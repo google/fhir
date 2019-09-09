@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Id"
+  type_name: ".google.fhir.r4.core.Id"
   options {
     [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Meta"
+  type_name: ".google.fhir.r4.core.Meta"
   options {
     [google.fhir.proto.field_description]: "Metadata about the resource"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Uri"
+  type_name: ".google.fhir.r4.core.Uri"
   options {
     [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Code"
+  type_name: ".google.fhir.r4.core.Code"
   options {
     [google.fhir.proto.field_description]: "Language of the resource content"
   }
@@ -44,7 +44,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Narrative"
+  type_name: ".google.fhir.r4.core.Narrative"
   options {
     [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
@@ -54,57 +54,63 @@ field {
   number: 6
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.ContainedResource"
+  type_name: ".google.protobuf.Any"
   options {
     [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
-  name: "extension"
   number: 7
+  options {
+    [google.fhir.proto.reserved_reason]: "Field 7 reserved for strongly-typed ContainedResource for id: CatalogEntry.contained"
+  }
+}
+field {
+  name: "extension"
+  number: 8
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
 }
 field {
   name: "modifier_extension"
-  number: 8
+  number: 9
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
   name: "identifier"
-  number: 9
+  number: 10
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Identifier"
+  type_name: ".google.fhir.r4.core.Identifier"
   options {
     [google.fhir.proto.field_description]: "Unique identifier of the catalog item"
   }
 }
 field {
   name: "type"
-  number: 10
+  number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "The type of item - medication, device, service, protocol or other"
   }
 }
 field {
   name: "orderable"
-  number: 11
+  number: 12
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Boolean"
+  type_name: ".google.fhir.r4.core.Boolean"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Whether the entry represents an orderable item"
@@ -112,10 +118,10 @@ field {
 }
 field {
   name: "referenced_item"
-  number: 12
+  number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "The item that is being defined"
@@ -134,90 +140,90 @@ field {
 }
 field {
   name: "additional_identifier"
-  number: 13
+  number: 14
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Identifier"
+  type_name: ".google.fhir.r4.core.Identifier"
   options {
     [google.fhir.proto.field_description]: "Any additional identifier(s) for the catalog item, in the same granularity or concept"
   }
 }
 field {
   name: "classification"
-  number: 14
+  number: 15
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "Classification (category or class) of the item entry"
   }
 }
 field {
   name: "status"
-  number: 15
+  number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.PublicationStatusCode"
+  type_name: ".google.fhir.r4.core.PublicationStatusCode"
   options {
     [google.fhir.proto.field_description]: "draft | active | retired | unknown"
   }
 }
 field {
   name: "validity_period"
-  number: 16
+  number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Period"
+  type_name: ".google.fhir.r4.core.Period"
   options {
     [google.fhir.proto.field_description]: "The time period in which this catalog entry is expected to be active"
   }
 }
 field {
   name: "valid_to"
-  number: 17
+  number: 18
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DateTime"
+  type_name: ".google.fhir.r4.core.DateTime"
   options {
     [google.fhir.proto.field_description]: "The date until which this catalog entry is expected to be active"
   }
 }
 field {
   name: "last_updated"
-  number: 18
+  number: 19
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DateTime"
+  type_name: ".google.fhir.r4.core.DateTime"
   options {
     [google.fhir.proto.field_description]: "When was this catalog last updated"
   }
 }
 field {
   name: "additional_characteristic"
-  number: 19
+  number: 20
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "Additional characteristics of the catalog entry"
   }
 }
 field {
   name: "additional_classification"
-  number: 20
+  number: 21
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "Additional classification of the catalog entry"
   }
 }
 field {
   name: "related_entry"
-  number: 21
+  number: 22
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CatalogEntry.RelatedEntry"
+  type_name: ".google.fhir.r4.core.CatalogEntry.RelatedEntry"
   options {
     [google.fhir.proto.field_description]: "An item that this catalog entry is related to"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -230,7 +236,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -240,7 +246,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -250,7 +256,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -260,7 +266,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CatalogEntryRelationTypeCode"
+    type_name: ".google.fhir.r4.core.CatalogEntryRelationTypeCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "triggers | is-replaced-by"
@@ -271,7 +277,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "The reference to the related item"

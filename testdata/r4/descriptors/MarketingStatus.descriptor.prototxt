@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "The country in which the marketing authorisation has been granted shall be specified It should be specified using the ISO 3166 \342\200\221 1 alpha-2 code elements"
@@ -45,7 +45,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "Where a Medicines Regulatory Agency has granted a marketing authorisation for which specific provisions within a jurisdiction apply, the jurisdiction can be specified using an appropriate controlled terminology The controlled term and the controlled term identifier shall be specified"
   }
@@ -55,7 +55,7 @@ field {
   number: 6
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "This attribute provides information on the status of the marketing of the medicinal product See ISO/TS 20443 for more information and examples"
@@ -66,7 +66,7 @@ field {
   number: 7
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Period"
+  type_name: ".google.fhir.r4.core.Period"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "The date when the Medicinal Product is placed on the market by the Marketing Authorisation Holder (or where applicable, the manufacturer/distributor) in a country and/or jurisdiction shall be provided A complete date consisting of day, month and year shall be specified using the ISO 8601 date format NOTE \342\200\234Placed on the market\342\200\235 refers to the release of the Medicinal Product into the distribution chain"
@@ -77,7 +77,7 @@ field {
   number: 8
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DateTime"
+  type_name: ".google.fhir.r4.core.DateTime"
   options {
     [google.fhir.proto.field_description]: "The date when the Medicinal Product is placed on the market by the Marketing Authorisation Holder (or where applicable, the manufacturer/distributor) in a country and/or jurisdiction shall be provided A complete date consisting of day, month and year shall be specified using the ISO 8601 date format NOTE \342\200\234Placed on the market\342\200\235 refers to the release of the Medicinal Product into the distribution chain"
   }

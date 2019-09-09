@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Id"
+  type_name: ".google.fhir.r4.core.Id"
   options {
     [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Meta"
+  type_name: ".google.fhir.r4.core.Meta"
   options {
     [google.fhir.proto.field_description]: "Metadata about the resource"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Uri"
+  type_name: ".google.fhir.r4.core.Uri"
   options {
     [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Code"
+  type_name: ".google.fhir.r4.core.Code"
   options {
     [google.fhir.proto.field_description]: "Language of the resource content"
   }
@@ -44,7 +44,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Narrative"
+  type_name: ".google.fhir.r4.core.Narrative"
   options {
     [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
@@ -54,137 +54,143 @@ field {
   number: 6
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.ContainedResource"
+  type_name: ".google.protobuf.Any"
   options {
     [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
-  name: "extension"
   number: 7
+  options {
+    [google.fhir.proto.reserved_reason]: "Field 7 reserved for strongly-typed ContainedResource for id: MedicinalProduct.contained"
+  }
+}
+field {
+  name: "extension"
+  number: 8
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
 }
 field {
   name: "modifier_extension"
-  number: 8
+  number: 9
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
   name: "identifier"
-  number: 9
+  number: 10
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Identifier"
+  type_name: ".google.fhir.r4.core.Identifier"
   options {
     [google.fhir.proto.field_description]: "Business identifier for this product. Could be an MPID"
   }
 }
 field {
   name: "type"
-  number: 10
+  number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "Regulatory type, e.g. Investigational or Authorized"
   }
 }
 field {
   name: "domain"
-  number: 11
+  number: 12
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Coding"
+  type_name: ".google.fhir.r4.core.Coding"
   options {
     [google.fhir.proto.field_description]: "If this medicine applies to human or veterinary uses"
   }
 }
 field {
   name: "combined_pharmaceutical_dose_form"
-  number: 12
+  number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "The dose form for a single part product, or combined form of a multiple part product"
   }
 }
 field {
   name: "legal_status_of_supply"
-  number: 13
+  number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "The legal status of supply of the medicinal product as classified by the regulator"
   }
 }
 field {
   name: "additional_monitoring_indicator"
-  number: 14
+  number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "Whether the Medicinal Product is subject to additional monitoring for regulatory reasons"
   }
 }
 field {
   name: "special_measures"
-  number: 15
+  number: 16
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Whether the Medicinal Product is subject to special measures for regulatory reasons"
   }
 }
 field {
   name: "paediatric_use_indicator"
-  number: 16
+  number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "If authorised for use in children"
   }
 }
 field {
   name: "product_classification"
-  number: 17
+  number: 18
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "Allows the product to be classified by various systems"
   }
 }
 field {
   name: "marketing_status"
-  number: 18
+  number: 19
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.MarketingStatus"
+  type_name: ".google.fhir.r4.core.MarketingStatus"
   options {
     [google.fhir.proto.field_description]: "Marketing status of the medicinal product, in contrast to marketing authorizaton"
   }
 }
 field {
   name: "pharmaceutical_product"
-  number: 19
+  number: 20
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Pharmaceutical aspects of product"
     [google.fhir.proto.valid_reference_type]: "MedicinalProductPharmaceutical"
@@ -192,10 +198,10 @@ field {
 }
 field {
   name: "packaged_medicinal_product"
-  number: 20
+  number: 21
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Package representation for the product"
     [google.fhir.proto.valid_reference_type]: "MedicinalProductPackaged"
@@ -203,10 +209,10 @@ field {
 }
 field {
   name: "attached_document"
-  number: 21
+  number: 22
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Supporting documentation, typically for regulatory submission"
     [google.fhir.proto.valid_reference_type]: "DocumentReference"
@@ -214,10 +220,10 @@ field {
 }
 field {
   name: "master_file"
-  number: 22
+  number: 23
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "A master file for to the medicinal product (e.g. Pharmacovigilance System Master File)"
     [google.fhir.proto.valid_reference_type]: "DocumentReference"
@@ -225,10 +231,10 @@ field {
 }
 field {
   name: "contact"
-  number: 23
+  number: 24
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "A product specific contact, person (in a role), or an organization"
     [google.fhir.proto.valid_reference_type]: "Organization"
@@ -237,10 +243,10 @@ field {
 }
 field {
   name: "clinical_trial"
-  number: 24
+  number: 25
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Clinical trials or studies that this product is involved in"
     [google.fhir.proto.valid_reference_type]: "ResearchStudy"
@@ -248,10 +254,10 @@ field {
 }
 field {
   name: "name"
-  number: 25
+  number: 26
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.MedicinalProduct.Name"
+  type_name: ".google.fhir.r4.core.MedicinalProduct.Name"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "The product\'s name, including full name and possibly coded parts"
@@ -260,20 +266,20 @@ field {
 }
 field {
   name: "cross_reference"
-  number: 26
+  number: 27
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Identifier"
+  type_name: ".google.fhir.r4.core.Identifier"
   options {
     [google.fhir.proto.field_description]: "Reference to another product, e.g. for linking authorised to investigational product"
   }
 }
 field {
   name: "manufacturing_business_operation"
-  number: 27
+  number: 28
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.MedicinalProduct.ManufacturingBusinessOperation"
+  type_name: ".google.fhir.r4.core.MedicinalProduct.ManufacturingBusinessOperation"
   options {
     [google.fhir.proto.field_description]: "An operation applied to the product, for manufacturing or adminsitrative purpose"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -281,10 +287,10 @@ field {
 }
 field {
   name: "special_designation"
-  number: 28
+  number: 29
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.MedicinalProduct.SpecialDesignation"
+  type_name: ".google.fhir.r4.core.MedicinalProduct.SpecialDesignation"
   options {
     [google.fhir.proto.field_description]: "Indicates if the medicinal product has an orphan designation for the treatment of a rare disease"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -297,7 +303,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -307,7 +313,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -317,7 +323,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -327,7 +333,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "The full product name"
@@ -338,7 +344,7 @@ nested_type {
     number: 5
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.MedicinalProduct.Name.NamePart"
+    type_name: ".google.fhir.r4.core.MedicinalProduct.Name.NamePart"
     options {
       [google.fhir.proto.field_description]: "Coding words or phrases of the name"
       [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -349,7 +355,7 @@ nested_type {
     number: 6
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.MedicinalProduct.Name.CountryLanguage"
+    type_name: ".google.fhir.r4.core.MedicinalProduct.Name.CountryLanguage"
     options {
       [google.fhir.proto.field_description]: "Country where the name applies"
       [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -362,7 +368,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -372,7 +378,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -382,7 +388,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -392,7 +398,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "A fragment of a product name"
@@ -403,7 +409,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Coding"
+      type_name: ".google.fhir.r4.core.Coding"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "Idenifying type for this part of the name (e.g. strength part)"
@@ -417,7 +423,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -427,7 +433,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -437,7 +443,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -447,7 +453,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.CodeableConcept"
+      type_name: ".google.fhir.r4.core.CodeableConcept"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "Country code for where this name applies"
@@ -458,7 +464,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.CodeableConcept"
+      type_name: ".google.fhir.r4.core.CodeableConcept"
       options {
         [google.fhir.proto.field_description]: "Jurisdiction code for where this name applies"
       }
@@ -468,7 +474,7 @@ nested_type {
       number: 6
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.CodeableConcept"
+      type_name: ".google.fhir.r4.core.CodeableConcept"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "Language code for this name"
@@ -483,7 +489,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -493,7 +499,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -503,7 +509,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -513,7 +519,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "The type of manufacturing operation"
     }
@@ -523,7 +529,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Identifier"
+    type_name: ".google.fhir.r4.core.Identifier"
     options {
       [google.fhir.proto.field_description]: "Regulatory authorization reference number"
     }
@@ -533,7 +539,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.DateTime"
+    type_name: ".google.fhir.r4.core.DateTime"
     options {
       [google.fhir.proto.field_description]: "Regulatory authorization date"
     }
@@ -543,7 +549,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "To indicate if this proces is commercially confidential"
     }
@@ -553,7 +559,7 @@ nested_type {
     number: 8
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.field_description]: "The manufacturer or establishment associated with the process"
       [google.fhir.proto.valid_reference_type]: "Organization"
@@ -564,7 +570,7 @@ nested_type {
     number: 9
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.field_description]: "A regulator which oversees the operation"
       [google.fhir.proto.valid_reference_type]: "Organization"
@@ -578,7 +584,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -588,7 +594,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -598,7 +604,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -608,7 +614,7 @@ nested_type {
     number: 4
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Identifier"
+    type_name: ".google.fhir.r4.core.Identifier"
     options {
       [google.fhir.proto.field_description]: "Identifier for the designation, or procedure number"
     }
@@ -618,7 +624,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "The type of special designation, e.g. orphan drug, minor use"
     }
@@ -628,7 +634,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "The intended use of the product, e.g. prevention, treatment"
     }
@@ -638,7 +644,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.MedicinalProduct.SpecialDesignation.IndicationX"
+    type_name: ".google.fhir.r4.core.MedicinalProduct.SpecialDesignation.IndicationX"
     options {
       [google.fhir.proto.field_description]: "Condition for which the medicinal use applies"
     }
@@ -648,7 +654,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "For example granted, pending, expired or withdrawn"
     }
@@ -658,7 +664,7 @@ nested_type {
     number: 9
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.DateTime"
+    type_name: ".google.fhir.r4.core.DateTime"
     options {
       [google.fhir.proto.field_description]: "Date when the designation was granted"
     }
@@ -668,7 +674,7 @@ nested_type {
     number: 10
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Animal species for which this applies"
     }
@@ -680,7 +686,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.CodeableConcept"
+      type_name: ".google.fhir.r4.core.CodeableConcept"
       oneof_index: 0
     }
     field {
@@ -688,7 +694,7 @@ nested_type {
       number: 2
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Reference"
+      type_name: ".google.fhir.r4.core.Reference"
       options {
         [google.fhir.proto.valid_reference_type]: "MedicinalProductIndication"
       }

@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Id"
+  type_name: ".google.fhir.r4.core.Id"
   options {
     [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Meta"
+  type_name: ".google.fhir.r4.core.Meta"
   options {
     [google.fhir.proto.field_description]: "Metadata about the resource"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Uri"
+  type_name: ".google.fhir.r4.core.Uri"
   options {
     [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Code"
+  type_name: ".google.fhir.r4.core.Code"
   options {
     [google.fhir.proto.field_description]: "Language of the resource content"
   }
@@ -44,7 +44,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Narrative"
+  type_name: ".google.fhir.r4.core.Narrative"
   options {
     [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
@@ -54,37 +54,43 @@ field {
   number: 6
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.ContainedResource"
+  type_name: ".google.protobuf.Any"
   options {
     [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
-  name: "extension"
   number: 7
+  options {
+    [google.fhir.proto.reserved_reason]: "Field 7 reserved for strongly-typed ContainedResource for id: StructureMap.contained"
+  }
+}
+field {
+  name: "extension"
+  number: 8
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
 }
 field {
   name: "modifier_extension"
-  number: 8
+  number: 9
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
   name: "url"
-  number: 9
+  number: 10
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Uri"
+  type_name: ".google.fhir.r4.core.Uri"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Canonical identifier for this structure map, represented as a URI (globally unique)"
@@ -92,30 +98,30 @@ field {
 }
 field {
   name: "identifier"
-  number: 10
+  number: 11
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Identifier"
+  type_name: ".google.fhir.r4.core.Identifier"
   options {
     [google.fhir.proto.field_description]: "Additional identifier for the structure map"
   }
 }
 field {
   name: "version"
-  number: 11
+  number: 12
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Business version of the structure map"
   }
 }
 field {
   name: "name"
-  number: 12
+  number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Name for this structure map (computer friendly)"
@@ -123,20 +129,20 @@ field {
 }
 field {
   name: "title"
-  number: 13
+  number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Name for this structure map (human friendly)"
   }
 }
 field {
   name: "status"
-  number: 14
+  number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.PublicationStatusCode"
+  type_name: ".google.fhir.r4.core.PublicationStatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "draft | active | retired | unknown"
@@ -144,100 +150,100 @@ field {
 }
 field {
   name: "experimental"
-  number: 15
+  number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Boolean"
+  type_name: ".google.fhir.r4.core.Boolean"
   options {
     [google.fhir.proto.field_description]: "For testing purposes, not real usage"
   }
 }
 field {
   name: "date"
-  number: 16
+  number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DateTime"
+  type_name: ".google.fhir.r4.core.DateTime"
   options {
     [google.fhir.proto.field_description]: "Date last changed"
   }
 }
 field {
   name: "publisher"
-  number: 17
+  number: 18
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Name of the publisher (organization or individual)"
   }
 }
 field {
   name: "contact"
-  number: 18
+  number: 19
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.ContactDetail"
+  type_name: ".google.fhir.r4.core.ContactDetail"
   options {
     [google.fhir.proto.field_description]: "Contact details for the publisher"
   }
 }
 field {
   name: "description"
-  number: 19
+  number: 20
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Markdown"
+  type_name: ".google.fhir.r4.core.Markdown"
   options {
     [google.fhir.proto.field_description]: "Natural language description of the structure map"
   }
 }
 field {
   name: "use_context"
-  number: 20
+  number: 21
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.UsageContext"
+  type_name: ".google.fhir.r4.core.UsageContext"
   options {
     [google.fhir.proto.field_description]: "The context that the content is intended to support"
   }
 }
 field {
   name: "jurisdiction"
-  number: 21
+  number: 22
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "Intended jurisdiction for structure map (if applicable)"
   }
 }
 field {
   name: "purpose"
-  number: 22
+  number: 23
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Markdown"
+  type_name: ".google.fhir.r4.core.Markdown"
   options {
     [google.fhir.proto.field_description]: "Why this structure map is defined"
   }
 }
 field {
   name: "copyright"
-  number: 23
+  number: 24
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Markdown"
+  type_name: ".google.fhir.r4.core.Markdown"
   options {
     [google.fhir.proto.field_description]: "Use and/or publishing restrictions"
   }
 }
 field {
   name: "structure"
-  number: 24
+  number: 25
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.StructureMap.Structure"
+  type_name: ".google.fhir.r4.core.StructureMap.Structure"
   options {
     [google.fhir.proto.field_description]: "Structure Definition used by this map"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -245,20 +251,20 @@ field {
 }
 field {
   name: "import"
-  number: 25
+  number: 26
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Canonical"
+  type_name: ".google.fhir.r4.core.Canonical"
   options {
     [google.fhir.proto.field_description]: "Other maps used by this map (canonical URLs)"
   }
 }
 field {
   name: "group"
-  number: 26
+  number: 27
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.StructureMap.Group"
+  type_name: ".google.fhir.r4.core.StructureMap.Group"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Named sections for reader convenience"
@@ -272,7 +278,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -282,7 +288,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -292,7 +298,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -302,7 +308,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Canonical"
+    type_name: ".google.fhir.r4.core.Canonical"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Canonical reference to structure definition"
@@ -313,7 +319,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.StructureMapModelModeCode"
+    type_name: ".google.fhir.r4.core.StructureMapModelModeCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "source | queried | target | produced"
@@ -324,7 +330,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Name for type in this map"
     }
@@ -334,7 +340,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Documentation on use of structure"
     }
@@ -347,7 +353,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -357,7 +363,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -367,7 +373,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -377,7 +383,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Id"
+    type_name: ".google.fhir.r4.core.Id"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Human-readable label"
@@ -388,7 +394,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Id"
+    type_name: ".google.fhir.r4.core.Id"
     options {
       [google.fhir.proto.field_description]: "Another group that this group adds rules to"
     }
@@ -398,7 +404,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.StructureMapGroupTypeModeCode"
+    type_name: ".google.fhir.r4.core.StructureMapGroupTypeModeCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "none | types | type-and-types"
@@ -409,7 +415,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Additional description/explanation for group"
     }
@@ -419,7 +425,7 @@ nested_type {
     number: 8
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.StructureMap.Group.Input"
+    type_name: ".google.fhir.r4.core.StructureMap.Group.Input"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Named instance provided when invoking the map"
@@ -431,7 +437,7 @@ nested_type {
     number: 9
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.StructureMap.Group.Rule"
+    type_name: ".google.fhir.r4.core.StructureMap.Group.Rule"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Transform Rule from source to target"
@@ -445,7 +451,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -455,7 +461,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -465,7 +471,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -475,7 +481,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Id"
+      type_name: ".google.fhir.r4.core.Id"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "Name for this instance of data"
@@ -486,7 +492,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Type for this instance of data"
       }
@@ -496,7 +502,7 @@ nested_type {
       number: 6
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.StructureMapInputModeCode"
+      type_name: ".google.fhir.r4.core.StructureMapInputModeCode"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "source | target"
@@ -507,7 +513,7 @@ nested_type {
       number: 7
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Documentation for this instance of data"
       }
@@ -520,7 +526,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -530,7 +536,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -540,7 +546,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -550,7 +556,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Id"
+      type_name: ".google.fhir.r4.core.Id"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "Name of the rule for internal references"
@@ -561,7 +567,7 @@ nested_type {
       number: 5
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.StructureMap.Group.Rule.Source"
+      type_name: ".google.fhir.r4.core.StructureMap.Group.Rule.Source"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "Source inputs to the mapping"
@@ -573,7 +579,7 @@ nested_type {
       number: 6
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.StructureMap.Group.Rule.Target"
+      type_name: ".google.fhir.r4.core.StructureMap.Group.Rule.Target"
       options {
         [google.fhir.proto.field_description]: "Content to create because of this mapping rule"
         [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -586,7 +592,7 @@ nested_type {
       number: 7
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.StructureMap.Group.Rule"
+      type_name: ".google.fhir.r4.core.StructureMap.Group.Rule"
       options {
         [google.fhir.proto.field_description]: "Rules contained in this rule"
       }
@@ -596,7 +602,7 @@ nested_type {
       number: 8
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.StructureMap.Group.Rule.Dependent"
+      type_name: ".google.fhir.r4.core.StructureMap.Group.Rule.Dependent"
       options {
         [google.fhir.proto.field_description]: "Which other rules to apply in the context of this rule"
         [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -607,7 +613,7 @@ nested_type {
       number: 9
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Documentation for this instance of data"
       }
@@ -619,7 +625,7 @@ nested_type {
         number: 1
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
         }
@@ -629,7 +635,7 @@ nested_type {
         number: 2
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Extension"
+        type_name: ".google.fhir.r4.core.Extension"
         options {
           [google.fhir.proto.field_description]: "Additional content defined by implementations"
         }
@@ -639,7 +645,7 @@ nested_type {
         number: 3
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Extension"
+        type_name: ".google.fhir.r4.core.Extension"
         options {
           [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
         }
@@ -649,7 +655,7 @@ nested_type {
         number: 4
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Id"
+        type_name: ".google.fhir.r4.core.Id"
         options {
           [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
           [google.fhir.proto.field_description]: "Type or variable this rule applies to"
@@ -660,7 +666,7 @@ nested_type {
         number: 5
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Integer"
+        type_name: ".google.fhir.r4.core.Integer"
         options {
           [google.fhir.proto.field_description]: "Specified minimum cardinality"
         }
@@ -670,7 +676,7 @@ nested_type {
         number: 6
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Specified maximum cardinality (number or *)"
         }
@@ -680,7 +686,7 @@ nested_type {
         number: 7
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Rule only applies if source has this type"
         }
@@ -690,7 +696,7 @@ nested_type {
         number: 8
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.StructureMap.Group.Rule.Source.DefaultValueX"
+        type_name: ".google.fhir.r4.core.StructureMap.Group.Rule.Source.DefaultValueX"
         options {
           [google.fhir.proto.field_description]: "Default value if no value exists"
         }
@@ -700,7 +706,7 @@ nested_type {
         number: 9
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Optional field for this source"
         }
@@ -710,7 +716,7 @@ nested_type {
         number: 10
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.StructureMapSourceListModeCode"
+        type_name: ".google.fhir.r4.core.StructureMapSourceListModeCode"
         options {
           [google.fhir.proto.field_description]: "first | not_first | last | not_last | only_one"
         }
@@ -720,7 +726,7 @@ nested_type {
         number: 11
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Id"
+        type_name: ".google.fhir.r4.core.Id"
         options {
           [google.fhir.proto.field_description]: "Named context for field, if a field is specified"
         }
@@ -730,7 +736,7 @@ nested_type {
         number: 12
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "FHIRPath expression  - must be true or the rule does not apply"
         }
@@ -740,7 +746,7 @@ nested_type {
         number: 13
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "FHIRPath expression  - must be true or the mapping engine throws an error instead of completing"
         }
@@ -750,7 +756,7 @@ nested_type {
         number: 14
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Message to put in log if source exists (FHIRPath)"
         }
@@ -762,7 +768,7 @@ nested_type {
           number: 1
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Base64Binary"
+          type_name: ".google.fhir.r4.core.Base64Binary"
           oneof_index: 0
         }
         field {
@@ -770,7 +776,7 @@ nested_type {
           number: 2
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Boolean"
+          type_name: ".google.fhir.r4.core.Boolean"
           oneof_index: 0
         }
         field {
@@ -778,7 +784,7 @@ nested_type {
           number: 3
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Canonical"
+          type_name: ".google.fhir.r4.core.Canonical"
           oneof_index: 0
         }
         field {
@@ -786,7 +792,7 @@ nested_type {
           number: 4
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Code"
+          type_name: ".google.fhir.r4.core.Code"
           oneof_index: 0
         }
         field {
@@ -794,7 +800,7 @@ nested_type {
           number: 5
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Date"
+          type_name: ".google.fhir.r4.core.Date"
           oneof_index: 0
         }
         field {
@@ -802,7 +808,7 @@ nested_type {
           number: 6
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.DateTime"
+          type_name: ".google.fhir.r4.core.DateTime"
           oneof_index: 0
         }
         field {
@@ -810,7 +816,7 @@ nested_type {
           number: 7
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Decimal"
+          type_name: ".google.fhir.r4.core.Decimal"
           oneof_index: 0
         }
         field {
@@ -818,7 +824,7 @@ nested_type {
           number: 8
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Id"
+          type_name: ".google.fhir.r4.core.Id"
           oneof_index: 0
         }
         field {
@@ -826,7 +832,7 @@ nested_type {
           number: 9
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Instant"
+          type_name: ".google.fhir.r4.core.Instant"
           oneof_index: 0
         }
         field {
@@ -834,7 +840,7 @@ nested_type {
           number: 10
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Integer"
+          type_name: ".google.fhir.r4.core.Integer"
           oneof_index: 0
         }
         field {
@@ -842,7 +848,7 @@ nested_type {
           number: 11
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Markdown"
+          type_name: ".google.fhir.r4.core.Markdown"
           oneof_index: 0
         }
         field {
@@ -850,7 +856,7 @@ nested_type {
           number: 12
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Oid"
+          type_name: ".google.fhir.r4.core.Oid"
           oneof_index: 0
         }
         field {
@@ -858,7 +864,7 @@ nested_type {
           number: 13
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.PositiveInt"
+          type_name: ".google.fhir.r4.core.PositiveInt"
           oneof_index: 0
         }
         field {
@@ -866,7 +872,7 @@ nested_type {
           number: 14
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.String"
+          type_name: ".google.fhir.r4.core.String"
           oneof_index: 0
           json_name: "string"
         }
@@ -875,7 +881,7 @@ nested_type {
           number: 15
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Time"
+          type_name: ".google.fhir.r4.core.Time"
           oneof_index: 0
         }
         field {
@@ -883,7 +889,7 @@ nested_type {
           number: 16
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.UnsignedInt"
+          type_name: ".google.fhir.r4.core.UnsignedInt"
           oneof_index: 0
         }
         field {
@@ -891,7 +897,7 @@ nested_type {
           number: 17
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Uri"
+          type_name: ".google.fhir.r4.core.Uri"
           oneof_index: 0
         }
         field {
@@ -899,7 +905,7 @@ nested_type {
           number: 18
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Url"
+          type_name: ".google.fhir.r4.core.Url"
           oneof_index: 0
         }
         field {
@@ -907,7 +913,7 @@ nested_type {
           number: 19
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Uuid"
+          type_name: ".google.fhir.r4.core.Uuid"
           oneof_index: 0
         }
         field {
@@ -915,7 +921,7 @@ nested_type {
           number: 20
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Address"
+          type_name: ".google.fhir.r4.core.Address"
           oneof_index: 0
         }
         field {
@@ -923,7 +929,7 @@ nested_type {
           number: 21
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Age"
+          type_name: ".google.fhir.r4.core.Age"
           oneof_index: 0
         }
         field {
@@ -931,7 +937,7 @@ nested_type {
           number: 22
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Annotation"
+          type_name: ".google.fhir.r4.core.Annotation"
           oneof_index: 0
         }
         field {
@@ -939,7 +945,7 @@ nested_type {
           number: 23
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Attachment"
+          type_name: ".google.fhir.r4.core.Attachment"
           oneof_index: 0
         }
         field {
@@ -947,7 +953,7 @@ nested_type {
           number: 24
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.CodeableConcept"
+          type_name: ".google.fhir.r4.core.CodeableConcept"
           oneof_index: 0
         }
         field {
@@ -955,7 +961,7 @@ nested_type {
           number: 25
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Coding"
+          type_name: ".google.fhir.r4.core.Coding"
           oneof_index: 0
         }
         field {
@@ -963,7 +969,7 @@ nested_type {
           number: 26
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.ContactPoint"
+          type_name: ".google.fhir.r4.core.ContactPoint"
           oneof_index: 0
         }
         field {
@@ -971,7 +977,7 @@ nested_type {
           number: 27
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Count"
+          type_name: ".google.fhir.r4.core.Count"
           oneof_index: 0
         }
         field {
@@ -979,7 +985,7 @@ nested_type {
           number: 28
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Distance"
+          type_name: ".google.fhir.r4.core.Distance"
           oneof_index: 0
         }
         field {
@@ -987,7 +993,7 @@ nested_type {
           number: 29
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Duration"
+          type_name: ".google.fhir.r4.core.Duration"
           oneof_index: 0
         }
         field {
@@ -995,7 +1001,7 @@ nested_type {
           number: 30
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.HumanName"
+          type_name: ".google.fhir.r4.core.HumanName"
           oneof_index: 0
         }
         field {
@@ -1003,7 +1009,7 @@ nested_type {
           number: 31
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Identifier"
+          type_name: ".google.fhir.r4.core.Identifier"
           oneof_index: 0
         }
         field {
@@ -1011,7 +1017,7 @@ nested_type {
           number: 32
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Money"
+          type_name: ".google.fhir.r4.core.Money"
           oneof_index: 0
         }
         field {
@@ -1019,7 +1025,7 @@ nested_type {
           number: 33
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Period"
+          type_name: ".google.fhir.r4.core.Period"
           oneof_index: 0
         }
         field {
@@ -1027,7 +1033,7 @@ nested_type {
           number: 34
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Quantity"
+          type_name: ".google.fhir.r4.core.Quantity"
           oneof_index: 0
         }
         field {
@@ -1035,7 +1041,7 @@ nested_type {
           number: 35
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Range"
+          type_name: ".google.fhir.r4.core.Range"
           oneof_index: 0
         }
         field {
@@ -1043,7 +1049,7 @@ nested_type {
           number: 36
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Ratio"
+          type_name: ".google.fhir.r4.core.Ratio"
           oneof_index: 0
         }
         field {
@@ -1051,7 +1057,7 @@ nested_type {
           number: 37
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Reference"
+          type_name: ".google.fhir.r4.core.Reference"
           oneof_index: 0
         }
         field {
@@ -1059,7 +1065,7 @@ nested_type {
           number: 38
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.SampledData"
+          type_name: ".google.fhir.r4.core.SampledData"
           oneof_index: 0
         }
         field {
@@ -1067,7 +1073,7 @@ nested_type {
           number: 39
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Signature"
+          type_name: ".google.fhir.r4.core.Signature"
           oneof_index: 0
         }
         field {
@@ -1075,7 +1081,7 @@ nested_type {
           number: 40
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Timing"
+          type_name: ".google.fhir.r4.core.Timing"
           oneof_index: 0
         }
         field {
@@ -1083,7 +1089,7 @@ nested_type {
           number: 41
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.ContactDetail"
+          type_name: ".google.fhir.r4.core.ContactDetail"
           oneof_index: 0
         }
         field {
@@ -1091,7 +1097,7 @@ nested_type {
           number: 42
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Contributor"
+          type_name: ".google.fhir.r4.core.Contributor"
           oneof_index: 0
         }
         field {
@@ -1099,7 +1105,7 @@ nested_type {
           number: 43
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.DataRequirement"
+          type_name: ".google.fhir.r4.core.DataRequirement"
           oneof_index: 0
         }
         field {
@@ -1107,7 +1113,7 @@ nested_type {
           number: 44
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Expression"
+          type_name: ".google.fhir.r4.core.Expression"
           oneof_index: 0
         }
         field {
@@ -1115,7 +1121,7 @@ nested_type {
           number: 45
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.ParameterDefinition"
+          type_name: ".google.fhir.r4.core.ParameterDefinition"
           oneof_index: 0
         }
         field {
@@ -1123,7 +1129,7 @@ nested_type {
           number: 46
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.RelatedArtifact"
+          type_name: ".google.fhir.r4.core.RelatedArtifact"
           oneof_index: 0
         }
         field {
@@ -1131,7 +1137,7 @@ nested_type {
           number: 47
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.TriggerDefinition"
+          type_name: ".google.fhir.r4.core.TriggerDefinition"
           oneof_index: 0
         }
         field {
@@ -1139,7 +1145,7 @@ nested_type {
           number: 48
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.UsageContext"
+          type_name: ".google.fhir.r4.core.UsageContext"
           oneof_index: 0
         }
         field {
@@ -1147,7 +1153,7 @@ nested_type {
           number: 49
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Dosage"
+          type_name: ".google.fhir.r4.core.Dosage"
           oneof_index: 0
         }
         options {
@@ -1165,7 +1171,7 @@ nested_type {
         number: 1
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
         }
@@ -1175,7 +1181,7 @@ nested_type {
         number: 2
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Extension"
+        type_name: ".google.fhir.r4.core.Extension"
         options {
           [google.fhir.proto.field_description]: "Additional content defined by implementations"
         }
@@ -1185,7 +1191,7 @@ nested_type {
         number: 3
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Extension"
+        type_name: ".google.fhir.r4.core.Extension"
         options {
           [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
         }
@@ -1195,7 +1201,7 @@ nested_type {
         number: 4
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Id"
+        type_name: ".google.fhir.r4.core.Id"
         options {
           [google.fhir.proto.field_description]: "Type or variable this rule applies to"
         }
@@ -1205,7 +1211,7 @@ nested_type {
         number: 5
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.StructureMapContextTypeCode"
+        type_name: ".google.fhir.r4.core.StructureMapContextTypeCode"
         options {
           [google.fhir.proto.field_description]: "type | variable"
         }
@@ -1215,7 +1221,7 @@ nested_type {
         number: 6
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Field to create in the context"
         }
@@ -1225,7 +1231,7 @@ nested_type {
         number: 7
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Id"
+        type_name: ".google.fhir.r4.core.Id"
         options {
           [google.fhir.proto.field_description]: "Named context for field, if desired, and a field is specified"
         }
@@ -1235,7 +1241,7 @@ nested_type {
         number: 8
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.StructureMapTargetListModeCode"
+        type_name: ".google.fhir.r4.core.StructureMapTargetListModeCode"
         options {
           [google.fhir.proto.field_description]: "first | share | last | collate"
         }
@@ -1245,7 +1251,7 @@ nested_type {
         number: 9
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Id"
+        type_name: ".google.fhir.r4.core.Id"
         options {
           [google.fhir.proto.field_description]: "Internal rule reference for shared list items"
         }
@@ -1255,7 +1261,7 @@ nested_type {
         number: 10
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.StructureMapTransformCode"
+        type_name: ".google.fhir.r4.core.StructureMapTransformCode"
         options {
           [google.fhir.proto.field_description]: "create | copy +"
         }
@@ -1265,7 +1271,7 @@ nested_type {
         number: 11
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.StructureMap.Group.Rule.Target.Parameter"
+        type_name: ".google.fhir.r4.core.StructureMap.Group.Rule.Target.Parameter"
         options {
           [google.fhir.proto.field_description]: "Parameters to the transform"
           [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -1278,7 +1284,7 @@ nested_type {
           number: 1
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.String"
+          type_name: ".google.fhir.r4.core.String"
           options {
             [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
           }
@@ -1288,7 +1294,7 @@ nested_type {
           number: 2
           label: LABEL_REPEATED
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Extension"
+          type_name: ".google.fhir.r4.core.Extension"
           options {
             [google.fhir.proto.field_description]: "Additional content defined by implementations"
           }
@@ -1298,7 +1304,7 @@ nested_type {
           number: 3
           label: LABEL_REPEATED
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Extension"
+          type_name: ".google.fhir.r4.core.Extension"
           options {
             [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
           }
@@ -1308,7 +1314,7 @@ nested_type {
           number: 4
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.StructureMap.Group.Rule.Target.Parameter.ValueX"
+          type_name: ".google.fhir.r4.core.StructureMap.Group.Rule.Target.Parameter.ValueX"
           options {
             [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
             [google.fhir.proto.field_description]: "Parameter value - variable or literal"
@@ -1321,7 +1327,7 @@ nested_type {
             number: 1
             label: LABEL_OPTIONAL
             type: TYPE_MESSAGE
-            type_name: ".google.fhir.r4.proto.Id"
+            type_name: ".google.fhir.r4.core.Id"
             oneof_index: 0
           }
           field {
@@ -1329,7 +1335,7 @@ nested_type {
             number: 2
             label: LABEL_OPTIONAL
             type: TYPE_MESSAGE
-            type_name: ".google.fhir.r4.proto.String"
+            type_name: ".google.fhir.r4.core.String"
             oneof_index: 0
             json_name: "string"
           }
@@ -1338,7 +1344,7 @@ nested_type {
             number: 3
             label: LABEL_OPTIONAL
             type: TYPE_MESSAGE
-            type_name: ".google.fhir.r4.proto.Boolean"
+            type_name: ".google.fhir.r4.core.Boolean"
             oneof_index: 0
           }
           field {
@@ -1346,7 +1352,7 @@ nested_type {
             number: 4
             label: LABEL_OPTIONAL
             type: TYPE_MESSAGE
-            type_name: ".google.fhir.r4.proto.Integer"
+            type_name: ".google.fhir.r4.core.Integer"
             oneof_index: 0
           }
           field {
@@ -1354,7 +1360,7 @@ nested_type {
             number: 5
             label: LABEL_OPTIONAL
             type: TYPE_MESSAGE
-            type_name: ".google.fhir.r4.proto.Decimal"
+            type_name: ".google.fhir.r4.core.Decimal"
             oneof_index: 0
           }
           options {
@@ -1373,7 +1379,7 @@ nested_type {
         number: 1
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
         }
@@ -1383,7 +1389,7 @@ nested_type {
         number: 2
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Extension"
+        type_name: ".google.fhir.r4.core.Extension"
         options {
           [google.fhir.proto.field_description]: "Additional content defined by implementations"
         }
@@ -1393,7 +1399,7 @@ nested_type {
         number: 3
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Extension"
+        type_name: ".google.fhir.r4.core.Extension"
         options {
           [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
         }
@@ -1403,7 +1409,7 @@ nested_type {
         number: 4
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Id"
+        type_name: ".google.fhir.r4.core.Id"
         options {
           [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
           [google.fhir.proto.field_description]: "Name of a rule or group to apply"
@@ -1414,7 +1420,7 @@ nested_type {
         number: 5
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
           [google.fhir.proto.field_description]: "Variable to pass to the rule or group"

@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Id"
+  type_name: ".google.fhir.r4.core.Id"
   options {
     [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Meta"
+  type_name: ".google.fhir.r4.core.Meta"
   options {
     [google.fhir.proto.field_description]: "Metadata about the resource"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Uri"
+  type_name: ".google.fhir.r4.core.Uri"
   options {
     [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Code"
+  type_name: ".google.fhir.r4.core.Code"
   options {
     [google.fhir.proto.field_description]: "Language of the resource content"
   }
@@ -44,7 +44,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Narrative"
+  type_name: ".google.fhir.r4.core.Narrative"
   options {
     [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
@@ -54,47 +54,53 @@ field {
   number: 6
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.ContainedResource"
+  type_name: ".google.protobuf.Any"
   options {
     [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
-  name: "extension"
   number: 7
+  options {
+    [google.fhir.proto.reserved_reason]: "Field 7 reserved for strongly-typed ContainedResource for id: Device.contained"
+  }
+}
+field {
+  name: "extension"
+  number: 8
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
 }
 field {
   name: "modifier_extension"
-  number: 8
+  number: 9
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
   name: "identifier"
-  number: 9
+  number: 10
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Identifier"
+  type_name: ".google.fhir.r4.core.Identifier"
   options {
     [google.fhir.proto.field_description]: "Instance identifier"
   }
 }
 field {
   name: "definition"
-  number: 10
+  number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "The reference to the definition for the device"
     [google.fhir.proto.valid_reference_type]: "DeviceDefinition"
@@ -102,10 +108,10 @@ field {
 }
 field {
   name: "udi_carrier"
-  number: 11
+  number: 12
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Device.UdiCarrier"
+  type_name: ".google.fhir.r4.core.Device.UdiCarrier"
   options {
     [google.fhir.proto.field_description]: "Unique Device Identifier (UDI) Barcode string"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -113,90 +119,90 @@ field {
 }
 field {
   name: "status"
-  number: 12
+  number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.FHIRDeviceStatusCode"
+  type_name: ".google.fhir.r4.core.FHIRDeviceStatusCode"
   options {
     [google.fhir.proto.field_description]: "active | inactive | entered-in-error | unknown"
   }
 }
 field {
   name: "status_reason"
-  number: 13
+  number: 14
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "online | paused | standby | offline | not-ready | transduc-discon | hw-discon | off"
   }
 }
 field {
   name: "distinct_identifier"
-  number: 14
+  number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "The distinct identification string"
   }
 }
 field {
   name: "manufacturer"
-  number: 15
+  number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Name of device manufacturer"
   }
 }
 field {
   name: "manufacture_date"
-  number: 16
+  number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DateTime"
+  type_name: ".google.fhir.r4.core.DateTime"
   options {
     [google.fhir.proto.field_description]: "Date when the device was made"
   }
 }
 field {
   name: "expiration_date"
-  number: 17
+  number: 18
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DateTime"
+  type_name: ".google.fhir.r4.core.DateTime"
   options {
     [google.fhir.proto.field_description]: "Date and time of expiry of this device (if applicable)"
   }
 }
 field {
   name: "lot_number"
-  number: 18
+  number: 19
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Lot number of manufacture"
   }
 }
 field {
   name: "serial_number"
-  number: 19
+  number: 20
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Serial number assigned by the manufacturer"
   }
 }
 field {
   name: "device_name"
-  number: 20
+  number: 21
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Device.DeviceName"
+  type_name: ".google.fhir.r4.core.Device.DeviceName"
   options {
     [google.fhir.proto.field_description]: "The name of the device as given by the manufacturer"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -204,40 +210,40 @@ field {
 }
 field {
   name: "model_number"
-  number: 21
+  number: 22
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "The model number for the device"
   }
 }
 field {
   name: "part_number"
-  number: 22
+  number: 23
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "The part number of the device"
   }
 }
 field {
   name: "type"
-  number: 23
+  number: 24
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "The kind or type of device"
   }
 }
 field {
   name: "specialization"
-  number: 24
+  number: 25
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Device.Specialization"
+  type_name: ".google.fhir.r4.core.Device.Specialization"
   options {
     [google.fhir.proto.field_description]: "The capabilities supported on a  device, the standards to which the device conforms for a particular purpose, and used for the communication"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -245,10 +251,10 @@ field {
 }
 field {
   name: "version"
-  number: 25
+  number: 26
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Device.Version"
+  type_name: ".google.fhir.r4.core.Device.Version"
   options {
     [google.fhir.proto.field_description]: "The actual design of the device or software version running on the device"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -256,10 +262,10 @@ field {
 }
 field {
   name: "property"
-  number: 26
+  number: 27
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Device.Property"
+  type_name: ".google.fhir.r4.core.Device.Property"
   options {
     [google.fhir.proto.field_description]: "The actual configuration settings of a device as it actually operates, e.g., regulation status, time properties"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -267,10 +273,10 @@ field {
 }
 field {
   name: "patient"
-  number: 27
+  number: 28
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Patient to whom Device is affixed"
     [google.fhir.proto.valid_reference_type]: "Patient"
@@ -278,10 +284,10 @@ field {
 }
 field {
   name: "owner"
-  number: 28
+  number: 29
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Organization responsible for device"
     [google.fhir.proto.valid_reference_type]: "Organization"
@@ -289,20 +295,20 @@ field {
 }
 field {
   name: "contact"
-  number: 29
+  number: 30
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.ContactPoint"
+  type_name: ".google.fhir.r4.core.ContactPoint"
   options {
     [google.fhir.proto.field_description]: "Details for human/organization for support"
   }
 }
 field {
   name: "location"
-  number: 30
+  number: 31
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Where the device is found"
     [google.fhir.proto.valid_reference_type]: "Location"
@@ -310,40 +316,40 @@ field {
 }
 field {
   name: "url"
-  number: 31
+  number: 32
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Uri"
+  type_name: ".google.fhir.r4.core.Uri"
   options {
     [google.fhir.proto.field_description]: "Network address to contact device"
   }
 }
 field {
   name: "note"
-  number: 32
+  number: 33
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Annotation"
+  type_name: ".google.fhir.r4.core.Annotation"
   options {
     [google.fhir.proto.field_description]: "Device notes and comments"
   }
 }
 field {
   name: "safety"
-  number: 33
+  number: 34
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "Safety Characteristics of Device"
   }
 }
 field {
   name: "parent"
-  number: 34
+  number: 35
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "The parent device"
     [google.fhir.proto.valid_reference_type]: "Device"
@@ -356,7 +362,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -366,7 +372,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -376,7 +382,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -386,7 +392,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Mandatory fixed portion of UDI"
     }
@@ -396,7 +402,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Uri"
+    type_name: ".google.fhir.r4.core.Uri"
     options {
       [google.fhir.proto.field_description]: "UDI Issuing Organization"
     }
@@ -406,7 +412,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Uri"
+    type_name: ".google.fhir.r4.core.Uri"
     options {
       [google.fhir.proto.field_description]: "Regional UDI authority"
     }
@@ -416,7 +422,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Base64Binary"
+    type_name: ".google.fhir.r4.core.Base64Binary"
     options {
       [google.fhir.proto.field_description]: "UDI Machine Readable Barcode String"
     }
@@ -427,7 +433,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "UDI Human Readable Barcode String"
     }
@@ -438,7 +444,7 @@ nested_type {
     number: 9
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.UDIEntryTypeCode"
+    type_name: ".google.fhir.r4.core.UDIEntryTypeCode"
     options {
       [google.fhir.proto.field_description]: "barcode | rfid | manual +"
     }
@@ -451,7 +457,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -461,7 +467,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -471,7 +477,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -481,7 +487,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "The name of the device"
@@ -492,7 +498,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.DeviceNameTypeCode"
+    type_name: ".google.fhir.r4.core.DeviceNameTypeCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "udi-label-name | user-friendly-name | patient-reported-name | manufacturer-name | model-name | other"
@@ -506,7 +512,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -516,7 +522,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -526,7 +532,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -536,7 +542,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "The standard that is used to operate and communicate"
@@ -547,7 +553,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "The version of the standard that is used to operate and communicate"
     }
@@ -560,7 +566,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -570,7 +576,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -580,7 +586,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -590,7 +596,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "The type of the device version"
     }
@@ -600,7 +606,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Identifier"
+    type_name: ".google.fhir.r4.core.Identifier"
     options {
       [google.fhir.proto.field_description]: "A single component of the device version"
     }
@@ -610,7 +616,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "The version text"
@@ -624,7 +630,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -634,7 +640,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -644,7 +650,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -654,7 +660,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Code that specifies the property DeviceDefinitionPropetyCode (Extensible)"
@@ -665,7 +671,7 @@ nested_type {
     number: 5
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Quantity"
+    type_name: ".google.fhir.r4.core.Quantity"
     options {
       [google.fhir.proto.field_description]: "Property value as a quantity"
     }
@@ -675,7 +681,7 @@ nested_type {
     number: 6
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Property value as a code, e.g., NTP4 (synced to NTP)"
     }

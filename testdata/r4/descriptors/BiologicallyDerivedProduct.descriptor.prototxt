@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Id"
+  type_name: ".google.fhir.r4.core.Id"
   options {
     [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Meta"
+  type_name: ".google.fhir.r4.core.Meta"
   options {
     [google.fhir.proto.field_description]: "Metadata about the resource"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Uri"
+  type_name: ".google.fhir.r4.core.Uri"
   options {
     [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Code"
+  type_name: ".google.fhir.r4.core.Code"
   options {
     [google.fhir.proto.field_description]: "Language of the resource content"
   }
@@ -44,7 +44,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Narrative"
+  type_name: ".google.fhir.r4.core.Narrative"
   options {
     [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
@@ -54,77 +54,83 @@ field {
   number: 6
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.ContainedResource"
+  type_name: ".google.protobuf.Any"
   options {
     [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
-  name: "extension"
   number: 7
+  options {
+    [google.fhir.proto.reserved_reason]: "Field 7 reserved for strongly-typed ContainedResource for id: BiologicallyDerivedProduct.contained"
+  }
+}
+field {
+  name: "extension"
+  number: 8
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
 }
 field {
   name: "modifier_extension"
-  number: 8
+  number: 9
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
   name: "identifier"
-  number: 9
+  number: 10
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Identifier"
+  type_name: ".google.fhir.r4.core.Identifier"
   options {
     [google.fhir.proto.field_description]: "External ids for this item"
   }
 }
 field {
   name: "product_category"
-  number: 10
+  number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.BiologicallyDerivedProductCategoryCode"
+  type_name: ".google.fhir.r4.core.BiologicallyDerivedProductCategoryCode"
   options {
     [google.fhir.proto.field_description]: "organ | tissue | fluid | cells | biologicalAgent"
   }
 }
 field {
   name: "product_code"
-  number: 11
+  number: 12
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "What this biologically derived product is"
   }
 }
 field {
   name: "status"
-  number: 12
+  number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.BiologicallyDerivedProductStatusCode"
+  type_name: ".google.fhir.r4.core.BiologicallyDerivedProductStatusCode"
   options {
     [google.fhir.proto.field_description]: "available | unavailable"
   }
 }
 field {
   name: "request"
-  number: 13
+  number: 14
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Procedure request"
     [google.fhir.proto.valid_reference_type]: "ServiceRequest"
@@ -132,20 +138,20 @@ field {
 }
 field {
   name: "quantity"
-  number: 14
+  number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Integer"
+  type_name: ".google.fhir.r4.core.Integer"
   options {
     [google.fhir.proto.field_description]: "The amount of this biologically derived product"
   }
 }
 field {
   name: "parent"
-  number: 15
+  number: 16
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "BiologicallyDerivedProduct parent"
     [google.fhir.proto.valid_reference_type]: "BiologicallyDerivedProduct"
@@ -153,10 +159,10 @@ field {
 }
 field {
   name: "collection"
-  number: 16
+  number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.BiologicallyDerivedProduct.Collection"
+  type_name: ".google.fhir.r4.core.BiologicallyDerivedProduct.Collection"
   options {
     [google.fhir.proto.field_description]: "How this product was collected"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -164,10 +170,10 @@ field {
 }
 field {
   name: "processing"
-  number: 17
+  number: 18
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.BiologicallyDerivedProduct.Processing"
+  type_name: ".google.fhir.r4.core.BiologicallyDerivedProduct.Processing"
   options {
     [google.fhir.proto.field_description]: "Any processing of the product during collection"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -175,10 +181,10 @@ field {
 }
 field {
   name: "manipulation"
-  number: 18
+  number: 19
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.BiologicallyDerivedProduct.Manipulation"
+  type_name: ".google.fhir.r4.core.BiologicallyDerivedProduct.Manipulation"
   options {
     [google.fhir.proto.field_description]: "Any manipulation of product post-collection"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -186,10 +192,10 @@ field {
 }
 field {
   name: "storage"
-  number: 19
+  number: 20
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.BiologicallyDerivedProduct.Storage"
+  type_name: ".google.fhir.r4.core.BiologicallyDerivedProduct.Storage"
   options {
     [google.fhir.proto.field_description]: "Product storage"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -202,7 +208,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -212,7 +218,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -222,7 +228,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -232,7 +238,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.field_description]: "Individual performing collection"
       [google.fhir.proto.valid_reference_type]: "Practitioner"
@@ -244,7 +250,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.field_description]: "Who is product from"
       [google.fhir.proto.valid_reference_type]: "Patient"
@@ -256,7 +262,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.BiologicallyDerivedProduct.Collection.CollectedX"
+    type_name: ".google.fhir.r4.core.BiologicallyDerivedProduct.Collection.CollectedX"
     options {
       [google.fhir.proto.field_description]: "Time of product collection"
     }
@@ -268,7 +274,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.DateTime"
+      type_name: ".google.fhir.r4.core.DateTime"
       oneof_index: 0
     }
     field {
@@ -276,7 +282,7 @@ nested_type {
       number: 2
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Period"
+      type_name: ".google.fhir.r4.core.Period"
       oneof_index: 0
     }
     options {
@@ -294,7 +300,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -304,7 +310,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -314,7 +320,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -324,7 +330,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Description of of processing"
     }
@@ -334,7 +340,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Procesing code"
     }
@@ -344,7 +350,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.field_description]: "Substance added during processing"
       [google.fhir.proto.valid_reference_type]: "Substance"
@@ -355,7 +361,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.BiologicallyDerivedProduct.Processing.TimeX"
+    type_name: ".google.fhir.r4.core.BiologicallyDerivedProduct.Processing.TimeX"
     options {
       [google.fhir.proto.field_description]: "Time of processing"
     }
@@ -367,7 +373,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.DateTime"
+      type_name: ".google.fhir.r4.core.DateTime"
       oneof_index: 0
     }
     field {
@@ -375,7 +381,7 @@ nested_type {
       number: 2
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Period"
+      type_name: ".google.fhir.r4.core.Period"
       oneof_index: 0
     }
     options {
@@ -393,7 +399,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -403,7 +409,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -413,7 +419,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -423,7 +429,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Description of manipulation"
     }
@@ -433,7 +439,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.BiologicallyDerivedProduct.Manipulation.TimeX"
+    type_name: ".google.fhir.r4.core.BiologicallyDerivedProduct.Manipulation.TimeX"
     options {
       [google.fhir.proto.field_description]: "Time of manipulation"
     }
@@ -445,7 +451,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.DateTime"
+      type_name: ".google.fhir.r4.core.DateTime"
       oneof_index: 0
     }
     field {
@@ -453,7 +459,7 @@ nested_type {
       number: 2
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Period"
+      type_name: ".google.fhir.r4.core.Period"
       oneof_index: 0
     }
     options {
@@ -471,7 +477,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -481,7 +487,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -491,7 +497,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -501,7 +507,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Description of storage"
     }
@@ -511,7 +517,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Decimal"
+    type_name: ".google.fhir.r4.core.Decimal"
     options {
       [google.fhir.proto.field_description]: "Storage temperature"
     }
@@ -521,7 +527,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.BiologicallyDerivedProductStorageScaleCode"
+    type_name: ".google.fhir.r4.core.BiologicallyDerivedProductStorageScaleCode"
     options {
       [google.fhir.proto.field_description]: "farenheit | celsius | kelvin"
     }
@@ -531,7 +537,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Period"
+    type_name: ".google.fhir.r4.core.Period"
     options {
       [google.fhir.proto.field_description]: "Storage timeperiod"
     }

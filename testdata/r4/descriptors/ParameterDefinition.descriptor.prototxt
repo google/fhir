@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Code"
+  type_name: ".google.fhir.r4.core.Code"
   options {
     [google.fhir.proto.field_description]: "Name used to access the parameter value"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.OperationParameterUseCode"
+  type_name: ".google.fhir.r4.core.OperationParameterUseCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "in | out"
@@ -45,7 +45,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Integer"
+  type_name: ".google.fhir.r4.core.Integer"
   options {
     [google.fhir.proto.field_description]: "Minimum cardinality"
   }
@@ -55,7 +55,7 @@ field {
   number: 6
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Maximum cardinality (a number of *)"
   }
@@ -65,7 +65,7 @@ field {
   number: 7
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "A brief description of the parameter"
   }
@@ -75,7 +75,7 @@ field {
   number: 8
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.FHIRAllTypesCode"
+  type_name: ".google.fhir.r4.core.FHIRAllTypesCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "What type of value"
@@ -86,7 +86,7 @@ field {
   number: 9
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Canonical"
+  type_name: ".google.fhir.r4.core.Canonical"
   options {
     [google.fhir.proto.field_description]: "What profile the value is expected to be"
   }

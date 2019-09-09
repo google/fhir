@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.SimpleQuantity"
+  type_name: ".google.fhir.r4.core.SimpleQuantity"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Zero value and units"
@@ -35,7 +35,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Decimal"
+  type_name: ".google.fhir.r4.core.Decimal"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Number of milliseconds between samples"
@@ -46,7 +46,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Decimal"
+  type_name: ".google.fhir.r4.core.Decimal"
   options {
     [google.fhir.proto.field_description]: "Multiply data by this before adding to origin"
   }
@@ -56,7 +56,7 @@ field {
   number: 6
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Decimal"
+  type_name: ".google.fhir.r4.core.Decimal"
   options {
     [google.fhir.proto.field_description]: "Lower limit of detection"
   }
@@ -66,7 +66,7 @@ field {
   number: 7
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Decimal"
+  type_name: ".google.fhir.r4.core.Decimal"
   options {
     [google.fhir.proto.field_description]: "Upper limit of detection"
   }
@@ -76,7 +76,7 @@ field {
   number: 8
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.PositiveInt"
+  type_name: ".google.fhir.r4.core.PositiveInt"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Number of sample points at each time point"
@@ -87,7 +87,7 @@ field {
   number: 9
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Decimal values with spaces, or \"E\" | \"U\" | \"L\""
   }

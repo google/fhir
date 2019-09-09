@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Id"
+  type_name: ".google.fhir.r4.core.Id"
   options {
     [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Meta"
+  type_name: ".google.fhir.r4.core.Meta"
   options {
     [google.fhir.proto.field_description]: "Metadata about the resource"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Uri"
+  type_name: ".google.fhir.r4.core.Uri"
   options {
     [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Code"
+  type_name: ".google.fhir.r4.core.Code"
   options {
     [google.fhir.proto.field_description]: "Language of the resource content"
   }
@@ -44,7 +44,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Narrative"
+  type_name: ".google.fhir.r4.core.Narrative"
   options {
     [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
@@ -54,47 +54,53 @@ field {
   number: 6
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.ContainedResource"
+  type_name: ".google.protobuf.Any"
   options {
     [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
-  name: "extension"
   number: 7
+  options {
+    [google.fhir.proto.reserved_reason]: "Field 7 reserved for strongly-typed ContainedResource for id: MeasureReport.contained"
+  }
+}
+field {
+  name: "extension"
+  number: 8
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
 }
 field {
   name: "modifier_extension"
-  number: 8
+  number: 9
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
   name: "identifier"
-  number: 9
+  number: 10
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Identifier"
+  type_name: ".google.fhir.r4.core.Identifier"
   options {
     [google.fhir.proto.field_description]: "Additional identifier for the MeasureReport"
   }
 }
 field {
   name: "status"
-  number: 10
+  number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.MeasureReportStatusCode"
+  type_name: ".google.fhir.r4.core.MeasureReportStatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "complete | pending | error"
@@ -102,10 +108,10 @@ field {
 }
 field {
   name: "type"
-  number: 11
+  number: 12
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.MeasureReportTypeCode"
+  type_name: ".google.fhir.r4.core.MeasureReportTypeCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "individual | subject-list | summary | data-collection"
@@ -113,10 +119,10 @@ field {
 }
 field {
   name: "measure"
-  number: 12
+  number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Canonical"
+  type_name: ".google.fhir.r4.core.Canonical"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "What measure was calculated"
@@ -124,10 +130,10 @@ field {
 }
 field {
   name: "subject"
-  number: 13
+  number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "What individual(s) the report is for"
     [google.fhir.proto.valid_reference_type]: "Patient"
@@ -141,20 +147,20 @@ field {
 }
 field {
   name: "date"
-  number: 14
+  number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DateTime"
+  type_name: ".google.fhir.r4.core.DateTime"
   options {
     [google.fhir.proto.field_description]: "When the report was generated"
   }
 }
 field {
   name: "reporter"
-  number: 15
+  number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Who is reporting the data"
     [google.fhir.proto.valid_reference_type]: "Practitioner"
@@ -165,10 +171,10 @@ field {
 }
 field {
   name: "period"
-  number: 16
+  number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Period"
+  type_name: ".google.fhir.r4.core.Period"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "What period the report covers"
@@ -176,20 +182,20 @@ field {
 }
 field {
   name: "improvement_notation"
-  number: 17
+  number: 18
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "increase | decrease"
   }
 }
 field {
   name: "group"
-  number: 18
+  number: 19
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.MeasureReport.Group"
+  type_name: ".google.fhir.r4.core.MeasureReport.Group"
   options {
     [google.fhir.proto.field_description]: "Measure results for each group"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -197,10 +203,10 @@ field {
 }
 field {
   name: "evaluated_resource"
-  number: 19
+  number: 20
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "What data was used to calculate the measure score"
     [google.fhir.proto.valid_reference_type]: "Resource"
@@ -213,7 +219,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -223,7 +229,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -233,7 +239,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -243,7 +249,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Meaning of the group"
     }
@@ -253,7 +259,7 @@ nested_type {
     number: 5
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.MeasureReport.Group.Population"
+    type_name: ".google.fhir.r4.core.MeasureReport.Group.Population"
     options {
       [google.fhir.proto.field_description]: "The populations in the group"
       [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -264,7 +270,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Quantity"
+    type_name: ".google.fhir.r4.core.Quantity"
     options {
       [google.fhir.proto.field_description]: "What score this group achieved"
     }
@@ -274,7 +280,7 @@ nested_type {
     number: 7
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.MeasureReport.Group.Stratifier"
+    type_name: ".google.fhir.r4.core.MeasureReport.Group.Stratifier"
     options {
       [google.fhir.proto.field_description]: "Stratification results"
       [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -287,7 +293,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -297,7 +303,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -307,7 +313,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -317,7 +323,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.CodeableConcept"
+      type_name: ".google.fhir.r4.core.CodeableConcept"
       options {
         [google.fhir.proto.field_description]: "initial-population | numerator | numerator-exclusion | denominator | denominator-exclusion | denominator-exception | measure-population | measure-population-exclusion | measure-observation"
       }
@@ -327,7 +333,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Integer"
+      type_name: ".google.fhir.r4.core.Integer"
       options {
         [google.fhir.proto.field_description]: "Size of the population"
       }
@@ -337,7 +343,7 @@ nested_type {
       number: 6
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Reference"
+      type_name: ".google.fhir.r4.core.Reference"
       options {
         [google.fhir.proto.field_description]: "For subject-list reports, the subject results in this population"
         [google.fhir.proto.valid_reference_type]: "List"
@@ -351,7 +357,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -361,7 +367,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -371,7 +377,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -381,7 +387,7 @@ nested_type {
       number: 4
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.CodeableConcept"
+      type_name: ".google.fhir.r4.core.CodeableConcept"
       options {
         [google.fhir.proto.field_description]: "What stratifier of the group"
       }
@@ -391,7 +397,7 @@ nested_type {
       number: 5
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.MeasureReport.Group.Stratifier.StratifierGroup"
+      type_name: ".google.fhir.r4.core.MeasureReport.Group.Stratifier.StratifierGroup"
       options {
         [google.fhir.proto.field_description]: "Stratum results, one for each unique value, or set of values, in the stratifier, or stratifier components"
         [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -404,7 +410,7 @@ nested_type {
         number: 1
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
         }
@@ -414,7 +420,7 @@ nested_type {
         number: 2
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Extension"
+        type_name: ".google.fhir.r4.core.Extension"
         options {
           [google.fhir.proto.field_description]: "Additional content defined by implementations"
         }
@@ -424,7 +430,7 @@ nested_type {
         number: 3
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Extension"
+        type_name: ".google.fhir.r4.core.Extension"
         options {
           [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
         }
@@ -434,7 +440,7 @@ nested_type {
         number: 4
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.CodeableConcept"
+        type_name: ".google.fhir.r4.core.CodeableConcept"
         options {
           [google.fhir.proto.field_description]: "The stratum value, e.g. male"
         }
@@ -444,7 +450,7 @@ nested_type {
         number: 5
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.MeasureReport.Group.Stratifier.StratifierGroup.Component"
+        type_name: ".google.fhir.r4.core.MeasureReport.Group.Stratifier.StratifierGroup.Component"
         options {
           [google.fhir.proto.field_description]: "Stratifier component values"
           [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -455,7 +461,7 @@ nested_type {
         number: 6
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.MeasureReport.Group.Stratifier.StratifierGroup.StratifierGroupPopulation"
+        type_name: ".google.fhir.r4.core.MeasureReport.Group.Stratifier.StratifierGroup.StratifierGroupPopulation"
         options {
           [google.fhir.proto.field_description]: "Population results in this stratum"
           [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -466,7 +472,7 @@ nested_type {
         number: 7
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Quantity"
+        type_name: ".google.fhir.r4.core.Quantity"
         options {
           [google.fhir.proto.field_description]: "What score this stratum achieved"
         }
@@ -478,7 +484,7 @@ nested_type {
           number: 1
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.String"
+          type_name: ".google.fhir.r4.core.String"
           options {
             [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
           }
@@ -488,7 +494,7 @@ nested_type {
           number: 2
           label: LABEL_REPEATED
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Extension"
+          type_name: ".google.fhir.r4.core.Extension"
           options {
             [google.fhir.proto.field_description]: "Additional content defined by implementations"
           }
@@ -498,7 +504,7 @@ nested_type {
           number: 3
           label: LABEL_REPEATED
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Extension"
+          type_name: ".google.fhir.r4.core.Extension"
           options {
             [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
           }
@@ -508,7 +514,7 @@ nested_type {
           number: 4
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.CodeableConcept"
+          type_name: ".google.fhir.r4.core.CodeableConcept"
           options {
             [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
             [google.fhir.proto.field_description]: "What stratifier component of the group"
@@ -519,7 +525,7 @@ nested_type {
           number: 5
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.CodeableConcept"
+          type_name: ".google.fhir.r4.core.CodeableConcept"
           options {
             [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
             [google.fhir.proto.field_description]: "The stratum component value, e.g. male"
@@ -533,7 +539,7 @@ nested_type {
           number: 1
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.String"
+          type_name: ".google.fhir.r4.core.String"
           options {
             [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
           }
@@ -543,7 +549,7 @@ nested_type {
           number: 2
           label: LABEL_REPEATED
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Extension"
+          type_name: ".google.fhir.r4.core.Extension"
           options {
             [google.fhir.proto.field_description]: "Additional content defined by implementations"
           }
@@ -553,7 +559,7 @@ nested_type {
           number: 3
           label: LABEL_REPEATED
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Extension"
+          type_name: ".google.fhir.r4.core.Extension"
           options {
             [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
           }
@@ -563,7 +569,7 @@ nested_type {
           number: 4
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.CodeableConcept"
+          type_name: ".google.fhir.r4.core.CodeableConcept"
           options {
             [google.fhir.proto.field_description]: "initial-population | numerator | numerator-exclusion | denominator | denominator-exclusion | denominator-exception | measure-population | measure-population-exclusion | measure-observation"
           }
@@ -573,7 +579,7 @@ nested_type {
           number: 5
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Integer"
+          type_name: ".google.fhir.r4.core.Integer"
           options {
             [google.fhir.proto.field_description]: "Size of the population"
           }
@@ -583,7 +589,7 @@ nested_type {
           number: 6
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Reference"
+          type_name: ".google.fhir.r4.core.Reference"
           options {
             [google.fhir.proto.field_description]: "For subject-list reports, the subject results in this population"
             [google.fhir.proto.valid_reference_type]: "List"

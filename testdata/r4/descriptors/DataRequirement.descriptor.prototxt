@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.FHIRAllTypesCode"
+  type_name: ".google.fhir.r4.core.FHIRAllTypesCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "The type of the required data"
@@ -35,7 +35,7 @@ field {
   number: 4
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Canonical"
+  type_name: ".google.fhir.r4.core.Canonical"
   options {
     [google.fhir.proto.field_description]: "The profile of the required data"
   }
@@ -45,7 +45,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DataRequirement.SubjectX"
+  type_name: ".google.fhir.r4.core.DataRequirement.SubjectX"
   options {
     [google.fhir.proto.field_description]: "E.g. Patient, Practitioner, RelatedPerson, Organization, Location, Device"
   }
@@ -55,7 +55,7 @@ field {
   number: 6
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Indicates specific structure elements that are referenced by the knowledge module"
   }
@@ -65,7 +65,7 @@ field {
   number: 7
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DataRequirement.CodeFilter"
+  type_name: ".google.fhir.r4.core.DataRequirement.CodeFilter"
   options {
     [google.fhir.proto.field_description]: "What codes are expected"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -77,7 +77,7 @@ field {
   number: 8
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DataRequirement.DateFilter"
+  type_name: ".google.fhir.r4.core.DataRequirement.DateFilter"
   options {
     [google.fhir.proto.field_description]: "What dates/date ranges are expected"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -89,7 +89,7 @@ field {
   number: 9
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.PositiveInt"
+  type_name: ".google.fhir.r4.core.PositiveInt"
   options {
     [google.fhir.proto.field_description]: "Number of results"
   }
@@ -99,7 +99,7 @@ field {
   number: 10
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DataRequirement.Sort"
+  type_name: ".google.fhir.r4.core.DataRequirement.Sort"
   options {
     [google.fhir.proto.field_description]: "Order of the results"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -112,7 +112,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     oneof_index: 0
   }
   field {
@@ -120,7 +120,7 @@ nested_type {
     number: 2
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.valid_reference_type]: "Group"
     }
@@ -140,7 +140,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -150,7 +150,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -160,7 +160,7 @@ nested_type {
     number: 3
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "A code-valued attribute to filter on"
     }
@@ -170,7 +170,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "A coded (token) parameter to search on"
     }
@@ -180,7 +180,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Canonical"
+    type_name: ".google.fhir.r4.core.Canonical"
     options {
       [google.fhir.proto.field_description]: "Valueset for the filter"
     }
@@ -190,7 +190,7 @@ nested_type {
     number: 6
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Coding"
+    type_name: ".google.fhir.r4.core.Coding"
     options {
       [google.fhir.proto.field_description]: "What code is expected"
     }
@@ -203,7 +203,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -213,7 +213,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -223,7 +223,7 @@ nested_type {
     number: 3
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "A date-valued attribute to filter on"
     }
@@ -233,7 +233,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "A date valued parameter to search on"
     }
@@ -243,7 +243,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.DataRequirement.DateFilter.ValueX"
+    type_name: ".google.fhir.r4.core.DataRequirement.DateFilter.ValueX"
     options {
       [google.fhir.proto.field_description]: "The value of the filter, as a Period, DateTime, or Duration value"
     }
@@ -255,7 +255,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.DateTime"
+      type_name: ".google.fhir.r4.core.DateTime"
       oneof_index: 0
     }
     field {
@@ -263,7 +263,7 @@ nested_type {
       number: 2
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Period"
+      type_name: ".google.fhir.r4.core.Period"
       oneof_index: 0
     }
     field {
@@ -271,7 +271,7 @@ nested_type {
       number: 3
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Duration"
+      type_name: ".google.fhir.r4.core.Duration"
       oneof_index: 0
     }
     options {
@@ -289,7 +289,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -299,7 +299,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -309,7 +309,7 @@ nested_type {
     number: 3
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "The name of the attribute to perform the sort"
@@ -320,7 +320,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.SortDirectionCode"
+    type_name: ".google.fhir.r4.core.SortDirectionCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "ascending | descending"

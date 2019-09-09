@@ -1512,14 +1512,11 @@ public class ProtoGeneratorTest {
   public void generateR4() throws Exception {
     Map<StructureDefinition, String> knownStructDefs = new HashMap<>();
     addPackage(
-        knownStructDefs,
-        "spec/hl7.fhir.core/4.0.0/package",
-        "google.fhir.r4.proto",
-        FhirVersion.R4);
+        knownStructDefs, "spec/hl7.fhir.core/4.0.0/package", "google.fhir.r4.core", FhirVersion.R4);
     ProtoGenerator protoGenerator =
         new ProtoGenerator(
             PackageInfo.newBuilder()
-                .setProtoPackage("google.fhir.r4.proto")
+                .setProtoPackage("google.fhir.r4.core")
                 .setJavaProtoPackage("com.google.fhir.r4.core")
                 .setFhirVersion(FhirVersion.R4)
                 .build(),

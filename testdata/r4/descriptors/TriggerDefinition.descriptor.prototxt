@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.TriggerTypeCode"
+  type_name: ".google.fhir.r4.core.TriggerTypeCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "named-event | periodic | data-changed | data-added | data-modified | data-removed | data-accessed | data-access-ended"
@@ -35,7 +35,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Name or URI that identifies the event"
   }
@@ -45,7 +45,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.TriggerDefinition.TimingX"
+  type_name: ".google.fhir.r4.core.TriggerDefinition.TimingX"
   options {
     [google.fhir.proto.field_description]: "Timing of the event"
   }
@@ -55,7 +55,7 @@ field {
   number: 6
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DataRequirement"
+  type_name: ".google.fhir.r4.core.DataRequirement"
   options {
     [google.fhir.proto.field_description]: "Triggering data of the event (multiple = \'and\')"
   }
@@ -65,7 +65,7 @@ field {
   number: 7
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Expression"
+  type_name: ".google.fhir.r4.core.Expression"
   options {
     [google.fhir.proto.field_description]: "Whether the event triggers (boolean expression)"
   }
@@ -77,7 +77,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Timing"
+    type_name: ".google.fhir.r4.core.Timing"
     oneof_index: 0
   }
   field {
@@ -85,7 +85,7 @@ nested_type {
     number: 2
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.valid_reference_type]: "Schedule"
     }
@@ -96,7 +96,7 @@ nested_type {
     number: 3
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Date"
+    type_name: ".google.fhir.r4.core.Date"
     oneof_index: 0
   }
   field {
@@ -104,7 +104,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.DateTime"
+    type_name: ".google.fhir.r4.core.DateTime"
     oneof_index: 0
   }
   options {

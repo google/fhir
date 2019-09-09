@@ -17,7 +17,7 @@ ROOT_PATH=../..
 INPUT_PATH=$ROOT_PATH/spec/hl7.fhir.core/4.0.0/package/
 PROTO_GENERATOR=$ROOT_PATH/bazel-bin/java/ProtoGenerator
 
-OUTPUT_PATH="$(dirname $0)/../../proto/r4/"
+OUTPUT_PATH="$(dirname $0)/../../proto/r4/core"
 DESCRIPTOR_OUTPUT_PATH="$(dirname $0)/../../testdata/r4/descriptors/"
 
 FHIR_STRUCT_DEF_ZIP="$ROOT_PATH/bazel-genfiles/spec/fhir_r4_structure_definitions.zip"
@@ -29,7 +29,6 @@ COMMON_FLAGS=" \
   --r4_struct_def_zip $FHIR_STRUCT_DEF_ZIP \
   --package_info $FHIR_PACKAGE_INFO \
   --struct_def_dep_pkg $FHIR_STRUCT_DEF_ZIP|$FHIR_PACKAGE_INFO \
-  --output_directory $OUTPUT_PATH \
   --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH "
 #
 # Build the binary.
@@ -44,7 +43,7 @@ fi
 # generate datatypes.proto
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
-  --output_name datatypes \
+  --output_directory $OUTPUT_PATH \
   --input_bundle $INPUT_PATH/Bundle-types.json \
   --exclude Reference \
   --exclude Extension
@@ -62,11 +61,10 @@ then
   cat "$(dirname $0)/r4/datatypes_supplement.txt" >> $OUTPUT_PATH/datatypes.proto
 fi
 
-# generate resources.proto
+# generate resource protos
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
-  --include_contained_resource \
-  --output_name resources \
+  --output_directory $OUTPUT_PATH/resources \
   --input_bundle $INPUT_PATH/Bundle-resources.json
 
 # generate profiles.proto
@@ -74,7 +72,7 @@ $PROTO_GENERATOR \
 # https://gforge.hl7.org/gf/project/fhir/tracker/?action=TrackerItemEdit&tracker_id=677&tracker_item_id=19239
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
-  --output_name profiles \
+  --output_directory $OUTPUT_PATH/profiles \
   --input_bundle $INPUT_PATH/Bundle-profiles-others.json \
   --exclude familymemberhistory-genetic
 
@@ -82,5 +80,5 @@ $PROTO_GENERATOR \
 # generate extensions
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
-  --output_name extensions \
+  --output_directory $OUTPUT_PATH \
   --input_bundle $INPUT_PATH/Bundle-extensions.json

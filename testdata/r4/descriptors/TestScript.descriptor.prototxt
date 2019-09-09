@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Id"
+  type_name: ".google.fhir.r4.core.Id"
   options {
     [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Meta"
+  type_name: ".google.fhir.r4.core.Meta"
   options {
     [google.fhir.proto.field_description]: "Metadata about the resource"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Uri"
+  type_name: ".google.fhir.r4.core.Uri"
   options {
     [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Code"
+  type_name: ".google.fhir.r4.core.Code"
   options {
     [google.fhir.proto.field_description]: "Language of the resource content"
   }
@@ -44,7 +44,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Narrative"
+  type_name: ".google.fhir.r4.core.Narrative"
   options {
     [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
@@ -54,37 +54,43 @@ field {
   number: 6
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.ContainedResource"
+  type_name: ".google.protobuf.Any"
   options {
     [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
-  name: "extension"
   number: 7
+  options {
+    [google.fhir.proto.reserved_reason]: "Field 7 reserved for strongly-typed ContainedResource for id: TestScript.contained"
+  }
+}
+field {
+  name: "extension"
+  number: 8
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
 }
 field {
   name: "modifier_extension"
-  number: 8
+  number: 9
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
   name: "url"
-  number: 9
+  number: 10
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Uri"
+  type_name: ".google.fhir.r4.core.Uri"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Canonical identifier for this test script, represented as a URI (globally unique)"
@@ -92,30 +98,30 @@ field {
 }
 field {
   name: "identifier"
-  number: 10
+  number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Identifier"
+  type_name: ".google.fhir.r4.core.Identifier"
   options {
     [google.fhir.proto.field_description]: "Additional identifier for the test script"
   }
 }
 field {
   name: "version"
-  number: 11
+  number: 12
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Business version of the test script"
   }
 }
 field {
   name: "name"
-  number: 12
+  number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Name for this test script (computer friendly)"
@@ -123,20 +129,20 @@ field {
 }
 field {
   name: "title"
-  number: 13
+  number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Name for this test script (human friendly)"
   }
 }
 field {
   name: "status"
-  number: 14
+  number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.PublicationStatusCode"
+  type_name: ".google.fhir.r4.core.PublicationStatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "draft | active | retired | unknown"
@@ -144,100 +150,100 @@ field {
 }
 field {
   name: "experimental"
-  number: 15
+  number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Boolean"
+  type_name: ".google.fhir.r4.core.Boolean"
   options {
     [google.fhir.proto.field_description]: "For testing purposes, not real usage"
   }
 }
 field {
   name: "date"
-  number: 16
+  number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DateTime"
+  type_name: ".google.fhir.r4.core.DateTime"
   options {
     [google.fhir.proto.field_description]: "Date last changed"
   }
 }
 field {
   name: "publisher"
-  number: 17
+  number: 18
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Name of the publisher (organization or individual)"
   }
 }
 field {
   name: "contact"
-  number: 18
+  number: 19
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.ContactDetail"
+  type_name: ".google.fhir.r4.core.ContactDetail"
   options {
     [google.fhir.proto.field_description]: "Contact details for the publisher"
   }
 }
 field {
   name: "description"
-  number: 19
+  number: 20
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Markdown"
+  type_name: ".google.fhir.r4.core.Markdown"
   options {
     [google.fhir.proto.field_description]: "Natural language description of the test script"
   }
 }
 field {
   name: "use_context"
-  number: 20
+  number: 21
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.UsageContext"
+  type_name: ".google.fhir.r4.core.UsageContext"
   options {
     [google.fhir.proto.field_description]: "The context that the content is intended to support"
   }
 }
 field {
   name: "jurisdiction"
-  number: 21
+  number: 22
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "Intended jurisdiction for test script (if applicable)"
   }
 }
 field {
   name: "purpose"
-  number: 22
+  number: 23
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Markdown"
+  type_name: ".google.fhir.r4.core.Markdown"
   options {
     [google.fhir.proto.field_description]: "Why this test script is defined"
   }
 }
 field {
   name: "copyright"
-  number: 23
+  number: 24
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Markdown"
+  type_name: ".google.fhir.r4.core.Markdown"
   options {
     [google.fhir.proto.field_description]: "Use and/or publishing restrictions"
   }
 }
 field {
   name: "origin"
-  number: 24
+  number: 25
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.TestScript.Origin"
+  type_name: ".google.fhir.r4.core.TestScript.Origin"
   options {
     [google.fhir.proto.field_description]: "An abstract server representing a client or sender in a message exchange"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -245,10 +251,10 @@ field {
 }
 field {
   name: "destination"
-  number: 25
+  number: 26
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.TestScript.Destination"
+  type_name: ".google.fhir.r4.core.TestScript.Destination"
   options {
     [google.fhir.proto.field_description]: "An abstract server representing a destination or receiver in a message exchange"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -256,10 +262,10 @@ field {
 }
 field {
   name: "metadata"
-  number: 26
+  number: 27
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.TestScript.Metadata"
+  type_name: ".google.fhir.r4.core.TestScript.Metadata"
   options {
     [google.fhir.proto.field_description]: "Required capability that is assumed to function correctly on the FHIR server being tested"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -268,10 +274,10 @@ field {
 }
 field {
   name: "fixture"
-  number: 27
+  number: 28
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.TestScript.Fixture"
+  type_name: ".google.fhir.r4.core.TestScript.Fixture"
   options {
     [google.fhir.proto.field_description]: "Fixture in the test script - by reference (uri)"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -279,10 +285,10 @@ field {
 }
 field {
   name: "profile"
-  number: 28
+  number: 29
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Reference of the validation profile"
     [google.fhir.proto.valid_reference_type]: "Resource"
@@ -290,10 +296,10 @@ field {
 }
 field {
   name: "variable"
-  number: 29
+  number: 30
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.TestScript.Variable"
+  type_name: ".google.fhir.r4.core.TestScript.Variable"
   options {
     [google.fhir.proto.field_description]: "Placeholder for evaluated elements"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -302,10 +308,10 @@ field {
 }
 field {
   name: "setup"
-  number: 30
+  number: 31
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.TestScript.Setup"
+  type_name: ".google.fhir.r4.core.TestScript.Setup"
   options {
     [google.fhir.proto.field_description]: "A series of required setup operations before tests are executed"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -313,10 +319,10 @@ field {
 }
 field {
   name: "test"
-  number: 31
+  number: 32
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.TestScript.Test"
+  type_name: ".google.fhir.r4.core.TestScript.Test"
   options {
     [google.fhir.proto.field_description]: "A test in this script"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -324,10 +330,10 @@ field {
 }
 field {
   name: "teardown"
-  number: 32
+  number: 33
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.TestScript.Teardown"
+  type_name: ".google.fhir.r4.core.TestScript.Teardown"
   options {
     [google.fhir.proto.field_description]: "A series of required clean up steps"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -340,7 +346,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -350,7 +356,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -360,7 +366,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -370,7 +376,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Integer"
+    type_name: ".google.fhir.r4.core.Integer"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "The index of the abstract origin server starting at 1"
@@ -381,7 +387,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Coding"
+    type_name: ".google.fhir.r4.core.Coding"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "FHIR-Client | FHIR-SDC-FormFiller"
@@ -395,7 +401,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -405,7 +411,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -415,7 +421,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -425,7 +431,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Integer"
+    type_name: ".google.fhir.r4.core.Integer"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "The index of the abstract destination server starting at 1"
@@ -436,7 +442,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Coding"
+    type_name: ".google.fhir.r4.core.Coding"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "FHIR-Server | FHIR-SDC-FormManager | FHIR-SDC-FormReceiver | FHIR-SDC-FormProcessor"
@@ -450,7 +456,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -460,7 +466,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -470,7 +476,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -480,7 +486,7 @@ nested_type {
     number: 4
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.TestScript.Metadata.Link"
+    type_name: ".google.fhir.r4.core.TestScript.Metadata.Link"
     options {
       [google.fhir.proto.field_description]: "Links to the FHIR specification"
       [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -491,7 +497,7 @@ nested_type {
     number: 5
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.TestScript.Metadata.Capability"
+    type_name: ".google.fhir.r4.core.TestScript.Metadata.Capability"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Capabilities  that are assumed to function correctly on the FHIR server being tested"
@@ -505,7 +511,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -515,7 +521,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -525,7 +531,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -535,7 +541,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Uri"
+      type_name: ".google.fhir.r4.core.Uri"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "URL to the specification"
@@ -546,7 +552,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Short description"
       }
@@ -559,7 +565,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -569,7 +575,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -579,7 +585,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -589,7 +595,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Boolean"
+      type_name: ".google.fhir.r4.core.Boolean"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "Are the capabilities required?"
@@ -600,7 +606,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Boolean"
+      type_name: ".google.fhir.r4.core.Boolean"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "Are the capabilities validated?"
@@ -611,7 +617,7 @@ nested_type {
       number: 6
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "The expected capabilities of the server"
       }
@@ -621,7 +627,7 @@ nested_type {
       number: 7
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Integer"
+      type_name: ".google.fhir.r4.core.Integer"
       options {
         [google.fhir.proto.field_description]: "Which origin server these requirements apply to"
       }
@@ -631,7 +637,7 @@ nested_type {
       number: 8
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Integer"
+      type_name: ".google.fhir.r4.core.Integer"
       options {
         [google.fhir.proto.field_description]: "Which server these requirements apply to"
       }
@@ -641,7 +647,7 @@ nested_type {
       number: 9
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Uri"
+      type_name: ".google.fhir.r4.core.Uri"
       options {
         [google.fhir.proto.field_description]: "Links to the FHIR specification"
       }
@@ -651,7 +657,7 @@ nested_type {
       number: 10
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Canonical"
+      type_name: ".google.fhir.r4.core.Canonical"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "Required Capability Statement"
@@ -666,7 +672,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -676,7 +682,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -686,7 +692,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -696,7 +702,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Boolean"
+    type_name: ".google.fhir.r4.core.Boolean"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Whether or not to implicitly create the fixture during setup"
@@ -707,7 +713,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Boolean"
+    type_name: ".google.fhir.r4.core.Boolean"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Whether or not to implicitly delete the fixture during teardown"
@@ -718,7 +724,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.field_description]: "Reference of the resource"
       [google.fhir.proto.valid_reference_type]: "Resource"
@@ -732,7 +738,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -742,7 +748,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -752,7 +758,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -762,7 +768,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Descriptive name for this variable"
@@ -773,7 +779,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Default, hard-coded, or user-defined value for this variable"
     }
@@ -783,7 +789,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Natural language description of the variable"
     }
@@ -793,7 +799,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "The FHIRPath expression against the fixture body"
     }
@@ -803,7 +809,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "HTTP header field name for source"
     }
@@ -813,7 +819,7 @@ nested_type {
     number: 9
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Hint help text for default value to enter"
     }
@@ -823,7 +829,7 @@ nested_type {
     number: 10
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "XPath or JSONPath against the fixture body"
     }
@@ -833,7 +839,7 @@ nested_type {
     number: 11
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Id"
+    type_name: ".google.fhir.r4.core.Id"
     options {
       [google.fhir.proto.field_description]: "Fixture Id of source expression or headerField within this variable"
     }
@@ -846,7 +852,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -856,7 +862,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -866,7 +872,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -876,7 +882,7 @@ nested_type {
     number: 4
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.TestScript.Setup.SetupAction"
+    type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "A setup operation or assert to perform"
@@ -891,7 +897,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -901,7 +907,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -911,7 +917,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -921,7 +927,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.TestScript.Setup.SetupAction.Operation"
+      type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Operation"
       options {
         [google.fhir.proto.field_description]: "The setup operation to perform"
         [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -933,7 +939,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.TestScript.Setup.SetupAction.Assert"
+      type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Assert"
       options {
         [google.fhir.proto.field_description]: "The assertion to perform"
         [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -950,7 +956,7 @@ nested_type {
         number: 1
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
         }
@@ -960,7 +966,7 @@ nested_type {
         number: 2
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Extension"
+        type_name: ".google.fhir.r4.core.Extension"
         options {
           [google.fhir.proto.field_description]: "Additional content defined by implementations"
         }
@@ -970,7 +976,7 @@ nested_type {
         number: 3
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Extension"
+        type_name: ".google.fhir.r4.core.Extension"
         options {
           [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
         }
@@ -980,7 +986,7 @@ nested_type {
         number: 4
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Coding"
+        type_name: ".google.fhir.r4.core.Coding"
         options {
           [google.fhir.proto.field_description]: "The operation code type that will be executed"
         }
@@ -990,7 +996,7 @@ nested_type {
         number: 5
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.FHIRDefinedTypeCode"
+        type_name: ".google.fhir.r4.core.FHIRDefinedTypeCode"
         options {
           [google.fhir.proto.field_description]: "Resource type"
         }
@@ -1000,7 +1006,7 @@ nested_type {
         number: 6
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Tracking/logging operation label"
         }
@@ -1010,7 +1016,7 @@ nested_type {
         number: 7
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Tracking/reporting operation description"
         }
@@ -1020,7 +1026,7 @@ nested_type {
         number: 8
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.MimeTypesCode"
+        type_name: ".google.fhir.r4.core.MimeTypesCode"
         options {
           [google.fhir.proto.field_description]: "Mime type to accept in the payload of the response, with charset etc."
         }
@@ -1030,7 +1036,7 @@ nested_type {
         number: 9
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.MimeTypesCode"
+        type_name: ".google.fhir.r4.core.MimeTypesCode"
         options {
           [google.fhir.proto.field_description]: "Mime type of the request payload contents, with charset etc."
         }
@@ -1040,7 +1046,7 @@ nested_type {
         number: 10
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Integer"
+        type_name: ".google.fhir.r4.core.Integer"
         options {
           [google.fhir.proto.field_description]: "Server responding to the request"
         }
@@ -1050,7 +1056,7 @@ nested_type {
         number: 11
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Boolean"
+        type_name: ".google.fhir.r4.core.Boolean"
         options {
           [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
           [google.fhir.proto.field_description]: "Whether or not to send the request url in encoded format"
@@ -1061,7 +1067,7 @@ nested_type {
         number: 12
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.TestScriptRequestMethodCodeCode"
+        type_name: ".google.fhir.r4.core.TestScriptRequestMethodCodeCode"
         options {
           [google.fhir.proto.field_description]: "delete | get | options | patch | post | put | head"
         }
@@ -1071,7 +1077,7 @@ nested_type {
         number: 13
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Integer"
+        type_name: ".google.fhir.r4.core.Integer"
         options {
           [google.fhir.proto.field_description]: "Server initiating the request"
         }
@@ -1081,7 +1087,7 @@ nested_type {
         number: 14
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Explicitly defined path parameters"
         }
@@ -1091,7 +1097,7 @@ nested_type {
         number: 15
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.TestScript.Setup.SetupAction.Operation.RequestHeader"
+        type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Operation.RequestHeader"
         options {
           [google.fhir.proto.field_description]: "Each operation can have one or more header elements"
           [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -1102,7 +1108,7 @@ nested_type {
         number: 16
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Id"
+        type_name: ".google.fhir.r4.core.Id"
         options {
           [google.fhir.proto.field_description]: "Fixture Id of mapped request"
         }
@@ -1112,7 +1118,7 @@ nested_type {
         number: 17
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Id"
+        type_name: ".google.fhir.r4.core.Id"
         options {
           [google.fhir.proto.field_description]: "Fixture Id of mapped response"
         }
@@ -1122,7 +1128,7 @@ nested_type {
         number: 18
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Id"
+        type_name: ".google.fhir.r4.core.Id"
         options {
           [google.fhir.proto.field_description]: "Fixture Id of body for PUT and POST requests"
         }
@@ -1132,7 +1138,7 @@ nested_type {
         number: 19
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Id"
+        type_name: ".google.fhir.r4.core.Id"
         options {
           [google.fhir.proto.field_description]: "Id of fixture used for extracting the [id],  [type], and [vid] for GET requests"
         }
@@ -1142,7 +1148,7 @@ nested_type {
         number: 20
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Request URL"
         }
@@ -1154,7 +1160,7 @@ nested_type {
           number: 1
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.String"
+          type_name: ".google.fhir.r4.core.String"
           options {
             [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
           }
@@ -1164,7 +1170,7 @@ nested_type {
           number: 2
           label: LABEL_REPEATED
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Extension"
+          type_name: ".google.fhir.r4.core.Extension"
           options {
             [google.fhir.proto.field_description]: "Additional content defined by implementations"
           }
@@ -1174,7 +1180,7 @@ nested_type {
           number: 3
           label: LABEL_REPEATED
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.Extension"
+          type_name: ".google.fhir.r4.core.Extension"
           options {
             [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
           }
@@ -1184,7 +1190,7 @@ nested_type {
           number: 4
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.String"
+          type_name: ".google.fhir.r4.core.String"
           options {
             [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
             [google.fhir.proto.field_description]: "HTTP header field name"
@@ -1195,7 +1201,7 @@ nested_type {
           number: 5
           label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
-          type_name: ".google.fhir.r4.proto.String"
+          type_name: ".google.fhir.r4.core.String"
           options {
             [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
             [google.fhir.proto.field_description]: "HTTP headerfield value"
@@ -1210,7 +1216,7 @@ nested_type {
         number: 1
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
         }
@@ -1220,7 +1226,7 @@ nested_type {
         number: 2
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Extension"
+        type_name: ".google.fhir.r4.core.Extension"
         options {
           [google.fhir.proto.field_description]: "Additional content defined by implementations"
         }
@@ -1230,7 +1236,7 @@ nested_type {
         number: 3
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Extension"
+        type_name: ".google.fhir.r4.core.Extension"
         options {
           [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
         }
@@ -1240,7 +1246,7 @@ nested_type {
         number: 4
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Tracking/logging assertion label"
         }
@@ -1250,7 +1256,7 @@ nested_type {
         number: 5
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Tracking/reporting assertion description"
         }
@@ -1260,7 +1266,7 @@ nested_type {
         number: 6
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.AssertionDirectionTypeCode"
+        type_name: ".google.fhir.r4.core.AssertionDirectionTypeCode"
         options {
           [google.fhir.proto.field_description]: "response | request"
         }
@@ -1270,7 +1276,7 @@ nested_type {
         number: 7
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Id of the source fixture to be evaluated"
         }
@@ -1280,7 +1286,7 @@ nested_type {
         number: 8
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "The FHIRPath expression to evaluate against the source fixture"
         }
@@ -1290,7 +1296,7 @@ nested_type {
         number: 9
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "XPath or JSONPath expression to evaluate against the source fixture"
         }
@@ -1300,7 +1306,7 @@ nested_type {
         number: 10
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.MimeTypesCode"
+        type_name: ".google.fhir.r4.core.MimeTypesCode"
         options {
           [google.fhir.proto.field_description]: "Mime type to compare against the \'Content-Type\' header"
         }
@@ -1310,7 +1316,7 @@ nested_type {
         number: 11
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "The FHIRPath expression to be evaluated"
         }
@@ -1320,7 +1326,7 @@ nested_type {
         number: 12
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "HTTP header field name"
         }
@@ -1330,7 +1336,7 @@ nested_type {
         number: 13
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Fixture Id of minimum content resource"
         }
@@ -1340,7 +1346,7 @@ nested_type {
         number: 14
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Boolean"
+        type_name: ".google.fhir.r4.core.Boolean"
         options {
           [google.fhir.proto.field_description]: "Perform validation on navigation links?"
         }
@@ -1350,7 +1356,7 @@ nested_type {
         number: 15
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.AssertionOperatorTypeCode"
+        type_name: ".google.fhir.r4.core.AssertionOperatorTypeCode"
         options {
           [google.fhir.proto.field_description]: "equals | notEquals | in | notIn | greaterThan | lessThan | empty | notEmpty | contains | notContains | eval"
         }
@@ -1360,7 +1366,7 @@ nested_type {
         number: 16
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "XPath or JSONPath expression"
         }
@@ -1370,7 +1376,7 @@ nested_type {
         number: 17
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.TestScriptRequestMethodCodeCode"
+        type_name: ".google.fhir.r4.core.TestScriptRequestMethodCodeCode"
         options {
           [google.fhir.proto.field_description]: "delete | get | options | patch | post | put | head"
         }
@@ -1380,7 +1386,7 @@ nested_type {
         number: 18
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Request URL comparison value"
         }
@@ -1391,7 +1397,7 @@ nested_type {
         number: 19
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.FHIRDefinedTypeCode"
+        type_name: ".google.fhir.r4.core.FHIRDefinedTypeCode"
         options {
           [google.fhir.proto.field_description]: "Resource type"
         }
@@ -1401,7 +1407,7 @@ nested_type {
         number: 20
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.AssertionResponseTypesCode"
+        type_name: ".google.fhir.r4.core.AssertionResponseTypesCode"
         options {
           [google.fhir.proto.field_description]: "okay | created | noContent | notModified | bad | forbidden | notFound | methodNotAllowed | conflict | gone | preconditionFailed | unprocessable"
         }
@@ -1411,7 +1417,7 @@ nested_type {
         number: 21
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "HTTP response code to test"
         }
@@ -1421,7 +1427,7 @@ nested_type {
         number: 22
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Id"
+        type_name: ".google.fhir.r4.core.Id"
         options {
           [google.fhir.proto.field_description]: "Fixture Id of source expression or headerField"
         }
@@ -1431,7 +1437,7 @@ nested_type {
         number: 23
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Id"
+        type_name: ".google.fhir.r4.core.Id"
         options {
           [google.fhir.proto.field_description]: "Profile Id of validation profile reference"
         }
@@ -1441,7 +1447,7 @@ nested_type {
         number: 24
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "The value to compare to"
         }
@@ -1451,7 +1457,7 @@ nested_type {
         number: 25
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Boolean"
+        type_name: ".google.fhir.r4.core.Boolean"
         options {
           [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
           [google.fhir.proto.field_description]: "Will this assert produce a warning only on error?"
@@ -1467,7 +1473,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -1477,7 +1483,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -1487,7 +1493,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -1497,7 +1503,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Tracking/logging name of this test"
     }
@@ -1507,7 +1513,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Tracking/reporting short description of the test"
     }
@@ -1517,7 +1523,7 @@ nested_type {
     number: 6
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.TestScript.Test.TestAction"
+    type_name: ".google.fhir.r4.core.TestScript.Test.TestAction"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "A test operation or assert to perform"
@@ -1532,7 +1538,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -1542,7 +1548,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -1552,7 +1558,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -1562,7 +1568,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.TestScript.Setup.SetupAction.Operation"
+      type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Operation"
       options {
         [google.fhir.proto.field_description]: "The setup operation to perform"
         [google.fhir.proto.fhir_path_constraint]: "sourceId.exists() or (targetId.count() + url.count() + params.count() = 1) or (type.code in (\'capabilities\' | \'search\' | \'transaction\' | \'history\'))"
@@ -1573,7 +1579,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.TestScript.Setup.SetupAction.Assert"
+      type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Assert"
       options {
         [google.fhir.proto.field_description]: "The setup assertion to perform"
         [google.fhir.proto.fhir_path_constraint]: "compareToSourceId.empty() xor (compareToSourceExpression.exists() or compareToSourcePath.exists())"
@@ -1591,7 +1597,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -1601,7 +1607,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -1611,7 +1617,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -1621,7 +1627,7 @@ nested_type {
     number: 4
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.TestScript.Teardown.TeardownAction"
+    type_name: ".google.fhir.r4.core.TestScript.Teardown.TeardownAction"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "One or more teardown operations to perform"
@@ -1635,7 +1641,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -1645,7 +1651,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -1655,7 +1661,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -1665,7 +1671,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.TestScript.Setup.SetupAction.Operation"
+      type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Operation"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "The teardown operation to perform"

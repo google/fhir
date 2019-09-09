@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Quantity"
+  type_name: ".google.fhir.r4.core.Quantity"
   options {
     [google.fhir.proto.field_description]: "Where applicable, the height can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used"
   }
@@ -44,7 +44,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Quantity"
+  type_name: ".google.fhir.r4.core.Quantity"
   options {
     [google.fhir.proto.field_description]: "Where applicable, the width can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used"
   }
@@ -54,7 +54,7 @@ field {
   number: 6
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Quantity"
+  type_name: ".google.fhir.r4.core.Quantity"
   options {
     [google.fhir.proto.field_description]: "Where applicable, the depth can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used"
   }
@@ -64,7 +64,7 @@ field {
   number: 7
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Quantity"
+  type_name: ".google.fhir.r4.core.Quantity"
   options {
     [google.fhir.proto.field_description]: "Where applicable, the weight can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used"
   }
@@ -74,7 +74,7 @@ field {
   number: 8
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Quantity"
+  type_name: ".google.fhir.r4.core.Quantity"
   options {
     [google.fhir.proto.field_description]: "Where applicable, the nominal volume can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used"
   }
@@ -84,7 +84,7 @@ field {
   number: 9
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Quantity"
+  type_name: ".google.fhir.r4.core.Quantity"
   options {
     [google.fhir.proto.field_description]: "Where applicable, the external diameter can be specified using a numerical value and its unit of measurement The unit of measurement shall be specified in accordance with ISO 11240 and the resulting terminology The symbol and the symbol identifier shall be used"
   }
@@ -94,7 +94,7 @@ field {
   number: 10
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Where applicable, the shape can be specified An appropriate controlled vocabulary shall be used The term and the term identifier shall be used"
   }
@@ -104,7 +104,7 @@ field {
   number: 11
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Where applicable, the color can be specified An appropriate controlled vocabulary shall be used The term and the term identifier shall be used"
   }
@@ -114,7 +114,7 @@ field {
   number: 12
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Where applicable, the imprint can be specified as text"
   }
@@ -124,7 +124,7 @@ field {
   number: 13
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Attachment"
+  type_name: ".google.fhir.r4.core.Attachment"
   options {
     [google.fhir.proto.field_description]: "Where applicable, the image can be provided The format of the image attachment shall be specified by regional implementations"
   }
@@ -134,7 +134,7 @@ field {
   number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "Where applicable, the scoring can be specified An appropriate controlled vocabulary shall be used The term and the term identifier shall be used"
   }

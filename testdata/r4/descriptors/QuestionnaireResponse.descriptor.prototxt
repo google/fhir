@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Id"
+  type_name: ".google.fhir.r4.core.Id"
   options {
     [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Meta"
+  type_name: ".google.fhir.r4.core.Meta"
   options {
     [google.fhir.proto.field_description]: "Metadata about the resource"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Uri"
+  type_name: ".google.fhir.r4.core.Uri"
   options {
     [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Code"
+  type_name: ".google.fhir.r4.core.Code"
   options {
     [google.fhir.proto.field_description]: "Language of the resource content"
   }
@@ -44,7 +44,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Narrative"
+  type_name: ".google.fhir.r4.core.Narrative"
   options {
     [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
@@ -54,47 +54,53 @@ field {
   number: 6
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.ContainedResource"
+  type_name: ".google.protobuf.Any"
   options {
     [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
-  name: "extension"
   number: 7
+  options {
+    [google.fhir.proto.reserved_reason]: "Field 7 reserved for strongly-typed ContainedResource for id: QuestionnaireResponse.contained"
+  }
+}
+field {
+  name: "extension"
+  number: 8
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
 }
 field {
   name: "modifier_extension"
-  number: 8
+  number: 9
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
   name: "identifier"
-  number: 9
+  number: 10
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Identifier"
+  type_name: ".google.fhir.r4.core.Identifier"
   options {
     [google.fhir.proto.field_description]: "Unique id for this set of answers"
   }
 }
 field {
   name: "based_on"
-  number: 10
+  number: 11
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Request fulfilled by this QuestionnaireResponse"
     [google.fhir.proto.valid_reference_type]: "CarePlan"
@@ -103,10 +109,10 @@ field {
 }
 field {
   name: "part_of"
-  number: 11
+  number: 12
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Part of this action"
     [google.fhir.proto.valid_reference_type]: "Observation"
@@ -115,20 +121,20 @@ field {
 }
 field {
   name: "questionnaire"
-  number: 12
+  number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Canonical"
+  type_name: ".google.fhir.r4.core.Canonical"
   options {
     [google.fhir.proto.field_description]: "Form being answered"
   }
 }
 field {
   name: "status"
-  number: 13
+  number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.QuestionnaireResponseStatusCode"
+  type_name: ".google.fhir.r4.core.QuestionnaireResponseStatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "in-progress | completed | amended | entered-in-error | stopped"
@@ -136,10 +142,10 @@ field {
 }
 field {
   name: "subject"
-  number: 14
+  number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "The subject of the questions"
     [google.fhir.proto.valid_reference_type]: "Resource"
@@ -147,10 +153,10 @@ field {
 }
 field {
   name: "encounter"
-  number: 15
+  number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Encounter created as part of"
     [google.fhir.proto.valid_reference_type]: "Encounter"
@@ -158,20 +164,20 @@ field {
 }
 field {
   name: "authored"
-  number: 16
+  number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DateTime"
+  type_name: ".google.fhir.r4.core.DateTime"
   options {
     [google.fhir.proto.field_description]: "Date the answers were gathered"
   }
 }
 field {
   name: "author"
-  number: 17
+  number: 18
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Person who received and recorded the answers"
     [google.fhir.proto.valid_reference_type]: "Device"
@@ -184,10 +190,10 @@ field {
 }
 field {
   name: "source"
-  number: 18
+  number: 19
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "The person who answered the questions"
     [google.fhir.proto.valid_reference_type]: "Patient"
@@ -198,10 +204,10 @@ field {
 }
 field {
   name: "item"
-  number: 19
+  number: 20
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.QuestionnaireResponse.Item"
+  type_name: ".google.fhir.r4.core.QuestionnaireResponse.Item"
   options {
     [google.fhir.proto.field_description]: "Groups and questions"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -215,7 +221,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -225,7 +231,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -235,7 +241,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -245,7 +251,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Pointer to specific item from Questionnaire"
@@ -256,7 +262,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Uri"
+    type_name: ".google.fhir.r4.core.Uri"
     options {
       [google.fhir.proto.field_description]: "ElementDefinition - details for the item"
     }
@@ -266,7 +272,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Name for group or question text"
     }
@@ -276,7 +282,7 @@ nested_type {
     number: 7
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.QuestionnaireResponse.Item.Answer"
+    type_name: ".google.fhir.r4.core.QuestionnaireResponse.Item.Answer"
     options {
       [google.fhir.proto.field_description]: "The response(s) to the question"
       [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -287,7 +293,7 @@ nested_type {
     number: 8
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.QuestionnaireResponse.Item"
+    type_name: ".google.fhir.r4.core.QuestionnaireResponse.Item"
     options {
       [google.fhir.proto.field_description]: "Nested questionnaire response items"
     }
@@ -299,7 +305,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -309,7 +315,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -319,7 +325,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -329,7 +335,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.QuestionnaireResponse.Item.Answer.ValueX"
+      type_name: ".google.fhir.r4.core.QuestionnaireResponse.Item.Answer.ValueX"
       options {
         [google.fhir.proto.field_description]: "Single-valued answer to the question"
       }
@@ -339,7 +345,7 @@ nested_type {
       number: 5
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.QuestionnaireResponse.Item"
+      type_name: ".google.fhir.r4.core.QuestionnaireResponse.Item"
       options {
         [google.fhir.proto.field_description]: "Nested groups and questions"
       }
@@ -351,7 +357,7 @@ nested_type {
         number: 1
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Boolean"
+        type_name: ".google.fhir.r4.core.Boolean"
         oneof_index: 0
       }
       field {
@@ -359,7 +365,7 @@ nested_type {
         number: 2
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Decimal"
+        type_name: ".google.fhir.r4.core.Decimal"
         oneof_index: 0
       }
       field {
@@ -367,7 +373,7 @@ nested_type {
         number: 3
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Integer"
+        type_name: ".google.fhir.r4.core.Integer"
         oneof_index: 0
       }
       field {
@@ -375,7 +381,7 @@ nested_type {
         number: 4
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Date"
+        type_name: ".google.fhir.r4.core.Date"
         oneof_index: 0
       }
       field {
@@ -383,7 +389,7 @@ nested_type {
         number: 5
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.DateTime"
+        type_name: ".google.fhir.r4.core.DateTime"
         oneof_index: 0
       }
       field {
@@ -391,7 +397,7 @@ nested_type {
         number: 6
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Time"
+        type_name: ".google.fhir.r4.core.Time"
         oneof_index: 0
       }
       field {
@@ -399,7 +405,7 @@ nested_type {
         number: 7
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         oneof_index: 0
         json_name: "string"
       }
@@ -408,7 +414,7 @@ nested_type {
         number: 8
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Uri"
+        type_name: ".google.fhir.r4.core.Uri"
         oneof_index: 0
       }
       field {
@@ -416,7 +422,7 @@ nested_type {
         number: 9
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Attachment"
+        type_name: ".google.fhir.r4.core.Attachment"
         oneof_index: 0
       }
       field {
@@ -424,7 +430,7 @@ nested_type {
         number: 10
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Coding"
+        type_name: ".google.fhir.r4.core.Coding"
         oneof_index: 0
       }
       field {
@@ -432,7 +438,7 @@ nested_type {
         number: 11
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Quantity"
+        type_name: ".google.fhir.r4.core.Quantity"
         oneof_index: 0
       }
       field {
@@ -440,7 +446,7 @@ nested_type {
         number: 12
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Reference"
+        type_name: ".google.fhir.r4.core.Reference"
         options {
           [google.fhir.proto.valid_reference_type]: "Resource"
         }

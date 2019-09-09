@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Id"
+  type_name: ".google.fhir.r4.core.Id"
   options {
     [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Meta"
+  type_name: ".google.fhir.r4.core.Meta"
   options {
     [google.fhir.proto.field_description]: "Metadata about the resource"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Uri"
+  type_name: ".google.fhir.r4.core.Uri"
   options {
     [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Code"
+  type_name: ".google.fhir.r4.core.Code"
   options {
     [google.fhir.proto.field_description]: "Language of the resource content"
   }
@@ -44,7 +44,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Narrative"
+  type_name: ".google.fhir.r4.core.Narrative"
   options {
     [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
@@ -54,47 +54,53 @@ field {
   number: 6
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.ContainedResource"
+  type_name: ".google.protobuf.Any"
   options {
     [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
-  name: "extension"
   number: 7
+  options {
+    [google.fhir.proto.reserved_reason]: "Field 7 reserved for strongly-typed ContainedResource for id: Claim.contained"
+  }
+}
+field {
+  name: "extension"
+  number: 8
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
 }
 field {
   name: "modifier_extension"
-  number: 8
+  number: 9
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
   name: "identifier"
-  number: 9
+  number: 10
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Identifier"
+  type_name: ".google.fhir.r4.core.Identifier"
   options {
     [google.fhir.proto.field_description]: "Business Identifier for claim"
   }
 }
 field {
   name: "status"
-  number: 10
+  number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.FinancialResourceStatusCodesCode"
+  type_name: ".google.fhir.r4.core.FinancialResourceStatusCodesCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "active | cancelled | draft | entered-in-error"
@@ -102,10 +108,10 @@ field {
 }
 field {
   name: "type"
-  number: 11
+  number: 12
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Category or discipline"
@@ -113,20 +119,20 @@ field {
 }
 field {
   name: "sub_type"
-  number: 12
+  number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "More granular claim type"
   }
 }
 field {
   name: "use"
-  number: 13
+  number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.UseCode"
+  type_name: ".google.fhir.r4.core.UseCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "claim | preauthorization | predetermination"
@@ -134,10 +140,10 @@ field {
 }
 field {
   name: "patient"
-  number: 14
+  number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "The recipient of the products and services"
@@ -146,20 +152,20 @@ field {
 }
 field {
   name: "billable_period"
-  number: 15
+  number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Period"
+  type_name: ".google.fhir.r4.core.Period"
   options {
     [google.fhir.proto.field_description]: "Relevant time frame for the claim"
   }
 }
 field {
   name: "created"
-  number: 16
+  number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DateTime"
+  type_name: ".google.fhir.r4.core.DateTime"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Resource creation date"
@@ -167,10 +173,10 @@ field {
 }
 field {
   name: "enterer"
-  number: 17
+  number: 18
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Author of the claim"
     [google.fhir.proto.valid_reference_type]: "Practitioner"
@@ -179,10 +185,10 @@ field {
 }
 field {
   name: "insurer"
-  number: 18
+  number: 19
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Target"
     [google.fhir.proto.valid_reference_type]: "Organization"
@@ -190,10 +196,10 @@ field {
 }
 field {
   name: "provider"
-  number: 19
+  number: 20
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Party responsible for the claim"
@@ -204,10 +210,10 @@ field {
 }
 field {
   name: "priority"
-  number: 20
+  number: 21
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Desired processing ugency"
@@ -215,20 +221,20 @@ field {
 }
 field {
   name: "funds_reserve"
-  number: 21
+  number: 22
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.CodeableConcept"
+  type_name: ".google.fhir.r4.core.CodeableConcept"
   options {
     [google.fhir.proto.field_description]: "For whom to reserve funds"
   }
 }
 field {
   name: "related"
-  number: 22
+  number: 23
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Claim.RelatedClaim"
+  type_name: ".google.fhir.r4.core.Claim.RelatedClaim"
   options {
     [google.fhir.proto.field_description]: "Prior or corollary claims"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -236,10 +242,10 @@ field {
 }
 field {
   name: "prescription"
-  number: 23
+  number: 24
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Prescription authorizing services and products"
     [google.fhir.proto.valid_reference_type]: "DeviceRequest"
@@ -249,10 +255,10 @@ field {
 }
 field {
   name: "original_prescription"
-  number: 24
+  number: 25
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Original prescription if superseded by fulfiller"
     [google.fhir.proto.valid_reference_type]: "DeviceRequest"
@@ -262,10 +268,10 @@ field {
 }
 field {
   name: "payee"
-  number: 25
+  number: 26
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Claim.Payee"
+  type_name: ".google.fhir.r4.core.Claim.Payee"
   options {
     [google.fhir.proto.field_description]: "Recipient of benefits payable"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -273,10 +279,10 @@ field {
 }
 field {
   name: "referral"
-  number: 26
+  number: 27
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Treatment referral"
     [google.fhir.proto.valid_reference_type]: "ServiceRequest"
@@ -284,10 +290,10 @@ field {
 }
 field {
   name: "facility"
-  number: 27
+  number: 28
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Servicing facility"
     [google.fhir.proto.valid_reference_type]: "Location"
@@ -295,10 +301,10 @@ field {
 }
 field {
   name: "care_team"
-  number: 28
+  number: 29
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Claim.CareTeam"
+  type_name: ".google.fhir.r4.core.Claim.CareTeam"
   options {
     [google.fhir.proto.field_description]: "Members of the care team"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -306,10 +312,10 @@ field {
 }
 field {
   name: "supporting_info"
-  number: 29
+  number: 30
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Claim.SupportingInformation"
+  type_name: ".google.fhir.r4.core.Claim.SupportingInformation"
   options {
     [google.fhir.proto.field_description]: "Supporting information"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -317,10 +323,10 @@ field {
 }
 field {
   name: "diagnosis"
-  number: 30
+  number: 31
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Claim.Diagnosis"
+  type_name: ".google.fhir.r4.core.Claim.Diagnosis"
   options {
     [google.fhir.proto.field_description]: "Pertinent diagnosis information"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -328,10 +334,10 @@ field {
 }
 field {
   name: "procedure"
-  number: 31
+  number: 32
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Claim.Procedure"
+  type_name: ".google.fhir.r4.core.Claim.Procedure"
   options {
     [google.fhir.proto.field_description]: "Clinical procedures performed"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -339,10 +345,10 @@ field {
 }
 field {
   name: "insurance"
-  number: 32
+  number: 33
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Claim.Insurance"
+  type_name: ".google.fhir.r4.core.Claim.Insurance"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Patient insurance information"
@@ -351,10 +357,10 @@ field {
 }
 field {
   name: "accident"
-  number: 33
+  number: 34
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Claim.Accident"
+  type_name: ".google.fhir.r4.core.Claim.Accident"
   options {
     [google.fhir.proto.field_description]: "Details of the event"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -362,10 +368,10 @@ field {
 }
 field {
   name: "item"
-  number: 34
+  number: 35
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Claim.Item"
+  type_name: ".google.fhir.r4.core.Claim.Item"
   options {
     [google.fhir.proto.field_description]: "Product or service provided"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -373,10 +379,10 @@ field {
 }
 field {
   name: "total"
-  number: 35
+  number: 36
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Money"
+  type_name: ".google.fhir.r4.core.Money"
   options {
     [google.fhir.proto.field_description]: "Total claim cost"
   }
@@ -388,7 +394,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -398,7 +404,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -408,7 +414,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -418,7 +424,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.field_description]: "Reference to the related claim"
       [google.fhir.proto.valid_reference_type]: "Claim"
@@ -429,7 +435,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "How the reference claim is related"
     }
@@ -439,7 +445,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Identifier"
+    type_name: ".google.fhir.r4.core.Identifier"
     options {
       [google.fhir.proto.field_description]: "File or case reference"
     }
@@ -452,7 +458,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -462,7 +468,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -472,7 +478,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -482,7 +488,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Category of recipient"
@@ -493,7 +499,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.field_description]: "Recipient reference"
       [google.fhir.proto.valid_reference_type]: "Practitioner"
@@ -511,7 +517,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -521,7 +527,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -531,7 +537,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -541,7 +547,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.PositiveInt"
+    type_name: ".google.fhir.r4.core.PositiveInt"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Order of care team"
@@ -552,7 +558,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Practitioner or organization"
@@ -566,7 +572,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Boolean"
+    type_name: ".google.fhir.r4.core.Boolean"
     options {
       [google.fhir.proto.field_description]: "Indicator of the lead practitioner"
     }
@@ -576,7 +582,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Function within the team"
     }
@@ -586,7 +592,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Practitioner credential or specialization"
     }
@@ -599,7 +605,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -609,7 +615,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -619,7 +625,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -629,7 +635,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.PositiveInt"
+    type_name: ".google.fhir.r4.core.PositiveInt"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Information instance identifier"
@@ -640,7 +646,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Classification of the supplied information"
@@ -651,7 +657,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Type of information"
     }
@@ -661,7 +667,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Claim.SupportingInformation.TimingX"
+    type_name: ".google.fhir.r4.core.Claim.SupportingInformation.TimingX"
     options {
       [google.fhir.proto.field_description]: "When it occurred"
     }
@@ -671,7 +677,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Claim.SupportingInformation.ValueX"
+    type_name: ".google.fhir.r4.core.Claim.SupportingInformation.ValueX"
     options {
       [google.fhir.proto.field_description]: "Data to be provided"
     }
@@ -681,7 +687,7 @@ nested_type {
     number: 9
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Explanation for the information"
     }
@@ -693,7 +699,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Date"
+      type_name: ".google.fhir.r4.core.Date"
       oneof_index: 0
     }
     field {
@@ -701,7 +707,7 @@ nested_type {
       number: 2
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Period"
+      type_name: ".google.fhir.r4.core.Period"
       oneof_index: 0
     }
     options {
@@ -718,7 +724,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Boolean"
+      type_name: ".google.fhir.r4.core.Boolean"
       oneof_index: 0
     }
     field {
@@ -726,7 +732,7 @@ nested_type {
       number: 2
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       oneof_index: 0
       json_name: "string"
     }
@@ -735,7 +741,7 @@ nested_type {
       number: 3
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Quantity"
+      type_name: ".google.fhir.r4.core.Quantity"
       oneof_index: 0
     }
     field {
@@ -743,7 +749,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Attachment"
+      type_name: ".google.fhir.r4.core.Attachment"
       oneof_index: 0
     }
     field {
@@ -751,7 +757,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Reference"
+      type_name: ".google.fhir.r4.core.Reference"
       options {
         [google.fhir.proto.valid_reference_type]: "Resource"
       }
@@ -772,7 +778,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -782,7 +788,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -792,7 +798,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -802,7 +808,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.PositiveInt"
+    type_name: ".google.fhir.r4.core.PositiveInt"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Diagnosis instance identifier"
@@ -813,7 +819,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Claim.Diagnosis.DiagnosisX"
+    type_name: ".google.fhir.r4.core.Claim.Diagnosis.DiagnosisX"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Nature of illness or problem"
@@ -824,7 +830,7 @@ nested_type {
     number: 6
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Timing or nature of the diagnosis"
     }
@@ -834,7 +840,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Present on admission"
     }
@@ -844,7 +850,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Package billing code"
     }
@@ -856,7 +862,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.CodeableConcept"
+      type_name: ".google.fhir.r4.core.CodeableConcept"
       oneof_index: 0
     }
     field {
@@ -864,7 +870,7 @@ nested_type {
       number: 2
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Reference"
+      type_name: ".google.fhir.r4.core.Reference"
       options {
         [google.fhir.proto.valid_reference_type]: "Condition"
       }
@@ -885,7 +891,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -895,7 +901,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -905,7 +911,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -915,7 +921,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.PositiveInt"
+    type_name: ".google.fhir.r4.core.PositiveInt"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Procedure instance identifier"
@@ -926,7 +932,7 @@ nested_type {
     number: 5
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Category of Procedure"
     }
@@ -936,7 +942,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.DateTime"
+    type_name: ".google.fhir.r4.core.DateTime"
     options {
       [google.fhir.proto.field_description]: "When the procedure was performed"
     }
@@ -946,7 +952,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Claim.Procedure.ProcedureX"
+    type_name: ".google.fhir.r4.core.Claim.Procedure.ProcedureX"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Specific clinical procedure"
@@ -957,7 +963,7 @@ nested_type {
     number: 8
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.field_description]: "Unique device identifier"
       [google.fhir.proto.valid_reference_type]: "Device"
@@ -970,7 +976,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.CodeableConcept"
+      type_name: ".google.fhir.r4.core.CodeableConcept"
       oneof_index: 0
     }
     field {
@@ -978,7 +984,7 @@ nested_type {
       number: 2
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Reference"
+      type_name: ".google.fhir.r4.core.Reference"
       options {
         [google.fhir.proto.valid_reference_type]: "Procedure"
       }
@@ -999,7 +1005,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -1009,7 +1015,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -1019,7 +1025,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -1029,7 +1035,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.PositiveInt"
+    type_name: ".google.fhir.r4.core.PositiveInt"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Insurance instance identifier"
@@ -1040,7 +1046,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Boolean"
+    type_name: ".google.fhir.r4.core.Boolean"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Coverage to be used for adjudication"
@@ -1051,7 +1057,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Identifier"
+    type_name: ".google.fhir.r4.core.Identifier"
     options {
       [google.fhir.proto.field_description]: "Pre-assigned Claim number"
     }
@@ -1061,7 +1067,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Insurance information"
@@ -1073,7 +1079,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Additional provider contract number"
     }
@@ -1083,7 +1089,7 @@ nested_type {
     number: 9
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Prior authorization reference number"
     }
@@ -1093,7 +1099,7 @@ nested_type {
     number: 10
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.field_description]: "Adjudication results"
       [google.fhir.proto.valid_reference_type]: "ClaimResponse"
@@ -1107,7 +1113,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -1117,7 +1123,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -1127,7 +1133,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -1137,7 +1143,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Date"
+    type_name: ".google.fhir.r4.core.Date"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "When the incident occurred"
@@ -1148,7 +1154,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "The nature of the accident"
     }
@@ -1158,7 +1164,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Claim.Accident.LocationX"
+    type_name: ".google.fhir.r4.core.Claim.Accident.LocationX"
     options {
       [google.fhir.proto.field_description]: "Where the event occurred"
     }
@@ -1170,7 +1176,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Address"
+      type_name: ".google.fhir.r4.core.Address"
       oneof_index: 0
     }
     field {
@@ -1178,7 +1184,7 @@ nested_type {
       number: 2
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Reference"
+      type_name: ".google.fhir.r4.core.Reference"
       options {
         [google.fhir.proto.valid_reference_type]: "Location"
       }
@@ -1199,7 +1205,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -1209,7 +1215,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -1219,7 +1225,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -1229,7 +1235,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.PositiveInt"
+    type_name: ".google.fhir.r4.core.PositiveInt"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Item instance identifier"
@@ -1240,7 +1246,7 @@ nested_type {
     number: 5
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.PositiveInt"
+    type_name: ".google.fhir.r4.core.PositiveInt"
     options {
       [google.fhir.proto.field_description]: "Applicable careTeam members"
     }
@@ -1250,7 +1256,7 @@ nested_type {
     number: 6
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.PositiveInt"
+    type_name: ".google.fhir.r4.core.PositiveInt"
     options {
       [google.fhir.proto.field_description]: "Applicable diagnoses"
     }
@@ -1260,7 +1266,7 @@ nested_type {
     number: 7
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.PositiveInt"
+    type_name: ".google.fhir.r4.core.PositiveInt"
     options {
       [google.fhir.proto.field_description]: "Applicable procedures"
     }
@@ -1270,7 +1276,7 @@ nested_type {
     number: 8
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.PositiveInt"
+    type_name: ".google.fhir.r4.core.PositiveInt"
     options {
       [google.fhir.proto.field_description]: "Applicable exception and supporting information"
     }
@@ -1280,7 +1286,7 @@ nested_type {
     number: 9
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Revenue or cost center code"
     }
@@ -1290,7 +1296,7 @@ nested_type {
     number: 10
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Benefit classification"
     }
@@ -1300,7 +1306,7 @@ nested_type {
     number: 11
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Billing, service, product, or drug code"
@@ -1311,7 +1317,7 @@ nested_type {
     number: 12
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Product or service billing modifiers"
     }
@@ -1321,7 +1327,7 @@ nested_type {
     number: 13
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Program the product or service is provided under"
     }
@@ -1331,7 +1337,7 @@ nested_type {
     number: 14
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Claim.Item.ServicedX"
+    type_name: ".google.fhir.r4.core.Claim.Item.ServicedX"
     options {
       [google.fhir.proto.field_description]: "Date or dates of service or product delivery"
     }
@@ -1341,7 +1347,7 @@ nested_type {
     number: 15
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Claim.Item.LocationX"
+    type_name: ".google.fhir.r4.core.Claim.Item.LocationX"
     options {
       [google.fhir.proto.field_description]: "Place of service or where product was supplied"
     }
@@ -1351,7 +1357,7 @@ nested_type {
     number: 16
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.SimpleQuantity"
+    type_name: ".google.fhir.r4.core.SimpleQuantity"
     options {
       [google.fhir.proto.field_description]: "Count of products or services"
     }
@@ -1361,7 +1367,7 @@ nested_type {
     number: 17
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Money"
+    type_name: ".google.fhir.r4.core.Money"
     options {
       [google.fhir.proto.field_description]: "Fee, charge or cost per item"
     }
@@ -1371,7 +1377,7 @@ nested_type {
     number: 18
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Decimal"
+    type_name: ".google.fhir.r4.core.Decimal"
     options {
       [google.fhir.proto.field_description]: "Price scaling factor"
     }
@@ -1381,7 +1387,7 @@ nested_type {
     number: 19
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Money"
+    type_name: ".google.fhir.r4.core.Money"
     options {
       [google.fhir.proto.field_description]: "Total item cost"
     }
@@ -1391,7 +1397,7 @@ nested_type {
     number: 20
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.field_description]: "Unique device identifier"
       [google.fhir.proto.valid_reference_type]: "Device"
@@ -1402,7 +1408,7 @@ nested_type {
     number: 21
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Anatomical location"
     }
@@ -1412,7 +1418,7 @@ nested_type {
     number: 22
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Anatomical sub-location"
     }
@@ -1422,7 +1428,7 @@ nested_type {
     number: 23
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.field_description]: "Encounters related to this billed item"
       [google.fhir.proto.valid_reference_type]: "Encounter"
@@ -1433,7 +1439,7 @@ nested_type {
     number: 24
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Claim.Item.Detail"
+    type_name: ".google.fhir.r4.core.Claim.Item.Detail"
     options {
       [google.fhir.proto.field_description]: "Product or service provided"
       [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -1446,7 +1452,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Date"
+      type_name: ".google.fhir.r4.core.Date"
       oneof_index: 0
     }
     field {
@@ -1454,7 +1460,7 @@ nested_type {
       number: 2
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Period"
+      type_name: ".google.fhir.r4.core.Period"
       oneof_index: 0
     }
     options {
@@ -1471,7 +1477,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.CodeableConcept"
+      type_name: ".google.fhir.r4.core.CodeableConcept"
       oneof_index: 0
     }
     field {
@@ -1479,7 +1485,7 @@ nested_type {
       number: 2
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Address"
+      type_name: ".google.fhir.r4.core.Address"
       oneof_index: 0
     }
     field {
@@ -1487,7 +1493,7 @@ nested_type {
       number: 3
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Reference"
+      type_name: ".google.fhir.r4.core.Reference"
       options {
         [google.fhir.proto.valid_reference_type]: "Location"
       }
@@ -1507,7 +1513,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -1517,7 +1523,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -1527,7 +1533,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -1537,7 +1543,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.PositiveInt"
+      type_name: ".google.fhir.r4.core.PositiveInt"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "Item instance identifier"
@@ -1548,7 +1554,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.CodeableConcept"
+      type_name: ".google.fhir.r4.core.CodeableConcept"
       options {
         [google.fhir.proto.field_description]: "Revenue or cost center code"
       }
@@ -1558,7 +1564,7 @@ nested_type {
       number: 6
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.CodeableConcept"
+      type_name: ".google.fhir.r4.core.CodeableConcept"
       options {
         [google.fhir.proto.field_description]: "Benefit classification"
       }
@@ -1568,7 +1574,7 @@ nested_type {
       number: 7
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.CodeableConcept"
+      type_name: ".google.fhir.r4.core.CodeableConcept"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "Billing, service, product, or drug code"
@@ -1579,7 +1585,7 @@ nested_type {
       number: 8
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.CodeableConcept"
+      type_name: ".google.fhir.r4.core.CodeableConcept"
       options {
         [google.fhir.proto.field_description]: "Service/Product billing modifiers"
       }
@@ -1589,7 +1595,7 @@ nested_type {
       number: 9
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.CodeableConcept"
+      type_name: ".google.fhir.r4.core.CodeableConcept"
       options {
         [google.fhir.proto.field_description]: "Program the product or service is provided under"
       }
@@ -1599,7 +1605,7 @@ nested_type {
       number: 10
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.SimpleQuantity"
+      type_name: ".google.fhir.r4.core.SimpleQuantity"
       options {
         [google.fhir.proto.field_description]: "Count of products or services"
       }
@@ -1609,7 +1615,7 @@ nested_type {
       number: 11
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Money"
+      type_name: ".google.fhir.r4.core.Money"
       options {
         [google.fhir.proto.field_description]: "Fee, charge or cost per item"
       }
@@ -1619,7 +1625,7 @@ nested_type {
       number: 12
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Decimal"
+      type_name: ".google.fhir.r4.core.Decimal"
       options {
         [google.fhir.proto.field_description]: "Price scaling factor"
       }
@@ -1629,7 +1635,7 @@ nested_type {
       number: 13
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Money"
+      type_name: ".google.fhir.r4.core.Money"
       options {
         [google.fhir.proto.field_description]: "Total item cost"
       }
@@ -1639,7 +1645,7 @@ nested_type {
       number: 14
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Reference"
+      type_name: ".google.fhir.r4.core.Reference"
       options {
         [google.fhir.proto.field_description]: "Unique device identifier"
         [google.fhir.proto.valid_reference_type]: "Device"
@@ -1650,7 +1656,7 @@ nested_type {
       number: 15
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Claim.Item.Detail.SubDetail"
+      type_name: ".google.fhir.r4.core.Claim.Item.Detail.SubDetail"
       options {
         [google.fhir.proto.field_description]: "Product or service provided"
         [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -1663,7 +1669,7 @@ nested_type {
         number: 1
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.String"
+        type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
         }
@@ -1673,7 +1679,7 @@ nested_type {
         number: 2
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Extension"
+        type_name: ".google.fhir.r4.core.Extension"
         options {
           [google.fhir.proto.field_description]: "Additional content defined by implementations"
         }
@@ -1683,7 +1689,7 @@ nested_type {
         number: 3
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Extension"
+        type_name: ".google.fhir.r4.core.Extension"
         options {
           [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
         }
@@ -1693,7 +1699,7 @@ nested_type {
         number: 4
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.PositiveInt"
+        type_name: ".google.fhir.r4.core.PositiveInt"
         options {
           [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
           [google.fhir.proto.field_description]: "Item instance identifier"
@@ -1704,7 +1710,7 @@ nested_type {
         number: 5
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.CodeableConcept"
+        type_name: ".google.fhir.r4.core.CodeableConcept"
         options {
           [google.fhir.proto.field_description]: "Revenue or cost center code"
         }
@@ -1714,7 +1720,7 @@ nested_type {
         number: 6
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.CodeableConcept"
+        type_name: ".google.fhir.r4.core.CodeableConcept"
         options {
           [google.fhir.proto.field_description]: "Benefit classification"
         }
@@ -1724,7 +1730,7 @@ nested_type {
         number: 7
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.CodeableConcept"
+        type_name: ".google.fhir.r4.core.CodeableConcept"
         options {
           [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
           [google.fhir.proto.field_description]: "Billing, service, product, or drug code"
@@ -1735,7 +1741,7 @@ nested_type {
         number: 8
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.CodeableConcept"
+        type_name: ".google.fhir.r4.core.CodeableConcept"
         options {
           [google.fhir.proto.field_description]: "Service/Product billing modifiers"
         }
@@ -1745,7 +1751,7 @@ nested_type {
         number: 9
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.CodeableConcept"
+        type_name: ".google.fhir.r4.core.CodeableConcept"
         options {
           [google.fhir.proto.field_description]: "Program the product or service is provided under"
         }
@@ -1755,7 +1761,7 @@ nested_type {
         number: 10
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.SimpleQuantity"
+        type_name: ".google.fhir.r4.core.SimpleQuantity"
         options {
           [google.fhir.proto.field_description]: "Count of products or services"
         }
@@ -1765,7 +1771,7 @@ nested_type {
         number: 11
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Money"
+        type_name: ".google.fhir.r4.core.Money"
         options {
           [google.fhir.proto.field_description]: "Fee, charge or cost per item"
         }
@@ -1775,7 +1781,7 @@ nested_type {
         number: 12
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Decimal"
+        type_name: ".google.fhir.r4.core.Decimal"
         options {
           [google.fhir.proto.field_description]: "Price scaling factor"
         }
@@ -1785,7 +1791,7 @@ nested_type {
         number: 13
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Money"
+        type_name: ".google.fhir.r4.core.Money"
         options {
           [google.fhir.proto.field_description]: "Total item cost"
         }
@@ -1795,7 +1801,7 @@ nested_type {
         number: 14
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.proto.Reference"
+        type_name: ".google.fhir.r4.core.Reference"
         options {
           [google.fhir.proto.field_description]: "Unique device identifier"
           [google.fhir.proto.valid_reference_type]: "Device"

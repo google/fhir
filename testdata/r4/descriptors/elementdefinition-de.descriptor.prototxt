@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Path of the element in the hierarchy of elements"
@@ -51,7 +51,7 @@ field {
   number: 6
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Name for this particular element (in a set of slices)"
   }
@@ -61,7 +61,7 @@ field {
   number: 7
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Boolean"
+  type_name: ".google.fhir.r4.core.Boolean"
   options {
     [google.fhir.proto.field_description]: "If this slice definition constrains an inherited slice definition (or not)"
   }
@@ -71,7 +71,7 @@ field {
   number: 8
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Name for element to display with or prompt for element"
   }
@@ -81,7 +81,7 @@ field {
   number: 9
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Coding"
+  type_name: ".google.fhir.r4.core.Coding"
   options {
     [google.fhir.proto.field_description]: "Corresponding codes in terminologies"
   }
@@ -103,7 +103,7 @@ field {
   number: 12
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Markdown"
+  type_name: ".google.fhir.r4.core.Markdown"
   options {
     [google.fhir.proto.field_description]: "Full formal definition as narrative text"
   }
@@ -113,7 +113,7 @@ field {
   number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Markdown"
+  type_name: ".google.fhir.r4.core.Markdown"
   options {
     [google.fhir.proto.field_description]: "Comments about the use of this element"
   }
@@ -123,7 +123,7 @@ field {
   number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Markdown"
+  type_name: ".google.fhir.r4.core.Markdown"
   options {
     [google.fhir.proto.field_description]: "Why this resource has been created"
   }
@@ -133,7 +133,7 @@ field {
   number: 15
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Other names"
   }
@@ -143,7 +143,7 @@ field {
   number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.UnsignedInt"
+  type_name: ".google.fhir.r4.core.UnsignedInt"
   options {
     [google.fhir.proto.field_description]: "Minimum Cardinality"
   }
@@ -153,7 +153,7 @@ field {
   number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Maximum Cardinality (a number or *)"
     [google.fhir.proto.fhir_path_constraint]: "empty() or ($this = \'*\') or (toInteger() >= 0)"
@@ -164,7 +164,7 @@ field {
   number: 18
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DataElementConstraintOnElementDefinitionDataType.Base"
+  type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.Base"
   options {
     [google.fhir.proto.field_description]: "Base definition information for tools"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -181,7 +181,7 @@ field {
   number: 20
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DataElementConstraintOnElementDefinitionDataType.TypeRef"
+  type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.TypeRef"
   options {
     [google.fhir.proto.field_description]: "Data type and Profile for this element"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -194,7 +194,7 @@ field {
   number: 21
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DataElementConstraintOnElementDefinitionDataType.DefaultValueX"
+  type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.DefaultValueX"
   options {
     [google.fhir.proto.field_description]: "Specified value if missing from instance"
   }
@@ -204,7 +204,7 @@ field {
   number: 22
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Markdown"
+  type_name: ".google.fhir.r4.core.Markdown"
   options {
     [google.fhir.proto.field_description]: "Implicit meaning when this element is missing"
   }
@@ -214,7 +214,7 @@ field {
   number: 23
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "What the order of the elements means"
   }
@@ -236,7 +236,7 @@ field {
   number: 26
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DataElementConstraintOnElementDefinitionDataType.Example"
+  type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.Example"
   options {
     [google.fhir.proto.field_description]: "Example value (as defined for type)"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -247,7 +247,7 @@ field {
   number: 27
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DataElementConstraintOnElementDefinitionDataType.MinValueX"
+  type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.MinValueX"
   options {
     [google.fhir.proto.field_description]: "Minimum Allowed Value (for some types)"
   }
@@ -257,7 +257,7 @@ field {
   number: 28
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DataElementConstraintOnElementDefinitionDataType.MaxValueX"
+  type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.MaxValueX"
   options {
     [google.fhir.proto.field_description]: "Maximum Allowed Value (for some types)"
   }
@@ -267,7 +267,7 @@ field {
   number: 29
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Integer"
+  type_name: ".google.fhir.r4.core.Integer"
   options {
     [google.fhir.proto.field_description]: "Max length for strings"
   }
@@ -277,7 +277,7 @@ field {
   number: 30
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Id"
+  type_name: ".google.fhir.r4.core.Id"
   options {
     [google.fhir.proto.field_description]: "Reference to invariant about presence"
   }
@@ -287,7 +287,7 @@ field {
   number: 31
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DataElementConstraintOnElementDefinitionDataType.Constraint"
+  type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.Constraint"
   options {
     [google.fhir.proto.field_description]: "Condition that must evaluate to true"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -299,7 +299,7 @@ field {
   number: 32
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Boolean"
+  type_name: ".google.fhir.r4.core.Boolean"
   options {
     [google.fhir.proto.field_description]: "If the element must be supported"
   }
@@ -315,7 +315,7 @@ field {
   number: 34
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Reason that this element is marked as a modifier"
   }
@@ -331,7 +331,7 @@ field {
   number: 36
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DataElementConstraintOnElementDefinitionDataType.ElementDefinitionBinding"
+  type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.ElementDefinitionBinding"
   options {
     [google.fhir.proto.field_description]: "ValueSet details if this is coded"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -343,7 +343,7 @@ field {
   number: 37
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DataElementConstraintOnElementDefinitionDataType.Mapping"
+  type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.Mapping"
   options {
     [google.fhir.proto.field_description]: "Map element to another set of definitions"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -354,7 +354,7 @@ field {
   number: 38
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Prompt for element phrased as question"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/elementdefinition-question"
@@ -366,7 +366,7 @@ field {
   number: 39
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.ElementDefinitionAllowedUnits.ValueX"
+  type_name: ".google.fhir.r4.core.ElementDefinitionAllowedUnits.ValueX"
   options {
     [google.fhir.proto.field_description]: "Units to use for measured value"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits"
@@ -380,7 +380,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -390,7 +390,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -400,7 +400,7 @@ nested_type {
     number: 3
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Path that identifies the base element"
@@ -411,7 +411,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.UnsignedInt"
+    type_name: ".google.fhir.r4.core.UnsignedInt"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Min cardinality of the base element"
@@ -422,7 +422,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Max cardinality of the base element"
@@ -436,7 +436,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -446,7 +446,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -456,7 +456,7 @@ nested_type {
     number: 3
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Uri"
+    type_name: ".google.fhir.r4.core.Uri"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Data type or Resource (reference to definition)"
@@ -473,7 +473,7 @@ nested_type {
     number: 5
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Canonical"
+    type_name: ".google.fhir.r4.core.Canonical"
     options {
       [google.fhir.proto.field_description]: "Profile (StructureDefinition or IG) on the Reference/canonical target - one must apply"
     }
@@ -489,7 +489,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.ReferenceVersionRulesCode"
+    type_name: ".google.fhir.r4.core.ReferenceVersionRulesCode"
     options {
       [google.fhir.proto.field_description]: "either | independent | specific"
     }
@@ -502,7 +502,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Base64Binary"
+    type_name: ".google.fhir.r4.core.Base64Binary"
     oneof_index: 0
   }
   field {
@@ -510,7 +510,7 @@ nested_type {
     number: 2
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Boolean"
+    type_name: ".google.fhir.r4.core.Boolean"
     oneof_index: 0
   }
   field {
@@ -518,7 +518,7 @@ nested_type {
     number: 3
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Canonical"
+    type_name: ".google.fhir.r4.core.Canonical"
     oneof_index: 0
   }
   field {
@@ -526,7 +526,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Code"
+    type_name: ".google.fhir.r4.core.Code"
     oneof_index: 0
   }
   field {
@@ -534,7 +534,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Date"
+    type_name: ".google.fhir.r4.core.Date"
     oneof_index: 0
   }
   field {
@@ -542,7 +542,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.DateTime"
+    type_name: ".google.fhir.r4.core.DateTime"
     oneof_index: 0
   }
   field {
@@ -550,7 +550,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Decimal"
+    type_name: ".google.fhir.r4.core.Decimal"
     oneof_index: 0
   }
   field {
@@ -558,7 +558,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Id"
+    type_name: ".google.fhir.r4.core.Id"
     oneof_index: 0
   }
   field {
@@ -566,7 +566,7 @@ nested_type {
     number: 9
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Instant"
+    type_name: ".google.fhir.r4.core.Instant"
     oneof_index: 0
   }
   field {
@@ -574,7 +574,7 @@ nested_type {
     number: 10
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Integer"
+    type_name: ".google.fhir.r4.core.Integer"
     oneof_index: 0
   }
   field {
@@ -582,7 +582,7 @@ nested_type {
     number: 11
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Markdown"
+    type_name: ".google.fhir.r4.core.Markdown"
     oneof_index: 0
   }
   field {
@@ -590,7 +590,7 @@ nested_type {
     number: 12
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Oid"
+    type_name: ".google.fhir.r4.core.Oid"
     oneof_index: 0
   }
   field {
@@ -598,7 +598,7 @@ nested_type {
     number: 13
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.PositiveInt"
+    type_name: ".google.fhir.r4.core.PositiveInt"
     oneof_index: 0
   }
   field {
@@ -606,7 +606,7 @@ nested_type {
     number: 14
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     oneof_index: 0
     json_name: "string"
   }
@@ -615,7 +615,7 @@ nested_type {
     number: 15
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Time"
+    type_name: ".google.fhir.r4.core.Time"
     oneof_index: 0
   }
   field {
@@ -623,7 +623,7 @@ nested_type {
     number: 16
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.UnsignedInt"
+    type_name: ".google.fhir.r4.core.UnsignedInt"
     oneof_index: 0
   }
   field {
@@ -631,7 +631,7 @@ nested_type {
     number: 17
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Uri"
+    type_name: ".google.fhir.r4.core.Uri"
     oneof_index: 0
   }
   field {
@@ -639,7 +639,7 @@ nested_type {
     number: 18
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Url"
+    type_name: ".google.fhir.r4.core.Url"
     oneof_index: 0
   }
   field {
@@ -647,7 +647,7 @@ nested_type {
     number: 19
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Uuid"
+    type_name: ".google.fhir.r4.core.Uuid"
     oneof_index: 0
   }
   field {
@@ -655,7 +655,7 @@ nested_type {
     number: 20
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Address"
+    type_name: ".google.fhir.r4.core.Address"
     oneof_index: 0
   }
   field {
@@ -663,7 +663,7 @@ nested_type {
     number: 21
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Age"
+    type_name: ".google.fhir.r4.core.Age"
     oneof_index: 0
   }
   field {
@@ -671,7 +671,7 @@ nested_type {
     number: 22
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Annotation"
+    type_name: ".google.fhir.r4.core.Annotation"
     oneof_index: 0
   }
   field {
@@ -679,7 +679,7 @@ nested_type {
     number: 23
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Attachment"
+    type_name: ".google.fhir.r4.core.Attachment"
     oneof_index: 0
   }
   field {
@@ -687,7 +687,7 @@ nested_type {
     number: 24
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     oneof_index: 0
   }
   field {
@@ -695,7 +695,7 @@ nested_type {
     number: 25
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Coding"
+    type_name: ".google.fhir.r4.core.Coding"
     oneof_index: 0
   }
   field {
@@ -703,7 +703,7 @@ nested_type {
     number: 26
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.ContactPoint"
+    type_name: ".google.fhir.r4.core.ContactPoint"
     oneof_index: 0
   }
   field {
@@ -711,7 +711,7 @@ nested_type {
     number: 27
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Count"
+    type_name: ".google.fhir.r4.core.Count"
     oneof_index: 0
   }
   field {
@@ -719,7 +719,7 @@ nested_type {
     number: 28
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Distance"
+    type_name: ".google.fhir.r4.core.Distance"
     oneof_index: 0
   }
   field {
@@ -727,7 +727,7 @@ nested_type {
     number: 29
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Duration"
+    type_name: ".google.fhir.r4.core.Duration"
     oneof_index: 0
   }
   field {
@@ -735,7 +735,7 @@ nested_type {
     number: 30
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.HumanName"
+    type_name: ".google.fhir.r4.core.HumanName"
     oneof_index: 0
   }
   field {
@@ -743,7 +743,7 @@ nested_type {
     number: 31
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Identifier"
+    type_name: ".google.fhir.r4.core.Identifier"
     oneof_index: 0
   }
   field {
@@ -751,7 +751,7 @@ nested_type {
     number: 32
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Money"
+    type_name: ".google.fhir.r4.core.Money"
     oneof_index: 0
   }
   field {
@@ -759,7 +759,7 @@ nested_type {
     number: 33
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Period"
+    type_name: ".google.fhir.r4.core.Period"
     oneof_index: 0
   }
   field {
@@ -767,7 +767,7 @@ nested_type {
     number: 34
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Quantity"
+    type_name: ".google.fhir.r4.core.Quantity"
     oneof_index: 0
   }
   field {
@@ -775,7 +775,7 @@ nested_type {
     number: 35
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Range"
+    type_name: ".google.fhir.r4.core.Range"
     oneof_index: 0
   }
   field {
@@ -783,7 +783,7 @@ nested_type {
     number: 36
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Ratio"
+    type_name: ".google.fhir.r4.core.Ratio"
     oneof_index: 0
   }
   field {
@@ -791,7 +791,7 @@ nested_type {
     number: 37
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     oneof_index: 0
   }
   field {
@@ -799,7 +799,7 @@ nested_type {
     number: 38
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.SampledData"
+    type_name: ".google.fhir.r4.core.SampledData"
     oneof_index: 0
   }
   field {
@@ -807,7 +807,7 @@ nested_type {
     number: 39
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Signature"
+    type_name: ".google.fhir.r4.core.Signature"
     oneof_index: 0
   }
   field {
@@ -815,7 +815,7 @@ nested_type {
     number: 40
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Timing"
+    type_name: ".google.fhir.r4.core.Timing"
     oneof_index: 0
   }
   field {
@@ -823,7 +823,7 @@ nested_type {
     number: 41
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.ContactDetail"
+    type_name: ".google.fhir.r4.core.ContactDetail"
     oneof_index: 0
   }
   field {
@@ -831,7 +831,7 @@ nested_type {
     number: 42
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Contributor"
+    type_name: ".google.fhir.r4.core.Contributor"
     oneof_index: 0
   }
   field {
@@ -839,7 +839,7 @@ nested_type {
     number: 43
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.DataRequirement"
+    type_name: ".google.fhir.r4.core.DataRequirement"
     oneof_index: 0
   }
   field {
@@ -847,7 +847,7 @@ nested_type {
     number: 44
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Expression"
+    type_name: ".google.fhir.r4.core.Expression"
     oneof_index: 0
   }
   field {
@@ -855,7 +855,7 @@ nested_type {
     number: 45
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.ParameterDefinition"
+    type_name: ".google.fhir.r4.core.ParameterDefinition"
     oneof_index: 0
   }
   field {
@@ -863,7 +863,7 @@ nested_type {
     number: 46
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.RelatedArtifact"
+    type_name: ".google.fhir.r4.core.RelatedArtifact"
     oneof_index: 0
   }
   field {
@@ -871,7 +871,7 @@ nested_type {
     number: 47
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.TriggerDefinition"
+    type_name: ".google.fhir.r4.core.TriggerDefinition"
     oneof_index: 0
   }
   field {
@@ -879,7 +879,7 @@ nested_type {
     number: 48
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.UsageContext"
+    type_name: ".google.fhir.r4.core.UsageContext"
     oneof_index: 0
   }
   field {
@@ -887,7 +887,7 @@ nested_type {
     number: 49
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Dosage"
+    type_name: ".google.fhir.r4.core.Dosage"
     oneof_index: 0
   }
   options {
@@ -904,7 +904,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -914,7 +914,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -924,7 +924,7 @@ nested_type {
     number: 3
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Describes the purpose of this example"
@@ -935,7 +935,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.DataElementConstraintOnElementDefinitionDataType.Example.ValueX"
+    type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.Example.ValueX"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Value of Example (one of allowed types)"
@@ -948,7 +948,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Base64Binary"
+      type_name: ".google.fhir.r4.core.Base64Binary"
       oneof_index: 0
     }
     field {
@@ -956,7 +956,7 @@ nested_type {
       number: 2
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Boolean"
+      type_name: ".google.fhir.r4.core.Boolean"
       oneof_index: 0
     }
     field {
@@ -964,7 +964,7 @@ nested_type {
       number: 3
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Canonical"
+      type_name: ".google.fhir.r4.core.Canonical"
       oneof_index: 0
     }
     field {
@@ -972,7 +972,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Code"
+      type_name: ".google.fhir.r4.core.Code"
       oneof_index: 0
     }
     field {
@@ -980,7 +980,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Date"
+      type_name: ".google.fhir.r4.core.Date"
       oneof_index: 0
     }
     field {
@@ -988,7 +988,7 @@ nested_type {
       number: 6
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.DateTime"
+      type_name: ".google.fhir.r4.core.DateTime"
       oneof_index: 0
     }
     field {
@@ -996,7 +996,7 @@ nested_type {
       number: 7
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Decimal"
+      type_name: ".google.fhir.r4.core.Decimal"
       oneof_index: 0
     }
     field {
@@ -1004,7 +1004,7 @@ nested_type {
       number: 8
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Id"
+      type_name: ".google.fhir.r4.core.Id"
       oneof_index: 0
     }
     field {
@@ -1012,7 +1012,7 @@ nested_type {
       number: 9
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Instant"
+      type_name: ".google.fhir.r4.core.Instant"
       oneof_index: 0
     }
     field {
@@ -1020,7 +1020,7 @@ nested_type {
       number: 10
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Integer"
+      type_name: ".google.fhir.r4.core.Integer"
       oneof_index: 0
     }
     field {
@@ -1028,7 +1028,7 @@ nested_type {
       number: 11
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Markdown"
+      type_name: ".google.fhir.r4.core.Markdown"
       oneof_index: 0
     }
     field {
@@ -1036,7 +1036,7 @@ nested_type {
       number: 12
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Oid"
+      type_name: ".google.fhir.r4.core.Oid"
       oneof_index: 0
     }
     field {
@@ -1044,7 +1044,7 @@ nested_type {
       number: 13
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.PositiveInt"
+      type_name: ".google.fhir.r4.core.PositiveInt"
       oneof_index: 0
     }
     field {
@@ -1052,7 +1052,7 @@ nested_type {
       number: 14
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       oneof_index: 0
       json_name: "string"
     }
@@ -1061,7 +1061,7 @@ nested_type {
       number: 15
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Time"
+      type_name: ".google.fhir.r4.core.Time"
       oneof_index: 0
     }
     field {
@@ -1069,7 +1069,7 @@ nested_type {
       number: 16
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.UnsignedInt"
+      type_name: ".google.fhir.r4.core.UnsignedInt"
       oneof_index: 0
     }
     field {
@@ -1077,7 +1077,7 @@ nested_type {
       number: 17
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Uri"
+      type_name: ".google.fhir.r4.core.Uri"
       oneof_index: 0
     }
     field {
@@ -1085,7 +1085,7 @@ nested_type {
       number: 18
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Url"
+      type_name: ".google.fhir.r4.core.Url"
       oneof_index: 0
     }
     field {
@@ -1093,7 +1093,7 @@ nested_type {
       number: 19
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Uuid"
+      type_name: ".google.fhir.r4.core.Uuid"
       oneof_index: 0
     }
     field {
@@ -1101,7 +1101,7 @@ nested_type {
       number: 20
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Address"
+      type_name: ".google.fhir.r4.core.Address"
       oneof_index: 0
     }
     field {
@@ -1109,7 +1109,7 @@ nested_type {
       number: 21
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Age"
+      type_name: ".google.fhir.r4.core.Age"
       oneof_index: 0
     }
     field {
@@ -1117,7 +1117,7 @@ nested_type {
       number: 22
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Annotation"
+      type_name: ".google.fhir.r4.core.Annotation"
       oneof_index: 0
     }
     field {
@@ -1125,7 +1125,7 @@ nested_type {
       number: 23
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Attachment"
+      type_name: ".google.fhir.r4.core.Attachment"
       oneof_index: 0
     }
     field {
@@ -1133,7 +1133,7 @@ nested_type {
       number: 24
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.CodeableConcept"
+      type_name: ".google.fhir.r4.core.CodeableConcept"
       oneof_index: 0
     }
     field {
@@ -1141,7 +1141,7 @@ nested_type {
       number: 25
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Coding"
+      type_name: ".google.fhir.r4.core.Coding"
       oneof_index: 0
     }
     field {
@@ -1149,7 +1149,7 @@ nested_type {
       number: 26
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.ContactPoint"
+      type_name: ".google.fhir.r4.core.ContactPoint"
       oneof_index: 0
     }
     field {
@@ -1157,7 +1157,7 @@ nested_type {
       number: 27
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Count"
+      type_name: ".google.fhir.r4.core.Count"
       oneof_index: 0
     }
     field {
@@ -1165,7 +1165,7 @@ nested_type {
       number: 28
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Distance"
+      type_name: ".google.fhir.r4.core.Distance"
       oneof_index: 0
     }
     field {
@@ -1173,7 +1173,7 @@ nested_type {
       number: 29
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Duration"
+      type_name: ".google.fhir.r4.core.Duration"
       oneof_index: 0
     }
     field {
@@ -1181,7 +1181,7 @@ nested_type {
       number: 30
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.HumanName"
+      type_name: ".google.fhir.r4.core.HumanName"
       oneof_index: 0
     }
     field {
@@ -1189,7 +1189,7 @@ nested_type {
       number: 31
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Identifier"
+      type_name: ".google.fhir.r4.core.Identifier"
       oneof_index: 0
     }
     field {
@@ -1197,7 +1197,7 @@ nested_type {
       number: 32
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Money"
+      type_name: ".google.fhir.r4.core.Money"
       oneof_index: 0
     }
     field {
@@ -1205,7 +1205,7 @@ nested_type {
       number: 33
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Period"
+      type_name: ".google.fhir.r4.core.Period"
       oneof_index: 0
     }
     field {
@@ -1213,7 +1213,7 @@ nested_type {
       number: 34
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Quantity"
+      type_name: ".google.fhir.r4.core.Quantity"
       oneof_index: 0
     }
     field {
@@ -1221,7 +1221,7 @@ nested_type {
       number: 35
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Range"
+      type_name: ".google.fhir.r4.core.Range"
       oneof_index: 0
     }
     field {
@@ -1229,7 +1229,7 @@ nested_type {
       number: 36
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Ratio"
+      type_name: ".google.fhir.r4.core.Ratio"
       oneof_index: 0
     }
     field {
@@ -1237,7 +1237,7 @@ nested_type {
       number: 37
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Reference"
+      type_name: ".google.fhir.r4.core.Reference"
       oneof_index: 0
     }
     field {
@@ -1245,7 +1245,7 @@ nested_type {
       number: 38
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.SampledData"
+      type_name: ".google.fhir.r4.core.SampledData"
       oneof_index: 0
     }
     field {
@@ -1253,7 +1253,7 @@ nested_type {
       number: 39
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Signature"
+      type_name: ".google.fhir.r4.core.Signature"
       oneof_index: 0
     }
     field {
@@ -1261,7 +1261,7 @@ nested_type {
       number: 40
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Timing"
+      type_name: ".google.fhir.r4.core.Timing"
       oneof_index: 0
     }
     field {
@@ -1269,7 +1269,7 @@ nested_type {
       number: 41
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.ContactDetail"
+      type_name: ".google.fhir.r4.core.ContactDetail"
       oneof_index: 0
     }
     field {
@@ -1277,7 +1277,7 @@ nested_type {
       number: 42
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Contributor"
+      type_name: ".google.fhir.r4.core.Contributor"
       oneof_index: 0
     }
     field {
@@ -1285,7 +1285,7 @@ nested_type {
       number: 43
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.DataRequirement"
+      type_name: ".google.fhir.r4.core.DataRequirement"
       oneof_index: 0
     }
     field {
@@ -1293,7 +1293,7 @@ nested_type {
       number: 44
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Expression"
+      type_name: ".google.fhir.r4.core.Expression"
       oneof_index: 0
     }
     field {
@@ -1301,7 +1301,7 @@ nested_type {
       number: 45
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.ParameterDefinition"
+      type_name: ".google.fhir.r4.core.ParameterDefinition"
       oneof_index: 0
     }
     field {
@@ -1309,7 +1309,7 @@ nested_type {
       number: 46
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.RelatedArtifact"
+      type_name: ".google.fhir.r4.core.RelatedArtifact"
       oneof_index: 0
     }
     field {
@@ -1317,7 +1317,7 @@ nested_type {
       number: 47
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.TriggerDefinition"
+      type_name: ".google.fhir.r4.core.TriggerDefinition"
       oneof_index: 0
     }
     field {
@@ -1325,7 +1325,7 @@ nested_type {
       number: 48
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.UsageContext"
+      type_name: ".google.fhir.r4.core.UsageContext"
       oneof_index: 0
     }
     field {
@@ -1333,7 +1333,7 @@ nested_type {
       number: 49
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Dosage"
+      type_name: ".google.fhir.r4.core.Dosage"
       oneof_index: 0
     }
     options {
@@ -1351,7 +1351,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Date"
+    type_name: ".google.fhir.r4.core.Date"
     oneof_index: 0
   }
   field {
@@ -1359,7 +1359,7 @@ nested_type {
     number: 2
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.DateTime"
+    type_name: ".google.fhir.r4.core.DateTime"
     oneof_index: 0
   }
   field {
@@ -1367,7 +1367,7 @@ nested_type {
     number: 3
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Instant"
+    type_name: ".google.fhir.r4.core.Instant"
     oneof_index: 0
   }
   field {
@@ -1375,7 +1375,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Time"
+    type_name: ".google.fhir.r4.core.Time"
     oneof_index: 0
   }
   field {
@@ -1383,7 +1383,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Decimal"
+    type_name: ".google.fhir.r4.core.Decimal"
     oneof_index: 0
   }
   field {
@@ -1391,7 +1391,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Integer"
+    type_name: ".google.fhir.r4.core.Integer"
     oneof_index: 0
   }
   field {
@@ -1399,7 +1399,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.PositiveInt"
+    type_name: ".google.fhir.r4.core.PositiveInt"
     oneof_index: 0
   }
   field {
@@ -1407,7 +1407,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.UnsignedInt"
+    type_name: ".google.fhir.r4.core.UnsignedInt"
     oneof_index: 0
   }
   field {
@@ -1415,7 +1415,7 @@ nested_type {
     number: 9
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Quantity"
+    type_name: ".google.fhir.r4.core.Quantity"
     oneof_index: 0
   }
   options {
@@ -1432,7 +1432,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Date"
+    type_name: ".google.fhir.r4.core.Date"
     oneof_index: 0
   }
   field {
@@ -1440,7 +1440,7 @@ nested_type {
     number: 2
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.DateTime"
+    type_name: ".google.fhir.r4.core.DateTime"
     oneof_index: 0
   }
   field {
@@ -1448,7 +1448,7 @@ nested_type {
     number: 3
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Instant"
+    type_name: ".google.fhir.r4.core.Instant"
     oneof_index: 0
   }
   field {
@@ -1456,7 +1456,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Time"
+    type_name: ".google.fhir.r4.core.Time"
     oneof_index: 0
   }
   field {
@@ -1464,7 +1464,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Decimal"
+    type_name: ".google.fhir.r4.core.Decimal"
     oneof_index: 0
   }
   field {
@@ -1472,7 +1472,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Integer"
+    type_name: ".google.fhir.r4.core.Integer"
     oneof_index: 0
   }
   field {
@@ -1480,7 +1480,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.PositiveInt"
+    type_name: ".google.fhir.r4.core.PositiveInt"
     oneof_index: 0
   }
   field {
@@ -1488,7 +1488,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.UnsignedInt"
+    type_name: ".google.fhir.r4.core.UnsignedInt"
     oneof_index: 0
   }
   field {
@@ -1496,7 +1496,7 @@ nested_type {
     number: 9
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Quantity"
+    type_name: ".google.fhir.r4.core.Quantity"
     oneof_index: 0
   }
   options {
@@ -1513,7 +1513,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -1523,7 +1523,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -1533,7 +1533,7 @@ nested_type {
     number: 3
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Id"
+    type_name: ".google.fhir.r4.core.Id"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Target of \'condition\' reference above"
@@ -1544,7 +1544,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Why this constraint is necessary or appropriate"
     }
@@ -1554,7 +1554,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.ConstraintSeverityCode"
+    type_name: ".google.fhir.r4.core.ConstraintSeverityCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "error | warning"
@@ -1565,7 +1565,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Human description of constraint"
@@ -1576,7 +1576,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "FHIRPath expression of constraint"
     }
@@ -1586,7 +1586,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "XPath expression of constraint"
     }
@@ -1596,7 +1596,7 @@ nested_type {
     number: 9
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Canonical"
+    type_name: ".google.fhir.r4.core.Canonical"
     options {
       [google.fhir.proto.field_description]: "Reference to original source of constraint"
     }
@@ -1609,7 +1609,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -1619,7 +1619,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -1629,7 +1629,7 @@ nested_type {
     number: 3
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.BindingStrengthCode"
+    type_name: ".google.fhir.r4.core.BindingStrengthCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "required | extensible | preferred | example"
@@ -1640,7 +1640,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Human explanation of the value set"
     }
@@ -1650,7 +1650,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Canonical"
+    type_name: ".google.fhir.r4.core.Canonical"
     options {
       [google.fhir.proto.field_description]: "Source of value set"
     }
@@ -1663,7 +1663,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -1673,7 +1673,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -1683,7 +1683,7 @@ nested_type {
     number: 3
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Id"
+    type_name: ".google.fhir.r4.core.Id"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Reference to mapping declaration"
@@ -1694,7 +1694,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.MimeTypesCode"
+    type_name: ".google.fhir.r4.core.MimeTypesCode"
     options {
       [google.fhir.proto.field_description]: "Computable language of mapping"
     }
@@ -1704,7 +1704,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Details of the mapping"
@@ -1715,7 +1715,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Comments about the mapping or its use"
     }

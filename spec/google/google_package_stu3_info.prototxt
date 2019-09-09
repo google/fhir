@@ -6,3 +6,5 @@ fhir_version: STU3
 telcom_url: "https://www.google.com"
 license: APACHE
 license_date: "2018"
+
+file_splitting_behavior: SEPARATE_EXTENSIONS

@@ -20,14 +20,17 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
 import com.google.fhir.dstu2.StructureDefinitionTransformer;
+import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.StructureDefinition;
+import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.fhir.stu3.FileUtils;
 import com.google.fhir.stu3.JsonFormat;
 import com.google.fhir.stu3.ProtoFilePrinter;
@@ -132,15 +135,9 @@ class ProtoGeneratorMain {
     private List<String> additionalImports = new ArrayList<>();
 
     @Parameter(
-        names = {"--separate_extensions"},
-        description =
-            "If true, will separate all extensions into a ${output_name}_extensions.proto file.")
-    private boolean separateExtensions = false;
-
-    @Parameter(
         names = {"--output_name"},
         description =
-            "Name for output proto files.  If separate_extensions is true, will "
+            "Name for output proto files.  If separating extensions, will "
                 + "output ${output_name}.proto and ${output_name}_extensions.proto.  "
                 + "Otherwise, just outputs ${output_name}.proto.")
     private String outputName = "output";
@@ -327,34 +324,150 @@ class ProtoGeneratorMain {
     ProtoGenerator generator = new ProtoGenerator(packageInfo, ImmutableMap.copyOf(knownTypes));
     ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
 
-    if (args.separateExtensions) {
-      List<StructureDefinition> extensions = new ArrayList<>();
-      List<StructureDefinition> profiles = new ArrayList<>();
+    switch (packageInfo.getFileSplittingBehavior()) {
+      case DEFAULT_SPLITTING_BEHAVIOR:
+      case NO_SPLITTING:
+        {
+          FileDescriptorProto proto = generator.generateFileDescriptor(definitions);
+          if (packageInfo.getLocalContainedResource() || args.includeContainedResource) {
+            proto = generator.addContainedResource(proto, proto.getMessageTypeList());
+          }
+          writeProto(proto, args.outputName + ".proto", args, true, printer);
+        }
+        break;
+      case SEPARATE_EXTENSIONS:
+        writeWithSeparateExtensionsFile(definitions, generator, printer, packageInfo, args);
+        break;
+      case SPLIT_RESOURCES:
+        writeSplitResources(definitions, generator, printer, packageInfo, args);
+        break;
+      case UNRECOGNIZED:
+        throw new IllegalArgumentException(
+            "Unrecognized file splitting behavior: " + packageInfo.getFileSplittingBehavior());
+    }
+  }
+
+  void writeWithSeparateExtensionsFile(
+      List<StructureDefinition> definitions,
+      ProtoGenerator generator,
+      ProtoFilePrinter printer,
+      PackageInfo packageInfo,
+      Args args)
+      throws IOException {
+    List<StructureDefinition> extensions = new ArrayList<>();
+    List<StructureDefinition> profiles = new ArrayList<>();
+    for (StructureDefinition structDef : definitions) {
+      if (structDef.getBaseDefinition().getValue().equals(EXTENSION_STRUCTURE_DEFINITION_URL)) {
+        extensions.add(structDef);
+      } else {
+        profiles.add(structDef);
+      }
+    }
+    writeProto(
+        generator.generateFileDescriptor(extensions),
+        args.outputName + "_extensions.proto",
+        args,
+        false,
+        printer);
+    FileDescriptorProto mainFileProto = generator.generateFileDescriptor(profiles);
+    if (packageInfo.getLocalContainedResource()) {
+      mainFileProto =
+          generator.addContainedResource(mainFileProto, mainFileProto.getMessageTypeList());
+    }
+    writeProto(mainFileProto, args.outputName + ".proto", args, true, printer);
+  }
+
+  void writeSplitResources(
+      List<StructureDefinition> definitions,
+      ProtoGenerator generator,
+      ProtoFilePrinter printer,
+      PackageInfo packageInfo,
+      Args args)
+      throws IOException {
+    // Divide into three categories.
+    // Extensions and datatypes will be printed into a single aggregate file each,
+    // while resources will be printed into one file per resource.
+    // Note primititives are include in datatypes here.
+    List<StructureDefinition> extensions = new ArrayList<>();
+    List<StructureDefinition> datatypes = new ArrayList<>();
+    List<StructureDefinition> resources = new ArrayList<>();
+
+    for (StructureDefinition structDef : definitions) {
+      StructureDefinitionKindCode.Value kind = structDef.getKind().getValue();
+      if (structDef.getBaseDefinition().getValue().equals(EXTENSION_STRUCTURE_DEFINITION_URL)) {
+        extensions.add(structDef);
+      } else if (kind == StructureDefinitionKindCode.Value.RESOURCE) {
+        resources.add(structDef);
+      } else if (kind == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE
+          || kind == StructureDefinitionKindCode.Value.COMPLEX_TYPE) {
+        datatypes.add(structDef);
+      }
+    }
+
+    if (!extensions.isEmpty()) {
+      writeProto(
+          generator.generateFileDescriptor(extensions), "extensions.proto", args, false, printer);
+    }
+
+    if (!datatypes.isEmpty()) {
+      writeProto(
+          generator.generateFileDescriptor(datatypes), "datatypes.proto", args, false, printer);
+    }
+
+    // TODO: Move Contained Resource logic into ProtoGenerator.java
+    if (!resources.isEmpty()) {
+      List<DescriptorProto> containedTypes = new ArrayList<>();
+      // Note that in the case where there is a contained resource that is local to a proto set,
+      // (the usual case), we need to define the ContainedResource proto in the same file as the
+      // Bundle proto to avoid a circular dependency.  Since we need to define all other resources
+      // before we can define ContainedResource, we defer printing the Bundle file until after
+      // all other resources are generated, and after we've added in ContainedResource.
+      FileDescriptorProto deferredBundleFile = null;
       for (StructureDefinition structDef : definitions) {
-        if (structDef.getBaseDefinition().getValue().equals(EXTENSION_STRUCTURE_DEFINITION_URL)) {
-          extensions.add(structDef);
+        List<StructureDefinition> oneResource = new ArrayList<>();
+        oneResource.add(structDef);
+        FileDescriptorProto fileProto = generator.generateFileDescriptor(oneResource);
+        DescriptorProto type = fileProto.getMessageType(0);
+        String filename = resourceNameToFileName(generator.getTypeName(structDef), generator);
+        if (type.getName().equals("Bundle")) {
+          deferredBundleFile = fileProto;
         } else {
-          profiles.add(structDef);
+          writeProto(fileProto, filename, args, true, printer);
+        }
+        if (!type.getOptions().getExtension(Annotations.isAbstractType)) {
+          containedTypes.add(type);
         }
       }
-      writeProto(
-          generator.generateFileDescriptor(extensions),
-          args.outputName + "_extensions.proto",
-          args,
-          false,
-          printer);
-      FileDescriptorProto mainFileProto = generator.generateFileDescriptor(profiles);
-      if (args.includeContainedResource || packageInfo.getLocalContainedResource()) {
-        mainFileProto = generator.addContainedResource(mainFileProto);
+      if (deferredBundleFile != null) {
+        if (packageInfo.getLocalContainedResource()) {
+          FileDescriptorProto.Builder fileBuilder =
+              generator.addContainedResource(deferredBundleFile, containedTypes).toBuilder();
+          String importRoot = args.outputDirectory;
+          while (importRoot.contains("/../")) {
+            // resolve foo/bar/baz/../../quux into foo/quux
+            importRoot = importRoot.replaceAll("/[^/]*/\\.\\./", "/");
+          }
+          for (DescriptorProto type : containedTypes) {
+            if (!type.getName().equals("Bundle")) {
+              fileBuilder.addDependency(
+                  new File(importRoot, resourceNameToFileName(type.getName(), generator))
+                      .toString());
+            }
+          }
+          writeProto(
+              fileBuilder.build(), "bundle_and_contained_resource.proto", args, true, printer);
+        } else {
+          writeProto(deferredBundleFile, "bundle.proto", args, true, printer);
+        }
       }
-      writeProto(mainFileProto, args.outputName + ".proto", args, true, printer);
-    } else {
-      FileDescriptorProto proto = generator.generateFileDescriptor(definitions);
-      if (args.includeContainedResource || packageInfo.getLocalContainedResource()) {
-        proto = generator.addContainedResource(proto);
-      }
-      writeProto(proto, args.outputName + ".proto", args, true, printer);
     }
+  }
+
+  String resourceNameToFileName(String resourceName, ProtoGenerator generator) {
+    return CaseFormat.UPPER_CAMEL.to(
+            CaseFormat.LOWER_UNDERSCORE,
+            ProtoGenerator.resolveAcronyms(ProtoGenerator.toFieldTypeCase(resourceName)))
+        + ".proto";
   }
 
   private void writeProto(

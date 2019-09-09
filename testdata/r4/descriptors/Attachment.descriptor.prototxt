@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.MimeTypesCode"
+  type_name: ".google.fhir.r4.core.MimeTypesCode"
   options {
     [google.fhir.proto.field_description]: "Mime type of the content, with charset etc."
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Code"
+  type_name: ".google.fhir.r4.core.Code"
   options {
     [google.fhir.proto.field_description]: "Human language of the content (BCP-47)"
   }
@@ -44,7 +44,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Base64Binary"
+  type_name: ".google.fhir.r4.core.Base64Binary"
   options {
     [google.fhir.proto.field_description]: "Data inline, base64ed"
   }
@@ -54,7 +54,7 @@ field {
   number: 6
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Url"
+  type_name: ".google.fhir.r4.core.Url"
   options {
     [google.fhir.proto.field_description]: "Uri where the data can be found"
   }
@@ -64,7 +64,7 @@ field {
   number: 7
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.UnsignedInt"
+  type_name: ".google.fhir.r4.core.UnsignedInt"
   options {
     [google.fhir.proto.field_description]: "Number of bytes of content (if url provided)"
   }
@@ -74,7 +74,7 @@ field {
   number: 8
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Base64Binary"
+  type_name: ".google.fhir.r4.core.Base64Binary"
   options {
     [google.fhir.proto.field_description]: "Hash of the data (sha-1, base64ed)"
   }
@@ -84,7 +84,7 @@ field {
   number: 9
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Label to display in place of the data"
   }
@@ -94,7 +94,7 @@ field {
   number: 10
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.DateTime"
+  type_name: ".google.fhir.r4.core.DateTime"
   options {
     [google.fhir.proto.field_description]: "Date attachment was first created"
   }

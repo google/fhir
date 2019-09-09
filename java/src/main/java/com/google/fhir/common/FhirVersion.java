@@ -18,13 +18,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.r4.core.FHIRVersionCode;
-import com.google.fhir.stu3.proto.AbstractTypeCode;
-import com.google.fhir.stu3.proto.AddressTypeCode;
-import com.google.fhir.stu3.proto.Decimal;
-import com.google.fhir.stu3.proto.ElementDefinition;
-import com.google.fhir.stu3.proto.ElementDefinitionBindingName;
-import com.google.fhir.stu3.proto.StructureDefinition;
-import com.google.fhir.stu3.uscore.UsCoreBirthSexCode;
+import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FileDescriptor;
 
 /** Enum that represents different FHIR versions and stores their corresponding types. */
@@ -33,27 +27,32 @@ public enum FhirVersion {
       "google.fhir.stu3.proto",
       "proto/stu3",
       ImmutableList.of(
-          AbstractTypeCode.getDescriptor().getFile(),
-          AddressTypeCode.getDescriptor().getFile(),
-          UsCoreBirthSexCode.getDescriptor().getFile()),
+          com.google.fhir.stu3.proto.AbstractTypeCode.getDescriptor().getFile(),
+          com.google.fhir.stu3.proto.AddressTypeCode.getDescriptor().getFile(),
+          com.google.fhir.stu3.uscore.UsCoreBirthSexCode.getDescriptor().getFile()),
       ImmutableMap.of(
-          "datatypes.proto", Decimal.getDescriptor().getFile(),
-          "resources.proto", StructureDefinition.getDescriptor().getFile(),
-          "metadatatypes.proto", ElementDefinition.getDescriptor().getFile(),
-          "extensions.proto", ElementDefinitionBindingName.getDescriptor().getFile(),
-          "codes.proto", AbstractTypeCode.getDescriptor().getFile()),
+          "datatypes.proto", com.google.fhir.stu3.proto.Decimal.getDescriptor().getFile(),
+          "resources.proto",
+              com.google.fhir.stu3.proto.StructureDefinition.getDescriptor().getFile(),
+          "metadatatypes.proto",
+              com.google.fhir.stu3.proto.ElementDefinition.getDescriptor().getFile(),
+          "extensions.proto",
+              com.google.fhir.stu3.proto.ElementDefinitionBindingName.getDescriptor().getFile(),
+          "codes.proto", com.google.fhir.stu3.proto.AbstractTypeCode.getDescriptor().getFile()),
+      com.google.fhir.stu3.proto.ContainedResource.getDescriptor(),
       FHIRVersionCode.Value.NUM_3_0_1),
   R4(
-      "google.fhir.r4.proto",
-      "proto/r4",
+      "google.fhir.r4.core",
+      "proto/r4/core",
       ImmutableList.of(
-          com.google.fhir.r4.proto.AccountStatusCode.getDescriptor().getFile(),
-          com.google.fhir.r4.proto.AddressTypeCode.getDescriptor().getFile(),
+          com.google.fhir.r4.core.AccountStatusCode.getDescriptor().getFile(),
+          com.google.fhir.r4.core.AddressTypeCode.getDescriptor().getFile(),
           com.google.fhir.r4.uscore.BirthSexCode.getDescriptor().getFile()),
       ImmutableMap.of(
-          "datatypes.proto", com.google.fhir.r4.proto.Decimal.getDescriptor().getFile(),
-          "resources.proto", com.google.fhir.r4.proto.Patient.getDescriptor().getFile(),
-          "codes.proto", com.google.fhir.r4.proto.AccountStatusCode.getDescriptor().getFile()),
+          "datatypes.proto", com.google.fhir.r4.core.Decimal.getDescriptor().getFile(),
+          "extensions.proto", com.google.fhir.r4.core.MimeType.getDescriptor().getFile(),
+          "codes.proto", com.google.fhir.r4.core.AccountStatusCode.getDescriptor().getFile()),
+      com.google.fhir.r4.core.ContainedResource.getDescriptor(),
       FHIRVersionCode.Value.NUM_4_0_0);
 
   // The proto package of the core FHIR structures.
@@ -65,6 +64,8 @@ public enum FhirVersion {
   // A map of all the FHIR core types to their corresponding files.
   public final ImmutableMap<String, FileDescriptor> coreTypeMap;
 
+  public final Descriptor coreContainedResource;
+
   public final FHIRVersionCode.Value minorVersion;
 
   private FhirVersion(
@@ -72,11 +73,13 @@ public enum FhirVersion {
       String coreProtoImportRoot,
       ImmutableList<FileDescriptor> codeTypeList,
       ImmutableMap<String, FileDescriptor> coreTypeMap,
+      Descriptor coreContainedResource,
       FHIRVersionCode.Value minorVersion) {
     this.coreProtoPackage = coreProtoPackage;
     this.coreProtoImportRoot = coreProtoImportRoot;
     this.codeTypeList = codeTypeList;
     this.coreTypeMap = coreTypeMap;
+    this.coreContainedResource = coreContainedResource;
     this.minorVersion = minorVersion;
   }
 

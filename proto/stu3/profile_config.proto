@@ -34,6 +34,33 @@ message PackageInfo {
   }
   License license = 10;
   string license_date = 11;
+
+  enum ContainedResourceBehavior {
+    DEFAULT = 0;
+    ANY = 1;
+    TYPED_CONTAINED_RESOURCE = 2;
+  }
+  // If unset, defaults to TYPED_CONTAINED_RESOURCE for DSTU2 and STU3, and
+  // ANY for later versions.
+  ContainedResourceBehavior contained_resource_behavior = 12;
+
+  // How the output messages should be divided into files.
+  enum FileSplittingBehavior {
+    DEFAULT_SPLITTING_BEHAVIOR = 0;  // Default is NO_SPLITTING
+    NO_SPLITTING = 1;         // All messages will be output into a single file,
+                              // regardless of type
+    SEPARATE_EXTENSIONS = 2;  // All extensions will be put into a single file,
+                              // and all other types will be put into a second
+                              // file
+    SPLIT_RESOURCES = 3;      // Like SEPARATE_EXTENSIONS, all extensions will
+                              // be put in a single fileone file, and all
+                              // resources will be put in their own individual
+                              // files.  Note that since this requires each to
+                              // be individually compilable, this is only valid
+                              //  with "ANY" contained resource behavior.
+  }
+  // If unset, defaults to no splitting
+  FileSplittingBehavior file_splitting_behavior = 13;
 }
 
 enum SizeRestriction {

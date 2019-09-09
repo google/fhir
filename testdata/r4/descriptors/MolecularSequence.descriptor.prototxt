@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Id"
+  type_name: ".google.fhir.r4.core.Id"
   options {
     [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
@@ -14,7 +14,7 @@ field {
   number: 2
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Meta"
+  type_name: ".google.fhir.r4.core.Meta"
   options {
     [google.fhir.proto.field_description]: "Metadata about the resource"
   }
@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Uri"
+  type_name: ".google.fhir.r4.core.Uri"
   options {
     [google.fhir.proto.field_description]: "A set of rules under which this content was created"
   }
@@ -34,7 +34,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Code"
+  type_name: ".google.fhir.r4.core.Code"
   options {
     [google.fhir.proto.field_description]: "Language of the resource content"
   }
@@ -44,7 +44,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Narrative"
+  type_name: ".google.fhir.r4.core.Narrative"
   options {
     [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
   }
@@ -54,57 +54,63 @@ field {
   number: 6
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.ContainedResource"
+  type_name: ".google.protobuf.Any"
   options {
     [google.fhir.proto.field_description]: "Contained, inline Resources"
   }
 }
 field {
-  name: "extension"
   number: 7
+  options {
+    [google.fhir.proto.reserved_reason]: "Field 7 reserved for strongly-typed ContainedResource for id: MolecularSequence.contained"
+  }
+}
+field {
+  name: "extension"
+  number: 8
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Additional content defined by implementations"
   }
 }
 field {
   name: "modifier_extension"
-  number: 8
+  number: 9
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Extension"
+  type_name: ".google.fhir.r4.core.Extension"
   options {
     [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
   }
 }
 field {
   name: "identifier"
-  number: 9
+  number: 10
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Identifier"
+  type_name: ".google.fhir.r4.core.Identifier"
   options {
     [google.fhir.proto.field_description]: "Unique ID for this particular sequence. This is a FHIR-defined id"
   }
 }
 field {
   name: "type"
-  number: 10
+  number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.SequenceTypeCode"
+  type_name: ".google.fhir.r4.core.SequenceTypeCode"
   options {
     [google.fhir.proto.field_description]: "aa | dna | rna"
   }
 }
 field {
   name: "coordinate_system"
-  number: 11
+  number: 12
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Integer"
+  type_name: ".google.fhir.r4.core.Integer"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Base number of coordinate system (0 for 0-based numbering or coordinates, inclusive start, exclusive end, 1 for 1-based numbering, inclusive start, inclusive end)"
@@ -112,10 +118,10 @@ field {
 }
 field {
   name: "patient"
-  number: 12
+  number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Who and/or what this is about"
     [google.fhir.proto.valid_reference_type]: "Patient"
@@ -123,10 +129,10 @@ field {
 }
 field {
   name: "specimen"
-  number: 13
+  number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Specimen used for sequencing"
     [google.fhir.proto.valid_reference_type]: "Specimen"
@@ -134,10 +140,10 @@ field {
 }
 field {
   name: "device"
-  number: 14
+  number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "The method for sequencing"
     [google.fhir.proto.valid_reference_type]: "Device"
@@ -145,10 +151,10 @@ field {
 }
 field {
   name: "performer"
-  number: 15
+  number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Who should be responsible for test result"
     [google.fhir.proto.valid_reference_type]: "Organization"
@@ -156,20 +162,20 @@ field {
 }
 field {
   name: "quantity"
-  number: 16
+  number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Quantity"
+  type_name: ".google.fhir.r4.core.Quantity"
   options {
     [google.fhir.proto.field_description]: "The number of copies of the sequence of interest.  (RNASeq)"
   }
 }
 field {
   name: "reference_seq"
-  number: 17
+  number: 18
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.MolecularSequence.ReferenceSeq"
+  type_name: ".google.fhir.r4.core.MolecularSequence.ReferenceSeq"
   options {
     [google.fhir.proto.field_description]: "A sequence used as reference"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -179,10 +185,10 @@ field {
 }
 field {
   name: "variant"
-  number: 18
+  number: 19
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.MolecularSequence.Variant"
+  type_name: ".google.fhir.r4.core.MolecularSequence.Variant"
   options {
     [google.fhir.proto.field_description]: "Variant in sequence"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -190,20 +196,20 @@ field {
 }
 field {
   name: "observed_seq"
-  number: 19
+  number: 20
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.String"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Sequence that was observed"
   }
 }
 field {
   name: "quality"
-  number: 20
+  number: 21
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.MolecularSequence.Quality"
+  type_name: ".google.fhir.r4.core.MolecularSequence.Quality"
   options {
     [google.fhir.proto.field_description]: "An set of value as quality of sequence"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -211,20 +217,20 @@ field {
 }
 field {
   name: "read_coverage"
-  number: 21
+  number: 22
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Integer"
+  type_name: ".google.fhir.r4.core.Integer"
   options {
     [google.fhir.proto.field_description]: "Average number of reads representing a given nucleotide in the reconstructed sequence"
   }
 }
 field {
   name: "repository"
-  number: 22
+  number: 23
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.MolecularSequence.Repository"
+  type_name: ".google.fhir.r4.core.MolecularSequence.Repository"
   options {
     [google.fhir.proto.field_description]: "External repository which contains detailed report related with observedSeq in this resource"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -232,10 +238,10 @@ field {
 }
 field {
   name: "pointer"
-  number: 23
+  number: 24
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.Reference"
+  type_name: ".google.fhir.r4.core.Reference"
   options {
     [google.fhir.proto.field_description]: "Pointer to next atomic sequence"
     [google.fhir.proto.valid_reference_type]: "MolecularSequence"
@@ -243,10 +249,10 @@ field {
 }
 field {
   name: "structure_variant"
-  number: 24
+  number: 25
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.proto.MolecularSequence.StructureVariant"
+  type_name: ".google.fhir.r4.core.MolecularSequence.StructureVariant"
   options {
     [google.fhir.proto.field_description]: "Structural variant"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -259,7 +265,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -269,7 +275,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -279,7 +285,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -289,7 +295,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Chromosome containing genetic finding"
     }
@@ -299,7 +305,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "The Genome Build used for reference, following GRCh build versions e.g. \'GRCh 37\'"
     }
@@ -309,7 +315,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.OrientationTypeCode"
+    type_name: ".google.fhir.r4.core.OrientationTypeCode"
     options {
       [google.fhir.proto.field_description]: "sense | antisense"
     }
@@ -319,7 +325,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Reference identifier"
     }
@@ -329,7 +335,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.field_description]: "A pointer to another MolecularSequence entity as reference sequence"
       [google.fhir.proto.valid_reference_type]: "MolecularSequence"
@@ -340,7 +346,7 @@ nested_type {
     number: 9
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "A string to represent reference sequence"
     }
@@ -350,7 +356,7 @@ nested_type {
     number: 10
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.StrandTypeCode"
+    type_name: ".google.fhir.r4.core.StrandTypeCode"
     options {
       [google.fhir.proto.field_description]: "watson | crick"
     }
@@ -360,7 +366,7 @@ nested_type {
     number: 11
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Integer"
+    type_name: ".google.fhir.r4.core.Integer"
     options {
       [google.fhir.proto.field_description]: "Start position of the window on the  reference sequence"
     }
@@ -370,7 +376,7 @@ nested_type {
     number: 12
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Integer"
+    type_name: ".google.fhir.r4.core.Integer"
     options {
       [google.fhir.proto.field_description]: "End position of the window on the reference sequence"
     }
@@ -383,7 +389,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -393,7 +399,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -403,7 +409,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -413,7 +419,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Integer"
+    type_name: ".google.fhir.r4.core.Integer"
     options {
       [google.fhir.proto.field_description]: "Start position of the variant on the  reference sequence"
     }
@@ -423,7 +429,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Integer"
+    type_name: ".google.fhir.r4.core.Integer"
     options {
       [google.fhir.proto.field_description]: "End position of the variant on the reference sequence"
     }
@@ -433,7 +439,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Allele that was observed"
     }
@@ -443,7 +449,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Allele in the reference sequence"
     }
@@ -453,7 +459,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Extended CIGAR string for aligning the sequence with reference bases"
     }
@@ -463,7 +469,7 @@ nested_type {
     number: 9
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Reference"
+    type_name: ".google.fhir.r4.core.Reference"
     options {
       [google.fhir.proto.field_description]: "Pointer to observed variant information"
       [google.fhir.proto.valid_reference_type]: "Observation"
@@ -477,7 +483,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -487,7 +493,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -497,7 +503,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -507,7 +513,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.QualityTypeCode"
+    type_name: ".google.fhir.r4.core.QualityTypeCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "indel | snp | unknown"
@@ -518,7 +524,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Standard sequence for comparison"
     }
@@ -528,7 +534,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Integer"
+    type_name: ".google.fhir.r4.core.Integer"
     options {
       [google.fhir.proto.field_description]: "Start position of the sequence"
     }
@@ -538,7 +544,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Integer"
+    type_name: ".google.fhir.r4.core.Integer"
     options {
       [google.fhir.proto.field_description]: "End position of the sequence"
     }
@@ -548,7 +554,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Quantity"
+    type_name: ".google.fhir.r4.core.Quantity"
     options {
       [google.fhir.proto.field_description]: "Quality score for the comparison"
     }
@@ -558,7 +564,7 @@ nested_type {
     number: 9
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Method to get quality"
     }
@@ -568,7 +574,7 @@ nested_type {
     number: 10
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Decimal"
+    type_name: ".google.fhir.r4.core.Decimal"
     options {
       [google.fhir.proto.field_description]: "True positives from the perspective of the truth data"
     }
@@ -579,7 +585,7 @@ nested_type {
     number: 11
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Decimal"
+    type_name: ".google.fhir.r4.core.Decimal"
     options {
       [google.fhir.proto.field_description]: "True positives from the perspective of the query data"
     }
@@ -590,7 +596,7 @@ nested_type {
     number: 12
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Decimal"
+    type_name: ".google.fhir.r4.core.Decimal"
     options {
       [google.fhir.proto.field_description]: "False negatives"
     }
@@ -601,7 +607,7 @@ nested_type {
     number: 13
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Decimal"
+    type_name: ".google.fhir.r4.core.Decimal"
     options {
       [google.fhir.proto.field_description]: "False positives"
     }
@@ -612,7 +618,7 @@ nested_type {
     number: 14
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Decimal"
+    type_name: ".google.fhir.r4.core.Decimal"
     options {
       [google.fhir.proto.field_description]: "False positives where the non-REF alleles in the Truth and Query Call Sets match"
     }
@@ -623,7 +629,7 @@ nested_type {
     number: 15
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Decimal"
+    type_name: ".google.fhir.r4.core.Decimal"
     options {
       [google.fhir.proto.field_description]: "Precision of comparison"
     }
@@ -633,7 +639,7 @@ nested_type {
     number: 16
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Decimal"
+    type_name: ".google.fhir.r4.core.Decimal"
     options {
       [google.fhir.proto.field_description]: "Recall of comparison"
     }
@@ -643,7 +649,7 @@ nested_type {
     number: 17
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Decimal"
+    type_name: ".google.fhir.r4.core.Decimal"
     options {
       [google.fhir.proto.field_description]: "F-score"
     }
@@ -653,7 +659,7 @@ nested_type {
     number: 18
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.MolecularSequence.Quality.Roc"
+    type_name: ".google.fhir.r4.core.MolecularSequence.Quality.Roc"
     options {
       [google.fhir.proto.field_description]: "Receiver Operator Characteristic (ROC) Curve"
       [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -666,7 +672,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -676,7 +682,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -686,7 +692,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -696,7 +702,7 @@ nested_type {
       number: 4
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Integer"
+      type_name: ".google.fhir.r4.core.Integer"
       options {
         [google.fhir.proto.field_description]: "Genotype quality score"
       }
@@ -706,7 +712,7 @@ nested_type {
       number: 5
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Integer"
+      type_name: ".google.fhir.r4.core.Integer"
       options {
         [google.fhir.proto.field_description]: "Roc score true positive numbers"
       }
@@ -717,7 +723,7 @@ nested_type {
       number: 6
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Integer"
+      type_name: ".google.fhir.r4.core.Integer"
       options {
         [google.fhir.proto.field_description]: "Roc score false positive numbers"
       }
@@ -728,7 +734,7 @@ nested_type {
       number: 7
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Integer"
+      type_name: ".google.fhir.r4.core.Integer"
       options {
         [google.fhir.proto.field_description]: "Roc score false negative numbers"
       }
@@ -739,7 +745,7 @@ nested_type {
       number: 8
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Decimal"
+      type_name: ".google.fhir.r4.core.Decimal"
       options {
         [google.fhir.proto.field_description]: "Precision of the GQ score"
       }
@@ -749,7 +755,7 @@ nested_type {
       number: 9
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Decimal"
+      type_name: ".google.fhir.r4.core.Decimal"
       options {
         [google.fhir.proto.field_description]: "Sensitivity of the GQ score"
       }
@@ -759,7 +765,7 @@ nested_type {
       number: 10
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Decimal"
+      type_name: ".google.fhir.r4.core.Decimal"
       options {
         [google.fhir.proto.field_description]: "FScore of the GQ score"
       }
@@ -773,7 +779,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -783,7 +789,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -793,7 +799,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -803,7 +809,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.RepositoryTypeCode"
+    type_name: ".google.fhir.r4.core.RepositoryTypeCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "directlink | openapi | login | oauth | other"
@@ -814,7 +820,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Uri"
+    type_name: ".google.fhir.r4.core.Uri"
     options {
       [google.fhir.proto.field_description]: "URI of the repository"
     }
@@ -824,7 +830,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Repository\'s name"
     }
@@ -834,7 +840,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Id of the dataset that used to call for dataset in repository"
     }
@@ -844,7 +850,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Id of the variantset that used to call for variantset in repository"
     }
@@ -854,7 +860,7 @@ nested_type {
     number: 9
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Id of the read"
     }
@@ -867,7 +873,7 @@ nested_type {
     number: 1
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.String"
+    type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
     }
@@ -877,7 +883,7 @@ nested_type {
     number: 2
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Additional content defined by implementations"
     }
@@ -887,7 +893,7 @@ nested_type {
     number: 3
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Extension"
+    type_name: ".google.fhir.r4.core.Extension"
     options {
       [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
     }
@@ -897,7 +903,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.CodeableConcept"
+    type_name: ".google.fhir.r4.core.CodeableConcept"
     options {
       [google.fhir.proto.field_description]: "Structural variant change type"
     }
@@ -907,7 +913,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Boolean"
+    type_name: ".google.fhir.r4.core.Boolean"
     options {
       [google.fhir.proto.field_description]: "Does the structural variant have base pair resolution breakpoints?"
     }
@@ -917,7 +923,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.Integer"
+    type_name: ".google.fhir.r4.core.Integer"
     options {
       [google.fhir.proto.field_description]: "Structural variant length"
     }
@@ -927,7 +933,7 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.MolecularSequence.StructureVariant.Outer"
+    type_name: ".google.fhir.r4.core.MolecularSequence.StructureVariant.Outer"
     options {
       [google.fhir.proto.field_description]: "Structural variant outer"
       [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -938,7 +944,7 @@ nested_type {
     number: 8
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.proto.MolecularSequence.StructureVariant.Inner"
+    type_name: ".google.fhir.r4.core.MolecularSequence.StructureVariant.Inner"
     options {
       [google.fhir.proto.field_description]: "Structural variant inner"
       [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -951,7 +957,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -961,7 +967,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -971,7 +977,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -981,7 +987,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Integer"
+      type_name: ".google.fhir.r4.core.Integer"
       options {
         [google.fhir.proto.field_description]: "Structural variant outer start"
       }
@@ -991,7 +997,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Integer"
+      type_name: ".google.fhir.r4.core.Integer"
       options {
         [google.fhir.proto.field_description]: "Structural variant outer end"
       }
@@ -1004,7 +1010,7 @@ nested_type {
       number: 1
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.String"
+      type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
       }
@@ -1014,7 +1020,7 @@ nested_type {
       number: 2
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Additional content defined by implementations"
       }
@@ -1024,7 +1030,7 @@ nested_type {
       number: 3
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Extension"
+      type_name: ".google.fhir.r4.core.Extension"
       options {
         [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
       }
@@ -1034,7 +1040,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Integer"
+      type_name: ".google.fhir.r4.core.Integer"
       options {
         [google.fhir.proto.field_description]: "Structural variant inner start"
       }
@@ -1044,7 +1050,7 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.proto.Integer"
+      type_name: ".google.fhir.r4.core.Integer"
       options {
         [google.fhir.proto.field_description]: "Structural variant inner end"
       }

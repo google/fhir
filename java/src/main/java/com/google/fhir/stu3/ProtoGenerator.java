@@ -26,6 +26,7 @@ import com.google.fhir.common.FhirVersion;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
+import com.google.fhir.proto.PackageInfo.ContainedResourceBehavior;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.r4.core.BindingStrengthCode;
 import com.google.fhir.r4.core.Canonical;
@@ -135,8 +136,17 @@ public class ProtoGenerator {
 
   private static Set<String> getTypesDefinedInFile(FileDescriptor file) {
     return file.getMessageTypes().stream()
-        .map(desc -> desc.getFullName())
+        .flatMap(desc -> getTypesDefinedInType(desc).stream())
         .collect(Collectors.toSet());
+  }
+
+  private static Set<String> getTypesDefinedInType(Descriptor type) {
+    Set<String> types = new HashSet<>();
+    types.add(type.getFullName());
+    for (Descriptor subType : type.getNestedTypes()) {
+      types.addAll(getTypesDefinedInType(subType));
+    }
+    return types;
   }
 
   // The package to write new protos to.
@@ -461,18 +471,22 @@ public class ProtoGenerator {
       String filename = entry.getKey();
       Set<String> types = entry.getValue();
 
-      if (needsDep(builder, types)) {
+      if (needsDep(builder, fhirVersion.coreProtoPackage, types)) {
         builder.addDependency(new File(fhirVersion.coreProtoImportRoot, filename).toString());
       }
     }
 
+    if (needsDep(builder, "google.protobuf", ImmutableSet.of("google.protobuf.Any"))) {
+      builder.addDependency("google/protobuf/any.proto");
+    }
     return builder.build();
   }
 
   // Returns true if the file proto uses a type from a set of types, but does not define it.
-  private boolean needsDep(FileDescriptorProtoOrBuilder fileProto, Set<String> types) {
+  private static boolean needsDep(
+      FileDescriptorProtoOrBuilder fileProto, String packageString, Set<String> types) {
     for (DescriptorProto descriptor : fileProto.getMessageTypeList()) {
-      if (types.contains(fhirVersion.coreProtoPackage + "." + descriptor.getName())
+      if (types.contains(packageString + "." + descriptor.getName())
           && !descriptor.getName().equals("RelatedArtifact")) {
         // This file defines a type from the set.  It can't depend on itself.
         // TODO: We don't pay attention to RelatedArtifact because there's an extension
@@ -526,7 +540,8 @@ public class ProtoGenerator {
    * Returns a version of the passed-in FileDescriptor that contains a ContainedResource message,
    * which contains only the resource types present in the generated FileDescriptorProto.
    */
-  public FileDescriptorProto addContainedResource(FileDescriptorProto fileDescriptor) {
+  public FileDescriptorProto addContainedResource(
+      FileDescriptorProto fileDescriptor, List<DescriptorProto> resourceTypes) {
     DescriptorProto.Builder contained =
         DescriptorProto.newBuilder()
             .setName("ContainedResource")
@@ -535,7 +550,7 @@ public class ProtoGenerator {
       // When generating contained resources for the core type (resources.proto),
       // just iterate through all the non-abstract types, assigning tag numbers as you go
       int tagNumber = 1;
-      for (DescriptorProto type : fileDescriptor.getMessageTypeList()) {
+      for (DescriptorProto type : resourceTypes) {
         if (!type.getOptions().getExtension(Annotations.isAbstractType)) {
           contained.addField(
               FieldDescriptorProto.newBuilder()
@@ -554,21 +569,20 @@ public class ProtoGenerator {
       // number of the field in the base contained resources for Patient.
       // Resources with no exact name matches are assigned field numbers that are greater than
       // the max used by the base ContainedResource.
-      Descriptor baseContainedResources =
-          fhirVersion.coreTypeMap.get("resources.proto").findMessageTypeByName("ContainedResource");
+      Descriptor baseContainedResource = fhirVersion.coreContainedResource;
       List<String> resourcesToInclude =
-          fileDescriptor.getMessageTypeList().stream()
+          resourceTypes.stream()
               .filter(desc -> !desc.getOptions().getExtension(Annotations.isAbstractType))
               .map(desc -> desc.getName())
               .collect(Collectors.toList());
-      for (FieldDescriptor field : baseContainedResources.getFields()) {
+      for (FieldDescriptor field : baseContainedResource.getFields()) {
         String typename = field.getMessageType().getName();
         if (resourcesToInclude.contains(typename)) {
           contained.addField(field.toProto().toBuilder().setTypeName(typename));
           resourcesToInclude.remove(typename);
         }
       }
-      int tagNumber = Iterables.getLast(baseContainedResources.getFields()).getNumber() + 1;
+      int tagNumber = Iterables.getLast(baseContainedResource.getFields()).getNumber() + 1;
       for (String resourceType : resourcesToInclude) {
         contained.addField(
             FieldDescriptorProto.newBuilder()
@@ -628,6 +642,21 @@ public class ProtoGenerator {
         // This is a slice.  Defer this field until the end of the message, to keep base field
         // numbers consistent across profiles.
         deferredElements.add(element);
+      } else if (isContainedResourceField(element)
+          && getContainedResourceBehavior(packageInfo)
+              != ContainedResourceBehavior.TYPED_CONTAINED_RESOURCE) {
+        buildAndAddField(element, elementList, nextTag++, builder);
+        builder
+            .addFieldBuilder()
+            .setNumber(nextTag)
+            .getOptionsBuilder()
+            .setExtension(
+                ProtoGeneratorAnnotations.reservedReason,
+                "Field "
+                    + nextTag
+                    + " reserved for strongly-typed ContainedResource for id: "
+                    + element.getId().getValue());
+        nextTag++;
       } else {
         buildAndAddField(element, elementList, nextTag++, builder);
       }
@@ -635,7 +664,8 @@ public class ProtoGenerator {
 
     for (ElementDefinition deferredElement : deferredElements) {
       // Currently we only support slicing for Extensions and Codings
-      if (isElementSupportedForSlicing(deferredElement)) {
+      if (isElementSupportedForSlicing(deferredElement)
+          || isContainedResourceField(deferredElement)) {
         buildAndAddField(deferredElement, elementList, nextTag++, builder);
       } else {
         builder
@@ -1263,14 +1293,23 @@ public class ProtoGenerator {
       }
 
       if (normalizedFhirTypeName.equals("Resource")) {
-        // We represent "Resource" FHIR types as "ContainedResource"
-        if (packageInfo.getLocalContainedResource()) {
-          return new QualifiedType("ContainedResource", packageInfo.getProtoPackage());
+        // We represent "Resource" FHIR types as "Any",
+        // unless we are on the Bundle type, in which case we use "ContainedResources" type.
+        // This allows defining resources in separate files without circular dependencies.
+        if (elementList.get(0).getId().getValue().equals("Bundle")
+            || getContainedResourceBehavior(packageInfo)
+                == ContainedResourceBehavior.TYPED_CONTAINED_RESOURCE) {
+          if (packageInfo.getLocalContainedResource()) {
+            return new QualifiedType("ContainedResource", packageInfo.getProtoPackage());
+          }
+          if (!packageInfo.getContainedResourcePackage().isEmpty()) {
+            return new QualifiedType(
+                "ContainedResource", packageInfo.getContainedResourcePackage());
+          }
+          return new QualifiedType("ContainedResource", fhirVersion.coreProtoPackage);
+        } else {
+          return new QualifiedType("Any", "google.protobuf");
         }
-        if (!packageInfo.getContainedResourcePackage().isEmpty()) {
-          return new QualifiedType("ContainedResource", packageInfo.getContainedResourcePackage());
-        }
-        return new QualifiedType("ContainedResource", fhirVersion.coreProtoPackage);
       }
 
       Optional<QualifiedType> valueSetType = checkForTypeWithBoundValueSet(element, elementList);
@@ -1768,11 +1807,15 @@ public class ProtoGenerator {
     return Optional.empty();
   }
 
+  private static boolean isContainedResourceField(ElementDefinition element) {
+    return element.getBase().getPath().getValue().equals("DomainResource.contained");
+  }
+
   private static final Pattern WORD_BREAK_PATTERN = Pattern.compile("[^A-Za-z0-9]+([A-Za-z0-9])");
 
   // Converts a FHIR id strings to UpperCamelCasing for FieldTypes using a regex pattern that
   // considers hyphen, underscore and space to be word breaks.
-  private static String toFieldTypeCase(String type) {
+  public static String toFieldTypeCase(String type) {
     String normalizedType = type;
     if (Character.isLowerCase(type.charAt(0))) {
       normalizedType = type.substring(0, 1).toUpperCase() + type.substring(1);
@@ -1996,6 +2039,19 @@ public class ProtoGenerator {
     return element.getTypeCount() == 1
         && (element.getType(0).getCode().getValue().equals("Extension")
             || element.getType(0).getCode().getValue().equals("Coding"));
+  }
+
+  private static ContainedResourceBehavior getContainedResourceBehavior(PackageInfo info) {
+    if (info.getContainedResourceBehavior() != ContainedResourceBehavior.DEFAULT) {
+      return info.getContainedResourceBehavior();
+    }
+    switch (info.getFhirVersion()) {
+      case DSTU2:
+      case STU3:
+        return ContainedResourceBehavior.TYPED_CONTAINED_RESOURCE;
+      default:
+        return ContainedResourceBehavior.ANY;
+    }
   }
 
   private static final boolean PRINT_SNAPSHOT_DISCREPANCIES = false;

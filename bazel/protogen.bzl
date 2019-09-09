@@ -118,7 +118,6 @@ def gen_fhir_protos(
 
     if separate_extensions:
         outs = ["_genfiles_" + name + ".proto", "_genfiles_" + name + "_extensions.proto"]
-        cmd += " --separate_extensions "
     else:
         outs = ["_genfiles_" + name + ".proto"]
 

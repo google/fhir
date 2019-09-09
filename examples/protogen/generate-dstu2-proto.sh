@@ -65,6 +65,5 @@ $PROTO_GENERATOR \
 # Generate resources.proto.
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
-  --include_contained_resource \
   --output_name resources \
   $(for i in $RESOURCES; do echo "$INPUT_PATH/StructureDefinition-${i}.json "; done)
