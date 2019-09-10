@@ -5,13 +5,14 @@ load("@protobuf_archive//:protobuf.bzl", "cc_proto_library", "py_proto_library")
 
 WELL_KNOWN_PROTOS = ["descriptor_proto", "any_proto"]
 
-def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = []):
+def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = [], **kwargs):
     """Generates proto_library target, as well as {py,cc,java}_proto_library targets.
 
     Args:
       proto_library_prefix: Name prefix to be added to various proto libraries.
       srcs: Srcs for the proto library.
       proto_deps: Deps by the proto_library.
+      **kwargs: varargs. Passed through to proto rules.
     """
     py_deps = []
     cc_deps = []
@@ -33,6 +34,7 @@ def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = []):
         deps = py_deps,
         default_runtime = "@protobuf_archive//:protobuf_python",
         protoc = "@protobuf_archive//:protoc",
+        **kwargs
     )
 
     cc_proto_library(
@@ -41,12 +43,14 @@ def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = []):
         deps = cc_deps,
         default_runtime = "@protobuf_archive//:protobuf",
         protoc = "@protobuf_archive//:protoc",
+        **kwargs
     )
 
     native.proto_library(
         name = proto_library_prefix + "_proto",
         srcs = srcs,
         deps = proto_deps,
+        **kwargs
     )
 
     native.java_proto_library(
@@ -54,4 +58,5 @@ def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = []):
         deps = [
             ":" + proto_library_prefix + "_proto",
         ],
+        **kwargs
     )

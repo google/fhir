@@ -27,8 +27,6 @@
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/resources/observation.pb.h"
 #include "proto/r4/core/resources/patient.pb.h"
-#include "proto/r4/google_extensions.pb.h"
-#include "proto/r4/resources.pb.h"
 #include "proto/r4/uscore.pb.h"
 #include "testdata/r4/profiles/test_core.pb.h"
 

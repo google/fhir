@@ -173,7 +173,6 @@
 #include "proto/r4/core/resources/value_set.pb.h"
 #include "proto/r4/core/resources/verification_result.pb.h"
 #include "proto/r4/core/resources/vision_prescription.pb.h"
-#include "testdata/r4/profiles/test.pb.h"
 #include "include/json/json.h"
 
 namespace google {

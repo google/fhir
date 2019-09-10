@@ -24,21 +24,6 @@ gen_fhir_definitions_and_protos(
 
 fhir_proto_library(
     srcs = [
-        "test.proto",
-        "test_extensions.proto",
-    ],
-    proto_deps = [
-        "//proto:annotations_proto",
-        "//proto/r4:codes_proto",
-        "//proto/r4:datatypes_proto",
-        "//proto/r4:extensions_proto",
-        "//proto/r4:resources_proto",
-    ],
-    proto_library_prefix = "test",
-)
-
-fhir_proto_library(
-    srcs = [
         "test_core.proto",
         "test_extensions_core.proto",
     ],

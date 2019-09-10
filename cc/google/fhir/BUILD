@@ -563,7 +563,6 @@ cc_test(
         "//proto/r4/core/resources:value_set_cc_proto",
         "//proto/r4/core/resources:verification_result_cc_proto",
         "//proto/r4/core/resources:vision_prescription_cc_proto",
-        "//testdata/r4/profiles:test_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@jsoncpp_git//:jsoncpp",

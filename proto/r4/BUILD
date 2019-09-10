@@ -38,6 +38,20 @@ fhir_proto_library(
 
 fhir_proto_library(
     srcs = [
+        "profiles.proto",
+    ],
+    proto_deps = [
+        ":codes_proto",
+        ":datatypes_proto",
+        ":extensions_proto",
+        ":resources_proto",
+        "//proto:annotations_proto",
+    ],
+    proto_library_prefix = "profiles",
+)
+
+fhir_proto_library(
+    srcs = [
         "extensions.proto",
         "google_extensions.proto",
     ],
@@ -59,20 +73,6 @@ fhir_proto_library(
         "//proto/r4/core:datatypes_proto",
     ],
     proto_library_prefix = "google_extensions_core",
-)
-
-fhir_proto_library(
-    srcs = [
-        "profiles.proto",
-    ],
-    proto_deps = [
-        ":codes_proto",
-        ":datatypes_proto",
-        ":extensions_proto",
-        ":resources_proto",
-        "//proto:annotations_proto",
-    ],
-    proto_library_prefix = "profiles",
 )
 
 gen_fhir_protos(
