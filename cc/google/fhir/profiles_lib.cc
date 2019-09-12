@@ -16,6 +16,8 @@
 
 #include "google/fhir/profiles_lib.h"
 
+#include "absl/synchronization/mutex.h"
+
 namespace google {
 namespace fhir {
 namespace profiles_internal {
@@ -38,20 +40,11 @@ const std::set<string> GetAncestorSet(const ::google::protobuf::Descriptor* desc
   return ancestors;
 }
 
-// 2d map from structure definitions to result for previously checked pairs
-std::unordered_map<string, std::unordered_map<string, bool>>&
-GetSharesCommonAncestorMemos() {
-  static std::unordered_map<string, std::unordered_map<string, bool>>*
-      share_common_ancestor_memos =
-          new std::unordered_map<string, std::unordered_map<string, bool>>();
-  return *share_common_ancestor_memos;
-}
-
-bool AddSharedCommonAncestorMemo(const string& first_url,
-                                 const string& second_url, const bool value) {
-  GetSharesCommonAncestorMemos()[first_url][second_url] = value;
-  GetSharesCommonAncestorMemos()[second_url][first_url] = value;
-
+bool AddSharedCommonAncestorMemo(
+    const string& first_url, const string& second_url, const bool value,
+    std::unordered_map<string, std::unordered_map<string, bool>>* memos) {
+  (*memos)[first_url][second_url] = value;
+  (*memos)[second_url][first_url] = value;
   return value;
 }
 
@@ -59,10 +52,14 @@ bool AddSharedCommonAncestorMemo(const string& first_url,
 
 const bool SharesCommonAncestor(const ::google::protobuf::Descriptor* first,
                                 const ::google::protobuf::Descriptor* second) {
+  static std::unordered_map<string, std::unordered_map<string, bool>> memos;
+  static absl::Mutex memos_mutex;
+
   const string& first_url = GetStructureDefinitionUrl(first);
   const string& second_url = GetStructureDefinitionUrl(second);
 
-  const auto& first_url_memo_entry = GetSharesCommonAncestorMemos()[first_url];
+  absl::MutexLock lock(&memos_mutex);
+  const auto& first_url_memo_entry = memos[first_url];
   const auto& memo_entry = first_url_memo_entry.find(second_url);
   if (memo_entry != first_url_memo_entry.end()) {
     return memo_entry->second;
@@ -71,10 +68,10 @@ const bool SharesCommonAncestor(const ::google::protobuf::Descriptor* first,
   const std::set<string> first_set = GetAncestorSet(first);
   for (const string& entry_from_second : GetAncestorSet(second)) {
     if (first_set.find(entry_from_second) != first_set.end()) {
-      return AddSharedCommonAncestorMemo(first_url, second_url, true);
+      return AddSharedCommonAncestorMemo(first_url, second_url, true, &memos);
     }
   }
-  return AddSharedCommonAncestorMemo(first_url, second_url, false);
+  return AddSharedCommonAncestorMemo(first_url, second_url, false, &memos);
 }
 
 }  // namespace profiles_internal

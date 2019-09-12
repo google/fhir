@@ -124,6 +124,7 @@ cc_library(
         "//proto:annotations_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/synchronization",
         "@org_tensorflow//tensorflow/core:lib",
     ],
 )
