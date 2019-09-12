@@ -1,0 +1,15 @@
+presubmit: {
+  review_notify: "chc-wat+reviews"
+  check_tests: {
+    failure_status: ERROR
+    project: "cloud_healthcare.tap"
+  }
+  check_tests: {
+    failure_status: ERROR
+    project: "cloud_healthcare.tap_gce"
+  }
+  check_tests: {
+    failure_status: ERROR
+    project: "fhir_go_parser.tap"
+  }
+}
