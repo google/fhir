@@ -202,10 +202,12 @@ cc_library(
         ":annotations",
         ":primitive_wrapper",
         ":proto_util",
+        ":util",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//cc/google/fhir/systems",
         "//proto:annotations_cc_proto",
+        "//proto/r4/core:datatypes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:resources_cc_proto",
         "@com_google_absl//absl/strings",
@@ -214,13 +216,30 @@ cc_library(
 )
 
 cc_test(
-    name = "resource_validation_test",
-    srcs = ["resource_validation_test.cc"],
+    name = "resource_validation_stu3_test",
+    srcs = ["resource_validation_stu3_test.cc"],
     deps = [
         ":resource_validation",
         ":test_helper",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:resources_cc_proto",
+        "@com_google_googletest//:gtest_main",
+        "@org_tensorflow//tensorflow/core:lib",
+        "@org_tensorflow//tensorflow/core:test",
+        "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "resource_validation_r4_test",
+    srcs = ["resource_validation_r4_test.cc"],
+    deps = [
+        ":resource_validation",
+        ":test_helper",
+        "//proto/r4/core:datatypes_cc_proto",
+        "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
+        "//proto/r4/core/resources:encounter_cc_proto",
+        "//proto/r4/core/resources:observation_cc_proto",
         "@com_google_googletest//:gtest_main",
         "@org_tensorflow//tensorflow/core:lib",
         "@org_tensorflow//tensorflow/core:test",

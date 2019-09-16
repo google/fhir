@@ -197,7 +197,11 @@ StatusOr<string> ReferenceMessageToString(const ::google::protobuf::Message& ref
       reference.GetDescriptor()->full_name());
 }
 
-absl::Duration GetDurationFromTimelikeElement(const DateTime& datetime) {
+namespace {
+
+template <class TypedDateTime>
+absl::Duration InternalGetDurationFromTimelikeElement(
+    const TypedDateTime& datetime) {
   // TODO: handle YEAR and MONTH properly, instead of approximating.
   switch (datetime.precision()) {
     case DateTime::YEAR:
@@ -215,6 +219,18 @@ absl::Duration GetDurationFromTimelikeElement(const DateTime& datetime) {
     default:
       LOG(FATAL) << "Unsupported datetime precision: " << datetime.precision();
   }
+}
+
+}  // namespace
+
+absl::Duration GetDurationFromTimelikeElement(
+    const stu3::proto::DateTime& datetime) {
+  return InternalGetDurationFromTimelikeElement(datetime);
+}
+
+absl::Duration GetDurationFromTimelikeElement(
+    const r4::core::DateTime& datetime) {
+  return InternalGetDurationFromTimelikeElement(datetime);
 }
 
 Status GetTimezone(const string& timezone_str, absl::TimeZone* tz) {

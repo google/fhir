@@ -77,7 +77,6 @@ namespace google {
 namespace fhir {
 
 using std::string;
-using ::google::fhir::stu3::proto::Reference;
 
 template <typename R>
 stu3::proto::Meta* MutableMetadataFromResource(R* resource) {
@@ -115,7 +114,10 @@ absl::Time GetTimeFromTimelikeElement(const T& timelike) {
 }
 
 absl::Duration GetDurationFromTimelikeElement(
-    const stu3::proto::DateTime& datetime);
+    const ::google::fhir::stu3::proto::DateTime& datetime);
+
+absl::Duration GetDurationFromTimelikeElement(
+    const ::google::fhir::r4::core::DateTime& datetime);
 
 Status GetTimezone(const string& timezone_str, absl::TimeZone* tz);
 

@@ -139,10 +139,10 @@ class SpecificWrapper : public PrimitiveWrapper {
  public:
   Status MergeInto(Message* target) const override {
     if (T::descriptor()->full_name() != target->GetDescriptor()->full_name()) {
-      return InvalidArgument("Type mismatch in SpecificWrapper#MergeInto: ",
-                             "Attempted to merge ",
-                             T::descriptor()->full_name(), " into ",
-                             target->GetDescriptor()->full_name());
+      return InvalidArgument(
+          "Type mismatch in SpecificWrapper#MergeInto: ", "Attempted to merge ",
+          T::descriptor()->full_name(), " into ",
+          target->GetDescriptor()->full_name());
     }
     target->MergeFrom(*wrapped_);
     return Status::OK();
@@ -1180,10 +1180,22 @@ Status ValidatePrimitive(const ::google::protobuf::Message& primitive) {
   }
 
   const ::google::protobuf::Descriptor* descriptor = primitive.GetDescriptor();
-  // TODO: Once wrapping a proto doesn't involve a copy,
-  // wrap directly here.
-  FHIR_ASSIGN_OR_RETURN(std::unique_ptr<PrimitiveWrapper> wrapper,
-                        GetStu3Wrapper(descriptor));
+  std::unique_ptr<PrimitiveWrapper> wrapper;
+  switch (GetFhirVersion(primitive)) {
+    case proto::STU3: {
+      FHIR_ASSIGN_OR_RETURN(wrapper, GetStu3Wrapper(descriptor));
+      break;
+    }
+    case proto::R4: {
+      FHIR_ASSIGN_OR_RETURN(wrapper, GetR4Wrapper(descriptor));
+      break;
+    }
+    default:
+      return InvalidArgument("Unsupported FHIR Version: ",
+                             proto::FhirVersion_Name(GetFhirVersion(primitive)),
+                             " for proto: ", descriptor->full_name());
+  }
+
   FHIR_RETURN_IF_ERROR(wrapper->Wrap(primitive));
   return wrapper->ValidateProto();
 }

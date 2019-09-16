@@ -1,4 +1,4 @@
-// Copyright 2018 Google LLC
+// Copyright 2019 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "google/fhir/resource_validation.h"
-
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "google/fhir/resource_validation.h"
 #include "google/fhir/test_helper.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/resources.pb.h"
+#include "proto/r4/core/datatypes.pb.h"
+#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/r4/core/resources/encounter.pb.h"
+#include "proto/r4/core/resources/observation.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
 
@@ -28,7 +29,7 @@ namespace fhir {
 
 namespace {
 
-using namespace stu3::proto;  // NOLINT
+using namespace r4::core;  // NOLINT
 
 static google::protobuf::TextFormat::Parser parser;
 
@@ -65,12 +66,17 @@ Encounter ValidEncounter() {
   return ParseFromString<Encounter>(R"proto(
     status { value: TRIAGED }
     id { value: "123" }
+    class_value {
+      code { value: "AMB" }
+      system { value: "urn:test" }
+    }
   )proto");
 }
 
 template <typename T>
 void ValidTest(const T& proto) {
-  EXPECT_TRUE(ValidateResource(proto).ok());
+  auto status = ValidateResource(proto);
+  EXPECT_TRUE(status.ok()) << status;
 }
 
 template <typename T>
@@ -95,20 +101,15 @@ TEST(ResourceValidationTest, InvalidPrimitiveField) {
 
 TEST(ResourceValidationTest, ValidReference) {
   Observation observation = ValidObservation();
-  observation.add_related()
-      ->mutable_target()
-      ->mutable_observation_id()
-      ->set_value("12345");
+  observation.mutable_specimen()->mutable_specimen_id()->set_value("12345");
   ValidTest(observation);
 }
 
 TEST(ResourceValidationTest, InvalidReference) {
   Observation observation = ValidObservation();
-  observation.add_related()->mutable_target()->mutable_patient_id()->set_value(
-      "12345");
-  InvalidTest(
-      "invalid-reference-Observation.related.target-disallowed-type-Patient",
-      observation);
+  observation.mutable_specimen()->mutable_device_id()->set_value("12345");
+  InvalidTest("invalid-reference-Observation.specimen-disallowed-type-Device",
+              observation);
 }
 
 TEST(ResourceValidationTest, RepeatedReferenceValid) {
@@ -135,7 +136,7 @@ TEST(ResourceValidationTest, EmptyOneof) {
   component->mutable_value();
   *(component->mutable_code()) = ValidCodeableConcept();
   InvalidTest(
-      "empty-oneof-google.fhir.stu3.proto.Observation.Component.Value.value",
+      "empty-oneof-google.fhir.r4.core.Observation.Component.ValueX.choice",
       observation);
 }
 
@@ -144,12 +145,108 @@ TEST(BundleValidationTest, Valid) {
   parser.AllowPartialMessage(true);
   Bundle bundle;
   ASSERT_TRUE(parser.ParseFromString(R"proto(
-    type { value: COLLECTION }
-    id { value: "123" }
-    entry { resource { patient {} } }
-  )proto", &bundle));
+                                       type { value: COLLECTION }
+                                       id { value: "123" }
+                                       entry { resource { patient {} } }
+                                     )proto",
+                                     &bundle));
 
   EXPECT_TRUE(ValidateResource(bundle).ok());
+}
+
+TEST(EncounterValidationTest, StartLaterThanEnd) {
+  google::protobuf::TextFormat::Parser parser;
+  parser.AllowPartialMessage(true);
+  Encounter encounter;
+  ASSERT_TRUE(parser.ParseFromString(
+      R"proto(
+        id { value: "123" }
+        status { value: FINISHED }
+        class_value {
+          code { value: "AMB" }
+          system { value: "urn:test" }
+        }
+        subject { patient_id { value: "4" } }
+        period {
+          start {
+            value_us: 5515680100000000  # "2144-10-13T21:21:40+00:00"
+            timezone: "UTC"
+            precision: SECOND
+          }
+          end {
+            value_us: 5515679100000000  # "2144-10-13T21:05:00+00:00"
+            timezone: "UTC"
+            precision: SECOND
+          }
+        }
+      )proto",
+      &encounter));
+
+  EXPECT_EQ(ValidateResource(encounter),
+            ::tensorflow::errors::FailedPrecondition(
+                "Encounter.period-start-time-later-than-end-time"));
+}
+
+TEST(EncounterValidationTest, StartLaterThanEndButEndHasDayPrecision) {
+  google::protobuf::TextFormat::Parser parser;
+  parser.AllowPartialMessage(true);
+  Encounter encounter;
+  ASSERT_TRUE(parser.ParseFromString(
+      R"proto(
+        id { value: "123" }
+        status { value: FINISHED }
+        class_value {
+          code { value: "AMB" }
+          system { value: "urn:test" }
+        }
+        subject { patient_id { value: "4" } }
+        period {
+          start {
+            value_us: 5515680100000000  # "2144-10-13T21:21:40+00:00"
+            timezone: "UTC"
+            precision: SECOND
+          }
+          end {
+            value_us: 5515679100000000  # "2144-10-13T21:05:00+00:00"
+            timezone: "UTC"
+            precision: DAY
+          }
+        }
+      )proto",
+      &encounter));
+
+  TF_ASSERT_OK(ValidateResource(encounter));
+}
+
+TEST(EncounterValidationTest, Valid) {
+  google::protobuf::TextFormat::Parser parser;
+  parser.AllowPartialMessage(true);
+  Encounter encounter;
+  ASSERT_TRUE(parser.ParseFromString(
+      R"proto(
+        id { value: "123" }
+        status { value: FINISHED }
+        class_value {
+          code { value: "AMB" }
+          system { value: "urn:test" }
+        }
+        subject { patient_id { value: "4" } }
+        period {
+          start {
+            value_us: 5515679100000000  # "2144-10-13T21:05:00+00:00"
+            timezone: "UTC"
+            precision: SECOND
+          }
+          end {
+            value_us: 5515680100000000  # "2144-10-13T21:21:40+00:00"
+            timezone: "UTC"
+            precision: SECOND
+          }
+        }
+      )proto",
+      &encounter));
+
+  TF_ASSERT_OK(ValidateResource(encounter));
 }
 
 }  // namespace

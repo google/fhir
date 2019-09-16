@@ -22,9 +22,10 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
+#include "proto/r4/core/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/resources.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
@@ -34,8 +35,6 @@ using std::string;
 
 using ::google::fhir::proto::valid_reference_type;
 using ::google::fhir::proto::validation_requirement;
-using ::google::fhir::stu3::proto::Reference;
-using ::google::fhir::stu3::proto::ReferenceId;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
@@ -46,14 +45,15 @@ using ::tensorflow::errors::InvalidArgument;
 
 namespace {
 
+template <class TypedReference, class TypedReferenceId>
 Status ValidateReference(const Message& message, const FieldDescriptor* field,
                          const string& base_name) {
-  static const Descriptor* descriptor = Reference::descriptor();
+  static const Descriptor* descriptor = TypedReference::descriptor();
   static const OneofDescriptor* oneof = descriptor->oneof_decl(0);
 
   for (int i = 0; i < PotentiallyRepeatedFieldSize(message, field); i++) {
-    const Reference& reference =
-        GetPotentiallyRepeatedMessage<Reference>(message, field, i);
+    const TypedReference& reference =
+        GetPotentiallyRepeatedMessage<TypedReference>(message, field, i);
     const Reflection* reflection = reference.GetReflection();
     const FieldDescriptor* reference_field =
         reflection->GetOneofFieldDescriptor(reference, oneof);
@@ -76,7 +76,7 @@ Status ValidateReference(const Message& message, const FieldDescriptor* field,
       return Status::OK();
     }
 
-    if (IsMessageType<ReferenceId>(reference_field->message_type())) {
+    if (IsMessageType<TypedReferenceId>(reference_field->message_type())) {
       const string& reference_type = reference_field->options().GetExtension(
           ::google::fhir::proto::referenced_fhir_type);
       bool is_allowed = false;
@@ -94,6 +94,35 @@ Status ValidateReference(const Message& message, const FieldDescriptor* field,
                                   field->name(), "-disallowed-type-",
                                   reference_type);
       }
+    }
+  }
+
+  return Status::OK();
+}
+
+template <class TypedDateTime>
+Status ValidatePeriod(const Message& period, const string& base) {
+  const Descriptor* descriptor = period.GetDescriptor();
+  const Reflection* reflection = period.GetReflection();
+  const FieldDescriptor* start_field = descriptor->FindFieldByName("start");
+  const FieldDescriptor* end_field = descriptor->FindFieldByName("end");
+
+  if (reflection->HasField(period, start_field) &&
+      reflection->HasField(period, end_field)) {
+    FHIR_ASSIGN_OR_RETURN(
+        const TypedDateTime& start,
+        GetMessageInField<TypedDateTime>(period, start_field));
+    FHIR_ASSIGN_OR_RETURN(const TypedDateTime& end,
+                          GetMessageInField<TypedDateTime>(period, end_field));
+    // Note that both start and end times of the period are inclusive, so
+    // we need to compare the end time at the upper bound of that time element.
+    // Also note the GetUpperBoundFromTimelikeElement is always greater than
+    // the time itself by exactly one time unit, and hence this comparison
+    // needs to be >=, to not allow ranges like [Tuesday, Monday] to be valid.
+    if (google::fhir::GetTimeFromTimelikeElement(start) >=
+        google::fhir::GetUpperBoundFromTimelikeElement(end)) {
+      return ::tensorflow::errors::FailedPrecondition(
+          base, "-start-time-later-than-end-time");
     }
   }
 
@@ -142,15 +171,39 @@ Status CheckField(const Message& message, const FieldDescriptor* field,
       return FailedPrecondition("missing-", new_base);
     }
   }
-  if (IsMessageType<Reference>(field->message_type())) {
-    return ValidateReference(message, field, base_name);
+  if (IsMessageType<::google::fhir::stu3::proto::Reference>(
+          field->message_type())) {
+    return ValidateReference<::google::fhir::stu3::proto::Reference,
+                             ::google::fhir::stu3::proto::ReferenceId>(
+        message, field, base_name);
+  }
+  if (IsMessageType<::google::fhir::r4::core::Reference>(
+          field->message_type())) {
+    return ValidateReference<::google::fhir::r4::core::Reference,
+                             ::google::fhir::r4::core::ReferenceId>(
+        message, field, base_name);
   }
   if (field->cpp_type() == ::google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
     for (int i = 0; i < PotentiallyRepeatedFieldSize(message, field); i++) {
-      FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(
-          GetPotentiallyRepeatedMessage(message, field, i), new_base));
+      const auto& submessage = GetPotentiallyRepeatedMessage(message, field, i);
+      FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(submessage, new_base));
+
+      // Run extra validation for some types, until FHIRPath validation covers
+      // these cases as well.
+      if (IsMessageType<::google::fhir::stu3::proto::Period>(
+              field->message_type())) {
+        FHIR_RETURN_IF_ERROR(
+            ValidatePeriod<::google::fhir::stu3::proto::DateTime>(submessage,
+                                                                  new_base));
+      }
+      if (IsMessageType<::google::fhir::r4::core::Period>(
+              field->message_type())) {
+        FHIR_RETURN_IF_ERROR(ValidatePeriod<::google::fhir::r4::core::DateTime>(
+            submessage, new_base));
+      }
     }
   }
+
   return Status::OK();
 }
 
