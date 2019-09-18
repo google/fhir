@@ -13,6 +13,7 @@ cc_library(
         ":util",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
+        "//net/proto2/proto:descriptor_cc_proto",
         "//proto:annotations_cc_proto",
         "//proto/r4/core:codes_cc_proto",
         "//proto/r4/core:datatypes_cc_proto",
@@ -58,6 +59,7 @@ cc_library(
         "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/strings",
         "@org_tensorflow//tensorflow/core:lib",
+        "@protobuf_archive//:protobuf",
     ],
 )
 
@@ -126,6 +128,7 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/synchronization",
         "@org_tensorflow//tensorflow/core:lib",
+        "@protobuf_archive//:protobuf",
     ],
 )
 
@@ -172,6 +175,7 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
         "@org_tensorflow//tensorflow/core:lib",
+        "@protobuf_archive//:protobuf",
     ],
 )
 
@@ -212,6 +216,7 @@ cc_library(
         "//proto/stu3:resources_cc_proto",
         "@com_google_absl//absl/strings",
         "@org_tensorflow//tensorflow/core:lib",
+        "@protobuf_archive//:protobuf",
     ],
 )
 
@@ -347,6 +352,7 @@ cc_library(
         ":util",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
+        "//net/proto2/proto:descriptor_cc_proto",
         "//proto:annotations_cc_proto",
         "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
@@ -621,6 +627,7 @@ cc_library(
         "//cc/google/fhir/r4:codeable_concepts",
         "//cc/google/fhir/status:statusor",
         "//cc/google/fhir/stu3:codeable_concepts",
+        "//net/proto2/proto:descriptor_cc_proto",
         "//proto:annotations_cc_proto",
         "//proto/r4/core:datatypes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
@@ -658,6 +665,7 @@ cc_library(
     hdrs = ["annotations.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        "//net/proto2/proto:descriptor_cc_proto",
         "//proto:annotations_cc_proto",
         "@protobuf_archive//:protobuf",
     ],
