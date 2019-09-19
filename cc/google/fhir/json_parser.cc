@@ -346,7 +346,11 @@ class Parser {
                                ->GetMessageFactory()
                                ->GetPrototype(field->message_type())
                                ->New());
-      FHIR_RETURN_IF_ERROR(MergeValue(json, target.get()));
+      auto status = MergeValue(json, target.get());
+      if (!status.ok()) {
+        return InvalidArgument("Error parsing field ", field->json_name(), ": ",
+                               status.error_message());
+      }
       return std::move(target);
     }
   }
