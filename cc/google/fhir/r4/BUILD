@@ -23,7 +23,6 @@ cc_library(
         "//proto:annotations_cc_proto",
         "@com_google_absl//absl/strings",
         "@org_tensorflow//tensorflow/core:lib",
-        "@protobuf_archive//:protobuf",
     ],
 )
 
@@ -63,7 +62,6 @@ cc_library(
         "//cc/google/fhir:codes",
         "//cc/google/fhir:proto_util",
         "//cc/google/fhir/status:statusor",
-        "//net/proto2/proto:descriptor_cc_proto",
         "//proto:annotations_cc_proto",
         "//proto/r4/core:datatypes_cc_proto",
         "@com_google_absl//absl/memory",
