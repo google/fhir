@@ -271,6 +271,19 @@ Status ConvertToGenericCodingInternal(const google::protobuf::Message& typed_cod
       generic_coding->mutable_code());
 }
 
+template <typename TypedResourceTypeCode>
+::google::fhir::StatusOr<typename TypedResourceTypeCode::Value>
+GetCodeForResourceTypeTemplate(const google::protobuf::Message& resource) {
+  const string& enum_string =
+      TitleCaseToUpperUnderscores(resource.GetDescriptor()->name());
+  typename TypedResourceTypeCode::Value value;
+  if (TypedResourceTypeCode::Value_Parse(enum_string, &value)) {
+    return value;
+  }
+  return InvalidArgument("No ResourceTypeCode found for type: ",
+                         resource.GetDescriptor()->name());
+}
+
 }  // namespace
 
 ::google::fhir::Status ConvertToTypedCode(
@@ -321,16 +334,26 @@ Status ConvertToGenericCodingInternal(const google::protobuf::Message& typed_cod
   return ConvertToGenericCodingInternal(typed_coding, generic_coding);
 }
 
-::google::fhir::StatusOr<ResourceTypeCode::Value> GetCodeForResourceType(
+template <>
+::google::fhir::StatusOr<::google::fhir::stu3::proto::ResourceTypeCode::Value>
+GetCodeForResourceType<::google::fhir::stu3::proto::ResourceTypeCode>(
     const google::protobuf::Message& resource) {
-  const string& enum_string =
-      TitleCaseToUpperUnderscores(resource.GetDescriptor()->name());
-  ResourceTypeCode::Value value;
-  if (ResourceTypeCode::Value_Parse(enum_string, &value)) {
-    return value;
-  }
-  return InvalidArgument("No ResourceTypeCode found for type: ",
-                         resource.GetDescriptor()->name());
+  return GetCodeForResourceTypeTemplate<
+      ::google::fhir::stu3::proto::ResourceTypeCode>(resource);
+}
+
+template <>
+::google::fhir::StatusOr<::google::fhir::r4::core::ResourceTypeCode::Value>
+GetCodeForResourceType<::google::fhir::r4::core::ResourceTypeCode>(
+    const google::protobuf::Message& resource) {
+  return GetCodeForResourceTypeTemplate<
+      ::google::fhir::r4::core::ResourceTypeCode>(resource);
+}
+
+::google::fhir::StatusOr<::google::fhir::stu3::proto::ResourceTypeCode::Value>
+GetCodeForResourceType(const google::protobuf::Message& resource) {
+  return GetCodeForResourceTypeTemplate<
+      ::google::fhir::stu3::proto::ResourceTypeCode>(resource);
 }
 
 }  // namespace fhir
