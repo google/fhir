@@ -74,6 +74,8 @@ const bool IsChoiceType(const ::google::protobuf::FieldDescriptor* field);
 
 const bool IsPrimitive(const ::google::protobuf::Descriptor* descriptor);
 
+const bool IsComplex(const ::google::protobuf::Descriptor* descriptor);
+
 const bool IsResource(const ::google::protobuf::Descriptor* descriptor);
 
 const bool IsReference(const ::google::protobuf::Descriptor* descriptor);

@@ -56,6 +56,11 @@ const bool IsPrimitive(const ::google::protobuf::Descriptor* descriptor) {
          proto::StructureDefinitionKindValue::KIND_PRIMITIVE_TYPE;
 }
 
+const bool IsComplex(const ::google::protobuf::Descriptor* descriptor) {
+  return descriptor->options().GetExtension(proto::structure_definition_kind) ==
+         proto::StructureDefinitionKindValue::KIND_COMPLEX_TYPE;
+}
+
 const bool IsResource(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().GetExtension(proto::structure_definition_kind) ==
          proto::StructureDefinitionKindValue::KIND_RESOURCE;
