@@ -345,6 +345,7 @@ cc_library(
         ":profiles",
         ":proto_util",
         ":util",
+        "//cc/google/fhir/r4:profiles",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto:annotations_cc_proto",

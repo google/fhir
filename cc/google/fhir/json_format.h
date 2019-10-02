@@ -20,9 +20,11 @@
 #include <string>
 
 #include "google/protobuf/message.h"
+#include "absl/strings/match.h"
 #include "absl/time/time.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/profiles.h"
+#include "google/fhir/r4/profiles.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "tensorflow/core/lib/core/errors.h"
@@ -48,7 +50,12 @@ template <typename R>
   FHIR_RETURN_IF_ERROR(
       MergeJsonFhirStringIntoProto(raw_json, &resource, default_timezone));
   // TODO: The NormalizeStu3 call will fail with R4.
-  return IsProfile(R::descriptor()) ? NormalizeStu3(resource) : resource;
+  if (IsProfile(R::descriptor())) {
+    return absl::StartsWith(R::descriptor()->full_name(), "google.fhir.r4.")
+               ? NormalizeR4(resource)
+               : NormalizeStu3(resource);
+  }
+  return resource;
 }
 
 ::google::fhir::StatusOr<string> PrettyPrintFhirToJsonString(
