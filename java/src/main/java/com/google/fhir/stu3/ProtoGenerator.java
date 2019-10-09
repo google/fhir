@@ -1365,8 +1365,6 @@ public class ProtoGenerator {
       System.out.println("Unexpected minimum field count: " + element.getMin().getValue());
     }
 
-    addFhirPathConstraints(element, options);
-
     if (isExternalExtension(element)) {
       // This is an extension with a single type defined by an external profile.
       // If we know about it, we'll inline a field for it.
