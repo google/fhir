@@ -14,6 +14,7 @@
 
 #include "google/fhir/resource_validation.h"
 
+#include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "absl/strings/str_cat.h"
@@ -41,7 +42,6 @@ using ::google::protobuf::Message;
 using ::google::protobuf::OneofDescriptor;
 using ::google::protobuf::Reflection;
 using ::tensorflow::errors::FailedPrecondition;
-using ::tensorflow::errors::InvalidArgument;
 
 namespace {
 
@@ -140,6 +140,13 @@ Status ValidateFhirConstraints(const Message& message,
                : FailedPrecondition("invalid-primitive-", base_name);
   }
 
+  if (IsMessageType<::google::protobuf::Any>(message)) {
+    // We do not validate "Any" contained resources.
+    // TODO: maybe we should though... we'd need a registry that
+    // allows us to automatically unpack into the correct type based on url.
+    return Status::OK();
+  }
+
   const Descriptor* descriptor = message.GetDescriptor();
   const Reflection* reflection = message.GetReflection();
   for (int i = 0; i < descriptor->field_count(); i++) {
@@ -209,14 +216,12 @@ Status CheckField(const Message& message, const FieldDescriptor* field,
 
 }  // namespace
 
-Status ValidateFhirConstraints(const ::google::protobuf::Message& message) {
+Status ValidateFhirConstraints(const Message& message) {
   return ValidateFhirConstraints(message, message.GetDescriptor()->name());
 }
 
 Status ValidateResource(const Message& resource) {
-  FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(resource));
-
-  return Status::OK();
+  return ValidateFhirConstraints(resource);
 }
 
 }  // namespace fhir

@@ -212,6 +212,7 @@ cc_library(
         "//proto/stu3:resources_cc_proto",
         "@com_google_absl//absl/strings",
         "@org_tensorflow//tensorflow/core:lib",
+        "@protobuf_archive//:protobuf",
     ],
 )
 
@@ -661,5 +662,29 @@ cc_library(
     deps = [
         "//proto:annotations_cc_proto",
         "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_library(
+    name = "fhir_types",
+    srcs = ["fhir_types.cc"],
+    hdrs = ["fhir_types.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":annotations",
+        "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "fhir_types_test",
+    srcs = ["fhir_types_test.cc"],
+    deps = [
+        ":fhir_types",
+        "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "//testdata/r4/profiles:testcore_cc_proto",
+        "//testdata/stu3/profiles:test_cc_proto",
+        "@com_google_googletest//:gtest_main",
     ],
 )

@@ -29,7 +29,7 @@ namespace fhir {
 
 namespace {
 
-using namespace r4::core;  // NOLINT
+using namespace google::fhir::r4::core;  // NOLINT
 
 static google::protobuf::TextFormat::Parser parser;
 
