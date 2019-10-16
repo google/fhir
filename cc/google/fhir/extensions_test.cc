@@ -24,6 +24,7 @@
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/extensions.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
+#include "proto/stu3/resources.pb.h"
 #include "testdata/stu3/profiles/test_extensions.pb.h"
 #include "tensorflow/core/lib/core/status.h"
 #include "tensorflow/core/lib/core/status_test_util.h"

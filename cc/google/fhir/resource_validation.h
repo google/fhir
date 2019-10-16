@@ -23,7 +23,6 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/systems/systems.h"
 #include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/resources.pb.h"
 
 namespace google {
 namespace fhir {
