@@ -2423,7 +2423,7 @@ message PatientUSCoreEthnicityExtension {
     option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/Coding";
     option (.google.fhir.proto.fhir_fixed_system) =
-        "http://hl7.org/fhir/us/core/ValueSet/omb-ethnicity-category";
+        "urn:oid:2.16.840.1.113883.6.238";
 
     core.String id = 1;
 
@@ -2444,7 +2444,7 @@ message PatientUSCoreEthnicityExtension {
     option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/Coding";
     option (.google.fhir.proto.fhir_fixed_system) =
-        "http://hl7.org/fhir/us/core/ValueSet/detailed-ethnicity";
+        "urn:oid:2.16.840.1.113883.6.238";
 
     core.String id = 1;
 
@@ -4632,32 +4632,14 @@ message PatientUSCoreRaceExtension {
 
   // American Indian or Alaska Native|Asian|Black or African American|Native
   // Hawaiian or Other Pacific Islander|White
-  message OmbCategoryCoding {
-    option (.google.fhir.proto.fhir_profile_base) =
-        "http://hl7.org/fhir/StructureDefinition/Coding";
-    option (.google.fhir.proto.fhir_fixed_system) =
-        "http://hl7.org/fhir/us/core/ValueSet/omb-race-category";
-
-    core.String id = 1;
-
-    repeated core.Extension extension = 2;
-
-    core.String version = 4;
-
-    OmbRaceCategoriesCode code = 5;
-
-    core.String display = 6;
-
-    core.Boolean user_selected = 7;
-  }
-  repeated OmbCategoryCoding omb_category = 4;
+  repeated core.Coding omb_category = 4;
 
   // Extended race codes
   message DetailedCoding {
     option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/Coding";
     option (.google.fhir.proto.fhir_fixed_system) =
-        "http://hl7.org/fhir/us/core/ValueSet/detailed-race";
+        "urn:oid:2.16.840.1.113883.6.238";
 
     core.String id = 1;
 

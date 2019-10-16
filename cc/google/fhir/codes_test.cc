@@ -66,23 +66,24 @@ TEST(CodesTest, GetCodeForResourceType_AllContainedTypesValid) {
   }
 }
 
-TEST(CodesTest, TypedCodingConversion) {
-  auto typed_golden =
-      ReadProto<r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding>(
-          "testdata/r4/codes/uscore_omb_typed.prototxt");
-  auto generic_golden =
-      ReadProto<r4::core::Coding>("testdata/r4/codes/uscore_omb_raw.prototxt");
-
-  r4::core::Coding generic_test;
-  auto status_generic = ConvertToGenericCoding(typed_golden, &generic_test);
-  ASSERT_TRUE(status_generic.ok()) << status_generic.error_message();
-  EXPECT_THAT(generic_test, EqualsProto(generic_golden));
-
-  r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding typed_test;
-  auto status_typed = ConvertToTypedCoding(generic_golden, &typed_test);
-  ASSERT_TRUE(status_typed.ok()) << status_typed.error_message();
-  EXPECT_THAT(typed_test, EqualsProto(typed_golden));
-}
+// TODO: Re-enable when typed codings are re-enabled.
+// TEST(CodesTest, TypedCodingConversion) {
+//   auto typed_golden =
+//       ReadProto<r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding>(
+//           "testdata/r4/codes/uscore_omb_typed.prototxt");
+//   auto generic_golden =
+//       ReadProto<r4::core::Coding>("testdata/r4/codes/uscore_omb_raw.prototxt");
+//
+//   r4::core::Coding generic_test;
+//   auto status_generic = ConvertToGenericCoding(typed_golden, &generic_test);
+//   ASSERT_TRUE(status_generic.ok()) << status_generic.error_message();
+//   EXPECT_THAT(generic_test, EqualsProto(generic_golden));
+//
+//   r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding typed_test;
+//   auto status_typed = ConvertToTypedCoding(generic_golden, &typed_test);
+//   ASSERT_TRUE(status_typed.ok()) << status_typed.error_message();
+//   EXPECT_THAT(typed_test, EqualsProto(typed_golden));
+// }
 
 }  // namespace
 
