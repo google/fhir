@@ -70,6 +70,7 @@ public final class ResourceUtils {
     return getContainedResourceInternal(resource);
   }
 
+  @SuppressWarnings("unchecked")
   public static <V> V getValue(Message primitive) {
     return (V) primitive.getField(primitive.getDescriptorForType().findFieldByName("value"));
   }
@@ -108,6 +109,7 @@ public final class ResourceUtils {
     return splitIfRelativeReference(builder);
   }
 
+  @SuppressWarnings("unchecked")
   private static Message replaceReferences(Message message, Map<String, String> referenceMap) {
     Message.Builder builder = null;
     for (Map.Entry<FieldDescriptor, Object> field : message.getAllFields().entrySet()) {

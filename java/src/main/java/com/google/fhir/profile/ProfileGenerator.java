@@ -411,6 +411,7 @@ final class ProfileGenerator {
     }
   }
 
+  @SuppressWarnings("unchecked")
   private void addDifferentialElements(
       StructureDefinition.Builder structDefBuilder, List<ElementDefinition> baseElements) {
     List<ElementDefinition> newElements = structDefBuilder.getSnapshot().getElementList();

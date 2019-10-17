@@ -626,6 +626,7 @@ public final class JsonFormat {
     /**
      * Parse a text-format message from {@code input} and merge the contents into {@code builder}.
      */
+    @SuppressWarnings("unchecked")
     public <T extends Message.Builder> T merge(final Reader input, final T builder) {
       JsonReader reader = new JsonReader(input);
       JsonElement json = jsonParser.parse(reader);
@@ -1084,7 +1085,7 @@ public final class JsonFormat {
     }
   } // End JsonFormat class
 
-  public static PrimitiveWrapper primitiveWrapperOf(
+  public static PrimitiveWrapper<?> primitiveWrapperOf(
       MessageOrBuilder message, ZoneId defaultTimeZone) {
     Descriptor descriptor = message.getDescriptorForType();
     if (descriptor.getOptions().hasExtension(Annotations.fhirValuesetUrl)) {
@@ -1140,7 +1141,7 @@ public final class JsonFormat {
     }
   }
 
-  public static PrimitiveWrapper parseAndWrap(
+  public static PrimitiveWrapper<?> parseAndWrap(
       JsonElement json, MessageOrBuilder message, ZoneId defaultTimeZone) {
     Descriptor descriptor = message.getDescriptorForType();
     if (json.isJsonArray()) {
