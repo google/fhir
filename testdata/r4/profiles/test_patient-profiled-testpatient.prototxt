@@ -16,7 +16,7 @@ identifier {
   type {
     coding {
       system {
-        value: "http://hl7.org/fhir/v2/0203"
+        value: "http://terminology.hl7.org/CodeSystem/v2-0203"
       }
       code {
         value: "MR"
@@ -59,7 +59,7 @@ contact {
   relationship {
     coding {
       system {
-        value: "http://hl7.org/fhir/v2/0131"
+        value: "http://terminology.hl7.org/CodeSystem/v2-0131"
       }
       code {
         value: "E"
@@ -93,3 +93,11 @@ link {
     value: SEEALSO
   }
 }
+marital_status: {
+  color { code { value: "blue" } }
+  coding {
+    system { value: "bogus-system.org" }
+    code { value: "baloney" }
+  }
+}
+dec_ext: { value: "0.5" }

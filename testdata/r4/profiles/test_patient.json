@@ -11,7 +11,7 @@
       "type": {
         "coding": [
           {
-            "system": "http://hl7.org/fhir/v2/0203",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
             "code": "MR"
           }
         ]
@@ -22,7 +22,7 @@
   ],
   "active": true,
   "name": [
-      {
+    {
       "use": "official",
       "family": "Donald",
       "given": [
@@ -31,6 +31,18 @@
     }
   ],
   "gender": "male",
+  "maritalStatus": {
+    "coding": [
+      {
+        "system": "bogus-system.org",
+        "code": "baloney"
+      },
+      {
+        "system": "http://hl7.org/fhir/metric-color",
+        "code": "blue"
+      }
+    ]
+  },
   "photo": [
     {
       "contentType": "image/gif",
@@ -43,7 +55,7 @@
         {
           "coding": [
             {
-              "system": "http://hl7.org/fhir/v2/0131",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
               "code": "E"
             }
           ]

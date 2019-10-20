@@ -93,3 +93,4 @@ link {
     value: SEEALSO
   }
 }
+dec_ext: { value: "0.5" }

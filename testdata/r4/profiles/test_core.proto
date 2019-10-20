@@ -276,7 +276,43 @@ message TestPatient {
   repeated core.Address address = 17;
 
   // Marital (civil) status of a patient
-  core.CodeableConcept marital_status = 18;
+  message CodeableConceptForMaritalStatus {
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
+
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Code defined by a terminology system
+    repeated core.Coding coding = 3;
+
+    // Plain text representation of the concept
+    core.String text = 4;
+
+    message Color {
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/Coding";
+      option (.google.fhir.proto.fhir_fixed_system) =
+          "http://hl7.org/fhir/metric-color";
+
+      core.String id = 1;
+
+      repeated core.Extension extension = 2;
+
+      core.String version = 4;
+
+      core.Code code = 5;
+
+      core.String display = 6;
+
+      core.Boolean user_selected = 7;
+    }
+    Color color = 5;
+  }
+  CodeableConceptForMaritalStatus marital_status = 18;
 
   // Whether patient is part of a multiple birth
   message MultipleBirthX {

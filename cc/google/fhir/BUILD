@@ -330,40 +330,6 @@ cc_test(
 )
 
 cc_library(
-    name = "json_format",
-    srcs = [
-        "json_parser.cc",
-        "json_printer.cc",
-    ],
-    hdrs = [
-        "json_format.h",
-    ],
-    strip_include_prefix = "//cc/",
-    deps = [
-        ":annotations",
-        ":extensions",
-        ":primitive_wrapper",
-        ":profiles",
-        ":proto_util",
-        ":util",
-        "//cc/google/fhir/r4:profiles",
-        "//cc/google/fhir/status",
-        "//cc/google/fhir/status:statusor",
-        "//proto:annotations_cc_proto",
-        "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
-        "//proto/stu3:datatypes_cc_proto",
-        "//proto/stu3:extensions_cc_proto",
-        "@com_google_absl//absl/memory",
-        "@com_google_absl//absl/strings",
-        "@com_google_absl//absl/time",
-        "@com_googlesource_code_re2//:re2",
-        "@jsoncpp_git//:jsoncpp",
-        "@org_tensorflow//tensorflow/core:lib",
-        "@protobuf_archive//:protobuf",
-    ],
-)
-
-cc_library(
     name = "primitive_wrapper",
     srcs = [
         "primitive_wrapper.cc",
@@ -384,6 +350,42 @@ cc_library(
         "//proto:annotations_cc_proto",
         "//proto/r4:google_extensions_core_cc_proto",
         "//proto/r4/core:datatypes_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:extensions_cc_proto",
+        "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
+        "@com_googlesource_code_re2//:re2",
+        "@jsoncpp_git//:jsoncpp",
+        "@org_tensorflow//tensorflow/core:lib",
+        "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_library(
+    name = "json_format",
+    srcs = [
+        "json_parser.cc",
+        "json_printer.cc",
+    ],
+    hdrs = [
+        "json_format.h",
+    ],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":annotations",
+        ":core_resource_registry",
+        ":extensions",
+        ":primitive_wrapper",
+        ":profiles",
+        ":proto_util",
+        ":resource_validation",
+        ":util",
+        "//cc/google/fhir/r4:profiles",
+        "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
+        "//proto:annotations_cc_proto",
+        "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:extensions_cc_proto",
         "@com_google_absl//absl/memory",
@@ -427,6 +429,7 @@ cc_test(
         "//spec:r4",
         "//testdata/r4:bigquery",
         "//testdata/r4:examples",
+        "//testdata/r4/profiles:testdata",
     ],
     shard_count = 10,
     deps = [
@@ -585,6 +588,7 @@ cc_test(
         "//proto/r4/core/resources:value_set_cc_proto",
         "//proto/r4/core/resources:verification_result_cc_proto",
         "//proto/r4/core/resources:vision_prescription_cc_proto",
+        "//testdata/r4/profiles:testcore_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@jsoncpp_git//:jsoncpp",
@@ -662,6 +666,39 @@ cc_library(
     deps = [
         "//proto:annotations_cc_proto",
         "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_library(
+    name = "core_resource_registry",
+    srcs = ["core_resource_registry.cc"],
+    hdrs = ["core_resource_registry.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":annotations",
+        "//cc/google/fhir/status:statusor",
+        "//proto:annotations_cc_proto",
+        "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "@com_google_absl//absl/memory",
+        "@org_tensorflow//tensorflow/core:lib",
+        "@protobuf_archive//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "core_resource_registry_test",
+    srcs = ["core_resource_registry_test.cc"],
+    deps = [
+        ":core_resource_registry",
+        ":proto_util",
+        "//proto/r4/core:datatypes_cc_proto",
+        "//proto/r4/core/resources:observation_cc_proto",
+        "//proto/stu3:profile_config_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "//testdata/r4/profiles:testcore_cc_proto",
+        "//testdata/stu3/profiles:test_cc_proto",
+        "@com_google_googletest//:gtest_main",
     ],
 )
 

@@ -11,7 +11,7 @@
       "type": {
         "coding": [
           {
-            "system": "http://hl7.org/fhir/v2/0203",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
             "code": "MR"
           }
         ]
@@ -22,11 +22,18 @@
   ],
   "active": true,
   "name": [
-      {
+    {
       "use": "official",
       "family": "Donald",
       "given": [
         "Duck"
+      ]
+    },
+    {
+      "use": "official",
+      "family": "Ronald",
+      "given": [
+        "McDonald"
       ]
     }
   ],
@@ -43,7 +50,7 @@
         {
           "coding": [
             {
-              "system": "http://hl7.org/fhir/v2/0131",
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
               "code": "E"
             }
           ]
@@ -65,12 +72,6 @@
         "reference": "Patient/pat2"
       },
       "type": "seealso"
-    }
-  ],
-  "extension": [
-    {
-      "url": "http://test/url/base/SimpleDecimalExt",
-      "valueDecimal": 0.5
     }
   ]
 }

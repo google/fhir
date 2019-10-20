@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef GOOGLE_FHIR_STU3_JSON_FORMAT_H_
-#define GOOGLE_FHIR_STU3_JSON_FORMAT_H_
+#ifndef GOOGLE_FHIR_JSON_FORMAT_H_
+#define GOOGLE_FHIR_JSON_FORMAT_H_
 
 #include <string>
 
@@ -38,7 +38,7 @@ using std::string;
 // Takes a default timezone for timelike data that does not specify timezone.
 ::google::fhir::Status MergeJsonFhirStringIntoProto(
     const string& raw_json, google::protobuf::Message* target,
-    absl::TimeZone default_timezone);
+    absl::TimeZone default_timezone, const bool validate);
 
 // Given a template for a FHIR resource type, creates a resource proto of that
 // type and merges a string of raw FHIR json into it.
@@ -47,14 +47,17 @@ template <typename R>
 ::google::fhir::StatusOr<R> JsonFhirStringToProto(
     const string& raw_json, const absl::TimeZone default_timezone) {
   R resource;
-  FHIR_RETURN_IF_ERROR(
-      MergeJsonFhirStringIntoProto(raw_json, &resource, default_timezone));
-  // TODO: The NormalizeStu3 call will fail with R4.
-  if (IsProfile(R::descriptor())) {
-    return absl::StartsWith(R::descriptor()->full_name(), "google.fhir.r4.")
-               ? NormalizeR4(resource)
-               : NormalizeStu3(resource);
-  }
+  FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(raw_json, &resource,
+                                                    default_timezone, true));
+  return resource;
+}
+
+template <typename R>
+::google::fhir::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
+    const string& raw_json, const absl::TimeZone default_timezone) {
+  R resource;
+  FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(raw_json, &resource,
+                                                    default_timezone, false));
   return resource;
 }
 
@@ -73,4 +76,4 @@ template <typename R>
 }  // namespace fhir
 }  // namespace google
 
-#endif  // GOOGLE_FHIR_STU3_JSON_FORMAT_H_
+#endif  // GOOGLE_FHIR_JSON_FORMAT_H_

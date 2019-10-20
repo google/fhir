@@ -74,7 +74,17 @@ void TestJsonValidation() {
   std::vector<string> valid_lines =
       ReadLines(absl::StrCat(file_base, ".valid.ndjson"));
   for (auto line_iter : valid_lines) {
-    TF_ASSERT_OK(JsonFhirStringToProto<W>(line_iter, kTimeZone).status());
+    // Note that we want to assert that the valid_line holds a valid string
+    // value for the primitive, and not that the resulting primitive satisfies
+    // all FHIR constraints, hence why we don't perform FHIR validation here.
+    // This is necessary because "null" is a valid value for primitives that we
+    // need to parse correctly, BUT unless there is also an extension on the
+    // primitive, it is invalid as a whole.
+    // In other words, "monkey" is an invalid value for Decimal, but "null"
+    // *is* valid, even though it is not on its own sufficient to constitute a
+    // valid decimal.
+    TF_ASSERT_OK(JsonFhirStringToProtoWithoutValidating<W>(line_iter, kTimeZone)
+                     .status());
   }
   std::vector<string> invalid_lines =
       ReadLines(absl::StrCat(file_base, ".invalid.ndjson"));

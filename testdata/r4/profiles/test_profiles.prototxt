@@ -17,6 +17,18 @@ profile {
     size_restriction: REQUIRED
   }
 
+  codeable_concept_slice {
+    coding_slice {
+      element_data {
+        name: "color"
+      }
+      code_data {
+        system: "http://hl7.org/fhir/metric-color"
+      }
+    }
+    field_id: "Patient.maritalStatus"
+  }
+
   extension_slice {
     element_data {
       name: "decExt"

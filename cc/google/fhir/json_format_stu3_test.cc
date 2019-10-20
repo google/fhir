@@ -77,18 +77,23 @@ Json::Value ParseJsonStringToValue(const string& raw_json) {
 }
 
 template <typename R>
-void TestPrint(const string& name) {
-  const R proto =
-      ReadStu3Proto<R>(absl::StrCat("examples/", name, ".prototxt"));
+void TestPrintWithFilepaths(const string& proto_path, const string& json_path) {
+  const R proto = ReadStu3Proto<R>(proto_path);
   string from_proto = PrettyPrintFhirToJsonString(proto).ValueOrDie();
-  string from_json = ReadFile(
-      absl::StrCat("spec/hl7.fhir.core/3.0.1/package/", name + ".json"));
+  string from_json = ReadFile(json_path);
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
     // This assert will fail, but we get terrible diff messages comparing
     // JsonCPP, so fall back to string diffs.
     ASSERT_EQ(from_proto, from_json);
   }
+}
+
+template <typename R>
+void TestPrint(const string& name) {
+  TestPrintWithFilepaths<R>(
+      absl::StrCat("examples/", name, ".prototxt"),
+      absl::StrCat("spec/hl7.fhir.core/3.0.1/package/", name + ".json"));
 }
 
 template <typename R>
@@ -120,7 +125,7 @@ TEST(JsonFormatStu3Test, EdgeCasesNdjsonParse) {
 }
 
 /** Test parsing to a profile */
-TEST(JsonFormatStu3Test, ParseSingleArrayElementIntoSingularField) {
+TEST(JsonFormatStu3Test, ParseProfile) {
   TestParseWithFilepaths<stu3::testing::TestPatient>(
       "profiles/test_patient-profiled-testpatient.prototxt",
       "testdata/stu3/profiles/test_patient.json");
@@ -134,6 +139,13 @@ TEST(JsonFormatStu3Test, ParseSingleArrayElementIntoSingularField) {
                         .name()
                         .given(0)
                         .value());
+}
+
+/** Test printing from a profile */
+TEST(JsonFormatStu3Test, PrintProfile) {
+  TestPrintWithFilepaths<stu3::testing::TestPatient>(
+      "profiles/test_patient-profiled-testpatient.prototxt",
+      "testdata/stu3/profiles/test_patient.json");
 }
 
 /** Test printing of FHIR edge cases. */

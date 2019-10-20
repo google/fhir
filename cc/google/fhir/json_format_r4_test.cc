@@ -173,6 +173,7 @@
 #include "proto/r4/core/resources/value_set.pb.h"
 #include "proto/r4/core/resources/verification_result.pb.h"
 #include "proto/r4/core/resources/vision_prescription.pb.h"
+#include "testdata/r4/profiles/test_core.pb.h"
 #include "include/json/json.h"
 
 namespace google {
@@ -192,7 +193,7 @@ StatusOr<R> ParseJsonToProto(const string& json_path) {
   string json = ReadFile(json_path);
   absl::TimeZone tz;
   absl::LoadTimeZone(kTimeZoneString, &tz);
-  return JsonFhirStringToProto<R>(json, tz);
+  return JsonFhirStringToProtoWithoutValidating<R>(json, tz);
 }
 
 // proto_path should be relative to //testdata/r4
@@ -228,21 +229,27 @@ Json::Value ParseJsonStringToValue(const string& raw_json) {
 }
 
 template <typename R>
-void TestPrint(const string& name) {
-  const R proto = ReadR4Proto<R>(absl::StrCat("examples/", name, ".prototxt"));
+void TestPrintWithFilepaths(const string& proto_path, const string& json_path) {
+  const R proto = ReadR4Proto<R>(proto_path);
   StatusOr<string> from_proto_status = PrettyPrintFhirToJsonString(proto);
   ASSERT_TRUE(from_proto_status.ok())
-      << "Failed Printing on: " << name << ": "
+      << "Failed Printing on: " << proto_path << ": "
       << from_proto_status.status().error_message();
   string from_proto = from_proto_status.ValueOrDie();
-  string from_json = ReadFile(
-      absl::StrCat("spec/hl7.fhir.core/4.0.0/package/", name + ".json"));
+  string from_json = ReadFile(absl::StrCat(json_path));
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
     // This assert will fail, but we get terrible diff messages comparing
     // JsonCPP, so fall back to string diffs.
     EXPECT_EQ(from_proto, from_json);
   }
+}
+
+template <typename R>
+void TestPrint(const string& name) {
+  TestPrintWithFilepaths<R>(
+      absl::StrCat("examples/", name, ".prototxt"),
+      absl::StrCat("spec/hl7.fhir.core/4.0.0/package/", name + ".json"));
 }
 
 template <typename R>
@@ -253,7 +260,27 @@ void TestPair(const std::vector<string>& file_names) {
   }
 }
 
-// TODO: Profiles tests.
+/** Test printing from a profile */
+TEST(JsonFormatR4Test, PrintProfile) {
+  TestPrintWithFilepaths<r4::testingcore::TestPatient>(
+      "profiles/test_patient-profiled-testpatient.prototxt",
+      "testdata/r4/profiles/test_patient.json");
+}
+
+/** Test parsing to a profile */
+TEST(JsonFormatR4Test, ParseProfile) {
+  TestParseWithFilepaths<r4::testingcore::TestPatient>(
+      "profiles/test_patient-profiled-testpatient.prototxt",
+      "testdata/r4/profiles/test_patient.json");
+}
+
+// Test parsing to a profile fails if the parsed resource doesn't match the
+// profile
+TEST(JsonFormatR4Test, ParseProfileMismatch) {
+  ASSERT_FALSE(ParseJsonToProto<r4::testingcore::TestPatient>(
+                   "testdata/r4/profiles/test_patient_multiple_names.json")
+                   .ok());
+}
 
 template <typename R>
 void TestPrintForAnalytics(const string& proto_name, const string& json_name) {

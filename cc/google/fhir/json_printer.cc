@@ -29,9 +29,12 @@
 #include "absl/strings/str_cat.h"
 #include "absl/time/time.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/core_resource_registry.h"
 #include "google/fhir/extensions.h"
 #include "google/fhir/primitive_wrapper.h"
+#include "google/fhir/profiles.h"
 #include "google/fhir/proto_util.h"
+#include "google/fhir/r4/profiles.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
@@ -404,21 +407,51 @@ class Printer {
   int current_indent_;
 };
 
+StatusOr<string> WriteMessage(Printer printer, const Message& message) {
+  if (IsProfile(message.GetDescriptor())) {
+    // Unprofile before writing, since JSON should be based on raw proto
+    // Note that these are "lenient" profilings, because it doesn't make sense
+    // to error out during printing.
+    FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> core_resource,
+                          GetBaseResourceInstance(message));
+
+    // TODO: This is not ideal because it pulls in both stu3 and
+    // r4 datatypes.
+    switch (GetFhirVersion(message)) {
+      case proto::STU3:
+        FHIR_RETURN_IF_ERROR(
+            ConvertToProfileLenientStu3(message, core_resource.get()));
+        break;
+      case proto::R4:
+        FHIR_RETURN_IF_ERROR(
+            ConvertToProfileLenientR4(message, core_resource.get()));
+        break;
+      default:
+        return InvalidArgument(
+            "Unsupported FHIR Version for profiling for resource: " +
+            message.GetDescriptor()->full_name());
+    }
+    return printer.WriteMessage(*core_resource);
+  } else {
+    return printer.WriteMessage(message);
+  }
+}
+
 }  // namespace
 
 StatusOr<string> PrettyPrintFhirToJsonString(const Message& fhir_proto) {
   Printer printer{2, true, false};
-  return printer.WriteMessage(fhir_proto);
+  return WriteMessage(printer, fhir_proto);
 }
 
 StatusOr<string> PrintFhirToJsonString(const Message& fhir_proto) {
   Printer printer{0, false, false};
-  return printer.WriteMessage(fhir_proto);
+  return WriteMessage(printer, fhir_proto);
 }
 
 StatusOr<string> PrintFhirToJsonStringForAnalytics(const Message& fhir_proto) {
   Printer printer{0, false, true};
-  return printer.WriteMessage(fhir_proto);
+  return WriteMessage(printer, fhir_proto);
 }
 
 StatusOr<string> PrettyPrintFhirToJsonStringForAnalytics(

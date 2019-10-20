@@ -26,10 +26,15 @@
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
 #include "absl/strings/str_cat.h"
+#include "google/fhir/annotations.h"
+#include "google/fhir/core_resource_registry.h"
 #include "google/fhir/extensions.h"
 #include "google/fhir/json_format.h"
 #include "google/fhir/primitive_wrapper.h"
+#include "google/fhir/profiles.h"
 #include "google/fhir/proto_util.h"
+#include "google/fhir/r4/profiles.h"
+#include "google/fhir/resource_validation.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
@@ -403,7 +408,8 @@ StatusOr<Json::Value> ParseJsonValue(const string& raw_json) {
 }  // namespace
 
 Status MergeJsonFhirStringIntoProto(const string& raw_json, Message* target,
-                                    const absl::TimeZone default_timezone) {
+                                    const absl::TimeZone default_timezone,
+                                    const bool validate) {
   string mutable_raw_json = raw_json;
   // FHIR JSON format stores decimals as unquoted rational numbers.  This is
   // problematic, because their representation could change when they are
@@ -435,7 +441,7 @@ Status MergeJsonFhirStringIntoProto(const string& raw_json, Message* target,
   // TODO: Decide if we want to support value-only JSON
   if (IsFhirType<stu3::proto::Decimal>(*target) && raw_json != "null") {
     // Similar to above, if this is a standalone decimal, parse it as a string
-    // to avoid changing reprentation due to precision.
+    // to avoid changing representation due to precision.
     FHIR_ASSIGN_OR_RETURN(
         value, ParseJsonValue(absl::StrCat("\"", mutable_raw_json, "\"")));
   } else {
@@ -443,7 +449,35 @@ Status MergeJsonFhirStringIntoProto(const string& raw_json, Message* target,
   }
 
   Parser parser{GetFhirVersion(*target), default_timezone};
-  return parser.MergeValue(value, target);
+
+  if (IsProfile(target->GetDescriptor())) {
+    FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> core_resource,
+                          GetBaseResourceInstance(*target));
+
+    FHIR_RETURN_IF_ERROR(parser.MergeValue(value, core_resource.get()));
+
+    // TODO: This is not ideal because it pulls in both stu3 and
+    // r4 datatypes.
+    switch (GetFhirVersion(*target)) {
+      case proto::STU3:
+        return validate ? ConvertToProfileStu3(*core_resource, target)
+                        : ConvertToProfileLenientStu3(*core_resource, target);
+      case proto::R4:
+        return validate ? ConvertToProfileR4(*core_resource, target)
+                        : ConvertToProfileLenientR4(*core_resource, target);
+      default:
+        return InvalidArgument(
+            "Unsupported FHIR Version for profiling for resource: " +
+            target->GetDescriptor()->full_name());
+    }
+  }
+
+  FHIR_RETURN_IF_ERROR(parser.MergeValue(value, target));
+
+  if (validate) {
+    return ValidateResource(*target);
+  }
+  return Status::OK();
 }
 
 }  // namespace fhir
