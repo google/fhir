@@ -113,6 +113,24 @@ void TestPrintForAnalytics(const string& name) {
   }
 }
 
+template <typename R>
+void TestPrintForAnalytics(const string& name, bool pretty) {
+  const R proto =
+      ReadStu3Proto<R>(absl::StrCat("examples/", name, ".prototxt"));
+  auto result = pretty ? PrettyPrintFhirToJsonStringForAnalytics(proto)
+                       : PrintFhirToJsonStringForAnalytics(proto);
+  ASSERT_TRUE(result.ok()) << result.status();
+  string from_proto = result.ValueOrDie();
+  string from_json =
+      ReadFile(absl::StrCat("testdata/stu3/bigquery/", name + ".json"));
+
+  if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
+    // This assert will fail, but we get terrible diff messages comparing
+    // JsonCPP, so fall back to string diffs.
+    ASSERT_EQ(from_json, from_proto);
+  }
+}
+
 /* Edge Case Testing */
 
 /** Test parsing of FHIR edge cases. */
@@ -151,11 +169,18 @@ TEST(JsonFormatStu3Test, PrintProfile) {
 /** Test printing of FHIR edge cases. */
 TEST(JsonFormatStu3Test, EdgeCasesPrint) { TestPrint<Patient>("Patient-null"); }
 
+TEST(JsonFormatStu3Test, PrettyPrintForAnalytics) {
+  TestPrintForAnalytics<Composition>("Composition-example", true);
+  TestPrintForAnalytics<Encounter>("Encounter-home", true);
+  TestPrintForAnalytics<Observation>("Observation-example-genetics-1", true);
+  TestPrintForAnalytics<Patient>("patient-example", true);
+}
+
 TEST(JsonFormatStu3Test, PrintForAnalytics) {
-  TestPrintForAnalytics<Composition>("Composition-example");
-  TestPrintForAnalytics<Encounter>("Encounter-home");
-  TestPrintForAnalytics<Observation>("Observation-example-genetics-1");
-  TestPrintForAnalytics<Patient>("patient-example");
+  TestPrintForAnalytics<Composition>("Composition-example", false);
+  TestPrintForAnalytics<Encounter>("Encounter-home", false);
+  TestPrintForAnalytics<Observation>("Observation-example-genetics-1", false);
+  TestPrintForAnalytics<Patient>("patient-example", false);
 }
 
 /* Resource tests start here. */

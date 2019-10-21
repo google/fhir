@@ -451,7 +451,7 @@ StatusOr<string> PrintFhirToJsonString(const Message& fhir_proto) {
 
 StatusOr<string> PrintFhirToJsonStringForAnalytics(const Message& fhir_proto) {
   Printer printer{0, false, true};
-  return WriteMessage(printer, fhir_proto);
+  return printer.WriteMessage(fhir_proto);
 }
 
 StatusOr<string> PrettyPrintFhirToJsonStringForAnalytics(

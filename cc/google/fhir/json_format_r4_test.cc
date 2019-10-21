@@ -283,12 +283,14 @@ TEST(JsonFormatR4Test, ParseProfileMismatch) {
 }
 
 template <typename R>
-void TestPrintForAnalytics(const string& proto_name, const string& json_name) {
+void TestPrintForAnalytics(const string& proto_name, const string& json_name,
+                           bool pretty) {
   R proto = ReadR4Proto<R>(absl::StrCat("examples/", proto_name, ".prototxt"));
   if (IsProfile(R::descriptor())) {
     proto = NormalizeR4(proto).ValueOrDie();
   }
-  auto result = PrettyPrintFhirToJsonStringForAnalytics(proto);
+  auto result = pretty ? PrettyPrintFhirToJsonStringForAnalytics(proto)
+                       : PrintFhirToJsonStringForAnalytics(proto);
   ASSERT_TRUE(result.ok()) << "Failed PrintForAnalytics on: " << proto_name
                            << "\n"
                            << result.status();
@@ -305,10 +307,11 @@ void TestPrintForAnalytics(const string& proto_name, const string& json_name) {
 
 template <typename R>
 void TestPrintForAnalytics(const string& name) {
-  TestPrintForAnalytics<R>(name, name);
+  TestPrintForAnalytics<R>(name, name, true);
+  TestPrintForAnalytics<R>(name, name, false);
 }
 
-TEST(JsonFormatR4Test, PrintForAnalytics) {
+TEST(JsonFormatR4Test, PrettyPrintForAnalytics) {
   TestPrintForAnalytics<Composition>("Composition-example");
   TestPrintForAnalytics<Encounter>("Encounter-home");
   TestPrintForAnalytics<Observation>("Observation-example-genetics-1");
@@ -318,7 +321,10 @@ TEST(JsonFormatR4Test, PrintForAnalytics) {
 TEST(JsonFormatR4Test, PrintForAnalyticsProfiled) {
   TestPrintForAnalytics<ObservationGenetics>(
       "Observation-example-genetics-1",
-      "Observation-example-genetics-1-profiled");
+      "Observation-example-genetics-1-profiled", true);
+  TestPrintForAnalytics<ObservationGenetics>(
+      "Observation-example-genetics-1",
+      "Observation-example-genetics-1-profiled", false);
 }
 
 TEST(JsonFormatR4Test, TestAccount) {
