@@ -378,13 +378,13 @@ java_test(
     srcs = ["src/test/java/com/google/fhir/r4/JsonFormatTest.java"],
     data = [
         "//spec:r4",
+        "//testdata/r4:bigquery",
         "//testdata/r4:examples",
     ],
     shard_count = 10,
     test_class = "com.google.fhir.r4.JsonFormatTest",
     deps = [
         ":json_format_test_base",
-        "//external:gson",
         "//external:guava",
         "//proto/r4/core/resources:account_java_proto",
         "//proto/r4/core/resources:activity_definition_java_proto",
@@ -522,7 +522,6 @@ java_test(
         "//proto/r4/core/resources:verification_result_java_proto",
         "//proto/r4/core/resources:vision_prescription_java_proto",
         "@com_google_protobuf//:protobuf_java",
-        "@com_google_truth_truth//jar",
         "@junit_junit//jar",
     ],
 )

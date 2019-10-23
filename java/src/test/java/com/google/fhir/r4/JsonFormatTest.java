@@ -199,6 +199,15 @@ public class JsonFormatTest extends JsonFormatTestBase {
     }
   }
 
+  /** Test the analytics output format. */
+  @Test
+  public void convertForAnalytics() throws Exception {
+    testConvertForAnalytics("Composition-example", Composition.newBuilder());
+    testConvertForAnalytics("Encounter-home", Encounter.newBuilder());
+    testConvertForAnalytics("Observation-example-genetics-1", Observation.newBuilder());
+    testConvertForAnalytics("Patient-example", Patient.newBuilder());
+  }
+
   @Test
   public void testAccount() throws IOException {
     String[] files = {"Account-ewg", "Account-example"};

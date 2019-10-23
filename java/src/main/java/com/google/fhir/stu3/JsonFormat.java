@@ -36,7 +36,6 @@ import com.google.fhir.r4.core.ResourceTypeCode;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.ValueSet;
 import com.google.fhir.stu3.google.PrimitiveHasNoValue;
-import com.google.fhir.stu3.proto.ReferenceId;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -309,16 +308,24 @@ public final class JsonFormat {
           com.google.fhir.r4.core.ContainedResource.getDescriptor().getFullName(),
           containedResourcesPrinter);
       // Special-case extensions for analytics use.
-      // TODO: Add extensionPrinter for R4 (or else make generic)
-      WellKnownTypePrinter extensionPrinter =
+      WellKnownTypePrinter stu3ExtensionPrinter =
           new WellKnownTypePrinter() {
             @Override
             public void print(PrinterImpl printer, MessageOrBuilder message) throws IOException {
               printer.printExtension((com.google.fhir.stu3.proto.Extension) message);
             }
           };
+      WellKnownTypePrinter r4ExtensionPrinter =
+          new WellKnownTypePrinter() {
+            @Override
+            public void print(PrinterImpl printer, MessageOrBuilder message) throws IOException {
+              printer.printExtension((com.google.fhir.r4.core.Extension) message);
+            }
+          };
       printers.put(
-          com.google.fhir.stu3.proto.Extension.getDescriptor().getFullName(), extensionPrinter);
+          com.google.fhir.stu3.proto.Extension.getDescriptor().getFullName(), stu3ExtensionPrinter);
+      printers.put(
+          com.google.fhir.r4.core.Extension.getDescriptor().getFullName(), r4ExtensionPrinter);
 
       WellKnownTypePrinter anyPrinter =
           new WellKnownTypePrinter() {
@@ -355,6 +362,15 @@ public final class JsonFormat {
 
     /** Prints an extension field. */
     private void printExtension(com.google.fhir.stu3.proto.Extension extension) throws IOException {
+      if (forAnalytics) {
+        generator.print("\"" + extension.getUrl().getValue() + "\"");
+      } else {
+        printMessage(extension);
+      }
+    }
+
+    /** Prints an extension field. */
+    private void printExtension(com.google.fhir.r4.core.Extension extension) throws IOException {
       if (forAnalytics) {
         generator.print("\"" + extension.getUrl().getValue() + "\"");
       } else {
@@ -514,23 +530,30 @@ public final class JsonFormat {
           generator.print("\"_" + name + "\":" + blankOrSpace);
           printRepeatedMessage(elements);
         }
-      } else if (forAnalytics
-          && ((Message) value).getDescriptorForType().equals(ReferenceId.getDescriptor())) {
-        // TODO: ForAnalytics for r4
-        generator.print(
-            "\"" + name + "\":" + blankOrSpace + "\"" + ((ReferenceId) value).getValue() + "\"");
       } else {
         Message message = (Message) value;
-        PrimitiveWrapper wrapper = primitiveWrapperOf(message, defaultTimeZone);
-        if (wrapper.hasValue()) {
-          generator.print("\"" + name + "\":" + blankOrSpace + wrapper.toJson());
-          printedElement = true;
-        }
-        Element element = wrapper.getElement();
-        if (element != null && !forAnalytics) {
-          printedElement = maybePrintFieldSeparator(printedElement);
-          generator.print("\"_" + name + "\":" + blankOrSpace);
-          print(element);
+        String messageName = message.getDescriptorForType().getFullName();
+        if (forAnalytics
+            && (messageName.equals(
+                    com.google.fhir.stu3.proto.ReferenceId.getDescriptor().getFullName())
+                || messageName.equals(
+                    com.google.fhir.r4.core.ReferenceId.getDescriptor().getFullName()))) {
+          // TODO: detect ReferenceId with an annotation
+          String referenceValue =
+              (String) message.getField(message.getDescriptorForType().findFieldByName("value"));
+          generator.print("\"" + name + "\":" + blankOrSpace + "\"" + referenceValue + "\"");
+        } else {
+          PrimitiveWrapper wrapper = primitiveWrapperOf(message, defaultTimeZone);
+          if (wrapper.hasValue()) {
+            generator.print("\"" + name + "\":" + blankOrSpace + wrapper.toJson());
+            printedElement = true;
+          }
+          Element element = wrapper.getElement();
+          if (element != null && !forAnalytics) {
+            printedElement = maybePrintFieldSeparator(printedElement);
+            generator.print("\"_" + name + "\":" + blankOrSpace);
+            print(element);
+          }
         }
       }
     }
@@ -626,7 +649,6 @@ public final class JsonFormat {
     /**
      * Parse a text-format message from {@code input} and merge the contents into {@code builder}.
      */
-    @SuppressWarnings("unchecked")
     public <T extends Message.Builder> T merge(final Reader input, final T builder) {
       JsonReader reader = new JsonReader(input);
       JsonElement json = jsonParser.parse(reader);
@@ -888,7 +910,6 @@ public final class JsonFormat {
     }
 
     // Supress lack of compile-time type safety because of proto newBuilderForType
-    @SuppressWarnings("unchecked")
     private Message parseFieldValue(
         FieldDescriptor field, JsonElement json, Message.Builder builder) {
       // Everything at the fhir-spec level should be a Message.
