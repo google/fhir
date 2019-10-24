@@ -26,6 +26,30 @@ namespace fhir {
 bool IsBundle(const ::google::protobuf::Message& message);
 bool IsProfileOfBundle(const ::google::protobuf::Message& message);
 bool IsTypeOrProfileOfBundle(const ::google::protobuf::Message& message);
+bool IsBundle(const ::google::protobuf::Descriptor* descriptor);
+bool IsProfileOfBundle(const ::google::protobuf::Descriptor* descriptor);
+bool IsTypeOrProfileOfBundle(const ::google::protobuf::Descriptor* descriptor);
+
+bool IsCodeableConcept(const ::google::protobuf::Message& message);
+bool IsProfileOfCodeableConcept(const ::google::protobuf::Message& message);
+bool IsTypeOrProfileOfCodeableConcept(const ::google::protobuf::Message& message);
+bool IsCodeableConcept(const ::google::protobuf::Descriptor* descriptor);
+bool IsProfileOfCodeableConcept(const ::google::protobuf::Descriptor* descriptor);
+bool IsTypeOrProfileOfCodeableConcept(const ::google::protobuf::Descriptor* descriptor);
+
+bool IsCoding(const ::google::protobuf::Message& message);
+bool IsProfileOfCoding(const ::google::protobuf::Message& message);
+bool IsTypeOrProfileOfCoding(const ::google::protobuf::Message& message);
+bool IsCoding(const ::google::protobuf::Descriptor* descriptor);
+bool IsProfileOfCoding(const ::google::protobuf::Descriptor* descriptor);
+bool IsTypeOrProfileOfCoding(const ::google::protobuf::Descriptor* descriptor);
+
+bool IsCode(const ::google::protobuf::Message& message);
+bool IsProfileOfCode(const ::google::protobuf::Message& message);
+bool IsTypeOrProfileOfCode(const ::google::protobuf::Message& message);
+bool IsCode(const ::google::protobuf::Descriptor* descriptor);
+bool IsProfileOfCode(const ::google::protobuf::Descriptor* descriptor);
+bool IsTypeOrProfileOfCode(const ::google::protobuf::Descriptor* descriptor);
 
 }  // namespace fhir
 }  // namespace google

@@ -374,8 +374,10 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":annotations",
+        ":codeable_concepts",
         ":core_resource_registry",
         ":extensions",
+        ":fhir_types",
         ":primitive_wrapper",
         ":profiles",
         ":proto_util",
@@ -676,6 +678,7 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":annotations",
+        ":util",
         "//cc/google/fhir/status:statusor",
         "//proto:annotations_cc_proto",
         "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",

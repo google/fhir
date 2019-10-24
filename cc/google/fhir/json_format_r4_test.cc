@@ -283,20 +283,19 @@ TEST(JsonFormatR4Test, ParseProfileMismatch) {
 }
 
 template <typename R>
-void TestPrintForAnalytics(const string& proto_name, const string& json_name,
-                           bool pretty) {
-  R proto = ReadR4Proto<R>(absl::StrCat("examples/", proto_name, ".prototxt"));
+void TestPrintForAnalytics(const string& proto_filepath,
+                           const string& json_filepath, bool pretty) {
+  R proto = ReadR4Proto<R>(proto_filepath);
   if (IsProfile(R::descriptor())) {
     proto = NormalizeR4(proto).ValueOrDie();
   }
   auto result = pretty ? PrettyPrintFhirToJsonStringForAnalytics(proto)
                        : PrintFhirToJsonStringForAnalytics(proto);
-  ASSERT_TRUE(result.ok()) << "Failed PrintForAnalytics on: " << proto_name
+  ASSERT_TRUE(result.ok()) << "Failed PrintForAnalytics on: " << proto_filepath
                            << "\n"
                            << result.status();
   string from_proto = result.ValueOrDie();
-  string from_json =
-      ReadFile(absl::StrCat("testdata/r4/bigquery/", json_name + ".json"));
+  string from_json = ReadFile(json_filepath);
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
     // This assert will fail, but we get terrible diff messages comparing
@@ -306,25 +305,31 @@ void TestPrintForAnalytics(const string& proto_name, const string& json_name,
 }
 
 template <typename R>
-void TestPrintForAnalytics(const string& name) {
-  TestPrintForAnalytics<R>(name, name, true);
-  TestPrintForAnalytics<R>(name, name, false);
+void TestPrintForAnalyticsWithFilepath(const string& proto_filepath,
+                                       const string& json_filepath) {
+  TestPrintForAnalytics<R>(proto_filepath, json_filepath, true);
+  TestPrintForAnalytics<R>(proto_filepath, json_filepath, false);
 }
 
-TEST(JsonFormatR4Test, PrettyPrintForAnalytics) {
+template <typename R>
+void TestPrintForAnalytics(const string& name) {
+  TestPrintForAnalyticsWithFilepath<R>(
+      absl::StrCat("examples/", name, ".prototxt"),
+      absl::StrCat("testdata/r4/bigquery/", name + ".json"));
+}
+
+TEST(JsonFormatR4Test, PrintForAnalytics) {
   TestPrintForAnalytics<Composition>("Composition-example");
   TestPrintForAnalytics<Encounter>("Encounter-home");
   TestPrintForAnalytics<Observation>("Observation-example-genetics-1");
   TestPrintForAnalytics<Patient>("Patient-example");
 }
 
-TEST(JsonFormatR4Test, PrintForAnalyticsProfiled) {
-  TestPrintForAnalytics<ObservationGenetics>(
-      "Observation-example-genetics-1",
-      "Observation-example-genetics-1-profiled", true);
-  TestPrintForAnalytics<ObservationGenetics>(
-      "Observation-example-genetics-1",
-      "Observation-example-genetics-1-profiled", false);
+/** Test printing from a profile */
+TEST(JsonFormatR4Test, PrintProfileForAnalytics) {
+  TestPrintForAnalyticsWithFilepath<r4::testingcore::TestPatient>(
+      "profiles/test_patient-profiled-testpatient.prototxt",
+      "testdata/r4/bigquery/TestPatient.json");
 }
 
 TEST(JsonFormatR4Test, TestAccount) {

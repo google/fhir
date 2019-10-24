@@ -268,5 +268,17 @@ Status CopyCommonField(const Message& source, Message* target,
   return Status::OK();
 }
 
+Status ClearField(Message* message, const string& field_name) {
+  const Descriptor* descriptor = message->GetDescriptor();
+  const FieldDescriptor* field = descriptor->FindFieldByName(field_name);
+
+  if (!field) {
+    return InvalidArgument("Error in ClearField:  ", descriptor->full_name(),
+                           " has no field ", field_name);
+  }
+  message->GetReflection()->ClearField(message, field);
+  return Status::OK();
+}
+
 }  // namespace fhir
 }  // namespace google

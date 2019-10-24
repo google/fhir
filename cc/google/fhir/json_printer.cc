@@ -29,8 +29,10 @@
 #include "absl/strings/str_cat.h"
 #include "absl/time/time.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/codeable_concepts.h"
 #include "google/fhir/core_resource_registry.h"
 #include "google/fhir/extensions.h"
+#include "google/fhir/fhir_types.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/profiles.h"
 #include "google/fhir/proto_util.h"
@@ -51,7 +53,6 @@ namespace {
 using ::google::fhir::IsChoiceType;
 using ::google::fhir::IsPrimitive;
 using ::google::fhir::IsReference;
-using ::google::fhir::ReferenceProtoToString;
 using ::google::fhir::Status;
 using ::google::fhir::StatusOr;
 using ::google::protobuf::Descriptor;
@@ -112,6 +113,11 @@ class Printer {
       if (standard_reference) {
         return PrintStandardNonPrimitive(*standard_reference);
       }
+    }
+    if (for_analytics_ && IsProfileOfCodeableConcept(proto.GetDescriptor())) {
+      FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> analytic_codeable_concept,
+                            MakeAnalyticCodeableConcept(proto));
+      return PrintStandardNonPrimitive(*analytic_codeable_concept);
     }
     return PrintStandardNonPrimitive(proto);
   }
@@ -362,6 +368,57 @@ class Printer {
       output_ += "]";
     }
     return Status::OK();
+  }
+
+  // Creates a copy of the profiled codeable concept that has ALL codings
+  // present in the coding fields, even if they're also present in profiled
+  // fields.
+  // Does this by making a copy of the original, clearing the coding field,
+  // and then coping all codings on the original (profiled and unprofiled)
+  // onto the coding field of the copy.
+  StatusOr<std::unique_ptr<Message>> MakeAnalyticCodeableConcept(
+      const Message& profiled_codeable_concept) {
+    auto analytic_codeable_concept =
+        absl::WrapUnique(profiled_codeable_concept.New());
+
+    FHIR_RETURN_IF_ERROR(CopyCodeableConcept(profiled_codeable_concept,
+                                             analytic_codeable_concept.get()));
+    FHIR_RETURN_IF_ERROR(ClearField(analytic_codeable_concept.get(), "coding"));
+
+    const Descriptor* descriptor = analytic_codeable_concept->GetDescriptor();
+    const Reflection* reflection = analytic_codeable_concept->GetReflection();
+    const FieldDescriptor* coding_field = descriptor->FindFieldByName("coding");
+    if (!coding_field || !coding_field->message_type() ||
+        !IsCoding(coding_field->message_type())) {
+      return InvalidArgument(
+          "Invalid or missing coding field on CodeableConcept type ",
+          descriptor->full_name());
+    }
+
+    switch (GetFhirVersion(profiled_codeable_concept)) {
+      case proto::STU3:
+        stu3::ForEachCoding(
+            profiled_codeable_concept, [&](const stu3::proto::Coding& coding) {
+              reflection
+                  ->AddMessage(analytic_codeable_concept.get(), coding_field)
+                  ->CopyFrom(coding);
+            });
+        break;
+      case proto::R4:
+        r4::ForEachCoding(
+            profiled_codeable_concept, [&](const r4::core::Coding& coding) {
+              reflection
+                  ->AddMessage(analytic_codeable_concept.get(), coding_field)
+                  ->CopyFrom(coding);
+            });
+        break;
+      default:
+        return InvalidArgument(
+            "Unsupported FHIR Version for profiling for resource: " +
+            profiled_codeable_concept.GetDescriptor()->full_name());
+    }
+
+    return analytic_codeable_concept;
   }
 
   // If reference is typed Returns a unique pointer to a new standardized

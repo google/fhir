@@ -246,6 +246,10 @@ bool AreSameMessageType(const ::google::protobuf::Message& a, const ::google::pr
 Status CopyCommonField(const ::google::protobuf::Message& source,
                        ::google::protobuf::Message* target, const string& field_name);
 
+// Clears a field by name on a message.  Returns InvalidArgument if the field
+// does not exist on the message.
+Status ClearField(::google::protobuf::Message* message, const string& field_name);
+
 }  // namespace fhir
 }  // namespace google
 
