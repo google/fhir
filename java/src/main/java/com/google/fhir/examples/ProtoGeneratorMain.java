@@ -29,12 +29,16 @@ import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.r4.core.Bundle;
+import com.google.fhir.r4.core.CodeSystem;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
+import com.google.fhir.r4.core.ValueSet;
 import com.google.fhir.stu3.FileUtils;
+import com.google.fhir.stu3.GeneratorUtils;
 import com.google.fhir.stu3.JsonFormat;
 import com.google.fhir.stu3.ProtoFilePrinter;
 import com.google.fhir.stu3.ProtoGenerator;
+import com.google.fhir.stu3.ValueSetGenerator;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import java.io.BufferedWriter;
@@ -45,8 +49,10 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -91,14 +97,6 @@ class ProtoGeneratorMain {
     private Boolean emitProto = false;
 
     @Parameter(
-      names = {"--include_contained_resource"},
-      description =
-          "Include a ContainedResource message, containing an entry for each message type present "
-              + " in the proto"
-    )
-    private Boolean includeContainedResource = false;
-
-    @Parameter(
         names = {"--package_info"},
         description = "Prototxt containing google.fhir.proto.PackageInfo",
         required = true)
@@ -110,24 +108,24 @@ class ProtoGeneratorMain {
     private String dstu2StructDefZip = null;
 
     @Parameter(
-        names = {"--stu3_struct_def_zip"},
-        description = "Zip file containing core STU3 Structure Definitions.")
-    private String stu3StructDefZip = null;
+        names = {"--stu3_definitions_zip"},
+        description = "Zip file containing core STU3 Definitions.")
+    private String stu3DefinitionsZip = null;
 
     @Parameter(
-        names = {"--r4_struct_def_zip"},
-        description = "Zip file containing core R4 Structure Definitions.")
-    private String r4StructDefZip = null;
+        names = {"--r4_definitions_zip"},
+        description = "Zip file containing core R4 Definitions.")
+    private String r4DefinitionsZip = null;
 
     @Parameter(
-        names = {"--struct_def_dep_pkg"},
+        names = {"--fhir_definition_dep"},
         description =
             "For StructureDefinitions that are non-core dependencies of the types being "
-                + "generated, this is a pipe-delimited tuple of target|PackageInfo. "
-                + "The target must be a zip archive, and the PackageInfo "
+                + "generated, this is a pipe-delimited tuple of zip|PackageInfo. "
+                + "The PackageInfo "
                 + "should be a path to a prototxt file containing a google.fhir.proto.PackageInfo "
                 + "proto.")
-    private List<String> structDefDepPkgList = new ArrayList<>();
+    private List<String> fhirDefinitionDepList = new ArrayList<>();
 
     @Parameter(
         names = {"--additional_import"},
@@ -169,12 +167,12 @@ class ProtoGeneratorMain {
     private Map<String, String> getDependencyPackagesMap() throws IOException {
       Splitter keyValueSplitter = Splitter.on("|");
       Map<String, String> packages = new HashMap<>();
-      for (String structDefDepPkg : structDefDepPkgList) {
-        List<String> keyValuePair = keyValueSplitter.splitToList(structDefDepPkg);
+      for (String fhirDefinitionDep : fhirDefinitionDepList) {
+        List<String> keyValuePair = keyValueSplitter.splitToList(fhirDefinitionDep);
         if (keyValuePair.size() != 2) {
           throw new IllegalArgumentException(
-              "Invalid struct_def_dep_pkg entry ["
-                  + structDefDepPkg
+              "Invalid fhir_definition_dep entry ["
+                  + fhirDefinitionDep
                   + "].  Should be of the form: your/archive.zip|your/package_info.prototxt");
         }
         PackageInfo depPackageInfo =
@@ -219,7 +217,7 @@ class ProtoGeneratorMain {
 
     // Map representing all packages that are dependencies of this package.
     // This map is of the form
-    // {location of zip archive of structure definitions -> proto package to inlined those types as}
+    // {location of zip archive of definitions -> proto package to inlined those types as}
     Map<String, String> dependencyPackagesMap = args.getDependencyPackagesMap();
 
     // Add in core FHIR types (e.g., datatypes and unprofiled resources)
@@ -233,20 +231,20 @@ class ProtoGeneratorMain {
             args.dstu2StructDefZip, com.google.fhir.common.FhirVersion.R4.coreProtoPackage);
         break;
       case STU3:
-        if (args.stu3StructDefZip == null) {
+        if (args.stu3DefinitionsZip == null) {
           throw new IllegalArgumentException(
-              "Package is for STU3, but --stu3_struct_def_zip is not specified.");
+              "Package is for STU3, but --stu3_definitions_zip is not specified.");
         }
         dependencyPackagesMap.put(
-            args.stu3StructDefZip, com.google.fhir.common.FhirVersion.STU3.coreProtoPackage);
+            args.stu3DefinitionsZip, com.google.fhir.common.FhirVersion.STU3.coreProtoPackage);
         break;
       case R4:
-        if (args.r4StructDefZip == null) {
+        if (args.r4DefinitionsZip == null) {
           throw new IllegalArgumentException(
-              "Package is for R4, but --r4_struct_def_zip is not specified.");
+              "Package is for R4, but --r4_definitions_zip is not specified.");
         }
         dependencyPackagesMap.put(
-            args.r4StructDefZip, com.google.fhir.common.FhirVersion.R4.coreProtoPackage);
+            args.r4DefinitionsZip, com.google.fhir.common.FhirVersion.R4.coreProtoPackage);
         break;
       default:
         throw new IllegalArgumentException(
@@ -260,8 +258,10 @@ class ProtoGeneratorMain {
     Map<StructureDefinition, String> knownTypes = new HashMap<>();
     for (Map.Entry<String, String> zipPackagePair : dependencyPackagesMap.entrySet()) {
       List<StructureDefinition> structDefs =
-          FileUtils.loadStructureDefinitionsInZip(
-              zipPackagePair.getKey(), packageInfo.getFhirVersion());
+          FileUtils.loadTypesInZip(
+              StructureDefinition.getDefaultInstance(),
+              zipPackagePair.getKey(),
+              packageInfo.getFhirVersion());
       for (StructureDefinition structDef : structDefs) {
         knownTypes.put(structDef, zipPackagePair.getValue());
       }
@@ -321,7 +321,13 @@ class ProtoGeneratorMain {
     writer.println("Generating proto descriptors...");
     writer.flush();
 
-    ProtoGenerator generator = new ProtoGenerator(packageInfo, ImmutableMap.copyOf(knownTypes));
+    ProtoGenerator generator =
+        packageInfo.getFhirVersion() != FhirVersion.R4
+            ? new ProtoGenerator(packageInfo, ImmutableMap.copyOf(knownTypes))
+            : new ProtoGenerator(
+                packageInfo,
+                ImmutableMap.copyOf(knownTypes),
+                makeR4ValueSetGenerator(packageInfo, dependencyPackagesMap.keySet()));
     ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
 
     switch (packageInfo.getFileSplittingBehavior()) {
@@ -329,7 +335,7 @@ class ProtoGeneratorMain {
       case NO_SPLITTING:
         {
           FileDescriptorProto proto = generator.generateFileDescriptor(definitions);
-          if (packageInfo.getLocalContainedResource() || args.includeContainedResource) {
+          if (packageInfo.getLocalContainedResource()) {
             proto = generator.addContainedResource(proto, proto.getMessageTypeList());
           }
           writeProto(proto, args.outputName + ".proto", args, true, printer);
@@ -466,7 +472,7 @@ class ProtoGeneratorMain {
   String resourceNameToFileName(String resourceName, ProtoGenerator generator) {
     return CaseFormat.UPPER_CAMEL.to(
             CaseFormat.LOWER_UNDERSCORE,
-            ProtoGenerator.resolveAcronyms(ProtoGenerator.toFieldTypeCase(resourceName)))
+            GeneratorUtils.resolveAcronyms(GeneratorUtils.toFieldTypeCase(resourceName)))
         + ".proto";
   }
 
@@ -513,6 +519,20 @@ class ProtoGeneratorMain {
         Files.asCharSink(outputFile, UTF_8).write(descriptor.toString());
       }
     }
+  }
+
+  private static ValueSetGenerator makeR4ValueSetGenerator(
+      PackageInfo packageInfo, Set<String> definitionZips) throws IOException {
+    Set<ValueSet> valueSets = new HashSet<>();
+    Set<CodeSystem> codeSystems = new HashSet<>();
+    for (String definitionZip : definitionZips) {
+      valueSets.addAll(
+          FileUtils.loadTypesInZip(ValueSet.getDefaultInstance(), definitionZip, FhirVersion.R4));
+      codeSystems.addAll(
+          FileUtils.loadTypesInZip(CodeSystem.getDefaultInstance(), definitionZip, FhirVersion.R4));
+    }
+
+    return new ValueSetGenerator(packageInfo, valueSets, codeSystems);
   }
 
   public static void main(String[] argv) throws IOException {

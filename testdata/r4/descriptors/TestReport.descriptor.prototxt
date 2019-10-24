@@ -110,7 +110,7 @@ field {
   number: 12
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.TestReportStatusCode"
+  type_name: ".google.fhir.r4.core.TestReport.StatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "completed | in-progress | waiting | stopped | entered-in-error"
@@ -133,7 +133,7 @@ field {
   number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.TestReportResultCode"
+  type_name: ".google.fhir.r4.core.TestReport.ResultCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "pass | fail | pending"
@@ -214,6 +214,60 @@ field {
   }
 }
 nested_type {
+  name: "StatusCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.TestReportStatusCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/report-status-codes"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
+  name: "ResultCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.TestReportResultCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/report-result-codes"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
   name: "Participant"
   field {
     name: "id"
@@ -250,7 +304,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.TestReportParticipantTypeCode"
+    type_name: ".google.fhir.r4.core.TestReport.Participant.TypeCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "test-engine | client | server"
@@ -275,6 +329,33 @@ nested_type {
     type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "The display name of the participant"
+    }
+  }
+  nested_type {
+    name: "TypeCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r4.core.TestReportParticipantTypeCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/report-participant-type"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
 }
@@ -415,7 +496,7 @@ nested_type {
         number: 4
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.TestReportActionResultCode"
+        type_name: ".google.fhir.r4.core.TestReport.Setup.SetupAction.Operation.ResultCode"
         options {
           [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
           [google.fhir.proto.field_description]: "pass | skip | fail | warning | error"
@@ -439,6 +520,33 @@ nested_type {
         type_name: ".google.fhir.r4.core.Uri"
         options {
           [google.fhir.proto.field_description]: "A link to further details on the result"
+        }
+      }
+      nested_type {
+        name: "ResultCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.TestReportActionResultCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/report-action-result-codes"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
         }
       }
     }
@@ -479,7 +587,7 @@ nested_type {
         number: 4
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.TestReportActionResultCode"
+        type_name: ".google.fhir.r4.core.TestReport.Setup.SetupAction.Assert.ResultCode"
         options {
           [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
           [google.fhir.proto.field_description]: "pass | skip | fail | warning | error"
@@ -503,6 +611,33 @@ nested_type {
         type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "A link to further details on the result"
+        }
+      }
+      nested_type {
+        name: "ResultCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.TestReportActionResultCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/report-action-result-codes"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
         }
       }
     }

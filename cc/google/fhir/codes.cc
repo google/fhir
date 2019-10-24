@@ -26,12 +26,15 @@
 namespace google {
 namespace fhir {
 
+using ::google::fhir::Status;
+using ::google::fhir::StatusOr;
 using ::google::fhir::stu3::proto::Code;
 using ::google::fhir::stu3::proto::ResourceTypeCode;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::EnumDescriptor;
 using ::google::protobuf::EnumValueDescriptor;
 using ::google::protobuf::FieldDescriptor;
+using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 using ::tensorflow::errors::InvalidArgument;
 
@@ -48,14 +51,50 @@ string TitleCaseToUpperUnderscores(const string& src) {
   return dst;
 }
 
+StatusOr<const EnumValueDescriptor*> StringToEnumValue(
+    const string& code_string, const EnumDescriptor* target_enum_type) {
+  // Try to find the Enum value by name (with some common substitutions).
+  string enum_case_code_string = code_string;
+  for (std::string::size_type i = 0; i < enum_case_code_string.length(); i++) {
+    enum_case_code_string[i] = std::toupper(enum_case_code_string[i]);
+  }
+  std::replace(enum_case_code_string.begin(), enum_case_code_string.end(), '-',
+               '_');
+  const EnumValueDescriptor* target_enum_value =
+      target_enum_type->FindValueByName(enum_case_code_string);
+  if (target_enum_value != nullptr) {
+    return target_enum_value;
+  }
+
+  // Finally, some codes had to be renamed to make them valid enum values.
+  // Iterate through all target enum values, and look for the
+  // "fhir_original_code" annotation for the original name.
+  for (int i = 0; i < target_enum_type->value_count(); i++) {
+    const EnumValueDescriptor* target_value = target_enum_type->value(i);
+    LOG(WARNING) << code_string << " : "
+                 << target_value->options().GetExtension(
+                        ::google::fhir::proto::fhir_original_code);
+    if (target_value->options().HasExtension(
+            ::google::fhir::proto::fhir_original_code) &&
+        target_value->options().GetExtension(
+            ::google::fhir::proto::fhir_original_code) == code_string) {
+      return target_value;
+    }
+  }
+
+  return InvalidArgument("Failed to convert ", code_string, " to ",
+                         target_enum_type->full_name(),
+                         ": No matching enum found.");
+}
+
 template <class CodeLike>
-::google::fhir::Status ConvertToTypedCodeInternal(const CodeLike& generic_code,
-                                                  google::protobuf::Message* typed_code) {
+Status ConvertToTypedCodeInternal(const CodeLike& generic_code,
+                                  Message* typed_code) {
   const Descriptor* target_descriptor = typed_code->GetDescriptor();
   const Reflection* target_reflection = typed_code->GetReflection();
 
-  // If there is no valueset url, assume we're just copying a plain old Code
-  if (!HasValueset(target_descriptor)) {
+  if (!(IsProfileOf<Code>(target_descriptor) ||
+        HasValueset(target_descriptor))) {
     if (!AreSameMessageType(generic_code, *typed_code)) {
       return InvalidArgument("Type ", target_descriptor->full_name(),
                              " is not a valid FHIR code type.");
@@ -90,7 +129,7 @@ template <class CodeLike>
     return InvalidArgument("Type ", target_descriptor->full_name(),
                            " has no value field");
   }
-  // If target it a string, just set it from the wrapped value.
+  // If target is a string, just set it from the wrapped value.
   if (target_value_field->type() == FieldDescriptor::Type::TYPE_STRING) {
     target_reflection->SetString(typed_code, target_value_field,
                                  generic_code.value());
@@ -101,46 +140,30 @@ template <class CodeLike>
     return InvalidArgument("Invalid target message: ",
                            target_descriptor->full_name());
   }
+  FHIR_ASSIGN_OR_RETURN(
+      const EnumValueDescriptor* target_enum_value,
+      StringToEnumValue(generic_code.value(), target_value_field->enum_type()));
+  target_reflection->SetEnum(typed_code, target_value_field, target_enum_value);
+  return Status::OK();
+}
 
-  // Try to find the Enum value by name (with some common substitutions).
-  string target_enum_name = generic_code.value();
-  for (std::string::size_type i = 0; i < target_enum_name.length(); i++) {
-    target_enum_name[i] = std::toupper(target_enum_name[i]);
-  }
-  std::replace(target_enum_name.begin(), target_enum_name.end(), '-', '_');
-  const EnumValueDescriptor* target_enum_value =
-      target_value_field->enum_type()->FindValueByName(target_enum_name);
-  if (target_enum_value != nullptr) {
-    target_reflection->SetEnum(typed_code, target_value_field,
-                               target_enum_value);
-    return Status::OK();
-  }
-
-  // Finally, some codes had to be renamed to make them valid enum values.
-  // Iterate through all target enum values, and ook for the
-  // "fhir_original_code" annotation for the original name.
-  const EnumDescriptor* target_enum_descriptor =
-      target_value_field->enum_type();
-  for (int i = 0; i < target_enum_descriptor->value_count(); i++) {
-    const EnumValueDescriptor* target_value = target_enum_descriptor->value(i);
-    if (target_value->options().HasExtension(
-            ::google::fhir::proto::fhir_original_code) &&
-        target_value->options().GetExtension(
-            ::google::fhir::proto::fhir_original_code) ==
-            generic_code.value()) {
-      target_reflection->SetEnum(typed_code, target_value_field, target_value);
-      return Status::OK();
-    }
+string EnumValueToString(const EnumValueDescriptor* enum_value) {
+  if (enum_value->options().HasExtension(
+          ::google::fhir::proto::fhir_original_code)) {
+    return enum_value->options().GetExtension(
+        ::google::fhir::proto::fhir_original_code);
   }
 
-  return InvalidArgument("Failed to convert to ",
-                         target_descriptor->full_name(), ": \"",
-                         generic_code.value(), "\" is not a valid enum entry");
+  string code_string = enum_value->name();
+  std::transform(code_string.begin(), code_string.end(), code_string.begin(),
+                 tolower);
+  std::replace(code_string.begin(), code_string.end(), '_', '-');
+  return code_string;
 }
 
 template <class CodeLike>
-::google::fhir::Status ConvertToGenericCodeInternal(
-    const google::protobuf::Message& typed_code, CodeLike* generic_code) {
+Status ConvertToGenericCodeInternal(const Message& typed_code,
+                                    CodeLike* generic_code) {
   if (IsMessageType<CodeLike>(typed_code)) {
     generic_code->CopyFrom(typed_code);
     return Status::OK();
@@ -148,7 +171,7 @@ template <class CodeLike>
 
   const Descriptor* descriptor = typed_code.GetDescriptor();
   const Reflection* reflection = typed_code.GetReflection();
-  if (!HasValueset(descriptor)) {
+  if (!HasValueset(descriptor) && !HasFixedSystem(descriptor)) {
     return InvalidArgument("Type ", descriptor->full_name(),
                            " is not a FHIR code type.");
   }
@@ -175,26 +198,15 @@ template <class CodeLike>
     return InvalidArgument("Invalid Code type: ", descriptor->full_name());
   }
 
-  const ::google::protobuf::EnumValueDescriptor* enum_descriptor =
-      reflection->GetEnum(typed_code, value_field);
-  if (enum_descriptor->options().HasExtension(
-          ::google::fhir::proto::fhir_original_code)) {
-    generic_code->set_value(enum_descriptor->options().GetExtension(
-        ::google::fhir::proto::fhir_original_code));
-    return Status::OK();
-  }
-
-  string code_string = enum_descriptor->name();
-  std::transform(code_string.begin(), code_string.end(), code_string.begin(),
-                 tolower);
-  std::replace(code_string.begin(), code_string.end(), '_', '-');
-  generic_code->set_value(code_string);
+  generic_code->set_value(
+      EnumValueToString(reflection->GetEnum(typed_code, value_field)));
   return Status::OK();
 }
+
 template <typename CodingLike,
           typename CodeLike = FHIR_DATATYPE(CodingLike, code)>
 Status ConvertToTypedCodingInternal(const CodingLike& generic_coding,
-                                    google::protobuf::Message* typed_coding) {
+                                    Message* typed_coding) {
   if (IsMessageType<CodingLike>(*typed_coding)) {
     typed_coding->CopyFrom(generic_coding);
     return Status::OK();
@@ -220,14 +232,6 @@ Status ConvertToTypedCodingInternal(const CodingLike& generic_coding,
                            CodingLike::descriptor()->full_name(), " to typed ",
                            descriptor->full_name(), ": Must have code field.");
   }
-  if (HasValueset(code_field->message_type()) &&
-      GetValueset(code_field->message_type()) !=
-          generic_coding.system().value()) {
-    return InvalidArgument(
-        "Cannot convert generic coding to typed code ", descriptor->full_name(),
-        ": Target has valueset ", GetValueset(descriptor),
-        " but generic coding has system ", generic_coding.system().value());
-  }
   return ConvertToTypedCodeInternal(
       generic_coding.code(),
       reflection->MutableMessage(typed_coding, code_field));
@@ -235,7 +239,7 @@ Status ConvertToTypedCodingInternal(const CodingLike& generic_coding,
 
 template <typename CodingLike,
           typename CodeLike = FHIR_DATATYPE(CodingLike, code)>
-Status ConvertToGenericCodingInternal(const google::protobuf::Message& typed_coding,
+Status ConvertToGenericCodingInternal(const Message& typed_coding,
                                       CodingLike* generic_coding) {
   if (IsMessageType<CodingLike>(typed_coding)) {
     generic_coding->CopyFrom(typed_coding);
@@ -263,17 +267,38 @@ Status ConvertToGenericCodingInternal(const google::protobuf::Message& typed_cod
         CodingLike::descriptor()->full_name(), ": Must have code.");
   }
 
-  generic_coding->mutable_system()->set_value(
-      GetFixedCodingSystem(typed_coding.GetDescriptor()));
+  const Message& typed_code = reflection->GetMessage(typed_coding, code_field);
 
-  return ConvertToGenericCodeInternal(
-      reflection->GetMessage(typed_coding, code_field),
-      generic_coding->mutable_code());
+  const string& system = GetFixedCodingSystem(typed_code.GetDescriptor());
+  if (!system.empty()) {
+    // The entire profiled coding can only be from a single system.  Use that.
+    generic_coding->mutable_system()->set_value(system);
+  } else {
+    // There is no single system for the whole coding - look for system
+    // annotation on the enum.
+    const FieldDescriptor* enum_field =
+        typed_code.GetDescriptor()->FindFieldByName("value");
+    if (enum_field->type() != FieldDescriptor::Type::TYPE_ENUM) {
+      return InvalidArgument(
+          "Invalid profiled Coding: missing system information on string code");
+    }
+    const ::google::protobuf::EnumValueDescriptor* enum_descriptor =
+        typed_code.GetReflection()->GetEnum(typed_code, enum_field);
+    if (!HasSourceCodeSystem(enum_descriptor)) {
+      return InvalidArgument(
+          "Invalid profiled Coding: missing system information on enum code");
+    }
+    generic_coding->mutable_system()->set_value(
+        GetSourceCodeSystem(enum_descriptor));
+  }
+
+  return ConvertToGenericCodeInternal(typed_code,
+                                      generic_coding->mutable_code());
 }
 
 template <typename TypedResourceTypeCode>
-::google::fhir::StatusOr<typename TypedResourceTypeCode::Value>
-GetCodeForResourceTypeTemplate(const google::protobuf::Message& resource) {
+StatusOr<typename TypedResourceTypeCode::Value> GetCodeForResourceTypeTemplate(
+    const Message& resource) {
   const string& enum_string =
       TitleCaseToUpperUnderscores(resource.GetDescriptor()->name());
   typename TypedResourceTypeCode::Value value;
@@ -286,58 +311,53 @@ GetCodeForResourceTypeTemplate(const google::protobuf::Message& resource) {
 
 }  // namespace
 
-::google::fhir::Status ConvertToTypedCode(
-    const ::google::fhir::stu3::proto::Code& generic_code,
-    google::protobuf::Message* target) {
+Status ConvertToTypedCode(const ::google::fhir::stu3::proto::Code& generic_code,
+                          Message* target) {
   return ConvertToTypedCodeInternal(generic_code, target);
 }
 
-::google::fhir::Status ConvertToTypedCode(
-    const ::google::fhir::r4::core::Code& generic_code,
-    google::protobuf::Message* target) {
+Status ConvertToTypedCode(const ::google::fhir::r4::core::Code& generic_code,
+                          Message* target) {
   return ConvertToTypedCodeInternal(generic_code, target);
 }
 
-::google::fhir::Status ConvertToGenericCode(
-    const google::protobuf::Message& typed_code,
-    google::fhir::stu3::proto::Code* generic_code) {
+Status ConvertToGenericCode(const Message& typed_code,
+                            google::fhir::stu3::proto::Code* generic_code) {
   return ConvertToGenericCodeInternal(typed_code, generic_code);
 }
 
-::google::fhir::Status ConvertToGenericCode(
-    const google::protobuf::Message& typed_code,
-    google::fhir::r4::core::Code* generic_code) {
+Status ConvertToGenericCode(const Message& typed_code,
+                            google::fhir::r4::core::Code* generic_code) {
   return ConvertToGenericCodeInternal(typed_code, generic_code);
 }
 
-::google::fhir::Status ConvertToTypedCoding(
+Status ConvertToTypedCoding(
     const ::google::fhir::stu3::proto::Coding& generic_coding,
-    google::protobuf::Message* typed_coding) {
+    Message* typed_coding) {
   return ConvertToTypedCodingInternal(generic_coding, typed_coding);
 }
 
-::google::fhir::Status ConvertToGenericCoding(
-    const google::protobuf::Message& typed_coding,
+Status ConvertToGenericCoding(
+    const Message& typed_coding,
     google::fhir::stu3::proto::Coding* generic_coding) {
   return ConvertToGenericCodingInternal(typed_coding, generic_coding);
 }
 
-::google::fhir::Status ConvertToTypedCoding(
+Status ConvertToTypedCoding(
     const ::google::fhir::r4::core::Coding& generic_coding,
-    google::protobuf::Message* typed_coding) {
+    Message* typed_coding) {
   return ConvertToTypedCodingInternal(generic_coding, typed_coding);
 }
 
-::google::fhir::Status ConvertToGenericCoding(
-    const google::protobuf::Message& typed_coding,
-    google::fhir::r4::core::Coding* generic_coding) {
+Status ConvertToGenericCoding(const Message& typed_coding,
+                              google::fhir::r4::core::Coding* generic_coding) {
   return ConvertToGenericCodingInternal(typed_coding, generic_coding);
 }
 
 template <>
 ::google::fhir::StatusOr<::google::fhir::stu3::proto::ResourceTypeCode::Value>
 GetCodeForResourceType<::google::fhir::stu3::proto::ResourceTypeCode>(
-    const google::protobuf::Message& resource) {
+    const Message& resource) {
   return GetCodeForResourceTypeTemplate<
       ::google::fhir::stu3::proto::ResourceTypeCode>(resource);
 }
@@ -345,15 +365,110 @@ GetCodeForResourceType<::google::fhir::stu3::proto::ResourceTypeCode>(
 template <>
 ::google::fhir::StatusOr<::google::fhir::r4::core::ResourceTypeCode::Value>
 GetCodeForResourceType<::google::fhir::r4::core::ResourceTypeCode>(
-    const google::protobuf::Message& resource) {
+    const Message& resource) {
   return GetCodeForResourceTypeTemplate<
       ::google::fhir::r4::core::ResourceTypeCode>(resource);
 }
 
 ::google::fhir::StatusOr<::google::fhir::stu3::proto::ResourceTypeCode::Value>
-GetCodeForResourceType(const google::protobuf::Message& resource) {
+GetCodeForResourceType(const Message& resource) {
   return GetCodeForResourceTypeTemplate<
       ::google::fhir::stu3::proto::ResourceTypeCode>(resource);
+}
+
+// TODO: deprecate most of the API in this file in favor of this
+// function.
+Status CopyCode(const Message& source, Message* target) {
+  const Descriptor* source_descriptor = source.GetDescriptor();
+  const Descriptor* target_descriptor = target->GetDescriptor();
+
+  if (source_descriptor->full_name() == target_descriptor->full_name()) {
+    target->CopyFrom(source);
+    return Status::OK();
+  }
+
+  const Reflection* source_reflection = source.GetReflection();
+  const Reflection* target_reflection = target->GetReflection();
+
+  const FieldDescriptor* source_value_field =
+      source_descriptor->FindFieldByName("value");
+  const FieldDescriptor* target_value_field =
+      target_descriptor->FindFieldByName("value");
+
+  if (!source_value_field || !target_value_field) {
+    return InvalidArgument(
+        "Unable to copy code from ", source_descriptor->full_name(), " to ",
+        target_descriptor->full_name(), ". Both must have a `value` field.");
+  }
+
+  FieldDescriptor::Type source_type = source_value_field->type();
+  FieldDescriptor::Type target_type = target_value_field->type();
+
+  FHIR_RETURN_IF_ERROR(CopyCommonField(source, target, "id"));
+  FHIR_RETURN_IF_ERROR(CopyCommonField(source, target, "extension"));
+
+  if (!source_reflection->HasField(source, source_value_field)) {
+    return Status::OK();
+  }
+
+  if (source_type == FieldDescriptor::Type::TYPE_ENUM) {
+    const EnumDescriptor* source_enum_type = source_value_field->enum_type();
+    const EnumValueDescriptor* source_value =
+        source_reflection->GetEnum(source, source_value_field);
+
+    if (target_type == FieldDescriptor::Type::TYPE_ENUM) {
+      const EnumDescriptor* target_enum_type = target_value_field->enum_type();
+      // Enum to Enum
+      if (source_enum_type == target_enum_type) {
+        target_reflection->SetEnum(target, target_value_field, source_value);
+        return Status::OK();
+      } else {
+        const EnumValueDescriptor* target_value =
+            target_enum_type->FindValueByName(source_value->name());
+        if (target_value) {
+          target_reflection->SetEnum(target, target_value_field, target_value);
+          return Status::OK();
+        } else {
+          return InvalidArgument(
+              "Unable to copy code from ", source_descriptor->full_name(),
+              " to ", target_descriptor->full_name(),
+              ". Found incompatible value: ", source_value->name());
+        }
+      }
+    } else if (target_type == FieldDescriptor::Type::TYPE_STRING) {
+      // Enum to String
+      target_reflection->SetString(target, target_value_field,
+                                   EnumValueToString(source_value));
+      return Status::OK();
+    } else {
+      return InvalidArgument(
+          "Cannot copy code to ", target_descriptor->full_name(),
+          ".  Must have a value field of either String type or Enum type.");
+    }
+  } else if (source_type == FieldDescriptor::Type::TYPE_STRING) {
+    const string& source_value =
+        source_reflection->GetString(source, source_value_field);
+    if (target_type == FieldDescriptor::Type::TYPE_STRING) {
+      // String to String
+      target_reflection->SetString(target, target_value_field, source_value);
+      return Status::OK();
+    } else if (target_type == FieldDescriptor::Type::TYPE_ENUM) {
+      // String to Enum
+      FHIR_ASSIGN_OR_RETURN(
+          const EnumValueDescriptor* target_enum_value,
+          StringToEnumValue(source_value, target_value_field->enum_type()));
+      target_reflection->SetEnum(target, target_value_field, target_enum_value);
+      return Status::OK();
+    } else {
+      return InvalidArgument(
+          "Cannot copy code to ", target_descriptor->full_name(),
+          ".  Must have a value field of either String type or Enum type.");
+    }
+  } else {
+    return InvalidArgument(
+        "Cannot copy code from ", source_descriptor->full_name(),
+        ".  Must have a value field of either String type or Enum type.");
+  }
 }
 
 }  // namespace fhir

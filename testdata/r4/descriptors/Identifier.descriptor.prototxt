@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.IdentifierUseCode"
+  type_name: ".google.fhir.r4.core.Identifier.UseCode"
   options {
     [google.fhir.proto.field_description]: "usual | official | temp | secondary | old (If known)"
   }
@@ -78,6 +78,33 @@ field {
   options {
     [google.fhir.proto.field_description]: "Organization that issued id (may be just text)"
     [google.fhir.proto.valid_reference_type]: "Organization"
+  }
+}
+nested_type {
+  name: "UseCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.IdentifierUseCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/identifier-use"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
   }
 }
 options {

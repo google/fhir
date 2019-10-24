@@ -144,14 +144,14 @@ Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
     const ::google::protobuf::FieldDescriptor* profiled_field =
         internal::ProfiledFieldForSystem(*concept, system);
     if (profiled_field != nullptr) {
-      if (HasFixedCodingSystem(profiled_field->message_type())) {
-        concept->GetReflection()->ClearField(concept, profiled_field);
-      } else if (IsMessageType<r4::core::CodingWithFixedCode>(
-                     profiled_field->message_type())) {
+      if (IsMessageType<r4::core::CodingWithFixedCode>(
+              profiled_field->message_type())) {
         return ::tensorflow::errors::InvalidArgument(
             "Cannot clear coding system: ", system, " from ",
             concept->GetDescriptor()->full_name(),
             ". It is a fixed code on that profile");
+      } else {
+        concept->GetReflection()->ClearField(concept, profiled_field);
       }
     }
   }

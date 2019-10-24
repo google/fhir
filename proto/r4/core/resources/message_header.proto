@@ -184,7 +184,21 @@ message MessageHeader {
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // ok | transient-error | fatal-error
-    ResponseTypeCode code = 5
+    message CodeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/response-code";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ResponseTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    CodeCode code = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Specific list of hints/warnings/errors

@@ -95,7 +95,7 @@ profile {
         size_restriction: OPTIONAL
       }
       code_data {
-        system: "http://hl7.org/fhir/ValueSet/metric-color"
+        system: "http://hl7.org/fhir/metric-color"
       }
     }
     field_id: "Observation.code"
@@ -169,5 +169,26 @@ profile {
       }
     }
     field_id: "Observation.code"
+  }
+}
+
+profile {
+  element_data {
+    name: "TestEncounter"
+  }
+  base_url: "http://hl7.org/fhir/StructureDefinition/Encounter"
+
+  codeable_concept_slice {
+    field_id: "Encounter.priority"
+    coding_slice {
+      element_data {
+        name: "act"
+        description: "Act Priority"
+        size_restriction: OPTIONAL
+      }
+      code_data {
+        system: "http://terminology.hl7.org/CodeSystem/v3-ActPriority"
+      }
+    }
   }
 }

@@ -65,7 +65,20 @@ message Location {
   repeated Identifier identifier = 10;
 
   // active | suspended | inactive
-  LocationStatusCode status = 11;
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/location-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    LocationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11;
 
   // The operational status of the location (typically only for a bed/room)
   Coding operational_status = 12;
@@ -82,7 +95,20 @@ message Location {
   String description = 15;
 
   // instance | kind
-  LocationModeCode mode = 16;
+  message ModeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/location-mode";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    LocationModeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ModeCode mode = 16;
 
   // Type of function performed
   repeated CodeableConcept type = 17;
@@ -142,6 +168,20 @@ message Location {
     repeated Extension modifier_extension = 3;
 
     // mon | tue | wed | thu | fri | sat | sun
+    message DaysOfWeekCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/days-of-week";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      .google.fhir.r4.core.DaysOfWeekCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
     repeated DaysOfWeekCode days_of_week = 4;
 
     // The Location is open all day

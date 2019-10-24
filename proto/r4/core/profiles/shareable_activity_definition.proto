@@ -86,7 +86,20 @@ message ShareableActivityDefinition {
   String subtitle = 15;
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 16
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // For testing purposes, not real usage
@@ -165,7 +178,20 @@ message ShareableActivityDefinition {
   repeated Canonical library = 37;
 
   // Kind of resource
-  RequestResourceTypeCode kind = 38;
+  message KindCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-resource-types";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestResourceTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  KindCode kind = 38;
 
   // What profile the resource needs to conform to
   Canonical profile = 39;
@@ -174,10 +200,36 @@ message ShareableActivityDefinition {
   CodeableConcept code = 40;
 
   // proposal | plan | order
-  RequestIntentCode intent = 41;
+  message IntentCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-intent";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestIntentCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  IntentCode intent = 41;
 
   // routine | urgent | asap | stat
-  RequestPriorityCode priority = 42;
+  message PriorityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-priority";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestPriorityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  PriorityCode priority = 42;
 
   // True if the activity should not be performed
   Boolean do_not_perform = 43;
@@ -213,7 +265,21 @@ message ShareableActivityDefinition {
     repeated Extension modifier_extension = 3;
 
     // patient | practitioner | related-person | device
-    ActionParticipantTypeCode type = 4
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-participant-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionParticipantTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // E.g. Nurse, Surgeon, Parent, etc.

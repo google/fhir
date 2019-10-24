@@ -198,8 +198,10 @@ bool CanHaveSlicing(const FieldDescriptor* field) {
              absl::StrCat(field->containing_type()->full_name(), "."), 0) == 0;
 }
 
-template <typename ExtensionLike, typename CodeableConceptLike = FHIR_DATATYPE(
-                                      ExtensionLike, codeable_concept)>
+template <typename ExtensionLike,
+          typename CodeableConceptLike = FHIR_DATATYPE(ExtensionLike,
+                                                       codeable_concept),
+          typename CodeLike = FHIR_DATATYPE(ExtensionLike, code)>
 Status CopyToProfile(const Message& source, Message* target) {
   target->Clear();
   // Handle all the raw extensions on source.  This slot extensions that have
@@ -277,6 +279,17 @@ Status CopyToProfile(const Message& source, Message* target) {
       return InvalidArgument("Encountered unexpected primitive type on field: ",
                              source_field->full_name());
     }
+    if (IsTypeOrProfileOf<CodeLike>(target_field->message_type())) {
+      FHIR_RETURN_IF_ERROR(ForEachMessageWithStatus<Message>(
+          source, source_field,
+          [&target, &target_field](const Message& source_message) {
+            return CopyCode(source_message,
+                            MutableOrAddMessage(target, target_field));
+          }));
+      continue;
+    }
+
+    // TODO:  Handle type-or-profile-of CodingLike
 
     if (IsTypeOrProfileOf<CodeableConceptLike>(target_field->message_type())) {
       FHIR_RETURN_IF_ERROR(ForEachMessageWithStatus<Message>(

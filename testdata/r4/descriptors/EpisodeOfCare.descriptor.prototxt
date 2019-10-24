@@ -100,7 +100,7 @@ field {
   number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.EpisodeOfCareStatusCode"
+  type_name: ".google.fhir.r4.core.EpisodeOfCare.StatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "planned | waitlist | active | onhold | finished | cancelled | entered-in-error"
@@ -217,6 +217,33 @@ field {
   }
 }
 nested_type {
+  name: "StatusCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.EpisodeOfCareStatusCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/episode-of-care-status"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
   name: "StatusHistory"
   field {
     name: "id"
@@ -253,7 +280,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.EpisodeOfCareStatusCode"
+    type_name: ".google.fhir.r4.core.EpisodeOfCare.StatusHistory.StatusCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "planned | waitlist | active | onhold | finished | cancelled | entered-in-error"
@@ -268,6 +295,33 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Duration the EpisodeOfCare was in the specified status"
+    }
+  }
+  nested_type {
+    name: "StatusCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r4.core.EpisodeOfCareStatusCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/episode-of-care-status"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
 }

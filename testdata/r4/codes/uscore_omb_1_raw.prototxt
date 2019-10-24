@@ -1,0 +1,10 @@
+system { value: "urn:oid:2.16.840.1.113883.6.238" }
+code { value: "2028-9" }
+id { value: "5" }
+user_selected {value: true}
+extension {
+  url { value: "foo" }
+  value { string_value { value: "bar" } }
+}
+version { value: "2" }
+display { value: "baz" }

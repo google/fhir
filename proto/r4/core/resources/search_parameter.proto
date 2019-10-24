@@ -76,7 +76,20 @@ message SearchParameter {
   Canonical derived_from = 13;
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 14
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 14
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // For testing purposes, not real usage
@@ -109,12 +122,38 @@ message SearchParameter {
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // The resource type(s) this search parameter applies to
-  repeated ResourceTypeCode base = 24
+  message BaseCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/resource-types";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ResourceTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated BaseCode base = 24
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // number | date | string | token | reference | composite | quantity | uri |
   // special
-  SearchParamTypeCode type = 25
+  message TypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/search-param-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SearchParamTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  TypeCode type = 25
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // FHIRPath expression that extracts the values
@@ -124,10 +163,36 @@ message SearchParameter {
   String xpath = 27;
 
   // normal | phonetic | nearby | distance | other
-  XPathUsageTypeCode xpath_usage = 28;
+  message XpathUsageCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/search-xpath-usage";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    XPathUsageTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  XpathUsageCode xpath_usage = 28;
 
   // Types of resource (if a resource reference)
-  repeated ResourceTypeCode target = 29;
+  message TargetCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/resource-types";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ResourceTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated TargetCode target = 29;
 
   // Allow multiple values per parameter (or)
   Boolean multiple_or = 30;
@@ -136,11 +201,37 @@ message SearchParameter {
   Boolean multiple_and = 31;
 
   // eq | ne | gt | lt | ge | le | sa | eb | ap
-  repeated SearchComparatorCode comparator = 32;
+  message ComparatorCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/search-comparator";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SearchComparatorCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated ComparatorCode comparator = 32;
 
   // missing | exact | contains | not | text | in | not-in | below | above |
   // type | identifier | ofType
-  repeated SearchModifierCodeCode modifier = 33;
+  message ModifierCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/search-modifier-code";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SearchModifierCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated ModifierCode modifier = 33;
 
   // Chained names supported
   repeated String chain = 34;

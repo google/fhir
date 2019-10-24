@@ -489,9 +489,36 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.ReferenceVersionRulesCode"
+    type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.TypeRef.VersioningCode"
     options {
       [google.fhir.proto.field_description]: "either | independent | specific"
+    }
+  }
+  nested_type {
+    name: "VersioningCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r4.core.ReferenceVersionRulesCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/reference-version-rules"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
 }
@@ -1554,7 +1581,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.ConstraintSeverityCode"
+    type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.Constraint.SeverityCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "error | warning"
@@ -1601,6 +1628,33 @@ nested_type {
       [google.fhir.proto.field_description]: "Reference to original source of constraint"
     }
   }
+  nested_type {
+    name: "SeverityCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r4.core.ConstraintSeverityCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/constraint-severity"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+    }
+  }
 }
 nested_type {
   name: "ElementDefinitionBinding"
@@ -1629,7 +1683,7 @@ nested_type {
     number: 3
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.BindingStrengthCode"
+    type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.ElementDefinitionBinding.StrengthCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "required | extensible | preferred | example"
@@ -1653,6 +1707,33 @@ nested_type {
     type_name: ".google.fhir.r4.core.Canonical"
     options {
       [google.fhir.proto.field_description]: "Source of value set"
+    }
+  }
+  nested_type {
+    name: "StrengthCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r4.core.BindingStrengthCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/binding-strength"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
 }
@@ -1694,7 +1775,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.MimeTypesCode"
+    type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.Mapping.LanguageCode"
     options {
       [google.fhir.proto.field_description]: "Computable language of mapping"
     }
@@ -1718,6 +1799,41 @@ nested_type {
     type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Comments about the mapping or its use"
+    }
+  }
+  nested_type {
+    name: "LanguageCode"
+    field {
+      number: 1
+      options {
+        [google.fhir.proto.reserved_reason]: "Field 1 reserved to allow enumeration in the future."
+      }
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Extension"
+    }
+    field {
+      name: "value"
+      number: 4
+      type: TYPE_STRING
+      options {
+        [google.fhir.proto.field_description]: "This valueset is not enumerable, and so is represented as a string."
+      }
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/mimetypes"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
 }

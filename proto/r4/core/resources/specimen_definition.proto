@@ -94,7 +94,21 @@ message SpecimenDefinition {
     CodeableConcept type = 5;
 
     // preferred | alternate
-    SpecimenContainedPreferenceCode preference = 6
+    message PreferenceCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/specimen-contained-preference";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      SpecimenContainedPreferenceCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    PreferenceCode preference = 6
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // The specimen's container

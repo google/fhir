@@ -118,7 +118,7 @@ code {
   },
   coding {
     system {
-      value: "http://hl7.org/fhir/ValueSet/metric-color"
+      value: "http://hl7.org/fhir/metric-color"
     }
     code {
       value: "red"

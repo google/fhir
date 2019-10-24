@@ -75,7 +75,20 @@ message DiagnosticReport {
   ];
 
   // registered | partial | preliminary | final +
-  DiagnosticReportStatusCode status = 12
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/diagnostic-report-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    DiagnosticReportStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 12
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Service category

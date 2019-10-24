@@ -95,14 +95,41 @@ message Device {
     String carrier_hrf = 8 [json_name = "carrierHRF"];
 
     // barcode | rfid | manual +
-    UDIEntryTypeCode entry_type = 9;
+    message EntryTypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/udi-entry-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      UDIEntryTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    EntryTypeCode entry_type = 9;
   }
   repeated UdiCarrier udi_carrier = 12
       [(.google.fhir.proto.fhir_path_constraint) =
            "hasValue() or (children().count() > id.count())"];
 
   // active | inactive | entered-in-error | unknown
-  FHIRDeviceStatusCode status = 13;
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/device-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    FHIRDeviceStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 13;
 
   // online | paused | standby | offline | not-ready | transduc-discon |
   // hw-discon | off
@@ -143,7 +170,21 @@ message Device {
 
     // udi-label-name | user-friendly-name | patient-reported-name |
     // manufacturer-name | model-name | other
-    DeviceNameTypeCode type = 5
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/device-nametype";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      DeviceNameTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated DeviceName device_name = 21

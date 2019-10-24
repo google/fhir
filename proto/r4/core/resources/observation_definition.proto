@@ -73,7 +73,20 @@ message ObservationDefinition {
 
   // Quantity | CodeableConcept | string | boolean | integer | Range | Ratio |
   // SampledData | time | dateTime | Period
-  repeated ObservationDataTypeCode permitted_data_type = 13;
+  message PermittedDataTypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/permitted-data-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ObservationDataTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated PermittedDataTypeCode permitted_data_type = 13;
 
   // Multiple results allowed
   Boolean multiple_results_allowed = 14;
@@ -123,7 +136,21 @@ message ObservationDefinition {
     repeated Extension modifier_extension = 3;
 
     // reference | critical | absolute
-    ObservationRangeCategoryCode category = 4;
+    message CategoryCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/observation-range-category";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ObservationRangeCategoryCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    CategoryCode category = 4;
 
     // The interval itself, for continuous or ordinal observations
     Range range = 5;
@@ -135,7 +162,21 @@ message ObservationDefinition {
     repeated CodeableConcept applies_to = 7;
 
     // male | female | other | unknown
-    AdministrativeGenderCode gender = 8;
+    message GenderCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/administrative-gender";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      AdministrativeGenderCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    GenderCode gender = 8;
 
     // Applicable age range, if relevant
     Range age = 9;

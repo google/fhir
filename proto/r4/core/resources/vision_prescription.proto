@@ -65,7 +65,20 @@ message VisionPrescription {
   repeated Identifier identifier = 10;
 
   // active | cancelled | draft | entered-in-error
-  FinancialResourceStatusCodesCode status = 11
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/fm-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    FinancialResourceStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Response creation date
@@ -109,7 +122,21 @@ message VisionPrescription {
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // right | left
-    VisionEyesCode eye = 5
+    message EyeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/vision-eye-codes";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      VisionEyesCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    EyeCode eye = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Power of the lens
@@ -137,7 +164,21 @@ message VisionPrescription {
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // up | down | in | out
-      VisionBaseCode base = 5
+      message BaseCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/vision-base-codes";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        VisionBaseCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      BaseCode base = 5
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
     repeated Prism prism = 9

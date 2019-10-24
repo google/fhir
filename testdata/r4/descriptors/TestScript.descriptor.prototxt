@@ -142,7 +142,7 @@ field {
   number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.PublicationStatusCode"
+  type_name: ".google.fhir.r4.core.TestScript.StatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "draft | active | retired | unknown"
@@ -337,6 +337,33 @@ field {
   options {
     [google.fhir.proto.field_description]: "A series of required clean up steps"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+  }
+}
+nested_type {
+  name: "StatusCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.PublicationStatusCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/publication-status"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
   }
 }
 nested_type {
@@ -996,7 +1023,7 @@ nested_type {
         number: 5
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.FHIRDefinedTypeCode"
+        type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Operation.ResourceCode"
         options {
           [google.fhir.proto.field_description]: "Resource type"
         }
@@ -1026,7 +1053,7 @@ nested_type {
         number: 8
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.MimeTypesCode"
+        type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Operation.AcceptCode"
         options {
           [google.fhir.proto.field_description]: "Mime type to accept in the payload of the response, with charset etc."
         }
@@ -1036,7 +1063,7 @@ nested_type {
         number: 9
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.MimeTypesCode"
+        type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Operation.ContentTypeCode"
         options {
           [google.fhir.proto.field_description]: "Mime type of the request payload contents, with charset etc."
         }
@@ -1067,7 +1094,7 @@ nested_type {
         number: 12
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.TestScriptRequestMethodCodeCode"
+        type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Operation.MethodCode"
         options {
           [google.fhir.proto.field_description]: "delete | get | options | patch | post | put | head"
         }
@@ -1151,6 +1178,1809 @@ nested_type {
         type_name: ".google.fhir.r4.core.String"
         options {
           [google.fhir.proto.field_description]: "Request URL"
+        }
+      }
+      nested_type {
+        name: "ResourceCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Operation.ResourceCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        enum_type {
+          name: "Value"
+          value {
+            name: "INVALID_UNINITIALIZED"
+            number: 0
+          }
+          value {
+            name: "ADDRESS"
+            number: 1
+            options {
+              [google.fhir.proto.fhir_original_code]: "Address"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "AGE"
+            number: 2
+            options {
+              [google.fhir.proto.fhir_original_code]: "Age"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "ANNOTATION"
+            number: 3
+            options {
+              [google.fhir.proto.fhir_original_code]: "Annotation"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "ATTACHMENT"
+            number: 4
+            options {
+              [google.fhir.proto.fhir_original_code]: "Attachment"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "BACKBONE_ELEMENT"
+            number: 5
+            options {
+              [google.fhir.proto.fhir_original_code]: "BackboneElement"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "CODEABLE_CONCEPT"
+            number: 6
+            options {
+              [google.fhir.proto.fhir_original_code]: "CodeableConcept"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "CODING"
+            number: 7
+            options {
+              [google.fhir.proto.fhir_original_code]: "Coding"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "CONTACT_DETAIL"
+            number: 8
+            options {
+              [google.fhir.proto.fhir_original_code]: "ContactDetail"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "CONTACT_POINT"
+            number: 9
+            options {
+              [google.fhir.proto.fhir_original_code]: "ContactPoint"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "CONTRIBUTOR"
+            number: 10
+            options {
+              [google.fhir.proto.fhir_original_code]: "Contributor"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "COUNT"
+            number: 11
+            options {
+              [google.fhir.proto.fhir_original_code]: "Count"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "DATA_REQUIREMENT"
+            number: 12
+            options {
+              [google.fhir.proto.fhir_original_code]: "DataRequirement"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "DISTANCE"
+            number: 13
+            options {
+              [google.fhir.proto.fhir_original_code]: "Distance"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "DOSAGE"
+            number: 14
+            options {
+              [google.fhir.proto.fhir_original_code]: "Dosage"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "DURATION"
+            number: 15
+            options {
+              [google.fhir.proto.fhir_original_code]: "Duration"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "ELEMENT"
+            number: 16
+            options {
+              [google.fhir.proto.fhir_original_code]: "Element"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "ELEMENT_DEFINITION"
+            number: 17
+            options {
+              [google.fhir.proto.fhir_original_code]: "ElementDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "EXPRESSION"
+            number: 18
+            options {
+              [google.fhir.proto.fhir_original_code]: "Expression"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "EXTENSION"
+            number: 19
+            options {
+              [google.fhir.proto.fhir_original_code]: "Extension"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "HUMAN_NAME"
+            number: 20
+            options {
+              [google.fhir.proto.fhir_original_code]: "HumanName"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "IDENTIFIER"
+            number: 21
+            options {
+              [google.fhir.proto.fhir_original_code]: "Identifier"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "MARKETING_STATUS"
+            number: 22
+            options {
+              [google.fhir.proto.fhir_original_code]: "MarketingStatus"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "META"
+            number: 23
+            options {
+              [google.fhir.proto.fhir_original_code]: "Meta"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "MONEY"
+            number: 24
+            options {
+              [google.fhir.proto.fhir_original_code]: "Money"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "MONEY_QUANTITY"
+            number: 25
+            options {
+              [google.fhir.proto.fhir_original_code]: "MoneyQuantity"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "NARRATIVE"
+            number: 26
+            options {
+              [google.fhir.proto.fhir_original_code]: "Narrative"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "PARAMETER_DEFINITION"
+            number: 27
+            options {
+              [google.fhir.proto.fhir_original_code]: "ParameterDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "PERIOD"
+            number: 28
+            options {
+              [google.fhir.proto.fhir_original_code]: "Period"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "POPULATION"
+            number: 29
+            options {
+              [google.fhir.proto.fhir_original_code]: "Population"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "PROD_CHARACTERISTIC"
+            number: 30
+            options {
+              [google.fhir.proto.fhir_original_code]: "ProdCharacteristic"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "PRODUCT_SHELF_LIFE"
+            number: 31
+            options {
+              [google.fhir.proto.fhir_original_code]: "ProductShelfLife"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "QUANTITY"
+            number: 32
+            options {
+              [google.fhir.proto.fhir_original_code]: "Quantity"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "RANGE"
+            number: 33
+            options {
+              [google.fhir.proto.fhir_original_code]: "Range"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "RATIO"
+            number: 34
+            options {
+              [google.fhir.proto.fhir_original_code]: "Ratio"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "REFERENCE"
+            number: 35
+            options {
+              [google.fhir.proto.fhir_original_code]: "Reference"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "RELATED_ARTIFACT"
+            number: 36
+            options {
+              [google.fhir.proto.fhir_original_code]: "RelatedArtifact"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "SAMPLED_DATA"
+            number: 37
+            options {
+              [google.fhir.proto.fhir_original_code]: "SampledData"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "SIGNATURE"
+            number: 38
+            options {
+              [google.fhir.proto.fhir_original_code]: "Signature"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "SIMPLE_QUANTITY"
+            number: 39
+            options {
+              [google.fhir.proto.fhir_original_code]: "SimpleQuantity"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE_AMOUNT"
+            number: 40
+            options {
+              [google.fhir.proto.fhir_original_code]: "SubstanceAmount"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "TIMING"
+            number: 41
+            options {
+              [google.fhir.proto.fhir_original_code]: "Timing"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "TRIGGER_DEFINITION"
+            number: 42
+            options {
+              [google.fhir.proto.fhir_original_code]: "TriggerDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "USAGE_CONTEXT"
+            number: 43
+            options {
+              [google.fhir.proto.fhir_original_code]: "UsageContext"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "BASE64_BINARY"
+            number: 44
+            options {
+              [google.fhir.proto.fhir_original_code]: "base64Binary"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "BOOLEAN"
+            number: 45
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "CANONICAL"
+            number: 46
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "CODE"
+            number: 47
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "DATE"
+            number: 48
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "DATE_TIME"
+            number: 49
+            options {
+              [google.fhir.proto.fhir_original_code]: "dateTime"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "DECIMAL"
+            number: 50
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "ID"
+            number: 51
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "INSTANT"
+            number: 52
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "INTEGER"
+            number: 53
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "MARKDOWN"
+            number: 54
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "OID"
+            number: 55
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "POSITIVE_INT"
+            number: 56
+            options {
+              [google.fhir.proto.fhir_original_code]: "positiveInt"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "STRING"
+            number: 57
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "TIME"
+            number: 58
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "UNSIGNED_INT"
+            number: 59
+            options {
+              [google.fhir.proto.fhir_original_code]: "unsignedInt"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "URI"
+            number: 60
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "URL"
+            number: 61
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "UUID"
+            number: 62
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "XHTML"
+            number: 63
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "ACCOUNT"
+            number: 64
+            options {
+              [google.fhir.proto.fhir_original_code]: "Account"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ACTIVITY_DEFINITION"
+            number: 65
+            options {
+              [google.fhir.proto.fhir_original_code]: "ActivityDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ADVERSE_EVENT"
+            number: 66
+            options {
+              [google.fhir.proto.fhir_original_code]: "AdverseEvent"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ALLERGY_INTOLERANCE"
+            number: 67
+            options {
+              [google.fhir.proto.fhir_original_code]: "AllergyIntolerance"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "APPOINTMENT"
+            number: 68
+            options {
+              [google.fhir.proto.fhir_original_code]: "Appointment"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "APPOINTMENT_RESPONSE"
+            number: 69
+            options {
+              [google.fhir.proto.fhir_original_code]: "AppointmentResponse"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "AUDIT_EVENT"
+            number: 70
+            options {
+              [google.fhir.proto.fhir_original_code]: "AuditEvent"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "BASIC"
+            number: 71
+            options {
+              [google.fhir.proto.fhir_original_code]: "Basic"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "BINARY"
+            number: 72
+            options {
+              [google.fhir.proto.fhir_original_code]: "Binary"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "BIOLOGICALLY_DERIVED_PRODUCT"
+            number: 73
+            options {
+              [google.fhir.proto.fhir_original_code]: "BiologicallyDerivedProduct"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "BODY_STRUCTURE"
+            number: 74
+            options {
+              [google.fhir.proto.fhir_original_code]: "BodyStructure"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "BUNDLE"
+            number: 75
+            options {
+              [google.fhir.proto.fhir_original_code]: "Bundle"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CAPABILITY_STATEMENT"
+            number: 76
+            options {
+              [google.fhir.proto.fhir_original_code]: "CapabilityStatement"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CARE_PLAN"
+            number: 77
+            options {
+              [google.fhir.proto.fhir_original_code]: "CarePlan"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CARE_TEAM"
+            number: 78
+            options {
+              [google.fhir.proto.fhir_original_code]: "CareTeam"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CATALOG_ENTRY"
+            number: 79
+            options {
+              [google.fhir.proto.fhir_original_code]: "CatalogEntry"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CHARGE_ITEM"
+            number: 80
+            options {
+              [google.fhir.proto.fhir_original_code]: "ChargeItem"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CHARGE_ITEM_DEFINITION"
+            number: 81
+            options {
+              [google.fhir.proto.fhir_original_code]: "ChargeItemDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CLAIM"
+            number: 82
+            options {
+              [google.fhir.proto.fhir_original_code]: "Claim"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CLAIM_RESPONSE"
+            number: 83
+            options {
+              [google.fhir.proto.fhir_original_code]: "ClaimResponse"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CLINICAL_IMPRESSION"
+            number: 84
+            options {
+              [google.fhir.proto.fhir_original_code]: "ClinicalImpression"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CODE_SYSTEM"
+            number: 85
+            options {
+              [google.fhir.proto.fhir_original_code]: "CodeSystem"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "COMMUNICATION"
+            number: 86
+            options {
+              [google.fhir.proto.fhir_original_code]: "Communication"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "COMMUNICATION_REQUEST"
+            number: 87
+            options {
+              [google.fhir.proto.fhir_original_code]: "CommunicationRequest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "COMPARTMENT_DEFINITION"
+            number: 88
+            options {
+              [google.fhir.proto.fhir_original_code]: "CompartmentDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "COMPOSITION"
+            number: 89
+            options {
+              [google.fhir.proto.fhir_original_code]: "Composition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CONCEPT_MAP"
+            number: 90
+            options {
+              [google.fhir.proto.fhir_original_code]: "ConceptMap"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CONDITION"
+            number: 91
+            options {
+              [google.fhir.proto.fhir_original_code]: "Condition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CONSENT"
+            number: 92
+            options {
+              [google.fhir.proto.fhir_original_code]: "Consent"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CONTRACT"
+            number: 93
+            options {
+              [google.fhir.proto.fhir_original_code]: "Contract"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "COVERAGE"
+            number: 94
+            options {
+              [google.fhir.proto.fhir_original_code]: "Coverage"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "COVERAGE_ELIGIBILITY_REQUEST"
+            number: 95
+            options {
+              [google.fhir.proto.fhir_original_code]: "CoverageEligibilityRequest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "COVERAGE_ELIGIBILITY_RESPONSE"
+            number: 96
+            options {
+              [google.fhir.proto.fhir_original_code]: "CoverageEligibilityResponse"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DETECTED_ISSUE"
+            number: 97
+            options {
+              [google.fhir.proto.fhir_original_code]: "DetectedIssue"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DEVICE"
+            number: 98
+            options {
+              [google.fhir.proto.fhir_original_code]: "Device"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DEVICE_DEFINITION"
+            number: 99
+            options {
+              [google.fhir.proto.fhir_original_code]: "DeviceDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DEVICE_METRIC"
+            number: 100
+            options {
+              [google.fhir.proto.fhir_original_code]: "DeviceMetric"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DEVICE_REQUEST"
+            number: 101
+            options {
+              [google.fhir.proto.fhir_original_code]: "DeviceRequest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DEVICE_USE_STATEMENT"
+            number: 102
+            options {
+              [google.fhir.proto.fhir_original_code]: "DeviceUseStatement"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DIAGNOSTIC_REPORT"
+            number: 103
+            options {
+              [google.fhir.proto.fhir_original_code]: "DiagnosticReport"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DOCUMENT_MANIFEST"
+            number: 104
+            options {
+              [google.fhir.proto.fhir_original_code]: "DocumentManifest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DOCUMENT_REFERENCE"
+            number: 105
+            options {
+              [google.fhir.proto.fhir_original_code]: "DocumentReference"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DOMAIN_RESOURCE"
+            number: 106
+            options {
+              [google.fhir.proto.fhir_original_code]: "DomainResource"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "EFFECT_EVIDENCE_SYNTHESIS"
+            number: 107
+            options {
+              [google.fhir.proto.fhir_original_code]: "EffectEvidenceSynthesis"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ENCOUNTER"
+            number: 108
+            options {
+              [google.fhir.proto.fhir_original_code]: "Encounter"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ENDPOINT"
+            number: 109
+            options {
+              [google.fhir.proto.fhir_original_code]: "Endpoint"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ENROLLMENT_REQUEST"
+            number: 110
+            options {
+              [google.fhir.proto.fhir_original_code]: "EnrollmentRequest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ENROLLMENT_RESPONSE"
+            number: 111
+            options {
+              [google.fhir.proto.fhir_original_code]: "EnrollmentResponse"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "EPISODE_OF_CARE"
+            number: 112
+            options {
+              [google.fhir.proto.fhir_original_code]: "EpisodeOfCare"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "EVENT_DEFINITION"
+            number: 113
+            options {
+              [google.fhir.proto.fhir_original_code]: "EventDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "EVIDENCE"
+            number: 114
+            options {
+              [google.fhir.proto.fhir_original_code]: "Evidence"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "EVIDENCE_VARIABLE"
+            number: 115
+            options {
+              [google.fhir.proto.fhir_original_code]: "EvidenceVariable"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "EXAMPLE_SCENARIO"
+            number: 116
+            options {
+              [google.fhir.proto.fhir_original_code]: "ExampleScenario"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "EXPLANATION_OF_BENEFIT"
+            number: 117
+            options {
+              [google.fhir.proto.fhir_original_code]: "ExplanationOfBenefit"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "FAMILY_MEMBER_HISTORY"
+            number: 118
+            options {
+              [google.fhir.proto.fhir_original_code]: "FamilyMemberHistory"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "FLAG"
+            number: 119
+            options {
+              [google.fhir.proto.fhir_original_code]: "Flag"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "GOAL"
+            number: 120
+            options {
+              [google.fhir.proto.fhir_original_code]: "Goal"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "GRAPH_DEFINITION"
+            number: 121
+            options {
+              [google.fhir.proto.fhir_original_code]: "GraphDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "GROUP"
+            number: 122
+            options {
+              [google.fhir.proto.fhir_original_code]: "Group"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "GUIDANCE_RESPONSE"
+            number: 123
+            options {
+              [google.fhir.proto.fhir_original_code]: "GuidanceResponse"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "HEALTHCARE_SERVICE"
+            number: 124
+            options {
+              [google.fhir.proto.fhir_original_code]: "HealthcareService"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "IMAGING_STUDY"
+            number: 125
+            options {
+              [google.fhir.proto.fhir_original_code]: "ImagingStudy"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "IMMUNIZATION"
+            number: 126
+            options {
+              [google.fhir.proto.fhir_original_code]: "Immunization"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "IMMUNIZATION_EVALUATION"
+            number: 127
+            options {
+              [google.fhir.proto.fhir_original_code]: "ImmunizationEvaluation"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "IMMUNIZATION_RECOMMENDATION"
+            number: 128
+            options {
+              [google.fhir.proto.fhir_original_code]: "ImmunizationRecommendation"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "IMPLEMENTATION_GUIDE"
+            number: 129
+            options {
+              [google.fhir.proto.fhir_original_code]: "ImplementationGuide"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "INSURANCE_PLAN"
+            number: 130
+            options {
+              [google.fhir.proto.fhir_original_code]: "InsurancePlan"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "INVOICE"
+            number: 131
+            options {
+              [google.fhir.proto.fhir_original_code]: "Invoice"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "LIBRARY"
+            number: 132
+            options {
+              [google.fhir.proto.fhir_original_code]: "Library"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "LINKAGE"
+            number: 133
+            options {
+              [google.fhir.proto.fhir_original_code]: "Linkage"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "LIST"
+            number: 134
+            options {
+              [google.fhir.proto.fhir_original_code]: "List"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "LOCATION"
+            number: 135
+            options {
+              [google.fhir.proto.fhir_original_code]: "Location"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEASURE"
+            number: 136
+            options {
+              [google.fhir.proto.fhir_original_code]: "Measure"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEASURE_REPORT"
+            number: 137
+            options {
+              [google.fhir.proto.fhir_original_code]: "MeasureReport"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDIA"
+            number: 138
+            options {
+              [google.fhir.proto.fhir_original_code]: "Media"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICATION"
+            number: 139
+            options {
+              [google.fhir.proto.fhir_original_code]: "Medication"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICATION_ADMINISTRATION"
+            number: 140
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicationAdministration"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICATION_DISPENSE"
+            number: 141
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicationDispense"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICATION_KNOWLEDGE"
+            number: 142
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicationKnowledge"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICATION_REQUEST"
+            number: 143
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicationRequest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICATION_STATEMENT"
+            number: 144
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicationStatement"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT"
+            number: 145
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProduct"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_AUTHORIZATION"
+            number: 146
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductAuthorization"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_CONTRAINDICATION"
+            number: 147
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductContraindication"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_INDICATION"
+            number: 148
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductIndication"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_INGREDIENT"
+            number: 149
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductIngredient"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_INTERACTION"
+            number: 150
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductInteraction"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_MANUFACTURED"
+            number: 151
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductManufactured"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_PACKAGED"
+            number: 152
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductPackaged"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_PHARMACEUTICAL"
+            number: 153
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductPharmaceutical"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_UNDESIRABLE_EFFECT"
+            number: 154
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductUndesirableEffect"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MESSAGE_DEFINITION"
+            number: 155
+            options {
+              [google.fhir.proto.fhir_original_code]: "MessageDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MESSAGE_HEADER"
+            number: 156
+            options {
+              [google.fhir.proto.fhir_original_code]: "MessageHeader"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MOLECULAR_SEQUENCE"
+            number: 157
+            options {
+              [google.fhir.proto.fhir_original_code]: "MolecularSequence"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "NAMING_SYSTEM"
+            number: 158
+            options {
+              [google.fhir.proto.fhir_original_code]: "NamingSystem"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "NUTRITION_ORDER"
+            number: 159
+            options {
+              [google.fhir.proto.fhir_original_code]: "NutritionOrder"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "OBSERVATION"
+            number: 160
+            options {
+              [google.fhir.proto.fhir_original_code]: "Observation"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "OBSERVATION_DEFINITION"
+            number: 161
+            options {
+              [google.fhir.proto.fhir_original_code]: "ObservationDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "OPERATION_DEFINITION"
+            number: 162
+            options {
+              [google.fhir.proto.fhir_original_code]: "OperationDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "OPERATION_OUTCOME"
+            number: 163
+            options {
+              [google.fhir.proto.fhir_original_code]: "OperationOutcome"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ORGANIZATION"
+            number: 164
+            options {
+              [google.fhir.proto.fhir_original_code]: "Organization"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ORGANIZATION_AFFILIATION"
+            number: 165
+            options {
+              [google.fhir.proto.fhir_original_code]: "OrganizationAffiliation"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PARAMETERS"
+            number: 166
+            options {
+              [google.fhir.proto.fhir_original_code]: "Parameters"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PATIENT"
+            number: 167
+            options {
+              [google.fhir.proto.fhir_original_code]: "Patient"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PAYMENT_NOTICE"
+            number: 168
+            options {
+              [google.fhir.proto.fhir_original_code]: "PaymentNotice"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PAYMENT_RECONCILIATION"
+            number: 169
+            options {
+              [google.fhir.proto.fhir_original_code]: "PaymentReconciliation"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PERSON"
+            number: 170
+            options {
+              [google.fhir.proto.fhir_original_code]: "Person"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PLAN_DEFINITION"
+            number: 171
+            options {
+              [google.fhir.proto.fhir_original_code]: "PlanDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PRACTITIONER"
+            number: 172
+            options {
+              [google.fhir.proto.fhir_original_code]: "Practitioner"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PRACTITIONER_ROLE"
+            number: 173
+            options {
+              [google.fhir.proto.fhir_original_code]: "PractitionerRole"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PROCEDURE"
+            number: 174
+            options {
+              [google.fhir.proto.fhir_original_code]: "Procedure"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PROVENANCE"
+            number: 175
+            options {
+              [google.fhir.proto.fhir_original_code]: "Provenance"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "QUESTIONNAIRE"
+            number: 176
+            options {
+              [google.fhir.proto.fhir_original_code]: "Questionnaire"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "QUESTIONNAIRE_RESPONSE"
+            number: 177
+            options {
+              [google.fhir.proto.fhir_original_code]: "QuestionnaireResponse"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RELATED_PERSON"
+            number: 178
+            options {
+              [google.fhir.proto.fhir_original_code]: "RelatedPerson"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "REQUEST_GROUP"
+            number: 179
+            options {
+              [google.fhir.proto.fhir_original_code]: "RequestGroup"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RESEARCH_DEFINITION"
+            number: 180
+            options {
+              [google.fhir.proto.fhir_original_code]: "ResearchDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RESEARCH_ELEMENT_DEFINITION"
+            number: 181
+            options {
+              [google.fhir.proto.fhir_original_code]: "ResearchElementDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RESEARCH_STUDY"
+            number: 182
+            options {
+              [google.fhir.proto.fhir_original_code]: "ResearchStudy"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RESEARCH_SUBJECT"
+            number: 183
+            options {
+              [google.fhir.proto.fhir_original_code]: "ResearchSubject"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RESOURCE"
+            number: 184
+            options {
+              [google.fhir.proto.fhir_original_code]: "Resource"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RISK_ASSESSMENT"
+            number: 185
+            options {
+              [google.fhir.proto.fhir_original_code]: "RiskAssessment"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RISK_EVIDENCE_SYNTHESIS"
+            number: 186
+            options {
+              [google.fhir.proto.fhir_original_code]: "RiskEvidenceSynthesis"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SCHEDULE"
+            number: 187
+            options {
+              [google.fhir.proto.fhir_original_code]: "Schedule"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SEARCH_PARAMETER"
+            number: 188
+            options {
+              [google.fhir.proto.fhir_original_code]: "SearchParameter"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SERVICE_REQUEST"
+            number: 189
+            options {
+              [google.fhir.proto.fhir_original_code]: "ServiceRequest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SLOT"
+            number: 190
+            options {
+              [google.fhir.proto.fhir_original_code]: "Slot"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SPECIMEN"
+            number: 191
+            options {
+              [google.fhir.proto.fhir_original_code]: "Specimen"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SPECIMEN_DEFINITION"
+            number: 192
+            options {
+              [google.fhir.proto.fhir_original_code]: "SpecimenDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "STRUCTURE_DEFINITION"
+            number: 193
+            options {
+              [google.fhir.proto.fhir_original_code]: "StructureDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "STRUCTURE_MAP"
+            number: 194
+            options {
+              [google.fhir.proto.fhir_original_code]: "StructureMap"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSCRIPTION"
+            number: 195
+            options {
+              [google.fhir.proto.fhir_original_code]: "Subscription"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE"
+            number: 196
+            options {
+              [google.fhir.proto.fhir_original_code]: "Substance"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE_NUCLEIC_ACID"
+            number: 197
+            options {
+              [google.fhir.proto.fhir_original_code]: "SubstanceNucleicAcid"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE_POLYMER"
+            number: 198
+            options {
+              [google.fhir.proto.fhir_original_code]: "SubstancePolymer"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE_PROTEIN"
+            number: 199
+            options {
+              [google.fhir.proto.fhir_original_code]: "SubstanceProtein"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE_REFERENCE_INFORMATION"
+            number: 200
+            options {
+              [google.fhir.proto.fhir_original_code]: "SubstanceReferenceInformation"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE_SOURCE_MATERIAL"
+            number: 201
+            options {
+              [google.fhir.proto.fhir_original_code]: "SubstanceSourceMaterial"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE_SPECIFICATION"
+            number: 202
+            options {
+              [google.fhir.proto.fhir_original_code]: "SubstanceSpecification"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUPPLY_DELIVERY"
+            number: 203
+            options {
+              [google.fhir.proto.fhir_original_code]: "SupplyDelivery"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUPPLY_REQUEST"
+            number: 204
+            options {
+              [google.fhir.proto.fhir_original_code]: "SupplyRequest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "TASK"
+            number: 205
+            options {
+              [google.fhir.proto.fhir_original_code]: "Task"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "TERMINOLOGY_CAPABILITIES"
+            number: 206
+            options {
+              [google.fhir.proto.fhir_original_code]: "TerminologyCapabilities"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "TEST_REPORT"
+            number: 207
+            options {
+              [google.fhir.proto.fhir_original_code]: "TestReport"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "TEST_SCRIPT"
+            number: 208
+            options {
+              [google.fhir.proto.fhir_original_code]: "TestScript"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "VALUE_SET"
+            number: 209
+            options {
+              [google.fhir.proto.fhir_original_code]: "ValueSet"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "VERIFICATION_RESULT"
+            number: 210
+            options {
+              [google.fhir.proto.fhir_original_code]: "VerificationResult"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "VISION_PRESCRIPTION"
+            number: 211
+            options {
+              [google.fhir.proto.fhir_original_code]: "VisionPrescription"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/defined-types"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+        }
+      }
+      nested_type {
+        name: "AcceptCode"
+        field {
+          number: 1
+          options {
+            [google.fhir.proto.reserved_reason]: "Field 1 reserved to allow enumeration in the future."
+          }
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        field {
+          name: "value"
+          number: 4
+          type: TYPE_STRING
+          options {
+            [google.fhir.proto.field_description]: "This valueset is not enumerable, and so is represented as a string."
+          }
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/mimetypes"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+        }
+      }
+      nested_type {
+        name: "ContentTypeCode"
+        field {
+          number: 1
+          options {
+            [google.fhir.proto.reserved_reason]: "Field 1 reserved to allow enumeration in the future."
+          }
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        field {
+          name: "value"
+          number: 4
+          type: TYPE_STRING
+          options {
+            [google.fhir.proto.field_description]: "This valueset is not enumerable, and so is represented as a string."
+          }
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/mimetypes"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+        }
+      }
+      nested_type {
+        name: "MethodCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.TestScriptRequestMethodCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/http-operations"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
         }
       }
       nested_type {
@@ -1266,7 +3096,7 @@ nested_type {
         number: 6
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.AssertionDirectionTypeCode"
+        type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Assert.DirectionCode"
         options {
           [google.fhir.proto.field_description]: "response | request"
         }
@@ -1306,7 +3136,7 @@ nested_type {
         number: 10
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.MimeTypesCode"
+        type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Assert.ContentTypeCode"
         options {
           [google.fhir.proto.field_description]: "Mime type to compare against the \'Content-Type\' header"
         }
@@ -1356,7 +3186,7 @@ nested_type {
         number: 15
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.AssertionOperatorTypeCode"
+        type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Assert.OperatorCode"
         options {
           [google.fhir.proto.field_description]: "equals | notEquals | in | notIn | greaterThan | lessThan | empty | notEmpty | contains | notContains | eval"
         }
@@ -1376,7 +3206,7 @@ nested_type {
         number: 17
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.TestScriptRequestMethodCodeCode"
+        type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Assert.RequestMethodCode"
         options {
           [google.fhir.proto.field_description]: "delete | get | options | patch | post | put | head"
         }
@@ -1397,7 +3227,7 @@ nested_type {
         number: 19
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.FHIRDefinedTypeCode"
+        type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Assert.ResourceCode"
         options {
           [google.fhir.proto.field_description]: "Resource type"
         }
@@ -1407,7 +3237,7 @@ nested_type {
         number: 20
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.AssertionResponseTypesCode"
+        type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Assert.ResponseCode"
         options {
           [google.fhir.proto.field_description]: "okay | created | noContent | notModified | bad | forbidden | notFound | methodNotAllowed | conflict | gone | preconditionFailed | unprocessable"
         }
@@ -1461,6 +3291,1855 @@ nested_type {
         options {
           [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
           [google.fhir.proto.field_description]: "Will this assert produce a warning only on error?"
+        }
+      }
+      nested_type {
+        name: "DirectionCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.AssertionDirectionTypeCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/assert-direction-codes"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+        }
+      }
+      nested_type {
+        name: "ContentTypeCode"
+        field {
+          number: 1
+          options {
+            [google.fhir.proto.reserved_reason]: "Field 1 reserved to allow enumeration in the future."
+          }
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        field {
+          name: "value"
+          number: 4
+          type: TYPE_STRING
+          options {
+            [google.fhir.proto.field_description]: "This valueset is not enumerable, and so is represented as a string."
+          }
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/mimetypes"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+        }
+      }
+      nested_type {
+        name: "OperatorCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.AssertionOperatorTypeCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/assert-operator-codes"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+        }
+      }
+      nested_type {
+        name: "RequestMethodCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.TestScriptRequestMethodCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/http-operations"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+        }
+      }
+      nested_type {
+        name: "ResourceCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Assert.ResourceCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        enum_type {
+          name: "Value"
+          value {
+            name: "INVALID_UNINITIALIZED"
+            number: 0
+          }
+          value {
+            name: "ADDRESS"
+            number: 1
+            options {
+              [google.fhir.proto.fhir_original_code]: "Address"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "AGE"
+            number: 2
+            options {
+              [google.fhir.proto.fhir_original_code]: "Age"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "ANNOTATION"
+            number: 3
+            options {
+              [google.fhir.proto.fhir_original_code]: "Annotation"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "ATTACHMENT"
+            number: 4
+            options {
+              [google.fhir.proto.fhir_original_code]: "Attachment"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "BACKBONE_ELEMENT"
+            number: 5
+            options {
+              [google.fhir.proto.fhir_original_code]: "BackboneElement"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "CODEABLE_CONCEPT"
+            number: 6
+            options {
+              [google.fhir.proto.fhir_original_code]: "CodeableConcept"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "CODING"
+            number: 7
+            options {
+              [google.fhir.proto.fhir_original_code]: "Coding"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "CONTACT_DETAIL"
+            number: 8
+            options {
+              [google.fhir.proto.fhir_original_code]: "ContactDetail"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "CONTACT_POINT"
+            number: 9
+            options {
+              [google.fhir.proto.fhir_original_code]: "ContactPoint"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "CONTRIBUTOR"
+            number: 10
+            options {
+              [google.fhir.proto.fhir_original_code]: "Contributor"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "COUNT"
+            number: 11
+            options {
+              [google.fhir.proto.fhir_original_code]: "Count"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "DATA_REQUIREMENT"
+            number: 12
+            options {
+              [google.fhir.proto.fhir_original_code]: "DataRequirement"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "DISTANCE"
+            number: 13
+            options {
+              [google.fhir.proto.fhir_original_code]: "Distance"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "DOSAGE"
+            number: 14
+            options {
+              [google.fhir.proto.fhir_original_code]: "Dosage"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "DURATION"
+            number: 15
+            options {
+              [google.fhir.proto.fhir_original_code]: "Duration"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "ELEMENT"
+            number: 16
+            options {
+              [google.fhir.proto.fhir_original_code]: "Element"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "ELEMENT_DEFINITION"
+            number: 17
+            options {
+              [google.fhir.proto.fhir_original_code]: "ElementDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "EXPRESSION"
+            number: 18
+            options {
+              [google.fhir.proto.fhir_original_code]: "Expression"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "EXTENSION"
+            number: 19
+            options {
+              [google.fhir.proto.fhir_original_code]: "Extension"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "HUMAN_NAME"
+            number: 20
+            options {
+              [google.fhir.proto.fhir_original_code]: "HumanName"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "IDENTIFIER"
+            number: 21
+            options {
+              [google.fhir.proto.fhir_original_code]: "Identifier"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "MARKETING_STATUS"
+            number: 22
+            options {
+              [google.fhir.proto.fhir_original_code]: "MarketingStatus"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "META"
+            number: 23
+            options {
+              [google.fhir.proto.fhir_original_code]: "Meta"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "MONEY"
+            number: 24
+            options {
+              [google.fhir.proto.fhir_original_code]: "Money"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "MONEY_QUANTITY"
+            number: 25
+            options {
+              [google.fhir.proto.fhir_original_code]: "MoneyQuantity"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "NARRATIVE"
+            number: 26
+            options {
+              [google.fhir.proto.fhir_original_code]: "Narrative"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "PARAMETER_DEFINITION"
+            number: 27
+            options {
+              [google.fhir.proto.fhir_original_code]: "ParameterDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "PERIOD"
+            number: 28
+            options {
+              [google.fhir.proto.fhir_original_code]: "Period"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "POPULATION"
+            number: 29
+            options {
+              [google.fhir.proto.fhir_original_code]: "Population"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "PROD_CHARACTERISTIC"
+            number: 30
+            options {
+              [google.fhir.proto.fhir_original_code]: "ProdCharacteristic"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "PRODUCT_SHELF_LIFE"
+            number: 31
+            options {
+              [google.fhir.proto.fhir_original_code]: "ProductShelfLife"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "QUANTITY"
+            number: 32
+            options {
+              [google.fhir.proto.fhir_original_code]: "Quantity"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "RANGE"
+            number: 33
+            options {
+              [google.fhir.proto.fhir_original_code]: "Range"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "RATIO"
+            number: 34
+            options {
+              [google.fhir.proto.fhir_original_code]: "Ratio"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "REFERENCE"
+            number: 35
+            options {
+              [google.fhir.proto.fhir_original_code]: "Reference"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "RELATED_ARTIFACT"
+            number: 36
+            options {
+              [google.fhir.proto.fhir_original_code]: "RelatedArtifact"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "SAMPLED_DATA"
+            number: 37
+            options {
+              [google.fhir.proto.fhir_original_code]: "SampledData"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "SIGNATURE"
+            number: 38
+            options {
+              [google.fhir.proto.fhir_original_code]: "Signature"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "SIMPLE_QUANTITY"
+            number: 39
+            options {
+              [google.fhir.proto.fhir_original_code]: "SimpleQuantity"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE_AMOUNT"
+            number: 40
+            options {
+              [google.fhir.proto.fhir_original_code]: "SubstanceAmount"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "TIMING"
+            number: 41
+            options {
+              [google.fhir.proto.fhir_original_code]: "Timing"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "TRIGGER_DEFINITION"
+            number: 42
+            options {
+              [google.fhir.proto.fhir_original_code]: "TriggerDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "USAGE_CONTEXT"
+            number: 43
+            options {
+              [google.fhir.proto.fhir_original_code]: "UsageContext"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "BASE64_BINARY"
+            number: 44
+            options {
+              [google.fhir.proto.fhir_original_code]: "base64Binary"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "BOOLEAN"
+            number: 45
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "CANONICAL"
+            number: 46
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "CODE"
+            number: 47
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "DATE"
+            number: 48
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "DATE_TIME"
+            number: 49
+            options {
+              [google.fhir.proto.fhir_original_code]: "dateTime"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "DECIMAL"
+            number: 50
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "ID"
+            number: 51
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "INSTANT"
+            number: 52
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "INTEGER"
+            number: 53
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "MARKDOWN"
+            number: 54
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "OID"
+            number: 55
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "POSITIVE_INT"
+            number: 56
+            options {
+              [google.fhir.proto.fhir_original_code]: "positiveInt"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "STRING"
+            number: 57
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "TIME"
+            number: 58
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "UNSIGNED_INT"
+            number: 59
+            options {
+              [google.fhir.proto.fhir_original_code]: "unsignedInt"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "URI"
+            number: 60
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "URL"
+            number: 61
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "UUID"
+            number: 62
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "XHTML"
+            number: 63
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/data-types"
+            }
+          }
+          value {
+            name: "ACCOUNT"
+            number: 64
+            options {
+              [google.fhir.proto.fhir_original_code]: "Account"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ACTIVITY_DEFINITION"
+            number: 65
+            options {
+              [google.fhir.proto.fhir_original_code]: "ActivityDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ADVERSE_EVENT"
+            number: 66
+            options {
+              [google.fhir.proto.fhir_original_code]: "AdverseEvent"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ALLERGY_INTOLERANCE"
+            number: 67
+            options {
+              [google.fhir.proto.fhir_original_code]: "AllergyIntolerance"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "APPOINTMENT"
+            number: 68
+            options {
+              [google.fhir.proto.fhir_original_code]: "Appointment"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "APPOINTMENT_RESPONSE"
+            number: 69
+            options {
+              [google.fhir.proto.fhir_original_code]: "AppointmentResponse"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "AUDIT_EVENT"
+            number: 70
+            options {
+              [google.fhir.proto.fhir_original_code]: "AuditEvent"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "BASIC"
+            number: 71
+            options {
+              [google.fhir.proto.fhir_original_code]: "Basic"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "BINARY"
+            number: 72
+            options {
+              [google.fhir.proto.fhir_original_code]: "Binary"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "BIOLOGICALLY_DERIVED_PRODUCT"
+            number: 73
+            options {
+              [google.fhir.proto.fhir_original_code]: "BiologicallyDerivedProduct"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "BODY_STRUCTURE"
+            number: 74
+            options {
+              [google.fhir.proto.fhir_original_code]: "BodyStructure"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "BUNDLE"
+            number: 75
+            options {
+              [google.fhir.proto.fhir_original_code]: "Bundle"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CAPABILITY_STATEMENT"
+            number: 76
+            options {
+              [google.fhir.proto.fhir_original_code]: "CapabilityStatement"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CARE_PLAN"
+            number: 77
+            options {
+              [google.fhir.proto.fhir_original_code]: "CarePlan"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CARE_TEAM"
+            number: 78
+            options {
+              [google.fhir.proto.fhir_original_code]: "CareTeam"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CATALOG_ENTRY"
+            number: 79
+            options {
+              [google.fhir.proto.fhir_original_code]: "CatalogEntry"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CHARGE_ITEM"
+            number: 80
+            options {
+              [google.fhir.proto.fhir_original_code]: "ChargeItem"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CHARGE_ITEM_DEFINITION"
+            number: 81
+            options {
+              [google.fhir.proto.fhir_original_code]: "ChargeItemDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CLAIM"
+            number: 82
+            options {
+              [google.fhir.proto.fhir_original_code]: "Claim"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CLAIM_RESPONSE"
+            number: 83
+            options {
+              [google.fhir.proto.fhir_original_code]: "ClaimResponse"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CLINICAL_IMPRESSION"
+            number: 84
+            options {
+              [google.fhir.proto.fhir_original_code]: "ClinicalImpression"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CODE_SYSTEM"
+            number: 85
+            options {
+              [google.fhir.proto.fhir_original_code]: "CodeSystem"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "COMMUNICATION"
+            number: 86
+            options {
+              [google.fhir.proto.fhir_original_code]: "Communication"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "COMMUNICATION_REQUEST"
+            number: 87
+            options {
+              [google.fhir.proto.fhir_original_code]: "CommunicationRequest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "COMPARTMENT_DEFINITION"
+            number: 88
+            options {
+              [google.fhir.proto.fhir_original_code]: "CompartmentDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "COMPOSITION"
+            number: 89
+            options {
+              [google.fhir.proto.fhir_original_code]: "Composition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CONCEPT_MAP"
+            number: 90
+            options {
+              [google.fhir.proto.fhir_original_code]: "ConceptMap"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CONDITION"
+            number: 91
+            options {
+              [google.fhir.proto.fhir_original_code]: "Condition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CONSENT"
+            number: 92
+            options {
+              [google.fhir.proto.fhir_original_code]: "Consent"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "CONTRACT"
+            number: 93
+            options {
+              [google.fhir.proto.fhir_original_code]: "Contract"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "COVERAGE"
+            number: 94
+            options {
+              [google.fhir.proto.fhir_original_code]: "Coverage"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "COVERAGE_ELIGIBILITY_REQUEST"
+            number: 95
+            options {
+              [google.fhir.proto.fhir_original_code]: "CoverageEligibilityRequest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "COVERAGE_ELIGIBILITY_RESPONSE"
+            number: 96
+            options {
+              [google.fhir.proto.fhir_original_code]: "CoverageEligibilityResponse"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DETECTED_ISSUE"
+            number: 97
+            options {
+              [google.fhir.proto.fhir_original_code]: "DetectedIssue"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DEVICE"
+            number: 98
+            options {
+              [google.fhir.proto.fhir_original_code]: "Device"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DEVICE_DEFINITION"
+            number: 99
+            options {
+              [google.fhir.proto.fhir_original_code]: "DeviceDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DEVICE_METRIC"
+            number: 100
+            options {
+              [google.fhir.proto.fhir_original_code]: "DeviceMetric"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DEVICE_REQUEST"
+            number: 101
+            options {
+              [google.fhir.proto.fhir_original_code]: "DeviceRequest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DEVICE_USE_STATEMENT"
+            number: 102
+            options {
+              [google.fhir.proto.fhir_original_code]: "DeviceUseStatement"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DIAGNOSTIC_REPORT"
+            number: 103
+            options {
+              [google.fhir.proto.fhir_original_code]: "DiagnosticReport"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DOCUMENT_MANIFEST"
+            number: 104
+            options {
+              [google.fhir.proto.fhir_original_code]: "DocumentManifest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DOCUMENT_REFERENCE"
+            number: 105
+            options {
+              [google.fhir.proto.fhir_original_code]: "DocumentReference"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "DOMAIN_RESOURCE"
+            number: 106
+            options {
+              [google.fhir.proto.fhir_original_code]: "DomainResource"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "EFFECT_EVIDENCE_SYNTHESIS"
+            number: 107
+            options {
+              [google.fhir.proto.fhir_original_code]: "EffectEvidenceSynthesis"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ENCOUNTER"
+            number: 108
+            options {
+              [google.fhir.proto.fhir_original_code]: "Encounter"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ENDPOINT"
+            number: 109
+            options {
+              [google.fhir.proto.fhir_original_code]: "Endpoint"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ENROLLMENT_REQUEST"
+            number: 110
+            options {
+              [google.fhir.proto.fhir_original_code]: "EnrollmentRequest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ENROLLMENT_RESPONSE"
+            number: 111
+            options {
+              [google.fhir.proto.fhir_original_code]: "EnrollmentResponse"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "EPISODE_OF_CARE"
+            number: 112
+            options {
+              [google.fhir.proto.fhir_original_code]: "EpisodeOfCare"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "EVENT_DEFINITION"
+            number: 113
+            options {
+              [google.fhir.proto.fhir_original_code]: "EventDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "EVIDENCE"
+            number: 114
+            options {
+              [google.fhir.proto.fhir_original_code]: "Evidence"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "EVIDENCE_VARIABLE"
+            number: 115
+            options {
+              [google.fhir.proto.fhir_original_code]: "EvidenceVariable"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "EXAMPLE_SCENARIO"
+            number: 116
+            options {
+              [google.fhir.proto.fhir_original_code]: "ExampleScenario"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "EXPLANATION_OF_BENEFIT"
+            number: 117
+            options {
+              [google.fhir.proto.fhir_original_code]: "ExplanationOfBenefit"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "FAMILY_MEMBER_HISTORY"
+            number: 118
+            options {
+              [google.fhir.proto.fhir_original_code]: "FamilyMemberHistory"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "FLAG"
+            number: 119
+            options {
+              [google.fhir.proto.fhir_original_code]: "Flag"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "GOAL"
+            number: 120
+            options {
+              [google.fhir.proto.fhir_original_code]: "Goal"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "GRAPH_DEFINITION"
+            number: 121
+            options {
+              [google.fhir.proto.fhir_original_code]: "GraphDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "GROUP"
+            number: 122
+            options {
+              [google.fhir.proto.fhir_original_code]: "Group"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "GUIDANCE_RESPONSE"
+            number: 123
+            options {
+              [google.fhir.proto.fhir_original_code]: "GuidanceResponse"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "HEALTHCARE_SERVICE"
+            number: 124
+            options {
+              [google.fhir.proto.fhir_original_code]: "HealthcareService"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "IMAGING_STUDY"
+            number: 125
+            options {
+              [google.fhir.proto.fhir_original_code]: "ImagingStudy"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "IMMUNIZATION"
+            number: 126
+            options {
+              [google.fhir.proto.fhir_original_code]: "Immunization"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "IMMUNIZATION_EVALUATION"
+            number: 127
+            options {
+              [google.fhir.proto.fhir_original_code]: "ImmunizationEvaluation"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "IMMUNIZATION_RECOMMENDATION"
+            number: 128
+            options {
+              [google.fhir.proto.fhir_original_code]: "ImmunizationRecommendation"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "IMPLEMENTATION_GUIDE"
+            number: 129
+            options {
+              [google.fhir.proto.fhir_original_code]: "ImplementationGuide"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "INSURANCE_PLAN"
+            number: 130
+            options {
+              [google.fhir.proto.fhir_original_code]: "InsurancePlan"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "INVOICE"
+            number: 131
+            options {
+              [google.fhir.proto.fhir_original_code]: "Invoice"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "LIBRARY"
+            number: 132
+            options {
+              [google.fhir.proto.fhir_original_code]: "Library"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "LINKAGE"
+            number: 133
+            options {
+              [google.fhir.proto.fhir_original_code]: "Linkage"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "LIST"
+            number: 134
+            options {
+              [google.fhir.proto.fhir_original_code]: "List"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "LOCATION"
+            number: 135
+            options {
+              [google.fhir.proto.fhir_original_code]: "Location"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEASURE"
+            number: 136
+            options {
+              [google.fhir.proto.fhir_original_code]: "Measure"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEASURE_REPORT"
+            number: 137
+            options {
+              [google.fhir.proto.fhir_original_code]: "MeasureReport"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDIA"
+            number: 138
+            options {
+              [google.fhir.proto.fhir_original_code]: "Media"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICATION"
+            number: 139
+            options {
+              [google.fhir.proto.fhir_original_code]: "Medication"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICATION_ADMINISTRATION"
+            number: 140
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicationAdministration"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICATION_DISPENSE"
+            number: 141
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicationDispense"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICATION_KNOWLEDGE"
+            number: 142
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicationKnowledge"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICATION_REQUEST"
+            number: 143
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicationRequest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICATION_STATEMENT"
+            number: 144
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicationStatement"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT"
+            number: 145
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProduct"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_AUTHORIZATION"
+            number: 146
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductAuthorization"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_CONTRAINDICATION"
+            number: 147
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductContraindication"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_INDICATION"
+            number: 148
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductIndication"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_INGREDIENT"
+            number: 149
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductIngredient"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_INTERACTION"
+            number: 150
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductInteraction"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_MANUFACTURED"
+            number: 151
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductManufactured"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_PACKAGED"
+            number: 152
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductPackaged"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_PHARMACEUTICAL"
+            number: 153
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductPharmaceutical"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MEDICINAL_PRODUCT_UNDESIRABLE_EFFECT"
+            number: 154
+            options {
+              [google.fhir.proto.fhir_original_code]: "MedicinalProductUndesirableEffect"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MESSAGE_DEFINITION"
+            number: 155
+            options {
+              [google.fhir.proto.fhir_original_code]: "MessageDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MESSAGE_HEADER"
+            number: 156
+            options {
+              [google.fhir.proto.fhir_original_code]: "MessageHeader"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "MOLECULAR_SEQUENCE"
+            number: 157
+            options {
+              [google.fhir.proto.fhir_original_code]: "MolecularSequence"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "NAMING_SYSTEM"
+            number: 158
+            options {
+              [google.fhir.proto.fhir_original_code]: "NamingSystem"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "NUTRITION_ORDER"
+            number: 159
+            options {
+              [google.fhir.proto.fhir_original_code]: "NutritionOrder"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "OBSERVATION"
+            number: 160
+            options {
+              [google.fhir.proto.fhir_original_code]: "Observation"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "OBSERVATION_DEFINITION"
+            number: 161
+            options {
+              [google.fhir.proto.fhir_original_code]: "ObservationDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "OPERATION_DEFINITION"
+            number: 162
+            options {
+              [google.fhir.proto.fhir_original_code]: "OperationDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "OPERATION_OUTCOME"
+            number: 163
+            options {
+              [google.fhir.proto.fhir_original_code]: "OperationOutcome"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ORGANIZATION"
+            number: 164
+            options {
+              [google.fhir.proto.fhir_original_code]: "Organization"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "ORGANIZATION_AFFILIATION"
+            number: 165
+            options {
+              [google.fhir.proto.fhir_original_code]: "OrganizationAffiliation"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PARAMETERS"
+            number: 166
+            options {
+              [google.fhir.proto.fhir_original_code]: "Parameters"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PATIENT"
+            number: 167
+            options {
+              [google.fhir.proto.fhir_original_code]: "Patient"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PAYMENT_NOTICE"
+            number: 168
+            options {
+              [google.fhir.proto.fhir_original_code]: "PaymentNotice"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PAYMENT_RECONCILIATION"
+            number: 169
+            options {
+              [google.fhir.proto.fhir_original_code]: "PaymentReconciliation"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PERSON"
+            number: 170
+            options {
+              [google.fhir.proto.fhir_original_code]: "Person"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PLAN_DEFINITION"
+            number: 171
+            options {
+              [google.fhir.proto.fhir_original_code]: "PlanDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PRACTITIONER"
+            number: 172
+            options {
+              [google.fhir.proto.fhir_original_code]: "Practitioner"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PRACTITIONER_ROLE"
+            number: 173
+            options {
+              [google.fhir.proto.fhir_original_code]: "PractitionerRole"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PROCEDURE"
+            number: 174
+            options {
+              [google.fhir.proto.fhir_original_code]: "Procedure"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "PROVENANCE"
+            number: 175
+            options {
+              [google.fhir.proto.fhir_original_code]: "Provenance"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "QUESTIONNAIRE"
+            number: 176
+            options {
+              [google.fhir.proto.fhir_original_code]: "Questionnaire"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "QUESTIONNAIRE_RESPONSE"
+            number: 177
+            options {
+              [google.fhir.proto.fhir_original_code]: "QuestionnaireResponse"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RELATED_PERSON"
+            number: 178
+            options {
+              [google.fhir.proto.fhir_original_code]: "RelatedPerson"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "REQUEST_GROUP"
+            number: 179
+            options {
+              [google.fhir.proto.fhir_original_code]: "RequestGroup"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RESEARCH_DEFINITION"
+            number: 180
+            options {
+              [google.fhir.proto.fhir_original_code]: "ResearchDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RESEARCH_ELEMENT_DEFINITION"
+            number: 181
+            options {
+              [google.fhir.proto.fhir_original_code]: "ResearchElementDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RESEARCH_STUDY"
+            number: 182
+            options {
+              [google.fhir.proto.fhir_original_code]: "ResearchStudy"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RESEARCH_SUBJECT"
+            number: 183
+            options {
+              [google.fhir.proto.fhir_original_code]: "ResearchSubject"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RESOURCE"
+            number: 184
+            options {
+              [google.fhir.proto.fhir_original_code]: "Resource"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RISK_ASSESSMENT"
+            number: 185
+            options {
+              [google.fhir.proto.fhir_original_code]: "RiskAssessment"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "RISK_EVIDENCE_SYNTHESIS"
+            number: 186
+            options {
+              [google.fhir.proto.fhir_original_code]: "RiskEvidenceSynthesis"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SCHEDULE"
+            number: 187
+            options {
+              [google.fhir.proto.fhir_original_code]: "Schedule"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SEARCH_PARAMETER"
+            number: 188
+            options {
+              [google.fhir.proto.fhir_original_code]: "SearchParameter"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SERVICE_REQUEST"
+            number: 189
+            options {
+              [google.fhir.proto.fhir_original_code]: "ServiceRequest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SLOT"
+            number: 190
+            options {
+              [google.fhir.proto.fhir_original_code]: "Slot"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SPECIMEN"
+            number: 191
+            options {
+              [google.fhir.proto.fhir_original_code]: "Specimen"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SPECIMEN_DEFINITION"
+            number: 192
+            options {
+              [google.fhir.proto.fhir_original_code]: "SpecimenDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "STRUCTURE_DEFINITION"
+            number: 193
+            options {
+              [google.fhir.proto.fhir_original_code]: "StructureDefinition"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "STRUCTURE_MAP"
+            number: 194
+            options {
+              [google.fhir.proto.fhir_original_code]: "StructureMap"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSCRIPTION"
+            number: 195
+            options {
+              [google.fhir.proto.fhir_original_code]: "Subscription"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE"
+            number: 196
+            options {
+              [google.fhir.proto.fhir_original_code]: "Substance"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE_NUCLEIC_ACID"
+            number: 197
+            options {
+              [google.fhir.proto.fhir_original_code]: "SubstanceNucleicAcid"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE_POLYMER"
+            number: 198
+            options {
+              [google.fhir.proto.fhir_original_code]: "SubstancePolymer"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE_PROTEIN"
+            number: 199
+            options {
+              [google.fhir.proto.fhir_original_code]: "SubstanceProtein"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE_REFERENCE_INFORMATION"
+            number: 200
+            options {
+              [google.fhir.proto.fhir_original_code]: "SubstanceReferenceInformation"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE_SOURCE_MATERIAL"
+            number: 201
+            options {
+              [google.fhir.proto.fhir_original_code]: "SubstanceSourceMaterial"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUBSTANCE_SPECIFICATION"
+            number: 202
+            options {
+              [google.fhir.proto.fhir_original_code]: "SubstanceSpecification"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUPPLY_DELIVERY"
+            number: 203
+            options {
+              [google.fhir.proto.fhir_original_code]: "SupplyDelivery"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "SUPPLY_REQUEST"
+            number: 204
+            options {
+              [google.fhir.proto.fhir_original_code]: "SupplyRequest"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "TASK"
+            number: 205
+            options {
+              [google.fhir.proto.fhir_original_code]: "Task"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "TERMINOLOGY_CAPABILITIES"
+            number: 206
+            options {
+              [google.fhir.proto.fhir_original_code]: "TerminologyCapabilities"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "TEST_REPORT"
+            number: 207
+            options {
+              [google.fhir.proto.fhir_original_code]: "TestReport"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "TEST_SCRIPT"
+            number: 208
+            options {
+              [google.fhir.proto.fhir_original_code]: "TestScript"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "VALUE_SET"
+            number: 209
+            options {
+              [google.fhir.proto.fhir_original_code]: "ValueSet"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "VERIFICATION_RESULT"
+            number: 210
+            options {
+              [google.fhir.proto.fhir_original_code]: "VerificationResult"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+          value {
+            name: "VISION_PRESCRIPTION"
+            number: 211
+            options {
+              [google.fhir.proto.fhir_original_code]: "VisionPrescription"
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+            }
+          }
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/defined-types"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+        }
+      }
+      nested_type {
+        name: "ResponseCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.AssertionResponseTypesCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/assert-response-code-types"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
         }
       }
     }

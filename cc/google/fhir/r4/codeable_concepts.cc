@@ -32,6 +32,7 @@ namespace {
 
 using ::google::fhir::r4::core::Coding;
 using ::google::fhir::r4::core::CodingWithFixedCode;
+using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::tensorflow::errors::AlreadyExists;
@@ -99,19 +100,19 @@ const bool ForEachInternalCodingHalting(
     const FieldDescriptor* field = descriptor->field(i);
     if (field->type() != FieldDescriptor::TYPE_MESSAGE) continue;
 
-    if (HasFixedCodingSystem(field->message_type())) {
-      const bool stop = ForEachMessageHalting<Message>(
-          concept, field,
-          [&fixed_system_func](const Message& fixed_system_coding) {
-            return fixed_system_func(fixed_system_coding);
-          });
-      if (stop) return true;
-    } else if (IsMessageType<CodingWithFixedCode>(field->message_type())) {
+    if (IsMessageType<CodingWithFixedCode>(field->message_type())) {
       const bool stop = ForEachMessageHalting<CodingWithFixedCode>(
           concept, field,
           [&fixed_code_func,
            &field](const CodingWithFixedCode& fixed_code_coding) {
             return fixed_code_func(field, fixed_code_coding);
+          });
+      if (stop) return true;
+    } else if (IsProfileOf<Coding>(field->message_type())) {
+      const bool stop = ForEachMessageHalting<Message>(
+          concept, field,
+          [&fixed_system_func](const Message& fixed_system_coding) {
+            return fixed_system_func(fixed_system_coding);
           });
       if (stop) return true;
     }
@@ -135,6 +136,13 @@ Status CopyFieldIfPresent(const Message& source, Message* target,
   return CopyCommonField(source, target, field_name);
 }
 
+bool HasCodeBoundToSystem(const Descriptor* coding_descriptor,
+                          const string& system) {
+  const FieldDescriptor* code_field =
+      coding_descriptor->FindFieldByName("code");
+  return code_field && GetFixedSystem(code_field->message_type()) == system;
+}
+
 }  // namespace
 
 namespace internal {
@@ -149,8 +157,9 @@ const FieldDescriptor* ProfiledFieldForSystem(const Message& concept,
   const ::google::protobuf::Descriptor* descriptor = concept.GetDescriptor();
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
-    if (GetInlinedCodingSystem(field) == system ||
-        GetFixedCodingSystem(field->message_type()) == system) {
+    if (IsProfileOf<Coding>(field->message_type()) &&
+        (GetInlinedCodingSystem(field) == system ||
+         HasCodeBoundToSystem(field->message_type(), system))) {
       return field;
     }
   }
@@ -257,18 +266,7 @@ Status AddCoding(Message* concept, const Coding& coding) {
     const FieldDescriptor* profiled_field =
         internal::ProfiledFieldForSystem(*concept, system);
     if (profiled_field != nullptr) {
-      if (HasFixedCodingSystem(profiled_field->message_type())) {
-        if (!profiled_field->is_repeated() &&
-            FieldHasValue(*concept, profiled_field)) {
-          return ::tensorflow::errors::AlreadyExists(
-              "Attempted to add a System to a non-repeated slice that is "
-              "already populated.  Field: ",
-              profiled_field->full_name(), ", System: ", system);
-        }
-        return ConvertToTypedCoding(
-            coding, MutableOrAddMessage(concept, profiled_field));
-      } else if (IsMessageType<CodingWithFixedCode>(
-                     profiled_field->message_type())) {
+      if (IsMessageType<CodingWithFixedCode>(profiled_field->message_type())) {
         const string& fixed_code = GetInlinedCodingCode(profiled_field);
         if (fixed_code == coding.code().value()) {
           if (!profiled_field->is_repeated() &&
@@ -285,6 +283,16 @@ Status AddCoding(Message* concept, const Coding& coding) {
           CopyCommonCodingFields(coding, fixed_system_code);
           return Status::OK();
         }
+      } else if (IsProfileOf<Coding>(profiled_field->message_type())) {
+        if (!profiled_field->is_repeated() &&
+            FieldHasValue(*concept, profiled_field)) {
+          return ::tensorflow::errors::AlreadyExists(
+              "Attempted to add a System to a non-repeated slice that is "
+              "already populated.  Field: ",
+              profiled_field->full_name(), ", System: ", system);
+        }
+        return ConvertToTypedCoding(
+            coding, MutableOrAddMessage(concept, profiled_field));
       }
     }
   }

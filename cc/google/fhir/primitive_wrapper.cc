@@ -36,6 +36,7 @@
 #include "google/fhir/annotations.h"
 #include "google/fhir/codes.h"
 #include "google/fhir/extensions.h"
+#include "google/fhir/fhir_types.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
@@ -1024,8 +1025,7 @@ StatusOr<std::unique_ptr<PrimitiveWrapper>> GetStu3Wrapper(
 
 StatusOr<std::unique_ptr<PrimitiveWrapper>> GetR4Wrapper(
     const Descriptor* target_descriptor) {
-  if (IsMessageType<r4::core::Code>(target_descriptor) ||
-      HasValueset(target_descriptor)) {
+  if (IsTypeOrProfileOfCode(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
         (new CodeWrapper<r4::core::Code>()));
   } else if (IsMessageType<r4::core::Base64Binary>(target_descriptor)) {

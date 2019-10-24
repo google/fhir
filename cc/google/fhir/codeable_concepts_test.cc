@@ -20,7 +20,7 @@
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
-#include "testdata/r4/profiles/test_core.pb.h"
+#include "testdata/r4/profiles/test.pb.h"
 #include "testdata/stu3/profiles/test.pb.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
 
@@ -30,7 +30,7 @@ namespace fhir {
 namespace {
 
 using Stu3TestObservation = stu3::testing::TestObservation;
-using R4TestObservation = r4::testingcore::TestObservation;
+using R4TestObservation = r4::testing::TestObservation;
 using ::testing::ElementsAre;
 
 const Stu3TestObservation::CodeableConceptForCode GetConceptStu3() {

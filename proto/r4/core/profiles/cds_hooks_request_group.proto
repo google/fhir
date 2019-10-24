@@ -87,15 +87,54 @@ message CDSHooksRequestGroup {
 
   // draft | active | suspended | cancelled | completed | entered-in-error |
   // unknown
-  RequestStatusCode status = 16
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // proposal | plan | order
-  RequestIntentCode intent = 17
+  message IntentCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-intent";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestIntentCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  IntentCode intent = 17
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // routine | urgent | asap | stat
-  RequestPriorityCode priority = 18;
+  message PriorityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-priority";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestPriorityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  PriorityCode priority = 18;
 
   // What's being requested/ordered
   CodeableConcept code = 19;
@@ -159,7 +198,21 @@ message CDSHooksRequestGroup {
     String text_equivalent = 7;
 
     // routine | urgent | asap | stat
-    RequestPriorityCode priority = 8;
+    message PriorityCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/request-priority";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      RequestPriorityCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    PriorityCode priority = 8;
 
     // Code representing the meaning of the action or sub-actions
     repeated CodeableConcept code = 9;
@@ -179,7 +232,21 @@ message CDSHooksRequestGroup {
       repeated Extension modifier_extension = 3;
 
       // applicability | start | stop
-      ActionConditionKindCode kind = 4
+      message KindCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/action-condition-kind";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ActionConditionKindCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      KindCode kind = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Boolean-valued expression
@@ -206,7 +273,21 @@ message CDSHooksRequestGroup {
 
       // before-start | before | before-end | concurrent-with-start | concurrent
       // | concurrent-with-end | after-start | after | after-end
-      ActionRelationshipTypeCode relationship = 5
+      message RelationshipCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/action-relationship-type";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ActionRelationshipTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      RelationshipCode relationship = 5
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Time offset for the relationship
@@ -252,19 +333,89 @@ message CDSHooksRequestGroup {
     CodeableConcept type = 15;
 
     // visual-group | logical-group | sentence-group
-    ActionGroupingBehaviorCode grouping_behavior = 16;
+    message GroupingBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-grouping-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionGroupingBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    GroupingBehaviorCode grouping_behavior = 16;
 
     // any | all | all-or-none | exactly-one | at-most-one | one-or-more
-    ActionSelectionBehaviorCode selection_behavior = 17;
+    message SelectionBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-selection-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionSelectionBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    SelectionBehaviorCode selection_behavior = 17;
 
     // must | could | must-unless-documented
-    ActionRequiredBehaviorCode required_behavior = 18;
+    message RequiredBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-required-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionRequiredBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    RequiredBehaviorCode required_behavior = 18;
 
     // yes | no
-    ActionPrecheckBehaviorCode precheck_behavior = 19;
+    message PrecheckBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-precheck-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionPrecheckBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    PrecheckBehaviorCode precheck_behavior = 19;
 
     // single | multiple
-    ActionCardinalityBehaviorCode cardinality_behavior = 20;
+    message CardinalityBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-cardinality-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionCardinalityBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    CardinalityBehaviorCode cardinality_behavior = 20;
 
     // The target of the action
     Reference resource = 21

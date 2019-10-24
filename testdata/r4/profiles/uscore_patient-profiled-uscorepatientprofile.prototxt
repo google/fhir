@@ -284,7 +284,7 @@ race {
     code { value:  NUM_2028_9 }
   }
   detailed {
-    code { value:  "2040-4" }
+    code { value:  NUM_2040_4 }
   }
   text {
     value: "asian - korean"

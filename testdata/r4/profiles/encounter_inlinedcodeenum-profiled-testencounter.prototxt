@@ -1,0 +1,45 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Encounter with patient @example</div>"
+  }
+}
+status {
+  value: IN_PROGRESS
+}
+class_value {
+  system {
+    value: "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+  }
+  code {
+    value: "IMP"
+  }
+  display {
+    value: "inpatient encounter"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+priority {
+  act {
+    code {
+      value: EM
+    }
+  }
+  coding {
+    system {
+      value: "test-system"
+    }
+    code {
+      value: "testvalue"
+    }
+  }
+}

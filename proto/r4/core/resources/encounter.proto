@@ -67,7 +67,20 @@ message Encounter {
 
   // planned | arrived | triaged | in-progress | onleave | finished | cancelled
   // +
-  EncounterStatusCode status = 11
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/encounter-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    EncounterStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // List of past encounter statuses
@@ -83,7 +96,21 @@ message Encounter {
 
     // planned | arrived | triaged | in-progress | onleave | finished |
     // cancelled +
-    EncounterStatusCode status = 4
+    message StatusCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/encounter-status";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      EncounterStatusCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    StatusCode status = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // The time that the episode was in the specified status
@@ -297,7 +324,21 @@ message Encounter {
     ];
 
     // planned | active | reserved | completed
-    EncounterLocationStatusCode status = 5;
+    message StatusCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/encounter-location-status";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      EncounterLocationStatusCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    StatusCode status = 5;
 
     // The physical type of the location (usually the level in the location
     // hierachy - bed room ward etc.)

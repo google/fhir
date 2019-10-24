@@ -65,7 +65,20 @@ message MedicationKnowledge {
   CodeableConcept code = 10;
 
   // active | inactive | entered-in-error
-  MedicationKnowledgeStatusCodesCode status = 11;
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/medicationknowledge-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    MedicationKnowledgeStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11;
 
   // Manufacturer of the item
   Reference manufacturer = 12

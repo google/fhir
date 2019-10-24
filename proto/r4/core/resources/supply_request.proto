@@ -65,13 +65,39 @@ message SupplyRequest {
   repeated Identifier identifier = 10;
 
   // draft | active | suspended +
-  SupplyRequestStatusCode status = 11;
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/supplyrequest-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SupplyRequestStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11;
 
   // The kind of supply (central, non-stock, etc.)
   CodeableConcept category = 12;
 
   // routine | urgent | asap | stat
-  RequestPriorityCode priority = 13;
+  message PriorityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-priority";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestPriorityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  PriorityCode priority = 13;
 
   // Medication, Substance, or Device requested to be supplied
   message ItemX {

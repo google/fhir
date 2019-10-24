@@ -307,6 +307,7 @@ public class ProtoFilePrinter {
   private String printEnum(EnumDescriptorProto descriptor, String typePrefix, String packageName) {
     // Get the name of this message.
     String messageName = descriptor.getName();
+    String optionPackage = getOptionsPackage(packageName);
 
     CharMatcher matcher = CharMatcher.is('.');
     String indent =
@@ -317,8 +318,21 @@ public class ProtoFilePrinter {
     message.append(indent).append("enum ").append(messageName).append(" {\n");
 
     String fieldIndent = indent + "  ";
+    if (descriptor.getOptions().hasExtension(Annotations.fhirCodeSystemUrl)) {
+      message
+          .append(fieldIndent)
+          .append("option (")
+          .append(optionPackage)
+          .append("fhir_code_system_url")
+          .append(") = ")
+          .append("\"")
+          .append(
+              EXTENSION_ESCAPER.escape(
+                  descriptor.getOptions().getExtension(Annotations.fhirCodeSystemUrl).toString()))
+          .append("\"")
+          .append(";\n");
+    }
 
-    String optionPackage = getOptionsPackage(packageName);
     // Loop over the elements.
     for (EnumValueDescriptorProto field : descriptor.getValueList()) {
       message.append(fieldIndent).append(field.getName()).append(" = ").append(field.getNumber());
@@ -330,6 +344,14 @@ public class ProtoFilePrinter {
             addFieldOption(
                 "(" + optionPackage + "fhir_original_code)",
                 "\"" + options.getExtension(Annotations.fhirOriginalCode) + "\"",
+                hasFieldOption,
+                message);
+      }
+      if (options.hasExtension(Annotations.sourceCodeSystem)) {
+        hasFieldOption =
+            addFieldOption(
+                "(" + optionPackage + "source_code_system)",
+                "\"" + options.getExtension(Annotations.sourceCodeSystem) + "\"",
                 hasFieldOption,
                 message);
       }

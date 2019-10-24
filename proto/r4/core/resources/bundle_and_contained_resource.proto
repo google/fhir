@@ -195,7 +195,20 @@ message Bundle {
 
   // document | message | transaction | transaction-response | batch |
   // batch-response | history | searchset | collection
-  BundleTypeCode type = 6
+  message TypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/bundle-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    BundleTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  TypeCode type = 6
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // When the bundle was assembled
@@ -260,7 +273,21 @@ message Bundle {
       repeated Extension modifier_extension = 3;
 
       // match | include | outcome - why this is in the result set
-      SearchEntryModeCode mode = 4;
+      message ModeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/search-entry-mode";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        SearchEntryModeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      ModeCode mode = 4;
 
       // Search ranking (between 0 and 1)
       Decimal score = 5;
@@ -280,7 +307,21 @@ message Bundle {
       repeated Extension modifier_extension = 3;
 
       // GET | HEAD | POST | PUT | DELETE | PATCH
-      HTTPVerbCode method = 4
+      message MethodCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/http-verb";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        HTTPVerbCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      MethodCode method = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // URL for HTTP equivalent of this entry

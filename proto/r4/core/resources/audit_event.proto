@@ -69,7 +69,20 @@ message AuditEvent {
   repeated Coding subtype = 11;
 
   // Type of action performed during the event
-  AuditEventActionCode action = 12;
+  message ActionCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/audit-event-action";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AuditEventActionCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ActionCode action = 12;
 
   // When the activity occurred
   Period period = 13;
@@ -79,7 +92,20 @@ message AuditEvent {
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Whether the event succeeded or failed
-  AuditEventOutcomeCode outcome = 15;
+  message OutcomeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/audit-event-outcome";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AuditEventOutcomeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  OutcomeCode outcome = 15;
 
   // Description of the event outcome
   String outcome_desc = 16;
@@ -149,7 +175,21 @@ message AuditEvent {
       String address = 4;
 
       // The type of network access point
-      AuditEventAgentNetworkTypeCode type = 5;
+      message TypeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/network-type";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        AuditEventAgentNetworkTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      TypeCode type = 5;
     }
     Network network = 13
         [(.google.fhir.proto.fhir_path_constraint) =

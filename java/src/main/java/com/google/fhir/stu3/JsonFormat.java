@@ -995,15 +995,15 @@ public final class JsonFormat {
       }
       if (tester.isSpecialCase("contextType", StructureDefinition.getDescriptor())) {
         String contextTypeString = json.getAsJsonPrimitive("contextType").getAsString();
-        ExtensionContextTypeCode contextType;
+        StructureDefinition.Context.TypeCode contextType;
         if (contextTypeString.equals("resource") || contextTypeString.equals("datatype")) {
           contextType =
-              ExtensionContextTypeCode.newBuilder()
+              StructureDefinition.Context.TypeCode.newBuilder()
                   .setValue(ExtensionContextTypeCode.Value.ELEMENT)
                   .build();
         } else if (contextTypeString.equals("extension")) {
           contextType =
-              ExtensionContextTypeCode.newBuilder()
+              StructureDefinition.Context.TypeCode.newBuilder()
                   .setValue(ExtensionContextTypeCode.Value.EXTENSION)
                   .build();
         } else {

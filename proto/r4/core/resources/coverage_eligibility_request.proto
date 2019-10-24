@@ -65,14 +65,40 @@ message CoverageEligibilityRequest {
   repeated Identifier identifier = 10;
 
   // active | cancelled | draft | entered-in-error
-  FinancialResourceStatusCodesCode status = 11
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/fm-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    FinancialResourceStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Desired processing priority
   CodeableConcept priority = 12;
 
   // auth-requirements | benefits | discovery | validation
-  repeated EligibilityRequestPurposeCode purpose = 13
+  message PurposeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/eligibilityrequest-purpose";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    EligibilityRequestPurposeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated PurposeCode purpose = 13
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Intended recipient of products and services

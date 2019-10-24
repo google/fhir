@@ -21,6 +21,7 @@
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/codes.h"
+#include "google/fhir/fhir_types.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/util.h"
@@ -105,7 +106,7 @@ Status SetDatatypeOnExtensionInternal(const Message& message,
     return ConvertToGenericCode(message,
                                 extension->mutable_value()->mutable_code());
   }
-  if (HasFixedCodingSystem(message.GetDescriptor())) {
+  if (IsTypeOrProfileOfCoding(message)) {
     // The source message is a bound coding type.
     // Convert it to a generic coding, and add it to the extension.
     return ConvertToGenericCoding(message,
@@ -274,7 +275,7 @@ Status ValueToMessageInternal(const ExtensionLike& extension, Message* message,
                               MutableOrAddMessage(message, field));
   }
 
-  if (HasFixedCodingSystem(field->message_type())) {
+  if (IsTypeOrProfileOfCoding(field->message_type())) {
     // The target message is a bound codng type.  Convert the generic codng
     // field from the extension into the target typed coding.
     return ConvertToTypedCoding(extension.value().coding(),

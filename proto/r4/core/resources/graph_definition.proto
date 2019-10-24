@@ -73,7 +73,20 @@ message GraphDefinition {
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 13
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 13
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // For testing purposes, not real usage
@@ -101,7 +114,20 @@ message GraphDefinition {
   Markdown purpose = 21;
 
   // Type of resource at which the graph starts
-  ResourceTypeCode start = 22
+  message StartCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/resource-types";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ResourceTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StartCode start = 22
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Profile on base resource
@@ -145,7 +171,21 @@ message GraphDefinition {
       repeated Extension modifier_extension = 3;
 
       // Type of resource this link refers to
-      ResourceTypeCode type = 4
+      message TypeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/resource-types";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ResourceTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      TypeCode type = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Criteria for reverse lookup
@@ -166,15 +206,57 @@ message GraphDefinition {
         repeated Extension modifier_extension = 3;
 
         // condition | requirement
-        GraphCompartmentUseCode use = 4
+        message UseCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/graph-compartment-use";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          GraphCompartmentUseCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        UseCode use = 4
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
         // Identifies the compartment
-        CompartmentTypeCode code = 5
+        message CodeCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/compartment-type";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          CompartmentTypeCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        CodeCode code = 5
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
         // identical | matching | different | custom
-        GraphCompartmentRuleCode rule = 6
+        message RuleCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/graph-compartment-rule";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          GraphCompartmentRuleCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        RuleCode rule = 6
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
         // Custom rule, as a FHIRPath expression

@@ -80,7 +80,20 @@ message ResearchStudy {
   // closed-to-accrual-and-intervention | completed | disapproved | in-review |
   // temporarily-closed-to-accrual |
   // temporarily-closed-to-accrual-and-intervention | withdrawn
-  ResearchStudyStatusCode status = 14
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/research-study-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ResearchStudyStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 14
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // treatment | prevention | diagnostic | supportive-care | screening |

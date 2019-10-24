@@ -81,7 +81,20 @@ message MessageDefinition {
   repeated Canonical replaces = 15;
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 16
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // For testing purposes, not real usage
@@ -131,7 +144,20 @@ message MessageDefinition {
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // consequence | currency | notification
-  MessageSignificanceCategoryCode category = 29;
+  message CategoryCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/message-significance-category";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    MessageSignificanceCategoryCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  CategoryCode category = 29;
 
   // Resource(s) that are the subject of the event
   message Focus {
@@ -145,7 +171,21 @@ message MessageDefinition {
     repeated Extension modifier_extension = 3;
 
     // Type of resource
-    ResourceTypeCode code = 4
+    message CodeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/resource-types";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ResourceTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    CodeCode code = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Profile that must be adhered to by focus
@@ -166,7 +206,20 @@ message MessageDefinition {
   ];
 
   // always | on-error | never | on-success
-  MessageheaderResponseRequestCode response_required = 31;
+  message ResponseRequiredCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/messageheader-response-request";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    MessageheaderResponseRequestCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ResponseRequiredCode response_required = 31;
 
   // Responses to this message
   message AllowedResponse {

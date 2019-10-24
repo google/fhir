@@ -152,7 +152,7 @@ field {
   number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.AdministrativeGenderCode"
+  type_name: ".google.fhir.r4.core.RelatedPerson.GenderCode"
   options {
     [google.fhir.proto.field_description]: "male | female | other | unknown"
   }
@@ -206,6 +206,33 @@ field {
   options {
     [google.fhir.proto.field_description]: "A language which may be used to communicate with about the patient\'s health"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+  }
+}
+nested_type {
+  name: "GenderCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.AdministrativeGenderCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/administrative-gender"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
   }
 }
 nested_type {

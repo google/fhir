@@ -45,7 +45,7 @@ label=${tokens[1]}
 source $(dirname "$BASH_SOURCE")/generate_protos_utils.sh
 
 # Build structure definitions, and then copy them into source
-try_build "${target}_structure_definitions"
+try_build "${target}_definitions"
 copy_to_src_if_present ${label}_extensions.json
 copy_to_src_if_present ${label}.json
 

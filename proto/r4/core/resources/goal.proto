@@ -67,7 +67,20 @@ message Goal {
 
   // proposed | planned | accepted | active | on-hold | completed | cancelled |
   // entered-in-error | rejected
-  GoalLifecycleStatusCode lifecycle_status = 11
+  message LifecycleStatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/goal-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    GoalLifecycleStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  LifecycleStatusCode lifecycle_status = 11
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // in-progress | improving | worsening | no-change | achieved | sustaining |

@@ -84,11 +84,48 @@ message CarePlan {
 
   // draft | active | suspended | completed | entered-in-error | cancelled |
   // unknown
-  RequestStatusCode status = 16
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // proposal | plan | order | option
-  CarePlanIntentCode intent = 17
+  message IntentCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/care-plan-intent";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    enum Value {
+      INVALID_UNINITIALIZED = 0;
+      PROPOSAL = 1 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/request-intent"];
+      PLAN = 2 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/request-intent"];
+      ORDER = 3 [(.google.fhir.proto.source_code_system) =
+                     "http://hl7.org/fhir/request-intent"];
+      OPTION = 4 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/request-intent"];
+    }
+    Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  IntentCode intent = 17
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Type of plan
@@ -201,7 +238,64 @@ message CarePlan {
       repeated Extension modifier_extension = 3;
 
       // Kind of resource
-      CarePlanActivityKindCode kind = 4;
+      message KindCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/care-plan-activity-kind";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        enum Value {
+          INVALID_UNINITIALIZED = 0;
+          APPOINTMENT = 1 [
+            (.google.fhir.proto.fhir_original_code) = "Appointment",
+            (.google.fhir.proto.source_code_system) =
+                "http://hl7.org/fhir/resource-types"
+          ];
+          COMMUNICATION_REQUEST = 2 [
+            (.google.fhir.proto.fhir_original_code) = "CommunicationRequest",
+            (.google.fhir.proto.source_code_system) =
+                "http://hl7.org/fhir/resource-types"
+          ];
+          DEVICE_REQUEST = 3 [
+            (.google.fhir.proto.fhir_original_code) = "DeviceRequest",
+            (.google.fhir.proto.source_code_system) =
+                "http://hl7.org/fhir/resource-types"
+          ];
+          MEDICATION_REQUEST = 4 [
+            (.google.fhir.proto.fhir_original_code) = "MedicationRequest",
+            (.google.fhir.proto.source_code_system) =
+                "http://hl7.org/fhir/resource-types"
+          ];
+          NUTRITION_ORDER = 5 [
+            (.google.fhir.proto.fhir_original_code) = "NutritionOrder",
+            (.google.fhir.proto.source_code_system) =
+                "http://hl7.org/fhir/resource-types"
+          ];
+          TASK = 6 [
+            (.google.fhir.proto.fhir_original_code) = "Task",
+            (.google.fhir.proto.source_code_system) =
+                "http://hl7.org/fhir/resource-types"
+          ];
+          SERVICE_REQUEST = 7 [
+            (.google.fhir.proto.fhir_original_code) = "ServiceRequest",
+            (.google.fhir.proto.source_code_system) =
+                "http://hl7.org/fhir/resource-types"
+          ];
+          VISION_PRESCRIPTION = 8 [
+            (.google.fhir.proto.fhir_original_code) = "VisionPrescription",
+            (.google.fhir.proto.source_code_system) =
+                "http://hl7.org/fhir/resource-types"
+          ];
+        }
+        Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      KindCode kind = 4;
 
       // Instantiates FHIR protocol or definition
       repeated Canonical instantiates_canonical = 5;
@@ -229,7 +323,21 @@ message CarePlan {
 
       // not-started | scheduled | in-progress | on-hold | completed | cancelled
       // | stopped | unknown | entered-in-error
-      CarePlanActivityStatusCode status = 11
+      message StatusCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/care-plan-activity-status";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        CarePlanActivityStatusCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      StatusCode status = 11
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Reason for current status

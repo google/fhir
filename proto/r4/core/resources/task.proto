@@ -82,7 +82,20 @@ message Task {
       [(.google.fhir.proto.valid_reference_type) = "Task"];
 
   // draft | requested | received | accepted | +
-  TaskStatusCode status = 16
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/task-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    TaskStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Reason for current status
@@ -93,11 +106,58 @@ message Task {
 
   // unknown | proposal | plan | order | original-order | reflex-order |
   // filler-order | instance-order | option
-  TaskIntentCode intent = 19
+  message IntentCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/task-intent";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    enum Value {
+      INVALID_UNINITIALIZED = 0;
+      UNKNOWN = 1 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/task-intent"];
+      PROPOSAL = 2 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/request-intent"];
+      PLAN = 3 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/request-intent"];
+      ORDER = 4 [(.google.fhir.proto.source_code_system) =
+                     "http://hl7.org/fhir/request-intent"];
+      ORIGINAL_ORDER = 5 [(.google.fhir.proto.source_code_system) =
+                              "http://hl7.org/fhir/request-intent"];
+      REFLEX_ORDER = 6 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/request-intent"];
+      FILLER_ORDER = 7 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/request-intent"];
+      INSTANCE_ORDER = 8 [(.google.fhir.proto.source_code_system) =
+                              "http://hl7.org/fhir/request-intent"];
+      OPTION = 9 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/request-intent"];
+    }
+    Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  IntentCode intent = 19
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // routine | urgent | asap | stat
-  RequestPriorityCode priority = 20;
+  message PriorityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-priority";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestPriorityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  PriorityCode priority = 20;
 
   // Task Type
   CodeableConcept code = 21;

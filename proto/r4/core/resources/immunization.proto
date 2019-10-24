@@ -18,7 +18,6 @@ package google.fhir.r4.core;
 
 import "google/protobuf/any.proto";
 import "proto/annotations.proto";
-import "proto/r4/core/codes.proto";
 import "proto/r4/core/datatypes.proto";
 
 option java_multiple_files = true;
@@ -65,7 +64,29 @@ message Immunization {
   repeated Identifier identifier = 10;
 
   // completed | entered-in-error | not-done
-  ImmunizationStatusCodesCode status = 11
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/immunization-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    enum Value {
+      INVALID_UNINITIALIZED = 0;
+      COMPLETED = 1 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/event-status"];
+      ENTERED_IN_ERROR = 2 [(.google.fhir.proto.source_code_system) =
+                                "http://hl7.org/fhir/event-status"];
+      NOT_DONE = 3 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/event-status"];
+    }
+    Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Reason not done

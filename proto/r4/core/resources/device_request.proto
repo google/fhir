@@ -82,15 +82,54 @@ message DeviceRequest {
   Identifier group_identifier = 15;
 
   // draft | active | suspended | completed | entered-in-error | cancelled
-  RequestStatusCode status = 16;
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16;
 
   // proposal | plan | original-order | encoded | reflex-order
-  RequestIntentCode intent = 17
+  message IntentCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-intent";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestIntentCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  IntentCode intent = 17
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Indicates how quickly the {{title}} should be addressed with respect to
   // other requests
-  RequestPriorityCode priority = 18;
+  message PriorityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-priority";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestPriorityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  PriorityCode priority = 18;
 
   // Device requested
   message CodeX {

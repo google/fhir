@@ -19,7 +19,7 @@
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/r4/core/datatypes.pb.h"
-#include "testdata/r4/profiles/test_core.pb.h"
+#include "testdata/r4/profiles/test.pb.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
 
 namespace google {
@@ -30,7 +30,7 @@ namespace {
 
 using ::google::fhir::r4::core::CodeableConcept;
 using ::google::fhir::r4::core::Coding;
-using ::google::fhir::r4::testingcore::TestObservation;
+using ::google::fhir::r4::testing::TestObservation;
 using ::testing::ElementsAre;
 
 const TestObservation::CodeableConceptForCode GetConcept() {

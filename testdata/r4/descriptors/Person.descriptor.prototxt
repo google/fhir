@@ -120,7 +120,7 @@ field {
   number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.AdministrativeGenderCode"
+  type_name: ".google.fhir.r4.core.Person.GenderCode"
   options {
     [google.fhir.proto.field_description]: "male | female | other | unknown"
   }
@@ -188,6 +188,33 @@ field {
   }
 }
 nested_type {
+  name: "GenderCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.AdministrativeGenderCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/administrative-gender"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
   name: "Link"
   field {
     name: "id"
@@ -239,9 +266,36 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.IdentityAssuranceLevelCode"
+    type_name: ".google.fhir.r4.core.Person.Link.AssuranceCode"
     options {
       [google.fhir.proto.field_description]: "level1 | level2 | level3 | level4"
+    }
+  }
+  nested_type {
+    name: "AssuranceCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r4.core.IdentityAssuranceLevelCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/identity-assuranceLevel"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
 }

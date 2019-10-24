@@ -142,7 +142,7 @@ field {
   number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.PublicationStatusCode"
+  type_name: ".google.fhir.r4.core.StructureMap.StatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "draft | active | retired | unknown"
@@ -272,6 +272,33 @@ field {
   }
 }
 nested_type {
+  name: "StatusCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.PublicationStatusCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/publication-status"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
   name: "Structure"
   field {
     name: "id"
@@ -319,7 +346,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.StructureMapModelModeCode"
+    type_name: ".google.fhir.r4.core.StructureMap.Structure.ModeCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "source | queried | target | produced"
@@ -343,6 +370,33 @@ nested_type {
     type_name: ".google.fhir.r4.core.String"
     options {
       [google.fhir.proto.field_description]: "Documentation on use of structure"
+    }
+  }
+  nested_type {
+    name: "ModeCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r4.core.StructureMapModelModeCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/map-model-mode"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
 }
@@ -404,7 +458,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.StructureMapGroupTypeModeCode"
+    type_name: ".google.fhir.r4.core.StructureMap.Group.TypeModeCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "none | types | type-and-types"
@@ -442,6 +496,33 @@ nested_type {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Transform Rule from source to target"
       [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+    }
+  }
+  nested_type {
+    name: "TypeModeCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r4.core.StructureMapGroupTypeModeCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/map-group-type-mode"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
   nested_type {
@@ -502,7 +583,7 @@ nested_type {
       number: 6
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.StructureMapInputModeCode"
+      type_name: ".google.fhir.r4.core.StructureMap.Group.Input.ModeCode"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "source | target"
@@ -516,6 +597,33 @@ nested_type {
       type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Documentation for this instance of data"
+      }
+    }
+    nested_type {
+      name: "ModeCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r4.core.StructureMapInputModeCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.Extension"
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/map-input-mode"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
       }
     }
   }
@@ -716,7 +824,7 @@ nested_type {
         number: 10
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.StructureMapSourceListModeCode"
+        type_name: ".google.fhir.r4.core.StructureMap.Group.Rule.Source.ListModeCode"
         options {
           [google.fhir.proto.field_description]: "first | not_first | last | not_last | only_one"
         }
@@ -1163,6 +1271,33 @@ nested_type {
           name: "choice"
         }
       }
+      nested_type {
+        name: "ListModeCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.StructureMapSourceListModeCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/map-source-list-mode"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+        }
+      }
     }
     nested_type {
       name: "Target"
@@ -1211,7 +1346,7 @@ nested_type {
         number: 5
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.StructureMapContextTypeCode"
+        type_name: ".google.fhir.r4.core.StructureMap.Group.Rule.Target.ContextTypeCode"
         options {
           [google.fhir.proto.field_description]: "type | variable"
         }
@@ -1241,7 +1376,7 @@ nested_type {
         number: 8
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.StructureMapTargetListModeCode"
+        type_name: ".google.fhir.r4.core.StructureMap.Group.Rule.Target.ListModeCode"
         options {
           [google.fhir.proto.field_description]: "first | share | last | collate"
         }
@@ -1261,7 +1396,7 @@ nested_type {
         number: 10
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.StructureMapTransformCode"
+        type_name: ".google.fhir.r4.core.StructureMap.Group.Rule.Target.TransformCode"
         options {
           [google.fhir.proto.field_description]: "create | copy +"
         }
@@ -1275,6 +1410,87 @@ nested_type {
         options {
           [google.fhir.proto.field_description]: "Parameters to the transform"
           [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+        }
+      }
+      nested_type {
+        name: "ContextTypeCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.StructureMapContextTypeCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/map-context-type"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+        }
+      }
+      nested_type {
+        name: "ListModeCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.StructureMapTargetListModeCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/map-target-list-mode"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+        }
+      }
+      nested_type {
+        name: "TransformCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.StructureMapTransformCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/map-transform"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
         }
       }
       nested_type {

@@ -143,7 +143,7 @@ field {
   number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.PublicationStatusCode"
+  type_name: ".google.fhir.r4.core.ShareableCodeSystem.StatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "draft | active | retired | unknown"
@@ -267,7 +267,7 @@ field {
   number: 27
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.CodeSystemHierarchyMeaningCode"
+  type_name: ".google.fhir.r4.core.ShareableCodeSystem.HierarchyMeaningCode"
   options {
     [google.fhir.proto.field_description]: "grouped-by | is-a | part-of | classified-with"
   }
@@ -297,7 +297,7 @@ field {
   number: 30
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.CodeSystemContentModeCode"
+  type_name: ".google.fhir.r4.core.ShareableCodeSystem.ContentCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "not-present | example | fragment | complete | supplement"
@@ -358,6 +358,87 @@ field {
   }
 }
 nested_type {
+  name: "StatusCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.PublicationStatusCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/publication-status"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
+  name: "HierarchyMeaningCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.CodeSystemHierarchyMeaningCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/codesystem-hierarchy-meaning"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
+  name: "ContentCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.CodeSystemContentModeCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/codesystem-content-mode"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
   name: "Filter"
   field {
     name: "id"
@@ -415,7 +496,7 @@ nested_type {
     number: 6
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.FilterOperatorCode"
+    type_name: ".google.fhir.r4.core.ShareableCodeSystem.Filter.OperatorCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Operators that can be used with filter"
@@ -430,6 +511,33 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "What to use for the value"
+    }
+  }
+  nested_type {
+    name: "OperatorCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r4.core.FilterOperatorCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/filter-operator"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
 }
@@ -501,10 +609,37 @@ nested_type {
     number: 7
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.PropertyTypeCode"
+    type_name: ".google.fhir.r4.core.ShareableCodeSystem.Property.TypeCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "code | Coding | string | integer | boolean | dateTime | decimal"
+    }
+  }
+  nested_type {
+    name: "TypeCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r4.core.PropertyTypeCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/concept-property-type"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
 }

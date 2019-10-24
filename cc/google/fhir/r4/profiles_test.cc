@@ -25,20 +25,23 @@
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/r4/core/datatypes.pb.h"
+#include "proto/r4/core/resources/encounter.pb.h"
 #include "proto/r4/core/resources/observation.pb.h"
 #include "proto/r4/core/resources/patient.pb.h"
 #include "proto/r4/uscore.pb.h"
-#include "testdata/r4/profiles/test_core.pb.h"
+#include "testdata/r4/profiles/test.pb.h"
 
 namespace google {
 namespace fhir {
 
 namespace {
 
+using ::google::fhir::r4::core::Encounter;
 using ::google::fhir::r4::core::Observation;
 using ::google::fhir::r4::core::Patient;
-using ::google::fhir::r4::testingcore::TestObservation;
-using ::google::fhir::r4::testingcore::TestObservationLvl2;
+using ::google::fhir::r4::testing::TestEncounter;
+using ::google::fhir::r4::testing::TestObservation;
+using ::google::fhir::r4::testing::TestObservationLvl2;
 using ::google::fhir::testutil::EqualsProto;
 using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
 
@@ -103,11 +106,10 @@ TEST(ProfilesTest, ComplexExtension) {
       "testdata/r4/profiles/observation_complexextension");
 }
 
-// TODO: reenable once c++ code is using new r4/core protos
-// TEST(ProfilesTest, UsCore) {
-//   TestPair<Patient, ::google::fhir::r4::uscore::USCorePatientProfile>(
-//       "testdata/r4/profiles/uscore_patient");
-// }
+TEST(ProfilesTest, UsCore) {
+  TestPair<Patient, ::google::fhir::r4::uscore::USCorePatientProfile>(
+      "testdata/r4/profiles/uscore_patient");
+}
 
 TEST(ProfilesTest, Normalize) {
   const TestObservation unnormalized = ReadProto<TestObservation>(absl::StrCat(
@@ -125,7 +127,7 @@ TEST(ProfilesTest, Normalize) {
 }
 
 TEST(ProfilesTest, NormalizeBundle) {
-  r4::testingcore::Bundle unnormalized_bundle;
+  r4::testing::Bundle unnormalized_bundle;
 
   *unnormalized_bundle.add_entry()
        ->mutable_resource()
@@ -136,7 +138,7 @@ TEST(ProfilesTest, NormalizeBundle) {
        ->mutable_test_observation_lvl2() = GetUnprofiled<TestObservationLvl2>(
       "testdata/r4/profiles/testobservation_lvl2");
 
-  r4::testingcore::Bundle expected_normalized;
+  r4::testing::Bundle expected_normalized;
   *expected_normalized.add_entry()
        ->mutable_resource()
        ->mutable_test_observation() = GetProfiled<TestObservation>(
@@ -146,8 +148,7 @@ TEST(ProfilesTest, NormalizeBundle) {
        ->mutable_test_observation_lvl2() = GetProfiled<TestObservationLvl2>(
       "testdata/r4/profiles/testobservation_lvl2");
 
-  StatusOr<r4::testingcore::Bundle> normalized =
-      NormalizeR4(unnormalized_bundle);
+  StatusOr<r4::testing::Bundle> normalized = NormalizeR4(unnormalized_bundle);
   EXPECT_THAT(normalized.ValueOrDie(),
               EqualsProtoIgnoringReordering(expected_normalized));
 }
@@ -179,6 +180,11 @@ TEST(ProfilesTest, MissingRequiredFields) {
 
   auto strict_status = ConvertToProfileR4(unprofiled, &profiled);
   ASSERT_EQ(tensorflow::error::FAILED_PRECONDITION, strict_status.code());
+}
+
+TEST(ProfilesTest, ConvertToInlinedCodeEnum) {
+  TestPair<Encounter, TestEncounter>(
+      "testdata/r4/profiles/encounter_inlinedcodeenum");
 }
 
 }  // namespace

@@ -73,11 +73,39 @@ message OperationOutcome {
     repeated Extension modifier_extension = 3;
 
     // fatal | error | warning | information
-    IssueSeverityCode severity = 4
+    message SeverityCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/issue-severity";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      IssueSeverityCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    SeverityCode severity = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Error or warning code
-    IssueTypeCode code = 5
+    message CodeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/issue-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      IssueTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    CodeCode code = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Additional details about the error

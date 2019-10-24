@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.ContactPointSystemCode"
+  type_name: ".google.fhir.r4.core.ContactPoint.SystemCode"
   options {
     [google.fhir.proto.field_description]: "phone | fax | email | pager | url | sms | other"
   }
@@ -44,7 +44,7 @@ field {
   number: 5
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.ContactPointUseCode"
+  type_name: ".google.fhir.r4.core.ContactPoint.UseCode"
   options {
     [google.fhir.proto.field_description]: "home | work | temp | old | mobile - purpose of this contact point"
   }
@@ -67,6 +67,60 @@ field {
   type_name: ".google.fhir.r4.core.Period"
   options {
     [google.fhir.proto.field_description]: "Time period when the contact point was/is in use"
+  }
+}
+nested_type {
+  name: "SystemCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.ContactPointSystemCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/contact-point-system"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
+  name: "UseCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.ContactPointUseCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/contact-point-use"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
   }
 }
 options {

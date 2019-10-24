@@ -90,7 +90,7 @@ class FhirProtoParseHelper {
       return T();
     }
     Status status = ValidateResource(tmp);
-    if (IsProfile(T::descriptor())) {
+    if (IsProfile(T::descriptor()) && IsResource(T::descriptor())) {
       switch (GetFhirVersion(tmp)) {
         case proto::STU3: {
           auto status_or_normalized = NormalizeStu3(tmp);

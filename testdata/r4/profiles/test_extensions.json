@@ -7,7 +7,7 @@
         "id": "SimpleDecimalExt",
         "url": "http://test/url/base/SimpleDecimalExt",
         "name": "SimpleDecimalExt",
-        "date": "2019-07-09",
+        "date": "2019-10-20",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -278,7 +278,7 @@
         "id": "SimpleCodeableConceptExtension",
         "url": "http://test/url/base/SimpleCodeableConceptExtension",
         "name": "SimpleCodeableConceptExtension",
-        "date": "2019-07-09",
+        "date": "2019-10-20",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -499,12 +499,6 @@
               "isModifier": false,
               "isSummary": false,
               "binding": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-                    "valueString": "CarePlanActivityStatus"
-                  }
-                ],
                 "strength": "required",
                 "valueSet": "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
               },
@@ -555,12 +549,6 @@
                 }
               ],
               "binding": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-                    "valueString": "CarePlanActivityStatus"
-                  }
-                ],
                 "strength": "required",
                 "valueSet": "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
               }
@@ -575,7 +563,7 @@
         "id": "DigitalMediaType",
         "url": "http://test/url/base/DigitalMediaType",
         "name": "DigitalMediaType",
-        "date": "2019-07-09",
+        "date": "2019-10-20",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -796,14 +784,8 @@
               "isModifier": false,
               "isSummary": false,
               "binding": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-                    "valueString": "DigitalMediaType"
-                  }
-                ],
                 "strength": "required",
-                "valueSet": "http://hl7.org/fhir/ValueSet/digital-media-type"
+                "valueSet": "http://hl7.org/fhir/ValueSet/media-type"
               },
               "mapping": [
                 {
@@ -852,14 +834,8 @@
                 }
               ],
               "binding": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-                    "valueString": "DigitalMediaType"
-                  }
-                ],
                 "strength": "required",
-                "valueSet": "http://hl7.org/fhir/ValueSet/digital-media-type"
+                "valueSet": "http://hl7.org/fhir/ValueSet/media-type"
               }
             }
           ]
@@ -872,7 +848,7 @@
         "id": "ComplexExt",
         "url": "http://test/url/base/ComplexExt",
         "name": "ComplexExt",
-        "date": "2019-07-09",
+        "date": "2019-10-20",
         "publisher": "Testington Inc.",
         "contact": [
           {

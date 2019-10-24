@@ -140,7 +140,7 @@ field {
   number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.PublicationStatusCode"
+  type_name: ".google.fhir.r4.core.ConceptMap.StatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "draft | active | retired | unknown"
@@ -265,6 +265,33 @@ field {
   options {
     [google.fhir.proto.field_description]: "Same source and target systems"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+  }
+}
+nested_type {
+  name: "StatusCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.PublicationStatusCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/publication-status"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
   }
 }
 nested_type {
@@ -535,7 +562,7 @@ nested_type {
         number: 6
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.ConceptMapEquivalenceCode"
+        type_name: ".google.fhir.r4.core.ConceptMap.Group.SourceElement.TargetElement.EquivalenceCode"
         options {
           [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
           [google.fhir.proto.field_description]: "relatedto | equivalent | equal | wider | subsumes | narrower | specializes | inexact | unmatched | disjoint"
@@ -570,6 +597,33 @@ nested_type {
         type_name: ".google.fhir.r4.core.ConceptMap.Group.SourceElement.TargetElement.OtherElement"
         options {
           [google.fhir.proto.field_description]: "Other concepts that this mapping also produces"
+        }
+      }
+      nested_type {
+        name: "EquivalenceCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.ConceptMapEquivalenceCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/concept-map-equivalence"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
         }
       }
       nested_type {
@@ -686,7 +740,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.ConceptMapGroupUnmappedModeCode"
+      type_name: ".google.fhir.r4.core.ConceptMap.Group.Unmapped.ModeCode"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "provided | fixed | other-map"
@@ -720,6 +774,33 @@ nested_type {
       type_name: ".google.fhir.r4.core.Canonical"
       options {
         [google.fhir.proto.field_description]: "canonical reference to an additional ConceptMap to use for mapping if the source concept is unmapped"
+      }
+    }
+    nested_type {
+      name: "ModeCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r4.core.ConceptMapGroupUnmappedModeCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.Extension"
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/conceptmap-unmapped-mode"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
       }
     }
   }

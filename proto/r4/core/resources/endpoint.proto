@@ -66,7 +66,20 @@ message Endpoint {
   repeated Identifier identifier = 10;
 
   // active | suspended | error | off | entered-in-error | test
-  EndpointStatusCode status = 11
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/endpoint-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    EndpointStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Protocol/Profile/Standard to be used with this endpoint connection
@@ -94,7 +107,24 @@ message Endpoint {
 
   // Mimetype to send. If not specified, the content could be anything
   // (including no payload, if the connectionType defined this)
-  repeated MimeTypesCode payload_mime_type = 18;
+  message PayloadMimeTypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/mimetypes";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    // Field 1 reserved to allow enumeration in the future.
+    reserved 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+
+    // This valueset is not enumerable, and so is represented as a string.
+    string value = 4;
+  }
+  repeated PayloadMimeTypeCode payload_mime_type = 18;
 
   // The technical base address for connecting to this endpoint
   Url address = 19

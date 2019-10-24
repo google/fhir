@@ -94,7 +94,7 @@ link {
   }
 }
 marital_status: {
-  color { code { value: "blue" } }
+  color { code { value: BLUE } }
   coding {
     system { value: "bogus-system.org" }
     code { value: "baloney" }

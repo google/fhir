@@ -83,7 +83,21 @@ message Linkage {
     repeated Extension modifier_extension = 3;
 
     // source | alternate | historical
-    LinkageTypeCode type = 4
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/linkage-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      LinkageTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Resource being linked

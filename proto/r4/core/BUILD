@@ -9,6 +9,7 @@ licenses(["notice"])
 fhir_proto_library(
     srcs = ["datatypes.proto"],
     proto_deps = [
+        ":codes_proto",
         "//proto:annotations_proto",
     ],
     proto_library_prefix = "datatypes",
@@ -17,7 +18,6 @@ fhir_proto_library(
 fhir_proto_library(
     srcs = ["codes.proto"],
     proto_deps = [
-        ":datatypes_proto",
         "//proto:annotations_proto",
     ],
     proto_library_prefix = "codes",
@@ -33,4 +33,12 @@ fhir_proto_library(
         "//proto:annotations_proto",
     ],
     proto_library_prefix = "extensions",
+)
+
+# We also make the .proto files readable for testing.
+filegroup(
+    name = "testdata",
+    srcs = glob([
+        "*.proto",
+    ]),
 )

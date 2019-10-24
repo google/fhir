@@ -19,6 +19,7 @@ import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.Annotations.StructureDefinitionKindValue;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
+import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.MessageOrBuilder;
 
@@ -96,6 +97,10 @@ public final class AnnotationUtils {
 
   public static String getFhirValuesetUrl(Descriptor descriptor) {
     return descriptor.getOptions().getExtension(Annotations.fhirValuesetUrl);
+  }
+
+  public static String getFhirCodeSystemUrl(EnumDescriptor descriptor) {
+    return descriptor.getOptions().getExtension(Annotations.fhirCodeSystemUrl);
   }
 
   public static boolean isProfileOf(Descriptor base, Descriptor test) {

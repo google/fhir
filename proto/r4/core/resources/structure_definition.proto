@@ -79,7 +79,20 @@ message StructureDefinition {
   String title = 14;
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 15
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 15
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // For testing purposes, not real usage
@@ -113,7 +126,20 @@ message StructureDefinition {
   repeated Coding keyword = 25;
 
   // FHIR Version this StructureDefinition targets
-  FHIRVersionCode fhir_version = 26;
+  message FhirVersionCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/FHIR-version";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    FHIRVersionCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  FhirVersionCode fhir_version = 26;
 
   // External specification that the content is mapped to
   message Mapping {
@@ -146,7 +172,20 @@ message StructureDefinition {
   ];
 
   // primitive-type | complex-type | resource | logical
-  StructureDefinitionKindCode kind = 28
+  message KindCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/structure-definition-kind";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    StructureDefinitionKindCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  KindCode kind = 28
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Whether the structure is abstract
@@ -165,7 +204,21 @@ message StructureDefinition {
     repeated Extension modifier_extension = 3;
 
     // fhirpath | element | extension
-    ExtensionContextTypeCode type = 4
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/extension-context-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ExtensionContextTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Where the extension can be used in instances
@@ -187,7 +240,20 @@ message StructureDefinition {
   Canonical base_definition = 33;
 
   // specialization | constraint - How relates to base definition
-  TypeDerivationRuleCode derivation = 34;
+  message DerivationCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/type-derivation-rule";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    TypeDerivationRuleCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  DerivationCode derivation = 34;
 
   // Snapshot view of the structure
   message Snapshot {

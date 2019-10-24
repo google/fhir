@@ -153,7 +153,7 @@ field {
   number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.RequestStatusCode"
+  type_name: ".google.fhir.r4.core.CarePlan.StatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "draft | active | suspended | completed | entered-in-error | cancelled | unknown"
@@ -164,7 +164,7 @@ field {
   number: 17
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.CarePlanIntentCode"
+  type_name: ".google.fhir.r4.core.CarePlan.IntentCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "proposal | plan | order | option"
@@ -345,6 +345,95 @@ field {
   }
 }
 nested_type {
+  name: "StatusCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.RequestStatusCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/request-status"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
+  name: "IntentCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.CarePlan.IntentCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  enum_type {
+    name: "Value"
+    value {
+      name: "INVALID_UNINITIALIZED"
+      number: 0
+    }
+    value {
+      name: "PROPOSAL"
+      number: 1
+      options {
+        [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/request-intent"
+      }
+    }
+    value {
+      name: "PLAN"
+      number: 2
+      options {
+        [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/request-intent"
+      }
+    }
+    value {
+      name: "ORDER"
+      number: 3
+      options {
+        [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/request-intent"
+      }
+    }
+    value {
+      name: "OPTION"
+      number: 4
+      options {
+        [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/request-intent"
+      }
+    }
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/care-plan-intent"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
   name: "Activity"
   field {
     name: "id"
@@ -474,7 +563,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.CarePlanActivityKindCode"
+      type_name: ".google.fhir.r4.core.CarePlan.Activity.Detail.KindCode"
       options {
         [google.fhir.proto.field_description]: "Kind of resource"
       }
@@ -549,7 +638,7 @@ nested_type {
       number: 11
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.CarePlanActivityStatusCode"
+      type_name: ".google.fhir.r4.core.CarePlan.Activity.Detail.StatusCode"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "not-started | scheduled | in-progress | on-hold | completed | cancelled | stopped | unknown | entered-in-error"
@@ -652,6 +741,131 @@ nested_type {
       type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "Extra info describing activity to perform"
+      }
+    }
+    nested_type {
+      name: "KindCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r4.core.CarePlan.Activity.Detail.KindCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.Extension"
+      }
+      enum_type {
+        name: "Value"
+        value {
+          name: "INVALID_UNINITIALIZED"
+          number: 0
+        }
+        value {
+          name: "APPOINTMENT"
+          number: 1
+          options {
+            [google.fhir.proto.fhir_original_code]: "Appointment"
+            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+          }
+        }
+        value {
+          name: "COMMUNICATION_REQUEST"
+          number: 2
+          options {
+            [google.fhir.proto.fhir_original_code]: "CommunicationRequest"
+            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+          }
+        }
+        value {
+          name: "DEVICE_REQUEST"
+          number: 3
+          options {
+            [google.fhir.proto.fhir_original_code]: "DeviceRequest"
+            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+          }
+        }
+        value {
+          name: "MEDICATION_REQUEST"
+          number: 4
+          options {
+            [google.fhir.proto.fhir_original_code]: "MedicationRequest"
+            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+          }
+        }
+        value {
+          name: "NUTRITION_ORDER"
+          number: 5
+          options {
+            [google.fhir.proto.fhir_original_code]: "NutritionOrder"
+            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+          }
+        }
+        value {
+          name: "TASK"
+          number: 6
+          options {
+            [google.fhir.proto.fhir_original_code]: "Task"
+            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+          }
+        }
+        value {
+          name: "SERVICE_REQUEST"
+          number: 7
+          options {
+            [google.fhir.proto.fhir_original_code]: "ServiceRequest"
+            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+          }
+        }
+        value {
+          name: "VISION_PRESCRIPTION"
+          number: 8
+          options {
+            [google.fhir.proto.fhir_original_code]: "VisionPrescription"
+            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
+          }
+        }
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/care-plan-activity-kind"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+      }
+    }
+    nested_type {
+      name: "StatusCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r4.core.CarePlanActivityStatusCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.Extension"
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/care-plan-activity-status"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
       }
     }
     nested_type {

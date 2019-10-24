@@ -24,7 +24,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.TriggerTypeCode"
+  type_name: ".google.fhir.r4.core.TriggerDefinition.TypeCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "named-event | periodic | data-changed | data-added | data-modified | data-removed | data-accessed | data-access-ended"
@@ -68,6 +68,33 @@ field {
   type_name: ".google.fhir.r4.core.Expression"
   options {
     [google.fhir.proto.field_description]: "Whether the event triggers (boolean expression)"
+  }
+}
+nested_type {
+  name: "TypeCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.TriggerTypeCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/trigger-type"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
   }
 }
 nested_type {

@@ -1,3 +1,17 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
 syntax = "proto3";
 
 package google.fhir.r4.uscore;
@@ -7,179 +21,1035 @@ import "proto/r4/core/datatypes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.uscore";
-option (.google.fhir.proto.fhir_version) = R4;
 
-// Codes for assigning sex at birth as specified by the [Office of the National
-// Coordinator for Health IT
-// (ONC)](https://www.healthit.gov/newsroom/about-onc). See
-// http://hl7.org/fhir/us/core/ValueSet/birthsex
-message BirthSexCode {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.fhir_valueset_url) =
-      "http://hl7.org/fhir/us/core/ValueSet/birthsex";
-
+//  The U.S. Centers for Disease Control and Prevention (CDC) has prepared a
+//  code set for use in codingrace and ethnicity data. This code set is based on
+//  current federal standards for classifying data onrace and ethnicity,
+//  specifically the minimum race and ethnicity categories defined by the U.S.
+//  Office ofManagement and Budget (OMB) and a more detailed set of race and
+//  ethnicity categories maintainedby the U.S. Bureau of the Census (BC). The
+//  main purpose of the code set is to facilitate use of federalstandards for
+//  classifying data on race and ethnicity when these data are exchanged,
+//  stored, retrieved,or analyzed in electronic form. At the same time, the code
+//  set can be applied to paper-based recordsystems to the extent that these
+//  systems are used to collect, maintain, and report data on race andethnicity
+//  in accordance with current federal standards. Source: [Race and Ethnicity
+//  Code Set
+//  Version 1.0](https://www.cdc.gov/phin/resources/vocabulary/documents/cdc-race--ethnicity-background-and-purpose.pdf).
+// See urn:oid:2.16.840.1.113883.6.238
+message RaceAndEthnicityCDCCode {
   enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "urn:oid:2.16.840.1.113883.6.238";
+
     INVALID_UNINITIALIZED = 0;
-    F = 1 [(.google.fhir.proto.fhir_original_code) = "F"];
-    M = 2 [(.google.fhir.proto.fhir_original_code) = "M"];
-    UNK = 3 [(.google.fhir.proto.fhir_original_code) = "UNK"];
+    NUM_1000_9 = 1 [(.google.fhir.proto.fhir_original_code) = "1000-9"];
+    NUM_1002_5 = 2 [(.google.fhir.proto.fhir_original_code) = "1002-5"];
+    NUM_1004_1 = 3 [(.google.fhir.proto.fhir_original_code) = "1004-1"];
+    NUM_1735_0 = 4 [(.google.fhir.proto.fhir_original_code) = "1735-0"];
+    NUM_1006_6 = 5 [(.google.fhir.proto.fhir_original_code) = "1006-6"];
+    NUM_1008_2 = 6 [(.google.fhir.proto.fhir_original_code) = "1008-2"];
+    NUM_1010_8 = 7 [(.google.fhir.proto.fhir_original_code) = "1010-8"];
+    NUM_1021_5 = 8 [(.google.fhir.proto.fhir_original_code) = "1021-5"];
+    NUM_1026_4 = 9 [(.google.fhir.proto.fhir_original_code) = "1026-4"];
+    NUM_1028_0 = 10 [(.google.fhir.proto.fhir_original_code) = "1028-0"];
+    NUM_1030_6 = 11 [(.google.fhir.proto.fhir_original_code) = "1030-6"];
+    NUM_1033_0 = 12 [(.google.fhir.proto.fhir_original_code) = "1033-0"];
+    NUM_1035_5 = 13 [(.google.fhir.proto.fhir_original_code) = "1035-5"];
+    NUM_1037_1 = 14 [(.google.fhir.proto.fhir_original_code) = "1037-1"];
+    NUM_1039_7 = 15 [(.google.fhir.proto.fhir_original_code) = "1039-7"];
+    NUM_1041_3 = 16 [(.google.fhir.proto.fhir_original_code) = "1041-3"];
+    NUM_1044_7 = 17 [(.google.fhir.proto.fhir_original_code) = "1044-7"];
+    NUM_1053_8 = 18 [(.google.fhir.proto.fhir_original_code) = "1053-8"];
+    NUM_1068_6 = 19 [(.google.fhir.proto.fhir_original_code) = "1068-6"];
+    NUM_1076_9 = 20 [(.google.fhir.proto.fhir_original_code) = "1076-9"];
+    NUM_1078_5 = 21 [(.google.fhir.proto.fhir_original_code) = "1078-5"];
+    NUM_1080_1 = 22 [(.google.fhir.proto.fhir_original_code) = "1080-1"];
+    NUM_1082_7 = 23 [(.google.fhir.proto.fhir_original_code) = "1082-7"];
+    NUM_1086_8 = 24 [(.google.fhir.proto.fhir_original_code) = "1086-8"];
+    NUM_1088_4 = 25 [(.google.fhir.proto.fhir_original_code) = "1088-4"];
+    NUM_1100_7 = 26 [(.google.fhir.proto.fhir_original_code) = "1100-7"];
+    NUM_1102_3 = 27 [(.google.fhir.proto.fhir_original_code) = "1102-3"];
+    NUM_1106_4 = 28 [(.google.fhir.proto.fhir_original_code) = "1106-4"];
+    NUM_1108_0 = 29 [(.google.fhir.proto.fhir_original_code) = "1108-0"];
+    NUM_1112_2 = 30 [(.google.fhir.proto.fhir_original_code) = "1112-2"];
+    NUM_1114_8 = 31 [(.google.fhir.proto.fhir_original_code) = "1114-8"];
+    NUM_1123_9 = 32 [(.google.fhir.proto.fhir_original_code) = "1123-9"];
+    NUM_1150_2 = 33 [(.google.fhir.proto.fhir_original_code) = "1150-2"];
+    NUM_1153_6 = 34 [(.google.fhir.proto.fhir_original_code) = "1153-6"];
+    NUM_1155_1 = 35 [(.google.fhir.proto.fhir_original_code) = "1155-1"];
+    NUM_1162_7 = 36 [(.google.fhir.proto.fhir_original_code) = "1162-7"];
+    NUM_1165_0 = 37 [(.google.fhir.proto.fhir_original_code) = "1165-0"];
+    NUM_1167_6 = 38 [(.google.fhir.proto.fhir_original_code) = "1167-6"];
+    NUM_1169_2 = 39 [(.google.fhir.proto.fhir_original_code) = "1169-2"];
+    NUM_1171_8 = 40 [(.google.fhir.proto.fhir_original_code) = "1171-8"];
+    NUM_1173_4 = 41 [(.google.fhir.proto.fhir_original_code) = "1173-4"];
+    NUM_1175_9 = 42 [(.google.fhir.proto.fhir_original_code) = "1175-9"];
+    NUM_1178_3 = 43 [(.google.fhir.proto.fhir_original_code) = "1178-3"];
+    NUM_1180_9 = 44 [(.google.fhir.proto.fhir_original_code) = "1180-9"];
+    NUM_1182_5 = 45 [(.google.fhir.proto.fhir_original_code) = "1182-5"];
+    NUM_1184_1 = 46 [(.google.fhir.proto.fhir_original_code) = "1184-1"];
+    NUM_1186_6 = 47 [(.google.fhir.proto.fhir_original_code) = "1186-6"];
+    NUM_1189_0 = 48 [(.google.fhir.proto.fhir_original_code) = "1189-0"];
+    NUM_1191_6 = 49 [(.google.fhir.proto.fhir_original_code) = "1191-6"];
+    NUM_1193_2 = 50 [(.google.fhir.proto.fhir_original_code) = "1193-2"];
+    NUM_1207_0 = 51 [(.google.fhir.proto.fhir_original_code) = "1207-0"];
+    NUM_1209_6 = 52 [(.google.fhir.proto.fhir_original_code) = "1209-6"];
+    NUM_1211_2 = 53 [(.google.fhir.proto.fhir_original_code) = "1211-2"];
+    NUM_1214_6 = 54 [(.google.fhir.proto.fhir_original_code) = "1214-6"];
+    NUM_1222_9 = 55 [(.google.fhir.proto.fhir_original_code) = "1222-9"];
+    NUM_1233_6 = 56 [(.google.fhir.proto.fhir_original_code) = "1233-6"];
+    NUM_1250_0 = 57 [(.google.fhir.proto.fhir_original_code) = "1250-0"];
+    NUM_1252_6 = 58 [(.google.fhir.proto.fhir_original_code) = "1252-6"];
+    NUM_1254_2 = 59 [(.google.fhir.proto.fhir_original_code) = "1254-2"];
+    NUM_1256_7 = 60 [(.google.fhir.proto.fhir_original_code) = "1256-7"];
+    NUM_1258_3 = 61 [(.google.fhir.proto.fhir_original_code) = "1258-3"];
+    NUM_1260_9 = 62 [(.google.fhir.proto.fhir_original_code) = "1260-9"];
+    NUM_1262_5 = 63 [(.google.fhir.proto.fhir_original_code) = "1262-5"];
+    NUM_1264_1 = 64 [(.google.fhir.proto.fhir_original_code) = "1264-1"];
+    NUM_1267_4 = 65 [(.google.fhir.proto.fhir_original_code) = "1267-4"];
+    NUM_1269_0 = 66 [(.google.fhir.proto.fhir_original_code) = "1269-0"];
+    NUM_1271_6 = 67 [(.google.fhir.proto.fhir_original_code) = "1271-6"];
+    NUM_1275_7 = 68 [(.google.fhir.proto.fhir_original_code) = "1275-7"];
+    NUM_1277_3 = 69 [(.google.fhir.proto.fhir_original_code) = "1277-3"];
+    NUM_1279_9 = 70 [(.google.fhir.proto.fhir_original_code) = "1279-9"];
+    NUM_1281_5 = 71 [(.google.fhir.proto.fhir_original_code) = "1281-5"];
+    NUM_1285_6 = 72 [(.google.fhir.proto.fhir_original_code) = "1285-6"];
+    NUM_1297_1 = 73 [(.google.fhir.proto.fhir_original_code) = "1297-1"];
+    NUM_1299_7 = 74 [(.google.fhir.proto.fhir_original_code) = "1299-7"];
+    NUM_1301_1 = 75 [(.google.fhir.proto.fhir_original_code) = "1301-1"];
+    NUM_1303_7 = 76 [(.google.fhir.proto.fhir_original_code) = "1303-7"];
+    NUM_1305_2 = 77 [(.google.fhir.proto.fhir_original_code) = "1305-2"];
+    NUM_1309_4 = 78 [(.google.fhir.proto.fhir_original_code) = "1309-4"];
+    NUM_1312_8 = 79 [(.google.fhir.proto.fhir_original_code) = "1312-8"];
+    NUM_1317_7 = 80 [(.google.fhir.proto.fhir_original_code) = "1317-7"];
+    NUM_1319_3 = 81 [(.google.fhir.proto.fhir_original_code) = "1319-3"];
+    NUM_1321_9 = 82 [(.google.fhir.proto.fhir_original_code) = "1321-9"];
+    NUM_1323_5 = 83 [(.google.fhir.proto.fhir_original_code) = "1323-5"];
+    NUM_1325_0 = 84 [(.google.fhir.proto.fhir_original_code) = "1325-0"];
+    NUM_1331_8 = 85 [(.google.fhir.proto.fhir_original_code) = "1331-8"];
+    NUM_1340_9 = 86 [(.google.fhir.proto.fhir_original_code) = "1340-9"];
+    NUM_1342_5 = 87 [(.google.fhir.proto.fhir_original_code) = "1342-5"];
+    NUM_1344_1 = 88 [(.google.fhir.proto.fhir_original_code) = "1344-1"];
+    NUM_1348_2 = 89 [(.google.fhir.proto.fhir_original_code) = "1348-2"];
+    NUM_1350_8 = 90 [(.google.fhir.proto.fhir_original_code) = "1350-8"];
+    NUM_1352_4 = 91 [(.google.fhir.proto.fhir_original_code) = "1352-4"];
+    NUM_1354_0 = 92 [(.google.fhir.proto.fhir_original_code) = "1354-0"];
+    NUM_1356_5 = 93 [(.google.fhir.proto.fhir_original_code) = "1356-5"];
+    NUM_1358_1 = 94 [(.google.fhir.proto.fhir_original_code) = "1358-1"];
+    NUM_1363_1 = 95 [(.google.fhir.proto.fhir_original_code) = "1363-1"];
+    NUM_1365_6 = 96 [(.google.fhir.proto.fhir_original_code) = "1365-6"];
+    NUM_1368_0 = 97 [(.google.fhir.proto.fhir_original_code) = "1368-0"];
+    NUM_1370_6 = 98 [(.google.fhir.proto.fhir_original_code) = "1370-6"];
+    NUM_1372_2 = 99 [(.google.fhir.proto.fhir_original_code) = "1372-2"];
+    NUM_1374_8 = 100 [(.google.fhir.proto.fhir_original_code) = "1374-8"];
+    NUM_1376_3 = 101 [(.google.fhir.proto.fhir_original_code) = "1376-3"];
+    NUM_1378_9 = 102 [(.google.fhir.proto.fhir_original_code) = "1378-9"];
+    NUM_1380_5 = 103 [(.google.fhir.proto.fhir_original_code) = "1380-5"];
+    NUM_1382_1 = 104 [(.google.fhir.proto.fhir_original_code) = "1382-1"];
+    NUM_1387_0 = 105 [(.google.fhir.proto.fhir_original_code) = "1387-0"];
+    NUM_1389_6 = 106 [(.google.fhir.proto.fhir_original_code) = "1389-6"];
+    NUM_1391_2 = 107 [(.google.fhir.proto.fhir_original_code) = "1391-2"];
+    NUM_1403_5 = 108 [(.google.fhir.proto.fhir_original_code) = "1403-5"];
+    NUM_1405_0 = 109 [(.google.fhir.proto.fhir_original_code) = "1405-0"];
+    NUM_1407_6 = 110 [(.google.fhir.proto.fhir_original_code) = "1407-6"];
+    NUM_1409_2 = 111 [(.google.fhir.proto.fhir_original_code) = "1409-2"];
+    NUM_1411_8 = 112 [(.google.fhir.proto.fhir_original_code) = "1411-8"];
+    NUM_1416_7 = 113 [(.google.fhir.proto.fhir_original_code) = "1416-7"];
+    NUM_1439_9 = 114 [(.google.fhir.proto.fhir_original_code) = "1439-9"];
+    NUM_1441_5 = 115 [(.google.fhir.proto.fhir_original_code) = "1441-5"];
+    NUM_1445_6 = 116 [(.google.fhir.proto.fhir_original_code) = "1445-6"];
+    NUM_1448_0 = 117 [(.google.fhir.proto.fhir_original_code) = "1448-0"];
+    NUM_1450_6 = 118 [(.google.fhir.proto.fhir_original_code) = "1450-6"];
+    NUM_1453_0 = 119 [(.google.fhir.proto.fhir_original_code) = "1453-0"];
+    NUM_1456_3 = 120 [(.google.fhir.proto.fhir_original_code) = "1456-3"];
+    NUM_1460_5 = 121 [(.google.fhir.proto.fhir_original_code) = "1460-5"];
+    NUM_1462_1 = 122 [(.google.fhir.proto.fhir_original_code) = "1462-1"];
+    NUM_1464_7 = 123 [(.google.fhir.proto.fhir_original_code) = "1464-7"];
+    NUM_1474_6 = 124 [(.google.fhir.proto.fhir_original_code) = "1474-6"];
+    NUM_1478_7 = 125 [(.google.fhir.proto.fhir_original_code) = "1478-7"];
+    NUM_1487_8 = 126 [(.google.fhir.proto.fhir_original_code) = "1487-8"];
+    NUM_1489_4 = 127 [(.google.fhir.proto.fhir_original_code) = "1489-4"];
+    NUM_1518_0 = 128 [(.google.fhir.proto.fhir_original_code) = "1518-0"];
+    NUM_1541_2 = 129 [(.google.fhir.proto.fhir_original_code) = "1541-2"];
+    NUM_1543_8 = 130 [(.google.fhir.proto.fhir_original_code) = "1543-8"];
+    NUM_1545_3 = 131 [(.google.fhir.proto.fhir_original_code) = "1545-3"];
+    NUM_1547_9 = 132 [(.google.fhir.proto.fhir_original_code) = "1547-9"];
+    NUM_1549_5 = 133 [(.google.fhir.proto.fhir_original_code) = "1549-5"];
+    NUM_1551_1 = 134 [(.google.fhir.proto.fhir_original_code) = "1551-1"];
+    NUM_1556_0 = 135 [(.google.fhir.proto.fhir_original_code) = "1556-0"];
+    NUM_1558_6 = 136 [(.google.fhir.proto.fhir_original_code) = "1558-6"];
+    NUM_1560_2 = 137 [(.google.fhir.proto.fhir_original_code) = "1560-2"];
+    NUM_1562_8 = 138 [(.google.fhir.proto.fhir_original_code) = "1562-8"];
+    NUM_1564_4 = 139 [(.google.fhir.proto.fhir_original_code) = "1564-4"];
+    NUM_1566_9 = 140 [(.google.fhir.proto.fhir_original_code) = "1566-9"];
+    NUM_1573_5 = 141 [(.google.fhir.proto.fhir_original_code) = "1573-5"];
+    NUM_1576_8 = 142 [(.google.fhir.proto.fhir_original_code) = "1576-8"];
+    NUM_1578_4 = 143 [(.google.fhir.proto.fhir_original_code) = "1578-4"];
+    NUM_1582_6 = 144 [(.google.fhir.proto.fhir_original_code) = "1582-6"];
+    NUM_1584_2 = 145 [(.google.fhir.proto.fhir_original_code) = "1584-2"];
+    NUM_1586_7 = 146 [(.google.fhir.proto.fhir_original_code) = "1586-7"];
+    NUM_1602_2 = 147 [(.google.fhir.proto.fhir_original_code) = "1602-2"];
+    NUM_1607_1 = 148 [(.google.fhir.proto.fhir_original_code) = "1607-1"];
+    NUM_1609_7 = 149 [(.google.fhir.proto.fhir_original_code) = "1609-7"];
+    NUM_1643_6 = 150 [(.google.fhir.proto.fhir_original_code) = "1643-6"];
+    NUM_1645_1 = 151 [(.google.fhir.proto.fhir_original_code) = "1645-1"];
+    NUM_1647_7 = 152 [(.google.fhir.proto.fhir_original_code) = "1647-7"];
+    NUM_1649_3 = 153 [(.google.fhir.proto.fhir_original_code) = "1649-3"];
+    NUM_1651_9 = 154 [(.google.fhir.proto.fhir_original_code) = "1651-9"];
+    NUM_1653_5 = 155 [(.google.fhir.proto.fhir_original_code) = "1653-5"];
+    NUM_1659_2 = 156 [(.google.fhir.proto.fhir_original_code) = "1659-2"];
+    NUM_1661_8 = 157 [(.google.fhir.proto.fhir_original_code) = "1661-8"];
+    NUM_1663_4 = 158 [(.google.fhir.proto.fhir_original_code) = "1663-4"];
+    NUM_1665_9 = 159 [(.google.fhir.proto.fhir_original_code) = "1665-9"];
+    NUM_1667_5 = 160 [(.google.fhir.proto.fhir_original_code) = "1667-5"];
+    NUM_1670_9 = 161 [(.google.fhir.proto.fhir_original_code) = "1670-9"];
+    NUM_1675_8 = 162 [(.google.fhir.proto.fhir_original_code) = "1675-8"];
+    NUM_1677_4 = 163 [(.google.fhir.proto.fhir_original_code) = "1677-4"];
+    NUM_1679_0 = 164 [(.google.fhir.proto.fhir_original_code) = "1679-0"];
+    NUM_1683_2 = 165 [(.google.fhir.proto.fhir_original_code) = "1683-2"];
+    NUM_1685_7 = 166 [(.google.fhir.proto.fhir_original_code) = "1685-7"];
+    NUM_1687_3 = 167 [(.google.fhir.proto.fhir_original_code) = "1687-3"];
+    NUM_1692_3 = 168 [(.google.fhir.proto.fhir_original_code) = "1692-3"];
+    NUM_1694_9 = 169 [(.google.fhir.proto.fhir_original_code) = "1694-9"];
+    NUM_1696_4 = 170 [(.google.fhir.proto.fhir_original_code) = "1696-4"];
+    NUM_1700_4 = 171 [(.google.fhir.proto.fhir_original_code) = "1700-4"];
+    NUM_1702_0 = 172 [(.google.fhir.proto.fhir_original_code) = "1702-0"];
+    NUM_1704_6 = 173 [(.google.fhir.proto.fhir_original_code) = "1704-6"];
+    NUM_1707_9 = 174 [(.google.fhir.proto.fhir_original_code) = "1707-9"];
+    NUM_1709_5 = 175 [(.google.fhir.proto.fhir_original_code) = "1709-5"];
+    NUM_1711_1 = 176 [(.google.fhir.proto.fhir_original_code) = "1711-1"];
+    NUM_1715_2 = 177 [(.google.fhir.proto.fhir_original_code) = "1715-2"];
+    NUM_1717_8 = 178 [(.google.fhir.proto.fhir_original_code) = "1717-8"];
+    NUM_1722_8 = 179 [(.google.fhir.proto.fhir_original_code) = "1722-8"];
+    NUM_1724_4 = 180 [(.google.fhir.proto.fhir_original_code) = "1724-4"];
+    NUM_1732_7 = 181 [(.google.fhir.proto.fhir_original_code) = "1732-7"];
+    NUM_1011_6 = 182 [(.google.fhir.proto.fhir_original_code) = "1011-6"];
+    NUM_1012_4 = 183 [(.google.fhir.proto.fhir_original_code) = "1012-4"];
+    NUM_1013_2 = 184 [(.google.fhir.proto.fhir_original_code) = "1013-2"];
+    NUM_1014_0 = 185 [(.google.fhir.proto.fhir_original_code) = "1014-0"];
+    NUM_1015_7 = 186 [(.google.fhir.proto.fhir_original_code) = "1015-7"];
+    NUM_1016_5 = 187 [(.google.fhir.proto.fhir_original_code) = "1016-5"];
+    NUM_1017_3 = 188 [(.google.fhir.proto.fhir_original_code) = "1017-3"];
+    NUM_1018_1 = 189 [(.google.fhir.proto.fhir_original_code) = "1018-1"];
+    NUM_1019_9 = 190 [(.google.fhir.proto.fhir_original_code) = "1019-9"];
+    NUM_1022_3 = 191 [(.google.fhir.proto.fhir_original_code) = "1022-3"];
+    NUM_1023_1 = 192 [(.google.fhir.proto.fhir_original_code) = "1023-1"];
+    NUM_1024_9 = 193 [(.google.fhir.proto.fhir_original_code) = "1024-9"];
+    NUM_1031_4 = 194 [(.google.fhir.proto.fhir_original_code) = "1031-4"];
+    NUM_1042_1 = 195 [(.google.fhir.proto.fhir_original_code) = "1042-1"];
+    NUM_1045_4 = 196 [(.google.fhir.proto.fhir_original_code) = "1045-4"];
+    NUM_1046_2 = 197 [(.google.fhir.proto.fhir_original_code) = "1046-2"];
+    NUM_1047_0 = 198 [(.google.fhir.proto.fhir_original_code) = "1047-0"];
+    NUM_1048_8 = 199 [(.google.fhir.proto.fhir_original_code) = "1048-8"];
+    NUM_1049_6 = 200 [(.google.fhir.proto.fhir_original_code) = "1049-6"];
+    NUM_1050_4 = 201 [(.google.fhir.proto.fhir_original_code) = "1050-4"];
+    NUM_1051_2 = 202 [(.google.fhir.proto.fhir_original_code) = "1051-2"];
+    NUM_1054_6 = 203 [(.google.fhir.proto.fhir_original_code) = "1054-6"];
+    NUM_1055_3 = 204 [(.google.fhir.proto.fhir_original_code) = "1055-3"];
+    NUM_1056_1 = 205 [(.google.fhir.proto.fhir_original_code) = "1056-1"];
+    NUM_1057_9 = 206 [(.google.fhir.proto.fhir_original_code) = "1057-9"];
+    NUM_1058_7 = 207 [(.google.fhir.proto.fhir_original_code) = "1058-7"];
+    NUM_1059_5 = 208 [(.google.fhir.proto.fhir_original_code) = "1059-5"];
+    NUM_1060_3 = 209 [(.google.fhir.proto.fhir_original_code) = "1060-3"];
+    NUM_1061_1 = 210 [(.google.fhir.proto.fhir_original_code) = "1061-1"];
+    NUM_1062_9 = 211 [(.google.fhir.proto.fhir_original_code) = "1062-9"];
+    NUM_1063_7 = 212 [(.google.fhir.proto.fhir_original_code) = "1063-7"];
+    NUM_1064_5 = 213 [(.google.fhir.proto.fhir_original_code) = "1064-5"];
+    NUM_1065_2 = 214 [(.google.fhir.proto.fhir_original_code) = "1065-2"];
+    NUM_1066_0 = 215 [(.google.fhir.proto.fhir_original_code) = "1066-0"];
+    NUM_1069_4 = 216 [(.google.fhir.proto.fhir_original_code) = "1069-4"];
+    NUM_1070_2 = 217 [(.google.fhir.proto.fhir_original_code) = "1070-2"];
+    NUM_1071_0 = 218 [(.google.fhir.proto.fhir_original_code) = "1071-0"];
+    NUM_1072_8 = 219 [(.google.fhir.proto.fhir_original_code) = "1072-8"];
+    NUM_1073_6 = 220 [(.google.fhir.proto.fhir_original_code) = "1073-6"];
+    NUM_1074_4 = 221 [(.google.fhir.proto.fhir_original_code) = "1074-4"];
+    NUM_1083_5 = 222 [(.google.fhir.proto.fhir_original_code) = "1083-5"];
+    NUM_1084_3 = 223 [(.google.fhir.proto.fhir_original_code) = "1084-3"];
+    NUM_1089_2 = 224 [(.google.fhir.proto.fhir_original_code) = "1089-2"];
+    NUM_1090_0 = 225 [(.google.fhir.proto.fhir_original_code) = "1090-0"];
+    NUM_1091_8 = 226 [(.google.fhir.proto.fhir_original_code) = "1091-8"];
+    NUM_1092_6 = 227 [(.google.fhir.proto.fhir_original_code) = "1092-6"];
+    NUM_1093_4 = 228 [(.google.fhir.proto.fhir_original_code) = "1093-4"];
+    NUM_1094_2 = 229 [(.google.fhir.proto.fhir_original_code) = "1094-2"];
+    NUM_1095_9 = 230 [(.google.fhir.proto.fhir_original_code) = "1095-9"];
+    NUM_1096_7 = 231 [(.google.fhir.proto.fhir_original_code) = "1096-7"];
+    NUM_1097_5 = 232 [(.google.fhir.proto.fhir_original_code) = "1097-5"];
+    NUM_1098_3 = 233 [(.google.fhir.proto.fhir_original_code) = "1098-3"];
+    NUM_1103_1 = 234 [(.google.fhir.proto.fhir_original_code) = "1103-1"];
+    NUM_1104_9 = 235 [(.google.fhir.proto.fhir_original_code) = "1104-9"];
+    NUM_1109_8 = 236 [(.google.fhir.proto.fhir_original_code) = "1109-8"];
+    NUM_1110_6 = 237 [(.google.fhir.proto.fhir_original_code) = "1110-6"];
+    NUM_1115_5 = 238 [(.google.fhir.proto.fhir_original_code) = "1115-5"];
+    NUM_1116_3 = 239 [(.google.fhir.proto.fhir_original_code) = "1116-3"];
+    NUM_1117_1 = 240 [(.google.fhir.proto.fhir_original_code) = "1117-1"];
+    NUM_1118_9 = 241 [(.google.fhir.proto.fhir_original_code) = "1118-9"];
+    NUM_1119_7 = 242 [(.google.fhir.proto.fhir_original_code) = "1119-7"];
+    NUM_1120_5 = 243 [(.google.fhir.proto.fhir_original_code) = "1120-5"];
+    NUM_1121_3 = 244 [(.google.fhir.proto.fhir_original_code) = "1121-3"];
+    NUM_1124_7 = 245 [(.google.fhir.proto.fhir_original_code) = "1124-7"];
+    NUM_1125_4 = 246 [(.google.fhir.proto.fhir_original_code) = "1125-4"];
+    NUM_1126_2 = 247 [(.google.fhir.proto.fhir_original_code) = "1126-2"];
+    NUM_1127_0 = 248 [(.google.fhir.proto.fhir_original_code) = "1127-0"];
+    NUM_1128_8 = 249 [(.google.fhir.proto.fhir_original_code) = "1128-8"];
+    NUM_1129_6 = 250 [(.google.fhir.proto.fhir_original_code) = "1129-6"];
+    NUM_1130_4 = 251 [(.google.fhir.proto.fhir_original_code) = "1130-4"];
+    NUM_1131_2 = 252 [(.google.fhir.proto.fhir_original_code) = "1131-2"];
+    NUM_1132_0 = 253 [(.google.fhir.proto.fhir_original_code) = "1132-0"];
+    NUM_1133_8 = 254 [(.google.fhir.proto.fhir_original_code) = "1133-8"];
+    NUM_1134_6 = 255 [(.google.fhir.proto.fhir_original_code) = "1134-6"];
+    NUM_1135_3 = 256 [(.google.fhir.proto.fhir_original_code) = "1135-3"];
+    NUM_1136_1 = 257 [(.google.fhir.proto.fhir_original_code) = "1136-1"];
+    NUM_1137_9 = 258 [(.google.fhir.proto.fhir_original_code) = "1137-9"];
+    NUM_1138_7 = 259 [(.google.fhir.proto.fhir_original_code) = "1138-7"];
+    NUM_1139_5 = 260 [(.google.fhir.proto.fhir_original_code) = "1139-5"];
+    NUM_1140_3 = 261 [(.google.fhir.proto.fhir_original_code) = "1140-3"];
+    NUM_1141_1 = 262 [(.google.fhir.proto.fhir_original_code) = "1141-1"];
+    NUM_1142_9 = 263 [(.google.fhir.proto.fhir_original_code) = "1142-9"];
+    NUM_1143_7 = 264 [(.google.fhir.proto.fhir_original_code) = "1143-7"];
+    NUM_1144_5 = 265 [(.google.fhir.proto.fhir_original_code) = "1144-5"];
+    NUM_1145_2 = 266 [(.google.fhir.proto.fhir_original_code) = "1145-2"];
+    NUM_1146_0 = 267 [(.google.fhir.proto.fhir_original_code) = "1146-0"];
+    NUM_1147_8 = 268 [(.google.fhir.proto.fhir_original_code) = "1147-8"];
+    NUM_1148_6 = 269 [(.google.fhir.proto.fhir_original_code) = "1148-6"];
+    NUM_1151_0 = 270 [(.google.fhir.proto.fhir_original_code) = "1151-0"];
+    NUM_1156_9 = 271 [(.google.fhir.proto.fhir_original_code) = "1156-9"];
+    NUM_1157_7 = 272 [(.google.fhir.proto.fhir_original_code) = "1157-7"];
+    NUM_1158_5 = 273 [(.google.fhir.proto.fhir_original_code) = "1158-5"];
+    NUM_1159_3 = 274 [(.google.fhir.proto.fhir_original_code) = "1159-3"];
+    NUM_1160_1 = 275 [(.google.fhir.proto.fhir_original_code) = "1160-1"];
+    NUM_1163_5 = 276 [(.google.fhir.proto.fhir_original_code) = "1163-5"];
+    NUM_1176_7 = 277 [(.google.fhir.proto.fhir_original_code) = "1176-7"];
+    NUM_1187_4 = 278 [(.google.fhir.proto.fhir_original_code) = "1187-4"];
+    NUM_1194_0 = 279 [(.google.fhir.proto.fhir_original_code) = "1194-0"];
+    NUM_1195_7 = 280 [(.google.fhir.proto.fhir_original_code) = "1195-7"];
+    NUM_1196_5 = 281 [(.google.fhir.proto.fhir_original_code) = "1196-5"];
+    NUM_1197_3 = 282 [(.google.fhir.proto.fhir_original_code) = "1197-3"];
+    NUM_1198_1 = 283 [(.google.fhir.proto.fhir_original_code) = "1198-1"];
+    NUM_1199_9 = 284 [(.google.fhir.proto.fhir_original_code) = "1199-9"];
+    NUM_1200_5 = 285 [(.google.fhir.proto.fhir_original_code) = "1200-5"];
+    NUM_1201_3 = 286 [(.google.fhir.proto.fhir_original_code) = "1201-3"];
+    NUM_1202_1 = 287 [(.google.fhir.proto.fhir_original_code) = "1202-1"];
+    NUM_1203_9 = 288 [(.google.fhir.proto.fhir_original_code) = "1203-9"];
+    NUM_1204_7 = 289 [(.google.fhir.proto.fhir_original_code) = "1204-7"];
+    NUM_1205_4 = 290 [(.google.fhir.proto.fhir_original_code) = "1205-4"];
+    NUM_1212_0 = 291 [(.google.fhir.proto.fhir_original_code) = "1212-0"];
+    NUM_1215_3 = 292 [(.google.fhir.proto.fhir_original_code) = "1215-3"];
+    NUM_1216_1 = 293 [(.google.fhir.proto.fhir_original_code) = "1216-1"];
+    NUM_1217_9 = 294 [(.google.fhir.proto.fhir_original_code) = "1217-9"];
+    NUM_1218_7 = 295 [(.google.fhir.proto.fhir_original_code) = "1218-7"];
+    NUM_1219_5 = 296 [(.google.fhir.proto.fhir_original_code) = "1219-5"];
+    NUM_1220_3 = 297 [(.google.fhir.proto.fhir_original_code) = "1220-3"];
+    NUM_1223_7 = 298 [(.google.fhir.proto.fhir_original_code) = "1223-7"];
+    NUM_1224_5 = 299 [(.google.fhir.proto.fhir_original_code) = "1224-5"];
+    NUM_1225_2 = 300 [(.google.fhir.proto.fhir_original_code) = "1225-2"];
+    NUM_1226_0 = 301 [(.google.fhir.proto.fhir_original_code) = "1226-0"];
+    NUM_1227_8 = 302 [(.google.fhir.proto.fhir_original_code) = "1227-8"];
+    NUM_1228_6 = 303 [(.google.fhir.proto.fhir_original_code) = "1228-6"];
+    NUM_1229_4 = 304 [(.google.fhir.proto.fhir_original_code) = "1229-4"];
+    NUM_1230_2 = 305 [(.google.fhir.proto.fhir_original_code) = "1230-2"];
+    NUM_1231_0 = 306 [(.google.fhir.proto.fhir_original_code) = "1231-0"];
+    NUM_1234_4 = 307 [(.google.fhir.proto.fhir_original_code) = "1234-4"];
+    NUM_1235_1 = 308 [(.google.fhir.proto.fhir_original_code) = "1235-1"];
+    NUM_1236_9 = 309 [(.google.fhir.proto.fhir_original_code) = "1236-9"];
+    NUM_1237_7 = 310 [(.google.fhir.proto.fhir_original_code) = "1237-7"];
+    NUM_1238_5 = 311 [(.google.fhir.proto.fhir_original_code) = "1238-5"];
+    NUM_1239_3 = 312 [(.google.fhir.proto.fhir_original_code) = "1239-3"];
+    NUM_1240_1 = 313 [(.google.fhir.proto.fhir_original_code) = "1240-1"];
+    NUM_1241_9 = 314 [(.google.fhir.proto.fhir_original_code) = "1241-9"];
+    NUM_1242_7 = 315 [(.google.fhir.proto.fhir_original_code) = "1242-7"];
+    NUM_1243_5 = 316 [(.google.fhir.proto.fhir_original_code) = "1243-5"];
+    NUM_1244_3 = 317 [(.google.fhir.proto.fhir_original_code) = "1244-3"];
+    NUM_1245_0 = 318 [(.google.fhir.proto.fhir_original_code) = "1245-0"];
+    NUM_1246_8 = 319 [(.google.fhir.proto.fhir_original_code) = "1246-8"];
+    NUM_1247_6 = 320 [(.google.fhir.proto.fhir_original_code) = "1247-6"];
+    NUM_1248_4 = 321 [(.google.fhir.proto.fhir_original_code) = "1248-4"];
+    NUM_1265_8 = 322 [(.google.fhir.proto.fhir_original_code) = "1265-8"];
+    NUM_1272_4 = 323 [(.google.fhir.proto.fhir_original_code) = "1272-4"];
+    NUM_1273_2 = 324 [(.google.fhir.proto.fhir_original_code) = "1273-2"];
+    NUM_1282_3 = 325 [(.google.fhir.proto.fhir_original_code) = "1282-3"];
+    NUM_1283_1 = 326 [(.google.fhir.proto.fhir_original_code) = "1283-1"];
+    NUM_1286_4 = 327 [(.google.fhir.proto.fhir_original_code) = "1286-4"];
+    NUM_1287_2 = 328 [(.google.fhir.proto.fhir_original_code) = "1287-2"];
+    NUM_1288_0 = 329 [(.google.fhir.proto.fhir_original_code) = "1288-0"];
+    NUM_1289_8 = 330 [(.google.fhir.proto.fhir_original_code) = "1289-8"];
+    NUM_1290_6 = 331 [(.google.fhir.proto.fhir_original_code) = "1290-6"];
+    NUM_1291_4 = 332 [(.google.fhir.proto.fhir_original_code) = "1291-4"];
+    NUM_1292_2 = 333 [(.google.fhir.proto.fhir_original_code) = "1292-2"];
+    NUM_1293_0 = 334 [(.google.fhir.proto.fhir_original_code) = "1293-0"];
+    NUM_1294_8 = 335 [(.google.fhir.proto.fhir_original_code) = "1294-8"];
+    NUM_1295_5 = 336 [(.google.fhir.proto.fhir_original_code) = "1295-5"];
+    NUM_1306_0 = 337 [(.google.fhir.proto.fhir_original_code) = "1306-0"];
+    NUM_1307_8 = 338 [(.google.fhir.proto.fhir_original_code) = "1307-8"];
+    NUM_1310_2 = 339 [(.google.fhir.proto.fhir_original_code) = "1310-2"];
+    NUM_1313_6 = 340 [(.google.fhir.proto.fhir_original_code) = "1313-6"];
+    NUM_1314_4 = 341 [(.google.fhir.proto.fhir_original_code) = "1314-4"];
+    NUM_1315_1 = 342 [(.google.fhir.proto.fhir_original_code) = "1315-1"];
+    NUM_1326_8 = 343 [(.google.fhir.proto.fhir_original_code) = "1326-8"];
+    NUM_1327_6 = 344 [(.google.fhir.proto.fhir_original_code) = "1327-6"];
+    NUM_1328_4 = 345 [(.google.fhir.proto.fhir_original_code) = "1328-4"];
+    NUM_1329_2 = 346 [(.google.fhir.proto.fhir_original_code) = "1329-2"];
+    NUM_1332_6 = 347 [(.google.fhir.proto.fhir_original_code) = "1332-6"];
+    NUM_1333_4 = 348 [(.google.fhir.proto.fhir_original_code) = "1333-4"];
+    NUM_1334_2 = 349 [(.google.fhir.proto.fhir_original_code) = "1334-2"];
+    NUM_1335_9 = 350 [(.google.fhir.proto.fhir_original_code) = "1335-9"];
+    NUM_1336_7 = 351 [(.google.fhir.proto.fhir_original_code) = "1336-7"];
+    NUM_1337_5 = 352 [(.google.fhir.proto.fhir_original_code) = "1337-5"];
+    NUM_1338_3 = 353 [(.google.fhir.proto.fhir_original_code) = "1338-3"];
+    NUM_1345_8 = 354 [(.google.fhir.proto.fhir_original_code) = "1345-8"];
+    NUM_1346_6 = 355 [(.google.fhir.proto.fhir_original_code) = "1346-6"];
+    NUM_1359_9 = 356 [(.google.fhir.proto.fhir_original_code) = "1359-9"];
+    NUM_1360_7 = 357 [(.google.fhir.proto.fhir_original_code) = "1360-7"];
+    NUM_1361_5 = 358 [(.google.fhir.proto.fhir_original_code) = "1361-5"];
+    NUM_1366_4 = 359 [(.google.fhir.proto.fhir_original_code) = "1366-4"];
+    NUM_1383_9 = 360 [(.google.fhir.proto.fhir_original_code) = "1383-9"];
+    NUM_1384_7 = 361 [(.google.fhir.proto.fhir_original_code) = "1384-7"];
+    NUM_1385_4 = 362 [(.google.fhir.proto.fhir_original_code) = "1385-4"];
+    NUM_1392_0 = 363 [(.google.fhir.proto.fhir_original_code) = "1392-0"];
+    NUM_1393_8 = 364 [(.google.fhir.proto.fhir_original_code) = "1393-8"];
+    NUM_1394_6 = 365 [(.google.fhir.proto.fhir_original_code) = "1394-6"];
+    NUM_1395_3 = 366 [(.google.fhir.proto.fhir_original_code) = "1395-3"];
+    NUM_1396_1 = 367 [(.google.fhir.proto.fhir_original_code) = "1396-1"];
+    NUM_1397_9 = 368 [(.google.fhir.proto.fhir_original_code) = "1397-9"];
+    NUM_1398_7 = 369 [(.google.fhir.proto.fhir_original_code) = "1398-7"];
+    NUM_1399_5 = 370 [(.google.fhir.proto.fhir_original_code) = "1399-5"];
+    NUM_1400_1 = 371 [(.google.fhir.proto.fhir_original_code) = "1400-1"];
+    NUM_1401_9 = 372 [(.google.fhir.proto.fhir_original_code) = "1401-9"];
+    NUM_1412_6 = 373 [(.google.fhir.proto.fhir_original_code) = "1412-6"];
+    NUM_1413_4 = 374 [(.google.fhir.proto.fhir_original_code) = "1413-4"];
+    NUM_1414_2 = 375 [(.google.fhir.proto.fhir_original_code) = "1414-2"];
+    NUM_1417_5 = 376 [(.google.fhir.proto.fhir_original_code) = "1417-5"];
+    NUM_1418_3 = 377 [(.google.fhir.proto.fhir_original_code) = "1418-3"];
+    NUM_1419_1 = 378 [(.google.fhir.proto.fhir_original_code) = "1419-1"];
+    NUM_1420_9 = 379 [(.google.fhir.proto.fhir_original_code) = "1420-9"];
+    NUM_1421_7 = 380 [(.google.fhir.proto.fhir_original_code) = "1421-7"];
+    NUM_1422_5 = 381 [(.google.fhir.proto.fhir_original_code) = "1422-5"];
+    NUM_1423_3 = 382 [(.google.fhir.proto.fhir_original_code) = "1423-3"];
+    NUM_1424_1 = 383 [(.google.fhir.proto.fhir_original_code) = "1424-1"];
+    NUM_1425_8 = 384 [(.google.fhir.proto.fhir_original_code) = "1425-8"];
+    NUM_1426_6 = 385 [(.google.fhir.proto.fhir_original_code) = "1426-6"];
+    NUM_1427_4 = 386 [(.google.fhir.proto.fhir_original_code) = "1427-4"];
+    NUM_1428_2 = 387 [(.google.fhir.proto.fhir_original_code) = "1428-2"];
+    NUM_1429_0 = 388 [(.google.fhir.proto.fhir_original_code) = "1429-0"];
+    NUM_1430_8 = 389 [(.google.fhir.proto.fhir_original_code) = "1430-8"];
+    NUM_1431_6 = 390 [(.google.fhir.proto.fhir_original_code) = "1431-6"];
+    NUM_1432_4 = 391 [(.google.fhir.proto.fhir_original_code) = "1432-4"];
+    NUM_1433_2 = 392 [(.google.fhir.proto.fhir_original_code) = "1433-2"];
+    NUM_1434_0 = 393 [(.google.fhir.proto.fhir_original_code) = "1434-0"];
+    NUM_1435_7 = 394 [(.google.fhir.proto.fhir_original_code) = "1435-7"];
+    NUM_1436_5 = 395 [(.google.fhir.proto.fhir_original_code) = "1436-5"];
+    NUM_1437_3 = 396 [(.google.fhir.proto.fhir_original_code) = "1437-3"];
+    NUM_1442_3 = 397 [(.google.fhir.proto.fhir_original_code) = "1442-3"];
+    NUM_1443_1 = 398 [(.google.fhir.proto.fhir_original_code) = "1443-1"];
+    NUM_1446_4 = 399 [(.google.fhir.proto.fhir_original_code) = "1446-4"];
+    NUM_1451_4 = 400 [(.google.fhir.proto.fhir_original_code) = "1451-4"];
+    NUM_1454_8 = 401 [(.google.fhir.proto.fhir_original_code) = "1454-8"];
+    NUM_1457_1 = 402 [(.google.fhir.proto.fhir_original_code) = "1457-1"];
+    NUM_1458_9 = 403 [(.google.fhir.proto.fhir_original_code) = "1458-9"];
+    NUM_1465_4 = 404 [(.google.fhir.proto.fhir_original_code) = "1465-4"];
+    NUM_1466_2 = 405 [(.google.fhir.proto.fhir_original_code) = "1466-2"];
+    NUM_1467_0 = 406 [(.google.fhir.proto.fhir_original_code) = "1467-0"];
+    NUM_1468_8 = 407 [(.google.fhir.proto.fhir_original_code) = "1468-8"];
+    NUM_1469_6 = 408 [(.google.fhir.proto.fhir_original_code) = "1469-6"];
+    NUM_1470_4 = 409 [(.google.fhir.proto.fhir_original_code) = "1470-4"];
+    NUM_1471_2 = 410 [(.google.fhir.proto.fhir_original_code) = "1471-2"];
+    NUM_1472_0 = 411 [(.google.fhir.proto.fhir_original_code) = "1472-0"];
+    NUM_1475_3 = 412 [(.google.fhir.proto.fhir_original_code) = "1475-3"];
+    NUM_1476_1 = 413 [(.google.fhir.proto.fhir_original_code) = "1476-1"];
+    NUM_1479_5 = 414 [(.google.fhir.proto.fhir_original_code) = "1479-5"];
+    NUM_1480_3 = 415 [(.google.fhir.proto.fhir_original_code) = "1480-3"];
+    NUM_1481_1 = 416 [(.google.fhir.proto.fhir_original_code) = "1481-1"];
+    NUM_1482_9 = 417 [(.google.fhir.proto.fhir_original_code) = "1482-9"];
+    NUM_1483_7 = 418 [(.google.fhir.proto.fhir_original_code) = "1483-7"];
+    NUM_1484_5 = 419 [(.google.fhir.proto.fhir_original_code) = "1484-5"];
+    NUM_1485_2 = 420 [(.google.fhir.proto.fhir_original_code) = "1485-2"];
+    NUM_1490_2 = 421 [(.google.fhir.proto.fhir_original_code) = "1490-2"];
+    NUM_1491_0 = 422 [(.google.fhir.proto.fhir_original_code) = "1491-0"];
+    NUM_1492_8 = 423 [(.google.fhir.proto.fhir_original_code) = "1492-8"];
+    NUM_1493_6 = 424 [(.google.fhir.proto.fhir_original_code) = "1493-6"];
+    NUM_1494_4 = 425 [(.google.fhir.proto.fhir_original_code) = "1494-4"];
+    NUM_1495_1 = 426 [(.google.fhir.proto.fhir_original_code) = "1495-1"];
+    NUM_1496_9 = 427 [(.google.fhir.proto.fhir_original_code) = "1496-9"];
+    NUM_1497_7 = 428 [(.google.fhir.proto.fhir_original_code) = "1497-7"];
+    NUM_1498_5 = 429 [(.google.fhir.proto.fhir_original_code) = "1498-5"];
+    NUM_1499_3 = 430 [(.google.fhir.proto.fhir_original_code) = "1499-3"];
+    NUM_1500_8 = 431 [(.google.fhir.proto.fhir_original_code) = "1500-8"];
+    NUM_1501_6 = 432 [(.google.fhir.proto.fhir_original_code) = "1501-6"];
+    NUM_1502_4 = 433 [(.google.fhir.proto.fhir_original_code) = "1502-4"];
+    NUM_1503_2 = 434 [(.google.fhir.proto.fhir_original_code) = "1503-2"];
+    NUM_1504_0 = 435 [(.google.fhir.proto.fhir_original_code) = "1504-0"];
+    NUM_1505_7 = 436 [(.google.fhir.proto.fhir_original_code) = "1505-7"];
+    NUM_1506_5 = 437 [(.google.fhir.proto.fhir_original_code) = "1506-5"];
+    NUM_1507_3 = 438 [(.google.fhir.proto.fhir_original_code) = "1507-3"];
+    NUM_1508_1 = 439 [(.google.fhir.proto.fhir_original_code) = "1508-1"];
+    NUM_1509_9 = 440 [(.google.fhir.proto.fhir_original_code) = "1509-9"];
+    NUM_1510_7 = 441 [(.google.fhir.proto.fhir_original_code) = "1510-7"];
+    NUM_1511_5 = 442 [(.google.fhir.proto.fhir_original_code) = "1511-5"];
+    NUM_1512_3 = 443 [(.google.fhir.proto.fhir_original_code) = "1512-3"];
+    NUM_1513_1 = 444 [(.google.fhir.proto.fhir_original_code) = "1513-1"];
+    NUM_1514_9 = 445 [(.google.fhir.proto.fhir_original_code) = "1514-9"];
+    NUM_1515_6 = 446 [(.google.fhir.proto.fhir_original_code) = "1515-6"];
+    NUM_1516_4 = 447 [(.google.fhir.proto.fhir_original_code) = "1516-4"];
+    NUM_1519_8 = 448 [(.google.fhir.proto.fhir_original_code) = "1519-8"];
+    NUM_1520_6 = 449 [(.google.fhir.proto.fhir_original_code) = "1520-6"];
+    NUM_1521_4 = 450 [(.google.fhir.proto.fhir_original_code) = "1521-4"];
+    NUM_1522_2 = 451 [(.google.fhir.proto.fhir_original_code) = "1522-2"];
+    NUM_1523_0 = 452 [(.google.fhir.proto.fhir_original_code) = "1523-0"];
+    NUM_1524_8 = 453 [(.google.fhir.proto.fhir_original_code) = "1524-8"];
+    NUM_1525_5 = 454 [(.google.fhir.proto.fhir_original_code) = "1525-5"];
+    NUM_1526_3 = 455 [(.google.fhir.proto.fhir_original_code) = "1526-3"];
+    NUM_1527_1 = 456 [(.google.fhir.proto.fhir_original_code) = "1527-1"];
+    NUM_1528_9 = 457 [(.google.fhir.proto.fhir_original_code) = "1528-9"];
+    NUM_1529_7 = 458 [(.google.fhir.proto.fhir_original_code) = "1529-7"];
+    NUM_1530_5 = 459 [(.google.fhir.proto.fhir_original_code) = "1530-5"];
+    NUM_1531_3 = 460 [(.google.fhir.proto.fhir_original_code) = "1531-3"];
+    NUM_1532_1 = 461 [(.google.fhir.proto.fhir_original_code) = "1532-1"];
+    NUM_1533_9 = 462 [(.google.fhir.proto.fhir_original_code) = "1533-9"];
+    NUM_1534_7 = 463 [(.google.fhir.proto.fhir_original_code) = "1534-7"];
+    NUM_1535_4 = 464 [(.google.fhir.proto.fhir_original_code) = "1535-4"];
+    NUM_1536_2 = 465 [(.google.fhir.proto.fhir_original_code) = "1536-2"];
+    NUM_1537_0 = 466 [(.google.fhir.proto.fhir_original_code) = "1537-0"];
+    NUM_1538_8 = 467 [(.google.fhir.proto.fhir_original_code) = "1538-8"];
+    NUM_1539_6 = 468 [(.google.fhir.proto.fhir_original_code) = "1539-6"];
+    NUM_1552_9 = 469 [(.google.fhir.proto.fhir_original_code) = "1552-9"];
+    NUM_1553_7 = 470 [(.google.fhir.proto.fhir_original_code) = "1553-7"];
+    NUM_1554_5 = 471 [(.google.fhir.proto.fhir_original_code) = "1554-5"];
+    NUM_1567_7 = 472 [(.google.fhir.proto.fhir_original_code) = "1567-7"];
+    NUM_1568_5 = 473 [(.google.fhir.proto.fhir_original_code) = "1568-5"];
+    NUM_1569_3 = 474 [(.google.fhir.proto.fhir_original_code) = "1569-3"];
+    NUM_1570_1 = 475 [(.google.fhir.proto.fhir_original_code) = "1570-1"];
+    NUM_1571_9 = 476 [(.google.fhir.proto.fhir_original_code) = "1571-9"];
+    NUM_1574_3 = 477 [(.google.fhir.proto.fhir_original_code) = "1574-3"];
+    NUM_1579_2 = 478 [(.google.fhir.proto.fhir_original_code) = "1579-2"];
+    NUM_1580_0 = 479 [(.google.fhir.proto.fhir_original_code) = "1580-0"];
+    NUM_1587_5 = 480 [(.google.fhir.proto.fhir_original_code) = "1587-5"];
+    NUM_1588_3 = 481 [(.google.fhir.proto.fhir_original_code) = "1588-3"];
+    NUM_1589_1 = 482 [(.google.fhir.proto.fhir_original_code) = "1589-1"];
+    NUM_1590_9 = 483 [(.google.fhir.proto.fhir_original_code) = "1590-9"];
+    NUM_1591_7 = 484 [(.google.fhir.proto.fhir_original_code) = "1591-7"];
+    NUM_1592_5 = 485 [(.google.fhir.proto.fhir_original_code) = "1592-5"];
+    NUM_1593_3 = 486 [(.google.fhir.proto.fhir_original_code) = "1593-3"];
+    NUM_1594_1 = 487 [(.google.fhir.proto.fhir_original_code) = "1594-1"];
+    NUM_1595_8 = 488 [(.google.fhir.proto.fhir_original_code) = "1595-8"];
+    NUM_1596_6 = 489 [(.google.fhir.proto.fhir_original_code) = "1596-6"];
+    NUM_1597_4 = 490 [(.google.fhir.proto.fhir_original_code) = "1597-4"];
+    NUM_1598_2 = 491 [(.google.fhir.proto.fhir_original_code) = "1598-2"];
+    NUM_1599_0 = 492 [(.google.fhir.proto.fhir_original_code) = "1599-0"];
+    NUM_1600_6 = 493 [(.google.fhir.proto.fhir_original_code) = "1600-6"];
+    NUM_1603_0 = 494 [(.google.fhir.proto.fhir_original_code) = "1603-0"];
+    NUM_1604_8 = 495 [(.google.fhir.proto.fhir_original_code) = "1604-8"];
+    NUM_1605_5 = 496 [(.google.fhir.proto.fhir_original_code) = "1605-5"];
+    NUM_1610_5 = 497 [(.google.fhir.proto.fhir_original_code) = "1610-5"];
+    NUM_1611_3 = 498 [(.google.fhir.proto.fhir_original_code) = "1611-3"];
+    NUM_1612_1 = 499 [(.google.fhir.proto.fhir_original_code) = "1612-1"];
+    NUM_1613_9 = 500 [(.google.fhir.proto.fhir_original_code) = "1613-9"];
+    NUM_1614_7 = 501 [(.google.fhir.proto.fhir_original_code) = "1614-7"];
+    NUM_1615_4 = 502 [(.google.fhir.proto.fhir_original_code) = "1615-4"];
+    NUM_1616_2 = 503 [(.google.fhir.proto.fhir_original_code) = "1616-2"];
+    NUM_1617_0 = 504 [(.google.fhir.proto.fhir_original_code) = "1617-0"];
+    NUM_1618_8 = 505 [(.google.fhir.proto.fhir_original_code) = "1618-8"];
+    NUM_1619_6 = 506 [(.google.fhir.proto.fhir_original_code) = "1619-6"];
+    NUM_1620_4 = 507 [(.google.fhir.proto.fhir_original_code) = "1620-4"];
+    NUM_1621_2 = 508 [(.google.fhir.proto.fhir_original_code) = "1621-2"];
+    NUM_1622_0 = 509 [(.google.fhir.proto.fhir_original_code) = "1622-0"];
+    NUM_1623_8 = 510 [(.google.fhir.proto.fhir_original_code) = "1623-8"];
+    NUM_1624_6 = 511 [(.google.fhir.proto.fhir_original_code) = "1624-6"];
+    NUM_1625_3 = 512 [(.google.fhir.proto.fhir_original_code) = "1625-3"];
+    NUM_1626_1 = 513 [(.google.fhir.proto.fhir_original_code) = "1626-1"];
+    NUM_1627_9 = 514 [(.google.fhir.proto.fhir_original_code) = "1627-9"];
+    NUM_1628_7 = 515 [(.google.fhir.proto.fhir_original_code) = "1628-7"];
+    NUM_1629_5 = 516 [(.google.fhir.proto.fhir_original_code) = "1629-5"];
+    NUM_1630_3 = 517 [(.google.fhir.proto.fhir_original_code) = "1630-3"];
+    NUM_1631_1 = 518 [(.google.fhir.proto.fhir_original_code) = "1631-1"];
+    NUM_1632_9 = 519 [(.google.fhir.proto.fhir_original_code) = "1632-9"];
+    NUM_1633_7 = 520 [(.google.fhir.proto.fhir_original_code) = "1633-7"];
+    NUM_1634_5 = 521 [(.google.fhir.proto.fhir_original_code) = "1634-5"];
+    NUM_1635_2 = 522 [(.google.fhir.proto.fhir_original_code) = "1635-2"];
+    NUM_1636_0 = 523 [(.google.fhir.proto.fhir_original_code) = "1636-0"];
+    NUM_1637_8 = 524 [(.google.fhir.proto.fhir_original_code) = "1637-8"];
+    NUM_1638_6 = 525 [(.google.fhir.proto.fhir_original_code) = "1638-6"];
+    NUM_1639_4 = 526 [(.google.fhir.proto.fhir_original_code) = "1639-4"];
+    NUM_1640_2 = 527 [(.google.fhir.proto.fhir_original_code) = "1640-2"];
+    NUM_1641_0 = 528 [(.google.fhir.proto.fhir_original_code) = "1641-0"];
+    NUM_1654_3 = 529 [(.google.fhir.proto.fhir_original_code) = "1654-3"];
+    NUM_1655_0 = 530 [(.google.fhir.proto.fhir_original_code) = "1655-0"];
+    NUM_1656_8 = 531 [(.google.fhir.proto.fhir_original_code) = "1656-8"];
+    NUM_1657_6 = 532 [(.google.fhir.proto.fhir_original_code) = "1657-6"];
+    NUM_1668_3 = 533 [(.google.fhir.proto.fhir_original_code) = "1668-3"];
+    NUM_1671_7 = 534 [(.google.fhir.proto.fhir_original_code) = "1671-7"];
+    NUM_1672_5 = 535 [(.google.fhir.proto.fhir_original_code) = "1672-5"];
+    NUM_1673_3 = 536 [(.google.fhir.proto.fhir_original_code) = "1673-3"];
+    NUM_1680_8 = 537 [(.google.fhir.proto.fhir_original_code) = "1680-8"];
+    NUM_1681_6 = 538 [(.google.fhir.proto.fhir_original_code) = "1681-6"];
+    NUM_1688_1 = 539 [(.google.fhir.proto.fhir_original_code) = "1688-1"];
+    NUM_1689_9 = 540 [(.google.fhir.proto.fhir_original_code) = "1689-9"];
+    NUM_1690_7 = 541 [(.google.fhir.proto.fhir_original_code) = "1690-7"];
+    NUM_1697_2 = 542 [(.google.fhir.proto.fhir_original_code) = "1697-2"];
+    NUM_1698_0 = 543 [(.google.fhir.proto.fhir_original_code) = "1698-0"];
+    NUM_1705_3 = 544 [(.google.fhir.proto.fhir_original_code) = "1705-3"];
+    NUM_1712_9 = 545 [(.google.fhir.proto.fhir_original_code) = "1712-9"];
+    NUM_1713_7 = 546 [(.google.fhir.proto.fhir_original_code) = "1713-7"];
+    NUM_1718_6 = 547 [(.google.fhir.proto.fhir_original_code) = "1718-6"];
+    NUM_1719_4 = 548 [(.google.fhir.proto.fhir_original_code) = "1719-4"];
+    NUM_1720_2 = 549 [(.google.fhir.proto.fhir_original_code) = "1720-2"];
+    NUM_1725_1 = 550 [(.google.fhir.proto.fhir_original_code) = "1725-1"];
+    NUM_1726_9 = 551 [(.google.fhir.proto.fhir_original_code) = "1726-9"];
+    NUM_1727_7 = 552 [(.google.fhir.proto.fhir_original_code) = "1727-7"];
+    NUM_1728_5 = 553 [(.google.fhir.proto.fhir_original_code) = "1728-5"];
+    NUM_1729_3 = 554 [(.google.fhir.proto.fhir_original_code) = "1729-3"];
+    NUM_1730_1 = 555 [(.google.fhir.proto.fhir_original_code) = "1730-1"];
+    NUM_1731_9 = 556 [(.google.fhir.proto.fhir_original_code) = "1731-9"];
+    NUM_1733_5 = 557 [(.google.fhir.proto.fhir_original_code) = "1733-5"];
+    NUM_1737_6 = 558 [(.google.fhir.proto.fhir_original_code) = "1737-6"];
+    NUM_1840_8 = 559 [(.google.fhir.proto.fhir_original_code) = "1840-8"];
+    NUM_1966_1 = 560 [(.google.fhir.proto.fhir_original_code) = "1966-1"];
+    NUM_1739_2 = 561 [(.google.fhir.proto.fhir_original_code) = "1739-2"];
+    NUM_1811_9 = 562 [(.google.fhir.proto.fhir_original_code) = "1811-9"];
+    NUM_1740_0 = 563 [(.google.fhir.proto.fhir_original_code) = "1740-0"];
+    NUM_1741_8 = 564 [(.google.fhir.proto.fhir_original_code) = "1741-8"];
+    NUM_1742_6 = 565 [(.google.fhir.proto.fhir_original_code) = "1742-6"];
+    NUM_1743_4 = 566 [(.google.fhir.proto.fhir_original_code) = "1743-4"];
+    NUM_1744_2 = 567 [(.google.fhir.proto.fhir_original_code) = "1744-2"];
+    NUM_1745_9 = 568 [(.google.fhir.proto.fhir_original_code) = "1745-9"];
+    NUM_1746_7 = 569 [(.google.fhir.proto.fhir_original_code) = "1746-7"];
+    NUM_1747_5 = 570 [(.google.fhir.proto.fhir_original_code) = "1747-5"];
+    NUM_1748_3 = 571 [(.google.fhir.proto.fhir_original_code) = "1748-3"];
+    NUM_1749_1 = 572 [(.google.fhir.proto.fhir_original_code) = "1749-1"];
+    NUM_1750_9 = 573 [(.google.fhir.proto.fhir_original_code) = "1750-9"];
+    NUM_1751_7 = 574 [(.google.fhir.proto.fhir_original_code) = "1751-7"];
+    NUM_1752_5 = 575 [(.google.fhir.proto.fhir_original_code) = "1752-5"];
+    NUM_1753_3 = 576 [(.google.fhir.proto.fhir_original_code) = "1753-3"];
+    NUM_1754_1 = 577 [(.google.fhir.proto.fhir_original_code) = "1754-1"];
+    NUM_1755_8 = 578 [(.google.fhir.proto.fhir_original_code) = "1755-8"];
+    NUM_1756_6 = 579 [(.google.fhir.proto.fhir_original_code) = "1756-6"];
+    NUM_1757_4 = 580 [(.google.fhir.proto.fhir_original_code) = "1757-4"];
+    NUM_1758_2 = 581 [(.google.fhir.proto.fhir_original_code) = "1758-2"];
+    NUM_1759_0 = 582 [(.google.fhir.proto.fhir_original_code) = "1759-0"];
+    NUM_1760_8 = 583 [(.google.fhir.proto.fhir_original_code) = "1760-8"];
+    NUM_1761_6 = 584 [(.google.fhir.proto.fhir_original_code) = "1761-6"];
+    NUM_1762_4 = 585 [(.google.fhir.proto.fhir_original_code) = "1762-4"];
+    NUM_1763_2 = 586 [(.google.fhir.proto.fhir_original_code) = "1763-2"];
+    NUM_1764_0 = 587 [(.google.fhir.proto.fhir_original_code) = "1764-0"];
+    NUM_1765_7 = 588 [(.google.fhir.proto.fhir_original_code) = "1765-7"];
+    NUM_1766_5 = 589 [(.google.fhir.proto.fhir_original_code) = "1766-5"];
+    NUM_1767_3 = 590 [(.google.fhir.proto.fhir_original_code) = "1767-3"];
+    NUM_1768_1 = 591 [(.google.fhir.proto.fhir_original_code) = "1768-1"];
+    NUM_1769_9 = 592 [(.google.fhir.proto.fhir_original_code) = "1769-9"];
+    NUM_1770_7 = 593 [(.google.fhir.proto.fhir_original_code) = "1770-7"];
+    NUM_1771_5 = 594 [(.google.fhir.proto.fhir_original_code) = "1771-5"];
+    NUM_1772_3 = 595 [(.google.fhir.proto.fhir_original_code) = "1772-3"];
+    NUM_1773_1 = 596 [(.google.fhir.proto.fhir_original_code) = "1773-1"];
+    NUM_1774_9 = 597 [(.google.fhir.proto.fhir_original_code) = "1774-9"];
+    NUM_1775_6 = 598 [(.google.fhir.proto.fhir_original_code) = "1775-6"];
+    NUM_1776_4 = 599 [(.google.fhir.proto.fhir_original_code) = "1776-4"];
+    NUM_1777_2 = 600 [(.google.fhir.proto.fhir_original_code) = "1777-2"];
+    NUM_1778_0 = 601 [(.google.fhir.proto.fhir_original_code) = "1778-0"];
+    NUM_1779_8 = 602 [(.google.fhir.proto.fhir_original_code) = "1779-8"];
+    NUM_1780_6 = 603 [(.google.fhir.proto.fhir_original_code) = "1780-6"];
+    NUM_1781_4 = 604 [(.google.fhir.proto.fhir_original_code) = "1781-4"];
+    NUM_1782_2 = 605 [(.google.fhir.proto.fhir_original_code) = "1782-2"];
+    NUM_1783_0 = 606 [(.google.fhir.proto.fhir_original_code) = "1783-0"];
+    NUM_1784_8 = 607 [(.google.fhir.proto.fhir_original_code) = "1784-8"];
+    NUM_1785_5 = 608 [(.google.fhir.proto.fhir_original_code) = "1785-5"];
+    NUM_1786_3 = 609 [(.google.fhir.proto.fhir_original_code) = "1786-3"];
+    NUM_1787_1 = 610 [(.google.fhir.proto.fhir_original_code) = "1787-1"];
+    NUM_1788_9 = 611 [(.google.fhir.proto.fhir_original_code) = "1788-9"];
+    NUM_1789_7 = 612 [(.google.fhir.proto.fhir_original_code) = "1789-7"];
+    NUM_1790_5 = 613 [(.google.fhir.proto.fhir_original_code) = "1790-5"];
+    NUM_1791_3 = 614 [(.google.fhir.proto.fhir_original_code) = "1791-3"];
+    NUM_1792_1 = 615 [(.google.fhir.proto.fhir_original_code) = "1792-1"];
+    NUM_1793_9 = 616 [(.google.fhir.proto.fhir_original_code) = "1793-9"];
+    NUM_1794_7 = 617 [(.google.fhir.proto.fhir_original_code) = "1794-7"];
+    NUM_1795_4 = 618 [(.google.fhir.proto.fhir_original_code) = "1795-4"];
+    NUM_1796_2 = 619 [(.google.fhir.proto.fhir_original_code) = "1796-2"];
+    NUM_1797_0 = 620 [(.google.fhir.proto.fhir_original_code) = "1797-0"];
+    NUM_1798_8 = 621 [(.google.fhir.proto.fhir_original_code) = "1798-8"];
+    NUM_1799_6 = 622 [(.google.fhir.proto.fhir_original_code) = "1799-6"];
+    NUM_1800_2 = 623 [(.google.fhir.proto.fhir_original_code) = "1800-2"];
+    NUM_1801_0 = 624 [(.google.fhir.proto.fhir_original_code) = "1801-0"];
+    NUM_1802_8 = 625 [(.google.fhir.proto.fhir_original_code) = "1802-8"];
+    NUM_1803_6 = 626 [(.google.fhir.proto.fhir_original_code) = "1803-6"];
+    NUM_1804_4 = 627 [(.google.fhir.proto.fhir_original_code) = "1804-4"];
+    NUM_1805_1 = 628 [(.google.fhir.proto.fhir_original_code) = "1805-1"];
+    NUM_1806_9 = 629 [(.google.fhir.proto.fhir_original_code) = "1806-9"];
+    NUM_1807_7 = 630 [(.google.fhir.proto.fhir_original_code) = "1807-7"];
+    NUM_1808_5 = 631 [(.google.fhir.proto.fhir_original_code) = "1808-5"];
+    NUM_1809_3 = 632 [(.google.fhir.proto.fhir_original_code) = "1809-3"];
+    NUM_1813_5 = 633 [(.google.fhir.proto.fhir_original_code) = "1813-5"];
+    NUM_1837_4 = 634 [(.google.fhir.proto.fhir_original_code) = "1837-4"];
+    NUM_1814_3 = 635 [(.google.fhir.proto.fhir_original_code) = "1814-3"];
+    NUM_1815_0 = 636 [(.google.fhir.proto.fhir_original_code) = "1815-0"];
+    NUM_1816_8 = 637 [(.google.fhir.proto.fhir_original_code) = "1816-8"];
+    NUM_1817_6 = 638 [(.google.fhir.proto.fhir_original_code) = "1817-6"];
+    NUM_1818_4 = 639 [(.google.fhir.proto.fhir_original_code) = "1818-4"];
+    NUM_1819_2 = 640 [(.google.fhir.proto.fhir_original_code) = "1819-2"];
+    NUM_1820_0 = 641 [(.google.fhir.proto.fhir_original_code) = "1820-0"];
+    NUM_1821_8 = 642 [(.google.fhir.proto.fhir_original_code) = "1821-8"];
+    NUM_1822_6 = 643 [(.google.fhir.proto.fhir_original_code) = "1822-6"];
+    NUM_1823_4 = 644 [(.google.fhir.proto.fhir_original_code) = "1823-4"];
+    NUM_1824_2 = 645 [(.google.fhir.proto.fhir_original_code) = "1824-2"];
+    NUM_1825_9 = 646 [(.google.fhir.proto.fhir_original_code) = "1825-9"];
+    NUM_1826_7 = 647 [(.google.fhir.proto.fhir_original_code) = "1826-7"];
+    NUM_1827_5 = 648 [(.google.fhir.proto.fhir_original_code) = "1827-5"];
+    NUM_1828_3 = 649 [(.google.fhir.proto.fhir_original_code) = "1828-3"];
+    NUM_1829_1 = 650 [(.google.fhir.proto.fhir_original_code) = "1829-1"];
+    NUM_1830_9 = 651 [(.google.fhir.proto.fhir_original_code) = "1830-9"];
+    NUM_1831_7 = 652 [(.google.fhir.proto.fhir_original_code) = "1831-7"];
+    NUM_1832_5 = 653 [(.google.fhir.proto.fhir_original_code) = "1832-5"];
+    NUM_1833_3 = 654 [(.google.fhir.proto.fhir_original_code) = "1833-3"];
+    NUM_1834_1 = 655 [(.google.fhir.proto.fhir_original_code) = "1834-1"];
+    NUM_1835_8 = 656 [(.google.fhir.proto.fhir_original_code) = "1835-8"];
+    NUM_1838_2 = 657 [(.google.fhir.proto.fhir_original_code) = "1838-2"];
+    NUM_1842_4 = 658 [(.google.fhir.proto.fhir_original_code) = "1842-4"];
+    NUM_1844_0 = 659 [(.google.fhir.proto.fhir_original_code) = "1844-0"];
+    NUM_1891_1 = 660 [(.google.fhir.proto.fhir_original_code) = "1891-1"];
+    NUM_1896_0 = 661 [(.google.fhir.proto.fhir_original_code) = "1896-0"];
+    NUM_1845_7 = 662 [(.google.fhir.proto.fhir_original_code) = "1845-7"];
+    NUM_1846_5 = 663 [(.google.fhir.proto.fhir_original_code) = "1846-5"];
+    NUM_1847_3 = 664 [(.google.fhir.proto.fhir_original_code) = "1847-3"];
+    NUM_1848_1 = 665 [(.google.fhir.proto.fhir_original_code) = "1848-1"];
+    NUM_1849_9 = 666 [(.google.fhir.proto.fhir_original_code) = "1849-9"];
+    NUM_1850_7 = 667 [(.google.fhir.proto.fhir_original_code) = "1850-7"];
+    NUM_1851_5 = 668 [(.google.fhir.proto.fhir_original_code) = "1851-5"];
+    NUM_1852_3 = 669 [(.google.fhir.proto.fhir_original_code) = "1852-3"];
+    NUM_1853_1 = 670 [(.google.fhir.proto.fhir_original_code) = "1853-1"];
+    NUM_1854_9 = 671 [(.google.fhir.proto.fhir_original_code) = "1854-9"];
+    NUM_1855_6 = 672 [(.google.fhir.proto.fhir_original_code) = "1855-6"];
+    NUM_1856_4 = 673 [(.google.fhir.proto.fhir_original_code) = "1856-4"];
+    NUM_1857_2 = 674 [(.google.fhir.proto.fhir_original_code) = "1857-2"];
+    NUM_1858_0 = 675 [(.google.fhir.proto.fhir_original_code) = "1858-0"];
+    NUM_1859_8 = 676 [(.google.fhir.proto.fhir_original_code) = "1859-8"];
+    NUM_1860_6 = 677 [(.google.fhir.proto.fhir_original_code) = "1860-6"];
+    NUM_1861_4 = 678 [(.google.fhir.proto.fhir_original_code) = "1861-4"];
+    NUM_1862_2 = 679 [(.google.fhir.proto.fhir_original_code) = "1862-2"];
+    NUM_1863_0 = 680 [(.google.fhir.proto.fhir_original_code) = "1863-0"];
+    NUM_1864_8 = 681 [(.google.fhir.proto.fhir_original_code) = "1864-8"];
+    NUM_1865_5 = 682 [(.google.fhir.proto.fhir_original_code) = "1865-5"];
+    NUM_1866_3 = 683 [(.google.fhir.proto.fhir_original_code) = "1866-3"];
+    NUM_1867_1 = 684 [(.google.fhir.proto.fhir_original_code) = "1867-1"];
+    NUM_1868_9 = 685 [(.google.fhir.proto.fhir_original_code) = "1868-9"];
+    NUM_1869_7 = 686 [(.google.fhir.proto.fhir_original_code) = "1869-7"];
+    NUM_1870_5 = 687 [(.google.fhir.proto.fhir_original_code) = "1870-5"];
+    NUM_1871_3 = 688 [(.google.fhir.proto.fhir_original_code) = "1871-3"];
+    NUM_1872_1 = 689 [(.google.fhir.proto.fhir_original_code) = "1872-1"];
+    NUM_1873_9 = 690 [(.google.fhir.proto.fhir_original_code) = "1873-9"];
+    NUM_1874_7 = 691 [(.google.fhir.proto.fhir_original_code) = "1874-7"];
+    NUM_1875_4 = 692 [(.google.fhir.proto.fhir_original_code) = "1875-4"];
+    NUM_1876_2 = 693 [(.google.fhir.proto.fhir_original_code) = "1876-2"];
+    NUM_1877_0 = 694 [(.google.fhir.proto.fhir_original_code) = "1877-0"];
+    NUM_1878_8 = 695 [(.google.fhir.proto.fhir_original_code) = "1878-8"];
+    NUM_1879_6 = 696 [(.google.fhir.proto.fhir_original_code) = "1879-6"];
+    NUM_1880_4 = 697 [(.google.fhir.proto.fhir_original_code) = "1880-4"];
+    NUM_1881_2 = 698 [(.google.fhir.proto.fhir_original_code) = "1881-2"];
+    NUM_1882_0 = 699 [(.google.fhir.proto.fhir_original_code) = "1882-0"];
+    NUM_1883_8 = 700 [(.google.fhir.proto.fhir_original_code) = "1883-8"];
+    NUM_1884_6 = 701 [(.google.fhir.proto.fhir_original_code) = "1884-6"];
+    NUM_1885_3 = 702 [(.google.fhir.proto.fhir_original_code) = "1885-3"];
+    NUM_1886_1 = 703 [(.google.fhir.proto.fhir_original_code) = "1886-1"];
+    NUM_1887_9 = 704 [(.google.fhir.proto.fhir_original_code) = "1887-9"];
+    NUM_1888_7 = 705 [(.google.fhir.proto.fhir_original_code) = "1888-7"];
+    NUM_1889_5 = 706 [(.google.fhir.proto.fhir_original_code) = "1889-5"];
+    NUM_1892_9 = 707 [(.google.fhir.proto.fhir_original_code) = "1892-9"];
+    NUM_1893_7 = 708 [(.google.fhir.proto.fhir_original_code) = "1893-7"];
+    NUM_1894_5 = 709 [(.google.fhir.proto.fhir_original_code) = "1894-5"];
+    NUM_1897_8 = 710 [(.google.fhir.proto.fhir_original_code) = "1897-8"];
+    NUM_1898_6 = 711 [(.google.fhir.proto.fhir_original_code) = "1898-6"];
+    NUM_1899_4 = 712 [(.google.fhir.proto.fhir_original_code) = "1899-4"];
+    NUM_1900_0 = 713 [(.google.fhir.proto.fhir_original_code) = "1900-0"];
+    NUM_1901_8 = 714 [(.google.fhir.proto.fhir_original_code) = "1901-8"];
+    NUM_1902_6 = 715 [(.google.fhir.proto.fhir_original_code) = "1902-6"];
+    NUM_1903_4 = 716 [(.google.fhir.proto.fhir_original_code) = "1903-4"];
+    NUM_1904_2 = 717 [(.google.fhir.proto.fhir_original_code) = "1904-2"];
+    NUM_1905_9 = 718 [(.google.fhir.proto.fhir_original_code) = "1905-9"];
+    NUM_1906_7 = 719 [(.google.fhir.proto.fhir_original_code) = "1906-7"];
+    NUM_1907_5 = 720 [(.google.fhir.proto.fhir_original_code) = "1907-5"];
+    NUM_1908_3 = 721 [(.google.fhir.proto.fhir_original_code) = "1908-3"];
+    NUM_1909_1 = 722 [(.google.fhir.proto.fhir_original_code) = "1909-1"];
+    NUM_1910_9 = 723 [(.google.fhir.proto.fhir_original_code) = "1910-9"];
+    NUM_1911_7 = 724 [(.google.fhir.proto.fhir_original_code) = "1911-7"];
+    NUM_1912_5 = 725 [(.google.fhir.proto.fhir_original_code) = "1912-5"];
+    NUM_1913_3 = 726 [(.google.fhir.proto.fhir_original_code) = "1913-3"];
+    NUM_1914_1 = 727 [(.google.fhir.proto.fhir_original_code) = "1914-1"];
+    NUM_1915_8 = 728 [(.google.fhir.proto.fhir_original_code) = "1915-8"];
+    NUM_1916_6 = 729 [(.google.fhir.proto.fhir_original_code) = "1916-6"];
+    NUM_1917_4 = 730 [(.google.fhir.proto.fhir_original_code) = "1917-4"];
+    NUM_1918_2 = 731 [(.google.fhir.proto.fhir_original_code) = "1918-2"];
+    NUM_1919_0 = 732 [(.google.fhir.proto.fhir_original_code) = "1919-0"];
+    NUM_1920_8 = 733 [(.google.fhir.proto.fhir_original_code) = "1920-8"];
+    NUM_1921_6 = 734 [(.google.fhir.proto.fhir_original_code) = "1921-6"];
+    NUM_1922_4 = 735 [(.google.fhir.proto.fhir_original_code) = "1922-4"];
+    NUM_1923_2 = 736 [(.google.fhir.proto.fhir_original_code) = "1923-2"];
+    NUM_1924_0 = 737 [(.google.fhir.proto.fhir_original_code) = "1924-0"];
+    NUM_1925_7 = 738 [(.google.fhir.proto.fhir_original_code) = "1925-7"];
+    NUM_1926_5 = 739 [(.google.fhir.proto.fhir_original_code) = "1926-5"];
+    NUM_1927_3 = 740 [(.google.fhir.proto.fhir_original_code) = "1927-3"];
+    NUM_1928_1 = 741 [(.google.fhir.proto.fhir_original_code) = "1928-1"];
+    NUM_1929_9 = 742 [(.google.fhir.proto.fhir_original_code) = "1929-9"];
+    NUM_1930_7 = 743 [(.google.fhir.proto.fhir_original_code) = "1930-7"];
+    NUM_1931_5 = 744 [(.google.fhir.proto.fhir_original_code) = "1931-5"];
+    NUM_1932_3 = 745 [(.google.fhir.proto.fhir_original_code) = "1932-3"];
+    NUM_1933_1 = 746 [(.google.fhir.proto.fhir_original_code) = "1933-1"];
+    NUM_1934_9 = 747 [(.google.fhir.proto.fhir_original_code) = "1934-9"];
+    NUM_1935_6 = 748 [(.google.fhir.proto.fhir_original_code) = "1935-6"];
+    NUM_1936_4 = 749 [(.google.fhir.proto.fhir_original_code) = "1936-4"];
+    NUM_1937_2 = 750 [(.google.fhir.proto.fhir_original_code) = "1937-2"];
+    NUM_1938_0 = 751 [(.google.fhir.proto.fhir_original_code) = "1938-0"];
+    NUM_1939_8 = 752 [(.google.fhir.proto.fhir_original_code) = "1939-8"];
+    NUM_1940_6 = 753 [(.google.fhir.proto.fhir_original_code) = "1940-6"];
+    NUM_1941_4 = 754 [(.google.fhir.proto.fhir_original_code) = "1941-4"];
+    NUM_1942_2 = 755 [(.google.fhir.proto.fhir_original_code) = "1942-2"];
+    NUM_1943_0 = 756 [(.google.fhir.proto.fhir_original_code) = "1943-0"];
+    NUM_1944_8 = 757 [(.google.fhir.proto.fhir_original_code) = "1944-8"];
+    NUM_1945_5 = 758 [(.google.fhir.proto.fhir_original_code) = "1945-5"];
+    NUM_1946_3 = 759 [(.google.fhir.proto.fhir_original_code) = "1946-3"];
+    NUM_1947_1 = 760 [(.google.fhir.proto.fhir_original_code) = "1947-1"];
+    NUM_1948_9 = 761 [(.google.fhir.proto.fhir_original_code) = "1948-9"];
+    NUM_1949_7 = 762 [(.google.fhir.proto.fhir_original_code) = "1949-7"];
+    NUM_1950_5 = 763 [(.google.fhir.proto.fhir_original_code) = "1950-5"];
+    NUM_1951_3 = 764 [(.google.fhir.proto.fhir_original_code) = "1951-3"];
+    NUM_1952_1 = 765 [(.google.fhir.proto.fhir_original_code) = "1952-1"];
+    NUM_1953_9 = 766 [(.google.fhir.proto.fhir_original_code) = "1953-9"];
+    NUM_1954_7 = 767 [(.google.fhir.proto.fhir_original_code) = "1954-7"];
+    NUM_1955_4 = 768 [(.google.fhir.proto.fhir_original_code) = "1955-4"];
+    NUM_1956_2 = 769 [(.google.fhir.proto.fhir_original_code) = "1956-2"];
+    NUM_1957_0 = 770 [(.google.fhir.proto.fhir_original_code) = "1957-0"];
+    NUM_1958_8 = 771 [(.google.fhir.proto.fhir_original_code) = "1958-8"];
+    NUM_1959_6 = 772 [(.google.fhir.proto.fhir_original_code) = "1959-6"];
+    NUM_1960_4 = 773 [(.google.fhir.proto.fhir_original_code) = "1960-4"];
+    NUM_1961_2 = 774 [(.google.fhir.proto.fhir_original_code) = "1961-2"];
+    NUM_1962_0 = 775 [(.google.fhir.proto.fhir_original_code) = "1962-0"];
+    NUM_1963_8 = 776 [(.google.fhir.proto.fhir_original_code) = "1963-8"];
+    NUM_1964_6 = 777 [(.google.fhir.proto.fhir_original_code) = "1964-6"];
+    NUM_1968_7 = 778 [(.google.fhir.proto.fhir_original_code) = "1968-7"];
+    NUM_1972_9 = 779 [(.google.fhir.proto.fhir_original_code) = "1972-9"];
+    NUM_1984_4 = 780 [(.google.fhir.proto.fhir_original_code) = "1984-4"];
+    NUM_1990_1 = 781 [(.google.fhir.proto.fhir_original_code) = "1990-1"];
+    NUM_1992_7 = 782 [(.google.fhir.proto.fhir_original_code) = "1992-7"];
+    NUM_2002_4 = 783 [(.google.fhir.proto.fhir_original_code) = "2002-4"];
+    NUM_2004_0 = 784 [(.google.fhir.proto.fhir_original_code) = "2004-0"];
+    NUM_2006_5 = 785 [(.google.fhir.proto.fhir_original_code) = "2006-5"];
+    NUM_1969_5 = 786 [(.google.fhir.proto.fhir_original_code) = "1969-5"];
+    NUM_1970_3 = 787 [(.google.fhir.proto.fhir_original_code) = "1970-3"];
+    NUM_1973_7 = 788 [(.google.fhir.proto.fhir_original_code) = "1973-7"];
+    NUM_1974_5 = 789 [(.google.fhir.proto.fhir_original_code) = "1974-5"];
+    NUM_1975_2 = 790 [(.google.fhir.proto.fhir_original_code) = "1975-2"];
+    NUM_1976_0 = 791 [(.google.fhir.proto.fhir_original_code) = "1976-0"];
+    NUM_1977_8 = 792 [(.google.fhir.proto.fhir_original_code) = "1977-8"];
+    NUM_1978_6 = 793 [(.google.fhir.proto.fhir_original_code) = "1978-6"];
+    NUM_1979_4 = 794 [(.google.fhir.proto.fhir_original_code) = "1979-4"];
+    NUM_1980_2 = 795 [(.google.fhir.proto.fhir_original_code) = "1980-2"];
+    NUM_1981_0 = 796 [(.google.fhir.proto.fhir_original_code) = "1981-0"];
+    NUM_1982_8 = 797 [(.google.fhir.proto.fhir_original_code) = "1982-8"];
+    NUM_1985_1 = 798 [(.google.fhir.proto.fhir_original_code) = "1985-1"];
+    NUM_1986_9 = 799 [(.google.fhir.proto.fhir_original_code) = "1986-9"];
+    NUM_1987_7 = 800 [(.google.fhir.proto.fhir_original_code) = "1987-7"];
+    NUM_1988_5 = 801 [(.google.fhir.proto.fhir_original_code) = "1988-5"];
+    NUM_1993_5 = 802 [(.google.fhir.proto.fhir_original_code) = "1993-5"];
+    NUM_1994_3 = 803 [(.google.fhir.proto.fhir_original_code) = "1994-3"];
+    NUM_1995_0 = 804 [(.google.fhir.proto.fhir_original_code) = "1995-0"];
+    NUM_1996_8 = 805 [(.google.fhir.proto.fhir_original_code) = "1996-8"];
+    NUM_1997_6 = 806 [(.google.fhir.proto.fhir_original_code) = "1997-6"];
+    NUM_1998_4 = 807 [(.google.fhir.proto.fhir_original_code) = "1998-4"];
+    NUM_1999_2 = 808 [(.google.fhir.proto.fhir_original_code) = "1999-2"];
+    NUM_2000_8 = 809 [(.google.fhir.proto.fhir_original_code) = "2000-8"];
+    NUM_2007_3 = 810 [(.google.fhir.proto.fhir_original_code) = "2007-3"];
+    NUM_2008_1 = 811 [(.google.fhir.proto.fhir_original_code) = "2008-1"];
+    NUM_2009_9 = 812 [(.google.fhir.proto.fhir_original_code) = "2009-9"];
+    NUM_2010_7 = 813 [(.google.fhir.proto.fhir_original_code) = "2010-7"];
+    NUM_2011_5 = 814 [(.google.fhir.proto.fhir_original_code) = "2011-5"];
+    NUM_2012_3 = 815 [(.google.fhir.proto.fhir_original_code) = "2012-3"];
+    NUM_2013_1 = 816 [(.google.fhir.proto.fhir_original_code) = "2013-1"];
+    NUM_2014_9 = 817 [(.google.fhir.proto.fhir_original_code) = "2014-9"];
+    NUM_2015_6 = 818 [(.google.fhir.proto.fhir_original_code) = "2015-6"];
+    NUM_2016_4 = 819 [(.google.fhir.proto.fhir_original_code) = "2016-4"];
+    NUM_2017_2 = 820 [(.google.fhir.proto.fhir_original_code) = "2017-2"];
+    NUM_2018_0 = 821 [(.google.fhir.proto.fhir_original_code) = "2018-0"];
+    NUM_2019_8 = 822 [(.google.fhir.proto.fhir_original_code) = "2019-8"];
+    NUM_2020_6 = 823 [(.google.fhir.proto.fhir_original_code) = "2020-6"];
+    NUM_2021_4 = 824 [(.google.fhir.proto.fhir_original_code) = "2021-4"];
+    NUM_2022_2 = 825 [(.google.fhir.proto.fhir_original_code) = "2022-2"];
+    NUM_2023_0 = 826 [(.google.fhir.proto.fhir_original_code) = "2023-0"];
+    NUM_2024_8 = 827 [(.google.fhir.proto.fhir_original_code) = "2024-8"];
+    NUM_2025_5 = 828 [(.google.fhir.proto.fhir_original_code) = "2025-5"];
+    NUM_2026_3 = 829 [(.google.fhir.proto.fhir_original_code) = "2026-3"];
+    NUM_2028_9 = 830 [(.google.fhir.proto.fhir_original_code) = "2028-9"];
+    NUM_2029_7 = 831 [(.google.fhir.proto.fhir_original_code) = "2029-7"];
+    NUM_2030_5 = 832 [(.google.fhir.proto.fhir_original_code) = "2030-5"];
+    NUM_2031_3 = 833 [(.google.fhir.proto.fhir_original_code) = "2031-3"];
+    NUM_2032_1 = 834 [(.google.fhir.proto.fhir_original_code) = "2032-1"];
+    NUM_2033_9 = 835 [(.google.fhir.proto.fhir_original_code) = "2033-9"];
+    NUM_2034_7 = 836 [(.google.fhir.proto.fhir_original_code) = "2034-7"];
+    NUM_2035_4 = 837 [(.google.fhir.proto.fhir_original_code) = "2035-4"];
+    NUM_2036_2 = 838 [(.google.fhir.proto.fhir_original_code) = "2036-2"];
+    NUM_2037_0 = 839 [(.google.fhir.proto.fhir_original_code) = "2037-0"];
+    NUM_2038_8 = 840 [(.google.fhir.proto.fhir_original_code) = "2038-8"];
+    NUM_2039_6 = 841 [(.google.fhir.proto.fhir_original_code) = "2039-6"];
+    NUM_2040_4 = 842 [(.google.fhir.proto.fhir_original_code) = "2040-4"];
+    NUM_2041_2 = 843 [(.google.fhir.proto.fhir_original_code) = "2041-2"];
+    NUM_2042_0 = 844 [(.google.fhir.proto.fhir_original_code) = "2042-0"];
+    NUM_2043_8 = 845 [(.google.fhir.proto.fhir_original_code) = "2043-8"];
+    NUM_2044_6 = 846 [(.google.fhir.proto.fhir_original_code) = "2044-6"];
+    NUM_2045_3 = 847 [(.google.fhir.proto.fhir_original_code) = "2045-3"];
+    NUM_2046_1 = 848 [(.google.fhir.proto.fhir_original_code) = "2046-1"];
+    NUM_2047_9 = 849 [(.google.fhir.proto.fhir_original_code) = "2047-9"];
+    NUM_2048_7 = 850 [(.google.fhir.proto.fhir_original_code) = "2048-7"];
+    NUM_2049_5 = 851 [(.google.fhir.proto.fhir_original_code) = "2049-5"];
+    NUM_2050_3 = 852 [(.google.fhir.proto.fhir_original_code) = "2050-3"];
+    NUM_2051_1 = 853 [(.google.fhir.proto.fhir_original_code) = "2051-1"];
+    NUM_2052_9 = 854 [(.google.fhir.proto.fhir_original_code) = "2052-9"];
+    NUM_2054_5 = 855 [(.google.fhir.proto.fhir_original_code) = "2054-5"];
+    NUM_2056_0 = 856 [(.google.fhir.proto.fhir_original_code) = "2056-0"];
+    NUM_2058_6 = 857 [(.google.fhir.proto.fhir_original_code) = "2058-6"];
+    NUM_2060_2 = 858 [(.google.fhir.proto.fhir_original_code) = "2060-2"];
+    NUM_2067_7 = 859 [(.google.fhir.proto.fhir_original_code) = "2067-7"];
+    NUM_2068_5 = 860 [(.google.fhir.proto.fhir_original_code) = "2068-5"];
+    NUM_2069_3 = 861 [(.google.fhir.proto.fhir_original_code) = "2069-3"];
+    NUM_2070_1 = 862 [(.google.fhir.proto.fhir_original_code) = "2070-1"];
+    NUM_2071_9 = 863 [(.google.fhir.proto.fhir_original_code) = "2071-9"];
+    NUM_2072_7 = 864 [(.google.fhir.proto.fhir_original_code) = "2072-7"];
+    NUM_2073_5 = 865 [(.google.fhir.proto.fhir_original_code) = "2073-5"];
+    NUM_2074_3 = 866 [(.google.fhir.proto.fhir_original_code) = "2074-3"];
+    NUM_2075_0 = 867 [(.google.fhir.proto.fhir_original_code) = "2075-0"];
+    NUM_2061_0 = 868 [(.google.fhir.proto.fhir_original_code) = "2061-0"];
+    NUM_2062_8 = 869 [(.google.fhir.proto.fhir_original_code) = "2062-8"];
+    NUM_2063_6 = 870 [(.google.fhir.proto.fhir_original_code) = "2063-6"];
+    NUM_2064_4 = 871 [(.google.fhir.proto.fhir_original_code) = "2064-4"];
+    NUM_2065_1 = 872 [(.google.fhir.proto.fhir_original_code) = "2065-1"];
+    NUM_2066_9 = 873 [(.google.fhir.proto.fhir_original_code) = "2066-9"];
+    NUM_2076_8 = 874 [(.google.fhir.proto.fhir_original_code) = "2076-8"];
+    NUM_2078_4 = 875 [(.google.fhir.proto.fhir_original_code) = "2078-4"];
+    NUM_2085_9 = 876 [(.google.fhir.proto.fhir_original_code) = "2085-9"];
+    NUM_2100_6 = 877 [(.google.fhir.proto.fhir_original_code) = "2100-6"];
+    NUM_2500_7 = 878 [(.google.fhir.proto.fhir_original_code) = "2500-7"];
+    NUM_2079_2 = 879 [(.google.fhir.proto.fhir_original_code) = "2079-2"];
+    NUM_2080_0 = 880 [(.google.fhir.proto.fhir_original_code) = "2080-0"];
+    NUM_2081_8 = 881 [(.google.fhir.proto.fhir_original_code) = "2081-8"];
+    NUM_2082_6 = 882 [(.google.fhir.proto.fhir_original_code) = "2082-6"];
+    NUM_2083_4 = 883 [(.google.fhir.proto.fhir_original_code) = "2083-4"];
+    NUM_2086_7 = 884 [(.google.fhir.proto.fhir_original_code) = "2086-7"];
+    NUM_2087_5 = 885 [(.google.fhir.proto.fhir_original_code) = "2087-5"];
+    NUM_2088_3 = 886 [(.google.fhir.proto.fhir_original_code) = "2088-3"];
+    NUM_2089_1 = 887 [(.google.fhir.proto.fhir_original_code) = "2089-1"];
+    NUM_2090_9 = 888 [(.google.fhir.proto.fhir_original_code) = "2090-9"];
+    NUM_2091_7 = 889 [(.google.fhir.proto.fhir_original_code) = "2091-7"];
+    NUM_2092_5 = 890 [(.google.fhir.proto.fhir_original_code) = "2092-5"];
+    NUM_2093_3 = 891 [(.google.fhir.proto.fhir_original_code) = "2093-3"];
+    NUM_2094_1 = 892 [(.google.fhir.proto.fhir_original_code) = "2094-1"];
+    NUM_2095_8 = 893 [(.google.fhir.proto.fhir_original_code) = "2095-8"];
+    NUM_2096_6 = 894 [(.google.fhir.proto.fhir_original_code) = "2096-6"];
+    NUM_2097_4 = 895 [(.google.fhir.proto.fhir_original_code) = "2097-4"];
+    NUM_2098_2 = 896 [(.google.fhir.proto.fhir_original_code) = "2098-2"];
+    NUM_2101_4 = 897 [(.google.fhir.proto.fhir_original_code) = "2101-4"];
+    NUM_2102_2 = 898 [(.google.fhir.proto.fhir_original_code) = "2102-2"];
+    NUM_2103_0 = 899 [(.google.fhir.proto.fhir_original_code) = "2103-0"];
+    NUM_2104_8 = 900 [(.google.fhir.proto.fhir_original_code) = "2104-8"];
+    NUM_2106_3 = 901 [(.google.fhir.proto.fhir_original_code) = "2106-3"];
+    NUM_2108_9 = 902 [(.google.fhir.proto.fhir_original_code) = "2108-9"];
+    NUM_2118_8 = 903 [(.google.fhir.proto.fhir_original_code) = "2118-8"];
+    NUM_2129_5 = 904 [(.google.fhir.proto.fhir_original_code) = "2129-5"];
+    NUM_2109_7 = 905 [(.google.fhir.proto.fhir_original_code) = "2109-7"];
+    NUM_2110_5 = 906 [(.google.fhir.proto.fhir_original_code) = "2110-5"];
+    NUM_2111_3 = 907 [(.google.fhir.proto.fhir_original_code) = "2111-3"];
+    NUM_2112_1 = 908 [(.google.fhir.proto.fhir_original_code) = "2112-1"];
+    NUM_2113_9 = 909 [(.google.fhir.proto.fhir_original_code) = "2113-9"];
+    NUM_2114_7 = 910 [(.google.fhir.proto.fhir_original_code) = "2114-7"];
+    NUM_2115_4 = 911 [(.google.fhir.proto.fhir_original_code) = "2115-4"];
+    NUM_2116_2 = 912 [(.google.fhir.proto.fhir_original_code) = "2116-2"];
+    NUM_2119_6 = 913 [(.google.fhir.proto.fhir_original_code) = "2119-6"];
+    NUM_2120_4 = 914 [(.google.fhir.proto.fhir_original_code) = "2120-4"];
+    NUM_2121_2 = 915 [(.google.fhir.proto.fhir_original_code) = "2121-2"];
+    NUM_2122_0 = 916 [(.google.fhir.proto.fhir_original_code) = "2122-0"];
+    NUM_2123_8 = 917 [(.google.fhir.proto.fhir_original_code) = "2123-8"];
+    NUM_2124_6 = 918 [(.google.fhir.proto.fhir_original_code) = "2124-6"];
+    NUM_2125_3 = 919 [(.google.fhir.proto.fhir_original_code) = "2125-3"];
+    NUM_2126_1 = 920 [(.google.fhir.proto.fhir_original_code) = "2126-1"];
+    NUM_2127_9 = 921 [(.google.fhir.proto.fhir_original_code) = "2127-9"];
+    NUM_2131_1 = 922 [(.google.fhir.proto.fhir_original_code) = "2131-1"];
+    NUM_2133_7 = 923 [(.google.fhir.proto.fhir_original_code) = "2133-7"];
+    NUM_2135_2 = 924 [(.google.fhir.proto.fhir_original_code) = "2135-2"];
+    NUM_2137_8 = 925 [(.google.fhir.proto.fhir_original_code) = "2137-8"];
+    NUM_2148_5 = 926 [(.google.fhir.proto.fhir_original_code) = "2148-5"];
+    NUM_2155_0 = 927 [(.google.fhir.proto.fhir_original_code) = "2155-0"];
+    NUM_2165_9 = 928 [(.google.fhir.proto.fhir_original_code) = "2165-9"];
+    NUM_2178_2 = 929 [(.google.fhir.proto.fhir_original_code) = "2178-2"];
+    NUM_2180_8 = 930 [(.google.fhir.proto.fhir_original_code) = "2180-8"];
+    NUM_2182_4 = 931 [(.google.fhir.proto.fhir_original_code) = "2182-4"];
+    NUM_2184_0 = 932 [(.google.fhir.proto.fhir_original_code) = "2184-0"];
+    NUM_2138_6 = 933 [(.google.fhir.proto.fhir_original_code) = "2138-6"];
+    NUM_2139_4 = 934 [(.google.fhir.proto.fhir_original_code) = "2139-4"];
+    NUM_2140_2 = 935 [(.google.fhir.proto.fhir_original_code) = "2140-2"];
+    NUM_2141_0 = 936 [(.google.fhir.proto.fhir_original_code) = "2141-0"];
+    NUM_2142_8 = 937 [(.google.fhir.proto.fhir_original_code) = "2142-8"];
+    NUM_2143_6 = 938 [(.google.fhir.proto.fhir_original_code) = "2143-6"];
+    NUM_2144_4 = 939 [(.google.fhir.proto.fhir_original_code) = "2144-4"];
+    NUM_2145_1 = 940 [(.google.fhir.proto.fhir_original_code) = "2145-1"];
+    NUM_2146_9 = 941 [(.google.fhir.proto.fhir_original_code) = "2146-9"];
+    NUM_2149_3 = 942 [(.google.fhir.proto.fhir_original_code) = "2149-3"];
+    NUM_2150_1 = 943 [(.google.fhir.proto.fhir_original_code) = "2150-1"];
+    NUM_2151_9 = 944 [(.google.fhir.proto.fhir_original_code) = "2151-9"];
+    NUM_2152_7 = 945 [(.google.fhir.proto.fhir_original_code) = "2152-7"];
+    NUM_2153_5 = 946 [(.google.fhir.proto.fhir_original_code) = "2153-5"];
+    NUM_2156_8 = 947 [(.google.fhir.proto.fhir_original_code) = "2156-8"];
+    NUM_2157_6 = 948 [(.google.fhir.proto.fhir_original_code) = "2157-6"];
+    NUM_2158_4 = 949 [(.google.fhir.proto.fhir_original_code) = "2158-4"];
+    NUM_2159_2 = 950 [(.google.fhir.proto.fhir_original_code) = "2159-2"];
+    NUM_2160_0 = 951 [(.google.fhir.proto.fhir_original_code) = "2160-0"];
+    NUM_2161_8 = 952 [(.google.fhir.proto.fhir_original_code) = "2161-8"];
+    NUM_2162_6 = 953 [(.google.fhir.proto.fhir_original_code) = "2162-6"];
+    NUM_2163_4 = 954 [(.google.fhir.proto.fhir_original_code) = "2163-4"];
+    NUM_2166_7 = 955 [(.google.fhir.proto.fhir_original_code) = "2166-7"];
+    NUM_2167_5 = 956 [(.google.fhir.proto.fhir_original_code) = "2167-5"];
+    NUM_2168_3 = 957 [(.google.fhir.proto.fhir_original_code) = "2168-3"];
+    NUM_2169_1 = 958 [(.google.fhir.proto.fhir_original_code) = "2169-1"];
+    NUM_2170_9 = 959 [(.google.fhir.proto.fhir_original_code) = "2170-9"];
+    NUM_2171_7 = 960 [(.google.fhir.proto.fhir_original_code) = "2171-7"];
+    NUM_2172_5 = 961 [(.google.fhir.proto.fhir_original_code) = "2172-5"];
+    NUM_2173_3 = 962 [(.google.fhir.proto.fhir_original_code) = "2173-3"];
+    NUM_2174_1 = 963 [(.google.fhir.proto.fhir_original_code) = "2174-1"];
+    NUM_2175_8 = 964 [(.google.fhir.proto.fhir_original_code) = "2175-8"];
+    NUM_2176_6 = 965 [(.google.fhir.proto.fhir_original_code) = "2176-6"];
+    NUM_2186_5 = 966 [(.google.fhir.proto.fhir_original_code) = "2186-5"];
   }
-  Value value = 1;
-
-  core.String id = 2;
-
-  repeated core.Extension extension = 3;
 }
 
-// The 41 [CDC ethnicity
-// codes](http://www.cdc.gov/phin/resources/vocabulary/index.html) that are
-// grouped under one of the 2 OMB ethnicity category codes. See
-// http://hl7.org/fhir/us/core/ValueSet/detailed-ethnicity
-message DetailedEthnicityCode {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.fhir_valueset_url) =
-      "http://hl7.org/fhir/us/core/ValueSet/detailed-ethnicity";
-
-  // Field 1 reserved to allow enumeration in the future.
-  reserved 1;
-
-  // This valueset is not enumerable, and so is represented as a string.
-  string value = 4;
-
-  core.String id = 2;
-
-  repeated core.Extension extension = 3;
-}
-
-// The 900+ [CDC Race
-// codes](http://www.cdc.gov/phin/resources/vocabulary/index.html) that are
-// grouped under one of the 5 OMB race category codes. See
-// http://hl7.org/fhir/us/core/ValueSet/detailed-race
-message DetailedRaceCode {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.fhir_valueset_url) =
-      "http://hl7.org/fhir/us/core/ValueSet/detailed-race";
-
-  // Field 1 reserved to allow enumeration in the future.
-  reserved 1;
-
-  // This valueset is not enumerable, and so is represented as a string.
-  string value = 4;
-
-  core.String id = 2;
-
-  repeated core.Extension extension = 3;
-}
-
-// The US Core Narrative Status Value Set limits the text status for the
-// resource narrative. See
-// http://hl7.org/fhir/us/core/ValueSet/us-core-narrative-status
-message NarrativeStatusCode {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.fhir_valueset_url) =
-      "http://hl7.org/fhir/us/core/ValueSet/us-core-narrative-status";
-
+// Set of codes that are needed for implementation of the US-Core profiles.
+// These codes are used as extensions to the FHIR and US Core value sets.
+//
+// See http://hl7.org/fhir/us/core/CodeSystem/careplan-category
+message USCoreCarePlanCategoryExtensionCode {
   enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/us/core/CodeSystem/careplan-category";
+
     INVALID_UNINITIALIZED = 0;
-    ADDITIONAL = 1;
-    GENERATED = 2;
+    ASSESS_PLAN = 1;
   }
-  Value value = 1;
-
-  core.String id = 2;
-
-  repeated core.Extension extension = 3;
 }
 
-// The codes for the ethnicity categories - 'Hispanic or Latino' and 'Non
-// Hispanic or Latino' - as defined by the [OMB Standards for Maintaining,
-// Collecting, and Presenting Federal Data on Race and Ethnicity, Statistical
-// Policy Directive No. 15, as revised, October 30,
-// 1997](https://www.whitehouse.gov/omb/fedreg_1997standards). See
-// http://hl7.org/fhir/us/core/ValueSet/omb-ethnicity-category
-message OmbEthnicityCategoriesCode {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.fhir_valueset_url) =
-      "http://hl7.org/fhir/us/core/ValueSet/omb-ethnicity-category";
-
+// Set of codes that are needed for implementation of the US-Core profiles.
+// These codes are used as extensions to the FHIR and US Core value sets.
+//
+// See http://hl7.org/fhir/us/core/CodeSystem/condition-category
+message USCoreConditionCategoryExtensionCode {
   enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/us/core/CodeSystem/condition-category";
+
     INVALID_UNINITIALIZED = 0;
-    NUM_2135_2 = 1 [(.google.fhir.proto.fhir_original_code) = "2135-2"];
-    NUM_2186_5 = 2 [(.google.fhir.proto.fhir_original_code) = "2186-5"];
+    PROBLEM = 1;
+    HEALTH_CONCERN = 2;
   }
-  Value value = 1;
-
-  core.String id = 2;
-
-  repeated core.Extension extension = 3;
 }
 
-// The codes for the concepts 'Unknown' and  'Asked but no answer' and the the
-// codes for the five race categories - 'American Indian' or 'Alaska Native',
-// 'Asian', 'Black or African American', 'Native Hawaiian or Other Pacific
-// Islander', and 'White' - as defined by the [OMB Standards for Maintaining,
-// Collecting, and Presenting Federal Data on Race and Ethnicity, Statistical
-// Policy Directive No. 15, as revised, October 30,
-// 1997](https://www.whitehouse.gov/omb/fedreg_1997standards) . See
-// http://hl7.org/fhir/us/core/ValueSet/omb-race-category
-message OmbRaceCategoriesCode {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.fhir_valueset_url) =
-      "http://hl7.org/fhir/us/core/ValueSet/omb-race-category";
-
+// The US Core DocumentReferences Type Code System is a 'starter set' of
+// categories supported for fetching and storing DocumentReference Resources.
+// See http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category
+message USCoreDocumentReferencesCategoryCode {
   enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category";
+
     INVALID_UNINITIALIZED = 0;
-    NUM_1002_5 = 1 [(.google.fhir.proto.fhir_original_code) = "1002-5"];
-    NUM_2028_9 = 2 [(.google.fhir.proto.fhir_original_code) = "2028-9"];
-    NUM_2054_5 = 3 [(.google.fhir.proto.fhir_original_code) = "2054-5"];
-    NUM_2076_8 = 4 [(.google.fhir.proto.fhir_original_code) = "2076-8"];
-    NUM_2106_3 = 5 [(.google.fhir.proto.fhir_original_code) = "2106-3"];
-    UNK = 6 [(.google.fhir.proto.fhir_original_code) = "UNK"];
-    ASKU = 7 [(.google.fhir.proto.fhir_original_code) = "ASKU"];
+    CLINICAL_NOTE = 1;
   }
-  Value value = 1;
-
-  core.String id = 2;
-
-  repeated core.Extension extension = 3;
-}
-
-// The US Core DocumentReference Type Value Set includes all LOINC  values whose
-// SCALE is DOC in the LOINC database and the HL7 v3 Code System NullFlavor
-// concept 'unknown'. See
-// http://hl7.org/fhir/us/core/ValueSet/us-core-documentreference-type
-message USCoreDocumentReferenceTypeCode {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.fhir_valueset_url) =
-      "http://hl7.org/fhir/us/core/ValueSet/us-core-documentreference-type";
-
-  // Field 1 reserved to allow enumeration in the future.
-  reserved 1;
-
-  // This valueset is not enumerable, and so is represented as a string.
-  string value = 4;
-
-  core.String id = 2;
-
-  repeated core.Extension extension = 3;
-}
-
-// Codes providing the status of an observation for smoking status. Constrained
-// to `final`and `entered-in-error`. See
-// http://hl7.org/fhir/us/core/ValueSet/us-core-observation-smoking-status-status
-message USCoreObservationSmokingStatusStatusCode {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.fhir_valueset_url) =
-      "http://hl7.org/fhir/us/core/ValueSet/us-core-observation-smoking-status-status";
-
-  enum Value {
-    INVALID_UNINITIALIZED = 0;
-    FINAL = 1;
-    ENTERED_IN_ERROR = 2;
-  }
-  Value value = 1;
-
-  core.String id = 2;
-
-  repeated core.Extension extension = 3;
 }

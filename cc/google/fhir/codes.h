@@ -58,6 +58,9 @@ namespace fhir {
     const google::protobuf::Message& typed_coding,
     google::fhir::r4::core::Coding* generic_coding);
 
+::google::fhir::Status CopyCode(const google::protobuf::Message& source,
+                                google::protobuf::Message* target);
+
 template <typename TypedResourceTypeCode>
 ::google::fhir::StatusOr<typename TypedResourceTypeCode::Value>
 GetCodeForResourceType(const google::protobuf::Message& resource);

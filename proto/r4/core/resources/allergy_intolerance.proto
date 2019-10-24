@@ -72,13 +72,52 @@ message AllergyIntolerance {
   CodeableConcept verification_status = 12;
 
   // allergy | intolerance - Underlying mechanism (if known)
-  AllergyIntoleranceTypeCode type = 13;
+  message TypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/allergy-intolerance-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AllergyIntoleranceTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  TypeCode type = 13;
 
   // food | medication | environment | biologic
-  repeated AllergyIntoleranceCategoryCode category = 14;
+  message CategoryCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/allergy-intolerance-category";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AllergyIntoleranceCategoryCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated CategoryCode category = 14;
 
   // low | high | unable-to-assess
-  AllergyIntoleranceCriticalityCode criticality = 15;
+  message CriticalityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AllergyIntoleranceCriticalityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  CriticalityCode criticality = 15;
 
   // Code that identifies the allergy or intolerance
   CodeableConcept code = 16;
@@ -158,7 +197,21 @@ message AllergyIntolerance {
     DateTime onset = 7;
 
     // mild | moderate | severe (of event as a whole)
-    AllergyIntoleranceSeverityCode severity = 8;
+    message SeverityCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/reaction-event-severity";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      AllergyIntoleranceSeverityCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    SeverityCode severity = 8;
 
     // How the subject was exposed to the substance
     CodeableConcept exposure_route = 9;

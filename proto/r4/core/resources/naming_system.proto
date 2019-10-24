@@ -66,11 +66,37 @@ message NamingSystem {
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 11
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // codesystem | identifier | root
-  NamingSystemTypeCode kind = 12
+  message KindCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/namingsystem-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    NamingSystemTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  KindCode kind = 12
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date last changed
@@ -113,7 +139,21 @@ message NamingSystem {
     repeated Extension modifier_extension = 3;
 
     // oid | uuid | uri | other
-    NamingSystemIdentifierTypeCode type = 4
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/namingsystem-identifier-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      NamingSystemIdentifierTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // The unique identifier

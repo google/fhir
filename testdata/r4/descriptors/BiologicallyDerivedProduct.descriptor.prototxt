@@ -100,7 +100,7 @@ field {
   number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.BiologicallyDerivedProductCategoryCode"
+  type_name: ".google.fhir.r4.core.BiologicallyDerivedProduct.ProductCategoryCode"
   options {
     [google.fhir.proto.field_description]: "organ | tissue | fluid | cells | biologicalAgent"
   }
@@ -120,7 +120,7 @@ field {
   number: 13
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.BiologicallyDerivedProductStatusCode"
+  type_name: ".google.fhir.r4.core.BiologicallyDerivedProduct.StatusCode"
   options {
     [google.fhir.proto.field_description]: "available | unavailable"
   }
@@ -199,6 +199,60 @@ field {
   options {
     [google.fhir.proto.field_description]: "Product storage"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+  }
+}
+nested_type {
+  name: "ProductCategoryCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.BiologicallyDerivedProductCategoryCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/product-category"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
+  name: "StatusCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.BiologicallyDerivedProductStatusCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/product-status"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
   }
 }
 nested_type {
@@ -527,7 +581,7 @@ nested_type {
     number: 6
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.BiologicallyDerivedProductStorageScaleCode"
+    type_name: ".google.fhir.r4.core.BiologicallyDerivedProduct.Storage.ScaleCode"
     options {
       [google.fhir.proto.field_description]: "farenheit | celsius | kelvin"
     }
@@ -540,6 +594,33 @@ nested_type {
     type_name: ".google.fhir.r4.core.Period"
     options {
       [google.fhir.proto.field_description]: "Storage timeperiod"
+    }
+  }
+  nested_type {
+    name: "ScaleCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r4.core.BiologicallyDerivedProductStorageScaleCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/product-storage-scale"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
 }

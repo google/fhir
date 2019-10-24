@@ -159,7 +159,7 @@ field {
   number: 16
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.ParticipationStatusCode"
+  type_name: ".google.fhir.r4.core.AppointmentResponse.ParticipantStatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "accepted | declined | tentative | in-process | completed | needs-action | entered-in-error"
@@ -173,6 +173,33 @@ field {
   type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Additional comments"
+  }
+}
+nested_type {
+  name: "ParticipantStatusCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.ParticipationStatusCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/participationstatus"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
   }
 }
 options {

@@ -79,7 +79,20 @@ message EffectEvidenceSynthesis {
   String title = 14;
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 15
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 15
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date last changed
@@ -203,6 +216,20 @@ message EffectEvidenceSynthesis {
     String description = 4;
 
     // exposure | exposure-alternative
+    message ExposureStateCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/exposure-state";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      .google.fhir.r4.core.ExposureStateCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
     ExposureStateCode exposure_state = 5;
 
     // Variant exposure states

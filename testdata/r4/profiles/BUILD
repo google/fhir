@@ -24,8 +24,8 @@ gen_fhir_definitions_and_protos(
 
 fhir_proto_library(
     srcs = [
-        "test_core.proto",
-        "test_extensions_core.proto",
+        "test.proto",
+        "test_extensions.proto",
     ],
     proto_deps = [
         "@protobuf_archive//:any_proto",
@@ -34,7 +34,7 @@ fhir_proto_library(
         "//proto/r4/core:datatypes_proto",
         "//proto/r4/core:extensions_proto",
     ],
-    proto_library_prefix = "testcore",
+    proto_library_prefix = "test",
 )
 
 filegroup(

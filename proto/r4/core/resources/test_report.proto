@@ -68,7 +68,20 @@ message TestReport {
   String name = 11;
 
   // completed | in-progress | waiting | stopped | entered-in-error
-  TestReportStatusCode status = 12
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/report-status-codes";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    TestReportStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 12
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Reference to the  version-specific TestScript that was executed to produce
@@ -79,7 +92,20 @@ message TestReport {
   ];
 
   // pass | fail | pending
-  TestReportResultCode result = 14
+  message ResultCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/report-result-codes";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    TestReportResultCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ResultCode result = 14
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // The final score (percentage of tests passed) resulting from the execution
@@ -105,7 +131,21 @@ message TestReport {
     repeated Extension modifier_extension = 3;
 
     // test-engine | client | server
-    TestReportParticipantTypeCode type = 4
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/report-participant-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      TestReportParticipantTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // The uri of the participant. An absolute URL is preferred
@@ -154,7 +194,21 @@ message TestReport {
         repeated Extension modifier_extension = 3;
 
         // pass | skip | fail | warning | error
-        TestReportActionResultCode result = 4
+        message ResultCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/report-action-result-codes";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          TestReportActionResultCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        ResultCode result = 4
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
         // A message associated with the result
@@ -179,7 +233,21 @@ message TestReport {
         repeated Extension modifier_extension = 3;
 
         // pass | skip | fail | warning | error
-        TestReportActionResultCode result = 4
+        message ResultCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/report-action-result-codes";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          TestReportActionResultCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        ResultCode result = 4
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
         // A message associated with the result

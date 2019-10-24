@@ -65,7 +65,20 @@ message Invoice {
   repeated Identifier identifier = 10;
 
   // draft | issued | balanced | cancelled | entered-in-error
-  InvoiceStatusCode status = 11
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/invoice-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    InvoiceStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Reason for cancellation of this Invoice
@@ -167,7 +180,21 @@ message Invoice {
       repeated Extension modifier_extension = 3;
 
       // base | surcharge | deduction | discount | tax | informational
-      InvoicePriceComponentTypeCode type = 4
+      message TypeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/invoice-priceComponentType";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        InvoicePriceComponentTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      TypeCode type = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Code identifying the specific component

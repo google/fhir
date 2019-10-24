@@ -18,10 +18,14 @@
 #include "gtest/gtest.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
+#include "proto/r4/core/codes.pb.h"
+#include "proto/r4/core/datatypes.pb.h"
+#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/r4/core/resources/encounter.pb.h"
+#include "proto/r4/core/resources/family_member_history.pb.h"
+#include "proto/r4/core/resources/metadata_resource.pb.h"
+#include "proto/r4/core/resources/patient.pb.h"
 #include "proto/r4/uscore.pb.h"
-#include "proto/stu3/codes.pb.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/resources.pb.h"
 
 namespace google {
 namespace fhir {
@@ -29,17 +33,19 @@ namespace fhir {
 namespace {
 
 using ::google::fhir::testutil::EqualsProto;
-using stu3::proto::ContainedResource;
-using stu3::proto::Encounter;
-using stu3::proto::FamilyMemberHistory;
-using stu3::proto::Patient;
-using stu3::proto::ResourceTypeCode;
+using r4::core::ContainedResource;
+using r4::core::Encounter;
+using r4::core::FamilyMemberHistory;
+using r4::core::MetadataResource;
+using r4::core::Patient;
+using r4::core::ResourceTypeCode;
 
 using ::testing::Test;
 
 void TestCodeForResourceType(const google::protobuf::Message& resource,
                              const ResourceTypeCode::Value value) {
-  const auto& statusOrValue = GetCodeForResourceType(resource);
+  const auto& statusOrValue =
+      GetCodeForResourceType<ResourceTypeCode>(resource);
   EXPECT_TRUE(statusOrValue.ok())
       << "failed getting code for " << resource.GetTypeName();
   EXPECT_EQ(statusOrValue.ValueOrDie(), value);
@@ -61,29 +67,43 @@ TEST(CodesTest, GetCodeForResourceType_AllContainedTypesValid) {
   for (int i = 0; i < ContainedResource::descriptor()->field_count(); i++) {
     const google::protobuf::Descriptor* type =
         ContainedResource::descriptor()->field(i)->message_type();
-    EXPECT_TRUE(GetCodeForResourceType(*factory->GetPrototype(type)).ok())
-        << "Failed to find code for type: " << type->full_name();
+    if (!IsMessageType<MetadataResource>(type)) {
+      // "MetadataResource" is not a real resource, and is just meant as a
+      // template
+      EXPECT_TRUE(
+          GetCodeForResourceType<ResourceTypeCode>(*factory->GetPrototype(type))
+              .ok())
+          << "Failed to find code for type: " << type->full_name();
+    }
   }
 }
 
-// TODO: Re-enable when typed codings are re-enabled.
-// TEST(CodesTest, TypedCodingConversion) {
-//   auto typed_golden =
-//       ReadProto<r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding>(
-//           "testdata/r4/codes/uscore_omb_typed.prototxt");
-//   auto generic_golden =
-//       ReadProto<r4::core::Coding>("testdata/r4/codes/uscore_omb_raw.prototxt");
-//
-//   r4::core::Coding generic_test;
-//   auto status_generic = ConvertToGenericCoding(typed_golden, &generic_test);
-//   ASSERT_TRUE(status_generic.ok()) << status_generic.error_message();
-//   EXPECT_THAT(generic_test, EqualsProto(generic_golden));
-//
-//   r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding typed_test;
-//   auto status_typed = ConvertToTypedCoding(generic_golden, &typed_test);
-//   ASSERT_TRUE(status_typed.ok()) << status_typed.error_message();
-//   EXPECT_THAT(typed_test, EqualsProto(typed_golden));
-// }
+void TestTypedCodingConversion(const string& typed_file,
+                               const string& untyped_file) {
+  auto typed_golden =
+      ReadProto<r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding>(
+          typed_file);
+  auto generic_golden = ReadProto<r4::core::Coding>(untyped_file);
+
+  r4::core::Coding generic_test;
+  auto status_generic = ConvertToGenericCoding(typed_golden, &generic_test);
+  ASSERT_TRUE(status_generic.ok()) << status_generic.error_message();
+  EXPECT_THAT(generic_test, EqualsProto(generic_golden));
+
+  r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding typed_test;
+  auto status_typed = ConvertToTypedCoding(generic_golden, &typed_test);
+  ASSERT_TRUE(status_typed.ok()) << status_typed.error_message();
+  EXPECT_THAT(typed_test, EqualsProto(typed_golden));
+}
+
+TEST(CodesTest, TypedCodingConversion) {
+  // There are two tests here that show that the same Coding will print with
+  // different systems depending on what the code is.
+  TestTypedCodingConversion("testdata/r4/codes/uscore_omb_1_typed.prototxt",
+                            "testdata/r4/codes/uscore_omb_1_raw.prototxt");
+  TestTypedCodingConversion("testdata/r4/codes/uscore_omb_2_typed.prototxt",
+                            "testdata/r4/codes/uscore_omb_2_raw.prototxt");
+}
 
 }  // namespace
 

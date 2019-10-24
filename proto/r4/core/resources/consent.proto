@@ -66,7 +66,20 @@ message Consent {
   repeated Identifier identifier = 10;
 
   // draft | proposed | active | rejected | inactive | entered-in-error
-  ConsentStateCode status = 11
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/consent-state-codes";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ConsentStateCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Which of the four areas this resource covers (extensible)
@@ -177,7 +190,21 @@ message Consent {
     repeated Extension modifier_extension = 3;
 
     // deny | permit
-    ConsentProvisionTypeCode type = 4;
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/consent-provision-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ConsentProvisionTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 4;
 
     // Timeframe for this rule
     Period period = 5;
@@ -244,7 +271,21 @@ message Consent {
       repeated Extension modifier_extension = 3;
 
       // instance | related | dependents | authoredby
-      ConsentDataMeaningCode meaning = 4
+      message MeaningCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/consent-data-meaning";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ConsentDataMeaningCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      MeaningCode meaning = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // The actual data reference

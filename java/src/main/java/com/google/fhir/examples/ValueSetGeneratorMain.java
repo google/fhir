@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /** Main class for using the ValueSetGenerator to generate valueset protos. */
 final class ValueSetGeneratorMain {
@@ -79,6 +80,13 @@ final class ValueSetGeneratorMain {
         names = {"--exclude_codes_in"},
         description = "Exclude codes for types used in these bundles")
     private Set<String> excludeCodeUsers = new HashSet<>();
+
+    @Parameter(
+        names = {"--eager_mode"},
+        description =
+            "Include all referenced code systems in --for_codes_in, even if they're not directly"
+                + " included.")
+    private boolean eagerMode = false;
   }
 
   private ValueSetGeneratorMain() {}
@@ -98,10 +106,24 @@ final class ValueSetGeneratorMain {
         FileUtils.mergeText(new File(args.packageInfo), PackageInfo.newBuilder()).build();
     FhirVersion fhirVersion = packageInfo.getFhirVersion();
 
-    Set<Bundle> valueSetBundles = loadBundles(args.valueSetBundleFiles, fhirVersion);
-    valueSetBundles.add(makeBundle(args.codeSystemFiles, args.valueSetFiles, fhirVersion));
+    Set<Bundle> codeSystemAndValueSetBundles = loadBundles(args.valueSetBundleFiles, fhirVersion);
+    codeSystemAndValueSetBundles.add(
+        makeBundle(args.codeSystemFiles, args.valueSetFiles, fhirVersion));
 
-    ValueSetGenerator generator = new ValueSetGenerator(packageInfo, valueSetBundles);
+    Set<ValueSet> valueSets =
+        codeSystemAndValueSetBundles.stream()
+            .flatMap(b -> b.getEntryList().stream())
+            .filter(e -> e.getResource().hasValueSet())
+            .map(e -> e.getResource().getValueSet())
+            .collect(Collectors.toSet());
+    Set<CodeSystem> codeSystems =
+        codeSystemAndValueSetBundles.stream()
+            .flatMap(b -> b.getEntryList().stream())
+            .filter(e -> e.getResource().hasCodeSystem())
+            .map(e -> e.getResource().getCodeSystem())
+            .collect(Collectors.toSet());
+
+    ValueSetGenerator generator = new ValueSetGenerator(packageInfo, valueSets, codeSystems);
 
     ProtoFilePrinter printer = new ProtoFilePrinter();
 
@@ -109,10 +131,11 @@ final class ValueSetGeneratorMain {
     File outputFile = new File(args.outputName);
     FileDescriptorProto fileDescriptor =
         args.codeUsers.isEmpty()
-            ? generator.generateValueSetFile()
+            ? generator.generateCodeSystemFile()
             : generator.forCodesUsedIn(
                 loadBundles(args.codeUsers, fhirVersion),
-                loadBundles(args.excludeCodeUsers, fhirVersion));
+                loadBundles(args.excludeCodeUsers, fhirVersion),
+                args.eagerMode);
     Files.asCharSink(outputFile, UTF_8).write(printer.print(fileDescriptor));
   }
 

@@ -66,7 +66,20 @@ message AdverseEvent {
   Identifier identifier = 10;
 
   // actual | potential
-  AdverseEventActualityCode actuality = 11
+  message ActualityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/adverse-event-actuality";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AdverseEventActualityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ActualityCode actuality = 11
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // product-problem | product-quality | product-use-error | wrong-dose |

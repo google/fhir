@@ -55,7 +55,20 @@ message ValueSetExpandRules {
   String id = 1;
 
   // Value of extension
-  ExpansionProcessingRuleCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/expansion-processing-rule";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ExpansionProcessingRuleCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for management.
@@ -89,7 +102,24 @@ message MimeType {
   String id = 1;
 
   // Value of extension
-  MimeTypesCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/mimetypes";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    // Field 1 reserved to allow enumeration in the future.
+    reserved 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+
+    // This valueset is not enumerable, and so is represented as a string.
+    string value = 4;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for CopyNumberEvent.
@@ -538,7 +568,39 @@ message StructureDefinitionTemplateStatus {
   String id = 1;
 
   // Value of extension
-  TemplateStatusCodeCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/template-status-code";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    enum Value {
+      INVALID_UNINITIALIZED = 0;
+      DRAFT = 1 [(.google.fhir.proto.source_code_system) =
+                     "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
+      PENDING = 2 [(.google.fhir.proto.source_code_system) =
+                       "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
+      ACTIVE = 3 [(.google.fhir.proto.source_code_system) =
+                      "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
+      REVIEW = 4 [(.google.fhir.proto.source_code_system) =
+                      "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
+      CANCELLED = 5 [(.google.fhir.proto.source_code_system) =
+                         "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
+      REJECTED = 6 [(.google.fhir.proto.source_code_system) =
+                        "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
+      RETIRED = 7 [(.google.fhir.proto.source_code_system) =
+                       "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
+      TERMINATED = 8 [(.google.fhir.proto.source_code_system) =
+                          "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
+    }
+    Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for MPPS.
@@ -794,7 +856,20 @@ message CapabilityStatementExpectation {
   String id = 1;
 
   // Value of extension
-  ConformanceExpectationCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/conformance-expectation";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ConformanceExpectationCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for concept-definition.
@@ -974,7 +1049,20 @@ message ElementDefinitionEquivalence {
   String id = 1;
 
   // Value of extension
-  ConceptMapEquivalenceCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/concept-map-equivalence";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ConceptMapEquivalenceCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for uncertaintyType.
@@ -991,7 +1079,68 @@ message QuantityUncertaintyType {
   String id = 1;
 
   // Value of extension
-  ProbabilityDistributionTypeCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/probability-distribution-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    enum Value {
+      INVALID_UNINITIALIZED = 0;
+      B = 1 [
+        (.google.fhir.proto.fhir_original_code) = "B",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
+      ];
+      E = 2 [
+        (.google.fhir.proto.fhir_original_code) = "E",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
+      ];
+      F = 3 [
+        (.google.fhir.proto.fhir_original_code) = "F",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
+      ];
+      G = 4 [
+        (.google.fhir.proto.fhir_original_code) = "G",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
+      ];
+      LN = 5 [
+        (.google.fhir.proto.fhir_original_code) = "LN",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
+      ];
+      N = 6 [
+        (.google.fhir.proto.fhir_original_code) = "N",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
+      ];
+      T = 7 [
+        (.google.fhir.proto.fhir_original_code) = "T",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
+      ];
+      U = 8 [
+        (.google.fhir.proto.fhir_original_code) = "U",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
+      ];
+      X2 = 9 [
+        (.google.fhir.proto.fhir_original_code) = "X2",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
+      ];
+    }
+    Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for assembly-order.
@@ -1008,7 +1157,58 @@ message HumanNameAssemblyOrder {
   String id = 1;
 
   // Value of extension
-  HumanNameAssemblyOrderCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/name-assembly-order";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    enum Value {
+      INVALID_UNINITIALIZED = 0;
+      NL1 = 1 [
+        (.google.fhir.proto.fhir_original_code) = "NL1",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/name-assembly-order"
+      ];
+      NL2 = 2 [
+        (.google.fhir.proto.fhir_original_code) = "NL2",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/name-assembly-order"
+      ];
+      NL3 = 3 [
+        (.google.fhir.proto.fhir_original_code) = "NL3",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/name-assembly-order"
+      ];
+      NL4 = 4 [
+        (.google.fhir.proto.fhir_original_code) = "NL4",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/name-assembly-order"
+      ];
+      F = 5 [
+        (.google.fhir.proto.fhir_original_code) = "F",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v2-0444"
+      ];
+      G = 6 [
+        (.google.fhir.proto.fhir_original_code) = "G",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v2-0444"
+      ];
+      UNK = 7 [
+        (.google.fhir.proto.fhir_original_code) = "UNK",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-NullFlavor"
+      ];
+    }
+    Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for referenceFilter.
@@ -1346,7 +1546,20 @@ message QuestionnaireReferenceResource {
   String id = 1;
 
   // Value of extension
-  ResourceTypeCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/resource-types";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ResourceTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for translatable.
@@ -1602,7 +1815,20 @@ message ResourceNullFlavor {
   String id = 1;
 
   // Value of extension
-  V3NullFlavorCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://terminology.hl7.org/ValueSet/v3-NullFlavor";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    V3NullFlavorCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for capabilities.
@@ -1619,7 +1845,20 @@ message CapabilityStatementCapabilities {
   String id = 1;
 
   // Value of extension
-  SmartCapabilitiesCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/smart-capabilities";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SmartCapabilitiesCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for map.
@@ -1807,7 +2046,20 @@ message QuestionnaireChoiceOrientation {
   String id = 1;
 
   // Value of extension
-  ChoiceListOrientationCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/choice-list-orientation";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ChoiceListOrientationCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for ADXP-streetAddressLine.
@@ -2077,7 +2329,20 @@ message ElementWg {
   String id = 1;
 
   // Value of extension
-  HL7WorkgroupCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/hl7-work-group";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    HL7WorkgroupCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for replaces.
@@ -2293,7 +2558,20 @@ message QuestionnaireBaseType {
   String id = 1;
 
   // Value of extension
-  DataTypeCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/data-types";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    DataTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for partner-name.
@@ -2616,7 +2894,20 @@ message QuestionnaireUsageMode {
   String id = 1;
 
   // Value of extension
-  QuestionnaireItemUsageModeCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/questionnaire-usage-mode";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    QuestionnaireItemUsageModeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for test.
@@ -2722,7 +3013,20 @@ message MessageHeaderMessageheaderResponseRequest {
   String id = 1;
 
   // Value of extension
-  MessageheaderResponseRequestCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/messageheader-response-request";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    MessageheaderResponseRequestCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for Item.
@@ -2972,7 +3276,20 @@ message ElementRelativeDateTime {
 
   // before-start | before | before-end | concurrent-with-start | concurrent |
   // concurrent-with-end | after-start | after | after-end
-  ActionRelationshipTypeCode relationship = 6
+  message RelationshipCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/action-relationship-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ActionRelationshipTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  RelationshipCode relationship = 6
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // How long
@@ -3079,7 +3396,20 @@ message BundleMatchGrade {
   String id = 1;
 
   // Value of extension
-  MatchGradeCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/match-grade";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    MatchGradeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for replaces.
@@ -3585,7 +3915,20 @@ message QuestionnaireConstraint {
   String requirements = 5;
 
   // error|warning
-  ConstraintSeverityCode severity = 6
+  message SeverityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/constraint-severity";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ConstraintSeverityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  SeverityCode severity = 6
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Formal rule
@@ -3666,7 +4009,20 @@ message ElementStandardsStatus {
   String id = 1;
 
   // Value of extension
-  StandardsStatusCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/standards-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    StandardsStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for lastReviewDate.
@@ -4037,7 +4393,20 @@ message HumanNameENUse {
   String id = 1;
 
   // Value of extension
-  V3EntityNameUseR2Code value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://terminology.hl7.org/ValueSet/v3-EntityNameUseR2";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    V3EntityNameUseR2Code.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for minLength.
@@ -4579,7 +4948,83 @@ message HumanNameENQualifier {
   String id = 1;
 
   // Value of extension
-  EntityNamePartQualifierCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/name-part-qualifier";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    enum Value {
+      INVALID_UNINITIALIZED = 0;
+      LS = 1 [
+        (.google.fhir.proto.fhir_original_code) = "LS",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      ];
+      AC = 2 [
+        (.google.fhir.proto.fhir_original_code) = "AC",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      ];
+      NB = 3 [
+        (.google.fhir.proto.fhir_original_code) = "NB",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      ];
+      PR = 4 [
+        (.google.fhir.proto.fhir_original_code) = "PR",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      ];
+      HON = 5 [
+        (.google.fhir.proto.fhir_original_code) = "HON",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      ];
+      BR = 6 [
+        (.google.fhir.proto.fhir_original_code) = "BR",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      ];
+      AD = 7 [
+        (.google.fhir.proto.fhir_original_code) = "AD",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      ];
+      SP = 8 [
+        (.google.fhir.proto.fhir_original_code) = "SP",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      ];
+      MID = 9 [
+        (.google.fhir.proto.fhir_original_code) = "MID",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      ];
+      CL = 10 [
+        (.google.fhir.proto.fhir_original_code) = "CL",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      ];
+      IN = 11 [
+        (.google.fhir.proto.fhir_original_code) = "IN",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      ];
+      VV = 12 [
+        (.google.fhir.proto.fhir_original_code) = "VV",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifier"
+      ];
+    }
+    Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for minOccurs.
@@ -5019,7 +5464,20 @@ message ValueSetParameterSource {
   String id = 1;
 
   // Value of extension
-  ExpansionParameterSourceCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/expansion-parameter-source";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ExpansionParameterSourceCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for secondaryFinding.
@@ -5117,7 +5575,20 @@ message StructureDefinitionNormativeVersion {
   String id = 1;
 
   // Value of extension
-  FHIRVersionCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/FHIR-version";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    FHIRVersionCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for Witness.
@@ -5219,7 +5690,20 @@ message DeviceImplantStatus {
   String id = 1;
 
   // Value of extension
-  ImplantStatusCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/implantStatus";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ImplantStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for Interpretation.
@@ -5468,7 +5952,63 @@ message AddressADUse {
   String id = 1;
 
   // Value of extension
-  PostalAddressUseCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/postal-address-use";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    enum Value {
+      INVALID_UNINITIALIZED = 0;
+      BAD = 1 [
+        (.google.fhir.proto.fhir_original_code) = "BAD",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
+      ];
+      CONF = 2 [
+        (.google.fhir.proto.fhir_original_code) = "CONF",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
+      ];
+      HP = 3 [
+        (.google.fhir.proto.fhir_original_code) = "HP",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
+      ];
+      HV = 4 [
+        (.google.fhir.proto.fhir_original_code) = "HV",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
+      ];
+      DIR = 5 [
+        (.google.fhir.proto.fhir_original_code) = "DIR",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
+      ];
+      PUB = 6 [
+        (.google.fhir.proto.fhir_original_code) = "PUB",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
+      ];
+      PHYS = 7 [
+        (.google.fhir.proto.fhir_original_code) = "PHYS",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
+      ];
+      PST = 8 [
+        (.google.fhir.proto.fhir_original_code) = "PST",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
+      ];
+    }
+    Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for proficiency.
@@ -5618,7 +6158,20 @@ message StructureDefinitionSecurityCategory {
   String id = 1;
 
   // Value of extension
-  ResourceSecurityCategoryCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/resource-security-category";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ResourceSecurityCategoryCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for Data Absent Reason.
@@ -5635,7 +6188,20 @@ message ElementDataAbsentReason {
   String id = 1;
 
   // Value of extension
-  DataAbsentReasonCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/data-absent-reason";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    DataAbsentReasonCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for resolutionAge.
@@ -6397,7 +6963,38 @@ message HumanNameENRepresentation {
   String id = 1;
 
   // Value of extension
-  NameRepresentationUseCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/name-v3-representation";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    enum Value {
+      INVALID_UNINITIALIZED = 0;
+      ABC = 1 [
+        (.google.fhir.proto.fhir_original_code) = "ABC",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-EntityNameUse"
+      ];
+      IDE = 2 [
+        (.google.fhir.proto.fhir_original_code) = "IDE",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-EntityNameUse"
+      ];
+      SYL = 3 [
+        (.google.fhir.proto.fhir_original_code) = "SYL",
+        (.google.fhir.proto.source_code_system) =
+            "http://terminology.hl7.org/CodeSystem/v3-EntityNameUse"
+      ];
+    }
+    Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for specimenCode.
@@ -6611,7 +7208,20 @@ message StructureDefinitionApplicableVersion {
   String id = 1;
 
   // Value of extension
-  FHIRVersionCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/FHIR-version";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    FHIRVersionCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for ADXP-censusTract.
@@ -7058,7 +7668,20 @@ message GoalAcceptance {
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // agree | disagree | pending
-  GoalAcceptanceStatusCode status = 5;
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/goal-acceptance-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    GoalAcceptanceStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 5;
 
   // Priority of goal for individual
   CodeableConcept priority = 6;
@@ -7078,7 +7701,24 @@ message TimezoneCode {
   String id = 1;
 
   // Value of extension
-  IANATimezonesCode value_code = 3;
+  message ValueCodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/timezones";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    // Field 1 reserved to allow enumeration in the future.
+    reserved 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+
+    // This valueset is not enumerable, and so is represented as a string.
+    string value = 4;
+  }
+  ValueCodeCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for preferenceType.
@@ -7233,7 +7873,20 @@ message RelativeDateCriteria {
 
   // before-start | before | before-end | concurrent-with-start | concurrent |
   // concurrent-with-end | after-start | after | after-end
-  ActionRelationshipTypeCode relationship = 5
+  message RelationshipCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/action-relationship-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ActionRelationshipTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  RelationshipCode relationship = 5
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Duration after the event

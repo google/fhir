@@ -14,9 +14,139 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.EntityNamePartQualifierCode"
+  type_name: ".google.fhir.r4.core.HumanNameENQualifier.ValueCodeCode"
   options {
     [google.fhir.proto.field_description]: "Value of extension"
+  }
+}
+nested_type {
+  name: "ValueCodeCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.HumanNameENQualifier.ValueCodeCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  enum_type {
+    name: "Value"
+    value {
+      name: "INVALID_UNINITIALIZED"
+      number: 0
+    }
+    value {
+      name: "LS"
+      number: 1
+      options {
+        [google.fhir.proto.fhir_original_code]: "LS"
+        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      }
+    }
+    value {
+      name: "AC"
+      number: 2
+      options {
+        [google.fhir.proto.fhir_original_code]: "AC"
+        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      }
+    }
+    value {
+      name: "NB"
+      number: 3
+      options {
+        [google.fhir.proto.fhir_original_code]: "NB"
+        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      }
+    }
+    value {
+      name: "PR"
+      number: 4
+      options {
+        [google.fhir.proto.fhir_original_code]: "PR"
+        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      }
+    }
+    value {
+      name: "HON"
+      number: 5
+      options {
+        [google.fhir.proto.fhir_original_code]: "HON"
+        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      }
+    }
+    value {
+      name: "BR"
+      number: 6
+      options {
+        [google.fhir.proto.fhir_original_code]: "BR"
+        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      }
+    }
+    value {
+      name: "AD"
+      number: 7
+      options {
+        [google.fhir.proto.fhir_original_code]: "AD"
+        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      }
+    }
+    value {
+      name: "SP"
+      number: 8
+      options {
+        [google.fhir.proto.fhir_original_code]: "SP"
+        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      }
+    }
+    value {
+      name: "MID"
+      number: 9
+      options {
+        [google.fhir.proto.fhir_original_code]: "MID"
+        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      }
+    }
+    value {
+      name: "CL"
+      number: 10
+      options {
+        [google.fhir.proto.fhir_original_code]: "CL"
+        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      }
+    }
+    value {
+      name: "IN"
+      number: 11
+      options {
+        [google.fhir.proto.fhir_original_code]: "IN"
+        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
+      }
+    }
+    value {
+      name: "VV"
+      number: 12
+      options {
+        [google.fhir.proto.fhir_original_code]: "VV"
+        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifier"
+      }
+    }
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/name-part-qualifier"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
   }
 }
 options {

@@ -75,7 +75,20 @@ message CapabilityStatement {
   String title = 13;
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 14
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 14
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // For testing purposes, not real usage
@@ -107,7 +120,20 @@ message CapabilityStatement {
   Markdown copyright = 23;
 
   // instance | capability | requirements
-  CapabilityStatementKindCode kind = 24
+  message KindCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/capability-statement-kind";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    CapabilityStatementKindCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  KindCode kind = 24
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Canonical URL of another capability statement this implements
@@ -168,15 +194,62 @@ message CapabilityStatement {
            "hasValue() or (children().count() > id.count())"];
 
   // FHIR Version the system supports
-  FHIRVersionCode fhir_version = 29
+  message FhirVersionCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/FHIR-version";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    FHIRVersionCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  FhirVersionCode fhir_version = 29
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // formats supported (xml | json | ttl | mime type)
-  repeated MimeTypesCode format = 30
+  message FormatCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/mimetypes";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    // Field 1 reserved to allow enumeration in the future.
+    reserved 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+
+    // This valueset is not enumerable, and so is represented as a string.
+    string value = 4;
+  }
+  repeated FormatCode format = 30
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Patch formats supported
-  repeated MimeTypesCode patch_format = 31;
+  message PatchFormatCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/mimetypes";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    // Field 1 reserved to allow enumeration in the future.
+    reserved 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+
+    // This valueset is not enumerable, and so is represented as a string.
+    string value = 4;
+  }
+  repeated PatchFormatCode patch_format = 31;
 
   // Implementation guides supported
   repeated Canonical implementation_guide = 32;
@@ -193,7 +266,21 @@ message CapabilityStatement {
     repeated Extension modifier_extension = 3;
 
     // client | server
-    RestfulCapabilityModeCode mode = 4
+    message ModeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/restful-capability-mode";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      RestfulCapabilityModeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    ModeCode mode = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // General description of implementation
@@ -235,7 +322,21 @@ message CapabilityStatement {
       repeated Extension modifier_extension = 3;
 
       // A resource type that is supported
-      ResourceTypeCode type = 4
+      message TypeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/resource-types";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ResourceTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      TypeCode type = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Base System profile for all uses of resource
@@ -260,7 +361,43 @@ message CapabilityStatement {
 
         // read | vread | update | patch | delete | history-instance |
         // history-type | create | search-type
-        TypeRestfulInteractionCode code = 4
+        message CodeCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/type-restful-interaction";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          enum Value {
+            INVALID_UNINITIALIZED = 0;
+            READ = 1 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/restful-interaction"];
+            VREAD = 2 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/restful-interaction"];
+            UPDATE = 3 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/restful-interaction"];
+            PATCH = 4 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/restful-interaction"];
+            DELETE = 5 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/restful-interaction"];
+            HISTORY_INSTANCE = 6
+                [(.google.fhir.proto.source_code_system) =
+                     "http://hl7.org/fhir/restful-interaction"];
+            HISTORY_TYPE = 7 [(.google.fhir.proto.source_code_system) =
+                                  "http://hl7.org/fhir/restful-interaction"];
+            CREATE = 8 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/restful-interaction"];
+            SEARCH_TYPE = 9 [(.google.fhir.proto.source_code_system) =
+                                 "http://hl7.org/fhir/restful-interaction"];
+          }
+          Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        CodeCode code = 4
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
         // Anything special about operation behavior
@@ -271,7 +408,21 @@ message CapabilityStatement {
                "hasValue() or (children().count() > id.count())"];
 
       // no-version | versioned | versioned-update
-      ResourceVersionPolicyCode versioning = 9;
+      message VersioningCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/versioning-policy";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ResourceVersionPolicyCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      VersioningCode versioning = 9;
 
       // Whether vRead can return past versions
       Boolean read_history = 10;
@@ -283,16 +434,58 @@ message CapabilityStatement {
       Boolean conditional_create = 12;
 
       // not-supported | modified-since | not-match | full-support
-      ConditionalReadStatusCode conditional_read = 13;
+      message ConditionalReadCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/conditional-read-status";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ConditionalReadStatusCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      ConditionalReadCode conditional_read = 13;
 
       // If allows/uses conditional update
       Boolean conditional_update = 14;
 
       // not-supported | single | multiple - how conditional delete is supported
-      ConditionalDeleteStatusCode conditional_delete = 15;
+      message ConditionalDeleteCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/conditional-delete-status";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ConditionalDeleteStatusCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      ConditionalDeleteCode conditional_delete = 15;
 
       // literal | logical | resolves | enforced | local
-      repeated ReferenceHandlingPolicyCode reference_policy = 16;
+      message ReferencePolicyCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/reference-handling-policy";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ReferenceHandlingPolicyCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      repeated ReferencePolicyCode reference_policy = 16;
 
       // _include values supported by the server
       repeated String search_include = 17;
@@ -320,7 +513,21 @@ message CapabilityStatement {
 
         // number | date | string | token | reference | composite | quantity |
         // uri | special
-        SearchParamTypeCode type = 6
+        message TypeCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/search-param-type";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          SearchParamTypeCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        TypeCode type = 6
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
         // Server-specific usage
@@ -375,7 +582,32 @@ message CapabilityStatement {
       repeated Extension modifier_extension = 3;
 
       // transaction | batch | search-system | history-system
-      SystemRestfulInteractionCode code = 4
+      message CodeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/system-restful-interaction";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        enum Value {
+          INVALID_UNINITIALIZED = 0;
+          TRANSACTION = 1 [(.google.fhir.proto.source_code_system) =
+                               "http://hl7.org/fhir/restful-interaction"];
+          BATCH = 2 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/restful-interaction"];
+          SEARCH_SYSTEM = 3 [(.google.fhir.proto.source_code_system) =
+                                 "http://hl7.org/fhir/restful-interaction"];
+          HISTORY_SYSTEM = 4 [(.google.fhir.proto.source_code_system) =
+                                  "http://hl7.org/fhir/restful-interaction"];
+        }
+        Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      CodeCode code = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Anything special about operation behavior
@@ -453,7 +685,21 @@ message CapabilityStatement {
       repeated Extension modifier_extension = 3;
 
       // sender | receiver
-      EventCapabilityModeCode mode = 4
+      message ModeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/event-capability-mode";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        EventCapabilityModeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      ModeCode mode = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Message supported by this system
@@ -480,7 +726,21 @@ message CapabilityStatement {
     repeated Extension modifier_extension = 3;
 
     // producer | consumer
-    DocumentModeCode mode = 4
+    message ModeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/document-mode";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      DocumentModeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    ModeCode mode = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Description of document support

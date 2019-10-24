@@ -62,7 +62,20 @@ message Subscription {
   repeated Extension modifier_extension = 9;
 
   // requested | active | error | off
-  SubscriptionStatusCode status = 10
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/subscription-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SubscriptionStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 10
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Contact details for source (e.g. troubleshooting)
@@ -94,14 +107,46 @@ message Subscription {
     repeated Extension modifier_extension = 3;
 
     // rest-hook | websocket | email | sms | message
-    SubscriptionChannelTypeCode type = 4
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/subscription-channel-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      SubscriptionChannelTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Where the channel points to
     Url endpoint = 5;
 
     // MIME type to send, or omit for no payload
-    MimeTypesCode payload = 6;
+    message PayloadCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/mimetypes";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      // Field 1 reserved to allow enumeration in the future.
+      reserved 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+
+      // This valueset is not enumerable, and so is represented as a string.
+      string value = 4;
+    }
+    PayloadCode payload = 6;
 
     // Usage depends on the channel type
     repeated String header = 7;

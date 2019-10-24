@@ -284,14 +284,14 @@ extension {
   extension {
     url { value: "ombCategory" }
     value { coding {
-      system { value: "http://hl7.org/fhir/us/core/ValueSet/omb-race-category" }
+      system { value: "urn:oid:2.16.840.1.113883.6.238" }
       code { value: "2028-9" }
     } }
   }
   extension {
     url { value: "detailed" }
     value { coding {
-      system { value: "http://hl7.org/fhir/us/core/ValueSet/detailed-race" }
+      system { value: "urn:oid:2.16.840.1.113883.6.238" }
       code { value: "2040-4" }
     } }
   }

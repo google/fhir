@@ -76,7 +76,20 @@ message ImplementationGuide {
   String title = 13;
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 14
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 14
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // For testing purposes, not real usage
@@ -108,10 +121,36 @@ message ImplementationGuide {
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // SPDX license code for this IG (or not-open-source)
-  SPDXLicenseCode license = 24;
+  message LicenseCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/spdx-license";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SPDXLicenseCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  LicenseCode license = 24;
 
   // FHIR Version(s) this Implementation Guide targets
-  repeated FHIRVersionCode fhir_version = 25
+  message FhirVersionCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/FHIR-version";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    FHIRVersionCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated FhirVersionCode fhir_version = 25
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Another Implementation guide this depends on
@@ -151,7 +190,21 @@ message ImplementationGuide {
     repeated Extension modifier_extension = 3;
 
     // Type this profile applies to
-    ResourceTypeCode type = 4
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/resource-types";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ResourceTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Profile that all resources must conform to
@@ -213,7 +266,21 @@ message ImplementationGuide {
       ];
 
       // Versions this applies to (if different to IG)
-      repeated FHIRVersionCode fhir_version = 5;
+      message FhirVersionCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/FHIR-version";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        FHIRVersionCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      repeated FhirVersionCode fhir_version = 5;
 
       // Human Name for the resource
       String name = 6;
@@ -270,7 +337,21 @@ message ImplementationGuide {
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // html | markdown | xml | generated
-      GuidePageGenerationCode generation = 6
+      message GenerationCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/guide-page-generation";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        GuidePageGenerationCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      GenerationCode generation = 6
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Nested Pages / Sections
@@ -293,7 +374,21 @@ message ImplementationGuide {
       // apply | path-resource | path-pages | path-tx-cache |
       // expansion-parameter | rule-broken-links | generate-xml | generate-json
       // | generate-turtle | html-template
-      GuideParameterCodeCode code = 4
+      message CodeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/guide-parameter-code";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        GuideParameterCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      CodeCode code = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Value for named type

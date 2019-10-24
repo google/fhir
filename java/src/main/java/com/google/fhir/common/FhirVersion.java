@@ -47,7 +47,7 @@ public enum FhirVersion {
       ImmutableList.of(
           com.google.fhir.r4.core.AccountStatusCode.getDescriptor().getFile(),
           com.google.fhir.r4.core.AddressTypeCode.getDescriptor().getFile(),
-          com.google.fhir.r4.uscore.BirthSexCode.getDescriptor().getFile()),
+          com.google.fhir.r4.uscore.RaceAndEthnicityCDCCode.getDescriptor().getFile()),
       ImmutableMap.of(
           "datatypes.proto", com.google.fhir.r4.core.Decimal.getDescriptor().getFile(),
           "extensions.proto", com.google.fhir.r4.core.MimeType.getDescriptor().getFile(),
@@ -67,6 +67,9 @@ public enum FhirVersion {
   public final Descriptor coreContainedResource;
 
   public final FHIRVersionCode.Value minorVersion;
+
+  // The path for annotation definition of proto options.
+  public static final String ANNOTATION_PATH = "proto";
 
   private FhirVersion(
       String coreProtoPackage,

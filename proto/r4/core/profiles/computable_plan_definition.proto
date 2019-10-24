@@ -87,7 +87,20 @@ message ComputablePlanDefinition {
   CodeableConcept type = 16;
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 17
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 17
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // For testing purposes, not real usage
@@ -255,7 +268,21 @@ message ComputablePlanDefinition {
     String text_equivalent = 7;
 
     // routine | urgent | asap | stat
-    RequestPriorityCode priority = 8;
+    message PriorityCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/request-priority";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      RequestPriorityCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    PriorityCode priority = 8;
 
     // Code representing the meaning of the action or sub-actions
     repeated CodeableConcept code = 9;
@@ -296,7 +323,21 @@ message ComputablePlanDefinition {
       repeated Extension modifier_extension = 3;
 
       // applicability | start | stop
-      ActionConditionKindCode kind = 4
+      message KindCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/action-condition-kind";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ActionConditionKindCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      KindCode kind = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Boolean-valued expression
@@ -329,7 +370,21 @@ message ComputablePlanDefinition {
 
       // before-start | before | before-end | concurrent-with-start | concurrent
       // | concurrent-with-end | after-start | after | after-end
-      ActionRelationshipTypeCode relationship = 5
+      message RelationshipCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/action-relationship-type";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ActionRelationshipTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      RelationshipCode relationship = 5
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Time offset for the relationship
@@ -374,7 +429,21 @@ message ComputablePlanDefinition {
       repeated Extension modifier_extension = 3;
 
       // patient | practitioner | related-person | device
-      ActionParticipantTypeCode type = 4
+      message TypeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/action-participant-type";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ActionParticipantTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      TypeCode type = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // E.g. Nurse, Surgeon, Parent
@@ -388,19 +457,89 @@ message ComputablePlanDefinition {
     CodeableConcept type = 21;
 
     // visual-group | logical-group | sentence-group
-    ActionGroupingBehaviorCode grouping_behavior = 22;
+    message GroupingBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-grouping-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionGroupingBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    GroupingBehaviorCode grouping_behavior = 22;
 
     // any | all | all-or-none | exactly-one | at-most-one | one-or-more
-    ActionSelectionBehaviorCode selection_behavior = 23;
+    message SelectionBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-selection-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionSelectionBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    SelectionBehaviorCode selection_behavior = 23;
 
     // must | could | must-unless-documented
-    ActionRequiredBehaviorCode required_behavior = 24;
+    message RequiredBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-required-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionRequiredBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    RequiredBehaviorCode required_behavior = 24;
 
     // yes | no
-    ActionPrecheckBehaviorCode precheck_behavior = 25;
+    message PrecheckBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-precheck-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionPrecheckBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    PrecheckBehaviorCode precheck_behavior = 25;
 
     // single | multiple
-    ActionCardinalityBehaviorCode cardinality_behavior = 26;
+    message CardinalityBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-cardinality-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionCardinalityBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    CardinalityBehaviorCode cardinality_behavior = 26;
 
     // Description of the activity to be performed
     message DefinitionX {

@@ -66,21 +66,60 @@ message MedicationRequest {
 
   // active | on-hold | cancelled | completed | entered-in-error | stopped |
   // draft | unknown
-  MedicationrequestStatusCode status = 11
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/medicationrequest-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    MedicationrequestStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Reason for current status
   CodeableConcept status_reason = 12;
 
   // proposal | plan | order | original-order | instance-order | option
-  MedicationRequestIntentCode intent = 13
+  message IntentCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/medicationrequest-intent";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    MedicationRequestIntentCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  IntentCode intent = 13
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Type of medication usage
   repeated CodeableConcept category = 14;
 
   // routine | urgent | asap | stat
-  RequestPriorityCode priority = 15;
+  message PriorityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-priority";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestPriorityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  PriorityCode priority = 15;
 
   // True if request is prohibiting action
   Boolean do_not_perform = 16;

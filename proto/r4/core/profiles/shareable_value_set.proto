@@ -82,7 +82,20 @@ message ShareableValueSet {
   String title = 14;
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 15
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 15
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // For testing purposes, not real usage
@@ -217,7 +230,21 @@ message ShareableValueSet {
 
         // = | is-a | descendent-of | is-not-a | regex | in | not-in |
         // generalizes | exists
-        FilterOperatorCode op = 5
+        message OpCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/filter-operator";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          FilterOperatorCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        OpCode op = 5
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
         // Code from the system, or regex criteria, or boolean value for exists

@@ -65,7 +65,20 @@ message MolecularSequence {
   repeated Identifier identifier = 10;
 
   // aa | dna | rna
-  SequenceTypeCode type = 11;
+  message TypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/sequence-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SequenceTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  TypeCode type = 11;
 
   // Base number of coordinate system (0 for 0-based numbering or coordinates,
   // inclusive start, exclusive end, 1 for 1-based numbering, inclusive start,
@@ -110,7 +123,21 @@ message MolecularSequence {
     String genome_build = 5;
 
     // sense | antisense
-    OrientationTypeCode orientation = 6;
+    message OrientationCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/orientation-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      OrientationTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    OrientationCode orientation = 6;
 
     // Reference identifier
     CodeableConcept reference_seq_id = 7;
@@ -123,7 +150,21 @@ message MolecularSequence {
     String reference_seq_string = 9;
 
     // watson | crick
-    StrandTypeCode strand = 10;
+    message StrandCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/strand-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      StrandTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    StrandCode strand = 10;
 
     // Start position of the window on the  reference sequence
     Integer window_start = 11;
@@ -189,7 +230,21 @@ message MolecularSequence {
     repeated Extension modifier_extension = 3;
 
     // indel | snp | unknown
-    QualityTypeCode type = 4
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/quality-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      QualityTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Standard sequence for comparison
@@ -288,7 +343,21 @@ message MolecularSequence {
     repeated Extension modifier_extension = 3;
 
     // directlink | openapi | login | oauth | other
-    RepositoryTypeCode type = 4
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/repository-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      RepositoryTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // URI of the repository

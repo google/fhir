@@ -51,7 +51,6 @@ import com.google.fhir.r4.core.ElementDefinition.ElementDefinitionBinding;
 import com.google.fhir.r4.core.ElementDefinitionOrBuilder;
 import com.google.fhir.r4.core.Extension;
 import com.google.fhir.r4.core.ExtensionContextTypeCode;
-import com.google.fhir.r4.core.FHIRVersionCode;
 import com.google.fhir.r4.core.Id;
 import com.google.fhir.r4.core.Markdown;
 import com.google.fhir.r4.core.SlicingRulesCode;
@@ -196,7 +195,7 @@ final class ProfileGenerator {
           .getSlicingBuilder()
           .setOrdered(fhirBoolean(false))
           .setRules(
-              SlicingRulesCode.newBuilder()
+              ElementDefinition.Slicing.RulesCode.newBuilder()
                   .setValue(
                       codeableConceptSlice.getRules()
                               == SlicingRulesCode.Value.INVALID_UNINITIALIZED
@@ -701,24 +700,25 @@ final class ProfileGenerator {
                 .addTelecom(
                     ContactPoint.newBuilder()
                         .setSystem(
-                            ContactPointSystemCode.newBuilder()
+                            ContactPoint.SystemCode.newBuilder()
                                 .setValue(ContactPointSystemCode.Value.URL))
                         .setValue(fhirString(packageInfo.getTelcomUrl()))))
         .setDescription(Markdown.newBuilder().setValue(elementData.getDescription()))
         .setFhirVersion(
-            FHIRVersionCode.newBuilder()
+            StructureDefinition.FhirVersionCode.newBuilder()
                 .setValue(FhirVersion.fromAnnotation(packageInfo.getFhirVersion()).minorVersion))
-        .setKind(StructureDefinitionKindCode.newBuilder().setValue(structureDefinitionKind))
+        .setKind(StructureDefinition.KindCode.newBuilder().setValue(structureDefinitionKind))
         .setAbstract(fhirBoolean(false))
         .addContext(
             StructureDefinition.Context.newBuilder()
                 .setType(
-                    ExtensionContextTypeCode.newBuilder()
+                    StructureDefinition.Context.TypeCode.newBuilder()
                         .setValue(ExtensionContextTypeCode.Value.ELEMENT)))
         .setType(fhirUri(type))
         .setBaseDefinition(fhirCanonical(baseDefinitionUrl))
         .setDerivation(
-            TypeDerivationRuleCode.newBuilder().setValue(TypeDerivationRuleCode.Value.CONSTRAINT));
+            StructureDefinition.DerivationCode.newBuilder()
+                .setValue(TypeDerivationRuleCode.Value.CONSTRAINT));
   }
 
   private ElementDefinition.Base buildBase(String path, StructureDefinition parentStructDef) {
@@ -828,7 +828,7 @@ final class ProfileGenerator {
         ElementDefinitionBinding.newBuilder()
             .setValueSet(fhirCanonical(codeData.getSystem()))
             .setStrength(
-                BindingStrengthCode.newBuilder()
+                ElementDefinition.ElementDefinitionBinding.StrengthCode.newBuilder()
                     .setValue(
                         codeData
                                 .getBindingStrength()

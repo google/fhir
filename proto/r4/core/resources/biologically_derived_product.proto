@@ -66,13 +66,39 @@ message BiologicallyDerivedProduct {
   repeated Identifier identifier = 10;
 
   // organ | tissue | fluid | cells | biologicalAgent
-  BiologicallyDerivedProductCategoryCode product_category = 11;
+  message ProductCategoryCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/product-category";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    BiologicallyDerivedProductCategoryCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ProductCategoryCode product_category = 11;
 
   // What this biologically derived product is
   CodeableConcept product_code = 12;
 
   // available | unavailable
-  BiologicallyDerivedProductStatusCode status = 13;
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/product-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    BiologicallyDerivedProductStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 13;
 
   // Procedure request
   repeated Reference request = 14
@@ -206,7 +232,21 @@ message BiologicallyDerivedProduct {
     Decimal temperature = 5;
 
     // farenheit | celsius | kelvin
-    BiologicallyDerivedProductStorageScaleCode scale = 6;
+    message ScaleCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/product-storage-scale";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      BiologicallyDerivedProductStorageScaleCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    ScaleCode scale = 6;
 
     // Storage timeperiod
     Period duration = 7;

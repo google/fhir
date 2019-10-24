@@ -100,7 +100,7 @@ field {
   number: 11
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.FinancialResourceStatusCodesCode"
+  type_name: ".google.fhir.r4.core.VisionPrescription.StatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "active | cancelled | draft | entered-in-error"
@@ -177,6 +177,33 @@ field {
   }
 }
 nested_type {
+  name: "StatusCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.FinancialResourceStatusCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/fm-status"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
   name: "LensSpecification"
   field {
     name: "id"
@@ -224,7 +251,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.VisionEyesCode"
+    type_name: ".google.fhir.r4.core.VisionPrescription.LensSpecification.EyeCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "right | left"
@@ -352,6 +379,33 @@ nested_type {
     }
   }
   nested_type {
+    name: "EyeCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r4.core.VisionEyesCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/vision-eye-codes"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+    }
+  }
+  nested_type {
     name: "Prism"
     field {
       name: "id"
@@ -399,10 +453,37 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.VisionBaseCode"
+      type_name: ".google.fhir.r4.core.VisionPrescription.LensSpecification.Prism.BaseCode"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "up | down | in | out"
+      }
+    }
+    nested_type {
+      name: "BaseCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r4.core.VisionBaseCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.Extension"
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/vision-base-codes"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
       }
     }
   }

@@ -82,7 +82,20 @@ message ShareableCodeSystem {
   String title = 14;
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 15
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 15
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // For testing purposes, not real usage
@@ -122,7 +135,20 @@ message ShareableCodeSystem {
   Canonical value_set = 26;
 
   // grouped-by | is-a | part-of | classified-with
-  CodeSystemHierarchyMeaningCode hierarchy_meaning = 27;
+  message HierarchyMeaningCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/codesystem-hierarchy-meaning";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    CodeSystemHierarchyMeaningCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  HierarchyMeaningCode hierarchy_meaning = 27;
 
   // If code system defines a compositional grammar
   Boolean compositional = 28;
@@ -131,7 +157,20 @@ message ShareableCodeSystem {
   Boolean version_needed = 29;
 
   // not-present | example | fragment | complete | supplement
-  CodeSystemContentModeCode content = 30
+  message ContentCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/codesystem-content-mode";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    CodeSystemContentModeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ContentCode content = 30
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Canonical URL of Code System this adds designations and properties to
@@ -159,7 +198,21 @@ message ShareableCodeSystem {
     String description = 5;
 
     // Operators that can be used with filter
-    repeated FilterOperatorCode operator = 6
+    message OperatorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/filter-operator";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      FilterOperatorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    repeated OperatorCode operator = 6
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // What to use for the value
@@ -193,7 +246,21 @@ message ShareableCodeSystem {
     String description = 6;
 
     // code | Coding | string | integer | boolean | dateTime | decimal
-    PropertyTypeCode type = 7
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/concept-property-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      PropertyTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 7
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Property property = 34

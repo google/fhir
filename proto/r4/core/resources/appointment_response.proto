@@ -93,7 +93,20 @@ message AppointmentResponse {
 
   // accepted | declined | tentative | in-process | completed | needs-action |
   // entered-in-error
-  ParticipationStatusCode participant_status = 16
+  message ParticipantStatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/participationstatus";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ParticipationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ParticipantStatusCode participant_status = 16
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Additional comments

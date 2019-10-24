@@ -78,7 +78,20 @@ message ConceptMap {
   String title = 14;
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 15
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 15
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // For testing purposes, not real usage
@@ -189,7 +202,21 @@ message ConceptMap {
 
         // relatedto | equivalent | equal | wider | subsumes | narrower |
         // specializes | inexact | unmatched | disjoint
-        ConceptMapEquivalenceCode equivalence = 6
+        message EquivalenceCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/concept-map-equivalence";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          ConceptMapEquivalenceCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        EquivalenceCode equivalence = 6
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
         // Description of status/issues in mapping
@@ -252,7 +279,21 @@ message ConceptMap {
       repeated Extension modifier_extension = 3;
 
       // provided | fixed | other-map
-      ConceptMapGroupUnmappedModeCode mode = 4
+      message ModeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/conceptmap-unmapped-mode";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ConceptMapGroupUnmappedModeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      ModeCode mode = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Fixed code when mode = fixed

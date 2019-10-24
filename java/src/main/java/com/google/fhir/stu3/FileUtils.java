@@ -49,16 +49,20 @@ public final class FileUtils {
 
   public static List<StructureDefinition> loadStructureDefinitionsInZip(String zip)
       throws IOException {
-    return loadStructureDefinitionsInZip(zip, FhirVersion.STU3);
+    return loadTypesInZip(StructureDefinition.newBuilder().build(), zip, FhirVersion.STU3);
   }
 
-  public static List<StructureDefinition> loadStructureDefinitionsInZip(
-      String zip, FhirVersion fhirVersion) throws IOException {
+  // Given a zip and a FHIR resource type, returns all the resources of that type
+  // found in the zip.  This will get all loose resources of that type in the zip,
+  // AND all resources of that type located in bundles found in the zip.
+  @SuppressWarnings("unchecked")
+  public static <T extends Message> List<T> loadTypesInZip(
+      T type, String zip, FhirVersion fhirVersion) throws IOException {
     JsonFormat.Parser parser =
         fhirVersion == FhirVersion.DSTU2 || fhirVersion == fhirVersion.STU3
             ? JsonFormat.getEarlyVersionGeneratorParser()
             : JsonFormat.getParser();
-    List<StructureDefinition> structDefs = new ArrayList<>();
+    List<T> extracted = new ArrayList<>();
     ZipFile zipFile = new ZipFile(new File(zip));
     Enumeration<? extends ZipEntry> entries = zipFile.entries();
     while (entries.hasMoreElements()) {
@@ -68,22 +72,31 @@ public final class FileUtils {
         json = StructureDefinitionTransformer.transformDstu2ToStu3(json);
       }
       try {
-        StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
-        parser.merge(json, structDefBuilder);
-        structDefs.add(structDefBuilder.build());
+        Message.Builder typeBuilder = type.newBuilderForType();
+        parser.merge(json, typeBuilder);
+        extracted.add((T) (typeBuilder.build()));
       } catch (IllegalArgumentException e) {
-        // Couldn't parse as structure definitions.  Check if it's a bundle of structure
-        // definitions
-        Bundle.Builder bundleBuilder = Bundle.newBuilder();
-        parser.merge(json, bundleBuilder);
-        for (Bundle.Entry entry : bundleBuilder.getEntryList()) {
-          if (entry.getResource().hasStructureDefinition()) {
-            structDefs.add(entry.getResource().getStructureDefinition());
+        // Couldn't parse as requested.
+        // Try to parse as a bundle, and if that works, pull out all instances of the requested
+        // type.
+        try {
+          Bundle.Builder bundleBuilder = Bundle.newBuilder();
+          parser.merge(json, bundleBuilder);
+          for (Bundle.Entry entry : bundleBuilder.getEntryList()) {
+            Message contained = ResourceUtils.getContainedResource(entry.getResource());
+            if (contained
+                .getDescriptorForType()
+                .getFullName()
+                .equals(type.getDescriptorForType().getFullName())) {
+              extracted.add((T) (contained));
+            }
           }
+        } catch (IllegalArgumentException e2) {
+          // This is neither a structure definition, or a bundle.  Ignore.
         }
       }
     }
-    return structDefs;
+    return extracted;
   }
 
   public static Message loadFhir(String filename, Message.Builder builder) throws IOException {

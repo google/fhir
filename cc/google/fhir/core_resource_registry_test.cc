@@ -21,7 +21,7 @@
 #include "proto/r4/core/resources/observation.pb.h"
 #include "proto/stu3/profile_config.pb.h"
 #include "proto/stu3/resources.pb.h"
-#include "testdata/r4/profiles/test_core.pb.h"
+#include "testdata/r4/profiles/test.pb.h"
 #include "testdata/stu3/profiles/test.pb.h"
 
 namespace google {
@@ -37,7 +37,7 @@ TEST(CoreResourceRegistryTest, Stu3Test) {
 }
 
 TEST(CoreResourceRegistryTest, R4Test) {
-  auto result = GetBaseResourceInstance(r4::testingcore::TestObservationLvl2());
+  auto result = GetBaseResourceInstance(r4::testing::TestObservationLvl2());
   ASSERT_TRUE(result.ok());
   ASSERT_TRUE(IsMessageType<r4::core::Observation>(*result.ValueOrDie()));
 }

@@ -71,7 +71,20 @@ message Person {
   repeated ContactPoint telecom = 12;
 
   // male | female | other | unknown
-  AdministrativeGenderCode gender = 13;
+  message GenderCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/administrative-gender";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AdministrativeGenderCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  GenderCode gender = 13;
 
   // The date on which the person was born
   Date birth_date = 14;
@@ -110,7 +123,21 @@ message Person {
     ];
 
     // level1 | level2 | level3 | level4
-    IdentityAssuranceLevelCode assurance = 5;
+    message AssuranceCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/identity-assuranceLevel";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      IdentityAssuranceLevelCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    AssuranceCode assurance = 5;
   }
   repeated Link link = 19
       [(.google.fhir.proto.fhir_path_constraint) =

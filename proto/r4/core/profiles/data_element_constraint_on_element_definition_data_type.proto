@@ -136,7 +136,21 @@ message DataElementConstraintOnElementDefinitionDataType {
     reserved 6;
 
     // either | independent | specific
-    ReferenceVersionRulesCode versioning = 7;
+    message VersioningCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/reference-version-rules";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ReferenceVersionRulesCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    VersioningCode versioning = 7;
   }
   repeated TypeRef type = 20 [
     (.google.fhir.proto.fhir_path_constraint) =
@@ -349,7 +363,21 @@ message DataElementConstraintOnElementDefinitionDataType {
     String requirements = 4;
 
     // error | warning
-    ConstraintSeverityCode severity = 5
+    message SeverityCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/constraint-severity";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ConstraintSeverityCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    SeverityCode severity = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Human description of constraint
@@ -392,7 +420,21 @@ message DataElementConstraintOnElementDefinitionDataType {
     repeated Extension extension = 2;
 
     // required | extensible | preferred | example
-    BindingStrengthCode strength = 3
+    message StrengthCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/binding-strength";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      BindingStrengthCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    StrengthCode strength = 3
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Human explanation of the value set
@@ -421,7 +463,25 @@ message DataElementConstraintOnElementDefinitionDataType {
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Computable language of mapping
-    MimeTypesCode language = 4;
+    message LanguageCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/mimetypes";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      // Field 1 reserved to allow enumeration in the future.
+      reserved 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+
+      // This valueset is not enumerable, and so is represented as a string.
+      string value = 4;
+    }
+    LanguageCode language = 4;
 
     // Details of the mapping
     String map = 5

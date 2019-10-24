@@ -73,7 +73,20 @@ message ChargeItem {
 
   // planned | billable | not-billable | aborted | billed | entered-in-error |
   // unknown
-  ChargeItemStatusCode status = 13
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/chargeitem-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ChargeItemStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 13
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Part of referenced ChargeItem

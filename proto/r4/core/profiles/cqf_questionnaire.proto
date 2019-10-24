@@ -84,14 +84,40 @@ message CQFQuestionnaire {
   repeated Canonical derived_from = 15;
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 16
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // For testing purposes, not real usage
   Boolean experimental = 17;
 
   // Resource that can be subject of QuestionnaireResponse
-  repeated ResourceTypeCode subject_type = 18;
+  message SubjectTypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/resource-types";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ResourceTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated SubjectTypeCode subject_type = 18;
 
   // Date last changed
   DateTime date = 19;
@@ -157,7 +183,21 @@ message CQFQuestionnaire {
     String text = 8;
 
     // group | display | boolean | decimal | integer | date | dateTime +
-    QuestionnaireItemTypeCode type = 9
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/item-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      QuestionnaireItemTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 9
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Only allow data when
@@ -176,7 +216,21 @@ message CQFQuestionnaire {
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // exists | = | != | > | < | >= | <=
-      QuestionnaireItemOperatorCode operator = 5
+      message OperatorCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/questionnaire-enable-operator";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        QuestionnaireItemOperatorCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      OperatorCode operator = 5
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Value for question comparison based on operator
@@ -208,7 +262,21 @@ message CQFQuestionnaire {
     ];
 
     // all | any
-    EnableWhenBehaviorCode enable_behavior = 11;
+    message EnableBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/questionnaire-enable-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      EnableWhenBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    EnableBehaviorCode enable_behavior = 11;
 
     // Whether the item must be included in data results
     Boolean required = 12;

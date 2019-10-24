@@ -73,7 +73,20 @@ message CompartmentDefinition {
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 13
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 13
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // For testing purposes, not real usage
@@ -98,7 +111,20 @@ message CompartmentDefinition {
   Markdown purpose = 20;
 
   // Patient | Encounter | RelatedPerson | Practitioner | Device
-  CompartmentTypeCode code = 21
+  message CodeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/compartment-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    CompartmentTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  CodeCode code = 21
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Whether the search syntax is supported
@@ -117,7 +143,21 @@ message CompartmentDefinition {
     repeated Extension modifier_extension = 3;
 
     // Name of resource type
-    ResourceTypeCode code = 4
+    message CodeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/resource-types";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ResourceTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    CodeCode code = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Search Parameter Name, or chained parameters

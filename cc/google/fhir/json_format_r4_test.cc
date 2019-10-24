@@ -173,7 +173,7 @@
 #include "proto/r4/core/resources/value_set.pb.h"
 #include "proto/r4/core/resources/verification_result.pb.h"
 #include "proto/r4/core/resources/vision_prescription.pb.h"
-#include "testdata/r4/profiles/test_core.pb.h"
+#include "testdata/r4/profiles/test.pb.h"
 #include "include/json/json.h"
 
 namespace google {
@@ -262,14 +262,14 @@ void TestPair(const std::vector<string>& file_names) {
 
 /** Test printing from a profile */
 TEST(JsonFormatR4Test, PrintProfile) {
-  TestPrintWithFilepaths<r4::testingcore::TestPatient>(
+  TestPrintWithFilepaths<r4::testing::TestPatient>(
       "profiles/test_patient-profiled-testpatient.prototxt",
       "testdata/r4/profiles/test_patient.json");
 }
 
 /** Test parsing to a profile */
 TEST(JsonFormatR4Test, ParseProfile) {
-  TestParseWithFilepaths<r4::testingcore::TestPatient>(
+  TestParseWithFilepaths<r4::testing::TestPatient>(
       "profiles/test_patient-profiled-testpatient.prototxt",
       "testdata/r4/profiles/test_patient.json");
 }
@@ -277,7 +277,7 @@ TEST(JsonFormatR4Test, ParseProfile) {
 // Test parsing to a profile fails if the parsed resource doesn't match the
 // profile
 TEST(JsonFormatR4Test, ParseProfileMismatch) {
-  ASSERT_FALSE(ParseJsonToProto<r4::testingcore::TestPatient>(
+  ASSERT_FALSE(ParseJsonToProto<r4::testing::TestPatient>(
                    "testdata/r4/profiles/test_patient_multiple_names.json")
                    .ok());
 }
@@ -327,7 +327,7 @@ TEST(JsonFormatR4Test, PrintForAnalytics) {
 
 /** Test printing from a profile */
 TEST(JsonFormatR4Test, PrintProfileForAnalytics) {
-  TestPrintForAnalyticsWithFilepath<r4::testingcore::TestPatient>(
+  TestPrintForAnalyticsWithFilepath<r4::testing::TestPatient>(
       "profiles/test_patient-profiled-testpatient.prototxt",
       "testdata/r4/bigquery/TestPatient.json");
 }

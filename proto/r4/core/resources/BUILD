@@ -1041,3 +1041,11 @@ fhir_proto_library(
     proto_deps = RESOURCE_DEPS,
     proto_library_prefix = "metadata_resource",
 )
+
+# We also make the .proto files readable for testing.
+filegroup(
+    name = "testdata",
+    srcs = glob([
+        "*.proto",
+    ]),
+)

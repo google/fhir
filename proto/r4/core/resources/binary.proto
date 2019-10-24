@@ -44,7 +44,24 @@ message Binary {
   Code language = 4;
 
   // MimeType of the binary content
-  MimeTypesCode content_type = 5
+  message ContentTypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/mimetypes";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    // Field 1 reserved to allow enumeration in the future.
+    reserved 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+
+    // This valueset is not enumerable, and so is represented as a string.
+    string value = 4;
+  }
+  ContentTypeCode content_type = 5
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Identifies another resource to use as proxy when enforcing access control

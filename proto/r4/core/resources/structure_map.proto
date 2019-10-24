@@ -80,7 +80,20 @@ message StructureMap {
   String title = 14;
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 15
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 15
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // For testing purposes, not real usage
@@ -126,7 +139,21 @@ message StructureMap {
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // source | queried | target | produced
-    StructureMapModelModeCode mode = 5
+    message ModeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/map-model-mode";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      StructureMapModelModeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    ModeCode mode = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Name for type in this map
@@ -161,7 +188,21 @@ message StructureMap {
     Id extends = 5;
 
     // none | types | type-and-types
-    StructureMapGroupTypeModeCode type_mode = 6
+    message TypeModeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/map-group-type-mode";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      StructureMapGroupTypeModeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeModeCode type_mode = 6
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Additional description/explanation for group
@@ -186,7 +227,21 @@ message StructureMap {
       String type = 5;
 
       // source | target
-      StructureMapInputModeCode mode = 6
+      message ModeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/map-input-mode";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        StructureMapInputModeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      ModeCode mode = 6
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Documentation for this instance of data
@@ -299,7 +354,21 @@ message StructureMap {
         String element = 9;
 
         // first | not_first | last | not_last | only_one
-        StructureMapSourceListModeCode list_mode = 10;
+        message ListModeCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/map-source-list-mode";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          StructureMapSourceListModeCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        ListModeCode list_mode = 10;
 
         // Named context for field, if a field is specified
         Id variable = 11;
@@ -335,7 +404,21 @@ message StructureMap {
         Id context = 4;
 
         // type | variable
-        StructureMapContextTypeCode context_type = 5;
+        message ContextTypeCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/map-context-type";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          StructureMapContextTypeCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        ContextTypeCode context_type = 5;
 
         // Field to create in the context
         String element = 6;
@@ -344,13 +427,41 @@ message StructureMap {
         Id variable = 7;
 
         // first | share | last | collate
-        repeated StructureMapTargetListModeCode list_mode = 8;
+        message ListModeCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/map-target-list-mode";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          StructureMapTargetListModeCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        repeated ListModeCode list_mode = 8;
 
         // Internal rule reference for shared list items
         Id list_rule_id = 9;
 
         // create | copy +
-        StructureMapTransformCode transform = 10;
+        message TransformCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/map-transform";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          StructureMapTransformCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        TransformCode transform = 10;
 
         // Parameters to the transform
         message Parameter {

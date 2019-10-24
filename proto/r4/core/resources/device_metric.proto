@@ -78,13 +78,52 @@ message DeviceMetric {
   Reference parent = 14 [(.google.fhir.proto.valid_reference_type) = "Device"];
 
   // on | off | standby | entered-in-error
-  DeviceMetricOperationalStatusCode operational_status = 15;
+  message OperationalStatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/metric-operational-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    DeviceMetricOperationalStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  OperationalStatusCode operational_status = 15;
 
   // black | red | green | yellow | blue | magenta | cyan | white
-  DeviceMetricColorCode color = 16;
+  message ColorCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/metric-color";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    DeviceMetricColorCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ColorCode color = 16;
 
   // measurement | setting | calculation | unspecified
-  DeviceMetricCategoryCode category = 17
+  message CategoryCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/metric-category";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    DeviceMetricCategoryCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  CategoryCode category = 17
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Describes the measurement repetition time
@@ -103,10 +142,38 @@ message DeviceMetric {
     repeated Extension modifier_extension = 3;
 
     // unspecified | offset | gain | two-point
-    DeviceMetricCalibrationTypeCode type = 4;
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/metric-calibration-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      DeviceMetricCalibrationTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 4;
 
     // not-calibrated | calibration-required | calibrated | unspecified
-    DeviceMetricCalibrationStateCode state = 5;
+    message StateCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/metric-calibration-state";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      DeviceMetricCalibrationStateCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    StateCode state = 5;
 
     // Describes the time last calibration has been performed
     Instant time = 6;

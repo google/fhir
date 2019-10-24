@@ -75,7 +75,20 @@ message Patient {
   repeated ContactPoint telecom = 13;
 
   // male | female | other | unknown
-  AdministrativeGenderCode gender = 14;
+  message GenderCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/administrative-gender";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AdministrativeGenderCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  GenderCode gender = 14;
 
   // The date of birth for the individual
   Date birth_date = 15;
@@ -135,7 +148,21 @@ message Patient {
     Address address = 7;
 
     // male | female | other | unknown
-    AdministrativeGenderCode gender = 8;
+    message GenderCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/administrative-gender";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      AdministrativeGenderCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    GenderCode gender = 8;
 
     // Organization that is associated with the contact
     Reference organization = 9
@@ -206,7 +233,21 @@ message Patient {
     ];
 
     // replaced-by | replaces | refer | seealso
-    LinkTypeCode type = 5
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/link-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      LinkTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Link link = 25

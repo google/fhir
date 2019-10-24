@@ -68,7 +68,20 @@ message Appointment {
 
   // proposed | pending | booked | arrived | fulfilled | cancelled | noshow |
   // entered-in-error | checked-in | waitlist
-  AppointmentStatusCode status = 11
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/appointmentstatus";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AppointmentStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // The coded reason for the appointment being cancelled
@@ -162,10 +175,38 @@ message Appointment {
     ];
 
     // required | optional | information-only
-    ParticipantRequiredCode required = 6;
+    message RequiredCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/participantrequired";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ParticipantRequiredCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    RequiredCode required = 6;
 
     // accepted | declined | tentative | needs-action
-    ParticipationStatusCode status = 7
+    message StatusCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/participationstatus";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ParticipationStatusCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    StatusCode status = 7
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Participation period of the actor

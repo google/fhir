@@ -65,14 +65,40 @@ message EnrollmentResponse {
   repeated Identifier identifier = 10;
 
   // active | cancelled | draft | entered-in-error
-  FinancialResourceStatusCodesCode status = 11;
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/fm-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    FinancialResourceStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11;
 
   // Claim reference
   Reference request = 12
       [(.google.fhir.proto.valid_reference_type) = "EnrollmentRequest"];
 
   // queued | complete | error | partial
-  ClaimProcessingCodesCode outcome = 13;
+  message OutcomeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/remittance-outcome";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ClaimProcessingCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  OutcomeCode outcome = 13;
 
   // Disposition Message
   String disposition = 14;

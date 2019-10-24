@@ -84,6 +84,10 @@ const string& GetValueset(const ::google::protobuf::Descriptor* descriptor);
 
 const bool HasValueset(const ::google::protobuf::Descriptor* descriptor);
 
+const string& GetFixedSystem(const ::google::protobuf::Descriptor* descriptor);
+
+const bool HasFixedSystem(const ::google::protobuf::Descriptor* descriptor);
+
 const string& GetInlinedCodingSystem(const ::google::protobuf::FieldDescriptor* field);
 
 const string& GetInlinedCodingCode(const ::google::protobuf::FieldDescriptor* field);
@@ -91,6 +95,11 @@ const string& GetInlinedCodingCode(const ::google::protobuf::FieldDescriptor* fi
 const bool HasFixedCodingSystem(const ::google::protobuf::Descriptor* descriptor);
 
 const string& GetFixedCodingSystem(const ::google::protobuf::Descriptor* descriptor);
+
+const string& GetSourceCodeSystem(
+    const ::google::protobuf::EnumValueDescriptor* descriptor);
+
+const bool HasSourceCodeSystem(const ::google::protobuf::EnumValueDescriptor* descriptor);
 
 const string& GetValueRegex(const ::google::protobuf::Descriptor* descriptor);
 

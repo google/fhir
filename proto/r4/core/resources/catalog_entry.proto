@@ -95,7 +95,20 @@ message CatalogEntry {
   repeated CodeableConcept classification = 15;
 
   // draft | active | retired | unknown
-  PublicationStatusCode status = 16;
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16;
 
   // The time period in which this catalog entry is expected to be active
   Period validity_period = 17;
@@ -124,7 +137,21 @@ message CatalogEntry {
     repeated Extension modifier_extension = 3;
 
     // triggers | is-replaced-by
-    CatalogEntryRelationTypeCode relationtype = 4
+    message RelationtypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/relation-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      CatalogEntryRelationTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    RelationtypeCode relationtype = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // The reference to the related item

@@ -130,7 +130,7 @@ field {
   number: 14
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.PublicationStatusCode"
+  type_name: ".google.fhir.r4.core.CapabilityStatement.StatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "draft | active | retired | unknown"
@@ -232,7 +232,7 @@ field {
   number: 24
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.CapabilityStatementKindCode"
+  type_name: ".google.fhir.r4.core.CapabilityStatement.KindCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "instance | capability | requirements"
@@ -285,7 +285,7 @@ field {
   number: 29
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.FHIRVersionCode"
+  type_name: ".google.fhir.r4.core.CapabilityStatement.FhirVersionCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "FHIR Version the system supports"
@@ -296,7 +296,7 @@ field {
   number: 30
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.MimeTypesCode"
+  type_name: ".google.fhir.r4.core.CapabilityStatement.FormatCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "formats supported (xml | json | ttl | mime type)"
@@ -307,7 +307,7 @@ field {
   number: 31
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.MimeTypesCode"
+  type_name: ".google.fhir.r4.core.CapabilityStatement.PatchFormatCode"
   options {
     [google.fhir.proto.field_description]: "Patch formats supported"
   }
@@ -354,6 +354,60 @@ field {
   options {
     [google.fhir.proto.field_description]: "Document definition"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
+  }
+}
+nested_type {
+  name: "StatusCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.PublicationStatusCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/publication-status"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
+  name: "KindCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.CapabilityStatementKindCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/capability-statement-kind"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
   }
 }
 nested_type {
@@ -486,6 +540,103 @@ nested_type {
   }
 }
 nested_type {
+  name: "FhirVersionCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.FHIRVersionCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/FHIR-version"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
+  name: "FormatCode"
+  field {
+    number: 1
+    options {
+      [google.fhir.proto.reserved_reason]: "Field 1 reserved to allow enumeration in the future."
+    }
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  field {
+    name: "value"
+    number: 4
+    type: TYPE_STRING
+    options {
+      [google.fhir.proto.field_description]: "This valueset is not enumerable, and so is represented as a string."
+    }
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/mimetypes"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
+  name: "PatchFormatCode"
+  field {
+    number: 1
+    options {
+      [google.fhir.proto.reserved_reason]: "Field 1 reserved to allow enumeration in the future."
+    }
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  field {
+    name: "value"
+    number: 4
+    type: TYPE_STRING
+    options {
+      [google.fhir.proto.field_description]: "This valueset is not enumerable, and so is represented as a string."
+    }
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/mimetypes"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
   name: "Rest"
   field {
     name: "id"
@@ -522,7 +673,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.RestfulCapabilityModeCode"
+    type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.ModeCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "client | server"
@@ -600,6 +751,33 @@ nested_type {
     type_name: ".google.fhir.r4.core.Canonical"
     options {
       [google.fhir.proto.field_description]: "Compartments served/used by system"
+    }
+  }
+  nested_type {
+    name: "ModeCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r4.core.RestfulCapabilityModeCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/restful-capability-mode"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
   nested_type {
@@ -702,7 +880,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.ResourceTypeCode"
+      type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource.TypeCode"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "A resource type that is supported"
@@ -754,7 +932,7 @@ nested_type {
       number: 9
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.ResourceVersionPolicyCode"
+      type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource.VersioningCode"
       options {
         [google.fhir.proto.field_description]: "no-version | versioned | versioned-update"
       }
@@ -794,7 +972,7 @@ nested_type {
       number: 13
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.ConditionalReadStatusCode"
+      type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource.ConditionalReadCode"
       options {
         [google.fhir.proto.field_description]: "not-supported | modified-since | not-match | full-support"
       }
@@ -814,7 +992,7 @@ nested_type {
       number: 15
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.ConditionalDeleteStatusCode"
+      type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource.ConditionalDeleteCode"
       options {
         [google.fhir.proto.field_description]: "not-supported | single | multiple - how conditional delete is supported"
       }
@@ -824,7 +1002,7 @@ nested_type {
       number: 16
       label: LABEL_REPEATED
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.ReferenceHandlingPolicyCode"
+      type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource.ReferencePolicyCode"
       options {
         [google.fhir.proto.field_description]: "literal | logical | resolves | enforced | local"
       }
@@ -872,6 +1050,33 @@ nested_type {
       }
     }
     nested_type {
+      name: "TypeCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r4.core.ResourceTypeCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.Extension"
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/resource-types"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+      }
+    }
+    nested_type {
       name: "ResourceInteraction"
       field {
         name: "id"
@@ -908,7 +1113,7 @@ nested_type {
         number: 4
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.TypeRestfulInteractionCode"
+        type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource.ResourceInteraction.CodeCode"
         options {
           [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
           [google.fhir.proto.field_description]: "read | vread | update | patch | delete | history-instance | history-type | create | search-type"
@@ -923,6 +1128,211 @@ nested_type {
         options {
           [google.fhir.proto.field_description]: "Anything special about operation behavior"
         }
+      }
+      nested_type {
+        name: "CodeCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource.ResourceInteraction.CodeCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        enum_type {
+          name: "Value"
+          value {
+            name: "INVALID_UNINITIALIZED"
+            number: 0
+          }
+          value {
+            name: "READ"
+            number: 1
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/restful-interaction"
+            }
+          }
+          value {
+            name: "VREAD"
+            number: 2
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/restful-interaction"
+            }
+          }
+          value {
+            name: "UPDATE"
+            number: 3
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/restful-interaction"
+            }
+          }
+          value {
+            name: "PATCH"
+            number: 4
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/restful-interaction"
+            }
+          }
+          value {
+            name: "DELETE"
+            number: 5
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/restful-interaction"
+            }
+          }
+          value {
+            name: "HISTORY_INSTANCE"
+            number: 6
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/restful-interaction"
+            }
+          }
+          value {
+            name: "HISTORY_TYPE"
+            number: 7
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/restful-interaction"
+            }
+          }
+          value {
+            name: "CREATE"
+            number: 8
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/restful-interaction"
+            }
+          }
+          value {
+            name: "SEARCH_TYPE"
+            number: 9
+            options {
+              [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/restful-interaction"
+            }
+          }
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/type-restful-interaction"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+        }
+      }
+    }
+    nested_type {
+      name: "VersioningCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r4.core.ResourceVersionPolicyCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.Extension"
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/versioning-policy"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+      }
+    }
+    nested_type {
+      name: "ConditionalReadCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r4.core.ConditionalReadStatusCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.Extension"
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/conditional-read-status"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+      }
+    }
+    nested_type {
+      name: "ConditionalDeleteCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r4.core.ConditionalDeleteStatusCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.Extension"
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/conditional-delete-status"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+      }
+    }
+    nested_type {
+      name: "ReferencePolicyCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r4.core.ReferenceHandlingPolicyCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.Extension"
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/reference-handling-policy"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
       }
     }
     nested_type {
@@ -983,7 +1393,7 @@ nested_type {
         number: 6
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.SearchParamTypeCode"
+        type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource.SearchParam.TypeCode"
         options {
           [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
           [google.fhir.proto.field_description]: "number | date | string | token | reference | composite | quantity | uri | special"
@@ -997,6 +1407,33 @@ nested_type {
         type_name: ".google.fhir.r4.core.Markdown"
         options {
           [google.fhir.proto.field_description]: "Server-specific usage"
+        }
+      }
+      nested_type {
+        name: "TypeCode"
+        field {
+          name: "value"
+          number: 1
+          type: TYPE_ENUM
+          type_name: ".google.fhir.r4.core.SearchParamTypeCode.Value"
+        }
+        field {
+          name: "id"
+          number: 2
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.String"
+        }
+        field {
+          name: "extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.r4.core.Extension"
+        }
+        options {
+          [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/search-param-type"
+          [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+          [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
         }
       }
     }
@@ -1103,7 +1540,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.SystemRestfulInteractionCode"
+      type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.SystemInteraction.CodeCode"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "transaction | batch | search-system | history-system"
@@ -1117,6 +1554,68 @@ nested_type {
       type_name: ".google.fhir.r4.core.Markdown"
       options {
         [google.fhir.proto.field_description]: "Anything special about operation behavior"
+      }
+    }
+    nested_type {
+      name: "CodeCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.SystemInteraction.CodeCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.Extension"
+      }
+      enum_type {
+        name: "Value"
+        value {
+          name: "INVALID_UNINITIALIZED"
+          number: 0
+        }
+        value {
+          name: "TRANSACTION"
+          number: 1
+          options {
+            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/restful-interaction"
+          }
+        }
+        value {
+          name: "BATCH"
+          number: 2
+          options {
+            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/restful-interaction"
+          }
+        }
+        value {
+          name: "SEARCH_SYSTEM"
+          number: 3
+          options {
+            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/restful-interaction"
+          }
+        }
+        value {
+          name: "HISTORY_SYSTEM"
+          number: 4
+          options {
+            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/restful-interaction"
+          }
+        }
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/system-restful-interaction"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
       }
     }
   }
@@ -1287,7 +1786,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.EventCapabilityModeCode"
+      type_name: ".google.fhir.r4.core.CapabilityStatement.Messaging.SupportedMessage.ModeCode"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "sender | receiver"
@@ -1302,6 +1801,33 @@ nested_type {
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "Message supported by this system"
+      }
+    }
+    nested_type {
+      name: "ModeCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r4.core.EventCapabilityModeCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.Extension"
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/event-capability-mode"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
       }
     }
   }
@@ -1343,7 +1869,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.DocumentModeCode"
+    type_name: ".google.fhir.r4.core.CapabilityStatement.Document.ModeCode"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "producer | consumer"
@@ -1368,6 +1894,33 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Constraint on the resources used in the document"
+    }
+  }
+  nested_type {
+    name: "ModeCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r4.core.DocumentModeCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/document-mode"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
 }

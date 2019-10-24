@@ -54,7 +54,7 @@ field {
   number: 6
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.BundleTypeCode"
+  type_name: ".google.fhir.r4.core.Bundle.TypeCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "document | message | transaction | transaction-response | batch | batch-response | history | searchset | collection"
@@ -112,6 +112,33 @@ field {
   type_name: ".google.fhir.r4.core.Signature"
   options {
     [google.fhir.proto.field_description]: "Digital Signature"
+  }
+}
+nested_type {
+  name: "TypeCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.BundleTypeCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/bundle-type"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
   }
 }
 nested_type {
@@ -301,7 +328,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.SearchEntryModeCode"
+      type_name: ".google.fhir.r4.core.Bundle.Entry.Search.ModeCode"
       options {
         [google.fhir.proto.field_description]: "match | include | outcome - why this is in the result set"
       }
@@ -314,6 +341,33 @@ nested_type {
       type_name: ".google.fhir.r4.core.Decimal"
       options {
         [google.fhir.proto.field_description]: "Search ranking (between 0 and 1)"
+      }
+    }
+    nested_type {
+      name: "ModeCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r4.core.SearchEntryModeCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.Extension"
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/search-entry-mode"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
       }
     }
   }
@@ -354,7 +408,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.HTTPVerbCode"
+      type_name: ".google.fhir.r4.core.Bundle.Entry.Request.MethodCode"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "GET | HEAD | POST | PUT | DELETE | PATCH"
@@ -409,6 +463,33 @@ nested_type {
       type_name: ".google.fhir.r4.core.String"
       options {
         [google.fhir.proto.field_description]: "For conditional creates"
+      }
+    }
+    nested_type {
+      name: "MethodCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r4.core.HTTPVerbCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.Extension"
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/http-verb"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
       }
     }
   }

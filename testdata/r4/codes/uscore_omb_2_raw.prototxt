@@ -1,5 +1,5 @@
-system { value: "http://hl7.org/fhir/us/core/ValueSet/omb-race-category" }
-code { value: "2028-9" }
+system { value: "http://terminology.hl7.org/CodeSystem/v3-NullFlavor" }
+code { value: "ASKU" }
 id { value: "5" }
 user_selected {value: true}
 extension {

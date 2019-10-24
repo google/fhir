@@ -531,12 +531,15 @@ java_test(
     size = "medium",
     srcs = ["src/test/java/com/google/fhir/stu3/ProtoFilePrinterTest.java"],
     data = [
-        "//proto/stu3:testdata",
-        "//spec:fhir_stu3_structure_definitions_filegroup",
-        "//testdata/stu3:descriptors",
+        "//proto/r4/core:testdata",
+        "//proto/r4/core/resources:testdata",
+        "//spec:fhir_r4_definitions.zip",
+        "//spec:fhir_r4_definitions_filegroup",
+        "//testdata/r4:descriptors",
     ],
     test_class = "com.google.fhir.stu3.ProtoFilePrinterTest",
     deps = [
+        ":ProtoGeneratorTest",
         ":proto_generator_lib",
         ":stu3",
         "//external:gson",
@@ -549,6 +552,7 @@ java_test(
         "//proto:annotations_java_proto",
         "//proto:protogenerator_annotations_java_proto",
         "//proto/r4/core:datatypes_java_proto",
+        "//proto/r4/core/resources:bundle_and_contained_resource_java_proto",
         "//proto/r4/core/resources:structure_definition_java_proto",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
@@ -562,9 +566,10 @@ java_test(
     size = "medium",
     srcs = ["src/test/java/com/google/fhir/stu3/ProtoGeneratorTest.java"],
     data = [
-        "//spec:fhir_r4_structure_definitions_filegroup",
-        "//spec:fhir_stu3_structure_definitions_filegroup",
-        "//spec:uscore_stu3_structure_definitions_filegroup",
+        "//spec:fhir_r4_definitions.zip",
+        "//spec:fhir_r4_definitions_filegroup",
+        "//spec:fhir_stu3_definitions_filegroup",
+        "//spec:uscore_stu3_definitions_filegroup",
         "//testdata/r4:descriptors",
         "//testdata/stu3:descriptors",
         "//testdata/stu3:google",
@@ -573,6 +578,7 @@ java_test(
     deps = [
         ":proto_generator_lib",
         ":stu3",
+        ":value_set_generator_lib",
         "//external:gson",
         "//external:guava",
         "//proto/stu3:datatypes_java_proto",
@@ -580,7 +586,9 @@ java_test(
         "//proto/stu3:resources_java_proto",
         "//proto:annotations_java_proto",
         "//proto:protogenerator_annotations_java_proto",
+        "//proto/r4/core/resources:code_system_java_proto",
         "//proto/r4/core/resources:structure_definition_java_proto",
+        "//proto/r4/core/resources:value_set_java_proto",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
         "@com_google_truth_truth//jar",
@@ -627,6 +635,7 @@ java_library(
     deps = [
         ":common",
         ":stu3",
+        ":value_set_generator_lib",
         "//external:guava",
         "//proto/stu3:codes_java_proto",
         "//proto/stu3:datatypes_java_proto",
@@ -648,15 +657,19 @@ java_binary(
     main_class = "com.google.fhir.examples.ProtoGeneratorMain",
     deps = [
         ":common",
+        ":generator_utils",
         ":proto_generator_lib",
         ":structure_definition_transformer",
         ":stu3",
+        ":value_set_generator_lib",
         "//external:guava",
         "//proto/stu3:profile_config_java_proto",
         "//proto:annotations_java_proto",
         "//proto/r4/core:codes_java_proto",
         "//proto/r4/core/resources:bundle_and_contained_resource_java_proto",
+        "//proto/r4/core/resources:code_system_java_proto",
         "//proto/r4/core/resources:structure_definition_java_proto",
+        "//proto/r4/core/resources:value_set_java_proto",
         "@com_beust_jcommander//jar",
         "@com_google_protobuf//:protobuf_java",
     ],
@@ -688,7 +701,7 @@ java_test(
     testonly = 1,
     srcs = ["src/test/java/com/google/fhir/profile/ProfileGeneratorTest.java"],
     data = [
-        "//spec:fhir_stu3_structure_definitions_filegroup",
+        "//spec:fhir_stu3_definitions_filegroup",
         "//testdata/stu3:profilegenerator",
     ],
     test_class = "com.google.fhir.profile.ProfileGeneratorTest",
@@ -724,11 +737,11 @@ java_binary(
 )
 
 java_library(
-    name = "valueset_generator_lib",
+    name = "value_set_generator_lib",
     srcs = ["src/main/java/com/google/fhir/stu3/ValueSetGenerator.java"],
     deps = [
         ":common",
-        ":proto_generator_lib",
+        ":generator_utils",
         ":stu3",
         "//external:guava",
         "//proto/stu3:profile_config_java_proto",
@@ -750,7 +763,7 @@ java_binary(
     main_class = "com.google.fhir.examples.ValueSetGeneratorMain",
     deps = [
         ":stu3",
-        ":valueset_generator_lib",
+        ":value_set_generator_lib",
         "//external:guava",
         "//proto/stu3:profile_config_java_proto",
         "//proto:annotations_java_proto",
@@ -760,5 +773,13 @@ java_binary(
         "//proto/r4/core/resources:value_set_java_proto",
         "@com_beust_jcommander//jar",
         "@com_google_protobuf//:protobuf_java",
+    ],
+)
+
+java_library(
+    name = "generator_utils",
+    srcs = ["src/main/java/com/google/fhir/stu3/GeneratorUtils.java"],
+    deps = [
+        "//external:guava",
     ],
 )

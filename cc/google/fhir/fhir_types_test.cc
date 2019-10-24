@@ -18,7 +18,7 @@
 #include "gtest/gtest.h"
 #include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/stu3/resources.pb.h"
-#include "testdata/r4/profiles/test_core.pb.h"
+#include "testdata/r4/profiles/test.pb.h"
 #include "testdata/stu3/profiles/test.pb.h"
 
 namespace google {
@@ -43,17 +43,17 @@ TEST(FhirTypesTest, IsTypeOrProfileOfBundleStu3) {
 
 TEST(FhirTypesTest, IsBundleR4) {
   ASSERT_TRUE(IsBundle(r4::core::Bundle()));
-  ASSERT_FALSE(IsBundle(r4::testingcore::Bundle()));
+  ASSERT_FALSE(IsBundle(r4::testing::Bundle()));
 }
 
 TEST(FhirTypesTest, IsProfileOfBundleR4) {
   ASSERT_FALSE(IsProfileOfBundle(r4::core::Bundle()));
-  ASSERT_TRUE(IsProfileOfBundle(r4::testingcore::Bundle()));
+  ASSERT_TRUE(IsProfileOfBundle(r4::testing::Bundle()));
 }
 
 TEST(FhirTypesTest, IsTypeOrProfileOfBundleR4) {
   ASSERT_TRUE(IsTypeOrProfileOfBundle(r4::core::Bundle()));
-  ASSERT_TRUE(IsTypeOrProfileOfBundle(r4::testingcore::Bundle()));
+  ASSERT_TRUE(IsTypeOrProfileOfBundle(r4::testing::Bundle()));
 }
 
 }  // namespace

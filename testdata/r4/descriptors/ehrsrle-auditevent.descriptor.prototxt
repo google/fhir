@@ -111,7 +111,7 @@ field {
   number: 12
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.AuditEventActionCode"
+  type_name: ".google.fhir.r4.core.EHRSFMRecordLifecycleEventAuditEvent.ActionCode"
   options {
     [google.fhir.proto.field_description]: "Type of action performed during the event"
   }
@@ -142,7 +142,7 @@ field {
   number: 15
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.AuditEventOutcomeCode"
+  type_name: ".google.fhir.r4.core.EHRSFMRecordLifecycleEventAuditEvent.OutcomeCode"
   options {
     [google.fhir.proto.field_description]: "Whether the event succeeded or failed"
   }
@@ -201,6 +201,60 @@ field {
     [google.fhir.proto.field_description]: "Data or objects used"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "name.empty() or query.empty()"
+  }
+}
+nested_type {
+  name: "ActionCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.AuditEventActionCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/audit-event-action"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
+  name: "OutcomeCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r4.core.AuditEventOutcomeCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/audit-event-outcome"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
   }
 }
 nested_type {
@@ -401,9 +455,36 @@ nested_type {
       number: 5
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.AuditEventAgentNetworkTypeCode"
+      type_name: ".google.fhir.r4.core.EHRSFMRecordLifecycleEventAuditEvent.Agent.Network.TypeCode"
       options {
         [google.fhir.proto.field_description]: "The type of network access point"
+      }
+    }
+    nested_type {
+      name: "TypeCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r4.core.AuditEventAgentNetworkTypeCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r4.core.Extension"
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/network-type"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
       }
     }
   }
