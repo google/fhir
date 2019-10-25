@@ -46,7 +46,8 @@ $PROTO_GENERATOR \
   --output_directory $OUTPUT_PATH \
   --input_bundle $INPUT_PATH/Bundle-types.json \
   --exclude Reference \
-  --exclude Extension
+  --exclude Extension \
+  --exclude Element
 
 # Some datatypes are manually generated.
 # These include:
