@@ -223,7 +223,7 @@ message ProfileForCatalog {
     repeated Extension modifier_extension = 3;
 
     // replaces | transforms | signs | appends
-    message CodeCode {
+    message CodeType {
       option (.google.fhir.proto.structure_definition_kind) =
           KIND_PRIMITIVE_TYPE;
       option (.google.fhir.proto.fhir_valueset_url) =
@@ -237,7 +237,7 @@ message ProfileForCatalog {
 
       repeated Extension extension = 3;
     }
-    CodeCode code = 4
+    CodeType code = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Target of the relationship

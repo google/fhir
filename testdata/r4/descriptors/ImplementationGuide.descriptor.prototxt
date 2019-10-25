@@ -979,7 +979,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.ImplementationGuide.Definition.Parameter.CodeCode"
+      type_name: ".google.fhir.r4.core.ImplementationGuide.Definition.Parameter.CodeType"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "apply | path-resource | path-pages | path-tx-cache | expansion-parameter | rule-broken-links | generate-xml | generate-json | generate-turtle | html-template"
@@ -997,7 +997,7 @@ nested_type {
       }
     }
     nested_type {
-      name: "CodeCode"
+      name: "CodeType"
       field {
         name: "value"
         number: 1

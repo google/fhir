@@ -145,7 +145,7 @@ nested_type {
     number: 5
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.OperationOutcome.Issue.CodeCode"
+    type_name: ".google.fhir.r4.core.OperationOutcome.Issue.CodeType"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Error or warning code"
@@ -219,7 +219,7 @@ nested_type {
     }
   }
   nested_type {
-    name: "CodeCode"
+    name: "CodeType"
     field {
       name: "value"
       number: 1

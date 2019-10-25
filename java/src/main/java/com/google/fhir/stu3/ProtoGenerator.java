@@ -1201,7 +1201,8 @@ public class ProtoGenerator {
         typeName = typeName + "X";
       }
       if (packageString.startsWith(typeName + ".")
-          || packageString.contains("." + typeName + ".")) {
+          || packageString.contains("." + typeName + ".")
+          || (typeName.equals("Code") && lastDotIndex != -1)) {
         typeName = typeName + "Type";
       }
     }
@@ -1259,11 +1260,18 @@ public class ProtoGenerator {
         // fields.
         String containerType = getContainerType(element, elementList);
         int lastDotIndex = containerType.lastIndexOf(".");
+
+        String containerTypeName = containerType.substring(lastDotIndex + 1);
+        if (containerTypeName.endsWith("CodeType")) {
+          // If we added "Type" to the end of a Code field to disambiguate it, drop the "Type"
+          // because we don't need to disambiguate anymore.  This is a "Hack".
+          containerTypeName = containerTypeName.substring(0, containerTypeName.length() - 4);
+        }
         return new QualifiedType(
             containerType.substring(0, lastDotIndex + 1)
                 + normalizedFhirTypeName
                 + "For"
-                + containerType.substring(lastDotIndex + 1),
+                + containerTypeName,
             packageInfo.getProtoPackage());
       }
 
@@ -1730,10 +1738,12 @@ public class ProtoGenerator {
       Optional<String> valueSetUrl = getBindingValueSetUrl(valueElement, elementList);
       if (valueSetUrl.isPresent()) {
         if (typeName.equals("code")) {
-          return Optional.of(
-              new QualifiedType(
-                  getContainerType(namingElement, elementList) + "Code",
-                  packageInfo.getProtoPackage()));
+          String containerName = getContainerType(namingElement, elementList);
+          if (!containerName.endsWith(".CodeType")) {
+            // Carve out an exception for CodeType because CodeTypeCode sounds silly.
+            containerName = containerName + "Code";
+          }
+          return Optional.of(new QualifiedType(containerName, packageInfo.getProtoPackage()));
         }
         if (!useLegacyTypeNaming() && typeName.equals("Coding")) {
           return Optional.of(

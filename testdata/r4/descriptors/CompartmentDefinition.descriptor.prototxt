@@ -203,7 +203,7 @@ field {
   number: 21
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.CompartmentDefinition.CodeCode"
+  type_name: ".google.fhir.r4.core.CompartmentDefinition.CodeType"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Patient | Encounter | RelatedPerson | Practitioner | Device"
@@ -259,7 +259,7 @@ nested_type {
   }
 }
 nested_type {
-  name: "CodeCode"
+  name: "CodeType"
   field {
     name: "value"
     number: 1
@@ -322,7 +322,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.CompartmentDefinition.Resource.CodeCode"
+    type_name: ".google.fhir.r4.core.CompartmentDefinition.Resource.CodeType"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Name of resource type"
@@ -349,7 +349,7 @@ nested_type {
     }
   }
   nested_type {
-    name: "CodeCode"
+    name: "CodeType"
     field {
       name: "value"
       number: 1

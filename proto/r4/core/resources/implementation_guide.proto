@@ -374,7 +374,7 @@ message ImplementationGuide {
       // apply | path-resource | path-pages | path-tx-cache |
       // expansion-parameter | rule-broken-links | generate-xml | generate-json
       // | generate-turtle | html-template
-      message CodeCode {
+      message CodeType {
         option (.google.fhir.proto.structure_definition_kind) =
             KIND_PRIMITIVE_TYPE;
         option (.google.fhir.proto.fhir_valueset_url) =
@@ -388,7 +388,7 @@ message ImplementationGuide {
 
         repeated Extension extension = 3;
       }
-      CodeCode code = 4
+      CodeType code = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Value for named type

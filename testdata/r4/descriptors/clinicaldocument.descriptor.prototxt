@@ -514,7 +514,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.ClinicalDocument.RelatesTo.CodeCode"
+    type_name: ".google.fhir.r4.core.ClinicalDocument.RelatesTo.CodeType"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "replaces | transforms | signs | appends"
@@ -532,7 +532,7 @@ nested_type {
     }
   }
   nested_type {
-    name: "CodeCode"
+    name: "CodeType"
     field {
       name: "value"
       number: 1

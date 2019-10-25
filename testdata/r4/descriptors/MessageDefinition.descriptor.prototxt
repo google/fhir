@@ -447,7 +447,7 @@ nested_type {
     number: 4
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.MessageDefinition.Focus.CodeCode"
+    type_name: ".google.fhir.r4.core.MessageDefinition.Focus.CodeType"
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Type of resource"
@@ -485,7 +485,7 @@ nested_type {
     }
   }
   nested_type {
-    name: "CodeCode"
+    name: "CodeType"
     field {
       name: "value"
       number: 1

@@ -205,7 +205,7 @@ field {
   number: 21
   label: LABEL_REPEATED
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.SubstanceSpecification.Code"
+  type_name: ".google.fhir.r4.core.SubstanceSpecification.CodeType"
   options {
     [google.fhir.proto.field_description]: "Codes associated with the substance"
     [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
@@ -881,7 +881,7 @@ nested_type {
   }
 }
 nested_type {
-  name: "Code"
+  name: "CodeType"
   field {
     name: "id"
     number: 1

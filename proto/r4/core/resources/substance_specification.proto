@@ -303,7 +303,7 @@ message SubstanceSpecification {
            "hasValue() or (children().count() > id.count())"];
 
   // Codes associated with the substance
-  message Code {
+  message CodeType {
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -330,7 +330,7 @@ message SubstanceSpecification {
     repeated Reference source = 8
         [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
   }
-  repeated Code code = 21
+  repeated CodeType code = 21
       [(.google.fhir.proto.fhir_path_constraint) =
            "hasValue() or (children().count() > id.count())"];
 

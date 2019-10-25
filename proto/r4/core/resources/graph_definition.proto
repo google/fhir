@@ -224,7 +224,7 @@ message GraphDefinition {
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
         // Identifies the compartment
-        message CodeCode {
+        message CodeType {
           option (.google.fhir.proto.structure_definition_kind) =
               KIND_PRIMITIVE_TYPE;
           option (.google.fhir.proto.fhir_valueset_url) =
@@ -238,7 +238,7 @@ message GraphDefinition {
 
           repeated Extension extension = 3;
         }
-        CodeCode code = 5
+        CodeType code = 5
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
         // identical | matching | different | custom

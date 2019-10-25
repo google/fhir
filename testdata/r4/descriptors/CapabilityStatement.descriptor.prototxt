@@ -1113,7 +1113,7 @@ nested_type {
         number: 4
         label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
-        type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource.ResourceInteraction.CodeCode"
+        type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource.ResourceInteraction.CodeType"
         options {
           [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
           [google.fhir.proto.field_description]: "read | vread | update | patch | delete | history-instance | history-type | create | search-type"
@@ -1130,12 +1130,12 @@ nested_type {
         }
       }
       nested_type {
-        name: "CodeCode"
+        name: "CodeType"
         field {
           name: "value"
           number: 1
           type: TYPE_ENUM
-          type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource.ResourceInteraction.CodeCode.Value"
+          type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource.ResourceInteraction.CodeType.Value"
         }
         field {
           name: "id"
@@ -1540,7 +1540,7 @@ nested_type {
       number: 4
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
-      type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.SystemInteraction.CodeCode"
+      type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.SystemInteraction.CodeType"
       options {
         [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
         [google.fhir.proto.field_description]: "transaction | batch | search-system | history-system"
@@ -1557,12 +1557,12 @@ nested_type {
       }
     }
     nested_type {
-      name: "CodeCode"
+      name: "CodeType"
       field {
         name: "value"
         number: 1
         type: TYPE_ENUM
-        type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.SystemInteraction.CodeCode.Value"
+        type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.SystemInteraction.CodeType.Value"
       }
       field {
         name: "id"

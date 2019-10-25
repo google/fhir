@@ -91,7 +91,7 @@ message OperationOutcome {
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Error or warning code
-    message CodeCode {
+    message CodeType {
       option (.google.fhir.proto.structure_definition_kind) =
           KIND_PRIMITIVE_TYPE;
       option (.google.fhir.proto.fhir_valueset_url) =
@@ -105,7 +105,7 @@ message OperationOutcome {
 
       repeated Extension extension = 3;
     }
-    CodeCode code = 5
+    CodeType code = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Additional details about the error

@@ -361,7 +361,7 @@ message CapabilityStatement {
 
         // read | vread | update | patch | delete | history-instance |
         // history-type | create | search-type
-        message CodeCode {
+        message CodeType {
           option (.google.fhir.proto.structure_definition_kind) =
               KIND_PRIMITIVE_TYPE;
           option (.google.fhir.proto.fhir_valueset_url) =
@@ -397,7 +397,7 @@ message CapabilityStatement {
 
           repeated Extension extension = 3;
         }
-        CodeCode code = 4
+        CodeType code = 4
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
         // Anything special about operation behavior
@@ -582,7 +582,7 @@ message CapabilityStatement {
       repeated Extension modifier_extension = 3;
 
       // transaction | batch | search-system | history-system
-      message CodeCode {
+      message CodeType {
         option (.google.fhir.proto.structure_definition_kind) =
             KIND_PRIMITIVE_TYPE;
         option (.google.fhir.proto.fhir_valueset_url) =
@@ -607,7 +607,7 @@ message CapabilityStatement {
 
         repeated Extension extension = 3;
       }
-      CodeCode code = 4
+      CodeType code = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
       // Anything special about operation behavior
