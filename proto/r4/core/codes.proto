@@ -171,6 +171,36 @@ message ActionSelectionBehaviorCode {
   }
 }
 
+// The type of an address (physical / postal).
+// See http://hl7.org/fhir/address-type
+message AddressTypeCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/address-type";
+
+    INVALID_UNINITIALIZED = 0;
+    POSTAL = 1;
+    PHYSICAL = 2;
+    BOTH = 3;
+  }
+}
+
+// The use of an address.
+// See http://hl7.org/fhir/address-use
+message AddressUseCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/address-use";
+
+    INVALID_UNINITIALIZED = 0;
+    HOME = 1;
+    WORK = 2;
+    TEMP = 3;
+    OLD = 4;
+    BILLING = 5;
+  }
+}
+
 // The gender of a person used for administrative purposes.
 // See http://hl7.org/fhir/administrative-gender
 message AdministrativeGenderCode {
@@ -228,6 +258,20 @@ message AdverseEventSeverityCode {
     MILD = 1;
     MODERATE = 2;
     SEVERE = 3;
+  }
+}
+
+// How resource references can be aggregated.
+// See http://hl7.org/fhir/resource-aggregation-mode
+message AggregationModeCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/resource-aggregation-mode";
+
+    INVALID_UNINITIALIZED = 0;
+    CONTAINED = 1;
+    REFERENCED = 2;
+    BUNDLED = 3;
   }
 }
 
@@ -436,11 +480,11 @@ message AuditEventAgentNetworkTypeCode {
         "http://hl7.org/fhir/network-type";
 
     INVALID_UNINITIALIZED = 0;
-    NUM_1 = 1 [(.google.fhir.proto.fhir_original_code) = "1"];
-    NUM_2 = 2 [(.google.fhir.proto.fhir_original_code) = "2"];
-    NUM_3 = 3 [(.google.fhir.proto.fhir_original_code) = "3"];
-    NUM_4 = 4 [(.google.fhir.proto.fhir_original_code) = "4"];
-    NUM_5 = 5 [(.google.fhir.proto.fhir_original_code) = "5"];
+    MACHINE_NAME = 1 [(.google.fhir.proto.fhir_original_code) = "1"];
+    IP_ADDRESS = 2 [(.google.fhir.proto.fhir_original_code) = "2"];
+    TELEPHONE_NUMBER = 3 [(.google.fhir.proto.fhir_original_code) = "3"];
+    EMAIL_ADDRESS = 4 [(.google.fhir.proto.fhir_original_code) = "4"];
+    URI = 5 [(.google.fhir.proto.fhir_original_code) = "5"];
   }
 }
 
@@ -452,10 +496,10 @@ message AuditEventOutcomeCode {
         "http://hl7.org/fhir/audit-event-outcome";
 
     INVALID_UNINITIALIZED = 0;
-    NUM_0 = 1 [(.google.fhir.proto.fhir_original_code) = "0"];
-    NUM_4 = 2 [(.google.fhir.proto.fhir_original_code) = "4"];
-    NUM_8 = 3 [(.google.fhir.proto.fhir_original_code) = "8"];
-    NUM_12 = 4 [(.google.fhir.proto.fhir_original_code) = "12"];
+    SUCCESS = 1 [(.google.fhir.proto.fhir_original_code) = "0"];
+    MINOR_FAILURE = 2 [(.google.fhir.proto.fhir_original_code) = "4"];
+    SERIOUS_FAILURE = 3 [(.google.fhir.proto.fhir_original_code) = "8"];
+    MAJOR_FAILURE = 4 [(.google.fhir.proto.fhir_original_code) = "12"];
   }
 }
 
@@ -470,6 +514,21 @@ message BenefitCostApplicabilityCode {
     IN_NETWORK = 1;
     OUT_OF_NETWORK = 2;
     OTHER = 3;
+  }
+}
+
+// Indication of the degree of conformance expectations associated with a
+// binding. See http://hl7.org/fhir/binding-strength
+message BindingStrengthCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/binding-strength";
+
+    INVALID_UNINITIALIZED = 0;
+    REQUIRED = 1;
+    EXTENSIBLE = 2;
+    PREFERRED = 3;
+    EXAMPLE = 4;
   }
 }
 
@@ -898,6 +957,53 @@ message ConsentStateCode {
   }
 }
 
+// SHALL applications comply with this constraint?
+// See http://hl7.org/fhir/constraint-severity
+message ConstraintSeverityCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/constraint-severity";
+
+    INVALID_UNINITIALIZED = 0;
+    ERROR = 1;
+    WARNING = 2;
+  }
+}
+
+// Telecommunications form for contact point.
+// See http://hl7.org/fhir/contact-point-system
+message ContactPointSystemCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/contact-point-system";
+
+    INVALID_UNINITIALIZED = 0;
+    PHONE = 1;
+    FAX = 2;
+    EMAIL = 3;
+    PAGER = 4;
+    URL = 5;
+    SMS = 6;
+    OTHER = 7;
+  }
+}
+
+// Use of contact point.
+// See http://hl7.org/fhir/contact-point-use
+message ContactPointUseCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/contact-point-use";
+
+    INVALID_UNINITIALIZED = 0;
+    HOME = 1;
+    WORK = 2;
+    TEMP = 3;
+    OLD = 4;
+    MOBILE = 5;
+  }
+}
+
 // This value set contract specific codes for status.
 // See http://hl7.org/fhir/contract-publicationstatus
 message ContractResourcePublicationStatusCode {
@@ -947,6 +1053,21 @@ message ContractResourceStatusCode {
     REVOKED = 13;
     RESOLVED = 14;
     TERMINATED = 15;
+  }
+}
+
+// The type of contributor.
+// See http://hl7.org/fhir/contributor-type
+message ContributorTypeCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/contributor-type";
+
+    INVALID_UNINITIALIZED = 0;
+    AUTHOR = 1;
+    EDITOR = 2;
+    REVIEWER = 3;
+    ENDORSER = 4;
   }
 }
 
@@ -1065,6 +1186,24 @@ message DataTypeCode {
     URL = 61;
     UUID = 62;
     XHTML = 63;
+  }
+}
+
+// The days of the week.
+// See http://hl7.org/fhir/days-of-week
+message DaysOfWeekCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/days-of-week";
+
+    INVALID_UNINITIALIZED = 0;
+    MON = 1;
+    TUE = 2;
+    WED = 3;
+    THU = 4;
+    FRI = 5;
+    SAT = 6;
+    SUN = 7;
   }
 }
 
@@ -1213,6 +1352,22 @@ message DiagnosticReportStatusCode {
     CANCELLED = 8;
     ENTERED_IN_ERROR = 9;
     UNKNOWN = 10;
+  }
+}
+
+// How an element value is interpreted when discrimination is evaluated.
+// See http://hl7.org/fhir/discriminator-type
+message DiscriminatorTypeCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/discriminator-type";
+
+    INVALID_UNINITIALIZED = 0;
+    VALUE = 1;
+    EXISTS = 2;
+    PATTERN = 3;
+    TYPE = 4;
+    PROFILE = 5;
   }
 }
 
@@ -1403,6 +1558,29 @@ message EventStatusCode {
   }
 }
 
+// Real world event relating to the schedule.
+// See http://hl7.org/fhir/event-timing
+message EventTimingCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/event-timing";
+
+    INVALID_UNINITIALIZED = 0;
+    MORN = 1 [(.google.fhir.proto.fhir_original_code) = "MORN"];
+    MORN_EARLY = 2 [(.google.fhir.proto.fhir_original_code) = "MORN.early"];
+    MORN_LATE = 3 [(.google.fhir.proto.fhir_original_code) = "MORN.late"];
+    NOON = 4 [(.google.fhir.proto.fhir_original_code) = "NOON"];
+    AFT = 5 [(.google.fhir.proto.fhir_original_code) = "AFT"];
+    AFT_EARLY = 6 [(.google.fhir.proto.fhir_original_code) = "AFT.early"];
+    AFT_LATE = 7 [(.google.fhir.proto.fhir_original_code) = "AFT.late"];
+    EVE = 8 [(.google.fhir.proto.fhir_original_code) = "EVE"];
+    EVE_EARLY = 9 [(.google.fhir.proto.fhir_original_code) = "EVE.early"];
+    EVE_LATE = 10 [(.google.fhir.proto.fhir_original_code) = "EVE.late"];
+    NIGHT = 11 [(.google.fhir.proto.fhir_original_code) = "NIGHT"];
+    PHS = 12 [(.google.fhir.proto.fhir_original_code) = "PHS"];
+  }
+}
+
 // The possible types of variables for exposures or outcomes (E.g. Dichotomous,
 // Continuous, Descriptive). See http://hl7.org/fhir/variable-type
 message EvidenceVariableTypeCode {
@@ -1567,27 +1745,27 @@ message FHIRVersionCode {
         "http://hl7.org/fhir/FHIR-version";
 
     INVALID_UNINITIALIZED = 0;
-    NUM_0_01 = 1 [(.google.fhir.proto.fhir_original_code) = "0.01"];
-    NUM_0_05 = 2 [(.google.fhir.proto.fhir_original_code) = "0.05"];
-    NUM_0_06 = 3 [(.google.fhir.proto.fhir_original_code) = "0.06"];
-    NUM_0_11 = 4 [(.google.fhir.proto.fhir_original_code) = "0.11"];
-    NUM_0_0_80 = 5 [(.google.fhir.proto.fhir_original_code) = "0.0.80"];
-    NUM_0_0_81 = 6 [(.google.fhir.proto.fhir_original_code) = "0.0.81"];
-    NUM_0_0_82 = 7 [(.google.fhir.proto.fhir_original_code) = "0.0.82"];
-    NUM_0_4_0 = 8 [(.google.fhir.proto.fhir_original_code) = "0.4.0"];
-    NUM_0_5_0 = 9 [(.google.fhir.proto.fhir_original_code) = "0.5.0"];
-    NUM_1_0_0 = 10 [(.google.fhir.proto.fhir_original_code) = "1.0.0"];
-    NUM_1_0_1 = 11 [(.google.fhir.proto.fhir_original_code) = "1.0.1"];
-    NUM_1_0_2 = 12 [(.google.fhir.proto.fhir_original_code) = "1.0.2"];
-    NUM_1_1_0 = 13 [(.google.fhir.proto.fhir_original_code) = "1.1.0"];
-    NUM_1_4_0 = 14 [(.google.fhir.proto.fhir_original_code) = "1.4.0"];
-    NUM_1_6_0 = 15 [(.google.fhir.proto.fhir_original_code) = "1.6.0"];
-    NUM_1_8_0 = 16 [(.google.fhir.proto.fhir_original_code) = "1.8.0"];
-    NUM_3_0_0 = 17 [(.google.fhir.proto.fhir_original_code) = "3.0.0"];
-    NUM_3_0_1 = 18 [(.google.fhir.proto.fhir_original_code) = "3.0.1"];
-    NUM_3_3_0 = 19 [(.google.fhir.proto.fhir_original_code) = "3.3.0"];
-    NUM_3_5_0 = 20 [(.google.fhir.proto.fhir_original_code) = "3.5.0"];
-    NUM_4_0_0 = 21 [(.google.fhir.proto.fhir_original_code) = "4.0.0"];
+    V_0_01 = 1 [(.google.fhir.proto.fhir_original_code) = "0.01"];
+    V_0_05 = 2 [(.google.fhir.proto.fhir_original_code) = "0.05"];
+    V_0_06 = 3 [(.google.fhir.proto.fhir_original_code) = "0.06"];
+    V_0_11 = 4 [(.google.fhir.proto.fhir_original_code) = "0.11"];
+    V_0_0_80 = 5 [(.google.fhir.proto.fhir_original_code) = "0.0.80"];
+    V_0_0_81 = 6 [(.google.fhir.proto.fhir_original_code) = "0.0.81"];
+    V_0_0_82 = 7 [(.google.fhir.proto.fhir_original_code) = "0.0.82"];
+    V_0_4_0 = 8 [(.google.fhir.proto.fhir_original_code) = "0.4.0"];
+    V_0_5_0 = 9 [(.google.fhir.proto.fhir_original_code) = "0.5.0"];
+    V_1_0_0 = 10 [(.google.fhir.proto.fhir_original_code) = "1.0.0"];
+    V_1_0_1 = 11 [(.google.fhir.proto.fhir_original_code) = "1.0.1"];
+    V_1_0_2 = 12 [(.google.fhir.proto.fhir_original_code) = "1.0.2"];
+    V_1_1_0 = 13 [(.google.fhir.proto.fhir_original_code) = "1.1.0"];
+    V_1_4_0 = 14 [(.google.fhir.proto.fhir_original_code) = "1.4.0"];
+    V_1_6_0 = 15 [(.google.fhir.proto.fhir_original_code) = "1.6.0"];
+    V_1_8_0 = 16 [(.google.fhir.proto.fhir_original_code) = "1.8.0"];
+    V_3_0_0 = 17 [(.google.fhir.proto.fhir_original_code) = "3.0.0"];
+    V_3_0_1 = 18 [(.google.fhir.proto.fhir_original_code) = "3.0.1"];
+    V_3_3_0 = 19 [(.google.fhir.proto.fhir_original_code) = "3.3.0"];
+    V_3_5_0 = 20 [(.google.fhir.proto.fhir_original_code) = "3.5.0"];
+    V_4_0_0 = 21 [(.google.fhir.proto.fhir_original_code) = "4.0.0"];
   }
 }
 
@@ -1870,6 +2048,22 @@ message HumanNameAssemblyOrderCode {
     NL2 = 2 [(.google.fhir.proto.fhir_original_code) = "NL2"];
     NL3 = 3 [(.google.fhir.proto.fhir_original_code) = "NL3"];
     NL4 = 4 [(.google.fhir.proto.fhir_original_code) = "NL4"];
+  }
+}
+
+// Identifies the purpose for this identifier, if known .
+// See http://hl7.org/fhir/identifier-use
+message IdentifierUseCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/identifier-use";
+
+    INVALID_UNINITIALIZED = 0;
+    USUAL = 1;
+    OFFICIAL = 2;
+    TEMP = 3;
+    SECONDARY = 4;
+    OLD = 5;
   }
 }
 
@@ -2305,6 +2499,24 @@ message MessageheaderResponseRequestCode {
   }
 }
 
+// The use of a human name.
+// See http://hl7.org/fhir/name-use
+message NameUseCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/name-use";
+
+    INVALID_UNINITIALIZED = 0;
+    USUAL = 1;
+    OFFICIAL = 2;
+    TEMP = 3;
+    NICKNAME = 4;
+    ANONYMOUS = 5;
+    OLD = 6;
+    MAIDEN = 7;
+  }
+}
+
 // Identifies the style of unique identifier used to identify a namespace.
 // See http://hl7.org/fhir/namingsystem-identifier-type
 message NamingSystemIdentifierTypeCode {
@@ -2331,6 +2543,21 @@ message NamingSystemTypeCode {
     CODESYSTEM = 1;
     IDENTIFIER = 2;
     ROOT = 3;
+  }
+}
+
+// The status of a resource narrative.
+// See http://hl7.org/fhir/narrative-status
+message NarrativeStatusCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/narrative-status";
+
+    INVALID_UNINITIALIZED = 0;
+    GENERATED = 1;
+    EXTENSIONS = 2;
+    ADDITIONAL = 3;
+    EMPTY = 4;
   }
 }
 
@@ -2417,6 +2644,19 @@ message OperationKindCode {
   }
 }
 
+// Whether an operation parameter is an input or an output parameter.
+// See http://hl7.org/fhir/operation-parameter-use
+message OperationParameterUseCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/operation-parameter-use";
+
+    INVALID_UNINITIALIZED = 0;
+    IN = 1;
+    OUT = 2;
+  }
+}
+
 // Type for orientation.
 // See http://hl7.org/fhir/orientation-type
 message OrientationTypeCode {
@@ -2456,6 +2696,22 @@ message ParticipationStatusCode {
     DECLINED = 2;
     TENTATIVE = 3;
     NEEDS_ACTION = 4;
+  }
+}
+
+// How a property is represented when serialized.
+// See http://hl7.org/fhir/property-representation
+message PropertyRepresentationCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/property-representation";
+
+    INVALID_UNINITIALIZED = 0;
+    XML_ATTR = 1 [(.google.fhir.proto.fhir_original_code) = "xmlAttr"];
+    XML_TEXT = 2 [(.google.fhir.proto.fhir_original_code) = "xmlText"];
+    TYPE_ATTR = 3 [(.google.fhir.proto.fhir_original_code) = "typeAttr"];
+    CDA_TEXT = 4 [(.google.fhir.proto.fhir_original_code) = "cdaText"];
+    XHTML = 5;
   }
 }
 
@@ -2519,6 +2775,22 @@ message QualityTypeCode {
     INDEL = 1;
     SNP = 2;
     UNKNOWN = 3;
+  }
+}
+
+// How the Quantity should be understood and represented.
+// See http://hl7.org/fhir/quantity-comparator
+message QuantityComparatorCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/quantity-comparator";
+
+    INVALID_UNINITIALIZED = 0;
+    LESS_THAN = 1 [(.google.fhir.proto.fhir_original_code) = "<"];
+    LESS_THAN_OR_EQUAL_TO = 2 [(.google.fhir.proto.fhir_original_code) = "<="];
+    GREATER_THAN_OR_EQUAL_TO = 3
+        [(.google.fhir.proto.fhir_original_code) = ">="];
+    GREATER_THAN = 4 [(.google.fhir.proto.fhir_original_code) = ">"];
   }
 }
 
@@ -2615,6 +2887,39 @@ message ReferenceHandlingPolicyCode {
     RESOLVES = 3;
     ENFORCED = 4;
     LOCAL = 5;
+  }
+}
+
+// Whether a reference needs to be version specific or version independent, or
+// whether either can be used. See http://hl7.org/fhir/reference-version-rules
+message ReferenceVersionRulesCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/reference-version-rules";
+
+    INVALID_UNINITIALIZED = 0;
+    EITHER = 1;
+    INDEPENDENT = 2;
+    SPECIFIC = 3;
+  }
+}
+
+// The type of relationship to the related artifact.
+// See http://hl7.org/fhir/related-artifact-type
+message RelatedArtifactTypeCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/related-artifact-type";
+
+    INVALID_UNINITIALIZED = 0;
+    DOCUMENTATION = 1;
+    JUSTIFICATION = 2;
+    CITATION = 3;
+    PREDECESSOR = 4;
+    SUCCESSOR = 5;
+    DERIVED_FROM = 6;
+    DEPENDS_ON = 7;
+    COMPOSED_OF = 8;
   }
 }
 
@@ -3120,7 +3425,8 @@ message SPDXLicenseCode {
 
     INVALID_UNINITIALIZED = 0;
     NOT_OPEN_SOURCE = 1;
-    NUM_0BSD = 2 [(.google.fhir.proto.fhir_original_code) = "0BSD"];
+    BSD_ZERO_CLAUSE_LICENSE = 2
+        [(.google.fhir.proto.fhir_original_code) = "0BSD"];
     AAL = 3 [(.google.fhir.proto.fhir_original_code) = "AAL"];
     ABSTYLES = 4 [(.google.fhir.proto.fhir_original_code) = "Abstyles"];
     ADOBE_2006 = 5 [(.google.fhir.proto.fhir_original_code) = "Adobe-2006"];
@@ -3655,6 +3961,20 @@ message SequenceTypeCode {
   }
 }
 
+// How slices are interpreted when evaluating an instance.
+// See http://hl7.org/fhir/resource-slicing-rules
+message SlicingRulesCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/resource-slicing-rules";
+
+    INVALID_UNINITIALIZED = 0;
+    CLOSED = 1;
+    OPEN = 2;
+    OPEN_AT_END = 3 [(.google.fhir.proto.fhir_original_code) = "openAtEnd"];
+  }
+}
+
 // The free/busy status of the slot.
 // See http://hl7.org/fhir/slotstatus
 message SlotStatusCode {
@@ -3693,6 +4013,19 @@ message SmartCapabilitiesCode {
     PERMISSION_OFFLINE = 12;
     PERMISSION_PATIENT = 13;
     PERMISSION_USER = 14;
+  }
+}
+
+// The possible sort directions, ascending or descending.
+// See http://hl7.org/fhir/sort-direction
+message SortDirectionCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/sort-direction";
+
+    INVALID_UNINITIALIZED = 0;
+    ASCENDING = 1;
+    DESCENDING = 2;
   }
 }
 
@@ -4106,6 +4439,25 @@ message TestScriptRequestMethodCode {
     POST = 5;
     PUT = 6;
     HEAD = 7;
+  }
+}
+
+// The type of trigger.
+// See http://hl7.org/fhir/trigger-type
+message TriggerTypeCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/trigger-type";
+
+    INVALID_UNINITIALIZED = 0;
+    NAMED_EVENT = 1;
+    PERIODIC = 2;
+    DATA_CHANGED = 3;
+    DATA_ADDED = 4;
+    DATA_MODIFIED = 5;
+    DATA_REMOVED = 6;
+    DATA_ACCESSED = 7;
+    DATA_ACCESS_ENDED = 8;
   }
 }
 
@@ -4936,6 +5288,35 @@ message V3RoleCode {
     NAMED = 395 [(.google.fhir.proto.fhir_original_code) = "NAMED"];
     PSYCHCF = 396 [(.google.fhir.proto.fhir_original_code) = "PSYCHCF"];
     SUBSCR = 397 [(.google.fhir.proto.fhir_original_code) = "SUBSCR"];
+  }
+}
+
+// **** MISSING DEFINITIONS ****
+// See http://terminology.hl7.org/CodeSystem/v3-TimingEvent
+message V3TimingEventCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://terminology.hl7.org/CodeSystem/v3-TimingEvent";
+
+    INVALID_UNINITIALIZED = 0;
+    AC = 1 [(.google.fhir.proto.fhir_original_code) = "AC"];
+    ACD = 2 [(.google.fhir.proto.fhir_original_code) = "ACD"];
+    ACM = 3 [(.google.fhir.proto.fhir_original_code) = "ACM"];
+    ACV = 4 [(.google.fhir.proto.fhir_original_code) = "ACV"];
+    C = 5 [(.google.fhir.proto.fhir_original_code) = "C"];
+    CD = 6 [(.google.fhir.proto.fhir_original_code) = "CD"];
+    CM = 7 [(.google.fhir.proto.fhir_original_code) = "CM"];
+    CV = 8 [(.google.fhir.proto.fhir_original_code) = "CV"];
+    HS = 9 [(.google.fhir.proto.fhir_original_code) = "HS"];
+    IC = 10 [(.google.fhir.proto.fhir_original_code) = "IC"];
+    ICD = 11 [(.google.fhir.proto.fhir_original_code) = "ICD"];
+    ICM = 12 [(.google.fhir.proto.fhir_original_code) = "ICM"];
+    ICV = 13 [(.google.fhir.proto.fhir_original_code) = "ICV"];
+    PC = 14 [(.google.fhir.proto.fhir_original_code) = "PC"];
+    PCD = 15 [(.google.fhir.proto.fhir_original_code) = "PCD"];
+    PCM = 16 [(.google.fhir.proto.fhir_original_code) = "PCM"];
+    PCV = 17 [(.google.fhir.proto.fhir_original_code) = "PCV"];
+    WAKE = 18 [(.google.fhir.proto.fhir_original_code) = "WAKE"];
   }
 }
 

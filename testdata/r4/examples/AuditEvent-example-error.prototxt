@@ -44,7 +44,7 @@ recorded {
   precision: SECOND
 }
 outcome {
-  value: NUM_8
+  value: SERIOUS_FAILURE
 }
 outcome_desc {
   value: "Invalid request to create an Operation resource on the Patient endpoint."
@@ -114,7 +114,7 @@ agent {
       value: "Workstation1.ehr.familyclinic.com"
     }
     type {
-      value: NUM_1
+      value: MACHINE_NAME
     }
   }
 }

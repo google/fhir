@@ -40,7 +40,7 @@ recorded {
   precision: SECOND
 }
 outcome {
-  value: NUM_0
+  value: SUCCESS
 }
 agent {
   type {
@@ -75,7 +75,7 @@ agent {
       value: "127.0.0.1"
     }
     type {
-      value: NUM_2
+      value: IP_ADDRESS
     }
   }
 }
@@ -113,7 +113,7 @@ agent {
       value: "Workstation1.ehr.familyclinic.com"
     }
     type {
-      value: NUM_1
+      value: MACHINE_NAME
     }
   }
 }

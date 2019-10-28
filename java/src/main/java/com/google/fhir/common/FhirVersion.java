@@ -40,20 +40,19 @@ public enum FhirVersion {
               com.google.fhir.stu3.proto.ElementDefinitionBindingName.getDescriptor().getFile(),
           "codes.proto", com.google.fhir.stu3.proto.AbstractTypeCode.getDescriptor().getFile()),
       com.google.fhir.stu3.proto.ContainedResource.getDescriptor(),
-      FHIRVersionCode.Value.NUM_3_0_1),
+      FHIRVersionCode.Value.V_3_0_1),
   R4(
       "google.fhir.r4.core",
       "proto/r4/core",
       ImmutableList.of(
           com.google.fhir.r4.core.AccountStatusCode.getDescriptor().getFile(),
-          com.google.fhir.r4.core.AddressTypeCode.getDescriptor().getFile(),
           com.google.fhir.r4.uscore.RaceAndEthnicityCDCCode.getDescriptor().getFile()),
       ImmutableMap.of(
           "datatypes.proto", com.google.fhir.r4.core.Decimal.getDescriptor().getFile(),
           "extensions.proto", com.google.fhir.r4.core.MimeType.getDescriptor().getFile(),
           "codes.proto", com.google.fhir.r4.core.AccountStatusCode.getDescriptor().getFile()),
       com.google.fhir.r4.core.ContainedResource.getDescriptor(),
-      FHIRVersionCode.Value.NUM_4_0_0);
+      FHIRVersionCode.Value.V_4_0_0);
 
   // The proto package of the core FHIR structures.
   public final String coreProtoPackage;

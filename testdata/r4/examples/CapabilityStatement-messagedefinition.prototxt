@@ -56,7 +56,7 @@ implementation {
   }
 }
 fhir_version {
-  value: NUM_4_0_0
+  value: V_4_0_0
 }
 format {
   value: "xml"

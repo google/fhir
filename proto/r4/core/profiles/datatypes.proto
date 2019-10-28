@@ -17,6 +17,7 @@ syntax = "proto3";
 package google.fhir.r4.core;
 
 import "proto/annotations.proto";
+import "proto/r4/core/codes.proto";
 import "proto/r4/core/datatypes.proto";
 import "proto/r4/core/extensions.proto";
 

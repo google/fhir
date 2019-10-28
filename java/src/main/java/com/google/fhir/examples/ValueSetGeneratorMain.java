@@ -125,7 +125,7 @@ final class ValueSetGeneratorMain {
 
     ValueSetGenerator generator = new ValueSetGenerator(packageInfo, valueSets, codeSystems);
 
-    ProtoFilePrinter printer = new ProtoFilePrinter();
+    ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
 
     System.out.println("Writing " + args.outputName + "...");
     File outputFile = new File(args.outputName);

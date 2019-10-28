@@ -80,7 +80,7 @@ license {
   value: CC0_1_0
 }
 fhir_version {
-  value: NUM_4_0_0
+  value: V_4_0_0
 }
 depends_on {
   uri {

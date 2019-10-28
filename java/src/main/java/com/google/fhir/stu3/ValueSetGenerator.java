@@ -404,7 +404,6 @@ public class ValueSetGenerator {
     builder.addValue(
         EnumValueDescriptorProto.newBuilder().setNumber(0).setName("INVALID_UNINITIALIZED"));
     int enumNumber = 1;
-    Set<String> codes = new HashSet<>();
     for (ValueSet.Compose.ConceptSet conceptSet : includes) {
       if (!conceptSet.getValueSetList().isEmpty()) {
         printNoEnumWarning(url, "Complex ConceptSets are not yet implemented");
@@ -423,7 +422,6 @@ public class ValueSetGenerator {
               url, "Unable to find all codes for system: " + conceptSet.getSystem().getValue());
           return Optional.empty();
         }
-        codes.add(valueBuilder.getName());
         builder.addValue(valueBuilder.setNumber(enumNumber++));
       }
     }
@@ -608,18 +606,17 @@ public class ValueSetGenerator {
     if (CODE_RENAMES.containsKey(rawCode)) {
       return CODE_RENAMES.get(rawCode);
     }
-    // TODO: enable this to have cleaner enums
-    // if (Character.isDigit(rawCode.charAt(0))) {
-    //   if (!display.isEmpty() && !Character.isDigit(display.charAt(0))) {
-    //     // CODE_DISPLAY_TO_FULLY_SPECIFY is a hack to deal with the fact that some UsCore race
-    // codes
-    //     // have duplicate Displays for Race and Ethnicity
-    //     rawCode =
-    //         CODE_DISPLAY_TO_FULLY_SPECIFY.contains(display) ? display + "_" + rawCode : display;
-    //   } else {
-    //     rawCode = Ascii.toUpperCase("V_" + rawCode);
-    //   }
-    // }
+    if (Character.isDigit(rawCode.charAt(0))) {
+      if (!display.isEmpty() && !Character.isDigit(display.charAt(0))) {
+        // CODE_DISPLAY_TO_FULLY_SPECIFY is a hack to deal with the fact that some UsCore race
+        // codes have duplicate Displays for Race and Ethnicity
+        // TODO: handle this in a generic way.
+        rawCode =
+            CODE_DISPLAY_TO_FULLY_SPECIFY.contains(display) ? display + "_" + rawCode : display;
+      } else {
+        rawCode = Ascii.toUpperCase("V_" + rawCode);
+      }
+    }
     String sanitizedCode =
         rawCode
             .replaceAll("[',]", "")

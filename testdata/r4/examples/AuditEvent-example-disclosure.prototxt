@@ -37,7 +37,7 @@ recorded {
   precision: SECOND
 }
 outcome {
-  value: NUM_0
+  value: SUCCESS
 }
 outcome_desc {
   value: "Successful  Disclosure"
@@ -98,7 +98,7 @@ agent {
       value: "custodian.net"
     }
     type {
-      value: NUM_1
+      value: MACHINE_NAME
     }
   }
 }
@@ -131,7 +131,7 @@ agent {
       value: "marketing.land"
     }
     type {
-      value: NUM_1
+      value: MACHINE_NAME
     }
   }
   purpose_of_use {
