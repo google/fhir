@@ -413,6 +413,12 @@ fhir_proto_library(
 )
 
 fhir_proto_library(
+    srcs = ["domain_resource.proto"],
+    proto_deps = RESOURCE_DEPS,
+    proto_library_prefix = "domain_resource",
+)
+
+fhir_proto_library(
     srcs = ["effect_evidence_synthesis.proto"],
     proto_deps = RESOURCE_DEPS,
     proto_library_prefix = "effect_evidence_synthesis",
@@ -872,6 +878,12 @@ fhir_proto_library(
     srcs = ["research_subject.proto"],
     proto_deps = RESOURCE_DEPS,
     proto_library_prefix = "research_subject",
+)
+
+fhir_proto_library(
+    srcs = ["resource.proto"],
+    proto_deps = RESOURCE_DEPS,
+    proto_library_prefix = "resource",
 )
 
 fhir_proto_library(
