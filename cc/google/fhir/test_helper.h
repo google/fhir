@@ -27,10 +27,10 @@
 #include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
 #include "google/fhir/annotations.h"
-#include "google/fhir/profiles.h"
 #include "google/fhir/r4/profiles.h"
 #include "google/fhir/resource_validation.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/stu3/profiles.h"
 #include "proto/annotations.pb.h"
 #include "tensorflow/core/platform/env.h"
 
@@ -147,7 +147,7 @@ T ReadR4Proto(const string& filename) {
   return ReadProto<T>(absl::StrCat("testdata/r4/", filename));
 }
 
-string ReadFile(const string& filename) {
+inline string ReadFile(const string& filename) {
   string result;
   TF_CHECK_OK(::tensorflow::ReadFileToString(
       ::tensorflow::Env::Default(),

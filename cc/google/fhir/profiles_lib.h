@@ -33,7 +33,6 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
-#include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "tensorflow/core/lib/core/status.h"
 

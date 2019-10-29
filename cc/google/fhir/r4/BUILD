@@ -10,19 +10,12 @@ cc_library(
     hdrs = ["profiles.h"],
     strip_include_prefix = "//cc/",
     deps = [
-        "//cc/google/fhir:annotations",
-        "//cc/google/fhir:codes",
-        "//cc/google/fhir:extensions",
-        "//cc/google/fhir:profiles",
         "//cc/google/fhir:profiles_lib",
-        "//cc/google/fhir:proto_util",
-        "//cc/google/fhir:resource_validation",
-        "//cc/google/fhir:util",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto:annotations_cc_proto",
-        "@com_google_absl//absl/strings",
         "@org_tensorflow//tensorflow/core:lib",
+        "@protobuf_archive//:protobuf",
     ],
 )
 
@@ -41,7 +34,6 @@ cc_test(
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//cc/google/fhir/testutil:proto_matchers",
-        "//proto/r4:google_extensions_core_cc_proto",
         "//proto/r4:uscore_cc_proto",
         "//proto/r4/core:datatypes_cc_proto",
         "//proto/r4/core/resources:encounter_cc_proto",

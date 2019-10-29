@@ -92,30 +92,13 @@ cc_test(
 )
 
 cc_library(
-    name = "profiles",
-    srcs = [
-        "profiles.cc",
-    ],
-    hdrs = ["profiles.h"],
-    strip_include_prefix = "//cc/",
-    deps = [
-        ":profiles_lib",
-        "//cc/google/fhir/status",
-        "//cc/google/fhir/status:statusor",
-        "//proto/stu3:datatypes_cc_proto",
-        "@org_tensorflow//tensorflow/core:lib",
-        "@protobuf_archive//:protobuf",
-    ],
-)
-
-cc_library(
     name = "profiles_lib",
     srcs = ["profiles_lib.cc"],
     hdrs = ["profiles_lib.h"],
     strip_include_prefix = "//cc/",
     visibility = [
-        "//cc/google/fhir:__pkg__",
         "//cc/google/fhir/r4:__pkg__",
+        "//cc/google/fhir/stu3:__pkg__",
     ],
     deps = [
         ":annotations",
@@ -128,35 +111,9 @@ cc_library(
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto:annotations_cc_proto",
-        "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/synchronization",
         "@org_tensorflow//tensorflow/core:lib",
-    ],
-)
-
-cc_test(
-    name = "profiles_stu3_test",
-    srcs = [
-        "profiles_stu3_test.cc",
-    ],
-    data = [
-        "//testdata/stu3:examples",
-        "//testdata/stu3/profiles:testdata",
-    ],
-    deps = [
-        ":profiles",
-        ":test_helper",
-        "//cc/google/fhir/status",
-        "//cc/google/fhir/status:statusor",
-        "//cc/google/fhir/testutil:proto_matchers",
-        "//proto/stu3:datatypes_cc_proto",
-        "//proto/stu3:extensions_cc_proto",
-        "//proto/stu3:profiles_cc_proto",
-        "//proto/stu3:resources_cc_proto",
-        "//testdata/stu3/profiles:test_cc_proto",
-        "@com_google_absl//absl/strings",
-        "@com_google_googletest//:gtest_main",
     ],
 )
 
@@ -289,10 +246,10 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":annotations",
-        ":profiles",
         ":resource_validation",
         "//cc/google/fhir/r4:profiles",
         "//cc/google/fhir/status",
+        "//cc/google/fhir/stu3:profiles",
         "//proto:annotations_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest",
@@ -385,13 +342,13 @@ cc_library(
         ":extensions",
         ":fhir_types",
         ":primitive_wrapper",
-        ":profiles",
         ":proto_util",
         ":resource_validation",
         ":util",
         "//cc/google/fhir/r4:profiles",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
+        "//cc/google/fhir/stu3:profiles",
         "//proto:annotations_cc_proto",
         "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
         "//proto/stu3:datatypes_cc_proto",

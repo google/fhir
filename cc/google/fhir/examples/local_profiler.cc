@@ -19,7 +19,7 @@
 #include "absl/strings/str_cat.h"
 #include "absl/time/time.h"
 #include "google/fhir/json_format.h"
-#include "google/fhir/profiles.h"
+#include "google/fhir/stu3/profiles.h"
 #include "examples/profiles/demo.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"

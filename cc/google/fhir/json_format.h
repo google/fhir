@@ -23,10 +23,10 @@
 #include "absl/strings/match.h"
 #include "absl/time/time.h"
 #include "google/fhir/annotations.h"
-#include "google/fhir/profiles.h"
 #include "google/fhir/r4/profiles.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/stu3/profiles.h"
 #include "tensorflow/core/lib/core/errors.h"
 
 namespace google {

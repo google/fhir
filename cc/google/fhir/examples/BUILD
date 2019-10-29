@@ -9,7 +9,7 @@ cc_binary(
     srcs = ["local_profiler.cc"],
     deps = [
         "//cc/google/fhir:json_format",
-        "//cc/google/fhir:profiles",
+        "//cc/google/fhir/stu3:profiles",
         "//examples/profiles:demo_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:resources_cc_proto",

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "google/fhir/profiles.h"
+#include "google/fhir/r4/profiles.h"
 
 #include "google/protobuf/message.h"
 #include "google/fhir/profiles_lib.h"
