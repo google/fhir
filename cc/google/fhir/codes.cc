@@ -71,9 +71,6 @@ StatusOr<const EnumValueDescriptor*> StringToEnumValue(
   // "fhir_original_code" annotation for the original name.
   for (int i = 0; i < target_enum_type->value_count(); i++) {
     const EnumValueDescriptor* target_value = target_enum_type->value(i);
-    LOG(WARNING) << code_string << " : "
-                 << target_value->options().GetExtension(
-                        ::google::fhir::proto::fhir_original_code);
     if (target_value->options().HasExtension(
             ::google::fhir::proto::fhir_original_code) &&
         target_value->options().GetExtension(
