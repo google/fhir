@@ -18,6 +18,7 @@ cc_library(
         "//proto/r4/core:datatypes_cc_proto",
         "//proto/stu3:codes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
+        "@com_google_absl//absl/strings",
         "@protobuf_archive//:protobuf",
     ],
 )

@@ -14,8 +14,11 @@
 
 #include "google/fhir/codes.h"
 
+#include <unordered_map>
+
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
+#include "absl/strings/ascii.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/util.h"
@@ -36,6 +39,8 @@ using ::google::protobuf::EnumValueDescriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
+using std::string;
+using std::unordered_map;
 using ::tensorflow::errors::InvalidArgument;
 
 namespace {
@@ -49,39 +54,6 @@ string TitleCaseToUpperUnderscores(const string& src) {
     dst.push_back(absl::ascii_toupper(*iter));
   }
   return dst;
-}
-
-StatusOr<const EnumValueDescriptor*> StringToEnumValue(
-    const string& code_string, const EnumDescriptor* target_enum_type) {
-  // Try to find the Enum value by name (with some common substitutions).
-  string enum_case_code_string = code_string;
-  for (std::string::size_type i = 0; i < enum_case_code_string.length(); i++) {
-    enum_case_code_string[i] = std::toupper(enum_case_code_string[i]);
-  }
-  std::replace(enum_case_code_string.begin(), enum_case_code_string.end(), '-',
-               '_');
-  const EnumValueDescriptor* target_enum_value =
-      target_enum_type->FindValueByName(enum_case_code_string);
-  if (target_enum_value != nullptr) {
-    return target_enum_value;
-  }
-
-  // Finally, some codes had to be renamed to make them valid enum values.
-  // Iterate through all target enum values, and look for the
-  // "fhir_original_code" annotation for the original name.
-  for (int i = 0; i < target_enum_type->value_count(); i++) {
-    const EnumValueDescriptor* target_value = target_enum_type->value(i);
-    if (target_value->options().HasExtension(
-            ::google::fhir::proto::fhir_original_code) &&
-        target_value->options().GetExtension(
-            ::google::fhir::proto::fhir_original_code) == code_string) {
-      return target_value;
-    }
-  }
-
-  return InvalidArgument("Failed to convert ", code_string, " to ",
-                         target_enum_type->full_name(),
-                         ": No matching enum found.");
 }
 
 template <class CodeLike>
@@ -137,9 +109,9 @@ Status ConvertToTypedCodeInternal(const CodeLike& generic_code,
     return InvalidArgument("Invalid target message: ",
                            target_descriptor->full_name());
   }
-  FHIR_ASSIGN_OR_RETURN(
-      const EnumValueDescriptor* target_enum_value,
-      StringToEnumValue(generic_code.value(), target_value_field->enum_type()));
+  FHIR_ASSIGN_OR_RETURN(const EnumValueDescriptor* target_enum_value,
+                        CodeStringToEnumValue(generic_code.value(),
+                                              target_value_field->enum_type()));
   target_reflection->SetEnum(typed_code, target_value_field, target_enum_value);
   return Status::OK();
 }
@@ -308,6 +280,53 @@ StatusOr<typename TypedResourceTypeCode::Value> GetCodeForResourceTypeTemplate(
 
 }  // namespace
 
+StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
+    const string& code_string, const EnumDescriptor* target_enum_type) {
+  // Map from (target_enum_type->full_name() x code_string) -> result
+  // for previous runs.
+  static auto* memos =
+      new unordered_map<string,
+                        unordered_map<string, const EnumValueDescriptor*>>();
+
+  // Check for memoized result.
+  const auto memos_for_enum_type = memos->find(target_enum_type->full_name());
+  if (memos_for_enum_type != memos->end()) {
+    const auto enum_result = memos_for_enum_type->second.find(code_string);
+    if (enum_result != memos_for_enum_type->second.end()) {
+      return enum_result->second;
+    }
+  }
+
+  // Try to find the Enum value by name (with some common substitutions).
+  string enum_case_code_string = absl::AsciiStrToUpper(code_string);
+  std::replace(enum_case_code_string.begin(), enum_case_code_string.end(), '-',
+               '_');
+  const EnumValueDescriptor* target_enum_value =
+      target_enum_type->FindValueByName(enum_case_code_string);
+  if (target_enum_value != nullptr) {
+    (*memos)[target_enum_type->full_name()][code_string] = target_enum_value;
+    return target_enum_value;
+  }
+
+  // Finally, some codes had to be renamed to make them valid enum values.
+  // Iterate through all target enum values, and look for the
+  // "fhir_original_code" annotation for the original name.
+  for (int i = 0; i < target_enum_type->value_count(); i++) {
+    const EnumValueDescriptor* target_value = target_enum_type->value(i);
+    if (target_value->options().HasExtension(
+            ::google::fhir::proto::fhir_original_code) &&
+        target_value->options().GetExtension(
+            ::google::fhir::proto::fhir_original_code) == code_string) {
+      (*memos)[target_enum_type->full_name()][code_string] = target_value;
+      return target_value;
+    }
+  }
+
+  return InvalidArgument("Failed to convert ", code_string, " to ",
+                         target_enum_type->full_name(),
+                         ": No matching enum found.");
+}
+
 Status ConvertToTypedCode(const ::google::fhir::stu3::proto::Code& generic_code,
                           Message* target) {
   return ConvertToTypedCodeInternal(generic_code, target);
@@ -453,7 +472,7 @@ Status CopyCode(const Message& source, Message* target) {
       // String to Enum
       FHIR_ASSIGN_OR_RETURN(
           const EnumValueDescriptor* target_enum_value,
-          StringToEnumValue(source_value, target_value_field->enum_type()));
+          CodeStringToEnumValue(source_value, target_value_field->enum_type()));
       target_reflection->SetEnum(target, target_value_field, target_enum_value);
       return Status::OK();
     } else {

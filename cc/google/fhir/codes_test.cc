@@ -38,6 +38,7 @@ using r4::core::Encounter;
 using r4::core::FamilyMemberHistory;
 using r4::core::MetadataResource;
 using r4::core::Patient;
+using r4::core::QuestionnaireItemOperatorCode;
 using r4::core::ResourceTypeCode;
 
 using ::testing::Test;
@@ -103,6 +104,16 @@ TEST(CodesTest, TypedCodingConversion) {
                             "testdata/r4/codes/uscore_omb_1_raw.prototxt");
   TestTypedCodingConversion("testdata/r4/codes/uscore_omb_2_typed.prototxt",
                             "testdata/r4/codes/uscore_omb_2_raw.prototxt");
+}
+
+TEST(CodesTest, CodeStringToEnumValue) {
+  auto enum_descriptor = QuestionnaireItemOperatorCode::Value_descriptor();
+  auto enum_value_descriptor = enum_descriptor->FindValueByName("GREATER_THAN");
+  auto result = CodeStringToEnumValue(">", enum_descriptor);
+  ASSERT_TRUE(result.ok());
+  EXPECT_EQ(
+      CodeStringToEnumValue(">", enum_descriptor).ValueOrDie()->full_name(),
+      enum_value_descriptor->full_name());
 }
 
 }  // namespace

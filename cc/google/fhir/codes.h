@@ -26,6 +26,10 @@
 namespace google {
 namespace fhir {
 
+::google::fhir::StatusOr<const ::google::protobuf::EnumValueDescriptor*>
+CodeStringToEnumValue(const std::string& code_string,
+                      const ::google::protobuf::EnumDescriptor* target_enum_type);
+
 ::google::fhir::Status ConvertToTypedCode(
     const ::google::fhir::stu3::proto::Code& generic_code,
     google::protobuf::Message* target);
