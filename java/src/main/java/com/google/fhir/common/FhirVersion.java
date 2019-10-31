@@ -28,8 +28,7 @@ public enum FhirVersion {
       "proto/stu3",
       ImmutableList.of(
           com.google.fhir.stu3.proto.AbstractTypeCode.getDescriptor().getFile(),
-          com.google.fhir.stu3.proto.AddressTypeCode.getDescriptor().getFile(),
-          com.google.fhir.stu3.uscore.UsCoreBirthSexCode.getDescriptor().getFile()),
+          com.google.fhir.stu3.proto.AddressTypeCode.getDescriptor().getFile()),
       ImmutableMap.of(
           "datatypes.proto", com.google.fhir.stu3.proto.Decimal.getDescriptor().getFile(),
           "resources.proto",
@@ -44,9 +43,7 @@ public enum FhirVersion {
   R4(
       "google.fhir.r4.core",
       "proto/r4/core",
-      ImmutableList.of(
-          com.google.fhir.r4.core.AccountStatusCode.getDescriptor().getFile(),
-          com.google.fhir.r4.uscore.RaceAndEthnicityCDCCode.getDescriptor().getFile()),
+      ImmutableList.of(com.google.fhir.r4.core.AccountStatusCode.getDescriptor().getFile()),
       ImmutableMap.of(
           "datatypes.proto", com.google.fhir.r4.core.Decimal.getDescriptor().getFile(),
           "extensions.proto", com.google.fhir.r4.core.MimeType.getDescriptor().getFile(),

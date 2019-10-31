@@ -40,13 +40,12 @@ function get_location() {
 }
 
 FHIR_STRUCT_DEF_ZIP="$ROOT_PATH/bazel-genfiles/spec/fhir_stu3_structure_definitions.zip"
-FHIR_PACKAGE_INFO="$ROOT_PATH//spec/fhir_stu3_package_info.prototxt"
 
 COMMON_FLAGS=" \
   --emit_proto \
   --emit_descriptors \
-  --stu3_struct_def_zip $FHIR_STRUCT_DEF_ZIP \
   --package_info $FHIR_PACKAGE_INFO \
+  --r4_core_dep $FHIR_DEFINITION_ZIP \
   --output_directory $OUTPUT_PATH \
   --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH" \
 

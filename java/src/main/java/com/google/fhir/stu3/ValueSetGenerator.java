@@ -42,9 +42,11 @@ import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileOptions;
+import com.google.protobuf.Descriptors.Descriptor;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -61,29 +63,59 @@ public class ValueSetGenerator {
   private final FhirVersion fhirVersion;
   private final Map<String, CodeSystem> codeSystemsByUrl;
   private final Map<String, ValueSet> valueSetsByUrl;
-  private final Set<String> versionCoreCodeSystems;
+  private final Map<String, String> protoTypesByUrl;
 
-  public ValueSetGenerator(
-      PackageInfo packageInfo, Set<ValueSet> valueSets, Set<CodeSystem> codeSystems) {
+  public ValueSetGenerator(PackageInfo packageInfo, Set<FhirPackage> fhirPackages) {
     this.packageInfo = packageInfo;
     this.fhirVersion = FhirVersion.fromAnnotation(packageInfo.getFhirVersion());
 
     this.codeSystemsByUrl =
-        codeSystems.stream().collect(Collectors.toMap(cs -> cs.getUrl().getValue(), cs -> cs));
+        fhirPackages.stream()
+            .flatMap(p -> p.codeSystems.stream())
+            .collect(Collectors.toMap(cs -> cs.getUrl().getValue(), cs -> cs));
 
     this.valueSetsByUrl =
-        valueSets.stream().collect(Collectors.toMap(vs -> vs.getUrl().getValue(), vs -> vs));
+        fhirPackages.stream()
+            .flatMap(p -> p.valueSets.stream())
+            .collect(Collectors.toMap(vs -> vs.getUrl().getValue(), vs -> vs));
 
-    this.versionCoreCodeSystems =
+    // Make a map from url to proto type for each type we can inline.
+    // This is assumed to be all the codes from all the included FhirPackages,
+    // WITH THE EXCEPTION of the core fhir package.
+    // This is due to the fact that there are prohibitively many codes defined in the core package
+    // to generate them all - so instead we inspect the code files listed in FhirVersion to know
+    this.protoTypesByUrl = new HashMap<>();
+    for (final FhirPackage fhirPackage : fhirPackages) {
+      if (!fhirPackage.packageInfo.getProtoPackage().equals(fhirVersion.coreProtoPackage)) {
+        String packageString = "." + fhirPackage.packageInfo.getProtoPackage() + ".";
+        protoTypesByUrl.putAll(
+            fhirPackage.codeSystems.stream()
+                .collect(
+                    Collectors.toMap(
+                        cs -> cs.getUrl().getValue(),
+                        cs -> packageString + getCodeSystemName(cs))));
+      }
+    }
+
+    // Add codes defined on core types proto
+    this.protoTypesByUrl.putAll(
         fhirVersion.codeTypeList.stream()
             .flatMap(file -> file.getMessageTypes().stream())
-            .filter(type -> type.getEnumTypes().size() == 1)
-            .map(type -> AnnotationUtils.getFhirCodeSystemUrl(type.getEnumTypes().get(0)))
-            .collect(Collectors.toSet());
+            .filter(descriptor -> isCodeType(descriptor))
+            .collect(
+                Collectors.toMap(
+                    descriptor ->
+                        AnnotationUtils.getFhirCodeSystemUrl(descriptor.getEnumTypes().get(0)),
+                    descriptor ->
+                        "." + fhirVersion.coreProtoPackage + "." + descriptor.getName())));
+  }
+
+  private static boolean isCodeType(Descriptor descriptor) {
+    return descriptor.getFields().isEmpty() && descriptor.getEnumTypes().size() == 1;
   }
 
   public FileDescriptorProto forCodesUsedIn(
-      Set<Bundle> codeUsers, Set<Bundle> excludingCodesIn, boolean eagerMode) {
+      Collection<Bundle> codeUsers, Collection<Bundle> excludingCodesIn, boolean eagerMode) {
     // Note we use eagerMode for used-in, and not-eagerMode for excluding.
     // This way the sets of codes generated are disjoint between (include A, exclude B, eager) and
     // (include B, not eager)
@@ -215,12 +247,11 @@ public class ValueSetGenerator {
 
     CodeSystem codeSystem = codeSystemsByUrl.get(url);
 
-    if (versionCoreCodeSystems.contains(url)) {
+    if (protoTypesByUrl.containsKey(url)) {
       enumField
           .setName("value")
           .setType(FieldDescriptorProto.Type.TYPE_ENUM)
-          .setTypeName(
-              "." + fhirVersion.coreProtoPackage + "." + getCodeSystemName(codeSystem) + ".Value");
+          .setTypeName(protoTypesByUrl.get(url) + ".Value");
       return descriptor.build();
     }
 
@@ -272,16 +303,12 @@ public class ValueSetGenerator {
 
     Optional<CodeSystem> oneToOneCodeSystem = getOneToOneCodeSystem(valueSet);
     if (oneToOneCodeSystem.isPresent()
-        && versionCoreCodeSystems.contains(oneToOneCodeSystem.get().getUrl().getValue())) {
+        && protoTypesByUrl.containsKey(oneToOneCodeSystem.get().getUrl().getValue())) {
       enumField
           .setName("value")
           .setType(FieldDescriptorProto.Type.TYPE_ENUM)
           .setTypeName(
-              "."
-                  + fhirVersion.coreProtoPackage
-                  + "."
-                  + getCodeSystemName(oneToOneCodeSystem.get())
-                  + ".Value");
+              protoTypesByUrl.get(oneToOneCodeSystem.get().getUrl().getValue()) + ".Value");
       return descriptor.build();
     }
 
@@ -673,7 +700,8 @@ public class ValueSetGenerator {
     return name + "Code";
   }
 
-  private Set<CodeSystem> getCodeSystemsUsedInBundles(Set<Bundle> bundles, boolean eagerMode) {
+  private Set<CodeSystem> getCodeSystemsUsedInBundles(
+      Collection<Bundle> bundles, boolean eagerMode) {
     final Set<String> valueSetUrls = new HashSet<>();
     for (Bundle bundle : bundles) {
       for (Bundle.Entry entry : bundle.getEntryList()) {

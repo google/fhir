@@ -26,9 +26,8 @@ FHIR_PACKAGE_INFO="$ROOT_PATH//spec/fhir_r4_package_info.prototxt"
 COMMON_FLAGS=" \
   --emit_proto \
   --emit_descriptors \
-  --r4_definitions_zip $FHIR_DEFINITION_ZIP \
   --package_info $FHIR_PACKAGE_INFO \
-  --fhir_definition_dep $FHIR_DEFINITION_ZIP|$FHIR_PACKAGE_INFO \
+  --r4_core_dep $FHIR_DEFINITION_ZIP \
   --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH "
 #
 # Build the binary.

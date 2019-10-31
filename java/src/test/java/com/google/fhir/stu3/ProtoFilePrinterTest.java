@@ -19,7 +19,6 @@ import static com.google.common.truth.Truth.assertWithMessage;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
@@ -56,8 +55,6 @@ public final class ProtoFilePrinterTest {
   private ProtoGenerator protoGenerator;
   private ProtoFilePrinter protoPrinter;
   private Runfiles runfiles;
-
-  private static ImmutableMap<StructureDefinition, String> knownStructDefs = null;
 
   /** Read and parse the specified StructureDefinition. */
   private StructureDefinition readStructureDefinition(String resourceName) throws IOException {
@@ -220,7 +217,7 @@ public final class ProtoFilePrinterTest {
             .setLicenseDate("2019")
             .build();
     protoGenerator =
-        ProtoGeneratorTest.makeR4ProtoGenerator("spec/fhir_r4_definitions.zip");
+        ProtoGeneratorTest.makeR4ProtoGenerator("spec/fhir_r4_package.zip");
     protoPrinter = new ProtoFilePrinter(packageInfo);
   }
 

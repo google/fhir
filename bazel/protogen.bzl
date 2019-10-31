@@ -20,56 +20,30 @@ PROTO_GENERATOR = "//java:ProtoGenerator"
 PROFILE_GENERATOR = "//java:ProfileGenerator"
 MANUAL_TAGS = ["manual"]
 
-def zip_file(name, filegroup = [], srcs = []):
-    if filegroup and srcs or not filegroup and not srcs:
-        fail("zip_file must have either filegroup or srcs but not both")
-    if filegroup:
-        native.genrule(
-            name = "_genrule_" + name,
-            srcs = [filegroup],
-            outs = [name],
-            cmd = "zip --quiet -j $@ $(locations %s)" % filegroup,
-            tags = MANUAL_TAGS,
-        )
-    if srcs:
-        filegroup_name = name + "_filegroup"
-        native.filegroup(
-            name = filegroup_name,
-            srcs = srcs,
-        )
-        native.genrule(
-            name = "_genrule_" + name,
-            srcs = [filegroup_name],
-            outs = [name],
-            cmd = "zip --quiet -j $@ $(locations %s)" % filegroup_name,
-            tags = MANUAL_TAGS,
-        )
-
 def fhir_package(
         package_name,
-        definitions_zip,
+        definitions,
         package_info):
-    """Generates a FHIR Definition package in a way that can be referenced by other packages
+    """Generates a FHIR package in a way that can be referenced by other packages
 
-    Given a zip of resource definitions, and a package info proto, this generates aliases
-    based on the package name, so that in the future, pointing to the package name allows other
-    rules to point directly to the zip and info.
+    Given a zip of resources, and a package info proto, this generates a zip file and a filegroup for the package.
+    This zip file will have the name $(package_name).zip, which can be used to construct a java FhirPackage object.
 
     Args:
         package_name: The name for the package, which other targets will use to refer to this
-        definitions_zip: the definitions to export with this package
+        definitions: the definitions to export with this package
         package_info: the package_info to export with this package
     """
-    if _get_zip_for_pkg(package_name) != definitions_zip:
-        native.alias(
-            name = _get_zip_for_pkg(package_name),
-            actual = definitions_zip,
-            tags = MANUAL_TAGS,
-        )
-
-    native.alias(
-        name = _get_package_info_for_pkg(package_name),
-        actual = package_info,
+    filegroup_name = package_name + "_filegroup"
+    native.filegroup(
+        name = filegroup_name,
+        srcs = definitions + [package_info],
+    )
+    native.genrule(
+        name = "_genrule_" + package_name,
+        srcs = [filegroup_name],
+        outs = [_get_zip_for_pkg(package_name)],
+        cmd = "zip --quiet -j $@ $(locations %s)" % filegroup_name,
         tags = MANUAL_TAGS,
     )
 
@@ -89,17 +63,16 @@ def gen_fhir_protos(
     Args:
       name: The name for the generated proto file (without .proto)
       package: The fhir_package to generate protos for.
-      package_deps: Any package_deps these definitions depend on.
+      package_deps: Any fhir_packages these definitions depend on.
                     Core fhir definitions are automatically included.
-      additional_proto_imports: Additional proto files the generated protos should import
+      additional_proto_imports: Additional proto files the generated protos should import.
                                 FHIR datatypes, annotations, and codes are included automatically.
       separate_extensions: If true, will produce two proto files, one for extensions
                            and one for profiles.
     """
 
     struct_def_dep_flags = " ".join([
-        "--fhir_definition_dep \"$(location %s)|$(location %s)\"" %
-        (_get_zip_for_pkg(dep), _get_package_info_for_pkg(dep))
+        "--fhir_definition_dep $(location %s)" % _get_zip_for_pkg(dep)
         for dep in (package_deps + [package])
     ])
     if not additional_proto_imports:
@@ -120,14 +93,12 @@ def gen_fhir_protos(
         $(location %s) \
             --emit_proto \
             --output_directory $(@D) \
-            --package_info $(location %s) \
-            --stu3_definitions_zip $(location %s) \
-            --r4_definitions_zip $(location %s) \
+            --stu3_core_dep $(location %s) \
+            --r4_core_dep $(location %s) \
             --output_name _genfiles_%s \
-            --input_zip $(location %s) \
+            --input_package $(location %s) \
             """ % (
         PROTO_GENERATOR,
-        _get_package_info_for_pkg(package),
         _get_zip_for_pkg(STU3_PACKAGE_DEP),
         _get_zip_for_pkg(R4_PACKAGE_DEP),
         name,
@@ -146,8 +117,7 @@ def gen_fhir_protos(
         STU3_PACKAGE_DEP,
         R4_PACKAGE_DEP,
     ]
-    srcs = ([_get_zip_for_pkg(pkg) for pkg in all_fhir_pkgs] +
-            [_get_package_info_for_pkg(pkg) for pkg in all_fhir_pkgs])
+    srcs = [_get_zip_for_pkg(pkg) for pkg in all_fhir_pkgs]
 
     native.genrule(
         name = name + "_proto_files",
@@ -205,9 +175,11 @@ def gen_fhir_definitions_and_protos(
                             profiles +
                             [_get_zip_for_pkg(dep) for dep in package_deps])
 
+    json_outs = ["_genfiles_" + name + "_extensions.json", "_genfiles_" + name + ".json"]
+
     native.genrule(
         name = name + "_definitions",
-        outs = ["_genfiles_" + name + "_extensions.json", "_genfiles_" + name + ".json"],
+        outs = json_outs,
         srcs = fhir_definition_srcs,
         tools = [
             PROFILE_GENERATOR,
@@ -232,20 +204,9 @@ def gen_fhir_definitions_and_protos(
         tags = MANUAL_TAGS,
     )
 
-    native.filegroup(
-        name = name + "_definitions_filegroup",
-        srcs = [name + "_extensions.json", name + ".json"],
-        tags = MANUAL_TAGS,
-    )
-
-    zip_file(
-        name = name + "_definitions.zip",
-        filegroup = ":%s_definitions_filegroup" % name,
-    )
-
     fhir_package(
         package_name = name,
-        definitions_zip = name + "_definitions.zip",
+        definitions = json_outs,
         package_info = package_info,
     )
 
@@ -258,7 +219,4 @@ def gen_fhir_definitions_and_protos(
     )
 
 def _get_zip_for_pkg(pkg):
-    return pkg + "_definitions_zip"
-
-def _get_package_info_for_pkg(pkg):
-    return pkg + "_package_info_prototxt"
+    return pkg + ".zip"

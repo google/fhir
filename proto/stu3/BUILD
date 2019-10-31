@@ -80,7 +80,7 @@ gen_fhir_protos(
     additional_proto_imports = [
         "proto/stu3/uscore_codes.proto",
     ],
-    package = "//spec:uscore-stu3-package",
+    package = "//spec:uscore_stu3_package",
 )
 
 fhir_proto_library(

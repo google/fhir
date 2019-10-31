@@ -11,7 +11,7 @@ gen_fhir_definitions_and_protos(
     extensions = [
         "google_extensions.prototxt",
     ],
-    package_info = "google_package_stu3_info.prototxt",
+    package_info = "google_stu3_package_info.prototxt",
     separate_extensions = True,
 )
 
@@ -20,6 +20,6 @@ gen_fhir_definitions_and_protos(
     extensions = [
         "google_extensions.prototxt",
     ],
-    package_info = "google_package_r4_info.prototxt",
+    package_info = "google_r4_package_info.prototxt",
     separate_extensions = True,
 )

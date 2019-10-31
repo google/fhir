@@ -13,7 +13,7 @@ gen_fhir_definitions_and_protos(
         "test_extensions.prototxt",
     ],
     package_deps = [
-        "//spec:uscore-r4-package",
+        "//spec:uscore_r4_package",
     ],
     package_info = "test_package_info.prototxt",
     profiles = [

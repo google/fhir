@@ -18,28 +18,19 @@ package com.google.fhir.stu3;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.fail;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
-import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
-import com.google.fhir.r4.core.CodeSystem;
 import com.google.fhir.r4.core.StructureDefinition;
-import com.google.fhir.r4.core.ValueSet;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
-import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.TextFormat;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,10 +46,7 @@ public class ProtoGeneratorTest {
   private JsonFormat.Parser jsonParser;
   private TextFormat.Parser textParser;
   private ExtensionRegistry registry;
-  private ProtoGenerator protoGenerator;
   private Runfiles runfiles;
-
-  private static ImmutableMap<StructureDefinition, String> knownStructDefs = null;
 
   /** Read the specifed file from the testdata directory into a String. */
   private String loadFile(String relativePath) throws IOException {
@@ -88,18 +76,18 @@ public class ProtoGeneratorTest {
     return builder.build();
   }
 
-  /** Read and parse the specified StructureDefinition. */
-  private StructureDefinition readModifiedStructureDefinition(String resourceName)
-      throws IOException {
-    String json =
-        loadFile(
-            "com_google_fhir/spec/hl7.fhir.core/3.0.1/modified/StructureDefinition-"
-                + resourceName
-                + ".json");
-    StructureDefinition.Builder builder = StructureDefinition.newBuilder();
-    jsonParser.merge(json, builder);
-    return builder.build();
-  }
+  // /** Read and parse the specified StructureDefinition. */
+  // private StructureDefinition readModifiedStructureDefinition(String resourceName)
+  //     throws IOException {
+  //   String json =
+  //       loadFile(
+  //           "com_google_fhir/spec/hl7.fhir.core/3.0.1/modified/StructureDefinition-"
+  //               + resourceName
+  //               + ".json");
+  //   StructureDefinition.Builder builder = StructureDefinition.newBuilder();
+  //   jsonParser.merge(json, builder);
+  //   return builder.build();
+  // }
 
   /** Read and parse the specified DescriptorProto. */
   private DescriptorProto readDescriptorProto(String resourceName, FhirVersion version)
@@ -121,95 +109,38 @@ public class ProtoGeneratorTest {
     return builder.build();
   }
 
-  private void testGeneratedSTU3Proto(String resourceName) throws IOException {
-    StructureDefinition resource = readStructureDefinition(resourceName, FhirVersion.STU3);
-    DescriptorProto generatedProto = protoGenerator.generateProto(resource);
-    DescriptorProto golden = readDescriptorProto(resourceName, FhirVersion.STU3);
-    assertThat(generatedProto).isEqualTo(golden);
-  }
-
-  private void testModifiedGeneratedSTU3Proto(String resourceName) throws IOException {
-    StructureDefinition resource = readModifiedStructureDefinition(resourceName);
-    DescriptorProto generatedProto = protoGenerator.generateProto(resource);
-    DescriptorProto golden = readDescriptorProto(resourceName, FhirVersion.STU3);
-    assertThat(generatedProto).isEqualTo(golden);
-  }
-
-  private void testExtension(String resourceName) throws IOException {
-    StructureDefinition resource = readStructureDefinition(resourceName, FhirVersion.STU3);
-    DescriptorProto generatedProto = protoGenerator.generateProto(resource);
-    DescriptorProto golden = readDescriptorProto(resourceName, FhirVersion.STU3);
-    assertThat(generatedProto).isEqualTo(golden);
-  }
-
-  private void verifyCompiledDescriptor(Descriptor descriptor) throws IOException {
-    DescriptorProto golden = readDescriptorProto(descriptor.getName(), FhirVersion.STU3);
-    assertThat(descriptor.toProto()).isEqualTo(golden);
-  }
-
-  private void addPackage(
-      Map<StructureDefinition, String> knownStructDefs,
-      String dir,
-      String protoPackage,
-      FhirVersion version)
-      throws IOException {
-
-    // NOTE: consentdirective is omitted because it is malformed.  See:
-    // https://gforge.hl7.org/gf/project/fhir/tracker/?action=TrackerItemEdit&tracker_item_id=19263
-    for (File file :
-        new File(runfiles.rlocation("com_google_fhir/" + dir))
-            .listFiles(
-                (listDir, name) ->
-                    name.endsWith(".json") && !name.endsWith("consentdirective.profile.json"))) {
-      String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
-      StructureDefinition.Builder builder = StructureDefinition.newBuilder();
-      jsonParser.merge(json, builder);
-      knownStructDefs.put(builder.build(), protoPackage);
-    }
-  }
-
-  public ImmutableMap<StructureDefinition, String> getKnownStructDefs() throws IOException {
-    if (knownStructDefs != null) {
-      return knownStructDefs;
-    }
-    Map<StructureDefinition, String> mutableKnownStructDefs = new HashMap<>();
-    addPackage(
-        mutableKnownStructDefs,
-        "spec/hl7.fhir.core/3.0.1/package",
-        "google.fhir.stu3.proto",
-        FhirVersion.STU3);
-    addPackage(
-        mutableKnownStructDefs,
-        "spec/hl7.fhir.core/3.0.1/modified",
-        "google.fhir.stu3.proto",
-        FhirVersion.STU3);
-    addPackage(
-        mutableKnownStructDefs,
-        "testdata/stu3/google",
-        "google.fhir.stu3.google",
-        FhirVersion.STU3);
-    addPackage(
-        mutableKnownStructDefs,
-        "spec/hl7.fhir.us.core/2.0.0/package",
-        "google.fhir.stu3.uscore",
-        FhirVersion.STU3);
-    knownStructDefs = ImmutableMap.copyOf(mutableKnownStructDefs);
-    return knownStructDefs;
-  }
+  // STU3 temporarily frozen.
+  //   private void testGeneratedSTU3Proto(String resourceName) throws IOException {
+  //     StructureDefinition resource = readStructureDefinition(resourceName, FhirVersion.STU3);
+  //     DescriptorProto generatedProto = protoGenerator.generateProto(resource);
+  //     DescriptorProto golden = readDescriptorProto(resourceName, FhirVersion.STU3);
+  //     assertThat(generatedProto).isEqualTo(golden);
+  //   }
+  //
+  //   private void testModifiedGeneratedSTU3Proto(String resourceName) throws IOException {
+  //     StructureDefinition resource = readModifiedStructureDefinition(resourceName);
+  //     DescriptorProto generatedProto = protoGenerator.generateProto(resource);
+  //     DescriptorProto golden = readDescriptorProto(resourceName, FhirVersion.STU3);
+  //     assertThat(generatedProto).isEqualTo(golden);
+  //   }
+  //
+  //   private void testExtension(String resourceName) throws IOException {
+  //     StructureDefinition resource = readStructureDefinition(resourceName, FhirVersion.STU3);
+  //     DescriptorProto generatedProto = protoGenerator.generateProto(resource);
+  //     DescriptorProto golden = readDescriptorProto(resourceName, FhirVersion.STU3);
+  //     assertThat(generatedProto).isEqualTo(golden);
+  //   }
+  //
+  //   private void verifyCompiledDescriptor(Descriptor descriptor) throws IOException {
+  //     DescriptorProto golden = readDescriptorProto(descriptor.getName(), FhirVersion.STU3);
+  //     assertThat(descriptor.toProto()).isEqualTo(golden);
+  //   }
 
   @Before
   public void setUp() throws IOException {
     jsonParser = JsonFormat.getEarlyVersionGeneratorParser();
     textParser = TextFormat.getParser();
     runfiles = Runfiles.create();
-    protoGenerator =
-        new ProtoGenerator(
-            PackageInfo.newBuilder()
-                .setProtoPackage("google.fhir.stu3.proto")
-                .setJavaProtoPackage("com.google.fhir.stu3.proto")
-                .setFhirVersion(FhirVersion.STU3)
-                .build(),
-            getKnownStructDefs());
 
     registry = ExtensionRegistry.newInstance();
     registry.add(Annotations.fhirCodeSystemUrl);
@@ -1516,29 +1447,13 @@ public class ProtoGeneratorTest {
   }
 
   static ProtoGenerator makeR4ProtoGenerator(String definitionZip) throws IOException {
-    PackageInfo packageInfo =
-        PackageInfo.newBuilder()
-            .setProtoPackage("google.fhir.r4.core")
-            .setJavaProtoPackage("com.google.fhir.r4.core")
-            .setFhirVersion(FhirVersion.R4)
-            .build();
-    Set<ValueSet> valueSets = new HashSet<>();
-    Set<CodeSystem> codeSystems = new HashSet<>();
-    valueSets.addAll(
-        FileUtils.loadTypesInZip(ValueSet.getDefaultInstance(), definitionZip, FhirVersion.R4));
-    codeSystems.addAll(
-        FileUtils.loadTypesInZip(CodeSystem.getDefaultInstance(), definitionZip, FhirVersion.R4));
-
-    Map<StructureDefinition, String> knownStructDefs =
-        FileUtils.loadTypesInZip(
-                StructureDefinition.getDefaultInstance(), definitionZip, FhirVersion.R4)
-            .stream()
-            .collect(Collectors.toMap(def -> def, def -> "google.fhir.r4.core"));
+    FhirPackage fhirPackage = FhirPackage.load(definitionZip);
 
     return new ProtoGenerator(
-        packageInfo,
-        ImmutableMap.copyOf(knownStructDefs),
-        new ValueSetGenerator(packageInfo, valueSets, codeSystems));
+        fhirPackage.packageInfo,
+        ImmutableSet.of(fhirPackage),
+        new ValueSetGenerator(
+            fhirPackage.packageInfo, ImmutableSet.of(FhirPackage.load(definitionZip))));
   }
 
   private static final int EXPECTED_R4_COUNT = 647;
@@ -1547,7 +1462,7 @@ public class ProtoGeneratorTest {
   @Test
   public void generateR4() throws Exception {
     ProtoGenerator protoGenerator =
-        makeR4ProtoGenerator("spec/fhir_r4_definitions.zip");
+        makeR4ProtoGenerator("spec/fhir_r4_package.zip");
     String suffix = ".descriptor.prototxt";
     int fileCount = 0;
     for (File file :

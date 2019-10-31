@@ -18,11 +18,13 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.google.common.io.Files;
+import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.Extensions;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.Profiles;
 import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.StructureDefinition;
+import com.google.fhir.stu3.FhirPackage;
 import com.google.fhir.stu3.FileUtils;
 import com.google.fhir.stu3.JsonFormat;
 import java.io.File;
@@ -124,7 +126,8 @@ public class ProfileGeneratorMain {
 
     List<StructureDefinition> baseStructDefPool = new ArrayList<>();
     for (String zip : args.structDefDepZips) {
-      baseStructDefPool.addAll(FileUtils.loadStructureDefinitionsInZip(zip));
+      baseStructDefPool.addAll(
+          FhirPackage.load(zip, packageInfo.getFhirVersion()).structureDefinitions);
     }
 
     switch (packageInfo.getFhirVersion()) {
@@ -133,14 +136,15 @@ public class ProfileGeneratorMain {
           throw new IllegalArgumentException(
               "Profile is for STU3, but --stu3_struct_def_zip is not specified.");
         }
-        baseStructDefPool.addAll(FileUtils.loadStructureDefinitionsInZip(args.stu3StructDefZip));
+        baseStructDefPool.addAll(
+            FhirPackage.load(args.stu3StructDefZip, FhirVersion.STU3).structureDefinitions);
         break;
       case R4:
         if (args.r4StructDefZip == null) {
           throw new IllegalArgumentException(
               "Profile is for R4, but --r4_struct_def_zip is not specified.");
         }
-        baseStructDefPool.addAll(FileUtils.loadStructureDefinitionsInZip(args.r4StructDefZip));
+        baseStructDefPool.addAll(FhirPackage.load(args.r4StructDefZip).structureDefinitions);
         break;
       default:
         throw new IllegalArgumentException(

@@ -19,6 +19,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Files;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
@@ -27,6 +29,7 @@ import com.google.fhir.r4.core.CodeSystem;
 import com.google.fhir.r4.core.ContainedResource;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.ValueSet;
+import com.google.fhir.stu3.FhirPackage;
 import com.google.fhir.stu3.FileUtils;
 import com.google.fhir.stu3.JsonFormat;
 import com.google.fhir.stu3.ProtoFilePrinter;
@@ -35,7 +38,9 @@ import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -106,24 +111,28 @@ final class ValueSetGeneratorMain {
         FileUtils.mergeText(new File(args.packageInfo), PackageInfo.newBuilder()).build();
     FhirVersion fhirVersion = packageInfo.getFhirVersion();
 
-    Set<Bundle> codeSystemAndValueSetBundles = loadBundles(args.valueSetBundleFiles, fhirVersion);
+    List<Bundle> codeSystemAndValueSetBundles = loadBundles(args.valueSetBundleFiles, fhirVersion);
     codeSystemAndValueSetBundles.add(
         makeBundle(args.codeSystemFiles, args.valueSetFiles, fhirVersion));
 
-    Set<ValueSet> valueSets =
+    List<ValueSet> valueSets =
         codeSystemAndValueSetBundles.stream()
             .flatMap(b -> b.getEntryList().stream())
             .filter(e -> e.getResource().hasValueSet())
             .map(e -> e.getResource().getValueSet())
-            .collect(Collectors.toSet());
-    Set<CodeSystem> codeSystems =
+            .collect(Collectors.toList());
+    List<CodeSystem> codeSystems =
         codeSystemAndValueSetBundles.stream()
             .flatMap(b -> b.getEntryList().stream())
             .filter(e -> e.getResource().hasCodeSystem())
             .map(e -> e.getResource().getCodeSystem())
-            .collect(Collectors.toSet());
+            .collect(Collectors.toList());
 
-    ValueSetGenerator generator = new ValueSetGenerator(packageInfo, valueSets, codeSystems);
+    ValueSetGenerator generator =
+        new ValueSetGenerator(
+            packageInfo,
+            ImmutableSet.of(
+                new FhirPackage(packageInfo, ImmutableList.of(), codeSystems, valueSets)));
 
     ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
 
@@ -175,17 +184,18 @@ final class ValueSetGeneratorMain {
     return bundle.build();
   }
 
-  private static Set<Bundle> loadBundles(Set<String> filenames, FhirVersion fhirVersion)
+  private static List<Bundle> loadBundles(Set<String> filenames, FhirVersion fhirVersion)
       throws IOException {
     JsonFormat.Parser parser = getParser(fhirVersion);
-    Set<Bundle> bundles = new HashSet<>();
+    List<Bundle> bundles = new ArrayList<>();
     for (String filename : filenames) {
       Bundle.Builder builder = Bundle.newBuilder();
       if (filename.endsWith(".json")) {
         String json = Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read();
         parser.merge(json, builder);
       } else if (filename.endsWith(".zip")) {
-        for (StructureDefinition structDef : FileUtils.loadStructureDefinitionsInZip(filename)) {
+        FhirPackage fhirPackage = FhirPackage.load(filename);
+        for (StructureDefinition structDef : fhirPackage.structureDefinitions) {
           builder.addEntryBuilder().getResourceBuilder().setStructureDefinition(structDef);
         }
       } else {

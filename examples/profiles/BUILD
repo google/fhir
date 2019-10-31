@@ -15,7 +15,7 @@ gen_fhir_definitions_and_protos(
     ],
     extensions = [],
     package_deps = [
-        "//spec:uscore-stu3-package",
+        "//spec:uscore_stu3_package",
     ],
     package_info = "demo_package_info.prototxt",
     profiles = ["demo_profiles.prototxt"],

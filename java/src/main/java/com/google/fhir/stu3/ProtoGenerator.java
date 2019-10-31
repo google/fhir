@@ -215,15 +215,12 @@ public class ProtoGenerator {
     return IdToken.fromTokenString(Iterables.getLast(tokenStrings));
   }
 
-  public ProtoGenerator(
-      PackageInfo packageInfo, ImmutableMap<StructureDefinition, String> knownTypes) {
-    this(packageInfo, knownTypes, null);
+  public ProtoGenerator(PackageInfo packageInfo, Set<FhirPackage> fhirPackages) {
+    this(packageInfo, fhirPackages, null);
   }
 
   public ProtoGenerator(
-      PackageInfo packageInfo,
-      ImmutableMap<StructureDefinition, String> knownTypes,
-      ValueSetGenerator valueSetGenerator) {
+      PackageInfo packageInfo, Set<FhirPackage> fhirPackages, ValueSetGenerator valueSetGenerator) {
     this.packageInfo = packageInfo;
     this.fhirVersion = FhirVersion.fromAnnotation(packageInfo.getFhirVersion());
     this.valueSetGenerator = valueSetGenerator;
@@ -234,8 +231,16 @@ public class ProtoGenerator {
     }
     this.coreTypeDefinitionsByFile = coreTypeBuilder.build();
 
+    Map<StructureDefinition, String> allDefinitions = new HashMap<>();
+    for (FhirPackage fhirPackage : fhirPackages) {
+      PackageInfo info = fhirPackage.packageInfo;
+      allDefinitions.putAll(
+          fhirPackage.structureDefinitions.stream()
+              .collect(Collectors.toMap(def -> def, def -> info.getProtoPackage())));
+    }
+
     Map<String, StructureDefinitionData> mutableStructDefDataByUrl = new HashMap<>();
-    for (Map.Entry<StructureDefinition, String> knownType : knownTypes.entrySet()) {
+    for (Map.Entry<StructureDefinition, String> knownType : allDefinitions.entrySet()) {
       StructureDefinition def = knownType.getKey();
       String protoPackage = knownType.getValue();
       String url = def.getUrl().getValue();
@@ -268,7 +273,7 @@ public class ProtoGenerator {
     final Set<String> knownUrls = new HashSet<>();
 
     this.baseStructDefsById =
-        knownTypes.keySet().stream()
+        allDefinitions.keySet().stream()
             .filter(
                 def -> def.getDerivation().getValue() != TypeDerivationRuleCode.Value.CONSTRAINT)
             .filter(def -> knownUrls.add(def.getUrl().getValue()))
