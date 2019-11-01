@@ -1,21 +1,20 @@
 syntax = "proto3";
 
-package company.fhir.stu3.demo;
+package company.fhir.r4.demo;
 
+import "google/protobuf/any.proto";
 import "proto/annotations.proto";
-import "proto/stu3/codes.proto";
-import "proto/stu3/datatypes.proto";
-import "proto/stu3/metadatatypes.proto";
-import "proto/stu3/resources.proto";
-import "proto/stu3/uscore.proto";
-import "proto/stu3/uscore_codes.proto";
+import "proto/r4/core/codes.proto";
+import "proto/r4/core/datatypes.proto";
+import "proto/r4/uscore.proto";
+import "proto/r4/uscore_codes.proto";
 
 option java_multiple_files = true;
-option java_package = "com.company.fhir.stu3.demo";
-option (.google.fhir.proto.fhir_version) = STU3;
+option java_package = "com.company.fhir.r4.demo";
+option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for DemoPatient.
-// US Core Patient Profile.
+// Information about an individual or animal receiving health care services.
 // See https://company.com/fhir/demo/DemoPatient
 message DemoPatient {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
@@ -27,201 +26,263 @@ message DemoPatient {
       "https://company.com/fhir/demo/DemoPatient";
 
   // Logical id of this artifact
-  .google.fhir.stu3.proto.Id id = 1;
+  .google.fhir.r4.core.Id id = 1;
 
   // Metadata about the resource
-  .google.fhir.stu3.proto.Meta meta = 2;
+  .google.fhir.r4.core.Meta meta = 2;
 
   // A set of rules under which this content was created
-  .google.fhir.stu3.proto.Uri implicit_rules = 3;
+  .google.fhir.r4.core.Uri implicit_rules = 3;
 
   // Language of the resource content
-  .google.fhir.stu3.proto.LanguageCode language = 4;
+  .google.fhir.r4.core.Code language = 4;
 
   // Text summary of the resource, for human interpretation
-  .google.fhir.stu3.proto.Narrative text = 5;
+  .google.fhir.r4.core.Narrative text = 5;
 
   // Contained, inline Resources
-  repeated .google.fhir.stu3.proto.ContainedResource contained = 6;
+  repeated .google.protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Patient.contained
+  reserved 7;
 
   // Extension
-  repeated .google.fhir.stu3.proto.Extension extension = 7;
+  repeated .google.fhir.r4.core.Extension extension = 8;
 
   // Extensions that cannot be ignored
-  repeated .google.fhir.stu3.proto.Extension modifier_extension = 8;
+  repeated .google.fhir.r4.core.Extension modifier_extension = 9;
 
   // An identifier for this patient
-  repeated .google.fhir.stu3.proto.Identifier identifier = 9
+  repeated .google.fhir.r4.core.Identifier identifier = 10
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Whether this patient's record is in active use
-  .google.fhir.stu3.proto.Boolean active = 10;
+  .google.fhir.r4.core.Boolean active = 11;
 
   // A name associated with the patient
-  repeated .google.fhir.stu3.proto.HumanName name = 11
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  repeated .google.fhir.r4.core.HumanName name = 12 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "family.exists() or given.exists()"
+  ];
 
   // A contact detail for the individual
-  repeated .google.fhir.stu3.proto.ContactPoint telecom = 12;
+  repeated .google.fhir.r4.core.ContactPoint telecom = 13;
 
   // male | female | other | unknown
-  .google.fhir.stu3.proto.AdministrativeGenderCode gender = 13
+  message GenderCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/administrative-gender";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    .google.fhir.r4.core.AdministrativeGenderCode.Value value = 1;
+
+    .google.fhir.r4.core.String id = 2;
+
+    repeated .google.fhir.r4.core.Extension extension = 3;
+  }
+  GenderCode gender = 14
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // The date of birth for the individual
-  .google.fhir.stu3.proto.Date birth_date = 14;
+  .google.fhir.r4.core.Date birth_date = 15;
 
   // Indicates if the individual is deceased or not
-  message Deceased {
+  message DeceasedX {
     option (.google.fhir.proto.is_choice_type) = true;
 
-    oneof deceased {
-      .google.fhir.stu3.proto.Boolean boolean = 1;
-      .google.fhir.stu3.proto.DateTime date_time = 2;
+    oneof choice {
+      .google.fhir.r4.core.Boolean boolean = 1;
+      .google.fhir.r4.core.DateTime date_time = 2;
     }
   }
-  Deceased deceased = 15;
+  DeceasedX deceased = 16;
 
-  // Addresses for the individual
-  repeated .google.fhir.stu3.proto.Address address = 16;
+  // An address for the individual
+  repeated .google.fhir.r4.core.Address address = 17;
 
   // Marital (civil) status of a patient
-  .google.fhir.stu3.proto.CodeableConcept marital_status = 17;
+  .google.fhir.r4.core.CodeableConcept marital_status = 18;
 
   // Whether patient is part of a multiple birth
-  message MultipleBirth {
+  message MultipleBirthX {
     option (.google.fhir.proto.is_choice_type) = true;
 
-    oneof multiple_birth {
-      .google.fhir.stu3.proto.Boolean boolean = 1;
-      .google.fhir.stu3.proto.Integer integer = 2;
+    oneof choice {
+      .google.fhir.r4.core.Boolean boolean = 1;
+      .google.fhir.r4.core.Integer integer = 2;
     }
   }
-  MultipleBirth multiple_birth = 18;
+  MultipleBirthX multiple_birth = 19;
 
   // Image of the patient
-  repeated .google.fhir.stu3.proto.Attachment photo = 19;
+  repeated .google.fhir.r4.core.Attachment photo = 20;
 
   // A contact party (e.g. guardian, partner, friend) for the patient
   message Contact {
-    // xml:id (or equivalent in JSON)
-    .google.fhir.stu3.proto.String id = 1;
+    // Unique id for inter-element referencing
+    .google.fhir.r4.core.String id = 1;
 
-    // Additional Content defined by implementations
-    repeated .google.fhir.stu3.proto.Extension extension = 2;
+    // Additional content defined by implementations
+    repeated .google.fhir.r4.core.Extension extension = 2;
 
-    // Extensions that cannot be ignored
-    repeated .google.fhir.stu3.proto.Extension modifier_extension = 3;
+    // Extensions that cannot be ignored even if unrecognized
+    repeated .google.fhir.r4.core.Extension modifier_extension = 3;
 
     // The kind of relationship
-    repeated .google.fhir.stu3.proto.CodeableConcept relationship = 4;
+    repeated .google.fhir.r4.core.CodeableConcept relationship = 4;
 
     // A name associated with the contact person
-    .google.fhir.stu3.proto.HumanName name = 5;
+    .google.fhir.r4.core.HumanName name = 5;
 
     // A contact detail for the person
-    repeated .google.fhir.stu3.proto.ContactPoint telecom = 6;
+    repeated .google.fhir.r4.core.ContactPoint telecom = 6;
 
     // Address for the contact person
-    .google.fhir.stu3.proto.Address address = 7;
+    .google.fhir.r4.core.Address address = 7;
 
     // male | female | other | unknown
-    .google.fhir.stu3.proto.AdministrativeGenderCode gender = 8;
+    message GenderCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/administrative-gender";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      .google.fhir.r4.core.AdministrativeGenderCode.Value value = 1;
+
+      .google.fhir.r4.core.String id = 2;
+
+      repeated .google.fhir.r4.core.Extension extension = 3;
+    }
+    GenderCode gender = 8;
 
     // Organization that is associated with the contact
-    .google.fhir.stu3.proto.Reference organization = 9
+    .google.fhir.r4.core.Reference organization = 9
         [(.google.fhir.proto.valid_reference_type) = "Organization"];
 
     // The period during which this contact person or organization is valid to
     // be contacted relating to this patient
-    .google.fhir.stu3.proto.Period period = 10;
+    .google.fhir.r4.core.Period period = 10;
   }
-  repeated Contact contact = 20 [
+  repeated Contact contact = 21 [
+    (.google.fhir.proto.fhir_path_constraint) =
+        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "name.exists() or telecom.exists() or address.exists() or organization.exists()"
   ];
 
-  // Patient.animal not present on profile.
-  reserved 21;
-
-  // A list of Languages which may be used to communicate with the patient about
-  // his or her health
+  // A language which may be used to communicate with the patient about his or
+  // her health
   message Communication {
-    // xml:id (or equivalent in JSON)
-    .google.fhir.stu3.proto.String id = 1;
+    // Unique id for inter-element referencing
+    .google.fhir.r4.core.String id = 1;
 
-    // Additional Content defined by implementations
-    repeated .google.fhir.stu3.proto.Extension extension = 2;
+    // Additional content defined by implementations
+    repeated .google.fhir.r4.core.Extension extension = 2;
 
-    // Extensions that cannot be ignored
-    repeated .google.fhir.stu3.proto.Extension modifier_extension = 3;
+    // Extensions that cannot be ignored even if unrecognized
+    repeated .google.fhir.r4.core.Extension modifier_extension = 3;
 
     // The language which can be used to communicate with the patient about his
     // or her health
-    .google.fhir.stu3.proto.CodeableConcept language = 4
+    .google.fhir.r4.core.CodeableConcept language = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Language preference indicator
-    .google.fhir.stu3.proto.Boolean preferred = 5;
+    .google.fhir.r4.core.Boolean preferred = 5;
   }
-  repeated Communication communication = 22;
+  repeated Communication communication = 22
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
 
   // Patient's nominated primary care provider
-  repeated .google.fhir.stu3.proto.Reference general_practitioner = 23 [
+  repeated .google.fhir.r4.core.Reference general_practitioner = 23 [
     (.google.fhir.proto.valid_reference_type) = "Organization",
-    (.google.fhir.proto.valid_reference_type) = "Practitioner"
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
   ];
 
   // Organization that is the custodian of the patient record
-  .google.fhir.stu3.proto.Reference managing_organization = 24
+  .google.fhir.r4.core.Reference managing_organization = 24
       [(.google.fhir.proto.valid_reference_type) = "Organization"];
 
   // Link to another patient resource that concerns the same actual person
   message Link {
-    // xml:id (or equivalent in JSON)
-    .google.fhir.stu3.proto.String id = 1;
+    // Unique id for inter-element referencing
+    .google.fhir.r4.core.String id = 1;
 
-    // Additional Content defined by implementations
-    repeated .google.fhir.stu3.proto.Extension extension = 2;
+    // Additional content defined by implementations
+    repeated .google.fhir.r4.core.Extension extension = 2;
 
-    // Extensions that cannot be ignored
-    repeated .google.fhir.stu3.proto.Extension modifier_extension = 3;
+    // Extensions that cannot be ignored even if unrecognized
+    repeated .google.fhir.r4.core.Extension modifier_extension = 3;
 
     // The other patient or related person resource that the link refers to
-    .google.fhir.stu3.proto.Reference other = 4 [
+    .google.fhir.r4.core.Reference other = 4 [
       (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
       (.google.fhir.proto.valid_reference_type) = "Patient",
       (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
     ];
 
-    // replaced-by | replaces | refer | seealso - type of link
-    .google.fhir.stu3.proto.LinkTypeCode type = 5
+    // replaced-by | replaces | refer | seealso
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/link-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      .google.fhir.r4.core.LinkTypeCode.Value value = 1;
+
+      .google.fhir.r4.core.String id = 2;
+
+      repeated .google.fhir.r4.core.Extension extension = 3;
+    }
+    TypeCode type = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Link link = 25;
+  repeated Link link = 25
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "hasValue() or (children().count() > id.count())"];
 
   // Extension
-  .google.fhir.stu3.uscore.PatientUSCoreRaceExtension race = 26
+  .google.fhir.r4.uscore.PatientUSCoreRaceExtension race = 26
       [(.google.fhir.proto.fhir_inlined_extension_url) =
            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"];
 
   // Extension
-  .google.fhir.stu3.uscore.PatientUSCoreEthnicityExtension ethnicity = 27
+  .google.fhir.r4.uscore.PatientUSCoreEthnicityExtension ethnicity = 27
       [(.google.fhir.proto.fhir_inlined_extension_url) =
            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"];
 
   // Extension
-  .google.fhir.stu3.uscore.UsCoreBirthSexCode birthsex = 28
+  .google.fhir.r4.uscore.PatientUSCoreBirthSexExtension birthsex = 28
       [(.google.fhir.proto.fhir_inlined_extension_url) =
            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"];
 
   // Mother's Maiden Name
-  .google.fhir.stu3.proto.String mothers_maiden_name = 29
-      [(.google.fhir.proto.fhir_inlined_extension_url) =
-           "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"];
+  .google.fhir.r4.core.String mothers_maiden_name = 29 [
+    (.google.fhir.proto.fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "hasValue() or (children().count() > id.count())",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
 
   // Patient's Birth Place
-  .google.fhir.stu3.proto.Address birth_place = 30
-      [(.google.fhir.proto.fhir_inlined_extension_url) =
-           "http://hl7.org/fhir/StructureDefinition/birthPlace"];
+  .google.fhir.r4.core.Address birth_place = 30 [
+    (.google.fhir.proto.fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/patient-birthPlace",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "hasValue() or (children().count() > id.count())",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
 }

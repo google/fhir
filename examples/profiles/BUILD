@@ -10,12 +10,12 @@ load("//bazel:proto.bzl", "fhir_proto_library")
 gen_fhir_definitions_and_protos(
     name = "demo",
     additional_proto_imports = [
-        "proto/stu3/uscore.proto",
-        "proto/stu3/uscore_codes.proto",
+        "proto/r4/uscore.proto",
+        "proto/r4/uscore_codes.proto",
     ],
     extensions = [],
     package_deps = [
-        "//spec:uscore_stu3_package",
+        "//spec:uscore_r4_package",
     ],
     package_info = "demo_package_info.prototxt",
     profiles = ["demo_profiles.prototxt"],
@@ -26,14 +26,13 @@ fhir_proto_library(
         "demo.proto",
     ],
     proto_deps = [
+        "@protobuf_archive//:any_proto",
         "//proto:annotations_proto",
-        "//proto/stu3:codes_proto",
-        "//proto/stu3:datatypes_proto",
-        "//proto/stu3:extensions_proto",
-        "//proto/stu3:metadatatypes_proto",
-        "//proto/stu3:resources_proto",
-        "//proto/stu3:uscore_codes_proto",
-        "//proto/stu3:uscore_proto",
+        "//proto/r4:uscore_codes_proto",
+        "//proto/r4:uscore_proto",
+        "//proto/r4/core:codes_proto",
+        "//proto/r4/core:datatypes_proto",
+        "//proto/r4/core:extensions_proto",
     ],
     proto_library_prefix = "demo",
 )

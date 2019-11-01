@@ -9,11 +9,9 @@ cc_binary(
     srcs = ["local_profiler.cc"],
     deps = [
         "//cc/google/fhir:json_format",
-        "//cc/google/fhir/stu3:profiles",
+        "//cc/google/fhir/r4:profiles",
         "//examples/profiles:demo_cc_proto",
-        "//proto/stu3:datatypes_cc_proto",
-        "//proto/stu3:resources_cc_proto",
-        "//proto/stu3:uscore_cc_proto",
+        "//proto/r4/core/resources:patient_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
     ],

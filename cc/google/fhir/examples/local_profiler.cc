@@ -19,19 +19,17 @@
 #include "absl/strings/str_cat.h"
 #include "absl/time/time.h"
 #include "google/fhir/json_format.h"
-#include "google/fhir/stu3/profiles.h"
+#include "google/fhir/r4/profiles.h"
 #include "examples/profiles/demo.pb.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/resources.pb.h"
-#include "proto/stu3/uscore.pb.h"
+#include "proto/r4/core/resources/patient.pb.h"
 
 using std::string;
 
-using ::company::fhir::stu3::demo::DemoPatient;
-using ::google::fhir::ConvertToProfileLenientStu3;
+using ::company::fhir::r4::demo::DemoPatient;
+using ::google::fhir::ConvertToProfileLenientR4;
 using ::google::fhir::JsonFhirStringToProto;
 using ::google::fhir::PrintFhirToJsonStringForAnalytics;
-using ::google::fhir::stu3::proto::Patient;
+using ::google::fhir::r4::core::Patient;
 
 template <typename R, typename P>
 void ConvertToProfile(const absl::TimeZone& time_zone, std::string dir) {
@@ -52,7 +50,8 @@ void ConvertToProfile(const absl::TimeZone& time_zone, std::string dir) {
     if (!line.length()) continue;
     R raw = JsonFhirStringToProto<Patient>(line, time_zone).ValueOrDie();
     P profiled;
-    CHECK(ConvertToProfileLenientStu3(raw, &profiled).ok());
+    auto status = ConvertToProfileLenientR4(raw, &profiled);
+    CHECK(status.ok()) << status.error_message();
     write_stream << PrintFhirToJsonStringForAnalytics(profiled).ValueOrDie();
     write_stream << "\n";
   }

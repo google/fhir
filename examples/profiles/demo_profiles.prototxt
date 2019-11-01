@@ -20,6 +20,6 @@ profile {
       description: "Patient's Birth Place"
       size_restriction: OPTIONAL
     }
-    url: "http://hl7.org/fhir/StructureDefinition/birthPlace"
+    url: "http://hl7.org/fhir/StructureDefinition/patient-birthPlace"
   }
 }

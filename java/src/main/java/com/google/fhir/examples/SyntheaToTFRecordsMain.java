@@ -14,9 +14,9 @@
 
 package com.google.fhir.examples;
 
+import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.stu3.JsonFormat.Parser;
 import com.google.fhir.stu3.ResourceUtils;
-import com.google.fhir.stu3.proto.Bundle;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.PipelineResult;
 import org.apache.beam.sdk.io.FileIO;

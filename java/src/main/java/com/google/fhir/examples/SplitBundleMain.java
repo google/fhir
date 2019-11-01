@@ -18,12 +18,12 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.bigquery.model.TableSchema;
+import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.stu3.BigQuerySchema;
 import com.google.fhir.stu3.JsonFormat;
 import com.google.fhir.stu3.JsonFormat.Parser;
 import com.google.fhir.stu3.JsonFormat.Printer;
 import com.google.fhir.stu3.ResourceUtils;
-import com.google.fhir.stu3.proto.Bundle;
 import com.google.protobuf.Message;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -84,8 +84,7 @@ public class SplitBundleMain {
               Files.newBufferedWriter(Paths.get(resourceType + ".analytic.ndjson"), UTF_8));
         }
         if (!schema.containsKey(resourceType)) {
-          // Generate a schema for this type. Note that we do this purely based on a single message,
-          // which could potentially cause issues with extensions.
+          // Generate a schema for this type.
           schema.put(resourceType, BigQuerySchema.fromDescriptor(resource.getDescriptorForType()));
         }
         BufferedWriter resourceOutput = fhirOutput.get(resourceType);

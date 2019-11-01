@@ -14,8 +14,6 @@ To run, assuming MY_DIR has the directory used in [BigQuery examples](https://gi
 bazel run //examples/profiles:LocalProfiler $MY_DIR
 
 # Generate Schema
-# This step will soon get removed once it's generated automatically along with
-# the profile proto.
 bazel run //java:BigQuerySchemaGenerator $MY_DIR
 
 # Upload DemoPatient

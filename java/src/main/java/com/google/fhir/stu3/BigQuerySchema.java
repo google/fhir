@@ -19,8 +19,9 @@ import com.google.api.services.bigquery.model.TableSchema;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableSet;
 import com.google.fhir.proto.Annotations;
-import com.google.fhir.stu3.proto.Decimal;
-import com.google.fhir.stu3.proto.Extension;
+import com.google.fhir.r4.core.Decimal;
+import com.google.fhir.r4.core.Extension;
+import com.google.protobuf.Any;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import java.util.ArrayList;
@@ -55,8 +56,9 @@ public final class BigQuerySchema {
 
     // We inline extensions and contained resources as simple strings describing the url or type,
     // respectively, to keep a well-structured schema.
-    if (fieldType.equals(Extension.getDescriptor())
-        || fieldType.getName().equals("ContainedResource")) {
+    if (AnnotationUtils.sameFhirType(fieldType, Extension.getDescriptor())
+        || fieldType.getName().equals("ContainedResource")
+        || fieldType.getFullName().equals(Any.getDescriptor().getFullName())) {
       return field.setType("STRING");
     }
     // We don't include nested types.
@@ -125,10 +127,19 @@ public final class BigQuerySchema {
   }
 
   private static String schemaTypeForPrimitive(Descriptor primitive) {
-    if (primitive.getFullName().equals(Decimal.getDescriptor().getFullName())) {
+    if (AnnotationUtils.sameFhirType(primitive, Decimal.getDescriptor())) {
       return "FLOAT";
     }
     FieldDescriptor valueField = primitive.findFieldByNumber(1);
+    if (valueField == null) {
+      // In non-enumberable CodeSystem/Valuesets, field 1 is reserved, and the value field is
+      // string.  Check that this matches, and then return String.
+      if (primitive.findFieldByName("value").getType() == FieldDescriptor.Type.STRING) {
+        return "STRING";
+      } else {
+        throw new IllegalArgumentException("Unrecognized primitive: " + primitive.getFullName());
+      }
+    }
     // If this is a timelike value field (value_us, for value_microseconds),
     // it will be rendered as a date string.
     if (valueField.getName().equals("value_us")) {

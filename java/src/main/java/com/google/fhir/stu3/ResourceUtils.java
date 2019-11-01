@@ -17,9 +17,9 @@ package com.google.fhir.stu3;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.Id;
 import com.google.fhir.r4.core.ReferenceId;
-import com.google.fhir.stu3.proto.Bundle;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
@@ -98,14 +98,13 @@ public final class ResourceUtils {
     if (!message.hasField(uri)) {
       return message;
     }
-    String oldValue = ((com.google.fhir.stu3.proto.String) message.getField(uri)).getValue();
+    String oldValue = ((com.google.fhir.r4.core.String) message.getField(uri)).getValue();
     if (!referenceMap.containsKey(oldValue)) {
       return message;
     }
     Message.Builder builder = message.toBuilder();
     String newValue = referenceMap.get(oldValue);
-    builder.setField(
-        uri, com.google.fhir.stu3.proto.String.newBuilder().setValue(newValue).build());
+    builder.setField(uri, com.google.fhir.r4.core.String.newBuilder().setValue(newValue).build());
     return splitIfRelativeReference(builder);
   }
 
@@ -188,7 +187,8 @@ public final class ResourceUtils {
         if (parts.size() == 4) {
           refId.setHistory(new IdWrapper(parts.get(3)).getWrapped());
         }
-        return ProtoUtils.fieldWiseCopy(refId, builder.getFieldBuilder(field)).build();
+        ProtoUtils.fieldWiseCopy(refId, builder.getFieldBuilder(field));
+        return builder.build();
       }
     }
     // Keep the uri field.
