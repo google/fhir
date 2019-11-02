@@ -103,6 +103,10 @@ public final class AnnotationUtils {
     return descriptor.getOptions().getExtension(Annotations.fhirCodeSystemUrl);
   }
 
+  public static String getEnumValuesetUrl(EnumDescriptor descriptor) {
+    return descriptor.getOptions().getExtension(Annotations.enumValuesetUrl);
+  }
+
   public static boolean isProfileOf(Descriptor base, Descriptor test) {
     for (int i = 0; i < test.getOptions().getExtensionCount(Annotations.fhirProfileBase); i++) {
       if (test.getOptions()

@@ -356,7 +356,7 @@ message TestPatient {
 
       core.String version = 4;
 
-      message BoundCode {
+      message FixedCode {
         option (.google.fhir.proto.structure_definition_kind) =
             KIND_PRIMITIVE_TYPE;
         option (.google.fhir.proto.fhir_profile_base) =
@@ -370,7 +370,7 @@ message TestPatient {
 
         repeated core.Extension extension = 3;
       }
-      BoundCode code = 5;
+      FixedCode code = 5;
 
       core.String display = 6;
 
@@ -641,7 +641,7 @@ message TestObservation {
 
       core.String version = 4;
 
-      message BoundCode {
+      message FixedCode {
         option (.google.fhir.proto.structure_definition_kind) =
             KIND_PRIMITIVE_TYPE;
         option (.google.fhir.proto.fhir_profile_base) =
@@ -658,7 +658,7 @@ message TestObservation {
         // This CodeSystem is not enumerable, and so is represented as a string.
         string value = 4;
       }
-      BoundCode code = 5;
+      FixedCode code = 5;
 
       core.String display = 6;
 
@@ -695,7 +695,7 @@ message TestObservation {
 
       core.String version = 4;
 
-      message BoundCode {
+      message FixedCode {
         option (.google.fhir.proto.structure_definition_kind) =
             KIND_PRIMITIVE_TYPE;
         option (.google.fhir.proto.fhir_profile_base) =
@@ -712,7 +712,7 @@ message TestObservation {
         // This CodeSystem is not enumerable, and so is represented as a string.
         string value = 4;
       }
-      BoundCode code = 5;
+      FixedCode code = 5;
 
       core.String display = 6;
 
@@ -730,7 +730,7 @@ message TestObservation {
 
       core.String version = 4;
 
-      message BoundCode {
+      message FixedCode {
         option (.google.fhir.proto.structure_definition_kind) =
             KIND_PRIMITIVE_TYPE;
         option (.google.fhir.proto.fhir_profile_base) =
@@ -747,7 +747,7 @@ message TestObservation {
         // This CodeSystem is not enumerable, and so is represented as a string.
         string value = 4;
       }
-      BoundCode code = 5;
+      FixedCode code = 5;
 
       core.String display = 6;
 
@@ -775,7 +775,7 @@ message TestObservation {
 
       core.String version = 4;
 
-      message BoundCode {
+      message FixedCode {
         option (.google.fhir.proto.structure_definition_kind) =
             KIND_PRIMITIVE_TYPE;
         option (.google.fhir.proto.fhir_profile_base) =
@@ -789,7 +789,7 @@ message TestObservation {
 
         repeated core.Extension extension = 3;
       }
-      BoundCode code = 5;
+      FixedCode code = 5;
 
       core.String display = 6;
 
@@ -1005,7 +1005,7 @@ message TestObservation {
 
         core.String version = 4;
 
-        message BoundCode {
+        message FixedCode {
           option (.google.fhir.proto.structure_definition_kind) =
               KIND_PRIMITIVE_TYPE;
           option (.google.fhir.proto.fhir_profile_base) =
@@ -1024,7 +1024,7 @@ message TestObservation {
           // string.
           string value = 4;
         }
-        BoundCode code = 5;
+        FixedCode code = 5;
 
         core.String display = 6;
 
@@ -1169,7 +1169,7 @@ message TestObservationLvl2 {
 
       core.String version = 4;
 
-      message BoundCode {
+      message FixedCode {
         option (.google.fhir.proto.structure_definition_kind) =
             KIND_PRIMITIVE_TYPE;
         option (.google.fhir.proto.fhir_profile_base) =
@@ -1186,7 +1186,7 @@ message TestObservationLvl2 {
         // This CodeSystem is not enumerable, and so is represented as a string.
         string value = 4;
       }
-      BoundCode code = 5;
+      FixedCode code = 5;
 
       core.String display = 6;
 
@@ -1223,7 +1223,7 @@ message TestObservationLvl2 {
 
       core.String version = 4;
 
-      message BoundCode {
+      message FixedCode {
         option (.google.fhir.proto.structure_definition_kind) =
             KIND_PRIMITIVE_TYPE;
         option (.google.fhir.proto.fhir_profile_base) =
@@ -1240,7 +1240,7 @@ message TestObservationLvl2 {
         // This CodeSystem is not enumerable, and so is represented as a string.
         string value = 4;
       }
-      BoundCode code = 5;
+      FixedCode code = 5;
 
       core.String display = 6;
 
@@ -1258,7 +1258,7 @@ message TestObservationLvl2 {
 
       core.String version = 4;
 
-      message BoundCode {
+      message FixedCode {
         option (.google.fhir.proto.structure_definition_kind) =
             KIND_PRIMITIVE_TYPE;
         option (.google.fhir.proto.fhir_profile_base) =
@@ -1275,7 +1275,7 @@ message TestObservationLvl2 {
         // This CodeSystem is not enumerable, and so is represented as a string.
         string value = 4;
       }
-      BoundCode code = 5;
+      FixedCode code = 5;
 
       core.String display = 6;
 
@@ -1303,7 +1303,7 @@ message TestObservationLvl2 {
 
       core.String version = 4;
 
-      message BoundCode {
+      message FixedCode {
         option (.google.fhir.proto.structure_definition_kind) =
             KIND_PRIMITIVE_TYPE;
         option (.google.fhir.proto.fhir_profile_base) =
@@ -1317,7 +1317,7 @@ message TestObservationLvl2 {
 
         repeated core.Extension extension = 3;
       }
-      BoundCode code = 5;
+      FixedCode code = 5;
 
       core.String display = 6;
 
@@ -1335,7 +1335,7 @@ message TestObservationLvl2 {
 
       core.String version = 4;
 
-      message BoundCode {
+      message FixedCode {
         option (.google.fhir.proto.structure_definition_kind) =
             KIND_PRIMITIVE_TYPE;
         option (.google.fhir.proto.fhir_profile_base) =
@@ -1353,7 +1353,7 @@ message TestObservationLvl2 {
         // This CodeSystem is not enumerable, and so is represented as a string.
         string value = 4;
       }
-      BoundCode code = 5;
+      FixedCode code = 5;
 
       core.String display = 6;
 
@@ -1569,7 +1569,7 @@ message TestObservationLvl2 {
 
         core.String version = 4;
 
-        message BoundCode {
+        message FixedCode {
           option (.google.fhir.proto.structure_definition_kind) =
               KIND_PRIMITIVE_TYPE;
           option (.google.fhir.proto.fhir_profile_base) =
@@ -1588,7 +1588,7 @@ message TestObservationLvl2 {
           // string.
           string value = 4;
         }
-        BoundCode code = 5;
+        FixedCode code = 5;
 
         core.String display = 6;
 
@@ -1797,7 +1797,7 @@ message TestEncounter {
 
       core.String version = 4;
 
-      message BoundCode {
+      message FixedCode {
         option (.google.fhir.proto.structure_definition_kind) =
             KIND_PRIMITIVE_TYPE;
         option (.google.fhir.proto.fhir_profile_base) =
@@ -1832,7 +1832,7 @@ message TestEncounter {
 
         repeated core.Extension extension = 3;
       }
-      BoundCode code = 5;
+      FixedCode code = 5;
 
       core.String display = 6;
 

@@ -19,18 +19,12 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Files;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.r4.core.Bundle;
-import com.google.fhir.r4.core.CodeSystem;
-import com.google.fhir.r4.core.ContainedResource;
 import com.google.fhir.r4.core.StructureDefinition;
-import com.google.fhir.r4.core.ValueSet;
 import com.google.fhir.stu3.FhirPackage;
-import com.google.fhir.stu3.FileUtils;
 import com.google.fhir.stu3.JsonFormat;
 import com.google.fhir.stu3.ProtoFilePrinter;
 import com.google.fhir.stu3.ValueSetGenerator;
@@ -42,7 +36,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /** Main class for using the ValueSetGenerator to generate valueset protos. */
 final class ValueSetGeneratorMain {
@@ -50,31 +43,25 @@ final class ValueSetGeneratorMain {
   private static class Args {
 
     @Parameter(
-        names = {"--valueset_bundle"},
-        description = "Bundle containing CodeSystem and ValueSet definitions.")
-    private Set<String> valueSetBundleFiles = new HashSet<>();
-
-    @Parameter(
-        names = {"--codesystem_file"},
-        description = "File containing CodeSystem definition.")
-    private Set<String> codeSystemFiles = new HashSet<>();
-
-    @Parameter(
-        names = {"--valueset_file"},
-        description = "File containing ValueSet definition.")
-    private Set<String> valueSetFiles = new HashSet<>();
-
-    @Parameter(
         names = {"--output_filename"},
-        description = "Name for output Value Set proto file.",
-        required = true)
+        description = "Name for output ValueSet + CodeSystem proto file.")
     private String outputName = null;
 
     @Parameter(
-        names = {"--package_info"},
-        description = "Prototxt containing google.fhir.proto.PackageInfo",
-        required = true)
-    private String packageInfo = null;
+        names = {"--output_codesystem_filename"},
+        description = "Name for output CodeSystem proto file.")
+    private String outputCodeSystemName = null;
+
+    @Parameter(
+        names = {"--output_valueset_filename"},
+        description = "Name for output ValueSet proto file.")
+    private String outputValueSetName = null;
+
+    @Parameter(
+        names = {"--fhir_definition_dep"},
+        description =
+            "FhirPackage zips that are dependencies of the valuesets being generated.")
+    private Set<String> fhirDefinitionDepList = new HashSet<>();
 
     @Parameter(
         names = {"--for_codes_in"},
@@ -82,16 +69,28 @@ final class ValueSetGeneratorMain {
     private Set<String> codeUsers = new HashSet<>();
 
     @Parameter(
-        names = {"--exclude_codes_in"},
-        description = "Exclude codes for types used in these bundles")
-    private Set<String> excludeCodeUsers = new HashSet<>();
-
-    @Parameter(
         names = {"--eager_mode"},
         description =
             "Include all referenced code systems in --for_codes_in, even if they're not directly"
-                + " included.")
+                + " inlined (e.g. suggested or preferred bindings).")
     private boolean eagerMode = false;
+
+    @Parameter(
+        names = {"--input_package"},
+        description = "FhirPackage zip to generate for codes and valuesets for.",
+        required = true)
+    private String inputPackage = null;
+
+    private Set<FhirPackage> getDependencies() throws IOException {
+      Set<FhirPackage> packages = new HashSet<>();
+      for (String fhirDefinitionDep : fhirDefinitionDepList) {
+        packages.add(FhirPackage.load(fhirDefinitionDep));
+      }
+      if (inputPackage != null) {
+        packages.add(FhirPackage.load(inputPackage));
+      }
+      return packages;
+    }
   }
 
   private ValueSetGeneratorMain() {}
@@ -107,45 +106,43 @@ final class ValueSetGeneratorMain {
       System.exit(1);
     }
 
-    PackageInfo packageInfo =
-        FileUtils.mergeText(new File(args.packageInfo), PackageInfo.newBuilder()).build();
+    FhirPackage inputPackage = FhirPackage.load(args.inputPackage);
+    PackageInfo packageInfo = inputPackage.packageInfo;
     FhirVersion fhirVersion = packageInfo.getFhirVersion();
 
-    List<Bundle> codeSystemAndValueSetBundles = loadBundles(args.valueSetBundleFiles, fhirVersion);
-    codeSystemAndValueSetBundles.add(
-        makeBundle(args.codeSystemFiles, args.valueSetFiles, fhirVersion));
+    ValueSetGenerator generator = new ValueSetGenerator(packageInfo, args.getDependencies());
 
-    List<ValueSet> valueSets =
-        codeSystemAndValueSetBundles.stream()
-            .flatMap(b -> b.getEntryList().stream())
-            .filter(e -> e.getResource().hasValueSet())
-            .map(e -> e.getResource().getValueSet())
-            .collect(Collectors.toList());
-    List<CodeSystem> codeSystems =
-        codeSystemAndValueSetBundles.stream()
-            .flatMap(b -> b.getEntryList().stream())
-            .filter(e -> e.getResource().hasCodeSystem())
-            .map(e -> e.getResource().getCodeSystem())
-            .collect(Collectors.toList());
-
-    ValueSetGenerator generator =
-        new ValueSetGenerator(
-            packageInfo,
-            ImmutableSet.of(
-                new FhirPackage(packageInfo, ImmutableList.of(), codeSystems, valueSets)));
+    FileDescriptorProto codesFileDescriptor =
+        args.codeUsers.isEmpty()
+            ? generator.generateCodeSystemFile(inputPackage)
+            : generator.forCodesUsedIn(loadBundles(args.codeUsers, fhirVersion), args.eagerMode);
+    FileDescriptorProto valueSetsFileDescriptor =
+        args.codeUsers.isEmpty()
+            ? generator.generateValueSetFile(inputPackage)
+            : generator.forValueSetsUsedIn(loadBundles(args.codeUsers, fhirVersion));
 
     ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
 
-    System.out.println("Writing " + args.outputName + "...");
-    File outputFile = new File(args.outputName);
-    FileDescriptorProto fileDescriptor =
-        args.codeUsers.isEmpty()
-            ? generator.generateCodeSystemFile()
-            : generator.forCodesUsedIn(
-                loadBundles(args.codeUsers, fhirVersion),
-                loadBundles(args.excludeCodeUsers, fhirVersion),
-                args.eagerMode);
-    Files.asCharSink(outputFile, UTF_8).write(printer.print(fileDescriptor));
+    if (args.outputName != null) {
+      System.out.println("Writing " + args.outputName + "...");
+      FileDescriptorProto jointFile =
+          codesFileDescriptor.toBuilder()
+              .addAllMessageType(valueSetsFileDescriptor.getMessageTypeList())
+              .build();
+      Files.asCharSink(new File(args.outputName), UTF_8).write(printer.print(jointFile));
+    }
+
+    if (args.outputCodeSystemName != null) {
+      System.out.println("Writing " + args.outputCodeSystemName + "...");
+      Files.asCharSink(new File(args.outputCodeSystemName), UTF_8)
+          .write(printer.print(codesFileDescriptor));
+    }
+
+    if (args.outputValueSetName != null) {
+      System.out.println("Writing " + args.outputValueSetName + "...");
+      Files.asCharSink(new File(args.outputValueSetName), UTF_8)
+          .write(printer.print(valueSetsFileDescriptor));
+    }
   }
 
   private static JsonFormat.Parser getParser(FhirVersion fhirVersion) {
@@ -158,30 +155,6 @@ final class ValueSetGeneratorMain {
         throw new IllegalArgumentException(
             "Fhir version unsupported by ValueSetGenerator: " + fhirVersion);
     }
-  }
-
-  private static Bundle makeBundle(
-      Set<String> codeSystemFiles, Set<String> valueSetFiles, FhirVersion fhirVersion)
-      throws IOException {
-    JsonFormat.Parser parser = getParser(fhirVersion);
-    Bundle.Builder bundle = Bundle.newBuilder();
-    for (String filename : codeSystemFiles) {
-      CodeSystem.Builder codeSystem = CodeSystem.newBuilder();
-      String json = Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read();
-      parser.merge(json, codeSystem);
-      bundle.addEntry(
-          Bundle.Entry.newBuilder()
-              .setResource(ContainedResource.newBuilder().setCodeSystem(codeSystem)));
-    }
-    for (String filename : valueSetFiles) {
-      ValueSet.Builder valueSet = ValueSet.newBuilder();
-      String json = Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read();
-      parser.merge(json, valueSet);
-      bundle.addEntry(
-          Bundle.Entry.newBuilder()
-              .setResource(ContainedResource.newBuilder().setValueSet(valueSet)));
-    }
-    return bundle.build();
   }
 
   private static List<Bundle> loadBundles(Set<String> filenames, FhirVersion fhirVersion)

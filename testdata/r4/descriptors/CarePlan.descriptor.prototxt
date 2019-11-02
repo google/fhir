@@ -377,7 +377,7 @@ nested_type {
     name: "value"
     number: 1
     type: TYPE_ENUM
-    type_name: ".google.fhir.r4.core.CarePlan.IntentCode.Value"
+    type_name: ".google.fhir.r4.core.CarePlanIntentValueSet.Value"
   }
   field {
     name: "id"
@@ -391,41 +391,6 @@ nested_type {
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
     type_name: ".google.fhir.r4.core.Extension"
-  }
-  enum_type {
-    name: "Value"
-    value {
-      name: "INVALID_UNINITIALIZED"
-      number: 0
-    }
-    value {
-      name: "PROPOSAL"
-      number: 1
-      options {
-        [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/request-intent"
-      }
-    }
-    value {
-      name: "PLAN"
-      number: 2
-      options {
-        [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/request-intent"
-      }
-    }
-    value {
-      name: "ORDER"
-      number: 3
-      options {
-        [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/request-intent"
-      }
-    }
-    value {
-      name: "OPTION"
-      number: 4
-      options {
-        [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/request-intent"
-      }
-    }
   }
   options {
     [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/care-plan-intent"
@@ -749,7 +714,7 @@ nested_type {
         name: "value"
         number: 1
         type: TYPE_ENUM
-        type_name: ".google.fhir.r4.core.CarePlan.Activity.Detail.KindCode.Value"
+        type_name: ".google.fhir.r4.core.CarePlanActivityKindValueSet.Value"
       }
       field {
         name: "id"
@@ -763,77 +728,6 @@ nested_type {
         label: LABEL_REPEATED
         type: TYPE_MESSAGE
         type_name: ".google.fhir.r4.core.Extension"
-      }
-      enum_type {
-        name: "Value"
-        value {
-          name: "INVALID_UNINITIALIZED"
-          number: 0
-        }
-        value {
-          name: "APPOINTMENT"
-          number: 1
-          options {
-            [google.fhir.proto.fhir_original_code]: "Appointment"
-            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
-          }
-        }
-        value {
-          name: "COMMUNICATION_REQUEST"
-          number: 2
-          options {
-            [google.fhir.proto.fhir_original_code]: "CommunicationRequest"
-            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
-          }
-        }
-        value {
-          name: "DEVICE_REQUEST"
-          number: 3
-          options {
-            [google.fhir.proto.fhir_original_code]: "DeviceRequest"
-            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
-          }
-        }
-        value {
-          name: "MEDICATION_REQUEST"
-          number: 4
-          options {
-            [google.fhir.proto.fhir_original_code]: "MedicationRequest"
-            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
-          }
-        }
-        value {
-          name: "NUTRITION_ORDER"
-          number: 5
-          options {
-            [google.fhir.proto.fhir_original_code]: "NutritionOrder"
-            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
-          }
-        }
-        value {
-          name: "TASK"
-          number: 6
-          options {
-            [google.fhir.proto.fhir_original_code]: "Task"
-            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
-          }
-        }
-        value {
-          name: "SERVICE_REQUEST"
-          number: 7
-          options {
-            [google.fhir.proto.fhir_original_code]: "ServiceRequest"
-            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
-          }
-        }
-        value {
-          name: "VISION_PRESCRIPTION"
-          number: 8
-          options {
-            [google.fhir.proto.fhir_original_code]: "VisionPrescription"
-            [google.fhir.proto.source_code_system]: "http://hl7.org/fhir/resource-types"
-          }
-        }
       }
       options {
         [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/care-plan-activity-kind"

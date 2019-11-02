@@ -20,6 +20,7 @@ import "google/protobuf/any.proto";
 import "proto/annotations.proto";
 import "proto/r4/core/codes.proto";
 import "proto/r4/core/datatypes.proto";
+import "proto/r4/core/valuesets.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
@@ -108,18 +109,7 @@ message CarePlan {
     option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/code";
 
-    enum Value {
-      INVALID_UNINITIALIZED = 0;
-      PROPOSAL = 1 [(.google.fhir.proto.source_code_system) =
-                        "http://hl7.org/fhir/request-intent"];
-      PLAN = 2 [(.google.fhir.proto.source_code_system) =
-                    "http://hl7.org/fhir/request-intent"];
-      ORDER = 3 [(.google.fhir.proto.source_code_system) =
-                     "http://hl7.org/fhir/request-intent"];
-      OPTION = 4 [(.google.fhir.proto.source_code_system) =
-                      "http://hl7.org/fhir/request-intent"];
-    }
-    Value value = 1;
+    CarePlanIntentValueSet.Value value = 1;
 
     String id = 2;
 
@@ -246,50 +236,7 @@ message CarePlan {
         option (.google.fhir.proto.fhir_profile_base) =
             "http://hl7.org/fhir/StructureDefinition/code";
 
-        enum Value {
-          INVALID_UNINITIALIZED = 0;
-          APPOINTMENT = 1 [
-            (.google.fhir.proto.fhir_original_code) = "Appointment",
-            (.google.fhir.proto.source_code_system) =
-                "http://hl7.org/fhir/resource-types"
-          ];
-          COMMUNICATION_REQUEST = 2 [
-            (.google.fhir.proto.fhir_original_code) = "CommunicationRequest",
-            (.google.fhir.proto.source_code_system) =
-                "http://hl7.org/fhir/resource-types"
-          ];
-          DEVICE_REQUEST = 3 [
-            (.google.fhir.proto.fhir_original_code) = "DeviceRequest",
-            (.google.fhir.proto.source_code_system) =
-                "http://hl7.org/fhir/resource-types"
-          ];
-          MEDICATION_REQUEST = 4 [
-            (.google.fhir.proto.fhir_original_code) = "MedicationRequest",
-            (.google.fhir.proto.source_code_system) =
-                "http://hl7.org/fhir/resource-types"
-          ];
-          NUTRITION_ORDER = 5 [
-            (.google.fhir.proto.fhir_original_code) = "NutritionOrder",
-            (.google.fhir.proto.source_code_system) =
-                "http://hl7.org/fhir/resource-types"
-          ];
-          TASK = 6 [
-            (.google.fhir.proto.fhir_original_code) = "Task",
-            (.google.fhir.proto.source_code_system) =
-                "http://hl7.org/fhir/resource-types"
-          ];
-          SERVICE_REQUEST = 7 [
-            (.google.fhir.proto.fhir_original_code) = "ServiceRequest",
-            (.google.fhir.proto.source_code_system) =
-                "http://hl7.org/fhir/resource-types"
-          ];
-          VISION_PRESCRIPTION = 8 [
-            (.google.fhir.proto.fhir_original_code) = "VisionPrescription",
-            (.google.fhir.proto.source_code_system) =
-                "http://hl7.org/fhir/resource-types"
-          ];
-        }
-        Value value = 1;
+        CarePlanActivityKindValueSet.Value value = 1;
 
         String id = 2;
 

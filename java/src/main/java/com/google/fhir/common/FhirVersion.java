@@ -43,20 +43,33 @@ public enum FhirVersion {
   R4(
       "google.fhir.r4.core",
       "proto/r4/core",
-      ImmutableList.of(com.google.fhir.r4.core.AccountStatusCode.getDescriptor().getFile()),
+      ImmutableList.of(
+          com.google.fhir.r4.core.AccountStatusCode.getDescriptor().getFile(),
+          com.google.fhir.r4.core.BodyLengthUnitsValueSet.getDescriptor().getFile()),
       ImmutableMap.of(
           "datatypes.proto", com.google.fhir.r4.core.Decimal.getDescriptor().getFile(),
           "extensions.proto", com.google.fhir.r4.core.MimeType.getDescriptor().getFile(),
-          "codes.proto", com.google.fhir.r4.core.AccountStatusCode.getDescriptor().getFile()),
+          "codes.proto", com.google.fhir.r4.core.AccountStatusCode.getDescriptor().getFile(),
+          "valuesets.proto",
+              com.google.fhir.r4.core.BodyLengthUnitsValueSet.getDescriptor().getFile()),
       com.google.fhir.r4.core.ContainedResource.getDescriptor(),
       FHIRVersionCode.Value.V_4_0_0);
 
   // The proto package of the core FHIR structures.
   public final String coreProtoPackage;
+  
   // The import location of the core FHIR proto package.
   public final String coreProtoImportRoot;
-  // A list of all the FHIR code files.
+
+  // A list of all files that define enums (CodeSystems and ValueSets) from the core FHIR package.
+  // This is necessary since the core FHIR package defines too many codes and valuesets to make
+  // enums for them all.  Instead, we only generate those that are used by the core resources and
+  // profiles.  If other CodeSystems/ValueSets get referenced by non-core profiles, the enum needs
+  // to be written into the profile definition itself.
+  // This list is used so that the ProtoGenerator can determine if a core enum was defined in the
+  // core code files, or needs to be inlined.
   public final ImmutableList<FileDescriptor> codeTypeList;
+
   // A map of all the FHIR core types to their corresponding files.
   public final ImmutableMap<String, FileDescriptor> coreTypeMap;
 

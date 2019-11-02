@@ -19,6 +19,7 @@ package google.fhir.r4.core;
 import "google/protobuf/any.proto";
 import "proto/annotations.proto";
 import "proto/r4/core/datatypes.proto";
+import "proto/r4/core/valuesets.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
@@ -72,16 +73,7 @@ message ClinicalImpression {
     option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/code";
 
-    enum Value {
-      INVALID_UNINITIALIZED = 0;
-      IN_PROGRESS = 1 [(.google.fhir.proto.source_code_system) =
-                           "http://hl7.org/fhir/event-status"];
-      COMPLETED = 2 [(.google.fhir.proto.source_code_system) =
-                         "http://hl7.org/fhir/event-status"];
-      ENTERED_IN_ERROR = 3 [(.google.fhir.proto.source_code_system) =
-                                "http://hl7.org/fhir/event-status"];
-    }
-    Value value = 1;
+    ClinicalImpressionStatusValueSet.Value value = 1;
 
     String id = 2;
 

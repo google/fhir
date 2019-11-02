@@ -10,6 +10,7 @@ RESOURCE_DEPS = [
     "//proto/r4/core:codes_proto",
     "//proto/r4/core:datatypes_proto",
     "//proto/r4/core:extensions_proto",
+    "//proto/r4/core:valuesets_proto",
     "//proto:annotations_proto",
     "@protobuf_archive//:any_proto",
 ]

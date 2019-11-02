@@ -281,10 +281,10 @@ managing_organization {
 }
 race {
   omb_category {
-    code { value:  NUM_2028_9 }
+    code { value:  ASIAN }
   }
   detailed {
-    code { value:  NUM_2040_4 }
+    code { value:  KOREAN }
   }
   text {
     value: "asian - korean"

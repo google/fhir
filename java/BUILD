@@ -168,6 +168,7 @@ java_library(
         "//proto/r4/core:codes_java_proto",
         "//proto/r4/core:datatypes_java_proto",
         "//proto/r4/core:extensions_java_proto",
+        "//proto/r4/core:valuesets_java_proto",
         "//proto/r4/core/resources:bundle_and_contained_resource_java_proto",
         "//proto/r4/core/resources:patient_java_proto",
         "//proto/r4/core/resources:structure_definition_java_proto",
@@ -724,6 +725,7 @@ java_binary(
     srcs = ["src/main/java/com/google/fhir/profile/ProfileGeneratorMain.java"],
     main_class = "com.google.fhir.profile.ProfileGeneratorMain",
     deps = [
+        ":common",
         ":generator_utils",
         ":profile_generator_lib",
         ":stu3",

@@ -89,6 +89,9 @@ extend google.protobuf.MessageOptions {
 extend google.protobuf.EnumOptions {
   // If this message CodeSystem enum, this is the url for the CodeSystem
   string fhir_code_system_url = 268060945;
+
+  // If this message ValueSet enum, this is the url for the CodeSystem
+  string enum_valueset_url = 276877913;
 }
 
 extend google.protobuf.EnumValueOptions {

@@ -260,6 +260,16 @@ class ProtoGeneratorMain {
       }
     }
 
+    // Add any "loose" FHIR definitions we're currently generating in as a FhirPackage.
+    // TODO: Eliminate this form of input entirely, in favor of only accepting
+    // FhirPackages
+    fhirPackages.add(
+        new FhirPackage(
+            packageInfo,
+            new ArrayList<StructureDefinition>(definitions),
+            new ArrayList<>(),
+            new ArrayList<>()));
+
     definitions =
         definitions.stream()
             .filter(def -> !args.excludeIds.contains(def.getId().getValue()))

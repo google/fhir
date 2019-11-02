@@ -25,7 +25,7 @@ nested_type {
     name: "value"
     number: 1
     type: TYPE_ENUM
-    type_name: ".google.fhir.r4.core.HumanNameAssemblyOrder.ValueCodeCode.Value"
+    type_name: ".google.fhir.r4.core.HumanNameAssemblyOrderValueSet.Value"
   }
   field {
     name: "id"
@@ -39,69 +39,6 @@ nested_type {
     label: LABEL_REPEATED
     type: TYPE_MESSAGE
     type_name: ".google.fhir.r4.core.Extension"
-  }
-  enum_type {
-    name: "Value"
-    value {
-      name: "INVALID_UNINITIALIZED"
-      number: 0
-    }
-    value {
-      name: "NL1"
-      number: 1
-      options {
-        [google.fhir.proto.fhir_original_code]: "NL1"
-        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/name-assembly-order"
-      }
-    }
-    value {
-      name: "NL2"
-      number: 2
-      options {
-        [google.fhir.proto.fhir_original_code]: "NL2"
-        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/name-assembly-order"
-      }
-    }
-    value {
-      name: "NL3"
-      number: 3
-      options {
-        [google.fhir.proto.fhir_original_code]: "NL3"
-        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/name-assembly-order"
-      }
-    }
-    value {
-      name: "NL4"
-      number: 4
-      options {
-        [google.fhir.proto.fhir_original_code]: "NL4"
-        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/name-assembly-order"
-      }
-    }
-    value {
-      name: "F"
-      number: 5
-      options {
-        [google.fhir.proto.fhir_original_code]: "F"
-        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/v2-0444"
-      }
-    }
-    value {
-      name: "G"
-      number: 6
-      options {
-        [google.fhir.proto.fhir_original_code]: "G"
-        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/v2-0444"
-      }
-    }
-    value {
-      name: "UNK"
-      number: 7
-      options {
-        [google.fhir.proto.fhir_original_code]: "UNK"
-        [google.fhir.proto.source_code_system]: "http://terminology.hl7.org/CodeSystem/v3-NullFlavor"
-      }
-    }
   }
   options {
     [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/name-assembly-order"

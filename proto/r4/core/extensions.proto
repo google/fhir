@@ -19,6 +19,7 @@ package google.fhir.r4.core;
 import "proto/annotations.proto";
 import "proto/r4/core/codes.proto";
 import "proto/r4/core/datatypes.proto";
+import "proto/r4/core/valuesets.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
@@ -575,26 +576,7 @@ message StructureDefinitionTemplateStatus {
     option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/code";
 
-    enum Value {
-      INVALID_UNINITIALIZED = 0;
-      DRAFT = 1 [(.google.fhir.proto.source_code_system) =
-                     "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
-      PENDING = 2 [(.google.fhir.proto.source_code_system) =
-                       "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
-      ACTIVE = 3 [(.google.fhir.proto.source_code_system) =
-                      "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
-      REVIEW = 4 [(.google.fhir.proto.source_code_system) =
-                      "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
-      CANCELLED = 5 [(.google.fhir.proto.source_code_system) =
-                         "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
-      REJECTED = 6 [(.google.fhir.proto.source_code_system) =
-                        "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
-      RETIRED = 7 [(.google.fhir.proto.source_code_system) =
-                       "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
-      TERMINATED = 8 [(.google.fhir.proto.source_code_system) =
-                          "urn:oid:2.16.840.1.113883.3.1937.98.5.8"];
-    }
-    Value value = 1;
+    TemplateStatusCodeValueSet.Value value = 1;
 
     String id = 2;
 
@@ -1086,55 +1068,7 @@ message QuantityUncertaintyType {
     option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/code";
 
-    enum Value {
-      INVALID_UNINITIALIZED = 0;
-      B = 1 [
-        (.google.fhir.proto.fhir_original_code) = "B",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
-      ];
-      E = 2 [
-        (.google.fhir.proto.fhir_original_code) = "E",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
-      ];
-      F = 3 [
-        (.google.fhir.proto.fhir_original_code) = "F",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
-      ];
-      G = 4 [
-        (.google.fhir.proto.fhir_original_code) = "G",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
-      ];
-      LN = 5 [
-        (.google.fhir.proto.fhir_original_code) = "LN",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
-      ];
-      N = 6 [
-        (.google.fhir.proto.fhir_original_code) = "N",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
-      ];
-      T = 7 [
-        (.google.fhir.proto.fhir_original_code) = "T",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
-      ];
-      U = 8 [
-        (.google.fhir.proto.fhir_original_code) = "U",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
-      ];
-      X2 = 9 [
-        (.google.fhir.proto.fhir_original_code) = "X2",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-ProbabilityDistributionType"
-      ];
-    }
-    Value value = 1;
+    ProbabilityDistributionTypeValueSet.Value value = 1;
 
     String id = 2;
 
@@ -1164,45 +1098,7 @@ message HumanNameAssemblyOrder {
     option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/code";
 
-    enum Value {
-      INVALID_UNINITIALIZED = 0;
-      NL1 = 1 [
-        (.google.fhir.proto.fhir_original_code) = "NL1",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/name-assembly-order"
-      ];
-      NL2 = 2 [
-        (.google.fhir.proto.fhir_original_code) = "NL2",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/name-assembly-order"
-      ];
-      NL3 = 3 [
-        (.google.fhir.proto.fhir_original_code) = "NL3",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/name-assembly-order"
-      ];
-      NL4 = 4 [
-        (.google.fhir.proto.fhir_original_code) = "NL4",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/name-assembly-order"
-      ];
-      F = 5 [
-        (.google.fhir.proto.fhir_original_code) = "F",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v2-0444"
-      ];
-      G = 6 [
-        (.google.fhir.proto.fhir_original_code) = "G",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v2-0444"
-      ];
-      UNK = 7 [
-        (.google.fhir.proto.fhir_original_code) = "UNK",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-NullFlavor"
-      ];
-    }
-    Value value = 1;
+    HumanNameAssemblyOrderValueSet.Value value = 1;
 
     String id = 2;
 
@@ -4955,70 +4851,7 @@ message HumanNameENQualifier {
     option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/code";
 
-    enum Value {
-      INVALID_UNINITIALIZED = 0;
-      LS = 1 [
-        (.google.fhir.proto.fhir_original_code) = "LS",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
-      ];
-      AC = 2 [
-        (.google.fhir.proto.fhir_original_code) = "AC",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
-      ];
-      NB = 3 [
-        (.google.fhir.proto.fhir_original_code) = "NB",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
-      ];
-      PR = 4 [
-        (.google.fhir.proto.fhir_original_code) = "PR",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
-      ];
-      HON = 5 [
-        (.google.fhir.proto.fhir_original_code) = "HON",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
-      ];
-      BR = 6 [
-        (.google.fhir.proto.fhir_original_code) = "BR",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
-      ];
-      AD = 7 [
-        (.google.fhir.proto.fhir_original_code) = "AD",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
-      ];
-      SP = 8 [
-        (.google.fhir.proto.fhir_original_code) = "SP",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
-      ];
-      MID = 9 [
-        (.google.fhir.proto.fhir_original_code) = "MID",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
-      ];
-      CL = 10 [
-        (.google.fhir.proto.fhir_original_code) = "CL",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
-      ];
-      IN = 11 [
-        (.google.fhir.proto.fhir_original_code) = "IN",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifierR2"
-      ];
-      VV = 12 [
-        (.google.fhir.proto.fhir_original_code) = "VV",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-EntityNamePartQualifier"
-      ];
-    }
-    Value value = 1;
+    EntityNamePartQualifierValueSet.Value value = 1;
 
     String id = 2;
 
@@ -5959,50 +5792,7 @@ message AddressADUse {
     option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/code";
 
-    enum Value {
-      INVALID_UNINITIALIZED = 0;
-      BAD = 1 [
-        (.google.fhir.proto.fhir_original_code) = "BAD",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
-      ];
-      CONF = 2 [
-        (.google.fhir.proto.fhir_original_code) = "CONF",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
-      ];
-      HP = 3 [
-        (.google.fhir.proto.fhir_original_code) = "HP",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
-      ];
-      HV = 4 [
-        (.google.fhir.proto.fhir_original_code) = "HV",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
-      ];
-      DIR = 5 [
-        (.google.fhir.proto.fhir_original_code) = "DIR",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
-      ];
-      PUB = 6 [
-        (.google.fhir.proto.fhir_original_code) = "PUB",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
-      ];
-      PHYS = 7 [
-        (.google.fhir.proto.fhir_original_code) = "PHYS",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
-      ];
-      PST = 8 [
-        (.google.fhir.proto.fhir_original_code) = "PST",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-AddressUse"
-      ];
-    }
-    Value value = 1;
+    PostalAddressUseValueSet.Value value = 1;
 
     String id = 2;
 
@@ -6970,25 +6760,7 @@ message HumanNameENRepresentation {
     option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/code";
 
-    enum Value {
-      INVALID_UNINITIALIZED = 0;
-      ABC = 1 [
-        (.google.fhir.proto.fhir_original_code) = "ABC",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-EntityNameUse"
-      ];
-      IDE = 2 [
-        (.google.fhir.proto.fhir_original_code) = "IDE",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-EntityNameUse"
-      ];
-      SYL = 3 [
-        (.google.fhir.proto.fhir_original_code) = "SYL",
-        (.google.fhir.proto.source_code_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-EntityNameUse"
-      ];
-    }
-    Value value = 1;
+    NameRepresentationUseValueSet.Value value = 1;
 
     String id = 2;
 

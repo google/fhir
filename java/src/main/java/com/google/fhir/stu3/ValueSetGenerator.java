@@ -18,7 +18,6 @@ import com.google.common.base.Ascii;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.fhir.common.FhirVersion;
 import com.google.fhir.proto.Annotations;
@@ -55,7 +54,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /** */
 public class ValueSetGenerator {
@@ -94,6 +92,11 @@ public class ValueSetGenerator {
                     Collectors.toMap(
                         cs -> cs.getUrl().getValue(),
                         cs -> packageString + getCodeSystemName(cs))));
+        protoTypesByUrl.putAll(
+            fhirPackage.valueSets.stream()
+                .collect(
+                    Collectors.toMap(
+                        vs -> vs.getUrl().getValue(), vs -> packageString + getValueSetName(vs))));
       }
     }
 
@@ -101,32 +104,43 @@ public class ValueSetGenerator {
     this.protoTypesByUrl.putAll(
         fhirVersion.codeTypeList.stream()
             .flatMap(file -> file.getMessageTypes().stream())
-            .filter(descriptor -> isCodeType(descriptor))
+            .filter(descriptor -> isEnumDefinition(descriptor))
             .collect(
                 Collectors.toMap(
-                    descriptor ->
-                        AnnotationUtils.getFhirCodeSystemUrl(descriptor.getEnumTypes().get(0)),
+                    descriptor -> getEnumDefiningUrl(descriptor),
                     descriptor ->
                         "." + fhirVersion.coreProtoPackage + "." + descriptor.getName())));
   }
 
-  private static boolean isCodeType(Descriptor descriptor) {
+  private static boolean isEnumDefinition(Descriptor descriptor) {
     return descriptor.getFields().isEmpty() && descriptor.getEnumTypes().size() == 1;
   }
 
-  public FileDescriptorProto forCodesUsedIn(
-      Collection<Bundle> codeUsers, Collection<Bundle> excludingCodesIn, boolean eagerMode) {
-    // Note we use eagerMode for used-in, and not-eagerMode for excluding.
-    // This way the sets of codes generated are disjoint between (include A, exclude B, eager) and
-    // (include B, not eager)
-    // because in both cases the codes in B are computed non-eagerly
+  private static String getEnumDefiningUrl(Descriptor descriptor) {
+    String codeSystem = AnnotationUtils.getFhirCodeSystemUrl(descriptor.getEnumTypes().get(0));
+    if (!codeSystem.isEmpty()) {
+      return codeSystem;
+    }
+    String valueSet = AnnotationUtils.getEnumValuesetUrl(descriptor.getEnumTypes().get(0));
+    if (!valueSet.isEmpty()) {
+      return valueSet;
+    }
+    throw new IllegalArgumentException(
+        "No Enum Defining Url found for: " + descriptor.getFullName());
+  }
+
+  public FileDescriptorProto forCodesUsedIn(Collection<Bundle> codeUsers, boolean eagerMode) {
     Set<CodeSystem> codeSystemsToGenerate = getCodeSystemsUsedInBundles(codeUsers, eagerMode);
-    codeSystemsToGenerate.removeAll(getCodeSystemsUsedInBundles(excludingCodesIn, !eagerMode));
     return generateCodeSystemFile(codeSystemsToGenerate);
   }
 
-  public FileDescriptorProto generateCodeSystemFile() {
-    return generateCodeSystemFile(codeSystemsByUrl.values());
+  public FileDescriptorProto forValueSetsUsedIn(Collection<Bundle> valueSetUsers) {
+    Set<ValueSet> valueSetsToGenerate = getValueSetsUsedInBundles(valueSetUsers);
+    return generateValueSetFile(valueSetsToGenerate);
+  }
+
+  public FileDescriptorProto generateCodeSystemFile(FhirPackage fhirPackage) {
+    return generateCodeSystemFile(fhirPackage.codeSystems);
   }
 
   private FileDescriptorProto generateCodeSystemFile(Collection<CodeSystem> codeSystemsToGenerate) {
@@ -153,6 +167,33 @@ public class ValueSetGenerator {
     return builder.build();
   }
 
+  public FileDescriptorProto generateValueSetFile(FhirPackage fhirPackage) {
+    return generateValueSetFile(fhirPackage.valueSets);
+  }
+
+  private FileDescriptorProto generateValueSetFile(Collection<ValueSet> valueSetsToGenerate) {
+    FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
+    builder.setPackage(packageInfo.getProtoPackage()).setSyntax("proto3");
+    builder.addDependency(new File(FhirVersion.ANNOTATION_PATH, "annotations.proto").toString());
+    FileOptions.Builder options = FileOptions.newBuilder();
+    if (!packageInfo.getJavaProtoPackage().isEmpty()) {
+      options.setJavaPackage(packageInfo.getJavaProtoPackage()).setJavaMultipleFiles(true);
+    }
+    if (!packageInfo.getGoProtoPackage().isEmpty()) {
+      options.setGoPackage(packageInfo.getGoProtoPackage());
+    }
+    builder.setOptions(options);
+    valueSetsToGenerate.stream()
+        .filter(vs -> !getOneToOneCodeSystem(vs).isPresent())
+        .map(vs -> generateValueSetProto(vs))
+        .filter(op -> op.isPresent())
+        .map(op -> op.get())
+        .sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
+        .forEach(proto -> builder.addMessageType(proto));
+
+    return builder.build();
+  }
+
   private DescriptorProto generateCodeSystemProto(CodeSystem codeSystem) {
     String codeSystemName = getCodeSystemName(codeSystem);
     String url = codeSystem.getUrl().getValue();
@@ -170,6 +211,28 @@ public class ValueSetGenerator {
     }
 
     return descriptor.addEnumType(generateCodeSystemEnum(codeSystem)).build();
+  }
+
+  private Optional<DescriptorProto> generateValueSetProto(ValueSet valueSet) {
+    String valueSetName = getValueSetName(valueSet);
+    String url = valueSet.getUrl().getValue();
+    DescriptorProto.Builder descriptor = DescriptorProto.newBuilder().setName(valueSetName);
+
+    // Build a top-level message description.
+    String comment = valueSet.getDescription().getValue() + "\nSee " + url;
+    descriptor
+        .getOptionsBuilder()
+        .setExtension(ProtoGeneratorAnnotations.messageDescription, comment);
+
+    if (!valueSetsByUrl.containsKey(url)) {
+      throw new IllegalArgumentException("Unrecognized CodeSystem: " + url);
+    }
+
+    Optional<EnumDescriptorProto> valueSetEnum = generateValueSetEnum(valueSet);
+    if (!valueSetEnum.isPresent()) {
+      return Optional.empty();
+    }
+    return Optional.of(descriptor.addEnumType(valueSetEnum.get()).build());
   }
 
   private static EnumDescriptorProto generateCodeSystemEnum(CodeSystem codeSystem) {
@@ -301,6 +364,14 @@ public class ValueSetGenerator {
             AnnotationUtils.getStructureDefinitionUrl(Code.getDescriptor()))
         .setExtension(Annotations.fhirValuesetUrl, valueSet.getUrl().getValue());
 
+    if (protoTypesByUrl.containsKey(url)) {
+      enumField
+          .setName("value")
+          .setType(FieldDescriptorProto.Type.TYPE_ENUM)
+          .setTypeName(protoTypesByUrl.get(url) + ".Value");
+      return descriptor.build();
+    }
+
     Optional<CodeSystem> oneToOneCodeSystem = getOneToOneCodeSystem(valueSet);
     if (oneToOneCodeSystem.isPresent()
         && protoTypesByUrl.containsKey(oneToOneCodeSystem.get().getUrl().getValue())) {
@@ -428,6 +499,7 @@ public class ValueSetGenerator {
                 Collectors.toMap(exclude -> exclude.getSystem().getValue(), exclude -> exclude));
 
     EnumDescriptorProto.Builder builder = EnumDescriptorProto.newBuilder().setName("Value");
+    builder.getOptionsBuilder().setExtension(Annotations.enumValuesetUrl, url);
     builder.addValue(
         EnumValueDescriptorProto.newBuilder().setNumber(0).setName("INVALID_UNINITIALIZED"));
     int enumNumber = 1;
@@ -464,6 +536,55 @@ public class ValueSetGenerator {
     System.out.println("Warning: Not generating enum for " + url + " - " + warning);
   }
 
+  private static class EnumValueWithBackupName {
+    final EnumValueDescriptorProto.Builder enumValue;
+    final String backupName;
+
+    EnumValueWithBackupName(EnumValueDescriptorProto.Builder enumValue, String backupName) {
+      this.enumValue = enumValue;
+      this.backupName = backupName;
+    }
+
+    String originalName() {
+      return enumValue.getName();
+    }
+
+    EnumValueDescriptorProto.Builder get(boolean withBackupName) {
+      if (!withBackupName) {
+        return enumValue;
+      }
+      return enumValue.setName(backupName);
+    }
+  }
+
+  private static List<EnumValueDescriptorProto.Builder> toEnumValueList(
+      List<EnumValueWithBackupName> enumsWithBackup) {
+    Set<String> usedNames = new HashSet<>();
+    Set<String> duplicatedNames = new HashSet<>();
+    for (EnumValueWithBackupName enumWithBackup : enumsWithBackup) {
+      if (!usedNames.add(enumWithBackup.originalName())) {
+        duplicatedNames.add(enumWithBackup.originalName());
+      }
+    }
+    List<EnumValueDescriptorProto.Builder> enumList = new ArrayList<>();
+    Set<String> finalUsedNames = new HashSet<>();
+    for (EnumValueWithBackupName enumWithBackup : enumsWithBackup) {
+      EnumValueDescriptorProto.Builder finalEnum =
+          enumWithBackup.get(duplicatedNames.contains(enumWithBackup.originalName()));
+      if (finalUsedNames.add(finalEnum.getName())) {
+        enumList.add(finalEnum);
+      } else if (finalEnum
+          .getOptions()
+          .getExtension(Annotations.sourceCodeSystem)
+          .equals("http://hl7.org/fhir/sid/ndc")) {
+        // This valueset has duplicate codes :( ignore.
+      } else {
+        throw new IllegalArgumentException("Found duplicate code: " + finalEnum);
+      }
+    }
+    return enumList;
+  }
+
   private List<EnumValueDescriptorProto.Builder> getEnumsForValueConceptSet(
       ValueSet.Compose.ConceptSet conceptSet, ValueSet.Compose.ConceptSet excludeSet) {
     String system = conceptSet.getSystem().getValue();
@@ -489,10 +610,12 @@ public class ValueSetGenerator {
           .map(concept -> valuesByCode.get(concept.getCode().getValue()))
           .collect(Collectors.toList());
     } else {
-      return conceptSet.getConceptList().stream()
-          .map(
-              concept -> buildEnumValue(concept.getCode(), concept.getDisplay().getValue(), system))
-          .collect(Collectors.toList());
+      return toEnumValueList(
+          conceptSet.getConceptList().stream()
+              .map(
+                  concept ->
+                      buildEnumValue(concept.getCode(), concept.getDisplay().getValue(), system))
+              .collect(Collectors.toList()));
     }
   }
 
@@ -520,19 +643,16 @@ public class ValueSetGenerator {
                 })
             .collect(Collectors.toList());
 
-    if (!filters.isEmpty()) {
-      System.out.println(":::" + system);
-    }
-
-    return buildEnumValues(codeSystem.getConceptList(), system, new HashSet<>(), filters);
+    return toEnumValueList(
+        buildEnumValues(codeSystem.getConceptList(), system, new HashSet<>(), filters));
   }
 
-  private static List<EnumValueDescriptorProto.Builder> buildEnumValues(
+  private static List<EnumValueWithBackupName> buildEnumValues(
       List<ConceptDefinition> concepts,
       String system,
       Set<String> classifications,
       List<Filter> filters) {
-    List<EnumValueDescriptorProto.Builder> valueList = new ArrayList<>();
+    List<EnumValueWithBackupName> valueList = new ArrayList<>();
     for (ConceptDefinition concept : concepts) {
       if (conceptMatchesFilters(concept, classifications, filters)) {
         valueList.add(buildEnumValue(concept.getCode(), concept.getDisplay().getValue(), system));
@@ -588,10 +708,10 @@ public class ValueSetGenerator {
     }
   }
 
-  private static EnumValueDescriptorProto.Builder buildEnumValue(
-      Code code, String display, String system) {
+  private static EnumValueWithBackupName buildEnumValue(Code code, String display, String system) {
     String originalCode = code.getValue();
-    String enumCase = toEnumCase(code, display);
+    String enumCase = toEnumCase(code, display, false);
+    String backupName = toEnumCase(code, display, true);
 
     EnumValueDescriptorProto.Builder builder =
         EnumValueDescriptorProto.newBuilder().setName(enumCase);
@@ -601,7 +721,7 @@ public class ValueSetGenerator {
     if (system != null) {
       builder.getOptionsBuilder().setExtension(Annotations.sourceCodeSystem, system);
     }
-    return builder;
+    return new EnumValueWithBackupName(builder, backupName);
   }
 
   private static final ImmutableMap<String, String> CODE_RENAMES =
@@ -619,27 +739,17 @@ public class ValueSetGenerator {
           .put("ANS+", "ANS_PLUS")
           .build();
 
-  private static final ImmutableSet<String> CODE_DISPLAY_TO_FULLY_SPECIFY =
-      ImmutableSet.of(
-          "Central American Indian",
-          "Mexican American Indian",
-          "South American Indian",
-          "Dominican");
-
   private static final Pattern ACRONYM_PATTERN = Pattern.compile("([A-Z])([A-Z]+)(?![a-z])");
 
-  private static String toEnumCase(Code code, String display) {
+  private static String toEnumCase(Code code, String display, boolean fullySpecify) {
+    // TODO: handle more cases of fullySpecify
     String rawCode = code.getValue();
     if (CODE_RENAMES.containsKey(rawCode)) {
       return CODE_RENAMES.get(rawCode);
     }
     if (Character.isDigit(rawCode.charAt(0))) {
       if (!display.isEmpty() && !Character.isDigit(display.charAt(0))) {
-        // CODE_DISPLAY_TO_FULLY_SPECIFY is a hack to deal with the fact that some UsCore race
-        // codes have duplicate Displays for Race and Ethnicity
-        // TODO: handle this in a generic way.
-        rawCode =
-            CODE_DISPLAY_TO_FULLY_SPECIFY.contains(display) ? display + "_" + rawCode : display;
+        rawCode = fullySpecify ? display + "_" + rawCode : display;
       } else {
         rawCode = Ascii.toUpperCase("V_" + rawCode);
       }
@@ -700,8 +810,20 @@ public class ValueSetGenerator {
     return name + "Code";
   }
 
-  private Set<CodeSystem> getCodeSystemsUsedInBundles(
-      Collection<Bundle> bundles, boolean eagerMode) {
+  public String getValueSetName(ValueSet valueSet) {
+    String name = GeneratorUtils.toFieldTypeCase(valueSet.getName().getValue());
+    name = name.replaceAll("[^A-Za-z0-9]", "");
+    if (name.endsWith("ValueSets")) {
+      return name.substring(0, name.length() - 1);
+    }
+    if (name.endsWith("ValueSet")) {
+      return name;
+    }
+
+    return name + "ValueSet";
+  }
+
+  private Set<ValueSet> getValueSetsUsedInBundles(Collection<Bundle> bundles) {
     final Set<String> valueSetUrls = new HashSet<>();
     for (Bundle bundle : bundles) {
       for (Bundle.Entry entry : bundle.getEntryList()) {
@@ -716,15 +838,22 @@ public class ValueSetGenerator {
         }
       }
     }
-    Stream<ValueSet> valueSets =
-        valueSetUrls.stream().map(url -> valueSetsByUrl.get(url)).filter(vs -> vs != null);
+    return valueSetUrls.stream()
+        .map(url -> valueSetsByUrl.get(url))
+        .filter(vs -> vs != null)
+        .collect(Collectors.toSet());
+  }
+
+  private Set<CodeSystem> getCodeSystemsUsedInBundles(
+      Collection<Bundle> bundles, boolean eagerMode) {
+    Set<ValueSet> valueSets = getValueSetsUsedInBundles(bundles);
 
     if (eagerMode) {
-      return valueSets
+      return valueSets.stream()
           .flatMap(vs -> getReferencedCodeSystems(vs).stream())
           .collect(Collectors.toSet());
     } else {
-      return valueSets
+      return valueSets.stream()
           .map(vs -> getOneToOneCodeSystem(vs))
           .filter(op -> op.isPresent())
           .map(op -> op.get())

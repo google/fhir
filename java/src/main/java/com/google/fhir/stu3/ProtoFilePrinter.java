@@ -26,6 +26,7 @@ import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
+import com.google.protobuf.DescriptorProtos.EnumOptions;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumValueOptions;
 import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
@@ -304,6 +305,9 @@ public class ProtoFilePrinter {
     return message.toString();
   }
 
+  private static final ImmutableList<Extension<EnumOptions, String>> ENUM_EXTENSIONS =
+      ImmutableList.of(Annotations.fhirCodeSystemUrl, Annotations.enumValuesetUrl);
+
   private String printEnum(EnumDescriptorProto descriptor, String typePrefix, String packageName) {
     // Get the name of this message.
     String messageName = descriptor.getName();
@@ -318,19 +322,19 @@ public class ProtoFilePrinter {
     message.append(indent).append("enum ").append(messageName).append(" {\n");
 
     String fieldIndent = indent + "  ";
-    if (descriptor.getOptions().hasExtension(Annotations.fhirCodeSystemUrl)) {
-      message
-          .append(fieldIndent)
-          .append("option (")
-          .append(optionPackage)
-          .append("fhir_code_system_url")
-          .append(") = ")
-          .append("\"")
-          .append(
-              EXTENSION_ESCAPER.escape(
-                  descriptor.getOptions().getExtension(Annotations.fhirCodeSystemUrl).toString()))
-          .append("\"")
-          .append(";\n");
+    for (Extension<EnumOptions, String> enumOption : ENUM_EXTENSIONS) {
+      if (descriptor.getOptions().hasExtension(enumOption)) {
+        message
+            .append(fieldIndent)
+            .append("option (")
+            .append(optionPackage)
+            .append(enumOption.getDescriptor().getName())
+            .append(") = ")
+            .append("\"")
+            .append(EXTENSION_ESCAPER.escape(descriptor.getOptions().getExtension(enumOption)))
+            .append("\"")
+            .append(";\n");
+      }
     }
 
     // Loop over the elements.

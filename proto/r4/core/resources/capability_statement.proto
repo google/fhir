@@ -20,6 +20,7 @@ import "google/protobuf/any.proto";
 import "proto/annotations.proto";
 import "proto/r4/core/codes.proto";
 import "proto/r4/core/datatypes.proto";
+import "proto/r4/core/valuesets.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
@@ -369,29 +370,7 @@ message CapabilityStatement {
           option (.google.fhir.proto.fhir_profile_base) =
               "http://hl7.org/fhir/StructureDefinition/code";
 
-          enum Value {
-            INVALID_UNINITIALIZED = 0;
-            READ = 1 [(.google.fhir.proto.source_code_system) =
-                          "http://hl7.org/fhir/restful-interaction"];
-            VREAD = 2 [(.google.fhir.proto.source_code_system) =
-                           "http://hl7.org/fhir/restful-interaction"];
-            UPDATE = 3 [(.google.fhir.proto.source_code_system) =
-                            "http://hl7.org/fhir/restful-interaction"];
-            PATCH = 4 [(.google.fhir.proto.source_code_system) =
-                           "http://hl7.org/fhir/restful-interaction"];
-            DELETE = 5 [(.google.fhir.proto.source_code_system) =
-                            "http://hl7.org/fhir/restful-interaction"];
-            HISTORY_INSTANCE = 6
-                [(.google.fhir.proto.source_code_system) =
-                     "http://hl7.org/fhir/restful-interaction"];
-            HISTORY_TYPE = 7 [(.google.fhir.proto.source_code_system) =
-                                  "http://hl7.org/fhir/restful-interaction"];
-            CREATE = 8 [(.google.fhir.proto.source_code_system) =
-                            "http://hl7.org/fhir/restful-interaction"];
-            SEARCH_TYPE = 9 [(.google.fhir.proto.source_code_system) =
-                                 "http://hl7.org/fhir/restful-interaction"];
-          }
-          Value value = 1;
+          TypeRestfulInteractionValueSet.Value value = 1;
 
           String id = 2;
 
@@ -590,18 +569,7 @@ message CapabilityStatement {
         option (.google.fhir.proto.fhir_profile_base) =
             "http://hl7.org/fhir/StructureDefinition/code";
 
-        enum Value {
-          INVALID_UNINITIALIZED = 0;
-          TRANSACTION = 1 [(.google.fhir.proto.source_code_system) =
-                               "http://hl7.org/fhir/restful-interaction"];
-          BATCH = 2 [(.google.fhir.proto.source_code_system) =
-                         "http://hl7.org/fhir/restful-interaction"];
-          SEARCH_SYSTEM = 3 [(.google.fhir.proto.source_code_system) =
-                                 "http://hl7.org/fhir/restful-interaction"];
-          HISTORY_SYSTEM = 4 [(.google.fhir.proto.source_code_system) =
-                                  "http://hl7.org/fhir/restful-interaction"];
-        }
-        Value value = 1;
+        SystemRestfulInteractionValueSet.Value value = 1;
 
         String id = 2;
 

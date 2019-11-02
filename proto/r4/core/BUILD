@@ -10,6 +10,7 @@ fhir_proto_library(
     srcs = ["datatypes.proto"],
     proto_deps = [
         ":codes_proto",
+        ":valuesets_proto",
         "//proto:annotations_proto",
     ],
     proto_library_prefix = "datatypes",
@@ -24,12 +25,21 @@ fhir_proto_library(
 )
 
 fhir_proto_library(
+    srcs = ["valuesets.proto"],
+    proto_deps = [
+        "//proto:annotations_proto",
+    ],
+    proto_library_prefix = "valuesets",
+)
+
+fhir_proto_library(
     srcs = [
         "extensions.proto",
     ],
     proto_deps = [
         ":codes_proto",
         ":datatypes_proto",
+        ":valuesets_proto",
         "//proto:annotations_proto",
     ],
     proto_library_prefix = "extensions",
