@@ -48,6 +48,11 @@ Status ConvertToProfileR4(const ::google::protobuf::Message& source,
 Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,
                                  ::google::protobuf::Message* target);
 
+// Normalizing a profiled proto ensures that all data that CAN be stored in
+// profiled fields IS stored in profiled fields.
+// E.g., if the message contains an extension in the raw extension field that
+// has a corresponding typed field, the return copy will have the data in the
+// typed field.
 template <typename T>
 StatusOr<T> NormalizeR4(const T& message) {
   T normalized;
