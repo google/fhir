@@ -262,7 +262,7 @@ message DemoPatient {
            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"];
 
   // Extension
-  .google.fhir.r4.uscore.PatientUSCoreBirthSexExtension birthsex = 28
+  .google.fhir.r4.uscore.PatientUSCoreBirthSexExtension.ValueCode birthsex = 28
       [(.google.fhir.proto.fhir_inlined_extension_url) =
            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"];
 

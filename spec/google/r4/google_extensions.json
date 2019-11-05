@@ -7,7 +7,7 @@
         "id": "PrimitiveHasNoValue",
         "url": "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
         "name": "PrimitiveHasNoValue",
-        "date": "2019-06-25",
+        "date": "2019-11-04",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -284,7 +284,7 @@
         "id": "Base64BinarySeparatorStride",
         "url": "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
         "name": "Base64BinarySeparatorStride",
-        "date": "2019-06-25",
+        "date": "2019-11-04",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -1223,7 +1223,7 @@
         "id": "EventLabel",
         "url": "https://g.co/fhir/StructureDefinition/eventLabel",
         "name": "EventLabel",
-        "date": "2019-06-25",
+        "date": "2019-11-04",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -3622,7 +3622,7 @@
         "id": "EventTrigger",
         "url": "https://g.co/fhir/StructureDefinition/eventTrigger",
         "name": "EventTrigger",
-        "date": "2019-06-25",
+        "date": "2019-11-04",
         "publisher": "Google LLC",
         "contact": [
           {

@@ -58,7 +58,7 @@ message SimpleCodeableConceptExtension {
   core.String id = 1;
 
   // Value of extension
-  message ValueCodeCode {
+  message ValueCode {
     option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
     option (.google.fhir.proto.fhir_valueset_url) =
         "http://hl7.org/fhir/ValueSet/care-plan-activity-status";
@@ -71,7 +71,7 @@ message SimpleCodeableConceptExtension {
 
     repeated core.Extension extension = 3;
   }
-  ValueCodeCode value_code = 3;
+  ValueCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for DigitalMediaType.
@@ -88,7 +88,7 @@ message DigitalMediaType {
   core.String id = 1;
 
   // Value of extension
-  message ValueCodeCode {
+  message ValueCode {
     option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
     option (.google.fhir.proto.fhir_valueset_url) =
         "http://hl7.org/fhir/ValueSet/media-type";
@@ -113,7 +113,7 @@ message DigitalMediaType {
 
     repeated core.Extension extension = 3;
   }
-  ValueCodeCode value_code = 3;
+  ValueCode value_code = 3;
 }
 
 // Auto-generated from StructureDefinition for ComplexExt.

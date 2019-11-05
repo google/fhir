@@ -28,6 +28,7 @@
 #include "proto/stu3/google_extensions.pb.h"
 #include "proto/stu3/profiles.pb.h"
 #include "proto/stu3/resources.pb.h"
+#include "proto/stu3/uscore.pb.h"
 #include "testdata/stu3/profiles/test.pb.h"
 
 namespace google {
@@ -116,6 +117,11 @@ TEST(ProfilesTest, FixedSystem) {
 TEST(ProfilesTest, ComplexExtension) {
   TestPair<Observation, TestObservation>(
       "testdata/stu3/profiles/observation_complexextension");
+}
+
+TEST(ProfilesTest, UsCore) {
+  TestPair<Patient, ::google::fhir::stu3::uscore::UsCorePatient>(
+      "testdata/stu3/profiles/uscore_patient");
 }
 
 TEST(ProfilesTest, Normalize) {

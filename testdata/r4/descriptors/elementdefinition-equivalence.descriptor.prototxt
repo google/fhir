@@ -14,13 +14,13 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.ElementDefinitionEquivalence.ValueCodeCode"
+  type_name: ".google.fhir.r4.core.ElementDefinitionEquivalence.ValueCode"
   options {
     [google.fhir.proto.field_description]: "Value of extension"
   }
 }
 nested_type {
-  name: "ValueCodeCode"
+  name: "ValueCode"
   field {
     name: "value"
     number: 1

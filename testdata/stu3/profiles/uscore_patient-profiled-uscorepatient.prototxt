@@ -279,36 +279,27 @@ managing_organization {
     value: "1"
   }
 }
-extension {
-  url { value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race" }
-  extension {
-    url { value: "ombCategory" }
-    value { coding {
-      system { value: "urn:oid:2.16.840.1.113883.6.238" }
-      code { value: "2028-9" }
-    } }
-  }
-  extension {
-    url { value: "detailed" }
-    value { coding {
-      system { value: "urn:oid:2.16.840.1.113883.6.238" }
-      code { value: "2040-4" }
-    } }
-  }
-  extension {
-    url { value: "text" }
-    value {
-      string_value { value: "asian - korean" }
+race {
+  omb_category {
+    system {
+      value: "urn:oid:2.16.840.1.113883.6.238"
     }
+    code {
+      value: "2028-9"
+    }
+  }
+  detailed {
+    system {
+      value: "urn:oid:2.16.840.1.113883.6.238"
+    }
+    code {
+      value: "2040-4"
+    }
+  }
+  text {
+    value: "asian - korean"
   }
 }
-extension {
-  url {
-    value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
-  }
-  value {
-    code {
-      value: "M"
-    }
-  }
+birthsex {
+  value: MALE
 }

@@ -290,3 +290,6 @@ race {
     value: "asian - korean"
   }
 }
+birthsex {
+  value: M
+}

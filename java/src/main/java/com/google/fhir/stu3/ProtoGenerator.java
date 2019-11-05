@@ -250,12 +250,12 @@ public class ProtoGenerator {
       }
       boolean isSimpleExtensionProfile =
           isExtensionProfile(def)
-              && isSimpleInternalExtension(
+              && isSimpleExtension(
                   def.getSnapshot().getElement(0), def.getSnapshot().getElementList());
       String inlineType;
       String structDefPackage;
       if (isSimpleExtensionProfile) {
-        QualifiedType qualifiedType = getSimpleExtensionDefinitionType(def);
+        QualifiedType qualifiedType = getSimpleExtensionDefinitionType(def, protoPackage);
         inlineType = qualifiedType.type;
         structDefPackage = qualifiedType.packageName;
       } else {
@@ -795,7 +795,7 @@ public class ProtoGenerator {
   private Optional<DescriptorProto> makeProfiledCodeIfRequired(
       ElementDefinition element, List<ElementDefinition> elementList) {
     ElementDefinition valueElement =
-        isSimpleInternalExtension(element, elementList)
+        isSimpleExtension(element, elementList)
             ? getExtensionValueElement(element, elementList)
             : element;
     if (valueElement.getTypeCount() != 1
@@ -1256,7 +1256,9 @@ public class ProtoGenerator {
       String normalizedFhirTypeName =
           normalizeType(Iterables.getOnlyElement(element.getTypeList()));
 
-      if (descendantsHaveSlices(element, elementList)) {
+      // Note: slicing is currently only supported on CodeableConcepts.
+      if (normalizedFhirTypeName.equals("CodeableConcept")
+          && descendantsHaveSlices(element, elementList)) {
         // This is not a backbone element, but it has children that have slices.  This means we
         // cannot use the "stock" FHIR datatype here.
         // A common example of this is CodeableConcepts.  These are not themselves sliced, but the
@@ -1308,7 +1310,7 @@ public class ProtoGenerator {
 
   private Optional<String> getBindingValueSetUrl(
       ElementDefinition element, List<ElementDefinition> elementList) {
-    if (isSimpleInternalExtension(element, elementList)) {
+    if (isSimpleExtension(element, elementList)) {
       return getBindingValueSetUrl(getExtensionValueElement(element, elementList), elementList);
     }
     if (!useLegacyTypeNaming()
@@ -1735,7 +1737,7 @@ public class ProtoGenerator {
     // element.
     ElementDefinition namingElement = element;
     ElementDefinition valueElement =
-        isSimpleInternalExtension(element, elementList)
+        isSimpleExtension(element, elementList)
             ? getExtensionValueElement(element, elementList)
             : element;
     if (getDistinctTypeCount(valueElement) == 1) {
@@ -1744,7 +1746,7 @@ public class ProtoGenerator {
       if (valueSetUrl.isPresent()) {
         if (typeName.equals("code")) {
           String containerName = getContainerType(namingElement, elementList);
-          if (!containerName.endsWith(".CodeType")) {
+          if (!containerName.endsWith("Code") && !containerName.endsWith(".CodeType")) {
             // Carve out an exception for CodeType because CodeTypeCode sounds silly.
             containerName = containerName + "Code";
           }
@@ -1773,7 +1775,7 @@ public class ProtoGenerator {
     // we're using to generate the type will be the "value" field on that extension.
     // In all other cases, the value element is the same as the element passed in.
     ElementDefinition valueElement =
-        isSimpleInternalExtension(element, elementList)
+        isSimpleExtension(element, elementList)
             ? getExtensionValueElement(element, elementList)
             : element;
 
@@ -1853,27 +1855,43 @@ public class ProtoGenerator {
     // An element is an extension element if either
     // A) it is a root element with id "Extension" and is a derivation from a base element or
     // B) it is a slice on an extension that is not defined by an external profile.
-    return (element.getId().getValue().equals("Extension") && element.hasBase())
-        || (element.getBase().getPath().getValue().endsWith(".extension")
+    if (!element.hasBase()) {
+      return false;
+    }
+    String idString = element.getId().getValue();
+    boolean isRootExtensionElement =
+        idString.equals("Extension")
+            || (!idString.contains(".") && idString.startsWith("Extension:"));
+    boolean isInternallyDefinedExtension =
+        (element.getBase().getPath().getValue().endsWith(".extension")
             && lastIdToken(element.getId().getValue()).slicename != null
             && element.getType(0).getProfileCount() == 0);
+    return isRootExtensionElement || isInternallyDefinedExtension;
   }
 
   // Returns the QualifiedType (type + package) of a simple extension.
-  private QualifiedType getSimpleExtensionDefinitionType(StructureDefinition def) {
+  private QualifiedType getSimpleExtensionDefinitionType(
+      StructureDefinition def, String protoPackage) {
     if (!isExtensionProfile(def)) {
       throw new IllegalArgumentException(
           "StructureDefinition is not an extension profile: " + def.getId().getValue());
     }
     ElementDefinition element = def.getSnapshot().getElement(0);
     List<ElementDefinition> elementList = def.getSnapshot().getElementList();
+    QualifiedType extensionType = new QualifiedType(getTypeName(def), protoPackage);
     if (isSingleTypedExtensionDefinition(def)) {
-      return getSimpleInternalExtensionType(element, elementList);
+      Optional<QualifiedType> binding = checkForTypeWithBoundValueSet(element, elementList);
+      if (binding.isPresent() && binding.get().type.equals("ExtensionCode")) {
+        return extensionType.childType("ValueCode");
+      }
+      if (isChoiceTypeExtension(element, elementList)) {
+        String choiceField = useLegacyTypeNaming() ? "Value" : "ValueX";
+        return extensionType.childType(choiceField);
+      } else {
+        return getSimpleInternalExtensionType(element, elementList);
+      }
     }
-    if (isChoiceTypeExtension(element, elementList)) {
-      String choiceField = useLegacyTypeNaming() ? ".Value" : ".ValueX";
-      return new QualifiedType(getTypeName(def) + choiceField, packageInfo.getProtoPackage());
-    }
+
     throw new IllegalArgumentException(
         "StructureDefinition is not a simple extension: " + def.getId().getValue());
   }
@@ -1894,8 +1912,10 @@ public class ProtoGenerator {
     ElementDefinition valueElement = getExtensionValueElement(element, elementList);
 
     if (valueElement.getMax().getValue().equals("0")) {
-      // There is no value element, this is a complex extension
-      return null;
+      // There is no value element, this is a complex extension.
+      throw new IllegalArgumentException(
+          "getSimpleInternalExtensionType called with complex extension: "
+              + element.getId().getValue());
     }
     if (getDistinctTypeCount(valueElement) == 1) {
       // This is a primitive extension with a single type
@@ -1926,8 +1946,7 @@ public class ProtoGenerator {
     return !valueElement.getMax().getValue().equals("0") && getDistinctTypeCount(valueElement) > 1;
   }
 
-  // TODO: Clean up some of the terminology - 'internal' is misleading here.
-  private static boolean isSimpleInternalExtension(
+  private static boolean isSimpleExtension(
       ElementDefinition element, List<ElementDefinition> elementList) {
     return isExtensionBackboneElement(element)
         && !getExtensionValueElement(element, elementList).getMax().getValue().equals("0");
@@ -1935,14 +1954,13 @@ public class ProtoGenerator {
 
   private static boolean isComplexInternalExtension(
       ElementDefinition element, List<ElementDefinition> elementList) {
-    return isExtensionBackboneElement(element) && !isSimpleInternalExtension(element, elementList);
+    return isExtensionBackboneElement(element) && !isSimpleExtension(element, elementList);
   }
 
   private static boolean isSingleTypedExtensionDefinition(StructureDefinition def) {
     ElementDefinition element = def.getSnapshot().getElement(0);
     List<ElementDefinition> elementList = def.getSnapshot().getElementList();
-    return isSimpleInternalExtension(element, elementList)
-        && getDistinctTypeCount(getExtensionValueElement(element, elementList)) == 1;
+    return isSimpleExtension(element, elementList);
   }
 
   /**
@@ -1952,7 +1970,7 @@ public class ProtoGenerator {
    */
   private QualifiedType getInternalExtensionType(
       ElementDefinition element, List<ElementDefinition> elementList) {
-    return isSimpleInternalExtension(element, elementList)
+    return isSimpleExtension(element, elementList)
         ? getSimpleInternalExtensionType(element, elementList)
         : new QualifiedType(getContainerType(element, elementList), packageInfo.getProtoPackage());
   }
