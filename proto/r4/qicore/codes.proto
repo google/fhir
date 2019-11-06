@@ -1,0 +1,270 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.qicore;
+
+import "proto/annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.qicore";
+
+// The RAND scoring for appropriateness of the procedure.
+// See http://hl7.org/fhir/us/qicore/CodeSystem/appropriateness-score
+message AppropriatenessScoreCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/us/qicore/CodeSystem/appropriateness-score";
+
+    INVALID_UNINITIALIZED = 0;
+    EXTREMELY_INAPPROPRIATE = 1;
+    INAPPROPRIATE = 2;
+    PROBABLY_INAPPROPRIATE = 3;
+    UNCERTAIN_INAPPROPRIATE = 4;
+    UNCERTAIN = 5;
+    UNCERTAIN_APPROPRIATE = 6;
+    PROBABLY_APPROPRIATE = 7;
+    APPROPRIATE = 8;
+    EXTREMELY_APPROPRIATE = 9;
+  }
+}
+
+// Value Set for QICore Communication Medium (Example)
+// See http://hl7.org/fhir/us/qicore/CodeSystem/communication-medium
+message CommunicationMediumCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/us/qicore/CodeSystem/communication-medium";
+
+    INVALID_UNINITIALIZED = 0;
+    UNSPECIFIED = 1;
+    TELEPHONE = 2;
+    FAX = 3;
+    DEVICE = 4;
+    VIDEO = 5;
+    VOICEMAIL = 6;
+    TEXT = 7;
+    SOCIAL_MEDIA = 8;
+    IN_PERSON = 9;
+    MAIL = 10;
+    EMAIL = 11;
+    PORTAL = 12;
+  }
+}
+
+// Value Set for QICore Condition Criticality (Example)
+// See http://hl7.org/fhir/us/qicore/CodeSystem/condition-criticality
+message ConditionCriticalityCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/us/qicore/CodeSystem/condition-criticality";
+
+    INVALID_UNINITIALIZED = 0;
+    UNSPECIFIED = 1;
+    SELF_RESOLVING = 2;
+    CONTROLLABLE = 3;
+    FUNCTIONAL_LOSS = 4;
+    LIFE_THREATENING = 5;
+    REQUIRES_HOSPITALIZATION = 6;
+  }
+}
+
+// The condition, state, or problem that the patient is in or has prior to a
+// therapy or procedure. This captures temporal (temporary circumstances) that
+// have bearing on the data that it qualifies but will not necessarily modify
+// its meaning. Things like 'after activity', 'at rest', or 'post-op'. See
+// http://hl7.org/fhir/us/qicore/CodeSystem/diagnosticorder-precondition
+message DiagnosticOrderPreconditionCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/us/qicore/CodeSystem/diagnosticorder-precondition";
+
+    INVALID_UNINITIALIZED = 0;
+    AFTER_ACTIVITY = 1 [(.google.fhir.proto.fhir_original_code) = "1"];
+    AT_REST = 2 [(.google.fhir.proto.fhir_original_code) = "2"];
+    POST_OP = 3 [(.google.fhir.proto.fhir_original_code) = "3"];
+  }
+}
+
+// Military service status codes
+// See http://hl7.org/fhir/us/qicore/CodeSystem/military-service
+message MilitaryServiceCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/us/qicore/CodeSystem/military-service";
+
+    INVALID_UNINITIALIZED = 0;
+    NOT_INDICATED = 1;
+    NO_MILITARY_SERVICE = 2;
+    VETERAN = 3;
+    ACTIVE_DUTY = 4;
+    ACTIVE_RESERVE = 5;
+    INACTIVE_RESERVE = 6;
+  }
+}
+
+// Code for method by which the observation result was validated, e.g., human
+// review, sliding average. See
+// http://hl7.org/fhir/us/qicore/CodeSystem/observation-verification
+message ObservationVerificationCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/us/qicore/CodeSystem/observation-verification";
+
+    INVALID_UNINITIALIZED = 0;
+    HUMAN_REVIEW = 1 [(.google.fhir.proto.fhir_original_code) = "1"];
+    SLIDING_AVERAGE = 2 [(.google.fhir.proto.fhir_original_code) = "2"];
+  }
+}
+
+// The value set to instantiate this attribute should be drawn from a
+// terminologically robust code system that consists of or contains concepts to
+// support the encounter process, in particular the process and reasons for
+// canceling or refusing an encounter. This value set is provided as a
+// suggestive example See
+// http://hl7.org/fhir/us/qicore/ValueSet/qicore-encounter-canceled-reason
+message QICoreEncounterCanceledReasonValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/us/qicore/ValueSet/qicore-encounter-canceled-reason";
+
+    INVALID_UNINITIALIZED = 0;
+    BLK = 1 [
+      (.google.fhir.proto.fhir_original_code) = "BLK",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+    ];
+    DEC = 2 [
+      (.google.fhir.proto.fhir_original_code) = "DEC",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+    ];
+    FIN = 3 [
+      (.google.fhir.proto.fhir_original_code) = "FIN",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+    ];
+    MED = 4 [
+      (.google.fhir.proto.fhir_original_code) = "MED",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+    ];
+    ALTD = 5 [
+      (.google.fhir.proto.fhir_original_code) = "ALTD",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+    ];
+  }
+}
+
+// The value set to instantiate this attribute should be drawn from a
+// terminologically robust code system that consists of or contains concepts to
+// support the goal process, in particular the process and reasons for rejecting
+// a goal. This value set is provided as a suggestive example. See
+// http://hl7.org/fhir/us/qicore/ValueSet/qicore-goal-reason-rejected
+message QICoreGoalReasonRejectedValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/us/qicore/ValueSet/qicore-goal-reason-rejected";
+
+    INVALID_UNINITIALIZED = 0;
+    BLK = 1 [
+      (.google.fhir.proto.fhir_original_code) = "BLK",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+    ];
+    DEC = 2 [
+      (.google.fhir.proto.fhir_original_code) = "DEC",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+    ];
+    FIN = 3 [
+      (.google.fhir.proto.fhir_original_code) = "FIN",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+    ];
+    MED = 4 [
+      (.google.fhir.proto.fhir_original_code) = "MED",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+    ];
+    ALTD = 5 [
+      (.google.fhir.proto.fhir_original_code) = "ALTD",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+    ];
+  }
+}
+
+// Codes indicating status of current or former military service.
+// See http://hl7.org/fhir/us/qicore/ValueSet/qicore-military-service
+message QICoreMilitaryServiceValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/us/qicore/ValueSet/qicore-military-service";
+
+    INVALID_UNINITIALIZED = 0;
+    NOT_INDICATED = 1
+        [(.google.fhir.proto.source_code_system) =
+             "http://hl7.org/fhir/us/qicore/CodeSystem/military-service"];
+    NO_MILITARY_SERVICE = 2
+        [(.google.fhir.proto.source_code_system) =
+             "http://hl7.org/fhir/us/qicore/CodeSystem/military-service"];
+    VETERAN = 3
+        [(.google.fhir.proto.source_code_system) =
+             "http://hl7.org/fhir/us/qicore/CodeSystem/military-service"];
+    ACTIVE_DUTY = 4
+        [(.google.fhir.proto.source_code_system) =
+             "http://hl7.org/fhir/us/qicore/CodeSystem/military-service"];
+    ACTIVE_RESERVE = 5
+        [(.google.fhir.proto.source_code_system) =
+             "http://hl7.org/fhir/us/qicore/CodeSystem/military-service"];
+    INACTIVE_RESERVE = 6
+        [(.google.fhir.proto.source_code_system) =
+             "http://hl7.org/fhir/us/qicore/CodeSystem/military-service"];
+  }
+}
+
+// Code indicating how the current observation compares to previous observations
+// - e.g., no change, rising trend, decreasing trend, etc... See
+// http://hl7.org/fhir/us/qicore/ValueSet/qicore-observation-delta
+message QICoreObservationDeltaValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/us/qicore/ValueSet/qicore-observation-delta";
+
+    INVALID_UNINITIALIZED = 0;
+    B = 1 [
+      (.google.fhir.proto.fhir_original_code) = "B",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v2-0078"
+    ];
+    D = 2 [
+      (.google.fhir.proto.fhir_original_code) = "D",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v2-0078"
+    ];
+    U = 3 [
+      (.google.fhir.proto.fhir_original_code) = "U",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v2-0078"
+    ];
+    W = 4 [
+      (.google.fhir.proto.fhir_original_code) = "W",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v2-0078"
+    ];
+  }
+}

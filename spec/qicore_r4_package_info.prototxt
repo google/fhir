@@ -1,0 +1,5 @@
+proto_package: "google.fhir.r4.qicore"
+java_proto_package: "com.google.fhir.r4.qicore"
+fhir_version: R4
+license: APACHE
+license_date: "2019"

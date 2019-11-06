@@ -90,9 +90,18 @@ fhir_package(
 
 # US QI core profiles.
 fhir_package(
-    package_name = "qicore_package",
+    package_name = "qicore_3_2_0_package",
     definitions = glob([
-        "hl7.fhir.us.qicore/3.2.0/StructureDefinition-*.json",
+        "hl7.fhir.us.qicore/3.2.0/*.json",
     ]),
     package_info = "qicore_stu3_package_info.prototxt",
+)
+
+# US QI core profiles.
+fhir_package(
+    package_name = "qicore_3_3_0_package",
+    definitions = glob([
+        "hl7.fhir.us.qicore/3.3.0/*.json",
+    ]),
+    package_info = "qicore_r4_package_info.prototxt",
 )
