@@ -490,7 +490,6 @@ field {
   type_name: ".google.fhir.r4.core.ShareableMeasure.Group"
   options {
     [google.fhir.proto.field_description]: "Population criteria group"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -501,7 +500,6 @@ field {
   type_name: ".google.fhir.r4.core.ShareableMeasure.SupplementalData"
   options {
     [google.fhir.proto.field_description]: "What other data should be reported with the measure"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -619,7 +617,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ShareableMeasure.Group.Population"
     options {
       [google.fhir.proto.field_description]: "Population criteria"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -630,7 +627,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ShareableMeasure.Group.Stratifier"
     options {
       [google.fhir.proto.field_description]: "Stratifier criteria for the measure"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -767,7 +763,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.ShareableMeasure.Group.Stratifier.Component"
       options {
         [google.fhir.proto.field_description]: "Stratifier criteria component for the measure"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {
@@ -915,4 +910,6 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Shareable Measure.\nA quality measure definition.\nSee http://hl7.org/fhir/StructureDefinition/shareablemeasure"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Measure"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/shareablemeasure"
+  [google.fhir.proto.fhir_path_message_constraint]: "group.stratifier.all((code | description | criteria).exists() xor component.exists())"
+  [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
 }

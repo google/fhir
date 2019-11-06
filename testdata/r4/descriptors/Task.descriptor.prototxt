@@ -400,7 +400,6 @@ field {
   type_name: ".google.fhir.r4.core.Task.Restriction"
   options {
     [google.fhir.proto.field_description]: "Constraints on fulfillment tasks"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -411,7 +410,6 @@ field {
   type_name: ".google.fhir.r4.core.Task.Parameter"
   options {
     [google.fhir.proto.field_description]: "Information used to perform task"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -422,7 +420,6 @@ field {
   type_name: ".google.fhir.r4.core.Task.Output"
   options {
     [google.fhir.proto.field_description]: "Information produced as part of task"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -1493,4 +1490,5 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Task, last updated 2018-12-27T22:37:54.724+11:00.\nA task to be performed.\nSee http://hl7.org/fhir/StructureDefinition/Task"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Task"
+  [google.fhir.proto.fhir_path_message_constraint]: "lastModified.exists().not() or authoredOn.exists().not() or lastModified >= authoredOn"
 }

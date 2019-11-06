@@ -216,7 +216,6 @@ field {
   type_name: ".google.fhir.r4.core.CoverageEligibilityResponse.Insurance"
   options {
     [google.fhir.proto.field_description]: "Patient insurance information"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -247,7 +246,6 @@ field {
   type_name: ".google.fhir.r4.core.CoverageEligibilityResponse.Errors"
   options {
     [google.fhir.proto.field_description]: "Processing errors"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -428,8 +426,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.CoverageEligibilityResponse.Insurance.Items"
     options {
       [google.fhir.proto.field_description]: "Benefits and authorization details"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-      [google.fhir.proto.fhir_path_constraint]: "category.exists() xor productOrService.exists()"
     }
   }
   nested_type {
@@ -574,7 +570,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.CoverageEligibilityResponse.Insurance.Items.Benefit"
       options {
         [google.fhir.proto.field_description]: "Benefit Summary"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     field {
@@ -738,6 +733,9 @@ nested_type {
           name: "choice"
         }
       }
+    }
+    options {
+      [google.fhir.proto.fhir_path_message_constraint]: "category.exists() xor productOrService.exists()"
     }
   }
 }

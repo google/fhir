@@ -176,7 +176,6 @@ field {
   type_name: ".google.fhir.r4.core.Organization.Contact"
   options {
     [google.fhir.proto.field_description]: "Contact for the organization for a certain purpose"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -267,4 +266,5 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Organization, last updated 2018-12-27T22:37:54.724+11:00.\nA grouping of people or organizations with a common purpose.\nSee http://hl7.org/fhir/StructureDefinition/Organization"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Organization"
+  [google.fhir.proto.fhir_path_message_constraint]: "(identifier.count() + name.count()) > 0"
 }

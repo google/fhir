@@ -340,10 +340,6 @@ field {
   type_name: ".google.fhir.r4.core.OperationDefinition.Parameter"
   options {
     [google.fhir.proto.field_description]: "Parameters for the operation/query"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "type.exists() or part.exists()"
-    [google.fhir.proto.fhir_path_constraint]: "searchType.exists() implies type = \'string\'"
-    [google.fhir.proto.fhir_path_constraint]: "targetProfile.exists() implies (type = \'Reference\' or type = \'canonical\')"
   }
 }
 field {
@@ -354,7 +350,6 @@ field {
   type_name: ".google.fhir.r4.core.OperationDefinition.Overload"
   options {
     [google.fhir.proto.field_description]: "Define overloaded variants for when  generating code"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -562,7 +557,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.OperationDefinition.Parameter.Binding"
     options {
       [google.fhir.proto.field_description]: "ValueSet details if this is coded"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -573,7 +567,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.OperationDefinition.Parameter.ReferencedFrom"
     options {
       [google.fhir.proto.field_description]: "References to this parameter"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -803,6 +796,11 @@ nested_type {
       }
     }
   }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "type.exists() or part.exists()"
+    [google.fhir.proto.fhir_path_message_constraint]: "searchType.exists() implies type = \'string\'"
+    [google.fhir.proto.fhir_path_message_constraint]: "targetProfile.exists() implies (type = \'Reference\' or type = \'canonical\')"
+  }
 }
 nested_type {
   name: "Overload"
@@ -861,4 +859,5 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for OperationDefinition, last updated 2018-12-27T22:37:54.724+11:00.\nDefinition of an operation or a named query.\nSee http://hl7.org/fhir/StructureDefinition/OperationDefinition"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/OperationDefinition"
+  [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
 }

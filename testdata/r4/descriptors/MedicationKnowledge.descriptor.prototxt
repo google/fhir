@@ -154,7 +154,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationKnowledge.RelatedMedicationKnowledge"
   options {
     [google.fhir.proto.field_description]: "Associated or related medication information"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -186,7 +185,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationKnowledge.Monograph"
   options {
     [google.fhir.proto.field_description]: "Associated documentation about the medication"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -197,7 +195,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationKnowledge.Ingredient"
   options {
     [google.fhir.proto.field_description]: "Active or inactive ingredient"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -228,7 +225,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationKnowledge.Cost"
   options {
     [google.fhir.proto.field_description]: "The pricing of the medication"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -239,7 +235,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationKnowledge.MonitoringProgram"
   options {
     [google.fhir.proto.field_description]: "Program under which a medication is reviewed"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -250,7 +245,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationKnowledge.AdministrationGuidelines"
   options {
     [google.fhir.proto.field_description]: "Guidelines for administration of the medication"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -261,7 +255,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationKnowledge.MedicineClassification"
   options {
     [google.fhir.proto.field_description]: "Categorization of the medication within a formulary or classification system"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -272,7 +265,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationKnowledge.Packaging"
   options {
     [google.fhir.proto.field_description]: "Details about packaged medications"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -283,7 +275,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationKnowledge.DrugCharacteristic"
   options {
     [google.fhir.proto.field_description]: "Specifies descriptive properties of the medicine"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -305,7 +296,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationKnowledge.Regulatory"
   options {
     [google.fhir.proto.field_description]: "Regulatory information about a medication"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -316,7 +306,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationKnowledge.Kinetics"
   options {
     [google.fhir.proto.field_description]: "The time course of drug absorption, distribution, metabolism and excretion of a medication from the body"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -707,7 +696,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.MedicationKnowledge.AdministrationGuidelines.Dosage"
     options {
       [google.fhir.proto.field_description]: "Dosage for the medication for the specific guidelines"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -728,7 +716,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.MedicationKnowledge.AdministrationGuidelines.PatientCharacteristics"
     options {
       [google.fhir.proto.field_description]: "Characteristics of the patient that are relevant to the administration guidelines"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -1148,7 +1135,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.MedicationKnowledge.Regulatory.Substitution"
     options {
       [google.fhir.proto.field_description]: "Specifies if changes are allowed when dispensing a medication from a regulatory perspective"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -1159,7 +1145,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.MedicationKnowledge.Regulatory.Schedule"
     options {
       [google.fhir.proto.field_description]: "Specifies the schedule of a medication in jurisdiction"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -1170,7 +1155,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.MedicationKnowledge.Regulatory.MaxDispense"
     options {
       [google.fhir.proto.field_description]: "The maximum number of units of the medication that can be dispensed in a period"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {

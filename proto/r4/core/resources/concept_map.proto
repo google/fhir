@@ -32,6 +32,8 @@ message ConceptMap {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/ConceptMap";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
 
   // Logical id of this artifact
   Id id = 1;
@@ -185,6 +187,9 @@ message ConceptMap {
 
       // Concept in target system for element
       message TargetElement {
+        option (.google.fhir.proto.fhir_path_message_constraint) =
+            "comment.exists() or equivalence.empty() or ((equivalence != 'narrower') and (equivalence != 'inexact'))";
+
         // Unique id for inter-element referencing
         String id = 1;
 
@@ -247,28 +252,23 @@ message ConceptMap {
           // Display for the code (if value is a code)
           String display = 7;
         }
-        repeated OtherElement depends_on = 8
-            [(.google.fhir.proto.fhir_path_constraint) =
-                 "hasValue() or (children().count() > id.count())"];
+        repeated OtherElement depends_on = 8;
 
         // Other concepts that this mapping also produces
         repeated OtherElement product = 9;
       }
-      repeated TargetElement target = 6 [
-        (.google.fhir.proto.fhir_path_constraint) =
-            "hasValue() or (children().count() > id.count())",
-        (.google.fhir.proto.fhir_path_constraint) =
-            "comment.exists() or equivalence.empty() or ((equivalence != 'narrower') and (equivalence != 'inexact'))"
-      ];
+      repeated TargetElement target = 6;
     }
-    repeated SourceElement element = 8 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())"
-    ];
+    repeated SourceElement element = 8
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // What to do when there is no mapping for the source concept
     message Unmapped {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "(mode = 'other-map') implies url.exists()";
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "(mode = 'fixed') implies code.exists()";
+
       // Unique id for inter-element referencing
       String id = 1;
 
@@ -306,16 +306,7 @@ message ConceptMap {
       // the source concept is unmapped
       Canonical url = 7;
     }
-    Unmapped unmapped = 9 [
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())",
-      (.google.fhir.proto.fhir_path_constraint) =
-          "(mode = 'other-map') implies url.exists()",
-      (.google.fhir.proto.fhir_path_constraint) =
-          "(mode = 'fixed') implies code.exists()"
-    ];
+    Unmapped unmapped = 9;
   }
-  repeated Group group = 27
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Group group = 27;
 }

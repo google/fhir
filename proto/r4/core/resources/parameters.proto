@@ -46,6 +46,9 @@ message Parameters {
 
   // Operation Parameter
   message Parameter {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(part.exists() and value.empty() and resource.empty()) or (part.empty() and (value.exists() xor resource.exists()))";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -123,10 +126,5 @@ message Parameters {
     // Named part of a multi-part parameter
     repeated Parameter part = 7;
   }
-  repeated Parameter parameter = 5 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "(part.exists() and value.empty() and resource.empty()) or (part.empty() and (value.exists() xor resource.exists()))"
-  ];
+  repeated Parameter parameter = 5;
 }

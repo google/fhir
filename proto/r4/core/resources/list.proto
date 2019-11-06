@@ -32,6 +32,12 @@ message List {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/List";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "mode = 'working' or entry.date.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "mode = 'changes' or entry.deleted.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "emptyReason.empty() or entry.empty()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -159,9 +165,7 @@ message List {
       (.google.fhir.proto.valid_reference_type) = "Resource"
     ];
   }
-  repeated Entry entry = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Entry entry = 21;
 
   // Why list is empty
   CodeableConcept empty_reason = 22;

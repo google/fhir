@@ -81,6 +81,11 @@ extend google.protobuf.MessageOptions {
 
   string fhir_fixed_system = 255621907;
 
+  // FHIRPath-based constraints that apply to the message in question.
+  // These constraints are propagated from the constraint.expression
+  // field on the FHIR ElementDefinition and may be used for data validation.
+  repeated string fhir_path_message_constraint = 276863075;
+
   // DEPRECATED: use fhir_profile_base to identify extension, and
   // fhir_structure_definition_url to get the extension url.
   string fhir_extension_url = 177048773 [deprecated = true];

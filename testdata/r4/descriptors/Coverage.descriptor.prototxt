@@ -215,7 +215,6 @@ field {
   type_name: ".google.fhir.r4.core.Coverage.Class"
   options {
     [google.fhir.proto.field_description]: "Additional coverage classifications"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
   json_name: "class"
 }
@@ -247,7 +246,6 @@ field {
   type_name: ".google.fhir.r4.core.Coverage.CostToBeneficiary"
   options {
     [google.fhir.proto.field_description]: "Patient payments for services/products"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -424,7 +422,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.Coverage.CostToBeneficiary.Exemption"
     options {
       [google.fhir.proto.field_description]: "Exceptions for patient payments"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {

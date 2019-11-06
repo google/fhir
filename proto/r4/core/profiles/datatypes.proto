@@ -34,6 +34,32 @@ message DataElementConstraintOnElementDefinitionDataType {
       "http://hl7.org/fhir/StructureDefinition/ElementDefinition";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-de";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "min.empty() or max.empty() or (max = '*') or iif(max != '*', min <= max.toInteger())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "contentReference.empty() or (type.empty() and defaultValue.empty() and fixed.empty() and pattern.empty() and example.empty() and minValue.empty() and maxValue.empty() and maxLength.empty() and binding.empty())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "pattern.empty() or (type.count() <= 1)";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "fixed.empty() or (type.count()  <= 1)";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "binding.empty() or type.code.empty() or type.select((code = 'code') or (code = 'Coding') or (code='CodeableConcept') or (code = 'Quantity') or (code = 'string') or (code = 'uri')).exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "sliceIsConstraining.exists() implies sliceName.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "pattern.empty() or fixed.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "constraint.select(key).isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "type.select(code).isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "sliceName.empty() or sliceName.matches('^[a-zA-Z0-9\\\\/\\\\-_\\\\[\\\\]\\\\@]+$')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "defaultValue.empty() or meaningWhenMissing.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "isModifier implies isModifierReason.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "path.matches('[A-Za-z][A-Za-z0-9]*(\\\\.[a-z][A-Za-z0-9]*(\\\\[x])?)*')";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -108,14 +134,18 @@ message DataElementConstraintOnElementDefinitionDataType {
     String max = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  Base base = 18 [(.google.fhir.proto.fhir_path_constraint) =
-                      "hasValue() or (children().count() > id.count())"];
+  Base base = 18;
 
   // ElementDefinition.contentReference not present on profile.
   reserved 19;
 
   // Data type and Profile for this element
   message TypeRef {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "aggregation.empty() or (code = 'Reference')";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(code='Reference' or code = 'canonical') or targetProfile.empty()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -153,14 +183,7 @@ message DataElementConstraintOnElementDefinitionDataType {
     }
     VersioningCode versioning = 7;
   }
-  repeated TypeRef type = 20 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "aggregation.empty() or (code = 'Reference')",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "(code='Reference' or code = 'canonical') or targetProfile.empty()"
-  ];
+  repeated TypeRef type = 20;
 
   // Specified value if missing from instance
   message DefaultValueX {
@@ -303,9 +326,7 @@ message DataElementConstraintOnElementDefinitionDataType {
     ValueX value = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Example example = 26
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Example example = 26;
 
   // Minimum Allowed Value (for some types)
   message MinValueX {
@@ -351,6 +372,9 @@ message DataElementConstraintOnElementDefinitionDataType {
 
   // Condition that must evaluate to true
   message Constraint {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "expression.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -394,11 +418,7 @@ message DataElementConstraintOnElementDefinitionDataType {
     // Reference to original source of constraint
     Canonical source = 9;
   }
-  repeated Constraint constraint = 31 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) = "expression.exists()"
-  ];
+  repeated Constraint constraint = 31;
 
   // If the element must be supported
   Boolean must_support = 32;
@@ -414,6 +434,9 @@ message DataElementConstraintOnElementDefinitionDataType {
 
   // ValueSet details if this is coded
   message ElementDefinitionBinding {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "valueSet.exists() implies (valueSet.startsWith('http:') or valueSet.startsWith('https') or valueSet.startsWith('urn:'))";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -444,12 +467,7 @@ message DataElementConstraintOnElementDefinitionDataType {
     // Source of value set
     Canonical value_set = 5;
   }
-  ElementDefinitionBinding binding = 36 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "valueSet.exists() implies (valueSet.startsWith('http:') or valueSet.startsWith('https') or valueSet.startsWith('urn:'))"
-  ];
+  ElementDefinitionBinding binding = 36;
 
   // Map element to another set of definitions
   message Mapping {
@@ -491,9 +509,7 @@ message DataElementConstraintOnElementDefinitionDataType {
     // Comments about the mapping or its use
     String comment = 6;
   }
-  repeated Mapping mapping = 37
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Mapping mapping = 37;
 
   // Prompt for element phrased as question
   repeated String question = 38 [

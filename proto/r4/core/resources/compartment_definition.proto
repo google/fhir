@@ -32,6 +32,8 @@ message CompartmentDefinition {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/CompartmentDefinition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
 
   // Logical id of this artifact
   Id id = 1;
@@ -166,7 +168,5 @@ message CompartmentDefinition {
     // Additional documentation about the resource and compartment
     String documentation = 6;
   }
-  repeated Resource resource = 23
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Resource resource = 23;
 }

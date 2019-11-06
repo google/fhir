@@ -134,7 +134,6 @@ field {
   type_name: ".google.fhir.r4.core.SubstancePolymer.MonomerSet"
   options {
     [google.fhir.proto.field_description]: "Todo"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -145,7 +144,6 @@ field {
   type_name: ".google.fhir.r4.core.SubstancePolymer.Repeat"
   options {
     [google.fhir.proto.field_description]: "Todo"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -198,7 +196,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.SubstancePolymer.MonomerSet.StartingMaterial"
     options {
       [google.fhir.proto.field_description]: "Todo"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -345,7 +342,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.SubstancePolymer.Repeat.RepeatUnit"
     options {
       [google.fhir.proto.field_description]: "Todo"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -418,7 +414,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.SubstancePolymer.Repeat.RepeatUnit.DegreeOfPolymerisation"
       options {
         [google.fhir.proto.field_description]: "Todo"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     field {
@@ -429,7 +424,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.SubstancePolymer.Repeat.RepeatUnit.StructuralRepresentation"
       options {
         [google.fhir.proto.field_description]: "Todo"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {

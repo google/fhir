@@ -169,7 +169,6 @@ field {
   type_name: ".google.fhir.r4.core.Invoice.Participant"
   options {
     [google.fhir.proto.field_description]: "Participant in creation of this Invoice"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -202,7 +201,6 @@ field {
   type_name: ".google.fhir.r4.core.Invoice.LineItem"
   options {
     [google.fhir.proto.field_description]: "Line items of this Invoice"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -403,7 +401,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.Invoice.LineItem.PriceComponent"
     options {
       [google.fhir.proto.field_description]: "Components of total line item price"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {

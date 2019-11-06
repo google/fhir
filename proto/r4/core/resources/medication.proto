@@ -125,9 +125,7 @@ message Medication {
     // Quantity of ingredient present
     Ratio strength = 6;
   }
-  repeated Ingredient ingredient = 16
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Ingredient ingredient = 16;
 
   // Details about packaged medications
   message Batch {
@@ -146,6 +144,5 @@ message Medication {
     // When batch will expire
     DateTime expiration_date = 5;
   }
-  Batch batch = 17 [(.google.fhir.proto.fhir_path_constraint) =
-                        "hasValue() or (children().count() > id.count())"];
+  Batch batch = 17;
 }

@@ -266,7 +266,6 @@ field {
   type_name: ".google.fhir.r4.core.CapabilityStatement.Software"
   options {
     [google.fhir.proto.field_description]: "Software that is covered by this capability statement"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -277,7 +276,6 @@ field {
   type_name: ".google.fhir.r4.core.CapabilityStatement.Implementation"
   options {
     [google.fhir.proto.field_description]: "If this describes a specific instance"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -330,8 +328,6 @@ field {
   type_name: ".google.fhir.r4.core.CapabilityStatement.Rest"
   options {
     [google.fhir.proto.field_description]: "If the endpoint is a RESTful one"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "resource.select(type).isDistinct()"
   }
 }
 field {
@@ -342,7 +338,6 @@ field {
   type_name: ".google.fhir.r4.core.CapabilityStatement.Messaging"
   options {
     [google.fhir.proto.field_description]: "If messaging is supported"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -353,7 +348,6 @@ field {
   type_name: ".google.fhir.r4.core.CapabilityStatement.Document"
   options {
     [google.fhir.proto.field_description]: "Document definition"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -697,7 +691,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Security"
     options {
       [google.fhir.proto.field_description]: "Information about security of implementation"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -708,8 +701,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource"
     options {
       [google.fhir.proto.field_description]: "Resource served on the REST interface"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-      [google.fhir.proto.fhir_path_constraint]: "searchParam.select(name).isDistinct()"
     }
   }
   field {
@@ -720,7 +711,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.SystemInteraction"
     options {
       [google.fhir.proto.field_description]: "What operations are supported?"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -924,7 +914,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource.ResourceInteraction"
       options {
         [google.fhir.proto.field_description]: "What operations are supported?"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     field {
@@ -1035,7 +1024,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource.SearchParam"
       options {
         [google.fhir.proto.field_description]: "Search parameters supported by implementation"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     field {
@@ -1046,7 +1034,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.CapabilityStatement.Rest.Resource.Operation"
       options {
         [google.fhir.proto.field_description]: "Definition of a resource operation"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {
@@ -1432,6 +1419,9 @@ nested_type {
         }
       }
     }
+    options {
+      [google.fhir.proto.fhir_path_message_constraint]: "searchParam.select(name).isDistinct()"
+    }
   }
   nested_type {
     name: "SystemInteraction"
@@ -1514,6 +1504,9 @@ nested_type {
       }
     }
   }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "resource.select(type).isDistinct()"
+  }
 }
 nested_type {
   name: "Messaging"
@@ -1555,7 +1548,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.CapabilityStatement.Messaging.Endpoint"
     options {
       [google.fhir.proto.field_description]: "Where messages should be sent"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -1586,7 +1578,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.CapabilityStatement.Messaging.SupportedMessage"
     options {
       [google.fhir.proto.field_description]: "Messages supported by this system"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -1823,4 +1814,12 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for CapabilityStatement, last updated 2018-12-27T22:37:54.724+11:00.\nA statement of system capabilities.\nSee http://hl7.org/fhir/StructureDefinition/CapabilityStatement"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/CapabilityStatement"
+  [google.fhir.proto.fhir_path_message_constraint]: "document.select(profile&mode).isDistinct()"
+  [google.fhir.proto.fhir_path_message_constraint]: "(kind!=\'requirements\') or (implementation.exists().not() and software.exists().not())"
+  [google.fhir.proto.fhir_path_message_constraint]: "(kind != \'capability\') or (implementation.exists().not() and software.exists())"
+  [google.fhir.proto.fhir_path_message_constraint]: "messaging.endpoint.empty() or kind = \'instance\'"
+  [google.fhir.proto.fhir_path_message_constraint]: "(kind != \'instance\') or implementation.exists()"
+  [google.fhir.proto.fhir_path_message_constraint]: "(description.count() + software.count() + implementation.count()) > 0"
+  [google.fhir.proto.fhir_path_message_constraint]: "rest.exists() or messaging.exists() or document.exists()"
+  [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
 }

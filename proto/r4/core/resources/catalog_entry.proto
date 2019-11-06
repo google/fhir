@@ -160,7 +160,5 @@ message CatalogEntry {
       (.google.fhir.proto.valid_reference_type) = "CatalogEntry"
     ];
   }
-  repeated RelatedEntry related_entry = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated RelatedEntry related_entry = 22;
 }

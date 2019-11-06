@@ -323,8 +323,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Provides guide for interpretation"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "low.exists() or high.exists() or text.exists()"
   }
 }
 field {
@@ -347,7 +345,6 @@ field {
   type_name: ".google.fhir.r4.core.HdlCholesterol.Component"
   options {
     [google.fhir.proto.field_description]: "Component results"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -476,7 +473,6 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "A fixed quantity (no comparator)"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       [google.fhir.proto.fhir_path_constraint]: "code.empty() or system.exists()"
       [google.fhir.proto.fhir_path_constraint]: "comparator.empty()"
     }
@@ -514,6 +510,9 @@ nested_type {
     options {
       [google.fhir.proto.field_description]: "Text based reference range in an observation"
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "low.exists() or high.exists() or text.exists()"
   }
 }
 nested_type {
@@ -703,4 +702,6 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Example Lipid Profile.\nHDL Cholesterol Result.\nSee http://hl7.org/fhir/StructureDefinition/hdlcholesterol"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Observation"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/hdlcholesterol"
+  [google.fhir.proto.fhir_path_message_constraint]: "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "dataAbsentReason.empty() or value.empty()"
 }

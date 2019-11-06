@@ -120,9 +120,7 @@ message ObservationDefinition {
     // Decimal precision of observation quantitative results
     Integer decimal_precision = 7;
   }
-  QuantitativeDetails quantitative_details = 17
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  QuantitativeDetails quantitative_details = 17;
 
   // Qualified range for continuous and ordinal observation results
   message QualifiedInterval {
@@ -187,9 +185,7 @@ message ObservationDefinition {
     // Condition associated with the reference range
     String condition = 11;
   }
-  repeated QualifiedInterval qualified_interval = 18
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated QualifiedInterval qualified_interval = 18;
 
   // Value set of valid coded values for the observations conforming to this
   // ObservationDefinition

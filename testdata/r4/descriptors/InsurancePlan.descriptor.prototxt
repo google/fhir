@@ -186,7 +186,6 @@ field {
   type_name: ".google.fhir.r4.core.InsurancePlan.Contact"
   options {
     [google.fhir.proto.field_description]: "Contact for the product"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -219,7 +218,6 @@ field {
   type_name: ".google.fhir.r4.core.InsurancePlan.Coverage"
   options {
     [google.fhir.proto.field_description]: "Coverage details"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -230,7 +228,6 @@ field {
   type_name: ".google.fhir.r4.core.InsurancePlan.Plan"
   options {
     [google.fhir.proto.field_description]: "Plan details"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -396,7 +393,6 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "List of benefits"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -460,7 +456,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.InsurancePlan.Coverage.CoverageBenefit.Limit"
       options {
         [google.fhir.proto.field_description]: "Benefit limits"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {
@@ -600,7 +595,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.InsurancePlan.Plan.GeneralCost"
     options {
       [google.fhir.proto.field_description]: "Overall costs"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -611,7 +605,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.InsurancePlan.Plan.SpecificCost"
     options {
       [google.fhir.proto.field_description]: "Specific costs"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -738,7 +731,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.InsurancePlan.Plan.SpecificCost.PlanBenefit"
       options {
         [google.fhir.proto.field_description]: "Benefits list"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {
@@ -792,7 +784,6 @@ nested_type {
         type_name: ".google.fhir.r4.core.InsurancePlan.Plan.SpecificCost.PlanBenefit.Cost"
         options {
           [google.fhir.proto.field_description]: "List of the costs"
-          [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
         }
       }
       nested_type {
@@ -876,4 +867,5 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for InsurancePlan, last updated 2018-12-27T22:37:54.724+11:00.\nDetails of a Health Insurance product/plan provided by an organization.\nSee http://hl7.org/fhir/StructureDefinition/InsurancePlan"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/InsurancePlan"
+  [google.fhir.proto.fhir_path_message_constraint]: "(identifier.count() + name.count()) > 0"
 }

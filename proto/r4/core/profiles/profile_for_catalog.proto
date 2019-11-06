@@ -171,9 +171,7 @@ message ProfileForCatalog {
       (.google.fhir.proto.valid_reference_type) = "Organization"
     ];
   }
-  repeated Attester attester = 19
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Attester attester = 19;
 
   // Organization which maintains the composition
   Reference custodian = 20
@@ -221,9 +219,7 @@ message ProfileForCatalog {
     TargetX target = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated RelatesTo relates_to = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated RelatesTo relates_to = 21;
 
   // The clinical service(s) being documented
   message Event {
@@ -246,12 +242,15 @@ message ProfileForCatalog {
     repeated Reference detail = 6
         [(.google.fhir.proto.valid_reference_type) = "Resource"];
   }
-  repeated Event event = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Event event = 22;
 
   // Composition is broken into sections
   message Section {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "text.exists() or entry.exists() or section.exists()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "emptyReason.empty() or entry.empty()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -317,14 +316,7 @@ message ProfileForCatalog {
     // Nested Section
     repeated Section section = 13;
   }
-  repeated Section section = 23 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "text.exists() or entry.exists() or section.exists()",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "emptyReason.empty() or entry.empty()"
-  ];
+  repeated Section section = 23;
 
   // The validity of the catalog
   DateTime validity_period = 24 [
@@ -332,8 +324,6 @@ message ProfileForCatalog {
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/cqm-ValidityPeriod",
     json_name = "ValidityPeriod",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];

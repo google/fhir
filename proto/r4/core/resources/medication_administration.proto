@@ -163,9 +163,7 @@ message MedicationAdministration {
       (.google.fhir.proto.valid_reference_type) = "Device"
     ];
   }
-  repeated Performer performer = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Performer performer = 21;
 
   // Reason administration performed
   repeated CodeableConcept reason_code = 22;
@@ -190,6 +188,9 @@ message MedicationAdministration {
 
   // Details of how medication was taken
   message Dosage {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "dose.exists() or rate.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -225,11 +226,7 @@ message MedicationAdministration {
     }
     RateX rate = 9;
   }
-  Dosage dosage = 27 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) = "dose.exists() or rate.exists()"
-  ];
+  Dosage dosage = 27;
 
   // A list of events of interest in the lifecycle
   repeated Reference event_history = 28

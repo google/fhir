@@ -84,9 +84,7 @@ message SubstanceReferenceInformation {
     repeated Reference source = 6
         [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
   }
-  repeated Gene gene = 11
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Gene gene = 11;
 
   // Todo
   message GeneElement {
@@ -109,9 +107,7 @@ message SubstanceReferenceInformation {
     repeated Reference source = 6
         [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
   }
-  repeated GeneElement gene_element = 12
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated GeneElement gene_element = 12;
 
   // Todo
   message Classification {
@@ -137,9 +133,7 @@ message SubstanceReferenceInformation {
     repeated Reference source = 7
         [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
   }
-  repeated Classification classification = 13
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Classification classification = 13;
 
   // Todo
   message Target {
@@ -186,7 +180,5 @@ message SubstanceReferenceInformation {
     repeated Reference source = 11
         [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
   }
-  repeated Target target = 14
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Target target = 14;
 }

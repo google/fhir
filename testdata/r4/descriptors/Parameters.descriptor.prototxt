@@ -47,8 +47,6 @@ field {
   type_name: ".google.fhir.r4.core.Parameters.Parameter"
   options {
     [google.fhir.proto.field_description]: "Operation Parameter"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "(part.exists() and value.empty() and resource.empty()) or (part.empty() and (value.exists() xor resource.exists()))"
   }
 }
 nested_type {
@@ -525,6 +523,9 @@ nested_type {
     oneof_decl {
       name: "choice"
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "(part.exists() and value.empty() and resource.empty()) or (part.empty() and (value.exists() xor resource.exists()))"
   }
 }
 options {

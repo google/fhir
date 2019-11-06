@@ -181,9 +181,7 @@ message VisionPrescription {
       BaseCode base = 5
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    repeated Prism prism = 9
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Prism prism = 9;
 
     // Added power for multifocal levels
     Decimal add = 10;
@@ -209,9 +207,6 @@ message VisionPrescription {
     // Notes for coatings
     repeated Annotation note = 17;
   }
-  repeated LensSpecification lens_specification = 17 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  repeated LensSpecification lens_specification = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }

@@ -185,7 +185,6 @@ field {
   type_name: ".google.fhir.r4.core.ActualGroup.Member"
   options {
     [google.fhir.proto.field_description]: "Who or what is in group"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -291,4 +290,5 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Actual Group.\nGroup of multiple entities.\nSee http://hl7.org/fhir/StructureDefinition/actualgroup"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Group"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/actualgroup"
+  [google.fhir.proto.fhir_path_message_constraint]: "member.empty() or (actual = true)"
 }

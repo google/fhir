@@ -169,9 +169,7 @@ message CoverageEligibilityRequest {
     // Applies to all items
     Boolean applies_to_all = 6;
   }
-  repeated SupportingInformation supporting_info = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated SupportingInformation supporting_info = 21;
 
   // Patient insurance information
   message Insurance {
@@ -196,9 +194,7 @@ message CoverageEligibilityRequest {
     // Additional provider contract number
     String business_arrangement = 6;
   }
-  repeated Insurance insurance = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Insurance insurance = 22;
 
   // Item to be evaluated for eligibiity
   message Details {
@@ -264,15 +260,11 @@ message CoverageEligibilityRequest {
       }
       DiagnosisX diagnosis = 4;
     }
-    repeated Diagnosis diagnosis = 12
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Diagnosis diagnosis = 12;
 
     // Product or service details
     repeated Reference detail = 13
         [(.google.fhir.proto.valid_reference_type) = "Resource"];
   }
-  repeated Details item = 23
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Details item = 23;
 }

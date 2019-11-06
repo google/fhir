@@ -32,6 +32,7 @@ message Linkage {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Linkage";
+  option (.google.fhir.proto.fhir_path_message_constraint) = "item.count()>1";
 
   // Logical id of this artifact
   Id id = 1;
@@ -106,9 +107,6 @@ message Linkage {
       (.google.fhir.proto.valid_reference_type) = "Resource"
     ];
   }
-  repeated Item item = 12 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  repeated Item item = 12
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }

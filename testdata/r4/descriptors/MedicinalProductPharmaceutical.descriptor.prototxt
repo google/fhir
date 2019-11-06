@@ -146,7 +146,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicinalProductPharmaceutical.Characteristics"
   options {
     [google.fhir.proto.field_description]: "Characteristics e.g. a products onset of action"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -158,7 +157,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "The path by which the pharmaceutical product is taken into or makes contact with the body"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -316,7 +314,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.MedicinalProductPharmaceutical.RouteOfAdministration.TargetSpecies"
     options {
       [google.fhir.proto.field_description]: "A species for which this route applies"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -370,7 +367,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.MedicinalProductPharmaceutical.RouteOfAdministration.TargetSpecies.WithdrawalPeriod"
       options {
         [google.fhir.proto.field_description]: "A species specific time during which consumption of animal product is not appropriate"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {

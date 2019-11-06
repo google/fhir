@@ -174,9 +174,7 @@ message Composition {
       (.google.fhir.proto.valid_reference_type) = "Organization"
     ];
   }
-  repeated Attester attester = 20
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Attester attester = 20;
 
   // Organization which maintains the composition
   Reference custodian = 21
@@ -224,9 +222,7 @@ message Composition {
     TargetX target = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated RelatesTo relates_to = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated RelatesTo relates_to = 22;
 
   // The clinical service(s) being documented
   message Event {
@@ -249,12 +245,15 @@ message Composition {
     repeated Reference detail = 6
         [(.google.fhir.proto.valid_reference_type) = "Resource"];
   }
-  repeated Event event = 23
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Event event = 23;
 
   // Composition is broken into sections
   message Section {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "text.exists() or entry.exists() or section.exists()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "emptyReason.empty() or entry.empty()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -318,12 +317,5 @@ message Composition {
     // Nested Section
     repeated Section section = 13;
   }
-  repeated Section section = 24 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "text.exists() or entry.exists() or section.exists()",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "emptyReason.empty() or entry.empty()"
-  ];
+  repeated Section section = 24;
 }

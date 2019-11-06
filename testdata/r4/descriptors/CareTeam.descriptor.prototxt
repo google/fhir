@@ -166,8 +166,6 @@ field {
   type_name: ".google.fhir.r4.core.CareTeam.Participant"
   options {
     [google.fhir.proto.field_description]: "Members of the team"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "onBehalfOf.exists() implies (member.resolve() is Practitioner)"
   }
 }
 field {
@@ -327,6 +325,9 @@ nested_type {
     options {
       [google.fhir.proto.field_description]: "Time period of participant"
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "onBehalfOf.exists() implies (member.resolve() is Practitioner)"
   }
 }
 options {

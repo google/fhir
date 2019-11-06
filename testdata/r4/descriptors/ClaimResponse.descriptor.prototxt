@@ -256,7 +256,6 @@ field {
   type_name: ".google.fhir.r4.core.ClaimResponse.Item"
   options {
     [google.fhir.proto.field_description]: "Adjudication for claim line items"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -267,7 +266,6 @@ field {
   type_name: ".google.fhir.r4.core.ClaimResponse.AddedItem"
   options {
     [google.fhir.proto.field_description]: "Insurer added line items"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -288,7 +286,6 @@ field {
   type_name: ".google.fhir.r4.core.ClaimResponse.Total"
   options {
     [google.fhir.proto.field_description]: "Adjudication totals"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -299,7 +296,6 @@ field {
   type_name: ".google.fhir.r4.core.ClaimResponse.Payment"
   options {
     [google.fhir.proto.field_description]: "Payment Details"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -340,7 +336,6 @@ field {
   type_name: ".google.fhir.r4.core.ClaimResponse.Note"
   options {
     [google.fhir.proto.field_description]: "Note concerning adjudication"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -362,7 +357,6 @@ field {
   type_name: ".google.fhir.r4.core.ClaimResponse.Insurance"
   options {
     [google.fhir.proto.field_description]: "Patient insurance information"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -373,7 +367,6 @@ field {
   type_name: ".google.fhir.r4.core.ClaimResponse.Error"
   options {
     [google.fhir.proto.field_description]: "Processing errors"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -519,7 +512,6 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Adjudication details"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -530,7 +522,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ClaimResponse.Item.ItemDetail"
     options {
       [google.fhir.proto.field_description]: "Adjudication for claim details"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -679,7 +670,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.ClaimResponse.Item.ItemDetail.SubDetail"
       options {
         [google.fhir.proto.field_description]: "Adjudication for claim sub-details"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {
@@ -963,7 +953,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ClaimResponse.AddedItem.AddedItemDetail"
     options {
       [google.fhir.proto.field_description]: "Insurer added line details"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -1149,7 +1138,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.ClaimResponse.AddedItem.AddedItemDetail.AddedItemSubDetail"
       options {
         [google.fhir.proto.field_description]: "Insurer added line items"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {

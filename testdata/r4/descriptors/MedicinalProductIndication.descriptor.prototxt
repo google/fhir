@@ -155,7 +155,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicinalProductIndication.OtherTherapy"
   options {
     [google.fhir.proto.field_description]: "Information about the use of the medicinal product in relation to other therapies described as part of the indication"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

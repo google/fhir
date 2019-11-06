@@ -331,7 +331,6 @@ field {
   type_name: ".google.fhir.r4.core.Communication.Payload"
   options {
     [google.fhir.proto.field_description]: "Message payload"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

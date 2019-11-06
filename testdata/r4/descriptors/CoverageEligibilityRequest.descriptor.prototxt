@@ -216,7 +216,6 @@ field {
   type_name: ".google.fhir.r4.core.CoverageEligibilityRequest.SupportingInformation"
   options {
     [google.fhir.proto.field_description]: "Supporting information"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -227,7 +226,6 @@ field {
   type_name: ".google.fhir.r4.core.CoverageEligibilityRequest.Insurance"
   options {
     [google.fhir.proto.field_description]: "Patient insurance information"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -238,7 +236,6 @@ field {
   type_name: ".google.fhir.r4.core.CoverageEligibilityRequest.Details"
   options {
     [google.fhir.proto.field_description]: "Item to be evaluated for eligibiity"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -575,7 +572,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.CoverageEligibilityRequest.Details.Diagnosis"
     options {
       [google.fhir.proto.field_description]: "Applicable diagnosis"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {

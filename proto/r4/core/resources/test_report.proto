@@ -155,9 +155,7 @@ message TestReport {
     // The display name of the participant
     String display = 6;
   }
-  repeated Participant participant = 18
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Participant participant = 18;
 
   // The results of the series of required setup operations before the tests
   // were executed
@@ -173,6 +171,9 @@ message TestReport {
 
     // A setup operation or assert that was executed
     message SetupAction {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "operation.exists() xor assert.exists()";
+
       // Unique id for inter-element referencing
       String id = 1;
 
@@ -217,9 +218,7 @@ message TestReport {
         // A link to further details on the result
         Uri detail = 6;
       }
-      Operation operation = 4
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      Operation operation = 4;
 
       // The assertion to perform
       message Assert {
@@ -256,22 +255,12 @@ message TestReport {
         // A link to further details on the result
         String detail = 6;
       }
-      Assert assert_value = 5 [
-        json_name = "assert",
-        (.google.fhir.proto.fhir_path_constraint) =
-            "hasValue() or (children().count() > id.count())"
-      ];
+      Assert assert_value = 5 [json_name = "assert"];
     }
-    repeated SetupAction action = 4 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())",
-      (.google.fhir.proto.fhir_path_constraint) =
-          "operation.exists() xor assert.exists()"
-    ];
+    repeated SetupAction action = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  Setup setup = 19 [(.google.fhir.proto.fhir_path_constraint) =
-                        "hasValue() or (children().count() > id.count())"];
+  Setup setup = 19;
 
   // A test executed from the test script
   message Test {
@@ -292,6 +281,9 @@ message TestReport {
 
     // A test operation or assert that was performed
     message TestAction {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "operation.exists() xor assert.exists()";
+
       // Unique id for inter-element referencing
       String id = 1;
 
@@ -307,17 +299,10 @@ message TestReport {
       // The assertion performed
       Setup.SetupAction.Assert assert_value = 5 [json_name = "assert"];
     }
-    repeated TestAction action = 6 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())",
-      (.google.fhir.proto.fhir_path_constraint) =
-          "operation.exists() xor assert.exists()"
-    ];
+    repeated TestAction action = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Test test = 20
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Test test = 20;
 
   // The results of running the series of required clean up steps
   message Teardown {
@@ -345,13 +330,8 @@ message TestReport {
       Setup.SetupAction.Operation operation = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    repeated TeardownAction action = 4 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())"
-    ];
+    repeated TeardownAction action = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  Teardown teardown = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Teardown teardown = 21;
 }

@@ -173,9 +173,7 @@ message DocumentReference {
       (.google.fhir.proto.valid_reference_type) = "DocumentReference"
     ];
   }
-  repeated RelatesTo relates_to = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated RelatesTo relates_to = 21;
 
   // Human-readable description
   String description = 22;
@@ -201,11 +199,8 @@ message DocumentReference {
     // Format/content rules for the document
     Coding format = 5;
   }
-  repeated Content content = 24 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  repeated Content content = 24
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Clinical context of document
   message Context {
@@ -245,6 +240,5 @@ message DocumentReference {
     repeated Reference related = 10
         [(.google.fhir.proto.valid_reference_type) = "Resource"];
   }
-  Context context = 25 [(.google.fhir.proto.fhir_path_constraint) =
-                            "hasValue() or (children().count() > id.count())"];
+  Context context = 25;
 }

@@ -149,6 +149,7 @@ public class ProtoGeneratorTest {
     registry.add(Annotations.fhirInlinedExtensionUrl);
     registry.add(Annotations.fhirOneofIsOptional);
     registry.add(Annotations.fhirPathConstraint);
+    registry.add(Annotations.fhirPathMessageConstraint);
     registry.add(Annotations.fhirProfileBase);
     registry.add(Annotations.fhirReferenceType);
     registry.add(Annotations.sourceCodeSystem);

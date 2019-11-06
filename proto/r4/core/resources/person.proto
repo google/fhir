@@ -139,7 +139,5 @@ message Person {
     }
     AssuranceCode assurance = 5;
   }
-  repeated Link link = 19
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Link link = 19;
 }

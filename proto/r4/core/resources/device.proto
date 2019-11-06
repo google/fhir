@@ -111,9 +111,7 @@ message Device {
     }
     EntryTypeCode entry_type = 9;
   }
-  repeated UdiCarrier udi_carrier = 12
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated UdiCarrier udi_carrier = 12;
 
   // active | inactive | entered-in-error | unknown
   message StatusCode {
@@ -187,9 +185,7 @@ message Device {
     TypeCode type = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated DeviceName device_name = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated DeviceName device_name = 21;
 
   // The model number for the device
   String model_number = 22;
@@ -219,9 +215,7 @@ message Device {
     // The version of the standard that is used to operate and communicate
     String version = 5;
   }
-  repeated Specialization specialization = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Specialization specialization = 25;
 
   // The actual design of the device or software version running on the device
   message Version {
@@ -244,9 +238,7 @@ message Device {
     String value = 6
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Version version = 26
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Version version = 26;
 
   // The actual configuration settings of a device as it actually operates,
   // e.g., regulation status, time properties
@@ -270,9 +262,7 @@ message Device {
     // Property value as a code, e.g., NTP4 (synced to NTP)
     repeated CodeableConcept value_code = 6;
   }
-  repeated Property property = 27
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Property property = 27;
 
   // Patient to whom Device is affixed
   Reference patient = 28

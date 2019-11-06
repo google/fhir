@@ -165,7 +165,6 @@ field {
   type_name: ".google.fhir.r4.core.BiologicallyDerivedProduct.Collection"
   options {
     [google.fhir.proto.field_description]: "How this product was collected"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -176,7 +175,6 @@ field {
   type_name: ".google.fhir.r4.core.BiologicallyDerivedProduct.Processing"
   options {
     [google.fhir.proto.field_description]: "Any processing of the product during collection"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -187,7 +185,6 @@ field {
   type_name: ".google.fhir.r4.core.BiologicallyDerivedProduct.Manipulation"
   options {
     [google.fhir.proto.field_description]: "Any manipulation of product post-collection"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -198,7 +195,6 @@ field {
   type_name: ".google.fhir.r4.core.BiologicallyDerivedProduct.Storage"
   options {
     [google.fhir.proto.field_description]: "Product storage"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {

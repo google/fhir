@@ -145,6 +145,9 @@ message RiskAssessment {
 
   // Outcome predicted
   message Prediction {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "probability is decimal implies (probability as decimal) <= 100";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -159,6 +162,8 @@ message RiskAssessment {
 
     // Likelihood of specified outcome
     message ProbabilityX {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "(low.empty() or ((low.code = '%') and (low.system = %ucum))) and (high.empty() or ((high.code = '%') and (high.system = %ucum)))";
       option (.google.fhir.proto.is_choice_type) = true;
 
       oneof choice {
@@ -166,10 +171,7 @@ message RiskAssessment {
         Range range = 2;
       }
     }
-    ProbabilityX probability = 5 [
-      (.google.fhir.proto.fhir_path_constraint) =
-          "(low.empty() or ((low.code = '%') and (low.system = %ucum))) and (high.empty() or ((high.code = '%') and (high.system = %ucum)))"
-    ];
+    ProbabilityX probability = 5;
 
     // Likelihood of specified outcome as a qualitative value
     CodeableConcept qualitative_risk = 6;
@@ -191,12 +193,7 @@ message RiskAssessment {
     // Explanation of prediction
     String rationale = 9;
   }
-  repeated Prediction prediction = 24 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "probability is decimal implies (probability as decimal) <= 100"
-  ];
+  repeated Prediction prediction = 24;
 
   // How to reduce risk
   String mitigation = 25;

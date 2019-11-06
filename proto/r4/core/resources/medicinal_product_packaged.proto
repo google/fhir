@@ -105,9 +105,7 @@ message MedicinalProductPackaged {
     // packaging)
     Identifier immediate_packaging = 5;
   }
-  repeated BatchIdentifier batch_identifier = 17
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated BatchIdentifier batch_identifier = 17;
 
   // A packaging item, as a contained for medicine, possibly with other
   // packaging items within
@@ -164,9 +162,6 @@ message MedicinalProductPackaged {
     repeated Reference manufacturer = 15
         [(.google.fhir.proto.valid_reference_type) = "Organization"];
   }
-  repeated PackageItem package_item = 18 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  repeated PackageItem package_item = 18
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }

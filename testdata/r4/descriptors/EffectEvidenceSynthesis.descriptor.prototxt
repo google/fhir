@@ -392,7 +392,6 @@ field {
   type_name: ".google.fhir.r4.core.EffectEvidenceSynthesis.SampleSize"
   options {
     [google.fhir.proto.field_description]: "What sample size was involved?"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -403,7 +402,6 @@ field {
   type_name: ".google.fhir.r4.core.EffectEvidenceSynthesis.ResultsByExposure"
   options {
     [google.fhir.proto.field_description]: "What was the result per exposure?"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -414,7 +412,6 @@ field {
   type_name: ".google.fhir.r4.core.EffectEvidenceSynthesis.EffectEstimate"
   options {
     [google.fhir.proto.field_description]: "What was the estimated effect"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -425,7 +422,6 @@ field {
   type_name: ".google.fhir.r4.core.EffectEvidenceSynthesis.Certainty"
   options {
     [google.fhir.proto.field_description]: "How certain is the effect"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -710,7 +706,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.EffectEvidenceSynthesis.EffectEstimate.PrecisionEstimate"
     options {
       [google.fhir.proto.field_description]: "How precise the estimate is"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -847,7 +842,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.EffectEvidenceSynthesis.Certainty.CertaintySubcomponent"
     options {
       [google.fhir.proto.field_description]: "A component that contributes to the overall certainty"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -918,4 +912,5 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for EffectEvidenceSynthesis, last updated 2018-12-27T22:37:54.724+11:00.\nA quantified estimate of effect based on a body of evidence.\nSee http://hl7.org/fhir/StructureDefinition/EffectEvidenceSynthesis"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/EffectEvidenceSynthesis"
+  [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
 }

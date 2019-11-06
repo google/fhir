@@ -110,9 +110,7 @@ message Substance {
     // Amount of substance in the package
     SimpleQuantity quantity = 6;
   }
-  repeated Instance instance = 15
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Instance instance = 15;
 
   // Composition information about the substance
   message Ingredient {
@@ -141,7 +139,5 @@ message Substance {
     SubstanceX substance = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Ingredient ingredient = 16
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Ingredient ingredient = 16;
 }

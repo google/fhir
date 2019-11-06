@@ -258,7 +258,6 @@ field {
   type_name: ".google.fhir.r4.core.ImplementationGuide.DependsOn"
   options {
     [google.fhir.proto.field_description]: "Another Implementation guide this depends on"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -269,7 +268,6 @@ field {
   type_name: ".google.fhir.r4.core.ImplementationGuide.Global"
   options {
     [google.fhir.proto.field_description]: "Profiles that apply globally"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -280,8 +278,6 @@ field {
   type_name: ".google.fhir.r4.core.ImplementationGuide.Definition"
   options {
     [google.fhir.proto.field_description]: "Information needed to build the IG"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "resource.groupingId.all(%context.grouping.id contains $this)"
   }
 }
 field {
@@ -292,7 +288,6 @@ field {
   type_name: ".google.fhir.r4.core.ImplementationGuide.Manifest"
   options {
     [google.fhir.proto.field_description]: "Information about an assembled IG"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -562,7 +557,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ImplementationGuide.Definition.Grouping"
     options {
       [google.fhir.proto.field_description]: "Grouping used to present related resources in the IG"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -574,7 +568,6 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Resource in the implementation guide"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -585,7 +578,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ImplementationGuide.Definition.Page"
     options {
       [google.fhir.proto.field_description]: "Page/Section in the Guide"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -596,7 +588,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ImplementationGuide.Definition.Parameter"
     options {
       [google.fhir.proto.field_description]: "Defines how IG is built by tools"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -607,7 +598,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ImplementationGuide.Definition.Template"
     options {
       [google.fhir.proto.field_description]: "A template for building resources"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -1089,6 +1079,9 @@ nested_type {
       }
     }
   }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "resource.groupingId.all(%context.grouping.id contains $this)"
+  }
 }
 nested_type {
   name: "Manifest"
@@ -1141,7 +1134,6 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Resource in the implementation guide"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -1152,7 +1144,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ImplementationGuide.Manifest.ManifestPage"
     options {
       [google.fhir.proto.field_description]: "HTML page within the parent IG"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -1334,4 +1325,6 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ImplementationGuide, last updated 2018-12-27T22:37:54.724+11:00.\nA set of rules about how FHIR is used.\nSee http://hl7.org/fhir/StructureDefinition/ImplementationGuide"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ImplementationGuide"
+  [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
+  [google.fhir.proto.fhir_path_message_constraint]: "definition.resource.fhirVersion.all(%context.fhirVersion contains $this)"
 }

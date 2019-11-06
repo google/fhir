@@ -218,7 +218,6 @@ field {
   type_name: ".google.fhir.r4.core.DocumentReference.RelatesTo"
   options {
     [google.fhir.proto.field_description]: "Relationships to other documents"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -250,7 +249,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Document referenced"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -261,7 +259,6 @@ field {
   type_name: ".google.fhir.r4.core.DocumentReference.Context"
   options {
     [google.fhir.proto.field_description]: "Clinical context of document"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {

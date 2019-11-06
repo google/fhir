@@ -184,7 +184,6 @@ field {
   type_name: ".google.fhir.r4.core.Person.Link"
   options {
     [google.fhir.proto.field_description]: "Link to a resource that concerns the same actual person"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {

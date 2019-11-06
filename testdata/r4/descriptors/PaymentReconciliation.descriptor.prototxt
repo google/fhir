@@ -222,7 +222,6 @@ field {
   type_name: ".google.fhir.r4.core.PaymentReconciliation.Details"
   options {
     [google.fhir.proto.field_description]: "Settlement particulars"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -243,7 +242,6 @@ field {
   type_name: ".google.fhir.r4.core.PaymentReconciliation.Notes"
   options {
     [google.fhir.proto.field_description]: "Note concerning processing"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {

@@ -183,6 +183,9 @@ message CoverageEligibilityResponse {
 
     // Benefits and authorization details
     message Items {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "category.exists() xor productOrService.exists()";
+
       // Unique id for inter-element referencing
       String id = 1;
 
@@ -264,9 +267,7 @@ message CoverageEligibilityResponse {
         }
         UsedX used = 6;
       }
-      repeated Benefit benefit = 14
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated Benefit benefit = 14;
 
       // Authorization required flag
       Boolean authorization_required = 15;
@@ -277,16 +278,9 @@ message CoverageEligibilityResponse {
       // Preauthorization requirements endpoint
       Uri authorization_url = 17;
     }
-    repeated Items item = 7 [
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())",
-      (.google.fhir.proto.fhir_path_constraint) =
-          "category.exists() xor productOrService.exists()"
-    ];
+    repeated Items item = 7;
   }
-  repeated Insurance insurance = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Insurance insurance = 21;
 
   // Preauthorization reference
   String pre_auth_ref = 22;
@@ -309,7 +303,5 @@ message CoverageEligibilityResponse {
     CodeableConcept code = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Errors error = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Errors error = 24;
 }

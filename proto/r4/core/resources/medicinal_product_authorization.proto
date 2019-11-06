@@ -133,9 +133,7 @@ message MedicinalProductAuthorization {
     // The start and expected end date of the authorization
     Period validity_period = 8;
   }
-  repeated JurisdictionalAuthorization jurisdictional_authorization = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated JurisdictionalAuthorization jurisdictional_authorization = 22;
 
   // Marketing Authorization Holder
   Reference holder = 23
@@ -177,7 +175,5 @@ message MedicinalProductAuthorization {
     // Applcations submitted to obtain a marketing authorization
     repeated Procedure application = 7;
   }
-  Procedure procedure = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Procedure procedure = 25;
 }

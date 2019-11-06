@@ -126,6 +126,9 @@ message Patient {
 
   // A contact party (e.g. guardian, partner, friend) for the patient
   message Contact {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "name.exists() or telecom.exists() or address.exists() or organization.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -172,12 +175,7 @@ message Patient {
     // be contacted relating to this patient
     Period period = 10;
   }
-  repeated Contact contact = 21 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "name.exists() or telecom.exists() or address.exists() or organization.exists()"
-  ];
+  repeated Contact contact = 21;
 
   // A language which may be used to communicate with the patient about his or
   // her health
@@ -199,9 +197,7 @@ message Patient {
     // Language preference indicator
     Boolean preferred = 5;
   }
-  repeated Communication communication = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Communication communication = 22;
 
   // Patient's nominated primary care provider
   repeated Reference general_practitioner = 23 [
@@ -250,7 +246,5 @@ message Patient {
     TypeCode type = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Link link = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Link link = 25;
 }

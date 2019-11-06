@@ -128,6 +128,9 @@ message QuestionnaireResponse {
 
   // Groups and questions
   message Item {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(answer.exists() and item.exists()).not()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -183,17 +186,10 @@ message QuestionnaireResponse {
       // Nested groups and questions
       repeated Item item = 5;
     }
-    repeated Answer answer = 7
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Answer answer = 7;
 
     // Nested questionnaire response items
     repeated Item item = 8;
   }
-  repeated Item item = 20 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "(answer.exists() and item.exists()).not()"
-  ];
+  repeated Item item = 20;
 }

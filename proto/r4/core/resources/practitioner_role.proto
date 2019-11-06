@@ -135,9 +135,7 @@ message PractitionerRole {
     // Closing time of day (ignored if allDay = true)
     Time available_end_time = 7;
   }
-  repeated AvailableTime available_time = 20
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated AvailableTime available_time = 20;
 
   // Not available during this time due to provided reason
   message NotAvailable {
@@ -157,9 +155,7 @@ message PractitionerRole {
     // Service not available from this date
     Period during = 5;
   }
-  repeated NotAvailable not_available = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated NotAvailable not_available = 21;
 
   // Description of availability exceptions
   String availability_exceptions = 22;

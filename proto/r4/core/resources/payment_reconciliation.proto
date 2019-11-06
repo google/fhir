@@ -185,9 +185,7 @@ message PaymentReconciliation {
     // Amount allocated to this payable
     Money amount = 13;
   }
-  repeated Details detail = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Details detail = 22;
 
   // Printed form identifier
   CodeableConcept form_code = 23;
@@ -223,7 +221,5 @@ message PaymentReconciliation {
     // Note explanatory text
     String text = 5;
   }
-  repeated Notes process_note = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Notes process_note = 24;
 }

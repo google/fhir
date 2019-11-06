@@ -1,5 +1,6 @@
 grammar FhirPath;
 
+// TODO: upgrade to the 2019 FHIRPath grammar (http://hl7.org/fhirpath/2019May/grammar.html)
 // Grammar rules
 
 //prog: line (line)*;

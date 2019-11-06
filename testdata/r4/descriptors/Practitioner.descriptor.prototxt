@@ -173,7 +173,6 @@ field {
   type_name: ".google.fhir.r4.core.Practitioner.Qualification"
   options {
     [google.fhir.proto.field_description]: "Certification, licenses, or training pertaining to the provision of care"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

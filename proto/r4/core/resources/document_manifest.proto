@@ -146,7 +146,5 @@ message DocumentManifest {
     // Related Resource
     Reference ref = 5 [(.google.fhir.proto.valid_reference_type) = "Resource"];
   }
-  repeated Related related = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Related related = 21;
 }

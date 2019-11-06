@@ -1,8 +1,8 @@
+load("//bazel:antlr4_cc.bzl", "antlr4_cc_lexer", "antlr4_cc_parser")
+
 licenses(["notice"])
 
 package(default_visibility = ["//visibility:public"])
-
-load("//bazel:antlr4_cc.bzl", "antlr4_cc_lexer", "antlr4_cc_parser")
 
 antlr4_cc_lexer(
     name = "fhir_path_lexer",
@@ -63,6 +63,8 @@ cc_test(
     deps = [
         ":fhir_path",
         "//cc/google/fhir/status",
+        "//proto/r4/core:datatypes_cc_proto",
+        "//proto/r4/core/resources:encounter_cc_proto",
         "//proto/stu3:codes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:resources_cc_proto",

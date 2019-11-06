@@ -35,6 +35,24 @@ message Bundle {
       "http://hl7.org/fhir/StructureDefinition/Bundle";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/Bundle";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(type = 'history') or entry.where(fullUrl.exists()).select(fullUrl&resource.meta.versionId).isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "type = 'document' implies (identifier.system.exists() and identifier.value.exists())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "entry.all(request.exists() = (%resource.type = 'batch' or %resource.type = 'transaction' or %resource.type = 'history'))";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "entry.all(response.exists() = (%resource.type = 'batch-response' or %resource.type = 'transaction-response' or %resource.type = 'history'))";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "type = 'message' implies entry.first().resource.is(MessageHeader)";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "total.empty() or (type = 'searchset') or (type = 'history')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "entry.search.empty() or (type = 'searchset')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "type = 'document' implies entry.first().resource.is(Composition)";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "type = 'document' implies (meta.lastUpdated.hasValue())";
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -95,12 +113,15 @@ message Bundle {
     core.Uri url = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Link link = 9
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Link link = 9;
 
   // Entry in the bundle - will have a resource or information
   message Entry {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "fullUrl.contains('/_history/').not()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "resource.exists() or request.exists() or response.exists()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -150,8 +171,7 @@ message Bundle {
       // Search ranking (between 0 and 1)
       core.Decimal score = 5;
     }
-    Search search = 7 [(.google.fhir.proto.fhir_path_constraint) =
-                           "hasValue() or (children().count() > id.count())"];
+    Search search = 7;
 
     // Additional execution information (transaction/batch/history)
     message Request {
@@ -198,8 +218,7 @@ message Bundle {
       // For conditional creates
       core.String if_none_exist = 9;
     }
-    Request request = 8 [(.google.fhir.proto.fhir_path_constraint) =
-                             "hasValue() or (children().count() > id.count())"];
+    Request request = 8;
 
     // Results of execution (transaction/batch/history)
     message Response {
@@ -228,13 +247,9 @@ message Bundle {
       // OperationOutcome with hints and warnings (for batch/transaction)
       ContainedResource outcome = 8;
     }
-    Response response = 9
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    Response response = 9;
   }
   repeated Entry entry = 10 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "fullUrl.contains('/_history/').not()",
     (.google.fhir.proto.fhir_path_constraint) =
@@ -396,6 +411,9 @@ message TestPatient {
 
   // A contact party (e.g. guardian, partner, friend) for the patient
   message Contact {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "name.exists() or telecom.exists() or address.exists() or organization.exists()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -444,8 +462,6 @@ message TestPatient {
   }
   repeated Contact contact = 21 [
     (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
         "name.exists() or telecom.exists() or address.exists() or organization.exists()"
   ];
 
@@ -469,9 +485,7 @@ message TestPatient {
     // Language preference indicator
     core.Boolean preferred = 5;
   }
-  repeated Communication communication = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Communication communication = 22;
 
   // Patient's nominated primary care provider
   repeated core.Reference general_practitioner = 23 [
@@ -520,17 +534,13 @@ message TestPatient {
     TypeCode type = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Link link = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Link link = 25;
 
   // Decimal Extension
   core.Decimal dec_ext = 26 [
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://test/url/base/SimpleDecimalExt",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -545,6 +555,10 @@ message TestObservation {
       "http://hl7.org/fhir/StructureDefinition/Observation";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/TestObservation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "dataAbsentReason.empty() or value.empty()";
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -889,6 +903,9 @@ message TestObservation {
 
   // Provides guide for interpretation
   message ReferenceRange {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "low.exists() or high.exists() or text.exists()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -916,12 +933,9 @@ message TestObservation {
     // Text based reference range in an observation
     core.String text = 9;
   }
-  repeated ReferenceRange reference_range = 30 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "low.exists() or high.exists() or text.exists()"
-  ];
+  repeated ReferenceRange reference_range = 30
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Related resource that belongs to the Observation group
   repeated core.Reference has_member = 31 [
@@ -1042,21 +1056,15 @@ message TestObservation {
       (.google.fhir.proto.fhir_inlined_extension_url) =
           "http://test/url/base/SimpleDecimalExt",
       (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())",
-      (.google.fhir.proto.fhir_path_constraint) =
           "extension.exists() != value.exists()"
     ];
   }
-  repeated Component component = 33
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Component component = 33;
 
   //
   ComplexExt my_complex_extension = 34 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://test/url/base/ComplexExt",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -1073,6 +1081,10 @@ message TestObservationLvl2 {
       "http://hl7.org/fhir/StructureDefinition/Observation";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/TestObservationLvl2";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "dataAbsentReason.empty() or value.empty()";
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -1453,6 +1465,9 @@ message TestObservationLvl2 {
 
   // Provides guide for interpretation
   message ReferenceRange {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "low.exists() or high.exists() or text.exists()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -1480,12 +1495,9 @@ message TestObservationLvl2 {
     // Text based reference range in an observation
     core.String text = 9;
   }
-  repeated ReferenceRange reference_range = 30 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "low.exists() or high.exists() or text.exists()"
-  ];
+  repeated ReferenceRange reference_range = 30
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "low.exists() or high.exists() or text.exists()"];
 
   // Related resource that belongs to the Observation group
   repeated core.Reference has_member = 31 [
@@ -1606,21 +1618,15 @@ message TestObservationLvl2 {
       (.google.fhir.proto.fhir_inlined_extension_url) =
           "http://test/url/base/SimpleDecimalExt",
       (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())",
-      (.google.fhir.proto.fhir_path_constraint) =
           "extension.exists() != value.exists()"
     ];
   }
-  repeated Component component = 33
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Component component = 33;
 
   //
   ComplexExt my_complex_extension = 34 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://test/url/base/ComplexExt",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -1629,8 +1635,6 @@ message TestObservationLvl2 {
   core.Decimal new_ext = 35 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://test/url/base/SimpleDecimalExt",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -1729,9 +1733,7 @@ message TestEncounter {
     core.Period period = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated StatusHistory status_history = 12
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated StatusHistory status_history = 12;
 
   // Classification of patient encounter
   core.Coding class_value = 13 [
@@ -1760,9 +1762,7 @@ message TestEncounter {
     core.Period period = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated ClassHistory class_history = 14
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated ClassHistory class_history = 14;
 
   // Specific type of encounter
   repeated core.CodeableConcept type = 15;
@@ -1880,9 +1880,7 @@ message TestEncounter {
       (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
     ];
   }
-  repeated Participant participant = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Participant participant = 21;
 
   // The appointment that scheduled this encounter
   repeated core.Reference appointment = 22
@@ -1930,9 +1928,7 @@ message TestEncounter {
     // Ranking of the diagnosis (for each role type)
     core.PositiveInt rank = 6;
   }
-  repeated Diagnosis diagnosis = 27
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Diagnosis diagnosis = 27;
 
   // The set of accounts that may be used for billing for this Encounter
   repeated core.Reference account = 28
@@ -1983,9 +1979,7 @@ message TestEncounter {
     // Category or kind of location after discharge
     core.CodeableConcept discharge_disposition = 12;
   }
-  Hospitalization hospitalization = 29
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Hospitalization hospitalization = 29;
 
   // List of locations where the patient has been
   message Location {
@@ -2028,9 +2022,7 @@ message TestEncounter {
     // Time period during which the patient was present at the location
     core.Period period = 7;
   }
-  repeated Location location = 30
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Location location = 30;
 
   // The organization (facility) responsible for this encounter
   core.Reference service_provider = 31

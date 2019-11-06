@@ -123,9 +123,7 @@ message SubstanceSpecification {
     }
     AmountX amount = 10;
   }
-  repeated Moiety moiety = 17
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Moiety moiety = 17;
 
   // General specifications for this substance, including how it is related to
   // other substances
@@ -175,9 +173,7 @@ message SubstanceSpecification {
     }
     AmountX amount = 8;
   }
-  repeated Property property = 18
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Property property = 18;
 
   // General information detailing this substance
   Reference reference_information = 19
@@ -257,13 +253,9 @@ message SubstanceSpecification {
         // be captured in this field
         Quantity amount = 6;
       }
-      MolecularWeight molecular_weight = 8
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      MolecularWeight molecular_weight = 8;
     }
-    repeated Isotope isotope = 8
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Isotope isotope = 8;
 
     // The molecular weight or weight range (for proteins, polymers or nucleic
     // acids)
@@ -294,13 +286,9 @@ message SubstanceSpecification {
       // An attached file with the structural representation
       Attachment attachment = 6;
     }
-    repeated Representation representation = 11
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Representation representation = 11;
   }
-  Structure structure = 20
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Structure structure = 20;
 
   // Codes associated with the substance
   message CodeType {
@@ -330,9 +318,7 @@ message SubstanceSpecification {
     repeated Reference source = 8
         [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
   }
-  repeated CodeType code = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated CodeType code = 21;
 
   // Names applicable to this substance
   message Name {
@@ -394,17 +380,13 @@ message SubstanceSpecification {
       // Date of official name change
       DateTime date = 6;
     }
-    repeated Official official = 13
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Official official = 13;
 
     // Supporting literature
     repeated Reference source = 14
         [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
   }
-  repeated Name name = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Name name = 22;
 
   // The molecular weight or weight range (for proteins, polymers or nucleic
   // acids)
@@ -468,9 +450,7 @@ message SubstanceSpecification {
     repeated Reference source = 10
         [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
   }
-  repeated Relationship relationship = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Relationship relationship = 24;
 
   // Data items specific to nucleic acids
   Reference nucleic_acid = 25

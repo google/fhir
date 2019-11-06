@@ -205,7 +205,6 @@ field {
   type_name: ".google.fhir.r4.core.RelatedPerson.Communication"
   options {
     [google.fhir.proto.field_description]: "A language which may be used to communicate with about the patient\'s health"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {

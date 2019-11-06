@@ -33,6 +33,8 @@ message EffectEvidenceSynthesis {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/EffectEvidenceSynthesis";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
 
   // Logical id of this artifact
   Id id = 1;
@@ -197,9 +199,7 @@ message EffectEvidenceSynthesis {
     // How many participants?
     Integer number_of_participants = 6;
   }
-  SampleSize sample_size = 39
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  SampleSize sample_size = 39;
 
   // What was the result per exposure?
   message ResultsByExposure {
@@ -241,9 +241,7 @@ message EffectEvidenceSynthesis {
       (.google.fhir.proto.valid_reference_type) = "RiskEvidenceSynthesis"
     ];
   }
-  repeated ResultsByExposure results_by_exposure = 40
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated ResultsByExposure results_by_exposure = 40;
 
   // What was the estimated effect
   message EffectEstimate {
@@ -294,13 +292,9 @@ message EffectEvidenceSynthesis {
       // Upper bound
       Decimal to = 7;
     }
-    repeated PrecisionEstimate precision_estimate = 9
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated PrecisionEstimate precision_estimate = 9;
   }
-  repeated EffectEstimate effect_estimate = 41
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated EffectEstimate effect_estimate = 41;
 
   // How certain is the effect
   message Certainty {
@@ -339,11 +333,7 @@ message EffectEvidenceSynthesis {
       // Used for footnotes or explanatory notes
       repeated Annotation note = 6;
     }
-    repeated CertaintySubcomponent certainty_subcomponent = 6
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated CertaintySubcomponent certainty_subcomponent = 6;
   }
-  repeated Certainty certainty = 42
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Certainty certainty = 42;
 }

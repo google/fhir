@@ -98,9 +98,7 @@ message MedicinalProductPharmaceutical {
     // The status of characteristic e.g. assigned or pending
     CodeableConcept status = 5;
   }
-  repeated Characteristics characteristics = 15
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Characteristics characteristics = 15;
 
   // The path by which the pharmaceutical product is taken into or makes contact
   // with the body
@@ -181,17 +179,10 @@ message MedicinalProductPharmaceutical {
         // Extra information about the withdrawal period
         String supporting_information = 6;
       }
-      repeated WithdrawalPeriod withdrawal_period = 5
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated WithdrawalPeriod withdrawal_period = 5;
     }
-    repeated TargetSpecies target_species = 10
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated TargetSpecies target_species = 10;
   }
-  repeated RouteOfAdministration route_of_administration = 16 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  repeated RouteOfAdministration route_of_administration = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }

@@ -261,7 +261,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "The product\'s name, including full name and possibly coded parts"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -282,7 +281,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicinalProduct.ManufacturingBusinessOperation"
   options {
     [google.fhir.proto.field_description]: "An operation applied to the product, for manufacturing or adminsitrative purpose"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -293,7 +291,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicinalProduct.SpecialDesignation"
   options {
     [google.fhir.proto.field_description]: "Indicates if the medicinal product has an orphan designation for the treatment of a rare disease"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -347,7 +344,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.MedicinalProduct.Name.NamePart"
     options {
       [google.fhir.proto.field_description]: "Coding words or phrases of the name"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -358,7 +354,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.MedicinalProduct.Name.CountryLanguage"
     options {
       [google.fhir.proto.field_description]: "Country where the name applies"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {

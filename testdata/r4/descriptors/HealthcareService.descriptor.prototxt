@@ -236,7 +236,6 @@ field {
   type_name: ".google.fhir.r4.core.HealthcareService.Eligibility"
   options {
     [google.fhir.proto.field_description]: "Specific eligibility requirements required to use the service"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -297,7 +296,6 @@ field {
   type_name: ".google.fhir.r4.core.HealthcareService.AvailableTime"
   options {
     [google.fhir.proto.field_description]: "Times the Service Site is available"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -308,7 +306,6 @@ field {
   type_name: ".google.fhir.r4.core.HealthcareService.NotAvailable"
   options {
     [google.fhir.proto.field_description]: "Not available during this time due to provided reason"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

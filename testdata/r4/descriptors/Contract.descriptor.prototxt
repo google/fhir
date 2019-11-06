@@ -342,7 +342,6 @@ field {
   type_name: ".google.fhir.r4.core.Contract.ContentDefinition"
   options {
     [google.fhir.proto.field_description]: "Contract precursor content"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -353,7 +352,6 @@ field {
   type_name: ".google.fhir.r4.core.Contract.Term"
   options {
     [google.fhir.proto.field_description]: "Contract Term List"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -386,7 +384,6 @@ field {
   type_name: ".google.fhir.r4.core.Contract.Signatory"
   options {
     [google.fhir.proto.field_description]: "Contract Signatory"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -397,7 +394,6 @@ field {
   type_name: ".google.fhir.r4.core.Contract.FriendlyLanguage"
   options {
     [google.fhir.proto.field_description]: "Contract Friendly Language"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -408,7 +404,6 @@ field {
   type_name: ".google.fhir.r4.core.Contract.LegalLanguage"
   options {
     [google.fhir.proto.field_description]: "Contract Legal Language"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -419,7 +414,6 @@ field {
   type_name: ".google.fhir.r4.core.Contract.ComputableLanguage"
   options {
     [google.fhir.proto.field_description]: "Computable Contract Language"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -722,7 +716,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.Contract.Term.SecurityLabel"
     options {
       [google.fhir.proto.field_description]: "Protection for the Term"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -734,7 +727,6 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Context of the Contract term"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -745,7 +737,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.Contract.Term.ContractAsset"
     options {
       [google.fhir.proto.field_description]: "Contract Term Asset List"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -756,7 +747,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.Contract.Term.Action"
     options {
       [google.fhir.proto.field_description]: "Entity being ascribed responsibility"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -921,7 +911,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.Contract.Term.ContractOffer.ContractParty"
       options {
         [google.fhir.proto.field_description]: "Offer Recipient"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     field {
@@ -973,7 +962,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.Contract.Term.ContractOffer.Answer"
       options {
         [google.fhir.proto.field_description]: "Response to offer text"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     field {
@@ -1313,7 +1301,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.Contract.Term.ContractAsset.AssetContext"
       options {
         [google.fhir.proto.field_description]: "Circumstance of the asset"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     field {
@@ -1404,7 +1391,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.Contract.Term.ContractAsset.ValuedItem"
       options {
         [google.fhir.proto.field_description]: "Contract Valued Item List"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {
@@ -1744,7 +1730,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.Contract.Term.Action.ActionSubject"
       options {
         [google.fhir.proto.field_description]: "Entity of the action"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     field {

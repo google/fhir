@@ -171,9 +171,7 @@ message DeviceRequest {
     }
     ValueX value = 5;
   }
-  repeated Parameter parameter = 20
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Parameter parameter = 20;
 
   // Focus of request
   Reference subject = 21 [

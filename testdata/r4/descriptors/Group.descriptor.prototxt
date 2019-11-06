@@ -179,7 +179,6 @@ field {
   type_name: ".google.fhir.r4.core.Group.Characteristic"
   options {
     [google.fhir.proto.field_description]: "Include / Exclude group members by Trait"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -190,7 +189,6 @@ field {
   type_name: ".google.fhir.r4.core.Group.Member"
   options {
     [google.fhir.proto.field_description]: "Who or what is in group"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -420,4 +418,5 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Group, last updated 2018-12-27T22:37:54.724+11:00.\nGroup of multiple entities.\nSee http://hl7.org/fhir/StructureDefinition/Group"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Group"
+  [google.fhir.proto.fhir_path_message_constraint]: "member.empty() or (actual = true)"
 }

@@ -157,7 +157,6 @@ field {
   type_name: ".google.fhir.r4.core.SupplyDelivery.SuppliedItem"
   options {
     [google.fhir.proto.field_description]: "The item that is delivered or supplied"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

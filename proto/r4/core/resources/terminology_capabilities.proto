@@ -32,6 +32,16 @@ message TerminologyCapabilities {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/TerminologyCapabilities";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(kind != 'instance') or implementation.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(description.count() + software.count() + implementation.count()) > 0";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(kind!='requirements') or (implementation.exists().not() and software.exists().not())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(kind != 'capability') or (implementation.exists().not() and software.exists())";
 
   // Logical id of this artifact
   Id id = 1;
@@ -154,9 +164,7 @@ message TerminologyCapabilities {
     // Version covered by this statement
     String version = 5;
   }
-  Software software = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Software software = 25;
 
   // If this describes a specific instance
   message Implementation {
@@ -176,15 +184,16 @@ message TerminologyCapabilities {
     // Base URL for the implementation
     Url url = 5;
   }
-  Implementation implementation = 26
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Implementation implementation = 26;
 
   // Whether lockedDate is supported
   Boolean locked_date = 27;
 
   // A code system supported by the server
   message CodeSystem {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "version.count() > 1 implies version.all(code.exists())";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -239,26 +248,17 @@ message TerminologyCapabilities {
         repeated Code op = 5
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
       }
-      repeated Filter filter = 8
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated Filter filter = 8;
 
       // Properties supported for $lookup
       repeated Code property = 9;
     }
-    repeated Version version = 5
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Version version = 5;
 
     // Whether subsumption is supported
     Boolean subsumption = 6;
   }
-  repeated CodeSystem code_system = 28 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "version.count() > 1 implies version.all(code.exists())"
-  ];
+  repeated CodeSystem code_system = 28;
 
   // Information about the [ValueSet/$expand](valueset-operation-expand.html)
   // operation
@@ -299,16 +299,12 @@ message TerminologyCapabilities {
       // Description of support for parameter
       String documentation = 5;
     }
-    repeated Parameter parameter = 7
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Parameter parameter = 7;
 
     // Documentation about text searching works
     Markdown text_filter = 8;
   }
-  Expansion expansion = 29
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Expansion expansion = 29;
 
   // explicit | all
   message CodeSearchCode {
@@ -342,9 +338,7 @@ message TerminologyCapabilities {
     Boolean translations = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  ValidateCode validate_code = 31
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  ValidateCode validate_code = 31;
 
   // Information about the
   // [ConceptMap/$translate](conceptmap-operation-translate.html) operation
@@ -362,9 +356,7 @@ message TerminologyCapabilities {
     Boolean needs_map = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  Translation translation = 32
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Translation translation = 32;
 
   // Information about the
   // [ConceptMap/$closure](conceptmap-operation-closure.html) operation
@@ -381,6 +373,5 @@ message TerminologyCapabilities {
     // If cross-system closure is supported
     Boolean translation = 4;
   }
-  Closure closure = 33 [(.google.fhir.proto.fhir_path_constraint) =
-                            "hasValue() or (children().count() > id.count())"];
+  Closure closure = 33;
 }

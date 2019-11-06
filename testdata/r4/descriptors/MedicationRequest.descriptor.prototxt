@@ -394,7 +394,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationRequest.DispenseRequest"
   options {
     [google.fhir.proto.field_description]: "Medication supply authorization"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -405,7 +404,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationRequest.Substitution"
   options {
     [google.fhir.proto.field_description]: "Any restrictions on medication substitution"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -622,7 +620,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.MedicationRequest.DispenseRequest.InitialFill"
     options {
       [google.fhir.proto.field_description]: "First fill details"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {

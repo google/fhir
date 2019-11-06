@@ -321,7 +321,6 @@ field {
   type_name: ".google.fhir.r4.core.ResearchStudy.Arm"
   options {
     [google.fhir.proto.field_description]: "Defined path through the study for a subject"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -332,7 +331,6 @@ field {
   type_name: ".google.fhir.r4.core.ResearchStudy.Objective"
   options {
     [google.fhir.proto.field_description]: "A goal for the study"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {

@@ -130,7 +130,5 @@ message RelatedPerson {
     // Language preference indicator
     Boolean preferred = 5;
   }
-  repeated Communication communication = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Communication communication = 21;
 }

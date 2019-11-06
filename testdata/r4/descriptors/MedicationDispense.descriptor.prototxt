@@ -191,7 +191,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationDispense.Performer"
   options {
     [google.fhir.proto.field_description]: "Who performed event"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -317,7 +316,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationDispense.Substitution"
   options {
     [google.fhir.proto.field_description]: "Whether a substitution was performed on the dispense"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -565,4 +563,5 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MedicationDispense, last updated 2018-12-27T22:37:54.724+11:00.\nDispensing a medication to a named patient.\nSee http://hl7.org/fhir/StructureDefinition/MedicationDispense"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MedicationDispense"
+  [google.fhir.proto.fhir_path_message_constraint]: "whenHandedOver.empty() or whenPrepared.empty() or whenHandedOver >= whenPrepared"
 }

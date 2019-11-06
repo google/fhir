@@ -216,9 +216,7 @@ message Contract {
     // Publication Ownership
     Markdown copyright = 9;
   }
-  ContentDefinition content_definition = 34
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  ContentDefinition content_definition = 34;
 
   // Contract Term List
   message Term {
@@ -285,9 +283,7 @@ message Contract {
       // Handling Instructions
       repeated Coding control = 7;
     }
-    repeated SecurityLabel security_label = 11
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated SecurityLabel security_label = 11;
 
     // Context of the Contract term
     message ContractOffer {
@@ -330,9 +326,7 @@ message Contract {
         CodeableConcept role = 5
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
       }
-      repeated ContractParty party = 5
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated ContractParty party = 5;
 
       // Negotiable offer asset
       Reference topic = 6
@@ -381,9 +375,7 @@ message Contract {
         ValueX value = 4
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
       }
-      repeated Answer answer = 10
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated Answer answer = 10;
 
       // Human readable offer text
       String text = 11;
@@ -394,11 +386,8 @@ message Contract {
       // Offer restriction numbers
       repeated UnsignedInt security_label_number = 13;
     }
-    ContractOffer offer = 12 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())"
-    ];
+    ContractOffer offer = 12
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Contract Term Asset List
     message ContractAsset {
@@ -448,9 +437,7 @@ message Contract {
         // Context description
         String text = 6;
       }
-      repeated AssetContext context = 9
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated AssetContext context = 9;
 
       // Quality desctiption of asset
       String condition = 10;
@@ -550,13 +537,9 @@ message Contract {
         // Security Labels that define affected terms
         repeated UnsignedInt security_label_number = 17;
       }
-      repeated ValuedItem valued_item = 18
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated ValuedItem valued_item = 18;
     }
-    repeated ContractAsset asset = 13
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated ContractAsset asset = 13;
 
     // Entity being ascribed responsibility
     message Action {
@@ -602,9 +585,7 @@ message Contract {
         // Role type of the agent
         CodeableConcept role = 5;
       }
-      repeated ActionSubject subject = 6
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated ActionSubject subject = 6;
 
       // Purpose for the Contract Term Action
       CodeableConcept intent = 7
@@ -699,16 +680,12 @@ message Contract {
       // Action restriction numbers
       repeated UnsignedInt security_label_number = 24;
     }
-    repeated Action action = 14
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Action action = 14;
 
     // Nested Contract Term Group
     repeated Term group = 15;
   }
-  repeated Term term = 35
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Term term = 35;
 
   // Extra Information
   repeated Reference supporting_info = 36
@@ -747,9 +724,7 @@ message Contract {
     repeated Signature signature = 6
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Signatory signer = 38
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Signatory signer = 38;
 
   // Contract Friendly Language
   message FriendlyLanguage {
@@ -778,9 +753,7 @@ message Contract {
     ContentX content = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated FriendlyLanguage friendly = 39
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated FriendlyLanguage friendly = 39;
 
   // Contract Legal Language
   message LegalLanguage {
@@ -809,9 +782,7 @@ message Contract {
     ContentX content = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated LegalLanguage legal = 40
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated LegalLanguage legal = 40;
 
   // Computable Contract Language
   message ComputableLanguage {
@@ -837,9 +808,7 @@ message Contract {
     ContentX content = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated ComputableLanguage rule = 41
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated ComputableLanguage rule = 41;
 
   // Binding Contract
   message LegallyBindingX {

@@ -32,6 +32,8 @@ message PrimitiveHasNoValue {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "https://g.co/fhir/StructureDefinition/primitiveHasNoValue";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   core.String id = 1;
@@ -49,6 +51,8 @@ message Base64BinarySeparatorStride {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   core.String id = 1;
@@ -57,16 +61,12 @@ message Base64BinarySeparatorStride {
   core.String separator = 4 [
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
     (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 
   // The stride.
   core.PositiveInt stride = 5 [
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -81,6 +81,8 @@ message EventLabel {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "https://g.co/fhir/StructureDefinition/eventLabel";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   core.String id = 1;
@@ -92,8 +94,6 @@ message EventLabel {
   core.Reference patient = 4 [
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
     (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 
@@ -101,29 +101,22 @@ message EventLabel {
   core.Coding type = 5 [
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
     (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 
   // Time associated with the label event, if available
-  core.DateTime event_time = 6 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
-  ];
+  core.DateTime event_time = 6 [(.google.fhir.proto.fhir_path_constraint) =
+                                    "extension.exists() != value.exists()"];
 
   // Resource that owns this label
-  core.Reference source = 7 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
-  ];
+  core.Reference source = 7 [(.google.fhir.proto.fhir_path_constraint) =
+                                 "extension.exists() != value.exists()"];
 
   // List of labels associated with this event
   message Label {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "extension.exists() != value.exists()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -136,8 +129,6 @@ message EventLabel {
     // Class name in multi-class prediction tasks, e.g. code "780.60" for icd9
     core.Coding class_name = 4 [
       (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())",
       (.google.fhir.proto.fhir_path_constraint) =
           "extension.exists() != value.exists()"
     ];
@@ -154,20 +145,10 @@ message EventLabel {
         core.DateTime date_time = 5;
       }
     }
-    ClassValue class_value = 5 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())",
-      (.google.fhir.proto.fhir_path_constraint) =
-          "extension.exists() != value.exists()"
-    ];
+    ClassValue class_value = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Label label = 8 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
-  ];
+  repeated Label label = 8;
 }
 
 // Auto-generated from StructureDefinition for EventTrigger.
@@ -179,6 +160,8 @@ message EventTrigger {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "https://g.co/fhir/StructureDefinition/eventTrigger";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   core.String id = 1;
@@ -187,8 +170,6 @@ message EventTrigger {
   core.Coding type = 4 [
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
     (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 
@@ -196,16 +177,10 @@ message EventTrigger {
   core.DateTime event_time = 5 [
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
     (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 
   // Resource that owns this trigger.
-  core.Reference source = 6 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
-  ];
+  core.Reference source = 6 [(.google.fhir.proto.fhir_path_constraint) =
+                                 "extension.exists() != value.exists()"];
 }

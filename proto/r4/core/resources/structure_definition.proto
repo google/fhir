@@ -32,6 +32,40 @@ message StructureDefinition {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/StructureDefinition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "children().element.where(path.contains('.').not()).label.empty() and children().element.where(path.contains('.').not()).code.empty() and children().element.where(path.contains('.').not()).requirements.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(kind!='logical'  and differential.element.first().path.contains('.').not()) implies differential.element.first().type.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "url.startsWith('http://hl7.org/fhir/StructureDefinition') implies (differential.element.type.code.all(hasValue() implies matches('^[a-zA-Z0-9]+$')) and snapshot.element.type.code.all(hasValue() implies matches('^[a-zA-Z0-9]+$')))";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "snapshot.element.all(id) and snapshot.element.id.trace('ids').isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "kind!='logical'  implies snapshot.element.first().type.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "contextInvariant.exists() implies type = 'Extension'";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "differential.element.all(id) and differential.element.id.trace('ids').isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(snapshot | differential).element.all(path.contains('.').not() implies sliceName.empty())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "kind != 'logical' implies snapshot.empty() or snapshot.element.first().path = type";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "url.startsWith('http://hl7.org/fhir/StructureDefinition') implies (snapshot.element.defaultValue.empty() and differential.element.defaultValue.empty())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "snapshot.element.all(id.exists()) and differential.element.all(id.exists())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "derivation = 'constraint' or snapshot.element.select(path).isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "differential.element.defaultValue.exists() implies (derivation = 'specialization')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "snapshot.exists() or differential.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "type != 'Extension' or derivation = 'specialization' or (context.exists())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "abstract = true or baseDefinition.exists()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -143,6 +177,9 @@ message StructureDefinition {
 
   // External specification that the content is mapped to
   message Mapping {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "name.exists() or uri.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -165,11 +202,7 @@ message StructureDefinition {
     // Versions, Issues, Scope limitations etc.
     String comment = 7;
   }
-  repeated Mapping mapping = 27 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) = "name.exists() or uri.exists()"
-  ];
+  repeated Mapping mapping = 27;
 
   // primitive-type | complex-type | resource | logical
   message KindCode {
@@ -225,9 +258,7 @@ message StructureDefinition {
     String expression = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Context context = 30
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Context context = 30;
 
   // FHIRPath invariants - when the extension can be used
   repeated String context_invariant = 31;
@@ -257,6 +288,13 @@ message StructureDefinition {
 
   // Snapshot view of the structure
   message Snapshot {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(%resource.kind = 'logical' or element.first().path = %resource.type) and element.tail().all(path.startsWith(%resource.snapshot.element.first().path&'.'))";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "element.all(definition.exists() and min.exists() and max.exists())";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "element.all(base.exists())";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -273,18 +311,15 @@ message StructureDefinition {
           "binding.empty() or binding.valueSet.exists() or binding.description.exists()"
     ];
   }
-  Snapshot snapshot = 35 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "(%resource.kind = 'logical' or element.first().path = %resource.type) and element.tail().all(path.startsWith(%resource.snapshot.element.first().path&'.'))",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "element.all(definition.exists() and min.exists() and max.exists())",
-    (.google.fhir.proto.fhir_path_constraint) = "element.all(base.exists())"
-  ];
+  Snapshot snapshot = 35;
 
   // Differential view of the structure
   message Differential {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "element.where(path.contains('.').not()).slicing.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(%resource.kind = 'logical' or element.first().path.startsWith(%resource.type)) and (element.tail().not() or  element.tail().all(path.startsWith(%resource.differential.element.first().path.replaceMatches('\\\\..*','')&'.')))";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -298,12 +333,5 @@ message StructureDefinition {
     repeated ElementDefinition element = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  Differential differential = 36 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "element.where(path.contains('.').not()).slicing.empty()",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "(%resource.kind = 'logical' or element.first().path.startsWith(%resource.type)) and (element.tail().not() or  element.tail().all(path.startsWith(%resource.differential.element.first().path.replaceMatches('\\..*','')&'.')))"
-  ];
+  Differential differential = 36;
 }

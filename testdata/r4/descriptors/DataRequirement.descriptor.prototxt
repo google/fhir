@@ -68,8 +68,6 @@ field {
   type_name: ".google.fhir.r4.core.DataRequirement.CodeFilter"
   options {
     [google.fhir.proto.field_description]: "What codes are expected"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "path.exists() xor searchParam.exists()"
   }
 }
 field {
@@ -80,8 +78,6 @@ field {
   type_name: ".google.fhir.r4.core.DataRequirement.DateFilter"
   options {
     [google.fhir.proto.field_description]: "What dates/date ranges are expected"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "path.exists() xor searchParam.exists()"
   }
 }
 field {
@@ -102,7 +98,6 @@ field {
   type_name: ".google.fhir.r4.core.DataRequirement.Sort"
   options {
     [google.fhir.proto.field_description]: "Order of the results"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -222,6 +217,9 @@ nested_type {
       [google.fhir.proto.field_description]: "What code is expected"
     }
   }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "path.exists() xor searchParam.exists()"
+  }
 }
 nested_type {
   name: "DateFilter"
@@ -307,6 +305,9 @@ nested_type {
     oneof_decl {
       name: "choice"
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "path.exists() xor searchParam.exists()"
   }
 }
 nested_type {

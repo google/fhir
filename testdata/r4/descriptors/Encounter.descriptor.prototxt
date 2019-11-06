@@ -114,7 +114,6 @@ field {
   type_name: ".google.fhir.r4.core.Encounter.StatusHistory"
   options {
     [google.fhir.proto.field_description]: "List of past encounter statuses"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -137,7 +136,6 @@ field {
   type_name: ".google.fhir.r4.core.Encounter.ClassHistory"
   options {
     [google.fhir.proto.field_description]: "List of past encounter classes"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -212,7 +210,6 @@ field {
   type_name: ".google.fhir.r4.core.Encounter.Participant"
   options {
     [google.fhir.proto.field_description]: "List of participants involved in the encounter"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -278,7 +275,6 @@ field {
   type_name: ".google.fhir.r4.core.Encounter.Diagnosis"
   options {
     [google.fhir.proto.field_description]: "The list of diagnosis relevant to this encounter"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -300,7 +296,6 @@ field {
   type_name: ".google.fhir.r4.core.Encounter.Hospitalization"
   options {
     [google.fhir.proto.field_description]: "Details about the admission to a healthcare service"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -311,7 +306,6 @@ field {
   type_name: ".google.fhir.r4.core.Encounter.Location"
   options {
     [google.fhir.proto.field_description]: "List of locations where the patient has been"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

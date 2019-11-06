@@ -35,6 +35,8 @@ message ServiceRequestGenetics {
       "http://hl7.org/fhir/StructureDefinition/ServiceRequest";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/servicerequest-genetics";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "orderDetail.empty() or code.exists()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -275,8 +277,6 @@ message ServiceRequestGenetics {
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/servicerequest-geneticsItem",
     json_name = "Item",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];

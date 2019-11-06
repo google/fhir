@@ -273,7 +273,6 @@ field {
   type_name: ".google.fhir.r4.core.FamilyMemberHistory.Condition"
   options {
     [google.fhir.proto.field_description]: "Condition that the related person had"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -551,4 +550,6 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for FamilyMemberHistory, last updated 2018-12-27T22:37:54.724+11:00.\nInformation about patient\'s relatives, relevant for patient.\nSee http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory"
+  [google.fhir.proto.fhir_path_message_constraint]: "age.exists() or estimatedAge.empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "age.empty() or born.empty()"
 }

@@ -33,6 +33,8 @@ message Task {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Task";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "lastModified.exists().not() or authoredOn.exists().not() or lastModified >= authoredOn";
 
   // Logical id of this artifact
   Id id = 1;
@@ -243,9 +245,7 @@ message Task {
       (.google.fhir.proto.valid_reference_type) = "Organization"
     ];
   }
-  Restriction restriction = 38
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Restriction restriction = 38;
 
   // Information used to perform task
   message Parameter {
@@ -321,9 +321,7 @@ message Task {
     ValueX value = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Parameter input = 39
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Parameter input = 39;
 
   // Information produced as part of task
   message Output {
@@ -399,7 +397,5 @@ message Task {
     ValueX value = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Output output = 40
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Output output = 40;
 }

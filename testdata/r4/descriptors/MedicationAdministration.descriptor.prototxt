@@ -214,7 +214,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationAdministration.Performer"
   options {
     [google.fhir.proto.field_description]: "Who performed the medication administration and what they did"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -280,8 +279,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicationAdministration.Dosage"
   options {
     [google.fhir.proto.field_description]: "Details of how medication was taken"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "dose.exists() or rate.exists()"
   }
 }
 field {
@@ -550,6 +547,9 @@ nested_type {
     oneof_decl {
       name: "choice"
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "dose.exists() or rate.exists()"
   }
 }
 options {

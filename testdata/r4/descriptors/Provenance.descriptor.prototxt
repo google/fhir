@@ -168,7 +168,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Actor involved"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -179,7 +178,6 @@ field {
   type_name: ".google.fhir.r4.core.Provenance.Entity"
   options {
     [google.fhir.proto.field_description]: "An entity used in this activity"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

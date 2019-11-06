@@ -32,6 +32,10 @@ message Measure {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Measure";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "group.stratifier.all((code | description | criteria).exists() xor component.exists())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
 
   // Logical id of this artifact
   Id id = 1;
@@ -242,9 +246,7 @@ message Measure {
       Expression criteria = 6
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    repeated Population population = 6
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Population population = 6;
 
     // Stratifier criteria for the measure
     message Stratifier {
@@ -287,17 +289,11 @@ message Measure {
         Expression criteria = 6
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
       }
-      repeated Component component = 7
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated Component component = 7;
     }
-    repeated Stratifier stratifier = 7
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Stratifier stratifier = 7;
   }
-  repeated Group group = 49
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Group group = 49;
 
   // What other data should be reported with the measure
   message SupplementalData {
@@ -323,7 +319,5 @@ message Measure {
     Expression criteria = 7
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated SupplementalData supplemental_data = 50
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated SupplementalData supplemental_data = 50;
 }

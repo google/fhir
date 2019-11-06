@@ -32,6 +32,10 @@ message ImplementationGuide {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/ImplementationGuide";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "definition.resource.fhirVersion.all(%context.fhirVersion contains $this)";
 
   // Logical id of this artifact
   Id id = 1;
@@ -174,9 +178,7 @@ message ImplementationGuide {
     // Version of the IG
     String version = 6;
   }
-  repeated DependsOn depends_on = 26
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated DependsOn depends_on = 26;
 
   // Profiles that apply globally
   message Global {
@@ -211,12 +213,13 @@ message ImplementationGuide {
     Canonical profile = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Global global = 27
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Global global = 27;
 
   // Information needed to build the IG
   message Definition {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "resource.groupingId.all(%context.grouping.id contains $this)";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -244,9 +247,7 @@ message ImplementationGuide {
       // Human readable text describing the package
       String description = 5;
     }
-    repeated Grouping grouping = 4
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Grouping grouping = 4;
 
     // Resource in the implementation guide
     message Resource {
@@ -302,11 +303,8 @@ message ImplementationGuide {
       // Grouping this is part of
       Id grouping_id = 9;
     }
-    repeated Resource resource = 5 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())"
-    ];
+    repeated Resource resource = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Page/Section in the Guide
     message Page {
@@ -357,8 +355,7 @@ message ImplementationGuide {
       // Nested Pages / Sections
       repeated Page page = 7;
     }
-    Page page = 6 [(.google.fhir.proto.fhir_path_constraint) =
-                       "hasValue() or (children().count() > id.count())"];
+    Page page = 6;
 
     // Defines how IG is built by tools
     message Parameter {
@@ -395,9 +392,7 @@ message ImplementationGuide {
       String value = 5
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    repeated Parameter parameter = 7
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Parameter parameter = 7;
 
     // A template for building resources
     message Template {
@@ -421,16 +416,9 @@ message ImplementationGuide {
       // The scope in which the template applies
       String scope = 6;
     }
-    repeated Template template = 8
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Template template = 8;
   }
-  Definition definition = 28 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "resource.groupingId.all(%context.grouping.id contains $this)"
-  ];
+  Definition definition = 28;
 
   // Information about an assembled IG
   message Manifest {
@@ -477,11 +465,8 @@ message ImplementationGuide {
       // Relative path for page in IG
       Url relative_path = 6;
     }
-    repeated ManifestResource resource = 5 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())"
-    ];
+    repeated ManifestResource resource = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // HTML page within the parent IG
     message ManifestPage {
@@ -504,9 +489,7 @@ message ImplementationGuide {
       // Anchor available on the page
       repeated String anchor = 6;
     }
-    repeated ManifestPage page = 6
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated ManifestPage page = 6;
 
     // Image within the IG
     repeated String image = 7;
@@ -514,7 +497,5 @@ message ImplementationGuide {
     // Additional linkable file in IG
     repeated String other = 8;
   }
-  Manifest manifest = 29
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Manifest manifest = 29;
 }

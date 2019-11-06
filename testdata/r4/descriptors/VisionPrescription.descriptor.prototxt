@@ -173,7 +173,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Vision lens authorization"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -295,7 +294,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.VisionPrescription.LensSpecification.Prism"
     options {
       [google.fhir.proto.field_description]: "Eye alignment compensation"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {

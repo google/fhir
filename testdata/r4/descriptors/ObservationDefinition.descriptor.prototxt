@@ -164,7 +164,6 @@ field {
   type_name: ".google.fhir.r4.core.ObservationDefinition.QuantitativeDetails"
   options {
     [google.fhir.proto.field_description]: "Characteristics of quantitative results"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -175,7 +174,6 @@ field {
   type_name: ".google.fhir.r4.core.ObservationDefinition.QualifiedInterval"
   options {
     [google.fhir.proto.field_description]: "Qualified range for continuous and ordinal observation results"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

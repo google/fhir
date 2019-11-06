@@ -145,9 +145,7 @@ message BiologicallyDerivedProduct {
     }
     CollectedX collected = 6;
   }
-  Collection collection = 17
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Collection collection = 17;
 
   // Any processing of the product during collection
   message Processing {
@@ -181,9 +179,7 @@ message BiologicallyDerivedProduct {
     }
     TimeX time = 7;
   }
-  repeated Processing processing = 18
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Processing processing = 18;
 
   // Any manipulation of product post-collection
   message Manipulation {
@@ -210,9 +206,7 @@ message BiologicallyDerivedProduct {
     }
     TimeX time = 5;
   }
-  Manipulation manipulation = 19
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Manipulation manipulation = 19;
 
   // Product storage
   message Storage {
@@ -251,7 +245,5 @@ message BiologicallyDerivedProduct {
     // Storage timeperiod
     Period duration = 7;
   }
-  repeated Storage storage = 20
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Storage storage = 20;
 }

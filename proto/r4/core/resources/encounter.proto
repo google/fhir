@@ -117,9 +117,7 @@ message Encounter {
     Period period = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated StatusHistory status_history = 12
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated StatusHistory status_history = 12;
 
   // Classification of patient encounter
   Coding class_value = 13 [
@@ -148,9 +146,7 @@ message Encounter {
     Period period = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated ClassHistory class_history = 14
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated ClassHistory class_history = 14;
 
   // Specific type of encounter
   repeated CodeableConcept type = 15;
@@ -199,9 +195,7 @@ message Encounter {
       (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
     ];
   }
-  repeated Participant participant = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Participant participant = 21;
 
   // The appointment that scheduled this encounter
   repeated Reference appointment = 22
@@ -249,9 +243,7 @@ message Encounter {
     // Ranking of the diagnosis (for each role type)
     PositiveInt rank = 6;
   }
-  repeated Diagnosis diagnosis = 27
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Diagnosis diagnosis = 27;
 
   // The set of accounts that may be used for billing for this Encounter
   repeated Reference account = 28
@@ -302,9 +294,7 @@ message Encounter {
     // Category or kind of location after discharge
     CodeableConcept discharge_disposition = 12;
   }
-  Hospitalization hospitalization = 29
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Hospitalization hospitalization = 29;
 
   // List of locations where the patient has been
   message Location {
@@ -347,9 +337,7 @@ message Encounter {
     // Time period during which the patient was present at the location
     Period period = 7;
   }
-  repeated Location location = 30
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Location location = 30;
 
   // The organization (facility) responsible for this encounter
   Reference service_provider = 31

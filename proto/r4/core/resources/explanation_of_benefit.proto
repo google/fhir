@@ -167,9 +167,7 @@ message ExplanationOfBenefit {
     // File or case reference
     Identifier reference = 6;
   }
-  repeated RelatedClaim related = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated RelatedClaim related = 24;
 
   // Prescription authorizing services or products
   Reference prescription = 25 [
@@ -204,8 +202,7 @@ message ExplanationOfBenefit {
       (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
     ];
   }
-  Payee payee = 27 [(.google.fhir.proto.fhir_path_constraint) =
-                        "hasValue() or (children().count() > id.count())"];
+  Payee payee = 27;
 
   // Treatment Referral
   Reference referral = 28
@@ -280,9 +277,7 @@ message ExplanationOfBenefit {
     // Practitioner credential or specialization
     CodeableConcept qualification = 8;
   }
-  repeated CareTeam care_team = 36
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated CareTeam care_team = 36;
 
   // Supporting information
   message SupportingInformation {
@@ -335,9 +330,7 @@ message ExplanationOfBenefit {
     // Explanation for the information
     Coding reason = 9;
   }
-  repeated SupportingInformation supporting_info = 37
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated SupportingInformation supporting_info = 37;
 
   // Pertinent diagnosis information
   message Diagnosis {
@@ -376,9 +369,7 @@ message ExplanationOfBenefit {
     // Package billing code
     CodeableConcept package_code = 8;
   }
-  repeated Diagnosis diagnosis = 38
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Diagnosis diagnosis = 38;
 
   // Clinical procedures performed
   message Procedure {
@@ -418,9 +409,7 @@ message ExplanationOfBenefit {
     repeated Reference udi = 8
         [(.google.fhir.proto.valid_reference_type) = "Device"];
   }
-  repeated Procedure procedure = 39
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Procedure procedure = 39;
 
   // Precedence (primary, secondary, etc.)
   PositiveInt precedence = 40;
@@ -449,11 +438,8 @@ message ExplanationOfBenefit {
     // Prior authorization reference number
     repeated String pre_auth_ref = 6;
   }
-  repeated Insurance insurance = 41 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  repeated Insurance insurance = 41
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Details of the event
   message Accident {
@@ -484,9 +470,7 @@ message ExplanationOfBenefit {
     }
     LocationX location = 6;
   }
-  Accident accident = 42
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Accident accident = 42;
 
   // Product or service provided
   message Item {
@@ -608,9 +592,7 @@ message ExplanationOfBenefit {
       // Non-monitary value
       Decimal value = 7;
     }
-    repeated Adjudication adjudication = 25
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Adjudication adjudication = 25;
 
     // Additional items
     message Detail {
@@ -718,17 +700,11 @@ message ExplanationOfBenefit {
         // Subdetail level adjudication details
         repeated Adjudication adjudication = 16;
       }
-      repeated SubDetail sub_detail = 17
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated SubDetail sub_detail = 17;
     }
-    repeated Detail detail = 26
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Detail detail = 26;
   }
-  repeated Item item = 43
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Item item = 43;
 
   // Insurer added line items
   message AddedItem {
@@ -887,17 +863,11 @@ message ExplanationOfBenefit {
         // Added items adjudication
         repeated Item.Adjudication adjudication = 11;
       }
-      repeated AddedItemDetailSubDetail sub_detail = 12
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated AddedItemDetailSubDetail sub_detail = 12;
     }
-    repeated AddedItemDetail detail = 21
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated AddedItemDetail detail = 21;
   }
-  repeated AddedItem add_item = 44
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated AddedItem add_item = 44;
 
   // Header-level adjudication
   repeated Item.Adjudication adjudication = 45;
@@ -921,9 +891,7 @@ message ExplanationOfBenefit {
     Money amount = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Total total = 46
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Total total = 46;
 
   // Payment Details
   message Payment {
@@ -954,8 +922,7 @@ message ExplanationOfBenefit {
     // Business identifier for the payment
     Identifier identifier = 9;
   }
-  Payment payment = 47 [(.google.fhir.proto.fhir_path_constraint) =
-                            "hasValue() or (children().count() > id.count())"];
+  Payment payment = 47;
 
   // Printed form identifier
   CodeableConcept form_code = 48;
@@ -1000,9 +967,7 @@ message ExplanationOfBenefit {
     // Language of the text
     CodeableConcept language = 7;
   }
-  repeated Note process_note = 50
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Note process_note = 50;
 
   // When the benefits are applicable
   Period benefit_period = 51;
@@ -1078,11 +1043,7 @@ message ExplanationOfBenefit {
       }
       UsedX used = 6;
     }
-    repeated Benefit financial = 11
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Benefit financial = 11;
   }
-  repeated BenefitBalance benefit_balance = 52
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated BenefitBalance benefit_balance = 52;
 }

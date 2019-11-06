@@ -32,6 +32,8 @@ message ExampleScenario {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/ExampleScenario";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
 
   // Logical id of this artifact
   Id id = 1;
@@ -154,9 +156,7 @@ message ExampleScenario {
     // The description of the actor
     Markdown description = 7;
   }
-  repeated Actor actor = 23
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Actor actor = 23;
 
   // Each resource and each version that is present in the workflow
   message Instance {
@@ -216,9 +216,7 @@ message ExampleScenario {
       Markdown description = 5
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    repeated Version version = 8
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Version version = 8;
 
     // Resources contained in the instance
     message ContainedInstance {
@@ -238,13 +236,9 @@ message ExampleScenario {
       // A specific version of a resource contained in the instance
       String version_id = 5;
     }
-    repeated ContainedInstance contained_instance = 9
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated ContainedInstance contained_instance = 9;
   }
-  repeated Instance instance = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Instance instance = 24;
 
   // Each major process - a group of operations
   message Process {
@@ -329,9 +323,7 @@ message ExampleScenario {
         // Each resource instance used by the responder
         Instance.ContainedInstance response = 13;
       }
-      Operation operation = 6
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      Operation operation = 6;
 
       // Alternate non-typical step action
       message Alternative {
@@ -354,17 +346,11 @@ message ExampleScenario {
         // What happens in each alternative option
         repeated Step step = 6;
       }
-      repeated Alternative alternative = 7
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated Alternative alternative = 7;
     }
-    repeated Step step = 8
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Step step = 8;
   }
-  repeated Process process = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Process process = 25;
 
   // Another nested workflow
   repeated Canonical workflow = 26;

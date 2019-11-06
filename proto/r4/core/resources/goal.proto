@@ -118,6 +118,9 @@ message Goal {
 
   // Target outcome for the goal
   message Target {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(detail.exists() and measure.exists()) or detail.exists().not()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -157,12 +160,7 @@ message Goal {
     }
     DueX due = 6;
   }
-  repeated Target target = 18 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "(detail.exists() and measure.exists()) or detail.exists().not()"
-  ];
+  repeated Target target = 18;
 
   // When goal status took effect
   Date status_date = 19;

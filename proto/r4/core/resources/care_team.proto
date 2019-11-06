@@ -102,6 +102,9 @@ message CareTeam {
 
   // Members of the team
   message Participant {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "onBehalfOf.exists() implies (member.resolve() is Practitioner)";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -131,12 +134,7 @@ message CareTeam {
     // Time period of participant
     Period period = 7;
   }
-  repeated Participant participant = 17 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "onBehalfOf.exists() implies (member.resolve() is Practitioner)"
-  ];
+  repeated Participant participant = 17;
 
   // Why the care team exists
   repeated CodeableConcept reason_code = 18;

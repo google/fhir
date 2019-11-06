@@ -125,9 +125,7 @@ message Practitioner {
     Reference issuer = 7
         [(.google.fhir.proto.valid_reference_type) = "Organization"];
   }
-  repeated Qualification qualification = 18
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Qualification qualification = 18;
 
   // A language the practitioner can use in patient communication
   repeated CodeableConcept communication = 19;

@@ -32,6 +32,12 @@ message NamingSystem {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/NamingSystem";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "kind != 'root' or uniqueId.all(type != 'uuid')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "uniqueId.where(preferred = true).select(type).isDistinct()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -169,9 +175,6 @@ message NamingSystem {
     // When is identifier valid?
     Period period = 8;
   }
-  repeated UniqueId unique_id = 22 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  repeated UniqueId unique_id = 22
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }

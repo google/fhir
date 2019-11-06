@@ -98,9 +98,7 @@ message MedicinalProductInteraction {
     ItemX item = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Interactant interactant = 12
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Interactant interactant = 12;
 
   // The type of the interaction e.g. drug-drug interaction, drug-food
   // interaction, drug-lab test interaction

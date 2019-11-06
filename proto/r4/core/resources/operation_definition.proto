@@ -33,6 +33,8 @@ message OperationDefinition {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/OperationDefinition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
 
   // Logical id of this artifact
   Id id = 1;
@@ -183,6 +185,13 @@ message OperationDefinition {
 
   // Parameters for the operation/query
   message Parameter {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "type.exists() or part.exists()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "searchType.exists() implies type = 'string'";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "targetProfile.exists() implies (type = 'Reference' or type = 'canonical')";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -296,9 +305,7 @@ message OperationDefinition {
       Canonical value_set = 5
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    Binding binding = 12
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    Binding binding = 12;
 
     // References to this parameter
     message ReferencedFrom {
@@ -318,23 +325,12 @@ message OperationDefinition {
       // Element id of reference
       String source_id = 5;
     }
-    repeated ReferencedFrom referenced_from = 13
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated ReferencedFrom referenced_from = 13;
 
     // Parts of a nested Parameter
     repeated Parameter part = 14;
   }
-  repeated Parameter parameter = 34 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "type.exists() or part.exists()",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "searchType.exists() implies type = 'string'",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "targetProfile.exists() implies (type = 'Reference' or type = 'canonical')"
-  ];
+  repeated Parameter parameter = 34;
 
   // Define overloaded variants for when  generating code
   message Overload {
@@ -353,7 +349,5 @@ message OperationDefinition {
     // Comments to go on overload
     String comment = 5;
   }
-  repeated Overload overload = 35
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Overload overload = 35;
 }

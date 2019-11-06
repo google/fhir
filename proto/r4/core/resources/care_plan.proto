@@ -184,6 +184,9 @@ message CarePlan {
 
   // Action to occur as part of plan
   message Activity {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "detail.empty() or reference.empty()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -344,15 +347,9 @@ message CarePlan {
       // Extra info describing activity to perform
       String description = 20;
     }
-    Detail detail = 8 [(.google.fhir.proto.fhir_path_constraint) =
-                           "hasValue() or (children().count() > id.count())"];
+    Detail detail = 8;
   }
-  repeated Activity activity = 31 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "detail.empty() or reference.empty()"
-  ];
+  repeated Activity activity = 31;
 
   // Comments about the plan
   repeated Annotation note = 32;

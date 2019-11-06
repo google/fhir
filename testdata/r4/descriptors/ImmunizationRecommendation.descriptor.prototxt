@@ -138,8 +138,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Vaccine administration recommendations"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "vaccineCode.exists() or targetDisease.exists()"
   }
 }
 nested_type {
@@ -233,7 +231,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ImmunizationRecommendation.Recommendation.DateCriterion"
     options {
       [google.fhir.proto.field_description]: "Dates governing proposed immunization"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -405,6 +402,9 @@ nested_type {
     oneof_decl {
       name: "choice"
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "vaccineCode.exists() or targetDisease.exists()"
   }
 }
 options {

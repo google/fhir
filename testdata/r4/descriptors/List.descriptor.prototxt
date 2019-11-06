@@ -214,7 +214,6 @@ field {
   type_name: ".google.fhir.r4.core.List.Entry"
   options {
     [google.fhir.proto.field_description]: "Entries in the list"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -360,4 +359,7 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for List, last updated 2018-12-27T22:37:54.724+11:00.\nA list is a curated collection of resources.\nSee http://hl7.org/fhir/StructureDefinition/List"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/List"
+  [google.fhir.proto.fhir_path_message_constraint]: "mode = \'working\' or entry.date.empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "mode = \'changes\' or entry.deleted.empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "emptyReason.empty() or entry.empty()"
 }

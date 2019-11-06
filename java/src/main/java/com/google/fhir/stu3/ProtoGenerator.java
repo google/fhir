@@ -117,10 +117,36 @@ public class ProtoGenerator {
           "positiveInt", FieldDescriptorProto.Type.TYPE_UINT32,
           "unsignedInt", FieldDescriptorProto.Type.TYPE_UINT32);
 
+  // Exclude constraints from the DomainResource until we refactor
+  // them to a common place rather on every resource.
+  // TODO: remove these with the above refactoring.
+  private static final ImmutableSet<String> DOMAIN_RESOURCE_CONSTRAINTS =
+      ImmutableSet.of(
+          "contained.contained.empty()",
+          "contained.meta.versionId.empty() and contained.meta.lastUpdated.empty()",
+          "contained.where((('#'+id in (%resource.descendants().reference"
+              + " | %resource.descendants().as(canonical) | %resource.descendants().as(uri)"
+              + " | %resource.descendants().as(url))) or descendants().where(reference = '#')"
+              + ".exists() or descendants().where(as(canonical) = '#').exists() or"
+              + " descendants().where(as(canonical) = '#').exists()).not())"
+              + ".trace('unmatched', id).empty()",
+          "text.div.exists()",
+          "contained.meta.security.empty()");
+
   // FHIR elements may have core constraint definitions that do not add
   // value to protocol buffers, so we exclude them.
   private static final ImmutableSet<String> EXCLUDED_FHIR_CONSTRAINTS =
-      ImmutableSet.of("hasValue() | (children().count() > id.count())");
+      ImmutableSet.<String>builder()
+          .addAll(DOMAIN_RESOURCE_CONSTRAINTS)
+          .add(
+              "hasValue() | (children().count() > id.count())",
+              "hasValue() or (children().count() > id.count())",
+              // Exclude the FHIR-provided element name regex, since field names are known at
+              // compile time
+              "path.matches('[^\\\\s\\\\.,:;\\\\\\'\"\\\\/|?!@#$%&*()\\\\[\\\\]{}]{1,64}"
+                  + "(\\\\.[^\\\\s\\\\.,:;\\\\\\'\"\\\\/|?!@#$%&*()\\\\[\\\\]{}]{1,64}"
+                  + "(\\\\[x\\\\])?(\\\\:[^\\\\s\\\\.]+)?)*')")
+          .build();
 
   // Should we use custom types for constrained references?
   private static final boolean USE_TYPED_REFERENCES = false;
@@ -594,6 +620,12 @@ public class ProtoGenerator {
     // Get the name of this message
     builder.setName(nameFromQualifiedName(getContainerType(currentElement, elementList)));
 
+    // Add message-level constraints.
+    List<String> expressions = getFhirPathConstraints(currentElement);
+    if (!expressions.isEmpty()) {
+      builder.getOptionsBuilder().setExtension(Annotations.fhirPathMessageConstraint, expressions);
+    }
+
     // When generating a descriptor for a primitive type, the value part may already be present.
     int nextTag = builder.getFieldCount() + 1;
 
@@ -696,7 +728,19 @@ public class ProtoGenerator {
                         .getTypeName()
                         .replace(fhirVersion.coreProtoPackage, packageInfo.getProtoPackage()))
                 .build();
+      } else {
+        // There is no submessage defined for this field, so apply constraints to the field itself.
+        List<String> expressions = getFhirPathConstraints(element);
+        if (!expressions.isEmpty()) {
+          field =
+              field.toBuilder()
+                  .setOptions(
+                      field.getOptions().toBuilder()
+                          .setExtension(Annotations.fhirPathConstraint, expressions))
+                  .build();
+        }
       }
+
       builder.addField(field);
     } else if (!element.getPath().getValue().equals("Extension.extension")
         && !element.getPath().getValue().equals("Extension.value[x]")) {
@@ -781,10 +825,22 @@ public class ProtoGenerator {
               .filter(type -> uniqueTypes.add(type.getCode().getValue()))
               .map(type -> baseChoiceType.getField(baseTypesToIndex.get(type.getCode().getValue())))
               .collect(Collectors.toList());
+
       // TODO: If a choice type is a slice of another choice type (not a pure
       // constraint, but actual slice) we'll need to update the name and type name as well.
-      return Optional.of(
-          baseChoiceType.toBuilder().clearField().addAllField(matchingFields).build());
+      DescriptorProto.Builder newChoiceType =
+          baseChoiceType.toBuilder().clearField().addAllField(matchingFields);
+
+      // Constraints may be on the choice base element rather than the value element,
+      // so reflect that here.
+      List<String> expressions = getFhirPathConstraints(element);
+      if (!expressions.isEmpty()) {
+        newChoiceType.setOptions(
+            baseChoiceType.getOptions().toBuilder()
+                .setExtension(Annotations.fhirPathMessageConstraint, expressions));
+      }
+
+      return Optional.of(newChoiceType.build());
     }
     if (isChoiceType(element)) {
       return Optional.of(makeChoiceType(element, elementList, field));
@@ -1341,8 +1397,6 @@ public class ProtoGenerator {
           ProtoGeneratorAnnotations.fieldDescription, element.getShort().getValue());
     }
 
-    addFhirPathConstraints(element, options);
-
     // Is this field required?
     if (element.getMin().getValue() == 1) {
       options.setExtension(
@@ -1438,19 +1492,13 @@ public class ProtoGenerator {
     return Optional.of(fieldBuilder.build());
   }
 
-  // Adds any FHIRPath constraints from the definition.
-  private static void addFhirPathConstraints(
-      ElementDefinition element, FieldOptions.Builder options) {
-    List<String> expressions =
-        element.getConstraintList().stream()
-            .filter(constraint -> constraint.hasExpression())
-            .map(constraint -> constraint.getExpression().getValue())
-            .filter(expression -> !EXCLUDED_FHIR_CONSTRAINTS.contains(expression))
-            .collect(Collectors.toList());
-
-    if (!expressions.isEmpty()) {
-      options.setExtension(Annotations.fhirPathConstraint, expressions);
-    }
+  // Returns the FHIRPath constraints on the given element, if any.
+  private static List<String> getFhirPathConstraints(ElementDefinition element) {
+    return element.getConstraintList().stream()
+        .filter(constraint -> constraint.hasExpression())
+        .map(constraint -> constraint.getExpression().getValue())
+        .filter(expression -> !EXCLUDED_FHIR_CONSTRAINTS.contains(expression))
+        .collect(Collectors.toList());
   }
 
   private static FieldDescriptorProto.Label getFieldSize(ElementDefinition element) {
@@ -1597,6 +1645,15 @@ public class ProtoGenerator {
         DescriptorProto.newBuilder()
             .setName(nameFromQualifiedName(getContainerType(element, elementList)));
     choiceType.getOptionsBuilder().setExtension(Annotations.isChoiceType, true);
+
+    // Add constraints on choice types.
+    List<String> expressions = getFhirPathConstraints(element);
+    if (!expressions.isEmpty()) {
+      choiceType
+          .getOptionsBuilder()
+          .setExtension(Annotations.fhirPathMessageConstraint, expressions);
+    }
+
     // TODO: Remove legacy renaming rules prior to V1.0
     OneofDescriptorProto.Builder oneof =
         choiceType

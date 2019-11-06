@@ -32,6 +32,8 @@ message MolecularSequence {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/MolecularSequence";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "coordinateSystem = 1 or coordinateSystem = 0";
 
   // Logical id of this artifact
   Id id = 1;
@@ -106,6 +108,11 @@ message MolecularSequence {
 
   // A sequence used as reference
   message ReferenceSeq {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(genomeBuild.count()+referenceSeqId.count()+ referenceSeqPointer.count()+ referenceSeqString.count()) = 1";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(chromosome.empty() and genomeBuild.empty()) or (chromosome.exists() and genomeBuild.exists())";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -172,14 +179,7 @@ message MolecularSequence {
     // End position of the window on the reference sequence
     Integer window_end = 12;
   }
-  ReferenceSeq reference_seq = 18 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "(genomeBuild.count()+referenceSeqId.count()+ referenceSeqPointer.count()+ referenceSeqString.count()) = 1",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "(chromosome.empty() and genomeBuild.empty()) or (chromosome.exists() and genomeBuild.exists())"
-  ];
+  ReferenceSeq reference_seq = 18;
 
   // Variant in sequence
   message Variant {
@@ -211,9 +211,7 @@ message MolecularSequence {
     Reference variant_pointer = 9
         [(.google.fhir.proto.valid_reference_type) = "Observation"];
   }
-  repeated Variant variant = 19
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Variant variant = 19;
 
   // Sequence that was observed
   String observed_seq = 20;
@@ -319,12 +317,9 @@ message MolecularSequence {
       // FScore of the GQ score
       repeated Decimal f_measure = 10;
     }
-    Roc roc = 18 [(.google.fhir.proto.fhir_path_constraint) =
-                      "hasValue() or (children().count() > id.count())"];
+    Roc roc = 18;
   }
-  repeated Quality quality = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Quality quality = 21;
 
   // Average number of reads representing a given nucleotide in the
   // reconstructed sequence
@@ -375,9 +370,7 @@ message MolecularSequence {
     // Id of the read
     String readset_id = 9;
   }
-  repeated Repository repository = 23
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Repository repository = 23;
 
   // Pointer to next atomic sequence
   repeated Reference pointer = 24
@@ -420,8 +413,7 @@ message MolecularSequence {
       // Structural variant outer end
       Integer end = 5;
     }
-    Outer outer = 7 [(.google.fhir.proto.fhir_path_constraint) =
-                         "hasValue() or (children().count() > id.count())"];
+    Outer outer = 7;
 
     // Structural variant inner
     message Inner {
@@ -440,10 +432,7 @@ message MolecularSequence {
       // Structural variant inner end
       Integer end = 5;
     }
-    Inner inner = 8 [(.google.fhir.proto.fhir_path_constraint) =
-                         "hasValue() or (children().count() > id.count())"];
+    Inner inner = 8;
   }
-  repeated StructureVariant structure_variant = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated StructureVariant structure_variant = 25;
 }

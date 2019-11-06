@@ -33,6 +33,10 @@ message FamilyMemberHistory {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "age.exists() or estimatedAge.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "age.empty() or born.empty()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -204,7 +208,5 @@ message FamilyMemberHistory {
     // Extra information about condition
     repeated Annotation note = 8;
   }
-  repeated Condition condition = 27
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Condition condition = 27;
 }

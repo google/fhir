@@ -151,9 +151,6 @@ message Subscription {
     // Usage depends on the channel type
     repeated String header = 7;
   }
-  Channel channel = 16 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  Channel channel = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }

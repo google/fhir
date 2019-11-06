@@ -161,7 +161,6 @@ field {
   type_name: ".google.fhir.r4.core.Account.Coverage"
   options {
     [google.fhir.proto.field_description]: "The party(s) that are responsible for covering the payment of this account, and what order should they be applied to the account"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -193,7 +192,6 @@ field {
   type_name: ".google.fhir.r4.core.Account.Guarantor"
   options {
     [google.fhir.proto.field_description]: "The parties ultimately responsible for balancing the Account"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

@@ -35,6 +35,8 @@ message ComputablePlanDefinition {
       "http://hl7.org/fhir/StructureDefinition/PlanDefinition";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/computableplandefinition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
 
   // Logical id of this artifact
   Id id = 1;
@@ -235,13 +237,9 @@ message ComputablePlanDefinition {
       // Reach goal within
       Duration due = 6;
     }
-    repeated Target target = 10
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Target target = 10;
   }
-  repeated Goal goal = 39
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Goal goal = 39;
 
   // Action defined by the plan
   message Action {
@@ -343,9 +341,7 @@ message ComputablePlanDefinition {
       // Boolean-valued expression
       Expression expression = 5;
     }
-    repeated Condition condition = 15
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Condition condition = 15;
 
     // Input data requirements
     repeated DataRequirement input = 16;
@@ -398,9 +394,7 @@ message ComputablePlanDefinition {
       }
       OffsetX offset = 6;
     }
-    repeated RelatedAction related_action = 18
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated RelatedAction related_action = 18;
 
     // When the action should take place
     message TimingX {
@@ -449,9 +443,7 @@ message ComputablePlanDefinition {
       // E.g. Nurse, Surgeon, Parent
       CodeableConcept role = 5;
     }
-    repeated Participant participant = 20
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Participant participant = 20;
 
     // create | update | remove | fire-event
     CodeableConcept type = 21;
@@ -572,14 +564,10 @@ message ComputablePlanDefinition {
       // An expression that provides the dynamic value for the customization
       Expression expression = 5;
     }
-    repeated DynamicValue dynamic_value = 29
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated DynamicValue dynamic_value = 29;
 
     // A sub-action
     repeated Action action = 30;
   }
-  repeated Action action = 40
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Action action = 40;
 }

@@ -271,7 +271,6 @@ field {
   type_name: ".google.fhir.r4.core.Immunization.Performer"
   options {
     [google.fhir.proto.field_description]: "Who performed event"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -335,8 +334,6 @@ field {
   type_name: ".google.fhir.r4.core.Immunization.Education"
   options {
     [google.fhir.proto.field_description]: "Educational material presented to patient"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "documentType.exists() or reference.exists()"
   }
 }
 field {
@@ -367,7 +364,6 @@ field {
   type_name: ".google.fhir.r4.core.Immunization.Reaction"
   options {
     [google.fhir.proto.field_description]: "Details of a reaction that follows immunization"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -378,7 +374,6 @@ field {
   type_name: ".google.fhir.r4.core.Immunization.ProtocolApplied"
   options {
     [google.fhir.proto.field_description]: "Protocol followed by the provider"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -562,6 +557,9 @@ nested_type {
     options {
       [google.fhir.proto.field_description]: "Educational material presentation date"
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "documentType.exists() or reference.exists()"
   }
 }
 nested_type {

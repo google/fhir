@@ -33,6 +33,8 @@ message TestScript {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/TestScript";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
 
   // Logical id of this artifact
   Id id = 1;
@@ -142,9 +144,7 @@ message TestScript {
     Coding profile = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Origin origin = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Origin origin = 25;
 
   // An abstract server representing a destination or receiver in a message
   // exchange
@@ -167,13 +167,14 @@ message TestScript {
     Coding profile = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Destination destination = 26
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Destination destination = 26;
 
   // Required capability that is assumed to function correctly on the FHIR
   // server being tested
   message Metadata {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "capability.required.exists() or capability.validated.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -201,9 +202,7 @@ message TestScript {
       // Short description
       String description = 5;
     }
-    repeated Link link = 4
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Link link = 4;
 
     // Capabilities  that are assumed to function correctly on the FHIR server
     // being tested
@@ -241,18 +240,10 @@ message TestScript {
       Canonical capabilities = 10
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    repeated Capability capability = 5 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())"
-    ];
+    repeated Capability capability = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  Metadata metadata = 27 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "capability.required.exists() or capability.validated.exists()"
-  ];
+  Metadata metadata = 27;
 
   // Fixture in the test script - by reference (uri)
   message Fixture {
@@ -277,9 +268,7 @@ message TestScript {
     Reference resource = 6
         [(.google.fhir.proto.valid_reference_type) = "Resource"];
   }
-  repeated Fixture fixture = 28
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Fixture fixture = 28;
 
   // Reference of the validation profile
   repeated Reference profile = 29
@@ -287,6 +276,9 @@ message TestScript {
 
   // Placeholder for evaluated elements
   message Variable {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "expression.empty() or headerField.empty() or path.empty()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -321,12 +313,7 @@ message TestScript {
     // Fixture Id of source expression or headerField within this variable
     Id source_id = 11;
   }
-  repeated Variable variable = 30 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "expression.empty() or headerField.empty() or path.empty()"
-  ];
+  repeated Variable variable = 30;
 
   // A series of required setup operations before tests are executed
   message Setup {
@@ -341,6 +328,9 @@ message TestScript {
 
     // A setup operation or assert to perform
     message SetupAction {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "operation.exists() xor assert.exists()";
+
       // Unique id for inter-element referencing
       String id = 1;
 
@@ -352,6 +342,9 @@ message TestScript {
 
       // The setup operation to perform
       message Operation {
+        option (.google.fhir.proto.fhir_path_message_constraint) =
+            "sourceId.exists() or (targetId.count() + url.count() + params.count() = 1) or (type.code in ('capabilities' |'search' | 'transaction' | 'history'))";
+
         // Unique id for inter-element referencing
         String id = 1;
 
@@ -478,9 +471,7 @@ message TestScript {
           String value = 5
               [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
         }
-        repeated RequestHeader request_header = 15
-            [(.google.fhir.proto.fhir_path_constraint) =
-                 "hasValue() or (children().count() > id.count())"];
+        repeated RequestHeader request_header = 15;
 
         // Fixture Id of mapped request
         Id request_id = 16;
@@ -498,15 +489,17 @@ message TestScript {
         // Request URL
         String url = 20;
       }
-      Operation operation = 4 [
-        (.google.fhir.proto.fhir_path_constraint) =
-            "hasValue() or (children().count() > id.count())",
-        (.google.fhir.proto.fhir_path_constraint) =
-            "sourceId.exists() or (targetId.count() + url.count() + params.count() = 1) or (type.code in ('capabilities' |'search' | 'transaction' | 'history'))"
-      ];
+      Operation operation = 4;
 
       // The assertion to perform
       message Assert {
+        option (.google.fhir.proto.fhir_path_message_constraint) =
+            "(response.empty() and responseCode.empty() and direction = 'request') or direction.empty() or direction = 'response'";
+        option (.google.fhir.proto.fhir_path_message_constraint) =
+            "extension.exists() or (contentType.count() + expression.count() + headerField.count() + minimumId.count() + navigationLinks.count() + path.count() + requestMethod.count() + resource.count() + responseCode.count() + response.count()  + validateProfileId.count() <=1)";
+        option (.google.fhir.proto.fhir_path_message_constraint) =
+            "compareToSourceId.empty() xor (compareToSourceExpression.exists() or compareToSourcePath.exists())";
+
         // Unique id for inter-element referencing
         String id = 1;
 
@@ -674,28 +667,12 @@ message TestScript {
         Boolean warning_only = 25
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
       }
-      Assert assert_value = 5 [
-        json_name = "assert",
-        (.google.fhir.proto.fhir_path_constraint) =
-            "hasValue() or (children().count() > id.count())",
-        (.google.fhir.proto.fhir_path_constraint) =
-            "(response.empty() and responseCode.empty() and direction = 'request') or direction.empty() or direction = 'response'",
-        (.google.fhir.proto.fhir_path_constraint) =
-            "extension.exists() or (contentType.count() + expression.count() + headerField.count() + minimumId.count() + navigationLinks.count() + path.count() + requestMethod.count() + resource.count() + responseCode.count() + response.count()  + validateProfileId.count() <=1)",
-        (.google.fhir.proto.fhir_path_constraint) =
-            "compareToSourceId.empty() xor (compareToSourceExpression.exists() or compareToSourcePath.exists())"
-      ];
+      Assert assert_value = 5 [json_name = "assert"];
     }
-    repeated SetupAction action = 4 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())",
-      (.google.fhir.proto.fhir_path_constraint) =
-          "operation.exists() xor assert.exists()"
-    ];
+    repeated SetupAction action = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  Setup setup = 31 [(.google.fhir.proto.fhir_path_constraint) =
-                        "hasValue() or (children().count() > id.count())"];
+  Setup setup = 31;
 
   // A test in this script
   message Test {
@@ -716,6 +693,9 @@ message TestScript {
 
     // A test operation or assert to perform
     message TestAction {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "operation.exists() xor assert.exists()";
+
       // Unique id for inter-element referencing
       String id = 1;
 
@@ -742,17 +722,10 @@ message TestScript {
             "extension.exists() or (contentType.count() + expression.count() + headerField.count() + minimumId.count() + navigationLinks.count() + path.count() + requestMethod.count() + resource.count() + responseCode.count() + response.count() + validateProfileId.count() <=1)"
       ];
     }
-    repeated TestAction action = 6 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())",
-      (.google.fhir.proto.fhir_path_constraint) =
-          "operation.exists() xor assert.exists()"
-    ];
+    repeated TestAction action = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Test test = 32
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Test test = 32;
 
   // A series of required clean up steps
   message Teardown {
@@ -783,13 +756,8 @@ message TestScript {
             "sourceId.exists() or (targetId.count() + url.count() + params.count() = 1) or (type.code in ('capabilities' | 'search' | 'transaction' | 'history'))"
       ];
     }
-    repeated TeardownAction action = 4 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())"
-    ];
+    repeated TeardownAction action = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  Teardown teardown = 33
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Teardown teardown = 33;
 }

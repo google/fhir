@@ -123,9 +123,7 @@ message HealthcareService {
     // Describes the eligibility conditions for the service
     Markdown comment = 5;
   }
-  repeated Eligibility eligibility = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Eligibility eligibility = 24;
 
   // Programs that this service is applicable to
   repeated CodeableConcept program = 25;
@@ -179,9 +177,7 @@ message HealthcareService {
     // Closing time of day (ignored if allDay = true)
     Time available_end_time = 7;
   }
-  repeated AvailableTime available_time = 30
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated AvailableTime available_time = 30;
 
   // Not available during this time due to provided reason
   message NotAvailable {
@@ -201,9 +197,7 @@ message HealthcareService {
     // Service not available from this date
     Period during = 5;
   }
-  repeated NotAvailable not_available = 31
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated NotAvailable not_available = 31;
 
   // Description of availability exceptions
   String availability_exceptions = 32;

@@ -34,6 +34,10 @@ message Triglyceride {
       "http://hl7.org/fhir/StructureDefinition/Observation";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/triglyceride";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "dataAbsentReason.empty() or value.empty()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -189,6 +193,9 @@ message Triglyceride {
 
   // Provides guide for interpretation
   message ReferenceRange {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "low.exists() or high.exists() or text.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -217,13 +224,8 @@ message Triglyceride {
     // Text based reference range in an observation
     String text = 9;
   }
-  ReferenceRange reference_range = 30 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "low.exists() or high.exists() or text.exists()"
-  ];
+  ReferenceRange reference_range = 30
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Observation.hasMember not present on profile.
   reserved 31;
@@ -275,7 +277,5 @@ message Triglyceride {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 33
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Component component = 33;
 }

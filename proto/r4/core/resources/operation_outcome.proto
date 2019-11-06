@@ -120,9 +120,6 @@ message OperationOutcome {
     // FHIRPath of element(s) related to issue
     repeated String expression = 9;
   }
-  repeated Issue issue = 10 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  repeated Issue issue = 10
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }

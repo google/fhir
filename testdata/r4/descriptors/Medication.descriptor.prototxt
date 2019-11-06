@@ -154,7 +154,6 @@ field {
   type_name: ".google.fhir.r4.core.Medication.Ingredient"
   options {
     [google.fhir.proto.field_description]: "Active or inactive ingredient"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -165,7 +164,6 @@ field {
   type_name: ".google.fhir.r4.core.Medication.Batch"
   options {
     [google.fhir.proto.field_description]: "Details about packaged medications"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {

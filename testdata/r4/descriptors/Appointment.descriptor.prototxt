@@ -302,8 +302,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Participants involved in appointment"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "type.exists() or actor.exists()"
   }
 }
 field {
@@ -487,9 +485,15 @@ nested_type {
       [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "type.exists() or actor.exists()"
+  }
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Appointment, last updated 2018-12-27T22:37:54.724+11:00.\nA booking of a healthcare event among patient(s), practitioner(s), related person(s) and/or device(s) for a specific date/time. This may result in one or more Encounter(s).\nSee http://hl7.org/fhir/StructureDefinition/Appointment"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Appointment"
+  [google.fhir.proto.fhir_path_message_constraint]: "Appointment.cancelationReason.exists() implies (Appointment.status=\'no-show\' or Appointment.status=\'cancelled\')"
+  [google.fhir.proto.fhir_path_message_constraint]: "(start.exists() and end.exists()) or (status in (\'proposed\' | \'cancelled\' | \'waitlist\'))"
+  [google.fhir.proto.fhir_path_message_constraint]: "start.exists() = end.exists()"
 }

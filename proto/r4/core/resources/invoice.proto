@@ -128,9 +128,7 @@ message Invoice {
       (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
     ];
   }
-  repeated Participant participant = 17
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Participant participant = 17;
 
   // Issuing Organization of Invoice
   Reference issuer = 18
@@ -206,13 +204,9 @@ message Invoice {
       // Monetary amount associated with this component
       Money amount = 7;
     }
-    repeated PriceComponent price_component = 6
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated PriceComponent price_component = 6;
   }
-  repeated LineItem line_item = 20
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated LineItem line_item = 20;
 
   // Components of Invoice total
   repeated LineItem.PriceComponent total_price_component = 21;

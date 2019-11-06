@@ -164,9 +164,7 @@ message Immunization {
       (.google.fhir.proto.valid_reference_type) = "Organization"
     ];
   }
-  repeated Performer performer = 27
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Performer performer = 27;
 
   // Additional immunization notes
   repeated Annotation note = 28;
@@ -189,6 +187,9 @@ message Immunization {
 
   // Educational material presented to patient
   message Education {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "documentType.exists() or reference.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -210,12 +211,7 @@ message Immunization {
     // Educational material presentation date
     DateTime presentation_date = 7;
   }
-  repeated Education education = 33 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "documentType.exists() or reference.exists()"
-  ];
+  repeated Education education = 33;
 
   // Patient eligibility for a vaccination program
   repeated CodeableConcept program_eligibility = 34;
@@ -244,9 +240,7 @@ message Immunization {
     // Indicates self-reported reaction
     Boolean reported = 6;
   }
-  repeated Reaction reaction = 36
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Reaction reaction = 36;
 
   // Protocol followed by the provider
   message ProtocolApplied {
@@ -292,7 +286,5 @@ message Immunization {
     }
     SeriesDosesX series_doses = 8;
   }
-  repeated ProtocolApplied protocol_applied = 37
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated ProtocolApplied protocol_applied = 37;
 }

@@ -20,12 +20,17 @@
 #include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/status/status.h"
+#include "proto/r4/core/datatypes.pb.h"
+#include "proto/r4/core/resources/encounter.pb.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
 #include "proto/stu3/uscore.pb.h"
 #include "proto/stu3/uscore_codes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
+
+using ::google::fhir::r4::core::Period;
+using ::google::fhir::r4::core::Quantity;
 
 using ::google::fhir::stu3::proto::Code;
 using ::google::fhir::stu3::proto::Coding;
@@ -62,7 +67,7 @@ Encounter ValidEncounter() {
     status { value: TRIAGED }
     id { value: "123" }
     period {
-      start: { value_us: 1556750153000 timezone: "America/Los_Angelas" }
+      start: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
     }
   )proto");
 }
@@ -231,6 +236,82 @@ TEST(FhirPathTest, TestFunctionNotExistsNegation) {
   EXPECT_TRUE(result.GetBoolean().ValueOrDie());
 }
 
+TEST(FhirPathTest, TestFunctionHasValue) {
+  auto expr = CompiledExpression::Compile(Encounter::descriptor(),
+                                          "period.start.hasValue()")
+                  .ValueOrDie();
+
+  Encounter test_encounter = ValidEncounter();
+
+  EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
+
+  EXPECT_TRUE(result.GetBoolean().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestFunctionHasValueNegation) {
+  auto expr = CompiledExpression::Compile(Encounter::descriptor(),
+                                          "period.start.hasValue().not()")
+                  .ValueOrDie();
+
+  Encounter test_encounter = ValidEncounter();
+
+  EvaluationResult has_value_result =
+      expr.Evaluate(test_encounter).ValueOrDie();
+  EXPECT_FALSE(has_value_result.GetBoolean().ValueOrDie());
+
+  test_encounter.mutable_period()->clear_start();
+  EvaluationResult no_value_result = expr.Evaluate(test_encounter).ValueOrDie();
+  EXPECT_TRUE(no_value_result.GetBoolean().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestFunctionHasValueComplex) {
+  auto expr =
+      CompiledExpression::Compile(Encounter::descriptor(), "period.hasValue()")
+          .ValueOrDie();
+
+  Encounter test_encounter = ValidEncounter();
+
+  EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
+
+  // hasValue should return false for non-primitive types.
+  EXPECT_FALSE(result.GetBoolean().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestOrShortCircuit) {
+  auto expr =
+      CompiledExpression::Compile(Quantity::descriptor(),
+                                  "value.hasValue().not() or value < 100")
+          .ValueOrDie();
+  Quantity quantity;
+  EvaluationResult result = expr.Evaluate(quantity).ValueOrDie();
+  EXPECT_TRUE(result.GetBoolean().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestMultiOrShortCircuit) {
+  auto expr =
+      CompiledExpression::Compile(
+          Period::descriptor(),
+          "start.hasValue().not() or end.hasValue().not() or start <= end")
+          .ValueOrDie();
+
+  Period no_end_period = ParseFromString<Period>(R"proto(
+    start: { value_us: 1556750000000 timezone: "America/Los_Angeles" }
+  )proto");
+
+  EvaluationResult result = expr.Evaluate(no_end_period).ValueOrDie();
+
+  EXPECT_TRUE(result.GetBoolean().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestOrFalseWithEmptyReturnsEmpty) {
+  auto expr = CompiledExpression::Compile(Quantity::descriptor(),
+                                          "value.hasValue() or value < 100")
+                  .ValueOrDie();
+  Quantity quantity;
+  EvaluationResult result = expr.Evaluate(quantity).ValueOrDie();
+  EXPECT_TRUE(result.GetMessages().empty());
+}
+
 TEST(FhirPathTest, TestOrOneIsTrue) {
   auto expr = CompiledExpression::Compile(
                   Encounter::descriptor(),
@@ -255,6 +336,25 @@ TEST(FhirPathTest, TestOrNeitherAreTrue) {
   EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
 
   EXPECT_FALSE(result.GetBoolean().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestAndShortCircuit) {
+  auto expr = CompiledExpression::Compile(Quantity::descriptor(),
+                                          "value.hasValue() and value < 100")
+                  .ValueOrDie();
+  Quantity quantity;
+  EvaluationResult result = expr.Evaluate(quantity).ValueOrDie();
+  EXPECT_FALSE(result.GetBoolean().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestAndTrueWithEmptyReturnsEmpty) {
+  auto expr =
+      CompiledExpression::Compile(Quantity::descriptor(),
+                                  "value.hasValue().not() and value < 100")
+          .ValueOrDie();
+  Quantity quantity;
+  EvaluationResult result = expr.Evaluate(quantity).ValueOrDie();
+  EXPECT_TRUE(result.GetMessages().empty());
 }
 
 TEST(FhirPathTest, TestAndOneIsTrue) {
@@ -476,6 +576,77 @@ TEST(FhirPathTest, NestedConstraintSatisfied) {
   MessageValidator validator;
 
   EXPECT_TRUE(validator.Validate(value_set).ok());
+}
+
+TEST(FhirPathTest, TimeComparison) {
+  auto start_before_end =
+      CompiledExpression::Compile(Period::descriptor(), "start <= end")
+          .ValueOrDie();
+
+  Period start_before_end_period = ParseFromString<Period>(R"proto(
+    start: { value_us: 1556750000000 timezone: "America/Los_Angeles" }
+    end: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
+  )proto");
+  EvaluationResult start_before_end_result =
+      start_before_end.Evaluate(start_before_end_period).ValueOrDie();
+  EXPECT_TRUE(start_before_end_result.GetBoolean().ValueOrDie());
+
+  Period end_before_start_period = ParseFromString<Period>(R"proto(
+    start: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
+    end: { value_us: 1556750000000 timezone: "America/Los_Angeles" }
+  )proto");
+  EvaluationResult end_before_start_result =
+      start_before_end.Evaluate(end_before_start_period).ValueOrDie();
+  EXPECT_FALSE(end_before_start_result.GetBoolean().ValueOrDie());
+}
+
+TEST(FhirPathTest, MessageLevelConstraint) {
+  Period period = ParseFromString<Period>(R"proto(
+    start: { value_us: 1556750000000 timezone: "America/Los_Angeles" }
+    end: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
+  )proto");
+
+  MessageValidator validator;
+  EXPECT_TRUE(validator.Validate(period).ok());
+}
+
+TEST(FhirPathTest, MessageLevelConstraintViolated) {
+  Period end_before_start_period = ParseFromString<Period>(R"proto(
+    start: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
+    end: { value_us: 1556750000000 timezone: "America/Los_Angeles" }
+  )proto");
+
+  MessageValidator validator;
+  EXPECT_FALSE(validator.Validate(end_before_start_period).ok());
+}
+
+TEST(FhirPathTest, NestedMessageLevelConstraint) {
+  auto start_with_no_end_encounter =
+      ParseFromString<::google::fhir::r4::core::Encounter>(R"proto(
+        status { value: TRIAGED }
+        id { value: "123" }
+        period {
+          start: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
+        }
+      )proto");
+
+  MessageValidator validator;
+  EXPECT_TRUE(validator.Validate(start_with_no_end_encounter).ok());
+}
+
+TEST(FhirPathTest, NestedMessageLevelConstraintViolated) {
+  auto end_before_start_encounter =
+      ParseFromString<::google::fhir::r4::core::Encounter>(R"proto(
+        status { value: TRIAGED }
+        id { value: "123" }
+        period {
+          start: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
+          end: { value_us: 1556750000000 timezone: "America/Los_Angeles" }
+        }
+      )proto");
+
+  MessageValidator validator;
+  EXPECT_FALSE(validator.Validate(end_before_start_encounter).ok());
 }
 
 TEST(FhirPathTest, ProfiledEmptyExtension) {

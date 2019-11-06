@@ -35,6 +35,8 @@ message ShareableActivityDefinition {
       "http://hl7.org/fhir/StructureDefinition/ActivityDefinition";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/shareableactivitydefinition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
 
   // Logical id of this artifact
   Id id = 1;
@@ -285,9 +287,7 @@ message ShareableActivityDefinition {
     // E.g. Nurse, Surgeon, Parent, etc.
     CodeableConcept role = 5;
   }
-  repeated Participant participant = 46
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Participant participant = 46;
 
   // What's administered/supplied
   message ProductX {
@@ -346,7 +346,5 @@ message ShareableActivityDefinition {
     Expression expression = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated DynamicValue dynamic_value = 55
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated DynamicValue dynamic_value = 55;
 }

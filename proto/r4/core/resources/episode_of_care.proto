@@ -119,9 +119,7 @@ message EpisodeOfCare {
     Period period = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated StatusHistory status_history = 12
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated StatusHistory status_history = 12;
 
   // Type/class  - e.g. specialist referral, disease management
   repeated CodeableConcept type = 13;
@@ -150,9 +148,7 @@ message EpisodeOfCare {
     // Ranking of the diagnosis (for each role type)
     PositiveInt rank = 6;
   }
-  repeated Diagnosis diagnosis = 14
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Diagnosis diagnosis = 14;
 
   // The patient who is the focus of this episode of care
   Reference patient = 15 [

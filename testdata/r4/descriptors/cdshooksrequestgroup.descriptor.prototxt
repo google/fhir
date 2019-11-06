@@ -279,8 +279,6 @@ field {
   type_name: ".google.fhir.r4.core.CDSHooksRequestGroup.Action"
   options {
     [google.fhir.proto.field_description]: "Proposed actions, if any"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "resource.exists() != action.exists()"
   }
 }
 nested_type {
@@ -474,7 +472,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.CDSHooksRequestGroup.Action.Condition"
     options {
       [google.fhir.proto.field_description]: "Whether or not the action is applicable"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -485,7 +482,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.CDSHooksRequestGroup.Action.RelatedAction"
     options {
       [google.fhir.proto.field_description]: "Relationship to another action"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -1010,6 +1006,9 @@ nested_type {
       [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
       [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "resource.exists() != action.exists()"
   }
 }
 options {

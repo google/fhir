@@ -31,6 +31,12 @@ message Condition {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Condition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "verificationStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-ver-status' and code='entered-in-error').empty() or clinicalStatus.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "abatement.empty() or clinicalStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-clinical' and (code='resolved' or code='remission' or code='inactive')).exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "clinicalStatus.exists() or verificationStatus='entered-in-error' or category.select($this='problem-list-item').empty()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -142,6 +148,9 @@ message Condition {
 
   // Stage/grade, usually assessed formally
   message Stage {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "summary.exists() or assessment.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -164,15 +173,13 @@ message Condition {
     // Kind of staging
     CodeableConcept type = 6;
   }
-  repeated Stage stage = 24 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "summary.exists() or assessment.exists()"
-  ];
+  repeated Stage stage = 24;
 
   // Supporting evidence
   message Evidence {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "code.exists() or detail.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -189,12 +196,7 @@ message Condition {
     repeated Reference detail = 5
         [(.google.fhir.proto.valid_reference_type) = "Resource"];
   }
-  repeated Evidence evidence = 25 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "code.exists() or detail.exists()"
-  ];
+  repeated Evidence evidence = 25;
 
   // Additional information about the Condition
   repeated Annotation note = 26;

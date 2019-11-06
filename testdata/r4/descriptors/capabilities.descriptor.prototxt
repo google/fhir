@@ -51,4 +51,5 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for capabilities.\nServer Capabilities.\nSee http://fhir-registry.smarthealthit.org/StructureDefinition/capabilities"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Extension"
   [google.fhir.proto.fhir_structure_definition_url]: "http://fhir-registry.smarthealthit.org/StructureDefinition/capabilities"
+  [google.fhir.proto.fhir_path_message_constraint]: "extension.exists() != value.exists()"
 }

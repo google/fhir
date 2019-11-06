@@ -210,8 +210,6 @@ field {
   type_name: ".google.fhir.r4.core.QuestionnaireResponse.Item"
   options {
     [google.fhir.proto.field_description]: "Groups and questions"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "(answer.exists() and item.exists()).not()"
   }
 }
 nested_type {
@@ -312,7 +310,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.QuestionnaireResponse.Item.Answer"
     options {
       [google.fhir.proto.field_description]: "The response(s) to the question"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -486,6 +483,9 @@ nested_type {
         name: "choice"
       }
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "(answer.exists() and item.exists()).not()"
   }
 }
 options {

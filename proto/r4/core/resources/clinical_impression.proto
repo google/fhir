@@ -158,9 +158,7 @@ message ClinicalImpression {
       (.google.fhir.proto.valid_reference_type) = "Media"
     ];
   }
-  repeated Investigation investigation = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Investigation investigation = 22;
 
   // Clinical Protocol followed
   repeated Uri protocol = 23;
@@ -192,9 +190,7 @@ message ClinicalImpression {
     // Which investigations support finding
     String basis = 6;
   }
-  repeated Finding finding = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Finding finding = 25;
 
   // Estimate of likely outcome
   repeated CodeableConcept prognosis_codeable_concept = 26;

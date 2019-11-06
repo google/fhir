@@ -145,11 +145,7 @@ message Coverage {
     // Human readable description of the type and value
     String name = 6;
   }
-  repeated Class class_value = 21 [
-    json_name = "class",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  repeated Class class_value = 21 [json_name = "class"];
 
   // Relative order of the coverage
   PositiveInt order = 22;
@@ -201,13 +197,9 @@ message Coverage {
       // The effective period of the exception
       Period period = 5;
     }
-    repeated Exemption exception = 6
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Exemption exception = 6;
   }
-  repeated CostToBeneficiary cost_to_beneficiary = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated CostToBeneficiary cost_to_beneficiary = 24;
 
   // Reimbursement to insurer
   Boolean subrogation = 25;

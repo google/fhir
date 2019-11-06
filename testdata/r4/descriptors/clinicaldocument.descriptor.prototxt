@@ -210,7 +210,6 @@ field {
   type_name: ".google.fhir.r4.core.ClinicalDocument.Attester"
   options {
     [google.fhir.proto.field_description]: "Attests to accuracy of composition"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -232,7 +231,6 @@ field {
   type_name: ".google.fhir.r4.core.ClinicalDocument.RelatesTo"
   options {
     [google.fhir.proto.field_description]: "Relationships to other compositions/documents"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -243,7 +241,6 @@ field {
   type_name: ".google.fhir.r4.core.ClinicalDocument.Event"
   options {
     [google.fhir.proto.field_description]: "The clinical service(s) being documented"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -254,9 +251,6 @@ field {
   type_name: ".google.fhir.r4.core.ClinicalDocument.Section"
   options {
     [google.fhir.proto.field_description]: "Composition is broken into sections"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "text.exists() or entry.exists() or section.exists()"
-    [google.fhir.proto.fhir_path_constraint]: "emptyReason.empty() or entry.empty()"
   }
 }
 field {
@@ -268,7 +262,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "Version-specific identifier for composition"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/composition-clinicaldocument-versionNumber"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
@@ -762,6 +755,10 @@ nested_type {
       [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
       [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "text.exists() or entry.exists() or section.exists()"
+    [google.fhir.proto.fhir_path_message_constraint]: "emptyReason.empty() or entry.empty()"
   }
 }
 options {

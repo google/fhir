@@ -181,9 +181,7 @@ message ClinicalDocument {
       (.google.fhir.proto.valid_reference_type) = "Organization"
     ];
   }
-  repeated Attester attester = 20
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Attester attester = 20;
 
   // Organization which maintains the composition
   Reference custodian = 21
@@ -231,9 +229,7 @@ message ClinicalDocument {
     TargetX target = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated RelatesTo relates_to = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated RelatesTo relates_to = 22;
 
   // The clinical service(s) being documented
   message Event {
@@ -256,12 +252,15 @@ message ClinicalDocument {
     repeated Reference detail = 6
         [(.google.fhir.proto.valid_reference_type) = "Resource"];
   }
-  repeated Event event = 23
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Event event = 23;
 
   // Composition is broken into sections
   message Section {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "text.exists() or entry.exists() or section.exists()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "emptyReason.empty() or entry.empty()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -325,21 +324,12 @@ message ClinicalDocument {
     // Nested Section
     repeated Section section = 13;
   }
-  repeated Section section = 24 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "text.exists() or entry.exists() or section.exists()",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "emptyReason.empty() or entry.empty()"
-  ];
+  repeated Section section = 24;
 
   // Version-specific identifier for composition
   repeated String version_number = 25 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/composition-clinicaldocument-versionNumber",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];

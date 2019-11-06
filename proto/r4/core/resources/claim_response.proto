@@ -202,11 +202,8 @@ message ClaimResponse {
       // Non-monetary value
       Decimal value = 7;
     }
-    repeated Adjudication adjudication = 6 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())"
-    ];
+    repeated Adjudication adjudication = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
     // Adjudication for claim details
     message ItemDetail {
@@ -251,17 +248,11 @@ message ClaimResponse {
         // Subdetail level adjudication details
         repeated Adjudication adjudication = 6;
       }
-      repeated SubDetail sub_detail = 7
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated SubDetail sub_detail = 7;
     }
-    repeated ItemDetail detail = 7
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated ItemDetail detail = 7;
   }
-  repeated Item item = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Item item = 25;
 
   // Insurer added line items
   message AddedItem {
@@ -423,17 +414,11 @@ message ClaimResponse {
         repeated Item.Adjudication adjudication = 11
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
       }
-      repeated AddedItemSubDetail sub_detail = 12
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated AddedItemSubDetail sub_detail = 12;
     }
-    repeated AddedItemDetail detail = 21
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated AddedItemDetail detail = 21;
   }
-  repeated AddedItem add_item = 26
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated AddedItem add_item = 26;
 
   // Header-level adjudication
   repeated Item.Adjudication adjudication = 27;
@@ -457,9 +442,7 @@ message ClaimResponse {
     Money amount = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Total total = 28
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Total total = 28;
 
   // Payment Details
   message Payment {
@@ -492,8 +475,7 @@ message ClaimResponse {
     // Business identifier for the payment
     Identifier identifier = 9;
   }
-  Payment payment = 29 [(.google.fhir.proto.fhir_path_constraint) =
-                            "hasValue() or (children().count() > id.count())"];
+  Payment payment = 29;
 
   // Funds reserved status
   CodeableConcept funds_reserve = 30;
@@ -542,9 +524,7 @@ message ClaimResponse {
     // Language of the text
     CodeableConcept language = 7;
   }
-  repeated Note process_note = 33
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Note process_note = 33;
 
   // Request for additional information
   repeated Reference communication_request = 34
@@ -582,9 +562,7 @@ message ClaimResponse {
     Reference claim_response = 8
         [(.google.fhir.proto.valid_reference_type) = "ClaimResponse"];
   }
-  repeated Insurance insurance = 35
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Insurance insurance = 35;
 
   // Processing errors
   message Error {
@@ -610,7 +588,5 @@ message ClaimResponse {
     CodeableConcept code = 7
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Error error = 36
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Error error = 36;
 }

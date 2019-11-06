@@ -148,9 +148,7 @@ message ChargeItem {
       (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
     ];
   }
-  repeated Performer performer = 19
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Performer performer = 19;
 
   // Organization providing the charged service
   Reference performing_organization = 20

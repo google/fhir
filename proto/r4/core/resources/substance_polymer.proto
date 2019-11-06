@@ -109,13 +109,9 @@ message SubstancePolymer {
       // Todo
       SubstanceAmount amount = 7;
     }
-    repeated StartingMaterial starting_material = 5
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated StartingMaterial starting_material = 5;
   }
-  repeated MonomerSet monomer_set = 14
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated MonomerSet monomer_set = 14;
 
   // Todo
   message Repeat {
@@ -174,9 +170,7 @@ message SubstancePolymer {
         // Todo
         SubstanceAmount amount = 5;
       }
-      repeated DegreeOfPolymerisation degree_of_polymerisation = 7
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated DegreeOfPolymerisation degree_of_polymerisation = 7;
 
       // Todo
       message StructuralRepresentation {
@@ -198,15 +192,9 @@ message SubstancePolymer {
         // Todo
         Attachment attachment = 6;
       }
-      repeated StructuralRepresentation structural_representation = 8
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated StructuralRepresentation structural_representation = 8;
     }
-    repeated RepeatUnit repeat_unit = 7
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated RepeatUnit repeat_unit = 7;
   }
-  repeated Repeat repeat = 15
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Repeat repeat = 15;
 }

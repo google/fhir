@@ -237,7 +237,6 @@ field {
   type_name: ".google.fhir.r4.core.Claim.RelatedClaim"
   options {
     [google.fhir.proto.field_description]: "Prior or corollary claims"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -274,7 +273,6 @@ field {
   type_name: ".google.fhir.r4.core.Claim.Payee"
   options {
     [google.fhir.proto.field_description]: "Recipient of benefits payable"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -307,7 +305,6 @@ field {
   type_name: ".google.fhir.r4.core.Claim.CareTeam"
   options {
     [google.fhir.proto.field_description]: "Members of the care team"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -318,7 +315,6 @@ field {
   type_name: ".google.fhir.r4.core.Claim.SupportingInformation"
   options {
     [google.fhir.proto.field_description]: "Supporting information"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -329,7 +325,6 @@ field {
   type_name: ".google.fhir.r4.core.Claim.Diagnosis"
   options {
     [google.fhir.proto.field_description]: "Pertinent diagnosis information"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -340,7 +335,6 @@ field {
   type_name: ".google.fhir.r4.core.Claim.Procedure"
   options {
     [google.fhir.proto.field_description]: "Clinical procedures performed"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -352,7 +346,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Patient insurance information"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -363,7 +356,6 @@ field {
   type_name: ".google.fhir.r4.core.Claim.Accident"
   options {
     [google.fhir.proto.field_description]: "Details of the event"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -374,7 +366,6 @@ field {
   type_name: ".google.fhir.r4.core.Claim.Item"
   options {
     [google.fhir.proto.field_description]: "Product or service provided"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -1496,7 +1487,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.Claim.Item.Detail"
     options {
       [google.fhir.proto.field_description]: "Product or service provided"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -1713,7 +1703,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.Claim.Item.Detail.SubDetail"
       options {
         [google.fhir.proto.field_description]: "Product or service provided"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {

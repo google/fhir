@@ -80,6 +80,9 @@ message ImmunizationRecommendation {
 
   // Vaccine administration recommendations
   message Recommendation {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "vaccineCode.exists() or targetDisease.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -124,9 +127,7 @@ message ImmunizationRecommendation {
       DateTime value = 5
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    repeated DateCriterion date_criterion = 9
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated DateCriterion date_criterion = 9;
 
     // Protocol details
     String description = 10;
@@ -166,11 +167,6 @@ message ImmunizationRecommendation {
     repeated Reference supporting_patient_information = 15
         [(.google.fhir.proto.valid_reference_type) = "Resource"];
   }
-  repeated Recommendation recommendation = 14 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "vaccineCode.exists() or targetDisease.exists()"
-  ];
+  repeated Recommendation recommendation = 14
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }

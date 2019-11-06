@@ -159,9 +159,7 @@ message Specimen {
     }
     FastingStatusX fasting_status = 10;
   }
-  Collection collection = 18
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Collection collection = 18;
 
   // Processing and processing step details
   message Processing {
@@ -195,9 +193,7 @@ message Specimen {
     }
     TimeX time = 7;
   }
-  repeated Processing processing = 19
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Processing processing = 19;
 
   // Direct container of specimen (tube/slide, etc.)
   message Container {
@@ -237,9 +233,7 @@ message Specimen {
     }
     AdditiveX additive = 9;
   }
-  repeated Container container = 20
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Container container = 20;
 
   // State of the specimen
   repeated CodeableConcept condition = 21;

@@ -103,7 +103,6 @@ field {
   type_name: ".google.fhir.r4.core.DeviceDefinition.UdiDeviceIdentifier"
   options {
     [google.fhir.proto.field_description]: "Unique Device Identifier (UDI) Barcode string"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -124,7 +123,6 @@ field {
   type_name: ".google.fhir.r4.core.DeviceDefinition.DeviceName"
   options {
     [google.fhir.proto.field_description]: "A name given to the device to identify it"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -155,7 +153,6 @@ field {
   type_name: ".google.fhir.r4.core.DeviceDefinition.Specialization"
   options {
     [google.fhir.proto.field_description]: "The capabilities supported on a  device, the standards to which the device conforms for a particular purpose, and used for the communication"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -216,7 +213,6 @@ field {
   type_name: ".google.fhir.r4.core.DeviceDefinition.Capability"
   options {
     [google.fhir.proto.field_description]: "Device capabilities"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -227,7 +223,6 @@ field {
   type_name: ".google.fhir.r4.core.DeviceDefinition.Property"
   options {
     [google.fhir.proto.field_description]: "The actual configuration settings of a device as it actually operates, e.g., regulation status, time properties"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -310,7 +305,6 @@ field {
   type_name: ".google.fhir.r4.core.DeviceDefinition.Material"
   options {
     [google.fhir.proto.field_description]: "A substance used to create the material(s) of which the device is made"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {

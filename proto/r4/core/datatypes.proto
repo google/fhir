@@ -550,6 +550,10 @@ message Age {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Age";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "code.empty() or system.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(code.exists() or value.empty()) and (system.empty() or system = %ucum) and (value.empty() or value.hasValue().not() or value > 0)";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -631,6 +635,8 @@ message Attachment {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Attachment";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "data.empty() or contentType.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -760,6 +766,8 @@ message ContactPoint {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/ContactPoint";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "value.empty() or system.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -855,6 +863,10 @@ message Count {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Count";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "code.empty() or system.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(code.exists() or value.empty()) and (system.empty() or system = %ucum) and (code.empty() or code = '1') and (value.empty() or value.hasValue().not() or value.toString().contains('.').not())";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -943,6 +955,9 @@ message DataRequirement {
 
   // What codes are expected
   message CodeFilter {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "path.exists() xor searchParam.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -961,15 +976,13 @@ message DataRequirement {
     // What code is expected
     repeated Coding code = 6;
   }
-  repeated CodeFilter code_filter = 7 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "path.exists() xor searchParam.exists()"
-  ];
+  repeated CodeFilter code_filter = 7;
 
   // What dates/date ranges are expected
   message DateFilter {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "path.exists() xor searchParam.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -994,12 +1007,7 @@ message DataRequirement {
     }
     ValueX value = 5;
   }
-  repeated DateFilter date_filter = 8 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "path.exists() xor searchParam.exists()"
-  ];
+  repeated DateFilter date_filter = 8;
 
   // Number of results
   PositiveInt limit = 9;
@@ -1034,9 +1042,7 @@ message DataRequirement {
     DirectionCode direction = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Sort sort = 10
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Sort sort = 10;
 }
 
 // Auto-generated from StructureDefinition for Distance, last updated
@@ -1046,6 +1052,10 @@ message Distance {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Distance";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "code.empty() or system.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(code.exists() or value.empty()) and (system.empty() or system = %ucum)";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1169,9 +1179,7 @@ message Dosage {
     }
     RateX rate = 5;
   }
-  repeated DoseAndRate dose_and_rate = 13
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated DoseAndRate dose_and_rate = 13;
 
   // Upper limit on medication per unit of time
   Ratio max_dose_per_period = 14;
@@ -1190,6 +1198,10 @@ message Duration {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Duration";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "code.empty() or system.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "code.exists() implies ((system = %ucum) and value.exists())";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1233,6 +1245,32 @@ message ElementDefinition {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/ElementDefinition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "min.empty() or max.empty() or (max = '*') or iif(max != '*', min <= max.toInteger())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "contentReference.empty() or (type.empty() and defaultValue.empty() and fixed.empty() and pattern.empty() and example.empty() and minValue.empty() and maxValue.empty() and maxLength.empty() and binding.empty())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "pattern.empty() or (type.count() <= 1)";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "fixed.empty() or (type.count()  <= 1)";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "binding.empty() or type.code.empty() or type.select((code = 'code') or (code = 'Coding') or (code='CodeableConcept') or (code = 'Quantity') or (code = 'string') or (code = 'uri')).exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "sliceIsConstraining.exists() implies sliceName.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "pattern.empty() or fixed.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "constraint.select(key).isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "type.select(code).isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "sliceName.empty() or sliceName.matches('^[a-zA-Z0-9\\\\/\\\\-_\\\\[\\\\]\\\\@]+$')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "defaultValue.empty() or meaningWhenMissing.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "isModifier implies isModifierReason.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "path.matches('[A-Za-z][A-Za-z0-9]*(\\\\.[a-z][A-Za-z0-9]*(\\\\[x])?)*')";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1277,6 +1315,9 @@ message ElementDefinition {
 
   // This element is sliced - slices follow
   message Slicing {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "discriminator.exists() or description.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -1313,9 +1354,7 @@ message ElementDefinition {
       String path = 4
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    repeated Discriminator discriminator = 3
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Discriminator discriminator = 3;
 
     // Text description of how slicing works (or not)
     String description = 4;
@@ -1341,12 +1380,7 @@ message ElementDefinition {
     RulesCode rules = 6
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  Slicing slicing = 10 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "discriminator.exists() or description.exists()"
-  ];
+  Slicing slicing = 10;
 
   // Concise definition for space-constrained presentation
   String short = 11;
@@ -1390,14 +1424,18 @@ message ElementDefinition {
     String max = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  Base base = 18 [(.google.fhir.proto.fhir_path_constraint) =
-                      "hasValue() or (children().count() > id.count())"];
+  Base base = 18;
 
   // Reference to definition of content for the element
   Uri content_reference = 19;
 
   // Data type and Profile for this element
   message TypeRef {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "aggregation.empty() or (code = 'Reference')";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(code='Reference' or code = 'canonical') or targetProfile.empty()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -1449,14 +1487,7 @@ message ElementDefinition {
     }
     VersioningCode versioning = 7;
   }
-  repeated TypeRef type = 20 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "aggregation.empty() or (code = 'Reference')",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "(code='Reference' or code = 'canonical') or targetProfile.empty()"
-  ];
+  repeated TypeRef type = 20;
 
   // Specified value if missing from instance
   message DefaultValueX {
@@ -1709,9 +1740,7 @@ message ElementDefinition {
     ValueX value = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Example example = 26
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Example example = 26;
 
   // Minimum Allowed Value (for some types)
   message MinValueX {
@@ -1757,6 +1786,9 @@ message ElementDefinition {
 
   // Condition that must evaluate to true
   message Constraint {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "expression.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -1800,11 +1832,7 @@ message ElementDefinition {
     // Reference to original source of constraint
     Canonical source = 9;
   }
-  repeated Constraint constraint = 31 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) = "expression.exists()"
-  ];
+  repeated Constraint constraint = 31;
 
   // If the element must be supported
   Boolean must_support = 32;
@@ -1820,6 +1848,9 @@ message ElementDefinition {
 
   // ValueSet details if this is coded
   message ElementDefinitionBinding {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "valueSet.exists() implies (valueSet.startsWith('http:') or valueSet.startsWith('https') or valueSet.startsWith('urn:'))";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -1850,12 +1881,7 @@ message ElementDefinition {
     // Source of value set
     Canonical value_set = 5;
   }
-  ElementDefinitionBinding binding = 36 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "valueSet.exists() implies (valueSet.startsWith('http:') or valueSet.startsWith('https') or valueSet.startsWith('urn:'))"
-  ];
+  ElementDefinitionBinding binding = 36;
 
   // Map element to another set of definitions
   message Mapping {
@@ -1897,9 +1923,7 @@ message ElementDefinition {
     // Comments about the mapping or its use
     String comment = 6;
   }
-  repeated Mapping mapping = 37
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Mapping mapping = 37;
 }
 
 // Auto-generated from StructureDefinition for Expression, last updated
@@ -1909,6 +1933,8 @@ message Expression {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Expression";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "expression.exists() or reference.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2265,6 +2291,8 @@ message Period {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Period";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "start.hasValue().not() or end.hasValue().not() or (start <= end)";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2444,6 +2472,8 @@ message Quantity {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Quantity";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "code.empty() or system.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2487,6 +2517,8 @@ message Range {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Range";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "low.empty() or high.empty() or (low <= high)";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2508,6 +2540,8 @@ message Ratio {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Ratio";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(numerator.empty() xor denominator.exists()) and (numerator.exists() or extension.exists())";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2763,9 +2797,7 @@ message SubstanceAmount {
     // Upper limit possible or expected
     Quantity high_limit = 4;
   }
-  ReferenceRange reference_range = 7
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  ReferenceRange reference_range = 7;
 }
 
 // Auto-generated from StructureDefinition for Timing, last updated
@@ -2790,6 +2822,25 @@ message Timing {
 
   // When the event is to occur
   message Repeat {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "offset.empty() or (when.exists() and ((when in ('C' | 'CM' | 'CD' | 'CV')).not()))";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "period.exists() implies period >= 0";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "periodMax.empty() or period.exists()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "durationMax.empty() or duration.exists()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "countMax.empty() or count.exists()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "duration.empty() or durationUnit.exists()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "timeOfDay.empty() or when.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "period.empty() or periodUnit.exists()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "duration.exists() implies duration >= 0";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -2906,28 +2957,7 @@ message Timing {
     // Minutes from event (before or after)
     UnsignedInt offset = 17;
   }
-  Repeat repeat = 5 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "offset.empty() or (when.exists() and ((when in ('C' | 'CM' | 'CD' | 'CV')).not()))",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "period.exists() implies period >= 0",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "periodMax.empty() or period.exists()",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "durationMax.empty() or duration.exists()",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "countMax.empty() or count.exists()",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "duration.empty() or durationUnit.exists()",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "timeOfDay.empty() or when.empty()",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "period.empty() or periodUnit.exists()",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "duration.exists() implies duration >= 0"
-  ];
+  Repeat repeat = 5;
 
   // BID | TID | QID | AM | PM | QD | QOD | +
   CodeableConcept code = 6;
@@ -2940,6 +2970,12 @@ message TriggerDefinition {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/TriggerDefinition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(type = 'named-event' implies name.exists()) and (type = 'periodic' implies timing.exists()) and (type.startsWith('data-') implies data.exists())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "condition.exists() implies data.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "data.empty() or timing.empty()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3041,6 +3077,10 @@ message MoneyQuantity {
       "http://hl7.org/fhir/StructureDefinition/Quantity";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/MoneyQuantity";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "code.empty() or system.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(code.exists() or value.empty()) and (system.empty() or system = 'urn:iso:std:iso:4217')";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3086,6 +3126,10 @@ message SimpleQuantity {
       "http://hl7.org/fhir/StructureDefinition/Quantity";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/SimpleQuantity";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "code.empty() or system.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "comparator.empty()";
 
   // Unique id for inter-element referencing
   String id = 1;

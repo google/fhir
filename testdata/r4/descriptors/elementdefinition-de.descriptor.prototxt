@@ -167,7 +167,6 @@ field {
   type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.Base"
   options {
     [google.fhir.proto.field_description]: "Base definition information for tools"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -184,9 +183,6 @@ field {
   type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.TypeRef"
   options {
     [google.fhir.proto.field_description]: "Data type and Profile for this element"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "aggregation.empty() or (code = \'Reference\')"
-    [google.fhir.proto.fhir_path_constraint]: "(code=\'Reference\' or code = \'canonical\') or targetProfile.empty()"
   }
 }
 field {
@@ -239,7 +235,6 @@ field {
   type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.Example"
   options {
     [google.fhir.proto.field_description]: "Example value (as defined for type)"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -290,8 +285,6 @@ field {
   type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.Constraint"
   options {
     [google.fhir.proto.field_description]: "Condition that must evaluate to true"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "expression.exists()"
   }
 }
 field {
@@ -334,8 +327,6 @@ field {
   type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.ElementDefinitionBinding"
   options {
     [google.fhir.proto.field_description]: "ValueSet details if this is coded"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "valueSet.exists() implies (valueSet.startsWith(\'http:\') or valueSet.startsWith(\'https\') or valueSet.startsWith(\'urn:\'))"
   }
 }
 field {
@@ -346,7 +337,6 @@ field {
   type_name: ".google.fhir.r4.core.DataElementConstraintOnElementDefinitionDataType.Mapping"
   options {
     [google.fhir.proto.field_description]: "Map element to another set of definitions"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -520,6 +510,10 @@ nested_type {
       [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
       [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "aggregation.empty() or (code = \'Reference\')"
+    [google.fhir.proto.fhir_path_message_constraint]: "(code=\'Reference\' or code = \'canonical\') or targetProfile.empty()"
   }
 }
 nested_type {
@@ -1655,6 +1649,9 @@ nested_type {
       [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "expression.exists()"
+  }
 }
 nested_type {
   name: "ElementDefinitionBinding"
@@ -1735,6 +1732,9 @@ nested_type {
       [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
       [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "valueSet.exists() implies (valueSet.startsWith(\'http:\') or valueSet.startsWith(\'https\') or valueSet.startsWith(\'urn:\'))"
   }
 }
 nested_type {
@@ -1842,4 +1842,17 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for DataElement constraint on ElementDefinition data type.\nDefinition of an element in a resource or extension.\nSee http://hl7.org/fhir/StructureDefinition/elementdefinition-de"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/ElementDefinition"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/elementdefinition-de"
+  [google.fhir.proto.fhir_path_message_constraint]: "min.empty() or max.empty() or (max = \'*\') or iif(max != \'*\', min <= max.toInteger())"
+  [google.fhir.proto.fhir_path_message_constraint]: "contentReference.empty() or (type.empty() and defaultValue.empty() and fixed.empty() and pattern.empty() and example.empty() and minValue.empty() and maxValue.empty() and maxLength.empty() and binding.empty())"
+  [google.fhir.proto.fhir_path_message_constraint]: "pattern.empty() or (type.count() <= 1)"
+  [google.fhir.proto.fhir_path_message_constraint]: "fixed.empty() or (type.count()  <= 1)"
+  [google.fhir.proto.fhir_path_message_constraint]: "binding.empty() or type.code.empty() or type.select((code = \'code\') or (code = \'Coding\') or (code=\'CodeableConcept\') or (code = \'Quantity\') or (code = \'string\') or (code = \'uri\')).exists()"
+  [google.fhir.proto.fhir_path_message_constraint]: "sliceIsConstraining.exists() implies sliceName.exists()"
+  [google.fhir.proto.fhir_path_message_constraint]: "pattern.empty() or fixed.empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "constraint.select(key).isDistinct()"
+  [google.fhir.proto.fhir_path_message_constraint]: "type.select(code).isDistinct()"
+  [google.fhir.proto.fhir_path_message_constraint]: "sliceName.empty() or sliceName.matches(\'^[a-zA-Z0-9\\\\/\\\\-_\\\\[\\\\]\\\\@]+$\')"
+  [google.fhir.proto.fhir_path_message_constraint]: "defaultValue.empty() or meaningWhenMissing.empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "isModifier implies isModifierReason.exists()"
+  [google.fhir.proto.fhir_path_message_constraint]: "path.matches(\'[A-Za-z][A-Za-z0-9]*(\\\\.[a-z][A-Za-z0-9]*(\\\\[x])?)*\')"
 }

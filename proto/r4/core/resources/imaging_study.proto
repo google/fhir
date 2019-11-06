@@ -230,9 +230,7 @@ message ImagingStudy {
         (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
       ];
     }
-    repeated Performer performer = 14
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Performer performer = 14;
 
     // A single SOP instance from the series
     message Instance {
@@ -259,11 +257,7 @@ message ImagingStudy {
       // Description of instance
       String title = 7;
     }
-    repeated Instance instance = 15
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Instance instance = 15;
   }
-  repeated Series series = 29
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Series series = 29;
 }

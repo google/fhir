@@ -172,16 +172,12 @@ message SpecimenDefinition {
         AdditiveX additive = 4
             [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
       }
-      repeated Additive additive = 10
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated Additive additive = 10;
 
       // Specimen container preparation
       String preparation = 11;
     }
-    Container container = 7
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    Container container = 7;
 
     // Specimen requirements
     String requirement = 8;
@@ -215,11 +211,7 @@ message SpecimenDefinition {
       // Preservation instruction
       String instruction = 7;
     }
-    repeated Handling handling = 11
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Handling handling = 11;
   }
-  repeated TypeTested type_tested = 15
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated TypeTested type_tested = 15;
 }

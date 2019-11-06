@@ -166,7 +166,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicinalProductPackaged.BatchIdentifier"
   options {
     [google.fhir.proto.field_description]: "Batch numbering"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -178,7 +177,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "A packaging item, as a contained for medicine, possibly with other packaging items within"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {

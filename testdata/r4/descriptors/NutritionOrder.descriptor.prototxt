@@ -232,7 +232,6 @@ field {
   type_name: ".google.fhir.r4.core.NutritionOrder.OralDiet"
   options {
     [google.fhir.proto.field_description]: "Oral diet components"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -243,7 +242,6 @@ field {
   type_name: ".google.fhir.r4.core.NutritionOrder.Supplement"
   options {
     [google.fhir.proto.field_description]: "Supplement components"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -254,7 +252,6 @@ field {
   type_name: ".google.fhir.r4.core.NutritionOrder.EnteralFormula"
   options {
     [google.fhir.proto.field_description]: "Enteral formula components"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -381,7 +378,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.NutritionOrder.OralDiet.Nutrient"
     options {
       [google.fhir.proto.field_description]: "Required  nutrient modifications"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -392,7 +388,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.NutritionOrder.OralDiet.Texture"
     options {
       [google.fhir.proto.field_description]: "Required  texture modifications"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -705,7 +700,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.NutritionOrder.EnteralFormula.Administration"
     options {
       [google.fhir.proto.field_description]: "Formula feeding instruction as structured data"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -821,4 +815,5 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for NutritionOrder, last updated 2018-12-27T22:37:54.724+11:00.\nDiet, formula or nutritional supplement request.\nSee http://hl7.org/fhir/StructureDefinition/NutritionOrder"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/NutritionOrder"
+  [google.fhir.proto.fhir_path_message_constraint]: "oralDiet.exists() or supplement.exists() or enteralFormula.exists()"
 }

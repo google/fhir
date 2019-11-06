@@ -161,9 +161,7 @@ message CommunicationRequest {
     ContentX content = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Payload payload = 23
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Payload payload = 23;
 
   // When scheduled
   message OccurrenceX {

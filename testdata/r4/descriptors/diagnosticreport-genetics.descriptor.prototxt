@@ -256,7 +256,6 @@ field {
   type_name: ".google.fhir.r4.core.DiagnosticReportGenetics.Media"
   options {
     [google.fhir.proto.field_description]: "Key images associated with this report"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -294,7 +293,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "AssessedCondition"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
   json_name: "AssessedCondition"
@@ -308,7 +306,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "FamilyHistory"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
   json_name: "FamilyMemberHistory"
@@ -322,7 +319,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "Analysis"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAnalysis"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
   json_name: "Analysis"
@@ -336,7 +332,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "References"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsReferences"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
   json_name: "References"

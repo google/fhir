@@ -178,7 +178,5 @@ message DeviceMetric {
     // Describes the time last calibration has been performed
     Instant time = 6;
   }
-  repeated Calibration calibration = 19
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Calibration calibration = 19;
 }

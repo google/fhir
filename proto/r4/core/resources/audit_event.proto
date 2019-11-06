@@ -191,18 +191,13 @@ message AuditEvent {
       }
       TypeCode type = 5;
     }
-    Network network = 13
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    Network network = 13;
 
     // Reason given for this user
     repeated CodeableConcept purpose_of_use = 14;
   }
-  repeated Agent agent = 18 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  repeated Agent agent = 18
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Audit Event Reporter
   message Source {
@@ -232,14 +227,14 @@ message AuditEvent {
     // The type of source where event originated
     repeated Coding type = 6;
   }
-  Source source = 19 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  Source source = 19
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Data or objects used
   message Entity {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "name.empty() or query.empty()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -300,13 +295,7 @@ message AuditEvent {
       ValueX value = 5
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    repeated Detail detail = 12
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Detail detail = 12;
   }
-  repeated Entity entity = 20 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) = "name.empty() or query.empty()"
-  ];
+  repeated Entity entity = 20;
 }

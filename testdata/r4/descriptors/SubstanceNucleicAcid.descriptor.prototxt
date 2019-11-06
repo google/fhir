@@ -133,7 +133,6 @@ field {
   type_name: ".google.fhir.r4.core.SubstanceNucleicAcid.Subunit"
   options {
     [google.fhir.proto.field_description]: "Subunits are listed in order of decreasing length; sequences of the same length will be ordered by molecular weight; subunits that have identical sequences will be repeated multiple times"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -236,7 +235,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.SubstanceNucleicAcid.Subunit.Linkage"
     options {
       [google.fhir.proto.field_description]: "The linkages between sugar residues will also be captured"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -247,7 +245,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.SubstanceNucleicAcid.Subunit.Sugar"
     options {
       [google.fhir.proto.field_description]: "5.3.6.8.1 Sugar ID (Mandatory)"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {

@@ -460,7 +460,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "The items the orderer requested"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/servicerequest-geneticsItem"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
   json_name: "Item"
@@ -642,4 +641,5 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ServiceRequest-Genetics.\nA request for a service to be performed.\nSee http://hl7.org/fhir/StructureDefinition/servicerequest-genetics"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/ServiceRequest"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/servicerequest-genetics"
+  [google.fhir.proto.fhir_path_message_constraint]: "orderDetail.empty() or code.exists()"
 }

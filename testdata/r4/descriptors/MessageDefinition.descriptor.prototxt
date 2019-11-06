@@ -296,8 +296,6 @@ field {
   type_name: ".google.fhir.r4.core.MessageDefinition.Focus"
   options {
     [google.fhir.proto.field_description]: "Resource(s) that are the subject of the event"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "max=\'*\' or (max.toInteger() > 0)"
   }
 }
 field {
@@ -318,7 +316,6 @@ field {
   type_name: ".google.fhir.r4.core.MessageDefinition.AllowedResponse"
   options {
     [google.fhir.proto.field_description]: "Responses to this message"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -511,6 +508,9 @@ nested_type {
       [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "max=\'*\' or (max.toInteger() > 0)"
+  }
 }
 nested_type {
   name: "ResponseRequiredCode"
@@ -597,4 +597,5 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MessageDefinition, last updated 2018-12-27T22:37:54.724+11:00.\nA resource that defines a type of message that can be exchanged between systems.\nSee http://hl7.org/fhir/StructureDefinition/MessageDefinition"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MessageDefinition"
+  [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
 }

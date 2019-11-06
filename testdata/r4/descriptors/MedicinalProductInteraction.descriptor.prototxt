@@ -116,7 +116,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicinalProductInteraction.Interactant"
   options {
     [google.fhir.proto.field_description]: "The specific medication, food or laboratory test that interacts"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

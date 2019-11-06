@@ -116,9 +116,7 @@ message MedicinalProductContraindication {
     MedicationX medication = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated OtherTherapy other_therapy = 15
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated OtherTherapy other_therapy = 15;
 
   // The population group to which this applies
   repeated Population population = 16;

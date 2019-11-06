@@ -247,7 +247,6 @@ field {
   type_name: ".google.fhir.r4.core.ExplanationOfBenefit.RelatedClaim"
   options {
     [google.fhir.proto.field_description]: "Prior or corollary claims"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -281,7 +280,6 @@ field {
   type_name: ".google.fhir.r4.core.ExplanationOfBenefit.Payee"
   options {
     [google.fhir.proto.field_description]: "Recipient of benefits payable"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -377,7 +375,6 @@ field {
   type_name: ".google.fhir.r4.core.ExplanationOfBenefit.CareTeam"
   options {
     [google.fhir.proto.field_description]: "Care Team members"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -388,7 +385,6 @@ field {
   type_name: ".google.fhir.r4.core.ExplanationOfBenefit.SupportingInformation"
   options {
     [google.fhir.proto.field_description]: "Supporting information"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -399,7 +395,6 @@ field {
   type_name: ".google.fhir.r4.core.ExplanationOfBenefit.Diagnosis"
   options {
     [google.fhir.proto.field_description]: "Pertinent diagnosis information"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -410,7 +405,6 @@ field {
   type_name: ".google.fhir.r4.core.ExplanationOfBenefit.Procedure"
   options {
     [google.fhir.proto.field_description]: "Clinical procedures performed"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -432,7 +426,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Patient insurance information"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -443,7 +436,6 @@ field {
   type_name: ".google.fhir.r4.core.ExplanationOfBenefit.Accident"
   options {
     [google.fhir.proto.field_description]: "Details of the event"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -454,7 +446,6 @@ field {
   type_name: ".google.fhir.r4.core.ExplanationOfBenefit.Item"
   options {
     [google.fhir.proto.field_description]: "Product or service provided"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -465,7 +456,6 @@ field {
   type_name: ".google.fhir.r4.core.ExplanationOfBenefit.AddedItem"
   options {
     [google.fhir.proto.field_description]: "Insurer added line items"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -486,7 +476,6 @@ field {
   type_name: ".google.fhir.r4.core.ExplanationOfBenefit.Total"
   options {
     [google.fhir.proto.field_description]: "Adjudication totals"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -497,7 +486,6 @@ field {
   type_name: ".google.fhir.r4.core.ExplanationOfBenefit.Payment"
   options {
     [google.fhir.proto.field_description]: "Payment Details"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -528,7 +516,6 @@ field {
   type_name: ".google.fhir.r4.core.ExplanationOfBenefit.Note"
   options {
     [google.fhir.proto.field_description]: "Note concerning adjudication"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -549,7 +536,6 @@ field {
   type_name: ".google.fhir.r4.core.ExplanationOfBenefit.BenefitBalance"
   options {
     [google.fhir.proto.field_description]: "Balance by Benefit Category"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -1654,7 +1640,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ExplanationOfBenefit.Item.Adjudication"
     options {
       [google.fhir.proto.field_description]: "Adjudication details"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -1665,7 +1650,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ExplanationOfBenefit.Item.Detail"
     options {
       [google.fhir.proto.field_description]: "Additional items"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -1976,7 +1960,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.ExplanationOfBenefit.Item.Detail.SubDetail"
       options {
         [google.fhir.proto.field_description]: "Additional items"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {
@@ -2361,7 +2344,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ExplanationOfBenefit.AddedItem.AddedItemDetail"
     options {
       [google.fhir.proto.field_description]: "Insurer added line items"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -2546,7 +2528,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.ExplanationOfBenefit.AddedItem.AddedItemDetail.AddedItemDetailSubDetail"
       options {
         [google.fhir.proto.field_description]: "Insurer added line items"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {
@@ -3024,7 +3005,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ExplanationOfBenefit.BenefitBalance.Benefit"
     options {
       [google.fhir.proto.field_description]: "Benefit Summary"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {

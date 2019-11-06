@@ -195,13 +195,9 @@ message AdverseEvent {
       // ProbabilityScale | Bayesian | Checklist
       CodeableConcept method = 7;
     }
-    repeated Causality causality = 5
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Causality causality = 5;
   }
-  repeated SuspectEntity suspect_entity = 26
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated SuspectEntity suspect_entity = 26;
 
   // AdverseEvent.subjectMedicalHistory
   repeated Reference subject_medical_history = 27 [

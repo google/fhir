@@ -144,7 +144,6 @@ field {
   type_name: ".google.fhir.r4.core.Substance.Instance"
   options {
     [google.fhir.proto.field_description]: "If this describes a specific package/container of the substance"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -155,7 +154,6 @@ field {
   type_name: ".google.fhir.r4.core.Substance.Ingredient"
   options {
     [google.fhir.proto.field_description]: "Composition information about the substance"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {

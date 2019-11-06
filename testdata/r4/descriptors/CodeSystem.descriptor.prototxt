@@ -325,7 +325,6 @@ field {
   type_name: ".google.fhir.r4.core.CodeSystem.Filter"
   options {
     [google.fhir.proto.field_description]: "Filter that can be used in a value set"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -336,7 +335,6 @@ field {
   type_name: ".google.fhir.r4.core.CodeSystem.Property"
   options {
     [google.fhir.proto.field_description]: "Additional information supplied about each concept"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -347,7 +345,6 @@ field {
   type_name: ".google.fhir.r4.core.CodeSystem.ConceptDefinition"
   options {
     [google.fhir.proto.field_description]: "Concepts in the code system"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -707,7 +704,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.CodeSystem.ConceptDefinition.Designation"
     options {
       [google.fhir.proto.field_description]: "Additional representations for the concept"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -718,7 +714,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.CodeSystem.ConceptDefinition.ConceptProperty"
     options {
       [google.fhir.proto.field_description]: "Property value for the concept"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -921,4 +916,6 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for CodeSystem, last updated 2018-12-27T22:37:54.724+11:00.\nDeclares the existence of and describes a code system or code system supplement.\nSee http://hl7.org/fhir/StructureDefinition/CodeSystem"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/CodeSystem"
+  [google.fhir.proto.fhir_path_message_constraint]: "concept.code.combine($this.descendants().concept.code).isDistinct()"
+  [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
 }

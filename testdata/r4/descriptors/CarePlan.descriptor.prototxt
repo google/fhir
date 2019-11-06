@@ -330,8 +330,6 @@ field {
   type_name: ".google.fhir.r4.core.CarePlan.Activity"
   options {
     [google.fhir.proto.field_description]: "Action to occur as part of plan"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "detail.empty() or reference.empty()"
   }
 }
 field {
@@ -488,7 +486,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.CarePlan.Activity.Detail"
     options {
       [google.fhir.proto.field_description]: "In-line definition of activity"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -825,6 +822,9 @@ nested_type {
         name: "choice"
       }
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "detail.empty() or reference.empty()"
   }
 }
 options {

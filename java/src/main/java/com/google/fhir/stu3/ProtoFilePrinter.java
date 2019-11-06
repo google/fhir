@@ -77,6 +77,7 @@ public class ProtoFilePrinter {
               Annotations.valueRegex,
               Annotations.fhirProfileBase,
               Annotations.fhirStructureDefinitionUrl,
+              Annotations.fhirPathMessageConstraint,
               Annotations.isChoiceType,
               Annotations.fhirFixedSystem);
 

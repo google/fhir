@@ -203,8 +203,6 @@ field {
   type_name: ".google.fhir.r4.core.Patient.Contact"
   options {
     [google.fhir.proto.field_description]: "A contact party (e.g. guardian, partner, friend) for the patient"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "name.exists() or telecom.exists() or address.exists() or organization.exists()"
   }
 }
 field {
@@ -215,7 +213,6 @@ field {
   type_name: ".google.fhir.r4.core.Patient.Communication"
   options {
     [google.fhir.proto.field_description]: "A language which may be used to communicate with the patient about his or her health"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -250,7 +247,6 @@ field {
   type_name: ".google.fhir.r4.core.Patient.Link"
   options {
     [google.fhir.proto.field_description]: "Link to another patient resource that concerns the same actual person"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -459,6 +455,9 @@ nested_type {
       [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
       [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "name.exists() or telecom.exists() or address.exists() or organization.exists()"
   }
 }
 nested_type {

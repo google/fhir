@@ -180,9 +180,7 @@ message Procedure {
     Reference on_behalf_of = 6
         [(.google.fhir.proto.valid_reference_type) = "Organization"];
   }
-  repeated Performer performer = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Performer performer = 24;
 
   // Where the procedure happened
   Reference location = 25
@@ -246,9 +244,7 @@ message Procedure {
       (.google.fhir.proto.valid_reference_type) = "Device"
     ];
   }
-  repeated FocalDevice focal_device = 35
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated FocalDevice focal_device = 35;
 
   // Items used during procedure
   repeated Reference used_reference = 36 [

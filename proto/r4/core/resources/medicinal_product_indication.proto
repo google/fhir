@@ -117,9 +117,7 @@ message MedicinalProductIndication {
     MedicationX medication = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated OtherTherapy other_therapy = 16
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated OtherTherapy other_therapy = 16;
 
   // Describe the undesirable effects of the medicinal product
   repeated Reference undesirable_effect = 17

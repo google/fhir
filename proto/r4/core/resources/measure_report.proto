@@ -32,6 +32,10 @@ message MeasureReport {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/MeasureReport";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "group.stratifier.stratum.all(value.exists() xor component.exists())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(type != 'data-collection') or group.exists().not()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -168,9 +172,7 @@ message MeasureReport {
       Reference subject_results = 6
           [(.google.fhir.proto.valid_reference_type) = "List"];
     }
-    repeated Population population = 5
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Population population = 5;
 
     // What score this group achieved
     Quantity measure_score = 6;
@@ -223,9 +225,7 @@ message MeasureReport {
           CodeableConcept value = 5
               [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
         }
-        repeated Component component = 5
-            [(.google.fhir.proto.fhir_path_constraint) =
-                 "hasValue() or (children().count() > id.count())"];
+        repeated Component component = 5;
 
         // Population results in this stratum
         message StratifierGroupPopulation {
@@ -251,24 +251,16 @@ message MeasureReport {
           Reference subject_results = 6
               [(.google.fhir.proto.valid_reference_type) = "List"];
         }
-        repeated StratifierGroupPopulation population = 6
-            [(.google.fhir.proto.fhir_path_constraint) =
-                 "hasValue() or (children().count() > id.count())"];
+        repeated StratifierGroupPopulation population = 6;
 
         // What score this stratum achieved
         Quantity measure_score = 7;
       }
-      repeated StratifierGroup stratum = 5
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated StratifierGroup stratum = 5;
     }
-    repeated Stratifier stratifier = 7
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Stratifier stratifier = 7;
   }
-  repeated Group group = 19
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Group group = 19;
 
   // What data was used to calculate the measure score
   repeated Reference evaluated_resource = 20

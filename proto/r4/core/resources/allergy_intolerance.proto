@@ -33,6 +33,10 @@ message AllergyIntolerance {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/AllergyIntolerance";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "verificationStatus='entered-in-error' or clinicalStatus.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "verificationStatus!='entered-in-error' or clinicalStatus.empty()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -219,7 +223,5 @@ message AllergyIntolerance {
     // Text about event not captured in other fields
     repeated Annotation note = 10;
   }
-  repeated Reaction reaction = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Reaction reaction = 25;
 }

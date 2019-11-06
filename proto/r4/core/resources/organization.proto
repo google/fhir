@@ -31,6 +31,8 @@ message Organization {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Organization";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(identifier.count() + name.count()) > 0";
 
   // Logical id of this artifact
   Id id = 1;
@@ -112,9 +114,7 @@ message Organization {
     // Visiting or postal addresses for the contact
     Address address = 7;
   }
-  repeated Contact contact = 18
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Contact contact = 18;
 
   // Technical endpoints providing access to services operated for the
   // organization

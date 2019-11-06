@@ -198,7 +198,6 @@ field {
   type_name: ".google.fhir.r4.core.MeasureReport.Group"
   options {
     [google.fhir.proto.field_description]: "Measure results for each group"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -316,7 +315,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.MeasureReport.Group.Population"
     options {
       [google.fhir.proto.field_description]: "The populations in the group"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -337,7 +335,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.MeasureReport.Group.Stratifier"
     options {
       [google.fhir.proto.field_description]: "Stratification results"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -454,7 +451,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.MeasureReport.Group.Stratifier.StratifierGroup"
       options {
         [google.fhir.proto.field_description]: "Stratum results, one for each unique value, or set of values, in the stratifier, or stratifier components"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {
@@ -507,7 +503,6 @@ nested_type {
         type_name: ".google.fhir.r4.core.MeasureReport.Group.Stratifier.StratifierGroup.Component"
         options {
           [google.fhir.proto.field_description]: "Stratifier component values"
-          [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
         }
       }
       field {
@@ -518,7 +513,6 @@ nested_type {
         type_name: ".google.fhir.r4.core.MeasureReport.Group.Stratifier.StratifierGroup.StratifierGroupPopulation"
         options {
           [google.fhir.proto.field_description]: "Population results in this stratum"
-          [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
         }
       }
       field {
@@ -657,4 +651,6 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MeasureReport, last updated 2018-12-27T22:37:54.724+11:00.\nResults of a measure evaluation.\nSee http://hl7.org/fhir/StructureDefinition/MeasureReport"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MeasureReport"
+  [google.fhir.proto.fhir_path_message_constraint]: "group.stratifier.stratum.all(value.exists() xor component.exists())"
+  [google.fhir.proto.fhir_path_message_constraint]: "(type != \'data-collection\') or group.exists().not()"
 }

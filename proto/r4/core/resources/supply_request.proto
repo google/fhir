@@ -146,9 +146,7 @@ message SupplyRequest {
     }
     ValueX value = 5;
   }
-  repeated Parameter parameter = 16
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Parameter parameter = 16;
 
   // When the request should be fulfilled
   message OccurrenceX {

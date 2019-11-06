@@ -176,7 +176,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Actor involved in the event"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -188,7 +187,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Audit Event Reporter"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -199,8 +197,6 @@ field {
   type_name: ".google.fhir.r4.core.EHRSFMRecordLifecycleEventAuditEvent.Entity"
   options {
     [google.fhir.proto.field_description]: "Data or objects used"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "name.empty() or query.empty()"
   }
 }
 nested_type {
@@ -395,7 +391,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.EHRSFMRecordLifecycleEventAuditEvent.Agent.Network"
     options {
       [google.fhir.proto.field_description]: "Logical network location for application activity"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -680,7 +675,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.EHRSFMRecordLifecycleEventAuditEvent.Entity.Detail"
     options {
       [google.fhir.proto.field_description]: "Additional Information about the entity"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -763,6 +757,9 @@ nested_type {
         name: "choice"
       }
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "name.empty() or query.empty()"
   }
 }
 options {

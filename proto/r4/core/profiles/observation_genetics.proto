@@ -35,6 +35,10 @@ message ObservationGenetics {
       "http://hl7.org/fhir/StructureDefinition/Observation";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-genetics";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "dataAbsentReason.empty() or value.empty()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -200,6 +204,9 @@ message ObservationGenetics {
 
   // Provides guide for interpretation
   message ReferenceRange {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "low.exists() or high.exists() or text.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -227,12 +234,7 @@ message ObservationGenetics {
     // Text based reference range in an observation
     String text = 9;
   }
-  repeated ReferenceRange reference_range = 30 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "low.exists() or high.exists() or text.exists()"
-  ];
+  repeated ReferenceRange reference_range = 30;
 
   // Related resource that belongs to the Observation group
   repeated Reference has_member = 31 [
@@ -295,17 +297,13 @@ message ObservationGenetics {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 33
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Component component = 33;
 
   // HGNC gene symbol
   CodeableConcept gene = 34 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene",
     json_name = "Gene",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -316,8 +314,6 @@ message ObservationGenetics {
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNARegionName",
     json_name = "DNARegionName",
     (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 
@@ -326,8 +322,6 @@ message ObservationGenetics {
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsCopyNumberEvent",
     json_name = "CopyNumberEvent",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -338,8 +332,6 @@ message ObservationGenetics {
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass",
     json_name = "GenomicSourceClass",
     (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 
@@ -348,8 +340,6 @@ message ObservationGenetics {
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsInterpretation",
     json_name = "InterpretationSlice",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -360,8 +350,6 @@ message ObservationGenetics {
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsVariant",
     json_name = "Variant",
     (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 
@@ -370,8 +358,6 @@ message ObservationGenetics {
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChange",
     json_name = "AminoAcidChange",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -382,8 +368,6 @@ message ObservationGenetics {
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllele",
     json_name = "Allele",
     (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 
@@ -393,8 +377,6 @@ message ObservationGenetics {
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsAncestry",
     json_name = "Ancestry",
     (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 
@@ -403,8 +385,6 @@ message ObservationGenetics {
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet",
     json_name = "PhaseSet",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];

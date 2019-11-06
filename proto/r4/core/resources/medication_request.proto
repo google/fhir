@@ -272,9 +272,7 @@ message MedicationRequest {
       // First fill duration
       Duration duration = 5;
     }
-    InitialFill initial_fill = 4
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    InitialFill initial_fill = 4;
 
     // Minimum period of time between dispenses
     Duration dispense_interval = 5;
@@ -295,9 +293,7 @@ message MedicationRequest {
     Reference performer = 10
         [(.google.fhir.proto.valid_reference_type) = "Organization"];
   }
-  DispenseRequest dispense_request = 37
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  DispenseRequest dispense_request = 37;
 
   // Any restrictions on medication substitution
   message Substitution {
@@ -325,9 +321,7 @@ message MedicationRequest {
     // Why should (not) substitution be made
     CodeableConcept reason = 5;
   }
-  Substitution substitution = 38
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Substitution substitution = 38;
 
   // An order/prescription that is being replaced
   Reference prior_prescription = 39

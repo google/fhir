@@ -163,9 +163,7 @@ message Claim {
     // File or case reference
     Identifier reference = 6;
   }
-  repeated RelatedClaim related = 23
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated RelatedClaim related = 23;
 
   // Prescription authorizing services and products
   Reference prescription = 24 [
@@ -205,8 +203,7 @@ message Claim {
       (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
     ];
   }
-  Payee payee = 26 [(.google.fhir.proto.fhir_path_constraint) =
-                        "hasValue() or (children().count() > id.count())"];
+  Payee payee = 26;
 
   // Treatment referral
   Reference referral = 27
@@ -248,9 +245,7 @@ message Claim {
     // Practitioner credential or specialization
     CodeableConcept qualification = 8;
   }
-  repeated CareTeam care_team = 29
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated CareTeam care_team = 29;
 
   // Supporting information
   message SupportingInformation {
@@ -303,9 +298,7 @@ message Claim {
     // Explanation for the information
     CodeableConcept reason = 9;
   }
-  repeated SupportingInformation supporting_info = 30
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated SupportingInformation supporting_info = 30;
 
   // Pertinent diagnosis information
   message Diagnosis {
@@ -344,9 +337,7 @@ message Claim {
     // Package billing code
     CodeableConcept package_code = 8;
   }
-  repeated Diagnosis diagnosis = 31
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Diagnosis diagnosis = 31;
 
   // Clinical procedures performed
   message Procedure {
@@ -386,9 +377,7 @@ message Claim {
     repeated Reference udi = 8
         [(.google.fhir.proto.valid_reference_type) = "Device"];
   }
-  repeated Procedure procedure = 32
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Procedure procedure = 32;
 
   // Patient insurance information
   message Insurance {
@@ -428,11 +417,8 @@ message Claim {
     Reference claim_response = 10
         [(.google.fhir.proto.valid_reference_type) = "ClaimResponse"];
   }
-  repeated Insurance insurance = 33 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  repeated Insurance insurance = 33
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Details of the event
   message Accident {
@@ -464,9 +450,7 @@ message Claim {
     }
     LocationX location = 6;
   }
-  Accident accident = 34
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Accident accident = 34;
 
   // Product or service provided
   message Item {
@@ -655,17 +639,11 @@ message Claim {
         repeated Reference udi = 14
             [(.google.fhir.proto.valid_reference_type) = "Device"];
       }
-      repeated SubDetail sub_detail = 15
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated SubDetail sub_detail = 15;
     }
-    repeated Detail detail = 24
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Detail detail = 24;
   }
-  repeated Item item = 35
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Item item = 35;
 
   // Total claim cost
   Money total = 36;

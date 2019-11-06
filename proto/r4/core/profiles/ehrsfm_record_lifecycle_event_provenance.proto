@@ -135,11 +135,8 @@ message EHRSFMRecordLifecycleEventProvenance {
       (.google.fhir.proto.valid_reference_type) = "Organization"
     ];
   }
-  repeated Agent agent = 17 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  repeated Agent agent = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // An entity used in this activity
   message Entity {
@@ -179,9 +176,7 @@ message EHRSFMRecordLifecycleEventProvenance {
     // Entity is attributed to this agent
     repeated Agent agent = 6;
   }
-  repeated Entity entity = 18
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Entity entity = 18;
 
   // Signature on target
   repeated Signature signature = 19;

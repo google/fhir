@@ -33,6 +33,8 @@ message InsurancePlan {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/InsurancePlan";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(identifier.count() + name.count()) > 0";
 
   // Logical id of this artifact
   Id id = 1;
@@ -128,9 +130,7 @@ message InsurancePlan {
     // Visiting or postal addresses for the contact
     Address address = 7;
   }
-  repeated Contact contact = 19
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Contact contact = 19;
 
   // Technical endpoint
   repeated Reference endpoint = 20
@@ -194,19 +194,12 @@ message InsurancePlan {
         // Benefit limit details
         CodeableConcept code = 5;
       }
-      repeated Limit limit = 6
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated Limit limit = 6;
     }
-    repeated CoverageBenefit benefit = 6 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())"
-    ];
+    repeated CoverageBenefit benefit = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Coverage coverage = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Coverage coverage = 22;
 
   // Plan details
   message Plan {
@@ -256,9 +249,7 @@ message InsurancePlan {
       // Additional cost information
       String comment = 7;
     }
-    repeated GeneralCost general_cost = 8
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated GeneralCost general_cost = 8;
 
     // Specific costs
     message SpecificCost {
@@ -314,19 +305,11 @@ message InsurancePlan {
           // The actual cost value
           Quantity value = 7;
         }
-        repeated Cost cost = 5
-            [(.google.fhir.proto.fhir_path_constraint) =
-                 "hasValue() or (children().count() > id.count())"];
+        repeated Cost cost = 5;
       }
-      repeated PlanBenefit benefit = 5
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated PlanBenefit benefit = 5;
     }
-    repeated SpecificCost specific_cost = 9
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated SpecificCost specific_cost = 9;
   }
-  repeated Plan plan = 23
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Plan plan = 23;
 }

@@ -144,9 +144,7 @@ message DetectedIssue {
     repeated Reference detail = 5
         [(.google.fhir.proto.valid_reference_type) = "Resource"];
   }
-  repeated Evidence evidence = 18
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Evidence evidence = 18;
 
   // Description and context
   String detail = 19;
@@ -178,7 +176,5 @@ message DetectedIssue {
       (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
     ];
   }
-  repeated Mitigation mitigation = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Mitigation mitigation = 21;
 }

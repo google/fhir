@@ -205,7 +205,6 @@ field {
   type_name: ".google.fhir.r4.core.VerificationResult.PrimarySource"
   options {
     [google.fhir.proto.field_description]: "Information about the primary source(s) involved in validation"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -216,7 +215,6 @@ field {
   type_name: ".google.fhir.r4.core.VerificationResult.Attestation"
   options {
     [google.fhir.proto.field_description]: "Information about the entity attesting to information"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -227,7 +225,6 @@ field {
   type_name: ".google.fhir.r4.core.VerificationResult.Validator"
   options {
     [google.fhir.proto.field_description]: "Information about the entity validating information"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {

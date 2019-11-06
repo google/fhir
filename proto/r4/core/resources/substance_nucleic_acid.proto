@@ -154,9 +154,7 @@ message SubstanceNucleicAcid {
       // Residues shall be captured as described in 5.3.6.8.3
       String residue_site = 7;
     }
-    repeated Linkage linkage = 10
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Linkage linkage = 10;
 
     // 5.3.6.8.1 Sugar ID (Mandatory)
     message Sugar {
@@ -182,11 +180,7 @@ message SubstanceNucleicAcid {
       // the base sequences listed above
       String residue_site = 6;
     }
-    repeated Sugar sugar = 11
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Sugar sugar = 11;
   }
-  repeated Subunit subunit = 14
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Subunit subunit = 14;
 }

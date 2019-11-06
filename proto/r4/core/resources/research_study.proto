@@ -177,8 +177,7 @@ message ResearchStudy {
     // Short explanation of study path
     String description = 6;
   }
-  repeated Arm arm = 32 [(.google.fhir.proto.fhir_path_constraint) =
-                             "hasValue() or (children().count() > id.count())"];
+  repeated Arm arm = 32;
 
   // A goal for the study
   message Objective {
@@ -197,7 +196,5 @@ message ResearchStudy {
     // primary | secondary | exploratory
     CodeableConcept type = 5;
   }
-  repeated Objective objective = 33
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Objective objective = 33;
 }

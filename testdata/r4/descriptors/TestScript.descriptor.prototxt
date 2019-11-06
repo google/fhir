@@ -246,7 +246,6 @@ field {
   type_name: ".google.fhir.r4.core.TestScript.Origin"
   options {
     [google.fhir.proto.field_description]: "An abstract server representing a client or sender in a message exchange"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -257,7 +256,6 @@ field {
   type_name: ".google.fhir.r4.core.TestScript.Destination"
   options {
     [google.fhir.proto.field_description]: "An abstract server representing a destination or receiver in a message exchange"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -268,8 +266,6 @@ field {
   type_name: ".google.fhir.r4.core.TestScript.Metadata"
   options {
     [google.fhir.proto.field_description]: "Required capability that is assumed to function correctly on the FHIR server being tested"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "capability.required.exists() or capability.validated.exists()"
   }
 }
 field {
@@ -280,7 +276,6 @@ field {
   type_name: ".google.fhir.r4.core.TestScript.Fixture"
   options {
     [google.fhir.proto.field_description]: "Fixture in the test script - by reference (uri)"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -302,8 +297,6 @@ field {
   type_name: ".google.fhir.r4.core.TestScript.Variable"
   options {
     [google.fhir.proto.field_description]: "Placeholder for evaluated elements"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-    [google.fhir.proto.fhir_path_constraint]: "expression.empty() or headerField.empty() or path.empty()"
   }
 }
 field {
@@ -314,7 +307,6 @@ field {
   type_name: ".google.fhir.r4.core.TestScript.Setup"
   options {
     [google.fhir.proto.field_description]: "A series of required setup operations before tests are executed"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -325,7 +317,6 @@ field {
   type_name: ".google.fhir.r4.core.TestScript.Test"
   options {
     [google.fhir.proto.field_description]: "A test in this script"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -336,7 +327,6 @@ field {
   type_name: ".google.fhir.r4.core.TestScript.Teardown"
   options {
     [google.fhir.proto.field_description]: "A series of required clean up steps"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -516,7 +506,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.TestScript.Metadata.Link"
     options {
       [google.fhir.proto.field_description]: "Links to the FHIR specification"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -528,7 +517,6 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "Capabilities  that are assumed to function correctly on the FHIR server being tested"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -690,6 +678,9 @@ nested_type {
         [google.fhir.proto.field_description]: "Required Capability Statement"
       }
     }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "capability.required.exists() or capability.validated.exists()"
   }
 }
 nested_type {
@@ -871,6 +862,9 @@ nested_type {
       [google.fhir.proto.field_description]: "Fixture Id of source expression or headerField within this variable"
     }
   }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "expression.empty() or headerField.empty() or path.empty()"
+  }
 }
 nested_type {
   name: "Setup"
@@ -913,8 +907,6 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "A setup operation or assert to perform"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-      [google.fhir.proto.fhir_path_constraint]: "operation.exists() xor assert.exists()"
     }
   }
   nested_type {
@@ -957,8 +949,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Operation"
       options {
         [google.fhir.proto.field_description]: "The setup operation to perform"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-        [google.fhir.proto.fhir_path_constraint]: "sourceId.exists() or (targetId.count() + url.count() + params.count() = 1) or (type.code in (\'capabilities\' |\'search\' | \'transaction\' | \'history\'))"
       }
     }
     field {
@@ -969,10 +959,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Assert"
       options {
         [google.fhir.proto.field_description]: "The assertion to perform"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-        [google.fhir.proto.fhir_path_constraint]: "(response.empty() and responseCode.empty() and direction = \'request\') or direction.empty() or direction = \'response\'"
-        [google.fhir.proto.fhir_path_constraint]: "extension.exists() or (contentType.count() + expression.count() + headerField.count() + minimumId.count() + navigationLinks.count() + path.count() + requestMethod.count() + resource.count() + responseCode.count() + response.count()  + validateProfileId.count() <=1)"
-        [google.fhir.proto.fhir_path_constraint]: "compareToSourceId.empty() xor (compareToSourceExpression.exists() or compareToSourcePath.exists())"
       }
       json_name: "assert"
     }
@@ -1127,7 +1113,6 @@ nested_type {
         type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Operation.RequestHeader"
         options {
           [google.fhir.proto.field_description]: "Each operation can have one or more header elements"
-          [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
         }
       }
       field {
@@ -1358,6 +1343,9 @@ nested_type {
             [google.fhir.proto.field_description]: "HTTP headerfield value"
           }
         }
+      }
+      options {
+        [google.fhir.proto.fhir_path_message_constraint]: "sourceId.exists() or (targetId.count() + url.count() + params.count() = 1) or (type.code in (\'capabilities\' |\'search\' | \'transaction\' | \'history\'))"
       }
     }
     nested_type {
@@ -1784,6 +1772,14 @@ nested_type {
           [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
         }
       }
+      options {
+        [google.fhir.proto.fhir_path_message_constraint]: "(response.empty() and responseCode.empty() and direction = \'request\') or direction.empty() or direction = \'response\'"
+        [google.fhir.proto.fhir_path_message_constraint]: "extension.exists() or (contentType.count() + expression.count() + headerField.count() + minimumId.count() + navigationLinks.count() + path.count() + requestMethod.count() + resource.count() + responseCode.count() + response.count()  + validateProfileId.count() <=1)"
+        [google.fhir.proto.fhir_path_message_constraint]: "compareToSourceId.empty() xor (compareToSourceExpression.exists() or compareToSourcePath.exists())"
+      }
+    }
+    options {
+      [google.fhir.proto.fhir_path_message_constraint]: "operation.exists() xor assert.exists()"
     }
   }
 }
@@ -1848,8 +1844,6 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "A test operation or assert to perform"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-      [google.fhir.proto.fhir_path_constraint]: "operation.exists() xor assert.exists()"
     }
   }
   nested_type {
@@ -1909,6 +1903,9 @@ nested_type {
       }
       json_name: "assert"
     }
+    options {
+      [google.fhir.proto.fhir_path_message_constraint]: "operation.exists() xor assert.exists()"
+    }
   }
 }
 nested_type {
@@ -1952,7 +1949,6 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "One or more teardown operations to perform"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -2005,4 +2001,5 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for TestScript, last updated 2018-12-27T22:37:54.724+11:00.\nDescribes a set of tests.\nSee http://hl7.org/fhir/StructureDefinition/TestScript"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/TestScript"
+  [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
 }

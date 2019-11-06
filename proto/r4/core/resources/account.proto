@@ -123,9 +123,7 @@ message Account {
     // The priority of the coverage in the context of this account
     PositiveInt priority = 5;
   }
-  repeated Coverage coverage = 16
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Coverage coverage = 16;
 
   // Entity managing the Account
   Reference owner = 17
@@ -159,9 +157,7 @@ message Account {
     // Guarantee account during
     Period period = 6;
   }
-  repeated Guarantor guarantor = 19
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Guarantor guarantor = 19;
 
   // Reference to a parent Account
   Reference part_of = 20

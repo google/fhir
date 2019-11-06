@@ -33,6 +33,22 @@ message CapabilityStatement {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/CapabilityStatement";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "document.select(profile&mode).isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(kind!='requirements') or (implementation.exists().not() and software.exists().not())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(kind != 'capability') or (implementation.exists().not() and software.exists())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "messaging.endpoint.empty() or kind = 'instance'";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(kind != 'instance') or implementation.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(description.count() + software.count() + implementation.count()) > 0";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "rest.exists() or messaging.exists() or document.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
 
   // Logical id of this artifact
   Id id = 1;
@@ -164,9 +180,7 @@ message CapabilityStatement {
     // Date this version was released
     DateTime release_date = 6;
   }
-  Software software = 27
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Software software = 27;
 
   // If this describes a specific instance
   message Implementation {
@@ -190,9 +204,7 @@ message CapabilityStatement {
     Reference custodian = 6
         [(.google.fhir.proto.valid_reference_type) = "Organization"];
   }
-  Implementation implementation = 28
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Implementation implementation = 28;
 
   // FHIR Version the system supports
   message FhirVersionCode {
@@ -257,6 +269,9 @@ message CapabilityStatement {
 
   // If the endpoint is a RESTful one
   message Rest {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "resource.select(type).isDistinct()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -307,12 +322,13 @@ message CapabilityStatement {
       // General description of how security works
       Markdown description = 6;
     }
-    Security security = 6
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    Security security = 6;
 
     // Resource served on the REST interface
     message Resource {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "searchParam.select(name).isDistinct()";
+
       // Unique id for inter-element referencing
       String id = 1;
 
@@ -382,9 +398,7 @@ message CapabilityStatement {
         // Anything special about operation behavior
         Markdown documentation = 5;
       }
-      repeated ResourceInteraction interaction = 8
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated ResourceInteraction interaction = 8;
 
       // no-version | versioned | versioned-update
       message VersioningCode {
@@ -512,9 +526,7 @@ message CapabilityStatement {
         // Server-specific usage
         Markdown documentation = 7;
       }
-      repeated SearchParam search_param = 19
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated SearchParam search_param = 19;
 
       // Definition of a resource operation
       message Operation {
@@ -538,16 +550,9 @@ message CapabilityStatement {
         // Specific details about operation behavior
         Markdown documentation = 6;
       }
-      repeated Operation operation = 20
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated Operation operation = 20;
     }
-    repeated Resource resource = 7 [
-      (.google.fhir.proto.fhir_path_constraint) =
-          "hasValue() or (children().count() > id.count())",
-      (.google.fhir.proto.fhir_path_constraint) =
-          "searchParam.select(name).isDistinct()"
-    ];
+    repeated Resource resource = 7;
 
     // What operations are supported?
     message SystemInteraction {
@@ -581,9 +586,7 @@ message CapabilityStatement {
       // Anything special about operation behavior
       Markdown documentation = 5;
     }
-    repeated SystemInteraction interaction = 8
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated SystemInteraction interaction = 8;
 
     // Search parameters for searching all resources
     repeated Resource.SearchParam search_param = 9;
@@ -594,12 +597,7 @@ message CapabilityStatement {
     // Compartments served/used by system
     repeated Canonical compartment = 11;
   }
-  repeated Rest rest = 33 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "resource.select(type).isDistinct()"
-  ];
+  repeated Rest rest = 33;
 
   // If messaging is supported
   message Messaging {
@@ -631,9 +629,7 @@ message CapabilityStatement {
       Url address = 5
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    repeated Endpoint endpoint = 4
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Endpoint endpoint = 4;
 
     // Reliable Message Cache Length (min)
     UnsignedInt reliable_cache = 5;
@@ -674,13 +670,9 @@ message CapabilityStatement {
       Canonical definition = 5
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    repeated SupportedMessage supported_message = 7
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated SupportedMessage supported_message = 7;
   }
-  repeated Messaging messaging = 34
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Messaging messaging = 34;
 
   // Document definition
   message Document {
@@ -718,7 +710,5 @@ message CapabilityStatement {
     Canonical profile = 6
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Document document = 35
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Document document = 35;
 }

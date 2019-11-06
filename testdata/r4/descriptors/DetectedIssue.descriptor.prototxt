@@ -179,7 +179,6 @@ field {
   type_name: ".google.fhir.r4.core.DetectedIssue.Evidence"
   options {
     [google.fhir.proto.field_description]: "Supporting evidence"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -210,7 +209,6 @@ field {
   type_name: ".google.fhir.r4.core.DetectedIssue.Mitigation"
   options {
     [google.fhir.proto.field_description]: "Step taken to address"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {

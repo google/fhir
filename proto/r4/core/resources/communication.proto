@@ -209,9 +209,7 @@ message Communication {
     ContentX content = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Payload payload = 31
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Payload payload = 31;
 
   // Comments made about the communication
   repeated Annotation note = 32;

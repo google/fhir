@@ -144,9 +144,7 @@ message Location {
     // Altitude with WGS84 datum
     Decimal altitude = 6;
   }
-  Position position = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Position position = 21;
 
   // Organization responsible for provisioning and upkeep
   Reference managing_organization = 22
@@ -193,9 +191,7 @@ message Location {
     // Time that the Location closes
     Time closing_time = 7;
   }
-  repeated HoursOfOperation hours_of_operation = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated HoursOfOperation hours_of_operation = 24;
 
   // Description of availability exceptions
   String availability_exceptions = 25;

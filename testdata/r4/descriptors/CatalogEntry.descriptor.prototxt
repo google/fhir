@@ -226,7 +226,6 @@ field {
   type_name: ".google.fhir.r4.core.CatalogEntry.RelatedEntry"
   options {
     [google.fhir.proto.field_description]: "An item that this catalog entry is related to"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {

@@ -143,7 +143,6 @@ field {
   type_name: ".google.fhir.r4.core.SpecimenDefinition.TypeTested"
   options {
     [google.fhir.proto.field_description]: "Specimen in container intended for testing by lab"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -217,7 +216,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.SpecimenDefinition.TypeTested.Container"
     options {
       [google.fhir.proto.field_description]: "The specimen\'s container"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -258,7 +256,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.SpecimenDefinition.TypeTested.Handling"
     options {
       [google.fhir.proto.field_description]: "Specimen handling before testing"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -388,7 +385,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.SpecimenDefinition.TypeTested.Container.Additive"
       options {
         [google.fhir.proto.field_description]: "Additive associated with container"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     field {

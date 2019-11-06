@@ -223,7 +223,6 @@ field {
   type_name: ".google.fhir.r4.core.ClinicalImpression.Investigation"
   options {
     [google.fhir.proto.field_description]: "One or more sets of investigations (signs, symptoms, etc.)"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -254,7 +253,6 @@ field {
   type_name: ".google.fhir.r4.core.ClinicalImpression.Finding"
   options {
     [google.fhir.proto.field_description]: "Possible or likely findings and diagnoses"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

@@ -32,6 +32,8 @@ message GraphDefinition {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/GraphDefinition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
 
   // Logical id of this artifact
   Id id = 1;
@@ -265,18 +267,12 @@ message GraphDefinition {
         // Documentation for FHIRPath expression
         String description = 8;
       }
-      repeated Compartment compartment = 7
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated Compartment compartment = 7;
 
       // Additional links from target resource
       repeated Link link = 8;
     }
-    repeated Target target = 9
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Target target = 9;
   }
-  repeated Link link = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Link link = 24;
 }

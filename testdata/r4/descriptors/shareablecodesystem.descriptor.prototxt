@@ -331,7 +331,6 @@ field {
   type_name: ".google.fhir.r4.core.ShareableCodeSystem.Filter"
   options {
     [google.fhir.proto.field_description]: "Filter that can be used in a value set"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -342,7 +341,6 @@ field {
   type_name: ".google.fhir.r4.core.ShareableCodeSystem.Property"
   options {
     [google.fhir.proto.field_description]: "Additional information supplied about each concept"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -354,7 +352,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Concepts in the code system"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -714,7 +711,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ShareableCodeSystem.ConceptDefinition.Designation"
     options {
       [google.fhir.proto.field_description]: "Additional representations for the concept"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -725,7 +721,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ShareableCodeSystem.ConceptDefinition.ConceptProperty"
     options {
       [google.fhir.proto.field_description]: "Property value for the concept"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -929,4 +924,6 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Shareable CodeSystem.\nDeclares the existence of and describes a code system or code system supplement.\nSee http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/CodeSystem"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
+  [google.fhir.proto.fhir_path_message_constraint]: "concept.code.combine($this.descendants().concept.code).isDistinct()"
+  [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
 }

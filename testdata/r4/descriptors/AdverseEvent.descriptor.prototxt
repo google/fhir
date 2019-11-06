@@ -269,7 +269,6 @@ field {
   type_name: ".google.fhir.r4.core.AdverseEvent.SuspectEntity"
   options {
     [google.fhir.proto.field_description]: "The suspected agent causing the adverse event"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -397,7 +396,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.AdverseEvent.SuspectEntity.Causality"
     options {
       [google.fhir.proto.field_description]: "Information on the possible cause of the event"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {

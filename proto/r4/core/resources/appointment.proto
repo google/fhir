@@ -34,6 +34,12 @@ message Appointment {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Appointment";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "Appointment.cancelationReason.exists() implies (Appointment.status='no-show' or Appointment.status='cancelled')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(start.exists() and end.exists()) or (status in ('proposed' | 'cancelled' | 'waitlist'))";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "start.exists() = end.exists()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -151,6 +157,9 @@ message Appointment {
 
   // Participants involved in appointment
   message Participant {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "type.exists() or actor.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -212,13 +221,8 @@ message Appointment {
     // Participation period of the actor
     Period period = 8;
   }
-  repeated Participant participant = 30 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "type.exists() or actor.exists()"
-  ];
+  repeated Participant participant = 30
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Potential date/time interval(s) requested to allocate the appointment
   // within

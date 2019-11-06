@@ -135,7 +135,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicinalProductIngredient.SpecifiedSubstance"
   options {
     [google.fhir.proto.field_description]: "A specified substance that comprises this ingredient"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -146,7 +145,6 @@ field {
   type_name: ".google.fhir.r4.core.MedicinalProductIngredient.Substance"
   options {
     [google.fhir.proto.field_description]: "The ingredient substance"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -221,7 +219,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.MedicinalProductIngredient.SpecifiedSubstance.Strength"
     options {
       [google.fhir.proto.field_description]: "Quantity of the substance or specified substance present in the manufactured item or pharmaceutical product"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -325,7 +322,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.MedicinalProductIngredient.SpecifiedSubstance.Strength.ReferenceStrength"
       options {
         [google.fhir.proto.field_description]: "Strength expressed in terms of a reference substance"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {

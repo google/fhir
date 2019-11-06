@@ -104,7 +104,6 @@ field {
   type_name: ".google.fhir.r4.core.MessageHeader.MessageDestination"
   options {
     [google.fhir.proto.field_description]: "Message destination application(s)"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -153,7 +152,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Message source application"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -187,7 +185,6 @@ field {
   type_name: ".google.fhir.r4.core.MessageHeader.Response"
   options {
     [google.fhir.proto.field_description]: "If this is a reply to prior message"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

@@ -251,7 +251,6 @@ field {
   type_name: ".google.fhir.r4.core.Procedure.Performer"
   options {
     [google.fhir.proto.field_description]: "The people who performed the procedure"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -372,7 +371,6 @@ field {
   type_name: ".google.fhir.r4.core.Procedure.FocalDevice"
   options {
     [google.fhir.proto.field_description]: "Manipulated, implanted, or removed device"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

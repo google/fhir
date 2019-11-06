@@ -33,6 +33,16 @@ message Consent {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Consent";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "patient.exists() or scope.coding.where(system='something' and code='adr').exists().not()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "patient.exists() or scope.coding.where(system='something' and code='treatment').exists().not()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "patient.exists() or scope.coding.where(system='something' and code='patient-privacy').exists().not()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "patient.exists() or scope.coding.where(system='something' and code='research').exists().not()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "policy.exists() or policyRule.exists()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -143,9 +153,7 @@ message Consent {
     // Specific policy covered by this consent
     Uri uri = 5;
   }
-  repeated Policy policy = 19
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Policy policy = 19;
 
   // Regulation that this consents to
   CodeableConcept policy_rule = 20;
@@ -174,9 +182,7 @@ message Consent {
     // When consent verified
     DateTime verification_date = 6;
   }
-  repeated Verification verification = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Verification verification = 21;
 
   // Constraints to the base Consent.policyRule
   message Provision {
@@ -237,9 +243,7 @@ message Consent {
         (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
       ];
     }
-    repeated ProvisionActor actor = 6
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated ProvisionActor actor = 6;
 
     // Actions controlled by this rule
     repeated CodeableConcept action = 7;
@@ -294,14 +298,10 @@ message Consent {
         (.google.fhir.proto.valid_reference_type) = "Resource"
       ];
     }
-    repeated ProvisionData data = 13
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated ProvisionData data = 13;
 
     // Nested Exception Rules
     repeated Provision provision = 14;
   }
-  Provision provision = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Provision provision = 22;
 }

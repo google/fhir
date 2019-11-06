@@ -149,9 +149,7 @@ message VerificationResult {
     // specific | any | source
     repeated CodeableConcept push_type_available = 10;
   }
-  repeated PrimarySource primary_source = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated PrimarySource primary_source = 21;
 
   // Information about the entity attesting to information
   message Attestation {
@@ -198,9 +196,7 @@ message VerificationResult {
     // Attester signature
     Signature source_signature = 11;
   }
-  Attestation attestation = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Attestation attestation = 22;
 
   // Information about the entity validating information
   message Validator {
@@ -225,7 +221,5 @@ message VerificationResult {
     // Validator signature
     Signature attestation_signature = 6;
   }
-  repeated Validator validator = 23
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Validator validator = 23;
 }

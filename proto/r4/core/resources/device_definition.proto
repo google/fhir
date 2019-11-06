@@ -90,9 +90,7 @@ message DeviceDefinition {
     Uri jurisdiction = 6
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated UdiDeviceIdentifier udi_device_identifier = 11
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated UdiDeviceIdentifier udi_device_identifier = 11;
 
   // Name of device manufacturer
   message ManufacturerX {
@@ -140,9 +138,7 @@ message DeviceDefinition {
     TypeCode type = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated DeviceName device_name = 13
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated DeviceName device_name = 13;
 
   // The model number for the device
   String model_number = 14;
@@ -169,9 +165,7 @@ message DeviceDefinition {
     // The version of the standard that is used to operate and communicate
     String version = 5;
   }
-  repeated Specialization specialization = 16
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Specialization specialization = 16;
 
   // Available versions
   repeated String version = 17;
@@ -207,9 +201,7 @@ message DeviceDefinition {
     // Description of capability
     repeated CodeableConcept description = 5;
   }
-  repeated Capability capability = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Capability capability = 22;
 
   // The actual configuration settings of a device as it actually operates,
   // e.g., regulation status, time properties
@@ -233,9 +225,7 @@ message DeviceDefinition {
     // Property value as a code, e.g., NTP4 (synced to NTP)
     repeated CodeableConcept value_code = 6;
   }
-  repeated Property property = 23
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Property property = 23;
 
   // Organization responsible for device
   Reference owner = 24
@@ -283,7 +273,5 @@ message DeviceDefinition {
     // Whether the substance is a known or suspected allergen
     Boolean allergenic_indicator = 6;
   }
-  repeated Material material = 31
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Material material = 31;
 }

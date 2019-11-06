@@ -34,6 +34,10 @@ message ShareableCodeSystem {
       "http://hl7.org/fhir/StructureDefinition/CodeSystem";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/shareablecodesystem";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "concept.code.combine($this.descendants().concept.code).isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
 
   // Logical id of this artifact
   Id id = 1;
@@ -219,9 +223,7 @@ message ShareableCodeSystem {
     String value = 7
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Filter filter = 33
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Filter filter = 33;
 
   // Additional information supplied about each concept
   message Property {
@@ -263,9 +265,7 @@ message ShareableCodeSystem {
     TypeCode type = 7
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Property property = 34
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Property property = 34;
 
   // Concepts in the code system
   message ConceptDefinition {
@@ -309,9 +309,7 @@ message ShareableCodeSystem {
       String value = 6
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    repeated Designation designation = 7
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Designation designation = 7;
 
     // Property value for the concept
     message ConceptProperty {
@@ -345,16 +343,11 @@ message ShareableCodeSystem {
       ValueX value = 5
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    repeated ConceptProperty property = 8
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated ConceptProperty property = 8;
 
     // Child Concepts (is-a/contains/categorizes)
     repeated ConceptDefinition concept = 9;
   }
-  repeated ConceptDefinition concept = 35 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  repeated ConceptDefinition concept = 35
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }

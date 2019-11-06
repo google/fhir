@@ -164,7 +164,6 @@ field {
   type_name: ".google.fhir.r4.core.SubstanceSpecification.Moiety"
   options {
     [google.fhir.proto.field_description]: "Moiety, for structural modifications"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -175,7 +174,6 @@ field {
   type_name: ".google.fhir.r4.core.SubstanceSpecification.Property"
   options {
     [google.fhir.proto.field_description]: "General specifications for this substance, including how it is related to other substances"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -197,7 +195,6 @@ field {
   type_name: ".google.fhir.r4.core.SubstanceSpecification.Structure"
   options {
     [google.fhir.proto.field_description]: "Structural information"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -208,7 +205,6 @@ field {
   type_name: ".google.fhir.r4.core.SubstanceSpecification.CodeType"
   options {
     [google.fhir.proto.field_description]: "Codes associated with the substance"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -219,7 +215,6 @@ field {
   type_name: ".google.fhir.r4.core.SubstanceSpecification.Name"
   options {
     [google.fhir.proto.field_description]: "Names applicable to this substance"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -240,7 +235,6 @@ field {
   type_name: ".google.fhir.r4.core.SubstanceSpecification.Relationship"
   options {
     [google.fhir.proto.field_description]: "A link between this substance and another, with details of the relationship"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -634,7 +628,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.SubstanceSpecification.Structure.Isotope"
     options {
       [google.fhir.proto.field_description]: "Applicable for single substances that contain a radionuclide or a non-natural isotopic ratio"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -666,7 +659,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.SubstanceSpecification.Structure.Representation"
     options {
       [google.fhir.proto.field_description]: "Molecular structural representation"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -749,7 +741,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.SubstanceSpecification.Structure.Isotope.MolecularWeight"
       options {
         [google.fhir.proto.field_description]: "The molecular weight or weight range (for proteins, polymers or nucleic acids)"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {
@@ -1095,7 +1086,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.SubstanceSpecification.Name.Official"
     options {
       [google.fhir.proto.field_description]: "Details of the official nature of this name"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {

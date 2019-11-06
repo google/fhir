@@ -160,17 +160,11 @@ message MedicinalProductIngredient {
         // The country or countries for which the strength range applies
         repeated CodeableConcept country = 8;
       }
-      repeated ReferenceStrength reference_strength = 10
-          [(.google.fhir.proto.fhir_path_constraint) =
-               "hasValue() or (children().count() > id.count())"];
+      repeated ReferenceStrength reference_strength = 10;
     }
-    repeated Strength strength = 7
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Strength strength = 7;
   }
-  repeated SpecifiedSubstance specified_substance = 14
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated SpecifiedSubstance specified_substance = 14;
 
   // The ingredient substance
   message Substance {
@@ -191,7 +185,5 @@ message MedicinalProductIngredient {
     // manufactured item or pharmaceutical product
     repeated SpecifiedSubstance.Strength strength = 5;
   }
-  Substance substance = 15
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Substance substance = 15;
 }

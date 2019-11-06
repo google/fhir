@@ -355,7 +355,6 @@ field {
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "What defines the members of the evidence element"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -649,4 +648,5 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for PICO Element Profile.\nA population, intervention, or exposure definition.\nSee http://hl7.org/fhir/StructureDefinition/picoelement"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/EvidenceVariable"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/picoelement"
+  [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
 }

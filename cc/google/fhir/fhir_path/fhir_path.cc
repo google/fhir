@@ -39,17 +39,20 @@ namespace fhir_path {
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
+using ::google::protobuf::MessageOptions;
 using ::google::protobuf::Reflection;
 using ::google::protobuf::util::MessageDifferencer;
 
 // Used to wrap primitives in protobuf messages, and
 // can be used against multiple versions of FHIR, not just R4.
 using ::google::fhir::r4::core::Boolean;
+using ::google::fhir::r4::core::DateTime;
 using ::google::fhir::r4::core::Decimal;
 using ::google::fhir::r4::core::Integer;
 using ::google::fhir::r4::core::String;
 
 using antlr4::ANTLRInputStream;
+using antlr4::BaseErrorListener;
 using antlr4::CommonTokenStream;
 using antlr4::tree::TerminalNode;
 
@@ -87,9 +90,10 @@ StatusOr<bool> MessagesToBoolean(const std::vector<const Message*>& messages) {
   return InvalidArgument("Expression did not evaluate to boolean");
 }
 
-// Supported funtions.
-const char kExistsFunction[] = "exists";
-const char kNotFunction[] = "not";
+// Supported functions.
+constexpr char kExistsFunction[] = "exists";
+constexpr char kNotFunction[] = "not";
+constexpr char kHasValueFunction[] = "hasValue";
 
 // Expression node that returns literals wrapped in the corresponding
 // protbuf wrapper
@@ -261,6 +265,45 @@ class NotFunction : public ExpressionNode {
   const std::shared_ptr<ExpressionNode> child_;
 };
 
+// Implements the FHIRPath .hasValue() function, which returns true
+// if and only if the child is a single primitive value.
+class HasValueFunction : public ExpressionNode {
+ public:
+  explicit HasValueFunction(const std::shared_ptr<ExpressionNode>& child)
+      : child_(child) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    Boolean* result = new Boolean();
+    work_space->DeleteWhenFinished(result);
+
+    if (child_results.size() != 1) {
+      result->set_value(false);
+    } else {
+      const MessageOptions& options =
+          child_results[0]->GetDescriptor()->options();
+      result->set_value(
+          options.HasExtension(proto::structure_definition_kind) &&
+          (options.GetExtension(proto::structure_definition_kind) ==
+           proto::StructureDefinitionKindValue::KIND_PRIMITIVE_TYPE));
+    }
+
+    results->push_back(result);
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Boolean::descriptor();
+  }
+
+ private:
+  const std::shared_ptr<ExpressionNode> child_;
+};
+
 // Base class for FHIRPath binary operators.
 class BinaryOperator : public ExpressionNode {
  public:
@@ -395,6 +438,11 @@ class ComparisonOperator : public BinaryOperator {
                IsMessageType<String>(*right_result)) {
       EvalStringComparison(dynamic_cast<const String*>(left_result),
                            dynamic_cast<const String*>(right_result), result);
+    } else if (IsMessageType<DateTime>(*left_result) &&
+               IsMessageType<DateTime>(*right_result)) {
+      FHIR_RETURN_IF_ERROR(EvalDateTimeComparison(
+          dynamic_cast<const DateTime*>(left_result),
+          dynamic_cast<const DateTime*>(right_result), result));
     } else {
       return InvalidArgument("Unsupported comparison value types");
     }
@@ -416,8 +464,8 @@ class ComparisonOperator : public BinaryOperator {
   void EvalIntegerComparison(const Integer* left_wrapper,
                              const Integer* right_wrapper,
                              Boolean* result) const {
-    int32_t left = left_wrapper->value();
-    int32_t right = right_wrapper->value();
+    const int32_t left = left_wrapper->value();
+    const int32_t right = right_wrapper->value();
 
     switch (comparison_type_) {
       case kLessThan:
@@ -506,48 +554,60 @@ class ComparisonOperator : public BinaryOperator {
     }
   }
 
-  ComparisonType comparison_type_;
-};
-
-// Base class for FHIRPath binary boolean operators.
-class BooleanOperator : public BinaryOperator {
- public:
-  Status EvaluateOperator(
-      const std::vector<const Message*>& left_results,
-      const std::vector<const Message*>& right_results, WorkSpace* work_space,
-      std::vector<const Message*>* out_results) const override {
-    // Per the FHIRPath spec, boolean operators propagate empty results.
-    if (left_results.empty() || right_results.empty()) {
-      return Status::OK();
+  Status EvalDateTimeComparison(const DateTime* left_message,
+                                const DateTime* right_message,
+                                Boolean* result) const {
+    // TODO: consider support for cross-timezone comparisons.
+    if (left_message->timezone() != right_message->timezone()) {
+      return InvalidArgument(
+          "Date comparisons only supported in same timezone");
     }
 
-    FHIR_ASSIGN_OR_RETURN(bool left_result, MessagesToBoolean(left_results));
-    FHIR_ASSIGN_OR_RETURN(bool right_result, MessagesToBoolean(right_results));
-    bool eval_result = EvaluateBool(left_result, right_result);
+    const int64_t left = left_message->value_us();
+    const int64_t right = right_message->value_us();
 
-    Boolean* result = new Boolean();
-    work_space->DeleteWhenFinished(result);
-    result->set_value(eval_result);
-
-    out_results->push_back(result);
+    switch (comparison_type_) {
+      case kLessThan:
+        result->set_value(left < right);
+        break;
+      case kGreaterThan:
+        result->set_value(left > right);
+        break;
+      case kLessThanEqualTo:
+        result->set_value(left <= right);
+        break;
+      case kGreaterThanEqualTo:
+        result->set_value(left >= right);
+        break;
+    }
 
     return Status::OK();
   }
 
+  ComparisonType comparison_type_;
+};
+
+// Base class for FHIRPath binary boolean operators.
+class BooleanOperator : public ExpressionNode {
+ public:
   const Descriptor* ReturnType() const override {
     return Boolean::descriptor();
   }
 
   BooleanOperator(std::shared_ptr<ExpressionNode> left,
                   std::shared_ptr<ExpressionNode> right)
-      : BinaryOperator(left, right) {}
+      : left_(left), right_(right) {}
 
-  // Perform the actual boolean evaluation.
-  virtual bool EvaluateBool(bool left, bool right) const = 0;
+ protected:
+  void SetResult(bool eval_result, WorkSpace* work_space,
+                 std::vector<const Message*>* results) const {
+    Boolean* result = new Boolean();
+    work_space->DeleteWhenFinished(result);
+    result->set_value(eval_result);
+    results->push_back(result);
+  }
 
- private:
   const std::shared_ptr<ExpressionNode> left_;
-
   const std::shared_ptr<ExpressionNode> right_;
 };
 
@@ -557,8 +617,40 @@ class OrOperator : public BooleanOperator {
              std::shared_ptr<ExpressionNode> right)
       : BooleanOperator(left, right) {}
 
-  bool EvaluateBool(bool left, bool right) const override {
-    return left || right;
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    // Logic from truth table spec: http://hl7.org/fhirpath/#boolean-logic
+    // Short circuit and return true on the first true result.
+    std::vector<const Message*> left_results;
+    FHIR_RETURN_IF_ERROR(left_->Evaluate(work_space, &left_results));
+    if (!left_results.empty()) {
+      FHIR_ASSIGN_OR_RETURN(bool left_result, MessagesToBoolean(left_results));
+      if (left_result) {
+        SetResult(true, work_space, results);
+        return Status::OK();
+      }
+    }
+
+    std::vector<const Message*> right_results;
+    FHIR_RETURN_IF_ERROR(right_->Evaluate(work_space, &right_results));
+    if (!right_results.empty()) {
+      FHIR_ASSIGN_OR_RETURN(bool right_result,
+                            MessagesToBoolean(right_results));
+      if (right_result) {
+        SetResult(true, work_space, results);
+        return Status::OK();
+      }
+    }
+
+    if (!left_results.empty() && !right_results.empty()) {
+      // Both children must be false to get here, so return false.
+      SetResult(false, work_space, results);
+      return Status::OK();
+    }
+
+    // Neither child is true and at least one is empty, so propagate
+    // empty per the FHIRPath spec.
+    return Status::OK();
   }
 };
 
@@ -568,8 +660,40 @@ class AndOperator : public BooleanOperator {
               std::shared_ptr<ExpressionNode> right)
       : BooleanOperator(left, right) {}
 
-  bool EvaluateBool(bool left, bool right) const override {
-    return left && right;
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    // Logic from truth table spec: http://hl7.org/fhirpath/#boolean-logic
+    // Short circuit and return false on the first false result.
+    std::vector<const Message*> left_results;
+    FHIR_RETURN_IF_ERROR(left_->Evaluate(work_space, &left_results));
+    if (!left_results.empty()) {
+      FHIR_ASSIGN_OR_RETURN(bool left_result, MessagesToBoolean(left_results));
+      if (!left_result) {
+        SetResult(false, work_space, results);
+        return Status::OK();
+      }
+    }
+
+    std::vector<const Message*> right_results;
+    FHIR_RETURN_IF_ERROR(right_->Evaluate(work_space, &right_results));
+    if (!right_results.empty()) {
+      FHIR_ASSIGN_OR_RETURN(bool right_result,
+                            MessagesToBoolean(right_results));
+      if (!right_result) {
+        SetResult(false, work_space, results);
+        return Status::OK();
+      }
+    }
+
+    if (!left_results.empty() && !right_results.empty()) {
+      // Both children must be true to get here, so return true.
+      SetResult(true, work_space, results);
+      return Status::OK();
+    }
+
+    // Neither child is false and at least one is empty, so propagate
+    // empty per the FHIRPath spec.
+    return Status::OK();
   }
 };
 
@@ -608,7 +732,7 @@ struct InvocationDefinition {
 class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
  public:
   explicit FhirPathCompilerVisitor(const Descriptor* descriptor)
-      : descriptor_(descriptor) {}
+      : error_listener_(this), descriptor_(descriptor) {}
 
   antlrcpp::Any visitInvocationExpression(
       FhirPathParser::InvocationExpressionContext* node) override {
@@ -826,6 +950,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   string GetError() { return error_message_; }
 
+  BaseErrorListener* GetErrorListener() { return &error_listener_; }
+
  private:
   // Returns an ExpressionNode that implements the
   // specified FHIRPath function.
@@ -836,6 +962,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return std::make_shared<ExistsFunction>(child_expression);
     } else if (function_name == kNotFunction) {
       return std::make_shared<NotFunction>(child_expression);
+    } else if (function_name == kHasValueFunction) {
+      return std::make_shared<HasValueFunction>(child_expression);
     } else {
       // TODO: Implement set of functions for initial use cases.
       SetError(absl::StrCat("The function ", function_name,
@@ -845,8 +973,26 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     }
   }
 
+  // ANTLR listener to report syntax errors.
+  class FhirPathErrorListener : public BaseErrorListener {
+   public:
+    FhirPathErrorListener(FhirPathCompilerVisitor* visitor)
+        : visitor_(visitor) {}
+
+    void syntaxError(antlr4::Recognizer* recognizer,
+                     antlr4::Token* offending_symbol, size_t line,
+                     size_t position_in_line, const string& message,
+                     std::exception_ptr e) override {
+      visitor_->SetError(message);
+    }
+
+   private:
+    FhirPathCompilerVisitor* visitor_;
+  };
+
   void SetError(const string& error_message) { error_message_ = error_message; }
 
+  FhirPathErrorListener error_listener_;
   const Descriptor* descriptor_;
   string error_message_;
 };
@@ -947,6 +1093,7 @@ StatusOr<CompiledExpression> CompiledExpression::Compile(
   FhirPathParser parser(&tokens);
 
   internal::FhirPathCompilerVisitor visitor(descriptor);
+  parser.addErrorListener(visitor.GetErrorListener());
   antlrcpp::Any result = visitor.visit(parser.expression());
 
   if (result.isNotNull()) {
@@ -987,6 +1134,23 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor) {
 
   auto constraints = absl::make_unique<MessageConstraints>();
 
+  int ext_size =
+      descriptor->options().ExtensionSize(proto::fhir_path_message_constraint);
+
+  for (int i = 0; i < ext_size; ++i) {
+    const string& fhir_path = descriptor->options().GetExtension(
+        proto::fhir_path_message_constraint, i);
+    auto constraint = CompiledExpression::Compile(descriptor, fhir_path);
+    if (constraint.ok()) {
+      CompiledExpression expression = constraint.ValueOrDie();
+      constraints->message_expressions_.push_back(expression);
+    }
+
+    // TODO: Unsupported FHIRPath expressions are simply not
+    // validated for now; this should produce an error once we support
+    // all of FHIRPath.
+  }
+
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
 
@@ -1004,7 +1168,7 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor) {
         auto constraint = CompiledExpression::Compile(field_type, fhir_path);
 
         if (constraint.ok()) {
-          constraints->expressions_.push_back(
+          constraints->field_expressions_.push_back(
               std::make_pair(field, constraint.ValueOrDie()));
         }
 
@@ -1033,7 +1197,8 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor) {
 
       // Nested fields that directly or transitively have constraints
       // are retained and used when applying constraints.
-      if (!child_constraints->expressions_.empty() ||
+      if (!child_constraints->message_expressions_.empty() ||
+          !child_constraints->field_expressions_.empty() ||
           !child_constraints->nested_with_constraints_.empty()) {
         constraints_local->nested_with_constraints_.push_back(field);
       }
@@ -1053,14 +1218,36 @@ Status MessageValidator::Validate(const Message& message) {
   return Validate(message, HaltOnErrorHandler);
 }
 
+// Validates that the given message satisfies the
+// the given FHIRPath expression, invoking the handler in case
+// of failure.
+Status ValidateMessageConstraint(const Message& message,
+                                 const CompiledExpression& expression,
+                                 const ViolationHandlerFunc handler,
+                                 bool* halt_validation) {
+  FHIR_ASSIGN_OR_RETURN(const EvaluationResult expr_result,
+                        expression.Evaluate(message));
+
+  if (!expr_result.GetBoolean().ValueOrDie()) {
+    string err_msg = absl::StrCat("fhirpath-constraint-violation-",
+                                  message.GetDescriptor()->name());
+
+    *halt_validation = handler(message, nullptr, expression.fhir_path());
+    return ::tensorflow::errors::FailedPrecondition(err_msg);
+  }
+
+  return Status::OK();
+}
+
 // Validates that the given field in the given parent satisfies the
 // the given FHIRPath expression, invoking the handler in case
 // of failure.
-Status ValidateConstraint(const Message& parent, const FieldDescriptor* field,
-                          const Message& field_value,
-                          const CompiledExpression& expression,
-                          const ViolationHandlerFunc handler,
-                          bool* halt_validation) {
+Status ValidateFieldConstraint(const Message& parent,
+                               const FieldDescriptor* field,
+                               const Message& field_value,
+                               const CompiledExpression& expression,
+                               const ViolationHandlerFunc handler,
+                               bool* halt_validation) {
   FHIR_ASSIGN_OR_RETURN(const EvaluationResult expr_result,
                         expression.Evaluate(field_value));
 
@@ -1107,8 +1294,18 @@ Status MessageValidator::Validate(const Message& message,
   // Keep the first failure to return to the caller.
   Status accumulative_status = Status::OK();
 
+  // Validate the constraints attached to the message root.
+  for (const CompiledExpression& expr : constraints->message_expressions_) {
+    UpdateStatus(
+        &accumulative_status,
+        ValidateMessageConstraint(message, expr, handler, halt_validation));
+    if (*halt_validation) {
+      return accumulative_status;
+    }
+  }
+
   // Validate the constraints attached to the message's fields.
-  for (auto expression : constraints->expressions_) {
+  for (auto expression : constraints->field_expressions_) {
     if (*halt_validation) {
       return accumulative_status;
     }
@@ -1118,8 +1315,8 @@ Status MessageValidator::Validate(const Message& message,
 
     ForEachMessageHalting<Message>(message, field, [&](const Message& child) {
       UpdateStatus(&accumulative_status,
-                   ValidateConstraint(message, field, child, expr, handler,
-                                      halt_validation));
+                   ValidateFieldConstraint(message, field, child, expr, handler,
+                                           halt_validation));
 
       return *halt_validation;
     });

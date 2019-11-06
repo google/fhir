@@ -144,9 +144,7 @@ message SubstanceSourceMaterial {
     // Specified Substance Group 1
     CodeableConcept material_type = 5;
   }
-  repeated FractionDescription fraction_description = 20
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated FractionDescription fraction_description = 20;
 
   // This subclause describes the organism which the substance is derived from.
   // For vaccines, the parent organism shall be specified based on these
@@ -208,9 +206,7 @@ message SubstanceSourceMaterial {
       // plant/animal name (of any rank)
       String author_description = 5;
     }
-    repeated Author author = 9
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Author author = 9;
 
     // 4.9.13.8.1 Hybrid species maternal organism ID (Optional)
     message Hybrid {
@@ -245,8 +241,7 @@ message SubstanceSourceMaterial {
       // The hybrid type of an organism shall be specified
       CodeableConcept hybrid_type = 8;
     }
-    Hybrid hybrid = 10 [(.google.fhir.proto.fhir_path_constraint) =
-                            "hasValue() or (children().count() > id.count())"];
+    Hybrid hybrid = 10;
 
     // 4.9.13.7.1 Kingdom (Conditional)
     message OrganismGeneral {
@@ -271,13 +266,9 @@ message SubstanceSourceMaterial {
       // The order of an organism shall be specified,
       CodeableConcept order = 7;
     }
-    OrganismGeneral organism_general = 11
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    OrganismGeneral organism_general = 11;
   }
-  Organism organism = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Organism organism = 21;
 
   // To do
   message PartDescription {
@@ -298,7 +289,5 @@ message SubstanceSourceMaterial {
     // locations may apply
     CodeableConcept part_location = 5;
   }
-  repeated PartDescription part_description = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated PartDescription part_description = 22;
 }

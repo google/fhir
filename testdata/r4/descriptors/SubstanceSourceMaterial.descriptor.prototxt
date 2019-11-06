@@ -193,7 +193,6 @@ field {
   type_name: ".google.fhir.r4.core.SubstanceSourceMaterial.FractionDescription"
   options {
     [google.fhir.proto.field_description]: "Many complex materials are fractions of parts of plants, animals, or minerals. Fraction elements are often necessary to define both Substances and Specified Group 1 Substances. For substances derived from Plants, fraction information will be captured at the Substance information level ( . Oils, Juices and Exudates). Additional information for Extracts, such as extraction solvent composition, will be captured at the Specified Substance Group 1 information level. For plasma-derived products fraction information will be captured at the Substance and the Specified Substance Group 1 levels"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -204,7 +203,6 @@ field {
   type_name: ".google.fhir.r4.core.SubstanceSourceMaterial.Organism"
   options {
     [google.fhir.proto.field_description]: "This subclause describes the organism which the substance is derived from. For vaccines, the parent organism shall be specified based on these subclause elements. As an example, full taxonomy will be described for the Substance Name: ., Leaf"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -215,7 +213,6 @@ field {
   type_name: ".google.fhir.r4.core.SubstanceSourceMaterial.PartDescription"
   options {
     [google.fhir.proto.field_description]: "To do"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -361,7 +358,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.SubstanceSourceMaterial.Organism.Author"
     options {
       [google.fhir.proto.field_description]: "4.9.13.6.1 Author type (Conditional)"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -372,7 +368,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.SubstanceSourceMaterial.Organism.Hybrid"
     options {
       [google.fhir.proto.field_description]: "4.9.13.8.1 Hybrid species maternal organism ID (Optional)"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -383,7 +378,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.SubstanceSourceMaterial.Organism.OrganismGeneral"
     options {
       [google.fhir.proto.field_description]: "4.9.13.7.1 Kingdom (Conditional)"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {

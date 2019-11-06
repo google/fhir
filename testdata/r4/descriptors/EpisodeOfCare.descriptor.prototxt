@@ -114,7 +114,6 @@ field {
   type_name: ".google.fhir.r4.core.EpisodeOfCare.StatusHistory"
   options {
     [google.fhir.proto.field_description]: "Past list of status codes (the current status may be included to cover the start date of the status)"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -135,7 +134,6 @@ field {
   type_name: ".google.fhir.r4.core.EpisodeOfCare.Diagnosis"
   options {
     [google.fhir.proto.field_description]: "The list of diagnosis relevant to this episode of care"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

@@ -34,6 +34,8 @@ message ValueSetExpression {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-expression";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -51,6 +53,8 @@ message ValueSetExpandRules {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-expand-rules";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -81,6 +85,8 @@ message AllergyIntoleranceManagement {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-management";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -98,6 +104,8 @@ message MimeType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/mimeType";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -133,6 +141,8 @@ message ObservationCopyNumberEvent {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsCopyNumberEvent";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -150,6 +160,8 @@ message HumanNameOwnName {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/humanname-own-name";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -167,6 +179,8 @@ message ValueSetConceptOrder {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-conceptOrder";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -184,6 +198,8 @@ message QuestionnaireDisplayCategory {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -201,6 +217,8 @@ message ResearchStudyExtension {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/workflow-researchStudy";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -220,6 +238,8 @@ message FamilyMemberHistorySibling {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-sibling";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -245,6 +265,8 @@ message ValueSetCaseSensitive {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-caseSensitive";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -262,6 +284,8 @@ message PatientBirthPlace {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-birthPlace";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -279,6 +303,8 @@ message CodeSystemConceptComments {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-concept-comments";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -297,6 +323,8 @@ message ServiceRequestQuestionnaireRequest {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/servicerequest-questionnaireRequest";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -315,6 +343,8 @@ message AnimalSpecies {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/practitioner-animalSpecies";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -332,6 +362,8 @@ message HumanLanguage {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/language";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -349,6 +381,8 @@ message ElementDefinitionObjectClassProperty {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-objectClassProperty";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -366,6 +400,8 @@ message ConditionOutcome {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/condition-outcome";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -383,6 +419,8 @@ message AddressADXPPostBox {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-postBox";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -400,6 +438,8 @@ message CodeSystemAlternate {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-alternate";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -425,6 +465,8 @@ message DiagnosticReportSummaryOf {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/diagnosticReport-summaryOf";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -443,6 +485,8 @@ message TargetBodyStructure {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedure-targetBodyStructure";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -461,6 +505,8 @@ message AddressADXPHouseNumber {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-houseNumber";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -478,6 +524,8 @@ message ValueSetExpandGroup {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-expand-group";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -505,6 +553,8 @@ message QuestionnaireResponseAuthor {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaireresponse-author";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -528,6 +578,8 @@ message ContactPointTELAddress {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-TEL-address";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -545,6 +597,8 @@ message QuestionnaireResponseReviewer {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaireresponse-reviewer";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -564,6 +618,8 @@ message StructureDefinitionTemplateStatus {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-template-status";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -594,6 +650,8 @@ message AuditEventMPPS {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-MPPS";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -611,6 +669,8 @@ message BasicRecipientLanguage {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-recipientLanguage";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -628,6 +688,8 @@ message AllergyIntoleranceAdministration {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-administration";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -646,6 +708,8 @@ message PatientInterpreterRequired {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-interpreterRequired";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -663,6 +727,8 @@ message ApproachBodyStructure {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedure-approachBodyStructure";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -681,6 +747,8 @@ message ValueSetSourceReference {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-sourceReference";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -698,6 +766,8 @@ message UsageContextGroup {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/usagecontext-group";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -715,6 +785,8 @@ message StringMarkdown {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/rendering-markdown";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -732,6 +804,8 @@ message EpisodeOfCareExtension {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/workflow-episodeOfCare";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -750,6 +824,8 @@ message ElementDefinitionIsCommonBinding {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -767,6 +843,8 @@ message OperationOutcomeDetectedIssue {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/operationoutcome-detectedIssue";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -785,6 +863,8 @@ message PermittedValueConceptmap {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-permitted-value-conceptmap";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -802,6 +882,8 @@ message CapabilityStatementOauthUris {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://fhir-registry.smarthealthit.org/StructureDefinition/oauth-uris";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -833,6 +915,8 @@ message CapabilityStatementExpectation {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -863,6 +947,8 @@ message ValueSetConceptDefinition {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-concept-definition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -880,6 +966,8 @@ message PatientMothersMaidenName {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -897,6 +985,8 @@ message GoalReasonRejected {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/goal-reasonRejected";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -914,6 +1004,8 @@ message QuestionnaireSignatureRequired {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-signatureRequired";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -931,6 +1023,8 @@ message NutritionOrderDoNotPerform {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/request-doNotPerform";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -948,6 +1042,8 @@ message ElementDefinitionMinValueSet {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-minValueSet";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -974,6 +1070,8 @@ message ElementStyle {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/rendering-style";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -991,6 +1089,8 @@ message ValueSetLabel {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-label";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1008,6 +1108,8 @@ message AuditEventAccession {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-Accession";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1026,6 +1128,8 @@ message ElementDefinitionEquivalence {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-equivalence";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1056,6 +1160,8 @@ message QuantityUncertaintyType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-uncertaintyType";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1086,6 +1192,8 @@ message HumanNameAssemblyOrder {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/humanname-assembly-order";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1116,6 +1224,8 @@ message QuestionnaireReferenceFilter {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-referenceFilter";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1133,6 +1243,8 @@ message PractitionerRolePrimaryInd {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/practitionerrole-primaryInd";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1150,6 +1262,8 @@ message ValueSetWarning {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-warning";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1167,6 +1281,8 @@ message ReasonReference {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/workflow-reasonReference";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1191,6 +1307,8 @@ message Risk {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/diagnosticReport-risk";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1209,6 +1327,8 @@ message Regex {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/regex";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1226,6 +1346,8 @@ message ValueSetSystemRef {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-systemRef";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1243,6 +1365,8 @@ message QuestionnaireOptionExclusive {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-optionExclusive";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1260,6 +1384,8 @@ message DiagnosticReportGlstring {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-glstring";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1283,6 +1409,8 @@ message AddressADXPCareOf {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-careOf";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1300,6 +1428,8 @@ message CodeSystemWorkflowStatus {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-workflowStatus";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1317,6 +1447,8 @@ message AddressADXPDeliveryInstallationQualifier {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryInstallationQualifier";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1334,6 +1466,8 @@ message AddressADXPUnitType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-unitType";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1351,6 +1485,8 @@ message PatientGenderIdentity {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-genderIdentity";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1368,6 +1504,8 @@ message ContactPointLocal {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/contactpoint-local";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1385,6 +1523,8 @@ message QuestionnaireSliderStepValue {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-sliderStepValue";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1402,6 +1542,8 @@ message DiagnosticReportReplaces {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/diagnosticReport-replaces";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1420,6 +1562,8 @@ message ObservationDelta {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-delta";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1437,6 +1581,8 @@ message QuestionnaireReferenceResource {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-referenceResource";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1467,6 +1613,8 @@ message ElementDefinitionTranslatable {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-translatable";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1484,6 +1632,8 @@ message ElementDefinitionSelector {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-selector";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1502,6 +1652,10 @@ message AllergyIntoleranceSubstanceExposureRisk {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/allergyintolerance-substanceExposureRisk";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "substanceExposureRisk.exists() and code.empty()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1527,6 +1681,8 @@ message DeviceRequestPatientInstruction {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/devicerequest-patientInstruction";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1552,6 +1708,8 @@ message ElementBodyStructureReference {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/bodySite";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1570,6 +1728,8 @@ message TaskCandidateList {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/task-candidateList";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1594,6 +1754,8 @@ message ElementDefinitionMaxValueSet {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1620,6 +1782,8 @@ message ValueSetReference {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-reference";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1637,6 +1801,8 @@ message FlagPriority {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/flag-priority";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1654,6 +1820,8 @@ message AllergyIntoleranceCertainty {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/allergyintolerance-certainty";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1671,6 +1839,8 @@ message StructureDefinitionCodegenSuper {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-codegen-super";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1688,6 +1858,8 @@ message ConsentLocation {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/consent-location";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1706,6 +1878,8 @@ message ResourceNullFlavor {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-nullFlavor";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1736,6 +1910,8 @@ message CapabilityStatementCapabilities {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://fhir-registry.smarthealthit.org/StructureDefinition/capabilities";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1766,6 +1942,8 @@ message ValueSetMap {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-map";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1783,6 +1961,8 @@ message ValueSetWorkflowStatus {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-workflowStatus";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1800,6 +1980,8 @@ message AllergyIntoleranceReasonRefuted {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/allergyintolerance-reasonRefuted";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1817,6 +1999,8 @@ message CodeSystemLabel {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-label";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1835,6 +2019,8 @@ message QuestionnaireResponseCompletionMode {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaireresponse-completionMode";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1852,6 +2038,8 @@ message TimingDayOfMonth {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/timing-dayOfMonth";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1869,6 +2057,8 @@ message ValueSetExpirationDate {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-expirationDate";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1886,6 +2076,8 @@ message RelatedArtifactExtension {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/workflow-relatedArtifact";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1903,6 +2095,8 @@ message ObservationTimeOffset {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-timeOffset";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1920,6 +2114,8 @@ message StructureDefinitionDependencies {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-dependencies";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1937,6 +2133,8 @@ message QuestionnaireChoiceOrientation {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1967,6 +2165,8 @@ message AddressADXPStreetAddressLine {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetAddressLine";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1984,6 +2184,8 @@ message ProcedureSchedule {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedure-schedule";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2002,6 +2204,8 @@ message DiagnosticReportLocationPerformed {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/diagnosticReport-locationPerformed";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2020,6 +2224,8 @@ message BasicInitiatingPerson {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-initiatingPerson";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2043,6 +2249,8 @@ message PatientNationality {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-nationality";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2066,6 +2274,8 @@ message PatientCadavericDonor {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-cadavericDonor";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2083,6 +2293,8 @@ message ConditionDueTo {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/condition-dueTo";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2115,6 +2327,8 @@ message ValueSetKeyWord {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-keyWord";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2132,6 +2346,8 @@ message AddressADXPDirection {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-direction";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2150,6 +2366,8 @@ message AuditEventParticipantObjectContainsStudy {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-ParticipantObjectContainsStudy";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2167,6 +2385,8 @@ message AddressADXPAdditionalLocator {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-additionalLocator";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2184,6 +2404,8 @@ message CodeSystemConceptOrder {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-conceptOrder";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2202,6 +2424,8 @@ message CommunicationRequestInitiatingLocation {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/communicationrequest-initiatingLocation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2220,6 +2444,8 @@ message ElementWg {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2250,6 +2476,8 @@ message TaskReplaces {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/task-replaces";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2268,6 +2496,8 @@ message ContactPointCountry {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/contactpoint-country";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2285,6 +2515,8 @@ message DirectedBy {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedure-directedBy";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2316,6 +2548,8 @@ message AttachmentCitation {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-citation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2333,6 +2567,8 @@ message CodeSystemUsage {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-usage";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2358,6 +2594,8 @@ message AddressADXPStreetNameBase {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetNameBase";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2375,6 +2613,8 @@ message MaxSize {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/maxSize";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2392,6 +2632,8 @@ message AddressADXPDeliveryMode {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryMode";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2409,6 +2651,8 @@ message IdentifierValidDate {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/identifier-validDate";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2426,6 +2670,8 @@ message PatientCitizenship {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-citizenship";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2449,6 +2695,8 @@ message QuestionnaireBaseType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-baseType";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2479,6 +2727,8 @@ message HumanNamePartnerName {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/humanname-partner-name";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2497,6 +2747,8 @@ message LocationBoundaryGeojson {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/location-boundary-geojson";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2514,6 +2766,8 @@ message AuditEventSOPClass {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-SOPClass";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2532,6 +2786,8 @@ message ValueSetActivityStatusDate {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-activityStatusDate";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2549,6 +2805,8 @@ message ObservationAllele {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllele";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2577,6 +2835,8 @@ message HumanNameMothersFamily {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/humanname-mothers-family";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2594,6 +2854,8 @@ message OrganizationPeriod {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/organization-period";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2611,6 +2873,8 @@ message EncounterReasonCancelled {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/encounter-reasonCancelled";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2628,6 +2892,8 @@ message EffectivePeriod {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/resource-effectivePeriod";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2645,6 +2911,8 @@ message ElementDefinitionDisplayHint {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-display-hint";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2662,6 +2930,8 @@ message ObservationVariant {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsVariant";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2691,6 +2961,8 @@ message DiagnosticReportAnalysis {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAnalysis";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2715,6 +2987,8 @@ message EntryFormat {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/entryFormat";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2732,6 +3006,8 @@ message NutritionOrderReplaces {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/request-replaces";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2750,6 +3026,8 @@ message ValueSetDeprecated {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-deprecated";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2767,6 +3045,8 @@ message CodeSystemWarning {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-warning";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2785,6 +3065,8 @@ message QuestionnaireUsageMode {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-usageMode";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2815,6 +3097,8 @@ message AllergyIntoleranceTest {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-test";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2836,6 +3120,8 @@ message BasicEncounterType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-encounterType";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2853,6 +3139,8 @@ message AttachmentStrengthOfRecommendation {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-strengthOfRecommendation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2870,6 +3158,8 @@ message ValueSetToocostly {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-toocostly";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2887,6 +3177,8 @@ message CodingSctdescid {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/coding-sctdescid";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2904,6 +3196,8 @@ message MessageHeaderMessageheaderResponseRequest {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/messageheader-response-request";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2934,6 +3228,8 @@ message DiagnosticReportItem {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/servicerequest-geneticsItem";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2965,6 +3261,8 @@ message ElementDefinitionProfileElement {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-profile-element";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -2982,6 +3280,8 @@ message PatientReligion {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-religion";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3000,6 +3300,8 @@ message AddressADXPDeliveryInstallationType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryInstallationType";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3017,6 +3319,8 @@ message ValueSetRulesText {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-rules-text";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3034,6 +3338,8 @@ message ConditionRuledOut {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/condition-ruledOut";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3052,6 +3358,8 @@ message ElementDefinitionQuestion {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-question";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3069,6 +3377,8 @@ message CodeSystemReplacedby {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-replacedby";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3086,6 +3396,8 @@ message ResourcePertainsToGoal {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/resource-pertainsToGoal";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3104,6 +3416,8 @@ message DesignNote {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/designNote";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3121,6 +3435,8 @@ message QuestionnaireReferenceProfile {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-referenceProfile";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3138,6 +3454,8 @@ message BasicEncounterClass {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-encounterClass";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3155,6 +3473,8 @@ message ElementRelativeDateTime {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-relativeDateTime";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3210,6 +3530,8 @@ message BundleHttpResponseHeader {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/http-response-header";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3228,6 +3550,8 @@ message FamilyMemberHistoryParent {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-parent";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3253,6 +3577,8 @@ message ElementNarrativeLink {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/narrativeLink";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3270,6 +3596,8 @@ message ElementDefinitionBindingName {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3287,6 +3615,8 @@ message BundleMatchGrade {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/match-grade";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3317,6 +3647,8 @@ message ObservationReplaces {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-replaces";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3336,6 +3668,8 @@ message ElementDefinitionHierarchy {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-hierarchy";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3353,6 +3687,8 @@ message ListChangeBase {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/list-changeBase";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3371,6 +3707,8 @@ message CodeSystemOtherName {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-otherName";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3395,6 +3733,8 @@ message AllergyIntoleranceLocation {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-location";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3412,6 +3752,8 @@ message OperationDefinitionProfile {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/operationdefinition-profile";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3429,6 +3771,8 @@ message AuditEventNumberOfInstances {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-NumberOfInstances";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3446,6 +3790,8 @@ message ObservationSequelTo {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-sequelTo";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3464,6 +3810,8 @@ message AddressADXPDeliveryAddressLine {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryAddressLine";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3481,6 +3829,8 @@ message FamilyMemberHistoryAbatement {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/familymemberhistory-abatement";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3509,6 +3859,8 @@ message CapabilityStatementSearchParameterCombination {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/capabilitystatement-search-parameter-combination";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3533,6 +3885,8 @@ message DiagnosticReportExtends {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/diagnosticReport-extends";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3551,6 +3905,8 @@ message QuestionnaireSupportLink {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-supportLink";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3568,6 +3924,8 @@ message BasicInitiatingOrganization {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-initiatingOrganization";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3586,6 +3944,8 @@ message ElementFmm {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3603,6 +3963,8 @@ message AuditEventInstance {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-Instance";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3620,6 +3982,8 @@ message ElementExpression {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-expression";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3637,6 +4001,8 @@ message CapabilityStatementWebsocket {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/capabilitystatement-websocket";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3654,6 +4020,8 @@ message ConditionOccurredFollowing {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/condition-occurredFollowing";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3686,6 +4054,8 @@ message QuestionnaireItemControl {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3703,6 +4073,8 @@ message ValueSetUnclosed {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-unclosed";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3720,6 +4092,8 @@ message ResourcePreferred {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-preferred";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3737,6 +4111,8 @@ message AllergyIntoleranceAssertedDate {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/allergyintolerance-assertedDate";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3754,6 +4130,8 @@ message AllergyIntoleranceExposureDuration {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-exposureDuration";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3771,6 +4149,8 @@ message ElementDefinitionBestpractice {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3797,6 +4177,8 @@ message QuestionnaireConstraint {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3848,6 +4230,8 @@ message PatientAdoptionInfo {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-adoptionInfo";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3865,6 +4249,8 @@ message EncounterModeOfArrival {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/encounter-modeOfArrival";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3882,6 +4268,8 @@ message ValueSetTrustedExpansion {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-trusted-expansion";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3900,6 +4288,8 @@ message ElementStandardsStatus {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3930,6 +4320,8 @@ message LastReviewDate {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/resource-lastReviewDate";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3947,6 +4339,8 @@ message ObservationGene {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3964,6 +4358,8 @@ message CodeSystemAuthor {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-author";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -3981,6 +4377,8 @@ message BasicReceivingPerson {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-receivingPerson";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4004,6 +4402,8 @@ message ServiceRequestPerformerOrder {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/request-performerOrder";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4021,6 +4421,8 @@ message ProcedureCausedBy {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedure-causedBy";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4051,6 +4453,8 @@ message ValueSetConceptComments {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-concept-comments";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4068,6 +4472,8 @@ message ObservationFocusCode {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-focusCode";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4085,6 +4491,8 @@ message AddressADXPDelimiter {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-delimiter";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4102,6 +4510,8 @@ message QuestionnaireFhirType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-fhirType";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4120,6 +4530,8 @@ message ElementDefinitionInheritedExtensibleValueSet {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-inheritedExtensibleValueSet";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4147,6 +4559,8 @@ message AddressADXPBuildingNumberSuffix {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-buildingNumberSuffix";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4164,6 +4578,8 @@ message ValueSetExtensible {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-extensible";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4181,6 +4597,8 @@ message StatusReasonExtension {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/request-statusReason";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4198,6 +4616,8 @@ message CanonicalDisplayName {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/display";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4215,6 +4635,8 @@ message PatientCongregation {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-congregation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4232,6 +4654,8 @@ message AllergyIntoleranceExposureDescription {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-exposureDescription";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4249,6 +4673,8 @@ message PatientRelatedPerson {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-relatedPerson";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4267,6 +4693,8 @@ message QuestionnaireUnit {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-unit";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4284,6 +4712,8 @@ message HumanNameENUse {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-EN-use";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4314,6 +4744,8 @@ message MinLength {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/minLength";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4331,6 +4763,8 @@ message CodeSystemHistory {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-history";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4381,6 +4815,8 @@ message PerformerFunction {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/event-performerFunction";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4398,6 +4834,8 @@ message BasicSystemUserLanguage {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-systemUserLanguage";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4416,6 +4854,8 @@ message ObservationGenomicSourceClass {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4434,6 +4874,8 @@ message DiagnosticReportFamilyMemberHistory {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4452,6 +4894,8 @@ message ElementCalculatedValue {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4469,6 +4913,8 @@ message CompositionSectionSubject {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/composition-section-subject";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4487,6 +4933,8 @@ message ObservationPrecondition {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-precondition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4505,6 +4953,8 @@ message CompositionValidityPeriod {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqm-ValidityPeriod";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4523,6 +4973,8 @@ message CompositionOtherConfidentiality {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/composition-clinicaldocument-otherConfidentiality";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4540,6 +4992,8 @@ message QuestionnaireMaxValue {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/maxValue";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4570,6 +5024,8 @@ message PatientAnimal {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-animal";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4597,6 +5053,8 @@ message PatientDisability {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-disability";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4614,6 +5072,8 @@ message HumanNameOwnPrefix {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/humanname-own-prefix";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4631,6 +5091,8 @@ message CodeSystemSourceReference {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-sourceReference";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4648,6 +5110,8 @@ message StringXhtml {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/rendering-xhtml";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4666,6 +5130,8 @@ message FamilyMemberHistoryObservation {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/family-member-history-genetics-observation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4684,6 +5150,8 @@ message StructureDefinitionAncestor {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-ancestor";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4701,6 +5169,8 @@ message EncounterAssociatedEncounter {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/encounter-associatedEncounter";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4719,6 +5189,8 @@ message DiagnosticReportAddendumOf {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/diagnosticReport-addendumOf";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4737,6 +5209,8 @@ message ElementInitialValue {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-initialValue";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4754,6 +5228,8 @@ message ConditionAssertedDate {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/condition-assertedDate";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4771,6 +5247,8 @@ message Namespace {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-namespace";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4788,6 +5266,8 @@ message ElementDefinitionJsonType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-json-type";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4805,6 +5285,8 @@ message ProcedureIncisionDateTime {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedure-incisionDateTime";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4822,6 +5304,8 @@ message StatusReason {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/event-statusReason";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4839,6 +5323,8 @@ message HumanNameENQualifier {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-EN-qualifier";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4869,6 +5355,8 @@ message QuestionnaireMinOccurs {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-minOccurs";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4886,6 +5374,8 @@ message Replaces {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/replaces";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4904,6 +5394,8 @@ message ValueSetAuthoritativeSource {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-authoritativeSource";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4921,6 +5413,8 @@ message SpecimenCollectionPriority {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/specimen-collectionPriority";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4938,6 +5432,8 @@ message ValueSetSupplement {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-supplement";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4955,6 +5451,8 @@ message AddressADXPUnitID {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-unitID";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4973,6 +5471,8 @@ message OrganizationAffiliationPrimaryInd {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/organizationaffiliation-primaryInd";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -4990,6 +5490,8 @@ message MaxDecimalPlaces {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/maxDecimalPlaces";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5008,6 +5510,8 @@ message AddressADXPDeliveryInstallationArea {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryInstallationArea";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5025,6 +5529,8 @@ message AddressADXPStreetName {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetName";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5042,6 +5548,8 @@ message InstantiatesUri {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/workflow-instantiatesUri";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5059,6 +5567,8 @@ message EventHistory {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/event-eventHistory";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5077,6 +5587,8 @@ message OperationOutcomeIssueSource {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/operationoutcome-issue-source";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5094,6 +5606,8 @@ message ValueSetUsage {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-usage";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5119,6 +5633,8 @@ message BasicSystemUserTaskContext {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-systemUserTaskContext";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5136,6 +5652,8 @@ message ProcedureMethod {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedure-method";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5154,6 +5672,8 @@ message DiagnosticReportReferences {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsReferences";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5180,6 +5700,8 @@ message StructureDefinitionCategory {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-category";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5197,6 +5719,8 @@ message SpecimenProcessingTime {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/specimen-processingTime";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5223,6 +5747,8 @@ message SpecimenSpecialHandling {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/specimen-specialHandling";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5240,6 +5766,8 @@ message InstantiatesCanonical {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/workflow-instantiatesCanonical";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5258,6 +5786,8 @@ message SpecimenSequenceNumber {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/specimen-sequenceNumber";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5275,6 +5805,8 @@ message BundleLocationDistance {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/location-distance";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5292,6 +5824,8 @@ message ValueSetParameterSource {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-parameterSource";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5332,6 +5866,8 @@ message ObservationSecondaryFinding {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-secondaryFinding";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5349,6 +5885,8 @@ message StringSCCoding {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-SC-coding";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5367,6 +5905,8 @@ message FamilyMemberHistoryPatientRecord {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/familymemberhistory-patient-record";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5385,6 +5925,8 @@ message ServiceRequestPrecondition {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/servicerequest-precondition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5403,6 +5945,8 @@ message StructureDefinitionNormativeVersion {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5433,6 +5977,8 @@ message ConsentWitness {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/consent-Witness";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5457,6 +6003,8 @@ message DiagnosticReportAssessedCondition {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5475,6 +6023,8 @@ message ElementDefinitionAllowedUnits {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5501,6 +6051,8 @@ message RenderedValue {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/rendered-value";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5518,6 +6070,8 @@ message DeviceImplantStatus {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/device-implantStatus";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5549,6 +6103,8 @@ message ObservationInterpretation {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsInterpretation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5567,6 +6123,8 @@ message ValueSetAuthor {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-author";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5584,6 +6142,8 @@ message ValueSetSystem {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-system";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5601,6 +6161,8 @@ message AllergyIntoleranceExposureDate {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-exposureDate";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5618,6 +6180,8 @@ message AllergyIntoleranceDuration {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/allergyintolerance-duration";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5635,6 +6199,8 @@ message ElementStyleSensitive {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/rendering-styleSensitive";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5652,6 +6218,8 @@ message CodeSystemTrustedExpansion {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-trusted-expansion";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5670,6 +6238,8 @@ message DiagnosticReportMethod {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-method";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5687,6 +6257,8 @@ message AddressADXPPrecinct {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-precinct";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5705,6 +6277,8 @@ message ObservationAminoAcidChange {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChange";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5728,6 +6302,8 @@ message QuestionnaireOptionPrefix {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5745,6 +6321,8 @@ message OrganizationPreferredContact {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/organization-preferredContact";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5763,6 +6341,8 @@ message ElementDefinitionBestpracticeExplanation {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice-explanation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5780,6 +6360,8 @@ message AddressADUse {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-AD-use";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5810,6 +6392,8 @@ message PatientProficiency {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-proficiency";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5833,6 +6417,8 @@ message ElementOriginalText {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/originalText";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5850,6 +6436,8 @@ message Translation {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/translation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5883,6 +6471,8 @@ message GoalRelationship {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/goal-relationship";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5908,6 +6498,8 @@ message ElementDefinitionObjectClass {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-objectClass";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5925,6 +6517,8 @@ message HumanNamePartnerPrefix {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/humanname-partner-prefix";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5943,6 +6537,8 @@ message StructureDefinitionSecurityCategory {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-security-category";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -5973,6 +6569,8 @@ message ElementDataAbsentReason {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/data-absent-reason";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6003,6 +6601,8 @@ message AllergyIntoleranceResolutionAge {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/allergyintolerance-resolutionAge";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6020,6 +6620,8 @@ message AllergyIntoleranceCareplan {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/openEHR-careplan";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6038,6 +6640,8 @@ message TimingExact {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/timing-exact";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6055,6 +6659,8 @@ message CodeSystemKeyWord {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-keyWord";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6072,6 +6678,8 @@ message PlanDefinitionCdsHooksEndpoint {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-cdsHooksEndpoint";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6089,6 +6697,8 @@ message StructureDefinitionSummary {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-summary";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6106,6 +6716,8 @@ message CapabilityStatementProhibited {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/capabilitystatement-prohibited";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6123,6 +6735,8 @@ message ObservationDNARegionName {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNARegionName";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6140,6 +6754,8 @@ message HumanNameFathersFamily {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/humanname-fathers-family";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6157,6 +6773,8 @@ message ReasonCode {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/workflow-reasonCode";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6174,6 +6792,8 @@ message FlagDetail {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/flag-detail";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6192,6 +6812,8 @@ message SupportingInfo {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6210,6 +6832,8 @@ message NutritionOrderInsurance {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/request-insurance";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6231,6 +6855,8 @@ message ValueSetExpansionSource {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-expansionSource";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6248,6 +6874,8 @@ message AttachmentQualityOfEvidence {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-qualityOfEvidence";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6265,6 +6893,8 @@ message ConsentTranscriber {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/consent-Transcriber";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6289,6 +6919,8 @@ message AddressADXPDeliveryModeIdentifier {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-deliveryModeIdentifier";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6306,6 +6938,8 @@ message ValueSetSystemName {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-systemName";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6323,6 +6957,8 @@ message DecimalPrecision {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/quantity-precision";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6340,6 +6976,8 @@ message QuestionnaireResponseSignature {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaireresponse-signature";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6357,6 +6995,8 @@ message QuestionnaireUnitValueSet {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-unitValueSet";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6374,6 +7014,8 @@ message ConditionRelated {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/condition-related";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6392,6 +7034,8 @@ message CodeSystemMap {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-map";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6409,6 +7053,8 @@ message DateTimezoneOffset {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/tz-offset";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6427,6 +7073,8 @@ message StructureDefinitionFmmNoWarnings {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm-no-warnings";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6444,6 +7092,8 @@ message ConceptMapBidirectional {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/concept-bidirectional";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6461,6 +7111,8 @@ message ValueSetOtherName {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-otherName";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6485,6 +7137,8 @@ message QuantityUncertainty {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-uncertainty";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6502,6 +7156,8 @@ message ValueSetEffectiveDate {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-effectiveDate";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6519,6 +7175,8 @@ message PermittedValueValueset {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/11179-permitted-value-valueset";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6536,6 +7194,8 @@ message AuditEventAnonymized {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-Anonymized";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6553,6 +7213,8 @@ message ElementDefinitionIdentifier {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/elementdefinition-identifier";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6570,6 +7232,8 @@ message DiagnosticReportHaploid {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-haploid";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6596,6 +7260,8 @@ message OperationOutcomeAuthority {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/operationoutcome-authority";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6613,6 +7279,8 @@ message QuestionnaireMinValue {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/minValue";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6642,6 +7310,8 @@ message StructureDefinitionTableName {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-table-name";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6660,6 +7330,8 @@ message CapabilityStatementSupportedSystem {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/capabilitystatement-supported-system";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6677,6 +7349,8 @@ message QuestionnaireResponseReason {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaireresponse-reason";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6694,6 +7368,8 @@ message BasicReceivingOrganization {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-receivingOrganization";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6713,6 +7389,8 @@ message CompositionVersionNumber {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/composition-clinicaldocument-versionNumber";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6731,6 +7409,8 @@ message ElementDefinitionExplicitTypeName {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6748,6 +7428,8 @@ message HumanNameENRepresentation {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-EN-representation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6779,6 +7461,8 @@ message ObservationSpecimenCode {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-specimenCode";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6796,6 +7480,8 @@ message DaysOfCycle {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/timing-daysOfCycle";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6817,6 +7503,8 @@ message ConsentNotificationEndpoint {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/consent-NotificationEndpoint";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6834,6 +7522,8 @@ message ElementMeasureInfo {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-measureInfo";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6860,6 +7550,8 @@ message ObservationAncestry {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsAncestry";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6889,6 +7581,8 @@ message AddressADXPHouseNumberNumeric {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-houseNumberNumeric";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6906,6 +7600,8 @@ message StructureDefinitionXmlNoOrder {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-no-order";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6923,6 +7619,8 @@ message BodyPosition {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-bodyPosition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6940,6 +7638,8 @@ message AddressADXPStreetNameType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetNameType";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6957,6 +7657,8 @@ message AuditEventEncrypted {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/auditevent-Encrypted";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -6975,6 +7677,8 @@ message StructureDefinitionApplicableVersion {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-applicable-version";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7005,6 +7709,8 @@ message AddressADXPCensusTract {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-censusTract";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7022,6 +7728,8 @@ message PartOf {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/event-partOf";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7040,6 +7748,8 @@ message ObservationReagent {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-reagent";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7058,6 +7768,8 @@ message BasicSystemUserType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-systemUserType";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7075,6 +7787,8 @@ message ElementDefinitionRdfType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-rdf-type";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7093,6 +7807,8 @@ message DiagnosticReportAlleleDatabase {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-allele-database";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7110,6 +7826,8 @@ message PatientBirthTime {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-birthTime";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7127,6 +7845,8 @@ message QuestionnaireHidden {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7144,6 +7864,8 @@ message ElementDefinitionXmlType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-xml-type";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7161,6 +7883,8 @@ message QuestionnaireUnitOption {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7178,6 +7902,8 @@ message ProcedureProgressStatus {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/procedure-progressStatus";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7195,6 +7921,8 @@ message FamilyMemberHistorySeverity {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/familymemberhistory-severity";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7212,6 +7940,8 @@ message RelevantHistory {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/request-relevantHistory";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7230,6 +7960,8 @@ message FamilyMemberHistoryType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/familymemberhistory-type";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7247,6 +7979,8 @@ message ElementLibrary {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-library";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7264,6 +7998,8 @@ message ApprovalDate {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/resource-approvalDate";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7281,6 +8017,8 @@ message ValueSetSteward {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-steward";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7298,6 +8036,8 @@ message BasicRecipientType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-recipientType";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7315,6 +8055,8 @@ message AddressGeolocation {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/geolocation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7340,6 +8082,8 @@ message SpecialStatus {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/valueset-special-status";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7357,6 +8101,8 @@ message ContactPointArea {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/contactpoint-area";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7374,6 +8120,8 @@ message ConditionBasedOn {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/event-basedOn";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7392,6 +8140,8 @@ message LocationExtension {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/event-location";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7410,6 +8160,8 @@ message ObservationGatewayDevice {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-gatewayDevice";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7428,6 +8180,8 @@ message GoalAcceptance {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/goal-acceptance";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7468,6 +8222,8 @@ message TimezoneCode {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/tz-code";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7502,6 +8258,8 @@ message PatientPreferenceType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-preferenceType";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7519,6 +8277,8 @@ message QuestionnaireVariable {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/variable";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7537,6 +8297,8 @@ message NutritionOrderAdaptiveFeedingDevice {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/nutritionorder-adaptiveFeedingDevice";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7555,6 +8317,8 @@ message ObservationDeviceCode {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-deviceCode";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7572,6 +8336,8 @@ message CarePlanActivityTitle {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/careplan-activity-title";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7589,6 +8355,8 @@ message QuantityPQTranslation {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/iso21090-PQ-translation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7606,6 +8374,8 @@ message OrdinalValue {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/ordinalValue";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7623,6 +8393,8 @@ message RelativeDateCriteria {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/relative-date";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7675,6 +8447,8 @@ message CodeSystemEffectiveDate {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-effectiveDate";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7692,6 +8466,8 @@ message ParametersFullUrl {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/parameters-fullUrl";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7709,6 +8485,8 @@ message CommunicationMedia {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/communication-media";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7726,6 +8504,8 @@ message PatientImportance {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/patient-importance";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7743,6 +8523,8 @@ message SpecimenIsDryWeight {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/specimen-isDryWeight";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7760,6 +8542,8 @@ message ObservationPhaseSet {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7789,6 +8573,8 @@ message CodeSystemExpirationDate {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/codesystem-expirationDate";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7806,6 +8592,8 @@ message ContactPointExtension {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/contactpoint-extension";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -7823,6 +8611,8 @@ message QuestionnaireMaxOccurs {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/questionnaire-maxOccurs";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   String id = 1;

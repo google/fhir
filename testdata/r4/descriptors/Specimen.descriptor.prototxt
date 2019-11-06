@@ -180,7 +180,6 @@ field {
   type_name: ".google.fhir.r4.core.Specimen.Collection"
   options {
     [google.fhir.proto.field_description]: "Collection details"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -191,7 +190,6 @@ field {
   type_name: ".google.fhir.r4.core.Specimen.Processing"
   options {
     [google.fhir.proto.field_description]: "Processing and processing step details"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -202,7 +200,6 @@ field {
   type_name: ".google.fhir.r4.core.Specimen.Container"
   options {
     [google.fhir.proto.field_description]: "Direct container of specimen (tube/slide, etc.)"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

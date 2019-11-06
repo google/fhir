@@ -193,7 +193,6 @@ field {
   type_name: ".google.fhir.r4.core.Consent.Policy"
   options {
     [google.fhir.proto.field_description]: "Policies covered by this consent"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -214,7 +213,6 @@ field {
   type_name: ".google.fhir.r4.core.Consent.Verification"
   options {
     [google.fhir.proto.field_description]: "Consent Verified by patient or family"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -225,7 +223,6 @@ field {
   type_name: ".google.fhir.r4.core.Consent.Provision"
   options {
     [google.fhir.proto.field_description]: "Constraints to the base Consent.policyRule"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -465,7 +462,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.Consent.Provision.ProvisionActor"
     options {
       [google.fhir.proto.field_description]: "Who|what controlled by this rule (or group, by role)"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -537,7 +533,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.Consent.Provision.ProvisionData"
     options {
       [google.fhir.proto.field_description]: "Data controlled by this rule"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -728,4 +723,9 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Consent, last updated 2018-12-27T22:37:54.724+11:00.\nA healthcare consumer\'s  choices to permit or deny recipients or roles to perform actions for specific purposes and periods of time.\nSee http://hl7.org/fhir/StructureDefinition/Consent"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Consent"
+  [google.fhir.proto.fhir_path_message_constraint]: "patient.exists() or scope.coding.where(system=\'something\' and code=\'adr\').exists().not()"
+  [google.fhir.proto.fhir_path_message_constraint]: "patient.exists() or scope.coding.where(system=\'something\' and code=\'treatment\').exists().not()"
+  [google.fhir.proto.fhir_path_message_constraint]: "patient.exists() or scope.coding.where(system=\'something\' and code=\'patient-privacy\').exists().not()"
+  [google.fhir.proto.fhir_path_message_constraint]: "patient.exists() or scope.coding.where(system=\'something\' and code=\'research\').exists().not()"
+  [google.fhir.proto.fhir_path_message_constraint]: "policy.exists() or policyRule.exists()"
 }

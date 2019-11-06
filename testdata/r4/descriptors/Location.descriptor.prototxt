@@ -203,7 +203,6 @@ field {
   type_name: ".google.fhir.r4.core.Location.Position"
   options {
     [google.fhir.proto.field_description]: "The absolute geographic location"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -236,7 +235,6 @@ field {
   type_name: ".google.fhir.r4.core.Location.HoursOfOperation"
   options {
     [google.fhir.proto.field_description]: "What days/times during a week is this location usually open"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

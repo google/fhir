@@ -224,7 +224,8 @@ class CompiledExpression {
 // The handler is provided with:
 // * The message on which the FHIRPath violation occurred. This
 //   may be the root message or a child structure.
-// * The field in the above message that caused the violation.
+// * The field in the above message that caused the violation, or
+//   nullptr if the error occured on the root of the message.
 //   This is the field on which the FHIRPath constraint is defined.
 // * The FHIRPath constraint expression that triggered the violation.
 typedef std::function<bool(const ::google::protobuf::Message& message,
@@ -256,14 +257,19 @@ class MessageValidator {
                   ViolationHandlerFunc handler);
 
  private:
-  // A cache of constraints for a given message definition, defined
-  // by the fields that directly have constraint expressions and
-  // nested fields that have constraints to recursively evaluate.
+  // A cache of constraints for a given message definition
   struct MessageConstraints {
+    // FHIRPath constraints at the "root" FHIR element, which is just the
+    // protobuf message.
+    std::vector<CompiledExpression> message_expressions_;
+
+    // FHIRPath constraints on fields
     std::vector<
         std::pair<const ::google::protobuf::FieldDescriptor*, const CompiledExpression>>
-        expressions_;
+        field_expressions_;
 
+    // Nested messages that have constraints, so the evaluation logic
+    // knows to check them.
     std::vector<const ::google::protobuf::FieldDescriptor*> nested_with_constraints_;
   };
 

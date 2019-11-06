@@ -147,7 +147,5 @@ message SubstanceProtein {
     // The modification at the C-terminal shall be specified
     String c_terminal_modification = 11;
   }
-  repeated Subunit subunit = 13
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Subunit subunit = 13;
 }

@@ -32,6 +32,8 @@ message NutritionOrder {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/NutritionOrder";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "oralDiet.exists() or supplement.exists() or enteralFormula.exists()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -173,9 +175,7 @@ message NutritionOrder {
       // Quantity of the specified nutrient
       SimpleQuantity amount = 5;
     }
-    repeated Nutrient nutrient = 6
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Nutrient nutrient = 6;
 
     // Required  texture modifications
     message Texture {
@@ -195,9 +195,7 @@ message NutritionOrder {
       // nutritional purposes
       CodeableConcept food_type = 5;
     }
-    repeated Texture texture = 7
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Texture texture = 7;
 
     // The required consistency of fluids and liquids provided to the patient
     repeated CodeableConcept fluid_consistency_type = 8;
@@ -205,9 +203,7 @@ message NutritionOrder {
     // Instructions or additional information about the oral diet
     String instruction = 9;
   }
-  OralDiet oral_diet = 23
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  OralDiet oral_diet = 23;
 
   // Supplement components
   message Supplement {
@@ -235,9 +231,7 @@ message NutritionOrder {
     // Instructions or additional information about the oral supplement
     String instruction = 8;
   }
-  repeated Supplement supplement = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Supplement supplement = 24;
 
   // Enteral formula components
   message EnteralFormula {
@@ -296,9 +290,7 @@ message NutritionOrder {
       }
       RateX rate = 6;
     }
-    repeated Administration administration = 10
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Administration administration = 10;
 
     // Upper limit on formula volume per unit of time
     SimpleQuantity max_volume_to_deliver = 11;
@@ -306,9 +298,7 @@ message NutritionOrder {
     // Formula feeding instructions expressed as text
     String administration_instruction = 12;
   }
-  EnteralFormula enteral_formula = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  EnteralFormula enteral_formula = 25;
 
   // Comments
   repeated Annotation note = 26;

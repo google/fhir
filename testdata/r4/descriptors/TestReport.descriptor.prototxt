@@ -177,7 +177,6 @@ field {
   type_name: ".google.fhir.r4.core.TestReport.Participant"
   options {
     [google.fhir.proto.field_description]: "A participant in the test execution, either the execution engine, a client, or a server"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -188,7 +187,6 @@ field {
   type_name: ".google.fhir.r4.core.TestReport.Setup"
   options {
     [google.fhir.proto.field_description]: "The results of the series of required setup operations before the tests were executed"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -199,7 +197,6 @@ field {
   type_name: ".google.fhir.r4.core.TestReport.Test"
   options {
     [google.fhir.proto.field_description]: "A test executed from the test script"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -210,7 +207,6 @@ field {
   type_name: ".google.fhir.r4.core.TestReport.Teardown"
   options {
     [google.fhir.proto.field_description]: "The results of running the series of required clean up steps"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -400,8 +396,6 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "A setup operation or assert that was executed"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-      [google.fhir.proto.fhir_path_constraint]: "operation.exists() xor assert.exists()"
     }
   }
   nested_type {
@@ -444,7 +438,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.TestReport.Setup.SetupAction.Operation"
       options {
         [google.fhir.proto.field_description]: "The operation to perform"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     field {
@@ -455,7 +448,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.TestReport.Setup.SetupAction.Assert"
       options {
         [google.fhir.proto.field_description]: "The assertion to perform"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
       json_name: "assert"
     }
@@ -641,6 +633,9 @@ nested_type {
         }
       }
     }
+    options {
+      [google.fhir.proto.fhir_path_message_constraint]: "operation.exists() xor assert.exists()"
+    }
   }
 }
 nested_type {
@@ -704,8 +699,6 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "A test operation or assert that was performed"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
-      [google.fhir.proto.fhir_path_constraint]: "operation.exists() xor assert.exists()"
     }
   }
   nested_type {
@@ -761,6 +754,9 @@ nested_type {
       }
       json_name: "assert"
     }
+    options {
+      [google.fhir.proto.fhir_path_message_constraint]: "operation.exists() xor assert.exists()"
+    }
   }
 }
 nested_type {
@@ -804,7 +800,6 @@ nested_type {
     options {
       [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
       [google.fhir.proto.field_description]: "One or more teardown operations performed"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {

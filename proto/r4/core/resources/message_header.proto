@@ -102,9 +102,7 @@ message MessageHeader {
       (.google.fhir.proto.valid_reference_type) = "Organization"
     ];
   }
-  repeated MessageDestination destination = 11
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated MessageDestination destination = 11;
 
   // Real world sender of the message
   Reference sender = 12 [
@@ -152,11 +150,8 @@ message MessageHeader {
     Url endpoint = 8
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  MessageSource source = 15 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  MessageSource source = 15
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Final responsibility for event
   Reference responsible = 16 [
@@ -205,9 +200,7 @@ message MessageHeader {
     Reference details = 6
         [(.google.fhir.proto.valid_reference_type) = "OperationOutcome"];
   }
-  Response response = 18
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Response response = 18;
 
   // The actual content of the message
   repeated Reference focus = 19

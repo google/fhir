@@ -173,9 +173,7 @@ message LipidProfile {
       (.google.fhir.proto.valid_reference_type) = "Media"
     ];
   }
-  repeated Media media = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Media media = 24;
 
   // Clinical Interpretation of Lipid Panel
   String conclusion = 25;

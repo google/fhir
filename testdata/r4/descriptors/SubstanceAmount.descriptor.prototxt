@@ -67,7 +67,6 @@ field {
   type_name: ".google.fhir.r4.core.SubstanceAmount.ReferenceRange"
   options {
     [google.fhir.proto.field_description]: "Reference range of possible or expected values"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {

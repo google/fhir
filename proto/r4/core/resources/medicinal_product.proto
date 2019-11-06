@@ -158,9 +158,7 @@ message MedicinalProduct {
       Coding type = 5
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    repeated NamePart name_part = 5
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated NamePart name_part = 5;
 
     // Country where the name applies
     message CountryLanguage {
@@ -184,15 +182,10 @@ message MedicinalProduct {
       CodeableConcept language = 6
           [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
     }
-    repeated CountryLanguage country_language = 6
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated CountryLanguage country_language = 6;
   }
-  repeated Name name = 26 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  repeated Name name = 26
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Reference to another product, e.g. for linking authorised to
   // investigational product
@@ -230,9 +223,7 @@ message MedicinalProduct {
     Reference regulator = 9
         [(.google.fhir.proto.valid_reference_type) = "Organization"];
   }
-  repeated ManufacturingBusinessOperation manufacturing_business_operation = 28
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated ManufacturingBusinessOperation manufacturing_business_operation = 28;
 
   // Indicates if the medicinal product has an orphan designation for the
   // treatment of a rare disease
@@ -276,7 +267,5 @@ message MedicinalProduct {
     // Animal species for which this applies
     CodeableConcept species = 10;
   }
-  repeated SpecialDesignation special_designation = 29
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated SpecialDesignation special_designation = 29;
 }

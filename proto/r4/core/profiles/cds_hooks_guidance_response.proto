@@ -156,8 +156,6 @@ message CDSHooksGuidanceResponse {
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/cqf-cdsHooksEndpoint",
     (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 }

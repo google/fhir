@@ -350,7 +350,6 @@ field {
   type_name: ".google.fhir.r4.core.SearchParameter.Component"
   options {
     [google.fhir.proto.field_description]: "For Composite resources to define the parts"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -601,4 +600,7 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for SearchParameter, last updated 2018-12-27T22:37:54.724+11:00.\nSearch parameter for a resource.\nSee http://hl7.org/fhir/StructureDefinition/SearchParameter"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/SearchParameter"
+  [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
+  [google.fhir.proto.fhir_path_message_constraint]: "xpath.empty() or xpathUsage.exists()"
+  [google.fhir.proto.fhir_path_message_constraint]: "chain.empty() or type = \'reference\'"
 }

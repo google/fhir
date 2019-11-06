@@ -38,6 +38,12 @@ message USCorePediatricBMIforAgeObservationProfile {
       "http://hl7.org/fhir/StructureDefinition/Observation";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/us/core/StructureDefinition/pediatric-bmi-for-age";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "dataAbsentReason.empty() or value.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(component.empty() and hasMember.empty()) implies (dataAbsentReason or value)";
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -153,6 +159,8 @@ message USCorePediatricBMIforAgeObservationProfile {
 
   // Often just a dateTime for Vital Signs
   message EffectiveX {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "($this as dateTime).toString().length() >= 8";
     option (.google.fhir.proto.is_choice_type) = true;
 
     oneof choice {
@@ -160,11 +168,8 @@ message USCorePediatricBMIforAgeObservationProfile {
       core.Period period = 2;
     }
   }
-  EffectiveX effective = 19 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "($this as dateTime).toString().length() >= 8"
-  ];
+  EffectiveX effective = 19
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date/Time this version was made available
   core.Instant issued = 20;
@@ -219,6 +224,9 @@ message USCorePediatricBMIforAgeObservationProfile {
 
   // Provides guide for interpretation
   message ReferenceRange {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "low.exists() or high.exists() or text.exists()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -246,12 +254,7 @@ message USCorePediatricBMIforAgeObservationProfile {
     // Text based reference range in an observation
     core.String text = 9;
   }
-  repeated ReferenceRange reference_range = 30 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "low.exists() or high.exists() or text.exists()"
-  ];
+  repeated ReferenceRange reference_range = 30;
 
   // Used when reporting vital signs panel components
   repeated core.Reference has_member = 31 [
@@ -272,6 +275,9 @@ message USCorePediatricBMIforAgeObservationProfile {
 
   // Used when reporting systolic and diastolic blood pressure.
   message Component {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "value.exists() or dataAbsentReason.exists()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -314,12 +320,7 @@ message USCorePediatricBMIforAgeObservationProfile {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 33 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "value.exists() or dataAbsentReason.exists()"
-  ];
+  repeated Component component = 33;
 
   // field 34 reserved for Observation.category:VSCat which uses an unsupported
   // slicing on CodeableConcept
@@ -338,6 +339,12 @@ message USCorePediatricWeightForHeightObservationProfile {
       "http://hl7.org/fhir/StructureDefinition/Observation";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/us/core/StructureDefinition/pediatric-weight-for-height";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "dataAbsentReason.empty() or value.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(component.empty() and hasMember.empty()) implies (dataAbsentReason or value)";
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -453,6 +460,8 @@ message USCorePediatricWeightForHeightObservationProfile {
 
   // Often just a dateTime for Vital Signs
   message EffectiveX {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "($this as dateTime).toString().length() >= 8";
     option (.google.fhir.proto.is_choice_type) = true;
 
     oneof choice {
@@ -460,11 +469,8 @@ message USCorePediatricWeightForHeightObservationProfile {
       core.Period period = 2;
     }
   }
-  EffectiveX effective = 19 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "($this as dateTime).toString().length() >= 8"
-  ];
+  EffectiveX effective = 19
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Date/Time this version was made available
   core.Instant issued = 20;
@@ -519,6 +525,9 @@ message USCorePediatricWeightForHeightObservationProfile {
 
   // Provides guide for interpretation
   message ReferenceRange {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "low.exists() or high.exists() or text.exists()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -546,12 +555,7 @@ message USCorePediatricWeightForHeightObservationProfile {
     // Text based reference range in an observation
     core.String text = 9;
   }
-  repeated ReferenceRange reference_range = 30 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "low.exists() or high.exists() or text.exists()"
-  ];
+  repeated ReferenceRange reference_range = 30;
 
   // Used when reporting vital signs panel components
   repeated core.Reference has_member = 31 [
@@ -572,6 +576,9 @@ message USCorePediatricWeightForHeightObservationProfile {
 
   // Used when reporting systolic and diastolic blood pressure.
   message Component {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "value.exists() or dataAbsentReason.exists()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -614,12 +621,7 @@ message USCorePediatricWeightForHeightObservationProfile {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 33 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "value.exists() or dataAbsentReason.exists()"
-  ];
+  repeated Component component = 33;
 
   // field 34 reserved for Observation.category:VSCat which uses an unsupported
   // slicing on CodeableConcept
@@ -636,6 +638,10 @@ message USCoreAllergyIntolerance {
       "http://hl7.org/fhir/StructureDefinition/AllergyIntolerance";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-allergyintolerance";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "verificationStatus='entered-in-error' or clinicalStatus.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "verificationStatus!='entered-in-error' or clinicalStatus.empty()";
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -823,9 +829,7 @@ message USCoreAllergyIntolerance {
     // Text about event not captured in other fields
     repeated core.Annotation note = 10;
   }
-  repeated Reaction reaction = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Reaction reaction = 25;
 }
 
 // Auto-generated from StructureDefinition for USCoreBirthSexExtension.
@@ -837,6 +841,10 @@ message PatientUSCoreBirthSexExtension {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "children().count() > id.count()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // xml:id (or equivalent in JSON)
   core.String id = 1;
@@ -1022,6 +1030,9 @@ message USCoreCarePlanProfile {
 
   // Action to occur as part of plan
   message Activity {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "detail.empty() or reference.empty()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -1182,15 +1193,9 @@ message USCoreCarePlanProfile {
       // Extra info describing activity to perform
       core.String description = 20;
     }
-    Detail detail = 8 [(.google.fhir.proto.fhir_path_constraint) =
-                           "hasValue() or (children().count() > id.count())"];
+    Detail detail = 8;
   }
-  repeated Activity activity = 31 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "detail.empty() or reference.empty()"
-  ];
+  repeated Activity activity = 31;
 
   // Comments about the plan
   repeated core.Annotation note = 32;
@@ -1279,6 +1284,9 @@ message USCoreCareTeam {
 
   // Members of the team
   message Participant {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "onBehalfOf.exists() implies (member.resolve() is Practitioner)";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -1308,13 +1316,8 @@ message USCoreCareTeam {
     // Time period of participant
     core.Period period = 7;
   }
-  repeated Participant participant = 17 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "onBehalfOf.exists() implies (member.resolve() is Practitioner)"
-  ];
+  repeated Participant participant = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Why the care team exists
   repeated core.CodeableConcept reason_code = 18;
@@ -1343,6 +1346,14 @@ message UsCoreCondition {
       "http://hl7.org/fhir/StructureDefinition/Condition";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-condition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "verificationStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-ver-status' and code='entered-in-error').empty() or clinicalStatus.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "abatement.empty() or clinicalStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-clinical' and (code='resolved' or code='remission' or code='inactive')).exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "clinicalStatus.exists() or verificationStatus='entered-in-error' or category.select($this='problem-list-item').empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "where(category in 'http://hl7.org/fhir/us/core/ValueSet/us-core-condition-category').exists()";
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -1455,6 +1466,9 @@ message UsCoreCondition {
 
   // Stage/grade, usually assessed formally
   message Stage {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "summary.exists() or assessment.exists()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -1477,15 +1491,13 @@ message UsCoreCondition {
     // Kind of staging
     core.CodeableConcept type = 6;
   }
-  repeated Stage stage = 24 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "summary.exists() or assessment.exists()"
-  ];
+  repeated Stage stage = 24;
 
   // Supporting evidence
   message Evidence {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "code.exists() or detail.exists()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -1502,12 +1514,7 @@ message UsCoreCondition {
     repeated core.Reference detail = 5
         [(.google.fhir.proto.valid_reference_type) = "Resource"];
   }
-  repeated Evidence evidence = 25 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "code.exists() or detail.exists()"
-  ];
+  repeated Evidence evidence = 25;
 
   // Additional information about the Condition
   repeated core.Annotation note = 26;
@@ -1601,9 +1608,7 @@ message USCoreDeviceProfile {
     }
     EntryTypeCode entry_type = 9;
   }
-  UdiCarrier udi_carrier = 12
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  UdiCarrier udi_carrier = 12;
 
   // active | inactive | entered-in-error | unknown
   message StatusCode {
@@ -1677,9 +1682,7 @@ message USCoreDeviceProfile {
     TypeCode type = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated DeviceName device_name = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated DeviceName device_name = 21;
 
   // The model number for the device
   core.String model_number = 22;
@@ -1710,9 +1713,7 @@ message USCoreDeviceProfile {
     // The version of the standard that is used to operate and communicate
     core.String version = 5;
   }
-  repeated Specialization specialization = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Specialization specialization = 25;
 
   // The actual design of the device or software version running on the device
   message Version {
@@ -1735,9 +1736,7 @@ message USCoreDeviceProfile {
     core.String value = 6
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Version version = 26
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Version version = 26;
 
   // The actual configuration settings of a device as it actually operates,
   // e.g., regulation status, time properties
@@ -1761,9 +1760,7 @@ message USCoreDeviceProfile {
     // Property value as a code, e.g., NTP4 (synced to NTP)
     repeated core.CodeableConcept value_code = 6;
   }
-  repeated Property property = 27
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Property property = 27;
 
   // Patient to whom Device is affixed
   core.Reference patient = 28 [
@@ -1807,6 +1804,8 @@ message USCoreDiagnosticReportProfileLaboratoryReporting {
       "http://hl7.org/fhir/StructureDefinition/DiagnosticReport";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-diagnosticreport-lab";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "result.exists() or presentedForm.exists()";
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -1948,9 +1947,7 @@ message USCoreDiagnosticReportProfileLaboratoryReporting {
       (.google.fhir.proto.valid_reference_type) = "Media"
     ];
   }
-  repeated Media media = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Media media = 24;
 
   // Clinical conclusion (interpretation) of test results
   core.String conclusion = 25;
@@ -2115,9 +2112,7 @@ message USCoreDiagnosticReportProfileNoteExchange {
       (.google.fhir.proto.valid_reference_type) = "Media"
     ];
   }
-  repeated Media media = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Media media = 24;
 
   // Clinical conclusion (interpretation) of test results
   core.String conclusion = 25;
@@ -2138,6 +2133,10 @@ message UsCoreDirectEmail {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-direct";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "children().count() > id.count()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // xml:id (or equivalent in JSON)
   core.String id = 1;
@@ -2299,9 +2298,7 @@ message USCoreDocumentReferenceProfile {
       (.google.fhir.proto.valid_reference_type) = "DocumentReference"
     ];
   }
-  repeated RelatesTo relates_to = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated RelatesTo relates_to = 21;
 
   // Human-readable description
   core.String description = 22;
@@ -2330,11 +2327,8 @@ message USCoreDocumentReferenceProfile {
     // Format/content rules for the document
     core.Coding format = 5;
   }
-  Content content = 24 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())"
-  ];
+  Content content = 24
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Clinical context of document
   message Context {
@@ -2372,8 +2366,7 @@ message USCoreDocumentReferenceProfile {
     repeated core.Reference related = 10
         [(.google.fhir.proto.valid_reference_type) = "Resource"];
   }
-  Context context = 25 [(.google.fhir.proto.fhir_path_constraint) =
-                            "hasValue() or (children().count() > id.count())"];
+  Context context = 25;
 }
 
 // Auto-generated from StructureDefinition for USCoreEncounterProfile.
@@ -2469,9 +2462,7 @@ message USCoreEncounterProfile {
     core.Period period = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated StatusHistory status_history = 12
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated StatusHistory status_history = 12;
 
   // Classification of patient encounter
   core.Coding class_value = 13 [
@@ -2500,9 +2491,7 @@ message USCoreEncounterProfile {
     core.Period period = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated ClassHistory class_history = 14
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated ClassHistory class_history = 14;
 
   // Specific type of encounter
   repeated core.CodeableConcept type = 15
@@ -2549,9 +2538,7 @@ message USCoreEncounterProfile {
     core.Reference individual = 6
         [(.google.fhir.proto.valid_reference_type) = "Practitioner"];
   }
-  repeated Participant participant = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Participant participant = 21;
 
   // The appointment that scheduled this encounter
   repeated core.Reference appointment = 22
@@ -2599,9 +2586,7 @@ message USCoreEncounterProfile {
     // Ranking of the diagnosis (for each role type)
     core.PositiveInt rank = 6;
   }
-  repeated Diagnosis diagnosis = 27
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Diagnosis diagnosis = 27;
 
   // The set of accounts that may be used for billing for this Encounter
   repeated core.Reference account = 28
@@ -2652,9 +2637,7 @@ message USCoreEncounterProfile {
     // Category or kind of location after discharge
     core.CodeableConcept discharge_disposition = 12;
   }
-  Hospitalization hospitalization = 29
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Hospitalization hospitalization = 29;
 
   // List of locations where the patient has been
   message Location {
@@ -2697,9 +2680,7 @@ message USCoreEncounterProfile {
     // Time period during which the patient was present at the location
     core.Period period = 7;
   }
-  repeated Location location = 30
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Location location = 30;
 
   // The organization (facility) responsible for this encounter
   core.Reference service_provider = 31
@@ -2719,6 +2700,10 @@ message PatientUSCoreEthnicityExtension {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "children().count() > id.count()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // xml:id (or equivalent in JSON)
   core.String id = 1;
@@ -2889,6 +2874,9 @@ message USCoreGoalProfile {
 
   // Target outcome for the goal
   message Target {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(detail.exists() and measure.exists()) or detail.exists().not()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -2928,12 +2916,7 @@ message USCoreGoalProfile {
     }
     DueX due = 6;
   }
-  repeated Target target = 18 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "(detail.exists() and measure.exists()) or detail.exists().not()"
-  ];
+  repeated Target target = 18;
 
   // When goal status took effect
   core.Date status_date = 19;
@@ -3115,9 +3098,7 @@ message USCoreImmunizationProfile {
       (.google.fhir.proto.valid_reference_type) = "Organization"
     ];
   }
-  repeated Performer performer = 27
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Performer performer = 27;
 
   // Additional immunization notes
   repeated core.Annotation note = 28;
@@ -3140,6 +3121,9 @@ message USCoreImmunizationProfile {
 
   // Educational material presented to patient
   message Education {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "documentType.exists() or reference.exists()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -3161,12 +3145,7 @@ message USCoreImmunizationProfile {
     // Educational material presentation date
     core.DateTime presentation_date = 7;
   }
-  repeated Education education = 33 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "documentType.exists() or reference.exists()"
-  ];
+  repeated Education education = 33;
 
   // Patient eligibility for a vaccination program
   repeated core.CodeableConcept program_eligibility = 34;
@@ -3195,9 +3174,7 @@ message USCoreImmunizationProfile {
     // Indicates self-reported reaction
     core.Boolean reported = 6;
   }
-  repeated Reaction reaction = 36
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Reaction reaction = 36;
 
   // Protocol followed by the provider
   message ProtocolApplied {
@@ -3243,9 +3220,7 @@ message USCoreImmunizationProfile {
     }
     SeriesDosesX series_doses = 8;
   }
-  repeated ProtocolApplied protocol_applied = 37
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated ProtocolApplied protocol_applied = 37;
 }
 
 // Auto-generated from StructureDefinition for USCoreLocation.
@@ -3370,9 +3345,7 @@ message USCoreLocation {
     // Altitude with WGS84 datum
     core.Decimal altitude = 6;
   }
-  Position position = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Position position = 21;
 
   // Organization responsible for provisioning and upkeep
   core.Reference managing_organization = 22
@@ -3419,9 +3392,7 @@ message USCoreLocation {
     // Time that the Location closes
     core.Time closing_time = 7;
   }
-  repeated HoursOfOperation hours_of_operation = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated HoursOfOperation hours_of_operation = 24;
 
   // Description of availability exceptions
   core.String availability_exceptions = 25;
@@ -3534,9 +3505,7 @@ message USCoreMedicationProfile {
     // Quantity of ingredient present
     core.Ratio strength = 6;
   }
-  repeated Ingredient ingredient = 16
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Ingredient ingredient = 16;
 
   // Details about packaged medications
   message Batch {
@@ -3555,8 +3524,7 @@ message USCoreMedicationProfile {
     // When batch will expire
     core.DateTime expiration_date = 5;
   }
-  Batch batch = 17 [(.google.fhir.proto.fhir_path_constraint) =
-                        "hasValue() or (children().count() > id.count())"];
+  Batch batch = 17;
 }
 
 // Auto-generated from StructureDefinition for USCoreMedicationRequestProfile.
@@ -3804,9 +3772,7 @@ message USCoreMedicationRequestProfile {
       // First fill duration
       core.Duration duration = 5;
     }
-    InitialFill initial_fill = 4
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    InitialFill initial_fill = 4;
 
     // Minimum period of time between dispenses
     core.Duration dispense_interval = 5;
@@ -3827,9 +3793,7 @@ message USCoreMedicationRequestProfile {
     core.Reference performer = 10
         [(.google.fhir.proto.valid_reference_type) = "Organization"];
   }
-  DispenseRequest dispense_request = 37
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  DispenseRequest dispense_request = 37;
 
   // Any restrictions on medication substitution
   message Substitution {
@@ -3857,9 +3821,7 @@ message USCoreMedicationRequestProfile {
     // Why should (not) substitution be made
     core.CodeableConcept reason = 5;
   }
-  Substitution substitution = 38
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  Substitution substitution = 38;
 
   // An order/prescription that is being replaced
   core.Reference prior_prescription = 39
@@ -4037,6 +3999,12 @@ message USCoreLaboratoryResultObservationProfile {
       "http://hl7.org/fhir/StructureDefinition/Observation";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "dataAbsentReason.empty() or value.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(component.empty() and related.empty()) implies (dataAbsentReason or value)";
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -4130,6 +4098,8 @@ message USCoreLaboratoryResultObservationProfile {
 
   // Clinically relevant time/time-period for observation
   message EffectiveX {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "($this as dateTime).toString().length() >= 8";
     option (.google.fhir.proto.is_choice_type) = true;
 
     oneof choice {
@@ -4137,9 +4107,7 @@ message USCoreLaboratoryResultObservationProfile {
       core.Period period = 2;
     }
   }
-  EffectiveX effective = 19
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "($this as dateTime).toString().length() >= 8"];
+  EffectiveX effective = 19;
 
   // Date/Time this version was made available
   core.Instant issued = 20;
@@ -4156,6 +4124,10 @@ message USCoreLaboratoryResultObservationProfile {
 
   // Result Value
   message ValueX {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "valueCodeableConcept.coding.system.empty() or valueCodeableConcept.coding.system = 'http://snomed.info/sct'";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "valueQuantity.system.empty() or valueQuantity.system = 'http://unitsofmeasure.org'";
     option (.google.fhir.proto.is_choice_type) = true;
 
     oneof choice {
@@ -4172,12 +4144,7 @@ message USCoreLaboratoryResultObservationProfile {
       core.Period period = 11;
     }
   }
-  ValueX value = 22 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "valueCodeableConcept.coding.system.empty() or valueCodeableConcept.coding.system = 'http://snomed.info/sct'",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "valueQuantity.system.empty() or valueQuantity.system = 'http://unitsofmeasure.org'"
-  ];
+  ValueX value = 22;
 
   // Why the result is missing
   core.CodeableConcept data_absent_reason = 23;
@@ -4206,6 +4173,9 @@ message USCoreLaboratoryResultObservationProfile {
 
   // Provides guide for interpretation
   message ReferenceRange {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "low.exists() or high.exists() or text.exists()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -4233,12 +4203,7 @@ message USCoreLaboratoryResultObservationProfile {
     // Text based reference range in an observation
     core.String text = 9;
   }
-  repeated ReferenceRange reference_range = 30 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "low.exists() or high.exists() or text.exists()"
-  ];
+  repeated ReferenceRange reference_range = 30;
 
   // Related resource that belongs to the Observation group
   repeated core.Reference has_member = 31 [
@@ -4301,9 +4266,7 @@ message USCoreLaboratoryResultObservationProfile {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 33
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Component component = 33;
 
   // field 34 reserved for Observation.category:laboratory which uses an
   // unsupported slicing on CodeableConcept
@@ -4319,6 +4282,8 @@ message USCoreOrganizationProfile {
       "http://hl7.org/fhir/StructureDefinition/Organization";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-organization";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(identifier.count() + name.count()) > 0";
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -4406,9 +4371,7 @@ message USCoreOrganizationProfile {
     // Visiting or postal addresses for the contact
     core.Address address = 7;
   }
-  repeated Contact contact = 18
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Contact contact = 18;
 
   // Technical endpoints providing access to services operated for the
   // organization
@@ -4524,6 +4487,9 @@ message USCorePatientProfile {
 
   // A contact party (e.g. guardian, partner, friend) for the patient
   message Contact {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "name.exists() or telecom.exists() or address.exists() or organization.exists()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -4570,12 +4536,7 @@ message USCorePatientProfile {
     // be contacted relating to this patient
     core.Period period = 10;
   }
-  repeated Contact contact = 21 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "name.exists() or telecom.exists() or address.exists() or organization.exists()"
-  ];
+  repeated Contact contact = 21;
 
   // A language which may be used to communicate with the patient about his or
   // her health
@@ -4597,9 +4558,7 @@ message USCorePatientProfile {
     // Language preference indicator
     core.Boolean preferred = 5;
   }
-  repeated Communication communication = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Communication communication = 22;
 
   // Patient's nominated primary care provider
   repeated core.Reference general_practitioner = 23 [
@@ -4648,9 +4607,7 @@ message USCorePatientProfile {
     TypeCode type = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Link link = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Link link = 25;
 
   // Extension
   PatientUSCoreRaceExtension race = 26
@@ -4772,9 +4729,7 @@ message USCorePractitionerProfile {
     core.Reference issuer = 7
         [(.google.fhir.proto.valid_reference_type) = "Organization"];
   }
-  repeated Qualification qualification = 18
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Qualification qualification = 18;
 
   // A language the practitioner can use in patient communication
   repeated core.CodeableConcept communication = 19;
@@ -4793,6 +4748,8 @@ message USCorePractitionerRoleProfile {
       "http://hl7.org/fhir/StructureDefinition/PractitionerRole";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitionerrole";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "telecom or endpoint";
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -4900,9 +4857,7 @@ message USCorePractitionerRoleProfile {
     // Closing time of day (ignored if allDay = true)
     core.Time available_end_time = 7;
   }
-  repeated AvailableTime available_time = 20
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated AvailableTime available_time = 20;
 
   // Not available during this time due to provided reason
   message NotAvailable {
@@ -4922,9 +4877,7 @@ message USCorePractitionerRoleProfile {
     // Service not available from this date
     core.Period during = 5;
   }
-  repeated NotAvailable not_available = 21
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated NotAvailable not_available = 21;
 
   // Description of availability exceptions
   core.String availability_exceptions = 22;
@@ -5090,9 +5043,7 @@ message USCoreProcedureProfile {
     core.Reference on_behalf_of = 6
         [(.google.fhir.proto.valid_reference_type) = "Organization"];
   }
-  repeated Performer performer = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Performer performer = 24;
 
   // Where the procedure happened
   core.Reference location = 25
@@ -5156,9 +5107,7 @@ message USCoreProcedureProfile {
       (.google.fhir.proto.valid_reference_type) = "Device"
     ];
   }
-  repeated FocalDevice focal_device = 35
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated FocalDevice focal_device = 35;
 
   // Items used during procedure
   repeated core.Reference used_reference = 36 [
@@ -5180,6 +5129,10 @@ message PatientUSCoreRaceExtension {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "children().count() > id.count()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "extension.exists() != value.exists()";
 
   // xml:id (or equivalent in JSON)
   core.String id = 1;
@@ -5268,6 +5221,10 @@ message USCoreSmokingStatusProfile {
       "http://hl7.org/fhir/StructureDefinition/Observation";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-smokingstatus";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "dataAbsentReason.empty() or value.empty()";
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -5423,6 +5380,9 @@ message USCoreSmokingStatusProfile {
 
   // Provides guide for interpretation
   message ReferenceRange {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "low.exists() or high.exists() or text.exists()";
+
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -5450,12 +5410,7 @@ message USCoreSmokingStatusProfile {
     // Text based reference range in an observation
     core.String text = 9;
   }
-  repeated ReferenceRange reference_range = 30 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "low.exists() or high.exists() or text.exists()"
-  ];
+  repeated ReferenceRange reference_range = 30;
 
   // Related resource that belongs to the Observation group
   repeated core.Reference has_member = 31 [
@@ -5518,7 +5473,5 @@ message USCoreSmokingStatusProfile {
     // Provides guide for interpretation of component result
     repeated ReferenceRange reference_range = 8;
   }
-  repeated Component component = 33
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Component component = 33;
 }

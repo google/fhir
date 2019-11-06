@@ -126,9 +126,7 @@ message SupplyDelivery {
     }
     ItemX item = 5;
   }
-  SuppliedItem supplied_item = 16
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  SuppliedItem supplied_item = 16;
 
   // When event occurred
   message OccurrenceX {

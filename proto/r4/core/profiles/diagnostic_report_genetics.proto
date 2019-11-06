@@ -175,9 +175,7 @@ message DiagnosticReportGenetics {
       (.google.fhir.proto.valid_reference_type) = "Media"
     ];
   }
-  repeated Media media = 24
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Media media = 24;
 
   // Clinical conclusion (interpretation) of test results
   String conclusion = 25;
@@ -194,8 +192,6 @@ message DiagnosticReportGenetics {
         "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition",
     json_name = "AssessedCondition",
     (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 
@@ -204,8 +200,6 @@ message DiagnosticReportGenetics {
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory",
     json_name = "FamilyMemberHistory",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
@@ -216,8 +210,6 @@ message DiagnosticReportGenetics {
         "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAnalysis",
     json_name = "Analysis",
     (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];
 
@@ -226,8 +218,6 @@ message DiagnosticReportGenetics {
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsReferences",
     json_name = "References",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
     (.google.fhir.proto.fhir_path_constraint) =
         "extension.exists() != value.exists()"
   ];

@@ -306,7 +306,6 @@ field {
   type_name: ".google.fhir.r4.core.ImagingStudy.Series"
   options {
     [google.fhir.proto.field_description]: "Each study has one or more series of instances"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 nested_type {
@@ -480,7 +479,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ImagingStudy.Series.Performer"
     options {
       [google.fhir.proto.field_description]: "Who performed the series"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -491,7 +489,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ImagingStudy.Series.Instance"
     options {
       [google.fhir.proto.field_description]: "A single SOP instance from the series"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {

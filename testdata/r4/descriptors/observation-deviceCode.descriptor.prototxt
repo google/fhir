@@ -24,4 +24,5 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for deviceCode.\nA code representing the the type of device used for this observation.  Should only be used if not implicit in the code found in `Observation.code`.\nSee http://hl7.org/fhir/StructureDefinition/observation-deviceCode"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Extension"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/observation-deviceCode"
+  [google.fhir.proto.fhir_path_message_constraint]: "extension.exists() != value.exists()"
 }

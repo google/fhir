@@ -224,7 +224,6 @@ field {
   type_name: ".google.fhir.r4.core.ExampleScenario.Actor"
   options {
     [google.fhir.proto.field_description]: "Actor participating in the resource"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -235,7 +234,6 @@ field {
   type_name: ".google.fhir.r4.core.ExampleScenario.Instance"
   options {
     [google.fhir.proto.field_description]: "Each resource and each version that is present in the workflow"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -246,7 +244,6 @@ field {
   type_name: ".google.fhir.r4.core.ExampleScenario.Process"
   options {
     [google.fhir.proto.field_description]: "Each major process - a group of operations"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {
@@ -470,7 +467,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ExampleScenario.Instance.Version"
     options {
       [google.fhir.proto.field_description]: "A specific version of the resource"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   field {
@@ -481,7 +477,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ExampleScenario.Instance.ContainedInstance"
     options {
       [google.fhir.proto.field_description]: "Resources contained in the instance"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -702,7 +697,6 @@ nested_type {
     type_name: ".google.fhir.r4.core.ExampleScenario.Process.Step"
     options {
       [google.fhir.proto.field_description]: "Each step of the process"
-      [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
     }
   }
   nested_type {
@@ -765,7 +759,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.ExampleScenario.Process.Step.Operation"
       options {
         [google.fhir.proto.field_description]: "Each interaction or action"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     field {
@@ -776,7 +769,6 @@ nested_type {
       type_name: ".google.fhir.r4.core.ExampleScenario.Process.Step.Alternative"
       options {
         [google.fhir.proto.field_description]: "Alternate non-typical step action"
-        [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
       }
     }
     nested_type {
@@ -983,4 +975,5 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ExampleScenario, last updated 2018-12-27T22:37:54.724+11:00.\nExample of workflow instance.\nSee http://hl7.org/fhir/StructureDefinition/ExampleScenario"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ExampleScenario"
+  [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
 }

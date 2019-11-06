@@ -127,7 +127,6 @@ field {
   type_name: ".google.fhir.r4.core.Dosage.DoseAndRate"
   options {
     [google.fhir.proto.field_description]: "Amount of medication administered"
-    [google.fhir.proto.fhir_path_constraint]: "hasValue() or (children().count() > id.count())"
   }
 }
 field {

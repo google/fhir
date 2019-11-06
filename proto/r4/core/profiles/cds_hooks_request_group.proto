@@ -175,6 +175,9 @@ message CDSHooksRequestGroup {
 
   // Proposed actions, if any
   message Action {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "resource.exists() != action.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 
@@ -252,9 +255,7 @@ message CDSHooksRequestGroup {
       // Boolean-valued expression
       Expression expression = 5;
     }
-    repeated Condition condition = 11
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated Condition condition = 11;
 
     // Relationship to another action
     message RelatedAction {
@@ -301,9 +302,7 @@ message CDSHooksRequestGroup {
       }
       OffsetX offset = 6;
     }
-    repeated RelatedAction related_action = 12
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "hasValue() or (children().count() > id.count())"];
+    repeated RelatedAction related_action = 12;
 
     // When the action should take place
     message TimingX {
@@ -424,10 +423,5 @@ message CDSHooksRequestGroup {
     // Sub action
     repeated Action action = 22;
   }
-  repeated Action action = 27 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "resource.exists() != action.exists()"
-  ];
+  repeated Action action = 27;
 }
