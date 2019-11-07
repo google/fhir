@@ -37,10 +37,6 @@
 namespace google {
 namespace fhir {
 
-using ::google::fhir::stu3::proto::DateTime;
-using ::google::fhir::stu3::proto::Id;
-using ::google::fhir::stu3::proto::Reference;
-using ::google::fhir::stu3::proto::ReferenceId;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
@@ -133,7 +129,7 @@ StatusOr<string> ReferenceProtoToStringInternal(
 
   const Reflection* reflection = reference.GetReflection();
   static const google::protobuf::OneofDescriptor* oneof =
-      Reference::descriptor()->FindOneofByName("reference");
+      ReferenceLike::descriptor()->FindOneofByName("reference");
   const FieldDescriptor* field =
       reflection->GetOneofFieldDescriptor(reference, oneof);
   if (field == nullptr) {
@@ -204,17 +200,17 @@ absl::Duration InternalGetDurationFromTimelikeElement(
     const TypedDateTime& datetime) {
   // TODO: handle YEAR and MONTH properly, instead of approximating.
   switch (datetime.precision()) {
-    case DateTime::YEAR:
+    case TypedDateTime::YEAR:
       return absl::Hours(24 * 366);
-    case DateTime::MONTH:
+    case TypedDateTime::MONTH:
       return absl::Hours(24 * 31);
-    case DateTime::DAY:
+    case TypedDateTime::DAY:
       return absl::Hours(24);
-    case DateTime::SECOND:
+    case TypedDateTime::SECOND:
       return absl::Seconds(1);
-    case DateTime::MILLISECOND:
+    case TypedDateTime::MILLISECOND:
       return absl::Milliseconds(1);
-    case DateTime::MICROSECOND:
+    case TypedDateTime::MICROSECOND:
       return absl::Microseconds(1);
     default:
       LOG(FATAL) << "Unsupported datetime precision: " << datetime.precision();
@@ -282,14 +278,13 @@ StatusOr<string> GetResourceId(const Message& message) {
   if (field->cpp_type() != FieldDescriptor::CPPTYPE_MESSAGE) {
     return InvalidArgument("No id field found on message");
   }
-  if (field->message_type()->full_name() == Id::descriptor()->full_name()) {
+  if (IsMessageType<stu3::proto::Id>(field->message_type())) {
     const auto* id_message =
-        dynamic_cast<const Id*>(&ref->GetMessage(message, field));
+        dynamic_cast<const stu3::proto::Id*>(&ref->GetMessage(message, field));
     return id_message->value();
-  } else if (field->message_type()->full_name() ==
-             google::fhir::r4::core::Id::descriptor()->full_name()) {
-    const auto* id_message = dynamic_cast<const google::fhir::r4::core::Id*>(
-        &ref->GetMessage(message, field));
+  } else if (IsMessageType<r4::core::Id>(field->message_type())) {
+    const auto* id_message =
+        dynamic_cast<const r4::core::Id*>(&ref->GetMessage(message, field));
     return id_message->value();
   } else {
     return InvalidArgument(
