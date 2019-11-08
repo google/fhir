@@ -46,10 +46,16 @@ using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
+using std::unordered_map;
 using ::tensorflow::errors::InvalidArgument;
 
 const bool SharesCommonAncestor(const ::google::protobuf::Descriptor* first,
                                 const ::google::protobuf::Descriptor* second);
+
+// Gets a map from profiled extension urls to the fields that they are profiled
+// in on a target message.
+const unordered_map<string, const FieldDescriptor*>& GetExtensionMap(
+    const Descriptor* descriptor);
 
 // Copies the contents of the extension field on source to the target message.
 // Any extensions that can be slotted into profiled fields are, and any that
@@ -71,13 +77,8 @@ Status PerformExtensionSlicing(const Message& source, Message* target) {
 
   // Map from profiled extension urls to the fields that they are profiled in
   // on the target
-  std::unordered_map<string, const FieldDescriptor*> extension_map;
-  for (int i = 0; i < target_descriptor->field_count(); i++) {
-    const FieldDescriptor* field = target_descriptor->field(i);
-    if (HasInlinedExtensionUrl(field)) {
-      extension_map[GetInlinedExtensionUrl(field)] = field;
-    }
-  }
+  std::unordered_map<string, const FieldDescriptor*> extension_map =
+      GetExtensionMap(target_descriptor);
 
   for (const ExtensionLike& source_extension :
        source_reflection->GetRepeatedFieldRef<ExtensionLike>(

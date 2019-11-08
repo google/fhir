@@ -74,6 +74,37 @@ const bool SharesCommonAncestor(const ::google::protobuf::Descriptor* first,
   return AddSharedCommonAncestorMemo(first_url, second_url, false, &memos);
 }
 
+const unordered_map<string, const FieldDescriptor*>& GetExtensionMap(
+    const Descriptor* descriptor) {
+  // Note that we memoize on descriptor address, since the values include
+  // FieldDescriptor addresses, which will only be valid for a given address
+  // of input descriptor
+  static auto* memos =
+      new unordered_map<intptr_t,
+                        unordered_map<string, const FieldDescriptor*>>();
+  static absl::Mutex memos_mutex;
+
+  const intptr_t memo_key = (intptr_t)descriptor;
+
+  memos_mutex.ReaderLock();
+  const auto iter = memos->find(memo_key);
+  if (iter != memos->end()) {
+    memos_mutex.ReaderUnlock();
+    return iter->second;
+  }
+  memos_mutex.ReaderUnlock();
+
+  absl::MutexLock lock(&memos_mutex);
+  auto& extension_map = (*memos)[memo_key];
+  for (int i = 0; i < descriptor->field_count(); i++) {
+    const FieldDescriptor* field = descriptor->field(i);
+    if (HasInlinedExtensionUrl(field)) {
+      extension_map[GetInlinedExtensionUrl(field)] = field;
+    }
+  }
+  return extension_map;
+}
+
 }  // namespace profiles_internal
 }  // namespace fhir
 }  // namespace google
