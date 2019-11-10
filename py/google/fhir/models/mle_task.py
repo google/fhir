@@ -35,6 +35,7 @@ import argparse
 import os
 from . import model  # Using a relative import for ease of use with Cloud.
 import tensorflow as tf
+from tensorflow.contrib import learn as contrib_learn
 
 
 def make_experiment_fn(input_dir, num_train_steps, num_eval_steps, label_name,
@@ -106,15 +107,16 @@ def make_experiment_fn(input_dir, num_train_steps, num_eval_steps, label_name,
     estimator = model.make_estimator(hparams,
                                      label_values.split(','),
                                      output_dir)
-    return tf.contrib.learn.Experiment(
+    return contrib_learn.Experiment(
         estimator=estimator,
         train_input_fn=train_input_fn,
         eval_input_fn=eval_input_fn,
         export_strategies=[
-            tf.contrib.learn.utils.saved_model_export_utils.
-            make_export_strategy(serving_input_fn,
-                                 default_output_alternative_key=None,
-                                 exports_to_keep=1)],
+            contrib_learn.utils.saved_model_export_utils.make_export_strategy(
+                serving_input_fn,
+                default_output_alternative_key=None,
+                exports_to_keep=1)
+        ],
         train_steps=num_train_steps,
         eval_steps=num_eval_steps,
         eval_delay_secs=0,
@@ -180,6 +182,5 @@ if __name__ == '__main__':
   output_directory = arguments.pop('output_dir')
 
   # Run the training job
-  tf.contrib.learn.learn_runner.run(
+  contrib_learn.learn_runner.run(
       make_experiment_fn(**arguments), output_directory)
-

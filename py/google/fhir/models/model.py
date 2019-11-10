@@ -21,6 +21,11 @@ from __future__ import print_function
 
 
 import tensorflow as tf
+from tensorflow.contrib import data as contrib_data
+from tensorflow.contrib import estimator as contrib_estimator
+from tensorflow.contrib import learn as contrib_learn
+from tensorflow.contrib import lookup as contrib_lookup
+from tensorflow.contrib import training as contrib_training
 
 
 CONTEXT_KEY_PREFIX = 'c-'
@@ -405,10 +410,10 @@ def get_input_fn(mode,
       files = tf.data.Dataset.list_files(file_names)
       if shuffle:
         files = files.shuffle(buffer_size=len(file_names))
-      dataset = (files
-                 .apply(tf.contrib.data.parallel_interleave(
-                     tf.data.TFRecordDataset, cycle_length=10))
-                 .repeat(num_epochs))
+      dataset = (
+          files.apply(
+              contrib_data.parallel_interleave(
+                  tf.data.TFRecordDataset, cycle_length=10)).repeat(num_epochs))
       if shuffle:
         dataset = dataset.shuffle(buffer_size=100)
       parse_fn = _make_parsing_fn(
@@ -566,9 +571,8 @@ def make_metrics(label_values):
       per class.
     """
 
-    label_ids = tf.contrib.lookup.index_table_from_tensor(
-        tuple(label_values),
-        name='class_id_lookup').lookup(labels)
+    label_ids = contrib_lookup.index_table_from_tensor(
+        tuple(label_values), name='class_id_lookup').lookup(labels)
 
     # We convert the task to a binary one of < 7 days.
     # 'less_or_equal_3', '3_7', '7_14', 'above_14'
@@ -681,7 +685,7 @@ def make_estimator(hparams, label_values, output_dir):
   else:
     raise ValueError(
         'Invalid Optimizer %s needs to be Ftrl or Adam' % hparams.optimizer)
-  run_config = tf.contrib.learn.RunConfig(save_checkpoints_secs=180)
+  run_config = contrib_learn.RunConfig(save_checkpoints_secs=180)
   if hparams.model_type == 'linear':
     estimator = tf.estimator.LinearClassifier(
         feature_columns=seq_features + categorical_context_features +
@@ -723,7 +727,7 @@ def make_estimator(hparams, label_values, output_dir):
     raise ValueError('Invalid model_type %s needs to be linear or dnn'
                      % hparams.model_type)
 
-  return tf.contrib.estimator.add_metrics(estimator, make_metrics(label_values))
+  return contrib_estimator.add_metrics(estimator, make_metrics(label_values))
 
 
 def create_hparams(hparams_override_str=''):
@@ -735,7 +739,7 @@ def create_hparams(hparams_override_str=''):
   Returns:
     Default HParams.
   """
-  hparams = tf.contrib.training.HParams(
+  hparams = contrib_training.HParams(
       # Sequence features are bucketed by their age at time of prediction in:
       # [time_windows[0] - time_windows[1]),
       # [time_windows[1] - time_windows[2]),
@@ -781,10 +785,9 @@ def create_hparams(hparams_override_str=''):
       # List of strings each of which is a ':'-separated list of feature that we
       # want to concatenate over the time dimension
       time_crossed_features=[
-          '%s:%s:%s:%s' % ('Observation.code',
-                           'Observation.value.quantity.value',
-                           'Observation.value.quantity.unit',
-                           'Observation.value.string')
+          '%s:%s:%s:%s' %
+          ('Observation.code', 'Observation.value.quantity.value',
+           'Observation.value.quantity.unit', 'Observation.value.string')
       ],
       time_concat_bucket_sizes=[39571],
       context_bucket_sizes=[4],
@@ -798,4 +801,3 @@ def create_hparams(hparams_override_str=''):
   if hparams_override_str:
     hparams = hparams.parse(hparams_override_str)
   return hparams
-

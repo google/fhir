@@ -39,6 +39,9 @@ py_library(
     srcs = [
         "model.py",
     ],
+    deps = [
+        requirement("tensorflow"),
+    ],
 )
 
 py_binary(
