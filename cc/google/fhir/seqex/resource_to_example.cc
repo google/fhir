@@ -495,14 +495,16 @@ void MessageToExample(const google::protobuf::Message& message, const string& pr
               .mutable_bytes_list()
               ->add_value(GetCode(coding));
         } else if (field->message_type()->full_name() ==
+                   Extension::descriptor()->full_name()) {
+          // We do not emit extensions. To include data encoded in extensions
+          // in generated examples, please use profiled bundles as input.
+        } else if (field->message_type()->full_name() ==
                        Identifier::descriptor()->full_name() ||
                    field->message_type()->full_name() ==
                        Id::descriptor()->full_name()) {
           // We don't emit identifiers.
           // TODO: are there situations where we should?
         } else if (field->message_type()->full_name() ==
-                       stu3::proto::Base64Binary::descriptor()->full_name() ||
-                   field->message_type()->full_name() ==
                        Base64Binary::descriptor()->full_name()) {
           // We don't emit Base64Binary.
           // TODO: are there situations where we should?
