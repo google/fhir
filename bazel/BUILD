@@ -7,5 +7,6 @@ exports_files(
         "*.bzl",
         "cython.BUILD",
         "requirements.txt",
+        "dependencies.bzl",
     ],
 )

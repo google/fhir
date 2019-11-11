@@ -21,8 +21,6 @@ java_library(
     ),
     deps = [
         ":common",
-        "//external:gson",
-        "//external:guava",
         "//proto/stu3:codes_java_proto",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
@@ -43,9 +41,11 @@ java_library(
         "//proto/r4/core/resources:operation_definition_java_proto",
         "//proto/r4/core/resources:structure_definition_java_proto",
         "//proto/r4/core/resources:value_set_java_proto",
-        "@com_google_apis_google_api_services_bigquery//jar",
-        "@com_google_http_client_google_http_client//jar",
         "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_apis_google_api_services_bigquery",
+        "@maven//:com_google_code_gson_gson",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_http_client_google_http_client",
     ],
 )
 
@@ -60,7 +60,6 @@ java_library(
     ],
     deps = [
         ":stu3",
-        "//external:guava",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:profile_config_java_proto",
         "//proto/stu3:resources_java_proto",
@@ -71,38 +70,39 @@ java_library(
         "//proto/r4/core/resources:code_system_java_proto",
         "//proto/r4/core/resources:structure_definition_java_proto",
         "//proto/r4/core/resources:value_set_java_proto",
-        "@com_beust_jcommander//jar",
-        "@com_google_apis_google_api_services_bigquery//jar",
-        "@com_google_http_client_google_http_client//jar",
-        "@com_google_http_client_google_http_client_gson//jar",
         "@com_google_protobuf//:protobuf_java",
         "@com_google_protobuf//:protobuf_java_util",
-        "@org_apache_beam_beam_sdks_java_core//jar",
+        "@maven//:com_beust_jcommander",
+        "@maven//:com_google_apis_google_api_services_bigquery",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_http_client_google_http_client",
+        "@maven//:com_google_http_client_google_http_client_gson",
+        "@maven//:org_apache_beam_beam_sdks_java_core",
     ],
 )
 
 java_library(
     name = "beam-runners",
     runtime_deps = [
-        "@com_fasterxml_jackson_core_jackson_annotations//jar",
-        "@com_fasterxml_jackson_core_jackson_core//jar",
-        "@com_fasterxml_jackson_core_jackson_databind//jar",
-        "@com_google_api_client_google_api_client//jar",
-        "@com_google_apis_google_api_services_clouddebugger//jar",
-        "@com_google_apis_google_api_services_dataflow//jar",
-        "@com_google_apis_google_api_services_storage//jar",
-        "@com_google_auth_google_auth_library_credentials//jar",
-        "@com_google_cloud_bigdataoss_util//jar",
-        "@joda_time_joda_time//jar",
-        "@org_apache_beam_beam_model_pipeline//jar",
-        "@org_apache_beam_beam_runners_direct_java//jar",
-        "@org_apache_beam_beam_runners_google_cloud_dataflow_java//jar",
-        "@org_apache_beam_beam_sdks_java_extensions_google_cloud_platform_core//jar",
-        "@org_apache_beam_beam_sdks_java_io_google_cloud_platform//jar",
-        "@org_apache_beam_beam_vendor_grpc_v1_13_1//jar",
-        "@org_slf4j_slf4j_api//jar",
-        "@org_slf4j_slf4j_simple//jar",
-        "@org_xerial_snappy_snappy_java//jar",
+        "@maven//:com_fasterxml_jackson_core_jackson_annotations",
+        "@maven//:com_fasterxml_jackson_core_jackson_core",
+        "@maven//:com_fasterxml_jackson_core_jackson_databind",
+        "@maven//:com_google_api_client_google_api_client",
+        "@maven//:com_google_apis_google_api_services_clouddebugger",
+        "@maven//:com_google_apis_google_api_services_dataflow",
+        "@maven//:com_google_apis_google_api_services_storage",
+        "@maven//:com_google_auth_google_auth_library_credentials",
+        "@maven//:com_google_cloud_bigdataoss_util",
+        "@maven//:joda_time_joda_time",
+        "@maven//:org_apache_beam_beam_model_pipeline",
+        "@maven//:org_apache_beam_beam_runners_direct_java",
+        "@maven//:org_apache_beam_beam_runners_google_cloud_dataflow_java",
+        "@maven//:org_apache_beam_beam_sdks_java_extensions_google_cloud_platform_core",
+        "@maven//:org_apache_beam_beam_sdks_java_io_google_cloud_platform",
+        "@maven//:org_apache_beam_beam_vendor_grpc_v1_13_1",
+        "@maven//:org_slf4j_slf4j_api",
+        "@maven//:org_slf4j_slf4j_simple",
+        "@maven//:org_xerial_snappy_snappy_java",
     ],
 )
 
@@ -139,11 +139,11 @@ java_library(
         "src/main/java/com/google/fhir/dstu2/StructureDefinitionTransformer.java",
     ],
     deps = [
-        "//external:gson",
-        "//external:guava",
-        "@com_beust_jcommander//jar",
-        "@com_google_http_client_google_http_client//jar",
-        "@com_google_http_client_google_http_client_gson//jar",
+        "@maven//:com_beust_jcommander",
+        "@maven//:com_google_code_gson_gson",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_http_client_google_http_client",
+        "@maven//:com_google_http_client_google_http_client_gson",
     ],
 )
 
@@ -155,7 +155,6 @@ java_library(
         "src/main/java/com/google/fhir/stu3/AnnotationUtils.java",
     ],
     deps = [
-        "//external:guava",
         "//proto/stu3:codes_java_proto",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
@@ -173,6 +172,7 @@ java_library(
         "//proto/r4/core/resources:patient_java_proto",
         "//proto/r4/core/resources:structure_definition_java_proto",
         "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
     ],
 )
 
@@ -183,11 +183,11 @@ java_test(
     test_class = "com.google.fhir.dstu2.StructureDefinitionTransformerTest",
     deps = [
         ":structure_definition_transformer",
-        "//external:gson",
-        "@com_google_http_client_google_http_client//jar",
-        "@com_google_http_client_google_http_client_gson//jar",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
+        "@maven//:com_google_code_gson_gson",
+        "@maven//:com_google_http_client_google_http_client",
+        "@maven//:com_google_http_client_google_http_client_gson",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -196,13 +196,13 @@ java_library(
     srcs = ["src/main/java/com/google/fhir/examples/BigQuerySchemaGeneratorMain.java"],
     deps = [
         ":stu3",
-        "//external:guava",
         "//examples/profiles:demo_java_proto",
-        "@com_beust_jcommander//jar",
-        "@com_google_apis_google_api_services_bigquery//jar",
-        "@com_google_http_client_google_http_client//jar",
-        "@com_google_http_client_google_http_client_gson//jar",
         "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_beust_jcommander",
+        "@maven//:com_google_apis_google_api_services_bigquery",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_http_client_google_http_client",
+        "@maven//:com_google_http_client_google_http_client_gson",
     ],
 )
 
@@ -227,8 +227,8 @@ java_test(
         "//proto/stu3:uscore_java_proto",
         "//proto:annotations_java_proto",
         "@com_google_protobuf//:protobuf_java",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -244,17 +244,17 @@ java_test(
     test_class = "com.google.fhir.stu3.BigQuerySchemaTest",
     deps = [
         ":stu3",
-        "//external:guava",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:resources_java_proto",
         "@bazel_tools//tools/java/runfiles",
-        "@com_google_apis_google_api_services_bigquery//jar",
-        "@com_google_http_client_google_http_client//jar",
-        "@com_google_http_client_google_http_client_gson//jar",
         "@com_google_protobuf//:protobuf_java",
         "@com_google_protobuf//:protobuf_java_util",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
+        "@maven//:com_google_apis_google_api_services_bigquery",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_http_client_google_http_client",
+        "@maven//:com_google_http_client_google_http_client_gson",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -267,8 +267,8 @@ java_test(
         ":stu3",
         "//proto/stu3:datatypes_java_proto",
         "//proto/r4/core:datatypes_java_proto",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -281,8 +281,8 @@ java_test(
         ":stu3",
         "//proto/stu3:datatypes_java_proto",
         "//proto/r4/core:datatypes_java_proto",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -295,8 +295,8 @@ java_test(
         ":stu3",
         "//proto/stu3:datatypes_java_proto",
         "//proto/r4/core:datatypes_java_proto",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -310,14 +310,14 @@ java_test(
     test_class = "com.google.fhir.stu3.ExtensionWrapperTest",
     deps = [
         ":stu3",
-        "//external:guava",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
         "//proto/r4/core:datatypes_java_proto",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -330,8 +330,8 @@ java_test(
         ":stu3",
         "//proto/stu3:datatypes_java_proto",
         "//proto/r4/core:datatypes_java_proto",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -341,12 +341,12 @@ java_library(
     srcs = ["src/main/java/com/google/fhir/common/JsonFormatTestBase.java"],
     deps = [
         ":stu3",
-        "//external:gson",
-        "//external:guava",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
+        "@maven//:com_google_code_gson_gson",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -365,13 +365,13 @@ java_test(
     deps = [
         ":json_format_test_base",
         ":stu3",
-        "//external:gson",
-        "//external:guava",
         "//proto/stu3:resources_java_proto",
         "//testdata/stu3/profiles:test_java_proto",
         "@com_google_protobuf//:protobuf_java",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
+        "@maven//:com_google_code_gson_gson",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -388,7 +388,6 @@ java_test(
     test_class = "com.google.fhir.r4.JsonFormatTest",
     deps = [
         ":json_format_test_base",
-        "//external:guava",
         "//proto/r4/core/resources:account_java_proto",
         "//proto/r4/core/resources:activity_definition_java_proto",
         "//proto/r4/core/resources:adverse_event_java_proto",
@@ -525,7 +524,8 @@ java_test(
         "//proto/r4/core/resources:verification_result_java_proto",
         "//proto/r4/core/resources:vision_prescription_java_proto",
         "@com_google_protobuf//:protobuf_java",
-        "@junit_junit//jar",
+        "@maven//:com_google_guava_guava",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -545,7 +545,6 @@ java_test(
         ":ProtoGeneratorTest",
         ":proto_generator_lib",
         ":stu3",
-        "//external:guava",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
         "//proto/stu3:metadatatypes_java_proto",
@@ -558,8 +557,9 @@ java_test(
         "//proto/r4/core/resources:structure_definition_java_proto",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -582,7 +582,6 @@ java_test(
         ":proto_generator_lib",
         ":stu3",
         ":value_set_generator_lib",
-        "//external:guava",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:profile_config_java_proto",
         "//proto/stu3:resources_java_proto",
@@ -593,8 +592,9 @@ java_test(
         "//proto/r4/core/resources:value_set_java_proto",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -607,8 +607,8 @@ java_test(
         ":stu3",
         "//proto/stu3:datatypes_java_proto",
         "//proto/r4/core:datatypes_java_proto",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -622,12 +622,12 @@ java_test(
     test_class = "com.google.fhir.stu3.ValidationTest",
     deps = [
         ":stu3",
-        "//external:guava",
         "//proto/stu3:datatypes_java_proto",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -639,7 +639,6 @@ java_library(
         ":generator_utils",
         ":stu3",
         ":value_set_generator_lib",
-        "//external:guava",
         "//proto/stu3:codes_java_proto",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
@@ -651,6 +650,7 @@ java_library(
         "//proto/r4/core:extensions_java_proto",
         "//proto/r4/core/resources:structure_definition_java_proto",
         "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
     ],
 )
 
@@ -664,7 +664,6 @@ java_binary(
         ":structure_definition_transformer",
         ":stu3",
         ":value_set_generator_lib",
-        "//external:guava",
         "//proto/stu3:profile_config_java_proto",
         "//proto:annotations_java_proto",
         "//proto/r4/core:codes_java_proto",
@@ -672,8 +671,9 @@ java_binary(
         "//proto/r4/core/resources:code_system_java_proto",
         "//proto/r4/core/resources:structure_definition_java_proto",
         "//proto/r4/core/resources:value_set_java_proto",
-        "@com_beust_jcommander//jar",
         "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_beust_jcommander",
+        "@maven//:com_google_guava_guava",
     ],
 )
 
@@ -683,7 +683,6 @@ java_library(
     deps = [
         ":common",
         ":stu3",
-        "//external:guava",
         "//proto/stu3:profile_config_java_proto",
         "//proto/stu3:profiles_java_proto",
         "//proto:annotations_java_proto",
@@ -693,6 +692,7 @@ java_library(
         "//proto/r4/core/resources:bundle_and_contained_resource_java_proto",
         "//proto/r4/core/resources:structure_definition_java_proto",
         "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
     ],
 )
 
@@ -709,14 +709,14 @@ java_test(
     deps = [
         ":profile_generator_lib",
         ":stu3",
-        "//external:guava",
         "//proto/stu3:profile_config_java_proto",
         "//proto/stu3:resources_java_proto",
         "//proto/r4/core/resources:bundle_and_contained_resource_java_proto",
         "//proto/r4/core/resources:structure_definition_java_proto",
         "@com_google_protobuf//:protobuf_java",
-        "@com_google_truth_truth//jar",
-        "@junit_junit//jar",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -729,13 +729,13 @@ java_binary(
         ":generator_utils",
         ":profile_generator_lib",
         ":stu3",
-        "//external:guava",
         "//proto/stu3:profile_config_java_proto",
         "//proto:annotations_java_proto",
         "//proto/r4/core:extensions_java_proto",
         "//proto/r4/core/resources:bundle_and_contained_resource_java_proto",
         "//proto/r4/core/resources:structure_definition_java_proto",
-        "@com_beust_jcommander//jar",
+        "@maven//:com_beust_jcommander",
+        "@maven//:com_google_guava_guava",
     ],
 )
 
@@ -746,7 +746,6 @@ java_library(
         ":common",
         ":generator_utils",
         ":stu3",
-        "//external:guava",
         "//proto/stu3:profile_config_java_proto",
         "//proto:annotations_java_proto",
         "//proto:protogenerator_annotations_java_proto",
@@ -757,6 +756,7 @@ java_library(
         "//proto/r4/core/resources:code_system_java_proto",
         "//proto/r4/core/resources:value_set_java_proto",
         "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
     ],
 )
 
@@ -768,15 +768,15 @@ java_binary(
         ":generator_utils",
         ":stu3",
         ":value_set_generator_lib",
-        "//external:guava",
         "//proto/stu3:profile_config_java_proto",
         "//proto:annotations_java_proto",
         "//proto/r4/core/resources:bundle_and_contained_resource_java_proto",
         "//proto/r4/core/resources:code_system_java_proto",
         "//proto/r4/core/resources:structure_definition_java_proto",
         "//proto/r4/core/resources:value_set_java_proto",
-        "@com_beust_jcommander//jar",
         "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_beust_jcommander",
+        "@maven//:com_google_guava_guava",
     ],
 )
 
@@ -789,7 +789,6 @@ java_library(
     deps = [
         ":structure_definition_transformer",
         ":stu3",
-        "//external:guava",
         "//proto/stu3:profile_config_java_proto",
         "//proto:annotations_java_proto",
         "//proto/r4/core/resources:bundle_and_contained_resource_java_proto",
@@ -797,5 +796,6 @@ java_library(
         "//proto/r4/core/resources:structure_definition_java_proto",
         "//proto/r4/core/resources:value_set_java_proto",
         "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
     ],
 )
