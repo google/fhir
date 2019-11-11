@@ -47,8 +47,8 @@ static const absl::TimeZone GetTimeZone() {
 
 static const absl::TimeZone kTimeZone = GetTimeZone();
 
-string CamelCaseToLowerUnderscores(const string& src) {
-  string dst;
+std::string CamelCaseToLowerUnderscores(const std::string& src) {
+  std::string dst;
   for (auto iter = src.begin(); iter != src.end(); ++iter) {
     if (absl::ascii_isupper(*iter) && iter != src.begin()) {
       dst.push_back('_');
@@ -58,8 +58,8 @@ string CamelCaseToLowerUnderscores(const string& src) {
   return dst;
 }
 
-std::vector<string> ReadLines(const string& filename) {
-  std::vector<string> lines = absl::StrSplit(ReadFile(filename), '\n');
+std::vector<std::string> ReadLines(const std::string& filename) {
+  std::vector<std::string> lines = absl::StrSplit(ReadFile(filename), '\n');
   if (lines.back().empty()) {
     lines.pop_back();
   }
@@ -68,10 +68,10 @@ std::vector<string> ReadLines(const string& filename) {
 
 template <class W>
 void TestJsonValidation() {
-  const string file_base =
+  const std::string file_base =
       absl::StrCat("testdata/stu3/validation/",
                    CamelCaseToLowerUnderscores(W::descriptor()->name()));
-  std::vector<string> valid_lines =
+  std::vector<std::string> valid_lines =
       ReadLines(absl::StrCat(file_base, ".valid.ndjson"));
   for (auto line_iter : valid_lines) {
     // Note that we want to assert that the valid_line holds a valid string
@@ -86,7 +86,7 @@ void TestJsonValidation() {
     TF_ASSERT_OK(JsonFhirStringToProtoWithoutValidating<W>(line_iter, kTimeZone)
                      .status());
   }
-  std::vector<string> invalid_lines =
+  std::vector<std::string> invalid_lines =
       ReadLines(absl::StrCat(file_base, ".invalid.ndjson"));
   for (auto line_iter : invalid_lines) {
     StatusOr<W> parsed = JsonFhirStringToProto<W>(line_iter, kTimeZone);
@@ -113,9 +113,9 @@ void TestBadProto(const W& w) {
 }
 
 template <class W>
-void TestProtoValidationsFromFile(const string& file_base,
+void TestProtoValidationsFromFile(const std::string& file_base,
                                   const bool has_invalid) {
-  const std::vector<string> valid_proto_strings = absl::StrSplit(
+  const std::vector<std::string> valid_proto_strings = absl::StrSplit(
       ReadFile(absl::StrCat(file_base, ".valid.prototxt")), "\n---\n");
 
   for (auto proto_string_iter : valid_proto_strings) {
@@ -124,7 +124,7 @@ void TestProtoValidationsFromFile(const string& file_base,
   }
 
   if (has_invalid) {
-    const std::vector<string> invalid_proto_strings = absl::StrSplit(
+    const std::vector<std::string> invalid_proto_strings = absl::StrSplit(
         ReadFile(absl::StrCat(file_base, ".invalid.prototxt")), "\n---\n");
 
     for (auto proto_string_iter : invalid_proto_strings) {
@@ -151,7 +151,7 @@ void TestProtoValidation(const bool has_invalid = true) {
   AddPrimitiveHasNoValue(&just_no_value);
   TestBadProto(just_no_value);
 
-  const string file_base =
+  const std::string file_base =
       absl::StrCat("testdata/stu3/validation/",
                    CamelCaseToLowerUnderscores(W::descriptor()->name()));
   TestProtoValidationsFromFile<W>(file_base, has_invalid);
@@ -251,7 +251,7 @@ TEST(PrimitiveValidationTestProto, Uri) { TestProtoValidation<Uri>(false); }
 
 TEST(PrimitiveValidationTestProto, Xhtml) {
   // XHTML can't have extensions - skip over extension tests.
-  const string file_base =
+  const std::string file_base =
       absl::StrCat("testdata/stu3/validation/",
                    CamelCaseToLowerUnderscores(Xhtml::descriptor()->name()));
   TestProtoValidationsFromFile<Xhtml>(file_base, false);

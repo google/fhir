@@ -41,7 +41,6 @@ namespace fhir {
 
 namespace profiles_internal {
 
-using std::string;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
@@ -54,7 +53,7 @@ const bool SharesCommonAncestor(const ::google::protobuf::Descriptor* first,
 
 // Gets a map from profiled extension urls to the fields that they are profiled
 // in on a target message.
-const unordered_map<string, const FieldDescriptor*>& GetExtensionMap(
+const unordered_map<std::string, const FieldDescriptor*>& GetExtensionMap(
     const Descriptor* descriptor);
 
 // Copies the contents of the extension field on source to the target message.
@@ -77,13 +76,13 @@ Status PerformExtensionSlicing(const Message& source, Message* target) {
 
   // Map from profiled extension urls to the fields that they are profiled in
   // on the target
-  std::unordered_map<string, const FieldDescriptor*> extension_map =
+  std::unordered_map<std::string, const FieldDescriptor*> extension_map =
       GetExtensionMap(target_descriptor);
 
   for (const ExtensionLike& source_extension :
        source_reflection->GetRepeatedFieldRef<ExtensionLike>(
            source, source_extension_field)) {
-    const string& url = source_extension.url().value();
+    const std::string& url = source_extension.url().value();
     const auto extension_entry_iter = extension_map.find(url);
     if (extension_entry_iter != extension_map.end()) {
       // This extension can be sliced into an inlined field.

@@ -32,7 +32,6 @@
 namespace google {
 namespace fhir {
 
-using std::string;
 
 using ::google::fhir::proto::valid_reference_type;
 using ::google::fhir::proto::validation_requirement;
@@ -47,7 +46,7 @@ namespace {
 
 template <class TypedReference, class TypedReferenceId>
 Status ValidateReference(const Message& message, const FieldDescriptor* field,
-                         const string& base_name) {
+                         const std::string& base_name) {
   static const Descriptor* descriptor = TypedReference::descriptor();
   static const OneofDescriptor* oneof = descriptor->oneof_decl(0);
 
@@ -77,12 +76,13 @@ Status ValidateReference(const Message& message, const FieldDescriptor* field,
     }
 
     if (IsMessageType<TypedReferenceId>(reference_field->message_type())) {
-      const string& reference_type = reference_field->options().GetExtension(
-          ::google::fhir::proto::referenced_fhir_type);
+      const std::string& reference_type =
+          reference_field->options().GetExtension(
+              ::google::fhir::proto::referenced_fhir_type);
       bool is_allowed = false;
       for (int i = 0; i < field->options().ExtensionSize(valid_reference_type);
            i++) {
-        const string& valid_type =
+        const std::string& valid_type =
             field->options().GetExtension(valid_reference_type, i);
         if (valid_type == reference_type || valid_type == "Resource") {
           is_allowed = true;
@@ -101,7 +101,7 @@ Status ValidateReference(const Message& message, const FieldDescriptor* field,
 }
 
 template <class TypedDateTime>
-Status ValidatePeriod(const Message& period, const string& base) {
+Status ValidatePeriod(const Message& period, const std::string& base) {
   const Descriptor* descriptor = period.GetDescriptor();
   const Reflection* reflection = period.GetReflection();
   const FieldDescriptor* start_field = descriptor->FindFieldByName("start");
@@ -130,10 +130,10 @@ Status ValidatePeriod(const Message& period, const string& base) {
 }
 
 Status CheckField(const Message& message, const FieldDescriptor* field,
-                  const string& base_name);
+                  const std::string& base_name);
 
 Status ValidateFhirConstraints(const Message& message,
-                               const string& base_name) {
+                               const std::string& base_name) {
   if (IsPrimitive(message.GetDescriptor())) {
     return ValidatePrimitive(message).ok()
                ? Status::OK()
@@ -169,8 +169,9 @@ Status ValidateFhirConstraints(const Message& message,
 
 // Check if a required field is missing.
 Status CheckField(const Message& message, const FieldDescriptor* field,
-                  const string& base_name) {
-  const string& new_base = absl::StrCat(base_name, ".", field->json_name());
+                  const std::string& base_name) {
+  const std::string& new_base =
+      absl::StrCat(base_name, ".", field->json_name());
   if (field->options().HasExtension(validation_requirement) &&
       field->options().GetExtension(validation_requirement) ==
           ::google::fhir::proto::REQUIRED_BY_FHIR) {

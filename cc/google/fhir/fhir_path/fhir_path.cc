@@ -69,7 +69,6 @@ using internal::ExpressionNode;
 
 using ::tensorflow::errors::InvalidArgument;
 
-using std::string;
 
 namespace internal {
 
@@ -524,8 +523,8 @@ class ComparisonOperator : public BinaryOperator {
   void EvalStringComparison(const String* left_message,
                             const String* right_message,
                             Boolean* result) const {
-    const string& left = left_message->value();
-    const string& right = right_message->value();
+    const std::string& left = left_message->value();
+    const std::string& right = right_message->value();
 
     // FHIR defines string comparisons to be based on unicode values,
     // so simply comparison operators are not sufficient.
@@ -710,10 +709,10 @@ inline std::shared_ptr<ExpressionNode> ToAny(
 // the calling object), and is a placeholder for a higher-level
 // visitor to transform into an ExpressionNode
 struct InvocationDefinition {
-  InvocationDefinition(const string& name, const bool is_function)
+  InvocationDefinition(const std::string& name, const bool is_function)
       : name(name), is_function(is_function) {}
 
-  const string name;
+  const std::string name;
 
   // Indicates it is a function invocation rather than a member lookup.
   const bool is_function;
@@ -798,7 +797,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   antlrcpp::Any visitEqualityExpression(
       FhirPathParser::EqualityExpressionContext* ctx) override {
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
-    string op = ctx->children[1]->getText();
+    std::string op = ctx->children[1]->getText();
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
     if (!CheckOk()) {
@@ -824,7 +823,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   antlrcpp::Any visitInequalityExpression(
       FhirPathParser::InequalityExpressionContext* ctx) override {
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
-    string op = ctx->children[1]->getText();
+    std::string op = ctx->children[1]->getText();
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
     if (!CheckOk()) {
@@ -854,7 +853,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitMemberInvocation(
       FhirPathParser::MemberInvocationContext* ctx) override {
-    string text = ctx->identifier()->IDENTIFIER()->getSymbol()->getText();
+    std::string text = ctx->identifier()->IDENTIFIER()->getSymbol()->getText();
 
     return std::make_shared<InvocationDefinition>(text, false);
   }
@@ -865,7 +864,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    string text =
+    std::string text =
         ctx->function()->identifier()->IDENTIFIER()->getSymbol()->getText();
 
     // TODO: visit and handle parameters
@@ -911,14 +910,14 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   }
 
   antlrcpp::Any visitTerminal(TerminalNode* node) override {
-    const string& text = node->getSymbol()->getText();
+    const std::string& text = node->getSymbol()->getText();
 
     switch (node->getSymbol()->getType()) {
       case FhirPathLexer::NUMBER:
         // Determine if the number is an integer or decimal, propagating
         // decimal types in string form to preserve precision.
-        if (text.find(".") != string::npos) {
-          return ToAny(std::make_shared<Literal<Decimal, string>>(text));
+        if (text.find(".") != std::string::npos) {
+          return ToAny(std::make_shared<Literal<Decimal, std::string>>(text));
         } else {
           int32_t value;
           if (!absl::SimpleAtoi(text, &value)) {
@@ -934,7 +933,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
         // so we remove them here. The following assert simply reflects
         // the lexer's guarantees as defined.
         assert(text.length() >= 2);
-        return ToAny(std::make_shared<Literal<String, string>>(
+        return ToAny(std::make_shared<Literal<String, std::string>>(
             text.substr(1, text.length() - 2)));
 
       default:
@@ -948,7 +947,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   bool CheckOk() { return error_message_.empty(); }
 
-  string GetError() { return error_message_; }
+  std::string GetError() { return error_message_; }
 
   BaseErrorListener* GetErrorListener() { return &error_listener_; }
 
@@ -981,7 +980,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
     void syntaxError(antlr4::Recognizer* recognizer,
                      antlr4::Token* offending_symbol, size_t line,
-                     size_t position_in_line, const string& message,
+                     size_t position_in_line, const std::string& message,
                      std::exception_ptr e) override {
       visitor_->SetError(message);
     }
@@ -990,11 +989,13 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     FhirPathCompilerVisitor* visitor_;
   };
 
-  void SetError(const string& error_message) { error_message_ = error_message; }
+  void SetError(const std::string& error_message) {
+    error_message_ = error_message;
+  }
 
   FhirPathErrorListener error_listener_;
   const Descriptor* descriptor_;
-  string error_message_;
+  std::string error_message_;
 };
 
 }  // namespace internal
@@ -1036,7 +1037,7 @@ StatusOr<int32_t> EvaluationResult::GetInteger() const {
   return InvalidArgument("Expression did not evaluate to integer");
 }
 
-StatusOr<string> EvaluationResult::GetDecimal() const {
+StatusOr<std::string> EvaluationResult::GetDecimal() const {
   auto messages = work_space_->GetResultMessages();
 
   if (messages.size() == 1 && IsMessageType<Decimal>(*messages[0])) {
@@ -1046,7 +1047,7 @@ StatusOr<string> EvaluationResult::GetDecimal() const {
   return InvalidArgument("Expression did not evaluate to decimal");
 }
 
-StatusOr<string> EvaluationResult::GetString() const {
+StatusOr<std::string> EvaluationResult::GetString() const {
   auto messages = work_space_->GetResultMessages();
 
   if (messages.size() == 1 && IsMessageType<String>(*messages[0])) {
@@ -1078,15 +1079,15 @@ CompiledExpression& CompiledExpression::operator=(
   return *this;
 }
 
-const string& CompiledExpression::fhir_path() const { return fhir_path_; }
+const std::string& CompiledExpression::fhir_path() const { return fhir_path_; }
 
 CompiledExpression::CompiledExpression(
-    const string& fhir_path,
+    const std::string& fhir_path,
     std::shared_ptr<internal::ExpressionNode> root_expression)
     : fhir_path_(fhir_path), root_expression_(root_expression) {}
 
 StatusOr<CompiledExpression> CompiledExpression::Compile(
-    const Descriptor* descriptor, const string& fhir_path) {
+    const Descriptor* descriptor, const std::string& fhir_path) {
   ANTLRInputStream input(fhir_path);
   FhirPathLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
@@ -1138,7 +1139,7 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor) {
       descriptor->options().ExtensionSize(proto::fhir_path_message_constraint);
 
   for (int i = 0; i < ext_size; ++i) {
-    const string& fhir_path = descriptor->options().GetExtension(
+    const std::string& fhir_path = descriptor->options().GetExtension(
         proto::fhir_path_message_constraint, i);
     auto constraint = CompiledExpression::Compile(descriptor, fhir_path);
     if (constraint.ok()) {
@@ -1162,7 +1163,7 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor) {
           field->options().ExtensionSize(proto::fhir_path_constraint);
 
       for (int j = 0; j < ext_size; ++j) {
-        const string& fhir_path =
+        const std::string& fhir_path =
             field->options().GetExtension(proto::fhir_path_constraint, j);
 
         auto constraint = CompiledExpression::Compile(field_type, fhir_path);
@@ -1210,7 +1211,7 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor) {
 
 // Default handler halts on first error
 bool HaltOnErrorHandler(const Message& message, const FieldDescriptor* field,
-                        const string& constraint) {
+                        const std::string& constraint) {
   return true;
 }
 
@@ -1229,8 +1230,8 @@ Status ValidateMessageConstraint(const Message& message,
                         expression.Evaluate(message));
 
   if (!expr_result.GetBoolean().ValueOrDie()) {
-    string err_msg = absl::StrCat("fhirpath-constraint-violation-",
-                                  message.GetDescriptor()->name());
+    std::string err_msg = absl::StrCat("fhirpath-constraint-violation-",
+                                       message.GetDescriptor()->name());
 
     *halt_validation = handler(message, nullptr, expression.fhir_path());
     return ::tensorflow::errors::FailedPrecondition(err_msg);
@@ -1252,7 +1253,7 @@ Status ValidateFieldConstraint(const Message& parent,
                         expression.Evaluate(field_value));
 
   if (!expr_result.GetBoolean().ValueOrDie()) {
-    string err_msg =
+    std::string err_msg =
         absl::StrCat("fhirpath-constraint-violation-",
                      field->containing_type()->name(), ".", field->json_name());
 

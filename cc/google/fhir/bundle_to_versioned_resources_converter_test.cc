@@ -25,7 +25,6 @@
 namespace google {
 namespace fhir {
 
-using std::string;
 
 using ::google::fhir::stu3::proto::Bundle;
 using ::google::fhir::stu3::proto::ContainedResource;
@@ -34,8 +33,8 @@ using ::testing::Contains;
 using ::testing::Pair;
 using ::testing::UnorderedElementsAre;
 
-void AssertCounter(const std::map<string, int>& counter_stats,
-                   const string& counter, int value) {
+void AssertCounter(const std::map<std::string, int>& counter_stats,
+                   const std::string& counter, int value) {
   ASSERT_EQ(value, counter_stats.find(counter)->second)
       << "Expected counter " << counter << " to be " << value << " but was "
       << counter_stats.find(counter)->second;
@@ -51,7 +50,7 @@ const stu3::proto::VersionConfig GetConfig() {
 }
 
 std::vector<ContainedResource> RunBundleToVersionedResources(
-    const Bundle& input, std::map<string, int>* counter_stats) {
+    const Bundle& input, std::map<std::string, int>* counter_stats) {
   return BundleToVersionedResources(input, GetConfig(), counter_stats);
 }
 
@@ -159,7 +158,7 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithTimeOfDeath) {
     }
   )proto", &patient_v2));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   auto output = RunBundleToVersionedResources(input, &counter_stats);
   // 2 patient versions + 2 versions of each encounter = 6
   ASSERT_EQ(6, output.size());
@@ -262,7 +261,7 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithDeceasedBoolean) {
     }
   )proto", &patient_v2));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   auto output = RunBundleToVersionedResources(input, &counter_stats);
   // 2 patient versions + 2 versions of each encounter = 6
   ASSERT_EQ(6, output.size());
@@ -308,7 +307,7 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithoutEncounters) {
       }
     })proto", &patient_v1));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   auto output = RunBundleToVersionedResources(input, &counter_stats);
   ASSERT_EQ(1, output.size());
   ASSERT_THAT(output, testing::ElementsAre(EqualsProto(patient_v1)));
@@ -328,7 +327,7 @@ TEST(BundleToVersionedResourcesConverterTest,
       }
     })proto", &input));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   auto output = RunBundleToVersionedResources(input, &counter_stats);
   ASSERT_EQ(0, output.size());
   AssertCounter(counter_stats, "patient-unknown-death-time-needs-attention", 1);
@@ -388,7 +387,7 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithoutDeath) {
       }
     })proto", &patient_v1));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   auto output = RunBundleToVersionedResources(input, &counter_stats);
   // 1 patient versions + 2 versions of each encounter = 4
   ASSERT_EQ(3, output.size());
@@ -432,7 +431,7 @@ TEST(BundleToVersionedResourcesConverterTest, DefaultTimestampOnly) {
       }
     })proto", &claim_v1));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(claim_v1)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
@@ -445,7 +444,7 @@ TEST(BundleToVersionedResourcesConverterTest, DefaultTimestampOnlyEmpty) {
     entry { resource { claim { language { value: "Klingon" } } } })proto",
                                                   &input));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
               testing::ElementsAre());
   AssertCounter(counter_stats, "split-failed-no-default_timestamp_field-Claim",
@@ -526,7 +525,7 @@ TEST(BundleToVersionedResourcesConverterTest, WithPopulatedOverride) {
       }
     })proto", &v2));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(v1), EqualsProto(v2)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
@@ -574,7 +573,7 @@ TEST(BundleToVersionedResourcesConverterTest, WithEmptyOverride) {
       }
     })proto", &v1));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(v1)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
@@ -638,7 +637,7 @@ TEST(BundleToVersionedResourcesConverterTest,
       }
     })proto", &v1));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   auto output = RunBundleToVersionedResources(input, &counter_stats);
   // 2 encounters + 1 condition = 3
   ASSERT_EQ(3, output.size());
@@ -661,7 +660,7 @@ TEST(BundleToVersionedResourcesConverterTest,
       }
     })proto", &input));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
               testing::ElementsAre());
   AssertCounter(counter_stats,
@@ -706,7 +705,7 @@ TEST(BundleToVersionedResourcesConverterTest,
       }
     })proto", &v1));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   auto output = RunBundleToVersionedResources(input, &counter_stats);
   // encounter/offset ignored
   ASSERT_THAT(output, UnorderedElementsAre(EqualsProto(v1)));
@@ -830,7 +829,7 @@ TEST(BundleToVersionedResourcesConverterTest, ExpandRepeatedTargets) {
       }
     })proto", &v3));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   auto output = RunBundleToVersionedResources(input, &counter_stats);
   ASSERT_THAT(output, UnorderedElementsAre(EqualsProto(v1), EqualsProto(v2),
                                            EqualsProto(v3)));
@@ -873,7 +872,7 @@ TEST(BundleToVersionedResourcesConverterTest, PrecisionConversionDay) {
       }
     })proto", &claim_v1));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(claim_v1)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
@@ -915,7 +914,7 @@ TEST(BundleToVersionedResourcesConverterTest, PrecisionConversionMonth) {
       }
     })proto", &claim_v1));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(claim_v1)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
@@ -957,7 +956,7 @@ TEST(BundleToVersionedResourcesConverterTest, PrecisionConversionYear) {
       }
     })proto", &claim_v1));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(claim_v1)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
@@ -1118,7 +1117,7 @@ TEST(BundleToVersionedResourcesConverterTest, MultipleDefaultTimestamps) {
       }
     })proto", &ma_2));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(ma_1), EqualsProto(ma_2)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 2);
@@ -1156,7 +1155,7 @@ TEST(BundleToVersionedResourcesConverterTest, TimeZoneWithFixedOffset) {
       }
     })proto", &claim_v1));
 
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(claim_v1)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);

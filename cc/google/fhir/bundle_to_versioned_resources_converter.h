@@ -84,7 +84,8 @@ StatusOr<const stu3::proto::DateTime*> GetStartOfFirstEncounter(
   return &(first_encounter->period().start());
 }
 
-const std::vector<std::pair<stu3::proto::DateTime, std::unordered_set<string>>>
+const std::vector<
+    std::pair<stu3::proto::DateTime, std::unordered_set<std::string>>>
 GetSortedOverrides(const stu3::proto::ResourceConfig& resource_config,
                    const ::google::protobuf::Message& resource);
 
@@ -118,7 +119,8 @@ void StampWrapAndAdd(std::vector<ContainedResourceLike>* versioned_resources,
     absl::TimeZone tz;
     TF_CHECK_OK(GetTimezone(timelike.timezone(), &tz))
         << "No Timezone on timelike: " << timelike.DebugString();
-    const string precision_string = T::Precision_Name(timelike.precision());
+    const std::string precision_string =
+        T::Precision_Name(timelike.precision());
     const auto& breakdown = GetTimeFromTimelikeElement(timelike).In(tz);
     if (precision_string == "DAY") {
       last_updated->set_value_us(absl::ToUnixMicros(
@@ -153,14 +155,14 @@ StatusOr<stu3::proto::DateTime> GetDefaultDateTime(
 template <typename R, typename ContainedResourceLike>
 void SplitResource(const R& resource, const stu3::proto::VersionConfig& config,
                    std::vector<ContainedResourceLike>* versioned_resources,
-                   std::map<string, int>* counter_stats) {
+                   std::map<std::string, int>* counter_stats) {
   // Make a mutable copy of the resource, that we will modify and copy into
   // the result vector along the way.
   std::unique_ptr<R> current_resource(resource.New());
   current_resource->CopyFrom(resource);
 
   const ::google::protobuf::Descriptor* descriptor = resource.GetDescriptor();
-  const string& resource_name = descriptor->name();
+  const std::string& resource_name = descriptor->name();
 
   const auto& iter = config.resource_config().find(resource_name);
   if (iter == config.resource_config().end()) {
@@ -191,9 +193,9 @@ void SplitResource(const R& resource, const stu3::proto::VersionConfig& config,
   // First off, get a list of override pairs, where each pair is
   // override time -> fields that should use that time, sorted in ascending
   // order.
-  const std::vector<std::pair<stu3::proto::DateTime,
-                              std::unordered_set<string>>>& sorted_overrides =
-      GetSortedOverrides(resource_config, resource);
+  const std::vector<
+      std::pair<stu3::proto::DateTime, std::unordered_set<std::string>>>&
+      sorted_overrides = GetSortedOverrides(resource_config, resource);
 
   // Strip out all fields with overrides, to get the "base" version.
   // This is the version that goes in at the "default" time.
@@ -202,8 +204,8 @@ void SplitResource(const R& resource, const stu3::proto::VersionConfig& config,
   // the _latest_ available time.  In that case, the "default" time version will
   // just be the original proto.
   for (const auto& timestamp_override : resource_config.timestamp_override()) {
-    for (const string& field_path : timestamp_override.resource_field()) {
-      if (field_path.find_last_of('[') == string::npos) {
+    for (const std::string& field_path : timestamp_override.resource_field()) {
+      if (field_path.find_last_of('[') == std::string::npos) {
         CHECK(ClearFieldByPath(current_resource.get(), field_path).ok());
       } else {
         CHECK(ClearFieldByPath(current_resource.get(), StripIndex(field_path))
@@ -217,7 +219,7 @@ void SplitResource(const R& resource, const stu3::proto::VersionConfig& config,
 
   for (const auto& override_map_entry : sorted_overrides) {
     // Add back any fields that became available at this time.
-    for (const string& field_path : override_map_entry.second) {
+    for (const std::string& field_path : override_map_entry.second) {
       const auto& original_submessage_status =
           GetSubmessageByPath(resource, field_path);
       if (original_submessage_status.status().code() ==
@@ -236,8 +238,8 @@ void SplitResource(const R& resource, const stu3::proto::VersionConfig& config,
           // It's an indexed path to a specific message within a repeated field.
           // Add just that message to the end of the destination repeated field.
           const std::size_t last_dot_index = field_path.find_last_of('.');
-          const string parent_path = field_path.substr(0, last_dot_index);
-          const string field_name = field_path.substr(last_dot_index + 1);
+          const std::string parent_path = field_path.substr(0, last_dot_index);
+          const std::string field_name = field_path.substr(last_dot_index + 1);
           ::google::protobuf::Message* destination_parent_field =
               GetMutableSubmessageByPath(current_resource.get(), parent_path)
                   .ValueOrDie();
@@ -260,8 +262,8 @@ void SplitResource(const R& resource, const stu3::proto::VersionConfig& config,
         // path to an entire repeated field.
         // Copy over the entire contents.
         const std::size_t last_dot_index = field_path.find_last_of('.');
-        const string parent_path = field_path.substr(0, last_dot_index);
-        const string field_name = field_path.substr(last_dot_index + 1);
+        const std::string parent_path = field_path.substr(0, last_dot_index);
+        const std::string field_name = field_path.substr(last_dot_index + 1);
         if (!HasSubmessageByPath(resource, parent_path).ValueOrDie()) {
           // The parent field is unpopulated on the source message, so there's
           // nothing to copy.
@@ -305,7 +307,7 @@ template <typename BundleLike, typename PatientLike,
 void SplitPatient(PatientLike patient, const BundleLike& bundle,
                   const stu3::proto::VersionConfig& config,
                   std::vector<ContainedResourceLike>* versioned_resources,
-                  std::map<string, int>* counter_stats) {
+                  std::map<std::string, int>* counter_stats) {
   if (patient.deceased().has_date_time()) {
     // We know when the patient died.  Add two versions of the patient:
     // One at time-of-death, with the death information, and
@@ -365,13 +367,11 @@ void SplitPatient(PatientLike patient, const BundleLike& bundle,
 
 }  // namespace internal
 
-using std::string;
-
 template <typename BundleLike, typename ContainedResourceLike =
                                    BUNDLE_CONTAINED_RESOURCE(BundleLike)>
 std::vector<ContainedResourceLike> BundleToVersionedResources(
     const BundleLike& bundle, const stu3::proto::VersionConfig& config,
-    std::map<string, int>* counter_stats) {
+    std::map<std::string, int>* counter_stats) {
   static auto* oneof_resource_descriptor =
       ContainedResourceLike::descriptor()->FindOneofByName("oneof_resource");
   std::vector<ContainedResourceLike> versioned_resources;
@@ -420,7 +420,7 @@ std::vector<ContainedResourceLike> BundleToVersionedResources(
                               &versioned_resources, counter_stats);
     }
     const int new_size = versioned_resources.size();
-    const string resource_name =
+    const std::string resource_name =
         resource.GetReflection()
             ->GetOneofFieldDescriptor(resource, oneof_resource_descriptor)
             ->name();
@@ -433,7 +433,7 @@ std::vector<ContainedResourceLike> BundleToVersionedResources(
 template <typename BundleLike>
 BundleLike BundleToVersionedBundle(const BundleLike& bundle,
                                    const stu3::proto::VersionConfig& config,
-                                   std::map<string, int>* counter_stats) {
+                                   std::map<std::string, int>* counter_stats) {
   const auto& versioned_resources =
       BundleToVersionedResources(bundle, config, counter_stats);
   BundleLike output_bundle;

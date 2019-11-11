@@ -41,12 +41,11 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-using std::string;
 
 namespace internal {
 
 StatusOr<std::vector<EventLabel>> ExtractLabelsFromExtensions(
-    const std::set<string>& label_names,
+    const std::set<std::string>& label_names,
     google::protobuf::RepeatedFieldRef<Extension> extensions) {
   std::vector<EventLabel> labels;
   TF_RETURN_IF_ERROR(
@@ -62,7 +61,8 @@ StatusOr<std::vector<EventLabel>> ExtractLabelsFromExtensions(
 
 void GetTriggerLabelsPairFromExtensions(
     const ::google::protobuf::RepeatedFieldRef<stu3::proto::Extension> extensions,
-    const std::set<string>& label_names, const string& trigger_event_name,
+    const std::set<std::string>& label_names,
+    const std::string& trigger_event_name,
     std::vector<TriggerLabelsPair>* trigger_labels_pair,
     int* num_triggers_filtered) {
   std::vector<stu3::google::EventTrigger> triggers;

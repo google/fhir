@@ -14,6 +14,8 @@
 
 #include "google/fhir/stu3/codeable_concepts.h"
 
+#include <string>
+
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
@@ -145,7 +147,7 @@ const bool ForEachInternalCodingHalting(
 // the source, or present on the source but not the target but the field is not
 // set, since no information will be lost in these cases.
 Status CopyFieldIfPresent(const Message& source, Message* target,
-                          const string& field_name) {
+                          const std::string& field_name) {
   const FieldDescriptor* field =
       source.GetDescriptor()->FindFieldByName(field_name);
   if (!field && FieldHasValue(source, field)) {
@@ -162,7 +164,7 @@ namespace internal {
 // This is internal, since outside callers shouldn't care about profiled vs
 // unprofiled.
 const FieldDescriptor* ProfiledFieldForSystem(const Message& concept,
-                                              const string& system) {
+                                              const std::string& system) {
   if (IsMessageType<stu3::proto::CodeableConcept>(concept)) return nullptr;
 
   const ::google::protobuf::Descriptor* descriptor = concept.GetDescriptor();
@@ -180,10 +182,11 @@ const FieldDescriptor* ProfiledFieldForSystem(const Message& concept,
 
 const bool FindSystemCodeStringPair(const Message& concept,
                                     const CodeBoolFunc& func,
-                                    string* found_system, string* found_code) {
+                                    std::string* found_system,
+                                    std::string* found_code) {
   return FindSystemCodeStringPair(
-      concept, [&func, &found_system, &found_code](const string& system,
-                                                   const string& code) {
+      concept, [&func, &found_system, &found_code](const std::string& system,
+                                                   const std::string& code) {
         if (func(system, code)) {
           *found_system = system;
           *found_code = code;
@@ -198,8 +201,8 @@ const bool FindSystemCodeStringPair(const Message& concept,
   return ForEachInternalCodingHalting(
       concept,
       [&func](const stu3::proto::Coding& coding) {
-        const string& system = coding.system().value();
-        const string& code = coding.code().value();
+        const std::string& system = coding.system().value();
+        const std::string& code = coding.code().value();
         if (func(system, code)) {
           return true;
         }
@@ -207,8 +210,8 @@ const bool FindSystemCodeStringPair(const Message& concept,
       },
       [&func](const FieldDescriptor* field,
               const stu3::proto::CodingWithFixedSystem& coding) {
-        const string& system = GetInlinedCodingSystem(field);
-        const string& code = coding.code().value();
+        const std::string& system = GetInlinedCodingSystem(field);
+        const std::string& code = coding.code().value();
         if (func(system, code)) {
           return true;
         }
@@ -216,8 +219,8 @@ const bool FindSystemCodeStringPair(const Message& concept,
       },
       [&func](const FieldDescriptor* field,
               const stu3::proto::CodingWithFixedCode& coding) {
-        const string& system = GetInlinedCodingSystem(field);
-        const string& code = GetInlinedCodingCode(field);
+        const std::string& system = GetInlinedCodingSystem(field);
+        const std::string& code = GetInlinedCodingCode(field);
         if (func(system, code)) {
           return true;
         }
@@ -226,19 +229,19 @@ const bool FindSystemCodeStringPair(const Message& concept,
 }
 
 void ForEachSystemCodeStringPair(const Message& concept, const CodeFunc& func) {
-  FindSystemCodeStringPair(concept,
-                           [&func](const string& system, const string& code) {
-                             func(system, code);
-                             return false;
-                           });
+  FindSystemCodeStringPair(
+      concept, [&func](const std::string& system, const std::string& code) {
+        func(system, code);
+        return false;
+      });
 }
 
-const std::vector<string> GetCodesWithSystem(
+const std::vector<std::string> GetCodesWithSystem(
     const Message& concept, const absl::string_view target_system) {
-  std::vector<string> codes;
+  std::vector<std::string> codes;
   ForEachSystemCodeStringPair(
-      concept,
-      [&codes, &target_system](const string& system, const string& code) {
+      concept, [&codes, &target_system](const std::string& system,
+                                        const std::string& code) {
         if (system == target_system) {
           codes.push_back(code);
         }
@@ -246,9 +249,9 @@ const std::vector<string> GetCodesWithSystem(
   return codes;
 }
 
-StatusOr<const string> GetOnlyCodeWithSystem(const Message& concept,
-                                             const absl::string_view system) {
-  const std::vector<string>& codes = GetCodesWithSystem(concept, system);
+StatusOr<const std::string> GetOnlyCodeWithSystem(
+    const Message& concept, const absl::string_view system) {
+  const std::vector<std::string>& codes = GetCodesWithSystem(concept, system);
   if (codes.empty()) {
     return tensorflow::errors::NotFound("No code from system: ", system);
   }
@@ -264,7 +267,7 @@ Status AddCoding(Message* concept, const stu3::proto::Coding& coding) {
         "Error adding coding: ", concept->GetDescriptor()->full_name(),
         " is not CodeableConcept-like.");
   }
-  const string& system = coding.system().value();
+  const std::string& system = coding.system().value();
   if (IsProfileOf<stu3::proto::CodeableConcept>(*concept)) {
     const FieldDescriptor* profiled_field =
         internal::ProfiledFieldForSystem(*concept, system);
@@ -286,7 +289,7 @@ Status AddCoding(Message* concept, const stu3::proto::Coding& coding) {
         return Status::OK();
       } else if (IsMessageType<stu3::proto::CodingWithFixedCode>(
                      profiled_field->message_type())) {
-        const string& fixed_code = GetInlinedCodingCode(profiled_field);
+        const std::string& fixed_code = GetInlinedCodingCode(profiled_field);
         if (fixed_code == coding.code().value()) {
           if (!profiled_field->is_repeated() &&
               FieldHasValue(*concept, profiled_field)) {
@@ -311,7 +314,8 @@ Status AddCoding(Message* concept, const stu3::proto::Coding& coding) {
   return Status::OK();
 }
 
-Status AddCoding(Message* concept, const string& system, const string& code) {
+Status AddCoding(Message* concept, const std::string& system,
+                 const std::string& code) {
   const google::protobuf::FieldDescriptor* field_descriptor =
       concept->GetDescriptor()->FindFieldByName("coding");
   if (field_descriptor == nullptr ||
@@ -427,7 +431,8 @@ bool IsCodeableConceptLike(const Message& message) {
 int CodingSize(const ::google::protobuf::Message& concept) {
   int size = 0;
   ForEachSystemCodeStringPair(
-      concept, [&size](const string& system, const string& code) { size++; });
+      concept,
+      [&size](const std::string& system, const std::string& code) { size++; });
   return size;
 }
 

@@ -71,17 +71,17 @@ using ::tensorflow::errors::InvalidArgument;
 // prepended by underscore, we add that as a separate mapping to the primitive
 // field.
 // TODO: memoize
-std::unordered_map<string, const FieldDescriptor*> GetFieldMap(
+std::unordered_map<std::string, const FieldDescriptor*> GetFieldMap(
     const Descriptor* descriptor) {
-  std::unordered_map<string, const FieldDescriptor*> field_map;
+  std::unordered_map<std::string, const FieldDescriptor*> field_map;
 
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
     if (IsChoiceType(field)) {
-      std::unordered_map<string, const FieldDescriptor*> inner_map =
+      std::unordered_map<std::string, const FieldDescriptor*> inner_map =
           GetFieldMap(field->message_type());
       for (auto iter = inner_map.begin(); iter != inner_map.end(); iter++) {
-        string child_field_name = iter->first;
+        std::string child_field_name = iter->first;
         if (child_field_name[0] == '_') {
           // Convert primitive extension field name to field on choice type,
           // e.g., value + _boolean -> _valueBoolean for Extension.value.
@@ -108,7 +108,7 @@ std::unordered_map<string, const FieldDescriptor*> GetFieldMap(
   return field_map;
 }
 
-typedef std::unordered_map<string, const FieldDescriptor*> FieldMap;
+typedef std::unordered_map<std::string, const FieldDescriptor*> FieldMap;
 
 // Builds a map from ContainedResource field type to FieldDescriptor for that
 // field.
@@ -122,11 +122,14 @@ std::unique_ptr<FieldMap> BuildResourceTypeMap(const Descriptor* descriptor) {
 }
 
 StatusOr<const FieldDescriptor*> GetContainedResourceField(
-    const Descriptor* contained_resource_desc, const string& resource_type) {
-  static std::unordered_map<string, std::unique_ptr<FieldMap>>* field_table =
-      new std::unordered_map<string, std::unique_ptr<FieldMap>>;
+    const Descriptor* contained_resource_desc,
+    const std::string& resource_type) {
+  static std::unordered_map<std::string, std::unique_ptr<FieldMap>>*
+      field_table =
+          new std::unordered_map<std::string, std::unique_ptr<FieldMap>>;
 
-  const string& contained_resource_name = contained_resource_desc->full_name();
+  const std::string& contained_resource_name =
+      contained_resource_desc->full_name();
   auto field_table_iter = field_table->find(contained_resource_name);
   const FieldDescriptor* field;
   if (field_table_iter == field_table->end()) {
@@ -155,7 +158,7 @@ class Parser {
       return MergeContainedResource(value, target);
     }
 
-    const std::unordered_map<string, const FieldDescriptor*> field_map =
+    const std::unordered_map<std::string, const FieldDescriptor*> field_map =
         GetFieldMap(target_descriptor);
 
     for (auto sub_value_iter = value.begin(); sub_value_iter != value.end();
@@ -171,7 +174,7 @@ class Parser {
               MergeField(*sub_value_iter, field_entry->second, target));
         }
       } else if (sub_value_iter.key().asString() == "resourceType") {
-        string resource_type = sub_value_iter->asString();
+        std::string resource_type = sub_value_iter->asString();
         if (!IsResource(target_descriptor) ||
             target_descriptor->name() != resource_type) {
           return InvalidArgument("Error merging json resource of type ",
@@ -195,7 +198,7 @@ class Parser {
     // about which field in the Oneof to set.  Instead, we need to inspect
     // the JSON input to determine its type.  Then, merge into that specific
     // field in the resource Oneof.
-    string resource_type =
+    std::string resource_type =
         value.get("resourceType", Json::Value::null).asString();
     FHIR_ASSIGN_OR_RETURN(
         const FieldDescriptor* contained_field,
@@ -206,10 +209,10 @@ class Parser {
 
   Status MergeChoiceField(const Json::Value& json,
                           const FieldDescriptor* choice_field,
-                          const string& field_name, Message* parent) {
+                          const std::string& field_name, Message* parent) {
     const Descriptor* choice_type_descriptor = choice_field->message_type();
     const auto choice_type_field_map = GetFieldMap(choice_type_descriptor);
-    string choice_field_name = field_name;
+    std::string choice_field_name = field_name;
     if (field_name[0] == '_') {
       // E.g., _valueBoolean -> boolean
       choice_field_name =
@@ -396,7 +399,7 @@ class Parser {
   const absl::TimeZone default_timezone_;
 };
 
-StatusOr<Json::Value> ParseJsonValue(const string& raw_json) {
+StatusOr<Json::Value> ParseJsonValue(const std::string& raw_json) {
   Json::Reader reader;
   Json::Value value;
   if (!reader.parse(raw_json, value)) {
@@ -407,10 +410,11 @@ StatusOr<Json::Value> ParseJsonValue(const string& raw_json) {
 
 }  // namespace
 
-Status MergeJsonFhirStringIntoProto(const string& raw_json, Message* target,
+Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
+                                    Message* target,
                                     const absl::TimeZone default_timezone,
                                     const bool validate) {
-  string mutable_raw_json = raw_json;
+  std::string mutable_raw_json = raw_json;
   // FHIR JSON format stores decimals as unquoted rational numbers.  This is
   // problematic, because their representation could change when they are
   // parsed into C++ doubles.  To avoid this, add quotes around any decimal

@@ -32,12 +32,11 @@
 namespace google {
 namespace fhir {
 
-using std::string;
 
 Status BuildHasNoValueExtension(::google::protobuf::Message* extension);
 
 struct JsonPrimitive {
-  string value;
+  std::string value;
   std::unique_ptr<::google::protobuf::Message> element;
 
   const bool is_non_null() const { return value != "null"; }

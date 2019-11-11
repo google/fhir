@@ -22,7 +22,6 @@
 namespace google {
 namespace fhir {
 
-using std::string;
 using ::google::protobuf::Message;
 
 Status ConvertToProfileStu3(const ::google::protobuf::Message& source,

@@ -14,6 +14,8 @@
 
 #include "google/fhir/codeable_concepts.h"
 
+#include <string>
+
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
@@ -58,7 +60,8 @@ using ::tensorflow::errors::InvalidArgument;
 
 const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
                                     const CodeBoolFunc& func,
-                                    string* found_system, string* found_code) {
+                                    std::string* found_system,
+                                    std::string* found_code) {
   CODEABLE_CONCEPTS_VERSION_DISPATCH(false, FindSystemCodeStringPair, concept,
                                      func, found_system, found_code);
 }
@@ -75,26 +78,26 @@ void ForEachSystemCodeStringPair(const ::google::protobuf::Message& concept,
                                           func);
 }
 
-const std::vector<string> GetCodesWithSystem(
+const std::vector<std::string> GetCodesWithSystem(
     const ::google::protobuf::Message& concept, const absl::string_view target_system) {
-  CODEABLE_CONCEPTS_VERSION_DISPATCH(std::vector<string>(), GetCodesWithSystem,
-                                     concept, target_system);
+  CODEABLE_CONCEPTS_VERSION_DISPATCH(
+      std::vector<std::string>(), GetCodesWithSystem, concept, target_system);
 }
 
-StatusOr<const string> GetOnlyCodeWithSystem(const ::google::protobuf::Message& concept,
-                                             const absl::string_view system) {
+StatusOr<const std::string> GetOnlyCodeWithSystem(
+    const ::google::protobuf::Message& concept, const absl::string_view system) {
   CODEABLE_CONCEPTS_VERSION_DISPATCH_WITH_STATUS(GetOnlyCodeWithSystem, concept,
                                                  system);
 }
 
-StatusOr<const string> ExtractCodeBySystem(const ::google::protobuf::Message& concept,
-                                           const absl::string_view system) {
+StatusOr<const std::string> ExtractCodeBySystem(
+    const ::google::protobuf::Message& concept, const absl::string_view system) {
   CODEABLE_CONCEPTS_VERSION_DISPATCH_WITH_STATUS(ExtractCodeBySystem, concept,
                                                  system);
 }
 
-Status AddCoding(::google::protobuf::Message* concept, const string& system,
-                 const string& code) {
+Status AddCoding(::google::protobuf::Message* concept, const std::string& system,
+                 const std::string& code) {
   switch (google::fhir::GetFhirVersion(*concept)) {
     case google::fhir::proto::STU3:
       return stu3::AddCoding(concept, system, code);

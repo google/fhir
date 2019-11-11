@@ -32,9 +32,7 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-using std::string;
-
-void ExampleKey::FromString(const string& key) {
+void ExampleKey::FromString(const std::string& key) {
   // e.g. "f26dd962a28daeb1-Patient/123:0-2@-957312000:Encounter/1"
   static LazyRE2 kStringFormatRegex = {
       "(?:[0-9a-f]{16}-)?"  // optional non-capturing group (shuffle prefix)
@@ -58,7 +56,7 @@ void ExampleKey::FromString(const string& key) {
 
 // We keep the offset and end for ease of debugging, although the label_time is
 // what makes the key truly unique.
-string ExampleKey::ToString() const {
+std::string ExampleKey::ToString() const {
   if (this->source.empty()) {
     return absl::StrCat(this->patient_id, ":", this->start, "-", this->end, "@",
                         absl::ToUnixSeconds(this->trigger_timestamp));
@@ -69,13 +67,13 @@ string ExampleKey::ToString() const {
 }
 
 // String form of key, with a uniformly distributed prefix for shuffling.
-string ExampleKey::ToStringWithPrefix() const {
+std::string ExampleKey::ToStringWithPrefix() const {
   return absl::StrCat(absl::Hex(::tensorflow::Fingerprint64(this->ToString()),
                                 absl::kZeroPad16),
                       "-", this->ToString());
 }
 
-void ExampleKey::FromPatientIdTimestampString(const string& key) {
+void ExampleKey::FromPatientIdTimestampString(const std::string& key) {
   static LazyRE2 kStringFormatRegex = {
       "(Patient/[^:]*)"  // this->patient_id (no colons)
       "@"
@@ -90,12 +88,12 @@ void ExampleKey::FromPatientIdTimestampString(const string& key) {
   this->end = 0;
 }
 
-string ExampleKey::ToPatientIdTimestampString() const {
+std::string ExampleKey::ToPatientIdTimestampString() const {
   return absl::StrCat(this->patient_id, "@",
                       absl::ToUnixSeconds(this->trigger_timestamp));
 }
 
-string ExampleKey::ToPatientIdSourceString() const {
+std::string ExampleKey::ToPatientIdSourceString() const {
   return absl::StrCat(this->patient_id, ":", this->source);
 }
 

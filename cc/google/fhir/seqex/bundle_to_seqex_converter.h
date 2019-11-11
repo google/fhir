@@ -52,7 +52,6 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-using std::string;
 
 typedef std::pair<stu3::google::EventTrigger,
                   std::vector<stu3::google::EventLabel>>
@@ -63,7 +62,7 @@ namespace internal {
 extern const char kClassInpatient[];
 
 Status BuildLabelsFromTriggerLabelPair(
-    const string& patient_id, const std::vector<TriggerLabelsPair>& labels,
+    const std::string& patient_id, const std::vector<TriggerLabelsPair>& labels,
     std::map<ExampleKey, tensorflow::Features>* label_map);
 
 // Add resource-independent, label-independent dense features for bagging.
@@ -71,8 +70,8 @@ void AddBaggingFeatures(absl::Time event_time,
                         const std::vector<absl::Time>& encounter_start_times,
                         tensorflow::Example* example);
 
-bool FeaturePrefixMatch(const string& feature,
-                        const std::set<string>& prefix_set);
+bool FeaturePrefixMatch(const std::string& feature,
+                        const std::set<std::string>& prefix_set);
 
 void GetSequenceFeatures(
     absl::Time trigger_timestamp,
@@ -81,14 +80,14 @@ void GetSequenceFeatures(
     const std::vector<
         std::pair<absl::Time, tensorflow::Example>>::const_iterator& end,
     const tensorflow::Features& feature_types,
-    const std::set<string>& redacted_features_for_example,
-    google::protobuf::Map<string, ::tensorflow::FeatureList>* feature_list_map);
+    const std::set<std::string>& redacted_features_for_example,
+    google::protobuf::Map<std::string, ::tensorflow::FeatureList>* feature_list_map);
 
 void GetContextFeatures(
     const std::pair<ExampleKey, tensorflow::Features>& labels,
     const tensorflow::Example& context, const int sequence_length,
     const std::vector<absl::Time>& encounter_start_times,
-    google::protobuf::Map<string, tensorflow::Feature>* feature_map,
+    google::protobuf::Map<std::string, tensorflow::Feature>* feature_map,
     const bool generate_sequence_label);
 
 class BaseBundleToSeqexConverter {
@@ -107,25 +106,25 @@ class BaseBundleToSeqexConverter {
 
   void EventSequenceToExamples(
       const std::map<absl::Time, absl::Time>& encounter_boundaries,
-      const std::vector<std::pair<std::pair<absl::Time, string>,
+      const std::vector<std::pair<std::pair<absl::Time, std::string>,
                                   tensorflow::Example>>& event_sequence);
 
   stu3::proto::VersionConfig version_config_;
-  std::set<string> redacted_features_;
+  std::set<std::string> redacted_features_;
 
   // These are computed once per Bundle.
-  string patient_id_;
+  std::string patient_id_;
   std::vector<std::pair<absl::Time, ::tensorflow::Example>> examples_;
   std::vector<absl::Time> encounter_start_times_;
   ::tensorflow::Example context_;
   // ExampleKey -> labels.
   std::map<struct seqex::ExampleKey, ::tensorflow::Features> label_map_;
-  std::map<string, int>* counter_stats_ = nullptr;
+  std::map<std::string, int>* counter_stats_ = nullptr;
 
   bool init_done_;
   std::map<struct seqex::ExampleKey, ::tensorflow::Features>::iterator
       current_label_;
-  std::set<string> redacted_features_for_example_;
+  std::set<std::string> redacted_features_for_example_;
   ::tensorflow::Features feature_types_;
 
   // The current sequence example.
@@ -151,13 +150,13 @@ class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
   // This API should be called once per bundle. When it returns, either the
   // iterator is Done(), or a valid key/example pair can be accessed using the
   // key() and example() accessors. To move to the next example, call Next();
-  bool Begin(const string& patient_id, const BundleLike& bundle,
+  bool Begin(const std::string& patient_id, const BundleLike& bundle,
              const std::vector<TriggerLabelsPair>& labels,
-             std::map<string, int>* counter_stats);
+             std::map<std::string, int>* counter_stats);
 
   // Return the example key.
   // Requires: !Done().
-  string ExampleKey() {
+  std::string ExampleKey() {
     CHECK(!Done());
     return key_.ToString();
   }
@@ -165,7 +164,7 @@ class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
   // Return the example key with a sixteen digit hex prefix based on a hash,
   // which makes it easier to shuffle the outputs.
   // Requires: !Done().
-  string ExampleKeyWithPrefix() {
+  std::string ExampleKeyWithPrefix() {
     CHECK(!Done());
     return key_.ToStringWithPrefix();
   }
@@ -182,10 +181,10 @@ class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
   }
 
  private:
-  bool Begin(const string& patient_id, const BundleLike& bundle,
+  bool Begin(const std::string& patient_id, const BundleLike& bundle,
              const std::map<struct seqex::ExampleKey, ::tensorflow::Features>&
                  label_map,
-             std::map<string, int>* counter_stats);
+             std::map<std::string, int>* counter_stats);
 
   // Get a list of non-overlapping encounter boundaries. For now, we use only
   // inpatient encounters, and merge any encounters that overlap.
@@ -205,7 +204,7 @@ class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
   template <typename R>
   void ConvertResourceToExamples(
       R resource,
-      std::vector<std::pair<std::pair<absl::Time, string>,
+      std::vector<std::pair<std::pair<absl::Time, std::string>,
                             ::tensorflow::Example>>* event_sequence) {
     // Conversion from versioned resource to example is 1-1.
     const absl::Time version_time = google::fhir::GetTimeFromTimelikeElement(
@@ -231,9 +230,9 @@ typedef BundleToSeqexConverter<stu3::proto::Bundle>
 
 template <typename BundleLike>
 bool BundleToSeqexConverter<BundleLike>::Begin(
-    const string& patient_id, const BundleLike& bundle,
+    const std::string& patient_id, const BundleLike& bundle,
     const std::map<struct seqex::ExampleKey, ::tensorflow::Features>& label_map,
-    std::map<string, int>* counter_stats) {
+    std::map<std::string, int>* counter_stats) {
   Reset();
   patient_id_ = patient_id;
   label_map_ = label_map;
@@ -252,9 +251,9 @@ bool BundleToSeqexConverter<BundleLike>::Begin(
 
 template <typename BundleLike>
 bool BundleToSeqexConverter<BundleLike>::Begin(
-    const string& patient_id, const BundleLike& bundle,
+    const std::string& patient_id, const BundleLike& bundle,
     const std::vector<TriggerLabelsPair>& labels,
-    std::map<string, int>* counter_stats) {
+    std::map<std::string, int>* counter_stats) {
   std::map<struct ExampleKey, ::tensorflow::Features> label_map;
   // TODO: Fail gracefully.
   CHECK(
@@ -313,7 +312,8 @@ template <typename BundleLike>
 void BundleToSeqexConverter<BundleLike>::BundleToExamples(
     const BundleLike& bundle) {
   // Make a sequence sorted by timestamp.
-  std::vector<std::pair<std::pair<absl::Time, string>, tensorflow::Example>>
+  std::vector<
+      std::pair<std::pair<absl::Time, std::string>, tensorflow::Example>>
       event_sequence;
   for (const auto& entry : bundle.entry()) {
     if (entry.resource().has_claim()) {
@@ -363,11 +363,13 @@ void BundleToSeqexConverter<BundleLike>::BundleToExamples(
   // Sort in time order, and then in case of a tie, sort by resource-id.
   // Note: we need the sorting to be deterministic so that we can do a
   // meaningful diff in data across different runs of the binary.
-  std::sort(
-      event_sequence.begin(), event_sequence.end(),
-      [](const std::pair<std::pair<absl::Time, string>, tensorflow::Example>& a,
-         const std::pair<std::pair<absl::Time, string>, tensorflow::Example>&
-             b) { return a.first < b.first; });
+  std::sort(event_sequence.begin(), event_sequence.end(),
+            [](const std::pair<std::pair<absl::Time, std::string>,
+                               tensorflow::Example>& a,
+               const std::pair<std::pair<absl::Time, std::string>,
+                               tensorflow::Example>& b) {
+              return a.first < b.first;
+            });
 
   // Get a list of encounter boundary times.
   std::map<absl::Time, absl::Time> encounter_boundaries;

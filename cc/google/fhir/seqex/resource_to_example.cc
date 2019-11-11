@@ -85,7 +85,7 @@ using ::tensorflow::Status;
 
 namespace {
 
-void AddTokensToExample(const string& name, const string& value,
+void AddTokensToExample(const std::string& name, const std::string& value,
                         ::tensorflow::Example* example,
                         bool enable_attribution) {
   std::unique_ptr<TextTokenizer> tokenizer;
@@ -125,10 +125,10 @@ void AddTokensToExample(const string& name, const string& value,
 // tokenize_feature_set and add_tokenize_feature_set is not empty, because that
 // case is ambiguous.
 void AddValueAndOrTokensToExample(
-    const std::set<string>& tokenize_feature_set,
-    const std::set<string>& add_tokenize_feature_set, const string& name,
-    const string& value, ::tensorflow::Example* example,
-    bool enable_attribution) {
+    const std::set<std::string>& tokenize_feature_set,
+    const std::set<std::string>& add_tokenize_feature_set,
+    const std::string& name, const std::string& value,
+    ::tensorflow::Example* example, bool enable_attribution) {
   if (tokenize_feature_set.count(name) != 0) {
     AddTokensToExample(name, value, example, enable_attribution);
     return;
@@ -146,7 +146,8 @@ void AddValueAndOrTokensToExample(
 // Extract code value for a given system code. Return as soon as we find one.
 
 Status ExtractCodeBySystem(const Message& codeable_concept,
-                           absl::string_view system_value, string* result) {
+                           absl::string_view system_value,
+                           std::string* result) {
   auto status_or_result =
       google::fhir::stu3::ExtractCodeBySystem(codeable_concept, system_value);
   if (status_or_result.ok()) {
@@ -157,11 +158,12 @@ Status ExtractCodeBySystem(const Message& codeable_concept,
 }
 
 Status ExtractIcdCode(const Message& codeable_concept,
-                      const std::vector<string>& schemes, string* result) {
+                      const std::vector<std::string>& schemes,
+                      std::string* result) {
   bool found_response = false;
-  string intermediate_result;
+  std::string intermediate_result;
   for (size_t i = 0; i < schemes.size(); i++) {
-    StatusOr<string> s =
+    StatusOr<std::string> s =
         google::fhir::stu3::ExtractCodeBySystem(codeable_concept, schemes[i]);
 
     if (s.status().code() == ::tensorflow::errors::Code::ALREADY_EXISTS) {
@@ -186,7 +188,7 @@ Status ExtractIcdCode(const Message& codeable_concept,
   }
 }
 
-absl::optional<string> GetCodeFromConceptText(const Message& concept) {
+absl::optional<std::string> GetCodeFromConceptText(const Message& concept) {
   if (stu3::CodingSize(concept) > 0) {
     return absl::nullopt;
   }
@@ -206,8 +208,8 @@ absl::optional<string> GetCodeFromConceptText(const Message& concept) {
   return absl::StrCat("text:" + statusor_text.ValueOrDie().value());
 }
 
-StatusOr<string> GetPreferredCode(const Message& concept) {
-  string code;
+StatusOr<std::string> GetPreferredCode(const Message& concept) {
+  std::string code;
   if (ExtractCodeBySystem(concept, systems::kLoinc, &code).ok()) {
     return absl::StrCat("loinc:" + code);
   }
@@ -270,7 +272,7 @@ StatusOr<string> GetPreferredCode(const Message& concept) {
 
 }  // namespace
 
-string GetCode(const Coding& coding) {
+std::string GetCode(const Coding& coding) {
   CodeableConcept concept;
   *concept.add_coding() = coding;
   const auto& statusor_code = GetPreferredCode(concept);
@@ -282,9 +284,10 @@ string GetCode(const Coding& coding) {
 }
 
 void AddCodeableConceptToExample(
-    const Message& concept, const string& name, ::tensorflow::Example* example,
-    std::set<string>* tokenize_feature_set,
-    const std::set<string>& add_tokenize_feature_set, bool enable_attribution) {
+    const Message& concept, const std::string& name,
+    ::tensorflow::Example* example, std::set<std::string>* tokenize_feature_set,
+    const std::set<std::string>& add_tokenize_feature_set,
+    bool enable_attribution) {
   const auto& statusor_code = GetPreferredCode(concept);
   if (!statusor_code.ok()) {
     // Ignore the code that we do not recognize.
@@ -292,7 +295,7 @@ void AddCodeableConceptToExample(
               << statusor_code.status().error_message();
     return;
   }
-  const string& code = statusor_code.ValueOrDie();
+  const std::string& code = statusor_code.ValueOrDie();
   // Codeable concepts are emitted using the preferred coding systems.
   (*example->mutable_features()->mutable_feature())[name]
       .mutable_bytes_list()
@@ -300,7 +303,7 @@ void AddCodeableConceptToExample(
   const StatusOr<String>& statusor_text =
       GetMessageInField<String>(concept, "text");
   if (statusor_text.ok() && !statusor_text.ValueOrDie().value().empty()) {
-    const string full_name = absl::StrCat(name, ".text");
+    const std::string full_name = absl::StrCat(name, ".text");
     if (absl::GetFlag(FLAGS_tokenize_code_text_features)) {
       tokenize_feature_set->insert(full_name);
     }
@@ -310,13 +313,14 @@ void AddCodeableConceptToExample(
   }
   stu3::ForEachCoding(concept, [&](const Coding& coding) {
     CHECK(coding.has_system() && coding.has_code());
-    const string system = systems::ToShortSystemName(coding.system().value());
+    const std::string system =
+        systems::ToShortSystemName(coding.system().value());
     (*example->mutable_features()
           ->mutable_feature())[absl::StrCat(name, ".", system)]
         .mutable_bytes_list()
         ->add_value(coding.code().value());
     if (coding.has_display()) {
-      const string full_name = absl::StrCat(name, ".", system, ".display");
+      const std::string full_name = absl::StrCat(name, ".", system, ".display");
       if (absl::GetFlag(FLAGS_tokenize_code_text_features)) {
         tokenize_feature_set->insert(full_name);
       }
@@ -328,22 +332,22 @@ void AddCodeableConceptToExample(
   });
 }
 
-void MessageToExample(const google::protobuf::Message& message, const string& prefix,
+void MessageToExample(const google::protobuf::Message& message, const std::string& prefix,
                       ::tensorflow::Example* example, bool enable_attribution) {
-  std::set<string> tokenize_feature_set;
-  const string& tokenize_feature_list =
+  std::set<std::string> tokenize_feature_set;
+  const std::string& tokenize_feature_list =
       absl::GetFlag(FLAGS_tokenize_feature_list);
   if (!tokenize_feature_list.empty()) {
     tokenize_feature_set =
         absl::StrSplit(tokenize_feature_list, ',', absl::SkipEmpty());
   }
-  std::set<string> add_tokenize_feature_set;
+  std::set<std::string> add_tokenize_feature_set;
   if (!absl::GetFlag(FLAGS_add_tokenize_feature_list).empty()) {
     add_tokenize_feature_set = absl::StrSplit(
         absl::GetFlag(FLAGS_add_tokenize_feature_list), ',', absl::SkipEmpty());
   }
 
-  std::set<string> intersection;
+  std::set<std::string> intersection;
   absl::c_set_intersection(tokenize_feature_set, add_tokenize_feature_set,
                            std::inserter(intersection, intersection.end()));
   QCHECK(intersection.empty())
@@ -361,7 +365,7 @@ void MessageToExample(const google::protobuf::Message& message, const string& pr
     } else if (reflection->HasField(message, field)) {
       count = 1;
     }
-    const string name = absl::StrCat(prefix, ".", field->json_name());
+    const std::string name = absl::StrCat(prefix, ".", field->json_name());
     for (int i = 0; i < count; i++) {
       if (field->cpp_type() == google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
         const google::protobuf::Message& child =
@@ -397,7 +401,7 @@ void MessageToExample(const google::protobuf::Message& message, const string& pr
               break;
             }
             case google::protobuf::FieldDescriptor::CPPTYPE_STRING: {
-              string str;
+              std::string str;
               str = reflection->GetStringReference(child, value_field, &str);
               bytes_list->add_value(absl::AsciiStrToLower(str));
               break;

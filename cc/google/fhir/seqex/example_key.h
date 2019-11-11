@@ -27,31 +27,30 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-using std::string;
 
 struct ExampleKey {
-  string patient_id;
+  std::string patient_id;
   absl::Time trigger_timestamp;
-  string source;
+  std::string source;
   int start;
   int end;
   // Formats all data fields from ExampleKey:
   // <patient_id>:<start>-<end>@<timestamp>:<source>.
-  string ToString() const;
+  std::string ToString() const;
   // Formats all data fields, and adds a prefix based on the hash
   // (to simplify shuffling for the caller):
   // <shuffle_prefix>-<patient_id>:<start>-<end>@<timestamp>:<source>.
-  string ToStringWithPrefix() const;
+  std::string ToStringWithPrefix() const;
   // Parses formatted string, with or without shuffle prefix and source:
   // <shuffle_prefix>-<patient_id>:<start>-<end>@<timestamp>:<source>.
-  void FromString(const string& key);
+  void FromString(const std::string& key);
   // Formats only patient id and timestamp: <patient_id>@<timestamp>.
-  string ToPatientIdTimestampString() const;
+  std::string ToPatientIdTimestampString() const;
   // Formats only patient id and source: <patient_id>:<source>.
-  string ToPatientIdSourceString() const;
+  std::string ToPatientIdSourceString() const;
   // Parses formatted string with only patient id and timestamp:
   // <patient_id>@<timestamp>.
-  void FromPatientIdTimestampString(const string& key);
+  void FromPatientIdTimestampString(const std::string& key);
 
   bool operator<(const ExampleKey& rhs) const {
     return std::tie(patient_id, trigger_timestamp, source, start, end) <

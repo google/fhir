@@ -21,9 +21,7 @@ namespace google {
 namespace fhir {
 namespace systems {
 
-using std::string;
-
-string FormatIcd9Diagnosis(const string& icd9) {
+std::string FormatIcd9Diagnosis(const std::string& icd9) {
   if (icd9.length() <= 3 || (icd9[0] == 'E' && icd9.length() <= 4) ||
       icd9.find('.') != std::string::npos) {
     return icd9;
@@ -34,14 +32,14 @@ string FormatIcd9Diagnosis(const string& icd9) {
   return absl::StrCat(icd9.substr(0, 3), ".", icd9.substr(3, icd9.length()));
 }
 
-string FormatIcd9Procedure(const string& icd9) {
+std::string FormatIcd9Procedure(const std::string& icd9) {
   if (icd9.length() <= 2 || icd9.find('.') != std::string::npos) {
     return icd9;
   }
   return absl::StrCat(icd9.substr(0, 2), ".", icd9.substr(2, icd9.length()));
 }
 
-string ToShortSystemName(const string& system) {
+std::string ToShortSystemName(const std::string& system) {
   if (system == kLoinc) {
     return "loinc";
   }

@@ -37,18 +37,18 @@ namespace seqex {
 namespace internal {
 
 StatusOr<std::vector<stu3::google::EventLabel>> ExtractLabelsFromExtensions(
-    const std::set<string>& label_names,
+    const std::set<std::string>& label_names,
     google::protobuf::RepeatedFieldRef<stu3::proto ::Extension> extensions);
 
 void GetTriggerLabelsPairFromExtensions(
     const ::google::protobuf::RepeatedFieldRef<stu3::proto::Extension> extensions,
-    const std::set<string>& label_names, const string& trigger_event_name,
+    const std::set<std::string>& label_names,
+    const std::string& trigger_event_name,
     std::vector<TriggerLabelsPair>* trigger_labels_pair,
     int* num_triggers_filtered);
 
 }  // namespace internal
 
-using std::string;
 
 // Group label events by event time, create a trigger proto for each group, and
 // format as a TriggerLabelsPair. The output is guaranteed to be sorted.
@@ -60,8 +60,8 @@ void GetTriggerLabelsPairFromInputLabels(
 // TriggerLabelsPair. The output is guaranteed to be sorted.
 template <typename BundleLike>
 void GetTriggerLabelsPair(const BundleLike& bundle,
-                          const std::set<string>& label_names,
-                          const string& trigger_event_name,
+                          const std::set<std::string>& label_names,
+                          const std::string& trigger_event_name,
                           std::vector<TriggerLabelsPair>* trigger_labels_pair,
                           int* num_triggers_filtered) {
   for (const auto& entry : bundle.entry()) {
@@ -78,7 +78,7 @@ void GetTriggerLabelsPair(const BundleLike& bundle,
 
 template <typename BundleLike>
 std::vector<stu3::google::EventLabel> ExtractLabelsFromBundle(
-    const BundleLike& bundle, const std::set<string>& label_names) {
+    const BundleLike& bundle, const std::set<std::string>& label_names) {
   std::vector<stu3::google::EventLabel> labels;
   for (const auto& entry : bundle.entry()) {
     auto result = GetResourceExtensionsFromBundleEntry(entry);

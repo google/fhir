@@ -28,7 +28,6 @@
 namespace google {
 namespace fhir {
 
-using std::string;
 
 // If <target> is a profiled type of <source>:
 // Converts a resource to a profiled version of that resource.

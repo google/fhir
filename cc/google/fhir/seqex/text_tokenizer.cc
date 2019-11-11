@@ -19,7 +19,6 @@
 #include "tensorflow/core/platform/logging.h"
 #include "re2/re2.h"
 
-using std::string;
 using std::vector;
 
 namespace google {
@@ -29,13 +28,12 @@ namespace seqex {
 namespace {
 const char kWhitespaceChars[] = " \t\r\n";
 
-vector<TextTokenizer::Token> SplitToSimpleWordTokens(
-    const string& text) {
+vector<TextTokenizer::Token> SplitToSimpleWordTokens(const std::string& text) {
   std::vector<TextTokenizer::Token> result;
   for (absl::string_view p : absl::StrSplit(
       text, absl::ByAnyChar(kWhitespaceChars), absl::SkipWhitespace())) {
     TextTokenizer::Token token;
-    token.text = string(p);
+    token.text = std::string(p);
     token.char_start = p.begin() - text.data();
     token.char_end = p.end() - text.data();
     CHECK_GE(token.char_start, 0);
@@ -50,7 +48,7 @@ vector<TextTokenizer::Token> SplitToSimpleWordTokens(
 // public
 std::vector<TextTokenizer::Token> SimpleWordTokenizer::Tokenize(
     absl::string_view text) {
-  string nopunc;
+  std::string nopunc;
   nopunc.assign(text.data(), text.size());
   static LazyRE2 kPunctuationRE = {R"re([\p{P}\p{S}])re"};
   RE2::GlobalReplace(&nopunc, *kPunctuationRE, " ");
@@ -64,7 +62,7 @@ std::vector<TextTokenizer::Token> SimpleWordTokenizer::Tokenize(
 std::vector<TextTokenizer::Token> SingleTokenTokenizer::Tokenize(
     absl::string_view text) {
   TextTokenizer::Token t;
-  t.text = string(text);
+  t.text = std::string(text);
   t.char_start = 0;
   t.char_end = t.text.size();
   return {t};

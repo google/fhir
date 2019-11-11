@@ -70,7 +70,7 @@ class Printer {
         add_newlines_(add_newlines),
         for_analytics_(for_analytics) {}
 
-  StatusOr<string> WriteMessage(const Message& message) {
+  StatusOr<std::string> WriteMessage(const Message& message) {
     output_.clear();
     current_indent_ = 0;
     FHIR_RETURN_IF_ERROR(PrintNonPrimitive(message));
@@ -100,7 +100,7 @@ class Printer {
     }
   }
 
-  void PrintFieldPreamble(const string& name) {
+  void PrintFieldPreamble(const std::string& name) {
     absl::StrAppend(&output_, "\"", name, "\": ");
   }
 
@@ -143,7 +143,7 @@ class Printer {
 
     if (for_analytics_ && IsFhirType<stu3::proto::Extension>(proto)) {
       // Only print extension url when in analytic mode.
-      string scratch;
+      std::string scratch;
       absl::StrAppend(&output_, "\"", GetExtensionUrl(proto, &scratch), "\"");
       return Status::OK();
     }
@@ -243,14 +243,15 @@ class Printer {
     return Status::OK();
   }
 
-  Status PrintPrimitiveField(const Message& proto, const string& field_name) {
+  Status PrintPrimitiveField(const Message& proto,
+                             const std::string& field_name) {
     // TODO: check for ReferenceId using an annotation.
     if (for_analytics_ && proto.GetDescriptor()->name() == "ReferenceId") {
       // In analytic mode, print the raw reference id rather than slicing into
       // type subfields, to make it easier to query.
       PrintFieldPreamble(field_name);
-      string scratch;
-      FHIR_ASSIGN_OR_RETURN(const string& reference_value,
+      std::string scratch;
+      FHIR_ASSIGN_OR_RETURN(const std::string& reference_value,
                             GetPrimitiveStringValue(proto, &scratch));
       absl::StrAppend(&output_, "\"", reference_value, "\"");
       return Status::OK();
@@ -274,7 +275,7 @@ class Printer {
   }
 
   Status PrintChoiceTypeField(const Message& choice_container,
-                              const string& json_name) {
+                              const std::string& json_name) {
     const google::protobuf::Reflection* choice_reflection =
         choice_container.GetReflection();
     const google::protobuf::Descriptor* choice_descriptor =
@@ -291,7 +292,7 @@ class Printer {
     }
     const google::protobuf::FieldDescriptor* value_field =
         choice_reflection->GetOneofFieldDescriptor(choice_container, oneof);
-    string oneof_field_name = value_field->json_name();
+    std::string oneof_field_name = value_field->json_name();
     oneof_field_name[0] = toupper(oneof_field_name[0]);
 
     if (IsPrimitive(value_field->message_type())) {
@@ -451,7 +452,7 @@ class Printer {
         mutable_reference.get(), uri_field);
     // Note that setting the uri clears the typed references, since they share
     // a oneof
-    FHIR_ASSIGN_OR_RETURN(const string& reference_string,
+    FHIR_ASSIGN_OR_RETURN(const std::string& reference_string,
                           ReferenceMessageToString(reference));
     FHIR_RETURN_IF_ERROR(SetPrimitiveStringValue(uri, reference_string));
     return mutable_reference;
@@ -461,11 +462,11 @@ class Printer {
   const bool add_newlines_;
   const bool for_analytics_;
 
-  string output_;
+  std::string output_;
   int current_indent_;
 };
 
-StatusOr<string> WriteMessage(Printer printer, const Message& message) {
+StatusOr<std::string> WriteMessage(Printer printer, const Message& message) {
   if (IsProfile(message.GetDescriptor())) {
     // Unprofile before writing, since JSON should be based on raw proto
     // Note that these are "lenient" profilings, because it doesn't make sense
@@ -497,22 +498,23 @@ StatusOr<string> WriteMessage(Printer printer, const Message& message) {
 
 }  // namespace
 
-StatusOr<string> PrettyPrintFhirToJsonString(const Message& fhir_proto) {
+StatusOr<std::string> PrettyPrintFhirToJsonString(const Message& fhir_proto) {
   Printer printer{2, true, false};
   return WriteMessage(printer, fhir_proto);
 }
 
-StatusOr<string> PrintFhirToJsonString(const Message& fhir_proto) {
+StatusOr<std::string> PrintFhirToJsonString(const Message& fhir_proto) {
   Printer printer{0, false, false};
   return WriteMessage(printer, fhir_proto);
 }
 
-StatusOr<string> PrintFhirToJsonStringForAnalytics(const Message& fhir_proto) {
+StatusOr<std::string> PrintFhirToJsonStringForAnalytics(
+    const Message& fhir_proto) {
   Printer printer{0, false, true};
   return printer.WriteMessage(fhir_proto);
 }
 
-StatusOr<string> PrettyPrintFhirToJsonStringForAnalytics(
+StatusOr<std::string> PrettyPrintFhirToJsonStringForAnalytics(
     const Message& fhir_proto) {
   Printer printer{2, true, true};
   return printer.WriteMessage(fhir_proto);

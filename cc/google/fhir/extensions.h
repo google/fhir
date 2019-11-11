@@ -36,7 +36,6 @@
 namespace google {
 namespace fhir {
 
-using std::string;
 
 Status ExtensionToMessage(const stu3::proto::Extension& extension,
                           ::google::protobuf::Message* message);
@@ -77,7 +76,7 @@ Status GetRepeatedFromExtension(const C& extension_container,
   }
   const ::google::protobuf::Descriptor* descriptor = T::descriptor();
   FHIR_RETURN_IF_ERROR(ValidateExtension(descriptor));
-  const string& url = descriptor->options().GetExtension(
+  const std::string& url = descriptor->options().GetExtension(
       ::google::fhir::proto::fhir_structure_definition_url);
   for (const auto& extension : extension_container) {
     if (extension.url().value() == url) {
@@ -114,15 +113,16 @@ StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
 Status ClearTypedExtensions(const ::google::protobuf::Descriptor* descriptor,
                             ::google::protobuf::Message* message);
 
-Status ClearExtensionsWithUrl(const string& url, ::google::protobuf::Message* message);
+Status ClearExtensionsWithUrl(const std::string& url,
+                              ::google::protobuf::Message* message);
 
-string GetInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* field);
+std::string GetInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* field);
 
-const string& GetExtensionUrl(const google::protobuf::Message& extension,
-                              string* scratch);
+const std::string& GetExtensionUrl(const google::protobuf::Message& extension,
+                                   std::string* scratch);
 
-const string& GetExtensionSystem(const google::protobuf::Message& extension,
-                                 string* scratch);
+const std::string& GetExtensionSystem(const google::protobuf::Message& extension,
+                                      std::string* scratch);
 
 }  // namespace fhir
 }  // namespace google

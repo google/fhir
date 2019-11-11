@@ -34,7 +34,6 @@
 namespace google {
 namespace fhir {
 
-using std::string;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
@@ -43,12 +42,12 @@ using ::tensorflow::errors::InvalidArgument;
 
 namespace {
 
-const std::unordered_map<string, const FieldDescriptor*>*
+const std::unordered_map<std::string, const FieldDescriptor*>*
 GetExtensionValueFieldsMap() {
-  static const std::unordered_map<string, const FieldDescriptor*>*
+  static const std::unordered_map<std::string, const FieldDescriptor*>*
       extension_value_fields_by_type = []() {
-        std::unordered_map<string, const FieldDescriptor*>* map =
-            new std::unordered_map<string, const FieldDescriptor*>;
+        std::unordered_map<std::string, const FieldDescriptor*>* map =
+            new std::unordered_map<std::string, const FieldDescriptor*>;
 
         const google::protobuf::OneofDescriptor* stu3_value_oneof =
             stu3::proto::Extension::Value::descriptor()->FindOneofByName(
@@ -312,7 +311,7 @@ const std::vector<const FieldDescriptor*> FindValueFields(
     const Descriptor* descriptor) {
   std::vector<const FieldDescriptor*> value_fields;
   for (int i = 0; i < descriptor->field_count(); i++) {
-    const string& name = descriptor->field(i)->name();
+    const std::string& name = descriptor->field(i)->name();
     if (name != "id" && name != "extension") {
       value_fields.push_back(descriptor->field(i));
     }
@@ -383,7 +382,7 @@ Status ExtensionToMessageInternal(const ExtensionLike& extension,
   const Descriptor* descriptor = message->GetDescriptor();
   const Reflection* reflection = message->GetReflection();
 
-  std::unordered_map<string, const FieldDescriptor*> fields_by_url;
+  std::unordered_map<std::string, const FieldDescriptor*> fields_by_url;
   const FieldDescriptor* id_field = nullptr;
   for (int i = 0; i < descriptor->field_count(); i++) {
     // We need to handle the "id" field separately, since it corresponds to
@@ -469,7 +468,7 @@ Status ClearTypedExtensions(const Descriptor* descriptor, Message* message) {
   return ClearExtensionsWithUrl(GetStructureDefinitionUrl(descriptor), message);
 }
 
-Status ClearExtensionsWithUrl(const string& url, Message* message) {
+Status ClearExtensionsWithUrl(const std::string& url, Message* message) {
   const Reflection* reflection = message->GetReflection();
   const FieldDescriptor* field =
       message->GetDescriptor()->FindFieldByName("extension");
@@ -478,8 +477,8 @@ Status ClearExtensionsWithUrl(const string& url, Message* message) {
   for (auto iter = repeated_ptr_field->begin();
        iter != repeated_ptr_field->end();) {
     const Message& extension = *iter;
-    string scratch;
-    const string& url_value = GetExtensionUrl(extension, &scratch);
+    std::string scratch;
+    const std::string& url_value = GetExtensionUrl(extension, &scratch);
 
     if (url_value == url) {
       iter = repeated_ptr_field->erase(iter);
@@ -490,7 +489,7 @@ Status ClearExtensionsWithUrl(const string& url, Message* message) {
   return Status::OK();
 }
 
-string GetInlinedExtensionUrl(const FieldDescriptor* field) {
+std::string GetInlinedExtensionUrl(const FieldDescriptor* field) {
   return field->options().HasExtension(
              ::google::fhir::proto::fhir_inlined_extension_url)
              ? field->options().GetExtension(
@@ -498,8 +497,8 @@ string GetInlinedExtensionUrl(const FieldDescriptor* field) {
              : field->json_name();
 }
 
-const string& GetExtensionUrl(const google::protobuf::Message& extension,
-                              string* scratch) {
+const std::string& GetExtensionUrl(const google::protobuf::Message& extension,
+                                   std::string* scratch) {
   const Message& url_message = extension.GetReflection()->GetMessage(
       extension, extension.GetDescriptor()->FindFieldByName("url"));
   return url_message.GetReflection()->GetStringReference(
@@ -507,8 +506,8 @@ const string& GetExtensionUrl(const google::protobuf::Message& extension,
       scratch);
 }
 
-const string& GetExtensionSystem(const google::protobuf::Message& extension,
-                                 string* scratch) {
+const std::string& GetExtensionSystem(const google::protobuf::Message& extension,
+                                      std::string* scratch) {
   const Message& url_message = extension.GetReflection()->GetMessage(
       extension, extension.GetDescriptor()->FindFieldByName("system"));
   return url_message.GetReflection()->GetStringReference(

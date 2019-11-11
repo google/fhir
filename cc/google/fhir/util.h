@@ -19,6 +19,7 @@
 
 #include <stddef.h>
 
+#include <string>
 #include <type_traits>
 #include <utility>
 
@@ -77,7 +78,6 @@
 namespace google {
 namespace fhir {
 
-using std::string;
 
 template <typename R>
 stu3::proto::Meta* MutableMetadataFromResource(R* resource) {
@@ -89,23 +89,26 @@ stu3::proto::Meta* MutableMetadataFromResource(R* resource) {
 Status SplitIfRelativeReference(::google::protobuf::Message* reference);
 
 StatusOr<stu3::proto::Reference> ReferenceStringToProtoStu3(
-    const string& input);
+    const std::string& input);
 
-StatusOr<r4::core::Reference> ReferenceStringToProtoR4(const string& input);
+StatusOr<r4::core::Reference> ReferenceStringToProtoR4(
+    const std::string& input);
 
 // Return the full string representation of a reference.
-StatusOr<string> ReferenceProtoToString(
+StatusOr<std::string> ReferenceProtoToString(
     const stu3::proto::Reference& reference);
 
 // Return the full string representation of a reference.
-StatusOr<string> ReferenceProtoToString(const r4::core::Reference& reference);
+StatusOr<std::string> ReferenceProtoToString(
+    const r4::core::Reference& reference);
 
 // When a message is not of a known type at compile time, this overload can
 // be used to cast to a reference and then call ReferenceProtoToString.
 // This is provided as a separate API rather than relying on the caller to cast
 // so that version-agnostic libraries don't need to link in multiple versions
 // of FHIR.
-StatusOr<string> ReferenceMessageToString(const ::google::protobuf::Message& reference);
+StatusOr<std::string> ReferenceMessageToString(
+    const ::google::protobuf::Message& reference);
 
 // Builds an absl::Time from a time-like fhir Element.
 // Must have a value_us field.
@@ -120,7 +123,7 @@ absl::Duration GetDurationFromTimelikeElement(
 absl::Duration GetDurationFromTimelikeElement(
     const ::google::fhir::r4::core::DateTime& datetime);
 
-Status GetTimezone(const string& timezone_str, absl::TimeZone* tz);
+Status GetTimezone(const std::string& timezone_str, absl::TimeZone* tz);
 
 // Builds a absl::Time from a time-like fhir Element, corresponding to the
 // smallest time greater than this time element. For elements with DAY
@@ -185,7 +188,7 @@ StatusOr<ContainedResourceLike> WrapContainedResource(
   return contained_resource;
 }
 
-StatusOr<string> GetResourceId(const ::google::protobuf::Message& message);
+StatusOr<std::string> GetResourceId(const ::google::protobuf::Message& message);
 
 template <typename BundleLike, typename PatientLike>
 Status GetPatient(const BundleLike& bundle, const PatientLike** patient) {
@@ -216,7 +219,7 @@ StatusOr<const PatientLike*> GetPatient(const BundleLike& bundle) {
 }
 
 // Returns a reference, e.g. "Encounter/1234" for a FHIR resource.
-string GetReferenceToResource(const ::google::protobuf::Message& message);
+std::string GetReferenceToResource(const ::google::protobuf::Message& message);
 
 // Given a resource and a reference, populates the correct typed reference field
 // with a reference to that resource. If the message is not a FHIR
@@ -268,9 +271,9 @@ GetResourceExtensionsFromBundleEntry(const EntryLike& entry) {
 }
 
 Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
-                               const string& value);
-StatusOr<string> GetPrimitiveStringValue(const ::google::protobuf::Message& primitive,
-                                         string* scratch);
+                               const std::string& value);
+StatusOr<std::string> GetPrimitiveStringValue(
+    const ::google::protobuf::Message& primitive, std::string* scratch);
 
 }  // namespace fhir
 }  // namespace google

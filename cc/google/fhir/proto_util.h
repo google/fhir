@@ -31,8 +31,6 @@
 namespace google {
 namespace fhir {
 
-using std::string;
-
 // Finds a message subfield at the path specified by a string in the format
 // used by a ResourceConfig (camel-case, prefixed by Resource type), e.g.:
 // MedicationRequest.dispenseRequest.validityPeriod.start
@@ -46,17 +44,17 @@ using std::string;
 // All versions return an INVALID_ARGUMENT status if the field_path does not
 // resolve to a message
 StatusOr<::google::protobuf::Message*> GetMutableSubmessageByPath(
-    ::google::protobuf::Message* message, const string& field_path);
+    ::google::protobuf::Message* message, const std::string& field_path);
 
 StatusOr<const ::google::protobuf::Message*> GetSubmessageByPath(
-    const ::google::protobuf::Message& message, const string& field_path);
+    const ::google::protobuf::Message& message, const std::string& field_path);
 
 // Typed variants that return the requested type, or INVALID_ARGUMENT if
 // the located message is not of the expected type.
 template <typename T>
-StatusOr<T*> GetMutableSubmessageByPathAndCheckType(::google::protobuf::Message* message,
-                                                    const string& field_path) {
-  const string& message_name = message->GetDescriptor()->name();
+StatusOr<T*> GetMutableSubmessageByPathAndCheckType(
+    ::google::protobuf::Message* message, const std::string& field_path) {
+  const std::string& message_name = message->GetDescriptor()->name();
   auto got = GetMutableSubmessageByPath(message, field_path);
   TF_RETURN_IF_ERROR(got.status());
   ::google::protobuf::Message* submessage = got.ValueOrDie();
@@ -73,8 +71,8 @@ StatusOr<T*> GetMutableSubmessageByPathAndCheckType(::google::protobuf::Message*
 
 template <typename T>
 StatusOr<const T*> GetSubmessageByPathAndCheckType(
-    const ::google::protobuf::Message& message, const string& field_path) {
-  const string& message_name = message.GetDescriptor()->name();
+    const ::google::protobuf::Message& message, const std::string& field_path) {
+  const std::string& message_name = message.GetDescriptor()->name();
   auto got = GetSubmessageByPath(message, field_path);
   TF_RETURN_IF_ERROR(got.status());
   const ::google::protobuf::Message* submessage = got.ValueOrDie();
@@ -93,7 +91,7 @@ StatusOr<const T*> GetSubmessageByPathAndCheckType(
 // false if the field is unset, and InvalidArgument if the field_path doesn't
 // resolve to a field, or the field is an unindexed repeated.
 StatusOr<const bool> HasSubmessageByPath(const ::google::protobuf::Message& message,
-                                         const string& field_path);
+                                         const std::string& field_path);
 
 // Clears a field at the location specified by field path.
 // If this points to a singular field, will just delete that element.
@@ -103,22 +101,22 @@ StatusOr<const bool> HasSubmessageByPath(const ::google::protobuf::Message& mess
 // Note that this operates on fields, not a submessage, so a field_path ending
 // in an index is considered invalid.
 tensorflow::Status ClearFieldByPath(::google::protobuf::Message* message,
-                                    const string& field_path);
+                                    const std::string& field_path);
 
 // Returns true if a field_path ends in a repeated index, e.g.,
 // Resource.repeatedSubfield[5].
 // If true, populates index param with the index.
 // Note that this is only true if the LEAF FIELD is repeated, so
 // EndsInIndex("Resource.repeatedSubfield[5].id", &index); // False
-bool EndsInIndex(const string& field_path, int* index);
+bool EndsInIndex(const std::string& field_path, int* index);
 
 // Variant that only returns boolean, without extracting index.
-bool EndsInIndex(const string& field_path);
+bool EndsInIndex(const std::string& field_path);
 
 // Strips repeated index from a field where EndsInIndex is true, e.g.:
 // StripIndex("repeatedSubfield[5]"); // "repeatedSubfield"
 // Is a no-op on fields for which EndsInIndex is false.
-string StripIndex(const string& field_path);
+std::string StripIndex(const std::string& field_path);
 
 // Convenience method for adding a message to a field.
 // If the field is singular, returns the mutable message.
@@ -132,7 +130,7 @@ string StripIndex(const string& field_path);
 bool FieldHasValue(const ::google::protobuf::Message& message,
                    const ::google::protobuf::FieldDescriptor* field);
 
-bool FieldHasValue(const ::google::protobuf::Message& message, const string& field);
+bool FieldHasValue(const ::google::protobuf::Message& message, const std::string& field);
 
 int PotentiallyRepeatedFieldSize(const ::google::protobuf::Message& message,
                                  const ::google::protobuf::FieldDescriptor* field);
@@ -227,7 +225,7 @@ StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
 
 template <typename T>
 StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
-                              const string& field_name) {
+                              const std::string& field_name) {
   const ::google::protobuf::FieldDescriptor* field =
       message.GetDescriptor()->FindFieldByName(field_name);
   if (!field) {
@@ -245,11 +243,12 @@ bool AreSameMessageType(const ::google::protobuf::Message& a, const ::google::pr
 // fields are of the same type, copies over the value.
 // Otherwise, returns InvalidArgument.
 Status CopyCommonField(const ::google::protobuf::Message& source,
-                       ::google::protobuf::Message* target, const string& field_name);
+                       ::google::protobuf::Message* target,
+                       const std::string& field_name);
 
 // Clears a field by name on a message.  Returns InvalidArgument if the field
 // does not exist on the message.
-Status ClearField(::google::protobuf::Message* message, const string& field_name);
+Status ClearField(::google::protobuf::Message* message, const std::string& field_name);
 
 }  // namespace fhir
 }  // namespace google

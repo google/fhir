@@ -27,12 +27,11 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-using std::string;
 
 class TextTokenizer {
  public:
   struct Token {
-    string text;
+    std::string text;
     int char_start;
     int char_end;
 

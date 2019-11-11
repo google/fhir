@@ -40,11 +40,11 @@ const Stu3TestObservation::CodeableConceptForCode GetConceptStu3() {
 
 TEST(CodeableConceptsTest, ForEachSystemCodeStringPair) {
   const auto concept = GetConceptStu3();
-  string sys_accum = "";
-  string code_accum = "";
+  std::string sys_accum = "";
+  std::string code_accum = "";
   ForEachSystemCodeStringPair(
-      concept,
-      [&sys_accum, &code_accum](const string& sys, const string& code) {
+      concept, [&sys_accum, &code_accum](const std::string& sys,
+                                         const std::string& code) {
         sys_accum = absl::StrCat(sys_accum, sys, ",");
         code_accum = absl::StrCat(code_accum, code, ",");
       });
@@ -226,9 +226,10 @@ TEST(CodeableConceptsTest, AddCodingFromStringsSTU3) {
   TF_CHECK_OK(AddCoding(&concept, "http://sysr.org", "rcode"));
 
   EXPECT_EQ(concept.coding_size(), 3);
-  string code_accum = "";
+  std::string code_accum = "";
   ForEachSystemCodeStringPair(
-      concept, [&code_accum](const string& code, const string& system) {
+      concept,
+      [&code_accum](const std::string& code, const std::string& system) {
         absl::StrAppend(&code_accum, code, ",");
       });
   EXPECT_EQ(code_accum, "http://sysq.org,http://sysq.org,http://sysr.org,");
@@ -242,9 +243,10 @@ TEST(CodeableConceptsTest, AddCodingFromStringsR4) {
   TF_CHECK_OK(AddCoding(&concept, "http://sysr.org", "rcode"));
 
   EXPECT_EQ(concept.coding_size(), 3);
-  string code_accum = "";
+  std::string code_accum = "";
   ForEachSystemCodeStringPair(
-      concept, [&code_accum](const string& code, const string& system) {
+      concept,
+      [&code_accum](const std::string& code, const std::string& system) {
         absl::StrAppend(&code_accum, code, ",");
       });
   EXPECT_EQ(code_accum, "http://sysq.org,http://sysq.org,http://sysr.org,");
@@ -256,12 +258,12 @@ const R4TestObservation::CodeableConceptForCode GetConceptR4() {
 }
 
 TEST(CodeableConceptsTest, FindSystemCodeStringPairUnprofiledR4) {
-  string found_system;
-  string found_code;
+  std::string found_system;
+  std::string found_code;
   const auto concept = GetConceptR4();
   EXPECT_TRUE(FindSystemCodeStringPair(
       concept,
-      [](const string& system, const string& code) {
+      [](const std::string& system, const std::string& code) {
         return system == "http://sysg.org" && code == "gcode1";
       },
       &found_system, &found_code));
@@ -270,12 +272,12 @@ TEST(CodeableConceptsTest, FindSystemCodeStringPairUnprofiledR4) {
 }
 
 TEST(CodeableConceptsTest, FindSystemCodeStringPairFixedSystemR4) {
-  string found_system;
-  string found_code;
+  std::string found_system;
+  std::string found_code;
   const auto concept = GetConceptR4();
   EXPECT_TRUE(FindSystemCodeStringPair(
       concept,
-      [](const string& system, const string& code) {
+      [](const std::string& system, const std::string& code) {
         return system == "http://sysb.org" && code == "bcode2";
       },
       &found_system, &found_code));
@@ -285,12 +287,12 @@ TEST(CodeableConceptsTest, FindSystemCodeStringPairFixedSystemR4) {
 }
 
 TEST(CodeableConceptsTest, FindSystemCodeStringPairFixedCodeR4) {
-  string found_system;
-  string found_code;
+  std::string found_system;
+  std::string found_code;
   const auto concept = GetConceptR4();
   EXPECT_TRUE(FindSystemCodeStringPair(
       concept,
-      [](const string& system, const string& code) {
+      [](const std::string& system, const std::string& code) {
         return system == "http://sysd.org" && code == "8675329";
       },
       &found_system, &found_code));
@@ -300,21 +302,22 @@ TEST(CodeableConceptsTest, FindSystemCodeStringPairFixedCodeR4) {
 }
 
 TEST(CodeableConceptsTest, FindSystemCodeStringPairNotFoundR4) {
-  string found_system;
-  string found_code;
+  std::string found_system;
+  std::string found_code;
   const auto concept = GetConceptR4();
   EXPECT_FALSE(FindSystemCodeStringPair(
-      concept, [](const string& system, const string& code) { return false; },
+      concept,
+      [](const std::string& system, const std::string& code) { return false; },
       &found_system, &found_code));
 }
 
 TEST(CodeableConceptsTest, ForEachSystemCodeStringPairR4) {
   const auto concept = GetConceptR4();
-  string sys_accum = "";
-  string code_accum = "";
+  std::string sys_accum = "";
+  std::string code_accum = "";
   ForEachSystemCodeStringPair(
-      concept,
-      [&sys_accum, &code_accum](const string& sys, const string& code) {
+      concept, [&sys_accum, &code_accum](const std::string& sys,
+                                         const std::string& code) {
         absl::StrAppend(&sys_accum, sys, ",");
         absl::StrAppend(&code_accum, code, ",");
       });
@@ -383,9 +386,10 @@ TEST(CodeableConceptsTest, GetOnlyCodeWithSystemNoneR4) {
 TEST(CodeableConceptsTest, ClearAllCodingsWithSystemUnprofiledR4) {
   auto concept = GetConceptR4();
   TF_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysg.org"));
-  string display_accum = "";
+  std::string display_accum = "";
   ForEachSystemCodeStringPair(
-      concept, [&display_accum](const string& code, const string& system) {
+      concept,
+      [&display_accum](const std::string& code, const std::string& system) {
         absl::StrAppend(&display_accum, code, ",");
       });
   EXPECT_EQ(display_accum,
@@ -396,9 +400,10 @@ TEST(CodeableConceptsTest, ClearAllCodingsWithSystemUnprofiledR4) {
 TEST(CodeableConceptsTest, ClearAllCodingsWithSystemFixedSystemR4) {
   auto concept = GetConceptR4();
   TF_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysb.org"));
-  string display_accum = "";
+  std::string display_accum = "";
   ForEachSystemCodeStringPair(
-      concept, [&display_accum](const string& code, const string& system) {
+      concept,
+      [&display_accum](const std::string& code, const std::string& system) {
         absl::StrAppend(&display_accum, code, ",");
       });
   EXPECT_EQ(display_accum,

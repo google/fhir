@@ -22,13 +22,12 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-using std::string;
 
 class ExampleKeyTest : public ::testing::Test {};
 
 // Tests for util functions
 TEST_F(ExampleKeyTest, ParseExampleKeyNoSource) {
-  const string key = "000fbcd133bb95ef-Patient/9511:0-1699@6794148180";
+  const std::string key = "000fbcd133bb95ef-Patient/9511:0-1699@6794148180";
   const ExampleKey expected = {
       "Patient/9511",                     // patient_id
       absl::FromUnixSeconds(6794148180),  // trigger_timestamp
@@ -42,7 +41,7 @@ TEST_F(ExampleKeyTest, ParseExampleKeyNoSource) {
 }
 
 TEST_F(ExampleKeyTest, ParseExampleKeyNegativeTimestampNoSource) {
-  const string key = "f26dd962a28daeb1-Patient/123:0-2@-957312000";
+  const std::string key = "f26dd962a28daeb1-Patient/123:0-2@-957312000";
   const ExampleKey expected = {
       "Patient/123",                      // patient_id
       absl::FromUnixSeconds(-957312000),  // trigger_timestamp
@@ -56,7 +55,7 @@ TEST_F(ExampleKeyTest, ParseExampleKeyNegativeTimestampNoSource) {
 }
 
 TEST_F(ExampleKeyTest, ParseExampleKeyDashesNoSource) {
-  const string key =
+  const std::string key =
       "00c4061415d4961b-Patient/45b7ca20-5cde-ee51b5d20127:0-67@1265414400";
   const ExampleKey expected = {
       "Patient/45b7ca20-5cde-ee51b5d20127",  // patient_id
@@ -78,12 +77,13 @@ TEST_F(ExampleKeyTest, GenerateExampleKeyNoSource) {
       0,                                  // start
       1699                                // end
   };
-  const string expected_key = "1ab84f967a46f259-Patient/9511:0-1699@6794148180";
+  const std::string expected_key =
+      "1ab84f967a46f259-Patient/9511:0-1699@6794148180";
   EXPECT_EQ(expected_key, key.ToStringWithPrefix());
 }
 
 TEST_F(ExampleKeyTest, ParsePatientIdTimestampExampleKey) {
-  const string key = "Patient/9511@-6794148180";
+  const std::string key = "Patient/9511@-6794148180";
   const ExampleKey expected = {
       "Patient/9511",                      // patient_id
       absl::FromUnixSeconds(-6794148180),  // trigger_timestamp
@@ -97,7 +97,7 @@ TEST_F(ExampleKeyTest, ParsePatientIdTimestampExampleKey) {
 }
 
 TEST_F(ExampleKeyTest, GeneratePatientIdTimestampExampleKey) {
-  const string expected_key = "Patient/9511@6794148180";
+  const std::string expected_key = "Patient/9511@6794148180";
   const ExampleKey key = {
       "Patient/9511",                     // patient_id
       absl::FromUnixSeconds(6794148180),  // trigger_timestamp
@@ -109,7 +109,7 @@ TEST_F(ExampleKeyTest, GeneratePatientIdTimestampExampleKey) {
 }
 
 TEST_F(ExampleKeyTest, GeneratePatientIdSourceExampleKey) {
-  const string expected_key = "Patient/9511:Encounter/1";
+  const std::string expected_key = "Patient/9511:Encounter/1";
   const ExampleKey key = {
       "Patient/9511",                     // patient_id
       absl::FromUnixSeconds(6794148180),  // trigger_timestamp
@@ -122,7 +122,7 @@ TEST_F(ExampleKeyTest, GeneratePatientIdSourceExampleKey) {
 
 // Tests with sequence_key_with_source
 TEST_F(ExampleKeyTest, ParseExampleKey) {
-  const string key = "000fbcd133bb95ef-Patient/9511:0-1699@6794148180";
+  const std::string key = "000fbcd133bb95ef-Patient/9511:0-1699@6794148180";
   const ExampleKey expected = {
       "Patient/9511",                     // patient_id
       absl::FromUnixSeconds(6794148180),  // trigger_timestamp
@@ -136,7 +136,8 @@ TEST_F(ExampleKeyTest, ParseExampleKey) {
 }
 
 TEST_F(ExampleKeyTest, ParseExampleKeyNegativeTimestamp) {
-  const string key = "f26dd962a28daeb1-Patient/123:0-2@-957312000:Claim2/1";
+  const std::string key =
+      "f26dd962a28daeb1-Patient/123:0-2@-957312000:Claim2/1";
   const ExampleKey expected = {
       "Patient/123",                      // patient_id
       absl::FromUnixSeconds(-957312000),  // trigger_timestamp
@@ -150,7 +151,7 @@ TEST_F(ExampleKeyTest, ParseExampleKeyNegativeTimestamp) {
 }
 
 TEST_F(ExampleKeyTest, ParseExampleKeyDashes) {
-  const string key =
+  const std::string key =
       "00c4061415d4961b-Patient/45b7ca20-5cde-ee51b5d20127:"
       "0-67@1265414400:Observation/c0ffee-deadbeef-123";
   const ExampleKey expected = {

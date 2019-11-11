@@ -27,7 +27,6 @@
 namespace google {
 namespace fhir {
 
-using std::string;
 
 using ::google::fhir::StatusOr;
 using ::google::protobuf::Descriptor;
@@ -47,10 +46,10 @@ enum class EmptyFieldsBehavior { ADD_DEFAULT, RETURN_NOT_FOUND };
 // not set.
 // If ADD_DEFAULT, this will return a default message.
 StatusOr<Message*> GetSubmessageByPathInternal(
-    Message* message, const string& field_path,
+    Message* message, const std::string& field_path,
     const EmptyFieldsBehavior empty_fields_behavior) {
-  const string& message_name = message->GetDescriptor()->name();
-  std::vector<string> tokens = absl::StrSplit(field_path, '.');
+  const std::string& message_name = message->GetDescriptor()->name();
+  std::vector<std::string> tokens = absl::StrSplit(field_path, '.');
   if (message_name != tokens[0]) {
     return InvalidArgument(absl::StrCat("Cannot find ", field_path, " in ",
                                         message_name,
@@ -123,21 +122,21 @@ StatusOr<Message*> GetSubmessageByPathInternal(
 
 }  //  namespace
 
-bool EndsInIndex(const string& field_path, int* index) {
+bool EndsInIndex(const std::string& field_path, int* index) {
   static LazyRE2 re{R"(\[([0-9]+)]$)"};
   return RE2::PartialMatch(field_path, *re, index);
 }
 
-bool EndsInIndex(const string& field_path) {
+bool EndsInIndex(const std::string& field_path) {
   int index;
   return EndsInIndex(field_path, &index);
 }
 
-string StripIndex(const string& field_path) {
+std::string StripIndex(const std::string& field_path) {
   return field_path.substr(0, field_path.find_last_of('['));
 }
 StatusOr<const bool> HasSubmessageByPath(const Message& message,
-                                         const string& field_path) {
+                                         const std::string& field_path) {
   const Status& status = GetSubmessageByPath(message, field_path).status();
   if (status.code() == ::tensorflow::error::Code::INVALID_ARGUMENT) {
     return status;
@@ -146,13 +145,13 @@ StatusOr<const bool> HasSubmessageByPath(const Message& message,
 }
 
 StatusOr<Message*> GetMutableSubmessageByPath(Message* message,
-                                              const string& field_path) {
+                                              const std::string& field_path) {
   return GetSubmessageByPathInternal(message, field_path,
                                      EmptyFieldsBehavior::ADD_DEFAULT);
 }
 
 StatusOr<const Message*> GetSubmessageByPath(const Message& message,
-                                             const string& field_path) {
+                                             const std::string& field_path) {
   auto got =
       GetSubmessageByPathInternal(&(const_cast<Message&>(message)), field_path,
                                   EmptyFieldsBehavior::RETURN_NOT_FOUND);
@@ -160,15 +159,15 @@ StatusOr<const Message*> GetSubmessageByPath(const Message& message,
   return const_cast<const Message*>(got.ValueOrDie());
 }
 
-Status ClearFieldByPath(Message* message, const string& field_path) {
+Status ClearFieldByPath(Message* message, const std::string& field_path) {
   if (EndsInIndex(field_path)) {
     return InvalidArgument(
         absl::StrCat("Cannot clear indexed repeated field: ", field_path));
   }
   // Get parent message, so we can clear the leaf field from it.
   const std::size_t last_dot_index = field_path.find_last_of('.');
-  const string parent_path = field_path.substr(0, last_dot_index);
-  const string field_name = field_path.substr(last_dot_index + 1);
+  const std::string parent_path = field_path.substr(0, last_dot_index);
+  const std::string field_name = field_path.substr(last_dot_index + 1);
   // First check if the parent message exists, to avoid adding an empty
   // parent message.
   auto got = HasSubmessageByPath(*message, parent_path);
@@ -201,7 +200,7 @@ bool FieldHasValue(const Message& message, const FieldDescriptor* field) {
   return PotentiallyRepeatedFieldSize(message, field) > 0;
 }
 
-bool FieldHasValue(const Message& message, const string& field_name) {
+bool FieldHasValue(const Message& message, const std::string& field_name) {
   return FieldHasValue(message,
                        message.GetDescriptor()->FindFieldByName(field_name));
 }
@@ -242,7 +241,7 @@ bool AreSameMessageType(const Message& a, const Message& b) {
 }
 
 Status CopyCommonField(const Message& source, Message* target,
-                       const string& field_name) {
+                       const std::string& field_name) {
   const Descriptor* source_descriptor = source.GetDescriptor();
   const Descriptor* target_descriptor = target->GetDescriptor();
 
@@ -268,7 +267,7 @@ Status CopyCommonField(const Message& source, Message* target,
   return Status::OK();
 }
 
-Status ClearField(Message* message, const string& field_name) {
+Status ClearField(Message* message, const std::string& field_name) {
   const Descriptor* descriptor = message->GetDescriptor();
   const FieldDescriptor* field = descriptor->FindFieldByName(field_name);
 

@@ -22,11 +22,9 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-using std::string;
-
-std::vector<string> ExtractText(
+std::vector<std::string> ExtractText(
     const std::vector<TextTokenizer::Token>& tokens) {
-  std::vector<string> result;
+  std::vector<std::string> result;
   for (const auto& t : tokens) {
     result.push_back(t.text);
   }
@@ -52,7 +50,7 @@ TEST(TextTokenizerTest, SimpleWordTokenizer) {
 
 TEST(TextTokenizerTest, SimpleWordTokenizer_CharRanges) {
   SimpleWordTokenizer t(false);
-  const string input = "These\n[**are**]\n\n\ntokens.";
+  const std::string input = "These\n[**are**]\n\n\ntokens.";
   auto tokenized = t.Tokenize(input);
   EXPECT_THAT(tokenized, ElementsAre((TextTokenizer::Token){"These", 0, 5},
                                      (TextTokenizer::Token){"are", 9, 12},
@@ -65,7 +63,7 @@ TEST(TextTokenizerTest, SimpleWordTokenizer_CharRanges) {
 
 TEST(TextTokenizerTest, SimpleWordTokenizer_LongText) {
   SimpleWordTokenizer t(true);
-  const string input =
+  const std::string input =
       "See elsewhere for objective data.\n\n20 year old russian speaking male "
       "admitted to [**Hospital Ward Name **] 10 on [**2000-1-10**] "
       "with\ndecompensated ETOH cirrohis with ascites and grade III "
@@ -81,7 +79,7 @@ TEST(TextTokenizerTest, SimpleWordTokenizer_LongText) {
 
 TEST(TextTokenizerTest, SingleTokenTokenizerTest) {
   SingleTokenTokenizer t;
-  const string text = "There  is\n but one token.";
+  const std::string text = "There  is\n but one token.";
   EXPECT_THAT(t.Tokenize(text),
               ElementsAre((TextTokenizer::Token){text, 0, (int)text.size()}));
 }

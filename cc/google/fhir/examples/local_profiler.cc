@@ -23,7 +23,6 @@
 #include "examples/profiles/demo.pb.h"
 #include "proto/r4/core/resources/patient.pb.h"
 
-using std::string;
 
 using ::company::fhir::r4::demo::DemoPatient;
 using ::google::fhir::ConvertToProfileLenientR4;
@@ -44,7 +43,7 @@ void ConvertToProfile(const absl::TimeZone& time_zone, std::string dir) {
   std::ofstream write_stream;
   write_stream.open(absl::StrCat(dir, "/", P::descriptor()->name(), ".ndjson"));
 
-  string line;
+  std::string line;
   while (!read_stream.eof()) {
     std::getline(read_stream, line);
     if (!line.length()) continue;

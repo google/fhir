@@ -179,7 +179,6 @@
 namespace google {
 namespace fhir {
 
-using std::string;
 
 namespace {
 
@@ -189,8 +188,8 @@ static const char* const kTimeZoneString = "Australia/Sydney";
 
 // json_path should be relative to fhir root
 template <typename R>
-StatusOr<R> ParseJsonToProto(const string& json_path) {
-  string json = ReadFile(json_path);
+StatusOr<R> ParseJsonToProto(const std::string& json_path) {
+  std::string json = ReadFile(json_path);
   absl::TimeZone tz;
   absl::LoadTimeZone(kTimeZoneString, &tz);
   return JsonFhirStringToProtoWithoutValidating<R>(json, tz);
@@ -201,7 +200,8 @@ StatusOr<R> ParseJsonToProto(const string& json_path) {
 // This difference is because we read most json test data from the spec package,
 // rather than the testdata directory.
 template <typename R>
-void TestParseWithFilepaths(const string& proto_path, const string& json_path) {
+void TestParseWithFilepaths(const std::string& proto_path,
+                            const std::string& json_path) {
   StatusOr<R> from_json_status = ParseJsonToProto<R>(json_path);
   ASSERT_TRUE(from_json_status.ok()) << "Failed parsing: " << json_path << "\n"
                                      << from_json_status.status();
@@ -209,19 +209,19 @@ void TestParseWithFilepaths(const string& proto_path, const string& json_path) {
   R from_disk = ReadR4Proto<R>(proto_path);
 
   ::google::protobuf::util::MessageDifferencer differencer;
-  string differences;
+  std::string differences;
   differencer.ReportDifferencesToString(&differences);
   EXPECT_TRUE(differencer.Compare(from_disk, from_json)) << differences;
 }
 
 template <typename R>
-void TestParse(const string& name) {
+void TestParse(const std::string& name) {
   TestParseWithFilepaths<R>(
       absl::StrCat("examples/", name, ".prototxt"),
       absl::StrCat("spec/hl7.fhir.core/4.0.0/package/", name + ".json"));
 }
 
-Json::Value ParseJsonStringToValue(const string& raw_json) {
+Json::Value ParseJsonStringToValue(const std::string& raw_json) {
   Json::Reader reader;
   Json::Value value;
   reader.parse(raw_json, value);
@@ -229,14 +229,15 @@ Json::Value ParseJsonStringToValue(const string& raw_json) {
 }
 
 template <typename R>
-void TestPrintWithFilepaths(const string& proto_path, const string& json_path) {
+void TestPrintWithFilepaths(const std::string& proto_path,
+                            const std::string& json_path) {
   const R proto = ReadR4Proto<R>(proto_path);
-  StatusOr<string> from_proto_status = PrettyPrintFhirToJsonString(proto);
+  StatusOr<std::string> from_proto_status = PrettyPrintFhirToJsonString(proto);
   ASSERT_TRUE(from_proto_status.ok())
       << "Failed Printing on: " << proto_path << ": "
       << from_proto_status.status().error_message();
-  string from_proto = from_proto_status.ValueOrDie();
-  string from_json = ReadFile(absl::StrCat(json_path));
+  std::string from_proto = from_proto_status.ValueOrDie();
+  std::string from_json = ReadFile(absl::StrCat(json_path));
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
     // This assert will fail, but we get terrible diff messages comparing
@@ -246,15 +247,15 @@ void TestPrintWithFilepaths(const string& proto_path, const string& json_path) {
 }
 
 template <typename R>
-void TestPrint(const string& name) {
+void TestPrint(const std::string& name) {
   TestPrintWithFilepaths<R>(
       absl::StrCat("examples/", name, ".prototxt"),
       absl::StrCat("spec/hl7.fhir.core/4.0.0/package/", name + ".json"));
 }
 
 template <typename R>
-void TestPair(const std::vector<string>& file_names) {
-  for (const string& file : file_names) {
+void TestPair(const std::vector<std::string>& file_names) {
+  for (const std::string& file : file_names) {
     TestPrint<R>(file);
     TestParse<R>(file);
   }
@@ -283,8 +284,8 @@ TEST(JsonFormatR4Test, ParseProfileMismatch) {
 }
 
 template <typename R>
-void TestPrintForAnalytics(const string& proto_filepath,
-                           const string& json_filepath, bool pretty) {
+void TestPrintForAnalytics(const std::string& proto_filepath,
+                           const std::string& json_filepath, bool pretty) {
   R proto = ReadR4Proto<R>(proto_filepath);
   if (IsProfile(R::descriptor())) {
     proto = NormalizeR4(proto).ValueOrDie();
@@ -294,8 +295,8 @@ void TestPrintForAnalytics(const string& proto_filepath,
   ASSERT_TRUE(result.ok()) << "Failed PrintForAnalytics on: " << proto_filepath
                            << "\n"
                            << result.status();
-  string from_proto = result.ValueOrDie();
-  string from_json = ReadFile(json_filepath);
+  std::string from_proto = result.ValueOrDie();
+  std::string from_json = ReadFile(json_filepath);
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
     // This assert will fail, but we get terrible diff messages comparing
@@ -305,14 +306,14 @@ void TestPrintForAnalytics(const string& proto_filepath,
 }
 
 template <typename R>
-void TestPrintForAnalyticsWithFilepath(const string& proto_filepath,
-                                       const string& json_filepath) {
+void TestPrintForAnalyticsWithFilepath(const std::string& proto_filepath,
+                                       const std::string& json_filepath) {
   TestPrintForAnalytics<R>(proto_filepath, json_filepath, true);
   TestPrintForAnalytics<R>(proto_filepath, json_filepath, false);
 }
 
 template <typename R>
-void TestPrintForAnalytics(const string& name) {
+void TestPrintForAnalytics(const std::string& name) {
   TestPrintForAnalyticsWithFilepath<R>(
       absl::StrCat("examples/", name, ".prototxt"),
       absl::StrCat("testdata/r4/bigquery/", name + ".json"));
@@ -333,12 +334,12 @@ TEST(JsonFormatR4Test, PrintProfileForAnalytics) {
 }
 
 TEST(JsonFormatR4Test, TestAccount) {
-  std::vector<string> files{"Account-ewg", "Account-example"};
+  std::vector<std::string> files{"Account-ewg", "Account-example"};
   TestPair<Account>(files);
 }
 
 TEST(JsonFormatR4Test, TestActivityDefinition) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "ActivityDefinition-administer-zika-virus-exposure-assessment",
       "ActivityDefinition-blood-tubes-supply",
       "ActivityDefinition-citalopramPrescription",
@@ -352,12 +353,12 @@ TEST(JsonFormatR4Test, TestActivityDefinition) {
 }
 
 TEST(JsonFormatR4Test, TestAdverseEvent) {
-  std::vector<string> files{"AdverseEvent-example"};
+  std::vector<std::string> files{"AdverseEvent-example"};
   TestPair<AdverseEvent>(files);
 }
 
 TEST(JsonFormatR4Test, TestAllergyIntolerance) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "AllergyIntolerance-example",    "AllergyIntolerance-fishallergy",
       "AllergyIntolerance-medication", "AllergyIntolerance-nka",
       "AllergyIntolerance-nkda",       "AllergyIntolerance-nkla"};
@@ -365,55 +366,55 @@ TEST(JsonFormatR4Test, TestAllergyIntolerance) {
 }
 
 TEST(JsonFormatR4Test, TestAppointment) {
-  std::vector<string> files{"Appointment-2docs", "Appointment-example",
-                            "Appointment-examplereq"};
+  std::vector<std::string> files{"Appointment-2docs", "Appointment-example",
+                                 "Appointment-examplereq"};
   TestPair<Appointment>(files);
 }
 
 TEST(JsonFormatR4Test, TestAppointmentResponse) {
-  std::vector<string> files{"AppointmentResponse-example",
-                            "AppointmentResponse-exampleresp"};
+  std::vector<std::string> files{"AppointmentResponse-example",
+                                 "AppointmentResponse-exampleresp"};
   TestPair<AppointmentResponse>(files);
 }
 
 TEST(JsonFormatR4Test, TestAuditEvent) {
-  std::vector<string> files{"AuditEvent-example-disclosure",
-                            "AuditEvent-example-error",
-                            "AuditEvent-example",
-                            "AuditEvent-example-login",
-                            "AuditEvent-example-logout",
-                            "AuditEvent-example-media",
-                            "AuditEvent-example-pixQuery",
-                            "AuditEvent-example-rest",
-                            "AuditEvent-example-search"};
+  std::vector<std::string> files{"AuditEvent-example-disclosure",
+                                 "AuditEvent-example-error",
+                                 "AuditEvent-example",
+                                 "AuditEvent-example-login",
+                                 "AuditEvent-example-logout",
+                                 "AuditEvent-example-media",
+                                 "AuditEvent-example-pixQuery",
+                                 "AuditEvent-example-rest",
+                                 "AuditEvent-example-search"};
   TestPair<AuditEvent>(files);
 }
 
 TEST(JsonFormatR4Test, TestBasic) {
-  std::vector<string> files{"Basic-basic-example-narrative", "Basic-classModel",
-                            "Basic-referral"};
+  std::vector<std::string> files{"Basic-basic-example-narrative",
+                                 "Basic-classModel", "Basic-referral"};
   TestPair<Basic>(files);
 }
 
 TEST(JsonFormatR4Test, TestBinary) {
-  std::vector<string> files{"Binary-example", "Binary-f006"};
+  std::vector<std::string> files{"Binary-example", "Binary-f006"};
   TestPair<Binary>(files);
 }
 
 TEST(JsonFormatR4Test, TestBiologicallyDerivedProduct) {
-  std::vector<string> files{"BiologicallyDerivedProduct-example"};
+  std::vector<std::string> files{"BiologicallyDerivedProduct-example"};
   TestPair<BiologicallyDerivedProduct>(files);
 }
 
 TEST(JsonFormatR4Test, TestBodyStructure) {
-  std::vector<string> files{"BodyStructure-fetus", "BodyStructure-skin-patch",
-                            "BodyStructure-tumor"};
+  std::vector<std::string> files{
+      "BodyStructure-fetus", "BodyStructure-skin-patch", "BodyStructure-tumor"};
   TestPair<BodyStructure>(files);
 }
 
 // Split bundles into several tests to enable better sharding.
 TEST(JsonFormatR4Test, TestBundlePt1) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "Bundle-101",
       "Bundle-10bb101f-a121-4264-a920-67be9cb82c74",
       "Bundle-3a0707d3-549e-4467-b8b8-5a2ab3800efe",
@@ -428,7 +429,7 @@ TEST(JsonFormatR4Test, TestBundlePt1) {
 }
 
 TEST(JsonFormatR4Test, TestBundlePt2) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "Bundle-bundle-example",
       "Bundle-bundle-references",
       "Bundle-bundle-request-medsallergies",
@@ -443,157 +444,159 @@ TEST(JsonFormatR4Test, TestBundlePt2) {
 }
 
 TEST(JsonFormatR4Test, TestBundlePt4) {
-  std::vector<string> files{"Bundle-conceptmaps", "Bundle-dataelements"};
+  std::vector<std::string> files{"Bundle-conceptmaps", "Bundle-dataelements"};
   TestPair<Bundle>(files);
 }
 
 TEST(JsonFormatR4Test, TestBundlePt3) {
-  std::vector<string> files{"Bundle-dg2",
-                            "Bundle-extensions",
-                            "Bundle-externals",
-                            "Bundle-f001",
-                            "Bundle-f202",
-                            "Bundle-father",
-                            "Bundle-ghp",
-                            "Bundle-hla-1",
-                            "Bundle-lipids",
-                            "Bundle-lri-example",
-                            "Bundle-micro",
-                            "Bundle-profiles-others",
-                            "Bundle-registry",
-                            "Bundle-report",
-                            "Bundle-searchParams",
-                            "Bundle-terminologies",
-                            "Bundle-types",
-                            "Bundle-ussg-fht",
-                            "Bundle-valueset-expansions",
-                            "Bundle-xds"};
+  std::vector<std::string> files{"Bundle-dg2",
+                                 "Bundle-extensions",
+                                 "Bundle-externals",
+                                 "Bundle-f001",
+                                 "Bundle-f202",
+                                 "Bundle-father",
+                                 "Bundle-ghp",
+                                 "Bundle-hla-1",
+                                 "Bundle-lipids",
+                                 "Bundle-lri-example",
+                                 "Bundle-micro",
+                                 "Bundle-profiles-others",
+                                 "Bundle-registry",
+                                 "Bundle-report",
+                                 "Bundle-searchParams",
+                                 "Bundle-terminologies",
+                                 "Bundle-types",
+                                 "Bundle-ussg-fht",
+                                 "Bundle-valueset-expansions",
+                                 "Bundle-xds"};
   TestPair<Bundle>(files);
 }
 
 TEST(JsonFormatR4Test, TestResourcesBundle) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "Bundle-resources",
   };
   TestPair<Bundle>(files);
 }
 
 TEST(JsonFormatR4Test, TestValuesetsBundle) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "Bundle-valuesets",
   };
   TestPair<Bundle>(files);
 }
 
 TEST(JsonFormatR4Test, TestV2ValuesetsBundle) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "Bundle-v2-valuesets",
   };
   TestPair<Bundle>(files);
 }
 
 TEST(JsonFormatR4Test, TestV3ValuesetsBundle) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "Bundle-v3-valuesets",
   };
   TestPair<Bundle>(files);
 }
 
 TEST(JsonFormatR4Test, TestCapabilityStatement) {
-  std::vector<string> files{"CapabilityStatement-base2",
-                            "CapabilityStatement-base",
-                            "CapabilityStatement-example",
-                            "CapabilityStatement-knowledge-repository",
-                            "CapabilityStatement-measure-processor",
-                            "CapabilityStatement-messagedefinition",
-                            "CapabilityStatement-phr",
-                            "CapabilityStatement-terminology-server"};
+  std::vector<std::string> files{"CapabilityStatement-base2",
+                                 "CapabilityStatement-base",
+                                 "CapabilityStatement-example",
+                                 "CapabilityStatement-knowledge-repository",
+                                 "CapabilityStatement-measure-processor",
+                                 "CapabilityStatement-messagedefinition",
+                                 "CapabilityStatement-phr",
+                                 "CapabilityStatement-terminology-server"};
   TestPair<CapabilityStatement>(files);
 }
 
 TEST(JsonFormatR4Test, TestCarePlan) {
-  std::vector<string> files{"CarePlan-example",   "CarePlan-f001",
-                            "CarePlan-f002",      "CarePlan-f003",
-                            "CarePlan-f201",      "CarePlan-f202",
-                            "CarePlan-f203",      "CarePlan-gpvisit",
-                            "CarePlan-integrate", "CarePlan-obesity-narrative",
-                            "CarePlan-preg"};
+  std::vector<std::string> files{
+      "CarePlan-example",   "CarePlan-f001",
+      "CarePlan-f002",      "CarePlan-f003",
+      "CarePlan-f201",      "CarePlan-f202",
+      "CarePlan-f203",      "CarePlan-gpvisit",
+      "CarePlan-integrate", "CarePlan-obesity-narrative",
+      "CarePlan-preg"};
   TestPair<CarePlan>(files);
 }
 
 TEST(JsonFormatR4Test, TestCareTeam) {
-  std::vector<string> files{"CareTeam-example"};
+  std::vector<std::string> files{"CareTeam-example"};
   TestPair<CareTeam>(files);
 }
 
 TEST(JsonFormatR4Test, TestCatalogEntry) {
-  std::vector<string> files{"CatalogEntry-example"};
+  std::vector<std::string> files{"CatalogEntry-example"};
   TestPair<CatalogEntry>(files);
 }
 
 TEST(JsonFormatR4Test, TestChargeItem) {
-  std::vector<string> files{"ChargeItem-example"};
+  std::vector<std::string> files{"ChargeItem-example"};
   TestPair<ChargeItem>(files);
 }
 
 TEST(JsonFormatR4Test, TestChargeItemDefinition) {
-  std::vector<string> files{"ChargeItemDefinition-device",
-                            "ChargeItemDefinition-ebm"};
+  std::vector<std::string> files{"ChargeItemDefinition-device",
+                                 "ChargeItemDefinition-ebm"};
   TestPair<ChargeItemDefinition>(files);
 }
 
 TEST(JsonFormatR4Test, TestClaim) {
-  std::vector<string> files{"Claim-100150", "Claim-100151",   "Claim-100152",
-                            "Claim-100153", "Claim-100154",   "Claim-100155",
-                            "Claim-100156", "Claim-660150",   "Claim-660151",
-                            "Claim-660152", "Claim-760150",   "Claim-760151",
-                            "Claim-760152", "Claim-860150",   "Claim-960150",
-                            "Claim-960151", "Claim-MED-00050"};
+  std::vector<std::string> files{
+      "Claim-100150",   "Claim-100151", "Claim-100152", "Claim-100153",
+      "Claim-100154",   "Claim-100155", "Claim-100156", "Claim-660150",
+      "Claim-660151",   "Claim-660152", "Claim-760150", "Claim-760151",
+      "Claim-760152",   "Claim-860150", "Claim-960150", "Claim-960151",
+      "Claim-MED-00050"};
   TestPair<Claim>(files);
 }
 
 TEST(JsonFormatR4Test, TestClaimResponse) {
-  std::vector<string> files{"ClaimResponse-R3500", "ClaimResponse-R3501",
-                            "ClaimResponse-R3502", "ClaimResponse-R3503",
-                            "ClaimResponse-UR3503"};
+  std::vector<std::string> files{"ClaimResponse-R3500", "ClaimResponse-R3501",
+                                 "ClaimResponse-R3502", "ClaimResponse-R3503",
+                                 "ClaimResponse-UR3503"};
   TestPair<ClaimResponse>(files);
 }
 
 TEST(JsonFormatR4Test, TestClinicalImpression) {
-  std::vector<string> files{"ClinicalImpression-example"};
+  std::vector<std::string> files{"ClinicalImpression-example"};
   TestPair<ClinicalImpression>(files);
 }
 
 TEST(JsonFormatR4Test, TestCommunication) {
-  std::vector<string> files{"Communication-example",
-                            "Communication-fm-attachment",
-                            "Communication-fm-solicited"};
+  std::vector<std::string> files{"Communication-example",
+                                 "Communication-fm-attachment",
+                                 "Communication-fm-solicited"};
   TestPair<Communication>(files);
 }
 
 TEST(JsonFormatR4Test, TestCommunicationRequest) {
-  std::vector<string> files{"CommunicationRequest-example",
-                            "CommunicationRequest-fm-solicit"};
+  std::vector<std::string> files{"CommunicationRequest-example",
+                                 "CommunicationRequest-fm-solicit"};
   TestPair<CommunicationRequest>(files);
 }
 
 TEST(JsonFormatR4Test, TestCompartmentDefinition) {
-  std::vector<string> files{"CompartmentDefinition-device",
-                            "CompartmentDefinition-encounter",
-                            "CompartmentDefinition-example",
-                            "CompartmentDefinition-patient",
-                            "CompartmentDefinition-practitioner",
-                            "CompartmentDefinition-relatedPerson"};
+  std::vector<std::string> files{"CompartmentDefinition-device",
+                                 "CompartmentDefinition-encounter",
+                                 "CompartmentDefinition-example",
+                                 "CompartmentDefinition-patient",
+                                 "CompartmentDefinition-practitioner",
+                                 "CompartmentDefinition-relatedPerson"};
   TestPair<CompartmentDefinition>(files);
 }
 
 TEST(JsonFormatR4Test, TestComposition) {
-  std::vector<string> files{"Composition-example", "Composition-example-mixed"};
+  std::vector<std::string> files{"Composition-example",
+                                 "Composition-example-mixed"};
   TestPair<Composition>(files);
 }
 
 TEST(JsonFormatR4Test, TestCondition) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "Condition-example2", "Condition-example",        "Condition-f001",
       "Condition-f002",     "Condition-f003",           "Condition-f201",
       "Condition-f202",     "Condition-f203",           "Condition-f204",
@@ -602,87 +605,88 @@ TEST(JsonFormatR4Test, TestCondition) {
 }
 
 TEST(JsonFormatR4Test, TestConsent) {
-  std::vector<string> files{"Consent-consent-example-basic",
-                            "Consent-consent-example-Emergency",
-                            "Consent-consent-example-grantor",
-                            "Consent-consent-example-notAuthor",
-                            "Consent-consent-example-notOrg",
-                            "Consent-consent-example-notThem",
-                            "Consent-consent-example-notThis",
-                            "Consent-consent-example-notTime",
-                            "Consent-consent-example-Out",
-                            "Consent-consent-example-pkb",
-                            "Consent-consent-example-signature",
-                            "Consent-consent-example-smartonfhir"};
+  std::vector<std::string> files{"Consent-consent-example-basic",
+                                 "Consent-consent-example-Emergency",
+                                 "Consent-consent-example-grantor",
+                                 "Consent-consent-example-notAuthor",
+                                 "Consent-consent-example-notOrg",
+                                 "Consent-consent-example-notThem",
+                                 "Consent-consent-example-notThis",
+                                 "Consent-consent-example-notTime",
+                                 "Consent-consent-example-Out",
+                                 "Consent-consent-example-pkb",
+                                 "Consent-consent-example-signature",
+                                 "Consent-consent-example-smartonfhir"};
   TestPair<Consent>(files);
 }
 
 TEST(JsonFormatR4Test, TestContract) {
-  std::vector<string> files{"Contract-C-123",
-                            "Contract-C-2121",
-                            "Contract-INS-101",
-                            "Contract-pcd-example-notAuthor",
-                            "Contract-pcd-example-notLabs",
-                            "Contract-pcd-example-notOrg",
-                            "Contract-pcd-example-notThem",
-                            "Contract-pcd-example-notThis"};
+  std::vector<std::string> files{"Contract-C-123",
+                                 "Contract-C-2121",
+                                 "Contract-INS-101",
+                                 "Contract-pcd-example-notAuthor",
+                                 "Contract-pcd-example-notLabs",
+                                 "Contract-pcd-example-notOrg",
+                                 "Contract-pcd-example-notThem",
+                                 "Contract-pcd-example-notThis"};
   TestPair<Contract>(files);
 }
 
 TEST(JsonFormatR4Test, TestCoverage) {
-  std::vector<string> files{"Coverage-7546D", "Coverage-7547E",
-                            "Coverage-9876B1", "Coverage-SP1234"};
+  std::vector<std::string> files{"Coverage-7546D", "Coverage-7547E",
+                                 "Coverage-9876B1", "Coverage-SP1234"};
   TestPair<Coverage>(files);
 }
 
 TEST(JsonFormatR4Test, TestCoverageEligibilityRequest) {
-  std::vector<string> files{"CoverageEligibilityRequest-52345",
-                            "CoverageEligibilityRequest-52346"};
+  std::vector<std::string> files{"CoverageEligibilityRequest-52345",
+                                 "CoverageEligibilityRequest-52346"};
   TestPair<CoverageEligibilityRequest>(files);
 }
 
 TEST(JsonFormatR4Test, TestCoverageEligibilityResponse) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "CoverageEligibilityResponse-E2500", "CoverageEligibilityResponse-E2501",
       "CoverageEligibilityResponse-E2502", "CoverageEligibilityResponse-E2503"};
   TestPair<CoverageEligibilityResponse>(files);
 }
 
 TEST(JsonFormatR4Test, TestDetectedIssue) {
-  std::vector<string> files{"DetectedIssue-allergy", "DetectedIssue-ddi",
-                            "DetectedIssue-duplicate", "DetectedIssue-lab"};
+  std::vector<std::string> files{"DetectedIssue-allergy", "DetectedIssue-ddi",
+                                 "DetectedIssue-duplicate",
+                                 "DetectedIssue-lab"};
   TestPair<DetectedIssue>(files);
 }
 
 TEST(JsonFormatR4Test, TestDevice) {
-  std::vector<string> files{"Device-example", "Device-f001"};
+  std::vector<std::string> files{"Device-example", "Device-f001"};
   TestPair<Device>(files);
 }
 
 TEST(JsonFormatR4Test, TestDeviceDefinition) {
-  std::vector<string> files{"DeviceDefinition-example"};
+  std::vector<std::string> files{"DeviceDefinition-example"};
   TestPair<DeviceDefinition>(files);
 }
 
 TEST(JsonFormatR4Test, TestDeviceMetric) {
-  std::vector<string> files{"DeviceMetric-example"};
+  std::vector<std::string> files{"DeviceMetric-example"};
   TestPair<DeviceMetric>(files);
 }
 
 TEST(JsonFormatR4Test, TestDeviceRequest) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "DeviceRequest-example", "DeviceRequest-insulinpump",
       "DeviceRequest-left-lens", "DeviceRequest-right-lens"};
   TestPair<DeviceRequest>(files);
 }
 
 TEST(JsonFormatR4Test, TestDeviceUseStatement) {
-  std::vector<string> files{"DeviceUseStatement-example"};
+  std::vector<std::string> files{"DeviceUseStatement-example"};
   TestPair<DeviceUseStatement>(files);
 }
 
 TEST(JsonFormatR4Test, TestDiagnosticReport) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "DiagnosticReport-102",  "DiagnosticReport-example-pgx",
       "DiagnosticReport-f201", "DiagnosticReport-gingival-mass",
       "DiagnosticReport-pap",  "DiagnosticReport-ultrasound"};
@@ -690,134 +694,137 @@ TEST(JsonFormatR4Test, TestDiagnosticReport) {
 }
 
 TEST(JsonFormatR4Test, TestDocumentManifest) {
-  std::vector<string> files{"DocumentManifest-654789",
-                            "DocumentManifest-example"};
+  std::vector<std::string> files{"DocumentManifest-654789",
+                                 "DocumentManifest-example"};
   TestPair<DocumentManifest>(files);
 }
 
 TEST(JsonFormatR4Test, TestDocumentReference) {
-  std::vector<string> files{"DocumentReference-example"};
+  std::vector<std::string> files{"DocumentReference-example"};
   TestPair<DocumentReference>(files);
 }
 
 TEST(JsonFormatR4Test, TestEffectEvidenceSynthesis) {
-  std::vector<string> files{"EffectEvidenceSynthesis-example"};
+  std::vector<std::string> files{"EffectEvidenceSynthesis-example"};
   TestPair<EffectEvidenceSynthesis>(files);
 }
 
 TEST(JsonFormatR4Test, TestEncounter) {
-  std::vector<string> files{"Encounter-emerg", "Encounter-example",
-                            "Encounter-f001",  "Encounter-f002",
-                            "Encounter-f003",  "Encounter-f201",
-                            "Encounter-f202",  "Encounter-f203",
-                            "Encounter-home",  "Encounter-xcda"};
+  std::vector<std::string> files{"Encounter-emerg", "Encounter-example",
+                                 "Encounter-f001",  "Encounter-f002",
+                                 "Encounter-f003",  "Encounter-f201",
+                                 "Encounter-f202",  "Encounter-f203",
+                                 "Encounter-home",  "Encounter-xcda"};
   TestPair<Encounter>(files);
 }
 
 TEST(JsonFormatR4Test, TestEndpoint) {
-  std::vector<string> files{"Endpoint-direct-endpoint", "Endpoint-example-iid",
-                            "Endpoint-example", "Endpoint-example-wadors"};
+  std::vector<std::string> files{"Endpoint-direct-endpoint",
+                                 "Endpoint-example-iid", "Endpoint-example",
+                                 "Endpoint-example-wadors"};
   TestPair<Endpoint>(files);
 }
 
 TEST(JsonFormatR4Test, TestEnrollmentRequest) {
-  std::vector<string> files{"EnrollmentRequest-22345"};
+  std::vector<std::string> files{"EnrollmentRequest-22345"};
   TestPair<EnrollmentRequest>(files);
 }
 
 TEST(JsonFormatR4Test, TestEnrollmentResponse) {
-  std::vector<string> files{"EnrollmentResponse-ER2500"};
+  std::vector<std::string> files{"EnrollmentResponse-ER2500"};
   TestPair<EnrollmentResponse>(files);
 }
 
 TEST(JsonFormatR4Test, TestEpisodeOfCare) {
-  std::vector<string> files{"EpisodeOfCare-example"};
+  std::vector<std::string> files{"EpisodeOfCare-example"};
   TestPair<EpisodeOfCare>(files);
 }
 
 TEST(JsonFormatR4Test, TestEventDefinition) {
-  std::vector<string> files{"EventDefinition-example"};
+  std::vector<std::string> files{"EventDefinition-example"};
   TestPair<EventDefinition>(files);
 }
 
 TEST(JsonFormatR4Test, TestEvidence) {
-  std::vector<string> files{"Evidence-example"};
+  std::vector<std::string> files{"Evidence-example"};
   TestPair<Evidence>(files);
 }
 
 TEST(JsonFormatR4Test, TestEvidenceVariable) {
-  std::vector<string> files{"EvidenceVariable-example"};
+  std::vector<std::string> files{"EvidenceVariable-example"};
   TestPair<EvidenceVariable>(files);
 }
 
 TEST(JsonFormatR4Test, TestExampleScenario) {
-  std::vector<string> files{"ExampleScenario-example"};
+  std::vector<std::string> files{"ExampleScenario-example"};
   TestPair<ExampleScenario>(files);
 }
 
 TEST(JsonFormatR4Test, TestExplanationOfBenefit) {
-  std::vector<string> files{"ExplanationOfBenefit-EB3500",
-                            "ExplanationOfBenefit-EB3501"};
+  std::vector<std::string> files{"ExplanationOfBenefit-EB3500",
+                                 "ExplanationOfBenefit-EB3501"};
   TestPair<ExplanationOfBenefit>(files);
 }
 
 TEST(JsonFormatR4Test, TestFamilyMemberHistory) {
-  std::vector<string> files{"FamilyMemberHistory-father",
-                            "FamilyMemberHistory-mother"};
+  std::vector<std::string> files{"FamilyMemberHistory-father",
+                                 "FamilyMemberHistory-mother"};
   TestPair<FamilyMemberHistory>(files);
 }
 
 TEST(JsonFormatR4Test, TestFlag) {
-  std::vector<string> files{"Flag-example-encounter", "Flag-example"};
+  std::vector<std::string> files{"Flag-example-encounter", "Flag-example"};
   TestPair<Flag>(files);
 }
 
 TEST(JsonFormatR4Test, TestGoal) {
-  std::vector<string> files{"Goal-example", "Goal-stop-smoking"};
+  std::vector<std::string> files{"Goal-example", "Goal-stop-smoking"};
   TestPair<Goal>(files);
 }
 
 TEST(JsonFormatR4Test, TestGraphDefinition) {
-  std::vector<string> files{"GraphDefinition-example"};
+  std::vector<std::string> files{"GraphDefinition-example"};
   TestPair<GraphDefinition>(files);
 }
 
 TEST(JsonFormatR4Test, TestGroup) {
-  std::vector<string> files{"Group-101", "Group-102",
-                            "Group-example-patientlist", "Group-herd1"};
+  std::vector<std::string> files{"Group-101", "Group-102",
+                                 "Group-example-patientlist", "Group-herd1"};
   TestPair<Group>(files);
 }
 
 TEST(JsonFormatR4Test, TestGuidanceResponse) {
-  std::vector<string> files{"GuidanceResponse-example"};
+  std::vector<std::string> files{"GuidanceResponse-example"};
   TestPair<GuidanceResponse>(files);
 }
 
 TEST(JsonFormatR4Test, TestHealthcareService) {
-  std::vector<string> files{"HealthcareService-example"};
+  std::vector<std::string> files{"HealthcareService-example"};
   TestPair<HealthcareService>(files);
 }
 
 TEST(JsonFormatR4Test, TestImagingStudy) {
-  std::vector<string> files{"ImagingStudy-example", "ImagingStudy-example-xr"};
+  std::vector<std::string> files{"ImagingStudy-example",
+                                 "ImagingStudy-example-xr"};
   TestPair<ImagingStudy>(files);
 }
 
 TEST(JsonFormatR4Test, TestImmunization) {
-  std::vector<string> files{"Immunization-example", "Immunization-historical",
-                            "Immunization-notGiven", "Immunization-protocol",
-                            "Immunization-subpotent"};
+  std::vector<std::string> files{
+      "Immunization-example", "Immunization-historical",
+      "Immunization-notGiven", "Immunization-protocol",
+      "Immunization-subpotent"};
   TestPair<Immunization>(files);
 }
 
 TEST(JsonFormatR4Test, TestImmunizationEvaluation) {
-  std::vector<string> files{"ImmunizationEvaluation-example",
-                            "ImmunizationEvaluation-notValid"};
+  std::vector<std::string> files{"ImmunizationEvaluation-example",
+                                 "ImmunizationEvaluation-notValid"};
   TestPair<ImmunizationEvaluation>(files);
 }
 
 TEST(JsonFormatR4Test, TestImmunizationRecommendation) {
-  std::vector<string> files{"ImmunizationRecommendation-example"};
+  std::vector<std::string> files{"ImmunizationRecommendation-example"};
   TestPair<ImmunizationRecommendation>(files);
 }
 
@@ -825,98 +832,100 @@ TEST(JsonFormatR4Test, TestImplementationGuide) {
   // "ImplementationGuide-fhir" and "ig-r4"do not parse because it contains a
   // reference to an invalid resource
   // https://gforge.hl7.org/gf/project/fhir/tracker/?action=TrackerItemEdit&tracker_item_id=22489
-  std::vector<string> files{"ImplementationGuide-example"};
+  std::vector<std::string> files{"ImplementationGuide-example"};
   TestPair<ImplementationGuide>(files);
 }
 
 TEST(JsonFormatR4Test, TestInsurancePlan) {
-  std::vector<string> files{"InsurancePlan-example"};
+  std::vector<std::string> files{"InsurancePlan-example"};
   TestPair<InsurancePlan>(files);
 }
 
 TEST(JsonFormatR4Test, TestInvoice) {
-  std::vector<string> files{"Invoice-example"};
+  std::vector<std::string> files{"Invoice-example"};
   TestPair<Invoice>(files);
 }
 
 TEST(JsonFormatR4Test, TestLibrary) {
-  std::vector<string> files{"Library-composition-example",
-                            "Library-example",
-                            "Library-hiv-indicators",
-                            "Library-library-cms146-example",
-                            "Library-library-exclusive-breastfeeding-cds-logic",
-                            "Library-library-exclusive-breastfeeding-cqm-logic",
-                            "Library-library-fhir-helpers",
-                            "Library-library-fhir-helpers-predecessor",
-                            "Library-library-fhir-model-definition",
-                            "Library-library-quick-model-definition",
-                            "Library-omtk-logic",
-                            "Library-omtk-modelinfo",
-                            "Library-opioidcds-common",
-                            "Library-opioidcds-recommendation-04",
-                            "Library-opioidcds-recommendation-05",
-                            "Library-opioidcds-recommendation-07",
-                            "Library-opioidcds-recommendation-08",
-                            "Library-opioidcds-recommendation-10",
-                            "Library-opioidcds-recommendation-11",
-                            "Library-suiciderisk-orderset-logic",
-                            "Library-zika-virus-intervention-logic"};
+  std::vector<std::string> files{
+      "Library-composition-example",
+      "Library-example",
+      "Library-hiv-indicators",
+      "Library-library-cms146-example",
+      "Library-library-exclusive-breastfeeding-cds-logic",
+      "Library-library-exclusive-breastfeeding-cqm-logic",
+      "Library-library-fhir-helpers",
+      "Library-library-fhir-helpers-predecessor",
+      "Library-library-fhir-model-definition",
+      "Library-library-quick-model-definition",
+      "Library-omtk-logic",
+      "Library-omtk-modelinfo",
+      "Library-opioidcds-common",
+      "Library-opioidcds-recommendation-04",
+      "Library-opioidcds-recommendation-05",
+      "Library-opioidcds-recommendation-07",
+      "Library-opioidcds-recommendation-08",
+      "Library-opioidcds-recommendation-10",
+      "Library-opioidcds-recommendation-11",
+      "Library-suiciderisk-orderset-logic",
+      "Library-zika-virus-intervention-logic"};
   TestPair<Library>(files);
 }
 
 TEST(JsonFormatR4Test, TestLinkage) {
-  std::vector<string> files{"Linkage-example"};
+  std::vector<std::string> files{"Linkage-example"};
   TestPair<Linkage>(files);
 }
 
 TEST(JsonFormatR4Test, TestList) {
-  std::vector<string> files{"List-current-allergies",
-                            "List-example-double-cousin-relationship",
-                            "List-example-empty",
-                            "List-example",
-                            "List-example-simple-empty",
-                            "List-f201",
-                            "List-genetic",
-                            "List-long",
-                            "List-med-list",
-                            "List-prognosis"};
+  std::vector<std::string> files{"List-current-allergies",
+                                 "List-example-double-cousin-relationship",
+                                 "List-example-empty",
+                                 "List-example",
+                                 "List-example-simple-empty",
+                                 "List-f201",
+                                 "List-genetic",
+                                 "List-long",
+                                 "List-med-list",
+                                 "List-prognosis"};
   TestPair<List>(files);
 }
 
 TEST(JsonFormatR4Test, TestLocation) {
-  std::vector<string> files{"Location-1",   "Location-2",  "Location-amb",
-                            "Location-hl7", "Location-ph", "Location-ukp"};
+  std::vector<std::string> files{"Location-1",   "Location-2",  "Location-amb",
+                                 "Location-hl7", "Location-ph", "Location-ukp"};
   TestPair<Location>(files);
 }
 
 TEST(JsonFormatR4Test, TestMeasure) {
-  std::vector<string> files{"Measure-component-a-example",
-                            "Measure-component-b-example",
-                            "Measure-composite-example",
-                            "Measure-hiv-indicators",
-                            "Measure-measure-cms146-example",
-                            "Measure-measure-exclusive-breastfeeding",
-                            "Measure-measure-predecessor-example"};
+  std::vector<std::string> files{"Measure-component-a-example",
+                                 "Measure-component-b-example",
+                                 "Measure-composite-example",
+                                 "Measure-hiv-indicators",
+                                 "Measure-measure-cms146-example",
+                                 "Measure-measure-exclusive-breastfeeding",
+                                 "Measure-measure-predecessor-example"};
   TestPair<Measure>(files);
 }
 
 TEST(JsonFormatR4Test, TestMeasureReport) {
-  std::vector<string> files{"MeasureReport-hiv-indicators",
-                            "MeasureReport-measurereport-cms146-cat1-example",
-                            "MeasureReport-measurereport-cms146-cat2-example",
-                            "MeasureReport-measurereport-cms146-cat3-example"};
+  std::vector<std::string> files{
+      "MeasureReport-hiv-indicators",
+      "MeasureReport-measurereport-cms146-cat1-example",
+      "MeasureReport-measurereport-cms146-cat2-example",
+      "MeasureReport-measurereport-cms146-cat3-example"};
   TestPair<MeasureReport>(files);
 }
 
 TEST(JsonFormatR4Test, TestMedia) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "Media-1.2.840.11361907579238403408700.3.1.04.19970327150033",
       "Media-example", "Media-sound", "Media-xray"};
   TestPair<Media>(files);
 }
 
 TEST(JsonFormatR4Test, TestMedication) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "Medication-med0301",           "Medication-med0302",
       "Medication-med0303",           "Medication-med0304",
       "Medication-med0305",           "Medication-med0306",
@@ -933,25 +942,25 @@ TEST(JsonFormatR4Test, TestMedication) {
 }
 
 TEST(JsonFormatR4Test, TestMedicationAdministration) {
-  std::vector<string> files{"MedicationAdministration-medadmin0301",
-                            "MedicationAdministration-medadmin0302",
-                            "MedicationAdministration-medadmin0303",
-                            "MedicationAdministration-medadmin0304",
-                            "MedicationAdministration-medadmin0305",
-                            "MedicationAdministration-medadmin0306",
-                            "MedicationAdministration-medadmin0307",
-                            "MedicationAdministration-medadmin0308",
-                            "MedicationAdministration-medadmin0309",
-                            "MedicationAdministration-medadmin0310",
-                            "MedicationAdministration-medadmin0311",
-                            "MedicationAdministration-medadmin0312",
-                            "MedicationAdministration-medadmin0313",
-                            "MedicationAdministration-medadminexample03"};
+  std::vector<std::string> files{"MedicationAdministration-medadmin0301",
+                                 "MedicationAdministration-medadmin0302",
+                                 "MedicationAdministration-medadmin0303",
+                                 "MedicationAdministration-medadmin0304",
+                                 "MedicationAdministration-medadmin0305",
+                                 "MedicationAdministration-medadmin0306",
+                                 "MedicationAdministration-medadmin0307",
+                                 "MedicationAdministration-medadmin0308",
+                                 "MedicationAdministration-medadmin0309",
+                                 "MedicationAdministration-medadmin0310",
+                                 "MedicationAdministration-medadmin0311",
+                                 "MedicationAdministration-medadmin0312",
+                                 "MedicationAdministration-medadmin0313",
+                                 "MedicationAdministration-medadminexample03"};
   TestPair<MedicationAdministration>(files);
 }
 
 TEST(JsonFormatR4Test, TestMedicationDispense) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "MedicationDispense-meddisp008",  "MedicationDispense-meddisp0301",
       "MedicationDispense-meddisp0302", "MedicationDispense-meddisp0303",
       "MedicationDispense-meddisp0304", "MedicationDispense-meddisp0305",
@@ -972,12 +981,12 @@ TEST(JsonFormatR4Test, TestMedicationDispense) {
 }
 
 TEST(JsonFormatR4Test, TestMedicationKnowledge) {
-  std::vector<string> files{"MedicationKnowledge-example"};
+  std::vector<std::string> files{"MedicationKnowledge-example"};
   TestPair<MedicationKnowledge>(files);
 }
 
 TEST(JsonFormatR4Test, TestMedicationRequest) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "MedicationRequest-medrx002",  "MedicationRequest-medrx0301",
       "MedicationRequest-medrx0302", "MedicationRequest-medrx0303",
       "MedicationRequest-medrx0304", "MedicationRequest-medrx0305",
@@ -1002,7 +1011,7 @@ TEST(JsonFormatR4Test, TestMedicationRequest) {
 }
 
 TEST(JsonFormatR4Test, TestMedicationStatement) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "MedicationStatement-example001", "MedicationStatement-example002",
       "MedicationStatement-example003", "MedicationStatement-example004",
       "MedicationStatement-example005", "MedicationStatement-example006",
@@ -1011,96 +1020,97 @@ TEST(JsonFormatR4Test, TestMedicationStatement) {
 }
 
 TEST(JsonFormatR4Test, TestMedicinalProduct) {
-  std::vector<string> files{"MedicinalProduct-example"};
+  std::vector<std::string> files{"MedicinalProduct-example"};
   TestPair<MedicinalProduct>(files);
 }
 
 TEST(JsonFormatR4Test, TestMedicinalProductAuthorization) {
-  std::vector<string> files{"MedicinalProductAuthorization-example"};
+  std::vector<std::string> files{"MedicinalProductAuthorization-example"};
   TestPair<MedicinalProductAuthorization>(files);
 }
 
 TEST(JsonFormatR4Test, TestMedicinalProductContraindication) {
-  std::vector<string> files{"MedicinalProductContraindication-example"};
+  std::vector<std::string> files{"MedicinalProductContraindication-example"};
   TestPair<MedicinalProductContraindication>(files);
 }
 
 TEST(JsonFormatR4Test, TestMedicinalProductIndication) {
-  std::vector<string> files{"MedicinalProductIndication-example"};
+  std::vector<std::string> files{"MedicinalProductIndication-example"};
   TestPair<MedicinalProductIndication>(files);
 }
 
 TEST(JsonFormatR4Test, TestMedicinalProductIngredient) {
-  std::vector<string> files{"MedicinalProductIngredient-example"};
+  std::vector<std::string> files{"MedicinalProductIngredient-example"};
   TestPair<MedicinalProductIngredient>(files);
 }
 
 TEST(JsonFormatR4Test, TestMedicinalProductInteraction) {
-  std::vector<string> files{"MedicinalProductInteraction-example"};
+  std::vector<std::string> files{"MedicinalProductInteraction-example"};
   TestPair<MedicinalProductInteraction>(files);
 }
 
 TEST(JsonFormatR4Test, TestMedicinalProductManufactured) {
-  std::vector<string> files{"MedicinalProductManufactured-example"};
+  std::vector<std::string> files{"MedicinalProductManufactured-example"};
   TestPair<MedicinalProductManufactured>(files);
 }
 
 TEST(JsonFormatR4Test, TestMedicinalProductPackaged) {
-  std::vector<string> files{"MedicinalProductPackaged-example"};
+  std::vector<std::string> files{"MedicinalProductPackaged-example"};
   TestPair<MedicinalProductPackaged>(files);
 }
 
 TEST(JsonFormatR4Test, TestMedicinalProductPharmaceutical) {
-  std::vector<string> files{"MedicinalProductPharmaceutical-example"};
+  std::vector<std::string> files{"MedicinalProductPharmaceutical-example"};
   TestPair<MedicinalProductPharmaceutical>(files);
 }
 
 TEST(JsonFormatR4Test, TestMedicinalProductUndesirableEffect) {
-  std::vector<string> files{"MedicinalProductUndesirableEffect-example"};
+  std::vector<std::string> files{"MedicinalProductUndesirableEffect-example"};
   TestPair<MedicinalProductUndesirableEffect>(files);
 }
 
 TEST(JsonFormatR4Test, TestMessageDefinition) {
-  std::vector<string> files{"MessageDefinition-example",
-                            "MessageDefinition-patient-link-notification",
-                            "MessageDefinition-patient-link-response"};
+  std::vector<std::string> files{"MessageDefinition-example",
+                                 "MessageDefinition-patient-link-notification",
+                                 "MessageDefinition-patient-link-response"};
   TestPair<MessageDefinition>(files);
 }
 
 TEST(JsonFormatR4Test, TestMessageHeader) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "MessageHeader-1cbdfb97-5859-48a4-8301-d54eab818d68"};
   TestPair<MessageHeader>(files);
 }
 
 TEST(JsonFormatR4Test, TestMolecularSequence) {
-  std::vector<string> files{"MolecularSequence-breastcancer",
-                            "MolecularSequence-coord-0-base",
-                            "MolecularSequence-coord-1-base",
-                            "MolecularSequence-example",
-                            "MolecularSequence-example-pgx-1",
-                            "MolecularSequence-example-pgx-2",
-                            "MolecularSequence-example-TPMT-one",
-                            "MolecularSequence-example-TPMT-two",
-                            "MolecularSequence-fda-example",
-                            "MolecularSequence-fda-vcf-comparison",
-                            "MolecularSequence-fda-vcfeval-comparison",
-                            "MolecularSequence-graphic-example-1",
-                            "MolecularSequence-graphic-example-2",
-                            "MolecularSequence-graphic-example-3",
-                            "MolecularSequence-graphic-example-4",
-                            "MolecularSequence-graphic-example-5",
-                            "MolecularSequence-sequence-complex-variant"};
+  std::vector<std::string> files{"MolecularSequence-breastcancer",
+                                 "MolecularSequence-coord-0-base",
+                                 "MolecularSequence-coord-1-base",
+                                 "MolecularSequence-example",
+                                 "MolecularSequence-example-pgx-1",
+                                 "MolecularSequence-example-pgx-2",
+                                 "MolecularSequence-example-TPMT-one",
+                                 "MolecularSequence-example-TPMT-two",
+                                 "MolecularSequence-fda-example",
+                                 "MolecularSequence-fda-vcf-comparison",
+                                 "MolecularSequence-fda-vcfeval-comparison",
+                                 "MolecularSequence-graphic-example-1",
+                                 "MolecularSequence-graphic-example-2",
+                                 "MolecularSequence-graphic-example-3",
+                                 "MolecularSequence-graphic-example-4",
+                                 "MolecularSequence-graphic-example-5",
+                                 "MolecularSequence-sequence-complex-variant"};
   TestPair<MolecularSequence>(files);
 }
 
 TEST(JsonFormatR4Test, TestNamingSystem) {
-  std::vector<string> files{"NamingSystem-example-id", "NamingSystem-example"};
+  std::vector<std::string> files{"NamingSystem-example-id",
+                                 "NamingSystem-example"};
   TestPair<NamingSystem>(files);
 }
 
 TEST(JsonFormatR4Test, TestNutritionOrder) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "NutritionOrder-cardiacdiet",         "NutritionOrder-diabeticdiet",
       "NutritionOrder-diabeticsupplement",  "NutritionOrder-energysupplement",
       "NutritionOrder-enteralbolus",        "NutritionOrder-enteralcontinuous",
@@ -1112,80 +1122,80 @@ TEST(JsonFormatR4Test, TestNutritionOrder) {
 }
 
 TEST(JsonFormatR4Test, TestObservation) {
-  std::vector<string> files{"Observation-10minute-apgar-score",
-                            "Observation-1minute-apgar-score",
-                            "Observation-20minute-apgar-score",
-                            "Observation-2minute-apgar-score",
-                            "Observation-5minute-apgar-score",
-                            "Observation-656",
-                            "Observation-abdo-tender",
-                            "Observation-alcohol-type",
-                            "Observation-bgpanel",
-                            "Observation-bloodgroup",
-                            "Observation-blood-pressure-cancel",
-                            "Observation-blood-pressure-dar",
-                            "Observation-blood-pressure",
-                            "Observation-bmd",
-                            "Observation-bmi",
-                            "Observation-bmi-using-related",
-                            "Observation-body-height",
-                            "Observation-body-length",
-                            "Observation-body-temperature",
-                            "Observation-clinical-gender",
-                            "Observation-date-lastmp",
-                            "Observation-decimal",
-                            "Observation-ekg",
-                            "Observation-example-diplotype1",
-                            "Observation-example-genetics-1",
-                            "Observation-example-genetics-2",
-                            "Observation-example-genetics-3",
-                            "Observation-example-genetics-4",
-                            "Observation-example-genetics-5",
-                            "Observation-example-genetics-brcapat",
-                            "Observation-example-haplotype1",
-                            "Observation-example-haplotype2",
-                            "Observation-example",
-                            "Observation-example-phenotype",
-                            "Observation-example-TPMT-diplotype",
-                            "Observation-example-TPMT-haplotype-one",
-                            "Observation-example-TPMT-haplotype-two",
-                            "Observation-eye-color",
-                            "Observation-f001",
-                            "Observation-f002",
-                            "Observation-f003",
-                            "Observation-f004",
-                            "Observation-f005",
-                            "Observation-f202",
-                            "Observation-f203",
-                            "Observation-f204",
-                            "Observation-f205",
-                            "Observation-f206",
-                            "Observation-gcs-qa",
-                            "Observation-glasgow",
-                            "Observation-head-circumference",
-                            "Observation-heart-rate",
-                            "Observation-herd1",
-                            "Observation-map-sitting",
-                            "Observation-mbp",
-                            "Observation-respiratory-rate",
-                            "Observation-rhstatus",
-                            "Observation-satO2",
-                            "Observation-secondsmoke",
-                            "Observation-trachcare",
-                            "Observation-unsat",
-                            "Observation-vitals-panel",
-                            "Observation-vomiting",
-                            "Observation-vp-oyster"};
+  std::vector<std::string> files{"Observation-10minute-apgar-score",
+                                 "Observation-1minute-apgar-score",
+                                 "Observation-20minute-apgar-score",
+                                 "Observation-2minute-apgar-score",
+                                 "Observation-5minute-apgar-score",
+                                 "Observation-656",
+                                 "Observation-abdo-tender",
+                                 "Observation-alcohol-type",
+                                 "Observation-bgpanel",
+                                 "Observation-bloodgroup",
+                                 "Observation-blood-pressure-cancel",
+                                 "Observation-blood-pressure-dar",
+                                 "Observation-blood-pressure",
+                                 "Observation-bmd",
+                                 "Observation-bmi",
+                                 "Observation-bmi-using-related",
+                                 "Observation-body-height",
+                                 "Observation-body-length",
+                                 "Observation-body-temperature",
+                                 "Observation-clinical-gender",
+                                 "Observation-date-lastmp",
+                                 "Observation-decimal",
+                                 "Observation-ekg",
+                                 "Observation-example-diplotype1",
+                                 "Observation-example-genetics-1",
+                                 "Observation-example-genetics-2",
+                                 "Observation-example-genetics-3",
+                                 "Observation-example-genetics-4",
+                                 "Observation-example-genetics-5",
+                                 "Observation-example-genetics-brcapat",
+                                 "Observation-example-haplotype1",
+                                 "Observation-example-haplotype2",
+                                 "Observation-example",
+                                 "Observation-example-phenotype",
+                                 "Observation-example-TPMT-diplotype",
+                                 "Observation-example-TPMT-haplotype-one",
+                                 "Observation-example-TPMT-haplotype-two",
+                                 "Observation-eye-color",
+                                 "Observation-f001",
+                                 "Observation-f002",
+                                 "Observation-f003",
+                                 "Observation-f004",
+                                 "Observation-f005",
+                                 "Observation-f202",
+                                 "Observation-f203",
+                                 "Observation-f204",
+                                 "Observation-f205",
+                                 "Observation-f206",
+                                 "Observation-gcs-qa",
+                                 "Observation-glasgow",
+                                 "Observation-head-circumference",
+                                 "Observation-heart-rate",
+                                 "Observation-herd1",
+                                 "Observation-map-sitting",
+                                 "Observation-mbp",
+                                 "Observation-respiratory-rate",
+                                 "Observation-rhstatus",
+                                 "Observation-satO2",
+                                 "Observation-secondsmoke",
+                                 "Observation-trachcare",
+                                 "Observation-unsat",
+                                 "Observation-vitals-panel",
+                                 "Observation-vomiting",
+                                 "Observation-vp-oyster"};
   TestPair<Observation>(files);
 }
 
 TEST(JsonFormatR4Test, TestObservationDefinition) {
-  std::vector<string> files{"ObservationDefinition-example"};
+  std::vector<std::string> files{"ObservationDefinition-example"};
   TestPair<ObservationDefinition>(files);
 }
 
 TEST(JsonFormatR4Test, TestOperationDefinition) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "OperationDefinition-ActivityDefinition-apply",
       "OperationDefinition-ActivityDefinition-data-requirements",
       "OperationDefinition-CapabilityStatement-conforms",
@@ -1237,83 +1247,84 @@ TEST(JsonFormatR4Test, TestOperationDefinition) {
 }
 
 TEST(JsonFormatR4Test, TestOperationOutcome) {
-  std::vector<string> files{"OperationOutcome-101",
-                            "OperationOutcome-allok",
-                            "OperationOutcome-break-the-glass",
-                            "OperationOutcome-exception",
-                            "OperationOutcome-searchfail",
-                            "OperationOutcome-validationfail"};
+  std::vector<std::string> files{"OperationOutcome-101",
+                                 "OperationOutcome-allok",
+                                 "OperationOutcome-break-the-glass",
+                                 "OperationOutcome-exception",
+                                 "OperationOutcome-searchfail",
+                                 "OperationOutcome-validationfail"};
   TestPair<OperationOutcome>(files);
 }
 
 TEST(JsonFormatR4Test, TestOrganization) {
-  std::vector<string> files{"Organization-1832473e-2fe0-452d-abe9-3cdb9879522f",
-                            "Organization-1",
-                            "Organization-2.16.840.1.113883.19.5",
-                            "Organization-2",
-                            "Organization-3",
-                            "Organization-f001",
-                            "Organization-f002",
-                            "Organization-f003",
-                            "Organization-f201",
-                            "Organization-f203",
-                            "Organization-hl7",
-                            "Organization-hl7pay",
-                            "Organization-mmanu"};
+  std::vector<std::string> files{
+      "Organization-1832473e-2fe0-452d-abe9-3cdb9879522f",
+      "Organization-1",
+      "Organization-2.16.840.1.113883.19.5",
+      "Organization-2",
+      "Organization-3",
+      "Organization-f001",
+      "Organization-f002",
+      "Organization-f003",
+      "Organization-f201",
+      "Organization-f203",
+      "Organization-hl7",
+      "Organization-hl7pay",
+      "Organization-mmanu"};
   TestPair<Organization>(files);
 }
 
 TEST(JsonFormatR4Test, TestOrganizationAffiliation) {
-  std::vector<string> files{"OrganizationAffiliation-example",
-                            "OrganizationAffiliation-orgrole1",
-                            "OrganizationAffiliation-orgrole2"};
+  std::vector<std::string> files{"OrganizationAffiliation-example",
+                                 "OrganizationAffiliation-orgrole1",
+                                 "OrganizationAffiliation-orgrole2"};
   TestPair<OrganizationAffiliation>(files);
 }
 
 TEST(JsonFormatR4Test, TestPatient) {
-  std::vector<string> files{"Patient-animal",
-                            "Patient-ch-example",
-                            "Patient-dicom",
-                            "Patient-example",
-                            "Patient-f001",
-                            "Patient-f201",
-                            "Patient-genetics-example1",
-                            "Patient-glossy",
-                            "Patient-ihe-pcd",
-                            "Patient-infant-fetal",
-                            "Patient-infant-mom",
-                            "Patient-infant-twin-1",
-                            "Patient-infant-twin-2",
-                            "Patient-mom",
-                            "Patient-newborn",
-                            "Patient-pat1",
-                            "Patient-pat2",
-                            "Patient-pat3",
-                            "Patient-pat4",
-                            "Patient-proband",
-                            "Patient-xcda",
-                            "Patient-xds"};
+  std::vector<std::string> files{"Patient-animal",
+                                 "Patient-ch-example",
+                                 "Patient-dicom",
+                                 "Patient-example",
+                                 "Patient-f001",
+                                 "Patient-f201",
+                                 "Patient-genetics-example1",
+                                 "Patient-glossy",
+                                 "Patient-ihe-pcd",
+                                 "Patient-infant-fetal",
+                                 "Patient-infant-mom",
+                                 "Patient-infant-twin-1",
+                                 "Patient-infant-twin-2",
+                                 "Patient-mom",
+                                 "Patient-newborn",
+                                 "Patient-pat1",
+                                 "Patient-pat2",
+                                 "Patient-pat3",
+                                 "Patient-pat4",
+                                 "Patient-proband",
+                                 "Patient-xcda",
+                                 "Patient-xds"};
   TestPair<Patient>(files);
 }
 
 TEST(JsonFormatR4Test, TestPaymentNotice) {
-  std::vector<string> files{"PaymentNotice-77654"};
+  std::vector<std::string> files{"PaymentNotice-77654"};
   TestPair<PaymentNotice>(files);
 }
 
 TEST(JsonFormatR4Test, TestPaymentReconciliation) {
-  std::vector<string> files{"PaymentReconciliation-ER2500"};
+  std::vector<std::string> files{"PaymentReconciliation-ER2500"};
   TestPair<PaymentReconciliation>(files);
 }
 
 TEST(JsonFormatR4Test, TestPerson) {
-  std::vector<string> files{"Person-example", "Person-f002", "Person-grahame",
-                            "Person-pd", "Person-pp"};
+  std::vector<std::string> files{"Person-example", "Person-f002",
+                                 "Person-grahame", "Person-pd", "Person-pp"};
   TestPair<Person>(files);
 }
 
 TEST(JsonFormatR4Test, TestPlanDefinition) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "PlanDefinition-chlamydia-screening-intervention",
       "PlanDefinition-example-cardiology-os",
       "PlanDefinition-exclusive-breastfeeding-intervention-01",
@@ -1336,7 +1347,7 @@ TEST(JsonFormatR4Test, TestPlanDefinition) {
 }
 
 TEST(JsonFormatR4Test, TestPractitioner) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "Practitioner-example", "Practitioner-f001",       "Practitioner-f002",
       "Practitioner-f003",    "Practitioner-f004",       "Practitioner-f005",
       "Practitioner-f006",    "Practitioner-f007",       "Practitioner-f201",
@@ -1346,50 +1357,51 @@ TEST(JsonFormatR4Test, TestPractitioner) {
 }
 
 TEST(JsonFormatR4Test, TestPractitionerRole) {
-  std::vector<string> files{"PractitionerRole-example"};
+  std::vector<std::string> files{"PractitionerRole-example"};
   TestPair<PractitionerRole>(files);
 }
 
 TEST(JsonFormatR4Test, TestProcedure) {
-  std::vector<string> files{"Procedure-ambulation",
-                            "Procedure-appendectomy-narrative",
-                            "Procedure-biopsy",
-                            "Procedure-colon-biopsy",
-                            "Procedure-colonoscopy",
-                            "Procedure-education",
-                            "Procedure-example-implant",
-                            "Procedure-example",
-                            "Procedure-f001",
-                            "Procedure-f002",
-                            "Procedure-f003",
-                            "Procedure-f004",
-                            "Procedure-f201",
-                            "Procedure-HCBS",
-                            "Procedure-ob",
-                            "Procedure-physical-therapy"};
+  std::vector<std::string> files{"Procedure-ambulation",
+                                 "Procedure-appendectomy-narrative",
+                                 "Procedure-biopsy",
+                                 "Procedure-colon-biopsy",
+                                 "Procedure-colonoscopy",
+                                 "Procedure-education",
+                                 "Procedure-example-implant",
+                                 "Procedure-example",
+                                 "Procedure-f001",
+                                 "Procedure-f002",
+                                 "Procedure-f003",
+                                 "Procedure-f004",
+                                 "Procedure-f201",
+                                 "Procedure-HCBS",
+                                 "Procedure-ob",
+                                 "Procedure-physical-therapy"};
   TestPair<Procedure>(files);
 }
 
 TEST(JsonFormatR4Test, TestProvenance) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "Provenance-consent-signature", "Provenance-example-biocompute-object",
       "Provenance-example-cwl", "Provenance-example", "Provenance-signature"};
   TestPair<Provenance>(files);
 }
 
 TEST(JsonFormatR4Test, TestQuestionnaire) {
-  std::vector<string> files{"Questionnaire-3141",
-                            "Questionnaire-bb",
-                            "Questionnaire-f201",
-                            "Questionnaire-gcs",
-                            "Questionnaire-phq-9-questionnaire",
-                            "Questionnaire-qs1",
-                            "Questionnaire-zika-virus-exposure-assessment"};
+  std::vector<std::string> files{
+      "Questionnaire-3141",
+      "Questionnaire-bb",
+      "Questionnaire-f201",
+      "Questionnaire-gcs",
+      "Questionnaire-phq-9-questionnaire",
+      "Questionnaire-qs1",
+      "Questionnaire-zika-virus-exposure-assessment"};
   TestPair<Questionnaire>(files);
 }
 
 TEST(JsonFormatR4Test, TestQuestionnaireResponse) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "QuestionnaireResponse-3141", "QuestionnaireResponse-bb",
       "QuestionnaireResponse-f201", "QuestionnaireResponse-gcs",
       "QuestionnaireResponse-ussg-fht-answers"};
@@ -1397,40 +1409,40 @@ TEST(JsonFormatR4Test, TestQuestionnaireResponse) {
 }
 
 TEST(JsonFormatR4Test, TestRelatedPerson) {
-  std::vector<string> files{"RelatedPerson-benedicte", "RelatedPerson-f001",
-                            "RelatedPerson-f002", "RelatedPerson-newborn-mom",
-                            "RelatedPerson-peter"};
+  std::vector<std::string> files{
+      "RelatedPerson-benedicte", "RelatedPerson-f001", "RelatedPerson-f002",
+      "RelatedPerson-newborn-mom", "RelatedPerson-peter"};
   TestPair<RelatedPerson>(files);
 }
 
 TEST(JsonFormatR4Test, TestRequestGroup) {
-  std::vector<string> files{"RequestGroup-example",
-                            "RequestGroup-kdn5-example"};
+  std::vector<std::string> files{"RequestGroup-example",
+                                 "RequestGroup-kdn5-example"};
   TestPair<RequestGroup>(files);
 }
 
 TEST(JsonFormatR4Test, TestResearchDefinition) {
-  std::vector<string> files{"ResearchDefinition-example"};
+  std::vector<std::string> files{"ResearchDefinition-example"};
   TestPair<ResearchDefinition>(files);
 }
 
 TEST(JsonFormatR4Test, TestResearchElementDefinition) {
-  std::vector<string> files{"ResearchElementDefinition-example"};
+  std::vector<std::string> files{"ResearchElementDefinition-example"};
   TestPair<ResearchElementDefinition>(files);
 }
 
 TEST(JsonFormatR4Test, TestResearchStudy) {
-  std::vector<string> files{"ResearchStudy-example"};
+  std::vector<std::string> files{"ResearchStudy-example"};
   TestPair<ResearchStudy>(files);
 }
 
 TEST(JsonFormatR4Test, TestResearchSubject) {
-  std::vector<string> files{"ResearchSubject-example"};
+  std::vector<std::string> files{"ResearchSubject-example"};
   TestPair<ResearchSubject>(files);
 }
 
 TEST(JsonFormatR4Test, TestRiskAssessment) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "RiskAssessment-breastcancer-risk", "RiskAssessment-cardiac",
       "RiskAssessment-genetic",           "RiskAssessment-population",
       "RiskAssessment-prognosis",         "RiskAssessment-riskexample"};
@@ -1438,94 +1450,94 @@ TEST(JsonFormatR4Test, TestRiskAssessment) {
 }
 
 TEST(JsonFormatR4Test, TestRiskEvidenceSynthesis) {
-  std::vector<string> files{"RiskEvidenceSynthesis-example"};
+  std::vector<std::string> files{"RiskEvidenceSynthesis-example"};
   TestPair<RiskEvidenceSynthesis>(files);
 }
 
 TEST(JsonFormatR4Test, TestSchedule) {
-  std::vector<string> files{"Schedule-example", "Schedule-exampleloc1",
-                            "Schedule-exampleloc2"};
+  std::vector<std::string> files{"Schedule-example", "Schedule-exampleloc1",
+                                 "Schedule-exampleloc2"};
   TestPair<Schedule>(files);
 }
 
 TEST(JsonFormatR4Test, TestServiceRequest) {
-  std::vector<string> files{"ServiceRequest-ambulation",
-                            "ServiceRequest-appendectomy-narrative",
-                            "ServiceRequest-benchpress",
-                            "ServiceRequest-colon-biopsy",
-                            "ServiceRequest-colonoscopy",
-                            "ServiceRequest-di",
-                            "ServiceRequest-do-not-turn",
-                            "ServiceRequest-education",
-                            "ServiceRequest-example-implant",
-                            "ServiceRequest-example",
-                            "ServiceRequest-example-pgx",
-                            "ServiceRequest-ft4",
-                            "ServiceRequest-lipid",
-                            "ServiceRequest-myringotomy",
-                            "ServiceRequest-ob",
-                            "ServiceRequest-og-example1",
-                            "ServiceRequest-physical-therapy",
-                            "ServiceRequest-physiotherapy",
-                            "ServiceRequest-subrequest",
-                            "ServiceRequest-vent"};
+  std::vector<std::string> files{"ServiceRequest-ambulation",
+                                 "ServiceRequest-appendectomy-narrative",
+                                 "ServiceRequest-benchpress",
+                                 "ServiceRequest-colon-biopsy",
+                                 "ServiceRequest-colonoscopy",
+                                 "ServiceRequest-di",
+                                 "ServiceRequest-do-not-turn",
+                                 "ServiceRequest-education",
+                                 "ServiceRequest-example-implant",
+                                 "ServiceRequest-example",
+                                 "ServiceRequest-example-pgx",
+                                 "ServiceRequest-ft4",
+                                 "ServiceRequest-lipid",
+                                 "ServiceRequest-myringotomy",
+                                 "ServiceRequest-ob",
+                                 "ServiceRequest-og-example1",
+                                 "ServiceRequest-physical-therapy",
+                                 "ServiceRequest-physiotherapy",
+                                 "ServiceRequest-subrequest",
+                                 "ServiceRequest-vent"};
   TestPair<ServiceRequest>(files);
 }
 
 TEST(JsonFormatR4Test, TestSlot) {
-  std::vector<string> files{"Slot-1", "Slot-2", "Slot-3", "Slot-example"};
+  std::vector<std::string> files{"Slot-1", "Slot-2", "Slot-3", "Slot-example"};
   TestPair<Slot>(files);
 }
 
 TEST(JsonFormatR4Test, TestSpecimen) {
-  std::vector<string> files{"Specimen-101", "Specimen-isolate",
-                            "Specimen-pooled-serum", "Specimen-sst",
-                            "Specimen-vma-urine"};
+  std::vector<std::string> files{"Specimen-101", "Specimen-isolate",
+                                 "Specimen-pooled-serum", "Specimen-sst",
+                                 "Specimen-vma-urine"};
   TestPair<Specimen>(files);
 }
 
 TEST(JsonFormatR4Test, TestSpecimenDefinition) {
-  std::vector<string> files{"SpecimenDefinition-2364"};
+  std::vector<std::string> files{"SpecimenDefinition-2364"};
   TestPair<SpecimenDefinition>(files);
 }
 
 TEST(JsonFormatR4Test, TestStructureMap) {
-  std::vector<string> files{"StructureMap-example",
-                            "StructureMap-supplyrequest-transform"};
+  std::vector<std::string> files{"StructureMap-example",
+                                 "StructureMap-supplyrequest-transform"};
   TestPair<StructureMap>(files);
 }
 
 TEST(JsonFormatR4Test, TestSubscription) {
-  std::vector<string> files{"Subscription-example-error",
-                            "Subscription-example"};
+  std::vector<std::string> files{"Subscription-example-error",
+                                 "Subscription-example"};
   TestPair<Subscription>(files);
 }
 
 TEST(JsonFormatR4Test, TestSubstance) {
-  std::vector<string> files{"Substance-example", "Substance-f201",
-                            "Substance-f202",    "Substance-f203",
-                            "Substance-f204",    "Substance-f205"};
+  std::vector<std::string> files{"Substance-example", "Substance-f201",
+                                 "Substance-f202",    "Substance-f203",
+                                 "Substance-f204",    "Substance-f205"};
   TestPair<Substance>(files);
 }
 
 TEST(JsonFormatR4Test, TestSubstanceSpecification) {
-  std::vector<string> files{"SubstanceSpecification-example"};
+  std::vector<std::string> files{"SubstanceSpecification-example"};
   TestPair<SubstanceSpecification>(files);
 }
 
 TEST(JsonFormatR4Test, TestSupplyDelivery) {
-  std::vector<string> files{"SupplyDelivery-pumpdelivery",
-                            "SupplyDelivery-simpledelivery"};
+  std::vector<std::string> files{"SupplyDelivery-pumpdelivery",
+                                 "SupplyDelivery-simpledelivery"};
   TestPair<SupplyDelivery>(files);
 }
 
 TEST(JsonFormatR4Test, TestSupplyRequest) {
-  std::vector<string> files{"SupplyRequest-simpleorder"};
+  std::vector<std::string> files{"SupplyRequest-simpleorder"};
   TestPair<SupplyRequest>(files);
 }
 
 TEST(JsonFormatR4Test, TestTask) {
-  std::vector<string> files{
+  std::vector<std::string> files{
       "Task-example1",    "Task-example2",    "Task-example3",
       "Task-example4",    "Task-example5",    "Task-example6",
       "Task-fm-example1", "Task-fm-example2", "Task-fm-example3",
@@ -1534,33 +1546,33 @@ TEST(JsonFormatR4Test, TestTask) {
 }
 
 TEST(JsonFormatR4Test, TestTerminologyCapabilities) {
-  std::vector<string> files{"TerminologyCapabilities-example"};
+  std::vector<std::string> files{"TerminologyCapabilities-example"};
   TestPair<TerminologyCapabilities>(files);
 }
 
 TEST(JsonFormatR4Test, TestTestReport) {
-  std::vector<string> files{"TestReport-testreport-example"};
+  std::vector<std::string> files{"TestReport-testreport-example"};
   TestPair<TestReport>(files);
 }
 
 TEST(JsonFormatR4Test, TestTestScript) {
-  std::vector<string> files{"TestScript-testscript-example-history",
-                            "TestScript-testscript-example",
-                            "TestScript-testscript-example-multisystem",
-                            "TestScript-testscript-example-readtest",
-                            "TestScript-testscript-example-search",
-                            "TestScript-testscript-example-update"};
+  std::vector<std::string> files{"TestScript-testscript-example-history",
+                                 "TestScript-testscript-example",
+                                 "TestScript-testscript-example-multisystem",
+                                 "TestScript-testscript-example-readtest",
+                                 "TestScript-testscript-example-search",
+                                 "TestScript-testscript-example-update"};
   TestPair<TestScript>(files);
 }
 
 TEST(JsonFormatR4Test, TestVerificationResult) {
-  std::vector<string> files{"VerificationResult-example"};
+  std::vector<std::string> files{"VerificationResult-example"};
   TestPair<VerificationResult>(files);
 }
 
 TEST(JsonFormatR4Test, TestVisionPrescription) {
-  std::vector<string> files{"VisionPrescription-33123",
-                            "VisionPrescription-33124"};
+  std::vector<std::string> files{"VisionPrescription-33123",
+                                 "VisionPrescription-33124"};
   TestPair<VisionPrescription>(files);
 }
 }  // namespace

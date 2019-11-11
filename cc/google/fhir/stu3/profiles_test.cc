@@ -44,19 +44,19 @@ using ::google::fhir::testutil::EqualsProto;
 using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
 
 template <class B>
-B GetUnprofiled(const string& filename) {
+B GetUnprofiled(const std::string& filename) {
   return ReadProto<B>(absl::StrCat(filename, ".prototxt"));
 }
 
 template <class P>
-P GetProfiled(const string& filename) {
+P GetProfiled(const std::string& filename) {
   return ReadProto<P>(absl::StrCat(
       filename, "-profiled-", absl::AsciiStrToLower(P::descriptor()->name()),
       ".prototxt"));
 }
 
 template <class B, class P>
-void TestDownConvert(const string& filename) {
+void TestDownConvert(const std::string& filename) {
   const B unprofiled = GetUnprofiled<B>(filename);
   P profiled;
 
@@ -69,7 +69,7 @@ void TestDownConvert(const string& filename) {
 }
 
 template <class B, class P>
-void TestUpConvert(const string& filename) {
+void TestUpConvert(const std::string& filename) {
   const P profiled = GetProfiled<P>(filename);
   B unprofiled;
 
@@ -83,7 +83,7 @@ void TestUpConvert(const string& filename) {
 }
 
 template <class B, class P>
-void TestPair(const string& filename) {
+void TestPair(const std::string& filename) {
   TestDownConvert<B, P>(filename);
   TestUpConvert<B, P>(filename);
 }

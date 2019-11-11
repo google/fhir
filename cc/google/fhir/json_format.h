@@ -32,20 +32,18 @@
 namespace google {
 namespace fhir {
 
-using std::string;
-
 // Merges a string of raw FHIR json into an existing message.
 // Takes a default timezone for timelike data that does not specify timezone.
 ::google::fhir::Status MergeJsonFhirStringIntoProto(
-    const string& raw_json, google::protobuf::Message* target,
+    const std::string& raw_json, google::protobuf::Message* target,
     absl::TimeZone default_timezone, const bool validate);
 
 // Given a template for a FHIR resource type, creates a resource proto of that
-// type and merges a string of raw FHIR json into it.
+// type and merges a std::string of raw FHIR json into it.
 // Takes a default timezone for timelike data that does not specify timezone.
 template <typename R>
 ::google::fhir::StatusOr<R> JsonFhirStringToProto(
-    const string& raw_json, const absl::TimeZone default_timezone) {
+    const std::string& raw_json, const absl::TimeZone default_timezone) {
   R resource;
   FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(raw_json, &resource,
                                                     default_timezone, true));
@@ -54,23 +52,23 @@ template <typename R>
 
 template <typename R>
 ::google::fhir::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
-    const string& raw_json, const absl::TimeZone default_timezone) {
+    const std::string& raw_json, const absl::TimeZone default_timezone) {
   R resource;
   FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(raw_json, &resource,
                                                     default_timezone, false));
   return resource;
 }
 
-::google::fhir::StatusOr<string> PrettyPrintFhirToJsonString(
+::google::fhir::StatusOr<std::string> PrettyPrintFhirToJsonString(
     const google::protobuf::Message& fhir_proto);
 
-::google::fhir::StatusOr<string> PrintFhirToJsonString(
+::google::fhir::StatusOr<std::string> PrintFhirToJsonString(
     const google::protobuf::Message& fhir_proto);
 
-::google::fhir::StatusOr<string> PrintFhirToJsonStringForAnalytics(
+::google::fhir::StatusOr<std::string> PrintFhirToJsonStringForAnalytics(
     const google::protobuf::Message& fhir_proto);
 
-::google::fhir::StatusOr<string> PrettyPrintFhirToJsonStringForAnalytics(
+::google::fhir::StatusOr<std::string> PrettyPrintFhirToJsonStringForAnalytics(
     const google::protobuf::Message& fhir_proto);
 
 }  // namespace fhir

@@ -25,11 +25,11 @@ using ::google::protobuf::Message;
 
 namespace {
 
-bool IsType(const string& url, const Descriptor* descriptor) {
+bool IsType(const std::string& url, const Descriptor* descriptor) {
   return GetStructureDefinitionUrl(descriptor) == url;
 }
 
-bool IsProfileOf(const string& url, const Descriptor* descriptor) {
+bool IsProfileOf(const std::string& url, const Descriptor* descriptor) {
   for (int i = 0;
        i < descriptor->options().ExtensionSize(proto::fhir_profile_base); i++) {
     if (descriptor->options().GetExtension(proto::fhir_profile_base, i) ==
@@ -40,19 +40,19 @@ bool IsProfileOf(const string& url, const Descriptor* descriptor) {
   return false;
 }
 
-bool IsTypeOrProfileOf(const string& url, const Descriptor* descriptor) {
+bool IsTypeOrProfileOf(const std::string& url, const Descriptor* descriptor) {
   return IsType(url, descriptor) || IsProfileOf(url, descriptor);
 }
 
-bool IsType(const string& url, const Message& message) {
+bool IsType(const std::string& url, const Message& message) {
   return IsType(url, message.GetDescriptor());
 }
 
-bool IsProfileOf(const string& url, const Message& message) {
+bool IsProfileOf(const std::string& url, const Message& message) {
   return IsProfileOf(url, message.GetDescriptor());
 }
 
-bool IsTypeOrProfileOf(const string& url, const Message& message) {
+bool IsTypeOrProfileOf(const std::string& url, const Message& message) {
   return IsTypeOrProfileOf(url, message.GetDescriptor());
 }
 

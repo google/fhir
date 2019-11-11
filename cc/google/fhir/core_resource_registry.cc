@@ -41,22 +41,22 @@ namespace {
 
 // Given a profiled resource descriptor, return the base resource in the core
 // FHIR spec
-StatusOr<string> GetCoreStructureDefinition(const Descriptor* descriptor) {
-  static std::unordered_map<string, string> memos;
+StatusOr<std::string> GetCoreStructureDefinition(const Descriptor* descriptor) {
+  static std::unordered_map<std::string, std::string> memos;
   auto iter = memos.find(descriptor->full_name());
   if (iter != memos.end()) {
     return iter->second;
   }
 
-  static const string* kCorePrefix =
-      new string("http://hl7.org/fhir/StructureDefinition/");
+  static const std::string* kCorePrefix =
+      new std::string("http://hl7.org/fhir/StructureDefinition/");
 
   for (int i = 0;
        i < descriptor->options().ExtensionSize(proto::fhir_profile_base); i++) {
     if (descriptor->options()
             .GetExtension(proto::fhir_profile_base, i)
             .substr(0, kCorePrefix->length()) == *kCorePrefix) {
-      const string& core_url =
+      const std::string& core_url =
           descriptor->options().GetExtension(proto::fhir_profile_base, i);
       memos[descriptor->full_name()] = core_url;
       return core_url;
@@ -70,12 +70,12 @@ StatusOr<string> GetCoreStructureDefinition(const Descriptor* descriptor) {
 // to an default resource message of that type, for all types in the
 // ContainedResource
 template <typename ContainedResourceLike>
-std::unordered_map<string, std::unique_ptr<Message>> BuildRegistry() {
+std::unordered_map<std::string, std::unique_ptr<Message>> BuildRegistry() {
   const ContainedResourceLike contained = ContainedResourceLike();
   const Descriptor* descriptor = contained.GetDescriptor();
   const Reflection* reflection = contained.GetReflection();
 
-  std::unordered_map<string, std::unique_ptr<Message>> registry;
+  std::unordered_map<std::string, std::unique_ptr<Message>> registry;
 
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
@@ -90,10 +90,10 @@ std::unordered_map<string, std::unique_ptr<Message>> BuildRegistry() {
 template <typename ContainedResourceLike>
 StatusOr<std::unique_ptr<::google::protobuf::Message>> GetBaseResourceInstanceForVersion(
     const ::google::protobuf::Message& message) {
-  static const std::unordered_map<string, std::unique_ptr<Message>> registry =
-      BuildRegistry<ContainedResourceLike>();
+  static const std::unordered_map<std::string, std::unique_ptr<Message>>
+      registry = BuildRegistry<ContainedResourceLike>();
 
-  FHIR_ASSIGN_OR_RETURN(const string& core_url,
+  FHIR_ASSIGN_OR_RETURN(const std::string& core_url,
                         GetCoreStructureDefinition(message.GetDescriptor()));
   auto example_iter = registry.find(core_url);
 

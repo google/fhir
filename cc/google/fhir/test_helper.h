@@ -69,8 +69,6 @@
 namespace google {
 namespace fhir {
 
-using std::string;
-
 enum ValidityExpectation { VALID, INVALID, NO_EXPECTATION };
 
 class FhirProtoParseHelper {
@@ -128,7 +126,7 @@ class FhirProtoParseHelper {
 };
 
 template <class T>
-T ReadProto(const string& filename) {
+T ReadProto(const std::string& filename) {
   T result;
   TF_CHECK_OK(::tensorflow::ReadTextProto(
       ::tensorflow::Env::Default(),
@@ -138,17 +136,17 @@ T ReadProto(const string& filename) {
 }
 
 template <class T>
-T ReadStu3Proto(const string& filename) {
+T ReadStu3Proto(const std::string& filename) {
   return ReadProto<T>(absl::StrCat("testdata/stu3/", filename));
 }
 
 template <class T>
-T ReadR4Proto(const string& filename) {
+T ReadR4Proto(const std::string& filename) {
   return ReadProto<T>(absl::StrCat("testdata/r4/", filename));
 }
 
-inline string ReadFile(const string& filename) {
-  string result;
+inline std::string ReadFile(const std::string& filename) {
+  std::string result;
   TF_CHECK_OK(::tensorflow::ReadFileToString(
       ::tensorflow::Env::Default(),
       filename,

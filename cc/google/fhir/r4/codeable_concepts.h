@@ -17,6 +17,7 @@
 
 #include <functional>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "google/protobuf/descriptor.pb.h"
@@ -33,8 +34,9 @@ namespace google {
 namespace fhir {
 namespace r4 {
 
-typedef std::function<void(const string& system, const string& code)> CodeFunc;
-typedef std::function<bool(const string& system, const string& code)>
+typedef std::function<void(const std::string& system, const std::string& code)>
+    CodeFunc;
+typedef std::function<bool(const std::string& system, const std::string& code)>
     CodeBoolFunc;
 typedef std::function<void(const r4::core::Coding&)> CodingFunc;
 typedef std::function<Status(const r4::core::Coding&)> CodingStatusFunc;
@@ -46,7 +48,7 @@ namespace internal {
 // This is internal, since outside callers shouldn't care about profiled vs
 // unprofiled.
 const ::google::protobuf::FieldDescriptor* ProfiledFieldForSystem(
-    const ::google::protobuf::Message& concept, const string& system);
+    const ::google::protobuf::Message& concept, const std::string& system);
 
 }  // namespace internal
 
@@ -56,7 +58,8 @@ const ::google::protobuf::FieldDescriptor* ProfiledFieldForSystem(
 // true.  If the function returned false for all Codings, returns false.
 const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
                                     const CodeBoolFunc& func,
-                                    string* found_system, string* found_code);
+                                    std::string* found_system,
+                                    std::string* found_code);
 
 // Variant of FindSystemCodeStringPair that does not explicitly set return
 // pointers.
@@ -101,24 +104,24 @@ Status ForEachCodingWithStatus(const ::google::protobuf::Message& concept,
 
 // Gets a vector of all codes with a given system, where codes are represented
 // as strings.
-const std::vector<string> GetCodesWithSystem(
+const std::vector<std::string> GetCodesWithSystem(
     const ::google::protobuf::Message& concept, const absl::string_view target_system);
 
 // Gets the only code with a given system.
 // If no code is found with that system, returns a NotFound status.
 // If more than one code is found with that system, returns AlreadyExists
 // status.
-StatusOr<const string> GetOnlyCodeWithSystem(const ::google::protobuf::Message& concept,
-                                             const absl::string_view system);
+StatusOr<const std::string> GetOnlyCodeWithSystem(
+    const ::google::protobuf::Message& concept, const absl::string_view system);
 
 // Gets the first code with a given system.
 // This differs from GetOnlyCodeWithSystem in that it doesn't throw an error
 // if there are more than one codes with that syatem.
 template <typename CodeableConceptLike>
-StatusOr<string> ExtractCodeBySystem(
+StatusOr<std::string> ExtractCodeBySystem(
     const CodeableConceptLike& codeable_concept,
     absl::string_view system_value) {
-  const std::vector<string>& codes =
+  const std::vector<std::string>& codes =
       GetCodesWithSystem(codeable_concept, system_value);
   if (codes.empty()) {
     return tensorflow::errors::NotFound("No code from system: ", system_value);
@@ -134,12 +137,12 @@ StatusOr<string> ExtractCodeBySystem(
 // to specify a required ICD9 code, but make it easy to add other ICD9 codes.
 Status AddCoding(::google::protobuf::Message* concept, const r4::core::Coding& coding);
 
-Status AddCoding(::google::protobuf::Message* concept, const string& system,
-                 const string& code);
+Status AddCoding(::google::protobuf::Message* concept, const std::string& system,
+                 const std::string& code);
 
 template <typename CodeableConceptLike>
 Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
-                                 const string& system) {
+                                 const std::string& system) {
   if (IsProfileOf<r4::core::CodeableConcept>(*concept)) {
     const ::google::protobuf::FieldDescriptor* profiled_field =
         internal::ProfiledFieldForSystem(*concept, system);

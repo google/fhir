@@ -39,14 +39,13 @@ using ::google::protobuf::EnumValueDescriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
-using std::string;
 using std::unordered_map;
 using ::tensorflow::errors::InvalidArgument;
 
 namespace {
 
-string TitleCaseToUpperUnderscores(const string& src) {
-  string dst;
+std::string TitleCaseToUpperUnderscores(const std::string& src) {
+  std::string dst;
   for (auto iter = src.begin(); iter != src.end(); ++iter) {
     if (absl::ascii_isupper(*iter) && iter != src.begin()) {
       dst.push_back('_');
@@ -116,14 +115,14 @@ Status ConvertToTypedCodeInternal(const CodeLike& generic_code,
   return Status::OK();
 }
 
-string EnumValueToString(const EnumValueDescriptor* enum_value) {
+std::string EnumValueToString(const EnumValueDescriptor* enum_value) {
   if (enum_value->options().HasExtension(
           ::google::fhir::proto::fhir_original_code)) {
     return enum_value->options().GetExtension(
         ::google::fhir::proto::fhir_original_code);
   }
 
-  string code_string = enum_value->name();
+  std::string code_string = enum_value->name();
   std::transform(code_string.begin(), code_string.end(), code_string.begin(),
                  tolower);
   std::replace(code_string.begin(), code_string.end(), '_', '-');
@@ -238,7 +237,7 @@ Status ConvertToGenericCodingInternal(const Message& typed_coding,
 
   const Message& typed_code = reflection->GetMessage(typed_coding, code_field);
 
-  const string& system = GetFixedCodingSystem(typed_code.GetDescriptor());
+  const std::string& system = GetFixedCodingSystem(typed_code.GetDescriptor());
   if (!system.empty()) {
     // The entire profiled coding can only be from a single system.  Use that.
     generic_coding->mutable_system()->set_value(system);
@@ -268,7 +267,7 @@ Status ConvertToGenericCodingInternal(const Message& typed_coding,
 template <typename TypedResourceTypeCode>
 StatusOr<typename TypedResourceTypeCode::Value> GetCodeForResourceTypeTemplate(
     const Message& resource) {
-  const string& enum_string =
+  const std::string& enum_string =
       TitleCaseToUpperUnderscores(resource.GetDescriptor()->name());
   typename TypedResourceTypeCode::Value value;
   if (TypedResourceTypeCode::Value_Parse(enum_string, &value)) {
@@ -281,12 +280,11 @@ StatusOr<typename TypedResourceTypeCode::Value> GetCodeForResourceTypeTemplate(
 }  // namespace
 
 StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
-    const string& code_string, const EnumDescriptor* target_enum_type) {
+    const std::string& code_string, const EnumDescriptor* target_enum_type) {
   // Map from (target_enum_type->full_name() x code_string) -> result
   // for previous runs.
-  static auto* memos =
-      new unordered_map<string,
-                        unordered_map<string, const EnumValueDescriptor*>>();
+  static auto* memos = new unordered_map<
+      std::string, unordered_map<std::string, const EnumValueDescriptor*>>();
 
   // Check for memoized result.
   const auto memos_for_enum_type = memos->find(target_enum_type->full_name());
@@ -298,7 +296,7 @@ StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
   }
 
   // Try to find the Enum value by name (with some common substitutions).
-  string enum_case_code_string = absl::AsciiStrToUpper(code_string);
+  std::string enum_case_code_string = absl::AsciiStrToUpper(code_string);
   std::replace(enum_case_code_string.begin(), enum_case_code_string.end(), '-',
                '_');
   const EnumValueDescriptor* target_enum_value =
@@ -462,7 +460,7 @@ Status CopyCode(const Message& source, Message* target) {
           ".  Must have a value field of either String type or Enum type.");
     }
   } else if (source_type == FieldDescriptor::Type::TYPE_STRING) {
-    const string& source_value =
+    const std::string& source_value =
         source_reflection->GetString(source, source_value_field);
     if (target_type == FieldDescriptor::Type::TYPE_STRING) {
       // String to String

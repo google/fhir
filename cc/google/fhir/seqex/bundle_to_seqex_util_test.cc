@@ -35,7 +35,6 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-using std::string;
 
 namespace {
 
@@ -114,7 +113,7 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPairFromInputLabels) {
 }
 
 TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_NoLabel) {
-  const std::set<string> label_names({"test1"});
+  const std::set<std::string> label_names({"test1"});
   Bundle bundle;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry { resource { patient { id { value: "14" } } } }
@@ -248,7 +247,7 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_NoLabel) {
 }
 
 TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithLabels) {
-  const std::set<string> label_names({"test1"});
+  const std::set<std::string> label_names({"test1"});
   Bundle bundle;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry { resource { patient { id { value: "20" } } } }
@@ -408,7 +407,7 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithLabels) {
 }
 
 TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_TriggerFiltered) {
-  const std::set<string> label_names({"test2"});
+  const std::set<std::string> label_names({"test2"});
   // The trigger would be filtered due to label time before trigger time.
   Bundle bundle;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
@@ -467,7 +466,7 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_TriggerFiltered) {
 }
 
 TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithMultipleTriggers) {
-  const std::set<string> label_names({"test1"});
+  const std::set<std::string> label_names({"test1"});
   Bundle bundle;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry { resource { patient { id { value: "20" } } } }
@@ -592,7 +591,7 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithMultipleTriggers) {
 }
 
 TEST(BundleToSeqexUtilTest, ExtractEventLabelProtoFromBundle) {
-  const std::set<string> label_names({"test1"});
+  const std::set<std::string> label_names({"test1"});
   Bundle bundle;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry { resource { patient { id { value: "14" } } } }

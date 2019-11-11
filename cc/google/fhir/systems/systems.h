@@ -24,7 +24,6 @@ namespace google {
 namespace fhir {
 namespace systems {
 
-using std::string;
 
 // These systems are standard values for valuesets described by the FHIR
 // standard, either at the resource level or in the code system listing found
@@ -61,21 +60,21 @@ const char kUnitsOfMeasure[] = "http://unitsofmeasure.org";
 // Format ICD9 Diagnosis code according to
 // http://www.icd9data.com/2015/Volume1/default.htm.
 // NOTE: Current implementation is fairly naive without validation / padding.
-string FormatIcd9Diagnosis(const string& icd9);
+std::string FormatIcd9Diagnosis(const std::string& icd9);
 
 // Format ICD9 Procedure code according to
 // http://www.icd9data.com/2012/Volume3/.
 // NOTE: Current implementation is fairly naive without validation / padding.
-string FormatIcd9Procedure(const string& icd9);
+std::string FormatIcd9Procedure(const std::string& icd9);
 
 // Return a short form of the system name.
-string ToShortSystemName(const string& system);
+std::string ToShortSystemName(const std::string& system);
 
 // We accept multiple different icd9/icd10/ccs subset coding schemes.
-static const std::vector<string>* const kIcd9Schemes =
-    new std::vector<string>({kIcd9, kIcd9Diagnosis, kIcd9Procedure});
-static const std::vector<string>* const kIcd10Schemes =
-    new std::vector<string>({kIcd10Diagnosis});
+static const std::vector<std::string>* const kIcd9Schemes =
+    new std::vector<std::string>({kIcd9, kIcd9Diagnosis, kIcd9Procedure});
+static const std::vector<std::string>* const kIcd10Schemes =
+    new std::vector<std::string>({kIcd10Diagnosis});
 
 }  // namespace systems
 }  // namespace fhir

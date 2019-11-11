@@ -51,10 +51,8 @@ using google::fhir::fhir_path::MessageValidator;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
 
-using std::string;
-
 template <typename T>
-T ParseFromString(const string& str) {
+T ParseFromString(const std::string& str) {
   google::protobuf::TextFormat::Parser parser;
   parser.AllowPartialMessage(true);
   T t;
@@ -100,7 +98,7 @@ UsCorePatient ValidUsCorePatient() {
   )proto");
 }
 
-bool EvaluateBoolExpression(const string& expression) {
+bool EvaluateBoolExpression(const std::string& expression) {
   // FHIRPath assumes a context object during evaluation, so we use an encounter
   // as a placeholder.
   auto numbers_equal =
@@ -169,14 +167,14 @@ TEST(FhirPathTest, TestNoSuchField) {
 
   EXPECT_FALSE(root_expr.ok());
   EXPECT_NE(root_expr.status().error_message().find("bogusrootfield"),
-            string::npos);
+            std::string::npos);
 
   auto child_expr = CompiledExpression::Compile(Encounter::descriptor(),
                                                 "period.boguschildfield");
 
   EXPECT_FALSE(child_expr.ok());
   EXPECT_NE(child_expr.status().error_message().find("boguschildfield"),
-            string::npos);
+            std::string::npos);
 }
 
 TEST(FhirPathTest, TestNoSuchFunction) {
@@ -185,7 +183,7 @@ TEST(FhirPathTest, TestNoSuchFunction) {
 
   EXPECT_FALSE(root_expr.ok());
   EXPECT_NE(root_expr.status().error_message().find("bogusfunction"),
-            string::npos);
+            std::string::npos);
 }
 
 TEST(FhirPathTest, TestFunctionExists) {
@@ -503,7 +501,7 @@ TEST(FhirPathTest, ConstraintViolation) {
 
   auto callback = [&observation](const Message& bad_message,
                                  const FieldDescriptor* field,
-                                 const string& constraint) {
+                                 const std::string& constraint) {
     // Ensure the expected bad sub-message is passed to the callback.
     EXPECT_EQ(observation.GetDescriptor()->full_name(),
               bad_message.GetDescriptor()->full_name());
@@ -515,7 +513,7 @@ TEST(FhirPathTest, ConstraintViolation) {
     return false;
   };
 
-  string err_message =
+  std::string err_message =
       "fhirpath-constraint-violation-Observation.referenceRange";
   EXPECT_EQ(validator.Validate(observation, callback),
             ::tensorflow::errors::FailedPrecondition(err_message));
@@ -552,7 +550,7 @@ TEST(FhirPathTest, NestedConstraintViolated) {
 
   MessageValidator validator;
 
-  string err_message =
+  std::string err_message =
       absl::StrCat("fhirpath-constraint-violation-", "Expansion.contains");
 
   EXPECT_EQ(validator.Validate(value_set),

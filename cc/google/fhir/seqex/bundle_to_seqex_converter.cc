@@ -59,7 +59,6 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-using std::string;
 
 using ::google::fhir::StatusOr;
 using ::google::fhir::stu3::google::EventLabel;
@@ -81,10 +80,10 @@ namespace internal {
 // From http://hl7.org/fhir/v3/ActCode
 const char kClassInpatient[] = "IMP";
 
-bool FeaturePrefixMatch(const string& feature,
-                        const std::set<string>& prefix_set) {
-  string name = feature;
-  while (prefix_set.count(name) == 0 && name.rfind('.') != string::npos) {
+bool FeaturePrefixMatch(const std::string& feature,
+                        const std::set<std::string>& prefix_set) {
+  std::string name = feature;
+  while (prefix_set.count(name) == 0 && name.rfind('.') != std::string::npos) {
     name = name.substr(0, name.rfind('.'));
   }
   return prefix_set.count(name) != 0;
@@ -93,7 +92,7 @@ bool FeaturePrefixMatch(const string& feature,
 void GetContextFeatures(const std::pair<ExampleKey, Features>& labels,
                         const Example& context, const int sequence_length,
                         const std::vector<absl::Time>& encounter_start_times,
-                        google::protobuf::Map<string, Feature>* feature_map,
+                        google::protobuf::Map<std::string, Feature>* feature_map,
                         const bool generate_sequence_label) {
   // Set patient context features.
   *feature_map = context.features().feature();
@@ -128,8 +127,8 @@ void GetSequenceFeatures(
     const std::vector<std::pair<absl::Time, Example>>::const_iterator& begin,
     const std::vector<std::pair<absl::Time, Example>>::const_iterator& end,
     const Features& feature_types,
-    const std::set<string>& redacted_features_for_example,
-    google::protobuf::Map<string, ::tensorflow::FeatureList>* feature_list_map) {
+    const std::set<std::string>& redacted_features_for_example,
+    google::protobuf::Map<std::string, ::tensorflow::FeatureList>* feature_list_map) {
   // Touch all feature lists, so we can keep pointers to map entries from here
   // on.
   for (const auto& empty_feature : feature_types.feature()) {
@@ -173,7 +172,7 @@ void GetSequenceFeatures(
     // Append to the output
     if (has_valid_feature) {
       for (const auto& empty_feature : feature_types.feature()) {
-        const string& feature_name = empty_feature.first;
+        const std::string& feature_name = empty_feature.first;
         auto* f =
             (*feature_list_map)[feature_name].mutable_feature(sequence_length);
         if (current_step.count(feature_name) != 0 &&
@@ -206,7 +205,7 @@ void GetSequenceFeatures(
     // Append to the output
     if (has_valid_feature) {
       for (const auto& empty_feature : feature_types.feature()) {
-        const string& feature_name = empty_feature.first;
+        const std::string& feature_name = empty_feature.first;
         auto* f = (*feature_list_map)[feature_name].add_feature();
         if (current_step.count(feature_name) != 0 &&
             (delta_time != 0 ||
@@ -243,15 +242,16 @@ void AddBaggingFeatures(absl::Time event_time,
 }
 
 // TODO: StatusOr<Reference>
-bool GetReferenceId(const google::protobuf::Message& message, const string& field_name,
-                    ReferenceId* reference_id) {
+bool GetReferenceId(const google::protobuf::Message& message,
+                    const std::string& field_name, ReferenceId* reference_id) {
   const google::protobuf::Reflection* reflection = message.GetReflection();
 
-  const string base_name = absl::StrCat(message.GetDescriptor()->name(), ".");
+  const std::string base_name =
+      absl::StrCat(message.GetDescriptor()->name(), ".");
   std::vector<const google::protobuf::FieldDescriptor*> fields;
   reflection->ListFields(message, &fields);
   for (const auto* field : fields) {
-    const string name = absl::StrCat(base_name, field->json_name());
+    const std::string name = absl::StrCat(base_name, field->json_name());
     if (name == field_name) {
       CHECK_EQ(field->cpp_type(), google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE)
           << "Field " << field_name << " has invalid cpp_type "
@@ -268,7 +268,7 @@ bool GetReferenceId(const google::protobuf::Message& message, const string& fiel
     } else if (absl::StartsWith(field_name, name) &&
                field->type() == google::protobuf::FieldDescriptor::TYPE_MESSAGE) {
       const google::protobuf::Message& reference = reflection->GetMessage(message, field);
-      string replaced_string;
+      std::string replaced_string;
       absl::string_view::size_type pos = field_name.find(name, 0);
       if (pos != absl::string_view::npos) {
         replaced_string.append(field_name.data(), pos);
@@ -286,7 +286,7 @@ bool GetReferenceId(const google::protobuf::Message& message, const string& fiel
 }
 
 StatusOr<ExampleKey> ConvertTriggerEventToExampleKey(
-    const string& patient_id, const EventTrigger& trigger) {
+    const std::string& patient_id, const EventTrigger& trigger) {
   if (!trigger.has_event_time()) {
     return ::tensorflow::errors::InvalidArgument("trigger-without-time");
   }
@@ -346,7 +346,7 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
     }
     // Even for current label, it's nice to have a .class suffix, as there are
     // companion features e.g. label event time for metrics.
-    const string label_prefix =
+    const std::string label_prefix =
         absl::StrCat("label.", event_label.type().code().value());
     (*result.mutable_feature())[absl::StrCat(label_prefix, ".class")] =
         class_names;
@@ -378,7 +378,7 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
 }
 
 Status BuildLabelsFromTriggerLabelPair(
-    const string& patient_id, const std::vector<TriggerLabelsPair>& labels,
+    const std::string& patient_id, const std::vector<TriggerLabelsPair>& labels,
     std::map<ExampleKey, Features>* label_map) {
   for (const auto& pair : labels) {
     auto result = ConvertTriggerEventToExampleKey(patient_id, pair.first);
@@ -502,7 +502,7 @@ void BaseBundleToSeqexConverter::Reset() {
 
 void BaseBundleToSeqexConverter::EventSequenceToExamples(
     const std::map<absl::Time, absl::Time>& encounter_boundaries,
-    const std::vector<std::pair<std::pair<absl::Time, string>,
+    const std::vector<std::pair<std::pair<absl::Time, std::string>,
                                 tensorflow::Example>>& event_sequence) {
   // We use the encounter start times to split the patient timeline.
   if (!event_sequence.empty()) {

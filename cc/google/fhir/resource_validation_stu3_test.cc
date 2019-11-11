@@ -33,7 +33,7 @@ using namespace stu3::proto;  // NOLINT
 static google::protobuf::TextFormat::Parser parser;
 
 template <typename T>
-T ParseFromString(const string& str) {
+T ParseFromString(const std::string& str) {
   google::protobuf::TextFormat::Parser parser;
   parser.AllowPartialMessage(true);
   T t;
@@ -75,7 +75,7 @@ void ValidTest(const T& proto) {
 }
 
 template <typename T>
-void InvalidTest(const string& err_msg, const T& proto) {
+void InvalidTest(const std::string& err_msg, const T& proto) {
   EXPECT_EQ(ValidateResource(proto),
             ::tensorflow::errors::FailedPrecondition(err_msg));
 }

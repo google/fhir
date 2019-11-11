@@ -25,7 +25,6 @@ namespace google {
 namespace fhir {
 namespace fhir_path {
 
-using std::string;
 
 namespace internal {
 
@@ -164,13 +163,13 @@ class EvaluationResult {
   // a decimal value per FHIRPath. That is, if it has a single message
   // that contains a decimal. A failure status is returned if the expression
   // did not resolve to a decimal value.
-  StatusOr<string> GetDecimal() const;
+  StatusOr<std::string> GetDecimal() const;
 
   // Returns success with a string value if the EvaluationResult represents
   // a string value per FHIRPath. That is, if it has a single message
   // that contains a string. A failure status is returned if the expression
   // did not resolve to a string value.
-  StatusOr<string> GetString() const;
+  StatusOr<std::string> GetString() const;
 
  private:
   friend class CompiledExpression;
@@ -195,22 +194,22 @@ class CompiledExpression {
   CompiledExpression& operator=(const CompiledExpression& other);
 
   // Returns the FHIRPath string used to compile this expression.
-  const string& fhir_path() const;
+  const std::string& fhir_path() const;
 
   // Compiles a FHIRPath expression into a structure that will efficiently
   // execute that expression.
   static StatusOr<CompiledExpression> Compile(
-      const ::google::protobuf::Descriptor* descriptor, const string& fhir_path);
+      const ::google::protobuf::Descriptor* descriptor, const std::string& fhir_path);
 
   // Evaluates the compiled expression against the given message.
   StatusOr<EvaluationResult> Evaluate(const ::google::protobuf::Message& message) const;
 
  private:
   explicit CompiledExpression(
-      const string& fhir_path,
+      const std::string& fhir_path,
       std::shared_ptr<internal::ExpressionNode> root_expression);
 
-  string fhir_path_;
+  std::string fhir_path_;
   std::shared_ptr<const internal::ExpressionNode> root_expression_;
 };
 
@@ -230,7 +229,7 @@ class CompiledExpression {
 // * The FHIRPath constraint expression that triggered the violation.
 typedef std::function<bool(const ::google::protobuf::Message& message,
                            const ::google::protobuf::FieldDescriptor* field,
-                           const string& constraint)>
+                           const std::string& constraint)>
     ViolationHandlerFunc;
 
 // This class validates that all fhir_path_constraint annotations on
@@ -283,7 +282,7 @@ class MessageValidator {
                   ViolationHandlerFunc handler, bool* halt_validation);
 
   absl::Mutex mutex_;
-  std::unordered_map<string, std::unique_ptr<MessageConstraints>>
+  std::unordered_map<std::string, std::unique_ptr<MessageConstraints>>
       constraints_cache_;
 };
 

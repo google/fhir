@@ -45,7 +45,7 @@ using ::google::fhir::stu3::testing::DigitalMediaType;
 using ::google::fhir::testutil::EqualsProto;
 
 template <class T>
-void ReadStu3TestData(const string& type, T* message,
+void ReadStu3TestData(const std::string& type, T* message,
                       stu3::proto::Extension* extension) {
   *message =
       ReadStu3Proto<T>(absl::StrCat("google/", type, ".message.prototxt"));
@@ -54,7 +54,7 @@ void ReadStu3TestData(const string& type, T* message,
 }
 
 template <class T>
-void ReadR4TestData(const string& type, T* message,
+void ReadR4TestData(const std::string& type, T* message,
                     r4::core::Extension* extension) {
   *message = ReadR4Proto<T>(absl::StrCat("google/", type, ".message.prototxt"));
   *extension = ReadR4Proto<r4::core::Extension>(
@@ -62,7 +62,7 @@ void ReadR4TestData(const string& type, T* message,
 }
 
 template <class T>
-void TestExtensionToMessage(const string& name) {
+void TestExtensionToMessage(const std::string& name) {
   T message;
   stu3::proto::Extension extension;
   ReadStu3TestData(name, &message, &extension);
@@ -73,7 +73,7 @@ void TestExtensionToMessage(const string& name) {
 }
 
 template <class T>
-void TestConvertToExtension(const string& name) {
+void TestConvertToExtension(const std::string& name) {
   T message;
   stu3::proto::Extension extension;
   ReadStu3TestData(name, &message, &extension);
@@ -84,7 +84,7 @@ void TestConvertToExtension(const string& name) {
 }
 
 template <class T>
-void TestExtensionToMessageR4(const string& name) {
+void TestExtensionToMessageR4(const std::string& name) {
   T message;
   r4::core::Extension extension;
   ReadR4TestData(name, &message, &extension);
@@ -95,7 +95,7 @@ void TestExtensionToMessageR4(const string& name) {
 }
 
 template <class T>
-void TestConvertToExtensionR4(const string& name) {
+void TestConvertToExtensionR4(const std::string& name) {
   T message;
   r4::core::Extension extension;
   ReadR4TestData(name, &message, &extension);

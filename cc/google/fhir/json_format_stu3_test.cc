@@ -28,7 +28,6 @@
 namespace google {
 namespace fhir {
 
-using std::string;
 
 namespace {
 
@@ -40,8 +39,8 @@ static const char* const kTimeZoneString = "Australia/Sydney";
 
 // json_path should be relative to fhir root
 template <typename R>
-R ParseJsonToProto(const string& json_path) {
-  string json = ReadFile(json_path);
+R ParseJsonToProto(const std::string& json_path) {
+  std::string json = ReadFile(json_path);
   absl::TimeZone tz;
   absl::LoadTimeZone(kTimeZoneString, &tz);
   return JsonFhirStringToProto<R>(json, tz).ValueOrDie();
@@ -52,24 +51,25 @@ R ParseJsonToProto(const string& json_path) {
 // This difference is because we read most json test data from the spec package,
 // rather than the testdata directory.
 template <typename R>
-void TestParseWithFilepaths(const string& proto_path, const string& json_path) {
+void TestParseWithFilepaths(const std::string& proto_path,
+                            const std::string& json_path) {
   R from_json = ParseJsonToProto<R>(json_path);
   R from_disk = ReadStu3Proto<R>(proto_path);
 
   ::google::protobuf::util::MessageDifferencer differencer;
-  string differences;
+  std::string differences;
   differencer.ReportDifferencesToString(&differences);
   ASSERT_TRUE(differencer.Compare(from_disk, from_json)) << differences;
 }
 
 template <typename R>
-void TestParse(const string& name) {
+void TestParse(const std::string& name) {
   TestParseWithFilepaths<R>(
       absl::StrCat("examples/", name, ".prototxt"),
       absl::StrCat("spec/hl7.fhir.core/3.0.1/package/", name + ".json"));
 }
 
-Json::Value ParseJsonStringToValue(const string& raw_json) {
+Json::Value ParseJsonStringToValue(const std::string& raw_json) {
   Json::Reader reader;
   Json::Value value;
   reader.parse(raw_json, value);
@@ -77,10 +77,11 @@ Json::Value ParseJsonStringToValue(const string& raw_json) {
 }
 
 template <typename R>
-void TestPrintWithFilepaths(const string& proto_path, const string& json_path) {
+void TestPrintWithFilepaths(const std::string& proto_path,
+                            const std::string& json_path) {
   const R proto = ReadStu3Proto<R>(proto_path);
-  string from_proto = PrettyPrintFhirToJsonString(proto).ValueOrDie();
-  string from_json = ReadFile(json_path);
+  std::string from_proto = PrettyPrintFhirToJsonString(proto).ValueOrDie();
+  std::string from_json = ReadFile(json_path);
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
     // This assert will fail, but we get terrible diff messages comparing
@@ -90,20 +91,20 @@ void TestPrintWithFilepaths(const string& proto_path, const string& json_path) {
 }
 
 template <typename R>
-void TestPrint(const string& name) {
+void TestPrint(const std::string& name) {
   TestPrintWithFilepaths<R>(
       absl::StrCat("examples/", name, ".prototxt"),
       absl::StrCat("spec/hl7.fhir.core/3.0.1/package/", name + ".json"));
 }
 
 template <typename R>
-void TestPrintForAnalytics(const string& name) {
+void TestPrintForAnalytics(const std::string& name) {
   const R proto =
       ReadStu3Proto<R>(absl::StrCat("examples/", name, ".prototxt"));
   auto result = PrettyPrintFhirToJsonStringForAnalytics(proto);
   ASSERT_TRUE(result.ok()) << result.status();
-  string from_proto = result.ValueOrDie();
-  string from_json =
+  std::string from_proto = result.ValueOrDie();
+  std::string from_json =
       ReadFile(absl::StrCat("testdata/stu3/bigquery/", name + ".json"));
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
@@ -114,14 +115,14 @@ void TestPrintForAnalytics(const string& name) {
 }
 
 template <typename R>
-void TestPrintForAnalytics(const string& name, bool pretty) {
+void TestPrintForAnalytics(const std::string& name, bool pretty) {
   const R proto =
       ReadStu3Proto<R>(absl::StrCat("examples/", name, ".prototxt"));
   auto result = pretty ? PrettyPrintFhirToJsonStringForAnalytics(proto)
                        : PrintFhirToJsonStringForAnalytics(proto);
   ASSERT_TRUE(result.ok()) << result.status();
-  string from_proto = result.ValueOrDie();
-  string from_json =
+  std::string from_proto = result.ValueOrDie();
+  std::string from_json =
       ReadFile(absl::StrCat("testdata/stu3/bigquery/", name + ".json"));
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {

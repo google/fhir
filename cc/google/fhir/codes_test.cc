@@ -79,8 +79,8 @@ TEST(CodesTest, GetCodeForResourceType_AllContainedTypesValid) {
   }
 }
 
-void TestTypedCodingConversion(const string& typed_file,
-                               const string& untyped_file) {
+void TestTypedCodingConversion(const std::string& typed_file,
+                               const std::string& untyped_file) {
   auto typed_golden =
       ReadProto<r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding>(
           typed_file);

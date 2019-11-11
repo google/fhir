@@ -23,7 +23,7 @@
 namespace google {
 namespace fhir {
 
-const string& GetStructureDefinitionUrl(
+const std::string& GetStructureDefinitionUrl(
     const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().GetExtension(
       proto::fhir_structure_definition_url);
@@ -31,7 +31,7 @@ const string& GetStructureDefinitionUrl(
 
 const bool IsProfileOf(const ::google::protobuf::Descriptor* descriptor,
                        const ::google::protobuf::Descriptor* potential_base) {
-  const string& base_url = GetStructureDefinitionUrl(potential_base);
+  const std::string& base_url = GetStructureDefinitionUrl(potential_base);
   for (int i = 0;
        i < descriptor->options().ExtensionSize(proto::fhir_profile_base); i++) {
     if (descriptor->options().GetExtension(proto::fhir_profile_base, i) ==
@@ -70,7 +70,7 @@ const bool IsReference(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().ExtensionSize(proto::fhir_reference_type) > 0;
 }
 
-const string& GetValueset(const ::google::protobuf::Descriptor* descriptor) {
+const std::string& GetValueset(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().GetExtension(proto::fhir_valueset_url);
 }
 
@@ -78,7 +78,7 @@ const bool HasValueset(const ::google::protobuf::Descriptor* descriptor) {
   return !GetValueset(descriptor).empty();
 }
 
-const string& GetFixedSystem(const ::google::protobuf::Descriptor* descriptor) {
+const std::string& GetFixedSystem(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().GetExtension(proto::fhir_fixed_system);
 }
 
@@ -86,15 +86,18 @@ const bool HasFixedSystem(const ::google::protobuf::Descriptor* descriptor) {
   return !GetFixedSystem(descriptor).empty();
 }
 
-const string& GetInlinedCodingSystem(const ::google::protobuf::FieldDescriptor* field) {
+const std::string& GetInlinedCodingSystem(
+    const ::google::protobuf::FieldDescriptor* field) {
   return field->options().GetExtension(proto::fhir_inlined_coding_system);
 }
 
-const string& GetInlinedCodingCode(const ::google::protobuf::FieldDescriptor* field) {
+const std::string& GetInlinedCodingCode(
+    const ::google::protobuf::FieldDescriptor* field) {
   return field->options().GetExtension(proto::fhir_inlined_coding_code);
 }
 
-const string& GetFixedCodingSystem(const ::google::protobuf::Descriptor* descriptor) {
+const std::string& GetFixedCodingSystem(
+    const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().GetExtension(proto::fhir_fixed_system);
 }
 
@@ -102,7 +105,7 @@ const bool HasFixedCodingSystem(const ::google::protobuf::Descriptor* descriptor
   return !GetFixedCodingSystem(descriptor).empty();
 }
 
-const string& GetSourceCodeSystem(
+const std::string& GetSourceCodeSystem(
     const ::google::protobuf::EnumValueDescriptor* descriptor) {
   return descriptor->options().GetExtension(proto::source_code_system);
 }
@@ -112,7 +115,7 @@ const bool HasSourceCodeSystem(
   return !GetSourceCodeSystem(descriptor).empty();
 }
 
-const string& GetValueRegex(const ::google::protobuf::Descriptor* descriptor) {
+const std::string& GetValueRegex(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().GetExtension(proto::value_regex);
 }
 

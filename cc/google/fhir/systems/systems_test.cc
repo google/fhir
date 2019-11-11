@@ -21,7 +21,6 @@ namespace fhir {
 namespace systems {
 namespace {
 
-using std::string;
 
 TEST(UtilTest, FormatIcd9Diagnosis) {
   EXPECT_EQ("768.70", FormatIcd9Diagnosis("76870"));

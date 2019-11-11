@@ -15,6 +15,8 @@
 #ifndef GOOGLE_FHIR_ANNOTATIONS_H_
 #define GOOGLE_FHIR_ANNOTATIONS_H_
 
+#include <string>
+
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
@@ -23,8 +25,8 @@
 namespace google {
 namespace fhir {
 
-using std::string;
-const string& GetStructureDefinitionUrl(const ::google::protobuf::Descriptor* descriptor);
+const std::string& GetStructureDefinitionUrl(
+    const ::google::protobuf::Descriptor* descriptor);
 
 const bool IsProfileOf(const ::google::protobuf::Descriptor* descriptor,
                        const ::google::protobuf::Descriptor* potential_base);
@@ -80,28 +82,29 @@ const bool IsResource(const ::google::protobuf::Descriptor* descriptor);
 
 const bool IsReference(const ::google::protobuf::Descriptor* descriptor);
 
-const string& GetValueset(const ::google::protobuf::Descriptor* descriptor);
+const std::string& GetValueset(const ::google::protobuf::Descriptor* descriptor);
 
 const bool HasValueset(const ::google::protobuf::Descriptor* descriptor);
 
-const string& GetFixedSystem(const ::google::protobuf::Descriptor* descriptor);
+const std::string& GetFixedSystem(const ::google::protobuf::Descriptor* descriptor);
 
 const bool HasFixedSystem(const ::google::protobuf::Descriptor* descriptor);
 
-const string& GetInlinedCodingSystem(const ::google::protobuf::FieldDescriptor* field);
+const std::string& GetInlinedCodingSystem(
+    const ::google::protobuf::FieldDescriptor* field);
 
-const string& GetInlinedCodingCode(const ::google::protobuf::FieldDescriptor* field);
+const std::string& GetInlinedCodingCode(const ::google::protobuf::FieldDescriptor* field);
 
 const bool HasFixedCodingSystem(const ::google::protobuf::Descriptor* descriptor);
 
-const string& GetFixedCodingSystem(const ::google::protobuf::Descriptor* descriptor);
+const std::string& GetFixedCodingSystem(const ::google::protobuf::Descriptor* descriptor);
 
-const string& GetSourceCodeSystem(
+const std::string& GetSourceCodeSystem(
     const ::google::protobuf::EnumValueDescriptor* descriptor);
 
 const bool HasSourceCodeSystem(const ::google::protobuf::EnumValueDescriptor* descriptor);
 
-const string& GetValueRegex(const ::google::protobuf::Descriptor* descriptor);
+const std::string& GetValueRegex(const ::google::protobuf::Descriptor* descriptor);
 
 const bool HasInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* field);
 

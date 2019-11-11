@@ -87,8 +87,8 @@ StatusOr<bool> HasPrimitiveHasNoValue(const Message& message) {
       message.GetDescriptor()->FindFieldByName("extension");
   std::vector<const Message*> no_value_extensions;
   ForEachMessage<Message>(message, field, [&](const Message& extension) {
-    string scratch;
-    const string& url_value = GetExtensionUrl(extension, &scratch);
+    std::string scratch;
+    const std::string& url_value = GetExtensionUrl(extension, &scratch);
     if (url_value == kPrimitiveHasNoValueUrl) {
       no_value_extensions.push_back(&extension);
     }
@@ -123,7 +123,7 @@ class PrimitiveWrapper {
 
   virtual Status ValidateProto() const = 0;
 
-  StatusOr<string> ToValueString() const {
+  StatusOr<std::string> ToValueString() const {
     static const char* kNullString = "null";
     if (HasValue()) {
       return ToNonNullValueString();
@@ -133,7 +133,7 @@ class PrimitiveWrapper {
 
  protected:
   virtual bool HasValue() const = 0;
-  virtual StatusOr<string> ToNonNullValueString() const = 0;
+  virtual StatusOr<std::string> ToNonNullValueString() const = 0;
 };
 
 template <typename T>
@@ -172,9 +172,9 @@ class SpecificWrapper : public PrimitiveWrapper {
     wrapped_ = managed_memory_.get();
   }
 
-  static Status ValidateString(const string& input) {
+  static Status ValidateString(const std::string& input) {
     static const RE2* regex_pattern = [] {
-      const string value_regex_string = GetValueRegex(T::descriptor());
+      const std::string value_regex_string = GetValueRegex(T::descriptor());
       return value_regex_string.empty() ? nullptr : new RE2(value_regex_string);
     }();
     return regex_pattern == nullptr || RE2::FullMatch(input, *regex_pattern)
@@ -225,8 +225,8 @@ class XhtmlWrapper : public SpecificWrapper<XhtmlLike> {
   }
 
  protected:
-  StatusOr<string> ToNonNullValueString() const override {
-    return StatusOr<string>(
+  StatusOr<std::string> ToNonNullValueString() const override {
+    return StatusOr<std::string>(
         Json::valueToQuotedString(this->GetWrapped()->value().c_str()));
   }
 };
@@ -321,15 +321,15 @@ class StringInputWrapper : public ExtensibleWrapper<T> {
   }
 
  protected:
-  virtual Status ParseString(const string& json_string) = 0;
+  virtual Status ParseString(const std::string& json_string) = 0;
 };
 
 // Template for wrappers that represent data as a string.
 template <typename T>
 class StringTypeWrapper : public StringInputWrapper<T> {
  public:
-  StatusOr<string> ToNonNullValueString() const override {
-    return StatusOr<string>(
+  StatusOr<std::string> ToNonNullValueString() const override {
+    return StatusOr<std::string>(
         Json::valueToQuotedString(this->GetWrapped()->value().c_str()));
   }
 
@@ -350,7 +350,7 @@ class StringTypeWrapper : public StringInputWrapper<T> {
   }
 
  protected:
-  Status ParseString(const string& json_string) override {
+  Status ParseString(const std::string& json_string) override {
     FHIR_RETURN_IF_ERROR(this->ValidateString(json_string));
     std::unique_ptr<T> wrapped = absl::make_unique<T>();
     wrapped->set_value(json_string);
@@ -360,19 +360,19 @@ class StringTypeWrapper : public StringInputWrapper<T> {
 };
 
 // Date Formats that are expected to include time zones.
-static const std::unordered_map<string, string>* const tz_formatters =
-    new std::unordered_map<string, string>{
+static const std::unordered_map<std::string, std::string>* const tz_formatters =
+    new std::unordered_map<std::string, std::string>{
         {"SECOND", "%Y-%m-%dT%H:%M:%S%Ez"},
         {"MILLISECOND", "%Y-%m-%dT%H:%M:%E3S%Ez"},
         {"MICROSECOND", "%Y-%m-%dT%H:%M:%E6S%Ez"}};
 // Note: %E#S accepts UP TO # decimal places, so we need to be sure to iterate
 // from most restrictive to least restrictive when checking input strings.
-static const std::vector<string>* const tz_formatters_iteration_order =
-    new std::vector<string>{"SECOND", "MILLISECOND", "MICROSECOND"};
+static const std::vector<std::string>* const tz_formatters_iteration_order =
+    new std::vector<std::string>{"SECOND", "MILLISECOND", "MICROSECOND"};
 // Date Formats that are expected to not include time zones, and use the default
 // time zone.
-static const std::unordered_map<string, string>* const no_tz_formatters =
-    new std::unordered_map<string, string>{
+static const std::unordered_map<std::string, std::string>* const
+    no_tz_formatters = new std::unordered_map<std::string, std::string>{
         {"YEAR", "%Y"}, {"MONTH", "%Y-%m"}, {"DAY", "%Y-%m-%d"}};
 
 // Template for wrappers that represent data as Timelike primitives
@@ -380,7 +380,7 @@ static const std::unordered_map<string, string>* const no_tz_formatters =
 template <typename T>
 class TimeTypeWrapper : public ExtensibleWrapper<T> {
  public:
-  StatusOr<string> ToNonNullValueString() const override {
+  StatusOr<std::string> ToNonNullValueString() const override {
     const T& timelike = *this->GetWrapped();
     absl::Time absolute_time = absl::FromUnixMicros(timelike.value_us());
     FHIR_ASSIGN_OR_RETURN(absl::TimeZone time_zone,
@@ -396,7 +396,7 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
       return InvalidArgument("Invalid precision on Time: ",
                              timelike.DebugString());
     }
-    string value = absl::StrCat(
+    std::string value = absl::StrCat(
         "\"", absl::FormatTime(format_iter->second, absolute_time, time_zone),
         "\"");
     return (timelike.timezone() == "Z")
@@ -445,18 +445,18 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
                              T::descriptor()->full_name(),
                              ": it is not a string value.");
     }
-    const string& json_string = json.asString();
+    const std::string& json_string = json.asString();
     FHIR_RETURN_IF_ERROR(this->ValidateString(json_string));
     // Note that this will handle any level of precision - it's up to various
     // wrappers' validation pattern to ensure that the precision of the value
     // is valid.  There's no risk of accidentally using an invalid precision
     // though, as it will fail to find an appropriate precision enum type.
-    for (string precision : *tz_formatters_iteration_order) {
+    for (std::string precision : *tz_formatters_iteration_order) {
       auto format_iter = tz_formatters->find(precision);
-      string err;
+      std::string err;
       absl::Time time;
       if (absl::ParseTime(format_iter->second, json_string, &time, &err)) {
-        FHIR_ASSIGN_OR_RETURN(const string time_zone_string,
+        FHIR_ASSIGN_OR_RETURN(const std::string time_zone_string,
                               ParseTimeZoneString(json_string));
         return SetValue(time, time_zone_string, format_iter->first);
       }
@@ -464,12 +464,12 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
 
     // These formats do not include timezones, and thus use the default time
     // zone.
-    for (std::pair<string, string> format : *no_tz_formatters) {
-      string err;
+    for (std::pair<std::string, std::string> format : *no_tz_formatters) {
+      std::string err;
       absl::Time time;
       if (absl::ParseTime(format.second, json_string, default_time_zone, &time,
                           &err)) {
-        string timezone_name = default_time_zone.name();
+        std::string timezone_name = default_time_zone.name();
 
         // Clean up the fixed timezone string that is returned from the
         // absl::Timezone library.
@@ -477,7 +477,7 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
           // TODO: Evaluate whether we want to keep the seconds offset.
           static const LazyRE2 kFixedTimezoneRegex{
               "Fixed\\/UTC([+-]\\d\\d:\\d\\d):\\d\\d"};
-          string fixed_timezone_name;
+          std::string fixed_timezone_name;
           if (RE2::FullMatch(timezone_name, *kFixedTimezoneRegex,
                              &fixed_timezone_name)) {
             timezone_name = fixed_timezone_name;
@@ -494,8 +494,8 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
   }
 
  private:
-  Status SetValue(absl::Time time, const string& timezone_string,
-                  const string& precision_string) {
+  Status SetValue(absl::Time time, const std::string& timezone_string,
+                  const std::string& precision_string) {
     std::unique_ptr<T> wrapped = absl::make_unique<T>();
     wrapped->set_value_us(ToUnixMicros(time));
     wrapped->set_timezone(timezone_string);
@@ -524,14 +524,14 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
   }
 
   static StatusOr<absl::TimeZone> BuildTimeZoneFromString(
-      const string& time_zone_string) {
+      const std::string& time_zone_string) {
     if (time_zone_string == "UTC" || time_zone_string == "Z") {
       return absl::UTCTimeZone();
     }
     // We can afford to use a simpler pattern here because we've already
     // validated the timezone above.
     static const LazyRE2 TIMEZONE_PATTERN = {"(\\+|-)(\\d{2}):(\\d{2})"};
-    string sign;
+    std::string sign;
     int hours;
     int minutes;
     if (RE2::FullMatch(time_zone_string, *TIMEZONE_PATTERN, &sign, &hours,
@@ -547,10 +547,11 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
     return tz;
   }
 
-  static StatusOr<string> ParseTimeZoneString(const string& date_string) {
+  static StatusOr<std::string> ParseTimeZoneString(
+      const std::string& date_string) {
     static const LazyRE2 TIMEZONE_PATTERN = {
         "(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))$"};
-    string time_zone_string;
+    std::string time_zone_string;
     if (RE2::PartialMatch(date_string, *TIMEZONE_PATTERN, &time_zone_string)) {
       return time_zone_string;
     }
@@ -582,7 +583,7 @@ class IntegerTypeWrapper : public ExtensibleWrapper<T> {
     return Status::OK();
   }
 
-  StatusOr<string> ToNonNullValueString() const override {
+  StatusOr<std::string> ToNonNullValueString() const override {
     return absl::StrCat(this->GetWrapped()->value());
   }
 
@@ -640,7 +641,7 @@ class CodeWrapper : public StringTypeWrapper<CodeType> {
             reflection->GetEnumValue(*this->GetWrapped(), value_field) != 0;
         break;
       case google::protobuf::FieldDescriptor::CPPTYPE_STRING: {
-        string str;
+        std::string str;
         has_value =
             !reflection
                  ->GetStringReference(*this->GetWrapped(), value_field, &str)
@@ -678,15 +679,15 @@ class CodeWrapper : public StringTypeWrapper<CodeType> {
 template <typename Base64BinaryType, typename SeparatorStrideExtensionType>
 class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
  public:
-  StatusOr<string> ToNonNullValueString() const override {
-    string escaped;
+  StatusOr<std::string> ToNonNullValueString() const override {
+    std::string escaped;
     absl::Base64Escape(this->GetWrapped()->value(), &escaped);
     std::vector<SeparatorStrideExtensionType> separator_extensions;
     FHIR_RETURN_IF_ERROR(GetRepeatedFromExtension(
         this->GetWrapped()->extension(), &separator_extensions));
     if (!separator_extensions.empty()) {
       int stride = separator_extensions[0].stride().value();
-      string separator = separator_extensions[0].separator().value();
+      std::string separator = separator_extensions[0].separator().value();
 
       RE2::GlobalReplace(&escaped, absl::StrCat("(.{", stride, "})"),
                          absl::StrCat("\\1", separator));
@@ -715,7 +716,7 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
                        "Base64Binary has both a value, and "
                        "a PrimitiveHasNoValueExtension.");
     }
-    FHIR_ASSIGN_OR_RETURN(const string& as_string, this->ToValueString());
+    FHIR_ASSIGN_OR_RETURN(const std::string& as_string, this->ToValueString());
     Status string_validation =
         this->ValidateString(as_string.substr(1, as_string.length() - 2));
     return string_validation.ok()
@@ -724,16 +725,16 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
   }
 
  private:
-  Status ParseString(const string& json_string) override {
+  Status ParseString(const std::string& json_string) override {
     std::unique_ptr<Base64BinaryType> wrapped =
         absl::make_unique<Base64BinaryType>();
     size_t stride = json_string.find(' ');
-    if (stride != string::npos) {
+    if (stride != std::string::npos) {
       size_t end = stride;
       while (end < json_string.length() && json_string[end] == ' ') {
         end++;
       }
-      string separator = json_string.substr(stride, end - stride);
+      std::string separator = json_string.substr(stride, end - stride);
       SeparatorStrideExtensionType separator_stride_extension_msg;
       separator_stride_extension_msg.mutable_separator()->set_value(separator);
       separator_stride_extension_msg.mutable_stride()->set_value(stride);
@@ -742,7 +743,7 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
                                               wrapped->add_extension()));
     }
 
-    string unescaped;
+    std::string unescaped;
     if (!absl::Base64Unescape(json_string, &unescaped)) {
       return InvalidArgument("Encountered invalid base64 string.");
     }
@@ -781,7 +782,7 @@ class BooleanWrapper : public ExtensibleWrapper<BooleanType> {
     return Status::OK();
   }
 
-  StatusOr<string> ToNonNullValueString() const override {
+  StatusOr<std::string> ToNonNullValueString() const override {
     return absl::StrCat(this->GetWrapped()->value() ? "true" : "false");
   }
 };
@@ -797,7 +798,7 @@ class BooleanWrapper : public ExtensibleWrapper<BooleanType> {
 template <typename DecimalType>
 class DecimalWrapper : public StringInputWrapper<DecimalType> {
  public:
-  StatusOr<string> ToNonNullValueString() const override {
+  StatusOr<std::string> ToNonNullValueString() const override {
     return absl::StrCat(this->GetWrapped()->value());
   }
 
@@ -839,7 +840,7 @@ class DecimalWrapper : public StringInputWrapper<DecimalType> {
                            "have been escaped prior to parsing by JsonFormat.");
   }
 
-  Status ParseString(const string& json_string) override {
+  Status ParseString(const std::string& json_string) override {
     FHIR_RETURN_IF_ERROR(this->ValidateString(json_string));
     // TODO: range check
     std::unique_ptr<DecimalType> wrapped = absl::make_unique<DecimalType>();
@@ -865,9 +866,9 @@ constexpr uint64_t DAY_IN_US = 24L * 60 * 60 * 1000 * 1000;
 template <typename TimeLike>
 class TimeWrapper : public StringInputWrapper<TimeLike> {
  public:
-  StatusOr<string> ToNonNullValueString() const override {
-    static const std::unordered_map<int, string>* const formatters =
-        new std::unordered_map<int, string>{
+  StatusOr<std::string> ToNonNullValueString() const override {
+    static const std::unordered_map<int, std::string>* const formatters =
+        new std::unordered_map<int, std::string>{
             {TimeLike::Precision::Time_Precision_SECOND, "%H:%M:%S"},
             {TimeLike::Precision::Time_Precision_MILLISECOND, "%H:%M:%E3S"},
             {TimeLike::Precision::Time_Precision_MICROSECOND, "%H:%M:%E6S"}};
@@ -916,13 +917,13 @@ class TimeWrapper : public StringInputWrapper<TimeLike> {
   }
 
  private:
-  Status ParseString(const string& json_string) override {
+  Status ParseString(const std::string& json_string) override {
     static LazyRE2 PATTERN{
         "([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])(?:\\.([0-9]+))?"};
     int hours;
     int minutes;
     int seconds;
-    string fractional_seconds;
+    std::string fractional_seconds;
     if (!RE2::FullMatch(json_string, *PATTERN, &hours, &minutes, &seconds,
                         &fractional_seconds)) {
       return InvalidArgument("Invalid Time ", json_string);
@@ -1165,7 +1166,7 @@ StatusOr<JsonPrimitive> WrapPrimitiveProto(const ::google::protobuf::Message& pr
           " for proto: ", proto.GetDescriptor()->full_name());
   }
   FHIR_RETURN_IF_ERROR(wrapper->Wrap(proto));
-  FHIR_ASSIGN_OR_RETURN(const string value, wrapper->ToValueString());
+  FHIR_ASSIGN_OR_RETURN(const std::string value, wrapper->ToValueString());
   if (wrapper->HasElement()) {
     FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> wrapped,
                           wrapper->GetElement());

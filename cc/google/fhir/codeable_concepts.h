@@ -17,6 +17,7 @@
 
 #include <functional>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "google/protobuf/descriptor.pb.h"
@@ -37,8 +38,9 @@
 namespace google {
 namespace fhir {
 
-typedef std::function<void(const string& system, const string& code)> CodeFunc;
-typedef std::function<bool(const string& system, const string& code)>
+typedef std::function<void(const std::string& system, const std::string& code)>
+    CodeFunc;
+typedef std::function<bool(const std::string& system, const std::string& code)>
     CodeBoolFunc;
 
 // Performs a function on all System/Code pairs, where all codes are treated
@@ -47,7 +49,8 @@ typedef std::function<bool(const string& system, const string& code)>
 // true.  If the function returned false for all Codings, returns false.
 const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
                                     const CodeBoolFunc& func,
-                                    string* found_system, string* found_code);
+                                    std::string* found_system,
+                                    std::string* found_code);
 
 // Variant of FindSystemCodeStringPair that does not explicitly set return
 // pointers.
@@ -63,22 +66,22 @@ void ForEachSystemCodeStringPair(const ::google::protobuf::Message& concept,
 
 // Gets a vector of all codes with a given system, where codes are represented
 // as strings.
-const std::vector<string> GetCodesWithSystem(
+const std::vector<std::string> GetCodesWithSystem(
     const ::google::protobuf::Message& concept, const absl::string_view target_system);
 
 // Gets the only code with a given system.
 // If no code is found with that system, returns a NotFound status.
 // If more than one code is found with that system, returns AlreadyExists
 // status.
-StatusOr<const string> GetOnlyCodeWithSystem(const ::google::protobuf::Message& concept,
-                                             const absl::string_view system);
+StatusOr<const std::string> GetOnlyCodeWithSystem(
+    const ::google::protobuf::Message& concept, const absl::string_view system);
 
 // Extract first code value with a given system.
 // Returns NOT_FOUND if none exists.
 // This is different from GetOnlyCodeWithSystem in that it doesn't fail if
 // there is more than one code with the given system.
 template <typename CodeableConceptLike>
-StatusOr<string> ExtractCodeBySystem(
+StatusOr<std::string> ExtractCodeBySystem(
     const CodeableConceptLike& codeable_concept,
     absl::string_view system_value) {
   switch (google::fhir::GetFhirVersion(codeable_concept)) {
@@ -95,12 +98,12 @@ StatusOr<string> ExtractCodeBySystem(
   }
 }
 
-Status AddCoding(::google::protobuf::Message* concept, const string& system,
-                 const string& code);
+Status AddCoding(::google::protobuf::Message* concept, const std::string& system,
+                 const std::string& code);
 
 template <typename CodeableConceptLike>
 Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
-                                 const string& system) {
+                                 const std::string& system) {
   switch (google::fhir::GetFhirVersion(*concept)) {
     case google::fhir::proto::STU3:
       return stu3::ClearAllCodingsWithSystem(concept, system);

@@ -39,7 +39,6 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-using std::string;
 
 using google::fhir::stu3::google::EventTrigger;
 using google::fhir::stu3::proto::Bundle;
@@ -59,15 +58,15 @@ class BundleToSeqexConverterTest : public ::testing::Test {
     absl::SetFlag(&FLAGS_trigger_time_redacted_features, "");
   }
 
-  void PerformTest(const string& input_key, const Bundle& bundle,
+  void PerformTest(const std::string& input_key, const Bundle& bundle,
                    const std::vector<TriggerLabelsPair>& trigger_labels_pair,
-                   const std::map<string, SequenceExample>& expected) {
+                   const std::map<std::string, SequenceExample>& expected) {
     // Until all config options for this object can be passed as args, we need
     // to initialize it after overriing the flags settings.
     BundleToSeqexConverter<> converter(fhir_version_config_,
                                        false /* enable_attribution */,
                                        false /* generate_sequence_label */);
-    std::map<string, int> counter_stats;
+    std::map<std::string, int> counter_stats;
     ASSERT_TRUE(converter.Begin(input_key, bundle, trigger_labels_pair,
                                 &counter_stats));
     for (const auto& iter : expected) {
@@ -639,7 +638,7 @@ TEST_F(BundleToSeqexConverterTest, MultipleLabelsSameTimestamp) {
       }
     })proto", &bundle));
 
-  string seqex_tmpl = R"(
+  std::string seqex_tmpl = R"(
       context: {
         feature { key: "Patient.birthDate" value { int64_list { value: -1323388800 } } }
         feature {
@@ -2318,7 +2317,7 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples) {
   BundleToSeqexConverter<> converter(fhir_version_config_,
                                      false /* enable_attribution */,
                                      false /*generate_sequence_label */);
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   ASSERT_TRUE(converter.Begin("Patient/14", bundle, trigger_labels_pair,
                               &counter_stats));
   ASSERT_FALSE(converter.Done());
@@ -2673,7 +2672,7 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples_EnableAttribution) {
   BundleToSeqexConverter<> converter(fhir_version_config_,
                                      true /* enable_attribution */,
                                      false /* generate_sequence_label */);
-  std::map<string, int> counter_stats;
+  std::map<std::string, int> counter_stats;
   ASSERT_TRUE(converter.Begin("Patient/14", bundle, trigger_labels_pair,
                               &counter_stats));
   ASSERT_FALSE(converter.Done());

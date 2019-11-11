@@ -44,15 +44,13 @@ using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 using ::tensorflow::errors::InvalidArgument;
 
-using std::string;
-
 namespace {
 
 // This is based on the implementation in protobuf/util/internal/utility.h.
-string ToSnakeCase(absl::string_view input) {
+std::string ToSnakeCase(absl::string_view input) {
   bool was_not_underscore = false;  // Initialize to false for case 1 (below)
   bool was_not_cap = false;
-  string result;
+  std::string result;
   result.reserve(input.size() << 1);
 
   for (size_t i = 0; i < input.size(); ++i) {
@@ -86,8 +84,9 @@ string ToSnakeCase(absl::string_view input) {
 }
 
 StatusOr<const FieldDescriptor*> GetReferenceFieldForResource(
-    const Message& reference, const string& resource_type) {
-  const string field_name = absl::StrCat(ToSnakeCase(resource_type), "_id");
+    const Message& reference, const std::string& resource_type) {
+  const std::string field_name =
+      absl::StrCat(ToSnakeCase(resource_type), "_id");
   const FieldDescriptor* field =
       reference.GetDescriptor()->FindFieldByName(field_name);
   if (field == nullptr) {
@@ -98,8 +97,9 @@ StatusOr<const FieldDescriptor*> GetReferenceFieldForResource(
   return field;
 }
 
-Status PopulateTypedReferenceId(const string& resource_id,
-                                const string& version, Message* reference_id) {
+Status PopulateTypedReferenceId(const std::string& resource_id,
+                                const std::string& version,
+                                Message* reference_id) {
   FHIR_RETURN_IF_ERROR(SetPrimitiveStringValue(reference_id, resource_id));
   if (!version.empty()) {
     const FieldDescriptor* history_field =
@@ -120,7 +120,7 @@ Status PopulateTypedReferenceId(const string& resource_id,
 
 template <typename ReferenceLike,
           typename ReferenceIdLike = REFERENCE_ID_TYPE(ReferenceLike)>
-StatusOr<string> ReferenceProtoToStringInternal(
+StatusOr<std::string> ReferenceProtoToStringInternal(
     const ReferenceLike& reference) {
   if (reference.has_uri()) {
     return reference.uri().value();
@@ -136,7 +136,7 @@ StatusOr<string> ReferenceProtoToStringInternal(
   if (field == nullptr) {
     return ::tensorflow::errors::NotFound("Reference not set");
   }
-  string prefix;
+  std::string prefix;
   bool start = true;
   for (const char c : field->name()) {
     if (start) {
@@ -152,14 +152,14 @@ StatusOr<string> ReferenceProtoToStringInternal(
   RE2::Replace(&prefix, *re, "");
   const ReferenceIdLike& id =
       (const ReferenceIdLike&)reflection->GetMessage(reference, field);
-  string reference_string = absl::StrCat(prefix, "/", id.value());
+  std::string reference_string = absl::StrCat(prefix, "/", id.value());
   if (id.has_history()) {
     absl::StrAppend(&reference_string, "/_history/", id.history().value());
   }
   return reference_string;
 }
 
-Status ReferenceStringToProto(const string& input, Message* reference) {
+Status ReferenceStringToProto(const std::string& input, Message* reference) {
   const Descriptor* descriptor = reference->GetDescriptor();
   const Reflection* reflection = reference->GetReflection();
   const FieldDescriptor* uri_field = descriptor->FindFieldByName("uri");
@@ -170,18 +170,20 @@ Status ReferenceStringToProto(const string& input, Message* reference) {
 
 }  // namespace
 
-StatusOr<string> ReferenceProtoToString(
+StatusOr<std::string> ReferenceProtoToString(
     const stu3::proto::Reference& reference) {
   return ReferenceProtoToStringInternal(reference);
 }
 
-StatusOr<string> ReferenceProtoToString(const r4::core::Reference& reference) {
+StatusOr<std::string> ReferenceProtoToString(
+    const r4::core::Reference& reference) {
   return ReferenceProtoToStringInternal(reference);
 }
 
 // TODO: Split these into separate files, each that accepts only
 // one type.
-StatusOr<string> ReferenceMessageToString(const ::google::protobuf::Message& reference) {
+StatusOr<std::string> ReferenceMessageToString(
+    const ::google::protobuf::Message& reference) {
   if (IsMessageType<stu3::proto::Reference>(reference)) {
     return ReferenceProtoToString(
         dynamic_cast<const stu3::proto::Reference&>(reference));
@@ -230,15 +232,15 @@ absl::Duration GetDurationFromTimelikeElement(
   return InternalGetDurationFromTimelikeElement(datetime);
 }
 
-Status GetTimezone(const string& timezone_str, absl::TimeZone* tz) {
+Status GetTimezone(const std::string& timezone_str, absl::TimeZone* tz) {
   // Try loading the timezone first.
   if (absl::LoadTimeZone(timezone_str, tz)) {
     return Status::OK();
   }
   static const LazyRE2 kFixedTimezoneRegex{"([+-])(\\d\\d):(\\d\\d)"};
-  string sign;
-  string hour_str;
-  string minute_str;
+  std::string sign;
+  std::string hour_str;
+  std::string minute_str;
   if (RE2::FullMatch(timezone_str, *kFixedTimezoneRegex, &sign, &hour_str,
                      &minute_str)) {
     int hour = 0;
@@ -265,7 +267,7 @@ Status GetTimezone(const string& timezone_str, absl::TimeZone* tz) {
       absl::StrCat("Invalid timezone format: ", timezone_str));
 }
 
-StatusOr<string> GetResourceId(const Message& message) {
+StatusOr<std::string> GetResourceId(const Message& message) {
   const auto* desc = message.GetDescriptor();
   const Reflection* ref = message.GetReflection();
   const FieldDescriptor* field = desc->FindFieldByName("id");
@@ -293,14 +295,14 @@ StatusOr<string> GetResourceId(const Message& message) {
   }
 }
 
-string GetReferenceToResource(const Message& message) {
+std::string GetReferenceToResource(const Message& message) {
   return absl::StrCat(message.GetDescriptor()->name(), "/",
                       GetResourceId(message).ValueOrDie());
 }
 
 Status PopulateReferenceToResource(const Message& resource,
                                    Message* reference) {
-  FHIR_ASSIGN_OR_RETURN(const string resource_id, GetResourceId(resource));
+  FHIR_ASSIGN_OR_RETURN(const std::string resource_id, GetResourceId(resource));
   FHIR_ASSIGN_OR_RETURN(const FieldDescriptor* reference_id_field,
                         GetReferenceFieldForResource(
                             *reference, resource.GetDescriptor()->name()));
@@ -333,16 +335,16 @@ Status SplitIfRelativeReference(Message* reference) {
 
   const Message& uri = reflection->GetMessage(*reference, uri_field);
 
-  string uri_scratch;
-  FHIR_ASSIGN_OR_RETURN(const string& uri_string,
+  std::string uri_scratch;
+  FHIR_ASSIGN_OR_RETURN(const std::string& uri_string,
                         GetPrimitiveStringValue(uri, &uri_scratch));
 
   static const LazyRE2 kInternalReferenceRegex{
       "([0-9A-Za-z_]+)/([A-Za-z0-9.-]{1,64})(?:/_history/"
       "([A-Za-z0-9.-]{1,64}))?"};
-  string resource_type;
-  string resource_id;
-  string version;
+  std::string resource_type;
+  std::string resource_id;
+  std::string version;
   if (RE2::FullMatch(uri_string, *kInternalReferenceRegex, &resource_type,
                      &resource_id, &version)) {
     FHIR_ASSIGN_OR_RETURN(
@@ -397,20 +399,21 @@ Status SplitIfRelativeReference(Message* reference) {
 }
 
 StatusOr<stu3::proto::Reference> ReferenceStringToProtoStu3(
-    const string& input) {
+    const std::string& input) {
   stu3::proto::Reference reference;
   FHIR_RETURN_IF_ERROR(ReferenceStringToProto(input, &reference));
   return reference;
 }
 
-StatusOr<r4::core::Reference> ReferenceStringToProtoR4(const string& input) {
+StatusOr<r4::core::Reference> ReferenceStringToProtoR4(
+    const std::string& input) {
   r4::core::Reference reference;
   FHIR_RETURN_IF_ERROR(ReferenceStringToProto(input, &reference));
   return reference;
 }
 
 Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
-                               const string& value) {
+                               const std::string& value) {
   const FieldDescriptor* value_field =
       primitive->GetDescriptor()->FindFieldByName("value");
   if (!value_field || value_field->is_repeated() ||
@@ -422,8 +425,8 @@ Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
   return Status::OK();
 }
 
-StatusOr<string> GetPrimitiveStringValue(const ::google::protobuf::Message& primitive,
-                                         string* scratch) {
+StatusOr<std::string> GetPrimitiveStringValue(
+    const ::google::protobuf::Message& primitive, std::string* scratch) {
   const FieldDescriptor* value_field =
       primitive.GetDescriptor()->FindFieldByName("value");
   if (!value_field || value_field->is_repeated() ||
