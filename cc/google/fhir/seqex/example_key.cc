@@ -36,7 +36,7 @@ void ExampleKey::FromString(const std::string& key) {
   // e.g. "f26dd962a28daeb1-Patient/123:0-2@-957312000:Encounter/1"
   static LazyRE2 kStringFormatRegex = {
       "(?:[0-9a-f]{16}-)?"  // optional non-capturing group (shuffle prefix)
-      "(Patient/[^:]+)"     // this->patient_id (no colons)
+      "(Patient/[A-Za-z0-9\\-\\.]{1,64})"  // this->patient_id
       ":"
       "([0-9]+)"  // this->start
       "-"
@@ -45,7 +45,7 @@ void ExampleKey::FromString(const std::string& key) {
       "(-?[0-9]+)"  // this->trigger_timestamp (may be negative)
       "(?::"        // optional non-capturing group; require a leading colon if
                     // present
-      "([0-9A-Za-z_]+/[^:]+)"  // this->source
+      "([A-Za-z]+/[A-Za-z0-9\\-\\.]{1,64})"  // this->source
       ")?"};
   tensorflow::int64 unix_seconds;
   CHECK(RE2::FullMatch(key, *kStringFormatRegex, &this->patient_id,
@@ -75,7 +75,7 @@ std::string ExampleKey::ToStringWithPrefix() const {
 
 void ExampleKey::FromPatientIdTimestampString(const std::string& key) {
   static LazyRE2 kStringFormatRegex = {
-      "(Patient/[^:]*)"  // this->patient_id (no colons)
+      "(Patient/[A-Za-z0-9\\-\\.]{1,64})"  // this->patient_id
       "@"
       "(-?[0-9]+)"  // this->trigger_timestamp (may be negative)
   };

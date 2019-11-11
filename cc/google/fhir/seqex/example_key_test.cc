@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "google/fhir/seqex/example_key.h"
+
 #include <memory>
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "google/fhir/seqex/example_key.h"
 
 namespace google {
 namespace fhir {
@@ -136,12 +137,11 @@ TEST_F(ExampleKeyTest, ParseExampleKey) {
 }
 
 TEST_F(ExampleKeyTest, ParseExampleKeyNegativeTimestamp) {
-  const std::string key =
-      "f26dd962a28daeb1-Patient/123:0-2@-957312000:Claim2/1";
+  const std::string key = "f26dd962a28daeb1-Patient/123:0-2@-957312000:Claim/1";
   const ExampleKey expected = {
       "Patient/123",                      // patient_id
       absl::FromUnixSeconds(-957312000),  // trigger_timestamp
-      "Claim2/1",                         // source
+      "Claim/1",                          // source
       0,                                  // start
       2                                   // end
   };
@@ -152,18 +152,31 @@ TEST_F(ExampleKeyTest, ParseExampleKeyNegativeTimestamp) {
 
 TEST_F(ExampleKeyTest, ParseExampleKeyDashes) {
   const std::string key =
-      "00c4061415d4961b-Patient/45b7ca20-5cde-ee51b5d20127:"
-      "0-67@1265414400:Observation/c0ffee-deadbeef-123";
+      "00c4061415d4961b-Patient/45b7ca20-5cde-ee51b5d20127.0:"
+      "0-67@1265414400:Observation/c0ffee-deadbeef-123.0";
   const ExampleKey expected = {
-      "Patient/45b7ca20-5cde-ee51b5d20127",   // patient_id
-      absl::FromUnixSeconds(1265414400),      // trigger_timestamp
-      "Observation/c0ffee-deadbeef-123",      // source
-      0,                                      // start
-      67                                      // end
+      "Patient/45b7ca20-5cde-ee51b5d20127.0",  // patient_id
+      absl::FromUnixSeconds(1265414400),       // trigger_timestamp
+      "Observation/c0ffee-deadbeef-123.0",     // source
+      0,                                       // start
+      67                                       // end
   };
   ExampleKey output;
   output.FromString(key);
   EXPECT_EQ(expected, output);
+}
+
+TEST_F(ExampleKeyTest, GenerateExampleKey) {
+  const ExampleKey key = {
+      "Patient/9511-0",                   // patient_id
+      absl::FromUnixSeconds(6794148180),  // timestamp
+      "Encounter/A.22",                   // source
+      0,                                  // start
+      1699                                // end
+  };
+  const std::string expected_key =
+      "3589c9e60770f576-Patient/9511-0:0-1699@6794148180:Encounter/A.22";
+  EXPECT_EQ(expected_key, key.ToStringWithPrefix());
 }
 
 }  // namespace seqex
