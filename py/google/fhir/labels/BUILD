@@ -1,9 +1,5 @@
-licenses(["notice"])
-
-package(default_visibility = ["//visibility:public"])
-
 load(
-    "@io_bazel_rules_python//python:python.bzl",
+    "@rules_python//python:python.bzl",
     "py_binary",
     "py_library",
     "py_test",
@@ -11,7 +7,11 @@ load(
 
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 
-# @io_bazel_rules_python may not be able to pull in transitive dependency correctly
+licenses(["notice"])
+
+package(default_visibility = ["//visibility:public"])
+
+# @rules_python may not be able to pull in transitive dependency correctly
 # (related issues: https://github.com/bazelbuild/rules_python/pull/90,
 #  https://github.com/bazelbuild/rules_python/pull/108). One would still need to run
 # pip install -r bazel/requirements.txt before running bazel on these targets.
@@ -42,7 +42,7 @@ py_test(
         ":encounter",
         "//proto/stu3:resources_py_pb2",
         "@absl_py//absl/testing:absltest",
-        "@protobuf_archive//:protobuf_python",
+        "@com_google_protobuf//:protobuf_python",
     ],
 )
 
@@ -75,7 +75,7 @@ py_test(
         "//proto/stu3:resources_py_pb2",
         "@absl_py//absl/testing:absltest",
         "@absl_py//absl/testing:parameterized",
-        "@protobuf_archive//:protobuf_python",
+        "@com_google_protobuf//:protobuf_python",
     ],
 )
 
@@ -115,7 +115,7 @@ py_test(
     deps = [
         ":bundle_to_label_lib",
         ":label",
-        "@protobuf_archive//:protobuf_python",
+        "@com_google_protobuf//:protobuf_python",
         "//proto/stu3:resources_py_pb2",
         "@absl_py//absl/testing:absltest",
         requirement("apache_beam"),

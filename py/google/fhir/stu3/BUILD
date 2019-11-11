@@ -22,6 +22,6 @@ py_test(
         ":util",
         "//proto/stu3:resources_py_pb2",
         "@absl_py//absl/testing:absltest",
-        "@protobuf_archive//:protobuf_python",
+        "@com_google_protobuf//:protobuf_python",
     ],
 )

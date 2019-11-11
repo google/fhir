@@ -1,11 +1,11 @@
+load("//bazel:cython.bzl", "pyx_library")
+
 licenses(["notice"])
 
 package(default_visibility = ["//visibility:public"])
 
-load("//bazel:cython.bzl", "pyx_library")
-
 load(
-    "@io_bazel_rules_python//python:python.bzl",
+    "@rules_python//python:python.bzl",
     "py_binary",
     "py_library",
     "py_test",
@@ -13,7 +13,7 @@ load(
 
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 
-# @io_bazel_rules_python may not be able to pull in transitive dependency correctly
+# @rules_python may not be able to pull in transitive dependency correctly
 # (related issues: https://github.com/bazelbuild/rules_python/pull/90,
 #  https://github.com/bazelbuild/rules_python/pull/108). One would still need to run
 # pip install -r bazel/requirements.txt before running bazel on these targets.
@@ -52,8 +52,8 @@ py_test(
         "//py/google/fhir/testutil:protobuf_compare",
         "@absl_py//absl/flags",
         "@absl_py//absl/testing:absltest",
+        "@com_google_protobuf//:protobuf_python",
         "@org_tensorflow//tensorflow/core:protos_all_py",
-        "@protobuf_archive//:protobuf_python",
     ],
 )
 
@@ -83,7 +83,7 @@ py_test(
         "//proto/stu3:resources_py_pb2",
         "//py/google/fhir/testutil:protobuf_compare",
         "@absl_py//absl/testing:absltest",
-        "@protobuf_archive//:protobuf_python",
+        "@com_google_protobuf//:protobuf_python",
     ],
 )
 
@@ -115,7 +115,7 @@ py_test(
     deps = [
         ":bundle_to_seqex",
         ":bundle_seqex_converter",
-        "@protobuf_archive//:protobuf_python",
+        "@com_google_protobuf//:protobuf_python",
         "//proto/stu3:extensions_py_pb2",
         "//proto/stu3:resources_py_pb2",
         "//proto/stu3:version_config_py_pb2",
@@ -137,7 +137,7 @@ py_binary(
     python_version = "PY2",
     deps = [
         ":bundle_to_seqex",
-        "@protobuf_archive//:protobuf_python",
+        "@com_google_protobuf//:protobuf_python",
         "//proto/stu3:extensions_py_pb2",
         "//proto/stu3:resources_py_pb2",
         "//proto/stu3:version_config_py_pb2",

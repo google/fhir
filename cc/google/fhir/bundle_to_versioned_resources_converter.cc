@@ -42,16 +42,9 @@ namespace fhir {
 
 using std::string;
 
-using ::google::fhir::stu3::proto::Bundle;
-using ::google::fhir::stu3::proto::ContainedResource;
 using ::google::fhir::stu3::proto::DateTime;
-using ::google::fhir::stu3::proto::Encounter;
-using ::google::fhir::stu3::proto::Instant;
-using ::google::fhir::stu3::proto::Meta;
-using ::google::fhir::stu3::proto::Patient;
 using ::google::fhir::stu3::proto::ResourceConfig;
 using ::google::fhir::stu3::proto::VersionConfig;
-using ::google::protobuf::Descriptor;
 using ::google::protobuf::Message;
 
 namespace internal {

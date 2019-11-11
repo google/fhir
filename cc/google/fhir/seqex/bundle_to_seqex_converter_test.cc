@@ -19,10 +19,11 @@
 #include <utility>
 #include <vector>
 
-#include "gflags/gflags.h"
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/flags/declare.h"
+#include "absl/flags/flag.h"
 #include "absl/strings/substitute.h"
 #include "google/fhir/seqex/example_key.h"
 #include "google/fhir/testutil/proto_matchers.h"
@@ -32,7 +33,7 @@
 #include "tensorflow/core/lib/core/status.h"
 #include "tensorflow/core/platform/env.h"
 
-DECLARE_bool(tokenize_code_text_features);
+ABSL_DECLARE_FLAG(bool, tokenize_code_text_features);
 
 namespace google {
 namespace fhir {
@@ -54,8 +55,8 @@ class BundleToSeqexConverterTest : public ::testing::Test {
         "proto/stu3/version_config.textproto",
         &fhir_version_config_));
     parser_.AllowPartialMessage(true);
-    FLAGS_tokenize_code_text_features = true;
-    FLAGS_trigger_time_redacted_features = "";
+    absl::SetFlag(&FLAGS_tokenize_code_text_features, true);
+    absl::SetFlag(&FLAGS_trigger_time_redacted_features, "");
   }
 
   void PerformTest(const string& input_key, const Bundle& bundle,
@@ -87,7 +88,7 @@ class BundleToSeqexConverterTest : public ::testing::Test {
 };
 
 TEST_F(BundleToSeqexConverterTest, Observation) {
-  FLAGS_tokenize_code_text_features = false;
+  absl::SetFlag(&FLAGS_tokenize_code_text_features, false);
   EventTrigger trigger;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     event_time {
@@ -1471,7 +1472,7 @@ TEST_F(BundleToSeqexConverterTest, TestDateTimeLabel) {
 TEST_F(BundleToSeqexConverterTest, RedactedFeatures) {
   // We redact the icd9 flavor features for Encounter.reason, but
   // keep the main Encounter.reason feature for test purposes.
-  FLAGS_trigger_time_redacted_features = "Encounter.reason.icd9";
+  absl::SetFlag(&FLAGS_trigger_time_redacted_features, "Encounter.reason.icd9");
 
   EventTrigger trigger;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
@@ -2029,7 +2030,7 @@ TEST_F(BundleToSeqexConverterTest, EmptyLabel) {
 TEST_F(BundleToSeqexConverterTest, TwoExamples) {
   // We redact the icd9 flavor features for Encounter.reason, but
   // keep the main Encounter.reason feature for test purposes.
-  FLAGS_trigger_time_redacted_features = "Encounter.reason.icd9";
+  absl::SetFlag(&FLAGS_trigger_time_redacted_features, "Encounter.reason.icd9");
 
   EventTrigger trigger1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
@@ -2336,7 +2337,7 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples) {
 TEST_F(BundleToSeqexConverterTest, TwoExamples_EnableAttribution) {
   // We redact the icd9 flavor features for Encounter.reason, but
   // keep the main Encounter.reason feature for test purposes.
-  FLAGS_trigger_time_redacted_features = "Encounter.reason.icd9";
+  absl::SetFlag(&FLAGS_trigger_time_redacted_features, "Encounter.reason.icd9");
 
   EventTrigger trigger1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(

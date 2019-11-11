@@ -25,8 +25,8 @@
 #include <utility>
 #include <vector>
 
-#include "gflags/gflags.h"
 #include "google/protobuf/message.h"
+#include "absl/flags/declare.h"
 #include "absl/strings/str_split.h"
 #include "absl/time/time.h"
 #include "google/fhir/bundle_to_versioned_resources_converter.h"
@@ -45,8 +45,8 @@
 #include "tensorflow/core/lib/core/status.h"
 #include "tensorflow/core/platform/logging.h"
 
-DECLARE_int32(max_sequence_length);
-DECLARE_string(trigger_time_redacted_features);
+ABSL_DECLARE_FLAG(int64_t, max_sequence_length);
+ABSL_DECLARE_FLAG(std::string, trigger_time_redacted_features);
 
 namespace google {
 namespace fhir {

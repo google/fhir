@@ -18,10 +18,10 @@
 #include <memory>
 #include <string>
 
-#include "gflags/gflags.h"
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "absl/algorithm/container.h"
+#include "absl/flags/flag.h"
 #include "absl/memory/memory.h"
 #include "absl/strings/numbers.h"
 #include "absl/strings/str_cat.h"
@@ -42,21 +42,21 @@
 #include "tensorflow/core/platform/logging.h"
 #include "re2/re2.h"
 
-DEFINE_string(tokenize_feature_list, "Composition.section.text.div",
-              "Comma separated feature name list for tokenizing string values. "
-              "Doesn't include the original value as a feature. "
-              "If a feature name is in this list, "
-              "it can't be in add_tokenize_feature_list");
-DEFINE_string(add_tokenize_feature_list, "",
-              "Comma separated feature name list for tokenizing string values. "
-              "Includes the original value as a feature as well. "
-              "If a feature name is in this list, "
-              "it can't be in tokenize_feature_list");
-DEFINE_bool(tokenize_code_text_features, true,
-            "Tokenize all the Coding.display and CodeableConcept.text fields. "
-            "Doesn't include the original value as a feature unless it's in "
-            "add_tokenize_feature_list.");
-DEFINE_string(tokenizer, "simple", "Which tokenizer to use.");
+ABSL_FLAG(std::string, tokenize_feature_list, "Composition.section.text.div",
+          "Comma separated feature name list for tokenizing string values. "
+          "Doesn't include the original value as a feature. "
+          "If a feature name is in this list, "
+          "it can't be in add_tokenize_feature_list");
+ABSL_FLAG(std::string, add_tokenize_feature_list, "",
+          "Comma separated feature name list for tokenizing string values. "
+          "Includes the original value as a feature as well. "
+          "If a feature name is in this list, "
+          "it can't be in tokenize_feature_list");
+ABSL_FLAG(bool, tokenize_code_text_features, true,
+          "Tokenize all the Coding.display and CodeableConcept.text fields. "
+          "Doesn't include the original value as a feature unless it's in "
+          "add_tokenize_feature_list.");
+ABSL_FLAG(std::string, tokenizer, "simple", "Which tokenizer to use.");
 
 namespace google {
 namespace fhir {
@@ -90,12 +90,12 @@ void AddTokensToExample(const string& name, const string& value,
                         bool enable_attribution) {
   std::unique_ptr<TextTokenizer> tokenizer;
   // Strings are tokenized if in the whitelist.
-  if (FLAGS_tokenizer == "simple") {
+  if (absl::GetFlag(FLAGS_tokenizer) == "simple") {
     tokenizer = absl::make_unique<SimpleWordTokenizer>(true /* lowercase */);
-  } else if (FLAGS_tokenizer == "single") {
+  } else if (absl::GetFlag(FLAGS_tokenizer) == "single") {
     tokenizer = absl::make_unique<SingleTokenTokenizer>();
   } else {
-    LOG(FATAL) << "Unknown tokenizer: " << FLAGS_tokenizer;
+    LOG(FATAL) << "Unknown tokenizer: " << absl::GetFlag(FLAGS_tokenizer);
   }
   auto tokens = tokenizer->Tokenize(value);
   auto* token_list =
@@ -301,7 +301,7 @@ void AddCodeableConceptToExample(
       GetMessageInField<String>(concept, "text");
   if (statusor_text.ok() && !statusor_text.ValueOrDie().value().empty()) {
     const string full_name = absl::StrCat(name, ".text");
-    if (FLAGS_tokenize_code_text_features) {
+    if (absl::GetFlag(FLAGS_tokenize_code_text_features)) {
       tokenize_feature_set->insert(full_name);
     }
     AddValueAndOrTokensToExample(
@@ -317,7 +317,7 @@ void AddCodeableConceptToExample(
         ->add_value(coding.code().value());
     if (coding.has_display()) {
       const string full_name = absl::StrCat(name, ".", system, ".display");
-      if (FLAGS_tokenize_code_text_features) {
+      if (absl::GetFlag(FLAGS_tokenize_code_text_features)) {
         tokenize_feature_set->insert(full_name);
       }
       AddValueAndOrTokensToExample(
@@ -331,14 +331,16 @@ void AddCodeableConceptToExample(
 void MessageToExample(const google::protobuf::Message& message, const string& prefix,
                       ::tensorflow::Example* example, bool enable_attribution) {
   std::set<string> tokenize_feature_set;
-  if (!FLAGS_tokenize_feature_list.empty()) {
+  const string& tokenize_feature_list =
+      absl::GetFlag(FLAGS_tokenize_feature_list);
+  if (!tokenize_feature_list.empty()) {
     tokenize_feature_set =
-        absl::StrSplit(FLAGS_tokenize_feature_list, ',', absl::SkipEmpty());
+        absl::StrSplit(tokenize_feature_list, ',', absl::SkipEmpty());
   }
   std::set<string> add_tokenize_feature_set;
-  if (!FLAGS_add_tokenize_feature_list.empty()) {
-    add_tokenize_feature_set =
-        absl::StrSplit(FLAGS_add_tokenize_feature_list, ',', absl::SkipEmpty());
+  if (!absl::GetFlag(FLAGS_add_tokenize_feature_list).empty()) {
+    add_tokenize_feature_set = absl::StrSplit(
+        absl::GetFlag(FLAGS_add_tokenize_feature_list), ',', absl::SkipEmpty());
   }
 
   std::set<string> intersection;

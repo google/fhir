@@ -13,7 +13,7 @@ fhir_proto_library(
         "qicore.proto",
     ],
     proto_deps = [
-        "@protobuf_archive//:any_proto",
+        "@com_google_protobuf//:any_proto",
         "//proto:annotations_proto",
         "//proto/r4:uscore_codes_proto",
         "//proto/r4:uscore_proto",

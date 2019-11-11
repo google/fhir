@@ -16,10 +16,11 @@
 
 #include <memory>
 
-#include "gflags/gflags.h"
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/flags/declare.h"
+#include "absl/flags/flag.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/resources.pb.h"
@@ -27,7 +28,7 @@
 #include "tensorflow/core/example/feature.pb.h"
 #include "tensorflow/core/platform/env.h"
 
-DECLARE_bool(tokenize_code_text_features);
+ABSL_DECLARE_FLAG(bool, tokenize_code_text_features);
 
 namespace google {
 namespace fhir {
@@ -82,7 +83,7 @@ TEST_F(ResourceToExampleTest, Patient) {
 }
 
 TEST_F(ResourceToExampleTest, Observation_ValueQuantity) {
-  FLAGS_tokenize_code_text_features = true;
+  absl::SetFlag(&FLAGS_tokenize_code_text_features, true);
   stu3::proto::Observation input;
   ASSERT_TRUE(parser_.ParseFromString(R"proto(
     id { value: "123" }
@@ -144,7 +145,7 @@ TEST_F(ResourceToExampleTest, Observation_ValueQuantity) {
 }
 
 TEST_F(ResourceToExampleTest, Observation_TwoCodes) {
-  FLAGS_tokenize_code_text_features = false;
+  absl::SetFlag(&FLAGS_tokenize_code_text_features, false);
   stu3::proto::Observation input;
   ASSERT_TRUE(parser_.ParseFromString(R"proto(
     id { value: "123" }

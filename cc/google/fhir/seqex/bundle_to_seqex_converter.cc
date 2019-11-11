@@ -20,8 +20,8 @@
 #include <type_traits>
 #include <utility>
 
-#include "gflags/gflags.h"
 #include "google/protobuf/descriptor.h"
+#include "absl/flags/flag.h"
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_split.h"
@@ -43,17 +43,17 @@
 #include "tensorflow/core/lib/core/status.h"
 #include "tensorflow/core/platform/env.h"
 
-DEFINE_int32(max_sequence_length, 1000000,
-             "Maximum length of emitted sequences");
-DEFINE_string(trigger_time_redacted_features, "",
-              "Sometimes, labels are directly or indirectly derived from "
-              "features that occur at the same time as the trigger. In those "
-              "cases, the original features need to be redacted to not make "
-              "the prediction task trivial. The list of features specified "
-              "here will be retained at all time steps prior to the trigger "
-              "time, but removed from the sequence example if they occur at "
-              "the trigger time exactly. Names are prefix-matched to the comma-"
-              "separated string values in this flag.");
+ABSL_FLAG(int64_t, max_sequence_length, 1000000,
+          "Maximum length of emitted sequences");
+ABSL_FLAG(std::string, trigger_time_redacted_features, "",
+          "Sometimes, labels are directly or indirectly derived from "
+          "features that occur at the same time as the trigger. In those "
+          "cases, the original features need to be redacted to not make "
+          "the prediction task trivial. The list of features specified "
+          "here will be retained at all time steps prior to the trigger "
+          "time, but removed from the sequence example if they occur at "
+          "the trigger time exactly. Names are prefix-matched to the comma-"
+          "separated string values in this flag.");
 
 namespace google {
 namespace fhir {
@@ -148,7 +148,7 @@ void GetSequenceFeatures(
   int sequence_length = 0;
 
   // Case 1: no updates needed.
-  const int64 now = absl::ToUnixSeconds(trigger_timestamp);
+  const int64_t now = absl::ToUnixSeconds(trigger_timestamp);
   while (sequence_length < event_id_feature->feature_size() &&
          event_id_feature->feature(sequence_length).int64_list().value(0) ==
              now) {
@@ -158,7 +158,7 @@ void GetSequenceFeatures(
 
   // Case 2: overwrite all features (but allocate no new sequence steps)
   while (sequence_length < event_id_feature->feature_size()) {
-    const int64 current_time = absl::ToUnixSeconds(iter->first);
+    const int64_t current_time = absl::ToUnixSeconds(iter->first);
     const auto& current_step = iter->second.features().feature();
     bool has_valid_feature = current_time != now;
 
@@ -191,7 +191,7 @@ void GetSequenceFeatures(
 
   // Case 3: add new features.
   while (iter != end) {
-    const int64 delta_time =
+    const int64_t delta_time =
         absl::ToInt64Seconds(trigger_timestamp - iter->first);
     const auto& current_step = iter->second.features().feature();
 
@@ -227,7 +227,7 @@ void AddBaggingFeatures(absl::Time event_time,
                         const std::vector<absl::Time>& encounter_start_times,
                         Example* example) {
   // The event id is the timestamp of the event.
-  int64 event_id = absl::ToUnixSeconds(event_time);
+  int64_t event_id = absl::ToUnixSeconds(event_time);
   (*example->mutable_features()->mutable_feature())[kEventIdFeatureKey]
       .mutable_int64_list()
       ->add_value(event_id);
@@ -236,7 +236,7 @@ void AddBaggingFeatures(absl::Time event_time,
   auto iter = std::upper_bound(encounter_start_times.begin(),
                                encounter_start_times.end(), event_time);
   int index = iter - encounter_start_times.begin();
-  int64 encounter_id = absl::ToUnixSeconds(encounter_start_times[index - 1]);
+  int64_t encounter_id = absl::ToUnixSeconds(encounter_start_times[index - 1]);
   (*example->mutable_features()->mutable_feature())[kEncounterIdFeatureKey]
       .mutable_int64_list()
       ->add_value(encounter_id);
@@ -401,7 +401,7 @@ BaseBundleToSeqexConverter::BaseBundleToSeqexConverter(
       generate_sequence_label_(generate_sequence_label) {
   // Split the redacted feature list for easy access.
   redacted_features_ =
-      absl::StrSplit(FLAGS_trigger_time_redacted_features, ',');
+      absl::StrSplit(absl::GetFlag(FLAGS_trigger_time_redacted_features), ',');
   // Make sure Done() would return true.
   current_label_ = label_map_.end();
 }
@@ -446,9 +446,11 @@ bool BaseBundleToSeqexConverter::Next() {
     }
 
     sequence_length = end - examples_.begin();
-    if (sequence_length > FLAGS_max_sequence_length) {
-      offset = sequence_length - FLAGS_max_sequence_length;
-      sequence_length = FLAGS_max_sequence_length;
+    const int64_t max_sequence_length =
+        absl::GetFlag(FLAGS_max_sequence_length);
+    if (sequence_length > max_sequence_length) {
+      offset = sequence_length - max_sequence_length;
+      sequence_length = max_sequence_length;
     }
   }
 

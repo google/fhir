@@ -6,28 +6,34 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 # are also imported here.
 http_archive(
     name = "io_bazel_rules_closure",
-    sha256 = "43c9b882fa921923bcba764453f4058d102bece35a37c9f6383c713004aacff1",
-    strip_prefix = "rules_closure-9889e2348259a5aad7e805547c1a0cf311cfcd91",
+    sha256 = "7d206c2383811f378a5ef03f4aacbcf5f47fd8650f6abbc3fa89f3a27dd8b176",
+    strip_prefix = "rules_closure-0.10.0",
     urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_closure/archive/9889e2348259a5aad7e805547c1a0cf311cfcd91.tar.gz",
-        "https://github.com/bazelbuild/rules_closure/archive/9889e2348259a5aad7e805547c1a0cf311cfcd91.tar.gz",  # 2018-12-21
+        "https://github.com/bazelbuild/rules_closure/archive/0.10.0.tar.gz",
     ],
+)
+
+http_archive(
+    name = "bazel_skylib",
+    sha256 = "bbccf674aa441c266df9894182d80de104cabd19be98be002f6d478aaa31574d",
+    strip_prefix = "bazel-skylib-2169ae1c374aab4a09aa90e65efe1a3aad4e279b",
+    urls = ["https://github.com/bazelbuild/bazel-skylib/archive/2169ae1c374aab4a09aa90e65efe1a3aad4e279b.tar.gz"],
 )
 
 http_archive(
     name = "org_tensorflow",
-    sha256 = "7cd19978e6bc7edc2c847bce19f95515a742b34ea5e28e4389dade35348f58ed",
-    strip_prefix = "tensorflow-1.13.1",
+    sha256 = "49b5f0495cd681cbcb5296a4476853d4aea19a43bdd9f179c928a977308a0617",
+    strip_prefix = "tensorflow-2.0.0",
     urls = [
-        "https://github.com/tensorflow/tensorflow/archive/v1.13.1.tar.gz",
+        "https://github.com/tensorflow/tensorflow/archive/v2.0.0.tar.gz",
     ],
 )
 
 http_archive(
-    name = "io_bazel_rules_python",
-    sha256 = "8b32d2dbb0b0dca02e0410da81499eef8ff051dad167d6931a92579e3b2a1d48",
-    strip_prefix = "rules_python-8b5d0683a7d878b28fffe464779c8a53659fc645",
-    urls = ["https://github.com/bazelbuild/rules_python/archive/8b5d0683a7d878b28fffe464779c8a53659fc645.tar.gz"],
+    name = "rules_python",
+    sha256 = "fa53cc0afe276d8f6675df1a424592e00e4f37b2a497e48399123233902e2e76",
+    strip_prefix = "rules_python-0.0.1",
+    urls = ["https://github.com/bazelbuild/rules_python/archive/0.0.1.tar.gz"],
 )
 
 # Used for the FHIRPath parser runtime.
@@ -39,11 +45,9 @@ http_archive(
     build_file = "//bazel:antlr.BUILD",
 )
 
-load("@io_bazel_rules_python//python:pip.bzl", "pip_repositories")
+load("@rules_python//python:pip.bzl", "pip_repositories", "pip_import")
 
 pip_repositories()
-
-load("@io_bazel_rules_python//python:pip.bzl", "pip_import")
 
 pip_import(
     name="fhir_bazel_pip_dependencies",
@@ -76,6 +80,7 @@ transitive_maven_jar(
         "com.fasterxml.jackson.core:jackson-core:2.9.5",
         "com.fasterxml.jackson.core:jackson-databind:2.9.5",
         "com.fasterxml.jackson.core:jackson-annotations:2.9.5",
+        "com.google.errorprone:error_prone_annotations:2.3.3",
         "com.google.cloud:google-cloud-bigquery:1.38.0",
         "com.google.code.gson:gson:2.8.5",
         "com.google.truth:truth:0.42",
@@ -124,4 +129,8 @@ bind(
     actual = "@guava_maven//jar",
 )
 
+bind(
+    name = "error_prone_annotations",
+    actual = "@com_google_errorprone_error_prone_annotations//jar",
+)
 

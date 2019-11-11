@@ -28,7 +28,7 @@ fhir_proto_library(
         "test_extensions.proto",
     ],
     proto_deps = [
-        "@protobuf_archive//:any_proto",
+        "@com_google_protobuf//:any_proto",
         "//proto:annotations_proto",
         "//proto/r4/core:codes_proto",
         "//proto/r4/core:datatypes_proto",

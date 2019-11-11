@@ -10,6 +10,6 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         "@com_google_googletest//:gtest",
-        "@protobuf_archive//:protobuf",
+        "@com_google_protobuf//:protobuf",
     ],
 )
