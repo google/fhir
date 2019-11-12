@@ -26,5 +26,5 @@ git clone https://github.com/synthetichealth/synthea.git
 cd synthea
 ./gradlew build check test
 
-# generate 1000 valid STU3 bundles in output/fhir/
+# generate 1000 valid R4 bundles in output/fhir/
 ./run_synthea Massachusetts -p 1000
