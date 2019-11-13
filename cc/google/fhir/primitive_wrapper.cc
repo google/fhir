@@ -44,7 +44,7 @@
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
 #include "proto/r4/core/datatypes.pb.h"
-#include "proto/r4/google_extensions_core.pb.h"
+#include "proto/r4/google_extensions.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "include/json/json.h"
@@ -1033,7 +1033,7 @@ StatusOr<std::unique_ptr<PrimitiveWrapper>> GetR4Wrapper(
   } else if (IsMessageType<r4::core::Base64Binary>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
         new Base64BinaryWrapper<r4::core::Base64Binary,
-                                r4::googlecore::Base64BinarySeparatorStride>());
+                                r4::google::Base64BinarySeparatorStride>());
   } else if (IsMessageType<r4::core::Boolean>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
         new BooleanWrapper<r4::core::Boolean>());

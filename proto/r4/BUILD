@@ -9,14 +9,14 @@ licenses(["notice"])
 
 fhir_proto_library(
     srcs = [
-        "google_extensions_core.proto",
+        "google_extensions.proto",
     ],
     proto_deps = [
         "//proto:annotations_proto",
         "//proto/r4/core:codes_proto",
         "//proto/r4/core:datatypes_proto",
     ],
-    proto_library_prefix = "google_extensions_core",
+    proto_library_prefix = "google_extensions",
 )
 
 gen_fhir_protos(

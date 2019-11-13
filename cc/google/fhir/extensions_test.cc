@@ -20,7 +20,7 @@
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/r4/core/datatypes.pb.h"
-#include "proto/r4/google_extensions_core.pb.h"
+#include "proto/r4/google_extensions.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/extensions.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
@@ -130,12 +130,12 @@ TEST(ExtensionsTest, PrintPrimitiveHasNoValue) {
 }
 
 TEST(ExtensionsTestR4, ParsePrimitiveHasNoValue) {
-  TestExtensionToMessageR4<r4::googlecore::PrimitiveHasNoValue>(
+  TestExtensionToMessageR4<r4::google::PrimitiveHasNoValue>(
       "primitive_has_no_value");
 }
 
 TEST(ExtensionsTestR4, PrintPrimitiveHasNoValue) {
-  TestConvertToExtensionR4<r4::googlecore::PrimitiveHasNoValue>(
+  TestConvertToExtensionR4<r4::google::PrimitiveHasNoValue>(
       "primitive_has_no_value");
 }
 
