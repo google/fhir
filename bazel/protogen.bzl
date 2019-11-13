@@ -14,11 +14,10 @@
 
 """Rules for generating Protos from FHIR definitions"""
 
-STU3_PACKAGE_DEP = "@com_google_fhir//spec:fhir_stu3_package"
-R4_PACKAGE_DEP = "@com_google_fhir//spec:fhir_r4_package"
-PROTO_GENERATOR = "@com_google_fhir//java:ProtoGenerator"
-PROFILE_GENERATOR = "@com_google_fhir//java:ProfileGenerator"
-
+STU3_PACKAGE_DEP = "//spec:fhir_stu3_package"
+R4_PACKAGE_DEP = "//spec:fhir_r4_package"
+PROTO_GENERATOR = "//java:ProtoGenerator"
+PROFILE_GENERATOR = "//java:ProfileGenerator"
 MANUAL_TAGS = ["manual"]
 
 def fhir_package(
