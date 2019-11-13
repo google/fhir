@@ -282,8 +282,7 @@ Status ValueToMessageInternal(const ExtensionLike& extension, Message* message,
   }
 
   // Value types must match.
-  if (value_field->message_type()->full_name() !=
-      field->message_type()->full_name()) {
+  if (!AreSameMessageType(value_field->message_type(), field->message_type())) {
     return InvalidArgument("Missing expected value of type ",
                            field->message_type()->full_name(), " in extension ",
                            extension.GetDescriptor()->full_name());

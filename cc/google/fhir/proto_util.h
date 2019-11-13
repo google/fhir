@@ -200,9 +200,13 @@ Status ForEachMessageWithStatus(
   return status;
 }
 
+bool AreSameMessageType(const ::google::protobuf::Message& a, const ::google::protobuf::Message& b);
+bool AreSameMessageType(const ::google::protobuf::Descriptor* a,
+                        const ::google::protobuf::Descriptor* b);
+
 template <typename T>
 bool IsMessageType(const ::google::protobuf::Descriptor* descriptor) {
-  return descriptor->full_name() == T::descriptor()->full_name();
+  return AreSameMessageType(descriptor, T::descriptor());
 }
 
 template <typename T>
@@ -236,8 +240,6 @@ StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
   return GetMessageInField<T>(
       message, message.GetDescriptor()->FindFieldByName(field_name));
 }
-
-bool AreSameMessageType(const ::google::protobuf::Message& a, const ::google::protobuf::Message& b);
 
 // If both |source| and |target| contain a field with the given name, and the
 // fields are of the same type, copies over the value.

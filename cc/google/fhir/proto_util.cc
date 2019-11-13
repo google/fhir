@@ -237,7 +237,11 @@ Message* MutablePotentiallyRepeatedMessage(Message* message,
 }
 
 bool AreSameMessageType(const Message& a, const Message& b) {
-  return a.GetDescriptor()->full_name() == b.GetDescriptor()->full_name();
+  return AreSameMessageType(a.GetDescriptor(), b.GetDescriptor());
+}
+
+bool AreSameMessageType(const Descriptor* a, const Descriptor* b) {
+  return a == b || a->full_name() == b->full_name();
 }
 
 Status CopyCommonField(const Message& source, Message* target,
