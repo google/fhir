@@ -26,7 +26,7 @@ function copy_to_src_if_present() {
   src=bazel-genfiles/$dir/_genfiles_$1
 
   dst=$dir/$1
-  if [ -e $src ]
+  if [ -e $src ] && [ $(wc -l < $src) -gt 20 ]
   then
     cp $src $dst
   fi

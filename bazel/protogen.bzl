@@ -92,6 +92,7 @@ def gen_fhir_protos(
     cmd = """
         $(location %s) \
             --emit_proto \
+            --emit_codes \
             --output_directory $(@D) \
             --stu3_core_dep $(location %s) \
             --r4_core_dep $(location %s) \
@@ -107,10 +108,10 @@ def gen_fhir_protos(
 
     cmd += additional_proto_imports_flags + " " + struct_def_dep_flags
 
+    outs = ["_genfiles_" + name + ".proto", "_genfiles_" + name + "_codes.proto"]
+
     if separate_extensions:
-        outs = ["_genfiles_" + name + ".proto", "_genfiles_" + name + "_extensions.proto"]
-    else:
-        outs = ["_genfiles_" + name + ".proto"]
+        outs += ["_genfiles_" + name + "_extensions.proto"]
 
     all_fhir_pkgs = package_deps + [
         package,

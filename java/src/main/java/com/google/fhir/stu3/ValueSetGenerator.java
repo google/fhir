@@ -129,6 +129,12 @@ public class ValueSetGenerator {
         "No Enum Defining Url found for: " + descriptor.getFullName());
   }
 
+  public FileDescriptorProto generateCodeSystemAndValueSetsFile(FhirPackage fhirPackage) {
+    return generateCodeSystemFile(fhirPackage).toBuilder()
+        .addAllMessageType(generateValueSetFile(fhirPackage).getMessageTypeList())
+        .build();
+  }
+
   public FileDescriptorProto forCodesUsedIn(Collection<Bundle> codeUsers, boolean eagerMode) {
     Set<CodeSystem> codeSystemsToGenerate = getCodeSystemsUsedInBundles(codeUsers, eagerMode);
     return generateCodeSystemFile(codeSystemsToGenerate);

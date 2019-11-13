@@ -44,3 +44,4 @@ try_build "$dir:${label}_proto_files"
 
 copy_to_src_if_present ${label}.proto
 copy_to_src_if_present ${label}_extensions.proto
+copy_to_src_if_present ${label}_codes.proto
