@@ -28,13 +28,18 @@ filegroup(
     ]),
 )
 
+# These files are used to help test resource validation.
+filegroup(
+    name = "validation",
+    srcs = glob([
+        "validation/*",
+    ]),
+)
+
 # These files contain google extensions.
 filegroup(
     name = "google",
     srcs = glob([
-        "google/*.json",
-        "google/*.descriptor.prototxt",
-        "google/*.extension.prototxt",
-        "google/*.message.prototxt",
+        "google/*",
     ]),
 )

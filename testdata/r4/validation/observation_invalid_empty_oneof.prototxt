@@ -1,0 +1,17 @@
+status { value: FINAL }
+code {
+  coding {
+    system { value: "foo" }
+    code { value: "bar" }
+  }
+}
+id { value: "123" }
+component {
+  value {}
+  code {
+    coding {
+      system { value: "foo" }
+      code { value: "bar" }
+    }
+  }
+}

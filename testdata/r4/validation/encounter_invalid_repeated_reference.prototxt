@@ -1,0 +1,9 @@
+status { value: TRIAGED }
+id { value: "123" }
+class_value {
+  code { value: "AMB" }
+  system { value: "urn:test" }
+}
+account { account_id { value: "111" } }
+account { patient_id { value: "222" } }
+account { account_id { value: "333" } }

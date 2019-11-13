@@ -17,7 +17,6 @@
 #include "gtest/gtest.h"
 #include "google/fhir/resource_validation.h"
 #include "google/fhir/test_helper.h"
-#include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/r4/core/resources/encounter.pb.h"
 #include "proto/r4/core/resources/observation.pb.h"
@@ -31,222 +30,67 @@ namespace {
 
 using namespace google::fhir::r4::core;  // NOLINT
 
-static google::protobuf::TextFormat::Parser parser;
-
 template <typename T>
-T ParseFromString(const std::string& str) {
-  google::protobuf::TextFormat::Parser parser;
-  parser.AllowPartialMessage(true);
-  T t;
-  EXPECT_TRUE(parser.ParseFromString(str, &t));
-  return t;
-}
-
-Observation ValidObservation() {
-  return ParseFromString<Observation>(R"proto(
-    status { value: FINAL }
-    code {
-      coding {
-        system { value: "foo" }
-        code { value: "bar" }
-      }
-    }
-    id { value: "123" }
-  )proto");
-}
-
-CodeableConcept ValidCodeableConcept() {
-  return ParseFromString<CodeableConcept>(R"proto(coding {
-                                                    system { value: "foo" }
-                                                    code { value: "bar" }
-                                                  })proto");
-}
-
-Encounter ValidEncounter() {
-  return ParseFromString<Encounter>(R"proto(
-    status { value: TRIAGED }
-    id { value: "123" }
-    class_value {
-      code { value: "AMB" }
-      system { value: "urn:test" }
-    }
-  )proto");
-}
-
-template <typename T>
-void ValidTest(const T& proto) {
-  auto status = ValidateResource(proto);
+void ValidTest(const std::string& name) {
+  auto status = ValidateResource(
+      ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt")));
   EXPECT_TRUE(status.ok()) << status;
 }
 
 template <typename T>
-void InvalidTest(const std::string& err_msg, const T& proto) {
-  EXPECT_EQ(ValidateResource(proto),
-            ::tensorflow::errors::FailedPrecondition(err_msg));
+void InvalidTest(const std::string& name) {
+  auto status = ValidateResource(
+      ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt")));
+
+  std::string error_msg =
+      ReadFile(absl::StrCat("testdata/r4/validation/", name, ".result.txt"));
+  if (error_msg[error_msg.length() - 1] == '\n') {
+    error_msg.erase(error_msg.length() - 1);
+  }
+
+  EXPECT_EQ(status, ::tensorflow::errors::FailedPrecondition(error_msg));
 }
 
 TEST(ResourceValidationTest, MissingRequiredField) {
-  Observation observation = ValidObservation();
-  observation.clear_status();
-  InvalidTest("missing-Observation.status", observation);
+  InvalidTest<Observation>("observation_invalid_missing_required");
 }
 
 TEST(ResourceValidationTest, InvalidPrimitiveField) {
-  Observation observation = ValidObservation();
-  observation.mutable_value()->mutable_quantity()->mutable_value()->set_value(
-      "1.2.3");
-  InvalidTest("invalid-primitive-Observation.value.quantity.value",
-              observation);
+  InvalidTest<Observation>("observation_invalid_primitive");
 }
 
 TEST(ResourceValidationTest, ValidReference) {
-  Observation observation = ValidObservation();
-  observation.mutable_specimen()->mutable_specimen_id()->set_value("12345");
-  ValidTest(observation);
+  ValidTest<Observation>("observation_valid_reference");
 }
 
 TEST(ResourceValidationTest, InvalidReference) {
-  Observation observation = ValidObservation();
-  observation.mutable_specimen()->mutable_device_id()->set_value("12345");
-  InvalidTest("invalid-reference-Observation.specimen-disallowed-type-Device",
-              observation);
+  InvalidTest<Observation>("observation_invalid_reference");
 }
 
 TEST(ResourceValidationTest, RepeatedReferenceValid) {
-  Encounter encounter = ValidEncounter();
-  encounter.add_account()->mutable_account_id()->set_value("111");
-  encounter.add_account()->mutable_account_id()->set_value("222");
-  encounter.add_account()->mutable_account_id()->set_value("333");
-  ValidTest(encounter);
+  ValidTest<Encounter>("encounter_valid_repeated_reference");
 }
 
 TEST(ResourceValidationTest, RepeatedReferenceInvalid) {
-  Encounter encounter = ValidEncounter();
-  encounter.add_account()->mutable_account_id()->set_value("111");
-  encounter.add_account()->mutable_patient_id()->set_value("222");
-  encounter.add_account()->mutable_account_id()->set_value("333");
-  InvalidTest("invalid-reference-Encounter.account-disallowed-type-Patient",
-              encounter);
+  InvalidTest<Encounter>("encounter_invalid_repeated_reference");
 }
 
 TEST(ResourceValidationTest, EmptyOneof) {
-  Observation observation = ValidObservation();
-
-  auto* component = observation.add_component();
-  component->mutable_value();
-  *(component->mutable_code()) = ValidCodeableConcept();
-  InvalidTest(
-      "empty-oneof-google.fhir.r4.core.Observation.Component.ValueX.choice",
-      observation);
+  InvalidTest<Observation>("observation_invalid_empty_oneof");
 }
 
-TEST(BundleValidationTest, Valid) {
-  google::protobuf::TextFormat::Parser parser;
-  parser.AllowPartialMessage(true);
-  Bundle bundle;
-  ASSERT_TRUE(parser.ParseFromString(R"proto(
-                                       type { value: COLLECTION }
-                                       id { value: "123" }
-                                       entry { resource { patient {} } }
-                                     )proto",
-                                     &bundle));
-
-  EXPECT_TRUE(ValidateResource(bundle).ok());
-}
+TEST(BundleValidationTest, Valid) { ValidTest<Bundle>("bundle_valid"); }
 
 TEST(EncounterValidationTest, StartLaterThanEnd) {
-  google::protobuf::TextFormat::Parser parser;
-  parser.AllowPartialMessage(true);
-  Encounter encounter;
-  ASSERT_TRUE(parser.ParseFromString(
-      R"proto(
-        id { value: "123" }
-        status { value: FINISHED }
-        class_value {
-          code { value: "AMB" }
-          system { value: "urn:test" }
-        }
-        subject { patient_id { value: "4" } }
-        period {
-          start {
-            value_us: 5515680100000000  # "2144-10-13T21:21:40+00:00"
-            timezone: "UTC"
-            precision: SECOND
-          }
-          end {
-            value_us: 5515679100000000  # "2144-10-13T21:05:00+00:00"
-            timezone: "UTC"
-            precision: SECOND
-          }
-        }
-      )proto",
-      &encounter));
-
-  EXPECT_EQ(ValidateResource(encounter),
-            ::tensorflow::errors::FailedPrecondition(
-                "Encounter.period-start-time-later-than-end-time"));
+  InvalidTest<Encounter>("encounter_invalid_start_later_than_end");
 }
 
 TEST(EncounterValidationTest, StartLaterThanEndButEndHasDayPrecision) {
-  google::protobuf::TextFormat::Parser parser;
-  parser.AllowPartialMessage(true);
-  Encounter encounter;
-  ASSERT_TRUE(parser.ParseFromString(
-      R"proto(
-        id { value: "123" }
-        status { value: FINISHED }
-        class_value {
-          code { value: "AMB" }
-          system { value: "urn:test" }
-        }
-        subject { patient_id { value: "4" } }
-        period {
-          start {
-            value_us: 5515680100000000  # "2144-10-13T21:21:40+00:00"
-            timezone: "UTC"
-            precision: SECOND
-          }
-          end {
-            value_us: 5515679100000000  # "2144-10-13T21:05:00+00:00"
-            timezone: "UTC"
-            precision: DAY
-          }
-        }
-      )proto",
-      &encounter));
-
-  TF_ASSERT_OK(ValidateResource(encounter));
+  ValidTest<Encounter>("encounter_valid_start_later_than_end_day_precision");
 }
 
 TEST(EncounterValidationTest, Valid) {
-  google::protobuf::TextFormat::Parser parser;
-  parser.AllowPartialMessage(true);
-  Encounter encounter;
-  ASSERT_TRUE(parser.ParseFromString(
-      R"proto(
-        id { value: "123" }
-        status { value: FINISHED }
-        class_value {
-          code { value: "AMB" }
-          system { value: "urn:test" }
-        }
-        subject { patient_id { value: "4" } }
-        period {
-          start {
-            value_us: 5515679100000000  # "2144-10-13T21:05:00+00:00"
-            timezone: "UTC"
-            precision: SECOND
-          }
-          end {
-            value_us: 5515680100000000  # "2144-10-13T21:21:40+00:00"
-            timezone: "UTC"
-            precision: SECOND
-          }
-        }
-      )proto",
-      &encounter));
-
-  TF_ASSERT_OK(ValidateResource(encounter));
+  ValidTest<Encounter>("encounter_valid");
 }
 
 }  // namespace

@@ -1,0 +1,19 @@
+id { value: "123" }
+status { value: FINISHED }
+class_value {
+  code { value: "AMB" }
+  system { value: "urn:test" }
+}
+subject { patient_id { value: "4" } }
+period {
+  start {
+    value_us: 5515680100000000  # "2144-10-13T21:21:40+00:00"
+    timezone: "UTC"
+    precision: SECOND
+  }
+  end {
+    value_us: 5515679100000000  # "2144-10-13T21:05:00+00:00"
+    timezone: "UTC"
+    precision: DAY
+  }
+}

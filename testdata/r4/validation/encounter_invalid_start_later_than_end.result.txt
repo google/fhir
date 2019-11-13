@@ -1,0 +1,1 @@
+Encounter.period-start-time-later-than-end-time

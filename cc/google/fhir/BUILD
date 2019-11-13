@@ -198,10 +198,12 @@ cc_test(
 cc_test(
     name = "resource_validation_r4_test",
     srcs = ["resource_validation_r4_test.cc"],
+    data = [
+        "//testdata/r4:validation",
+    ],
     deps = [
         ":resource_validation",
         ":test_helper",
-        "//proto/r4/core:datatypes_cc_proto",
         "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
         "//proto/r4/core/resources:encounter_cc_proto",
         "//proto/r4/core/resources:observation_cc_proto",
