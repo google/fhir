@@ -19,6 +19,7 @@
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "absl/strings/ascii.h"
+#include "absl/synchronization/mutex.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/util.h"
@@ -285,15 +286,20 @@ StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
   // for previous runs.
   static auto* memos = new unordered_map<
       std::string, unordered_map<std::string, const EnumValueDescriptor*>>();
+  static absl::Mutex memos_mutex;
 
-  // Check for memoized result.
+  // Check for memoized result.  Note we lock the mutex, in case something tries
+  // to read this map while it is being written to.
+  memos_mutex.ReaderLock();
   const auto memos_for_enum_type = memos->find(target_enum_type->full_name());
   if (memos_for_enum_type != memos->end()) {
     const auto enum_result = memos_for_enum_type->second.find(code_string);
     if (enum_result != memos_for_enum_type->second.end()) {
+      memos_mutex.ReaderUnlock();
       return enum_result->second;
     }
   }
+  memos_mutex.ReaderUnlock();
 
   // Try to find the Enum value by name (with some common substitutions).
   std::string enum_case_code_string = absl::AsciiStrToUpper(code_string);
@@ -302,6 +308,7 @@ StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
   const EnumValueDescriptor* target_enum_value =
       target_enum_type->FindValueByName(enum_case_code_string);
   if (target_enum_value != nullptr) {
+    absl::MutexLock lock(&memos_mutex);
     (*memos)[target_enum_type->full_name()][code_string] = target_enum_value;
     return target_enum_value;
   }
@@ -315,6 +322,7 @@ StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
             ::google::fhir::proto::fhir_original_code) &&
         target_value->options().GetExtension(
             ::google::fhir::proto::fhir_original_code) == code_string) {
+      absl::MutexLock lock(&memos_mutex);
       (*memos)[target_enum_type->full_name()][code_string] = target_value;
       return target_value;
     }
