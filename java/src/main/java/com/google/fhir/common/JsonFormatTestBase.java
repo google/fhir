@@ -19,7 +19,6 @@ import static org.junit.Assert.fail;
 
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
-import com.google.fhir.stu3.JsonFormat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

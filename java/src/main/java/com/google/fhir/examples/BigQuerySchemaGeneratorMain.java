@@ -17,7 +17,7 @@ package com.google.fhir.examples;
 import com.company.fhir.r4.demo.DemoPatient;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.bigquery.model.TableSchema;
-import com.google.fhir.stu3.BigQuerySchema;
+import com.google.fhir.common.BigQuerySchema;
 import com.google.protobuf.Descriptors.Descriptor;
 import java.io.File;
 import java.io.IOException;

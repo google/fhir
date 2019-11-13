@@ -17,9 +17,9 @@ package com.google.fhir.examples;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.common.io.Files;
+import com.google.fhir.common.JsonFormat.Parser;
+import com.google.fhir.common.ResourceUtils;
 import com.google.fhir.r4.core.ContainedResource;
-import com.google.fhir.stu3.JsonFormat.Parser;
-import com.google.fhir.stu3.ResourceUtils;
 import com.google.protobuf.Message;
 import java.io.IOException;
 

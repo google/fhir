@@ -18,12 +18,12 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.bigquery.model.TableSchema;
+import com.google.fhir.common.BigQuerySchema;
+import com.google.fhir.common.JsonFormat;
+import com.google.fhir.common.JsonFormat.Parser;
+import com.google.fhir.common.JsonFormat.Printer;
+import com.google.fhir.common.ResourceUtils;
 import com.google.fhir.r4.core.Bundle;
-import com.google.fhir.stu3.BigQuerySchema;
-import com.google.fhir.stu3.JsonFormat;
-import com.google.fhir.stu3.JsonFormat.Parser;
-import com.google.fhir.stu3.JsonFormat.Printer;
-import com.google.fhir.stu3.ResourceUtils;
 import com.google.protobuf.Message;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -42,7 +42,7 @@ import java.util.Map;
 public class SplitBundleMain {
 
   public static void main(String[] args) throws IOException {
-    Parser fhirParser = com.google.fhir.stu3.JsonFormat.getParser();
+    Parser fhirParser = com.google.fhir.common.JsonFormat.getParser();
     Printer fhirPrinter = JsonFormat.getPrinter().omittingInsignificantWhitespace();
     Printer analyticPrinter =
         JsonFormat.getPrinter().omittingInsignificantWhitespace().forAnalytics();

@@ -18,10 +18,10 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.bigquery.model.TableSchema;
+import com.google.fhir.common.BigQuerySchema;
+import com.google.fhir.common.JsonFormat.Parser;
+import com.google.fhir.common.ResourceUtils;
 import com.google.fhir.r4.core.ContainedResource;
-import com.google.fhir.stu3.BigQuerySchema;
-import com.google.fhir.stu3.JsonFormat.Parser;
-import com.google.fhir.stu3.ResourceUtils;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
 import com.google.protobuf.util.JsonFormat.Printer;

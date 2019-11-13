@@ -14,9 +14,9 @@
 
 package com.google.fhir.examples;
 
+import com.google.fhir.common.JsonFormat.Parser;
+import com.google.fhir.common.ResourceUtils;
 import com.google.fhir.r4.core.Bundle;
-import com.google.fhir.stu3.JsonFormat.Parser;
-import com.google.fhir.stu3.ResourceUtils;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.PipelineResult;
 import org.apache.beam.sdk.io.FileIO;
@@ -58,7 +58,7 @@ public class SyntheaToTFRecordsMain {
   static class ParseBundleFn extends DoFn<String, Bundle> {
     @ProcessElement
     public void processElement(ProcessContext c) throws Exception {
-      Parser fhirParser = com.google.fhir.stu3.JsonFormat.getParser();
+      Parser fhirParser = com.google.fhir.common.JsonFormat.getParser();
 
       // Parse the input bundle.
       Bundle.Builder builder = Bundle.newBuilder();

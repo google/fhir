@@ -14,7 +14,6 @@
 
 package com.google.fhir.common;
 
-import com.google.fhir.stu3.AnnotationUtils;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
