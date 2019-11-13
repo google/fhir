@@ -20,8 +20,7 @@ fi
 
 bazel build //java:SplitBundle
 
-SPLIT_BUNDLE=$(pwd)/../../bazel-bin/java/SplitBundle
+SPLIT_BUNDLE=bazel-bin/java/SplitBundle
 
-cd $1
-$SPLIT_BUNDLE synthea/output/fhir/*.json
+$SPLIT_BUNDLE $1 $1/synthea/output/fhir/*.json
 

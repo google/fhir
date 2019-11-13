@@ -35,8 +35,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This example splits a set of FHIR bundles into individual resources, saved as ndjson files. Each
- * argument is assumed to be an input file.
+ * This example splits a set of FHIR bundles into individual resources, saved as ndjson files. The
+ * first argument is assumed to be the target output directory, and each subsequent argument is an
+ * input file.
  */
 public class SplitBundleMain {
 
@@ -53,7 +54,10 @@ public class SplitBundleMain {
     Map<String, BufferedWriter> analyticOutput = new HashMap<>();
     // We create one schema per output resource type.
     Map<String, TableSchema> schema = new HashMap<>();
-    for (String file : args) {
+
+    String outputDir = args[0];
+    for (int i = 1; i < args.length; i++) {
+      String file = args[i];
       System.out.println("Processing " + file + "...");
       String input = new String(Files.readAllBytes(Paths.get(file)), UTF_8);
 
@@ -78,10 +82,11 @@ public class SplitBundleMain {
         if (!fhirOutput.containsKey(resourceType)) {
           fhirOutput.put(
               resourceType,
-              Files.newBufferedWriter(Paths.get(resourceType + ".fhir.ndjson"), UTF_8));
+              Files.newBufferedWriter(Paths.get(outputDir, resourceType + ".fhir.ndjson"), UTF_8));
           analyticOutput.put(
               resourceType,
-              Files.newBufferedWriter(Paths.get(resourceType + ".analytic.ndjson"), UTF_8));
+              Files.newBufferedWriter(
+                  Paths.get(outputDir, resourceType + ".analytic.ndjson"), UTF_8));
         }
         if (!schema.containsKey(resourceType)) {
           // Generate a schema for this type.
@@ -105,7 +110,7 @@ public class SplitBundleMain {
     // Write the schemas to disk.
     GsonFactory gsonFactory = new GsonFactory();
     for (String resourceType : schema.keySet()) {
-      String filename = Paths.get(resourceType + ".schema.json").toString();
+      String filename = Paths.get(outputDir, resourceType + ".schema.json").toString();
       com.google.common.io.Files.asCharSink(new File(filename), StandardCharsets.UTF_8)
           .write(gsonFactory.toPrettyString(schema.get(resourceType).getFields()));
     }
