@@ -26,6 +26,7 @@
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
 #include "absl/strings/str_cat.h"
+#include "absl/synchronization/mutex.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/core_resource_registry.h"
 #include "google/fhir/extensions.h"
@@ -70,15 +71,32 @@ using ::tensorflow::errors::InvalidArgument;
 // Since FHIR represents extensions to primitives as separate JSON fields,
 // prepended by underscore, we add that as a separate mapping to the primitive
 // field.
-// TODO: memoize
-std::unordered_map<std::string, const FieldDescriptor*> GetFieldMap(
+const std::unordered_map<std::string, const FieldDescriptor*>& GetFieldMap(
     const Descriptor* descriptor) {
-  std::unordered_map<std::string, const FieldDescriptor*> field_map;
+  // Note that we memoize on descriptor address, since the values include
+  // FieldDescriptor addresses, which will only be valid for a given address
+  // of input descriptor
+  static auto* memos = new std::unordered_map<
+      intptr_t, std::unique_ptr<
+                    std::unordered_map<std::string, const FieldDescriptor*>>>();
+  static absl::Mutex memos_mutex;
 
+  const intptr_t memo_key = (intptr_t)descriptor;
+
+  memos_mutex.ReaderLock();
+  const auto iter = memos->find(memo_key);
+  if (iter != memos->end()) {
+    memos_mutex.ReaderUnlock();
+    return *iter->second;
+  }
+  memos_mutex.ReaderUnlock();
+
+  auto field_map = absl::make_unique<
+      std::unordered_map<std::string, const FieldDescriptor*>>();
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
     if (IsChoiceType(field)) {
-      std::unordered_map<std::string, const FieldDescriptor*> inner_map =
+      const std::unordered_map<std::string, const FieldDescriptor*>& inner_map =
           GetFieldMap(field->message_type());
       for (auto iter = inner_map.begin(); iter != inner_map.end(); iter++) {
         std::string child_field_name = iter->first;
@@ -86,26 +104,29 @@ std::unordered_map<std::string, const FieldDescriptor*> GetFieldMap(
           // Convert primitive extension field name to field on choice type,
           // e.g., value + _boolean -> _valueBoolean for Extension.value.
           child_field_name[1] = std::toupper(child_field_name[1]);
-          field_map[absl::StrCat("_", field->json_name(),
-                                 child_field_name.substr(1))] = field;
+          (*field_map)[absl::StrCat("_", field->json_name(),
+                                    child_field_name.substr(1))] = field;
         } else {
           // For non-primitive, just append them together as camelcase, e.g.,
           // value + boolean = valueBoolean
           child_field_name[0] = std::toupper(child_field_name[0]);
-          field_map[absl::StrCat(field->json_name(), child_field_name)] = field;
+          (*field_map)[absl::StrCat(field->json_name(), child_field_name)] =
+              field;
         }
       }
     } else {
-      field_map[field->json_name()] = field;
+      (*field_map)[field->json_name()] = field;
       if (field->type() == FieldDescriptor::TYPE_MESSAGE &&
           IsPrimitive(field->message_type())) {
         // Fhir JSON represents extensions to primitive fields as separate
         // standalone JSON objects, keyed by the "_" + field name.
-        field_map["_" + field->json_name()] = field;
+        (*field_map)["_" + field->json_name()] = field;
       }
     }
   }
-  return field_map;
+  absl::MutexLock lock(&memos_mutex);
+  (*memos)[memo_key] = std::move(field_map);
+  return *(*memos)[memo_key];
 }
 
 typedef std::unordered_map<std::string, const FieldDescriptor*> FieldMap;
@@ -158,7 +179,7 @@ class Parser {
       return MergeContainedResource(value, target);
     }
 
-    const std::unordered_map<std::string, const FieldDescriptor*> field_map =
+    const std::unordered_map<std::string, const FieldDescriptor*>& field_map =
         GetFieldMap(target_descriptor);
 
     for (auto sub_value_iter = value.begin(); sub_value_iter != value.end();
@@ -211,7 +232,7 @@ class Parser {
                           const FieldDescriptor* choice_field,
                           const std::string& field_name, Message* parent) {
     const Descriptor* choice_type_descriptor = choice_field->message_type();
-    const auto choice_type_field_map = GetFieldMap(choice_type_descriptor);
+    const auto& choice_type_field_map = GetFieldMap(choice_type_descriptor);
     std::string choice_field_name = field_name;
     if (field_name[0] == '_') {
       // E.g., _valueBoolean -> boolean

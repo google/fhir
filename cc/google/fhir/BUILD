@@ -359,6 +359,7 @@ cc_library(
         "//proto/stu3:extensions_cc_proto",
         "@com_google_absl//absl/memory",
         "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/synchronization",
         "@com_google_absl//absl/time",
         "@com_google_protobuf//:protobuf",
         "@com_googlesource_code_re2//:re2",
