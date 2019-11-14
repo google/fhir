@@ -1,0 +1,12 @@
+{
+  "name": "hl7.fhir.r4.core",
+  "version": "4.0.1",
+  "fhir-version-list" : [ "4.0.1" ],
+  "type": "fhir.core",
+  "license": "CC0-1.0",
+  "canonical": "http://hl7.org/fhir",
+  "title": "FHIR R4 package : Core",
+  "description": "Definitions (API, structures and terminologies) for the R4 version of the FHIR standard",
+  "author": "HL7 Inc",
+  "url": "http://hl7.org/fhir/R4"
+}
