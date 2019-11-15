@@ -5,9 +5,20 @@ load("@rules_python//python:pip.bzl", "pip_repositories")
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "pip_install")
 load("@org_tensorflow//tensorflow:workspace.bzl", "tf_workspace")
 load("@rules_jvm_external//:defs.bzl", "maven_install")
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
 
 def fhir_proto_dependencies():
     """ Loads dependencies of FhirProto """
+
+    rules_proto_dependencies()
+    rules_proto_toolchains()
+
+    http_archive(
+        name = "rules_cc",
+        urls = ["https://github.com/bazelbuild/rules_cc/archive/bf6a32cff59d22305c37361ca6fea752df8fdd59.zip"],
+        strip_prefix = "rules_cc-bf6a32cff59d22305c37361ca6fea752df8fdd59",
+        sha256 = "3bb877a515252877080d68d919f39c54e18c74b421ec10831a1d17059cae86bf",
+    )
 
     # Used for the FHIRPath parser runtime.
     http_archive(

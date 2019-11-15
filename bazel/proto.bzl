@@ -1,7 +1,9 @@
 """Proto related build rules for fhir.
 """
 
-load("@com_google_protobuf//:protobuf.bzl", "cc_proto_library", "py_proto_library")
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_cc//cc:defs.bzl", "cc_proto_library")
+load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 
 WELL_KNOWN_PROTOS = ["descriptor_proto", "any_proto"]
 
@@ -28,6 +30,13 @@ def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = [], **kwarg
             py_deps.append(x[:-6] + "_py_pb2")
             cc_deps.append(x[:-6] + "_cc_proto")
 
+    proto_library(
+        name = proto_library_prefix + "_proto",
+        srcs = srcs,
+        deps = proto_deps,
+        **kwargs
+    )
+
     py_proto_library(
         name = proto_library_prefix + "_py_pb2",
         srcs = srcs,
@@ -39,18 +48,7 @@ def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = [], **kwarg
 
     cc_proto_library(
         name = proto_library_prefix + "_cc_proto",
-        srcs = srcs,
-        deps = cc_deps,
-        default_runtime = "@com_google_protobuf//:protobuf",
-        protoc = "@com_google_protobuf//:protoc",
-        **kwargs
-    )
-
-    native.proto_library(
-        name = proto_library_prefix + "_proto",
-        srcs = srcs,
-        deps = proto_deps,
-        **kwargs
+        deps = [proto_library_prefix + "_proto"],
     )
 
     native.java_proto_library(
