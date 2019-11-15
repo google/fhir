@@ -1,23 +1,57 @@
 """ Function for loading dependencies of the FhirProto library """
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("@rules_python//python:pip.bzl", "pip_repositories")
-load("@fhir_bazel_pip_dependencies//:requirements.bzl", "pip_install")
-load("@org_tensorflow//tensorflow:workspace.bzl", "tf_workspace")
-load("@rules_jvm_external//:defs.bzl", "maven_install")
-load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
 
-def fhir_proto_dependencies():
+def fhirproto_dependencies():
     """ Loads dependencies of FhirProto """
 
-    rules_proto_dependencies()
-    rules_proto_toolchains()
+    http_archive(
+        name = "rules_jvm_external",
+        strip_prefix = "rules_jvm_external-2.1",
+        sha256 = "515ee5265387b88e4547b34a57393d2bcb1101314bcc5360ec7a482792556f42",
+        url = "https://github.com/bazelbuild/rules_jvm_external/archive/2.1.zip",
+    )
+
+    http_archive(
+        name = "io_bazel_rules_closure",
+        sha256 = "7d206c2383811f378a5ef03f4aacbcf5f47fd8650f6abbc3fa89f3a27dd8b176",
+        strip_prefix = "rules_closure-0.10.0",
+        urls = [
+            "https://github.com/bazelbuild/rules_closure/archive/0.10.0.tar.gz",
+        ],
+    )
+
+    http_archive(
+        name = "rules_proto",
+        sha256 = "602e7161d9195e50246177e7c55b2f39950a9cf7366f74ed5f22fd45750cd208",
+        strip_prefix = "rules_proto-97d8af4dc474595af3900dd85cb3a29ad28cc313",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz",
+            "https://github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz",
+        ],
+    )
+
+    http_archive(
+        name = "rules_python",
+        sha256 = "fa53cc0afe276d8f6675df1a424592e00e4f37b2a497e48399123233902e2e76",
+        strip_prefix = "rules_python-0.0.1",
+        urls = ["https://github.com/bazelbuild/rules_python/archive/0.0.1.tar.gz"],
+    )
 
     http_archive(
         name = "rules_cc",
         urls = ["https://github.com/bazelbuild/rules_cc/archive/bf6a32cff59d22305c37361ca6fea752df8fdd59.zip"],
         strip_prefix = "rules_cc-bf6a32cff59d22305c37361ca6fea752df8fdd59",
         sha256 = "3bb877a515252877080d68d919f39c54e18c74b421ec10831a1d17059cae86bf",
+    )
+
+    http_archive(
+        name = "org_tensorflow",
+        sha256 = "49b5f0495cd681cbcb5296a4476853d4aea19a43bdd9f179c928a977308a0617",
+        strip_prefix = "tensorflow-2.0.0",
+        urls = [
+            "https://github.com/tensorflow/tensorflow/archive/v2.0.0.tar.gz",
+        ],
     )
 
     # Used for the FHIRPath parser runtime.
@@ -34,50 +68,4 @@ def fhir_proto_dependencies():
         sha256 = "bbccf674aa441c266df9894182d80de104cabd19be98be002f6d478aaa31574d",
         strip_prefix = "bazel-skylib-2169ae1c374aab4a09aa90e65efe1a3aad4e279b",
         urls = ["https://github.com/bazelbuild/bazel-skylib/archive/2169ae1c374aab4a09aa90e65efe1a3aad4e279b.tar.gz"],
-    )
-
-    pip_repositories()
-
-    pip_install()
-
-    tf_workspace("", "@org_tensorflow")
-
-    maven_install(
-        artifacts = [
-            "org.antlr:antlr4:jar:4.7.1",
-            "com.beust:jcommander:1.72",
-            "com.fasterxml.jackson.core:jackson-core:2.9.5",
-            "com.fasterxml.jackson.core:jackson-databind:2.9.5",
-            "com.fasterxml.jackson.core:jackson-annotations:2.9.5",
-            "com.google.cloud:google-cloud-bigquery:1.38.0",
-            "com.google.code.gson:gson:2.8.5",
-            "com.google.errorprone:error_prone_annotations:2.3.3",
-            "com.google.guava:guava:26.0-jre",
-            "com.google.http-client:google-http-client-gson:1.24.1",
-            "com.google.truth:truth:0.42",
-            "junit:junit:4.12",
-            "org.apache.beam:beam-runners-direct-java:2.9.0",
-            "org.apache.beam:beam-runners-google-cloud-dataflow-java:2.9.0",
-            "org.apache.beam:beam-sdks-java-core:2.9.0",
-            "org.slf4j:slf4j-simple:1.7.25",
-        ],
-        repositories = [
-            "https://maven.google.com",
-            "https://repo1.maven.org/maven2",
-        ],
-    )
-
-    native.bind(
-        name = "gson",
-        actual = "@maven//:com_google_code_gson_gson",
-    )
-
-    native.bind(
-        name = "guava",
-        actual = "@maven//:com_google_guava_guava",
-    )
-
-    native.bind(
-        name = "error_prone_annotations",
-        actual = "@maven//:com_google_errorprone_error_prone_annotations",
     )
