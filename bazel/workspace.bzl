@@ -9,7 +9,7 @@ def fhirproto_workspace():
 
     pip_import(
         name = "fhir_bazel_pip_dependencies",
-        requirements = "//bazel:requirements.txt",
+        requirements = "@com_google_fhir//bazel:requirements.txt",
     )
     pip_repositories()
 
