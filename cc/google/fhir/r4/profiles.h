@@ -44,6 +44,8 @@ namespace fhir {
 Status ConvertToProfileR4(const ::google::protobuf::Message& source,
                           ::google::protobuf::Message* target);
 
+// Similar to ConvertToProfileR4, but does not validate that the proto is valid
+// according to the target profile.
 Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,
                                  ::google::protobuf::Message* target);
 

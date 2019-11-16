@@ -168,6 +168,7 @@ cc_library(
         ":primitive_wrapper",
         ":proto_util",
         ":util",
+        "//cc/google/fhir/fhir_path",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//cc/google/fhir/systems",

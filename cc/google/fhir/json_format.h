@@ -34,12 +34,16 @@ namespace fhir {
 
 // Merges a string of raw FHIR json into an existing message.
 // Takes a default timezone for timelike data that does not specify timezone.
+// For reading JSON into a new resource, it is recommended to use
+// JsonFhirStringToProto or JsonFhirStringToProtoWithoutValidating.
 ::google::fhir::Status MergeJsonFhirStringIntoProto(
     const std::string& raw_json, google::protobuf::Message* target,
     absl::TimeZone default_timezone, const bool validate);
 
 // Given a template for a FHIR resource type, creates a resource proto of that
 // type and merges a std::string of raw FHIR json into it.
+// Returns a status error if the JSON string was not a valid resource according
+// to the requirements of the requested FHIR proto.
 // Takes a default timezone for timelike data that does not specify timezone.
 template <typename R>
 ::google::fhir::StatusOr<R> JsonFhirStringToProto(
@@ -50,6 +54,11 @@ template <typename R>
   return resource;
 }
 
+// Given a template for a FHIR resource type, creates a resource proto of that
+// type and merges a std::string of raw FHIR json into it.
+// Will not validate FHIR requirements such as required fields, but will fail
+// if it encounters a field it cannot convert.
+// Takes a default timezone for timelike data that does not specify timezone.
 template <typename R>
 ::google::fhir::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
     const std::string& raw_json, const absl::TimeZone default_timezone) {
@@ -59,15 +68,25 @@ template <typename R>
   return resource;
 }
 
-::google::fhir::StatusOr<std::string> PrettyPrintFhirToJsonString(
-    const google::protobuf::Message& fhir_proto);
+// Prints a FHIR primitive to string for display.  This string conforms to the
+// FHIR regex for this primitive.
+::google::fhir::StatusOr<std::string> PrintFhirPrimitive(
+    const ::google::protobuf::Message& primitive);
 
+// Prints a FHIR proto to a single line of FHIR JSON, suitable for NDJSON
 ::google::fhir::StatusOr<std::string> PrintFhirToJsonString(
     const google::protobuf::Message& fhir_proto);
 
+// Prints a FHIR proto to "pretty" (i.e., multi-line) FHIR JSON.
+::google::fhir::StatusOr<std::string> PrettyPrintFhirToJsonString(
+    const google::protobuf::Message& fhir_proto);
+
+// Prints a FHIR proto to a single line of FHIR Analytic JSON,
+// suitable for NDJSON
 ::google::fhir::StatusOr<std::string> PrintFhirToJsonStringForAnalytics(
     const google::protobuf::Message& fhir_proto);
 
+// Prints a FHIR proto to "pretty" (i.e., multi-line) FHIR Analytic JSON.
 ::google::fhir::StatusOr<std::string> PrettyPrintFhirToJsonStringForAnalytics(
     const google::protobuf::Message& fhir_proto);
 

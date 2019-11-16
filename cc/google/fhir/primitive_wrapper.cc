@@ -189,12 +189,12 @@ class SpecificWrapper : public PrimitiveWrapper {
 template <typename XhtmlLike>
 class XhtmlWrapper : public SpecificWrapper<XhtmlLike> {
  public:
-  bool HasValue() const { return true; }
+  bool HasValue() const override { return true; }
 
-  bool HasElement() const { return this->GetWrapped()->has_id(); }
+  bool HasElement() const override { return this->GetWrapped()->has_id(); }
 
   // Xhtml can't have extensions, it's always valid
-  Status ValidateProto() const { return Status::OK(); }
+  Status ValidateProto() const override { return Status::OK(); }
 
   StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement() const override {
     std::unique_ptr<Message> element =
@@ -234,7 +234,7 @@ class XhtmlWrapper : public SpecificWrapper<XhtmlLike> {
 template <typename T>
 class ExtensibleWrapper : public SpecificWrapper<T> {
  public:
-  Status ValidateProto() const {
+  Status ValidateProto() const override {
     FHIR_ASSIGN_OR_RETURN(const bool has_no_value_extension,
                           HasPrimitiveHasNoValue(*this->GetWrapped()));
     const T& typed = dynamic_cast<const T&>(*this->GetWrapped());

@@ -498,6 +498,13 @@ StatusOr<std::string> WriteMessage(Printer printer, const Message& message) {
 
 }  // namespace
 
+::google::fhir::StatusOr<std::string> PrintFhirPrimitive(
+    const ::google::protobuf::Message& message) {
+  FHIR_ASSIGN_OR_RETURN(const JsonPrimitive& primitive,
+                        WrapPrimitiveProto(message));
+  return primitive.value;
+}
+
 StatusOr<std::string> PrettyPrintFhirToJsonString(const Message& fhir_proto) {
   Printer printer{2, true, false};
   return WriteMessage(printer, fhir_proto);

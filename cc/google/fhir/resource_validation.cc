@@ -19,6 +19,7 @@
 #include "google/protobuf/descriptor.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/fhir_path/fhir_path.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
@@ -224,12 +225,26 @@ Status CheckField(const Message& message, const FieldDescriptor* field,
 
 }  // namespace
 
-Status ValidateFhirConstraints(const Message& message) {
-  return ValidateFhirConstraints(message, message.GetDescriptor()->name());
+// TODO: Invert the default here for FHIRPath handling, and have
+// ValidateWithoutFhirPath instead of ValidateWithFhirPath
+
+Status ValidateResourceWithFhirPath(const Message& resource) {
+  FHIR_RETURN_IF_ERROR(
+      ValidateFhirConstraints(resource, resource.GetDescriptor()->name()));
+  return fhir_path::ValidateMessage(resource);
+}
+
+// TODO(nickgeorge, rbrush): Consider integrating handler func into validations
+// in this file.
+Status ValidateResourceWithFhirPath(const Message& resource,
+                                    fhir_path::ViolationHandlerFunc handler) {
+  FHIR_RETURN_IF_ERROR(
+      ValidateFhirConstraints(resource, resource.GetDescriptor()->name()));
+  return fhir_path::ValidateMessage(resource, handler);
 }
 
 Status ValidateResource(const Message& resource) {
-  return ValidateFhirConstraints(resource);
+  return ValidateFhirConstraints(resource, resource.GetDescriptor()->name());
 }
 
 }  // namespace fhir

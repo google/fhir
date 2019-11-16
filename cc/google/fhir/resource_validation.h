@@ -27,10 +27,7 @@
 namespace google {
 namespace fhir {
 
-Status ValidateFhirConstraints(const ::google::protobuf::Message& message);
-
-// Run resource-specific validation on a single FHIR resource. One could
-// override this function to impose additional resource-specific constraints.
+// Run resource-specific validation on a single FHIR resource.
 Status ValidateResource(const ::google::protobuf::Message& resource);
 
 }  // namespace fhir
