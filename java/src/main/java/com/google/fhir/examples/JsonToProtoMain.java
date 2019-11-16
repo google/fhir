@@ -21,7 +21,6 @@ import com.google.fhir.common.JsonFormat.Parser;
 import com.google.fhir.common.ResourceUtils;
 import com.google.fhir.r4.core.ContainedResource;
 import com.google.protobuf.Message;
-import java.io.IOException;
 
 /**
  * This example reads FHIR resources in json format, one message per file, and emits corresponding
@@ -29,7 +28,7 @@ import java.io.IOException;
  */
 public class JsonToProtoMain {
 
-  public static void main(String[] argv) throws IOException {
+  public static void main(String[] argv) throws Exception {
     JsonParserArgs args = new JsonParserArgs(argv);
     Parser fhirParser = Parser.newBuilder().withDefaultTimeZone(args.getDefaultTimezone()).build();
 

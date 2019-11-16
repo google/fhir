@@ -15,7 +15,7 @@
 package com.google.fhir.common;
 
 /** Exception indicating a fhir validation failure. */
-final class InvalidFhirException extends Exception {
+public final class InvalidFhirException extends Exception {
 
   public InvalidFhirException(String invalidReason, Exception e) {
     super(invalidReason, e);

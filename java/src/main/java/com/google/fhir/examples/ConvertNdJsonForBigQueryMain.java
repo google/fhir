@@ -28,7 +28,6 @@ import com.google.protobuf.util.JsonFormat.Printer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -44,7 +43,7 @@ import java.util.Map;
  */
 public class ConvertNdJsonForBigQueryMain {
 
-  public static void main(String[] argv) throws IOException {
+  public static void main(String[] argv) throws Exception {
     JsonParserArgs args = new JsonParserArgs(argv);
     Parser fhirParser = Parser.newBuilder().withDefaultTimeZone(args.getDefaultTimezone()).build();
     Printer protoPrinter = JsonFormat.printer().omittingInsignificantWhitespace();

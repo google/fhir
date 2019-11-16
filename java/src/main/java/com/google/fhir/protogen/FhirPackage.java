@@ -17,6 +17,7 @@ package com.google.fhir.protogen;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.common.io.ByteStreams;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.common.ResourceUtils;
 import com.google.fhir.dstu2.StructureDefinitionTransformer;
@@ -59,11 +60,12 @@ public class FhirPackage {
     this.valueSets = valueSets;
   }
 
-  public static FhirPackage load(String zipFilePath) throws IOException {
+  public static FhirPackage load(String zipFilePath) throws IOException, InvalidFhirException {
     return load(zipFilePath, FhirVersion.R4);
   }
 
-  public static FhirPackage load(String zipFilePath, FhirVersion fhirVersion) throws IOException {
+  public static FhirPackage load(String zipFilePath, FhirVersion fhirVersion)
+      throws IOException, InvalidFhirException {
     List<ValueSet> valueSets = new ArrayList<>();
     List<CodeSystem> codeSystems = new ArrayList<>();
     List<StructureDefinition> structureDefinitions = new ArrayList<>();
@@ -72,7 +74,7 @@ public class FhirPackage {
     JsonFormat.Parser parser =
         fhirVersion == FhirVersion.DSTU2 || fhirVersion == fhirVersion.STU3
             ? JsonFormat.getEarlyVersionGeneratorParser()
-            : JsonFormat.getParser();
+            : JsonFormat.getLenientParser();
     ZipFile zipFile = new ZipFile(new File(zipFilePath));
     Enumeration<? extends ZipEntry> entries = zipFile.entries();
     while (entries.hasMoreElements()) {
@@ -137,7 +139,7 @@ public class FhirPackage {
 
   @SuppressWarnings("unchecked")
   private static <T extends Message> Optional<T> tryParsingAs(
-      String json, T type, JsonFormat.Parser parser) {
+      String json, T type, JsonFormat.Parser parser) throws InvalidFhirException {
     try {
       Message.Builder typeBuilder = type.newBuilderForType();
       parser.merge(json, typeBuilder);

@@ -29,7 +29,6 @@ import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.TextFormat;
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,14 +48,14 @@ public class ProtoGeneratorTest {
   private Runfiles runfiles;
 
   /** Read the specifed file from the testdata directory into a String. */
-  private String loadFile(String relativePath) throws IOException {
+  private String loadFile(String relativePath) throws Exception {
     File file = new File(runfiles.rlocation(relativePath));
     return Files.asCharSource(file, StandardCharsets.UTF_8).read();
   }
 
   /** Read and parse the specified StructureDefinition. */
   private StructureDefinition readStructureDefinition(String resourceName, FhirVersion version)
-      throws IOException {
+      throws Exception {
     String pathPrefix;
     switch (version) {
       case STU3:
@@ -76,9 +75,10 @@ public class ProtoGeneratorTest {
     return builder.build();
   }
 
+  // TODO: STU3 temporarily frozen.
   // /** Read and parse the specified StructureDefinition. */
   // private StructureDefinition readModifiedStructureDefinition(String resourceName)
-  //     throws IOException {
+  //     throws Exception {
   //   String json =
   //       loadFile(
   //           "com_google_fhir/spec/hl7.fhir.core/3.0.1/modified/StructureDefinition-"
@@ -91,7 +91,7 @@ public class ProtoGeneratorTest {
 
   /** Read and parse the specified DescriptorProto. */
   private DescriptorProto readDescriptorProto(String resourceName, FhirVersion version)
-      throws IOException {
+      throws Exception {
     String pathPrefix;
     switch (version) {
       case STU3:
@@ -110,34 +110,34 @@ public class ProtoGeneratorTest {
   }
 
   // STU3 temporarily frozen.
-  //   private void testGeneratedSTU3Proto(String resourceName) throws IOException {
+  //   private void testGeneratedSTU3Proto(String resourceName) throws Exception {
   //     StructureDefinition resource = readStructureDefinition(resourceName, FhirVersion.STU3);
   //     DescriptorProto generatedProto = protoGenerator.generateProto(resource);
   //     DescriptorProto golden = readDescriptorProto(resourceName, FhirVersion.STU3);
   //     assertThat(generatedProto).isEqualTo(golden);
   //   }
   //
-  //   private void testModifiedGeneratedSTU3Proto(String resourceName) throws IOException {
+  //   private void testModifiedGeneratedSTU3Proto(String resourceName) throws Exception {
   //     StructureDefinition resource = readModifiedStructureDefinition(resourceName);
   //     DescriptorProto generatedProto = protoGenerator.generateProto(resource);
   //     DescriptorProto golden = readDescriptorProto(resourceName, FhirVersion.STU3);
   //     assertThat(generatedProto).isEqualTo(golden);
   //   }
   //
-  //   private void testExtension(String resourceName) throws IOException {
+  //   private void testExtension(String resourceName) throws Exception {
   //     StructureDefinition resource = readStructureDefinition(resourceName, FhirVersion.STU3);
   //     DescriptorProto generatedProto = protoGenerator.generateProto(resource);
   //     DescriptorProto golden = readDescriptorProto(resourceName, FhirVersion.STU3);
   //     assertThat(generatedProto).isEqualTo(golden);
   //   }
   //
-  //   private void verifyCompiledDescriptor(Descriptor descriptor) throws IOException {
+  //   private void verifyCompiledDescriptor(Descriptor descriptor) throws Exception {
   //     DescriptorProto golden = readDescriptorProto(descriptor.getName(), FhirVersion.STU3);
   //     assertThat(descriptor.toProto()).isEqualTo(golden);
   //   }
 
   @Before
-  public void setUp() throws IOException {
+  public void setUp() throws Exception {
     jsonParser = JsonFormat.getEarlyVersionGeneratorParser();
     textParser = TextFormat.getParser();
     runfiles = Runfiles.create();
@@ -169,7 +169,7 @@ public class ProtoGeneratorTest {
     registry.add(ProtoGeneratorAnnotations.reservedReason);
   }
 
-  // STU3 temporarily frozen.
+  //  TODO: STU3 temporarily frozen.
   //
   //   // Test the primitive FHIR data types individually. */
   //
@@ -1437,7 +1437,7 @@ public class ProtoGeneratorTest {
   //   }
 
   private void testGeneratedR4Proto(ProtoGenerator protoGenerator, String resourceName)
-      throws IOException {
+      throws Exception {
     StructureDefinition resource = readStructureDefinition(resourceName, FhirVersion.R4);
     DescriptorProto generatedProto = protoGenerator.generateProto(resource);
     DescriptorProto golden = readDescriptorProto(resourceName, FhirVersion.R4);
@@ -1447,7 +1447,7 @@ public class ProtoGeneratorTest {
     }
   }
 
-  static ProtoGenerator makeR4ProtoGenerator(String definitionZip) throws IOException {
+  static ProtoGenerator makeR4ProtoGenerator(String definitionZip) throws Exception {
     FhirPackage fhirPackage = FhirPackage.load(definitionZip);
 
     return new ProtoGenerator(

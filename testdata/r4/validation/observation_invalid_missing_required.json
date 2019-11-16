@@ -1,0 +1,10 @@
+{
+  "resourceType": "Observation",
+  "code": {
+    "coding": [{
+      "system": "foo",
+      "code": "bar"
+    }]
+  },
+  "id": "123"
+}

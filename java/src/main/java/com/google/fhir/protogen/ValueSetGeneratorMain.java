@@ -27,7 +27,6 @@ import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -78,7 +77,7 @@ final class ValueSetGeneratorMain {
         required = true)
     private String inputPackage = null;
 
-    private Set<FhirPackage> getDependencies() throws IOException {
+    private Set<FhirPackage> getDependencies() throws Exception {
       Set<FhirPackage> packages = new HashSet<>();
       for (String fhirDefinitionDep : fhirDefinitionDepList) {
         packages.add(FhirPackage.load(fhirDefinitionDep));
@@ -92,7 +91,7 @@ final class ValueSetGeneratorMain {
 
   private ValueSetGeneratorMain() {}
 
-  public static void main(String[] argv) throws IOException {
+  public static void main(String[] argv) throws Exception {
     // Each non-flag argument is assumed to be an input file.
     Args args = new Args();
     JCommander jcommander = new JCommander(args);
@@ -155,7 +154,7 @@ final class ValueSetGeneratorMain {
   }
 
   private static List<Bundle> loadBundles(Set<String> filenames, FhirVersion fhirVersion)
-      throws IOException {
+      throws Exception {
     JsonFormat.Parser parser = getParser(fhirVersion);
     List<Bundle> bundles = new ArrayList<>();
     for (String filename : filenames) {
