@@ -1,0 +1,22 @@
+{
+  "name": "hl7.fhir.us.core",
+  "version": "3.1.0",
+  "tools-version": 3,
+  "type": "fhir.ig",
+  "date": "20191106130801",
+  "license": "CC0-1.0",
+  "canonical": "http://hl7.org/fhir/us/core",
+  "title": "US Core",
+  "fhirVersions": [
+    "4.0.1"
+  ],
+  "dependencies": {
+    "hl7.fhir.r4.core": "4.0.1"
+  },
+  "author": "HL7 International - US Realm Steering Committee",
+  "directories": {
+    "lib": "package",
+    "example": "example"
+  },
+  "url": "http://hl7.org/fhir/us/core"
+}
