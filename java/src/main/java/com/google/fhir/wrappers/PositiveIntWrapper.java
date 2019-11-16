@@ -22,10 +22,15 @@ import java.util.regex.Pattern;
 
 /** A wrapper around the PositiveInt FHIR primitive type. */
 public class PositiveIntWrapper extends NumericTypeWrapper<PositiveInt> {
-
-  private static final Pattern POSITIVE_INT_PATTERN =
+  private static final Pattern REGEX_PATTERN =
       Pattern.compile(
           AnnotationUtils.getValueRegexForPrimitiveType(PositiveInt.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
+
   private static final PositiveInt NULL_POSITIVE_INT =
       PositiveInt.newBuilder().addExtension(getNoValueExtension()).build();
 
@@ -44,7 +49,7 @@ public class PositiveIntWrapper extends NumericTypeWrapper<PositiveInt> {
   }
 
   private static PositiveInt parseAndValidate(String input) {
-    validateUsingPattern(POSITIVE_INT_PATTERN, input);
+    validateUsingPattern(REGEX_PATTERN, input);
     return PositiveInt.newBuilder().setValue(Integer.parseInt(input)).build();
   }
 

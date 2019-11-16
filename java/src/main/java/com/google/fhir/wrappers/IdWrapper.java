@@ -23,8 +23,14 @@ import java.util.regex.Pattern;
 /** A wrapper around the Id FHIR primitive type. */
 public class IdWrapper extends PrimitiveWrapper<Id> {
 
-  private static final Pattern ID_PATTERN =
+  private static final Pattern REGEX_PATTERN =
       Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Id.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
+
   private static final Id NULL_ID = Id.newBuilder().addExtension(getNoValueExtension()).build();
 
   /** Create an IdWrapper from an Id. */
@@ -42,7 +48,7 @@ public class IdWrapper extends PrimitiveWrapper<Id> {
   }
 
   private static Id parseAndValidate(String input) {
-    validateUsingPattern(ID_PATTERN, input);
+    validateUsingPattern(REGEX_PATTERN, input);
     return Id.newBuilder().setValue(input).build();
   }
 

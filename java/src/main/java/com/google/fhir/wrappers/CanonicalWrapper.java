@@ -23,9 +23,15 @@ import java.util.regex.Pattern;
 /** A wrapper around the Canonical FHIR primitive type. */
 public class CanonicalWrapper extends PrimitiveWrapper<Canonical> {
 
-  private static final Pattern CANONICAL_PATTERN =
+  private static final Pattern REGEX_PATTERN =
       Pattern.compile(
           AnnotationUtils.getValueRegexForPrimitiveType(Canonical.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
+
   private static final Canonical NULL_CANONICAL =
       Canonical.newBuilder().addExtension(getNoValueExtension()).build();
 
@@ -45,7 +51,7 @@ public class CanonicalWrapper extends PrimitiveWrapper<Canonical> {
   }
 
   private static Canonical parseAndValidate(String input) {
-    validateUsingPattern(CANONICAL_PATTERN, input);
+    validateUsingPattern(REGEX_PATTERN, input);
     return Canonical.newBuilder().setValue(input).build();
   }
 

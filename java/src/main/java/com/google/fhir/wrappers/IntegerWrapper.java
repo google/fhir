@@ -23,8 +23,14 @@ import java.util.regex.Pattern;
 /** A wrapper around the Integer FHIR primitive type. */
 public class IntegerWrapper extends NumericTypeWrapper<Integer> {
 
-  private static final Pattern INTEGER_PATTERN =
+  private static final Pattern REGEX_PATTERN =
       Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Integer.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
+
   private static final Integer NULL_INTEGER =
       Integer.newBuilder().addExtension(getNoValueExtension()).build();
 
@@ -43,7 +49,7 @@ public class IntegerWrapper extends NumericTypeWrapper<Integer> {
   }
 
   private static Integer parseAndValidate(String input) {
-    validateUsingPattern(INTEGER_PATTERN, input);
+    validateUsingPattern(REGEX_PATTERN, input);
     return Integer.newBuilder().setValue(java.lang.Integer.parseInt(input)).build();
   }
 

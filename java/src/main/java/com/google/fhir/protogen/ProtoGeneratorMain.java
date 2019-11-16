@@ -12,7 +12,7 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-package com.google.fhir.examples;
+package com.google.fhir.protogen;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -29,11 +29,6 @@ import com.google.fhir.dstu2.StructureDefinitionTransformer;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
-import com.google.fhir.protogen.FhirPackage;
-import com.google.fhir.protogen.GeneratorUtils;
-import com.google.fhir.protogen.ProtoFilePrinter;
-import com.google.fhir.protogen.ProtoGenerator;
-import com.google.fhir.protogen.ValueSetGenerator;
 import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
@@ -93,11 +88,6 @@ class ProtoGeneratorMain {
       description = "Emit a .proto file generated from the input"
     )
     private Boolean emitProto = false;
-
-    @Parameter(
-        names = {"--emit_codes"},
-        description = "Emit a .proto file generated from CodeSystems and ValueSets in the input")
-    private Boolean emitCodesProto = false;
 
     @Parameter(
         names = {"--package_info"},
@@ -284,23 +274,12 @@ class ProtoGeneratorMain {
     writer.println("Generating proto descriptors...");
     writer.flush();
 
-    ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
-    ValueSetGenerator valueSetGenerator = new ValueSetGenerator(packageInfo, fhirPackages);
     ProtoGenerator generator =
         packageInfo.getFhirVersion() != FhirVersion.R4
             ? new ProtoGenerator(packageInfo, fhirPackages)
-            : new ProtoGenerator(packageInfo, fhirPackages, valueSetGenerator);
-
-    if (args.emitCodesProto) {
-      if (inputPackage == null) {
-        throw new IllegalArgumentException(
-            "Emitting codes proto is only valid for proto generation at the package level, using"
-                + " --input_package");
-      }
-      File outputFile = new File(args.outputDirectory, args.outputName + "_codes.proto");
-      Files.asCharSink(outputFile, UTF_8)
-          .write(printer.print(valueSetGenerator.generateCodeSystemAndValueSetsFile(inputPackage)));
-    }
+            : new ProtoGenerator(
+                packageInfo, fhirPackages, new ValueSetGenerator(packageInfo, fhirPackages));
+    ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
 
     switch (packageInfo.getFileSplittingBehavior()) {
       case DEFAULT_SPLITTING_BEHAVIOR:

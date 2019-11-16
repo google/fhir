@@ -31,8 +31,14 @@ import java.util.regex.Pattern;
 /** A wrapper around the Date FHIR primitive type. */
 public class DateWrapper extends PrimitiveWrapper<Date> {
 
-  private static final Pattern DATE_PATTERN =
+  private static final Pattern REGEX_PATTERN =
       Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Date.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
+
   private static final Date NULL_DATE =
       Date.newBuilder().addExtension(getNoValueExtension()).build();
 
@@ -70,7 +76,7 @@ public class DateWrapper extends PrimitiveWrapper<Date> {
   }
 
   private static Date parseAndValidate(String input, ZoneId defaultTimeZone) {
-    validateUsingPattern(DATE_PATTERN, input);
+    validateUsingPattern(REGEX_PATTERN, input);
     try {
       return buildDate(Year.parse(input).atDay(1), defaultTimeZone, Date.Precision.YEAR);
     } catch (DateTimeParseException e) {

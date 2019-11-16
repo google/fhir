@@ -14,12 +14,22 @@
 
 package com.google.fhir.wrappers;
 
+import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.r4.core.Markdown;
 import com.google.protobuf.MessageOrBuilder;
+import java.util.regex.Pattern;
 
 /** A wrapper around the Markdown FHIR primitive type. */
 public class MarkdownWrapper extends PrimitiveWrapper<Markdown> {
+
+  private static final Pattern REGEX_PATTERN =
+      Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Markdown.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
 
   private static final Markdown NULL_MARKDOWN =
       Markdown.newBuilder().addExtension(getNoValueExtension()).build();
@@ -35,7 +45,12 @@ public class MarkdownWrapper extends PrimitiveWrapper<Markdown> {
 
   /** Create an MarkdownWrapper from a java String. */
   public MarkdownWrapper(String input) {
-    super(input == null ? NULL_MARKDOWN : Markdown.newBuilder().setValue(input).build());
+    super(input == null ? NULL_MARKDOWN : parseAndValidate(input));
+  }
+
+  private static Markdown parseAndValidate(String input) {
+    validateUsingPattern(REGEX_PATTERN, input);
+    return Markdown.newBuilder().setValue(input).build();
   }
 
   @Override

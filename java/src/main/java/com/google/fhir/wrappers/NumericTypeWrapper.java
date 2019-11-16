@@ -27,10 +27,6 @@ public abstract class NumericTypeWrapper<T extends Message> extends PrimitiveWra
 
   @Override
   public JsonPrimitive toJson() {
-    return new JsonPrimitive(toBigDecimal());
-  }
-
-  public BigDecimal toBigDecimal() {
-    return new BigDecimal(toString());
+    return new JsonPrimitive(new BigDecimal(toString()));
   }
 }

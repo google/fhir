@@ -14,13 +14,23 @@
 
 package com.google.fhir.wrappers;
 
+import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.r4.core.Extension;
 import com.google.fhir.r4.core.Url;
 import com.google.protobuf.MessageOrBuilder;
+import java.util.regex.Pattern;
 
 /** A wrapper around the Url FHIR primitive type. */
 public class UrlWrapper extends PrimitiveWrapper<Url> {
+
+  private static final Pattern REGEX_PATTERN =
+      Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Url.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
 
   private static final Url NULL_URL =
       Url.newBuilder()
@@ -47,6 +57,7 @@ public class UrlWrapper extends PrimitiveWrapper<Url> {
   }
 
   private static Url parseAndValidate(String input) {
+    validateUsingPattern(REGEX_PATTERN, input);
     return Url.newBuilder().setValue(input).build();
   }
 }

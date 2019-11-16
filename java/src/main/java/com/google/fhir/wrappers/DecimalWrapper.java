@@ -24,8 +24,14 @@ import java.util.regex.Pattern;
 /** A wrapper around the Decimal FHIR primitive type. */
 public class DecimalWrapper extends NumericTypeWrapper<Decimal> {
 
-  private static final Pattern DECIMAL_PATTERN =
+  private static final Pattern REGEX_PATTERN =
       Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Decimal.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
+
   private static final Decimal NULL_DECIMAL =
       Decimal.newBuilder().addExtension(getNoValueExtension()).build();
 
@@ -58,7 +64,7 @@ public class DecimalWrapper extends NumericTypeWrapper<Decimal> {
   }
 
   private static Decimal parseAndValidate(String input) {
-    validateUsingPattern(DECIMAL_PATTERN, input);
+    validateUsingPattern(REGEX_PATTERN, input);
     validate(input);
     return Decimal.newBuilder().setValue(input).build();
   }

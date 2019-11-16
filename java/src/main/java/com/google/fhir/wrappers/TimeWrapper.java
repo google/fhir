@@ -27,8 +27,14 @@ import java.util.regex.Pattern;
 /** A wrapper around the Time FHIR primitive type. */
 public class TimeWrapper extends PrimitiveWrapper<Time> {
 
-  private static final Pattern TIME_PATTERN =
+  private static final Pattern REGEX_PATTERN =
       Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Time.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
+
   private static final Time NULL_TIME =
       Time.newBuilder().addExtension(getNoValueExtension()).build();
 
@@ -55,7 +61,7 @@ public class TimeWrapper extends PrimitiveWrapper<Time> {
   }
 
   private static Time parseAndValidate(String input) {
-    validateUsingPattern(TIME_PATTERN, input);
+    validateUsingPattern(REGEX_PATTERN, input);
     try {
       return buildTime(LocalTime.parse(input, SECOND), Time.Precision.SECOND);
     } catch (DateTimeParseException e) {

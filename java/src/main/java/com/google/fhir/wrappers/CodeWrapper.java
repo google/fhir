@@ -33,8 +33,14 @@ import java.util.regex.Pattern;
  */
 public class CodeWrapper extends PrimitiveWrapper<Code> {
 
-  private static final Pattern CODE_PATTERN =
+  private static final Pattern REGEX_PATTERN =
       Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Code.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
+
   private static final Code NULL_CODE =
       Code.newBuilder().addExtension(getNoValueExtension()).build();
 
@@ -143,7 +149,7 @@ public class CodeWrapper extends PrimitiveWrapper<Code> {
   }
 
   private static Code parseAndValidate(String input) {
-    validateUsingPattern(CODE_PATTERN, input);
+    validateUsingPattern(REGEX_PATTERN, input);
     return Code.newBuilder().setValue(input).build();
   }
 

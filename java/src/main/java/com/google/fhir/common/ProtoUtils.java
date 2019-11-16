@@ -27,8 +27,14 @@ public class ProtoUtils {
 
   private ProtoUtils() {}
 
+  public static int fieldSize(MessageOrBuilder message, FieldDescriptor field) {
+    return field.isRepeated()
+        ? message.getRepeatedFieldCount(field)
+        : (message.hasField(field) ? 1 : 0);
+  }
+
   public static boolean fieldIsSet(MessageOrBuilder message, FieldDescriptor field) {
-    return field.isRepeated() ? message.getRepeatedFieldCount(field) > 0 : message.hasField(field);
+    return fieldSize(message, field) > 0;
   }
 
   public static <T> T getBuilderAtIndex(Message.Builder builder, FieldDescriptor field, int index) {

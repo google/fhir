@@ -35,27 +35,10 @@ import com.google.fhir.r4.core.ResourceTypeCode;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.ValueSet;
 import com.google.fhir.stu3.google.PrimitiveHasNoValue;
-import com.google.fhir.wrappers.Base64BinaryWrapper;
-import com.google.fhir.wrappers.BooleanWrapper;
-import com.google.fhir.wrappers.CanonicalWrapper;
 import com.google.fhir.wrappers.CodeWrapper;
-import com.google.fhir.wrappers.DateTimeWrapper;
-import com.google.fhir.wrappers.DateWrapper;
-import com.google.fhir.wrappers.DecimalWrapper;
 import com.google.fhir.wrappers.ExtensionWrapper;
-import com.google.fhir.wrappers.IdWrapper;
-import com.google.fhir.wrappers.InstantWrapper;
-import com.google.fhir.wrappers.IntegerWrapper;
-import com.google.fhir.wrappers.MarkdownWrapper;
-import com.google.fhir.wrappers.OidWrapper;
-import com.google.fhir.wrappers.PositiveIntWrapper;
 import com.google.fhir.wrappers.PrimitiveWrapper;
-import com.google.fhir.wrappers.StringWrapper;
-import com.google.fhir.wrappers.TimeWrapper;
-import com.google.fhir.wrappers.UnsignedIntWrapper;
-import com.google.fhir.wrappers.UriWrapper;
-import com.google.fhir.wrappers.UrlWrapper;
-import com.google.fhir.wrappers.XhtmlWrapper;
+import com.google.fhir.wrappers.PrimitiveWrappers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -526,7 +509,7 @@ public final class JsonFormat {
         List<PrimitiveWrapper> wrappers = new ArrayList<>();
         List<MessageOrBuilder> elements = new ArrayList<>();
         for (MessageOrBuilder message : list) {
-          PrimitiveWrapper wrapper = primitiveWrapperOf(message, defaultTimeZone);
+          PrimitiveWrapper wrapper = PrimitiveWrappers.primitiveWrapperOf(message, defaultTimeZone);
           wrappers.add(wrapper);
           hasValue = hasValue || wrapper.hasValue();
           Element element = wrapper.getElement();
@@ -563,7 +546,7 @@ public final class JsonFormat {
               (String) message.getField(message.getDescriptorForType().findFieldByName("value"));
           generator.print("\"" + name + "\":" + blankOrSpace + "\"" + referenceValue + "\"");
         } else {
-          PrimitiveWrapper wrapper = primitiveWrapperOf(message, defaultTimeZone);
+          PrimitiveWrapper wrapper = PrimitiveWrappers.primitiveWrapperOf(message, defaultTimeZone);
           if (wrapper.hasValue()) {
             generator.print("\"" + name + "\":" + blankOrSpace + wrapper.toJson());
             printedElement = true;
@@ -675,7 +658,7 @@ public final class JsonFormat {
       if (json.isJsonObject()) {
         mergeMessage(json.getAsJsonObject(), builder);
       } else {
-        parseAndWrap(json, builder, defaultTimeZone).copyInto(builder);
+        PrimitiveWrappers.parseAndWrap(json, builder, defaultTimeZone).copyInto(builder);
       }
       return builder;
     }
@@ -946,7 +929,9 @@ public final class JsonFormat {
           mergeMessage((JsonObject) json, subBuilder);
         }
         try {
-          return parseAndWrap(json, subBuilder, defaultTimeZone).copyInto(subBuilder).build();
+          return PrimitiveWrappers.parseAndWrap(json, subBuilder, defaultTimeZone)
+              .copyInto(subBuilder)
+              .build();
         } catch (IllegalArgumentException e) {
           throw new IllegalArgumentException("Error parsing field: " + field.getFullName(), e);
         }
@@ -1125,166 +1110,6 @@ public final class JsonFormat {
       return false;
     }
   } // End JsonFormat class
-
-  public static PrimitiveWrapper<?> primitiveWrapperOf(
-      MessageOrBuilder message, ZoneId defaultTimeZone) {
-    Descriptor descriptor = message.getDescriptorForType();
-    if (descriptor.getOptions().hasExtension(Annotations.fhirValuesetUrl)) {
-      return CodeWrapper.of(message);
-    }
-    switch (descriptor.getName()) {
-      case "Base64Binary":
-        return new Base64BinaryWrapper(message);
-      case "Boolean":
-        return new BooleanWrapper(message);
-      case "Code":
-        return new CodeWrapper(message);
-      case "Date":
-        return new DateWrapper(message);
-      case "DateTime":
-        if (defaultTimeZone == null) {
-          return new DateTimeWrapper(message);
-        } else {
-          return new DateTimeWrapper(message, defaultTimeZone);
-        }
-      case "Decimal":
-        return new DecimalWrapper(message);
-      case "Id":
-        return new IdWrapper(message);
-      case "Instant":
-        return new InstantWrapper(message);
-      case "Integer":
-        return new IntegerWrapper(message);
-      case "Markdown":
-        return new MarkdownWrapper(message);
-      case "Oid":
-        return new OidWrapper(message);
-      case "PositiveInt":
-        return new PositiveIntWrapper(message);
-      case "String":
-        return new StringWrapper(message);
-      case "Time":
-        return new TimeWrapper(message);
-      case "UnsignedInt":
-        return new UnsignedIntWrapper(message);
-      case "Uri":
-        return new UriWrapper(message);
-      case "Xhtml":
-        return new XhtmlWrapper(message);
-        // R4 only
-      case "Canonical":
-        return new CanonicalWrapper(message);
-      case "Url":
-        return new UrlWrapper(message);
-      default:
-        throw new IllegalArgumentException(
-            "Unexpected primitive FHIR type: " + descriptor.getName());
-    }
-  }
-
-  public static PrimitiveWrapper<?> parseAndWrap(
-      JsonElement json, MessageOrBuilder message, ZoneId defaultTimeZone) {
-    Descriptor descriptor = message.getDescriptorForType();
-    if (json.isJsonArray()) {
-      // JsonArrays are not allowed here
-      throw new IllegalArgumentException("Cannot wrap a JsonArray.  Found: " + json.getClass());
-    }
-    // JSON objects represents extension on a primitive, and are treated as null values.
-    if (json.isJsonObject()) {
-      json = JsonNull.INSTANCE;
-    }
-    String jsonString = json.isJsonNull() ? null : json.getAsJsonPrimitive().getAsString();
-
-    if (descriptor.getOptions().hasExtension(Annotations.fhirValuesetUrl)) {
-      return new CodeWrapper(jsonString);
-    }
-    // TODO: Make proper class hierarchy for wrapper input types,
-    // so these can all accept JsonElement in constructor, and do type checking there.
-    switch (descriptor.getName()) {
-      case "Base64Binary":
-        checkIsString(json);
-        return new Base64BinaryWrapper(jsonString);
-      case "Boolean":
-        checkIsBoolean(json);
-        return new BooleanWrapper(jsonString);
-      case "Code":
-        checkIsString(json);
-        return new CodeWrapper(jsonString);
-      case "Date":
-        checkIsString(json);
-        return new DateWrapper(jsonString, defaultTimeZone);
-      case "DateTime":
-        checkIsString(json);
-        return new DateTimeWrapper(jsonString, defaultTimeZone);
-      case "Decimal":
-        checkIsNumber(json);
-        return new DecimalWrapper(jsonString);
-      case "Id":
-        checkIsString(json);
-        return new IdWrapper(jsonString);
-      case "Instant":
-        checkIsString(json);
-        return new InstantWrapper(jsonString);
-      case "Integer":
-        checkIsNumber(json);
-        return new IntegerWrapper(jsonString);
-      case "Markdown":
-        checkIsString(json);
-        return new MarkdownWrapper(jsonString);
-      case "Oid":
-        checkIsString(json);
-        return new OidWrapper(jsonString);
-      case "PositiveInt":
-        checkIsNumber(json);
-        return new PositiveIntWrapper(jsonString);
-      case "String":
-        checkIsString(json);
-        return new StringWrapper(jsonString);
-      case "Time":
-        checkIsString(json);
-        return new TimeWrapper(jsonString);
-      case "UnsignedInt":
-        checkIsNumber(json);
-        return new UnsignedIntWrapper(jsonString);
-      case "Uri":
-        checkIsString(json);
-        return new UriWrapper(jsonString);
-      case "Xhtml":
-        checkIsString(json);
-        return new XhtmlWrapper(jsonString);
-        // R4 only
-      case "Canonical":
-        checkIsString(json);
-        return new CanonicalWrapper(jsonString);
-      case "Url":
-        checkIsString(json);
-        return new UrlWrapper(jsonString);
-      default:
-        throw new IllegalArgumentException(
-            "Unexpected primitive FHIR type: " + descriptor.getName());
-    }
-  }
-
-  private static void checkIsBoolean(JsonElement json) {
-    if (!(json.isJsonNull() || json.isJsonObject())
-        && !(json.isJsonPrimitive() && json.getAsJsonPrimitive().isBoolean())) {
-      throw new IllegalArgumentException("Invalid JSON element for boolean: " + json);
-    }
-  }
-
-  private static void checkIsNumber(JsonElement json) {
-    if (!(json.isJsonNull() || json.isJsonObject())
-        && !(json.isJsonPrimitive() && json.getAsJsonPrimitive().isNumber())) {
-      throw new IllegalArgumentException("Invalid JSON element for number: " + json);
-    }
-  }
-
-  private static void checkIsString(JsonElement json) {
-    if (!(json.isJsonNull() || json.isJsonObject())
-        && !(json.isJsonPrimitive() && json.getAsJsonPrimitive().isString())) {
-      throw new IllegalArgumentException("Invalid JSON element for string-like: " + json);
-    }
-  }
 
   private static Message.Builder getContainedResourceForMessage(MessageOrBuilder input) {
     switch (AnnotationUtils.getFhirVersion(input.getDescriptorForType())) {

@@ -15,6 +15,7 @@
 package com.google.fhir.wrappers;
 
 import com.google.common.io.BaseEncoding;
+import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.r4.core.Base64Binary;
 import com.google.fhir.r4.core.PositiveInt;
@@ -24,9 +25,19 @@ import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /** A wrapper around the Base64Binary FHIR primitive type. */
 public class Base64BinaryWrapper extends PrimitiveWrapper<Base64Binary> {
+
+  private static final Pattern REGEX_PATTERN =
+      Pattern.compile(
+          AnnotationUtils.getValueRegexForPrimitiveType(Base64Binary.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
 
   private static final Base64Binary NULL_BASE64_BINARY =
       Base64Binary.newBuilder().addExtension(getNoValueExtension()).build();
@@ -46,6 +57,9 @@ public class Base64BinaryWrapper extends PrimitiveWrapper<Base64Binary> {
   }
 
   private static Base64Binary parseAndValidate(String input) {
+    // TODO: Java regex engine throws a StackOverflow exception if we try to validate
+    // here.
+
     BaseEncoding encoding = BaseEncoding.base64();
     Base64Binary.Builder builder = Base64Binary.newBuilder();
     int stride = input.indexOf(' ');

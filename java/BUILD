@@ -144,6 +144,7 @@ java_library(
     name = "common",
     srcs = [
         "src/main/java/com/google/fhir/common/AnnotationUtils.java",
+        "src/main/java/com/google/fhir/common/InvalidFhirException.java",
         "src/main/java/com/google/fhir/common/ProtoUtils.java",
     ],
     deps = [
@@ -214,6 +215,42 @@ java_library(
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_code_gson_gson",
         "@maven//:com_google_guava_guava",
+    ],
+)
+
+java_library(
+    name = "resource_validator",
+    srcs = ["src/main/java/com/google/fhir/common/ResourceValidator.java"],
+    deps = [
+        ":common",
+        ":primitive_wrappers",
+        "//proto/stu3:datatypes_java_proto",
+        "//proto:annotations_java_proto",
+        "//proto/r4/core:datatypes_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
+    ],
+)
+
+java_test(
+    name = "ResourceValidatorTest",
+    size = "small",
+    srcs = ["src/test/java/com/google/fhir/common/ResourceValidatorR4Test.java"],
+    data = [
+        "//testdata/r4:validation",
+    ],
+    test_class = "com.google.fhir.common.ResourceValidatorR4Test",
+    deps = [
+        ":common",
+        ":resource_validator",
+        "//proto/r4/core/resources:bundle_and_contained_resource_java_proto",
+        "//proto/r4/core/resources:encounter_java_proto",
+        "//proto/r4/core/resources:observation_java_proto",
+        "@bazel_tools//tools/java/runfiles",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 
@@ -655,7 +692,10 @@ java_test(
     test_class = "com.google.fhir.wrappers.ValidationTest",
     deps = [
         ":json_format",
+        ":primitive_wrappers",
+        "//proto/stu3:codes_java_proto",
         "//proto/stu3:datatypes_java_proto",
+        "//proto/stu3:extensions_java_proto",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_guava_guava",

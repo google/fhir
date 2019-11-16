@@ -14,12 +14,22 @@
 
 package com.google.fhir.wrappers;
 
+import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.r4.core.Uri;
 import com.google.protobuf.MessageOrBuilder;
+import java.util.regex.Pattern;
 
 /** A wrapper around the Uri FHIR primitive type. */
 public class UriWrapper extends PrimitiveWrapper<Uri> {
+
+  private static final Pattern REGEX_PATTERN =
+      Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Uri.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
 
   private static final Uri NULL_URI = Uri.newBuilder().addExtension(getNoValueExtension()).build();
 
@@ -37,12 +47,13 @@ public class UriWrapper extends PrimitiveWrapper<Uri> {
     super(input == null ? NULL_URI : parseAndValidate(input));
   }
 
+  private static Uri parseAndValidate(String input) {
+    validateUsingPattern(REGEX_PATTERN, input);
+    return Uri.newBuilder().setValue(input).build();
+  }
+
   @Override
   protected String printValue() {
     return getWrapped().getValue();
-  }
-
-  private static Uri parseAndValidate(String input) {
-    return Uri.newBuilder().setValue(input).build();
   }
 }

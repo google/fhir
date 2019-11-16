@@ -14,6 +14,7 @@
 
 package com.google.fhir.wrappers;
 
+import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.r4.core.Boolean;
 import com.google.gson.JsonPrimitive;
@@ -23,7 +24,14 @@ import java.util.regex.Pattern;
 /** A wrapper around the Boolean FHIR primitive type. */
 public class BooleanWrapper extends PrimitiveWrapper<Boolean> {
 
-  private static final Pattern BOOLEAN_PATTERN = Pattern.compile("true|false");
+  private static final Pattern REGEX_PATTERN =
+      Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Boolean.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
+
   private static final Boolean NULL_BOOLEAN =
       Boolean.newBuilder().addExtension(getNoValueExtension()).build();
 
@@ -42,7 +50,7 @@ public class BooleanWrapper extends PrimitiveWrapper<Boolean> {
   }
 
   private static Boolean parseAndValidate(String input) {
-    validateUsingPattern(BOOLEAN_PATTERN, input);
+    validateUsingPattern(REGEX_PATTERN, input);
     return Boolean.newBuilder().setValue(java.lang.Boolean.parseBoolean(input)).build();
   }
 

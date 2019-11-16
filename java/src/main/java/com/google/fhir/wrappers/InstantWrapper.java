@@ -15,6 +15,7 @@
 package com.google.fhir.wrappers;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.r4.core.Instant;
 import com.google.protobuf.MessageOrBuilder;
@@ -26,10 +27,14 @@ import java.util.regex.Pattern;
 
 /** A wrapper around the Instant FHIR primitive type. */
 public class InstantWrapper extends PrimitiveWrapper<Instant> {
+  private static final Pattern REGEX_PATTERN =
+      Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Instant.getDefaultInstance()));
 
-  private static final Pattern INSTANT_PATTERN =
-      Pattern.compile(
-          "-?[0-9]{4}-(0[1-9]|1[0-2])-(0[0-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))");
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
+
   private static final Instant NULL_INSTANT =
       Instant.newBuilder().addExtension(getNoValueExtension()).build();
 
@@ -57,7 +62,7 @@ public class InstantWrapper extends PrimitiveWrapper<Instant> {
   }
 
   private static Instant parseAndValidate(String input) {
-    validateUsingPattern(INSTANT_PATTERN, input);
+    validateUsingPattern(REGEX_PATTERN, input);
     try {
       OffsetDateTime offsetDateTime = OffsetDateTime.parse(input, SECOND_WITH_TZ);
       String timezone = extractFhirTimezone(input, offsetDateTime);

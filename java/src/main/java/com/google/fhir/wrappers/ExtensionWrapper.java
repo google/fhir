@@ -54,8 +54,8 @@ public final class ExtensionWrapper {
     List<Extension> r4Extensions =
         input.stream()
             .map(
-                r4Extension ->
-                    ProtoUtils.fieldWiseCopy(r4Extension, Extension.newBuilder()).build())
+                stu3Extension ->
+                    ProtoUtils.fieldWiseCopy(stu3Extension, Extension.newBuilder()).build())
             .collect(Collectors.toList());
     return new ExtensionWrapper(r4Extensions);
   }
@@ -162,6 +162,17 @@ public final class ExtensionWrapper {
               + message.getDescriptorForType().getFullName()
               + " is an invalid FHIR extension: Missing fhir_structure_definition_url annotation.");
     }
+  }
+
+  public <T extends MessageOrBuilder> ExtensionWrapper add(Extension extension) {
+    content.add(extension);
+    return this;
+  }
+
+  public <T extends MessageOrBuilder> ExtensionWrapper add(
+      com.google.fhir.stu3.proto.Extension stu3Extension) {
+    content.add(ProtoUtils.fieldWiseCopy(stu3Extension, Extension.newBuilder()).build());
+    return this;
   }
 
   /** Add a new message, converting it to a FHIR Extension. */

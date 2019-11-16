@@ -14,6 +14,7 @@
 
 package com.google.fhir.wrappers;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.r4.core.Boolean;
 import com.google.fhir.r4.core.Element;
@@ -51,6 +52,39 @@ public abstract class PrimitiveWrapper<T extends Message> {
 
   protected PrimitiveWrapper(T t) {
     wrapped = t;
+  }
+
+  protected abstract Pattern getPattern();
+
+  private static final ImmutableSet<String> NON_VALUE_FIELDS = ImmutableSet.of("id", "extension");
+
+  /**
+   * Validates that the wrapped primitive proto is valid according to the FHIR spec.
+   */
+  // TODO: This should throw a checked InvalidFhirException.
+  public void validateWrapped() {
+    if (hasValue()) {
+      validateUsingPattern(getPattern(), printValue());
+      return;
+    }
+    // There is a primitive-has-no-value extension.  Make sure it's valid.
+    // There must be at least one other extension.
+    Descriptor descriptor = getWrapped().getDescriptorForType();
+    if (getWrapped().getRepeatedFieldCount(descriptor.findFieldByName("extension")) < 2) {
+      throw new IllegalArgumentException(
+          descriptor.getName()
+              + " must have either extensions or value"
+              + " (not counting the PrimitiveHasNoValue extension).");
+    }
+    // There must truly be no value (i.e., no fields set other than id or extension).
+    for (FieldDescriptor setField : getWrapped().getAllFields().keySet()) {
+      if (!NON_VALUE_FIELDS.contains(setField.getName())) {
+        throw new IllegalArgumentException(
+            descriptor.getName()
+                + " contains the PrimitiveHasNoValue extension, but also has value field set: "
+                + setField.getName());
+      }
+    }
   }
 
   /**

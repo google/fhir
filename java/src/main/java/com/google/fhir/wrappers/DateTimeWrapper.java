@@ -33,8 +33,14 @@ import java.util.regex.Pattern;
 /** A wrapper around the DateTime FHIR primitive type. */
 public class DateTimeWrapper extends PrimitiveWrapper<DateTime> {
 
-  private static final Pattern DATE_TIME_PATTERN =
+  private static final Pattern REGEX_PATTERN =
       Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(DateTime.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
+
   private static final DateTime NULL_DATE_TIME =
       DateTime.newBuilder().addExtension(getNoValueExtension()).build();
 
@@ -79,7 +85,7 @@ public class DateTimeWrapper extends PrimitiveWrapper<DateTime> {
   }
 
   private static DateTime parseAndValidate(String input, ZoneId defaultTimeZone) {
-    validateUsingPattern(DATE_TIME_PATTERN, input);
+    validateUsingPattern(REGEX_PATTERN, input);
 
     // Dates, no provided timezone.
     try {
@@ -160,5 +166,35 @@ public class DateTimeWrapper extends PrimitiveWrapper<DateTime> {
     return withOriginalTimezone(
         Instant.ofEpochMilli(dateTime.getValueUs() / 1000L).atZone(zoneId).format(formatter),
         dateTime.getTimezone());
+  }
+
+  public long getUpperBound() {
+    return getWrapped().getValueUs() + getDurationFromPrecision();
+  }
+
+  private static final long MICROS_PER_MILLI = 1000;
+  private static final long MICROS_PER_SECOND = MICROS_PER_MILLI * 1000;
+  private static final long MICROS_PER_DAY = MICROS_PER_SECOND * 60 * 60 * 24;
+  private static final long MICROS_PER_MONTH = MICROS_PER_DAY * 31;
+  private static final long MICROS_PER_YEAR = MICROS_PER_DAY * 366;
+
+  private long getDurationFromPrecision() {
+    switch (getWrapped().getPrecision()) {
+      case YEAR:
+        return MICROS_PER_YEAR;
+      case MONTH:
+        return MICROS_PER_MONTH;
+      case DAY:
+        return MICROS_PER_DAY;
+      case SECOND:
+        return MICROS_PER_SECOND;
+      case MILLISECOND:
+        return MICROS_PER_MILLI;
+      case MICROSECOND:
+        return 1;
+      default:
+        throw new IllegalArgumentException(
+            "Unrecognized Precision on DateTime: " + getWrapped().getPrecision());
+    }
   }
 }

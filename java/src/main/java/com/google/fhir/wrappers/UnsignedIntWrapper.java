@@ -23,9 +23,15 @@ import java.util.regex.Pattern;
 /** A wrapper around the UnsignedInt FHIR primitive type. */
 public class UnsignedIntWrapper extends NumericTypeWrapper<UnsignedInt> {
 
-  private static final Pattern UNSIGNED_INT_PATTERN =
+  private static final Pattern REGEX_PATTERN =
       Pattern.compile(
           AnnotationUtils.getValueRegexForPrimitiveType(UnsignedInt.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
+
   private static final UnsignedInt NULL_UNSIGNED_INT =
       UnsignedInt.newBuilder().addExtension(getNoValueExtension()).build();
 
@@ -49,7 +55,7 @@ public class UnsignedIntWrapper extends NumericTypeWrapper<UnsignedInt> {
   }
 
   private static UnsignedInt parseAndValidate(String input) {
-    validateUsingPattern(UNSIGNED_INT_PATTERN, input);
+    validateUsingPattern(REGEX_PATTERN, input);
     return UnsignedInt.newBuilder().setValue(Integer.parseInt(input)).build();
   }
 }

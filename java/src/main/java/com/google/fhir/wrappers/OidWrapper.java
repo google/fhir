@@ -23,8 +23,14 @@ import java.util.regex.Pattern;
 /** A wrapper around the Oid FHIR primitive type. */
 public class OidWrapper extends PrimitiveWrapper<Oid> {
 
-  private static final Pattern OID_PATTERN =
+  private static final Pattern REGEX_PATTERN =
       Pattern.compile(AnnotationUtils.getValueRegexForPrimitiveType(Oid.getDefaultInstance()));
+
+  @Override
+  protected Pattern getPattern() {
+    return REGEX_PATTERN;
+  }
+
   private static final Oid NULL_OID = Oid.newBuilder().addExtension(getNoValueExtension()).build();
 
   /** Create an OidWrapper from an Oid. */
@@ -42,7 +48,7 @@ public class OidWrapper extends PrimitiveWrapper<Oid> {
   }
 
   private static Oid parseAndValidate(String input) {
-    validateUsingPattern(OID_PATTERN, input);
+    validateUsingPattern(REGEX_PATTERN, input);
     return Oid.newBuilder().setValue(input).build();
   }
 
