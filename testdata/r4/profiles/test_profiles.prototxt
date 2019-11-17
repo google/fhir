@@ -1,6 +1,7 @@
 profile {
   element_data {
     name: "Bundle",
+    description: "Test Bundle"
   }
   base_url: "http://hl7.org/fhir/StructureDefinition/Bundle"
 }
@@ -148,6 +149,7 @@ profile {
 profile {
   element_data {
     name: "TestObservationLvl2"
+    description: "Level 2 Observation"
   }
   base_url: "http://test/url/base/TestObservation"
 
@@ -175,6 +177,7 @@ profile {
 profile {
   element_data {
     name: "TestEncounter"
+    description: "Test Encounter"
   }
   base_url: "http://hl7.org/fhir/StructureDefinition/Encounter"
 

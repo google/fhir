@@ -1954,7 +1954,6 @@
         "sliceName": "subComplexExt1",
         "short": "The sub complex 1",
         "definition": "The sub complex 1",
-        "comment": "",
         "min": 1,
         "max": "1",
         "condition": [
@@ -2113,7 +2112,6 @@
         "sliceName": "subSubComplexExt1",
         "short": "The sub sub complex 1",
         "definition": "The sub sub complex 1",
-        "comment": "",
         "min": 1,
         "max": "1",
         "condition": [

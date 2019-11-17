@@ -1880,7 +1880,6 @@
         "sliceName": "birthPlace",
         "short": "The patient's address of birth",
         "definition": "The patient's address of birth",
-        "comment": "",
         "min": 1,
         "max": "1",
         "type": [
@@ -1919,7 +1918,6 @@
         "sliceName": "telAddress",
         "short": "Telephone or fax number.",
         "definition": "Telephone or fax number.",
-        "comment": "",
         "type": [
           {
             "code": "Extension",

@@ -378,15 +378,19 @@ final class ProfileGenerator {
 
   private void customizeRootElement(
       ElementDefinition.Builder rootElement, ElementData elementData) {
-    rootElement.setDefinition(Markdown.newBuilder().setValue(elementData.getDescription()));
+    if (!elementData.getDescription().isEmpty()) {
+      rootElement.setDefinition(Markdown.newBuilder().setValue(elementData.getDescription()));
+    }
     rootElement.setMin(minSize(elementData.getSizeRestriction()));
     rootElement.setMax(maxSize(elementData.getSizeRestriction()));
-    rootElement
-        .getShortBuilder()
-        .setValue(
-            elementData.getShort().isEmpty()
-                ? elementData.getDescription()
-                : elementData.getShort());
+    if (!elementData.getShort().isEmpty() || !elementData.getDescription().isEmpty()) {
+      rootElement
+          .getShortBuilder()
+          .setValue(
+              elementData.getShort().isEmpty()
+                  ? elementData.getDescription()
+                  : elementData.getShort());
+    }
 
     if (!elementData.getComment().isEmpty()) {
       rootElement.getCommentBuilder().setValue(elementData.getComment());
@@ -465,6 +469,11 @@ final class ProfileGenerator {
           Message newValue = (Message) newElement.getField(field);
           Message baseValue = (Message) baseElement.getField(field);
           if (!newValue.equals(baseValue)) {
+            // TODO: There's currently a bug where the differential emits empty markdown
+            // for removed fields, and empty markdown is invalid.
+            if (newValue instanceof Markdown && ((Markdown) newValue).getValue().isEmpty()) {
+              continue;
+            }
             // TODO: do we need finer grain than element field diffing?
             diffElement.setField(field, newValue);
             foundDiff = true;
@@ -695,15 +704,6 @@ final class ProfileGenerator {
         .setName(fhirString(elementData.getName()))
         .setDate(creationDateTime)
         .setPublisher(fhirString(packageInfo.getPublisher()))
-        .addContact(
-            ContactDetail.newBuilder()
-                .addTelecom(
-                    ContactPoint.newBuilder()
-                        .setSystem(
-                            ContactPoint.SystemCode.newBuilder()
-                                .setValue(ContactPointSystemCode.Value.URL))
-                        .setValue(fhirString(packageInfo.getTelcomUrl()))))
-        .setDescription(Markdown.newBuilder().setValue(elementData.getDescription()))
         .setFhirVersion(
             StructureDefinition.FhirVersionCode.newBuilder()
                 .setValue(FhirVersion.fromAnnotation(packageInfo.getFhirVersion()).minorVersion))
@@ -719,6 +719,20 @@ final class ProfileGenerator {
         .setDerivation(
             StructureDefinition.DerivationCode.newBuilder()
                 .setValue(TypeDerivationRuleCode.Value.CONSTRAINT));
+    if (!packageInfo.getTelcomUrl().isEmpty()) {
+      structureDefinitionBuilder.addContact(
+          ContactDetail.newBuilder()
+              .addTelecom(
+                  ContactPoint.newBuilder()
+                      .setSystem(
+                          ContactPoint.SystemCode.newBuilder()
+                              .setValue(ContactPointSystemCode.Value.URL))
+                      .setValue(fhirString(packageInfo.getTelcomUrl()))));
+    }
+    if (!elementData.getDescription().isEmpty()) {
+      structureDefinitionBuilder.setDescription(
+          Markdown.newBuilder().setValue(elementData.getDescription()));
+    }
   }
 
   private ElementDefinition.Base buildBase(String path, StructureDefinition parentStructDef) {

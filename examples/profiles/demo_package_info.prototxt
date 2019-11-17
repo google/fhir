@@ -2,3 +2,4 @@ proto_package: "company.fhir.r4.demo"
 java_proto_package: "com.company.fhir.r4.demo"
 fhir_version: R4
 base_url: "https://company.com/fhir/demo"
+publisher: "Demo Company LLC"
