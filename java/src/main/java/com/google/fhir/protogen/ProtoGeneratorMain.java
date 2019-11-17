@@ -91,6 +91,11 @@ class ProtoGeneratorMain {
     private Boolean emitProto = false;
 
     @Parameter(
+        names = {"--emit_codes"},
+        description = "Emit a .proto file generated from CodeSystems and ValueSets in the input")
+    private Boolean emitCodesProto = false;
+
+    @Parameter(
         names = {"--package_info"},
         description = "Prototxt containing google.fhir.proto.PackageInfo")
     private String packageInfo = null;
@@ -280,12 +285,24 @@ class ProtoGeneratorMain {
     writer.println("Generating proto descriptors...");
     writer.flush();
 
+    ValueSetGenerator valueSetGenerator = new ValueSetGenerator(packageInfo, fhirPackages);
     ProtoGenerator generator =
         packageInfo.getFhirVersion() != FhirVersion.R4
             ? new ProtoGenerator(packageInfo, fhirPackages)
             : new ProtoGenerator(
-                packageInfo, fhirPackages, new ValueSetGenerator(packageInfo, fhirPackages));
+                packageInfo, fhirPackages, valueSetGenerator);
     ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
+
+    if (args.emitCodesProto) {
+      if (inputPackage == null) {
+        throw new IllegalArgumentException(
+            "Emitting codes proto is only valid for proto generation at the package level, using"
+                + " --input_package");
+      }
+      File outputFile = new File(args.outputDirectory, args.outputName + "_codes.proto");
+      Files.asCharSink(outputFile, UTF_8)
+          .write(printer.print(valueSetGenerator.generateCodeSystemAndValueSetsFile(inputPackage)));
+    }
 
     switch (packageInfo.getFileSplittingBehavior()) {
       case DEFAULT_SPLITTING_BEHAVIOR:
