@@ -147,7 +147,7 @@ class ProtoGeneratorMain {
     @Parameter(description = "List of input StructureDefinitions")
     private List<String> inputFiles = new ArrayList<>();
 
-    private Set<FhirPackage> getDependencies() throws Exception {
+    private Set<FhirPackage> getDependencies() throws IOException {
       Set<FhirPackage> packages = new HashSet<>();
       for (String fhirDefinitionDep : fhirDefinitionDepList) {
         packages.add(FhirPackage.load(fhirDefinitionDep));
@@ -157,7 +157,7 @@ class ProtoGeneratorMain {
   }
 
   private static StructureDefinition loadStructureDefinition(
-      String fullFilename, FhirVersion fhirVersion) throws Exception {
+      String fullFilename, FhirVersion fhirVersion) throws IOException {
     String json = Files.asCharSource(new File(fullFilename), StandardCharsets.UTF_8).read();
     StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
     switch (fhirVersion) {
@@ -174,7 +174,7 @@ class ProtoGeneratorMain {
     this.writer = checkNotNull(writer);
   }
 
-  void run(Args args) throws Exception {
+  void run(Args args) throws IOException {
     PackageInfo packageInfo;
     FhirPackage inputPackage = null;
     if (args.inputPackage != null) {
@@ -472,7 +472,7 @@ class ProtoGeneratorMain {
     }
   }
 
-  public static void main(String[] argv) throws Exception {
+  public static void main(String[] argv) throws IOException {
     // Each non-flag argument is assumed to be an input file.
     Args args = new Args();
     JCommander jcommander = new JCommander(args);

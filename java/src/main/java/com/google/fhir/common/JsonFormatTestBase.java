@@ -24,19 +24,19 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import com.google.protobuf.Message;
+import com.google.protobuf.Message.Builder;
 import com.google.protobuf.TextFormat;
 import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.time.ZoneId;
 import java.util.Map;
 import java.util.TreeSet;
-import org.junit.Before;
 
 /** Unit tests for {@link JsonFormat}. */
 public abstract class JsonFormatTestBase {
   protected JsonFormat.Parser jsonParser;
-  protected JsonFormat.Parser nonValidatingJsonParser;
   protected JsonFormat.Printer jsonPrinter;
   protected JsonFormat.Printer ndjsonPrinter;
   protected TextFormat.Parser textParser;
@@ -51,13 +51,13 @@ public abstract class JsonFormatTestBase {
   }
 
   /** Read the specifed json file from the testdata directory as a String. */
-  protected String loadJson(String filename) throws Exception {
+  protected String loadJson(String filename) throws IOException {
     File file = new File(runfiles.rlocation("com_google_fhir/" + filename));
     return Files.asCharSource(file, StandardCharsets.UTF_8).read();
   }
 
   /** Read the specifed prototxt file from the testdata directory and parse it. */
-  protected void mergeText(String filename, Message.Builder builder) throws Exception {
+  protected void mergeText(String filename, Message.Builder builder) throws IOException {
     File file =
         new File(
             runfiles.rlocation(
@@ -65,33 +65,24 @@ public abstract class JsonFormatTestBase {
     textParser.merge(Files.asCharSource(file, StandardCharsets.UTF_8).read(), builder);
   }
 
-  protected void parseToProto(String name, Message.Builder builder) throws Exception {
+  protected void parseToProto(String name, Builder builder) throws IOException {
     jsonParser.merge(
         loadJson("spec/hl7.fhir.core/" + versionNumber + "/package/" + name + ".json"), builder);
   }
 
-  public void testPair(String name, Message.Builder builder) throws Exception {
-    testPair(name, builder, true /* validateJson */);
-  }
-
-  public void testPair(String name, Message.Builder builder, boolean validateJson)
-      throws Exception {
+  public void testPair(String name, Builder builder) throws IOException {
     try {
       // Load golden JSON
       String goldenJson =
           loadJson("spec/hl7.fhir.core/" + versionNumber + "/package/" + name + ".json");
 
       // Load golden proto
-      Message.Builder goldenProto = builder.clone();
+      Builder goldenProto = builder.clone();
       mergeText("examples/" + name + ".prototxt", goldenProto);
 
       // Test Parser
-      Message.Builder testProto = builder.clone();
-      if (validateJson) {
-        jsonParser.merge(goldenJson, testProto);
-      } else {
-        nonValidatingJsonParser.merge(goldenJson, testProto);
-      }
+      Builder testProto = builder.clone();
+      jsonParser.merge(goldenJson, testProto);
       if (!testProto.build().toString().equals(goldenProto.build().toString())) {
         System.err.println("Failed Parsing on: " + name);
         assertThat(testProto.build().toString()).isEqualTo(goldenProto.build().toString());
@@ -127,12 +118,12 @@ public abstract class JsonFormatTestBase {
     }
   }
 
-  protected void testParse(String name, Message.Builder builder) throws Exception {
+  protected void testParse(String name, Builder builder) throws IOException {
     // Parse the json version of the input.
-    Message.Builder jsonBuilder = builder.clone();
+    Builder jsonBuilder = builder.clone();
     parseToProto(name, jsonBuilder);
     // Parse the proto text version of the input.
-    Message.Builder textBuilder = builder.clone();
+    Builder textBuilder = builder.clone();
     mergeText("examples/" + name + ".prototxt", textBuilder);
 
     if (!jsonBuilder.build().toString().equals(textBuilder.build().toString())) {
@@ -170,9 +161,9 @@ public abstract class JsonFormatTestBase {
     return testJson.toString();
   }
 
-  protected void testPrint(String name, Message.Builder builder) throws Exception {
+  protected void testPrint(String name, Builder builder) throws IOException {
     // Parse the proto text version of the input.
-    Message.Builder textBuilder = builder.clone();
+    Builder textBuilder = builder.clone();
     mergeText("examples/" + name + ".prototxt", textBuilder);
     // Load the json version of the input as a String.
     String jsonGolden =
@@ -186,9 +177,9 @@ public abstract class JsonFormatTestBase {
     }
   }
 
-  protected void testConvertForAnalytics(String name, Message.Builder builder) throws Exception {
+  protected void testConvertForAnalytics(String name, Builder builder) throws IOException {
     // Parse the json version of the input.
-    Message.Builder jsonBuilder = builder.clone();
+    Builder jsonBuilder = builder.clone();
     jsonParser.merge(
         loadJson("spec/hl7.fhir.core/" + versionNumber + "/package/" + name + ".json"),
         jsonBuilder);
@@ -199,15 +190,9 @@ public abstract class JsonFormatTestBase {
     assertThat(analyticsTest.trim()).isEqualTo(analyticsGolden.trim());
   }
 
-  @Before
-  public void setUpParser() throws Exception {
+  public void setUpParser() throws IOException {
     jsonParser =
         JsonFormat.Parser.newBuilder().withDefaultTimeZone(ZoneId.of("Australia/Sydney")).build();
-    nonValidatingJsonParser =
-        JsonFormat.Parser.newBuilder()
-            .withDefaultTimeZone(ZoneId.of("Australia/Sydney"))
-            .withoutValidation()
-            .build();
     jsonPrinter = JsonFormat.getPrinter().withDefaultTimeZone(ZoneId.of("Australia/Sydney"));
     ndjsonPrinter =
         JsonFormat.getPrinter()

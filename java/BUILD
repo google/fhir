@@ -198,7 +198,6 @@ java_library(
         ":common",
         ":primitive_wrappers",
         ":resource_utils",
-        ":resource_validator",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
         "//proto/stu3:resources_java_proto",
@@ -259,7 +258,6 @@ java_library(
     name = "file_utils",
     srcs = ["src/main/java/com/google/fhir/common/FileUtils.java"],
     deps = [
-        ":common",
         ":json_format",
         "//proto/r4/core/resources:structure_definition_java_proto",
         "@com_google_protobuf//:protobuf_java",
@@ -469,13 +467,10 @@ java_test(
         "//spec:r4",
         "//testdata/r4:bigquery",
         "//testdata/r4:examples",
-        "//testdata/r4:validation",
     ],
     shard_count = 10,
     test_class = "com.google.fhir.r4.JsonFormatTest",
     deps = [
-        ":common",
-        ":json_format",
         ":json_format_test_base",
         "//proto/r4/core/resources:account_java_proto",
         "//proto/r4/core/resources:activity_definition_java_proto",
@@ -614,7 +609,6 @@ java_test(
         "//proto/r4/core/resources:vision_prescription_java_proto",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_guava_guava",
-        "@maven//:com_google_truth_truth",
         "@maven//:junit_junit",
     ],
 )

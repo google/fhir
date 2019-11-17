@@ -134,6 +134,8 @@ import com.google.fhir.stu3.proto.TestReport;
 import com.google.fhir.stu3.proto.TestScript;
 import com.google.fhir.stu3.proto.ValueSet;
 import com.google.fhir.stu3.proto.VisionPrescription;
+import java.io.IOException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -144,6 +146,11 @@ public class JsonFormatTest extends JsonFormatTestBase {
 
   public JsonFormatTest() {
     super("stu3", "3.0.1");
+  }
+
+  @Before
+  public void setUp() throws IOException {
+    setUpParser();
   }
 
   /** Test parsing JSON edge cases. */

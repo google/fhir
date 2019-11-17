@@ -587,19 +587,11 @@ public final class JsonFormat {
   }
 
   /**
-   * Return a {@link Parser} instance that can parse json-format FHIR messages. The returned
+   * Return a {@link Parser} instance which can parse json-format FHIR messages. The returned
    * instance is thread-safe.
    */
   public static Parser getParser() {
     return Parser.newBuilder().build();
-  }
-
-  /**
-   * Return a {@link Parser} instance that can parse json-format FHIR messages, but will not
-   * validate that the generate proto contains all the fields required by the requested proto type.
-   */
-  public static Parser getLenientParser() {
-    return Parser.newBuilder().withoutValidation().build();
   }
 
   /**
@@ -610,7 +602,7 @@ public final class JsonFormat {
   // TODO: Once packages have been rearranged, make this package-private, since
   // it should only be used by generators.
   public static Parser getEarlyVersionGeneratorParser() {
-    return new Parser(true, false, ZoneId.systemDefault());
+    return new Parser(true, ZoneId.systemDefault());
   }
 
   /**
@@ -623,28 +615,23 @@ public final class JsonFormat {
     private final boolean convertEarlyVersions;
     private final JsonParser jsonParser;
     private final ZoneId defaultTimeZone;
-    private final ResourceValidator resourceValidator;
 
-    private Parser(boolean convertEarlyVersions, boolean validateProto, ZoneId defaultTimeZone) {
+    private Parser(boolean convertEarlyVersions, ZoneId defaultTimeZone) {
       this.convertEarlyVersions = convertEarlyVersions;
       this.jsonParser = new JsonParser();
       this.defaultTimeZone = defaultTimeZone;
-
-      this.resourceValidator = validateProto ? new ResourceValidator() : null;
     }
 
     /** Returns a new instance of {@link Builder} with default parameters. */
     public static Builder newBuilder() {
-      return new Builder(true /* validateProto */, ZoneId.systemDefault());
+      return new Builder(ZoneId.systemDefault());
     }
 
     /** Builder that can be used to obtain new instances of {@link Parser}. */
     public static final class Builder {
       private final ZoneId defaultTimeZone;
-      private final boolean validateProto;
 
-      Builder(boolean validateProto, ZoneId defaultTimeZone) {
-        this.validateProto = validateProto;
+      Builder(ZoneId defaultTimeZone) {
         this.defaultTimeZone = defaultTimeZone;
       }
 
@@ -654,24 +641,18 @@ public final class JsonFormat {
        * assumed to be measured in the default timezone.
        */
       public Builder withDefaultTimeZone(ZoneId defaultTimeZone) {
-        return new Builder(validateProto, defaultTimeZone);
-      }
-
-      public Builder withoutValidation() {
-        return new Builder(false, defaultTimeZone);
+        return new Builder(defaultTimeZone);
       }
 
       public Parser build() {
-        return new Parser(
-            false /* convertEarlyVersions */, validateProto /* validate */, defaultTimeZone);
+        return new Parser(false /*useLenientJsonReader */, defaultTimeZone);
       }
     }
 
     /**
      * Parse a text-format message from {@code input} and merge the contents into {@code builder}.
      */
-    public <T extends Message.Builder> T merge(final Reader input, final T builder)
-        throws InvalidFhirException {
+    public <T extends Message.Builder> T merge(final Reader input, final T builder) {
       JsonReader reader = new JsonReader(input);
       JsonElement json = jsonParser.parse(reader);
       if (json.isJsonObject()) {
@@ -679,17 +660,13 @@ public final class JsonFormat {
       } else {
         PrimitiveWrappers.parseAndWrap(json, builder, defaultTimeZone).copyInto(builder);
       }
-      if (resourceValidator != null) {
-        resourceValidator.validateResource(builder);
-      }
       return builder;
     }
 
     /**
      * Parse a text-format message from {@code input} and merge the contents into {@code builder}.
      */
-    public <T extends Message.Builder> T merge(final CharSequence input, final T builder)
-        throws InvalidFhirException {
+    public <T extends Message.Builder> T merge(final CharSequence input, final T builder) {
       merge(new StringReader(input.toString()), builder);
       return builder;
     }

@@ -27,6 +27,7 @@ import com.google.fhir.r4.core.Bundle;
 import com.google.protobuf.Message;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -40,7 +41,7 @@ import java.util.Map;
  */
 public class SplitBundleMain {
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) throws IOException {
     Parser fhirParser = com.google.fhir.common.JsonFormat.getParser();
     Printer fhirPrinter = JsonFormat.getPrinter().omittingInsignificantWhitespace();
     Printer analyticPrinter =

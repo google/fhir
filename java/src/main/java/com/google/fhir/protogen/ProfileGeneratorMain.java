@@ -98,7 +98,7 @@ public class ProfileGeneratorMain {
     return FileUtils.mergeText(new File(filename), PackageInfo.newBuilder()).build();
   }
 
-  public static void main(String[] argv) throws Exception {
+  public static void main(String[] argv) throws IOException {
     Args args = new Args();
     JCommander jcommander = new JCommander(args);
 

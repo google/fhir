@@ -58,7 +58,7 @@ public final class ProtoFilePrinterTest {
   private Runfiles runfiles;
 
   /** Read and parse the specified StructureDefinition. */
-  private StructureDefinition readStructureDefinition(String resourceName) throws Exception {
+  private StructureDefinition readStructureDefinition(String resourceName) throws IOException {
     System.out.println(resourceName);
     File file =
         new File(
@@ -192,7 +192,7 @@ public final class ProtoFilePrinterTest {
           "CodingWithFixedSystem",
           "Element");
 
-  private List<StructureDefinition> getResourcesInFile(FileDescriptor compiled) throws Exception {
+  private List<StructureDefinition> getResourcesInFile(FileDescriptor compiled) throws IOException {
     List<StructureDefinition> resourceDefinitions = new ArrayList<>();
     for (Descriptor message : compiled.getMessageTypes()) {
       if (!message.getFields().isEmpty()
@@ -205,7 +205,7 @@ public final class ProtoFilePrinterTest {
   }
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() throws IOException {
     String packageName = "google.fhir.stu3.proto";
     jsonParser = JsonFormat.getEarlyVersionGeneratorParser();
     runfiles = Runfiles.create();

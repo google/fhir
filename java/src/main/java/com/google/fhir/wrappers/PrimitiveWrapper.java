@@ -63,17 +63,10 @@ public abstract class PrimitiveWrapper<T extends Message> {
    */
   // TODO: This should throw a checked InvalidFhirException.
   public void validateWrapped() {
-    // Note: hasValue checks for PrimitiveHasNoValue extension, NOT for presense of value
-    // If there is no PrimitiveHasNoValue extension, validate the value.
     if (hasValue()) {
       validateUsingPattern(getPattern(), printValue());
       return;
-    } else {
-      validatePrimitiveWithPrimitiveHasNoValueExtension();
     }
-  }
-
-  protected void validatePrimitiveWithPrimitiveHasNoValueExtension() {
     // There is a primitive-has-no-value extension.  Make sure it's valid.
     // There must be at least one other extension.
     Descriptor descriptor = getWrapped().getDescriptorForType();

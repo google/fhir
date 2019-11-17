@@ -25,6 +25,7 @@ import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.protobuf.TextFormat;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public final class ProfileGeneratorTest {
   private static final boolean GENERATE_GOLDEN = false;
 
   // TODO: consolidate these proto loading functions across test files.
-  private static Extensions loadExtensionsProto(String filename) throws Exception {
+  private static Extensions loadExtensionsProto(String filename) throws IOException {
     Extensions.Builder extensionsBuilder = Extensions.newBuilder();
     TextFormat.merge(
         Files.asCharSource(new File(TESTDATA_DIR + filename + ".prototxt"), StandardCharsets.UTF_8)
@@ -59,7 +60,7 @@ public final class ProfileGeneratorTest {
     return extensionsBuilder.build();
   }
 
-  private static Profiles loadProfilesProto(String filename) throws Exception {
+  private static Profiles loadProfilesProto(String filename) throws IOException {
     Profiles.Builder profilesBuilder = Profiles.newBuilder();
     TextFormat.merge(
         Files.asCharSource(new File(TESTDATA_DIR + filename + ".prototxt"), StandardCharsets.UTF_8)
@@ -68,7 +69,7 @@ public final class ProfileGeneratorTest {
     return profilesBuilder.build();
   }
 
-  private static PackageInfo loadPackageInfoProto(String filename) throws Exception {
+  private static PackageInfo loadPackageInfoProto(String filename) throws IOException {
     PackageInfo.Builder projectInfo = PackageInfo.newBuilder();
     TextFormat.merge(
         Files.asCharSource(new File(TESTDATA_DIR + filename + ".prototxt"), StandardCharsets.UTF_8)
@@ -77,7 +78,7 @@ public final class ProfileGeneratorTest {
     return projectInfo.build();
   }
 
-  private StructureDefinition loadStructureDefinition(String fullFilename) throws Exception {
+  private StructureDefinition loadStructureDefinition(String fullFilename) throws IOException {
     String structDefString =
         Files.asCharSource(new File(fullFilename), StandardCharsets.UTF_8).read();
     StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
@@ -85,16 +86,16 @@ public final class ProfileGeneratorTest {
     return structDefBuilder.build();
   }
 
-  private static String loadTestStructureDefinitionJson(String filename) throws Exception {
+  private String loadTestStructureDefinitionJson(String filename) throws IOException {
     return Files.asCharSource(new File(TESTDATA_DIR + filename), StandardCharsets.UTF_8).read();
   }
 
-  private StructureDefinition loadFhirStructureDefinition(String filename) throws Exception {
+  private StructureDefinition loadFhirStructureDefinition(String filename) throws IOException {
     return loadStructureDefinition("spec/hl7.fhir.core/3.0.1/package/" + filename);
   }
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() throws IOException {
     knownTypes = new ArrayList<>();
     knownTypes.add(loadFhirStructureDefinition("StructureDefinition-Coding.json"));
     knownTypes.add(loadFhirStructureDefinition("StructureDefinition-CodeableConcept.json"));

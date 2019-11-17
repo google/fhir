@@ -28,22 +28,19 @@ public final class FileUtils {
   private FileUtils() {}
 
   public static StructureDefinition loadStructureDefinition(String fullFilename)
-      throws IOException, InvalidFhirException {
+      throws IOException {
     return loadStructureDefinition(new File(fullFilename));
   }
 
-  public static StructureDefinition loadStructureDefinition(File file)
-      throws IOException, InvalidFhirException {
+  public static StructureDefinition loadStructureDefinition(File file) throws IOException {
     return (StructureDefinition) loadFhir(file, StructureDefinition.newBuilder());
   }
 
-  public static Message loadFhir(String filename, Message.Builder builder)
-      throws IOException, InvalidFhirException {
+  public static Message loadFhir(String filename, Message.Builder builder) throws IOException {
     return loadFhir(new File(filename), builder);
   }
 
-  public static Message loadFhir(File file, Message.Builder builder)
-      throws IOException, InvalidFhirException {
+  public static Message loadFhir(File file, Message.Builder builder) throws IOException {
     String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
     JsonFormat.Parser.newBuilder().build().merge(json, builder);
     return builder.build();
