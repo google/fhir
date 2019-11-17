@@ -60,7 +60,7 @@ def fhirproto_dependencies():
         url = "https://www.antlr.org/download/antlr4-cpp-runtime-4.7.1-source.zip",
         sha256 = "23bebc0411052a260f43ae097aa1ab39869eb6b6aa558b046c367a4ea33d1ccc",
         strip_prefix = "runtime/src",
-        build_file = "//bazel:antlr.BUILD",
+        build_file = "@com_google_fhir//bazel:antlr.BUILD",
     )
 
     http_archive(
