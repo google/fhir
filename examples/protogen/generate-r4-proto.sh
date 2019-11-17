@@ -20,14 +20,16 @@ PROTO_GENERATOR=$ROOT_PATH/bazel-bin/java/ProtoGenerator
 OUTPUT_PATH="$(dirname $0)/../../proto/r4/core"
 DESCRIPTOR_OUTPUT_PATH="$(dirname $0)/../../testdata/r4/descriptors/"
 
-FHIR_DEFINITION_ZIP="$ROOT_PATH/bazel-genfiles/spec/fhir_r4_definitions.zip"
-FHIR_PACKAGE_INFO="$ROOT_PATH//spec/fhir_r4_package_info.prototxt"
+bazel build //spec/fhir_r4_definitions.zip
+FHIR_PACKAGE="$ROOT_PATH/bazel-genfiles/spec/fhir_r4_definitions.zip"
+FHIR_R4_PACKAGE_INFO="$ROOT_PATH//spec/fhir_r4_package_info.prototxt"
 
 COMMON_FLAGS=" \
   --emit_proto \
   --emit_descriptors \
-  --package_info $FHIR_PACKAGE_INFO \
-  --r4_core_dep $FHIR_DEFINITION_ZIP \
+  --sort \
+  --package_info $FHIR_R4_PACKAGE_INFO \
+  --r4_core_dep $FHIR_R4_PACKAGE \
   --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH "
 #
 # Build the binary.

@@ -23,6 +23,7 @@ import com.beust.jcommander.ParameterException;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.io.Files;
+import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.FileUtils;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.dstu2.StructureDefinitionTransformer;
@@ -93,6 +94,11 @@ class ProtoGeneratorMain {
         names = {"--package_info"},
         description = "Prototxt containing google.fhir.proto.PackageInfo")
     private String packageInfo = null;
+
+    @Parameter(
+        names = {"--sort"},
+        description = "If true, will sort messages within a file by message name.")
+    private boolean sort = false;
 
     @Parameter(
         names = {"--stu3_core_dep"},
@@ -438,6 +444,26 @@ class ProtoGeneratorMain {
       for (String additionalImport : args.additionalImports) {
         proto = proto.toBuilder().addDependency(new File(additionalImport).toString()).build();
       }
+    }
+    if (args.sort) {
+      List<DescriptorProto> messages = new ArrayList<>(proto.getMessageTypeList());
+      proto =
+          proto.toBuilder()
+              .clearMessageType()
+              .addAllMessageType(
+                  messages.stream()
+                      .sorted(
+                          (a, b) -> {
+                            boolean aIsPrimitive = AnnotationUtils.isPrimitiveType(a);
+                            boolean bIsPrimitive = AnnotationUtils.isPrimitiveType(b);
+                            if (aIsPrimitive != bIsPrimitive) {
+                              return aIsPrimitive ? -1 : 1;
+                            } else {
+                              return a.getName().compareTo(b.getName());
+                            }
+                          })
+                      .collect(Collectors.toList()))
+              .build();
     }
     String protoFileContents = printer.print(proto);
 

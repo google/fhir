@@ -24,25 +24,6 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
-// Auto-generated from StructureDefinition for BackboneElement, last updated
-// 2018-12-27T22:37:54.724+11:00. Base for elements defined inside a resource.
-// See http://hl7.org/fhir/StructureDefinition/BackboneElement
-message BackboneElement {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (.google.fhir.proto.is_abstract_type) = true;
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/BackboneElement";
-
-  // Unique id for inter-element referencing
-  String id = 1;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 2;
-
-  // Extensions that cannot be ignored even if unrecognized
-  repeated Extension modifier_extension = 3;
-}
-
 // Auto-generated from StructureDefinition for base64Binary, last updated
 // 2018-12-27T22:37:54.724+11:00. Primitive Type base64Binary. See
 // http://hl7.org/fhir/StructureDefinition/base64Binary
@@ -684,6 +665,25 @@ message Attachment {
 
   // Date attachment was first created
   DateTime creation = 10;
+}
+
+// Auto-generated from StructureDefinition for BackboneElement, last updated
+// 2018-12-27T22:37:54.724+11:00. Base for elements defined inside a resource.
+// See http://hl7.org/fhir/StructureDefinition/BackboneElement
+message BackboneElement {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.is_abstract_type) = true;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/BackboneElement";
+
+  // Unique id for inter-element referencing
+  String id = 1;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 2;
+
+  // Extensions that cannot be ignored even if unrecognized
+  repeated Extension modifier_extension = 3;
 }
 
 // Auto-generated from StructureDefinition for CodeableConcept, last updated
@@ -2180,6 +2180,56 @@ message Money {
   CurrencyCode currency = 4;
 }
 
+// Auto-generated from StructureDefinition for MoneyQuantity, last updated
+// 2018-12-27T22:37:54.724+11:00. An amount of money. With regard to precision,
+// see [Decimal Precision](datatypes.html#precision). See
+// http://hl7.org/fhir/StructureDefinition/MoneyQuantity
+message MoneyQuantity {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Quantity";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MoneyQuantity";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "code.empty() or system.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(code.exists() or value.empty()) and (system.empty() or system = 'urn:iso:std:iso:4217')";
+
+  // Unique id for inter-element referencing
+  String id = 1;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 2;
+
+  // Numerical value (with implicit precision)
+  Decimal value = 3;
+
+  // < | <= | >= | > - how to understand the value
+  message ComparatorCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/quantity-comparator";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    QuantityComparatorCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ComparatorCode comparator = 4;
+
+  // Unit representation
+  String unit = 5;
+
+  // System that defines coded unit form
+  Uri system = 6;
+
+  // Coded form of the unit
+  Code code = 7;
+}
+
 // Auto-generated from StructureDefinition for Narrative, last updated
 // 2018-12-27T22:37:54.724+11:00. Human-readable summary of the resource
 // (essential clinical and business information). See
@@ -2733,6 +2783,42 @@ message Signature {
   Base64Binary data = 9;
 }
 
+// Auto-generated from StructureDefinition for SimpleQuantity, last updated
+// 2018-12-27T22:37:54.724+11:00. A fixed quantity (no comparator). See
+// http://hl7.org/fhir/StructureDefinition/SimpleQuantity
+message SimpleQuantity {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Quantity";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/SimpleQuantity";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "code.empty() or system.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "comparator.empty()";
+
+  // Unique id for inter-element referencing
+  String id = 1;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 2;
+
+  // Numerical value (with implicit precision)
+  Decimal value = 3;
+
+  // Quantity.comparator not present on profile.
+  reserved 4;
+
+  // Unit representation
+  String unit = 5;
+
+  // System that defines coded unit form
+  Uri system = 6;
+
+  // Coded form of the unit
+  Code code = 7;
+}
+
 // Auto-generated from StructureDefinition for SubstanceAmount, last updated
 // 2018-12-27T22:37:54.724+11:00. Chemical substances are a single substance
 // type whose primary defining element is the molecular structure. Chemical
@@ -3065,92 +3151,6 @@ message UsageContext {
   }
   ValueX value = 4
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-}
-
-// Auto-generated from StructureDefinition for MoneyQuantity, last updated
-// 2018-12-27T22:37:54.724+11:00. An amount of money. With regard to precision,
-// see [Decimal Precision](datatypes.html#precision). See
-// http://hl7.org/fhir/StructureDefinition/MoneyQuantity
-message MoneyQuantity {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (.google.fhir.proto.fhir_profile_base) =
-      "http://hl7.org/fhir/StructureDefinition/Quantity";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/MoneyQuantity";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "code.empty() or system.exists()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "(code.exists() or value.empty()) and (system.empty() or system = 'urn:iso:std:iso:4217')";
-
-  // Unique id for inter-element referencing
-  String id = 1;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 2;
-
-  // Numerical value (with implicit precision)
-  Decimal value = 3;
-
-  // < | <= | >= | > - how to understand the value
-  message ComparatorCode {
-    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-    option (.google.fhir.proto.fhir_valueset_url) =
-        "http://hl7.org/fhir/ValueSet/quantity-comparator";
-    option (.google.fhir.proto.fhir_profile_base) =
-        "http://hl7.org/fhir/StructureDefinition/code";
-
-    QuantityComparatorCode.Value value = 1;
-
-    String id = 2;
-
-    repeated Extension extension = 3;
-  }
-  ComparatorCode comparator = 4;
-
-  // Unit representation
-  String unit = 5;
-
-  // System that defines coded unit form
-  Uri system = 6;
-
-  // Coded form of the unit
-  Code code = 7;
-}
-
-// Auto-generated from StructureDefinition for SimpleQuantity, last updated
-// 2018-12-27T22:37:54.724+11:00. A fixed quantity (no comparator). See
-// http://hl7.org/fhir/StructureDefinition/SimpleQuantity
-message SimpleQuantity {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (.google.fhir.proto.fhir_profile_base) =
-      "http://hl7.org/fhir/StructureDefinition/Quantity";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/SimpleQuantity";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "code.empty() or system.exists()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "comparator.empty()";
-
-  // Unique id for inter-element referencing
-  String id = 1;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 2;
-
-  // Numerical value (with implicit precision)
-  Decimal value = 3;
-
-  // Quantity.comparator not present on profile.
-  reserved 4;
-
-  // Unit representation
-  String unit = 5;
-
-  // System that defines coded unit form
-  Uri system = 6;
-
-  // Coded form of the unit
-  Code code = 7;
 }
 
 // End of auto-generated messages.

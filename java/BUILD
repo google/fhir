@@ -707,8 +707,9 @@ java_test(
 java_binary(
     name = "ProtoGenerator",
     srcs = ["src/main/java/com/google/fhir/protogen/ProtoGeneratorMain.java"],
-    main_class = "com.google.fhir.examples.ProtoGeneratorMain",
+    main_class = "com.google.fhir.protogen.ProtoGeneratorMain",
     deps = [
+        ":common",
         ":file_utils",
         ":json_format",
         ":protogen",
