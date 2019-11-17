@@ -26,7 +26,7 @@ import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 
 /** Validator for FHIR resources. */
-final class ResourceValidator {
+public final class ResourceValidator {
 
   public ResourceValidator() {}
 
