@@ -66,7 +66,12 @@ public abstract class PrimitiveWrapper<T extends Message> {
     if (hasValue()) {
       validateUsingPattern(getPattern(), printValue());
       return;
+    } else {
+      validatePrimitiveWithoutValue();
     }
+  }
+
+  protected void validatePrimitiveWithoutValue() {
     // There is a primitive-has-no-value extension.  Make sure it's valid.
     // There must be at least one other extension.
     Descriptor descriptor = getWrapped().getDescriptorForType();
@@ -90,6 +95,8 @@ public abstract class PrimitiveWrapper<T extends Message> {
   /**
    * True if the primitive wapped by this is has a value, as opposed to being purely defined by
    * extensions.
+   * Note that this checks for PrimitiveHasNoValue extension, NOT for the actual presence of a value
+   * field.
    */
   public boolean hasValue() {
     return hasValue(wrapped);

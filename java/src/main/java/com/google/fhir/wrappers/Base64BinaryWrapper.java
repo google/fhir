@@ -85,6 +85,17 @@ public class Base64BinaryWrapper extends PrimitiveWrapper<Base64Binary> {
   }
 
   @Override
+  public void validateWrapped() {
+    // TODO: Java regex engine throws a StackOverflow exception if we try to validate
+    // here.
+    if (hasValue()) {
+      return;
+    } else {
+      validatePrimitiveWithoutValue();
+    }
+  }
+
+  @Override
   protected String printValue() {
     BaseEncoding encoding = BaseEncoding.base64();
     List<Base64BinarySeparatorStride> strideExtension =

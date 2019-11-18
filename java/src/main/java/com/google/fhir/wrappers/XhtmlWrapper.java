@@ -48,6 +48,15 @@ public class XhtmlWrapper extends PrimitiveWrapper<Xhtml> {
     }
   }
 
+  /**
+   * We need a custom validateWrapped function because Xhtml doesn't have an extension field. Since
+   * it can't have extensions, and there's no regex for validation, it's always valid
+   */
+  @Override
+  public void validateWrapped() {
+    return;
+  }
+
   @Override
   protected String printValue() {
     return getWrapped().getValue();
