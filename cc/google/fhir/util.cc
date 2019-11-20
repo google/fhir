@@ -319,6 +319,13 @@ StatusOr<stu3::proto::Reference> GetTypedReferenceToResourceStu3(
   return reference;
 }
 
+StatusOr<r4::core::Reference> GetTypedReferenceToResourceR4(
+    const ::google::protobuf::Message& resource) {
+  r4::core::Reference reference;
+  FHIR_RETURN_IF_ERROR(PopulateReferenceToResource(resource, &reference));
+  return reference;
+}
+
 // Splits relative references into their components, for example, "Patient/ABCD"
 // will result in the patientId field getting the value "ABCD".
 Status SplitIfRelativeReference(Message* reference) {

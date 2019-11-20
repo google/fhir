@@ -233,6 +233,9 @@ Status PopulatedTypedReferenceToResource(const ::google::protobuf::Message& reso
 StatusOr<stu3::proto::Reference> GetTypedReferenceToResourceStu3(
     const ::google::protobuf::Message& resource);
 
+StatusOr<r4::core::Reference> GetTypedReferenceToResourceR4(
+    const ::google::protobuf::Message& resource);
+
 // Extract the value of a Decimal field as a double.
 Status GetDecimalValue(const stu3::proto::Decimal& decimal, double* value);
 
