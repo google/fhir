@@ -22,6 +22,8 @@
 // Include the ANTLR-generated visitor, lexer and parser files.
 #include "absl/memory/memory.h"
 #include "absl/strings/numbers.h"
+#include "absl/time/civil_time.h"
+#include "absl/time/time.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/fhir_path/FhirPathBaseVisitor.h"
 #include "google/fhir/fhir_path/FhirPathLexer.h"
@@ -556,27 +558,80 @@ class ComparisonOperator : public BinaryOperator {
   Status EvalDateTimeComparison(const DateTime* left_message,
                                 const DateTime* right_message,
                                 Boolean* result) const {
-    // TODO: consider support for cross-timezone comparisons.
-    if (left_message->timezone() != right_message->timezone()) {
+    absl::Time left_time = absl::FromUnixMicros(left_message->value_us());
+    absl::TimeZone left_zone;
+    if (!absl::LoadTimeZone(left_message->timezone(), &left_zone)) {
       return InvalidArgument(
-          "Date comparisons only supported in same timezone");
+          absl::StrCat("Unknown time zone: ", left_message->timezone()));
     }
 
-    const int64_t left = left_message->value_us();
-    const int64_t right = right_message->value_us();
+    absl::Time right_time = absl::FromUnixMicros(right_message->value_us());
+    absl::TimeZone right_zone;
+    if (!absl::LoadTimeZone(right_message->timezone(), &right_zone)) {
+      return InvalidArgument(
+          absl::StrCat("Unknown time zone: ", right_message->timezone()));
+    }
+
+    // negative if left < right, positive if left > right, 0 if equal
+    absl::civil_diff_t time_difference;
+
+    // The FHIRPath spec (http://hl7.org/fhirpath/#comparison) states that
+    // datetime comparison is done at the finest precision BOTH
+    // dates support. This is equivalent to finding the looser precision
+    // between the two and comparing them, which is simpler to implement here.
+    if (left_message->precision() == DateTime::YEAR ||
+        right_message->precision() == DateTime::YEAR) {
+      absl::CivilYear left_year = absl::ToCivilYear(left_time, left_zone);
+      absl::CivilYear right_year = absl::ToCivilYear(right_time, right_zone);
+      time_difference = left_year - right_year;
+
+    } else if (left_message->precision() == DateTime::MONTH ||
+               right_message->precision() == DateTime::MONTH) {
+      absl::CivilMonth left_month = absl::ToCivilMonth(left_time, left_zone);
+      absl::CivilMonth right_month = absl::ToCivilMonth(right_time, right_zone);
+      time_difference = left_month - right_month;
+
+    } else if (left_message->precision() == DateTime::DAY ||
+               right_message->precision() == DateTime::DAY) {
+      absl::CivilDay left_day = absl::ToCivilDay(left_time, left_zone);
+      absl::CivilDay right_day = absl::ToCivilDay(right_time, right_zone);
+      time_difference = left_day - right_day;
+
+    } else if (left_message->precision() == DateTime::SECOND ||
+               right_message->precision() == DateTime::SECOND) {
+      absl::CivilSecond left_second = absl::ToCivilSecond(left_time, left_zone);
+      absl::CivilSecond right_second =
+          absl::ToCivilSecond(right_time, right_zone);
+      time_difference = left_second - right_second;
+    } else {
+      // Abseil does not support sub-second civil time precision, so we handle
+      // them by first comparing seconds (to resolve timezone differences)
+      // and then comparing the sub-second component if the seconds are
+      // equal.
+      absl::CivilSecond left_second = absl::ToCivilSecond(left_time, left_zone);
+      absl::CivilSecond right_second =
+          absl::ToCivilSecond(right_time, right_zone);
+      time_difference = left_second - right_second;
+
+      // In the same second, so check for sub-second differences.
+      if (time_difference == 0) {
+        time_difference = left_message->value_us() % 1000000 -
+                          right_message->value_us() % 1000000;
+      }
+    }
 
     switch (comparison_type_) {
       case kLessThan:
-        result->set_value(left < right);
+        result->set_value(time_difference < 0);
         break;
       case kGreaterThan:
-        result->set_value(left > right);
+        result->set_value(time_difference > 0);
         break;
       case kLessThanEqualTo:
-        result->set_value(left <= right);
+        result->set_value(time_difference <= 0);
         break;
       case kGreaterThanEqualTo:
-        result->set_value(left >= right);
+        result->set_value(time_difference >= 0);
         break;
     }
 

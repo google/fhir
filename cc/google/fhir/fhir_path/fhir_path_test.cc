@@ -19,6 +19,8 @@
 #include "google/protobuf/util/message_differencer.h"
 #include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
+#include "absl/time/civil_time.h"
+#include "absl/time/time.h"
 #include "google/fhir/status/status.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/resources/encounter.pb.h"
@@ -29,6 +31,7 @@
 #include "proto/stu3/uscore_codes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 
+using ::google::fhir::r4::core::DateTime;
 using ::google::fhir::r4::core::Period;
 using ::google::fhir::r4::core::Quantity;
 
@@ -108,6 +111,27 @@ bool EvaluateBoolExpression(const std::string& expression) {
   Encounter test_encounter = ValidEncounter();
   EvaluationResult result = numbers_equal.Evaluate(test_encounter).ValueOrDie();
 
+  return result.GetBoolean().ValueOrDie();
+}
+
+DateTime ToDateTime(const absl::CivilSecond& civil_time,
+                    const absl::TimeZone& zone,
+                    const DateTime::Precision& precision) {
+  DateTime date_time;
+  date_time.set_value_us(absl::ToUnixMicros(absl::FromCivil(civil_time, zone)));
+  date_time.set_timezone(zone.name());
+  date_time.set_precision(precision);
+  return date_time;
+}
+
+// Helper to evaluate boolean expressions on periods with the
+// given start and end times.
+bool EvaluateOnPeriod(const CompiledExpression& expression,
+                      const DateTime& start, const DateTime& end) {
+  Period period;
+  *period.mutable_start() = start;
+  *period.mutable_end() = end;
+  EvaluationResult result = expression.Evaluate(period).ValueOrDie();
   return result.GetBoolean().ValueOrDie();
 }
 
@@ -582,26 +606,84 @@ TEST(FhirPathTest, TimeComparison) {
           .ValueOrDie();
 
   Period start_before_end_period = ParseFromString<Period>(R"proto(
-    start: { value_us: 1556750000000 timezone: "America/Los_Angeles" }
-    end: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
+    start: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
+    end: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
   )proto");
   EvaluationResult start_before_end_result =
       start_before_end.Evaluate(start_before_end_period).ValueOrDie();
   EXPECT_TRUE(start_before_end_result.GetBoolean().ValueOrDie());
 
   Period end_before_start_period = ParseFromString<Period>(R"proto(
-    start: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
-    end: { value_us: 1556750000000 timezone: "America/Los_Angeles" }
+    start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
+    end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
   )proto");
   EvaluationResult end_before_start_result =
       start_before_end.Evaluate(end_before_start_period).ValueOrDie();
   EXPECT_FALSE(end_before_start_result.GetBoolean().ValueOrDie());
 }
 
+TEST(FhirPathTest, TimeCompareDifferentPrecision) {
+  absl::TimeZone zone;
+  absl::LoadTimeZone("America/Los_Angeles", &zone);
+  auto start_before_end =
+      CompiledExpression::Compile(Period::descriptor(), "start <= end")
+          .ValueOrDie();
+
+  // Ensure comparison returns false on fine-grained checks but true
+  // on corresponding coarse-grained checks.
+  EXPECT_FALSE(EvaluateOnPeriod(
+      start_before_end,
+      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                 DateTime::SECOND),
+      ToDateTime(absl::CivilDay(2019, 5, 2), zone, DateTime::SECOND)));
+
+  EXPECT_TRUE(EvaluateOnPeriod(
+      start_before_end,
+      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                 DateTime::SECOND),
+      ToDateTime(absl::CivilDay(2019, 5, 2), zone, DateTime::DAY)));
+
+  EXPECT_FALSE(EvaluateOnPeriod(
+      start_before_end,
+      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                 DateTime::SECOND),
+      ToDateTime(absl::CivilDay(2019, 5, 1), zone, DateTime::DAY)));
+
+  EXPECT_TRUE(EvaluateOnPeriod(
+      start_before_end,
+      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                 DateTime::SECOND),
+      ToDateTime(absl::CivilDay(2019, 5, 1), zone, DateTime::MONTH)));
+
+  EXPECT_FALSE(EvaluateOnPeriod(
+      start_before_end,
+      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                 DateTime::SECOND),
+      ToDateTime(absl::CivilDay(2019, 1, 1), zone, DateTime::MONTH)));
+
+  EXPECT_TRUE(EvaluateOnPeriod(
+      start_before_end,
+      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                 DateTime::SECOND),
+      ToDateTime(absl::CivilDay(2019, 1, 1), zone, DateTime::YEAR)));
+
+  // Test edge case for very high precision comparisons.
+  DateTime start_micros;
+  start_micros.set_value_us(1556750000000011);
+  start_micros.set_timezone("America/Los_Angeles");
+  start_micros.set_precision(DateTime::MICROSECOND);
+
+  DateTime end_micros = start_micros;
+  EXPECT_TRUE(EvaluateOnPeriod(start_before_end, start_micros, end_micros));
+
+  end_micros.set_value_us(end_micros.value_us() - 1);
+  EXPECT_FALSE(EvaluateOnPeriod(start_before_end, start_micros, end_micros));
+}
+
 TEST(FhirPathTest, MessageLevelConstraint) {
   Period period = ParseFromString<Period>(R"proto(
-    start: { value_us: 1556750000000 timezone: "America/Los_Angeles" }
-    end: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
+    start: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
+    end: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
   )proto");
 
   MessageValidator validator;
@@ -610,8 +692,8 @@ TEST(FhirPathTest, MessageLevelConstraint) {
 
 TEST(FhirPathTest, MessageLevelConstraintViolated) {
   Period end_before_start_period = ParseFromString<Period>(R"proto(
-    start: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
-    end: { value_us: 1556750000000 timezone: "America/Los_Angeles" }
+    start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
+    end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
   )proto");
 
   MessageValidator validator;
@@ -624,7 +706,7 @@ TEST(FhirPathTest, NestedMessageLevelConstraint) {
         status { value: TRIAGED }
         id { value: "123" }
         period {
-          start: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
+          start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
         }
       )proto");
 
@@ -638,8 +720,8 @@ TEST(FhirPathTest, NestedMessageLevelConstraintViolated) {
         status { value: TRIAGED }
         id { value: "123" }
         period {
-          start: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
-          end: { value_us: 1556750000000 timezone: "America/Los_Angeles" }
+          start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
+          end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
         }
       )proto");
 
