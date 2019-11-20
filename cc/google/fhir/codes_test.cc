@@ -16,6 +16,7 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "google/fhir/proto_util.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/r4/core/codes.pb.h"

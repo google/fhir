@@ -33,6 +33,7 @@ cc_test(
     ],
     deps = [
         ":codes",
+        ":proto_util",
         ":test_helper",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/r4:uscore_cc_proto",
@@ -383,6 +384,7 @@ cc_test(
         ":json_format",
         ":test_helper",
         "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:resources_cc_proto",
         "//testdata/stu3/profiles:test_cc_proto",
         "@com_google_absl//absl/strings",

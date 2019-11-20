@@ -22,6 +22,7 @@
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/resources.pb.h"
+#include "proto/stu3/datatypes.pb.h"
 #include "testdata/stu3/profiles/test.pb.h"
 #include "include/json/json.h"
 

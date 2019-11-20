@@ -1,0 +1,22 @@
+status { value: FINAL }
+code {
+  coding {
+    system { value: "foo" }
+    code { value: "bar" }
+  }
+}
+id { value: "123" }
+component {
+  value {
+    boolean {value: true}
+  }
+  code {
+    coding {
+      system { value: "foo" }
+      code { value: "bar" }
+    }
+  }
+}
+reference_range {
+ id { value: "9876" }
+}

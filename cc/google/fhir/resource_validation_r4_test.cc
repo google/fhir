@@ -32,14 +32,14 @@ using namespace google::fhir::r4::core;  // NOLINT
 
 template <typename T>
 void ValidTest(const std::string& name) {
-  auto status = ValidateResource(
+  auto status = ValidateResourceWithFhirPath(
       ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt")));
   EXPECT_TRUE(status.ok()) << status;
 }
 
 template <typename T>
 void InvalidTest(const std::string& name) {
-  auto status = ValidateResource(
+  auto status = ValidateResourceWithFhirPath(
       ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt")));
 
   std::string error_msg =
@@ -65,6 +65,10 @@ TEST(ResourceValidationTest, ValidReference) {
 
 TEST(ResourceValidationTest, InvalidReference) {
   InvalidTest<Observation>("observation_invalid_reference");
+}
+
+TEST(ResourceValidationTest, FHIRPathViolation) {
+  InvalidTest<Observation>("observation_invalid_fhirpath_violation");
 }
 
 TEST(ResourceValidationTest, RepeatedReferenceValid) {
