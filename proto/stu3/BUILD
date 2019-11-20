@@ -1,11 +1,11 @@
+load("//bazel:proto.bzl", "fhir_proto_library")
+load("//bazel:protogen.bzl", "gen_fhir_protos")
+
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
 
 exports_files(["version_config.textproto"])
-
-load("//bazel:proto.bzl", "fhir_proto_library")
-load("//bazel:protogen.bzl", "gen_fhir_protos")
 
 fhir_proto_library(
     srcs = ["datatypes.proto"],

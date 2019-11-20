@@ -70,7 +70,7 @@ extend google.protobuf.MessageOptions {
   // A list of structure definitions of elements that this element is a
   // profile of.
   // In the case of a profile of a profile, this will have the Structure
-  // definition of all elements in this profile's inheritence chain.
+  // definition of all elements in this profile's inheritance chain.
   repeated string fhir_profile_base = 206336851;
 
   // This message refers to an abstract type in FHIR
