@@ -41,7 +41,7 @@ cdef extern from "proto/stu3/resources.pb.h" namespace "google::fhir::stu3::prot
     bool ParseFromString(const string& input)
     pass
 
-cdef extern from "proto/stu3/version_config.pb.h" namespace "google::fhir::stu3::proto" nogil:
+cdef extern from "proto/version_config.pb.h" namespace "google::fhir::proto" nogil:
   cdef cppclass VersionConfig:
     bool ParseFromString(const string& input)
 

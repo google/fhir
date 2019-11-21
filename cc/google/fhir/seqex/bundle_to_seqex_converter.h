@@ -39,7 +39,7 @@
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "proto/stu3/resources.pb.h"
-#include "proto/stu3/version_config.pb.h"
+#include "proto/version_config.pb.h"
 #include "tensorflow/core/example/example.pb.h"
 #include "tensorflow/core/example/feature.pb.h"
 #include "tensorflow/core/lib/core/status.h"
@@ -92,9 +92,9 @@ void GetContextFeatures(
 
 class BaseBundleToSeqexConverter {
  public:
-  BaseBundleToSeqexConverter(
-      const stu3::proto::VersionConfig& fhir_version_config,
-      const bool enable_attribution, const bool generate_sequence_label);
+  BaseBundleToSeqexConverter(const proto::VersionConfig& fhir_version_config,
+                             const bool enable_attribution,
+                             const bool generate_sequence_label);
   // Move the iterator to the next key/example pair from the bundle.
   bool Next();
 
@@ -109,7 +109,7 @@ class BaseBundleToSeqexConverter {
       const std::vector<std::pair<std::pair<absl::Time, std::string>,
                                   tensorflow::Example>>& event_sequence);
 
-  stu3::proto::VersionConfig version_config_;
+  proto::VersionConfig version_config_;
   std::set<std::string> redacted_features_;
 
   // These are computed once per Bundle.

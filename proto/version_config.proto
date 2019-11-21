@@ -2,14 +2,14 @@
 
 syntax = "proto3";
 
-package google.fhir.stu3.proto;
+package google.fhir.proto;
 
 message ResourceConfig {
   // If not specified otherwise, all events in this resource are assumed to
   // have occurred at the timestamp in this field.
   repeated string default_timestamp_fields = 1;
 
-  // TODO: Add mechanisim for specifying when contained resources
+  // TODO: Add mechanism for specifying when contained resources
   // should be added in to a versioned resource.
 
   message TimestampOverride {

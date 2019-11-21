@@ -39,10 +39,9 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-
+using google::fhir::proto::VersionConfig;
 using google::fhir::stu3::google::EventTrigger;
 using google::fhir::stu3::proto::Bundle;
-using google::fhir::stu3::proto::VersionConfig;
 using ::google::fhir::testutil::EqualsProto;
 using ::tensorflow::SequenceExample;
 

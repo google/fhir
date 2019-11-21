@@ -109,25 +109,6 @@ fhir_proto_library(
     proto_library_prefix = "uscore_codes",
 )
 
-fhir_proto_library(
-    srcs = [
-        "version_config.proto",
-    ],
-    proto_library_prefix = "version_config",
-)
-
-fhir_proto_library(
-    srcs = [
-        "profile_config.proto",
-    ],
-    proto_deps = [
-        "//proto:annotations_proto",
-        "//proto/r4/core:codes_proto",
-        "//proto/r4/core:datatypes_proto",
-    ],
-    proto_library_prefix = "profile_config",
-)
-
 # We also make the .proto files readable for testing.
 filegroup(
     name = "testdata",

@@ -24,9 +24,9 @@ import os
 from absl import flags
 from absl.testing import absltest
 from google.protobuf import text_format
+from proto import version_config_pb2
 from proto.stu3 import google_extensions_pb2
 from proto.stu3 import resources_pb2
-from proto.stu3 import version_config_pb2
 from py.google.fhir.seqex import bundle_to_seqex_converter
 from py.google.fhir.testutil import protobuf_compare
 from tensorflow.core.example import example_pb2

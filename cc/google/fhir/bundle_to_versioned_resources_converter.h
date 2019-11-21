@@ -26,7 +26,7 @@
 #include "google/fhir/util.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
-#include "proto/stu3/version_config.pb.h"
+#include "proto/version_config.pb.h"
 
 namespace google {
 namespace fhir {
@@ -86,7 +86,7 @@ StatusOr<const stu3::proto::DateTime*> GetStartOfFirstEncounter(
 
 const std::vector<
     std::pair<stu3::proto::DateTime, std::unordered_set<std::string>>>
-GetSortedOverrides(const stu3::proto::ResourceConfig& resource_config,
+GetSortedOverrides(const proto::ResourceConfig& resource_config,
                    const ::google::protobuf::Message& resource);
 
 // Stamps a resource with a version + time metadata,
@@ -149,11 +149,10 @@ void StampWrapAndAdd(std::vector<ContainedResourceLike>* versioned_resources,
 // Any fields that aren't present in a TimestampOverride config will be entered
 // at this default time.
 StatusOr<stu3::proto::DateTime> GetDefaultDateTime(
-    const stu3::proto::ResourceConfig& config,
-    const ::google::protobuf::Message& message);
+    const proto::ResourceConfig& config, const ::google::protobuf::Message& message);
 
 template <typename R, typename ContainedResourceLike>
-void SplitResource(const R& resource, const stu3::proto::VersionConfig& config,
+void SplitResource(const R& resource, const proto::VersionConfig& config,
                    std::vector<ContainedResourceLike>* versioned_resources,
                    std::map<std::string, int>* counter_stats) {
   // Make a mutable copy of the resource, that we will modify and copy into
@@ -305,7 +304,7 @@ void SplitResource(const R& resource, const stu3::proto::VersionConfig& config,
 template <typename BundleLike, typename PatientLike,
           typename ContainedResourceLike>
 void SplitPatient(PatientLike patient, const BundleLike& bundle,
-                  const stu3::proto::VersionConfig& config,
+                  const proto::VersionConfig& config,
                   std::vector<ContainedResourceLike>* versioned_resources,
                   std::map<std::string, int>* counter_stats) {
   if (patient.deceased().has_date_time()) {
@@ -370,7 +369,7 @@ void SplitPatient(PatientLike patient, const BundleLike& bundle,
 template <typename BundleLike, typename ContainedResourceLike =
                                    BUNDLE_CONTAINED_RESOURCE(BundleLike)>
 std::vector<ContainedResourceLike> BundleToVersionedResources(
-    const BundleLike& bundle, const stu3::proto::VersionConfig& config,
+    const BundleLike& bundle, const proto::VersionConfig& config,
     std::map<std::string, int>* counter_stats) {
   static auto* oneof_resource_descriptor =
       ContainedResourceLike::descriptor()->FindOneofByName("oneof_resource");
@@ -432,7 +431,7 @@ std::vector<ContainedResourceLike> BundleToVersionedResources(
 
 template <typename BundleLike>
 BundleLike BundleToVersionedBundle(const BundleLike& bundle,
-                                   const stu3::proto::VersionConfig& config,
+                                   const proto::VersionConfig& config,
                                    std::map<std::string, int>* counter_stats) {
   const auto& versioned_resources =
       BundleToVersionedResources(bundle, config, counter_stats);

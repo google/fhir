@@ -38,7 +38,7 @@
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "proto/stu3/resources.pb.h"
-#include "proto/stu3/version_config.pb.h"
+#include "proto/version_config.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "tensorflow/core/lib/core/status.h"
 #include "tensorflow/core/platform/env.h"
@@ -61,6 +61,7 @@ namespace seqex {
 
 
 using ::google::fhir::StatusOr;
+using ::google::fhir::proto::VersionConfig;
 using ::google::fhir::stu3::google::EventLabel;
 using ::google::fhir::stu3::google::EventTrigger;
 using ::google::fhir::stu3::proto::Bundle;
@@ -69,7 +70,6 @@ using ::google::fhir::stu3::proto::EncounterStatusCode;
 using ::google::fhir::stu3::proto::Medication;
 using ::google::fhir::stu3::proto::Patient;
 using ::google::fhir::stu3::proto::ReferenceId;
-using ::google::fhir::stu3::proto::VersionConfig;
 using ::tensorflow::Example;
 using ::tensorflow::Feature;
 using ::tensorflow::Features;
@@ -394,7 +394,7 @@ Status BuildLabelsFromTriggerLabelPair(
 }
 
 BaseBundleToSeqexConverter::BaseBundleToSeqexConverter(
-    const stu3::proto::VersionConfig& fhir_version_config,
+    const proto::VersionConfig& fhir_version_config,
     const bool enable_attribution, const bool generate_sequence_label)
     : version_config_(fhir_version_config),
       enable_attribution_(enable_attribution),

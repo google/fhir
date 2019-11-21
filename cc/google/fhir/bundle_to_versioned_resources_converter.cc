@@ -40,9 +40,9 @@
 namespace google {
 namespace fhir {
 
+using ::google::fhir::proto::ResourceConfig;
+using ::google::fhir::proto::VersionConfig;
 using ::google::fhir::stu3::proto::DateTime;
-using ::google::fhir::stu3::proto::ResourceConfig;
-using ::google::fhir::stu3::proto::VersionConfig;
 using ::google::protobuf::Message;
 
 namespace internal {

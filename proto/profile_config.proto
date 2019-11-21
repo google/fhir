@@ -9,8 +9,6 @@ import "proto/r4/core/datatypes.proto";
 option java_package = "com.google.fhir.proto";
 option java_multiple_files = true;
 
-// TODO: move out of stu3 directory as this is not release specific
-
 message PackageInfo {
   proto.FhirVersion fhir_version = 1;
   // Base url to use for all profiles defined here.

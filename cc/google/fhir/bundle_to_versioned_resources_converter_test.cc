@@ -40,8 +40,8 @@ void AssertCounter(const std::map<std::string, int>& counter_stats,
       << counter_stats.find(counter)->second;
 }
 
-const stu3::proto::VersionConfig GetConfig() {
-  stu3::proto::VersionConfig result;
+const proto::VersionConfig GetConfig() {
+  proto::VersionConfig result;
   TF_CHECK_OK(::tensorflow::ReadTextProto(
       ::tensorflow::Env::Default(),
       "proto/stu3/version_config.textproto",

@@ -27,9 +27,9 @@ import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import StandardOptions
 from google.protobuf import text_format
+from proto import version_config_pb2
 from proto.stu3 import google_extensions_pb2
 from proto.stu3 import resources_pb2
-from proto.stu3 import version_config_pb2
 from py.google.fhir.seqex import bundle_to_seqex
 from tensorflow.core.example import example_pb2
 
