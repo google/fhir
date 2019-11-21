@@ -31,6 +31,7 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/util.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 
@@ -559,18 +560,12 @@ class ComparisonOperator : public BinaryOperator {
                                 const DateTime* right_message,
                                 Boolean* result) const {
     absl::Time left_time = absl::FromUnixMicros(left_message->value_us());
-    absl::TimeZone left_zone;
-    if (!absl::LoadTimeZone(left_message->timezone(), &left_zone)) {
-      return InvalidArgument(
-          absl::StrCat("Unknown time zone: ", left_message->timezone()));
-    }
-
     absl::Time right_time = absl::FromUnixMicros(right_message->value_us());
-    absl::TimeZone right_zone;
-    if (!absl::LoadTimeZone(right_message->timezone(), &right_zone)) {
-      return InvalidArgument(
-          absl::StrCat("Unknown time zone: ", right_message->timezone()));
-    }
+
+    FHIR_ASSIGN_OR_RETURN(absl::TimeZone left_zone,
+                          BuildTimeZoneFromString(left_message->timezone()));
+    FHIR_ASSIGN_OR_RETURN(absl::TimeZone right_zone,
+                          BuildTimeZoneFromString(right_message->timezone()));
 
     // negative if left < right, positive if left > right, 0 if equal
     absl::civil_diff_t time_difference;
@@ -1155,8 +1150,8 @@ StatusOr<CompiledExpression> CompiledExpression::Compile(
   if (result.isNotNull()) {
     auto root_node = result.as<std::shared_ptr<internal::ExpressionNode>>();
     return CompiledExpression(fhir_path, root_node);
-
   } else {
+    auto status = InvalidArgument(visitor.GetError());
     return InvalidArgument(visitor.GetError());
   }
 }

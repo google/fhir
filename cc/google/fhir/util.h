@@ -278,6 +278,11 @@ Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
 StatusOr<std::string> GetPrimitiveStringValue(
     const ::google::protobuf::Message& primitive, std::string* scratch);
 
+// Converts a time zone string of the forms found in time-like primitive types
+// into an absl::TimeZone
+StatusOr<absl::TimeZone> BuildTimeZoneFromString(
+    const std::string& time_zone_string);
+
 }  // namespace fhir
 }  // namespace google
 

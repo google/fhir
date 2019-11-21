@@ -41,6 +41,7 @@ cc_library(
         ":fhir_path_lexer",
         "//cc/google/fhir:annotations",
         "//cc/google/fhir:proto_util",
+        "//cc/google/fhir:util",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto/r4/core:datatypes_cc_proto",

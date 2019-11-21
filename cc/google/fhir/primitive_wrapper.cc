@@ -523,30 +523,6 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
     return Status::OK();
   }
 
-  static StatusOr<absl::TimeZone> BuildTimeZoneFromString(
-      const std::string& time_zone_string) {
-    if (time_zone_string == "UTC" || time_zone_string == "Z") {
-      return absl::UTCTimeZone();
-    }
-    // We can afford to use a simpler pattern here because we've already
-    // validated the timezone above.
-    static const LazyRE2 TIMEZONE_PATTERN = {"(\\+|-)(\\d{2}):(\\d{2})"};
-    std::string sign;
-    int hours;
-    int minutes;
-    if (RE2::FullMatch(time_zone_string, *TIMEZONE_PATTERN, &sign, &hours,
-                       &minutes)) {
-      int seconds_offset = ((hours * 60) + minutes) * 60;
-      seconds_offset *= (sign == "-" ? -1 : 1);
-      return absl::FixedTimeZone(seconds_offset);
-    }
-    absl::TimeZone tz;
-    if (!absl::LoadTimeZone(time_zone_string, &tz)) {
-      return InvalidArgument("Unable to parse timezone: ", time_zone_string);
-    }
-    return tz;
-  }
-
   static StatusOr<std::string> ParseTimeZoneString(
       const std::string& date_string) {
     static const LazyRE2 TIMEZONE_PATTERN = {

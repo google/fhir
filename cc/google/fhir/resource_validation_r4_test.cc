@@ -97,6 +97,10 @@ TEST(EncounterValidationTest, Valid) {
   ValidTest<Encounter>("encounter_valid");
 }
 
+TEST(EncounterValidationTest, ValidWithNumericTimezone) {
+  ValidTest<Encounter>("encounter_valid_numeric_timezone");
+}
+
 }  // namespace
 
 }  // namespace fhir

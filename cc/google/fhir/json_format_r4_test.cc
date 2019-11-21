@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include <unordered_set>
+
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -189,10 +191,24 @@ static const char* const kTimeZoneString = "Australia/Sydney";
 // json_path should be relative to fhir root
 template <typename R>
 StatusOr<R> ParseJsonToProto(const std::string& json_path) {
+  // Some examples are invalid fhir.
+  // See:
+  // https://gforge.hl7.org/gf/project/fhir/tracker/?action=TrackerItemEdit&tracker_item_id=24933
+  static std::unordered_set<std::string> INVALID_RECORDS{
+      "spec/hl7.fhir.core/4.0.0/package/Questionnaire-qs1.json",
+      "spec/hl7.fhir.core/4.0.0/package/Observation-clinical-gender.json",
+      "spec/hl7.fhir.core/4.0.0/package/DeviceMetric-example.json",
+      "spec/hl7.fhir.core/4.0.0/package/DeviceUseStatement-example.json",
+      "spec/hl7.fhir.core/4.0.0/package/MedicationRequest-medrx0301.json"};
+
   std::string json = ReadFile(json_path);
   absl::TimeZone tz;
   absl::LoadTimeZone(kTimeZoneString, &tz);
-  return JsonFhirStringToProtoWithoutValidating<R>(json, tz);
+  if (INVALID_RECORDS.find(json_path) == INVALID_RECORDS.end()) {
+    return JsonFhirStringToProto<R>(json, tz);
+  } else {
+    return JsonFhirStringToProtoWithoutValidating<R>(json, tz);
+  }
 }
 
 // proto_path should be relative to //testdata/r4
