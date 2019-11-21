@@ -1,25 +1,12 @@
-# FHIR protocol buffers
+# Introduction
 
-This repository contains a Google implementation of protocol buffers for
-FHIR. This is not an officially supported Google product.
+FhirProto is Google’s implementation of the [FHIR Standard](http://hl7.org/fhir/) for Health Care data using [Protocol Buffers](https://developers.google.com/protocol-buffers).  By leveraging Google’s core data storage format, FhirProto provides a type-safe, strongly validated FHIR format with cross-language support at a fraction of the size on disk, making it a great data model to develop your Health Care application on.  Structured Codes and Extensions guarantee that your data will be in the correct format.  Support for generating and validating against custom Implementation Guides allow you to customize FhirProto to your dataset and requirements.  Parsing and Printing libraries make it easy to go back and forth between FhirProto format and JSON.
 
-To build this repository, install [bazel](https://bazel.build/), and necessary
-dependencies (we recommend you to run this from an virtual env):
+# Getting Started
+We think the best way to get an idea of how FhirProto works is to get in and start playing with it.  To that end, we provide [https://github.com/google/fhir-example](https://github.com/google/fhir-example). This repo contains a script for using [Synthea](https://github.com/synthetichealth/synthea) to create a synthetic FHIR JSON dataset, and then shows some examples of parsing, printing, validating, profiling and querying.  The repo also contains a [walkthrough](https://github.com/google/fhir-examples/blob/master/EXAMPLES.md) of many of the examples.
 
-```
-$ pip install -r bazel/requirements.txt
-```
+A Reference User Guide with in-depth descriptions of different concepts can be found [here](https://github.com/google/fhir-examples/blob/master/USERGUIDE.md).
 
-Then run:
+## Trademark
+FHIR® is the registered trademark of HL7 and is used with the permission of HL7. Use of the FHIR trademark does not constitute endorsement of this product by HL7.
 
-```
-$ bazel test //...
-```
-
-For some ideas of how to use this code, see the [examples](./examples/):
-
-* [Querying with BigQuery](./examples/bigquery/README.md)
-* [Converting FHIR json to proto](./java/src/main/java/com/google/fhir/examples/JsonToProtoMain.java)
-
-This is still an early version and subject to change. For some background, please
-see our [blog post](https://research.googleblog.com/2018/03/making-healthcare-data-work-better-with.html). Support for C++, Go, and Python is coming soon. You can post questions and feedback in this [web forum](https://groups.google.com/forum/#!forum/fhir-protobuf).
