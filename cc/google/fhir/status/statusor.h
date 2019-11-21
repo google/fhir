@@ -186,7 +186,6 @@ class StatusOr : private internal_statusor::StatusOrData<T>,
   // Returns a reference to our status. If this contains a T, then
   // returns Status::OK().
   const Status& status() const &;
-  Status status() &&;
 
   // Returns a reference to our current value, or CHECK-fails if !this->ok().
   //
@@ -287,10 +286,6 @@ inline StatusOr<T>& StatusOr<T>::operator=(StatusOr<U>&& other) {
 template <typename T>
 const Status& StatusOr<T>::status() const & {
   return this->status_;
-}
-template <typename T>
-Status StatusOr<T>::status() && {
-  return ok() ? Status::OK() : std::move(this->status_);
 }
 
 template <typename T>

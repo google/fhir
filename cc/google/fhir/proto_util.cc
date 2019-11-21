@@ -137,7 +137,7 @@ std::string StripIndex(const std::string& field_path) {
 }
 StatusOr<const bool> HasSubmessageByPath(const Message& message,
                                          const std::string& field_path) {
-  const Status& status = GetSubmessageByPath(message, field_path).status();
+  const Status status = GetSubmessageByPath(message, field_path).status();
   if (status.code() == ::tensorflow::error::Code::INVALID_ARGUMENT) {
     return status;
   }
