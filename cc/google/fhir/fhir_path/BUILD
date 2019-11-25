@@ -40,6 +40,7 @@ cc_library(
         ":fhir_path_grammar",
         ":fhir_path_lexer",
         "//cc/google/fhir:annotations",
+        "//cc/google/fhir:primitive_wrapper",
         "//cc/google/fhir:proto_util",
         "//cc/google/fhir:util",
         "//cc/google/fhir/status",

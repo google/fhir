@@ -16,6 +16,7 @@
 
 #include <utility>
 
+#include "google/protobuf/descriptor.h"
 #include "google/protobuf/util/message_differencer.h"
 #include "absl/strings/str_cat.h"
 
@@ -28,6 +29,7 @@
 #include "google/fhir/fhir_path/FhirPathBaseVisitor.h"
 #include "google/fhir/fhir_path/FhirPathLexer.h"
 #include "google/fhir/fhir_path/FhirPathParser.h"
+#include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
@@ -63,10 +65,13 @@ using antlr_parser::FhirPathBaseVisitor;
 using antlr_parser::FhirPathLexer;
 using antlr_parser::FhirPathParser;
 
+using ::google::fhir::AreSameMessageType;
 using ::google::fhir::ForEachMessage;
 using ::google::fhir::ForEachMessageHalting;
 using ::google::fhir::IsMessageType;
+using ::google::fhir::JsonPrimitive;
 using ::google::fhir::StatusOr;
+using ::google::fhir::WrapPrimitiveProto;
 
 using internal::ExpressionNode;
 
@@ -96,6 +101,16 @@ StatusOr<bool> MessagesToBoolean(const std::vector<const Message*>& messages) {
 constexpr char kExistsFunction[] = "exists";
 constexpr char kNotFunction[] = "not";
 constexpr char kHasValueFunction[] = "hasValue";
+
+// Logical field in primitives representing the underlying value.
+constexpr char kPrimitiveValueField[] = "value";
+
+// Returns true if the given field is accessing the logical "value"
+// field on FHIR primitives.
+bool IsFhirPrimitiveValue(const FieldDescriptor* field) {
+  return field->name() == kPrimitiveValueField &&
+         IsPrimitive(field->containing_type());
+}
 
 // Expression node that returns literals wrapped in the corresponding
 // protbuf wrapper
@@ -144,9 +159,14 @@ class InvokeTermNode : public ExpressionNode {
 
     } else {
       if (refl->HasField(message, field_)) {
-        const Message& child = refl->GetMessage(message, field_);
-
-        results->push_back(&child);
+        // .value invocations on primitive types should return the FHIR
+        // primitive message type rather than the underlying native primitive.
+        if (IsFhirPrimitiveValue(field_)) {
+          results->push_back(&message);
+        } else {
+          const Message& child = refl->GetMessage(message, field_);
+          results->push_back(&child);
+        }
       }
     }
 
@@ -180,9 +200,15 @@ class InvokeExpressionNode : public ExpressionNode {
     // Iterate through the results of the child expression and invoke
     // the appropriate field.
     for (const Message* child_message : child_results) {
-      ForEachMessage<Message>(
-          *child_message, field_,
-          [&](const Message& result) { results->push_back(&result); });
+      // .value invocations on primitive types should return the FHIR
+      // primitive message type rather than the underlying native primitive.
+      if (IsFhirPrimitiveValue(field_)) {
+        results->push_back(child_message);
+      } else {
+        ForEachMessage<Message>(
+            *child_message, field_,
+            [&](const Message& result) { results->push_back(&result); });
+      }
     }
 
     return Status::OK();
@@ -351,10 +377,30 @@ class EqualsOperator : public BinaryOperator {
       // Scan for unequal messages.
       result->set_value(true);
       for (int i = 0; i < left_results.size(); ++i) {
-        if (!MessageDifferencer::Equals(*left_results.at(i),
-                                        *right_results.at(i))) {
-          result->set_value(false);
-          break;
+        const Message* left = left_results.at(i);
+        const Message* right = right_results.at(i);
+
+        if (AreSameMessageType(*left, *right)) {
+          if (!MessageDifferencer::Equals(*left, *right)) {
+            result->set_value(false);
+            break;
+          }
+        } else {
+          // When dealing with different types we might be comparing a
+          // primitive type (like an enum) to a literal string, which is
+          // supported. Therefore we simply convert both to string form
+          // and consider them unequal if either is not a string.
+          StatusOr<JsonPrimitive> left_primitive = WrapPrimitiveProto(*left);
+          StatusOr<JsonPrimitive> right_primitive = WrapPrimitiveProto(*right);
+
+          // Comparisons between primitives and non-primitives are valid
+          // in FHIRPath and should simply return false rather than an error.
+          if (!left_primitive.ok() || !right_primitive.ok() ||
+              left_primitive.ValueOrDie().value !=
+                  right_primitive.ValueOrDie().value) {
+            result->set_value(false);
+            break;
+          }
         }
       }
     }

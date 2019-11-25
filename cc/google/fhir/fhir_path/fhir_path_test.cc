@@ -270,6 +270,17 @@ TEST(FhirPathTest, TestFunctionHasValue) {
   EXPECT_TRUE(result.GetBoolean().ValueOrDie());
 }
 
+TEST(FhirPathTest, TestLogicalValueFieldExists) {
+  // The logical .value field on primitives should return the primitive itself.
+  auto expr = CompiledExpression::Compile(Quantity::descriptor(),
+                                          "value.value.exists()")
+                  .ValueOrDie();
+  Quantity quantity;
+  quantity.mutable_value()->set_value("100");
+  EvaluationResult result = expr.Evaluate(quantity).ValueOrDie();
+  EXPECT_TRUE(result.GetBoolean().ValueOrDie());
+}
+
 TEST(FhirPathTest, TestFunctionHasValueNegation) {
   auto expr = CompiledExpression::Compile(Encounter::descriptor(),
                                           "period.start.hasValue().not()")
@@ -678,6 +689,20 @@ TEST(FhirPathTest, TimeCompareDifferentPrecision) {
 
   end_micros.set_value_us(end_micros.value_us() - 1);
   EXPECT_FALSE(EvaluateOnPeriod(start_before_end, start_micros, end_micros));
+}
+
+TEST(FhirPathTest, TestCompareEnumToString) {
+  auto encounter = ValidEncounter();
+  auto is_triaged =
+      CompiledExpression::Compile(Encounter::descriptor(), "status = 'triaged'")
+          .ValueOrDie();
+
+  EXPECT_TRUE(
+      is_triaged.Evaluate(encounter).ValueOrDie().GetBoolean().ValueOrDie());
+  encounter.mutable_status()->set_value(
+      google::fhir::stu3::proto::EncounterStatusCode::FINISHED);
+  EXPECT_FALSE(
+      is_triaged.Evaluate(encounter).ValueOrDie().GetBoolean().ValueOrDie());
 }
 
 TEST(FhirPathTest, MessageLevelConstraint) {
