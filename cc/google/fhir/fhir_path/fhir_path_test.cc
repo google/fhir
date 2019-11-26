@@ -549,7 +549,8 @@ TEST(FhirPathTest, ConstraintViolation) {
   };
 
   std::string err_message =
-      "fhirpath-constraint-violation-Observation.referenceRange";
+      absl::StrCat("fhirpath-constraint-violation-Observation.referenceRange: ",
+                   "\"low.exists() or high.exists() or text.exists()\"");
   EXPECT_EQ(validator.Validate(observation, callback),
             ::tensorflow::errors::FailedPrecondition(err_message));
 }
@@ -585,8 +586,9 @@ TEST(FhirPathTest, NestedConstraintViolated) {
 
   MessageValidator validator;
 
-  std::string err_message =
-      absl::StrCat("fhirpath-constraint-violation-", "Expansion.contains");
+  std::string err_message = absl::StrCat(
+      "fhirpath-constraint-violation-",
+      "Expansion.contains: ", "\"code.exists() or display.exists()\"");
 
   EXPECT_EQ(validator.Validate(value_set),
             ::tensorflow::errors::FailedPrecondition(err_message));

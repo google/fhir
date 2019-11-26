@@ -1,1 +1,1 @@
-fhirpath-constraint-violation-ReferenceRange
+fhirpath-constraint-violation-ReferenceRange: "low.exists() or high.exists() or text.exists()"

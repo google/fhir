@@ -1325,9 +1325,17 @@ Status ValidateMessageConstraint(const Message& message,
   FHIR_ASSIGN_OR_RETURN(const EvaluationResult expr_result,
                         expression.Evaluate(message));
 
+  if (!expr_result.GetBoolean().ok()) {
+    *halt_validation = true;
+    return InvalidArgument(absl::StrCat(
+        "Constraint did not evaluate to boolean: ",
+        message.GetDescriptor()->name(), ": \"", expression.fhir_path(), "\""));
+  }
+
   if (!expr_result.GetBoolean().ValueOrDie()) {
     std::string err_msg = absl::StrCat("fhirpath-constraint-violation-",
-                                       message.GetDescriptor()->name());
+                                       message.GetDescriptor()->name(), ": \"",
+                                       expression.fhir_path(), "\"");
 
     *halt_validation = handler(message, nullptr, expression.fhir_path());
     return ::tensorflow::errors::FailedPrecondition(err_msg);
@@ -1349,9 +1357,9 @@ Status ValidateFieldConstraint(const Message& parent,
                         expression.Evaluate(field_value));
 
   if (!expr_result.GetBoolean().ValueOrDie()) {
-    std::string err_msg =
-        absl::StrCat("fhirpath-constraint-violation-",
-                     field->containing_type()->name(), ".", field->json_name());
+    std::string err_msg = absl::StrCat(
+        "fhirpath-constraint-violation-", field->containing_type()->name(), ".",
+        field->json_name(), ": \"", expression.fhir_path(), "\"");
 
     *halt_validation = handler(parent, field, expression.fhir_path());
     return ::tensorflow::errors::FailedPrecondition(err_msg);
