@@ -29,7 +29,6 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "google/fhir/systems/systems.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"

@@ -34,7 +34,6 @@
 #include "google/fhir/seqex/feature_keys.h"
 #include "google/fhir/seqex/resource_to_example.h"
 #include "google/fhir/status/status.h"
-#include "google/fhir/systems/systems.h"
 #include "google/fhir/util.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"

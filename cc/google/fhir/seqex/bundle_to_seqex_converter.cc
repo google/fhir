@@ -31,7 +31,6 @@
 #include "google/fhir/seqex/feature_keys.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "google/fhir/systems/systems.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
 #include "proto/stu3/codes.pb.h"
@@ -64,11 +63,6 @@ using ::google::fhir::StatusOr;
 using ::google::fhir::proto::VersionConfig;
 using ::google::fhir::stu3::google::EventLabel;
 using ::google::fhir::stu3::google::EventTrigger;
-using ::google::fhir::stu3::proto::Bundle;
-using ::google::fhir::stu3::proto::Encounter;
-using ::google::fhir::stu3::proto::EncounterStatusCode;
-using ::google::fhir::stu3::proto::Medication;
-using ::google::fhir::stu3::proto::Patient;
 using ::google::fhir::stu3::proto::ReferenceId;
 using ::tensorflow::Example;
 using ::tensorflow::Feature;
@@ -457,6 +451,7 @@ bool BaseBundleToSeqexConverter::Next() {
   // Convert to feature-major. If the requested sequence start is not what
   // we expected, we have to start from scratch.
   if (offset != cached_offset_) {
+    // When this happens, example generation will be expensive.
     seqex_.Clear();
     cached_offset_ = offset;
   }

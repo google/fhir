@@ -17,7 +17,6 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/time/time.h"
-#include "google/fhir/systems/systems.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
@@ -36,7 +35,6 @@ using ::google::fhir::stu3::proto::ContainedResource;
 using ::google::fhir::stu3::proto::Date;
 using ::google::fhir::stu3::proto::DateTime;
 using ::google::fhir::stu3::proto::Encounter;
-using ::google::fhir::systems::kIcd9Schemes;
 using ::google::fhir::testutil::EqualsProto;
 
 TEST(GetTimeFromTimelikeElement, DateTime) {
