@@ -47,10 +47,10 @@ def fhirproto_dependencies():
 
     http_archive(
         name = "org_tensorflow",
-        sha256 = "49b5f0495cd681cbcb5296a4476853d4aea19a43bdd9f179c928a977308a0617",
-        strip_prefix = "tensorflow-2.0.0",
+        sha256 = "674cc90223f1d6b7fa2969e82636a630ce453e48a9dec39d73d6dba2fd3fd243",
+        strip_prefix = "tensorflow-2.1.0-rc0",
         urls = [
-            "https://github.com/tensorflow/tensorflow/archive/v2.0.0.tar.gz",
+            "https://github.com/tensorflow/tensorflow/archive/v2.1.0-rc0.tar.gz",
         ],
     )
 
@@ -65,7 +65,6 @@ def fhirproto_dependencies():
 
     http_archive(
         name = "bazel_skylib",
-        sha256 = "bbccf674aa441c266df9894182d80de104cabd19be98be002f6d478aaa31574d",
-        strip_prefix = "bazel-skylib-2169ae1c374aab4a09aa90e65efe1a3aad4e279b",
-        urls = ["https://github.com/bazelbuild/bazel-skylib/archive/2169ae1c374aab4a09aa90e65efe1a3aad4e279b.tar.gz"],
+        sha256 = "1dde365491125a3db70731e25658dfdd3bc5dbdfd11b840b3e987ecf043c7ca0",
+        urls = ["https://github.com/bazelbuild/bazel-skylib/releases/download/0.9.0/bazel_skylib-0.9.0.tar.gz"],
     )
