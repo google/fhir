@@ -24,6 +24,7 @@
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "google/protobuf/reflection.h"
+#include "absl/flags/flag.h"
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
 #include "absl/time/time.h"
@@ -34,8 +35,13 @@
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
 #include "tensorflow/core/lib/hash/hash.h"
+#include "tensorflow/core/platform/env.h"
 #include "tensorflow/core/platform/logging.h"
 #include "tensorflow/core/platform/types.h"
+
+ABSL_FLAG(std::string, fhir_version_config, "version_config.textproto",
+          "Configuration file detailing how to split fhir resources into units "
+          "on a patient timeline, and which supporting resources to include.");
 
 namespace google {
 namespace fhir {
@@ -56,8 +62,8 @@ struct DateTimeHash {
     ::tensorflow::uint64 h = std::hash<uint64_t>()(date_time.value_us());
     h = tensorflow::Hash64Combine(
         h, std::hash<std::string>()(date_time.timezone()));
-    h = tensorflow::Hash64Combine(
-        h, std::hash<int32_t>()(date_time.precision()));
+    h = tensorflow::Hash64Combine(h,
+                                  std::hash<int32_t>()(date_time.precision()));
     return h;
   }
 };
@@ -239,6 +245,14 @@ GetSortedOverrides(const ResourceConfig& resource_config,
 }
 
 }  // namespace internal
+
+const VersionConfig VersionConfigFromFlags() {
+  VersionConfig result;
+  TF_CHECK_OK(::tensorflow::ReadTextProto(
+      ::tensorflow::Env::Default(), absl::GetFlag(FLAGS_fhir_version_config),
+      &result));
+  return result;
+}
 
 }  // namespace fhir
 }  // namespace google

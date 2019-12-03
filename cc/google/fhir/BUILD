@@ -275,6 +275,7 @@ cc_library(
         "//proto:version_config_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:resources_cc_proto",
+        "@com_google_absl//absl/flags:flag",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
         "@com_google_protobuf//:protobuf",

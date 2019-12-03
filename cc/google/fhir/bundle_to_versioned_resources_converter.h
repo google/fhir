@@ -366,6 +366,9 @@ void SplitPatient(PatientLike patient, const BundleLike& bundle,
 
 }  // namespace internal
 
+
+const proto::VersionConfig VersionConfigFromFlags();
+
 template <typename BundleLike, typename ContainedResourceLike =
                                    BUNDLE_CONTAINED_RESOURCE(BundleLike)>
 std::vector<ContainedResourceLike> BundleToVersionedResources(
