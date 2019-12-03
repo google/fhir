@@ -130,7 +130,7 @@ T ReadProto(const std::string& filename) {
   T result;
   TF_CHECK_OK(::tensorflow::ReadTextProto(
       ::tensorflow::Env::Default(),
-      filename,
+      absl::StrCat(getenv("TEST_SRCDIR"), "/com_google_fhir/", filename),
       &result));
   return result;
 }
@@ -149,7 +149,7 @@ inline std::string ReadFile(const std::string& filename) {
   std::string result;
   TF_CHECK_OK(::tensorflow::ReadFileToString(
       ::tensorflow::Env::Default(),
-      filename,
+      absl::StrCat(getenv("TEST_SRCDIR"), "/com_google_fhir/", filename),
       &result));
   return result;
 }

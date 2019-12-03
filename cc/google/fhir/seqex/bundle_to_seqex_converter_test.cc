@@ -50,9 +50,12 @@ class BundleToSeqexConverterTest : public ::testing::Test {
   void SetUp() override {
     TF_CHECK_OK(::tensorflow::ReadTextProto(
         ::tensorflow::Env::Default(),
-        "proto/stu3/version_config.textproto",
+        absl::StrCat(
+            getenv("TEST_SRCDIR"),
+            "/com_google_fhir/proto/stu3/version_config.textproto"),
         &fhir_version_config_));
     parser_.AllowPartialMessage(true);
+    // Reset command line flags to default values between tests.
     absl::SetFlag(&FLAGS_tokenize_code_text_features, true);
     absl::SetFlag(&FLAGS_trigger_time_redacted_features, "");
   }
