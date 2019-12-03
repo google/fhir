@@ -29,7 +29,6 @@ namespace fhir {
 
 namespace {
 
-
 class Base1 {
  public:
   virtual ~Base1() {}

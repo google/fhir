@@ -15,6 +15,7 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/strings/str_cat.h"
 #include "google/fhir/resource_validation.h"
 #include "google/fhir/test_helper.h"
 #include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"

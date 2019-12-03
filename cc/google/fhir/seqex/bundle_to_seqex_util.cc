@@ -80,6 +80,10 @@ void GetTriggerLabelsPairFromExtensions(
     for (const EventLabel& label : labels) {
       if (label.has_event_time() && google::fhir::GetTimeFromTimelikeElement(
                                         label.event_time()) < trigger_time) {
+        // If the label happens before the trigger, the trigger should be
+        // thrown out. Note that there is no easy way to only throw out one
+        // type of label because a missing label would be treated as a
+        // negative example, not an example which should be skipped.
         should_keep = false;
         break;
       }
