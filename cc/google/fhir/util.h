@@ -28,6 +28,7 @@
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "google/protobuf/reflection.h"
+#include "absl/base/macros.h"
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
@@ -122,8 +123,6 @@ absl::Duration GetDurationFromTimelikeElement(
 absl::Duration GetDurationFromTimelikeElement(
     const ::google::fhir::r4::core::DateTime& datetime);
 
-Status GetTimezone(const std::string& timezone_str, absl::TimeZone* tz);
-
 // Builds a absl::Time from a time-like fhir Element, corresponding to the
 // smallest time greater than this time element. For elements with DAY
 // precision, for example, this will be 86400 seconds past value_us of this
@@ -133,6 +132,14 @@ absl::Time GetUpperBoundFromTimelikeElement(const T& timelike) {
   return absl::FromUnixMicros(timelike.value_us()) +
          GetDurationFromTimelikeElement(timelike);
 }
+
+ABSL_DEPRECATED("Use BuildTimeZoneFromString instead.")
+Status GetTimezone(const std::string& timezone_str, absl::TimeZone* tz);
+
+// Converts a time zone string of the forms found in time-like primitive types
+// into an absl::TimeZone
+StatusOr<absl::TimeZone> BuildTimeZoneFromString(
+    const std::string& time_zone_string);
 
 // Populates the resource oneof on ContainedResource with the passed-in
 // resource.
@@ -276,11 +283,6 @@ Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
                                const std::string& value);
 StatusOr<std::string> GetPrimitiveStringValue(
     const ::google::protobuf::Message& primitive, std::string* scratch);
-
-// Converts a time zone string of the forms found in time-like primitive types
-// into an absl::TimeZone
-StatusOr<absl::TimeZone> BuildTimeZoneFromString(
-    const std::string& time_zone_string);
 
 }  // namespace fhir
 }  // namespace google

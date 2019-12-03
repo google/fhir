@@ -232,38 +232,46 @@ absl::Duration GetDurationFromTimelikeElement(
 }
 
 Status GetTimezone(const std::string& timezone_str, absl::TimeZone* tz) {
-  // Try loading the timezone first.
-  if (absl::LoadTimeZone(timezone_str, tz)) {
-    return Status::OK();
-  }
-  static const LazyRE2 kFixedTimezoneRegex{"([+-])(\\d\\d):(\\d\\d)"};
-  std::string sign;
-  std::string hour_str;
-  std::string minute_str;
-  if (RE2::FullMatch(timezone_str, *kFixedTimezoneRegex, &sign, &hour_str,
-                     &minute_str)) {
-    int hour = 0;
-    int minute = 0;
-    int seconds_offset = 0;
-    if (!absl::SimpleAtoi(hour_str, &hour) || hour > 14) {
-      return InvalidArgument(
-          absl::StrCat("Invalid timezone format: ", timezone_str));
-    }
-    seconds_offset += hour * 60 * 60;
-    if (!absl::SimpleAtoi(minute_str, &minute) || minute > 59) {
-      return InvalidArgument(
-          absl::StrCat("Invalid timezone format: ", timezone_str));
-    }
-    seconds_offset += minute * 60;
-    if (sign == "-") {
-      seconds_offset = -seconds_offset;
-    }
-    *tz = absl::FixedTimeZone(seconds_offset);
-    return Status::OK();
+  FHIR_ASSIGN_OR_RETURN(*tz, BuildTimeZoneFromString(timezone_str));
+  return Status::OK();
+}
+
+StatusOr<absl::TimeZone> BuildTimeZoneFromString(
+    const std::string& time_zone_string) {
+  if (time_zone_string == "UTC" || time_zone_string == "Z") {
+    return absl::UTCTimeZone();
   }
 
-  return InvalidArgument(
-      absl::StrCat("Invalid timezone format: ", timezone_str));
+  // The full regex for timezone in FHIR is the last part of
+  // http://hl7.org/fhir/datatypes.html#dateTime
+  // We split this up into two regex, because 14:00 is a special case.
+  static const LazyRE2 MAIN_TIMEZONE_PATTERN = {
+      "(\\+|-)(0[0-9]|1[0-3]):([0-5][0-9])"};
+
+  std::string sign;
+  int hours;
+  int minutes;
+  if (RE2::FullMatch(time_zone_string, *MAIN_TIMEZONE_PATTERN, &sign, &hours,
+                     &minutes)) {
+    int seconds_offset = ((hours * 60) + minutes) * 60;
+    seconds_offset *= (sign == "-" ? -1 : 1);
+    return absl::FixedTimeZone(seconds_offset);
+  }
+
+  // +/- 14:00 is also allowed.
+  static const LazyRE2 FOURTEEN_HUNDRED_PATTERN = {"(\\+|-)14:00"};
+  std::string sign_fh;
+  if (RE2::FullMatch(time_zone_string, *FOURTEEN_HUNDRED_PATTERN, &sign_fh)) {
+    int seconds_offset = 14 * 60 * 60;
+    seconds_offset *= (sign_fh == "-" ? -1 : 1);
+    return absl::FixedTimeZone(seconds_offset);
+  }
+
+  absl::TimeZone tz;
+  if (!absl::LoadTimeZone(time_zone_string, &tz)) {
+    return InvalidArgument("Unable to parse timezone: ", time_zone_string);
+  }
+  return tz;
 }
 
 StatusOr<std::string> GetResourceId(const Message& message) {
@@ -450,44 +458,6 @@ Status GetDecimalValue(const stu3::proto::Decimal& decimal, double* value) {
         absl::StrCat("Invalid decimal: '", decimal.value(), "'"));
   }
   return Status::OK();
-}
-
-StatusOr<absl::TimeZone> BuildTimeZoneFromString(
-    const std::string& time_zone_string) {
-  if (time_zone_string == "UTC" || time_zone_string == "Z") {
-    return absl::UTCTimeZone();
-  }
-
-  // The full regex for timezone in FHIR is the last part of
-  // http://hl7.org/fhir/datatypes.html#dateTime
-  // We split this up into two regex, because 14:00 is a special case.
-  static const LazyRE2 MAIN_TIMEZONE_PATTERN = {
-      "(\\+|-)(0[0-9]|1[0-3]):([0-5][0-9])"};
-
-  std::string sign;
-  int hours;
-  int minutes;
-  if (RE2::FullMatch(time_zone_string, *MAIN_TIMEZONE_PATTERN, &sign, &hours,
-                     &minutes)) {
-    int seconds_offset = ((hours * 60) + minutes) * 60;
-    seconds_offset *= (sign == "-" ? -1 : 1);
-    return absl::FixedTimeZone(seconds_offset);
-  }
-
-  // +/- 14:00 is also allowed.
-  static const LazyRE2 FOURTEEN_HUNDRED_PATTERN = {"(\\+|-)14:00"};
-  std::string sign_fh;
-  if (RE2::FullMatch(time_zone_string, *FOURTEEN_HUNDRED_PATTERN, &sign_fh)) {
-    int seconds_offset = 14 * 60 * 60;
-    seconds_offset *= (sign == "-" ? -1 : 1);
-    return absl::FixedTimeZone(seconds_offset);
-  }
-
-  absl::TimeZone tz;
-  if (!absl::LoadTimeZone(time_zone_string, &tz)) {
-    return InvalidArgument("Unable to parse timezone: ", time_zone_string);
-  }
-  return tz;
 }
 
 }  // namespace fhir

@@ -133,6 +133,7 @@ cc_library(
         "//proto:annotations_cc_proto",
         "//proto/r4/core:datatypes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
+        "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/memory",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
