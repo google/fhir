@@ -101,17 +101,29 @@ UsCorePatient ValidUsCorePatient() {
   )proto");
 }
 
-bool EvaluateBoolExpression(const std::string& expression) {
-  // FHIRPath assumes a context object during evaluation, so we use an encounter
-  // as a placeholder.
-  auto numbers_equal =
-      CompiledExpression::Compile(Encounter::descriptor(), expression)
-          .ValueOrDie();
+google::fhir::StatusOr<bool> EvaluateBoolExpressionWithStatus(
+    const std::string& expression) {
+  // FHIRPath assumes a EvaluateBoolExpression object during evaluation, so we
+  // use an encounter as a placeholder.
+  auto compiled_expression =
+      CompiledExpression::Compile(Encounter::descriptor(), expression);
+  if (!compiled_expression.ok()) {
+    return google::fhir::StatusOr<bool>(compiled_expression.status());
+  }
 
   Encounter test_encounter = ValidEncounter();
-  EvaluationResult result = numbers_equal.Evaluate(test_encounter).ValueOrDie();
+  google::fhir::StatusOr<EvaluationResult> result =
+      compiled_expression.ValueOrDie().Evaluate(test_encounter);
 
-  return result.GetBoolean().ValueOrDie();
+  if (!result.ok()) {
+    return google::fhir::StatusOr<bool>(result.status());
+  }
+
+  return result.ValueOrDie().GetBoolean();
+}
+
+bool EvaluateBoolExpression(const std::string& expression) {
+  return EvaluateBoolExpressionWithStatus(expression).ValueOrDie();
 }
 
 DateTime ToDateTime(const absl::CivilSecond& civil_time,
@@ -295,6 +307,57 @@ TEST(FhirPathTest, TestFunctionHasValueNegation) {
   test_encounter.mutable_period()->clear_start();
   EvaluationResult no_value_result = expr.Evaluate(test_encounter).ValueOrDie();
   EXPECT_TRUE(no_value_result.GetBoolean().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestFunctionStartsWith) {
+  // Missing argument
+  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("'foo'.startsWith()").ok());
+
+  // Too many arguments
+  EXPECT_FALSE(
+      EvaluateBoolExpressionWithStatus("'foo'.startsWith('foo', 'foo')").ok());
+
+  // Wrong argument type
+  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("'foo'.startsWith(1)").ok());
+  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("'foo'.startsWith(1.0)").ok());
+  EXPECT_FALSE(EvaluateBoolExpressionWithStatus(
+                   "'foo'.startsWith(@2015-02-04T14:34:28Z)")
+                   .ok());
+  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("'foo'.startsWith(true)").ok());
+
+  // Function does not exist for non-string type
+  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("1.startsWith(1)").ok());
+  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("1.startsWith('1')").ok());
+
+  // Basic cases
+  EXPECT_TRUE(EvaluateBoolExpression("''.startsWith('')"));
+  EXPECT_TRUE(EvaluateBoolExpression("'foo'.startsWith('')"));
+  EXPECT_TRUE(EvaluateBoolExpression("'foo'.startsWith('f')"));
+  EXPECT_TRUE(EvaluateBoolExpression("'foo'.startsWith('foo')"));
+  EXPECT_FALSE(EvaluateBoolExpression("'foo'.startsWith('foob')"));
+}
+
+TEST(FhirPathTest, TestFunctionStartsWithSelfReference) {
+  auto expr = CompiledExpression::Compile(
+                  Observation::descriptor(),
+                  "code.coding.code.startsWith(code.coding.code)")
+                  .ValueOrDie();
+
+  Observation test_observation = ValidObservation();
+
+  EvaluationResult contains_result =
+      expr.Evaluate(test_observation).ValueOrDie();
+  EXPECT_TRUE(contains_result.GetBoolean().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestFunctionStartsWithInvokedOnNonString) {
+  auto expr = CompiledExpression::Compile(Observation::descriptor(),
+                                          "code.startsWith('foo')")
+                  .ValueOrDie();
+
+  Observation test_observation = ValidObservation();
+
+  EXPECT_FALSE(expr.Evaluate(test_observation).ok());
 }
 
 TEST(FhirPathTest, TestFunctionHasValueComplex) {

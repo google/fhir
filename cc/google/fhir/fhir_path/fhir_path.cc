@@ -18,6 +18,7 @@
 
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/util/message_differencer.h"
+#include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
 
 // Include the ANTLR-generated visitor, lexer and parser files.
@@ -97,10 +98,42 @@ StatusOr<bool> MessagesToBoolean(const std::vector<const Message*>& messages) {
   return InvalidArgument("Expression did not evaluate to boolean");
 }
 
+// Returns the string representation of the provided message for messages that
+// are represented in JSON as strings. Requires the presence of exactly one
+// message in the provided collection. For primitive messages that are not
+// represented as a string in JSON a status other than OK will be returned.
+StatusOr<std::string> MessagesToString(
+    const std::vector<const Message*>& messages) {
+  if (messages.size() != 1) {
+    return InvalidArgument("Expression must represent a single value.");
+  }
+
+  const Message* message = messages[0];
+  if (IsMessageType<String>(*message)) {
+    return dynamic_cast<const String*>(message)->value();
+  }
+
+  if (!IsPrimitive(message->GetDescriptor())) {
+    return InvalidArgument("Expression must be a primitive.");
+  }
+
+  StatusOr<JsonPrimitive> json_primitive = WrapPrimitiveProto(*message);
+  std::string json_string = json_primitive.ValueOrDie().value;
+
+  if (!absl::StartsWith(json_string, "\"")) {
+    return InvalidArgument("Expression must evaluate to a string.");
+  }
+
+  // Trim the starting and ending double quotation marks from the string (added
+  // by JsonPrimitive.)
+  return json_string.substr(1, json_string.size() - 2);
+}
+
 // Supported functions.
 constexpr char kExistsFunction[] = "exists";
 constexpr char kNotFunction[] = "not";
 constexpr char kHasValueFunction[] = "hasValue";
+constexpr char kStartsWithFunction[] = "startsWith";
 
 // Logical field in primitives representing the underlying value.
 constexpr char kPrimitiveValueField[] = "value";
@@ -331,6 +364,66 @@ class HasValueFunction : public ExpressionNode {
  private:
   const std::shared_ptr<ExpressionNode> child_;
 };
+
+// Implements the FHIRPath .startsWith() function, which returns true if and
+// only if the child string starts with the given string. When the given string
+// is the empty string .startsWith() returns true.
+//
+// Missing or incorrect parameters will end evaluation and cause Evaluate to
+// return a status other than OK. See
+// http://hl7.org/fhirpath/2018Sep/index.html#functions-2.
+//
+// Please note that execution will proceed on any String-like type.
+// Specifically, any type for which its JsonPrimitive value is a string. This
+// differs from the allowed implicit conversions defined in
+// https://hl7.org/fhirpath/2018Sep/index.html#conversion.
+class StartsWithFunction : public ExpressionNode {
+ public:
+  explicit StartsWithFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>> params)
+      : child_(child), params_(params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    // startsWith requires a single parameter
+    if (params_.size() != 1) {
+      return InvalidArgument(kInvalidArgumentMessage);
+    }
+
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    std::vector<const Message*> params_results;
+    FHIR_RETURN_IF_ERROR(params_[0]->Evaluate(work_space, &params_results));
+
+    if (child_results.size() != 1 || params_results.size() != 1) {
+      return InvalidArgument(kInvalidArgumentMessage);
+    }
+
+    FHIR_ASSIGN_OR_RETURN(std::string item, MessagesToString(child_results));
+    FHIR_ASSIGN_OR_RETURN(std::string prefix, MessagesToString(params_results));
+
+    Boolean* result = new Boolean();
+    work_space->DeleteWhenFinished(result);
+    result->set_value(absl::StartsWith(item, prefix));
+    results->push_back(result);
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Boolean::descriptor();
+  }
+
+ private:
+  const std::shared_ptr<ExpressionNode> child_;
+  const std::vector<std::shared_ptr<ExpressionNode>> params_;
+
+  static constexpr char kInvalidArgumentMessage[] =
+      "startsWith must be invoked on a string with a single string "
+      "argument";
+};
+constexpr char StartsWithFunction::kInvalidArgumentMessage[];
 
 // Base class for FHIRPath binary operators.
 class BinaryOperator : public ExpressionNode {
@@ -808,12 +901,16 @@ struct InvocationDefinition {
   InvocationDefinition(const std::string& name, const bool is_function)
       : name(name), is_function(is_function) {}
 
+  InvocationDefinition(const std::string& name, const bool is_function,
+                       std::vector<std::shared_ptr<ExpressionNode>> params)
+      : name(name), is_function(is_function), params(params) {}
+
   const std::string name;
 
   // Indicates it is a function invocation rather than a member lookup.
   const bool is_function;
 
-  const std::vector<std::unique_ptr<ExpressionNode>> params;
+  const std::vector<std::shared_ptr<ExpressionNode>> params;
 };
 
 // ANTLR Visitor implementation to translate the AST
@@ -846,7 +943,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
         expression.as<std::shared_ptr<ExpressionNode>>();
 
     if (definition->is_function) {
-      auto function_node = createFunction(definition->name, expr);
+      auto function_node =
+          createFunction(definition->name, expr, definition->params);
 
       if (function_node == nullptr) {
         return nullptr;
@@ -963,10 +1061,21 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     std::string text =
         ctx->function()->identifier()->IDENTIFIER()->getSymbol()->getText();
 
-    // TODO: visit and handle parameters
-    //  in ctx->function()->paramList()->expression()
+    std::vector<std::shared_ptr<ExpressionNode>> evaluated_params;
 
-    return std::make_shared<InvocationDefinition>(text, true);
+    if (ctx->function()->paramList()) {
+      std::vector<FhirPathParser::ExpressionContext*> params =
+          ctx->function()->paramList()->expression();
+      for (auto it = params.begin(); it != params.end(); ++it) {
+        antlrcpp::Any param_any = (*it)->accept(this);
+          evaluated_params.push_back(
+              param_any.isNotNull()
+                  ? param_any.as<std::shared_ptr<ExpressionNode>>()
+                  : std::shared_ptr<ExpressionNode>(nullptr));
+      }
+    }
+
+    return std::make_shared<InvocationDefinition>(text, true, evaluated_params);
   }
 
   antlrcpp::Any visitOrExpression(
@@ -1052,13 +1161,16 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   // specified FHIRPath function.
   std::shared_ptr<ExpressionNode> createFunction(
       const std::string& function_name,
-      std::shared_ptr<ExpressionNode> child_expression) {
+      std::shared_ptr<ExpressionNode> child_expression,
+      std::vector<std::shared_ptr<ExpressionNode>> params) {
     if (function_name == kExistsFunction) {
       return std::make_shared<ExistsFunction>(child_expression);
     } else if (function_name == kNotFunction) {
       return std::make_shared<NotFunction>(child_expression);
     } else if (function_name == kHasValueFunction) {
       return std::make_shared<HasValueFunction>(child_expression);
+    } else if (function_name == kStartsWithFunction) {
+      return std::make_shared<StartsWithFunction>(child_expression, params);
     } else {
       // TODO: Implement set of functions for initial use cases.
       SetError(absl::StrCat("The function ", function_name,
