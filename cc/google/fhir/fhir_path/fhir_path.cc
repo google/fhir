@@ -24,6 +24,7 @@
 // Include the ANTLR-generated visitor, lexer and parser files.
 #include "absl/memory/memory.h"
 #include "absl/strings/numbers.h"
+#include "absl/strings/escaping.h"
 #include "absl/time/civil_time.h"
 #include "absl/time/time.h"
 #include "google/fhir/annotations.h"
@@ -1133,13 +1134,20 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
           return ToAny(std::make_shared<Literal<Integer, int32_t>>(value));
         }
 
-      case FhirPathLexer::STRING:
+      case FhirPathLexer::STRING: {
         // The lexer keeps the quotes around string literals,
         // so we remove them here. The following assert simply reflects
         // the lexer's guarantees as defined.
         assert(text.length() >= 2);
-        return ToAny(std::make_shared<Literal<String, std::string>>(
-            text.substr(1, text.length() - 2)));
+        const std::string& trimmed = text.substr(1, text.length() - 2);
+        std::string unescaped;
+        // CUnescape handles additional escape sequences not allowed by
+        // FHIRPath. However, these additional sequences are disallowed by the
+        // grammar rules (FhirPath.g4) which are enforced by the parser. In
+        // addition, CUnescape does not handle escaped forward slashes.
+        absl::CUnescape(trimmed, &unescaped);
+        return ToAny(std::make_shared<Literal<String, std::string>>(unescaped));
+      }
 
       default:
 

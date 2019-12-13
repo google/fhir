@@ -101,19 +101,38 @@ UsCorePatient ValidUsCorePatient() {
   )proto");
 }
 
-google::fhir::StatusOr<bool> EvaluateBoolExpressionWithStatus(
+google::fhir::StatusOr<EvaluationResult> EvaluateExpressionWithStatus(
     const std::string& expression) {
   // FHIRPath assumes a EvaluateBoolExpression object during evaluation, so we
   // use an encounter as a placeholder.
   auto compiled_expression =
       CompiledExpression::Compile(Encounter::descriptor(), expression);
   if (!compiled_expression.ok()) {
-    return google::fhir::StatusOr<bool>(compiled_expression.status());
+    return google::fhir::StatusOr<EvaluationResult>(
+        compiled_expression.status());
   }
 
   Encounter test_encounter = ValidEncounter();
+  return compiled_expression.ValueOrDie().Evaluate(test_encounter);
+}
+
+
+google::fhir::StatusOr<std::string> EvaluateStringExpressionWithStatus(
+    const std::string& expression) {
   google::fhir::StatusOr<EvaluationResult> result =
-      compiled_expression.ValueOrDie().Evaluate(test_encounter);
+      EvaluateExpressionWithStatus(expression);
+
+  if (!result.ok()) {
+    return google::fhir::StatusOr<std::string>(result.status());
+  }
+
+  return result.ValueOrDie().GetString();
+}
+
+google::fhir::StatusOr<bool> EvaluateBoolExpressionWithStatus(
+    const std::string& expression) {
+  google::fhir::StatusOr<EvaluationResult> result =
+      EvaluateExpressionWithStatus(expression);
 
   if (!result.ok()) {
     return google::fhir::StatusOr<bool>(result.status());
@@ -564,6 +583,24 @@ TEST(FhirPathTest, TestStringLiteral) {
   Encounter test_encounter = ValidEncounter();
   EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
   EXPECT_EQ("foo", result.GetString().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestStringLiteralEscaping) {
+  EXPECT_EQ("\\", EvaluateStringExpressionWithStatus("'\\\\'").ValueOrDie());
+  EXPECT_EQ("\f", EvaluateStringExpressionWithStatus("'\\f'").ValueOrDie());
+  EXPECT_EQ("\n", EvaluateStringExpressionWithStatus("'\\n'").ValueOrDie());
+  EXPECT_EQ("\r", EvaluateStringExpressionWithStatus("'\\r'").ValueOrDie());
+  EXPECT_EQ("\t", EvaluateStringExpressionWithStatus("'\\t'").ValueOrDie());
+  EXPECT_EQ("\"", EvaluateStringExpressionWithStatus("'\\\"'").ValueOrDie());
+  EXPECT_EQ("'", EvaluateStringExpressionWithStatus("'\\\''").ValueOrDie());
+  EXPECT_EQ("\t", EvaluateStringExpressionWithStatus("'\\t'").ValueOrDie());
+  EXPECT_EQ(" ", EvaluateStringExpressionWithStatus("'\\u0020'").ValueOrDie());
+
+  // Disallowed escape sequences
+  EXPECT_FALSE(EvaluateStringExpressionWithStatus("'\\x20'").ok());
+  EXPECT_FALSE(EvaluateStringExpressionWithStatus("'\\123'").ok());
+  EXPECT_FALSE(EvaluateStringExpressionWithStatus("'\\x20'").ok());
+  EXPECT_FALSE(EvaluateStringExpressionWithStatus("'\\x00000020'").ok());
 }
 
 TEST(FhirPathTest, TestStringComparisons) {
