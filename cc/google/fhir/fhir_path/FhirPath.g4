@@ -33,7 +33,7 @@ term
 
 literal
         : '{' '}'                                               #nullLiteral
-        | ('true' | 'false')                                    #booleanLiteral
+        | BOOL                                                  #booleanLiteral
         | STRING                                                #stringLiteral
         | NUMBER                                                #numberLiteral
         | DATETIME                                              #dateTimeLiteral
@@ -104,10 +104,10 @@ identifier
 //        : '{' '}'
 //        ;                      // To create an empty array (and avoid a NULL literal)
 
-//BOOL
-//        : 'true'
-//        | 'false'
-//        ;
+BOOL
+        : 'true'
+        | 'false'
+        ;
 
 DATETIME
         : '@'

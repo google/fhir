@@ -498,6 +498,11 @@ TEST(FhirPathTest, TestAndBothAreTrue) {
   EXPECT_TRUE(result.GetBoolean().ValueOrDie());
 }
 
+TEST(FhirPathTest, TestBooleanLiteral) {
+  EXPECT_TRUE(EvaluateBoolExpression("true"));
+  EXPECT_FALSE(EvaluateBoolExpression("false"));
+}
+
 TEST(FhirPathTest, TestIntegerLiteral) {
   auto expr =
       CompiledExpression::Compile(Encounter::descriptor(), "42").ValueOrDie();
@@ -705,6 +710,10 @@ TEST(FhirPathTest, NestedConstraintSatisfied) {
   auto proto_string = new ::google::fhir::stu3::proto::String();
   proto_string->set_value("placeholder display");
   contains->set_allocated_display(proto_string);
+
+  auto proto_boolean = new ::google::fhir::stu3::proto::Boolean();
+  proto_boolean->set_value(true);
+  contains->set_allocated_abstract(proto_boolean);
 
   value_set.set_allocated_expansion(expansion);
 

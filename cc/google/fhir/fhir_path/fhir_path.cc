@@ -1149,6 +1149,9 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
         return ToAny(std::make_shared<Literal<String, std::string>>(unescaped));
       }
 
+      case FhirPathLexer::BOOL:
+        return ToAny(std::make_shared<Literal<Boolean, bool>>(text == "true"));
+
       default:
 
         SetError(absl::StrCat("Unknown terminal type: ", text));
