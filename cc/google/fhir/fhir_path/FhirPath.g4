@@ -32,7 +32,7 @@ term
         ;
 
 literal
-        : '{' '}'                                               #nullLiteral
+        : EMPTY                                                 #nullLiteral
         | BOOL                                                  #booleanLiteral
         | STRING                                                #stringLiteral
         | NUMBER                                                #numberLiteral
@@ -98,11 +98,9 @@ identifier
     Lexical rules
 *****************************************************************/
 
-// Not sure why, but with these as lexical rules, when the grammar is imported into CQL, they are not correctly recognized
-// Moving the same rules into the literal production rule above corrects the issue
-//EMPTY
-//        : '{' '}'
-//        ;                      // To create an empty array (and avoid a NULL literal)
+EMPTY
+        : '{' '}'
+        ;                      // To create an empty array (and avoid a NULL literal)
 
 BOOL
         : 'true'

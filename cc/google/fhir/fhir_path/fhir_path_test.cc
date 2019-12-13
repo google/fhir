@@ -498,6 +498,12 @@ TEST(FhirPathTest, TestAndBothAreTrue) {
   EXPECT_TRUE(result.GetBoolean().ValueOrDie());
 }
 
+TEST(FhirPathTest, TestEmptyLiteral) {
+  EvaluationResult result = EvaluateExpressionWithStatus("{}").ValueOrDie();
+
+  EXPECT_EQ(0, result.GetMessages().size());
+}
+
 TEST(FhirPathTest, TestBooleanLiteral) {
   EXPECT_TRUE(EvaluateBoolExpression("true"));
   EXPECT_FALSE(EvaluateBoolExpression("false"));

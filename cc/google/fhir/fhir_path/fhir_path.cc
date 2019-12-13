@@ -171,6 +171,24 @@ class Literal : public ExpressionNode {
   const PrimitiveType value_;
 };
 
+// Expression node for the empty literal.
+class EmptyLiteral : public ExpressionNode {
+ public:
+  EmptyLiteral() {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    return Status::OK();
+  }
+
+  // The return type of the empty literal is undefined. If this causes problems,
+  // it is likely we could arbitrarily pick one of the primitive types without
+  // ill-effect.
+  const Descriptor* ReturnType() const override {
+    return nullptr;
+  }
+};
+
 // Implements the InvocationTerm from the FHIRPath grammar,
 // producing a term from the root context message.
 class InvokeTermNode : public ExpressionNode {
@@ -1151,6 +1169,9 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
       case FhirPathLexer::BOOL:
         return ToAny(std::make_shared<Literal<Boolean, bool>>(text == "true"));
+
+      case FhirPathLexer::EMPTY:
+        return ToAny(std::make_shared<EmptyLiteral>());
 
       default:
 
