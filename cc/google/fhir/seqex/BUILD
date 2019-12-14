@@ -124,7 +124,6 @@ cc_library(
         "//cc/google/fhir:util",
         "//cc/google/fhir/status",
         "//cc/google/fhir/stu3:codeable_concepts",
-        "//cc/google/fhir/systems",
         "//proto:annotations_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/algorithm:container",
