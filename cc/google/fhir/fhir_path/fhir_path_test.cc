@@ -392,6 +392,20 @@ TEST(FhirPathTest, TestFunctionHasValueComplex) {
   EXPECT_FALSE(result.GetBoolean().ValueOrDie());
 }
 
+TEST(FhirPathTest, TestImplies) {
+  EXPECT_TRUE(EvaluateBoolExpression("(true implies true) = true"));
+  EXPECT_TRUE(EvaluateBoolExpression("(true implies false) = false"));
+  EXPECT_TRUE(EvaluateBoolExpression("(true implies {}) = {}"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("(false implies true) = true"));
+  EXPECT_TRUE(EvaluateBoolExpression("(false implies false) = true"));
+  EXPECT_TRUE(EvaluateBoolExpression("(false implies {}) = true"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("({} implies true) = true"));
+  EXPECT_TRUE(EvaluateBoolExpression("({} implies false) = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("({} implies {}) = {}"));
+}
+
 TEST(FhirPathTest, TestOrShortCircuit) {
   auto expr =
       CompiledExpression::Compile(Quantity::descriptor(),
