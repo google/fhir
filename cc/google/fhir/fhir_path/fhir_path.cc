@@ -494,6 +494,33 @@ class BinaryOperator : public ExpressionNode {
   const std::shared_ptr<ExpressionNode> right_;
 };
 
+class IndexerExpression : public BinaryOperator {
+ public:
+  IndexerExpression(std::shared_ptr<ExpressionNode> left,
+                    std::shared_ptr<ExpressionNode> right)
+      : BinaryOperator(left, right) {}
+
+  Status EvaluateOperator(
+      const std::vector<const Message*>& left_results,
+      const std::vector<const Message*>& right_results, WorkSpace* work_space,
+      std::vector<const Message*>* out_results) const override {
+    FHIR_ASSIGN_OR_RETURN(auto index,
+                          (PrimitiveOrEmpty<int, Integer>(right_results)));
+    if (!index.has_value()) {
+      return InvalidArgument("Index must be present.");
+    }
+
+    if (left_results.empty() || left_results.size() <= index.value()) {
+      return Status::OK();
+    }
+
+    out_results->push_back(left_results[index.value()]);
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override { return nullptr; }
+};
+
 class EqualsOperator : public BinaryOperator {
  public:
   Status EvaluateOperator(
@@ -1080,6 +1107,21 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     } else {
       return ToAny(std::make_shared<InvokeTermNode>(field));
     }
+  }
+
+  antlrcpp::Any visitIndexerExpression(
+      FhirPathParser::IndexerExpressionContext* ctx) override {
+    antlrcpp::Any left_any = ctx->children[0]->accept(this);
+    antlrcpp::Any right_any = ctx->children[2]->accept(this);
+
+    if (!CheckOk()) {
+      return nullptr;
+    }
+
+    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
+    auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
+
+    return ToAny(std::make_shared<IndexerExpression>(left, right));
   }
 
   antlrcpp::Any visitEqualityExpression(

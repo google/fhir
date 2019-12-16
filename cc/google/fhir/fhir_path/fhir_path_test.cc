@@ -392,6 +392,16 @@ TEST(FhirPathTest, TestFunctionHasValueComplex) {
   EXPECT_FALSE(result.GetBoolean().ValueOrDie());
 }
 
+TEST(FhirPathTest, TestIndexer) {
+  EXPECT_TRUE(EvaluateBoolExpression("true[0] = true"));
+  EXPECT_TRUE(EvaluateBoolExpression("true[1] = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("false[0] = false"));
+  EXPECT_TRUE(EvaluateBoolExpression("false[1] = {}"));
+
+  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("true['foo']").ok());
+  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("true[(1 | 2)]").ok());
+}
+
 TEST(FhirPathTest, TestImplies) {
   EXPECT_TRUE(EvaluateBoolExpression("(true implies true) = true"));
   EXPECT_TRUE(EvaluateBoolExpression("(true implies false) = false"));
