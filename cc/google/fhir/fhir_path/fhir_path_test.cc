@@ -406,6 +406,20 @@ TEST(FhirPathTest, TestImplies) {
   EXPECT_TRUE(EvaluateBoolExpression("({} implies {}) = {}"));
 }
 
+TEST(FhirPathTest, TestXor) {
+  EXPECT_TRUE(EvaluateBoolExpression("(true xor true) = false"));
+  EXPECT_TRUE(EvaluateBoolExpression("(true xor false) = true"));
+  EXPECT_TRUE(EvaluateBoolExpression("(true xor {}) = {}"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("(false xor true) = true"));
+  EXPECT_TRUE(EvaluateBoolExpression("(false xor false) = false"));
+  EXPECT_TRUE(EvaluateBoolExpression("(false xor {}) = {}"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("({} xor true) = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("({} xor false) = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("({} xor {}) = {}"));
+}
+
 TEST(FhirPathTest, TestOrShortCircuit) {
   auto expr =
       CompiledExpression::Compile(Quantity::descriptor(),

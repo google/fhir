@@ -834,6 +834,15 @@ class BooleanOperator : public ExpressionNode {
     results->push_back(result);
   }
 
+  StatusOr<absl::optional<bool>> EvaluateBooleanNode(
+      std::shared_ptr<ExpressionNode> node, WorkSpace* work_space) const {
+    std::vector<const Message*> results;
+    FHIR_RETURN_IF_ERROR(node->Evaluate(work_space, &results));
+    FHIR_ASSIGN_OR_RETURN(absl::optional<bool> result,
+                          (PrimitiveOrEmpty<bool, Boolean>(results)));
+    return result;
+  }
+
   const std::shared_ptr<ExpressionNode> left_;
   const std::shared_ptr<ExpressionNode> right_;
 };
@@ -848,10 +857,8 @@ class ImpliesOperator : public BooleanOperator {
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
-    std::vector<const Message*> left_results;
-    FHIR_RETURN_IF_ERROR(left_->Evaluate(work_space, &left_results));
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> left_result,
-                          (PrimitiveOrEmpty<bool, Boolean>(left_results)));
+                          EvaluateBooleanNode(left_, work_space));
 
     // Short circuit evaluation when left_result == "false"
     if (left_result.has_value() && !left_result.value()) {
@@ -859,10 +866,8 @@ class ImpliesOperator : public BooleanOperator {
       return Status::OK();
     }
 
-    std::vector<const Message*> right_results;
-    FHIR_RETURN_IF_ERROR(right_->Evaluate(work_space, &right_results));
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> right_result,
-                          (PrimitiveOrEmpty<bool, Boolean>(right_results)));
+                          EvaluateBooleanNode(right_, work_space));
 
     if (!left_result.has_value()) {
       if (right_result.value_or(false)) {
@@ -872,6 +877,32 @@ class ImpliesOperator : public BooleanOperator {
       SetResult(right_result.value(), work_space, results);
     }
 
+    return Status::OK();
+  }
+};
+
+class XorOperator : public BooleanOperator {
+ public:
+  XorOperator(std::shared_ptr<ExpressionNode> left,
+              std::shared_ptr<ExpressionNode> right)
+      : BooleanOperator(left, right) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    // Logic from truth table spec: http://hl7.org/fhirpath/#boolean-logic
+    FHIR_ASSIGN_OR_RETURN(absl::optional<bool> left_result,
+                          EvaluateBooleanNode(left_, work_space));
+    if (!left_result.has_value()) {
+      return Status::OK();
+    }
+
+    FHIR_ASSIGN_OR_RETURN(absl::optional<bool> right_result,
+                          EvaluateBooleanNode(right_, work_space));
+    if (!right_result.has_value()) {
+      return Status::OK();
+    }
+
+    SetResult(left_result.value() != right_result.value(), work_space, results);
     return Status::OK();
   }
 };
@@ -886,28 +917,21 @@ class OrOperator : public BooleanOperator {
                   std::vector<const Message*>* results) const override {
     // Logic from truth table spec: http://hl7.org/fhirpath/#boolean-logic
     // Short circuit and return true on the first true result.
-    std::vector<const Message*> left_results;
-    FHIR_RETURN_IF_ERROR(left_->Evaluate(work_space, &left_results));
-    if (!left_results.empty()) {
-      FHIR_ASSIGN_OR_RETURN(bool left_result, MessagesToBoolean(left_results));
-      if (left_result) {
-        SetResult(true, work_space, results);
-        return Status::OK();
-      }
+    FHIR_ASSIGN_OR_RETURN(absl::optional<bool> left_result,
+                          EvaluateBooleanNode(left_, work_space));
+    if (left_result.has_value() && left_result.value()) {
+      SetResult(true, work_space, results);
+      return Status::OK();
     }
 
-    std::vector<const Message*> right_results;
-    FHIR_RETURN_IF_ERROR(right_->Evaluate(work_space, &right_results));
-    if (!right_results.empty()) {
-      FHIR_ASSIGN_OR_RETURN(bool right_result,
-                            MessagesToBoolean(right_results));
-      if (right_result) {
-        SetResult(true, work_space, results);
-        return Status::OK();
-      }
+    FHIR_ASSIGN_OR_RETURN(absl::optional<bool> right_result,
+                          EvaluateBooleanNode(right_, work_space));
+    if (right_result.has_value() && right_result.value()) {
+      SetResult(true, work_space, results);
+      return Status::OK();
     }
 
-    if (!left_results.empty() && !right_results.empty()) {
+    if (left_result.has_value() && right_result.has_value()) {
       // Both children must be false to get here, so return false.
       SetResult(false, work_space, results);
       return Status::OK();
@@ -929,28 +953,21 @@ class AndOperator : public BooleanOperator {
                   std::vector<const Message*>* results) const override {
     // Logic from truth table spec: http://hl7.org/fhirpath/#boolean-logic
     // Short circuit and return false on the first false result.
-    std::vector<const Message*> left_results;
-    FHIR_RETURN_IF_ERROR(left_->Evaluate(work_space, &left_results));
-    if (!left_results.empty()) {
-      FHIR_ASSIGN_OR_RETURN(bool left_result, MessagesToBoolean(left_results));
-      if (!left_result) {
-        SetResult(false, work_space, results);
-        return Status::OK();
-      }
+    FHIR_ASSIGN_OR_RETURN(absl::optional<bool> left_result,
+                          EvaluateBooleanNode(left_, work_space));
+    if (left_result.has_value() && !left_result.value()) {
+      SetResult(false, work_space, results);
+      return Status::OK();
     }
 
-    std::vector<const Message*> right_results;
-    FHIR_RETURN_IF_ERROR(right_->Evaluate(work_space, &right_results));
-    if (!right_results.empty()) {
-      FHIR_ASSIGN_OR_RETURN(bool right_result,
-                            MessagesToBoolean(right_results));
-      if (!right_result) {
-        SetResult(false, work_space, results);
-        return Status::OK();
-      }
+    FHIR_ASSIGN_OR_RETURN(absl::optional<bool> right_result,
+                          EvaluateBooleanNode(right_, work_space));
+    if (right_result.has_value() && !right_result.value()) {
+      SetResult(false, work_space, results);
+      return Status::OK();
     }
 
-    if (!left_results.empty() && !right_results.empty()) {
+    if (left_result.has_value() && right_result.has_value()) {
       // Both children must be true to get here, so return true.
       SetResult(true, work_space, results);
       return Status::OK();
@@ -1173,6 +1190,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   antlrcpp::Any visitOrExpression(
       FhirPathParser::OrExpressionContext* ctx) override {
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
+    std::string op = ctx->children[1]->getText();
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
     if (!CheckOk()) {
@@ -1182,7 +1200,9 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
     auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
 
-    return ToAny(std::make_shared<OrOperator>(left, right));
+    return op == "or"
+        ? ToAny(std::make_shared<OrOperator>(left, right))
+        : ToAny(std::make_shared<XorOperator>(left, right));
   }
 
   antlrcpp::Any visitAndExpression(
