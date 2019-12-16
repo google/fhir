@@ -1,0 +1,60 @@
+{
+  "resourceType": "SupplyRequest",
+  "id": "simpleorder",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: simpleorder</p><p><b>identifier</b>: Order10284</p><p><b>status</b>: active</p><p><b>category</b>: Central Stock Resupply <span>(Details : {[not stated] code 'central' = 'central', given as 'Central Stock Resupply'})</span></p><p><b>priority</b>: asap</p><p><b>item</b>: Blood collect tubes blue cap <span>(Details : {[not stated] code 'BlueTubes' = 'BlueTubes', given as 'Blood collect tubes blue cap'})</span></p><p><b>quantity</b>: 10</p><p><b>occurrence</b>: 31/12/2016</p><p><b>authoredOn</b>: 31/12/2016</p><p><b>requester</b>: Henry Seven</p><p><b>supplier</b>: Vendor1</p><p><b>reasonCode</b>: Refill due to low stock <span>(Details : {[not stated] code 'stock_low' = 'stock_low', given as 'Refill due to low stock'})</span></p><p><b>deliverFrom</b>: Location 1</p><p><b>deliverTo</b>: GoodHealth Clinic Receiving</p></div>"
+  },
+  "identifier": [
+    {
+      "value": "Order10284"
+    }
+  ],
+  "status": "active",
+  "category": {
+    "coding": [
+      {
+        "code": "central",
+        "display": "Central Stock Resupply"
+      }
+    ]
+  },
+  "priority": "asap",
+  "itemCodeableConcept": {
+    "coding": [
+      {
+        "code": "BlueTubes",
+        "display": "Blood collect tubes blue cap"
+      }
+    ]
+  },
+  "quantity": {
+    "value": 10
+  },
+  "occurrenceDateTime": "2016-12-31",
+  "authoredOn": "2016-12-31",
+  "requester": {
+    "display": "Henry Seven"
+  },
+  "supplier": [
+    {
+      "display": "Vendor1"
+    }
+  ],
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "code": "stock_low",
+          "display": "Refill due to low stock"
+        }
+      ]
+    }
+  ],
+  "deliverFrom": {
+    "display": "Location 1"
+  },
+  "deliverTo": {
+    "display": "GoodHealth Clinic Receiving"
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "resourceType": "PlanDefinition",
+  "id": "protocol-example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n<p>\n    <b>id: </b>example, </p>\n\n  <p>\n    <b>identifier: </b>, <b>system: </b>http://acme.org, <b>value: </b>example-1, </p>\n  <p>\n    <b>title: </b>Obesity Assessment Protocol, </p>\n  <p>\n    <b>status: </b>draft, </p>\n  <p>\n    <b>type: </b>condition, </p>\n  <p>\n    <b>purpose: </b>Example of A medical algorithm for assessment and treatment of overweight and obesity, </p>\n  <p>\n    <b>author: </b>, <b>display: </b>National Heart, Lung, and Blood Institute http://www.nhlbi.nih.gov/health-pro/guidelines/current/obesity-guidelines/e_textbook/txgd/algorthm/algorthm.htm, </p>\n  <p>\n    <b>step: </b>, <b>name: </b>Measure BMI, <b>description: </b>Measure, Weight, Height, Waist, Circumference; Calculate BMI  Weight must be measured so that the BMI can be calculated. Most charts are based on weights obtained with the patient wearing undergarments and no shoes. BMI can be manually calculated (kg/[height in meters]2), but is more easily obtained from a nomogram. Waist circumference is important because evidence suggests that abdominal fat is a particularly strong determinant of cardiovascular risk in those with a BMI of 25 to 34.9 kg/m2. Increased waist circumference can also be a marker of increased risk even in persons of normal weight. The technique for measuring waist circumference is described in the text. A nutrition assessment will also help to assess the diet and physical activity habits of overweight patients, <b>precondition: </b>, <b>union: </b>, <b>description: </b>The practitioner must seek to determine whether the patient has ever been overweight. While a technical definition is provided, a simple question such as 'Have you ever been overweight?' will accomplish the same goal. Questions directed towards weight history, dietary habits, physical activities, and medications may provide useful information about the origins of obesity in particular patients., <b>condition: </b>, <b>type: </b>, <b>coding: </b>, <b>system: </b>http://acme.org, <b>code: </b>1234, <b>display: </b>Obesity, <b>valueBoolean: </b>true, <b>union: </b>, <b>description: </b>BMI Measured in Past 2 Years  For those who have not been overweight, a 2 year interval is appropriate for the reassessment of BMI. While this time span is not evidence-based, it is believed to be a reasonable compromise between the need to identify weight gain at an early stage and the need to limit the time, effort, and cost of repeated measurements., <b>condition: </b>, <b>type: </b>, <b>text: </b>BMI in last 2 years, <b>valueBoolean: </b>false, <b>activity: </b>, <b>detail: </b>, <b>category: </b>procedure, <b>code: </b>, <b>coding: </b>, <b>system: </b>http://loinc.org, <b>code: </b>39156-5, <b>display: </b>Body mass index (BMI) [Ratio], <b>performer: </b>, <b>display: </b>Nurse Ratched, <b>description: </b>Extra information on activity , </p>\n    </div>"
+  },
+  "contained": [
+    {
+      "resourceType": "ActivityDefinition",
+      "id": "procedure",
+      "status": "draft",
+      "description": "Extra information on activity ",
+      "kind": "ServiceRequest",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "39156-5",
+            "display": "Body mass index (BMI) [Ratio]"
+          }
+        ]
+      },
+      "participant": [
+        {
+          "type": "practitioner",
+          "role": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/practitioner-role",
+                "code": "doctor",
+                "display": "Doctor"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "identifier": [
+    {
+      "system": "http://acme.org",
+      "value": "example-1"
+    }
+  ],
+  "title": "Obesity Assessment Protocol",
+  "type": {
+    "coding": [
+      {
+        "code": "clinical-protocol"
+      }
+    ]
+  },
+  "status": "draft",
+  "useContext": [
+    {
+      "code": {
+        "code": "focus"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "414916001",
+            "display": "Obesity (disorder)"
+          }
+        ]
+      }
+    }
+  ],
+  "purpose": "Example of A medical algorithm for assessment and treatment of overweight and obesity",
+  "author": [
+    {
+      "name": "National Heart, Lung, and Blood Institute",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "https://www.nhlbi.nih.gov/health-pro/guidelines"
+        }
+      ]
+    }
+  ],
+  "relatedArtifact": [
+    {
+      "type": "derived-from",
+      "display": "Overweight and Obesity Treatment Guidelines",
+      "url": "http://www.nhlbi.nih.gov/health-pro/guidelines/current/obesity-guidelines/e_textbook/txgd/algorthm/algorthm.htm"
+    }
+  ],
+  "goal": [
+    {
+      "id": "reduce-bmi-ratio",
+      "category": {
+        "text": "Treatment"
+      },
+      "description": {
+        "text": "Reduce BMI to below 25"
+      },
+      "priority": {
+        "text": "medium-priority"
+      },
+      "start": {
+        "text": "When the patient's BMI Ratio is at or above 25"
+      },
+      "addresses": [
+        {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "414916001",
+              "display": "Obesity (disorder)"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        {
+          "type": "justification",
+          "display": "Evaluation and Treatment Strategy",
+          "url": "https://www.nhlbi.nih.gov/health-pro/guidelines/current/obesity-guidelines/e_textbook/txgd/42.htm"
+        }
+      ],
+      "target": [
+        {
+          "measure": {
+            "coding": [
+              {
+                "system": "http://loinc.org",
+                "code": "39156-5",
+                "display": "Body mass index (BMI) [Ratio]"
+              }
+            ]
+          },
+          "detailRange": {
+            "high": {
+              "value": 24.9,
+              "unit": "kg/m2"
+            }
+          },
+          "due": {
+            "value": 1,
+            "unit": "a"
+          }
+        }
+      ]
+    }
+  ],
+  "action": [
+    {
+      "title": "Measure BMI",
+      "description": "Measure, Weight, Height, Waist, Circumference; Calculate BMI",
+      "textEquivalent": "Weight must be measured so that the BMI can be calculated. Most charts are based on weights obtained with the patient wearing undergarments and no shoes. BMI can be manually calculated (kg/[height in meters]2), but is more easily obtained from a nomogram. Waist circumference is important because evidence suggests that abdominal fat is a particularly strong determinant of cardiovascular risk in those with a BMI of 25 to 34.9 kg/m2. Increased waist circumference can also be a marker of increased risk even in persons of normal weight. The technique for measuring waist circumference is described in the text. A nutrition assessment will also help to assess the diet and physical activity habits of overweight patients",
+      "goalId": [
+        "reduce-bmi-ratio"
+      ],
+      "condition": [
+        {
+          "kind": "applicability",
+          "expression": {
+            "description": "The practitioner must seek to determine whether the patient has ever been overweight. While a technical definition is provided, a simple question such as 'Have you ever been overweight?' will accomplish the same goal. Questions directed towards weight history, dietary habits, physical activities, and medications may provide useful information about the origins of obesity in particular patients.  For those who have not been overweight, a 2 year interval is appropriate for the reassessment of BMI. While this time span is not evidence-based, it is believed to be a reasonable compromise between the need to identify weight gain at an early stage and the need to limit the time, effort, and cost of repeated measurements.",
+            "language": "text/cql",
+            "expression": "exists ([Condition: Obesity]) or not exists ([Observation: BMI] O where O.effectiveDateTime 2 years or less before Today())"
+          }
+        }
+      ],
+      "requiredBehavior": "must-unless-documented",
+      "cardinalityBehavior": "single",
+      "definitionCanonical": "#procedure"
+    }
+  ]
+}

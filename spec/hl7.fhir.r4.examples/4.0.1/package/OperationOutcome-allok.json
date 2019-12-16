@@ -1,0 +1,17 @@
+{
+  "resourceType": "OperationOutcome",
+  "id": "allok",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>All OK</p>\n    </div>"
+  },
+  "issue": [
+    {
+      "severity": "information",
+      "code": "informational",
+      "details": {
+        "text": "All OK"
+      }
+    }
+  ]
+}

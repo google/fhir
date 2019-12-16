@@ -1,0 +1,49 @@
+{
+  "resourceType": "Provenance",
+  "id": "consent-signature",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: consent-signature</p><p><b>target</b>: <a>Consent/consent-example-signature</a></p><p><b>recorded</b>: 26/05/2016 12:41:10 AM</p><h3>Agents</h3><table><tr><td>-</td><td><b>Role</b></td><td><b>Who</b></td></tr><tr><td>*</td><td>author (originator) <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ParticipationType code 'AUT' = 'author (originator))</span></td><td><a>Patient/72</a></td></tr></table><p><b>signature</b>: </p></div>"
+  },
+  "target": [
+    {
+      "reference": "Consent/consent-example-signature"
+    }
+  ],
+  "recorded": "2016-05-26T00:41:10-04:00",
+  "agent": [
+    {
+      "role": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "AUT"
+            }
+          ]
+        }
+      ],
+      "who": {
+        "reference": "Patient/72"
+      }
+    }
+  ],
+  "signature": [
+    {
+      "type": [
+        {
+          "system": "urn:iso-astm:E1762-95:2013",
+          "code": "1.2.840.10065.1.12.1.1",
+          "display": "Author's Signature"
+        }
+      ],
+      "when": "2016-05-26T00:41:10-04:00",
+      "who": {
+        "reference": "Patient/72"
+      },
+      "targetFormat": "application/fhir+xml",
+      "sigFormat": "application/signature+xml",
+      "data": "dGhpcyBibG9iIGlzIHNuaXBwZWQ="
+    }
+  ]
+}

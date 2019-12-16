@@ -1,0 +1,121 @@
+{
+  "resourceType": "NutritionOrder",
+  "id": "enteralbolus",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: enteralbolus</p><p><b>identifier</b>: 123</p><p><b>status</b>: active</p><p><b>intent</b>: order</p><p><b>patient</b>: <a>Peter Chalmers</a></p><p><b>encounter</b>: <a>Inpatient</a></p><p><b>dateTime</b>: 17/09/2014</p><p><b>orderer</b>: <a>Dr Adam Careful</a></p><p><b>allergyIntolerance</b>: <a>Cashew Nuts</a></p><p><b>foodPreferenceModifier</b>: Dairy Free <span>(Details : {http://terminology.hl7.org/CodeSystem/diet code 'dairy-free' = 'Dairy Free)</span></p><p><b>excludeFoodModifier</b>: Cashew Nut <span>(Details : {SNOMED CT code '227493005' = 'Cashew nuts', given as 'Cashew Nut'})</span></p><blockquote><p><b>enteralFormula</b></p><p><b>baseFormulaType</b>: Adult high protein formula <span>(Details : {SNOMED CT code '442991000124104' = 'Adult high protein formula (product)', given as 'Adult high protein formula'})</span></p><p><b>baseFormulaProductName</b>: Acme High Protein Formula</p><p><b>additiveType</b>: Lipid <span>(Details : {http://terminology.hl7.org/CodeSystem/entformula-additive code 'lipid' = 'Lipid', given as 'Lipid'})</span></p><p><b>additiveProductName</b>: Acme Lipid Additive</p><p><b>caloricDensity</b>: 1.5 calories per milliliter<span> (Details: UCUM code cal/mL = 'cal/mL')</span></p><p><b>routeofAdministration</b>: Instillation, gastrostomy tube <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-RouteOfAdministration code 'GT' = 'Instillation, gastrostomy tube', given as 'Instillation, gastrostomy tube'})</span></p><h3>Administrations</h3><table><tr><td>-</td><td><b>Schedule</b></td><td><b>Quantity</b></td></tr><tr><td>*</td><td>Starting 17/09/2014 4:00:00 PM, Do Once per 4 hours</td><td>240 milliliters<span> (Details: UCUM code mL = 'mL')</span></td></tr></table><p><b>maxVolumeToDeliver</b>: 1440 milliliter/day<span> (Details: UCUM code mL/d = 'mL/d')</span></p><p><b>administrationInstruction</b>: 240 mls every 4hrs </p></blockquote></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://www.acme.org/nutritionorders",
+      "value": "123"
+    }
+  ],
+  "status": "active",
+  "intent": "order",
+  "patient": {
+    "reference": "Patient/example",
+    "display": "Peter Chalmers"
+  },
+  "encounter": {
+    "reference": "Encounter/example",
+    "display": "Inpatient"
+  },
+  "dateTime": "2014-09-17",
+  "orderer": {
+    "reference": "Practitioner/example",
+    "display": "Dr Adam Careful"
+  },
+  "allergyIntolerance": [
+    {
+      "reference": "AllergyIntolerance/example",
+      "display": "Cashew Nuts"
+    }
+  ],
+  "foodPreferenceModifier": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/diet",
+          "code": "dairy-free"
+        }
+      ]
+    }
+  ],
+  "excludeFoodModifier": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "version": "20140730",
+          "code": "227493005",
+          "display": "Cashew Nut"
+        }
+      ]
+    }
+  ],
+  "enteralFormula": {
+    "baseFormulaType": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "442991000124104",
+          "display": "Adult high protein formula"
+        }
+      ]
+    },
+    "baseFormulaProductName": "Acme High Protein Formula",
+    "additiveType": {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/entformula-additive",
+          "code": "lipid",
+          "display": "Lipid"
+        }
+      ]
+    },
+    "additiveProductName": "Acme Lipid Additive",
+    "caloricDensity": {
+      "value": 1.5,
+      "unit": "calories per milliliter",
+      "system": "http://unitsofmeasure.org",
+      "code": "cal/mL"
+    },
+    "routeofAdministration": {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-RouteOfAdministration",
+          "code": "GT",
+          "display": "Instillation, gastrostomy tube"
+        }
+      ]
+    },
+    "administration": [
+      {
+        "schedule": {
+          "repeat": {
+            "boundsPeriod": {
+              "start": "2014-09-17T16:00:00Z"
+            },
+            "frequency": 1,
+            "period": 4,
+            "periodUnit": "h"
+          }
+        },
+        "quantity": {
+          "value": 240,
+          "unit": "milliliters",
+          "system": "http://unitsofmeasure.org",
+          "code": "mL"
+        }
+      }
+    ],
+    "maxVolumeToDeliver": {
+      "value": 1440,
+      "unit": "milliliter/day",
+      "system": "http://unitsofmeasure.org",
+      "code": "mL/d"
+    },
+    "administrationInstruction": "240 mls every 4hrs "
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "resourceType": "ActivityDefinition",
+  "id": "provide-mosquito-prevention-advice",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Id: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">ActivityDefinition/provide-mosquito-prevention-advice</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Status: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">draft</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Description: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">Provide mosquito prevention advice</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Related: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <p style=\"margin-top: 5px;\">\n                     <b>type: </b>\n                     <span>documentation</span>\n                  </p>\n                  <p style=\"margin-top: 5px;\">\n                     <b>display: </b>\n                     <span>Advice for patients about how to avoid Mosquito bites.</span>\n                  </p>\n                  <p style=\"margin-top: 5px;\">\n                     <b>url: </b>\n                     <span>http://www.cdc.gov/zika/prevention/index.html</span>\n                  </p>\n               </td>\n            </tr>\n         </table>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Related: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <p style=\"margin-top: 5px;\">\n                     <b>type: </b>\n                     <span>documentation</span>\n                  </p>\n                  <p style=\"margin-top: 5px;\">\n                     <b>display: </b>\n                     <span>Advice for patients about which mosquito repellents are effective and safe to use in pregnancy. [DEET, IF3535 and Picardin are safe during]</span>\n                  </p>\n                  <p style=\"margin-top: 5px;\">\n                     <b>url: </b>\n                     <span>https://www.epa.gov/insect-repellents/find-insect-repellent-right-you</span>\n                  </p>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Category: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">communication</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Code: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-right: 25px;\">\n                  <span style=\"padding-left: 25px;\">\n                     <b>text: </b>\n                     <span>Provide Mosquito Prevention Advice</span>\n                     <br/>\n                  </span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Participant: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">practitioner</td>\n            </tr>\n         </table>\n      </div>"
+  },
+  "url": "http://example.org/ActivityDefinition/provide-mosquito-prevention-advice",
+  "status": "draft",
+  "description": "Provide mosquito prevention advice",
+  "relatedArtifact": [
+    {
+      "type": "documentation",
+      "display": "Advice for patients about how to avoid Mosquito bites.",
+      "url": "http://www.cdc.gov/zika/prevention/index.html"
+    },
+    {
+      "type": "documentation",
+      "display": "Advice for patients about which mosquito repellents are effective and safe to use in pregnancy. [DEET, IF3535 and Picardin are safe during]",
+      "url": "https://www.epa.gov/insect-repellents/find-insect-repellent-right-you"
+    }
+  ],
+  "library": [
+    "Library/zika-virus-intervention-logic"
+  ],
+  "kind": "CommunicationRequest",
+  "code": {
+    "text": "Provide Mosquito Prevention Advice"
+  },
+  "timingTiming": {
+    "_event": [
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/cqf-expression",
+            "valueExpression": {
+              "language": "text/cql",
+              "expression": "Now()"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "participant": [
+    {
+      "type": "practitioner"
+    }
+  ]
+}

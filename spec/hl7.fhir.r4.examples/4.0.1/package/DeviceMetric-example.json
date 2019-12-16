@@ -1,0 +1,55 @@
+{
+  "resourceType": "DeviceMetric",
+  "id": "example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>identifier</b>: 345675</p><p><b>type</b>: MDC_PULS_OXIM_SAT_O2 <span>(Details : {urn:iso:std:iso:11073:10101 code '150456' = '150456', given as 'MDC_PULS_OXIM_SAT_O2'})</span></p><p><b>unit</b>: MDC_DIM_PERCENT <span>(Details : {urn:iso:std:iso:11073:10101 code '262688' = '262688', given as 'MDC_DIM_PERCENT'})</span></p><p><b>source</b>: <a>Device/dev1</a></p><p><b>parent</b>: <a>DeviceDefinition/dc102</a></p><p><b>operationalStatus</b>: on</p><p><b>color</b>: blue</p><p><b>category</b>: measurement</p><p><b>measurementPeriod</b>: Do Once per 1 seconds</p><h3>Calibrations</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>State</b></td><td><b>Time</b></td></tr><tr><td>*</td><td>two-point</td><td>calibrated</td><td>28/12/2016 9:03:04 AM</td></tr></table></div>"
+  },
+  "identifier": [
+    {
+      "system": "http://goodcare.org/devicemetric/id",
+      "value": "345675"
+    }
+  ],
+  "type": {
+    "coding": [
+      {
+        "system": "urn:iso:std:iso:11073:10101",
+        "code": "150456",
+        "display": "MDC_PULS_OXIM_SAT_O2"
+      }
+    ]
+  },
+  "unit": {
+    "coding": [
+      {
+        "system": "urn:iso:std:iso:11073:10101",
+        "code": "262688",
+        "display": "MDC_DIM_PERCENT"
+      }
+    ]
+  },
+  "source": {
+    "reference": "Device/dev1"
+  },
+  "parent": {
+    "reference": "DeviceDefinition/dc102"
+  },
+  "operationalStatus": "on",
+  "color": "blue",
+  "category": "measurement",
+  "measurementPeriod": {
+    "repeat": {
+      "frequency": 1,
+      "period": 1,
+      "periodUnit": "s"
+    }
+  },
+  "calibration": [
+    {
+      "type": "two-point",
+      "state": "calibrated",
+      "time": "2016-12-28T09:03:04-05:00"
+    }
+  ]
+}

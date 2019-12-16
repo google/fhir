@@ -1,0 +1,33 @@
+{
+  "resourceType": "SearchParameter",
+  "id": "filter",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: filter</p><p><b>url</b>: <b>http://hl7.org/fhir/SearchParameter/filter</b></p><p><b>version</b>: 1</p><p><b>name</b>: FilterSearchParameter</p><p><b>status</b>: draft</p><p><b>experimental</b>: false</p><p><b>date</b>: 26/07/2018</p><p><b>publisher</b>: Health Level Seven International (FHIR Infrastructure)</p><p><b>contact</b>: </p><p><b>description</b>: This is the formal declaration for the _filter parameter, documented at [http://hl7.org/fhir/search_filter.html](http://hl7.org/fhir/search_filter.html)</p><p><b>purpose</b>: Support combination searches when the simple name=value basis of search cannot express what is required</p><p><b>code</b>: _filter</p><p><b>base</b>: Resource</p><p><b>type</b>: special</p></div>"
+  },
+  "url": "http://hl7.org/fhir/SearchParameter/filter",
+  "version": "1",
+  "name": "FilterSearchParameter",
+  "status": "draft",
+  "experimental": false,
+  "date": "2018-07-26",
+  "publisher": "Health Level Seven International (FHIR Infrastructure)",
+  "contact": [
+    {
+      "name": "FHIR Project",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://hl7.org/fhir"
+        }
+      ]
+    }
+  ],
+  "description": "This is the formal declaration for the _filter parameter, documented at [http://hl7.org/fhir/search_filter.html](http://hl7.org/fhir/search_filter.html)",
+  "purpose": "Support combination searches when the simple name=value basis of search cannot express what is required",
+  "code": "_filter",
+  "base": [
+    "Resource"
+  ],
+  "type": "special"
+}

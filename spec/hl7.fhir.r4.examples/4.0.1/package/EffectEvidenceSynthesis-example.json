@@ -1,0 +1,21 @@
+{
+  "resourceType": "EffectEvidenceSynthesis",
+  "id": "example",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>"
+  },
+  "status": "draft",
+  "population": {
+    "reference": "EvidenceVariable/example"
+  },
+  "exposure": {
+    "reference": "EvidenceVariable/example"
+  },
+  "exposureAlternative": {
+    "reference": "EvidenceVariable/example"
+  },
+  "outcome": {
+    "reference": "EvidenceVariable/example"
+  }
+}

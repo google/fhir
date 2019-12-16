@@ -1,0 +1,49 @@
+{
+  "resourceType": "ActivityDefinition",
+  "id": "serum-zika-dengue-virus-igm",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Id: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">ActivityDefinition/serum-zika-dengue-virus-igm</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Status: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">draft</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Description: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">Order Serum Zika and Dengue Virus IgM</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Related: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <p style=\"margin-top: 5px;\">\n                     <b>type: </b>\n                     <span>documentation</span>\n                  </p>\n                  <p style=\"margin-top: 5px;\">\n                     <b>display: </b>\n                     <span>Explanation of diagnostic tests for Zika virus and which to use based on the patients clinical and exposure history.</span>\n                  </p>\n                  <p style=\"margin-top: 5px;\">\n                     <b>url: </b>\n                     <span>http://www.cdc.gov/zika/hc-providers/diagnostic.html</span>\n                  </p>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Category: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">diagnostic</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Code: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-right: 25px;\">\n                  <span style=\"padding-left: 25px;\">\n                     <b>text: </b>\n                     <span>Serum Zika and Dengue Virus IgM</span>\n                     <br/>\n                  </span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Participant: </b>\n               </td>\n            </tr>\n            <tr style=\"vertical-align: top;\">\n               <td style=\"padding-left: 25px; padding-right: 25px;\">practitioner</td>\n            </tr>\n         </table>\n      </div>"
+  },
+  "url": "http://example.org/ActivityDefinition/serum-zika-dengue-virus-igm",
+  "status": "draft",
+  "description": "Order Serum Zika and Dengue Virus IgM",
+  "relatedArtifact": [
+    {
+      "type": "documentation",
+      "display": "Explanation of diagnostic tests for Zika virus and which to use based on the patient’s clinical and exposure history.",
+      "url": "http://www.cdc.gov/zika/hc-providers/diagnostic.html"
+    },
+    {
+      "type": "derived-from",
+      "resource": "ActivityDefinition/serum-dengue-virus-igm"
+    }
+  ],
+  "library": [
+    "Library/zika-virus-intervention-logic"
+  ],
+  "kind": "ServiceRequest",
+  "code": {
+    "text": "Serum Zika and Dengue Virus IgM"
+  },
+  "timingTiming": {
+    "_event": [
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/cqf-expression",
+            "valueExpression": {
+              "language": "text/cql",
+              "expression": "Now()"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "participant": [
+    {
+      "type": "practitioner"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "hl7.fhir.r4.examples",
+  "version": "4.0.1",
+  "fhirVersions" : [ "4.0.1" ],
+  "type": "fhir.examples",
+  "license": "CC0-1.0",
+  "canonical": "http://hl7.org/fhir",
+  "tools-version" : 3,
+  "homepage": "http://hl7.org/fhir",
+  "title": "FHIR R4 package : Examples",
+  "description": "Example resources in the R4 version of the FHIR standard",
+  "author": "HL7 Inc",
+  "url": "http://hl7.org/fhir/R4"
+}

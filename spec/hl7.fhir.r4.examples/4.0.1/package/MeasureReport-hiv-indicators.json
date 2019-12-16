@@ -1,0 +1,408 @@
+{
+  "resourceType": "MeasureReport",
+  "id": "hiv-indicators",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: hiv-indicators</p><p><b>status</b>: complete</p><p><b>type</b>: summary</p><p><b>measure</b>: <a>http://ohie.org/Measure/hiv-indicators</a></p><p><b>reporter</b>: <a>Organization/ZW01</a></p><p><b>period</b>: 01/01/2018 --&gt; 31/01/2018</p><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_ART1_N <span>(Details : {[not stated] code 'QRPH_ADX_ART1_N' = 'QRPH_ADX_ART1_N)</span></p><p><b>measureScore</b>: 0</p><blockquote><p><b>stratifier</b></p><p><b>code</b>: AGE_GROUP:SEX <span>(Details : {[not stated] code 'AGE_GROUP:SEX' = 'AGE_GROUP:SEX)</span></p><blockquote><p><b>stratum</b></p><p><b>value</b>: P0Y--P1Y:F <span>(Details : {[not stated] code 'P0Y--P1Y:F' = 'P0Y--P1Y:F)</span></p><p><b>measureScore</b>: 0</p></blockquote><blockquote><p><b>stratum</b></p><p><b>value</b>: P0Y--P1Y:M <span>(Details : {[not stated] code 'P0Y--P1Y:M' = 'P0Y--P1Y:M)</span></p><p><b>measureScore</b>: 0</p></blockquote><blockquote><p><b>stratum</b></p><p><b>value</b>: P1Y--P5Y:F <span>(Details : {[not stated] code 'P1Y--P5Y:F' = 'P1Y--P5Y:F)</span></p><p><b>measureScore</b>: 0</p></blockquote><blockquote><p><b>stratum</b></p><p><b>value</b>: P1Y--P5Y:M <span>(Details : {[not stated] code 'P1Y--P5Y:M' = 'P1Y--P5Y:M)</span></p><p><b>measureScore</b>: 0</p></blockquote><blockquote><p><b>stratum</b></p><p><b>value</b>: P10Y--P15Y:F <span>(Details : {[not stated] code 'P10Y--P15Y:F' = 'P10Y--P15Y:F)</span></p><p><b>measureScore</b>: 0</p></blockquote><blockquote><p><b>stratum</b></p><p><b>value</b>: P10Y--P15Y:M <span>(Details : {[not stated] code 'P10Y--P15Y:M' = 'P10Y--P15Y:M)</span></p><p><b>measureScore</b>: 0</p></blockquote></blockquote></blockquote><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_ART1_N <span>(Details : {[not stated] code 'QRPH_ADX_ART1_N' = 'QRPH_ADX_ART1_N)</span></p><p><b>measureScore</b>: 0</p><blockquote><p><b>stratifier</b></p><p><b>code</b>: AGE_GROUP:SEX <span>(Details : {[not stated] code 'AGE_GROUP:SEX' = 'AGE_GROUP:SEX)</span></p><blockquote><p><b>stratum</b></p><p><b>value</b>: P0Y--P1Y:F <span>(Details : {[not stated] code 'P0Y--P1Y:F' = 'P0Y--P1Y:F)</span></p><p><b>measureScore</b>: 0</p></blockquote><blockquote><p><b>stratum</b></p><p><b>value</b>: P0Y--P1Y:M <span>(Details : {[not stated] code 'P0Y--P1Y:M' = 'P0Y--P1Y:M)</span></p><p><b>measureScore</b>: 0</p></blockquote><blockquote><p><b>stratum</b></p><p><b>value</b>: P1Y--P5Y:F <span>(Details : {[not stated] code 'P1Y--P5Y:F' = 'P1Y--P5Y:F)</span></p><p><b>measureScore</b>: 0</p></blockquote><blockquote><p><b>stratum</b></p><p><b>value</b>: P1Y--P5Y:M <span>(Details : {[not stated] code 'P1Y--P5Y:M' = 'P1Y--P5Y:M)</span></p><p><b>measureScore</b>: 0</p></blockquote><blockquote><p><b>stratum</b></p><p><b>value</b>: P10Y--P15Y:F <span>(Details : {[not stated] code 'P10Y--P15Y:F' = 'P10Y--P15Y:F)</span></p><p><b>measureScore</b>: 0</p></blockquote><blockquote><p><b>stratum</b></p><p><b>value</b>: P10Y--P15Y:M <span>(Details : {[not stated] code 'P10Y--P15Y:M' = 'P10Y--P15Y:M)</span></p><p><b>measureScore</b>: 0</p></blockquote></blockquote></blockquote><blockquote><p><b>group</b></p><p><b>code</b>: QRPH_ADX_ART1_N <span>(Details : {[not stated] code 'QRPH_ADX_ART1_N' = 'QRPH_ADX_ART1_N)</span></p><p><b>measureScore</b>: 0</p><blockquote><p><b>stratifier</b></p><p><b>code</b>: AGE_GROUP <span>(Details : {[not stated] code 'AGE_GROUP' = 'AGE_GROUP)</span>, SEX <span>(Details : {[not stated] code 'SEX' = 'SEX)</span></p><blockquote><p><b>stratum</b></p><blockquote><p><b>component</b></p><p><b>code</b>: AGE_GROUP <span>(Details : {[not stated] code 'AGE_GROUP' = 'AGE_GROUP)</span></p><p><b>value</b>: P0Y--P1Y <span>(Details : {[not stated] code 'P0Y--P1Y' = 'P0Y--P1Y)</span></p></blockquote><blockquote><p><b>component</b></p><p><b>code</b>: SEX <span>(Details : {[not stated] code 'SEX' = 'SEX)</span></p><p><b>value</b>: F <span>(Details : {[not stated] code 'F' = 'F)</span></p></blockquote><p><b>measureScore</b>: 0</p></blockquote><blockquote><p><b>stratum</b></p><blockquote><p><b>component</b></p><p><b>code</b>: AGE_GROUP <span>(Details : {[not stated] code 'AGE_GROUP' = 'AGE_GROUP)</span></p><p><b>value</b>: P0Y--P1Y <span>(Details : {[not stated] code 'P0Y--P1Y' = 'P0Y--P1Y)</span></p></blockquote><blockquote><p><b>component</b></p><p><b>code</b>: SEX <span>(Details : {[not stated] code 'SEX' = 'SEX)</span></p><p><b>value</b>: M <span>(Details : {[not stated] code 'M' = 'M)</span></p></blockquote><p><b>measureScore</b>: 0</p></blockquote><blockquote><p><b>stratum</b></p><blockquote><p><b>component</b></p><p><b>code</b>: AGE_GROUP <span>(Details : {[not stated] code 'AGE_GROUP' = 'AGE_GROUP)</span></p><p><b>value</b>: P1Y--P5Y <span>(Details : {[not stated] code 'P1Y--P5Y' = 'P1Y--P5Y)</span></p></blockquote><blockquote><p><b>component</b></p><p><b>code</b>: SEX <span>(Details : {[not stated] code 'SEX' = 'SEX)</span></p><p><b>value</b>: F <span>(Details : {[not stated] code 'F' = 'F)</span></p></blockquote><p><b>measureScore</b>: 0</p></blockquote><blockquote><p><b>stratum</b></p><blockquote><p><b>component</b></p><p><b>code</b>: AGE_GROUP <span>(Details : {[not stated] code 'AGE_GROUP' = 'AGE_GROUP)</span></p><p><b>value</b>: P1Y--P5Y <span>(Details : {[not stated] code 'P1Y--P5Y' = 'P1Y--P5Y)</span></p></blockquote><blockquote><p><b>component</b></p><p><b>code</b>: SEX <span>(Details : {[not stated] code 'SEX' = 'SEX)</span></p><p><b>value</b>: F <span>(Details : {[not stated] code 'F' = 'F)</span></p></blockquote><p><b>measureScore</b>: 0</p></blockquote></blockquote></blockquote></div>"
+  },
+  "status": "complete",
+  "type": "summary",
+  "measure": "http://ohie.org/Measure/hiv-indicators",
+  "reporter": {
+    "reference": "Organization/ZW01"
+  },
+  "period": {
+    "start": "2018-01-01",
+    "end": "2018-01-31"
+  },
+  "group": [
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "QRPH_ADX_ART1_N"
+          }
+        ]
+      },
+      "measureScore": {
+        "value": 0
+      },
+      "stratifier": [
+        {
+          "code": [
+            {
+              "coding": [
+                {
+                  "code": "AGE_GROUP:SEX"
+                }
+              ]
+            }
+          ],
+          "stratum": [
+            {
+              "value": {
+                "coding": [
+                  {
+                    "code": "P0Y--P1Y:F"
+                  }
+                ]
+              },
+              "measureScore": {
+                "value": 0
+              }
+            },
+            {
+              "value": {
+                "coding": [
+                  {
+                    "code": "P0Y--P1Y:M"
+                  }
+                ]
+              },
+              "measureScore": {
+                "value": 0
+              }
+            },
+            {
+              "value": {
+                "coding": [
+                  {
+                    "code": "P1Y--P5Y:F"
+                  }
+                ]
+              },
+              "measureScore": {
+                "value": 0
+              }
+            },
+            {
+              "value": {
+                "coding": [
+                  {
+                    "code": "P1Y--P5Y:M"
+                  }
+                ]
+              },
+              "measureScore": {
+                "value": 0
+              }
+            },
+            {
+              "value": {
+                "coding": [
+                  {
+                    "code": "P10Y--P15Y:F"
+                  }
+                ]
+              },
+              "measureScore": {
+                "value": 0
+              }
+            },
+            {
+              "value": {
+                "coding": [
+                  {
+                    "code": "P10Y--P15Y:M"
+                  }
+                ]
+              },
+              "measureScore": {
+                "value": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "QRPH_ADX_ART1_N"
+          }
+        ]
+      },
+      "measureScore": {
+        "value": 0
+      },
+      "stratifier": [
+        {
+          "code": [
+            {
+              "coding": [
+                {
+                  "code": "AGE_GROUP:SEX"
+                }
+              ]
+            }
+          ],
+          "stratum": [
+            {
+              "value": {
+                "coding": [
+                  {
+                    "code": "P0Y--P1Y:F"
+                  }
+                ]
+              },
+              "measureScore": {
+                "value": 0
+              }
+            },
+            {
+              "value": {
+                "coding": [
+                  {
+                    "code": "P0Y--P1Y:M"
+                  }
+                ]
+              },
+              "measureScore": {
+                "value": 0
+              }
+            },
+            {
+              "value": {
+                "coding": [
+                  {
+                    "code": "P1Y--P5Y:F"
+                  }
+                ]
+              },
+              "measureScore": {
+                "value": 0
+              }
+            },
+            {
+              "value": {
+                "coding": [
+                  {
+                    "code": "P1Y--P5Y:M"
+                  }
+                ]
+              },
+              "measureScore": {
+                "value": 0
+              }
+            },
+            {
+              "value": {
+                "coding": [
+                  {
+                    "code": "P10Y--P15Y:F"
+                  }
+                ]
+              },
+              "measureScore": {
+                "value": 0
+              }
+            },
+            {
+              "value": {
+                "coding": [
+                  {
+                    "code": "P10Y--P15Y:M"
+                  }
+                ]
+              },
+              "measureScore": {
+                "value": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "QRPH_ADX_ART1_N"
+          }
+        ]
+      },
+      "measureScore": {
+        "value": 0
+      },
+      "stratifier": [
+        {
+          "code": [
+            {
+              "coding": [
+                {
+                  "code": "AGE_GROUP"
+                }
+              ]
+            },
+            {
+              "coding": [
+                {
+                  "code": "SEX"
+                }
+              ]
+            }
+          ],
+          "stratum": [
+            {
+              "component": [
+                {
+                  "code": {
+                    "coding": [
+                      {
+                        "code": "AGE_GROUP"
+                      }
+                    ]
+                  },
+                  "value": {
+                    "coding": [
+                      {
+                        "code": "P0Y--P1Y"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "code": {
+                    "coding": [
+                      {
+                        "code": "SEX"
+                      }
+                    ]
+                  },
+                  "value": {
+                    "coding": [
+                      {
+                        "code": "F"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "measureScore": {
+                "value": 0
+              }
+            },
+            {
+              "component": [
+                {
+                  "code": {
+                    "coding": [
+                      {
+                        "code": "AGE_GROUP"
+                      }
+                    ]
+                  },
+                  "value": {
+                    "coding": [
+                      {
+                        "code": "P0Y--P1Y"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "code": {
+                    "coding": [
+                      {
+                        "code": "SEX"
+                      }
+                    ]
+                  },
+                  "value": {
+                    "coding": [
+                      {
+                        "code": "M"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "measureScore": {
+                "value": 0
+              }
+            },
+            {
+              "component": [
+                {
+                  "code": {
+                    "coding": [
+                      {
+                        "code": "AGE_GROUP"
+                      }
+                    ]
+                  },
+                  "value": {
+                    "coding": [
+                      {
+                        "code": "P1Y--P5Y"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "code": {
+                    "coding": [
+                      {
+                        "code": "SEX"
+                      }
+                    ]
+                  },
+                  "value": {
+                    "coding": [
+                      {
+                        "code": "F"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "measureScore": {
+                "value": 0
+              }
+            },
+            {
+              "component": [
+                {
+                  "code": {
+                    "coding": [
+                      {
+                        "code": "AGE_GROUP"
+                      }
+                    ]
+                  },
+                  "value": {
+                    "coding": [
+                      {
+                        "code": "P1Y--P5Y"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "code": {
+                    "coding": [
+                      {
+                        "code": "SEX"
+                      }
+                    ]
+                  },
+                  "value": {
+                    "coding": [
+                      {
+                        "code": "F"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "measureScore": {
+                "value": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

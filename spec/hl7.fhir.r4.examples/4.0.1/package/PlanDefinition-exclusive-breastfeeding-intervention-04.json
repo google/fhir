@@ -1,0 +1,87 @@
+{
+  "resourceType": "PlanDefinition",
+  "id": "exclusive-breastfeeding-intervention-04",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Id: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">PlanDefinition/exclusive-breastfeeding-intervention-04</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Identifier: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <b>value: </b>\n                  <span>exclusive-breastfeeding-intervention-04</span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Title: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">Exclusive Breastfeeding Intervention-04</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Status: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">active</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Description: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">Exclusive breastfeeding intervention intended to improve outcomes for exclusive breastmilk feeding of newborns by creating a lactation consult for the mother if appropriate.</td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Topic: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <span>\n                     <b>text: </b>\n                     <span>Exclusive Breastfeeding</span>\n                  </span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <table class=\"grid dict\">\n            <tr>\n               <td>\n                  <b>Library: </b>\n               </td>\n            </tr>\n            <tr>\n               <td style=\"padding-left: 25px; padding-right: 25px;\">\n                  <b>reference: </b>\n                  <span>Library/library-exclusive-breastfeeding-cds-logic</span>\n               </td>\n            </tr>\n         </table>\n         <p/>\n         <h2>Actions</h2>\n         <p style=\"width: 100%;\" class=\"hierarchy\">\n            <span>\n               <b>Step: </b>\n               <br/>\n               <span style=\"padding-left: 25px;\">\n                  <b>title: </b>\n                  <span>Mother should be referred to a lactation specialist for consultation.</span>\n                  <br/>\n               </span>\n               <span style=\"padding-left: 25px;\">\n                  <b>condition: </b>\n                  <br/>\n                  <span style=\"padding-left: 50px;\">\n                     <b>type: </b>\n                     <span>applicability</span>\n                     <br/>\n                  </span>\n                  <span style=\"padding-left: 50px;\">\n                     <b>expression: </b>\n                     <span>Should Create Lactation Consult</span>\n                     <br/>\n                  </span>\n               </span>\n               <span style=\"padding-left: 25px;\">\n                  <span>\n                     <b>Step: </b>\n                     <br/>\n                     <span style=\"padding-left: 50px;\">\n                        <b>title: </b>\n                        <span>Create a lactation consult request.</span>\n                        <br/>\n                     </span>\n                     <span style=\"padding-left: 50px;\">\n                        <b>text: </b>\n                        <span>Create a lactation consult request</span>\n                        <br/>\n                     </span>\n                     <span style=\"padding-left: 50px;\"/>\n                  </span>\n               </span>\n            </span>\n         </p>\n      </div>"
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "value": "exclusive-breastfeeding-intervention-04"
+    }
+  ],
+  "version": "1.0.0",
+  "title": "Exclusive Breastfeeding Intervention-04",
+  "status": "active",
+  "date": "2015-03-08",
+  "description": "Exclusive breastfeeding intervention intended to improve outcomes for exclusive breastmilk feeding of newborns by creating a lactation consult for the mother if appropriate.",
+  "topic": [
+    {
+      "text": "Exclusive Breastfeeding"
+    }
+  ],
+  "relatedArtifact": [
+    {
+      "type": "derived-from",
+      "resource": "Measure/measure-exclusive-breastfeeding"
+    }
+  ],
+  "library": [
+    "Library/library-exclusive-breastfeeding-cds-logic"
+  ],
+  "action": [
+    {
+      "title": "Mother should be referred to a lactation specialist for consultation.",
+      "trigger": [
+        {
+          "type": "named-event",
+          "name": "Admission"
+        },
+        {
+          "type": "named-event",
+          "name": "Birth"
+        },
+        {
+          "type": "named-event",
+          "name": "Infant Transfer to Recovery"
+        },
+        {
+          "type": "named-event",
+          "name": "Transfer to Post-Partum"
+        }
+      ],
+      "condition": [
+        {
+          "kind": "applicability",
+          "expression": {
+            "language": "text/cql",
+            "expression": "Should Create Lactation Consult"
+          }
+        }
+      ],
+      "action": [
+        {
+          "title": "Create a lactation consult request.",
+          "textEquivalent": "Create a lactation consult request",
+          "type": {
+            "coding": [
+              {
+                "code": "create"
+              }
+            ]
+          },
+          "dynamicValue": [
+            {
+              "path": "/",
+              "expression": {
+                "language": "text/cql",
+                "expression": "Create Lactation Consult Request"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

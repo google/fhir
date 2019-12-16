@@ -1,0 +1,192 @@
+{
+  "resourceType": "Encounter",
+  "id": "f203",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f203</p><p><b>identifier</b>: Encounter_Roel_20130311 (TEMP)</p><p><b>status</b>: finished</p><h3>StatusHistories</h3><table><tr><td>-</td><td><b>Status</b></td><td><b>Period</b></td></tr><tr><td>*</td><td>arrived</td><td>08/03/2013 --&gt; (ongoing)</td></tr></table><p><b>class</b>: inpatient encounter (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode code IMP = 'inpatient encounter', stated as 'inpatient encounter')</p><p><b>type</b>: Inpatient stay for nine days <span>(Details : {SNOMED CT code '183807002' = 'Inpatient stay 9 days', given as 'Inpatient stay for nine days'})</span></p><p><b>priority</b>: High priority <span>(Details : {SNOMED CT code '394849002' = 'High priority', given as 'High priority'})</span></p><p><b>subject</b>: <a>Roel</a></p><p><b>episodeOfCare</b>: <a>EpisodeOfCare/example</a></p><p><b>basedOn</b>: <a>ServiceRequest/myringotomy</a></p><h3>Participants</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Individual</b></td></tr><tr><td>*</td><td>Participation <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-ParticipationType code 'PART' = 'Participation)</span></td><td><a>Practitioner/f201</a></td></tr></table><p><b>appointment</b>: <a>Appointment/example</a></p><p><b>period</b>: 11/03/2013 --&gt; 20/03/2013</p><p><b>reasonCode</b>: The patient seems to suffer from bilateral pneumonia and renal insufficiency, most likely due to chemotherapy. <span>(Details )</span></p><blockquote><p><b>diagnosis</b></p><p><b>condition</b>: <a>Condition/stroke</a></p><p><b>use</b>: Admission diagnosis <span>(Details : {http://terminology.hl7.org/CodeSystem/diagnosis-role code 'AD' = 'Admission diagnosis', given as 'Admission diagnosis'})</span></p><p><b>rank</b>: 1</p></blockquote><blockquote><p><b>diagnosis</b></p><p><b>condition</b>: <a>Condition/f201</a></p><p><b>use</b>: Discharge diagnosis <span>(Details : {http://terminology.hl7.org/CodeSystem/diagnosis-role code 'DD' = 'Discharge diagnosis', given as 'Discharge diagnosis'})</span></p></blockquote><p><b>account</b>: <a>Account/example</a></p><h3>Hospitalizations</h3><table><tr><td>-</td><td><b>Origin</b></td><td><b>AdmitSource</b></td><td><b>ReAdmission</b></td><td><b>DietPreference</b></td><td><b>SpecialCourtesy</b></td><td><b>SpecialArrangement</b></td><td><b>Destination</b></td></tr><tr><td>*</td><td><a>Location/2</a></td><td>Clinical Oncology Department <span>(Details : {SNOMED CT code '309902002' = 'Clinical oncology department', given as 'Clinical Oncology Department'})</span></td><td>readmitted <span>(Details : {[not stated] code 'null' = 'null', given as 'readmitted'})</span></td><td>Fluid balance regulation <span>(Details : {SNOMED CT code '276026009' = 'Fluid balance regulation', given as 'Fluid balance regulation'})</span></td><td>normal courtesy <span>(Details : {http://terminology.hl7.org/CodeSystem/v3-EncounterSpecialCourtesy code 'NRM' = 'normal courtesy', given as 'normal courtesy'})</span></td><td>Wheelchair <span>(Details : {http://terminology.hl7.org/CodeSystem/encounter-special-arrangements code 'wheel' = 'Wheelchair', given as 'Wheelchair'})</span></td><td><a>Location/2</a></td></tr></table><p><b>serviceProvider</b>: <a>Organization/2</a></p><p><b>partOf</b>: <a>Encounter/f203</a></p></div>"
+  },
+  "identifier": [
+    {
+      "use": "temp",
+      "value": "Encounter_Roel_20130311"
+    }
+  ],
+  "status": "finished",
+  "statusHistory": [
+    {
+      "status": "arrived",
+      "period": {
+        "start": "2013-03-08"
+      }
+    }
+  ],
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "IMP",
+    "display": "inpatient encounter"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "183807002",
+          "display": "Inpatient stay for nine days"
+        }
+      ]
+    }
+  ],
+  "priority": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "394849002",
+        "display": "High priority"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/f201",
+    "display": "Roel"
+  },
+  "episodeOfCare": [
+    {
+      "reference": "EpisodeOfCare/example"
+    }
+  ],
+  "basedOn": [
+    {
+      "reference": "ServiceRequest/myringotomy"
+    }
+  ],
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PART"
+            }
+          ]
+        }
+      ],
+      "individual": {
+        "reference": "Practitioner/f201"
+      }
+    }
+  ],
+  "appointment": [
+    {
+      "reference": "Appointment/example"
+    }
+  ],
+  "period": {
+    "start": "2013-03-11",
+    "end": "2013-03-20"
+  },
+  "reasonCode": [
+    {
+      "text": "The patient seems to suffer from bilateral pneumonia and renal insufficiency, most likely due to chemotherapy."
+    }
+  ],
+  "diagnosis": [
+    {
+      "condition": {
+        "reference": "Condition/stroke"
+      },
+      "use": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/diagnosis-role",
+            "code": "AD",
+            "display": "Admission diagnosis"
+          }
+        ]
+      },
+      "rank": 1
+    },
+    {
+      "condition": {
+        "reference": "Condition/f201"
+      },
+      "use": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/diagnosis-role",
+            "code": "DD",
+            "display": "Discharge diagnosis"
+          }
+        ]
+      }
+    }
+  ],
+  "account": [
+    {
+      "reference": "Account/example"
+    }
+  ],
+  "hospitalization": {
+    "origin": {
+      "reference": "Location/2"
+    },
+    "admitSource": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "309902002",
+          "display": "Clinical Oncology Department"
+        }
+      ]
+    },
+    "reAdmission": {
+      "coding": [
+        {
+          "display": "readmitted"
+        }
+      ]
+    },
+    "dietPreference": [
+      {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "276026009",
+            "display": "Fluid balance regulation"
+          }
+        ]
+      }
+    ],
+    "specialCourtesy": [
+      {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-EncounterSpecialCourtesy",
+            "code": "NRM",
+            "display": "normal courtesy"
+          }
+        ]
+      }
+    ],
+    "specialArrangement": [
+      {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/encounter-special-arrangements",
+            "code": "wheel",
+            "display": "Wheelchair"
+          }
+        ]
+      }
+    ],
+    "destination": {
+      "reference": "Location/2"
+    }
+  },
+  "serviceProvider": {
+    "reference": "Organization/2"
+  },
+  "partOf": {
+    "reference": "Encounter/f203"
+  }
+}
