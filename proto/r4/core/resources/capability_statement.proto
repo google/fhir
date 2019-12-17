@@ -27,28 +27,28 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for CapabilityStatement, last updated
-// 2018-12-27T22:37:54.724+11:00. A statement of system capabilities. See
+// 2019-11-01T09:29:23.356+11:00. A statement of system capabilities. See
 // http://hl7.org/fhir/StructureDefinition/CapabilityStatement
 message CapabilityStatement {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/CapabilityStatement";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "document.select(profile&mode).isDistinct()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "(kind!='requirements') or (implementation.exists().not() and software.exists().not())";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "(kind != 'capability') or (implementation.exists().not() and software.exists())";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "messaging.endpoint.empty() or kind = 'instance'";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "(kind != 'instance') or implementation.exists()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "(description.count() + software.count() + implementation.count()) > 0";
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "rest.exists() or messaging.exists() or document.exists()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
+      "(description.count() + software.count() + implementation.count()) > 0";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "messaging.endpoint.empty() or kind = 'instance'";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "document.select(profile&mode).isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(kind != 'instance') or implementation.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(kind != 'capability') or (implementation.exists().not() and software.exists())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(kind!='requirements') or (implementation.exists().not() and software.exists().not())";
 
   // Logical id of this artifact
   Id id = 1;

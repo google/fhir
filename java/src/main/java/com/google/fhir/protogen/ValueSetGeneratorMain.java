@@ -29,10 +29,9 @@ import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /** Main class for using the ValueSetGenerator to generate valueset protos. */
 final class ValueSetGeneratorMain {
@@ -64,6 +63,11 @@ final class ValueSetGeneratorMain {
         names = {"--for_codes_in"},
         description = "Generate codes for types used in these bundles.")
     private Set<String> codeUsers = new HashSet<>();
+
+    @Parameter(
+        names = {"--for_codes_in_package"},
+        description = "Generate codes for types used in these FhirPackages.")
+    private Set<String> codeUserPackages = new HashSet<>();
 
     @Parameter(
         names = {"--eager_mode"},
@@ -109,14 +113,28 @@ final class ValueSetGeneratorMain {
 
     ValueSetGenerator generator = new ValueSetGenerator(packageInfo, args.getDependencies());
 
+    Set<StructureDefinition> codeUsers = new HashSet<>();
+
+    Set<Bundle> bundles = loadBundles(args.codeUsers, fhirVersion);
+    codeUsers.addAll(
+        bundles.stream()
+            .flatMap(bundle -> bundle.getEntryList().stream())
+            .filter(entry -> entry.getResource().hasStructureDefinition())
+            .map(entry -> entry.getResource().getStructureDefinition())
+            .collect(Collectors.toSet()));
+    for (String fhirPackageString : args.codeUserPackages) {
+      FhirPackage fhirPackage = FhirPackage.load(fhirPackageString);
+      codeUsers.addAll(fhirPackage.structureDefinitions);
+    }
+
     FileDescriptorProto codesFileDescriptor =
-        args.codeUsers.isEmpty()
+        codeUsers.isEmpty()
             ? generator.generateCodeSystemFile(inputPackage)
-            : generator.forCodesUsedIn(loadBundles(args.codeUsers, fhirVersion), args.eagerMode);
+            : generator.forCodesUsedIn(codeUsers, args.eagerMode);
     FileDescriptorProto valueSetsFileDescriptor =
-        args.codeUsers.isEmpty()
+        codeUsers.isEmpty()
             ? generator.generateValueSetFile(inputPackage)
-            : generator.forValueSetsUsedIn(loadBundles(args.codeUsers, fhirVersion));
+            : generator.forValueSetsUsedIn(codeUsers);
 
     ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
 
@@ -154,10 +172,10 @@ final class ValueSetGeneratorMain {
     }
   }
 
-  private static List<Bundle> loadBundles(Set<String> filenames, FhirVersion fhirVersion)
+  private static Set<Bundle> loadBundles(Set<String> filenames, FhirVersion fhirVersion)
       throws IOException {
     JsonFormat.Parser parser = getParser(fhirVersion);
-    List<Bundle> bundles = new ArrayList<>();
+    Set<Bundle> bundles = new HashSet<>();
     for (String filename : filenames) {
       Bundle.Builder builder = Bundle.newBuilder();
       if (filename.endsWith(".json")) {

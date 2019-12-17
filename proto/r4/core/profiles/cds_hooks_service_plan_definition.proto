@@ -574,8 +574,6 @@ message CDSHooksServicePlanDefinition {
   Uri cds_hooks_endpoint = 41 [
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/cqf-cdsHooksEndpoint",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
+        "http://hl7.org/fhir/StructureDefinition/cqf-cdsHooksEndpoint"
   ];
 }

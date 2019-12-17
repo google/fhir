@@ -36,9 +36,9 @@ message CQFQuestionnaire {
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-questionnaire";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "descendants().linkId.isDistinct()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
       "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "descendants().linkId.isDistinct()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -162,27 +162,27 @@ message CQFQuestionnaire {
   // Questions and sections within the Questionnaire
   message Item {
     option (.google.fhir.proto.fhir_path_message_constraint) =
-        "type!='display' or readOnly.empty()";
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "(type!='group' and type!='display') or initial.empty()";
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "type!='display' or (required.empty() and repeats.empty())";
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "(type ='choice' or type = 'open-choice' or type = 'decimal' or type = 'integer' or type = 'date' or type = 'dateTime' or type = 'time' or type = 'string' or type = 'quantity') or (answerValueSet.empty() and answerOption.empty())";
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "answerOption.empty() or answerValueSet.empty()";
+        "(type='group' implies item.empty().not()) and (type.trace('type')='display' implies item.trace('item').empty())";
     option (.google.fhir.proto.fhir_path_message_constraint) =
         "type!='display' or code.empty()";
     option (.google.fhir.proto.fhir_path_message_constraint) =
+        "answerOption.empty() or answerValueSet.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(type ='choice' or type = 'open-choice' or type = 'decimal' or type = 'integer' or type = 'date' or type = 'dateTime' or type = 'time' or type = 'string' or type = 'quantity') or (answerValueSet.empty() and answerOption.empty())";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "type!='display' or (required.empty() and repeats.empty())";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(type!='group' and type!='display') or initial.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "type!='display' or readOnly.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
         "(type in ('boolean' | 'decimal' | 'integer' | 'string' | 'text' | 'url' | 'open-choice')) or maxLength.empty()";
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "(type='group' implies item.empty().not()) and (type.trace('type')='display' implies item.trace('item').empty())";
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "repeats=true or initial.count() <= 1";
     option (.google.fhir.proto.fhir_path_message_constraint) =
         "answerOption.empty() or initial.empty()";
     option (.google.fhir.proto.fhir_path_message_constraint) =
         "enableWhen.count() > 2 implies enableBehavior.exists()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "repeats=true or initial.count() <= 1";
 
     // Unique id for inter-element referencing
     String id = 1;
@@ -393,10 +393,7 @@ message CQFQuestionnaire {
   repeated Item item = 31;
 
   // A library containing logic referenced by the questionnaire
-  repeated Canonical library = 32 [
-    (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/cqf-library",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
-  ];
+  repeated Canonical library = 32
+      [(.google.fhir.proto.fhir_inlined_extension_url) =
+           "http://hl7.org/fhir/StructureDefinition/cqf-library"];
 }

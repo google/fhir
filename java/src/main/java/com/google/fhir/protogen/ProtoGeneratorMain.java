@@ -33,6 +33,7 @@ import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
+import com.google.fhir.r4.core.TypeDerivationRuleCode;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import java.io.BufferedWriter;
@@ -47,6 +48,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -99,6 +101,13 @@ class ProtoGeneratorMain {
         names = {"--package_info"},
         description = "Prototxt containing google.fhir.proto.PackageInfo")
     private String packageInfo = null;
+
+    @Parameter(
+        names = {"--filter"},
+        description =
+            "Filter for types of definitions in input package to use.  If set, must be one of"
+                + " resource, profile, extension, datatype.")
+    private String filter = null;
 
     @Parameter(
         names = {"--sort"},
@@ -190,6 +199,9 @@ class ProtoGeneratorMain {
     FhirPackage inputPackage = null;
     if (args.inputPackage != null) {
       inputPackage = FhirPackage.load(args.inputPackage);
+      if (args.filter != null) {
+        inputPackage = applyFilter(inputPackage, args.filter);
+      }
       packageInfo = inputPackage.packageInfo;
     } else if (args.packageInfo != null) {
       packageInfo =
@@ -241,7 +253,7 @@ class ProtoGeneratorMain {
       // e.g., my-oddly_namedFile from foo/bar/my-oddly_namedFile.profile.json
       String fileBaseName = Splitter.on('.').splitToList(new File(filename).getName()).get(0);
       typeToSourceFileBaseName.put(
-          ProtoGenerator.getTypeName(definition, packageInfo.getFhirVersion()), fileBaseName);
+          GeneratorUtils.getTypeName(definition, packageInfo.getFhirVersion()), fileBaseName);
     }
 
     if (args.inputBundleFile != null) {
@@ -251,7 +263,7 @@ class ProtoGeneratorMain {
           StructureDefinition structDef = entry.getResource().getStructureDefinition();
           definitions.add(structDef);
           typeToSourceFileBaseName.put(
-              ProtoGenerator.getTypeName(structDef, packageInfo.getFhirVersion()),
+              GeneratorUtils.getTypeName(structDef, packageInfo.getFhirVersion()),
               structDef.getId().getValue());
         }
       }
@@ -261,7 +273,7 @@ class ProtoGeneratorMain {
       for (StructureDefinition structDef : inputPackage.structureDefinitions) {
         definitions.add(structDef);
         typeToSourceFileBaseName.put(
-            ProtoGenerator.getTypeName(structDef, packageInfo.getFhirVersion()),
+            GeneratorUtils.getTypeName(structDef, packageInfo.getFhirVersion()),
             structDef.getId().getValue());
       }
     }
@@ -324,6 +336,39 @@ class ProtoGeneratorMain {
       case UNRECOGNIZED:
         throw new IllegalArgumentException(
             "Unrecognized file splitting behavior: " + packageInfo.getFileSplittingBehavior());
+    }
+  }
+
+  private static FhirPackage applyFilter(FhirPackage fhirPackage, String type) {
+    Predicate<StructureDefinition> isDatatype =
+        def ->
+            def.getKind().getValue() == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE
+                || def.getKind().getValue() == StructureDefinitionKindCode.Value.COMPLEX_TYPE;
+    Predicate<StructureDefinition> isResource =
+        def ->
+            def.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE
+                // Despite being categorized as "Logical" rather than a "Resourcde",
+                // MetadataResource is
+                // included here for historical reasons (and lack of a better place...)
+                || def.getId().getValue().equals("MetadataResource");
+    Predicate<StructureDefinition> isConstraint =
+        def -> def.getDerivation().getValue() == TypeDerivationRuleCode.Value.CONSTRAINT;
+    Predicate<StructureDefinition> isExtensionProfile =
+        isConstraint.and(
+            def ->
+                def.getBaseDefinition()
+                    .getValue()
+                    .equals("http://hl7.org/fhir/StructureDefinition/Extension"));
+    if (type.equals("datatype")) {
+      return fhirPackage.filterResources(isDatatype.and(isExtensionProfile.negate()));
+    } else if (type.equals("extension")) {
+      return fhirPackage.filterResources(isExtensionProfile);
+    } else if (type.equals("resource")) {
+      return fhirPackage.filterResources(isResource.and(isConstraint.negate()));
+    } else if (type.equals("profile")) {
+      return fhirPackage.filterResources(isResource.and(isConstraint));
+    } else {
+      throw new IllegalArgumentException("Unrecognized filter: " + type);
     }
   }
 
@@ -408,7 +453,9 @@ class ProtoGeneratorMain {
         oneResource.add(structDef);
         FileDescriptorProto fileProto = generator.generateFileDescriptor(oneResource);
         DescriptorProto type = fileProto.getMessageType(0);
-        String filename = resourceNameToFileName(generator.getTypeName(structDef), generator);
+        String filename =
+            resourceNameToFileName(
+                GeneratorUtils.getTypeName(structDef, packageInfo.getFhirVersion()), generator);
         if (type.getName().equals("Bundle")) {
           deferredBundleFile = fileProto;
         } else {
@@ -482,6 +529,7 @@ class ProtoGeneratorMain {
                       .collect(Collectors.toList()))
               .build();
     }
+
     String protoFileContents = printer.print(proto);
 
     if (args.emitProto) {

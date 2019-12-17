@@ -809,8 +809,8 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Observation, last updated 2018-12-27T22:37:54.724+11:00.\nMeasurements and simple assertions.\nSee http://hl7.org/fhir/StructureDefinition/Observation"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Observation, last updated 2019-11-01T09:29:23.356+11:00.\nMeasurements and simple assertions.\nSee http://hl7.org/fhir/StructureDefinition/Observation"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Observation"
-  [google.fhir.proto.fhir_path_message_constraint]: "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()"
   [google.fhir.proto.fhir_path_message_constraint]: "dataAbsentReason.empty() or value.empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()"
 }

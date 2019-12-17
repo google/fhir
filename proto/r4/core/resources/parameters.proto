@@ -25,7 +25,7 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for Parameters, last updated
-// 2018-12-27T22:37:54.724+11:00. Operation Request or Response. See
+// 2019-11-01T09:29:23.356+11:00. Operation Request or Response. See
 // http://hl7.org/fhir/StructureDefinition/Parameters
 message Parameters {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
@@ -116,6 +116,7 @@ message Parameters {
         TriggerDefinition trigger_definition = 47;
         UsageContext usage_context = 48;
         Dosage dosage = 49;
+        Meta meta = 50;
       }
     }
     ValueX value = 5;

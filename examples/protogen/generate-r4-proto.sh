@@ -14,7 +14,6 @@
 # limitations under the License.
 
 ROOT_PATH=../..
-INPUT_PATH=$ROOT_PATH/spec/hl7.fhir.core/4.0.0/package/
 PROTO_GENERATOR=$ROOT_PATH/bazel-bin/java/ProtoGenerator
 
 OUTPUT_PATH="$(dirname $0)/../../proto/r4/core"
@@ -22,14 +21,13 @@ DESCRIPTOR_OUTPUT_PATH="$(dirname $0)/../../testdata/r4/descriptors/"
 
 bazel build //spec/fhir_r4_definitions.zip
 FHIR_PACKAGE="$ROOT_PATH/bazel-genfiles/spec/fhir_r4_definitions.zip"
-FHIR_R4_PACKAGE_INFO="$ROOT_PATH//spec/fhir_r4_package_info.prototxt"
 
 COMMON_FLAGS=" \
   --emit_proto \
   --emit_descriptors \
   --sort \
-  --package_info $FHIR_R4_PACKAGE_INFO \
-  --r4_core_dep $FHIR_R4_PACKAGE \
+  --r4_core_dep $FHIR_PACKAGE \
+  --input_package $FHIR_PACKAGE \
   --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH "
 #
 # Build the binary.
@@ -45,7 +43,8 @@ fi
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --output_directory $OUTPUT_PATH \
-  --input_bundle $INPUT_PATH/Bundle-types.json \
+  --filter datatype \
+  --exclude elementdefinition-de \
   --exclude Reference \
   --exclude Extension \
   --exclude Element
@@ -56,7 +55,6 @@ $PROTO_GENERATOR \
 # * Proto for Reference, which allows more structure than FHIR spec provides.
 # * Extension, which has a field order discrepancy between spec and test data.
 # TODO: generate Extension proto with custom ordering.
-# TODO: generate codes.proto
 if [ $? -eq 0 ]
 then
   echo -e "\n//End of auto-generated messages.\n" >> $OUTPUT_PATH/datatypes.proto
@@ -67,7 +65,7 @@ fi
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --output_directory $OUTPUT_PATH/resources \
-  --input_bundle $INPUT_PATH/Bundle-resources.json
+  --filter resource
 
 # generate profiles.proto
 # exclude familymemberhistory-genetic due to
@@ -75,7 +73,7 @@ $PROTO_GENERATOR \
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --output_directory $OUTPUT_PATH/profiles \
-  --input_bundle $INPUT_PATH/Bundle-profiles-others.json \
+  --filter profile \
   --exclude familymemberhistory-genetic
 
 
@@ -83,4 +81,4 @@ $PROTO_GENERATOR \
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --output_directory $OUTPUT_PATH \
-  --input_bundle $INPUT_PATH/Bundle-extensions.json
+  --filter extension

@@ -26,7 +26,7 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for CareTeam, last updated
-// 2018-12-27T22:37:54.724+11:00. Planned participants in the coordination and
+// 2019-11-01T09:29:23.356+11:00. Planned participants in the coordination and
 // delivery of care for a patient or group. See
 // http://hl7.org/fhir/StructureDefinition/CareTeam
 message CareTeam {
@@ -103,7 +103,7 @@ message CareTeam {
   // Members of the team
   message Participant {
     option (.google.fhir.proto.fhir_path_message_constraint) =
-        "onBehalfOf.exists() implies (member.resolve() is Practitioner)";
+        "onBehalfOf.exists() implies (member.resolve().iif(empty(), true, ofType(Practitioner).exists()))";
 
     // Unique id for inter-element referencing
     String id = 1;

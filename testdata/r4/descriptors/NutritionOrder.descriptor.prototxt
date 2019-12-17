@@ -133,7 +133,7 @@ field {
   type_name: ".google.fhir.r4.core.NutritionOrder.StatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.proto.field_description]: "proposed | draft | planned | requested | active | on-hold | completed | cancelled | entered-in-error"
+    [google.fhir.proto.field_description]: "draft | active | on-hold | revoked | completed | entered-in-error | unknown"
   }
 }
 field {
@@ -144,7 +144,7 @@ field {
   type_name: ".google.fhir.r4.core.NutritionOrder.IntentCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.proto.field_description]: "proposal | plan | order"
+    [google.fhir.proto.field_description]: "proposal | plan | directive | order | original-order | reflex-order | filler-order | instance-order | option"
   }
 }
 field {
@@ -813,7 +813,7 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for NutritionOrder, last updated 2018-12-27T22:37:54.724+11:00.\nDiet, formula or nutritional supplement request.\nSee http://hl7.org/fhir/StructureDefinition/NutritionOrder"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for NutritionOrder, last updated 2019-11-01T09:29:23.356+11:00.\nDiet, formula or nutritional supplement request.\nSee http://hl7.org/fhir/StructureDefinition/NutritionOrder"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/NutritionOrder"
   [google.fhir.proto.fhir_path_message_constraint]: "oralDiet.exists() or supplement.exists() or enteralFormula.exists()"
 }

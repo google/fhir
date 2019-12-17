@@ -25,7 +25,7 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for SubstanceNucleicAcid, last
-// updated 2018-12-27T22:37:54.724+11:00. Nucleic acids are defined by three
+// updated 2019-11-01T09:29:23.356+11:00. Nucleic acids are defined by three
 // distinct elements: the base, sugar and linkage. Individual substance/moiety
 // IDs will be created for each of these elements. The nucleotide sequence will
 // be always entered in the 5’-3’ direction. See

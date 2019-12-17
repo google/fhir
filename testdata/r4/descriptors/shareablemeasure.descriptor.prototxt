@@ -910,6 +910,6 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Shareable Measure.\nA quality measure definition.\nSee http://hl7.org/fhir/StructureDefinition/shareablemeasure"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Measure"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/shareablemeasure"
-  [google.fhir.proto.fhir_path_message_constraint]: "group.stratifier.all((code | description | criteria).exists() xor component.exists())"
   [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
+  [google.fhir.proto.fhir_path_message_constraint]: "group.stratifier.all((code | description | criteria).exists() xor component.exists())"
 }

@@ -3047,7 +3047,7 @@ message VitalSignsUnitsValueSet {
       (.google.fhir.proto.fhir_original_code) = "mm[Hg]",
       (.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"
     ];
-    MIN = 10 [
+    PER_MIN = 10 [
       (.google.fhir.proto.fhir_original_code) = "/min",
       (.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"
     ];

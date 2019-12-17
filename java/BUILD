@@ -464,7 +464,7 @@ java_test(
     size = "large",
     srcs = ["src/test/java/com/google/fhir/r4/JsonFormatTest.java"],
     data = [
-        "//spec:r4",
+        "//spec:r4_examples",
         "//testdata/r4:bigquery",
         "//testdata/r4:examples",
     ],

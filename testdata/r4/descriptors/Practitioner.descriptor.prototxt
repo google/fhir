@@ -289,6 +289,6 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Practitioner, last updated 2018-12-27T22:37:54.724+11:00.\nA person with a  formal responsibility in the provisioning of healthcare or related services.\nSee http://hl7.org/fhir/StructureDefinition/Practitioner"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Practitioner, last updated 2019-11-01T09:29:23.356+11:00.\nA person with a  formal responsibility in the provisioning of healthcare or related services.\nSee http://hl7.org/fhir/StructureDefinition/Practitioner"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Practitioner"
 }

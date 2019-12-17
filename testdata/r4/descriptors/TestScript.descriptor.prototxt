@@ -1773,9 +1773,9 @@ nested_type {
         }
       }
       options {
-        [google.fhir.proto.fhir_path_message_constraint]: "(response.empty() and responseCode.empty() and direction = \'request\') or direction.empty() or direction = \'response\'"
         [google.fhir.proto.fhir_path_message_constraint]: "extension.exists() or (contentType.count() + expression.count() + headerField.count() + minimumId.count() + navigationLinks.count() + path.count() + requestMethod.count() + resource.count() + responseCode.count() + response.count()  + validateProfileId.count() <=1)"
         [google.fhir.proto.fhir_path_message_constraint]: "compareToSourceId.empty() xor (compareToSourceExpression.exists() or compareToSourcePath.exists())"
+        [google.fhir.proto.fhir_path_message_constraint]: "(response.empty() and responseCode.empty() and direction = \'request\') or direction.empty() or direction = \'response\'"
       }
     }
     options {
@@ -1897,9 +1897,9 @@ nested_type {
       type_name: ".google.fhir.r4.core.TestScript.Setup.SetupAction.Assert"
       options {
         [google.fhir.proto.field_description]: "The setup assertion to perform"
+        [google.fhir.proto.fhir_path_constraint]: "extension.exists() or (contentType.count() + expression.count() + headerField.count() + minimumId.count() + navigationLinks.count() + path.count() + requestMethod.count() + resource.count() + responseCode.count() + response.count() + validateProfileId.count() <=1)"
         [google.fhir.proto.fhir_path_constraint]: "compareToSourceId.empty() xor (compareToSourceExpression.exists() or compareToSourcePath.exists())"
         [google.fhir.proto.fhir_path_constraint]: "(response.empty() and responseCode.empty() and direction = \'request\') or direction.empty() or direction = \'response\'"
-        [google.fhir.proto.fhir_path_constraint]: "extension.exists() or (contentType.count() + expression.count() + headerField.count() + minimumId.count() + navigationLinks.count() + path.count() + requestMethod.count() + resource.count() + responseCode.count() + response.count() + validateProfileId.count() <=1)"
       }
       json_name: "assert"
     }
@@ -1999,7 +1999,7 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for TestScript, last updated 2018-12-27T22:37:54.724+11:00.\nDescribes a set of tests.\nSee http://hl7.org/fhir/StructureDefinition/TestScript"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for TestScript, last updated 2019-11-01T09:29:23.356+11:00.\nDescribes a set of tests.\nSee http://hl7.org/fhir/StructureDefinition/TestScript"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/TestScript"
   [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
 }

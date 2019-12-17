@@ -45,6 +45,9 @@ group {
     name {
       value: "source"
     }
+    type {
+      value: "ActivityDefinition"
+    }
     mode {
       value: SOURCE
     }
@@ -52,6 +55,9 @@ group {
   input {
     name {
       value: "target"
+    }
+    type {
+      value: "SupplyRequest"
     }
     mode {
       value: TARGET

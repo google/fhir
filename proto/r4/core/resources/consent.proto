@@ -26,7 +26,7 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for Consent, last updated
-// 2018-12-27T22:37:54.724+11:00. A healthcare consumer's  choices to permit or
+// 2019-11-01T09:29:23.356+11:00. A healthcare consumer's  choices to permit or
 // deny recipients or roles to perform actions for specific purposes and periods
 // of time. See http://hl7.org/fhir/StructureDefinition/Consent
 message Consent {
@@ -34,15 +34,15 @@ message Consent {
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Consent";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "patient.exists() or scope.coding.where(system='something' and code='adr').exists().not()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "patient.exists() or scope.coding.where(system='something' and code='treatment').exists().not()";
+      "policy.exists() or policyRule.exists()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "patient.exists() or scope.coding.where(system='something' and code='patient-privacy').exists().not()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "patient.exists() or scope.coding.where(system='something' and code='research').exists().not()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "policy.exists() or policyRule.exists()";
+      "patient.exists() or scope.coding.where(system='something' and code='adr').exists().not()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "patient.exists() or scope.coding.where(system='something' and code='treatment').exists().not()";
 
   // Logical id of this artifact
   Id id = 1;

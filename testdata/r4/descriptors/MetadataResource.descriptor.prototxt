@@ -4,7 +4,7 @@ field {
   number: 1
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.Id"
+  type_name: ".google.fhir.r4.core.String"
   options {
     [google.fhir.proto.field_description]: "Logical id of this artifact"
   }
@@ -235,7 +235,7 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_LOGICAL
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MetadataResource, last updated 2018-12-27T22:37:54.724+11:00.\nCommon Ancestor declaration for definitional resources.\nSee http://hl7.org/fhir/StructureDefinition/MetadataResource"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MetadataResource, last updated 2019-11-01T09:29:23.356+11:00.\nCommon Ancestor declaration for definitional resources.\nSee http://hl7.org/fhir/StructureDefinition/MetadataResource"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MetadataResource"
   [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
 }

@@ -403,7 +403,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.r4.core.ActivityDefinition.IntentCode"
   options {
-    [google.fhir.proto.field_description]: "proposal | plan | order"
+    [google.fhir.proto.field_description]: "proposal | plan | directive | order | original-order | reflex-order | filler-order | instance-order | option"
   }
 }
 field {
@@ -910,7 +910,7 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ActivityDefinition, last updated 2018-12-27T22:37:54.724+11:00.\nThe definition of a specific activity to be taken, independent of any particular patient or context.\nSee http://hl7.org/fhir/StructureDefinition/ActivityDefinition"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ActivityDefinition, last updated 2019-11-01T09:29:23.356+11:00.\nThe definition of a specific activity to be taken, independent of any particular patient or context.\nSee http://hl7.org/fhir/StructureDefinition/ActivityDefinition"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ActivityDefinition"
   [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
 }

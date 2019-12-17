@@ -14,6 +14,8 @@
 
 package com.google.fhir.protogen;
 
+import static com.google.fhir.protogen.GeneratorUtils.getOptionalElementById;
+
 import com.google.common.base.Ascii;
 import com.google.common.base.Splitter;
 import com.google.common.collect.MoreCollectors;
@@ -770,13 +772,6 @@ final class ProfileGenerator {
       String id, List<ElementDefinition.Builder> elements) {
     return getOptionalElementBuilderById(id, elements)
         .orElseThrow(() -> new IllegalArgumentException("No element with id: " + id));
-  }
-
-  private static Optional<ElementDefinition> getOptionalElementById(
-      String id, List<ElementDefinition> elements) {
-    return elements.stream()
-        .filter(element -> element.getId().getValue().equals(id))
-        .collect(MoreCollectors.toOptional());
   }
 
   private static Optional<ElementDefinition.Builder> getOptionalElementBuilderById(

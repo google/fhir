@@ -399,7 +399,7 @@ cc_test(
     size = "large",
     srcs = ["json_format_r4_test.cc"],
     data = [
-        "//spec:r4",
+        "//spec:r4_examples",
         "//testdata/r4:bigquery",
         "//testdata/r4:examples",
         "//testdata/r4/profiles:testdata",

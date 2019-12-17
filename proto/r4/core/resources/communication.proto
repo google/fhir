@@ -26,7 +26,7 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for Communication, last updated
-// 2018-12-27T22:37:54.724+11:00. A record of information transmitted from a
+// 2019-11-01T09:29:23.356+11:00. A record of information transmitted from a
 // sender to a receiver. See
 // http://hl7.org/fhir/StructureDefinition/Communication
 message Communication {
@@ -83,8 +83,8 @@ message Communication {
   repeated Reference in_response_to = 15
       [(.google.fhir.proto.valid_reference_type) = "Communication"];
 
-  // preparation | in-progress | not-done | suspended | aborted | completed |
-  // entered-in-error
+  // preparation | in-progress | not-done | on-hold | stopped | completed |
+  // entered-in-error | unknown
   message StatusCode {
     option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
     option (.google.fhir.proto.fhir_valueset_url) =
@@ -107,7 +107,7 @@ message Communication {
   // Message category
   repeated CodeableConcept category = 18;
 
-  // Message urgency
+  // routine | urgent | asap | stat
   message PriorityCode {
     option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
     option (.google.fhir.proto.fhir_valueset_url) =

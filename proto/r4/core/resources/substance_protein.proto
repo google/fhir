@@ -25,7 +25,7 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for SubstanceProtein, last updated
-// 2018-12-27T22:37:54.724+11:00. A SubstanceProtein is defined as a single unit
+// 2019-11-01T09:29:23.356+11:00. A SubstanceProtein is defined as a single unit
 // of a linear amino acid sequence, or a combination of subunits that are either
 // covalently linked or have a defined invariant stoichiometric relationship.
 // This includes all synthetic, recombinant and purified SubstanceProteins of

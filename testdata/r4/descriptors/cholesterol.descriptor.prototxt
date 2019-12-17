@@ -238,7 +238,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.r4.core.Cholesterol.ValueX"
   options {
-    [google.fhir.proto.field_description]: "Cholesterol value"
+    [google.fhir.proto.field_description]: "Actual result"
   }
 }
 field {
@@ -702,6 +702,6 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Example Lipid Profile.\nMeasurements and simple assertions.\nSee http://hl7.org/fhir/StructureDefinition/cholesterol"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Observation"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/cholesterol"
-  [google.fhir.proto.fhir_path_message_constraint]: "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()"
   [google.fhir.proto.fhir_path_message_constraint]: "dataAbsentReason.empty() or value.empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()"
 }

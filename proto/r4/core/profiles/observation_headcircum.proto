@@ -37,11 +37,11 @@ message ObservationHeadcircum {
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/headcircum";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
       "dataAbsentReason.empty() or value.empty()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "(component.empty() and hasMember.empty()) implies (dataAbsentReason or value)";
+      "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(component.empty() and hasMember.empty()) implies (dataAbsentReason.exists() or value.exists())";
 
   // Logical id of this artifact
   Id id = 1;

@@ -27,13 +27,13 @@ import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.protogen.GeneratorUtils.QualifiedType;
 import com.google.fhir.r4.core.BindingStrengthCode;
-import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.Code;
 import com.google.fhir.r4.core.CodeSystem;
 import com.google.fhir.r4.core.CodeSystem.ConceptDefinition;
 import com.google.fhir.r4.core.Coding;
 import com.google.fhir.r4.core.ElementDefinition;
 import com.google.fhir.r4.core.FilterOperatorCode;
+import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.ValueSet;
 import com.google.fhir.r4.core.ValueSet.Compose.ConceptSet.Filter;
 import com.google.fhir.wrappers.CanonicalWrapper;
@@ -139,13 +139,14 @@ public class ValueSetGenerator {
         .build();
   }
 
-  public FileDescriptorProto forCodesUsedIn(Collection<Bundle> codeUsers, boolean eagerMode) {
-    Set<CodeSystem> codeSystemsToGenerate = getCodeSystemsUsedInBundles(codeUsers, eagerMode);
+  public FileDescriptorProto forCodesUsedIn(
+      Collection<StructureDefinition> codeUsers, boolean eagerMode) {
+    Set<CodeSystem> codeSystemsToGenerate = getCodeSystemsUsedInDefinitions(codeUsers, eagerMode);
     return generateCodeSystemFile(codeSystemsToGenerate);
   }
 
-  public FileDescriptorProto forValueSetsUsedIn(Collection<Bundle> valueSetUsers) {
-    Set<ValueSet> valueSetsToGenerate = getValueSetsUsedInBundles(valueSetUsers);
+  public FileDescriptorProto forValueSetsUsedIn(Collection<StructureDefinition> valueSetUsers) {
+    Set<ValueSet> valueSetsToGenerate = getValueSetsUsedInStructureDefinitions(valueSetUsers);
     return generateValueSetFile(valueSetsToGenerate);
   }
 
@@ -539,7 +540,31 @@ public class ValueSetGenerator {
       printNoEnumWarning(url, "no codes found");
       return Optional.empty();
     }
+    builder = dedupValueSetEnum(builder);
     return Optional.of(builder.build());
+  }
+
+  /**
+   * Dedupes codes within a valueset. Note that a code is only considered a dupe if it has the same
+   * value AND is from the same code system. Two identically-named codes from different codesystems
+   * are considered different codes. True dupes can occur when ValueSets are composed from other
+   * ValueSets.
+   */
+  private static EnumDescriptorProto.Builder dedupValueSetEnum(
+      EnumDescriptorProto.Builder enumBuilder) {
+    EnumDescriptorProto.Builder dedupedEnum = enumBuilder.clone();
+    dedupedEnum.clearValue();
+
+    Map<String, Set<String>> codesBySystem = new HashMap<>();
+    for (EnumValueDescriptorProto enumValue : enumBuilder.getValueList()) {
+      String codeSystem = enumValue.getOptions().getExtension(Annotations.sourceCodeSystem);
+      String enumName = enumValue.getName();
+      codesBySystem.putIfAbsent(codeSystem, new HashSet<>());
+      if (codesBySystem.get(codeSystem).add(enumName)) {
+        dedupedEnum.addValue(enumValue);
+      }
+    }
+    return dedupedEnum;
   }
 
   private static void printNoEnumWarning(String url, String warning) {
@@ -736,17 +761,25 @@ public class ValueSetGenerator {
 
   private static final ImmutableMap<String, String> CODE_RENAMES =
       ImmutableMap.<String, String>builder()
-          .put("=", "EQUALS")
-          .put("<", "LESS_THAN")
+          .put("NaN", "NOT_A_NUMBER")
+          .put("_", "UNDERSCORE")
+          .put("'", "APOSTROPHE")
+          .build();
+
+  private static final ImmutableMap<String, String> SYMBOLS =
+      ImmutableMap.<String, String>builder()
           .put("<=", "LESS_THAN_OR_EQUAL_TO")
           .put(">=", "GREATER_THAN_OR_EQUAL_TO")
           .put(">", "GREATER_THAN")
           .put("!=", "NOT_EQUAL_TO")
+          .put("=", "EQUALS")
+          .put("<", "LESS_THAN")
           .put("*", "STAR")
           .put("%", "PERCENT")
-          .put("NaN", "NOT_A_NUMBER")
           .put("…", "DOT_DOT_DOT")
-          .put("ANS+", "ANS_PLUS")
+          .put("+", "PLUS")
+          .put("?", "QM")
+          .put("#", "NUM")
           .build();
 
   private static final Pattern ACRONYM_PATTERN = Pattern.compile("([A-Z])([A-Z]+)(?![a-z])");
@@ -764,6 +797,23 @@ public class ValueSetGenerator {
         rawCode = Ascii.toUpperCase("V_" + rawCode);
       }
     }
+    if (CODE_RENAMES.containsKey(rawCode)) {
+      return CODE_RENAMES.get(rawCode);
+    }
+    for (Map.Entry<String, String> entry : SYMBOLS.entrySet()) {
+      if (rawCode.contains(entry.getKey())) {
+        rawCode = rawCode.replaceAll(Pattern.quote(entry.getKey()), "_" + entry.getValue() + "_");
+        if (rawCode.endsWith("_")) {
+          rawCode = rawCode.substring(0, rawCode.length() - 1);
+        }
+        if (rawCode.startsWith("_")) {
+          rawCode = rawCode.substring(1);
+        }
+      }
+    }
+    if (rawCode.charAt(0) == '/') {
+      rawCode = "PER_" + rawCode.substring(1);
+    }
     String sanitizedCode =
         rawCode
             .replaceAll("[',]", "")
@@ -775,7 +825,10 @@ public class ValueSetGenerator {
     if (sanitizedCode.endsWith("_")) {
       sanitizedCode = sanitizedCode.substring(0, sanitizedCode.length() - 1);
     }
-    if (Character.isDigit(rawCode.charAt(0))) {
+    if (sanitizedCode.length() == 0) {
+      throw new IllegalArgumentException("Unable to generate enum for code: " + code);
+    }
+    if (Character.isDigit(sanitizedCode.charAt(0))) {
       return Ascii.toUpperCase("NUM_" + sanitizedCode);
     }
     // Don't change FOO into F_O_O
@@ -800,9 +853,20 @@ public class ValueSetGenerator {
 
   // CodeSystems that we hard-code to specific names, e.g., to avoid a colision.
   private static final ImmutableMap<String, String> CODE_SYSTEM_RENAMES =
-      ImmutableMap.of(
-          "http://hl7.org/fhir/CodeSystem/medication-statement-status",
-          "MedicationStatementStatusCodes");
+      ImmutableMap.<String, String>builder()
+          .put("http://hl7.org/fhir/secondary-finding", "ObservationSecondaryFindingCode")
+          .put(
+              "http://terminology.hl7.org/CodeSystem/composition-altcode-kind",
+              "CompositionAlternativeCodeKindCode")
+          .put(
+              "http://hl7.org/fhir/contract-security-classification",
+              "ContractResourceSecurityClassificationCode")
+          .put("http://hl7.org/fhir/device-definition-status", "FHIRDeviceDefinitionStatusCode")
+          // TODO: drop this rename - it's done to avoid a change in the 4.0.1 CL
+          .put(
+              "http://hl7.org/fhir/CodeSystem/medication-statement-status",
+              "MedicationStatementStatusCodes")
+          .build();
 
   public String getCodeSystemName(CodeSystem codeSystem) {
     if (CODE_SYSTEM_RENAMES.containsKey(codeSystem.getUrl().getValue())) {
@@ -833,20 +897,16 @@ public class ValueSetGenerator {
     return name + "ValueSet";
   }
 
-  private Set<ValueSet> getValueSetsUsedInBundles(Collection<Bundle> bundles) {
+  private Set<ValueSet> getValueSetsUsedInStructureDefinitions(
+      Collection<StructureDefinition> definitions) {
     final Set<String> valueSetUrls = new HashSet<>();
-    for (Bundle bundle : bundles) {
-      for (Bundle.Entry entry : bundle.getEntryList()) {
-        if (entry.getResource().hasStructureDefinition()) {
-          entry.getResource().getStructureDefinition().getSnapshot().getElementList().stream()
-              .map(element -> getBindingValueSetUrl(element))
-              .filter(optionalUrl -> optionalUrl.isPresent())
-              .forEach(
-                  optionalUrl ->
-                      valueSetUrls.add(
-                          Iterables.get(Splitter.on('|').split(optionalUrl.get()), 0)));
-        }
-      }
+    for (StructureDefinition def : definitions) {
+      def.getSnapshot().getElementList().stream()
+          .map(element -> getBindingValueSetUrl(element))
+          .filter(optionalUrl -> optionalUrl.isPresent())
+          .forEach(
+              optionalUrl ->
+                  valueSetUrls.add(Iterables.get(Splitter.on('|').split(optionalUrl.get()), 0)));
     }
     return valueSetUrls.stream()
         .map(url -> valueSetsByUrl.get(url))
@@ -854,9 +914,9 @@ public class ValueSetGenerator {
         .collect(Collectors.toSet());
   }
 
-  private Set<CodeSystem> getCodeSystemsUsedInBundles(
-      Collection<Bundle> bundles, boolean eagerMode) {
-    Set<ValueSet> valueSets = getValueSetsUsedInBundles(bundles);
+  private Set<CodeSystem> getCodeSystemsUsedInDefinitions(
+      Collection<StructureDefinition> definitions, boolean eagerMode) {
+    Set<ValueSet> valueSets = getValueSetsUsedInStructureDefinitions(definitions);
 
     if (eagerMode) {
       return valueSets.stream()

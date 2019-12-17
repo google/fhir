@@ -189,33 +189,25 @@ message ProfileForHLAGenotypingResults {
   // Allele Database
   CodeableConcept allele_database = 28 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-allele-database",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
+        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-allele-database"
   ];
 
   // Glstring
   DiagnosticReportGlstring glstring = 29 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-glstring",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
+        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-glstring"
   ];
 
   // Haploid
   repeated DiagnosticReportHaploid haploid = 30 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-haploid",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
+        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-haploid"
   ];
 
   // The platform, methodology and software applied at the time of the
   // genotyping
   CodeableConcept method = 31 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-method",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
+        "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-method"
   ];
 }

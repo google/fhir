@@ -843,8 +843,6 @@ message PatientUSCoreBirthSexExtension {
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "children().count() > id.count()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "extension.exists() != value.exists()";
 
   // xml:id (or equivalent in JSON)
   core.String id = 1;
@@ -2135,8 +2133,6 @@ message UsCoreDirectEmail {
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-direct";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "children().count() > id.count()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "extension.exists() != value.exists()";
 
   // xml:id (or equivalent in JSON)
   core.String id = 1;
@@ -2702,8 +2698,6 @@ message PatientUSCoreEthnicityExtension {
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "children().count() > id.count()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "extension.exists() != value.exists()";
 
   // xml:id (or equivalent in JSON)
   core.String id = 1;
@@ -4748,8 +4742,6 @@ message USCorePractitionerRoleProfile {
       "http://hl7.org/fhir/StructureDefinition/PractitionerRole";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitionerrole";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "telecom or endpoint";
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -5131,8 +5123,6 @@ message PatientUSCoreRaceExtension {
       "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "children().count() > id.count()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "extension.exists() != value.exists()";
 
   // xml:id (or equivalent in JSON)
   core.String id = 1;

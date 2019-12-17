@@ -154,11 +154,11 @@ message ShareableValueSet {
     // Include one or more codes from a code system or other value set(s)
     message ConceptSet {
       option (.google.fhir.proto.fhir_path_message_constraint) =
+          "valueSet.exists() or system.exists()";
+      option (.google.fhir.proto.fhir_path_message_constraint) =
           "(concept.exists() or filter.exists()) implies system.exists()";
       option (.google.fhir.proto.fhir_path_message_constraint) =
           "concept.empty() or filter.empty()";
-      option (.google.fhir.proto.fhir_path_message_constraint) =
-          "valueSet.exists() or system.exists()";
 
       // Unique id for inter-element referencing
       String id = 1;

@@ -98,9 +98,9 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MoneyQuantity, last updated 2018-12-27T22:37:54.724+11:00.\nAn amount of money. With regard to precision, see [Decimal Precision](datatypes.html#precision).\nSee http://hl7.org/fhir/StructureDefinition/MoneyQuantity"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MoneyQuantity, last updated 2019-11-01T09:29:23.356+11:00.\nAn amount of money. With regard to precision, see [Decimal Precision](datatypes.html#precision).\nSee http://hl7.org/fhir/StructureDefinition/MoneyQuantity"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Quantity"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MoneyQuantity"
-  [google.fhir.proto.fhir_path_message_constraint]: "code.empty() or system.exists()"
   [google.fhir.proto.fhir_path_message_constraint]: "(code.exists() or value.empty()) and (system.empty() or system = \'urn:iso:std:iso:4217\')"
+  [google.fhir.proto.fhir_path_message_constraint]: "code.empty() or system.exists()"
 }

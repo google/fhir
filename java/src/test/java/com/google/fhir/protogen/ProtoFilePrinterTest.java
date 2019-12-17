@@ -63,7 +63,7 @@ public final class ProtoFilePrinterTest {
     File file =
         new File(
             runfiles.rlocation(
-                "com_google_fhir/spec/hl7.fhir.core/4.0.0/package/StructureDefinition-"
+                "com_google_fhir/spec/hl7.fhir.core/4.0.1/package/StructureDefinition-"
                     + resourceName
                     + ".json"));
     if (!file.exists()) {
@@ -72,7 +72,7 @@ public final class ProtoFilePrinterTest {
       file =
           new File(
               runfiles.rlocation(
-                  "com_google_fhir/spec/hl7.fhir.core/4.0.0/package/StructureDefinition-"
+                  "com_google_fhir/spec/hl7.fhir.core/4.0.1/package/StructureDefinition-"
                       + lowerCased
                       + ".json"));
     }

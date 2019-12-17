@@ -19,6 +19,11 @@ identifier {
 type {
   value: DOCUMENT
 }
+timestamp {
+  value_us: 1369779141000000
+  timezone: "Z"
+  precision: SECOND
+}
 entry {
   full_url {
     value: "http://fhir.healthintersections.com.au/open/Composition/180f219f-97a8-486d-99d9-ed631fe4fc57"

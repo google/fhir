@@ -190,35 +190,27 @@ message DiagnosticReportGenetics {
   repeated Reference assessed_condition = 28 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition",
-    json_name = "AssessedCondition",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
+    json_name = "AssessedCondition"
   ];
 
   // FamilyHistory
   repeated Reference family_member_history = 29 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory",
-    json_name = "FamilyMemberHistory",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
+    json_name = "FamilyMemberHistory"
   ];
 
   // Analysis
   repeated DiagnosticReportAnalysis analysis = 30 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAnalysis",
-    json_name = "Analysis",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
+    json_name = "Analysis"
   ];
 
   // References
   repeated DiagnosticReportReferences references = 31 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsReferences",
-    json_name = "References",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
+    json_name = "References"
   ];
 }

@@ -16,6 +16,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.r4.core.HumanNameENUse.ValueCode"
   options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Value of extension"
   }
 }
@@ -51,5 +52,4 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for EN-use.\nA | ANON | I | P | R | C | M | ABC | IDE | SYL | OLD | DN | OR | PHON | SRCH | T.\nSee http://hl7.org/fhir/StructureDefinition/iso21090-EN-use"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Extension"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/iso21090-EN-use"
-  [google.fhir.proto.fhir_path_message_constraint]: "extension.exists() != value.exists()"
 }

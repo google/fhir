@@ -124,7 +124,7 @@ field {
   type_name: ".google.fhir.r4.core.MedicationRequest.IntentCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.proto.field_description]: "proposal | plan | order | original-order | instance-order | option"
+    [google.fhir.proto.field_description]: "proposal | plan | order | original-order | reflex-order | filler-order | instance-order | option"
   }
 }
 field {
@@ -818,6 +818,6 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MedicationRequest, last updated 2018-12-27T22:37:54.724+11:00.\nOrdering of medication for patient or group.\nSee http://hl7.org/fhir/StructureDefinition/MedicationRequest"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MedicationRequest, last updated 2019-11-01T09:29:23.356+11:00.\nOrdering of medication for patient or group.\nSee http://hl7.org/fhir/StructureDefinition/MedicationRequest"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MedicationRequest"
 }

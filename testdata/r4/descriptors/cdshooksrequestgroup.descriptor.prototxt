@@ -157,7 +157,7 @@ field {
   type_name: ".google.fhir.r4.core.CDSHooksRequestGroup.StatusCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.proto.field_description]: "draft | active | suspended | cancelled | completed | entered-in-error | unknown"
+    [google.fhir.proto.field_description]: "draft | active | on-hold | revoked | completed | entered-in-error | unknown"
   }
 }
 field {
@@ -168,7 +168,7 @@ field {
   type_name: ".google.fhir.r4.core.CDSHooksRequestGroup.IntentCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.proto.field_description]: "proposal | plan | order"
+    [google.fhir.proto.field_description]: "proposal | plan | directive | order | original-order | reflex-order | filler-order | instance-order | option"
   }
 }
 field {

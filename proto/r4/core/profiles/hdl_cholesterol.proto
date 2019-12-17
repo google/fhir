@@ -35,9 +35,9 @@ message HdlCholesterol {
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/hdlcholesterol";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
       "dataAbsentReason.empty() or value.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -156,7 +156,7 @@ message HdlCholesterol {
     (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
   ];
 
-  // HDL Cholesterol value
+  // Actual result
   message ValueX {
     option (.google.fhir.proto.is_choice_type) = true;
 

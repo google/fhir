@@ -673,8 +673,8 @@ nested_type {
     }
   }
   options {
-    [google.fhir.proto.fhir_path_message_constraint]: "(%resource.kind = \'logical\' or element.first().path = %resource.type) and element.tail().all(path.startsWith(%resource.snapshot.element.first().path&\'.\'))"
     [google.fhir.proto.fhir_path_message_constraint]: "element.all(definition.exists() and min.exists() and max.exists())"
+    [google.fhir.proto.fhir_path_message_constraint]: "(%resource.kind = \'logical\' or element.first().path = %resource.type) and element.tail().all(path.startsWith(%resource.snapshot.element.first().path&\'.\'))"
     [google.fhir.proto.fhir_path_message_constraint]: "element.all(base.exists())"
   }
 }
@@ -723,28 +723,28 @@ nested_type {
   }
   options {
     [google.fhir.proto.fhir_path_message_constraint]: "element.where(path.contains(\'.\').not()).slicing.empty()"
-    [google.fhir.proto.fhir_path_message_constraint]: "(%resource.kind = \'logical\' or element.first().path.startsWith(%resource.type)) and (element.tail().not() or  element.tail().all(path.startsWith(%resource.differential.element.first().path.replaceMatches(\'\\\\..*\',\'\')&\'.\')))"
+    [google.fhir.proto.fhir_path_message_constraint]: "(%resource.kind = \'logical\' or element.first().path.startsWith(%resource.type)) and (element.tail().empty() or element.tail().all(path.startsWith(%resource.differential.element.first().path.replaceMatches(\'\\\\..*\',\'\')&\'.\')))"
   }
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for StructureDefinition, last updated 2018-12-27T22:37:54.724+11:00.\nStructural Definition.\nSee http://hl7.org/fhir/StructureDefinition/StructureDefinition"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for StructureDefinition, last updated 2019-11-01T09:29:23.356+11:00.\nStructural Definition.\nSee http://hl7.org/fhir/StructureDefinition/StructureDefinition"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/StructureDefinition"
-  [google.fhir.proto.fhir_path_message_constraint]: "children().element.where(path.contains(\'.\').not()).label.empty() and children().element.where(path.contains(\'.\').not()).code.empty() and children().element.where(path.contains(\'.\').not()).requirements.empty()"
-  [google.fhir.proto.fhir_path_message_constraint]: "(kind!=\'logical\'  and differential.element.first().path.contains(\'.\').not()) implies differential.element.first().type.empty()"
-  [google.fhir.proto.fhir_path_message_constraint]: "url.startsWith(\'http://hl7.org/fhir/StructureDefinition\') implies (differential.element.type.code.all(hasValue() implies matches(\'^[a-zA-Z0-9]+$\')) and snapshot.element.type.code.all(hasValue() implies matches(\'^[a-zA-Z0-9]+$\')))"
-  [google.fhir.proto.fhir_path_message_constraint]: "snapshot.element.all(id) and snapshot.element.id.trace(\'ids\').isDistinct()"
-  [google.fhir.proto.fhir_path_message_constraint]: "kind!=\'logical\'  implies snapshot.element.first().type.empty()"
-  [google.fhir.proto.fhir_path_message_constraint]: "contextInvariant.exists() implies type = \'Extension\'"
-  [google.fhir.proto.fhir_path_message_constraint]: "differential.element.all(id) and differential.element.id.trace(\'ids\').isDistinct()"
-  [google.fhir.proto.fhir_path_message_constraint]: "(snapshot | differential).element.all(path.contains(\'.\').not() implies sliceName.empty())"
-  [google.fhir.proto.fhir_path_message_constraint]: "kind != \'logical\' implies snapshot.empty() or snapshot.element.first().path = type"
-  [google.fhir.proto.fhir_path_message_constraint]: "url.startsWith(\'http://hl7.org/fhir/StructureDefinition\') implies (snapshot.element.defaultValue.empty() and differential.element.defaultValue.empty())"
-  [google.fhir.proto.fhir_path_message_constraint]: "snapshot.element.all(id.exists()) and differential.element.all(id.exists())"
-  [google.fhir.proto.fhir_path_message_constraint]: "derivation = \'constraint\' or snapshot.element.select(path).isDistinct()"
-  [google.fhir.proto.fhir_path_message_constraint]: "differential.element.defaultValue.exists() implies (derivation = \'specialization\')"
   [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
-  [google.fhir.proto.fhir_path_message_constraint]: "snapshot.exists() or differential.exists()"
-  [google.fhir.proto.fhir_path_message_constraint]: "type != \'Extension\' or derivation = \'specialization\' or (context.exists())"
+  [google.fhir.proto.fhir_path_message_constraint]: "derivation = \'constraint\' or snapshot.element.select(path).isDistinct()"
+  [google.fhir.proto.fhir_path_message_constraint]: "(kind!=\'logical\'  and differential.element.first().path.contains(\'.\').not()) implies differential.element.first().type.empty()"
   [google.fhir.proto.fhir_path_message_constraint]: "abstract = true or baseDefinition.exists()"
+  [google.fhir.proto.fhir_path_message_constraint]: "type != \'Extension\' or derivation = \'specialization\' or (context.exists())"
+  [google.fhir.proto.fhir_path_message_constraint]: "snapshot.exists() or differential.exists()"
+  [google.fhir.proto.fhir_path_message_constraint]: "children().element.where(path.contains(\'.\').not()).label.empty() and children().element.where(path.contains(\'.\').not()).code.empty() and children().element.where(path.contains(\'.\').not()).requirements.empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "kind != \'logical\' implies snapshot.empty() or snapshot.element.first().path = type"
+  [google.fhir.proto.fhir_path_message_constraint]: "snapshot.element.all(id.exists()) and differential.element.all(id.exists())"
+  [google.fhir.proto.fhir_path_message_constraint]: "kind!=\'logical\' implies snapshot.element.first().type.empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "snapshot.element.all(id.exists()) and snapshot.element.id.trace(\'ids\').isDistinct()"
+  [google.fhir.proto.fhir_path_message_constraint]: "differential.element.all(id.exists()) and differential.element.id.trace(\'ids\').isDistinct()"
+  [google.fhir.proto.fhir_path_message_constraint]: "contextInvariant.exists() implies type = \'Extension\'"
+  [google.fhir.proto.fhir_path_message_constraint]: "url.startsWith(\'http://hl7.org/fhir/StructureDefinition\') implies (differential.element.type.code.all(matches(\'^[a-zA-Z0-9]+$\') or matches(\'^http:\\\\/\\\\/hl7\\\\.org\\\\/fhirpath\\\\/System\\\\.[A-Z][A-Za-z]+$\')) and snapshot.element.type.code.all(matches(\'^[a-zA-Z0-9\\\\.]+$\') or matches(\'^http:\\\\/\\\\/hl7\\\\.org\\\\/fhirpath\\\\/System\\\\.[A-Z][A-Za-z]+$\')))"
+  [google.fhir.proto.fhir_path_message_constraint]: "differential.element.defaultValue.exists() implies (derivation = \'specialization\')"
+  [google.fhir.proto.fhir_path_message_constraint]: "url.startsWith(\'http://hl7.org/fhir/StructureDefinition\') implies (snapshot.element.defaultValue.empty() and differential.element.defaultValue.empty())"
+  [google.fhir.proto.fhir_path_message_constraint]: "(snapshot | differential).element.all(path.contains(\'.\').not() implies sliceName.empty())"
 }

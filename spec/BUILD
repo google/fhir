@@ -47,23 +47,37 @@ fhir_package(
 filegroup(
     name = "r4",
     srcs = glob([
-        "hl7.fhir.core/4.0.0/package/*.json",
+        "hl7.fhir.core/4.0.1/package/*.json",
+    ]),
+)
+
+# Example testdata, e.g., Patient-example.json, was dropped in the 4.0.1 npm
+filegroup(
+    name = "r4_examples",
+    srcs = glob([
+        "hl7.fhir.r4.examples/4.0.1/package/*",
     ]),
 )
 
 fhir_package(
     package_name = "fhir_r4_package",
-    definitions = glob(
-        ["hl7.fhir.core/4.0.0/package/StructureDefinition-*.json"],
-        exclude = [
-            "hl7.fhir.core/4.0.0/package/StructureDefinition-example-*.json",
-            "hl7.fhir.core/4.0.0/package/StructureDefinition-*.*.json",
-        ],
-    ) + [
-        "hl7.fhir.core/4.0.0/package/Bundle-v2-valuesets.json",
-        "hl7.fhir.core/4.0.0/package/Bundle-v3-valuesets.json",
-        "hl7.fhir.core/4.0.0/package/Bundle-valuesets.json",
-    ],
+    definitions =
+        glob(
+            ["hl7.fhir.core/4.0.1/package/StructureDefinition-*.json"],
+            exclude = [
+                "hl7.fhir.core/4.0.1/package/StructureDefinition-example-*.json",
+                "hl7.fhir.core/4.0.1/package/StructureDefinition-*.*.json",
+                "hl7.fhir.core/4.0.1/package/StructureDefinition-structuredefinition-xml-type.json",
+                "hl7.fhir.core/4.0.1/package/StructureDefinition-structuredefinition-rdf-type.json",
+                "hl7.fhir.core/4.0.1/package/StructureDefinition-structuredefinition-json-type.json",
+            ],
+        ) + glob(
+            [
+                "hl7.fhir.core/4.0.1/package/ValueSet-*.json",
+            ],
+        ) + glob(
+            ["hl7.fhir.core/4.0.1/package/CodeSystem-*.json"],
+        ),
     package_info = "fhir_r4_package_info.prototxt",
 )
 

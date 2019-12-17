@@ -37,11 +37,11 @@ message ObservationBp {
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/bp";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
       "dataAbsentReason.empty() or value.empty()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "(component.empty() and hasMember.empty()) implies (dataAbsentReason or value)";
+      "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(component.empty() and hasMember.empty()) implies (dataAbsentReason.exists() or value.exists())";
 
   // Logical id of this artifact
   Id id = 1;
@@ -182,8 +182,17 @@ message ObservationBp {
     (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
   ];
 
-  // Observation.value[x] not present on profile.
-  reserved 22;
+  // Vital Signs value are recorded using the Quantity data type. For supporting
+  // observations such as Cuff size could use other datatypes such as
+  // CodeableConcept.
+  message ValueX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Quantity quantity = 1;
+    }
+  }
+  ValueX value = 22;
 
   // Why the result is missing
   CodeableConcept data_absent_reason = 23;

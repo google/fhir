@@ -456,8 +456,8 @@ nested_type {
     }
   }
   options {
-    [google.fhir.proto.fhir_path_message_constraint]: "(genomeBuild.count()+referenceSeqId.count()+ referenceSeqPointer.count()+ referenceSeqString.count()) = 1"
     [google.fhir.proto.fhir_path_message_constraint]: "(chromosome.empty() and genomeBuild.empty()) or (chromosome.exists() and genomeBuild.exists())"
+    [google.fhir.proto.fhir_path_message_constraint]: "(genomeBuild.count()+referenceSeqId.count()+ referenceSeqPointer.count()+ referenceSeqString.count()) = 1"
   }
 }
 nested_type {
@@ -1188,7 +1188,7 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MolecularSequence, last updated 2018-12-27T22:37:54.724+11:00.\nInformation about a biological sequence.\nSee http://hl7.org/fhir/StructureDefinition/MolecularSequence"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MolecularSequence, last updated 2019-11-01T09:29:23.356+11:00.\nInformation about a biological sequence.\nSee http://hl7.org/fhir/StructureDefinition/MolecularSequence"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MolecularSequence"
   [google.fhir.proto.fhir_path_message_constraint]: "coordinateSystem = 1 or coordinateSystem = 0"
 }

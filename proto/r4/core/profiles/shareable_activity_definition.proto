@@ -201,7 +201,8 @@ message ShareableActivityDefinition {
   // Detail type of activity
   CodeableConcept code = 40;
 
-  // proposal | plan | order
+  // proposal | plan | directive | order | original-order | reflex-order |
+  // filler-order | instance-order | option
   message IntentCode {
     option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
     option (.google.fhir.proto.fhir_valueset_url) =

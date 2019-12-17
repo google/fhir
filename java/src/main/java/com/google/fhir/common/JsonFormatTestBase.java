@@ -43,11 +43,11 @@ public abstract class JsonFormatTestBase {
   protected Runfiles runfiles;
 
   private final String versionName;
-  private final String versionNumber;
+  private final String examplesDir;
 
-  protected JsonFormatTestBase(String versionName, String versionNumber) {
+  protected JsonFormatTestBase(String versionName, String examplesDir) {
     this.versionName = versionName;
-    this.versionNumber = versionNumber;
+    this.examplesDir = examplesDir;
   }
 
   /** Read the specifed json file from the testdata directory as a String. */
@@ -66,15 +66,13 @@ public abstract class JsonFormatTestBase {
   }
 
   protected void parseToProto(String name, Builder builder) throws IOException {
-    jsonParser.merge(
-        loadJson("spec/hl7.fhir.core/" + versionNumber + "/package/" + name + ".json"), builder);
+    jsonParser.merge(loadJson("spec/" + examplesDir + "/package/" + name + ".json"), builder);
   }
 
   public void testPair(String name, Builder builder) throws IOException {
     try {
       // Load golden JSON
-      String goldenJson =
-          loadJson("spec/hl7.fhir.core/" + versionNumber + "/package/" + name + ".json");
+      String goldenJson = loadJson("spec/" + examplesDir + "/package/" + name + ".json");
 
       // Load golden proto
       Builder goldenProto = builder.clone();
@@ -166,8 +164,7 @@ public abstract class JsonFormatTestBase {
     Builder textBuilder = builder.clone();
     mergeText("examples/" + name + ".prototxt", textBuilder);
     // Load the json version of the input as a String.
-    String jsonGolden =
-        loadJson("spec/hl7.fhir.core/" + versionNumber + "/package/" + name + ".json");
+    String jsonGolden = loadJson("spec/" + examplesDir + "/package/" + name + ".json");
     // Print the proto as json and compare.
     String testJson = jsonPrinter.print(textBuilder);
 
@@ -180,9 +177,7 @@ public abstract class JsonFormatTestBase {
   protected void testConvertForAnalytics(String name, Builder builder) throws IOException {
     // Parse the json version of the input.
     Builder jsonBuilder = builder.clone();
-    jsonParser.merge(
-        loadJson("spec/hl7.fhir.core/" + versionNumber + "/package/" + name + ".json"),
-        jsonBuilder);
+    jsonParser.merge(loadJson("spec/" + examplesDir + "/package/" + name + ".json"), jsonBuilder);
     // Load the analytics version of the input as a String.
     String analyticsGolden = loadJson("testdata/" + versionName + "/bigquery/" + name + ".json");
     // Print and compare.

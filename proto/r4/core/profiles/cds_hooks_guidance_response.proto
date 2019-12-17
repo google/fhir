@@ -77,8 +77,6 @@ message CDSHooksGuidanceResponse {
 
     oneof choice {
       Uri uri = 1;
-      Canonical canonical = 2;
-      CodeableConcept codeable_concept = 3;
     }
   }
   ModuleX module = 12
@@ -154,8 +152,6 @@ message CDSHooksGuidanceResponse {
   Uri cds_hooks_endpoint = 25 [
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/cqf-cdsHooksEndpoint",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
+        "http://hl7.org/fhir/StructureDefinition/cqf-cdsHooksEndpoint"
   ];
 }

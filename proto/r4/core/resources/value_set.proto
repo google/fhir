@@ -26,7 +26,7 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for ValueSet, last updated
-// 2018-12-27T22:37:54.724+11:00. A set of codes drawn from one or more code
+// 2019-11-01T09:29:23.356+11:00. A set of codes drawn from one or more code
 // systems. See http://hl7.org/fhir/StructureDefinition/ValueSet
 message ValueSet {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
@@ -147,11 +147,11 @@ message ValueSet {
     // Include one or more codes from a code system or other value set(s)
     message ConceptSet {
       option (.google.fhir.proto.fhir_path_message_constraint) =
+          "valueSet.exists() or system.exists()";
+      option (.google.fhir.proto.fhir_path_message_constraint) =
           "(concept.exists() or filter.exists()) implies system.exists()";
       option (.google.fhir.proto.fhir_path_message_constraint) =
           "concept.empty() or filter.empty()";
-      option (.google.fhir.proto.fhir_path_message_constraint) =
-          "valueSet.exists() or system.exists()";
 
       // Unique id for inter-element referencing
       String id = 1;

@@ -24,7 +24,7 @@ field {
   number: 4
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.RelativeDateCriteria.Event"
+  type_name: ".google.fhir.r4.core.RelativeDateCriteria.EventX"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Event that the date is relative to"
@@ -53,7 +53,7 @@ field {
   }
 }
 nested_type {
-  name: "Event"
+  name: "EventX"
   field {
     name: "reference"
     number: 1
@@ -112,5 +112,4 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Relative Date Criteria.\nRelative Date Criteria.\nSee http://hl7.org/fhir/StructureDefinition/relative-date"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Extension"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/relative-date"
-  [google.fhir.proto.fhir_path_message_constraint]: "extension.exists() != value.exists()"
 }

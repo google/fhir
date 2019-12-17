@@ -329,8 +329,6 @@ message ClinicalDocument {
   // Version-specific identifier for composition
   repeated String version_number = 25 [
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/composition-clinicaldocument-versionNumber",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
+        "http://hl7.org/fhir/StructureDefinition/composition-clinicaldocument-versionNumber"
   ];
 }

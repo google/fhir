@@ -27,7 +27,7 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for TestScript, last updated
-// 2018-12-27T22:37:54.724+11:00. Describes a set of tests. See
+// 2019-11-01T09:29:23.356+11:00. Describes a set of tests. See
 // http://hl7.org/fhir/StructureDefinition/TestScript
 message TestScript {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
@@ -494,11 +494,11 @@ message TestScript {
       // The assertion to perform
       message Assert {
         option (.google.fhir.proto.fhir_path_message_constraint) =
-            "(response.empty() and responseCode.empty() and direction = 'request') or direction.empty() or direction = 'response'";
-        option (.google.fhir.proto.fhir_path_message_constraint) =
             "extension.exists() or (contentType.count() + expression.count() + headerField.count() + minimumId.count() + navigationLinks.count() + path.count() + requestMethod.count() + resource.count() + responseCode.count() + response.count()  + validateProfileId.count() <=1)";
         option (.google.fhir.proto.fhir_path_message_constraint) =
             "compareToSourceId.empty() xor (compareToSourceExpression.exists() or compareToSourcePath.exists())";
+        option (.google.fhir.proto.fhir_path_message_constraint) =
+            "(response.empty() and responseCode.empty() and direction = 'request') or direction.empty() or direction = 'response'";
 
         // Unique id for inter-element referencing
         String id = 1;
@@ -715,11 +715,11 @@ message TestScript {
       Setup.SetupAction.Assert assert_value = 5 [
         json_name = "assert",
         (.google.fhir.proto.fhir_path_constraint) =
+            "extension.exists() or (contentType.count() + expression.count() + headerField.count() + minimumId.count() + navigationLinks.count() + path.count() + requestMethod.count() + resource.count() + responseCode.count() + response.count() + validateProfileId.count() <=1)",
+        (.google.fhir.proto.fhir_path_constraint) =
             "compareToSourceId.empty() xor (compareToSourceExpression.exists() or compareToSourcePath.exists())",
         (.google.fhir.proto.fhir_path_constraint) =
-            "(response.empty() and responseCode.empty() and direction = 'request') or direction.empty() or direction = 'response'",
-        (.google.fhir.proto.fhir_path_constraint) =
-            "extension.exists() or (contentType.count() + expression.count() + headerField.count() + minimumId.count() + navigationLinks.count() + path.count() + requestMethod.count() + resource.count() + responseCode.count() + response.count() + validateProfileId.count() <=1)"
+            "(response.empty() and responseCode.empty() and direction = 'request') or direction.empty() or direction = 'response'"
       ];
     }
     repeated TestAction action = 6

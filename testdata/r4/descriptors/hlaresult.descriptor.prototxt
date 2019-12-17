@@ -297,7 +297,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "Allele Database"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-allele-database"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -309,7 +308,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "Glstring"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-glstring"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -321,7 +319,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "Haploid"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-haploid"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 field {
@@ -333,7 +330,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "The platform, methodology and software applied at the time of the\rgenotyping"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/hla-genotyping-results-method"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 nested_type {

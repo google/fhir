@@ -261,7 +261,6 @@ field {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Service endpoint"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/cqf-cdsHooksEndpoint"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 nested_type {
@@ -272,22 +271,6 @@ nested_type {
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.r4.core.Uri"
-    oneof_index: 0
-  }
-  field {
-    name: "canonical"
-    number: 2
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.Canonical"
-    oneof_index: 0
-  }
-  field {
-    name: "codeable_concept"
-    number: 3
-    label: LABEL_OPTIONAL
-    type: TYPE_MESSAGE
-    type_name: ".google.fhir.r4.core.CodeableConcept"
     oneof_index: 0
   }
   options {

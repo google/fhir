@@ -65,7 +65,7 @@ public class ProtoGeneratorTest {
         break;
       case R4:
         pathPrefix =
-            "com_google_fhir/spec/hl7.fhir.core/4.0.0/package/StructureDefinition-";
+            "com_google_fhir/spec/hl7.fhir.core/4.0.1/package/StructureDefinition-";
         break;
       default:
         throw new IllegalArgumentException("unrecognized FHIR version " + version);
@@ -1456,7 +1456,7 @@ public class ProtoGeneratorTest {
         new ValueSetGenerator(fhirPackage.packageInfo, ImmutableSet.of(fhirPackage)));
   }
 
-  private static final int EXPECTED_R4_COUNT = 647;
+  private static final int EXPECTED_R4_COUNT = 644;
 
   /** Test generating R4 proto files. */
   @Test

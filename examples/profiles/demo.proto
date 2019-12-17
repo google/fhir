@@ -123,6 +123,9 @@ message DemoPatient {
 
   // A contact party (e.g. guardian, partner, friend) for the patient
   message Contact {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "name.exists() or telecom.exists() or address.exists() or organization.exists()";
+
     // Unique id for inter-element referencing
     .google.fhir.r4.core.String id = 1;
 
@@ -169,12 +172,7 @@ message DemoPatient {
     // be contacted relating to this patient
     .google.fhir.r4.core.Period period = 10;
   }
-  repeated Contact contact = 21 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "name.exists() or telecom.exists() or address.exists() or organization.exists()"
-  ];
+  repeated Contact contact = 21;
 
   // A language which may be used to communicate with the patient about his or
   // her health
@@ -196,9 +194,7 @@ message DemoPatient {
     // Language preference indicator
     .google.fhir.r4.core.Boolean preferred = 5;
   }
-  repeated Communication communication = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Communication communication = 22;
 
   // Patient's nominated primary care provider
   repeated .google.fhir.r4.core.Reference general_practitioner = 23 [
@@ -247,9 +243,7 @@ message DemoPatient {
     TypeCode type = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Link link = 25
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "hasValue() or (children().count() > id.count())"];
+  repeated Link link = 25;
 
   // Extension
   .google.fhir.r4.uscore.PatientUSCoreRaceExtension race = 26
@@ -267,22 +261,12 @@ message DemoPatient {
            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"];
 
   // Mother's Maiden Name
-  .google.fhir.r4.core.String mothers_maiden_name = 29 [
-    (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
-  ];
+  .google.fhir.r4.core.String mothers_maiden_name = 29
+      [(.google.fhir.proto.fhir_inlined_extension_url) =
+           "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"];
 
   // Patient's Birth Place
-  .google.fhir.r4.core.Address birth_place = 30 [
-    (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://hl7.org/fhir/StructureDefinition/patient-birthPlace",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "hasValue() or (children().count() > id.count())",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
-  ];
+  .google.fhir.r4.core.Address birth_place = 30
+      [(.google.fhir.proto.fhir_inlined_extension_url) =
+           "http://hl7.org/fhir/StructureDefinition/patient-birthPlace"];
 }

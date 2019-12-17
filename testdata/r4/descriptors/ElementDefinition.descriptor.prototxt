@@ -748,7 +748,7 @@ nested_type {
     }
   }
   options {
-    [google.fhir.proto.fhir_path_message_constraint]: "aggregation.empty() or (code = \'Reference\')"
+    [google.fhir.proto.fhir_path_message_constraint]: "aggregation.empty() or (code = \'Reference\') or (code = \'canonical\')"
     [google.fhir.proto.fhir_path_message_constraint]: "(code=\'Reference\' or code = \'canonical\') or targetProfile.empty()"
   }
 }
@@ -1145,6 +1145,14 @@ nested_type {
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.r4.core.Dosage"
+    oneof_index: 0
+  }
+  field {
+    name: "meta"
+    number: 50
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Meta"
     oneof_index: 0
   }
   options {
@@ -1549,6 +1557,14 @@ nested_type {
     type_name: ".google.fhir.r4.core.Dosage"
     oneof_index: 0
   }
+  field {
+    name: "meta"
+    number: 50
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Meta"
+    oneof_index: 0
+  }
   options {
     [google.fhir.proto.is_choice_type]: true
   }
@@ -1949,6 +1965,14 @@ nested_type {
     label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.r4.core.Dosage"
+    oneof_index: 0
+  }
+  field {
+    name: "meta"
+    number: 50
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Meta"
     oneof_index: 0
   }
   options {
@@ -2395,6 +2419,14 @@ nested_type {
       label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
       type_name: ".google.fhir.r4.core.Dosage"
+      oneof_index: 0
+    }
+    field {
+      name: "meta"
+      number: 50
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r4.core.Meta"
       oneof_index: 0
     }
     options {
@@ -2879,19 +2911,19 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ElementDefinition, last updated 2018-12-27T22:37:54.724+11:00.\nDefinition of an element in a resource or extension.\nSee http://hl7.org/fhir/StructureDefinition/ElementDefinition"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ElementDefinition, last updated 2019-11-01T09:29:23.356+11:00.\nDefinition of an element in a resource or extension.\nSee http://hl7.org/fhir/StructureDefinition/ElementDefinition"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ElementDefinition"
   [google.fhir.proto.fhir_path_message_constraint]: "min.empty() or max.empty() or (max = \'*\') or iif(max != \'*\', min <= max.toInteger())"
   [google.fhir.proto.fhir_path_message_constraint]: "contentReference.empty() or (type.empty() and defaultValue.empty() and fixed.empty() and pattern.empty() and example.empty() and minValue.empty() and maxValue.empty() and maxLength.empty() and binding.empty())"
-  [google.fhir.proto.fhir_path_message_constraint]: "pattern.empty() or (type.count() <= 1)"
   [google.fhir.proto.fhir_path_message_constraint]: "fixed.empty() or (type.count()  <= 1)"
-  [google.fhir.proto.fhir_path_message_constraint]: "binding.empty() or type.code.empty() or type.select((code = \'code\') or (code = \'Coding\') or (code=\'CodeableConcept\') or (code = \'Quantity\') or (code = \'string\') or (code = \'uri\')).exists()"
-  [google.fhir.proto.fhir_path_message_constraint]: "sliceIsConstraining.exists() implies sliceName.exists()"
+  [google.fhir.proto.fhir_path_message_constraint]: "pattern.empty() or (type.count() <= 1)"
   [google.fhir.proto.fhir_path_message_constraint]: "pattern.empty() or fixed.empty()"
-  [google.fhir.proto.fhir_path_message_constraint]: "constraint.select(key).isDistinct()"
+  [google.fhir.proto.fhir_path_message_constraint]: "binding.empty() or type.code.empty() or type.select((code = \'code\') or (code = \'Coding\') or (code=\'CodeableConcept\') or (code = \'Quantity\') or (code = \'string\') or (code = \'uri\')).exists()"
   [google.fhir.proto.fhir_path_message_constraint]: "type.select(code).isDistinct()"
-  [google.fhir.proto.fhir_path_message_constraint]: "sliceName.empty() or sliceName.matches(\'^[a-zA-Z0-9\\\\/\\\\-_\\\\[\\\\]\\\\@]+$\')"
+  [google.fhir.proto.fhir_path_message_constraint]: "constraint.select(key).isDistinct()"
   [google.fhir.proto.fhir_path_message_constraint]: "defaultValue.empty() or meaningWhenMissing.empty()"
-  [google.fhir.proto.fhir_path_message_constraint]: "isModifier implies isModifierReason.exists()"
+  [google.fhir.proto.fhir_path_message_constraint]: "sliceName.empty() or sliceName.matches(\'^[a-zA-Z0-9\\\\/\\\\-_\\\\[\\\\]\\\\@]+$\')"
+  [google.fhir.proto.fhir_path_message_constraint]: "(isModifier.exists() and isModifier) implies isModifierReason.exists()"
   [google.fhir.proto.fhir_path_message_constraint]: "path.matches(\'[A-Za-z][A-Za-z0-9]*(\\\\.[a-z][A-Za-z0-9]*(\\\\[x])?)*\')"
+  [google.fhir.proto.fhir_path_message_constraint]: "sliceIsConstraining.exists() implies sliceName.exists()"
 }

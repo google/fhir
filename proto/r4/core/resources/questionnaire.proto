@@ -26,16 +26,16 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for Questionnaire, last updated
-// 2018-12-27T22:37:54.724+11:00. A structured set of questions. See
+// 2019-11-01T09:29:23.356+11:00. A structured set of questions. See
 // http://hl7.org/fhir/StructureDefinition/Questionnaire
 message Questionnaire {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Questionnaire";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "descendants().linkId.isDistinct()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
       "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "descendants().linkId.isDistinct()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -159,27 +159,27 @@ message Questionnaire {
   // Questions and sections within the Questionnaire
   message Item {
     option (.google.fhir.proto.fhir_path_message_constraint) =
-        "type!='display' or readOnly.empty()";
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "(type!='group' and type!='display') or initial.empty()";
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "type!='display' or (required.empty() and repeats.empty())";
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "(type ='choice' or type = 'open-choice' or type = 'decimal' or type = 'integer' or type = 'date' or type = 'dateTime' or type = 'time' or type = 'string' or type = 'quantity') or (answerValueSet.empty() and answerOption.empty())";
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "answerOption.empty() or answerValueSet.empty()";
+        "(type='group' implies item.empty().not()) and (type.trace('type')='display' implies item.trace('item').empty())";
     option (.google.fhir.proto.fhir_path_message_constraint) =
         "type!='display' or code.empty()";
     option (.google.fhir.proto.fhir_path_message_constraint) =
+        "answerOption.empty() or answerValueSet.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(type ='choice' or type = 'open-choice' or type = 'decimal' or type = 'integer' or type = 'date' or type = 'dateTime' or type = 'time' or type = 'string' or type = 'quantity') or (answerValueSet.empty() and answerOption.empty())";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "type!='display' or (required.empty() and repeats.empty())";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(type!='group' and type!='display') or initial.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "type!='display' or readOnly.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
         "(type in ('boolean' | 'decimal' | 'integer' | 'string' | 'text' | 'url' | 'open-choice')) or maxLength.empty()";
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "(type='group' implies item.empty().not()) and (type.trace('type')='display' implies item.trace('item').empty())";
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "repeats=true or initial.count() <= 1";
     option (.google.fhir.proto.fhir_path_message_constraint) =
         "answerOption.empty() or initial.empty()";
     option (.google.fhir.proto.fhir_path_message_constraint) =
         "enableWhen.count() > 2 implies enableBehavior.exists()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "repeats=true or initial.count() <= 1";
 
     // Unique id for inter-element referencing
     String id = 1;

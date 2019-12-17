@@ -30,7 +30,7 @@ field {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for canonical, last updated 2018-12-27T22:37:54.724+11:00.\nPrimitive Type canonical.\nSee http://hl7.org/fhir/StructureDefinition/canonical"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for canonical, last updated 2019-11-01T09:29:23.356+11:00.\nPrimitive Type canonical.\nSee http://hl7.org/fhir/StructureDefinition/canonical"
   [google.fhir.proto.value_regex]: "\\S*"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/canonical"
 }

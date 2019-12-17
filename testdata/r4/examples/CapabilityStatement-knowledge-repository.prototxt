@@ -51,7 +51,7 @@ software {
   }
 }
 fhir_version {
-  value: V_4_0_0
+  value: V_4_0_1
 }
 format {
   value: "json"

@@ -520,8 +520,8 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for AllergyIntolerance, last updated 2018-12-27T22:37:54.724+11:00.\nAllergy or Intolerance (generally: Risk of adverse reaction to a substance).\nSee http://hl7.org/fhir/StructureDefinition/AllergyIntolerance"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for AllergyIntolerance, last updated 2019-11-01T09:29:23.356+11:00.\nAllergy or Intolerance (generally: Risk of adverse reaction to a substance).\nSee http://hl7.org/fhir/StructureDefinition/AllergyIntolerance"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/AllergyIntolerance"
-  [google.fhir.proto.fhir_path_message_constraint]: "verificationStatus=\'entered-in-error\' or clinicalStatus.exists()"
-  [google.fhir.proto.fhir_path_message_constraint]: "verificationStatus!=\'entered-in-error\' or clinicalStatus.empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "verificationStatus.coding.where(system = \'http://terminology.hl7.org/CodeSystem/allergyintolerance-verification\' and code = \'entered-in-error\').exists() or clinicalStatus.exists()"
+  [google.fhir.proto.fhir_path_message_constraint]: "verificationStatus.coding.where(system = \'http://terminology.hl7.org/CodeSystem/allergyintolerance-verification\' and code = \'entered-in-error\').empty() or clinicalStatus.empty()"
 }

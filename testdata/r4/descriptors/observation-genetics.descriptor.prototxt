@@ -372,7 +372,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "HGNC gene symbol"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGene"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
   json_name: "Gene"
 }
@@ -385,7 +384,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "DNA region name"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsDNARegionName"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
   json_name: "DNARegionName"
 }
@@ -398,7 +396,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "Copy number variation"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsCopyNumberEvent"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
   json_name: "CopyNumberEvent"
 }
@@ -411,7 +408,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "Genomic source class"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsGenomicSourceClass"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
   json_name: "GenomicSourceClass"
 }
@@ -424,7 +420,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "Clinical interpretations for variant"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsInterpretation"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
   json_name: "InterpretationSlice"
 }
@@ -437,7 +432,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "Variant"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsVariant"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
   json_name: "Variant"
 }
@@ -450,7 +444,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "AminoAcidChange"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChange"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
   json_name: "AminoAcidChange"
 }
@@ -463,7 +456,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "Allele"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAllele"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
   json_name: "Allele"
 }
@@ -476,7 +468,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "Ancestry"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsAncestry"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
   json_name: "Ancestry"
 }
@@ -489,7 +480,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "Phase set"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/observation-geneticsPhaseSet"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
   json_name: "PhaseSet"
 }
@@ -942,6 +932,6 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Observation-genetics.\nMeasurements and simple assertions.\nSee http://hl7.org/fhir/StructureDefinition/observation-genetics"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Observation"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/observation-genetics"
-  [google.fhir.proto.fhir_path_message_constraint]: "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()"
   [google.fhir.proto.fhir_path_message_constraint]: "dataAbsentReason.empty() or value.empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()"
 }

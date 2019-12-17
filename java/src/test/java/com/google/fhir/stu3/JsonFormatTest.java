@@ -145,7 +145,7 @@ import org.junit.runners.JUnit4;
 public class JsonFormatTest extends JsonFormatTestBase {
 
   public JsonFormatTest() {
-    super("stu3", "3.0.1");
+    super("stu3", "hl7.fhir.core/3.0.1");
   }
 
   @Before

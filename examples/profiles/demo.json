@@ -7,18 +7,8 @@
         "id": "DemoPatient",
         "url": "https://company.com/fhir/demo/DemoPatient",
         "name": "DemoPatient",
-        "date": "2019-11-04",
-        "publisher": "",
-        "contact": [
-          {
-            "telecom": [
-              {
-                "system": "url",
-                "value": ""
-              }
-            ]
-          }
-        ],
+        "date": "2019-12-16",
+        "publisher": "Demo Company LLC",
         "description": "Extension of US Core Patient for FHIR Profile demo",
         "fhirVersion": "4.0.0",
         "kind": "resource",
@@ -3392,7 +3382,7 @@
                   "human": "All FHIR elements must have a @value or children",
                   "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
-                  "source": "Element"
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 },
                 {
                   "key": "ext-1",
@@ -3446,7 +3436,7 @@
                   "human": "All FHIR elements must have a @value or children",
                   "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
-                  "source": "Element"
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 },
                 {
                   "key": "ext-1",
@@ -3561,7 +3551,7 @@
                   "human": "All FHIR elements must have a @value or children",
                   "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
-                  "source": "Element"
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 },
                 {
                   "key": "ext-1",
@@ -3608,7 +3598,7 @@
                   "human": "All FHIR elements must have a @value or children",
                   "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
-                  "source": "Element"
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 },
                 {
                   "key": "ext-1",

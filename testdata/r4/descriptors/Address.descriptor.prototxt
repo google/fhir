@@ -175,6 +175,6 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Address, last updated 2018-12-27T22:37:54.724+11:00.\nAn address expressed using postal conventions (as opposed to GPS or other location definition formats).\nSee http://hl7.org/fhir/StructureDefinition/Address"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Address, last updated 2019-11-01T09:29:23.356+11:00.\nAn address expressed using postal conventions (as opposed to GPS or other location definition formats).\nSee http://hl7.org/fhir/StructureDefinition/Address"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Address"
 }

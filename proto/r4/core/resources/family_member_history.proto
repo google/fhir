@@ -26,7 +26,7 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for FamilyMemberHistory, last updated
-// 2018-12-27T22:37:54.724+11:00. Information about patient's relatives,
+// 2019-11-01T09:29:23.356+11:00. Information about patient's relatives,
 // relevant for patient. See
 // http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory
 message FamilyMemberHistory {
@@ -34,9 +34,9 @@ message FamilyMemberHistory {
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "age.exists() or estimatedAge.empty()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
       "age.empty() or born.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "age.exists() or estimatedAge.empty()";
 
   // Logical id of this artifact
   Id id = 1;

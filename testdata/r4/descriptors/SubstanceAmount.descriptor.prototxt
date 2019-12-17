@@ -148,6 +148,6 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for SubstanceAmount, last updated 2018-12-27T22:37:54.724+11:00.\nChemical substances are a single substance type whose primary defining element is the molecular structure. Chemical substances shall be defined on the basis of their complete covalent molecular structure; the presence of a salt (counter-ion) and/or solvates (water, alcohols) is also captured. Purity, grade, physical form or particle size are not taken into account in the definition of a chemical substance or in the assignment of a Substance ID.\nSee http://hl7.org/fhir/StructureDefinition/SubstanceAmount"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for SubstanceAmount, last updated 2019-11-01T09:29:23.356+11:00.\nChemical substances are a single substance type whose primary defining element is the molecular structure. Chemical substances shall be defined on the basis of their complete covalent molecular structure; the presence of a salt (counter-ion) and/or solvates (water, alcohols) is also captured. Purity, grade, physical form or particle size are not taken into account in the definition of a chemical substance or in the assignment of a Substance ID.\nSee http://hl7.org/fhir/StructureDefinition/SubstanceAmount"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/SubstanceAmount"
 }

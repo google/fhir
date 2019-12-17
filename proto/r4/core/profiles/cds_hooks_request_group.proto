@@ -85,8 +85,7 @@ message CDSHooksRequestGroup {
   // Composite request this is part of
   Identifier group_identifier = 15;
 
-  // draft | active | suspended | cancelled | completed | entered-in-error |
-  // unknown
+  // draft | active | on-hold | revoked | completed | entered-in-error | unknown
   message StatusCode {
     option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
     option (.google.fhir.proto.fhir_valueset_url) =
@@ -103,7 +102,8 @@ message CDSHooksRequestGroup {
   StatusCode status = 16
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
-  // proposal | plan | order
+  // proposal | plan | directive | order | original-order | reflex-order |
+  // filler-order | instance-order | option
   message IntentCode {
     option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
     option (.google.fhir.proto.fhir_valueset_url) =

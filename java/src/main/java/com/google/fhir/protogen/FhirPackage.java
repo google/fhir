@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -133,6 +135,14 @@ public class FhirPackage {
               + ".  The package info file must end in package_info.prototxt");
     }
     return new FhirPackage(packageInfo, structureDefinitions, codeSystems, valueSets);
+  }
+
+  FhirPackage filterResources(Predicate<StructureDefinition> filter) {
+    return new FhirPackage(
+        packageInfo,
+        structureDefinitions.stream().filter(filter).collect(Collectors.toList()),
+        codeSystems,
+        valueSets);
   }
 
   @SuppressWarnings("unchecked")

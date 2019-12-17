@@ -154,7 +154,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.r4.core.DeviceRequest.StatusCode"
   options {
-    [google.fhir.proto.field_description]: "draft | active | suspended | completed | entered-in-error | cancelled"
+    [google.fhir.proto.field_description]: "draft | active | on-hold | revoked | completed | entered-in-error | unknown"
   }
 }
 field {
@@ -165,7 +165,7 @@ field {
   type_name: ".google.fhir.r4.core.DeviceRequest.IntentCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
-    [google.fhir.proto.field_description]: "proposal | plan | original-order | encoded | reflex-order"
+    [google.fhir.proto.field_description]: "proposal | plan | directive | order | original-order | reflex-order | filler-order | instance-order | option"
   }
 }
 field {
@@ -175,7 +175,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.r4.core.DeviceRequest.PriorityCode"
   options {
-    [google.fhir.proto.field_description]: "Indicates how quickly the {{title}} should be addressed with respect to other requests"
+    [google.fhir.proto.field_description]: "routine | urgent | asap | stat"
   }
 }
 field {
@@ -593,6 +593,6 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for DeviceRequest, last updated 2018-12-27T22:37:54.724+11:00.\nMedical device request.\nSee http://hl7.org/fhir/StructureDefinition/DeviceRequest"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for DeviceRequest, last updated 2019-11-01T09:29:23.356+11:00.\nMedical device request.\nSee http://hl7.org/fhir/StructureDefinition/DeviceRequest"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/DeviceRequest"
 }

@@ -26,7 +26,7 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for ResearchSubject, last updated
-// 2018-12-27T22:37:54.724+11:00. Physical entity which is the primary unit of
+// 2019-11-01T09:29:23.356+11:00. Physical entity which is the primary unit of
 // interest in the study. See
 // http://hl7.org/fhir/StructureDefinition/ResearchSubject
 message ResearchSubject {

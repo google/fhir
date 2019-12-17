@@ -315,7 +315,6 @@ field {
   options {
     [google.fhir.proto.field_description]: "A library containing logic referenced by the questionnaire"
     [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/cqf-library"
-    [google.fhir.proto.fhir_path_constraint]: "extension.exists() != value.exists()"
   }
 }
 nested_type {
@@ -1078,17 +1077,17 @@ nested_type {
     }
   }
   options {
-    [google.fhir.proto.fhir_path_message_constraint]: "type!=\'display\' or readOnly.empty()"
-    [google.fhir.proto.fhir_path_message_constraint]: "(type!=\'group\' and type!=\'display\') or initial.empty()"
-    [google.fhir.proto.fhir_path_message_constraint]: "type!=\'display\' or (required.empty() and repeats.empty())"
-    [google.fhir.proto.fhir_path_message_constraint]: "(type =\'choice\' or type = \'open-choice\' or type = \'decimal\' or type = \'integer\' or type = \'date\' or type = \'dateTime\' or type = \'time\' or type = \'string\' or type = \'quantity\') or (answerValueSet.empty() and answerOption.empty())"
-    [google.fhir.proto.fhir_path_message_constraint]: "answerOption.empty() or answerValueSet.empty()"
-    [google.fhir.proto.fhir_path_message_constraint]: "type!=\'display\' or code.empty()"
-    [google.fhir.proto.fhir_path_message_constraint]: "(type in (\'boolean\' | \'decimal\' | \'integer\' | \'string\' | \'text\' | \'url\' | \'open-choice\')) or maxLength.empty()"
     [google.fhir.proto.fhir_path_message_constraint]: "(type=\'group\' implies item.empty().not()) and (type.trace(\'type\')=\'display\' implies item.trace(\'item\').empty())"
-    [google.fhir.proto.fhir_path_message_constraint]: "repeats=true or initial.count() <= 1"
+    [google.fhir.proto.fhir_path_message_constraint]: "type!=\'display\' or code.empty()"
+    [google.fhir.proto.fhir_path_message_constraint]: "answerOption.empty() or answerValueSet.empty()"
+    [google.fhir.proto.fhir_path_message_constraint]: "(type =\'choice\' or type = \'open-choice\' or type = \'decimal\' or type = \'integer\' or type = \'date\' or type = \'dateTime\' or type = \'time\' or type = \'string\' or type = \'quantity\') or (answerValueSet.empty() and answerOption.empty())"
+    [google.fhir.proto.fhir_path_message_constraint]: "type!=\'display\' or (required.empty() and repeats.empty())"
+    [google.fhir.proto.fhir_path_message_constraint]: "(type!=\'group\' and type!=\'display\') or initial.empty()"
+    [google.fhir.proto.fhir_path_message_constraint]: "type!=\'display\' or readOnly.empty()"
+    [google.fhir.proto.fhir_path_message_constraint]: "(type in (\'boolean\' | \'decimal\' | \'integer\' | \'string\' | \'text\' | \'url\' | \'open-choice\')) or maxLength.empty()"
     [google.fhir.proto.fhir_path_message_constraint]: "answerOption.empty() or initial.empty()"
     [google.fhir.proto.fhir_path_message_constraint]: "enableWhen.count() > 2 implies enableBehavior.exists()"
+    [google.fhir.proto.fhir_path_message_constraint]: "repeats=true or initial.count() <= 1"
   }
 }
 options {
@@ -1096,6 +1095,6 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for CQF-Questionnaire.\nA questionnaire with the ability to specify behavior associated with questions or groups of questions.\nSee http://hl7.org/fhir/StructureDefinition/cqf-questionnaire"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Questionnaire"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/cqf-questionnaire"
-  [google.fhir.proto.fhir_path_message_constraint]: "descendants().linkId.isDistinct()"
   [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
+  [google.fhir.proto.fhir_path_message_constraint]: "descendants().linkId.isDistinct()"
 }

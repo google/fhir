@@ -167,7 +167,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   private static final boolean GENERATE_GOLDEN = false;
 
   public JsonFormatTest() {
-    super("r4", "4.0.0");
+    super("r4", "hl7.fhir.r4.examples/4.0.1");
   }
 
   @Before

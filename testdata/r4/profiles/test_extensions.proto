@@ -33,8 +33,6 @@ message SimpleDecimalExt {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/SimpleDecimalExt";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   core.String id = 1;
@@ -55,8 +53,6 @@ message SimpleCodeableConceptExtension {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/SimpleCodeableConceptExtension";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   core.String id = 1;
@@ -87,8 +83,6 @@ message DigitalMediaType {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/DigitalMediaType";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   core.String id = 1;
@@ -131,21 +125,15 @@ message ComplexExt {
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/ComplexExt";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "extension.exists() != value.exists()";
 
   // Unique id for inter-element referencing
   core.String id = 1;
 
   // simple subfield
-  core.String simple_subfield = 4 [(.google.fhir.proto.fhir_path_constraint) =
-                                       "extension.exists() != value.exists()"];
+  core.String simple_subfield = 4;
 
   // complex subfield
   message ComplexSubfield {
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "extension.exists() != value.exists()";
-
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -156,7 +144,7 @@ message ComplexExt {
     reserved 3;
 
     // choice type
-    message SimpleSubSubFieldA {
+    message SimpleSubSubFieldAX {
       option (.google.fhir.proto.is_choice_type) = true;
 
       oneof choice {
@@ -165,18 +153,11 @@ message ComplexExt {
         core.Boolean boolean = 3;
       }
     }
-    SimpleSubSubFieldA simple_sub_sub_field_a = 4
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "extension.exists() != value.exists()"];
+    SimpleSubSubFieldAX simple_sub_sub_field_a = 4;
 
     // simple sub sub field b
-    repeated core.UnsignedInt simple_sub_sub_field_b = 5
-        [(.google.fhir.proto.fhir_path_constraint) =
-             "extension.exists() != value.exists()"];
+    repeated core.UnsignedInt simple_sub_sub_field_b = 5;
   }
-  ComplexSubfield complex_subfield = 5 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
-  ];
+  ComplexSubfield complex_subfield = 5
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }

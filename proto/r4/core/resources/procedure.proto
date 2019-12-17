@@ -26,7 +26,7 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for Procedure, last updated
-// 2018-12-27T22:37:54.724+11:00. An action that is being or was performed on a
+// 2019-11-01T09:29:23.356+11:00. An action that is being or was performed on a
 // patient. See http://hl7.org/fhir/StructureDefinition/Procedure
 message Procedure {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
@@ -83,7 +83,7 @@ message Procedure {
     (.google.fhir.proto.valid_reference_type) = "MedicationAdministration"
   ];
 
-  // preparation | in-progress | not-done | suspended | aborted | completed |
+  // preparation | in-progress | not-done | on-hold | stopped | completed |
   // entered-in-error | unknown
   message StatusCode {
     option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;

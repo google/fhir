@@ -26,7 +26,7 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for PaymentNotice, last updated
-// 2018-12-27T22:37:54.724+11:00. PaymentNotice request. See
+// 2019-11-01T09:29:23.356+11:00. PaymentNotice request. See
 // http://hl7.org/fhir/StructureDefinition/PaymentNotice
 message PaymentNotice {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;

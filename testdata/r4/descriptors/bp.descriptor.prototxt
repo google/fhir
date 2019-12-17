@@ -232,9 +232,13 @@ field {
   }
 }
 field {
+  name: "value"
   number: 22
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r4.core.ObservationBp.ValueX"
   options {
-    [google.fhir.proto.reserved_reason]: "Observation.value[x] not present on profile."
+    [google.fhir.proto.field_description]: "Vital Signs value are recorded using the Quantity data type. For supporting observations such as Cuff size could use other datatypes such as CodeableConcept."
   }
 }
 field {
@@ -483,6 +487,23 @@ nested_type {
   options {
     [google.fhir.proto.is_choice_type]: true
     [google.fhir.proto.fhir_path_message_constraint]: "($this as dateTime).toString().length() >= 8"
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+nested_type {
+  name: "ValueX"
+  field {
+    name: "quantity"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r4.core.Quantity"
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
   }
   oneof_decl {
     name: "choice"
@@ -775,7 +796,7 @@ options {
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/vitalsigns"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Observation"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/bp"
-  [google.fhir.proto.fhir_path_message_constraint]: "value.empty() or component.code.where( (coding.code = %resource.code.coding.code) and (coding.system = %resource.code.coding.system)).empty()"
   [google.fhir.proto.fhir_path_message_constraint]: "dataAbsentReason.empty() or value.empty()"
-  [google.fhir.proto.fhir_path_message_constraint]: "(component.empty() and hasMember.empty()) implies (dataAbsentReason or value)"
+  [google.fhir.proto.fhir_path_message_constraint]: "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "(component.empty() and hasMember.empty()) implies (dataAbsentReason.exists() or value.exists())"
 }

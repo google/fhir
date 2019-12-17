@@ -373,19 +373,19 @@ nested_type {
     }
   }
   options {
-    [google.fhir.proto.fhir_path_message_constraint]: "offset.empty() or (when.exists() and ((when in (\'C\' | \'CM\' | \'CD\' | \'CV\')).not()))"
+    [google.fhir.proto.fhir_path_message_constraint]: "duration.empty() or durationUnit.exists()"
+    [google.fhir.proto.fhir_path_message_constraint]: "period.empty() or periodUnit.exists()"
+    [google.fhir.proto.fhir_path_message_constraint]: "duration.exists() implies duration >= 0"
     [google.fhir.proto.fhir_path_message_constraint]: "period.exists() implies period >= 0"
     [google.fhir.proto.fhir_path_message_constraint]: "periodMax.empty() or period.exists()"
     [google.fhir.proto.fhir_path_message_constraint]: "durationMax.empty() or duration.exists()"
     [google.fhir.proto.fhir_path_message_constraint]: "countMax.empty() or count.exists()"
-    [google.fhir.proto.fhir_path_message_constraint]: "duration.empty() or durationUnit.exists()"
+    [google.fhir.proto.fhir_path_message_constraint]: "offset.empty() or (when.exists() and ((when in (\'C\' | \'CM\' | \'CD\' | \'CV\')).not()))"
     [google.fhir.proto.fhir_path_message_constraint]: "timeOfDay.empty() or when.empty()"
-    [google.fhir.proto.fhir_path_message_constraint]: "period.empty() or periodUnit.exists()"
-    [google.fhir.proto.fhir_path_message_constraint]: "duration.exists() implies duration >= 0"
   }
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Timing, last updated 2018-12-27T22:37:54.724+11:00.\nA timing schedule that specifies an event that may occur multiple times.\nSee http://hl7.org/fhir/StructureDefinition/Timing"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Timing, last updated 2019-11-01T09:29:23.356+11:00.\nA timing schedule that specifies an event that may occur multiple times.\nSee http://hl7.org/fhir/StructureDefinition/Timing"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Timing"
 }

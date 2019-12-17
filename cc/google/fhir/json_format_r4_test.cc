@@ -195,11 +195,13 @@ StatusOr<R> ParseJsonToProto(const std::string& json_path) {
   // See:
   // https://gforge.hl7.org/gf/project/fhir/tracker/?action=TrackerItemEdit&tracker_item_id=24933
   static std::unordered_set<std::string> INVALID_RECORDS{
-      "spec/hl7.fhir.core/4.0.0/package/Questionnaire-qs1.json",
-      "spec/hl7.fhir.core/4.0.0/package/Observation-clinical-gender.json",
-      "spec/hl7.fhir.core/4.0.0/package/DeviceMetric-example.json",
-      "spec/hl7.fhir.core/4.0.0/package/DeviceUseStatement-example.json",
-      "spec/hl7.fhir.core/4.0.0/package/MedicationRequest-medrx0301.json"};
+      "spec/hl7.fhir.r4.examples/4.0.1/package/Questionnaire-qs1.json",
+      "spec/hl7.fhir.r4.examples/4.0.1/package/"
+      "Observation-clinical-gender.json",
+      "spec/hl7.fhir.r4.examples/4.0.1/package/DeviceMetric-example.json",
+      "spec/hl7.fhir.r4.examples/4.0.1/package/DeviceUseStatement-example.json",
+      "spec/hl7.fhir.r4.examples/4.0.1/package/"
+      "MedicationRequest-medrx0301.json"};
 
   std::string json = ReadFile(json_path);
   absl::TimeZone tz;
@@ -234,7 +236,7 @@ template <typename R>
 void TestParse(const std::string& name) {
   TestParseWithFilepaths<R>(
       absl::StrCat("examples/", name, ".prototxt"),
-      absl::StrCat("spec/hl7.fhir.core/4.0.0/package/", name + ".json"));
+      absl::StrCat("spec/hl7.fhir.r4.examples/4.0.1/package/", name + ".json"));
 }
 
 Json::Value ParseJsonStringToValue(const std::string& raw_json) {
@@ -266,7 +268,7 @@ template <typename R>
 void TestPrint(const std::string& name) {
   TestPrintWithFilepaths<R>(
       absl::StrCat("examples/", name, ".prototxt"),
-      absl::StrCat("spec/hl7.fhir.core/4.0.0/package/", name + ".json"));
+      absl::StrCat("spec/hl7.fhir.r4.examples/4.0.1/package/", name + ".json"));
 }
 
 template <typename R>
@@ -495,26 +497,26 @@ TEST(JsonFormatR4Test, TestResourcesBundle) {
   TestPair<Bundle>(files);
 }
 
-TEST(JsonFormatR4Test, TestValuesetsBundle) {
-  std::vector<std::string> files{
-      "Bundle-valuesets",
-  };
-  TestPair<Bundle>(files);
-}
+// TEST(JsonFormatR4Test, TestValuesetsBundle) {
+//   std::vector<std::string> files{
+//       "Bundle-valuesets",
+//   };
+//   TestPair<Bundle>(files);
+// }
 
-TEST(JsonFormatR4Test, TestV2ValuesetsBundle) {
-  std::vector<std::string> files{
-      "Bundle-v2-valuesets",
-  };
-  TestPair<Bundle>(files);
-}
-
-TEST(JsonFormatR4Test, TestV3ValuesetsBundle) {
-  std::vector<std::string> files{
-      "Bundle-v3-valuesets",
-  };
-  TestPair<Bundle>(files);
-}
+// TEST(JsonFormatR4Test, TestV2ValuesetsBundle) {
+//   std::vector<std::string> files{
+//       "Bundle-v2-valuesets",
+//   };
+//   TestPair<Bundle>(files);
+// }
+//
+// TEST(JsonFormatR4Test, TestV3ValuesetsBundle) {
+//   std::vector<std::string> files{
+//       "Bundle-v3-valuesets",
+//   };
+//   TestPair<Bundle>(files);
+// }
 
 TEST(JsonFormatR4Test, TestCapabilityStatement) {
   std::vector<std::string> files{"CapabilityStatement-base2",

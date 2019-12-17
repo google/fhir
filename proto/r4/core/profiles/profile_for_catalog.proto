@@ -323,9 +323,7 @@ message ProfileForCatalog {
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://hl7.org/fhir/StructureDefinition/cqm-ValidityPeriod",
-    json_name = "ValidityPeriod",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
+    json_name = "ValidityPeriod"
   ];
 
   // field 25 reserved for Composition.date:IssueDate which uses an unsupported

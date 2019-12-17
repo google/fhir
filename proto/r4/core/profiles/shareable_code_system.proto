@@ -35,9 +35,9 @@ message ShareableCodeSystem {
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/shareablecodesystem";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "concept.code.combine($this.descendants().concept.code).isDistinct()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
       "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "concept.code.combine($this.descendants().concept.code).isDistinct()";
 
   // Logical id of this artifact
   Id id = 1;
@@ -201,7 +201,8 @@ message ShareableCodeSystem {
     // How or why the filter is used
     String description = 5;
 
-    // Operators that can be used with filter
+    // = | is-a | descendent-of | is-not-a | regex | in | not-in | generalizes |
+    // exists
     message OperatorCode {
       option (.google.fhir.proto.structure_definition_kind) =
           KIND_PRIMITIVE_TYPE;

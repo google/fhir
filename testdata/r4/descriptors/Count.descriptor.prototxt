@@ -98,8 +98,8 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Count, last updated 2018-12-27T22:37:54.724+11:00.\nA measured or measurable amount.\nSee http://hl7.org/fhir/StructureDefinition/Count"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Count, last updated 2019-11-01T09:29:23.356+11:00.\nA measured or measurable amount.\nSee http://hl7.org/fhir/StructureDefinition/Count"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Count"
-  [google.fhir.proto.fhir_path_message_constraint]: "code.empty() or system.exists()"
   [google.fhir.proto.fhir_path_message_constraint]: "(code.exists() or value.empty()) and (system.empty() or system = %ucum) and (code.empty() or code = \'1\') and (value.empty() or value.hasValue().not() or value.toString().contains(\'.\').not())"
+  [google.fhir.proto.fhir_path_message_constraint]: "code.empty() or system.exists()"
 }

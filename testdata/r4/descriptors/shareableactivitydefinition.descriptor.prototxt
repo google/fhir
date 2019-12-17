@@ -409,7 +409,7 @@ field {
   type: TYPE_MESSAGE
   type_name: ".google.fhir.r4.core.ShareableActivityDefinition.IntentCode"
   options {
-    [google.fhir.proto.field_description]: "proposal | plan | order"
+    [google.fhir.proto.field_description]: "proposal | plan | directive | order | original-order | reflex-order | filler-order | instance-order | option"
   }
 }
 field {

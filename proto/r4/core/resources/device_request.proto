@@ -26,7 +26,7 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for DeviceRequest, last updated
-// 2018-12-27T22:37:54.724+11:00. Medical device request. See
+// 2019-11-01T09:29:23.356+11:00. Medical device request. See
 // http://hl7.org/fhir/StructureDefinition/DeviceRequest
 message DeviceRequest {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
@@ -81,7 +81,7 @@ message DeviceRequest {
   // Identifier of composite request
   Identifier group_identifier = 15;
 
-  // draft | active | suspended | completed | entered-in-error | cancelled
+  // draft | active | on-hold | revoked | completed | entered-in-error | unknown
   message StatusCode {
     option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
     option (.google.fhir.proto.fhir_valueset_url) =
@@ -97,7 +97,8 @@ message DeviceRequest {
   }
   StatusCode status = 16;
 
-  // proposal | plan | original-order | encoded | reflex-order
+  // proposal | plan | directive | order | original-order | reflex-order |
+  // filler-order | instance-order | option
   message IntentCode {
     option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
     option (.google.fhir.proto.fhir_valueset_url) =
@@ -114,8 +115,7 @@ message DeviceRequest {
   IntentCode intent = 17
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
-  // Indicates how quickly the {{title}} should be addressed with respect to
-  // other requests
+  // routine | urgent | asap | stat
   message PriorityCode {
     option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
     option (.google.fhir.proto.fhir_valueset_url) =

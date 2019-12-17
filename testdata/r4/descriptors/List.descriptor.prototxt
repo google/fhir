@@ -357,9 +357,9 @@ nested_type {
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
-  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for List, last updated 2018-12-27T22:37:54.724+11:00.\nA list is a curated collection of resources.\nSee http://hl7.org/fhir/StructureDefinition/List"
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for List, last updated 2019-11-01T09:29:23.356+11:00.\nA list is a curated collection of resources.\nSee http://hl7.org/fhir/StructureDefinition/List"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/List"
-  [google.fhir.proto.fhir_path_message_constraint]: "mode = \'working\' or entry.date.empty()"
-  [google.fhir.proto.fhir_path_message_constraint]: "mode = \'changes\' or entry.deleted.empty()"
   [google.fhir.proto.fhir_path_message_constraint]: "emptyReason.empty() or entry.empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "mode = \'changes\' or entry.deleted.empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "mode = \'working\' or entry.date.empty()"
 }

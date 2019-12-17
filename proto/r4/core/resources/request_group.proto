@@ -26,7 +26,7 @@ option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for RequestGroup, last updated
-// 2018-12-27T22:37:54.724+11:00. A group of related requests. See
+// 2019-11-01T09:29:23.356+11:00. A group of related requests. See
 // http://hl7.org/fhir/StructureDefinition/RequestGroup
 message RequestGroup {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
@@ -81,8 +81,7 @@ message RequestGroup {
   // Composite request this is part of
   Identifier group_identifier = 15;
 
-  // draft | active | suspended | cancelled | completed | entered-in-error |
-  // unknown
+  // draft | active | on-hold | revoked | completed | entered-in-error | unknown
   message StatusCode {
     option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
     option (.google.fhir.proto.fhir_valueset_url) =
@@ -99,7 +98,8 @@ message RequestGroup {
   StatusCode status = 16
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
-  // proposal | plan | order
+  // proposal | plan | directive | order | original-order | reflex-order |
+  // filler-order | instance-order | option
   message IntentCode {
     option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
     option (.google.fhir.proto.fhir_valueset_url) =
