@@ -16,12 +16,12 @@
 
 #include "google/protobuf/message.h"
 #include "google/protobuf/text_format.h"
-#include "google/protobuf/util/message_differencer.h"
 #include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
 #include "absl/time/civil_time.h"
 #include "absl/time/time.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/testutil/proto_matchers.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/resources/encounter.pb.h"
 #include "proto/stu3/codes.pb.h"
@@ -46,11 +46,11 @@ using ::google::fhir::stu3::uscore::UsCorePatient;
 
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
-using ::google::protobuf::util::MessageDifferencer;
 using google::fhir::Status;
 using google::fhir::fhir_path::CompiledExpression;
 using google::fhir::fhir_path::EvaluationResult;
 using google::fhir::fhir_path::MessageValidator;
+using google::fhir::testutil::EqualsProto;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
 
@@ -185,7 +185,7 @@ TEST(FhirPathTest, TestGetDirectChild) {
 
   const Message* status = result.GetMessages()[0];
 
-  EXPECT_TRUE(MessageDifferencer::Equals(*status, test_encounter.status()));
+  EXPECT_THAT(*status, EqualsProto(test_encounter.status()));
 }
 
 TEST(FhirPathTest, TestGetGrandchild) {
@@ -201,8 +201,7 @@ TEST(FhirPathTest, TestGetGrandchild) {
 
   const Message* status = result.GetMessages()[0];
 
-  EXPECT_TRUE(
-      MessageDifferencer::Equals(*status, test_encounter.period().start()));
+  EXPECT_THAT(*status, EqualsProto(test_encounter.period().start()));
 }
 
 TEST(FhirPathTest, TestGetEmptyGrandchild) {

@@ -67,6 +67,7 @@ cc_test(
     deps = [
         ":fhir_path",
         "//cc/google/fhir/status",
+        "//cc/google/fhir/testutil:proto_matchers",
         "//proto/r4/core:datatypes_cc_proto",
         "//proto/r4/core/resources:encounter_cc_proto",
         "//proto/stu3:codes_cc_proto",
