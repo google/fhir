@@ -51,7 +51,6 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-
 typedef std::pair<stu3::google::EventTrigger,
                   std::vector<stu3::google::EventLabel>>
     TriggerLabelsPair;
@@ -384,8 +383,7 @@ void BundleToSeqexConverter<BundleLike>::BundleToContext(
   for (const auto& entry : bundle.entry()) {
     if (entry.resource().has_patient()) {
       auto patient = entry.resource().patient();
-      if (google::fhir::GetMetadataFromResource(patient).version_id().value() !=
-          "0") {
+      if (patient.meta().version_id().value() != "0") {
         // We're only interested in the V0 patient for the context.
         continue;
       }

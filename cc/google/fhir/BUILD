@@ -65,6 +65,7 @@ cc_library(
         "//proto/r4/core:datatypes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/strings",
+        "@com_google_protobuf//:protobuf",
         "@org_tensorflow//tensorflow/core:lib",
     ],
 )
@@ -116,6 +117,7 @@ cc_library(
         "//proto:annotations_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/synchronization",
+        "@com_google_protobuf//:protobuf",
         "@org_tensorflow//tensorflow/core:lib",
     ],
 )
@@ -137,6 +139,8 @@ cc_library(
         "@com_google_absl//absl/memory",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
+        "@com_google_protobuf//:protobuf",
+        "@com_googlesource_code_re2//:re2",
         "@org_tensorflow//tensorflow/core:lib",
     ],
 )

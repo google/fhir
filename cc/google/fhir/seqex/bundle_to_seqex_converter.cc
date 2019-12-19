@@ -58,7 +58,6 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-
 using ::google::fhir::StatusOr;
 using ::google::fhir::proto::VersionConfig;
 using ::google::fhir::stu3::google::EventLabel;
@@ -320,9 +319,8 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
               label.class_value().integer().value());
         }
         if (label.class_value().has_decimal()) {
-          double value;
-          CHECK(GetDecimalValue(label.class_value().decimal(), &value).ok());
-          floats.mutable_float_list()->add_value(value);
+          floats.mutable_float_list()->add_value(
+              GetDecimalValue(label.class_value().decimal()).ValueOrDie());
         }
         if (label.class_value().has_boolean()) {
           booleans.mutable_int64_list()->add_value(
@@ -364,8 +362,8 @@ Features ConvertCurrentEventLabelToTensorflowFeatures(
           booleans;
     }
     if (datetime_secs.int64_list().value_size() > 0) {
-      (*result.mutable_feature())[
-          absl::StrCat(label_prefix, ".value_datetime_secs")] = datetime_secs;
+      (*result.mutable_feature())[absl::StrCat(
+          label_prefix, ".value_datetime_secs")] = datetime_secs;
     }
   }
   return result;

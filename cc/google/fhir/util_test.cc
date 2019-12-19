@@ -34,8 +34,98 @@ using ::google::fhir::stu3::proto::CodeableConcept;
 using ::google::fhir::stu3::proto::ContainedResource;
 using ::google::fhir::stu3::proto::Date;
 using ::google::fhir::stu3::proto::DateTime;
+using ::google::fhir::stu3::proto::Decimal;
 using ::google::fhir::stu3::proto::Encounter;
 using ::google::fhir::testutil::EqualsProto;
+
+using ::google::fhir::stu3::proto::AllergyIntolerance;
+using ::google::fhir::stu3::proto::Coding;
+using ::google::fhir::stu3::proto::Composition;
+using ::google::fhir::stu3::proto::EncounterStatusCode;
+using ::google::fhir::stu3::proto::Extension;
+using ::google::fhir::stu3::proto::Medication;
+using ::google::fhir::stu3::proto::MedicationRequest;
+using ::google::fhir::stu3::proto::Meta;
+using ::google::fhir::stu3::proto::Observation;
+using ::google::fhir::stu3::proto::Patient;
+using ::google::fhir::stu3::proto::Reference;
+using ::google::fhir::stu3::proto::ReferenceId;
+
+using ::testing::ElementsAre;
+using ::testing::Not;
+
+TEST(GetResourceIdFromReferenceTest, PatientId) {
+  Reference r;
+  r.mutable_patient_id()->set_value("123");
+  auto got = google::fhir::GetResourceIdFromReference<Patient>(r);
+  ASSERT_TRUE(got.status().ok());
+  EXPECT_EQ(got.ValueOrDie(), "123");
+}
+
+TEST(GetResourceIdFromReferenceTest, PatientIdAsUri) {
+  Reference r;
+  r.mutable_uri()->set_value("Patient/123");
+  auto got = google::fhir::GetResourceIdFromReference<Patient>(r);
+  ASSERT_TRUE(got.status().ok());
+  EXPECT_EQ(got.ValueOrDie(), "123");
+}
+
+TEST(GetResourceIdFromReferenceTest, EncounterId) {
+  Reference r;
+  r.mutable_encounter_id()->set_value("456");
+  auto got = google::fhir::GetResourceIdFromReference<Encounter>(r);
+  ASSERT_TRUE(got.status().ok());
+  EXPECT_EQ(got.ValueOrDie(), "456");
+}
+
+TEST(GetResourceIdFromReferenceTest, EncounterIdAsUri) {
+  Reference r;
+  r.mutable_uri()->set_value("Encounter/456");
+  auto got = google::fhir::GetResourceIdFromReference<Encounter>(r);
+  ASSERT_TRUE(got.status().ok());
+  EXPECT_EQ(got.ValueOrDie(), "456");
+}
+
+TEST(GetResourceIdFromReferenceTest, ReferenceDoesNotMatch) {
+  Reference r;
+  r.mutable_uri()->set_value("Patient/123");
+  auto got = google::fhir::GetResourceIdFromReference<Encounter>(r);
+  EXPECT_EQ(got.status(), ::tensorflow::errors::InvalidArgument(
+                              "Reference type doesn't match"));
+}
+
+TEST(GetResourceFromBundleEntryTest, GetResourceFromEncounter) {
+  Bundle::Entry entry;
+  Encounter* encounter = entry.mutable_resource()->mutable_encounter();
+  encounter->mutable_status()->set_value(EncounterStatusCode::FINISHED);
+  encounter->mutable_id()->set_value("2468");
+
+  const google::protobuf::Message* resource =
+      GetResourceFromBundleEntry(entry).ValueOrDie();
+  auto* desc = resource->GetDescriptor();
+  EXPECT_EQ("Encounter", desc->name());
+  const Encounter* result_encounter = dynamic_cast<const Encounter*>(resource);
+  std::string resource_id;
+
+  EXPECT_EQ(EncounterStatusCode::FINISHED, result_encounter->status().value());
+  EXPECT_EQ("2468", result_encounter->id().value());
+}
+
+TEST(GetResourceFromBundleEntryTest, GetResourceFromPatient) {
+  Bundle::Entry entry;
+  Patient* patient = entry.mutable_resource()->mutable_patient();
+  patient->mutable_birth_date()->set_value_us(-77641200000000);
+  patient->mutable_id()->set_value("2468");
+
+  const google::protobuf::Message* resource =
+      GetResourceFromBundleEntry(entry).ValueOrDie();
+  auto* desc = resource->GetDescriptor();
+  EXPECT_EQ("Patient", desc->name());
+  const Patient* result_patient = dynamic_cast<const Patient*>(resource);
+
+  EXPECT_EQ(-77641200000000, result_patient->birth_date().value_us());
+  EXPECT_EQ("2468", result_patient->id().value());
+}
 
 TEST(GetTimeFromTimelikeElement, DateTime) {
   DateTime with_time;
@@ -61,25 +151,6 @@ TEST(GetTimeFromTimelikeElement, Date) {
   EXPECT_EQ(absl::ToUnixMicros(
                 google::fhir::GetTimeFromTimelikeElement(time_not_set)),
             0L);
-}
-
-TEST(GetTimezone, TimeZoneStr) {
-  absl::TimeZone tz;
-
-  // Valid cases.
-  ASSERT_TRUE(GetTimezone("Z", &tz).ok());
-  ASSERT_EQ(tz.name(), "UTC");
-  ASSERT_TRUE(GetTimezone("-06:00", &tz).ok());
-  ASSERT_EQ(tz.name(), "Fixed/UTC-06:00:00");
-  ASSERT_TRUE(GetTimezone("+06:00", &tz).ok());
-  ASSERT_EQ(tz.name(), "Fixed/UTC+06:00:00");
-  ASSERT_TRUE(GetTimezone("-06:30", &tz).ok());
-  ASSERT_EQ(tz.name(), "Fixed/UTC-06:30:00");
-
-  // Error cases.
-  ASSERT_FALSE(GetTimezone("06:30", &tz).ok());
-  ASSERT_FALSE(GetTimezone("-15:30", &tz).ok());
-  ASSERT_FALSE(GetTimezone("-14:60", &tz).ok());
 }
 
 TEST(BuildTimeZoneFromString, ValidAndInvalidInputs) {
@@ -163,6 +234,82 @@ TEST(GetPatient, StatusOr) {
       ->set_value("5");
 
   EXPECT_EQ(GetPatient(bundle).ValueOrDie()->id().value(), "5");
+}
+
+TEST(GetTypedContainedResource, Valid) {
+  ContainedResource contained;
+  contained.mutable_allergy_intolerance()->mutable_id()->set_value("47");
+
+  ASSERT_EQ("47", google::fhir::GetTypedContainedResource<AllergyIntolerance>(
+                      contained)
+                      .ValueOrDie()
+                      ->id()
+                      .value());
+}
+
+TEST(GetTypedContainedResource, WrongType) {
+  ContainedResource contained;
+  contained.mutable_allergy_intolerance()->mutable_id()->set_value("47");
+
+  EXPECT_EQ(google::fhir::GetTypedContainedResource<Patient>(contained)
+                .status()
+                .code(),
+            ::tensorflow::errors::Code::NOT_FOUND);
+}
+
+TEST(GetTypedContainedResource, BadType) {
+  ContainedResource contained;
+  contained.mutable_allergy_intolerance()->mutable_id()->set_value("47");
+
+  EXPECT_EQ(
+      google::fhir::GetTypedContainedResource<DateTime>(contained).status(),
+      ::tensorflow::errors::InvalidArgument(
+          "No resource field found for type DateTime"));
+}
+
+TEST(GetDecimalValue, NormalValue) {
+  Decimal decimal;
+  decimal.set_value("1.2345e3");
+
+  EXPECT_EQ(GetDecimalValue(decimal).ValueOrDie(), 1234.5);
+}
+
+TEST(GetDecimalValue, NotANumber) {
+  Decimal decimal;
+  decimal.set_value("NaN");
+
+  EXPECT_EQ(GetDecimalValue(decimal).status(),
+            ::tensorflow::errors::InvalidArgument("Invalid decimal: 'NaN'"));
+}
+
+TEST(GetDecimalValue, PositiveInfinity) {
+  Decimal decimal;
+  decimal.set_value("1e+1000");
+
+  EXPECT_EQ(
+      GetDecimalValue(decimal).status(),
+      ::tensorflow::errors::InvalidArgument("Invalid decimal: '1e+1000'"));
+}
+
+TEST(GetDecimalValue, NegativeInfinity) {
+  Decimal decimal;
+  decimal.set_value("-1e+1000");
+
+  EXPECT_EQ(
+      GetDecimalValue(decimal).status(),
+      ::tensorflow::errors::InvalidArgument("Invalid decimal: '-1e+1000'"));
+}
+
+TEST(GetMutablePatient, StatusOr) {
+  Bundle bundle;
+  bundle.add_entry()
+      ->mutable_resource()
+      ->mutable_patient()
+      ->mutable_id()
+      ->set_value("5");
+
+  EXPECT_EQ(GetMutablePatient(&bundle).ValueOrDie()->mutable_id()->value(),
+            "5");
 }
 
 }  // namespace

@@ -17,6 +17,7 @@
 #ifndef GOOGLE_FHIR_UTIL_H_
 #define GOOGLE_FHIR_UTIL_H_
 
+#include <math.h>
 #include <stddef.h>
 
 #include <string>
@@ -78,12 +79,6 @@
 namespace google {
 namespace fhir {
 
-
-template <typename R>
-stu3::proto::Meta* MutableMetadataFromResource(R* resource) {
-  return resource->mutable_meta();
-}
-
 // Splits relative references into their components, for example, "Patient/ABCD"
 // will result in the patientId field getting the value "ABCD".
 Status SplitIfRelativeReference(::google::protobuf::Message* reference);
@@ -132,9 +127,6 @@ absl::Time GetUpperBoundFromTimelikeElement(const T& timelike) {
   return absl::FromUnixMicros(timelike.value_us()) +
          GetDurationFromTimelikeElement(timelike);
 }
-
-ABSL_DEPRECATED("Use BuildTimeZoneFromString instead.")
-Status GetTimezone(const std::string& timezone_str, absl::TimeZone* tz);
 
 // Converts a time zone string of the forms found in time-like primitive types
 // into an absl::TimeZone
@@ -196,6 +188,8 @@ StatusOr<ContainedResourceLike> WrapContainedResource(
 
 StatusOr<std::string> GetResourceId(const ::google::protobuf::Message& message);
 
+bool ResourceHasId(const ::google::protobuf::Message& message);
+
 template <typename BundleLike, typename PatientLike>
 Status GetPatient(const BundleLike& bundle, const PatientLike** patient) {
   bool found = false;
@@ -224,14 +218,19 @@ StatusOr<const PatientLike*> GetPatient(const BundleLike& bundle) {
   return patient;
 }
 
+template <typename BundleLike,
+          typename PatientLike = BUNDLE_TYPE(BundleLike, patient)>
+StatusOr<PatientLike*> GetMutablePatient(BundleLike* bundle) {
+  const PatientLike* const_patient;
+  auto status = GetPatient(*bundle, &const_patient);
+  if (status.ok()) {
+    return const_cast<PatientLike*>(const_patient);
+  }
+  return status;
+}
+
 // Returns a reference, e.g. "Encounter/1234" for a FHIR resource.
 std::string GetReferenceToResource(const ::google::protobuf::Message& message);
-
-// Given a resource and a reference, populates the correct typed reference field
-// with a reference to that resource. If the message is not a FHIR
-// resource, an error will be returned.
-Status PopulatedTypedReferenceToResource(const ::google::protobuf::Message& resource,
-                                         stu3::proto::Reference* reference);
 
 // Returns a typed Reference for a FHIR resource.  If the message is not a FHIR
 // resource, an error will be returned.
@@ -243,22 +242,22 @@ StatusOr<r4::core::Reference> GetTypedReferenceToResourceR4(
     const ::google::protobuf::Message& resource);
 
 // Extract the value of a Decimal field as a double.
-Status GetDecimalValue(const stu3::proto::Decimal& decimal, double* value);
-
-// Extracts and returns the FHIR metadata from a resource
-template <typename R>
-const stu3::proto::Meta& GetMetadataFromResource(const R& resource) {
-  return resource.meta();
+template <class DecimalLike>
+StatusOr<double> GetDecimalValue(const DecimalLike& decimal) {
+  double value;
+  if (!absl::SimpleAtod(decimal.value(), &value) || isinf(value) ||
+      isnan(value)) {
+    return ::tensorflow::errors::InvalidArgument(
+        absl::StrCat("Invalid decimal: '", decimal.value(), "'"));
+  }
+  return value;
 }
 
 // Extracts and returns the FHIR resource from a bundle entry.
 template <typename EntryLike>
-Status GetResourceFromBundleEntry(const EntryLike& entry,
-                                  const ::google::protobuf::Message** result) {
-  auto got_value = GetContainedResource(entry.resource());
-  TF_RETURN_IF_ERROR(got_value.status());
-  *result = got_value.ValueOrDie();
-  return Status::OK();
+StatusOr<const ::google::protobuf::Message*> GetResourceFromBundleEntry(
+    const EntryLike& entry) {
+  return GetContainedResource(entry.resource());
 }
 
 // Extracts and returns the FHIR extension list from the resource field in
@@ -267,8 +266,8 @@ template <typename EntryLike,
           typename ExtensionLike = EXTENSION_TYPE(EntryLike)>
 StatusOr<const ::google::protobuf::RepeatedFieldRef<ExtensionLike>>
 GetResourceExtensionsFromBundleEntry(const EntryLike& entry) {
-  const ::google::protobuf::Message* resource;
-  TF_RETURN_IF_ERROR(GetResourceFromBundleEntry(entry, &resource));
+  FHIR_ASSIGN_OR_RETURN(const ::google::protobuf::Message* resource,
+                        GetResourceFromBundleEntry(entry));
   const ::google::protobuf::Reflection* ref = resource->GetReflection();
   // Get the bundle field corresponding to this resource.
   const ::google::protobuf::FieldDescriptor* field =
@@ -283,6 +282,112 @@ Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
                                const std::string& value);
 StatusOr<std::string> GetPrimitiveStringValue(
     const ::google::protobuf::Message& primitive, std::string* scratch);
+
+// Finds a resource of a templatized type within a bundle, by reference id.
+template <typename R, typename BundleLike, typename ReferenceIdLike>
+Status GetResourceByReferenceId(const BundleLike& bundle,
+                                const ReferenceIdLike& reference_id,
+                                const R** output) {
+  // First, find the correct oneof field to check.
+  const ::google::protobuf::OneofDescriptor* resource_oneof =
+      BundleLike::Entry::descriptor()
+          ->FindFieldByName("resource")
+          ->message_type()
+          ->FindOneofByName("oneof_resource");
+
+  const ::google::protobuf::FieldDescriptor* resource_field = nullptr;
+  for (int i = 0; i < resource_oneof->field_count(); i++) {
+    const ::google::protobuf::FieldDescriptor* field = resource_oneof->field(i);
+    if (field->message_type()->full_name() == R::descriptor()->full_name()) {
+      resource_field = field;
+    }
+  }
+  if (resource_field == nullptr) {
+    return ::tensorflow::errors::InvalidArgument(
+        "No resource oneof option for type ", R::descriptor()->full_name());
+  }
+
+  // For each bundle entry, check if that field is populated with a resource
+  // with the correct reference id.
+  for (const auto& entry : bundle.entry()) {
+    const ::google::protobuf::Message& contained_resource = entry.resource();
+    const ::google::protobuf::Reflection* contained_reflection =
+        contained_resource.GetReflection();
+    if (contained_reflection->HasField(contained_resource, resource_field)) {
+      const R& resource = dynamic_cast<const R&>(
+          contained_reflection->GetMessage(contained_resource, resource_field));
+      if (resource.id().value() == reference_id.value()) {
+        *output = &resource;
+        return Status::OK();
+      }
+    }
+  }
+
+  return ::tensorflow::errors::NotFound(
+      "No matching resource in bundle.\nReference:", reference_id.value(),
+      "\nBundle:\n", bundle.DebugString());
+}
+
+template <typename ResourceType, typename ReferenceLike>
+StatusOr<std::string> GetResourceIdFromReference(
+    const ReferenceLike& reference) {
+  auto value = ReferenceProtoToString(reference);
+  if (!value.ok()) {
+    return value;
+  }
+  ::absl::string_view r(value.ValueOrDie());
+  if (!::absl::ConsumePrefix(
+          &r, absl::StrCat(ResourceType::descriptor()->name(), "/"))) {
+    return ::tensorflow::errors::InvalidArgument(
+        "Reference type doesn't match");
+  }
+  return std::string(r);
+}
+
+void BuildDateTime(const absl::Time time, const std::string& time_zone,
+                   const stu3::proto::DateTime::Precision precision,
+                   stu3::proto::DateTime* datetime);
+
+void BuildDateTime(const absl::Time time, const std::string& time_zone,
+                   const r4::core::DateTime::Precision precision,
+                   r4::core::DateTime* datetime);
+
+template <typename ContainedResourceLike>
+StatusOr<::google::protobuf::Message*> MutableContainedResource(
+    ContainedResourceLike* contained) {
+  const ::google::protobuf::Reflection* ref = contained->GetReflection();
+  // Get the resource field corresponding to this resource.
+  const ::google::protobuf::OneofDescriptor* resource_oneof =
+      contained->GetDescriptor()->FindOneofByName("oneof_resource");
+  const ::google::protobuf::FieldDescriptor* field =
+      contained->GetReflection()->GetOneofFieldDescriptor(*contained,
+                                                          resource_oneof);
+  if (!field) {
+    return ::tensorflow::errors::NotFound("No Bundle Resource found");
+  }
+  return ref->MutableMessage(contained, field);
+}
+
+template <typename R, typename ContainedResourceLike>
+StatusOr<const R*> GetTypedContainedResource(
+    const ContainedResourceLike& contained) {
+  const ::google::protobuf::OneofDescriptor* contained_oneof =
+      ContainedResourceLike::descriptor()->FindOneofByName("oneof_resource");
+  for (int i = 0; i < contained_oneof->field_count(); i++) {
+    const ::google::protobuf::FieldDescriptor* field = contained_oneof->field(i);
+    if (field->message_type()->full_name() == R::descriptor()->full_name()) {
+      if (!contained.GetReflection()->HasField(contained, field)) {
+        return ::tensorflow::errors::NotFound(
+            "Contained resource does not have set resource of type ",
+            R::descriptor()->name());
+      }
+      return dynamic_cast<const R*>(
+          &contained.GetReflection()->GetMessage(contained, field));
+    }
+  }
+  return ::tensorflow::errors::InvalidArgument(
+      "No resource field found for type ", R::descriptor()->name());
+}
 
 }  // namespace fhir
 }  // namespace google

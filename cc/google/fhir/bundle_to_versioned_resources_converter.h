@@ -97,7 +97,7 @@ GetSortedOverrides(const proto::ResourceConfig& resource_config,
 template <typename ContainedResourceLike, typename T, typename R>
 void StampWrapAndAdd(std::vector<ContainedResourceLike>* versioned_resources,
                      const T& timelike, const int version_id, R* resource) {
-  stu3::proto::Meta* meta = MutableMetadataFromResource(resource);
+  stu3::proto::Meta* meta = resource->mutable_meta();
   meta->mutable_version_id()->set_value(absl::StrCat(version_id));
   stu3::proto::Instant* last_updated = meta->mutable_last_updated();
   last_updated->set_timezone(timelike.timezone());
@@ -116,9 +116,8 @@ void StampWrapAndAdd(std::vector<ContainedResourceLike>* versioned_resources,
     last_updated->set_precision(precision);
   } else {
     last_updated->set_precision(stu3::proto::Instant::SECOND);
-    absl::TimeZone tz;
-    TF_CHECK_OK(GetTimezone(timelike.timezone(), &tz))
-        << "No Timezone on timelike: " << timelike.DebugString();
+    absl::TimeZone tz =
+        BuildTimeZoneFromString(timelike.timezone()).ValueOrDie();
     const std::string precision_string =
         T::Precision_Name(timelike.precision());
     const auto& breakdown = GetTimeFromTimelikeElement(timelike).In(tz);
@@ -365,7 +364,6 @@ void SplitPatient(PatientLike patient, const BundleLike& bundle,
 }
 
 }  // namespace internal
-
 
 const proto::VersionConfig VersionConfigFromFlags();
 

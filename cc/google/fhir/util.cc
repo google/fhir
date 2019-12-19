@@ -32,7 +32,6 @@
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
-#include "re2/re2.h"
 
 namespace google {
 namespace fhir {
@@ -231,11 +230,6 @@ absl::Duration GetDurationFromTimelikeElement(
   return InternalGetDurationFromTimelikeElement(datetime);
 }
 
-Status GetTimezone(const std::string& timezone_str, absl::TimeZone* tz) {
-  FHIR_ASSIGN_OR_RETURN(*tz, BuildTimeZoneFromString(timezone_str));
-  return Status::OK();
-}
-
 StatusOr<absl::TimeZone> BuildTimeZoneFromString(
     const std::string& time_zone_string) {
   if (time_zone_string == "UTC" || time_zone_string == "Z") {
@@ -300,6 +294,10 @@ StatusOr<std::string> GetResourceId(const Message& message) {
     return InvalidArgument(
         absl::StrCat("id field is not a valid Id type: ", desc->full_name()));
   }
+}
+
+bool ResourceHasId(const Message& message) {
+  return !GetResourceId(message).ValueOrDie().empty();
 }
 
 std::string GetReferenceToResource(const Message& message) {
@@ -452,12 +450,20 @@ StatusOr<std::string> GetPrimitiveStringValue(
                                                        scratch);
 }
 
-Status GetDecimalValue(const stu3::proto::Decimal& decimal, double* value) {
-  if (!absl::SimpleAtod(decimal.value(), value)) {
-    return InvalidArgument(
-        absl::StrCat("Invalid decimal: '", decimal.value(), "'"));
-  }
-  return Status::OK();
+void BuildDateTime(const absl::Time time, const std::string& time_zone,
+                   const stu3::proto::DateTime::Precision precision,
+                   stu3::proto::DateTime* datetime) {
+  datetime->set_value_us(absl::ToUnixMicros(time));
+  datetime->set_timezone(time_zone);
+  datetime->set_precision(precision);
+}
+
+void BuildDateTime(const absl::Time time, const std::string& time_zone,
+                   const r4::core::DateTime::Precision precision,
+                   r4::core::DateTime* datetime) {
+  datetime->set_value_us(absl::ToUnixMicros(time));
+  datetime->set_timezone(time_zone);
+  datetime->set_precision(precision);
 }
 
 }  // namespace fhir
