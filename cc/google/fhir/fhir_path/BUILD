@@ -66,6 +66,7 @@ cc_test(
     features = ["-use_header_modules"],  # Incompatible with -fexceptions.
     deps = [
         ":fhir_path",
+        "//cc/google/fhir:proto_util",
         "//cc/google/fhir/status",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/r4/core:datatypes_cc_proto",

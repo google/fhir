@@ -19,13 +19,34 @@
 
 #include "google/protobuf/util/message_differencer.h"
 #include "gmock/gmock.h"
+#include "google/fhir/proto_util.h"
 
 namespace google {
 namespace fhir {
 namespace testutil {
 
-MATCHER_P(EqualsProto, other, "") {
-  return ::google::protobuf::util::MessageDifferencer::Equals(arg, other);
+// Matcher that compares google::protobuf::Message objects for equality.
+class EqualsProtoMatcher {
+ public:
+  EqualsProtoMatcher(const google::protobuf::Message& expected);
+
+  bool MatchAndExplain(const google::protobuf::Message& m,
+                       testing::MatchResultListener* /* listener */) const;
+
+  bool MatchAndExplain(const google::protobuf::Message* m,
+                       testing::MatchResultListener* /* listener */) const;
+
+  void DescribeTo(::std::ostream* os) const;
+
+  void DescribeNegationTo(::std::ostream* os) const;
+
+ private:
+  const std::shared_ptr<google::protobuf::Message> expected_;
+};
+
+inline testing::PolymorphicMatcher<EqualsProtoMatcher> EqualsProto(
+    const google::protobuf::Message& expected) {
+  return testing::MakePolymorphicMatcher(EqualsProtoMatcher(expected));
 }
 
 MATCHER_P(EqualsProtoIgnoringReordering, other, "") {

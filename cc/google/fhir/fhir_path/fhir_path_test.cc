@@ -16,10 +16,12 @@
 
 #include "google/protobuf/message.h"
 #include "google/protobuf/text_format.h"
+#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
 #include "absl/time/civil_time.h"
 #include "absl/time/time.h"
+#include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/r4/core/datatypes.pb.h"
@@ -31,9 +33,12 @@
 #include "proto/stu3/uscore_codes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 
+using ::google::fhir::r4::core::Boolean;
 using ::google::fhir::r4::core::DateTime;
+using ::google::fhir::r4::core::Integer;
 using ::google::fhir::r4::core::Period;
 using ::google::fhir::r4::core::Quantity;
+using ::google::fhir::r4::core::String;
 
 using ::google::fhir::stu3::proto::Code;
 using ::google::fhir::stu3::proto::Coding;
@@ -44,13 +49,14 @@ using ::google::fhir::stu3::proto::ValueSet;
 using ::google::fhir::stu3::uscore::UsCoreBirthSexCode;
 using ::google::fhir::stu3::uscore::UsCorePatient;
 
-using ::google::protobuf::FieldDescriptor;
-using ::google::protobuf::Message;
 using google::fhir::Status;
 using google::fhir::fhir_path::CompiledExpression;
 using google::fhir::fhir_path::EvaluationResult;
 using google::fhir::fhir_path::MessageValidator;
 using google::fhir::testutil::EqualsProto;
+using ::google::protobuf::FieldDescriptor;
+using ::google::protobuf::Message;
+using testing::UnorderedElementsAreArray;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
 
@@ -229,6 +235,13 @@ TEST(FhirPathTest, TestNoSuchField) {
   EXPECT_FALSE(child_expr.ok());
   EXPECT_NE(child_expr.status().error_message().find("boguschildfield"),
             std::string::npos);
+
+  auto complex_child_expr = CompiledExpression::Compile(
+      Encounter::descriptor(), "(period | status).boguschildfield");
+  EXPECT_TRUE(complex_child_expr.ok());
+  auto complex_child_evaluation_result =
+      complex_child_expr.ValueOrDie().Evaluate(ValidEncounter());
+  EXPECT_FALSE(complex_child_evaluation_result.ok());
 }
 
 TEST(FhirPathTest, TestNoSuchFunction) {
@@ -389,6 +402,55 @@ TEST(FhirPathTest, TestFunctionHasValueComplex) {
 
   // hasValue should return false for non-primitive types.
   EXPECT_FALSE(result.GetBoolean().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestUnion) {
+  EXPECT_TRUE(EvaluateBoolExpression("({} | {}) = {}"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("(true | {}) = true"));
+  EXPECT_TRUE(EvaluateBoolExpression("(true | true) = true"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("(false | {}) = false"));
+  EXPECT_TRUE(EvaluateBoolExpression("(false | false) = false"));
+}
+
+TEST(FhirPathTest, TestUnionDeduplicationPrimitives) {
+  EvaluationResult evaluation_result =
+      EvaluateExpressionWithStatus("true | false | 1 | 'foo' | 2 | 1 | 'foo'")
+          .ValueOrDie();
+  std::vector<const Message*> result = evaluation_result.GetMessages();
+
+  Boolean true_proto = ParseFromString<Boolean>("value: true");
+  Boolean false_proto = ParseFromString<Boolean>("value: false");
+  Integer integer_1_proto = ParseFromString<Integer>("value: 1");
+  Integer integer_2_proto = ParseFromString<Integer>("value: 2");
+  String string_foo_proto = ParseFromString<String>("value: 'foo'");
+
+  ASSERT_THAT(result,
+              UnorderedElementsAreArray(
+                  {EqualsProto(true_proto),
+                   EqualsProto(false_proto),
+                   EqualsProto(integer_1_proto),
+                   EqualsProto(integer_2_proto),
+                   EqualsProto(string_foo_proto)}));
+}
+
+TEST(FhirPathTest, TestUnionDeduplicationObjects) {
+  Encounter test_encounter = ValidEncounter();
+
+  EvaluationResult evaluation_result =
+      CompiledExpression::Compile(Encounter::descriptor(),
+                                  ("period | status | status | period"))
+          .ValueOrDie()
+          .Evaluate(test_encounter)
+          .ValueOrDie();
+  std::vector<const Message*> result = evaluation_result
+          .GetMessages();
+
+  ASSERT_THAT(result,
+              UnorderedElementsAreArray(
+                  {EqualsProto(test_encounter.status()),
+                   EqualsProto(test_encounter.period())}));
 }
 
 TEST(FhirPathTest, TestIndexer) {

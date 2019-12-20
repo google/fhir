@@ -259,8 +259,11 @@ class InvokeTermNode : public ExpressionNode {
 class InvokeExpressionNode : public ExpressionNode {
  public:
   InvokeExpressionNode(std::shared_ptr<ExpressionNode> child_expression,
-                       const FieldDescriptor* field)
-      : child_expression_(child_expression), field_(field) {}
+                       const FieldDescriptor* field,
+                       const std::string& field_name)
+      : child_expression_(std::move(child_expression)),
+        field_(field),
+        field_name_(field_name) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -272,13 +275,27 @@ class InvokeExpressionNode : public ExpressionNode {
     // Iterate through the results of the child expression and invoke
     // the appropriate field.
     for (const Message* child_message : child_results) {
+      // In the case where the field descriptor was not known at compile time
+      // (because ExpressionNode.ReturnType() currently doesn't support
+      // collections with mixed types) we attempt to find it at evaluation time.
+      const FieldDescriptor* field =
+          field_ != nullptr
+              ? field_
+              : child_message->GetDescriptor()->FindFieldByName(field_name_);
+
+      if (field == nullptr) {
+        return InvalidArgument(absl::StrCat("Unable to find field '",
+                                            field_name_, "' in message ",
+                                            child_message->GetTypeName()));
+      }
+
       // .value invocations on primitive types should return the FHIR
       // primitive message type rather than the underlying native primitive.
-      if (IsFhirPrimitiveValue(field_)) {
+      if (IsFhirPrimitiveValue(field)) {
         results->push_back(child_message);
       } else {
         ForEachMessage<Message>(
-            *child_message, field_,
+            *child_message, field,
             [&](const Message& result) { results->push_back(&result); });
       }
     }
@@ -287,12 +304,15 @@ class InvokeExpressionNode : public ExpressionNode {
   }
 
   const Descriptor* ReturnType() const override {
-    return field_->message_type();
+    return field_ != nullptr ? field_->message_type() : nullptr;
   }
 
  private:
   const std::shared_ptr<ExpressionNode> child_expression_;
+  // Null if the child_expression_ may evaluate to a collection that contains
+  // multiple types.
   const FieldDescriptor* field_;
+  const std::string field_name_;
 };
 
 // Implements the FHIRPath .exists() function
@@ -488,7 +508,7 @@ class BinaryOperator : public ExpressionNode {
       const std::vector<const Message*>& right_results, WorkSpace* work_space,
       std::vector<const Message*>* out_results) const = 0;
 
- private:
+ protected:
   const std::shared_ptr<ExpressionNode> left_;
 
   const std::shared_ptr<ExpressionNode> right_;
@@ -518,7 +538,7 @@ class IndexerExpression : public BinaryOperator {
     return Status::OK();
   }
 
-  const Descriptor* ReturnType() const override { return nullptr; }
+  const Descriptor* ReturnType() const override { return left_->ReturnType(); }
 };
 
 class EqualsOperator : public BinaryOperator {
@@ -538,34 +558,31 @@ class EqualsOperator : public BinaryOperator {
       for (int i = 0; i < left_results.size(); ++i) {
         const Message* left = left_results.at(i);
         const Message* right = right_results.at(i);
-
-        if (AreSameMessageType(*left, *right)) {
-          if (!MessageDifferencer::Equals(*left, *right)) {
-            result->set_value(false);
-            break;
-          }
-        } else {
-          // When dealing with different types we might be comparing a
-          // primitive type (like an enum) to a literal string, which is
-          // supported. Therefore we simply convert both to string form
-          // and consider them unequal if either is not a string.
-          StatusOr<JsonPrimitive> left_primitive = WrapPrimitiveProto(*left);
-          StatusOr<JsonPrimitive> right_primitive = WrapPrimitiveProto(*right);
-
-          // Comparisons between primitives and non-primitives are valid
-          // in FHIRPath and should simply return false rather than an error.
-          if (!left_primitive.ok() || !right_primitive.ok() ||
-              left_primitive.ValueOrDie().value !=
-                  right_primitive.ValueOrDie().value) {
-            result->set_value(false);
-            break;
-          }
-        }
+        result->set_value(AreEqual(*left, *right));
       }
     }
 
     out_results->push_back(result);
     return Status::OK();
+  }
+
+  static bool AreEqual(const Message& left, const Message& right) {
+    if (AreSameMessageType(left, right)) {
+      return MessageDifferencer::Equals(left, right);
+    } else {
+      // When dealing with different types we might be comparing a
+      // primitive type (like an enum) to a literal string, which is
+      // supported. Therefore we simply convert both to string form
+      // and consider them unequal if either is not a string.
+      StatusOr<JsonPrimitive> left_primitive = WrapPrimitiveProto(left);
+      StatusOr<JsonPrimitive> right_primitive = WrapPrimitiveProto(right);
+
+      // Comparisons between primitives and non-primitives are valid
+      // in FHIRPath and should simply return false rather than an error.
+      return left_primitive.ok() && right_primitive.ok() &&
+             left_primitive.ValueOrDie().value ==
+                 right_primitive.ValueOrDie().value;
+    }
   }
 
   const Descriptor* ReturnType() const override {
@@ -575,6 +592,59 @@ class EqualsOperator : public BinaryOperator {
   EqualsOperator(std::shared_ptr<ExpressionNode> left,
                  std::shared_ptr<ExpressionNode> right)
       : BinaryOperator(left, right) {}
+};
+
+struct ProtoPtrSameTypeAndEqual {
+  bool operator()(const google::protobuf::Message* lhs,
+                  const google::protobuf::Message* rhs) const {
+    return (lhs == rhs) ||
+           ((lhs != nullptr && rhs != nullptr) &&
+           EqualsOperator::AreEqual(*lhs, *rhs));
+  }
+};
+
+struct ProtoPtrHash {
+  size_t operator()(const google::protobuf::Message* message) const {
+    if (message == nullptr) {
+      return 0;
+    }
+
+    if (IsPrimitive(message->GetDescriptor())) {
+      return std::hash<std::string>{}(
+          WrapPrimitiveProto(*message).ValueOrDie().value);
+    }
+
+    return std::hash<std::string>{}(message->SerializeAsString());
+  }
+};
+
+class UnionOperator : public BinaryOperator {
+ public:
+  UnionOperator(std::shared_ptr<ExpressionNode> left,
+                std::shared_ptr<ExpressionNode> right)
+      : BinaryOperator(std::move(left), std::move(right)) {}
+
+  Status EvaluateOperator(
+      const std::vector<const Message*>& left_results,
+      const std::vector<const Message*>& right_results, WorkSpace* work_space,
+      std::vector<const Message*>* out_results) const override {
+    std::unordered_set<const Message*, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
+        results;
+    results.insert(left_results.begin(), left_results.end());
+    results.insert(right_results.begin(), right_results.end());
+    out_results->insert(out_results->begin(), results.begin(), results.end());
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    if (AreSameMessageType(left_->ReturnType(), right_->ReturnType())) {
+      return left_->ReturnType();
+    }
+
+    // TODO: Consider refactoring ReturnType to return a set of all types
+    // in the collection.
+    return nullptr;
+  }
 };
 
 // Converts decimal or integer container messages to a double value
@@ -1074,16 +1144,19 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       }
     } else {
       const Descriptor* descriptor = expr->ReturnType();
-
       const FieldDescriptor* field =
-          descriptor->FindFieldByName(definition->name);
+          descriptor != nullptr ? descriptor->FindFieldByName(definition->name)
+                                : nullptr;
 
-      if (field == nullptr) {
-        SetError(absl::StrCat("Unable to find field", definition->name));
+      // If we know the return type of the expression, and the return type
+      // doesn't have the referenced field, set an error and return.
+      if (descriptor != nullptr && field == nullptr) {
+        SetError(absl::StrCat("Unable to find field ", definition->name));
         return nullptr;
       }
 
-      return ToAny(std::make_shared<InvokeExpressionNode>(expression, field));
+      return ToAny(std::make_shared<InvokeExpressionNode>(expression, field,
+                                                          definition->name));
     }
   }
 
@@ -1122,6 +1195,21 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
 
     return ToAny(std::make_shared<IndexerExpression>(left, right));
+  }
+
+  antlrcpp::Any visitUnionExpression(
+      FhirPathParser::UnionExpressionContext* ctx) override {
+    antlrcpp::Any left_any = ctx->children[0]->accept(this);
+    antlrcpp::Any right_any = ctx->children[2]->accept(this);
+
+    if (!CheckOk()) {
+      return nullptr;
+    }
+
+    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
+    auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
+
+    return ToAny(std::make_shared<UnionOperator>(left, right));
   }
 
   antlrcpp::Any visitEqualityExpression(
