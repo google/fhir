@@ -26,7 +26,7 @@ import tempfile
 from absl import flags
 from absl.testing import absltest
 from absl.testing import parameterized
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from py.google.fhir.models import mle_task
 from py.google.fhir.models import test_utils
 

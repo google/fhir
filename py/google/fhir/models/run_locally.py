@@ -24,7 +24,7 @@ import glob
 import os
 from absl import flags
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from py.google.fhir.models import model
 

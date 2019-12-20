@@ -34,7 +34,7 @@ And preview on port 6006
 import argparse
 import os
 from . import model  # Using a relative import for ease of use with Cloud.
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from tensorflow.contrib import learn as contrib_learn
 
 
