@@ -155,6 +155,7 @@ constexpr char kExistsFunction[] = "exists";
 constexpr char kNotFunction[] = "not";
 constexpr char kHasValueFunction[] = "hasValue";
 constexpr char kStartsWithFunction[] = "startsWith";
+constexpr char kEmptyFunction[] = "empty";
 
 // Logical field in primitives representing the underlying value.
 constexpr char kPrimitiveValueField[] = "value";
@@ -483,6 +484,34 @@ class StartsWithFunction : public ExpressionNode {
       "argument";
 };
 constexpr char StartsWithFunction::kInvalidArgumentMessage[];
+
+// Implements the FHIRPath .empty() function.
+//
+// Returns true if the input collection is empty and false otherwise.
+class EmptyFunction : public ExpressionNode {
+ public:
+  explicit EmptyFunction(const std::shared_ptr<ExpressionNode>& child)
+      : child_(child) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    Boolean* result = new Boolean();
+    work_space->DeleteWhenFinished(result);
+    result->set_value(child_results.empty());
+    results->push_back(result);
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Boolean::descriptor();
+  }
+
+ private:
+  const std::shared_ptr<ExpressionNode> child_;
+};
 
 // Base class for FHIRPath binary operators.
 class BinaryOperator : public ExpressionNode {
@@ -1426,6 +1455,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return std::make_shared<HasValueFunction>(child_expression);
     } else if (function_name == kStartsWithFunction) {
       return std::make_shared<StartsWithFunction>(child_expression, params);
+    } else if (function_name == kEmptyFunction) {
+      return std::make_shared<EmptyFunction>(child_expression);
     } else {
       // TODO: Implement set of functions for initial use cases.
       SetError(absl::StrCat("The function ", function_name,

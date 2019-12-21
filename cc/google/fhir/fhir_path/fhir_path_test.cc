@@ -404,6 +404,12 @@ TEST(FhirPathTest, TestFunctionHasValueComplex) {
   EXPECT_FALSE(result.GetBoolean().ValueOrDie());
 }
 
+TEST(FhirPathTest, TestFunctionEmpty) {
+  EXPECT_TRUE(EvaluateBoolExpression("{}.empty()"));
+  EXPECT_FALSE(EvaluateBoolExpression("true.empty()"));
+  EXPECT_FALSE(EvaluateBoolExpression("(false | true).empty()"));
+}
+
 TEST(FhirPathTest, TestUnion) {
   EXPECT_TRUE(EvaluateBoolExpression("({} | {}) = {}"));
 
