@@ -1135,6 +1135,52 @@ class AndOperator : public BooleanOperator {
   }
 };
 
+// Implements the "contain" operator. This may also be used for the "in"
+// operator by switching the left and right operands.
+//
+// See https://hl7.org/fhirpath/#collections-2
+class ContainsOperator : public BinaryOperator {
+ public:
+  ContainsOperator(std::shared_ptr<ExpressionNode> left,
+                  std::shared_ptr<ExpressionNode> right)
+      : BinaryOperator(std::move(left), std::move(right)) {}
+
+  Status EvaluateOperator(
+      const std::vector<const Message*>& left_results,
+      const std::vector<const Message*>& right_results,
+      WorkSpace* work_space,
+      std::vector<const Message*>* results) const override {
+    if (right_results.empty()) {
+      return Status::OK();
+    }
+
+    if (right_results.size() > 1) {
+      return InvalidArgument(
+          "in/contains must have one or fewer items in the left/right "
+          "operand.");
+    }
+
+    const Message* right_operand = right_results[0];
+
+    bool found =
+        std::any_of(left_results.begin(), left_results.end(),
+                    [right_operand](const Message* message) {
+                      return EqualsOperator::AreEqual(*right_operand, *message);
+                    });
+
+    Boolean* result = new Boolean();
+    work_space->DeleteWhenFinished(result);
+    result->set_value(found);
+    results->push_back(result);
+
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Boolean::descriptor();
+  }
+};
+
 // Produces a shared pointer explicitly of ExpressionNode rather
 // than a subclass to work well with ANTLR's "Any" semantics.
 inline std::shared_ptr<ExpressionNode> ToAny(
@@ -1326,6 +1372,29 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     }
 
     return ToAny(std::make_shared<ComparisonOperator>(left, right, op_type));
+  }
+
+  antlrcpp::Any visitMembershipExpression(
+      FhirPathParser::MembershipExpressionContext* ctx) override {
+    antlrcpp::Any left_any = ctx->children[0]->accept(this);
+    std::string op = ctx->children[1]->getText();
+    antlrcpp::Any right_any = ctx->children[2]->accept(this);
+
+    if (!CheckOk()) {
+      return nullptr;
+    }
+
+    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
+    auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
+
+    if (op == "in") {
+      return ToAny(std::make_shared<ContainsOperator>(right, left));
+    } else if (op == "contains") {
+      return ToAny(std::make_shared<ContainsOperator>(left, right));
+    }
+
+    SetError(absl::StrCat("Unsupported membership operator: ", op));
+    return nullptr;
   }
 
   antlrcpp::Any visitMemberInvocation(

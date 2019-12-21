@@ -475,6 +475,38 @@ TEST(FhirPathTest, TestIndexer) {
   EXPECT_FALSE(EvaluateBoolExpressionWithStatus("true[(1 | 2)]").ok());
 }
 
+TEST(FhirPathTest, TestContains) {
+  EXPECT_TRUE(EvaluateBoolExpression("true contains true"));
+  EXPECT_TRUE(EvaluateBoolExpression("(false | true) contains true"));
+
+  EXPECT_FALSE(EvaluateBoolExpression("true contains false"));
+  EXPECT_FALSE(EvaluateBoolExpression("(false | true) contains 1"));
+  EXPECT_FALSE(EvaluateBoolExpression("{} contains true"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("({} contains {}) = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("(true contains {}) = {}"));
+
+  EXPECT_FALSE(
+      EvaluateBoolExpressionWithStatus("{} contains (true | false)").ok());
+  EXPECT_FALSE(
+      EvaluateBoolExpressionWithStatus("true contains (true | false)").ok());
+}
+
+TEST(FhirPathTest, TestIn) {
+  EXPECT_TRUE(EvaluateBoolExpression("true in true"));
+  EXPECT_TRUE(EvaluateBoolExpression("true in (false | true)"));
+
+  EXPECT_FALSE(EvaluateBoolExpression("false in true"));
+  EXPECT_FALSE(EvaluateBoolExpression("1 in (false | true)"));
+  EXPECT_FALSE(EvaluateBoolExpression("true in {}"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("({} in {}) = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("({} in true) = {}"));
+
+  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("(true | false) in {}").ok());
+  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("(true | false) in {}").ok());
+}
+
 TEST(FhirPathTest, TestImplies) {
   EXPECT_TRUE(EvaluateBoolExpression("(true implies true) = true"));
   EXPECT_TRUE(EvaluateBoolExpression("(true implies false) = false"));
