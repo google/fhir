@@ -156,6 +156,7 @@ constexpr char kNotFunction[] = "not";
 constexpr char kHasValueFunction[] = "hasValue";
 constexpr char kStartsWithFunction[] = "startsWith";
 constexpr char kEmptyFunction[] = "empty";
+constexpr char kFirstFunction[] = "first";
 
 // Logical field in primitives representing the underlying value.
 constexpr char kPrimitiveValueField[] = "value";
@@ -507,6 +508,35 @@ class EmptyFunction : public ExpressionNode {
 
   const Descriptor* ReturnType() const override {
     return Boolean::descriptor();
+  }
+
+ private:
+  const std::shared_ptr<ExpressionNode> child_;
+};
+
+// Implements the FHIRPath .first() function.
+//
+// Returns the first element of the input collection. Or an empty collection if
+// if the input collection is empty.
+class FirstFunction : public ExpressionNode {
+ public:
+  explicit FirstFunction(const std::shared_ptr<ExpressionNode>& child)
+      : child_(child) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (!child_results.empty()) {
+      results->push_back(child_results[0]);
+    }
+
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return child_->ReturnType();
   }
 
  private:
@@ -1311,8 +1341,19 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    std::string text =
-        ctx->function()->identifier()->IDENTIFIER()->getSymbol()->getText();
+    antlr4::tree::TerminalNode* node =
+        ctx->function()->identifier()->IDENTIFIER();
+    // TODO: After adding support for .first() we see situations where
+    // "node" ends up being null. I believe this is because some expressions
+    // that were previously short-circuited due to lack of support for .first()
+    // are now evaluated. For example, "element.first().path.contains('.').not()
+    // implies element.first().type.empty()" fails without this check.
+    if (node == nullptr) {
+      SetError(absl::StrCat("No identifier attached to function call"));
+      return nullptr;
+    }
+
+    std::string text = node->getSymbol()->getText();
 
     std::vector<std::shared_ptr<ExpressionNode>> evaluated_params;
 
@@ -1457,6 +1498,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return std::make_shared<StartsWithFunction>(child_expression, params);
     } else if (function_name == kEmptyFunction) {
       return std::make_shared<EmptyFunction>(child_expression);
+    } else if (function_name == kFirstFunction) {
+      return std::make_shared<FirstFunction>(child_expression);
     } else {
       // TODO: Implement set of functions for initial use cases.
       SetError(absl::StrCat("The function ", function_name,

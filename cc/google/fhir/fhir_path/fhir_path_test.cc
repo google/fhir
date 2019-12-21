@@ -410,6 +410,12 @@ TEST(FhirPathTest, TestFunctionEmpty) {
   EXPECT_FALSE(EvaluateBoolExpression("(false | true).empty()"));
 }
 
+TEST(FhirPathTest, TestFunctionFirst) {
+  EXPECT_TRUE(EvaluateBoolExpression("{}.first() = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("true.first()"));
+  EXPECT_TRUE(EvaluateExpressionWithStatus("(false | true).first()").ok());
+}
+
 TEST(FhirPathTest, TestUnion) {
   EXPECT_TRUE(EvaluateBoolExpression("({} | {}) = {}"));
 
