@@ -112,6 +112,10 @@ const proto::FhirVersion GetFhirVersion(const ::google::protobuf::Descriptor* de
 
 const proto::FhirVersion GetFhirVersion(const ::google::protobuf::Message& message);
 
+const bool IsContainedResource(const ::google::protobuf::Message& message);
+
+const bool IsContainedResource(const ::google::protobuf::Descriptor* descriptor);
+
 }  // namespace fhir
 }  // namespace google
 

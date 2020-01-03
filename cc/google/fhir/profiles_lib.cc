@@ -16,6 +16,8 @@
 
 #include "google/fhir/profiles_lib.h"
 
+#include <string>
+
 #include "absl/synchronization/mutex.h"
 
 namespace google {
@@ -106,6 +108,34 @@ const unordered_map<std::string, const FieldDescriptor*>& GetExtensionMap(
     }
   }
   return extension_map;
+}
+
+// Returns the corresponding FieldDescriptor on a target message for a given
+// field on a source message, or nullptr if none can be found.
+// Returns a status error if any subprocess encounters a problem.
+// Note that the inability to find a suitable target field does NOT constitute
+// a failure with a status return.
+StatusOr<const FieldDescriptor*> FindTargetField(
+    const Message& source, const Message* target,
+    const FieldDescriptor* source_field) {
+  const Descriptor* target_descriptor = target->GetDescriptor();
+
+  const FieldDescriptor* target_field =
+      target_descriptor->FindFieldByName(source_field->name());
+  if (target_field) {
+    return target_field;
+  }
+  // If the source and target are contained resources, and the fields don't
+  // match up, it can be a profile that exists in one but not the other.
+  // In this case, use the base resource type if available, otherwise fail.
+  if (IsContainedResource(*target) && IsContainedResource(source)) {
+    FHIR_ASSIGN_OR_RETURN(
+        const Descriptor* source_base_type,
+        GetBaseResourceDescriptor(source_field->message_type()));
+    const std::string base_field_name = ToSnakeCase(source_base_type->name());
+    return target_descriptor->FindFieldByName(base_field_name);
+  }
+  return nullptr;
 }
 
 }  // namespace profiles_internal

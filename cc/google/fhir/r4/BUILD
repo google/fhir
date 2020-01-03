@@ -36,6 +36,7 @@ cc_test(
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/r4:uscore_cc_proto",
         "//proto/r4/core:datatypes_cc_proto",
+        "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
         "//proto/r4/core/resources:encounter_cc_proto",
         "//proto/r4/core/resources:observation_cc_proto",
         "//proto/r4/core/resources:patient_cc_proto",

@@ -389,6 +389,8 @@ StatusOr<const R*> GetTypedContainedResource(
       "No resource field found for type ", R::descriptor()->name());
 }
 
+std::string ToSnakeCase(absl::string_view input);
+
 }  // namespace fhir
 }  // namespace google
 

@@ -89,12 +89,12 @@ std::unordered_map<std::string, std::unique_ptr<Message>> BuildRegistry() {
 
 template <typename ContainedResourceLike>
 StatusOr<std::unique_ptr<::google::protobuf::Message>> GetBaseResourceInstanceForVersion(
-    const ::google::protobuf::Message& message) {
+    const ::google::protobuf::Descriptor* descriptor) {
   static const std::unordered_map<std::string, std::unique_ptr<Message>>
       registry = BuildRegistry<ContainedResourceLike>();
 
   FHIR_ASSIGN_OR_RETURN(const std::string& core_url,
-                        GetCoreStructureDefinition(message.GetDescriptor()));
+                        GetCoreStructureDefinition(descriptor));
   auto example_iter = registry.find(core_url);
 
   if (example_iter == registry.end()) {
@@ -104,24 +104,36 @@ StatusOr<std::unique_ptr<::google::protobuf::Message>> GetBaseResourceInstanceFo
   return absl::WrapUnique(example_iter->second->New());
 }
 
-}  // namespace
-
 // TODO: Split into versioned files so we don't pull in both STU3
 // and R4
-StatusOr<std::unique_ptr<::google::protobuf::Message>> GetBaseResourceInstance(
-    const ::google::protobuf::Message& message) {
-  switch (GetFhirVersion(message)) {
+StatusOr<std::unique_ptr<::google::protobuf::Message>>
+GetBaseResourceInstanceFromDescriptor(const Descriptor* descriptor) {
+  switch (GetFhirVersion(descriptor)) {
     case proto::STU3:
       return GetBaseResourceInstanceForVersion<stu3::proto::ContainedResource>(
-          message);
+          descriptor);
     case proto::R4:
       return GetBaseResourceInstanceForVersion<r4::core::ContainedResource>(
-          message);
+          descriptor);
     default:
       return InvalidArgument(
           "Unsupported FHIR Version for core_resource_registry for resource: " +
-          message.GetDescriptor()->full_name());
+          descriptor->full_name());
   }
+}
+
+}  // namespace
+
+StatusOr<std::unique_ptr<::google::protobuf::Message>> GetBaseResourceInstance(
+    const ::google::protobuf::Message& message) {
+  return GetBaseResourceInstanceFromDescriptor(message.GetDescriptor());
+}
+
+StatusOr<const Descriptor*> GetBaseResourceDescriptor(
+    const ::google::protobuf::Descriptor* descriptor) {
+  FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> instance,
+                        GetBaseResourceInstanceFromDescriptor(descriptor));
+  return instance->GetDescriptor();
 }
 
 }  // namespace fhir

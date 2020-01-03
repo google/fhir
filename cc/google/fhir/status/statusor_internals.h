@@ -23,6 +23,8 @@ namespace google {
 namespace fhir {
 namespace internal_statusor {
 
+using ::tensorflow::Status;  // TENSORFLOW_STATUS_OK
+
 class Helper {
  public:
   // Move type-agnostic error handling to the .cc.

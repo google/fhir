@@ -132,5 +132,15 @@ const proto::FhirVersion GetFhirVersion(const ::google::protobuf::Message& messa
   return GetFhirVersion(message.GetDescriptor());
 }
 
+const bool IsContainedResource(const ::google::protobuf::Message& message) {
+  return IsContainedResource(message.GetDescriptor());
+}
+
+const bool IsContainedResource(const ::google::protobuf::Descriptor* descriptor) {
+  // TODO: Add a contained-resource specific annotation and read
+  // that instead.
+  return descriptor->name() == "ContainedResource";
+}
+
 }  // namespace fhir
 }  // namespace google

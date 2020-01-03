@@ -108,6 +108,7 @@ cc_library(
         ":annotations",
         ":codeable_concepts",
         ":codes",
+        ":core_resource_registry",
         ":extensions",
         ":proto_util",
         ":resource_validation",

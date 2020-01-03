@@ -25,6 +25,7 @@
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/r4/core/datatypes.pb.h"
+#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/r4/core/resources/encounter.pb.h"
 #include "proto/r4/core/resources/observation.pb.h"
 #include "proto/r4/core/resources/patient.pb.h"
@@ -42,6 +43,7 @@ using ::google::fhir::r4::core::Patient;
 using ::google::fhir::r4::testing::TestEncounter;
 using ::google::fhir::r4::testing::TestObservation;
 using ::google::fhir::r4::testing::TestObservationLvl2;
+using ::google::fhir::r4::testing::TestPatient;
 using ::google::fhir::testutil::EqualsProto;
 using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
 
@@ -62,11 +64,7 @@ void TestDownConvert(const std::string& filename) {
   const B unprofiled = GetUnprofiled<B>(filename);
   P profiled;
 
-  auto status = ConvertToProfileLenientR4(unprofiled, &profiled);
-  if (!status.ok()) {
-    LOG(ERROR) << status.error_message();
-    ASSERT_TRUE(status.ok());
-  }
+  FHIR_ASSERT_OK(ConvertToProfileLenientR4(unprofiled, &profiled));
   EXPECT_THAT(profiled, EqualsProto(GetProfiled<P>(filename)));
 }
 
@@ -75,11 +73,7 @@ void TestUpConvert(const std::string& filename) {
   const P profiled = GetProfiled<P>(filename);
   B unprofiled;
 
-  auto status = ConvertToProfileLenientR4(profiled, &unprofiled);
-  if (!status.ok()) {
-    LOG(ERROR) << status.error_message();
-    ASSERT_TRUE(status.ok());
-  }
+  FHIR_ASSERT_OK(ConvertToProfileLenientR4(profiled, &unprofiled));
   EXPECT_THAT(unprofiled, EqualsProtoIgnoringReordering(ReadProto<B>(
                               absl::StrCat(filename, ".prototxt"))));
 }
@@ -185,6 +179,28 @@ TEST(ProfilesTest, MissingRequiredFields) {
 TEST(ProfilesTest, ConvertToInlinedCodeEnum) {
   TestPair<Encounter, TestEncounter>(
       "testdata/r4/profiles/encounter_inlinedcodeenum");
+}
+
+TEST(ProfilesTest, ContainedResourcesWithUnmatchedProfileNames) {
+  const TestPatient test_patient = ReadProto<TestPatient>(
+      "testdata/r4/profiles/test_patient-profiled-testpatient.prototxt");
+  r4::testing::Bundle test_bundle;
+  test_bundle.add_entry()->mutable_resource()->mutable_test_patient()->CopyFrom(
+      test_patient);
+
+  r4::core::Bundle core_bundle;
+  FHIR_ASSERT_OK(ConvertToProfileLenientR4(test_bundle, &core_bundle));
+
+  ASSERT_EQ(core_bundle.entry_size(), 1);
+  const auto& entry = core_bundle.entry(0);
+
+  ASSERT_TRUE(entry.resource().has_patient());
+
+  TestPatient test_patient_roundtrip;
+  FHIR_ASSERT_OK(
+      ConvertToProfileR4(entry.resource().patient(), &test_patient_roundtrip));
+  EXPECT_THAT(test_patient_roundtrip,
+              EqualsProtoIgnoringReordering(test_patient));
 }
 
 }  // namespace

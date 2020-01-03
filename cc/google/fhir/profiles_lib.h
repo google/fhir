@@ -26,6 +26,7 @@
 #include "google/fhir/annotations.h"
 #include "google/fhir/codeable_concepts.h"
 #include "google/fhir/codes.h"
+#include "google/fhir/core_resource_registry.h"
 #include "google/fhir/extensions.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/resource_validation.h"
@@ -197,6 +198,10 @@ bool CanHaveSlicing(const FieldDescriptor* field) {
              absl::StrCat(field->containing_type()->full_name(), "."), 0) == 0;
 }
 
+StatusOr<const FieldDescriptor*> FindTargetField(
+    const Message& source, const Message* target,
+    const FieldDescriptor* source_field);
+
 template <typename ExtensionLike,
           typename CodeableConceptLike = FHIR_DATATYPE(ExtensionLike,
                                                        codeable_concept),
@@ -227,8 +232,8 @@ Status CopyToProfile(const Message& source, Message* target) {
     // PerformExtensionSlicing
     if (source_field->name() == "extension") continue;
 
-    const FieldDescriptor* target_field =
-        target_descriptor->FindFieldByName(source_field->name());
+    FHIR_ASSIGN_OR_RETURN(const FieldDescriptor* target_field,
+                          FindTargetField(source, target, source_field));
     if (!target_field) {
       // Since CodeableConcepts are handled via a different code path,
       // the only time that a field on source might not exist on target is if

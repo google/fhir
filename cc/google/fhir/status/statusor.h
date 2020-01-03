@@ -93,8 +93,20 @@ limitations under the License.
   }                                                      \
   lhs = std::move(statusor.ValueOrDie())
 
+#define FHIR_ASSERT_OK_AND_ASSIGN(lhs, rexpr) \
+  {                                           \
+    auto statusor = (rexpr);                  \
+    if (!statusor.ok()) {                     \
+      LOG(ERROR) << statusor.error_message(); \
+      ASSERT_TRUE(statusor.ok());             \
+    }                                         \
+    lhs = std::move(statusor.ValueOrDie())    \
+  }
+
 namespace google {
 namespace fhir {
+
+using ::tensorflow::Status;  // TENSORFLOW_STATUS_OK
 
 #if defined(__clang__)
 // Only clang supports warn_unused_result as a type annotation.
