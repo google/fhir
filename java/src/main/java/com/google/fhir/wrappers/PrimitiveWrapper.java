@@ -65,7 +65,6 @@ public abstract class PrimitiveWrapper<T extends Message> {
   public void validateWrapped() {
     if (hasValue()) {
       validateUsingPattern(getPattern(), printValue());
-      return;
     } else {
       validatePrimitiveWithoutValue();
     }
