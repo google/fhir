@@ -95,9 +95,9 @@ fhir_package(
 fhir_package(
     package_name = "uscore_r4_package",
     definitions = glob([
-        "hl7.fhir.us.core/3.0.0/package/StructureDefinition-*.json",
-    ]) + glob(["hl7.fhir.us.core/3.0.0/package/ValueSet-*.json"]) + glob([
-        "hl7.fhir.us.core/3.0.0/package/CodeSystem-*.json",
+        "hl7.fhir.us.core/3.1.0/package/StructureDefinition-*.json",
+    ]) + glob(["hl7.fhir.us.core/3.1.0/package/ValueSet-*.json"]) + glob([
+        "hl7.fhir.us.core/3.1.0/package/CodeSystem-*.json",
     ]),
     package_info = "uscore_r4_package_info.prototxt",
 )

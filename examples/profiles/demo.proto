@@ -245,12 +245,12 @@ message DemoPatient {
   }
   repeated Link link = 25;
 
-  // Extension
+  // US Core Race Extension
   .google.fhir.r4.uscore.PatientUSCoreRaceExtension race = 26
       [(.google.fhir.proto.fhir_inlined_extension_url) =
            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"];
 
-  // Extension
+  // US Core ethnicity Extension
   .google.fhir.r4.uscore.PatientUSCoreEthnicityExtension ethnicity = 27
       [(.google.fhir.proto.fhir_inlined_extension_url) =
            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"];

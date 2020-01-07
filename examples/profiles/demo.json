@@ -45,7 +45,15 @@
                   "human": "If the resource is contained in another resource, it SHALL NOT contain nested Resources",
                   "expression": "contained.contained.empty()",
                   "xpath": "not(parent::f:contained and f:contained)",
-                  "source": "DomainResource"
+                  "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                },
+                {
+                  "key": "dom-3",
+                  "severity": "error",
+                  "human": "If the resource is contained in another resource, it SHALL be referred to from elsewhere in the resource or SHALL refer to the containing resource",
+                  "expression": "contained.where((('#'+id in (%resource.descendants().reference | %resource.descendants().as(canonical) | %resource.descendants().as(uri) | %resource.descendants().as(url))) or descendants().where(reference = '#').exists() or descendants().where(as(canonical) = '#').exists() or descendants().where(as(canonical) = '#').exists()).not()).trace('unmatched', id).empty()",
+                  "xpath": "not(exists(for $id in f:contained/*/f:id/@value return $contained[not(parent::*/descendant::f:reference/@value=concat('#', $contained/*/id/@value) or descendant::f:reference[@value='#'])]))",
+                  "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
                 },
                 {
                   "key": "dom-4",
@@ -53,15 +61,15 @@
                   "human": "If a resource is contained in another resource, it SHALL NOT have a meta.versionId or a meta.lastUpdated",
                   "expression": "contained.meta.versionId.empty() and contained.meta.lastUpdated.empty()",
                   "xpath": "not(exists(f:contained/*/f:meta/f:versionId)) and not(exists(f:contained/*/f:meta/f:lastUpdated))",
-                  "source": "DomainResource"
+                  "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
                 },
                 {
-                  "key": "dom-3",
+                  "key": "dom-5",
                   "severity": "error",
-                  "human": "If the resource is contained in another resource, it SHALL be referred to from elsewhere in the resource or SHALL refer to the containing resource",
-                  "expression": "contained.where((('#'+id in (%resource.descendants().reference | %resource.descendants().as(canonical) | %resource.descendants().as(uri) | %resource.descendants().as(url))) or descendants().where(reference = '#').exists() or descendants().where(as(canonical) = '#').exists() or descendants().where(as(canonical) = '#').exists()).not()).trace('unmatched', id).empty()",
-                  "xpath": "not(exists(for $contained in f:contained return $contained[not(parent::*/descendant::f:reference/@value=concat('#', $contained/*/id/@value) or descendant::f:reference[@value='#'])]))",
-                  "source": "DomainResource"
+                  "human": "If a resource is contained in another resource, it SHALL NOT have a security label",
+                  "expression": "contained.meta.security.empty()",
+                  "xpath": "not(exists(f:contained/*/f:meta/f:security))",
+                  "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
                 },
                 {
                   "extension": [
@@ -77,17 +85,9 @@
                   "key": "dom-6",
                   "severity": "warning",
                   "human": "A resource should have narrative for robust management",
-                  "expression": "text.div.exists()",
+                  "expression": "text.`div`.exists()",
                   "xpath": "exists(f:text/h:div)",
-                  "source": "DomainResource"
-                },
-                {
-                  "key": "dom-5",
-                  "severity": "error",
-                  "human": "If a resource is contained in another resource, it SHALL NOT have a security label",
-                  "expression": "contained.meta.security.empty()",
-                  "xpath": "not(exists(f:contained/*/f:meta/f:security))",
-                  "source": "DomainResource"
+                  "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
                 }
               ],
               "mustSupport": false,
@@ -127,7 +127,13 @@
               },
               "type": [
                 {
-                  "code": "id"
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                      "valueUrl": "string"
+                    }
+                  ],
+                  "code": "http://hl7.org/fhirpath/System.String"
                 }
               ],
               "isModifier": false,
@@ -148,6 +154,16 @@
               "type": [
                 {
                   "code": "Meta"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -171,6 +187,16 @@
                   "code": "uri"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": true,
               "isModifierReason": "This element is labeled as a modifier because the implicit rules may provide additional knowledge about the resource that modifies it's meaning or interpretation",
               "isSummary": true
@@ -191,6 +217,16 @@
               "type": [
                 {
                   "code": "code"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -239,6 +275,16 @@
                   "code": "Narrative"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -284,7 +330,6 @@
               "id": "Patient.extension",
               "path": "Patient.extension",
               "slicing": {
-                "id": "1",
                 "discriminator": [
                   {
                     "type": "value",
@@ -308,6 +353,24 @@
                   "code": "Extension"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                }
+              ],
               "isModifier": false,
               "isSummary": false
             },
@@ -315,8 +378,8 @@
               "id": "Patient.extension:race",
               "path": "Patient.extension",
               "sliceName": "race",
-              "short": "Extension",
-              "definition": "An Extension",
+              "short": "US Core Race Extension",
+              "definition": "Concepts classifying the person into a named category of humans sharing common history, traits, geographical origin or nationality.  The race codes used to represent these concepts are based upon the [CDC Race and Ethnicity Code Set Version 1.0](http://www.cdc.gov/phin/resources/vocabulary/index.html) which includes over 900 concepts for representing race and ethnicity of which 921 reference race.  The race concepts are grouped by and pre-mapped to the 5 OMB race categories:\n\n   - American Indian or Alaska Native\n   - Asian\n   - Black or African American\n   - Native Hawaiian or Other Pacific Islander\n   - White.",
               "min": 0,
               "max": "1",
               "base": {
@@ -332,9 +395,29 @@
                   ]
                 }
               ],
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                }
+              ],
               "mustSupport": true,
               "isModifier": false,
-              "isSummary": false,
               "mapping": [
                 {
                   "identity": "argonaut-dq-dstu2",
@@ -346,8 +429,8 @@
               "id": "Patient.extension:ethnicity",
               "path": "Patient.extension",
               "sliceName": "ethnicity",
-              "short": "Extension",
-              "definition": "An Extension",
+              "short": "US Core ethnicity Extension",
+              "definition": "Concepts classifying the person into a named category of humans sharing common history, traits, geographical origin or nationality.  The ethnicity codes used to represent these concepts are based upon the [CDC ethnicity and Ethnicity Code Set Version 1.0](http://www.cdc.gov/phin/resources/vocabulary/index.html) which includes over 900 concepts for representing race and ethnicity of which 43 reference ethnicity.  The ethnicity concepts are grouped by and pre-mapped to the 2 OMB ethnicity categories: - Hispanic or Latino - Not Hispanic or Latino.",
               "min": 0,
               "max": "1",
               "base": {
@@ -363,9 +446,29 @@
                   ]
                 }
               ],
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                }
+              ],
               "mustSupport": true,
               "isModifier": false,
-              "isSummary": false,
               "mapping": [
                 {
                   "identity": "argonaut-dq-dstu2",
@@ -378,7 +481,8 @@
               "path": "Patient.extension",
               "sliceName": "birthsex",
               "short": "Extension",
-              "definition": "An Extension",
+              "definition": "A code classifying the person's sex assigned at birth  as specified by the [Office of the National Coordinator for Health IT (ONC)](https://www.healthit.gov/newsroom/about-onc).",
+              "comment": "The codes required are intended to present birth sex (i.e., the sex recorded on the patient’s birth certificate) and not gender identity or reassigned sex.",
               "min": 0,
               "max": "1",
               "base": {
@@ -394,10 +498,38 @@
                   ]
                 }
               ],
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                }
+              ],
               "mustSupport": true,
               "isModifier": false,
-              "isSummary": false,
               "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "player[classCode=PSN|ANM and determinerCode=INSTANCE]/administrativeGender"
+                },
+                {
+                  "identity": "iso11179",
+                  "map": ".patient.administrativeGenderCode"
+                },
                 {
                   "identity": "argonaut-dq-dstu2",
                   "map": "Patient.extension"
@@ -427,6 +559,24 @@
                   "code": "Extension"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                }
+              ],
               "isModifier": true,
               "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the resource that contains them",
               "isSummary": false,
@@ -453,6 +603,16 @@
               "type": [
                 {
                   "code": "Identifier"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "mustSupport": true,
@@ -498,7 +658,13 @@
               },
               "type": [
                 {
-                  "code": "string"
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                      "valueUrl": "string"
+                    }
+                  ],
+                  "code": "http://hl7.org/fhirpath/System.String"
                 }
               ],
               "isModifier": false,
@@ -542,6 +708,24 @@
                   "code": "Extension"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                }
+              ],
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -570,6 +754,16 @@
                   "code": "code"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": true,
               "isModifierReason": "This is labeled as \"Is Modifier\" because applications should not mistake a temporary id for a permanent one.",
               "isSummary": true,
@@ -582,7 +776,7 @@
                 ],
                 "strength": "required",
                 "description": "Identifies the purpose for this identifier, if known .",
-                "valueSet": "http://hl7.org/fhir/ValueSet/identifier-use|4.0.0"
+                "valueSet": "http://hl7.org/fhir/ValueSet/identifier-use|4.0.1"
               },
               "mapping": [
                 {
@@ -612,6 +806,16 @@
               "type": [
                 {
                   "code": "CodeableConcept"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -667,6 +871,16 @@
                   "valueUri": "http://www.acme.com/identifiers/patient"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "mustSupport": true,
               "isModifier": false,
               "isSummary": true,
@@ -713,6 +927,16 @@
                   "valueString": "123456"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "mustSupport": true,
               "isModifier": false,
               "isSummary": true,
@@ -750,6 +974,16 @@
               "type": [
                 {
                   "code": "Period"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -790,6 +1024,16 @@
                   ]
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": false,
               "isSummary": true,
               "mapping": [
@@ -827,6 +1071,16 @@
                 }
               ],
               "meaningWhenMissing": "This resource is generally assumed to be active if no value is provided for the active element",
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": true,
               "isModifierReason": "This element is labelled as a modifier because it is a status element that can indicate that a record should not be treated as valid",
               "isSummary": true,
@@ -866,9 +1120,17 @@
               ],
               "constraint": [
                 {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
                   "key": "us-core-8",
                   "severity": "error",
-                  "human": "Patient.name.given  or Patient.name.family or both SHALL be present",
+                  "human": "Patient.name.given or Patient.name.family or both SHALL be present",
                   "expression": "family.exists() or given.exists()",
                   "xpath": "f:given or f:family"
                 }
@@ -912,7 +1174,13 @@
               },
               "type": [
                 {
-                  "code": "string"
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                      "valueUrl": "string"
+                    }
+                  ],
+                  "code": "http://hl7.org/fhirpath/System.String"
                 }
               ],
               "isModifier": false,
@@ -956,6 +1224,24 @@
                   "code": "Extension"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                }
+              ],
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -984,6 +1270,16 @@
                   "code": "code"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": true,
               "isModifierReason": "This is labeled as \"Is Modifier\" because applications should not mistake a temporary or old name etc.for a current/permanent one",
               "isSummary": true,
@@ -996,7 +1292,7 @@
                 ],
                 "strength": "required",
                 "description": "The use of a human name.",
-                "valueSet": "http://hl7.org/fhir/ValueSet/name-use|4.0.0"
+                "valueSet": "http://hl7.org/fhir/ValueSet/name-use|4.0.1"
               },
               "mapping": [
                 {
@@ -1032,6 +1328,16 @@
                   "code": "string"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": false,
               "isSummary": true,
               "mapping": [
@@ -1064,6 +1370,19 @@
               "type": [
                 {
                   "code": "string"
+                }
+              ],
+              "condition": [
+                "us-core-8"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "mustSupport": true,
@@ -1111,6 +1430,19 @@
                 }
               ],
               "orderMeaning": "Given Names appear in the correct order for presenting the name",
+              "condition": [
+                "us-core-8"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "mustSupport": true,
               "isModifier": false,
               "isSummary": true,
@@ -1151,6 +1483,16 @@
                 }
               ],
               "orderMeaning": "Prefixes appear in the correct order for presenting the name",
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": false,
               "isSummary": true,
               "mapping": [
@@ -1186,6 +1528,16 @@
                 }
               ],
               "orderMeaning": "Suffixes appear in the correct order for presenting the name",
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": false,
               "isSummary": true,
               "mapping": [
@@ -1215,6 +1567,16 @@
               "type": [
                 {
                   "code": "Period"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -1253,6 +1615,16 @@
                   "code": "ContactPoint"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "mustSupport": true,
               "isModifier": false,
               "isSummary": true,
@@ -1271,7 +1643,7 @@
                 },
                 {
                   "identity": "argonaut-dq-dstu2",
-                  "map": "Patient.gender"
+                  "map": "NA"
                 }
               ]
             },
@@ -1292,7 +1664,13 @@
               },
               "type": [
                 {
-                  "code": "string"
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                      "valueUrl": "string"
+                    }
+                  ],
+                  "code": "http://hl7.org/fhirpath/System.String"
                 }
               ],
               "isModifier": false,
@@ -1336,6 +1714,24 @@
                   "code": "Extension"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                }
+              ],
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -1365,6 +1761,16 @@
               "condition": [
                 "cpt-2"
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "mustSupport": true,
               "isModifier": false,
               "isSummary": true,
@@ -1388,7 +1794,7 @@
                 },
                 {
                   "identity": "argonaut-dq-dstu2",
-                  "map": "Patient.gender"
+                  "map": "NA"
                 }
               ]
             },
@@ -1411,6 +1817,16 @@
                   "code": "string"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "mustSupport": true,
               "isModifier": false,
               "isSummary": true,
@@ -1429,7 +1845,7 @@
                 },
                 {
                   "identity": "argonaut-dq-dstu2",
-                  "map": "Patient.gender"
+                  "map": "NA"
                 }
               ]
             },
@@ -1452,19 +1868,23 @@
                   "code": "code"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
+              "mustSupport": true,
               "isModifier": true,
               "isModifierReason": "This is labeled as \"Is Modifier\" because applications should not mistake a temporary or old contact etc.for a current/permanent one",
               "isSummary": true,
               "binding": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-                    "valueString": "ContactPointUse"
-                  }
-                ],
                 "strength": "required",
-                "description": "Use of contact point.",
-                "valueSet": "http://hl7.org/fhir/ValueSet/contact-point-use|4.0.0"
+                "valueSet": "http://hl7.org/fhir/ValueSet/contact-point-use"
               },
               "mapping": [
                 {
@@ -1478,6 +1898,10 @@
                 {
                   "identity": "servd",
                   "map": "./ContactPointPurpose"
+                },
+                {
+                  "identity": "argonaut-dq-dstu2",
+                  "map": "NA"
                 }
               ]
             },
@@ -1497,6 +1921,16 @@
               "type": [
                 {
                   "code": "positiveInt"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -1527,6 +1961,16 @@
               "type": [
                 {
                   "code": "Period"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -1563,6 +2007,16 @@
               "type": [
                 {
                   "code": "code"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "mustSupport": true,
@@ -1608,6 +2062,16 @@
               "type": [
                 {
                   "code": "date"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "mustSupport": true,
@@ -1658,6 +2122,16 @@
                   "code": "dateTime"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": true,
               "isModifierReason": "This element is labeled as a modifier because once a patient is marked as deceased, the actions that are appropriate to perform on the patient may be significantly different.",
               "isSummary": true,
@@ -1693,6 +2167,16 @@
               "type": [
                 {
                   "code": "Address"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "mustSupport": true,
@@ -1734,7 +2218,13 @@
               },
               "type": [
                 {
-                  "code": "string"
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                      "valueUrl": "string"
+                    }
+                  ],
+                  "code": "http://hl7.org/fhirpath/System.String"
                 }
               ],
               "isModifier": false,
@@ -1778,6 +2268,24 @@
                   "code": "Extension"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                }
+              ],
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -1812,6 +2320,16 @@
                   "valueCode": "home"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": true,
               "isModifierReason": "This is labeled as \"Is Modifier\" because applications should not mistake a temporary or old address etc.for a current/permanent one",
               "isSummary": true,
@@ -1824,7 +2342,7 @@
                 ],
                 "strength": "required",
                 "description": "The use of an address.",
-                "valueSet": "http://hl7.org/fhir/ValueSet/address-use|4.0.0"
+                "valueSet": "http://hl7.org/fhir/ValueSet/address-use|4.0.1"
               },
               "mapping": [
                 {
@@ -1865,6 +2383,16 @@
                   "valueCode": "both"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": false,
               "isSummary": true,
               "binding": {
@@ -1876,7 +2404,7 @@
                 ],
                 "strength": "required",
                 "description": "The type of an address (physical / postal).",
-                "valueSet": "http://hl7.org/fhir/ValueSet/address-type|4.0.0"
+                "valueSet": "http://hl7.org/fhir/ValueSet/address-type|4.0.1"
               },
               "mapping": [
                 {
@@ -1916,6 +2444,16 @@
                 {
                   "label": "General",
                   "valueString": "137 Nowhere Street, Erewhon 9132"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -1959,6 +2497,16 @@
                   "valueString": "137 Nowhere Street"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "mustSupport": true,
               "isModifier": false,
               "isSummary": true,
@@ -1981,7 +2529,7 @@
                 },
                 {
                   "identity": "argonaut-dq-dstu2",
-                  "map": "Patient.birthDate"
+                  "map": "NA"
                 }
               ]
             },
@@ -2011,6 +2559,16 @@
                   "valueString": "Erewhon"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "mustSupport": true,
               "isModifier": false,
               "isSummary": true,
@@ -2033,7 +2591,7 @@
                 },
                 {
                   "identity": "argonaut-dq-dstu2",
-                  "map": "Patient.birthDate"
+                  "map": "NA"
                 }
               ]
             },
@@ -2062,6 +2620,16 @@
                 {
                   "label": "General",
                   "valueString": "Madison"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -2098,6 +2666,16 @@
                   "code": "string"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "mustSupport": true,
               "isModifier": false,
               "isSummary": true,
@@ -2125,7 +2703,7 @@
                 },
                 {
                   "identity": "argonaut-dq-dstu2",
-                  "map": "Patient.birthDate"
+                  "map": "NA"
                 }
               ]
             },
@@ -2156,6 +2734,16 @@
                   "valueString": "9132"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "mustSupport": true,
               "isModifier": false,
               "isSummary": true,
@@ -2178,7 +2766,7 @@
                 },
                 {
                   "identity": "argonaut-dq-dstu2",
-                  "map": "Patient.birthDate"
+                  "map": "NA"
                 }
               ]
             },
@@ -2198,6 +2786,16 @@
               "type": [
                 {
                   "code": "string"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -2243,11 +2841,22 @@
                 {
                   "label": "General",
                   "valuePeriod": {
-                    "start": "2010-03-23T00:00:00+00:00",
-                    "end": "2010-07-01T00:00:00+00:00"
+                    "start": "2010-03-23T00:00:00+11:00",
+                    "end": "2010-07-01T00:00:00+10:00"
                   }
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
+              "mustSupport": true,
               "isModifier": false,
               "isSummary": true,
               "mapping": [
@@ -2262,6 +2871,10 @@
                 {
                   "identity": "servd",
                   "map": "./StartDate and ./EndDate"
+                },
+                {
+                  "identity": "argonaut-dq-dstu2",
+                  "map": "NA"
                 }
               ]
             },
@@ -2281,6 +2894,16 @@
               "type": [
                 {
                   "code": "CodeableConcept"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -2337,6 +2960,16 @@
                   "code": "integer"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -2371,6 +3004,16 @@
               "type": [
                 {
                   "code": "Attachment"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -2422,7 +3065,7 @@
                   "human": "All FHIR elements must have a @value or children",
                   "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
-                  "source": "Element"
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 },
                 {
                   "key": "pat-1",
@@ -2462,7 +3105,13 @@
               },
               "type": [
                 {
-                  "code": "string"
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                      "valueUrl": "string"
+                    }
+                  ],
+                  "code": "http://hl7.org/fhirpath/System.String"
                 }
               ],
               "isModifier": false,
@@ -2494,6 +3143,24 @@
               "type": [
                 {
                   "code": "Extension"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
                 }
               ],
               "isModifier": false,
@@ -2529,6 +3196,24 @@
                   "code": "Extension"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                }
+              ],
               "isModifier": true,
               "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
               "isSummary": true,
@@ -2555,6 +3240,16 @@
               "type": [
                 {
                   "code": "CodeableConcept"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -2603,6 +3298,16 @@
                   "code": "HumanName"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -2637,6 +3342,16 @@
               "type": [
                 {
                   "code": "ContactPoint"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -2674,6 +3389,16 @@
                   "code": "Address"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -2709,6 +3434,16 @@
                   "code": "code"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": false,
               "isSummary": false,
               "binding": {
@@ -2724,7 +3459,7 @@
                 ],
                 "strength": "required",
                 "description": "The gender of a person used for administrative purposes.",
-                "valueSet": "http://hl7.org/fhir/ValueSet/administrative-gender|4.0.0"
+                "valueSet": "http://hl7.org/fhir/ValueSet/administrative-gender|4.0.1"
               },
               "mapping": [
                 {
@@ -2765,6 +3500,16 @@
               "condition": [
                 "pat-1"
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -2797,6 +3542,16 @@
               "type": [
                 {
                   "code": "Period"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -2838,7 +3593,7 @@
                   "human": "All FHIR elements must have a @value or children",
                   "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
-                  "source": "Element"
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "mustSupport": true,
@@ -2876,7 +3631,13 @@
               },
               "type": [
                 {
-                  "code": "string"
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                      "valueUrl": "string"
+                    }
+                  ],
+                  "code": "http://hl7.org/fhirpath/System.String"
                 }
               ],
               "isModifier": false,
@@ -2908,6 +3669,24 @@
               "type": [
                 {
                   "code": "Extension"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
                 }
               ],
               "isModifier": false,
@@ -2943,6 +3722,24 @@
                   "code": "Extension"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                }
+              ],
               "isModifier": true,
               "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
               "isSummary": true,
@@ -2972,16 +3769,20 @@
                   "code": "CodeableConcept"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "mustSupport": true,
               "isModifier": false,
               "isSummary": false,
               "binding": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet",
-                    "valueCanonical": "http://hl7.org/fhir/us/core/ValueSet/simple-language"
-                  }
-                ],
                 "strength": "extensible",
                 "valueSet": "http://hl7.org/fhir/us/core/ValueSet/simple-language"
               },
@@ -3021,6 +3822,16 @@
               "type": [
                 {
                   "code": "boolean"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -3066,6 +3877,16 @@
                   ]
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -3103,6 +3924,16 @@
                   "targetProfile": [
                     "http://hl7.org/fhir/StructureDefinition/Organization"
                   ]
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": false,
@@ -3144,7 +3975,7 @@
                   "human": "All FHIR elements must have a @value or children",
                   "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
-                  "source": "Element"
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
                 }
               ],
               "isModifier": true,
@@ -3178,7 +4009,13 @@
               },
               "type": [
                 {
-                  "code": "string"
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                      "valueUrl": "string"
+                    }
+                  ],
+                  "code": "http://hl7.org/fhirpath/System.String"
                 }
               ],
               "isModifier": false,
@@ -3212,6 +4049,24 @@
                   "code": "Extension"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                }
+              ],
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -3243,6 +4098,24 @@
               "type": [
                 {
                   "code": "Extension"
+                }
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
                 }
               ],
               "isModifier": true,
@@ -3283,6 +4156,16 @@
                   ]
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": false,
               "isSummary": true,
               "mapping": [
@@ -3317,6 +4200,16 @@
                   "code": "code"
                 }
               ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                }
+              ],
               "isModifier": false,
               "isSummary": true,
               "binding": {
@@ -3328,7 +4221,7 @@
                 ],
                 "strength": "required",
                 "description": "The type of link between this patient resource and another patient resource.",
-                "valueSet": "http://hl7.org/fhir/ValueSet/link-type|4.0.0"
+                "valueSet": "http://hl7.org/fhir/ValueSet/link-type|4.0.1"
               },
               "mapping": [
                 {
@@ -3457,6 +4350,8 @@
               "id": "Patient.extension:race",
               "path": "Patient.extension",
               "sliceName": "race",
+              "short": "US Core Race Extension",
+              "definition": "Concepts classifying the person into a named category of humans sharing common history, traits, geographical origin or nationality.  The race codes used to represent these concepts are based upon the [CDC Race and Ethnicity Code Set Version 1.0](http://www.cdc.gov/phin/resources/vocabulary/index.html) which includes over 900 concepts for representing race and ethnicity of which 921 reference race.  The race concepts are grouped by and pre-mapped to the 5 OMB race categories:\n\n   - American Indian or Alaska Native\n   - Asian\n   - Black or African American\n   - Native Hawaiian or Other Pacific Islander\n   - White.",
               "max": "1",
               "type": [
                 {
@@ -3464,6 +4359,19 @@
                   "profile": [
                     "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"
                   ]
+                }
+              ],
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
                 }
               ],
               "mustSupport": true,
@@ -3478,6 +4386,8 @@
               "id": "Patient.extension:ethnicity",
               "path": "Patient.extension",
               "sliceName": "ethnicity",
+              "short": "US Core ethnicity Extension",
+              "definition": "Concepts classifying the person into a named category of humans sharing common history, traits, geographical origin or nationality.  The ethnicity codes used to represent these concepts are based upon the [CDC ethnicity and Ethnicity Code Set Version 1.0](http://www.cdc.gov/phin/resources/vocabulary/index.html) which includes over 900 concepts for representing race and ethnicity of which 43 reference ethnicity.  The ethnicity concepts are grouped by and pre-mapped to the 2 OMB ethnicity categories: - Hispanic or Latino - Not Hispanic or Latino.",
               "max": "1",
               "type": [
                 {
@@ -3485,6 +4395,19 @@
                   "profile": [
                     "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"
                   ]
+                }
+              ],
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
                 }
               ],
               "mustSupport": true,
@@ -3499,6 +4422,8 @@
               "id": "Patient.extension:birthsex",
               "path": "Patient.extension",
               "sliceName": "birthsex",
+              "definition": "A code classifying the person's sex assigned at birth  as specified by the [Office of the National Coordinator for Health IT (ONC)](https://www.healthit.gov/newsroom/about-onc).",
+              "comment": "The codes required are intended to present birth sex (i.e., the sex recorded on the patient’s birth certificate) and not gender identity or reassigned sex.",
               "max": "1",
               "type": [
                 {
@@ -3508,8 +4433,29 @@
                   ]
                 }
               ],
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                }
+              ],
               "mustSupport": true,
               "mapping": [
+                {
+                  "identity": "rim",
+                  "map": "player[classCode=PSN|ANM and determinerCode=INSTANCE]/administrativeGender"
+                },
+                {
+                  "identity": "iso11179",
+                  "map": ".patient.administrativeGenderCode"
+                },
                 {
                   "identity": "argonaut-dq-dstu2",
                   "map": "Patient.extension"
@@ -3545,14 +4491,6 @@
                 "ele-1"
               ],
               "constraint": [
-                {
-                  "key": "ele-1",
-                  "severity": "error",
-                  "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() or (children().count() > id.count())",
-                  "xpath": "@value|f:*|h:div",
-                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
-                },
                 {
                   "key": "ext-1",
                   "severity": "error",
@@ -3592,14 +4530,6 @@
                 "ele-1"
               ],
               "constraint": [
-                {
-                  "key": "ele-1",
-                  "severity": "error",
-                  "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() or (children().count() > id.count())",
-                  "xpath": "@value|f:*|h:div",
-                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
-                },
                 {
                   "key": "ext-1",
                   "severity": "error",
