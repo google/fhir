@@ -1173,8 +1173,6 @@ public class ProtoGenerator {
 
   /** Extract the type of a container field, possibly by reference. */
   private String getContainerType(ElementDefinition element, List<ElementDefinition> elementList) {
-    String id = element.getId().getValue();
-
     if (element.hasContentReference()) {
       // Find the named element which was referenced. We'll use the type of that element.
       // Strip the first character from the content reference since it is a '#'
@@ -1653,7 +1651,7 @@ public class ProtoGenerator {
           .setExtension(Annotations.fhirPathMessageConstraint, expressions);
     }
 
-    OneofDescriptorProto.Builder oneof = choiceType.addOneofDeclBuilder().setName("choice");
+    choiceType.addOneofDeclBuilder().setName("choice");
 
     int nextTag = 1;
     // Group types.
@@ -2002,7 +2000,7 @@ public class ProtoGenerator {
     // the "current" package (i.e., the package used in the constructor).  So, in the case where
     // getQualifiedFieldType returns a non-core package, replace it with the package this structure
     // definition belongs in.
-    if (valueType.packageName != fhirVersion.coreProtoPackage) {
+    if (!valueType.packageName.equals(fhirVersion.coreProtoPackage)) {
       valueType = new QualifiedType(valueType.type, protoPackage);
     }
 
