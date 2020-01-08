@@ -7,7 +7,7 @@
         "id": "Bundle",
         "url": "http://test/url/base/Bundle",
         "name": "Bundle",
-        "date": "2019-07-03",
+        "date": "2020-01-06",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -19,7 +19,6 @@
             ]
           }
         ],
-        "description": "",
         "fhirVersion": "3.0.1",
         "kind": "resource",
         "abstract": false,
@@ -1160,7 +1159,7 @@
         "id": "TestPatient",
         "url": "http://test/url/base/TestPatient",
         "name": "TestPatient",
-        "date": "2019-07-03",
+        "date": "2020-01-06",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -2984,7 +2983,6 @@
               "sliceName": "decExt",
               "short": "Decimal Extension",
               "definition": "Decimal Extension",
-              "comment": "",
               "min": 1,
               "max": "1",
               "type": [
@@ -3027,7 +3025,7 @@
         "id": "TestObservation",
         "url": "http://test/url/base/TestObservation",
         "name": "TestObservation",
-        "date": "2019-07-03",
+        "date": "2020-01-06",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -5027,8 +5025,8 @@
               "id": "Observation.extension:myComplexExtension",
               "path": "Observation.extension",
               "sliceName": "myComplexExtension",
-              "short": "",
-              "definition": "",
+              "short": "Optional Extensions Element",
+              "definition": "Optional Extension Element - found in all resources.",
               "min": 0,
               "max": "1",
               "base": {
@@ -5070,8 +5068,8 @@
               "id": "Observation.component.extension:onNested",
               "path": "Observation.component.extension",
               "sliceName": "onNested",
-              "short": "",
-              "definition": "",
+              "short": "Optional Extensions Element",
+              "definition": "Optional Extension Element - found in all resources.",
               "min": 0,
               "max": "1",
               "base": {
@@ -6385,8 +6383,8 @@
               "id": "Observation.category.coding:catA",
               "path": "Observation.category.coding",
               "sliceName": "catA",
-              "short": "",
-              "definition": "",
+              "short": "A reference to a code defined by a terminology system",
+              "definition": "A reference to a code defined by a terminology system.",
               "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
               "min": 0,
               "max": "*",
@@ -6725,8 +6723,8 @@
               "id": "Observation.component.interpretation.coding:onNestedConcept",
               "path": "Observation.component.interpretation.coding",
               "sliceName": "onNestedConcept",
-              "short": "",
-              "definition": "",
+              "short": "A reference to a code defined by a terminology system",
+              "definition": "A reference to a code defined by a terminology system.",
               "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
               "min": 0,
               "max": "1",
@@ -7024,9 +7022,8 @@
               "id": "Observation.extension:myComplexExtension",
               "path": "Observation.extension",
               "sliceName": "myComplexExtension",
-              "short": "",
-              "definition": "",
-              "comment": "",
+              "short": "Optional Extensions Element",
+              "definition": "Optional Extension Element - found in all resources.",
               "max": "1",
               "type": [
                 {
@@ -7062,9 +7059,8 @@
               "id": "Observation.component.extension:onNested",
               "path": "Observation.component.extension",
               "sliceName": "onNested",
-              "short": "",
-              "definition": "",
-              "comment": "",
+              "short": "Optional Extensions Element",
+              "definition": "Optional Extension Element - found in all resources.",
               "max": "1",
               "type": [
                 {
@@ -7292,9 +7288,7 @@
             {
               "id": "Observation.category.coding:catA",
               "path": "Observation.category.coding",
-              "sliceName": "catA",
-              "short": "",
-              "definition": ""
+              "sliceName": "catA"
             },
             {
               "id": "Observation.category.coding:catA.id",
@@ -7347,8 +7341,6 @@
               "id": "Observation.component.interpretation.coding:onNestedConcept",
               "path": "Observation.component.interpretation.coding",
               "sliceName": "onNestedConcept",
-              "short": "",
-              "definition": "",
               "max": "1"
             },
             {
@@ -7394,7 +7386,7 @@
         "id": "TestObservationLvl2",
         "url": "http://test/url/base/TestObservationLvl2",
         "name": "TestObservationLvl2",
-        "date": "2019-07-03",
+        "date": "2020-01-06",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -7406,7 +7398,6 @@
             ]
           }
         ],
-        "description": "",
         "fhirVersion": "3.0.1",
         "kind": "resource",
         "abstract": false,
@@ -9394,8 +9385,8 @@
               "id": "Observation.extension:myComplexExtension",
               "path": "Observation.extension",
               "sliceName": "myComplexExtension",
-              "short": "",
-              "definition": "",
+              "short": "Optional Extensions Element",
+              "definition": "Optional Extension Element - found in all resources.",
               "min": 0,
               "max": "1",
               "base": {
@@ -9437,8 +9428,8 @@
               "id": "Observation.component.extension:onNested",
               "path": "Observation.component.extension",
               "sliceName": "onNested",
-              "short": "",
-              "definition": "",
+              "short": "Optional Extensions Element",
+              "definition": "Optional Extension Element - found in all resources.",
               "min": 0,
               "max": "1",
               "base": {
@@ -10752,8 +10743,8 @@
               "id": "Observation.category.coding:catA",
               "path": "Observation.category.coding",
               "sliceName": "catA",
-              "short": "",
-              "definition": "",
+              "short": "A reference to a code defined by a terminology system",
+              "definition": "A reference to a code defined by a terminology system.",
               "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
               "min": 0,
               "max": "*",
@@ -11092,8 +11083,8 @@
               "id": "Observation.component.interpretation.coding:onNestedConcept",
               "path": "Observation.component.interpretation.coding",
               "sliceName": "onNestedConcept",
-              "short": "",
-              "definition": "",
+              "short": "A reference to a code defined by a terminology system",
+              "definition": "A reference to a code defined by a terminology system.",
               "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
               "min": 0,
               "max": "1",
@@ -11387,8 +11378,8 @@
               "id": "Observation.extension:newExt",
               "path": "Observation.extension",
               "sliceName": "newExt",
-              "short": "",
-              "definition": "",
+              "short": "Optional Extensions Element",
+              "definition": "Optional Extension Element - found in all resources.",
               "min": 0,
               "max": "1",
               "base": {
@@ -11475,8 +11466,8 @@
               "id": "Observation.code.coding:newCodeOnProfiled",
               "path": "Observation.code.coding",
               "sliceName": "newCodeOnProfiled",
-              "short": "",
-              "definition": "",
+              "short": "A reference to a code defined by a terminology system",
+              "definition": "A reference to a code defined by a terminology system.",
               "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
               "min": 0,
               "max": "1",
@@ -11774,9 +11765,8 @@
               "id": "Observation.extension:myComplexExtension",
               "path": "Observation.extension",
               "sliceName": "myComplexExtension",
-              "short": "",
-              "definition": "",
-              "comment": "",
+              "short": "Optional Extensions Element",
+              "definition": "Optional Extension Element - found in all resources.",
               "max": "1",
               "type": [
                 {
@@ -11812,9 +11802,8 @@
               "id": "Observation.component.extension:onNested",
               "path": "Observation.component.extension",
               "sliceName": "onNested",
-              "short": "",
-              "definition": "",
-              "comment": "",
+              "short": "Optional Extensions Element",
+              "definition": "Optional Extension Element - found in all resources.",
               "max": "1",
               "type": [
                 {
@@ -11853,7 +11842,6 @@
               "short": "SysA Code",
               "definition": "SysA Code",
               "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
-              "requirements": "",
               "max": "1",
               "condition": [
                 "ele-1"
@@ -11928,7 +11916,6 @@
               "short": "SysB Code",
               "definition": "SysB Code",
               "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
-              "requirements": "",
               "condition": [
                 "ele-1"
               ],
@@ -12002,7 +11989,6 @@
               "short": "SysC Code",
               "definition": "SysC Code",
               "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
-              "requirements": "",
               "max": "1",
               "condition": [
                 "ele-1"
@@ -12078,7 +12064,6 @@
               "short": "SysD Code",
               "definition": "SysD Code",
               "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
-              "requirements": "",
               "max": "1",
               "condition": [
                 "ele-1"
@@ -12151,10 +12136,8 @@
               "id": "Observation.category.coding:catA",
               "path": "Observation.category.coding",
               "sliceName": "catA",
-              "short": "",
-              "definition": "",
+              "short": "A reference to a code defined by a terminology system",
               "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
-              "requirements": "",
               "condition": [
                 "ele-1"
               ],
@@ -12225,10 +12208,8 @@
               "id": "Observation.component.interpretation.coding:onNestedConcept",
               "path": "Observation.component.interpretation.coding",
               "sliceName": "onNestedConcept",
-              "short": "",
-              "definition": "",
+              "short": "A reference to a code defined by a terminology system",
               "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
-              "requirements": "",
               "max": "1",
               "condition": [
                 "ele-1"
@@ -12300,9 +12281,8 @@
               "id": "Observation.extension:newExt",
               "path": "Observation.extension",
               "sliceName": "newExt",
-              "short": "",
-              "definition": "",
-              "comment": "",
+              "short": "Optional Extensions Element",
+              "definition": "Optional Extension Element - found in all resources.",
               "max": "1",
               "type": [
                 {
@@ -12338,10 +12318,8 @@
               "id": "Observation.code.coding:newCodeOnProfiled",
               "path": "Observation.code.coding",
               "sliceName": "newCodeOnProfiled",
-              "short": "",
-              "definition": "",
+              "short": "A reference to a code defined by a terminology system",
               "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
-              "requirements": "",
               "max": "1",
               "condition": [
                 "ele-1"

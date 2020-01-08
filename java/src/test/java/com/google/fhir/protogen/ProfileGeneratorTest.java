@@ -30,8 +30,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -43,38 +44,28 @@ public final class ProfileGeneratorTest {
   private final JsonFormat.Parser jsonParser = JsonFormat.getEarlyVersionGeneratorParser();
   private final JsonFormat.Printer jsonPrinter = JsonFormat.getPrinter();
 
-  private ProfileGenerator generator;
-  private List<StructureDefinition> knownTypes;
-  private final LocalDate creationDate = LocalDate.of(2018, 9, 22);
-
-  private static final String TESTDATA_DIR = "testdata/stu3/profilegenerator/";
-  private static final boolean GENERATE_GOLDEN = false;
+  private static final String STU3_TESTDATA_DIR = "testdata/stu3/profiles/";
+  private static final String R4_TESTDATA_DIR = "testdata/r4/profiles/";
 
   // TODO: consolidate these proto loading functions across test files.
   private static Extensions loadExtensionsProto(String filename) throws IOException {
     Extensions.Builder extensionsBuilder = Extensions.newBuilder();
     TextFormat.merge(
-        Files.asCharSource(new File(TESTDATA_DIR + filename + ".prototxt"), StandardCharsets.UTF_8)
-            .read(),
-        extensionsBuilder);
+        Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read(), extensionsBuilder);
     return extensionsBuilder.build();
   }
 
   private static Profiles loadProfilesProto(String filename) throws IOException {
     Profiles.Builder profilesBuilder = Profiles.newBuilder();
     TextFormat.merge(
-        Files.asCharSource(new File(TESTDATA_DIR + filename + ".prototxt"), StandardCharsets.UTF_8)
-            .read(),
-        profilesBuilder);
+        Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read(), profilesBuilder);
     return profilesBuilder.build();
   }
 
   private static PackageInfo loadPackageInfoProto(String filename) throws IOException {
     PackageInfo.Builder projectInfo = PackageInfo.newBuilder();
     TextFormat.merge(
-        Files.asCharSource(new File(TESTDATA_DIR + filename + ".prototxt"), StandardCharsets.UTF_8)
-            .read(),
-        projectInfo);
+        Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read(), projectInfo);
     return projectInfo.build();
   }
 
@@ -86,67 +77,103 @@ public final class ProfileGeneratorTest {
     return structDefBuilder.build();
   }
 
-  private String loadTestStructureDefinitionJson(String filename) throws IOException {
-    return Files.asCharSource(new File(TESTDATA_DIR + filename), StandardCharsets.UTF_8).read();
+  private static String loadGoldenJson(String filename) throws IOException {
+    return Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read();
   }
 
-  private StructureDefinition loadFhirStructureDefinition(String filename) throws IOException {
+  private StructureDefinition loadStu3FhirStructureDefinition(String filename) throws IOException {
     return loadStructureDefinition("spec/hl7.fhir.core/3.0.1/package/" + filename);
   }
 
-  @Before
-  public void setUp() throws IOException {
-    knownTypes = new ArrayList<>();
-    knownTypes.add(loadFhirStructureDefinition("StructureDefinition-Coding.json"));
-    knownTypes.add(loadFhirStructureDefinition("StructureDefinition-CodeableConcept.json"));
-    knownTypes.add(loadFhirStructureDefinition("StructureDefinition-Element.json"));
-    knownTypes.add(loadFhirStructureDefinition("StructureDefinition-Extension.json"));
-    knownTypes.add(loadFhirStructureDefinition("StructureDefinition-Observation.json"));
-    knownTypes.add(loadFhirStructureDefinition("StructureDefinition-Patient.json"));
-    generator =
-        new ProfileGenerator(
-            loadPackageInfoProto("test_package_info"),
-            loadProfilesProto("profiles"),
-            loadExtensionsProto("extensions"),
-            knownTypes,
-            creationDate);
+  private StructureDefinition loadR4FhirStructureDefinition(String filename) throws IOException {
+    return loadStructureDefinition("spec/hl7.fhir.core/4.0.1/package/" + filename);
+  }
+
+  private static final Pattern DATE_PATTERN =
+      Pattern.compile("\"date\"\\s*:\\s*\"([0-9]{4})-([0-9]{2})-([0-9]{2})\"");
+
+  /**
+   * Extract the creation date that was used in the Golden json. This makes the testdata immune to
+   * regenerations with new dates, by guaranteeing the ProfileGenerator will use the correct date.
+   */
+  private static LocalDate getCreationDate(String jsonFile) throws IOException {
+    String json = loadGoldenJson(jsonFile);
+    Matcher matcher = DATE_PATTERN.matcher(json);
+    Assert.assertTrue(matcher.find());
+    return LocalDate.of(
+        Integer.parseInt(matcher.group(1)),
+        Integer.parseInt(matcher.group(2)),
+        Integer.parseInt(matcher.group(3)));
+  }
+
+  private ProfileGenerator makeStu3Generator() throws IOException {
+    List<StructureDefinition> knownTypes = new ArrayList<>();
+    knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Coding.json"));
+    knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-CodeableConcept.json"));
+    knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Element.json"));
+    knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Extension.json"));
+    knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Observation.json"));
+    knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Patient.json"));
+    knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Bundle.json"));
+    LocalDate creationDate = getCreationDate(STU3_TESTDATA_DIR + "test.json");
+    return new ProfileGenerator(
+        loadPackageInfoProto(STU3_TESTDATA_DIR + "test_package_info.prototxt"),
+        loadProfilesProto(STU3_TESTDATA_DIR + "test_profiles.prototxt"),
+        loadExtensionsProto(STU3_TESTDATA_DIR + "test_extensions.prototxt"),
+        knownTypes,
+        creationDate);
   }
 
   @Test
-  public void testGenerateExtensions() throws Exception {
-    Bundle extensions = generator.generateExtensions();
-    for (Bundle.Entry entry : extensions.getEntryList()) {
-      StructureDefinition structDef = entry.getResource().getStructureDefinition();
-      String testDefinition =
-          loadTestStructureDefinitionJson(structDef.getId().getValue() + ".extension.json").trim();
-      String output = jsonPrinter.print(structDef).trim();
-      if (GENERATE_GOLDEN) {
-        if (!testDefinition.equals(output)) {
-          System.out.println("GOLDEN:\n" + output);
-          Assert.fail();
-        }
-      } else {
-        assertThat(output).isEqualTo(testDefinition);
-      }
-    }
+  public void testGenerateExtensionsStu3() throws Exception {
+    Bundle extensions = makeStu3Generator().generateExtensions();
+    String goldenDefinition = loadGoldenJson(STU3_TESTDATA_DIR + "test_extensions.json").trim();
+    String output = jsonPrinter.print(extensions).trim();
+    assertThat(output).isEqualTo(goldenDefinition);
   }
 
   @Test
-  public void testGenerateProfiles() throws Exception {
-    Bundle profiles = generator.generateProfiles();
-    for (Bundle.Entry entry : profiles.getEntryList()) {
-      StructureDefinition structDef = entry.getResource().getStructureDefinition();
-      String testDefinition =
-          loadTestStructureDefinitionJson(structDef.getId().getValue() + ".profile.json").trim();
-      String output = jsonPrinter.print(structDef).trim();
-      if (GENERATE_GOLDEN) {
-        if (!testDefinition.equals(output)) {
-          System.out.println("GOLDEN:\n" + output);
-          Assert.fail();
-        }
-      } else {
-        assertThat(output).isEqualTo(testDefinition);
-      }
-    }
+  public void testGenerateProfilesStu3() throws Exception {
+    Bundle profiles = makeStu3Generator().generateProfiles();
+    String goldenDefinition = loadGoldenJson(STU3_TESTDATA_DIR + "test.json").trim();
+    String output = jsonPrinter.print(profiles).trim();
+    assertThat(output).isEqualTo(goldenDefinition);
+  }
+
+  private ProfileGenerator makeR4Generator() throws IOException {
+    List<StructureDefinition> knownTypes = new ArrayList<>();
+    knownTypes.add(loadR4FhirStructureDefinition("StructureDefinition-Coding.json"));
+    knownTypes.add(loadR4FhirStructureDefinition("StructureDefinition-CodeableConcept.json"));
+    knownTypes.add(loadR4FhirStructureDefinition("StructureDefinition-Element.json"));
+    knownTypes.add(loadR4FhirStructureDefinition("StructureDefinition-Extension.json"));
+    knownTypes.add(loadR4FhirStructureDefinition("StructureDefinition-Observation.json"));
+    knownTypes.add(loadR4FhirStructureDefinition("StructureDefinition-Patient.json"));
+    knownTypes.add(loadR4FhirStructureDefinition("StructureDefinition-Bundle.json"));
+    knownTypes.add(loadR4FhirStructureDefinition("StructureDefinition-Encounter.json"));
+
+    LocalDate creationDate = getCreationDate(R4_TESTDATA_DIR + "test.json");
+
+    return new ProfileGenerator(
+        loadPackageInfoProto(R4_TESTDATA_DIR + "test_package_info.prototxt"),
+        loadProfilesProto(R4_TESTDATA_DIR + "test_profiles.prototxt"),
+        loadExtensionsProto(R4_TESTDATA_DIR + "test_extensions.prototxt"),
+        knownTypes,
+        creationDate);
+  }
+
+  @Test
+  public void testGenerateExtensionsR4() throws Exception {
+    Bundle extensions = makeR4Generator().generateExtensions();
+    String goldenDefinition = loadGoldenJson(R4_TESTDATA_DIR + "test_extensions.json").trim();
+    String output = jsonPrinter.print(extensions).trim();
+    assertThat(output).isEqualTo(goldenDefinition);
+  }
+
+  @Test
+  public void testGenerateProfilesR4() throws Exception {
+    Bundle profiles = makeR4Generator().generateProfiles();
+    String goldenDefinition = loadGoldenJson(R4_TESTDATA_DIR + "test.json").trim();
+    String output = jsonPrinter.print(profiles).trim();
+    assertThat(output).isEqualTo(goldenDefinition);
   }
 }

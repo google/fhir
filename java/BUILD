@@ -731,8 +731,10 @@ java_test(
     testonly = 1,
     srcs = ["src/test/java/com/google/fhir/protogen/ProfileGeneratorTest.java"],
     data = [
+        "//spec:fhir_r4_package_filegroup",
         "//spec:fhir_stu3_package_filegroup",
-        "//testdata/stu3:profilegenerator",
+        "//testdata/r4:profiles",
+        "//testdata/stu3:profiles",
     ],
     test_class = "com.google.fhir.protogen.ProfileGeneratorTest",
     deps = [

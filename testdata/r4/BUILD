@@ -43,3 +43,8 @@ filegroup(
         "google/*",
     ]),
 )
+
+alias(
+    name = "profiles",
+    actual = "//testdata/r4/profiles:testdata",
+)

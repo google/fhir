@@ -7,7 +7,7 @@
         "id": "SimpleDecimalExt",
         "url": "http://test/url/base/SimpleDecimalExt",
         "name": "SimpleDecimalExt",
-        "date": "2019-07-03",
+        "date": "2020-01-06",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -241,7 +241,7 @@
         "id": "SimpleCodeableConceptExtension",
         "url": "http://test/url/base/SimpleCodeableConceptExtension",
         "name": "SimpleCodeableConceptExtension",
-        "date": "2019-07-03",
+        "date": "2020-01-06",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -488,7 +488,7 @@
         "id": "DigitalMediaType",
         "url": "http://test/url/base/DigitalMediaType",
         "name": "DigitalMediaType",
-        "date": "2019-07-03",
+        "date": "2020-01-06",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -735,7 +735,7 @@
         "id": "ComplexExt",
         "url": "http://test/url/base/ComplexExt",
         "name": "ComplexExt",
-        "date": "2019-07-03",
+        "date": "2020-01-06",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1830,7 +1830,6 @@
               "sliceName": "simpleSubfield",
               "short": "simple subfield",
               "definition": "simple subfield",
-              "comment": "",
               "max": "1",
               "condition": [
                 "ele-1"
@@ -1883,7 +1882,6 @@
               "sliceName": "complexSubfield",
               "short": "complex subfield",
               "definition": "complex subfield",
-              "comment": "",
               "min": 1,
               "max": "1",
               "condition": [
@@ -1933,7 +1931,6 @@
               "sliceName": "simpleSubSubFieldA",
               "short": "choice type",
               "definition": "choice type",
-              "comment": "",
               "max": "1",
               "condition": [
                 "ele-1"
@@ -1991,7 +1988,6 @@
               "sliceName": "simpleSubSubFieldB",
               "short": "simple sub sub field b",
               "definition": "simple sub sub field b",
-              "comment": "",
               "condition": [
                 "ele-1"
               ],
