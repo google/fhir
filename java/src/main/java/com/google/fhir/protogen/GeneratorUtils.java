@@ -21,10 +21,15 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.MoreCollectors;
 import com.google.fhir.proto.Annotations;
+import com.google.fhir.r4.core.DateTime;
 import com.google.fhir.r4.core.ElementDefinition;
 import com.google.fhir.r4.core.ExtensionContextTypeCode;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
+import com.google.fhir.wrappers.DateTimeWrapper;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -284,5 +289,12 @@ final class GeneratorUtils {
       }
     }
     return toFieldTypeCase(name);
+  }
+
+  static DateTime buildCreationDateTime(LocalDate localDate) {
+    return new DateTimeWrapper(
+            localDate.format(DateTimeFormatter.ISO_LOCAL_DATE), ZoneId.of("US/Pacific"))
+        .copyInto(DateTime.newBuilder())
+        .build();
   }
 }

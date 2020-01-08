@@ -135,6 +135,7 @@ def gen_fhir_definitions_and_protos(
         package_info,
         extensions = [],
         profiles = [],
+        terminologies = [],
         package_deps = [],
         additional_proto_imports = [],
         separate_extensions = False):
@@ -152,6 +153,7 @@ def gen_fhir_definitions_and_protos(
       package_info: Metadata shared by all generated Structure Definitions.
       extensions: List of Extensions prototxt files
       profiles: List of Profiles prototxt files.
+      terminologies: List of Terminologies prototxt files.
       package_deps: Any package_deps these definitions depend on.
                     Core fhir definitions are automatically included.
       additional_proto_imports: Additional proto files the generated profiles should import
@@ -160,8 +162,9 @@ def gen_fhir_definitions_and_protos(
                                           and one for profiles.
     """
 
-    extension_flags = " ".join([("--extensions $(location %s) " % extension) for extension in extensions])
     profile_flags = " ".join([("--profiles $(location %s) " % profile) for profile in profiles])
+    extension_flags = " ".join([("--extensions $(location %s) " % extension) for extension in extensions])
+    terminology_flags = " ".join([("--terminologies $(location %s) " % terminology) for terminology in terminologies])
 
     struct_def_dep_zip_flags = " ".join([
         ("--struct_def_dep_zip $(location %s) " % _get_zip_for_pkg(dep))
@@ -173,11 +176,16 @@ def gen_fhir_definitions_and_protos(
                                 _get_zip_for_pkg(STU3_PACKAGE_DEP),
                                 _get_zip_for_pkg(R4_PACKAGE_DEP),
                             ] +
-                            extensions +
                             profiles +
+                            extensions +
+                            terminologies +
                             [_get_zip_for_pkg(dep) for dep in package_deps])
 
-    json_outs = ["_genfiles_" + name + "_extensions.json", "_genfiles_" + name + ".json"]
+    json_outs = [
+        "_genfiles_" + name + ".json",
+        "_genfiles_" + name + "_extensions.json",
+        "_genfiles_" + name + "_terminologies.json",
+    ]
 
     native.genrule(
         name = name + "_definitions",
@@ -193,15 +201,16 @@ def gen_fhir_definitions_and_protos(
                 --package_info $(location %s) \
                 --stu3_struct_def_zip $(location %s) \
                 --r4_struct_def_zip $(location %s) \
-                %s %s %s""" % (
+                %s %s %s %s""" % (
             PROFILE_GENERATOR,
             name,
             package_info,
             _get_zip_for_pkg(STU3_PACKAGE_DEP),
             _get_zip_for_pkg(R4_PACKAGE_DEP),
             struct_def_dep_zip_flags,
-            extension_flags,
             profile_flags,
+            extension_flags,
+            terminology_flags,
         )),
         tags = MANUAL_TAGS,
     )

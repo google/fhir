@@ -71,13 +71,23 @@ enum SizeRestriction {
   REPEATED = 5;
 }
 
+// Config for definition of Profiles that are part of an Implementation
+// Guide to be generated
 message Profiles {
   repeated Profile profile = 2;
 }
 
+// Config for definition of Extensions  that are part of an Implementation
+// Guide to be generated
 message Extensions {
   repeated SimpleExtension simple_extension = 2;
   repeated ComplexExtension complex_extension = 3;
+}
+
+// Config for definition of Terminologies (CodeSysems and ValueSets) that are
+// part of an Implementation Guide to be generated
+message Terminologies {
+  repeated CodeSystemConfig code_system = 1;
 }
 
 message Profile {
@@ -232,4 +242,21 @@ message CodeData {
   // Optional - if set, this code will have a fixed value, and will not be
   // inlined as a field.
   string fixed_value = 3;
+}
+
+message CodeSystemConfig {
+  string name = 1;
+  google.fhir.r4.core.PublicationStatusCode.Value status = 2;
+  string description = 3;
+  string url_override = 4;
+
+  message Concept {
+    string code = 1;
+    string display = 2;
+    string definition = 3;
+
+    // TODO: Concepts can have "child" concepts representing
+    // is-a/contains/categorizes relationships
+  }
+  repeated Concept concept = 5;
 }

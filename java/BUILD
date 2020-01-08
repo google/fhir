@@ -32,6 +32,7 @@ java_library(
         ":json_format",
         ":primitive_wrappers",
         ":resource_utils",
+        ":resource_validator",
         ":structure_definition_transformer",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",

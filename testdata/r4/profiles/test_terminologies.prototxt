@@ -1,0 +1,20 @@
+code_system {
+  name: "Brewery"
+  status: DRAFT
+  description: "The brewery of origin."
+
+  concept {
+    code: "sante-adairius"
+    display: "Sante Adairius"
+  }
+
+  concept {
+    code: "treehouse"
+    display: "Treehouse"
+  }
+
+  concept {
+    code: "cantillon"
+    display: "Cantillon"
+  }
+}

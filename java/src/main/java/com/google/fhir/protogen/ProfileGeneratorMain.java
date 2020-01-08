@@ -24,6 +24,7 @@ import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.Extensions;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.Profiles;
+import com.google.fhir.proto.Terminologies;
 import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.StructureDefinition;
 import java.io.File;
@@ -69,6 +70,11 @@ public class ProfileGeneratorMain {
     private List<String> profiles = new ArrayList<>();
 
     @Parameter(
+        names = {"--terminologies"},
+        description = "Prototxt file containing a Terminologies proto.")
+    private List<String> terminologies = new ArrayList<>();
+
+    @Parameter(
         names = {"--struct_def_dep_zip"},
         description = "Zip file containing structure definitions that profiles might depend on.")
     private List<String> structDefDepZips = new ArrayList<>();
@@ -92,6 +98,10 @@ public class ProfileGeneratorMain {
 
   private static Extensions readExtensions(String filename) throws IOException {
     return FileUtils.mergeText(new File(filename), Extensions.newBuilder()).build();
+  }
+
+  private static Terminologies readTerminologies(String filename) throws IOException {
+    return FileUtils.mergeText(new File(filename), Terminologies.newBuilder()).build();
   }
 
   private static PackageInfo readPackageInfo(String filename) throws IOException {
@@ -119,6 +129,12 @@ public class ProfileGeneratorMain {
       Extensions extensions = readExtensions(extensionsFile);
       combinedExtensionsBuilder.addAllSimpleExtension(extensions.getSimpleExtensionList());
       combinedExtensionsBuilder.addAllComplexExtension(extensions.getComplexExtensionList());
+    }
+
+    Terminologies.Builder combinedTerminologiesBuilder = Terminologies.newBuilder();
+    for (String terminologiesFile : args.terminologies) {
+      Terminologies terminologies = readTerminologies(terminologiesFile);
+      combinedTerminologiesBuilder.addAllCodeSystem(terminologies.getCodeSystemList());
     }
 
     PackageInfo packageInfo = readPackageInfo(args.packageInfo);
@@ -153,14 +169,21 @@ public class ProfileGeneratorMain {
     ProfileGenerator profileGenerator =
         new ProfileGenerator(
             packageInfo,
-            combinedProfilesBuilder.build(),
-            combinedExtensionsBuilder.build(),
             baseStructDefPool,
             LocalDate.now());
 
-    writeBundle(profileGenerator.generateProfiles(), args.outputDirectory, args.name);
     writeBundle(
-        profileGenerator.generateExtensions(), args.outputDirectory, args.name + "_extensions");
+        profileGenerator.generateProfiles(combinedProfilesBuilder.build()),
+        args.outputDirectory,
+        args.name);
+    writeBundle(
+        profileGenerator.generateExtensions(combinedExtensionsBuilder.build()),
+        args.outputDirectory,
+        args.name + "_extensions");
+    writeBundle(
+        profileGenerator.generateCodeSystems(combinedTerminologiesBuilder.build()),
+        args.outputDirectory,
+        args.name + "_terminologies");
   }
 
   private static void writeBundle(Bundle bundle, String dir, String name) throws IOException {

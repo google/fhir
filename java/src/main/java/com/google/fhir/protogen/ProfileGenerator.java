@@ -14,6 +14,7 @@
 
 package com.google.fhir.protogen;
 
+import static com.google.fhir.protogen.GeneratorUtils.getElementById;
 import static com.google.fhir.protogen.GeneratorUtils.getOptionalElementById;
 
 import com.google.common.base.Ascii;
@@ -36,6 +37,7 @@ import com.google.fhir.proto.Profiles;
 import com.google.fhir.proto.ReferenceRestriction;
 import com.google.fhir.proto.SimpleExtension;
 import com.google.fhir.proto.SizeRestriction;
+import com.google.fhir.proto.Terminologies;
 import com.google.fhir.r4.core.BindingStrengthCode;
 import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.Canonical;
@@ -63,13 +65,10 @@ import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
 import com.google.fhir.r4.core.UnsignedInt;
 import com.google.fhir.r4.core.Uri;
-import com.google.fhir.wrappers.DateTimeWrapper;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -86,21 +85,16 @@ import java.util.stream.Collectors;
  */
 final class ProfileGenerator {
   private final PackageInfo packageInfo;
-  private final Profiles profiles;
-  private final Extensions extensions;
+  private final TerminologyGenerator terminologyGenerator;
   private final Map<String, StructureDefinition> urlToStructDefMap;
   private final Map<String, StructureDefinition> idToBaseStructDefMap;
   private final DateTime creationDateTime;
 
   ProfileGenerator(
       PackageInfo packageInfo,
-      Profiles profiles,
-      Extensions extensions,
       List<StructureDefinition> knownTypesList,
       LocalDate creationTime) {
     this.packageInfo = packageInfo;
-    this.profiles = profiles;
-    this.extensions = extensions;
     this.urlToStructDefMap =
         knownTypesList.stream().collect(Collectors.toMap(def -> def.getUrl().getValue(), f -> f));
     this.idToBaseStructDefMap =
@@ -108,10 +102,12 @@ final class ProfileGenerator {
             .filter(
                 def -> def.getDerivation().getValue() != TypeDerivationRuleCode.Value.CONSTRAINT)
             .collect(Collectors.toMap(def -> def.getId().getValue(), f -> f));
-    this.creationDateTime = buildCreationDateTime(creationTime);
+    this.creationDateTime = GeneratorUtils.buildCreationDateTime(creationTime);
+
+    this.terminologyGenerator = new TerminologyGenerator(packageInfo, creationTime);
   }
 
-  Bundle generateProfiles() {
+  Bundle generateProfiles(Profiles profiles) {
     Bundle.Builder bundle = Bundle.newBuilder();
     for (Profile profile : profiles.getProfileList()) {
       StructureDefinition structDef = makeProfile(profile);
@@ -123,7 +119,7 @@ final class ProfileGenerator {
     return bundle.build();
   }
 
-  Bundle generateExtensions() {
+  Bundle generateExtensions(Extensions extensions) {
     Bundle.Builder bundle = Bundle.newBuilder();
     for (SimpleExtension simpleExtension : extensions.getSimpleExtensionList()) {
       bundle.addEntry(
@@ -140,6 +136,10 @@ final class ProfileGenerator {
                       .setStructureDefinition(makeComplexExtension(complexExtension))));
     }
     return bundle.build();
+  }
+
+  Bundle generateCodeSystems(Terminologies terminologies) {
+    return terminologyGenerator.generateCodeSystems(terminologies);
   }
 
   private StructureDefinition makeProfile(Profile profile) {
@@ -760,14 +760,6 @@ final class ProfileGenerator {
     }
   }
 
-  // Returns the only element in the list matching a given id.
-  // Throws IllegalArgumentException if zero or more than one matching elements are found.
-  // TODO: consolidate with ProtoGenerator
-  private static ElementDefinition getElementById(String id, List<ElementDefinition> elements) {
-    return getOptionalElementById(id, elements)
-        .orElseThrow(() -> new IllegalArgumentException("No element with id: " + id));
-  }
-
   private static ElementDefinition.Builder getElementBuilderById(
       String id, List<ElementDefinition.Builder> elements) {
     return getOptionalElementBuilderById(id, elements)
@@ -871,13 +863,6 @@ final class ProfileGenerator {
 
   private static Code fhirCode(String value) {
     return Code.newBuilder().setValue(value).build();
-  }
-
-  private static DateTime buildCreationDateTime(LocalDate localDate) {
-    return new DateTimeWrapper(
-            localDate.format(DateTimeFormatter.ISO_LOCAL_DATE), ZoneId.of("US/Pacific"))
-        .copyInto(DateTime.newBuilder())
-        .build();
   }
 
   private StructureDefinition getExtensionStructDef() {

@@ -21,8 +21,10 @@ import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Extensions;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.Profiles;
+import com.google.fhir.proto.Terminologies;
 import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.StructureDefinition;
+import com.google.protobuf.Message;
 import com.google.protobuf.TextFormat;
 import java.io.File;
 import java.io.IOException;
@@ -48,24 +50,32 @@ public final class ProfileGeneratorTest {
   private static final String R4_TESTDATA_DIR = "testdata/r4/profiles/";
 
   // TODO: consolidate these proto loading functions across test files.
+  private static void loadProto(String filename, Message.Builder builder) throws IOException {
+    TextFormat.merge(
+        Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read(), builder);
+  }
+
   private static Extensions loadExtensionsProto(String filename) throws IOException {
     Extensions.Builder extensionsBuilder = Extensions.newBuilder();
-    TextFormat.merge(
-        Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read(), extensionsBuilder);
+    loadProto(filename, extensionsBuilder);
     return extensionsBuilder.build();
   }
 
   private static Profiles loadProfilesProto(String filename) throws IOException {
     Profiles.Builder profilesBuilder = Profiles.newBuilder();
-    TextFormat.merge(
-        Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read(), profilesBuilder);
+    loadProto(filename, profilesBuilder);
     return profilesBuilder.build();
+  }
+
+  private static Terminologies loadTerminologiesProto(String filename) throws IOException {
+    Terminologies.Builder terminologiesBuilder = Terminologies.newBuilder();
+    loadProto(filename, terminologiesBuilder);
+    return terminologiesBuilder.build();
   }
 
   private static PackageInfo loadPackageInfoProto(String filename) throws IOException {
     PackageInfo.Builder projectInfo = PackageInfo.newBuilder();
-    TextFormat.merge(
-        Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read(), projectInfo);
+    loadProto(filename, projectInfo);
     return projectInfo.build();
   }
 
@@ -96,8 +106,7 @@ public final class ProfileGeneratorTest {
    * Extract the creation date that was used in the Golden json. This makes the testdata immune to
    * regenerations with new dates, by guaranteeing the ProfileGenerator will use the correct date.
    */
-  private static LocalDate getCreationDate(String jsonFile) throws IOException {
-    String json = loadGoldenJson(jsonFile);
+  private static LocalDate getCreationDate(String json) throws IOException {
     Matcher matcher = DATE_PATTERN.matcher(json);
     Assert.assertTrue(matcher.find());
     return LocalDate.of(
@@ -106,7 +115,7 @@ public final class ProfileGeneratorTest {
         Integer.parseInt(matcher.group(3)));
   }
 
-  private ProfileGenerator makeStu3Generator() throws IOException {
+  private ProfileGenerator makeStu3Generator(String goldenJson) throws IOException {
     List<StructureDefinition> knownTypes = new ArrayList<>();
     knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Coding.json"));
     knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-CodeableConcept.json"));
@@ -115,32 +124,48 @@ public final class ProfileGeneratorTest {
     knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Observation.json"));
     knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Patient.json"));
     knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Bundle.json"));
-    LocalDate creationDate = getCreationDate(STU3_TESTDATA_DIR + "test.json");
+
+    LocalDate creationDate = getCreationDate(goldenJson);
+
     return new ProfileGenerator(
         loadPackageInfoProto(STU3_TESTDATA_DIR + "test_package_info.prototxt"),
-        loadProfilesProto(STU3_TESTDATA_DIR + "test_profiles.prototxt"),
-        loadExtensionsProto(STU3_TESTDATA_DIR + "test_extensions.prototxt"),
         knownTypes,
         creationDate);
   }
 
   @Test
   public void testGenerateExtensionsStu3() throws Exception {
-    Bundle extensions = makeStu3Generator().generateExtensions();
     String goldenDefinition = loadGoldenJson(STU3_TESTDATA_DIR + "test_extensions.json").trim();
+    Bundle extensions =
+        makeStu3Generator(goldenDefinition)
+            .generateExtensions(
+                loadExtensionsProto(STU3_TESTDATA_DIR + "test_extensions.prototxt"));
     String output = jsonPrinter.print(extensions).trim();
     assertThat(output).isEqualTo(goldenDefinition);
   }
 
   @Test
   public void testGenerateProfilesStu3() throws Exception {
-    Bundle profiles = makeStu3Generator().generateProfiles();
     String goldenDefinition = loadGoldenJson(STU3_TESTDATA_DIR + "test.json").trim();
+    Bundle profiles =
+        makeStu3Generator(goldenDefinition)
+            .generateProfiles(loadProfilesProto(STU3_TESTDATA_DIR + "test_profiles.prototxt"));
     String output = jsonPrinter.print(profiles).trim();
     assertThat(output).isEqualTo(goldenDefinition);
   }
 
-  private ProfileGenerator makeR4Generator() throws IOException {
+  @Test
+  public void testGenerateTerminologiesStu3() throws Exception {
+    String goldenDefinition = loadGoldenJson(STU3_TESTDATA_DIR + "test_terminologies.json").trim();
+    Bundle terminologies =
+        makeStu3Generator(goldenDefinition)
+            .generateCodeSystems(
+                loadTerminologiesProto(STU3_TESTDATA_DIR + "test_terminologies.prototxt"));
+    String output = jsonPrinter.print(terminologies).trim();
+    assertThat(output).isEqualTo(goldenDefinition);
+  }
+
+  private ProfileGenerator makeR4Generator(String goldenJson) throws IOException {
     List<StructureDefinition> knownTypes = new ArrayList<>();
     knownTypes.add(loadR4FhirStructureDefinition("StructureDefinition-Coding.json"));
     knownTypes.add(loadR4FhirStructureDefinition("StructureDefinition-CodeableConcept.json"));
@@ -151,29 +176,42 @@ public final class ProfileGeneratorTest {
     knownTypes.add(loadR4FhirStructureDefinition("StructureDefinition-Bundle.json"));
     knownTypes.add(loadR4FhirStructureDefinition("StructureDefinition-Encounter.json"));
 
-    LocalDate creationDate = getCreationDate(R4_TESTDATA_DIR + "test.json");
+    LocalDate creationDate = getCreationDate(goldenJson);
 
     return new ProfileGenerator(
         loadPackageInfoProto(R4_TESTDATA_DIR + "test_package_info.prototxt"),
-        loadProfilesProto(R4_TESTDATA_DIR + "test_profiles.prototxt"),
-        loadExtensionsProto(R4_TESTDATA_DIR + "test_extensions.prototxt"),
         knownTypes,
         creationDate);
   }
 
   @Test
   public void testGenerateExtensionsR4() throws Exception {
-    Bundle extensions = makeR4Generator().generateExtensions();
     String goldenDefinition = loadGoldenJson(R4_TESTDATA_DIR + "test_extensions.json").trim();
+    Bundle extensions =
+        makeR4Generator(goldenDefinition)
+            .generateExtensions(loadExtensionsProto(R4_TESTDATA_DIR + "test_extensions.prototxt"));
     String output = jsonPrinter.print(extensions).trim();
     assertThat(output).isEqualTo(goldenDefinition);
   }
 
   @Test
   public void testGenerateProfilesR4() throws Exception {
-    Bundle profiles = makeR4Generator().generateProfiles();
     String goldenDefinition = loadGoldenJson(R4_TESTDATA_DIR + "test.json").trim();
+    Bundle profiles =
+        makeR4Generator(goldenDefinition)
+            .generateProfiles(loadProfilesProto(R4_TESTDATA_DIR + "test_profiles.prototxt"));
     String output = jsonPrinter.print(profiles).trim();
+    assertThat(output).isEqualTo(goldenDefinition);
+  }
+
+  @Test
+  public void testGenerateTerminologiesR4() throws Exception {
+    String goldenDefinition = loadGoldenJson(R4_TESTDATA_DIR + "test_terminologies.json").trim();
+    Bundle terminologies =
+        makeR4Generator(goldenDefinition)
+            .generateCodeSystems(
+                loadTerminologiesProto(R4_TESTDATA_DIR + "test_terminologies.prototxt"));
+    String output = jsonPrinter.print(terminologies).trim();
     assertThat(output).isEqualTo(goldenDefinition);
   }
 }
