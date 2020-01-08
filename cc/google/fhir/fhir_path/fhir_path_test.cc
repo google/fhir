@@ -442,6 +442,18 @@ TEST(FhirPathTest, TestFunctionEmpty) {
   EXPECT_FALSE(EvaluateBoolExpression("(false | true).empty()"));
 }
 
+TEST(FhirPathTest, TestFunctionCount) {
+  EXPECT_EQ(EvaluateExpressionWithStatus("{}.count()").ValueOrDie()
+                .GetInteger().ValueOrDie(),
+            0);
+  EXPECT_EQ(EvaluateExpressionWithStatus("'a'.count()").ValueOrDie()
+                .GetInteger().ValueOrDie(),
+            1);
+  EXPECT_EQ(EvaluateExpressionWithStatus("('a' | 1).count()").ValueOrDie()
+                .GetInteger().ValueOrDie(),
+            2);
+}
+
 TEST(FhirPathTest, TestFunctionFirst) {
   EXPECT_TRUE(EvaluateBoolExpression("{}.first() = {}"));
   EXPECT_TRUE(EvaluateBoolExpression("true.first()"));

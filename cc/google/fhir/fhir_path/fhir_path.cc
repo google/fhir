@@ -159,6 +159,7 @@ constexpr char kEmptyFunction[] = "empty";
 constexpr char kFirstFunction[] = "first";
 constexpr char kTraceFunction[] = "trace";
 constexpr char kToIntegerFunction[] = "toInteger";
+constexpr char kCountFunction[] = "count";
 
 // Logical field in primitives representing the underlying value.
 constexpr char kPrimitiveValueField[] = "value";
@@ -510,6 +511,34 @@ class EmptyFunction : public ExpressionNode {
 
   const Descriptor* ReturnType() const override {
     return Boolean::descriptor();
+  }
+
+ private:
+  const std::shared_ptr<ExpressionNode> child_;
+};
+
+// Implements the FHIRPath .count() function.
+//
+// Returns the size of the input collection as an integer.
+class CountFunction : public ExpressionNode {
+ public:
+  explicit CountFunction(const std::shared_ptr<ExpressionNode>& child)
+      : child_(child) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    Integer* result = new Integer();
+    work_space->DeleteWhenFinished(result);
+    result->set_value(child_results.size());
+    results->push_back(result);
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Integer::descriptor();
   }
 
  private:
@@ -1677,6 +1706,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return std::make_shared<TraceFunction>(child_expression, params);
     } else if (function_name == kToIntegerFunction) {
       return std::make_shared<ToIntegerFunction>(child_expression);
+    } else if (function_name == kCountFunction) {
+      return std::make_shared<CountFunction>(child_expression);
     } else {
       // TODO: Implement set of functions for initial use cases.
       SetError(absl::StrCat("The function ", function_name,
