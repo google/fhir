@@ -391,6 +391,38 @@ TEST(FhirPathTest, TestFunctionStartsWithInvokedOnNonString) {
   EXPECT_FALSE(expr.Evaluate(test_observation).ok());
 }
 
+TEST(FhirPathTest, TestFunctionToInteger) {
+  EXPECT_EQ(EvaluateExpressionWithStatus("1.toInteger()")
+                .ValueOrDie()
+                .GetInteger()
+                .ValueOrDie(),
+            1);
+  EXPECT_EQ(EvaluateExpressionWithStatus("'2'.toInteger()")
+                .ValueOrDie()
+                .GetInteger()
+                .ValueOrDie(),
+            2);
+
+  EXPECT_TRUE(EvaluateExpressionWithStatus("(3.3).toInteger()")
+                  .ValueOrDie()
+                  .GetMessages()
+                  .empty());
+  EXPECT_TRUE(EvaluateExpressionWithStatus("'a'.toInteger()")
+                  .ValueOrDie()
+                  .GetMessages()
+                  .empty());
+
+  EXPECT_FALSE(EvaluateExpressionWithStatus("(1 | 2).toInteger()").ok());
+}
+
+TEST(FhirPathTest, TestFunctionTrace) {
+  EXPECT_TRUE(EvaluateBoolExpression("true.trace('debug')"));
+  EXPECT_TRUE(EvaluateExpressionWithStatus("{}.trace('debug')")
+                  .ValueOrDie()
+                  .GetMessages()
+                  .empty());
+}
+
 TEST(FhirPathTest, TestFunctionHasValueComplex) {
   auto expr =
       CompiledExpression::Compile(Encounter::descriptor(), "period.hasValue()")

@@ -157,6 +157,8 @@ constexpr char kHasValueFunction[] = "hasValue";
 constexpr char kStartsWithFunction[] = "startsWith";
 constexpr char kEmptyFunction[] = "empty";
 constexpr char kFirstFunction[] = "first";
+constexpr char kTraceFunction[] = "trace";
+constexpr char kToIntegerFunction[] = "toInteger";
 
 // Logical field in primitives representing the underlying value.
 constexpr char kPrimitiveValueField[] = "value";
@@ -537,6 +539,108 @@ class FirstFunction : public ExpressionNode {
 
   const Descriptor* ReturnType() const override {
     return child_->ReturnType();
+  }
+
+ private:
+  const std::shared_ptr<ExpressionNode> child_;
+};
+
+// Implements the FHIRPath .trace() function.
+class TraceFunction : public ExpressionNode {
+ public:
+  explicit TraceFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : child_(child), params_(params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    // trace requires a single parameter
+    if (params_.size() != 1) {
+      return InvalidArgument(
+          "trace() must be invoked with a single string argument");
+    }
+
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, results));
+
+    std::vector<const Message*> params_results;
+    FHIR_RETURN_IF_ERROR(params_[0]->Evaluate(work_space, &params_results));
+    FHIR_ASSIGN_OR_RETURN(std::string name, MessagesToString(params_results));
+
+    LOG(INFO) << "trace(" << name << "):";
+    for (auto it = results->begin(); it != results->end(); it++) {
+      LOG(INFO) << (*it)->DebugString();
+    }
+
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return child_->ReturnType();
+  }
+
+ private:
+  const std::shared_ptr<ExpressionNode> child_;
+  const std::vector<std::shared_ptr<ExpressionNode>> params_;
+};
+
+// Implements the FHIRPath .toInteger() function.
+class ToIntegerFunction : public ExpressionNode {
+ public:
+  explicit ToIntegerFunction(
+      const std::shared_ptr<ExpressionNode>& child)
+      : child_(child) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.size() > 1) {
+      return InvalidArgument(
+          "toInterger() requires a collection with no more than 1 item.");
+    }
+
+    if (child_results.empty()) {
+      return Status::OK();
+    }
+
+    const Message* child_result = child_results[0];
+
+    if (!IsPrimitive(child_result->GetDescriptor())) {
+      return Status::OK();
+    }
+
+    if (IsMessageType<Integer>(*child_result)) {
+      results->push_back(child_result);
+      return Status::OK();
+    }
+
+    if (IsMessageType<Boolean>(*child_result)) {
+      Integer* result = new Integer();
+      work_space->DeleteWhenFinished(result);
+      result->set_value(dynamic_cast<const Boolean*>(child_result)->value());
+      results->push_back(result);
+      return Status::OK();
+    }
+
+    auto child_as_string = MessagesToString(child_results);
+    if (child_as_string.ok()) {
+      int32_t value;
+      if (absl::SimpleAtoi(child_as_string.ValueOrDie(), &value)) {
+        Integer* result = new Integer();
+        work_space->DeleteWhenFinished(result);
+        result->set_value(value);
+        results->push_back(result);
+        return Status::OK();
+      }
+    }
+
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Integer::descriptor();
   }
 
  private:
@@ -1569,6 +1673,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return std::make_shared<EmptyFunction>(child_expression);
     } else if (function_name == kFirstFunction) {
       return std::make_shared<FirstFunction>(child_expression);
+    } else if (function_name == kTraceFunction) {
+      return std::make_shared<TraceFunction>(child_expression, params);
+    } else if (function_name == kToIntegerFunction) {
+      return std::make_shared<ToIntegerFunction>(child_expression);
     } else {
       // TODO: Implement set of functions for initial use cases.
       SetError(absl::StrCat("The function ", function_name,
