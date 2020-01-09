@@ -160,6 +160,8 @@ constexpr char kFirstFunction[] = "first";
 constexpr char kTraceFunction[] = "trace";
 constexpr char kToIntegerFunction[] = "toInteger";
 constexpr char kCountFunction[] = "count";
+constexpr char kDistinctFunction[] = "distinct";
+constexpr char kCombineFunction[] = "combine";
 
 // Logical field in primitives representing the underlying value.
 constexpr char kPrimitiveValueField[] = "value";
@@ -837,6 +839,73 @@ class UnionOperator : public BinaryOperator {
     // in the collection.
     return nullptr;
   }
+};
+
+// Implements the FHIRPath .distinct() function.
+class DistinctFunction : public ExpressionNode {
+ public:
+  explicit DistinctFunction(const std::shared_ptr<ExpressionNode>& child)
+      : child_(child) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    std::unordered_set<const Message*, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
+        result_set;
+    result_set.insert(child_results.begin(), child_results.end());
+    results->insert(results->begin(), result_set.begin(), result_set.end());
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override { return child_->ReturnType(); }
+
+ private:
+  const std::shared_ptr<ExpressionNode> child_;
+};
+
+// Implements the FHIRPath .combine() function.
+class CombineFunction : public ExpressionNode {
+ public:
+  explicit CombineFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : child_(child), params_(params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    if (params_.size() != 1) {
+      return InvalidArgument(
+          "combine() must be invoked with exactly one argument.");
+    }
+
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    std::vector<const Message*> param_results;
+    FHIR_RETURN_IF_ERROR(params_[0]->Evaluate(work_space, &param_results));
+
+    results->insert(results->end(), child_results.begin(), child_results.end());
+    results->insert(results->end(), param_results.begin(), param_results.end());
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    DCHECK_EQ(params_.size(), 1);
+
+    if (AreSameMessageType(child_->ReturnType(), params_[0]->ReturnType())) {
+      return child_->ReturnType();
+    }
+
+    // TODO: Consider refactoring ReturnType to return a set of all types
+    // in the collection.
+    return nullptr;
+  }
+
+ private:
+  const std::shared_ptr<ExpressionNode> child_;
+  const std::vector<std::shared_ptr<ExpressionNode>> params_;
 };
 
 // Converts decimal or integer container messages to a double value
@@ -1708,6 +1777,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return std::make_shared<ToIntegerFunction>(child_expression);
     } else if (function_name == kCountFunction) {
       return std::make_shared<CountFunction>(child_expression);
+    } else if (function_name == kCombineFunction) {
+      return std::make_shared<CombineFunction>(child_expression, params);
+    } else if (function_name == kDistinctFunction) {
+      return std::make_shared<DistinctFunction>(child_expression);
     } else {
       // TODO: Implement set of functions for initial use cases.
       SetError(absl::StrCat("The function ", function_name,

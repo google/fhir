@@ -509,6 +509,36 @@ TEST(FhirPathTest, TestUnionDeduplicationObjects) {
                    EqualsProto(test_encounter.period())}));
 }
 
+TEST(FhirPathTest, TestCombine) {
+  EXPECT_TRUE(EvaluateBoolExpression("{}.combine({}) = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("true.combine({})"));
+  EXPECT_TRUE(EvaluateBoolExpression("{}.combine(true)"));
+
+  Boolean true_proto = ParseFromString<Boolean>("value: true");
+  Boolean false_proto = ParseFromString<Boolean>("value: false");
+  EvaluationResult evaluation_result =
+      EvaluateExpressionWithStatus("true.combine(true).combine(false)")
+          .ValueOrDie();
+  EXPECT_THAT(evaluation_result.GetMessages(),
+              UnorderedElementsAreArray({EqualsProto(true_proto),
+                                         EqualsProto(true_proto),
+                                         EqualsProto(false_proto)}));
+}
+
+TEST(FhirPathTest, TestDistinct) {
+  EXPECT_TRUE(EvaluateBoolExpression("{}.distinct() = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("true.distinct()"));
+  EXPECT_TRUE(EvaluateBoolExpression("true.combine(true).distinct()"));
+
+  Boolean true_proto = ParseFromString<Boolean>("value: true");
+  Boolean false_proto = ParseFromString<Boolean>("value: false");
+  EvaluationResult evaluation_result =
+      EvaluateExpressionWithStatus("(true | false).distinct()").ValueOrDie();
+  EXPECT_THAT(evaluation_result.GetMessages(),
+              UnorderedElementsAreArray(
+                  {EqualsProto(true_proto), EqualsProto(false_proto)}));
+}
+
 TEST(FhirPathTest, TestIndexer) {
   EXPECT_TRUE(EvaluateBoolExpression("true[0] = true"));
   EXPECT_TRUE(EvaluateBoolExpression("true[1] = {}"));
