@@ -169,6 +169,7 @@ constexpr char kCountFunction[] = "count";
 constexpr char kDistinctFunction[] = "distinct";
 constexpr char kCombineFunction[] = "combine";
 constexpr char kMatchesFunction[] = "matches";
+constexpr char kLengthFunction[] = "length";
 
 // Logical field in primitives representing the underlying value.
 constexpr char kPrimitiveValueField[] = "value";
@@ -576,6 +577,35 @@ class MatchesFunction : public SingleValueFunctionNode {
 
   const Descriptor* ReturnType() const override {
     return Boolean::descriptor();
+  }
+};
+
+// Implements the FHIRPath .length() function.
+class LengthFunction : public FunctionNode {
+ public:
+  explicit LengthFunction(const std::shared_ptr<ExpressionNode>& child)
+      : FunctionNode(child) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.empty()) {
+      return Status::OK();
+    }
+
+    FHIR_ASSIGN_OR_RETURN(std::string item, MessagesToString(child_results));
+
+    Integer* result = new Integer();
+    work_space->DeleteWhenFinished(result);
+    result->set_value(item.length());
+    results->push_back(result);
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Integer::descriptor();
   }
 };
 
@@ -1832,6 +1862,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return std::make_shared<DistinctFunction>(child_expression);
     } else if (function_name == kMatchesFunction) {
       return std::make_shared<MatchesFunction>(child_expression, params);
+    } else if (function_name == kLengthFunction) {
+      return std::make_shared<LengthFunction>(child_expression);
     } else {
       // TODO: Implement set of functions for initial use cases.
       SetError(absl::StrCat("The function ", function_name,

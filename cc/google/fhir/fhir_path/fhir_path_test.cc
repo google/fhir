@@ -399,6 +399,14 @@ TEST(FhirPathTest, TestFunctionMatches) {
   EXPECT_TRUE(EvaluateBoolExpression("'abc'.matches('...')"));
 }
 
+TEST(FhirPathTest, TestFunctionLength) {
+  EXPECT_TRUE(EvaluateBoolExpression("{}.length() = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("''.length() = 0"));
+  EXPECT_TRUE(EvaluateBoolExpression("'abc'.length() = 3"));
+
+  EXPECT_FALSE(EvaluateExpressionWithStatus("3.length()").ok());
+}
+
 TEST(FhirPathTest, TestFunctionToInteger) {
   EXPECT_EQ(EvaluateExpressionWithStatus("1.toInteger()")
                 .ValueOrDie()
