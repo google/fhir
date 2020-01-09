@@ -120,25 +120,18 @@ StatusOr<absl::optional<T>> PrimitiveOrEmpty(
 }
 
 // Returns the string representation of the provided message for messages that
-// are represented in JSON as strings. Requires the presence of exactly one
-// message in the provided collection. For primitive messages that are not
+// are represented in JSON as strings. For primitive messages that are not
 // represented as a string in JSON a status other than OK will be returned.
-StatusOr<std::string> MessagesToString(
-    const std::vector<const Message*>& messages) {
-  if (messages.size() != 1) {
-    return InvalidArgument("Expression must represent a single value.");
+StatusOr<std::string> MessageToString(const Message& message) {
+  if (IsMessageType<String>(message)) {
+    return dynamic_cast<const String*>(&message)->value();
   }
 
-  const Message* message = messages[0];
-  if (IsMessageType<String>(*message)) {
-    return dynamic_cast<const String*>(message)->value();
-  }
-
-  if (!IsPrimitive(message->GetDescriptor())) {
+  if (!IsPrimitive(message.GetDescriptor())) {
     return InvalidArgument("Expression must be a primitive.");
   }
 
-  StatusOr<JsonPrimitive> json_primitive = WrapPrimitiveProto(*message);
+  StatusOr<JsonPrimitive> json_primitive = WrapPrimitiveProto(message);
   std::string json_string = json_primitive.ValueOrDie().value;
 
   if (!absl::StartsWith(json_string, "\"")) {
@@ -148,6 +141,19 @@ StatusOr<std::string> MessagesToString(
   // Trim the starting and ending double quotation marks from the string (added
   // by JsonPrimitive.)
   return json_string.substr(1, json_string.size() - 2);
+}
+
+// Returns the string representation of the provided message for messages that
+// are represented in JSON as strings. Requires the presence of exactly one
+// message in the provided collection. For primitive messages that are not
+// represented as a string in JSON a status other than OK will be returned.
+StatusOr<std::string> MessagesToString(
+    const std::vector<const Message*>& messages) {
+  if (messages.size() != 1) {
+    return InvalidArgument("Expression must represent a single value.");
+  }
+
+  return MessageToString(*messages[0]);
 }
 
 // Supported functions.
@@ -323,11 +329,73 @@ class InvokeExpressionNode : public ExpressionNode {
   const std::string field_name_;
 };
 
+class FunctionNode : public ExpressionNode {
+ protected:
+  explicit FunctionNode(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params = {})
+      : child_(child), params_(params){}
+
+  const std::shared_ptr<ExpressionNode> child_;
+  const std::vector<std::shared_ptr<ExpressionNode>> params_;
+};
+
+class SingleParameterFunctionNode : public FunctionNode {
+ private:
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    //  requires a single parameter
+    if (params_.size() != 1) {
+      return InvalidArgument("this function requires a single parameter.");
+    }
+
+    std::vector<const Message*> first_param;
+    FHIR_RETURN_IF_ERROR(params_[0]->Evaluate(work_space, &first_param));
+
+    return Evaluate(work_space, first_param, results);
+  }
+
+ protected:
+  explicit SingleParameterFunctionNode(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : FunctionNode(child, params){}
+
+  virtual Status Evaluate(WorkSpace* work_space,
+                          std::vector<const Message*>& first_param,
+                          std::vector<const Message*>* results) const = 0;
+};
+
+class SingleValueFunctionNode : public SingleParameterFunctionNode {
+ private:
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>& first_param,
+                  std::vector<const Message*>* results) const override {
+    //  requires a single parameter
+    if (first_param.size() != 1) {
+      return InvalidArgument(
+          "this function requires a single value parameter.");
+    }
+
+    return EvaluateWithParam(work_space, *first_param[0], results);
+  }
+
+ protected:
+  explicit SingleValueFunctionNode(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : SingleParameterFunctionNode(child, params){}
+
+  virtual Status EvaluateWithParam(
+      WorkSpace* work_space, const Message& param,
+      std::vector<const Message*>* results) const = 0;
+};
+
 // Implements the FHIRPath .exists() function
-class ExistsFunction : public ExpressionNode {
+class ExistsFunction : public FunctionNode {
  public:
   explicit ExistsFunction(const std::shared_ptr<ExpressionNode>& child)
-      : child_(child) {}
+      : FunctionNode(child) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -345,16 +413,13 @@ class ExistsFunction : public ExpressionNode {
   const Descriptor* ReturnType() const override {
     return Boolean::descriptor();
   }
-
- private:
-  const std::shared_ptr<ExpressionNode> child_;
 };
 
 // Implements the FHIRPath .not() function.
-class NotFunction : public ExpressionNode {
+class NotFunction : public FunctionNode {
  public:
   explicit NotFunction(const std::shared_ptr<ExpressionNode>& child)
-      : child_(child) {}
+      : FunctionNode(child) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -388,17 +453,14 @@ class NotFunction : public ExpressionNode {
   const Descriptor* ReturnType() const override {
     return Boolean::descriptor();
   }
-
- private:
-  const std::shared_ptr<ExpressionNode> child_;
 };
 
 // Implements the FHIRPath .hasValue() function, which returns true
 // if and only if the child is a single primitive value.
-class HasValueFunction : public ExpressionNode {
+class HasValueFunction : public FunctionNode {
  public:
   explicit HasValueFunction(const std::shared_ptr<ExpressionNode>& child)
-      : child_(child) {}
+      : FunctionNode(child) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -427,9 +489,6 @@ class HasValueFunction : public ExpressionNode {
   const Descriptor* ReturnType() const override {
     return Boolean::descriptor();
   }
-
- private:
-  const std::shared_ptr<ExpressionNode> child_;
 };
 
 // Implements the FHIRPath .startsWith() function, which returns true if and
@@ -444,32 +503,24 @@ class HasValueFunction : public ExpressionNode {
 // Specifically, any type for which its JsonPrimitive value is a string. This
 // differs from the allowed implicit conversions defined in
 // https://hl7.org/fhirpath/2018Sep/index.html#conversion.
-class StartsWithFunction : public ExpressionNode {
+class StartsWithFunction : public SingleValueFunctionNode {
  public:
   explicit StartsWithFunction(
       const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>> params)
-      : child_(child), params_(params) {}
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : SingleValueFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
+  Status EvaluateWithParam(WorkSpace* work_space, const Message& param,
                   std::vector<const Message*>* results) const override {
-    // startsWith requires a single parameter
-    if (params_.size() != 1) {
-      return InvalidArgument(kInvalidArgumentMessage);
-    }
-
     std::vector<const Message*> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
-    std::vector<const Message*> params_results;
-    FHIR_RETURN_IF_ERROR(params_[0]->Evaluate(work_space, &params_results));
-
-    if (child_results.size() != 1 || params_results.size() != 1) {
+    if (child_results.size() != 1) {
       return InvalidArgument(kInvalidArgumentMessage);
     }
 
     FHIR_ASSIGN_OR_RETURN(std::string item, MessagesToString(child_results));
-    FHIR_ASSIGN_OR_RETURN(std::string prefix, MessagesToString(params_results));
+    FHIR_ASSIGN_OR_RETURN(std::string prefix, MessageToString(param));
 
     Boolean* result = new Boolean();
     work_space->DeleteWhenFinished(result);
@@ -483,29 +534,21 @@ class StartsWithFunction : public ExpressionNode {
   }
 
  private:
-  const std::shared_ptr<ExpressionNode> child_;
-  const std::vector<std::shared_ptr<ExpressionNode>> params_;
-
   static constexpr char kInvalidArgumentMessage[] =
       "startsWith must be invoked on a string with a single string "
       "argument";
 };
 constexpr char StartsWithFunction::kInvalidArgumentMessage[];
 
-class MatchesFunction : public ExpressionNode {
+class MatchesFunction : public SingleValueFunctionNode {
  public:
   explicit MatchesFunction(
       const std::shared_ptr<ExpressionNode>& child,
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
-      : child_(child), params_(params) {}
+      : SingleValueFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
+  Status EvaluateWithParam(WorkSpace* work_space, const Message& param,
                   std::vector<const Message*>* results) const override {
-    // matches() requires a single parameter
-    if (params_.size() != 1) {
-      return InvalidArgument("matches() requires a single parameter.");
-    }
-
     std::vector<const Message*> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -513,12 +556,8 @@ class MatchesFunction : public ExpressionNode {
       return Status::OK();
     }
 
-    std::vector<const Message*> params_results;
-    FHIR_RETURN_IF_ERROR(params_[0]->Evaluate(work_space, &params_results));
-
     FHIR_ASSIGN_OR_RETURN(std::string item, MessagesToString(child_results));
-    FHIR_ASSIGN_OR_RETURN(std::string re_string,
-                          MessagesToString(params_results));
+    FHIR_ASSIGN_OR_RETURN(std::string re_string, MessageToString(param));
 
     RE2 re(re_string);
 
@@ -538,19 +577,15 @@ class MatchesFunction : public ExpressionNode {
   const Descriptor* ReturnType() const override {
     return Boolean::descriptor();
   }
-
- private:
-  const std::shared_ptr<ExpressionNode> child_;
-  const std::vector<std::shared_ptr<ExpressionNode>> params_;
 };
 
 // Implements the FHIRPath .empty() function.
 //
 // Returns true if the input collection is empty and false otherwise.
-class EmptyFunction : public ExpressionNode {
+class EmptyFunction : public FunctionNode {
  public:
   explicit EmptyFunction(const std::shared_ptr<ExpressionNode>& child)
-      : child_(child) {}
+      : FunctionNode(child) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -567,18 +602,15 @@ class EmptyFunction : public ExpressionNode {
   const Descriptor* ReturnType() const override {
     return Boolean::descriptor();
   }
-
- private:
-  const std::shared_ptr<ExpressionNode> child_;
 };
 
 // Implements the FHIRPath .count() function.
 //
 // Returns the size of the input collection as an integer.
-class CountFunction : public ExpressionNode {
+class CountFunction : public FunctionNode {
  public:
   explicit CountFunction(const std::shared_ptr<ExpressionNode>& child)
-      : child_(child) {}
+      : FunctionNode(child) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -595,19 +627,16 @@ class CountFunction : public ExpressionNode {
   const Descriptor* ReturnType() const override {
     return Integer::descriptor();
   }
-
- private:
-  const std::shared_ptr<ExpressionNode> child_;
 };
 
 // Implements the FHIRPath .first() function.
 //
 // Returns the first element of the input collection. Or an empty collection if
 // if the input collection is empty.
-class FirstFunction : public ExpressionNode {
+class FirstFunction : public FunctionNode {
  public:
   explicit FirstFunction(const std::shared_ptr<ExpressionNode>& child)
-      : child_(child) {}
+      : FunctionNode(child) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -624,32 +653,20 @@ class FirstFunction : public ExpressionNode {
   const Descriptor* ReturnType() const override {
     return child_->ReturnType();
   }
-
- private:
-  const std::shared_ptr<ExpressionNode> child_;
 };
 
 // Implements the FHIRPath .trace() function.
-class TraceFunction : public ExpressionNode {
+class TraceFunction : public SingleValueFunctionNode {
  public:
   explicit TraceFunction(
       const std::shared_ptr<ExpressionNode>& child,
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
-      : child_(child), params_(params) {}
+      : SingleValueFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
+  Status EvaluateWithParam(WorkSpace* work_space, const Message& param,
                   std::vector<const Message*>* results) const override {
-    // trace requires a single parameter
-    if (params_.size() != 1) {
-      return InvalidArgument(
-          "trace() must be invoked with a single string argument");
-    }
-
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, results));
-
-    std::vector<const Message*> params_results;
-    FHIR_RETURN_IF_ERROR(params_[0]->Evaluate(work_space, &params_results));
-    FHIR_ASSIGN_OR_RETURN(std::string name, MessagesToString(params_results));
+    FHIR_ASSIGN_OR_RETURN(std::string name, MessageToString(param));
 
     LOG(INFO) << "trace(" << name << "):";
     for (auto it = results->begin(); it != results->end(); it++) {
@@ -662,18 +679,14 @@ class TraceFunction : public ExpressionNode {
   const Descriptor* ReturnType() const override {
     return child_->ReturnType();
   }
-
- private:
-  const std::shared_ptr<ExpressionNode> child_;
-  const std::vector<std::shared_ptr<ExpressionNode>> params_;
 };
 
 // Implements the FHIRPath .toInteger() function.
-class ToIntegerFunction : public ExpressionNode {
+class ToIntegerFunction : public FunctionNode {
  public:
   explicit ToIntegerFunction(
       const std::shared_ptr<ExpressionNode>& child)
-      : child_(child) {}
+      : FunctionNode(child) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -726,9 +739,6 @@ class ToIntegerFunction : public ExpressionNode {
   const Descriptor* ReturnType() const override {
     return Integer::descriptor();
   }
-
- private:
-  const std::shared_ptr<ExpressionNode> child_;
 };
 
 // Base class for FHIRPath binary operators.
@@ -895,10 +905,10 @@ class UnionOperator : public BinaryOperator {
 };
 
 // Implements the FHIRPath .distinct() function.
-class DistinctFunction : public ExpressionNode {
+class DistinctFunction : public FunctionNode {
  public:
   explicit DistinctFunction(const std::shared_ptr<ExpressionNode>& child)
-      : child_(child) {}
+      : FunctionNode(child) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -913,34 +923,24 @@ class DistinctFunction : public ExpressionNode {
   }
 
   const Descriptor* ReturnType() const override { return child_->ReturnType(); }
-
- private:
-  const std::shared_ptr<ExpressionNode> child_;
 };
 
 // Implements the FHIRPath .combine() function.
-class CombineFunction : public ExpressionNode {
+class CombineFunction : public SingleParameterFunctionNode {
  public:
   explicit CombineFunction(
       const std::shared_ptr<ExpressionNode>& child,
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
-      : child_(child), params_(params) {}
+      : SingleParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>& first_param,
                   std::vector<const Message*>* results) const override {
-    if (params_.size() != 1) {
-      return InvalidArgument(
-          "combine() must be invoked with exactly one argument.");
-    }
-
     std::vector<const Message*> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
-    std::vector<const Message*> param_results;
-    FHIR_RETURN_IF_ERROR(params_[0]->Evaluate(work_space, &param_results));
-
     results->insert(results->end(), child_results.begin(), child_results.end());
-    results->insert(results->end(), param_results.begin(), param_results.end());
+    results->insert(results->end(), first_param.begin(), first_param.end());
     return Status::OK();
   }
 
@@ -955,10 +955,6 @@ class CombineFunction : public ExpressionNode {
     // in the collection.
     return nullptr;
   }
-
- private:
-  const std::shared_ptr<ExpressionNode> child_;
-  const std::vector<std::shared_ptr<ExpressionNode>> params_;
 };
 
 // Converts decimal or integer container messages to a double value
