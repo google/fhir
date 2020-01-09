@@ -162,6 +162,7 @@ constexpr char kToIntegerFunction[] = "toInteger";
 constexpr char kCountFunction[] = "count";
 constexpr char kDistinctFunction[] = "distinct";
 constexpr char kCombineFunction[] = "combine";
+constexpr char kMatchesFunction[] = "matches";
 
 // Logical field in primitives representing the underlying value.
 constexpr char kPrimitiveValueField[] = "value";
@@ -490,6 +491,58 @@ class StartsWithFunction : public ExpressionNode {
       "argument";
 };
 constexpr char StartsWithFunction::kInvalidArgumentMessage[];
+
+class MatchesFunction : public ExpressionNode {
+ public:
+  explicit MatchesFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : child_(child), params_(params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    // matches() requires a single parameter
+    if (params_.size() != 1) {
+      return InvalidArgument("matches() requires a single parameter.");
+    }
+
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.empty()) {
+      return Status::OK();
+    }
+
+    std::vector<const Message*> params_results;
+    FHIR_RETURN_IF_ERROR(params_[0]->Evaluate(work_space, &params_results));
+
+    FHIR_ASSIGN_OR_RETURN(std::string item, MessagesToString(child_results));
+    FHIR_ASSIGN_OR_RETURN(std::string re_string,
+                          MessagesToString(params_results));
+
+    RE2 re(re_string);
+
+    if (!re.ok()) {
+      return InvalidArgument(
+          absl::StrCat("Unable to parse regular expression, '", re_string,
+                       "'. ", re.error()));
+    }
+
+    Boolean* result = new Boolean();
+    work_space->DeleteWhenFinished(result);
+    result->set_value(RE2::FullMatch(item, re));
+    results->push_back(result);
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Boolean::descriptor();
+  }
+
+ private:
+  const std::shared_ptr<ExpressionNode> child_;
+  const std::vector<std::shared_ptr<ExpressionNode>> params_;
+};
 
 // Implements the FHIRPath .empty() function.
 //
@@ -1781,6 +1834,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return std::make_shared<CombineFunction>(child_expression, params);
     } else if (function_name == kDistinctFunction) {
       return std::make_shared<DistinctFunction>(child_expression);
+    } else if (function_name == kMatchesFunction) {
+      return std::make_shared<MatchesFunction>(child_expression, params);
     } else {
       // TODO: Implement set of functions for initial use cases.
       SetError(absl::StrCat("The function ", function_name,

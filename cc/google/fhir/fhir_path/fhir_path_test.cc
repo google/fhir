@@ -391,6 +391,14 @@ TEST(FhirPathTest, TestFunctionStartsWithInvokedOnNonString) {
   EXPECT_FALSE(expr.Evaluate(test_observation).ok());
 }
 
+TEST(FhirPathTest, TestFunctionMatches) {
+  EXPECT_TRUE(EvaluateBoolExpression("{}.matches('') = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("''.matches('')"));
+  EXPECT_TRUE(EvaluateBoolExpression("'a'.matches('a')"));
+  EXPECT_FALSE(EvaluateBoolExpression("'abc'.matches('a')"));
+  EXPECT_TRUE(EvaluateBoolExpression("'abc'.matches('...')"));
+}
+
 TEST(FhirPathTest, TestFunctionToInteger) {
   EXPECT_EQ(EvaluateExpressionWithStatus("1.toInteger()")
                 .ValueOrDie()
