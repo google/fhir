@@ -39,6 +39,7 @@ cc_test(
     deps = [
         ":bundle_to_seqex_converter",
         ":example_key",
+        ":text_tokenizer",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/stu3:extensions_cc_proto",
         "//proto/stu3:resources_cc_proto",
@@ -143,10 +144,12 @@ cc_test(
     srcs = ["resource_to_example_test.cc"],
     deps = [
         ":resource_to_example",
+        ":text_tokenizer",
         "//cc/google/fhir:test_helper",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/stu3:resources_cc_proto",
         "@com_google_absl//absl/flags:flag",
+        "@com_google_absl//absl/memory",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
         "@org_tensorflow//tensorflow/core:lib",
@@ -160,6 +163,7 @@ cc_library(
     hdrs = ["text_tokenizer.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        "@com_google_absl//absl/flags:flag",
         "@com_google_absl//absl/strings",
         "@com_googlesource_code_re2//:re2",
         "@org_tensorflow//tensorflow/core:lib",
@@ -171,6 +175,7 @@ cc_test(
     srcs = ["text_tokenizer_test.cc"],
     deps = [
         ":text_tokenizer",
+        "@com_google_absl//absl/flags:flag",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
     ],

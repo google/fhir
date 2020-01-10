@@ -17,6 +17,7 @@
 #ifndef GOOGLE_FHIR_SEQEX_TEXT_TOKENIZER_H_
 #define GOOGLE_FHIR_SEQEX_TEXT_TOKENIZER_H_
 
+#include <memory>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -26,7 +27,6 @@
 namespace google {
 namespace fhir {
 namespace seqex {
-
 
 class TextTokenizer {
  public:
@@ -41,21 +41,27 @@ class TextTokenizer {
     }
 
     std::ostream& operator<<(std::ostream& os) const {
-      os << text.substr(char_start, char_end - char_start);
+      os << text;
       return os;
     }
   };
 
-  // Decomposes text into ordered strings.
-  virtual std::vector<Token> Tokenize(absl::string_view text) = 0;
   virtual ~TextTokenizer() {}
+
+  // Creates a text tokenizer as specified by flags.
+  static std::shared_ptr<TextTokenizer> FromFlags();
+
+  // Decompose a text string into tokens.
+  virtual std::vector<Token> Tokenize(absl::string_view text) const = 0;
 };
 
-// Breaks up text based on white-space and ignores punctuation.
+// Breaks up text based on white-space and ignores punctuation. Applies
+// replacement of numeric tokens, and adds bigrams and trigrams, if specified
+// by flags.
 class SimpleWordTokenizer : public TextTokenizer {
  public:
   explicit SimpleWordTokenizer(bool lowercase) : lowercase_(lowercase) {}
-  std::vector<Token> Tokenize(absl::string_view text) override;
+  std::vector<Token> Tokenize(absl::string_view text) const override;
 
  private:
   bool lowercase_;
@@ -64,7 +70,7 @@ class SimpleWordTokenizer : public TextTokenizer {
 // The text IS the token.
 class SingleTokenTokenizer : public TextTokenizer {
  public:
-  std::vector<Token> Tokenize(absl::string_view text) override;
+  std::vector<Token> Tokenize(absl::string_view text) const override;
 };
 
 }  // namespace seqex

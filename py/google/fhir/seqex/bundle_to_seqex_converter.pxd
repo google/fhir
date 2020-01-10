@@ -15,6 +15,7 @@
 
 from libcpp cimport bool
 from libcpp.map cimport map as cpp_map
+from libcpp.memory cimport shared_ptr
 from libcpp.vector cimport vector
 from libcpp.utility cimport pair
 
@@ -47,10 +48,16 @@ cdef extern from "proto/version_config.pb.h" namespace "google::fhir::proto" nog
 
 ctypedef pair[EventTrigger, vector[EventLabel]] TriggerLabelsPair
 
+cdef extern from "google/fhir/seqex/text_tokenizer.h" namespace "google::fhir::seqex" nogil:
+  cdef cppclass TextTokenizer:
+
+    @staticmethod
+    shared_ptr[const TextTokenizer] FromFlags()
+
 cdef extern from "google/fhir/seqex/bundle_to_seqex_converter.h" namespace "google::fhir::seqex" nogil:
   cdef cppclass UnprofiledBundleToSeqexConverter:
 
-    UnprofiledBundleToSeqexConverter(const VersionConfig&, const bool, const bool),
+    UnprofiledBundleToSeqexConverter(const VersionConfig&, shared_ptr[const TextTokenizer], const bool, const bool),
 
     bool Begin(const string& patient_id, const Bundle& bundle,
                const vector[TriggerLabelsPair]& labels,

@@ -14,24 +14,32 @@
 
 #include "google/fhir/seqex/text_tokenizer.h"
 
+#include <memory>
+
+#include "absl/flags/flag.h"
 #include "absl/strings/ascii.h"
+#include "absl/strings/numbers.h"
+#include "absl/strings/str_cat.h"
 #include "absl/strings/str_split.h"
 #include "tensorflow/core/platform/logging.h"
 #include "re2/re2.h"
 
-using std::vector;
+ABSL_FLAG(std::string, tokenizer, "simple", "Which tokenizer to use.");
 
 namespace google {
 namespace fhir {
 namespace seqex {
 
 namespace {
-const char kWhitespaceChars[] = " \t\r\n";
 
-vector<TextTokenizer::Token> SplitToSimpleWordTokens(const std::string& text) {
+const char kWhitespaceChars[] = " \t\r\n";
+const TextTokenizer::Token start = {"<s>", 0, 0};
+
+std::vector<TextTokenizer::Token> SplitToSimpleWordTokens(
+    const std::string& text) {
   std::vector<TextTokenizer::Token> result;
   for (absl::string_view p : absl::StrSplit(
-      text, absl::ByAnyChar(kWhitespaceChars), absl::SkipWhitespace())) {
+           text, absl::ByAnyChar(kWhitespaceChars), absl::SkipWhitespace())) {
     TextTokenizer::Token token;
     token.text = std::string(p);
     token.char_start = p.begin() - text.data();
@@ -43,11 +51,23 @@ vector<TextTokenizer::Token> SplitToSimpleWordTokens(const std::string& text) {
   }
   return result;
 }
+
 }  // namespace
+
+std::shared_ptr<TextTokenizer> TextTokenizer::FromFlags() {
+  // Strings are tokenized if in the whitelist.
+  if (absl::GetFlag(FLAGS_tokenizer) == "simple") {
+    return std::make_shared<SimpleWordTokenizer>(true /* lowercase */);
+  } else if (absl::GetFlag(FLAGS_tokenizer) == "single") {
+    return std::make_shared<SingleTokenTokenizer>();
+  } else {
+    LOG(FATAL) << "Unknown tokenizer: " << absl::GetFlag(FLAGS_tokenizer);
+  }
+}
 
 // public
 std::vector<TextTokenizer::Token> SimpleWordTokenizer::Tokenize(
-    absl::string_view text) {
+    absl::string_view text) const {
   std::string nopunc;
   nopunc.assign(text.data(), text.size());
   static LazyRE2 kPunctuationRE = {R"re([\p{P}\p{S}])re"};
@@ -55,12 +75,12 @@ std::vector<TextTokenizer::Token> SimpleWordTokenizer::Tokenize(
   if (this->lowercase_) {
     nopunc = absl::AsciiStrToLower(nopunc);
   }
-  return SplitToSimpleWordTokens(nopunc);
+    return SplitToSimpleWordTokens(nopunc);
 }
 
 // public
 std::vector<TextTokenizer::Token> SingleTokenTokenizer::Tokenize(
-    absl::string_view text) {
+    absl::string_view text) const {
   TextTokenizer::Token t;
   t.text = std::string(text);
   t.char_start = 0;

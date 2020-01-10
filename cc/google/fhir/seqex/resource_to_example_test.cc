@@ -21,6 +21,8 @@
 #include "gtest/gtest.h"
 #include "absl/flags/declare.h"
 #include "absl/flags/flag.h"
+#include "absl/memory/memory.h"
+#include "google/fhir/seqex/text_tokenizer.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/resources.pb.h"
@@ -38,10 +40,14 @@ using ::google::fhir::testutil::EqualsProto;
 
 class ResourceToExampleTest : public ::testing::Test {
  public:
-  void SetUp() override { parser_.AllowPartialMessage(true); }
+  void SetUp() override {
+    parser_.AllowPartialMessage(true);
+    tokenizer_ = std::make_shared<SimpleWordTokenizer>(true /* lowercase */);
+  }
 
  protected:
   google::protobuf::TextFormat::Parser parser_;
+  std::shared_ptr<TextTokenizer> tokenizer_;
 };
 
 TEST_F(ResourceToExampleTest, Patient) {
@@ -78,7 +84,7 @@ TEST_F(ResourceToExampleTest, Patient) {
   )proto", &expected));
 
   ::tensorflow::Example output;
-  ResourceToExample(patient, &output, false);
+  ResourceToExample(patient, *tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
 
@@ -140,7 +146,7 @@ TEST_F(ResourceToExampleTest, Observation_ValueQuantity) {
   )proto", &expected));
 
   ::tensorflow::Example output;
-  ResourceToExample(input, &output, false);
+  ResourceToExample(input, *tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
 
@@ -206,7 +212,7 @@ TEST_F(ResourceToExampleTest, Observation_TwoCodes) {
   )proto", &expected));
 
   ::tensorflow::Example output;
-  ResourceToExample(input, &output, false);
+  ResourceToExample(input, *tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
 
@@ -241,7 +247,7 @@ TEST_F(ResourceToExampleTest, PositiveInt) {
       }
     })proto", &expected));
   ::tensorflow::Example output;
-  ResourceToExample(input, &output, false);
+  ResourceToExample(input, *tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
 
@@ -262,10 +268,9 @@ TEST_F(ResourceToExampleTest, HandlesCodeValueAsString) {
         })proto",
       &expected));
   ::tensorflow::Example output;
-  ResourceToExample(input, &output, false);
+  ResourceToExample(input, *tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
-
 
 TEST_F(ResourceToExampleTest, BinaryResourceWithContent) {
   stu3::proto::Binary input;
@@ -285,7 +290,7 @@ TEST_F(ResourceToExampleTest, BinaryResourceWithContent) {
         })proto",
       &expected));
   ::tensorflow::Example output;
-  ResourceToExample(input, &output, false);
+  ResourceToExample(input, *tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
 

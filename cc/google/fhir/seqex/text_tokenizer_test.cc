@@ -13,10 +13,15 @@
 // limitations under the License.
 
 #include "google/fhir/seqex/text_tokenizer.h"
+
+#include <memory>
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/flags/flag.h"
 #include "absl/strings/ascii.h"
 #include "absl/strings/str_join.h"
+ABSL_DECLARE_FLAG(std::string, tokenizer);
 
 namespace google {
 namespace fhir {
@@ -33,6 +38,21 @@ std::vector<std::string> ExtractText(
 
 using ::testing::ElementsAre;
 
+TEST(TextTokenizerTest, FromFlagsDefaultValue) {
+  std::shared_ptr<TextTokenizer> tokenizer = TextTokenizer::FromFlags();
+  ASSERT_THAT(tokenizer.get(), testing::Not(nullptr));
+  EXPECT_THAT(ExtractText(tokenizer->Tokenize("These 2 tokens")),
+              ElementsAre("these", "2", "tokens"));
+}
+
+TEST(TextTokenizerTest, FromFlagsOverride) {
+  absl::SetFlag(&FLAGS_tokenizer, "single");
+  std::shared_ptr<TextTokenizer> tokenizer = TextTokenizer::FromFlags();
+  ASSERT_THAT(tokenizer.get(), testing::Not(nullptr));
+  EXPECT_THAT(ExtractText(tokenizer->Tokenize("These 2 tokens")),
+              ElementsAre("These 2 tokens"));
+}
+
 TEST(TextTokenizerTest, SimpleWordTokenizer) {
   SimpleWordTokenizer t(false);
   EXPECT_THAT(ExtractText(t.Tokenize("These are tokens.")),
@@ -48,7 +68,7 @@ TEST(TextTokenizerTest, SimpleWordTokenizer) {
               ElementsAre("these", "are", "tokens"));
 }
 
-TEST(TextTokenizerTest, SimpleWordTokenizer_CharRanges) {
+TEST(TextTokenizerTest, SimpleWordTokenizerCharRanges) {
   SimpleWordTokenizer t(false);
   const std::string input = "These\n[**are**]\n\n\ntokens.";
   auto tokenized = t.Tokenize(input);
@@ -61,7 +81,7 @@ TEST(TextTokenizerTest, SimpleWordTokenizer_CharRanges) {
   }
 }
 
-TEST(TextTokenizerTest, SimpleWordTokenizer_LongText) {
+TEST(TextTokenizerTest, SimpleWordTokenizerLongText) {
   SimpleWordTokenizer t(true);
   const std::string input =
       "See elsewhere for objective data.\n\n20 year old russian speaking male "
@@ -77,7 +97,7 @@ TEST(TextTokenizerTest, SimpleWordTokenizer_LongText) {
   }
 }
 
-TEST(TextTokenizerTest, SingleTokenTokenizerTest) {
+TEST(TextTokenizerTest, SingleTokenTokenizer) {
   SingleTokenTokenizer t;
   const std::string text = "There  is\n but one token.";
   EXPECT_THAT(t.Tokenize(text),

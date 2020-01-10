@@ -30,6 +30,7 @@ pyx_library(
     ],
     deps = [
         "//cc/google/fhir/seqex:bundle_to_seqex_converter",
+        "//cc/google/fhir/seqex:text_tokenizer",
         "//proto:version_config_cc_proto",
         "//proto/stu3:extensions_cc_proto",
         "//proto/stu3:resources_cc_proto",

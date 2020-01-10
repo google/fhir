@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <iterator>
 #include <map>
+#include <memory>
 #include <set>
 #include <string>
 #include <utility>
@@ -91,6 +92,7 @@ void GetContextFeatures(
 class BaseBundleToSeqexConverter {
  public:
   BaseBundleToSeqexConverter(const proto::VersionConfig& fhir_version_config,
+                             std::shared_ptr<const TextTokenizer> tokenizer,
                              const bool enable_attribution,
                              const bool generate_sequence_label);
   // Move the iterator to the next key/example pair from the bundle.
@@ -108,6 +110,7 @@ class BaseBundleToSeqexConverter {
                                   tensorflow::Example>>& event_sequence);
 
   proto::VersionConfig version_config_;
+  std::shared_ptr<const TextTokenizer> tokenizer_;
   std::set<std::string> redacted_features_;
 
   // These are computed once per Bundle.
@@ -208,7 +211,8 @@ class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
     const absl::Time version_time = google::fhir::GetTimeFromTimelikeElement(
         resource.meta().last_updated());
     ::tensorflow::Example example;
-    seqex::ResourceToExample(resource, &example, enable_attribution_);
+    seqex::ResourceToExample(resource, *tokenizer_, &example,
+                             enable_attribution_);
     if (enable_attribution_) {
       (*example.mutable_features()
             ->mutable_feature())[seqex::kResourceIdFeatureKey]
@@ -389,7 +393,7 @@ void BundleToSeqexConverter<BundleLike>::BundleToContext(
       }
       patient.clear_meta();
       patient.clear_deceased();
-      ResourceToExample(patient, &context_, enable_attribution_);
+      ResourceToExample(patient, *tokenizer_, &context_, enable_attribution_);
       CHECK(patient.has_id());
       // Add patientId to context feature for cross validation.
       (*context_.mutable_features()->mutable_feature())[kPatientIdFeatureKey]

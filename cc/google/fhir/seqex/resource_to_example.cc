@@ -56,7 +56,6 @@ ABSL_FLAG(bool, tokenize_code_text_features, true,
           "Tokenize all the Coding.display and CodeableConcept.text fields. "
           "Doesn't include the original value as a feature unless it's in "
           "add_tokenize_feature_list.");
-ABSL_FLAG(std::string, tokenizer, "simple", "Which tokenizer to use.");
 
 namespace google {
 namespace fhir {
@@ -212,18 +211,10 @@ using ::tensorflow::Status;
 namespace {
 
 void AddTokensToExample(const std::string& name, const std::string& value,
+                        const TextTokenizer& tokenizer,
                         ::tensorflow::Example* example,
                         bool enable_attribution) {
-  std::unique_ptr<TextTokenizer> tokenizer;
-  // Strings are tokenized if in the whitelist.
-  if (absl::GetFlag(FLAGS_tokenizer) == "simple") {
-    tokenizer = absl::make_unique<SimpleWordTokenizer>(true /* lowercase */);
-  } else if (absl::GetFlag(FLAGS_tokenizer) == "single") {
-    tokenizer = absl::make_unique<SingleTokenTokenizer>();
-  } else {
-    LOG(FATAL) << "Unknown tokenizer: " << absl::GetFlag(FLAGS_tokenizer);
-  }
-  auto tokens = tokenizer->Tokenize(value);
+  auto tokens = tokenizer.Tokenize(value);
   auto* token_list =
       (*example->mutable_features()
             ->mutable_feature())[absl::StrCat(name, ".tokenized")]
@@ -253,15 +244,16 @@ void AddTokensToExample(const std::string& name, const std::string& value,
 void AddValueAndOrTokensToExample(
     const std::set<std::string>& tokenize_feature_set,
     const std::set<std::string>& add_tokenize_feature_set,
-    const std::string& name, const std::string& value,
-    ::tensorflow::Example* example, bool enable_attribution) {
+    const TextTokenizer& tokenizer, const std::string& name,
+    const std::string& value, ::tensorflow::Example* example,
+    bool enable_attribution) {
   if (tokenize_feature_set.count(name) != 0) {
-    AddTokensToExample(name, value, example, enable_attribution);
+    AddTokensToExample(name, value, tokenizer, example, enable_attribution);
     return;
   }
 
   if (add_tokenize_feature_set.count(name) != 0) {
-    AddTokensToExample(name, value, example, enable_attribution);
+    AddTokensToExample(name, value, tokenizer, example, enable_attribution);
   }
 
   (*example->mutable_features()->mutable_feature())[name]
@@ -413,7 +405,7 @@ void AddCodeableConceptToExample(
     const Message& concept, const std::string& name,
     ::tensorflow::Example* example, std::set<std::string>* tokenize_feature_set,
     const std::set<std::string>& add_tokenize_feature_set,
-    bool enable_attribution) {
+    const TextTokenizer& tokenizer, bool enable_attribution) {
   const auto& statusor_code = GetPreferredCode(concept);
   if (!statusor_code.ok()) {
     // Ignore the code that we do not recognize.
@@ -434,7 +426,7 @@ void AddCodeableConceptToExample(
       tokenize_feature_set->insert(full_name);
     }
     AddValueAndOrTokensToExample(
-        *tokenize_feature_set, add_tokenize_feature_set, full_name,
+        *tokenize_feature_set, add_tokenize_feature_set, tokenizer, full_name,
         statusor_text.ValueOrDie().value(), example, enable_attribution);
   }
   stu3::ForEachCoding(concept, [&](const Coding& coding) {
@@ -451,7 +443,7 @@ void AddCodeableConceptToExample(
         tokenize_feature_set->insert(full_name);
       }
       AddValueAndOrTokensToExample(
-          *tokenize_feature_set, add_tokenize_feature_set,
+          *tokenize_feature_set, add_tokenize_feature_set, tokenizer,
           absl::StrCat(name, ".", system, ".display"), coding.display().value(),
           example, enable_attribution);
     }
@@ -459,6 +451,7 @@ void AddCodeableConceptToExample(
 }
 
 void MessageToExample(const google::protobuf::Message& message, const std::string& prefix,
+                      const TextTokenizer& tokenizer,
                       ::tensorflow::Example* example, bool enable_attribution) {
   std::set<std::string> tokenize_feature_set;
   const std::string& tokenize_feature_list =
@@ -572,15 +565,15 @@ void MessageToExample(const google::protobuf::Message& message, const std::strin
                    String::descriptor()->full_name()) {
           String s;
           s.CopyFrom(child);
-          AddValueAndOrTokensToExample(tokenize_feature_set,
-                                       add_tokenize_feature_set, name,
-                                       s.value(), example, enable_attribution);
+          AddValueAndOrTokensToExample(
+              tokenize_feature_set, add_tokenize_feature_set, tokenizer, name,
+              s.value(), example, enable_attribution);
         } else if (field->message_type()->full_name() ==
                    Xhtml::descriptor()->full_name()) {
           Xhtml xhtml;
           xhtml.CopyFrom(child);
           AddValueAndOrTokensToExample(
-              tokenize_feature_set, add_tokenize_feature_set, name,
+              tokenize_feature_set, add_tokenize_feature_set, tokenizer, name,
               xhtml.value(), example, enable_attribution);
         } else if (field->message_type()->full_name() ==
                    Boolean::descriptor()->full_name()) {
@@ -616,7 +609,7 @@ void MessageToExample(const google::protobuf::Message& message, const std::strin
           // Codeable concepts are emitted using the preferred coding systems.
           AddCodeableConceptToExample(
               child, name, example, &tokenize_feature_set,
-              add_tokenize_feature_set, enable_attribution);
+              add_tokenize_feature_set, tokenizer, enable_attribution);
         } else if (field->message_type()->full_name() ==
                    Coding::descriptor()->full_name()) {
           // Codings are emitted with the system if we know it, as raw codes
@@ -651,7 +644,7 @@ void MessageToExample(const google::protobuf::Message& message, const std::strin
           // We currently flatten repeated submessages. That could potentially
           // be problematic.
           // TODO: figure out something better to do here.
-          MessageToExample(child, name, example, enable_attribution);
+          MessageToExample(child, name, tokenizer, example, enable_attribution);
         }
       } else {
         LOG(INFO) << "Unable to handle field " << name << " in message of type "
@@ -662,10 +655,12 @@ void MessageToExample(const google::protobuf::Message& message, const std::strin
 }
 
 void ResourceToExample(const google::protobuf::Message& message,
+                       const TextTokenizer& tokenizer,
                        ::tensorflow::Example* example,
                        bool enable_attribution) {
   const google::protobuf::Descriptor* descriptor = message.GetDescriptor();
-  MessageToExample(message, descriptor->name(), example, enable_attribution);
+  MessageToExample(message, descriptor->name(), tokenizer, example,
+                   enable_attribution);
 }
 
 }  // namespace seqex

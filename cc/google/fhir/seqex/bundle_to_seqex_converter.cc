@@ -387,8 +387,10 @@ Status BuildLabelsFromTriggerLabelPair(
 
 BaseBundleToSeqexConverter::BaseBundleToSeqexConverter(
     const proto::VersionConfig& fhir_version_config,
+    std::shared_ptr<const TextTokenizer> tokenizer,
     const bool enable_attribution, const bool generate_sequence_label)
     : version_config_(fhir_version_config),
+      tokenizer_(tokenizer),
       enable_attribution_(enable_attribution),
       generate_sequence_label_(generate_sequence_label) {
   // Split the redacted feature list for easy access.

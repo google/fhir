@@ -15,6 +15,7 @@
 #include "google/fhir/seqex/bundle_to_seqex_converter.h"
 
 #include <map>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -26,6 +27,7 @@
 #include "absl/flags/flag.h"
 #include "absl/strings/substitute.h"
 #include "google/fhir/seqex/example_key.h"
+#include "google/fhir/seqex/text_tokenizer.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "proto/stu3/resources.pb.h"
@@ -58,6 +60,7 @@ class BundleToSeqexConverterTest : public ::testing::Test {
     // Reset command line flags to default values between tests.
     absl::SetFlag(&FLAGS_tokenize_code_text_features, true);
     absl::SetFlag(&FLAGS_trigger_time_redacted_features, "");
+    tokenizer_ = TextTokenizer::FromFlags();
   }
 
   void PerformTest(const std::string& input_key, const Bundle& bundle,
@@ -65,7 +68,7 @@ class BundleToSeqexConverterTest : public ::testing::Test {
                    const std::map<std::string, SequenceExample>& expected) {
     // Until all config options for this object can be passed as args, we need
     // to initialize it after overriing the flags settings.
-    BundleToSeqexConverter<> converter(fhir_version_config_,
+    BundleToSeqexConverter<> converter(fhir_version_config_, tokenizer_,
                                        false /* enable_attribution */,
                                        false /* generate_sequence_label */);
     std::map<std::string, int> counter_stats;
@@ -85,6 +88,7 @@ class BundleToSeqexConverterTest : public ::testing::Test {
 
  protected:
   VersionConfig fhir_version_config_;
+  std::shared_ptr<TextTokenizer> tokenizer_;
   google::protobuf::TextFormat::Parser parser_;
 };
 
@@ -2316,7 +2320,7 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples) {
       }
     })proto", &seqex2));
 
-  BundleToSeqexConverter<> converter(fhir_version_config_,
+  BundleToSeqexConverter<> converter(fhir_version_config_, tokenizer_,
                                      false /* enable_attribution */,
                                      false /*generate_sequence_label */);
   std::map<std::string, int> counter_stats;
@@ -2671,7 +2675,7 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples_EnableAttribution) {
       }
     })proto", &seqex2));
 
-  BundleToSeqexConverter<> converter(fhir_version_config_,
+  BundleToSeqexConverter<> converter(fhir_version_config_, tokenizer_,
                                      true /* enable_attribution */,
                                      false /* generate_sequence_label */);
   std::map<std::string, int> counter_stats;

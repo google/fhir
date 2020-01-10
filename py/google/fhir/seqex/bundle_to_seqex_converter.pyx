@@ -40,8 +40,10 @@ cdef class PyBundleToSeqexConverter:
     cdef VersionConfig c_version_config
     assert c_version_config.ParseFromString(
       version_config.SerializeToString())
+    cdef shared_ptr[const TextTokenizer] c_tokenizer
+    c_tokenizer = TextTokenizer.FromFlags()
     self._thisptr.reset(new UnprofiledBundleToSeqexConverter(
-      c_version_config, enable_attribution,
+      c_version_config, c_tokenizer, enable_attribution,
       generate_sequence_label))
 
   def begin(self, patient_id, bundle, trigger_labels_pair_list):
