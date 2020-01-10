@@ -555,6 +555,14 @@ TEST(FhirPathTest, TestDistinct) {
                   {EqualsProto(true_proto), EqualsProto(false_proto)}));
 }
 
+TEST(FhirPathTest, TestIsDistinct) {
+  EXPECT_TRUE(EvaluateBoolExpression("{}.isDistinct()"));
+  EXPECT_TRUE(EvaluateBoolExpression("true.isDistinct()"));
+  EXPECT_TRUE(EvaluateBoolExpression("(true | false).isDistinct()"));
+
+  EXPECT_FALSE(EvaluateBoolExpression("true.combine(true).isDistinct()"));
+}
+
 TEST(FhirPathTest, TestIndexer) {
   EXPECT_TRUE(EvaluateBoolExpression("true[0] = true"));
   EXPECT_TRUE(EvaluateBoolExpression("true[1] = {}"));

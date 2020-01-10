@@ -170,6 +170,7 @@ constexpr char kDistinctFunction[] = "distinct";
 constexpr char kCombineFunction[] = "combine";
 constexpr char kMatchesFunction[] = "matches";
 constexpr char kLengthFunction[] = "length";
+constexpr char kIsDistinctFunction[] = "isDistinct";
 
 // Logical field in primitives representing the underlying value.
 constexpr char kPrimitiveValueField[] = "value";
@@ -931,6 +932,34 @@ class UnionOperator : public BinaryOperator {
     // TODO: Consider refactoring ReturnType to return a set of all types
     // in the collection.
     return nullptr;
+  }
+};
+
+// Implements the FHIRPath .isDistinct() function.
+class IsDistinctFunction : public FunctionNode {
+ public:
+  explicit IsDistinctFunction(const std::shared_ptr<ExpressionNode>& child)
+      : FunctionNode(child) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    std::unordered_set<const Message*, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
+        child_results_set;
+    child_results_set.insert(child_results.begin(), child_results.end());
+
+
+    Boolean* result = new Boolean();
+    work_space->DeleteWhenFinished(result);
+    result->set_value(child_results_set.size() == child_results.size());
+    results->push_back(result);
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Boolean::GetDescriptor();
   }
 };
 
@@ -1864,6 +1893,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return std::make_shared<MatchesFunction>(child_expression, params);
     } else if (function_name == kLengthFunction) {
       return std::make_shared<LengthFunction>(child_expression);
+    } else if (function_name == kIsDistinctFunction) {
+      return std::make_shared<IsDistinctFunction>(child_expression);
     } else {
       // TODO: Implement set of functions for initial use cases.
       SetError(absl::StrCat("The function ", function_name,
