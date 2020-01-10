@@ -541,6 +541,29 @@ TEST(FhirPathTest, TestCombine) {
                                          EqualsProto(false_proto)}));
 }
 
+TEST(FhirPathTest, TestIntersect) {
+  EXPECT_TRUE(EvaluateBoolExpression("{}.intersect({}) = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("true.intersect({}) = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("true.intersect(false) = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("{}.intersect(true) = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("true.intersect(true) = true"));
+  EXPECT_TRUE(EvaluateBoolExpression("(true | false).intersect(true) = true"));
+
+  EXPECT_TRUE(
+      EvaluateBoolExpression("(true.combine(true)).intersect(true) = true)"));
+  EXPECT_TRUE(
+      EvaluateBoolExpression("(true).intersect(true.combine(true)) = true)"));
+
+  Boolean true_proto = ParseFromString<Boolean>("value: true");
+  Boolean false_proto = ParseFromString<Boolean>("value: false");
+  EvaluationResult evaluation_result =
+      EvaluateExpressionWithStatus("(true | false).intersect(true | false)")
+          .ValueOrDie();
+  EXPECT_THAT(evaluation_result.GetMessages(),
+              UnorderedElementsAreArray(
+                  {EqualsProto(true_proto), EqualsProto(false_proto)}));
+}
+
 TEST(FhirPathTest, TestDistinct) {
   EXPECT_TRUE(EvaluateBoolExpression("{}.distinct() = {}"));
   EXPECT_TRUE(EvaluateBoolExpression("true.distinct()"));

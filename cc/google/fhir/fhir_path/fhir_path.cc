@@ -171,6 +171,7 @@ constexpr char kCombineFunction[] = "combine";
 constexpr char kMatchesFunction[] = "matches";
 constexpr char kLengthFunction[] = "length";
 constexpr char kIsDistinctFunction[] = "isDistinct";
+constexpr char kIntersectFunction[] = "intersect";
 
 // Logical field in primitives representing the underlying value.
 constexpr char kPrimitiveValueField[] = "value";
@@ -1000,6 +1001,47 @@ class CombineFunction : public SingleParameterFunctionNode {
 
     results->insert(results->end(), child_results.begin(), child_results.end());
     results->insert(results->end(), first_param.begin(), first_param.end());
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    DCHECK_EQ(params_.size(), 1);
+
+    if (AreSameMessageType(child_->ReturnType(), params_[0]->ReturnType())) {
+      return child_->ReturnType();
+    }
+
+    // TODO: Consider refactoring ReturnType to return a set of all types
+    // in the collection.
+    return nullptr;
+  }
+};
+
+// Implements the FHIRPath .intersect() function.
+class IntersectFunction : public SingleParameterFunctionNode {
+ public:
+  explicit IntersectFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : SingleParameterFunctionNode(child, params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>& first_param,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    std::unordered_set<const Message*, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
+        child_set;
+    child_set.insert(child_results.begin(), child_results.end());
+
+    for (const auto& elem : first_param) {
+      if (child_set.count(elem) > 0) {
+        child_set.erase(elem);
+        results->push_back(elem);
+      }
+    }
+
     return Status::OK();
   }
 
@@ -1895,6 +1937,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return std::make_shared<LengthFunction>(child_expression);
     } else if (function_name == kIsDistinctFunction) {
       return std::make_shared<IsDistinctFunction>(child_expression);
+    } else if (function_name == kIntersectFunction) {
+      return std::make_shared<IntersectFunction>(child_expression, params);
     } else {
       // TODO: Implement set of functions for initial use cases.
       SetError(absl::StrCat("The function ", function_name,
