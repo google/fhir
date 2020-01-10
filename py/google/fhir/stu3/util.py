@@ -22,7 +22,7 @@ from proto.stu3 import resources_pb2
 
 
 def GetPatient(
-    bundle):
+    bundle: resources_pb2.Bundle) -> typing.Optional[resources_pb2.Patient]:
   """Returns the patient resource from the bundle, if it exists."""
   for entry in bundle.entry:
     if entry.resource.HasField('patient'):

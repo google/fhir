@@ -6,6 +6,7 @@ publisher: "Testington Inc."
 fhir_version: R4
 telcom_url: "http://www.testington.com"
 license: APACHE
+license_date: "2019"
 
 local_contained_resource: true
 file_splitting_behavior: SEPARATE_EXTENSIONS

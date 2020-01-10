@@ -7,7 +7,7 @@
         "id": "Bundle",
         "url": "http://test/url/base/Bundle",
         "name": "Bundle",
-        "date": "2019-12-16",
+        "date": "2020-01-09",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -20,7 +20,7 @@
           }
         ],
         "description": "Test Bundle",
-        "fhirVersion": "4.0.0",
+        "fhirVersion": "4.0.1",
         "kind": "resource",
         "abstract": false,
         "context": [
@@ -1882,7 +1882,7 @@
         "id": "TestPatient",
         "url": "http://test/url/base/TestPatient",
         "name": "TestPatient",
-        "date": "2019-12-16",
+        "date": "2020-01-09",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1895,7 +1895,7 @@
           }
         ],
         "description": "Patient with some fields changed for test.",
-        "fhirVersion": "4.0.0",
+        "fhirVersion": "4.0.1",
         "kind": "resource",
         "abstract": false,
         "context": [
@@ -4675,7 +4675,7 @@
         "id": "TestObservation",
         "url": "http://test/url/base/TestObservation",
         "name": "TestObservation",
-        "date": "2019-12-16",
+        "date": "2020-01-09",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -4688,7 +4688,7 @@
           }
         ],
         "description": "Patient with some fields changed for test.",
-        "fhirVersion": "4.0.0",
+        "fhirVersion": "4.0.1",
         "kind": "resource",
         "abstract": false,
         "context": [
@@ -10740,7 +10740,7 @@
         "id": "TestObservationLvl2",
         "url": "http://test/url/base/TestObservationLvl2",
         "name": "TestObservationLvl2",
-        "date": "2019-12-16",
+        "date": "2020-01-09",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -10753,7 +10753,7 @@
           }
         ],
         "description": "Level 2 Observation",
-        "fhirVersion": "4.0.0",
+        "fhirVersion": "4.0.1",
         "kind": "resource",
         "abstract": false,
         "context": [
@@ -17608,7 +17608,7 @@
         "id": "TestEncounter",
         "url": "http://test/url/base/TestEncounter",
         "name": "TestEncounter",
-        "date": "2019-12-16",
+        "date": "2020-01-09",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -17621,7 +17621,7 @@
           }
         ],
         "description": "Test Encounter",
-        "fhirVersion": "4.0.0",
+        "fhirVersion": "4.0.1",
         "kind": "resource",
         "abstract": false,
         "context": [

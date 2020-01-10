@@ -7,7 +7,7 @@
         "id": "PrimitiveHasNoValue",
         "url": "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
         "name": "PrimitiveHasNoValue",
-        "date": "2019-12-16",
+        "date": "2020-01-09",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -20,7 +20,7 @@
           }
         ],
         "description": "Whether or not the primitive is missing a value.",
-        "fhirVersion": "4.0.0",
+        "fhirVersion": "4.0.1",
         "kind": "complex-type",
         "abstract": false,
         "context": [
@@ -305,7 +305,7 @@
         "id": "Base64BinarySeparatorStride",
         "url": "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
         "name": "Base64BinarySeparatorStride",
-        "date": "2019-12-16",
+        "date": "2020-01-09",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -318,7 +318,7 @@
           }
         ],
         "description": "Base64Binary rendering parameters.",
-        "fhirVersion": "4.0.0",
+        "fhirVersion": "4.0.1",
         "kind": "complex-type",
         "abstract": false,
         "context": [
@@ -1292,7 +1292,7 @@
         "id": "EventLabel",
         "url": "https://g.co/fhir/StructureDefinition/eventLabel",
         "name": "EventLabel",
-        "date": "2019-12-16",
+        "date": "2020-01-09",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -1305,7 +1305,7 @@
           }
         ],
         "description": "EventLabels define labels used for TensorFlow model training and evaluation.",
-        "fhirVersion": "4.0.0",
+        "fhirVersion": "4.0.1",
         "kind": "complex-type",
         "abstract": false,
         "context": [
@@ -3802,7 +3802,7 @@
         "id": "EventTrigger",
         "url": "https://g.co/fhir/StructureDefinition/eventTrigger",
         "name": "EventTrigger",
-        "date": "2019-12-16",
+        "date": "2020-01-09",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -3815,7 +3815,7 @@
           }
         ],
         "description": "EventTriggers specify cutoff times for generated TensorFlow examples.",
-        "fhirVersion": "4.0.0",
+        "fhirVersion": "4.0.1",
         "kind": "complex-type",
         "abstract": false,
         "context": [

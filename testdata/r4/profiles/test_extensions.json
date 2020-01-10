@@ -7,7 +7,7 @@
         "id": "SimpleDecimalExt",
         "url": "http://test/url/base/SimpleDecimalExt",
         "name": "SimpleDecimalExt",
-        "date": "2019-12-16",
+        "date": "2020-01-09",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -20,7 +20,7 @@
           }
         ],
         "description": "This is the A-Extension",
-        "fhirVersion": "4.0.0",
+        "fhirVersion": "4.0.1",
         "kind": "complex-type",
         "abstract": false,
         "context": [
@@ -299,7 +299,7 @@
         "id": "SimpleCodeableConceptExtension",
         "url": "http://test/url/base/SimpleCodeableConceptExtension",
         "name": "SimpleCodeableConceptExtension",
-        "date": "2019-12-16",
+        "date": "2020-01-09",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -312,7 +312,7 @@
           }
         ],
         "description": "SimpleCodeableConcept Extension",
-        "fhirVersion": "4.0.0",
+        "fhirVersion": "4.0.1",
         "kind": "complex-type",
         "abstract": false,
         "context": [
@@ -605,7 +605,7 @@
         "id": "DigitalMediaType",
         "url": "http://test/url/base/DigitalMediaType",
         "name": "DigitalMediaType",
-        "date": "2019-12-16",
+        "date": "2020-01-09",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -618,7 +618,7 @@
           }
         ],
         "description": "Extension for Digital Media Type code.",
-        "fhirVersion": "4.0.0",
+        "fhirVersion": "4.0.1",
         "kind": "complex-type",
         "abstract": false,
         "context": [
@@ -911,7 +911,7 @@
         "id": "ComplexExt",
         "url": "http://test/url/base/ComplexExt",
         "name": "ComplexExt",
-        "date": "2019-12-16",
+        "date": "2020-01-09",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -924,7 +924,7 @@
           }
         ],
         "description": "complex extension",
-        "fhirVersion": "4.0.0",
+        "fhirVersion": "4.0.1",
         "kind": "complex-type",
         "abstract": false,
         "context": [

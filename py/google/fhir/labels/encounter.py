@@ -26,7 +26,7 @@ from __future__ import print_function
 
 from datetime import datetime
 from datetime import timedelta
-
+import typing
 
 from proto.stu3 import codes_pb2
 from proto.stu3 import datatypes_pb2
@@ -39,7 +39,7 @@ SECS_PER_HOUR = 3600
 SECS_PER_DAY = 3600 * 24
 
 
-def ToTime(date_and_time):
+def ToTime(date_and_time: datatypes_pb2.DateTime) -> datetime:
   """Get utc seconds from FHIR DateTime.
 
   Args:
@@ -52,14 +52,14 @@ def ToTime(date_and_time):
   return datetime.utcfromtimestamp(date_and_time.value_us / 1000000)
 
 
-def EncounterIsFinished(encounter):
+def EncounterIsFinished(encounter: resources_pb2.Encounter) -> bool:
   return (encounter.period.HasField('start') and
           encounter.period.HasField('end') and
           encounter.status.value ==
           codes_pb2.EncounterStatusCode.FINISHED)
 
 
-def EncounterIsValidHospitalization(encounter):
+def EncounterIsValidHospitalization(encounter: resources_pb2.Encounter) -> bool:
   enc_class = encounter.class_value
   return (EncounterIsFinished(encounter) and
           enc_class.system.value == ENCOUNTER_CLASS_CODESYSTEM and
@@ -67,28 +67,28 @@ def EncounterIsValidHospitalization(encounter):
 
 
 def EncounterIsValidHospitalizationForSynthea(
-    encounter):
+    encounter: resources_pb2.Encounter) -> bool:
   enc_class = encounter.class_value
   return (EncounterIsFinished(encounter) and
           enc_class.code.value == 'inpatient')
 
 
-def AtDuration(encounter,
-               hours):
+def AtDuration(encounter: resources_pb2.Encounter,
+               hours: int) -> datetime:
   # encounter.start + hours
   result = ToTime(encounter.period.start) + timedelta(hours=hours)
   assert result <= ToTime(encounter.period.end)
   return result
 
 
-def EncounterLengthDays(encounter):
+def EncounterLengthDays(encounter: resources_pb2.Encounter) -> float:
   # Needs a float to properly put encounters in ranges.
   length_delta = ToTime(encounter.period.end) - ToTime(encounter.period.start)
   return float(length_delta.total_seconds()) / SECS_PER_DAY
 
 
 def GetPatient(
-    bundle):
+    bundle: resources_pb2.Bundle) -> typing.Optional[resources_pb2.Patient]:
   for entry in bundle.entry:
     if entry.resource.HasField('patient'):
       return entry.resource.patient

@@ -32,7 +32,7 @@ from __future__ import division
 from __future__ import print_function
 
 import datetime
-
+import typing
 
 from proto.stu3 import datatypes_pb2
 from proto.stu3 import google_extensions_pb2
@@ -49,8 +49,8 @@ LOS_BOUNDARIES = [3, 7, 14]
 
 
 def ExtractCodeBySystem(
-    codable_concept,
-    system):
+    codable_concept: datatypes_pb2.CodeableConcept,
+    system: str) -> typing.Optional[bytes]:
   """Extract code in codable_concept."""
   for coding in codable_concept.coding:
     if (coding.HasField('system') and coding.HasField('code') and
@@ -59,16 +59,16 @@ def ExtractCodeBySystem(
   return None
 
 
-def ToMicroSeconds(dt):
+def ToMicroSeconds(dt: datetime.datetime) -> int:
   delta = dt - datetime.datetime(1970, 1, 1)
   return int(delta.total_seconds()) * 1000000
 
 
 # Note: this API only compose encounter level API.
 def ComposeLabel(
-    patient, enc,
-    label_name, label_val,
-    label_time):
+    patient: resources_pb2.Patient, enc: resources_pb2.Encounter,
+    label_name: bytes, label_val: bytes,
+    label_time: datetime.datetime) -> google_extensions_pb2.EventLabel:
   """Compose an event_label proto given inputs.
 
   Args:

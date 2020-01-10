@@ -53,11 +53,11 @@ public enum FhirVersion {
           "valuesets.proto",
               com.google.fhir.r4.core.BodyLengthUnitsValueSet.getDescriptor().getFile()),
       com.google.fhir.r4.core.ContainedResource.getDescriptor(),
-      FHIRVersionCode.Value.V_4_0_0);
+      FHIRVersionCode.Value.V_4_0_1);
 
   // The proto package of the core FHIR structures.
   public final String coreProtoPackage;
-  
+
   // The import location of the core FHIR proto package.
   public final String coreProtoImportRoot;
 
