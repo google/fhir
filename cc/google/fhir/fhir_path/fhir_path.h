@@ -41,10 +41,29 @@ class WorkSpace {
   // the accumulated results, and tracks temporary data to be deleted
   // when the evaluation result is destroyed.
   explicit WorkSpace(const ::google::protobuf::Message* message_context)
-      : message_context_(message_context) {}
+      : message_context_stack_({message_context}) {}
 
   // Gets the message context the FHIRPath expression is evaluated against.
-  const ::google::protobuf::Message* MessageContext() { return message_context_; }
+  const ::google::protobuf::Message* MessageContext() {
+    return message_context_stack_.back();
+  }
+
+  // Pushes a new message to the top of the context stack.
+  //
+  // This is useful, for example, when evaluating a function's argument of type
+  // expression whose evaluation context is the message it was invoked on, not
+  // the base context of the workspace.
+  const void PushMessageContext(const ::google::protobuf::Message* message_context) {
+    message_context_stack_.push_back(message_context);
+  }
+
+  // Pops a message off the top of the context stack.
+  //
+  // Requires that there is more than one message on the stack.
+  const void PopMessageContext() {
+    DCHECK_GT(message_context_stack_.size(), 1);
+    return message_context_stack_.pop_back();
+  }
 
   // Sets the results to be returned to the caller.
   void SetResultMessages(std::vector<const ::google::protobuf::Message*> messages) {
@@ -68,7 +87,7 @@ class WorkSpace {
  private:
   std::vector<const ::google::protobuf::Message*> messages_;
 
-  const ::google::protobuf::Message* message_context_;
+  std::vector<const ::google::protobuf::Message*> message_context_stack_;
 
   std::vector<std::unique_ptr<::google::protobuf::Message>> to_delete_;
 };

@@ -677,6 +677,35 @@ TEST(FhirPathTest, TestWhereNoMatches) {
   EXPECT_TRUE(EvaluateBoolExpression("{}.where(true) = {}"));
 }
 
+TEST(FhirPathTest, TestSelect) {
+  EvaluationResult evaluation_result =
+      EvaluateExpressionWithStatus("(1 | 2 | 3).select(($this > 2) | $this)")
+          .ValueOrDie();
+  std::vector<const Message*> result = evaluation_result.GetMessages();
+
+  Boolean true_proto = ParseFromString<Boolean>("value: true");
+  Boolean false_proto = ParseFromString<Boolean>("value: false");
+  Integer integer_1_proto = ParseFromString<Integer>("value: 1");
+  Integer integer_2_proto = ParseFromString<Integer>("value: 2");
+  Integer integer_3_proto = ParseFromString<Integer>("value: 3");
+
+  ASSERT_THAT(
+      result,
+      UnorderedElementsAreArray({
+        EqualsProto(true_proto),
+        EqualsProto(false_proto),
+        EqualsProto(false_proto),
+        EqualsProto(integer_1_proto),
+        EqualsProto(integer_2_proto),
+        EqualsProto(integer_3_proto)
+      }));
+}
+
+TEST(FhirPathTest, TestSelectEmptyResult) {
+  EXPECT_TRUE(EvaluateBoolExpression("{}.where(true) = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("(1 | 2 | 3).where(false) = {}"));
+}
+
 TEST(FhirPathTest, TestXor) {
   EXPECT_TRUE(EvaluateBoolExpression("(true xor true) = false"));
   EXPECT_TRUE(EvaluateBoolExpression("(true xor false) = true"));
