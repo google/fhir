@@ -172,6 +172,7 @@ constexpr char kMatchesFunction[] = "matches";
 constexpr char kLengthFunction[] = "length";
 constexpr char kIsDistinctFunction[] = "isDistinct";
 constexpr char kIntersectFunction[] = "intersect";
+constexpr char kWhereFunction[] = "where";
 
 // Logical field in primitives representing the underlying value.
 constexpr char kPrimitiveValueField[] = "value";
@@ -333,6 +334,23 @@ class InvokeExpressionNode : public ExpressionNode {
 };
 
 class FunctionNode : public ExpressionNode {
+ public:
+  static std::vector<std::shared_ptr<ExpressionNode>> CompileParams(
+      const std::vector<FhirPathParser::ExpressionContext*>& params,
+      FhirPathBaseVisitor* visitor) {
+    std::vector<std::shared_ptr<ExpressionNode>> compiled_params;
+
+    for (auto it = params.begin(); it != params.end(); ++it) {
+      antlrcpp::Any param_any = (*it)->accept(visitor);
+      compiled_params.push_back(
+          param_any.isNotNull()
+              ? param_any.as<std::shared_ptr<ExpressionNode>>()
+              : std::shared_ptr<ExpressionNode>(nullptr));
+    }
+
+    return compiled_params;
+  }
+
  protected:
   explicit FunctionNode(
       const std::shared_ptr<ExpressionNode>& child,
@@ -1017,6 +1035,42 @@ class CombineFunction : public SingleParameterFunctionNode {
   }
 };
 
+// Implements the FHIRPath .where() function.
+class WhereFunction : public FunctionNode {
+ public:
+  explicit WhereFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : FunctionNode(child, params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    //  requires a single parameter
+    if (params_.size() != 1) {
+      return InvalidArgument("where() requires a single parameter.");
+    }
+
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    for (const Message* message : child_results) {
+      std::vector<const Message*> param_results;
+      WorkSpace expression_work_space(message);
+      FHIR_RETURN_IF_ERROR(
+          params_[0]->Evaluate(&expression_work_space, &param_results));
+      FHIR_ASSIGN_OR_RETURN(StatusOr<absl::optional<bool>> allowed,
+                            (PrimitiveOrEmpty<bool, Boolean>(param_results)));
+      if (allowed.ValueOrDie().value_or(false)) {
+        results->push_back(message);
+      }
+    }
+
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override { return child_->ReturnType(); }
+};
+
 // Implements the FHIRPath .intersect() function.
 class IntersectFunction : public SingleParameterFunctionNode {
  public:
@@ -1549,8 +1603,9 @@ struct InvocationDefinition {
   InvocationDefinition(const std::string& name, const bool is_function)
       : name(name), is_function(is_function) {}
 
-  InvocationDefinition(const std::string& name, const bool is_function,
-                       std::vector<std::shared_ptr<ExpressionNode>> params)
+  InvocationDefinition(
+      const std::string& name, const bool is_function,
+      const std::vector<FhirPathParser::ExpressionContext*>& params)
       : name(name), is_function(is_function), params(params) {}
 
   const std::string name;
@@ -1558,7 +1613,7 @@ struct InvocationDefinition {
   // Indicates it is a function invocation rather than a member lookup.
   const bool is_function;
 
-  const std::vector<std::shared_ptr<ExpressionNode>> params;
+  const std::vector<FhirPathParser::ExpressionContext*> params;
 };
 
 // ANTLR Visitor implementation to translate the AST
@@ -1594,7 +1649,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       auto function_node =
           createFunction(definition->name, expr, definition->params);
 
-      if (function_node == nullptr) {
+      if (function_node == nullptr || !CheckOk()) {
         return nullptr;
       } else {
         return ToAny(function_node);
@@ -1778,19 +1833,12 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
     std::vector<std::shared_ptr<ExpressionNode>> evaluated_params;
 
+    std::vector<FhirPathParser::ExpressionContext*> params;
     if (ctx->function()->paramList()) {
-      std::vector<FhirPathParser::ExpressionContext*> params =
-          ctx->function()->paramList()->expression();
-      for (auto it = params.begin(); it != params.end(); ++it) {
-        antlrcpp::Any param_any = (*it)->accept(this);
-          evaluated_params.push_back(
-              param_any.isNotNull()
-                  ? param_any.as<std::shared_ptr<ExpressionNode>>()
-                  : std::shared_ptr<ExpressionNode>(nullptr));
-      }
+      params = ctx->function()->paramList()->expression();
     }
 
-    return std::make_shared<InvocationDefinition>(text, true, evaluated_params);
+    return std::make_shared<InvocationDefinition>(text, true, params);
   }
 
   antlrcpp::Any visitImpliesExpression(
@@ -1908,7 +1956,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   std::shared_ptr<ExpressionNode> createFunction(
       const std::string& function_name,
       std::shared_ptr<ExpressionNode> child_expression,
-      std::vector<std::shared_ptr<ExpressionNode>> params) {
+      const std::vector<FhirPathParser::ExpressionContext*>& params) {
     if (function_name == kExistsFunction) {
       return std::make_shared<ExistsFunction>(child_expression);
     } else if (function_name == kNotFunction) {
@@ -1916,29 +1964,49 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     } else if (function_name == kHasValueFunction) {
       return std::make_shared<HasValueFunction>(child_expression);
     } else if (function_name == kStartsWithFunction) {
-      return std::make_shared<StartsWithFunction>(child_expression, params);
+      return std::make_shared<StartsWithFunction>(
+          child_expression, FunctionNode::CompileParams(params, this));
     } else if (function_name == kEmptyFunction) {
       return std::make_shared<EmptyFunction>(child_expression);
     } else if (function_name == kFirstFunction) {
       return std::make_shared<FirstFunction>(child_expression);
     } else if (function_name == kTraceFunction) {
-      return std::make_shared<TraceFunction>(child_expression, params);
+      return std::make_shared<TraceFunction>(
+          child_expression, FunctionNode::CompileParams(params, this));
     } else if (function_name == kToIntegerFunction) {
       return std::make_shared<ToIntegerFunction>(child_expression);
     } else if (function_name == kCountFunction) {
       return std::make_shared<CountFunction>(child_expression);
     } else if (function_name == kCombineFunction) {
-      return std::make_shared<CombineFunction>(child_expression, params);
+      return std::make_shared<CombineFunction>(
+          child_expression, FunctionNode::CompileParams(params, this));
     } else if (function_name == kDistinctFunction) {
       return std::make_shared<DistinctFunction>(child_expression);
     } else if (function_name == kMatchesFunction) {
-      return std::make_shared<MatchesFunction>(child_expression, params);
+      return std::make_shared<MatchesFunction>(
+          child_expression, FunctionNode::CompileParams(params, this));
     } else if (function_name == kLengthFunction) {
       return std::make_shared<LengthFunction>(child_expression);
     } else if (function_name == kIsDistinctFunction) {
       return std::make_shared<IsDistinctFunction>(child_expression);
     } else if (function_name == kIntersectFunction) {
-      return std::make_shared<IntersectFunction>(child_expression, params);
+      return std::make_shared<IntersectFunction>(
+          child_expression, FunctionNode::CompileParams(params, this));
+    } else if (function_name == kWhereFunction) {
+      // where()'s single parameter is a expression that is evaluated in the
+      // context of the expression the function is invoked on, not the base
+      // context. In order to compile the parameter, we need to visit it with
+      // the child expression's type and not the base type of the current
+      // visitor.
+      FhirPathCompilerVisitor visitor(child_expression->ReturnType());
+      auto compiled_params = FunctionNode::CompileParams(params, &visitor);
+
+      if (!visitor.CheckOk()) {
+        SetError(visitor.GetError());
+        return std::shared_ptr<ExpressionNode>(nullptr);
+      }
+
+      return std::make_shared<WhereFunction>(child_expression, compiled_params);
     } else {
       // TODO: Implement set of functions for initial use cases.
       SetError(absl::StrCat("The function ", function_name,

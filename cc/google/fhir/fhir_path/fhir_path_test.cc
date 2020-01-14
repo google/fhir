@@ -41,6 +41,7 @@ using ::google::fhir::r4::core::Quantity;
 using ::google::fhir::r4::core::String;
 
 using ::google::fhir::stu3::proto::Code;
+using ::google::fhir::stu3::proto::CodeableConcept;
 using ::google::fhir::stu3::proto::Coding;
 using ::google::fhir::stu3::proto::Encounter;
 using ::google::fhir::stu3::proto::Observation;
@@ -640,6 +641,40 @@ TEST(FhirPathTest, TestImplies) {
   EXPECT_TRUE(EvaluateBoolExpression("({} implies true) = true"));
   EXPECT_TRUE(EvaluateBoolExpression("({} implies false) = {}"));
   EXPECT_TRUE(EvaluateBoolExpression("({} implies {}) = {}"));
+}
+
+TEST(FhirPathTest, TestWhere) {
+  CodeableConcept observation = ParseFromString<CodeableConcept>(R"proto(
+    coding {
+      system { value: "foo" }
+      code { value: "abc" }
+    }
+    coding {
+      system { value: "bar" }
+      code { value: "def" }
+    }
+    coding {
+      system { value: "foo" }
+      code { value: "ghi" }
+    }
+  )proto");
+
+  Code code_abc = ParseFromString<Code>("value: 'abc'");
+  Code code_ghi = ParseFromString<Code>("value: 'ghi'");
+  EvaluationResult evaluation_result =
+      CompiledExpression::Compile(CodeableConcept::descriptor(),
+                                  "coding.where(system = 'foo').code")
+          .ValueOrDie()
+          .Evaluate(observation)
+          .ValueOrDie();
+  EXPECT_THAT(evaluation_result.GetMessages(),
+              UnorderedElementsAreArray(
+                  {EqualsProto(code_abc), EqualsProto(code_ghi)}));
+}
+
+TEST(FhirPathTest, TestWhereNoMatches) {
+  EXPECT_TRUE(EvaluateBoolExpression("('a' | 'b' | 'c').where(false) = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("{}.where(true) = {}"));
 }
 
 TEST(FhirPathTest, TestXor) {
