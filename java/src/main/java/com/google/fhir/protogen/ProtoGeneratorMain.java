@@ -26,7 +26,6 @@ import com.google.common.io.Files;
 import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.FileUtils;
 import com.google.fhir.common.JsonFormat;
-import com.google.fhir.dstu2.StructureDefinitionTransformer;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;

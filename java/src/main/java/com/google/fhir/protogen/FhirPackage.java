@@ -19,7 +19,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import com.google.common.io.ByteStreams;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.common.ResourceUtils;
-import com.google.fhir.dstu2.StructureDefinitionTransformer;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.r4.core.Bundle;
@@ -72,7 +71,7 @@ public class FhirPackage {
     PackageInfo packageInfo = null;
 
     JsonFormat.Parser parser =
-        fhirVersion == FhirVersion.DSTU2 || fhirVersion == fhirVersion.STU3
+        fhirVersion == fhirVersion.STU3
             ? JsonFormat.getEarlyVersionGeneratorParser()
             : JsonFormat.getParser();
     ZipFile zipFile = new ZipFile(new File(zipFilePath));
@@ -93,9 +92,6 @@ public class FhirPackage {
         continue;
       }
       String json = new String(ByteStreams.toByteArray(zipFile.getInputStream(entry)), UTF_8);
-      if (fhirVersion == FhirVersion.DSTU2) {
-        json = StructureDefinitionTransformer.transformDstu2ToStu3(json);
-      }
 
       Optional<ValueSet> valueSet = tryParsingAs(json, ValueSet.getDefaultInstance(), parser);
       if (valueSet.isPresent()) {

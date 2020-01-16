@@ -33,7 +33,6 @@ java_library(
         ":primitive_wrappers",
         ":resource_utils",
         ":resource_validator",
-        ":structure_definition_transformer",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
         "//proto:annotations_java_proto",
@@ -124,20 +123,6 @@ java_binary(
     runtime_deps = [
         ":beam-runners",
         ":examples",
-    ],
-)
-
-java_library(
-    name = "structure_definition_transformer",
-    srcs = [
-        "src/main/java/com/google/fhir/dstu2/StructureDefinitionTransformer.java",
-    ],
-    deps = [
-        "@maven//:com_beust_jcommander",
-        "@maven//:com_google_code_gson_gson",
-        "@maven//:com_google_guava_guava",
-        "@maven//:com_google_http_client_google_http_client",
-        "@maven//:com_google_http_client_google_http_client_gson",
     ],
 )
 
@@ -276,21 +261,6 @@ java_library(
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_apis_google_api_services_bigquery",
         "@maven//:com_google_guava_guava",
-    ],
-)
-
-java_test(
-    name = "StructureDefinitionTransformerTest",
-    size = "small",
-    srcs = ["src/test/java/com/google/fhir/dstu2/StructureDefinitionTransformerTest.java"],
-    test_class = "com.google.fhir.dstu2.StructureDefinitionTransformerTest",
-    deps = [
-        ":structure_definition_transformer",
-        "@maven//:com_google_code_gson_gson",
-        "@maven//:com_google_http_client_google_http_client",
-        "@maven//:com_google_http_client_google_http_client_gson",
-        "@maven//:com_google_truth_truth",
-        "@maven//:junit_junit",
     ],
 )
 
@@ -714,7 +684,6 @@ java_binary(
         ":file_utils",
         ":json_format",
         ":protogen",
-        ":structure_definition_transformer",
         "//proto:annotations_java_proto",
         "//proto:profile_config_java_proto",
         "//proto/r4/core:codes_java_proto",

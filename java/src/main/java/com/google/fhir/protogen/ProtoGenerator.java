@@ -203,7 +203,7 @@ public class ProtoGenerator {
 
   // The package to write new protos to.
   private final PackageInfo packageInfo;
-  // The fhir version to use (e.g., DSTU2, STU3, R4).
+  // The fhir version to use (e.g., STU3, R4).
   // This determines which core dependencies (e.g., datatypes.proto) to use.
   private final FhirVersion fhirVersion;
 
@@ -1026,8 +1026,6 @@ public class ProtoGenerator {
 
   private Optional<String> getPrimitiveRegex(ElementDefinition element) {
     switch (packageInfo.getFhirVersion()) {
-      case DSTU2:
-        // DSTU2 and STU3 have the same regex extension url, so just use the STU3 one.
       case STU3:
         List<com.google.fhir.stu3.proto.ElementDefinitionRegex> stu3Regex =
             ExtensionWrapper.fromExtensionsIn(element.getType(0))
@@ -2097,7 +2095,6 @@ public class ProtoGenerator {
       return info.getContainedResourceBehavior();
     }
     switch (info.getFhirVersion()) {
-      case DSTU2:
       case STU3:
         return ContainedResourceBehavior.TYPED_CONTAINED_RESOURCE;
       default:
