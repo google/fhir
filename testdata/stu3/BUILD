@@ -76,6 +76,13 @@ filegroup(
     ]),
 )
 
+filegroup(
+    name = "footprint",
+    srcs = glob([
+        "footprint/*",
+    ]),
+)
+
 alias(
     name = "profiles",
     actual = "//testdata/stu3/profiles:testdata",
