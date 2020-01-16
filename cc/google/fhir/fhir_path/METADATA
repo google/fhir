@@ -12,4 +12,22 @@ presubmit: {
     failure_status: ERROR
     project: "fhir_go_parser.tap"
   }
+  check_guitar: {
+    workflow_query: "//google/cloud/healthcare/test/guitar:healthcare_integration_presubmit"
+    cluster_name: "healthcare-oneshot-cluster"
+    failure_status: ERROR
+    ignore_file_modifications: false  # Does not skip runs when CL has changed.
+    submit_execute: true  # Runs Guitar before submitting.
+    submit_execute_mode: SYNCHRONOUS  # Submits after Guitar completes.
+    # When there is no new CL file modifications, skips tests if the most recent healthy result is not too old.
+    review_results_age_limit: 86400  # In seconds.
+    submit_results_age_limit: 86400  # In seconds.
+    base: {
+      disable_tags: "SKIP_HEALTHCARE_INTEGRATION_TEST"
+      disable_tags: "SKIP_HEALTHCARE_INTEGRATION_TESTS"
+      disable_tags: "SKIP_INTEGRATION_TEST"
+      disable_tags: "SKIP_INTEGRATION_TESTS"
+      disable_tags: "SKIP_GUITAR"
+    }
+  }
 }
