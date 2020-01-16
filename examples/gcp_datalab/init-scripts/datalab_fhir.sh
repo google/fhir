@@ -29,7 +29,7 @@ readonly DOCKER_IMAGE="$(/usr/share/google/get_metadata_value attributes/docker-
 
 # For running the docker init action
 readonly INIT_ACTIONS_REPO="$(/usr/share/google/get_metadata_value attributes/INIT_ACTIONS_REPO \
-  || echo 'https://github.com/GoogleCloudPlatform/dataproc-initialization-actions.git')"
+  || echo 'https://github.com/GoogleCloudDataproc/initialization-actions.git')"
 readonly INIT_ACTIONS_BRANCH="$(/usr/share/google/get_metadata_value attributes/INIT_ACTIONS_BRANCH \
   || echo 'master')"
 
