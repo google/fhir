@@ -156,25 +156,6 @@ StatusOr<std::string> MessagesToString(
   return MessageToString(*messages[0]);
 }
 
-// Supported functions.
-constexpr char kExistsFunction[] = "exists";
-constexpr char kNotFunction[] = "not";
-constexpr char kHasValueFunction[] = "hasValue";
-constexpr char kStartsWithFunction[] = "startsWith";
-constexpr char kEmptyFunction[] = "empty";
-constexpr char kFirstFunction[] = "first";
-constexpr char kTraceFunction[] = "trace";
-constexpr char kToIntegerFunction[] = "toInteger";
-constexpr char kCountFunction[] = "count";
-constexpr char kDistinctFunction[] = "distinct";
-constexpr char kCombineFunction[] = "combine";
-constexpr char kMatchesFunction[] = "matches";
-constexpr char kLengthFunction[] = "length";
-constexpr char kIsDistinctFunction[] = "isDistinct";
-constexpr char kIntersectFunction[] = "intersect";
-constexpr char kWhereFunction[] = "where";
-constexpr char kSelectFunction[] = "select";
-
 // Logical field in primitives representing the underlying value.
 constexpr char kPrimitiveValueField[] = "value";
 
@@ -336,30 +317,77 @@ class InvokeExpressionNode : public ExpressionNode {
 
 class FunctionNode : public ExpressionNode {
  public:
-  static std::vector<std::shared_ptr<ExpressionNode>> CompileParams(
+  template <class T>
+  StatusOr<T*> static Create(
+      const std::shared_ptr<ExpressionNode>& child_expression,
+      const std::vector<FhirPathParser::ExpressionContext*>& params,
+      FhirPathBaseVisitor* base_context_visitor,
+      FhirPathBaseVisitor* child_context_visitor) {
+    FHIR_ASSIGN_OR_RETURN(
+        std::vector<std::shared_ptr<ExpressionNode>> compiled_params,
+        T::CompileParams(params, base_context_visitor, child_context_visitor));
+    FHIR_RETURN_IF_ERROR(T::ValidateParams(compiled_params));
+    return new T(child_expression, compiled_params);
+  }
+
+  static StatusOr<std::vector<std::shared_ptr<ExpressionNode>>> CompileParams(
+      const std::vector<FhirPathParser::ExpressionContext*>& params,
+      FhirPathBaseVisitor* base_context_visitor,
+      FhirPathBaseVisitor*) {
+    return CompileParams(params, base_context_visitor);
+  }
+
+  static StatusOr<std::vector<std::shared_ptr<ExpressionNode>>> CompileParams(
       const std::vector<FhirPathParser::ExpressionContext*>& params,
       FhirPathBaseVisitor* visitor) {
     std::vector<std::shared_ptr<ExpressionNode>> compiled_params;
 
     for (auto it = params.begin(); it != params.end(); ++it) {
       antlrcpp::Any param_any = (*it)->accept(visitor);
+      if (param_any.isNull()) {
+        return InvalidArgument("Failed to compile parameter.");
+      }
       compiled_params.push_back(
-          param_any.isNotNull()
-              ? param_any.as<std::shared_ptr<ExpressionNode>>()
-              : std::shared_ptr<ExpressionNode>(nullptr));
+          param_any.as<std::shared_ptr<ExpressionNode>>());
     }
 
     return compiled_params;
   }
 
+  // This is the default implementation. FunctionNodes's that need to validate
+  // params at compile time should overwrite this definition with their own.
+  static Status ValidateParams(
+      const std::vector<std::shared_ptr<ExpressionNode>>& params) {
+    return Status::OK();
+  }
+
  protected:
-  explicit FunctionNode(
-      const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>>& params = {})
-      : child_(child), params_(params){}
+  FunctionNode(const std::shared_ptr<ExpressionNode>& child,
+               const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : child_(child), params_(params) {}
 
   const std::shared_ptr<ExpressionNode> child_;
   const std::vector<std::shared_ptr<ExpressionNode>> params_;
+};
+
+class ZeroParameterFunctionNode : public FunctionNode {
+ public:
+  static Status ValidateParams(
+      const std::vector<std::shared_ptr<ExpressionNode>>& params) {
+    if (!params.empty()) {
+      return InvalidArgument("Function does not accept any arguments.");
+    }
+
+    return Status::OK();
+  }
+
+ protected:
+  ZeroParameterFunctionNode(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : FunctionNode(child, params) {
+    TF_DCHECK_OK(ValidateParams(params));
+  }
 };
 
 class SingleParameterFunctionNode : public FunctionNode {
@@ -377,11 +405,23 @@ class SingleParameterFunctionNode : public FunctionNode {
     return Evaluate(work_space, first_param, results);
   }
 
+ public:
+  static Status ValidateParams(
+      const std::vector<std::shared_ptr<ExpressionNode>>& params) {
+    if (params.size() != 1) {
+      return InvalidArgument("Function requires exactly one argument.");
+    }
+
+    return Status::OK();
+  }
+
  protected:
-  explicit SingleParameterFunctionNode(
+  SingleParameterFunctionNode(
       const std::shared_ptr<ExpressionNode>& child,
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
-      : FunctionNode(child, params){}
+      : FunctionNode(child, params) {
+    TF_DCHECK_OK(ValidateParams(params));
+  }
 
   virtual Status Evaluate(WorkSpace* work_space,
                           std::vector<const Message*>& first_param,
@@ -403,10 +443,10 @@ class SingleValueFunctionNode : public SingleParameterFunctionNode {
   }
 
  protected:
-  explicit SingleValueFunctionNode(
+  SingleValueFunctionNode(
       const std::shared_ptr<ExpressionNode>& child,
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
-      : SingleParameterFunctionNode(child, params){}
+      : SingleParameterFunctionNode(child, params) {}
 
   virtual Status EvaluateWithParam(
       WorkSpace* work_space, const Message& param,
@@ -414,10 +454,11 @@ class SingleValueFunctionNode : public SingleParameterFunctionNode {
 };
 
 // Implements the FHIRPath .exists() function
-class ExistsFunction : public FunctionNode {
+class ExistsFunction : public ZeroParameterFunctionNode {
  public:
-  explicit ExistsFunction(const std::shared_ptr<ExpressionNode>& child)
-      : FunctionNode(child) {}
+  ExistsFunction(const std::shared_ptr<ExpressionNode>& child,
+                 const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -438,10 +479,12 @@ class ExistsFunction : public FunctionNode {
 };
 
 // Implements the FHIRPath .not() function.
-class NotFunction : public FunctionNode {
+class NotFunction : public ZeroParameterFunctionNode {
  public:
-  explicit NotFunction(const std::shared_ptr<ExpressionNode>& child)
-      : FunctionNode(child) {}
+  NotFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params = {})
+      : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -479,10 +522,11 @@ class NotFunction : public FunctionNode {
 
 // Implements the FHIRPath .hasValue() function, which returns true
 // if and only if the child is a single primitive value.
-class HasValueFunction : public FunctionNode {
+class HasValueFunction : public ZeroParameterFunctionNode {
  public:
-  explicit HasValueFunction(const std::shared_ptr<ExpressionNode>& child)
-      : FunctionNode(child) {}
+  HasValueFunction(const std::shared_ptr<ExpressionNode>& child,
+                   const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -602,10 +646,11 @@ class MatchesFunction : public SingleValueFunctionNode {
 };
 
 // Implements the FHIRPath .length() function.
-class LengthFunction : public FunctionNode {
+class LengthFunction : public ZeroParameterFunctionNode {
  public:
-  explicit LengthFunction(const std::shared_ptr<ExpressionNode>& child)
-      : FunctionNode(child) {}
+  LengthFunction(const std::shared_ptr<ExpressionNode>& child,
+                 const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -633,10 +678,12 @@ class LengthFunction : public FunctionNode {
 // Implements the FHIRPath .empty() function.
 //
 // Returns true if the input collection is empty and false otherwise.
-class EmptyFunction : public FunctionNode {
+class EmptyFunction : public ZeroParameterFunctionNode {
  public:
-  explicit EmptyFunction(const std::shared_ptr<ExpressionNode>& child)
-      : FunctionNode(child) {}
+  EmptyFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -658,10 +705,12 @@ class EmptyFunction : public FunctionNode {
 // Implements the FHIRPath .count() function.
 //
 // Returns the size of the input collection as an integer.
-class CountFunction : public FunctionNode {
+class CountFunction : public ZeroParameterFunctionNode {
  public:
-  explicit CountFunction(const std::shared_ptr<ExpressionNode>& child)
-      : FunctionNode(child) {}
+  CountFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -684,10 +733,12 @@ class CountFunction : public FunctionNode {
 //
 // Returns the first element of the input collection. Or an empty collection if
 // if the input collection is empty.
-class FirstFunction : public FunctionNode {
+class FirstFunction : public ZeroParameterFunctionNode {
  public:
-  explicit FirstFunction(const std::shared_ptr<ExpressionNode>& child)
-      : FunctionNode(child) {}
+  FirstFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -709,7 +760,7 @@ class FirstFunction : public FunctionNode {
 // Implements the FHIRPath .trace() function.
 class TraceFunction : public SingleValueFunctionNode {
  public:
-  explicit TraceFunction(
+  TraceFunction(
       const std::shared_ptr<ExpressionNode>& child,
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleValueFunctionNode(child, params) {}
@@ -733,11 +784,12 @@ class TraceFunction : public SingleValueFunctionNode {
 };
 
 // Implements the FHIRPath .toInteger() function.
-class ToIntegerFunction : public FunctionNode {
+class ToIntegerFunction : public ZeroParameterFunctionNode {
  public:
-  explicit ToIntegerFunction(
-      const std::shared_ptr<ExpressionNode>& child)
-      : FunctionNode(child) {}
+  ToIntegerFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -956,10 +1008,12 @@ class UnionOperator : public BinaryOperator {
 };
 
 // Implements the FHIRPath .isDistinct() function.
-class IsDistinctFunction : public FunctionNode {
+class IsDistinctFunction : public ZeroParameterFunctionNode {
  public:
-  explicit IsDistinctFunction(const std::shared_ptr<ExpressionNode>& child)
-      : FunctionNode(child) {}
+  IsDistinctFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -984,10 +1038,12 @@ class IsDistinctFunction : public FunctionNode {
 };
 
 // Implements the FHIRPath .distinct() function.
-class DistinctFunction : public FunctionNode {
+class DistinctFunction : public ZeroParameterFunctionNode {
  public:
-  explicit DistinctFunction(const std::shared_ptr<ExpressionNode>& child)
-      : FunctionNode(child) {}
+  DistinctFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
@@ -1007,7 +1063,7 @@ class DistinctFunction : public FunctionNode {
 // Implements the FHIRPath .combine() function.
 class CombineFunction : public SingleParameterFunctionNode {
  public:
-  explicit CombineFunction(
+  CombineFunction(
       const std::shared_ptr<ExpressionNode>& child,
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleParameterFunctionNode(child, params) {}
@@ -1039,18 +1095,30 @@ class CombineFunction : public SingleParameterFunctionNode {
 // Implements the FHIRPath .where() function.
 class WhereFunction : public FunctionNode {
  public:
-  WhereFunction(
-      const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>>& params)
-      : FunctionNode(child, params) {}
+  static Status ValidateParams(
+      const std::vector<std::shared_ptr<ExpressionNode>>& params) {
+    if (params.size() != 1) {
+      return InvalidArgument("Function requires exactly one argument.");
+    }
+
+    return Status::OK();
+  }
+
+  static StatusOr<std::vector<std::shared_ptr<ExpressionNode>>> CompileParams(
+      const std::vector<FhirPathParser::ExpressionContext*>& params,
+      FhirPathBaseVisitor*,
+      FhirPathBaseVisitor* child_context_visitor) {
+    return FunctionNode::CompileParams(params, child_context_visitor);
+  }
+
+  WhereFunction(const std::shared_ptr<ExpressionNode>& child,
+                const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : FunctionNode(child, params) {
+    TF_DCHECK_OK(ValidateParams(params));
+  }
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
-    //  requires a single parameter
-    if (params_.size() != 1) {
-      return InvalidArgument("where() requires a single parameter.");
-    }
-
     std::vector<const Message*> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1075,17 +1143,30 @@ class WhereFunction : public FunctionNode {
 // Implements the FHIRPath .select() function.
 class SelectFunction : public FunctionNode {
  public:
-  SelectFunction(
-      const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>>& params)
-      : FunctionNode(child, params) {}
+  static Status ValidateParams(
+      const std::vector<std::shared_ptr<ExpressionNode>>& params) {
+    if (params.size() != 1) {
+      return InvalidArgument("Function requires exactly one argument.");
+    }
+
+    return Status::OK();
+  }
+
+  static StatusOr<std::vector<std::shared_ptr<ExpressionNode>>> CompileParams(
+      const std::vector<FhirPathParser::ExpressionContext*>& params,
+      FhirPathBaseVisitor*,
+      FhirPathBaseVisitor* child_context_visitor) {
+    return FunctionNode::CompileParams(params, child_context_visitor);
+  }
+
+  SelectFunction(const std::shared_ptr<ExpressionNode>& child,
+                 const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : FunctionNode(child, params) {
+    TF_DCHECK_OK(ValidateParams(params));
+  }
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
-    if (params_.size() != 1) {
-      return InvalidArgument("select() requires a single parameter.");
-    }
-
     std::vector<const Message*> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1100,7 +1181,6 @@ class SelectFunction : public FunctionNode {
   }
 
   const Descriptor* ReturnType() const override {
-    DCHECK_EQ(params_.size(), 1);
     return params_[0]->ReturnType();
   }
 };
@@ -1134,8 +1214,6 @@ class IntersectFunction : public SingleParameterFunctionNode {
   }
 
   const Descriptor* ReturnType() const override {
-    DCHECK_EQ(params_.size(), 1);
-
     if (AreSameMessageType(child_->ReturnType(), params_[0]->ReturnType())) {
       return child_->ReturnType();
     }
@@ -2012,78 +2090,64 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   BaseErrorListener* GetErrorListener() { return &error_listener_; }
 
  private:
-  // Returns an ExpressionNode that implements the
-  // specified FHIRPath function.
+  typedef std::function<StatusOr<ExpressionNode*>(
+      std::shared_ptr<ExpressionNode>,
+      const std::vector<FhirPathParser::ExpressionContext*>&,
+      FhirPathBaseVisitor*, FhirPathBaseVisitor*)>
+      FunctionFactory;
+
+  std::map<std::string, FunctionFactory>
+      function_map{
+          {"exists", FunctionNode::Create<ExistsFunction>},
+          {"not", FunctionNode::Create<NotFunction>},
+          {"hasValue", FunctionNode::Create<HasValueFunction>},
+          {"startsWith", FunctionNode::Create<StartsWithFunction>},
+          {"empty", FunctionNode::Create<EmptyFunction>},
+          {"first", FunctionNode::Create<FirstFunction>},
+          {"trace", FunctionNode::Create<TraceFunction>},
+          {"toInteger", FunctionNode::Create<ToIntegerFunction>},
+          {"count", FunctionNode::Create<CountFunction>},
+          {"combine", FunctionNode::Create<CombineFunction>},
+          {"distinct", FunctionNode::Create<DistinctFunction>},
+          {"matches", FunctionNode::Create<MatchesFunction>},
+          {"length", FunctionNode::Create<LengthFunction>},
+          {"isDistinct", FunctionNode::Create<IsDistinctFunction>},
+          {"intersect", FunctionNode::Create<IntersectFunction>},
+          {"where", FunctionNode::Create<WhereFunction>},
+          {"select", FunctionNode::Create<SelectFunction>},
+      };
+
+  // Returns an ExpressionNode that implements the specified FHIRPath function.
   std::shared_ptr<ExpressionNode> createFunction(
       const std::string& function_name,
       std::shared_ptr<ExpressionNode> child_expression,
       const std::vector<FhirPathParser::ExpressionContext*>& params) {
-    if (function_name == kExistsFunction) {
-      return std::make_shared<ExistsFunction>(child_expression);
-    } else if (function_name == kNotFunction) {
-      return std::make_shared<NotFunction>(child_expression);
-    } else if (function_name == kHasValueFunction) {
-      return std::make_shared<HasValueFunction>(child_expression);
-    } else if (function_name == kStartsWithFunction) {
-      return std::make_shared<StartsWithFunction>(
-          child_expression, FunctionNode::CompileParams(params, this));
-    } else if (function_name == kEmptyFunction) {
-      return std::make_shared<EmptyFunction>(child_expression);
-    } else if (function_name == kFirstFunction) {
-      return std::make_shared<FirstFunction>(child_expression);
-    } else if (function_name == kTraceFunction) {
-      return std::make_shared<TraceFunction>(
-          child_expression, FunctionNode::CompileParams(params, this));
-    } else if (function_name == kToIntegerFunction) {
-      return std::make_shared<ToIntegerFunction>(child_expression);
-    } else if (function_name == kCountFunction) {
-      return std::make_shared<CountFunction>(child_expression);
-    } else if (function_name == kCombineFunction) {
-      return std::make_shared<CombineFunction>(
-          child_expression, FunctionNode::CompileParams(params, this));
-    } else if (function_name == kDistinctFunction) {
-      return std::make_shared<DistinctFunction>(child_expression);
-    } else if (function_name == kMatchesFunction) {
-      return std::make_shared<MatchesFunction>(
-          child_expression, FunctionNode::CompileParams(params, this));
-    } else if (function_name == kLengthFunction) {
-      return std::make_shared<LengthFunction>(child_expression);
-    } else if (function_name == kIsDistinctFunction) {
-      return std::make_shared<IsDistinctFunction>(child_expression);
-    } else if (function_name == kIntersectFunction) {
-      return std::make_shared<IntersectFunction>(
-          child_expression, FunctionNode::CompileParams(params, this));
-    } else if (function_name == kWhereFunction) {
-      // where()'s single parameter is a expression that is evaluated in the
-      // context of the expression the function is invoked on, not the base
-      // context. In order to compile the parameter, we need to visit it with
-      // the child expression's type and not the base type of the current
-      // visitor.
-      FhirPathCompilerVisitor visitor(child_expression->ReturnType());
-      auto compiled_params = FunctionNode::CompileParams(params, &visitor);
-
-      if (!visitor.CheckOk()) {
-        SetError(visitor.GetError());
+    std::map<std::string, FunctionFactory>::iterator function_factory =
+        function_map.find(function_name);
+    if (function_factory != function_map.end()) {
+      // Some functions accept parameters that are expressions evaluated using
+      // the child expression's result as context, not the base context of the
+      // FHIRPath expression. In order to compile such parameters, we need to
+      // visit it with the child expression's type and not the base type of the
+      // current visitor. Therefore, both the current visitor and a visitor with
+      // the child expression as the context are provided. The function factory
+      // will use whichever visitor (or both) is needed to compile the function
+      // invocation.
+      FhirPathCompilerVisitor child_context_visitor(
+          child_expression->ReturnType());
+      StatusOr<ExpressionNode*> result = function_factory->second(
+          child_expression, params, this, &child_context_visitor);
+      if (!result.ok()) {
+        this->SetError(absl::StrCat(
+            "Failed to compile call to ", function_name,
+            "(): ", result.status().error_message(),
+            !child_context_visitor.CheckOk()
+                ? absl::StrCat("; ", child_context_visitor.GetError())
+                : ""));
         return std::shared_ptr<ExpressionNode>(nullptr);
       }
 
-      return std::make_shared<WhereFunction>(child_expression, compiled_params);
-    } else if (function_name == kSelectFunction) {
-      // select()'s single parameter is a expression that is evaluated in the
-      // context of the expression the function is invoked on, not the base
-      // context. In order to compile the parameter, we need to visit it with
-      // the child expression's type and not the base type of the current
-      // visitor.
-      FhirPathCompilerVisitor visitor(child_expression->ReturnType());
-      auto compiled_params = FunctionNode::CompileParams(params, &visitor);
-
-      if (!visitor.CheckOk()) {
-        SetError(visitor.GetError());
-        return std::shared_ptr<ExpressionNode>(nullptr);
-      }
-
-      return std::make_shared<SelectFunction>(child_expression,
-                                              compiled_params);
+      return std::shared_ptr<ExpressionNode>(result.ValueOrDie());
     } else {
       // TODO: Implement set of functions for initial use cases.
       SetError(absl::StrCat("The function ", function_name,

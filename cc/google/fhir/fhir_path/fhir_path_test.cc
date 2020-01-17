@@ -677,6 +677,12 @@ TEST(FhirPathTest, TestWhereNoMatches) {
   EXPECT_TRUE(EvaluateBoolExpression("{}.where(true) = {}"));
 }
 
+TEST(FhirPathTest, TestWhereValidatesArguments) {
+  EXPECT_FALSE(EvaluateExpressionWithStatus("{}.where()").ok());
+  EXPECT_TRUE(EvaluateExpressionWithStatus("{}.where(true)").ok());
+  EXPECT_FALSE(EvaluateExpressionWithStatus("{}.where(true, false)").ok());
+}
+
 TEST(FhirPathTest, TestSelect) {
   EvaluationResult evaluation_result =
       EvaluateExpressionWithStatus("(1 | 2 | 3).select(($this > 2) | $this)")
@@ -704,6 +710,12 @@ TEST(FhirPathTest, TestSelect) {
 TEST(FhirPathTest, TestSelectEmptyResult) {
   EXPECT_TRUE(EvaluateBoolExpression("{}.where(true) = {}"));
   EXPECT_TRUE(EvaluateBoolExpression("(1 | 2 | 3).where(false) = {}"));
+}
+
+TEST(FhirPathTest, TestSelectValidatesArguments) {
+  EXPECT_FALSE(EvaluateExpressionWithStatus("{}.select()").ok());
+  EXPECT_TRUE(EvaluateExpressionWithStatus("{}.select(true)").ok());
+  EXPECT_FALSE(EvaluateExpressionWithStatus("{}.select(true, false)").ok());
 }
 
 TEST(FhirPathTest, TestXor) {
