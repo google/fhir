@@ -189,7 +189,6 @@ namespace seqex {
 
 using ::google::fhir::stu3::proto::Base64Binary;
 using ::google::fhir::stu3::proto::Boolean;
-using ::google::fhir::stu3::proto::CodeableConcept;
 using ::google::fhir::stu3::proto::Coding;
 using ::google::fhir::stu3::proto::Date;
 using ::google::fhir::stu3::proto::DateTime;
@@ -326,79 +325,12 @@ absl::optional<std::string> GetCodeFromConceptText(const Message& concept) {
   return absl::StrCat("text:" + statusor_text.ValueOrDie().value());
 }
 
-StatusOr<std::string> GetPreferredCode(const Message& concept) {
-  std::string code;
-  if (ExtractCodeBySystem(concept, systems::kLoinc, &code).ok()) {
-    return absl::StrCat("loinc:" + code);
-  }
-  if (ExtractIcdCode(concept, *systems::kIcd9Schemes, &code).ok()) {
-    return absl::StrCat("icd9:" + code);
-  }
-  if (ExtractIcdCode(concept, *systems::kIcd10Schemes, &code).ok()) {
-    return absl::StrCat("icd10:" + code);
-  }
-  if (ExtractCodeBySystem(concept, systems::kCpt, &code).ok()) {
-    return absl::StrCat("cpt:" + code);
-  }
-  if (ExtractCodeBySystem(concept, systems::kNdc, &code).ok()) {
-    return absl::StrCat("ndc:" + code);
-  }
-  if (ExtractCodeBySystem(concept, systems::kRxNorm, &code).ok()) {
-    return absl::StrCat("rxnorm:" + code);
-  }
-  if (ExtractCodeBySystem(concept, systems::kSnomed, &code).ok()) {
-    return absl::StrCat("snomed:" + code);
-  }
-  if (ExtractCodeBySystem(concept, systems::kObservationCategory, &code).ok()) {
-    return absl::StrCat("observation_category:" + code);
-  }
-  if (ExtractCodeBySystem(concept, systems::kClaimCategory, &code).ok()) {
-    return absl::StrCat("claim_category:" + code);
-  }
-  if (ExtractCodeBySystem(concept, systems::kMaritalStatus, &code).ok()) {
-    return absl::StrCat("marital_status:" + code);
-  }
-  if (ExtractCodeBySystem(concept, systems::kNUBCDischarge, &code).ok()) {
-    return absl::StrCat("nubc_discharge:" + code);
-  }
-  if (ExtractCodeBySystem(concept, systems::kLanguage, &code).ok()) {
-    return absl::StrCat("language:" + code);
-  }
-  if (ExtractCodeBySystem(concept, systems::kDischargeDisposition, &code)
-          .ok()) {
-    return absl::StrCat("discharge_disposition:" + code);
-  }
-  if (ExtractCodeBySystem(concept, systems::kDiagnosisRole, &code).ok()) {
-    return absl::StrCat("diagnosis_role:" + code);
-  }
-  if (ExtractCodeBySystem(concept, systems::kEncounterClass, &code).ok()) {
-    return absl::StrCat("actcode:" + code);
-  }
-  if (ExtractCodeBySystem(concept, systems::kConditionCategory, &code).ok()) {
-    return absl::StrCat("condition_category:" + code);
-  }
-  if (ExtractCodeBySystem(concept, systems::kProcedureCategory, &code).ok()) {
-    return absl::StrCat("procedure_category:" + code);
-  }
-  if (ExtractCodeBySystem(concept, systems::kConditionVerStatus, &code).ok()) {
-    return absl::StrCat("condition_ver_status:" + code);
-  }
-  return ::tensorflow::errors::NotFound(
-      absl::StrCat("No known coding system found in CodeableConcept: ",
-                   concept.DebugString()));
-}
-
 }  // namespace
 
 std::string GetCode(const Coding& coding) {
-  CodeableConcept concept;
-  *concept.add_coding() = coding;
-  const auto& statusor_code = GetPreferredCode(concept);
-  if (statusor_code.ok()) {
-    return statusor_code.ValueOrDie();
-  } else {
-    return coding.code().value();
-  }
+  const std::string system =
+      systems::ToShortSystemName(coding.system().value());
+  return absl::StrCat(system, ":", coding.code().value());
 }
 
 void AddCodeableConceptToExample(
@@ -406,18 +338,6 @@ void AddCodeableConceptToExample(
     ::tensorflow::Example* example, std::set<std::string>* tokenize_feature_set,
     const std::set<std::string>& add_tokenize_feature_set,
     const TextTokenizer& tokenizer, bool enable_attribution) {
-  const auto& statusor_code = GetPreferredCode(concept);
-  if (!statusor_code.ok()) {
-    // Ignore the code that we do not recognize.
-    LOG(INFO) << "Unable to handle the codeable concept: "
-              << statusor_code.status().error_message();
-    return;
-  }
-  const std::string& code = statusor_code.ValueOrDie();
-  // Codeable concepts are emitted using the preferred coding systems.
-  (*example->mutable_features()->mutable_feature())[name]
-      .mutable_bytes_list()
-      ->add_value(code);
   const StatusOr<String>& statusor_text =
       GetMessageInField<String>(concept, "text");
   if (statusor_text.ok() && !statusor_text.ValueOrDie().value().empty()) {

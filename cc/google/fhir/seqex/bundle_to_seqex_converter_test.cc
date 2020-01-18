@@ -92,198 +92,6 @@ class BundleToSeqexConverterTest : public ::testing::Test {
   google::protobuf::TextFormat::Parser parser_;
 };
 
-TEST_F(BundleToSeqexConverterTest, Observation) {
-  absl::SetFlag(&FLAGS_tokenize_code_text_features, false);
-  EventTrigger trigger;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time {
-      value_us: 1420102800000000
-      precision: SECOND
-      timezone: "America/New_York"
-    }
-    source { encounter_id { value: "789" } }
-  )proto", &trigger));
-  std::vector<TriggerLabelsPair> trigger_labels_pair({{trigger, {}}});
-  Bundle input;
-  ASSERT_TRUE(parser_.ParseFromString(R"proto(
-    entry {
-      resource {
-        patient {
-          id { value: "14" }
-          birth_date {
-            value_us: -1323388800000000
-            precision: DAY
-            timezone: "America/New_York"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          period {
-            start {
-              value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
-            }
-            end {
-              value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
-            }
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        observation {
-          id { value: "123" }
-          subject { patient_id { value: "456" } }
-          code {
-            coding {
-              system { value: "http://loinc.org" }
-              code { value: "LAB50" }
-            }
-            text { value: "BILIRUBIN, TOTAL" }
-          }
-          context { encounter_id { value: "789" } }
-          effective { date_time { value_us: 1420102700000000 } }
-          value {
-            quantity: {
-              value { value: "0.5" }
-              unit { value: "mEq/L" }
-            }
-          }
-        }
-      }
-    })proto", &input));
-  SequenceExample expected;
-  ASSERT_TRUE(parser_.ParseFromString(R"proto(
-    context {
-      feature: {
-        key: "Patient.birthDate"
-        value { int64_list { value: -1323388800 } }
-      }
-      feature {
-        key: "currentEncounterId"
-        value { int64_list { value: 1420099200 } }
-      }
-      feature {
-        key: "patientId"
-        value { bytes_list { value: "14" } }
-      }
-      feature {
-        key: "sequenceLength"
-        value { int64_list { value: 3 } }
-      }
-      feature {
-        key: "timestamp"
-        value { int64_list { value: 1420102800 } }
-      }
-    }
-    feature_lists {
-      feature_list {
-        key: "Encounter.meta.lastUpdated"
-        value {
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.end"
-        value {
-          feature { int64_list {} }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.start"
-        value {
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420099200 } }
-        }
-      }
-      feature_list {
-        key: "Observation.meta.lastUpdated"
-        value {
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102700 } }
-          feature { int64_list {} }
-        }
-      }
-      feature_list {
-        key: "Observation.code"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "loinc:LAB50" } }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "Observation.code.text"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "BILIRUBIN, TOTAL" } }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "Observation.code.loinc"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "LAB50" } }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "Observation.effective.dateTime"
-        value {
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102700 } }
-          feature { int64_list {} }
-        }
-      }
-      feature_list {
-        key: "Observation.value.quantity.unit"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "mEq/L" } }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "Observation.value.quantity.value"
-        value {
-          feature { float_list {} }
-          feature { float_list { value: 0.5 } }
-          feature { float_list {} }
-        }
-      }
-      feature_list {
-        key: "encounterId"
-        value {
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-        }
-      }
-      feature_list {
-        key: "eventId"
-        value {
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420102700 } }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-    })proto", &expected));
-
-  PerformTest("Patient/14", input, trigger_labels_pair,
-              {{"Patient/14:0-3@1420102800:Encounter/789", expected}});
-}
-
 TEST_F(BundleToSeqexConverterTest, TestMultipleResources) {
   EventTrigger trigger;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
@@ -448,16 +256,6 @@ TEST_F(BundleToSeqexConverterTest, TestMultipleResources) {
         }
       }
       feature_list {
-        key: "Condition.code"
-        value {
-          feature { bytes_list { value: "icd9:bar" } }
-          feature { bytes_list { value: "icd9:baz" } }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
         key: "Condition.code.icd9"
         value {
           feature { bytes_list { value: "bar" } }
@@ -515,16 +313,6 @@ TEST_F(BundleToSeqexConverterTest, TestMultipleResources) {
           feature { int64_list { value: 1420099200 } }
           feature { int64_list {} }
           feature { int64_list { value: 1420099200 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-          feature { bytes_list { value: "icd9:191.4" } }
         }
       }
       feature_list {
@@ -681,10 +469,6 @@ TEST_F(BundleToSeqexConverterTest, MultipleLabelsSameTimestamp) {
         feature_list {
           key: "Encounter.period.start"
           value { feature { int64_list { value: 1420099200 } } }
-        }
-        feature_list {
-          key: "Encounter.reason"
-          value { feature { bytes_list { } } }
         }
         feature_list {
           key: "Encounter.reason.icd9"
@@ -1475,8 +1259,6 @@ TEST_F(BundleToSeqexConverterTest, TestDateTimeLabel) {
 }
 
 TEST_F(BundleToSeqexConverterTest, RedactedFeatures) {
-  // We redact the icd9 flavor features for Encounter.reason, but
-  // keep the main Encounter.reason feature for test purposes.
   absl::SetFlag(&FLAGS_trigger_time_redacted_features, "Encounter.reason.icd9");
 
   EventTrigger trigger;
@@ -1618,15 +1400,6 @@ TEST_F(BundleToSeqexConverterTest, RedactedFeatures) {
           feature { int64_list { value: 1417420800 } }
           feature { int64_list { value: 1420099200 } }
           feature { int64_list { value: 1420099200 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "icd9:V410.9" } }
-          feature { bytes_list {} }
-          feature { bytes_list { value: "icd9:191.4" } }
         }
       }
       feature_list {
@@ -1831,14 +1604,6 @@ TEST_F(BundleToSeqexConverterTest, JoinMedication) {
         }
       }
       feature_list {
-        key: "MedicationRequest.contained.medication.code"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "ndc:123" } }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
         key: "encounterId"
         value {
           feature { int64_list { value: 1420099200 } }
@@ -2011,14 +1776,6 @@ TEST_F(BundleToSeqexConverterTest, EmptyLabel) {
         }
       }
       feature_list {
-        key: "MedicationRequest.contained.medication.code"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "ndc:123" } }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
         key: "encounterId"
         value {
           feature { int64_list { value: 1420099200 } }
@@ -2033,8 +1790,6 @@ TEST_F(BundleToSeqexConverterTest, EmptyLabel) {
 }
 
 TEST_F(BundleToSeqexConverterTest, TwoExamples) {
-  // We redact the icd9 flavor features for Encounter.reason, but
-  // keep the main Encounter.reason feature for test purposes.
   absl::SetFlag(&FLAGS_trigger_time_redacted_features, "Encounter.reason.icd9");
 
   EventTrigger trigger1;
@@ -2173,13 +1928,6 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples) {
         value {
           feature { int64_list { value: 1417420800 } }
           feature { int64_list { value: 1417420800 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "icd9:V410.9" } }
         }
       }
       feature_list {
@@ -2274,15 +2022,6 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples) {
         }
       }
       feature_list {
-        key: "Encounter.reason"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "icd9:V410.9" } }
-          feature { bytes_list {} }
-          feature { bytes_list { value: "icd9:191.4" } }
-        }
-      }
-      feature_list {
         key: "Encounter.reason.icd9"
         value {
           feature { bytes_list {} }
@@ -2340,8 +2079,6 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples) {
 }
 
 TEST_F(BundleToSeqexConverterTest, TwoExamples_EnableAttribution) {
-  // We redact the icd9 flavor features for Encounter.reason, but
-  // keep the main Encounter.reason feature for test purposes.
   absl::SetFlag(&FLAGS_trigger_time_redacted_features, "Encounter.reason.icd9");
 
   EventTrigger trigger1;
@@ -2480,13 +2217,6 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples_EnableAttribution) {
         value {
           feature { int64_list { value: 1417420800 } }
           feature { int64_list { value: 1417420800 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "icd9:V410.9" } }
         }
       }
       feature_list {
@@ -2599,15 +2329,6 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples_EnableAttribution) {
           feature { int64_list { value: 1417420800 } }
           feature { int64_list { value: 1420099200 } }
           feature { int64_list { value: 1420099200 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "icd9:V410.9" } }
-          feature { bytes_list {} }
-          feature { bytes_list { value: "icd9:191.4" } }
         }
       }
       feature_list {

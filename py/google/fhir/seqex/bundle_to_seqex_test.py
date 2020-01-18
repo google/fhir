@@ -351,10 +351,6 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
             value { feature { int64_list { } } feature { int64_list { value: 1417424400 } } }
           }
           feature_list {
-            key: "Encounter.reason"
-            value { feature { bytes_list { } } feature { bytes_list { value: "icd9:V410.9" } } }
-          }
-          feature_list {
             key: "Encounter.reason.icd9"
             value { feature { bytes_list { } } feature { bytes_list { value: "V410.9" } } }
           }
@@ -412,12 +408,6 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
             key: "Encounter.period.end"
             value {
               feature { int64_list { } } feature { int64_list { value: 1417424400 } } feature { int64_list { } } feature { int64_list { value: 1420102800 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason"
-            value {
-              feature { bytes_list { } } feature { bytes_list { value: "icd9:V410.9" } } feature { bytes_list { } } feature { bytes_list { value: "icd9:191.4" } }
             }
           }
           feature_list {

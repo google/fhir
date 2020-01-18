@@ -142,10 +142,6 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
             value { feature { int64_list { value: 1420095600 } } }
           }
           feature_list {
-            key: "MedicationRequest.contained.medication.code"
-            value { feature { bytes_list { value: "ndc:123" } } }
-          }
-          feature_list {
             key: "encounterId"
             value { feature { int64_list { value: 1420095600 } } }
           }
@@ -292,10 +288,6 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
           value { feature { int64_list { value: 1417392000 } } feature { int64_list { value: 1420099200 } } feature { int64_list { } } feature { int64_list { } } feature { int64_list { } } }
         }
         feature_list {
-          key: "Condition.code"
-          value { feature { bytes_list { value: "icd9:bar" } } feature { bytes_list { value: "icd9:baz" } } feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { } } }
-        }
-        feature_list {
           key: "Condition.code.icd9"
           value { feature { bytes_list { value: "bar" } } feature { bytes_list { value: "baz" } } feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { } } }
         }
@@ -318,10 +310,6 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
         feature_list {
           key: "Encounter.period.end"
           value { feature { int64_list { } } feature { int64_list { } } feature { int64_list { } } feature { int64_list { } } feature { int64_list { value: 1420102800 } } }
-        }
-        feature_list {
-          key: "Encounter.reason"
-          value { feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { value: "icd9:191.4" } } }
         }
         feature_list {
           key: "Encounter.reason.icd9"
@@ -464,10 +452,6 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
             value { feature { int64_list { } } feature { int64_list { value: 1417424400 } } }
           }
           feature_list {
-            key: "Encounter.reason"
-            value { feature { bytes_list { } } feature { bytes_list { value: "icd9:V410.9" } } }
-          }
-          feature_list {
             key: "Encounter.reason.icd9"
             value { feature { bytes_list { } } feature { bytes_list { value: "V410.9" } } }
           }
@@ -525,12 +509,6 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
             key: "Encounter.period.end"
             value {
               feature { int64_list { } } feature { int64_list { value: 1417424400 } } feature { int64_list { } } feature { int64_list { value: 1420102800 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason"
-            value {
-              feature { bytes_list { } } feature { bytes_list { value: "icd9:V410.9" } } feature { bytes_list { } } feature { bytes_list { value: "icd9:191.4" } }
             }
           }
           feature_list {
