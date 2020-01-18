@@ -42,7 +42,7 @@ class ResourceToExampleTest : public ::testing::Test {
  public:
   void SetUp() override {
     parser_.AllowPartialMessage(true);
-    tokenizer_ = std::make_shared<SimpleWordTokenizer>(true /* lowercase */);
+    tokenizer_ = std::make_shared<SimpleWordTokenizer>();
   }
 
  protected:

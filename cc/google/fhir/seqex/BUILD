@@ -1,6 +1,6 @@
 licenses(["notice"])
 
-package(default_visibility = ["//visibility:public"],)
+package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "bundle_to_seqex_converter",

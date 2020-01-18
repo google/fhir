@@ -53,6 +53,20 @@ class TextTokenizer {
 
   // Decompose a text string into tokens.
   virtual std::vector<Token> Tokenize(absl::string_view text) const = 0;
+
+ protected:
+  // Apply additional processing to a set of tokens, generating a new set. This
+  // processing might include steps like replacing numbers by a single numeric
+  // token, adding bigrams or trigrams, and more, depending on flag settings.
+  virtual std::vector<Token> ProcessTokens(
+      const std::vector<Token>& tokens) const;
+
+  // Replace numeric tokens in the provided vector with the default numeric
+  // token string, retaining the character positions.
+  void ReplaceNumbers(std::vector<Token>* tokens) const;
+
+  std::vector<Token> GenerateBigrams(const std::vector<Token>& tokens) const;
+  std::vector<Token> GenerateTrigrams(const std::vector<Token>& tokens) const;
 };
 
 // Breaks up text based on white-space and ignores punctuation. Applies
@@ -60,11 +74,7 @@ class TextTokenizer {
 // by flags.
 class SimpleWordTokenizer : public TextTokenizer {
  public:
-  explicit SimpleWordTokenizer(bool lowercase) : lowercase_(lowercase) {}
   std::vector<Token> Tokenize(absl::string_view text) const override;
-
- private:
-  bool lowercase_;
 };
 
 // The text IS the token.
