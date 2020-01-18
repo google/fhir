@@ -20,20 +20,7 @@ import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
-import com.google.fhir.r4.core.Canonical;
-import com.google.fhir.r4.core.CapabilityStatement;
-import com.google.fhir.r4.core.CodeSystem;
-import com.google.fhir.r4.core.CompartmentDefinition;
-import com.google.fhir.r4.core.ConceptMap;
 import com.google.fhir.r4.core.Element;
-import com.google.fhir.r4.core.ElementDefinition;
-import com.google.fhir.r4.core.ElementDefinition.ElementDefinitionBinding;
-import com.google.fhir.r4.core.ExtensionContextTypeCode;
-import com.google.fhir.r4.core.Identifier;
-import com.google.fhir.r4.core.OperationDefinition;
-import com.google.fhir.r4.core.ResourceTypeCode;
-import com.google.fhir.r4.core.StructureDefinition;
-import com.google.fhir.r4.core.ValueSet;
 import com.google.fhir.stu3.google.PrimitiveHasNoValue;
 import com.google.fhir.wrappers.CodeWrapper;
 import com.google.fhir.wrappers.ExtensionWrapper;
@@ -41,7 +28,6 @@ import com.google.fhir.wrappers.PrimitiveWrapper;
 import com.google.fhir.wrappers.PrimitiveWrappers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
@@ -595,14 +581,21 @@ public final class JsonFormat {
   }
 
   /**
-   * Returns a specialized parser that is able of parsing STU3 structure definitions into R4
-   * (normalized) structure definitions. This is *NOT* an all-purpose STU3 -> R4 converter, and
-   * should *NOT* be used for any data other than structure definitions.
+   * Returns a specialized parser that is able of parsing non-R4 spec resources (CodeSystems,
+   * ValueSets, and StructureDefinitions) into R4 versions for useinprotogeneration. These are *NOT*
+   * all-purpose version converters, and should *NOT* be used for purposes other than
+   * protogeneration.
    */
-  // TODO: Once packages have been rearranged, make this package-private, since
-  // it should only be used by generators.
-  public static Parser getEarlyVersionGeneratorParser() {
-    return new Parser(true, ZoneId.systemDefault());
+  public static Parser getSpecParser(FhirVersion version) {
+    switch (version) {
+      case STU3:
+        return Parser.newBuilder().withStu3ProtoGenTransformer().build();
+      case R4:
+        return Parser.newBuilder().build();
+      default:
+        throw new IllegalArgumentException(
+            "Fhir version not supported for getSpecParser: " + version);
+    }
   }
 
   /**
@@ -612,14 +605,17 @@ public final class JsonFormat {
    * control the parser behavior.
    */
   public static final class Parser {
-    private final boolean convertEarlyVersions;
-    private final JsonParser jsonParser;
+    private final JsonParser jsonParser = new JsonParser();
+    private final ProtoGenTransformer protoGenTransformer;
     private final ZoneId defaultTimeZone;
 
-    private Parser(boolean convertEarlyVersions, ZoneId defaultTimeZone) {
-      this.convertEarlyVersions = convertEarlyVersions;
-      this.jsonParser = new JsonParser();
+    private Parser(ZoneId defaultTimeZone, ProtoGenTransformer protoGenTransformer) {
+      this.protoGenTransformer = protoGenTransformer;
       this.defaultTimeZone = defaultTimeZone;
+    }
+
+    public static Parser withDefaultTimeZone(ZoneId defaultTimeZone) {
+      return Parser.newBuilder().withDefaultTimeZone(defaultTimeZone).build();
     }
 
     /** Returns a new instance of {@link Builder} with default parameters. */
@@ -628,11 +624,13 @@ public final class JsonFormat {
     }
 
     /** Builder that can be used to obtain new instances of {@link Parser}. */
-    public static final class Builder {
-      private final ZoneId defaultTimeZone;
+    static final class Builder {
+      private ZoneId defaultTimeZone;
+      private ProtoGenTransformer protoGenTransformer;
 
       Builder(ZoneId defaultTimeZone) {
         this.defaultTimeZone = defaultTimeZone;
+        this.protoGenTransformer = ProtoGenTransformer.NO_OP;
       }
 
       /*
@@ -640,12 +638,22 @@ public final class JsonFormat {
        * this instance which do not have explicit timezone or timezone offset information will be
        * assumed to be measured in the default timezone.
        */
-      public Builder withDefaultTimeZone(ZoneId defaultTimeZone) {
-        return new Builder(defaultTimeZone);
+      Builder withDefaultTimeZone(ZoneId defaultTimeZone) {
+        this.defaultTimeZone = defaultTimeZone;
+        return this;
       }
 
-      public Parser build() {
-        return new Parser(false /*useLenientJsonReader */, defaultTimeZone);
+      Builder withStu3ProtoGenTransformer() {
+        return withProtoGenTransformer(ProtoGenTransformer.STU3_TO_R4);
+      }
+
+      Builder withProtoGenTransformer(ProtoGenTransformer protoGenTransformer) {
+        this.protoGenTransformer = protoGenTransformer;
+        return this;
+      }
+
+      Parser build() {
+        return new Parser(defaultTimeZone, protoGenTransformer);
       }
     }
 
@@ -718,27 +726,31 @@ public final class JsonFormat {
       Descriptor descriptor = builder.getDescriptorForType();
       Map<String, FieldDescriptor> nameToDescriptorMap = getFieldMap(descriptor);
 
+      protoGenTransformer.performMultiFieldConversions(json, builder);
+
       for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
+        JsonElement element = entry.getValue();
         String fieldName = entry.getKey();
-        if (convertEarlyVersions && performSpecializedConversion(json, fieldName, builder)) {
+        if (protoGenTransformer.performSpecializedConversion(element, fieldName, builder)) {
+          // This field was handled via custom logic.
           continue;
         }
         if (nameToDescriptorMap.containsKey(fieldName)) {
           FieldDescriptor field = nameToDescriptorMap.get(fieldName);
           if (field.getMessageType().getFullName().equals(Any.getDescriptor().getFullName())) {
-            JsonArray array = entry.getValue().getAsJsonArray();
+            JsonArray array = element.getAsJsonArray();
             for (int i = 0; i < array.size(); i++) {
               Message.Builder containedBuilder = getContainedResourceForMessage(builder);
               parseContainedResource(array.get(i).getAsJsonObject(), containedBuilder);
               builder.addRepeatedField(field, Any.pack(containedBuilder.build()));
             }
           } else if (AnnotationUtils.isChoiceType(field)) {
-            mergeChoiceField(field, fieldName, entry.getValue(), builder);
+            mergeChoiceField(field, fieldName, element, builder);
           } else {
-            mergeField(field, entry.getValue(), builder);
+            mergeField(field, element, builder);
           }
         } else if (fieldName.equals("resourceType")) {
-          String inputType = entry.getValue().getAsString();
+          String inputType = element.getAsString();
           if (!AnnotationUtils.isResource(descriptor) || !inputType.equals(descriptor.getName())) {
             throw new IllegalArgumentException(
                 "Trying to parse a resource of type "
@@ -802,11 +814,6 @@ public final class JsonFormat {
     }
 
     private void mergeField(FieldDescriptor field, JsonElement json, Message.Builder builder) {
-      if (convertEarlyVersions && json == JsonNull.INSTANCE) {
-        // Sometimes when converting structure definition version, we need to null out a field.
-        // Skip over any field that has been nulled out.
-        return;
-      }
       if (!isPrimitiveType(field)) {
         if ((field.isRepeated() && builder.getRepeatedFieldCount(field) > 0)
             || (!field.isRepeated() && builder.hasField(field))) {
@@ -950,164 +957,6 @@ public final class JsonFormat {
         mergeMessage(json.getAsJsonObject(), subBuilder);
         return subBuilder.build();
       }
-    }
-
-    private static class EarlyVersionFieldConversionTester {
-      private final JsonObject json;
-      private final String fieldName;
-      private final Descriptor type;
-
-      EarlyVersionFieldConversionTester(JsonObject json, String fieldName, Descriptor type) {
-        this.json = json;
-        this.fieldName = fieldName;
-        this.type = type;
-      }
-
-      boolean isSpecialCase(String testFieldName, Descriptor testDescriptor) {
-        return fieldName.equals(testFieldName)
-            && testDescriptor.getFullName().equals(type.getFullName());
-      }
-
-      boolean fieldIsPrimitive() {
-        return json.get(fieldName).isJsonPrimitive();
-      }
-
-      String getAsString() {
-        return json.getAsJsonPrimitive(fieldName).getAsString();
-      }
-
-      Canonical referenceToCanonical() {
-        return Canonical.newBuilder()
-            .setValue(json.getAsJsonObject(fieldName).getAsJsonPrimitive("reference").getAsString())
-            .build();
-      }
-    }
-
-    // TODO: pull this logic into a separate file.
-    private boolean performSpecializedConversion(
-        JsonObject json, String fieldName, Message.Builder builder) {
-      EarlyVersionFieldConversionTester tester =
-          new EarlyVersionFieldConversionTester(json, fieldName, builder.getDescriptorForType());
-      if (tester.isSpecialCase("valueSetReference", ElementDefinitionBinding.getDescriptor())) {
-        ((ElementDefinitionBinding.Builder) builder).setValueSet(tester.referenceToCanonical());
-        return true;
-      }
-      if (tester.isSpecialCase("valueSetUri", ElementDefinitionBinding.getDescriptor())) {
-        ((ElementDefinitionBinding.Builder) builder)
-            .getValueSetBuilder()
-            .setValue(tester.getAsString());
-        return true;
-      }
-      if (tester.isSpecialCase("contextType", StructureDefinition.getDescriptor())) {
-        String contextTypeString = json.getAsJsonPrimitive("contextType").getAsString();
-        StructureDefinition.Context.TypeCode contextType;
-        if (contextTypeString.equals("resource") || contextTypeString.equals("datatype")) {
-          contextType =
-              StructureDefinition.Context.TypeCode.newBuilder()
-                  .setValue(ExtensionContextTypeCode.Value.ELEMENT)
-                  .build();
-        } else if (contextTypeString.equals("extension")) {
-          contextType =
-              StructureDefinition.Context.TypeCode.newBuilder()
-                  .setValue(ExtensionContextTypeCode.Value.EXTENSION)
-                  .build();
-        } else {
-          throw new IllegalArgumentException("Unrecognized Context type: " + contextTypeString);
-        }
-        if (json.has("context")) {
-          for (JsonElement contextElement : json.getAsJsonArray("context")) {
-            StructureDefinition.Context.Builder contextBuilder =
-                StructureDefinition.Context.newBuilder();
-            contextBuilder
-                .setType(contextType)
-                .getExpressionBuilder()
-                .setValue(contextElement.getAsJsonPrimitive().getAsString());
-            ((StructureDefinition.Builder) builder).addContext(contextBuilder);
-          }
-          // Null out context array to prevent trying to merge into context field on proto.
-          json.add("context", JsonNull.INSTANCE);
-        }
-        return true;
-      }
-      if (tester.isSpecialCase("targetProfile", ElementDefinition.TypeRef.getDescriptor())
-          && tester.fieldIsPrimitive()) {
-        ((ElementDefinition.TypeRef.Builder) builder)
-            .addTargetProfile(Canonical.newBuilder().setValue(tester.getAsString()));
-        return true;
-      }
-      if (tester.isSpecialCase("profile", ElementDefinition.TypeRef.getDescriptor())
-          && tester.fieldIsPrimitive()) {
-        ((ElementDefinition.TypeRef.Builder) builder)
-            .addProfile(
-                Canonical.newBuilder().setValue(json.getAsJsonPrimitive("profile").getAsString()));
-        return true;
-      }
-      if (tester.isSpecialCase("identifier", CodeSystem.getDescriptor())
-          && json.get("identifier").isJsonObject()) {
-        Identifier.Builder identifierBuilder = Identifier.newBuilder();
-        mergeMessage(json.get("identifier").getAsJsonObject(), identifierBuilder);
-        ((CodeSystem.Builder) builder).addIdentifier(identifierBuilder);
-        return true;
-      }
-      if (tester.isSpecialCase("extensible", ValueSet.getDescriptor())) {
-        // Field was dropped in R4.  We don't do anything with it anyway, so ignore.
-        return true;
-      }
-      if (tester.isSpecialCase("sourceReference", ConceptMap.getDescriptor())) {
-        ((ConceptMap.Builder) builder)
-            .getSourceBuilder()
-            .setCanonical(tester.referenceToCanonical());
-        return true;
-      }
-      if (tester.isSpecialCase("targetReference", ConceptMap.getDescriptor())) {
-        ((ConceptMap.Builder) builder)
-            .getTargetBuilder()
-            .setCanonical(tester.referenceToCanonical());
-        return true;
-      }
-      if (tester.isSpecialCase("acceptUnknown", CapabilityStatement.getDescriptor())) {
-        // Field was dropped in R4.  We don't do anything with it anyway, so ignore.
-        return true;
-      }
-      if (tester.isSpecialCase("type", CapabilityStatement.Rest.Resource.getDescriptor())) {
-        // The code BodySite was renamed BodyStructure in R4.
-        if (tester.getAsString().equals("BodySite")) {
-          ((CapabilityStatement.Rest.Resource.Builder) builder)
-              .getTypeBuilder()
-              .setValue(ResourceTypeCode.Value.BODY_STRUCTURE);
-        }
-        return true;
-      }
-      if (tester.isSpecialCase("code", CompartmentDefinition.Resource.getDescriptor())) {
-        // The code BodySite was renamed BodyStructure in R4.
-        if (tester.getAsString().equals("BodySite")) {
-          ((CompartmentDefinition.Resource.Builder) builder)
-              .getCodeBuilder()
-              .setValue(ResourceTypeCode.Value.BODY_STRUCTURE);
-        }
-        return true;
-      }
-      if (tester.isSpecialCase("resource", OperationDefinition.getDescriptor())) {
-        // Some OperationDefinition codes have been changed in R4, but we don't use them, so ignore.
-        return true;
-      }
-      if (tester.isSpecialCase("profile", OperationDefinition.Parameter.getDescriptor())) {
-        ((OperationDefinition.Parameter.Builder) builder)
-            .addTargetProfile(tester.referenceToCanonical());
-        return true;
-      }
-      if (tester.isSpecialCase(
-          "valueSetReference", OperationDefinition.Parameter.Binding.getDescriptor())) {
-        ((OperationDefinition.Parameter.Binding.Builder) builder)
-            .setValueSet(tester.referenceToCanonical());
-        return true;
-      }
-      if (tester.isSpecialCase("reference", Canonical.getDescriptor())) {
-        ((Canonical.Builder) builder).setValue(tester.getAsString());
-        return true;
-      }
-
-      return false;
     }
   } // End JsonFormat class
 

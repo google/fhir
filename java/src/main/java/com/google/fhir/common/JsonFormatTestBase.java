@@ -186,8 +186,7 @@ public abstract class JsonFormatTestBase {
   }
 
   public void setUpParser() throws IOException {
-    jsonParser =
-        JsonFormat.Parser.newBuilder().withDefaultTimeZone(ZoneId.of("Australia/Sydney")).build();
+    jsonParser = JsonFormat.Parser.withDefaultTimeZone(ZoneId.of("Australia/Sydney"));
     jsonPrinter = JsonFormat.getPrinter().withDefaultTimeZone(ZoneId.of("Australia/Sydney"));
     ndjsonPrinter =
         JsonFormat.getPrinter()

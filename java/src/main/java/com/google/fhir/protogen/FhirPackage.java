@@ -100,7 +100,7 @@ public class FhirPackage {
     List<ValueSet> valueSets = new ArrayList<>();
     List<CodeSystem> codeSystems = new ArrayList<>();
     List<StructureDefinition> structureDefinitions = new ArrayList<>();
-    JsonFormat.Parser parser = getSpecParser(packageInfo.getFhirVersion());
+    JsonFormat.Parser parser = JsonFormat.getSpecParser(packageInfo.getFhirVersion());
 
     for (Map.Entry<String, String> jsonFile : jsonFiles.entrySet()) {
       String json = jsonFile.getValue();
@@ -155,17 +155,5 @@ public class FhirPackage {
   private static Optional<String> getResourceType(String json) {
     Matcher matcher = RESOURCE_TYPE_PATTERN.matcher(json);
     return matcher.find() ? Optional.of(matcher.group(1)) : Optional.empty();
-  }
-
-  private static JsonFormat.Parser getSpecParser(FhirVersion version) {
-    switch (version) {
-      case STU3:
-        return JsonFormat.getEarlyVersionGeneratorParser();
-      case R4:
-        return JsonFormat.getParser();
-      default:
-        throw new IllegalArgumentException(
-            "Fhir version not supported for getSpecParser: " + version);
-    }
   }
 }

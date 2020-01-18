@@ -18,6 +18,7 @@ import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.io.Files;
 import com.google.fhir.common.JsonFormat;
+import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.Extensions;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.Profiles;
@@ -42,8 +43,6 @@ import org.junit.runners.JUnit4;
 /** Tests for ProfileGenerator */
 @RunWith(JUnit4.class)
 public final class ProfileGeneratorTest {
-
-  private final JsonFormat.Parser jsonParser = JsonFormat.getEarlyVersionGeneratorParser();
   private final JsonFormat.Printer jsonPrinter = JsonFormat.getPrinter();
 
   private static final String STU3_TESTDATA_DIR = "testdata/stu3/profiles/";
@@ -79,11 +78,12 @@ public final class ProfileGeneratorTest {
     return projectInfo.build();
   }
 
-  private StructureDefinition loadStructureDefinition(String fullFilename) throws IOException {
+  private StructureDefinition loadStructureDefinition(String fullFilename, FhirVersion version)
+      throws IOException {
     String structDefString =
         Files.asCharSource(new File(fullFilename), StandardCharsets.UTF_8).read();
     StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
-    jsonParser.merge(structDefString, structDefBuilder);
+    JsonFormat.getSpecParser(version).merge(structDefString, structDefBuilder);
     return structDefBuilder.build();
   }
 
@@ -92,11 +92,13 @@ public final class ProfileGeneratorTest {
   }
 
   private StructureDefinition loadStu3FhirStructureDefinition(String filename) throws IOException {
-    return loadStructureDefinition("spec/hl7.fhir.core/3.0.1/package/" + filename);
+    return loadStructureDefinition(
+        "spec/hl7.fhir.core/3.0.1/package/" + filename, FhirVersion.STU3);
   }
 
   private StructureDefinition loadR4FhirStructureDefinition(String filename) throws IOException {
-    return loadStructureDefinition("spec/hl7.fhir.core/4.0.1/package/" + filename);
+    return loadStructureDefinition(
+        "spec/hl7.fhir.core/4.0.1/package/" + filename, FhirVersion.R4);
   }
 
   private static final Pattern DATE_PATTERN =

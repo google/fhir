@@ -179,14 +179,7 @@ class ProtoGeneratorMain {
       String fullFilename, FhirVersion fhirVersion) throws IOException {
     String json = Files.asCharSource(new File(fullFilename), StandardCharsets.UTF_8).read();
     StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
-    switch (fhirVersion) {
-      case STU3:
-        return JsonFormat.getEarlyVersionGeneratorParser().merge(json, structDefBuilder).build();
-      case R4:
-        return JsonFormat.getParser().merge(json, structDefBuilder).build();
-      default:
-        throw new IllegalArgumentException("Unrecognized FHIR version: " + fhirVersion);
-    }
+    return JsonFormat.getSpecParser(fhirVersion).merge(json, structDefBuilder).build();
   }
 
   ProtoGeneratorMain(PrintWriter writer) {

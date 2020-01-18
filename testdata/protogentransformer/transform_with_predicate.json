@@ -1,0 +1,18 @@
+{
+  "resourceType": "StructureDefinition",
+  "url": "https://company.com/foo",
+  "name": "FakeThing",
+  "status": "draft",
+  "kind": "resource",
+  "abstract": false,
+  "type": "FakeThing",
+  "snapshot": {
+    "element": [
+      {"type": [
+        {"code": "no"},
+        {"code": "yes"},
+        {"code": "nope"}
+      ]}
+    ]
+  }
+}

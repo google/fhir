@@ -207,7 +207,7 @@ public final class ProtoFilePrinterTest {
   @Before
   public void setUp() throws IOException {
     String packageName = "google.fhir.stu3.proto";
-    jsonParser = JsonFormat.getEarlyVersionGeneratorParser();
+    jsonParser = JsonFormat.getSpecParser(Annotations.FhirVersion.STU3);
     runfiles = Runfiles.create();
     PackageInfo packageInfo =
         PackageInfo.newBuilder()

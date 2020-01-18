@@ -160,21 +160,9 @@ final class ValueSetGeneratorMain {
     }
   }
 
-  private static JsonFormat.Parser getParser(FhirVersion fhirVersion) {
-    switch (fhirVersion) {
-      case STU3:
-        return JsonFormat.getEarlyVersionGeneratorParser();
-      case R4:
-        return JsonFormat.getParser();
-      default:
-        throw new IllegalArgumentException(
-            "Fhir version unsupported by ValueSetGenerator: " + fhirVersion);
-    }
-  }
-
   private static Set<Bundle> loadBundles(Set<String> filenames, FhirVersion fhirVersion)
       throws IOException {
-    JsonFormat.Parser parser = getParser(fhirVersion);
+    JsonFormat.Parser parser = JsonFormat.getSpecParser(fhirVersion);
     Set<Bundle> bundles = new HashSet<>();
     for (String filename : filenames) {
       Bundle.Builder builder = Bundle.newBuilder();

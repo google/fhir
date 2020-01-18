@@ -31,7 +31,7 @@ public class JsonToProtoMain {
 
   public static void main(String[] argv) throws IOException {
     JsonParserArgs args = new JsonParserArgs(argv);
-    Parser fhirParser = Parser.newBuilder().withDefaultTimeZone(args.getDefaultTimezone()).build();
+    Parser fhirParser = Parser.withDefaultTimeZone(args.getDefaultTimezone());
 
     // Process the input files one by one.
     for (JsonParserArgs.InputOutputFilePair entry : args.getInputOutputFilePairs()) {

@@ -46,7 +46,7 @@ public class ConvertNdJsonForBigQueryMain {
 
   public static void main(String[] argv) throws IOException {
     JsonParserArgs args = new JsonParserArgs(argv);
-    Parser fhirParser = Parser.newBuilder().withDefaultTimeZone(args.getDefaultTimezone()).build();
+    Parser fhirParser = Parser.withDefaultTimeZone(args.getDefaultTimezone());
     Printer protoPrinter = JsonFormat.printer().omittingInsignificantWhitespace();
     GsonFactory gsonFactory = new GsonFactory();
 

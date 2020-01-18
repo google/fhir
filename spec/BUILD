@@ -39,7 +39,15 @@ fhir_package(
         ],
     ) + glob([
         "hl7.fhir.core/3.0.1/modified/StructureDefinition-*.json",
-    ]),
+    ]) + glob(
+        [
+            "hl7.fhir.core/3.0.1/package/ValueSet-*.json",
+        ],
+    ) + glob(
+        [
+            "hl7.fhir.core/3.0.1/package/CodeSystem-*.json",
+        ],
+    ),
     package_info = "fhir_stu3_package_info.prototxt",
 )
 

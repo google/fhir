@@ -138,7 +138,7 @@ public class ProtoGeneratorTest {
 
   @Before
   public void setUp() throws IOException {
-    jsonParser = JsonFormat.getEarlyVersionGeneratorParser();
+    jsonParser = JsonFormat.getParser();
     textParser = TextFormat.getParser();
     runfiles = Runfiles.create();
 
