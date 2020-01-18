@@ -20,7 +20,6 @@ import com.beust.jcommander.ParameterException;
 import com.google.common.io.Files;
 import com.google.fhir.common.FileUtils;
 import com.google.fhir.common.JsonFormat;
-import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.Extensions;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.Profiles;
@@ -141,8 +140,7 @@ public class ProfileGeneratorMain {
 
     List<StructureDefinition> baseStructDefPool = new ArrayList<>();
     for (String zip : args.structDefDepZips) {
-      baseStructDefPool.addAll(
-          FhirPackage.load(zip, packageInfo.getFhirVersion()).structureDefinitions);
+      baseStructDefPool.addAll(FhirPackage.load(zip).structureDefinitions);
     }
 
     switch (packageInfo.getFhirVersion()) {
@@ -151,8 +149,7 @@ public class ProfileGeneratorMain {
           throw new IllegalArgumentException(
               "Profile is for STU3, but --stu3_struct_def_zip is not specified.");
         }
-        baseStructDefPool.addAll(
-            FhirPackage.load(args.stu3StructDefZip, FhirVersion.STU3).structureDefinitions);
+        baseStructDefPool.addAll(FhirPackage.load(args.stu3StructDefZip).structureDefinitions);
         break;
       case R4:
         if (args.r4StructDefZip == null) {

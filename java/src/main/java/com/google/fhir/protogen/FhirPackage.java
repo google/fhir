@@ -31,9 +31,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -61,21 +65,12 @@ public class FhirPackage {
   }
 
   public static FhirPackage load(String zipFilePath) throws IOException {
-    return load(zipFilePath, FhirVersion.R4);
-  }
-
-  public static FhirPackage load(String zipFilePath, FhirVersion fhirVersion) throws IOException {
-    List<ValueSet> valueSets = new ArrayList<>();
-    List<CodeSystem> codeSystems = new ArrayList<>();
-    List<StructureDefinition> structureDefinitions = new ArrayList<>();
-    PackageInfo packageInfo = null;
-
-    JsonFormat.Parser parser =
-        fhirVersion == fhirVersion.STU3
-            ? JsonFormat.getEarlyVersionGeneratorParser()
-            : JsonFormat.getParser();
     ZipFile zipFile = new ZipFile(new File(zipFilePath));
     Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+    PackageInfo packageInfo = null;
+    Map<String, String> jsonFiles = new HashMap<>();
+
     while (entries.hasMoreElements()) {
       ZipEntry entry = entries.nextElement();
       if (entry.getName().endsWith("package_info.prototxt")) {
@@ -87,32 +82,43 @@ public class FhirPackage {
           throw new IllegalArgumentException(
               "Missing proto_package from PackageInfo in " + zipFilePath);
         }
+        if (packageInfo.getFhirVersion() == FhirVersion.FHIR_VERSION_UNKNOWN) {
+          throw new IllegalArgumentException(
+              "Missing fhir_version from PackageInfo in " + zipFilePath);
+        }
+      } else if (entry.getName().endsWith(".json")) {
+        String json = new String(ByteStreams.toByteArray(zipFile.getInputStream(entry)), UTF_8);
+        jsonFiles.put(entry.getName(), json);
       }
-      if (!entry.getName().endsWith(".json")) {
-        continue;
-      }
-      String json = new String(ByteStreams.toByteArray(zipFile.getInputStream(entry)), UTF_8);
+    }
 
-      Optional<ValueSet> valueSet = tryParsingAs(json, ValueSet.getDefaultInstance(), parser);
-      if (valueSet.isPresent()) {
-        valueSets.add(valueSet.get());
-        continue;
-      }
-      Optional<CodeSystem> codeSystem = tryParsingAs(json, CodeSystem.getDefaultInstance(), parser);
-      if (codeSystem.isPresent()) {
-        codeSystems.add(codeSystem.get());
-        continue;
-      }
-      Optional<StructureDefinition> structureDefinition =
-          tryParsingAs(json, StructureDefinition.getDefaultInstance(), parser);
-      if (structureDefinition.isPresent()) {
-        structureDefinitions.add(structureDefinition.get());
+    if (packageInfo == null) {
+      throw new IllegalArgumentException(
+          "FhirPackage does not have a valid package_info.prototxt: " + zipFilePath);
+    }
+
+    List<ValueSet> valueSets = new ArrayList<>();
+    List<CodeSystem> codeSystems = new ArrayList<>();
+    List<StructureDefinition> structureDefinitions = new ArrayList<>();
+    JsonFormat.Parser parser = getSpecParser(packageInfo.getFhirVersion());
+
+    for (Map.Entry<String, String> jsonFile : jsonFiles.entrySet()) {
+      String json = jsonFile.getValue();
+      Optional<String> expectedType = getResourceType(json);
+      if (!expectedType.isPresent()) {
+        System.out.println("Unhandled JSON entry: " + jsonFile.getKey());
         continue;
       }
 
-      Optional<Bundle> bundle = tryParsingAs(json, Bundle.getDefaultInstance(), parser);
-      if (bundle.isPresent()) {
-        for (Bundle.Entry bundleEntry : bundle.get().getEntryList()) {
+      if (expectedType.get().equals("ValueSet")) {
+        valueSets.add(parser.merge(json, ValueSet.newBuilder()).build());
+      } else if (expectedType.get().equals("CodeSystem")) {
+        codeSystems.add(parser.merge(json, CodeSystem.newBuilder()).build());
+      } else if (expectedType.get().equals("StructureDefinition")) {
+        structureDefinitions.add(parser.merge(json, StructureDefinition.newBuilder()).build());
+      } else if (expectedType.get().equals("Bundle")) {
+        Bundle bundle = parser.merge(json, Bundle.newBuilder()).build();
+        for (Bundle.Entry bundleEntry : bundle.getEntryList()) {
           Message contained = ResourceUtils.getContainedResource(bundleEntry.getResource());
           if (contained instanceof ValueSet) {
             valueSets.add((ValueSet) contained);
@@ -122,6 +128,8 @@ public class FhirPackage {
             structureDefinitions.add((StructureDefinition) contained);
           }
         }
+      } else {
+        System.out.println("Unhandled JSON entry: " + jsonFile.getKey());
       }
     }
     if (packageInfo == null) {
@@ -141,15 +149,23 @@ public class FhirPackage {
         valueSets);
   }
 
-  @SuppressWarnings("unchecked")
-  private static <T extends Message> Optional<T> tryParsingAs(
-      String json, T type, JsonFormat.Parser parser) {
-    try {
-      Message.Builder typeBuilder = type.newBuilderForType();
-      parser.merge(json, typeBuilder);
-      return Optional.of((T) typeBuilder.build());
-    } catch (IllegalArgumentException e) {
-      return Optional.empty();
+  private static final Pattern RESOURCE_TYPE_PATTERN =
+      Pattern.compile("\"resourceType\"\\s*:\\s*\"([A-Za-z]*)\"");
+
+  private static Optional<String> getResourceType(String json) {
+    Matcher matcher = RESOURCE_TYPE_PATTERN.matcher(json);
+    return matcher.find() ? Optional.of(matcher.group(1)) : Optional.empty();
+  }
+
+  private static JsonFormat.Parser getSpecParser(FhirVersion version) {
+    switch (version) {
+      case STU3:
+        return JsonFormat.getEarlyVersionGeneratorParser();
+      case R4:
+        return JsonFormat.getParser();
+      default:
+        throw new IllegalArgumentException(
+            "Fhir version not supported for getSpecParser: " + version);
     }
   }
 }
