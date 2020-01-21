@@ -158,7 +158,8 @@ public class ProtoGenerator {
                   + "(\\\\.[^\\\\s\\\\.,:;\\\\\\'\"\\\\/|?!@#$%&*()\\\\[\\\\]{}]{1,64}"
                   + "(\\\\[x\\\\])?(\\\\:[^\\\\s\\\\.]+)?)*')",
               // "telcom or endpoint" is an invalid expression that shows up in USCore
-              "telecom or endpoint")
+              "telecom or endpoint",
+              "fullUrl.contains('/_history/').not()") // See https://jira.hl7.org/browse/FHIR-25525)
           .build();
 
   private static final String FHIRPATH_TYPE_PREFIX = "http://hl7.org/fhirpath/";

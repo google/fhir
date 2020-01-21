@@ -572,7 +572,6 @@ nested_type {
   }
   options {
     [google.fhir.proto.fhir_path_message_constraint]: "resource.exists() or request.exists() or response.exists()"
-    [google.fhir.proto.fhir_path_message_constraint]: "fullUrl.contains(\'/_history/\').not()"
   }
 }
 options {
