@@ -16,7 +16,9 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
 #include "testdata/r4/profiles/test.pb.h"
 #include "testdata/stu3/profiles/test.pb.h"
@@ -54,6 +56,36 @@ TEST(FhirTypesTest, IsProfileOfBundleR4) {
 TEST(FhirTypesTest, IsTypeOrProfileOfBundleR4) {
   ASSERT_TRUE(IsTypeOrProfileOfBundle(r4::core::Bundle()));
   ASSERT_TRUE(IsTypeOrProfileOfBundle(r4::testing::Bundle()));
+}
+
+TEST(FhirTypesTest, IsCodeStu3) {
+  ASSERT_TRUE(IsCode(stu3::proto::Code()));
+  ASSERT_FALSE(IsCode(stu3::proto::MimeTypeCode()));
+}
+
+TEST(FhirTypesTest, IsProfileOfCodeStu3) {
+  ASSERT_FALSE(IsProfileOfCode(stu3::proto::Code()));
+  ASSERT_TRUE(IsProfileOfCode(stu3::proto::MimeTypeCode()));
+}
+
+TEST(FhirTypesTest, IsTypeOrProfileOfCodeStu3) {
+  ASSERT_TRUE(IsTypeOrProfileOfCode(stu3::proto::Code()));
+  ASSERT_TRUE(IsTypeOrProfileOfCode(stu3::proto::MimeTypeCode()));
+}
+
+TEST(FhirTypesTest, IsCodeR4) {
+  ASSERT_TRUE(IsCode(r4::core::Code()));
+  ASSERT_FALSE(IsCode(r4::core::Bundle::TypeCode()));
+}
+
+TEST(FhirTypesTest, IsProfileOfCodeR4) {
+  ASSERT_FALSE(IsProfileOfCode(r4::core::Code()));
+  ASSERT_TRUE(IsProfileOfCode(r4::core::Bundle::TypeCode()));
+}
+
+TEST(FhirTypesTest, IsTypeOrProfileOfCodeR4) {
+  ASSERT_TRUE(IsTypeOrProfileOfCode(r4::core::Code()));
+  ASSERT_TRUE(IsTypeOrProfileOfCode(r4::core::Bundle::TypeCode()));
 }
 
 }  // namespace

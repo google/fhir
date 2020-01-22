@@ -82,12 +82,37 @@ bool IsTypeOrProfileOf(const std::string& url, const Message& message) {
   }
 
 FHIR_TYPE_CHECK(Bundle, "http://hl7.org/fhir/StructureDefinition/Bundle");
-FHIR_TYPE_CHECK(Code, "http://hl7.org/fhir/StructureDefinition/code");
 FHIR_TYPE_CHECK(Coding, "http://hl7.org/fhir/StructureDefinition/Coding");
 FHIR_TYPE_CHECK(CodeableConcept,
                 "http://hl7.org/fhir/StructureDefinition/CodeableConcept");
 
 #undef FHIR_TYPE_CHECK
+
+bool IsCode(const ::google::protobuf::Message& message) {
+  return IsCode(message.GetDescriptor());
+}
+
+bool IsProfileOfCode(const ::google::protobuf::Message& message) {
+  return IsProfileOfCode(message.GetDescriptor());
+}
+
+bool IsTypeOrProfileOfCode(const ::google::protobuf::Message& message) {
+  return IsTypeOrProfileOfCode(message.GetDescriptor());
+}
+
+bool IsCode(const ::google::protobuf::Descriptor* descriptor) {
+  return IsType("http://hl7.org/fhir/StructureDefinition/code", descriptor);
+}
+
+bool IsProfileOfCode(const ::google::protobuf::Descriptor* descriptor) {
+  return IsProfileOf("http://hl7.org/fhir/StructureDefinition/code",
+                     descriptor) ||
+         descriptor->options().HasExtension(proto::fhir_valueset_url);
+}
+
+bool IsTypeOrProfileOfCode(const ::google::protobuf::Descriptor* descriptor) {
+  return IsCode(descriptor) || IsProfileOfCode(descriptor);
+}
 
 }  // namespace fhir
 }  // namespace google

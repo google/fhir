@@ -697,7 +697,9 @@ cc_test(
     srcs = ["fhir_types_test.cc"],
     deps = [
         ":fhir_types",
+        "//proto/r4/core:datatypes_cc_proto",
         "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:resources_cc_proto",
         "//testdata/r4/profiles:test_cc_proto",
         "//testdata/stu3/profiles:test_cc_proto",
