@@ -45,7 +45,6 @@ using ::google::fhir::stu3::proto::CodeableConcept;
 using ::google::fhir::stu3::proto::Coding;
 using ::google::fhir::stu3::proto::Encounter;
 using ::google::fhir::stu3::proto::Observation;
-using ::google::fhir::stu3::proto::StructureDefinition;
 using ::google::fhir::stu3::proto::Uri;
 using ::google::fhir::stu3::proto::ValueSet;
 using ::google::fhir::stu3::uscore::UsCoreBirthSexCode;
@@ -682,38 +681,6 @@ TEST(FhirPathTest, TestWhereValidatesArguments) {
   EXPECT_FALSE(EvaluateExpressionWithStatus("{}.where()").ok());
   EXPECT_TRUE(EvaluateExpressionWithStatus("{}.where(true)").ok());
   EXPECT_FALSE(EvaluateExpressionWithStatus("{}.where(true, false)").ok());
-}
-
-TEST(FhirPathTest, TestAll) {
-  EXPECT_TRUE(EvaluateBoolExpression("{}.all(false)"));
-  EXPECT_TRUE(EvaluateBoolExpression("(false).all(true)"));
-  EXPECT_TRUE(EvaluateBoolExpression("(1 | 2 | 3).all($this < 4)"));
-  EXPECT_FALSE(EvaluateBoolExpression("(1 | 2 | 3).all($this > 4)"));
-
-  // Verify that all() fails when called with the wrong number of arguments.
-  EXPECT_FALSE(EvaluateExpressionWithStatus("{}.all()").ok());
-  EXPECT_FALSE(EvaluateExpressionWithStatus("{}.all(true, false)").ok());
-}
-
-TEST(FhirPathTest, TestAllReadsFieldFromDifferingTypes) {
-  StructureDefinition structure_definition =
-      ParseFromString<StructureDefinition>(R"proto(
-        snapshot {
-          element {}
-        }
-        differential {
-          element {}
-        }
-      )proto");
-
-  EvaluationResult evaluation_result =
-      CompiledExpression::Compile(
-          StructureDefinition::descriptor(),
-          "(snapshot | differential).all(element.exists())")
-          .ValueOrDie()
-          .Evaluate(structure_definition)
-          .ValueOrDie();
-  EXPECT_TRUE(evaluation_result.GetBoolean().ValueOrDie());
 }
 
 TEST(FhirPathTest, TestSelect) {

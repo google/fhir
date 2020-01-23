@@ -213,36 +213,30 @@ class EmptyLiteral : public ExpressionNode {
 // producing a term from the root context message.
 class InvokeTermNode : public ExpressionNode {
  public:
-  explicit InvokeTermNode(const FieldDescriptor* field,
-                          const std::string& field_name)
-      : field_(field), field_name_(field_name) {}
+  explicit InvokeTermNode(const FieldDescriptor* field) : field_(field) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
     const Message& message = *work_space->MessageContext();
     const Reflection* refl = message.GetReflection();
-    const FieldDescriptor* field =
-        field_ != nullptr
-            ? field_
-            : message.GetDescriptor()->FindFieldByName(field_name_);
 
-    if (field->is_repeated()) {
-      int field_size = refl->FieldSize(message, field);
+    if (field_->is_repeated()) {
+      int field_size = refl->FieldSize(message, field_);
 
       for (int i = 0; i < field_size; ++i) {
-        const Message& child = refl->GetRepeatedMessage(message, field, i);
+        const Message& child = refl->GetRepeatedMessage(message, field_, i);
 
         results->push_back(&child);
       }
 
     } else {
-      if (refl->HasField(message, field)) {
+      if (refl->HasField(message, field_)) {
         // .value invocations on primitive types should return the FHIR
         // primitive message type rather than the underlying native primitive.
-        if (IsFhirPrimitiveValue(field)) {
+        if (IsFhirPrimitiveValue(field_)) {
           results->push_back(&message);
         } else {
-          const Message& child = refl->GetMessage(message, field);
+          const Message& child = refl->GetMessage(message, field_);
           results->push_back(&child);
         }
       }
@@ -252,12 +246,11 @@ class InvokeTermNode : public ExpressionNode {
   }
 
   const Descriptor* ReturnType() const override {
-    return field_ != nullptr ? field_->message_type() : nullptr;
+    return field_->message_type();
   }
 
  private:
   const FieldDescriptor* field_;
-  const std::string field_name_;
 };
 
 // Handles the InvocationExpression from the FHIRPath grammar,
@@ -1004,12 +997,6 @@ class UnionOperator : public BinaryOperator {
   }
 
   const Descriptor* ReturnType() const override {
-    // If the return type of one of the operands is unknown, the return type of
-    // the union operator is unknown.
-    if (left_->ReturnType() == nullptr || right_->ReturnType() == nullptr) {
-      return nullptr;
-    }
-
     if (AreSameMessageType(left_->ReturnType(), right_->ReturnType())) {
       return left_->ReturnType();
     }
@@ -1151,68 +1138,6 @@ class WhereFunction : public FunctionNode {
   }
 
   const Descriptor* ReturnType() const override { return child_->ReturnType(); }
-};
-
-// Implements the FHIRPath .all() function.
-class AllFunction : public FunctionNode {
- public:
-  static Status ValidateParams(
-      const std::vector<std::shared_ptr<ExpressionNode>>& params) {
-    if (params.size() != 1) {
-      return InvalidArgument("Function requires exactly one argument.");
-    }
-
-    return Status::OK();
-  }
-
-  static StatusOr<std::vector<std::shared_ptr<ExpressionNode>>> CompileParams(
-      const std::vector<FhirPathParser::ExpressionContext*>& params,
-      FhirPathBaseVisitor*,
-      FhirPathBaseVisitor* child_context_visitor) {
-    return FunctionNode::CompileParams(params, child_context_visitor);
-  }
-
-  AllFunction(
-      const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>>& params)
-      : FunctionNode(child, params) {
-    TF_DCHECK_OK(ValidateParams(params));
-  }
-
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
-    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
-    FHIR_ASSIGN_OR_RETURN(bool result, Evaluate(child_results));
-
-    Boolean* result_message = new Boolean();
-    work_space->DeleteWhenFinished(result_message);
-    result_message->set_value(result);
-    results->push_back(result_message);
-    return Status::OK();
-  }
-
-  const Descriptor* ReturnType() const override {
-    return Boolean::GetDescriptor();
-  }
-
- private:
-  StatusOr<bool> Evaluate(
-      const std::vector<const Message*>& child_results) const {
-    for (const Message* message : child_results) {
-      std::vector<const Message*> param_results;
-      WorkSpace expression_work_space(message);
-      FHIR_RETURN_IF_ERROR(
-          params_[0]->Evaluate(&expression_work_space, &param_results));
-      FHIR_ASSIGN_OR_RETURN(StatusOr<absl::optional<bool>> criteria_met,
-                            (PrimitiveOrEmpty<bool, Boolean>(param_results)));
-      if (!criteria_met.ValueOrDie().value_or(false)) {
-        return false;
-      }
-    }
-
-    return true;
-  }
 };
 
 // Implements the FHIRPath .select() function.
@@ -1892,17 +1817,15 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     auto definition = invocation.as<std::shared_ptr<InvocationDefinition>>();
 
     const FieldDescriptor* field =
-        descriptor_ != nullptr ? descriptor_->FindFieldByName(definition->name)
-                              : nullptr;
+        descriptor_->FindFieldByName(definition->name);
 
-    // If we know the return type of the expression, and the return type
-    // doesn't have the referenced field, set an error and return.
-    if (descriptor_ != nullptr && field == nullptr) {
+    if (field == nullptr) {
       SetError(absl::StrCat("Unable to find field ", definition->name));
       return nullptr;
-    }
 
-    return ToAny(std::make_shared<InvokeTermNode>(field, definition->name));
+    } else {
+      return ToAny(std::make_shared<InvokeTermNode>(field));
+    }
   }
 
   antlrcpp::Any visitIndexerExpression(
@@ -2192,7 +2115,6 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
           {"intersect", FunctionNode::Create<IntersectFunction>},
           {"where", FunctionNode::Create<WhereFunction>},
           {"select", FunctionNode::Create<SelectFunction>},
-          {"all", FunctionNode::Create<AllFunction>},
       };
 
   // Returns an ExpressionNode that implements the specified FHIRPath function.
