@@ -121,10 +121,12 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":text_tokenizer",
+        "//cc/google/fhir:codeable_concepts",
+        "//cc/google/fhir:codes",
+        "//cc/google/fhir:fhir_types",
         "//cc/google/fhir:proto_util",
         "//cc/google/fhir:util",
         "//cc/google/fhir/status",
-        "//cc/google/fhir/stu3:codeable_concepts",
         "//proto:annotations_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/algorithm:container",
