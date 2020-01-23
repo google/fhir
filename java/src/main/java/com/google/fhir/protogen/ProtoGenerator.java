@@ -159,7 +159,10 @@ public class ProtoGenerator {
                   + "(\\\\[x\\\\])?(\\\\:[^\\\\s\\\\.]+)?)*')",
               // "telcom or endpoint" is an invalid expression that shows up in USCore
               "telecom or endpoint",
-              "fullUrl.contains('/_history/').not()") // See https://jira.hl7.org/browse/FHIR-25525)
+              "fullUrl.contains('/_history/').not()", // See https://jira.hl7.org/browse/FHIR-25525
+              // Invalid FHIRPath constraint on StructureDefinition.snapshot in STU3. Fixed in R4
+              // but unlikely to be backported.
+              "element.all(definition and min and max)")
           .build();
 
   private static final String FHIRPATH_TYPE_PREFIX = "http://hl7.org/fhirpath/";

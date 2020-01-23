@@ -356,7 +356,6 @@ field {
     [google.fhir.proto.field_description]: "Snapshot view of the structure"
     [google.fhir.proto.fhir_path_constraint]: "element.first().type.empty()"
     [google.fhir.proto.fhir_path_constraint]: "element.first().path = %resource.type and element.tail().all(path.startsWith(%resource.type&\'.\'))"
-    [google.fhir.proto.fhir_path_constraint]: "element.all(definition and min and max)"
   }
 }
 field {
