@@ -17631,9 +17631,7 @@ message StructureDefinition {
   Snapshot snapshot = 35 [
     (.google.fhir.proto.fhir_path_constraint) = "element.first().type.empty()",
     (.google.fhir.proto.fhir_path_constraint) =
-        "element.first().path = %resource.type and element.tail().all(path.startsWith(%resource.type&'.'))",
-    (.google.fhir.proto.fhir_path_constraint) =
-        "element.all(definition and min and max)"
+        "element.first().path = %resource.type and element.tail().all(path.startsWith(%resource.type&'.'))"
   ];
 
   // Differential view of the structure
