@@ -13,7 +13,7 @@ presubmit: {
     project: "fhir_go_parser.tap"
   }
   check_guitar: {
-    workflow_query: "//google/cloud/healthcare/test/guitar:healthcare_integration_presubmit"
+    workflow_query: "//google/cloud/healthcare/test/guitar:fhir_integration_presubmit"
     cluster_name: "healthcare-oneshot-cluster"
     failure_status: ERROR
     ignore_file_modifications: false  # Does not skip runs when CL has changed.
