@@ -1891,6 +1891,15 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
     auto definition = invocation.as<std::shared_ptr<InvocationDefinition>>();
 
+    if (definition->is_function) {
+      auto function_node = createFunction(
+          definition->name, std::make_shared<ThisReference>(descriptor_),
+          definition->params);
+
+      return function_node == nullptr || !CheckOk() ? nullptr
+                                                    : ToAny(function_node);
+    }
+
     const FieldDescriptor* field =
         descriptor_ != nullptr ? descriptor_->FindFieldByName(definition->name)
                               : nullptr;
@@ -2109,6 +2118,24 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   antlrcpp::Any visitThisInvocation(
       FhirPathParser::ThisInvocationContext* ctx) override {
     return ToAny(std::make_shared<ThisReference>(descriptor_));
+  }
+
+  antlrcpp::Any visitExternalConstant(
+      FhirPathParser::ExternalConstantContext* ctx) override {
+    std::string name = ctx->children[1]->getText();
+    if (name == "ucum") {
+      return ToAny(std::make_shared<Literal<String, std::string>>(
+          "http://unitsofmeasure.org"));
+    } else if (name == "sct") {
+      return ToAny(std::make_shared<Literal<String, std::string>>(
+          "http://snomed.info/sct"));
+    } else if (name == "loinc") {
+      return ToAny(
+          std::make_shared<Literal<String, std::string>>("http://loinc.org"));
+    }
+
+    SetError(absl::StrCat("Unknown external constant: ", name));
+    return nullptr;
   }
 
   antlrcpp::Any visitTerminal(TerminalNode* node) override {

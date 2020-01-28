@@ -175,6 +175,34 @@ bool EvaluateOnPeriod(const CompiledExpression& expression,
   return result.GetBoolean().ValueOrDie();
 }
 
+TEST(FhirPathTest, TestExternalConstants) {
+  EvaluationResult ucum_evaluation_result =
+      EvaluateExpressionWithStatus("%ucum").ValueOrDie();
+  String ucum_expected_result =
+      ParseFromString<String>("value: 'http://unitsofmeasure.org'");
+
+  EXPECT_THAT(ucum_evaluation_result.GetMessages(),
+              UnorderedElementsAreArray({EqualsProto(ucum_expected_result)}));
+
+  EvaluationResult sct_evaluation_result =
+      EvaluateExpressionWithStatus("%sct").ValueOrDie();
+  String sct_expected_result =
+      ParseFromString<String>("value: 'http://snomed.info/sct'");
+
+  EXPECT_THAT(sct_evaluation_result.GetMessages(),
+              UnorderedElementsAreArray({EqualsProto(sct_expected_result)}));
+
+  EvaluationResult loinc_evaluation_result =
+      EvaluateExpressionWithStatus("%loinc").ValueOrDie();
+  String loinc_expected_result =
+      ParseFromString<String>("value: 'http://loinc.org'");
+
+  EXPECT_THAT(loinc_evaluation_result.GetMessages(),
+              UnorderedElementsAreArray({EqualsProto(loinc_expected_result)}));
+
+  EXPECT_FALSE(EvaluateExpressionWithStatus("%unknown").ok());
+}
+
 TEST(FhirPathTest, TestMalformed) {
   auto expr = CompiledExpression::Compile(Encounter::descriptor(),
                                           "expression->not->valid");
@@ -277,6 +305,10 @@ TEST(FhirPathTest, TestNoSuchFunction) {
   EXPECT_FALSE(root_expr.ok());
   EXPECT_NE(root_expr.status().error_message().find("bogusfunction"),
             std::string::npos);
+}
+
+TEST(FhirPathTest, TestFunctionTopLevelInvocation) {
+  EXPECT_TRUE(EvaluateBoolExpression("exists()"));
 }
 
 TEST(FhirPathTest, TestFunctionExists) {
