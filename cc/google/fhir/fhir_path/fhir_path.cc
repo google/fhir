@@ -2019,7 +2019,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       FhirPathParser::MemberInvocationContext* ctx) override {
     std::string text = ctx->identifier()->IDENTIFIER()->getSymbol()->getText();
 
-    return std::make_shared<InvocationDefinition>(text, false);
+    return std::make_shared<InvocationDefinition>(ToSnakeCase(text), false);
   }
 
   antlrcpp::Any visitFunctionInvocation(

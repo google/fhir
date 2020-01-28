@@ -78,6 +78,7 @@ Encounter ValidEncounter() {
     period {
       start: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
     }
+    status_history { status { value: ARRIVED } }
   )proto");
 }
 
@@ -221,6 +222,29 @@ TEST(FhirPathTest, TestGetEmptyGrandchild) {
   EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
 
   EXPECT_EQ(0, result.GetMessages().size());
+}
+
+TEST(FhirPathTest, TestFieldExists) {
+  Encounter test_encounter = ValidEncounter();
+
+  auto root_expr =
+      CompiledExpression::Compile(Encounter::descriptor(), "period")
+          .ValueOrDie();
+  EvaluationResult root_result =
+      root_expr.Evaluate(test_encounter).ValueOrDie();
+  EXPECT_THAT(
+      root_result.GetMessages(),
+      UnorderedElementsAreArray({EqualsProto(test_encounter.period())}));
+
+  // Tests the conversion from camelCase to snake_case
+  auto camel_case_expr =
+      CompiledExpression::Compile(Encounter::descriptor(), "statusHistory")
+          .ValueOrDie();
+  EvaluationResult camel_case_result =
+      camel_case_expr.Evaluate(test_encounter).ValueOrDie();
+  EXPECT_THAT(camel_case_result.GetMessages(),
+              UnorderedElementsAreArray(
+                  {EqualsProto(test_encounter.status_history(0))}));
 }
 
 TEST(FhirPathTest, TestNoSuchField) {
