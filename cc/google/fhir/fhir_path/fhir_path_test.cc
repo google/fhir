@@ -24,38 +24,41 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/testutil/proto_matchers.h"
+#include "proto/r4/core/codes.pb.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/resources/encounter.pb.h"
-#include "proto/stu3/codes.pb.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/resources.pb.h"
-#include "proto/stu3/uscore.pb.h"
-#include "proto/stu3/uscore_codes.pb.h"
+#include "proto/r4/core/resources/observation.pb.h"
+#include "proto/r4/core/resources/structure_definition.pb.h"
+#include "proto/r4/core/resources/value_set.pb.h"
+#include "proto/r4/uscore.pb.h"
+#include "proto/r4/uscore_codes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 
-using ::google::fhir::r4::core::Boolean;
-using ::google::fhir::r4::core::DateTime;
-using ::google::fhir::r4::core::Integer;
-using ::google::fhir::r4::core::Period;
-using ::google::fhir::r4::core::Quantity;
-using ::google::fhir::r4::core::String;
+namespace google {
+namespace fhir {
+namespace fhir_path {
 
-using ::google::fhir::stu3::proto::Code;
-using ::google::fhir::stu3::proto::CodeableConcept;
-using ::google::fhir::stu3::proto::Coding;
-using ::google::fhir::stu3::proto::Encounter;
-using ::google::fhir::stu3::proto::Observation;
-using ::google::fhir::stu3::proto::StructureDefinition;
-using ::google::fhir::stu3::proto::Uri;
-using ::google::fhir::stu3::proto::ValueSet;
-using ::google::fhir::stu3::uscore::UsCoreBirthSexCode;
-using ::google::fhir::stu3::uscore::UsCorePatient;
+namespace {
 
-using google::fhir::Status;
-using google::fhir::fhir_path::CompiledExpression;
-using google::fhir::fhir_path::EvaluationResult;
-using google::fhir::fhir_path::MessageValidator;
-using google::fhir::testutil::EqualsProto;
+using r4::core::Boolean;
+using r4::core::Code;
+using r4::core::CodeableConcept;
+using r4::core::DateTime;
+using r4::core::Decimal;
+using r4::core::Encounter;
+using r4::core::Integer;
+using r4::core::Observation;
+using r4::core::Period;
+using r4::core::Quantity;
+using r4::core::SimpleQuantity;
+using r4::core::String;
+using r4::core::StructureDefinition;
+using r4::core::ValueSet;
+using r4::uscore::BirthSexValueSet;
+using r4::uscore::USCorePatientProfile;
+
+using testutil::EqualsProto;
+
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using testing::UnorderedElementsAreArray;
@@ -101,8 +104,8 @@ ValueSet ValidValueSet() {
   )proto");
 }
 
-UsCorePatient ValidUsCorePatient() {
-  return ParseFromString<UsCorePatient>(R"proto(
+USCorePatientProfile ValidUsCorePatient() {
+  return ParseFromString<USCorePatientProfile>(R"proto(
     identifier {
       system { value: "foo" },
       value: { value: "http://example.com/patient" }
@@ -110,41 +113,36 @@ UsCorePatient ValidUsCorePatient() {
   )proto");
 }
 
-google::fhir::StatusOr<EvaluationResult> EvaluateExpressionWithStatus(
+StatusOr<EvaluationResult> EvaluateExpressionWithStatus(
     const std::string& expression) {
   // FHIRPath assumes a EvaluateBoolExpression object during evaluation, so we
   // use an encounter as a placeholder.
   auto compiled_expression =
       CompiledExpression::Compile(Encounter::descriptor(), expression);
   if (!compiled_expression.ok()) {
-    return google::fhir::StatusOr<EvaluationResult>(
-        compiled_expression.status());
+    return StatusOr<EvaluationResult>(compiled_expression.status());
   }
 
   Encounter test_encounter = ValidEncounter();
   return compiled_expression.ValueOrDie().Evaluate(test_encounter);
 }
 
-
-google::fhir::StatusOr<std::string> EvaluateStringExpressionWithStatus(
+StatusOr<std::string> EvaluateStringExpressionWithStatus(
     const std::string& expression) {
-  google::fhir::StatusOr<EvaluationResult> result =
-      EvaluateExpressionWithStatus(expression);
+  StatusOr<EvaluationResult> result = EvaluateExpressionWithStatus(expression);
 
   if (!result.ok()) {
-    return google::fhir::StatusOr<std::string>(result.status());
+    return StatusOr<std::string>(result.status());
   }
 
   return result.ValueOrDie().GetString();
 }
 
-google::fhir::StatusOr<bool> EvaluateBoolExpressionWithStatus(
-    const std::string& expression) {
-  google::fhir::StatusOr<EvaluationResult> result =
-      EvaluateExpressionWithStatus(expression);
+StatusOr<bool> EvaluateBoolExpressionWithStatus(const std::string& expression) {
+  StatusOr<EvaluationResult> result = EvaluateExpressionWithStatus(expression);
 
   if (!result.ok()) {
-    return google::fhir::StatusOr<bool>(result.status());
+    return StatusOr<bool>(result.status());
   }
 
   return result.ValueOrDie().GetBoolean();
@@ -1078,9 +1076,8 @@ TEST(FhirPathTest, ConstraintViolation) {
                                  const FieldDescriptor* field,
                                  const std::string& constraint) {
     // Ensure the expected bad sub-message is passed to the callback.
-    EXPECT_EQ(observation.GetDescriptor()->full_name(),
+    EXPECT_EQ(observation.reference_range(0).GetDescriptor()->full_name(),
               bad_message.GetDescriptor()->full_name());
-    EXPECT_EQ("referenceRange", field->json_name());
 
     // Ensure the expected constraint failed.
     EXPECT_EQ("low.exists() or high.exists() or text.exists()", constraint);
@@ -1089,7 +1086,7 @@ TEST(FhirPathTest, ConstraintViolation) {
   };
 
   std::string err_message =
-      absl::StrCat("fhirpath-constraint-violation-Observation.referenceRange: ",
+      absl::StrCat("fhirpath-constraint-violation-ReferenceRange: ",
                    "\"low.exists() or high.exists() or text.exists()\"");
   EXPECT_EQ(validator.Validate(observation, callback),
             ::tensorflow::errors::FailedPrecondition(err_message));
@@ -1102,10 +1099,10 @@ TEST(FhirPathTest, ConstraintSatisfied) {
   // as required by FHIR.
   auto ref_range = observation.add_reference_range();
 
-  auto value = new ::google::fhir::stu3::proto::Decimal();
+  auto value = new Decimal();
   value->set_allocated_value(new std::string("123.45"));
 
-  auto high = new ::google::fhir::stu3::proto::SimpleQuantity();
+  auto high = new SimpleQuantity();
   high->set_allocated_value(value);
 
   ref_range->set_allocated_high(high);
@@ -1118,17 +1115,18 @@ TEST(FhirPathTest, ConstraintSatisfied) {
 TEST(FhirPathTest, NestedConstraintViolated) {
   ValueSet value_set = ValidValueSet();
 
-  auto expansion = new ::google::fhir::stu3::proto::ValueSet_Expansion;
+  auto expansion = new ValueSet::Expansion;
 
   // Add empty contains structure to violate FHIR constraint.
   expansion->add_contains();
+  value_set.mutable_name()->set_value("Placeholder");
   value_set.set_allocated_expansion(expansion);
 
   MessageValidator validator;
 
-  std::string err_message = absl::StrCat(
-      "fhirpath-constraint-violation-",
-      "Expansion.contains: ", "\"code.exists() or display.exists()\"");
+  std::string err_message =
+      absl::StrCat("fhirpath-constraint-violation-Contains: ",
+                   "\"code.exists() or display.exists()\"");
 
   EXPECT_EQ(validator.Validate(value_set),
             ::tensorflow::errors::FailedPrecondition(err_message));
@@ -1136,17 +1134,17 @@ TEST(FhirPathTest, NestedConstraintViolated) {
 
 TEST(FhirPathTest, NestedConstraintSatisfied) {
   ValueSet value_set = ValidValueSet();
+  value_set.mutable_name()->set_value("Placeholder");
 
-  auto expansion = new ::google::fhir::stu3::proto::ValueSet_Expansion;
-
+  auto expansion = new ValueSet::Expansion;
   auto contains = expansion->add_contains();
 
   // Contains struct has value to satisfy FHIR constraint.
-  auto proto_string = new ::google::fhir::stu3::proto::String();
-  proto_string->set_value("placeholder display");
+  auto proto_string = new String();
+  proto_string->set_value("Placeholder value");
   contains->set_allocated_display(proto_string);
 
-  auto proto_boolean = new ::google::fhir::stu3::proto::Boolean();
+  auto proto_boolean = new Boolean();
   proto_boolean->set_value(true);
   contains->set_allocated_abstract(proto_boolean);
 
@@ -1246,7 +1244,7 @@ TEST(FhirPathTest, TestCompareEnumToString) {
   EXPECT_TRUE(
       is_triaged.Evaluate(encounter).ValueOrDie().GetBoolean().ValueOrDie());
   encounter.mutable_status()->set_value(
-      google::fhir::stu3::proto::EncounterStatusCode::FINISHED);
+      r4::core::EncounterStatusCode::FINISHED);
   EXPECT_FALSE(
       is_triaged.Evaluate(encounter).ValueOrDie().GetBoolean().ValueOrDie());
 }
@@ -1272,59 +1270,56 @@ TEST(FhirPathTest, MessageLevelConstraintViolated) {
 }
 
 TEST(FhirPathTest, NestedMessageLevelConstraint) {
-  auto start_with_no_end_encounter =
-      ParseFromString<::google::fhir::r4::core::Encounter>(R"proto(
-        status { value: TRIAGED }
-        id { value: "123" }
-        period {
-          start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
-        }
-      )proto");
+  auto start_with_no_end_encounter = ParseFromString<Encounter>(R"proto(
+    status { value: TRIAGED }
+    id { value: "123" }
+    period {
+      start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
+    }
+  )proto");
 
   MessageValidator validator;
   EXPECT_TRUE(validator.Validate(start_with_no_end_encounter).ok());
 }
 
 TEST(FhirPathTest, NestedMessageLevelConstraintViolated) {
-  auto end_before_start_encounter =
-      ParseFromString<::google::fhir::r4::core::Encounter>(R"proto(
-        status { value: TRIAGED }
-        id { value: "123" }
-        period {
-          start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
-          end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
-        }
-      )proto");
+  auto end_before_start_encounter = ParseFromString<Encounter>(R"proto(
+    status { value: TRIAGED }
+    id { value: "123" }
+    period {
+      start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
+      end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
+    }
+  )proto");
 
   MessageValidator validator;
   EXPECT_FALSE(validator.Validate(end_before_start_encounter).ok());
 }
 
 TEST(FhirPathTest, ProfiledEmptyExtension) {
-  UsCorePatient patient = ValidUsCorePatient();
+  USCorePatientProfile patient = ValidUsCorePatient();
   MessageValidator validator;
   EXPECT_TRUE(validator.Validate(patient).ok());
 }
 
 TEST(FhirPathTest, ProfiledWithExtensions) {
-  UsCorePatient patient = ValidUsCorePatient();
-  auto race = new google::fhir::stu3::uscore::PatientUSCoreRaceExtension();
+  USCorePatientProfile patient = ValidUsCorePatient();
+  auto race = new r4::uscore::PatientUSCoreRaceExtension();
 
-  Coding* coding = race->add_omb_category();
-
-  Uri* uri = new Uri();
-  uri->set_value("urn:oid:2.16.840.1.113883.6.238");
-  coding->set_allocated_system(uri);
-
-  Code* code = new Code();
-  code->set_value("1002-5");
-  coding->set_allocated_code(code);
+  r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding* coding =
+      race->add_omb_category();
+  coding->mutable_code()->set_value(
+      r4::uscore::OmbRaceCategoriesValueSet::AMERICAN_INDIAN_OR_ALASKA_NATIVE);
   patient.set_allocated_race(race);
 
-  UsCoreBirthSexCode* birth_sex = new UsCoreBirthSexCode();
-  birth_sex->set_value(UsCoreBirthSexCode::MALE);
-  patient.set_allocated_birthsex(birth_sex);
+  patient.mutable_birthsex()->set_value(BirthSexValueSet::M);
 
   MessageValidator validator;
   EXPECT_TRUE(validator.Validate(patient).ok());
 }
+
+}  // namespace
+
+}  // namespace fhir_path
+}  // namespace fhir
+}  // namespace google
