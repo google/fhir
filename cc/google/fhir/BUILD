@@ -706,3 +706,20 @@ cc_test(
         "@com_google_googletest//:gtest_main",
     ],
 )
+
+cc_library(
+    name = "primitive_handler",
+    srcs = ["primitive_handler.cc"],
+    hdrs = ["primitive_handler.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":annotations",
+        ":primitive_wrapper",
+        ":proto_util",
+        ":util",
+        "//cc/google/fhir/status",
+        "@com_google_protobuf//:protobuf",
+        "@jsoncpp_git//:jsoncpp",
+        "@org_tensorflow//tensorflow/core:lib",
+    ],
+)

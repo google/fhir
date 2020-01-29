@@ -62,6 +62,7 @@ using ::google::fhir::GetRepeatedFromExtension;
 using ::google::fhir::HasValueset;
 using ::google::fhir::Status;
 using ::google::fhir::StatusOr;
+using primitives_internal::PrimitiveWrapper;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::EnumDescriptor;
 using ::google::protobuf::EnumValueDescriptor;
@@ -110,31 +111,6 @@ StatusOr<bool> HasPrimitiveHasNoValue(const Message& message) {
   return boolean_msg.GetReflection()->GetBool(
       boolean_msg, boolean_msg.GetDescriptor()->FindFieldByName("value"));
 }
-
-class PrimitiveWrapper {
- public:
-  virtual ~PrimitiveWrapper() {}
-  virtual Status MergeInto(::google::protobuf::Message* target) const = 0;
-  virtual Status Parse(const Json::Value& json,
-                       const absl::TimeZone& default_time_zone) = 0;
-  virtual Status Wrap(const ::google::protobuf::Message&) = 0;
-  virtual bool HasElement() const = 0;
-  virtual StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement() const = 0;
-
-  virtual Status ValidateProto() const = 0;
-
-  StatusOr<std::string> ToValueString() const {
-    static const char* kNullString = "null";
-    if (HasValue()) {
-      return ToNonNullValueString();
-    }
-    return absl::StrCat(kNullString);
-  }
-
- protected:
-  virtual bool HasValue() const = 0;
-  virtual StatusOr<std::string> ToNonNullValueString() const = 0;
-};
 
 template <typename T>
 class SpecificWrapper : public PrimitiveWrapper {

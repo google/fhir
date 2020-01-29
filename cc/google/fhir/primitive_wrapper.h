@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef GOOGLE_FHIR_STU3_PRIMITIVE_WRAPPER_H_
-#define GOOGLE_FHIR_STU3_PRIMITIVE_WRAPPER_H_
+#ifndef GOOGLE_FHIR_PRIMITIVE_WRAPPER_H_
+#define GOOGLE_FHIR_PRIMITIVE_WRAPPER_H_
 
 #include <memory>
 #include <string>
 
+#include "absl/strings/str_cat.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/time/time.h"
@@ -52,7 +53,36 @@ struct JsonPrimitive {
 
 ::google::fhir::Status ValidatePrimitive(const ::google::protobuf::Message& primitive);
 
+namespace primitives_internal {
+
+class PrimitiveWrapper {
+ public:
+  virtual ~PrimitiveWrapper() {}
+  virtual Status MergeInto(::google::protobuf::Message* target) const = 0;
+  virtual Status Parse(const Json::Value& json,
+                       const absl::TimeZone& default_time_zone) = 0;
+  virtual Status Wrap(const ::google::protobuf::Message&) = 0;
+  virtual bool HasElement() const = 0;
+  virtual StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement() const = 0;
+
+  virtual Status ValidateProto() const = 0;
+
+  StatusOr<std::string> ToValueString() const {
+    static const char* kNullString = "null";
+    if (HasValue()) {
+      return ToNonNullValueString();
+    }
+    return absl::StrCat(kNullString);
+  }
+
+ protected:
+  virtual bool HasValue() const = 0;
+  virtual StatusOr<std::string> ToNonNullValueString() const = 0;
+};
+
+}  // namespace primitives_internal
+
 }  // namespace fhir
 }  // namespace google
 
-#endif  // GOOGLE_FHIR_STU3_PRIMITIVE_WRAPPER_H_
+#endif  // GOOGLE_FHIR_PRIMITIVE_WRAPPER_H_
