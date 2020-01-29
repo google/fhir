@@ -919,5 +919,4 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Shareable ActivityDefinition.\nThe definition of a specific activity to be taken, independent of any particular patient or context.\nSee http://hl7.org/fhir/StructureDefinition/shareableactivitydefinition"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/ActivityDefinition"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/shareableactivitydefinition"
-  [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
 }

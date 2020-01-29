@@ -35,8 +35,6 @@ message ShareableCodeSystem {
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/shareablecodesystem";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
       "concept.code.combine($this.descendants().concept.code).isDistinct()";
 
   // Logical id of this artifact

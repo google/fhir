@@ -975,5 +975,4 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ExampleScenario, last updated 2019-11-01T09:29:23.356+11:00.\nExample of workflow instance.\nSee http://hl7.org/fhir/StructureDefinition/ExampleScenario"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ExampleScenario"
-  [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
 }

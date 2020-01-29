@@ -1095,6 +1095,5 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for CQF-Questionnaire.\nA questionnaire with the ability to specify behavior associated with questions or groups of questions.\nSee http://hl7.org/fhir/StructureDefinition/cqf-questionnaire"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Questionnaire"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/cqf-questionnaire"
-  [google.fhir.proto.fhir_path_message_constraint]: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\')"
   [google.fhir.proto.fhir_path_message_constraint]: "descendants().linkId.isDistinct()"
 }

@@ -36,8 +36,6 @@ message CQFQuestionnaire {
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/cqf-questionnaire";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
       "descendants().linkId.isDistinct()";
 
   // Logical id of this artifact

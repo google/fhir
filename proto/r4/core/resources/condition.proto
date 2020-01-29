@@ -32,8 +32,6 @@ message Condition {
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Condition";
   option (.google.fhir.proto.fhir_path_message_constraint) =
-      "clinicalStatus.exists() or verificationStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-ver-status' and code = 'entered-in-error').exists() or category.select($this='problem-list-item').empty()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
       "abatement.empty() or clinicalStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-clinical' and (code='resolved' or code='remission' or code='inactive')).exists()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "verificationStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-ver-status' and code='entered-in-error').empty() or clinicalStatus.empty()";

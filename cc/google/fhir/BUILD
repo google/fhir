@@ -212,6 +212,7 @@ cc_test(
         "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
         "//proto/r4/core/resources:encounter_cc_proto",
         "//proto/r4/core/resources:observation_cc_proto",
+        "//proto/r4/core/resources:questionnaire_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",

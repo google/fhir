@@ -2721,9 +2721,6 @@ nested_type {
       [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
     }
   }
-  options {
-    [google.fhir.proto.fhir_path_message_constraint]: "expression.exists()"
-  }
 }
 nested_type {
   name: "ElementDefinitionBinding"
@@ -2924,6 +2921,5 @@ options {
   [google.fhir.proto.fhir_path_message_constraint]: "defaultValue.empty() or meaningWhenMissing.empty()"
   [google.fhir.proto.fhir_path_message_constraint]: "sliceName.empty() or sliceName.matches(\'^[a-zA-Z0-9\\\\/\\\\-_\\\\[\\\\]\\\\@]+$\')"
   [google.fhir.proto.fhir_path_message_constraint]: "(isModifier.exists() and isModifier) implies isModifierReason.exists()"
-  [google.fhir.proto.fhir_path_message_constraint]: "path.matches(\'[A-Za-z][A-Za-z0-9]*(\\\\.[a-z][A-Za-z0-9]*(\\\\[x])?)*\')"
   [google.fhir.proto.fhir_path_message_constraint]: "sliceIsConstraining.exists() implies sliceName.exists()"
 }

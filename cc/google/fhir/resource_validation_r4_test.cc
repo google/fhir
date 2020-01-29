@@ -21,6 +21,7 @@
 #include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/r4/core/resources/encounter.pb.h"
 #include "proto/r4/core/resources/observation.pb.h"
+#include "proto/r4/core/resources/questionnaire.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
 
@@ -100,6 +101,10 @@ TEST(EncounterValidationTest, Valid) {
 
 TEST(EncounterValidationTest, ValidWithNumericTimezone) {
   ValidTest<Encounter>("encounter_valid_numeric_timezone");
+}
+
+TEST(EncounterValidationTest, QuestionnaireWithoutName) {
+  ValidTest<Questionnaire>("questionnaire_without_name");
 }
 
 }  // namespace

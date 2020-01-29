@@ -2387,7 +2387,8 @@ StatusOr<CompiledExpression> CompiledExpression::Compile(
   parser.addErrorListener(visitor.GetErrorListener());
   antlrcpp::Any result = visitor.visit(parser.expression());
 
-  if (result.isNotNull()) {
+  // TODO: the visitor error check should be redundant
+  if (result.isNotNull() && visitor.GetError().empty()) {
     auto root_node = result.as<std::shared_ptr<internal::ExpressionNode>>();
     return CompiledExpression(fhir_path, root_node);
   } else {

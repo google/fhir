@@ -42,6 +42,7 @@ import com.google.fhir.protogen.GeneratorUtils.QualifiedType;
 import com.google.fhir.r4.core.BindingStrengthCode;
 import com.google.fhir.r4.core.Canonical;
 import com.google.fhir.r4.core.CodeableConcept;
+import com.google.fhir.r4.core.ConstraintSeverityCode;
 import com.google.fhir.r4.core.ElementDefinition;
 import com.google.fhir.r4.core.Extension;
 import com.google.fhir.r4.core.StructureDefinition;
@@ -1498,6 +1499,8 @@ public class ProtoGenerator {
   private static List<String> getFhirPathConstraints(ElementDefinition element) {
     return element.getConstraintList().stream()
         .filter(constraint -> constraint.hasExpression())
+        .filter(
+            constraint -> constraint.getSeverity().getValue() == ConstraintSeverityCode.Value.ERROR)
         .map(constraint -> constraint.getExpression().getValue())
         .filter(expression -> !EXCLUDED_FHIR_CONSTRAINTS.contains(expression))
         .collect(Collectors.toList());
