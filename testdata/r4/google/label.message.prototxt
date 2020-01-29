@@ -1,0 +1,25 @@
+type {
+  system { value: "urn:test:model:label"}
+  code { value: "icd9" }
+}
+event_time {
+  value_us: 1388566800000000  # "2014-01-01T09:00:00+00:00"
+  precision: SECOND
+  timezone: "America/Los_Angeles"
+}
+source {
+  encounter_id { value: "1" }
+}
+label {
+  class_name {
+    system { value: "urn:test:model:class" }
+    code { value: "A" }
+  }
+}
+label {
+  class_name {
+    system { value: "urn:test:model:class" }
+    code { value: "B" }
+  }
+  class_value { integer { value: 5  } }
+}

@@ -1,0 +1,9 @@
+url { value: "http://hl7.org/fhir/StructureDefinition/capabilitystatement-search-parameter-combination" }
+extension {
+  url { value: "required" }
+  value { string_value { value: "foo" } }
+}
+extension {
+  url { value: "required" }
+  value { string_value { value: "bar" } }
+}

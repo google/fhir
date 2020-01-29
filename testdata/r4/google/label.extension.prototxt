@@ -1,0 +1,44 @@
+url { value: "https://g.co/fhir/StructureDefinition/eventLabel" }
+extension {
+  url { value: "type" }
+  value { coding {
+    system { value: "urn:test:model:label"}
+    code { value: "icd9" }
+  } }
+}
+extension {
+  url { value: "eventTime" }
+  value { date_time {
+    value_us: 1388566800000000  # "2014-01-01T09:00:00+00:00"
+    precision: SECOND
+    timezone: "America/Los_Angeles"
+  } }
+}
+extension {
+  url { value: "source" }
+  value { reference { encounter_id { value: "1" } } }
+}
+extension {
+  url { value: "label" }
+  extension {
+    url { value: "className" }
+    value { coding {
+      system { value: "urn:test:model:class" }
+      code { value: "A" }
+    } }
+  }
+}
+extension {
+  url { value: "label" }
+  extension {
+    url { value: "className" }
+    value { coding {
+      system { value: "urn:test:model:class" }
+      code { value: "B" }
+    } }
+  }
+  extension {
+    url { value: "classValue" }
+    value { integer { value: 5 } }
+  }
+}

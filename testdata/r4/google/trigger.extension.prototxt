@@ -1,0 +1,20 @@
+url { value: "https://g.co/fhir/StructureDefinition/eventTrigger" }
+extension {
+  url { value: "type" }
+  value { coding {
+    system { value: "urn:test:model:trigger"}
+    code { value: "at_discharge" }
+  } }
+}
+extension {
+  url { value: "eventTime" }
+  value { date_time {
+    value_us: 1388566800000000  # "2014-01-01T09:00:00+00:00"
+    precision: SECOND
+    timezone: "America/Los_Angeles"
+  } }
+}
+extension {
+  url { value: "source" }
+  value { reference { encounter_id { value: "1" } } }
+}

@@ -1,0 +1,12 @@
+type {
+  system { value: "urn:test:model:trigger"}
+  code { value: "at_discharge" }
+}
+event_time {
+  value_us: 1388566800000000  # "2014-01-01T09:00:00+00:00"
+  precision: SECOND
+  timezone: "America/Los_Angeles"
+}
+source {
+  encounter_id { value: "1" }
+}

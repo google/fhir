@@ -1,0 +1,5 @@
+value: "using:invalid:characters"
+---
+value: "spaces not allowed in an id"
+---
+value: "12345678901234567890123456789012345678901234567890123456789012345"
