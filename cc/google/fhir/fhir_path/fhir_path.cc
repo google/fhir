@@ -1563,6 +1563,76 @@ class ComparisonOperator : public BinaryOperator {
   ComparisonType comparison_type_;
 };
 
+// Implementation for FHIRPath's addition operator.
+class AdditionOperator : public BinaryOperator {
+ public:
+  Status EvaluateOperator(
+      const std::vector<const Message*>& left_results,
+      const std::vector<const Message*>& right_results, WorkSpace* work_space,
+      std::vector<const Message*>* out_results) const override {
+    // Per the FHIRPath spec, comparison operators propagate empty results.
+    if (left_results.empty() || right_results.empty()) {
+      return Status::OK();
+    }
+
+    if (left_results.size() > 1 || right_results.size() > 1) {
+      return InvalidArgument(
+          "Addition operators must have one element on each side.");
+    }
+
+    const Message* left_result = left_results[0];
+    const Message* right_result = right_results[0];
+
+    if (IsMessageType<Integer>(*left_result) &&
+        IsMessageType<Integer>(*right_result)) {
+      Integer* result = new Integer();
+      work_space->DeleteWhenFinished(result);
+      result->set_value(
+          EvalIntegerAddition(dynamic_cast<const Integer*>(left_result),
+                              dynamic_cast<const Integer*>(right_result)));
+      out_results->push_back(result);
+    } else if (IsMessageType<String>(*left_result) &&
+               IsMessageType<String>(*right_result)) {
+      String* result = new String();
+      work_space->DeleteWhenFinished(result);
+      result->set_value(
+          EvalStringAddition(dynamic_cast<const String*>(left_result),
+                             dynamic_cast<const String*>(right_result)));
+      out_results->push_back(result);
+    } else {
+      // TODO: Add implementation for Date, DateTime, Time, and Decimal
+      // addition.
+      return InvalidArgument(absl::StrCat("Addition not supported for ",
+                                          left_result->GetTypeName(), " and ",
+                                          right_result->GetTypeName()));
+    }
+
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override { return left_->ReturnType(); }
+
+  AdditionOperator(std::shared_ptr<ExpressionNode> left,
+                   std::shared_ptr<ExpressionNode> right)
+      : BinaryOperator(std::move(left), std::move(right)) {}
+
+ private:
+  int32_t EvalIntegerAddition(const Integer* left_wrapper,
+                              const Integer* right_wrapper) const {
+    const int32_t left = left_wrapper->value();
+    const int32_t right = right_wrapper->value();
+    return left + right;
+  }
+
+  std::string EvalStringAddition(const String* left_message,
+                                 const String* right_message) const {
+    const std::string& left = left_message->value();
+    const std::string& right = right_message->value();
+
+    return absl::StrCat(left, right);
+  }
+};
+
 // Base class for FHIRPath binary boolean operators.
 class BooleanOperator : public ExpressionNode {
  public:
@@ -1942,6 +2012,29 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
 
     return ToAny(std::make_shared<UnionOperator>(left, right));
+  }
+
+  antlrcpp::Any visitAdditiveExpression(
+      FhirPathParser::AdditiveExpressionContext* ctx) override {
+    antlrcpp::Any left_any = ctx->children[0]->accept(this);
+    std::string op = ctx->children[1]->getText();
+    antlrcpp::Any right_any = ctx->children[2]->accept(this);
+
+    if (!CheckOk()) {
+      return nullptr;
+    }
+
+    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
+    auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
+
+    if (op == "+") {
+      return ToAny(std::make_shared<AdditionOperator>(left, right));
+    }
+
+    // TODO: Support "-" and "&"
+
+    SetError(absl::StrCat("Unsupported additive operator: ", op));
+    return nullptr;
   }
 
   antlrcpp::Any visitEqualityExpression(

@@ -956,6 +956,18 @@ TEST(FhirPathTest, TestIntegerLiteral) {
               std::string::npos);
 }
 
+TEST(FhirPathTest, TestIntegerAddition) {
+  EXPECT_TRUE(EvaluateBoolExpression("(2 + 3) = 5"));
+  EXPECT_TRUE(EvaluateBoolExpression("({} + 3) = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("(2 + {}) = {}"));
+}
+
+TEST(FhirPathTest, TestStringAddition) {
+  EXPECT_TRUE(EvaluateBoolExpression("('foo' + 'bar') = 'foobar'"));
+  EXPECT_TRUE(EvaluateBoolExpression("({} + 'bar') = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("('foo' + {}) = {}"));
+}
+
 TEST(FhirPathTest, TestIntegerComparisons) {
   EXPECT_TRUE(EvaluateBoolExpression("42 = 42"));
   EXPECT_FALSE(EvaluateBoolExpression("42 = 43"));
