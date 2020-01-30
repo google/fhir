@@ -613,6 +613,44 @@ class StartsWithFunction : public SingleValueFunctionNode {
 };
 constexpr char StartsWithFunction::kInvalidArgumentMessage[];
 
+// Implements the FHIRPath .contains() function.
+class ContainsFunction : public SingleValueFunctionNode {
+ public:
+  explicit ContainsFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : SingleValueFunctionNode(child, params) {}
+
+  Status EvaluateWithParam(
+      WorkSpace* work_space, const Message& param,
+      std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.empty()) {
+      return Status::OK();
+    }
+
+    if (child_results.size() > 1) {
+      return InvalidArgument("contains() must be invoked on a single string.");
+    }
+
+    FHIR_ASSIGN_OR_RETURN(std::string haystack,
+                          MessagesToString(child_results));
+    FHIR_ASSIGN_OR_RETURN(std::string needle, MessageToString(param));
+
+    Boolean* result = new Boolean();
+    work_space->DeleteWhenFinished(result);
+    result->set_value(absl::StrContains(haystack, needle));
+    results->push_back(result);
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Boolean::descriptor();
+  }
+};
+
 class MatchesFunction : public SingleValueFunctionNode {
  public:
   explicit MatchesFunction(
@@ -2130,22 +2168,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    antlr4::tree::TerminalNode* node =
-        ctx->function()->identifier()->IDENTIFIER();
-    // TODO: After adding support for .first() we see situations where
-    // "node" ends up being null. I believe this is because some expressions
-    // that were previously short-circuited due to lack of support for .first()
-    // are now evaluated. For example, "element.first().path.contains('.').not()
-    // implies element.first().type.empty()" fails without this check.
-    if (node == nullptr) {
-      SetError(absl::StrCat("No identifier attached to function call"));
-      return nullptr;
-    }
-
-    std::string text = node->getSymbol()->getText();
-
-    std::vector<std::shared_ptr<ExpressionNode>> evaluated_params;
-
+    std::string text = ctx->function()->identifier()->getText();
     std::vector<FhirPathParser::ExpressionContext*> params;
     if (ctx->function()->paramList()) {
       params = ctx->function()->paramList()->expression();
@@ -2293,27 +2316,27 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       FhirPathBaseVisitor*, FhirPathBaseVisitor*)>
       FunctionFactory;
 
-  std::map<std::string, FunctionFactory>
-      function_map{
-          {"exists", FunctionNode::Create<ExistsFunction>},
-          {"not", FunctionNode::Create<NotFunction>},
-          {"hasValue", FunctionNode::Create<HasValueFunction>},
-          {"startsWith", FunctionNode::Create<StartsWithFunction>},
-          {"empty", FunctionNode::Create<EmptyFunction>},
-          {"first", FunctionNode::Create<FirstFunction>},
-          {"trace", FunctionNode::Create<TraceFunction>},
-          {"toInteger", FunctionNode::Create<ToIntegerFunction>},
-          {"count", FunctionNode::Create<CountFunction>},
-          {"combine", FunctionNode::Create<CombineFunction>},
-          {"distinct", FunctionNode::Create<DistinctFunction>},
-          {"matches", FunctionNode::Create<MatchesFunction>},
-          {"length", FunctionNode::Create<LengthFunction>},
-          {"isDistinct", FunctionNode::Create<IsDistinctFunction>},
-          {"intersect", FunctionNode::Create<IntersectFunction>},
-          {"where", FunctionNode::Create<WhereFunction>},
-          {"select", FunctionNode::Create<SelectFunction>},
-          {"all", FunctionNode::Create<AllFunction>},
-      };
+  std::map<std::string, FunctionFactory> function_map{
+      {"exists", FunctionNode::Create<ExistsFunction>},
+      {"not", FunctionNode::Create<NotFunction>},
+      {"hasValue", FunctionNode::Create<HasValueFunction>},
+      {"startsWith", FunctionNode::Create<StartsWithFunction>},
+      {"contains", FunctionNode::Create<ContainsFunction>},
+      {"empty", FunctionNode::Create<EmptyFunction>},
+      {"first", FunctionNode::Create<FirstFunction>},
+      {"trace", FunctionNode::Create<TraceFunction>},
+      {"toInteger", FunctionNode::Create<ToIntegerFunction>},
+      {"count", FunctionNode::Create<CountFunction>},
+      {"combine", FunctionNode::Create<CombineFunction>},
+      {"distinct", FunctionNode::Create<DistinctFunction>},
+      {"matches", FunctionNode::Create<MatchesFunction>},
+      {"length", FunctionNode::Create<LengthFunction>},
+      {"isDistinct", FunctionNode::Create<IsDistinctFunction>},
+      {"intersect", FunctionNode::Create<IntersectFunction>},
+      {"where", FunctionNode::Create<WhereFunction>},
+      {"select", FunctionNode::Create<SelectFunction>},
+      {"all", FunctionNode::Create<AllFunction>},
+  };
 
   // Returns an ExpressionNode that implements the specified FHIRPath function.
   std::shared_ptr<ExpressionNode> createFunction(

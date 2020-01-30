@@ -396,6 +396,23 @@ TEST(FhirPathTest, TestFunctionHasValueNegation) {
   EXPECT_TRUE(no_value_result.GetBoolean().ValueOrDie());
 }
 
+TEST(FhirPathTest, TestFunctionContains) {
+  // Wrong number and/or types of arguments.
+  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("'foo'.contains()").ok());
+  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("'foo'.contains(1)").ok());
+  EXPECT_FALSE(
+      EvaluateBoolExpressionWithStatus("'foo'.contains('a', 'b')").ok());
+
+  EXPECT_TRUE(EvaluateBoolExpression("'foo'.contains('')"));
+  EXPECT_TRUE(EvaluateBoolExpression("'foo'.contains('o')"));
+  EXPECT_TRUE(EvaluateBoolExpression("'foo'.contains('foo')"));
+  EXPECT_FALSE(EvaluateBoolExpression("'foo'.contains('foob')"));
+  EXPECT_TRUE(EvaluateBoolExpression("''.contains('')"));
+  EXPECT_FALSE(EvaluateBoolExpression("''.contains('foo')"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("{}.contains('foo') = {}"));
+}
+
 TEST(FhirPathTest, TestFunctionStartsWith) {
   // Missing argument
   EXPECT_FALSE(EvaluateBoolExpressionWithStatus("'foo'.startsWith()").ok());
