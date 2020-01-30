@@ -63,12 +63,22 @@ using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 using ::tensorflow::errors::InvalidArgument;
 
+// Format in which the printer will represent the FHIR proto in JSON form.
+enum FhirJsonFormat {
+  // Lossless JSON representation of FHIR proto.
+  kFormatPure = 0,
+
+  // Lossy JSON representation with specified maximum recursive depth and
+  // limited support for Extensions.
+  kFormatAnalytic = 1
+};
+
 class Printer {
  public:
-  Printer(int indent_size, bool add_newlines, bool for_analytics)
+  Printer(int indent_size, bool add_newlines, FhirJsonFormat json_format)
       : indent_size_(indent_size),
         add_newlines_(add_newlines),
-        for_analytics_(for_analytics) {}
+        json_format_(json_format) {}
 
   StatusOr<std::string> WriteMessage(const Message& message) {
     output_.clear();
@@ -105,7 +115,7 @@ class Printer {
   }
 
   Status PrintNonPrimitive(const Message& proto) {
-    if (IsReference(proto.GetDescriptor()) && !for_analytics_) {
+    if (IsReference(proto.GetDescriptor()) && json_format_ == kFormatPure) {
       // For printing reference, we don't want typed reference fields,
       // just standard FHIR reference fields.
       // If we have a typed field instead, convert to a "Standard" reference.
@@ -115,7 +125,8 @@ class Printer {
         return PrintStandardNonPrimitive(*standard_reference);
       }
     }
-    if (for_analytics_ && IsProfileOfCodeableConcept(proto.GetDescriptor())) {
+    if (json_format_ == kFormatAnalytic &&
+        IsProfileOfCodeableConcept(proto.GetDescriptor())) {
       FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> analytic_codeable_concept,
                             MakeAnalyticCodeableConcept(proto));
       return PrintStandardNonPrimitive(*analytic_codeable_concept);
@@ -141,7 +152,8 @@ class Printer {
       return PrintContainedResource(contained);
     }
 
-    if (for_analytics_ && IsFhirType<stu3::proto::Extension>(proto)) {
+    if (json_format_ == kFormatAnalytic &&
+        IsFhirType<stu3::proto::Extension>(proto)) {
       // Only print extension url when in analytic mode.
       std::string scratch;
       absl::StrAppend(&output_, "\"", GetExtensionUrl(proto, &scratch), "\"");
@@ -149,7 +161,7 @@ class Printer {
     }
 
     OpenJsonObject();
-    if (IsResource(descriptor) && !for_analytics_) {
+    if (IsResource(descriptor) && json_format_ == kFormatPure) {
       absl::StrAppend(&output_, "\"resourceType\": \"", descriptor->name(),
                       "\",");
       AddNewline();
@@ -163,7 +175,7 @@ class Printer {
       // fhir.
       // In analytics mode, we print the containing message to make it easier
       // to query all possible choice types in a single query.
-      if (IsChoiceType(field) && !for_analytics_) {
+      if (IsChoiceType(field) && json_format_ == kFormatPure) {
         FHIR_RETURN_IF_ERROR(PrintChoiceTypeField(
             reflection->GetMessage(proto, field), field->json_name()));
       } else {
@@ -185,7 +197,7 @@ class Printer {
     for (const FieldDescriptor* field : set_fields) {
       const Message& field_value =
           proto.GetReflection()->GetMessage(proto, field);
-      if (for_analytics_) {
+      if (json_format_ == kFormatAnalytic) {
         // Only print resource url if in analytic mode.
         absl::StrAppend(&output_, "\"",
                         GetStructureDefinitionUrl(field_value.GetDescriptor()),
@@ -246,7 +258,8 @@ class Printer {
   Status PrintPrimitiveField(const Message& proto,
                              const std::string& field_name) {
     // TODO: check for ReferenceId using an annotation.
-    if (for_analytics_ && proto.GetDescriptor()->name() == "ReferenceId") {
+    if (json_format_ == kFormatAnalytic &&
+        proto.GetDescriptor()->name() == "ReferenceId") {
       // In analytic mode, print the raw reference id rather than slicing into
       // type subfields, to make it easier to query.
       PrintFieldPreamble(field_name);
@@ -263,7 +276,7 @@ class Printer {
       PrintFieldPreamble(field_name);
       output_ += json_primitive.value;
     }
-    if (json_primitive.element && !for_analytics_) {
+    if (json_primitive.element && json_format_ == kFormatPure) {
       if (json_primitive.is_non_null()) {
         output_ += ",";
         AddNewline();
@@ -460,7 +473,7 @@ class Printer {
 
   const int indent_size_;
   const bool add_newlines_;
-  const bool for_analytics_;
+  const FhirJsonFormat json_format_;
 
   std::string output_;
   int current_indent_;
@@ -506,24 +519,24 @@ StatusOr<std::string> WriteMessage(Printer printer, const Message& message) {
 }
 
 StatusOr<std::string> PrettyPrintFhirToJsonString(const Message& fhir_proto) {
-  Printer printer{2, true, false};
+  Printer printer{2, true, kFormatPure};
   return WriteMessage(printer, fhir_proto);
 }
 
 StatusOr<std::string> PrintFhirToJsonString(const Message& fhir_proto) {
-  Printer printer{0, false, false};
+  Printer printer{0, false, kFormatPure};
   return WriteMessage(printer, fhir_proto);
 }
 
 StatusOr<std::string> PrintFhirToJsonStringForAnalytics(
     const Message& fhir_proto) {
-  Printer printer{0, false, true};
+  Printer printer{0, false, kFormatAnalytic};
   return printer.WriteMessage(fhir_proto);
 }
 
 StatusOr<std::string> PrettyPrintFhirToJsonStringForAnalytics(
     const Message& fhir_proto) {
-  Printer printer{2, true, true};
+  Printer printer{2, true, kFormatAnalytic};
   return printer.WriteMessage(fhir_proto);
 }
 

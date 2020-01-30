@@ -49,6 +49,16 @@ import java.util.Map;
 /** Parsers for FHIR data encoded as json or xml. */
 public final class JsonFormat {
 
+  // Format in which the printer will represent the FHIR proto in JSON form.
+  private enum FhirJsonFormat {
+    // Lossless JSON representation of FHIR proto.
+    PURE,
+
+    // Lossy JSON representation with specified maximum recursive depth and
+    // limited support for Extensions.
+    ANALYTIC,
+  }
+
   private JsonFormat() {}
 
   // TODO: Use r4 extension once generated.
@@ -67,20 +77,23 @@ public final class JsonFormat {
    * system default.
    */
   public static Printer getPrinter() {
-    return new Printer(false /*omittingInsignificantWhitespace*/, ZoneId.systemDefault(), false);
+    return new Printer(
+        false /*omittingInsignificantWhitespace*/, ZoneId.systemDefault(), FhirJsonFormat.PURE);
   }
 
   /** A Printer converts protobuf message to JSON format. */
   public static class Printer {
     private final boolean omittingInsignificantWhitespace;
     private final ZoneId defaultTimeZone;
-    private final boolean forAnalytics;
+    private final FhirJsonFormat jsonFormat;
 
     private Printer(
-        boolean omittingInsignificantWhitespace, ZoneId defaultTimeZone, boolean forAnalytics) {
+        boolean omittingInsignificantWhitespace,
+        ZoneId defaultTimeZone,
+        FhirJsonFormat jsonFormat) {
       this.omittingInsignificantWhitespace = omittingInsignificantWhitespace;
       this.defaultTimeZone = defaultTimeZone;
-      this.forAnalytics = forAnalytics;
+      this.jsonFormat = jsonFormat;
     }
 
     /**
@@ -101,7 +114,7 @@ public final class JsonFormat {
      * current {@link Printer}.
      */
     public Printer omittingInsignificantWhitespace() {
-      return new Printer(true, defaultTimeZone, forAnalytics);
+      return new Printer(true, defaultTimeZone, jsonFormat);
     }
 
     /*
@@ -111,7 +124,7 @@ public final class JsonFormat {
      * standard, currently always in the form of a time offset.
      */
     public Printer withDefaultTimeZone(ZoneId defaultTimeZone) {
-      return new Printer(omittingInsignificantWhitespace, defaultTimeZone, forAnalytics);
+      return new Printer(omittingInsignificantWhitespace, defaultTimeZone, jsonFormat);
     }
 
     /*
@@ -120,7 +133,7 @@ public final class JsonFormat {
      * https://github.com/rbrush/sql-on-fhir/blob/master/sql-on-fhir.md
      */
     public Printer forAnalytics() {
-      return new Printer(omittingInsignificantWhitespace, defaultTimeZone, true);
+      return new Printer(omittingInsignificantWhitespace, defaultTimeZone, FhirJsonFormat.ANALYTIC);
     }
 
     /**
@@ -129,7 +142,7 @@ public final class JsonFormat {
      * @throws IOException if writing to the output fails.
      */
     public void appendTo(MessageOrBuilder message, Appendable output) throws IOException {
-      new PrinterImpl(output, omittingInsignificantWhitespace, defaultTimeZone, forAnalytics)
+      new PrinterImpl(output, omittingInsignificantWhitespace, defaultTimeZone, jsonFormat)
           .print(message);
     }
 
@@ -240,13 +253,13 @@ public final class JsonFormat {
     private final CharSequence blankOrSpace;
     private final CharSequence blankOrNewLine;
     private final ZoneId defaultTimeZone;
-    private final boolean forAnalytics;
+    private final FhirJsonFormat jsonFormat;
 
     PrinterImpl(
         Appendable jsonOutput,
         boolean omittingInsignificantWhitespace,
         ZoneId defaultTimeZone,
-        boolean forAnalytics) {
+        FhirJsonFormat jsonFormat) {
       // json format related properties, determined by printerType
       if (omittingInsignificantWhitespace) {
         this.generator = new CompactTextGenerator(jsonOutput);
@@ -258,7 +271,7 @@ public final class JsonFormat {
         this.blankOrNewLine = "\n";
       }
       this.defaultTimeZone = defaultTimeZone;
-      this.forAnalytics = forAnalytics;
+      this.jsonFormat = jsonFormat;
     }
 
     void print(MessageOrBuilder message) throws IOException {
@@ -333,7 +346,7 @@ public final class JsonFormat {
     /** Prints a contained resource field. */
     private void printContainedResource(MessageOrBuilder message) throws IOException {
       for (Map.Entry<FieldDescriptor, Object> field : message.getAllFields().entrySet()) {
-        if (forAnalytics) {
+        if (jsonFormat == FhirJsonFormat.ANALYTIC) {
           /* We print only the type of the contained resource here. */
           generator.print(
               "\""
@@ -351,7 +364,7 @@ public final class JsonFormat {
 
     /** Prints an extension field. */
     private void printExtension(com.google.fhir.stu3.proto.Extension extension) throws IOException {
-      if (forAnalytics) {
+      if (jsonFormat == FhirJsonFormat.ANALYTIC) {
         generator.print("\"" + extension.getUrl().getValue() + "\"");
       } else {
         printMessage(extension);
@@ -360,7 +373,7 @@ public final class JsonFormat {
 
     /** Prints an extension field. */
     private void printExtension(com.google.fhir.r4.core.Extension extension) throws IOException {
-      if (forAnalytics) {
+      if (jsonFormat == FhirJsonFormat.ANALYTIC) {
         generator.print("\"" + extension.getUrl().getValue() + "\"");
       } else {
         printMessage(extension);
@@ -386,7 +399,7 @@ public final class JsonFormat {
     /** Prints a reference field. */
     private void printReference(MessageOrBuilder reference) throws IOException {
       FieldDescriptor uriField = reference.getDescriptorForType().findFieldByName("uri");
-      if (reference.hasField(uriField) || forAnalytics) {
+      if (reference.hasField(uriField) || jsonFormat == FhirJsonFormat.ANALYTIC) {
         printMessage(reference);
       } else {
         // Restore the Uri field.
@@ -435,7 +448,8 @@ public final class JsonFormat {
     private void printMessage(MessageOrBuilder message) throws IOException {
       boolean printedField = false;
 
-      if (AnnotationUtils.isResource(message.getDescriptorForType()) && !forAnalytics) {
+      if (AnnotationUtils.isResource(message.getDescriptorForType())
+          && jsonFormat == FhirJsonFormat.PURE) {
         printedField = maybeStartMessage(printedField);
         generator.print(
             "\"resourceType\":"
@@ -448,7 +462,7 @@ public final class JsonFormat {
       for (Map.Entry<FieldDescriptor, Object> entry : message.getAllFields().entrySet()) {
         printedField = maybeStartMessage(printedField);
         String name = entry.getKey().getJsonName();
-        if (AnnotationUtils.isChoiceType(entry.getKey()) && !forAnalytics) {
+        if (AnnotationUtils.isChoiceType(entry.getKey()) && jsonFormat == FhirJsonFormat.PURE) {
           printChoiceField(entry.getKey(), entry.getValue());
         } else if (isPrimitiveType(entry.getKey())) {
           printPrimitiveField(name, entry.getKey(), entry.getValue());
@@ -514,7 +528,7 @@ public final class JsonFormat {
           generator.outdent();
           generator.print("]");
         }
-        if (hasExtension && !forAnalytics) {
+        if (hasExtension && jsonFormat == FhirJsonFormat.PURE) {
           printedElement = maybePrintFieldSeparator(printedElement);
           generator.print("\"_" + name + "\":" + blankOrSpace);
           printRepeatedMessage(elements);
@@ -522,7 +536,7 @@ public final class JsonFormat {
       } else {
         Message message = (Message) value;
         String messageName = message.getDescriptorForType().getFullName();
-        if (forAnalytics
+        if (jsonFormat == FhirJsonFormat.ANALYTIC
             && (messageName.equals(
                     com.google.fhir.stu3.proto.ReferenceId.getDescriptor().getFullName())
                 || messageName.equals(
@@ -538,7 +552,7 @@ public final class JsonFormat {
             printedElement = true;
           }
           Element element = wrapper.getElement();
-          if (element != null && !forAnalytics) {
+          if (element != null && jsonFormat == FhirJsonFormat.PURE) {
             printedElement = maybePrintFieldSeparator(printedElement);
             generator.print("\"_" + name + "\":" + blankOrSpace);
             print(element);
