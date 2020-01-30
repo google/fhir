@@ -1357,8 +1357,6 @@ message Bundle {
   }
   repeated Entry entry = 9 [
     (.google.fhir.proto.fhir_path_constraint) =
-        "fullUrl.contains('/_history/').not()",
-    (.google.fhir.proto.fhir_path_constraint) =
         "resource.exists() or request.exists() or response.exists()"
   ];
 
