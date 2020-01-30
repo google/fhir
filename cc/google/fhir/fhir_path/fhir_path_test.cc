@@ -252,6 +252,7 @@ TEST(FhirPathTest, TestGetEmptyGrandchild) {
 
 TEST(FhirPathTest, TestFieldExists) {
   Encounter test_encounter = ValidEncounter();
+  test_encounter.mutable_class_value()->mutable_display()->set_value("foo");
 
   auto root_expr =
       CompiledExpression::Compile(Encounter::descriptor(), "period")
@@ -271,6 +272,17 @@ TEST(FhirPathTest, TestFieldExists) {
   EXPECT_THAT(camel_case_result.GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(test_encounter.status_history(0))}));
+
+  // Test that the json_name field annotation is used when searching for a
+  // field.
+  auto json_name_alias_expr =
+      CompiledExpression::Compile(Encounter::descriptor(), "class")
+          .ValueOrDie();
+  EvaluationResult json_name_alias_result =
+      json_name_alias_expr.Evaluate(test_encounter).ValueOrDie();
+  EXPECT_THAT(
+      json_name_alias_result.GetMessages(),
+      UnorderedElementsAreArray({EqualsProto(test_encounter.class_value())}));
 }
 
 TEST(FhirPathTest, TestNoSuchField) {

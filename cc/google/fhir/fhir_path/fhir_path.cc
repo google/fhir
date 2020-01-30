@@ -166,6 +166,22 @@ bool IsFhirPrimitiveValue(const FieldDescriptor* field) {
          IsPrimitive(field->containing_type());
 }
 
+// Finds a field in the message descriptor whose JSON name matches the provided
+// name or nullptr if one is not found.
+//
+// Neither Descriptor::FindFieldByName or Descriptor::FindFieldByCamelcaseName
+// will suffice as some FHIR fields are renamed in the FHIR protos (e.g.
+// "assert" becomes "assert_value" and "class" becomes "class_value").
+const FieldDescriptor* FindFieldByJsonName(const Descriptor* descriptor,
+                                           absl::string_view json_name) {
+  for (int i = 0; i < descriptor->field_count(); ++i) {
+    if (json_name == descriptor->field(i)->json_name()) {
+      return descriptor->field(i);
+    }
+  }
+  return nullptr;
+}
+
 // Expression node that returns literals wrapped in the corresponding
 // protbuf wrapper
 template <typename ProtoType, typename PrimitiveType>
@@ -224,7 +240,7 @@ class InvokeTermNode : public ExpressionNode {
     const FieldDescriptor* field =
         field_ != nullptr
             ? field_
-            : message.GetDescriptor()->FindFieldByName(field_name_);
+            : FindFieldByJsonName(message.GetDescriptor(), field_name_);
 
     if (field->is_repeated()) {
       int field_size = refl->FieldSize(message, field);
@@ -286,9 +302,9 @@ class InvokeExpressionNode : public ExpressionNode {
       // (because ExpressionNode.ReturnType() currently doesn't support
       // collections with mixed types) we attempt to find it at evaluation time.
       const FieldDescriptor* field =
-          field_ != nullptr
-              ? field_
-              : child_message->GetDescriptor()->FindFieldByName(field_name_);
+          field_ != nullptr ? field_
+                            : FindFieldByJsonName(
+                                  child_message->GetDescriptor(), field_name_);
 
       if (field == nullptr) {
         return InvalidArgument(absl::StrCat("Unable to find field '",
@@ -2038,8 +2054,9 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     } else {
       const Descriptor* descriptor = expr->ReturnType();
       const FieldDescriptor* field =
-          descriptor != nullptr ? descriptor->FindFieldByName(definition->name)
-                                : nullptr;
+          descriptor != nullptr
+              ? FindFieldByJsonName(descriptor, definition->name)
+              : nullptr;
 
       // If we know the return type of the expression, and the return type
       // doesn't have the referenced field, set an error and return.
@@ -2077,8 +2094,9 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     }
 
     const FieldDescriptor* field =
-        descriptor_ != nullptr ? descriptor_->FindFieldByName(definition->name)
-                              : nullptr;
+        descriptor_ != nullptr
+            ? FindFieldByJsonName(descriptor_, definition->name)
+            : nullptr;
 
     // If we know the return type of the expression, and the return type
     // doesn't have the referenced field, set an error and return.
@@ -2251,8 +2269,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   antlrcpp::Any visitMemberInvocation(
       FhirPathParser::MemberInvocationContext* ctx) override {
     std::string text = ctx->identifier()->IDENTIFIER()->getSymbol()->getText();
-
-    return std::make_shared<InvocationDefinition>(ToSnakeCase(text), false);
+    return std::make_shared<InvocationDefinition>(text, false);
   }
 
   antlrcpp::Any visitFunctionInvocation(
