@@ -14,13 +14,10 @@ cc_library(
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto:annotations_cc_proto",
-        "//proto/r4/core:codes_cc_proto",
-        "//proto/r4/core:datatypes_cc_proto",
-        "//proto/stu3:codes_cc_proto",
-        "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/synchronization",
         "@com_google_protobuf//:protobuf",
+        "@org_tensorflow//tensorflow/core:lib",
     ],
 )
 

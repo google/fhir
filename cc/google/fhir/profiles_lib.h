@@ -111,8 +111,8 @@ Status PerformExtensionSlicing(const Message& source, Message* target) {
           typed_extension->CopyFrom(src_value);
         } else if (src_datatype_field->message_type()->full_name() ==
                    CodeLike::descriptor()->full_name()) {
-          TF_RETURN_IF_ERROR(ConvertToTypedCode(
-              dynamic_cast<const CodeLike&>(src_value), typed_extension));
+          TF_RETURN_IF_ERROR(
+              CopyCode(dynamic_cast<const CodeLike&>(src_value), typed_extension));
         } else {
           return InvalidArgument(
               "Profiled extension slice is incorrect type: ", url, "should be ",

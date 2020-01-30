@@ -566,7 +566,7 @@ class CodeWrapper : public StringTypeWrapper<CodeType> {
  public:
   Status Wrap(const ::google::protobuf::Message& codelike) override {
     std::unique_ptr<CodeType> wrapped = absl::make_unique<CodeType>();
-    FHIR_RETURN_IF_ERROR(ConvertToGenericCode(codelike, wrapped.get()));
+    FHIR_RETURN_IF_ERROR(CopyCode(codelike, wrapped.get()));
     this->WrapAndManage(std::move(wrapped));
     return Status::OK();
   }
@@ -575,7 +575,7 @@ class CodeWrapper : public StringTypeWrapper<CodeType> {
     if (IsMessageType<CodeType>(*target)) {
       target->MergeFrom(*this->GetWrapped());
     }
-    return ConvertToTypedCode(*this->GetWrapped(), target);
+    return CopyCode(*this->GetWrapped(), target);
   }
 
  private:

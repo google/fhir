@@ -200,8 +200,7 @@ const bool FindSystemCodeStringPair(const Message& concept,
       },
       [&func](const Message& fixed_system_coding) {
         Coding generic_coding;
-        auto status =
-            ConvertToGenericCoding(fixed_system_coding, &generic_coding);
+        auto status = CopyCoding(fixed_system_coding, &generic_coding);
         if (!status.ok()) {
           LOG(WARNING) << "Encountered malformed Coding with fixed system "
                        << fixed_system_coding.GetDescriptor()->full_name()
@@ -294,8 +293,7 @@ Status AddCoding(Message* concept, const Coding& coding) {
               "already populated.  Field: ",
               profiled_field->full_name(), ", System: ", system);
         }
-        return ConvertToTypedCoding(
-            coding, MutableOrAddMessage(concept, profiled_field));
+        return CopyCoding(coding, MutableOrAddMessage(concept, profiled_field));
       }
     }
   }
@@ -348,8 +346,7 @@ std::shared_ptr<const Coding> FindCoding(const Message& concept,
       },
       [&func, &found_coding](const Message& fixed_system_coding) {
         std::unique_ptr<Coding> synth_coding = absl::make_unique<Coding>();
-        auto status =
-            ConvertToGenericCoding(fixed_system_coding, synth_coding.get());
+        auto status = CopyCoding(fixed_system_coding, synth_coding.get());
         if (!status.ok()) {
           LOG(WARNING) << "Encountered malformed Coding with fixed system "
                        << fixed_system_coding.GetDescriptor()->full_name()

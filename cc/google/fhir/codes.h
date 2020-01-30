@@ -18,59 +18,38 @@
 #include "google/protobuf/message.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "proto/r4/core/codes.pb.h"
-#include "proto/r4/core/datatypes.pb.h"
-#include "proto/stu3/codes.pb.h"
-#include "proto/stu3/datatypes.pb.h"
+#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
 
-::google::fhir::StatusOr<const ::google::protobuf::EnumValueDescriptor*>
-CodeStringToEnumValue(const std::string& code_string,
-                      const ::google::protobuf::EnumDescriptor* target_enum_type);
+namespace codes_internal {
 
-::google::fhir::Status ConvertToTypedCode(
-    const ::google::fhir::stu3::proto::Code& generic_code,
-    google::protobuf::Message* target);
+std::string TitleCaseToUpperUnderscores(const std::string& src);
 
-::google::fhir::Status ConvertToTypedCode(
-    const ::google::fhir::r4::core::Code& generic_code,
-    google::protobuf::Message* target);
+}
 
-::google::fhir::Status ConvertToGenericCode(
-    const google::protobuf::Message& typed_code,
-    ::google::fhir::stu3::proto::Code* generic_code);
+StatusOr<const ::google::protobuf::EnumValueDescriptor*> CodeStringToEnumValue(
+    const std::string& code_string,
+    const ::google::protobuf::EnumDescriptor* target_enum_type);
 
-::google::fhir::Status ConvertToGenericCode(
-    const google::protobuf::Message& typed_code,
-    ::google::fhir::r4::core::Code* generic_code);
+Status CopyCoding(const ::google::protobuf::Message& source, google::protobuf::Message* target);
+Status CopyCode(const ::google::protobuf::Message& source, google::protobuf::Message* target);
 
-::google::fhir::Status ConvertToTypedCoding(
-    const google::fhir::stu3::proto::Coding& generic_coding,
-    google::protobuf::Message* typed_coding);
-
-::google::fhir::Status ConvertToGenericCoding(
-    const google::protobuf::Message& typed_coding,
-    google::fhir::stu3::proto::Coding* generic_coding);
-
-::google::fhir::Status ConvertToTypedCoding(
-    const google::fhir::r4::core::Coding& generic_coding,
-    google::protobuf::Message* typed_coding);
-
-::google::fhir::Status ConvertToGenericCoding(
-    const google::protobuf::Message& typed_coding,
-    google::fhir::r4::core::Coding* generic_coding);
-
-::google::fhir::Status CopyCode(const google::protobuf::Message& source,
-                                google::protobuf::Message* target);
+StatusOr<std::string> GetSystemForCode(const ::google::protobuf::Message& code);
 
 template <typename TypedResourceTypeCode>
-::google::fhir::StatusOr<typename TypedResourceTypeCode::Value>
-GetCodeForResourceType(const google::protobuf::Message& resource);
-
-::google::fhir::StatusOr<::google::fhir::stu3::proto::ResourceTypeCode::Value>
-GetCodeForResourceType(const google::protobuf::Message& resource);
+StatusOr<typename TypedResourceTypeCode::Value> GetCodeForResourceType(
+    const ::google::protobuf::Message& resource) {
+  const std::string& enum_string = codes_internal::TitleCaseToUpperUnderscores(
+      resource.GetDescriptor()->name());
+  typename TypedResourceTypeCode::Value value;
+  if (TypedResourceTypeCode::Value_Parse(enum_string, &value)) {
+    return value;
+  }
+  return ::tensorflow::errors::InvalidArgument(
+      "No ResourceTypeCode found for type: ", resource.GetDescriptor()->name());
+}
 
 }  // namespace fhir
 }  // namespace google

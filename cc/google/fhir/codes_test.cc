@@ -88,12 +88,12 @@ void TestTypedCodingConversion(const std::string& typed_file,
   auto generic_golden = ReadProto<r4::core::Coding>(untyped_file);
 
   r4::core::Coding generic_test;
-  auto status_generic = ConvertToGenericCoding(typed_golden, &generic_test);
+  auto status_generic = CopyCoding(typed_golden, &generic_test);
   ASSERT_TRUE(status_generic.ok()) << status_generic.error_message();
   EXPECT_THAT(generic_test, EqualsProto(generic_golden));
 
   r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding typed_test;
-  auto status_typed = ConvertToTypedCoding(generic_golden, &typed_test);
+  auto status_typed = CopyCoding(generic_golden, &typed_test);
   ASSERT_TRUE(status_typed.ok()) << status_typed.error_message();
   EXPECT_THAT(typed_test, EqualsProto(typed_golden));
 }

@@ -316,7 +316,7 @@ void MessageToExample(const google::protobuf::Message& message, const std::strin
         if (IsTypeOrProfileOfCode(child)) {
           // Codes are emitted as-is, without tokenization.
           stu3::proto::Code code;
-          CHECK(ConvertToGenericCode(child, &code).ok());
+          CHECK(CopyCode(child, &code).ok());
           (*example->mutable_features()->mutable_feature())[name]
               .mutable_bytes_list()
               ->add_value(code.value());
@@ -407,7 +407,7 @@ void MessageToExample(const google::protobuf::Message& message, const std::strin
           // otherwise.
           bool use_name_in_feature_name = IsCodeableConceptLike(message);
           Coding coding;
-          auto status = ConvertToGenericCoding(child, &coding);
+          auto status = CopyCoding(child, &coding);
           if (!status.ok() &&
               field->message_type()->full_name() ==
                   stu3::proto::CodingWithFixedSystem::descriptor()

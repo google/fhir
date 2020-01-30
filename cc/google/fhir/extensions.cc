@@ -102,14 +102,12 @@ Status SetDatatypeOnExtensionInternal(const Message& message,
   if (HasValueset(message.GetDescriptor())) {
     // The source message is a bound code type.
     // Convert it to a generic code, and add it to the extension.
-    return ConvertToGenericCode(message,
-                                extension->mutable_value()->mutable_code());
+    return CopyCode(message, extension->mutable_value()->mutable_code());
   }
   if (IsTypeOrProfileOfCoding(message)) {
     // The source message is a bound coding type.
     // Convert it to a generic coding, and add it to the extension.
-    return ConvertToGenericCoding(message,
-                                  extension->mutable_value()->mutable_coding());
+    return CopyCoding(message, extension->mutable_value()->mutable_coding());
   }
   return InvalidArgument(descriptor->full_name(),
                          " is not a valid value type on Extension.");
@@ -270,15 +268,15 @@ Status ValueToMessageInternal(const ExtensionLike& extension, Message* message,
   if (HasValueset(field->message_type())) {
     // The target message is a bound code type.  Convert the generic code
     // field from the extension into the target typed code.
-    return ConvertToTypedCode(extension.value().code(),
-                              MutableOrAddMessage(message, field));
+    return CopyCode(extension.value().code(),
+                    MutableOrAddMessage(message, field));
   }
 
   if (IsTypeOrProfileOfCoding(field->message_type())) {
     // The target message is a bound codng type.  Convert the generic codng
     // field from the extension into the target typed coding.
-    return ConvertToTypedCoding(extension.value().coding(),
-                                MutableOrAddMessage(message, field));
+    return CopyCoding(extension.value().coding(),
+                      MutableOrAddMessage(message, field));
   }
 
   // Value types must match.
