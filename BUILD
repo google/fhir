@@ -1,4 +1,2 @@
 
-exports_files([
-    "LICENSE",
-])
+exports_files(["LICENSE"])
