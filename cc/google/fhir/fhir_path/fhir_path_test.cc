@@ -973,6 +973,23 @@ TEST(FhirPathTest, TestIntegerLiteral) {
               std::string::npos);
 }
 
+TEST(FhirPathTest, TestPolarityOperator) {
+  EXPECT_TRUE(EvaluateBoolExpression("+1 = 1"));
+  EXPECT_TRUE(EvaluateBoolExpression("-(+1) = -1"));
+  EXPECT_TRUE(EvaluateBoolExpression("+(-1) = -1"));
+  EXPECT_TRUE(EvaluateBoolExpression("-(-1) = 1"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("+1.2 = 1.2"));
+  EXPECT_TRUE(EvaluateBoolExpression("-(+1.2) = -1.2"));
+  EXPECT_TRUE(EvaluateBoolExpression("+(-1.2) = -1.2"));
+  EXPECT_TRUE(EvaluateBoolExpression("-(-1.2) = 1.2"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("+{} = {}"));
+  EXPECT_TRUE(EvaluateBoolExpression("-{} = {}"));
+
+  EXPECT_FALSE(EvaluateExpressionWithStatus("+(1 | 2)").ok());
+}
+
 TEST(FhirPathTest, TestIntegerAddition) {
   EXPECT_TRUE(EvaluateBoolExpression("(2 + 3) = 5"));
   EXPECT_TRUE(EvaluateBoolExpression("({} + 3) = {}"));

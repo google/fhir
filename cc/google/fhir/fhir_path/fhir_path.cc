@@ -1671,6 +1671,74 @@ class AdditionOperator : public BinaryOperator {
   }
 };
 
+class PolarityOperator : public ExpressionNode {
+ public:
+  // Supported polarity operations.
+  enum PolarityOperation {
+    kPositive,
+    kNegative,
+  };
+
+  PolarityOperator(PolarityOperation operation,
+                   std::shared_ptr<ExpressionNode>& operand)
+      : operation_(operation), operand_(operand) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> operand_result;
+    FHIR_RETURN_IF_ERROR(operand_->Evaluate(work_space, &operand_result));
+
+    if (operand_result.size() > 1) {
+      return InvalidArgument(
+          "Polarity operators must operate on a single element.");
+    }
+
+    if (operand_result.empty()) {
+      return Status::OK();
+    }
+
+    const Message* operand_value = operand_result[0];
+
+    if (operation_ == kPositive) {
+      results->push_back(operand_value);
+      return Status::OK();
+    }
+
+    if (IsMessageType<Decimal>(*operand_value)) {
+      Decimal* result = new Decimal();
+      work_space->DeleteWhenFinished(result);
+      result->CopyFrom(*operand_value);
+      if (absl::StartsWith(result->value(), "-")) {
+        result->set_value(result->value().substr(1));
+      } else {
+        result->set_value(absl::StrCat("-", result->value()));
+      }
+      results->push_back(result);
+      return Status::OK();
+    }
+
+    if (IsMessageType<Integer>(*operand_value)) {
+      Integer* result = new Integer();
+      work_space->DeleteWhenFinished(result);
+      result->CopyFrom(*operand_value);
+      result->set_value(result->value() * -1);
+      results->push_back(result);
+      return Status::OK();
+    }
+
+    return InvalidArgument(
+        "Polarity operators must operate on a decimal or integer type.");
+  }
+
+  const Descriptor* ReturnType() const override {
+    return operand_->ReturnType();
+  }
+
+ private:
+  const PolarityOperation operation_;
+  const std::shared_ptr<ExpressionNode> operand_;
+};
+
 // Base class for FHIRPath binary boolean operators.
 class BooleanOperator : public ExpressionNode {
  public:
@@ -2072,6 +2140,31 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     // TODO: Support "-" and "&"
 
     SetError(absl::StrCat("Unsupported additive operator: ", op));
+    return nullptr;
+  }
+
+  antlrcpp::Any visitPolarityExpression(
+      FhirPathParser::PolarityExpressionContext* ctx) override {
+    std::string op = ctx->children[0]->getText();
+    antlrcpp::Any operand_any = ctx->children[1]->accept(this);
+
+    if (!CheckOk()) {
+      return nullptr;
+    }
+
+    auto operand = operand_any.as<std::shared_ptr<ExpressionNode>>();
+
+    if (op == "+") {
+      return ToAny(std::make_shared<PolarityOperator>(
+          PolarityOperator::kPositive, operand));
+    }
+
+    if (op == "-") {
+      return ToAny(std::make_shared<PolarityOperator>(
+          PolarityOperator::kNegative, operand));
+    }
+
+    SetError(absl::StrCat("Unsupported polarity operator: ", op));
     return nullptr;
   }
 
