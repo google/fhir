@@ -80,3 +80,53 @@ cc_test(
         "@com_google_googletest//:gtest_main",
     ],
 )
+
+cc_library(
+    name = "primitive_handler",
+    srcs = ["primitive_handler.cc"],
+    hdrs = ["primitive_handler.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "//cc/google/fhir:annotations",
+        "//cc/google/fhir:codes",
+        "//cc/google/fhir:extensions",
+        "//cc/google/fhir:fhir_types",
+        "//cc/google/fhir:primitive_handler",
+        "//cc/google/fhir:primitive_wrapper",
+        "//cc/google/fhir:proto_util",
+        "//cc/google/fhir:util",
+        "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
+        "//proto:annotations_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:extensions_cc_proto",
+        "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
+        "@com_google_protobuf//:protobuf",
+        "@com_googlesource_code_re2//:re2",
+        "@jsoncpp_git//:jsoncpp",
+        "@org_tensorflow//tensorflow/core:lib",
+    ],
+)
+
+cc_test(
+    name = "primitive_handler_test",
+    srcs = ["primitive_handler_test.cc"],
+    data = [
+        "//testdata/stu3:validation",
+    ],
+    deps = [
+        ":primitive_handler",
+        "//cc/google/fhir:annotations",
+        "//cc/google/fhir:json_format",
+        "//cc/google/fhir:test_helper",
+        "//proto/stu3:codes_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:extensions_cc_proto",
+        "@com_google_absl//absl/strings",
+        "@com_google_googletest//:gtest_main",
+        "@com_google_protobuf//:protobuf",
+        "@org_tensorflow//tensorflow/core:test",
+    ],
+)

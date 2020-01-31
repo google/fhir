@@ -17,14 +17,19 @@
 #ifndef GOOGLE_FHIR_PRIMITIVE_HANDLER_H_
 #define GOOGLE_FHIR_PRIMITIVE_HANDLER_H_
 
+#include <memory>
 #include <string>
 
+#include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
+#include "absl/time/time.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "include/json/json.h"
+#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
@@ -54,22 +59,22 @@ class PrimitiveHandler {
   virtual StatusOr<std::string> GetStringValue(
       const ::google::protobuf::Message& primitive) const = 0;
 
-  virtual ::google::protobuf::Message* newString(const std::string& str) const = 0;
+  virtual ::google::protobuf::Message* NewString(const std::string& str) const = 0;
 
   virtual StatusOr<bool> GetBooleanValue(
       const ::google::protobuf::Message& primitive) const = 0;
 
-  virtual ::google::protobuf::Message* newBoolean(const bool value) const = 0;
+  virtual ::google::protobuf::Message* NewBoolean(const bool value) const = 0;
 
   virtual StatusOr<int> GetIntegerValue(
       const ::google::protobuf::Message& primitive) const = 0;
 
-  virtual ::google::protobuf::Message* newInteger(const int value) const = 0;
+  virtual ::google::protobuf::Message* NewInteger(const int value) const = 0;
 
   virtual StatusOr<std::string> GetDecimalValue(
       const ::google::protobuf::Message& primitive) const = 0;
 
-  virtual ::google::protobuf::Message* newDecimal(const std::string value) const = 0;
+  virtual ::google::protobuf::Message* NewDecimal(const std::string value) const = 0;
 
  protected:
   PrimitiveHandler(proto::FhirVersion version) : version_(version) {}
@@ -119,7 +124,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     return dynamic_cast<const String&>(primitive).value();
   }
 
-  ::google::protobuf::Message* newString(const std::string& str) const override {
+  ::google::protobuf::Message* NewString(const std::string& str) const override {
     String* msg = new String();
     msg->set_value(str);
     return msg;
@@ -131,7 +136,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     return dynamic_cast<const Boolean&>(primitive).value();
   }
 
-  ::google::protobuf::Message* newBoolean(const bool value) const override {
+  ::google::protobuf::Message* NewBoolean(const bool value) const override {
     Boolean* msg = new Boolean();
     msg->set_value(value);
     return msg;
@@ -143,7 +148,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     return dynamic_cast<const Integer&>(primitive).value();
   }
 
-  ::google::protobuf::Message* newInteger(const int value) const override {
+  ::google::protobuf::Message* NewInteger(const int value) const override {
     Integer* msg = new Integer();
     msg->set_value(value);
     return msg;
@@ -155,7 +160,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     return dynamic_cast<const Decimal&>(primitive).value();
   }
 
-  ::google::protobuf::Message* newDecimal(const std::string value) const override {
+  ::google::protobuf::Message* NewDecimal(const std::string value) const override {
     Decimal* msg = new Decimal();
     msg->set_value(value);
     return msg;

@@ -716,6 +716,8 @@ cc_library(
         ":proto_util",
         ":util",
         "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
+        "@com_google_absl//absl/time",
         "@com_google_protobuf//:protobuf",
         "@jsoncpp_git//:jsoncpp",
         "@org_tensorflow//tensorflow/core:lib",

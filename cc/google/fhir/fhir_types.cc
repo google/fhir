@@ -85,6 +85,7 @@ FHIR_TYPE_CHECK(Bundle, "http://hl7.org/fhir/StructureDefinition/Bundle");
 FHIR_TYPE_CHECK(Coding, "http://hl7.org/fhir/StructureDefinition/Coding");
 FHIR_TYPE_CHECK(CodeableConcept,
                 "http://hl7.org/fhir/StructureDefinition/CodeableConcept");
+FHIR_TYPE_CHECK(Extension, "http://hl7.org/fhir/StructureDefinition/Extension");
 
 #undef FHIR_TYPE_CHECK
 

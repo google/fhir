@@ -51,6 +51,13 @@ bool IsCode(const ::google::protobuf::Descriptor* descriptor);
 bool IsProfileOfCode(const ::google::protobuf::Descriptor* descriptor);
 bool IsTypeOrProfileOfCode(const ::google::protobuf::Descriptor* descriptor);
 
+bool IsExtension(const ::google::protobuf::Message& message);
+bool IsProfileOfExtension(const ::google::protobuf::Message& message);
+bool IsTypeOrProfileOfExtension(const ::google::protobuf::Message& message);
+bool IsExtension(const ::google::protobuf::Descriptor* descriptor);
+bool IsProfileOfExtension(const ::google::protobuf::Descriptor* descriptor);
+bool IsTypeOrProfileOfExtension(const ::google::protobuf::Descriptor* descriptor);
+
 }  // namespace fhir
 }  // namespace google
 
