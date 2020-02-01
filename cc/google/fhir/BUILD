@@ -59,36 +59,9 @@ cc_library(
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto:annotations_cc_proto",
-        "//proto/r4/core:datatypes_cc_proto",
-        "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_protobuf//:protobuf",
         "@org_tensorflow//tensorflow/core:lib",
-    ],
-)
-
-cc_test(
-    name = "extensions_test",
-    srcs = ["extensions_test.cc"],
-    data = [
-        "//testdata/r4:google",
-        "//testdata/stu3:google",
-    ],
-    deps = [
-        ":extensions",
-        ":test_helper",
-        "//cc/google/fhir/testutil:proto_matchers",
-        "//proto/r4:google_extensions_cc_proto",
-        "//proto/r4/core:datatypes_cc_proto",
-        "//proto/r4/core:extensions_cc_proto",
-        "//proto/stu3:datatypes_cc_proto",
-        "//proto/stu3:extensions_cc_proto",
-        "//proto/stu3:resources_cc_proto",
-        "//testdata/stu3/profiles:test_cc_proto",
-        "@com_google_absl//absl/strings",
-        "@com_google_googletest//:gtest_main",
-        "@org_tensorflow//tensorflow/core:lib",
-        "@org_tensorflow//tensorflow/core:test",
     ],
 )
 

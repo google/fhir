@@ -123,7 +123,8 @@ Status PerformExtensionSlicing(const Message& source, Message* target) {
         // This is a complex extension
         Message* typed_extension = MutableOrAddMessage(target, inlined_field);
         TF_RETURN_IF_ERROR(
-            ExtensionToMessage(source_extension, typed_extension));
+            extensions_templates::ExtensionToMessage<ExtensionLike>(
+                source_extension, typed_extension));
       }
     } else {
       // There is no inlined field for this extension, just copy it over.
@@ -151,12 +152,15 @@ Status UnsliceExtension(const Message& typed_extension,
                         ExtensionLike* target) {
   if (IsProfileOf<ExtensionLike>(typed_extension)) {
     // This a profile on extension, and therefore a complex extension
-    return ConvertToExtension(typed_extension, target);
+    return extensions_templates::ConvertToExtension<ExtensionLike>(
+        typed_extension, target);
   } else {
     // This just a raw datatype, and therefore a simple extension
-    target->mutable_url()->set_value(GetInlinedExtensionUrl(source_field));
+    target->mutable_url()->set_value(
+        extensions_lib::GetInlinedExtensionUrl(source_field));
 
-    return SetDatatypeOnExtension(typed_extension, target);
+    return extensions_templates::SetDatatypeOnExtension<ExtensionLike>(
+        typed_extension, target);
   }
 }
 

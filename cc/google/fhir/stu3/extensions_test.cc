@@ -1,26 +1,26 @@
-// Copyright 2018 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/*
+ * Copyright 2020 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-#include "google/fhir/extensions.h"
+#include "google/fhir/stu3/extensions.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/r4/core/datatypes.pb.h"
-#include "proto/r4/google_extensions.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/extensions.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
@@ -31,40 +31,32 @@
 
 namespace google {
 namespace fhir {
+namespace stu3 {
 
 namespace {
 
-using ::google::fhir::stu3::google::Base64BinarySeparatorStride;
-using ::google::fhir::stu3::google::EventLabel;
-using ::google::fhir::stu3::google::EventTrigger;
-using ::google::fhir::stu3::google::PrimitiveHasNoValue;
-using ::google::fhir::stu3::proto::
-    CapabilityStatementSearchParameterCombination;
-using ::google::fhir::stu3::proto::Composition;
-using ::google::fhir::stu3::testing::DigitalMediaType;
+using google::Base64BinarySeparatorStride;
+using google::EventLabel;
+using google::EventTrigger;
+using google::PrimitiveHasNoValue;
 using ::google::fhir::testutil::EqualsProto;
+using proto::CapabilityStatementSearchParameterCombination;
+using proto::Composition;
+using testing::DigitalMediaType;
 
 template <class T>
 void ReadStu3TestData(const std::string& type, T* message,
-                      stu3::proto::Extension* extension) {
+                      proto::Extension* extension) {
   *message =
       ReadStu3Proto<T>(absl::StrCat("google/", type, ".message.prototxt"));
-  *extension = ReadStu3Proto<stu3::proto::Extension>(
-      absl::StrCat("google/", type, ".extension.prototxt"));
-}
-
-template <class T>
-void ReadR4TestData(const std::string& type, T* message,
-                    r4::core::Extension* extension) {
-  *message = ReadR4Proto<T>(absl::StrCat("google/", type, ".message.prototxt"));
-  *extension = ReadR4Proto<r4::core::Extension>(
+  *extension = ReadStu3Proto<proto::Extension>(
       absl::StrCat("google/", type, ".extension.prototxt"));
 }
 
 template <class T>
 void TestExtensionToMessage(const std::string& name) {
   T message;
-  stu3::proto::Extension extension;
+  proto::Extension extension;
   ReadStu3TestData(name, &message, &extension);
 
   T output;
@@ -75,32 +67,10 @@ void TestExtensionToMessage(const std::string& name) {
 template <class T>
 void TestConvertToExtension(const std::string& name) {
   T message;
-  stu3::proto::Extension extension;
+  proto::Extension extension;
   ReadStu3TestData(name, &message, &extension);
 
-  stu3::proto::Extension output;
-  TF_ASSERT_OK(ConvertToExtension(message, &output));
-  EXPECT_THAT(output, EqualsProto(extension));
-}
-
-template <class T>
-void TestExtensionToMessageR4(const std::string& name) {
-  T message;
-  r4::core::Extension extension;
-  ReadR4TestData(name, &message, &extension);
-
-  T output;
-  TF_ASSERT_OK(ExtensionToMessage(extension, &output));
-  EXPECT_THAT(output, EqualsProto(message));
-}
-
-template <class T>
-void TestConvertToExtensionR4(const std::string& name) {
-  T message;
-  r4::core::Extension extension;
-  ReadR4TestData(name, &message, &extension);
-
-  r4::core::Extension output;
+  proto::Extension output;
   TF_ASSERT_OK(ConvertToExtension(message, &output));
   EXPECT_THAT(output, EqualsProto(extension));
 }
@@ -127,16 +97,6 @@ TEST(ExtensionsTest, ParsePrimitiveHasNoValue) {
 
 TEST(ExtensionsTest, PrintPrimitiveHasNoValue) {
   TestConvertToExtension<PrimitiveHasNoValue>("primitive_has_no_value");
-}
-
-TEST(ExtensionsTestR4, ParsePrimitiveHasNoValue) {
-  TestExtensionToMessageR4<r4::google::PrimitiveHasNoValue>(
-      "primitive_has_no_value");
-}
-
-TEST(ExtensionsTestR4, PrintPrimitiveHasNoValue) {
-  TestConvertToExtensionR4<r4::google::PrimitiveHasNoValue>(
-      "primitive_has_no_value");
 }
 
 TEST(ExtensionsTest, ParsePrimitiveHasNoValue_Empty) {
@@ -325,5 +285,6 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionMultipleFound) {
 
 }  // namespace
 
+}  // namespace stu3
 }  // namespace fhir
 }  // namespace google

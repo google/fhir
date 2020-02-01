@@ -82,6 +82,39 @@ cc_test(
 )
 
 cc_library(
+    name = "extensions",
+    srcs = ["extensions.cc"],
+    hdrs = ["extensions.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "//cc/google/fhir:extensions",
+        "//cc/google/fhir/status:statusor",
+        "//proto/stu3:datatypes_cc_proto",
+    ],
+)
+
+cc_test(
+    name = "extensions_test",
+    srcs = ["extensions_test.cc"],
+    data = [
+        "//testdata/stu3:google",
+    ],
+    deps = [
+        ":extensions",
+        "//cc/google/fhir:test_helper",
+        "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:extensions_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "//testdata/stu3/profiles:test_cc_proto",
+        "@com_google_absl//absl/strings",
+        "@com_google_googletest//:gtest_main",
+        "@org_tensorflow//tensorflow/core:lib",
+        "@org_tensorflow//tensorflow/core:test",
+    ],
+)
+
+cc_library(
     name = "primitive_handler",
     srcs = ["primitive_handler.cc"],
     hdrs = ["primitive_handler.h"],

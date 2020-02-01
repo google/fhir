@@ -104,7 +104,7 @@ const unordered_map<std::string, const FieldDescriptor*>& GetExtensionMap(
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
     if (HasInlinedExtensionUrl(field)) {
-      extension_map[GetInlinedExtensionUrl(field)] = field;
+      extension_map[extensions_lib::GetInlinedExtensionUrl(field)] = field;
     }
   }
   return extension_map;

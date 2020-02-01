@@ -62,6 +62,7 @@ cc_library(
         "//cc/google/fhir:extensions",
         "//cc/google/fhir:util",
         "//cc/google/fhir/status:statusor",
+        "//cc/google/fhir/stu3:extensions",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:extensions_cc_proto",
         "//proto/stu3:resources_cc_proto",

@@ -71,7 +71,8 @@ StatusOr<bool> HasPrimitiveHasNoValue(const Message& message) {
   std::vector<const Message*> no_value_extensions;
   ForEachMessage<Message>(message, field, [&](const Message& extension) {
     std::string scratch;
-    const std::string& url_value = GetExtensionUrl(extension, &scratch);
+    const std::string& url_value =
+        extensions_lib::GetExtensionUrl(extension, &scratch);
     if (url_value == kPrimitiveHasNoValueUrl) {
       no_value_extensions.push_back(&extension);
     }

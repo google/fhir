@@ -60,6 +60,8 @@ struct JsonPrimitive {
 
 namespace primitives_internal {
 
+using extensions_lib::ClearExtensionsWithUrl;
+using extensions_lib::ClearTypedExtensions;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::EnumDescriptor;
 using ::google::protobuf::EnumValueDescriptor;
@@ -630,14 +632,15 @@ class CodeWrapper : public StringTypeWrapper<CodeType> {
   }
 };
 
-template <typename Base64BinaryType, typename SeparatorStrideExtensionType>
+template <typename Base64BinaryType, typename SeparatorStrideExtensionType,
+          typename ExtensionType = EXTENSION_TYPE(Base64BinaryType)>
 class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
  public:
   StatusOr<std::string> ToNonNullValueString() const override {
     std::string escaped;
     absl::Base64Escape(this->GetWrapped()->value(), &escaped);
     std::vector<SeparatorStrideExtensionType> separator_extensions;
-    FHIR_RETURN_IF_ERROR(GetRepeatedFromExtension(
+    FHIR_RETURN_IF_ERROR(extensions_lib::GetRepeatedFromExtension(
         this->GetWrapped()->extension(), &separator_extensions));
     if (!separator_extensions.empty()) {
       int stride = separator_extensions[0].stride().value();
@@ -693,8 +696,9 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
       separator_stride_extension_msg.mutable_separator()->set_value(separator);
       separator_stride_extension_msg.mutable_stride()->set_value(stride);
 
-      FHIR_RETURN_IF_ERROR(ConvertToExtension(separator_stride_extension_msg,
-                                              wrapped->add_extension()));
+      FHIR_RETURN_IF_ERROR(
+          extensions_templates::ConvertToExtension<ExtensionType>(
+              separator_stride_extension_msg, wrapped->add_extension()));
     }
 
     std::string unescaped;

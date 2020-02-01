@@ -51,13 +51,13 @@ namespace fhir {
 
 namespace {
 
-using ::google::fhir::ClearTypedExtensions;
 using ::google::fhir::IsChoiceType;
 using ::google::fhir::IsPrimitive;
 using ::google::fhir::IsReference;
 using ::google::fhir::IsResource;
 using ::google::fhir::Status;
 using ::google::fhir::StatusOr;
+using ::google::fhir::extensions_lib::ClearTypedExtensions;
 using ::google::fhir::proto::FhirVersion;
 using ::google::protobuf::Any;
 using ::google::protobuf::Descriptor;
