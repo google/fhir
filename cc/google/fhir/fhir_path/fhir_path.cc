@@ -706,6 +706,55 @@ class MatchesFunction : public SingleValueFunctionNode {
   }
 };
 
+class ToStringFunction : public ZeroParameterFunctionNode {
+ public:
+  ToStringFunction(const std::shared_ptr<ExpressionNode>& child,
+                   const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.size() > 1) {
+      return InvalidArgument(
+          "Input collection must not contain multiple items");
+    }
+
+    if (child_results.empty()) {
+      return Status::OK();
+    }
+
+    const Message* child = child_results[0];
+
+    if (IsMessageType<String>(*child)) {
+      results->push_back(child);
+      return Status::OK();
+    }
+
+    if (!IsPrimitive(child->GetDescriptor())) {
+      return Status::OK();
+    }
+
+    FHIR_ASSIGN_OR_RETURN(JsonPrimitive json_primitive,
+                          WrapPrimitiveProto(*child));
+    std::string json_string = json_primitive.value;
+
+    if (absl::StartsWith(json_string, "\"")) {
+      json_string = json_string.substr(1, json_string.size() - 2);
+    }
+
+    String* result = new String();
+    work_space->DeleteWhenFinished(result);
+    result->set_value(json_string);
+    results->push_back(result);
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override { return String::descriptor(); }
+};
+
 // Implements the FHIRPath .length() function.
 class LengthFunction : public ZeroParameterFunctionNode {
  public:
@@ -2478,6 +2527,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"where", FunctionNode::Create<WhereFunction>},
       {"select", FunctionNode::Create<SelectFunction>},
       {"all", FunctionNode::Create<AllFunction>},
+      {"toString", FunctionNode::Create<ToStringFunction>},
   };
 
   // Returns an ExpressionNode that implements the specified FHIRPath function.

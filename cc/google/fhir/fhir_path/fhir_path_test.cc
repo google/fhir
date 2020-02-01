@@ -61,6 +61,7 @@ using testutil::EqualsProto;
 
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
+using testing::IsEmpty;
 using testing::UnorderedElementsAreArray;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
@@ -537,6 +538,24 @@ TEST(FhirPathTest, TestFunctionToInteger) {
                   .empty());
 
   EXPECT_FALSE(EvaluateExpressionWithStatus("(1 | 2).toInteger()").ok());
+}
+
+TEST(FhirPathTest, TestFunctionToString) {
+  EXPECT_EQ(EvaluateStringExpressionWithStatus("1.toString()").ValueOrDie(),
+            "1");
+  EXPECT_EQ(EvaluateStringExpressionWithStatus("1.1.toString()").ValueOrDie(),
+            "1.1");
+  EXPECT_EQ(EvaluateStringExpressionWithStatus("'foo'.toString()").ValueOrDie(),
+            "foo");
+  EXPECT_EQ(EvaluateStringExpressionWithStatus("true.toString()").ValueOrDie(),
+            "true");
+  EXPECT_THAT(
+      EvaluateExpressionWithStatus("{}.toString()").ValueOrDie().GetMessages(),
+      IsEmpty());
+  EXPECT_THAT(
+      EvaluateExpressionWithStatus("toString()").ValueOrDie().GetMessages(),
+      IsEmpty());
+  EXPECT_FALSE(EvaluateExpressionWithStatus("(1 | 2).toString()").ok());
 }
 
 TEST(FhirPathTest, TestFunctionTrace) {
