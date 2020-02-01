@@ -1191,7 +1191,8 @@ class WhereFunction : public FunctionNode {
 
     for (const Message* message : child_results) {
       std::vector<const Message*> param_results;
-      WorkSpace expression_work_space(message);
+      WorkSpace expression_work_space(work_space->MessageContextStack(),
+                                      message);
       FHIR_RETURN_IF_ERROR(
           params_[0]->Evaluate(&expression_work_space, &param_results));
       FHIR_ASSIGN_OR_RETURN(StatusOr<absl::optional<bool>> allowed,
@@ -1237,7 +1238,7 @@ class AllFunction : public FunctionNode {
                   std::vector<const Message*>* results) const override {
     std::vector<const Message*> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
-    FHIR_ASSIGN_OR_RETURN(bool result, Evaluate(child_results));
+    FHIR_ASSIGN_OR_RETURN(bool result, Evaluate(work_space, child_results));
 
     Boolean* result_message = new Boolean();
     work_space->DeleteWhenFinished(result_message);
@@ -1252,10 +1253,12 @@ class AllFunction : public FunctionNode {
 
  private:
   StatusOr<bool> Evaluate(
+      WorkSpace* work_space,
       const std::vector<const Message*>& child_results) const {
     for (const Message* message : child_results) {
       std::vector<const Message*> param_results;
-      WorkSpace expression_work_space(message);
+      WorkSpace expression_work_space(work_space->MessageContextStack(),
+                                      message);
       FHIR_RETURN_IF_ERROR(
           params_[0]->Evaluate(&expression_work_space, &param_results));
       FHIR_ASSIGN_OR_RETURN(StatusOr<absl::optional<bool>> criteria_met,
@@ -1984,6 +1987,24 @@ class ThisReference : public ExpressionNode {
   const Descriptor* descriptor_;
 };
 
+// Expression node for a reference to %context.
+class ContextReference : public ExpressionNode {
+ public:
+  explicit ContextReference(const Descriptor* descriptor)
+      : descriptor_(descriptor) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    results->push_back(work_space->BottomMessageContext());
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override { return descriptor_; }
+
+ private:
+  const Descriptor* descriptor_;
+};
+
 // Produces a shared pointer explicitly of ExpressionNode rather
 // than a subclass to work well with ANTLR's "Any" semantics.
 inline std::shared_ptr<ExpressionNode> ToAny(
@@ -2024,7 +2045,14 @@ struct InvocationDefinition {
 class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
  public:
   explicit FhirPathCompilerVisitor(const Descriptor* descriptor)
-      : error_listener_(this), descriptor_(descriptor) {}
+      : error_listener_(this), descriptor_stack_({descriptor}) {}
+
+  explicit FhirPathCompilerVisitor(
+      const std::vector<const Descriptor*>& descriptor_stack_history,
+      const Descriptor* descriptor)
+      : error_listener_(this), descriptor_stack_(descriptor_stack_history) {
+    descriptor_stack_.push_back(descriptor);
+  }
 
   antlrcpp::Any visitInvocationExpression(
       FhirPathParser::InvocationExpressionContext* node) override {
@@ -2086,7 +2114,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
     if (definition->is_function) {
       auto function_node = createFunction(
-          definition->name, std::make_shared<ThisReference>(descriptor_),
+          definition->name,
+          std::make_shared<ThisReference>(descriptor_stack_.back()),
           definition->params);
 
       return function_node == nullptr || !CheckOk() ? nullptr
@@ -2094,13 +2123,13 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     }
 
     const FieldDescriptor* field =
-        descriptor_ != nullptr
-            ? FindFieldByJsonName(descriptor_, definition->name)
+        descriptor_stack_.back() != nullptr
+            ? FindFieldByJsonName(descriptor_stack_.back(), definition->name)
             : nullptr;
 
     // If we know the return type of the expression, and the return type
     // doesn't have the referenced field, set an error and return.
-    if (descriptor_ != nullptr && field == nullptr) {
+    if (descriptor_stack_.back() != nullptr && field == nullptr) {
       SetError(absl::StrCat("Unable to find field ", definition->name));
       return nullptr;
     }
@@ -2343,7 +2372,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitThisInvocation(
       FhirPathParser::ThisInvocationContext* ctx) override {
-    return ToAny(std::make_shared<ThisReference>(descriptor_));
+    return ToAny(std::make_shared<ThisReference>(descriptor_stack_.back()));
   }
 
   antlrcpp::Any visitExternalConstant(
@@ -2358,6 +2387,9 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     } else if (name == "loinc") {
       return ToAny(
           std::make_shared<Literal<String, std::string>>("http://loinc.org"));
+    } else if (name == "context") {
+      return ToAny(
+          std::make_shared<ContextReference>(descriptor_stack_.front()));
     }
 
     SetError(absl::StrCat("Unknown external constant: ", name));
@@ -2465,7 +2497,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       // will use whichever visitor (or both) is needed to compile the function
       // invocation.
       FhirPathCompilerVisitor child_context_visitor(
-          child_expression->ReturnType());
+          descriptor_stack_, child_expression->ReturnType());
       StatusOr<ExpressionNode*> result = function_factory->second(
           child_expression, params, this, &child_context_visitor);
       if (!result.ok()) {
@@ -2510,7 +2542,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   }
 
   FhirPathErrorListener error_listener_;
-  const Descriptor* descriptor_;
+  std::vector<const Descriptor*> descriptor_stack_;
   std::string error_message_;
 };
 

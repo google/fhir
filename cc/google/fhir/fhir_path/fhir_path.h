@@ -43,9 +43,29 @@ class WorkSpace {
   explicit WorkSpace(const ::google::protobuf::Message* message_context)
       : message_context_stack_({message_context}) {}
 
+  // Same as WorkSpace(const ::google::protobuf::Message*) but message_context_stack is
+  // added the the bottom of the message context stack and message_context is
+  // placed on the top.
+  explicit WorkSpace(
+      const std::vector<const ::google::protobuf::Message*>& message_context_stack,
+      const ::google::protobuf::Message* message_context)
+      : message_context_stack_(message_context_stack) {
+    message_context_stack_.push_back(message_context);
+  }
+
   // Gets the message context the FHIRPath expression is evaluated against.
   const ::google::protobuf::Message* MessageContext() {
     return message_context_stack_.back();
+  }
+
+  // Gets the message context the FHIRPath expression is evaluated against.
+  std::vector<const ::google::protobuf::Message*> MessageContextStack() {
+    return message_context_stack_;
+  }
+
+  // Gets the bottom-most message context of this workspace.
+  const ::google::protobuf::Message* BottomMessageContext() {
+    return message_context_stack_.front();
   }
 
   // Pushes a new message to the top of the context stack.

@@ -201,6 +201,29 @@ TEST(FhirPathTest, TestExternalConstants) {
   EXPECT_FALSE(EvaluateExpressionWithStatus("%unknown").ok());
 }
 
+TEST(FhirPathTest, TestExternalConstantsContext) {
+  Encounter test_encounter = ValidEncounter();
+
+  auto result = CompiledExpression::Compile(Encounter::descriptor(), "%context")
+                    .ValueOrDie()
+                    .Evaluate(test_encounter)
+                    .ValueOrDie();
+  EXPECT_THAT(result.GetMessages(),
+              UnorderedElementsAreArray({EqualsProto(test_encounter)}));
+}
+
+TEST(FhirPathTest, TestExternalConstantsContextReferenceInExpressionParam) {
+  Encounter test_encounter = ValidEncounter();
+
+  auto result = CompiledExpression::Compile(Encounter::descriptor(),
+                                            "status.select(%context)")
+                    .ValueOrDie()
+                    .Evaluate(test_encounter)
+                    .ValueOrDie();
+  EXPECT_THAT(result.GetMessages(),
+              UnorderedElementsAreArray({EqualsProto(test_encounter)}));
+}
+
 TEST(FhirPathTest, TestMalformed) {
   auto expr = CompiledExpression::Compile(Encounter::descriptor(),
                                           "expression->not->valid");
