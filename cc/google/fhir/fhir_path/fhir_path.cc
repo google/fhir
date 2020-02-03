@@ -1366,6 +1366,84 @@ class SelectFunction : public FunctionNode {
   }
 };
 
+// Implements the FHIRPath .iif() function.
+class IifFunction : public FunctionNode {
+ public:
+  static StatusOr<std::vector<std::shared_ptr<ExpressionNode>>> CompileParams(
+      const std::vector<FhirPathParser::ExpressionContext*>& params,
+      FhirPathBaseVisitor* base_context_visitor,
+      FhirPathBaseVisitor* child_context_visitor) {
+    if (params.size() < 2 || params.size() > 3) {
+      return InvalidArgument("iif() requires 2 or 3 arugments.");
+    }
+
+    std::vector<std::shared_ptr<ExpressionNode>> compiled_params;
+
+    antlrcpp::Any criterion = params[0]->accept(child_context_visitor);
+    if (criterion.isNull()) {
+      return InvalidArgument("Failed to compile parameter.");
+    }
+    compiled_params.push_back(criterion.as<std::shared_ptr<ExpressionNode>>());
+
+    antlrcpp::Any true_result = params[1]->accept(base_context_visitor);
+    if (true_result.isNull()) {
+      return InvalidArgument("Failed to compile parameter.");
+    }
+    compiled_params.push_back(
+        true_result.as<std::shared_ptr<ExpressionNode>>());
+
+    if (params.size() > 2) {
+      antlrcpp::Any otherwise_result = params[2]->accept(base_context_visitor);
+      if (otherwise_result.isNull()) {
+        return InvalidArgument("Failed to compile parameter.");
+      }
+      compiled_params.push_back(
+          otherwise_result.as<std::shared_ptr<ExpressionNode>>());
+    }
+
+    return compiled_params;
+  }
+
+  IifFunction(const std::shared_ptr<ExpressionNode>& child,
+              const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : FunctionNode(child, params) {
+    TF_DCHECK_OK(ValidateParams(params));
+  }
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.size() > 1) {
+      return InvalidArgument(
+          "iif() requires a collection with no more than 1 item.");
+    }
+
+    if (child_results.empty()) {
+      return Status::OK();
+    }
+
+    const Message* child = child_results[0];
+
+    std::vector<const Message*> param_results;
+    WorkSpace expression_work_space(work_space->MessageContextStack(), child);
+    FHIR_RETURN_IF_ERROR(
+        params_[0]->Evaluate(&expression_work_space, &param_results));
+    FHIR_ASSIGN_OR_RETURN(StatusOr<absl::optional<bool>> criterion_met,
+                          (PrimitiveOrEmpty<bool, Boolean>(param_results)));
+    if (criterion_met.ValueOrDie().value_or(false)) {
+      FHIR_RETURN_IF_ERROR(params_[1]->Evaluate(work_space, results));
+    } else if (params_.size() > 2) {
+      FHIR_RETURN_IF_ERROR(params_[2]->Evaluate(work_space, results));
+    }
+
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override { return child_->ReturnType(); }
+};
+
 // Implements the FHIRPath .intersect() function.
 class IntersectFunction : public SingleParameterFunctionNode {
  public:
@@ -2528,6 +2606,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"select", FunctionNode::Create<SelectFunction>},
       {"all", FunctionNode::Create<AllFunction>},
       {"toString", FunctionNode::Create<ToStringFunction>},
+      {"iif", FunctionNode::Create<IifFunction>},
   };
 
   // Returns an ExpressionNode that implements the specified FHIRPath function.

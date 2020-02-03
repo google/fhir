@@ -876,6 +876,51 @@ TEST(FhirPathTest, TestSelectValidatesArguments) {
   EXPECT_FALSE(EvaluateExpressionWithStatus("{}.select(true, false)").ok());
 }
 
+TEST(FhirPathTest, TestIif) {
+  // 2 parameter invocations
+  EXPECT_EQ(EvaluateExpressionWithStatus("iif(true, 1)")
+                .ValueOrDie()
+                .GetInteger()
+                .ValueOrDie(),
+            1);
+  EXPECT_THAT(
+      EvaluateExpressionWithStatus("iif(false, 1)").ValueOrDie().GetMessages(),
+      IsEmpty());
+  EXPECT_THAT(
+      EvaluateExpressionWithStatus("iif({}, 1)").ValueOrDie().GetMessages(),
+      IsEmpty());
+
+  // 3 parameters invocations
+  EXPECT_EQ(EvaluateExpressionWithStatus("iif(true, 1, 2)")
+                .ValueOrDie()
+                .GetInteger()
+                .ValueOrDie(),
+            1);
+  EXPECT_EQ(EvaluateExpressionWithStatus("iif(false, 1, 2)")
+                .ValueOrDie()
+                .GetInteger()
+                .ValueOrDie(),
+            2);
+  EXPECT_EQ(EvaluateExpressionWithStatus("iif({}, 1, 2)")
+                .ValueOrDie()
+                .GetInteger()
+                .ValueOrDie(),
+            2);
+
+  EXPECT_THAT(EvaluateExpressionWithStatus("{}.iif(true, false)")
+                  .ValueOrDie()
+                  .GetMessages(),
+              IsEmpty());
+  EXPECT_FALSE(EvaluateExpressionWithStatus("(1 | 2).iif(true, false)").ok());
+}
+
+TEST(FhirPathTest, TestIifValidatesArguments) {
+  EXPECT_FALSE(EvaluateExpressionWithStatus("{}.iif()").ok());
+  EXPECT_FALSE(EvaluateExpressionWithStatus("{}.iif(true)").ok());
+  EXPECT_FALSE(
+      EvaluateExpressionWithStatus("{}.iif(true, false, true, false)").ok());
+}
+
 TEST(FhirPathTest, TestXor) {
   EXPECT_TRUE(EvaluateBoolExpression("(true xor true) = false"));
   EXPECT_TRUE(EvaluateBoolExpression("(true xor false) = true"));
