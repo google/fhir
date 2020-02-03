@@ -1817,6 +1817,44 @@ class AdditionOperator : public BinaryOperator {
   }
 };
 
+// Implementation for FHIRPath's string concatenation operator (&).
+class StrCatOperator : public BinaryOperator {
+ public:
+  Status EvaluateOperator(
+      const std::vector<const Message*>& left_results,
+      const std::vector<const Message*>& right_results, WorkSpace* work_space,
+      std::vector<const Message*>* out_results) const override {
+    if (left_results.size() > 1 || right_results.size() > 1) {
+      return InvalidArgument(
+          "String concatenation operators must have one element on each side.");
+    }
+
+    std::string left;
+    std::string right;
+
+    if (!left_results.empty()) {
+      FHIR_ASSIGN_OR_RETURN(left, MessageToString(*left_results[0]));
+    }
+    if (!right_results.empty()) {
+      FHIR_ASSIGN_OR_RETURN(right, MessageToString(*right_results[0]));
+    }
+
+    String* result = new String();
+    work_space->DeleteWhenFinished(result);
+    result->set_value(absl::StrCat(left, right));
+    out_results->push_back(result);
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return String::GetDescriptor();
+  }
+
+  StrCatOperator(std::shared_ptr<ExpressionNode> left,
+                 std::shared_ptr<ExpressionNode> right)
+      : BinaryOperator(std::move(left), std::move(right)) {}
+};
+
 class PolarityOperator : public ExpressionNode {
  public:
   // Supported polarity operations.
@@ -2311,7 +2349,11 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return ToAny(std::make_shared<AdditionOperator>(left, right));
     }
 
-    // TODO: Support "-" and "&"
+    if (op == "&") {
+      return ToAny(std::make_shared<StrCatOperator>(left, right));
+    }
+
+    // TODO: Support "-"
 
     SetError(absl::StrCat("Unsupported additive operator: ", op));
     return nullptr;

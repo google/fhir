@@ -1101,6 +1101,16 @@ TEST(FhirPathTest, TestStringAddition) {
   EXPECT_TRUE(EvaluateBoolExpression("('foo' + {}) = {}"));
 }
 
+TEST(FhirPathTest, TestStringConcatenation) {
+  EXPECT_EQ(EvaluateStringExpressionWithStatus("('foo' & 'bar')").ValueOrDie(),
+            "foobar");
+  EXPECT_EQ(EvaluateStringExpressionWithStatus("{} & 'bar'").ValueOrDie(),
+            "bar");
+  EXPECT_EQ(EvaluateStringExpressionWithStatus("'foo' & {}").ValueOrDie(),
+            "foo");
+  EXPECT_EQ(EvaluateStringExpressionWithStatus("{} & {}").ValueOrDie(), "");
+}
+
 TEST(FhirPathTest, TestIntegerComparisons) {
   EXPECT_TRUE(EvaluateBoolExpression("42 = 42"));
   EXPECT_FALSE(EvaluateBoolExpression("42 = 43"));
