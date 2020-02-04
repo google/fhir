@@ -61,6 +61,7 @@ using testutil::EqualsProto;
 
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
+using testing::ElementsAreArray;
 using testing::IsEmpty;
 using testing::UnorderedElementsAreArray;
 
@@ -601,6 +602,46 @@ TEST(FhirPathTest, TestFunctionFirst) {
   EXPECT_TRUE(EvaluateBoolExpression("{}.first() = {}"));
   EXPECT_TRUE(EvaluateBoolExpression("true.first()"));
   EXPECT_TRUE(EvaluateExpressionWithStatus("(false | true).first()").ok());
+}
+
+TEST(FhirPathTest, TestFunctionTail) {
+  EXPECT_THAT(
+      EvaluateExpressionWithStatus("{}.tail()").ValueOrDie().GetMessages(),
+      IsEmpty());
+
+  EXPECT_THAT(
+      EvaluateExpressionWithStatus("true.tail()").ValueOrDie().GetMessages(),
+      IsEmpty());
+
+  EXPECT_TRUE(EvaluateBoolExpression("true.combine(true).tail()"));
+}
+
+TEST(FhirPathTest, TestFunctionTailMaintainsOrder) {
+  CodeableConcept observation = ParseFromString<CodeableConcept>(R"proto(
+    coding {
+      system { value: "foo" }
+      code { value: "abc" }
+    }
+    coding {
+      system { value: "bar" }
+      code { value: "def" }
+    }
+    coding {
+      system { value: "foo" }
+      code { value: "ghi" }
+    }
+  )proto");
+
+  Code code_def = ParseFromString<Code>("value: 'def'");
+  Code code_ghi = ParseFromString<Code>("value: 'ghi'");
+  EvaluationResult evaluation_result =
+      CompiledExpression::Compile(CodeableConcept::descriptor(),
+                                  "coding.tail().code")
+          .ValueOrDie()
+          .Evaluate(observation)
+          .ValueOrDie();
+  EXPECT_THAT(evaluation_result.GetMessages(),
+              ElementsAreArray({EqualsProto(code_def), EqualsProto(code_ghi)}));
 }
 
 TEST(FhirPathTest, TestUnion) {

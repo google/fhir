@@ -867,6 +867,29 @@ class FirstFunction : public ZeroParameterFunctionNode {
   }
 };
 
+// Implements the FHIRPath .tail() function.
+class TailFunction : public ZeroParameterFunctionNode {
+ public:
+  TailFunction(const std::shared_ptr<ExpressionNode>& child,
+               const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.size() > 1) {
+      results->insert(results->begin(), child_results.begin() + 1,
+                      child_results.end());
+    }
+
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override { return child_->ReturnType(); }
+};
+
 // Implements the FHIRPath .trace() function.
 class TraceFunction : public SingleValueFunctionNode {
  public:
@@ -2635,6 +2658,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"contains", FunctionNode::Create<ContainsFunction>},
       {"empty", FunctionNode::Create<EmptyFunction>},
       {"first", FunctionNode::Create<FirstFunction>},
+      {"tail", FunctionNode::Create<TailFunction>},
       {"trace", FunctionNode::Create<TraceFunction>},
       {"toInteger", FunctionNode::Create<ToIntegerFunction>},
       {"count", FunctionNode::Create<CountFunction>},
