@@ -616,6 +616,98 @@ TEST(FhirPathTest, TestFunctionTail) {
   EXPECT_TRUE(EvaluateBoolExpression("true.combine(true).tail()"));
 }
 
+TEST(FhirPathTest, TestFunctionIsPrimitives) {
+  EXPECT_THAT(
+      EvaluateExpressionWithStatus("{}.is(Boolean)").ValueOrDie().GetMessages(),
+      IsEmpty());
+
+  EXPECT_TRUE(EvaluateBoolExpression("true.is(Boolean)"));
+  EXPECT_FALSE(EvaluateBoolExpression("true.is(Decimal)"));
+  EXPECT_FALSE(EvaluateBoolExpression("true.is(Integer)"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("1.is(Integer)"));
+  EXPECT_FALSE(EvaluateBoolExpression("1.is(Decimal)"));
+  EXPECT_FALSE(EvaluateBoolExpression("1.is(Boolean)"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("1.1.is(Decimal)"));
+  EXPECT_FALSE(EvaluateBoolExpression("1.1.is(Integer)"));
+  EXPECT_FALSE(EvaluateBoolExpression("1.1.is(Boolean)"));
+}
+
+TEST(FhirPathTest, TestFunctionIsResources) {
+  Observation observation = ParseFromString<Observation>(R"proto()proto");
+
+  EvaluationResult is_boolean_evaluation_result =
+      CompiledExpression::Compile(CodeableConcept::descriptor(),
+                                  "$this.is(Boolean)")
+          .ValueOrDie()
+          .Evaluate(observation)
+          .ValueOrDie();
+  EXPECT_FALSE(is_boolean_evaluation_result.GetBoolean().ValueOrDie());
+
+  EvaluationResult is_codeable_concept_evaluation_result =
+      CompiledExpression::Compile(CodeableConcept::descriptor(),
+                                  "$this.is(CodeableConcept)")
+          .ValueOrDie()
+          .Evaluate(observation)
+          .ValueOrDie();
+  EXPECT_FALSE(is_codeable_concept_evaluation_result.GetBoolean().ValueOrDie());
+
+  EvaluationResult is_observation_evaluation_result =
+      CompiledExpression::Compile(CodeableConcept::descriptor(),
+                                  "$this.is(Observation)")
+          .ValueOrDie()
+          .Evaluate(observation)
+          .ValueOrDie();
+  EXPECT_TRUE(is_observation_evaluation_result.GetBoolean().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestOperatorIsPrimitives) {
+  EXPECT_THAT(
+      EvaluateExpressionWithStatus("{} is Boolean").ValueOrDie().GetMessages(),
+      IsEmpty());
+
+  EXPECT_TRUE(EvaluateBoolExpression("true is Boolean"));
+  EXPECT_FALSE(EvaluateBoolExpression("true is Decimal"));
+  EXPECT_FALSE(EvaluateBoolExpression("true is Integer"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("1 is Integer"));
+  EXPECT_FALSE(EvaluateBoolExpression("1 is Decimal"));
+  EXPECT_FALSE(EvaluateBoolExpression("1 is Boolean"));
+
+  EXPECT_TRUE(EvaluateBoolExpression("1.1 is Decimal"));
+  EXPECT_FALSE(EvaluateBoolExpression("1.1 is Integer"));
+  EXPECT_FALSE(EvaluateBoolExpression("1.1 is Boolean"));
+}
+
+TEST(FhirPathTest, TestOperatorIsResources) {
+  Observation observation = ParseFromString<Observation>(R"proto()proto");
+
+  EvaluationResult is_boolean_evaluation_result =
+      CompiledExpression::Compile(CodeableConcept::descriptor(),
+                                  "$this is Boolean")
+          .ValueOrDie()
+          .Evaluate(observation)
+          .ValueOrDie();
+  EXPECT_FALSE(is_boolean_evaluation_result.GetBoolean().ValueOrDie());
+
+  EvaluationResult is_codeable_concept_evaluation_result =
+      CompiledExpression::Compile(CodeableConcept::descriptor(),
+                                  "$this is CodeableConcept")
+          .ValueOrDie()
+          .Evaluate(observation)
+          .ValueOrDie();
+  EXPECT_FALSE(is_codeable_concept_evaluation_result.GetBoolean().ValueOrDie());
+
+  EvaluationResult is_observation_evaluation_result =
+      CompiledExpression::Compile(CodeableConcept::descriptor(),
+                                  "$this is Observation")
+          .ValueOrDie()
+          .Evaluate(observation)
+          .ValueOrDie();
+  EXPECT_TRUE(is_observation_evaluation_result.GetBoolean().ValueOrDie());
+}
+
 TEST(FhirPathTest, TestFunctionTailMaintainsOrder) {
   CodeableConcept observation = ParseFromString<CodeableConcept>(R"proto(
     coding {

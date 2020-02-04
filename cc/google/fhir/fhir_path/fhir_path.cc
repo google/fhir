@@ -1467,6 +1467,64 @@ class IifFunction : public FunctionNode {
   const Descriptor* ReturnType() const override { return child_->ReturnType(); }
 };
 
+// Implements the FHIRPath .is() function.
+//
+// TODO: This does not currently validate that the tested type exists.
+// According to the FHIRPath spec, if the type does not exist the expression
+// should throw an error instead of returning false.
+//
+// TODO: Handle type namespaces (i.e. FHIR.* and System.*)
+//
+// TODO: Handle type inheritance correctly. For example, a Patient
+// resource is a DomainResource, but this function, as is, will return false.
+class IsFunction : public ExpressionNode {
+ public:
+  StatusOr<IsFunction*> static Create(
+      const std::shared_ptr<ExpressionNode>& child_expression,
+      const std::vector<FhirPathParser::ExpressionContext*>& params,
+      FhirPathBaseVisitor* base_context_visitor,
+      FhirPathBaseVisitor* child_context_visitor) {
+    if (params.size() != 1) {
+      return InvalidArgument("is() requires a single argument.");
+    }
+
+    return new IsFunction(child_expression, params[0]->getText());
+  }
+
+  IsFunction(const std::shared_ptr<ExpressionNode>& child,
+             std::string type_name)
+      : child_(child), type_name_(type_name) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.size() > 1) {
+      return InvalidArgument(
+          "is() requires a collection with no more than 1 item.");
+    }
+
+    if (child_results.empty()) {
+      return Status::OK();
+    }
+
+    auto result = new Boolean();
+    work_space->DeleteWhenFinished(result);
+    result->set_value(child_results[0]->GetDescriptor()->name() == type_name_);
+    results->push_back(result);
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Boolean::GetDescriptor();
+  }
+
+ private:
+  const std::shared_ptr<ExpressionNode> child_;
+  const std::string type_name_;
+};
+
 // Implements the FHIRPath .intersect() function.
 class IntersectFunction : public SingleParameterFunctionNode {
  public:
@@ -2407,6 +2465,26 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     return nullptr;
   }
 
+  antlrcpp::Any visitTypeExpression(
+      FhirPathParser::TypeExpressionContext* ctx) override {
+    antlrcpp::Any left_any = ctx->children[0]->accept(this);
+    std::string op = ctx->children[1]->getText();
+    std::string type = ctx->children[2]->getText();
+
+    if (!CheckOk()) {
+      return nullptr;
+    }
+
+    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
+
+    if (op == "is") {
+      return ToAny(std::make_shared<IsFunction>(left, type));
+    }
+
+    SetError(absl::StrCat("Unsupported type operator: ", op));
+    return nullptr;
+  }
+
   antlrcpp::Any visitEqualityExpression(
       FhirPathParser::EqualityExpressionContext* ctx) override {
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
@@ -2673,6 +2751,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"all", FunctionNode::Create<AllFunction>},
       {"toString", FunctionNode::Create<ToStringFunction>},
       {"iif", FunctionNode::Create<IifFunction>},
+      {"is", IsFunction::Create},
   };
 
   // Returns an ExpressionNode that implements the specified FHIRPath function.
