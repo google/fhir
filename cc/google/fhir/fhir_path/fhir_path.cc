@@ -32,6 +32,7 @@
 #include "google/fhir/fhir_path/FhirPathBaseVisitor.h"
 #include "google/fhir/fhir_path/FhirPathLexer.h"
 #include "google/fhir/fhir_path/FhirPathParser.h"
+#include "google/fhir/fhir_path/utils.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
@@ -156,16 +157,6 @@ StatusOr<std::string> MessagesToString(
   return MessageToString(*messages[0]);
 }
 
-// Logical field in primitives representing the underlying value.
-constexpr char kPrimitiveValueField[] = "value";
-
-// Returns true if the given field is accessing the logical "value"
-// field on FHIR primitives.
-bool IsFhirPrimitiveValue(const FieldDescriptor* field) {
-  return field->name() == kPrimitiveValueField &&
-         IsPrimitive(field->containing_type());
-}
-
 // Finds a field in the message descriptor whose JSON name matches the provided
 // name or nullptr if one is not found.
 //
@@ -236,35 +227,12 @@ class InvokeTermNode : public ExpressionNode {
   Status Evaluate(WorkSpace* work_space,
                   std::vector<const Message*>* results) const override {
     const Message& message = *work_space->MessageContext();
-    const Reflection* refl = message.GetReflection();
     const FieldDescriptor* field =
         field_ != nullptr
             ? field_
             : FindFieldByJsonName(message.GetDescriptor(), field_name_);
 
-    if (field->is_repeated()) {
-      int field_size = refl->FieldSize(message, field);
-
-      for (int i = 0; i < field_size; ++i) {
-        const Message& child = refl->GetRepeatedMessage(message, field, i);
-
-        results->push_back(&child);
-      }
-
-    } else {
-      if (refl->HasField(message, field)) {
-        // .value invocations on primitive types should return the FHIR
-        // primitive message type rather than the underlying native primitive.
-        if (IsFhirPrimitiveValue(field)) {
-          results->push_back(&message);
-        } else {
-          const Message& child = refl->GetMessage(message, field);
-          results->push_back(&child);
-        }
-      }
-    }
-
-    return Status::OK();
+    return RetrieveField(message, *field, results);
   }
 
   const Descriptor* ReturnType() const override {
@@ -312,15 +280,7 @@ class InvokeExpressionNode : public ExpressionNode {
                                             child_message->GetTypeName()));
       }
 
-      // .value invocations on primitive types should return the FHIR
-      // primitive message type rather than the underlying native primitive.
-      if (IsFhirPrimitiveValue(field)) {
-        results->push_back(child_message);
-      } else {
-        ForEachMessage<Message>(
-            *child_message, field,
-            [&](const Message& result) { results->push_back(&result); });
-      }
+      FHIR_RETURN_IF_ERROR(RetrieveField(*child_message, *field, results));
     }
 
     return Status::OK();

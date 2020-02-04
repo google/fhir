@@ -39,6 +39,7 @@ cc_library(
     deps = [
         ":fhir_path_grammar",
         ":fhir_path_lexer",
+        ":utils",
         "//cc/google/fhir:annotations",
         "//cc/google/fhir:primitive_wrapper",
         "//cc/google/fhir:proto_util",
@@ -51,6 +52,29 @@ cc_library(
         "@com_google_absl//absl/synchronization",
         "@com_google_absl//absl/time",
         "@com_google_absl//absl/types:optional",
+        "@com_google_protobuf//:protobuf",
+        "@org_tensorflow//tensorflow/core:lib",
+    ],
+)
+
+cc_library(
+    name = "utils",
+    srcs = [
+        "utils.cc",
+    ],
+    hdrs = [
+        "utils.h",
+    ],
+    strip_include_prefix = "//cc/",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//cc/google/fhir:annotations",
+        "//cc/google/fhir:primitive_wrapper",
+        "//cc/google/fhir:proto_util",
+        "//cc/google/fhir:util",
+        "//cc/google/fhir/status",
+        "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/strings",
         "@com_google_protobuf//:protobuf",
         "@org_tensorflow//tensorflow/core:lib",
     ],
@@ -82,5 +106,25 @@ cc_test(
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
         "@org_tensorflow//tensorflow/core:lib",
+    ],
+)
+
+cc_test(
+    name = "utils_test",
+    size = "small",
+    srcs = [
+        "utils_test.cc",
+    ],
+    deps = [
+        ":utils",
+        "//cc/google/fhir/status",
+        "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/r4/core:datatypes_cc_proto",
+        "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
+        "//proto/r4/core/resources:patient_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "@com_google_googletest//:gtest_main",
+        "@com_google_protobuf//:protobuf",
     ],
 )
