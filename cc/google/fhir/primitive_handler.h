@@ -61,20 +61,28 @@ class PrimitiveHandler {
 
   virtual ::google::protobuf::Message* NewString(const std::string& str) const = 0;
 
+  virtual const ::google::protobuf::Descriptor* StringDescriptor() const = 0;
+
   virtual StatusOr<bool> GetBooleanValue(
       const ::google::protobuf::Message& primitive) const = 0;
 
   virtual ::google::protobuf::Message* NewBoolean(const bool value) const = 0;
+
+  virtual const ::google::protobuf::Descriptor* BooleanDescriptor() const = 0;
 
   virtual StatusOr<int> GetIntegerValue(
       const ::google::protobuf::Message& primitive) const = 0;
 
   virtual ::google::protobuf::Message* NewInteger(const int value) const = 0;
 
+  virtual const ::google::protobuf::Descriptor* IntegerDescriptor() const = 0;
+
   virtual StatusOr<std::string> GetDecimalValue(
       const ::google::protobuf::Message& primitive) const = 0;
 
   virtual ::google::protobuf::Message* NewDecimal(const std::string value) const = 0;
+
+  virtual const ::google::protobuf::Descriptor* DecimalDescriptor() const = 0;
 
  protected:
   PrimitiveHandler(proto::FhirVersion version) : version_(version) {}
@@ -130,6 +138,10 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     return msg;
   }
 
+  const ::google::protobuf::Descriptor* StringDescriptor() const override {
+    return String::GetDescriptor();
+  }
+
   StatusOr<bool> GetBooleanValue(
       const ::google::protobuf::Message& primitive) const override {
     CheckType<Boolean>(primitive);
@@ -140,6 +152,10 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     Boolean* msg = new Boolean();
     msg->set_value(value);
     return msg;
+  }
+
+  const ::google::protobuf::Descriptor* BooleanDescriptor() const override {
+    return Boolean::GetDescriptor();
   }
 
   StatusOr<int> GetIntegerValue(
@@ -154,6 +170,10 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     return msg;
   }
 
+  const ::google::protobuf::Descriptor* IntegerDescriptor() const override {
+    return Integer::GetDescriptor();
+  }
+
   StatusOr<std::string> GetDecimalValue(
       const ::google::protobuf::Message& primitive) const override {
     CheckType<Decimal>(primitive);
@@ -164,6 +184,10 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     Decimal* msg = new Decimal();
     msg->set_value(value);
     return msg;
+  }
+
+  const ::google::protobuf::Descriptor* DecimalDescriptor() const override {
+    return Decimal::GetDescriptor();
   }
 
  protected:

@@ -269,16 +269,18 @@ TEST(PrimitiveValidationTestProto, StringCode) {
   TestProtoValidation<MimeTypeCode>();
 }
 
-#define HANDLER_TYPE_TEST(type, value)                               \
-  TEST(HandlerTypeTest, type) {                                      \
-    ::google::protobuf::Message* msg =                                           \
-        Stu3PrimitiveHandler::GetInstance()->New##type(value);       \
-    ASSERT_EQ(msg->GetDescriptor()->name(), #type);                  \
-    auto extracted_status =                                          \
-        Stu3PrimitiveHandler::GetInstance()->Get##type##Value(*msg); \
-    TF_ASSERT_OK(extracted_status.status());                         \
-    ASSERT_EQ(extracted_status.ValueOrDie(), value);                 \
-    delete msg;                                                      \
+#define HANDLER_TYPE_TEST(type, value)                                       \
+  TEST(HandlerTypeTest, type) {                                              \
+    ::google::protobuf::Message* msg =                                                 \
+        Stu3PrimitiveHandler::GetInstance()->New##type(value);               \
+    ASSERT_EQ(msg->GetDescriptor()->name(), #type);                          \
+    auto extracted_status =                                                  \
+        Stu3PrimitiveHandler::GetInstance()->Get##type##Value(*msg);         \
+    TF_ASSERT_OK(extracted_status.status());                                 \
+    ASSERT_EQ(extracted_status.ValueOrDie(), value);                         \
+    ASSERT_EQ(Stu3PrimitiveHandler::GetInstance()->type##Descriptor()->name(), \
+              #type);                                                        \
+    delete msg;                                                              \
   }
 
 HANDLER_TYPE_TEST(String, "mandalorian");
