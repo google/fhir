@@ -2889,6 +2889,10 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor) {
     if (constraint.ok()) {
       CompiledExpression expression = constraint.ValueOrDie();
       constraints->message_expressions_.push_back(expression);
+    } else {
+      LOG(WARNING) << "Ignoring message constraint on " << descriptor->name()
+                   << " (" << fhir_path << "). "
+                   << constraint.status().error_message();
     }
 
     // TODO: Unsupported FHIRPath expressions are simply not
@@ -2915,6 +2919,10 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor) {
         if (constraint.ok()) {
           constraints->field_expressions_.push_back(
               std::make_pair(field, constraint.ValueOrDie()));
+        } else {
+          LOG(WARNING) << "Ignoring field constraint on " << descriptor->name()
+                       << "." << field_type->name() << " (" << fhir_path
+                       << "). " << constraint.status().error_message();
         }
 
         // TODO: Unsupported FHIRPath expressions are simply not
