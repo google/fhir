@@ -65,7 +65,7 @@
   typename std::remove_const<typename std::remove_reference<decltype( \
       std::declval<t>().id().extension(0))>::type>::type
 
-// Given a FHIR type, returns the datatype with a given name assosiated with
+// Given a FHIR type, returns the datatype with a given name associated with
 // the input type's version of fhir
 #define FHIR_DATATYPE(t, d)                                           \
   typename std::remove_const<typename std::remove_reference<decltype( \
