@@ -351,6 +351,33 @@ TEST(JsonFormatR4Test, PrintProfileForAnalytics) {
       "testdata/r4/bigquery/TestPatient.json");
 }
 
+TEST(JsonFormatR4Test, PrintForAnalyticsWithContained) {
+  r4::testing::TestPatient patient = ReadR4Proto<r4::testing::TestPatient>(
+      "profiles/test_patient-profiled-testpatient.prototxt");
+  r4::testing::TestObservation observation =
+      ReadR4Proto<r4::testing::TestObservation>(
+          "examples/Observation-example-genetics-1.prototxt");
+
+  r4::testing::ContainedResource contained;
+  *contained.mutable_test_observation() = observation;
+
+  patient.add_contained()->PackFrom(contained);
+
+  auto result = PrettyPrintFhirToJsonStringForAnalytics(patient);
+  ASSERT_TRUE(result.ok())
+      << "Failed PrintForAnalytics on Patient with Contained\n"
+      << result.status();
+
+  std::string from_proto = result.ValueOrDie();
+  std::string from_json = ReadFile("testdata/r4/examples/with_contained.json");
+
+  if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
+    // This assert will fail, but we get terrible diff messages comparing
+    // JsonCPP, so fall back to string diffs.
+    ASSERT_EQ(from_json, from_proto);
+  }
+}
+
 TEST(JsonFormatR4Test, TestAccount) {
   std::vector<std::string> files{"Account-ewg", "Account-example"};
   TestPair<Account>(files);

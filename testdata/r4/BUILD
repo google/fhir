@@ -16,7 +16,7 @@ filegroup(
 filegroup(
     name = "examples",
     srcs = glob([
-        "examples/*.prototxt",
+        "examples/*",
     ]),
 )
 

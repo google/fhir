@@ -144,10 +144,12 @@ class Printer {
       return PrintContainedResource(proto);
     }
     if (descriptor->full_name() == Any::descriptor()->full_name()) {
-      // TODO: Handle STU3 Any
       r4::core::ContainedResource contained;
       if (!dynamic_cast<const Any&>(proto).UnpackTo(&contained)) {
-        return InvalidArgument("Unable to unpack Any to ContainedResource");
+        // If we can't unpack the Any, drop it.
+        // TODO: Use a registry to determine the correct
+        // ContainedResource to unpack to
+        return Status::OK();
       }
       return PrintContainedResource(contained);
     }
