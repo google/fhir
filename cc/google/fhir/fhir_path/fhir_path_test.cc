@@ -27,7 +27,9 @@
 #include "proto/r4/core/codes.pb.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/resources/encounter.pb.h"
+#include "proto/r4/core/resources/medication_knowledge.pb.h"
 #include "proto/r4/core/resources/observation.pb.h"
+#include "proto/r4/core/resources/parameters.pb.h"
 #include "proto/r4/core/resources/structure_definition.pb.h"
 #include "proto/r4/core/resources/value_set.pb.h"
 #include "proto/r4/uscore.pb.h"
@@ -47,7 +49,9 @@ using r4::core::DateTime;
 using r4::core::Decimal;
 using r4::core::Encounter;
 using r4::core::Integer;
+using r4::core::MedicationKnowledge_Kinetics;
 using r4::core::Observation;
+using r4::core::Parameters;
 using r4::core::Period;
 using r4::core::Quantity;
 using r4::core::SimpleQuantity;
@@ -66,6 +70,48 @@ using testing::IsEmpty;
 using testing::UnorderedElementsAreArray;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
+
+// Matcher for StatusOr<EvaluationResult> that checks to see that the evaluation
+// succeeded and evaluated to a single boolean with value of false.
+//
+// NOTE: Not(EvalsToFalse()) is not the same as EvalsToTrue() as the former
+// will match cases where evaluation fails.
+MATCHER(EvalsToFalse, "") {
+  if (!arg.ok()) {
+    *result_listener << "evaluation error: " << arg.status().error_message();
+    return false;
+  }
+
+  StatusOr<bool> result = arg.ValueOrDie().GetBoolean();
+  if (!result.ok()) {
+    *result_listener << "did not resolve to a boolean: "
+                     << result.status().error_message();
+    return false;
+  }
+
+  return !result.ValueOrDie();
+}
+
+// Matcher for StatusOr<EvaluationResult> that checks to see that the evaluation
+// succeeded and evaluated to a single boolean with value of true.
+//
+// NOTE: Not(EvalsToTrue()) is not the same as EvalsToFalse() as the former
+// will match cases where evaluation fails.
+MATCHER(EvalsToTrue, "") {
+  if (!arg.ok()) {
+    *result_listener << "evaluation error: " << arg.status().error_message();
+    return false;
+  }
+
+  StatusOr<bool> result = arg.ValueOrDie().GetBoolean();
+  if (!result.ok()) {
+    *result_listener << "did not resolve to a boolean: "
+                     << result.status().error_message();
+    return false;
+  }
+
+  return result.ValueOrDie();
+}
 
 template <typename T>
 T ParseFromString(const std::string& str) {
@@ -115,18 +161,21 @@ USCorePatientProfile ValidUsCorePatient() {
   )proto");
 }
 
+template <typename T>
+StatusOr<EvaluationResult> Evaluate(const T& message,
+    const std::string& expression) {
+    FHIR_ASSIGN_OR_RETURN(auto compiled_expression,
+      CompiledExpression::Compile(message.GetDescriptor(), expression));
+
+  return compiled_expression.Evaluate(message);
+}
+
 StatusOr<EvaluationResult> EvaluateExpressionWithStatus(
     const std::string& expression) {
-  // FHIRPath assumes a EvaluateBoolExpression object during evaluation, so we
-  // use an encounter as a placeholder.
-  auto compiled_expression =
-      CompiledExpression::Compile(Encounter::descriptor(), expression);
-  if (!compiled_expression.ok()) {
-    return StatusOr<EvaluationResult>(compiled_expression.status());
-  }
-
+  // FHIRPath assumes a resource object during evaluation, so we use an
+  // encounter as a placeholder.
   Encounter test_encounter = ValidEncounter();
-  return compiled_expression.ValueOrDie().Evaluate(test_encounter);
+  return Evaluate(test_encounter, expression);
 }
 
 StatusOr<std::string> EvaluateStringExpressionWithStatus(
@@ -1266,6 +1315,46 @@ TEST(FhirPathTest, TestIntegerComparisons) {
   EXPECT_FALSE(EvaluateBoolExpression("43 <= 42"));
 }
 
+TEST(FhirPathTest, TestIntegerLikeComparison) {
+  Parameters parameters =
+      ParseFromString<Parameters>(R"proto(
+        parameter {value {integer {value: -1}}}
+        parameter {value {integer {value: 0}}}
+        parameter {value {integer {value: 1}}}
+        parameter {value {unsigned_int {value: 0}}}
+      )proto");
+
+  // lhs = -1 (signed), rhs = 0 (unsigned)
+  EXPECT_THAT(Evaluate(parameters, "parameter[0].value < parameter[3].value"),
+              EvalsToTrue());
+  EXPECT_THAT(Evaluate(parameters, "parameter[0].value <= parameter[3].value"),
+              EvalsToTrue());
+  EXPECT_THAT(Evaluate(parameters, "parameter[0].value >= parameter[3].value"),
+              EvalsToFalse());
+  EXPECT_THAT(Evaluate(parameters, "parameter[0].value > parameter[3].value"),
+              EvalsToFalse());
+
+  // lhs = 0 (signed), rhs = 0 (unsigned)
+  EXPECT_THAT(Evaluate(parameters, "parameter[1].value < parameter[3].value"),
+              EvalsToFalse());
+  EXPECT_THAT(Evaluate(parameters, "parameter[1].value <= parameter[3].value"),
+              EvalsToTrue());
+  EXPECT_THAT(Evaluate(parameters, "parameter[1].value >= parameter[3].value"),
+              EvalsToTrue());
+  EXPECT_THAT(Evaluate(parameters, "parameter[1].value > parameter[3].value"),
+              EvalsToFalse());
+
+  // lhs = 1 (signed), rhs = 0 (unsigned)
+  EXPECT_THAT(Evaluate(parameters, "parameter[2].value < parameter[3].value"),
+              EvalsToFalse());
+  EXPECT_THAT(Evaluate(parameters, "parameter[2].value <= parameter[3].value"),
+              EvalsToFalse());
+  EXPECT_THAT(Evaluate(parameters, "parameter[2].value >= parameter[3].value"),
+              EvalsToTrue());
+  EXPECT_THAT(Evaluate(parameters, "parameter[2].value > parameter[3].value"),
+              EvalsToTrue());
+}
+
 TEST(FhirPathTest, TestDecimalLiteral) {
   auto expr =
       CompiledExpression::Compile(Encounter::descriptor(), "1.25").ValueOrDie();
@@ -1521,6 +1610,69 @@ TEST(FhirPathTest, TimeCompareDifferentPrecision) {
 
   end_micros.set_value_us(end_micros.value_us() - 1);
   EXPECT_FALSE(EvaluateOnPeriod(start_before_end, start_micros, end_micros));
+}
+
+TEST(FhirPathTest, SimpleQuantityComparisons) {
+  MedicationKnowledge_Kinetics kinetics =
+      ParseFromString<MedicationKnowledge_Kinetics>(R"proto(
+        area_under_curve {
+          value { value: "1.1"}
+          system { value: "http://valuesystem.example.org/foo" }
+          code { value: "bar" }
+        }
+        area_under_curve {
+          value { value: "1.2"}
+          system { value: "http://valuesystem.example.org/foo" }
+          code { value: "bar" }
+        }
+        area_under_curve {
+          value { value: "1.1"}
+          system { value: "http://valuesystem.example.org/foo" }
+          code { value: "different" }
+        }
+        area_under_curve {
+          value { value: "1.1"}
+          system { value: "http://valuesystem.example.org/different" }
+          code { value: "bar" }
+        }
+      )proto");
+
+  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] < areaUnderCurve[0]"),
+              EvalsToFalse());
+  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] <= areaUnderCurve[0]"),
+              EvalsToTrue());
+  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] >= areaUnderCurve[0]"),
+              EvalsToTrue());
+  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] > areaUnderCurve[0]"),
+              EvalsToFalse());
+
+  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[1] < areaUnderCurve[0]"),
+              EvalsToFalse());
+  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[1] <= areaUnderCurve[0]"),
+              EvalsToFalse());
+  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[1] >= areaUnderCurve[0]"),
+              EvalsToTrue());
+  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[1] > areaUnderCurve[0]"),
+              EvalsToTrue());
+
+  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] < areaUnderCurve[1]"),
+              EvalsToTrue());
+  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] <= areaUnderCurve[1]"),
+              EvalsToTrue());
+  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] >= areaUnderCurve[1]"),
+              EvalsToFalse());
+  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] > areaUnderCurve[1]"),
+              EvalsToFalse());
+
+  // Different quantity codes
+  EXPECT_FALSE(Evaluate(
+                   kinetics, "areaUnderCurve[0] > areaUnderCurve[2]")
+                   .ok());
+
+  // Different quantity systems
+  EXPECT_FALSE(Evaluate(
+                   kinetics, "areaUnderCurve[0] > areaUnderCurve[3]")
+                   .ok());
 }
 
 TEST(FhirPathTest, TestCompareEnumToString) {

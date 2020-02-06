@@ -206,11 +206,13 @@ StatusOr<R> ParseJsonToProto(const std::string& json_path) {
   std::string json = ReadFile(json_path);
   absl::TimeZone tz;
   absl::LoadTimeZone(kTimeZoneString, &tz);
+  FHIR_ASSIGN_OR_RETURN(R resource,
+                        JsonFhirStringToProtoWithoutValidating<R>(json, tz));
+
   if (INVALID_RECORDS.find(json_path) == INVALID_RECORDS.end()) {
-    return JsonFhirStringToProto<R>(json, tz);
-  } else {
-    return JsonFhirStringToProtoWithoutValidating<R>(json, tz);
+    FHIR_RETURN_IF_ERROR(ValidateResourceWithFhirPath(resource));
   }
+  return resource;
 }
 
 // proto_path should be relative to //testdata/r4

@@ -58,7 +58,9 @@ using ::google::fhir::r4::core::Boolean;
 using ::google::fhir::r4::core::DateTime;
 using ::google::fhir::r4::core::Decimal;
 using ::google::fhir::r4::core::Integer;
+using ::google::fhir::r4::core::SimpleQuantity;
 using ::google::fhir::r4::core::String;
+using ::google::fhir::r4::core::UnsignedInt;
 
 using antlr4::ANTLRInputStream;
 using antlr4::BaseErrorListener;
@@ -272,7 +274,7 @@ class InvokeExpressionNode : public ExpressionNode {
       const FieldDescriptor* field =
           field_ != nullptr ? field_
                             : FindFieldByJsonName(
-                                  child_message->GetDescriptor(), field_name_);
+              child_message->GetDescriptor(), field_name_);
 
       if (field == nullptr) {
         return InvalidArgument(absl::StrCat("Unable to find field '",
@@ -1583,6 +1585,23 @@ class ComparisonOperator : public BinaryOperator {
       EvalIntegerComparison(dynamic_cast<const Integer*>(left_result),
                             dynamic_cast<const Integer*>(right_result), result);
 
+    } else if (IsMessageType<UnsignedInt>(*left_result) &&
+               IsMessageType<Integer>(*right_result)) {
+      EvalIntegerComparison(dynamic_cast<const UnsignedInt*>(left_result),
+                            dynamic_cast<const Integer*>(right_result), result);
+
+    } else if (IsMessageType<Integer>(*left_result) &&
+               IsMessageType<UnsignedInt>(*right_result)) {
+      EvalIntegerComparison(dynamic_cast<const Integer*>(left_result),
+                            dynamic_cast<const UnsignedInt*>(right_result),
+                            result);
+
+    } else if (IsMessageType<UnsignedInt>(*left_result) &&
+               IsMessageType<UnsignedInt>(*right_result)) {
+      EvalIntegerComparison(dynamic_cast<const UnsignedInt*>(left_result),
+                            dynamic_cast<const UnsignedInt*>(right_result),
+                            result);
+
     } else if (IsMessageType<Decimal>(*left_result) ||
                IsMessageType<Decimal>(*right_result)) {
       FHIR_RETURN_IF_ERROR(
@@ -1597,8 +1616,15 @@ class ComparisonOperator : public BinaryOperator {
       FHIR_RETURN_IF_ERROR(EvalDateTimeComparison(
           dynamic_cast<const DateTime*>(left_result),
           dynamic_cast<const DateTime*>(right_result), result));
+    } else if (IsMessageType<SimpleQuantity>(*left_result) &&
+               IsMessageType<SimpleQuantity>(*right_result)) {
+      FHIR_RETURN_IF_ERROR(EvalSimpleQuantityComparison(
+          dynamic_cast<const SimpleQuantity*>(left_result),
+          dynamic_cast<const SimpleQuantity*>(right_result), result));
     } else {
-      return InvalidArgument("Unsupported comparison value types");
+      return InvalidArgument(
+          "Unsupported comparison value types: ", left_result->GetTypeName(),
+          " and ", right_result->GetTypeName());
     }
 
     out_results->push_back(result);
@@ -1615,9 +1641,13 @@ class ComparisonOperator : public BinaryOperator {
       : BinaryOperator(left, right), comparison_type_(comparison_type) {}
 
  private:
-  void EvalIntegerComparison(const Integer* left_wrapper,
-                             const Integer* right_wrapper,
+  template <class LT, class RT>
+  void EvalIntegerComparison(const LT* left_wrapper,
+                             const RT* right_wrapper,
                              Boolean* result) const {
+    // It isn't necessary to widen the values from 32 to 64 bits when converting
+    // a UnsignedInt or PositiveInt to an int32_t because FHIR restricts the
+    // values of those types to 31 bits.
     const int32_t left = left_wrapper->value();
     const int32_t right = right_wrapper->value();
 
@@ -1783,6 +1813,23 @@ class ComparisonOperator : public BinaryOperator {
     }
 
     return Status::OK();
+  }
+
+  Status EvalSimpleQuantityComparison(const SimpleQuantity* left_wrapper,
+                                      const SimpleQuantity* right_wrapper,
+                                      Boolean* result) const {
+    if (left_wrapper->code().value() != right_wrapper->code().value() ||
+        left_wrapper->system().value() != right_wrapper->system().value()) {
+      // From the FHIRPath spec: "Implementations are not required to fully
+      // support operations on units, but they must at least respect units,
+      // recognizing when units differ."
+      return InvalidArgument(
+          "Compared quantities must have the same units. Got ",
+          left_wrapper->unit().value(), " and ", right_wrapper->unit().value());
+    }
+
+    return EvalDecimalComparison(&left_wrapper->value(),
+                                 &right_wrapper->value(), result);
   }
 
   ComparisonType comparison_type_;
