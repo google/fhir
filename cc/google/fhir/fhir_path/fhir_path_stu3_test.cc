@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "google/fhir/fhir_path/fhir_path.h"
-
+// FHIRPath tests specific to STU3
+// TODO: many of these are redundant with fhir_path_test.cc
+// and should be removed when those tests start to handle multiple version.
 #include "google/protobuf/message.h"
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
@@ -21,19 +22,15 @@
 #include "absl/strings/str_cat.h"
 #include "absl/time/civil_time.h"
 #include "absl/time/time.h"
+#include "google/fhir/fhir_path/fhir_path.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/r4/core/codes.pb.h"
-#include "proto/r4/core/datatypes.pb.h"
-#include "proto/r4/core/resources/encounter.pb.h"
-#include "proto/r4/core/resources/medication_knowledge.pb.h"
-#include "proto/r4/core/resources/observation.pb.h"
-#include "proto/r4/core/resources/parameters.pb.h"
-#include "proto/r4/core/resources/structure_definition.pb.h"
-#include "proto/r4/core/resources/value_set.pb.h"
-#include "proto/r4/uscore.pb.h"
-#include "proto/r4/uscore_codes.pb.h"
+#include "proto/stu3/codes.pb.h"
+#include "proto/stu3/datatypes.pb.h"
+#include "proto/stu3/resources.pb.h"
+#include "proto/stu3/uscore.pb.h"
+#include "proto/stu3/uscore_codes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
@@ -42,76 +39,29 @@ namespace fhir_path {
 
 namespace {
 
-using r4::core::Boolean;
-using r4::core::Code;
-using r4::core::CodeableConcept;
-using r4::core::DateTime;
-using r4::core::Decimal;
-using r4::core::Encounter;
-using r4::core::Integer;
-using r4::core::MedicationKnowledge_Kinetics;
-using r4::core::Observation;
-using r4::core::Parameters;
-using r4::core::Period;
-using r4::core::Quantity;
-using r4::core::SimpleQuantity;
-using r4::core::String;
-using r4::core::StructureDefinition;
-using r4::core::ValueSet;
-using r4::uscore::BirthSexValueSet;
-using r4::uscore::USCorePatientProfile;
+using stu3::proto::Boolean;
+using stu3::proto::Code;
+using stu3::proto::CodeableConcept;
+using stu3::proto::Decimal;
+using stu3::proto::Encounter;
+using stu3::proto::Observation;
+using stu3::proto::Period;
+using stu3::proto::Quantity;
+using stu3::proto::SimpleQuantity;
+using stu3::proto::String;
+using stu3::proto::StructureDefinition;
+using stu3::proto::ValueSet;
+using stu3::uscore::UsCoreBirthSexCode;
+using stu3::uscore::UsCorePatient;
 
 using testutil::EqualsProto;
 
-using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using testing::ElementsAreArray;
 using testing::IsEmpty;
 using testing::UnorderedElementsAreArray;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
-
-// Matcher for StatusOr<EvaluationResult> that checks to see that the evaluation
-// succeeded and evaluated to a single boolean with value of false.
-//
-// NOTE: Not(EvalsToFalse()) is not the same as EvalsToTrue() as the former
-// will match cases where evaluation fails.
-MATCHER(EvalsToFalse, "") {
-  if (!arg.ok()) {
-    *result_listener << "evaluation error: " << arg.status().error_message();
-    return false;
-  }
-
-  StatusOr<bool> result = arg.ValueOrDie().GetBoolean();
-  if (!result.ok()) {
-    *result_listener << "did not resolve to a boolean: "
-                     << result.status().error_message();
-    return false;
-  }
-
-  return !result.ValueOrDie();
-}
-
-// Matcher for StatusOr<EvaluationResult> that checks to see that the evaluation
-// succeeded and evaluated to a single boolean with value of true.
-//
-// NOTE: Not(EvalsToTrue()) is not the same as EvalsToFalse() as the former
-// will match cases where evaluation fails.
-MATCHER(EvalsToTrue, "") {
-  if (!arg.ok()) {
-    *result_listener << "evaluation error: " << arg.status().error_message();
-    return false;
-  }
-
-  StatusOr<bool> result = arg.ValueOrDie().GetBoolean();
-  if (!result.ok()) {
-    *result_listener << "did not resolve to a boolean: "
-                     << result.status().error_message();
-    return false;
-  }
-
-  return result.ValueOrDie();
-}
 
 template <typename T>
 T ParseFromString(const std::string& str) {
@@ -122,7 +72,6 @@ T ParseFromString(const std::string& str) {
   return t;
 }
 
-// TODO: Templatize methods to work with both STU3 and R4
 Encounter ValidEncounter() {
   return ParseFromString<Encounter>(R"proto(
     status { value: TRIAGED }
@@ -153,8 +102,8 @@ ValueSet ValidValueSet() {
   )proto");
 }
 
-USCorePatientProfile ValidUsCorePatient() {
-  return ParseFromString<USCorePatientProfile>(R"proto(
+UsCorePatient ValidUsCorePatient() {
+  return ParseFromString<UsCorePatient>(R"proto(
     identifier {
       system { value: "foo" },
       value: { value: "http://example.com/patient" }
@@ -162,21 +111,18 @@ USCorePatientProfile ValidUsCorePatient() {
   )proto");
 }
 
-template <typename T>
-StatusOr<EvaluationResult> Evaluate(const T& message,
-    const std::string& expression) {
-    FHIR_ASSIGN_OR_RETURN(auto compiled_expression,
-      CompiledExpression::Compile(message.GetDescriptor(), expression));
-
-  return compiled_expression.Evaluate(message);
-}
-
 StatusOr<EvaluationResult> EvaluateExpressionWithStatus(
     const std::string& expression) {
-  // FHIRPath assumes a resource object during evaluation, so we use an
-  // encounter as a placeholder.
+  // FHIRPath assumes a EvaluateBoolExpression object during evaluation, so we
+  // use an encounter as a placeholder.
+  auto compiled_expression =
+      CompiledExpression::Compile(Encounter::descriptor(), expression);
+  if (!compiled_expression.ok()) {
+    return StatusOr<EvaluationResult>(compiled_expression.status());
+  }
+
   Encounter test_encounter = ValidEncounter();
-  return Evaluate(test_encounter, expression);
+  return compiled_expression.ValueOrDie().Evaluate(test_encounter);
 }
 
 StatusOr<std::string> EvaluateStringExpressionWithStatus(
@@ -202,56 +148,6 @@ StatusOr<bool> EvaluateBoolExpressionWithStatus(const std::string& expression) {
 
 bool EvaluateBoolExpression(const std::string& expression) {
   return EvaluateBoolExpressionWithStatus(expression).ValueOrDie();
-}
-
-DateTime ToDateTime(const absl::CivilSecond& civil_time,
-                    const absl::TimeZone& zone,
-                    const DateTime::Precision& precision) {
-  DateTime date_time;
-  date_time.set_value_us(absl::ToUnixMicros(absl::FromCivil(civil_time, zone)));
-  date_time.set_timezone(zone.name());
-  date_time.set_precision(precision);
-  return date_time;
-}
-
-// Helper to evaluate boolean expressions on periods with the
-// given start and end times.
-bool EvaluateOnPeriod(const CompiledExpression& expression,
-                      const DateTime& start, const DateTime& end) {
-  Period period;
-  *period.mutable_start() = start;
-  *period.mutable_end() = end;
-  EvaluationResult result = expression.Evaluate(period).ValueOrDie();
-  return result.GetBoolean().ValueOrDie();
-}
-
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, TestExternalConstants) {
-  EvaluationResult ucum_evaluation_result =
-      EvaluateExpressionWithStatus("%ucum").ValueOrDie();
-  String ucum_expected_result =
-      ParseFromString<String>("value: 'http://unitsofmeasure.org'");
-
-  EXPECT_THAT(ucum_evaluation_result.GetMessages(),
-              UnorderedElementsAreArray({EqualsProto(ucum_expected_result)}));
-
-  EvaluationResult sct_evaluation_result =
-      EvaluateExpressionWithStatus("%sct").ValueOrDie();
-  String sct_expected_result =
-      ParseFromString<String>("value: 'http://snomed.info/sct'");
-
-  EXPECT_THAT(sct_evaluation_result.GetMessages(),
-              UnorderedElementsAreArray({EqualsProto(sct_expected_result)}));
-
-  EvaluationResult loinc_evaluation_result =
-      EvaluateExpressionWithStatus("%loinc").ValueOrDie();
-  String loinc_expected_result =
-      ParseFromString<String>("value: 'http://loinc.org'");
-
-  EXPECT_THAT(loinc_evaluation_result.GetMessages(),
-              UnorderedElementsAreArray({EqualsProto(loinc_expected_result)}));
-
-  EXPECT_FALSE(EvaluateExpressionWithStatus("%unknown").ok());
 }
 
 TEST(FhirPathTest, TestExternalConstantsContext) {
@@ -638,14 +534,20 @@ TEST(FhirPathTest, TestFunctionEmpty) {
 }
 
 TEST(FhirPathTest, TestFunctionCount) {
-  EXPECT_EQ(EvaluateExpressionWithStatus("{}.count()").ValueOrDie()
-                .GetInteger().ValueOrDie(),
+  EXPECT_EQ(EvaluateExpressionWithStatus("{}.count()")
+                .ValueOrDie()
+                .GetInteger()
+                .ValueOrDie(),
             0);
-  EXPECT_EQ(EvaluateExpressionWithStatus("'a'.count()").ValueOrDie()
-                .GetInteger().ValueOrDie(),
+  EXPECT_EQ(EvaluateExpressionWithStatus("'a'.count()")
+                .ValueOrDie()
+                .GetInteger()
+                .ValueOrDie(),
             1);
-  EXPECT_EQ(EvaluateExpressionWithStatus("('a' | 1).count()").ValueOrDie()
-                .GetInteger().ValueOrDie(),
+  EXPECT_EQ(EvaluateExpressionWithStatus("('a' | 1).count()")
+                .ValueOrDie()
+                .GetInteger()
+                .ValueOrDie(),
             2);
 }
 
@@ -797,28 +699,6 @@ TEST(FhirPathTest, TestUnion) {
   EXPECT_TRUE(EvaluateBoolExpression("(false | false) = false"));
 }
 
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, TestUnionDeduplicationPrimitives) {
-  EvaluationResult evaluation_result =
-      EvaluateExpressionWithStatus("true | false | 1 | 'foo' | 2 | 1 | 'foo'")
-          .ValueOrDie();
-  std::vector<const Message*> result = evaluation_result.GetMessages();
-
-  Boolean true_proto = ParseFromString<Boolean>("value: true");
-  Boolean false_proto = ParseFromString<Boolean>("value: false");
-  Integer integer_1_proto = ParseFromString<Integer>("value: 1");
-  Integer integer_2_proto = ParseFromString<Integer>("value: 2");
-  String string_foo_proto = ParseFromString<String>("value: 'foo'");
-
-  ASSERT_THAT(result,
-              UnorderedElementsAreArray(
-                  {EqualsProto(true_proto),
-                   EqualsProto(false_proto),
-                   EqualsProto(integer_1_proto),
-                   EqualsProto(integer_2_proto),
-                   EqualsProto(string_foo_proto)}));
-}
-
 TEST(FhirPathTest, TestUnionDeduplicationObjects) {
   Encounter test_encounter = ValidEncounter();
 
@@ -828,69 +708,11 @@ TEST(FhirPathTest, TestUnionDeduplicationObjects) {
           .ValueOrDie()
           .Evaluate(test_encounter)
           .ValueOrDie();
-  std::vector<const Message*> result = evaluation_result
-          .GetMessages();
+  std::vector<const Message*> result = evaluation_result.GetMessages();
 
-  ASSERT_THAT(result,
-              UnorderedElementsAreArray(
-                  {EqualsProto(test_encounter.status()),
-                   EqualsProto(test_encounter.period())}));
-}
-
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, TestCombine) {
-  EXPECT_TRUE(EvaluateBoolExpression("{}.combine({}) = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("true.combine({})"));
-  EXPECT_TRUE(EvaluateBoolExpression("{}.combine(true)"));
-
-  Boolean true_proto = ParseFromString<Boolean>("value: true");
-  Boolean false_proto = ParseFromString<Boolean>("value: false");
-  EvaluationResult evaluation_result =
-      EvaluateExpressionWithStatus("true.combine(true).combine(false)")
-          .ValueOrDie();
-  EXPECT_THAT(evaluation_result.GetMessages(),
-              UnorderedElementsAreArray({EqualsProto(true_proto),
-                                         EqualsProto(true_proto),
-                                         EqualsProto(false_proto)}));
-}
-
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, TestIntersect) {
-  EXPECT_TRUE(EvaluateBoolExpression("{}.intersect({}) = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("true.intersect({}) = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("true.intersect(false) = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("{}.intersect(true) = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("true.intersect(true) = true"));
-  EXPECT_TRUE(EvaluateBoolExpression("(true | false).intersect(true) = true"));
-
-  EXPECT_TRUE(
-      EvaluateBoolExpression("(true.combine(true)).intersect(true) = true)"));
-  EXPECT_TRUE(
-      EvaluateBoolExpression("(true).intersect(true.combine(true)) = true)"));
-
-  Boolean true_proto = ParseFromString<Boolean>("value: true");
-  Boolean false_proto = ParseFromString<Boolean>("value: false");
-  EvaluationResult evaluation_result =
-      EvaluateExpressionWithStatus("(true | false).intersect(true | false)")
-          .ValueOrDie();
-  EXPECT_THAT(evaluation_result.GetMessages(),
-              UnorderedElementsAreArray(
-                  {EqualsProto(true_proto), EqualsProto(false_proto)}));
-}
-
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, TestDistinct) {
-  EXPECT_TRUE(EvaluateBoolExpression("{}.distinct() = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("true.distinct()"));
-  EXPECT_TRUE(EvaluateBoolExpression("true.combine(true).distinct()"));
-
-  Boolean true_proto = ParseFromString<Boolean>("value: true");
-  Boolean false_proto = ParseFromString<Boolean>("value: false");
-  EvaluationResult evaluation_result =
-      EvaluateExpressionWithStatus("(true | false).distinct()").ValueOrDie();
-  EXPECT_THAT(evaluation_result.GetMessages(),
-              UnorderedElementsAreArray(
-                  {EqualsProto(true_proto), EqualsProto(false_proto)}));
+  ASSERT_THAT(result, UnorderedElementsAreArray(
+                          {EqualsProto(test_encounter.status()),
+                           EqualsProto(test_encounter.period())}));
 }
 
 TEST(FhirPathTest, TestIsDistinct) {
@@ -1011,12 +833,8 @@ TEST(FhirPathTest, TestAll) {
 TEST(FhirPathTest, TestAllReadsFieldFromDifferingTypes) {
   StructureDefinition structure_definition =
       ParseFromString<StructureDefinition>(R"proto(
-        snapshot {
-          element {}
-        }
-        differential {
-          element {}
-        }
+        snapshot { element {} }
+        differential { element {} }
       )proto");
 
   EvaluationResult evaluation_result =
@@ -1027,31 +845,6 @@ TEST(FhirPathTest, TestAllReadsFieldFromDifferingTypes) {
           .Evaluate(structure_definition)
           .ValueOrDie();
   EXPECT_TRUE(evaluation_result.GetBoolean().ValueOrDie());
-}
-
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, TestSelect) {
-  EvaluationResult evaluation_result =
-      EvaluateExpressionWithStatus("(1 | 2 | 3).select(($this > 2) | $this)")
-          .ValueOrDie();
-  std::vector<const Message*> result = evaluation_result.GetMessages();
-
-  Boolean true_proto = ParseFromString<Boolean>("value: true");
-  Boolean false_proto = ParseFromString<Boolean>("value: false");
-  Integer integer_1_proto = ParseFromString<Integer>("value: 1");
-  Integer integer_2_proto = ParseFromString<Integer>("value: 2");
-  Integer integer_3_proto = ParseFromString<Integer>("value: 3");
-
-  ASSERT_THAT(
-      result,
-      UnorderedElementsAreArray({
-        EqualsProto(true_proto),
-        EqualsProto(false_proto),
-        EqualsProto(false_proto),
-        EqualsProto(integer_1_proto),
-        EqualsProto(integer_2_proto),
-        EqualsProto(integer_3_proto)
-      }));
 }
 
 TEST(FhirPathTest, TestSelectEmptyResult) {
@@ -1322,46 +1115,6 @@ TEST(FhirPathTest, TestIntegerComparisons) {
   EXPECT_FALSE(EvaluateBoolExpression("43 <= 42"));
 }
 
-TEST(FhirPathTest, TestIntegerLikeComparison) {
-  Parameters parameters =
-      ParseFromString<Parameters>(R"proto(
-        parameter {value {integer {value: -1}}}
-        parameter {value {integer {value: 0}}}
-        parameter {value {integer {value: 1}}}
-        parameter {value {unsigned_int {value: 0}}}
-      )proto");
-
-  // lhs = -1 (signed), rhs = 0 (unsigned)
-  EXPECT_THAT(Evaluate(parameters, "parameter[0].value < parameter[3].value"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate(parameters, "parameter[0].value <= parameter[3].value"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate(parameters, "parameter[0].value >= parameter[3].value"),
-              EvalsToFalse());
-  EXPECT_THAT(Evaluate(parameters, "parameter[0].value > parameter[3].value"),
-              EvalsToFalse());
-
-  // lhs = 0 (signed), rhs = 0 (unsigned)
-  EXPECT_THAT(Evaluate(parameters, "parameter[1].value < parameter[3].value"),
-              EvalsToFalse());
-  EXPECT_THAT(Evaluate(parameters, "parameter[1].value <= parameter[3].value"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate(parameters, "parameter[1].value >= parameter[3].value"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate(parameters, "parameter[1].value > parameter[3].value"),
-              EvalsToFalse());
-
-  // lhs = 1 (signed), rhs = 0 (unsigned)
-  EXPECT_THAT(Evaluate(parameters, "parameter[2].value < parameter[3].value"),
-              EvalsToFalse());
-  EXPECT_THAT(Evaluate(parameters, "parameter[2].value <= parameter[3].value"),
-              EvalsToFalse());
-  EXPECT_THAT(Evaluate(parameters, "parameter[2].value >= parameter[3].value"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate(parameters, "parameter[2].value > parameter[3].value"),
-              EvalsToTrue());
-}
-
 TEST(FhirPathTest, TestDecimalLiteral) {
   auto expr =
       CompiledExpression::Compile(Encounter::descriptor(), "1.25").ValueOrDie();
@@ -1447,36 +1200,6 @@ TEST(FhirPathTest, TestStringComparisons) {
   EXPECT_FALSE(EvaluateBoolExpression("'foo' <= 'bar'"));
 }
 
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, ConstraintViolation) {
-  Observation observation = ValidObservation();
-
-  // If a range is present it must have a high or low value,
-  // so ensure the constraint fails if it doesn't.
-  observation.add_reference_range();
-
-  MessageValidator validator;
-
-  auto callback = [&observation](const Message& bad_message,
-                                 const FieldDescriptor* field,
-                                 const std::string& constraint) {
-    // Ensure the expected bad sub-message is passed to the callback.
-    EXPECT_EQ(observation.reference_range(0).GetDescriptor()->full_name(),
-              bad_message.GetDescriptor()->full_name());
-
-    // Ensure the expected constraint failed.
-    EXPECT_EQ("low.exists() or high.exists() or text.exists()", constraint);
-
-    return false;
-  };
-
-  std::string err_message =
-      absl::StrCat("fhirpath-constraint-violation-ReferenceRange: ",
-                   "\"low.exists() or high.exists() or text.exists()\"");
-  EXPECT_EQ(validator.Validate(observation, callback),
-            ::tensorflow::errors::FailedPrecondition(err_message));
-}
-
 TEST(FhirPathTest, ConstraintSatisfied) {
   Observation observation = ValidObservation();
 
@@ -1495,26 +1218,6 @@ TEST(FhirPathTest, ConstraintSatisfied) {
   MessageValidator validator;
 
   EXPECT_TRUE(validator.Validate(observation).ok());
-}
-
-TEST(FhirPathTest, NestedConstraintViolated) {
-  ValueSet value_set = ValidValueSet();
-
-  auto expansion = new ValueSet::Expansion;
-
-  // Add empty contains structure to violate FHIR constraint.
-  expansion->add_contains();
-  value_set.mutable_name()->set_value("Placeholder");
-  value_set.set_allocated_expansion(expansion);
-
-  MessageValidator validator;
-
-  std::string err_message =
-      absl::StrCat("fhirpath-constraint-violation-Contains: ",
-                   "\"code.exists() or display.exists()\"");
-
-  EXPECT_EQ(validator.Validate(value_set),
-            ::tensorflow::errors::FailedPrecondition(err_message));
 }
 
 TEST(FhirPathTest, NestedConstraintSatisfied) {
@@ -1540,151 +1243,6 @@ TEST(FhirPathTest, NestedConstraintSatisfied) {
   EXPECT_TRUE(validator.Validate(value_set).ok());
 }
 
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, TimeComparison) {
-  auto start_before_end =
-      CompiledExpression::Compile(Period::descriptor(), "start <= end")
-          .ValueOrDie();
-
-  Period start_before_end_period = ParseFromString<Period>(R"proto(
-    start: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
-    end: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
-  )proto");
-  EvaluationResult start_before_end_result =
-      start_before_end.Evaluate(start_before_end_period).ValueOrDie();
-  EXPECT_TRUE(start_before_end_result.GetBoolean().ValueOrDie());
-
-  Period end_before_start_period = ParseFromString<Period>(R"proto(
-    start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
-    end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
-  )proto");
-  EvaluationResult end_before_start_result =
-      start_before_end.Evaluate(end_before_start_period).ValueOrDie();
-  EXPECT_FALSE(end_before_start_result.GetBoolean().ValueOrDie());
-}
-
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, TimeCompareDifferentPrecision) {
-  absl::TimeZone zone;
-  absl::LoadTimeZone("America/Los_Angeles", &zone);
-  auto start_before_end =
-      CompiledExpression::Compile(Period::descriptor(), "start <= end")
-          .ValueOrDie();
-
-  // Ensure comparison returns false on fine-grained checks but true
-  // on corresponding coarse-grained checks.
-  EXPECT_FALSE(EvaluateOnPeriod(
-      start_before_end,
-      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                 DateTime::SECOND),
-      ToDateTime(absl::CivilDay(2019, 5, 2), zone, DateTime::SECOND)));
-
-  EXPECT_TRUE(EvaluateOnPeriod(
-      start_before_end,
-      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                 DateTime::SECOND),
-      ToDateTime(absl::CivilDay(2019, 5, 2), zone, DateTime::DAY)));
-
-  EXPECT_FALSE(EvaluateOnPeriod(
-      start_before_end,
-      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                 DateTime::SECOND),
-      ToDateTime(absl::CivilDay(2019, 5, 1), zone, DateTime::DAY)));
-
-  EXPECT_TRUE(EvaluateOnPeriod(
-      start_before_end,
-      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                 DateTime::SECOND),
-      ToDateTime(absl::CivilDay(2019, 5, 1), zone, DateTime::MONTH)));
-
-  EXPECT_FALSE(EvaluateOnPeriod(
-      start_before_end,
-      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                 DateTime::SECOND),
-      ToDateTime(absl::CivilDay(2019, 1, 1), zone, DateTime::MONTH)));
-
-  EXPECT_TRUE(EvaluateOnPeriod(
-      start_before_end,
-      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                 DateTime::SECOND),
-      ToDateTime(absl::CivilDay(2019, 1, 1), zone, DateTime::YEAR)));
-
-  // Test edge case for very high precision comparisons.
-  DateTime start_micros;
-  start_micros.set_value_us(1556750000000011);
-  start_micros.set_timezone("America/Los_Angeles");
-  start_micros.set_precision(DateTime::MICROSECOND);
-
-  DateTime end_micros = start_micros;
-  EXPECT_TRUE(EvaluateOnPeriod(start_before_end, start_micros, end_micros));
-
-  end_micros.set_value_us(end_micros.value_us() - 1);
-  EXPECT_FALSE(EvaluateOnPeriod(start_before_end, start_micros, end_micros));
-}
-
-TEST(FhirPathTest, SimpleQuantityComparisons) {
-  MedicationKnowledge_Kinetics kinetics =
-      ParseFromString<MedicationKnowledge_Kinetics>(R"proto(
-        area_under_curve {
-          value { value: "1.1"}
-          system { value: "http://valuesystem.example.org/foo" }
-          code { value: "bar" }
-        }
-        area_under_curve {
-          value { value: "1.2"}
-          system { value: "http://valuesystem.example.org/foo" }
-          code { value: "bar" }
-        }
-        area_under_curve {
-          value { value: "1.1"}
-          system { value: "http://valuesystem.example.org/foo" }
-          code { value: "different" }
-        }
-        area_under_curve {
-          value { value: "1.1"}
-          system { value: "http://valuesystem.example.org/different" }
-          code { value: "bar" }
-        }
-      )proto");
-
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] < areaUnderCurve[0]"),
-              EvalsToFalse());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] <= areaUnderCurve[0]"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] >= areaUnderCurve[0]"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] > areaUnderCurve[0]"),
-              EvalsToFalse());
-
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[1] < areaUnderCurve[0]"),
-              EvalsToFalse());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[1] <= areaUnderCurve[0]"),
-              EvalsToFalse());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[1] >= areaUnderCurve[0]"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[1] > areaUnderCurve[0]"),
-              EvalsToTrue());
-
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] < areaUnderCurve[1]"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] <= areaUnderCurve[1]"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] >= areaUnderCurve[1]"),
-              EvalsToFalse());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] > areaUnderCurve[1]"),
-              EvalsToFalse());
-
-  // Different quantity codes
-  EXPECT_FALSE(Evaluate(
-                   kinetics, "areaUnderCurve[0] > areaUnderCurve[2]")
-                   .ok());
-
-  // Different quantity systems
-  EXPECT_FALSE(Evaluate(
-                   kinetics, "areaUnderCurve[0] > areaUnderCurve[3]")
-                   .ok());
-}
-
 TEST(FhirPathTest, TestCompareEnumToString) {
   auto encounter = ValidEncounter();
   auto is_triaged =
@@ -1694,7 +1252,7 @@ TEST(FhirPathTest, TestCompareEnumToString) {
   EXPECT_TRUE(
       is_triaged.Evaluate(encounter).ValueOrDie().GetBoolean().ValueOrDie());
   encounter.mutable_status()->set_value(
-      r4::core::EncounterStatusCode::FINISHED);
+      stu3::proto::EncounterStatusCode::FINISHED);
   EXPECT_FALSE(
       is_triaged.Evaluate(encounter).ValueOrDie().GetBoolean().ValueOrDie());
 }
@@ -1707,17 +1265,6 @@ TEST(FhirPathTest, MessageLevelConstraint) {
 
   MessageValidator validator;
   EXPECT_TRUE(validator.Validate(period).ok());
-}
-
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, MessageLevelConstraintViolated) {
-  Period end_before_start_period = ParseFromString<Period>(R"proto(
-    start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
-    end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
-  )proto");
-
-  MessageValidator validator;
-  EXPECT_FALSE(validator.Validate(end_before_start_period).ok());
 }
 
 TEST(FhirPathTest, NestedMessageLevelConstraint) {
@@ -1733,37 +1280,22 @@ TEST(FhirPathTest, NestedMessageLevelConstraint) {
   EXPECT_TRUE(validator.Validate(start_with_no_end_encounter).ok());
 }
 
-TEST(FhirPathTest, NestedMessageLevelConstraintViolated) {
-  auto end_before_start_encounter = ParseFromString<Encounter>(R"proto(
-    status { value: TRIAGED }
-    id { value: "123" }
-    period {
-      start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
-      end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
-    }
-  )proto");
-
-  MessageValidator validator;
-  EXPECT_FALSE(validator.Validate(end_before_start_encounter).ok());
-}
-
 TEST(FhirPathTest, ProfiledEmptyExtension) {
-  USCorePatientProfile patient = ValidUsCorePatient();
+  UsCorePatient patient = ValidUsCorePatient();
   MessageValidator validator;
   EXPECT_TRUE(validator.Validate(patient).ok());
 }
 
 TEST(FhirPathTest, ProfiledWithExtensions) {
-  USCorePatientProfile patient = ValidUsCorePatient();
-  auto race = new r4::uscore::PatientUSCoreRaceExtension();
+  UsCorePatient patient = ValidUsCorePatient();
+  auto race = new stu3::uscore::PatientUSCoreRaceExtension();
 
-  r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding* coding =
-      race->add_omb_category();
-  coding->mutable_code()->set_value(
-      r4::uscore::OmbRaceCategoriesValueSet::AMERICAN_INDIAN_OR_ALASKA_NATIVE);
+  stu3::proto::Coding* coding = race->add_omb_category();
+  coding->mutable_code()->set_value("urn:oid:2.16.840.1.113883.6.238");
+  coding->mutable_code()->set_value("1002-5");
   patient.set_allocated_race(race);
 
-  patient.mutable_birthsex()->set_value(BirthSexValueSet::M);
+  patient.mutable_birthsex()->set_value(UsCoreBirthSexCode::MALE);
 
   MessageValidator validator;
   EXPECT_TRUE(validator.Validate(patient).ok());

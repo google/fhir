@@ -112,6 +112,32 @@ cc_test(
 )
 
 cc_test(
+    name = "fhir_path_stu3_test",
+    size = "small",
+    srcs = ["fhir_path_stu3_test.cc"],
+    copts = [
+        "-fexceptions",
+    ],
+    features = ["-use_header_modules"],  # Incompatible with -fexceptions.
+    deps = [
+        "//cc/google/fhir:proto_util",
+        "//cc/google/fhir/fhir_path",
+        "//cc/google/fhir/status",
+        "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/stu3:codes_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "//proto/stu3:uscore_cc_proto",
+        "//proto/stu3:uscore_codes_cc_proto",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
+        "@com_google_googletest//:gtest_main",
+        "@com_google_protobuf//:protobuf",
+        "@org_tensorflow//tensorflow/core:lib",
+    ],
+)
+
+cc_test(
     name = "utils_test",
     size = "small",
     srcs = [
