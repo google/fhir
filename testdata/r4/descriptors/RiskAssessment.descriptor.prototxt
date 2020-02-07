@@ -466,9 +466,6 @@ nested_type {
       name: "choice"
     }
   }
-  options {
-    [google.fhir.proto.fhir_path_message_constraint]: "probability is decimal implies (probability as decimal) <= 100"
-  }
 }
 options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE

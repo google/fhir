@@ -145,9 +145,6 @@ message RiskAssessment {
 
   // Outcome predicted
   message Prediction {
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "probability is decimal implies (probability as decimal) <= 100";
-
     // Unique id for inter-element referencing
     String id = 1;
 

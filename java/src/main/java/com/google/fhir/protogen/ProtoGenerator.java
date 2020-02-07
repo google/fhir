@@ -163,7 +163,9 @@ public class ProtoGenerator {
               "fullUrl.contains('/_history/').not()", // See https://jira.hl7.org/browse/FHIR-25525
               // Invalid FHIRPath constraint on StructureDefinition.snapshot in STU3. Fixed in R4
               // but unlikely to be backported.
-              "element.all(definition and min and max)")
+              "element.all(definition and min and max)",
+              // See https://jira.hl7.org/browse/FHIR-25796
+              "probability is decimal implies (probability as decimal) <= 100")
           .build();
 
   private static final String FHIRPATH_TYPE_PREFIX = "http://hl7.org/fhirpath/";
