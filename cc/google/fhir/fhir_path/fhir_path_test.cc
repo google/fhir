@@ -71,6 +71,10 @@ using testing::UnorderedElementsAreArray;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
 
+MATCHER(EvalsToEmpty, "") {
+  return arg.ok() && arg.ValueOrDie().GetMessages().empty();
+}
+
 // Matcher for StatusOr<EvaluationResult> that checks to see that the evaluation
 // succeeded and evaluated to a single boolean with value of false.
 //
@@ -665,6 +669,72 @@ TEST(FhirPathTest, TestFunctionTail) {
       IsEmpty());
 
   EXPECT_TRUE(EvaluateBoolExpression("true.combine(true).tail()"));
+}
+
+TEST(FhirPathTest, TestFunctionAsPrimitives) {
+  EXPECT_THAT(EvaluateExpressionWithStatus("{}.as(Boolean)"), EvalsToEmpty());
+
+  EXPECT_TRUE(EvaluateBoolExpression("true.as(Boolean)"));
+  EXPECT_THAT(EvaluateExpressionWithStatus("true.as(Decimal)"), EvalsToEmpty());
+  EXPECT_THAT(EvaluateExpressionWithStatus("true.as(Integer)"), EvalsToEmpty());
+
+  EXPECT_EQ(EvaluateExpressionWithStatus("1.as(Integer)")
+                .ValueOrDie().GetInteger().ValueOrDie(),
+            1);
+  EXPECT_THAT(EvaluateExpressionWithStatus("1.as(Decimal)"), EvalsToEmpty());
+  EXPECT_THAT(EvaluateExpressionWithStatus("1.as(Boolean)"), EvalsToEmpty());
+
+  EXPECT_EQ(EvaluateExpressionWithStatus("1.1.as(Decimal)")
+                .ValueOrDie().GetDecimal().ValueOrDie(),
+            "1.1");
+  EXPECT_THAT(EvaluateExpressionWithStatus("1.1.as(Integer)"), EvalsToEmpty());
+  EXPECT_THAT(EvaluateExpressionWithStatus("1.1.as(Boolean)"), EvalsToEmpty());
+}
+
+TEST(FhirPathTest, TestFunctionAsResources) {
+  Observation observation = ParseFromString<Observation>(R"proto()proto");
+
+  EXPECT_THAT(Evaluate(observation, "$this.as(Boolean)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate(observation, "$this.as(CodeableConcept)"),
+              EvalsToEmpty());
+
+  EvaluationResult as_observation_evaluation_result =
+      Evaluate(observation, "$this.as(Observation)").ValueOrDie();
+  EXPECT_THAT(as_observation_evaluation_result.GetMessages(),
+              ElementsAreArray({EqualsProto(observation)}));;
+}
+
+TEST(FhirPathTest, TestOperatorAsPrimitives) {
+  EXPECT_THAT(EvaluateExpressionWithStatus("{} as Boolean"), EvalsToEmpty());
+
+  EXPECT_TRUE(EvaluateBoolExpression("true as Boolean"));
+  EXPECT_THAT(EvaluateExpressionWithStatus("true as Decimal"), EvalsToEmpty());
+  EXPECT_THAT(EvaluateExpressionWithStatus("true as Integer"), EvalsToEmpty());
+
+  EXPECT_EQ(EvaluateExpressionWithStatus("1 as Integer")
+                .ValueOrDie().GetInteger().ValueOrDie(),
+            1);
+  EXPECT_THAT(EvaluateExpressionWithStatus("1 as Decimal"), EvalsToEmpty());
+  EXPECT_THAT(EvaluateExpressionWithStatus("1 as Boolean"), EvalsToEmpty());
+
+  EXPECT_EQ(EvaluateExpressionWithStatus("1.1 as Decimal")
+                .ValueOrDie().GetDecimal().ValueOrDie(),
+            "1.1");
+  EXPECT_THAT(EvaluateExpressionWithStatus("1.1 as Integer"), EvalsToEmpty());
+  EXPECT_THAT(EvaluateExpressionWithStatus("1.1 as Boolean"), EvalsToEmpty());
+}
+
+TEST(FhirPathTest, TestOperatorAsResources) {
+  Observation observation = ParseFromString<Observation>(R"proto()proto");
+
+  EXPECT_THAT(Evaluate(observation, "$this as Boolean"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate(observation, "$this as CodeableConcept"),
+              EvalsToEmpty());
+
+  EvaluationResult as_observation_evaluation_result =
+      Evaluate(observation, "$this as Observation").ValueOrDie();
+  EXPECT_THAT(as_observation_evaluation_result.GetMessages(),
+              ElementsAreArray({EqualsProto(observation)}));
 }
 
 TEST(FhirPathTest, TestFunctionIsPrimitives) {

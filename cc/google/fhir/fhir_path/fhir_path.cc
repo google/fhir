@@ -18,13 +18,11 @@
 
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/util/message_differencer.h"
-#include "absl/strings/match.h"
-#include "absl/strings/str_cat.h"
-
-// Include the ANTLR-generated visitor, lexer and parser files.
 #include "absl/memory/memory.h"
-#include "absl/strings/numbers.h"
 #include "absl/strings/escaping.h"
+#include "absl/strings/match.h"
+#include "absl/strings/numbers.h"
+#include "absl/strings/str_cat.h"
 #include "absl/time/civil_time.h"
 #include "absl/time/time.h"
 #include "absl/types/optional.h"
@@ -1473,13 +1471,72 @@ class IsFunction : public ExpressionNode {
 
     auto result = new Boolean();
     work_space->DeleteWhenFinished(result);
-    result->set_value(child_results[0]->GetDescriptor()->name() == type_name_);
+    result->set_value(absl::EqualsIgnoreCase(
+        child_results[0]->GetDescriptor()->name(), type_name_));
     results->push_back(result);
     return Status::OK();
   }
 
   const Descriptor* ReturnType() const override {
     return Boolean::GetDescriptor();
+  }
+
+ private:
+  const std::shared_ptr<ExpressionNode> child_;
+  const std::string type_name_;
+};
+
+// Implements the FHIRPath .as() function.
+//
+// TODO: This does not currently validate that the tested type exists.
+// According to the FHIRPath spec, if the type does not exist the expression
+// should throw an error.
+//
+// TODO: Handle type namespaces (i.e. FHIR.* and System.*)
+//
+// TODO: Handle type inheritance correctly. For example, a Patient
+// resource is a DomainResource, but this function, as is, will behave as if
+// a Patient is not a DomainResource and return an empty collection.
+class AsFunction : public ExpressionNode {
+ public:
+  StatusOr<AsFunction*> static Create(
+      const std::shared_ptr<ExpressionNode>& child_expression,
+      const std::vector<FhirPathParser::ExpressionContext*>& params,
+      FhirPathBaseVisitor* base_context_visitor,
+      FhirPathBaseVisitor* child_context_visitor) {
+    if (params.size() != 1) {
+      return InvalidArgument("as() requires a single argument.");
+    }
+
+    return new AsFunction(child_expression, params[0]->getText());
+  }
+
+  AsFunction(const std::shared_ptr<ExpressionNode>& child,
+             std::string type_name)
+      : child_(child), type_name_(type_name) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.size() > 1) {
+      return InvalidArgument(
+          "as() requires a collection with no more than 1 item.");
+    }
+
+    if (!child_results.empty() &&
+        absl::EqualsIgnoreCase(child_results[0]->GetDescriptor()->name(),
+                               type_name_)) {
+      results->push_back(child_results[0]);
+    }
+
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    // TODO: Fetch the descriptor based on this->type_name_.
+    return nullptr;
   }
 
  private:
@@ -2488,6 +2545,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return ToAny(std::make_shared<IsFunction>(left, type));
     }
 
+    if (op == "as") {
+      return ToAny(std::make_shared<AsFunction>(left, type));
+    }
+
     SetError(absl::StrCat("Unsupported type operator: ", op));
     return nullptr;
   }
@@ -2759,6 +2820,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"toString", FunctionNode::Create<ToStringFunction>},
       {"iif", FunctionNode::Create<IifFunction>},
       {"is", IsFunction::Create},
+      {"as", AsFunction::Create},
   };
 
   // Returns an ExpressionNode that implements the specified FHIRPath function.
