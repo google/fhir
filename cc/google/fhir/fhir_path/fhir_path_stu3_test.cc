@@ -63,6 +63,10 @@ using testing::UnorderedElementsAreArray;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
 
+MATCHER(EvalsToEmpty, "") {
+  return arg.ok() && arg.ValueOrDie().GetMessages().empty();
+}
+
 template <typename T>
 T ParseFromString(const std::string& str) {
   google::protobuf::TextFormat::Parser parser;
@@ -123,6 +127,10 @@ StatusOr<EvaluationResult> EvaluateExpressionWithStatus(
 
   Encounter test_encounter = ValidEncounter();
   return compiled_expression.ValueOrDie().Evaluate(test_encounter);
+}
+
+StatusOr<EvaluationResult> Evaluate(const std::string& expression) {
+  return EvaluateExpressionWithStatus(expression);
 }
 
 StatusOr<std::string> EvaluateStringExpressionWithStatus(
@@ -394,7 +402,7 @@ TEST(FhirPathTest, TestFunctionContains) {
   EXPECT_TRUE(EvaluateBoolExpression("''.contains('')"));
   EXPECT_FALSE(EvaluateBoolExpression("''.contains('foo')"));
 
-  EXPECT_TRUE(EvaluateBoolExpression("{}.contains('foo') = {}"));
+  EXPECT_THAT(Evaluate("{}.contains('foo')"), EvalsToEmpty());
 }
 
 TEST(FhirPathTest, TestFunctionStartsWith) {
@@ -449,7 +457,7 @@ TEST(FhirPathTest, TestFunctionStartsWithInvokedOnNonString) {
 }
 
 TEST(FhirPathTest, TestFunctionMatches) {
-  EXPECT_TRUE(EvaluateBoolExpression("{}.matches('') = {}"));
+  EXPECT_THAT(Evaluate("{}.matches('')"), EvalsToEmpty());
   EXPECT_TRUE(EvaluateBoolExpression("''.matches('')"));
   EXPECT_TRUE(EvaluateBoolExpression("'a'.matches('a')"));
   EXPECT_FALSE(EvaluateBoolExpression("'abc'.matches('a')"));
@@ -457,7 +465,7 @@ TEST(FhirPathTest, TestFunctionMatches) {
 }
 
 TEST(FhirPathTest, TestFunctionLength) {
-  EXPECT_TRUE(EvaluateBoolExpression("{}.length() = {}"));
+  EXPECT_THAT(Evaluate("{}.length()"), EvalsToEmpty());
   EXPECT_TRUE(EvaluateBoolExpression("''.length() = 0"));
   EXPECT_TRUE(EvaluateBoolExpression("'abc'.length() = 3"));
 
@@ -552,7 +560,7 @@ TEST(FhirPathTest, TestFunctionCount) {
 }
 
 TEST(FhirPathTest, TestFunctionFirst) {
-  EXPECT_TRUE(EvaluateBoolExpression("{}.first() = {}"));
+  EXPECT_THAT(Evaluate("{}.first()"), EvalsToEmpty());
   EXPECT_TRUE(EvaluateBoolExpression("true.first()"));
   EXPECT_TRUE(EvaluateExpressionWithStatus("(false | true).first()").ok());
 }
@@ -690,7 +698,7 @@ TEST(FhirPathTest, TestFunctionTailMaintainsOrder) {
 }
 
 TEST(FhirPathTest, TestUnion) {
-  EXPECT_TRUE(EvaluateBoolExpression("({} | {}) = {}"));
+  EXPECT_THAT(Evaluate("({} | {})"), EvalsToEmpty());
 
   EXPECT_TRUE(EvaluateBoolExpression("(true | {}) = true"));
   EXPECT_TRUE(EvaluateBoolExpression("(true | true) = true"));
@@ -725,9 +733,9 @@ TEST(FhirPathTest, TestIsDistinct) {
 
 TEST(FhirPathTest, TestIndexer) {
   EXPECT_TRUE(EvaluateBoolExpression("true[0] = true"));
-  EXPECT_TRUE(EvaluateBoolExpression("true[1] = {}"));
+  EXPECT_THAT(Evaluate("true[1]"), EvalsToEmpty());
   EXPECT_TRUE(EvaluateBoolExpression("false[0] = false"));
-  EXPECT_TRUE(EvaluateBoolExpression("false[1] = {}"));
+  EXPECT_THAT(Evaluate("false[1]"), EvalsToEmpty());
 
   EXPECT_FALSE(EvaluateBoolExpressionWithStatus("true['foo']").ok());
   EXPECT_FALSE(EvaluateBoolExpressionWithStatus("true[(1 | 2)]").ok());
@@ -741,8 +749,8 @@ TEST(FhirPathTest, TestContains) {
   EXPECT_FALSE(EvaluateBoolExpression("(false | true) contains 1"));
   EXPECT_FALSE(EvaluateBoolExpression("{} contains true"));
 
-  EXPECT_TRUE(EvaluateBoolExpression("({} contains {}) = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("(true contains {}) = {}"));
+  EXPECT_THAT(Evaluate("({} contains {})"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("(true contains {})"), EvalsToEmpty());
 
   EXPECT_FALSE(
       EvaluateBoolExpressionWithStatus("{} contains (true | false)").ok());
@@ -758,8 +766,8 @@ TEST(FhirPathTest, TestIn) {
   EXPECT_FALSE(EvaluateBoolExpression("1 in (false | true)"));
   EXPECT_FALSE(EvaluateBoolExpression("true in {}"));
 
-  EXPECT_TRUE(EvaluateBoolExpression("({} in {}) = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("({} in true) = {}"));
+  EXPECT_THAT(Evaluate("({} in {})"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("({} in true)"), EvalsToEmpty());
 
   EXPECT_FALSE(EvaluateBoolExpressionWithStatus("(true | false) in {}").ok());
   EXPECT_FALSE(EvaluateBoolExpressionWithStatus("(true | false) in {}").ok());
@@ -768,15 +776,15 @@ TEST(FhirPathTest, TestIn) {
 TEST(FhirPathTest, TestImplies) {
   EXPECT_TRUE(EvaluateBoolExpression("(true implies true) = true"));
   EXPECT_TRUE(EvaluateBoolExpression("(true implies false) = false"));
-  EXPECT_TRUE(EvaluateBoolExpression("(true implies {}) = {}"));
+  EXPECT_THAT(Evaluate("(true implies {})"), EvalsToEmpty());
 
   EXPECT_TRUE(EvaluateBoolExpression("(false implies true) = true"));
   EXPECT_TRUE(EvaluateBoolExpression("(false implies false) = true"));
   EXPECT_TRUE(EvaluateBoolExpression("(false implies {}) = true"));
 
   EXPECT_TRUE(EvaluateBoolExpression("({} implies true) = true"));
-  EXPECT_TRUE(EvaluateBoolExpression("({} implies false) = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("({} implies {}) = {}"));
+  EXPECT_THAT(Evaluate("({} implies false)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("({} implies {})"), EvalsToEmpty());
 }
 
 TEST(FhirPathTest, TestWhere) {
@@ -809,8 +817,8 @@ TEST(FhirPathTest, TestWhere) {
 }
 
 TEST(FhirPathTest, TestWhereNoMatches) {
-  EXPECT_TRUE(EvaluateBoolExpression("('a' | 'b' | 'c').where(false) = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("{}.where(true) = {}"));
+  EXPECT_THAT(Evaluate("('a' | 'b' | 'c').where(false)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("{}.where(true)"), EvalsToEmpty());
 }
 
 TEST(FhirPathTest, TestWhereValidatesArguments) {
@@ -848,8 +856,8 @@ TEST(FhirPathTest, TestAllReadsFieldFromDifferingTypes) {
 }
 
 TEST(FhirPathTest, TestSelectEmptyResult) {
-  EXPECT_TRUE(EvaluateBoolExpression("{}.where(true) = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("(1 | 2 | 3).where(false) = {}"));
+  EXPECT_THAT(Evaluate("{}.where(true)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("(1 | 2 | 3).where(false)"), EvalsToEmpty());
 }
 
 TEST(FhirPathTest, TestSelectValidatesArguments) {
@@ -906,15 +914,15 @@ TEST(FhirPathTest, TestIifValidatesArguments) {
 TEST(FhirPathTest, TestXor) {
   EXPECT_TRUE(EvaluateBoolExpression("(true xor true) = false"));
   EXPECT_TRUE(EvaluateBoolExpression("(true xor false) = true"));
-  EXPECT_TRUE(EvaluateBoolExpression("(true xor {}) = {}"));
+  EXPECT_THAT(Evaluate("(true xor {})"), EvalsToEmpty());
 
   EXPECT_TRUE(EvaluateBoolExpression("(false xor true) = true"));
   EXPECT_TRUE(EvaluateBoolExpression("(false xor false) = false"));
-  EXPECT_TRUE(EvaluateBoolExpression("(false xor {}) = {}"));
+  EXPECT_THAT(Evaluate("(false xor {})"), EvalsToEmpty());
 
-  EXPECT_TRUE(EvaluateBoolExpression("({} xor true) = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("({} xor false) = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("({} xor {}) = {}"));
+  EXPECT_THAT(Evaluate("({} xor true)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("({} xor false)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("({} xor {})"), EvalsToEmpty());
 }
 
 TEST(FhirPathTest, TestOrShortCircuit) {
@@ -1065,22 +1073,22 @@ TEST(FhirPathTest, TestPolarityOperator) {
   EXPECT_TRUE(EvaluateBoolExpression("+(-1.2) = -1.2"));
   EXPECT_TRUE(EvaluateBoolExpression("-(-1.2) = 1.2"));
 
-  EXPECT_TRUE(EvaluateBoolExpression("+{} = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("-{} = {}"));
+  EXPECT_THAT(Evaluate("+{}"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("-{}"), EvalsToEmpty());
 
   EXPECT_FALSE(EvaluateExpressionWithStatus("+(1 | 2)").ok());
 }
 
 TEST(FhirPathTest, TestIntegerAddition) {
   EXPECT_TRUE(EvaluateBoolExpression("(2 + 3) = 5"));
-  EXPECT_TRUE(EvaluateBoolExpression("({} + 3) = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("(2 + {}) = {}"));
+  EXPECT_THAT(Evaluate("({} + 3)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("(2 + {})"), EvalsToEmpty());
 }
 
 TEST(FhirPathTest, TestStringAddition) {
   EXPECT_TRUE(EvaluateBoolExpression("('foo' + 'bar') = 'foobar'"));
-  EXPECT_TRUE(EvaluateBoolExpression("({} + 'bar') = {}"));
-  EXPECT_TRUE(EvaluateBoolExpression("('foo' + {}) = {}"));
+  EXPECT_THAT(Evaluate("({} + 'bar')"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("('foo' + {})"), EvalsToEmpty());
 }
 
 TEST(FhirPathTest, TestStringConcatenation) {

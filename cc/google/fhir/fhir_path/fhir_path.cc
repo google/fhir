@@ -1000,6 +1000,10 @@ class EqualsOperator : public BinaryOperator {
       const std::vector<const Message*>& left_results,
       const std::vector<const Message*>& right_results, WorkSpace* work_space,
       std::vector<const Message*>* out_results) const override {
+    if (left_results.empty() || right_results.empty()) {
+      return Status::OK();
+    }
+
     Boolean* result = new Boolean();
     work_space->DeleteWhenFinished(result);
 
