@@ -16,6 +16,7 @@
 
 #include "google/protobuf/message.h"
 #include "google/fhir/profiles_lib.h"
+#include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/status/status.h"
 #include "proto/annotations.pb.h"
 
@@ -24,7 +25,7 @@ namespace fhir {
 
 Status ConvertToProfileR4(const ::google::protobuf::Message& source,
                           ::google::protobuf::Message* target) {
-  return profiles_internal::ConvertToProfileInternal<r4::core::Extension>(
+  return profiles_internal::ConvertToProfileInternal<r4::R4PrimitiveHandler>(
       source, target);
 }
 
@@ -32,7 +33,7 @@ Status ConvertToProfileR4(const ::google::protobuf::Message& source,
 Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,
                                  ::google::protobuf::Message* target) {
   return profiles_internal::ConvertToProfileLenientInternal<
-      r4::core::Extension>(source, target);
+      r4::R4PrimitiveHandler>(source, target);
 }
 
 }  // namespace fhir

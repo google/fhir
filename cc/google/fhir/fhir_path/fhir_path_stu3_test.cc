@@ -1232,23 +1232,16 @@ TEST(FhirPathTest, NestedConstraintSatisfied) {
   ValueSet value_set = ValidValueSet();
   value_set.mutable_name()->set_value("Placeholder");
 
-  auto expansion = new ValueSet::Expansion;
+  auto expansion = value_set.mutable_expansion();
   auto contains = expansion->add_contains();
 
   // Contains struct has value to satisfy FHIR constraint.
-  auto proto_string = new String();
-  proto_string->set_value("Placeholder value");
-  contains->set_allocated_display(proto_string);
-
-  auto proto_boolean = new Boolean();
-  proto_boolean->set_value(true);
-  contains->set_allocated_abstract(proto_boolean);
-
-  value_set.set_allocated_expansion(expansion);
+  contains->mutable_display()->set_value("Placeholder value");
+  contains->mutable_abstract()->set_value(true);
 
   MessageValidator validator;
 
-  EXPECT_TRUE(validator.Validate(value_set).ok());
+  FHIR_ASSERT_OK(validator.Validate(value_set));
 }
 
 TEST(FhirPathTest, TestCompareEnumToString) {
@@ -1257,12 +1250,12 @@ TEST(FhirPathTest, TestCompareEnumToString) {
       CompiledExpression::Compile(Encounter::descriptor(), "status = 'triaged'")
           .ValueOrDie();
 
-  EXPECT_TRUE(
-      is_triaged.Evaluate(encounter).ValueOrDie().GetBoolean().ValueOrDie());
+  FHIR_ASSERT_OK_AND_ASSIGN(auto eval_result, is_triaged.Evaluate(encounter));
+  FHIR_ASSERT_OK_AND_CONTAINS(true, eval_result.GetBoolean());
   encounter.mutable_status()->set_value(
       stu3::proto::EncounterStatusCode::FINISHED);
-  EXPECT_FALSE(
-      is_triaged.Evaluate(encounter).ValueOrDie().GetBoolean().ValueOrDie());
+  FHIR_ASSERT_OK_AND_CONTAINS(
+      false, is_triaged.Evaluate(encounter).ValueOrDie().GetBoolean());
 }
 
 TEST(FhirPathTest, MessageLevelConstraint) {
@@ -1285,13 +1278,13 @@ TEST(FhirPathTest, NestedMessageLevelConstraint) {
   )proto");
 
   MessageValidator validator;
-  EXPECT_TRUE(validator.Validate(start_with_no_end_encounter).ok());
+  FHIR_ASSERT_OK(validator.Validate(start_with_no_end_encounter));
 }
 
 TEST(FhirPathTest, ProfiledEmptyExtension) {
   UsCorePatient patient = ValidUsCorePatient();
   MessageValidator validator;
-  EXPECT_TRUE(validator.Validate(patient).ok());
+  FHIR_ASSERT_OK(validator.Validate(patient));
 }
 
 TEST(FhirPathTest, ProfiledWithExtensions) {
@@ -1306,7 +1299,7 @@ TEST(FhirPathTest, ProfiledWithExtensions) {
   patient.mutable_birthsex()->set_value(UsCoreBirthSexCode::MALE);
 
   MessageValidator validator;
-  EXPECT_TRUE(validator.Validate(patient).ok());
+  FHIR_ASSERT_OK(validator.Validate(patient));
 }
 
 }  // namespace

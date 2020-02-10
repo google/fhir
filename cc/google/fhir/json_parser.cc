@@ -49,7 +49,6 @@
 namespace google {
 namespace fhir {
 
-namespace {
 
 using ::google::fhir::IsChoiceType;
 using ::google::fhir::IsPrimitive;
@@ -65,6 +64,8 @@ using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 using ::tensorflow::errors::InvalidArgument;
+
+namespace internal {
 
 // Given a proto descriptor, constructs a map from FHIR JSON field name to
 // FieldDescriptor.
@@ -169,8 +170,10 @@ StatusOr<const FieldDescriptor*> GetContainedResourceField(
 
 class Parser {
  public:
-  explicit Parser(FhirVersion fhir_version, absl::TimeZone default_timezone)
-      : fhir_version_(fhir_version), default_timezone_(default_timezone) {}
+  explicit Parser(const PrimitiveHandler* primitive_handler,
+                  absl::TimeZone default_timezone)
+      : primitive_handler_(primitive_handler),
+        default_timezone_(default_timezone) {}
 
   Status MergeMessage(const Json::Value& value, Message* target) {
     const Descriptor* target_descriptor = target->GetDescriptor();
@@ -394,7 +397,7 @@ class Parser {
         return BuildHasNoValueExtension(target->GetReflection()->AddMessage(
             target, target->GetDescriptor()->FindFieldByName("extension")));
       } else {
-        return ParseInto(json, fhir_version_, default_timezone_, target);
+        return primitive_handler_->ParseInto(json, default_timezone_, target);
       }
     } else if (IsReference(target->GetDescriptor())) {
       FHIR_RETURN_IF_ERROR(MergeMessage(json, target));
@@ -416,7 +419,7 @@ class Parser {
   }
 
  private:
-  const FhirVersion fhir_version_;
+  const PrimitiveHandler* primitive_handler_;
   const absl::TimeZone default_timezone_;
 };
 
@@ -429,12 +432,11 @@ StatusOr<Json::Value> ParseJsonValue(const std::string& raw_json) {
   return value;
 }
 
-}  // namespace
+}  // namespace internal
 
-Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
-                                    Message* target,
-                                    const absl::TimeZone default_timezone,
-                                    const bool validate) {
+Status Parser::MergeJsonFhirStringIntoProto(
+    const std::string& raw_json, Message* target,
+    const absl::TimeZone default_timezone, const bool validate) const {
   std::string mutable_raw_json = raw_json;
   // FHIR JSON format stores decimals as unquoted rational numbers.  This is
   // problematic, because their representation could change when they are
@@ -467,13 +469,13 @@ Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
   if (IsFhirType<stu3::proto::Decimal>(*target) && raw_json != "null") {
     // Similar to above, if this is a standalone decimal, parse it as a string
     // to avoid changing representation due to precision.
-    FHIR_ASSIGN_OR_RETURN(
-        value, ParseJsonValue(absl::StrCat("\"", mutable_raw_json, "\"")));
+    FHIR_ASSIGN_OR_RETURN(value, internal::ParseJsonValue(absl::StrCat(
+                                     "\"", mutable_raw_json, "\"")));
   } else {
-    FHIR_ASSIGN_OR_RETURN(value, ParseJsonValue(mutable_raw_json));
+    FHIR_ASSIGN_OR_RETURN(value, internal::ParseJsonValue(mutable_raw_json));
   }
 
-  Parser parser{GetFhirVersion(*target), default_timezone};
+  internal::Parser parser{primitive_handler_, default_timezone};
 
   if (IsProfile(target->GetDescriptor())) {
     FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> core_resource,
@@ -500,7 +502,7 @@ Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
   FHIR_RETURN_IF_ERROR(parser.MergeValue(value, target));
 
   if (validate) {
-    return ValidateResource(*target);
+    return ValidateResource(*target, primitive_handler_);
   }
   return Status::OK();
 }

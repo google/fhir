@@ -33,9 +33,12 @@
 #include "google/fhir/fhir_path/utils.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
+#include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/stu3/primitive_handler.h"
 #include "google/fhir/util.h"
+#include "proto/annotations.pb.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 
@@ -75,7 +78,6 @@ using ::google::fhir::ForEachMessageHalting;
 using ::google::fhir::IsMessageType;
 using ::google::fhir::JsonPrimitive;
 using ::google::fhir::StatusOr;
-using ::google::fhir::WrapPrimitiveProto;
 
 using internal::ExpressionNode;
 
@@ -83,6 +85,21 @@ using ::tensorflow::errors::InvalidArgument;
 
 
 namespace internal {
+
+// TODO: This method forces linking in all supported versions of
+// FHIR. It should be replaced by a passed-in PrimitiveHandler.
+StatusOr<const PrimitiveHandler*> GetPrimitiveHandler(const Message& message) {
+  const auto version = GetFhirVersion(message);
+  switch (version) {
+    case proto::FhirVersion::STU3:
+      return stu3::Stu3PrimitiveHandler::GetInstance();
+    case proto::FhirVersion::R4:
+      return r4::R4PrimitiveHandler::GetInstance();
+    default:
+      return InvalidArgument("Invalid FHIR version for FhirPath: ",
+                             FhirVersion_Name(version));
+  }
+}
 
 // Returns true if the collection of messages represents
 // a boolean value per FHIRPath conventions; that is it
@@ -132,7 +149,9 @@ StatusOr<std::string> MessageToString(const Message& message) {
     return InvalidArgument("Expression must be a primitive.");
   }
 
-  StatusOr<JsonPrimitive> json_primitive = WrapPrimitiveProto(message);
+  FHIR_ASSIGN_OR_RETURN(const PrimitiveHandler* handler,
+                        GetPrimitiveHandler(message));
+  StatusOr<JsonPrimitive> json_primitive = handler->WrapPrimitiveProto(message);
   std::string json_string = json_primitive.ValueOrDie().value;
 
   if (!absl::StartsWith(json_string, "\"")) {
@@ -697,8 +716,10 @@ class ToStringFunction : public ZeroParameterFunctionNode {
       return Status::OK();
     }
 
+    FHIR_ASSIGN_OR_RETURN(const PrimitiveHandler* handler,
+                          GetPrimitiveHandler(*child));
     FHIR_ASSIGN_OR_RETURN(JsonPrimitive json_primitive,
-                          WrapPrimitiveProto(*child));
+                          handler->WrapPrimitiveProto(*child));
     std::string json_string = json_primitive.value;
 
     if (absl::StartsWith(json_string, "\"")) {
@@ -1027,12 +1048,21 @@ class EqualsOperator : public BinaryOperator {
     if (AreSameMessageType(left, right)) {
       return MessageDifferencer::Equals(left, right);
     } else {
+      // TODO: This will crash on a non-STU3 or R4 primitive.
+      // That's probably ok for now but we should fix this to never crash ASAP.
+      const PrimitiveHandler* left_handler =
+          GetPrimitiveHandler(left).ValueOrDie();
+      const PrimitiveHandler* right_handler =
+          GetPrimitiveHandler(right).ValueOrDie();
+
       // When dealing with different types we might be comparing a
       // primitive type (like an enum) to a literal string, which is
       // supported. Therefore we simply convert both to string form
       // and consider them unequal if either is not a string.
-      StatusOr<JsonPrimitive> left_primitive = WrapPrimitiveProto(left);
-      StatusOr<JsonPrimitive> right_primitive = WrapPrimitiveProto(right);
+      StatusOr<JsonPrimitive> left_primitive =
+          left_handler->WrapPrimitiveProto(left);
+      StatusOr<JsonPrimitive> right_primitive =
+          right_handler->WrapPrimitiveProto(right);
 
       // Comparisons between primitives and non-primitives are valid
       // in FHIRPath and should simply return false rather than an error.
@@ -1054,21 +1084,26 @@ class EqualsOperator : public BinaryOperator {
 struct ProtoPtrSameTypeAndEqual {
   bool operator()(const google::protobuf::Message* lhs,
                   const google::protobuf::Message* rhs) const {
-    return (lhs == rhs) ||
-           ((lhs != nullptr && rhs != nullptr) &&
-           EqualsOperator::AreEqual(*lhs, *rhs));
+    return (lhs == rhs) || ((lhs != nullptr && rhs != nullptr) &&
+                            EqualsOperator::AreEqual(*lhs, *rhs));
   }
 };
 
 struct ProtoPtrHash {
   size_t operator()(const google::protobuf::Message* message) const {
+    const StatusOr<const PrimitiveHandler*> handler =
+        GetPrimitiveHandler(*message);
     if (message == nullptr) {
       return 0;
     }
 
+    // TODO: This will crash on a non-STU3 or R4 primitive.
+    // That's probably ok for now but we should fix this to never crash ASAP.
     if (IsPrimitive(message->GetDescriptor())) {
-      return std::hash<std::string>{}(
-          WrapPrimitiveProto(*message).ValueOrDie().value);
+      return std::hash<std::string>{}(handler.ValueOrDie()
+                                          ->WrapPrimitiveProto(*message)
+                                          .ValueOrDie()
+                                          .value);
     }
 
     return std::hash<std::string>{}(message->SerializeAsString());

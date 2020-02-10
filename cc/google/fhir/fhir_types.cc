@@ -58,27 +58,29 @@ bool IsTypeOrProfileOf(const std::string& url, const Message& message) {
 
 }  // namespace
 
-#define FHIR_TYPE_CHECK(type, url)                                       \
+#define FHIR_SIMPLE_TYPE_CHECK(type, url)                                \
   bool Is##type(const Message& message) { return IsType(url, message); } \
-                                                                         \
-  bool IsProfileOf##type(const Message& message) {                       \
-    return IsProfileOf(url, message);                                    \
-  }                                                                      \
-                                                                         \
-  bool IsTypeOrProfileOf##type(const Message& message) {                 \
-    return IsTypeOrProfileOf(url, message);                              \
-  }                                                                      \
                                                                          \
   bool Is##type(const Descriptor* descriptor) {                          \
     return IsType(url, descriptor);                                      \
-  }                                                                      \
-                                                                         \
-  bool IsProfileOf##type(const Descriptor* descriptor) {                 \
-    return IsProfileOf(url, descriptor);                                 \
-  }                                                                      \
-                                                                         \
-  bool IsTypeOrProfileOf##type(const Descriptor* descriptor) {           \
-    return IsTypeOrProfileOf(url, descriptor);                           \
+  }
+
+#define FHIR_TYPE_CHECK(type, url)                             \
+  FHIR_SIMPLE_TYPE_CHECK(type, url)                            \
+  bool IsProfileOf##type(const Message& message) {             \
+    return IsProfileOf(url, message);                          \
+  }                                                            \
+                                                               \
+  bool IsTypeOrProfileOf##type(const Message& message) {       \
+    return IsTypeOrProfileOf(url, message);                    \
+  }                                                            \
+                                                               \
+  bool IsProfileOf##type(const Descriptor* descriptor) {       \
+    return IsProfileOf(url, descriptor);                       \
+  }                                                            \
+                                                               \
+  bool IsTypeOrProfileOf##type(const Descriptor* descriptor) { \
+    return IsTypeOrProfileOf(url, descriptor);                 \
   }
 
 FHIR_TYPE_CHECK(Bundle, "http://hl7.org/fhir/StructureDefinition/Bundle");
@@ -86,7 +88,25 @@ FHIR_TYPE_CHECK(Coding, "http://hl7.org/fhir/StructureDefinition/Coding");
 FHIR_TYPE_CHECK(CodeableConcept,
                 "http://hl7.org/fhir/StructureDefinition/CodeableConcept");
 FHIR_TYPE_CHECK(Extension, "http://hl7.org/fhir/StructureDefinition/Extension");
+FHIR_SIMPLE_TYPE_CHECK(Boolean,
+                       "http://hl7.org/fhir/StructureDefinition/boolean");
+FHIR_SIMPLE_TYPE_CHECK(String,
+                       "http://hl7.org/fhir/StructureDefinition/string");
+FHIR_SIMPLE_TYPE_CHECK(Integer,
+                       "http://hl7.org/fhir/StructureDefinition/integer");
+FHIR_SIMPLE_TYPE_CHECK(UnsignedInt,
+                       "http://hl7.org/fhir/StructureDefinition/unsignedInt");
+FHIR_SIMPLE_TYPE_CHECK(Decimal,
+                       "http://hl7.org/fhir/StructureDefinition/decimal");
+FHIR_SIMPLE_TYPE_CHECK(DateTime,
+                       "http://hl7.org/fhir/StructureDefinition/dateTime");
+FHIR_SIMPLE_TYPE_CHECK(Time, "http://hl7.org/fhir/StructureDefinition/time");
+FHIR_SIMPLE_TYPE_CHECK(Quantity,
+                       "http://hl7.org/fhir/StructureDefinition/Quantity");
+FHIR_SIMPLE_TYPE_CHECK(
+    SimpleQuantity, "http://hl7.org/fhir/StructureDefinition/SimpleQuantity");
 
+#undef FHIR_SIMPLE_TYPE_CHECK
 #undef FHIR_TYPE_CHECK
 
 bool IsCode(const ::google::protobuf::Message& message) {

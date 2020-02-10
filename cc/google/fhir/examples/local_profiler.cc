@@ -18,7 +18,7 @@
 
 #include "absl/strings/str_cat.h"
 #include "absl/time/time.h"
-#include "google/fhir/json_format.h"
+#include "google/fhir/r4/json_format.h"
 #include "google/fhir/r4/profiles.h"
 #include "examples/profiles/demo.pb.h"
 #include "proto/r4/core/resources/patient.pb.h"
@@ -26,8 +26,6 @@
 
 using ::company::fhir::r4::demo::DemoPatient;
 using ::google::fhir::ConvertToProfileLenientR4;
-using ::google::fhir::JsonFhirStringToProto;
-using ::google::fhir::PrintFhirToJsonStringForAnalytics;
 using ::google::fhir::r4::core::Patient;
 
 template <typename R, typename P>
@@ -47,11 +45,14 @@ void ConvertToProfile(const absl::TimeZone& time_zone, std::string dir) {
   while (!read_stream.eof()) {
     std::getline(read_stream, line);
     if (!line.length()) continue;
-    R raw = JsonFhirStringToProto<Patient>(line, time_zone).ValueOrDie();
+    R raw = google::fhir::r4::JsonFhirStringToProto<Patient>(line, time_zone)
+                .ValueOrDie();
     P profiled;
     auto status = ConvertToProfileLenientR4(raw, &profiled);
     CHECK(status.ok()) << status.error_message();
-    write_stream << PrintFhirToJsonStringForAnalytics(profiled).ValueOrDie();
+    write_stream << google::fhir::r4::PrintFhirToJsonStringForAnalytics(
+                        profiled)
+                        .ValueOrDie();
     write_stream << "\n";
   }
 }

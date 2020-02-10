@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include "google/fhir/stu3/json_format.h"
+
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -21,14 +23,14 @@
 #include "google/fhir/json_format.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/stu3/resources.pb.h"
 #include "proto/stu3/datatypes.pb.h"
+#include "proto/stu3/resources.pb.h"
 #include "testdata/stu3/profiles/test.pb.h"
 #include "include/json/json.h"
 
 namespace google {
 namespace fhir {
-
+namespace stu3 {
 
 namespace {
 
@@ -2192,5 +2194,6 @@ TEST(JsonFormatTest, VisionPrescriptionPrint) {
 
 }  // namespace
 
+}  // namespace stu3
 }  // namespace fhir
 }  // namespace google

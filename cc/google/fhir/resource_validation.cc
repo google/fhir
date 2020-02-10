@@ -20,6 +20,7 @@
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/fhir_path/fhir_path.h"
+#include "google/fhir/primitive_handler.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
@@ -138,12 +139,14 @@ Status ValidatePeriod(const Message& period, const std::string& base) {
 }
 
 Status CheckField(const Message& message, const FieldDescriptor* field,
-                  const std::string& base_name);
+                  const std::string& base_name,
+                  const PrimitiveHandler* primitive_handler);
 
 Status ValidateFhirConstraints(const Message& message,
-                               const std::string& base_name) {
+                               const std::string& base_name,
+                               const PrimitiveHandler* primitive_handler) {
   if (IsPrimitive(message.GetDescriptor())) {
-    return ValidatePrimitive(message).ok()
+    return primitive_handler->ValidatePrimitive(message).ok()
                ? Status::OK()
                : FailedPrecondition("invalid-primitive-", base_name);
   }
@@ -158,7 +161,8 @@ Status ValidateFhirConstraints(const Message& message,
   const Descriptor* descriptor = message.GetDescriptor();
   const Reflection* reflection = message.GetReflection();
   for (int i = 0; i < descriptor->field_count(); i++) {
-    FHIR_RETURN_IF_ERROR(CheckField(message, descriptor->field(i), base_name));
+    FHIR_RETURN_IF_ERROR(CheckField(message, descriptor->field(i), base_name,
+                                    primitive_handler));
   }
   // Also verify that oneof fields are set.
   // Note that optional choice-types should have the containing message unset -
@@ -177,9 +181,14 @@ Status ValidateFhirConstraints(const Message& message,
 
 // Check if a required field is missing.
 Status CheckField(const Message& message, const FieldDescriptor* field,
-                  const std::string& base_name) {
+                  const std::string& base_name,
+                  const PrimitiveHandler* primitive_handler) {
   const std::string& new_base =
       absl::StrCat(base_name, ".", field->json_name());
+  if (field->options().GetExtension(validation_requirement) ==
+      ::google::fhir::proto::REQUIRED_BY_FHIR) {
+    LOG(WARNING) << field->full_name();
+  }
   if (field->options().HasExtension(validation_requirement) &&
       field->options().GetExtension(validation_requirement) ==
           ::google::fhir::proto::REQUIRED_BY_FHIR) {
@@ -202,7 +211,8 @@ Status CheckField(const Message& message, const FieldDescriptor* field,
   if (field->cpp_type() == ::google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
     for (int i = 0; i < PotentiallyRepeatedFieldSize(message, field); i++) {
       const auto& submessage = GetPotentiallyRepeatedMessage(message, field, i);
-      FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(submessage, new_base));
+      FHIR_RETURN_IF_ERROR(
+          ValidateFhirConstraints(submessage, new_base, primitive_handler));
 
       // Run extra validation for some types, until FHIRPath validation covers
       // these cases as well.
@@ -228,23 +238,27 @@ Status CheckField(const Message& message, const FieldDescriptor* field,
 // TODO: Invert the default here for FHIRPath handling, and have
 // ValidateWithoutFhirPath instead of ValidateWithFhirPath
 
-Status ValidateResourceWithFhirPath(const Message& resource) {
-  FHIR_RETURN_IF_ERROR(
-      ValidateFhirConstraints(resource, resource.GetDescriptor()->name()));
+Status ValidateResourceWithFhirPath(const Message& resource,
+                                    const PrimitiveHandler* primitive_handler) {
+  FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(
+      resource, resource.GetDescriptor()->name(), primitive_handler));
   return fhir_path::ValidateMessage(resource);
 }
 
 // TODO(nickgeorge, rbrush): Consider integrating handler func into validations
 // in this file.
 Status ValidateResourceWithFhirPath(const Message& resource,
-                                    fhir_path::ViolationHandlerFunc handler) {
-  FHIR_RETURN_IF_ERROR(
-      ValidateFhirConstraints(resource, resource.GetDescriptor()->name()));
+                                    fhir_path::ViolationHandlerFunc handler,
+                                    const PrimitiveHandler* primitive_handler) {
+  FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(
+      resource, resource.GetDescriptor()->name(), primitive_handler));
   return fhir_path::ValidateMessage(resource, handler);
 }
 
-Status ValidateResource(const Message& resource) {
-  return ValidateFhirConstraints(resource, resource.GetDescriptor()->name());
+Status ValidateResource(const Message& resource,
+                        const PrimitiveHandler* primitive_handler) {
+  return ValidateFhirConstraints(resource, resource.GetDescriptor()->name(),
+                                 primitive_handler);
 }
 
 }  // namespace fhir

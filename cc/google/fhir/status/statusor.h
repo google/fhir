@@ -91,16 +91,29 @@ limitations under the License.
   if (!statusor.ok()) {                                  \
     return statusor.status();                            \
   }                                                      \
-  lhs = std::move(statusor.ValueOrDie())
+  lhs = std::move(statusor.ValueOrDie());
 
-#define FHIR_ASSERT_OK_AND_ASSIGN(lhs, rexpr) \
-  {                                           \
-    auto statusor = (rexpr);                  \
-    if (!statusor.ok()) {                     \
-      LOG(ERROR) << statusor.error_message(); \
-      ASSERT_TRUE(statusor.ok());             \
-    }                                         \
-    lhs = std::move(statusor.ValueOrDie())    \
+#define FHIR_ASSERT_OK_AND_ASSIGN(lhs, rexpr)                             \
+  FHIR_ASSERT_OK_AND_ASSIGN_IMPL(                                         \
+      FHIR_STATUS_MACROS_CONCAT_NAME(_status_or_value, __COUNTER__), lhs, \
+      rexpr)
+
+#define FHIR_ASSERT_OK_AND_ASSIGN_IMPL(statusor, lhs, rexpr) \
+  auto statusor = (rexpr);                                   \
+  if (!statusor.ok()) {                                      \
+    LOG(ERROR) << statusor.status().error_message();         \
+    ASSERT_TRUE(statusor.ok());                              \
+  }                                                          \
+  lhs = std::move(statusor.ValueOrDie());
+
+#define FHIR_ASSERT_OK_AND_CONTAINS(lhs, rexpr)        \
+  {                                                    \
+    auto statusor = (rexpr);                           \
+    if (!statusor.ok()) {                              \
+      LOG(ERROR) << statusor.status().error_message(); \
+      ASSERT_TRUE(statusor.ok());                      \
+    }                                                  \
+    ASSERT_EQ(lhs, statusor.ValueOrDie());             \
   }
 
 namespace google {

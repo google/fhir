@@ -30,7 +30,7 @@ namespace fhir {
 namespace stu3 {
 
 class Stu3PrimitiveHandler
-    : public google::fhir::primitives_internal::PrimitiveHandlerTemplate<
+    : public ::google::fhir::primitives_internal::PrimitiveHandlerTemplate<
           proto::Extension> {
  public:
   static const Stu3PrimitiveHandler* GetInstance();
@@ -38,7 +38,7 @@ class Stu3PrimitiveHandler
  protected:
   ::google::fhir::StatusOr<
       std::unique_ptr<primitives_internal::PrimitiveWrapper>>
-  GetWrapper(const ::google::protobuf::Descriptor* target_descriptor) const;
+  GetWrapper(const ::google::protobuf::Descriptor* target_descriptor) const override;
 };
 
 }  // namespace stu3

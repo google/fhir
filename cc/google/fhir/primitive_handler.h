@@ -34,7 +34,12 @@
 namespace google {
 namespace fhir {
 
-// TODO: Move JsonPrimitive here from primitive_wrapper.h.
+struct JsonPrimitive {
+  std::string value;
+  std::unique_ptr<::google::protobuf::Message> element;
+
+  const bool is_non_null() const { return value != "null"; }
+};
 
 // Class that abstracts direct interaction with primitives.  By delegating
 // primitive handling to an instance of this class, core libraries can be

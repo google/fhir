@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 #include <ctype.h>
 
 #include <memory>
@@ -34,6 +33,8 @@
 #include "google/fhir/core_resource_registry.h"
 #include "google/fhir/extensions.h"
 #include "google/fhir/fhir_types.h"
+#include "google/fhir/json_format.h"
+#include "google/fhir/primitive_handler.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/r4/profiles.h"
@@ -49,8 +50,6 @@
 namespace google {
 namespace fhir {
 
-namespace {
-
 using ::google::fhir::IsChoiceType;
 using ::google::fhir::IsPrimitive;
 using ::google::fhir::IsReference;
@@ -62,6 +61,8 @@ using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 using ::tensorflow::errors::InvalidArgument;
+
+namespace internal {
 
 // Format in which the printer will represent the FHIR proto in JSON form.
 enum FhirJsonFormat {
@@ -75,8 +76,10 @@ enum FhirJsonFormat {
 
 class Printer {
  public:
-  Printer(int indent_size, bool add_newlines, FhirJsonFormat json_format)
-      : indent_size_(indent_size),
+  Printer(const PrimitiveHandler* primitive_handler, int indent_size,
+          bool add_newlines, FhirJsonFormat json_format)
+      : primitive_handler_(primitive_handler),
+        indent_size_(indent_size),
         add_newlines_(add_newlines),
         json_format_(json_format) {}
 
@@ -154,8 +157,7 @@ class Printer {
       return PrintContainedResource(contained);
     }
 
-    if (json_format_ == kFormatAnalytic &&
-        IsFhirType<stu3::proto::Extension>(proto)) {
+    if (json_format_ == kFormatAnalytic && IsExtension(proto)) {
       // Only print extension url when in analytic mode.
       std::string scratch;
       absl::StrAppend(&output_, "\"",
@@ -273,7 +275,7 @@ class Printer {
       return Status::OK();
     }
     FHIR_ASSIGN_OR_RETURN(const JsonPrimitive json_primitive,
-                          WrapPrimitiveProto(proto));
+                          primitive_handler_->WrapPrimitiveProto(proto));
 
     if (json_primitive.is_non_null()) {
       PrintFieldPreamble(field_name);
@@ -339,8 +341,9 @@ class Printer {
     for (int i = 0; i < field_size; i++) {
       const Message& field_value =
           reflection->GetRepeatedMessage(containing_proto, field, i);
-      FHIR_ASSIGN_OR_RETURN(json_primitives[i],
-                            WrapPrimitiveProto(field_value));
+      FHIR_ASSIGN_OR_RETURN(
+          json_primitives[i],
+          primitive_handler_->WrapPrimitiveProto(field_value));
       non_null_values_found =
           non_null_values_found || (json_primitives[i].is_non_null());
       any_primitive_extensions_found =
@@ -474,6 +477,7 @@ class Printer {
     return mutable_reference;
   }
 
+  const PrimitiveHandler* primitive_handler_;
   const int indent_size_;
   const bool add_newlines_;
   const FhirJsonFormat json_format_;
@@ -512,34 +516,40 @@ StatusOr<std::string> WriteMessage(Printer printer, const Message& message) {
   }
 }
 
-}  // namespace
+}  // namespace internal
 
-::google::fhir::StatusOr<std::string> PrintFhirPrimitive(
-    const ::google::protobuf::Message& message) {
-  FHIR_ASSIGN_OR_RETURN(const JsonPrimitive& primitive,
-                        WrapPrimitiveProto(message));
+::google::fhir::StatusOr<std::string> Printer::PrintFhirPrimitive(
+    const Message& primitive_message) const {
+  FHIR_ASSIGN_OR_RETURN(
+      const JsonPrimitive& primitive,
+      primitive_handler_->WrapPrimitiveProto(primitive_message));
   return primitive.value;
 }
 
-StatusOr<std::string> PrettyPrintFhirToJsonString(const Message& fhir_proto) {
-  Printer printer{2, true, kFormatPure};
+StatusOr<std::string> Printer::PrettyPrintFhirToJsonString(
+    const Message& fhir_proto) const {
+  internal::Printer printer{primitive_handler_, 2, true, internal::kFormatPure};
   return WriteMessage(printer, fhir_proto);
 }
 
-StatusOr<std::string> PrintFhirToJsonString(const Message& fhir_proto) {
-  Printer printer{0, false, kFormatPure};
+StatusOr<std::string> Printer::PrintFhirToJsonString(
+    const Message& fhir_proto) const {
+  internal::Printer printer{primitive_handler_, 0, false,
+                            internal::kFormatPure};
   return WriteMessage(printer, fhir_proto);
 }
 
-StatusOr<std::string> PrintFhirToJsonStringForAnalytics(
-    const Message& fhir_proto) {
-  Printer printer{0, false, kFormatAnalytic};
+StatusOr<std::string> Printer::PrintFhirToJsonStringForAnalytics(
+    const Message& fhir_proto) const {
+  internal::Printer printer{primitive_handler_, 0, false,
+                            internal::kFormatAnalytic};
   return printer.WriteMessage(fhir_proto);
 }
 
-StatusOr<std::string> PrettyPrintFhirToJsonStringForAnalytics(
-    const Message& fhir_proto) {
-  Printer printer{2, true, kFormatAnalytic};
+StatusOr<std::string> Printer::PrettyPrintFhirToJsonStringForAnalytics(
+    const Message& fhir_proto) const {
+  internal::Printer printer{primitive_handler_, 2, true,
+                            internal::kFormatAnalytic};
   return printer.WriteMessage(fhir_proto);
 }
 

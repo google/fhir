@@ -17,8 +17,12 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "proto/r4/core/datatypes.pb.h"
+#include "proto/r4/core/extensions.pb.h"
+#include "proto/r4/core/profiles/observation_bodyheight.pb.h"
 #include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/r4/uscore.pb.h"
 #include "proto/stu3/datatypes.pb.h"
+#include "proto/stu3/extensions.pb.h"
 #include "proto/stu3/resources.pb.h"
 #include "testdata/r4/profiles/test.pb.h"
 #include "testdata/stu3/profiles/test.pb.h"
@@ -28,65 +32,73 @@ namespace fhir {
 
 namespace {
 
-TEST(FhirTypesTest, IsBundleStu3) {
-  ASSERT_TRUE(IsBundle(stu3::proto::Bundle()));
-  ASSERT_FALSE(IsBundle(stu3::testing::Bundle()));
-}
+#define FHIR_SIMPLE_TYPE_TEST(type)                         \
+  TEST(FhirTypesTest, IsStu3##type) {                       \
+    ASSERT_TRUE(Is##type(stu3::proto::type()));             \
+    ASSERT_TRUE(Is##type(stu3::proto::type::descriptor())); \
+  }                                                         \
+  TEST(FhirTypesTest, IsR4##type) {                         \
+    ASSERT_TRUE(Is##type(r4::core::type()));                \
+    ASSERT_TRUE(Is##type(r4::core::type::descriptor()));    \
+  }
 
-TEST(FhirTypesTest, IsProfileOfBundleStu3) {
-  ASSERT_FALSE(IsProfileOfBundle(stu3::proto::Bundle()));
-  ASSERT_TRUE(IsProfileOfBundle(stu3::testing::Bundle()));
-}
+#define FHIR_STU3_TYPE_TEST(type, stu3profile)                 \
+  TEST(FhirTypesTest, Is##type##Stu3) {                        \
+    ASSERT_TRUE(Is##type(stu3::proto::type()));                \
+    ASSERT_FALSE(Is##type(stu3profile()));                     \
+  }                                                            \
+  TEST(FhirTypesTest, IsProfileOf##type##Stu3) {               \
+    ASSERT_FALSE(IsProfileOf##type(stu3::proto::type()));      \
+    ASSERT_TRUE(IsProfileOf##type(stu3profile()));             \
+  }                                                            \
+                                                               \
+  TEST(FhirTypesTest, IsTypeOrProfileOf##type##Stu3) {         \
+    ASSERT_TRUE(IsTypeOrProfileOf##type(stu3::proto::type())); \
+    ASSERT_TRUE(IsTypeOrProfileOf##type(stu3profile()));       \
+  }
 
-TEST(FhirTypesTest, IsTypeOrProfileOfBundleStu3) {
-  ASSERT_TRUE(IsTypeOrProfileOfBundle(stu3::proto::Bundle()));
-  ASSERT_TRUE(IsTypeOrProfileOfBundle(stu3::testing::Bundle()));
-}
+#define FHIR_R4_TYPE_TEST(type, r4profile)                  \
+  TEST(FhirTypesTest, Is##type##R4) {                       \
+    ASSERT_TRUE(Is##type(r4::core::type()));                \
+    ASSERT_FALSE(Is##type(r4profile()));                    \
+  }                                                         \
+                                                            \
+  TEST(FhirTypesTest, IsProfileOf##type##R4) {              \
+    ASSERT_FALSE(IsProfileOf##type(r4::core::type()));      \
+    ASSERT_TRUE(IsProfileOf##type(r4profile()));            \
+  }                                                         \
+                                                            \
+  TEST(FhirTypesTest, IsTypeOrProfileOf##type##R4) {        \
+    ASSERT_TRUE(IsTypeOrProfileOf##type(r4::core::type())); \
+    ASSERT_TRUE(IsTypeOrProfileOf##type(r4profile()));      \
+  }
 
-TEST(FhirTypesTest, IsBundleR4) {
-  ASSERT_TRUE(IsBundle(r4::core::Bundle()));
-  ASSERT_FALSE(IsBundle(r4::testing::Bundle()));
-}
+#define FHIR_TYPE_TEST(type, stu3profile, r4profile) \
+  FHIR_STU3_TYPE_TEST(type, stu3profile);            \
+  FHIR_R4_TYPE_TEST(type, r4profile);
 
-TEST(FhirTypesTest, IsProfileOfBundleR4) {
-  ASSERT_FALSE(IsProfileOfBundle(r4::core::Bundle()));
-  ASSERT_TRUE(IsProfileOfBundle(r4::testing::Bundle()));
-}
+FHIR_TYPE_TEST(Bundle, stu3::testing::Bundle, r4::testing::Bundle);
+FHIR_TYPE_TEST(Code, stu3::proto::MimeTypeCode, r4::core::Bundle::TypeCode);
+FHIR_TYPE_TEST(Extension, stu3::proto::DataElementAdministrativeStatus,
+               r4::core::AddressADUse);
 
-TEST(FhirTypesTest, IsTypeOrProfileOfBundleR4) {
-  ASSERT_TRUE(IsTypeOrProfileOfBundle(r4::core::Bundle()));
-  ASSERT_TRUE(IsTypeOrProfileOfBundle(r4::testing::Bundle()));
-}
+// CodeableConcept and Coding only profiled in R4
+FHIR_SIMPLE_TYPE_TEST(CodeableConcept);
+FHIR_R4_TYPE_TEST(CodeableConcept,
+                  r4::core::ObservationBodyheight::CodeableConceptForCode);
+FHIR_SIMPLE_TYPE_TEST(Coding);
+FHIR_R4_TYPE_TEST(Coding,
+                  r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding);
 
-TEST(FhirTypesTest, IsCodeStu3) {
-  ASSERT_TRUE(IsCode(stu3::proto::Code()));
-  ASSERT_FALSE(IsCode(stu3::proto::MimeTypeCode()));
-}
-
-TEST(FhirTypesTest, IsProfileOfCodeStu3) {
-  ASSERT_FALSE(IsProfileOfCode(stu3::proto::Code()));
-  ASSERT_TRUE(IsProfileOfCode(stu3::proto::MimeTypeCode()));
-}
-
-TEST(FhirTypesTest, IsTypeOrProfileOfCodeStu3) {
-  ASSERT_TRUE(IsTypeOrProfileOfCode(stu3::proto::Code()));
-  ASSERT_TRUE(IsTypeOrProfileOfCode(stu3::proto::MimeTypeCode()));
-}
-
-TEST(FhirTypesTest, IsCodeR4) {
-  ASSERT_TRUE(IsCode(r4::core::Code()));
-  ASSERT_FALSE(IsCode(r4::core::Bundle::TypeCode()));
-}
-
-TEST(FhirTypesTest, IsProfileOfCodeR4) {
-  ASSERT_FALSE(IsProfileOfCode(r4::core::Code()));
-  ASSERT_TRUE(IsProfileOfCode(r4::core::Bundle::TypeCode()));
-}
-
-TEST(FhirTypesTest, IsTypeOrProfileOfCodeR4) {
-  ASSERT_TRUE(IsTypeOrProfileOfCode(r4::core::Code()));
-  ASSERT_TRUE(IsTypeOrProfileOfCode(r4::core::Bundle::TypeCode()));
-}
+FHIR_SIMPLE_TYPE_TEST(Boolean);
+FHIR_SIMPLE_TYPE_TEST(String);
+FHIR_SIMPLE_TYPE_TEST(Integer);
+FHIR_SIMPLE_TYPE_TEST(UnsignedInt);
+FHIR_SIMPLE_TYPE_TEST(Decimal);
+FHIR_SIMPLE_TYPE_TEST(DateTime);
+FHIR_SIMPLE_TYPE_TEST(Time);
+FHIR_SIMPLE_TYPE_TEST(Quantity);
+FHIR_SIMPLE_TYPE_TEST(SimpleQuantity);
 
 }  // namespace
 

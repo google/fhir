@@ -46,6 +46,7 @@ cc_library(
     hdrs = ["profiles.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":primitive_handler",
         "//cc/google/fhir:profiles_lib",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
@@ -143,23 +144,69 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "json_format",
+    srcs = ["json_format.cc"],
+    hdrs = ["json_format.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":primitive_handler",
+        "//cc/google/fhir:json_format",
+    ],
+)
+
 cc_test(
-    name = "primitive_handler_test",
-    srcs = ["primitive_handler_test.cc"],
+    name = "json_format_test",
+    srcs = ["json_format_test.cc"],
+    data = [
+        "//spec:stu3",
+        "//testdata/stu3:bigquery",
+        "//testdata/stu3:examples",
+        "//testdata/stu3:ndjson",
+        "//testdata/stu3:profiles",
+    ],
+    deps = [
+        ":json_format",
+        "//cc/google/fhir:json_format",
+        "//cc/google/fhir:test_helper",
+        "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "//testdata/stu3/profiles:test_cc_proto",
+        "@com_google_absl//absl/strings",
+        "@com_google_googletest//:gtest_main",
+        "@com_google_protobuf//:protobuf",
+        "@jsoncpp_git//:jsoncpp",
+    ],
+)
+
+cc_library(
+    name = "resource_validation",
+    srcs = ["resource_validation.cc"],
+    hdrs = ["resource_validation.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":primitive_handler",
+        "//cc/google/fhir:resource_validation",
+        "//cc/google/fhir/fhir_path",
+        "@com_google_protobuf//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "resource_validation_test",
+    srcs = ["resource_validation_test.cc"],
     data = [
         "//testdata/stu3:validation",
     ],
     deps = [
-        ":primitive_handler",
-        "//cc/google/fhir:annotations",
-        "//cc/google/fhir:json_format",
+        ":resource_validation",
         "//cc/google/fhir:test_helper",
-        "//proto/stu3:codes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
-        "//proto/stu3:extensions_cc_proto",
-        "@com_google_absl//absl/strings",
+        "//proto/stu3:resources_cc_proto",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
+        "@org_tensorflow//tensorflow/core:lib",
         "@org_tensorflow//tensorflow/core:test",
     ],
 )

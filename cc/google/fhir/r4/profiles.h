@@ -26,6 +26,7 @@
 namespace google {
 namespace fhir {
 
+// TODO: move to r4 namespace, drop R4 suffix.
 
 // If <target> is a profiled type of <source>:
 // Converts a resource to a profiled version of that resource.

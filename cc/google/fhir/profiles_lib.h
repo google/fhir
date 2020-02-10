@@ -347,7 +347,8 @@ Status CopyToProfile(const Message& source, Message* target) {
   return Status::OK();
 }
 
-template <typename ExtensionLike>
+template <typename PrimitiveHandlerVersion,
+          typename ExtensionLike = typename PrimitiveHandlerVersion::Extension>
 Status ConvertToProfileLenientInternal(const Message& source, Message* target) {
   if (!SharesCommonAncestor(source.GetDescriptor(), target->GetDescriptor())) {
     return tensorflow::errors::InvalidArgument(
@@ -357,12 +358,14 @@ Status ConvertToProfileLenientInternal(const Message& source, Message* target) {
   return CopyToProfile<ExtensionLike>(source, target);
 }
 
-template <typename ExtensionLike>
+template <typename PrimitiveHandlerVersion,
+          typename ExtensionLike = typename PrimitiveHandlerVersion::Extension>
 Status ConvertToProfileInternal(const Message& source, Message* target) {
   const auto& status =
-      ConvertToProfileLenientInternal<ExtensionLike>(source, target);
+      ConvertToProfileLenientInternal<PrimitiveHandlerVersion>(source, target);
   FHIR_RETURN_IF_ERROR(status);
-  Status validation = ValidateResource(*target);
+  Status validation =
+      ValidateResource(*target, PrimitiveHandlerVersion::GetInstance());
   if (validation.ok()) {
     return Status::OK();
   }

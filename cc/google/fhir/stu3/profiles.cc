@@ -17,7 +17,7 @@
 #include "google/protobuf/message.h"
 #include "google/fhir/profiles_lib.h"
 #include "google/fhir/status/status.h"
-#include "proto/stu3/datatypes.pb.h"
+#include "google/fhir/stu3/primitive_handler.h"
 
 namespace google {
 namespace fhir {
@@ -26,15 +26,15 @@ using ::google::protobuf::Message;
 
 Status ConvertToProfileStu3(const ::google::protobuf::Message& source,
                             ::google::protobuf::Message* target) {
-  return profiles_internal::ConvertToProfileInternal<stu3::proto::Extension>(
-      source, target);
+  return profiles_internal::ConvertToProfileInternal<
+      stu3::Stu3PrimitiveHandler>(source, target);
 }
 
 // Identical to ConvertToProfile, except does not run the validation step.
 Status ConvertToProfileLenientStu3(const ::google::protobuf::Message& source,
                                    ::google::protobuf::Message* target) {
   return profiles_internal::ConvertToProfileLenientInternal<
-      stu3::proto::Extension>(source, target);
+      stu3::Stu3PrimitiveHandler>(source, target);
 }
 
 }  // namespace fhir

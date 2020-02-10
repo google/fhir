@@ -41,23 +41,6 @@ namespace fhir {
 
 Status BuildHasNoValueExtension(::google::protobuf::Message* extension);
 
-struct JsonPrimitive {
-  std::string value;
-  std::unique_ptr<::google::protobuf::Message> element;
-
-  const bool is_non_null() const { return value != "null"; }
-};
-
-::google::fhir::Status ParseInto(const Json::Value& json,
-                                 const proto::FhirVersion fhir_version,
-                                 const absl::TimeZone tz,
-                                 ::google::protobuf::Message* target);
-
-::google::fhir::StatusOr<JsonPrimitive> WrapPrimitiveProto(
-    const ::google::protobuf::Message& proto);
-
-::google::fhir::Status ValidatePrimitive(const ::google::protobuf::Message& primitive);
-
 namespace primitives_internal {
 
 using extensions_lib::ClearExtensionsWithUrl;

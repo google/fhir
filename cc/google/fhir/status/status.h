@@ -24,13 +24,10 @@ namespace fhir {
 
 #define FHIR_RETURN_IF_ERROR(x) TF_RETURN_IF_ERROR(x)
 
-#define FHIR_ASSERT_OK(rexpr)               \
-  {                                         \
-    auto status = (rexpr);                  \
-    if (!status.ok()) {                     \
-      LOG(ERROR) << status.error_message(); \
-      ASSERT_TRUE(status.ok());             \
-    }                                       \
+#define FHIR_ASSERT_OK(rexpr)                           \
+  {                                                     \
+    auto status = (rexpr);                              \
+    ASSERT_TRUE(status.ok()) << status.error_message(); \
   }
 
 }  // namespace fhir

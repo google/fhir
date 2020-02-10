@@ -27,10 +27,13 @@
 #include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/r4/profiles.h"
-#include "google/fhir/resource_validation.h"
+#include "google/fhir/r4/resource_validation.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/stu3/primitive_handler.h"
 #include "google/fhir/stu3/profiles.h"
+#include "google/fhir/stu3/resource_validation.h"
 #include "proto/annotations.pb.h"
 #include "tensorflow/core/platform/env.h"
 
@@ -87,33 +90,39 @@ class FhirProtoParseHelper {
                          << " in file " << file_;
       return T();
     }
-    Status status = ValidateResource(tmp);
-    if (IsProfile(T::descriptor()) && IsResource(T::descriptor())) {
-      switch (GetFhirVersion(tmp)) {
-        case proto::STU3: {
+    Status valid_status;
+    const bool is_profile =
+        IsProfile(T::descriptor()) && IsResource(T::descriptor());
+    switch (GetFhirVersion(tmp)) {
+      case proto::STU3: {
+        valid_status = stu3::ValidateResource(tmp);
+        if (is_profile) {
           auto status_or_normalized = NormalizeStu3(tmp);
           EXPECT_TRUE(status_or_normalized.ok());
           tmp = status_or_normalized.ValueOrDie();
-          break;
         }
-        case proto::R4: {
+        break;
+      }
+      case proto::R4: {
+        valid_status = r4::ValidateResource(tmp);
+        if (is_profile) {
           auto status_or_normalized = NormalizeR4(tmp);
           EXPECT_TRUE(status_or_normalized.ok());
           tmp = status_or_normalized.ValueOrDie();
-          break;
         }
+        break;
       }
     }
     if (validity_ == VALID) {
-      EXPECT_TRUE(status.ok())
+      EXPECT_TRUE(valid_status.ok())
           << "Invalid FHIR resource of type " << T::descriptor()->full_name()
           << " on line " << line_ << " in file " << file_ << " : "
-          << status.error_message();
+          << valid_status.error_message();
     } else if (validity_ == INVALID) {
-      EXPECT_FALSE(status.ok())
+      EXPECT_FALSE(valid_status.ok())
           << "Unexpected valid FHIR resource of type "
           << T::descriptor()->name() << " on line " << line_ << " in file "
-          << file_ << " : " << status.error_message();
+          << file_ << " : " << valid_status.error_message();
     }
     return tmp;
   }
