@@ -129,6 +129,7 @@ cc_test(
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/stu3:codes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:metadatatypes_cc_proto",
         "//proto/stu3:resources_cc_proto",
         "//proto/stu3:uscore_cc_proto",
         "//proto/stu3:uscore_codes_cc_proto",

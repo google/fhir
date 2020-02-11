@@ -28,6 +28,7 @@
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
+#include "proto/stu3/metadatatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
 #include "proto/stu3/uscore.pb.h"
 #include "proto/stu3/uscore_codes.pb.h"
@@ -113,6 +114,15 @@ UsCorePatient ValidUsCorePatient() {
       value: { value: "http://example.com/patient" }
     }
   )proto");
+}
+
+template <typename T>
+StatusOr<EvaluationResult> Evaluate(const T& message,
+    const std::string& expression) {
+  FHIR_ASSIGN_OR_RETURN(auto compiled_expression,
+      CompiledExpression::Compile(message.GetDescriptor(), expression));
+
+  return compiled_expression.Evaluate(message);
 }
 
 StatusOr<EvaluationResult> EvaluateExpressionWithStatus(
@@ -280,12 +290,8 @@ TEST(FhirPathTest, TestNoSuchField) {
   EXPECT_NE(child_expr.status().error_message().find("boguschildfield"),
             std::string::npos);
 
-  auto complex_child_expr = CompiledExpression::Compile(
-      Encounter::descriptor(), "(period | status).boguschildfield");
-  EXPECT_TRUE(complex_child_expr.ok());
-  auto complex_child_evaluation_result =
-      complex_child_expr.ValueOrDie().Evaluate(ValidEncounter());
-  EXPECT_FALSE(complex_child_evaluation_result.ok());
+  EXPECT_THAT(Evaluate(ValidEncounter(), "(period | status).boguschildfield"),
+              EvalsToEmpty());
 }
 
 TEST(FhirPathTest, TestNoSuchFunction) {
@@ -386,6 +392,31 @@ TEST(FhirPathTest, TestFunctionHasValueNegation) {
   test_encounter.mutable_period()->clear_start();
   EvaluationResult no_value_result = expr.Evaluate(test_encounter).ValueOrDie();
   EXPECT_TRUE(no_value_result.GetBoolean().ValueOrDie());
+}
+
+TEST(FhirPathTest, TestFunctionChildren) {
+  StructureDefinition structure_definition =
+      ParseFromString<StructureDefinition>(R"proto(
+        name {value: "foo"}
+        context_invariant {value: "bar"}
+        snapshot {element {label {value: "snapshot"}}}
+        differential {element {label {value: "differential"}}}
+      )proto");
+
+  EXPECT_THAT(
+      Evaluate(structure_definition, "children()").ValueOrDie().GetMessages(),
+      UnorderedElementsAreArray(
+          {EqualsProto(structure_definition.name()),
+           EqualsProto(structure_definition.context_invariant(0)),
+           EqualsProto(structure_definition.snapshot()),
+           EqualsProto(structure_definition.differential())}));
+
+  EXPECT_THAT(
+      Evaluate(structure_definition, "children().element")
+          .ValueOrDie().GetMessages(),
+      UnorderedElementsAreArray(
+          {EqualsProto(structure_definition.snapshot().element(0)),
+           EqualsProto(structure_definition.differential().element(0))}));
 }
 
 TEST(FhirPathTest, TestFunctionContains) {

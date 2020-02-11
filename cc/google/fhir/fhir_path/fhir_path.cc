@@ -251,6 +251,15 @@ class InvokeTermNode : public ExpressionNode {
             ? field_
             : FindFieldByJsonName(message.GetDescriptor(), field_name_);
 
+    // If the field cannot be found an empty collection is returned. This
+    // matches the behavior of https://github.com/HL7/fhirpath.js and is
+    // empirically necessitated by expressions such as "children().element"
+    // where not every child necessarily has an "element" field (see FHIRPath
+    // constraints on Bundle for a full example.)
+    if (field == nullptr) {
+      return Status::OK();
+    }
+
     return RetrieveField(message, *field, results);
   }
 
@@ -293,13 +302,14 @@ class InvokeExpressionNode : public ExpressionNode {
                             : FindFieldByJsonName(
               child_message->GetDescriptor(), field_name_);
 
-      if (field == nullptr) {
-        return InvalidArgument(absl::StrCat("Unable to find field '",
-                                            field_name_, "' in message ",
-                                            child_message->GetTypeName()));
+      // If the field cannot be found the result is an empty collection. This
+      // matches the behavior of https://github.com/HL7/fhirpath.js and is
+      // empirically necessitated by expressions such as "children().element"
+      // where not every child necessarily has an "element" field (see FHIRPath
+      // constraints on Bundle for a full example.)
+      if (field != nullptr) {
+        FHIR_RETURN_IF_ERROR(RetrieveField(*child_message, *field, results));
       }
-
-      FHIR_RETURN_IF_ERROR(RetrieveField(*child_message, *field, results));
     }
 
     return Status::OK();
@@ -1583,6 +1593,33 @@ class AsFunction : public ExpressionNode {
   const std::string type_name_;
 };
 
+class ChildrenFunction : public ZeroParameterFunctionNode {
+ public:
+  ChildrenFunction(const std::shared_ptr<ExpressionNode>& child,
+                 const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<const Message*>* results) const override {
+    std::vector<const Message*> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    for (const Message* child : child_results) {
+      const Descriptor* descriptor = child->GetDescriptor();
+      for (int i = 0; i < descriptor->field_count(); i++) {
+        FHIR_RETURN_IF_ERROR(
+            RetrieveField(*child, *descriptor->field(i), results));
+      }
+    }
+
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return nullptr;
+  }
+};
+
 // Implements the FHIRPath .intersect() function.
 class IntersectFunction : public SingleParameterFunctionNode {
  public:
@@ -2860,6 +2897,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"iif", FunctionNode::Create<IifFunction>},
       {"is", IsFunction::Create},
       {"as", AsFunction::Create},
+      {"children", FunctionNode::Create<ChildrenFunction>},
   };
 
   // Returns an ExpressionNode that implements the specified FHIRPath function.
