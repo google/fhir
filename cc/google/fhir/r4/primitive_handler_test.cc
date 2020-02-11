@@ -27,7 +27,6 @@
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/resources/binary.pb.h"
 #include "proto/r4/core/resources/patient.pb.h"
-#include "proto/r4/core/valuesets.pb.h"
 #include "proto/r4/google_extensions.pb.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
 

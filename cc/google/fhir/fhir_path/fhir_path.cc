@@ -50,7 +50,6 @@ using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::MessageOptions;
-using ::google::protobuf::Reflection;
 using ::google::protobuf::util::MessageDifferencer;
 
 // Used to wrap primitives in protobuf messages, and
@@ -73,7 +72,6 @@ using antlr_parser::FhirPathLexer;
 using antlr_parser::FhirPathParser;
 
 using ::google::fhir::AreSameMessageType;
-using ::google::fhir::ForEachMessage;
 using ::google::fhir::ForEachMessageHalting;
 using ::google::fhir::IsMessageType;
 using ::google::fhir::JsonPrimitive;
@@ -493,7 +491,7 @@ class ExistsFunction : public ZeroParameterFunctionNode {
 // Implements the FHIRPath .not() function.
 class NotFunction : public ZeroParameterFunctionNode {
  public:
-  NotFunction(
+  explicit NotFunction(
       const std::shared_ptr<ExpressionNode>& child,
       const std::vector<std::shared_ptr<ExpressionNode>>& params = {})
       : ZeroParameterFunctionNode(child, params) {}
@@ -2943,7 +2941,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   // ANTLR listener to report syntax errors.
   class FhirPathErrorListener : public BaseErrorListener {
    public:
-    FhirPathErrorListener(FhirPathCompilerVisitor* visitor)
+    explicit FhirPathErrorListener(FhirPathCompilerVisitor* visitor)
         : visitor_(visitor) {}
 
     void syntaxError(antlr4::Recognizer* recognizer,

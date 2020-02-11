@@ -29,7 +29,7 @@ using ::google::fhir::ConvertToProfileLenientR4;
 using ::google::fhir::r4::core::Patient;
 
 template <typename R, typename P>
-void ConvertToProfile(const absl::TimeZone& time_zone, std::string dir) {
+void ConvertToProfile(const absl::TimeZone time_zone, std::string dir) {
   std::cout << "Converting Synthea " << R::descriptor()->name() << " to "
             << P::descriptor()->name() << std::endl;
 

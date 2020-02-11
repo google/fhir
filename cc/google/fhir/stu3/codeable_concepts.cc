@@ -67,8 +67,7 @@ void CopyCommonCodingFields(const SrcCodingLike& src, DestCodingLike* dest) {
 std::unique_ptr<stu3::proto::Coding> CodingFromFixedSystemCoding(
     const google::protobuf::FieldDescriptor* field,
     const stu3::proto::CodingWithFixedSystem& fixed_system_coding) {
-  std::unique_ptr<stu3::proto::Coding> coding =
-      absl::make_unique<stu3::proto::Coding>();
+  auto coding = absl::make_unique<stu3::proto::Coding>();
   CopyCommonCodingFields(fixed_system_coding, coding.get());
   coding->mutable_system()->set_value(GetInlinedCodingSystem(field));
   *coding->mutable_code() = fixed_system_coding.code();
@@ -78,8 +77,7 @@ std::unique_ptr<stu3::proto::Coding> CodingFromFixedSystemCoding(
 std::unique_ptr<stu3::proto::Coding> CodingFromFixedCodeCoding(
     const google::protobuf::FieldDescriptor* field,
     const stu3::proto::CodingWithFixedCode& fixed_code_coding) {
-  std::unique_ptr<stu3::proto::Coding> coding =
-      absl::make_unique<stu3::proto::Coding>();
+  auto coding = absl::make_unique<stu3::proto::Coding>();
   CopyCommonCodingFields(fixed_code_coding, coding.get());
   coding->mutable_system()->set_value(GetInlinedCodingSystem(field));
   coding->mutable_code()->set_value(GetInlinedCodingCode(field));

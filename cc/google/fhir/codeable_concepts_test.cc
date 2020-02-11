@@ -45,8 +45,8 @@ TEST(CodeableConceptsTest, ForEachSystemCodeStringPair) {
   ForEachSystemCodeStringPair(
       concept, [&sys_accum, &code_accum](const std::string& sys,
                                          const std::string& code) {
-        sys_accum = absl::StrCat(sys_accum, sys, ",");
-        code_accum = absl::StrCat(code_accum, code, ",");
+        absl::StrAppend(&sys_accum, sys, ",");
+        absl::StrAppend(&code_accum, code, ",");
       });
   EXPECT_EQ(
       sys_accum,

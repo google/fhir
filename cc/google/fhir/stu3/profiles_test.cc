@@ -24,8 +24,6 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/google_extensions.pb.h"
 #include "proto/stu3/profiles.pb.h"
 #include "proto/stu3/resources.pb.h"
 #include "proto/stu3/uscore.pb.h"

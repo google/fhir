@@ -54,13 +54,10 @@ void TestCodeForResourceType(const google::protobuf::Message& resource,
 }
 
 TEST(CodesTest, GetCodeForResourceType) {
-  TestCodeForResourceType(
-      Encounter(), ResourceTypeCode::Value::ResourceTypeCode_Value_ENCOUNTER);
-  TestCodeForResourceType(
-      Patient(), ResourceTypeCode::Value::ResourceTypeCode_Value_PATIENT);
-  TestCodeForResourceType(
-      FamilyMemberHistory(),
-      ResourceTypeCode::Value::ResourceTypeCode_Value_FAMILY_MEMBER_HISTORY);
+  TestCodeForResourceType(Encounter(), ResourceTypeCode::ENCOUNTER);
+  TestCodeForResourceType(Patient(), ResourceTypeCode::PATIENT);
+  TestCodeForResourceType(FamilyMemberHistory(),
+                          ResourceTypeCode::FAMILY_MEMBER_HISTORY);
 }
 
 TEST(CodesTest, GetCodeForResourceType_AllContainedTypesValid) {

@@ -18,7 +18,6 @@
 #include "google/fhir/profiles_lib.h"
 #include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/status/status.h"
-#include "proto/annotations.pb.h"
 
 namespace google {
 namespace fhir {

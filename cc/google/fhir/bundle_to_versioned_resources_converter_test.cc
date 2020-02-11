@@ -29,7 +29,6 @@ using ::google::fhir::stu3::proto::Bundle;
 using ::google::fhir::stu3::proto::ContainedResource;
 using ::google::fhir::testutil::EqualsProto;
 using ::testing::Contains;
-using ::testing::Pair;
 using ::testing::UnorderedElementsAre;
 
 void AssertCounter(const std::map<std::string, int>& counter_stats,

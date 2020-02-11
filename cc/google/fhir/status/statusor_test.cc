@@ -21,6 +21,7 @@ limitations under the License.
 #include <type_traits>
 
 #include "gmock/gmock.h"
+#include "absl/memory/memory.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "tensorflow/core/platform/macros.h"
 
@@ -67,7 +68,7 @@ static_assert(!std::is_default_constructible<NoDefaultConstructor>(),
 
 StatusOr<std::unique_ptr<int>> ReturnUniquePtr() {
   // Uses implicit constructor from T&&
-  return std::unique_ptr<int>(new int(0));
+  return absl::make_unique<int>(0);
 }
 
 TEST(StatusOr, ElementType) {

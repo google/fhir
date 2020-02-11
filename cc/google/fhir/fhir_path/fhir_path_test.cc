@@ -66,7 +66,6 @@ using testutil::EqualsProto;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using testing::ElementsAreArray;
-using testing::IsEmpty;
 using testing::UnorderedElementsAreArray;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
@@ -200,8 +199,8 @@ bool EvaluateBoolExpression(const std::string& expression) {
   return EvaluateBoolExpressionWithStatus(expression).ValueOrDie();
 }
 
-DateTime ToDateTime(const absl::CivilSecond& civil_time,
-                    const absl::TimeZone& zone,
+DateTime ToDateTime(const absl::CivilSecond civil_time,
+                    const absl::TimeZone zone,
                     const DateTime::Precision& precision) {
   DateTime date_time;
   date_time.set_value_us(absl::ToUnixMicros(absl::FromCivil(civil_time, zone)));

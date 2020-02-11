@@ -24,7 +24,6 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/r4/core/resources/encounter.pb.h"
 #include "proto/r4/core/resources/observation.pb.h"
@@ -185,8 +184,8 @@ TEST(ProfilesTest, ContainedResourcesWithUnmatchedProfileNames) {
   const TestPatient test_patient = ReadProto<TestPatient>(
       "testdata/r4/profiles/test_patient-profiled-testpatient.prototxt");
   r4::testing::Bundle test_bundle;
-  test_bundle.add_entry()->mutable_resource()->mutable_test_patient()->CopyFrom(
-      test_patient);
+  *test_bundle.add_entry()->mutable_resource()->mutable_test_patient() =
+      test_patient;
 
   r4::core::Bundle core_bundle;
   FHIR_ASSERT_OK(ConvertToProfileLenientR4(test_bundle, &core_bundle));

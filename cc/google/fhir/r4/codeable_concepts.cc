@@ -67,7 +67,7 @@ void CopyCommonCodingFields(const SrcCodingLike& src, DestCodingLike* dest) {
 std::unique_ptr<Coding> CodingFromFixedCodeCoding(
     const google::protobuf::FieldDescriptor* field,
     const CodingWithFixedCode& fixed_code_coding) {
-  std::unique_ptr<Coding> coding = absl::make_unique<Coding>();
+  auto coding = absl::make_unique<Coding>();
   CopyCommonCodingFields(fixed_code_coding, coding.get());
   coding->mutable_system()->set_value(GetInlinedCodingSystem(field));
   coding->mutable_code()->set_value(GetInlinedCodingCode(field));
@@ -345,7 +345,7 @@ std::shared_ptr<const Coding> FindCoding(const Message& concept,
         return false;
       },
       [&func, &found_coding](const Message& fixed_system_coding) {
-        std::unique_ptr<Coding> synth_coding = absl::make_unique<Coding>();
+        auto synth_coding = absl::make_unique<Coding>();
         auto status = CopyCoding(fixed_system_coding, synth_coding.get());
         if (!status.ok()) {
           LOG(WARNING) << "Encountered malformed Coding with fixed system "

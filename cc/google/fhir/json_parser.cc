@@ -135,7 +135,7 @@ typedef std::unordered_map<std::string, const FieldDescriptor*> FieldMap;
 // Builds a map from ContainedResource field type to FieldDescriptor for that
 // field.
 std::unique_ptr<FieldMap> BuildResourceTypeMap(const Descriptor* descriptor) {
-  std::unique_ptr<FieldMap> map = absl::make_unique<FieldMap>();
+  auto map = absl::make_unique<FieldMap>();
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
     (*map)[field->message_type()->name()] = field;

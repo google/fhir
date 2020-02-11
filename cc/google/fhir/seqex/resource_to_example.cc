@@ -415,11 +415,11 @@ void MessageToExample(const google::protobuf::Message& message, const std::strin
             // TODO: remove this code path.
             stu3::proto::CodingWithFixedSystem fixed_coding;
             fixed_coding.CopyFrom(child);
-            coding.mutable_code()->CopyFrom(fixed_coding.code());
+            *coding.mutable_code() = fixed_coding.code();
             *coding.mutable_system()->mutable_value() =
                 GetInlinedCodingSystem(field);
             if (fixed_coding.has_display()) {
-              coding.mutable_display()->CopyFrom(fixed_coding.display());
+              *coding.mutable_display() = fixed_coding.display();
             }
             AddCodingToExample(coding, prefix, true, example,
                                &tokenize_feature_set, add_tokenize_feature_set,

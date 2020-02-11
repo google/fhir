@@ -27,7 +27,6 @@
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/resources.pb.h"
 #include "tensorflow/core/example/example.pb.h"
-#include "tensorflow/core/example/feature.pb.h"
 #include "tensorflow/core/platform/env.h"
 
 ABSL_DECLARE_FLAG(bool, tokenize_code_text_features);

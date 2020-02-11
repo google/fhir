@@ -20,7 +20,6 @@
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/metadatatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
 
@@ -30,7 +29,6 @@ namespace fhir {
 namespace {
 
 using ::google::fhir::stu3::proto::Bundle;
-using ::google::fhir::stu3::proto::CodeableConcept;
 using ::google::fhir::stu3::proto::ContainedResource;
 using ::google::fhir::stu3::proto::Date;
 using ::google::fhir::stu3::proto::DateTime;
@@ -39,20 +37,9 @@ using ::google::fhir::stu3::proto::Encounter;
 using ::google::fhir::testutil::EqualsProto;
 
 using ::google::fhir::stu3::proto::AllergyIntolerance;
-using ::google::fhir::stu3::proto::Coding;
-using ::google::fhir::stu3::proto::Composition;
 using ::google::fhir::stu3::proto::EncounterStatusCode;
-using ::google::fhir::stu3::proto::Extension;
-using ::google::fhir::stu3::proto::Medication;
-using ::google::fhir::stu3::proto::MedicationRequest;
-using ::google::fhir::stu3::proto::Meta;
-using ::google::fhir::stu3::proto::Observation;
 using ::google::fhir::stu3::proto::Patient;
 using ::google::fhir::stu3::proto::Reference;
-using ::google::fhir::stu3::proto::ReferenceId;
-
-using ::testing::ElementsAre;
-using ::testing::Not;
 
 TEST(GetResourceIdFromReferenceTest, PatientId) {
   Reference r;

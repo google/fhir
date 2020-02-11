@@ -133,8 +133,8 @@ TEST(CodeableConceptsTest, ForEachSystemCodeStringPair) {
   ForEachSystemCodeStringPair(
       concept, [&sys_accum, &code_accum](const std::string& sys,
                                          const std::string& code) {
-        sys_accum = absl::StrCat(sys_accum, sys, ",");
-        code_accum = absl::StrCat(code_accum, code, ",");
+        absl::StrAppend(&sys_accum, sys, ",");
+        absl::StrAppend(&code_accum, code, ",");
       });
   EXPECT_EQ(
       sys_accum,
@@ -148,9 +148,9 @@ TEST(CodeableConceptsTest, ForEachCoding) {
   const auto concept = GetConcept();
   std::string display_accum = "";
   ForEachCoding(concept, [&display_accum](const Coding& coding) {
-    display_accum = absl::StrCat(
-        display_accum, coding.has_display() ? coding.display().value() : "NONE",
-        ",");
+    absl::StrAppend(&display_accum,
+                    coding.has_display() ? coding.display().value() : "NONE",
+                    ",");
   });
   EXPECT_EQ(display_accum,
             "FDisplay,GDisplay1,GDisplay2,A "
@@ -233,7 +233,7 @@ TEST(CodeableConceptsTest, AddCodingUnprofiled) {
   EXPECT_EQ(concept.coding_size(), 3);
   std::string display_accum = "";
   ForEachCoding(concept, [&display_accum](const Coding& coding) {
-    display_accum = absl::StrCat(display_accum, coding.display().value(), ",");
+    absl::StrAppend(&display_accum, coding.display().value(), ",");
   });
   EXPECT_EQ(display_accum, "Q display1,Q display2,R display,");
 }
@@ -252,7 +252,7 @@ TEST(CodeableConceptsTest, AddCodingFixedSystem) {
   EXPECT_EQ(concept.sys_b_size(), 2);
   std::string display_accum = "";
   ForEachCoding(concept, [&display_accum](const Coding& coding) {
-    display_accum = absl::StrCat(display_accum, coding.display().value(), ",");
+    absl::StrAppend(&display_accum, coding.display().value(), ",");
   });
   EXPECT_EQ(display_accum, "A display,B display1,B display2,");
 }
@@ -268,7 +268,7 @@ TEST(CodeableConceptsTest, AddCodingFixedCode) {
   EXPECT_EQ(concept.coding_size(), 0);
   std::string display_accum = "";
   ForEachCoding(concept, [&display_accum](const Coding& coding) {
-    display_accum = absl::StrCat(display_accum, coding.display().value(), ",");
+    absl::StrAppend(&display_accum, coding.display().value(), ",");
   });
   EXPECT_EQ(display_accum, "C display,D display,");
 }
@@ -320,9 +320,9 @@ TEST(CodeableConceptsTest, ClearAllCodingsWithSystemUnprofiled) {
   TF_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysg.org"));
   std::string display_accum = "";
   ForEachCoding(concept, [&display_accum](const Coding& coding) {
-    display_accum = absl::StrCat(
-        display_accum, coding.has_display() ? coding.display().value() : "NONE",
-        ",");
+    absl::StrAppend(&display_accum,
+                    coding.has_display() ? coding.display().value() : "NONE",
+                    ",");
   });
   EXPECT_EQ(display_accum,
             "FDisplay,A Display,BDisplay1,BDisplay2,NONE,display d,");
@@ -333,9 +333,9 @@ TEST(CodeableConceptsTest, ClearAllCodingsWithSystemFixedSystem) {
   TF_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysb.org"));
   std::string display_accum = "";
   ForEachCoding(concept, [&display_accum](const Coding& coding) {
-    display_accum = absl::StrCat(
-        display_accum, coding.has_display() ? coding.display().value() : "NONE",
-        ",");
+    absl::StrAppend(&display_accum,
+                    coding.has_display() ? coding.display().value() : "NONE",
+                    ",");
   });
   EXPECT_EQ(display_accum,
             "FDisplay,GDisplay1,GDisplay2,A Display,NONE,display d,");
