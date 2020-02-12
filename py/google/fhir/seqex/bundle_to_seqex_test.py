@@ -336,7 +336,7 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
         feature_lists: {
           feature_list {
             key: "Encounter.class"
-            value { feature { bytes_list { value: "actcode:IMP" } } feature { bytes_list { value: "actcode:IMP" } } }
+            value { feature { bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" } } feature { bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" } } }
           }
           feature_list {
             key: "Encounter.meta.lastUpdated"
@@ -351,11 +351,11 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
             value { feature { int64_list { } } feature { int64_list { value: 1417424400 } } }
           }
           feature_list {
-            key: "Encounter.reason.icd9"
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
             value { feature { bytes_list { } } feature { bytes_list { value: "V410.9" } } }
           }
           feature_list {
-            key: "Encounter.reason.icd9.display.tokenized"
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
             value { feature { bytes_list { } } feature { bytes_list { value: "standard" value: "issue" } } }
           }
           feature_list {
@@ -391,7 +391,7 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
           feature_list {
             key: "Encounter.class"
             value {
-              feature { bytes_list { value: "actcode:IMP" } } feature { bytes_list { value: "actcode:IMP" } } feature { bytes_list { value: "actcode:IMP" } } feature { bytes_list { value: "actcode:IMP" } }
+              feature { bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" } } feature { bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" } } feature { bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" } } feature { bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" } }
             }
           }
           feature_list {
@@ -411,13 +411,13 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
             }
           }
           feature_list {
-            key: "Encounter.reason.icd9"
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
             value {
               feature { bytes_list { } } feature { bytes_list { value: "V410.9" } } feature { bytes_list { } } feature { bytes_list { value: "191.4" } }
             }
           }
           feature_list {
-            key: "Encounter.reason.icd9.display.tokenized"
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
             value {
               feature { bytes_list { } } feature { bytes_list { value: "standard" value: "issue" } } feature { bytes_list { } } feature { bytes_list { value: "malignant" value: "neoplasm" value: "of" value: "occipital" value: "lobe" } }
             }

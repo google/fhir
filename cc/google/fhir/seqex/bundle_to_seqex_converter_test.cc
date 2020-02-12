@@ -191,179 +191,185 @@ TEST_F(BundleToSeqexConverterTest, TestMultipleResources) {
     })proto", &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    context: {
-      feature: {
-        key: "Patient.birthDate"
-        value { int64_list { value: -1323388800 } }
-      }
-      feature {
-        key: "currentEncounterId"
-        value { int64_list { value: 1420099200 } }
-      }
-      feature {
-        key: "patientId"
-        value { bytes_list { value: "14" } }
-      }
-      feature {
-        key: "sequenceLength"
-        value { int64_list { value: 5 } }
-      }
-      feature {
-        key: "timestamp"
-        value { int64_list { value: 1420102800 } }
-      }
-    }
-    feature_lists: {
-      feature_list {
-        key: "Composition.date"
-        value {
-          feature { int64_list {} }
-          feature { int64_list {} }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102800 } }
-          feature { int64_list {} }
-        }
-      }
-      feature_list {
-        key: "Composition.meta.lastUpdated"
-        value {
-          feature { int64_list {} }
-          feature { int64_list {} }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102800 } }
-          feature { int64_list {} }
-        }
-      }
-      feature_list {
-        key: "Composition.section.text.div.tokenized"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-          feature { bytes_list { value: "test" value: "text" } }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "Condition.meta.lastUpdated"
-        value {
-          feature { int64_list { value: 1417392000 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list {} }
-          feature { int64_list {} }
-          feature { int64_list {} }
-        }
-      }
-      feature_list {
-        key: "Condition.code.icd9"
-        value {
-          feature { bytes_list { value: "bar" } }
-          feature { bytes_list { value: "baz" } }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "Condition.assertedDate"
-        value {
-          feature { int64_list { value: 1417392000 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list {} }
-          feature { int64_list {} }
-          feature { int64_list {} }
-        }
-      }
-      feature_list {
-        key: "Encounter.meta.lastUpdated"
-        value {
-          feature { int64_list {} }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.class"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-          feature { bytes_list { value: "actcode:IMP" } }
-          feature { bytes_list {} }
-          feature { bytes_list { value: "actcode:IMP" } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.end"
-        value {
-          feature { int64_list {} }
-          feature { int64_list {} }
-          feature { int64_list {} }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.start"
-        value {
-          feature { int64_list {} }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420099200 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-          feature { bytes_list { value: "191.4" } }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9.display.tokenized"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        context: {
+          feature: {
+            key: "Patient.birthDate"
+            value { int64_list { value: -1323388800 } }
+          }
           feature {
-            bytes_list {
-              value: "malignant"
-              value: "neoplasm"
-              value: "of"
-              value: "occipital"
-              value: "lobe"
-            }
+            key: "currentEncounterId"
+            value { int64_list { value: 1420099200 } }
+          }
+          feature {
+            key: "patientId"
+            value { bytes_list { value: "14" } }
+          }
+          feature {
+            key: "sequenceLength"
+            value { int64_list { value: 5 } }
+          }
+          feature {
+            key: "timestamp"
+            value { int64_list { value: 1420102800 } }
           }
         }
-      }
-      feature_list {
-        key: "encounterId"
-        value {
-          feature { int64_list { value: 1417392000 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-        }
-      }
-      feature_list {
-        key: "eventId"
-        value {
-          feature { int64_list { value: 1417392000 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420102800 } }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-    })proto", &seqex));
+        feature_lists: {
+          feature_list {
+            key: "Composition.date"
+            value {
+              feature { int64_list {} }
+              feature { int64_list {} }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420102800 } }
+              feature { int64_list {} }
+            }
+          }
+          feature_list {
+            key: "Composition.meta.lastUpdated"
+            value {
+              feature { int64_list {} }
+              feature { int64_list {} }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420102800 } }
+              feature { int64_list {} }
+            }
+          }
+          feature_list {
+            key: "Composition.section.text.div.tokenized"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+              feature { bytes_list { value: "test" value: "text" } }
+              feature { bytes_list {} }
+            }
+          }
+          feature_list {
+            key: "Condition.meta.lastUpdated"
+            value {
+              feature { int64_list { value: 1417392000 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list {} }
+              feature { int64_list {} }
+              feature { int64_list {} }
+            }
+          }
+          feature_list {
+            key: "Condition.code.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+            value {
+              feature { bytes_list { value: "bar" } }
+              feature { bytes_list { value: "baz" } }
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+            }
+          }
+          feature_list {
+            key: "Condition.assertedDate"
+            value {
+              feature { int64_list { value: 1417392000 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list {} }
+              feature { int64_list {} }
+              feature { int64_list {} }
+            }
+          }
+          feature_list {
+            key: "Encounter.meta.lastUpdated"
+            value {
+              feature { int64_list {} }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.class"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+              feature { bytes_list {} }
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.end"
+            value {
+              feature { int64_list {} }
+              feature { int64_list {} }
+              feature { int64_list {} }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.start"
+            value {
+              feature { int64_list {} }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420099200 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+              feature { bytes_list { value: "191.4" } }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+              feature {
+                bytes_list {
+                  value: "malignant"
+                  value: "neoplasm"
+                  value: "of"
+                  value: "occipital"
+                  value: "lobe"
+                }
+              }
+            }
+          }
+          feature_list {
+            key: "encounterId"
+            value {
+              feature { int64_list { value: 1417392000 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420099200 } }
+            }
+          }
+          feature_list {
+            key: "eventId"
+            value {
+              feature { int64_list { value: 1417392000 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420102800 } }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+        })proto",
+      &seqex));
 
   PerformTest("Patient/14", bundle, trigger_labels_pair,
               {{"Patient/14:0-5@1420102800:Encounter/1", seqex}});
@@ -460,7 +466,7 @@ TEST_F(BundleToSeqexConverterTest, MultipleLabelsSameTimestamp) {
         }
         feature_list {
           key: "Encounter.class"
-          value { feature { bytes_list { value: "actcode:IMP" } } }
+          value { feature { bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" } } }
         }
         feature_list {
           key: "Encounter.period.end"
@@ -471,11 +477,11 @@ TEST_F(BundleToSeqexConverterTest, MultipleLabelsSameTimestamp) {
           value { feature { int64_list { value: 1420099200 } } }
         }
         feature_list {
-          key: "Encounter.reason.icd9"
+          key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
           value { feature { bytes_list { } } }
         }
         feature_list {
-          key: "Encounter.reason.icd9.display.tokenized"
+          key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
           value { feature { bytes_list { } } }
         }
         feature_list {
@@ -543,55 +549,61 @@ TEST_F(BundleToSeqexConverterTest, TestClassLabel) {
     })proto", &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    context: {
-      feature {
-        key: "Patient.birthDate"
-        value { int64_list { value: -1323388800 } }
-      }
-      feature {
-        key: "currentEncounterId"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "patientId"
-        value { bytes_list { value: "14" } }
-      }
-      feature {
-        key: "sequenceLength"
-        value { int64_list { value: 1 } }
-      }
-      feature {
-        key: "timestamp"
-        value { int64_list { value: 1420444800 } }
-      }
-    }
-    feature_lists: {
-      feature_list {
-        key: "Encounter.meta.lastUpdated"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "Encounter.class"
-        value { feature { bytes_list { value: "actcode:IMP" } } }
-      }
-      feature_list {
-        key: "Encounter.period.end"
-        value { feature { int64_list {} } }
-      }
-      feature_list {
-        key: "Encounter.period.start"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "encounterId"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "eventId"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-    })proto", &seqex));
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        context: {
+          feature {
+            key: "Patient.birthDate"
+            value { int64_list { value: -1323388800 } }
+          }
+          feature {
+            key: "currentEncounterId"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "patientId"
+            value { bytes_list { value: "14" } }
+          }
+          feature {
+            key: "sequenceLength"
+            value { int64_list { value: 1 } }
+          }
+          feature {
+            key: "timestamp"
+            value { int64_list { value: 1420444800 } }
+          }
+        }
+        feature_lists: {
+          feature_list {
+            key: "Encounter.meta.lastUpdated"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "Encounter.class"
+            value {
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.end"
+            value { feature { int64_list {} } }
+          }
+          feature_list {
+            key: "Encounter.period.start"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "encounterId"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "eventId"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+        })proto",
+      &seqex));
 
   PerformTest("Patient/14", bundle, trigger_labels_pair,
               {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
@@ -655,67 +667,73 @@ TEST_F(BundleToSeqexConverterTest, TestBooleanLabelTrue) {
     })proto", &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    context: {
-      feature {
-        key: "Patient.birthDate"
-        value { int64_list { value: -1323388800 } }
-      }
-      feature {
-        key: "currentEncounterId"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "patientId"
-        value { bytes_list { value: "14" } }
-      }
-      feature {
-        key: "sequenceLength"
-        value { int64_list { value: 1 } }
-      }
-      feature {
-        key: "timestamp"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "label.test_boolean_label.class"
-        value {}
-      }
-      feature {
-        key: "label.test_boolean_label.timestamp_secs"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "label.test_boolean_label.value_boolean"
-        value { int64_list { value: 1 } }
-      }
-    }
-    feature_lists: {
-      feature_list {
-        key: "Encounter.meta.lastUpdated"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "Encounter.class"
-        value { feature { bytes_list { value: "actcode:IMP" } } }
-      }
-      feature_list {
-        key: "Encounter.period.end"
-        value { feature { int64_list {} } }
-      }
-      feature_list {
-        key: "Encounter.period.start"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "encounterId"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "eventId"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-    })proto", &seqex));
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        context: {
+          feature {
+            key: "Patient.birthDate"
+            value { int64_list { value: -1323388800 } }
+          }
+          feature {
+            key: "currentEncounterId"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "patientId"
+            value { bytes_list { value: "14" } }
+          }
+          feature {
+            key: "sequenceLength"
+            value { int64_list { value: 1 } }
+          }
+          feature {
+            key: "timestamp"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "label.test_boolean_label.class"
+            value {}
+          }
+          feature {
+            key: "label.test_boolean_label.timestamp_secs"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "label.test_boolean_label.value_boolean"
+            value { int64_list { value: 1 } }
+          }
+        }
+        feature_lists: {
+          feature_list {
+            key: "Encounter.meta.lastUpdated"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "Encounter.class"
+            value {
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.end"
+            value { feature { int64_list {} } }
+          }
+          feature_list {
+            key: "Encounter.period.start"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "encounterId"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "eventId"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+        })proto",
+      &seqex));
 
   PerformTest("Patient/14", bundle, trigger_labels_pair,
               {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
@@ -779,67 +797,73 @@ TEST_F(BundleToSeqexConverterTest, TestBooleanLabelFalse) {
     })proto", &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    context: {
-      feature {
-        key: "Patient.birthDate"
-        value { int64_list { value: -1323388800 } }
-      }
-      feature {
-        key: "currentEncounterId"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "patientId"
-        value { bytes_list { value: "14" } }
-      }
-      feature {
-        key: "sequenceLength"
-        value { int64_list { value: 1 } }
-      }
-      feature {
-        key: "timestamp"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "label.test_boolean_label.class"
-        value {}
-      }
-      feature {
-        key: "label.test_boolean_label.timestamp_secs"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "label.test_boolean_label.value_boolean"
-        value { int64_list { value: 0 } }
-      }
-    }
-    feature_lists: {
-      feature_list {
-        key: "Encounter.meta.lastUpdated"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "Encounter.class"
-        value { feature { bytes_list { value: "actcode:IMP" } } }
-      }
-      feature_list {
-        key: "Encounter.period.end"
-        value { feature { int64_list {} } }
-      }
-      feature_list {
-        key: "Encounter.period.start"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "encounterId"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "eventId"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-    })proto", &seqex));
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        context: {
+          feature {
+            key: "Patient.birthDate"
+            value { int64_list { value: -1323388800 } }
+          }
+          feature {
+            key: "currentEncounterId"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "patientId"
+            value { bytes_list { value: "14" } }
+          }
+          feature {
+            key: "sequenceLength"
+            value { int64_list { value: 1 } }
+          }
+          feature {
+            key: "timestamp"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "label.test_boolean_label.class"
+            value {}
+          }
+          feature {
+            key: "label.test_boolean_label.timestamp_secs"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "label.test_boolean_label.value_boolean"
+            value { int64_list { value: 0 } }
+          }
+        }
+        feature_lists: {
+          feature_list {
+            key: "Encounter.meta.lastUpdated"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "Encounter.class"
+            value {
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.end"
+            value { feature { int64_list {} } }
+          }
+          feature_list {
+            key: "Encounter.period.start"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "encounterId"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "eventId"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+        })proto",
+      &seqex));
 
   PerformTest("Patient/14", bundle, trigger_labels_pair,
               {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
@@ -920,77 +944,73 @@ TEST_F(BundleToSeqexConverterTest, TestClassNameWithClassValueBoolean) {
     })proto", &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    context: {
-      feature {
-        key: "Patient.birthDate"
-        value { int64_list { value: -1323388800 } }
-      }
-      feature {
-        key: "currentEncounterId"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "patientId"
-        value { bytes_list { value: "14" } }
-      }
-      feature {
-        key: "sequenceLength"
-        value { int64_list { value: 1 } }
-      }
-      feature {
-        key: "timestamp"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "label.code1.class"
-        value {
-          bytes_list {
-            value: "value1"
-            value: "value2"
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        context: {
+          feature {
+            key: "Patient.birthDate"
+            value { int64_list { value: -1323388800 } }
+          }
+          feature {
+            key: "currentEncounterId"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "patientId"
+            value { bytes_list { value: "14" } }
+          }
+          feature {
+            key: "sequenceLength"
+            value { int64_list { value: 1 } }
+          }
+          feature {
+            key: "timestamp"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "label.code1.class"
+            value { bytes_list { value: "value1" value: "value2" } }
+          }
+          feature {
+            key: "label.code1.timestamp_secs"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "label.code1.value_boolean"
+            value { int64_list { value: 0 value: 1 } }
           }
         }
-      }
-      feature {
-        key: "label.code1.timestamp_secs"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "label.code1.value_boolean"
-        value {
-          int64_list {
-            value: 0
-            value: 1
+        feature_lists: {
+          feature_list {
+            key: "Encounter.meta.lastUpdated"
+            value { feature { int64_list { value: 1420444800 } } }
           }
-        }
-      }
-    }
-    feature_lists: {
-      feature_list {
-        key: "Encounter.meta.lastUpdated"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "Encounter.class"
-        value { feature { bytes_list { value: "actcode:IMP" } } }
-      }
-      feature_list {
-        key: "Encounter.period.end"
-        value { feature { int64_list {} } }
-      }
-      feature_list {
-        key: "Encounter.period.start"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "encounterId"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "eventId"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-    })proto", &seqex));
+          feature_list {
+            key: "Encounter.class"
+            value {
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.end"
+            value { feature { int64_list {} } }
+          }
+          feature_list {
+            key: "Encounter.period.start"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "encounterId"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "eventId"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+        })proto",
+      &seqex));
 
   PerformTest("Patient/14", bundle, trigger_labels_pair,
               {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
@@ -1061,72 +1081,73 @@ TEST_F(BundleToSeqexConverterTest, TestBooleanLabelMultiple) {
     })proto", &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    context: {
-      feature {
-        key: "Patient.birthDate"
-        value { int64_list { value: -1323388800 } }
-      }
-      feature {
-        key: "currentEncounterId"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "patientId"
-        value { bytes_list { value: "14" } }
-      }
-      feature {
-        key: "sequenceLength"
-        value { int64_list { value: 1 } }
-      }
-      feature {
-        key: "timestamp"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "label.test_boolean_label.class"
-        value {}
-      }
-      feature {
-        key: "label.test_boolean_label.timestamp_secs"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "label.test_boolean_label.value_boolean"
-        value {
-          int64_list {
-            value: 0
-            value: 1
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        context: {
+          feature {
+            key: "Patient.birthDate"
+            value { int64_list { value: -1323388800 } }
+          }
+          feature {
+            key: "currentEncounterId"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "patientId"
+            value { bytes_list { value: "14" } }
+          }
+          feature {
+            key: "sequenceLength"
+            value { int64_list { value: 1 } }
+          }
+          feature {
+            key: "timestamp"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "label.test_boolean_label.class"
+            value {}
+          }
+          feature {
+            key: "label.test_boolean_label.timestamp_secs"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "label.test_boolean_label.value_boolean"
+            value { int64_list { value: 0 value: 1 } }
           }
         }
-      }
-    }
-    feature_lists: {
-      feature_list {
-        key: "Encounter.meta.lastUpdated"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "Encounter.class"
-        value { feature { bytes_list { value: "actcode:IMP" } } }
-      }
-      feature_list {
-        key: "Encounter.period.end"
-        value { feature { int64_list {} } }
-      }
-      feature_list {
-        key: "Encounter.period.start"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "encounterId"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "eventId"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-    })proto", &seqex));
+        feature_lists: {
+          feature_list {
+            key: "Encounter.meta.lastUpdated"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "Encounter.class"
+            value {
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.end"
+            value { feature { int64_list {} } }
+          }
+          feature_list {
+            key: "Encounter.period.start"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "encounterId"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "eventId"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+        })proto",
+      &seqex));
 
   PerformTest("Patient/14", bundle, trigger_labels_pair,
               {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
@@ -1192,74 +1213,81 @@ TEST_F(BundleToSeqexConverterTest, TestDateTimeLabel) {
     })proto", &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    context: {
-      feature {
-        key: "Patient.birthDate"
-        value { int64_list { value: -1323388800 } }
-      }
-      feature {
-        key: "currentEncounterId"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "patientId"
-        value { bytes_list { value: "14" } }
-      }
-      feature {
-        key: "sequenceLength"
-        value { int64_list { value: 1 } }
-      }
-      feature {
-        key: "timestamp"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "label.test_datetime_label.class"
-        value {}
-      }
-      feature {
-        key: "label.test_datetime_label.timestamp_secs"
-        value { int64_list { value: 1420444800 } }
-      }
-      feature {
-        key: "label.test_datetime_label.value_datetime_secs"
-        value { int64_list { value: 1515980100 } }
-      }
-    }
-    feature_lists: {
-      feature_list {
-        key: "Encounter.meta.lastUpdated"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "Encounter.class"
-        value { feature { bytes_list { value: "actcode:IMP" } } }
-      }
-      feature_list {
-        key: "Encounter.period.end"
-        value { feature { int64_list {} } }
-      }
-      feature_list {
-        key: "Encounter.period.start"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "encounterId"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-      feature_list {
-        key: "eventId"
-        value { feature { int64_list { value: 1420444800 } } }
-      }
-    })proto", &seqex));
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        context: {
+          feature {
+            key: "Patient.birthDate"
+            value { int64_list { value: -1323388800 } }
+          }
+          feature {
+            key: "currentEncounterId"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "patientId"
+            value { bytes_list { value: "14" } }
+          }
+          feature {
+            key: "sequenceLength"
+            value { int64_list { value: 1 } }
+          }
+          feature {
+            key: "timestamp"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "label.test_datetime_label.class"
+            value {}
+          }
+          feature {
+            key: "label.test_datetime_label.timestamp_secs"
+            value { int64_list { value: 1420444800 } }
+          }
+          feature {
+            key: "label.test_datetime_label.value_datetime_secs"
+            value { int64_list { value: 1515980100 } }
+          }
+        }
+        feature_lists: {
+          feature_list {
+            key: "Encounter.meta.lastUpdated"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "Encounter.class"
+            value {
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.end"
+            value { feature { int64_list {} } }
+          }
+          feature_list {
+            key: "Encounter.period.start"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "encounterId"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+          feature_list {
+            key: "eventId"
+            value { feature { int64_list { value: 1420444800 } } }
+          }
+        })proto",
+      &seqex));
 
   PerformTest("Patient/14", bundle, trigger_labels_pair,
               {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
 }
 
 TEST_F(BundleToSeqexConverterTest, RedactedFeatures) {
-  absl::SetFlag(&FLAGS_trigger_time_redacted_features, "Encounter.reason.icd9");
+  absl::SetFlag(&FLAGS_trigger_time_redacted_features,
+                "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis");
 
   EventTrigger trigger;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
@@ -1342,103 +1370,113 @@ TEST_F(BundleToSeqexConverterTest, RedactedFeatures) {
     })proto", &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    context: {
-      feature {
-        key: "Patient.birthDate"
-        value { int64_list { value: -1323388800 } }
-      }
-      feature {
-        key: "currentEncounterId"
-        value { int64_list { value: 1420099200 } }
-      }
-      feature {
-        key: "patientId"
-        value { bytes_list { value: "14" } }
-      }
-      feature {
-        key: "sequenceLength"
-        value { int64_list { value: 4 } }
-      }
-      feature {
-        key: "timestamp"
-        value { int64_list { value: 1420102800 } }
-      }
-    }
-    feature_lists: {
-      feature_list: {
-        key: "Encounter.meta.lastUpdated"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417424400 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420102800 } }
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        context: {
+          feature {
+            key: "Patient.birthDate"
+            value { int64_list { value: -1323388800 } }
+          }
+          feature {
+            key: "currentEncounterId"
+            value { int64_list { value: 1420099200 } }
+          }
+          feature {
+            key: "patientId"
+            value { bytes_list { value: "14" } }
+          }
+          feature {
+            key: "sequenceLength"
+            value { int64_list { value: 4 } }
+          }
+          feature {
+            key: "timestamp"
+            value { int64_list { value: 1420102800 } }
+          }
         }
-      }
-      feature_list {
-        key: "Encounter.class"
-        value {
-          feature { bytes_list { value: "actcode:IMP" } }
-          feature { bytes_list { value: "actcode:IMP" } }
-          feature { bytes_list { value: "actcode:IMP" } }
-          feature { bytes_list { value: "actcode:IMP" } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.end"
-        value {
-          feature { int64_list {} }
-          feature { int64_list { value: 1417424400 } }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.start"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "V410.9" } }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9.display.tokenized"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "standard" value: "issue" } }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "encounterId"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-        }
-      }
-      feature_list {
-        key: "eventId"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417424400 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-    })proto", &seqex));
+        feature_lists: {
+          feature_list: {
+            key: "Encounter.meta.lastUpdated"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417424400 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.class"
+            value {
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.end"
+            value {
+              feature { int64_list {} }
+              feature { int64_list { value: 1417424400 } }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.start"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420099200 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list { value: "V410.9" } }
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list { value: "standard" value: "issue" } }
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+            }
+          }
+          feature_list {
+            key: "encounterId"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420099200 } }
+            }
+          }
+          feature_list {
+            key: "eventId"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417424400 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+        })proto",
+      &seqex));
 
   PerformTest("Patient/14", bundle, trigger_labels_pair,
               {{"Patient/14:0-4@1420102800:Encounter/1", seqex}});
@@ -1523,95 +1561,97 @@ TEST_F(BundleToSeqexConverterTest, JoinMedication) {
     })proto", &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    context: {
-      feature {
-        key: "Patient.birthDate"
-        value { int64_list { value: -1323388800 } }
-      }
-      feature {
-        key: "currentEncounterId"
-        value { int64_list { value: 1420099200 } }
-      }
-      feature {
-        key: "patientId"
-        value { bytes_list { value: "14" } }
-      }
-      feature {
-        key: "sequenceLength"
-        value { int64_list { value: 3 } }
-      }
-      feature {
-        key: "timestamp"
-        value { int64_list { value: 1420102800 } }
-      }
-    }
-    feature_lists: {
-      feature_list {
-        key: "Encounter.meta.lastUpdated"
-        value {
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102800 } }
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        context: {
+          feature {
+            key: "Patient.birthDate"
+            value { int64_list { value: -1323388800 } }
+          }
+          feature {
+            key: "currentEncounterId"
+            value { int64_list { value: 1420099200 } }
+          }
+          feature {
+            key: "patientId"
+            value { bytes_list { value: "14" } }
+          }
+          feature {
+            key: "sequenceLength"
+            value { int64_list { value: 3 } }
+          }
+          feature {
+            key: "timestamp"
+            value { int64_list { value: 1420102800 } }
+          }
         }
-      }
-      feature_list {
-        key: "Encounter.period.end"
-        value {
-          feature { int64_list {} }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.start"
-        value {
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420099200 } }
-        }
-      }
-      feature_list {
-        key: "MedicationRequest.meta.lastUpdated"
-        value {
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102700 } }
-          feature { int64_list {} }
-        }
-      }
-      feature_list {
-        key: "MedicationRequest.contained.medication.code.ndc"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "123" } }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "MedicationRequest.authoredOn"
-        value {
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102700 } }
-          feature { int64_list {} }
-        }
-      }
-      feature_list {
-        key: "eventId"
-        value {
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420102700 } }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-      feature_list {
-        key: "encounterId"
-        value {
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-        }
-      }
-    })proto", &seqex));
+        feature_lists: {
+          feature_list {
+            key: "Encounter.meta.lastUpdated"
+            value {
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.end"
+            value {
+              feature { int64_list {} }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.start"
+            value {
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420099200 } }
+            }
+          }
+          feature_list {
+            key: "MedicationRequest.meta.lastUpdated"
+            value {
+              feature { int64_list {} }
+              feature { int64_list { value: 1420102700 } }
+              feature { int64_list {} }
+            }
+          }
+          feature_list {
+            key: "MedicationRequest.contained.medication.code.http-hl7-org-fhir-sid-ndc"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list { value: "123" } }
+              feature { bytes_list {} }
+            }
+          }
+          feature_list {
+            key: "MedicationRequest.authoredOn"
+            value {
+              feature { int64_list {} }
+              feature { int64_list { value: 1420102700 } }
+              feature { int64_list {} }
+            }
+          }
+          feature_list {
+            key: "eventId"
+            value {
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420102700 } }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+          feature_list {
+            key: "encounterId"
+            value {
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420099200 } }
+            }
+          }
+        })proto",
+      &seqex));
 
   PerformTest("Patient/14", bundle, trigger_labels_pair,
               {{"Patient/14:0-3@1420102800", seqex}});
@@ -1695,102 +1735,105 @@ TEST_F(BundleToSeqexConverterTest, EmptyLabel) {
       }
     })proto", &bundle));
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    context: {
-      feature: {
-        key: "Patient.birthDate"
-        value { int64_list { value: -1323388800 } }
-      }
-      feature {
-        key: "currentEncounterId"
-        value { int64_list { value: 1420099200 } }
-      }
-      feature {
-        key: "patientId"
-        value { bytes_list { value: "14" } }
-      }
-      feature {
-        key: "sequenceLength"
-        value { int64_list { value: 3 } }
-      }
-      feature {
-        key: "timestamp"
-        value { int64_list { value: 1420102800 } }
-      }
-    }
-    feature_lists: {
-      feature_list {
-        key: "Encounter.meta.lastUpdated"
-        value {
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102800 } }
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        context: {
+          feature: {
+            key: "Patient.birthDate"
+            value { int64_list { value: -1323388800 } }
+          }
+          feature {
+            key: "currentEncounterId"
+            value { int64_list { value: 1420099200 } }
+          }
+          feature {
+            key: "patientId"
+            value { bytes_list { value: "14" } }
+          }
+          feature {
+            key: "sequenceLength"
+            value { int64_list { value: 3 } }
+          }
+          feature {
+            key: "timestamp"
+            value { int64_list { value: 1420102800 } }
+          }
         }
-      }
-      feature_list {
-        key: "Encounter.period.end"
-        value {
-          feature { int64_list {} }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.start"
-        value {
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420099200 } }
-        }
-      }
-      feature_list {
-        key: "MedicationRequest.meta.lastUpdated"
-        value {
-          feature { int64_list {} }
-          feature { int64_list { value: 1420100000 } }
-          feature { int64_list {} }
-        }
-      }
-      feature_list {
-        key: "MedicationRequest.contained.medication.code.ndc"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "123" } }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "MedicationRequest.authoredOn"
-        value {
-          feature { int64_list {} }
-          feature { int64_list { value: 1420100000 } }
-          feature { int64_list {} }
-        }
-      }
-      feature_list {
-        key: "eventId"
-        value {
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420100000 } }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-      feature_list {
-        key: "encounterId"
-        value {
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-        }
-      }
-    })proto", &seqex));
+        feature_lists: {
+          feature_list {
+            key: "Encounter.meta.lastUpdated"
+            value {
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.end"
+            value {
+              feature { int64_list {} }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.start"
+            value {
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420099200 } }
+            }
+          }
+          feature_list {
+            key: "MedicationRequest.meta.lastUpdated"
+            value {
+              feature { int64_list {} }
+              feature { int64_list { value: 1420100000 } }
+              feature { int64_list {} }
+            }
+          }
+          feature_list {
+            key: "MedicationRequest.contained.medication.code.http-hl7-org-fhir-sid-ndc"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list { value: "123" } }
+              feature { bytes_list {} }
+            }
+          }
+          feature_list {
+            key: "MedicationRequest.authoredOn"
+            value {
+              feature { int64_list {} }
+              feature { int64_list { value: 1420100000 } }
+              feature { int64_list {} }
+            }
+          }
+          feature_list {
+            key: "eventId"
+            value {
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420100000 } }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+          feature_list {
+            key: "encounterId"
+            value {
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420099200 } }
+            }
+          }
+        })proto",
+      &seqex));
 
   PerformTest("Patient/14", bundle, trigger_labels_pair,
               {{"Patient/14:0-3@1420102800", seqex}});
 }
 
 TEST_F(BundleToSeqexConverterTest, TwoExamples) {
-  absl::SetFlag(&FLAGS_trigger_time_redacted_features, "Encounter.reason.icd9");
+  absl::SetFlag(&FLAGS_trigger_time_redacted_features,
+                "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis");
 
   EventTrigger trigger1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
@@ -1878,186 +1921,202 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples) {
     })proto", &bundle));
 
   SequenceExample seqex1;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    context: {
-      feature {
-        key: "Patient.birthDate"
-        value { int64_list { value: -1323388800 } }
-      }
-      feature {
-        key: "currentEncounterId"
-        value { int64_list { value: 1417420800 } }
-      }
-      feature {
-        key: "patientId"
-        value { bytes_list { value: "14" } }
-      }
-      feature {
-        key: "sequenceLength"
-        value { int64_list { value: 2 } }
-      }
-      feature {
-        key: "timestamp"
-        value { int64_list { value: 1417424400 } }
-      }
-    }
-    feature_lists: {
-      feature_list {
-        key: "Encounter.meta.lastUpdated"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417424400 } }
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        context: {
+          feature {
+            key: "Patient.birthDate"
+            value { int64_list { value: -1323388800 } }
+          }
+          feature {
+            key: "currentEncounterId"
+            value { int64_list { value: 1417420800 } }
+          }
+          feature {
+            key: "patientId"
+            value { bytes_list { value: "14" } }
+          }
+          feature {
+            key: "sequenceLength"
+            value { int64_list { value: 2 } }
+          }
+          feature {
+            key: "timestamp"
+            value { int64_list { value: 1417424400 } }
+          }
         }
-      }
-      feature_list {
-        key: "Encounter.class"
-        value {
-          feature { bytes_list { value: "actcode:IMP" } }
-          feature { bytes_list { value: "actcode:IMP" } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.end"
-        value {
-          feature { int64_list {} }
-          feature { int64_list { value: 1417424400 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.start"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417420800 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9.display.tokenized"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "encounterId"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417420800 } }
-        }
-      }
-      feature_list {
-        key: "eventId"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417424400 } }
-        }
-      }
-    })proto", &seqex1));
+        feature_lists: {
+          feature_list {
+            key: "Encounter.meta.lastUpdated"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417424400 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.class"
+            value {
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.end"
+            value {
+              feature { int64_list {} }
+              feature { int64_list { value: 1417424400 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.start"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417420800 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+            }
+          }
+          feature_list {
+            key: "encounterId"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417420800 } }
+            }
+          }
+          feature_list {
+            key: "eventId"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417424400 } }
+            }
+          }
+        })proto",
+      &seqex1));
 
   SequenceExample seqex2;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    context: {
-      feature {
-        key: "Patient.birthDate"
-        value { int64_list { value: -1323388800 } }
-      }
-      feature {
-        key: "currentEncounterId"
-        value { int64_list { value: 1420099200 } }
-      }
-      feature {
-        key: "patientId"
-        value { bytes_list { value: "14" } }
-      }
-      feature {
-        key: "sequenceLength"
-        value { int64_list { value: 4 } }
-      }
-      feature {
-        key: "timestamp"
-        value { int64_list { value: 1420102800 } }
-      }
-    }
-    feature_lists: {
-      feature_list {
-        key: "Encounter.meta.lastUpdated"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417424400 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420102800 } }
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        context: {
+          feature {
+            key: "Patient.birthDate"
+            value { int64_list { value: -1323388800 } }
+          }
+          feature {
+            key: "currentEncounterId"
+            value { int64_list { value: 1420099200 } }
+          }
+          feature {
+            key: "patientId"
+            value { bytes_list { value: "14" } }
+          }
+          feature {
+            key: "sequenceLength"
+            value { int64_list { value: 4 } }
+          }
+          feature {
+            key: "timestamp"
+            value { int64_list { value: 1420102800 } }
+          }
         }
-      }
-      feature_list {
-        key: "Encounter.class"
-        value {
-          feature { bytes_list { value: "actcode:IMP" } }
-          feature { bytes_list { value: "actcode:IMP" } }
-          feature { bytes_list { value: "actcode:IMP" } }
-          feature { bytes_list { value: "actcode:IMP" } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.end"
-        value {
-          feature { int64_list {} }
-          feature { int64_list { value: 1417424400 } }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.start"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "V410.9" } }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9.display.tokenized"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "standard" value: "issue" } }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "encounterId"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-        }
-      }
-      feature_list {
-        key: "eventId"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417424400 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-    })proto", &seqex2));
+        feature_lists: {
+          feature_list {
+            key: "Encounter.meta.lastUpdated"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417424400 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.class"
+            value {
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.end"
+            value {
+              feature { int64_list {} }
+              feature { int64_list { value: 1417424400 } }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.start"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420099200 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list { value: "V410.9" } }
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list { value: "standard" value: "issue" } }
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+            }
+          }
+          feature_list {
+            key: "encounterId"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420099200 } }
+            }
+          }
+          feature_list {
+            key: "eventId"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417424400 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+        })proto",
+      &seqex2));
 
   BundleToSeqexConverter<> converter(fhir_version_config_, tokenizer_,
                                      false /* enable_attribution */,
@@ -2079,7 +2138,8 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples) {
 }
 
 TEST_F(BundleToSeqexConverterTest, TwoExamples_EnableAttribution) {
-  absl::SetFlag(&FLAGS_trigger_time_redacted_features, "Encounter.reason.icd9");
+  absl::SetFlag(&FLAGS_trigger_time_redacted_features,
+                "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis");
 
   EventTrigger trigger1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
@@ -2167,234 +2227,250 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples_EnableAttribution) {
     })proto", &bundle));
 
   SequenceExample seqex1;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    context: {
-      feature {
-        key: "Patient.birthDate"
-        value { int64_list { value: -1323388800 } }
-      }
-      feature {
-        key: "currentEncounterId"
-        value { int64_list { value: 1417420800 } }
-      }
-      feature {
-        key: "patientId"
-        value { bytes_list { value: "14" } }
-      }
-      feature {
-        key: "sequenceLength"
-        value { int64_list { value: 2 } }
-      }
-      feature {
-        key: "timestamp"
-        value { int64_list { value: 1417424400 } }
-      }
-    }
-    feature_lists: {
-      feature_list {
-        key: "Encounter.meta.lastUpdated"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417424400 } }
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        context: {
+          feature {
+            key: "Patient.birthDate"
+            value { int64_list { value: -1323388800 } }
+          }
+          feature {
+            key: "currentEncounterId"
+            value { int64_list { value: 1417420800 } }
+          }
+          feature {
+            key: "patientId"
+            value { bytes_list { value: "14" } }
+          }
+          feature {
+            key: "sequenceLength"
+            value { int64_list { value: 2 } }
+          }
+          feature {
+            key: "timestamp"
+            value { int64_list { value: 1417424400 } }
+          }
         }
-      }
-      feature_list {
-        key: "Encounter.class"
-        value {
-          feature { bytes_list { value: "actcode:IMP" } }
-          feature { bytes_list { value: "actcode:IMP" } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.end"
-        value {
-          feature { int64_list {} }
-          feature { int64_list { value: 1417424400 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.start"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417420800 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9.display.tokenized"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9.display.token_start"
-        value {
-          feature { int64_list {} }
-          feature { int64_list {} }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9.display.token_end"
-        value {
-          feature { int64_list {} }
-          feature { int64_list {} }
-        }
-      }
-      feature_list {
-        key: "encounterId"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417420800 } }
-        }
-      }
-      feature_list {
-        key: "eventId"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417424400 } }
-        }
-      }
-      feature_list {
-        key: "resourceId"
-        value {
-          feature { bytes_list { value: "Encounter/1" } }
-          feature { bytes_list { value: "Encounter/1" } }
-        }
-      }
-    })proto", &seqex1));
+        feature_lists: {
+          feature_list {
+            key: "Encounter.meta.lastUpdated"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417424400 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.class"
+            value {
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.end"
+            value {
+              feature { int64_list {} }
+              feature { int64_list { value: 1417424400 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.start"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417420800 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.token_start"
+            value {
+              feature { int64_list {} }
+              feature { int64_list {} }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.token_end"
+            value {
+              feature { int64_list {} }
+              feature { int64_list {} }
+            }
+          }
+          feature_list {
+            key: "encounterId"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417420800 } }
+            }
+          }
+          feature_list {
+            key: "eventId"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417424400 } }
+            }
+          }
+          feature_list {
+            key: "resourceId"
+            value {
+              feature { bytes_list { value: "Encounter/1" } }
+              feature { bytes_list { value: "Encounter/1" } }
+            }
+          }
+        })proto",
+      &seqex1));
 
   SequenceExample seqex2;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    context: {
-      feature {
-        key: "Patient.birthDate"
-        value { int64_list { value: -1323388800 } }
-      }
-      feature {
-        key: "currentEncounterId"
-        value { int64_list { value: 1420099200 } }
-      }
-      feature {
-        key: "patientId"
-        value { bytes_list { value: "14" } }
-      }
-      feature {
-        key: "sequenceLength"
-        value { int64_list { value: 4 } }
-      }
-      feature {
-        key: "timestamp"
-        value { int64_list { value: 1420102800 } }
-      }
-    }
-    feature_lists: {
-      feature_list {
-        key: "Encounter.meta.lastUpdated"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417424400 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420102800 } }
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        context: {
+          feature {
+            key: "Patient.birthDate"
+            value { int64_list { value: -1323388800 } }
+          }
+          feature {
+            key: "currentEncounterId"
+            value { int64_list { value: 1420099200 } }
+          }
+          feature {
+            key: "patientId"
+            value { bytes_list { value: "14" } }
+          }
+          feature {
+            key: "sequenceLength"
+            value { int64_list { value: 4 } }
+          }
+          feature {
+            key: "timestamp"
+            value { int64_list { value: 1420102800 } }
+          }
         }
-      }
-      feature_list {
-        key: "Encounter.class"
-        value {
-          feature { bytes_list { value: "actcode:IMP" } }
-          feature { bytes_list { value: "actcode:IMP" } }
-          feature { bytes_list { value: "actcode:IMP" } }
-          feature { bytes_list { value: "actcode:IMP" } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.end"
-        value {
-          feature { int64_list {} }
-          feature { int64_list { value: 1417424400 } }
-          feature { int64_list {} }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.period.start"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "V410.9" } }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9.display.tokenized"
-        value {
-          feature { bytes_list {} }
-          feature { bytes_list { value: "standard" value: "issue" } }
-          feature { bytes_list {} }
-          feature { bytes_list {} }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9.display.token_start"
-        value {
-          feature { int64_list {} }
-          feature { int64_list { value: 0 value: 9 } }
-          feature { int64_list {} }
-          feature { int64_list {} }
-        }
-      }
-      feature_list {
-        key: "Encounter.reason.icd9.display.token_end"
-        value {
-          feature { int64_list {} }
-          feature { int64_list { value: 8 value: 14 } }
-          feature { int64_list {} }
-          feature { int64_list {} }
-        }
-      }
-      feature_list {
-        key: "encounterId"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420099200 } }
-        }
-      }
-      feature_list {
-        key: "eventId"
-        value {
-          feature { int64_list { value: 1417420800 } }
-          feature { int64_list { value: 1417424400 } }
-          feature { int64_list { value: 1420099200 } }
-          feature { int64_list { value: 1420102800 } }
-        }
-      }
-      feature_list {
-        key: "resourceId"
-        value {
-          feature { bytes_list { value: "Encounter/1" } }
-          feature { bytes_list { value: "Encounter/1" } }
-          feature { bytes_list { value: "Encounter/2" } }
-          feature { bytes_list { value: "Encounter/2" } }
-        }
-      }
-    })proto", &seqex2));
+        feature_lists: {
+          feature_list {
+            key: "Encounter.meta.lastUpdated"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417424400 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.class"
+            value {
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+              feature {
+                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+              }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.end"
+            value {
+              feature { int64_list {} }
+              feature { int64_list { value: 1417424400 } }
+              feature { int64_list {} }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.period.start"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420099200 } }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list { value: "V410.9" } }
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+            value {
+              feature { bytes_list {} }
+              feature { bytes_list { value: "standard" value: "issue" } }
+              feature { bytes_list {} }
+              feature { bytes_list {} }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.token_start"
+            value {
+              feature { int64_list {} }
+              feature { int64_list { value: 0 value: 9 } }
+              feature { int64_list {} }
+              feature { int64_list {} }
+            }
+          }
+          feature_list {
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.token_end"
+            value {
+              feature { int64_list {} }
+              feature { int64_list { value: 8 value: 14 } }
+              feature { int64_list {} }
+              feature { int64_list {} }
+            }
+          }
+          feature_list {
+            key: "encounterId"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420099200 } }
+            }
+          }
+          feature_list {
+            key: "eventId"
+            value {
+              feature { int64_list { value: 1417420800 } }
+              feature { int64_list { value: 1417424400 } }
+              feature { int64_list { value: 1420099200 } }
+              feature { int64_list { value: 1420102800 } }
+            }
+          }
+          feature_list {
+            key: "resourceId"
+            value {
+              feature { bytes_list { value: "Encounter/1" } }
+              feature { bytes_list { value: "Encounter/1" } }
+              feature { bytes_list { value: "Encounter/2" } }
+              feature { bytes_list { value: "Encounter/2" } }
+            }
+          }
+        })proto",
+      &seqex2));
 
   BundleToSeqexConverter<> converter(fhir_version_config_, tokenizer_,
                                      true /* enable_attribution */,

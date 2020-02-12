@@ -126,7 +126,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
         } }
         feature_lists: {
           feature_list {
-            key: "MedicationRequest.contained.medication.code.ndc"
+            key: "MedicationRequest.contained.medication.code.http-hl7-org-fhir-sid-ndc"
             value { feature { bytes_list { value: "123" } } }
           }
           feature_list {
@@ -288,7 +288,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
           value { feature { int64_list { value: 1417392000 } } feature { int64_list { value: 1420099200 } } feature { int64_list { } } feature { int64_list { } } feature { int64_list { } } }
         }
         feature_list {
-          key: "Condition.code.icd9"
+          key: "Condition.code.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
           value { feature { bytes_list { value: "bar" } } feature { bytes_list { value: "baz" } } feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { } } }
         }
         feature_list {
@@ -297,7 +297,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
         }
         feature_list {
           key: "Encounter.class"
-          value { feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { value: "actcode:IMP" } } feature { bytes_list { } } feature { bytes_list { value: "actcode:IMP" } } }
+          value { feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" } } feature { bytes_list { } } feature { bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" } } }
         }
         feature_list {
           key: "Encounter.meta.lastUpdated"
@@ -312,11 +312,11 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
           value { feature { int64_list { } } feature { int64_list { } } feature { int64_list { } } feature { int64_list { } } feature { int64_list { value: 1420102800 } } }
         }
         feature_list {
-          key: "Encounter.reason.icd9"
+          key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
           value { feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { value: "191.4" } } }
         }
         feature_list {
-          key: "Encounter.reason.icd9.display.tokenized"
+          key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
           value { feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { value: "malignant" value: "neoplasm" value: "of" value: "occipital" value: "lobe" } } }
         }
         feature_list {
@@ -437,7 +437,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
         feature_lists: {
           feature_list {
             key: "Encounter.class"
-            value { feature { bytes_list { value: "actcode:IMP" } } feature { bytes_list { value: "actcode:IMP" } } }
+            value { feature { bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" } } feature { bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" } } }
           }
           feature_list {
             key: "Encounter.meta.lastUpdated"
@@ -452,11 +452,11 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
             value { feature { int64_list { } } feature { int64_list { value: 1417424400 } } }
           }
           feature_list {
-            key: "Encounter.reason.icd9"
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
             value { feature { bytes_list { } } feature { bytes_list { value: "V410.9" } } }
           }
           feature_list {
-            key: "Encounter.reason.icd9.display.tokenized"
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
             value { feature { bytes_list { } } feature { bytes_list { value: "standard" value: "issue" } } }
           }
           feature_list {
@@ -492,7 +492,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
           feature_list {
             key: "Encounter.class"
             value {
-              feature { bytes_list { value: "actcode:IMP" } } feature { bytes_list { value: "actcode:IMP" } } feature { bytes_list { value: "actcode:IMP" } } feature { bytes_list { value: "actcode:IMP" } }
+              feature { bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" } } feature { bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" } } feature { bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" } } feature { bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" } }
             }
           }
           feature_list {
@@ -512,13 +512,13 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
             }
           }
           feature_list {
-            key: "Encounter.reason.icd9"
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
             value {
               feature { bytes_list { } } feature { bytes_list { value: "V410.9" } } feature { bytes_list { } } feature { bytes_list { value: "191.4" } }
             }
           }
           feature_list {
-            key: "Encounter.reason.icd9.display.tokenized"
+            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
             value {
               feature { bytes_list { } } feature { bytes_list { value: "standard" value: "issue" } } feature { bytes_list { } } feature { bytes_list { value: "malignant" value: "neoplasm" value: "of" value: "occipital" value: "lobe" } }
             }

@@ -61,108 +61,6 @@ ABSL_FLAG(bool, tokenize_code_text_features, true,
 
 namespace google {
 namespace fhir {
-
-namespace systems {
-
-// These systems are standard values for valuesets described by the FHIR
-// standard, either at the resource level or in the code system listing found
-// at https://www.hl7.org/fhir/terminologies-systems.html.
-const char kAdmitSource[] = "http://hl7.org/fhir/admit-source";
-const char kClaimCategory[] = "http://hl7.org/fhir/claiminformationcategory";
-const char kConditionCategory[] =
-    "http://hl7.org/fhir/ValueSet/condition-category";
-const char kConditionVerStatus[] =
-    "http://hl7.org/fhir/ValueSet/condition-ver-status";
-const char kCpt[] = "http://www.ama-assn.org/go/cpt";
-const char kDiagnosisRole[] = "http://hl7.org/fhir/diagnosis-role";
-const char kDischargeDisposition[] =
-    "http://hl7.org/fhir/discharge-disposition";
-const char kEncounterClass[] = "http://hl7.org/fhir/v3/ActCode";
-const char kEncounterType[] = "http://hl7.org/fhir/encounter-type";
-const char kIcd10Diagnosis[] = "http://hl7.org/fhir/sid/icd-10";
-const char kIcd9Diagnosis[] = "http://hl7.org/fhir/sid/icd-9-cm/diagnosis";
-const char kIcd9Procedure[] = "http://hl7.org/fhir/sid/icd-9-cm/procedure";
-const char kIcd9[] = "http://hl7.org/fhir/sid/icd-9-cm";
-const char kLanguage[] = "urn:ietf:bcp:47";
-const char kLoinc[] = "http://loinc.org";
-const char kMaritalStatus[] = "http://hl7.org/fhir/v3/MaritalStatus";
-const char kNUBCDischarge[] = "http://www.nubc.org/patient-discharge";
-const char kNdc[] = "http://hl7.org/fhir/sid/ndc";
-const char kObservationCategory[] = "http://hl7.org/fhir/observation-category";
-const char kProcedureCategory[] =
-    "http://hl7.org/fhir/ValueSet/procedure-category";
-const char kRxNorm[] = "http://www.nlm.nih.gov/research/umls/rxnorm";
-const char kSnomed[] = "http://snomed.info/sct";
-
-// We accept multiple different icd9/icd10/ccs subset coding schemes.
-static const std::vector<std::string>* const kIcd9Schemes =
-    new std::vector<std::string>({kIcd9, kIcd9Diagnosis, kIcd9Procedure});
-static const std::vector<std::string>* const kIcd10Schemes =
-    new std::vector<std::string>({kIcd10Diagnosis});
-
-// Return a short form of the system name.
-std::string ToShortSystemName(const std::string& system) {
-  if (system == kLoinc) {
-    return "loinc";
-  }
-  for (const auto& icd9_system : *kIcd9Schemes) {
-    if (system == icd9_system) {
-      return "icd9";
-    }
-  }
-  for (const auto& icd10_system : *kIcd10Schemes) {
-    if (system == icd10_system) {
-      return "icd10";
-    }
-  }
-  if (system == kCpt) {
-    return "cpt";
-  }
-  if (system == kNdc) {
-    return "ndc";
-  }
-  if (system == kSnomed) {
-    return "snomed";
-  }
-  if (system == kObservationCategory) {
-    return "observation_category";
-  }
-  if (system == kClaimCategory) {
-    return "claim_category";
-  }
-  if (system == kMaritalStatus) {
-    return "marital_status";
-  }
-  if (system == kNUBCDischarge) {
-    return "nubc_discharge";
-  }
-  if (system == kLanguage) {
-    return "language";
-  }
-  if (system == kRxNorm) {
-    return "rxnorm";
-  }
-  if (system == kAdmitSource) {
-    return "admit_source";
-  }
-  if (system == kEncounterClass) {
-    return "actcode";
-  }
-  if (system == kDischargeDisposition) {
-    return "discharge_disposition";
-  }
-  if (system == kEncounterType) {
-    return "encounter_type";
-  }
-  if (system == kDiagnosisRole) {
-    return "diagnosis_role";
-  }
-  return absl::StrReplaceAll(
-      system, {{"://", "-"}, {":", "-"}, {"/", "-"}, {".", "-"}});
-}
-
-}  // namespace systems
-
 namespace seqex {
 
 using ::google::fhir::stu3::proto::Base64Binary;
@@ -248,7 +146,8 @@ void AddCodingToExample(const Coding& coding, const std::string& name,
                         bool enable_attribution) {
   CHECK(coding.has_system() && coding.has_code());
   const std::string system =
-      systems::ToShortSystemName(coding.system().value());
+      absl::StrReplaceAll(coding.system().value(),
+                          {{"://", "-"}, {":", "-"}, {"/", "-"}, {".", "-"}});
   const std::string feature_name =
       append_system_to_feature_name ? absl::StrCat(name, ".", system) : name;
   const std::string code =

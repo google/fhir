@@ -102,17 +102,19 @@ TEST_F(ResourceToExampleTest, PositiveInt) {
     }
   )proto", &input));
   ::tensorflow::Example expected;
-  ASSERT_TRUE(parser_.ParseFromString(R"proto(
-    features {
-      feature {
-        key: "Encounter.diagnosis.rank"
-        value { int64_list { value: 6789 } }
-      }
-      feature {
-        key: "Encounter.diagnosis.role.diagnosis_role"
-        value { bytes_list { value: "DD" } }
-      }
-    })proto", &expected));
+  ASSERT_TRUE(parser_.ParseFromString(
+      R"proto(
+        features {
+          feature {
+            key: "Encounter.diagnosis.rank"
+            value { int64_list { value: 6789 } }
+          }
+          feature {
+            key: "Encounter.diagnosis.role.http-hl7-org-fhir-diagnosis-role"
+            value { bytes_list { value: "DD" } }
+          }
+        })proto",
+      &expected));
   ::tensorflow::Example output;
   ResourceToExample(input, *tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
