@@ -185,10 +185,6 @@ Status CheckField(const Message& message, const FieldDescriptor* field,
                   const PrimitiveHandler* primitive_handler) {
   const std::string& new_base =
       absl::StrCat(base_name, ".", field->json_name());
-  if (field->options().GetExtension(validation_requirement) ==
-      ::google::fhir::proto::REQUIRED_BY_FHIR) {
-    LOG(WARNING) << field->full_name();
-  }
   if (field->options().HasExtension(validation_requirement) &&
       field->options().GetExtension(validation_requirement) ==
           ::google::fhir::proto::REQUIRED_BY_FHIR) {
