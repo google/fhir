@@ -31,16 +31,19 @@ EqualsProtoMatcher::EqualsProtoMatcher(const google::protobuf::Message& expected
 
 bool EqualsProtoMatcher::MatchAndExplain(
     const google::protobuf::Message& m,
-    testing::MatchResultListener* /* listener */) const {
-  return google::fhir::AreSameMessageType(*expected_, m) &&
-         ::google::protobuf::util::MessageDifferencer::Equals(*expected_, m);
+    testing::MatchResultListener* l) const {
+  return MatchAndExplain(&m, l);
 }
 
 bool EqualsProtoMatcher::MatchAndExplain(
     const google::protobuf::Message* m,
-    testing::MatchResultListener* /* listener */) const {
-  return google::fhir::AreSameMessageType(*expected_, *m) &&
+    testing::MatchResultListener* l) const {
+  bool result = google::fhir::AreSameMessageType(*expected_, *m) &&
          ::google::protobuf::util::MessageDifferencer::Equals(*expected_, *m);
+  if (!result && m != nullptr) {
+    *l << m->GetTypeName() << " <" << m->DebugString() << ">";
+  }
+  return result;
 }
 
 void EqualsProtoMatcher::DescribeTo(::std::ostream* os) const {
