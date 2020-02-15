@@ -81,6 +81,31 @@ Status RetrieveField(const Message& root, const FieldDescriptor& field,
       });
 }
 
+bool HasField(const google::protobuf::Descriptor* descriptor,
+              absl::string_view json_name) {
+  if (IsContainedResource(descriptor) || IsChoiceTypeContainer(descriptor)) {
+    for (int i = 0; i < descriptor->field_count(); i++) {
+      if (FindFieldByJsonName(descriptor->field(i)->message_type(),
+                              json_name)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  return FindFieldByJsonName(descriptor, json_name);
+}
+
+const google::protobuf::FieldDescriptor* FindFieldByJsonName(
+    const google::protobuf::Descriptor* descriptor, absl::string_view json_name) {
+  for (int i = 0; i < descriptor->field_count(); ++i) {
+    if (json_name == descriptor->field(i)->json_name()) {
+      return descriptor->field(i);
+    }
+  }
+  return nullptr;
+}
+
 }  // namespace internal
 }  // namespace fhir_path
 }  // namespace fhir

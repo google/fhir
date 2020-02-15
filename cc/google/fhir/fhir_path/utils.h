@@ -39,6 +39,23 @@ tensorflow::Status RetrieveField(const google::protobuf::Message& root,
                       const google::protobuf::FieldDescriptor& field,
                       std::vector<const google::protobuf::Message*>* results);
 
+// Returns true if the message descriptor contains a field whose JSON name
+// matches the provided json_name. In the case that the descriptor describes a
+// proto wrapper used for ValueX or contained resources, a search for a matching
+// field is preformed within the possible values/resources that the proto wraps.
+// Returns false if a matching field is not found.
+bool HasField(const google::protobuf::Descriptor* descriptor,
+              absl::string_view json_name);
+
+// Finds a field in the message descriptor whose JSON name matches the provided
+// name or nullptr if one is not found.
+//
+// Neither Descriptor::FindFieldByName or Descriptor::FindFieldByCamelcaseName
+// will suffice as some FHIR fields are renamed in the FHIR protos (e.g.
+// "assert" becomes "assert_value" and "class" becomes "class_value").
+const google::protobuf::FieldDescriptor* FindFieldByJsonName(
+    const google::protobuf::Descriptor* descriptor, absl::string_view json_name);
+
 }  // namespace internal
 }  // namespace fhir_path
 }  // namespace fhir

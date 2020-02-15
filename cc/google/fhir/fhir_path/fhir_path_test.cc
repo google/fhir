@@ -1722,6 +1722,21 @@ TEST(FhirPathTest, ProfiledWithExtensions) {
   EXPECT_TRUE(validator.Validate(patient).ok());
 }
 
+FHIR_VERSION_TEST(FhirPathTest, PathNavigationAfterContainedResourceAndValueX, {
+  Bundle bundle = ParseFromString<Bundle>(
+      R"proto(entry: {
+                resource: {
+                  patient: { deceased: { boolean: { value: true } } }
+                }
+              })proto");
+
+  Boolean expected = ParseFromString<Boolean>("value: true");
+
+  FHIR_ASSERT_OK_AND_ASSIGN(auto result,
+                            Evaluate(bundle, "entry[0].resource.deceased"));
+  EXPECT_THAT(result.GetMessages(), ElementsAreArray({EqualsProto(expected)}));
+})
+
 }  // namespace
 
 }  // namespace fhir_path

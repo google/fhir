@@ -46,9 +46,13 @@ const bool IsProfile(const ::google::protobuf::Descriptor* descriptor) {
   return descriptor->options().ExtensionSize(proto::fhir_profile_base) > 0;
 }
 
+const bool IsChoiceTypeContainer(const ::google::protobuf::Descriptor* descriptor) {
+  return descriptor->options().GetExtension(proto::is_choice_type);
+}
+
 const bool IsChoiceType(const ::google::protobuf::FieldDescriptor* field) {
   return field->type() == google::protobuf::FieldDescriptor::Type::TYPE_MESSAGE &&
-         field->message_type()->options().GetExtension(proto::is_choice_type);
+         IsChoiceTypeContainer(field->message_type());
 }
 
 const bool IsPrimitive(const ::google::protobuf::Descriptor* descriptor) {

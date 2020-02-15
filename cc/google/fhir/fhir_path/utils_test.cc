@@ -133,6 +133,25 @@ TEST(Utils, RetrieveFieldRepeated) {
                   {EqualsProto(communication1), EqualsProto(communication2)}));
 }
 
+TEST(Utils, FindFieldByJsonName) {
+  // Default case
+  EXPECT_EQ(FindFieldByJsonName(stu3::Encounter::descriptor(), "period"),
+            stu3::Encounter::descriptor()->FindFieldByName("period"));
+
+  // camelCase -> snake_case
+  EXPECT_EQ(FindFieldByJsonName(stu3::Encounter::descriptor(), "statusHistory"),
+            stu3::Encounter::descriptor()->FindFieldByName("status_history"));
+
+  // Field with a JSON alias.
+  EXPECT_EQ(FindFieldByJsonName(stu3::Encounter::descriptor(), "class"),
+            stu3::Encounter::descriptor()->FindFieldByName("class_value"));
+}
+
+TEST(Utils, HasField) {
+  EXPECT_TRUE(HasField(stu3::ContainedResource::descriptor(), "deceased"));
+  EXPECT_TRUE(HasField(r4::ContainedResource::descriptor(), "deceased"));
+}
+
 }  // namespace
 }  // namespace internal
 }  // namespace fhir_path

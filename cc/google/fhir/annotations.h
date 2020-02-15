@@ -72,6 +72,8 @@ const bool IsTypeOrProfileOf(const ::google::protobuf::Message& message) {
 
 const bool IsProfile(const ::google::protobuf::Descriptor* descriptor);
 
+const bool IsChoiceTypeContainer(const ::google::protobuf::Descriptor* descriptor);
+
 const bool IsChoiceType(const ::google::protobuf::FieldDescriptor* field);
 
 const bool IsPrimitive(const ::google::protobuf::Descriptor* descriptor);

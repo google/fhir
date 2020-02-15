@@ -174,22 +174,6 @@ StatusOr<std::string> MessagesToString(
   return MessageToString(*messages[0]);
 }
 
-// Finds a field in the message descriptor whose JSON name matches the provided
-// name or nullptr if one is not found.
-//
-// Neither Descriptor::FindFieldByName or Descriptor::FindFieldByCamelcaseName
-// will suffice as some FHIR fields are renamed in the FHIR protos (e.g.
-// "assert" becomes "assert_value" and "class" becomes "class_value").
-const FieldDescriptor* FindFieldByJsonName(const Descriptor* descriptor,
-                                           absl::string_view json_name) {
-  for (int i = 0; i < descriptor->field_count(); ++i) {
-    if (json_name == descriptor->field(i)->json_name()) {
-      return descriptor->field(i);
-    }
-  }
-  return nullptr;
-}
-
 // Expression node that returns literals wrapped in the corresponding
 // protbuf wrapper
 template <typename ProtoType, typename PrimitiveType>
@@ -2465,18 +2449,18 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       }
     } else {
       const Descriptor* descriptor = expr->ReturnType();
-      const FieldDescriptor* field =
-          descriptor != nullptr
-              ? FindFieldByJsonName(descriptor, definition->name)
-              : nullptr;
 
       // If we know the return type of the expression, and the return type
       // doesn't have the referenced field, set an error and return.
-      if (descriptor != nullptr && field == nullptr) {
+      if (descriptor != nullptr && !HasField(descriptor, definition->name)) {
         SetError(absl::StrCat("Unable to find field ", definition->name));
         return nullptr;
       }
 
+      const FieldDescriptor* field =
+          descriptor != nullptr
+              ? FindFieldByJsonName(descriptor, definition->name)
+              : nullptr;
       return ToAny(std::make_shared<InvokeExpressionNode>(expression, field,
                                                           definition->name));
     }
@@ -2506,18 +2490,19 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
                                                     : ToAny(function_node);
     }
 
-    const FieldDescriptor* field =
-        descriptor_stack_.back() != nullptr
-            ? FindFieldByJsonName(descriptor_stack_.back(), definition->name)
-            : nullptr;
+    const Descriptor* descriptor = descriptor_stack_.back();
 
     // If we know the return type of the expression, and the return type
     // doesn't have the referenced field, set an error and return.
-    if (descriptor_stack_.back() != nullptr && field == nullptr) {
+    if (descriptor != nullptr && !HasField(descriptor, definition->name)) {
       SetError(absl::StrCat("Unable to find field ", definition->name));
       return nullptr;
     }
 
+    const FieldDescriptor* field =
+        descriptor != nullptr
+            ? FindFieldByJsonName(descriptor, definition->name)
+            : nullptr;
     return ToAny(std::make_shared<InvokeTermNode>(field, definition->name));
   }
 
