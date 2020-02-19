@@ -333,7 +333,7 @@ def _make_feature_engineering_fn(dedup, time_windows, include_age,
       padded_in_time_window = tf.logical_and(padded_event_age <= max_age,
                                              padded_event_age > min_age)
 
-      for k, v in examples.iteritems():
+      for k, v in examples.items():
         if k.startswith(CONTEXT_KEY_PREFIX):
           continue
         # For each sparse feature entry, look up whether it is in the time
@@ -347,7 +347,7 @@ def _make_feature_engineering_fn(dedup, time_windows, include_age,
 
         feature_map[k + '-til-%d' %min_age] = sp_tensor
 
-    for k, v in examples.iteritems():
+    for k, v in examples.items():
       if k.startswith(CONTEXT_KEY_PREFIX):
         feature_map[k] = v
     return feature_map
