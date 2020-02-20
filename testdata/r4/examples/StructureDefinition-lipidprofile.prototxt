@@ -1,0 +1,4027 @@
+id {
+  value: "lipidprofile"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">to do</div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-summary"
+  }
+  value {
+    markdown {
+      value: "This is a test summary [lipids](observation.html)"
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+      value: 1
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg"
+  }
+  value {
+    code {
+      value: "oo"
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+  }
+  value {
+    code {
+      value: "trial-use"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/StructureDefinition/lipidprofile"
+}
+version {
+  value: "4.0.1"
+}
+name {
+  value: "Example Lipid Profile"
+}
+status {
+  value: DRAFT
+}
+experimental {
+  value: true
+}
+date {
+  value_us: 1336744800000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "Grahame Grieve"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "grahame@healthintersections.com.au"
+    }
+  }
+}
+description {
+  value: "Lipid Lab Report"
+}
+fhir_version {
+  value: V_4_0_1
+}
+mapping {
+  identity {
+    value: "workflow"
+  }
+  uri {
+    value: "http://hl7.org/fhir/workflow"
+  }
+  name {
+    value: "Workflow Pattern"
+  }
+}
+mapping {
+  identity {
+    value: "v2"
+  }
+  uri {
+    value: "http://hl7.org/v2"
+  }
+  name {
+    value: "HL7 v2 Mapping"
+  }
+}
+mapping {
+  identity {
+    value: "rim"
+  }
+  uri {
+    value: "http://hl7.org/v3"
+  }
+  name {
+    value: "RIM Mapping"
+  }
+}
+mapping {
+  identity {
+    value: "w5"
+  }
+  uri {
+    value: "http://hl7.org/fhir/fivews"
+  }
+  name {
+    value: "FiveWs Pattern Mapping"
+  }
+}
+kind {
+  value: RESOURCE
+}
+abstract {
+}
+type {
+  value: "DiagnosticReport"
+}
+base_definition {
+  value: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport"
+}
+derivation {
+  value: CONSTRAINT
+}
+snapshot {
+  element {
+    id {
+      value: "DiagnosticReport"
+    }
+    path {
+      value: "DiagnosticReport"
+    }
+    short {
+      value: "Lipid Lab Report"
+    }
+    definition {
+      value: "The findings and interpretation of a general lipid lab profile."
+    }
+    comment {
+      value: "In this profile, mustSupport means that authoring systems must include the ability to report these elements, and processing systems must cater for them by either displaying them to the user or considering them appropriately in decision support systems."
+    }
+    alias {
+      value: "Report"
+    }
+    alias {
+      value: "Test"
+    }
+    alias {
+      value: "Result"
+    }
+    alias {
+      value: "Results"
+    }
+    alias {
+      value: "Labs"
+    }
+    alias {
+      value: "Laboratory"
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    constraint {
+      key {
+        value: "dom-2"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "If the resource is contained in another resource, it SHALL NOT contain nested Resources"
+      }
+      expression {
+        value: "contained.contained.empty()"
+      }
+      xpath {
+        value: "not(parent::f:contained and f:contained)"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/DomainResource"
+      }
+    }
+    constraint {
+      key {
+        value: "dom-3"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "If the resource is contained in another resource, it SHALL be referred to from elsewhere in the resource or SHALL refer to the containing resource"
+      }
+      expression {
+        value: "contained.where(((\'#\'+id in (%resource.descendants().reference | %resource.descendants().as(canonical) | %resource.descendants().as(uri) | %resource.descendants().as(url))) or descendants().where(reference = \'#\').exists() or descendants().where(as(canonical) = \'#\').exists() or descendants().where(as(canonical) = \'#\').exists()).not()).trace(\'unmatched\', id).empty()"
+      }
+      xpath {
+        value: "not(exists(for $id in f:contained/*/f:id/@value return $contained[not(parent::*/descendant::f:reference/@value=concat(\'#\', $contained/*/id/@value) or descendant::f:reference[@value=\'#\'])]))"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/DomainResource"
+      }
+    }
+    constraint {
+      key {
+        value: "dom-4"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "If a resource is contained in another resource, it SHALL NOT have a meta.versionId or a meta.lastUpdated"
+      }
+      expression {
+        value: "contained.meta.versionId.empty() and contained.meta.lastUpdated.empty()"
+      }
+      xpath {
+        value: "not(exists(f:contained/*/f:meta/f:versionId)) and not(exists(f:contained/*/f:meta/f:lastUpdated))"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/DomainResource"
+      }
+    }
+    constraint {
+      key {
+        value: "dom-5"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "If a resource is contained in another resource, it SHALL NOT have a security label"
+      }
+      expression {
+        value: "contained.meta.security.empty()"
+      }
+      xpath {
+        value: "not(exists(f:contained/*/f:meta/f:security))"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/DomainResource"
+      }
+    }
+    constraint {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice"
+        }
+        value {
+          boolean {
+            value: true
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice-explanation"
+        }
+        value {
+          markdown {
+            value: "When a resource has no narrative, only systems that fully understand the data can display the resource to a human safely. Including a human readable representation in the resource makes for a much more robust eco-system and cheaper handling of resources by intermediary systems. Some ecosystems restrict distribution of resources to only those systems that do fully understand the resources, and as a consequence implementers may believe that the narrative is superfluous. However experience shows that such eco-systems often open up to new participants over time."
+          }
+        }
+      }
+      key {
+        value: "dom-6"
+      }
+      severity {
+        value: WARNING
+      }
+      human {
+        value: "A resource should have narrative for robust management"
+      }
+      expression {
+        value: "text.`div`.exists()"
+      }
+      xpath {
+        value: "exists(f:text/h:div)"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/DomainResource"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "Entity. Role, or Act"
+      }
+    }
+    mapping {
+      identity {
+        value: "workflow"
+      }
+      map {
+        value: "Event"
+      }
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "ORU -> OBR"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "Observation[classCode=OBS, moodCode=EVN]"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.id"
+    }
+    path {
+      value: "DiagnosticReport.id"
+    }
+    short {
+      value: "Logical id of this artifact"
+    }
+    definition {
+      value: "The logical id of the resource, as used in the URL for the resource. Once assigned, this value never changes."
+    }
+    comment {
+      value: "The only time that a resource does not have an id is when it is being submitted to the server using a create operation."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "Resource.id"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type"
+        }
+        value {
+          url {
+            value: "string"
+          }
+        }
+      }
+      code {
+        value: "http://hl7.org/fhirpath/System.String"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.meta"
+    }
+    path {
+      value: "DiagnosticReport.meta"
+    }
+    short {
+      value: "Metadata about the resource"
+    }
+    definition {
+      value: "The metadata about the resource. This is content that is maintained by the infrastructure. Changes to the content might not always be associated with version changes to the resource."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "Resource.meta"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "Meta"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.implicitRules"
+    }
+    path {
+      value: "DiagnosticReport.implicitRules"
+    }
+    short {
+      value: "A set of rules under which this content was created"
+    }
+    definition {
+      value: "A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc."
+    }
+    comment {
+      value: "Asserting this rule set restricts the content to be only understood by a limited set of trading partners. This inherently limits the usefulness of the data in the long term. However, the existing health eco-system is highly fractured, and not yet ready to define, collect, and exchange data in a generally computable sense. Wherever possible, implementers and/or specification writers should avoid using this element. Often, when used, the URL is a reference to an implementation guide that defines these special rules as part of it\'s narrative along with other profiles, value sets, etc."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "Resource.implicitRules"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "uri"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+      value: true
+    }
+    is_modifier_reason {
+      value: "This element is labeled as a modifier because the implicit rules may provide additional knowledge about the resource that modifies it\'s meaning or interpretation"
+    }
+    is_summary {
+      value: true
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.language"
+    }
+    path {
+      value: "DiagnosticReport.language"
+    }
+    short {
+      value: "Language of the resource content"
+    }
+    definition {
+      value: "The base language in which the resource is written."
+    }
+    comment {
+      value: "Language is provided to support indexing and accessibility (typically, services such as text to speech use the language tag). The html language tag in the narrative applies  to the narrative. The language tag on the resource may be used to specify the language of other presentations generated from the data in the resource. Not all the content has to be in the base language. The Resource.language should not be assumed to apply to the narrative automatically. If a language is specified, it should it also be specified on the div element in the html (see rules in HTML5 for information about the relationship between xml:lang and the html lang attribute)."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "Resource.language"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "code"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    binding {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet"
+        }
+        value {
+          canonical {
+            value: "http://hl7.org/fhir/ValueSet/all-languages"
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName"
+        }
+        value {
+          string_value {
+            value: "Language"
+          }
+        }
+      }
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding"
+        }
+        value {
+          boolean {
+            value: true
+          }
+        }
+      }
+      strength {
+        value: PREFERRED
+      }
+      description {
+        value: "A human language."
+      }
+      value_set {
+        value: "http://hl7.org/fhir/ValueSet/languages"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.text"
+    }
+    path {
+      value: "DiagnosticReport.text"
+    }
+    short {
+      value: "Text summary of the resource, for human interpretation"
+    }
+    definition {
+      value: "A human-readable narrative that contains a summary of the resource and can be used to represent the content of the resource to a human. The narrative need not encode all the structured data, but is required to contain sufficient detail to make it \"clinically safe\" for a human to just read the narrative. Resource definitions may define what content should be represented in the narrative to ensure clinical safety."
+    }
+    comment {
+      value: "Contained resources do not have narrative. Resources that are not contained SHOULD have a narrative. In some cases, a resource may only have text with little or no additional discrete data (as long as all minOccurs=1 elements are satisfied).  This may be necessary for data from legacy systems where information is captured as a \"text blob\" or where text is additionally entered raw or narrated and encoded information is added later."
+    }
+    alias {
+      value: "narrative"
+    }
+    alias {
+      value: "html"
+    }
+    alias {
+      value: "xhtml"
+    }
+    alias {
+      value: "display"
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DomainResource.text"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "Narrative"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "Act.text?"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.contained"
+    }
+    path {
+      value: "DiagnosticReport.contained"
+    }
+    short {
+      value: "Contained, inline Resources"
+    }
+    definition {
+      value: "These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope."
+    }
+    comment {
+      value: "This should never be done when the content can be identified properly, as once identification is lost, it is extremely difficult (and context dependent) to restore it again. Contained resources may have profiles and tags In their meta elements, but SHALL NOT have security labels."
+    }
+    alias {
+      value: "inline resources"
+    }
+    alias {
+      value: "anonymous resources"
+    }
+    alias {
+      value: "contained resources"
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DomainResource.contained"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Resource"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "N/A"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.extension"
+    }
+    path {
+      value: "DiagnosticReport.extension"
+    }
+    short {
+      value: "Additional content defined by implementations"
+    }
+    definition {
+      value: "May be used to represent additional information that is not part of the basic definition of the resource. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension."
+    }
+    comment {
+      value: "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone."
+    }
+    alias {
+      value: "extensions"
+    }
+    alias {
+      value: "user content"
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DomainResource.extension"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Extension"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    constraint {
+      key {
+        value: "ext-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "Must have either extensions or value[x], not both"
+      }
+      expression {
+        value: "extension.exists() != value.exists()"
+      }
+      xpath {
+        value: "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Extension"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "N/A"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.modifierExtension"
+    }
+    path {
+      value: "DiagnosticReport.modifierExtension"
+    }
+    short {
+      value: "Extensions that cannot be ignored"
+    }
+    definition {
+      value: "May be used to represent additional information that is not part of the basic definition of the resource and that modifies the understanding of the element that contains it and/or the understanding of the containing element\'s descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.\n\nModifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself)."
+    }
+    comment {
+      value: "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone."
+    }
+    requirements {
+      value: "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](http://hl7.org/fhir/extensibility.html#modifierExtension)."
+    }
+    alias {
+      value: "extensions"
+    }
+    alias {
+      value: "user content"
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DomainResource.modifierExtension"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Extension"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    constraint {
+      key {
+        value: "ext-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "Must have either extensions or value[x], not both"
+      }
+      expression {
+        value: "extension.exists() != value.exists()"
+      }
+      xpath {
+        value: "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Extension"
+      }
+    }
+    is_modifier {
+      value: true
+    }
+    is_modifier_reason {
+      value: "Modifier extensions are expected to modify the meaning or interpretation of the resource that contains them"
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "N/A"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.identifier"
+    }
+    path {
+      value: "DiagnosticReport.identifier"
+    }
+    short {
+      value: "Business identifier for report"
+    }
+    definition {
+      value: "Identifiers assigned to this report by the performer or other systems."
+    }
+    comment {
+      value: "Usually assigned by the Information System of the diagnostic service provider (filler id)."
+    }
+    requirements {
+      value: "Need to know what identifier to use when making queries about this report from the source laboratory, and for linking to the report outside FHIR context."
+    }
+    alias {
+      value: "ReportID"
+    }
+    alias {
+      value: "Filler ID"
+    }
+    alias {
+      value: "Placer ID"
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.identifier"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Identifier"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "workflow"
+      }
+      map {
+        value: "Event.identifier"
+      }
+    }
+    mapping {
+      identity {
+        value: "w5"
+      }
+      map {
+        value: "FiveWs.identifier"
+      }
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBR-51/ for globally unique filler ID  - OBR-3 , For non-globally unique filler-id the flller/placer number must be combined with the universal service Id -  OBR-2(if present)+OBR-3+OBR-4"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "id"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.basedOn"
+    }
+    path {
+      value: "DiagnosticReport.basedOn"
+    }
+    short {
+      value: "What was requested"
+    }
+    definition {
+      value: "Details concerning a service requested."
+    }
+    comment {
+      value: "Note: Usually there is one test request for each result, however in some circumstances multiple test requests may be represented using a single test result resource. Note that there are also cases where one request leads to multiple reports."
+    }
+    requirements {
+      value: "This allows tracing of authorization for the report and tracking whether proposals/recommendations were acted upon."
+    }
+    alias {
+      value: "Request"
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.basedOn"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/CarePlan"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/MedicationRequest"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/NutritionOrder"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/ServiceRequest"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "workflow"
+      }
+      map {
+        value: "Event.basedOn"
+      }
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "ORC? OBR-2/3?"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "outboundRelationship[typeCode=FLFS].target"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.status"
+    }
+    path {
+      value: "DiagnosticReport.status"
+    }
+    short {
+      value: "registered | partial | preliminary | final +"
+    }
+    definition {
+      value: "The status of the diagnostic report."
+    }
+    requirements {
+      value: "Diagnostic services routinely issue provisional/incomplete reports, and sometimes withdraw previously released reports."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.status"
+      }
+      min {
+        value: 1
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "code"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+      value: true
+    }
+    is_modifier_reason {
+      value: "This element is labeled as a modifier because it is a status element that contains status entered-in-error which means that the resource should not be treated as valid"
+    }
+    is_summary {
+      value: true
+    }
+    binding {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName"
+        }
+        value {
+          string_value {
+            value: "DiagnosticReportStatus"
+          }
+        }
+      }
+      strength {
+        value: REQUIRED
+      }
+      description {
+        value: "The status of the diagnostic report."
+      }
+      value_set {
+        value: "http://hl7.org/fhir/ValueSet/diagnostic-report-status|4.0.1"
+      }
+    }
+    mapping {
+      identity {
+        value: "workflow"
+      }
+      map {
+        value: "Event.status"
+      }
+    }
+    mapping {
+      identity {
+        value: "w5"
+      }
+      map {
+        value: "FiveWs.status"
+      }
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBR-25 (not 1:1 mapping)"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "statusCode  Note: final and amended are distinguished by whether observation is the subject of a ControlAct event of type \"revise\""
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.category"
+    }
+    path {
+      value: "DiagnosticReport.category"
+    }
+    short {
+      value: "Service category"
+    }
+    definition {
+      value: "A code that classifies the clinical discipline, department or diagnostic service that created the report (e.g. cardiology, biochemistry, hematology, MRI). This is used for searching, sorting and display purposes."
+    }
+    comment {
+      value: "Multiple categories are allowed using various categorization schemes.   The level of granularity is defined by the category concepts in the value set. More fine-grained filtering can be performed using the metadata and/or terminology hierarchy in DiagnosticReport.code."
+    }
+    alias {
+      value: "Department"
+    }
+    alias {
+      value: "Sub-department"
+    }
+    alias {
+      value: "Service"
+    }
+    alias {
+      value: "Discipline"
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.category"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "CodeableConcept"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    binding {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName"
+        }
+        value {
+          string_value {
+            value: "DiagnosticServiceSection"
+          }
+        }
+      }
+      strength {
+        value: EXAMPLE
+      }
+      description {
+        value: "Codes for diagnostic service sections."
+      }
+      value_set {
+        value: "http://hl7.org/fhir/ValueSet/diagnostic-service-sections"
+      }
+    }
+    mapping {
+      identity {
+        value: "w5"
+      }
+      map {
+        value: "FiveWs.class"
+      }
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBR-24"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "inboundRelationship[typeCode=COMP].source[classCode=LIST, moodCode=EVN, code < LabService].code"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.code"
+    }
+    path {
+      value: "DiagnosticReport.code"
+    }
+    short {
+      value: "LOINC Code for Lipid Panel with LDL"
+    }
+    definition {
+      value: "LOINC Code for Lipid Panel with LDL."
+    }
+    comment {
+      value: "LOINC code includes \"direct\" LDL - does this mean LDL derived by measuring VLDL by ultracentrifugation? This panel includes both measured and calculated LDL."
+    }
+    alias {
+      value: "Type"
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.code"
+      }
+      min {
+        value: 1
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "CodeableConcept"
+      }
+    }
+    fixed {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "57698-3"
+          }
+          display {
+            value: "Lipid panel with direct LDL - Serum or Plasma"
+          }
+        }
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    binding {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName"
+        }
+        value {
+          string_value {
+            value: "DiagnosticReportCodes"
+          }
+        }
+      }
+      strength {
+        value: PREFERRED
+      }
+      description {
+        value: "Codes that describe Diagnostic Reports."
+      }
+      value_set {
+        value: "http://hl7.org/fhir/ValueSet/report-codes"
+      }
+    }
+    mapping {
+      identity {
+        value: "workflow"
+      }
+      map {
+        value: "Event.code"
+      }
+    }
+    mapping {
+      identity {
+        value: "w5"
+      }
+      map {
+        value: "FiveWs.what[x]"
+      }
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBR-4 (HL7 v2 doesn\'t provide an easy way to indicate both the ordered test and the performed panel)"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "code"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.subject"
+    }
+    path {
+      value: "DiagnosticReport.subject"
+    }
+    short {
+      value: "The subject of the report - usually, but not always, the patient"
+    }
+    definition {
+      value: "The subject of the report. Usually, but not always, this is a patient. However, diagnostic services also perform analyses on specimens collected from a variety of other sources."
+    }
+    requirements {
+      value: "SHALL know the subject context."
+    }
+    alias {
+      value: "Patient"
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.subject"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Patient"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Group"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Device"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Location"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "workflow"
+      }
+      map {
+        value: "Event.subject"
+      }
+    }
+    mapping {
+      identity {
+        value: "w5"
+      }
+      map {
+        value: "FiveWs.subject[x]"
+      }
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "PID-3 (no HL7 v2 mapping for Group or Device)"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "participation[typeCode=SBJ]"
+      }
+    }
+    mapping {
+      identity {
+        value: "w5"
+      }
+      map {
+        value: "FiveWs.subject"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.encounter"
+    }
+    path {
+      value: "DiagnosticReport.encounter"
+    }
+    short {
+      value: "Health care event when test ordered"
+    }
+    definition {
+      value: "The healthcare event  (e.g. a patient and healthcare provider interaction) which this DiagnosticReport is about."
+    }
+    comment {
+      value: "This will typically be the encounter the event occurred within, but some events may be initiated prior to or after the official completion of an encounter  but still be tied to the context of the encounter  (e.g. pre-admission laboratory tests)."
+    }
+    requirements {
+      value: "Links the request to the Encounter context."
+    }
+    alias {
+      value: "Context"
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.encounter"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Encounter"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "workflow"
+      }
+      map {
+        value: "Event.encounter"
+      }
+    }
+    mapping {
+      identity {
+        value: "w5"
+      }
+      map {
+        value: "FiveWs.context"
+      }
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "PV1-19"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "inboundRelationship[typeCode=COMP].source[classCode=ENC, moodCode=EVN]"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.effective[x]"
+    }
+    path {
+      value: "DiagnosticReport.effective[x]"
+    }
+    short {
+      value: "Clinically relevant time/time-period for report"
+    }
+    definition {
+      value: "The time or time-period the observed values are related to. When the subject of the report is a patient, this is usually either the time of the procedure or of specimen collection(s), but very often the source of the date/time is not known, only the date/time itself."
+    }
+    comment {
+      value: "If the diagnostic procedure was performed on the patient, this is the time it was performed. If there are specimens, the diagnostically relevant time can be derived from the specimen collection times, but the specimen information is not always available, and the exact relationship between the specimens and the diagnostically relevant time is not always automatic."
+    }
+    requirements {
+      value: "Need to know where in the patient history to file/present this report."
+    }
+    alias {
+      value: "Observation time"
+    }
+    alias {
+      value: "Effective Time"
+    }
+    alias {
+      value: "Occurrence"
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.effective[x]"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "dateTime"
+      }
+    }
+    type {
+      code {
+        value: "Period"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "workflow"
+      }
+      map {
+        value: "Event.occurrence[x]"
+      }
+    }
+    mapping {
+      identity {
+        value: "w5"
+      }
+      map {
+        value: "FiveWs.done[x]"
+      }
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBR-7"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "effectiveTime"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.issued"
+    }
+    path {
+      value: "DiagnosticReport.issued"
+    }
+    short {
+      value: "DateTime this version was made"
+    }
+    definition {
+      value: "The date and time that this version of the report was made available to providers, typically after the report was reviewed and verified."
+    }
+    comment {
+      value: "May be different from the update time of the resource itself, because that is the status of the record (potentially a secondary copy), not the actual release time of the report."
+    }
+    requirements {
+      value: "Clinicians need to be able to check the date that the report was released."
+    }
+    alias {
+      value: "Date published"
+    }
+    alias {
+      value: "Date Issued"
+    }
+    alias {
+      value: "Date Verified"
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.issued"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "instant"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "w5"
+      }
+      map {
+        value: "FiveWs.recorded"
+      }
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBR-22"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "participation[typeCode=VRF or AUT].time"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.performer"
+    }
+    path {
+      value: "DiagnosticReport.performer"
+    }
+    short {
+      value: "Responsible Diagnostic Service"
+    }
+    definition {
+      value: "The diagnostic service that is responsible for issuing the report."
+    }
+    comment {
+      value: "This is not necessarily the source of the atomic data items or the entity that interpreted the results. It is the entity that takes responsibility for the clinical report."
+    }
+    requirements {
+      value: "Need to know whom to contact if there are queries about the results. Also may need to track the source of reports for secondary data analysis."
+    }
+    alias {
+      value: "Laboratory"
+    }
+    alias {
+      value: "Service"
+    }
+    alias {
+      value: "Practitioner"
+    }
+    alias {
+      value: "Department"
+    }
+    alias {
+      value: "Company"
+    }
+    alias {
+      value: "Authorized by"
+    }
+    alias {
+      value: "Director"
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.performer"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Practitioner"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/PractitionerRole"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Organization"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/CareTeam"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "workflow"
+      }
+      map {
+        value: "Event.performer.actor"
+      }
+    }
+    mapping {
+      identity {
+        value: "w5"
+      }
+      map {
+        value: "FiveWs.actor"
+      }
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "PRT-8 (where this PRT-4-Participation = \"PO\")"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: ".participation[typeCode=PRF]"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.resultsInterpreter"
+    }
+    path {
+      value: "DiagnosticReport.resultsInterpreter"
+    }
+    short {
+      value: "Primary result interpreter"
+    }
+    definition {
+      value: "The practitioner or organization that is responsible for the report\'s conclusions and interpretations."
+    }
+    comment {
+      value: "Might not be the same entity that takes responsibility for the clinical report."
+    }
+    requirements {
+      value: "Need to know whom to contact if there are queries about the results. Also may need to track the source of reports for secondary data analysis."
+    }
+    alias {
+      value: "Analyzed by"
+    }
+    alias {
+      value: "Reported by"
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.resultsInterpreter"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Practitioner"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/PractitionerRole"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Organization"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/CareTeam"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "workflow"
+      }
+      map {
+        value: "Event.performer.actor"
+      }
+    }
+    mapping {
+      identity {
+        value: "w5"
+      }
+      map {
+        value: "FiveWs.actor"
+      }
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBR-32, PRT-8 (where this PRT-4-Participation = \"PI\")"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: ".participation[typeCode=PRF]"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.specimen"
+    }
+    path {
+      value: "DiagnosticReport.specimen"
+    }
+    short {
+      value: "Specimens this report is based on"
+    }
+    definition {
+      value: "Details about the specimens on which this diagnostic report is based."
+    }
+    comment {
+      value: "If the specimen is sufficiently specified with a code in the test result name, then this additional data may be redundant. If there are multiple specimens, these may be represented per observation or group."
+    }
+    requirements {
+      value: "Need to be able to report information about the collected specimens on which the report is based."
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.specimen"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Specimen"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "SPM"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "participation[typeCode=SBJ]"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.result"
+    }
+    path {
+      value: "DiagnosticReport.result"
+    }
+    slicing {
+      discriminator {
+        type {
+          value: VALUE
+        }
+        path {
+          value: "resolve().code"
+        }
+      }
+      ordered {
+        value: true
+      }
+      rules {
+        value: CLOSED
+      }
+    }
+    short {
+      value: "Observations"
+    }
+    definition {
+      value: "[Observations](http://hl7.org/fhir/observation.html)  that are part of this diagnostic report."
+    }
+    comment {
+      value: "Observations can contain observations."
+    }
+    requirements {
+      value: "Need to support individual results, or  groups of results, where the result grouping is arbitrary, but meaningful."
+    }
+    alias {
+      value: "Data"
+    }
+    alias {
+      value: "Atomic Value"
+    }
+    alias {
+      value: "Result"
+    }
+    alias {
+      value: "Atomic result"
+    }
+    alias {
+      value: "Data"
+    }
+    alias {
+      value: "Test"
+    }
+    alias {
+      value: "Analyte"
+    }
+    alias {
+      value: "Battery"
+    }
+    alias {
+      value: "Organizer"
+    }
+    min {
+      value: 3
+    }
+    max {
+      value: "4"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.result"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Observation"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBXs"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "outboundRelationship[typeCode=COMP].target"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.result:Cholesterol"
+    }
+    path {
+      value: "DiagnosticReport.result"
+    }
+    slice_name {
+      value: "Cholesterol"
+    }
+    short {
+      value: "Cholesterol Result"
+    }
+    definition {
+      value: "Reference to Cholesterol Result."
+    }
+    comment {
+      value: "Observations can contain observations."
+    }
+    requirements {
+      value: "Need to support individual results, or  groups of results, where the result grouping is arbitrary, but meaningful."
+    }
+    alias {
+      value: "Data"
+    }
+    alias {
+      value: "Atomic Value"
+    }
+    alias {
+      value: "Result"
+    }
+    alias {
+      value: "Atomic result"
+    }
+    alias {
+      value: "Data"
+    }
+    alias {
+      value: "Test"
+    }
+    alias {
+      value: "Analyte"
+    }
+    alias {
+      value: "Battery"
+    }
+    alias {
+      value: "Organizer"
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.result"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/cholesterol"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    must_support {
+      value: true
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBXs"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "outboundRelationship[typeCode=COMP].target"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.result:Triglyceride"
+    }
+    path {
+      value: "DiagnosticReport.result"
+    }
+    slice_name {
+      value: "Triglyceride"
+    }
+    short {
+      value: "Triglyceride Result"
+    }
+    definition {
+      value: "Group of elements for Triglyceride result."
+    }
+    comment {
+      value: "Observations can contain observations."
+    }
+    requirements {
+      value: "Need to support individual results, or  groups of results, where the result grouping is arbitrary, but meaningful."
+    }
+    alias {
+      value: "Data"
+    }
+    alias {
+      value: "Atomic Value"
+    }
+    alias {
+      value: "Result"
+    }
+    alias {
+      value: "Atomic result"
+    }
+    alias {
+      value: "Data"
+    }
+    alias {
+      value: "Test"
+    }
+    alias {
+      value: "Analyte"
+    }
+    alias {
+      value: "Battery"
+    }
+    alias {
+      value: "Organizer"
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.result"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/triglyceride"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    must_support {
+      value: true
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBXs"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "outboundRelationship[typeCode=COMP].target"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.result:HDLCholesterol"
+    }
+    path {
+      value: "DiagnosticReport.result"
+    }
+    slice_name {
+      value: "HDLCholesterol"
+    }
+    short {
+      value: "HDL Cholesterol Result"
+    }
+    definition {
+      value: "Group of elements for HDL Cholesterol result."
+    }
+    comment {
+      value: "Observations can contain observations."
+    }
+    requirements {
+      value: "Need to support individual results, or  groups of results, where the result grouping is arbitrary, but meaningful."
+    }
+    alias {
+      value: "Data"
+    }
+    alias {
+      value: "Atomic Value"
+    }
+    alias {
+      value: "Result"
+    }
+    alias {
+      value: "Atomic result"
+    }
+    alias {
+      value: "Data"
+    }
+    alias {
+      value: "Test"
+    }
+    alias {
+      value: "Analyte"
+    }
+    alias {
+      value: "Battery"
+    }
+    alias {
+      value: "Organizer"
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.result"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/hdlcholesterol"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    must_support {
+      value: true
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBXs"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "outboundRelationship[typeCode=COMP].target"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.result:LDLCholesterol"
+    }
+    path {
+      value: "DiagnosticReport.result"
+    }
+    slice_name {
+      value: "LDLCholesterol"
+    }
+    short {
+      value: "LDL Cholesterol result, if reported"
+    }
+    definition {
+      value: "LDL Cholesterol result, if reported."
+    }
+    comment {
+      value: "Observations can contain observations."
+    }
+    requirements {
+      value: "Need to support individual results, or  groups of results, where the result grouping is arbitrary, but meaningful."
+    }
+    alias {
+      value: "Data"
+    }
+    alias {
+      value: "Atomic Value"
+    }
+    alias {
+      value: "Result"
+    }
+    alias {
+      value: "Atomic result"
+    }
+    alias {
+      value: "Data"
+    }
+    alias {
+      value: "Test"
+    }
+    alias {
+      value: "Analyte"
+    }
+    alias {
+      value: "Battery"
+    }
+    alias {
+      value: "Organizer"
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.result"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/ldlcholesterol"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    must_support {
+      value: true
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBXs"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "outboundRelationship[typeCode=COMP].target"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.imagingStudy"
+    }
+    path {
+      value: "DiagnosticReport.imagingStudy"
+    }
+    short {
+      value: "Reference to full details of imaging associated with the diagnostic report"
+    }
+    definition {
+      value: "One or more links to full details of any imaging performed during the diagnostic investigation. Typically, this is imaging performed by DICOM enabled modalities, but this is not required. A fully enabled PACS viewer can use this information to provide views of the source images."
+    }
+    comment {
+      value: "ImagingStudy and the image element are somewhat overlapping - typically, the list of image references in the image element will also be found in one of the imaging study resources. However, each caters to different types of displays for different types of purposes. Neither, either, or both may be provided."
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.imagingStudy"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/ImagingStudy"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "outboundRelationship[typeCode=COMP].target[classsCode=DGIMG, moodCode=EVN]"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.media"
+    }
+    path {
+      value: "DiagnosticReport.media"
+    }
+    short {
+      value: "Key images associated with this report"
+    }
+    definition {
+      value: "A list of key images associated with this report. The images are generally created during the diagnostic process, and may be directly of the patient, or of treated specimens (i.e. slides of interest)."
+    }
+    requirements {
+      value: "Many diagnostic services include images in the report as part of their service."
+    }
+    alias {
+      value: "DICOM"
+    }
+    alias {
+      value: "Slides"
+    }
+    alias {
+      value: "Scans"
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.media"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "BackboneElement"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBX?"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "outboundRelationship[typeCode=COMP].target"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.media.id"
+    }
+    path {
+      value: "DiagnosticReport.media.id"
+    }
+    representation {
+      value: XML_ATTR
+    }
+    short {
+      value: "Unique id for inter-element referencing"
+    }
+    definition {
+      value: "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "Element.id"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type"
+        }
+        value {
+          url {
+            value: "string"
+          }
+        }
+      }
+      code {
+        value: "http://hl7.org/fhirpath/System.String"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "n/a"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.media.extension"
+    }
+    path {
+      value: "DiagnosticReport.media.extension"
+    }
+    short {
+      value: "Additional content defined by implementations"
+    }
+    definition {
+      value: "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension."
+    }
+    comment {
+      value: "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone."
+    }
+    alias {
+      value: "extensions"
+    }
+    alias {
+      value: "user content"
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "Element.extension"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Extension"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    constraint {
+      key {
+        value: "ext-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "Must have either extensions or value[x], not both"
+      }
+      expression {
+        value: "extension.exists() != value.exists()"
+      }
+      xpath {
+        value: "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Extension"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "n/a"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.media.modifierExtension"
+    }
+    path {
+      value: "DiagnosticReport.media.modifierExtension"
+    }
+    short {
+      value: "Extensions that cannot be ignored even if unrecognized"
+    }
+    definition {
+      value: "May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element\'s descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.\n\nModifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself)."
+    }
+    comment {
+      value: "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone."
+    }
+    requirements {
+      value: "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](http://hl7.org/fhir/extensibility.html#modifierExtension)."
+    }
+    alias {
+      value: "extensions"
+    }
+    alias {
+      value: "user content"
+    }
+    alias {
+      value: "modifiers"
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "BackboneElement.modifierExtension"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Extension"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    constraint {
+      key {
+        value: "ext-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "Must have either extensions or value[x], not both"
+      }
+      expression {
+        value: "extension.exists() != value.exists()"
+      }
+      xpath {
+        value: "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Extension"
+      }
+    }
+    is_modifier {
+      value: true
+    }
+    is_modifier_reason {
+      value: "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them"
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "N/A"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.media.comment"
+    }
+    path {
+      value: "DiagnosticReport.media.comment"
+    }
+    short {
+      value: "Comment about the image (e.g. explanation)"
+    }
+    definition {
+      value: "A comment about the image. Typically, this is used to provide an explanation for why the image is included, or to draw the viewer\'s attention to important features."
+    }
+    comment {
+      value: "The comment should be displayed with the image. It would be common for the report to include additional discussion of the image contents in other sections such as the conclusion."
+    }
+    requirements {
+      value: "The provider of the report should make a comment about each image included in the report."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.media.comment"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "string"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: ".inboundRelationship[typeCode=COMP].source[classCode=OBS, moodCode=EVN, code=\"annotation\"].value"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.media.link"
+    }
+    path {
+      value: "DiagnosticReport.media.link"
+    }
+    short {
+      value: "Reference to the image source"
+    }
+    definition {
+      value: "Reference to the image source."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.media.link"
+      }
+      min {
+        value: 1
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/Media"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: ".value.reference"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.conclusion"
+    }
+    path {
+      value: "DiagnosticReport.conclusion"
+    }
+    short {
+      value: "Clinical Interpretation of Lipid Panel"
+    }
+    definition {
+      value: "May include diagnosis or suggestions for follow up testing."
+    }
+    comment {
+      value: "It\'s not unusual for the lab to make some kind of interpretative comment on the set of results."
+    }
+    requirements {
+      value: "Need to be able to provide a conclusion that is not lost among the basic result data."
+    }
+    alias {
+      value: "Report"
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.conclusion"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "string"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    must_support {
+      value: true
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBX"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "inboundRelationship[typeCode=\"SPRT\"].source[classCode=OBS, moodCode=EVN, code=LOINC:48767-8].value (type=ST)"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.conclusionCode"
+    }
+    path {
+      value: "DiagnosticReport.conclusionCode"
+    }
+    short {
+      value: "No codes for a lipid panel"
+    }
+    definition {
+      value: "No codes for a lipid panel."
+    }
+    comment {
+      value: "Not used in this context."
+    }
+    min {
+    }
+    max {
+      value: "0"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.conclusionCode"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "CodeableConcept"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    binding {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName"
+        }
+        value {
+          string_value {
+            value: "AdjunctDiagnosis"
+          }
+        }
+      }
+      strength {
+        value: EXAMPLE
+      }
+      description {
+        value: "Diagnosis codes provided as adjuncts to the report."
+      }
+      value_set {
+        value: "http://hl7.org/fhir/ValueSet/clinical-findings"
+      }
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBX"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "inboundRelationship[typeCode=SPRT].source[classCode=OBS, moodCode=EVN, code=LOINC:54531-9].value (type=CD)"
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.presentedForm"
+    }
+    path {
+      value: "DiagnosticReport.presentedForm"
+    }
+    short {
+      value: "Entire report as issued"
+    }
+    definition {
+      value: "Rich text representation of the entire result as issued by the diagnostic service. Multiple formats are allowed but they SHALL be semantically equivalent."
+    }
+    comment {
+      value: "\"application/pdf\" is recommended as the most reliable and interoperable in this context."
+    }
+    requirements {
+      value: "Gives laboratory the ability to provide its own fully formatted report for clinical fidelity."
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "DiagnosticReport.presentedForm"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Attachment"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "OBX"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "text (type=ED)"
+      }
+    }
+  }
+}
+differential {
+  element {
+    id {
+      value: "DiagnosticReport"
+    }
+    path {
+      value: "DiagnosticReport"
+    }
+    short {
+      value: "Lipid Lab Report"
+    }
+    definition {
+      value: "The findings and interpretation of a general lipid lab profile."
+    }
+    comment {
+      value: "In this profile, mustSupport means that authoring systems must include the ability to report these elements, and processing systems must cater for them by either displaying them to the user or considering them appropriately in decision support systems."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.code"
+    }
+    path {
+      value: "DiagnosticReport.code"
+    }
+    short {
+      value: "LOINC Code for Lipid Panel with LDL"
+    }
+    definition {
+      value: "LOINC Code for Lipid Panel with LDL."
+    }
+    comment {
+      value: "LOINC code includes \"direct\" LDL - does this mean LDL derived by measuring VLDL by ultracentrifugation? This panel includes both measured and calculated LDL."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    type {
+      code {
+        value: "CodeableConcept"
+      }
+    }
+    fixed {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "57698-3"
+          }
+          display {
+            value: "Lipid panel with direct LDL - Serum or Plasma"
+          }
+        }
+      }
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.result"
+    }
+    path {
+      value: "DiagnosticReport.result"
+    }
+    slicing {
+      discriminator {
+        type {
+          value: VALUE
+        }
+        path {
+          value: "resolve().code"
+        }
+      }
+      ordered {
+        value: true
+      }
+      rules {
+        value: CLOSED
+      }
+    }
+    min {
+      value: 3
+    }
+    max {
+      value: "4"
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.result:Cholesterol"
+    }
+    path {
+      value: "DiagnosticReport.result"
+    }
+    slice_name {
+      value: "Cholesterol"
+    }
+    short {
+      value: "Cholesterol Result"
+    }
+    definition {
+      value: "Reference to Cholesterol Result."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/cholesterol"
+      }
+    }
+    must_support {
+      value: true
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.result:Triglyceride"
+    }
+    path {
+      value: "DiagnosticReport.result"
+    }
+    slice_name {
+      value: "Triglyceride"
+    }
+    short {
+      value: "Triglyceride Result"
+    }
+    definition {
+      value: "Group of elements for Triglyceride result."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/triglyceride"
+      }
+    }
+    must_support {
+      value: true
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.result:HDLCholesterol"
+    }
+    path {
+      value: "DiagnosticReport.result"
+    }
+    slice_name {
+      value: "HDLCholesterol"
+    }
+    short {
+      value: "HDL Cholesterol Result"
+    }
+    definition {
+      value: "Group of elements for HDL Cholesterol result."
+    }
+    min {
+      value: 1
+    }
+    max {
+      value: "1"
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/hdlcholesterol"
+      }
+    }
+    must_support {
+      value: true
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.result:LDLCholesterol"
+    }
+    path {
+      value: "DiagnosticReport.result"
+    }
+    slice_name {
+      value: "LDLCholesterol"
+    }
+    short {
+      value: "LDL Cholesterol result, if reported"
+    }
+    definition {
+      value: "LDL Cholesterol result, if reported."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    type {
+      code {
+        value: "Reference"
+      }
+      target_profile {
+        value: "http://hl7.org/fhir/StructureDefinition/ldlcholesterol"
+      }
+    }
+    must_support {
+      value: true
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.conclusion"
+    }
+    path {
+      value: "DiagnosticReport.conclusion"
+    }
+    short {
+      value: "Clinical Interpretation of Lipid Panel"
+    }
+    definition {
+      value: "May include diagnosis or suggestions for follow up testing."
+    }
+    comment {
+      value: "It\'s not unusual for the lab to make some kind of interpretative comment on the set of results."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    type {
+      code {
+        value: "string"
+      }
+    }
+    must_support {
+      value: true
+    }
+  }
+  element {
+    id {
+      value: "DiagnosticReport.conclusionCode"
+    }
+    path {
+      value: "DiagnosticReport.conclusionCode"
+    }
+    short {
+      value: "No codes for a lipid panel"
+    }
+    definition {
+      value: "No codes for a lipid panel."
+    }
+    comment {
+      value: "Not used in this context."
+    }
+    min {
+    }
+    max {
+      value: "0"
+    }
+    type {
+      code {
+        value: "CodeableConcept"
+      }
+    }
+  }
+}

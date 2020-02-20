@@ -1,0 +1,1205 @@
+id {
+  value: "Coding"
+}
+meta {
+  last_updated {
+    value_us: 1572560963356000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"border: 0px #F0F0F0 solid; font-size: 11px; font-family: verdana; vertical-align: top;\">\n              <tr style=\"border: 1px #F0F0F0 solid; font-size: 11px; font-family: verdana; vertical-align: top;\">\n                <th style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a href=\"formats.html#table\" title=\"The logical name of the element\">Name</a>\n                </th>\n                <th style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a href=\"formats.html#table\" title=\"Information about the use of the element\">Flags</a>\n                </th>\n                <th style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a href=\"formats.html#table\" title=\"Minimum and Maximum # of times the the element can appear in the instance\">Card.</a>\n                </th>\n                <th style=\"width: 100px\" class=\"hierarchy\">\n                  <a href=\"formats.html#table\" title=\"Reference to the type of the element\">Type</a>\n                </th>\n                <th style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a href=\"formats.html#table\" title=\"Additional information about the element\">Description &amp; Constraints</a>\n                  <span style=\"float: right\">\n                    <a href=\"formats.html#table\" title=\"Legend for this format\">\n                      <img src=\"help16.png\" alt=\"doco\" style=\"background-color: inherit\"/>\n                    </a>\n                  </span>\n                </th>\n              </tr>\n              <tr style=\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white;\">\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAAL0lEQVR42u3XsQ0AQAgCQHdl/xn8jxvYWB3JlTR0VJLa+OltBwAAYP6EEQAAgCsPVYVAgIJrA/sAAAAASUVORK5CYII=)\" class=\"hierarchy\">\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg==\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/>\n                  <img src=\"data: image/png;base64,R0lGODlhEAAQAPQfAOvGUf7ztuvPMf/78/fkl/Pbg+u8Rvjqteu2Pf3zxPz36Pz0z+vTmPzurPvuw/npofbjquvNefHVduuyN+uuMu3Oafbgjfnqvf/3zv/3xevPi+vRjP/20/bmsP///wD/ACH5BAEKAB8ALAAAAAAQABAAAAVl4CeOZGme5qCqqDg8jyVJaz1876DsmAQAgqDgltspMEhMJoMZ4iy6I1AooFCIv+wKybziALVAoAEjYLwDgGIpJhMslgxaLR4/3rMAWoBp32V5exg8Shl1ckRUQVaMVkQ2kCstKCEAOw==\" alt=\".\" style=\"background-color: white; background-color: inherit\" title=\"Element\" class=\"hierarchy\"/> \n                  <a href=\"datatypes-definitions.html#Coding\" title=\"Coding : A reference to a code defined by a terminology system.\">Coding</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a style=\"padding-left: 3px; padding-right: 3px; color: black; null\" href=\"elementdefinition-definitions.html#ElementDefinition.isSummary\" title=\"This element is included in summaries\">\316\243</a>\n                  <a style=\"padding-left: 3px; padding-right: 3px; border: 1px grey solid; font-weight: bold; color: black; background-color: #e6ffe6\" href=\"versions.html#std-process\" title=\"Standards Status = Normative\">N</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"/>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a href=\"element.html\">Element</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">A reference to a code defined by a terminology system\n                  <br/>Elements defined in Ancestors: \n                  <a href=\"element.html#Element\" title=\"Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.\">id</a>, \n                  <a href=\"element.html#Element\" title=\"May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.\">extension</a>\n                </td>\n              </tr>\n\n              <tr style=\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white;\">\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAAL0lEQVR42u3XsQ0AQAgCQHdl/xn8jxvYWB3JlTR0VJLa+OltBwAAYP6EEQAAgCsPVYVAgIJrA/sAAAAASUVORK5CYII=)\" class=\"hierarchy\">\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg==\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/>\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/>\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg==\" alt=\".\" style=\"background-color: white; background-color: inherit\" title=\"Primitive Data Type\" class=\"hierarchy\"/> \n                  <a href=\"datatypes-definitions.html#Coding.system\" title=\"Coding.system : The identification of the code system that defines the meaning of the symbol in the code.\">system</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a style=\"padding-left: 3px; padding-right: 3px; color: black; null\" href=\"elementdefinition-definitions.html#ElementDefinition.isSummary\" title=\"This element is included in summaries\">\316\243</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a href=\"datatypes.html#uri\">uri</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Identity of the terminology system</td>\n              </tr>\n\n              <tr style=\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white;\">\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAAL0lEQVR42u3XsQ0AQAgCQHdl/xn8jxvYWB3JlTR0VJLa+OltBwAAYP6EEQAAgCsPVYVAgIJrA/sAAAAASUVORK5CYII=)\" class=\"hierarchy\">\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg==\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/>\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/>\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg==\" alt=\".\" style=\"background-color: white; background-color: inherit\" title=\"Primitive Data Type\" class=\"hierarchy\"/> \n                  <a href=\"datatypes-definitions.html#Coding.version\" title=\"Coding.version : The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.\">version</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a style=\"padding-left: 3px; padding-right: 3px; color: black; null\" href=\"elementdefinition-definitions.html#ElementDefinition.isSummary\" title=\"This element is included in summaries\">\316\243</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a href=\"datatypes.html#string\">string</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Version of the system - if relevant</td>\n              </tr>\n\n              <tr style=\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white;\">\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAAL0lEQVR42u3XsQ0AQAgCQHdl/xn8jxvYWB3JlTR0VJLa+OltBwAAYP6EEQAAgCsPVYVAgIJrA/sAAAAASUVORK5CYII=)\" class=\"hierarchy\">\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg==\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/>\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/>\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg==\" alt=\".\" style=\"background-color: white; background-color: inherit\" title=\"Primitive Data Type\" class=\"hierarchy\"/> \n                  <a href=\"datatypes-definitions.html#Coding.code\" title=\"Coding.code : A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).\">code</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a style=\"padding-left: 3px; padding-right: 3px; color: black; null\" href=\"elementdefinition-definitions.html#ElementDefinition.isSummary\" title=\"This element is included in summaries\">\316\243</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a href=\"datatypes.html#code\">code</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Symbol in syntax defined by the system</td>\n              </tr>\n\n              <tr style=\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white;\">\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAAL0lEQVR42u3XsQ0AQAgCQHdl/xn8jxvYWB3JlTR0VJLa+OltBwAAYP6EEQAAgCsPVYVAgIJrA/sAAAAASUVORK5CYII=)\" class=\"hierarchy\">\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg==\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/>\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/>\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg==\" alt=\".\" style=\"background-color: white; background-color: inherit\" title=\"Primitive Data Type\" class=\"hierarchy\"/> \n                  <a href=\"datatypes-definitions.html#Coding.display\" title=\"Coding.display : A representation of the meaning of the code in the system, following the rules of the system.\">display</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a style=\"padding-left: 3px; padding-right: 3px; color: black; null\" href=\"elementdefinition-definitions.html#ElementDefinition.isSummary\" title=\"This element is included in summaries\">\316\243</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a href=\"datatypes.html#string\">string</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Representation defined by the system</td>\n              </tr>\n\n              <tr style=\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white;\">\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAAI0lEQVR42u3QIQEAAAACIL/6/4MvTAQOkLYBAAB4kAAAANwMad9AqkRjgNAAAAAASUVORK5CYII=)\" class=\"hierarchy\">\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg==\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/>\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzME+lXFigAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+3OsRUAIAjEUOL+O8cJABttJM11/x1qZAGqRBEVcNIqdWj1efDqQbb3HwwwwEfABmQUHSPM9dtDAAAAAElFTkSuQmCC\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/>\n                  <img src=\"data: image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg==\" alt=\".\" style=\"background-color: white; background-color: inherit\" title=\"Primitive Data Type\" class=\"hierarchy\"/> \n                  <a href=\"datatypes-definitions.html#Coding.userSelected\" title=\"Coding.userSelected : Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).\">userSelected</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a style=\"padding-left: 3px; padding-right: 3px; color: black; null\" href=\"elementdefinition-definitions.html#ElementDefinition.isSummary\" title=\"This element is included in summaries\">\316\243</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">\n                  <a href=\"datatypes.html#boolean\">boolean</a>\n                </td>\n                <td style=\"vertical-align: top; text-align : left; background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">If this coding was chosen directly by the user</td>\n              </tr>\n\n              <tr>\n                <td colspan=\"5\" class=\"hierarchy\">\n                  <br/>\n                  <a href=\"formats.html#table\" title=\"Legend for this format\">\n                    <img src=\"help16.png\" alt=\"doco\" style=\"background-color: inherit\"/> Documentation for this format\n                  </a>\n                </td>\n              </tr>\n            </table>\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+  }
+  value {
+    code {
+      value: "normative"
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version"
+  }
+  value {
+    code {
+      value: "4.0.0"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/StructureDefinition/Coding"
+}
+version {
+  value: "4.0.1"
+}
+name {
+  value: "Coding"
+}
+status {
+  value: ACTIVE
+}
+date {
+  value_us: 1572560963000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+publisher {
+  value: "HL7 FHIR Standard"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+}
+description {
+  value: "Base StructureDefinition for Coding Type: A reference to a code defined by a terminology system."
+}
+purpose {
+  value: "References to codes are very common in healthcare models."
+}
+fhir_version {
+  value: V_4_0_1
+}
+mapping {
+  identity {
+    value: "v2"
+  }
+  uri {
+    value: "http://hl7.org/v2"
+  }
+  name {
+    value: "HL7 v2 Mapping"
+  }
+}
+mapping {
+  identity {
+    value: "rim"
+  }
+  uri {
+    value: "http://hl7.org/v3"
+  }
+  name {
+    value: "RIM Mapping"
+  }
+}
+mapping {
+  identity {
+    value: "orim"
+  }
+  uri {
+    value: "http://hl7.org/orim"
+  }
+  name {
+    value: "Ontological RIM Mapping"
+  }
+}
+kind {
+  value: COMPLEX_TYPE
+}
+abstract {
+}
+type {
+  value: "Coding"
+}
+base_definition {
+  value: "http://hl7.org/fhir/StructureDefinition/Element"
+}
+derivation {
+  value: SPECIALIZATION
+}
+snapshot {
+  element {
+    id {
+      value: "Coding"
+    }
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+      }
+      value {
+        code {
+          value: "normative"
+        }
+      }
+    }
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version"
+      }
+      value {
+        code {
+          value: "4.0.0"
+        }
+      }
+    }
+    path {
+      value: "Coding"
+    }
+    short {
+      value: "A reference to a code defined by a terminology system"
+    }
+    definition {
+      value: "A reference to a code defined by a terminology system."
+    }
+    comment {
+      value: "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information."
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "Coding"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    condition {
+      value: "ele-1"
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "n/a"
+      }
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "CE/CNE/CWE subset one of the sets of component 1-3 or 4-6"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "CV"
+      }
+    }
+    mapping {
+      identity {
+        value: "orim"
+      }
+      map {
+        value: "fhir:Coding rdfs:subClassOf dt:CDCoding"
+      }
+    }
+  }
+  element {
+    id {
+      value: "Coding.id"
+    }
+    path {
+      value: "Coding.id"
+    }
+    representation {
+      value: XML_ATTR
+    }
+    short {
+      value: "Unique id for inter-element referencing"
+    }
+    definition {
+      value: "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "Element.id"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      extension {
+        url {
+          value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type"
+        }
+        value {
+          url {
+            value: "string"
+          }
+        }
+      }
+      code {
+        value: "http://hl7.org/fhirpath/System.String"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "n/a"
+      }
+    }
+  }
+  element {
+    id {
+      value: "Coding.extension"
+    }
+    path {
+      value: "Coding.extension"
+    }
+    slicing {
+      discriminator {
+        type {
+          value: VALUE
+        }
+        path {
+          value: "url"
+        }
+      }
+      description {
+        value: "Extensions are always sliced by (at least) url"
+      }
+      rules {
+        value: OPEN
+      }
+    }
+    short {
+      value: "Additional content defined by implementations"
+    }
+    definition {
+      value: "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension."
+    }
+    comment {
+      value: "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone."
+    }
+    alias {
+      value: "extensions"
+    }
+    alias {
+      value: "user content"
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    base {
+      path {
+        value: "Element.extension"
+      }
+      min {
+      }
+      max {
+        value: "*"
+      }
+    }
+    type {
+      code {
+        value: "Extension"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    constraint {
+      key {
+        value: "ext-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "Must have either extensions or value[x], not both"
+      }
+      expression {
+        value: "extension.exists() != value.exists()"
+      }
+      xpath {
+        value: "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Extension"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "n/a"
+      }
+    }
+  }
+  element {
+    id {
+      value: "Coding.system"
+    }
+    path {
+      value: "Coding.system"
+    }
+    short {
+      value: "Identity of the terminology system"
+    }
+    definition {
+      value: "The identification of the code system that defines the meaning of the symbol in the code."
+    }
+    comment {
+      value: "The URI may be an OID (urn:oid:...) or a UUID (urn:uuid:...).  OIDs and UUIDs SHALL be references to the HL7 OID registry. Otherwise, the URI should come from HL7\'s list of FHIR defined special URIs or it should reference to some definition that establishes the system clearly and unambiguously."
+    }
+    requirements {
+      value: "Need to be unambiguous about the source of the definition of the symbol."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "Coding.system"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "uri"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "C*E.3"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "./codeSystem"
+      }
+    }
+    mapping {
+      identity {
+        value: "orim"
+      }
+      map {
+        value: "fhir:Coding.system rdfs:subPropertyOf dt:CDCoding.codeSystem"
+      }
+    }
+  }
+  element {
+    id {
+      value: "Coding.version"
+    }
+    path {
+      value: "Coding.version"
+    }
+    short {
+      value: "Version of the system - if relevant"
+    }
+    definition {
+      value: "The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged."
+    }
+    comment {
+      value: "Where the terminology does not clearly define what string should be used to identify code system versions, the recommendation is to use the date (expressed in FHIR date format) on which that version was officially published as the version date."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "Coding.version"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "string"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "C*E.7"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "./codeSystemVersion"
+      }
+    }
+    mapping {
+      identity {
+        value: "orim"
+      }
+      map {
+        value: "fhir:Coding.version rdfs:subPropertyOf dt:CDCoding.codeSystemVersion"
+      }
+    }
+  }
+  element {
+    id {
+      value: "Coding.code"
+    }
+    path {
+      value: "Coding.code"
+    }
+    short {
+      value: "Symbol in syntax defined by the system"
+    }
+    definition {
+      value: "A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination)."
+    }
+    requirements {
+      value: "Need to refer to a particular code in the system."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "Coding.code"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "code"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "C*E.1"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "./code"
+      }
+    }
+    mapping {
+      identity {
+        value: "orim"
+      }
+      map {
+        value: "fhir:Coding.code rdfs:subPropertyOf dt:CDCoding.code"
+      }
+    }
+  }
+  element {
+    id {
+      value: "Coding.display"
+    }
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/elementdefinition-translatable"
+      }
+      value {
+        boolean {
+          value: true
+        }
+      }
+    }
+    path {
+      value: "Coding.display"
+    }
+    short {
+      value: "Representation defined by the system"
+    }
+    definition {
+      value: "A representation of the meaning of the code in the system, following the rules of the system."
+    }
+    requirements {
+      value: "Need to be able to carry a human-readable meaning of the code for readers that do not know  the system."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "Coding.display"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "string"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "C*E.2 - but note this is not well followed"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "CV.displayName"
+      }
+    }
+    mapping {
+      identity {
+        value: "orim"
+      }
+      map {
+        value: "fhir:Coding.display rdfs:subPropertyOf dt:CDCoding.displayName"
+      }
+    }
+  }
+  element {
+    id {
+      value: "Coding.userSelected"
+    }
+    path {
+      value: "Coding.userSelected"
+    }
+    short {
+      value: "If this coding was chosen directly by the user"
+    }
+    definition {
+      value: "Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays)."
+    }
+    comment {
+      value: "Amongst a set of alternatives, a directly chosen code is the most appropriate starting point for new translations. There is some ambiguity about what exactly \'directly chosen\' implies, and trading partner agreement may be needed to clarify the use of this element and its consequences more completely."
+    }
+    requirements {
+      value: "This has been identified as a clinical safety criterium - that this exact system/code pair was chosen explicitly, rather than inferred by the system based on some rules or language processing."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    base {
+      path {
+        value: "Coding.userSelected"
+      }
+      min {
+      }
+      max {
+        value: "1"
+      }
+    }
+    type {
+      code {
+        value: "boolean"
+      }
+    }
+    constraint {
+      key {
+        value: "ele-1"
+      }
+      severity {
+        value: ERROR
+      }
+      human {
+        value: "All FHIR elements must have a @value or children"
+      }
+      expression {
+        value: "hasValue() or (children().count() > id.count())"
+      }
+      xpath {
+        value: "@value|f:*|h:div"
+      }
+      source {
+        value: "http://hl7.org/fhir/StructureDefinition/Element"
+      }
+    }
+    is_modifier {
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "Sometimes implied by being first"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "CD.codingRationale"
+      }
+    }
+    mapping {
+      identity {
+        value: "orim"
+      }
+      map {
+        value: "fhir:Coding.userSelected fhir:mapsTo dt:CDCoding.codingRationale. fhir:Coding.userSelected fhir:hasMap fhir:Coding.userSelected.map. fhir:Coding.userSelected.map a fhir:Map;   fhir:target dt:CDCoding.codingRationale. fhir:Coding.userSelected\\#true a [     fhir:source \"true\";     fhir:target dt:CDCoding.codingRationale\\#O   ]"
+      }
+    }
+  }
+}
+differential {
+  element {
+    id {
+      value: "Coding"
+    }
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+      }
+      value {
+        code {
+          value: "normative"
+        }
+      }
+    }
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version"
+      }
+      value {
+        code {
+          value: "4.0.0"
+        }
+      }
+    }
+    path {
+      value: "Coding"
+    }
+    short {
+      value: "A reference to a code defined by a terminology system"
+    }
+    definition {
+      value: "A reference to a code defined by a terminology system."
+    }
+    comment {
+      value: "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information."
+    }
+    min {
+    }
+    max {
+      value: "*"
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "CE/CNE/CWE subset one of the sets of component 1-3 or 4-6"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "CV"
+      }
+    }
+    mapping {
+      identity {
+        value: "orim"
+      }
+      map {
+        value: "fhir:Coding rdfs:subClassOf dt:CDCoding"
+      }
+    }
+  }
+  element {
+    id {
+      value: "Coding.system"
+    }
+    path {
+      value: "Coding.system"
+    }
+    short {
+      value: "Identity of the terminology system"
+    }
+    definition {
+      value: "The identification of the code system that defines the meaning of the symbol in the code."
+    }
+    comment {
+      value: "The URI may be an OID (urn:oid:...) or a UUID (urn:uuid:...).  OIDs and UUIDs SHALL be references to the HL7 OID registry. Otherwise, the URI should come from HL7\'s list of FHIR defined special URIs or it should reference to some definition that establishes the system clearly and unambiguously."
+    }
+    requirements {
+      value: "Need to be unambiguous about the source of the definition of the symbol."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    type {
+      code {
+        value: "uri"
+      }
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "C*E.3"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "./codeSystem"
+      }
+    }
+    mapping {
+      identity {
+        value: "orim"
+      }
+      map {
+        value: "fhir:Coding.system rdfs:subPropertyOf dt:CDCoding.codeSystem"
+      }
+    }
+  }
+  element {
+    id {
+      value: "Coding.version"
+    }
+    path {
+      value: "Coding.version"
+    }
+    short {
+      value: "Version of the system - if relevant"
+    }
+    definition {
+      value: "The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged."
+    }
+    comment {
+      value: "Where the terminology does not clearly define what string should be used to identify code system versions, the recommendation is to use the date (expressed in FHIR date format) on which that version was officially published as the version date."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    type {
+      code {
+        value: "string"
+      }
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "C*E.7"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "./codeSystemVersion"
+      }
+    }
+    mapping {
+      identity {
+        value: "orim"
+      }
+      map {
+        value: "fhir:Coding.version rdfs:subPropertyOf dt:CDCoding.codeSystemVersion"
+      }
+    }
+  }
+  element {
+    id {
+      value: "Coding.code"
+    }
+    path {
+      value: "Coding.code"
+    }
+    short {
+      value: "Symbol in syntax defined by the system"
+    }
+    definition {
+      value: "A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination)."
+    }
+    requirements {
+      value: "Need to refer to a particular code in the system."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    type {
+      code {
+        value: "code"
+      }
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "C*E.1"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "./code"
+      }
+    }
+    mapping {
+      identity {
+        value: "orim"
+      }
+      map {
+        value: "fhir:Coding.code rdfs:subPropertyOf dt:CDCoding.code"
+      }
+    }
+  }
+  element {
+    id {
+      value: "Coding.display"
+    }
+    extension {
+      url {
+        value: "http://hl7.org/fhir/StructureDefinition/elementdefinition-translatable"
+      }
+      value {
+        boolean {
+          value: true
+        }
+      }
+    }
+    path {
+      value: "Coding.display"
+    }
+    short {
+      value: "Representation defined by the system"
+    }
+    definition {
+      value: "A representation of the meaning of the code in the system, following the rules of the system."
+    }
+    requirements {
+      value: "Need to be able to carry a human-readable meaning of the code for readers that do not know  the system."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    type {
+      code {
+        value: "string"
+      }
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "C*E.2 - but note this is not well followed"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "CV.displayName"
+      }
+    }
+    mapping {
+      identity {
+        value: "orim"
+      }
+      map {
+        value: "fhir:Coding.display rdfs:subPropertyOf dt:CDCoding.displayName"
+      }
+    }
+  }
+  element {
+    id {
+      value: "Coding.userSelected"
+    }
+    path {
+      value: "Coding.userSelected"
+    }
+    short {
+      value: "If this coding was chosen directly by the user"
+    }
+    definition {
+      value: "Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays)."
+    }
+    comment {
+      value: "Amongst a set of alternatives, a directly chosen code is the most appropriate starting point for new translations. There is some ambiguity about what exactly \'directly chosen\' implies, and trading partner agreement may be needed to clarify the use of this element and its consequences more completely."
+    }
+    requirements {
+      value: "This has been identified as a clinical safety criterium - that this exact system/code pair was chosen explicitly, rather than inferred by the system based on some rules or language processing."
+    }
+    min {
+    }
+    max {
+      value: "1"
+    }
+    type {
+      code {
+        value: "boolean"
+      }
+    }
+    is_summary {
+      value: true
+    }
+    mapping {
+      identity {
+        value: "v2"
+      }
+      map {
+        value: "Sometimes implied by being first"
+      }
+    }
+    mapping {
+      identity {
+        value: "rim"
+      }
+      map {
+        value: "CD.codingRationale"
+      }
+    }
+    mapping {
+      identity {
+        value: "orim"
+      }
+      map {
+        value: "fhir:Coding.userSelected fhir:mapsTo dt:CDCoding.codingRationale. fhir:Coding.userSelected fhir:hasMap fhir:Coding.userSelected.map. fhir:Coding.userSelected.map a fhir:Map;   fhir:target dt:CDCoding.codingRationale. fhir:Coding.userSelected\\#true a [     fhir:source \"true\";     fhir:target dt:CDCoding.codingRationale\\#O   ]"
+      }
+    }
+  }
+}

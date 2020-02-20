@@ -1554,6 +1554,12 @@ TEST(JsonFormatR4Test, TestStructureMap) {
   TestPair<StructureMap>(files);
 }
 
+TEST(JsonFormatR4Test, TestStructureDefinition) {
+  std::vector<std::string> files{"StructureDefinition-Coding",
+                                 "StructureDefinition-lipidprofile"};
+  TestPair<StructureDefinition>(files);
+}
+
 TEST(JsonFormatR4Test, TestSubscription) {
   std::vector<std::string> files{"Subscription-example-error",
                                  "Subscription-example"};
