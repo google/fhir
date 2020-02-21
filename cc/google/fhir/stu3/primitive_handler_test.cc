@@ -19,6 +19,7 @@
 #include <string>
 #include <vector>
 
+#include "google/protobuf/any.pb.h"
 #include "google/protobuf/message.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -26,6 +27,7 @@
 #include "absl/strings/str_split.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/json_format.h"
+#include "google/fhir/stu3/json_format.h"
 #include "google/fhir/test_helper.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
@@ -281,6 +283,11 @@ TEST(PrimitiveValidationTestProto, StringCode) {
     ASSERT_EQ(Stu3PrimitiveHandler::GetInstance()->type##Descriptor()->name(), \
               #type);                                                        \
     delete msg;                                                              \
+                                                                             \
+    ::google::protobuf::Any any;                                             \
+    ASSERT_NE(::tensorflow::Status::OK(),                                    \
+              Stu3PrimitiveHandler::GetInstance()->Get##type##Value(any)     \
+                  .status());                                                \
   }
 
 HANDLER_TYPE_TEST(String, "mandalorian");

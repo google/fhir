@@ -148,6 +148,29 @@ cc_library(
     ],
 )
 
+cc_test(
+    name = "primitive_handler_test",
+    srcs = ["primitive_handler_test.cc"],
+    data = [
+        "//testdata/r4:validation",
+    ],
+    deps = [
+        ":json_format",
+        ":primitive_handler",
+        "//cc/google/fhir:annotations",
+        "//cc/google/fhir:json_format",
+        "//cc/google/fhir:test_helper",
+        "//proto/r4:google_extensions_cc_proto",
+        "//proto/r4/core:datatypes_cc_proto",
+        "//proto/r4/core/resources:binary_cc_proto",
+        "//proto/r4/core/resources:patient_cc_proto",
+        "@com_google_absl//absl/strings",
+        "@com_google_googletest//:gtest_main",
+        "@com_google_protobuf//:protobuf",
+        "@org_tensorflow//tensorflow/core:test",
+    ],
+)
+
 cc_library(
     name = "json_format",
     srcs = ["json_format.cc"],

@@ -16,6 +16,7 @@
 
 #include "google/fhir/r4/primitive_handler.h"
 
+#include "google/protobuf/any.pb.h"
 #include "google/protobuf/message.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -23,6 +24,7 @@
 #include "absl/strings/str_split.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/json_format.h"
+#include "google/fhir/r4/json_format.h"
 #include "google/fhir/test_helper.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/resources/binary.pb.h"
@@ -279,6 +281,11 @@ TEST(PrimitiveValidationTestProto, StringCode) {
     ASSERT_EQ(R4PrimitiveHandler::GetInstance()->type##Descriptor()->name(), \
               #type);                                                        \
     delete msg;                                                              \
+                                                                             \
+    ::google::protobuf::Any any;                                             \
+    ASSERT_NE(::tensorflow::Status::OK(),                                    \
+              R4PrimitiveHandler::GetInstance()->Get##type##Value(any)       \
+                  .status());                                                \
   }
 
 HANDLER_TYPE_TEST(String, "mandalorian");

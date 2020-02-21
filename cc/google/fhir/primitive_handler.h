@@ -104,6 +104,7 @@ class PrimitiveHandler {
 namespace primitives_internal {
 
 template <typename Expected>
+ABSL_MUST_USE_RESULT
 Status CheckType(const ::google::protobuf::Message& message) {
   return IsMessageType<Expected>(message)
              ? Status::OK()
@@ -133,7 +134,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 
   StatusOr<std::string> GetStringValue(
       const ::google::protobuf::Message& primitive) const override {
-    CheckType<String>(primitive);
+    FHIR_RETURN_IF_ERROR(CheckType<String>(primitive));
     return dynamic_cast<const String&>(primitive).value();
   }
 
@@ -149,7 +150,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 
   StatusOr<bool> GetBooleanValue(
       const ::google::protobuf::Message& primitive) const override {
-    CheckType<Boolean>(primitive);
+    FHIR_RETURN_IF_ERROR(CheckType<Boolean>(primitive));
     return dynamic_cast<const Boolean&>(primitive).value();
   }
 
@@ -165,7 +166,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 
   StatusOr<int> GetIntegerValue(
       const ::google::protobuf::Message& primitive) const override {
-    CheckType<Integer>(primitive);
+    FHIR_RETURN_IF_ERROR(CheckType<Integer>(primitive));
     return dynamic_cast<const Integer&>(primitive).value();
   }
 
@@ -181,7 +182,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 
   StatusOr<std::string> GetDecimalValue(
       const ::google::protobuf::Message& primitive) const override {
-    CheckType<Decimal>(primitive);
+    FHIR_RETURN_IF_ERROR(CheckType<Decimal>(primitive));
     return dynamic_cast<const Decimal&>(primitive).value();
   }
 
