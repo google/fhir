@@ -259,11 +259,11 @@ public final class ExtensionWrapper {
   private static Map<Descriptor, FieldDescriptor> buildExtensionValueFieldMap() {
 
     Map<String, FieldDescriptor> fieldNameToR4Field =
-        Extension.Value.getDescriptor().getOneofs().get(0).getFields().stream()
+        Extension.ValueX.getDescriptor().getOneofs().get(0).getFields().stream()
             .collect(Collectors.toMap(f -> f.getName(), f -> f));
 
     Map<Descriptor, FieldDescriptor> fieldsMap =
-        com.google.fhir.stu3.proto.Extension.Value.getDescriptor()
+        com.google.fhir.stu3.proto.Extension.ValueX.getDescriptor()
             .getOneofs()
             .get(0)
             .getFields()
@@ -274,7 +274,7 @@ public final class ExtensionWrapper {
                     f -> f.getMessageType(), f -> fieldNameToR4Field.get(f.getName())));
 
     fieldsMap.putAll(
-        Extension.Value.getDescriptor().getOneofs().get(0).getFields().stream()
+        Extension.ValueX.getDescriptor().getOneofs().get(0).getFields().stream()
             .collect(Collectors.toMap(FieldDescriptor::getMessageType, f -> f)));
     return fieldsMap;
   }
@@ -299,7 +299,7 @@ public final class ExtensionWrapper {
     }
     FieldDescriptor valueFieldForType = EXTENSION_VALUE_FIELDS_BY_TYPE.get(valueDescriptor);
     if (valueFieldForType != null) {
-      Extension.Value.Builder valueBuilder = result.getValueBuilder();
+      Extension.ValueX.Builder valueBuilder = result.getValueBuilder();
       ProtoUtils.fieldWiseCopy(value, valueBuilder.getFieldBuilder(valueFieldForType));
       return;
     }
@@ -357,7 +357,7 @@ public final class ExtensionWrapper {
           checkIsMessage(
               extension
                   .getValue()
-                  .getOneofFieldDescriptor(Extension.Value.getDescriptor().getOneofs().get(0)));
+                  .getOneofFieldDescriptor(Extension.ValueX.getDescriptor().getOneofs().get(0)));
       // We only hit this case for simple extensions. The output type had better have just one
       // field other than extension and id, and it had better be of the right type.
       List<FieldDescriptor> messageFields =
@@ -432,11 +432,11 @@ public final class ExtensionWrapper {
   }
 
   private static void addValueToChoiceType(
-      Extension.Value value, Message.Builder choiceTypeBuilder) {
+      Extension.ValueX value, Message.Builder choiceTypeBuilder) {
     Descriptor choiceDescriptor = choiceTypeBuilder.getDescriptorForType();
     FieldDescriptor extensionValueField =
         checkIsMessage(
-            value.getOneofFieldDescriptor(Extension.Value.getDescriptor().getOneofs().get(0)));
+            value.getOneofFieldDescriptor(Extension.ValueX.getDescriptor().getOneofs().get(0)));
     for (FieldDescriptor choiceField : choiceDescriptor.getFields()) {
       checkIsMessage(choiceField);
       if (AnnotationUtils.sameFhirType(
@@ -452,10 +452,10 @@ public final class ExtensionWrapper {
             + choiceDescriptor.getFullName());
   }
 
-  private static void addValueToMessage(Extension.Value value, Message.Builder builder) {
+  private static void addValueToMessage(Extension.ValueX value, Message.Builder builder) {
     FieldDescriptor valueField =
         checkIsMessage(
-            value.getOneofFieldDescriptor(Extension.Value.getDescriptor().getOneofs().get(0)));
+            value.getOneofFieldDescriptor(Extension.ValueX.getDescriptor().getOneofs().get(0)));
     ProtoUtils.fieldWiseCopy((Message) value.getField(valueField), builder);
   }
 

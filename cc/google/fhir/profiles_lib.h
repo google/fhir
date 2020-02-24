@@ -97,7 +97,7 @@ Status PerformExtensionSlicing(const Message& source, Message* target) {
         const auto& value = source_extension.value();
         const FieldDescriptor* src_datatype_field =
             value.GetReflection()->GetOneofFieldDescriptor(
-                value, value.GetDescriptor()->FindOneofByName("value"));
+                value, value.GetDescriptor()->FindOneofByName("choice"));
         if (src_datatype_field == nullptr) {
           return InvalidArgument(
               absl::StrCat("Invalid extension: neither value nor extensions "

@@ -1289,10 +1289,10 @@ message Extension {
   Uri url = 2 [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // Value of extension
-  message Value {
+  message ValueX {
     option (.google.fhir.proto.is_choice_type) = true;
 
-    oneof value {
+    oneof choice {
       Base64Binary base64_binary = 1;
       Boolean boolean = 2;
       Code code = 3;
@@ -1333,7 +1333,7 @@ message Extension {
       Meta meta = 38;
     }
   }
-  Value value = 3;
+  ValueX value = 3;
 
   // Additional Content defined by implementations
   repeated Extension extension = 4;

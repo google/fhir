@@ -95,7 +95,7 @@ public final class ValidationTest {
   private static final Extension ARBITRARY_EXTENSION =
       Extension.newBuilder()
           .setUrl(Uri.newBuilder().setValue("abcd"))
-          .setValue(Extension.Value.newBuilder().setBoolean(Boolean.newBuilder().setValue(true)))
+          .setValue(Extension.ValueX.newBuilder().setBoolean(Boolean.newBuilder().setValue(true)))
           .build();
 
   private void testProtoValidation(Message message) throws IOException {

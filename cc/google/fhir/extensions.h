@@ -132,7 +132,7 @@ template <class ExtensionLike>
 StatusOr<const ::google::protobuf::FieldDescriptor*> GetExtensionValueField(
     const ExtensionLike& extension) {
   static const google::protobuf::OneofDescriptor* value_oneof =
-      ExtensionLike::Value::descriptor()->FindOneofByName("value");
+      ExtensionLike::ValueX::descriptor()->FindOneofByName("choice");
   const auto& value = extension.value();
   const ::google::protobuf::Reflection* value_reflection = value.GetReflection();
   const ::google::protobuf::FieldDescriptor* field =
@@ -354,7 +354,8 @@ Status ExtensionToMessage(const ExtensionLike& extension,
         ->CopyFrom(extension.id());
   }
 
-  if (extension.value().value_case() != ExtensionLike::Value::VALUE_NOT_SET) {
+  if (extension.value().choice_case() !=
+      ExtensionLike::ValueX::CHOICE_NOT_SET) {
     // This is a simple extension, with only one value.
     if (fields_by_url.size() != 1 ||
         fields_by_url.begin()->second->is_repeated()) {
@@ -373,7 +374,7 @@ Status ExtensionToMessage(const ExtensionLike& extension,
           " has no field with name ", inner.url().value());
     }
 
-    if (inner.value().value_case() != ExtensionLike::Value::VALUE_NOT_SET) {
+    if (inner.value().choice_case() != ExtensionLike::ValueX::CHOICE_NOT_SET) {
       FHIR_RETURN_IF_ERROR(ValueToMessage(inner, message, field));
     } else {
       ::google::protobuf::Message* child;

@@ -3185,10 +3185,10 @@ message Extension {
   repeated Extension extension = 3;
 
   // Value of extension
-  message Value {
+  message ValueX {
     option (.google.fhir.proto.is_choice_type) = true;
 
-    oneof value {
+    oneof choice {
       Base64Binary base64_binary = 1;
       Boolean boolean = 2;
       Canonical canonical = 3;
@@ -3240,7 +3240,7 @@ message Extension {
       Dosage dosage = 49;
     }
   }
-  Value value = 4;
+  ValueX value = 4;
 }
 
 // Specialization of Coding that drops the system and code fields.

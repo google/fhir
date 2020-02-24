@@ -49,14 +49,14 @@ GetExtensionValueFieldsMap() {
         new std::unordered_map<std::string, const ::google::protobuf::FieldDescriptor*>;
 
     const google::protobuf::OneofDescriptor* stu3_value_oneof =
-        stu3::proto::Extension::Value::descriptor()->FindOneofByName("value");
+        stu3::proto::Extension::ValueX::descriptor()->FindOneofByName("choice");
     CHECK(stu3_value_oneof != nullptr);
     for (int i = 0; i < stu3_value_oneof->field_count(); i++) {
       const ::google::protobuf::FieldDescriptor* field = stu3_value_oneof->field(i);
       (*map)[field->message_type()->full_name()] = field;
     }
     const google::protobuf::OneofDescriptor* r4_value_oneof =
-        r4::core::Extension::Value::descriptor()->FindOneofByName("value");
+        r4::core::Extension::ValueX::descriptor()->FindOneofByName("choice");
     CHECK(r4_value_oneof != nullptr);
     for (int i = 0; i < r4_value_oneof->field_count(); i++) {
       const ::google::protobuf::FieldDescriptor* field = r4_value_oneof->field(i);
