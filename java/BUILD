@@ -391,12 +391,27 @@ java_test(
 java_library(
     name = "json_format_test_base",
     testonly = 1,
-    srcs = ["src/main/java/com/google/fhir/common/JsonFormatTestBase.java"],
+    srcs = ["src/main/java/com/google/fhir/testing/JsonFormatTestBase.java"],
     deps = [
         ":json_format",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_code_gson_gson",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
+    ],
+)
+
+java_library(
+    name = "validation_test_base",
+    testonly = 1,
+    srcs = ["src/main/java/com/google/fhir/testing/ValidationTestBase.java"],
+    deps = [
+        ":json_format",
+        ":primitive_wrappers",
+        "@bazel_tools//tools/java/runfiles",
+        "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_guava_guava",
         "@maven//:com_google_truth_truth",
         "@maven//:junit_junit",
@@ -647,23 +662,42 @@ java_test(
 )
 
 java_test(
-    name = "ValidationTest",
+    name = "ValidationStu3Test",
     size = "medium",
-    srcs = ["src/test/java/com/google/fhir/wrappers/ValidationTest.java"],
+    srcs = ["src/test/java/com/google/fhir/stu3/wrappers/ValidationTest.java"],
     data = [
         "//testdata/stu3:validation",
     ],
-    test_class = "com.google.fhir.wrappers.ValidationTest",
+    test_class = "com.google.fhir.stu3.wrappers.ValidationTest",
     deps = [
         ":json_format",
-        ":primitive_wrappers",
+        ":validation_test_base",
         "//proto/stu3:codes_java_proto",
         "//proto/stu3:datatypes_java_proto",
         "//proto/stu3:extensions_java_proto",
+        "//proto/stu3:uscore_java_proto",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
-        "@maven//:com_google_guava_guava",
-        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
+    ],
+)
+
+java_test(
+    name = "ValidationR4Test",
+    size = "medium",
+    srcs = ["src/test/java/com/google/fhir/r4/wrappers/ValidationTest.java"],
+    data = [
+        "//testdata/r4:validation",
+    ],
+    test_class = "com.google.fhir.r4.wrappers.ValidationTest",
+    deps = [
+        ":json_format",
+        ":validation_test_base",
+        "//proto/r4:google_extensions_java_proto",
+        "//proto/r4:uscore_java_proto",
+        "//proto/r4/core:datatypes_java_proto",
+        "@bazel_tools//tools/java/runfiles",
+        "@com_google_protobuf//:protobuf_java",
         "@maven//:junit_junit",
     ],
 )

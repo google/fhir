@@ -1,0 +1,4 @@
+value: "http://hl7.org/fhir/ValueSet/my-valueset"
+---
+value: "http://hl7.org/fhir/ValueSet/my-valueset|0.8"
+

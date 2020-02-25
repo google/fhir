@@ -1,4 +1,4 @@
-//    Copyright 2018 Google Inc.
+//    Copyright 2020 Google Inc.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -12,151 +12,34 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-package com.google.fhir.wrappers;
+package com.google.fhir.stu3.wrappers;
 
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
-
-import com.google.common.base.CaseFormat;
-import com.google.common.base.Splitter;
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.stu3.google.PrimitiveHasNoValue;
 import com.google.fhir.stu3.proto.Boolean;
-import com.google.fhir.stu3.proto.Extension;
-import com.google.fhir.stu3.proto.Uri;
-import com.google.protobuf.Message;
-import com.google.protobuf.Message.Builder;
+import com.google.fhir.stu3.uscore.UsCoreDirectEmail;
+import com.google.fhir.testing.ValidationTestBase;
 import com.google.protobuf.TextFormat;
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-/** Validation tests for primitive types. For each tested type, we load two ndjson file */
-// TODO: Update this test (and corresponding c++ test) to R4
+/** Validation tests for STU3 primitive types. */
 @RunWith(JUnit4.class)
-public final class ValidationTest {
+public final class ValidationTest extends ValidationTestBase {
 
-  private JsonFormat.Parser jsonParser;
-  private TextFormat.Parser textParser;
-  private Runfiles runfiles;
-
-  /** Parse the given line, expecting it to be valid. */
-  private void expectValid(java.lang.String line, Builder builder) throws IOException {
-    jsonParser.merge(line, builder);
-  }
-
-  /** Parse the given line, expecting it to be invalid. */
-  private void expectInvalid(java.lang.String line, Builder builder) throws IOException {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> jsonParser.merge(line, builder));
-    assertThat(exception).hasMessageThat().containsMatch("Invalid|Unknown|Error");
-  }
-
-  /** Read the specified ndjson file from the testdata directory as a List of Strings. */
-  private java.util.List<java.lang.String> readLines(Builder type, boolean valid)
-      throws IOException {
-    Path path =
-        Paths.get(
-            runfiles.rlocation("com_google_fhir/testdata/stu3/validation/"),
-            CaseFormat.UPPER_CAMEL.to(
-                    CaseFormat.LOWER_UNDERSCORE, type.getDescriptorForType().getName())
-                + (valid ? ".valid.ndjson" : ".invalid.ndjson"));
-    return Files.readAllLines(path, StandardCharsets.UTF_8);
-  }
-
-  /** Read the specifed text file from the testdata directory as a String. */
-  private String loadText(String filename) throws IOException {
-    File file = new File(runfiles.rlocation("com_google_fhir/" + filename));
-    return com.google.common.io.Files.asCharSource(file, StandardCharsets.UTF_8).read();
-  }
-
-  /** Test parsing a set of valid and invalid inputs for the given type. */
-  private void testJsonValidation(Builder type) throws IOException {
-    for (java.lang.String line : readLines(type.clone(), true)) {
-      expectValid(line, type.clone());
-    }
-    for (java.lang.String line : readLines(type.clone(), false)) {
-      expectInvalid(line, type.clone());
-    }
-  }
-
-  private static final PrimitiveHasNoValue PRIMITIVE_HAS_NO_VALUE =
-      PrimitiveHasNoValue.newBuilder().setValueBoolean(Boolean.newBuilder().setValue(true)).build();
-  private static final Extension ARBITRARY_EXTENSION =
-      Extension.newBuilder()
-          .setUrl(Uri.newBuilder().setValue("abcd"))
-          .setValue(Extension.ValueX.newBuilder().setBoolean(Boolean.newBuilder().setValue(true)))
-          .build();
-
-  private void testProtoValidation(Message message) throws IOException {
-    String messageName = message.getDescriptorForType().getFullName();
-    // Test cases that are common to all primitives
-
-    // It's ok to have no value if there's another extension present.
-    Message.Builder onlyExtensions = message.newBuilderForType();
-    ExtensionWrapper.of()
-        .add(PRIMITIVE_HAS_NO_VALUE)
-        .add(ARBITRARY_EXTENSION)
-        .addToMessage(onlyExtensions);
-    try {
-      PrimitiveWrappers.validatePrimitive(onlyExtensions);
-    } catch (Exception e) {
-      Assert.fail(messageName + " with only extensions should pass, got: " + e.getMessage());
-    }
-
-    // But it's not okay to JUST have the no value extension (and no other extensions).
-    Message.Builder justNoValue = message.newBuilderForType();
-    ExtensionWrapper.of().add(PRIMITIVE_HAS_NO_VALUE).addToMessage(justNoValue);
-
-    IllegalArgumentException primitiveException = assertThrows(IllegalArgumentException.class,
-        () -> PrimitiveWrappers.validatePrimitive(justNoValue));
-    assertTrue(primitiveException.getMessage().contains("PrimitiveHasNoValue"));
-
-    // Run individual cases from testdata files.
-    String fileBase =
-        "testdata/stu3/validation/"
-            + CaseFormat.UPPER_CAMEL.to(
-                CaseFormat.LOWER_UNDERSCORE, message.getDescriptorForType().getName());
-
-    // Check the valid file
-    Iterable<String> validProtoStrings =
-        Splitter.on("\n---\n").split(loadText(fileBase + ".valid.prototxt"));
-    for (String validProtoString : validProtoStrings) {
-      Message.Builder testBuilder = message.newBuilderForType();
-      textParser.merge(validProtoString, testBuilder);
-      try {
-        PrimitiveWrappers.validatePrimitive(testBuilder);
-      } catch (Exception e) {
-        Assert.fail(
-            messageName + " expected valid " + validProtoString + "\nGot: " + e.getMessage());
-      }
-    }
-
-    // Check the invalid file if present.
-    String[] invalidProtoStrings = null;
-    try {
-      invalidProtoStrings = loadText(fileBase + ".invalid.prototxt").split("\n---\n");
-    } catch (IOException e) {
-      // Not all primitives have invalid files - e.g., it's impossible to have a Boolean with an
-      // invalid value.
-    }
-    if (invalidProtoStrings != null) {
-      for (String invalidProtoString : invalidProtoStrings) {
-        Message.Builder testBuilder = message.newBuilderForType();
-        textParser.merge(invalidProtoString, testBuilder);
-        assertThrows(Exception.class, () -> PrimitiveWrappers.validatePrimitive(testBuilder));
-      }
-    }
+  public ValidationTest() {
+    super(
+        "stu3",
+        PrimitiveHasNoValue.newBuilder()
+            .setValueBoolean(Boolean.newBuilder().setValue(true))
+            .build(),
+        UsCoreDirectEmail.newBuilder()
+            .setValueBoolean(Boolean.newBuilder().setValue(true))
+            .build());
   }
 
   @Before
@@ -165,8 +48,6 @@ public final class ValidationTest {
     textParser = TextFormat.getParser();
     runfiles = Runfiles.create();
   }
-
-  /* Test validation of primitive types. */
 
   @Test
   public void testBase64Binary() throws IOException {

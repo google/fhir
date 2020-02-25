@@ -15,7 +15,6 @@
 package com.google.fhir.r4;
 
 import com.google.common.io.Files;
-import com.google.fhir.common.JsonFormatTestBase;
 import com.google.fhir.r4.core.Account;
 import com.google.fhir.r4.core.ActivityDefinition;
 import com.google.fhir.r4.core.AdverseEvent;
@@ -151,6 +150,7 @@ import com.google.fhir.r4.core.TestReport;
 import com.google.fhir.r4.core.TestScript;
 import com.google.fhir.r4.core.VerificationResult;
 import com.google.fhir.r4.core.VisionPrescription;
+import com.google.fhir.testing.JsonFormatTestBase;
 import com.google.protobuf.Message;
 import java.io.File;
 import java.io.IOException;

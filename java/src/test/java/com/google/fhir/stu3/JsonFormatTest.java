@@ -16,7 +16,6 @@ package com.google.fhir.stu3;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import com.google.fhir.common.JsonFormatTestBase;
 import com.google.fhir.stu3.proto.Account;
 import com.google.fhir.stu3.proto.ActivityDefinition;
 import com.google.fhir.stu3.proto.AdverseEvent;
@@ -134,6 +133,7 @@ import com.google.fhir.stu3.proto.TestReport;
 import com.google.fhir.stu3.proto.TestScript;
 import com.google.fhir.stu3.proto.ValueSet;
 import com.google.fhir.stu3.proto.VisionPrescription;
+import com.google.fhir.testing.JsonFormatTestBase;
 import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;

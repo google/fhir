@@ -12,13 +12,14 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-package com.google.fhir.common;
+package com.google.fhir.testing;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.fail;
 
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
+import com.google.fhir.common.JsonFormat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
