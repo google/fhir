@@ -23,6 +23,7 @@
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/time/time.h"
+#include "absl/types/optional.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
@@ -90,7 +91,7 @@ class PrimitiveHandler {
   virtual const ::google::protobuf::Descriptor* DecimalDescriptor() const = 0;
 
  protected:
-  PrimitiveHandler(proto::FhirVersion version) : version_(version) {}
+  explicit PrimitiveHandler(proto::FhirVersion version) : version_(version) {}
 
   virtual StatusOr<std::unique_ptr<primitives_internal::PrimitiveWrapper>>
   GetWrapper(const ::google::protobuf::Descriptor* target_descriptor) const = 0;
@@ -200,6 +201,87 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
   PrimitiveHandlerTemplate()
       : PrimitiveHandler(GetFhirVersion(ExtensionType::descriptor())) {}
 };
+
+// Helper function for handling primitive types that are universally present in
+// all FHIR versions >= STU3.
+template <typename ExtensionType, typename XhtmlType,
+          typename Base64BinarySeparatorStrideType>
+absl::optional<std::unique_ptr<PrimitiveWrapper>> GetCommonWrapper(
+    const Descriptor* target_descriptor) {
+  if (IsTypeOrProfileOfCode(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new CodeWrapper<FHIR_DATATYPE(ExtensionType, code)>());
+  }
+  if (IsMessageType<FHIR_DATATYPE(ExtensionType, code)>(target_descriptor) ||
+      HasValueset(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        (new CodeWrapper<FHIR_DATATYPE(ExtensionType, code)>()));
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, base64_binary)>(
+                 target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new Base64BinaryWrapper<FHIR_DATATYPE(ExtensionType, base64_binary),
+                                Base64BinarySeparatorStrideType>());
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, boolean)>(
+                 target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new BooleanWrapper<FHIR_DATATYPE(ExtensionType, boolean)>());
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, date)>(
+                 target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new TimeTypeWrapper<FHIR_DATATYPE(ExtensionType, date)>());
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, date_time)>(
+                 target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new TimeTypeWrapper<FHIR_DATATYPE(ExtensionType, date_time)>());
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, decimal)>(
+                 target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new DecimalWrapper<FHIR_DATATYPE(ExtensionType, decimal)>());
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, id)>(
+                 target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<FHIR_DATATYPE(ExtensionType, id)>());
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, instant)>(
+                 target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new TimeTypeWrapper<FHIR_DATATYPE(ExtensionType, instant)>());
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, integer)>(
+                 target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new IntegerTypeWrapper<FHIR_DATATYPE(ExtensionType, integer)>());
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, markdown)>(
+                 target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<FHIR_DATATYPE(ExtensionType, markdown)>());
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, oid)>(
+                 target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<FHIR_DATATYPE(ExtensionType, oid)>());
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, positive_int)>(
+                 target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new PositiveIntWrapper<FHIR_DATATYPE(ExtensionType, positive_int)>());
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, string_value)>(
+                 target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<FHIR_DATATYPE(ExtensionType, string_value)>());
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, time)>(
+                 target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new TimeWrapper<FHIR_DATATYPE(ExtensionType, time)>());
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, unsigned_int)>(
+                 target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new UnsignedIntWrapper<FHIR_DATATYPE(ExtensionType, unsigned_int)>());
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, uri)>(
+                 target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<FHIR_DATATYPE(ExtensionType, uri)>());
+  } else if (IsMessageType<XhtmlType>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(new XhtmlWrapper<XhtmlType>());
+  }
+  return absl::optional<std::unique_ptr<PrimitiveWrapper>>();
+}
 
 }  // namespace primitives_internal
 

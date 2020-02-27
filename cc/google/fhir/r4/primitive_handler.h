@@ -40,7 +40,7 @@ class R4PrimitiveHandler
  protected:
   ::google::fhir::StatusOr<
       std::unique_ptr<primitives_internal::PrimitiveWrapper>>
-  GetWrapper(const ::google::protobuf::Descriptor* target_descriptor) const;
+  GetWrapper(const ::google::protobuf::Descriptor* target_descriptor) const override;
 };
 
 }  // namespace r4
