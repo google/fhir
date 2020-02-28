@@ -916,7 +916,7 @@ class TailFunction : public ZeroParameterFunctionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.size() > 1) {
-      results->insert(results->begin(), child_results.begin() + 1,
+      results->insert(results->begin(), std::next(child_results.begin()),
                       child_results.end());
     }
 
@@ -2543,7 +2543,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
       // If we know the return type of the expression, and the return type
       // doesn't have the referenced field, set an error and return.
-      if (descriptor != nullptr && !HasField(descriptor, definition->name)) {
+      if (descriptor != nullptr && !HasFieldWithJsonName(descriptor,
+                                                         definition->name)) {
         SetError(absl::StrCat("Unable to find field ", definition->name));
         return nullptr;
       }
@@ -2585,7 +2586,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
     // If we know the return type of the expression, and the return type
     // doesn't have the referenced field, set an error and return.
-    if (descriptor != nullptr && !HasField(descriptor, definition->name)) {
+    if (descriptor != nullptr && !HasFieldWithJsonName(descriptor,
+                                                       definition->name)) {
       SetError(absl::StrCat("Unable to find field ", definition->name));
       return nullptr;
     }

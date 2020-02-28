@@ -44,8 +44,8 @@ tensorflow::Status RetrieveField(const google::protobuf::Message& root,
 // proto wrapper used for ValueX or contained resources, a search for a matching
 // field is preformed within the possible values/resources that the proto wraps.
 // Returns false if a matching field is not found.
-bool HasField(const google::protobuf::Descriptor* descriptor,
-              absl::string_view json_name);
+bool HasFieldWithJsonName(const google::protobuf::Descriptor* descriptor,
+                          absl::string_view json_name);
 
 // Finds a field in the message descriptor whose JSON name matches the provided
 // name or nullptr if one is not found.

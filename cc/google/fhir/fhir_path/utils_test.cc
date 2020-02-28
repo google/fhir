@@ -147,9 +147,11 @@ TEST(Utils, FindFieldByJsonName) {
             stu3::Encounter::descriptor()->FindFieldByName("class_value"));
 }
 
-TEST(Utils, HasField) {
-  EXPECT_TRUE(HasField(stu3::ContainedResource::descriptor(), "deceased"));
-  EXPECT_TRUE(HasField(r4::ContainedResource::descriptor(), "deceased"));
+TEST(Utils, HasFieldWithJsonName) {
+  EXPECT_TRUE(HasFieldWithJsonName(stu3::ContainedResource::descriptor(),
+                                   "deceased"));
+  EXPECT_TRUE(HasFieldWithJsonName(r4::ContainedResource::descriptor(),
+                                   "deceased"));
 }
 
 }  // namespace

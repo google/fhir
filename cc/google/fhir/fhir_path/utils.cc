@@ -81,8 +81,8 @@ Status RetrieveField(const Message& root, const FieldDescriptor& field,
       });
 }
 
-bool HasField(const google::protobuf::Descriptor* descriptor,
-              absl::string_view json_name) {
+bool HasFieldWithJsonName(const google::protobuf::Descriptor* descriptor,
+                          absl::string_view json_name) {
   if (IsContainedResource(descriptor) || IsChoiceTypeContainer(descriptor)) {
     for (int i = 0; i < descriptor->field_count(); i++) {
       if (FindFieldByJsonName(descriptor->field(i)->message_type(),
