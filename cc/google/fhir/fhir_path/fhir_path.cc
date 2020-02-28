@@ -80,6 +80,7 @@ using ::google::fhir::StatusOr;
 using internal::ExpressionNode;
 
 using ::tensorflow::errors::InvalidArgument;
+using ::tensorflow::errors::NotFound;
 
 
 namespace internal {
@@ -102,13 +103,28 @@ StatusOr<const PrimitiveHandler*> GetPrimitiveHandler(const Message& message) {
 // Returns true if the collection of messages represents
 // a boolean value per FHIRPath conventions; that is it
 // has exactly one item that is boolean.
-bool IsSingleBoolean(const std::vector<const Message*>& messages) {
+bool IsSingleBoolean(const std::vector<WorkspaceMessage>& messages) {
+  return messages.size() == 1 &&
+         IsMessageType<Boolean>(*messages[0].Message());
+}
+
+bool IsSingleBoolean(const std::vector<const google::protobuf::Message*>& messages) {
   return messages.size() == 1 && IsMessageType<Boolean>(*messages[0]);
 }
 
 // Returns success with a boolean value if the message collection
 // represents a single boolean, or a failure status otherwise.
-StatusOr<bool> MessagesToBoolean(const std::vector<const Message*>& messages) {
+StatusOr<bool> MessagesToBoolean(
+    const std::vector<WorkspaceMessage>& messages) {
+  if (IsSingleBoolean(messages)) {
+    return dynamic_cast<const Boolean*>(messages[0].Message())->value();
+  }
+
+  return InvalidArgument("Expression did not evaluate to boolean");
+}
+
+StatusOr<bool> MessagesToBoolean(
+    const std::vector<const google::protobuf::Message*>& messages) {
   if (IsSingleBoolean(messages)) {
     return dynamic_cast<const Boolean*>(messages[0])->value();
   }
@@ -118,38 +134,41 @@ StatusOr<bool> MessagesToBoolean(const std::vector<const Message*>& messages) {
 
 template <class T, class M>
 StatusOr<absl::optional<T>> PrimitiveOrEmpty(
-    const std::vector<const Message*>& messages) {
+    const std::vector<WorkspaceMessage>& messages) {
   if (messages.empty()) {
     return absl::optional<T>();
   }
 
-  if (messages.size() > 1 || !IsPrimitive(messages[0]->GetDescriptor())) {
+  if (messages.size() > 1 ||
+      !IsPrimitive(messages[0].Message()->GetDescriptor())) {
     return InvalidArgument(
         "Expression must be empty or represent a single primitive value.");
   }
 
-  if (!IsMessageType<M>(*messages[0])) {
+  if (!IsMessageType<M>(*messages[0].Message())) {
     return InvalidArgument("Single value expression of wrong type.");
   }
 
-  return absl::optional<T>(dynamic_cast<const M*>(messages[0])->value());
+  return absl::optional<T>(
+      dynamic_cast<const M*>(messages[0].Message())->value());
 }
 
 // Returns the string representation of the provided message for messages that
 // are represented in JSON as strings. For primitive messages that are not
 // represented as a string in JSON a status other than OK will be returned.
-StatusOr<std::string> MessageToString(const Message& message) {
-  if (IsMessageType<String>(message)) {
-    return dynamic_cast<const String*>(&message)->value();
+StatusOr<std::string> MessageToString(const WorkspaceMessage& message) {
+  if (IsMessageType<String>(*message.Message())) {
+    return dynamic_cast<const String*>(message.Message())->value();
   }
 
-  if (!IsPrimitive(message.GetDescriptor())) {
+  if (!IsPrimitive(message.Message()->GetDescriptor())) {
     return InvalidArgument("Expression must be a primitive.");
   }
 
   FHIR_ASSIGN_OR_RETURN(const PrimitiveHandler* handler,
-                        GetPrimitiveHandler(message));
-  StatusOr<JsonPrimitive> json_primitive = handler->WrapPrimitiveProto(message);
+                        GetPrimitiveHandler(*message.Message()));
+  StatusOr<JsonPrimitive> json_primitive =
+      handler->WrapPrimitiveProto(*message.Message());
   std::string json_string = json_primitive.ValueOrDie().value;
 
   if (!absl::StartsWith(json_string, "\"")) {
@@ -166,12 +185,38 @@ StatusOr<std::string> MessageToString(const Message& message) {
 // message in the provided collection. For primitive messages that are not
 // represented as a string in JSON a status other than OK will be returned.
 StatusOr<std::string> MessagesToString(
-    const std::vector<const Message*>& messages) {
+    const std::vector<WorkspaceMessage>& messages) {
   if (messages.size() != 1) {
     return InvalidArgument("Expression must represent a single value.");
   }
 
-  return MessageToString(*messages[0]);
+  return MessageToString(messages[0]);
+}
+
+StatusOr<WorkspaceMessage> WorkspaceMessage::NearestResource() const {
+  if (IsResource(result_->GetDescriptor())) {
+    return *this;
+  }
+
+  auto it = std::find_if(ancestry_stack_.rbegin(), ancestry_stack_.rend(),
+                         [](const google::protobuf::Message* message) {
+                           return IsResource(message->GetDescriptor());
+                         });
+
+  if (it == ancestry_stack_.rend()) {
+    return ::tensorflow::errors::NotFound("No Resource found in ancestry.");
+  }
+
+  std::vector<const google::protobuf::Message*> resource_ancestry(
+      std::make_reverse_iterator(ancestry_stack_.rend()),
+      std::make_reverse_iterator(std::next(it)));
+  return WorkspaceMessage(resource_ancestry, *it);
+}
+
+std::vector<const google::protobuf::Message*> WorkspaceMessage::Ancestry() const {
+  std::vector<const google::protobuf::Message*> stack = ancestry_stack_;
+  stack.push_back(result_);
+  return stack;
 }
 
 // Expression node that returns literals wrapped in the corresponding
@@ -182,11 +227,11 @@ class Literal : public ExpressionNode {
   explicit Literal(PrimitiveType value) : value_(value) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
+                  std::vector<WorkspaceMessage>* results) const override {
     auto value = new ProtoType();
     value->set_value(value_);
     work_space->DeleteWhenFinished(value);
-    results->push_back(value);
+    results->push_back(WorkspaceMessage(value));
 
     return Status::OK();
   }
@@ -205,7 +250,7 @@ class EmptyLiteral : public ExpressionNode {
   EmptyLiteral() {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
+                  std::vector<WorkspaceMessage>* results) const override {
     return Status::OK();
   }
 
@@ -226,12 +271,13 @@ class InvokeTermNode : public ExpressionNode {
       : field_(field), field_name_(field_name) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    const Message& message = *work_space->MessageContext();
+                  std::vector<WorkspaceMessage>* results) const override {
+    const WorkspaceMessage& message = work_space->MessageContext();
     const FieldDescriptor* field =
         field_ != nullptr
             ? field_
-            : FindFieldByJsonName(message.GetDescriptor(), field_name_);
+            : FindFieldByJsonName(message.Message()->GetDescriptor(),
+                                  field_name_);
 
     // If the field cannot be found an empty collection is returned. This
     // matches the behavior of https://github.com/HL7/fhirpath.js and is
@@ -242,7 +288,14 @@ class InvokeTermNode : public ExpressionNode {
       return Status::OK();
     }
 
-    return RetrieveField(message, *field, results);
+    std::vector<const Message*> result_protos;
+    FHIR_RETURN_IF_ERROR(
+        RetrieveField(*message.Message(), *field, &result_protos));
+    for (const Message* result : result_protos) {
+      results->push_back(WorkspaceMessage(message, result));
+    }
+
+    return Status::OK();
   }
 
   const Descriptor* ReturnType() const override {
@@ -267,30 +320,38 @@ class InvokeExpressionNode : public ExpressionNode {
         field_name_(field_name) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
 
     FHIR_RETURN_IF_ERROR(
         child_expression_->Evaluate(work_space, &child_results));
 
     // Iterate through the results of the child expression and invoke
     // the appropriate field.
-    for (const Message* child_message : child_results) {
+    for (const WorkspaceMessage& child_message : child_results) {
       // In the case where the field descriptor was not known at compile time
       // (because ExpressionNode.ReturnType() currently doesn't support
       // collections with mixed types) we attempt to find it at evaluation time.
       const FieldDescriptor* field =
-          field_ != nullptr ? field_
-                            : FindFieldByJsonName(
-              child_message->GetDescriptor(), field_name_);
+          field_ != nullptr
+              ? field_
+              : FindFieldByJsonName(child_message.Message()->GetDescriptor(),
+                                    field_name_);
 
       // If the field cannot be found the result is an empty collection. This
       // matches the behavior of https://github.com/HL7/fhirpath.js and is
       // empirically necessitated by expressions such as "children().element"
       // where not every child necessarily has an "element" field (see FHIRPath
       // constraints on Bundle for a full example.)
-      if (field != nullptr) {
-        FHIR_RETURN_IF_ERROR(RetrieveField(*child_message, *field, results));
+      if (field == nullptr) {
+        continue;
+      }
+
+      std::vector<const Message*> result_protos;
+      FHIR_RETURN_IF_ERROR(
+          RetrieveField(*child_message.Message(), *field, &result_protos));
+      for (const Message* result : result_protos) {
+        results->push_back(WorkspaceMessage(child_message, result));
       }
     }
 
@@ -387,13 +448,13 @@ class ZeroParameterFunctionNode : public FunctionNode {
 class SingleParameterFunctionNode : public FunctionNode {
  private:
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
+                  std::vector<WorkspaceMessage>* results) const override {
     //  requires a single parameter
     if (params_.size() != 1) {
       return InvalidArgument("this function requires a single parameter.");
     }
 
-    std::vector<const Message*> first_param;
+    std::vector<WorkspaceMessage> first_param;
     FHIR_RETURN_IF_ERROR(params_[0]->Evaluate(work_space, &first_param));
 
     return Evaluate(work_space, first_param, results);
@@ -418,22 +479,22 @@ class SingleParameterFunctionNode : public FunctionNode {
   }
 
   virtual Status Evaluate(WorkSpace* work_space,
-                          std::vector<const Message*>& first_param,
-                          std::vector<const Message*>* results) const = 0;
+                          const std::vector<WorkspaceMessage>& first_param,
+                          std::vector<WorkspaceMessage>* results) const = 0;
 };
 
 class SingleValueFunctionNode : public SingleParameterFunctionNode {
  private:
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>& first_param,
-                  std::vector<const Message*>* results) const override {
+                  const std::vector<WorkspaceMessage>& first_param,
+                  std::vector<WorkspaceMessage>* results) const override {
     //  requires a single parameter
     if (first_param.size() != 1) {
       return InvalidArgument(
           "this function requires a single value parameter.");
     }
 
-    return EvaluateWithParam(work_space, *first_param[0], results);
+    return EvaluateWithParam(work_space, first_param[0], results);
   }
 
  protected:
@@ -443,8 +504,8 @@ class SingleValueFunctionNode : public SingleParameterFunctionNode {
       : SingleParameterFunctionNode(child, params) {}
 
   virtual Status EvaluateWithParam(
-      WorkSpace* work_space, const Message& param,
-      std::vector<const Message*>* results) const = 0;
+      WorkSpace* work_space, const WorkspaceMessage& param,
+      std::vector<WorkspaceMessage>* results) const = 0;
 };
 
 // Implements the FHIRPath .exists() function
@@ -455,14 +516,14 @@ class ExistsFunction : public ZeroParameterFunctionNode {
       : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     Boolean* result = new Boolean();
     work_space->DeleteWhenFinished(result);
     result->set_value(!child_results.empty());
-    results->push_back(result);
+    results->push_back(WorkspaceMessage(result));
 
     return Status::OK();
   }
@@ -481,8 +542,8 @@ class NotFunction : public ZeroParameterFunctionNode {
       : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
 
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -503,7 +564,7 @@ class NotFunction : public ZeroParameterFunctionNode {
       work_space->DeleteWhenFinished(result);
       result->set_value(!child_result);
 
-      results->push_back(result);
+      results->push_back(WorkspaceMessage(result));
     }
 
     return Status::OK();
@@ -523,8 +584,8 @@ class HasValueFunction : public ZeroParameterFunctionNode {
       : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
 
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -535,14 +596,14 @@ class HasValueFunction : public ZeroParameterFunctionNode {
       result->set_value(false);
     } else {
       const MessageOptions& options =
-          child_results[0]->GetDescriptor()->options();
+          child_results[0].Message()->GetDescriptor()->options();
       result->set_value(
           options.HasExtension(proto::structure_definition_kind) &&
           (options.GetExtension(proto::structure_definition_kind) ==
            proto::StructureDefinitionKindValue::KIND_PRIMITIVE_TYPE));
     }
 
-    results->push_back(result);
+    results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
 
@@ -570,9 +631,10 @@ class StartsWithFunction : public SingleValueFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleValueFunctionNode(child, params) {}
 
-  Status EvaluateWithParam(WorkSpace* work_space, const Message& param,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+  Status EvaluateWithParam(
+      WorkSpace* work_space, const WorkspaceMessage& param,
+      std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.size() != 1) {
@@ -585,7 +647,7 @@ class StartsWithFunction : public SingleValueFunctionNode {
     Boolean* result = new Boolean();
     work_space->DeleteWhenFinished(result);
     result->set_value(absl::StartsWith(item, prefix));
-    results->push_back(result);
+    results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
 
@@ -609,9 +671,9 @@ class ContainsFunction : public SingleValueFunctionNode {
       : SingleValueFunctionNode(child, params) {}
 
   Status EvaluateWithParam(
-      WorkSpace* work_space, const Message& param,
-      std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+      WorkSpace* work_space, const WorkspaceMessage& param,
+      std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.empty()) {
@@ -629,7 +691,7 @@ class ContainsFunction : public SingleValueFunctionNode {
     Boolean* result = new Boolean();
     work_space->DeleteWhenFinished(result);
     result->set_value(absl::StrContains(haystack, needle));
-    results->push_back(result);
+    results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
 
@@ -645,9 +707,10 @@ class MatchesFunction : public SingleValueFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleValueFunctionNode(child, params) {}
 
-  Status EvaluateWithParam(WorkSpace* work_space, const Message& param,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+  Status EvaluateWithParam(
+      WorkSpace* work_space, const WorkspaceMessage& param,
+      std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.empty()) {
@@ -668,7 +731,7 @@ class MatchesFunction : public SingleValueFunctionNode {
     Boolean* result = new Boolean();
     work_space->DeleteWhenFinished(result);
     result->set_value(RE2::FullMatch(item, re));
-    results->push_back(result);
+    results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
 
@@ -684,8 +747,8 @@ class ToStringFunction : public ZeroParameterFunctionNode {
       : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.size() > 1) {
@@ -697,21 +760,21 @@ class ToStringFunction : public ZeroParameterFunctionNode {
       return Status::OK();
     }
 
-    const Message* child = child_results[0];
+    const WorkspaceMessage& child = child_results[0];
 
-    if (IsMessageType<String>(*child)) {
+    if (IsMessageType<String>(*child.Message())) {
       results->push_back(child);
       return Status::OK();
     }
 
-    if (!IsPrimitive(child->GetDescriptor())) {
+    if (!IsPrimitive(child.Message()->GetDescriptor())) {
       return Status::OK();
     }
 
     FHIR_ASSIGN_OR_RETURN(const PrimitiveHandler* handler,
-                          GetPrimitiveHandler(*child));
+                          GetPrimitiveHandler(*child.Message()));
     FHIR_ASSIGN_OR_RETURN(JsonPrimitive json_primitive,
-                          handler->WrapPrimitiveProto(*child));
+                          handler->WrapPrimitiveProto(*child.Message()));
     std::string json_string = json_primitive.value;
 
     if (absl::StartsWith(json_string, "\"")) {
@@ -721,7 +784,7 @@ class ToStringFunction : public ZeroParameterFunctionNode {
     String* result = new String();
     work_space->DeleteWhenFinished(result);
     result->set_value(json_string);
-    results->push_back(result);
+    results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
 
@@ -736,8 +799,8 @@ class LengthFunction : public ZeroParameterFunctionNode {
       : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.empty()) {
@@ -749,7 +812,7 @@ class LengthFunction : public ZeroParameterFunctionNode {
     Integer* result = new Integer();
     work_space->DeleteWhenFinished(result);
     result->set_value(item.length());
-    results->push_back(result);
+    results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
 
@@ -769,14 +832,14 @@ class EmptyFunction : public ZeroParameterFunctionNode {
       : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     Boolean* result = new Boolean();
     work_space->DeleteWhenFinished(result);
     result->set_value(child_results.empty());
-    results->push_back(result);
+    results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
 
@@ -796,14 +859,14 @@ class CountFunction : public ZeroParameterFunctionNode {
       : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     Integer* result = new Integer();
     work_space->DeleteWhenFinished(result);
     result->set_value(child_results.size());
-    results->push_back(result);
+    results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
 
@@ -824,8 +887,8 @@ class FirstFunction : public ZeroParameterFunctionNode {
       : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (!child_results.empty()) {
@@ -848,8 +911,8 @@ class TailFunction : public ZeroParameterFunctionNode {
       : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.size() > 1) {
@@ -871,14 +934,15 @@ class TraceFunction : public SingleValueFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleValueFunctionNode(child, params) {}
 
-  Status EvaluateWithParam(WorkSpace* work_space, const Message& param,
-                  std::vector<const Message*>* results) const override {
+  Status EvaluateWithParam(
+      WorkSpace* work_space, const WorkspaceMessage& param,
+      std::vector<WorkspaceMessage>* results) const override {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, results));
     FHIR_ASSIGN_OR_RETURN(std::string name, MessageToString(param));
 
     LOG(INFO) << "trace(" << name << "):";
     for (auto it = results->begin(); it != results->end(); it++) {
-      LOG(INFO) << (*it)->DebugString();
+      LOG(INFO) << (*it).Message()->DebugString();
     }
 
     return Status::OK();
@@ -898,8 +962,8 @@ class ToIntegerFunction : public ZeroParameterFunctionNode {
       : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.size() > 1) {
@@ -911,22 +975,23 @@ class ToIntegerFunction : public ZeroParameterFunctionNode {
       return Status::OK();
     }
 
-    const Message* child_result = child_results[0];
+    const WorkspaceMessage& child_result = child_results[0];
 
-    if (!IsPrimitive(child_result->GetDescriptor())) {
+    if (!IsPrimitive(child_result.Message()->GetDescriptor())) {
       return Status::OK();
     }
 
-    if (IsMessageType<Integer>(*child_result)) {
+    if (IsMessageType<Integer>(*child_result.Message())) {
       results->push_back(child_result);
       return Status::OK();
     }
 
-    if (IsMessageType<Boolean>(*child_result)) {
+    if (IsMessageType<Boolean>(*child_result.Message())) {
       Integer* result = new Integer();
       work_space->DeleteWhenFinished(result);
-      result->set_value(dynamic_cast<const Boolean*>(child_result)->value());
-      results->push_back(result);
+      result->set_value(
+          dynamic_cast<const Boolean*>(child_result.Message())->value());
+      results->push_back(WorkspaceMessage(result));
       return Status::OK();
     }
 
@@ -937,7 +1002,7 @@ class ToIntegerFunction : public ZeroParameterFunctionNode {
         Integer* result = new Integer();
         work_space->DeleteWhenFinished(result);
         result->set_value(value);
-        results->push_back(result);
+        results->push_back(WorkspaceMessage(result));
         return Status::OK();
       }
     }
@@ -954,11 +1019,11 @@ class ToIntegerFunction : public ZeroParameterFunctionNode {
 class BinaryOperator : public ExpressionNode {
  public:
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> left_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> left_results;
     FHIR_RETURN_IF_ERROR(left_->Evaluate(work_space, &left_results));
 
-    std::vector<const Message*> right_results;
+    std::vector<WorkspaceMessage> right_results;
     FHIR_RETURN_IF_ERROR(right_->Evaluate(work_space, &right_results));
 
     return EvaluateOperator(left_results, right_results, work_space, results);
@@ -970,9 +1035,9 @@ class BinaryOperator : public ExpressionNode {
 
   // Perform the actual boolean evaluation.
   virtual Status EvaluateOperator(
-      const std::vector<const Message*>& left_results,
-      const std::vector<const Message*>& right_results, WorkSpace* work_space,
-      std::vector<const Message*>* out_results) const = 0;
+      const std::vector<WorkspaceMessage>& left_results,
+      const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
+      std::vector<WorkspaceMessage>* out_results) const = 0;
 
  protected:
   const std::shared_ptr<ExpressionNode> left_;
@@ -987,9 +1052,9 @@ class IndexerExpression : public BinaryOperator {
       : BinaryOperator(left, right) {}
 
   Status EvaluateOperator(
-      const std::vector<const Message*>& left_results,
-      const std::vector<const Message*>& right_results, WorkSpace* work_space,
-      std::vector<const Message*>* out_results) const override {
+      const std::vector<WorkspaceMessage>& left_results,
+      const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
+      std::vector<WorkspaceMessage>* out_results) const override {
     FHIR_ASSIGN_OR_RETURN(auto index,
                           (PrimitiveOrEmpty<int, Integer>(right_results)));
     if (!index.has_value()) {
@@ -1010,9 +1075,9 @@ class IndexerExpression : public BinaryOperator {
 class EqualsOperator : public BinaryOperator {
  public:
   Status EvaluateOperator(
-      const std::vector<const Message*>& left_results,
-      const std::vector<const Message*>& right_results, WorkSpace* work_space,
-      std::vector<const Message*>* out_results) const override {
+      const std::vector<WorkspaceMessage>& left_results,
+      const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
+      std::vector<WorkspaceMessage>* out_results) const override {
     if (left_results.empty() || right_results.empty()) {
       return Status::OK();
     }
@@ -1026,13 +1091,13 @@ class EqualsOperator : public BinaryOperator {
       // Scan for unequal messages.
       result->set_value(true);
       for (int i = 0; i < left_results.size(); ++i) {
-        const Message* left = left_results.at(i);
-        const Message* right = right_results.at(i);
-        result->set_value(AreEqual(*left, *right));
+        const WorkspaceMessage& left = left_results.at(i);
+        const WorkspaceMessage& right = right_results.at(i);
+        result->set_value(AreEqual(*left.Message(), *right.Message()));
       }
     }
 
-    out_results->push_back(result);
+    out_results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
 
@@ -1074,15 +1139,17 @@ class EqualsOperator : public BinaryOperator {
 };
 
 struct ProtoPtrSameTypeAndEqual {
-  bool operator()(const google::protobuf::Message* lhs,
-                  const google::protobuf::Message* rhs) const {
-    return (lhs == rhs) || ((lhs != nullptr && rhs != nullptr) &&
-                            EqualsOperator::AreEqual(*lhs, *rhs));
+  bool operator()(const WorkspaceMessage& lhs,
+                  const WorkspaceMessage& rhs) const {
+    return (lhs.Message() == rhs.Message()) ||
+           ((lhs.Message() != nullptr && rhs.Message() != nullptr) &&
+            EqualsOperator::AreEqual(*lhs.Message(), *rhs.Message()));
   }
 };
 
 struct ProtoPtrHash {
-  size_t operator()(const google::protobuf::Message* message) const {
+  size_t operator()(const WorkspaceMessage& result) const {
+    const google::protobuf::Message* message = result.Message();
     const StatusOr<const PrimitiveHandler*> handler =
         GetPrimitiveHandler(*message);
     if (message == nullptr) {
@@ -1109,10 +1176,10 @@ class UnionOperator : public BinaryOperator {
       : BinaryOperator(std::move(left), std::move(right)) {}
 
   Status EvaluateOperator(
-      const std::vector<const Message*>& left_results,
-      const std::vector<const Message*>& right_results, WorkSpace* work_space,
-      std::vector<const Message*>* out_results) const override {
-    std::unordered_set<const Message*, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
+      const std::vector<WorkspaceMessage>& left_results,
+      const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
+      std::vector<WorkspaceMessage>* out_results) const override {
+    std::unordered_set<WorkspaceMessage, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
         results;
     results.insert(left_results.begin(), left_results.end());
     results.insert(right_results.begin(), right_results.end());
@@ -1146,11 +1213,11 @@ class IsDistinctFunction : public ZeroParameterFunctionNode {
       : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
-    std::unordered_set<const Message*, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
+    std::unordered_set<WorkspaceMessage, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
         child_results_set;
     child_results_set.insert(child_results.begin(), child_results.end());
 
@@ -1158,7 +1225,7 @@ class IsDistinctFunction : public ZeroParameterFunctionNode {
     Boolean* result = new Boolean();
     work_space->DeleteWhenFinished(result);
     result->set_value(child_results_set.size() == child_results.size());
-    results->push_back(result);
+    results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
 
@@ -1176,11 +1243,11 @@ class DistinctFunction : public ZeroParameterFunctionNode {
       : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
-    std::unordered_set<const Message*, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
+    std::unordered_set<WorkspaceMessage, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
         result_set;
     result_set.insert(child_results.begin(), child_results.end());
     results->insert(results->begin(), result_set.begin(), result_set.end());
@@ -1199,9 +1266,9 @@ class CombineFunction : public SingleParameterFunctionNode {
       : SingleParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>& first_param,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  const std::vector<WorkspaceMessage>& first_param,
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     results->insert(results->end(), child_results.begin(), child_results.end());
@@ -1248,12 +1315,12 @@ class WhereFunction : public FunctionNode {
   }
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
-    for (const Message* message : child_results) {
-      std::vector<const Message*> param_results;
+    for (const WorkspaceMessage& message : child_results) {
+      std::vector<WorkspaceMessage> param_results;
       WorkSpace expression_work_space(work_space->MessageContextStack(),
                                       message);
       FHIR_RETURN_IF_ERROR(
@@ -1298,15 +1365,15 @@ class AllFunction : public FunctionNode {
   }
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
     FHIR_ASSIGN_OR_RETURN(bool result, Evaluate(work_space, child_results));
 
     Boolean* result_message = new Boolean();
     work_space->DeleteWhenFinished(result_message);
     result_message->set_value(result);
-    results->push_back(result_message);
+    results->push_back(WorkspaceMessage(result_message));
     return Status::OK();
   }
 
@@ -1317,9 +1384,9 @@ class AllFunction : public FunctionNode {
  private:
   StatusOr<bool> Evaluate(
       WorkSpace* work_space,
-      const std::vector<const Message*>& child_results) const {
-    for (const Message* message : child_results) {
-      std::vector<const Message*> param_results;
+      const std::vector<WorkspaceMessage>& child_results) const {
+    for (const WorkspaceMessage& message : child_results) {
+      std::vector<WorkspaceMessage> param_results;
       WorkSpace expression_work_space(work_space->MessageContextStack(),
                                       message);
       FHIR_RETURN_IF_ERROR(
@@ -1361,11 +1428,11 @@ class SelectFunction : public FunctionNode {
   }
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
-    for (const Message* message : child_results) {
+    for (const WorkspaceMessage& message : child_results) {
       work_space->PushMessageContext(message);
       Status status = params_[0]->Evaluate(work_space, results);
       work_space->PopMessageContext();
@@ -1425,8 +1492,8 @@ class IifFunction : public FunctionNode {
   }
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.size() > 1) {
@@ -1438,10 +1505,11 @@ class IifFunction : public FunctionNode {
       return Status::OK();
     }
 
-    const Message* child = child_results[0];
+    const WorkspaceMessage& child = child_results[0];
 
-    std::vector<const Message*> param_results;
-    WorkSpace expression_work_space(work_space->MessageContextStack(), child);
+    std::vector<WorkspaceMessage> param_results;
+    WorkSpace expression_work_space(work_space->MessageContextStack(),
+                                    child);
     FHIR_RETURN_IF_ERROR(
         params_[0]->Evaluate(&expression_work_space, &param_results));
     FHIR_ASSIGN_OR_RETURN(StatusOr<absl::optional<bool>> criterion_met,
@@ -1487,8 +1555,8 @@ class IsFunction : public ExpressionNode {
       : child_(child), type_name_(type_name) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.size() > 1) {
@@ -1503,8 +1571,8 @@ class IsFunction : public ExpressionNode {
     auto result = new Boolean();
     work_space->DeleteWhenFinished(result);
     result->set_value(absl::EqualsIgnoreCase(
-        child_results[0]->GetDescriptor()->name(), type_name_));
-    results->push_back(result);
+        child_results[0].Message()->GetDescriptor()->name(), type_name_));
+    results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
 
@@ -1547,8 +1615,8 @@ class AsFunction : public ExpressionNode {
       : child_(child), type_name_(type_name) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.size() > 1) {
@@ -1557,8 +1625,8 @@ class AsFunction : public ExpressionNode {
     }
 
     if (!child_results.empty() &&
-        absl::EqualsIgnoreCase(child_results[0]->GetDescriptor()->name(),
-                               type_name_)) {
+        absl::EqualsIgnoreCase(
+            child_results[0].Message()->GetDescriptor()->name(), type_name_)) {
       results->push_back(child_results[0]);
     }
 
@@ -1582,15 +1650,19 @@ class ChildrenFunction : public ZeroParameterFunctionNode {
       : ZeroParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
-    for (const Message* child : child_results) {
-      const Descriptor* descriptor = child->GetDescriptor();
+    for (const WorkspaceMessage& child : child_results) {
+      const Descriptor* descriptor = child.Message()->GetDescriptor();
       for (int i = 0; i < descriptor->field_count(); i++) {
+        std::vector<const Message*> messages;
         FHIR_RETURN_IF_ERROR(
-            RetrieveField(*child, *descriptor->field(i), results));
+            RetrieveField(*child.Message(), *descriptor->field(i), &messages));
+        for (const Message* message : messages) {
+            results->push_back(WorkspaceMessage(child, message));
+        }
       }
     }
 
@@ -1611,12 +1683,12 @@ class IntersectFunction : public SingleParameterFunctionNode {
       : SingleParameterFunctionNode(child, params) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>& first_param,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> child_results;
+                  const std::vector<WorkspaceMessage>& first_param,
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
-    std::unordered_set<const Message*, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
+    std::unordered_set<WorkspaceMessage, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
         child_set;
     child_set.insert(child_results.begin(), child_results.end());
 
@@ -1631,6 +1703,11 @@ class IntersectFunction : public SingleParameterFunctionNode {
   }
 
   const Descriptor* ReturnType() const override {
+    if (child_->ReturnType() == nullptr ||
+        params_[0]->ReturnType() == nullptr) {
+      return nullptr;
+    }
+
     if (AreSameMessageType(child_->ReturnType(), params_[0]->ReturnType())) {
       return child_->ReturnType();
     }
@@ -1676,9 +1753,9 @@ class ComparisonOperator : public BinaryOperator {
   };
 
   Status EvaluateOperator(
-      const std::vector<const Message*>& left_results,
-      const std::vector<const Message*>& right_results, WorkSpace* work_space,
-      std::vector<const Message*>* out_results) const override {
+      const std::vector<WorkspaceMessage>& left_results,
+      const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
+      std::vector<WorkspaceMessage>* out_results) const override {
     // Per the FHIRPath spec, comparison operators propagate empty results.
     if (left_results.empty() || right_results.empty()) {
       return Status::OK();
@@ -1689,8 +1766,8 @@ class ComparisonOperator : public BinaryOperator {
           "Comparison operators must have one element on each side.");
     }
 
-    const Message* left_result = left_results[0];
-    const Message* right_result = right_results[0];
+    const Message* left_result = left_results[0].Message();
+    const Message* right_result = right_results[0].Message();
 
     Boolean* result = new Boolean();
     work_space->DeleteWhenFinished(result);
@@ -1742,7 +1819,7 @@ class ComparisonOperator : public BinaryOperator {
           " and ", right_result->GetTypeName());
     }
 
-    out_results->push_back(result);
+    out_results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
 
@@ -1954,9 +2031,9 @@ class ComparisonOperator : public BinaryOperator {
 class AdditionOperator : public BinaryOperator {
  public:
   Status EvaluateOperator(
-      const std::vector<const Message*>& left_results,
-      const std::vector<const Message*>& right_results, WorkSpace* work_space,
-      std::vector<const Message*>* out_results) const override {
+      const std::vector<WorkspaceMessage>& left_results,
+      const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
+      std::vector<WorkspaceMessage>* out_results) const override {
     // Per the FHIRPath spec, comparison operators propagate empty results.
     if (left_results.empty() || right_results.empty()) {
       return Status::OK();
@@ -1967,8 +2044,8 @@ class AdditionOperator : public BinaryOperator {
           "Addition operators must have one element on each side.");
     }
 
-    const Message* left_result = left_results[0];
-    const Message* right_result = right_results[0];
+    const Message* left_result = left_results[0].Message();
+    const Message* right_result = right_results[0].Message();
 
     if (IsMessageType<Integer>(*left_result) &&
         IsMessageType<Integer>(*right_result)) {
@@ -1977,7 +2054,7 @@ class AdditionOperator : public BinaryOperator {
       result->set_value(
           EvalIntegerAddition(dynamic_cast<const Integer*>(left_result),
                               dynamic_cast<const Integer*>(right_result)));
-      out_results->push_back(result);
+      out_results->push_back(WorkspaceMessage(result));
     } else if (IsMessageType<String>(*left_result) &&
                IsMessageType<String>(*right_result)) {
       String* result = new String();
@@ -1985,7 +2062,7 @@ class AdditionOperator : public BinaryOperator {
       result->set_value(
           EvalStringAddition(dynamic_cast<const String*>(left_result),
                              dynamic_cast<const String*>(right_result)));
-      out_results->push_back(result);
+      out_results->push_back(WorkspaceMessage(result));
     } else {
       // TODO: Add implementation for Date, DateTime, Time, and Decimal
       // addition.
@@ -2024,9 +2101,9 @@ class AdditionOperator : public BinaryOperator {
 class StrCatOperator : public BinaryOperator {
  public:
   Status EvaluateOperator(
-      const std::vector<const Message*>& left_results,
-      const std::vector<const Message*>& right_results, WorkSpace* work_space,
-      std::vector<const Message*>* out_results) const override {
+      const std::vector<WorkspaceMessage>& left_results,
+      const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
+      std::vector<WorkspaceMessage>* out_results) const override {
     if (left_results.size() > 1 || right_results.size() > 1) {
       return InvalidArgument(
           "String concatenation operators must have one element on each side.");
@@ -2036,16 +2113,16 @@ class StrCatOperator : public BinaryOperator {
     std::string right;
 
     if (!left_results.empty()) {
-      FHIR_ASSIGN_OR_RETURN(left, MessageToString(*left_results[0]));
+      FHIR_ASSIGN_OR_RETURN(left, MessageToString(left_results[0]));
     }
     if (!right_results.empty()) {
-      FHIR_ASSIGN_OR_RETURN(right, MessageToString(*right_results[0]));
+      FHIR_ASSIGN_OR_RETURN(right, MessageToString(right_results[0]));
     }
 
     String* result = new String();
     work_space->DeleteWhenFinished(result);
     result->set_value(absl::StrCat(left, right));
-    out_results->push_back(result);
+    out_results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
 
@@ -2071,8 +2148,8 @@ class PolarityOperator : public ExpressionNode {
       : operation_(operation), operand_(operand) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
-    std::vector<const Message*> operand_result;
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> operand_result;
     FHIR_RETURN_IF_ERROR(operand_->Evaluate(work_space, &operand_result));
 
     if (operand_result.size() > 1) {
@@ -2084,32 +2161,32 @@ class PolarityOperator : public ExpressionNode {
       return Status::OK();
     }
 
-    const Message* operand_value = operand_result[0];
+    const WorkspaceMessage& operand_value = operand_result[0];
 
     if (operation_ == kPositive) {
       results->push_back(operand_value);
       return Status::OK();
     }
 
-    if (IsMessageType<Decimal>(*operand_value)) {
+    if (IsMessageType<Decimal>(*operand_value.Message())) {
       Decimal* result = new Decimal();
       work_space->DeleteWhenFinished(result);
-      result->CopyFrom(*operand_value);
+      result->CopyFrom(*operand_value.Message());
       if (absl::StartsWith(result->value(), "-")) {
         result->set_value(result->value().substr(1));
       } else {
         result->set_value(absl::StrCat("-", result->value()));
       }
-      results->push_back(result);
+      results->push_back(WorkspaceMessage(result));
       return Status::OK();
     }
 
-    if (IsMessageType<Integer>(*operand_value)) {
+    if (IsMessageType<Integer>(*operand_value.Message())) {
       Integer* result = new Integer();
       work_space->DeleteWhenFinished(result);
-      result->CopyFrom(*operand_value);
+      result->CopyFrom(*operand_value.Message());
       result->set_value(result->value() * -1);
-      results->push_back(result);
+      results->push_back(WorkspaceMessage(result));
       return Status::OK();
     }
 
@@ -2139,16 +2216,16 @@ class BooleanOperator : public ExpressionNode {
 
  protected:
   void SetResult(bool eval_result, WorkSpace* work_space,
-                 std::vector<const Message*>* results) const {
+                 std::vector<WorkspaceMessage>* results) const {
     Boolean* result = new Boolean();
     work_space->DeleteWhenFinished(result);
     result->set_value(eval_result);
-    results->push_back(result);
+    results->push_back(WorkspaceMessage(result));
   }
 
   StatusOr<absl::optional<bool>> EvaluateBooleanNode(
       std::shared_ptr<ExpressionNode> node, WorkSpace* work_space) const {
-    std::vector<const Message*> results;
+    std::vector<WorkspaceMessage> results;
     FHIR_RETURN_IF_ERROR(node->Evaluate(work_space, &results));
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> result,
                           (PrimitiveOrEmpty<bool, Boolean>(results)));
@@ -2168,7 +2245,7 @@ class ImpliesOperator : public BooleanOperator {
       : BooleanOperator(left, right) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
+                  std::vector<WorkspaceMessage>* results) const override {
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> left_result,
                           EvaluateBooleanNode(left_, work_space));
 
@@ -2200,7 +2277,7 @@ class XorOperator : public BooleanOperator {
       : BooleanOperator(left, right) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
+                  std::vector<WorkspaceMessage>* results) const override {
     // Logic from truth table spec: http://hl7.org/fhirpath/#boolean-logic
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> left_result,
                           EvaluateBooleanNode(left_, work_space));
@@ -2226,7 +2303,7 @@ class OrOperator : public BooleanOperator {
       : BooleanOperator(left, right) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
+                  std::vector<WorkspaceMessage>* results) const override {
     // Logic from truth table spec: http://hl7.org/fhirpath/#boolean-logic
     // Short circuit and return true on the first true result.
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> left_result,
@@ -2262,7 +2339,7 @@ class AndOperator : public BooleanOperator {
       : BooleanOperator(left, right) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
+                  std::vector<WorkspaceMessage>* results) const override {
     // Logic from truth table spec: http://hl7.org/fhirpath/#boolean-logic
     // Short circuit and return false on the first false result.
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> left_result,
@@ -2302,10 +2379,9 @@ class ContainsOperator : public BinaryOperator {
       : BinaryOperator(std::move(left), std::move(right)) {}
 
   Status EvaluateOperator(
-      const std::vector<const Message*>& left_results,
-      const std::vector<const Message*>& right_results,
-      WorkSpace* work_space,
-      std::vector<const Message*>* results) const override {
+      const std::vector<WorkspaceMessage>& left_results,
+      const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
+      std::vector<WorkspaceMessage>* results) const override {
     if (right_results.empty()) {
       return Status::OK();
     }
@@ -2316,18 +2392,18 @@ class ContainsOperator : public BinaryOperator {
           "operand.");
     }
 
-    const Message* right_operand = right_results[0];
+    const Message* right_operand = right_results[0].Message();
 
-    bool found =
-        std::any_of(left_results.begin(), left_results.end(),
-                    [right_operand](const Message* message) {
-                      return EqualsOperator::AreEqual(*right_operand, *message);
-                    });
+    bool found = std::any_of(left_results.begin(), left_results.end(),
+                             [right_operand](const WorkspaceMessage& message) {
+                               return EqualsOperator::AreEqual(
+                                   *right_operand, *message.Message());
+                             });
 
     Boolean* result = new Boolean();
     work_space->DeleteWhenFinished(result);
     result->set_value(found);
-    results->push_back(result);
+    results->push_back(WorkspaceMessage(result));
 
     return Status::OK();
   }
@@ -2344,7 +2420,7 @@ class ThisReference : public ExpressionNode {
       : descriptor_(descriptor){}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
+                  std::vector<WorkspaceMessage>* results) const override {
     results->push_back(work_space->MessageContext());
     return Status::OK();
   }
@@ -2362,7 +2438,7 @@ class ContextReference : public ExpressionNode {
       : descriptor_(descriptor) {}
 
   Status Evaluate(WorkSpace* work_space,
-                  std::vector<const Message*>* results) const override {
+                  std::vector<WorkspaceMessage>* results) const override {
     results->push_back(work_space->BottomMessageContext());
     return Status::OK();
   }
@@ -2371,6 +2447,21 @@ class ContextReference : public ExpressionNode {
 
  private:
   const Descriptor* descriptor_;
+};
+
+// Expression node for a reference to %resource.
+class ResourceReference : public ExpressionNode {
+ public:
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<WorkspaceMessage>* results) const override {
+    FHIR_ASSIGN_OR_RETURN(WorkspaceMessage result,
+                          work_space->MessageContext().NearestResource());
+    results->push_back(result);
+    return Status::OK();
+  }
+
+  // TODO: Track %resource type during compilation.
+  const Descriptor* ReturnType() const override { return nullptr; }
 };
 
 // Produces a shared pointer explicitly of ExpressionNode rather
@@ -2787,6 +2878,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     } else if (name == "context") {
       return ToAny(
           std::make_shared<ContextReference>(descriptor_stack_.front()));
+    } else if (name == "resource") {
+      return ToAny(std::make_shared<ResourceReference>());
     }
 
     SetError(absl::StrCat("Unknown external constant: ", name));
@@ -3060,11 +3153,24 @@ StatusOr<CompiledExpression> CompiledExpression::Compile(
 
 StatusOr<EvaluationResult> CompiledExpression::Evaluate(
     const Message& message) const {
-  auto work_space = absl::make_unique<internal::WorkSpace>(&message);
+  return Evaluate(internal::WorkspaceMessage(&message));
+}
+
+StatusOr<EvaluationResult> CompiledExpression::Evaluate(
+    const internal::WorkspaceMessage& message) const {
+  std::vector<internal::WorkspaceMessage> message_context_stack;
+  auto work_space =
+      absl::make_unique<internal::WorkSpace>(message_context_stack, message);
+
+  std::vector<internal::WorkspaceMessage> workspace_results;
+  FHIR_RETURN_IF_ERROR(
+      root_expression_->Evaluate(work_space.get(), &workspace_results));
 
   std::vector<const Message*> results;
-
-  FHIR_RETURN_IF_ERROR(root_expression_->Evaluate(work_space.get(), &results));
+  results.reserve(workspace_results.size());
+  for (internal::WorkspaceMessage& result : workspace_results) {
+    results.push_back(result.Message());
+  }
 
   work_space->SetResultMessages(results);
 
@@ -3182,7 +3288,7 @@ Status MessageValidator::Validate(const Message& message) {
 // Validates that the given message satisfies the
 // the given FHIRPath expression, invoking the handler in case
 // of failure.
-Status ValidateMessageConstraint(const Message& message,
+Status ValidateMessageConstraint(const internal::WorkspaceMessage& message,
                                  const CompiledExpression& expression,
                                  const ViolationHandlerFunc handler,
                                  bool* halt_validation) {
@@ -3191,17 +3297,19 @@ Status ValidateMessageConstraint(const Message& message,
 
   if (!expr_result.GetBoolean().ok()) {
     *halt_validation = true;
-    return InvalidArgument(absl::StrCat(
-        "Constraint did not evaluate to boolean: ",
-        message.GetDescriptor()->name(), ": \"", expression.fhir_path(), "\""));
+    return InvalidArgument("Constraint did not evaluate to boolean: ",
+                           message.Message()->GetDescriptor()->name(), ": \"",
+                           expression.fhir_path(), "\"");
   }
 
   if (!expr_result.GetBoolean().ValueOrDie()) {
-    std::string err_msg = absl::StrCat("fhirpath-constraint-violation-",
-                                       message.GetDescriptor()->name(), ": \"",
-                                       expression.fhir_path(), "\"");
+    std::string err_msg =
+        absl::StrCat("fhirpath-constraint-violation-",
+                     message.Message()->GetDescriptor()->name(), ": \"",
+                     expression.fhir_path(), "\"");
 
-    *halt_validation = handler(message, nullptr, expression.fhir_path());
+    *halt_validation =
+        handler(*message.Message(), nullptr, expression.fhir_path());
     return ::tensorflow::errors::FailedPrecondition(err_msg);
   }
 
@@ -3213,7 +3321,7 @@ Status ValidateMessageConstraint(const Message& message,
 // of failure.
 Status ValidateFieldConstraint(const Message& parent,
                                const FieldDescriptor* field,
-                               const Message& field_value,
+                               const internal::WorkspaceMessage& field_value,
                                const CompiledExpression& expression,
                                const ViolationHandlerFunc handler,
                                bool* halt_validation) {
@@ -3242,16 +3350,18 @@ void UpdateStatus(Status* accumulative_status, const Status& current_status) {
 Status MessageValidator::Validate(const Message& message,
                                   ViolationHandlerFunc handler) {
   bool halt_validation = false;
-  return Validate(message, handler, &halt_validation);
+  return Validate(internal::WorkspaceMessage(&message), handler,
+                  &halt_validation);
 }
 
-Status MessageValidator::Validate(const Message& message,
+Status MessageValidator::Validate(const internal::WorkspaceMessage& message,
                                   ViolationHandlerFunc handler,
                                   bool* halt_validation) {
   // ConstraintsFor may recursively build constraints so
   // we lock the mutex here to ensure thread safety.
   mutex_.Lock();
-  auto status_or_constraints = ConstraintsFor(message.GetDescriptor());
+  auto status_or_constraints =
+      ConstraintsFor(message.Message()->GetDescriptor());
   mutex_.Unlock();
 
   if (!status_or_constraints.ok()) {
@@ -3282,13 +3392,16 @@ Status MessageValidator::Validate(const Message& message,
     const FieldDescriptor* field = expression.first;
     const CompiledExpression& expr = expression.second;
 
-    ForEachMessageHalting<Message>(message, field, [&](const Message& child) {
-      UpdateStatus(&accumulative_status,
-                   ValidateFieldConstraint(message, field, child, expr, handler,
-                                           halt_validation));
+    ForEachMessageHalting<Message>(
+        *message.Message(), field, [&](const Message& child) {
+          UpdateStatus(&accumulative_status,
+                       ValidateFieldConstraint(
+                           *message.Message(), field,
+                           internal::WorkspaceMessage(message, &child), expr,
+                           handler, halt_validation));
 
-      return *halt_validation;
-    });
+          return *halt_validation;
+        });
   }
 
   // Recursively validate constraints for nested messages that have them.
@@ -3297,11 +3410,13 @@ Status MessageValidator::Validate(const Message& message,
       return accumulative_status;
     }
 
-    ForEachMessageHalting<Message>(message, field, [&](const Message& child) {
-      UpdateStatus(&accumulative_status,
-                   Validate(child, handler, halt_validation));
-      return *halt_validation;
-    });
+    ForEachMessageHalting<Message>(
+        *message.Message(), field, [&](const Message& child) {
+          UpdateStatus(&accumulative_status,
+                       Validate(internal::WorkspaceMessage(message, &child),
+                                handler, halt_validation));
+          return *halt_validation;
+        });
   }
 
   return accumulative_status;

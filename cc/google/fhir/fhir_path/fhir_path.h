@@ -19,6 +19,7 @@
 
 #include "google/protobuf/message.h"
 #include "absl/synchronization/mutex.h"
+#include "google/fhir/annotations.h"
 #include "google/fhir/status/statusor.h"
 
 namespace google {
@@ -27,6 +28,52 @@ namespace fhir_path {
 
 
 namespace internal {
+
+// Represents a single value encountered during FHIRPath evaluation, including
+// necessary context about the value's ancestry to determine the resource
+// it was derived from (where possible.)
+class WorkspaceMessage {
+ public:
+  explicit WorkspaceMessage(const ::google::protobuf::Message* message)
+      : result_(message) {}
+
+  WorkspaceMessage(const WorkspaceMessage& parent,
+                   const ::google::protobuf::Message* message)
+      : ancestry_stack_(parent.Ancestry()), result_(message) {}
+
+  WorkspaceMessage(const std::vector<const google::protobuf::Message*>& ancestry,
+                   const ::google::protobuf::Message* message)
+      : ancestry_stack_(ancestry), result_(message) {}
+
+  WorkspaceMessage(const WorkspaceMessage& copy) = default;
+  WorkspaceMessage& operator=(const WorkspaceMessage& copy) = default;
+  WorkspaceMessage(WorkspaceMessage&& move) = default;
+  WorkspaceMessage& operator=(WorkspaceMessage&& move) = default;
+
+  // Returns the Message wrapped by this class.
+  const ::google::protobuf::Message* Message() const { return result_; }
+
+  // Finds the nearest message of type Resource for the message wrapped by this
+  // class.
+  //
+  // The nearest resource may be the message wrapped by this class or one of
+  // its ancestors. In the case where this message is derived (i.e. not
+  // explicitly a node in a resource) a status of NotFound is returned.
+  StatusOr<WorkspaceMessage> NearestResource() const;
+
+ private:
+  // Returns the ancestry of this message.
+  //
+  // The front of the vector is the root and the end of the vector is the
+  // message stored by this object. In cases where there is not a clear parent
+  // (e.g. the result of Resource.foo.empty() is generated during evaluation and
+  // is not clearly owned by any resource) the ancestry stack may contain a
+  // single element that points to the message wrapped by this class.
+  std::vector<const google::protobuf::Message*> Ancestry() const;
+
+  std::vector<const google::protobuf::Message*> ancestry_stack_;
+  const ::google::protobuf::Message* result_;
+};
 
 // Represents working memory needed to evaluate the expression aginst
 // a given message. All temporary structures are destroyed when
@@ -41,30 +88,30 @@ class WorkSpace {
   // the accumulated results, and tracks temporary data to be deleted
   // when the evaluation result is destroyed.
   explicit WorkSpace(const ::google::protobuf::Message* message_context)
-      : message_context_stack_({message_context}) {}
+      : message_context_stack_({WorkspaceMessage(message_context)}) {}
 
   // Same as WorkSpace(const ::google::protobuf::Message*) but message_context_stack is
   // added the the bottom of the message context stack and message_context is
   // placed on the top.
   explicit WorkSpace(
-      const std::vector<const ::google::protobuf::Message*>& message_context_stack,
-      const ::google::protobuf::Message* message_context)
+      const std::vector<WorkspaceMessage>& message_context_stack,
+      const WorkspaceMessage& message_context)
       : message_context_stack_(message_context_stack) {
     message_context_stack_.push_back(message_context);
   }
 
   // Gets the message context the FHIRPath expression is evaluated against.
-  const ::google::protobuf::Message* MessageContext() {
+  const WorkspaceMessage MessageContext() {
     return message_context_stack_.back();
   }
 
   // Gets the message context the FHIRPath expression is evaluated against.
-  std::vector<const ::google::protobuf::Message*> MessageContextStack() {
+  std::vector<WorkspaceMessage> MessageContextStack() {
     return message_context_stack_;
   }
 
   // Gets the bottom-most message context of this workspace.
-  const ::google::protobuf::Message* BottomMessageContext() {
+  const WorkspaceMessage BottomMessageContext() {
     return message_context_stack_.front();
   }
 
@@ -73,7 +120,7 @@ class WorkSpace {
   // This is useful, for example, when evaluating a function's argument of type
   // expression whose evaluation context is the message it was invoked on, not
   // the base context of the workspace.
-  const void PushMessageContext(const ::google::protobuf::Message* message_context) {
+  const void PushMessageContext(const WorkspaceMessage& message_context) {
     message_context_stack_.push_back(message_context);
   }
 
@@ -107,7 +154,7 @@ class WorkSpace {
  private:
   std::vector<const ::google::protobuf::Message*> messages_;
 
-  std::vector<const ::google::protobuf::Message*> message_context_stack_;
+  std::vector<WorkspaceMessage> message_context_stack_;
 
   std::vector<std::unique_ptr<::google::protobuf::Message>> to_delete_;
 };
@@ -136,7 +183,7 @@ class ExpressionNode {
   // so a new work_space is provided on each call.
   virtual Status Evaluate(
       WorkSpace* work_space,
-      std::vector<const ::google::protobuf::Message*>* results) const = 0;
+      std::vector<WorkspaceMessage>* results) const = 0;
 
   // The descriptor of the message type returned by the expression.
   virtual const ::google::protobuf::Descriptor* ReturnType() const = 0;
@@ -243,6 +290,14 @@ class CompiledExpression {
   // Evaluates the compiled expression against the given message.
   StatusOr<EvaluationResult> Evaluate(const ::google::protobuf::Message& message) const;
 
+  // Evaluates the compiled expression against the given message.
+  //
+  // Use this over Evaluate(const ::google::protobuf::Message&) when additional metadata
+  // needs to be included with the message that the expression is being
+  // evaluated against (e.g. the message's ancestry.)
+  StatusOr<EvaluationResult> Evaluate(
+      const internal::WorkspaceMessage& message) const;
+
  private:
   explicit CompiledExpression(
       const std::string& fhir_path,
@@ -317,7 +372,7 @@ class MessageValidator {
 
   // Recursively called validation method that can terminate
   // validation based on the callback.
-  Status Validate(const ::google::protobuf::Message& message,
+  Status Validate(const internal::WorkspaceMessage& message,
                   ViolationHandlerFunc handler, bool* halt_validation);
 
   absl::Mutex mutex_;

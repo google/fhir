@@ -31,18 +31,18 @@
 #include "proto/r4/core/resources/medication_knowledge.pb.h"
 #include "proto/r4/core/resources/observation.pb.h"
 #include "proto/r4/core/resources/parameters.pb.h"
+#include "proto/r4/core/resources/patient.pb.h"
 #include "proto/r4/core/resources/structure_definition.pb.h"
 #include "proto/r4/core/resources/value_set.pb.h"
 #include "proto/r4/uscore.pb.h"
 #include "proto/r4/uscore_codes.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
-#include "proto/r4/core/resources/patient.pb.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/metadatatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
 #include "proto/stu3/uscore.pb.h"
 #include "proto/stu3/uscore_codes.pb.h"
+#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
@@ -1735,6 +1735,121 @@ FHIR_VERSION_TEST(FhirPathTest, PathNavigationAfterContainedResourceAndValueX, {
   FHIR_ASSERT_OK_AND_ASSIGN(auto result,
                             Evaluate(bundle, "entry[0].resource.deceased"));
   EXPECT_THAT(result.GetMessages(), ElementsAreArray({EqualsProto(expected)}));
+})
+
+FHIR_VERSION_TEST(FhirPathTest, ResourceReference, {
+  Bundle bundle = ParseFromString<Bundle>(
+      R"proto(entry: {
+                resource: {
+                  patient: { deceased: { boolean: { value: true } } }
+                }
+              }
+              entry: {
+                resource: {
+                  observation: { value: { string_value: { value: "foo" } } }
+                }
+              }
+              entry: {
+                resource: {
+                  bundle: {
+                    entry: {
+                      resource: {
+                        observation: {
+                          value: { string_value: { value: "bar" } }
+                        }
+                      }
+                    }
+                  }
+                }
+              })proto");
+
+  EXPECT_THAT(Evaluate(bundle, "%resource").ValueOrDie().GetMessages(),
+              ElementsAreArray({EqualsProto(bundle)}));
+
+  EXPECT_THAT(
+      Evaluate(bundle, "entry[0].resource.select(%resource)")
+          .ValueOrDie()
+          .GetMessages(),
+      ElementsAreArray({EqualsProto(bundle.entry(0).resource().patient())}));
+
+  EXPECT_THAT(
+      Evaluate(bundle, "entry[0].resource.select(%resource).select(%resource)")
+          .ValueOrDie()
+          .GetMessages(),
+      ElementsAreArray({EqualsProto(bundle.entry(0).resource().patient())}));
+
+  EXPECT_THAT(
+      Evaluate(bundle, "entry[0].resource.deceased.select(%resource)")
+          .ValueOrDie()
+          .GetMessages(),
+      ElementsAreArray({EqualsProto(bundle.entry(0).resource().patient())}));
+
+  EXPECT_THAT(Evaluate(bundle, "entry[1].resource.select(%resource)")
+                  .ValueOrDie()
+                  .GetMessages(),
+              ElementsAreArray(
+                  {EqualsProto(bundle.entry(1).resource().observation())}));
+
+  EXPECT_THAT(Evaluate(bundle, "entry[1].resource.value.select(%resource)")
+                  .ValueOrDie()
+                  .GetMessages(),
+              ElementsAreArray(
+                  {EqualsProto(bundle.entry(1).resource().observation())}));
+
+  EXPECT_THAT(
+      Evaluate(bundle, "entry[2].resource.select(%resource)")
+          .ValueOrDie()
+          .GetMessages(),
+      ElementsAreArray({EqualsProto(bundle.entry(2).resource().bundle())}));
+
+  EXPECT_THAT(
+      Evaluate(bundle, "entry[2].resource.entry[0].resource.select(%resource)")
+          .ValueOrDie()
+          .GetMessages(),
+      ElementsAreArray({EqualsProto(bundle.entry(2)
+                                        .resource()
+                                        .bundle()
+                                        .entry(0)
+                                        .resource()
+                                        .observation())}));
+
+  EXPECT_THAT(Evaluate(bundle, "entry.resource.select(%resource)")
+                  .ValueOrDie()
+                  .GetMessages(),
+              UnorderedElementsAreArray(
+                  {EqualsProto(bundle.entry(0).resource().patient()),
+                   EqualsProto(bundle.entry(1).resource().observation()),
+                   EqualsProto(bundle.entry(2).resource().bundle())}));
+
+  // Note: The spec states that %resources resolves to "the resource that
+  // contains the original node that is in %context." Given that the literal
+  // 'true' is not contained by any resources it is believed that this should
+  // result in an error.
+  EXPECT_EQ(Evaluate(bundle, "true.select(%resource)").status().error_message(),
+            "No Resource found in ancestry.");
+
+  // Likewise, derived values do not have a defined %resource.
+  EXPECT_EQ(Evaluate(bundle,
+                     "(entry[2].resource.entry[0].resource.value & "
+                     "entry[1].resource.value).select(%resource)")
+                .status()
+                .error_message(),
+            "No Resource found in ancestry.");
+
+  EXPECT_THAT(Evaluate(bundle,
+                       "(entry[2].resource.entry[0].resource.value | "
+                       "entry[1].resource.value | %resource).select(%resource)")
+                  .ValueOrDie()
+                  .GetMessages(),
+              UnorderedElementsAreArray(
+                  {EqualsProto(bundle.entry(2)
+                                   .resource()
+                                   .bundle()
+                                   .entry(0)
+                                   .resource()
+                                   .observation()),
+                   EqualsProto(bundle.entry(1).resource().observation()),
+                   EqualsProto(bundle)}));
 })
 
 }  // namespace
