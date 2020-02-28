@@ -3139,10 +3139,11 @@ StatusOr<CompiledExpression> CompiledExpression::Compile(
 
   internal::FhirPathCompilerVisitor visitor(descriptor);
   parser.addErrorListener(visitor.GetErrorListener());
+  lexer.addErrorListener(visitor.GetErrorListener());
   antlrcpp::Any result = visitor.visit(parser.expression());
 
   // TODO: the visitor error check should be redundant
-  if (result.isNotNull() && visitor.GetError().empty()) {
+  if (result.isNotNull() && visitor.CheckOk()) {
     auto root_node = result.as<std::shared_ptr<internal::ExpressionNode>>();
     return CompiledExpression(fhir_path, root_node);
   } else {

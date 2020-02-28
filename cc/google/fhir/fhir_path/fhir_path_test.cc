@@ -30,6 +30,7 @@
 #include "proto/r4/core/resources/encounter.pb.h"
 #include "proto/r4/core/resources/medication_knowledge.pb.h"
 #include "proto/r4/core/resources/observation.pb.h"
+#include "proto/r4/core/resources/organization.pb.h"
 #include "proto/r4/core/resources/parameters.pb.h"
 #include "proto/r4/core/resources/patient.pb.h"
 #include "proto/r4/core/resources/structure_definition.pb.h"
@@ -83,6 +84,7 @@ using FhirNamespace::Encounter; \
 using FhirNamespace::EncounterStatusCode; \
 using FhirNamespace::Integer; \
 using FhirNamespace::Observation; \
+using FhirNamespace::Organization; \
 using FhirNamespace::Parameters; \
 using FhirNamespace::Patient; \
 using FhirNamespace::Period; \
@@ -103,7 +105,19 @@ Body \
 } \
 
 MATCHER(EvalsToEmpty, "") {
-  return arg.ok() && arg.ValueOrDie().GetMessages().empty();
+  if (!arg.ok()) {
+    *result_listener << "evaluation error: " << arg.status().error_message();
+    return false;
+  }
+
+  std::vector<const Message*> results = arg.ValueOrDie().GetMessages();
+
+  if (!results.empty()) {
+    *result_listener << "has size of " << results.size();
+    return false;
+  }
+
+  return true;
 }
 
 // Matcher for StatusOr<EvaluationResult> that checks to see that the evaluation
@@ -234,21 +248,10 @@ StatusOr<EvaluationResult> Evaluate(
   return Evaluate(test_encounter, expression);
 }
 
-StatusOr<std::string> EvaluateStringExpressionWithStatus(
-    const std::string& expression) {
-  FHIR_ASSIGN_OR_RETURN(EvaluationResult result, Evaluate(expression));
-
-  return result.GetString();
-}
-
 StatusOr<bool> EvaluateBoolExpressionWithStatus(const std::string& expression) {
   FHIR_ASSIGN_OR_RETURN(EvaluationResult result, Evaluate(expression));
 
   return result.GetBoolean();
-}
-
-bool EvaluateBoolExpression(const std::string& expression) {
-  return EvaluateBoolExpressionWithStatus(expression).ValueOrDie();
 }
 
 DateTime ToDateTime(const absl::CivilSecond civil_time,
@@ -403,7 +406,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestNoSuchFunction, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionTopLevelInvocation, {
-  EXPECT_TRUE(EvaluateBoolExpression("exists()"));
+  EXPECT_THAT(Evaluate("exists()"), EvalsToTrue());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionExists, {
@@ -485,12 +488,12 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionContains, {
   EXPECT_FALSE(
       EvaluateBoolExpressionWithStatus("'foo'.contains('a', 'b')").ok());
 
-  EXPECT_TRUE(EvaluateBoolExpression("'foo'.contains('')"));
-  EXPECT_TRUE(EvaluateBoolExpression("'foo'.contains('o')"));
-  EXPECT_TRUE(EvaluateBoolExpression("'foo'.contains('foo')"));
-  EXPECT_FALSE(EvaluateBoolExpression("'foo'.contains('foob')"));
-  EXPECT_TRUE(EvaluateBoolExpression("''.contains('')"));
-  EXPECT_FALSE(EvaluateBoolExpression("''.contains('foo')"));
+  EXPECT_THAT(Evaluate("'foo'.contains('')"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo'.contains('o')"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo'.contains('foo')"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo'.contains('foob')"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("''.contains('')"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("''.contains('foo')"), EvalsToFalse());
 
   EXPECT_THAT(Evaluate("{}.contains('foo')"), EvalsToEmpty());
 })
@@ -516,11 +519,11 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionStartsWith, {
   EXPECT_FALSE(EvaluateBoolExpressionWithStatus("1.startsWith('1')").ok());
 
   // Basic cases
-  EXPECT_TRUE(EvaluateBoolExpression("''.startsWith('')"));
-  EXPECT_TRUE(EvaluateBoolExpression("'foo'.startsWith('')"));
-  EXPECT_TRUE(EvaluateBoolExpression("'foo'.startsWith('f')"));
-  EXPECT_TRUE(EvaluateBoolExpression("'foo'.startsWith('foo')"));
-  EXPECT_FALSE(EvaluateBoolExpression("'foo'.startsWith('foob')"));
+  EXPECT_THAT(Evaluate("''.startsWith('')"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo'.startsWith('')"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo'.startsWith('f')"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo'.startsWith('foo')"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo'.startsWith('foob')"), EvalsToFalse());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionStartsWithSelfReference, {
@@ -536,16 +539,16 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionStartsWithInvokedOnNonString, {
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionMatches, {
   EXPECT_THAT(Evaluate("{}.matches('')"), EvalsToEmpty());
-  EXPECT_TRUE(EvaluateBoolExpression("''.matches('')"));
-  EXPECT_TRUE(EvaluateBoolExpression("'a'.matches('a')"));
-  EXPECT_FALSE(EvaluateBoolExpression("'abc'.matches('a')"));
-  EXPECT_TRUE(EvaluateBoolExpression("'abc'.matches('...')"));
+  EXPECT_THAT(Evaluate("''.matches('')"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'a'.matches('a')"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'abc'.matches('a')"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("'abc'.matches('...')"), EvalsToTrue());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionLength, {
   EXPECT_THAT(Evaluate("{}.length()"), EvalsToEmpty());
-  EXPECT_TRUE(EvaluateBoolExpression("''.length() = 0"));
-  EXPECT_TRUE(EvaluateBoolExpression("'abc'.length() = 3"));
+  EXPECT_THAT(Evaluate("''.length() = 0"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'abc'.length() = 3"), EvalsToTrue());
 
   EXPECT_FALSE(Evaluate("3.length()").ok());
 })
@@ -582,7 +585,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionToString, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionTrace, {
-  EXPECT_TRUE(EvaluateBoolExpression("true.trace('debug')"));
+  EXPECT_THAT(Evaluate("true.trace('debug')"), EvalsToTrue());
   EXPECT_THAT(Evaluate("{}.trace('debug')"), EvalsToEmpty());
 })
 
@@ -593,9 +596,9 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionHasValueComplex, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionEmpty, {
-  EXPECT_TRUE(EvaluateBoolExpression("{}.empty()"));
-  EXPECT_FALSE(EvaluateBoolExpression("true.empty()"));
-  EXPECT_FALSE(EvaluateBoolExpression("(false | true).empty()"));
+  EXPECT_THAT(Evaluate("{}.empty()"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("true.empty()"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("(false | true).empty()"), EvalsToFalse());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionCount, {
@@ -612,20 +615,20 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionCount, {
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionFirst, {
   EXPECT_THAT(Evaluate("{}.first()"), EvalsToEmpty());
-  EXPECT_TRUE(EvaluateBoolExpression("true.first()"));
+  EXPECT_THAT(Evaluate("true.first()"), EvalsToTrue());
   EXPECT_TRUE(Evaluate("(false | true).first()").ok());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionTail, {
   EXPECT_THAT(Evaluate("{}.tail()"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("true.tail()"), EvalsToEmpty());
-  EXPECT_TRUE(EvaluateBoolExpression("true.combine(true).tail()"));
+  EXPECT_THAT(Evaluate("true.combine(true).tail()"), EvalsToTrue());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionAsPrimitives, {
   EXPECT_THAT(Evaluate("{}.as(Boolean)"), EvalsToEmpty());
 
-  EXPECT_TRUE(EvaluateBoolExpression("true.as(Boolean)"));
+  EXPECT_THAT(Evaluate("true.as(Boolean)"), EvalsToTrue());
   EXPECT_THAT(Evaluate("true.as(Decimal)"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("true.as(Integer)"), EvalsToEmpty());
 
@@ -656,7 +659,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionAsResources, {
 FHIR_VERSION_TEST(FhirPathTest, TestOperatorAsPrimitives, {
   EXPECT_THAT(Evaluate("{} as Boolean"), EvalsToEmpty());
 
-  EXPECT_TRUE(EvaluateBoolExpression("true as Boolean"));
+  EXPECT_THAT(Evaluate("true as Boolean"), EvalsToTrue());
   EXPECT_THAT(Evaluate("true as Decimal"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("true as Integer"), EvalsToEmpty());
 
@@ -686,17 +689,17 @@ FHIR_VERSION_TEST(FhirPathTest, TestOperatorAsResources, {
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionIsPrimitives, {
   EXPECT_THAT(Evaluate("{}.is(Boolean)"), EvalsToEmpty());
 
-  EXPECT_TRUE(EvaluateBoolExpression("true.is(Boolean)"));
-  EXPECT_FALSE(EvaluateBoolExpression("true.is(Decimal)"));
-  EXPECT_FALSE(EvaluateBoolExpression("true.is(Integer)"));
+  EXPECT_THAT(Evaluate("true.is(Boolean)"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("true.is(Decimal)"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("true.is(Integer)"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("1.is(Integer)"));
-  EXPECT_FALSE(EvaluateBoolExpression("1.is(Decimal)"));
-  EXPECT_FALSE(EvaluateBoolExpression("1.is(Boolean)"));
+  EXPECT_THAT(Evaluate("1.is(Integer)"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1.is(Decimal)"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("1.is(Boolean)"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("1.1.is(Decimal)"));
-  EXPECT_FALSE(EvaluateBoolExpression("1.1.is(Integer)"));
-  EXPECT_FALSE(EvaluateBoolExpression("1.1.is(Boolean)"));
+  EXPECT_THAT(Evaluate("1.1.is(Decimal)"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1.1.is(Integer)"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("1.1.is(Boolean)"), EvalsToFalse());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionIsResources, {
@@ -711,17 +714,17 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionIsResources, {
 FHIR_VERSION_TEST(FhirPathTest, TestOperatorIsPrimitives, {
   EXPECT_THAT(Evaluate("{} is Boolean"), EvalsToEmpty());
 
-  EXPECT_TRUE(EvaluateBoolExpression("true is Boolean"));
-  EXPECT_FALSE(EvaluateBoolExpression("true is Decimal"));
-  EXPECT_FALSE(EvaluateBoolExpression("true is Integer"));
+  EXPECT_THAT(Evaluate("true is Boolean"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("true is Decimal"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("true is Integer"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("1 is Integer"));
-  EXPECT_FALSE(EvaluateBoolExpression("1 is Decimal"));
-  EXPECT_FALSE(EvaluateBoolExpression("1 is Boolean"));
+  EXPECT_THAT(Evaluate("1 is Integer"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1 is Decimal"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("1 is Boolean"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("1.1 is Decimal"));
-  EXPECT_FALSE(EvaluateBoolExpression("1.1 is Integer"));
-  EXPECT_FALSE(EvaluateBoolExpression("1.1 is Boolean"));
+  EXPECT_THAT(Evaluate("1.1 is Decimal"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1.1 is Integer"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("1.1 is Boolean"), EvalsToFalse());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestOperatorIsResources, {
@@ -806,8 +809,8 @@ FHIR_VERSION_TEST(FhirPathTest, TestUnionDeduplicationObjects, {
 // TODO: Templatize tests to work with both STU3 and R4
 TEST(FhirPathTest, TestCombine) {
   EXPECT_THAT(Evaluate("{}.combine({})"), EvalsToEmpty());
-  EXPECT_TRUE(EvaluateBoolExpression("true.combine({})"));
-  EXPECT_TRUE(EvaluateBoolExpression("{}.combine(true)"));
+  EXPECT_THAT(Evaluate("true.combine({})"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("{}.combine(true)"), EvalsToTrue());
 
   Boolean true_proto = ParseFromString<Boolean>("value: true");
   Boolean false_proto = ParseFromString<Boolean>("value: false");
@@ -845,8 +848,8 @@ TEST(FhirPathTest, TestIntersect) {
 // TODO: Templatize tests to work with both STU3 and R4
 TEST(FhirPathTest, TestDistinct) {
   EXPECT_THAT(Evaluate("{}.distinct()"), EvalsToEmpty());
-  EXPECT_TRUE(EvaluateBoolExpression("true.distinct()"));
-  EXPECT_TRUE(EvaluateBoolExpression("true.combine(true).distinct()"));
+  EXPECT_THAT(Evaluate("true.distinct()"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("true.combine(true).distinct()"), EvalsToTrue());
 
   Boolean true_proto = ParseFromString<Boolean>("value: true");
   Boolean false_proto = ParseFromString<Boolean>("value: false");
@@ -858,11 +861,11 @@ TEST(FhirPathTest, TestDistinct) {
 }
 
 FHIR_VERSION_TEST(FhirPathTest, TestIsDistinct, {
-  EXPECT_TRUE(EvaluateBoolExpression("{}.isDistinct()"));
-  EXPECT_TRUE(EvaluateBoolExpression("true.isDistinct()"));
-  EXPECT_TRUE(EvaluateBoolExpression("(true | false).isDistinct()"));
+  EXPECT_THAT(Evaluate("{}.isDistinct()"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("true.isDistinct()"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(true | false).isDistinct()"), EvalsToTrue());
 
-  EXPECT_FALSE(EvaluateBoolExpression("true.combine(true).isDistinct()"));
+  EXPECT_THAT(Evaluate("true.combine(true).isDistinct()"), EvalsToFalse());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestIndexer, {
@@ -876,47 +879,45 @@ FHIR_VERSION_TEST(FhirPathTest, TestIndexer, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestContains, {
-  EXPECT_TRUE(EvaluateBoolExpression("true contains true"));
-  EXPECT_TRUE(EvaluateBoolExpression("(false | true) contains true"));
+  EXPECT_THAT(Evaluate("true contains true"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(false | true) contains true"), EvalsToTrue());
 
-  EXPECT_FALSE(EvaluateBoolExpression("true contains false"));
-  EXPECT_FALSE(EvaluateBoolExpression("(false | true) contains 1"));
-  EXPECT_FALSE(EvaluateBoolExpression("{} contains true"));
+  EXPECT_THAT(Evaluate("true contains false"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("(false | true) contains 1"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("{} contains true"), EvalsToFalse());
 
   EXPECT_THAT(Evaluate("({} contains {})"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("(true contains {})"), EvalsToEmpty());
 
-  EXPECT_FALSE(
-      EvaluateBoolExpressionWithStatus("{} contains (true | false)").ok());
-  EXPECT_FALSE(
-      EvaluateBoolExpressionWithStatus("true contains (true | false)").ok());
+  EXPECT_FALSE(Evaluate("{} contains (true | false)").ok());
+  EXPECT_FALSE(Evaluate("true contains (true | false)").ok());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestIn, {
-  EXPECT_TRUE(EvaluateBoolExpression("true in true"));
-  EXPECT_TRUE(EvaluateBoolExpression("true in (false | true)"));
+  EXPECT_THAT(Evaluate("true in true"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("true in (false | true)"), EvalsToTrue());
 
-  EXPECT_FALSE(EvaluateBoolExpression("false in true"));
-  EXPECT_FALSE(EvaluateBoolExpression("1 in (false | true)"));
-  EXPECT_FALSE(EvaluateBoolExpression("true in {}"));
+  EXPECT_THAT(Evaluate("false in true"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("1 in (false | true)"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("true in {}"), EvalsToFalse());
 
   EXPECT_THAT(Evaluate("({} in {})"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("({} in true)"), EvalsToEmpty());
 
-  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("(true | false) in {}").ok());
-  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("(true | false) in {}").ok());
+  EXPECT_FALSE(Evaluate("(true | false) in {}").ok());
+  EXPECT_FALSE(Evaluate("(true | false) in {}").ok());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestImplies, {
-  EXPECT_TRUE(EvaluateBoolExpression("(true implies true) = true"));
-  EXPECT_TRUE(EvaluateBoolExpression("(true implies false) = false"));
+  EXPECT_THAT(Evaluate("(true implies true) = true"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(true implies false) = false"), EvalsToTrue());
   EXPECT_THAT(Evaluate("(true implies {})"), EvalsToEmpty());
 
-  EXPECT_TRUE(EvaluateBoolExpression("(false implies true) = true"));
-  EXPECT_TRUE(EvaluateBoolExpression("(false implies false) = true"));
-  EXPECT_TRUE(EvaluateBoolExpression("(false implies {}) = true"));
+  EXPECT_THAT(Evaluate("(false implies true) = true"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(false implies false) = true"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(false implies {}) = true"), EvalsToTrue());
 
-  EXPECT_TRUE(EvaluateBoolExpression("({} implies true) = true"));
+  EXPECT_THAT(Evaluate("({} implies true) = true"), EvalsToTrue());
   EXPECT_THAT(Evaluate("({} implies false)"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("({} implies {})"), EvalsToEmpty());
 })
@@ -962,10 +963,10 @@ FHIR_VERSION_TEST(FhirPathTest, TestWhereValidatesArguments, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestAll, {
-  EXPECT_TRUE(EvaluateBoolExpression("{}.all(false)"));
-  EXPECT_TRUE(EvaluateBoolExpression("(false).all(true)"));
-  EXPECT_TRUE(EvaluateBoolExpression("(1 | 2 | 3).all($this < 4)"));
-  EXPECT_FALSE(EvaluateBoolExpression("(1 | 2 | 3).all($this > 4)"));
+  EXPECT_THAT(Evaluate("{}.all(false)"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(false).all(true)"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(1 | 2 | 3).all($this < 4)"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(1 | 2 | 3).all($this > 4)"), EvalsToFalse());
 
   // Verify that all() fails when called with the wrong number of arguments.
   EXPECT_FALSE(Evaluate("{}.all()").ok());
@@ -983,14 +984,9 @@ FHIR_VERSION_TEST(FhirPathTest, TestAllReadsFieldFromDifferingTypes, {
         }
       )proto");
 
-  EvaluationResult evaluation_result =
-      CompiledExpression::Compile(
-          StructureDefinition::descriptor(),
-          "(snapshot | differential).all(element.exists())")
-          .ValueOrDie()
-          .Evaluate(structure_definition)
-          .ValueOrDie();
-  EXPECT_TRUE(evaluation_result.GetBoolean().ValueOrDie());
+  EXPECT_THAT(Evaluate(structure_definition,
+                       "(snapshot | differential).all(element.exists())"),
+              EvalsToTrue());
 })
 
 // TODO: Templatize tests to work with both STU3 and R4
@@ -1055,12 +1051,12 @@ FHIR_VERSION_TEST(FhirPathTest, TestIifValidatesArguments, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestXor, {
-  EXPECT_TRUE(EvaluateBoolExpression("(true xor true) = false"));
-  EXPECT_TRUE(EvaluateBoolExpression("(true xor false) = true"));
+  EXPECT_THAT(Evaluate("(true xor true) = false"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(true xor false) = true"), EvalsToTrue());
   EXPECT_THAT(Evaluate("(true xor {})"), EvalsToEmpty());
 
-  EXPECT_TRUE(EvaluateBoolExpression("(false xor true) = true"));
-  EXPECT_TRUE(EvaluateBoolExpression("(false xor false) = false"));
+  EXPECT_THAT(Evaluate("(false xor true) = true"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(false xor false) = false"), EvalsToTrue());
   EXPECT_THAT(Evaluate("(false xor {})"), EvalsToEmpty());
 
   EXPECT_THAT(Evaluate("({} xor true)"), EvalsToEmpty());
@@ -1069,107 +1065,69 @@ FHIR_VERSION_TEST(FhirPathTest, TestXor, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestOrShortCircuit, {
-  auto expr =
-      CompiledExpression::Compile(Quantity::descriptor(),
-                                  "value.hasValue().not() or value < 100")
-          .ValueOrDie();
   Quantity quantity;
-  EvaluationResult result = expr.Evaluate(quantity).ValueOrDie();
-  EXPECT_TRUE(result.GetBoolean().ValueOrDie());
+  EXPECT_THAT(Evaluate(quantity, "value.hasValue().not() or value < 100"),
+              EvalsToTrue());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestMultiOrShortCircuit, {
-  auto expr =
-      CompiledExpression::Compile(
-          Period::descriptor(),
-          "start.hasValue().not() or end.hasValue().not() or start <= end")
-          .ValueOrDie();
-
   Period no_end_period = ParseFromString<Period>(R"proto(
     start: { value_us: 1556750000000 timezone: "America/Los_Angeles" }
   )proto");
 
-  EvaluationResult result = expr.Evaluate(no_end_period).ValueOrDie();
-
-  EXPECT_TRUE(result.GetBoolean().ValueOrDie());
+  EXPECT_THAT(
+      Evaluate(
+          no_end_period,
+          "start.hasValue().not() or end.hasValue().not() or start <= end"),
+      EvalsToTrue());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestOrFalseWithEmptyReturnsEmpty, {
-  auto expr = CompiledExpression::Compile(Quantity::descriptor(),
-                                          "value.hasValue() or value < 100")
-                  .ValueOrDie();
   Quantity quantity;
-  EXPECT_THAT(expr.Evaluate(quantity), EvalsToEmpty());
+  EXPECT_THAT(Evaluate(quantity, "value.hasValue() or value < 100"),
+              EvalsToEmpty());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestOrOneIsTrue, {
-  auto expr = CompiledExpression::Compile(
-                  Encounter::descriptor(),
-                  "period.start.exists() or period.end.exists()")
-                  .ValueOrDie();
-
   Encounter test_encounter = ValidEncounter<Encounter>();
 
-  EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
-
-  EXPECT_TRUE(result.GetBoolean().ValueOrDie());
+  EXPECT_THAT(
+      Evaluate(test_encounter, "period.start.exists() or period.end.exists()"),
+      EvalsToTrue());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestOrNeitherAreTrue, {
-  auto expr = CompiledExpression::Compile(
-                  Encounter::descriptor(),
-                  "hospitalization.exists() or location.exists()")
-                  .ValueOrDie();
-
   Encounter test_encounter = ValidEncounter<Encounter>();
 
-  EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
-
-  EXPECT_FALSE(result.GetBoolean().ValueOrDie());
+  EXPECT_THAT(
+      Evaluate(test_encounter, "hospitalization.exists() or location.exists()"),
+      EvalsToFalse());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestAndShortCircuit, {
-  auto expr = CompiledExpression::Compile(Quantity::descriptor(),
-                                          "value.hasValue() and value < 100")
-                  .ValueOrDie();
   Quantity quantity;
-  EvaluationResult result = expr.Evaluate(quantity).ValueOrDie();
-  EXPECT_FALSE(result.GetBoolean().ValueOrDie());
+  EXPECT_THAT(Evaluate(quantity, "value.hasValue() and value < 100"),
+              EvalsToFalse());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestAndTrueWithEmptyReturnsEmpty, {
-  auto expr =
-      CompiledExpression::Compile(Quantity::descriptor(),
-                                  "value.hasValue().not() and value < 100")
-          .ValueOrDie();
   Quantity quantity;
-  EXPECT_THAT(expr.Evaluate(quantity), EvalsToEmpty());
+  EXPECT_THAT(Evaluate(quantity, "value.hasValue().not() and value < 100"),
+              EvalsToEmpty());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestAndOneIsTrue, {
-  auto expr = CompiledExpression::Compile(
-                  Encounter::descriptor(),
-                  "period.start.exists() and period.end.exists()")
-                  .ValueOrDie();
-
   Encounter test_encounter = ValidEncounter<Encounter>();
-
-  EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
-
-  EXPECT_FALSE(result.GetBoolean().ValueOrDie());
+  EXPECT_THAT(
+      Evaluate(test_encounter, "period.start.exists() and period.end.exists()"),
+      EvalsToFalse());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestAndBothAreTrue, {
-  auto expr =
-      CompiledExpression::Compile(Encounter::descriptor(),
-                                  "period.start.exists() and status.exists()")
-          .ValueOrDie();
-
   Encounter test_encounter = ValidEncounter<Encounter>();
-
-  EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
-
-  EXPECT_TRUE(result.GetBoolean().ValueOrDie());
+  EXPECT_THAT(
+      Evaluate(test_encounter, "period.start.exists() and status.exists()"),
+      EvalsToTrue());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestEmptyLiteral, {
@@ -1177,8 +1135,8 @@ FHIR_VERSION_TEST(FhirPathTest, TestEmptyLiteral, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestBooleanLiteral, {
-  EXPECT_TRUE(EvaluateBoolExpression("true"));
-  EXPECT_FALSE(EvaluateBoolExpression("false"));
+  EXPECT_THAT(Evaluate("true"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("false"), EvalsToFalse());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestIntegerLiteral, {
@@ -1202,15 +1160,15 @@ FHIR_VERSION_TEST(FhirPathTest, TestIntegerLiteral, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestPolarityOperator, {
-  EXPECT_TRUE(EvaluateBoolExpression("+1 = 1"));
-  EXPECT_TRUE(EvaluateBoolExpression("-(+1) = -1"));
-  EXPECT_TRUE(EvaluateBoolExpression("+(-1) = -1"));
-  EXPECT_TRUE(EvaluateBoolExpression("-(-1) = 1"));
+  EXPECT_THAT(Evaluate("+1 = 1"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("-(+1) = -1"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("+(-1) = -1"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("-(-1) = 1"), EvalsToTrue());
 
-  EXPECT_TRUE(EvaluateBoolExpression("+1.2 = 1.2"));
-  EXPECT_TRUE(EvaluateBoolExpression("-(+1.2) = -1.2"));
-  EXPECT_TRUE(EvaluateBoolExpression("+(-1.2) = -1.2"));
-  EXPECT_TRUE(EvaluateBoolExpression("-(-1.2) = 1.2"));
+  EXPECT_THAT(Evaluate("+1.2 = 1.2"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("-(+1.2) = -1.2"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("+(-1.2) = -1.2"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("-(-1.2) = 1.2"), EvalsToTrue());
 
   EXPECT_THAT(Evaluate("+{}"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("-{}"), EvalsToEmpty());
@@ -1219,25 +1177,23 @@ FHIR_VERSION_TEST(FhirPathTest, TestPolarityOperator, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestIntegerAddition, {
-  EXPECT_TRUE(EvaluateBoolExpression("(2 + 3) = 5"));
+  EXPECT_THAT(Evaluate("(2 + 3) = 5"), EvalsToTrue());
   EXPECT_THAT(Evaluate("({} + 3)"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("(2 + {})"), EvalsToEmpty());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestStringAddition, {
-  EXPECT_TRUE(EvaluateBoolExpression("('foo' + 'bar') = 'foobar'"));
+  EXPECT_THAT(Evaluate("('foo' + 'bar') = 'foobar'"), EvalsToTrue());
   EXPECT_THAT(Evaluate("({} + 'bar')"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("('foo' + {})"), EvalsToEmpty());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestStringConcatenation, {
-  EXPECT_EQ(EvaluateStringExpressionWithStatus("('foo' & 'bar')").ValueOrDie(),
-            "foobar");
-  EXPECT_EQ(EvaluateStringExpressionWithStatus("{} & 'bar'").ValueOrDie(),
-            "bar");
-  EXPECT_EQ(EvaluateStringExpressionWithStatus("'foo' & {}").ValueOrDie(),
-            "foo");
-  EXPECT_EQ(EvaluateStringExpressionWithStatus("{} & {}").ValueOrDie(), "");
+  EXPECT_THAT(Evaluate("('foo' & 'bar')"),
+              EvalsToStringThatMatches(StrEq("foobar")));
+  EXPECT_THAT(Evaluate("{} & 'bar'"), EvalsToStringThatMatches(StrEq("bar")));
+  EXPECT_THAT(Evaluate("'foo' & {}"), EvalsToStringThatMatches(StrEq("foo")));
+  EXPECT_THAT(Evaluate("{} & {}"), EvalsToStringThatMatches(StrEq("")));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestEmptyComparisons, {
@@ -1267,25 +1223,25 @@ FHIR_VERSION_TEST(FhirPathTest, TestEmptyComparisons, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestIntegerComparisons, {
-  EXPECT_TRUE(EvaluateBoolExpression("42 = 42"));
-  EXPECT_FALSE(EvaluateBoolExpression("42 = 43"));
+  EXPECT_THAT(Evaluate("42 = 42"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("42 = 43"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("42 != 43"));
-  EXPECT_FALSE(EvaluateBoolExpression("42 != 42"));
+  EXPECT_THAT(Evaluate("42 != 43"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("42 != 42"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("42 < 43"));
-  EXPECT_FALSE(EvaluateBoolExpression("42 < 42"));
+  EXPECT_THAT(Evaluate("42 < 43"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("42 < 42"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("43 > 42"));
-  EXPECT_FALSE(EvaluateBoolExpression("42 > 42"));
+  EXPECT_THAT(Evaluate("43 > 42"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("42 > 42"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("42 >= 42"));
-  EXPECT_TRUE(EvaluateBoolExpression("43 >= 42"));
-  EXPECT_FALSE(EvaluateBoolExpression("42 >= 43"));
+  EXPECT_THAT(Evaluate("42 >= 42"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("43 >= 42"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("42 >= 43"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("42 <= 42"));
-  EXPECT_TRUE(EvaluateBoolExpression("42 <= 43"));
-  EXPECT_FALSE(EvaluateBoolExpression("43 <= 42"));
+  EXPECT_THAT(Evaluate("42 <= 42"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("42 <= 43"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("43 <= 42"), EvalsToFalse());
 })
 
 TEST(FhirPathTest, TestIntegerLikeComparison) {
@@ -1339,29 +1295,29 @@ FHIR_VERSION_TEST(FhirPathTest, TestDecimalLiteral, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestDecimalComparisons, {
-  EXPECT_TRUE(EvaluateBoolExpression("1.25 = 1.25"));
-  EXPECT_FALSE(EvaluateBoolExpression("1.25 = 1.3"));
+  EXPECT_THAT(Evaluate("1.25 = 1.25"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1.25 = 1.3"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("1.25 != 1.26"));
-  EXPECT_FALSE(EvaluateBoolExpression("1.25 != 1.25"));
+  EXPECT_THAT(Evaluate("1.25 != 1.26"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1.25 != 1.25"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("1.25 < 1.26"));
-  EXPECT_TRUE(EvaluateBoolExpression("1 < 1.26"));
-  EXPECT_FALSE(EvaluateBoolExpression("1.25 < 1.25"));
+  EXPECT_THAT(Evaluate("1.25 < 1.26"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1 < 1.26"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1.25 < 1.25"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("1.26 > 1.25"));
-  EXPECT_TRUE(EvaluateBoolExpression("1.26 > 1"));
-  EXPECT_FALSE(EvaluateBoolExpression("1.25 > 1.25"));
+  EXPECT_THAT(Evaluate("1.26 > 1.25"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1.26 > 1"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1.25 > 1.25"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("1.25 >= 1.25"));
-  EXPECT_TRUE(EvaluateBoolExpression("1.25 >= 1"));
-  EXPECT_TRUE(EvaluateBoolExpression("1.26 >= 1.25"));
-  EXPECT_FALSE(EvaluateBoolExpression("1.25 >= 1.26"));
+  EXPECT_THAT(Evaluate("1.25 >= 1.25"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1.25 >= 1"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1.26 >= 1.25"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1.25 >= 1.26"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("1.25 <= 1.25"));
-  EXPECT_TRUE(EvaluateBoolExpression("1.25 <= 1.26"));
-  EXPECT_FALSE(EvaluateBoolExpression("1.26 <= 1.25"));
-  EXPECT_FALSE(EvaluateBoolExpression("1.26 <= 1"));
+  EXPECT_THAT(Evaluate("1.25 <= 1.25"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1.25 <= 1.26"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1.26 <= 1.25"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("1.26 <= 1"), EvalsToFalse());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestStringLiteral, {
@@ -1369,74 +1325,72 @@ FHIR_VERSION_TEST(FhirPathTest, TestStringLiteral, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestStringLiteralEscaping, {
-  EXPECT_EQ("\\", EvaluateStringExpressionWithStatus("'\\\\'").ValueOrDie());
-  EXPECT_EQ("\f", EvaluateStringExpressionWithStatus("'\\f'").ValueOrDie());
-  EXPECT_EQ("\n", EvaluateStringExpressionWithStatus("'\\n'").ValueOrDie());
-  EXPECT_EQ("\r", EvaluateStringExpressionWithStatus("'\\r'").ValueOrDie());
-  EXPECT_EQ("\t", EvaluateStringExpressionWithStatus("'\\t'").ValueOrDie());
-  EXPECT_EQ("\"", EvaluateStringExpressionWithStatus("'\\\"'").ValueOrDie());
-  EXPECT_EQ("'", EvaluateStringExpressionWithStatus("'\\\''").ValueOrDie());
-  EXPECT_EQ("\t", EvaluateStringExpressionWithStatus("'\\t'").ValueOrDie());
-  EXPECT_EQ(" ", EvaluateStringExpressionWithStatus("'\\u0020'").ValueOrDie());
+  EXPECT_THAT(Evaluate("'\\\\'"), EvalsToStringThatMatches(StrEq("\\")));
+  EXPECT_THAT(Evaluate("'\\f'"), EvalsToStringThatMatches(StrEq("\f")));
+  EXPECT_THAT(Evaluate("'\\n'"), EvalsToStringThatMatches(StrEq("\n")));
+  EXPECT_THAT(Evaluate("'\\r'"), EvalsToStringThatMatches(StrEq("\r")));
+  EXPECT_THAT(Evaluate("'\\t'"), EvalsToStringThatMatches(StrEq("\t")));
+  EXPECT_THAT(Evaluate("'\\\"'"), EvalsToStringThatMatches(StrEq("\"")));
+  EXPECT_THAT(Evaluate("'\\\''"), EvalsToStringThatMatches(StrEq("'")));
+  EXPECT_THAT(Evaluate("'\\t'"), EvalsToStringThatMatches(StrEq("\t")));
+  EXPECT_THAT(Evaluate("'\\u0020'"), EvalsToStringThatMatches(StrEq(" ")));
 
   // Disallowed escape sequences
-  EXPECT_FALSE(EvaluateStringExpressionWithStatus("'\\x20'").ok());
-  EXPECT_FALSE(EvaluateStringExpressionWithStatus("'\\123'").ok());
-  EXPECT_FALSE(EvaluateStringExpressionWithStatus("'\\x20'").ok());
-  EXPECT_FALSE(EvaluateStringExpressionWithStatus("'\\x00000020'").ok());
+  EXPECT_FALSE(Evaluate("'\\x20'").ok());
+  EXPECT_FALSE(Evaluate("'\\123'").ok());
+  EXPECT_FALSE(Evaluate("'\\x20'").ok());
+  EXPECT_FALSE(Evaluate("'\\x00000020'").ok());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestStringComparisons, {
-  EXPECT_TRUE(EvaluateBoolExpression("'foo' = 'foo'"));
-  EXPECT_FALSE(EvaluateBoolExpression("'foo' = 'bar'"));
+  EXPECT_THAT(Evaluate("'foo' = 'foo'"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo' = 'bar'"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("'foo' != 'bar'"));
-  EXPECT_FALSE(EvaluateBoolExpression("'foo' != 'foo'"));
+  EXPECT_THAT(Evaluate("'foo' != 'bar'"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo' != 'foo'"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("'bar' < 'foo'"));
-  EXPECT_FALSE(EvaluateBoolExpression("'foo' < 'foo'"));
+  EXPECT_THAT(Evaluate("'bar' < 'foo'"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo' < 'foo'"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("'foo' > 'bar'"));
-  EXPECT_FALSE(EvaluateBoolExpression("'foo' > 'foo'"));
+  EXPECT_THAT(Evaluate("'foo' > 'bar'"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo' > 'foo'"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("'foo' >= 'foo'"));
-  EXPECT_TRUE(EvaluateBoolExpression("'foo' >= 'bar'"));
-  EXPECT_FALSE(EvaluateBoolExpression("'bar' >= 'foo'"));
+  EXPECT_THAT(Evaluate("'foo' >= 'foo'"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo' >= 'bar'"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'bar' >= 'foo'"), EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateBoolExpression("'foo' <= 'foo'"));
-  EXPECT_TRUE(EvaluateBoolExpression("'bar' <= 'foo'"));
-  EXPECT_FALSE(EvaluateBoolExpression("'foo' <= 'bar'"));
+  EXPECT_THAT(Evaluate("'foo' <= 'foo'"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'bar' <= 'foo'"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo' <= 'bar'"), EvalsToFalse());
 })
 
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, ConstraintViolation) {
-  Observation observation = ValidObservation<Observation>();
-
-  // If a range is present it must have a high or low value,
-  // so ensure the constraint fails if it doesn't.
-  observation.add_reference_range();
+FHIR_VERSION_TEST(FhirPathTest, ConstraintViolation, {
+  auto organization = ParseFromString<Organization>(R"proto(
+    name: {value: 'myorg'}
+    telecom: { use: {value: HOME}}
+  )proto");
 
   MessageValidator validator;
 
-  auto callback = [&observation](const Message& bad_message,
+  auto callback = [&organization](const Message& bad_message,
                                  const FieldDescriptor* field,
                                  const std::string& constraint) {
     // Ensure the expected bad sub-message is passed to the callback.
-    EXPECT_EQ(observation.reference_range(0).GetDescriptor()->full_name(),
-              bad_message.GetDescriptor()->full_name());
+    EXPECT_EQ(organization.GetDescriptor()->name(),
+              bad_message.GetDescriptor()->name());
 
     // Ensure the expected constraint failed.
-    EXPECT_EQ("low.exists() or high.exists() or text.exists()", constraint);
+    EXPECT_EQ("where(use = 'home').empty()", constraint);
 
     return false;
   };
 
   std::string err_message =
-      absl::StrCat("fhirpath-constraint-violation-ReferenceRange: ",
-                   "\"low.exists() or high.exists() or text.exists()\"");
-  EXPECT_EQ(validator.Validate(observation, callback),
+      absl::StrCat("fhirpath-constraint-violation-Organization.telecom: ",
+                   "\"where(use = 'home').empty()\"");
+  EXPECT_EQ(validator.Validate(organization, callback),
             ::tensorflow::errors::FailedPrecondition(err_message));
-}
+})
 
 FHIR_VERSION_TEST(FhirPathTest, ConstraintSatisfied, {
   Observation observation = ValidObservation<Observation>();
@@ -1499,25 +1453,18 @@ FHIR_VERSION_TEST(FhirPathTest, NestedConstraintSatisfied, {
 
 // TODO: Templatize tests to work with both STU3 and R4
 TEST(FhirPathTest, TimeComparison) {
-  auto start_before_end =
-      CompiledExpression::Compile(Period::descriptor(), "start <= end")
-          .ValueOrDie();
-
   Period start_before_end_period = ParseFromString<Period>(R"proto(
     start: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
     end: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
   )proto");
-  EvaluationResult start_before_end_result =
-      start_before_end.Evaluate(start_before_end_period).ValueOrDie();
-  EXPECT_TRUE(start_before_end_result.GetBoolean().ValueOrDie());
+  EXPECT_THAT(Evaluate(start_before_end_period, "start <= end"), EvalsToTrue());
 
   Period end_before_start_period = ParseFromString<Period>(R"proto(
     start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
     end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
   )proto");
-  EvaluationResult end_before_start_result =
-      start_before_end.Evaluate(end_before_start_period).ValueOrDie();
-  EXPECT_FALSE(end_before_start_result.GetBoolean().ValueOrDie());
+  EXPECT_THAT(Evaluate(end_before_start_period, "start <= end"),
+              EvalsToFalse());
 }
 
 // TODO: Templatize tests to work with both STU3 and R4

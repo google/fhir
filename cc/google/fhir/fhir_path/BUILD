@@ -100,6 +100,7 @@ cc_test(
         "//proto/r4/core/resources:encounter_cc_proto",
         "//proto/r4/core/resources:medication_knowledge_cc_proto",
         "//proto/r4/core/resources:observation_cc_proto",
+        "//proto/r4/core/resources:organization_cc_proto",
         "//proto/r4/core/resources:parameters_cc_proto",
         "//proto/r4/core/resources:patient_cc_proto",
         "//proto/r4/core/resources:structure_definition_cc_proto",
