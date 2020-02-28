@@ -38,7 +38,6 @@
 namespace google {
 namespace fhir {
 
-
 Status BuildHasNoValueExtension(::google::protobuf::Message* extension);
 
 namespace primitives_internal {
