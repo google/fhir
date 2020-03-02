@@ -4,6 +4,12 @@ id {
 status {
   value: FINAL
 }
+code {
+  coding {
+    system { value: "foo"},
+    code { value: "bar" }
+  }
+}
 component {
   id {
     value: "12345"
@@ -11,9 +17,16 @@ component {
   on_nested {
     value: "1.234"
   }
+  code {
+    coding {
+      system { value: "baz"},
+      code { value: "quux" }
+    }
+  }
 }
 my_complex_extension {
-  simple_subfield {
-    value: "foobar"
+  simple_subfield { value: "foobar" }
+  complex_subfield {
+    simple_sub_sub_field_b { value: 5 }
   }
 }

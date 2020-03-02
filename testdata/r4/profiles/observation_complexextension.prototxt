@@ -4,17 +4,52 @@ id {
 status {
   value: FINAL
 }
+code {
+  coding {
+    system { value: "foo"},
+    code { value: "bar" }
+  }
+}
 component {
   id { value: "12345" }
   extension {
     url { value: "http://test/url/base/SimpleDecimalExt" }
     value { decimal { value: "1.234" } }
   }
+  code {
+    coding {
+      system { value: "baz"},
+      code { value: "quux" }
+    }
+  }
 }
 extension {
-  url { value: "http://test/url/base/ComplexExt" }
+  url {
+    value: "http://test/url/base/ComplexExt"
+  }
   extension {
-    url { value: "simpleSubfield" }
-    value { string_value { value: "foobar" } }
+    url {
+      value: "simpleSubfield"
+    }
+    value {
+      string_value {
+        value: "foobar"
+      }
+    }
+  }
+  extension {
+    url {
+      value: "complexSubfield"
+    }
+    extension {
+      url {
+        value: "simpleSubSubFieldB"
+      }
+      value {
+        unsigned_int {
+          value: 5
+        }
+      }
+    }
   }
 }

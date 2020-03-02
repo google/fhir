@@ -62,6 +62,18 @@ StatusOr<T> NormalizeStu3(const T& message) {
   return normalized;
 }
 
+// Normalizes a resource, and then validates the output.
+// Returns any status error, either from normalizing or validating.
+// This guarantees that if this function returns a resource, that resource
+// is both in normalized form, and valid according to all restrictions of
+// the profile.
+template <typename T>
+StatusOr<T> NormalizeAndValidateStu3(const T& message) {
+  T normalized;
+  FHIR_RETURN_IF_ERROR(ConvertToProfileStu3(message, &normalized));
+  return normalized;
+}
+
 }  // namespace fhir
 }  // namespace google
 

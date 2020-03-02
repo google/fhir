@@ -380,8 +380,7 @@ Status ExtensionToMessage(const ExtensionLike& extension,
       ::google::protobuf::Message* child;
       if (field->is_repeated()) {
         child = reflection->AddMessage(message, field);
-      } else if (reflection->HasField(*message, field) ||
-                 inner.extension_size() > 0) {
+      } else if (reflection->HasField(*message, field)) {
         return ::tensorflow::errors::AlreadyExists(
             "Unexpected repeated value for tag ", field->name(),
             " in extension ", inner.DebugString());

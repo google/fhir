@@ -139,6 +139,28 @@ TEST(ProfilesTest, Normalize) {
           "observation_complexextension-profiled-testobservation.prototxt"))));
 }
 
+TEST(ProfilesTest, NormalizeAndValidate_Invalid) {
+  TestObservation unnormalized = ReadProto<TestObservation>(absl::StrCat(
+      "testdata/stu3/profiles/observation_complexextension.prototxt"));
+  unnormalized.clear_status();
+  StatusOr<TestObservation> normalized = NormalizeAndValidateStu3(unnormalized);
+  EXPECT_FALSE(normalized.ok());
+  EXPECT_EQ(normalized.status().error_message(),
+            "missing-TestObservation.status");
+}
+
+TEST(ProfilesTest, NormalizeAndValidate_Valid) {
+  const TestObservation unnormalized = ReadProto<TestObservation>(absl::StrCat(
+      "testdata/stu3/profiles/observation_complexextension.prototxt"));
+  StatusOr<TestObservation> normalized = NormalizeAndValidateStu3(unnormalized);
+  FHIR_ASSERT_OK(normalized.status());
+  EXPECT_THAT(
+      normalized.ValueOrDie(),
+      EqualsProto(ReadProto<TestObservation>(absl::StrCat(
+          "testdata/stu3/profiles/"
+          "observation_complexextension-profiled-testobservation.prototxt"))));
+}
+
 TEST(ProfilesTest, NormalizeBundle) {
   stu3::testing::Bundle unnormalized_bundle;
 
