@@ -1,5 +1,6 @@
 proto_package: "google.fhir.r4.core"
 java_proto_package: "com.google.fhir.r4.core"
+go_proto_package: "github.com/google/fhir/go/proto/r4/core"
 fhir_version: R4
 license: APACHE
 license_date: "2019"

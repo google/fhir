@@ -1,4 +1,5 @@
 load("//bazel:proto.bzl", "fhir_proto_library")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -39,4 +40,14 @@ fhir_proto_library(
         "//proto/r4/core:datatypes_proto",
     ],
     proto_library_prefix = "profile_config",
+)
+
+go_proto_library(
+    name = "go_proto",
+    importpath = "github.com/google/fhir/go/proto",
+    protos = [
+        "//proto:annotations_proto",
+        "//proto:protogenerator_annotations_proto",
+        "//proto:version_config_proto",
+    ],
 )

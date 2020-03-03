@@ -46,6 +46,15 @@ def fhirproto_dependencies():
     )
 
     http_archive(
+        name = "io_bazel_rules_go",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.22.1/rules_go-v0.22.1.tar.gz",
+            "https://github.com/bazelbuild/rules_go/releases/download/v0.22.1/rules_go-v0.22.1.tar.gz",
+        ],
+        sha256 = "e6a6c016b0663e06fa5fccf1cd8152eab8aa8180c583ec20c872f4f9953a7ac5",
+    )
+
+    http_archive(
         name = "org_tensorflow",
         sha256 = "674cc90223f1d6b7fa2969e82636a630ce453e48a9dec39d73d6dba2fd3fd243",
         strip_prefix = "tensorflow-2.1.0-rc0",

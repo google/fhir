@@ -8,6 +8,7 @@ import "proto/r4/core/datatypes.proto";
 
 option java_package = "com.google.fhir.proto";
 option java_multiple_files = true;
+option go_package = "github.com/google/fhir/go/proto";
 
 message PackageInfo {
   proto.FhirVersion fhir_version = 1;

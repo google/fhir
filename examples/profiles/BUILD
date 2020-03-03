@@ -6,6 +6,7 @@ licenses(["notice"])
 
 load("//bazel:protogen.bzl", "gen_fhir_definitions_and_protos")
 load("//bazel:proto.bzl", "fhir_proto_library")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 
 gen_fhir_definitions_and_protos(
     name = "demo",
@@ -35,4 +36,17 @@ fhir_proto_library(
         "//proto/r4/core:extensions_proto",
     ],
     proto_library_prefix = "demo",
+)
+
+go_proto_library(
+    name = "go_proto",
+    importpath = "github.com/google/fhir/examples/profiles",
+    protos = [
+        "//examples/profiles:demo_proto",
+    ],
+    deps = [
+        "//proto:go_proto",
+        "//proto/r4:uscore_go_proto",
+        "//proto/r4/core:go_proto",
+    ],
 )

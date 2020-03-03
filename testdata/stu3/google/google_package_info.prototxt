@@ -1,3 +1,4 @@
 proto_package: "google.fhir.stu3.google"
 java_proto_package: "com.google.fhir.stu3.google"
+go_proto_package: "github.com/google/fhir/go/stu3/google"
 fhir_version: STU3

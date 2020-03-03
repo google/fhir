@@ -4,6 +4,8 @@ syntax = "proto3";
 
 package google.fhir.proto;
 
+option go_package = "github.com/google/fhir/go/proto";
+
 message ResourceConfig {
   // If not specified otherwise, all events in this resource are assumed to
   // have occurred at the timestamp in this field.

@@ -1,5 +1,6 @@
 load("//bazel:proto.bzl", "fhir_proto_library")
 load("//bazel:protogen.bzl", "gen_fhir_protos")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -115,4 +116,22 @@ filegroup(
     srcs = glob([
         "*.proto",
     ]),
+)
+
+go_proto_library(
+    name = "go_proto",
+    importpath = "github.com/google/fhir/go/proto/stu3",
+    protos = [
+        "//proto/stu3:datatypes_proto",
+        "//proto/stu3:codes_proto",
+        "//proto/stu3:metadatatypes_proto",
+        "//proto/stu3:extensions_proto",
+        "//proto/stu3:resources_proto",
+        "//proto/stu3:profiles_proto",
+        "//proto/stu3:uscore_proto",
+        "//proto/stu3:uscore_codes_proto",
+    ],
+    deps = [
+        "//proto:go_proto",
+    ],
 )
