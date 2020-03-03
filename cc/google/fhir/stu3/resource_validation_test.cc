@@ -111,7 +111,7 @@ TEST(ResourceValidationTest, InvalidReference) {
   observation.add_related()->mutable_target()->mutable_patient_id()->set_value(
       "12345");
   InvalidTest(
-      "invalid-reference-Observation.related.target-disallowed-type-Patient",
+      "invalid-reference-disallowed-type-Patient-at-Observation.related.target",
       observation);
 }
 
@@ -128,7 +128,7 @@ TEST(ResourceValidationTest, RepeatedReferenceInvalid) {
   encounter.add_account()->mutable_account_id()->set_value("111");
   encounter.add_account()->mutable_patient_id()->set_value("222");
   encounter.add_account()->mutable_account_id()->set_value("333");
-  InvalidTest("invalid-reference-Encounter.account-disallowed-type-Patient",
+  InvalidTest("invalid-reference-disallowed-type-Patient-at-Encounter.account",
               encounter);
 }
 

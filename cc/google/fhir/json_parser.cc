@@ -40,8 +40,6 @@
 #include "google/fhir/stu3/profiles.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
-#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
-#include "proto/stu3/google_extensions.pb.h"
 #include "include/json/json.h"
 #include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
@@ -354,9 +352,8 @@ class Parser {
   }
 
   Status ClearPrimitiveHasNoValue(Message* message) {
-    return ClearTypedExtensions(
-        ::google::fhir::stu3::google::PrimitiveHasNoValue::descriptor(),
-        message);
+    return extensions_lib::ClearExtensionsWithUrl(
+        primitives_internal::kPrimitiveHasNoValueUrl, message);
   }
 
   StatusOr<std::unique_ptr<Message>> ParseFieldValue(
@@ -366,11 +363,11 @@ class Parser {
                              field->full_name(), " is not a message.");
     }
     if (field->message_type()->full_name() == Any::descriptor()->full_name()) {
-      // TODO: Handle STU3 Any
-      r4::core::ContainedResource contained;
-      FHIR_RETURN_IF_ERROR(MergeContainedResource(json, &contained));
+      std::unique_ptr<Message> contained =
+          absl::WrapUnique(primitive_handler_->NewContainedResource());
+      FHIR_RETURN_IF_ERROR(MergeContainedResource(json, contained.get()));
       Any* any = new Any;
-      any->PackFrom(contained);
+      any->PackFrom(*contained);
       return absl::WrapUnique<Message>(any);
     } else {
       std::unique_ptr<Message> target =

@@ -43,29 +43,18 @@ namespace fhir {
 namespace r4 {
 
 using primitives_internal::PrimitiveWrapper;
-using primitives_internal::StringTypeWrapper;
 using ::google::protobuf::Descriptor;
 using ::tensorflow::errors::InvalidArgument;
 
 StatusOr<std::unique_ptr<PrimitiveWrapper>> R4PrimitiveHandler::GetWrapper(
     const Descriptor* target_descriptor) const {
-  absl::optional<std::unique_ptr<PrimitiveWrapper>> common_wrapper =
-      primitives_internal::GetCommonWrapper<
+  absl::optional<std::unique_ptr<PrimitiveWrapper>> wrapper =
+      primitives_internal::GetWrapperForR4Types<
           core::Extension, core::Xhtml, google::Base64BinarySeparatorStride>(
           target_descriptor);
 
-  if (common_wrapper.has_value()) {
-    return std::move(common_wrapper.value());
-  }
-
-  if (IsMessageType<core::Canonical>(target_descriptor)) {
-    return std::unique_ptr<PrimitiveWrapper>(
-        new StringTypeWrapper<core::Canonical>());
-  }
-
-  if (IsMessageType<core::Url>(target_descriptor)) {
-    return std::unique_ptr<PrimitiveWrapper>(
-        new StringTypeWrapper<core::Url>());
+  if (wrapper.has_value()) {
+    return std::move(wrapper.value());
   }
 
   return InvalidArgument("Unexpected R4 primitive FHIR type: ",

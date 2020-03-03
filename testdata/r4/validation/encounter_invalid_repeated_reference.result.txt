@@ -1,1 +1,1 @@
-invalid-reference-Encounter.account-disallowed-type-Patient
+invalid-reference-disallowed-type-Patient-at-Encounter.account

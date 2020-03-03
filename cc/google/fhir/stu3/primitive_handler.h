@@ -24,6 +24,7 @@
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/stu3/datatypes.pb.h"
+#include "proto/stu3/resources.pb.h"
 
 namespace google {
 namespace fhir {
@@ -31,7 +32,7 @@ namespace stu3 {
 
 class Stu3PrimitiveHandler
     : public ::google::fhir::primitives_internal::PrimitiveHandlerTemplate<
-          proto::Extension> {
+          proto::Bundle> {
  public:
   static const Stu3PrimitiveHandler* GetInstance();
 

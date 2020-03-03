@@ -48,13 +48,13 @@ using ::tensorflow::errors::InvalidArgument;
 
 StatusOr<std::unique_ptr<PrimitiveWrapper>> Stu3PrimitiveHandler::GetWrapper(
     const Descriptor* target_descriptor) const {
-  absl::optional<std::unique_ptr<PrimitiveWrapper>> common_wrapper =
-      primitives_internal::GetCommonWrapper<
+  absl::optional<std::unique_ptr<PrimitiveWrapper>> wrapper =
+      primitives_internal::GetWrapperForStu3Types<
           proto::Extension, proto::Xhtml, google::Base64BinarySeparatorStride>(
           target_descriptor);
 
-  if (common_wrapper.has_value()) {
-    return std::move(common_wrapper.value());
+  if (wrapper.has_value()) {
+    return std::move(wrapper.value());
   }
   return InvalidArgument("Unexpected STU3 primitive FHIR type: ",
                          target_descriptor->full_name());

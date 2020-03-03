@@ -62,6 +62,19 @@ class PrimitiveHandler {
 
   Status ValidatePrimitive(const ::google::protobuf::Message& primitive) const;
 
+  // Validates that a reference field conforms to spec.
+  // The types of resources that can be referenced is controlled via annotations
+  // on the proto, e.g., R4 Patient.general_practitioner must be a reference to
+  // an Organization, Practitioner, or PractitionerRole, or it must be an
+  // untyped reference, like uri.
+  virtual Status ValidateReferenceField(
+      const ::google::protobuf::Message& parent,
+      const ::google::protobuf::FieldDescriptor* field) const = 0;
+
+  virtual ::google::protobuf::Message* NewContainedResource() const = 0;
+
+  virtual const ::google::protobuf::Descriptor* ContainedResourceDescriptor() const = 0;
+
   virtual StatusOr<std::string> GetStringValue(
       const ::google::protobuf::Message& primitive) const = 0;
 
@@ -104,15 +117,76 @@ class PrimitiveHandler {
 
 namespace primitives_internal {
 
+using ::google::protobuf::OneofDescriptor;
+
 template <typename Expected>
-ABSL_MUST_USE_RESULT
-Status CheckType(const ::google::protobuf::Message& message) {
-  return IsMessageType<Expected>(message)
+ABSL_MUST_USE_RESULT Status CheckType(const ::google::protobuf::Descriptor* descriptor) {
+  return IsMessageType<Expected>(descriptor)
              ? Status::OK()
-             : InvalidArgument("Tried to get ",
-                               Expected::descriptor()->full_name(),
-                               " value, but message was of type ",
-                               message.GetDescriptor()->full_name());
+             : InvalidArgument("Expected ", Expected::descriptor()->full_name(),
+                               ", but message was of type ",
+                               descriptor->full_name());
+}
+
+template <typename Expected>
+ABSL_MUST_USE_RESULT Status CheckType(const ::google::protobuf::Message& message) {
+  return CheckType<Expected>(message.GetDescriptor());
+}
+
+template <class TypedReference,
+          class TypedReferenceId = REFERENCE_ID_TYPE(TypedReference)>
+Status ValidateReferenceField(const Message& parent,
+                              const FieldDescriptor* field) {
+  static const Descriptor* descriptor = TypedReference::descriptor();
+  static const OneofDescriptor* oneof = descriptor->oneof_decl(0);
+
+  for (int i = 0; i < PotentiallyRepeatedFieldSize(parent, field); i++) {
+    const TypedReference& reference =
+        GetPotentiallyRepeatedMessage<TypedReference>(parent, field, i);
+    const Reflection* reflection = reference.GetReflection();
+    const FieldDescriptor* reference_field =
+        reflection->GetOneofFieldDescriptor(reference, oneof);
+
+    if (!reference_field) {
+      if (reference.extension_size() == 0 && !reference.has_identifier() &&
+          !reference.has_display()) {
+        return FailedPrecondition("empty-reference");
+      }
+      // There's no reference field, but there is other data.  That's valid.
+      return Status::OK();
+    }
+    if (field->options().ExtensionSize(proto::valid_reference_type) == 0) {
+      // The reference field does not have restrictions, so any value is fine.
+      return Status::OK();
+    }
+    if (reference.has_uri() || reference.has_fragment()) {
+      // Uri and Fragment references are untyped.
+      return Status::OK();
+    }
+
+    if (IsMessageType<TypedReferenceId>(reference_field->message_type())) {
+      const std::string& reference_type =
+          reference_field->options().GetExtension(
+              ::google::fhir::proto::referenced_fhir_type);
+      bool is_allowed = false;
+      for (int i = 0;
+           i < field->options().ExtensionSize(proto::valid_reference_type);
+           i++) {
+        const std::string& valid_type =
+            field->options().GetExtension(proto::valid_reference_type, i);
+        if (valid_type == reference_type || valid_type == "Resource") {
+          is_allowed = true;
+          break;
+        }
+      }
+      if (!is_allowed) {
+        return FailedPrecondition("invalid-reference-disallowed-type-",
+                                  reference_type);
+      }
+    }
+  }
+
+  return Status::OK();
 }
 
 // Template for a PrimitiveHandler tied to a single version of FHIR.
@@ -120,18 +194,40 @@ Status CheckType(const ::google::protobuf::Message& message) {
 // The templating is kept separate from the main interface, in order to provide
 // a version-agnostic type that libraries can use without needing to template
 // themselves.
-template <typename ExtensionType,
-          typename StringType = FHIR_DATATYPE(ExtensionType, string_value),
-          typename IntegerType = FHIR_DATATYPE(ExtensionType, integer),
-          typename DecimalType = FHIR_DATATYPE(ExtensionType, decimal),
-          typename BooleanType = FHIR_DATATYPE(ExtensionType, boolean)>
+template <typename BundleType,
+          typename ContainedResourceType =
+              BUNDLE_CONTAINED_RESOURCE(BundleType),
+          typename ExtensionType = EXTENSION_TYPE(BundleType),
+          typename StringType = FHIR_DATATYPE(BundleType, string_value),
+          typename IntegerType = FHIR_DATATYPE(BundleType, integer),
+          typename DecimalType = FHIR_DATATYPE(BundleType, decimal),
+          typename BooleanType = FHIR_DATATYPE(BundleType, boolean),
+          typename ReferenceType = FHIR_DATATYPE(BundleType, reference)>
 class PrimitiveHandlerTemplate : public PrimitiveHandler {
  public:
+  typedef BundleType Bundle;
+  typedef ContainedResourceType ContainedResource;
   typedef ExtensionType Extension;
   typedef StringType String;
   typedef BooleanType Boolean;
   typedef IntegerType Integer;
   typedef DecimalType Decimal;
+  typedef ReferenceType Reference;
+
+  Status ValidateReferenceField(const Message& parent,
+                                const FieldDescriptor* field) const override {
+    FHIR_RETURN_IF_ERROR(CheckType<Reference>(field->message_type()));
+    return primitives_internal::ValidateReferenceField<Reference>(parent,
+                                                                  field);
+  }
+
+  ::google::protobuf::Message* NewContainedResource() const override {
+    return new ContainedResource();
+  }
+
+  const ::google::protobuf::Descriptor* ContainedResourceDescriptor() const override {
+    return ContainedResource::GetDescriptor();
+  }
 
   StatusOr<std::string> GetStringValue(
       const ::google::protobuf::Message& primitive) const override {
@@ -206,7 +302,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 // all FHIR versions >= STU3.
 template <typename ExtensionType, typename XhtmlType,
           typename Base64BinarySeparatorStrideType>
-absl::optional<std::unique_ptr<PrimitiveWrapper>> GetCommonWrapper(
+absl::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForStu3Types(
     const Descriptor* target_descriptor) {
   if (IsTypeOrProfileOfCode(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
@@ -279,6 +375,34 @@ absl::optional<std::unique_ptr<PrimitiveWrapper>> GetCommonWrapper(
         new StringTypeWrapper<FHIR_DATATYPE(ExtensionType, uri)>());
   } else if (IsMessageType<XhtmlType>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(new XhtmlWrapper<XhtmlType>());
+  }
+  return absl::optional<std::unique_ptr<PrimitiveWrapper>>();
+}
+
+// Helper function for handling primitive types that are universally present in
+// all FHIR versions >= R4.
+template <typename ExtensionType, typename XhtmlType,
+          typename Base64BinarySeparatorStrideType>
+absl::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForR4Types(
+    const Descriptor* target_descriptor) {
+  absl::optional<std::unique_ptr<PrimitiveWrapper>> wrapper_for_stu3_types =
+      primitives_internal::GetWrapperForStu3Types<
+          ExtensionType, XhtmlType, Base64BinarySeparatorStrideType>(
+          target_descriptor);
+
+  if (wrapper_for_stu3_types.has_value()) {
+    return std::move(wrapper_for_stu3_types.value());
+  }
+
+  if (IsMessageType<FHIR_DATATYPE(ExtensionType, canonical)>(
+          target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<FHIR_DATATYPE(ExtensionType, canonical)>());
+  }
+
+  if (IsMessageType<FHIR_DATATYPE(ExtensionType, url)>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<FHIR_DATATYPE(ExtensionType, url)>());
   }
   return absl::optional<std::unique_ptr<PrimitiveWrapper>>();
 }

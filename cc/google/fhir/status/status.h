@@ -30,6 +30,13 @@ namespace fhir {
     ASSERT_TRUE(status.ok()) << status.error_message(); \
   }
 
+#define FHIR_ASSERT_STATUS(rexpr, msg)      \
+  {                                         \
+    auto status = (rexpr);                  \
+    ASSERT_FALSE(status.ok());              \
+    ASSERT_EQ(status.error_message(), msg); \
+  }
+
 }  // namespace fhir
 }  // namespace google
 

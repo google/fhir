@@ -43,8 +43,6 @@
 #include "google/fhir/stu3/profiles.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
-#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
-#include "proto/stu3/datatypes.pb.h"
 #include "include/json/json.h"
 
 namespace google {
@@ -147,14 +145,15 @@ class Printer {
       return PrintContainedResource(proto);
     }
     if (descriptor->full_name() == Any::descriptor()->full_name()) {
-      r4::core::ContainedResource contained;
-      if (!dynamic_cast<const Any&>(proto).UnpackTo(&contained)) {
+      std::unique_ptr<Message> contained =
+          absl::WrapUnique(primitive_handler_->NewContainedResource());
+      if (!dynamic_cast<const Any&>(proto).UnpackTo(contained.get())) {
         // If we can't unpack the Any, drop it.
         // TODO: Use a registry to determine the correct
         // ContainedResource to unpack to
         return Status::OK();
       }
-      return PrintContainedResource(contained);
+      return PrintContainedResource(*contained);
     }
 
     if (json_format_ == kFormatAnalytic && IsExtension(proto)) {

@@ -35,72 +35,14 @@ namespace google {
 namespace fhir {
 
 
-using ::google::fhir::proto::valid_reference_type;
 using ::google::fhir::proto::validation_requirement;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
-using ::google::protobuf::OneofDescriptor;
 using ::google::protobuf::Reflection;
 using ::tensorflow::errors::FailedPrecondition;
 
 namespace {
-
-template <class TypedReference, class TypedReferenceId>
-Status ValidateReference(const Message& message, const FieldDescriptor* field,
-                         const std::string& base_name) {
-  static const Descriptor* descriptor = TypedReference::descriptor();
-  static const OneofDescriptor* oneof = descriptor->oneof_decl(0);
-
-  for (int i = 0; i < PotentiallyRepeatedFieldSize(message, field); i++) {
-    const TypedReference& reference =
-        GetPotentiallyRepeatedMessage<TypedReference>(message, field, i);
-    const Reflection* reflection = reference.GetReflection();
-    const FieldDescriptor* reference_field =
-        reflection->GetOneofFieldDescriptor(reference, oneof);
-
-    if (!reference_field) {
-      if (reference.extension_size() == 0 && !reference.has_identifier() &&
-          !reference.has_display()) {
-        return FailedPrecondition("empty-reference-", base_name, ".",
-                                  field->name());
-      }
-      // There's no reference field, but there is other data.  That's valid.
-      return Status::OK();
-    }
-    if (field->options().ExtensionSize(valid_reference_type) == 0) {
-      // The reference field does not have restrictions, so any value is fine.
-      return Status::OK();
-    }
-    if (reference.has_uri() || reference.has_fragment()) {
-      // Uri and Fragment references are untyped.
-      return Status::OK();
-    }
-
-    if (IsMessageType<TypedReferenceId>(reference_field->message_type())) {
-      const std::string& reference_type =
-          reference_field->options().GetExtension(
-              ::google::fhir::proto::referenced_fhir_type);
-      bool is_allowed = false;
-      for (int i = 0; i < field->options().ExtensionSize(valid_reference_type);
-           i++) {
-        const std::string& valid_type =
-            field->options().GetExtension(valid_reference_type, i);
-        if (valid_type == reference_type || valid_type == "Resource") {
-          is_allowed = true;
-          break;
-        }
-      }
-      if (!is_allowed) {
-        return FailedPrecondition("invalid-reference-", base_name, ".",
-                                  field->name(), "-disallowed-type-",
-                                  reference_type);
-      }
-    }
-  }
-
-  return Status::OK();
-}
 
 template <class TypedDateTime>
 Status ValidatePeriod(const Message& period, const std::string& base) {
@@ -139,7 +81,7 @@ Status ValidatePeriod(const Message& period, const std::string& base) {
 }
 
 Status CheckField(const Message& message, const FieldDescriptor* field,
-                  const std::string& base_name,
+                  const std::string& field_name,
                   const PrimitiveHandler* primitive_handler);
 
 Status ValidateFhirConstraints(const Message& message,
@@ -160,9 +102,13 @@ Status ValidateFhirConstraints(const Message& message,
 
   const Descriptor* descriptor = message.GetDescriptor();
   const Reflection* reflection = message.GetReflection();
+
   for (int i = 0; i < descriptor->field_count(); i++) {
-    FHIR_RETURN_IF_ERROR(CheckField(message, descriptor->field(i), base_name,
-                                    primitive_handler));
+    const FieldDescriptor* field = descriptor->field(i);
+    const std::string& field_name =
+        absl::StrCat(base_name, ".", field->json_name());
+    FHIR_RETURN_IF_ERROR(
+        CheckField(message, field, field_name, primitive_handler));
   }
   // Also verify that oneof fields are set.
   // Note that optional choice-types should have the containing message unset -
@@ -181,34 +127,28 @@ Status ValidateFhirConstraints(const Message& message,
 
 // Check if a required field is missing.
 Status CheckField(const Message& message, const FieldDescriptor* field,
-                  const std::string& base_name,
+                  const std::string& field_name,
                   const PrimitiveHandler* primitive_handler) {
-  const std::string& new_base =
-      absl::StrCat(base_name, ".", field->json_name());
   if (field->options().HasExtension(validation_requirement) &&
       field->options().GetExtension(validation_requirement) ==
           ::google::fhir::proto::REQUIRED_BY_FHIR) {
     if (!FieldHasValue(message, field)) {
-      return FailedPrecondition("missing-", new_base);
+      return FailedPrecondition("missing-", field_name);
     }
   }
-  if (IsMessageType<::google::fhir::stu3::proto::Reference>(
-          field->message_type())) {
-    return ValidateReference<::google::fhir::stu3::proto::Reference,
-                             ::google::fhir::stu3::proto::ReferenceId>(
-        message, field, base_name);
+
+  if (IsReference(field->message_type())) {
+    auto status = primitive_handler->ValidateReferenceField(message, field);
+    return status.ok()
+               ? status
+               : FailedPrecondition(status.error_message(), "-at-", field_name);
   }
-  if (IsMessageType<::google::fhir::r4::core::Reference>(
-          field->message_type())) {
-    return ValidateReference<::google::fhir::r4::core::Reference,
-                             ::google::fhir::r4::core::ReferenceId>(
-        message, field, base_name);
-  }
+
   if (field->cpp_type() == ::google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
     for (int i = 0; i < PotentiallyRepeatedFieldSize(message, field); i++) {
       const auto& submessage = GetPotentiallyRepeatedMessage(message, field, i);
       FHIR_RETURN_IF_ERROR(
-          ValidateFhirConstraints(submessage, new_base, primitive_handler));
+          ValidateFhirConstraints(submessage, field_name, primitive_handler));
 
       // Run extra validation for some types, until FHIRPath validation covers
       // these cases as well.
@@ -216,12 +156,12 @@ Status CheckField(const Message& message, const FieldDescriptor* field,
               field->message_type())) {
         FHIR_RETURN_IF_ERROR(
             ValidatePeriod<::google::fhir::stu3::proto::DateTime>(submessage,
-                                                                  new_base));
+                                                                  field_name));
       }
       if (IsMessageType<::google::fhir::r4::core::Period>(
               field->message_type())) {
         FHIR_RETURN_IF_ERROR(ValidatePeriod<::google::fhir::r4::core::DateTime>(
-            submessage, new_base));
+            submessage, field_name));
       }
     }
   }

@@ -32,6 +32,7 @@
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
+#include "proto/stu3/resources.pb.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
 
 namespace google {
@@ -161,6 +162,22 @@ void TestProtoValidation(const bool has_invalid = true) {
       absl::StrCat("testdata/stu3/validation/",
                    CamelCaseToLowerUnderscores(W::descriptor()->name()));
   TestProtoValidationsFromFile<W>(file_base, has_invalid);
+}
+
+TEST(PrimitiveHandlerTest, ValidReference) {
+  Observation obs = ReadStu3Proto<Observation>(
+      "validation/observation_valid_reference.prototxt");
+  FHIR_ASSERT_OK(Stu3PrimitiveHandler::GetInstance()->ValidateReferenceField(
+      obs, obs.GetDescriptor()->FindFieldByName("specimen")));
+}
+
+TEST(PrimitiveHandlerTest, InvalidReference) {
+  Observation obs = ReadStu3Proto<Observation>(
+      "validation/observation_invalid_reference.prototxt");
+  FHIR_ASSERT_STATUS(
+      Stu3PrimitiveHandler::GetInstance()->ValidateReferenceField(
+          obs, obs.GetDescriptor()->FindFieldByName("specimen")),
+      "invalid-reference-disallowed-type-Device");
 }
 
 TEST(PrimitiveValidationTestJson, Base64Binary) {

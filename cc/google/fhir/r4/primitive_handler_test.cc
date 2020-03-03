@@ -28,6 +28,7 @@
 #include "google/fhir/test_helper.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/resources/binary.pb.h"
+#include "proto/r4/core/resources/observation.pb.h"
 #include "proto/r4/core/resources/patient.pb.h"
 #include "proto/r4/google_extensions.pb.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
@@ -159,6 +160,21 @@ void TestProtoValidation(const bool has_invalid = true) {
       absl::StrCat("testdata/r4/validation/",
                    CamelCaseToLowerUnderscores(W::descriptor()->name()));
   TestProtoValidationsFromFile<W>(file_base, has_invalid);
+}
+
+TEST(PrimitiveHandlerTest, ValidReference) {
+  Observation obs = ReadR4Proto<Observation>(
+      "validation/observation_valid_reference.prototxt");
+  FHIR_ASSERT_OK(R4PrimitiveHandler::GetInstance()->ValidateReferenceField(
+      obs, obs.GetDescriptor()->FindFieldByName("specimen")));
+}
+
+TEST(PrimitiveHandlerTest, InvalidReference) {
+  Observation obs = ReadR4Proto<Observation>(
+      "validation/observation_invalid_reference.prototxt");
+  FHIR_ASSERT_STATUS(R4PrimitiveHandler::GetInstance()->ValidateReferenceField(
+                         obs, obs.GetDescriptor()->FindFieldByName("specimen")),
+                     "invalid-reference-disallowed-type-Device");
 }
 
 TEST(PrimitiveValidationTestJson, Base64Binary) {

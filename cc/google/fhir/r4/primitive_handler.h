@@ -25,7 +25,7 @@
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "proto/r4/core/datatypes.pb.h"
+#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 
 namespace google {
 namespace fhir {
@@ -33,7 +33,7 @@ namespace r4 {
 
 class R4PrimitiveHandler
     : public google::fhir::primitives_internal::PrimitiveHandlerTemplate<
-          core::Extension> {
+          core::Bundle> {
  public:
   static const R4PrimitiveHandler* GetInstance();
 

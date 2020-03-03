@@ -157,12 +157,13 @@ public final class ResourceValidator {
       }
       if (!isAllowed) {
         throw new InvalidFhirException(
-            "invalid-reference-"
+            "invalid-reference"
+                + "-disallowed-type-"
+                + referenceType
+                + "-at-"
                 + baseName
                 + "."
-                + field.getName()
-                + "-disallowed-type-"
-                + referenceType);
+                + field.getName());
       }
     }
   }

@@ -25,6 +25,7 @@
 #include "google/protobuf/message.h"
 #include "google/protobuf/reflection.h"
 #include "absl/strings/str_cat.h"
+#include "absl/types/optional.h"
 #include "google/fhir/codes.h"
 #include "google/fhir/fhir_types.h"
 #include "google/fhir/status/status.h"
@@ -105,7 +106,7 @@ Status ExtensionToMessage(const ExtensionLike& extension,
 // Returns ::tensorflow::errors::InvalidArgument if there's no matching oneof
 // type on the extension for the message.
 template <class ExtensionLike>
-Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
+Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
                               ExtensionLike* extension);
 
 template <class ExtensionLike>
@@ -125,11 +126,39 @@ template <class ExtensionLike>
 Status AddValueToExtension(const ::google::protobuf::Message& message,
                            ExtensionLike* extension, bool is_choice_type);
 
-const std::unordered_map<std::string, const ::google::protobuf::FieldDescriptor*>*
-GetExtensionValueFieldsMap();
+// For the Extension message in the template, returns the appropriate field on
+// the extension for a descriptor of a given type.
+// For example, given a Base64Binary, this will return the base64_binary field
+// on an extension.
+template <typename ExtensionType>
+const absl::optional<const ::google::protobuf::FieldDescriptor*>
+GetExtensionValueFieldByType(const ::google::protobuf::Descriptor* field_type) {
+  static const std::unordered_map<
+      std::string,
+      const ::google::protobuf::FieldDescriptor*>* extension_value_fields_by_type = []() {
+    std::unordered_map<std::string, const ::google::protobuf::FieldDescriptor*>* map =
+        new std::unordered_map<std::string, const ::google::protobuf::FieldDescriptor*>;
 
+    const google::protobuf::OneofDescriptor* value_oneof =
+        ExtensionType::ValueX::descriptor()->FindOneofByName("choice");
+    CHECK(value_oneof != nullptr);
+    for (int i = 0; i < value_oneof->field_count(); i++) {
+      const ::google::protobuf::FieldDescriptor* field = value_oneof->field(i);
+      (*map)[field->message_type()->full_name()] = field;
+    }
+    return map;
+  }();
+  auto iter = extension_value_fields_by_type->find(field_type->full_name());
+  return iter == extension_value_fields_by_type->end()
+             ? absl::optional<const ::google::protobuf::FieldDescriptor*>()
+             : absl::make_optional(iter->second);
+}
+
+// Given an extension, returns the field descriptor for the populated choice
+// type in the value oneof.
+// Returns an InvalidArgument status if no value field is set on the extension.
 template <class ExtensionLike>
-StatusOr<const ::google::protobuf::FieldDescriptor*> GetExtensionValueField(
+StatusOr<const ::google::protobuf::FieldDescriptor*> GetPopulatedExtensionValueField(
     const ExtensionLike& extension) {
   static const google::protobuf::OneofDescriptor* value_oneof =
       ExtensionLike::ValueX::descriptor()->FindOneofByName("choice");
@@ -276,8 +305,9 @@ Status ValueToMessage(const ExtensionLike& extension,
     return ::tensorflow::errors::InvalidArgument("Invalid extension: ",
                                                  extension.DebugString());
   }
-  FHIR_ASSIGN_OR_RETURN(const ::google::protobuf::FieldDescriptor* value_field,
-                        extensions_internal::GetExtensionValueField(extension));
+  FHIR_ASSIGN_OR_RETURN(
+      const ::google::protobuf::FieldDescriptor* value_field,
+      extensions_internal::GetPopulatedExtensionValueField(extension));
 
   const ::google::protobuf::Reflection* message_reflection = message->GetReflection();
   if (IsChoiceType(field)) {
@@ -395,29 +425,28 @@ Status ExtensionToMessage(const ExtensionLike& extension,
 }
 
 template <class ExtensionLike>
-Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
+Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
                               ExtensionLike* extension) {
-  const ::google::protobuf::Descriptor* descriptor = message.GetDescriptor();
-  auto value_field_iter =
-      extensions_internal::GetExtensionValueFieldsMap()->find(
-          descriptor->full_name());
-  if (value_field_iter !=
-      extensions_internal::GetExtensionValueFieldsMap()->end()) {
+  const ::google::protobuf::Descriptor* descriptor = datum.GetDescriptor();
+  auto value_field_optional =
+      extensions_internal::GetExtensionValueFieldByType<ExtensionLike>(
+          descriptor);
+  if (value_field_optional.has_value()) {
     extension->value()
         .GetReflection()
-        ->MutableMessage(extension->mutable_value(), value_field_iter->second)
-        ->CopyFrom(message);
+        ->MutableMessage(extension->mutable_value(), *value_field_optional)
+        ->CopyFrom(datum);
     return Status::OK();
   }
-  if (HasValueset(message.GetDescriptor())) {
-    // The source message is a bound code type.
+  if (HasValueset(datum.GetDescriptor())) {
+    // The source datum is a bound code type.
     // Convert it to a generic code, and add it to the extension.
-    return CopyCode(message, extension->mutable_value()->mutable_code());
+    return CopyCode(datum, extension->mutable_value()->mutable_code());
   }
-  if (IsTypeOrProfileOfCoding(message)) {
-    // The source message is a bound coding type.
+  if (IsTypeOrProfileOfCoding(datum)) {
+    // The source datum is a bound coding type.
     // Convert it to a generic coding, and add it to the extension.
-    return CopyCoding(message, extension->mutable_value()->mutable_coding());
+    return CopyCoding(datum, extension->mutable_value()->mutable_coding());
   }
   return ::tensorflow::errors::InvalidArgument(
       descriptor->full_name(), " is not a valid value type on Extension.");
