@@ -196,7 +196,9 @@ StatusOr<R> ParseJsonToProto(const std::string& json_path) {
   // Some examples are invalid fhir.
   // See:
   // https://gforge.hl7.org/gf/project/fhir/tracker/?action=TrackerItemEdit&tracker_item_id=24933
+  // https://jira.hl7.org/browse/FHIR-26461
   static std::unordered_set<std::string> INVALID_RECORDS{
+      "spec/hl7.fhir.r4.examples/4.0.1/package/Bundle-dataelements.json",
       "spec/hl7.fhir.r4.examples/4.0.1/package/Questionnaire-qs1.json",
       "spec/hl7.fhir.r4.examples/4.0.1/package/"
       "Observation-clinical-gender.json",
@@ -208,11 +210,13 @@ StatusOr<R> ParseJsonToProto(const std::string& json_path) {
   std::string json = ReadFile(json_path);
   absl::TimeZone tz;
   absl::LoadTimeZone(kTimeZoneString, &tz);
+  FHIR_ASSIGN_OR_RETURN(R resource,
+                        JsonFhirStringToProtoWithoutValidating<R>(json, tz));
+
   if (INVALID_RECORDS.find(json_path) == INVALID_RECORDS.end()) {
-    return JsonFhirStringToProto<R>(json, tz);
-  } else {
-    return JsonFhirStringToProtoWithoutValidating<R>(json, tz);
+    FHIR_RETURN_IF_ERROR(ValidateResourceWithFhirPath(resource));
   }
+  return resource;
 }
 
 // proto_path should be relative to //testdata/r4
