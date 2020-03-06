@@ -463,7 +463,7 @@ Status Parser::MergeJsonFhirStringIntoProto(
   Json::Value value;
 
   // TODO: Decide if we want to support value-only JSON
-  if (IsFhirType<stu3::proto::Decimal>(*target) && raw_json != "null") {
+  if (IsDecimal(*target) && raw_json != "null") {
     // Similar to above, if this is a standalone decimal, parse it as a string
     // to avoid changing representation due to precision.
     FHIR_ASSIGN_OR_RETURN(value, internal::ParseJsonValue(absl::StrCat(

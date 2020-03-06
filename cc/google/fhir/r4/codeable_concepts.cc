@@ -21,6 +21,7 @@
 #include "absl/memory/memory.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/codes.h"
+#include "google/fhir/fhir_types.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/r4/core/datatypes.pb.h"
@@ -110,7 +111,7 @@ const bool ForEachInternalCodingHalting(
             return fixed_code_func(field, fixed_code_coding);
           });
       if (stop) return true;
-    } else if (IsProfileOf<Coding>(field->message_type())) {
+    } else if (IsProfileOfCoding(field->message_type())) {
       const bool stop = ForEachMessageHalting<Message>(
           concept, field,
           [&fixed_system_func](const Message& fixed_system_coding) {
@@ -159,7 +160,7 @@ const FieldDescriptor* ProfiledFieldForSystem(const Message& concept,
   const ::google::protobuf::Descriptor* descriptor = concept.GetDescriptor();
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
-    if (IsProfileOf<Coding>(field->message_type()) &&
+    if (IsProfileOfCoding(field->message_type()) &&
         (GetInlinedCodingSystem(field) == system ||
          HasCodeBoundToSystem(field->message_type(), system))) {
       return field;
@@ -258,13 +259,13 @@ StatusOr<const std::string> GetOnlyCodeWithSystem(
 }
 
 Status AddCoding(Message* concept, const Coding& coding) {
-  if (!IsTypeOrProfileOf<r4::core::CodeableConcept>(*concept)) {
+  if (!IsTypeOrProfileOfCodeableConcept(*concept)) {
     return InvalidArgument(
         "Error adding coding: ", concept->GetDescriptor()->full_name(),
         " is not CodeableConcept-like.");
   }
   const std::string& system = coding.system().value();
-  if (IsProfileOf<r4::core::CodeableConcept>(*concept)) {
+  if (IsProfileOfCodeableConcept(*concept)) {
     const FieldDescriptor* profiled_field =
         internal::ProfiledFieldForSystem(*concept, system);
     if (profiled_field != nullptr) {
@@ -285,7 +286,7 @@ Status AddCoding(Message* concept, const Coding& coding) {
           CopyCommonCodingFields(coding, fixed_system_code);
           return Status::OK();
         }
-      } else if (IsProfileOf<Coding>(profiled_field->message_type())) {
+      } else if (IsProfileOfCoding(profiled_field->message_type())) {
         if (!profiled_field->is_repeated() &&
             FieldHasValue(*concept, profiled_field)) {
           return ::tensorflow::errors::AlreadyExists(
@@ -407,14 +408,6 @@ Status CopyCodeableConcept(const Message& source, Message* target) {
   return ForEachCodingWithStatus(source, [&target](const Coding& coding) {
     return AddCoding(target, coding);
   });
-}
-
-bool IsCodeableConceptLike(const ::google::protobuf::Descriptor* descriptor) {
-  return IsTypeOrProfileOf<r4::core::CodeableConcept>(descriptor);
-}
-
-bool IsCodeableConceptLike(const Message& message) {
-  return IsCodeableConceptLike(message.GetDescriptor());
 }
 
 int CodingSize(const ::google::protobuf::Message& concept) {

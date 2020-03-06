@@ -81,6 +81,7 @@ cc_library(
         ":codes",
         ":core_resource_registry",
         ":extensions",
+        ":fhir_types",
         ":proto_util",
         ":resource_validation",
         ":util",

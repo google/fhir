@@ -28,6 +28,7 @@
 #include "google/fhir/codes.h"
 #include "google/fhir/core_resource_registry.h"
 #include "google/fhir/extensions.h"
+#include "google/fhir/fhir_types.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/resource_validation.h"
 #include "google/fhir/status/status.h"
@@ -150,7 +151,7 @@ template <typename ExtensionLike>
 Status UnsliceExtension(const Message& typed_extension,
                         const FieldDescriptor* source_field,
                         ExtensionLike* target) {
-  if (IsProfileOf<ExtensionLike>(typed_extension)) {
+  if (IsProfileOfExtension(typed_extension)) {
     // This a profile on extension, and therefore a complex extension
     return extensions_templates::ConvertToExtension<ExtensionLike>(
         typed_extension, target);
@@ -187,8 +188,8 @@ bool CanHaveSlicing(const FieldDescriptor* field) {
     return true;
   }
   if (IsProfile(field_type)) {
-    if (IsProfileOf<CodeableConceptLike>(field_type) ||
-        IsProfileOf<ExtensionLike>(field_type)) {
+    if (IsProfileOfCodeableConcept(field_type) ||
+        IsProfileOfExtension(field_type)) {
       // Profiles on Extensions and CodeableConcepts are the slices themselves,
       // rather than elements that *have* slices.
       return false;
@@ -287,7 +288,7 @@ Status CopyToProfile(const Message& source, Message* target) {
       return InvalidArgument("Encountered unexpected primitive type on field: ",
                              source_field->full_name());
     }
-    if (IsTypeOrProfileOf<CodeLike>(target_field->message_type())) {
+    if (IsTypeOrProfileOfCode(target_field->message_type())) {
       FHIR_RETURN_IF_ERROR(ForEachMessageWithStatus<Message>(
           source, source_field,
           [&target, &target_field](const Message& source_message) {
@@ -299,7 +300,7 @@ Status CopyToProfile(const Message& source, Message* target) {
 
     // TODO:  Handle type-or-profile-of CodingLike
 
-    if (IsTypeOrProfileOf<CodeableConceptLike>(target_field->message_type())) {
+    if (IsTypeOrProfileOfCodeableConcept(target_field->message_type())) {
       FHIR_RETURN_IF_ERROR(ForEachMessageWithStatus<Message>(
           source, source_field,
           [&target, &target_field](const Message& source_message) {

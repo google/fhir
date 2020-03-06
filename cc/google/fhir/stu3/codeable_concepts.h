@@ -24,6 +24,7 @@
 #include "google/protobuf/message.h"
 #include "absl/types/optional.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/fhir_types.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/annotations.pb.h"
@@ -143,7 +144,7 @@ Status AddCoding(::google::protobuf::Message* concept, const std::string& system
 template <typename CodeableConceptLike>
 Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
                                  const std::string& system) {
-  if (IsProfileOf<stu3::proto::CodeableConcept>(*concept)) {
+  if (IsProfileOfCodeableConcept(*concept)) {
     const ::google::protobuf::FieldDescriptor* profiled_field =
         internal::ProfiledFieldForSystem(*concept, system);
     if (profiled_field != nullptr) {
@@ -172,10 +173,6 @@ Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
 
 Status CopyCodeableConcept(const ::google::protobuf::Message& source,
                            ::google::protobuf::Message* target);
-
-bool IsCodeableConceptLike(const ::google::protobuf::Descriptor* descriptor);
-
-bool IsCodeableConceptLike(const ::google::protobuf::Message& message);
 
 int CodingSize(const ::google::protobuf::Message& concept);
 

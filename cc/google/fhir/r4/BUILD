@@ -55,6 +55,7 @@ cc_library(
     deps = [
         "//cc/google/fhir:annotations",
         "//cc/google/fhir:codes",
+        "//cc/google/fhir:fhir_types",
         "//cc/google/fhir:proto_util",
         "//cc/google/fhir/status:statusor",
         "//proto:annotations_cc_proto",

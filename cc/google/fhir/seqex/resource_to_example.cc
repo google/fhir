@@ -256,7 +256,8 @@ void MessageToExample(const google::protobuf::Message& message, const std::strin
           String s;
           s.CopyFrom(child);
           if (absl::GetFlag(FLAGS_tokenize_code_text_features) &&
-              field->name() == "text" && IsCodeableConceptLike(message)) {
+              field->name() == "text" &&
+              IsTypeOrProfileOfCodeableConcept(message)) {
             AddTokensToExample(name, s.value(), tokenizer, example,
                                enable_attribution);
           } else {
@@ -304,7 +305,8 @@ void MessageToExample(const google::protobuf::Message& message, const std::strin
         } else if (IsTypeOrProfileOfCoding(field->message_type())) {
           // Codings are emitted with the system if we know it, as raw codes
           // otherwise.
-          bool use_name_in_feature_name = IsCodeableConceptLike(message);
+          bool use_name_in_feature_name =
+              IsTypeOrProfileOfCodeableConcept(message);
           Coding coding;
           auto status = CopyCoding(child, &coding);
           if (!status.ok() &&

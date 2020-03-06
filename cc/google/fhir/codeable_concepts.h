@@ -124,10 +124,6 @@ Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
 Status CopyCodeableConcept(const ::google::protobuf::Message& source,
                            ::google::protobuf::Message* target);
 
-bool IsCodeableConceptLike(const ::google::protobuf::Descriptor* descriptor);
-
-bool IsCodeableConceptLike(const ::google::protobuf::Message& message);
-
 int CodingSize(const ::google::protobuf::Message& concept);
 
 }  // namespace fhir

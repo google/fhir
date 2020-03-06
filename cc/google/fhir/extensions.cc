@@ -65,7 +65,7 @@ const std::vector<const FieldDescriptor*> FindValueFields(
 namespace extensions_lib {
 
 Status ValidateExtension(const Descriptor* descriptor) {
-  if (!IsProfileOf<stu3::proto::Extension>(descriptor)) {
+  if (!IsProfileOfExtension(descriptor)) {
     return InvalidArgument(descriptor->full_name(),
                            " is not a FHIR extension type");
   }

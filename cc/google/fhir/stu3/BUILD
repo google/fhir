@@ -9,6 +9,7 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         "//cc/google/fhir:annotations",
+        "//cc/google/fhir:fhir_types",
         "//cc/google/fhir:proto_util",
         "//cc/google/fhir/status:statusor",
         "//proto:annotations_cc_proto",

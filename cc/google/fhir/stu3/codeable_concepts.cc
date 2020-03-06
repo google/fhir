@@ -21,6 +21,7 @@
 #include "absl/memory/memory.h"
 #include "absl/strings/match.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/fhir_types.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/annotations.pb.h"
@@ -260,13 +261,13 @@ StatusOr<const std::string> GetOnlyCodeWithSystem(
 }
 
 Status AddCoding(Message* concept, const stu3::proto::Coding& coding) {
-  if (!IsTypeOrProfileOf<stu3::proto::CodeableConcept>(*concept)) {
+  if (!IsTypeOrProfileOfCodeableConcept(*concept)) {
     return InvalidArgument(
         "Error adding coding: ", concept->GetDescriptor()->full_name(),
         " is not CodeableConcept-like.");
   }
   const std::string& system = coding.system().value();
-  if (IsProfileOf<stu3::proto::CodeableConcept>(*concept)) {
+  if (IsProfileOfCodeableConcept(*concept)) {
     const FieldDescriptor* profiled_field =
         internal::ProfiledFieldForSystem(*concept, system);
     if (profiled_field != nullptr) {
@@ -416,14 +417,6 @@ Status CopyCodeableConcept(const Message& source, Message* target) {
                                  [&target](const stu3::proto::Coding& coding) {
                                    return AddCoding(target, coding);
                                  });
-}
-
-bool IsCodeableConceptLike(const ::google::protobuf::Descriptor* descriptor) {
-  return IsTypeOrProfileOf<stu3::proto::CodeableConcept>(descriptor);
-}
-
-bool IsCodeableConceptLike(const Message& message) {
-  return IsCodeableConceptLike(message.GetDescriptor());
 }
 
 int CodingSize(const ::google::protobuf::Message& concept) {

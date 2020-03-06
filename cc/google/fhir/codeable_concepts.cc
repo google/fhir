@@ -118,22 +118,6 @@ Status CopyCodeableConcept(const ::google::protobuf::Message& source,
                                                  target);
 }
 
-bool IsCodeableConceptLike(const ::google::protobuf::Descriptor* descriptor) {
-  switch (google::fhir::GetFhirVersion(descriptor)) {
-    case google::fhir::proto::STU3:
-      return stu3::IsCodeableConceptLike(descriptor);
-    case google::fhir::proto::R4: {
-      return r4::IsCodeableConceptLike(descriptor);
-    }
-    default:
-      return false;
-  }
-}
-
-bool IsCodeableConceptLike(const ::google::protobuf::Message& message) {
-  return IsCodeableConceptLike(message.GetDescriptor());
-}
-
 int CodingSize(const ::google::protobuf::Message& concept) {
   switch (google::fhir::GetFhirVersion(concept)) {
     case google::fhir::proto::STU3:
