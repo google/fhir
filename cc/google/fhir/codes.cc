@@ -120,7 +120,7 @@ StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
     }
   }
 
-  return InvalidArgument("Failed to convert ", code_string, " to ",
+  return InvalidArgument("Failed to convert `", code_string, "` to ",
                          target_enum_type->full_name(),
                          ": No matching enum found.");
 }
