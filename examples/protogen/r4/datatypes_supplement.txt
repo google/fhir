@@ -34,7 +34,7 @@ message Extension {
   message ValueX {
     option (.google.fhir.proto.is_choice_type) = true;
 
-    oneof value {
+    oneof choice {
       Base64Binary base64_binary = 1;
       Boolean boolean = 2;
       Canonical canonical = 3;

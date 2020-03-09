@@ -515,9 +515,13 @@ public class ProtoGenerator {
             .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource"));
     if (packageInfo.getProtoPackage().equals(fhirVersion.coreProtoPackage)) {
       // When generating contained resources for the core type (resources.proto),
-      // just iterate through all the non-abstract resources, assigning tag numbers as you go
+      // iterate through all the non-abstract resources sorted alphebetically, assigning tag numbers
+      // as you go
+      TreeSet<DescriptorProto> sortedResources =
+          new TreeSet<>((a, b) -> a.getName().compareTo(b.getName()));
+      sortedResources.addAll(resourceTypes);
       int tagNumber = 1;
-      for (DescriptorProto type : resourceTypes) {
+      for (DescriptorProto type : sortedResources) {
         if (AnnotationUtils.isResource(type)
             && !type.getOptions().getExtension(Annotations.isAbstractType)) {
           contained.addField(
@@ -1242,15 +1246,16 @@ public class ProtoGenerator {
     return packageString + typeName;
   }
 
-  private static String legacyRenaming(String typeName, String packageString) {
-    return packageString.contains(".")
-            && (packageString.startsWith(typeName + ".")
-                || packageString.contains("." + typeName + ".")
-                || typeName.equals("Timing")
-                || typeName.equals("Age"))
-        ? typeName + "Type"
-        : typeName;
-  }
+  // Commented out until STU3 generation is re-enabled.
+  // private static String legacyRenaming(String typeName, String packageString) {
+  //   return packageString.contains(".")
+  //           && (packageString.startsWith(typeName + ".")
+  //               || packageString.contains("." + typeName + ".")
+  //               || typeName.equals("Timing")
+  //               || typeName.equals("Age"))
+  //       ? typeName + "Type"
+  //       : typeName;
+  // }
 
   /**
    * Gets the field type and package of a potentially complex element. This handles choice types,
