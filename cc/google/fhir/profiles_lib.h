@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GOOGLE_FHIR_STU3_PROFILES_LIB_H_
-#define GOOGLE_FHIR_STU3_PROFILES_LIB_H_
+#ifndef GOOGLE_FHIR_PROFILES_LIB_H_
+#define GOOGLE_FHIR_PROFILES_LIB_H_
 
 #include <sstream>
 #include <string>
@@ -378,4 +378,4 @@ Status ConvertToProfileInternal(const Message& source, Message* target) {
 }  // namespace fhir
 }  // namespace google
 
-#endif  // GOOGLE_FHIR_STU3_PROFILES_LIB_H_
+#endif  // GOOGLE_FHIR_PROFILES_LIB_H_
