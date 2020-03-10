@@ -13356,7 +13356,7 @@ message OperationDefinition {
     (.google.fhir.proto.fhir_path_constraint) =
         "type.exists() or part.exists()",
     (.google.fhir.proto.fhir_path_constraint) =
-        "searchType implies type = 'string'"
+        "searchType.exists() implies type = 'string'"
   ];
 
   // Define overloaded variants for when  generating code
@@ -16637,9 +16637,7 @@ message RiskAssessment {
     // Explanation of prediction
     String rationale = 9;
   }
-  repeated Prediction prediction = 22
-      [(.google.fhir.proto.fhir_path_constraint) =
-           "probability is decimal implies probability.as(decimal) <= 100"];
+  repeated Prediction prediction = 22;
 
   // How to reduce risk
   String mitigation = 23;
