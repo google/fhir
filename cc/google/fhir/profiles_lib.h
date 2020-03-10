@@ -177,16 +177,6 @@ bool CanHaveSlicing(const FieldDescriptor* field) {
   // 3) Contained resources of profiled bundles.  These are basically "profiles"
   //    of the base contained resources, but are not actually fhir elements.
   const Descriptor* field_type = field->message_type();
-  // TODO: Use an annotation for this.
-  if (field->message_type()->name() == "ContainedResource" &&
-      (field->message_type()->full_name() !=
-           "google.fhir.stu3.proto.ContainedResource" &&
-       field->message_type()->full_name() !=
-           "google.fhir.r4.core.ContainedResource" &&
-       field->message_type()->full_name() !=
-           "google.fhir.r4.proto.ContainedResource")) {
-    return true;
-  }
   if (IsProfile(field_type)) {
     if (IsProfileOfCodeableConcept(field_type) ||
         IsProfileOfExtension(field_type)) {

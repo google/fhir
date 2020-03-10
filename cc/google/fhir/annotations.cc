@@ -43,7 +43,16 @@ const bool IsProfileOf(const ::google::protobuf::Descriptor* descriptor,
 }
 
 const bool IsProfile(const ::google::protobuf::Descriptor* descriptor) {
-  return descriptor->options().ExtensionSize(proto::fhir_profile_base) > 0;
+  // Note ContainedResource is not a true FHIR type, an as such, profiles of
+  // contained resources don't have a fhir_profile_base
+  // TODO: Use an annotation for this.
+  return descriptor->options().ExtensionSize(proto::fhir_profile_base) > 0 ||
+         (descriptor->name() == "ContainedResource" &&
+          (descriptor->full_name() !=
+               "google.fhir.stu3.proto.ContainedResource" &&
+           descriptor->full_name() != "google.fhir.r4.core.ContainedResource" &&
+           descriptor->full_name() !=
+               "google.fhir.r5.proto.ContainedResource"));
 }
 
 const bool IsChoiceTypeContainer(const ::google::protobuf::Descriptor* descriptor) {
