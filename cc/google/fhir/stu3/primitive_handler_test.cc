@@ -310,6 +310,8 @@ TEST(PrimitiveValidationTestProto, StringCode) {
 HANDLER_TYPE_TEST(String, "mandalorian");
 HANDLER_TYPE_TEST(Boolean, true);
 HANDLER_TYPE_TEST(Integer, 87);
+HANDLER_TYPE_TEST(UnsignedInt, 86);
+HANDLER_TYPE_TEST(PositiveInt, 85);
 HANDLER_TYPE_TEST(Decimal, "4.7");
 
 #undef HANDLER_TYPE_TEST

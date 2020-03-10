@@ -67,6 +67,9 @@ bool IsString(const ::google::protobuf::Descriptor* descriptor);
 bool IsInteger(const ::google::protobuf::Message& message);
 bool IsInteger(const ::google::protobuf::Descriptor* descriptor);
 
+bool IsPositiveInt(const ::google::protobuf::Message& message);
+bool IsPositiveInt(const ::google::protobuf::Descriptor* descriptor);
+
 bool IsUnsignedInt(const ::google::protobuf::Message& message);
 bool IsUnsignedInt(const ::google::protobuf::Descriptor* descriptor);
 

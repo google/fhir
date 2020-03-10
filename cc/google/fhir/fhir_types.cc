@@ -96,6 +96,8 @@ FHIR_SIMPLE_TYPE_CHECK(Integer,
                        "http://hl7.org/fhir/StructureDefinition/integer");
 FHIR_SIMPLE_TYPE_CHECK(UnsignedInt,
                        "http://hl7.org/fhir/StructureDefinition/unsignedInt");
+FHIR_SIMPLE_TYPE_CHECK(PositiveInt,
+                       "http://hl7.org/fhir/StructureDefinition/positiveInt");
 FHIR_SIMPLE_TYPE_CHECK(Decimal,
                        "http://hl7.org/fhir/StructureDefinition/decimal");
 FHIR_SIMPLE_TYPE_CHECK(DateTime,

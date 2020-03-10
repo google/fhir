@@ -96,6 +96,20 @@ class PrimitiveHandler {
 
   virtual const ::google::protobuf::Descriptor* IntegerDescriptor() const = 0;
 
+  virtual StatusOr<int> GetUnsignedIntValue(
+      const ::google::protobuf::Message& primitive) const = 0;
+
+  virtual ::google::protobuf::Message* NewUnsignedInt(const int value) const = 0;
+
+  virtual const ::google::protobuf::Descriptor* UnsignedIntDescriptor() const = 0;
+
+  virtual StatusOr<int> GetPositiveIntValue(
+      const ::google::protobuf::Message& primitive) const = 0;
+
+  virtual ::google::protobuf::Message* NewPositiveInt(const int value) const = 0;
+
+  virtual const ::google::protobuf::Descriptor* PositiveIntDescriptor() const = 0;
+
   virtual StatusOr<std::string> GetDecimalValue(
       const ::google::protobuf::Message& primitive) const = 0;
 
@@ -200,6 +214,8 @@ template <typename BundleType,
           typename ExtensionType = EXTENSION_TYPE(BundleType),
           typename StringType = FHIR_DATATYPE(BundleType, string_value),
           typename IntegerType = FHIR_DATATYPE(BundleType, integer),
+          typename PositiveIntType = FHIR_DATATYPE(BundleType, positive_int),
+          typename UnsignedIntType = FHIR_DATATYPE(BundleType, unsigned_int),
           typename DecimalType = FHIR_DATATYPE(BundleType, decimal),
           typename BooleanType = FHIR_DATATYPE(BundleType, boolean),
           typename ReferenceType = FHIR_DATATYPE(BundleType, reference)>
@@ -211,6 +227,8 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
   typedef StringType String;
   typedef BooleanType Boolean;
   typedef IntegerType Integer;
+  typedef PositiveIntType PositiveInt;
+  typedef UnsignedIntType UnsignedInt;
   typedef DecimalType Decimal;
   typedef ReferenceType Reference;
 
@@ -275,6 +293,38 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 
   const ::google::protobuf::Descriptor* IntegerDescriptor() const override {
     return Integer::GetDescriptor();
+  }
+
+  StatusOr<int> GetPositiveIntValue(
+      const ::google::protobuf::Message& primitive) const override {
+    FHIR_RETURN_IF_ERROR(CheckType<PositiveInt>(primitive));
+    return dynamic_cast<const PositiveInt&>(primitive).value();
+  }
+
+  ::google::protobuf::Message* NewPositiveInt(const int value) const override {
+    PositiveInt* msg = new PositiveInt();
+    msg->set_value(value);
+    return msg;
+  }
+
+  const ::google::protobuf::Descriptor* PositiveIntDescriptor() const override {
+    return PositiveInt::GetDescriptor();
+  }
+
+  StatusOr<int> GetUnsignedIntValue(
+      const ::google::protobuf::Message& primitive) const override {
+    FHIR_RETURN_IF_ERROR(CheckType<UnsignedInt>(primitive));
+    return dynamic_cast<const UnsignedInt&>(primitive).value();
+  }
+
+  ::google::protobuf::Message* NewUnsignedInt(const int value) const override {
+    UnsignedInt* msg = new UnsignedInt();
+    msg->set_value(value);
+    return msg;
+  }
+
+  const ::google::protobuf::Descriptor* UnsignedIntDescriptor() const override {
+    return UnsignedInt::GetDescriptor();
   }
 
   StatusOr<std::string> GetDecimalValue(
