@@ -313,6 +313,119 @@ HANDLER_TYPE_TEST(Decimal, "4.7");
 
 #undef HANDLER_TYPE_TEST
 
+TEST(PrimitiveHandlerTest, DateTimeGetters) {
+  DateTime date_time;
+  date_time.set_value_us(5000);
+  date_time.set_timezone(kTimeZoneString);
+  date_time.set_precision(DateTime::DAY);
+
+  StatusOr<absl::Time> extracted_time =
+      R4PrimitiveHandler::GetInstance()->GetDateTimeValue(date_time);
+  TF_ASSERT_OK(extracted_time.status());
+  ASSERT_EQ(extracted_time.ValueOrDie(), absl::FromUnixMicros(5000));
+
+  StatusOr<absl::TimeZone> extracted_time_zone =
+      R4PrimitiveHandler::GetInstance()->GetDateTimeZone(date_time);
+  TF_ASSERT_OK(extracted_time_zone.status());
+  ASSERT_EQ(extracted_time_zone.ValueOrDie(), kTimeZone);
+
+  StatusOr<DateTimePrecision> extracted_precision =
+      R4PrimitiveHandler::GetInstance()->GetDateTimePrecision(date_time);
+  TF_ASSERT_OK(extracted_precision.status());
+  ASSERT_EQ(extracted_precision.ValueOrDie(), DateTimePrecision::kDay);
+}
+
+TEST(PrimitiveHandlerTest, GetDateTimeValue) {
+  DateTime date_time;
+  date_time.set_value_us(5000);
+
+  StatusOr<absl::Time> extracted_time =
+      R4PrimitiveHandler::GetInstance()->GetDateTimeValue(date_time);
+  TF_ASSERT_OK(extracted_time.status());
+  ASSERT_EQ(extracted_time.ValueOrDie(), absl::FromUnixMicros(5000));
+
+  ASSERT_NE(::tensorflow::Status::OK(),
+            R4PrimitiveHandler::GetInstance()
+                ->GetDateTimeValue(::google::protobuf::Any())
+                .status());
+}
+
+TEST(PrimitiveHandlerTest, GetDateTimeZone) {
+  DateTime date_time;
+  date_time.set_timezone(kTimeZoneString);
+
+  StatusOr<absl::TimeZone> extracted_time_zone =
+      R4PrimitiveHandler::GetInstance()->GetDateTimeZone(date_time);
+  TF_ASSERT_OK(extracted_time_zone.status());
+  ASSERT_EQ(extracted_time_zone.ValueOrDie(), kTimeZone);
+
+  ASSERT_NE(::tensorflow::Status::OK(),
+            R4PrimitiveHandler::GetInstance()
+                ->GetDateTimeZone(::google::protobuf::Any())
+                .status());
+}
+
+TEST(PrimitiveHandlerTest, GetDateTimePrecision) {
+  DateTime date_time;
+  date_time.set_precision(DateTime::DAY);
+
+  StatusOr<DateTimePrecision> extracted_precision =
+      R4PrimitiveHandler::GetInstance()->GetDateTimePrecision(date_time);
+  TF_ASSERT_OK(extracted_precision.status());
+  ASSERT_EQ(extracted_precision.ValueOrDie(), DateTimePrecision::kDay);
+
+  ASSERT_NE(::tensorflow::Status::OK(),
+            R4PrimitiveHandler::GetInstance()->GetDateTimePrecision(
+                ::google::protobuf::Any()).status());
+}
+
+TEST(PrimitiveHandlerTest, GetSimpleQuantityValue) {
+  SimpleQuantity simple_quantity;
+  simple_quantity.mutable_value()->set_value("1.5");
+
+  StatusOr<std::string> extracted_value =
+      R4PrimitiveHandler::GetInstance()->GetSimpleQuantityValue(
+          simple_quantity);
+  TF_ASSERT_OK(extracted_value.status());
+  ASSERT_EQ(extracted_value.ValueOrDie(), "1.5");
+
+  ASSERT_NE(::tensorflow::Status::OK(),
+            R4PrimitiveHandler::GetInstance()
+                ->GetSimpleQuantityValue(::google::protobuf::Any())
+                .status());
+}
+
+TEST(PrimitiveHandlerTest, GetSimpleQuantityCode) {
+  SimpleQuantity simple_quantity;
+  simple_quantity.mutable_code()->set_value("12345");
+
+  StatusOr<std::string> extracted_code =
+      R4PrimitiveHandler::GetInstance()->GetSimpleQuantityCode(simple_quantity);
+  TF_ASSERT_OK(extracted_code.status());
+  ASSERT_EQ(extracted_code.ValueOrDie(), "12345");
+
+  ASSERT_NE(::tensorflow::Status::OK(),
+            R4PrimitiveHandler::GetInstance()
+                ->GetSimpleQuantityCode(::google::protobuf::Any())
+                .status());
+}
+
+TEST(PrimitiveHandlerTest, GetSimpleQuantitySystem) {
+  SimpleQuantity simple_quantity;
+  simple_quantity.mutable_system()->set_value("http://example.org");
+
+  StatusOr<std::string> extracted_system =
+      R4PrimitiveHandler::GetInstance()->GetSimpleQuantitySystem(
+          simple_quantity);
+  TF_ASSERT_OK(extracted_system.status());
+  ASSERT_EQ(extracted_system.ValueOrDie(), "http://example.org");
+
+  ASSERT_NE(::tensorflow::Status::OK(),
+            R4PrimitiveHandler::GetInstance()
+                ->GetSimpleQuantitySystem(::google::protobuf::Any())
+                .status());
+}
+
 }  // namespace
 
 }  // namespace r4

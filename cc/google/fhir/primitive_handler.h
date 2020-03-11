@@ -42,6 +42,18 @@ struct JsonPrimitive {
   const bool is_non_null() const { return value != "null"; }
 };
 
+// Version agnostic DateTimePrecision enum.
+// See http://hl7.org/fhir/StructureDefinition/dateTime
+enum class DateTimePrecision {
+  kUnspecified = 0,
+  kYear = 1,
+  kMonth = 2,
+  kDay = 3,
+  kSecond = 4,
+  kMillisecond = 5,
+  kMicrosecond = 6,
+};
+
 // Class that abstracts direct interaction with primitives.  By delegating
 // primitive handling to an instance of this class, core libraries can be
 // written without depending on any specific version of FHIR. This allows for
@@ -116,6 +128,24 @@ class PrimitiveHandler {
   virtual ::google::protobuf::Message* NewDecimal(const std::string value) const = 0;
 
   virtual const ::google::protobuf::Descriptor* DecimalDescriptor() const = 0;
+
+  virtual StatusOr<std::string> GetSimpleQuantityCode(
+      const ::google::protobuf::Message& simple_quantity) const = 0;
+
+  virtual StatusOr<std::string> GetSimpleQuantitySystem(
+      const ::google::protobuf::Message& simple_quantity) const = 0;
+
+  virtual StatusOr<std::string> GetSimpleQuantityValue(
+      const ::google::protobuf::Message& simple_quantity) const = 0;
+
+  virtual StatusOr<absl::Time> GetDateTimeValue(
+      const ::google::protobuf::Message& date_time) const = 0;
+
+  virtual StatusOr<absl::TimeZone> GetDateTimeZone(
+      const ::google::protobuf::Message& date_time) const = 0;
+
+  virtual StatusOr<DateTimePrecision> GetDateTimePrecision(
+      const ::google::protobuf::Message& date_time) const = 0;
 
  protected:
   explicit PrimitiveHandler(proto::FhirVersion version) : version_(version) {}
@@ -216,9 +246,12 @@ template <typename BundleType,
           typename IntegerType = FHIR_DATATYPE(BundleType, integer),
           typename PositiveIntType = FHIR_DATATYPE(BundleType, positive_int),
           typename UnsignedIntType = FHIR_DATATYPE(BundleType, unsigned_int),
+          typename DateTimeType = FHIR_DATATYPE(BundleType, date_time),
           typename DecimalType = FHIR_DATATYPE(BundleType, decimal),
           typename BooleanType = FHIR_DATATYPE(BundleType, boolean),
-          typename ReferenceType = FHIR_DATATYPE(BundleType, reference)>
+          typename ReferenceType = FHIR_DATATYPE(BundleType, reference),
+          typename SimpleQuantityType =
+              FHIR_DATATYPE(BundleType, sampled_data().origin)>
 class PrimitiveHandlerTemplate : public PrimitiveHandler {
  public:
   typedef BundleType Bundle;
@@ -229,8 +262,10 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
   typedef IntegerType Integer;
   typedef PositiveIntType PositiveInt;
   typedef UnsignedIntType UnsignedInt;
+  typedef DateTimeType DateTime;
   typedef DecimalType Decimal;
   typedef ReferenceType Reference;
+  typedef SimpleQuantityType SimpleQuantity;
 
   Status ValidateReferenceField(const Message& parent,
                                 const FieldDescriptor* field) const override {
@@ -341,6 +376,64 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 
   const ::google::protobuf::Descriptor* DecimalDescriptor() const override {
     return Decimal::GetDescriptor();
+  }
+
+  StatusOr<std::string> GetSimpleQuantityCode(
+      const ::google::protobuf::Message& simple_quantity) const override {
+    FHIR_RETURN_IF_ERROR(CheckType<SimpleQuantity>(simple_quantity));
+    return dynamic_cast<const SimpleQuantity&>(simple_quantity).code().value();
+  }
+
+  StatusOr<std::string> GetSimpleQuantitySystem(
+      const ::google::protobuf::Message& simple_quantity) const override {
+    FHIR_RETURN_IF_ERROR(CheckType<SimpleQuantity>(simple_quantity));
+    return dynamic_cast<const SimpleQuantity&>(simple_quantity).system().value();
+  }
+
+  StatusOr<std::string> GetSimpleQuantityValue(
+      const ::google::protobuf::Message& simple_quantity) const override {
+    FHIR_RETURN_IF_ERROR(CheckType<SimpleQuantity>(simple_quantity));
+    return dynamic_cast<const SimpleQuantity&>(simple_quantity).value().value();
+  }
+
+  StatusOr<absl::Time> GetDateTimeValue(
+      const ::google::protobuf::Message& date_time) const override {
+    FHIR_RETURN_IF_ERROR(CheckType<DateTime>(date_time));
+    return absl::FromUnixMicros(
+        dynamic_cast<const DateTime&>(date_time).value_us());
+  }
+
+  StatusOr<absl::TimeZone> GetDateTimeZone(
+      const ::google::protobuf::Message& date_time) const override {
+    FHIR_RETURN_IF_ERROR(CheckType<DateTime>(date_time));
+    return BuildTimeZoneFromString(
+        dynamic_cast<const DateTime&>(date_time).timezone());
+  }
+
+  StatusOr<DateTimePrecision> GetDateTimePrecision(
+      const ::google::protobuf::Message& date_time) const override {
+    FHIR_RETURN_IF_ERROR(CheckType<DateTime>(date_time));
+    switch (dynamic_cast<const DateTime&>(date_time).precision()) {
+      case DateTime::YEAR:
+        return DateTimePrecision::kYear;
+
+      case DateTime::MONTH:
+        return DateTimePrecision::kMonth;
+
+      case DateTime::DAY:
+        return DateTimePrecision::kDay;
+
+      case DateTime::SECOND:
+        return DateTimePrecision::kSecond;
+
+      case DateTime::MILLISECOND:
+        return DateTimePrecision::kMillisecond;
+
+      case DateTime::MICROSECOND:
+        return DateTimePrecision::kMicrosecond;
+    }
+
+    return DateTimePrecision::kUnspecified;
   }
 
  protected:
