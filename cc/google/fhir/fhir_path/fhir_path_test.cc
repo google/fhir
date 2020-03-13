@@ -248,12 +248,6 @@ StatusOr<EvaluationResult> Evaluate(
   return Evaluate(test_encounter, expression);
 }
 
-StatusOr<bool> EvaluateBoolExpressionWithStatus(const std::string& expression) {
-  FHIR_ASSIGN_OR_RETURN(EvaluationResult result, Evaluate(expression));
-
-  return result.GetBoolean();
-}
-
 DateTime ToDateTime(const absl::CivilSecond civil_time,
                     const absl::TimeZone zone,
                     const DateTime::Precision& precision) {
@@ -325,12 +319,9 @@ FHIR_VERSION_TEST(FhirPathTest, TestGetDirectChild, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestGetGrandchild, {
-  auto expr =
-      CompiledExpression::Compile(Encounter::descriptor(), "period.start")
-          .ValueOrDie();
-
   Encounter test_encounter = ValidEncounter<Encounter>();
-  EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
+  EvaluationResult result =
+      Evaluate(test_encounter, "period.start").ValueOrDie();
 
   EXPECT_THAT(result.GetMessages(), UnorderedElementsAreArray({EqualsProto(
                                         test_encounter.period().start())}));
@@ -345,32 +336,23 @@ FHIR_VERSION_TEST(FhirPathTest, TestFieldExists, {
   Encounter test_encounter = ValidEncounter<Encounter>();
   test_encounter.mutable_class_value()->mutable_display()->set_value("foo");
 
-  auto root_expr =
-      CompiledExpression::Compile(Encounter::descriptor(), "period")
-          .ValueOrDie();
   EvaluationResult root_result =
-      root_expr.Evaluate(test_encounter).ValueOrDie();
+      Evaluate(test_encounter, "period").ValueOrDie();
   EXPECT_THAT(
       root_result.GetMessages(),
       UnorderedElementsAreArray({EqualsProto(test_encounter.period())}));
 
   // Tests the conversion from camelCase to snake_case
-  auto camel_case_expr =
-      CompiledExpression::Compile(Encounter::descriptor(), "statusHistory")
-          .ValueOrDie();
   EvaluationResult camel_case_result =
-      camel_case_expr.Evaluate(test_encounter).ValueOrDie();
+      Evaluate(test_encounter, "statusHistory").ValueOrDie();
   EXPECT_THAT(camel_case_result.GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(test_encounter.status_history(0))}));
 
   // Test that the json_name field annotation is used when searching for a
   // field.
-  auto json_name_alias_expr =
-      CompiledExpression::Compile(Encounter::descriptor(), "class")
-          .ValueOrDie();
   EvaluationResult json_name_alias_result =
-      json_name_alias_expr.Evaluate(test_encounter).ValueOrDie();
+      Evaluate(test_encounter, "class").ValueOrDie();
   EXPECT_THAT(
       json_name_alias_result.GetMessages(),
       UnorderedElementsAreArray({EqualsProto(test_encounter.class_value())}));
@@ -445,15 +427,13 @@ FHIR_VERSION_TEST(FhirPathTest, TestLogicalValueFieldExists, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionHasValueNegation, {
-  auto expr = CompiledExpression::Compile(Encounter::descriptor(),
-                                          "period.start.hasValue().not()")
-                  .ValueOrDie();
-
   Encounter test_encounter = ValidEncounter<Encounter>();
-  EXPECT_THAT(expr.Evaluate(test_encounter), EvalsToFalse());
+  EXPECT_THAT(Evaluate(test_encounter, "period.start.hasValue().not()"),
+              EvalsToFalse());
 
   test_encounter.mutable_period()->clear_start();
-  EXPECT_THAT(expr.Evaluate(test_encounter), EvalsToTrue());
+  EXPECT_THAT(Evaluate(test_encounter, "period.start.hasValue().not()"),
+              EvalsToTrue());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionChildren, {
@@ -483,10 +463,9 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionChildren, {
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionContains, {
   // Wrong number and/or types of arguments.
-  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("'foo'.contains()").ok());
-  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("'foo'.contains(1)").ok());
-  EXPECT_FALSE(
-      EvaluateBoolExpressionWithStatus("'foo'.contains('a', 'b')").ok());
+  EXPECT_FALSE(Evaluate("'foo'.contains()").ok());
+  EXPECT_FALSE(Evaluate("'foo'.contains(1)").ok());
+  EXPECT_FALSE(Evaluate("'foo'.contains('a', 'b')").ok());
 
   EXPECT_THAT(Evaluate("'foo'.contains('')"), EvalsToTrue());
   EXPECT_THAT(Evaluate("'foo'.contains('o')"), EvalsToTrue());
@@ -500,23 +479,20 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionContains, {
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionStartsWith, {
   // Missing argument
-  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("'foo'.startsWith()").ok());
+  EXPECT_FALSE(Evaluate("'foo'.startsWith()").ok());
 
   // Too many arguments
-  EXPECT_FALSE(
-      EvaluateBoolExpressionWithStatus("'foo'.startsWith('foo', 'foo')").ok());
+  EXPECT_FALSE(Evaluate("'foo'.startsWith('foo', 'foo')").ok());
 
   // Wrong argument type
-  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("'foo'.startsWith(1)").ok());
-  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("'foo'.startsWith(1.0)").ok());
-  EXPECT_FALSE(EvaluateBoolExpressionWithStatus(
-                   "'foo'.startsWith(@2015-02-04T14:34:28Z)")
-                   .ok());
-  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("'foo'.startsWith(true)").ok());
+  EXPECT_FALSE(Evaluate("'foo'.startsWith(1)").ok());
+  EXPECT_FALSE(Evaluate("'foo'.startsWith(1.0)").ok());
+  EXPECT_FALSE(Evaluate("'foo'.startsWith(@2015-02-04T14:34:28Z)").ok());
+  EXPECT_FALSE(Evaluate("'foo'.startsWith(true)").ok());
 
   // Function does not exist for non-string type
-  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("1.startsWith(1)").ok());
-  EXPECT_FALSE(EvaluateBoolExpressionWithStatus("1.startsWith('1')").ok());
+  EXPECT_FALSE(Evaluate("1.startsWith(1)").ok());
+  EXPECT_FALSE(Evaluate("1.startsWith('1')").ok());
 
   // Basic cases
   EXPECT_THAT(Evaluate("''.startsWith('')"), EvalsToTrue());
@@ -941,11 +917,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestWhere, {
   Code code_abc = ParseFromString<Code>("value: 'abc'");
   Code code_ghi = ParseFromString<Code>("value: 'ghi'");
   EvaluationResult evaluation_result =
-      CompiledExpression::Compile(CodeableConcept::descriptor(),
-                                  "coding.where(system = 'foo').code")
-          .ValueOrDie()
-          .Evaluate(observation)
-          .ValueOrDie();
+      Evaluate(observation, "coding.where(system = 'foo').code").ValueOrDie();
   EXPECT_THAT(evaluation_result.GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(code_abc), EqualsProto(code_ghi)}));
@@ -1140,11 +1112,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestBooleanLiteral, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestIntegerLiteral, {
-  auto expr =
-      CompiledExpression::Compile(Encounter::descriptor(), "42").ValueOrDie();
-
-  Encounter test_encounter = ValidEncounter<Encounter>();
-  EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
+  EvaluationResult result = Evaluate("42").ValueOrDie();
   EXPECT_EQ(42, result.GetInteger().ValueOrDie());
 
   // Ensure evaluation of an out-of-range literal fails.
@@ -1285,12 +1253,7 @@ TEST(FhirPathTest, TestIntegerLikeComparison) {
 }
 
 FHIR_VERSION_TEST(FhirPathTest, TestDecimalLiteral, {
-  auto expr =
-      CompiledExpression::Compile(Encounter::descriptor(), "1.25").ValueOrDie();
-
-  Encounter test_encounter = ValidEncounter<Encounter>();
-  EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
-
+  EvaluationResult result = Evaluate("1.25").ValueOrDie();
   EXPECT_EQ("1.25", result.GetDecimal().ValueOrDie());
 })
 
