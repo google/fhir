@@ -285,33 +285,12 @@ TEST(PrimitiveValidationTestProto, StringCode) {
   TestProtoValidation<Binary::ContentTypeCode>();
 }
 
-#define HANDLER_TYPE_TEST(type, value)                                       \
-  TEST(HandlerTypeTest, type) {                                              \
-    ::google::protobuf::Message* msg =                                                 \
-        R4PrimitiveHandler::GetInstance()->New##type(value);                 \
-    ASSERT_EQ(msg->GetDescriptor()->name(), #type);                          \
-    auto extracted_status =                                                  \
-        R4PrimitiveHandler::GetInstance()->Get##type##Value(*msg);           \
-    TF_ASSERT_OK(extracted_status.status());                                 \
-    ASSERT_EQ(extracted_status.ValueOrDie(), value);                         \
-    ASSERT_EQ(R4PrimitiveHandler::GetInstance()->type##Descriptor()->name(), \
-              #type);                                                        \
-    delete msg;                                                              \
-                                                                             \
-    ::google::protobuf::Any any;                                             \
-    ASSERT_NE(::tensorflow::Status::OK(),                                    \
-              R4PrimitiveHandler::GetInstance()->Get##type##Value(any)       \
-                  .status());                                                \
-  }
-
-HANDLER_TYPE_TEST(String, "mandalorian");
-HANDLER_TYPE_TEST(Boolean, true);
-HANDLER_TYPE_TEST(Integer, 87);
-HANDLER_TYPE_TEST(UnsignedInt, 86);
-HANDLER_TYPE_TEST(PositiveInt, 85);
-HANDLER_TYPE_TEST(Decimal, "4.7");
-
-#undef HANDLER_TYPE_TEST
+HANDLER_TYPE_TEST(String, "mandalorian", R4PrimitiveHandler);
+HANDLER_TYPE_TEST(Boolean, true, R4PrimitiveHandler);
+HANDLER_TYPE_TEST(Integer, 87, R4PrimitiveHandler);
+HANDLER_TYPE_TEST(UnsignedInt, 86, R4PrimitiveHandler);
+HANDLER_TYPE_TEST(PositiveInt, 85, R4PrimitiveHandler);
+HANDLER_TYPE_TEST(Decimal, "4.7", R4PrimitiveHandler);
 
 TEST(PrimitiveHandlerTest, DateTimeGetters) {
   DateTime date_time;

@@ -208,7 +208,9 @@ Status ValidateReferenceField(const Message& parent,
       return Status::OK();
     }
 
-    if (IsMessageType<TypedReferenceId>(reference_field->message_type())) {
+    // There's no reference annotations for DSTU2, so skip the validation.
+    if (GetFhirVersion(parent.GetDescriptor()) != proto::DSTU2 &&
+        IsMessageType<TypedReferenceId>(reference_field->message_type())) {
       const std::string& reference_type =
           reference_field->options().GetExtension(
               ::google::fhir::proto::referenced_fhir_type);
