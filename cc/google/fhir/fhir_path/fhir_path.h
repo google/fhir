@@ -20,6 +20,7 @@
 #include "google/protobuf/message.h"
 #include "absl/synchronization/mutex.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/primitive_handler.h"
 #include "google/fhir/status/statusor.h"
 
 namespace google {
@@ -87,16 +88,20 @@ class WorkSpace {
   // (generally the resource against which the expression is run),
   // the accumulated results, and tracks temporary data to be deleted
   // when the evaluation result is destroyed.
-  explicit WorkSpace(const ::google::protobuf::Message* message_context)
-      : message_context_stack_({WorkspaceMessage(message_context)}) {}
+  explicit WorkSpace(const PrimitiveHandler* primitive_handler,
+                     const ::google::protobuf::Message* message_context)
+      : message_context_stack_({WorkspaceMessage(message_context)}),
+        primitive_handler_(primitive_handler) {}
 
   // Same as WorkSpace(const ::google::protobuf::Message*) but message_context_stack is
   // added the the bottom of the message context stack and message_context is
   // placed on the top.
   explicit WorkSpace(
+      const PrimitiveHandler* primitive_handler,
       const std::vector<WorkspaceMessage>& message_context_stack,
       const WorkspaceMessage& message_context)
-      : message_context_stack_(message_context_stack) {
+      : message_context_stack_(message_context_stack),
+        primitive_handler_(primitive_handler) {
     message_context_stack_.push_back(message_context);
   }
 
@@ -151,12 +156,18 @@ class WorkSpace {
     to_delete_.push_back(std::unique_ptr<::google::protobuf::Message>(message));
   }
 
+  const PrimitiveHandler* GetPrimitiveHandler() {
+    return primitive_handler_;
+  }
+
  private:
   std::vector<const ::google::protobuf::Message*> messages_;
 
   std::vector<WorkspaceMessage> message_context_stack_;
 
   std::vector<std::unique_ptr<::google::protobuf::Message>> to_delete_;
+
+  const PrimitiveHandler* primitive_handler_;
 };
 
 // Abstract base class of "compiled" FHIRPath expressions. In this
@@ -285,7 +296,8 @@ class CompiledExpression {
   // Compiles a FHIRPath expression into a structure that will efficiently
   // execute that expression.
   static StatusOr<CompiledExpression> Compile(
-      const ::google::protobuf::Descriptor* descriptor, const std::string& fhir_path);
+      const ::google::protobuf::Descriptor* descriptor,
+      const PrimitiveHandler* primitive_handler, const std::string& fhir_path);
 
   // Evaluates the compiled expression against the given message.
   StatusOr<EvaluationResult> Evaluate(const ::google::protobuf::Message& message) const;
@@ -301,10 +313,12 @@ class CompiledExpression {
  private:
   explicit CompiledExpression(
       const std::string& fhir_path,
-      std::shared_ptr<internal::ExpressionNode> root_expression);
+      std::shared_ptr<internal::ExpressionNode> root_expression,
+      const PrimitiveHandler* primitive_handler_);
 
   std::string fhir_path_;
   std::shared_ptr<const internal::ExpressionNode> root_expression_;
+  const PrimitiveHandler* primitive_handler_;
 };
 
 // Handler callback function invoked for each FHIRPath constraint violation.
@@ -368,11 +382,13 @@ class MessageValidator {
 
   // Loads constraints for the given descriptor.
   StatusOr<MessageConstraints*> ConstraintsFor(
-      const ::google::protobuf::Descriptor* descriptor);
+      const ::google::protobuf::Descriptor* descriptor,
+      const PrimitiveHandler* primitive_handler);
 
   // Recursively called validation method that can terminate
   // validation based on the callback.
   Status Validate(const internal::WorkspaceMessage& message,
+                  const PrimitiveHandler* primitive_handler,
                   ViolationHandlerFunc handler, bool* halt_validation);
 
   absl::Mutex mutex_;

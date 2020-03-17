@@ -22,7 +22,9 @@
 #include "absl/time/civil_time.h"
 #include "absl/time/time.h"
 #include "google/fhir/proto_util.h"
+#include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/stu3/primitive_handler.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/r4/core/codes.pb.h"
 #include "proto/r4/core/datatypes.pb.h"
@@ -53,22 +55,13 @@ namespace {
 
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
-using r4::core::Boolean;
-using r4::core::DateTime;
-using r4::core::Decimal;
-using r4::core::Integer;
-using r4::core::Observation;
-using r4::core::Parameters;
-using r4::core::Period;
-using r4::core::Quantity;
-using r4::core::SimpleQuantity;
-using r4::core::String;
 using r4::uscore::BirthSexValueSet;
 using r4::uscore::USCorePatientProfile;
 using ::testing::ElementsAreArray;
 using ::testing::EndsWith;
 using ::testing::StrEq;
 using ::testing::UnorderedElementsAreArray;
+using ::tensorflow::errors::InvalidArgument;
 using testutil::EqualsProto;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
@@ -95,13 +88,15 @@ using FhirNamespace::StructureDefinition; \
 using FhirNamespace::ValueSet; \
 
 #define FHIR_VERSION_TEST(CaseName, TestName, Body) \
+namespace r4test { \
 TEST(CaseName, TestName##R4) { \
-USING(::google::fhir::r4::core) \
 Body \
 } \
+} \
+namespace stu3test { \
 TEST(CaseName, TestName##STU3) { \
-USING(::google::fhir::stu3::proto) \
 Body \
+} \
 } \
 
 MATCHER(EvalsToEmpty, "") {
@@ -138,6 +133,10 @@ MATCHER(EvalsToFalse, "") {
     return false;
   }
 
+  if (result.ValueOrDie()) {
+    *result_listener << "evaluated to true";
+  }
+
   return !result.ValueOrDie();
 }
 
@@ -157,6 +156,10 @@ MATCHER(EvalsToTrue, "") {
     *result_listener << "did not resolve to a boolean: "
                      << result.status().error_message();
     return false;
+  }
+
+  if (!result.ValueOrDie()) {
+    *result_listener << "evaluated to false";
   }
 
   return result.ValueOrDie();
@@ -231,11 +234,35 @@ USCorePatientProfile ValidUsCorePatient() {
   )proto");
 }
 
+StatusOr<const ::google::fhir::PrimitiveHandler*> GetPrimitiveHandler(
+    const ::google::protobuf::Descriptor* descriptor) {
+  const auto version = GetFhirVersion(descriptor);
+  switch (version) {
+    case proto::FhirVersion::STU3:
+      return ::google::fhir::stu3::Stu3PrimitiveHandler::GetInstance();
+    case proto::FhirVersion::R4:
+      return ::google::fhir::r4::R4PrimitiveHandler::GetInstance();
+    default:
+      return InvalidArgument("Unsupported FHIR version for FhirPath: ",
+                             FhirVersion_Name(version));
+  }
+}
+
+StatusOr<CompiledExpression> Compile(
+      const ::google::protobuf::Descriptor* descriptor, const std::string& fhir_path) {
+  FHIR_ASSIGN_OR_RETURN(auto primitive_handler,
+                        GetPrimitiveHandler(descriptor));
+  return CompiledExpression::Compile(descriptor, primitive_handler, fhir_path);
+}
+
+namespace r4test {
+USING(::google::fhir::r4::core)
+
 template <typename T>
 StatusOr<EvaluationResult> Evaluate(const T& message,
     const std::string& expression) {
-    FHIR_ASSIGN_OR_RETURN(auto compiled_expression,
-      CompiledExpression::Compile(message.GetDescriptor(), expression));
+  FHIR_ASSIGN_OR_RETURN(auto compiled_expression,
+                        Compile(message.GetDescriptor(), expression));
 
   return compiled_expression.Evaluate(message);
 }
@@ -245,28 +272,48 @@ StatusOr<EvaluationResult> Evaluate(
   // FHIRPath assumes a resource object during evaluation, so we use an
   // encounter as a placeholder.
   auto test_encounter = ValidEncounter<r4::core::Encounter>();
-  return Evaluate(test_encounter, expression);
+  return Evaluate<r4::core::Encounter>(test_encounter, expression);
+}
+}  // namespace r4test
+
+namespace stu3test {
+USING(::google::fhir::stu3::proto)
+
+template <typename T>
+StatusOr<EvaluationResult> Evaluate(const T& message,
+    const std::string& expression) {
+  FHIR_ASSIGN_OR_RETURN(auto compiled_expression,
+                        Compile(message.GetDescriptor(), expression));
+
+  return compiled_expression.Evaluate(message);
 }
 
-DateTime ToDateTime(const absl::CivilSecond civil_time,
+StatusOr<EvaluationResult> Evaluate(
+    const std::string& expression) {
+  // FHIRPath assumes a resource object during evaluation, so we use an
+  // encounter as a placeholder.
+  auto test_encounter = ValidEncounter<stu3::proto::Encounter>();
+  return Evaluate<stu3::proto::Encounter>(test_encounter, expression);
+}
+}  // namespace stu3test
+
+template <typename T, typename P>
+T ToDateTime(const absl::CivilSecond civil_time,
                     const absl::TimeZone zone,
-                    const DateTime::Precision& precision) {
-  DateTime date_time;
+                    const P& precision) {
+  T date_time;
   date_time.set_value_us(absl::ToUnixMicros(absl::FromCivil(civil_time, zone)));
   date_time.set_timezone(zone.name());
   date_time.set_precision(precision);
   return date_time;
 }
 
-// Helper to evaluate boolean expressions on periods with the
-// given start and end times.
-bool EvaluateOnPeriod(const CompiledExpression& expression,
-                      const DateTime& start, const DateTime& end) {
-  Period period;
+template <typename P, typename D>
+P CreatePeriod(const D& start, const D& end) {
+  P period;
   *period.mutable_start() = start;
   *period.mutable_end() = end;
-  EvaluationResult result = expression.Evaluate(period).ValueOrDie();
-  return result.GetBoolean().ValueOrDie();
+  return period;
 }
 
 FHIR_VERSION_TEST(FhirPathTest, TestExternalConstants, {
@@ -300,18 +347,14 @@ FHIR_VERSION_TEST(
     })
 
 FHIR_VERSION_TEST(FhirPathTest, TestMalformed, {
-  auto expr = CompiledExpression::Compile(Encounter::descriptor(),
-                                          "expression->not->valid");
+  auto expr = Compile(Encounter::descriptor(), "expression->not->valid");
 
   EXPECT_FALSE(expr.ok());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestGetDirectChild, {
-  auto expr = CompiledExpression::Compile(Encounter::descriptor(), "status")
-                  .ValueOrDie();
-
   Encounter test_encounter = ValidEncounter<Encounter>();
-  EvaluationResult result = expr.Evaluate(test_encounter).ValueOrDie();
+  EvaluationResult result = Evaluate(test_encounter, "status").ValueOrDie();
 
   EXPECT_THAT(
       result.GetMessages(),
@@ -359,15 +402,13 @@ FHIR_VERSION_TEST(FhirPathTest, TestFieldExists, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestNoSuchField, {
-  auto root_expr =
-      CompiledExpression::Compile(Encounter::descriptor(), "bogusrootfield");
+  auto root_expr = Compile(Encounter::descriptor(), "bogusrootfield");
 
   EXPECT_FALSE(root_expr.ok());
   EXPECT_NE(root_expr.status().error_message().find("bogusrootfield"),
             std::string::npos);
 
-  auto child_expr = CompiledExpression::Compile(Encounter::descriptor(),
-                                                "period.boguschildfield");
+  auto child_expr = Compile(Encounter::descriptor(), "period.boguschildfield");
 
   EXPECT_FALSE(child_expr.ok());
   EXPECT_NE(child_expr.status().error_message().find("boguschildfield"),
@@ -379,8 +420,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestNoSuchField, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestNoSuchFunction, {
-  auto root_expr = CompiledExpression::Compile(Encounter::descriptor(),
-                                               "period.bogusfunction()");
+  auto root_expr = Compile(Encounter::descriptor(), "period.bogusfunction()");
 
   EXPECT_FALSE(root_expr.ok());
   EXPECT_NE(root_expr.status().error_message().find("bogusfunction"),
@@ -745,8 +785,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestUnion, {
   EXPECT_THAT(Evaluate("(false | false)"), EvalsToFalse());
 })
 
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, TestUnionDeduplicationPrimitives) {
+FHIR_VERSION_TEST(FhirPathTest, TestUnionDeduplicationPrimitives, {
   EvaluationResult evaluation_result =
       Evaluate("true | false | 1 | 'foo' | 2 | 1 | 'foo'")
           .ValueOrDie();
@@ -765,7 +804,7 @@ TEST(FhirPathTest, TestUnionDeduplicationPrimitives) {
                    EqualsProto(integer_1_proto),
                    EqualsProto(integer_2_proto),
                    EqualsProto(string_foo_proto)}));
-}
+})
 
 FHIR_VERSION_TEST(FhirPathTest, TestUnionDeduplicationObjects, {
   Encounter test_encounter = ValidEncounter<Encounter>();
@@ -782,8 +821,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestUnionDeduplicationObjects, {
                    EqualsProto(test_encounter.period())}));
 })
 
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, TestCombine) {
+FHIR_VERSION_TEST(FhirPathTest, TestCombine, {
   EXPECT_THAT(Evaluate("{}.combine({})"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("true.combine({})"), EvalsToTrue());
   EXPECT_THAT(Evaluate("{}.combine(true)"), EvalsToTrue());
@@ -797,10 +835,9 @@ TEST(FhirPathTest, TestCombine) {
               UnorderedElementsAreArray({EqualsProto(true_proto),
                                          EqualsProto(true_proto),
                                          EqualsProto(false_proto)}));
-}
+})
 
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, TestIntersect) {
+FHIR_VERSION_TEST(FhirPathTest, TestIntersect, {
   EXPECT_THAT(Evaluate("{}.intersect({})"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("true.intersect({})"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("true.intersect(false)"), EvalsToEmpty());
@@ -819,10 +856,9 @@ TEST(FhirPathTest, TestIntersect) {
   EXPECT_THAT(evaluation_result.GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(true_proto), EqualsProto(false_proto)}));
-}
+})
 
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, TestDistinct) {
+FHIR_VERSION_TEST(FhirPathTest, TestDistinct, {
   EXPECT_THAT(Evaluate("{}.distinct()"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("true.distinct()"), EvalsToTrue());
   EXPECT_THAT(Evaluate("true.combine(true).distinct()"), EvalsToTrue());
@@ -834,7 +870,7 @@ TEST(FhirPathTest, TestDistinct) {
   EXPECT_THAT(evaluation_result.GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(true_proto), EqualsProto(false_proto)}));
-}
+})
 
 FHIR_VERSION_TEST(FhirPathTest, TestIsDistinct, {
   EXPECT_THAT(Evaluate("{}.isDistinct()"), EvalsToTrue());
@@ -961,8 +997,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestAllReadsFieldFromDifferingTypes, {
               EvalsToTrue());
 })
 
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, TestSelect) {
+FHIR_VERSION_TEST(FhirPathTest, TestSelect, {
   EvaluationResult evaluation_result =
       Evaluate("(1 | 2 | 3).select(($this > 2) | $this)")
           .ValueOrDie();
@@ -984,7 +1019,7 @@ TEST(FhirPathTest, TestSelect) {
         EqualsProto(integer_2_proto),
         EqualsProto(integer_3_proto)
       }));
-}
+})
 
 FHIR_VERSION_TEST(FhirPathTest, TestSelectEmptyResult, {
   EXPECT_THAT(Evaluate("{}.where(true)"), EvalsToEmpty());
@@ -1118,8 +1153,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestIntegerLiteral, {
   // Ensure evaluation of an out-of-range literal fails.
   const char* overflow_value = "10000000000";
   Status bad_int_status =
-      CompiledExpression::Compile(Encounter::descriptor(), overflow_value)
-          .status();
+      Compile(Encounter::descriptor(), overflow_value).status();
 
   EXPECT_FALSE(bad_int_status.ok());
   // Failure message should contain the bad string.
@@ -1212,7 +1246,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestIntegerComparisons, {
   EXPECT_THAT(Evaluate("43 <= 42"), EvalsToFalse());
 })
 
-TEST(FhirPathTest, TestIntegerLikeComparison) {
+FHIR_VERSION_TEST(FhirPathTest, TestIntegerLikeComparison, {
   Parameters parameters =
       ParseFromString<Parameters>(R"proto(
         parameter {value {integer {value: -1}}}
@@ -1250,7 +1284,7 @@ TEST(FhirPathTest, TestIntegerLikeComparison) {
               EvalsToTrue());
   EXPECT_THAT(Evaluate(parameters, "parameter[2].value > parameter[3].value"),
               EvalsToTrue());
-}
+})
 
 FHIR_VERSION_TEST(FhirPathTest, TestDecimalLiteral, {
   EvaluationResult result = Evaluate("1.25").ValueOrDie();
@@ -1414,8 +1448,7 @@ FHIR_VERSION_TEST(FhirPathTest, NestedConstraintSatisfied, {
   EXPECT_TRUE(validator.Validate(value_set).ok());
 })
 
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, TimeComparison) {
+FHIR_VERSION_TEST(FhirPathTest, TimeComparison, {
   Period start_before_end_period = ParseFromString<Period>(R"proto(
     start: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
     end: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
@@ -1428,53 +1461,73 @@ TEST(FhirPathTest, TimeComparison) {
   )proto");
   EXPECT_THAT(Evaluate(end_before_start_period, "start <= end"),
               EvalsToFalse());
-}
+})
 
-// TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, TimeCompareDifferentPrecision) {
+FHIR_VERSION_TEST(FhirPathTest, TimeCompareDifferentPrecision, {
   absl::TimeZone zone;
   absl::LoadTimeZone("America/Los_Angeles", &zone);
-  auto start_before_end =
-      CompiledExpression::Compile(Period::descriptor(), "start <= end")
-          .ValueOrDie();
 
   // Ensure comparison returns false on fine-grained checks but true
   // on corresponding coarse-grained checks.
-  EXPECT_FALSE(EvaluateOnPeriod(
-      start_before_end,
-      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                 DateTime::SECOND),
-      ToDateTime(absl::CivilDay(2019, 5, 2), zone, DateTime::SECOND)));
+  EXPECT_THAT(
+      Evaluate(CreatePeriod<Period, DateTime>(
+                   ToDateTime<DateTime, DateTime::Precision>(
+                       absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                       DateTime::SECOND),
+                   ToDateTime<DateTime, DateTime::Precision>(
+                       absl::CivilDay(2019, 5, 2), zone, DateTime::SECOND)),
+               "start <= end"),
+      EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateOnPeriod(
-      start_before_end,
-      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                 DateTime::SECOND),
-      ToDateTime(absl::CivilDay(2019, 5, 2), zone, DateTime::DAY)));
+  EXPECT_THAT(
+      Evaluate(CreatePeriod<Period, DateTime>(
+                   ToDateTime<DateTime, DateTime::Precision>(
+                       absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                       DateTime::SECOND),
+                   ToDateTime<DateTime, DateTime::Precision>(
+                       absl::CivilDay(2019, 5, 2), zone, DateTime::DAY)),
+               "start <= end"),
+      EvalsToTrue());
 
-  EXPECT_FALSE(EvaluateOnPeriod(
-      start_before_end,
-      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                 DateTime::SECOND),
-      ToDateTime(absl::CivilDay(2019, 5, 1), zone, DateTime::DAY)));
+  EXPECT_THAT(
+      Evaluate(CreatePeriod<Period, DateTime>(
+                   ToDateTime<DateTime, DateTime::Precision>(
+                       absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                       DateTime::SECOND),
+                   ToDateTime<DateTime, DateTime::Precision>(
+                       absl::CivilDay(2019, 5, 1), zone, DateTime::DAY)),
+               "start <= end"),
+      EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateOnPeriod(
-      start_before_end,
-      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                 DateTime::SECOND),
-      ToDateTime(absl::CivilDay(2019, 5, 1), zone, DateTime::MONTH)));
+  EXPECT_THAT(
+      Evaluate(CreatePeriod<Period, DateTime>(
+                   ToDateTime<DateTime, DateTime::Precision>(
+                       absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                       DateTime::SECOND),
+                   ToDateTime<DateTime, DateTime::Precision>(
+                       absl::CivilDay(2019, 5, 1), zone, DateTime::MONTH)),
+               "start <= end"),
+      EvalsToTrue());
 
-  EXPECT_FALSE(EvaluateOnPeriod(
-      start_before_end,
-      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                 DateTime::SECOND),
-      ToDateTime(absl::CivilDay(2019, 1, 1), zone, DateTime::MONTH)));
+  EXPECT_THAT(
+      Evaluate(CreatePeriod<Period, DateTime>(
+                   ToDateTime<DateTime, DateTime::Precision>(
+                       absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                       DateTime::SECOND),
+                   ToDateTime<DateTime, DateTime::Precision>(
+                       absl::CivilDay(2019, 1, 1), zone, DateTime::MONTH)),
+               "start <= end"),
+      EvalsToFalse());
 
-  EXPECT_TRUE(EvaluateOnPeriod(
-      start_before_end,
-      ToDateTime(absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                 DateTime::SECOND),
-      ToDateTime(absl::CivilDay(2019, 1, 1), zone, DateTime::YEAR)));
+  EXPECT_THAT(
+      Evaluate(CreatePeriod<Period, DateTime>(
+                   ToDateTime<DateTime, DateTime::Precision>(
+                       absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                       DateTime::SECOND),
+                   ToDateTime<DateTime, DateTime::Precision>(
+                       absl::CivilDay(2019, 1, 1), zone, DateTime::YEAR)),
+               "start <= end"),
+      EvalsToTrue());
 
   // Test edge case for very high precision comparisons.
   DateTime start_micros;
@@ -1483,11 +1536,15 @@ TEST(FhirPathTest, TimeCompareDifferentPrecision) {
   start_micros.set_precision(DateTime::MICROSECOND);
 
   DateTime end_micros = start_micros;
-  EXPECT_TRUE(EvaluateOnPeriod(start_before_end, start_micros, end_micros));
+  EXPECT_THAT(Evaluate(CreatePeriod<Period, DateTime>(start_micros, end_micros),
+                       "start <= end"),
+              EvalsToTrue());
 
   end_micros.set_value_us(end_micros.value_us() - 1);
-  EXPECT_FALSE(EvaluateOnPeriod(start_before_end, start_micros, end_micros));
-}
+  EXPECT_THAT(Evaluate(CreatePeriod<Period, DateTime>(start_micros, end_micros),
+                       "start <= end"),
+              EvalsToFalse());
+})
 
 FHIR_VERSION_TEST(FhirPathTest, SimpleQuantityComparisons, {
   auto kinetics =
@@ -1574,7 +1631,7 @@ FHIR_VERSION_TEST(FhirPathTest, MessageLevelConstraint, {
 
 // TODO: Templatize tests to work with both STU3 and R4
 TEST(FhirPathTest, MessageLevelConstraintViolated) {
-  Period end_before_start_period = ParseFromString<Period>(R"proto(
+  auto end_before_start_period = ParseFromString<r4::core::Period>(R"proto(
     start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
     end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
   )proto");

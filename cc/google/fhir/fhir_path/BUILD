@@ -41,6 +41,7 @@ cc_library(
         ":fhir_path_lexer",
         ":utils",
         "//cc/google/fhir:annotations",
+        "//cc/google/fhir:primitive_handler",
         "//cc/google/fhir:primitive_wrapper",
         "//cc/google/fhir:proto_util",
         "//cc/google/fhir:util",
@@ -90,7 +91,9 @@ cc_test(
     deps = [
         ":fhir_path",
         "//cc/google/fhir:proto_util",
+        "//cc/google/fhir/r4:primitive_handler",
         "//cc/google/fhir/status",
+        "//cc/google/fhir/stu3:primitive_handler",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/r4:uscore_cc_proto",
         "//proto/r4:uscore_codes_cc_proto",

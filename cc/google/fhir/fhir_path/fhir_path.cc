@@ -55,12 +55,9 @@ using ::google::protobuf::util::MessageDifferencer;
 // Used to wrap primitives in protobuf messages, and
 // can be used against multiple versions of FHIR, not just R4.
 using ::google::fhir::r4::core::Boolean;
-using ::google::fhir::r4::core::DateTime;
 using ::google::fhir::r4::core::Decimal;
 using ::google::fhir::r4::core::Integer;
-using ::google::fhir::r4::core::SimpleQuantity;
 using ::google::fhir::r4::core::String;
-using ::google::fhir::r4::core::UnsignedInt;
 
 using antlr4::ANTLRInputStream;
 using antlr4::BaseErrorListener;
@@ -87,8 +84,9 @@ namespace internal {
 
 // TODO: This method forces linking in all supported versions of
 // FHIR. It should be replaced by a passed-in PrimitiveHandler.
-StatusOr<const PrimitiveHandler*> GetPrimitiveHandler(const Message& message) {
-  const auto version = GetFhirVersion(message);
+StatusOr<const PrimitiveHandler*> GetPrimitiveHandler(
+    const Message& message) {
+  const auto version = GetFhirVersion(message.GetDescriptor());
   switch (version) {
     case proto::FhirVersion::STU3:
       return stu3::Stu3PrimitiveHandler::GetInstance();
@@ -100,43 +98,61 @@ StatusOr<const PrimitiveHandler*> GetPrimitiveHandler(const Message& message) {
   }
 }
 
-// Returns true if the collection of messages represents
-// a boolean value per FHIRPath conventions; that is it
-// has exactly one item that is boolean.
-bool IsSingleBoolean(const std::vector<WorkspaceMessage>& messages) {
-  return messages.size() == 1 &&
-         IsMessageType<Boolean>(*messages[0].Message());
+// Returns true if the provided FHIR message converts to System.Integer.
+//
+// See https://www.hl7.org/fhir/fhirpath.html#types
+bool IsSystemInteger(const Message& message) {
+  return IsInteger(message) || IsUnsignedInt(message) || IsPositiveInt(message);
 }
 
-bool IsSingleBoolean(const std::vector<const google::protobuf::Message*>& messages) {
-  return messages.size() == 1 && IsMessageType<Boolean>(*messages[0]);
-}
-
-// Returns success with a boolean value if the message collection
-// represents a single boolean, or a failure status otherwise.
-StatusOr<bool> MessagesToBoolean(
-    const std::vector<WorkspaceMessage>& messages) {
-  if (IsSingleBoolean(messages)) {
-    return dynamic_cast<const Boolean*>(messages[0].Message())->value();
+// Returns the integer value of the FHIR message if it can be converted to
+// a System.Integer
+//
+// See https://www.hl7.org/fhir/fhirpath.html#types
+StatusOr<int32_t> ToSystemInteger(
+    const PrimitiveHandler* primitive_handler, const Message& message) {
+  // It isn't necessary to widen the values from 32 to 64 bits when converting
+  // a UnsignedInt or PositiveInt to an int32_t because FHIR restricts the
+  // values of those types to 31 bits.
+  if (IsInteger(message)) {
+    return primitive_handler->GetIntegerValue(message).ValueOrDie();
   }
 
-  return InvalidArgument("Expression did not evaluate to boolean");
-}
-
-StatusOr<bool> MessagesToBoolean(
-    const std::vector<const google::protobuf::Message*>& messages) {
-  if (IsSingleBoolean(messages)) {
-    return dynamic_cast<const Boolean*>(messages[0])->value();
+  if (IsUnsignedInt(message)) {
+    return primitive_handler->GetUnsignedIntValue(message).ValueOrDie();
   }
 
-  return InvalidArgument("Expression did not evaluate to boolean");
+  if (IsPositiveInt(message)) {
+    return primitive_handler->GetPositiveIntValue(message).ValueOrDie();
+  }
+
+  return InvalidArgument(message.GetTypeName(),
+                         " cannot be cast to an integer.");
 }
 
-template <class T, class M>
-StatusOr<absl::optional<T>> PrimitiveOrEmpty(
+StatusOr<absl::optional<int32_t>> IntegerOrEmpty(
+    const PrimitiveHandler* primitive_handler,
     const std::vector<WorkspaceMessage>& messages) {
   if (messages.empty()) {
-    return absl::optional<T>();
+    return absl::optional<int>();
+  }
+
+  if (messages.size() > 1 ||
+      !IsSystemInteger(*messages[0].Message())) {
+    return InvalidArgument(
+        "Expression must be empty or represent a single primitive value.");
+  }
+
+  FHIR_ASSIGN_OR_RETURN(int32_t value, ToSystemInteger(primitive_handler,
+                                                       *messages[0].Message()));
+  return absl::optional<int32_t>(value);
+}
+
+StatusOr<absl::optional<bool>> BooleanOrEmpty(
+    const PrimitiveHandler* primitive_handler,
+    const std::vector<WorkspaceMessage>& messages) {
+  if (messages.empty()) {
+    return absl::optional<bool>();
   }
 
   if (messages.size() > 1 ||
@@ -145,30 +161,26 @@ StatusOr<absl::optional<T>> PrimitiveOrEmpty(
         "Expression must be empty or represent a single primitive value.");
   }
 
-  if (!IsMessageType<M>(*messages[0].Message())) {
-    return InvalidArgument("Single value expression of wrong type.");
-  }
-
-  return absl::optional<T>(
-      dynamic_cast<const M*>(messages[0].Message())->value());
+  FHIR_ASSIGN_OR_RETURN(
+      bool value, primitive_handler->GetBooleanValue(*messages[0].Message()));
+  return absl::optional<bool>(value);
 }
 
 // Returns the string representation of the provided message for messages that
 // are represented in JSON as strings. For primitive messages that are not
 // represented as a string in JSON a status other than OK will be returned.
-StatusOr<std::string> MessageToString(const WorkspaceMessage& message) {
-  if (IsMessageType<String>(*message.Message())) {
-    return dynamic_cast<const String*>(message.Message())->value();
+StatusOr<std::string> MessageToString(const PrimitiveHandler* primitive_handler,
+                                      const WorkspaceMessage& message) {
+  if (IsString(*message.Message())) {
+    return primitive_handler->GetStringValue(*message.Message());
   }
 
   if (!IsPrimitive(message.Message()->GetDescriptor())) {
     return InvalidArgument("Expression must be a primitive.");
   }
 
-  FHIR_ASSIGN_OR_RETURN(const PrimitiveHandler* handler,
-                        GetPrimitiveHandler(*message.Message()));
   StatusOr<JsonPrimitive> json_primitive =
-      handler->WrapPrimitiveProto(*message.Message());
+      primitive_handler->WrapPrimitiveProto(*message.Message());
   std::string json_string = json_primitive.ValueOrDie().value;
 
   if (!absl::StartsWith(json_string, "\"")) {
@@ -185,12 +197,13 @@ StatusOr<std::string> MessageToString(const WorkspaceMessage& message) {
 // message in the provided collection. For primitive messages that are not
 // represented as a string in JSON a status other than OK will be returned.
 StatusOr<std::string> MessagesToString(
+    const PrimitiveHandler* primitive_handler,
     const std::vector<WorkspaceMessage>& messages) {
   if (messages.size() != 1) {
     return InvalidArgument("Expression must represent a single value.");
   }
 
-  return MessageToString(messages[0]);
+  return MessageToString(primitive_handler, messages[0]);
 }
 
 StatusOr<WorkspaceMessage> WorkspaceMessage::NearestResource() const {
@@ -221,15 +234,16 @@ std::vector<const google::protobuf::Message*> WorkspaceMessage::Ancestry() const
 
 // Expression node that returns literals wrapped in the corresponding
 // protbuf wrapper
-template <typename ProtoType, typename PrimitiveType>
+template <typename PrimitiveType>
 class Literal : public ExpressionNode {
  public:
-  explicit Literal(PrimitiveType value) : value_(value) {}
+  Literal(PrimitiveType value, const Descriptor* descriptor,
+                   std::function<Message*(PrimitiveType)> factory)
+      : value_(value), descriptor_(descriptor), factory_(factory) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<WorkspaceMessage>* results) const override {
-    auto value = new ProtoType();
-    value->set_value(value_);
+    Message* value = factory_(value_);
     work_space->DeleteWhenFinished(value);
     results->push_back(WorkspaceMessage(value));
 
@@ -237,11 +251,13 @@ class Literal : public ExpressionNode {
   }
 
   const Descriptor* ReturnType() const override {
-    return ProtoType::descriptor();
+    return descriptor_;
   }
 
  private:
   const PrimitiveType value_;
+  const Descriptor* descriptor_;
+  std::function<Message*(PrimitiveType)> factory_;
 };
 
 // Expression node for the empty literal.
@@ -520,9 +536,9 @@ class ExistsFunction : public ZeroParameterFunctionNode {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
-    Boolean* result = new Boolean();
+    Message* result =
+        work_space->GetPrimitiveHandler()->NewBoolean(!child_results.empty());
     work_space->DeleteWhenFinished(result);
-    result->set_value(!child_results.empty());
     results->push_back(WorkspaceMessage(result));
 
     return Status::OK();
@@ -553,19 +569,21 @@ class NotFunction : public ZeroParameterFunctionNode {
       return Status::OK();
     }
 
+    if (child_results.size() != 1) {
+      return InvalidArgument("not() must be invoked on a singleton collection");
+    }
+
     // Per the FHIR spec, the not() function produces a value
     // IFF it is given a boolean input, and returns an empty result
     // otherwise.
-    if (IsSingleBoolean(child_results)) {
-      FHIR_ASSIGN_OR_RETURN(bool child_result,
-                            MessagesToBoolean(child_results));
+    FHIR_ASSIGN_OR_RETURN(bool child_result,
+                          work_space->GetPrimitiveHandler()->GetBooleanValue(
+                              *child_results[0].Message()));
 
-      Boolean* result = new Boolean();
-      work_space->DeleteWhenFinished(result);
-      result->set_value(!child_result);
-
-      results->push_back(WorkspaceMessage(result));
-    }
+    Message* result =
+        work_space->GetPrimitiveHandler()->NewBoolean(!child_result);
+    work_space->DeleteWhenFinished(result);
+    results->push_back(WorkspaceMessage(result));
 
     return Status::OK();
   }
@@ -589,20 +607,10 @@ class HasValueFunction : public ZeroParameterFunctionNode {
 
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
-    Boolean* result = new Boolean();
+    Message* result = work_space->GetPrimitiveHandler()->NewBoolean(
+        child_results.size() == 1 &&
+        IsPrimitive(child_results[0].Message()->GetDescriptor()));
     work_space->DeleteWhenFinished(result);
-
-    if (child_results.size() != 1) {
-      result->set_value(false);
-    } else {
-      const MessageOptions& options =
-          child_results[0].Message()->GetDescriptor()->options();
-      result->set_value(
-          options.HasExtension(proto::structure_definition_kind) &&
-          (options.GetExtension(proto::structure_definition_kind) ==
-           proto::StructureDefinitionKindValue::KIND_PRIMITIVE_TYPE));
-    }
-
     results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
@@ -641,12 +649,16 @@ class StartsWithFunction : public SingleValueFunctionNode {
       return InvalidArgument(kInvalidArgumentMessage);
     }
 
-    FHIR_ASSIGN_OR_RETURN(std::string item, MessagesToString(child_results));
-    FHIR_ASSIGN_OR_RETURN(std::string prefix, MessageToString(param));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string item,
+        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string prefix,
+        MessageToString(work_space->GetPrimitiveHandler(), param));
 
-    Boolean* result = new Boolean();
+    Message* result = work_space->GetPrimitiveHandler()->NewBoolean(
+        absl::StartsWith(item, prefix));
     work_space->DeleteWhenFinished(result);
-    result->set_value(absl::StartsWith(item, prefix));
     results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
@@ -684,13 +696,16 @@ class ContainsFunction : public SingleValueFunctionNode {
       return InvalidArgument("contains() must be invoked on a single string.");
     }
 
-    FHIR_ASSIGN_OR_RETURN(std::string haystack,
-                          MessagesToString(child_results));
-    FHIR_ASSIGN_OR_RETURN(std::string needle, MessageToString(param));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string haystack,
+        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string needle,
+        MessageToString(work_space->GetPrimitiveHandler(), param));
 
-    Boolean* result = new Boolean();
+    Message* result = work_space->GetPrimitiveHandler()->NewBoolean(
+        absl::StrContains(haystack, needle));
     work_space->DeleteWhenFinished(result);
-    result->set_value(absl::StrContains(haystack, needle));
     results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
@@ -717,8 +732,12 @@ class MatchesFunction : public SingleValueFunctionNode {
       return Status::OK();
     }
 
-    FHIR_ASSIGN_OR_RETURN(std::string item, MessagesToString(child_results));
-    FHIR_ASSIGN_OR_RETURN(std::string re_string, MessageToString(param));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string item,
+        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string re_string,
+        MessageToString(work_space->GetPrimitiveHandler(), param));
 
     RE2 re(re_string);
 
@@ -728,9 +747,9 @@ class MatchesFunction : public SingleValueFunctionNode {
                        "'. ", re.error()));
     }
 
-    Boolean* result = new Boolean();
+    Message* result =
+        work_space->GetPrimitiveHandler()->NewBoolean(RE2::FullMatch(item, re));
     work_space->DeleteWhenFinished(result);
-    result->set_value(RE2::FullMatch(item, re));
     results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
@@ -762,7 +781,7 @@ class ToStringFunction : public ZeroParameterFunctionNode {
 
     const WorkspaceMessage& child = child_results[0];
 
-    if (IsMessageType<String>(*child.Message())) {
+    if (IsString(*child.Message())) {
       results->push_back(child);
       return Status::OK();
     }
@@ -771,19 +790,17 @@ class ToStringFunction : public ZeroParameterFunctionNode {
       return Status::OK();
     }
 
-    FHIR_ASSIGN_OR_RETURN(const PrimitiveHandler* handler,
-                          GetPrimitiveHandler(*child.Message()));
     FHIR_ASSIGN_OR_RETURN(JsonPrimitive json_primitive,
-                          handler->WrapPrimitiveProto(*child.Message()));
+                          work_space->GetPrimitiveHandler()->WrapPrimitiveProto(
+                              *child.Message()));
     std::string json_string = json_primitive.value;
 
     if (absl::StartsWith(json_string, "\"")) {
       json_string = json_string.substr(1, json_string.size() - 2);
     }
 
-    String* result = new String();
+    Message* result = work_space->GetPrimitiveHandler()->NewString(json_string);
     work_space->DeleteWhenFinished(result);
-    result->set_value(json_string);
     results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
@@ -807,11 +824,13 @@ class LengthFunction : public ZeroParameterFunctionNode {
       return Status::OK();
     }
 
-    FHIR_ASSIGN_OR_RETURN(std::string item, MessagesToString(child_results));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string item,
+        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
 
-    Integer* result = new Integer();
+    Message* result =
+        work_space->GetPrimitiveHandler()->NewInteger(item.length());
     work_space->DeleteWhenFinished(result);
-    result->set_value(item.length());
     results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
@@ -836,9 +855,9 @@ class EmptyFunction : public ZeroParameterFunctionNode {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
-    Boolean* result = new Boolean();
+    Message* result =
+        work_space->GetPrimitiveHandler()->NewBoolean(child_results.empty());
     work_space->DeleteWhenFinished(result);
-    result->set_value(child_results.empty());
     results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
@@ -863,9 +882,9 @@ class CountFunction : public ZeroParameterFunctionNode {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
-    Integer* result = new Integer();
+    Message* result =
+        work_space->GetPrimitiveHandler()->NewInteger(child_results.size());
     work_space->DeleteWhenFinished(result);
-    result->set_value(child_results.size());
     results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
@@ -938,7 +957,9 @@ class TraceFunction : public SingleValueFunctionNode {
       WorkSpace* work_space, const WorkspaceMessage& param,
       std::vector<WorkspaceMessage>* results) const override {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, results));
-    FHIR_ASSIGN_OR_RETURN(std::string name, MessageToString(param));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string name,
+        MessageToString(work_space->GetPrimitiveHandler(), param));
 
     LOG(INFO) << "trace(" << name << "):";
     for (auto it = results->begin(); it != results->end(); it++) {
@@ -981,27 +1002,28 @@ class ToIntegerFunction : public ZeroParameterFunctionNode {
       return Status::OK();
     }
 
-    if (IsMessageType<Integer>(*child_result.Message())) {
+    if (IsInteger(*child_result.Message())) {
       results->push_back(child_result);
       return Status::OK();
     }
 
-    if (IsMessageType<Boolean>(*child_result.Message())) {
-      Integer* result = new Integer();
+    if (IsBoolean(*child_result.Message())) {
+      FHIR_ASSIGN_OR_RETURN(bool value,
+                            work_space->GetPrimitiveHandler()->GetBooleanValue(
+                                *child_result.Message()));
+      Message* result = work_space->GetPrimitiveHandler()->NewInteger(value);
       work_space->DeleteWhenFinished(result);
-      result->set_value(
-          dynamic_cast<const Boolean*>(child_result.Message())->value());
       results->push_back(WorkspaceMessage(result));
       return Status::OK();
     }
 
-    auto child_as_string = MessagesToString(child_results);
+    auto child_as_string =
+        MessagesToString(work_space->GetPrimitiveHandler(), child_results);
     if (child_as_string.ok()) {
       int32_t value;
       if (absl::SimpleAtoi(child_as_string.ValueOrDie(), &value)) {
-        Integer* result = new Integer();
+        Message* result = work_space->GetPrimitiveHandler()->NewInteger(value);
         work_space->DeleteWhenFinished(result);
-        result->set_value(value);
         results->push_back(WorkspaceMessage(result));
         return Status::OK();
       }
@@ -1047,16 +1069,17 @@ class BinaryOperator : public ExpressionNode {
 
 class IndexerExpression : public BinaryOperator {
  public:
-  IndexerExpression(std::shared_ptr<ExpressionNode> left,
+  IndexerExpression(const PrimitiveHandler* primitive_handler,
+                    std::shared_ptr<ExpressionNode> left,
                     std::shared_ptr<ExpressionNode> right)
-      : BinaryOperator(left, right) {}
+      : BinaryOperator(left, right), primitive_handler_(primitive_handler) {}
 
   Status EvaluateOperator(
       const std::vector<WorkspaceMessage>& left_results,
       const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
       std::vector<WorkspaceMessage>* out_results) const override {
     FHIR_ASSIGN_OR_RETURN(auto index,
-                          (PrimitiveOrEmpty<int, Integer>(right_results)));
+                          (IntegerOrEmpty(primitive_handler_, right_results)));
     if (!index.has_value()) {
       return InvalidArgument("Index must be present.");
     }
@@ -1070,6 +1093,9 @@ class IndexerExpression : public BinaryOperator {
   }
 
   const Descriptor* ReturnType() const override { return left_->ReturnType(); }
+
+ private:
+  const PrimitiveHandler* primitive_handler_;
 };
 
 class EqualsOperator : public BinaryOperator {
@@ -1082,23 +1108,27 @@ class EqualsOperator : public BinaryOperator {
       return Status::OK();
     }
 
-    Boolean* result = new Boolean();
+    Message* result = work_space->GetPrimitiveHandler()->NewBoolean(
+        AreEqual(left_results, right_results));
     work_space->DeleteWhenFinished(result);
-
-    if (left_results.size() != right_results.size()) {
-      result->set_value(false);
-    } else {
-      // Scan for unequal messages.
-      result->set_value(true);
-      for (int i = 0; i < left_results.size(); ++i) {
-        const WorkspaceMessage& left = left_results.at(i);
-        const WorkspaceMessage& right = right_results.at(i);
-        result->set_value(AreEqual(*left.Message(), *right.Message()));
-      }
-    }
-
     out_results->push_back(WorkspaceMessage(result));
     return Status::OK();
+  }
+
+  static bool AreEqual(const std::vector<WorkspaceMessage>& left_results,
+      const std::vector<WorkspaceMessage>& right_results) {
+    if (left_results.size() != right_results.size()) {
+      return false;
+    }
+
+    for (int i = 0; i < left_results.size(); ++i) {
+        const WorkspaceMessage& left = left_results.at(i);
+        const WorkspaceMessage& right = right_results.at(i);
+      if (!AreEqual(*left.Message(), *right.Message())) {
+        return false;
+      }
+    }
+    return true;
   }
 
   static bool AreEqual(const Message& left, const Message& right) {
@@ -1221,10 +1251,9 @@ class IsDistinctFunction : public ZeroParameterFunctionNode {
         child_results_set;
     child_results_set.insert(child_results.begin(), child_results.end());
 
-
-    Boolean* result = new Boolean();
+    Message* result = work_space->GetPrimitiveHandler()->NewBoolean(
+        child_results_set.size() == child_results.size());
     work_space->DeleteWhenFinished(result);
-    result->set_value(child_results_set.size() == child_results.size());
     results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
@@ -1321,12 +1350,14 @@ class WhereFunction : public FunctionNode {
 
     for (const WorkspaceMessage& message : child_results) {
       std::vector<WorkspaceMessage> param_results;
-      WorkSpace expression_work_space(work_space->MessageContextStack(),
+      WorkSpace expression_work_space(work_space->GetPrimitiveHandler(),
+                                      work_space->MessageContextStack(),
                                       message);
       FHIR_RETURN_IF_ERROR(
           params_[0]->Evaluate(&expression_work_space, &param_results));
-      FHIR_ASSIGN_OR_RETURN(StatusOr<absl::optional<bool>> allowed,
-                            (PrimitiveOrEmpty<bool, Boolean>(param_results)));
+      FHIR_ASSIGN_OR_RETURN(
+          StatusOr<absl::optional<bool>> allowed,
+          (BooleanOrEmpty(work_space->GetPrimitiveHandler(), param_results)));
       if (allowed.ValueOrDie().value_or(false)) {
         results->push_back(message);
       }
@@ -1370,9 +1401,9 @@ class AllFunction : public FunctionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
     FHIR_ASSIGN_OR_RETURN(bool result, Evaluate(work_space, child_results));
 
-    Boolean* result_message = new Boolean();
+    Message* result_message =
+        work_space->GetPrimitiveHandler()->NewBoolean(result);
     work_space->DeleteWhenFinished(result_message);
-    result_message->set_value(result);
     results->push_back(WorkspaceMessage(result_message));
     return Status::OK();
   }
@@ -1387,12 +1418,14 @@ class AllFunction : public FunctionNode {
       const std::vector<WorkspaceMessage>& child_results) const {
     for (const WorkspaceMessage& message : child_results) {
       std::vector<WorkspaceMessage> param_results;
-      WorkSpace expression_work_space(work_space->MessageContextStack(),
+      WorkSpace expression_work_space(work_space->GetPrimitiveHandler(),
+                                      work_space->MessageContextStack(),
                                       message);
       FHIR_RETURN_IF_ERROR(
           params_[0]->Evaluate(&expression_work_space, &param_results));
-      FHIR_ASSIGN_OR_RETURN(StatusOr<absl::optional<bool>> criteria_met,
-                            (PrimitiveOrEmpty<bool, Boolean>(param_results)));
+      FHIR_ASSIGN_OR_RETURN(
+          StatusOr<absl::optional<bool>> criteria_met,
+          (BooleanOrEmpty(work_space->GetPrimitiveHandler(), param_results)));
       if (!criteria_met.ValueOrDie().value_or(false)) {
         return false;
       }
@@ -1508,12 +1541,13 @@ class IifFunction : public FunctionNode {
     const WorkspaceMessage& child = child_results[0];
 
     std::vector<WorkspaceMessage> param_results;
-    WorkSpace expression_work_space(work_space->MessageContextStack(),
-                                    child);
+    WorkSpace expression_work_space(work_space->GetPrimitiveHandler(),
+                                    work_space->MessageContextStack(), child);
     FHIR_RETURN_IF_ERROR(
         params_[0]->Evaluate(&expression_work_space, &param_results));
-    FHIR_ASSIGN_OR_RETURN(StatusOr<absl::optional<bool>> criterion_met,
-                          (PrimitiveOrEmpty<bool, Boolean>(param_results)));
+    FHIR_ASSIGN_OR_RETURN(
+        StatusOr<absl::optional<bool>> criterion_met,
+        (BooleanOrEmpty(work_space->GetPrimitiveHandler(), param_results)));
     if (criterion_met.ValueOrDie().value_or(false)) {
       FHIR_RETURN_IF_ERROR(params_[1]->Evaluate(work_space, results));
     } else if (params_.size() > 2) {
@@ -1568,10 +1602,10 @@ class IsFunction : public ExpressionNode {
       return Status::OK();
     }
 
-    auto result = new Boolean();
+    Message* result =
+        work_space->GetPrimitiveHandler()->NewBoolean(absl::EqualsIgnoreCase(
+            child_results[0].Message()->GetDescriptor()->name(), type_name_));
     work_space->DeleteWhenFinished(result);
-    result->set_value(absl::EqualsIgnoreCase(
-        child_results[0].Message()->GetDescriptor()->name(), type_name_));
     results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
@@ -1719,21 +1753,21 @@ class IntersectFunction : public SingleParameterFunctionNode {
 };
 
 // Converts decimal or integer container messages to a double value
-static Status MessageToDouble(const Message& message, double* value) {
-  if (IsMessageType<Decimal>(message)) {
-    const Decimal* decimal = dynamic_cast<const Decimal*>(&message);
+static Status MessageToDouble(const PrimitiveHandler* primitive_handler,
+                              const Message& message, double* value) {
+  if (IsDecimal(message)) {
+    FHIR_ASSIGN_OR_RETURN(std::string string_value,
+                          primitive_handler->GetDecimalValue(message));
 
-    if (!absl::SimpleAtod(decimal->value(), value)) {
+    if (!absl::SimpleAtod(string_value, value)) {
       return InvalidArgument(
-          absl::StrCat("Could not convert to numeric: ", decimal->value()));
+          absl::StrCat("Could not convert to numeric: ", string_value));
     }
 
     return Status::OK();
 
-  } else if (IsMessageType<Integer>(message)) {
-    const Integer* integer = dynamic_cast<const Integer*>(&message);
-
-    *value = integer->value();
+  } else if (IsSystemInteger(message)) {
+    FHIR_ASSIGN_OR_RETURN(*value, ToSystemInteger(primitive_handler, message));
     return Status::OK();
   }
 
@@ -1766,60 +1800,13 @@ class ComparisonOperator : public BinaryOperator {
           "Comparison operators must have one element on each side.");
     }
 
-    const Message* left_result = left_results[0].Message();
-    const Message* right_result = right_results[0].Message();
+    FHIR_ASSIGN_OR_RETURN(bool result, EvalComparison(
+        work_space->GetPrimitiveHandler(), left_results[0], right_results[0]));
 
-    Boolean* result = new Boolean();
-    work_space->DeleteWhenFinished(result);
-
-    if (IsMessageType<Integer>(*left_result) &&
-        IsMessageType<Integer>(*right_result)) {
-      EvalIntegerComparison(dynamic_cast<const Integer*>(left_result),
-                            dynamic_cast<const Integer*>(right_result), result);
-
-    } else if (IsMessageType<UnsignedInt>(*left_result) &&
-               IsMessageType<Integer>(*right_result)) {
-      EvalIntegerComparison(dynamic_cast<const UnsignedInt*>(left_result),
-                            dynamic_cast<const Integer*>(right_result), result);
-
-    } else if (IsMessageType<Integer>(*left_result) &&
-               IsMessageType<UnsignedInt>(*right_result)) {
-      EvalIntegerComparison(dynamic_cast<const Integer*>(left_result),
-                            dynamic_cast<const UnsignedInt*>(right_result),
-                            result);
-
-    } else if (IsMessageType<UnsignedInt>(*left_result) &&
-               IsMessageType<UnsignedInt>(*right_result)) {
-      EvalIntegerComparison(dynamic_cast<const UnsignedInt*>(left_result),
-                            dynamic_cast<const UnsignedInt*>(right_result),
-                            result);
-
-    } else if (IsMessageType<Decimal>(*left_result) ||
-               IsMessageType<Decimal>(*right_result)) {
-      FHIR_RETURN_IF_ERROR(
-          EvalDecimalComparison(left_result, right_result, result));
-
-    } else if (IsMessageType<String>(*left_result) &&
-               IsMessageType<String>(*right_result)) {
-      EvalStringComparison(dynamic_cast<const String*>(left_result),
-                           dynamic_cast<const String*>(right_result), result);
-    } else if (IsMessageType<DateTime>(*left_result) &&
-               IsMessageType<DateTime>(*right_result)) {
-      FHIR_RETURN_IF_ERROR(EvalDateTimeComparison(
-          dynamic_cast<const DateTime*>(left_result),
-          dynamic_cast<const DateTime*>(right_result), result));
-    } else if (IsMessageType<SimpleQuantity>(*left_result) &&
-               IsMessageType<SimpleQuantity>(*right_result)) {
-      FHIR_RETURN_IF_ERROR(EvalSimpleQuantityComparison(
-          dynamic_cast<const SimpleQuantity*>(left_result),
-          dynamic_cast<const SimpleQuantity*>(right_result), result));
-    } else {
-      return InvalidArgument(
-          "Unsupported comparison value types: ", left_result->GetTypeName(),
-          " and ", right_result->GetTypeName());
-    }
-
-    out_results->push_back(WorkspaceMessage(result));
+    Message* result_message =
+        work_space->GetPrimitiveHandler()->NewBoolean(result);
+    work_space->DeleteWhenFinished(result_message);
+    out_results->push_back(WorkspaceMessage(result_message));
     return Status::OK();
   }
 
@@ -1833,75 +1820,93 @@ class ComparisonOperator : public BinaryOperator {
       : BinaryOperator(left, right), comparison_type_(comparison_type) {}
 
  private:
-  template <class LT, class RT>
-  void EvalIntegerComparison(const LT* left_wrapper,
-                             const RT* right_wrapper,
-                             Boolean* result) const {
-    // It isn't necessary to widen the values from 32 to 64 bits when converting
-    // a UnsignedInt or PositiveInt to an int32_t because FHIR restricts the
-    // values of those types to 31 bits.
-    const int32_t left = left_wrapper->value();
-    const int32_t right = right_wrapper->value();
+  StatusOr<bool> EvalComparison(const PrimitiveHandler* primitive_handler,
+      const WorkspaceMessage& left, const WorkspaceMessage& right) const {
+    const Message* left_result = left.Message();
+    const Message* right_result = right.Message();
 
-    switch (comparison_type_) {
-      case kLessThan:
-        result->set_value(left < right);
-        break;
-      case kGreaterThan:
-        result->set_value(left > right);
-        break;
-      case kLessThanEqualTo:
-        result->set_value(left <= right);
-        break;
-      case kGreaterThanEqualTo:
-        result->set_value(left >= right);
-        break;
+    if (IsSystemInteger(*left_result) && IsSystemInteger(*right_result)) {
+      return EvalIntegerComparison(
+          ToSystemInteger(primitive_handler, *left_result)
+              .ValueOrDie(),
+          ToSystemInteger(primitive_handler, *right_result)
+              .ValueOrDie());
+    } else if (IsDecimal(*left_result) || IsDecimal(*right_result)) {
+      return EvalDecimalComparison(primitive_handler, left_result,
+                                   right_result);
+
+    } else if (IsString(*left_result) && IsString(*right_result)) {
+      return EvalStringComparison(primitive_handler, left_result, right_result);
+    } else if (IsDateTime(*left_result) && IsDateTime(*right_result)) {
+      return EvalDateTimeComparison(primitive_handler, *left_result,
+                                    *right_result);
+    } else if (IsSimpleQuantity(*left_result) &&
+               IsSimpleQuantity(*right_result)) {
+      return EvalSimpleQuantityComparison(primitive_handler, *left_result,
+                                          *right_result);
+    } else {
+      return InvalidArgument(
+          "Unsupported comparison value types: ", left_result->GetTypeName(),
+          " and ", right_result->GetTypeName());
     }
   }
 
-  Status EvalDecimalComparison(const Message* left_message,
-                               const Message* right_message,
-                               Boolean* result) const {
+  bool EvalIntegerComparison(int32_t left, int32_t right) const {
+    switch (comparison_type_) {
+      case kLessThan:
+        return left < right;
+      case kGreaterThan:
+        return left > right;
+      case kLessThanEqualTo:
+        return left <= right;
+      case kGreaterThanEqualTo:
+        return left >= right;
+    }
+  }
+
+  StatusOr<bool> EvalDecimalComparison(
+      const PrimitiveHandler* primitive_handler, const Message* left_message,
+      const Message* right_message) const {
     // Handle decimal comparisons, converting integer types
     // if necessary.
     double left;
-    FHIR_RETURN_IF_ERROR(MessageToDouble(*left_message, &left));
+    FHIR_RETURN_IF_ERROR(
+        MessageToDouble(primitive_handler, *left_message, &left));
     double right;
-    FHIR_RETURN_IF_ERROR(MessageToDouble(*right_message, &right));
+    FHIR_RETURN_IF_ERROR(
+        MessageToDouble(primitive_handler, *right_message, &right));
 
     switch (comparison_type_) {
       case kLessThan:
-        result->set_value(left < right);
-        break;
+        return left < right;
       case kGreaterThan:
-        result->set_value(left > right);
-        break;
+        return left > right;
       case kLessThanEqualTo:
         // Fallback to literal comparison for equality to avoid
         // rounding errors.
-        result->set_value(
+        return
             left <= right ||
             (left_message->GetDescriptor() == right_message->GetDescriptor() &&
-             MessageDifferencer::Equals(*left_message, *right_message)));
-        break;
+             MessageDifferencer::Equals(*left_message, *right_message));
       case kGreaterThanEqualTo:
         // Fallback to literal comparison for equality to avoid
         // rounding errors.
-        result->set_value(
+        return
             left >= right ||
             (left_message->GetDescriptor() == right_message->GetDescriptor() &&
-             MessageDifferencer::Equals(*left_message, *right_message)));
-        break;
+             MessageDifferencer::Equals(*left_message, *right_message));
     }
 
     return Status::OK();
   }
 
-  void EvalStringComparison(const String* left_message,
-                            const String* right_message,
-                            Boolean* result) const {
-    const std::string& left = left_message->value();
-    const std::string& right = right_message->value();
+  StatusOr<bool> EvalStringComparison(const PrimitiveHandler* primitive_handler,
+                                      const Message* left_message,
+                                      const Message* right_message) const {
+    FHIR_ASSIGN_OR_RETURN(const std::string left,
+                          primitive_handler->GetStringValue(*left_message));
+    FHIR_ASSIGN_OR_RETURN(const std::string right,
+                          primitive_handler->GetStringValue(*right_message));
 
     // FHIR defines string comparisons to be based on unicode values,
     // so simply comparison operators are not sufficient.
@@ -1916,30 +1921,35 @@ class ComparisonOperator : public BinaryOperator {
 
     switch (comparison_type_) {
       case kLessThan:
-        result->set_value(compare_result < 0);
-        break;
+        return compare_result < 0;
       case kGreaterThan:
-        result->set_value(compare_result > 0);
-        break;
+        return compare_result > 0;
       case kLessThanEqualTo:
-        result->set_value(compare_result <= 0);
-        break;
+        return compare_result <= 0;
       case kGreaterThanEqualTo:
-        result->set_value(compare_result >= 0);
-        break;
+        return compare_result >= 0;
     }
   }
 
-  Status EvalDateTimeComparison(const DateTime* left_message,
-                                const DateTime* right_message,
-                                Boolean* result) const {
-    absl::Time left_time = absl::FromUnixMicros(left_message->value_us());
-    absl::Time right_time = absl::FromUnixMicros(right_message->value_us());
+  StatusOr<bool> EvalDateTimeComparison(
+      const PrimitiveHandler* primitive_handler, const Message& left_message,
+      const Message& right_message) const {
+    FHIR_ASSIGN_OR_RETURN(absl::Time left_time,
+                          primitive_handler->GetDateTimeValue(left_message));
+    FHIR_ASSIGN_OR_RETURN(absl::Time right_time,
+                          primitive_handler->GetDateTimeValue(right_message));
 
     FHIR_ASSIGN_OR_RETURN(absl::TimeZone left_zone,
-                          BuildTimeZoneFromString(left_message->timezone()));
+                          primitive_handler->GetDateTimeZone(left_message));
     FHIR_ASSIGN_OR_RETURN(absl::TimeZone right_zone,
-                          BuildTimeZoneFromString(right_message->timezone()));
+                          primitive_handler->GetDateTimeZone(right_message));
+
+    FHIR_ASSIGN_OR_RETURN(
+        DateTimePrecision left_precision,
+        primitive_handler->GetDateTimePrecision(left_message));
+    FHIR_ASSIGN_OR_RETURN(
+        DateTimePrecision right_precision,
+        primitive_handler->GetDateTimePrecision(right_message));
 
     // negative if left < right, positive if left > right, 0 if equal
     absl::civil_diff_t time_difference;
@@ -1948,26 +1958,26 @@ class ComparisonOperator : public BinaryOperator {
     // datetime comparison is done at the finest precision BOTH
     // dates support. This is equivalent to finding the looser precision
     // between the two and comparing them, which is simpler to implement here.
-    if (left_message->precision() == DateTime::YEAR ||
-        right_message->precision() == DateTime::YEAR) {
+    if (left_precision == DateTimePrecision::kYear ||
+        right_precision == DateTimePrecision::kYear) {
       absl::CivilYear left_year = absl::ToCivilYear(left_time, left_zone);
       absl::CivilYear right_year = absl::ToCivilYear(right_time, right_zone);
       time_difference = left_year - right_year;
 
-    } else if (left_message->precision() == DateTime::MONTH ||
-               right_message->precision() == DateTime::MONTH) {
+    } else if (left_precision == DateTimePrecision::kMonth ||
+               right_precision == DateTimePrecision::kMonth) {
       absl::CivilMonth left_month = absl::ToCivilMonth(left_time, left_zone);
       absl::CivilMonth right_month = absl::ToCivilMonth(right_time, right_zone);
       time_difference = left_month - right_month;
 
-    } else if (left_message->precision() == DateTime::DAY ||
-               right_message->precision() == DateTime::DAY) {
+    } else if (left_precision == DateTimePrecision::kDay ||
+               right_precision == DateTimePrecision::kDay) {
       absl::CivilDay left_day = absl::ToCivilDay(left_time, left_zone);
       absl::CivilDay right_day = absl::ToCivilDay(right_time, right_zone);
       time_difference = left_day - right_day;
 
-    } else if (left_message->precision() == DateTime::SECOND ||
-               right_message->precision() == DateTime::SECOND) {
+    } else if (left_precision == DateTimePrecision::kSecond ||
+               right_precision == DateTimePrecision::kSecond) {
       absl::CivilSecond left_second = absl::ToCivilSecond(left_time, left_zone);
       absl::CivilSecond right_second =
           absl::ToCivilSecond(right_time, right_zone);
@@ -1984,44 +1994,64 @@ class ComparisonOperator : public BinaryOperator {
 
       // In the same second, so check for sub-second differences.
       if (time_difference == 0) {
-        time_difference = left_message->value_us() % 1000000 -
-                          right_message->value_us() % 1000000;
+        time_difference = absl::ToUnixMicros(left_time) % 1000000 -
+                          absl::ToUnixMicros(right_time) % 1000000;
       }
     }
 
     switch (comparison_type_) {
       case kLessThan:
-        result->set_value(time_difference < 0);
-        break;
+        return time_difference < 0;
       case kGreaterThan:
-        result->set_value(time_difference > 0);
-        break;
+        return time_difference > 0;
       case kLessThanEqualTo:
-        result->set_value(time_difference <= 0);
-        break;
+        return time_difference <= 0;
       case kGreaterThanEqualTo:
-        result->set_value(time_difference >= 0);
-        break;
+        return time_difference >= 0;
     }
-
-    return Status::OK();
   }
 
-  Status EvalSimpleQuantityComparison(const SimpleQuantity* left_wrapper,
-                                      const SimpleQuantity* right_wrapper,
-                                      Boolean* result) const {
-    if (left_wrapper->code().value() != right_wrapper->code().value() ||
-        left_wrapper->system().value() != right_wrapper->system().value()) {
+  StatusOr<bool> EvalSimpleQuantityComparison(
+      const PrimitiveHandler* primitive_handler,
+      const Message& left_wrapper,
+      const Message& right_wrapper) const {
+    FHIR_ASSIGN_OR_RETURN(
+        std::string left_code,
+        primitive_handler->GetSimpleQuantityCode(left_wrapper));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string left_system,
+        primitive_handler->GetSimpleQuantitySystem(left_wrapper));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string right_code,
+        primitive_handler->GetSimpleQuantityCode(right_wrapper));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string right_system,
+        primitive_handler->GetSimpleQuantitySystem(right_wrapper));
+
+    if (left_code != right_code || left_system != right_system) {
       // From the FHIRPath spec: "Implementations are not required to fully
       // support operations on units, but they must at least respect units,
       // recognizing when units differ."
       return InvalidArgument(
           "Compared quantities must have the same units. Got ",
-          left_wrapper->unit().value(), " and ", right_wrapper->unit().value());
+          "[", left_code, ", ", left_system, "] and ",
+          "[", right_code, ", ", right_system, "]");
     }
 
-    return EvalDecimalComparison(&left_wrapper->value(),
-                                 &right_wrapper->value(), result);
+    FHIR_ASSIGN_OR_RETURN(
+        std::string left_value,
+        primitive_handler->GetSimpleQuantityValue(left_wrapper));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string right_value,
+        primitive_handler->GetSimpleQuantityValue(right_wrapper));
+
+    auto left_value_wrapper =
+        std::unique_ptr<Message>(primitive_handler->NewDecimal(left_value));
+    auto right_value_wrapper =
+        std::unique_ptr<Message>(primitive_handler->NewDecimal(right_value));
+
+    return EvalDecimalComparison(primitive_handler, left_value_wrapper.get(),
+                                 right_value_wrapper.get());
   }
 
   ComparisonType comparison_type_;
@@ -2047,21 +2077,20 @@ class AdditionOperator : public BinaryOperator {
     const Message* left_result = left_results[0].Message();
     const Message* right_result = right_results[0].Message();
 
-    if (IsMessageType<Integer>(*left_result) &&
-        IsMessageType<Integer>(*right_result)) {
-      Integer* result = new Integer();
+    if (IsSystemInteger(*left_result) && IsSystemInteger(*right_result)) {
+      FHIR_ASSIGN_OR_RETURN(
+          int32_t value, EvalIntegerAddition(work_space->GetPrimitiveHandler(),
+                                             *left_result, *right_result));
+      Message* result = work_space->GetPrimitiveHandler()->NewInteger(value);
       work_space->DeleteWhenFinished(result);
-      result->set_value(
-          EvalIntegerAddition(dynamic_cast<const Integer*>(left_result),
-                              dynamic_cast<const Integer*>(right_result)));
       out_results->push_back(WorkspaceMessage(result));
-    } else if (IsMessageType<String>(*left_result) &&
-               IsMessageType<String>(*right_result)) {
-      String* result = new String();
+    } else if (IsString(*left_result) && IsString(*right_result)) {
+      FHIR_ASSIGN_OR_RETURN(
+          std::string value,
+          EvalStringAddition(work_space->GetPrimitiveHandler(), *left_result,
+                             *right_result));
+      Message* result = work_space->GetPrimitiveHandler()->NewString(value);
       work_space->DeleteWhenFinished(result);
-      result->set_value(
-          EvalStringAddition(dynamic_cast<const String*>(left_result),
-                             dynamic_cast<const String*>(right_result)));
       out_results->push_back(WorkspaceMessage(result));
     } else {
       // TODO: Add implementation for Date, DateTime, Time, and Decimal
@@ -2081,17 +2110,23 @@ class AdditionOperator : public BinaryOperator {
       : BinaryOperator(std::move(left), std::move(right)) {}
 
  private:
-  int32_t EvalIntegerAddition(const Integer* left_wrapper,
-                              const Integer* right_wrapper) const {
-    const int32_t left = left_wrapper->value();
-    const int32_t right = right_wrapper->value();
+  StatusOr<int32_t> EvalIntegerAddition(
+      const PrimitiveHandler* primitive_handler, const Message& left_wrapper,
+      const Message& right_wrapper) const {
+    FHIR_ASSIGN_OR_RETURN(int32_t left,
+                          ToSystemInteger(primitive_handler, left_wrapper));
+    FHIR_ASSIGN_OR_RETURN(int32_t right,
+                          ToSystemInteger(primitive_handler, right_wrapper));
     return left + right;
   }
 
-  std::string EvalStringAddition(const String* left_message,
-                                 const String* right_message) const {
-    const std::string& left = left_message->value();
-    const std::string& right = right_message->value();
+  StatusOr<std::string> EvalStringAddition(
+      const PrimitiveHandler* primitive_handler, const Message& left_message,
+      const Message& right_message) const {
+    FHIR_ASSIGN_OR_RETURN(std::string left,
+                          primitive_handler->GetStringValue(left_message));
+    FHIR_ASSIGN_OR_RETURN(std::string right,
+                          primitive_handler->GetStringValue(right_message));
 
     return absl::StrCat(left, right);
   }
@@ -2113,15 +2148,19 @@ class StrCatOperator : public BinaryOperator {
     std::string right;
 
     if (!left_results.empty()) {
-      FHIR_ASSIGN_OR_RETURN(left, MessageToString(left_results[0]));
+      FHIR_ASSIGN_OR_RETURN(
+          left,
+          MessageToString(work_space->GetPrimitiveHandler(), left_results[0]));
     }
     if (!right_results.empty()) {
-      FHIR_ASSIGN_OR_RETURN(right, MessageToString(right_results[0]));
+      FHIR_ASSIGN_OR_RETURN(
+          right,
+          MessageToString(work_space->GetPrimitiveHandler(), right_results[0]));
     }
 
-    String* result = new String();
+    Message* result =
+        work_space->GetPrimitiveHandler()->NewString(absl::StrCat(left, right));
     work_space->DeleteWhenFinished(result);
-    result->set_value(absl::StrCat(left, right));
     out_results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
@@ -2168,24 +2207,25 @@ class PolarityOperator : public ExpressionNode {
       return Status::OK();
     }
 
-    if (IsMessageType<Decimal>(*operand_value.Message())) {
-      Decimal* result = new Decimal();
+    if (IsDecimal(*operand_value.Message())) {
+      FHIR_ASSIGN_OR_RETURN(std::string value,
+                            work_space->GetPrimitiveHandler()->GetDecimalValue(
+                                *operand_value.Message()));
+      value = absl::StartsWith(value, "-") ? value.substr(1)
+                                           : absl::StrCat("-", value);
+      Message* result = work_space->GetPrimitiveHandler()->NewDecimal(value);
       work_space->DeleteWhenFinished(result);
-      result->CopyFrom(*operand_value.Message());
-      if (absl::StartsWith(result->value(), "-")) {
-        result->set_value(result->value().substr(1));
-      } else {
-        result->set_value(absl::StrCat("-", result->value()));
-      }
       results->push_back(WorkspaceMessage(result));
       return Status::OK();
     }
 
-    if (IsMessageType<Integer>(*operand_value.Message())) {
-      Integer* result = new Integer();
+    if (IsSystemInteger(*operand_value.Message())) {
+      FHIR_ASSIGN_OR_RETURN(int32_t value,
+                            ToSystemInteger(work_space->GetPrimitiveHandler(),
+                                            *operand_value.Message()));
+      Message* result =
+          work_space->GetPrimitiveHandler()->NewInteger(value * -1);
       work_space->DeleteWhenFinished(result);
-      result->CopyFrom(*operand_value.Message());
-      result->set_value(result->value() * -1);
       results->push_back(WorkspaceMessage(result));
       return Status::OK();
     }
@@ -2217,9 +2257,9 @@ class BooleanOperator : public ExpressionNode {
  protected:
   void SetResult(bool eval_result, WorkSpace* work_space,
                  std::vector<WorkspaceMessage>* results) const {
-    Boolean* result = new Boolean();
+    Message* result =
+        work_space->GetPrimitiveHandler()->NewBoolean(eval_result);
     work_space->DeleteWhenFinished(result);
-    result->set_value(eval_result);
     results->push_back(WorkspaceMessage(result));
   }
 
@@ -2227,8 +2267,9 @@ class BooleanOperator : public ExpressionNode {
       std::shared_ptr<ExpressionNode> node, WorkSpace* work_space) const {
     std::vector<WorkspaceMessage> results;
     FHIR_RETURN_IF_ERROR(node->Evaluate(work_space, &results));
-    FHIR_ASSIGN_OR_RETURN(absl::optional<bool> result,
-                          (PrimitiveOrEmpty<bool, Boolean>(results)));
+    FHIR_ASSIGN_OR_RETURN(
+        absl::optional<bool> result,
+        (BooleanOrEmpty(work_space->GetPrimitiveHandler(), results)));
     return result;
   }
 
@@ -2400,9 +2441,8 @@ class ContainsOperator : public BinaryOperator {
                                    *right_operand, *message.Message());
                              });
 
-    Boolean* result = new Boolean();
+    Message* result = work_space->GetPrimitiveHandler()->NewBoolean(found);
     work_space->DeleteWhenFinished(result);
-    result->set_value(found);
     results->push_back(WorkspaceMessage(result));
 
     return Status::OK();
@@ -2503,13 +2543,18 @@ struct InvocationDefinition {
 // more frequently here, but the costs in this case are negligible.
 class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
  public:
-  explicit FhirPathCompilerVisitor(const Descriptor* descriptor)
-      : error_listener_(this), descriptor_stack_({descriptor}) {}
+  FhirPathCompilerVisitor(const Descriptor* descriptor,
+                          const PrimitiveHandler* primitive_handler)
+      : error_listener_(this),
+        descriptor_stack_({descriptor}),
+        primitive_handler_(primitive_handler) {}
 
-  explicit FhirPathCompilerVisitor(
+  FhirPathCompilerVisitor(
       const std::vector<const Descriptor*>& descriptor_stack_history,
-      const Descriptor* descriptor)
-      : error_listener_(this), descriptor_stack_(descriptor_stack_history) {
+      const Descriptor* descriptor, const PrimitiveHandler* primitive_handler)
+      : error_listener_(this),
+        descriptor_stack_(descriptor_stack_history),
+        primitive_handler_(primitive_handler) {
     descriptor_stack_.push_back(descriptor);
   }
 
@@ -2611,7 +2656,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
     auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
 
-    return ToAny(std::make_shared<IndexerExpression>(left, right));
+    return ToAny(
+        std::make_shared<IndexerExpression>(primitive_handler_, left, right));
   }
 
   antlrcpp::Any visitUnionExpression(
@@ -2868,15 +2914,25 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   antlrcpp::Any visitExternalConstant(
       FhirPathParser::ExternalConstantContext* ctx) override {
     std::string name = ctx->children[1]->getText();
+    const PrimitiveHandler* primitive_handler = primitive_handler_;
     if (name == "ucum") {
-      return ToAny(std::make_shared<Literal<String, std::string>>(
-          "http://unitsofmeasure.org"));
+      return ToAny(std::make_shared<Literal<std::string>>(
+          "http://unitsofmeasure.org", primitive_handler_->StringDescriptor(),
+          [primitive_handler](const std::string& value) {
+            return primitive_handler->NewString(value);
+          }));
     } else if (name == "sct") {
-      return ToAny(std::make_shared<Literal<String, std::string>>(
-          "http://snomed.info/sct"));
+      return ToAny(std::make_shared<Literal<std::string>>(
+          "http://snomed.info/sct", primitive_handler_->StringDescriptor(),
+          [primitive_handler](const std::string& value) {
+            return primitive_handler->NewString(value);
+          }));
     } else if (name == "loinc") {
-      return ToAny(
-          std::make_shared<Literal<String, std::string>>("http://loinc.org"));
+      return ToAny(std::make_shared<Literal<std::string>>(
+          "http://loinc.org", primitive_handler_->StringDescriptor(),
+          [primitive_handler](const std::string& value) {
+            return primitive_handler->NewString(value);
+          }));
     } else if (name == "context") {
       return ToAny(
           std::make_shared<ContextReference>(descriptor_stack_.front()));
@@ -2890,13 +2946,18 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitTerminal(TerminalNode* node) override {
     const std::string& text = node->getSymbol()->getText();
+    const PrimitiveHandler* primitive_handler = primitive_handler_;
 
     switch (node->getSymbol()->getType()) {
       case FhirPathLexer::NUMBER:
         // Determine if the number is an integer or decimal, propagating
         // decimal types in string form to preserve precision.
         if (text.find(".") != std::string::npos) {
-          return ToAny(std::make_shared<Literal<Decimal, std::string>>(text));
+          return ToAny(std::make_shared<Literal<std::string>>(
+              text, primitive_handler_->DecimalDescriptor(),
+              [primitive_handler](const std::string& value) {
+                return primitive_handler->NewDecimal(value);
+              }));
         } else {
           int32_t value;
           if (!absl::SimpleAtoi(text, &value)) {
@@ -2904,7 +2965,11 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
             return nullptr;
           }
 
-          return ToAny(std::make_shared<Literal<Integer, int32_t>>(value));
+          return ToAny(std::make_shared<Literal<int32_t>>(
+              value, primitive_handler_->IntegerDescriptor(),
+              [primitive_handler](int32_t value) {
+                return primitive_handler->NewInteger(value);
+              }));
         }
 
       case FhirPathLexer::STRING: {
@@ -2919,11 +2984,19 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
         // grammar rules (FhirPath.g4) which are enforced by the parser. In
         // addition, CUnescape does not handle escaped forward slashes.
         absl::CUnescape(trimmed, &unescaped);
-        return ToAny(std::make_shared<Literal<String, std::string>>(unescaped));
+        return ToAny(std::make_shared<Literal<std::string>>(
+            unescaped, primitive_handler_->StringDescriptor(),
+            [primitive_handler](const std::string& value) {
+              return primitive_handler->NewString(value);
+            }));
       }
 
       case FhirPathLexer::BOOL:
-        return ToAny(std::make_shared<Literal<Boolean, bool>>(text == "true"));
+        return ToAny(std::make_shared<Literal<bool>>(
+            text == "true", primitive_handler_->BooleanDescriptor(),
+            [primitive_handler](bool value) {
+              return primitive_handler->NewBoolean(value);
+            }));
 
       case FhirPathLexer::EMPTY:
         return ToAny(std::make_shared<EmptyLiteral>());
@@ -2995,7 +3068,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       // will use whichever visitor (or both) is needed to compile the function
       // invocation.
       FhirPathCompilerVisitor child_context_visitor(
-          descriptor_stack_, child_expression->ReturnType());
+          descriptor_stack_, child_expression->ReturnType(),
+          primitive_handler_);
       StatusOr<ExpressionNode*> result = function_factory->second(
           child_expression, params, this, &child_context_visitor);
       if (!result.ok()) {
@@ -3042,6 +3116,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   FhirPathErrorListener error_listener_;
   std::vector<const Descriptor*> descriptor_stack_;
   std::string error_message_;
+  const PrimitiveHandler* primitive_handler_;
 };
 
 }  // namespace internal
@@ -3066,61 +3141,64 @@ const std::vector<const Message*>& EvaluationResult::GetMessages() const {
 }
 
 StatusOr<bool> EvaluationResult::GetBoolean() const {
-  if (internal::IsSingleBoolean(work_space_->GetResultMessages())) {
-    return internal::MessagesToBoolean(work_space_->GetResultMessages());
+  auto messages = work_space_->GetResultMessages();
+  if (messages.size() != 1) {
+    return InvalidArgument(
+        "Result collection must contain exactly one element");
   }
-
-  return InvalidArgument("Expression did not evaluate to boolean");
+  return work_space_->GetPrimitiveHandler()->GetBooleanValue(*messages[0]);
 }
 
 StatusOr<int32_t> EvaluationResult::GetInteger() const {
   auto messages = work_space_->GetResultMessages();
-
-  if (messages.size() == 1 && IsMessageType<Integer>(*messages[0])) {
-    return dynamic_cast<const Integer*>(messages[0])->value();
+  if (messages.size() != 1) {
+    return InvalidArgument(
+        "Result collection must contain exactly one element");
   }
-
-  return InvalidArgument("Expression did not evaluate to integer");
+  return work_space_->GetPrimitiveHandler()->GetIntegerValue(*messages[0]);
 }
 
 StatusOr<std::string> EvaluationResult::GetDecimal() const {
   auto messages = work_space_->GetResultMessages();
-
-  if (messages.size() == 1 && IsMessageType<Decimal>(*messages[0])) {
-    return dynamic_cast<const Decimal*>(messages[0])->value();
+  if (messages.size() != 1) {
+    return InvalidArgument(
+        "Result collection must contain exactly one element");
   }
-
-  return InvalidArgument("Expression did not evaluate to decimal");
+  return work_space_->GetPrimitiveHandler()->GetDecimalValue(*messages[0]);
 }
 
 StatusOr<std::string> EvaluationResult::GetString() const {
   auto messages = work_space_->GetResultMessages();
-
-  if (messages.size() == 1 && IsMessageType<String>(*messages[0])) {
-    return dynamic_cast<const String*>(messages[0])->value();
+  if (messages.size() != 1) {
+    return InvalidArgument(
+        "Result collection must contain exactly one element");
   }
-
-  return InvalidArgument("Expression did not evaluate to string");
+  return work_space_->GetPrimitiveHandler()->GetStringValue(*messages[0]);
 }
 
 CompiledExpression::CompiledExpression(CompiledExpression&& other)
     : fhir_path_(std::move(other.fhir_path_)),
-      root_expression_(std::move(other.root_expression_)) {}
+      root_expression_(std::move(other.root_expression_)),
+      primitive_handler_(other.primitive_handler_) {}
 
 CompiledExpression& CompiledExpression::operator=(CompiledExpression&& other) {
   fhir_path_ = std::move(other.fhir_path_);
   root_expression_ = std::move(other.root_expression_);
+  primitive_handler_ = other.primitive_handler_;
 
   return *this;
 }
 
 CompiledExpression::CompiledExpression(const CompiledExpression& other)
-    : fhir_path_(other.fhir_path_), root_expression_(other.root_expression_) {}
+    : fhir_path_(other.fhir_path_),
+      root_expression_(other.root_expression_),
+      primitive_handler_(other.primitive_handler_) {}
 
 CompiledExpression& CompiledExpression::operator=(
     const CompiledExpression& other) {
   fhir_path_ = other.fhir_path_;
   root_expression_ = other.root_expression_;
+  primitive_handler_ = other.primitive_handler_;
 
   return *this;
 }
@@ -3129,17 +3207,21 @@ const std::string& CompiledExpression::fhir_path() const { return fhir_path_; }
 
 CompiledExpression::CompiledExpression(
     const std::string& fhir_path,
-    std::shared_ptr<internal::ExpressionNode> root_expression)
-    : fhir_path_(fhir_path), root_expression_(root_expression) {}
+    std::shared_ptr<internal::ExpressionNode> root_expression,
+    const PrimitiveHandler* primitive_handler)
+    : fhir_path_(fhir_path),
+      root_expression_(root_expression),
+      primitive_handler_(primitive_handler) {}
 
 StatusOr<CompiledExpression> CompiledExpression::Compile(
-    const Descriptor* descriptor, const std::string& fhir_path) {
+    const Descriptor* descriptor, const PrimitiveHandler* primitive_handler,
+    const std::string& fhir_path) {
   ANTLRInputStream input(fhir_path);
   FhirPathLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
   FhirPathParser parser(&tokens);
 
-  internal::FhirPathCompilerVisitor visitor(descriptor);
+  internal::FhirPathCompilerVisitor visitor(descriptor, primitive_handler);
   parser.addErrorListener(visitor.GetErrorListener());
   lexer.addErrorListener(visitor.GetErrorListener());
   antlrcpp::Any result = visitor.visit(parser.expression());
@@ -3147,7 +3229,7 @@ StatusOr<CompiledExpression> CompiledExpression::Compile(
   // TODO: the visitor error check should be redundant
   if (result.isNotNull() && visitor.CheckOk()) {
     auto root_node = result.as<std::shared_ptr<internal::ExpressionNode>>();
-    return CompiledExpression(fhir_path, root_node);
+    return CompiledExpression(fhir_path, root_node, primitive_handler);
   } else {
     auto status = InvalidArgument(visitor.GetError());
     return InvalidArgument(visitor.GetError());
@@ -3162,8 +3244,8 @@ StatusOr<EvaluationResult> CompiledExpression::Evaluate(
 StatusOr<EvaluationResult> CompiledExpression::Evaluate(
     const internal::WorkspaceMessage& message) const {
   std::vector<internal::WorkspaceMessage> message_context_stack;
-  auto work_space =
-      absl::make_unique<internal::WorkSpace>(message_context_stack, message);
+  auto work_space = absl::make_unique<internal::WorkSpace>(
+      primitive_handler_, message_context_stack, message);
 
   std::vector<internal::WorkspaceMessage> workspace_results;
   FHIR_RETURN_IF_ERROR(
@@ -3186,7 +3268,8 @@ MessageValidator::~MessageValidator() {}
 // Build the constraints for the given message type and
 // add it to the constraints cache.
 StatusOr<MessageValidator::MessageConstraints*>
-MessageValidator::ConstraintsFor(const Descriptor* descriptor) {
+MessageValidator::ConstraintsFor(const Descriptor* descriptor,
+                                 const PrimitiveHandler* primitive_handler) {
   // Simply return the cached constraint if it exists.
   auto iter = constraints_cache_.find(descriptor->full_name());
 
@@ -3202,7 +3285,8 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor) {
   for (int i = 0; i < ext_size; ++i) {
     const std::string& fhir_path = descriptor->options().GetExtension(
         proto::fhir_path_message_constraint, i);
-    auto constraint = CompiledExpression::Compile(descriptor, fhir_path);
+    auto constraint =
+        CompiledExpression::Compile(descriptor, primitive_handler, fhir_path);
     if (constraint.ok()) {
       CompiledExpression expression = constraint.ValueOrDie();
       constraints->message_expressions_.push_back(expression);
@@ -3231,7 +3315,8 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor) {
         const std::string& fhir_path =
             field->options().GetExtension(proto::fhir_path_constraint, j);
 
-        auto constraint = CompiledExpression::Compile(field_type, fhir_path);
+        auto constraint = CompiledExpression::Compile(
+            field_type, primitive_handler, fhir_path);
 
         if (constraint.ok()) {
           constraints->field_expressions_.push_back(
@@ -3263,7 +3348,8 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor) {
     // Constraints only apply to non-primitives.
     if (field_type != nullptr) {
       // Validate the field type.
-      FHIR_ASSIGN_OR_RETURN(auto child_constraints, ConstraintsFor(field_type));
+      FHIR_ASSIGN_OR_RETURN(auto child_constraints,
+                            ConstraintsFor(field_type, primitive_handler));
 
       // Nested fields that directly or transitively have constraints
       // are retained and used when applying constraints.
@@ -3330,8 +3416,9 @@ Status ValidateFieldConstraint(const Message& parent,
                                bool* halt_validation) {
   FHIR_ASSIGN_OR_RETURN(const EvaluationResult expr_result,
                         expression.Evaluate(field_value));
+  FHIR_ASSIGN_OR_RETURN(bool result, expr_result.GetBoolean());
 
-  if (!expr_result.GetBoolean().ValueOrDie()) {
+  if (!result) {
     std::string err_msg = absl::StrCat(
         "fhirpath-constraint-violation-", field->containing_type()->name(), ".",
         field->json_name(), ": \"", expression.fhir_path(), "\"");
@@ -3353,18 +3440,21 @@ void UpdateStatus(Status* accumulative_status, const Status& current_status) {
 Status MessageValidator::Validate(const Message& message,
                                   ViolationHandlerFunc handler) {
   bool halt_validation = false;
-  return Validate(internal::WorkspaceMessage(&message), handler,
-                  &halt_validation);
+  FHIR_ASSIGN_OR_RETURN(auto primitive_handler,
+                        internal::GetPrimitiveHandler(message));
+  return Validate(internal::WorkspaceMessage(&message), primitive_handler,
+                  handler, &halt_validation);
 }
 
 Status MessageValidator::Validate(const internal::WorkspaceMessage& message,
+                                  const PrimitiveHandler* primitive_handler,
                                   ViolationHandlerFunc handler,
                                   bool* halt_validation) {
   // ConstraintsFor may recursively build constraints so
   // we lock the mutex here to ensure thread safety.
   mutex_.Lock();
   auto status_or_constraints =
-      ConstraintsFor(message.Message()->GetDescriptor());
+      ConstraintsFor(message.Message()->GetDescriptor(), primitive_handler);
   mutex_.Unlock();
 
   if (!status_or_constraints.ok()) {
@@ -3417,7 +3507,7 @@ Status MessageValidator::Validate(const internal::WorkspaceMessage& message,
         *message.Message(), field, [&](const Message& child) {
           UpdateStatus(&accumulative_status,
                        Validate(internal::WorkspaceMessage(message, &child),
-                                handler, halt_validation));
+                                primitive_handler, handler, halt_validation));
           return *halt_validation;
         });
   }

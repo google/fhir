@@ -42,11 +42,13 @@ static const char* const kTimeZoneString = "Australia/Sydney";
 
 // json_path should be relative to fhir root
 template <typename R>
-R ParseJsonToProto(const std::string& json_path) {
+StatusOr<R> ParseJsonToProto(const std::string& json_path) {
   std::string json = ReadFile(json_path);
   absl::TimeZone tz;
   absl::LoadTimeZone(kTimeZoneString, &tz);
-  return JsonFhirStringToProto<R>(json, tz).ValueOrDie();
+  FHIR_ASSIGN_OR_RETURN(R resource, JsonFhirStringToProto<R>(json, tz));
+  FHIR_RETURN_IF_ERROR(ValidateResourceWithFhirPath(resource));
+  return resource;
 }
 
 // proto_path should be relative to //testdata/stu3
@@ -56,7 +58,10 @@ R ParseJsonToProto(const std::string& json_path) {
 template <typename R>
 void TestParseWithFilepaths(const std::string& proto_path,
                             const std::string& json_path) {
-  R from_json = ParseJsonToProto<R>(json_path);
+  StatusOr<R> from_json_status = ParseJsonToProto<R>(json_path);
+  ASSERT_TRUE(from_json_status.ok()) << "Failed parsing: " << json_path << "\n"
+                                     << from_json_status.status();
+  R from_json = from_json_status.ValueOrDie();
   R from_disk = ReadStu3Proto<R>(proto_path);
 
   ::google::protobuf::util::MessageDifferencer differencer;
@@ -158,6 +163,7 @@ TEST(JsonFormatStu3Test, ParseProfile) {
   // that changes.
   ASSERT_EQ("Duck", ParseJsonToProto<stu3::testing::TestPatient>(
                         "testdata/stu3/profiles/test_patient.json")
+                        .ValueOrDie()
                         .name()
                         .given(0)
                         .value());
