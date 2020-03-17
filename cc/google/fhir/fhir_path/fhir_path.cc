@@ -961,9 +961,9 @@ class TraceFunction : public SingleValueFunctionNode {
         std::string name,
         MessageToString(work_space->GetPrimitiveHandler(), param));
 
-    LOG(INFO) << "trace(" << name << "):";
+    DVLOG(1) << "trace(" << name << "):";
     for (auto it = results->begin(); it != results->end(); it++) {
-      LOG(INFO) << (*it).Message()->DebugString();
+      DVLOG(1) << (*it).Message()->DebugString();
     }
 
     return Status::OK();
