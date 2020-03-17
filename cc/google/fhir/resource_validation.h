@@ -17,7 +17,7 @@
 #ifndef GOOGLE_FHIR_RESOURCE_VALIDATION_H_
 #define GOOGLE_FHIR_RESOURCE_VALIDATION_H_
 
-#include "google/fhir/fhir_path/fhir_path.h"
+#include "google/fhir/fhir_path/fhir_path_validation.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/status/status.h"

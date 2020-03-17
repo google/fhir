@@ -22,6 +22,7 @@ cc_library(
     name = "fhir_path",
     srcs = [
         "fhir_path.cc",
+        "fhir_path_validation.cc",
     ],
     hdrs = [
         # TODO: These may not be necessary as Bazel approaches 1.0
@@ -30,6 +31,7 @@ cc_library(
         "FhirPathParser.h",
         "FhirPathVisitor.h",
         "fhir_path.h",
+        "fhir_path_validation.h",
     ],
     copts = [
         "-fexceptions",
@@ -87,7 +89,10 @@ cc_library(
 cc_test(
     name = "fhir_path_test",
     size = "small",
-    srcs = ["fhir_path_test.cc"],
+    srcs = [
+        "fhir_path_test.cc",
+        "fhir_path_validation_test.cc",
+    ],
     deps = [
         ":fhir_path",
         "//cc/google/fhir:proto_util",

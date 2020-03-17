@@ -19,7 +19,7 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "google/fhir/fhir_path/fhir_path.h"
+#include "google/fhir/fhir_path/fhir_path_validation.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"

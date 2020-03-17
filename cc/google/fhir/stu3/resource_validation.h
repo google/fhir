@@ -18,7 +18,7 @@
 #define GOOGLE_FHIR_STU3_RESOURCE_VALIDATION_H_
 
 #include "google/protobuf/message.h"
-#include "google/fhir/fhir_path/fhir_path.h"
+#include "google/fhir/fhir_path/fhir_path_validation.h"
 
 namespace google {
 namespace fhir {
