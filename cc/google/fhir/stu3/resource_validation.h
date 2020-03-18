@@ -28,9 +28,6 @@ Status ValidateResource(const ::google::protobuf::Message& resource);
 
 Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource);
 
-Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource,
-                                    fhir_path::ViolationHandlerFunc handler);
-
 }  // namespace stu3
 }  // namespace fhir
 }  // namespace google

@@ -32,12 +32,6 @@ Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource)
                                       R4PrimitiveHandler::GetInstance());
 }
 
-Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource,
-                                    fhir_path::ViolationHandlerFunc handler) {
-  return ValidateResourceWithFhirPath(resource, handler,
-                                      R4PrimitiveHandler::GetInstance());
-}
-
 }  // namespace r4
 }  // namespace fhir
 }  // namespace google

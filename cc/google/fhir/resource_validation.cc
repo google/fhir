@@ -181,16 +181,6 @@ Status ValidateResourceWithFhirPath(const Message& resource,
   return fhir_path::ValidateMessage(resource);
 }
 
-// TODO(nickgeorge, rbrush): Consider integrating handler func into validations
-// in this file.
-Status ValidateResourceWithFhirPath(const Message& resource,
-                                    fhir_path::ViolationHandlerFunc handler,
-                                    const PrimitiveHandler* primitive_handler) {
-  FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(
-      resource, resource.GetDescriptor()->name(), primitive_handler));
-  return fhir_path::ValidateMessage(resource, handler);
-}
-
 Status ValidateResource(const Message& resource,
                         const PrimitiveHandler* primitive_handler) {
   return ValidateFhirConstraints(resource, resource.GetDescriptor()->name(),

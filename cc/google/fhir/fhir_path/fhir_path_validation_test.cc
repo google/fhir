@@ -46,11 +46,7 @@ namespace fhir_path {
 
 namespace {
 
-using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
-using r4::uscore::BirthSexValueSet;
-using r4::uscore::USCorePatientProfile;
-using ::testing::EndsWith;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
 
@@ -77,6 +73,26 @@ TEST(CaseName, TestName##STU3) { \
 Body \
 } \
 } \
+
+const ::google::fhir::PrimitiveHandler* GetPrimitiveHandler(
+    const ::google::protobuf::Descriptor* descriptor) {
+  const auto version = GetFhirVersion(descriptor);
+  switch (version) {
+    case proto::FhirVersion::STU3:
+      return ::google::fhir::stu3::Stu3PrimitiveHandler::GetInstance();
+    case proto::FhirVersion::R4:
+      return ::google::fhir::r4::R4PrimitiveHandler::GetInstance();
+    default:
+      ADD_FAILURE() << "Primitive handler not available.";
+      return nullptr;
+  }
+}
+
+ValidationResults Validate(const Message& message) {
+  MessageValidator validator;
+  return validator.Validate(GetPrimitiveHandler(message.GetDescriptor()),
+                            message);
+}
 
 template <typename T>
 T ParseFromString(const std::string& str) {
@@ -108,9 +124,9 @@ T ValidValueSet() {
   )proto");
 }
 
-// TODO: Templatize methods to work with both STU3 and R4
-USCorePatientProfile ValidUsCorePatient() {
-  return ParseFromString<USCorePatientProfile>(R"proto(
+template <typename T>
+T ValidUsCorePatient() {
+  return ParseFromString<T>(R"proto(
     identifier {
       system { value: "foo" },
       value: { value: "http://example.com/patient" }
@@ -133,26 +149,17 @@ FHIR_VERSION_TEST(FhirPathTest, ConstraintViolation, {
     telecom: { use: {value: HOME}}
   )proto");
 
-  MessageValidator validator;
+  ValidationResults results = Validate(organization);
+  EXPECT_FALSE(results.IsValid());
 
-  auto callback = [&organization](const Message& bad_message,
-                                 const FieldDescriptor* field,
-                                 const std::string& constraint) {
-    // Ensure the expected bad sub-message is passed to the callback.
-    EXPECT_EQ(organization.GetDescriptor()->name(),
-              bad_message.GetDescriptor()->name());
-
-    // Ensure the expected constraint failed.
-    EXPECT_EQ("where(use = 'home').empty()", constraint);
-
-    return false;
-  };
-
-  std::string err_message =
-      absl::StrCat("fhirpath-constraint-violation-Organization.telecom: ",
-                   "\"where(use = 'home').empty()\"");
-  EXPECT_EQ(validator.Validate(organization, callback),
-            ::tensorflow::errors::FailedPrecondition(err_message));
+  std::vector<ValidationResult> result_vector = results.Results();
+  auto result =
+      find_if(result_vector.begin(), result_vector.end(), [](auto result) {
+        return result.Constraint() == "where(use = 'home').empty()" &&
+               result.DebugPath() == "Organization.telecom";
+      });
+  ASSERT_TRUE(result != result_vector.end());
+  ASSERT_FALSE((*result).EvaluationResult().ValueOrDie());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, ConstraintSatisfied, {
@@ -170,9 +177,7 @@ FHIR_VERSION_TEST(FhirPathTest, ConstraintSatisfied, {
 
   ref_range->set_allocated_high(high);
 
-  MessageValidator validator;
-
-  EXPECT_TRUE(validator.Validate(observation).ok());
+  EXPECT_TRUE(Validate(observation).IsValid());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, NestedConstraintViolated, {
@@ -185,10 +190,17 @@ FHIR_VERSION_TEST(FhirPathTest, NestedConstraintViolated, {
   value_set.mutable_name()->set_value("Placeholder");
   value_set.set_allocated_expansion(expansion);
 
-  MessageValidator validator;
+  ValidationResults results = Validate(value_set);
+  EXPECT_FALSE(results.IsValid());
 
-  EXPECT_THAT(validator.Validate(value_set).ToString(),
-            EndsWith("\"code.exists() or display.exists()\""));
+  std::vector<ValidationResult> result_vector = results.Results();
+  auto result =
+      find_if(result_vector.begin(), result_vector.end(), [](auto result) {
+        return result.Constraint() ==
+               "code.exists() or display.exists()";
+      });
+  ASSERT_TRUE(result != result_vector.end());
+  ASSERT_FALSE((*result).EvaluationResult().ValueOrDie());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, NestedConstraintSatisfied, {
@@ -209,9 +221,7 @@ FHIR_VERSION_TEST(FhirPathTest, NestedConstraintSatisfied, {
 
   value_set.set_allocated_expansion(expansion);
 
-  MessageValidator validator;
-
-  EXPECT_TRUE(validator.Validate(value_set).ok());
+  EXPECT_TRUE(Validate(value_set).IsValid());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, MessageLevelConstraint, {
@@ -220,8 +230,7 @@ FHIR_VERSION_TEST(FhirPathTest, MessageLevelConstraint, {
     end: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
   )proto");
 
-  MessageValidator validator;
-  EXPECT_TRUE(validator.Validate(period).ok());
+  EXPECT_TRUE(Validate(period).IsValid());
 })
 
 // TODO: Templatize tests to work with both STU3 and R4
@@ -231,8 +240,7 @@ TEST(FhirPathTest, MessageLevelConstraintViolated) {
     end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
   )proto");
 
-  MessageValidator validator;
-  EXPECT_FALSE(validator.Validate(end_before_start_period).ok());
+  EXPECT_FALSE(Validate(end_before_start_period).IsValid());
 }
 
 FHIR_VERSION_TEST(FhirPathTest, NestedMessageLevelConstraint, {
@@ -244,8 +252,7 @@ FHIR_VERSION_TEST(FhirPathTest, NestedMessageLevelConstraint, {
     }
   )proto");
 
-  MessageValidator validator;
-  EXPECT_TRUE(validator.Validate(start_with_no_end_encounter).ok());
+  EXPECT_TRUE(Validate(start_with_no_end_encounter).IsValid());
 })
 
 TEST(FhirPathTest, NestedMessageLevelConstraintViolated) {
@@ -258,18 +265,18 @@ TEST(FhirPathTest, NestedMessageLevelConstraintViolated) {
     }
   )proto");
 
-  MessageValidator validator;
-  EXPECT_FALSE(validator.Validate(end_before_start_encounter).ok());
+  EXPECT_FALSE(Validate(end_before_start_encounter).IsValid());
 }
 
-FHIR_VERSION_TEST(FhirPathTest, ProfiledEmptyExtension, {
-  USCorePatientProfile patient = ValidUsCorePatient();
-  MessageValidator validator;
-  EXPECT_TRUE(validator.Validate(patient).ok());
-})
+// TODO: Templatize tests to work with both STU3 and R4
+TEST(FhirPathTest, ProfiledEmptyExtension) {
+  r4::uscore::USCorePatientProfile patient =
+      ValidUsCorePatient<r4::uscore::USCorePatientProfile>();
+  EXPECT_TRUE(Validate(patient).IsValid());
+}
 
-TEST(FhirPathTest, ProfiledWithExtensions) {
-  USCorePatientProfile patient = ValidUsCorePatient();
+TEST(FhirPathTest, ProfiledWithExtensionsR4) {
+  auto patient = ValidUsCorePatient<r4::uscore::USCorePatientProfile>();
   auto race = new r4::uscore::PatientUSCoreRaceExtension();
 
   r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding* coding =
@@ -278,10 +285,24 @@ TEST(FhirPathTest, ProfiledWithExtensions) {
       r4::uscore::OmbRaceCategoriesValueSet::AMERICAN_INDIAN_OR_ALASKA_NATIVE);
   patient.set_allocated_race(race);
 
-  patient.mutable_birthsex()->set_value(BirthSexValueSet::M);
+  patient.mutable_birthsex()->set_value(r4::uscore::BirthSexValueSet::M);
+
+  EXPECT_TRUE(Validate(patient).IsValid());
+}
+
+TEST(FhirPathTest, ProfiledWithExtensionsSTU3) {
+  auto patient = ValidUsCorePatient<stu3::uscore::UsCorePatient>();
+  auto race = new stu3::uscore::PatientUSCoreRaceExtension();
+
+  stu3::proto::Coding* coding = race->add_omb_category();
+  coding->mutable_code()->set_value("urn:oid:2.16.840.1.113883.6.238");
+  coding->mutable_code()->set_value("1002-5");
+  patient.set_allocated_race(race);
+
+  patient.mutable_birthsex()->set_value(stu3::uscore::UsCoreBirthSexCode::MALE);
 
   MessageValidator validator;
-  EXPECT_TRUE(validator.Validate(patient).ok());
+  ASSERT_TRUE(Validate(patient).IsValid());
 }
 
 }  // namespace

@@ -47,7 +47,7 @@ namespace fhir_path {
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
-using ::google::fhir::ForEachMessageHalting;
+using ::google::fhir::ForEachMessage;
 using ::google::fhir::StatusOr;
 using ::tensorflow::errors::InvalidArgument;
 
@@ -67,12 +67,31 @@ StatusOr<const PrimitiveHandler*> GetPrimitiveHandler(
   }
 }
 
+bool ValidationResults::IsValid(ValidationBehavior behavior) const {
+  for (const ValidationResult& result : results_) {
+    if (!result.EvaluationResult().ok() &&
+        behavior == ValidationBehavior::kStrict) {
+      return false;
+    }
+
+    if (!result.EvaluationResult().ValueOrDie()) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+std::vector<ValidationResult> ValidationResults::Results() const {
+  return results_;
+}
+
 MessageValidator::MessageValidator() {}
 MessageValidator::~MessageValidator() {}
 
 // Build the constraints for the given message type and
 // add it to the constraints cache.
-StatusOr<MessageValidator::MessageConstraints*>
+MessageValidator::MessageConstraints*
 MessageValidator::ConstraintsFor(const Descriptor* descriptor,
                                  const PrimitiveHandler* primitive_handler) {
   // Simply return the cached constraint if it exists.
@@ -153,8 +172,7 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor,
     // Constraints only apply to non-primitives.
     if (field_type != nullptr) {
       // Validate the field type.
-      FHIR_ASSIGN_OR_RETURN(auto child_constraints,
-                            ConstraintsFor(field_type, primitive_handler));
+      auto child_constraints = ConstraintsFor(field_type, primitive_handler);
 
       // Nested fields that directly or transitively have constraints
       // are retained and used when applying constraints.
@@ -169,166 +187,108 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor,
   return constraints_local;
 }
 
-// Default handler halts on first error
-bool HaltOnErrorHandler(const Message& message, const FieldDescriptor* field,
-                        const std::string& constraint) {
-  return true;
+// Validates that the given message satisfies the given FHIRPath expression.
+ValidationResult ValidateMessageConstraint(
+    const internal::WorkspaceMessage& message,
+    const CompiledExpression& expression) {
+  StatusOr<EvaluationResult> expr_result = expression.Evaluate(message);
+  return ValidationResult(
+      message.Message()->GetDescriptor()->name(), expression.fhir_path(),
+      expr_result.ok() ? expr_result.ValueOrDie().GetBoolean()
+                       : expr_result.status());
 }
 
-Status MessageValidator::Validate(const Message& message) {
-  return Validate(message, HaltOnErrorHandler);
+// Validates that the given field in the given parent satisfies the given
+// FHIRPath expression.
+ValidationResult ValidateFieldConstraint(
+    const Message& parent, const FieldDescriptor* field,
+    const internal::WorkspaceMessage& field_value,
+    const CompiledExpression& expression) {
+  StatusOr<EvaluationResult> expr_result = expression.Evaluate(field_value);
+  return ValidationResult(
+      absl::StrCat(field->containing_type()->name(), ".", field->json_name()),
+      expression.fhir_path(),
+      expr_result.ok() ? expr_result.ValueOrDie().GetBoolean()
+                       : expr_result.status());
 }
 
-// Validates that the given message satisfies the
-// the given FHIRPath expression, invoking the handler in case
-// of failure.
-Status ValidateMessageConstraint(const internal::WorkspaceMessage& message,
-                                 const CompiledExpression& expression,
-                                 const ViolationHandlerFunc handler,
-                                 bool* halt_validation) {
-  FHIR_ASSIGN_OR_RETURN(const EvaluationResult expr_result,
-                        expression.Evaluate(message));
-
-  if (!expr_result.GetBoolean().ok()) {
-    *halt_validation = true;
-    return InvalidArgument("Constraint did not evaluate to boolean: ",
-                           message.Message()->GetDescriptor()->name(), ": \"",
-                           expression.fhir_path(), "\"");
-  }
-
-  if (!expr_result.GetBoolean().ValueOrDie()) {
-    std::string err_msg =
-        absl::StrCat("fhirpath-constraint-violation-",
-                     message.Message()->GetDescriptor()->name(), ": \"",
-                     expression.fhir_path(), "\"");
-
-    *halt_validation =
-        handler(*message.Message(), nullptr, expression.fhir_path());
-    return ::tensorflow::errors::FailedPrecondition(err_msg);
-  }
-
-  return Status::OK();
-}
-
-// Validates that the given field in the given parent satisfies the
-// the given FHIRPath expression, invoking the handler in case
-// of failure.
-Status ValidateFieldConstraint(const Message& parent,
-                               const FieldDescriptor* field,
-                               const internal::WorkspaceMessage& field_value,
-                               const CompiledExpression& expression,
-                               const ViolationHandlerFunc handler,
-                               bool* halt_validation) {
-  FHIR_ASSIGN_OR_RETURN(const EvaluationResult expr_result,
-                        expression.Evaluate(field_value));
-  FHIR_ASSIGN_OR_RETURN(bool result, expr_result.GetBoolean());
-
-  if (!result) {
-    std::string err_msg = absl::StrCat(
-        "fhirpath-constraint-violation-", field->containing_type()->name(), ".",
-        field->json_name(), ": \"", expression.fhir_path(), "\"");
-
-    *halt_validation = handler(parent, field, expression.fhir_path());
-    return ::tensorflow::errors::FailedPrecondition(err_msg);
-  }
-
-  return Status::OK();
-}
-
-// Store the first detected failure in the accumulative status.
-void UpdateStatus(Status* accumulative_status, const Status& current_status) {
-  if (accumulative_status->ok() && !current_status.ok()) {
-    *accumulative_status = current_status;
-  }
-}
-
-Status MessageValidator::Validate(const Message& message,
-                                  ViolationHandlerFunc handler) {
-  bool halt_validation = false;
-  FHIR_ASSIGN_OR_RETURN(auto primitive_handler, GetPrimitiveHandler(message));
-  return Validate(internal::WorkspaceMessage(&message), primitive_handler,
-                  handler, &halt_validation);
-}
-
-Status MessageValidator::Validate(const internal::WorkspaceMessage& message,
+void MessageValidator::Validate(const internal::WorkspaceMessage& message,
                                   const PrimitiveHandler* primitive_handler,
-                                  ViolationHandlerFunc handler,
-                                  bool* halt_validation) {
+                                  std::vector<ValidationResult>* results) {
   // ConstraintsFor may recursively build constraints so
   // we lock the mutex here to ensure thread safety.
   mutex_.Lock();
-  auto status_or_constraints =
+  MessageConstraints* constraints =
       ConstraintsFor(message.Message()->GetDescriptor(), primitive_handler);
   mutex_.Unlock();
 
-  if (!status_or_constraints.ok()) {
-    return status_or_constraints.status();
-  }
-
-  auto constraints = status_or_constraints.ValueOrDie();
-
-  // Keep the first failure to return to the caller.
-  Status accumulative_status = Status::OK();
-
   // Validate the constraints attached to the message root.
   for (const CompiledExpression& expr : constraints->message_expressions) {
-    UpdateStatus(
-        &accumulative_status,
-        ValidateMessageConstraint(message, expr, handler, halt_validation));
-    if (*halt_validation) {
-      return accumulative_status;
-    }
+    results->push_back(ValidateMessageConstraint(message, expr));
   }
 
   // Validate the constraints attached to the message's fields.
   for (auto expression : constraints->field_expressions) {
-    if (*halt_validation) {
-      return accumulative_status;
-    }
-
     const FieldDescriptor* field = expression.first;
     const CompiledExpression& expr = expression.second;
 
-    ForEachMessageHalting<Message>(
+    ForEachMessage<Message>(
         *message.Message(), field, [&](const Message& child) {
-          UpdateStatus(&accumulative_status,
-                       ValidateFieldConstraint(
-                           *message.Message(), field,
-                           internal::WorkspaceMessage(message, &child), expr,
-                           handler, halt_validation));
-
-          return *halt_validation;
+          results->push_back(ValidateFieldConstraint(
+              *message.Message(), field,
+              internal::WorkspaceMessage(message, &child), expr));
         });
   }
 
   // Recursively validate constraints for nested messages that have them.
   for (const FieldDescriptor* field : constraints->nested_with_constraints) {
-    if (*halt_validation) {
-      return accumulative_status;
-    }
-
-    ForEachMessageHalting<Message>(
+    ForEachMessage<Message>(
         *message.Message(), field, [&](const Message& child) {
-          UpdateStatus(&accumulative_status,
-                       Validate(internal::WorkspaceMessage(message, &child),
-                                primitive_handler, handler, halt_validation));
-          return *halt_validation;
+          Validate(internal::WorkspaceMessage(message, &child),
+                   primitive_handler, results);
         });
   }
+}
 
-  return accumulative_status;
+Status MessageValidator::Validate(const ::google::protobuf::Message& message) {
+  FHIR_ASSIGN_OR_RETURN(const PrimitiveHandler* primitive_handler,
+                        GetPrimitiveHandler(message));
+  ValidationResults results = Validate(primitive_handler, message);
+
+  if (results.IsValid(ValidationResults::ValidationBehavior::kRelaxed)) {
+    return Status::OK();
+  }
+
+  std::vector<ValidationResult> result_vector = results.Results();
+  auto result =
+      find_if(result_vector.begin(), result_vector.end(), [](auto result) {
+        return !result.EvaluationResult().ok() ||
+               !result.EvaluationResult().ValueOrDie();
+      });
+
+  return ::tensorflow::errors::FailedPrecondition(
+      "fhirpath-constraint-violation-", (*result).DebugPath(), ": \"",
+      (*result).Constraint(), "\"");
+}
+
+ValidationResults MessageValidator::Validate(
+    const PrimitiveHandler* primitive_handler,
+    const ::google::protobuf::Message& message) {
+  std::vector<ValidationResult> results;
+  Validate(internal::WorkspaceMessage(&message), primitive_handler, &results);
+  return ValidationResults(results);
 }
 
 // Common validator instance for the lifetime of the process.
 static MessageValidator* validator = new MessageValidator();
 
-Status ValidateMessage(const ::google::protobuf::Message& message) {
-  return validator->Validate(message);
+ValidationResults ValidateMessage(const PrimitiveHandler* primitive_handler,
+                                  const ::google::protobuf::Message& message) {
+  return validator->Validate(primitive_handler, message);
 }
 
-Status ValidateMessage(const ::google::protobuf::Message& message,
-                       ViolationHandlerFunc handler) {
-  return validator->Validate(message, handler);
+Status ValidateMessage(const ::google::protobuf::Message& message) {
+  return validator->Validate(message);
 }
 
 }  // namespace fhir_path

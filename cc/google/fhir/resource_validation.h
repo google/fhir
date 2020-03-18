@@ -37,12 +37,6 @@ Status ValidateResource(const ::google::protobuf::Message& resource,
 Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource,
                                     const PrimitiveHandler* primitive_handler);
 
-// TODO(nickgeorge, rbrush): Consider integrating handler func into validations
-// in this file.
-Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource,
-                                    fhir_path::ViolationHandlerFunc handler,
-                                    const PrimitiveHandler* primitive_handler);
-
 }  // namespace fhir
 }  // namespace google
 
