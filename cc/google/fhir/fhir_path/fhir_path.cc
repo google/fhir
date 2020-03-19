@@ -46,39 +46,26 @@ namespace google {
 namespace fhir {
 namespace fhir_path {
 
+using ::antlr4::ANTLRInputStream;
+using ::antlr4::BaseErrorListener;
+using ::antlr4::CommonTokenStream;
+using ::antlr4::tree::TerminalNode;
+using ::antlr_parser::FhirPathBaseVisitor;
+using ::antlr_parser::FhirPathLexer;
+using ::antlr_parser::FhirPathParser;
+using ::google::fhir::AreSameMessageType;
+using ::google::fhir::JsonPrimitive;
+using ::google::fhir::StatusOr;
+using ::google::fhir::r4::core::Boolean;
+using ::google::fhir::r4::core::Integer;
+using ::google::fhir::r4::core::String;
+using internal::ExpressionNode;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
-using ::google::protobuf::MessageOptions;
 using ::google::protobuf::util::MessageDifferencer;
-
-// Used to wrap primitives in protobuf messages, and
-// can be used against multiple versions of FHIR, not just R4.
-using ::google::fhir::r4::core::Boolean;
-using ::google::fhir::r4::core::Decimal;
-using ::google::fhir::r4::core::Integer;
-using ::google::fhir::r4::core::String;
-
-using antlr4::ANTLRInputStream;
-using antlr4::BaseErrorListener;
-using antlr4::CommonTokenStream;
-using antlr4::tree::TerminalNode;
-
-using antlr_parser::FhirPathBaseVisitor;
-using antlr_parser::FhirPathLexer;
-using antlr_parser::FhirPathParser;
-
-using ::google::fhir::AreSameMessageType;
-using ::google::fhir::ForEachMessageHalting;
-using ::google::fhir::IsMessageType;
-using ::google::fhir::JsonPrimitive;
-using ::google::fhir::StatusOr;
-
-using internal::ExpressionNode;
-
 using ::tensorflow::errors::InvalidArgument;
 using ::tensorflow::errors::NotFound;
-
 
 namespace internal {
 
@@ -2183,7 +2170,7 @@ class PolarityOperator : public ExpressionNode {
   };
 
   PolarityOperator(PolarityOperation operation,
-                   std::shared_ptr<ExpressionNode>& operand)
+                   const std::shared_ptr<ExpressionNode>& operand)
       : operation_(operation), operand_(operand) {}
 
   Status Evaluate(WorkSpace* work_space,
@@ -3023,7 +3010,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       FhirPathBaseVisitor*, FhirPathBaseVisitor*)>
       FunctionFactory;
 
-  std::map<std::string, FunctionFactory> function_map{
+  std::map<std::string, FunctionFactory> function_map_{
       {"exists", FunctionNode::Create<ExistsFunction>},
       {"not", FunctionNode::Create<NotFunction>},
       {"hasValue", FunctionNode::Create<HasValueFunction>},
@@ -3057,8 +3044,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       std::shared_ptr<ExpressionNode> child_expression,
       const std::vector<FhirPathParser::ExpressionContext*>& params) {
     std::map<std::string, FunctionFactory>::iterator function_factory =
-        function_map.find(function_name);
-    if (function_factory != function_map.end()) {
+        function_map_.find(function_name);
+    if (function_factory != function_map_.end()) {
       // Some functions accept parameters that are expressions evaluated using
       // the child expression's result as context, not the base context of the
       // FHIRPath expression. In order to compile such parameters, we need to
