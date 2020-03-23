@@ -121,6 +121,7 @@ cc_library(
     srcs = ["primitive_handler.cc"],
     hdrs = ["primitive_handler.h"],
     strip_include_prefix = "//cc/",
+    visibility = ["//cc/google/fhir:internal"],
     deps = [
         "//cc/google/fhir:annotations",
         "//cc/google/fhir:codes",

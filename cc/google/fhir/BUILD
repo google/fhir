@@ -2,6 +2,13 @@ licenses(["notice"])
 
 package(default_visibility = ["//visibility:public"])
 
+package_group(
+    name = "internal",
+    packages = [
+        "//cc/google/fhir/...",
+    ],
+)
+
 cc_library(
     name = "codes",
     srcs = ["codes.cc"],
@@ -432,6 +439,7 @@ cc_library(
     srcs = ["primitive_handler.cc"],
     hdrs = ["primitive_handler.h"],
     strip_include_prefix = "//cc/",
+    visibility = [":internal"],
     deps = [
         ":annotations",
         ":primitive_wrapper",
