@@ -14,6 +14,7 @@
 
 #include "google/fhir/fhir_path/utils.h"
 
+#include "google/protobuf/any.pb.h"
 #include "google/fhir/util.h"
 #include "tensorflow/core/lib/core/errors.h"
 
@@ -26,6 +27,7 @@ using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 using ::tensorflow::errors::NotFound;
+using ::tensorflow::errors::Unimplemented;
 
 // Logical field in primitives representing the underlying value.
 constexpr char kPrimitiveValueField[] = "value";
@@ -72,6 +74,13 @@ Status RetrieveField(const Message& root, const FieldDescriptor& field,
 
   return ForEachMessageWithStatus<Message>(
       root, &field, [&](const Message& child) {
+        // R4+ packs contained resources in Any protos.
+        if (IsMessageType<google::protobuf::Any>(child)) {
+          // TODO: Add support for ContainedResource packed in Any.
+          return Unimplemented(
+              "Contained resources packed in protobuf.Any are not supported");
+        }
+
         if (IsChoiceType(&field) || IsContainedResource(field.message_type())) {
           return OneofMessageFromContainer(child, results);
         } else {

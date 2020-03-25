@@ -69,9 +69,12 @@ StatusOr<const PrimitiveHandler*> GetPrimitiveHandler(
 
 bool ValidationResults::IsValid(ValidationBehavior behavior) const {
   for (const ValidationResult& result : results_) {
-    if (!result.EvaluationResult().ok() &&
-        behavior == ValidationBehavior::kStrict) {
-      return false;
+    if (!result.EvaluationResult().ok()) {
+      if (behavior == ValidationBehavior::kStrict) {
+        return false;
+      }
+
+      continue;
     }
 
     if (!result.EvaluationResult().ValueOrDie()) {

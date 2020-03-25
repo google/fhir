@@ -746,6 +746,76 @@ class MatchesFunction : public SingleValueFunctionNode {
   }
 };
 
+class ReplaceMatchesFunction : public FunctionNode {
+ public:
+  explicit ReplaceMatchesFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : FunctionNode(child, params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> pattern_param;
+    FHIR_RETURN_IF_ERROR(params_[0]->Evaluate(work_space, &pattern_param));
+
+    std::vector<WorkspaceMessage> replacement_param;
+    FHIR_RETURN_IF_ERROR(params_[1]->Evaluate(work_space, &replacement_param));
+
+    return EvaluateWithParam(work_space, pattern_param, replacement_param,
+                             results);
+  }
+
+  Status EvaluateWithParam(
+      WorkSpace* work_space, const std::vector<WorkspaceMessage>& pattern_param,
+      const std::vector<WorkspaceMessage>& replacement_param,
+      std::vector<WorkspaceMessage>* results) const {
+    std::vector<WorkspaceMessage> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.empty()) {
+      return Status::OK();
+    }
+
+    FHIR_ASSIGN_OR_RETURN(
+        std::string item,
+        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string re_string,
+        MessagesToString(work_space->GetPrimitiveHandler(), pattern_param));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string replacement_string,
+        MessagesToString(work_space->GetPrimitiveHandler(), replacement_param));
+
+    RE2 re(re_string);
+
+    if (!re.ok()) {
+      return InvalidArgument(
+          absl::StrCat("Unable to parse regular expression '", re_string,
+                       "'. ", re.error()));
+    }
+
+    RE2::Replace(&item, re, replacement_string);
+
+    Message* result = work_space->GetPrimitiveHandler()->NewString(item);
+    work_space->DeleteWhenFinished(result);
+    results->push_back(WorkspaceMessage(result));
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override { return String::descriptor(); }
+
+  static Status ValidateParams(
+      const std::vector<std::shared_ptr<ExpressionNode>>& params) {
+    if (params.size() != 2) {
+      return InvalidArgument(
+          "replaceMatches requires exactly two parameters. Got ",
+          params.size(), ".");
+    }
+
+    return Status::OK();
+  }
+};
+
 class ToStringFunction : public ZeroParameterFunctionNode {
  public:
   ToStringFunction(const std::shared_ptr<ExpressionNode>& child,
@@ -1295,6 +1365,11 @@ class CombineFunction : public SingleParameterFunctionNode {
   const Descriptor* ReturnType() const override {
     DCHECK_EQ(params_.size(), 1);
 
+    if (child_->ReturnType() == nullptr ||
+        params_[0]->ReturnType() == nullptr) {
+      return nullptr;
+    }
+
     if (AreSameMessageType(child_->ReturnType(), params_[0]->ReturnType())) {
       return child_->ReturnType();
     }
@@ -1693,6 +1768,50 @@ class ChildrenFunction : public ZeroParameterFunctionNode {
   const Descriptor* ReturnType() const override {
     return nullptr;
   }
+};
+
+class DescendantsFunction : public ZeroParameterFunctionNode {
+ public:
+  DescendantsFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    for (const WorkspaceMessage& child : child_results) {
+      FHIR_RETURN_IF_ERROR(AppendDescendants(child, work_space, results));
+    }
+
+    return Status::OK();
+  }
+
+  Status AppendDescendants(const WorkspaceMessage& parent,
+                           WorkSpace* work_space,
+                           std::vector<WorkspaceMessage>* results) const {
+    const Descriptor* descriptor = parent.Message()->GetDescriptor();
+    if (IsPrimitive(descriptor)) {
+      return Status::OK();
+    }
+
+    for (int i = 0; i < descriptor->field_count(); i++) {
+      std::vector<const Message*> messages;
+      FHIR_RETURN_IF_ERROR(RetrieveField(
+          *parent.Message(), *descriptor->field(i), &messages));
+      for (const Message* message : messages) {
+        WorkspaceMessage child(parent, message);
+        results->push_back(child);
+        FHIR_RETURN_IF_ERROR(AppendDescendants(child, work_space, results));
+      }
+    }
+
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override { return nullptr; }
 };
 
 // Implements the FHIRPath .intersect() function.
@@ -3025,6 +3144,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"combine", FunctionNode::Create<CombineFunction>},
       {"distinct", FunctionNode::Create<DistinctFunction>},
       {"matches", FunctionNode::Create<MatchesFunction>},
+      {"replaceMatches", FunctionNode::Create<ReplaceMatchesFunction>},
       {"length", FunctionNode::Create<LengthFunction>},
       {"isDistinct", FunctionNode::Create<IsDistinctFunction>},
       {"intersect", FunctionNode::Create<IntersectFunction>},
@@ -3036,6 +3156,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"is", IsFunction::Create},
       {"as", AsFunction::Create},
       {"children", FunctionNode::Create<ChildrenFunction>},
+      {"descendants", FunctionNode::Create<DescendantsFunction>},
   };
 
   // Returns an ExpressionNode that implements the specified FHIRPath function.

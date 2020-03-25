@@ -33,6 +33,7 @@ namespace {
 using ::google::fhir::testutil::EqualsProto;
 using ::google::protobuf::Message;
 using ::google::protobuf::TextFormat;
+using ::tensorflow::error::UNIMPLEMENTED;
 using ::testing::UnorderedElementsAreArray;
 
 namespace r4 = ::google::fhir::r4::core;
@@ -66,6 +67,37 @@ TEST(Utils, RetrieveFieldR4ContainedResource) {
       &results));
 
   ASSERT_THAT(results, UnorderedElementsAreArray({EqualsProto(patient)}));
+}
+
+TEST(Utils, RetrieveFieldR4ContainedResourceAny) {
+  r4::ContainedResource contained;
+  ASSERT_TRUE(TextFormat::ParseFromString(
+      "patient: { deceased: { boolean: { value: true } } }", &contained));
+
+  r4::Patient patient;
+  patient.add_contained()->PackFrom(contained);
+
+  r4::ContainedResource unpack_to;
+  std::vector<const Message*> results;
+  Status result = RetrieveField(
+      patient, *r4::Patient::GetDescriptor()->FindFieldByName("contained"),
+      &results);
+
+  EXPECT_EQ(result.code(), UNIMPLEMENTED) << result;
+}
+
+TEST(Utils, RetrieveFieldR4WrongAny) {
+  r4::Boolean boolean;
+  r4::Patient patient;
+  patient.add_contained()->PackFrom(boolean);
+
+  r4::ContainedResource unpack_to;
+  std::vector<const Message*> results;
+  Status result = RetrieveField(
+      patient, *r4::Patient::GetDescriptor()->FindFieldByName("contained"),
+      &results);
+
+  EXPECT_EQ(result.code(), UNIMPLEMENTED) << result;
 }
 
 TEST(Utils, RetrieveFieldStu3ContainedResource) {

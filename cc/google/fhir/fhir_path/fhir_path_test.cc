@@ -57,8 +57,10 @@ using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using r4::uscore::BirthSexValueSet;
 using r4::uscore::USCorePatientProfile;
+using ::tensorflow::error::INVALID_ARGUMENT;
 using ::testing::ElementsAreArray;
 using ::testing::EndsWith;
+using ::testing::Eq;
 using ::testing::StrEq;
 using ::testing::UnorderedElementsAreArray;
 using ::tensorflow::errors::InvalidArgument;
@@ -501,6 +503,35 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionChildren, {
            EqualsProto(structure_definition.differential().element(0))}));
 });
 
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionDescendants, {
+  StructureDefinition structure_definition =
+      ParseFromString<StructureDefinition>(R"proto(
+        name {value: "foo"}
+        context_invariant {value: "bar"}
+        snapshot {element {label {value: "snapshot"}}}
+        differential {element {label {value: "differential"}}}
+      )proto");
+
+  EXPECT_THAT(
+      Evaluate(structure_definition, "descendants()")
+          .ValueOrDie()
+          .GetMessages(),
+      UnorderedElementsAreArray(
+          {EqualsProto(structure_definition.name()),
+           EqualsProto(structure_definition.context_invariant(0)),
+           EqualsProto(structure_definition.snapshot()),
+           EqualsProto(structure_definition.snapshot().element(0)),
+           EqualsProto(structure_definition.snapshot().element(0).label()),
+           EqualsProto(structure_definition.differential()),
+           EqualsProto(structure_definition.differential().element(0)),
+           EqualsProto(
+               structure_definition.differential().element(0).label())}));
+});
+
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionDescendantsOnEmptyCollection, {
+  EXPECT_THAT(Evaluate("{}.descendants()"), EvalsToEmpty());
+});
+
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionContains, {
   // Wrong number and/or types of arguments.
   EXPECT_FALSE(Evaluate("'foo'.contains()").ok());
@@ -559,6 +590,23 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionMatches, {
   EXPECT_THAT(Evaluate("'a'.matches('a')"), EvalsToTrue());
   EXPECT_THAT(Evaluate("'abc'.matches('a')"), EvalsToFalse());
   EXPECT_THAT(Evaluate("'abc'.matches('...')"), EvalsToTrue());
+})
+
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionReplaceMatches, {
+  EXPECT_THAT(Evaluate("{}.replaceMatches('', '')"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("'a'.replaceMatches('.', 'b')"),
+              EvalsToStringThatMatches(StrEq("b")));
+})
+
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionReplaceMatchesWrongArgCount, {
+  StatusOr<EvaluationResult> result = Evaluate("''.replaceMatches()");
+  EXPECT_THAT(result.status().code(), Eq(INVALID_ARGUMENT)) << result.status();
+})
+
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionReplaceMatchesBadRegex, {
+  StatusOr<EvaluationResult> result =
+      Evaluate("''.replaceMatches('(', 'a')").status();
+  EXPECT_THAT(result.status().code(), Eq(INVALID_ARGUMENT)) << result.status();
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionLength, {

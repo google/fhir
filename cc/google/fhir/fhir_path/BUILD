@@ -145,5 +145,6 @@ cc_test(
         "//proto/stu3:resources_cc_proto",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
+        "@org_tensorflow//tensorflow/core:lib",
     ],
 )
