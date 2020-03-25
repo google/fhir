@@ -357,12 +357,14 @@ nested_type {
   field {
     name: "value"
     number: 1
+    label: LABEL_OPTIONAL
     type: TYPE_ENUM
     type_name: ".google.fhir.r4.core.PublicationStatusCode.Value"
   }
   field {
     name: "id"
     number: 2
+    label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.r4.core.String"
   }
@@ -384,12 +386,14 @@ nested_type {
   field {
     name: "value"
     number: 1
+    label: LABEL_OPTIONAL
     type: TYPE_ENUM
     type_name: ".google.fhir.r4.core.OperationKindCode.Value"
   }
   field {
     name: "id"
     number: 2
+    label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.r4.core.String"
   }
@@ -411,12 +415,14 @@ nested_type {
   field {
     name: "value"
     number: 1
+    label: LABEL_OPTIONAL
     type: TYPE_ENUM
     type_name: ".google.fhir.r4.core.ResourceTypeCode.Value"
   }
   field {
     name: "id"
     number: 2
+    label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.r4.core.String"
   }
@@ -584,12 +590,14 @@ nested_type {
     field {
       name: "value"
       number: 1
+      label: LABEL_OPTIONAL
       type: TYPE_ENUM
       type_name: ".google.fhir.r4.core.OperationParameterUseCode.Value"
     }
     field {
       name: "id"
       number: 2
+      label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
       type_name: ".google.fhir.r4.core.String"
     }
@@ -611,12 +619,14 @@ nested_type {
     field {
       name: "value"
       number: 1
+      label: LABEL_OPTIONAL
       type: TYPE_ENUM
       type_name: ".google.fhir.r4.core.FHIRAllTypesValueSet.Value"
     }
     field {
       name: "id"
       number: 2
+      label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
       type_name: ".google.fhir.r4.core.String"
     }
@@ -638,12 +648,14 @@ nested_type {
     field {
       name: "value"
       number: 1
+      label: LABEL_OPTIONAL
       type: TYPE_ENUM
       type_name: ".google.fhir.r4.core.SearchParamTypeCode.Value"
     }
     field {
       name: "id"
       number: 2
+      label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
       type_name: ".google.fhir.r4.core.String"
     }
@@ -719,12 +731,14 @@ nested_type {
       field {
         name: "value"
         number: 1
+        label: LABEL_OPTIONAL
         type: TYPE_ENUM
         type_name: ".google.fhir.r4.core.BindingStrengthCode.Value"
       }
       field {
         name: "id"
         number: 2
+        label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
         type_name: ".google.fhir.r4.core.String"
       }

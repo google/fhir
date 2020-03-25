@@ -402,12 +402,14 @@ nested_type {
   field {
     name: "value"
     number: 1
+    label: LABEL_OPTIONAL
     type: TYPE_ENUM
     type_name: ".google.fhir.r4.core.PublicationStatusCode.Value"
   }
   field {
     name: "id"
     number: 2
+    label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.r4.core.String"
   }
@@ -959,12 +961,14 @@ nested_type {
     field {
       name: "value"
       number: 1
+      label: LABEL_OPTIONAL
       type: TYPE_ENUM
       type_name: ".google.fhir.r4.core.RequestPriorityCode.Value"
     }
     field {
       name: "id"
       number: 2
+      label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
       type_name: ".google.fhir.r4.core.String"
     }
@@ -1067,12 +1071,14 @@ nested_type {
       field {
         name: "value"
         number: 1
+        label: LABEL_OPTIONAL
         type: TYPE_ENUM
         type_name: ".google.fhir.r4.core.ActionConditionKindCode.Value"
       }
       field {
         name: "id"
         number: 2
+        label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
         type_name: ".google.fhir.r4.core.String"
       }
@@ -1159,12 +1165,14 @@ nested_type {
       field {
         name: "value"
         number: 1
+        label: LABEL_OPTIONAL
         type: TYPE_ENUM
         type_name: ".google.fhir.r4.core.ActionRelationshipTypeCode.Value"
       }
       field {
         name: "id"
         number: 2
+        label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
         type_name: ".google.fhir.r4.core.String"
       }
@@ -1322,12 +1330,14 @@ nested_type {
       field {
         name: "value"
         number: 1
+        label: LABEL_OPTIONAL
         type: TYPE_ENUM
         type_name: ".google.fhir.r4.core.ActionParticipantTypeCode.Value"
       }
       field {
         name: "id"
         number: 2
+        label: LABEL_OPTIONAL
         type: TYPE_MESSAGE
         type_name: ".google.fhir.r4.core.String"
       }
@@ -1350,12 +1360,14 @@ nested_type {
     field {
       name: "value"
       number: 1
+      label: LABEL_OPTIONAL
       type: TYPE_ENUM
       type_name: ".google.fhir.r4.core.ActionGroupingBehaviorCode.Value"
     }
     field {
       name: "id"
       number: 2
+      label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
       type_name: ".google.fhir.r4.core.String"
     }
@@ -1377,12 +1389,14 @@ nested_type {
     field {
       name: "value"
       number: 1
+      label: LABEL_OPTIONAL
       type: TYPE_ENUM
       type_name: ".google.fhir.r4.core.ActionSelectionBehaviorCode.Value"
     }
     field {
       name: "id"
       number: 2
+      label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
       type_name: ".google.fhir.r4.core.String"
     }
@@ -1404,12 +1418,14 @@ nested_type {
     field {
       name: "value"
       number: 1
+      label: LABEL_OPTIONAL
       type: TYPE_ENUM
       type_name: ".google.fhir.r4.core.ActionRequiredBehaviorCode.Value"
     }
     field {
       name: "id"
       number: 2
+      label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
       type_name: ".google.fhir.r4.core.String"
     }
@@ -1431,12 +1447,14 @@ nested_type {
     field {
       name: "value"
       number: 1
+      label: LABEL_OPTIONAL
       type: TYPE_ENUM
       type_name: ".google.fhir.r4.core.ActionPrecheckBehaviorCode.Value"
     }
     field {
       name: "id"
       number: 2
+      label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
       type_name: ".google.fhir.r4.core.String"
     }
@@ -1458,12 +1476,14 @@ nested_type {
     field {
       name: "value"
       number: 1
+      label: LABEL_OPTIONAL
       type: TYPE_ENUM
       type_name: ".google.fhir.r4.core.ActionCardinalityBehaviorCode.Value"
     }
     field {
       name: "id"
       number: 2
+      label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
       type_name: ".google.fhir.r4.core.String"
     }

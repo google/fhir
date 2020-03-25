@@ -334,12 +334,14 @@ nested_type {
   field {
     name: "value"
     number: 1
+    label: LABEL_OPTIONAL
     type: TYPE_ENUM
     type_name: ".google.fhir.r4.core.PublicationStatusCode.Value"
   }
   field {
     name: "id"
     number: 2
+    label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.r4.core.String"
   }
@@ -1170,12 +1172,14 @@ nested_type {
         field {
           name: "value"
           number: 1
+          label: LABEL_OPTIONAL
           type: TYPE_ENUM
           type_name: ".google.fhir.r4.core.FHIRDefinedTypeValueSet.Value"
         }
         field {
           name: "id"
           number: 2
+          label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
           type_name: ".google.fhir.r4.core.String"
         }
@@ -1203,6 +1207,7 @@ nested_type {
         field {
           name: "id"
           number: 2
+          label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
           type_name: ".google.fhir.r4.core.String"
         }
@@ -1216,6 +1221,7 @@ nested_type {
         field {
           name: "value"
           number: 4
+          label: LABEL_OPTIONAL
           type: TYPE_STRING
           options {
             [google.fhir.proto.field_description]: "This valueset is not enumerable, and so is represented as a string."
@@ -1238,6 +1244,7 @@ nested_type {
         field {
           name: "id"
           number: 2
+          label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
           type_name: ".google.fhir.r4.core.String"
         }
@@ -1251,6 +1258,7 @@ nested_type {
         field {
           name: "value"
           number: 4
+          label: LABEL_OPTIONAL
           type: TYPE_STRING
           options {
             [google.fhir.proto.field_description]: "This valueset is not enumerable, and so is represented as a string."
@@ -1267,12 +1275,14 @@ nested_type {
         field {
           name: "value"
           number: 1
+          label: LABEL_OPTIONAL
           type: TYPE_ENUM
           type_name: ".google.fhir.r4.core.TestScriptRequestMethodCode.Value"
         }
         field {
           name: "id"
           number: 2
+          label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
           type_name: ".google.fhir.r4.core.String"
         }
@@ -1607,12 +1617,14 @@ nested_type {
         field {
           name: "value"
           number: 1
+          label: LABEL_OPTIONAL
           type: TYPE_ENUM
           type_name: ".google.fhir.r4.core.AssertionDirectionTypeCode.Value"
         }
         field {
           name: "id"
           number: 2
+          label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
           type_name: ".google.fhir.r4.core.String"
         }
@@ -1640,6 +1652,7 @@ nested_type {
         field {
           name: "id"
           number: 2
+          label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
           type_name: ".google.fhir.r4.core.String"
         }
@@ -1653,6 +1666,7 @@ nested_type {
         field {
           name: "value"
           number: 4
+          label: LABEL_OPTIONAL
           type: TYPE_STRING
           options {
             [google.fhir.proto.field_description]: "This valueset is not enumerable, and so is represented as a string."
@@ -1669,12 +1683,14 @@ nested_type {
         field {
           name: "value"
           number: 1
+          label: LABEL_OPTIONAL
           type: TYPE_ENUM
           type_name: ".google.fhir.r4.core.AssertionOperatorTypeCode.Value"
         }
         field {
           name: "id"
           number: 2
+          label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
           type_name: ".google.fhir.r4.core.String"
         }
@@ -1696,12 +1712,14 @@ nested_type {
         field {
           name: "value"
           number: 1
+          label: LABEL_OPTIONAL
           type: TYPE_ENUM
           type_name: ".google.fhir.r4.core.TestScriptRequestMethodCode.Value"
         }
         field {
           name: "id"
           number: 2
+          label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
           type_name: ".google.fhir.r4.core.String"
         }
@@ -1723,12 +1741,14 @@ nested_type {
         field {
           name: "value"
           number: 1
+          label: LABEL_OPTIONAL
           type: TYPE_ENUM
           type_name: ".google.fhir.r4.core.FHIRDefinedTypeValueSet.Value"
         }
         field {
           name: "id"
           number: 2
+          label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
           type_name: ".google.fhir.r4.core.String"
         }
@@ -1750,12 +1770,14 @@ nested_type {
         field {
           name: "value"
           number: 1
+          label: LABEL_OPTIONAL
           type: TYPE_ENUM
           type_name: ".google.fhir.r4.core.AssertionResponseTypesCode.Value"
         }
         field {
           name: "id"
           number: 2
+          label: LABEL_OPTIONAL
           type: TYPE_MESSAGE
           type_name: ".google.fhir.r4.core.String"
         }

@@ -76,6 +76,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -298,6 +299,13 @@ public class ProtoGenerator {
     return GeneratorUtils.getTypeName(def, packageInfo.getFhirVersion());
   }
 
+  private StructureDefinitionData getDefinitionDataByUrl(String url) {
+    if (!structDefDataByUrl.containsKey(url)) {
+      throw new IllegalArgumentException("Unrecognized resource URL: " + url);
+    }
+    return structDefDataByUrl.get(url);
+  }
+
   /**
    * Generate a proto descriptor from a StructureDefinition, using the snapshot form of the
    * definition. For a more elaborate discussion of these versions, see
@@ -407,7 +415,7 @@ public class ProtoGenerator {
             .setName(name)
             .getOptionsBuilder()
             .addExtension(Annotations.fhirProfileBase, baseUrl);
-        defInChain = structDefDataByUrl.get(baseUrl).structDef;
+        defInChain = getDefinitionDataByUrl(baseUrl).structDef;
       }
     }
     return builder.build();
@@ -431,7 +439,8 @@ public class ProtoGenerator {
       builder.addMessageType(proto);
     }
     // Add imports. Annotations is always needed.
-    builder.addDependency(new File(FhirVersion.ANNOTATION_PATH, "annotations.proto").toString());
+    NavigableSet<String> dependencies = new TreeSet<>();
+    dependencies.add(new File(FhirVersion.ANNOTATION_PATH, "annotations.proto").toString());
     // Add the remaining FHIR dependencies if the file uses a type from the FHIR dep, but does not
     // define a type from that dep.
     for (Map.Entry<String, Set<String>> entry : coreTypeDefinitionsByFile.entrySet()) {
@@ -439,13 +448,14 @@ public class ProtoGenerator {
       Set<String> types = entry.getValue();
 
       if (needsDep(builder, fhirVersion.coreProtoPackage, types)) {
-        builder.addDependency(new File(fhirVersion.coreProtoImportRoot, filename).toString());
+        dependencies.add(new File(fhirVersion.coreProtoImportRoot, filename).toString());
       }
     }
 
     if (needsDep(builder, "google.protobuf", ImmutableSet.of("google.protobuf.Any"))) {
-      builder.addDependency("google/protobuf/any.proto");
+      dependencies.add("google/protobuf/any.proto");
     }
+    dependencies.forEach(dep -> builder.addDependency(dep));
     return builder.build();
   }
 
@@ -530,6 +540,7 @@ public class ProtoGenerator {
                   .setNumber(tagNumber++)
                   .setTypeName(type.getName())
                   .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                  .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
                   .setOneofIndex(0 /* the oneof_resource */)
                   .build());
         }
@@ -550,7 +561,9 @@ public class ProtoGenerator {
       for (FieldDescriptor field : baseContainedResource.getFields()) {
         String typename = field.getMessageType().getName();
         if (resourcesToInclude.contains(typename)) {
-          contained.addField(field.toProto().toBuilder().setTypeName(typename));
+          contained.addField(
+              field.toProto().toBuilder()
+                  .setTypeName("." + packageInfo.getProtoPackage() + "." + typename));
           resourcesToInclude.remove(typename);
         }
       }
@@ -560,8 +573,9 @@ public class ProtoGenerator {
             FieldDescriptorProto.newBuilder()
                 .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, resourceType))
                 .setNumber(tagNumber++)
-                .setTypeName(resourceType)
+                .setTypeName("." + packageInfo.getProtoPackage() + "." + resourceType)
                 .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
                 .setOneofIndex(0 /* the oneof_resource */)
                 .build());
       }
@@ -1094,10 +1108,10 @@ public class ProtoGenerator {
         }
         builder.addEnumType(enumBuilder);
         builder.addField(
-            field
-                .toBuilder()
+            field.toBuilder()
                 .clearTypeName()
                 .setType(FieldDescriptorProto.Type.TYPE_INT64)
+                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
                 .setName("value_us"));
         if (TYPES_WITH_TIMEZONE.contains(defId)) {
           builder.addField(TIMEZONE_FIELD);
@@ -1783,9 +1797,9 @@ public class ProtoGenerator {
    * type.
    */
   private StructureDefinitionData getBaseStructureDefinitionData(String url) {
-    StructureDefinitionData defData = structDefDataByUrl.get(url);
+    StructureDefinitionData defData = getDefinitionDataByUrl(url);
     while (isProfile(defData.structDef)) {
-      defData = structDefDataByUrl.get(defData.structDef.getBaseDefinition().getValue());
+      defData = getDefinitionDataByUrl(defData.structDef.getBaseDefinition().getValue());
     }
     return defData;
   }

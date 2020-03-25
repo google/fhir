@@ -289,7 +289,8 @@ public class ValueSetGenerator {
                 .setNumber(2)
                 .setName("id")
                 .setTypeName("." + fhirVersion.coreProtoPackage + ".String")
-                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE))
+                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL))
         .addField(
             FieldDescriptorProto.newBuilder()
                 .setNumber(3)
@@ -309,6 +310,7 @@ public class ValueSetGenerator {
               .setNumber(4)
               .setName("value")
               .setType(FieldDescriptorProto.Type.TYPE_STRING)
+              .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
               .setOptions(
                   FieldOptions.newBuilder()
                       .setExtension(
@@ -325,6 +327,7 @@ public class ValueSetGenerator {
       enumField
           .setName("value")
           .setType(FieldDescriptorProto.Type.TYPE_ENUM)
+          .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
           .setTypeName(protoTypesByUrl.get(url) + ".Value");
       return descriptor.build();
     }
@@ -335,7 +338,8 @@ public class ValueSetGenerator {
         .setName("value")
         .setTypeName(
             "." + qualifiedType.packageName + "." + qualifiedType.type + "." + codeEnum.getName())
-        .setType(FieldDescriptorProto.Type.TYPE_ENUM);
+        .setType(FieldDescriptorProto.Type.TYPE_ENUM)
+        .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL);
     return descriptor.build();
   }
 
@@ -356,6 +360,7 @@ public class ValueSetGenerator {
                 .setNumber(2)
                 .setName("id")
                 .setTypeName("." + fhirVersion.coreProtoPackage + ".String")
+                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
                 .setType(FieldDescriptorProto.Type.TYPE_MESSAGE))
         .addField(
             FieldDescriptorProto.newBuilder()
@@ -378,6 +383,7 @@ public class ValueSetGenerator {
     if (protoTypesByUrl.containsKey(url)) {
       enumField
           .setName("value")
+          .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
           .setType(FieldDescriptorProto.Type.TYPE_ENUM)
           .setTypeName(protoTypesByUrl.get(url) + ".Value");
       return descriptor.build();
@@ -389,6 +395,7 @@ public class ValueSetGenerator {
       enumField
           .setName("value")
           .setType(FieldDescriptorProto.Type.TYPE_ENUM)
+          .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
           .setTypeName(
               protoTypesByUrl.get(oneToOneCodeSystem.get().getUrl().getValue()) + ".Value");
       return descriptor.build();
@@ -420,6 +427,7 @@ public class ValueSetGenerator {
             .setNumber(4)
             .setName("value")
             .setType(FieldDescriptorProto.Type.TYPE_STRING)
+            .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
             .setOptions(
                 FieldOptions.newBuilder()
                     .setExtension(
@@ -454,6 +462,7 @@ public class ValueSetGenerator {
         FieldDescriptorProto.newBuilder()
             .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
             .setTypeName(codeType.toQualifiedTypeString())
+            .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
             .setName("code")
             .setNumber(5)
             .build());
@@ -489,6 +498,7 @@ public class ValueSetGenerator {
     codingFields.add(
         FieldDescriptorProto.newBuilder()
             .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+            .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
             .setTypeName(codeType.toQualifiedTypeString())
             .setName("code")
             .setNumber(5)

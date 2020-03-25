@@ -191,12 +191,14 @@ nested_type {
   field {
     name: "value"
     number: 1
+    label: LABEL_OPTIONAL
     type: TYPE_ENUM
     type_name: ".google.fhir.r4.core.AdministrativeGenderCode.Value"
   }
   field {
     name: "id"
     number: 2
+    label: LABEL_OPTIONAL
     type: TYPE_MESSAGE
     type_name: ".google.fhir.r4.core.String"
   }
@@ -275,12 +277,14 @@ nested_type {
     field {
       name: "value"
       number: 1
+      label: LABEL_OPTIONAL
       type: TYPE_ENUM
       type_name: ".google.fhir.r4.core.IdentityAssuranceLevelCode.Value"
     }
     field {
       name: "id"
       number: 2
+      label: LABEL_OPTIONAL
       type: TYPE_MESSAGE
       type_name: ".google.fhir.r4.core.String"
     }
