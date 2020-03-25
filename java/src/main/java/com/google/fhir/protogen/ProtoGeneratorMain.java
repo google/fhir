@@ -21,15 +21,11 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.google.common.base.CaseFormat;
-import com.google.common.base.Splitter;
 import com.google.common.io.Files;
 import com.google.fhir.common.AnnotationUtils;
-import com.google.fhir.common.FileUtils;
-import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
-import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
@@ -40,7 +36,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -97,11 +92,6 @@ class ProtoGeneratorMain {
     private Boolean emitCodesProto = false;
 
     @Parameter(
-        names = {"--package_info"},
-        description = "Prototxt containing google.fhir.proto.PackageInfo")
-    private String packageInfo = null;
-
-    @Parameter(
         names = {"--filter"},
         description =
             "Filter for types of definitions in input package to use.  If set, must be one of"
@@ -149,22 +139,15 @@ class ProtoGeneratorMain {
     private String outputName = "output";
 
     @Parameter(
-        names = {"--input_bundle"},
-        description = "Input Bundle of StructureDefinitions")
-    private String inputBundleFile = null;
-
-    @Parameter(
         names = {"--input_package"},
-        description = "Input FHIR package")
-    private String inputPackage = null;
+        description = "Input FHIR package",
+        required = true)
+    private String inputPackageLocation = null;
 
     @Parameter(
         names = {"--exclude"},
         description = "Ids of input StructureDefinitions to ignore.")
     private List<String> excludeIds = new ArrayList<>();
-
-    @Parameter(description = "List of input StructureDefinitions")
-    private List<String> inputFiles = new ArrayList<>();
 
     private Set<FhirPackage> getDependencies() throws IOException {
       Set<FhirPackage> packages = new HashSet<>();
@@ -175,32 +158,16 @@ class ProtoGeneratorMain {
     }
   }
 
-  private static StructureDefinition loadStructureDefinition(
-      String fullFilename, FhirVersion fhirVersion) throws IOException {
-    String json = Files.asCharSource(new File(fullFilename), StandardCharsets.UTF_8).read();
-    StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
-    return JsonFormat.getSpecParser(fhirVersion).merge(json, structDefBuilder).build();
-  }
-
   ProtoGeneratorMain(PrintWriter writer) {
     this.writer = checkNotNull(writer);
   }
 
   void run(Args args) throws IOException {
-    PackageInfo packageInfo;
-    FhirPackage inputPackage = null;
-    if (args.inputPackage != null) {
-      inputPackage = FhirPackage.load(args.inputPackage);
-      if (args.filter != null) {
-        inputPackage = applyFilter(inputPackage, args.filter);
-      }
-      packageInfo = inputPackage.packageInfo;
-    } else if (args.packageInfo != null) {
-      packageInfo =
-          FileUtils.mergeText(new File(args.packageInfo), PackageInfo.newBuilder()).build();
-    } else {
-      throw new IllegalArgumentException("Must either have an --input_package, or --package_info");
+    FhirPackage inputPackage = FhirPackage.load(args.inputPackageLocation);
+    if (args.filter != null) {
+      inputPackage = applyFilter(inputPackage, args.filter);
     }
+    PackageInfo packageInfo = inputPackage.packageInfo;
 
     if (packageInfo.getProtoPackage().isEmpty()
         || packageInfo.getFhirVersion() == FhirVersion.FHIR_VERSION_UNKNOWN) {
@@ -209,6 +176,7 @@ class ProtoGeneratorMain {
     }
 
     Set<FhirPackage> fhirPackages = args.getDependencies();
+    fhirPackages.add(inputPackage);
 
     // Add in core FHIR types (e.g., datatypes and unprofiled resources)
     switch (packageInfo.getFhirVersion()) {
@@ -231,57 +199,14 @@ class ProtoGeneratorMain {
             "FHIR version not supported by ProfileGenerator: " + packageInfo.getFhirVersion());
     }
 
-    // Read the inputs in sequence.
-    List<StructureDefinition> definitions = new ArrayList<>();
-    for (String filename : args.inputFiles) {
-      StructureDefinition definition =
-          loadStructureDefinition(filename, packageInfo.getFhirVersion());
-      definitions.add(definition);
-
-      // Keep a mapping from Message name that will be generated to file name that it came from.
-      // This allows us to generate parallel file names between input and output files.
-
-      // File base name is the last token, stripped of any extension
-      // e.g., my-oddly_namedFile from foo/bar/my-oddly_namedFile.profile.json
-      String fileBaseName = Splitter.on('.').splitToList(new File(filename).getName()).get(0);
+    for (StructureDefinition structDef : inputPackage.structureDefinitions) {
       typeToSourceFileBaseName.put(
-          GeneratorUtils.getTypeName(definition, packageInfo.getFhirVersion()), fileBaseName);
+          GeneratorUtils.getTypeName(structDef, packageInfo.getFhirVersion()),
+          structDef.getId().getValue());
     }
 
-    if (args.inputBundleFile != null) {
-      Bundle bundle = (Bundle) FileUtils.loadFhir(args.inputBundleFile, Bundle.newBuilder());
-      for (Bundle.Entry entry : bundle.getEntryList()) {
-        if (entry.getResource().hasStructureDefinition()) {
-          StructureDefinition structDef = entry.getResource().getStructureDefinition();
-          definitions.add(structDef);
-          typeToSourceFileBaseName.put(
-              GeneratorUtils.getTypeName(structDef, packageInfo.getFhirVersion()),
-              structDef.getId().getValue());
-        }
-      }
-    }
-
-    if (inputPackage != null) {
-      for (StructureDefinition structDef : inputPackage.structureDefinitions) {
-        definitions.add(structDef);
-        typeToSourceFileBaseName.put(
-            GeneratorUtils.getTypeName(structDef, packageInfo.getFhirVersion()),
-            structDef.getId().getValue());
-      }
-    }
-
-    // Add any "loose" FHIR definitions we're currently generating in as a FhirPackage.
-    // TODO: Eliminate this form of input entirely, in favor of only accepting
-    // FhirPackages
-    fhirPackages.add(
-        new FhirPackage(
-            packageInfo,
-            new ArrayList<StructureDefinition>(definitions),
-            new ArrayList<>(),
-            new ArrayList<>()));
-
-    definitions =
-        definitions.stream()
+    List<StructureDefinition> inputDefinitions =
+        inputPackage.structureDefinitions.stream()
             .filter(def -> !args.excludeIds.contains(def.getId().getValue()))
             .collect(Collectors.toList());
 
@@ -312,7 +237,7 @@ class ProtoGeneratorMain {
       case DEFAULT_SPLITTING_BEHAVIOR:
       case NO_SPLITTING:
         {
-          FileDescriptorProto proto = generator.generateFileDescriptor(definitions);
+          FileDescriptorProto proto = generator.generateFileDescriptor(inputDefinitions);
           if (packageInfo.getLocalContainedResource()) {
             proto = generator.addContainedResource(proto, proto.getMessageTypeList());
           }
@@ -320,10 +245,10 @@ class ProtoGeneratorMain {
         }
         break;
       case SEPARATE_EXTENSIONS:
-        writeWithSeparateExtensionsFile(definitions, generator, printer, packageInfo, args);
+        writeWithSeparateExtensionsFile(inputDefinitions, generator, printer, packageInfo, args);
         break;
       case SPLIT_RESOURCES:
-        writeSplitResources(definitions, generator, printer, packageInfo, args);
+        writeSplitResources(inputDefinitions, generator, printer, packageInfo, args);
         break;
       case UNRECOGNIZED:
         throw new IllegalArgumentException(

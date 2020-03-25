@@ -649,6 +649,23 @@ java_test(
 )
 
 java_test(
+    name = "FhirPackageTest",
+    size = "small",
+    srcs = ["src/test/java/com/google/fhir/protogen/FhirPackageTest.java"],
+    data = [
+        "//spec:fhir_r4_package.zip",
+    ],
+    test_class = "com.google.fhir.protogen.FhirPackageTest",
+    deps = [
+        ":protogen",
+        "//proto:profile_config_java_proto",
+        "@maven//:com_google_guava_guava_testlib",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
+    ],
+)
+
+java_test(
     name = "TimeWrapperTest",
     size = "small",
     srcs = ["src/test/java/com/google/fhir/wrappers/TimeWrapperTest.java"],
@@ -708,13 +725,10 @@ java_binary(
     main_class = "com.google.fhir.protogen.ProtoGeneratorMain",
     deps = [
         ":common",
-        ":file_utils",
-        ":json_format",
         ":protogen",
         "//proto:annotations_java_proto",
         "//proto:profile_config_java_proto",
         "//proto/r4/core:codes_java_proto",
-        "//proto/r4/core/resources:bundle_and_contained_resource_java_proto",
         "//proto/r4/core/resources:structure_definition_java_proto",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_beust_jcommander",

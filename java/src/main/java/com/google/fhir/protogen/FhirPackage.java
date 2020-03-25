@@ -64,6 +64,20 @@ public class FhirPackage {
     this.valueSets = valueSets;
   }
 
+  @Override
+  public boolean equals(Object other) {
+    return other instanceof FhirPackage
+        && ((FhirPackage) other)
+            .packageInfo
+            .getProtoPackage()
+            .equals(packageInfo.getProtoPackage());
+  }
+
+  @Override
+  public int hashCode() {
+    return packageInfo.getProtoPackage().hashCode();
+  }
+
   public static FhirPackage load(String zipFilePath) throws IOException {
     ZipFile zipFile = new ZipFile(new File(zipFilePath));
     Enumeration<? extends ZipEntry> entries = zipFile.entries();
