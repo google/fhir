@@ -32,6 +32,10 @@ gen_fhir_protos(
         "proto/r4/uscore.proto",
         "proto/r4/qicore/codes.proto",
     ],
+    # This is an old version of the QI core that has a dependency on a
+    # US-core resource that doesn't exist anymore.
+    # TODO: Bump this up to QICore 4.0.0 and re-enable
+    disable_test = True,
     package = "//spec:qicore_3_3_0_package",
     package_deps = [
         "//spec:uscore_r4_package",

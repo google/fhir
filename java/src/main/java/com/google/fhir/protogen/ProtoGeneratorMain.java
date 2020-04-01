@@ -233,6 +233,7 @@ class ProtoGeneratorMain {
           .write(printer.print(valueSetGenerator.generateCodeSystemAndValueSetsFile(inputPackage)));
     }
 
+    // TODO: Move this logic to Protogenerator
     switch (packageInfo.getFileSplittingBehavior()) {
       case DEFAULT_SPLITTING_BEHAVIOR:
       case NO_SPLITTING:

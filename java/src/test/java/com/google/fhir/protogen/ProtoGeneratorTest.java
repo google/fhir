@@ -15,22 +15,20 @@
 package com.google.fhir.protogen;
 
 import static com.google.common.truth.Truth.assertThat;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.fail;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.common.JsonFormat;
-import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
-import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.TextFormat;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,7 +49,7 @@ public class ProtoGeneratorTest {
   /** Read the specifed file from the testdata directory into a String. */
   private String loadFile(String relativePath) throws IOException {
     File file = new File(runfiles.rlocation(relativePath));
-    return Files.asCharSource(file, StandardCharsets.UTF_8).read();
+    return Files.asCharSource(file, UTF_8).read();
   }
 
   /** Read and parse the specified StructureDefinition. */
@@ -143,30 +141,7 @@ public class ProtoGeneratorTest {
     runfiles = Runfiles.create();
 
     registry = ExtensionRegistry.newInstance();
-    registry.add(Annotations.fhirCodeSystemUrl);
-    registry.add(Annotations.fhirInlinedCodingCode);
-    registry.add(Annotations.fhirInlinedCodingSystem);
-    registry.add(Annotations.fhirInlinedExtensionUrl);
-    registry.add(Annotations.fhirOneofIsOptional);
-    registry.add(Annotations.fhirPathConstraint);
-    registry.add(Annotations.fhirPathMessageConstraint);
-    registry.add(Annotations.fhirProfileBase);
-    registry.add(Annotations.fhirReferenceType);
-    registry.add(Annotations.sourceCodeSystem);
-    registry.add(Annotations.fhirStructureDefinitionUrl);
-    registry.add(Annotations.fhirOriginalCode);
-    registry.add(Annotations.fhirValuesetUrl);
-    registry.add(Annotations.fhirVersion);
-    registry.add(Annotations.isAbstractType);
-    registry.add(Annotations.isChoiceType);
-    registry.add(Annotations.referencedFhirType);
-    registry.add(Annotations.structureDefinitionKind);
-    registry.add(Annotations.validReferenceType);
-    registry.add(Annotations.validationRequirement);
-    registry.add(Annotations.valueRegex);
-    registry.add(ProtoGeneratorAnnotations.fieldDescription);
-    registry.add(ProtoGeneratorAnnotations.messageDescription);
-    registry.add(ProtoGeneratorAnnotations.reservedReason);
+    ProtoGeneratorTestUtils.initializeRegistry(registry);
   }
 
   // STU3 temporarily frozen.
@@ -1447,22 +1422,14 @@ public class ProtoGeneratorTest {
     }
   }
 
-  static ProtoGenerator makeR4ProtoGenerator(String definitionZip) throws IOException {
-    FhirPackage fhirPackage = FhirPackage.load(definitionZip);
-
-    return new ProtoGenerator(
-        fhirPackage.packageInfo,
-        ImmutableSet.of(fhirPackage),
-        new ValueSetGenerator(fhirPackage.packageInfo, ImmutableSet.of(fhirPackage)));
-  }
-
   private static final int EXPECTED_R4_COUNT = 644;
 
   /** Test generating R4 proto files. */
   @Test
   public void generateR4() throws Exception {
     ProtoGenerator protoGenerator =
-        makeR4ProtoGenerator("spec/fhir_r4_package.zip");
+        ProtoGeneratorTestUtils.makeProtoGenerator(
+            "spec/fhir_r4_package.zip", ImmutableSet.of() /* no dependencies */);
     String suffix = ".descriptor.prototxt";
     int fileCount = 0;
     for (File file :

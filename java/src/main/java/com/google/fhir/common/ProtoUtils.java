@@ -130,4 +130,8 @@ public class ProtoUtils {
     }
     return target;
   }
+
+  public static boolean areSameMessageType(Descriptor first, Descriptor second) {
+    return first.equals(second) || first.getFullName().equals(second.getFullName());
+  }
 }

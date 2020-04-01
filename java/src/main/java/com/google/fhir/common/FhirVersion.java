@@ -25,6 +25,7 @@ import com.google.protobuf.Descriptors.FileDescriptor;
 public enum FhirVersion {
   STU3(
       "google.fhir.stu3.proto",
+      "spec/fhir_stu3_package.zip",
       "proto/stu3",
       ImmutableList.of(
           com.google.fhir.stu3.proto.AbstractTypeCode.getDescriptor().getFile(),
@@ -42,6 +43,7 @@ public enum FhirVersion {
       FHIRVersionCode.Value.V_3_0_1),
   R4(
       "google.fhir.r4.core",
+      "spec/fhir_r4_package.zip",
       "proto/r4/core",
       ImmutableList.of(
           com.google.fhir.r4.core.AccountStatusCode.getDescriptor().getFile(),
@@ -57,6 +59,9 @@ public enum FhirVersion {
 
   // The proto package of the core FHIR structures.
   public final String coreProtoPackage;
+
+  // The defining FhirPackage.
+  public final String coreFhirPackageZip;
 
   // The import location of the core FHIR proto package.
   public final String coreProtoImportRoot;
@@ -82,12 +87,14 @@ public enum FhirVersion {
 
   private FhirVersion(
       String coreProtoPackage,
+      String coreFhirPackageZip,
       String coreProtoImportRoot,
       ImmutableList<FileDescriptor> codeTypeList,
       ImmutableMap<String, FileDescriptor> coreTypeMap,
       Descriptor coreContainedResource,
       FHIRVersionCode.Value minorVersion) {
     this.coreProtoPackage = coreProtoPackage;
+    this.coreFhirPackageZip = coreFhirPackageZip;
     this.coreProtoImportRoot = coreProtoImportRoot;
     this.codeTypeList = codeTypeList;
     this.coreTypeMap = coreTypeMap;

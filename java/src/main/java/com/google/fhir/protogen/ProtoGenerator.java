@@ -16,6 +16,7 @@ package com.google.fhir.protogen;
 
 import static com.google.fhir.protogen.GeneratorUtils.getElementById;
 import static com.google.fhir.protogen.GeneratorUtils.getParent;
+import static com.google.fhir.protogen.GeneratorUtils.isExtensionProfile;
 import static com.google.fhir.protogen.GeneratorUtils.isProfile;
 import static com.google.fhir.protogen.GeneratorUtils.isSlice;
 import static com.google.fhir.protogen.GeneratorUtils.lastIdToken;
@@ -1183,11 +1184,6 @@ public class ProtoGenerator {
     return element.getTypeCount() == 1
         && element.getType(0).getCode().getValue().equals("Extension")
         && element.getType(0).getProfileCount() == 1;
-  }
-
-  private static boolean isExtensionProfile(StructureDefinition def) {
-    return def.getType().getValue().equals("Extension")
-        && def.getDerivation().getValue() == TypeDerivationRuleCode.Value.CONSTRAINT;
   }
 
   private static boolean isChoiceType(ElementDefinition element) {

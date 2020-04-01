@@ -297,4 +297,9 @@ final class GeneratorUtils {
         .copyInto(DateTime.newBuilder())
         .build();
   }
+
+  static boolean isExtensionProfile(StructureDefinition def) {
+    return def.getType().getValue().equals("Extension")
+        && def.getDerivation().getValue() == TypeDerivationRuleCode.Value.CONSTRAINT;
+  }
 }

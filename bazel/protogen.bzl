@@ -53,7 +53,8 @@ def gen_fhir_protos(
         package,
         package_deps = [],
         additional_proto_imports = None,
-        separate_extensions = False):
+        separate_extensions = False,
+        disable_test = False):
     """Generates a proto file from a fhir_package
 
     These rules should be run by the generate_protos.sh script, which will generate the
@@ -70,6 +71,7 @@ def gen_fhir_protos(
                                 FHIR datatypes, annotations, and codes are included automatically.
       separate_extensions: If true, will produce two proto files, one for extensions
                            and one for profiles.
+      disable_test: If true, will not declare a GeneratedProtoTest
     """
 
     struct_def_dep_flags = " ".join([
@@ -78,18 +80,21 @@ def gen_fhir_protos(
     ])
     if not additional_proto_imports:
         additional_proto_imports = []
-    if separate_extensions:
-        # Also add the extensions proto files as an import to the main file.
-        # Unfortunately we don't have an easy way to get the directory that
-        # a genrule runs out of, but it's pretty easy to deduce from the output
-        # directory - we just cut off everything up to and including "genfiles/"
-        src_dir = "$$(GENDIR=$(@D) && echo $${GENDIR##*genfiles/})"
-        additional_proto_imports += [src_dir + "/" + name + "_extensions.proto"]
 
     additional_proto_imports_flags = " ".join([
         "--additional_import %s" % proto_import
         for proto_import in additional_proto_imports
     ])
+
+    if separate_extensions:
+        # Also add the extensions proto files as an import to the main file.
+        # Unfortunately we don't have an easy way to get the directory that
+        # a genrule runs out of, but it's pretty easy to deduce from the output
+        # directory - we just cut off everything up to and including "genfiles/"
+        src_dir = ("\"$$(GENDIR=$(execpath %s) && dirname $${GENDIR##*genfiles/})\"" %
+                   _get_zip_for_pkg(package))
+        additional_proto_imports_flags += " --additional_import %s/%s_extensions.proto" % (src_dir, name)
+
     cmd = """
         $(location %s) \
             --emit_proto \
@@ -112,23 +117,52 @@ def gen_fhir_protos(
     outs = ["_genfiles_" + name + ".proto", "_genfiles_" + name + "_codes.proto"]
 
     if separate_extensions:
-        outs += ["_genfiles_" + name + "_extensions.proto"]
+        outs.append("_genfiles_" + name + "_extensions.proto")
 
     all_fhir_pkgs = package_deps + [
         package,
         STU3_PACKAGE_DEP,
         R4_PACKAGE_DEP,
     ]
-    srcs = [_get_zip_for_pkg(pkg) for pkg in all_fhir_pkgs]
+    src_pkgs = [_get_zip_for_pkg(pkg) for pkg in all_fhir_pkgs]
 
     native.genrule(
         name = name + "_proto_files",
         outs = outs,
-        srcs = srcs,
+        srcs = src_pkgs,
         tools = [PROTO_GENERATOR],
         cmd = cmd,
         tags = MANUAL_TAGS,
     )
+
+    if not disable_test:
+        additional_import_test_flag = ",".join(additional_proto_imports)
+        deps_test_flag = ",".join(["$(location %s)" % _get_zip_for_pkg(dep) for dep in package_deps])
+        test_flags = [
+            "-Dfhir_package=$(location %s)" % _get_zip_for_pkg(package),
+            "-Drule_name=" + name,
+            "-Ddependencies=" + deps_test_flag,
+            "-Dimports=" + additional_import_test_flag,
+        ]
+
+        native.java_test(
+            name = "GeneratedProtoTest_" + name,
+            size = "medium",
+            srcs = ["//java:GeneratedProtoTest.java"],
+            jvm_flags = test_flags,
+            data = src_pkgs,
+            test_class = "com.google.fhir.protogen.GeneratedProtoTest",
+            runtime_deps = [
+                _get_java_proto_rule_for_pkg(package, name),
+            ],
+            deps = [
+                "//java:proto_generator_test_utils",
+                "//java:protogen",
+                "@maven//:com_google_guava_guava",
+                "@com_google_protobuf//:protobuf_java",
+                "@maven//:junit_junit",
+            ],
+        )
 
 def gen_fhir_definitions_and_protos(
         name,
@@ -227,7 +261,11 @@ def gen_fhir_definitions_and_protos(
         package_deps = package_deps,
         additional_proto_imports = additional_proto_imports,
         separate_extensions = separate_extensions,
+        disable_test = len(profiles) == 0,
     )
 
 def _get_zip_for_pkg(pkg):
     return pkg + ".zip"
+
+def _get_java_proto_rule_for_pkg(pkg, name):
+    return ":".split(pkg)[0] + name + "_java_proto"

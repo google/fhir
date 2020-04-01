@@ -24,7 +24,10 @@ java_library(
     name = "protogen",
     srcs = glob(
         ["src/main/java/com/google/fhir/protogen/*"],
-        exclude = ["src/main/java/com/google/fhir/protogen/*Main.java"],
+        exclude = [
+            "src/main/java/com/google/fhir/protogen/*Main.java",
+            "src/main/java/com/google/fhir/protogen/ProtoGeneratorTestUtils.java",
+        ],
     ),
     deps = [
         ":common",
@@ -418,6 +421,24 @@ java_library(
     ],
 )
 
+java_library(
+    name = "proto_generator_test_utils",
+    testonly = 1,
+    srcs = ["src/main/java/com/google/fhir/protogen/ProtoGeneratorTestUtils.java"],
+    deps = [
+        ":common",
+        ":fhir_version",
+        ":protogen",
+        "//proto:annotations_java_proto",
+        "//proto:profile_config_java_proto",
+        "//proto:protogenerator_annotations_java_proto",
+        "//proto/r4/core/resources:structure_definition_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
+    ],
+)
+
 java_test(
     name = "JsonFormatStu3Test",
     size = "large",
@@ -636,9 +657,9 @@ java_test(
     test_class = "com.google.fhir.protogen.ProtoGeneratorTest",
     deps = [
         ":json_format",
+        ":proto_generator_test_utils",
         ":protogen",
         "//proto:annotations_java_proto",
-        "//proto:protogenerator_annotations_java_proto",
         "//proto/r4/core/resources:structure_definition_java_proto",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
@@ -834,4 +855,11 @@ java_test(
         "@maven//:com_google_truth_truth",
         "@maven//:junit_junit",
     ],
+)
+
+exports_files(["src/test/java/com/google/fhir/protogen/GeneratedProtoTest.java"])
+
+alias(
+    name = "GeneratedProtoTest.java",
+    actual = "src/test/java/com/google/fhir/protogen/GeneratedProtoTest.java",
 )
