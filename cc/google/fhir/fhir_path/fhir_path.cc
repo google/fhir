@@ -33,10 +33,8 @@
 #include "google/fhir/fhir_path/utils.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
-#include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "google/fhir/stu3/primitive_handler.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
 #include "proto/r4/core/datatypes.pb.h"
@@ -69,21 +67,8 @@ using ::tensorflow::errors::NotFound;
 
 namespace internal {
 
-// TODO: This method forces linking in all supported versions of
-// FHIR. It should be replaced by a passed-in PrimitiveHandler.
-StatusOr<const PrimitiveHandler*> GetPrimitiveHandler(
-    const Message& message) {
-  const auto version = GetFhirVersion(message.GetDescriptor());
-  switch (version) {
-    case proto::FhirVersion::STU3:
-      return stu3::Stu3PrimitiveHandler::GetInstance();
-    case proto::FhirVersion::R4:
-      return r4::R4PrimitiveHandler::GetInstance();
-    default:
-      return InvalidArgument("Invalid FHIR version for FhirPath: ",
-                             FhirVersion_Name(version));
-  }
-}
+// Default number of buckets to create when constructing a std::unordered_set.
+constexpr int kDefaultSetBucketCount = 10;
 
 // Returns true if the provided FHIR message converts to System.Integer.
 //
@@ -1165,15 +1150,16 @@ class EqualsOperator : public BinaryOperator {
       return Status::OK();
     }
 
-    Message* result = work_space->GetPrimitiveHandler()->NewBoolean(
-        AreEqual(left_results, right_results));
+    Message* result = work_space->GetPrimitiveHandler()->NewBoolean(AreEqual(
+        work_space->GetPrimitiveHandler(), left_results, right_results));
     work_space->DeleteWhenFinished(result);
     out_results->push_back(WorkspaceMessage(result));
     return Status::OK();
   }
 
-  static bool AreEqual(const std::vector<WorkspaceMessage>& left_results,
-      const std::vector<WorkspaceMessage>& right_results) {
+  static bool AreEqual(const PrimitiveHandler* primitive_handler,
+                       const std::vector<WorkspaceMessage>& left_results,
+                       const std::vector<WorkspaceMessage>& right_results) {
     if (left_results.size() != right_results.size()) {
       return false;
     }
@@ -1181,32 +1167,26 @@ class EqualsOperator : public BinaryOperator {
     for (int i = 0; i < left_results.size(); ++i) {
         const WorkspaceMessage& left = left_results.at(i);
         const WorkspaceMessage& right = right_results.at(i);
-      if (!AreEqual(*left.Message(), *right.Message())) {
-        return false;
-      }
+        if (!AreEqual(primitive_handler, *left.Message(), *right.Message())) {
+          return false;
+        }
     }
     return true;
   }
 
-  static bool AreEqual(const Message& left, const Message& right) {
+  static bool AreEqual(const PrimitiveHandler* primitive_handler,
+                       const Message& left, const Message& right) {
     if (AreSameMessageType(left, right)) {
       return MessageDifferencer::Equals(left, right);
     } else {
-      // TODO: This will crash on a non-STU3 or R4 primitive.
-      // That's probably ok for now but we should fix this to never crash ASAP.
-      const PrimitiveHandler* left_handler =
-          GetPrimitiveHandler(left).ValueOrDie();
-      const PrimitiveHandler* right_handler =
-          GetPrimitiveHandler(right).ValueOrDie();
-
       // When dealing with different types we might be comparing a
       // primitive type (like an enum) to a literal string, which is
       // supported. Therefore we simply convert both to string form
       // and consider them unequal if either is not a string.
       StatusOr<JsonPrimitive> left_primitive =
-          left_handler->WrapPrimitiveProto(left);
+          primitive_handler->WrapPrimitiveProto(left);
       StatusOr<JsonPrimitive> right_primitive =
-          right_handler->WrapPrimitiveProto(right);
+          primitive_handler->WrapPrimitiveProto(right);
 
       // Comparisons between primitives and non-primitives are valid
       // in FHIRPath and should simply return false rather than an error.
@@ -1226,19 +1206,26 @@ class EqualsOperator : public BinaryOperator {
 };
 
 struct ProtoPtrSameTypeAndEqual {
+  explicit ProtoPtrSameTypeAndEqual(const PrimitiveHandler* primitive_handler)
+      : primitive_handler(primitive_handler) {}
+  const PrimitiveHandler* primitive_handler;
+
   bool operator()(const WorkspaceMessage& lhs,
                   const WorkspaceMessage& rhs) const {
     return (lhs.Message() == rhs.Message()) ||
            ((lhs.Message() != nullptr && rhs.Message() != nullptr) &&
-            EqualsOperator::AreEqual(*lhs.Message(), *rhs.Message()));
+            EqualsOperator::AreEqual(primitive_handler, *lhs.Message(),
+                                     *rhs.Message()));
   }
 };
 
 struct ProtoPtrHash {
+  explicit ProtoPtrHash(const PrimitiveHandler* primitive_handler)
+      : primitive_handler(primitive_handler) {}
+  const PrimitiveHandler* primitive_handler;
+
   size_t operator()(const WorkspaceMessage& result) const {
     const google::protobuf::Message* message = result.Message();
-    const StatusOr<const PrimitiveHandler*> handler =
-        GetPrimitiveHandler(*message);
     if (message == nullptr) {
       return 0;
     }
@@ -1246,10 +1233,8 @@ struct ProtoPtrHash {
     // TODO: This will crash on a non-STU3 or R4 primitive.
     // That's probably ok for now but we should fix this to never crash ASAP.
     if (IsPrimitive(message->GetDescriptor())) {
-      return std::hash<std::string>{}(handler.ValueOrDie()
-                                          ->WrapPrimitiveProto(*message)
-                                          .ValueOrDie()
-                                          .value);
+      return std::hash<std::string>{}(
+          primitive_handler->WrapPrimitiveProto(*message).ValueOrDie().value);
     }
 
     return std::hash<std::string>{}(message->SerializeAsString());
@@ -1267,7 +1252,9 @@ class UnionOperator : public BinaryOperator {
       const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
       std::vector<WorkspaceMessage>* out_results) const override {
     std::unordered_set<WorkspaceMessage, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
-        results;
+        results(kDefaultSetBucketCount,
+                ProtoPtrHash(work_space->GetPrimitiveHandler()),
+                ProtoPtrSameTypeAndEqual(work_space->GetPrimitiveHandler()));
     results.insert(left_results.begin(), left_results.end());
     results.insert(right_results.begin(), right_results.end());
     out_results->insert(out_results->begin(), results.begin(), results.end());
@@ -1305,8 +1292,10 @@ class IsDistinctFunction : public ZeroParameterFunctionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     std::unordered_set<WorkspaceMessage, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
-        child_results_set;
-    child_results_set.insert(child_results.begin(), child_results.end());
+        child_results_set(
+            child_results.begin(), child_results.end(), kDefaultSetBucketCount,
+            ProtoPtrHash(work_space->GetPrimitiveHandler()),
+            ProtoPtrSameTypeAndEqual(work_space->GetPrimitiveHandler()));
 
     Message* result = work_space->GetPrimitiveHandler()->NewBoolean(
         child_results_set.size() == child_results.size());
@@ -1334,8 +1323,10 @@ class DistinctFunction : public ZeroParameterFunctionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     std::unordered_set<WorkspaceMessage, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
-        result_set;
-    result_set.insert(child_results.begin(), child_results.end());
+        result_set(child_results.begin(), child_results.end(),
+                   kDefaultSetBucketCount,
+                   ProtoPtrHash(work_space->GetPrimitiveHandler()),
+                   ProtoPtrSameTypeAndEqual(work_space->GetPrimitiveHandler()));
     results->insert(results->begin(), result_set.begin(), result_set.end());
     return Status::OK();
   }
@@ -1829,8 +1820,10 @@ class IntersectFunction : public SingleParameterFunctionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     std::unordered_set<WorkspaceMessage, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
-        child_set;
-    child_set.insert(child_results.begin(), child_results.end());
+        child_set(child_results.begin(), child_results.end(),
+                  kDefaultSetBucketCount,
+                  ProtoPtrHash(work_space->GetPrimitiveHandler()),
+                  ProtoPtrSameTypeAndEqual(work_space->GetPrimitiveHandler()));
 
     for (const auto& elem : first_param) {
       if (child_set.count(elem) > 0) {
@@ -2542,8 +2535,9 @@ class ContainsOperator : public BinaryOperator {
     const Message* right_operand = right_results[0].Message();
 
     bool found = std::any_of(left_results.begin(), left_results.end(),
-                             [right_operand](const WorkspaceMessage& message) {
+                             [=](const WorkspaceMessage& message) {
                                return EqualsOperator::AreEqual(
+                                   work_space->GetPrimitiveHandler(),
                                    *right_operand, *message.Message());
                              });
 
