@@ -174,11 +174,12 @@ Status CheckField(const Message& message, const FieldDescriptor* field,
 // TODO: Invert the default here for FHIRPath handling, and have
 // ValidateWithoutFhirPath instead of ValidateWithFhirPath
 
-Status ValidateResourceWithFhirPath(const Message& resource,
-                                    const PrimitiveHandler* primitive_handler) {
+Status ValidateResourceWithFhirPath(
+    const Message& resource, const PrimitiveHandler* primitive_handler,
+    fhir_path::FhirPathValidator* message_validator) {
   FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(
       resource, resource.GetDescriptor()->name(), primitive_handler));
-  return fhir_path::ValidateMessage(resource);
+  return message_validator->Validate(resource).LegacyValidationResult();
 }
 
 Status ValidateResource(const Message& resource,

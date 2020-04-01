@@ -34,8 +34,10 @@ Status ValidateResource(const ::google::protobuf::Message& resource,
 
 // Run resource-specific validation + FHIRPath validation on a single FHIR
 // resource.
-Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource,
-                                    const PrimitiveHandler* primitive_handler);
+Status ValidateResourceWithFhirPath(
+    const ::google::protobuf::Message& resource,
+    const PrimitiveHandler* primitive_handler,
+    fhir_path::FhirPathValidator* message_validator);
 
 }  // namespace fhir
 }  // namespace google

@@ -51,22 +51,6 @@ using ::google::fhir::ForEachMessage;
 using ::google::fhir::StatusOr;
 using ::tensorflow::errors::InvalidArgument;
 
-// TODO: This method forces linking in all supported versions of
-// FHIR. It should be replaced by a passed-in PrimitiveHandler.
-StatusOr<const PrimitiveHandler*> GetPrimitiveHandler(
-    const Message& message) {
-  const auto version = GetFhirVersion(message.GetDescriptor());
-  switch (version) {
-    case proto::FhirVersion::STU3:
-      return stu3::Stu3PrimitiveHandler::GetInstance();
-    case proto::FhirVersion::R4:
-      return r4::R4PrimitiveHandler::GetInstance();
-    default:
-      return InvalidArgument("Invalid FHIR version for FhirPath: ",
-                             FhirVersion_Name(version));
-  }
-}
-
 bool ValidationResults::IsValid(ValidationBehavior behavior) const {
   for (const ValidationResult& result : results_) {
     if (!result.EvaluationResult().ok()) {
@@ -89,14 +73,12 @@ std::vector<ValidationResult> ValidationResults::Results() const {
   return results_;
 }
 
-MessageValidator::MessageValidator() {}
-MessageValidator::~MessageValidator() {}
+FhirPathValidator::~FhirPathValidator() {}
 
 // Build the constraints for the given message type and
 // add it to the constraints cache.
-MessageValidator::MessageConstraints*
-MessageValidator::ConstraintsFor(const Descriptor* descriptor,
-                                 const PrimitiveHandler* primitive_handler) {
+FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
+    const Descriptor* descriptor) {
   // Simply return the cached constraint if it exists.
   auto iter = constraints_cache_.find(descriptor->full_name());
 
@@ -113,7 +95,7 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor,
     const std::string& fhir_path = descriptor->options().GetExtension(
         proto::fhir_path_message_constraint, i);
     auto constraint =
-        CompiledExpression::Compile(descriptor, primitive_handler, fhir_path);
+        CompiledExpression::Compile(descriptor, primitive_handler_, fhir_path);
     if (constraint.ok()) {
       CompiledExpression expression = constraint.ValueOrDie();
       constraints->message_expressions.push_back(expression);
@@ -143,7 +125,7 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor,
             field->options().GetExtension(proto::fhir_path_constraint, j);
 
         auto constraint = CompiledExpression::Compile(
-            field_type, primitive_handler, fhir_path);
+            field_type, primitive_handler_, fhir_path);
 
         if (constraint.ok()) {
           constraints->field_expressions.push_back(
@@ -175,7 +157,7 @@ MessageValidator::ConstraintsFor(const Descriptor* descriptor,
     // Constraints only apply to non-primitives.
     if (field_type != nullptr) {
       // Validate the field type.
-      auto child_constraints = ConstraintsFor(field_type, primitive_handler);
+      auto child_constraints = ConstraintsFor(field_type);
 
       // Nested fields that directly or transitively have constraints
       // are retained and used when applying constraints.
@@ -215,14 +197,13 @@ ValidationResult ValidateFieldConstraint(
                        : expr_result.status());
 }
 
-void MessageValidator::Validate(const internal::WorkspaceMessage& message,
-                                  const PrimitiveHandler* primitive_handler,
-                                  std::vector<ValidationResult>* results) {
+void FhirPathValidator::Validate(const internal::WorkspaceMessage& message,
+                                 std::vector<ValidationResult>* results) {
   // ConstraintsFor may recursively build constraints so
   // we lock the mutex here to ensure thread safety.
   mutex_.Lock();
   MessageConstraints* constraints =
-      ConstraintsFor(message.Message()->GetDescriptor(), primitive_handler);
+      ConstraintsFor(message.Message()->GetDescriptor());
   mutex_.Unlock();
 
   // Validate the constraints attached to the message root.
@@ -247,51 +228,31 @@ void MessageValidator::Validate(const internal::WorkspaceMessage& message,
   for (const FieldDescriptor* field : constraints->nested_with_constraints) {
     ForEachMessage<Message>(
         *message.Message(), field, [&](const Message& child) {
-          Validate(internal::WorkspaceMessage(message, &child),
-                   primitive_handler, results);
+          Validate(internal::WorkspaceMessage(message, &child), results);
         });
   }
 }
 
-Status MessageValidator::Validate(const ::google::protobuf::Message& message) {
-  FHIR_ASSIGN_OR_RETURN(const PrimitiveHandler* primitive_handler,
-                        GetPrimitiveHandler(message));
-  ValidationResults results = Validate(primitive_handler, message);
-
-  if (results.IsValid(ValidationResults::ValidationBehavior::kRelaxed)) {
+Status ValidationResults::LegacyValidationResult() const {
+  if (IsValid(ValidationResults::ValidationBehavior::kRelaxed)) {
     return Status::OK();
   }
 
-  std::vector<ValidationResult> result_vector = results.Results();
-  auto result =
-      find_if(result_vector.begin(), result_vector.end(), [](auto result) {
-        return !result.EvaluationResult().ok() ||
-               !result.EvaluationResult().ValueOrDie();
-      });
+  auto result = find_if(results_.begin(), results_.end(), [](auto result) {
+    return !result.EvaluationResult().ok() ||
+           !result.EvaluationResult().ValueOrDie();
+  });
 
   return ::tensorflow::errors::FailedPrecondition(
       "fhirpath-constraint-violation-", (*result).DebugPath(), ": \"",
       (*result).Constraint(), "\"");
 }
 
-ValidationResults MessageValidator::Validate(
-    const PrimitiveHandler* primitive_handler,
+ValidationResults FhirPathValidator::Validate(
     const ::google::protobuf::Message& message) {
   std::vector<ValidationResult> results;
-  Validate(internal::WorkspaceMessage(&message), primitive_handler, &results);
+  Validate(internal::WorkspaceMessage(&message), &results);
   return ValidationResults(results);
-}
-
-// Common validator instance for the lifetime of the process.
-static MessageValidator* validator = new MessageValidator();
-
-ValidationResults ValidateMessage(const PrimitiveHandler* primitive_handler,
-                                  const ::google::protobuf::Message& message) {
-  return validator->Validate(primitive_handler, message);
-}
-
-Status ValidateMessage(const ::google::protobuf::Message& message) {
-  return validator->Validate(message);
 }
 
 }  // namespace fhir_path

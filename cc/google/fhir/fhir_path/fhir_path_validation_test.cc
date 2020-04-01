@@ -19,10 +19,10 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
+#include "google/fhir/fhir_path/r4_fhir_path_validation.h"
+#include "google/fhir/fhir_path/stu3_fhir_path_validation.h"
 #include "google/fhir/proto_util.h"
-#include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/status/status.h"
-#include "google/fhir/stu3/primitive_handler.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/resources/encounter.pb.h"
@@ -74,25 +74,6 @@ Body \
 } \
 } \
 
-const ::google::fhir::PrimitiveHandler* GetPrimitiveHandler(
-    const ::google::protobuf::Descriptor* descriptor) {
-  const auto version = GetFhirVersion(descriptor);
-  switch (version) {
-    case proto::FhirVersion::STU3:
-      return ::google::fhir::stu3::Stu3PrimitiveHandler::GetInstance();
-    case proto::FhirVersion::R4:
-      return ::google::fhir::r4::R4PrimitiveHandler::GetInstance();
-    default:
-      ADD_FAILURE() << "Primitive handler not available.";
-      return nullptr;
-  }
-}
-
-ValidationResults Validate(const Message& message) {
-  MessageValidator validator;
-  return validator.Validate(GetPrimitiveHandler(message.GetDescriptor()),
-                            message);
-}
 
 template <typename T>
 T ParseFromString(const std::string& str) {
@@ -136,10 +117,12 @@ T ValidUsCorePatient() {
 
 namespace r4test {
 USING(::google::fhir::r4::core)
+typedef ::google::fhir::r4::FhirPathValidator VersionedMessageValidator;
 }  // namespace r4test
 
 namespace stu3test {
 USING(::google::fhir::stu3::proto)
+typedef ::google::fhir::stu3::FhirPathValidator VersionedMessageValidator;
 }  // namespace stu3test
 
 
@@ -149,7 +132,8 @@ FHIR_VERSION_TEST(FhirPathTest, ConstraintViolation, {
     telecom: { use: {value: HOME}}
   )proto");
 
-  ValidationResults results = Validate(organization);
+  ValidationResults results =
+      VersionedMessageValidator().Validate(organization);
   EXPECT_FALSE(results.IsValid());
 
   std::vector<ValidationResult> result_vector = results.Results();
@@ -177,7 +161,7 @@ FHIR_VERSION_TEST(FhirPathTest, ConstraintSatisfied, {
 
   ref_range->set_allocated_high(high);
 
-  EXPECT_TRUE(Validate(observation).IsValid());
+  EXPECT_TRUE(VersionedMessageValidator().Validate(observation).IsValid());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, NestedConstraintViolated, {
@@ -190,7 +174,7 @@ FHIR_VERSION_TEST(FhirPathTest, NestedConstraintViolated, {
   value_set.mutable_name()->set_value("Placeholder");
   value_set.set_allocated_expansion(expansion);
 
-  ValidationResults results = Validate(value_set);
+  ValidationResults results = VersionedMessageValidator().Validate(value_set);
   EXPECT_FALSE(results.IsValid());
 
   std::vector<ValidationResult> result_vector = results.Results();
@@ -221,7 +205,7 @@ FHIR_VERSION_TEST(FhirPathTest, NestedConstraintSatisfied, {
 
   value_set.set_allocated_expansion(expansion);
 
-  EXPECT_TRUE(Validate(value_set).IsValid());
+  EXPECT_TRUE(VersionedMessageValidator().Validate(value_set).IsValid());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, MessageLevelConstraint, {
@@ -230,7 +214,7 @@ FHIR_VERSION_TEST(FhirPathTest, MessageLevelConstraint, {
     end: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
   )proto");
 
-  EXPECT_TRUE(Validate(period).IsValid());
+  EXPECT_TRUE(VersionedMessageValidator().Validate(period).IsValid());
 })
 
 // TODO: Templatize tests to work with both STU3 and R4
@@ -240,7 +224,8 @@ TEST(FhirPathTest, MessageLevelConstraintViolated) {
     end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
   )proto");
 
-  EXPECT_FALSE(Validate(end_before_start_period).IsValid());
+  EXPECT_FALSE(
+      r4::FhirPathValidator().Validate(end_before_start_period).IsValid());
 }
 
 FHIR_VERSION_TEST(FhirPathTest, NestedMessageLevelConstraint, {
@@ -252,7 +237,9 @@ FHIR_VERSION_TEST(FhirPathTest, NestedMessageLevelConstraint, {
     }
   )proto");
 
-  EXPECT_TRUE(Validate(start_with_no_end_encounter).IsValid());
+  EXPECT_TRUE(VersionedMessageValidator()
+                  .Validate(start_with_no_end_encounter)
+                  .IsValid());
 })
 
 TEST(FhirPathTest, NestedMessageLevelConstraintViolated) {
@@ -265,14 +252,15 @@ TEST(FhirPathTest, NestedMessageLevelConstraintViolated) {
     }
   )proto");
 
-  EXPECT_FALSE(Validate(end_before_start_encounter).IsValid());
+  EXPECT_FALSE(
+      r4::FhirPathValidator().Validate(end_before_start_encounter).IsValid());
 }
 
 // TODO: Templatize tests to work with both STU3 and R4
 TEST(FhirPathTest, ProfiledEmptyExtension) {
   r4::uscore::USCorePatientProfile patient =
       ValidUsCorePatient<r4::uscore::USCorePatientProfile>();
-  EXPECT_TRUE(Validate(patient).IsValid());
+  EXPECT_TRUE(r4::FhirPathValidator().Validate(patient).IsValid());
 }
 
 TEST(FhirPathTest, ProfiledWithExtensionsR4) {
@@ -287,7 +275,7 @@ TEST(FhirPathTest, ProfiledWithExtensionsR4) {
 
   patient.mutable_birthsex()->set_value(r4::uscore::BirthSexValueSet::M);
 
-  EXPECT_TRUE(Validate(patient).IsValid());
+  EXPECT_TRUE(r4::FhirPathValidator().Validate(patient).IsValid());
 }
 
 TEST(FhirPathTest, ProfiledWithExtensionsSTU3) {
@@ -301,8 +289,7 @@ TEST(FhirPathTest, ProfiledWithExtensionsSTU3) {
 
   patient.mutable_birthsex()->set_value(stu3::uscore::UsCoreBirthSexCode::MALE);
 
-  MessageValidator validator;
-  ASSERT_TRUE(Validate(patient).IsValid());
+  ASSERT_TRUE(stu3::FhirPathValidator().Validate(patient).IsValid());
 }
 
 }  // namespace

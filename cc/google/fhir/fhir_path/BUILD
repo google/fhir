@@ -65,6 +65,40 @@ cc_library(
 )
 
 cc_library(
+    name = "r4_fhir_path_validation",
+    srcs = [
+        "r4_fhir_path_validation.cc",
+    ],
+    hdrs = [
+        "r4_fhir_path_validation.h",
+    ],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":fhir_path",
+        "//cc/google/fhir/r4:primitive_handler",
+        "@com_google_absl//absl/base:core_headers",
+        "@com_google_protobuf//:protobuf",
+    ],
+)
+
+cc_library(
+    name = "stu3_fhir_path_validation",
+    srcs = [
+        "stu3_fhir_path_validation.cc",
+    ],
+    hdrs = [
+        "stu3_fhir_path_validation.h",
+    ],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":fhir_path",
+        "//cc/google/fhir/stu3:primitive_handler",
+        "@com_google_absl//absl/base:core_headers",
+        "@com_google_protobuf//:protobuf",
+    ],
+)
+
+cc_library(
     name = "utils",
     srcs = [
         "utils.cc",
@@ -73,7 +107,7 @@ cc_library(
         "utils.h",
     ],
     strip_include_prefix = "//cc/",
-    visibility = ["//visibility:public"],
+    visibility = [":__pkg__"],
     deps = [
         "//cc/google/fhir:annotations",
         "//cc/google/fhir:primitive_wrapper",
@@ -96,6 +130,8 @@ cc_test(
     ],
     deps = [
         ":fhir_path",
+        ":r4_fhir_path_validation",
+        ":stu3_fhir_path_validation",
         "//cc/google/fhir:proto_util",
         "//cc/google/fhir/r4:primitive_handler",
         "//cc/google/fhir/status",

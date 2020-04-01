@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-#include "google/fhir/resource_validation.h"
-
-#include "google/fhir/stu3/primitive_handler.h"
 #include "google/fhir/stu3/resource_validation.h"
+
+#include "google/fhir/fhir_path/stu3_fhir_path_validation.h"
+#include "google/fhir/resource_validation.h"
+#include "google/fhir/stu3/primitive_handler.h"
 
 namespace google {
 namespace fhir {
@@ -28,8 +29,8 @@ Status ValidateResource(const ::google::protobuf::Message& resource) {
 }
 
 Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource) {
-  return ValidateResourceWithFhirPath(resource,
-                                      Stu3PrimitiveHandler::GetInstance());
+  return ValidateResourceWithFhirPath(
+      resource, Stu3PrimitiveHandler::GetInstance(), GetFhirPathValidator());
 }
 
 }  // namespace stu3

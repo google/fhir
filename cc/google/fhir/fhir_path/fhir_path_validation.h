@@ -85,6 +85,10 @@ class ValidationResults {
   // validity. By default kStrict is used.
   bool IsValid(ValidationBehavior behavior = ValidationBehavior::kStrict) const;
 
+  // Returns Status::OK or the status of the first constraint violation
+  // encountered.
+  Status LegacyValidationResult() const;
+
   // Returns the result for each FHIRPath expressions that was evaluated.
   // TODO: Expose expressions that failed to compile.
   std::vector<ValidationResult> Results() const;
@@ -98,23 +102,14 @@ class ValidationResults {
 // constraint expressions as it encounters them, so users are encouraged
 // to create a single instance of this for the lifetime of the process.
 // This class is thread safe.
-class MessageValidator {
+class FhirPathValidator {
  public:
-  MessageValidator();
-  ~MessageValidator();
+  FhirPathValidator(const PrimitiveHandler* primitive_handler)
+      : primitive_handler_(primitive_handler) {}
+  virtual ~FhirPathValidator();
 
-  // Validates the fhir_path_constraint annotations on the given message.
-  // Returns Status::OK or the status of the first constraint violation
-  // encountered. Users needing more details should use the overloaded
-  // version of with a callback handler for each violation.
-  ABSL_DEPRECATED(
-    "Use Validate(const PrimitiveHandler*, const Message&) instead.")
-  Status Validate(const ::google::protobuf::Message& message);
-
-  // Validates the fhir_path_constraint annotations on the given message.
   ABSL_MUST_USE_RESULT
-  ValidationResults Validate(const PrimitiveHandler* primitive_handler,
-                             const ::google::protobuf::Message& message);
+  ValidationResults Validate(const ::google::protobuf::Message& message);
 
  private:
   // A cache of constraints for a given message definition
@@ -134,29 +129,20 @@ class MessageValidator {
   };
 
   // Loads constraints for the given descriptor.
-  MessageConstraints* ConstraintsFor(
-      const ::google::protobuf::Descriptor* descriptor,
-      const PrimitiveHandler* primitive_handler);
+  MessageConstraints* ConstraintsFor(const ::google::protobuf::Descriptor* descriptor);
 
   // Recursively called validation method that aggregates results into the
   // provided vector.
   void Validate(const internal::WorkspaceMessage& message,
-                const PrimitiveHandler* primitive_handler,
                 std::vector<ValidationResult>* results);
 
+  const PrimitiveHandler* primitive_handler_;
   absl::Mutex mutex_;
   std::unordered_map<std::string, std::unique_ptr<MessageConstraints>>
       constraints_cache_;
 };
 
 // Validates the fhir_path_constraint annotations on the given message.
-// Returns Status::OK or the status of the first constraint violation
-// encountered. Users needing more details should use the overloaded
-// version of with a callback handler for each violation.
-ABSL_DEPRECATED(
-    "Use ValidateMessage(const PrimitiveHandler*, const Message&) instead.")
-Status ValidateMessage(const ::google::protobuf::Message& message);
-
 ABSL_MUST_USE_RESULT
 ValidationResults ValidateMessage(const PrimitiveHandler* primitive_handler,
                                   const ::google::protobuf::Message& message);

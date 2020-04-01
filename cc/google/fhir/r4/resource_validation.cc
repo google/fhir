@@ -16,6 +16,7 @@
 
 #include "google/fhir/r4/resource_validation.h"
 
+#include "google/fhir/fhir_path/r4_fhir_path_validation.h"
 #include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/resource_validation.h"
 
@@ -28,8 +29,8 @@ Status ValidateResource(const ::google::protobuf::Message& resource) {
 }
 
 Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource) {
-  return ValidateResourceWithFhirPath(resource,
-                                      R4PrimitiveHandler::GetInstance());
+  return ValidateResourceWithFhirPath(
+      resource, R4PrimitiveHandler::GetInstance(), GetFhirPathValidator());
 }
 
 }  // namespace r4
