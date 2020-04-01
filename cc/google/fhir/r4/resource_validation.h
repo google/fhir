@@ -18,15 +18,16 @@
 #define GOOGLE_FHIR_R4_RESOURCE_VALIDATION_H_
 
 #include "google/protobuf/message.h"
-#include "google/fhir/fhir_path/fhir_path_validation.h"
+#include "tensorflow/core/lib/core/status.h"
 
 namespace google {
 namespace fhir {
 namespace r4 {
 
-Status ValidateResource(const ::google::protobuf::Message& resource);
+::tensorflow::Status ValidateResource(const ::google::protobuf::Message& resource);
 
-Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource);
+::tensorflow::Status ValidateResourceWithFhirPath(
+    const ::google::protobuf::Message& resource);
 
 }  // namespace r4
 }  // namespace fhir

@@ -22,7 +22,6 @@ cc_library(
     name = "fhir_path",
     srcs = [
         "fhir_path.cc",
-        "fhir_path_validation.cc",
     ],
     hdrs = [
         # TODO: These may not be necessary as Bazel approaches 1.0
@@ -31,7 +30,6 @@ cc_library(
         "FhirPathParser.h",
         "FhirPathVisitor.h",
         "fhir_path.h",
-        "fhir_path_validation.h",
     ],
     copts = [
         "-fexceptions",
@@ -41,6 +39,35 @@ cc_library(
     deps = [
         ":fhir_path_grammar",
         ":fhir_path_lexer",
+        ":utils",
+        "//cc/google/fhir:annotations",
+        "//cc/google/fhir:primitive_handler",
+        "//cc/google/fhir:primitive_wrapper",
+        "//cc/google/fhir:proto_util",
+        "//cc/google/fhir:util",
+        "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
+        "//proto/r4/core:datatypes_cc_proto",
+        "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
+        "@com_google_absl//absl/types:optional",
+        "@com_google_protobuf//:protobuf",
+        "@org_tensorflow//tensorflow/core:lib",
+    ],
+)
+
+cc_library(
+    name = "fhir_path_validation",
+    srcs = [
+        "fhir_path_validation.cc",
+    ],
+    hdrs = [
+        "fhir_path_validation.h",
+    ],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":fhir_path",
         ":utils",
         "//cc/google/fhir:annotations",
         "//cc/google/fhir:primitive_handler",
@@ -72,7 +99,7 @@ cc_library(
     ],
     strip_include_prefix = "//cc/",
     deps = [
-        ":fhir_path",
+        ":fhir_path_validation",
         "//cc/google/fhir/r4:primitive_handler",
         "@com_google_absl//absl/base:core_headers",
         "@com_google_protobuf//:protobuf",
@@ -89,7 +116,7 @@ cc_library(
     ],
     strip_include_prefix = "//cc/",
     deps = [
-        ":fhir_path",
+        ":fhir_path_validation",
         "//cc/google/fhir/stu3:primitive_handler",
         "@com_google_absl//absl/base:core_headers",
         "@com_google_protobuf//:protobuf",
@@ -124,12 +151,9 @@ cc_test(
     size = "small",
     srcs = [
         "fhir_path_test.cc",
-        "fhir_path_validation_test.cc",
     ],
     deps = [
         ":fhir_path",
-        ":r4_fhir_path_validation",
-        ":stu3_fhir_path_validation",
         "//cc/google/fhir:proto_util",
         "//cc/google/fhir/r4:primitive_handler",
         "//cc/google/fhir/status",
@@ -156,6 +180,37 @@ cc_test(
         "//proto/stu3:uscore_codes_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
+        "@com_google_googletest//:gtest_main",
+        "@com_google_protobuf//:protobuf",
+        "@org_tensorflow//tensorflow/core:lib",
+    ],
+)
+
+cc_test(
+    name = "fhir_path_validation_test",
+    size = "small",
+    srcs = [
+        "fhir_path_validation_test.cc",
+    ],
+    deps = [
+        ":fhir_path_validation",
+        ":r4_fhir_path_validation",
+        ":stu3_fhir_path_validation",
+        "//proto/r4:uscore_cc_proto",
+        "//proto/r4:uscore_codes_cc_proto",
+        "//proto/r4/core:datatypes_cc_proto",
+        "//proto/r4/core/resources:encounter_cc_proto",
+        "//proto/r4/core/resources:medication_knowledge_cc_proto",
+        "//proto/r4/core/resources:observation_cc_proto",
+        "//proto/r4/core/resources:organization_cc_proto",
+        "//proto/r4/core/resources:value_set_cc_proto",
+        "//proto/stu3:codes_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:metadatatypes_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "//proto/stu3:uscore_cc_proto",
+        "//proto/stu3:uscore_codes_cc_proto",
+        "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
         "@org_tensorflow//tensorflow/core:lib",

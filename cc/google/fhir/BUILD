@@ -150,10 +150,9 @@ cc_library(
     deps = [
         ":annotations",
         ":primitive_handler",
-        ":primitive_wrapper",
         ":proto_util",
         ":util",
-        "//cc/google/fhir/fhir_path",
+        "//cc/google/fhir/fhir_path:fhir_path_validation",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto:annotations_cc_proto",

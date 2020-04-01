@@ -17,10 +17,10 @@
 #ifndef GOOGLE_FHIR_RESOURCE_VALIDATION_H_
 #define GOOGLE_FHIR_RESOURCE_VALIDATION_H_
 
+#include "google/protobuf/message.h"
 #include "google/fhir/fhir_path/fhir_path_validation.h"
 #include "google/fhir/primitive_handler.h"
-#include "google/fhir/primitive_wrapper.h"
-#include "google/fhir/status/status.h"
+#include "tensorflow/core/lib/core/status.h"
 
 namespace google {
 namespace fhir {
@@ -29,12 +29,13 @@ namespace fhir {
 // ValidateWithoutFhirPath instead of ValidateWithFhirPath
 
 // Run resource-specific validation on a single FHIR resource.
-Status ValidateResource(const ::google::protobuf::Message& resource,
-                        const PrimitiveHandler* primitive_handler);
+::tensorflow::Status ValidateResource(
+    const ::google::protobuf::Message& resource,
+    const PrimitiveHandler* primitive_handler);
 
 // Run resource-specific validation + FHIRPath validation on a single FHIR
 // resource.
-Status ValidateResourceWithFhirPath(
+::tensorflow::Status ValidateResourceWithFhirPath(
     const ::google::protobuf::Message& resource,
     const PrimitiveHandler* primitive_handler,
     fhir_path::FhirPathValidator* message_validator);

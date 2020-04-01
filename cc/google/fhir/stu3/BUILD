@@ -189,9 +189,9 @@ cc_library(
     deps = [
         ":primitive_handler",
         "//cc/google/fhir:resource_validation",
-        "//cc/google/fhir/fhir_path",
         "//cc/google/fhir/fhir_path:stu3_fhir_path_validation",
         "@com_google_protobuf//:protobuf",
+        "@org_tensorflow//tensorflow/core:lib",
     ],
 )
 
