@@ -1612,6 +1612,60 @@ class IifFunction : public FunctionNode {
   const Descriptor* ReturnType() const override { return child_->ReturnType(); }
 };
 
+// Implements the FHIRPath .ofType() function.
+//
+// TODO: This does not currently validate that the tested type exists.
+// According to the FHIRPath spec, if the type does not exist the expression
+// should throw an error instead of returning false.
+//
+// TODO: Handle type namespaces (i.e. FHIR.* and System.*)
+//
+// TODO: Handle type inheritance correctly. For example, a Patient
+// resource is a DomainResource, but this function, as is, will filter out the
+// Patient if ofType(DomainResource) is used.
+class OfTypeFunction : public ExpressionNode {
+ public:
+  StatusOr<OfTypeFunction*> static Create(
+      const std::shared_ptr<ExpressionNode>& child_expression,
+      const std::vector<FhirPathParser::ExpressionContext*>& params,
+      FhirPathBaseVisitor* base_context_visitor,
+      FhirPathBaseVisitor* child_context_visitor) {
+    if (params.size() != 1) {
+      return InvalidArgument("ofType() requires a single argument.");
+    }
+
+    return new OfTypeFunction(child_expression, params[0]->getText());
+  }
+
+  OfTypeFunction(const std::shared_ptr<ExpressionNode>& child,
+             std::string type_name)
+      : child_(child), type_name_(type_name) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    for (const WorkspaceMessage& message : child_results) {
+      if (absl::EqualsIgnoreCase(
+            message.Message()->GetDescriptor()->name(), type_name_)) {
+        results->push_back(message);
+      }
+    }
+
+    return Status::OK();
+  }
+
+  const Descriptor* ReturnType() const override {
+    // TODO: Fetch the descriptor based on this->type_name_.
+    return nullptr;
+  }
+
+ private:
+  const std::shared_ptr<ExpressionNode> child_;
+  const std::string type_name_;
+};
+
 // Implements the FHIRPath .is() function.
 //
 // TODO: This does not currently validate that the tested type exists.
@@ -3148,6 +3202,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"iif", FunctionNode::Create<IifFunction>},
       {"is", IsFunction::Create},
       {"as", AsFunction::Create},
+      {"ofType", OfTypeFunction::Create},
       {"children", FunctionNode::Create<ChildrenFunction>},
       {"descendants", FunctionNode::Create<DescendantsFunction>},
   };

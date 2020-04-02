@@ -689,6 +689,39 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionTail, {
   EXPECT_THAT(Evaluate("true.combine(true).tail()"), EvalsToTrue());
 })
 
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionOfTypePrimitives, {
+  EXPECT_THAT(Evaluate("{}.ofType(Boolean)"), EvalsToEmpty());
+
+  EXPECT_THAT(Evaluate("(true | 1 | 2.0 | 'foo').ofType(Boolean)"),
+              EvalsToTrue());
+  EXPECT_THAT(Evaluate("(true | 1 | 2.0 | 'foo').ofType(String)"),
+              EvalsToStringThatMatches(StrEq("foo")));
+
+  EXPECT_THAT(
+      Evaluate("(true | 1 | 2.0 | 'foo').ofType(Integer)")
+          .ValueOrDie()
+          .GetMessages(),
+      ElementsAreArray({EqualsProto(ParseFromString<Integer>("value: 1"))}));
+  EXPECT_THAT(Evaluate("(true | 1 | 2.0 | 'foo').ofType(Decimal)")
+                  .ValueOrDie()
+                  .GetMessages(),
+              ElementsAreArray(
+                  {EqualsProto(ParseFromString<Decimal>("value: '2.0'"))}));
+})
+
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionOfTypeResources, {
+  Observation observation = ParseFromString<Observation>(R"proto()proto");
+
+  EXPECT_THAT(Evaluate(observation, "$this.ofType(Boolean)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate(observation, "$this.ofType(CodeableConcept)"),
+              EvalsToEmpty());
+
+  EvaluationResult as_observation_evaluation_result =
+      Evaluate(observation, "$this.ofType(Observation)").ValueOrDie();
+  EXPECT_THAT(as_observation_evaluation_result.GetMessages(),
+              ElementsAreArray({EqualsProto(observation)}));
+})
+
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionAsPrimitives, {
   EXPECT_THAT(Evaluate("{}.as(Boolean)"), EvalsToEmpty());
 
