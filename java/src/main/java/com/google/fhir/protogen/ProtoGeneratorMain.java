@@ -163,10 +163,14 @@ class ProtoGeneratorMain {
   }
 
   void run(Args args) throws IOException {
-    FhirPackage inputPackage = FhirPackage.load(args.inputPackageLocation);
-    if (args.filter != null) {
-      inputPackage = applyFilter(inputPackage, args.filter);
-    }
+    Set<FhirPackage> fhirPackages = args.getDependencies();
+
+    FhirPackage unfilteredInputPackage = FhirPackage.load(args.inputPackageLocation);
+    fhirPackages.add(unfilteredInputPackage);
+    FhirPackage inputPackage =
+        args.filter == null
+            ? unfilteredInputPackage
+            : applyFilter(unfilteredInputPackage, args.filter);
     PackageInfo packageInfo = inputPackage.packageInfo;
 
     if (packageInfo.getProtoPackage().isEmpty()
@@ -174,9 +178,6 @@ class ProtoGeneratorMain {
       throw new IllegalArgumentException(
           "package_info must contain at least a proto_package and fhir_version.");
     }
-
-    Set<FhirPackage> fhirPackages = args.getDependencies();
-    fhirPackages.add(inputPackage);
 
     // Add in core FHIR types (e.g., datatypes and unprofiled resources)
     switch (packageInfo.getFhirVersion()) {
