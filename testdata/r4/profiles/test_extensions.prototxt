@@ -75,3 +75,25 @@ simple_extension {
     system: "http://hl7.org/fhir/ValueSet/media-type"
   }
 }
+
+simple_extension {
+  element_data {
+    name: "FavoriteBrewery"
+    size_restriction: OPTIONAL
+  }
+  code_type {
+    system: "http://test/url/base/ValueSet/Brewery"
+  }
+}
+
+simple_extension {
+  element_data {
+    name: "FavoriteCalifornian"
+    size_restriction: OPTIONAL
+  }
+  code_type {
+    system: "http://test/url/base/ValueSet/Californians"
+  }
+}
+
+

@@ -134,6 +134,7 @@ public class ProfileGeneratorMain {
     for (String terminologiesFile : args.terminologies) {
       Terminologies terminologies = readTerminologies(terminologiesFile);
       combinedTerminologiesBuilder.addAllCodeSystem(terminologies.getCodeSystemList());
+      combinedTerminologiesBuilder.addAllValueSet(terminologies.getValueSetList());
     }
 
     PackageInfo packageInfo = readPackageInfo(args.packageInfo);
@@ -178,7 +179,7 @@ public class ProfileGeneratorMain {
         args.outputDirectory,
         args.name + "_extensions");
     writeBundle(
-        profileGenerator.generateCodeSystems(combinedTerminologiesBuilder.build()),
+        profileGenerator.generateTerminologies(combinedTerminologiesBuilder.build()),
         args.outputDirectory,
         args.name + "_terminologies");
   }

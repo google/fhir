@@ -138,8 +138,8 @@ final class ProfileGenerator {
     return bundle.build();
   }
 
-  Bundle generateCodeSystems(Terminologies terminologies) {
-    return terminologyGenerator.generateCodeSystems(terminologies);
+  Bundle generateTerminologies(Terminologies terminologies) {
+    return terminologyGenerator.generateTerminologies(terminologies);
   }
 
   private StructureDefinition makeProfile(Profile profile) {

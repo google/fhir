@@ -14,15 +14,20 @@
 
 package com.google.fhir.protogen;
 
+import static java.util.stream.Collectors.toList;
+
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.ResourceValidator;
 import com.google.fhir.proto.CodeSystemConfig;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.Terminologies;
+import com.google.fhir.proto.ValueSetConfig;
 import com.google.fhir.r4.core.Bundle;
+import com.google.fhir.r4.core.Code;
 import com.google.fhir.r4.core.CodeSystem;
 import com.google.fhir.r4.core.CodeSystemContentModeCode;
 import com.google.fhir.r4.core.DateTime;
+import com.google.fhir.r4.core.ValueSet;
 import java.time.LocalDate;
 
 /**
@@ -39,13 +44,16 @@ final class TerminologyGenerator {
     this.creationDateTime = GeneratorUtils.buildCreationDateTime(creationTime);
   }
 
-  Bundle generateCodeSystems(Terminologies terminologies) {
+  Bundle generateTerminologies(Terminologies terminologies) {
     Bundle.Builder bundle = Bundle.newBuilder();
     for (CodeSystemConfig codeSystemConfig : terminologies.getCodeSystemList()) {
       bundle
           .addEntryBuilder()
           .getResourceBuilder()
           .setCodeSystem(buildCodeSystem(codeSystemConfig));
+    }
+    for (ValueSetConfig valueSetConfig : terminologies.getValueSetList()) {
+      bundle.addEntryBuilder().getResourceBuilder().setValueSet(buildValueSet(valueSetConfig));
     }
 
     return bundle.build();
@@ -95,5 +103,62 @@ final class TerminologyGenerator {
     }
 
     // TODO: handle child concepts.
+  }
+
+  private ValueSet buildValueSet(ValueSetConfig config) {
+    ValueSet.Builder builder = ValueSet.newBuilder();
+
+    builder.getNameBuilder().setValue(config.getName());
+    builder.getTitleBuilder().setValue(config.getName());
+    if (!config.getDescription().isEmpty()) {
+      builder.getDescriptionBuilder().setValue(config.getDescription());
+    }
+    builder.getStatusBuilder().setValue(config.getStatus());
+    builder.setDate(creationDateTime);
+    builder.getPublisherBuilder().setValue(packageInfo.getPublisher());
+
+    String url =
+        config.getUrlOverride().isEmpty()
+            ? packageInfo.getBaseUrl() + "/ValueSet/" + config.getName()
+            : config.getUrlOverride();
+    builder.getUrlBuilder().setValue(url);
+
+    ValueSet.Compose.Builder composeBuilder = builder.getComposeBuilder();
+
+    for (ValueSetConfig.System system : config.getSystemList()) {
+      ValueSet.Compose.ConceptSet.Builder includeBuilder = composeBuilder.addIncludeBuilder();
+      includeBuilder.getSystemBuilder().setValue(system.getUrl());
+
+      if (system.getIncludeCount() > 0 && system.getExcludeCount() > 0) {
+        throw new IllegalArgumentException(
+            "Error generating ValueSet `"
+                + url
+                + "`:  Cannot specify both `include` and `exclude` lists.");
+      }
+
+      includeBuilder.addAllConcept(
+          system.getIncludeList().stream()
+              .map(
+                  code ->
+                      ValueSet.Compose.ConceptSet.ConceptReference.newBuilder()
+                          .setCode(Code.newBuilder().setValue(code))
+                          .build())
+              .collect(toList()));
+
+      if (system.getExcludeCount() > 0) {
+        ValueSet.Compose.ConceptSet.Builder excludeBuilder = composeBuilder.addExcludeBuilder();
+        excludeBuilder.getSystemBuilder().setValue(system.getUrl());
+        excludeBuilder.addAllConcept(
+            system.getExcludeList().stream()
+                .map(
+                    code ->
+                        ValueSet.Compose.ConceptSet.ConceptReference.newBuilder()
+                            .setCode(Code.newBuilder().setValue(code))
+                            .build())
+                .collect(toList()));
+      }
+    }
+
+    return builder.build();
   }
 }

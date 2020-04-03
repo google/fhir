@@ -83,9 +83,12 @@ public class ValueSetGenerator {
 
     // Make a map from url to proto type for each type we can inline.
     // This is assumed to be all the codes from all the included FhirPackages,
-    // WITH THE EXCEPTION of the core fhir package.
-    // This is due to the fact that there are prohibitively many codes defined in the core package
-    // to generate them all - so instead we inspect the code files listed in FhirVersion to know
+    // with two exceptions:
+    // 1) codes/valuesets from the core package.  This is due to the fact that there are
+    // prohibitively many codes defined in the core package to generate them all - so instead we
+    // inspect the code files listed in FhirVersion to know
+    // 2) Valuesets that have 1-1 relationship with a codesystem.  In this case, we don't generate
+    // a valueset resource, because it's redundant with the codesystem.
     this.protoTypesByUrl = new HashMap<>();
     for (final FhirPackage fhirPackage : fhirPackages) {
       if (!fhirPackage.packageInfo.getProtoPackage().equals(fhirVersion.coreProtoPackage)) {
@@ -98,6 +101,7 @@ public class ValueSetGenerator {
                         cs -> packageString + getCodeSystemName(cs))));
         protoTypesByUrl.putAll(
             fhirPackage.valueSets.stream()
+                .filter(vs -> !getOneToOneCodeSystem(vs).isPresent())
                 .collect(
                     Collectors.toMap(
                         vs -> vs.getUrl().getValue(), vs -> packageString + getValueSetName(vs))));

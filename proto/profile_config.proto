@@ -88,6 +88,7 @@ message Extensions {
 // part of an Implementation Guide to be generated
 message Terminologies {
   repeated CodeSystemConfig code_system = 1;
+  repeated ValueSetConfig value_set = 2;
 }
 
 message Profile {
@@ -259,4 +260,25 @@ message CodeSystemConfig {
     // is-a/contains/categorizes relationships
   }
   repeated Concept concept = 5;
+}
+
+message ValueSetConfig {
+  string name = 1;
+  google.fhir.r4.core.PublicationStatusCode.Value status = 2;
+  string description = 3;
+  string url_override = 4;
+
+  message System {
+    string url = 1;
+
+    // At most one of {include, exclude} fields should be set.
+    // If neither is set, all codes from that system will included.
+
+    // Codes from this system to include.
+    repeated string include = 2;
+
+    // Codes from this system to exclude.
+    repeated string exclude = 3;
+  }
+  repeated System system = 5;
 }

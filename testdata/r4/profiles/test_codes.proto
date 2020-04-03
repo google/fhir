@@ -31,6 +31,72 @@ message BreweryCode {
     INVALID_UNINITIALIZED = 0;
     SANTE_ADAIRIUS = 1;
     TREEHOUSE = 2;
-    CANTILLON = 3;
+    RUSSIAN_RIVER = 3;
+    CANTILLON = 4;
+  }
+}
+
+// NFL Football Teams
+// See http://test/url/base/FootballTeams
+message FootballTeamsCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://test/url/base/FootballTeams";
+
+    INVALID_UNINITIALIZED = 0;
+    NINERS = 1 [(.google.fhir.proto.fhir_original_code) = "Niners"];
+    EAGLES = 2 [(.google.fhir.proto.fhir_original_code) = "Eagles"];
+  }
+}
+
+// ValueSet for Brewery Code System.
+// See http://test/url/base/ValueSet/AmericanBreweries
+message AmericanBreweriesValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://test/url/base/ValueSet/AmericanBreweries";
+
+    INVALID_UNINITIALIZED = 0;
+    SANTE_ADAIRIUS = 1 [(.google.fhir.proto.source_code_system) =
+                            "http://test/url/base/Brewery"];
+    TREEHOUSE = 2 [(.google.fhir.proto.source_code_system) =
+                       "http://test/url/base/Brewery"];
+    RUSSIAN_RIVER = 3 [(.google.fhir.proto.source_code_system) =
+                           "http://test/url/base/Brewery"];
+  }
+}
+
+// ValueSet for California breweries.
+// See http://test/url/base/ValueSet/CaliforniaBreweries
+message CaliforniaBreweriesValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://test/url/base/ValueSet/CaliforniaBreweries";
+
+    INVALID_UNINITIALIZED = 0;
+    SANTE_ADAIRIUS = 1 [(.google.fhir.proto.source_code_system) =
+                            "http://test/url/base/Brewery"];
+    RUSSIAN_RIVER = 2 [(.google.fhir.proto.source_code_system) =
+                           "http://test/url/base/Brewery"];
+  }
+}
+
+// California businesses
+// See http://test/url/base/ValueSet/Californians
+message CaliforniansValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://test/url/base/ValueSet/Californians";
+
+    INVALID_UNINITIALIZED = 0;
+    SANTE_ADAIRIUS = 1 [(.google.fhir.proto.source_code_system) =
+                            "http://test/url/base/Brewery"];
+    RUSSIAN_RIVER = 2 [(.google.fhir.proto.source_code_system) =
+                           "http://test/url/base/Brewery"];
+    NINERS = 3 [
+      (.google.fhir.proto.fhir_original_code) = "Niners",
+      (.google.fhir.proto.source_code_system) =
+          "http://test/url/base/FootballTeams"
+    ];
   }
 }

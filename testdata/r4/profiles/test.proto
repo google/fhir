@@ -532,6 +532,16 @@ message TestPatient {
     (.google.fhir.proto.fhir_inlined_extension_url) =
         "http://test/url/base/SimpleDecimalExt"
   ];
+
+  // Optional Extensions Element
+  FavoriteBrewery.ValueCode favorite_brewery = 27
+      [(.google.fhir.proto.fhir_inlined_extension_url) =
+           "http://test/url/base/FavoriteBrewery"];
+
+  // Optional Extensions Element
+  FavoriteCalifornian.ValueCode favorite_californian = 28
+      [(.google.fhir.proto.fhir_inlined_extension_url) =
+           "http://test/url/base/FavoriteCalifornian"];
 }
 
 // Auto-generated from StructureDefinition for TestObservation.

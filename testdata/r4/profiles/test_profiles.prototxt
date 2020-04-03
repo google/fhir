@@ -38,6 +38,20 @@ profile {
     }
     url: "http://test/url/base/SimpleDecimalExt"
   }
+
+  extension_slice {
+    element_data {
+      name: "favoriteBrewery"
+    }
+    url: "http://test/url/base/FavoriteBrewery"
+  }
+
+  extension_slice {
+    element_data {
+      name: "favoriteCalifornian"
+    }
+    url: "http://test/url/base/FavoriteCalifornian"
+  }
 }
 
 profile {

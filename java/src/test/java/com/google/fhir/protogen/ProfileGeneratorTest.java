@@ -161,7 +161,7 @@ public final class ProfileGeneratorTest {
     String goldenDefinition = loadGoldenJson(STU3_TESTDATA_DIR + "test_terminologies.json").trim();
     Bundle terminologies =
         makeStu3Generator(goldenDefinition)
-            .generateCodeSystems(
+            .generateTerminologies(
                 loadTerminologiesProto(STU3_TESTDATA_DIR + "test_terminologies.prototxt"));
     String output = jsonPrinter.print(terminologies).trim();
     assertThat(output).isEqualTo(goldenDefinition);
@@ -211,7 +211,7 @@ public final class ProfileGeneratorTest {
     String goldenDefinition = loadGoldenJson(R4_TESTDATA_DIR + "test_terminologies.json").trim();
     Bundle terminologies =
         makeR4Generator(goldenDefinition)
-            .generateCodeSystems(
+            .generateTerminologies(
                 loadTerminologiesProto(R4_TESTDATA_DIR + "test_terminologies.prototxt"));
     String output = jsonPrinter.print(terminologies).trim();
     assertThat(output).isEqualTo(goldenDefinition);

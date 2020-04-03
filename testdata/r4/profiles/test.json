@@ -7,7 +7,7 @@
         "id": "Bundle",
         "url": "http://test/url/base/Bundle",
         "name": "Bundle",
-        "date": "2020-01-09",
+        "date": "2020-04-02",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1882,7 +1882,7 @@
         "id": "TestPatient",
         "url": "http://test/url/base/TestPatient",
         "name": "TestPatient",
-        "date": "2020-01-09",
+        "date": "2020-04-02",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -4118,6 +4118,114 @@
               "isModifier": false
             },
             {
+              "id": "Patient.extension:favoriteBrewery",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
+              "path": "Patient.extension",
+              "sliceName": "favoriteBrewery",
+              "short": "Optional Extensions Element",
+              "definition": "Optional Extension Element - found in all resources.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension",
+                  "profile": [
+                    "http://test/url/base/FavoriteBrewery"
+                  ]
+                }
+              ],
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ],
+              "isModifier": false
+            },
+            {
+              "id": "Patient.extension:favoriteCalifornian",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
+              "path": "Patient.extension",
+              "sliceName": "favoriteCalifornian",
+              "short": "Optional Extensions Element",
+              "definition": "Optional Extension Element - found in all resources.",
+              "min": 0,
+              "max": "1",
+              "base": {
+                "path": "Extension",
+                "min": 0,
+                "max": "*"
+              },
+              "type": [
+                {
+                  "code": "Extension",
+                  "profile": [
+                    "http://test/url/base/FavoriteCalifornian"
+                  ]
+                }
+              ],
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ],
+              "isModifier": false
+            },
+            {
               "id": "Patient.maritalStatus.coding",
               "path": "Patient.maritalStatus.coding",
               "slicing": {
@@ -4613,6 +4721,84 @@
               ]
             },
             {
+              "id": "Patient.extension:favoriteBrewery",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
+              "path": "Patient.extension",
+              "sliceName": "favoriteBrewery",
+              "short": "Optional Extensions Element",
+              "definition": "Optional Extension Element - found in all resources.",
+              "max": "1",
+              "type": [
+                {
+                  "code": "Extension",
+                  "profile": [
+                    "http://test/url/base/FavoriteBrewery"
+                  ]
+                }
+              ],
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ]
+            },
+            {
+              "id": "Patient.extension:favoriteCalifornian",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                  "valueCode": "normative"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                  "valueCode": "4.0.0"
+                }
+              ],
+              "path": "Patient.extension",
+              "sliceName": "favoriteCalifornian",
+              "short": "Optional Extensions Element",
+              "definition": "Optional Extension Element - found in all resources.",
+              "max": "1",
+              "type": [
+                {
+                  "code": "Extension",
+                  "profile": [
+                    "http://test/url/base/FavoriteCalifornian"
+                  ]
+                }
+              ],
+              "condition": [
+                "ele-1"
+              ],
+              "constraint": [
+                {
+                  "key": "ext-1",
+                  "severity": "error",
+                  "human": "Must have either extensions or value[x], not both",
+                  "expression": "extension.exists() != value.exists()",
+                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                  "source": "Extension"
+                }
+              ]
+            },
+            {
               "id": "Patient.maritalStatus.coding",
               "path": "Patient.maritalStatus.coding",
               "slicing": {
@@ -4675,7 +4861,7 @@
         "id": "TestObservation",
         "url": "http://test/url/base/TestObservation",
         "name": "TestObservation",
-        "date": "2020-01-09",
+        "date": "2020-04-02",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -10740,7 +10926,7 @@
         "id": "TestObservationLvl2",
         "url": "http://test/url/base/TestObservationLvl2",
         "name": "TestObservationLvl2",
-        "date": "2020-01-09",
+        "date": "2020-04-02",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -17608,7 +17794,7 @@
         "id": "TestEncounter",
         "url": "http://test/url/base/TestEncounter",
         "name": "TestEncounter",
-        "date": "2020-01-09",
+        "date": "2020-04-02",
         "publisher": "Testington Inc.",
         "contact": [
           {

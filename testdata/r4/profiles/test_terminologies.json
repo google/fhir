@@ -8,7 +8,7 @@
         "name": "Brewery",
         "title": "Brewery",
         "status": "draft",
-        "date": "2020-01-09",
+        "date": "2020-04-02",
         "publisher": "Testington Inc.",
         "description": "The brewery of origin.",
         "content": "complete",
@@ -22,10 +22,145 @@
             "display": "Treehouse"
           },
           {
+            "code": "russian-river",
+            "display": "Russian River"
+          },
+          {
             "code": "cantillon",
             "display": "Cantillon"
           }
         ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "CodeSystem",
+        "url": "http://test/url/base/FootballTeams",
+        "name": "FootballTeams",
+        "title": "FootballTeams",
+        "status": "draft",
+        "date": "2020-04-02",
+        "publisher": "Testington Inc.",
+        "description": "NFL Football Teams",
+        "content": "complete",
+        "concept": [
+          {
+            "code": "Niners"
+          },
+          {
+            "code": "Eagles"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "ValueSet",
+        "url": "http://test/url/base/ValueSet/Brewery",
+        "name": "Brewery",
+        "title": "Brewery",
+        "status": "draft",
+        "date": "2020-04-02",
+        "publisher": "Testington Inc.",
+        "description": "ValueSet for Brewery Code System.",
+        "compose": {
+          "include": [
+            {
+              "system": "http://test/url/base/Brewery"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "ValueSet",
+        "url": "http://test/url/base/ValueSet/CaliforniaBreweries",
+        "name": "CaliforniaBreweries",
+        "title": "CaliforniaBreweries",
+        "status": "draft",
+        "date": "2020-04-02",
+        "publisher": "Testington Inc.",
+        "description": "ValueSet for California breweries.",
+        "compose": {
+          "include": [
+            {
+              "system": "http://test/url/base/Brewery",
+              "concept": [
+                {
+                  "code": "sante-adairius"
+                },
+                {
+                  "code": "russian-river"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "ValueSet",
+        "url": "http://test/url/base/ValueSet/AmericanBreweries",
+        "name": "AmericanBreweries",
+        "title": "AmericanBreweries",
+        "status": "draft",
+        "date": "2020-04-02",
+        "publisher": "Testington Inc.",
+        "description": "ValueSet for Brewery Code System.",
+        "compose": {
+          "include": [
+            {
+              "system": "http://test/url/base/Brewery"
+            }
+          ],
+          "exclude": [
+            {
+              "system": "http://test/url/base/Brewery",
+              "concept": [
+                {
+                  "code": "cantillon"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "ValueSet",
+        "url": "http://test/url/base/ValueSet/Californians",
+        "name": "Californians",
+        "title": "Californians",
+        "status": "draft",
+        "date": "2020-04-02",
+        "publisher": "Testington Inc.",
+        "description": "California businesses",
+        "compose": {
+          "include": [
+            {
+              "system": "http://test/url/base/Brewery",
+              "concept": [
+                {
+                  "code": "sante-adairius"
+                },
+                {
+                  "code": "russian-river"
+                }
+              ]
+            },
+            {
+              "system": "http://test/url/base/FootballTeams",
+              "concept": [
+                {
+                  "code": "Niners"
+                }
+              ]
+            }
+          ]
+        }
       }
     }
   ]

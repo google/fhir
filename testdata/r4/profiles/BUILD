@@ -28,6 +28,7 @@ gen_fhir_definitions_and_protos(
 fhir_proto_library(
     srcs = [
         "test.proto",
+        "test_codes.proto",
         "test_extensions.proto",
     ],
     proto_deps = [

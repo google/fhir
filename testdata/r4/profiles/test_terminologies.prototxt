@@ -14,7 +14,84 @@ code_system {
   }
 
   concept {
+    code: "russian-river"
+    display: "Russian River"
+  }
+
+  concept {
     code: "cantillon"
     display: "Cantillon"
+  }
+}
+
+code_system {
+  name: "FootballTeams"
+  status: DRAFT
+  description: "NFL Football Teams"
+
+  concept {
+    code: "Niners"
+  }
+
+  concept {
+    code: "Eagles"
+  }
+}
+
+
+
+value_set {
+  name: "Brewery"
+  status: DRAFT
+  description: "ValueSet for Brewery Code System."
+
+  system {
+    url: "http://test/url/base/Brewery"
+  }
+}
+
+
+value_set {
+  name: "CaliforniaBreweries"
+  status: DRAFT
+  description: "ValueSet for California breweries."
+
+  system {
+    url: "http://test/url/base/Brewery"
+
+    include: "sante-adairius"
+    include: "russian-river"
+  }
+}
+
+
+value_set {
+  name: "AmericanBreweries"
+  status: DRAFT
+  description: "ValueSet for Brewery Code System."
+
+  system {
+    url: "http://test/url/base/Brewery"
+
+    exclude: "cantillon"
+  }
+}
+
+value_set {
+  name: "Californians",
+  status: DRAFT
+  description: "California businesses"
+
+  system {
+    url: "http://test/url/base/Brewery"
+
+    include: "sante-adairius"
+    include: "russian-river"
+  }
+
+  system {
+    url: "http://test/url/base/FootballTeams"
+
+    include: "Niners"
   }
 }
