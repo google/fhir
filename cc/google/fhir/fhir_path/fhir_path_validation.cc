@@ -211,7 +211,7 @@ void FhirPathValidator::Validate(const internal::WorkspaceMessage& message,
   }
 
   // Validate the constraints attached to the message's fields.
-  for (auto expression : constraints->field_expressions) {
+  for (const auto& expression : constraints->field_expressions) {
     const FieldDescriptor* field = expression.first;
     const CompiledExpression& expr = expression.second;
 
