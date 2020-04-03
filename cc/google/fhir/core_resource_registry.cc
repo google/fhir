@@ -21,21 +21,22 @@
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
+#include "absl/status/status.h"
+#include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/annotations.pb.h"
 #include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/stu3/resources.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
 
+using ::absl::InvalidArgumentError;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
-using ::tensorflow::errors::InvalidArgument;
 
 namespace {
 
@@ -62,8 +63,8 @@ StatusOr<std::string> GetCoreStructureDefinition(const Descriptor* descriptor) {
       return core_url;
     }
   }
-  return InvalidArgument("Not a profile of a core resource: ",
-                         descriptor->full_name());
+  return InvalidArgumentError(absl::StrCat("Not a profile of a core resource: ",
+                                           descriptor->full_name()));
 }
 
 // For a given ContainedResource version, returns a registry from resource url
@@ -98,8 +99,8 @@ StatusOr<std::unique_ptr<::google::protobuf::Message>> GetBaseResourceInstanceFo
   auto example_iter = registry.find(core_url);
 
   if (example_iter == registry.end()) {
-    return InvalidArgument("Unrecognized core Structure Definition Url: ",
-                           core_url);
+    return InvalidArgumentError(
+        absl::StrCat("Unrecognized core Structure Definition Url: ", core_url));
   }
   return absl::WrapUnique(example_iter->second->New());
 }
@@ -116,7 +117,7 @@ GetBaseResourceInstanceFromDescriptor(const Descriptor* descriptor) {
       return GetBaseResourceInstanceForVersion<r4::core::ContainedResource>(
           descriptor);
     default:
-      return InvalidArgument(
+      return InvalidArgumentError(
           "Unsupported FHIR Version for core_resource_registry for resource: " +
           descriptor->full_name());
   }

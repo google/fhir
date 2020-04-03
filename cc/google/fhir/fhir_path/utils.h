@@ -35,9 +35,9 @@ namespace internal {
 //
 // NOTE: The messages in the results vector will no longer be accessible when
 // the root message is deleted.
-tensorflow::Status RetrieveField(const google::protobuf::Message& root,
-                      const google::protobuf::FieldDescriptor& field,
-                      std::vector<const google::protobuf::Message*>* results);
+absl::Status RetrieveField(const google::protobuf::Message& root,
+                           const google::protobuf::FieldDescriptor& field,
+                           std::vector<const google::protobuf::Message*>* results);
 
 // Returns true if the message descriptor contains a field whose JSON name
 // matches the provided json_name. In the case that the descriptor describes a

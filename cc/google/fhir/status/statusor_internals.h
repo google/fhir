@@ -17,19 +17,18 @@ limitations under the License.
 #define GOOGLE_FHIR_STATUS_STATUSOR_INTERNALS_H_
 
 #include "google/fhir/status/status.h"
-#include "tensorflow/core/platform/macros.h"
 
 namespace google {
 namespace fhir {
 namespace internal_statusor {
 
-using ::tensorflow::Status;  // TENSORFLOW_STATUS_OK
+using ::absl::Status;  // TENSORFLOW_STATUS_OK
 
 class Helper {
  public:
   // Move type-agnostic error handling to the .cc.
   static void HandleInvalidStatusCtorArg(Status*);
-  TF_ATTRIBUTE_NORETURN static void Crash(const Status& status);
+  static void Crash(const Status& status);
 };
 
 // Construct an instance of T in `p` through placement new, passing Args... to
@@ -136,7 +135,7 @@ class StatusOrData {
       MakeValue(value);
     } else {
       MakeValue(value);
-      status_ = Status::OK();
+      status_ = absl::OkStatus();
     }
   }
 
@@ -146,7 +145,7 @@ class StatusOrData {
       MakeValue(std::move(value));
     } else {
       MakeValue(std::move(value));
-      status_ = Status::OK();
+      status_ = absl::OkStatus();
     }
   }
 

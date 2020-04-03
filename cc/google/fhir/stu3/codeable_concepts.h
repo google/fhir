@@ -22,6 +22,7 @@
 
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/message.h"
+#include "absl/status/status.h"
 #include "absl/types/optional.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/fhir_types.h"
@@ -29,7 +30,6 @@
 #include "google/fhir/status/statusor.h"
 #include "proto/annotations.pb.h"
 #include "proto/stu3/datatypes.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
@@ -125,7 +125,8 @@ StatusOr<std::string> ExtractCodeBySystem(
   const std::vector<std::string>& codes =
       GetCodesWithSystem(codeable_concept, system_value);
   if (codes.empty()) {
-    return tensorflow::errors::NotFound("No code from system: ", system_value);
+    return absl::NotFoundError(
+        absl::StrCat("No code from system: ", system_value));
   }
   return codes.front();
 }
@@ -153,10 +154,10 @@ Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
         concept->GetReflection()->ClearField(concept, profiled_field);
       } else if (IsMessageType<stu3::proto::CodingWithFixedCode>(
                      profiled_field->message_type())) {
-        return ::tensorflow::errors::InvalidArgument(
-            "Cannot clear coding system: ", system, " from ",
-            concept->GetDescriptor()->full_name(),
-            ". It is a fixed code on that profile");
+        return ::absl::InvalidArgumentError(
+            absl::StrCat("Cannot clear coding system: ", system, " from ",
+                         concept->GetDescriptor()->full_name(),
+                         ". It is a fixed code on that profile"));
       }
     }
   }
@@ -168,7 +169,7 @@ Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
       iter++;
     }
   }
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 Status CopyCodeableConcept(const ::google::protobuf::Message& source,

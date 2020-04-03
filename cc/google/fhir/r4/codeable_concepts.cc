@@ -19,13 +19,13 @@
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
+#include "absl/status/status.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/codes.h"
 #include "google/fhir/fhir_types.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/r4/core/datatypes.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
@@ -33,14 +33,14 @@ namespace r4 {
 
 namespace {
 
+using ::absl::AlreadyExistsError;
+using ::absl::InvalidArgumentError;
+using ::absl::NotFoundError;
 using ::google::fhir::r4::core::Coding;
 using ::google::fhir::r4::core::CodingWithFixedCode;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
-using ::tensorflow::errors::AlreadyExists;
-using ::tensorflow::errors::InvalidArgument;
-using ::tensorflow::errors::NotFound;
 
 // Utility functions for working with potentially profiled CodeableConcepts.
 // These use a visitor pattern to allow operations on all Codings within a
@@ -134,7 +134,7 @@ Status CopyFieldIfPresent(const Message& source, Message* target,
   const FieldDescriptor* field =
       source.GetDescriptor()->FindFieldByName(field_name);
   if (!field && FieldHasValue(source, field)) {
-    return Status::OK();
+    return absl::OkStatus();
   }
   return CopyCommonField(source, target, field_name);
 }
@@ -205,7 +205,7 @@ const bool FindSystemCodeStringPair(const Message& concept,
         if (!status.ok()) {
           LOG(WARNING) << "Encountered malformed Coding with fixed system "
                        << fixed_system_coding.GetDescriptor()->full_name()
-                       << ": " << status.error_message();
+                       << ": " << status.message();
           return false;
         }
         const std::string& system = generic_coding.system().value();
@@ -250,19 +250,19 @@ StatusOr<const std::string> GetOnlyCodeWithSystem(
     const Message& concept, const absl::string_view system) {
   const std::vector<std::string>& codes = GetCodesWithSystem(concept, system);
   if (codes.empty()) {
-    return tensorflow::errors::NotFound("No code from system: ", system);
+    return absl::NotFoundError(absl::StrCat("No code from system: ", system));
   }
   if (codes.size() > 1) {
-    return ::tensorflow::errors::AlreadyExists("Found more than one code");
+    return ::absl::AlreadyExistsError("Found more than one code");
   }
   return codes.front();
 }
 
 Status AddCoding(Message* concept, const Coding& coding) {
   if (!IsTypeOrProfileOfCodeableConcept(*concept)) {
-    return InvalidArgument(
+    return InvalidArgumentError(absl::StrCat(
         "Error adding coding: ", concept->GetDescriptor()->full_name(),
-        " is not CodeableConcept-like.");
+        " is not CodeableConcept-like."));
   }
   const std::string& system = coding.system().value();
   if (IsProfileOfCodeableConcept(*concept)) {
@@ -274,25 +274,25 @@ Status AddCoding(Message* concept, const Coding& coding) {
         if (fixed_code == coding.code().value()) {
           if (!profiled_field->is_repeated() &&
               FieldHasValue(*concept, profiled_field)) {
-            return ::tensorflow::errors::AlreadyExists(
+            return ::absl::AlreadyExistsError(absl::StrCat(
                 "Attempted to add a Code-System Pair to a non-repeated slice "
                 "that is already populated.  Field: ",
                 profiled_field->full_name(), ", System: ", system,
-                ", Code:", fixed_code);
+                ", Code:", fixed_code));
           }
           Message* target_coding = MutableOrAddMessage(concept, profiled_field);
           CodingWithFixedCode* fixed_system_code =
               static_cast<CodingWithFixedCode*>(target_coding);
           CopyCommonCodingFields(coding, fixed_system_code);
-          return Status::OK();
+          return absl::OkStatus();
         }
       } else if (IsProfileOfCoding(profiled_field->message_type())) {
         if (!profiled_field->is_repeated() &&
             FieldHasValue(*concept, profiled_field)) {
-          return ::tensorflow::errors::AlreadyExists(
+          return ::absl::AlreadyExistsError(absl::StrCat(
               "Attempted to add a System to a non-repeated slice that is "
               "already populated.  Field: ",
-              profiled_field->full_name(), ", System: ", system);
+              profiled_field->full_name(), ", System: ", system));
         }
         return CopyCoding(coding, MutableOrAddMessage(concept, profiled_field));
       }
@@ -301,7 +301,7 @@ Status AddCoding(Message* concept, const Coding& coding) {
   concept->GetReflection()
       ->AddMessage(concept, concept->GetDescriptor()->FindFieldByName("coding"))
       ->CopyFrom(coding);
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 Status AddCoding(Message* concept, const std::string& system,
@@ -310,9 +310,9 @@ Status AddCoding(Message* concept, const std::string& system,
       concept->GetDescriptor()->FindFieldByName("coding");
   if (field_descriptor == nullptr ||
       field_descriptor->type() != google::protobuf::FieldDescriptor::TYPE_MESSAGE) {
-    return InvalidArgument(
+    return InvalidArgumentError(absl::StrCat(
         "Error adding coding: ", concept->GetDescriptor()->full_name(),
-        " is not CodeableConcept-like.");
+        " is not CodeableConcept-like."));
   }
   const google::protobuf::Descriptor* descriptor = field_descriptor->message_type();
   if (descriptor->full_name() == Coding::descriptor()->full_name()) {
@@ -322,11 +322,12 @@ Status AddCoding(Message* concept, const std::string& system,
     return AddCoding(concept, coding);
   } else if (GetFhirVersion(descriptor) ==
              ::google::fhir::proto::FhirVersion::STU3) {
-    return InvalidArgument(
+    return InvalidArgumentError(
         "Invoked R4 version of AddCoding with an STU3 coding");
   } else {
-    return InvalidArgument("Error adding coding: ", descriptor->full_name(),
-                           " is not a supported Coding type.");
+    return InvalidArgumentError(
+        absl::StrCat("Error adding coding: ", descriptor->full_name(),
+                     " is not a supported Coding type."));
   }
 }
 
@@ -351,7 +352,7 @@ std::shared_ptr<const Coding> FindCoding(const Message& concept,
         if (!status.ok()) {
           LOG(WARNING) << "Encountered malformed Coding with fixed system "
                        << fixed_system_coding.GetDescriptor()->full_name()
-                       << ": " << status.error_message();
+                       << ": " << status.message();
           return false;
         }
         if (func(*synth_coding)) {
@@ -384,7 +385,7 @@ void ForEachCoding(const Message& concept, const CodingFunc& func) {
 
 Status ForEachCodingWithStatus(const Message& concept,
                                const CodingStatusFunc& func) {
-  Status return_status = Status::OK();
+  Status return_status = absl::OkStatus();
   FindCoding(concept, [&func, &return_status](const Coding& coding) {
     Status status = func(coding);
     if (status.ok()) {

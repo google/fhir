@@ -18,16 +18,15 @@
 #define GOOGLE_FHIR_STU3_RESOURCE_VALIDATION_H_
 
 #include "google/protobuf/message.h"
-#include "tensorflow/core/lib/core/status.h"
+#include "absl/status/status.h"
 
 namespace google {
 namespace fhir {
 namespace stu3 {
 
-::tensorflow::Status ValidateResource(const ::google::protobuf::Message& resource);
+::absl::Status ValidateResource(const ::google::protobuf::Message& resource);
 
-::tensorflow::Status ValidateResourceWithFhirPath(
-    const ::google::protobuf::Message& resource);
+::absl::Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource);
 
 }  // namespace stu3
 }  // namespace fhir

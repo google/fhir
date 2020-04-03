@@ -49,6 +49,7 @@ cc_library(
         "//cc/google/fhir/status:statusor",
         "//proto/r4/core:datatypes_cc_proto",
         "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
         "@com_google_absl//absl/types:optional",
@@ -80,12 +81,12 @@ cc_library(
         "//proto/r4/core:datatypes_cc_proto",
         "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/synchronization",
         "@com_google_absl//absl/time",
         "@com_google_absl//absl/types:optional",
         "@com_google_protobuf//:protobuf",
-        "@org_tensorflow//tensorflow/core:lib",
     ],
 )
 
@@ -134,15 +135,10 @@ cc_library(
     strip_include_prefix = "//cc/",
     visibility = [":__pkg__"],
     deps = [
-        "//cc/google/fhir:annotations",
-        "//cc/google/fhir:primitive_wrapper",
-        "//cc/google/fhir:proto_util",
         "//cc/google/fhir:util",
         "//cc/google/fhir/status",
-        "@com_google_absl//absl/memory",
-        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/status",
         "@com_google_protobuf//:protobuf",
-        "@org_tensorflow//tensorflow/core:lib",
     ],
 )
 
@@ -178,11 +174,11 @@ cc_test(
         "//proto/stu3:resources_cc_proto",
         "//proto/stu3:uscore_cc_proto",
         "//proto/stu3:uscore_codes_cc_proto",
+        "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
-        "@org_tensorflow//tensorflow/core:lib",
     ],
 )
 
@@ -210,10 +206,10 @@ cc_test(
         "//proto/stu3:resources_cc_proto",
         "//proto/stu3:uscore_cc_proto",
         "//proto/stu3:uscore_codes_cc_proto",
+        "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
-        "@org_tensorflow//tensorflow/core:lib",
     ],
 )
 
@@ -225,7 +221,6 @@ cc_test(
     ],
     deps = [
         ":utils",
-        "//cc/google/fhir/status",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/r4/core:datatypes_cc_proto",
         "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
@@ -234,6 +229,5 @@ cc_test(
         "//proto/stu3:resources_cc_proto",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
-        "@org_tensorflow//tensorflow/core:lib",
     ],
 )

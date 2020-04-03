@@ -259,7 +259,7 @@ void TestPrintWithFilepaths(const std::string& proto_path,
   StatusOr<std::string> from_proto_status = PrettyPrintFhirToJsonString(proto);
   ASSERT_TRUE(from_proto_status.ok())
       << "Failed Printing on: " << proto_path << ": "
-      << from_proto_status.status().error_message();
+      << from_proto_status.status().message();
   std::string from_proto = from_proto_status.ValueOrDie();
   std::string from_json = ReadFile(absl::StrCat(json_path));
 

@@ -32,7 +32,6 @@
 #include "proto/stu3/google_extensions.pb.h"
 #include "proto/stu3/resources.pb.h"
 #include "tensorflow/core/example/example.pb.h"
-#include "tensorflow/core/lib/core/status.h"
 #include "tensorflow/core/platform/env.h"
 
 ABSL_DECLARE_FLAG(bool, tokenize_code_text_features);

@@ -109,7 +109,7 @@ TEST(ProfilesTest, Normalize) {
       "testdata/r4/profiles/observation_complexextension.prototxt"));
   StatusOr<TestObservation> normalized = NormalizeR4(unnormalized);
   if (!normalized.status().ok()) {
-    LOG(ERROR) << normalized.status().error_message();
+    LOG(ERROR) << normalized.status().message();
     ASSERT_TRUE(normalized.status().ok());
   }
   EXPECT_THAT(
@@ -125,8 +125,7 @@ TEST(ProfilesTest, NormalizeAndValidate_Invalid) {
   unnormalized.clear_status();
   StatusOr<TestObservation> normalized = NormalizeAndValidateR4(unnormalized);
   EXPECT_FALSE(normalized.ok());
-  EXPECT_EQ(normalized.status().error_message(),
-            "missing-TestObservation.status");
+  EXPECT_EQ(normalized.status().message(), "missing-TestObservation.status");
 }
 
 TEST(ProfilesTest, NormalizeAndValidate_Valid) {
@@ -179,10 +178,10 @@ TEST(ProfilesTest, UnableToProfile) {
   Patient patient;
 
   auto lenient_status = ConvertToProfileLenientR4(unprofiled, &patient);
-  ASSERT_EQ(tensorflow::error::INVALID_ARGUMENT, lenient_status.code());
+  ASSERT_EQ(absl::StatusCode::kInvalidArgument, lenient_status.code());
 
   auto strict_status = ConvertToProfileR4(unprofiled, &patient);
-  ASSERT_EQ(tensorflow::error::INVALID_ARGUMENT, strict_status.code());
+  ASSERT_EQ(absl::StatusCode::kInvalidArgument, strict_status.code());
 }
 
 TEST(ProfilesTest, MissingRequiredFields) {
@@ -191,10 +190,10 @@ TEST(ProfilesTest, MissingRequiredFields) {
   TestObservation profiled;
 
   auto lenient_status = ConvertToProfileLenientR4(unprofiled, &profiled);
-  ASSERT_EQ(tensorflow::error::OK, lenient_status.code());
+  ASSERT_EQ(absl::StatusCode::kOk, lenient_status.code());
 
   auto strict_status = ConvertToProfileR4(unprofiled, &profiled);
-  ASSERT_EQ(tensorflow::error::FAILED_PRECONDITION, strict_status.code());
+  ASSERT_EQ(absl::StatusCode::kFailedPrecondition, strict_status.code());
 }
 
 TEST(ProfilesTest, ConvertToInlinedCodeEnum) {

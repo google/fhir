@@ -23,6 +23,7 @@
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
+#include "absl/status/status.h"
 #include "absl/strings/string_view.h"
 #include "absl/types/optional.h"
 #include "google/fhir/annotations.h"
@@ -33,7 +34,6 @@
 #include "proto/annotations.pb.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
@@ -91,7 +91,7 @@ StatusOr<std::string> ExtractCodeBySystem(
       return r4::ExtractCodeBySystem(codeable_concept, system_value);
     }
     default:
-      return ::tensorflow::errors::InvalidArgument(
+      return ::absl::InvalidArgumentError(
           absl::StrCat("FHIR version not supported by codeable_concepts.h: ",
                        google::fhir::proto::FhirVersion_Name(
                            google::fhir::GetFhirVersion(codeable_concept))));
@@ -111,7 +111,7 @@ Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
       return r4::ClearAllCodingsWithSystem(concept, system);
     }
     default:
-      return ::tensorflow::errors::InvalidArgument(
+      return ::absl::InvalidArgumentError(
           absl::StrCat("FHIR version not supported by codeable_concepts.h: ",
                        google::fhir::proto::FhirVersion_Name(
                            google::fhir::GetFhirVersion(*concept))));

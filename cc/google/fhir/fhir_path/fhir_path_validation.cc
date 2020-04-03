@@ -19,6 +19,7 @@
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/util/message_differencer.h"
 #include "absl/memory/memory.h"
+#include "absl/status/status.h"
 #include "absl/strings/escaping.h"
 #include "absl/strings/match.h"
 #include "absl/strings/numbers.h"
@@ -36,18 +37,18 @@
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
 #include "proto/r4/core/datatypes.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
 namespace fhir_path {
 
+using ::google::fhir::ForEachMessage;
+using ::google::fhir::StatusOr;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::fhir::ForEachMessage;
 using ::google::fhir::StatusOr;
-using ::tensorflow::errors::InvalidArgument;
 
 bool ValidationResults::IsValid(ValidationBehavior behavior) const {
   for (const ValidationResult& result : results_) {
@@ -100,7 +101,7 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
     } else {
       LOG(WARNING) << "Ignoring message constraint on " << descriptor->name()
                    << " (" << fhir_path << "). "
-                   << constraint.status().error_message();
+                   << constraint.status().message();
     }
 
     // TODO: Unsupported FHIRPath expressions are simply not
@@ -131,7 +132,7 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
         } else {
           LOG(WARNING) << "Ignoring field constraint on " << descriptor->name()
                        << "." << field_type->name() << " (" << fhir_path
-                       << "). " << constraint.status().error_message();
+                       << "). " << constraint.status().message();
         }
 
         // TODO: Unsupported FHIRPath expressions are simply not
@@ -233,7 +234,7 @@ void FhirPathValidator::Validate(const internal::WorkspaceMessage& message,
 
 Status ValidationResults::LegacyValidationResult() const {
   if (IsValid(ValidationResults::ValidationBehavior::kRelaxed)) {
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   auto result = find_if(results_.begin(), results_.end(), [](auto result) {
@@ -241,9 +242,9 @@ Status ValidationResults::LegacyValidationResult() const {
            !result.EvaluationResult().ValueOrDie();
   });
 
-  return ::tensorflow::errors::FailedPrecondition(
-      "fhirpath-constraint-violation-", (*result).DebugPath(), ": \"",
-      (*result).Constraint(), "\"");
+  return ::absl::FailedPreconditionError(
+      absl::StrCat("fhirpath-constraint-violation-", (*result).DebugPath(),
+                   ": \"", (*result).Constraint(), "\""));
 }
 
 ValidationResults FhirPathValidator::Validate(

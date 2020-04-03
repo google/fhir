@@ -16,12 +16,12 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/status/status.h"
 #include "absl/time/time.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
@@ -77,8 +77,8 @@ TEST(GetResourceIdFromReferenceTest, ReferenceDoesNotMatch) {
   Reference r;
   r.mutable_uri()->set_value("Patient/123");
   auto got = google::fhir::GetResourceIdFromReference<Encounter>(r);
-  EXPECT_EQ(got.status(), ::tensorflow::errors::InvalidArgument(
-                              "Reference type doesn't match"));
+  EXPECT_EQ(got.status(),
+            ::absl::InvalidArgumentError("Reference type doesn't match"));
 }
 
 TEST(GetResourceFromBundleEntryTest, GetResourceFromEncounter) {
@@ -186,9 +186,8 @@ TEST(WrapContainedResource, Valid) {
 TEST(WrapContainedResource, InvalidType) {
   DateTime datetime;
   EXPECT_EQ(WrapContainedResource<ContainedResource>(datetime).status(),
-            ::tensorflow::errors::InvalidArgument(
-                "Resource type DateTime not found in "
-                "fhir::Bundle::Entry::resource"));
+            ::absl::InvalidArgumentError("Resource type DateTime not found in "
+                                         "fhir::Bundle::Entry::resource"));
 }
 
 TEST(SetContainedResource, Valid) {
@@ -207,9 +206,8 @@ TEST(SetContainedResource, InvalidType) {
   DateTime datetime;
   ContainedResource result;
   EXPECT_EQ(SetContainedResource(datetime, &result),
-            ::tensorflow::errors::InvalidArgument(
-                "Resource type DateTime not found in "
-                "fhir::Bundle::Entry::resource"));
+            ::absl::InvalidArgumentError("Resource type DateTime not found in "
+                                         "fhir::Bundle::Entry::resource"));
 }
 
 TEST(GetPatient, StatusOr) {
@@ -241,7 +239,7 @@ TEST(GetTypedContainedResource, WrongType) {
   EXPECT_EQ(google::fhir::GetTypedContainedResource<Patient>(contained)
                 .status()
                 .code(),
-            ::tensorflow::errors::Code::NOT_FOUND);
+            ::absl::StatusCode::kNotFound);
 }
 
 TEST(GetTypedContainedResource, BadType) {
@@ -250,7 +248,7 @@ TEST(GetTypedContainedResource, BadType) {
 
   EXPECT_EQ(
       google::fhir::GetTypedContainedResource<DateTime>(contained).status(),
-      ::tensorflow::errors::InvalidArgument(
+      ::absl::InvalidArgumentError(
           "No resource field found for type DateTime"));
 }
 
@@ -266,25 +264,23 @@ TEST(GetDecimalValue, NotANumber) {
   decimal.set_value("NaN");
 
   EXPECT_EQ(GetDecimalValue(decimal).status(),
-            ::tensorflow::errors::InvalidArgument("Invalid decimal: 'NaN'"));
+            ::absl::InvalidArgumentError("Invalid decimal: 'NaN'"));
 }
 
 TEST(GetDecimalValue, PositiveInfinity) {
   Decimal decimal;
   decimal.set_value("1e+1000");
 
-  EXPECT_EQ(
-      GetDecimalValue(decimal).status(),
-      ::tensorflow::errors::InvalidArgument("Invalid decimal: '1e+1000'"));
+  EXPECT_EQ(GetDecimalValue(decimal).status(),
+            ::absl::InvalidArgumentError("Invalid decimal: '1e+1000'"));
 }
 
 TEST(GetDecimalValue, NegativeInfinity) {
   Decimal decimal;
   decimal.set_value("-1e+1000");
 
-  EXPECT_EQ(
-      GetDecimalValue(decimal).status(),
-      ::tensorflow::errors::InvalidArgument("Invalid decimal: '-1e+1000'"));
+  EXPECT_EQ(GetDecimalValue(decimal).status(),
+            ::absl::InvalidArgumentError("Invalid decimal: '-1e+1000'"));
 }
 
 TEST(GetMutablePatient, StatusOr) {

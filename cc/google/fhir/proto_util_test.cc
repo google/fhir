@@ -19,10 +19,10 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/status/status.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
-#include "tensorflow/core/lib/core/status.h"
 
 namespace google {
 namespace fhir {
@@ -68,7 +68,7 @@ TEST(ForEachMessageWithStatus, Ok) {
 
   auto status = ForEachMessageWithStatus<Encounter::Location>(
       encounter, field,
-      [](const Encounter::Location& location) { return Status::OK(); });
+      [](const Encounter::Location& location) { return absl::OkStatus(); });
 
   ASSERT_TRUE(status.ok());
 }
@@ -81,12 +81,12 @@ TEST(ForEachMessageWithStatus, Fail) {
   auto status = ForEachMessageWithStatus<Encounter::Location>(
       encounter, field, [](const Encounter::Location& location) {
         return location.period().start().value_us() == 7
-                   ? tensorflow::errors::InvalidArgument("it's 7")
-                   : Status::OK();
+                   ? absl::InvalidArgumentError("it's 7")
+                   : absl::OkStatus();
       });
 
   ASSERT_TRUE(!status.ok());
-  ASSERT_EQ(status.error_message(), "it's 7");
+  ASSERT_EQ(status.message(), "it's 7");
 }
 
 TEST(GetSubmessageByPath, Valid) {
@@ -124,7 +124,7 @@ TEST(GetSubmessageByPath, NotFound) {
   const MedicationRequest request;
   auto result = google::fhir::GetSubmessageByPathAndCheckType<DateTime>(
       request, "MedicationRequest.dispenseRequest.validityPeriod.start");
-  ASSERT_EQ(result.status().code(), ::tensorflow::error::Code::NOT_FOUND);
+  ASSERT_EQ(result.status().code(), ::absl::StatusCode::kNotFound);
 }
 
 TEST(GetMutableSubmessageByPath, NotFoundIsOk) {
@@ -147,8 +147,7 @@ TEST(GetSubmessageByPath, BadPath) {
 
   auto result = google::fhir::GetSubmessageByPathAndCheckType<DateTime>(
       request, "MedicationRequest.garbageField.validityPeriod.start");
-  ASSERT_EQ(result.status().code(),
-            ::tensorflow::error::Code::INVALID_ARGUMENT);
+  ASSERT_EQ(result.status().code(), ::absl::StatusCode::kInvalidArgument);
 }
 
 TEST(GetSubmessageByPath, WrongRequestedType) {
@@ -162,8 +161,7 @@ TEST(GetSubmessageByPath, WrongRequestedType) {
 
   auto result = google::fhir::GetSubmessageByPathAndCheckType<Observation>(
       request, "MedicationRequest.dispenseRequest.validityPeriod.start");
-  ASSERT_EQ(result.status().code(),
-            ::tensorflow::error::Code::INVALID_ARGUMENT);
+  ASSERT_EQ(result.status().code(), ::absl::StatusCode::kInvalidArgument);
 }
 
 TEST(GetSubmessageByPath, WrongResourceType) {
@@ -176,8 +174,7 @@ TEST(GetSubmessageByPath, WrongResourceType) {
           &request));
   auto result = google::fhir::GetSubmessageByPathAndCheckType<DateTime>(
       request, "Encounter.dispenseRequest.validityPeriod.start");
-  ASSERT_EQ(result.status().code(),
-            ::tensorflow::error::Code::INVALID_ARGUMENT);
+  ASSERT_EQ(result.status().code(), ::absl::StatusCode::kInvalidArgument);
 }
 
 TEST(GetSubmessageByPath, HasIndex) {
@@ -209,16 +206,14 @@ TEST(GetSubmessageByPath, UnindexedRepeatedAtEnd) {
   const Encounter encounter = MakeTestEncounter();
   auto result = google::fhir::GetSubmessageByPathAndCheckType<DateTime>(
       encounter, "Encounter.location");
-  ASSERT_EQ(result.status().code(),
-            ::tensorflow::error::Code::INVALID_ARGUMENT);
+  ASSERT_EQ(result.status().code(), ::absl::StatusCode::kInvalidArgument);
 }
 
 TEST(GetSubmessageByPath, UnindexedRepeatedInMiddle) {
   const Encounter encounter = MakeTestEncounter();
   auto result = google::fhir::GetSubmessageByPathAndCheckType<DateTime>(
       encounter, "Encounter.location.period");
-  ASSERT_EQ(result.status().code(),
-            ::tensorflow::error::Code::INVALID_ARGUMENT);
+  ASSERT_EQ(result.status().code(), ::absl::StatusCode::kInvalidArgument);
 }
 
 TEST(GetSubmessageByPath, Untemplatized) {
@@ -279,7 +274,7 @@ TEST(ClearFieldByPath, SingularAbsent) {
 TEST(ClearFieldByPath, SingularInvalid) {
   Encounter encounter = MakeTestEncounter();
   const auto& status = ClearFieldByPath(&encounter, "Encounter.garbage");
-  ASSERT_EQ(status.code(), ::tensorflow::error::Code::INVALID_ARGUMENT);
+  ASSERT_EQ(status.code(), ::absl::StatusCode::kInvalidArgument);
 }
 
 TEST(ClearFieldByPath, RepeatedUnindexedPresent) {
@@ -308,7 +303,7 @@ TEST(ClearFieldByPath, RepeatedUnindexedAbsent) {
 TEST(ClearFieldByPath, RepeatedIndexedPresentFails) {
   Encounter encounter = MakeTestEncounter();
   ASSERT_EQ(ClearFieldByPath(&encounter, "Encounter.location[1]").code(),
-            ::tensorflow::error::Code::INVALID_ARGUMENT);
+            ::absl::StatusCode::kInvalidArgument);
 }
 
 TEST(HasSubmessageByPath, SingularPresent) {
@@ -331,7 +326,7 @@ TEST(HasSubmessageByPath, SingularInvalid) {
   ASSERT_EQ(HasSubmessageByPath(encounter, "Encounter.location[1].sandwich")
                 .status()
                 .code(),
-            ::tensorflow::error::Code::INVALID_ARGUMENT);
+            ::absl::StatusCode::kInvalidArgument);
 }
 
 TEST(HasSubmessageByPath, RepeatedIndexedPresent) {
@@ -352,14 +347,14 @@ TEST(HasSubmessageByPath, RepeatedIndexedInvalid) {
   Encounter encounter = MakeTestEncounter();
   ASSERT_EQ(
       HasSubmessageByPath(encounter, "Encounter.sandwich[1]").status().code(),
-      ::tensorflow::error::Code::INVALID_ARGUMENT);
+      ::absl::StatusCode::kInvalidArgument);
 }
 
 TEST(HasSubmessageByPath, RepeatedUnindexed) {
   Encounter encounter = MakeTestEncounter();
   ASSERT_EQ(
       HasSubmessageByPath(encounter, "Encounter.location").status().code(),
-      ::tensorflow::error::Code::INVALID_ARGUMENT);
+      ::absl::StatusCode::kInvalidArgument);
 }
 
 TEST(EndsInIndex, True) {

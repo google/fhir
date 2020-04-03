@@ -21,14 +21,13 @@
 #include <utility>
 
 #include "google/protobuf/reflection.h"
+#include "absl/status/status.h"
 #include "absl/time/time.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/extensions.h"
 #include "google/fhir/util.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
-#include "tensorflow/core/lib/core/status.h"
 
 using google::fhir::StatusOr;
 using google::fhir::stu3::google::EventLabel;
@@ -46,7 +45,7 @@ StatusOr<std::vector<EventLabel>> ExtractLabelsFromExtensions(
     const std::set<std::string>& label_names,
     google::protobuf::RepeatedFieldRef<Extension> extensions) {
   std::vector<EventLabel> labels;
-  TF_RETURN_IF_ERROR(
+  FHIR_RETURN_IF_ERROR(
       google::fhir::stu3::GetRepeatedFromExtension(extensions, &labels));
   std::vector<EventLabel> target_labels;
   for (const auto& label : labels) {
@@ -64,7 +63,7 @@ void GetTriggerLabelsPairFromExtensions(
     std::vector<TriggerLabelsPair>* trigger_labels_pair,
     int* num_triggers_filtered) {
   std::vector<stu3::google::EventTrigger> triggers;
-  TF_CHECK_OK(
+  FHIR_CHECK_OK(
       google::fhir::stu3::GetRepeatedFromExtension(extensions, &triggers));
   // Note that this only joins triggers and labels within the same resource.
   auto labels_result = ExtractLabelsFromExtensions(label_names, extensions);

@@ -23,6 +23,7 @@
 
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
+#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
@@ -56,11 +57,11 @@ StatusOr<T*> GetMutableSubmessageByPathAndCheckType(
     ::google::protobuf::Message* message, const std::string& field_path) {
   const std::string& message_name = message->GetDescriptor()->name();
   auto got = GetMutableSubmessageByPath(message, field_path);
-  TF_RETURN_IF_ERROR(got.status());
+  FHIR_RETURN_IF_ERROR(got.status());
   ::google::protobuf::Message* submessage = got.ValueOrDie();
   if (T::descriptor()->full_name() !=
       submessage->GetDescriptor()->full_name()) {
-    return ::tensorflow::errors::InvalidArgument(
+    return ::absl::InvalidArgumentError(
         ::absl::StrCat("Cannot find ", field_path, " in ", message_name,
                        " of type ", T::descriptor()->full_name(),
                        ".  Found: ", submessage->GetDescriptor()->full_name()));
@@ -74,11 +75,11 @@ StatusOr<const T*> GetSubmessageByPathAndCheckType(
     const ::google::protobuf::Message& message, const std::string& field_path) {
   const std::string& message_name = message.GetDescriptor()->name();
   auto got = GetSubmessageByPath(message, field_path);
-  TF_RETURN_IF_ERROR(got.status());
+  FHIR_RETURN_IF_ERROR(got.status());
   const ::google::protobuf::Message* submessage = got.ValueOrDie();
   if (T::descriptor()->full_name() !=
       submessage->GetDescriptor()->full_name()) {
-    return ::tensorflow::errors::InvalidArgument(
+    return ::absl::InvalidArgumentError(
         ::absl::StrCat("Cannot find ", field_path, " in ", message_name,
                        " of type ", T::descriptor()->full_name(),
                        ".  Found: ", submessage->GetDescriptor()->full_name()));
@@ -100,8 +101,8 @@ StatusOr<const bool> HasSubmessageByPath(const ::google::protobuf::Message& mess
 // If the path is invalid, returns an InvalidArgument status.
 // Note that this operates on fields, not a submessage, so a field_path ending
 // in an index is considered invalid.
-tensorflow::Status ClearFieldByPath(::google::protobuf::Message* message,
-                                    const std::string& field_path);
+absl::Status ClearFieldByPath(::google::protobuf::Message* message,
+                              const std::string& field_path);
 
 // Returns true if a field_path ends in a repeated index, e.g.,
 // Resource.repeatedSubfield[5].
@@ -187,7 +188,7 @@ template <typename FieldType>
 Status ForEachMessageWithStatus(
     const ::google::protobuf::Message& message, const ::google::protobuf::FieldDescriptor* field,
     std::function<Status(const FieldType& message)> func) {
-  Status status = Status::OK();
+  Status status = absl::OkStatus();
   ForEachMessageHalting<FieldType>(message, field,
                                    [&func, &status](const FieldType& message) {
                                      const Status func_status = func(message);
@@ -218,10 +219,10 @@ template <typename T>
 StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
                               const ::google::protobuf::FieldDescriptor* field) {
   if (field->message_type()->full_name() != T::descriptor()->full_name()) {
-    return tensorflow::errors::InvalidArgument(
+    return absl::InvalidArgumentError(absl::StrCat(
         "Invalid arguments to GetMessageInField: ", field->full_name(),
         " is of type ", field->message_type()->full_name(), " but ",
-        T::descriptor()->full_name(), " was requested.");
+        T::descriptor()->full_name(), " was requested."));
   }
   return dynamic_cast<const T&>(
       message.GetReflection()->GetMessage(message, field));
@@ -233,9 +234,9 @@ StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
   const ::google::protobuf::FieldDescriptor* field =
       message.GetDescriptor()->FindFieldByName(field_name);
   if (!field) {
-    return tensorflow::errors::InvalidArgument(
+    return absl::InvalidArgumentError(absl::StrCat(
         "Invalid arguments to GetMessageInField: No field ", field_name,
-        " in type ", message.GetDescriptor()->full_name());
+        " in type ", message.GetDescriptor()->full_name()));
   }
   return GetMessageInField<T>(
       message, message.GetDescriptor()->FindFieldByName(field_name));

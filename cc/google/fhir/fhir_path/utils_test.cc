@@ -33,7 +33,6 @@ namespace {
 using ::google::fhir::testutil::EqualsProto;
 using ::google::protobuf::Message;
 using ::google::protobuf::TextFormat;
-using ::tensorflow::error::UNIMPLEMENTED;
 using ::testing::UnorderedElementsAreArray;
 
 namespace r4 = ::google::fhir::r4::core;
@@ -83,7 +82,7 @@ TEST(Utils, RetrieveFieldR4ContainedResourceAny) {
       patient, *r4::Patient::GetDescriptor()->FindFieldByName("contained"),
       &results);
 
-  EXPECT_EQ(result.code(), UNIMPLEMENTED) << result;
+  EXPECT_EQ(result.code(), absl::StatusCode::kUnimplemented) << result;
 }
 
 TEST(Utils, RetrieveFieldR4WrongAny) {
@@ -97,7 +96,7 @@ TEST(Utils, RetrieveFieldR4WrongAny) {
       patient, *r4::Patient::GetDescriptor()->FindFieldByName("contained"),
       &results);
 
-  EXPECT_EQ(result.code(), UNIMPLEMENTED) << result;
+  EXPECT_EQ(result.code(), absl::StatusCode::kUnimplemented) << result;
 }
 
 TEST(Utils, RetrieveFieldStu3ContainedResource) {

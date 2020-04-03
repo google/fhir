@@ -55,7 +55,7 @@ StatusOr<const stu3::proto::DateTime*> GetEndOfLastEncounter(
     }
   }
   if (last_encounter == nullptr) {
-    return ::tensorflow::errors::NotFound("No encounter found");
+    return ::absl::NotFoundError("No encounter found");
   }
   return &(last_encounter->period().end());
 }
@@ -79,7 +79,7 @@ StatusOr<const stu3::proto::DateTime*> GetStartOfFirstEncounter(
     }
   }
   if (first_encounter == nullptr) {
-    return ::tensorflow::errors::NotFound("No encounter found");
+    return ::absl::NotFoundError("No encounter found");
   }
   return &(first_encounter->period().start());
 }
@@ -172,7 +172,7 @@ void SplitResource(const R& resource, const proto::VersionConfig& config,
   StatusOr<stu3::proto::DateTime> default_time_status =
       GetDefaultDateTime(resource_config, resource);
   if (!default_time_status.ok()) {
-    (*counter_stats)[default_time_status.status().error_message()]++;
+    (*counter_stats)[std::string(default_time_status.status().message())]++;
     return;
   }
   stu3::proto::DateTime default_time = default_time_status.ValueOrDie();
@@ -221,7 +221,7 @@ void SplitResource(const R& resource, const proto::VersionConfig& config,
       const auto& original_submessage_status =
           GetSubmessageByPath(resource, field_path);
       if (original_submessage_status.status().code() ==
-          ::tensorflow::error::Code::NOT_FOUND) {
+          ::absl::StatusCode::kNotFound) {
         // Nothing to copy.
         continue;
       }

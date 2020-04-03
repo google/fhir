@@ -18,6 +18,7 @@
 
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
+#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/codes.h"
@@ -26,26 +27,26 @@
 #include "google/fhir/status/status.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 #include "tensorflow/core/platform/logging.h"
 
 namespace google {
 namespace fhir {
 
+using ::absl::InvalidArgumentError;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
-using ::tensorflow::errors::InvalidArgument;
 
 namespace extensions_internal {
 
 Status CheckIsMessage(const FieldDescriptor* field) {
   if (field->type() != FieldDescriptor::Type::TYPE_MESSAGE) {
-    return InvalidArgument("Encountered unexpected proto primitive: ",
-                           field->full_name(), ".  Should be FHIR type");
+    return InvalidArgumentError(absl::StrCat(
+        "Encountered unexpected proto primitive: ", field->full_name(),
+        ".  Should be FHIR type"));
   }
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 const std::vector<const FieldDescriptor*> FindValueFields(
@@ -66,16 +67,17 @@ namespace extensions_lib {
 
 Status ValidateExtension(const Descriptor* descriptor) {
   if (!IsProfileOfExtension(descriptor)) {
-    return InvalidArgument(descriptor->full_name(),
-                           " is not a FHIR extension type");
+    return InvalidArgumentError(
+        absl::StrCat(descriptor->full_name(), " is not a FHIR extension type"));
   }
   if (!descriptor->options().HasExtension(
           ::google::fhir::proto::fhir_structure_definition_url)) {
-    return InvalidArgument(descriptor->full_name(),
-                           " is not a valid FHIR extension type: No "
-                           "fhir_structure_definition_url.");
+    return InvalidArgumentError(
+        absl::StrCat(descriptor->full_name(),
+                     " is not a valid FHIR extension type: No "
+                     "fhir_structure_definition_url."));
   }
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 Status ClearTypedExtensions(const Descriptor* descriptor, Message* message) {
@@ -101,7 +103,7 @@ Status ClearExtensionsWithUrl(const std::string& url, Message* message) {
       iter++;
     }
   }
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 const std::string& GetExtensionUrl(const google::protobuf::Message& extension,

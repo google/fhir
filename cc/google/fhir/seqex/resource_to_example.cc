@@ -40,7 +40,6 @@
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/example/example.pb.h"
 #include "tensorflow/core/example/feature.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 #include "tensorflow/core/platform/logging.h"
 #include "re2/re2.h"
 

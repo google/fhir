@@ -55,7 +55,7 @@ limitations under the License.
 //
 //  StatusOr<Foo*> FooFactory::MakeNewFoo(int arg) {
 //    if (arg <= 0) {
-//      return tensorflow::InvalidArgument("Arg must be positive");
+//      return absl::InvalidArgumentError("Arg must be positive");
 //    } else {
 //      return new Foo(arg);
 //    }
@@ -74,7 +74,6 @@ limitations under the License.
 
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor_internals.h"
-#include "tensorflow/core/platform/macros.h"
 
 // Internal helper for concatenating macro values.
 #define FHIR_STATUS_MACROS_CONCAT_NAME_INNER(x, y) x##y
@@ -101,30 +100,30 @@ limitations under the License.
 #define FHIR_ASSERT_OK_AND_ASSIGN_IMPL(statusor, lhs, rexpr) \
   auto statusor = (rexpr);                                   \
   if (!statusor.ok()) {                                      \
-    LOG(ERROR) << statusor.status().error_message();         \
+    LOG(ERROR) << statusor.status().message();               \
     ASSERT_TRUE(statusor.ok());                              \
   }                                                          \
   lhs = std::move(statusor.ValueOrDie());
 
-#define FHIR_ASSERT_OK_AND_CONTAINS(lhs, rexpr)        \
-  {                                                    \
-    auto statusor = (rexpr);                           \
-    if (!statusor.ok()) {                              \
-      LOG(ERROR) << statusor.status().error_message(); \
-      ASSERT_TRUE(statusor.ok());                      \
-    }                                                  \
-    ASSERT_EQ(lhs, statusor.ValueOrDie());             \
+#define FHIR_ASSERT_OK_AND_CONTAINS(lhs, rexpr)  \
+  {                                              \
+    auto statusor = (rexpr);                     \
+    if (!statusor.ok()) {                        \
+      LOG(ERROR) << statusor.status().message(); \
+      ASSERT_TRUE(statusor.ok());                \
+    }                                            \
+    ASSERT_EQ(lhs, statusor.ValueOrDie());       \
   }
 
 namespace google {
 namespace fhir {
 
-using ::tensorflow::Status;  // TENSORFLOW_STATUS_OK
+using ::absl::Status;
 
 #if defined(__clang__)
 // Only clang supports warn_unused_result as a type annotation.
 template <typename T>
-class TF_MUST_USE_RESULT StatusOr;
+class ABSL_MUST_USE_RESULT StatusOr;
 #endif
 
 template <typename T>
@@ -191,8 +190,8 @@ class StatusOr : private internal_statusor::StatusOrData<T>,
   // Status()' when the return type is StatusOr<T>.
   //
   // REQUIRES: !status.ok(). This requirement is DCHECKed.
-  // In optimized builds, passing Status::OK() here will have the effect
-  // of passing tensorflow::error::INTERNAL as a fallback.
+  // In optimized builds, passing absl::OkStatus() here will have the effect
+  // of passing absl::StatusCode::kInternal as a fallback.
   StatusOr(const Status& status);
   StatusOr& operator=(const Status& status);
 
@@ -209,7 +208,7 @@ class StatusOr : private internal_statusor::StatusOrData<T>,
   bool ok() const { return this->status_.ok(); }
 
   // Returns a reference to our status. If this contains a T, then
-  // returns Status::OK().
+  // returns absl::OkStatus().
   const Status& status() const &;
 
   // Returns a reference to our current value, or CHECK-fails if !this->ok().
@@ -247,7 +246,7 @@ class StatusOr : private internal_statusor::StatusOrData<T>,
 // Implementation details for StatusOr<T>
 
 template <typename T>
-StatusOr<T>::StatusOr() : Base(Status(::tensorflow::error::UNKNOWN, "")) {}
+StatusOr<T>::StatusOr() : Base(Status(::absl::StatusCode::kUnknown, "")) {}
 
 template <typename T>
 StatusOr<T>::StatusOr(const T& value) : Base(value) {}

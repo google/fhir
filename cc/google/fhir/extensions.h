@@ -24,6 +24,7 @@
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "google/protobuf/reflection.h"
+#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "absl/types/optional.h"
 #include "google/fhir/codes.h"
@@ -103,7 +104,7 @@ Status ExtensionToMessage(const ExtensionLike& extension,
 
 // Given a datatype message (E.g., String, Code, Boolean, etc.),
 // finds the appropriate field on the target extension and sets it.
-// Returns ::tensorflow::errors::InvalidArgument if there's no matching oneof
+// Returns ::absl::InvalidArgumentError if there's no matching oneof
 // type on the extension for the message.
 template <class ExtensionLike>
 Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
@@ -167,7 +168,7 @@ StatusOr<const ::google::protobuf::FieldDescriptor*> GetPopulatedExtensionValueF
   const ::google::protobuf::FieldDescriptor* field =
       value_reflection->GetOneofFieldDescriptor(value, value_oneof);
   if (field == nullptr) {
-    return ::tensorflow::errors::InvalidArgument("No value set on extension.");
+    return ::absl::InvalidArgumentError("No value set on extension.");
   }
   FHIR_RETURN_IF_ERROR(extensions_internal::CheckIsMessage(field));
   return field;
@@ -182,8 +183,8 @@ Status AddFieldsToExtension(const ::google::protobuf::Message& message,
   reflection->ListFields(message, &fields);
   for (const auto* field : fields) {
     if (field->cpp_type() != ::google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
-      return ::tensorflow::errors::InvalidArgument(
-          descriptor->full_name(), " is not a FHIR extension type");
+      return ::absl::InvalidArgumentError(absl::StrCat(
+          descriptor->full_name(), " is not a FHIR extension type"));
     }
     // Add submessages to nested extensions.
     if (field->is_repeated()) {
@@ -205,7 +206,7 @@ Status AddFieldsToExtension(const ::google::protobuf::Message& message,
           reflection->GetMessage(message, field), child, IsChoiceType(field)));
     }
   }
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 template <class ExtensionLike>
@@ -216,15 +217,15 @@ Status AddValueToExtension(const ::google::protobuf::Message& message,
   if (is_choice_type) {
     const google::protobuf::OneofDescriptor* oneof = descriptor->oneof_decl(0);
     if (oneof == nullptr) {
-      return ::tensorflow::errors::InvalidArgument(
-          "Choice type is missing a oneof: ", descriptor->full_name());
+      return ::absl::InvalidArgumentError(absl::StrCat(
+          "Choice type is missing a oneof: ", descriptor->full_name()));
     }
     const ::google::protobuf::Reflection* message_reflection = message.GetReflection();
     const ::google::protobuf::FieldDescriptor* value_field =
         message_reflection->GetOneofFieldDescriptor(message, oneof);
     if (value_field == nullptr) {
-      return ::tensorflow::errors::InvalidArgument(
-          "Choice type has no value set: ", descriptor->full_name());
+      return ::absl::InvalidArgumentError(absl::StrCat(
+          "Choice type has no value set: ", descriptor->full_name()));
     }
     FHIR_RETURN_IF_ERROR(extensions_internal::CheckIsMessage(value_field));
     return extensions_internal::AddValueToExtension(
@@ -233,7 +234,7 @@ Status AddValueToExtension(const ::google::protobuf::Message& message,
   // Try to set the message directly as a datatype value on the extension.
   // E.g., put message of type boolean into the value.boolean field
   if (extensions_templates::SetDatatypeOnExtension(message, extension).ok()) {
-    return Status::OK();
+    return absl::OkStatus();
   }
   // Fall back to adding individual fields as sub-extensions.
   return AddFieldsToExtension(message, extension);
@@ -250,7 +251,7 @@ Status GetRepeatedFromExtension(const C& extension_container,
   // extensions are present.  Return early in this case to keep overhead as low
   // as possible.
   if (extension_container.empty()) {
-    return Status::OK();
+    return absl::OkStatus();
   }
   const ::google::protobuf::Descriptor* descriptor = T::descriptor();
   FHIR_RETURN_IF_ERROR(ValidateExtension(descriptor));
@@ -265,7 +266,7 @@ Status GetRepeatedFromExtension(const C& extension_container,
       result->emplace_back(message);
     }
   }
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 template <class T, class C>
@@ -273,16 +274,16 @@ StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
   std::vector<T> result;
   FHIR_RETURN_IF_ERROR(GetRepeatedFromExtension(entity.extension(), &result));
   if (result.empty()) {
-    return ::tensorflow::errors::NotFound(
-        "Did not find any extension with url: ",
-        GetStructureDefinitionUrl(T::descriptor()), " on ",
-        C::descriptor()->full_name(), ".");
+    return ::absl::NotFoundError(
+        absl::StrCat("Did not find any extension with url: ",
+                     GetStructureDefinitionUrl(T::descriptor()), " on ",
+                     C::descriptor()->full_name(), "."));
   }
   if (result.size() > 1) {
-    return ::tensorflow::errors::InvalidArgument(
-        "Expected exactly 1 extension with url: ",
-        GetStructureDefinitionUrl(T::descriptor()), " on ",
-        C::descriptor()->full_name(), ". Found: ", result.size());
+    return ::absl::InvalidArgumentError(
+        absl::StrCat("Expected exactly 1 extension with url: ",
+                     GetStructureDefinitionUrl(T::descriptor()), " on ",
+                     C::descriptor()->full_name(), ". Found: ", result.size()));
   }
   return result.front();
 }
@@ -297,13 +298,13 @@ Status ValueToMessage(const ExtensionLike& extension,
                       const ::google::protobuf::FieldDescriptor* field) {
   const ::google::protobuf::Descriptor* descriptor = message->GetDescriptor();
   if (field->cpp_type() != ::google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
-    return ::tensorflow::errors::InvalidArgument(
-        descriptor->full_name(), " is not a FHIR extension type");
+    return ::absl::InvalidArgumentError(
+        absl::StrCat(descriptor->full_name(), " is not a FHIR extension type"));
   }
   // If there's a value, there can not be any extensions set.
   if (extension.extension_size() > 0) {
-    return ::tensorflow::errors::InvalidArgument("Invalid extension: ",
-                                                 extension.DebugString());
+    return ::absl::InvalidArgumentError(
+        absl::StrCat("Invalid extension: ", extension.DebugString()));
   }
   FHIR_ASSIGN_OR_RETURN(
       const ::google::protobuf::FieldDescriptor* value_field,
@@ -325,9 +326,9 @@ Status ValueToMessage(const ExtensionLike& extension,
         return ValueToMessage(extension, choice_message, choice_field);
       }
     }
-    return ::tensorflow::errors::InvalidArgument(
-        "No field on Choice Type ", choice_descriptor->full_name(),
-        " for extension ", extension.DebugString());
+    return ::absl::InvalidArgumentError(
+        absl::StrCat("No field on Choice Type ", choice_descriptor->full_name(),
+                     " for extension ", extension.DebugString()));
   }
 
   if (HasValueset(field->message_type())) {
@@ -346,15 +347,15 @@ Status ValueToMessage(const ExtensionLike& extension,
 
   // Value types must match.
   if (!AreSameMessageType(value_field->message_type(), field->message_type())) {
-    return ::tensorflow::errors::InvalidArgument(
+    return ::absl::InvalidArgumentError(absl::StrCat(
         "Missing expected value of type ", field->message_type()->full_name(),
-        " in extension ", extension.GetDescriptor()->full_name());
+        " in extension ", extension.GetDescriptor()->full_name()));
   }
   const auto& value = extension.value();
   const ::google::protobuf::Reflection* value_reflection = value.GetReflection();
   MutableOrAddMessage(message, field)
       ->CopyFrom(value_reflection->GetMessage(value, value_field));
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 template <class ExtensionLike>
@@ -389,8 +390,8 @@ Status ExtensionToMessage(const ExtensionLike& extension,
     // This is a simple extension, with only one value.
     if (fields_by_url.size() != 1 ||
         fields_by_url.begin()->second->is_repeated()) {
-      return ::tensorflow::errors::InvalidArgument(
-          descriptor->full_name(), " is not a FHIR extension type");
+      return ::absl::InvalidArgumentError(absl::StrCat(
+          descriptor->full_name(), " is not a FHIR extension type"));
     }
     return ValueToMessage(extension, message, fields_by_url.begin()->second);
   }
@@ -399,9 +400,9 @@ Status ExtensionToMessage(const ExtensionLike& extension,
     const ::google::protobuf::FieldDescriptor* field = fields_by_url[inner.url().value()];
 
     if (field == nullptr) {
-      return ::tensorflow::errors::InvalidArgument(
-          "Message of type ", descriptor->full_name(),
-          " has no field with name ", inner.url().value());
+      return ::absl::InvalidArgumentError(
+          absl::StrCat("Message of type ", descriptor->full_name(),
+                       " has no field with name ", inner.url().value()));
     }
 
     if (inner.value().choice_case() != ExtensionLike::ValueX::CHOICE_NOT_SET) {
@@ -411,9 +412,9 @@ Status ExtensionToMessage(const ExtensionLike& extension,
       if (field->is_repeated()) {
         child = reflection->AddMessage(message, field);
       } else if (reflection->HasField(*message, field)) {
-        return ::tensorflow::errors::AlreadyExists(
-            "Unexpected repeated value for tag ", field->name(),
-            " in extension ", inner.DebugString());
+        return ::absl::AlreadyExistsError(
+            absl::StrCat("Unexpected repeated value for tag ", field->name(),
+                         " in extension ", inner.DebugString()));
       } else {
         child = reflection->MutableMessage(message, field);
       }
@@ -421,7 +422,7 @@ Status ExtensionToMessage(const ExtensionLike& extension,
       FHIR_RETURN_IF_ERROR(ExtensionToMessage(inner, child));
     }
   }
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 template <class ExtensionLike>
@@ -436,7 +437,7 @@ Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
         .GetReflection()
         ->MutableMessage(extension->mutable_value(), *value_field_optional)
         ->CopyFrom(datum);
-    return Status::OK();
+    return absl::OkStatus();
   }
   if (HasValueset(datum.GetDescriptor())) {
     // The source datum is a bound code type.
@@ -448,8 +449,8 @@ Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
     // Convert it to a generic coding, and add it to the extension.
     return CopyCoding(datum, extension->mutable_value()->mutable_coding());
   }
-  return ::tensorflow::errors::InvalidArgument(
-      descriptor->full_name(), " is not a valid value type on Extension.");
+  return ::absl::InvalidArgumentError(absl::StrCat(
+      descriptor->full_name(), " is not a valid value type on Extension."));
 }
 
 template <class ExtensionLike>
@@ -474,8 +475,8 @@ Status ConvertToExtension(const ::google::protobuf::Message& message,
   const std::vector<const ::google::protobuf::FieldDescriptor*> value_fields =
       extensions_internal::FindValueFields(descriptor);
   if (value_fields.empty()) {
-    return ::tensorflow::errors::InvalidArgument(
-        "Extension has no value fields: ", descriptor->name());
+    return ::absl::InvalidArgumentError(
+        absl::StrCat("Extension has no value fields: ", descriptor->name()));
   }
   if (value_fields.size() == 1 && !value_fields[0]->is_repeated()) {
     const ::google::protobuf::FieldDescriptor* value_field = value_fields[0];
@@ -487,7 +488,7 @@ Status ConvertToExtension(const ::google::protobuf::Message& message,
     } else {
       // TODO(nickgeorge, sundberg): This is an invalid extension.  Maybe we
       // should be erroring out here?
-      return Status::OK();
+      return absl::OkStatus();
     }
   } else {
     return extensions_internal::AddFieldsToExtension(message, extension);

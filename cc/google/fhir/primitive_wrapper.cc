@@ -29,6 +29,7 @@
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
+#include "absl/status/status.h"
 #include "absl/strings/escaping.h"
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
@@ -44,19 +45,18 @@
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
 #include "include/json/json.h"
-#include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
 
 namespace google {
 namespace fhir {
 
+using ::absl::InvalidArgumentError;
 using ::google::fhir::Status;
 using ::google::fhir::StatusOr;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
-using ::tensorflow::errors::InvalidArgument;
 
 namespace primitives_internal {
 
@@ -73,9 +73,9 @@ StatusOr<bool> HasPrimitiveHasNoValue(const Message& message) {
     }
   });
   if (no_value_extensions.size() > 1) {
-    return InvalidArgument(
+    return InvalidArgumentError(absl::StrCat(
         "Message has more than one PrimitiveHasNoValue extension: ",
-        message.GetDescriptor()->full_name());
+        message.GetDescriptor()->full_name()));
   }
   if (no_value_extensions.empty()) {
     return false;
@@ -97,8 +97,8 @@ Status BuildHasNoValueExtension(Message* extension) {
   const Reflection* reflection = extension->GetReflection();
 
   if (!IsExtension(descriptor)) {
-    return InvalidArgument("Not a valid extension type: ",
-                           descriptor->full_name());
+    return InvalidArgumentError(
+        absl::StrCat("Not a valid extension type: ", descriptor->full_name()));
   }
 
   const FieldDescriptor* url_field = descriptor->FindFieldByName("url");
@@ -116,7 +116,7 @@ Status BuildHasNoValueExtension(Message* extension) {
       boolean_message,
       boolean_message->GetDescriptor()->FindFieldByName("value"), true);
 
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 }  // namespace fhir

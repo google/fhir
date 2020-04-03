@@ -22,6 +22,7 @@
 
 #include "google/protobuf/descriptor.h"
 #include "absl/flags/flag.h"
+#include "absl/status/status.h"
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_split.h"
@@ -35,8 +36,6 @@
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "proto/version_config.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
-#include "tensorflow/core/lib/core/status.h"
 #include "tensorflow/core/platform/env.h"
 
 ABSL_FLAG(int64_t, max_sequence_length, 1000000,
@@ -55,6 +54,7 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
+using ::absl::Status;
 using ::google::fhir::StatusOr;
 using ::google::fhir::proto::VersionConfig;
 using ::google::fhir::stu3::google::EventLabel;
@@ -63,7 +63,6 @@ using ::google::fhir::stu3::proto::ReferenceId;
 using ::tensorflow::Example;
 using ::tensorflow::Feature;
 using ::tensorflow::Features;
-using ::tensorflow::Status;
 
 namespace internal {
 
@@ -278,7 +277,7 @@ bool GetReferenceId(const google::protobuf::Message& message,
 StatusOr<ExampleKey> ConvertTriggerEventToExampleKey(
     const std::string& patient_id, const EventTrigger& trigger) {
   if (!trigger.has_event_time()) {
-    return ::tensorflow::errors::InvalidArgument("trigger-without-time");
+    return ::absl::InvalidArgumentError("trigger-without-time");
   }
   ExampleKey key;
   key.patient_id = patient_id;
@@ -371,7 +370,7 @@ Status BuildLabelsFromTriggerLabelPair(
     std::map<ExampleKey, Features>* label_map) {
   for (const auto& pair : labels) {
     auto result = ConvertTriggerEventToExampleKey(patient_id, pair.first);
-    TF_RETURN_IF_ERROR(result.status());
+    FHIR_RETURN_IF_ERROR(result.status());
     const ExampleKey key = result.ValueOrDie();
     if (label_map->find(key) == label_map->end()) {
       label_map->insert(
@@ -379,7 +378,7 @@ Status BuildLabelsFromTriggerLabelPair(
                                   pair.second, key.trigger_timestamp)));
     }
   }
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 BaseBundleToSeqexConverter::BaseBundleToSeqexConverter(

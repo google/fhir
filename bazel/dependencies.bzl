@@ -6,6 +6,13 @@ def fhirproto_dependencies():
     """ Loads dependencies of FhirProto """
 
     http_archive(
+        name = "com_google_absl",
+        sha256 = "0db0d26f43ba6806a8a3338da3e646bb581f0ca5359b3a201d8fb8e4752fd5f8",
+        strip_prefix = "abseil-cpp-20200225.1",
+        url = "https://github.com/abseil/abseil-cpp/archive/20200225.1.tar.gz",
+    )
+
+    http_archive(
         name = "rules_jvm_external",
         strip_prefix = "rules_jvm_external-2.1",
         sha256 = "515ee5265387b88e4547b34a57393d2bcb1101314bcc5360ec7a482792556f42",

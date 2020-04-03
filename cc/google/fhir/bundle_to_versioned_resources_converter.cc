@@ -89,14 +89,14 @@ StatusOr<DateTime> GetDefaultDateTime(const ResourceConfig& config,
           GetSubmessageByPathAndCheckType<DateTime>(message,
                                                     default_timestamp_field);
       if (default_date_time_status.status().code() !=
-          ::tensorflow::error::Code::NOT_FOUND) {
+          ::absl::StatusCode::kNotFound) {
         return *default_date_time_status.ValueOrDie();
       }
     }
   }
-  return ::tensorflow::errors::InvalidArgument(
-      "split-failed-no-default_timestamp_field-",
-      message.GetDescriptor()->name());
+  return ::absl::InvalidArgumentError(
+      absl::StrCat("split-failed-no-default_timestamp_field-",
+                   message.GetDescriptor()->name()));
 }
 
 // Expands a TimestampOverride config for a repeated field.
@@ -217,7 +217,7 @@ GetSortedOverrides(const ResourceConfig& resource_config,
       const auto& time_status = GetSubmessageByPathAndCheckType<DateTime>(
           resource, ts_override.timestamp_field());
       // Ignore if requested override is not present
-      if (time_status.status().code() == ::tensorflow::error::Code::NOT_FOUND) {
+      if (time_status.status().code() == ::absl::StatusCode::kNotFound) {
         continue;
       }
 

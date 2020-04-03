@@ -28,6 +28,7 @@
 namespace google {
 namespace fhir {
 
+using ::absl::InvalidArgumentError;
 using ::google::fhir::Status;
 using ::google::fhir::StatusOr;
 using ::google::protobuf::Descriptor;
@@ -37,7 +38,6 @@ using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 using std::unordered_map;
-using ::tensorflow::errors::InvalidArgument;
 
 namespace codes_internal {
 
@@ -120,9 +120,9 @@ StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
     }
   }
 
-  return InvalidArgument("Failed to convert `", code_string, "` to ",
-                         target_enum_type->full_name(),
-                         ": No matching enum found.");
+  return InvalidArgumentError(
+      absl::StrCat("Failed to convert `", code_string, "` to ",
+                   target_enum_type->full_name(), ": No matching enum found."));
 }
 
 Status CopyCoding(const Message& source, Message* target) {
@@ -131,7 +131,7 @@ Status CopyCoding(const Message& source, Message* target) {
 
   if (source_descriptor->full_name() == target_descriptor->full_name()) {
     target->CopyFrom(source);
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   // Copy fields present in both profiled and unprofiled codings.
@@ -147,12 +147,14 @@ Status CopyCoding(const Message& source, Message* target) {
       target_descriptor->FindFieldByName("code");
 
   if (!source_code_field) {
-    return InvalidArgument("Invalid Coding: ", source_descriptor->full_name(),
-                           " has no code field.");
+    return InvalidArgumentError(
+        absl::StrCat("Invalid Coding: ", source_descriptor->full_name(),
+                     " has no code field."));
   }
   if (!target_code_field) {
-    return InvalidArgument("Invalid Coding: ", target_descriptor->full_name(),
-                           " has no code field.");
+    return InvalidArgumentError(
+        absl::StrCat("Invalid Coding: ", target_descriptor->full_name(),
+                     " has no code field."));
   }
 
   const Message& source_code =
@@ -173,7 +175,7 @@ Status CopyCoding(const Message& source, Message* target) {
         source_system));
   }
 
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 Status CopyCode(const Message& source, Message* target) {
@@ -182,7 +184,7 @@ Status CopyCode(const Message& source, Message* target) {
 
   if (source_descriptor->full_name() == target_descriptor->full_name()) {
     target->CopyFrom(source);
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Reflection* source_reflection = source.GetReflection();
@@ -194,9 +196,9 @@ Status CopyCode(const Message& source, Message* target) {
       target_descriptor->FindFieldByName("value");
 
   if (!source_value_field || !target_value_field) {
-    return InvalidArgument(
+    return InvalidArgumentError(absl::StrCat(
         "Unable to copy code from ", source_descriptor->full_name(), " to ",
-        target_descriptor->full_name(), ". Both must have a `value` field.");
+        target_descriptor->full_name(), ". Both must have a `value` field."));
   }
 
   FieldDescriptor::Type source_type = source_value_field->type();
@@ -206,7 +208,7 @@ Status CopyCode(const Message& source, Message* target) {
   FHIR_RETURN_IF_ERROR(CopyCommonField(source, target, "extension"));
 
   if (!source_reflection->HasField(source, source_value_field)) {
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   if (source_type == FieldDescriptor::Type::TYPE_ENUM) {
@@ -219,29 +221,29 @@ Status CopyCode(const Message& source, Message* target) {
       // Enum to Enum
       if (source_enum_type == target_enum_type) {
         target_reflection->SetEnum(target, target_value_field, source_value);
-        return Status::OK();
+        return absl::OkStatus();
       } else {
         const EnumValueDescriptor* target_value =
             target_enum_type->FindValueByName(source_value->name());
         if (target_value) {
           target_reflection->SetEnum(target, target_value_field, target_value);
-          return Status::OK();
+          return absl::OkStatus();
         } else {
-          return InvalidArgument(
+          return InvalidArgumentError(absl::StrCat(
               "Unable to copy code from ", source_descriptor->full_name(),
               " to ", target_descriptor->full_name(),
-              ". Found incompatible value: ", source_value->name());
+              ". Found incompatible value: ", source_value->name()));
         }
       }
     } else if (target_type == FieldDescriptor::Type::TYPE_STRING) {
       // Enum to String
       target_reflection->SetString(target, target_value_field,
                                    EnumValueToString(source_value));
-      return Status::OK();
+      return absl::OkStatus();
     } else {
-      return InvalidArgument(
+      return InvalidArgumentError(absl::StrCat(
           "Cannot copy code to ", target_descriptor->full_name(),
-          ".  Must have a value field of either String type or Enum type.");
+          ".  Must have a value field of either String type or Enum type."));
     }
   } else if (source_type == FieldDescriptor::Type::TYPE_STRING) {
     const std::string& source_value =
@@ -249,23 +251,23 @@ Status CopyCode(const Message& source, Message* target) {
     if (target_type == FieldDescriptor::Type::TYPE_STRING) {
       // String to String
       target_reflection->SetString(target, target_value_field, source_value);
-      return Status::OK();
+      return absl::OkStatus();
     } else if (target_type == FieldDescriptor::Type::TYPE_ENUM) {
       // String to Enum
       FHIR_ASSIGN_OR_RETURN(
           const EnumValueDescriptor* target_enum_value,
           CodeStringToEnumValue(source_value, target_value_field->enum_type()));
       target_reflection->SetEnum(target, target_value_field, target_enum_value);
-      return Status::OK();
+      return absl::OkStatus();
     } else {
-      return InvalidArgument(
+      return InvalidArgumentError(absl::StrCat(
           "Cannot copy code to ", target_descriptor->full_name(),
-          ".  Must have a value field of either String type or Enum type.");
+          ".  Must have a value field of either String type or Enum type."));
     }
   } else {
-    return InvalidArgument(
+    return InvalidArgumentError(absl::StrCat(
         "Cannot copy code from ", source_descriptor->full_name(),
-        ".  Must have a value field of either String type or Enum type.");
+        ".  Must have a value field of either String type or Enum type."));
   }
 }
 
@@ -289,13 +291,13 @@ StatusOr<std::string> GetSystemForCode(const ::google::protobuf::Message& code) 
   const FieldDescriptor* enum_field =
       code.GetDescriptor()->FindFieldByName("value");
   if (enum_field->type() != FieldDescriptor::Type::TYPE_ENUM) {
-    return InvalidArgument(
+    return InvalidArgumentError(
         "Invalid profiled Coding: missing system information on string code");
   }
   const ::google::protobuf::EnumValueDescriptor* enum_descriptor =
       code.GetReflection()->GetEnum(code, enum_field);
   if (!HasSourceCodeSystem(enum_descriptor)) {
-    return InvalidArgument(
+    return InvalidArgumentError(
         "Invalid profiled Coding: missing system information on enum code");
   }
   return GetSourceCodeSystem(enum_descriptor);

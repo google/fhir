@@ -86,12 +86,12 @@ void TestTypedCodingConversion(const std::string& typed_file,
 
   r4::core::Coding generic_test;
   auto status_generic = CopyCoding(typed_golden, &generic_test);
-  ASSERT_TRUE(status_generic.ok()) << status_generic.error_message();
+  ASSERT_TRUE(status_generic.ok()) << status_generic.message();
   EXPECT_THAT(generic_test, EqualsProto(generic_golden));
 
   r4::uscore::PatientUSCoreRaceExtension::OmbCategoryCoding typed_test;
   auto status_typed = CopyCoding(generic_golden, &typed_test);
-  ASSERT_TRUE(status_typed.ok()) << status_typed.error_message();
+  ASSERT_TRUE(status_typed.ok()) << status_typed.message();
   EXPECT_THAT(typed_test, EqualsProto(typed_golden));
 }
 

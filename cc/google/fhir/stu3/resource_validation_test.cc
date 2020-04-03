@@ -19,10 +19,10 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/status/status.h"
 #include "google/fhir/test_helper.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
 
 namespace google {
@@ -79,8 +79,7 @@ void ValidTest(const T& proto) {
 
 template <typename T>
 void InvalidTest(const std::string& err_msg, const T& proto) {
-  EXPECT_EQ(ValidateResource(proto),
-            ::tensorflow::errors::FailedPrecondition(err_msg));
+  EXPECT_EQ(ValidateResource(proto), ::absl::FailedPreconditionError(err_msg));
 }
 
 TEST(ResourceValidationTest, MissingRequiredField) {
@@ -179,7 +178,7 @@ TEST(EncounterValidationTest, StartLaterThanEnd) {
   )proto", &encounter));
 
   EXPECT_EQ(ValidateResource(encounter),
-            ::tensorflow::errors::FailedPrecondition(
+            ::absl::FailedPreconditionError(
                 "Encounter.period-start-time-later-than-end-time"));
 }
 
@@ -205,7 +204,7 @@ TEST(EncounterValidationTest, StartLaterThanEndButEndHasDayPrecision) {
     }
   )proto", &encounter));
 
-  TF_ASSERT_OK(ValidateResource(encounter));
+  FHIR_ASSERT_OK(ValidateResource(encounter));
 }
 
 TEST(EncounterValidationTest, Valid) {
@@ -230,7 +229,7 @@ TEST(EncounterValidationTest, Valid) {
     }
   )proto", &encounter));
 
-  TF_ASSERT_OK(ValidateResource(encounter));
+  FHIR_ASSERT_OK(ValidateResource(encounter));
 }
 
 }  // namespace

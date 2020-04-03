@@ -18,6 +18,7 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/fhir_path/r4_fhir_path_validation.h"
 #include "google/fhir/fhir_path/stu3_fhir_path_validation.h"
@@ -35,15 +36,12 @@
 #include "proto/stu3/resources.pb.h"
 #include "proto/stu3/uscore.pb.h"
 #include "proto/stu3/uscore_codes.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
 namespace fhir_path {
 
 namespace {
-
-using ::google::protobuf::Message;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
 

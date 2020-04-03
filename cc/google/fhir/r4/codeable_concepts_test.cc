@@ -196,19 +196,19 @@ TEST(CodeableConceptsTest, GetOnlyCodeWithSystemFixedCode) {
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemUnprofiledTooMany) {
   const auto concept = GetConcept();
   ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysg.org").status().code(),
-            ::tensorflow::error::Code::ALREADY_EXISTS);
+            ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemProfiledTooMany) {
   const auto concept = GetConcept();
   ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysb.org").status().code(),
-            ::tensorflow::error::Code::ALREADY_EXISTS);
+            ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemNone) {
   const auto concept = GetConcept();
   ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysq.org").status().code(),
-            ::tensorflow::error::Code::NOT_FOUND);
+            ::absl::StatusCode::kNotFound);
 }
 
 Coding MakeCoding(const std::string& sys, const std::string& code,
@@ -223,11 +223,11 @@ Coding MakeCoding(const std::string& sys, const std::string& code,
 TEST(CodeableConceptsTest, AddCodingUnprofiled) {
   TestObservation::CodeableConceptForCode concept;
 
-  TF_CHECK_OK(AddCoding(&concept,
-                        MakeCoding("http://sysq.org", "qcode1", "Q display1")));
-  TF_CHECK_OK(AddCoding(&concept,
-                        MakeCoding("http://sysq.org", "qcode2", "Q display2")));
-  TF_CHECK_OK(
+  FHIR_CHECK_OK(AddCoding(
+      &concept, MakeCoding("http://sysq.org", "qcode1", "Q display1")));
+  FHIR_CHECK_OK(AddCoding(
+      &concept, MakeCoding("http://sysq.org", "qcode2", "Q display2")));
+  FHIR_CHECK_OK(
       AddCoding(&concept, MakeCoding("http://sysr.org", "rcode", "R display")));
 
   EXPECT_EQ(concept.coding_size(), 3);
@@ -241,12 +241,12 @@ TEST(CodeableConceptsTest, AddCodingUnprofiled) {
 TEST(CodeableConceptsTest, AddCodingFixedSystem) {
   TestObservation::CodeableConceptForCode concept;
 
-  TF_CHECK_OK(
+  FHIR_CHECK_OK(
       AddCoding(&concept, MakeCoding("http://sysa.org", "acode", "A display")));
-  TF_CHECK_OK(AddCoding(&concept,
-                        MakeCoding("http://sysb.org", "bcode1", "B display1")));
-  TF_CHECK_OK(AddCoding(&concept,
-                        MakeCoding("http://sysb.org", "bcode", "B display2")));
+  FHIR_CHECK_OK(AddCoding(
+      &concept, MakeCoding("http://sysb.org", "bcode1", "B display1")));
+  FHIR_CHECK_OK(AddCoding(
+      &concept, MakeCoding("http://sysb.org", "bcode", "B display2")));
 
   EXPECT_EQ(concept.coding_size(), 0);
   EXPECT_EQ(concept.sys_b_size(), 2);
@@ -260,10 +260,10 @@ TEST(CodeableConceptsTest, AddCodingFixedSystem) {
 TEST(CodeableConceptsTest, AddCodingFixedCode) {
   TestObservation::CodeableConceptForCode concept;
 
-  TF_CHECK_OK(
+  FHIR_CHECK_OK(
       AddCoding(&concept, MakeCoding("http://sysc.org", "8472", "C display")));
-  TF_CHECK_OK(AddCoding(&concept,
-                        MakeCoding("http://sysd.org", "8675329", "D display")));
+  FHIR_CHECK_OK(AddCoding(
+      &concept, MakeCoding("http://sysd.org", "8675329", "D display")));
 
   EXPECT_EQ(concept.coding_size(), 0);
   std::string display_accum = "";
@@ -277,24 +277,24 @@ TEST(CodeableConceptsTest, AddCodingFixedSystemSingularAlreadyExists) {
   TestObservation::CodeableConceptForCode concept;
   // sysa is inlined in a non-repeated field, meaning it can only have one code
   // from that system.
-  TF_CHECK_OK(AddCoding(&concept,
-                        MakeCoding("http://sysa.org", "acode1", "A display1")));
+  FHIR_CHECK_OK(AddCoding(
+      &concept, MakeCoding("http://sysa.org", "acode1", "A display1")));
   EXPECT_EQ(
       AddCoding(&concept, MakeCoding("http://sysa.org", "acode2", "A display2"))
           .code(),
-      ::tensorflow::error::Code::ALREADY_EXISTS);
+      ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, AddCodingFixedCodeAlreadyExists) {
   TestObservation::CodeableConceptForCode concept;
   // sysc is inlined in a non-repeated fixed-code field, meaning it can only
   // have one with the fixed code and system.
-  TF_CHECK_OK(
+  FHIR_CHECK_OK(
       AddCoding(&concept, MakeCoding("http://sysc.org", "8472", "C display")));
   EXPECT_EQ(AddCoding(&concept,
                       MakeCoding("http://sysc.org", "8472", "C display other"))
                 .code(),
-            ::tensorflow::error::Code::ALREADY_EXISTS);
+            ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, AddCodingToSameSystemAsFixedCodeOk) {
@@ -302,11 +302,11 @@ TEST(CodeableConceptsTest, AddCodingToSameSystemAsFixedCodeOk) {
   // sysc is inlined in a fixed-code field.
   // If we add a coding from that system that doesn't match the expected code,
   // it should just go in as an unprofiled coding.
-  TF_CHECK_OK(
+  FHIR_CHECK_OK(
       AddCoding(&concept, MakeCoding("http://sysc.org", "8471", "normal 1")));
-  TF_CHECK_OK(AddCoding(
+  FHIR_CHECK_OK(AddCoding(
       &concept, MakeCoding("http://sysc.org", "8472", "magic inlined")));
-  TF_CHECK_OK(
+  FHIR_CHECK_OK(
       AddCoding(&concept, MakeCoding("http://sysc.org", "8473", "normal 2")));
 
   EXPECT_EQ(concept.coding_size(), 2);
@@ -317,7 +317,7 @@ TEST(CodeableConceptsTest, AddCodingToSameSystemAsFixedCodeOk) {
 
 TEST(CodeableConceptsTest, ClearAllCodingsWithSystemUnprofiled) {
   auto concept = GetConcept();
-  TF_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysg.org"));
+  FHIR_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysg.org"));
   std::string display_accum = "";
   ForEachCoding(concept, [&display_accum](const Coding& coding) {
     absl::StrAppend(&display_accum,
@@ -330,7 +330,7 @@ TEST(CodeableConceptsTest, ClearAllCodingsWithSystemUnprofiled) {
 
 TEST(CodeableConceptsTest, ClearAllCodingsWithSystemFixedSystem) {
   auto concept = GetConcept();
-  TF_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysb.org"));
+  FHIR_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysb.org"));
   std::string display_accum = "";
   ForEachCoding(concept, [&display_accum](const Coding& coding) {
     absl::StrAppend(&display_accum,
@@ -434,17 +434,18 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
       )proto");
 
   CodeableConcept profiled_to_unprofiled;
-  TF_ASSERT_OK(CopyCodeableConcept(concept_for_code, &profiled_to_unprofiled));
+  FHIR_ASSERT_OK(
+      CopyCodeableConcept(concept_for_code, &profiled_to_unprofiled));
   ASSERT_THAT(concept,
               testutil::EqualsProtoIgnoringReordering(profiled_to_unprofiled));
 
   TestObservation::CodeableConceptForCode unprofiled_to_profiled;
-  TF_ASSERT_OK(CopyCodeableConcept(concept, &unprofiled_to_profiled));
+  FHIR_ASSERT_OK(CopyCodeableConcept(concept, &unprofiled_to_profiled));
   ASSERT_THAT(concept_for_code,
               testutil::EqualsProtoIgnoringReordering(unprofiled_to_profiled));
 
   TestObservation::CodeableConceptForCategory profiled_to_profiled;
-  TF_ASSERT_OK(CopyCodeableConcept(concept_for_code, &profiled_to_profiled));
+  FHIR_ASSERT_OK(CopyCodeableConcept(concept_for_code, &profiled_to_profiled));
   ASSERT_THAT(concept_for_cat,
               testutil::EqualsProtoIgnoringReordering(profiled_to_profiled));
 }
@@ -452,9 +453,9 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
 TEST(CodeableConceptsTest, AddCodingFromStrings) {
   r4::core::CodeableConcept concept;
 
-  TF_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode1"));
-  TF_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode2"));
-  TF_CHECK_OK(AddCoding(&concept, "http://sysr.org", "rcode"));
+  FHIR_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode1"));
+  FHIR_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode2"));
+  FHIR_CHECK_OK(AddCoding(&concept, "http://sysr.org", "rcode"));
 
   EXPECT_EQ(concept.coding_size(), 3);
   std::string code_accum = "";

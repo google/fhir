@@ -19,12 +19,12 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/test_helper.h"
 #include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/r4/core/resources/encounter.pb.h"
 #include "proto/r4/core/resources/observation.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
 
 namespace google {
@@ -53,7 +53,7 @@ void InvalidTest(const std::string& name) {
     error_msg.erase(error_msg.length() - 1);
   }
 
-  EXPECT_EQ(status, ::tensorflow::errors::FailedPrecondition(error_msg));
+  EXPECT_EQ(status, ::absl::FailedPreconditionError(error_msg));
 }
 
 TEST(ResourceValidationTest, MissingRequiredField) {

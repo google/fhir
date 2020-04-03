@@ -16,25 +16,42 @@ limitations under the License.
 #ifndef GOOGLE_FHIR_STATUS_STATUS_H_
 #define GOOGLE_FHIR_STATUS_STATUS_H_
 
-#include "tensorflow/core/lib/core/status.h"
-#include "tensorflow/core/platform/macros.h"
+#include "absl/status/status.h"
 
 namespace google {
 namespace fhir {
 
-#define FHIR_RETURN_IF_ERROR(x) TF_RETURN_IF_ERROR(x)
-
-#define FHIR_ASSERT_OK(rexpr)                           \
-  {                                                     \
-    auto status = (rexpr);                              \
-    ASSERT_TRUE(status.ok()) << status.error_message(); \
+#define FHIR_RETURN_IF_ERROR(expr) \
+  {                                \
+    auto _status = (expr);         \
+    if (!_status.ok()) {           \
+      return _status;              \
+    }                              \
   }
 
-#define FHIR_ASSERT_STATUS(rexpr, msg)      \
+#define FHIR_ASSERT_OK(rexpr)                     \
+  {                                               \
+    auto status = (rexpr);                        \
+    ASSERT_TRUE(status.ok()) << status.message(); \
+  }
+
+#define FHIR_CHECK_OK(rexpr)                \
   {                                         \
     auto status = (rexpr);                  \
-    ASSERT_FALSE(status.ok());              \
-    ASSERT_EQ(status.error_message(), msg); \
+    CHECK(status.ok()) << status.message(); \
+  }
+
+#define FHIR_DCHECK_OK(rexpr)                \
+  {                                          \
+    auto status = (rexpr);                   \
+    DCHECK(status.ok()) << status.message(); \
+  }
+
+#define FHIR_ASSERT_STATUS(rexpr, msg) \
+  {                                    \
+    auto status = (rexpr);             \
+    ASSERT_FALSE(status.ok());         \
+    ASSERT_EQ(status.message(), msg);  \
   }
 
 }  // namespace fhir

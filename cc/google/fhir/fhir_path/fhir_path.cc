@@ -19,6 +19,7 @@
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/util/message_differencer.h"
 #include "absl/memory/memory.h"
+#include "absl/status/status.h"
 #include "absl/strings/escaping.h"
 #include "absl/strings/match.h"
 #include "absl/strings/numbers.h"
@@ -37,12 +38,13 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/r4/core/datatypes.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
 namespace fhir_path {
 
+using ::absl::InvalidArgumentError;
+using ::absl::NotFoundError;
 using ::antlr4::ANTLRInputStream;
 using ::antlr4::BaseErrorListener;
 using ::antlr4::CommonTokenStream;
@@ -61,8 +63,6 @@ using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::util::MessageDifferencer;
-using ::tensorflow::errors::InvalidArgument;
-using ::tensorflow::errors::NotFound;
 
 namespace internal {
 
@@ -97,8 +97,8 @@ StatusOr<int32_t> ToSystemInteger(
     return primitive_handler->GetPositiveIntValue(message).ValueOrDie();
   }
 
-  return InvalidArgument(message.GetTypeName(),
-                         " cannot be cast to an integer.");
+  return InvalidArgumentError(
+      absl::StrCat(message.GetTypeName(), " cannot be cast to an integer."));
 }
 
 StatusOr<absl::optional<int32_t>> IntegerOrEmpty(
@@ -110,7 +110,7 @@ StatusOr<absl::optional<int32_t>> IntegerOrEmpty(
 
   if (messages.size() > 1 ||
       !IsSystemInteger(*messages[0].Message())) {
-    return InvalidArgument(
+    return InvalidArgumentError(
         "Expression must be empty or represent a single primitive value.");
   }
 
@@ -128,7 +128,7 @@ StatusOr<absl::optional<bool>> BooleanOrEmpty(
 
   if (messages.size() > 1 ||
       !IsPrimitive(messages[0].Message()->GetDescriptor())) {
-    return InvalidArgument(
+    return InvalidArgumentError(
         "Expression must be empty or represent a single primitive value.");
   }
 
@@ -147,7 +147,7 @@ StatusOr<std::string> MessageToString(const PrimitiveHandler* primitive_handler,
   }
 
   if (!IsPrimitive(message.Message()->GetDescriptor())) {
-    return InvalidArgument("Expression must be a primitive.");
+    return InvalidArgumentError("Expression must be a primitive.");
   }
 
   StatusOr<JsonPrimitive> json_primitive =
@@ -155,7 +155,7 @@ StatusOr<std::string> MessageToString(const PrimitiveHandler* primitive_handler,
   std::string json_string = json_primitive.ValueOrDie().value;
 
   if (!absl::StartsWith(json_string, "\"")) {
-    return InvalidArgument("Expression must evaluate to a string.");
+    return InvalidArgumentError("Expression must evaluate to a string.");
   }
 
   // Trim the starting and ending double quotation marks from the string (added
@@ -171,7 +171,7 @@ StatusOr<std::string> MessagesToString(
     const PrimitiveHandler* primitive_handler,
     const std::vector<WorkspaceMessage>& messages) {
   if (messages.size() != 1) {
-    return InvalidArgument("Expression must represent a single value.");
+    return InvalidArgumentError("Expression must represent a single value.");
   }
 
   return MessageToString(primitive_handler, messages[0]);
@@ -188,7 +188,7 @@ StatusOr<WorkspaceMessage> WorkspaceMessage::NearestResource() const {
                          });
 
   if (it == ancestry_stack_.rend()) {
-    return ::tensorflow::errors::NotFound("No Resource found in ancestry.");
+    return ::absl::NotFoundError("No Resource found in ancestry.");
   }
 
   std::vector<const google::protobuf::Message*> resource_ancestry(
@@ -218,7 +218,7 @@ class Literal : public ExpressionNode {
     work_space->DeleteWhenFinished(value);
     results->push_back(WorkspaceMessage(value));
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -238,7 +238,7 @@ class EmptyLiteral : public ExpressionNode {
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<WorkspaceMessage>* results) const override {
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   // The return type of the empty literal is undefined. If this causes problems,
@@ -272,7 +272,7 @@ class InvokeTermNode : public ExpressionNode {
     // where not every child necessarily has an "element" field (see FHIRPath
     // constraints on Bundle for a full example.)
     if (field == nullptr) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     std::vector<const Message*> result_protos;
@@ -282,7 +282,7 @@ class InvokeTermNode : public ExpressionNode {
       results->push_back(WorkspaceMessage(message, result));
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -342,7 +342,7 @@ class InvokeExpressionNode : public ExpressionNode {
       }
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -387,7 +387,7 @@ class FunctionNode : public ExpressionNode {
     for (auto it = params.begin(); it != params.end(); ++it) {
       antlrcpp::Any param_any = (*it)->accept(visitor);
       if (param_any.isNull()) {
-        return InvalidArgument("Failed to compile parameter.");
+        return InvalidArgumentError("Failed to compile parameter.");
       }
       compiled_params.push_back(
           param_any.as<std::shared_ptr<ExpressionNode>>());
@@ -400,7 +400,7 @@ class FunctionNode : public ExpressionNode {
   // params at compile time should overwrite this definition with their own.
   static Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
-    return Status::OK();
+    return absl::OkStatus();
   }
 
  protected:
@@ -417,10 +417,10 @@ class ZeroParameterFunctionNode : public FunctionNode {
   static Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     if (!params.empty()) {
-      return InvalidArgument("Function does not accept any arguments.");
+      return InvalidArgumentError("Function does not accept any arguments.");
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
  protected:
@@ -428,7 +428,7 @@ class ZeroParameterFunctionNode : public FunctionNode {
       const std::shared_ptr<ExpressionNode>& child,
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : FunctionNode(child, params) {
-    TF_DCHECK_OK(ValidateParams(params));
+    FHIR_DCHECK_OK(ValidateParams(params));
   }
 };
 
@@ -438,7 +438,7 @@ class SingleParameterFunctionNode : public FunctionNode {
                   std::vector<WorkspaceMessage>* results) const override {
     //  requires a single parameter
     if (params_.size() != 1) {
-      return InvalidArgument("this function requires a single parameter.");
+      return InvalidArgumentError("this function requires a single parameter.");
     }
 
     std::vector<WorkspaceMessage> first_param;
@@ -451,10 +451,10 @@ class SingleParameterFunctionNode : public FunctionNode {
   static Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     if (params.size() != 1) {
-      return InvalidArgument("Function requires exactly one argument.");
+      return InvalidArgumentError("Function requires exactly one argument.");
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
  protected:
@@ -462,7 +462,7 @@ class SingleParameterFunctionNode : public FunctionNode {
       const std::shared_ptr<ExpressionNode>& child,
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : FunctionNode(child, params) {
-    TF_DCHECK_OK(ValidateParams(params));
+    FHIR_DCHECK_OK(ValidateParams(params));
   }
 
   virtual Status Evaluate(WorkSpace* work_space,
@@ -477,7 +477,7 @@ class SingleValueFunctionNode : public SingleParameterFunctionNode {
                   std::vector<WorkspaceMessage>* results) const override {
     //  requires a single parameter
     if (first_param.size() != 1) {
-      return InvalidArgument(
+      return InvalidArgumentError(
           "this function requires a single value parameter.");
     }
 
@@ -512,7 +512,7 @@ class ExistsFunction : public ZeroParameterFunctionNode {
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -537,11 +537,12 @@ class NotFunction : public ZeroParameterFunctionNode {
     // Per the FHIRPath spec, boolean operations on empty collection
     // propagate the empty collection.
     if (child_results.empty()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     if (child_results.size() != 1) {
-      return InvalidArgument("not() must be invoked on a singleton collection");
+      return InvalidArgumentError(
+          "not() must be invoked on a singleton collection");
     }
 
     // Per the FHIR spec, the not() function produces a value
@@ -556,7 +557,7 @@ class NotFunction : public ZeroParameterFunctionNode {
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -583,7 +584,7 @@ class HasValueFunction : public ZeroParameterFunctionNode {
         IsPrimitive(child_results[0].Message()->GetDescriptor()));
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -617,7 +618,7 @@ class StartsWithFunction : public SingleValueFunctionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.size() != 1) {
-      return InvalidArgument(kInvalidArgumentMessage);
+      return InvalidArgumentError(kInvalidArgumentMessage);
     }
 
     FHIR_ASSIGN_OR_RETURN(
@@ -631,7 +632,7 @@ class StartsWithFunction : public SingleValueFunctionNode {
         absl::StartsWith(item, prefix));
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -660,11 +661,12 @@ class ContainsFunction : public SingleValueFunctionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.empty()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     if (child_results.size() > 1) {
-      return InvalidArgument("contains() must be invoked on a single string.");
+      return InvalidArgumentError(
+          "contains() must be invoked on a single string.");
     }
 
     FHIR_ASSIGN_OR_RETURN(
@@ -678,7 +680,7 @@ class ContainsFunction : public SingleValueFunctionNode {
         absl::StrContains(haystack, needle));
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -700,7 +702,7 @@ class MatchesFunction : public SingleValueFunctionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.empty()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     FHIR_ASSIGN_OR_RETURN(
@@ -713,7 +715,7 @@ class MatchesFunction : public SingleValueFunctionNode {
     RE2 re(re_string);
 
     if (!re.ok()) {
-      return InvalidArgument(
+      return InvalidArgumentError(
           absl::StrCat("Unable to parse regular expression, '", re_string,
                        "'. ", re.error()));
     }
@@ -722,7 +724,7 @@ class MatchesFunction : public SingleValueFunctionNode {
         work_space->GetPrimitiveHandler()->NewBoolean(RE2::FullMatch(item, re));
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -757,7 +759,7 @@ class ReplaceMatchesFunction : public FunctionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.empty()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     FHIR_ASSIGN_OR_RETURN(
@@ -773,9 +775,9 @@ class ReplaceMatchesFunction : public FunctionNode {
     RE2 re(re_string);
 
     if (!re.ok()) {
-      return InvalidArgument(
-          absl::StrCat("Unable to parse regular expression '", re_string,
-                       "'. ", re.error()));
+      return InvalidArgumentError(
+          absl::StrCat("Unable to parse regular expression '", re_string, "'. ",
+                       re.error()));
     }
 
     RE2::Replace(&item, re, replacement_string);
@@ -783,7 +785,7 @@ class ReplaceMatchesFunction : public FunctionNode {
     Message* result = work_space->GetPrimitiveHandler()->NewString(item);
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override { return String::descriptor(); }
@@ -791,12 +793,12 @@ class ReplaceMatchesFunction : public FunctionNode {
   static Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     if (params.size() != 2) {
-      return InvalidArgument(
-          "replaceMatches requires exactly two parameters. Got ",
-          params.size(), ".");
+      return InvalidArgumentError(
+          absl::StrCat("replaceMatches requires exactly two parameters. Got ",
+                       params.size(), "."));
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 };
 
@@ -812,23 +814,23 @@ class ToStringFunction : public ZeroParameterFunctionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.size() > 1) {
-      return InvalidArgument(
+      return InvalidArgumentError(
           "Input collection must not contain multiple items");
     }
 
     if (child_results.empty()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     const WorkspaceMessage& child = child_results[0];
 
     if (IsString(*child.Message())) {
       results->push_back(child);
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     if (!IsPrimitive(child.Message()->GetDescriptor())) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     FHIR_ASSIGN_OR_RETURN(JsonPrimitive json_primitive,
@@ -843,7 +845,7 @@ class ToStringFunction : public ZeroParameterFunctionNode {
     Message* result = work_space->GetPrimitiveHandler()->NewString(json_string);
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override { return String::descriptor(); }
@@ -862,7 +864,7 @@ class LengthFunction : public ZeroParameterFunctionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.empty()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     FHIR_ASSIGN_OR_RETURN(
@@ -873,7 +875,7 @@ class LengthFunction : public ZeroParameterFunctionNode {
         work_space->GetPrimitiveHandler()->NewInteger(item.length());
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -900,7 +902,7 @@ class EmptyFunction : public ZeroParameterFunctionNode {
         work_space->GetPrimitiveHandler()->NewBoolean(child_results.empty());
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -927,7 +929,7 @@ class CountFunction : public ZeroParameterFunctionNode {
         work_space->GetPrimitiveHandler()->NewInteger(child_results.size());
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -955,7 +957,7 @@ class FirstFunction : public ZeroParameterFunctionNode {
       results->push_back(child_results[0]);
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -980,7 +982,7 @@ class TailFunction : public ZeroParameterFunctionNode {
                       child_results.end());
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override { return child_->ReturnType(); }
@@ -1007,7 +1009,7 @@ class TraceFunction : public SingleValueFunctionNode {
       DVLOG(1) << (*it).Message()->DebugString();
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -1029,23 +1031,23 @@ class ToIntegerFunction : public ZeroParameterFunctionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.size() > 1) {
-      return InvalidArgument(
-          "toInterger() requires a collection with no more than 1 item.");
+      return InvalidArgumentError(
+          "toInteger() requires a collection with no more than 1 item.");
     }
 
     if (child_results.empty()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     const WorkspaceMessage& child_result = child_results[0];
 
     if (!IsPrimitive(child_result.Message()->GetDescriptor())) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     if (IsInteger(*child_result.Message())) {
       results->push_back(child_result);
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     if (IsBoolean(*child_result.Message())) {
@@ -1055,7 +1057,7 @@ class ToIntegerFunction : public ZeroParameterFunctionNode {
       Message* result = work_space->GetPrimitiveHandler()->NewInteger(value);
       work_space->DeleteWhenFinished(result);
       results->push_back(WorkspaceMessage(result));
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     auto child_as_string =
@@ -1066,11 +1068,11 @@ class ToIntegerFunction : public ZeroParameterFunctionNode {
         Message* result = work_space->GetPrimitiveHandler()->NewInteger(value);
         work_space->DeleteWhenFinished(result);
         results->push_back(WorkspaceMessage(result));
-        return Status::OK();
+        return absl::OkStatus();
       }
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -1122,15 +1124,15 @@ class IndexerExpression : public BinaryOperator {
     FHIR_ASSIGN_OR_RETURN(auto index,
                           (IntegerOrEmpty(primitive_handler_, right_results)));
     if (!index.has_value()) {
-      return InvalidArgument("Index must be present.");
+      return InvalidArgumentError("Index must be present.");
     }
 
     if (left_results.empty() || left_results.size() <= index.value()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     out_results->push_back(left_results[index.value()]);
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override { return left_->ReturnType(); }
@@ -1146,14 +1148,14 @@ class EqualsOperator : public BinaryOperator {
       const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
       std::vector<WorkspaceMessage>* out_results) const override {
     if (left_results.empty() || right_results.empty()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     Message* result = work_space->GetPrimitiveHandler()->NewBoolean(AreEqual(
         work_space->GetPrimitiveHandler(), left_results, right_results));
     work_space->DeleteWhenFinished(result);
     out_results->push_back(WorkspaceMessage(result));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   static bool AreEqual(const PrimitiveHandler* primitive_handler,
@@ -1257,7 +1259,7 @@ class UnionOperator : public BinaryOperator {
     results.insert(left_results.begin(), left_results.end());
     results.insert(right_results.begin(), right_results.end());
     out_results->insert(out_results->begin(), results.begin(), results.end());
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -1300,7 +1302,7 @@ class IsDistinctFunction : public ZeroParameterFunctionNode {
         child_results_set.size() == child_results.size());
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -1327,7 +1329,7 @@ class DistinctFunction : public ZeroParameterFunctionNode {
                    ProtoPtrHash(work_space->GetPrimitiveHandler()),
                    ProtoPtrSameTypeAndEqual(work_space->GetPrimitiveHandler()));
     results->insert(results->begin(), result_set.begin(), result_set.end());
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override { return child_->ReturnType(); }
@@ -1349,7 +1351,7 @@ class CombineFunction : public SingleParameterFunctionNode {
 
     results->insert(results->end(), child_results.begin(), child_results.end());
     results->insert(results->end(), first_param.begin(), first_param.end());
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -1376,10 +1378,10 @@ class WhereFunction : public FunctionNode {
   static Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     if (params.size() != 1) {
-      return InvalidArgument("Function requires exactly one argument.");
+      return InvalidArgumentError("Function requires exactly one argument.");
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   static StatusOr<std::vector<std::shared_ptr<ExpressionNode>>> CompileParams(
@@ -1392,7 +1394,7 @@ class WhereFunction : public FunctionNode {
   WhereFunction(const std::shared_ptr<ExpressionNode>& child,
                 const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : FunctionNode(child, params) {
-    TF_DCHECK_OK(ValidateParams(params));
+    FHIR_DCHECK_OK(ValidateParams(params));
   }
 
   Status Evaluate(WorkSpace* work_space,
@@ -1415,7 +1417,7 @@ class WhereFunction : public FunctionNode {
       }
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override { return child_->ReturnType(); }
@@ -1427,10 +1429,10 @@ class AllFunction : public FunctionNode {
   static Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     if (params.size() != 1) {
-      return InvalidArgument("Function requires exactly one argument.");
+      return InvalidArgumentError("Function requires exactly one argument.");
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   static StatusOr<std::vector<std::shared_ptr<ExpressionNode>>> CompileParams(
@@ -1444,7 +1446,7 @@ class AllFunction : public FunctionNode {
       const std::shared_ptr<ExpressionNode>& child,
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : FunctionNode(child, params) {
-    TF_DCHECK_OK(ValidateParams(params));
+    FHIR_DCHECK_OK(ValidateParams(params));
   }
 
   Status Evaluate(WorkSpace* work_space,
@@ -1457,7 +1459,7 @@ class AllFunction : public FunctionNode {
         work_space->GetPrimitiveHandler()->NewBoolean(result);
     work_space->DeleteWhenFinished(result_message);
     results->push_back(WorkspaceMessage(result_message));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -1493,10 +1495,10 @@ class SelectFunction : public FunctionNode {
   static Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     if (params.size() != 1) {
-      return InvalidArgument("Function requires exactly one argument.");
+      return InvalidArgumentError("Function requires exactly one argument.");
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   static StatusOr<std::vector<std::shared_ptr<ExpressionNode>>> CompileParams(
@@ -1509,7 +1511,7 @@ class SelectFunction : public FunctionNode {
   SelectFunction(const std::shared_ptr<ExpressionNode>& child,
                  const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : FunctionNode(child, params) {
-    TF_DCHECK_OK(ValidateParams(params));
+    FHIR_DCHECK_OK(ValidateParams(params));
   }
 
   Status Evaluate(WorkSpace* work_space,
@@ -1524,7 +1526,7 @@ class SelectFunction : public FunctionNode {
       FHIR_RETURN_IF_ERROR(status);
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -1540,20 +1542,20 @@ class IifFunction : public FunctionNode {
       FhirPathBaseVisitor* base_context_visitor,
       FhirPathBaseVisitor* child_context_visitor) {
     if (params.size() < 2 || params.size() > 3) {
-      return InvalidArgument("iif() requires 2 or 3 arugments.");
+      return InvalidArgumentError("iif() requires 2 or 3 arugments.");
     }
 
     std::vector<std::shared_ptr<ExpressionNode>> compiled_params;
 
     antlrcpp::Any criterion = params[0]->accept(child_context_visitor);
     if (criterion.isNull()) {
-      return InvalidArgument("Failed to compile parameter.");
+      return InvalidArgumentError("Failed to compile parameter.");
     }
     compiled_params.push_back(criterion.as<std::shared_ptr<ExpressionNode>>());
 
     antlrcpp::Any true_result = params[1]->accept(base_context_visitor);
     if (true_result.isNull()) {
-      return InvalidArgument("Failed to compile parameter.");
+      return InvalidArgumentError("Failed to compile parameter.");
     }
     compiled_params.push_back(
         true_result.as<std::shared_ptr<ExpressionNode>>());
@@ -1561,7 +1563,7 @@ class IifFunction : public FunctionNode {
     if (params.size() > 2) {
       antlrcpp::Any otherwise_result = params[2]->accept(base_context_visitor);
       if (otherwise_result.isNull()) {
-        return InvalidArgument("Failed to compile parameter.");
+        return InvalidArgumentError("Failed to compile parameter.");
       }
       compiled_params.push_back(
           otherwise_result.as<std::shared_ptr<ExpressionNode>>());
@@ -1573,7 +1575,7 @@ class IifFunction : public FunctionNode {
   IifFunction(const std::shared_ptr<ExpressionNode>& child,
               const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : FunctionNode(child, params) {
-    TF_DCHECK_OK(ValidateParams(params));
+    FHIR_DCHECK_OK(ValidateParams(params));
   }
 
   Status Evaluate(WorkSpace* work_space,
@@ -1582,12 +1584,12 @@ class IifFunction : public FunctionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.size() > 1) {
-      return InvalidArgument(
+      return InvalidArgumentError(
           "iif() requires a collection with no more than 1 item.");
     }
 
     if (child_results.empty()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     const WorkspaceMessage& child = child_results[0];
@@ -1606,7 +1608,7 @@ class IifFunction : public FunctionNode {
       FHIR_RETURN_IF_ERROR(params_[2]->Evaluate(work_space, results));
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override { return child_->ReturnType(); }
@@ -1631,7 +1633,7 @@ class OfTypeFunction : public ExpressionNode {
       FhirPathBaseVisitor* base_context_visitor,
       FhirPathBaseVisitor* child_context_visitor) {
     if (params.size() != 1) {
-      return InvalidArgument("ofType() requires a single argument.");
+      return InvalidArgumentError("ofType() requires a single argument.");
     }
 
     return new OfTypeFunction(child_expression, params[0]->getText());
@@ -1653,7 +1655,7 @@ class OfTypeFunction : public ExpressionNode {
       }
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -1684,7 +1686,7 @@ class IsFunction : public ExpressionNode {
       FhirPathBaseVisitor* base_context_visitor,
       FhirPathBaseVisitor* child_context_visitor) {
     if (params.size() != 1) {
-      return InvalidArgument("is() requires a single argument.");
+      return InvalidArgumentError("is() requires a single argument.");
     }
 
     return new IsFunction(child_expression, params[0]->getText());
@@ -1700,12 +1702,12 @@ class IsFunction : public ExpressionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.size() > 1) {
-      return InvalidArgument(
+      return InvalidArgumentError(
           "is() requires a collection with no more than 1 item.");
     }
 
     if (child_results.empty()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     Message* result =
@@ -1713,7 +1715,7 @@ class IsFunction : public ExpressionNode {
             child_results[0].Message()->GetDescriptor()->name(), type_name_));
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -1744,7 +1746,7 @@ class AsFunction : public ExpressionNode {
       FhirPathBaseVisitor* base_context_visitor,
       FhirPathBaseVisitor* child_context_visitor) {
     if (params.size() != 1) {
-      return InvalidArgument("as() requires a single argument.");
+      return InvalidArgumentError("as() requires a single argument.");
     }
 
     return new AsFunction(child_expression, params[0]->getText());
@@ -1760,7 +1762,7 @@ class AsFunction : public ExpressionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     if (child_results.size() > 1) {
-      return InvalidArgument(
+      return InvalidArgumentError(
           "as() requires a collection with no more than 1 item.");
     }
 
@@ -1770,7 +1772,7 @@ class AsFunction : public ExpressionNode {
       results->push_back(child_results[0]);
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -1806,7 +1808,7 @@ class ChildrenFunction : public ZeroParameterFunctionNode {
       }
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -1830,7 +1832,7 @@ class DescendantsFunction : public ZeroParameterFunctionNode {
       FHIR_RETURN_IF_ERROR(AppendDescendants(child, work_space, results));
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   Status AppendDescendants(const WorkspaceMessage& parent,
@@ -1838,7 +1840,7 @@ class DescendantsFunction : public ZeroParameterFunctionNode {
                            std::vector<WorkspaceMessage>* results) const {
     const Descriptor* descriptor = parent.Message()->GetDescriptor();
     if (IsPrimitive(descriptor)) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     for (int i = 0; i < descriptor->field_count(); i++) {
@@ -1852,7 +1854,7 @@ class DescendantsFunction : public ZeroParameterFunctionNode {
       }
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override { return nullptr; }
@@ -1885,7 +1887,7 @@ class IntersectFunction : public SingleParameterFunctionNode {
       }
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -1912,18 +1914,18 @@ static Status MessageToDouble(const PrimitiveHandler* primitive_handler,
                           primitive_handler->GetDecimalValue(message));
 
     if (!absl::SimpleAtod(string_value, value)) {
-      return InvalidArgument(
+      return InvalidArgumentError(
           absl::StrCat("Could not convert to numeric: ", string_value));
     }
 
-    return Status::OK();
+    return absl::OkStatus();
 
   } else if (IsSystemInteger(message)) {
     FHIR_ASSIGN_OR_RETURN(*value, ToSystemInteger(primitive_handler, message));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
-  return InvalidArgument(
+  return InvalidArgumentError(
       absl::StrCat("Message type cannot be converted to double: ",
                    message.GetDescriptor()->full_name()));
 }
@@ -1944,11 +1946,11 @@ class ComparisonOperator : public BinaryOperator {
       std::vector<WorkspaceMessage>* out_results) const override {
     // Per the FHIRPath spec, comparison operators propagate empty results.
     if (left_results.empty() || right_results.empty()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     if (left_results.size() > 1 || right_results.size() > 1) {
-      return InvalidArgument(
+      return InvalidArgumentError(
           "Comparison operators must have one element on each side.");
     }
 
@@ -1959,7 +1961,7 @@ class ComparisonOperator : public BinaryOperator {
         work_space->GetPrimitiveHandler()->NewBoolean(result);
     work_space->DeleteWhenFinished(result_message);
     out_results->push_back(WorkspaceMessage(result_message));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -1997,9 +1999,9 @@ class ComparisonOperator : public BinaryOperator {
       return EvalSimpleQuantityComparison(primitive_handler, *left_result,
                                           *right_result);
     } else {
-      return InvalidArgument(
+      return InvalidArgumentError(absl::StrCat(
           "Unsupported comparison value types: ", left_result->GetTypeName(),
-          " and ", right_result->GetTypeName());
+          " and ", right_result->GetTypeName()));
     }
   }
 
@@ -2049,7 +2051,7 @@ class ComparisonOperator : public BinaryOperator {
              MessageDifferencer::Equals(*left_message, *right_message));
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   StatusOr<bool> EvalStringComparison(const PrimitiveHandler* primitive_handler,
@@ -2184,10 +2186,10 @@ class ComparisonOperator : public BinaryOperator {
       // From the FHIRPath spec: "Implementations are not required to fully
       // support operations on units, but they must at least respect units,
       // recognizing when units differ."
-      return InvalidArgument(
-          "Compared quantities must have the same units. Got ",
-          "[", left_code, ", ", left_system, "] and ",
-          "[", right_code, ", ", right_system, "]");
+      return InvalidArgumentError(
+          absl::StrCat("Compared quantities must have the same units. Got ",
+                       "[", left_code, ", ", left_system, "] and ", "[",
+                       right_code, ", ", right_system, "]"));
     }
 
     FHIR_ASSIGN_OR_RETURN(
@@ -2218,11 +2220,11 @@ class AdditionOperator : public BinaryOperator {
       std::vector<WorkspaceMessage>* out_results) const override {
     // Per the FHIRPath spec, comparison operators propagate empty results.
     if (left_results.empty() || right_results.empty()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     if (left_results.size() > 1 || right_results.size() > 1) {
-      return InvalidArgument(
+      return InvalidArgumentError(
           "Addition operators must have one element on each side.");
     }
 
@@ -2247,12 +2249,12 @@ class AdditionOperator : public BinaryOperator {
     } else {
       // TODO: Add implementation for Date, DateTime, Time, and Decimal
       // addition.
-      return InvalidArgument(absl::StrCat("Addition not supported for ",
-                                          left_result->GetTypeName(), " and ",
-                                          right_result->GetTypeName()));
+      return InvalidArgumentError(absl::StrCat(
+          "Addition not supported for ", left_result->GetTypeName(), " and ",
+          right_result->GetTypeName()));
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override { return left_->ReturnType(); }
@@ -2292,8 +2294,9 @@ class StrCatOperator : public BinaryOperator {
       const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
       std::vector<WorkspaceMessage>* out_results) const override {
     if (left_results.size() > 1 || right_results.size() > 1) {
-      return InvalidArgument(
-          "String concatenation operators must have one element on each side.");
+      return InvalidArgumentError(
+          "String concatenation operators must have one element "
+          "on each side.");
     }
 
     std::string left;
@@ -2314,7 +2317,7 @@ class StrCatOperator : public BinaryOperator {
         work_space->GetPrimitiveHandler()->NewString(absl::StrCat(left, right));
     work_space->DeleteWhenFinished(result);
     out_results->push_back(WorkspaceMessage(result));
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -2344,19 +2347,19 @@ class PolarityOperator : public ExpressionNode {
     FHIR_RETURN_IF_ERROR(operand_->Evaluate(work_space, &operand_result));
 
     if (operand_result.size() > 1) {
-      return InvalidArgument(
+      return InvalidArgumentError(
           "Polarity operators must operate on a single element.");
     }
 
     if (operand_result.empty()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     const WorkspaceMessage& operand_value = operand_result[0];
 
     if (operation_ == kPositive) {
       results->push_back(operand_value);
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     if (IsDecimal(*operand_value.Message())) {
@@ -2368,7 +2371,7 @@ class PolarityOperator : public ExpressionNode {
       Message* result = work_space->GetPrimitiveHandler()->NewDecimal(value);
       work_space->DeleteWhenFinished(result);
       results->push_back(WorkspaceMessage(result));
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     if (IsSystemInteger(*operand_value.Message())) {
@@ -2379,10 +2382,10 @@ class PolarityOperator : public ExpressionNode {
           work_space->GetPrimitiveHandler()->NewInteger(value * -1);
       work_space->DeleteWhenFinished(result);
       results->push_back(WorkspaceMessage(result));
-      return Status::OK();
+      return absl::OkStatus();
     }
 
-    return InvalidArgument(
+    return InvalidArgumentError(
         "Polarity operators must operate on a decimal or integer type.");
   }
 
@@ -2445,7 +2448,7 @@ class ImpliesOperator : public BooleanOperator {
     // Short circuit evaluation when left_result == "false"
     if (left_result.has_value() && !left_result.value()) {
       SetResult(true, work_space, results);
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> right_result,
@@ -2459,7 +2462,7 @@ class ImpliesOperator : public BooleanOperator {
       SetResult(right_result.value(), work_space, results);
     }
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 };
 
@@ -2475,17 +2478,17 @@ class XorOperator : public BooleanOperator {
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> left_result,
                           EvaluateBooleanNode(left_, work_space));
     if (!left_result.has_value()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> right_result,
                           EvaluateBooleanNode(right_, work_space));
     if (!right_result.has_value()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     SetResult(left_result.value() != right_result.value(), work_space, results);
-    return Status::OK();
+    return absl::OkStatus();
   }
 };
 
@@ -2503,25 +2506,25 @@ class OrOperator : public BooleanOperator {
                           EvaluateBooleanNode(left_, work_space));
     if (left_result.has_value() && left_result.value()) {
       SetResult(true, work_space, results);
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> right_result,
                           EvaluateBooleanNode(right_, work_space));
     if (right_result.has_value() && right_result.value()) {
       SetResult(true, work_space, results);
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     if (left_result.has_value() && right_result.has_value()) {
       // Both children must be false to get here, so return false.
       SetResult(false, work_space, results);
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     // Neither child is true and at least one is empty, so propagate
     // empty per the FHIRPath spec.
-    return Status::OK();
+    return absl::OkStatus();
   }
 };
 
@@ -2539,25 +2542,25 @@ class AndOperator : public BooleanOperator {
                           EvaluateBooleanNode(left_, work_space));
     if (left_result.has_value() && !left_result.value()) {
       SetResult(false, work_space, results);
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> right_result,
                           EvaluateBooleanNode(right_, work_space));
     if (right_result.has_value() && !right_result.value()) {
       SetResult(false, work_space, results);
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     if (left_result.has_value() && right_result.has_value()) {
       // Both children must be true to get here, so return true.
       SetResult(true, work_space, results);
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     // Neither child is false and at least one is empty, so propagate
     // empty per the FHIRPath spec.
-    return Status::OK();
+    return absl::OkStatus();
   }
 };
 
@@ -2576,11 +2579,11 @@ class ContainsOperator : public BinaryOperator {
       const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
       std::vector<WorkspaceMessage>* results) const override {
     if (right_results.empty()) {
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     if (right_results.size() > 1) {
-      return InvalidArgument(
+      return InvalidArgumentError(
           "in/contains must have one or fewer items in the left/right "
           "operand.");
     }
@@ -2598,7 +2601,7 @@ class ContainsOperator : public BinaryOperator {
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
 
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override {
@@ -2615,7 +2618,7 @@ class ThisReference : public ExpressionNode {
   Status Evaluate(WorkSpace* work_space,
                   std::vector<WorkspaceMessage>* results) const override {
     results->push_back(work_space->MessageContext());
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override { return descriptor_; }
@@ -2633,7 +2636,7 @@ class ContextReference : public ExpressionNode {
   Status Evaluate(WorkSpace* work_space,
                   std::vector<WorkspaceMessage>* results) const override {
     results->push_back(work_space->BottomMessageContext());
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* ReturnType() const override { return descriptor_; }
@@ -2650,7 +2653,7 @@ class ResourceReference : public ExpressionNode {
     FHIR_ASSIGN_OR_RETURN(WorkspaceMessage result,
                           work_space->MessageContext().NearestResource());
     results->push_back(result);
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   // TODO: Track %resource type during compilation.
@@ -3231,7 +3234,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       if (!result.ok()) {
         this->SetError(absl::StrCat(
             "Failed to compile call to ", function_name,
-            "(): ", result.status().error_message(),
+            "(): ", result.status().message(),
             !child_context_visitor.CheckOk()
                 ? absl::StrCat("; ", child_context_visitor.GetError())
                 : ""));
@@ -3299,7 +3302,7 @@ const std::vector<const Message*>& EvaluationResult::GetMessages() const {
 StatusOr<bool> EvaluationResult::GetBoolean() const {
   auto messages = work_space_->GetResultMessages();
   if (messages.size() != 1) {
-    return InvalidArgument(
+    return InvalidArgumentError(
         "Result collection must contain exactly one element");
   }
   return work_space_->GetPrimitiveHandler()->GetBooleanValue(*messages[0]);
@@ -3308,7 +3311,7 @@ StatusOr<bool> EvaluationResult::GetBoolean() const {
 StatusOr<int32_t> EvaluationResult::GetInteger() const {
   auto messages = work_space_->GetResultMessages();
   if (messages.size() != 1) {
-    return InvalidArgument(
+    return InvalidArgumentError(
         "Result collection must contain exactly one element");
   }
   return work_space_->GetPrimitiveHandler()->GetIntegerValue(*messages[0]);
@@ -3317,7 +3320,7 @@ StatusOr<int32_t> EvaluationResult::GetInteger() const {
 StatusOr<std::string> EvaluationResult::GetDecimal() const {
   auto messages = work_space_->GetResultMessages();
   if (messages.size() != 1) {
-    return InvalidArgument(
+    return InvalidArgumentError(
         "Result collection must contain exactly one element");
   }
   return work_space_->GetPrimitiveHandler()->GetDecimalValue(*messages[0]);
@@ -3326,7 +3329,7 @@ StatusOr<std::string> EvaluationResult::GetDecimal() const {
 StatusOr<std::string> EvaluationResult::GetString() const {
   auto messages = work_space_->GetResultMessages();
   if (messages.size() != 1) {
-    return InvalidArgument(
+    return InvalidArgumentError(
         "Result collection must contain exactly one element");
   }
   return work_space_->GetPrimitiveHandler()->GetStringValue(*messages[0]);
@@ -3387,8 +3390,8 @@ StatusOr<CompiledExpression> CompiledExpression::Compile(
     auto root_node = result.as<std::shared_ptr<internal::ExpressionNode>>();
     return CompiledExpression(fhir_path, root_node, primitive_handler);
   } else {
-    auto status = InvalidArgument(visitor.GetError());
-    return InvalidArgument(visitor.GetError());
+    auto status = InvalidArgumentError(visitor.GetError());
+    return InvalidArgumentError(visitor.GetError());
   }
 }
 

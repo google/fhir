@@ -22,6 +22,7 @@
 
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
+#include "absl/status/status.h"
 #include "absl/time/time.h"
 #include "absl/types/optional.h"
 #include "google/fhir/primitive_wrapper.h"
@@ -30,7 +31,6 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "include/json/json.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
@@ -166,10 +166,10 @@ using ::google::protobuf::OneofDescriptor;
 template <typename Expected>
 ABSL_MUST_USE_RESULT Status CheckType(const ::google::protobuf::Descriptor* descriptor) {
   return IsMessageType<Expected>(descriptor)
-             ? Status::OK()
-             : InvalidArgument("Expected ", Expected::descriptor()->full_name(),
-                               ", but message was of type ",
-                               descriptor->full_name());
+             ? absl::OkStatus()
+             : InvalidArgumentError(absl::StrCat(
+                   "Expected ", Expected::descriptor()->full_name(),
+                   ", but message was of type ", descriptor->full_name()));
 }
 
 template <typename Expected>
@@ -194,18 +194,18 @@ Status ValidateReferenceField(const Message& parent,
     if (!reference_field) {
       if (reference.extension_size() == 0 && !reference.has_identifier() &&
           !reference.has_display()) {
-        return FailedPrecondition("empty-reference");
+        return absl::FailedPreconditionError("empty-reference");
       }
       // There's no reference field, but there is other data.  That's valid.
-      return Status::OK();
+      return absl::OkStatus();
     }
     if (field->options().ExtensionSize(proto::valid_reference_type) == 0) {
       // The reference field does not have restrictions, so any value is fine.
-      return Status::OK();
+      return absl::OkStatus();
     }
     if (reference.has_uri() || reference.has_fragment()) {
       // Uri and Fragment references are untyped.
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     // There's no reference annotations for DSTU2, so skip the validation.
@@ -226,13 +226,13 @@ Status ValidateReferenceField(const Message& parent,
         }
       }
       if (!is_allowed) {
-        return FailedPrecondition("invalid-reference-disallowed-type-",
-                                  reference_type);
+        return absl::FailedPreconditionError(
+            absl::StrCat("invalid-reference-disallowed-type-", reference_type));
       }
     }
   }
 
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 // Template for a PrimitiveHandler tied to a single version of FHIR.

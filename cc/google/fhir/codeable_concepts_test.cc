@@ -95,19 +95,19 @@ TEST(CodeableConceptsTest, GetOnlyCodeWithSystemFixedCode) {
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemUnprofiledTooMany) {
   const auto concept = GetConceptStu3();
   ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysg.org").status().code(),
-            ::tensorflow::error::Code::ALREADY_EXISTS);
+            ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemProfiledTooMany) {
   const auto concept = GetConceptStu3();
   ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysb.org").status().code(),
-            ::tensorflow::error::Code::ALREADY_EXISTS);
+            ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemNone) {
   const auto concept = GetConceptStu3();
   ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysq.org").status().code(),
-            ::tensorflow::error::Code::NOT_FOUND);
+            ::absl::StatusCode::kNotFound);
 }
 
 TEST(CodeableConceptsTest, ClearAllCodingsWithSystemFixedCode) {
@@ -203,17 +203,18 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
       )proto");
 
   stu3::proto::CodeableConcept profiled_to_unprofiled;
-  TF_ASSERT_OK(CopyCodeableConcept(concept_for_code, &profiled_to_unprofiled));
+  FHIR_ASSERT_OK(
+      CopyCodeableConcept(concept_for_code, &profiled_to_unprofiled));
   ASSERT_THAT(concept,
               testutil::EqualsProtoIgnoringReordering(profiled_to_unprofiled));
 
   Stu3TestObservation::CodeableConceptForCode unprofiled_to_profiled;
-  TF_ASSERT_OK(CopyCodeableConcept(concept, &unprofiled_to_profiled));
+  FHIR_ASSERT_OK(CopyCodeableConcept(concept, &unprofiled_to_profiled));
   ASSERT_THAT(concept_for_code,
               testutil::EqualsProtoIgnoringReordering(unprofiled_to_profiled));
 
   Stu3TestObservation::CodeableConceptForCategory profiled_to_profiled;
-  TF_ASSERT_OK(CopyCodeableConcept(concept_for_code, &profiled_to_profiled));
+  FHIR_ASSERT_OK(CopyCodeableConcept(concept_for_code, &profiled_to_profiled));
   ASSERT_THAT(concept_for_cat,
               testutil::EqualsProtoIgnoringReordering(profiled_to_profiled));
 }
@@ -221,9 +222,9 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
 TEST(CodeableConceptsTest, AddCodingFromStringsSTU3) {
   stu3::proto::CodeableConcept concept;
 
-  TF_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode1"));
-  TF_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode2"));
-  TF_CHECK_OK(AddCoding(&concept, "http://sysr.org", "rcode"));
+  FHIR_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode1"));
+  FHIR_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode2"));
+  FHIR_CHECK_OK(AddCoding(&concept, "http://sysr.org", "rcode"));
 
   EXPECT_EQ(concept.coding_size(), 3);
   std::string code_accum = "";
@@ -238,9 +239,9 @@ TEST(CodeableConceptsTest, AddCodingFromStringsSTU3) {
 TEST(CodeableConceptsTest, AddCodingFromStringsR4) {
   r4::core::CodeableConcept concept;
 
-  TF_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode1"));
-  TF_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode2"));
-  TF_CHECK_OK(AddCoding(&concept, "http://sysr.org", "rcode"));
+  FHIR_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode1"));
+  FHIR_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode2"));
+  FHIR_CHECK_OK(AddCoding(&concept, "http://sysr.org", "rcode"));
 
   EXPECT_EQ(concept.coding_size(), 3);
   std::string code_accum = "";
@@ -368,24 +369,24 @@ TEST(CodeableConceptsTest, GetOnlyCodeWithSystemFixedCodeR4) {
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemUnprofiledTooManyR4) {
   const auto concept = GetConceptR4();
   ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysg.org").status().code(),
-            ::tensorflow::error::Code::ALREADY_EXISTS);
+            ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemProfiledTooManyR4) {
   const auto concept = GetConceptR4();
   ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysb.org").status().code(),
-            ::tensorflow::error::Code::ALREADY_EXISTS);
+            ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemNoneR4) {
   const auto concept = GetConceptR4();
   ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysq.org").status().code(),
-            ::tensorflow::error::Code::NOT_FOUND);
+            ::absl::StatusCode::kNotFound);
 }
 
 TEST(CodeableConceptsTest, ClearAllCodingsWithSystemUnprofiledR4) {
   auto concept = GetConceptR4();
-  TF_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysg.org"));
+  FHIR_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysg.org"));
   std::string display_accum = "";
   ForEachSystemCodeStringPair(
       concept,
@@ -399,7 +400,7 @@ TEST(CodeableConceptsTest, ClearAllCodingsWithSystemUnprofiledR4) {
 
 TEST(CodeableConceptsTest, ClearAllCodingsWithSystemFixedSystemR4) {
   auto concept = GetConceptR4();
-  TF_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysb.org"));
+  FHIR_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysb.org"));
   std::string display_accum = "";
   ForEachSystemCodeStringPair(
       concept,
@@ -504,17 +505,18 @@ TEST(CodeableConceptsTest, CopyCodeableConceptR4) {
       )proto");
 
   r4::core::CodeableConcept profiled_to_unprofiled;
-  TF_ASSERT_OK(CopyCodeableConcept(concept_for_code, &profiled_to_unprofiled));
+  FHIR_ASSERT_OK(
+      CopyCodeableConcept(concept_for_code, &profiled_to_unprofiled));
   ASSERT_THAT(concept,
               testutil::EqualsProtoIgnoringReordering(profiled_to_unprofiled));
 
   R4TestObservation::CodeableConceptForCode unprofiled_to_profiled;
-  TF_ASSERT_OK(CopyCodeableConcept(concept, &unprofiled_to_profiled));
+  FHIR_ASSERT_OK(CopyCodeableConcept(concept, &unprofiled_to_profiled));
   ASSERT_THAT(concept_for_code,
               testutil::EqualsProtoIgnoringReordering(unprofiled_to_profiled));
 
   R4TestObservation::CodeableConceptForCategory profiled_to_profiled;
-  TF_ASSERT_OK(CopyCodeableConcept(concept_for_code, &profiled_to_profiled));
+  FHIR_ASSERT_OK(CopyCodeableConcept(concept_for_code, &profiled_to_profiled));
   ASSERT_THAT(concept_for_cat,
               testutil::EqualsProtoIgnoringReordering(profiled_to_profiled));
 }

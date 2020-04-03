@@ -117,12 +117,12 @@ class FhirProtoParseHelper {
       EXPECT_TRUE(valid_status.ok())
           << "Invalid FHIR resource of type " << T::descriptor()->full_name()
           << " on line " << line_ << " in file " << file_ << " : "
-          << valid_status.error_message();
+          << valid_status.message();
     } else if (validity_ == INVALID) {
       EXPECT_FALSE(valid_status.ok())
           << "Unexpected valid FHIR resource of type "
           << T::descriptor()->name() << " on line " << line_ << " in file "
-          << file_ << " : " << valid_status.error_message();
+          << file_ << " : " << valid_status.message();
     }
     return tmp;
   }
@@ -169,13 +169,13 @@ inline std::string ReadFile(const std::string& filename) {
     ASSERT_EQ(msg->GetDescriptor()->name(), #type);                           \
     auto extracted_status =                                                   \
         handlerType::GetInstance()->Get##type##Value(*msg);                   \
-    TF_ASSERT_OK(extracted_status.status());                                  \
+    FHIR_ASSERT_OK(extracted_status.status());                                \
     ASSERT_EQ(extracted_status.ValueOrDie(), value);                          \
     ASSERT_EQ(handlerType::GetInstance()->type##Descriptor()->name(), #type); \
     delete msg;                                                               \
                                                                               \
     ::google::protobuf::Any any;                                              \
-    ASSERT_NE(::tensorflow::Status::OK(),                                     \
+    ASSERT_NE(::absl::OkStatus(),                                             \
               handlerType::GetInstance()->Get##type##Value(any).status());    \
   }
 

@@ -15,7 +15,7 @@ limitations under the License.
 
 #include "google/fhir/status/statusor.h"
 
-#include "tensorflow/core/lib/core/errors.h"
+#include "absl/status/status.h"
 #include "tensorflow/core/platform/logging.h"
 
 namespace google {
@@ -26,8 +26,8 @@ void Helper::HandleInvalidStatusCtorArg(Status* status) {
   const char* kMessage =
       "An OK status is not a valid constructor argument to StatusOr<T>";
   LOG(ERROR) << kMessage;
-  // Fall back to tensorflow::error::INTERNAL.
-  *status = ::tensorflow::errors::Internal(kMessage);
+  // Fall back to absl::InternalError.
+  *status = ::absl::InternalError(kMessage);
 }
 
 void Helper::Crash(const Status& status) {

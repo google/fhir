@@ -88,8 +88,9 @@ void TestJsonValidation() {
     // In other words, "monkey" is an invalid value for Decimal, but "null"
     // *is* valid, even though it is not on its own sufficient to constitute a
     // valid decimal.
-    TF_ASSERT_OK(JsonFhirStringToProtoWithoutValidating<W>(line_iter, kTimeZone)
-                     .status());
+    FHIR_ASSERT_OK(
+        JsonFhirStringToProtoWithoutValidating<W>(line_iter, kTimeZone)
+            .status());
   }
   std::vector<std::string> invalid_lines =
       ReadLines(absl::StrCat(file_base, ".invalid.ndjson"));
@@ -125,8 +126,7 @@ void TestProtoValidationsFromFile(const std::string& file_base,
 
   for (auto proto_string_iter : valid_proto_strings) {
     W w = PARSE_STU3_PROTO(proto_string_iter);
-    TF_ASSERT_OK(Stu3PrimitiveHandler::GetInstance()->ValidatePrimitive(w))
-        << w.DebugString();
+    FHIR_ASSERT_OK(Stu3PrimitiveHandler::GetInstance()->ValidatePrimitive(w));
   }
 
   if (has_invalid) {
@@ -150,7 +150,7 @@ void TestProtoValidation(const bool has_invalid = true) {
   Extension* e = only_extensions.add_extension();
   e->mutable_url()->set_value("abcd");
   e->mutable_value()->mutable_boolean()->set_value(true);
-  TF_ASSERT_OK(
+  FHIR_ASSERT_OK(
       Stu3PrimitiveHandler::GetInstance()->ValidatePrimitive(only_extensions));
 
   // It's not ok to JUST have a no value extension.
@@ -303,17 +303,17 @@ TEST(PrimitiveHandlerTest, DateTimeGetters) {
 
   StatusOr<absl::Time> extracted_time =
       Stu3PrimitiveHandler::GetInstance()->GetDateTimeValue(date_time);
-  TF_ASSERT_OK(extracted_time.status());
+  FHIR_ASSERT_OK(extracted_time.status());
   ASSERT_EQ(extracted_time.ValueOrDie(), absl::FromUnixMicros(5000));
 
   StatusOr<absl::TimeZone> extracted_time_zone =
       Stu3PrimitiveHandler::GetInstance()->GetDateTimeZone(date_time);
-  TF_ASSERT_OK(extracted_time_zone.status());
+  FHIR_ASSERT_OK(extracted_time_zone.status());
   ASSERT_EQ(extracted_time_zone.ValueOrDie(), kTimeZone);
 
   StatusOr<DateTimePrecision> extracted_precision =
       Stu3PrimitiveHandler::GetInstance()->GetDateTimePrecision(date_time);
-  TF_ASSERT_OK(extracted_precision.status());
+  FHIR_ASSERT_OK(extracted_precision.status());
   ASSERT_EQ(extracted_precision.ValueOrDie(), DateTimePrecision::kDay);
 }
 
@@ -323,10 +323,10 @@ TEST(PrimitiveHandlerTest, GetDateTimeValue) {
 
   StatusOr<absl::Time> extracted_time =
       Stu3PrimitiveHandler::GetInstance()->GetDateTimeValue(date_time);
-  TF_ASSERT_OK(extracted_time.status());
+  FHIR_ASSERT_OK(extracted_time.status());
   ASSERT_EQ(extracted_time.ValueOrDie(), absl::FromUnixMicros(5000));
 
-  ASSERT_NE(::tensorflow::Status::OK(),
+  ASSERT_NE(::absl::OkStatus(),
             Stu3PrimitiveHandler::GetInstance()
                 ->GetDateTimeValue(::google::protobuf::Any())
                 .status());
@@ -338,13 +338,12 @@ TEST(PrimitiveHandlerTest, GetDateTimeZone) {
 
   StatusOr<absl::TimeZone> extracted_time_zone =
       Stu3PrimitiveHandler::GetInstance()->GetDateTimeZone(date_time);
-  TF_ASSERT_OK(extracted_time_zone.status());
+  FHIR_ASSERT_OK(extracted_time_zone.status());
   ASSERT_EQ(extracted_time_zone.ValueOrDie(), kTimeZone);
 
-  ASSERT_NE(::tensorflow::Status::OK(),
-            Stu3PrimitiveHandler::GetInstance()
-                ->GetDateTimeZone(::google::protobuf::Any())
-                .status());
+  ASSERT_NE(::absl::OkStatus(), Stu3PrimitiveHandler::GetInstance()
+                                    ->GetDateTimeZone(::google::protobuf::Any())
+                                    .status());
 }
 
 TEST(PrimitiveHandlerTest, GetDateTimePrecision) {
@@ -353,10 +352,10 @@ TEST(PrimitiveHandlerTest, GetDateTimePrecision) {
 
   StatusOr<DateTimePrecision> extracted_precision =
       Stu3PrimitiveHandler::GetInstance()->GetDateTimePrecision(date_time);
-  TF_ASSERT_OK(extracted_precision.status());
+  FHIR_ASSERT_OK(extracted_precision.status());
   ASSERT_EQ(extracted_precision.ValueOrDie(), DateTimePrecision::kDay);
 
-  ASSERT_NE(::tensorflow::Status::OK(),
+  ASSERT_NE(::absl::OkStatus(),
             Stu3PrimitiveHandler::GetInstance()
                 ->GetDateTimePrecision(::google::protobuf::Any())
                 .status());
@@ -369,10 +368,10 @@ TEST(PrimitiveHandlerTest, GetSimpleQuantityValue) {
   StatusOr<std::string> extracted_value =
       Stu3PrimitiveHandler::GetInstance()->GetSimpleQuantityValue(
           simple_quantity);
-  TF_ASSERT_OK(extracted_value.status());
+  FHIR_ASSERT_OK(extracted_value.status());
   ASSERT_EQ(extracted_value.ValueOrDie(), "1.5");
 
-  ASSERT_NE(::tensorflow::Status::OK(),
+  ASSERT_NE(::absl::OkStatus(),
             Stu3PrimitiveHandler::GetInstance()
                 ->GetSimpleQuantityValue(::google::protobuf::Any())
                 .status());
@@ -385,10 +384,10 @@ TEST(PrimitiveHandlerTest, GetSimpleQuantityCode) {
   StatusOr<std::string> extracted_code =
       Stu3PrimitiveHandler::GetInstance()->GetSimpleQuantityCode(
           simple_quantity);
-  TF_ASSERT_OK(extracted_code.status());
+  FHIR_ASSERT_OK(extracted_code.status());
   ASSERT_EQ(extracted_code.ValueOrDie(), "12345");
 
-  ASSERT_NE(::tensorflow::Status::OK(),
+  ASSERT_NE(::absl::OkStatus(),
             Stu3PrimitiveHandler::GetInstance()
                 ->GetSimpleQuantityCode(::google::protobuf::Any())
                 .status());
@@ -401,10 +400,10 @@ TEST(PrimitiveHandlerTest, GetSimpleQuantitySystem) {
   StatusOr<std::string> extracted_system =
       Stu3PrimitiveHandler::GetInstance()->GetSimpleQuantitySystem(
           simple_quantity);
-  TF_ASSERT_OK(extracted_system.status());
+  FHIR_ASSERT_OK(extracted_system.status());
   ASSERT_EQ(extracted_system.ValueOrDie(), "http://example.org");
 
-  ASSERT_NE(::tensorflow::Status::OK(),
+  ASSERT_NE(::absl::OkStatus(),
             Stu3PrimitiveHandler::GetInstance()
                 ->GetSimpleQuantitySystem(::google::protobuf::Any())
                 .status());

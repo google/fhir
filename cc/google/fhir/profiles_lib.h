@@ -22,6 +22,7 @@
 
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
+#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/codeable_concepts.h"
@@ -35,20 +36,18 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
-#include "tensorflow/core/lib/core/status.h"
 
 namespace google {
 namespace fhir {
 
 namespace profiles_internal {
 
+using ::absl::InvalidArgumentError;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 using std::unordered_map;
-using ::tensorflow::errors::InvalidArgument;
 
 const bool SharesCommonAncestor(const ::google::protobuf::Descriptor* first,
                                 const ::google::protobuf::Descriptor* second);
@@ -73,7 +72,7 @@ Status PerformExtensionSlicing(const Message& source, Message* target) {
       source_descriptor->FindFieldByName("extension");
   if (!source_extension_field) {
     // Nothing to slice
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   // Map from profiled extension urls to the fields that they are profiled in
@@ -100,7 +99,7 @@ Status PerformExtensionSlicing(const Message& source, Message* target) {
             value.GetReflection()->GetOneofFieldDescriptor(
                 value, value.GetDescriptor()->FindOneofByName("choice"));
         if (src_datatype_field == nullptr) {
-          return InvalidArgument(
+          return InvalidArgumentError(
               absl::StrCat("Invalid extension: neither value nor extensions "
                            "set on extension ",
                            url));
@@ -112,18 +111,18 @@ Status PerformExtensionSlicing(const Message& source, Message* target) {
           typed_extension->CopyFrom(src_value);
         } else if (src_datatype_field->message_type()->full_name() ==
                    CodeLike::descriptor()->full_name()) {
-          TF_RETURN_IF_ERROR(
+          FHIR_RETURN_IF_ERROR(
               CopyCode(dynamic_cast<const CodeLike&>(src_value), typed_extension));
         } else {
-          return InvalidArgument(
+          return InvalidArgumentError(absl::StrCat(
               "Profiled extension slice is incorrect type: ", url, "should be ",
               destination_type->full_name(), " but is ",
-              src_datatype_field->message_type()->full_name());
+              src_datatype_field->message_type()->full_name()));
         }
       } else {
         // This is a complex extension
         Message* typed_extension = MutableOrAddMessage(target, inlined_field);
-        TF_RETURN_IF_ERROR(
+        FHIR_RETURN_IF_ERROR(
             extensions_templates::ExtensionToMessage<ExtensionLike>(
                 source_extension, typed_extension));
       }
@@ -134,17 +133,17 @@ Status PerformExtensionSlicing(const Message& source, Message* target) {
       if (!target_extension_field) {
         // Target doesn't have a raw extension field, and doesn't have a typed
         // extension field that can bandle this.
-        return InvalidArgument(
+        return InvalidArgumentError(absl::StrCat(
             "Cannot Slice extensions from ", source_descriptor->full_name(),
             " to ", target_descriptor->full_name(),
             ": target does not have an extension field that can handle url: ",
-            url);
+            url));
       }
       target_reflection->AddMessage(target, target_extension_field)
           ->CopyFrom(source_extension);
     }
   }
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 template <typename ExtensionLike>
@@ -235,19 +234,18 @@ Status CopyToProfile(const Message& source, Message* target) {
       // the source is a typed extension.  In this case, it should be converted
       // to a raw extension.
       if (!HasInlinedExtensionUrl(source_field) || !target_extension_field) {
-        return InvalidArgument("Unable to Profile ",
-                               source_descriptor->full_name(), " to ",
-                               target_descriptor->full_name(), ": no field ",
-                               source_field->name(), " on target.");
+        return InvalidArgumentError(
+            absl::StrCat("Unable to Profile ", source_descriptor->full_name(),
+                         " to ", target_descriptor->full_name(), ": no field ",
+                         source_field->name(), " on target."));
       }
       if (!IsMessageType<ExtensionLike>(
               target_extension_field->message_type())) {
-        return InvalidArgument(
+        return InvalidArgumentError(absl::StrCat(
             "Unexpected type on extension field for ",
-            target_descriptor->full_name(),
-            ".  Expected: ", ExtensionLike::descriptor()->full_name(),
-            " but found: ",
-            target_extension_field->message_type()->full_name());
+            target_descriptor->full_name(), ".  Expected: ",
+            ExtensionLike::descriptor()->full_name(), " but found: ",
+            target_extension_field->message_type()->full_name()));
       }
 
       FHIR_RETURN_IF_ERROR(ForEachMessageWithStatus<Message>(
@@ -266,17 +264,18 @@ Status CopyToProfile(const Message& source, Message* target) {
     // field.
     if (source_field->is_repeated() && !target_field->is_repeated() &&
         source_reflection->FieldSize(source, source_field) > 1) {
-      return InvalidArgument(
+      return InvalidArgumentError(absl::StrCat(
           "Unable to Profile ", source_descriptor->full_name(), " to ",
           target_descriptor->full_name(), ": For field ", source_field->name(),
-          ", source has multiple entries but target field is not repeated.");
+          ", source has multiple entries but target field is not repeated."));
     }
 
     const Descriptor* source_field_type = source_field->message_type();
 
     if (!source_field_type) {
-      return InvalidArgument("Encountered unexpected primitive type on field: ",
-                             source_field->full_name());
+      return InvalidArgumentError(
+          absl::StrCat("Encountered unexpected primitive type on field: ",
+                       source_field->full_name()));
     }
     if (IsTypeOrProfileOfCode(target_field->message_type())) {
       FHIR_RETURN_IF_ERROR(ForEachMessageWithStatus<Message>(
@@ -329,22 +328,22 @@ Status CopyToProfile(const Message& source, Message* target) {
           });
       continue;
     }
-    return InvalidArgument("Unable to Profile ", source_descriptor->full_name(),
-                           " to ", target_descriptor->full_name(), ": Types ",
-                           source_field_type->full_name(), " and ",
-                           target_field->message_type()->full_name(),
-                           " are incompatible.");
+    return InvalidArgumentError(absl::StrCat(
+        "Unable to Profile ", source_descriptor->full_name(), " to ",
+        target_descriptor->full_name(), ": Types ",
+        source_field_type->full_name(), " and ",
+        target_field->message_type()->full_name(), " are incompatible."));
   }
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 template <typename PrimitiveHandlerVersion,
           typename ExtensionLike = typename PrimitiveHandlerVersion::Extension>
 Status ConvertToProfileLenientInternal(const Message& source, Message* target) {
   if (!SharesCommonAncestor(source.GetDescriptor(), target->GetDescriptor())) {
-    return tensorflow::errors::InvalidArgument(
+    return absl::InvalidArgumentError(absl::StrCat(
         "Incompatible profile types: ", source.GetDescriptor()->full_name(),
-        " to ", target->GetDescriptor()->full_name());
+        " to ", target->GetDescriptor()->full_name()));
   }
   return CopyToProfile<ExtensionLike>(source, target);
 }
@@ -358,9 +357,9 @@ Status ConvertToProfileInternal(const Message& source, Message* target) {
   Status validation =
       ValidateResource(*target, PrimitiveHandlerVersion::GetInstance());
   if (validation.ok()) {
-    return Status::OK();
+    return absl::OkStatus();
   }
-  return tensorflow::errors::FailedPrecondition(validation.error_message());
+  return absl::FailedPreconditionError(validation.message());
 }
 
 }  // namespace profiles_internal

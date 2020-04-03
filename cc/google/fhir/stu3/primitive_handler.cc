@@ -21,6 +21,7 @@
 
 #include "google/protobuf/descriptor.h"
 #include "absl/memory/memory.h"
+#include "absl/status/status.h"
 #include "absl/strings/string_view.h"
 #include "absl/types/optional.h"
 #include "google/fhir/annotations.h"
@@ -36,15 +37,14 @@
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "include/json/json.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
 namespace stu3 {
 
+using ::absl::InvalidArgumentError;
 using primitives_internal::PrimitiveWrapper;
 using ::google::protobuf::Descriptor;
-using ::tensorflow::errors::InvalidArgument;
 
 StatusOr<std::unique_ptr<PrimitiveWrapper>> Stu3PrimitiveHandler::GetWrapper(
     const Descriptor* target_descriptor) const {
@@ -56,8 +56,8 @@ StatusOr<std::unique_ptr<PrimitiveWrapper>> Stu3PrimitiveHandler::GetWrapper(
   if (wrapper.has_value()) {
     return std::move(wrapper.value());
   }
-  return InvalidArgument("Unexpected STU3 primitive FHIR type: ",
-                         target_descriptor->full_name());
+  return InvalidArgumentError(absl::StrCat(
+      "Unexpected STU3 primitive FHIR type: ", target_descriptor->full_name()));
 }
 
 const Stu3PrimitiveHandler* Stu3PrimitiveHandler::GetInstance() {

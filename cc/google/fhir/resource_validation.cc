@@ -17,6 +17,7 @@
 #include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
+#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/primitive_handler.h"
@@ -27,18 +28,16 @@
 #include "proto/annotations.pb.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
 
-
+using ::absl::FailedPreconditionError;
 using ::google::fhir::proto::validation_requirement;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
-using ::tensorflow::errors::FailedPrecondition;
 
 namespace {
 
@@ -70,12 +69,12 @@ Status ValidatePeriod(const Message& period, const std::string& base) {
     // [Tuesday, Monday] to be valid.
     if (google::fhir::GetTimeFromTimelikeElement(start) >=
         google::fhir::GetUpperBoundFromTimelikeElement(end)) {
-      return ::tensorflow::errors::FailedPrecondition(
-          base, "-start-time-later-than-end-time");
+      return ::absl::FailedPreconditionError(
+          absl::StrCat(base, "-start-time-later-than-end-time"));
     }
   }
 
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 Status CheckField(const Message& message, const FieldDescriptor* field,
@@ -87,15 +86,16 @@ Status ValidateFhirConstraints(const Message& message,
                                const PrimitiveHandler* primitive_handler) {
   if (IsPrimitive(message.GetDescriptor())) {
     return primitive_handler->ValidatePrimitive(message).ok()
-               ? Status::OK()
-               : FailedPrecondition("invalid-primitive-", base_name);
+               ? absl::OkStatus()
+               : FailedPreconditionError(
+                     absl::StrCat("invalid-primitive-", base_name));
   }
 
   if (IsMessageType<::google::protobuf::Any>(message)) {
     // We do not validate "Any" contained resources.
     // TODO: maybe we should though... we'd need a registry that
     // allows us to automatically unpack into the correct type based on url.
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Descriptor* descriptor = message.GetDescriptor();
@@ -116,11 +116,11 @@ Status ValidateFhirConstraints(const Message& message,
     if (!reflection->HasOneof(message, oneof) &&
         !oneof->options().GetExtension(
             ::google::fhir::proto::fhir_oneof_is_optional)) {
-      FHIR_RETURN_IF_ERROR(::tensorflow::errors::FailedPrecondition(
-          "empty-oneof-", oneof->full_name()));
+      FHIR_RETURN_IF_ERROR(::absl::FailedPreconditionError(
+          absl::StrCat("empty-oneof-", oneof->full_name())));
     }
   }
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 // Check if a required field is missing.
@@ -131,15 +131,15 @@ Status CheckField(const Message& message, const FieldDescriptor* field,
       field->options().GetExtension(validation_requirement) ==
           ::google::fhir::proto::REQUIRED_BY_FHIR) {
     if (!FieldHasValue(message, field)) {
-      return FailedPrecondition("missing-", field_name);
+      return FailedPreconditionError(absl::StrCat("missing-", field_name));
     }
   }
 
   if (IsReference(field->message_type())) {
     auto status = primitive_handler->ValidateReferenceField(message, field);
-    return status.ok()
-               ? status
-               : FailedPrecondition(status.error_message(), "-at-", field_name);
+    return status.ok() ? status
+                       : FailedPreconditionError(absl::StrCat(
+                             status.message(), "-at-", field_name));
   }
 
   if (field->cpp_type() == ::google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
@@ -164,7 +164,7 @@ Status CheckField(const Message& message, const FieldDescriptor* field,
     }
   }
 
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 }  // namespace

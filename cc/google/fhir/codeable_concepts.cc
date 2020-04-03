@@ -19,6 +19,7 @@
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
+#include "absl/status/status.h"
 #include "absl/strings/match.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/proto_util.h"
@@ -26,7 +27,6 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/codeable_concepts.h"
 #include "proto/annotations.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 #define CODEABLE_CONCEPTS_VERSION_DISPATCH(default_return_val, function_name, \
                                            first_arg, args...)                \
@@ -43,7 +43,7 @@
 #define CODEABLE_CONCEPTS_VERSION_DISPATCH_WITH_STATUS(function_name,         \
                                                        first_arg, args...)    \
   CODEABLE_CONCEPTS_VERSION_DISPATCH(                                         \
-      InvalidArgument(                                                        \
+      InvalidArgumentError(                                                   \
           absl::StrCat("FHIR version not supported by codeable_concepts.h: ", \
                        google::fhir::proto::FhirVersion_Name(                 \
                            google::fhir::GetFhirVersion(first_arg)))),        \
@@ -56,7 +56,7 @@
 namespace google {
 namespace fhir {
 
-using ::tensorflow::errors::InvalidArgument;
+using ::absl::InvalidArgumentError;
 
 const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
                                     const CodeBoolFunc& func,
@@ -105,7 +105,7 @@ Status AddCoding(::google::protobuf::Message* concept, const std::string& system
       return r4::AddCoding(concept, system, code);
     }
     default:
-      return InvalidArgument(
+      return InvalidArgumentError(
           absl::StrCat("FHIR version not supported by codeable_concepts.h: ",
                        google::fhir::proto::FhirVersion_Name(
                            google::fhir::GetFhirVersion(*concept))));

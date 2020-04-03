@@ -15,19 +15,19 @@
 #include "google/fhir/fhir_path/utils.h"
 
 #include "google/protobuf/any.pb.h"
+#include "absl/status/status.h"
 #include "google/fhir/util.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
 namespace fhir_path {
 namespace internal {
 
+using ::absl::NotFoundError;
+using ::absl::UnimplementedError;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
-using ::tensorflow::errors::NotFound;
-using ::tensorflow::errors::Unimplemented;
 
 // Logical field in primitives representing the underlying value.
 constexpr char kPrimitiveValueField[] = "value";
@@ -45,22 +45,22 @@ Status OneofMessageFromContainer(const Message& container_message,
   const google::protobuf::OneofDescriptor* oneof_descriptor =
       container_message.GetDescriptor()->oneof_decl(0);
   if (oneof_descriptor == nullptr) {
-    return NotFound("Oneof field not found in ",
-                    container_message.GetTypeName(), ".");
+    return NotFoundError(absl::StrCat("Oneof field not found in ",
+                                      container_message.GetTypeName(), "."));
   }
 
   const FieldDescriptor* oneof_field =
       container_reflection->GetOneofFieldDescriptor(container_message,
                                                     oneof_descriptor);
   if (oneof_field == nullptr) {
-    return NotFound("Oneof field not set in ", container_message.GetTypeName(),
-                    ".");
+    return NotFoundError(absl::StrCat("Oneof field not set in ",
+                                      container_message.GetTypeName(), "."));
   }
 
   const Message& oneof_message =
       container_reflection->GetMessage(container_message, oneof_field);
   results->push_back(&oneof_message);
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 Status RetrieveField(const Message& root, const FieldDescriptor& field,
@@ -69,7 +69,7 @@ Status RetrieveField(const Message& root, const FieldDescriptor& field,
   // primitive message type rather than the underlying native primitive.
   if (IsFhirPrimitiveValue(field)) {
     results->push_back(&root);
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   return ForEachMessageWithStatus<Message>(
@@ -77,7 +77,7 @@ Status RetrieveField(const Message& root, const FieldDescriptor& field,
         // R4+ packs contained resources in Any protos.
         if (IsMessageType<google::protobuf::Any>(child)) {
           // TODO: Add support for ContainedResource packed in Any.
-          return Unimplemented(
+          return UnimplementedError(
               "Contained resources packed in protobuf.Any are not supported");
         }
 
@@ -85,7 +85,7 @@ Status RetrieveField(const Message& root, const FieldDescriptor& field,
           return OneofMessageFromContainer(child, results);
         } else {
           results->push_back(&child);
-          return Status::OK();
+          return absl::OkStatus();
         }
       });
 }

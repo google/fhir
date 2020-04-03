@@ -28,6 +28,7 @@
 
 #include "google/protobuf/message.h"
 #include "absl/flags/declare.h"
+#include "absl/status/status.h"
 #include "absl/strings/str_split.h"
 #include "absl/time/time.h"
 #include "google/fhir/bundle_to_versioned_resources_converter.h"
@@ -42,7 +43,6 @@
 #include "proto/version_config.pb.h"
 #include "tensorflow/core/example/example.pb.h"
 #include "tensorflow/core/example/feature.pb.h"
-#include "tensorflow/core/lib/core/status.h"
 #include "tensorflow/core/platform/logging.h"
 
 ABSL_DECLARE_FLAG(int64_t, max_sequence_length);

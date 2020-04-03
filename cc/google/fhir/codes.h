@@ -16,9 +16,10 @@
 #define GOOGLE_FHIR_STU3_CODES_H_
 
 #include "google/protobuf/message.h"
+#include "absl/status/status.h"
+#include "absl/strings/str_cat.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
@@ -47,8 +48,9 @@ StatusOr<typename TypedResourceTypeCode::Value> GetCodeForResourceType(
   if (TypedResourceTypeCode::Value_Parse(enum_string, &value)) {
     return value;
   }
-  return ::tensorflow::errors::InvalidArgument(
-      "No ResourceTypeCode found for type: ", resource.GetDescriptor()->name());
+  return ::absl::InvalidArgumentError(
+      absl::StrCat("No ResourceTypeCode found for type: ",
+                   resource.GetDescriptor()->name()));
 }
 
 }  // namespace fhir

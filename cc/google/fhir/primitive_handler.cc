@@ -16,17 +16,17 @@
 
 #include "google/fhir/primitive_handler.h"
 
+#include "absl/status/status.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/primitive_wrapper.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
 
+using ::absl::InvalidArgumentError;
 using primitives_internal::PrimitiveWrapper;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::Message;
-using ::tensorflow::errors::InvalidArgument;
 
 ::google::fhir::Status PrimitiveHandler::ParseInto(const Json::Value& json,
                                                    const absl::TimeZone tz,
@@ -35,7 +35,8 @@ using ::tensorflow::errors::InvalidArgument;
 
   if (json.type() == Json::ValueType::arrayValue ||
       json.type() == Json::ValueType::objectValue) {
-    return InvalidArgument("Invalid JSON type for ", json.toStyledString());
+    return InvalidArgumentError(
+        absl::StrCat("Invalid JSON type for ", json.toStyledString()));
   }
   FHIR_ASSIGN_OR_RETURN(std::unique_ptr<PrimitiveWrapper> wrapper,
                         GetWrapper(target->GetDescriptor()));
@@ -71,8 +72,8 @@ Status PrimitiveHandler::ValidatePrimitive(
   FHIR_RETURN_IF_ERROR(CheckVersion(primitive));
 
   if (!IsPrimitive(primitive.GetDescriptor())) {
-    return InvalidArgument("Not a primitive type: ",
-                           primitive.GetDescriptor()->full_name());
+    return InvalidArgumentError(absl::StrCat(
+        "Not a primitive type: ", primitive.GetDescriptor()->full_name()));
   }
 
   const ::google::protobuf::Descriptor* descriptor = primitive.GetDescriptor();
@@ -90,12 +91,13 @@ Status PrimitiveHandler::CheckVersion(const Message& message) const {
 Status PrimitiveHandler::CheckVersion(const Descriptor* descriptor) const {
   auto test_version = GetFhirVersion(descriptor);
   if (test_version != version_) {
-    return InvalidArgument("Invalid message for PrimitiveHandler.  Handler is ",
-                           proto::FhirVersion_Name(version_), " but message `",
-                           descriptor->full_name(), " is ",
-                           proto::FhirVersion_Name(test_version));
+    return InvalidArgumentError(
+        absl::StrCat("Invalid message for PrimitiveHandler.  Handler is ",
+                     proto::FhirVersion_Name(version_), " but message `",
+                     descriptor->full_name(), " is ",
+                     proto::FhirVersion_Name(test_version)));
   }
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 }  // namespace fhir

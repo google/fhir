@@ -7,7 +7,7 @@ cc_library(
     hdrs = ["status.h"],
     strip_include_prefix = "//cc/",
     deps = [
-        "@org_tensorflow//tensorflow/core:lib",
+        "@com_google_absl//absl/status",
     ],
 )
 
@@ -21,6 +21,7 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":status",
+        "@com_google_absl//absl/status",
         "@org_tensorflow//tensorflow/core:lib",
     ],
 )
@@ -32,7 +33,7 @@ cc_test(
     deps = [
         ":statusor",
         "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/status",
         "@com_google_googletest//:gtest_main",
-        "@org_tensorflow//tensorflow/core:lib",
     ],
 )

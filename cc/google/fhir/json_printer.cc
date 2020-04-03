@@ -48,17 +48,17 @@
 namespace google {
 namespace fhir {
 
+using ::absl::InvalidArgumentError;
 using ::google::fhir::IsChoiceType;
 using ::google::fhir::IsPrimitive;
 using ::google::fhir::IsReference;
 using ::google::fhir::Status;
 using ::google::fhir::StatusOr;
-using ::google::protobuf::Descriptor;
 using ::google::protobuf::Any;
+using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
-using ::tensorflow::errors::InvalidArgument;
 
 namespace internal {
 
@@ -151,7 +151,7 @@ class Printer {
         // If we can't unpack the Any, drop it.
         // TODO: Use a registry to determine the correct
         // ContainedResource to unpack to
-        return Status::OK();
+        return absl::OkStatus();
       }
       return PrintContainedResource(*contained);
     }
@@ -161,7 +161,7 @@ class Printer {
       std::string scratch;
       absl::StrAppend(&output_, "\"",
                       extensions_lib::GetExtensionUrl(proto, &scratch), "\"");
-      return Status::OK();
+      return absl::OkStatus();
     }
 
     OpenJsonObject();
@@ -191,7 +191,7 @@ class Printer {
       }
     }
     CloseJsonObject();
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   Status PrintContainedResource(const Message& proto) {
@@ -210,14 +210,15 @@ class Printer {
         FHIR_RETURN_IF_ERROR(PrintNonPrimitive(field_value));
       }
     }
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   Status PrintField(const Message& containing_proto,
                     const FieldDescriptor* field) {
     if (field->containing_type() != containing_proto.GetDescriptor()) {
-      return InvalidArgument("Field ", field->full_name(), " not found on ",
-                             containing_proto.GetDescriptor()->full_name());
+      return InvalidArgumentError(
+          absl::StrCat("Field ", field->full_name(), " not found on ",
+                       containing_proto.GetDescriptor()->full_name()));
     }
     const Reflection* reflection = containing_proto.GetReflection();
 
@@ -256,7 +257,7 @@ class Printer {
             PrintNonPrimitive(reflection->GetMessage(containing_proto, field)));
       }
     }
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   Status PrintPrimitiveField(const Message& proto,
@@ -271,7 +272,7 @@ class Printer {
       FHIR_ASSIGN_OR_RETURN(const std::string& reference_value,
                             GetPrimitiveStringValue(proto, &scratch));
       absl::StrAppend(&output_, "\"", reference_value, "\"");
-      return Status::OK();
+      return absl::OkStatus();
     }
     FHIR_ASSIGN_OR_RETURN(const JsonPrimitive json_primitive,
                           primitive_handler_->WrapPrimitiveProto(proto));
@@ -288,7 +289,7 @@ class Printer {
       PrintFieldPreamble(absl::StrCat("_", field_name));
       FHIR_RETURN_IF_ERROR(PrintNonPrimitive(*json_primitive.element));
     }
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   Status PrintChoiceTypeField(const Message& choice_container,
@@ -298,14 +299,16 @@ class Printer {
     const google::protobuf::Descriptor* choice_descriptor =
         choice_container.GetDescriptor();
     if (choice_descriptor->oneof_decl_count() != 1) {
-      return InvalidArgument("No oneof field on: ",
-                             choice_container.GetDescriptor()->full_name());
+      return InvalidArgumentError(
+          absl::StrCat("No oneof field on: ",
+                       choice_container.GetDescriptor()->full_name()));
     }
     const google::protobuf::OneofDescriptor* oneof =
         choice_container.GetDescriptor()->oneof_decl(0);
     if (!choice_reflection->HasOneof(choice_container, oneof)) {
-      return InvalidArgument("Oneof not set on choice type: ",
-                             choice_container.GetDescriptor()->full_name());
+      return InvalidArgumentError(
+          absl::StrCat("Oneof not set on choice type: ",
+                       choice_container.GetDescriptor()->full_name()));
     }
     const google::protobuf::FieldDescriptor* value_field =
         choice_reflection->GetOneofFieldDescriptor(choice_container, oneof);
@@ -321,14 +324,15 @@ class Printer {
       FHIR_RETURN_IF_ERROR(PrintNonPrimitive(
           choice_reflection->GetMessage(choice_container, value_field)));
     }
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   Status PrintRepeatedPrimitiveField(const Message& containing_proto,
                                      const FieldDescriptor* field) {
     if (field->containing_type() != containing_proto.GetDescriptor()) {
-      return InvalidArgument("Field ", field->full_name(), " not found on ",
-                             containing_proto.GetDescriptor()->full_name());
+      return InvalidArgumentError(
+          absl::StrCat("Field ", field->full_name(), " not found on ",
+                       containing_proto.GetDescriptor()->full_name()));
     }
     const Reflection* reflection = containing_proto.GetReflection();
     int field_size = reflection->FieldSize(containing_proto, field);
@@ -387,7 +391,7 @@ class Printer {
       AddNewline();
       output_ += "]";
     }
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   // Creates a copy of the profiled codeable concept that has ALL codings
@@ -410,9 +414,9 @@ class Printer {
     const FieldDescriptor* coding_field = descriptor->FindFieldByName("coding");
     if (!coding_field || !coding_field->message_type() ||
         !IsCoding(coding_field->message_type())) {
-      return InvalidArgument(
+      return InvalidArgumentError(absl::StrCat(
           "Invalid or missing coding field on CodeableConcept type ",
-          descriptor->full_name());
+          descriptor->full_name()));
     }
 
     switch (GetFhirVersion(profiled_codeable_concept)) {
@@ -433,7 +437,7 @@ class Printer {
             });
         break;
       default:
-        return InvalidArgument(
+        return InvalidArgumentError(
             "Unsupported FHIR Version for profiling for resource: " +
             profiled_codeable_concept.GetDescriptor()->full_name());
     }
@@ -505,7 +509,7 @@ StatusOr<std::string> WriteMessage(Printer printer, const Message& message) {
             ConvertToProfileLenientR4(message, core_resource.get()));
         break;
       default:
-        return InvalidArgument(
+        return InvalidArgumentError(
             "Unsupported FHIR Version for profiling for resource: " +
             message.GetDescriptor()->full_name());
     }

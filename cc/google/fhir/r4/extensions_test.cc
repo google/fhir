@@ -18,6 +18,7 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
@@ -26,7 +27,6 @@
 #include "proto/r4/core/resources/composition.pb.h"
 #include "proto/r4/google_extensions.pb.h"
 #include "testdata/r4/profiles/test_extensions.pb.h"
-#include "tensorflow/core/lib/core/status.h"
 #include "tensorflow/core/lib/core/status_test_util.h"
 
 namespace google {
@@ -59,7 +59,7 @@ void TestExtensionToMessage(const std::string& name) {
   ReadR4TestData(name, &message, &extension);
 
   T output;
-  TF_ASSERT_OK(ExtensionToMessage(extension, &output));
+  FHIR_ASSERT_OK(ExtensionToMessage(extension, &output));
   EXPECT_THAT(output, EqualsProto(message));
 }
 
@@ -70,7 +70,7 @@ void TestConvertToExtension(const std::string& name) {
   ReadR4TestData(name, &message, &extension);
 
   Extension output;
-  TF_ASSERT_OK(ConvertToExtension(message, &output));
+  FHIR_ASSERT_OK(ConvertToExtension(message, &output));
   EXPECT_THAT(output, EqualsProto(extension));
 }
 
@@ -182,7 +182,7 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionOneFound) {
                                                     )pb",
                                                     &expected));
 
-  TF_ASSERT_OK(extracted.status());
+  FHIR_ASSERT_OK(extracted.status());
   EXPECT_THAT(extracted.ValueOrDie(), EqualsProto(expected));
 }
 
@@ -225,7 +225,7 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionNoneFound) {
       ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(composition);
 
   EXPECT_FALSE(extracted.status().ok());
-  EXPECT_EQ(tensorflow::error::NOT_FOUND, extracted.status().code());
+  EXPECT_EQ(absl::StatusCode::kNotFound, extracted.status().code());
 }
 
 TEST(ExtensionsTest, ExtractOnlyMatchingExtensionMultipleFound) {
@@ -279,7 +279,7 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionMultipleFound) {
       ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(composition);
 
   EXPECT_FALSE(extracted.status().ok());
-  EXPECT_EQ(tensorflow::error::INVALID_ARGUMENT, extracted.status().code());
+  EXPECT_EQ(absl::StatusCode::kInvalidArgument, extracted.status().code());
 }
 
 }  // namespace

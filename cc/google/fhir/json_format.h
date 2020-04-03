@@ -20,6 +20,7 @@
 #include <string>
 
 #include "google/protobuf/message.h"
+#include "absl/status/status.h"
 #include "absl/strings/match.h"
 #include "absl/time/time.h"
 #include "google/fhir/annotations.h"
@@ -28,7 +29,6 @@
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/profiles.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {

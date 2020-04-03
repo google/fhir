@@ -18,6 +18,7 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "absl/time/civil_time.h"
 #include "absl/time/time.h"
@@ -45,7 +46,6 @@
 #include "proto/stu3/resources.pb.h"
 #include "proto/stu3/uscore.pb.h"
 #include "proto/stu3/uscore_codes.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
@@ -53,17 +53,16 @@ namespace fhir_path {
 
 namespace {
 
+using ::absl::InvalidArgumentError;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using r4::uscore::BirthSexValueSet;
 using r4::uscore::USCorePatientProfile;
-using ::tensorflow::error::INVALID_ARGUMENT;
 using ::testing::ElementsAreArray;
 using ::testing::EndsWith;
 using ::testing::Eq;
 using ::testing::StrEq;
 using ::testing::UnorderedElementsAreArray;
-using ::tensorflow::errors::InvalidArgument;
 using testutil::EqualsProto;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
@@ -103,7 +102,7 @@ Body \
 
 MATCHER(EvalsToEmpty, "") {
   if (!arg.ok()) {
-    *result_listener << "evaluation error: " << arg.status().error_message();
+    *result_listener << "evaluation error: " << arg.status().message();
     return false;
   }
 
@@ -124,14 +123,14 @@ MATCHER(EvalsToEmpty, "") {
 // will match cases where evaluation fails.
 MATCHER(EvalsToFalse, "") {
   if (!arg.ok()) {
-    *result_listener << "evaluation error: " << arg.status().error_message();
+    *result_listener << "evaluation error: " << arg.status().message();
     return false;
   }
 
   StatusOr<bool> result = arg.ValueOrDie().GetBoolean();
   if (!result.ok()) {
     *result_listener << "did not resolve to a boolean: "
-                     << result.status().error_message();
+                     << result.status().message();
     return false;
   }
 
@@ -149,14 +148,14 @@ MATCHER(EvalsToFalse, "") {
 // will match cases where evaluation fails.
 MATCHER(EvalsToTrue, "") {
   if (!arg.ok()) {
-    *result_listener << "evaluation error: " << arg.status().error_message();
+    *result_listener << "evaluation error: " << arg.status().message();
     return false;
   }
 
   StatusOr<bool> result = arg.ValueOrDie().GetBoolean();
   if (!result.ok()) {
     *result_listener << "did not resolve to a boolean: "
-                     << result.status().error_message();
+                     << result.status().message();
     return false;
   }
 
@@ -169,14 +168,14 @@ MATCHER(EvalsToTrue, "") {
 
 MATCHER_P(EvalsToStringThatMatches, string_matcher, "") {
   if (!arg.ok()) {
-    *result_listener << "evaluation error: " << arg.status().error_message();
+    *result_listener << "evaluation error: " << arg.status().message();
     return false;
   }
 
   StatusOr<std::string> result = arg.ValueOrDie().GetString();
   if (!result.ok()) {
     *result_listener << "did not resolve to a string: "
-                     << result.status().error_message();
+                     << result.status().message();
     return false;
   }
 
@@ -245,8 +244,9 @@ StatusOr<const ::google::fhir::PrimitiveHandler*> GetPrimitiveHandler(
     case proto::FhirVersion::R4:
       return ::google::fhir::r4::R4PrimitiveHandler::GetInstance();
     default:
-      return InvalidArgument("Unsupported FHIR version for FhirPath: ",
-                             FhirVersion_Name(version));
+      return InvalidArgumentError(
+          absl::StrCat("Unsupported FHIR version for FhirPath: ",
+                       FhirVersion_Name(version)));
   }
 }
 
@@ -407,13 +407,13 @@ FHIR_VERSION_TEST(FhirPathTest, TestNoSuchField, {
   auto root_expr = Compile(Encounter::descriptor(), "bogusrootfield");
 
   EXPECT_FALSE(root_expr.ok());
-  EXPECT_NE(root_expr.status().error_message().find("bogusrootfield"),
+  EXPECT_NE(root_expr.status().message().find("bogusrootfield"),
             std::string::npos);
 
   auto child_expr = Compile(Encounter::descriptor(), "period.boguschildfield");
 
   EXPECT_FALSE(child_expr.ok());
-  EXPECT_NE(child_expr.status().error_message().find("boguschildfield"),
+  EXPECT_NE(child_expr.status().message().find("boguschildfield"),
             std::string::npos);
 
   EXPECT_THAT(Evaluate(ValidEncounter<Encounter>(),
@@ -425,7 +425,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestNoSuchFunction, {
   auto root_expr = Compile(Encounter::descriptor(), "period.bogusfunction()");
 
   EXPECT_FALSE(root_expr.ok());
-  EXPECT_NE(root_expr.status().error_message().find("bogusfunction"),
+  EXPECT_NE(root_expr.status().message().find("bogusfunction"),
             std::string::npos);
 })
 
@@ -600,13 +600,15 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionReplaceMatches, {
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionReplaceMatchesWrongArgCount, {
   StatusOr<EvaluationResult> result = Evaluate("''.replaceMatches()");
-  EXPECT_THAT(result.status().code(), Eq(INVALID_ARGUMENT)) << result.status();
+  EXPECT_THAT(result.status().code(), Eq(absl::StatusCode::kInvalidArgument))
+      << result.status();
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionReplaceMatchesBadRegex, {
   StatusOr<EvaluationResult> result =
       Evaluate("''.replaceMatches('(', 'a')").status();
-  EXPECT_THAT(result.status().code(), Eq(INVALID_ARGUMENT)) << result.status();
+  EXPECT_THAT(result.status().code(), Eq(absl::StatusCode::kInvalidArgument))
+      << result.status();
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionLength, {
@@ -1238,7 +1240,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestIntegerLiteral, {
 
   EXPECT_FALSE(bad_int_status.ok());
   // Failure message should contain the bad string.
-  EXPECT_TRUE(bad_int_status.error_message().find(overflow_value) !=
+  EXPECT_TRUE(bad_int_status.message().find(overflow_value) !=
               std::string::npos);
 })
 
@@ -1716,7 +1718,7 @@ FHIR_VERSION_TEST(FhirPathTest, ResourceReference, {
   // contains the original node that is in %context." Given that the literal
   // 'true' is not contained by any resources it is believed that this should
   // result in an error.
-  EXPECT_EQ(Evaluate(bundle, "true.select(%resource)").status().error_message(),
+  EXPECT_EQ(Evaluate(bundle, "true.select(%resource)").status().message(),
             "No Resource found in ancestry.");
 
   // Likewise, derived values do not have a defined %resource.
@@ -1724,7 +1726,7 @@ FHIR_VERSION_TEST(FhirPathTest, ResourceReference, {
                      "(entry[2].resource.entry[0].resource.value & "
                      "entry[1].resource.value).select(%resource)")
                 .status()
-                .error_message(),
+                .message(),
             "No Resource found in ancestry.");
 
   EXPECT_THAT(Evaluate(bundle,

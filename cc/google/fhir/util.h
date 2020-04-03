@@ -30,6 +30,7 @@
 #include "google/protobuf/message.h"
 #include "google/protobuf/reflection.h"
 #include "absl/base/macros.h"
+#include "absl/status/status.h"
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
@@ -42,7 +43,6 @@
 #include "proto/annotations.pb.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
-#include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
 
 // Macro for specifying the ContainedResources type within a bundle-like object,
@@ -144,7 +144,7 @@ Status SetContainedResource(const ::google::protobuf::Message& resource,
   for (int i = 0; i < resource_oneof->field_count(); i++) {
     const ::google::protobuf::FieldDescriptor* field = resource_oneof->field(i);
     if (field->cpp_type() != ::google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
-      return ::tensorflow::errors::InvalidArgument(
+      return ::absl::InvalidArgumentError(
           absl::StrCat("Field ", field->full_name(), "is not a message"));
     }
     if (field->message_type()->name() == resource.GetDescriptor()->name()) {
@@ -152,13 +152,13 @@ Status SetContainedResource(const ::google::protobuf::Message& resource,
     }
   }
   if (resource_field == nullptr) {
-    return ::tensorflow::errors::InvalidArgument(
+    return ::absl::InvalidArgumentError(
         absl::StrCat("Resource type ", resource.GetDescriptor()->name(),
                      " not found in fhir::Bundle::Entry::resource"));
   }
   const ::google::protobuf::Reflection* ref = contained->GetReflection();
   ref->MutableMessage(contained, resource_field)->CopyFrom(resource);
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 template <typename ContainedResourceLike>
@@ -172,7 +172,7 @@ StatusOr<const ::google::protobuf::Message*> GetContainedResource(
       contained.GetReflection()->GetOneofFieldDescriptor(contained,
                                                          resource_oneof);
   if (!field) {
-    return ::tensorflow::errors::NotFound("No Bundle Resource found");
+    return ::absl::NotFoundError("No Bundle Resource found");
   }
   return &(ref->GetMessage(contained, field));
 }
@@ -182,7 +182,7 @@ template <typename ContainedResourceLike>
 StatusOr<ContainedResourceLike> WrapContainedResource(
     const ::google::protobuf::Message& resource) {
   ContainedResourceLike contained_resource;
-  TF_RETURN_IF_ERROR(SetContainedResource(resource, &contained_resource));
+  FHIR_RETURN_IF_ERROR(SetContainedResource(resource, &contained_resource));
   return contained_resource;
 }
 
@@ -196,7 +196,7 @@ Status GetPatient(const BundleLike& bundle, const PatientLike** patient) {
   for (const auto& entry : bundle.entry()) {
     if (entry.resource().has_patient()) {
       if (found) {
-        return ::tensorflow::errors::AlreadyExists(
+        return ::absl::AlreadyExistsError(
             "Found more than one patient in bundle");
       }
       *patient = &entry.resource().patient();
@@ -204,9 +204,9 @@ Status GetPatient(const BundleLike& bundle, const PatientLike** patient) {
     }
   }
   if (found) {
-    return Status::OK();
+    return absl::OkStatus();
   } else {
-    return ::tensorflow::errors::NotFound("No patient in bundle.");
+    return ::absl::NotFoundError("No patient in bundle.");
   }
 }
 
@@ -247,7 +247,7 @@ StatusOr<double> GetDecimalValue(const DecimalLike& decimal) {
   double value;
   if (!absl::SimpleAtod(decimal.value(), &value) || isinf(value) ||
       isnan(value)) {
-    return ::tensorflow::errors::InvalidArgument(
+    return ::absl::InvalidArgumentError(
         absl::StrCat("Invalid decimal: '", decimal.value(), "'"));
   }
   return value;
@@ -273,7 +273,7 @@ GetResourceExtensionsFromBundleEntry(const EntryLike& entry) {
   const ::google::protobuf::FieldDescriptor* field =
       resource->GetDescriptor()->FindFieldByName("extension");
   if (field == nullptr) {
-    return ::tensorflow::errors::NotFound("No extension field.");
+    return ::absl::NotFoundError("No extension field.");
   }
   return ref->GetRepeatedFieldRef<ExtensionLike>(*resource, field);
 }
@@ -303,8 +303,8 @@ Status GetResourceByReferenceId(const BundleLike& bundle,
     }
   }
   if (resource_field == nullptr) {
-    return ::tensorflow::errors::InvalidArgument(
-        "No resource oneof option for type ", R::descriptor()->full_name());
+    return ::absl::InvalidArgumentError(absl::StrCat(
+        "No resource oneof option for type ", R::descriptor()->full_name()));
   }
 
   // For each bundle entry, check if that field is populated with a resource
@@ -318,14 +318,14 @@ Status GetResourceByReferenceId(const BundleLike& bundle,
           contained_reflection->GetMessage(contained_resource, resource_field));
       if (resource.id().value() == reference_id.value()) {
         *output = &resource;
-        return Status::OK();
+        return absl::OkStatus();
       }
     }
   }
 
-  return ::tensorflow::errors::NotFound(
+  return ::absl::NotFoundError(absl::StrCat(
       "No matching resource in bundle.\nReference:", reference_id.value(),
-      "\nBundle:\n", bundle.DebugString());
+      "\nBundle:\n", bundle.DebugString()));
 }
 
 template <typename ResourceType, typename ReferenceLike>
@@ -338,8 +338,8 @@ StatusOr<std::string> GetResourceIdFromReference(
   ::absl::string_view r(value.ValueOrDie());
   if (!::absl::ConsumePrefix(
           &r, absl::StrCat(ResourceType::descriptor()->name(), "/"))) {
-    return ::tensorflow::errors::InvalidArgument(
-        "Reference type doesn't match");
+    return ::absl::InvalidArgumentError(
+        absl::StrCat("Reference type doesn't match"));
   }
   return std::string(r);
 }
@@ -363,7 +363,7 @@ StatusOr<::google::protobuf::Message*> MutableContainedResource(
       contained->GetReflection()->GetOneofFieldDescriptor(*contained,
                                                           resource_oneof);
   if (!field) {
-    return ::tensorflow::errors::NotFound("No Bundle Resource found");
+    return ::absl::NotFoundError("No Bundle Resource found");
   }
   return ref->MutableMessage(contained, field);
 }
@@ -377,16 +377,16 @@ StatusOr<const R*> GetTypedContainedResource(
     const ::google::protobuf::FieldDescriptor* field = contained_oneof->field(i);
     if (field->message_type()->full_name() == R::descriptor()->full_name()) {
       if (!contained.GetReflection()->HasField(contained, field)) {
-        return ::tensorflow::errors::NotFound(
+        return ::absl::NotFoundError(absl::StrCat(
             "Contained resource does not have set resource of type ",
-            R::descriptor()->name());
+            R::descriptor()->name()));
       }
       return dynamic_cast<const R*>(
           &contained.GetReflection()->GetMessage(contained, field));
     }
   }
-  return ::tensorflow::errors::InvalidArgument(
-      "No resource field found for type ", R::descriptor()->name());
+  return ::absl::InvalidArgumentError(absl::StrCat(
+      "No resource field found for type ", R::descriptor()->name()));
 }
 
 std::string ToSnakeCase(absl::string_view input);

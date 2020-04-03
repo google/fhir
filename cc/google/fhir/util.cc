@@ -29,6 +29,7 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "absl/status/status.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/lib/core/errors.h"
@@ -36,11 +37,11 @@
 namespace google {
 namespace fhir {
 
+using ::absl::InvalidArgumentError;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
-using ::tensorflow::errors::InvalidArgument;
 
 namespace {
 
@@ -51,9 +52,10 @@ StatusOr<const FieldDescriptor*> GetReferenceFieldForResource(
   const FieldDescriptor* field =
       reference.GetDescriptor()->FindFieldByName(field_name);
   if (field == nullptr) {
-    return InvalidArgument(absl::StrCat("Resource type ", resource_type,
-                                        " is not valid for a reference (field ",
-                                        field_name, " does not exist)."));
+    return InvalidArgumentError(
+        absl::StrCat("Resource type ", resource_type,
+                     " is not valid for a reference (field ", field_name,
+                     " does not exist)."));
   }
   return field;
 }
@@ -66,7 +68,7 @@ Status PopulateTypedReferenceId(const std::string& resource_id,
     const FieldDescriptor* history_field =
         reference_id->GetDescriptor()->FindFieldByName("history");
     if (history_field == nullptr) {
-      return InvalidArgument(
+      return InvalidArgumentError(
           absl::StrCat("Not a valid ReferenceId message: ",
                        reference_id->GetDescriptor()->full_name(),
                        ".  Field history does not exist)."));
@@ -76,7 +78,7 @@ Status PopulateTypedReferenceId(const std::string& resource_id,
                                     reference_id, history_field),
                                 version));
   }
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 template <typename ReferenceLike,
@@ -95,7 +97,7 @@ StatusOr<std::string> ReferenceProtoToStringInternal(
   const FieldDescriptor* field =
       reflection->GetOneofFieldDescriptor(reference, oneof);
   if (field == nullptr) {
-    return ::tensorflow::errors::NotFound("Reference not set");
+    return ::absl::NotFoundError("Reference not set");
   }
   std::string prefix;
   bool start = true;
@@ -152,9 +154,9 @@ StatusOr<std::string> ReferenceMessageToString(
     return ReferenceProtoToString(
         dynamic_cast<const r4::core::Reference&>(reference));
   }
-  return InvalidArgument(
-      "Invalid Reference type for ReferenceMessageToString: ",
-      reference.GetDescriptor()->full_name());
+  return InvalidArgumentError(
+      absl::StrCat("Invalid Reference type for ReferenceMessageToString: ",
+                   reference.GetDescriptor()->full_name()));
 }
 
 namespace {
@@ -226,7 +228,8 @@ StatusOr<absl::TimeZone> BuildTimeZoneFromString(
 
   absl::TimeZone tz;
   if (!absl::LoadTimeZone(time_zone_string, &tz)) {
-    return InvalidArgument("Unable to parse timezone: ", time_zone_string);
+    return InvalidArgumentError(
+        absl::StrCat("Unable to parse timezone: ", time_zone_string));
   }
   return tz;
 }
@@ -236,14 +239,15 @@ StatusOr<std::string> GetResourceId(const Message& message) {
   const Reflection* ref = message.GetReflection();
   const FieldDescriptor* field = desc->FindFieldByName("id");
   if (!field) {
-    return InvalidArgument("Error calling GetResourceId: ", desc->full_name(),
-                           " has no Id field");
+    return InvalidArgumentError(
+        absl::StrCat("Error calling GetResourceId: ", desc->full_name(),
+                     " has no Id field"));
   }
   if (field->is_repeated()) {
-    return InvalidArgument("Unexpected repeated id field");
+    return InvalidArgumentError("Unexpected repeated id field");
   }
   if (field->cpp_type() != FieldDescriptor::CPPTYPE_MESSAGE) {
-    return InvalidArgument("No id field found on message");
+    return InvalidArgumentError("No id field found on message");
   }
   if (IsMessageType<stu3::proto::Id>(field->message_type())) {
     const auto* id_message =
@@ -254,7 +258,7 @@ StatusOr<std::string> GetResourceId(const Message& message) {
         dynamic_cast<const r4::core::Id*>(&ref->GetMessage(message, field));
     return id_message->value();
   } else {
-    return InvalidArgument(
+    return InvalidArgumentError(
         absl::StrCat("id field is not a valid Id type: ", desc->full_name()));
   }
 }
@@ -305,7 +309,7 @@ Status SplitIfRelativeReference(Message* reference) {
       descriptor->FindFieldByName("fragment");
   if (!reflection->HasField(*reference, uri_field)) {
     // There is no uri to split
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   const Message& uri = reflection->GetMessage(*reference, uri_field);
@@ -341,7 +345,7 @@ Status SplitIfRelativeReference(Message* reference) {
     FHIR_RETURN_IF_ERROR(CopyCommonField(uri, reference_id.get(), "extension"));
     reflection->SetAllocatedMessage(reference, reference_id.release(),
                                     reference_id_field);
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   static const LazyRE2 kFragmentReferenceRegex{"#[A-Za-z0-9.-]{1,64}"};
@@ -360,17 +364,17 @@ Status SplitIfRelativeReference(Message* reference) {
     FHIR_RETURN_IF_ERROR(CopyCommonField(uri, fragment.get(), "extension"));
     reflection->SetAllocatedMessage(reference, fragment.release(),
                                     fragment_field);
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   // We're permissive about various full url schemes.
   static LazyRE2 kUrlReference = {"(http|https|urn):.*"};
   if (RE2::FullMatch(uri_string, *kUrlReference)) {
     // There's no way to rewrite the URI, but it's valid as is.
-    return Status::OK();
+    return absl::OkStatus();
   }
-  return InvalidArgument(absl::StrCat("String \"", uri_string,
-                                      "\" cannot be parsed as a reference."));
+  return InvalidArgumentError(absl::StrCat(
+      "String \"", uri_string, "\" cannot be parsed as a reference."));
 }
 
 StatusOr<stu3::proto::Reference> ReferenceStringToProtoStu3(
@@ -393,11 +397,12 @@ Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
       primitive->GetDescriptor()->FindFieldByName("value");
   if (!value_field || value_field->is_repeated() ||
       value_field->type() != FieldDescriptor::Type::TYPE_STRING) {
-    return InvalidArgument("Not a valid String-type primitive: ",
-                           primitive->GetDescriptor()->full_name());
+    return InvalidArgumentError(
+        absl::StrCat("Not a valid String-type primitive: ",
+                     primitive->GetDescriptor()->full_name()));
   }
   primitive->GetReflection()->SetString(primitive, value_field, value);
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 StatusOr<std::string> GetPrimitiveStringValue(
@@ -406,8 +411,9 @@ StatusOr<std::string> GetPrimitiveStringValue(
       primitive.GetDescriptor()->FindFieldByName("value");
   if (!value_field || value_field->is_repeated() ||
       value_field->type() != FieldDescriptor::Type::TYPE_STRING) {
-    return InvalidArgument("Not a valid String-type primitive: ",
-                           primitive.GetDescriptor()->full_name());
+    return InvalidArgumentError(
+        absl::StrCat("Not a valid String-type primitive: ",
+                     primitive.GetDescriptor()->full_name()));
   }
   return primitive.GetReflection()->GetStringReference(primitive, value_field,
                                                        scratch);

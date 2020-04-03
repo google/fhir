@@ -60,7 +60,7 @@ void TestDownConvert(const std::string& filename) {
 
   auto status = ConvertToProfileLenientStu3(unprofiled, &profiled);
   if (!status.ok()) {
-    LOG(ERROR) << status.error_message();
+    LOG(ERROR) << status.message();
     ASSERT_TRUE(status.ok());
   }
   EXPECT_THAT(profiled, EqualsProto(GetProfiled<P>(filename)));
@@ -73,7 +73,7 @@ void TestUpConvert(const std::string& filename) {
 
   auto status = ConvertToProfileLenientStu3(profiled, &unprofiled);
   if (!status.ok()) {
-    LOG(ERROR) << status.error_message();
+    LOG(ERROR) << status.message();
     ASSERT_TRUE(status.ok());
   }
   EXPECT_THAT(unprofiled, EqualsProtoIgnoringReordering(ReadProto<B>(
@@ -129,7 +129,7 @@ TEST(ProfilesTest, Normalize) {
   StatusOr<stu3::testing::TestObservation> normalized =
       NormalizeStu3(unnormalized);
   if (!normalized.status().ok()) {
-    LOG(ERROR) << normalized.status().error_message();
+    LOG(ERROR) << normalized.status().message();
     ASSERT_TRUE(normalized.status().ok());
   }
   EXPECT_THAT(
@@ -145,8 +145,7 @@ TEST(ProfilesTest, NormalizeAndValidate_Invalid) {
   unnormalized.clear_status();
   StatusOr<TestObservation> normalized = NormalizeAndValidateStu3(unnormalized);
   EXPECT_FALSE(normalized.ok());
-  EXPECT_EQ(normalized.status().error_message(),
-            "missing-TestObservation.status");
+  EXPECT_EQ(normalized.status().message(), "missing-TestObservation.status");
 }
 
 TEST(ProfilesTest, NormalizeAndValidate_Valid) {
@@ -204,10 +203,10 @@ TEST(ProfilesTest, UnableToProfile) {
   Patient patient;
 
   auto lenient_status = ConvertToProfileLenientStu3(unprofiled, &patient);
-  ASSERT_EQ(tensorflow::error::INVALID_ARGUMENT, lenient_status.code());
+  ASSERT_EQ(absl::StatusCode::kInvalidArgument, lenient_status.code());
 
   auto strict_status = ConvertToProfileStu3(unprofiled, &patient);
-  ASSERT_EQ(tensorflow::error::INVALID_ARGUMENT, strict_status.code());
+  ASSERT_EQ(absl::StatusCode::kInvalidArgument, strict_status.code());
 }
 
 TEST(ProfilesTest, MissingRequiredFields) {
@@ -216,11 +215,11 @@ TEST(ProfilesTest, MissingRequiredFields) {
   TestObservation profiled;
 
   auto lenient_status = ConvertToProfileLenientStu3(unprofiled, &profiled);
-  ASSERT_EQ(tensorflow::error::OK, lenient_status.code());
+  ASSERT_EQ(absl::StatusCode::kOk, lenient_status.code());
 
   auto strict_status = ConvertToProfileStu3(unprofiled, &profiled);
-  ASSERT_EQ(tensorflow::error::FAILED_PRECONDITION, strict_status.code())
-      << "Incorrect status: " << strict_status.error_message();
+  ASSERT_EQ(absl::StatusCode::kFailedPrecondition, strict_status.code())
+      << "Incorrect status: " << strict_status.message();
 }
 
 }  // namespace

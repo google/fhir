@@ -25,6 +25,7 @@
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
+#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "absl/synchronization/mutex.h"
 #include "google/fhir/annotations.h"
@@ -41,13 +42,12 @@
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
 #include "include/json/json.h"
-#include "tensorflow/core/lib/core/errors.h"
 #include "re2/re2.h"
 
 namespace google {
 namespace fhir {
 
-
+using ::absl::InvalidArgumentError;
 using ::google::fhir::IsChoiceType;
 using ::google::fhir::IsPrimitive;
 using ::google::fhir::IsReference;
@@ -61,7 +61,6 @@ using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
-using ::tensorflow::errors::InvalidArgument;
 
 namespace internal {
 
@@ -160,8 +159,8 @@ StatusOr<const FieldDescriptor*> GetContainedResourceField(
     field = (*field_table_iter->second)[resource_type];
   }
   if (!field) {
-    return InvalidArgument("No field on ", contained_resource_name,
-                           " with type ", resource_type);
+    return InvalidArgumentError(absl::StrCat(
+        "No field on ", contained_resource_name, " with type ", resource_type));
   }
   return field;
 }
@@ -199,18 +198,17 @@ class Parser {
         std::string resource_type = sub_value_iter->asString();
         if (!IsResource(target_descriptor) ||
             target_descriptor->name() != resource_type) {
-          return InvalidArgument("Error merging json resource of type ",
-                                 resource_type, " into message of type",
-                                 target_descriptor->name());
+          return InvalidArgumentError(absl::StrCat(
+              "Error merging json resource of type ", resource_type,
+              " into message of type", target_descriptor->name()));
         }
       } else {
-        return InvalidArgument("Unable to merge field ",
-                               absl::StrCat(sub_value_iter.key().asString()),
-                               " into resource of type ",
-                               target_descriptor->full_name());
+        return InvalidArgumentError(absl::StrCat(
+            "Unable to merge field ", sub_value_iter.key().asString(),
+            " into resource of type ", target_descriptor->full_name()));
       }
     }
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   Status MergeContainedResource(const Json::Value& value, Message* target) {
@@ -249,8 +247,8 @@ class Parser {
     }
     auto value_field_iter = choice_type_field_map.find(choice_field_name);
     if (value_field_iter == choice_type_field_map.end()) {
-      return InvalidArgument("Can't find ", choice_field_name, " on ",
-                             choice_field->full_name());
+      return InvalidArgumentError(absl::StrCat(
+          "Can't find ", choice_field_name, " on ", choice_field->full_name()));
     }
     Message* choice_msg =
         parent->GetReflection()->MutableMessage(parent, choice_field);
@@ -274,10 +272,10 @@ class Parser {
             parent_reflection->FieldSize(*parent, field) == 0) &&
           !(!field->is_repeated() &&
             !parent_reflection->HasField(*parent, field))) {
-        return InvalidArgument("Target field already set: ", field->full_name(),
-                               "\n", parent->DebugString(), "\n",
-                               field->full_name(), "\n",
-                               absl::StrCat(json.toStyledString()), "\n done");
+        return InvalidArgumentError(
+            absl::StrCat("Target field already set: ", field->full_name(), "\n",
+                         parent->DebugString(), "\n", field->full_name(), "\n",
+                         json.toStyledString(), "\n done"));
       }
     }
 
@@ -292,23 +290,23 @@ class Parser {
       // valueString), and once by an extension (e.g., _valueString).
       if (oneof_field && !(IsPrimitive(field->message_type()) &&
                            oneof_field->full_name() == field->full_name())) {
-        return InvalidArgument(
+        return InvalidArgumentError(absl::StrCat(
             "Cannot set field ", field->full_name(), " because another field ",
-            oneof_field->full_name(), " of the same oneof is already set.");
+            oneof_field->full_name(), " of the same oneof is already set."));
       }
     }
 
     if (field->is_repeated()) {
       if (!json.isArray()) {
-        return InvalidArgument(
-            "Attempted to set repeated field ", field->full_name(),
-            " using non-array JSON: ", absl::StrCat(json.toStyledString()));
+        return InvalidArgumentError(
+            absl::StrCat("Attempted to set repeated field ", field->full_name(),
+                         " using non-array JSON: ", json.toStyledString()));
       }
       size_t existing_field_size = parent_reflection->FieldSize(*parent, field);
       if (existing_field_size != 0 && existing_field_size != json.size()) {
-        return InvalidArgument(
+        return InvalidArgumentError(absl::StrCat(
             "Repeated primitive list length does not match extension list ",
-            "for field: ", field->full_name());
+            "for field: ", field->full_name()));
       }
       for (Json::ArrayIndex i = 0; i < json.size(); i++) {
         FHIR_ASSIGN_OR_RETURN(
@@ -342,7 +340,7 @@ class Parser {
                                                field);
       }
     }
-    return Status::OK();
+    return absl::OkStatus();
   }
 
   Status AddPrimitiveHasNoValueExtension(Message* message) {
@@ -359,8 +357,9 @@ class Parser {
   StatusOr<std::unique_ptr<Message>> ParseFieldValue(
       const FieldDescriptor* field, const Json::Value& json, Message* parent) {
     if (field->type() != FieldDescriptor::Type::TYPE_MESSAGE) {
-      return InvalidArgument("Error in FHIR proto definition: Field ",
-                             field->full_name(), " is not a message.");
+      return InvalidArgumentError(
+          absl::StrCat("Error in FHIR proto definition: Field ",
+                       field->full_name(), " is not a message."));
     }
     if (field->message_type()->full_name() == Any::descriptor()->full_name()) {
       std::unique_ptr<Message> contained =
@@ -377,8 +376,9 @@ class Parser {
                                ->New());
       auto status = MergeValue(json, target.get());
       if (!status.ok()) {
-        return InvalidArgument("Error parsing field ", field->json_name(), ": ",
-                               status.error_message());
+        return InvalidArgumentError(absl::StrCat("Error parsing field ",
+                                                 field->json_name(), ": ",
+                                                 status.message()));
       }
       return std::move(target);
     }
@@ -409,8 +409,9 @@ class Parser {
         // the size of a repeated FHIR field to max of 1.
         return MergeMessage(json.get(0u, Json::Value::null), target);
       }
-      return InvalidArgument("Expected JsonObject for field of type ",
-                             target->GetDescriptor()->full_name());
+      return InvalidArgumentError(
+          absl::StrCat("Expected JsonObject for field of type ",
+                       target->GetDescriptor()->full_name()));
     }
     return MergeMessage(json, target);
   }
@@ -424,7 +425,8 @@ StatusOr<Json::Value> ParseJsonValue(const std::string& raw_json) {
   Json::Reader reader;
   Json::Value value;
   if (!reader.parse(raw_json, value)) {
-    return InvalidArgument("Failed parsing raw json: ", raw_json);
+    return InvalidArgumentError(
+        absl::StrCat("Failed parsing raw json: ", raw_json));
   }
   return value;
 }
@@ -490,7 +492,7 @@ Status Parser::MergeJsonFhirStringIntoProto(
         return validate ? ConvertToProfileR4(*core_resource, target)
                         : ConvertToProfileLenientR4(*core_resource, target);
       default:
-        return InvalidArgument(
+        return InvalidArgumentError(
             "Unsupported FHIR Version for profiling for resource: " +
             target->GetDescriptor()->full_name());
     }
@@ -501,7 +503,7 @@ Status Parser::MergeJsonFhirStringIntoProto(
   if (validate) {
     return ValidateResource(*target, primitive_handler_);
   }
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 }  // namespace fhir

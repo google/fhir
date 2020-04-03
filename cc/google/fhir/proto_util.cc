@@ -27,13 +27,12 @@
 namespace google {
 namespace fhir {
 
-
+using ::absl::InvalidArgumentError;
+using ::absl::Status;
 using ::google::fhir::StatusOr;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
-using ::tensorflow::Status;
-using ::tensorflow::errors::InvalidArgument;
 
 namespace {
 
@@ -51,9 +50,9 @@ StatusOr<Message*> GetSubmessageByPathInternal(
   const std::string& message_name = message->GetDescriptor()->name();
   std::vector<std::string> tokens = absl::StrSplit(field_path, '.');
   if (message_name != tokens[0]) {
-    return InvalidArgument(absl::StrCat("Cannot find ", field_path, " in ",
-                                        message_name,
-                                        ": invalid top-level resource."));
+    return InvalidArgumentError(absl::StrCat("Cannot find ", field_path, " in ",
+                                             message_name,
+                                             ": invalid top-level resource."));
   }
 
   Message* submessage = message;
@@ -65,12 +64,12 @@ StatusOr<Message*> GetSubmessageByPathInternal(
     if (subfield != nullptr) {
       // We found a field with this name.
       if (subfield->cpp_type() != FieldDescriptor::CPPTYPE_MESSAGE) {
-        return InvalidArgument(
+        return InvalidArgumentError(
             absl::StrCat("Cannot resolve field path ", field_path, ": field ",
                          subfield->full_name(), " is not a message."));
       }
       if (subfield->is_repeated()) {
-        return InvalidArgument(
+        return InvalidArgumentError(
             absl::StrCat("Found repeated field with no index: ", field_path));
       }
 
@@ -78,7 +77,7 @@ StatusOr<Message*> GetSubmessageByPathInternal(
       // exists, but is populated.
       if (empty_fields_behavior == EmptyFieldsBehavior::RETURN_NOT_FOUND &&
           !submessage->GetReflection()->HasField(*submessage, subfield)) {
-        return ::tensorflow::errors::NotFound(
+        return ::absl::NotFoundError(
             absl::StrCat("Field ", field_path, " is empty"));
       }
       submessage =
@@ -92,24 +91,24 @@ StatusOr<Message*> GetSubmessageByPathInternal(
       if (!EndsInIndex(*token_iter, &index)) {
         // The field was not found, either as a singular or indexed repeated
         // field.
-        return InvalidArgument(
+        return InvalidArgumentError(
             absl::StrCat("Cannot find field ", *token_iter, " in ",
                          submessage->GetDescriptor()->full_name()));
       }
       subfield = submessage->GetDescriptor()->FindFieldByCamelcaseName(
           StripIndex(*token_iter));
       if (subfield == nullptr) {
-        return InvalidArgument(
+        return InvalidArgumentError(
             absl::StrCat("Invalid field path: ", field_path));
       }
       if (!subfield->is_repeated()) {
-        return InvalidArgument(absl::StrCat(
+        return InvalidArgumentError(absl::StrCat(
             "Tried to index into non-repeated field: ", field_path));
       }
       const auto* submessage_reflection = submessage->GetReflection();
       int field_size = submessage_reflection->FieldSize(*submessage, subfield);
       if (field_size <= index) {
-        return ::tensorflow::errors::OutOfRange(absl::StrCat(
+        return ::absl::OutOfRangeError(absl::StrCat(
             "Out of range index on repeated field.  Field: ", field_path,
             "  Size: ", field_size, "  Index: ", index));
       }
@@ -138,7 +137,7 @@ std::string StripIndex(const std::string& field_path) {
 StatusOr<const bool> HasSubmessageByPath(const Message& message,
                                          const std::string& field_path) {
   const Status status = GetSubmessageByPath(message, field_path).status();
-  if (status.code() == ::tensorflow::error::Code::INVALID_ARGUMENT) {
+  if (status.code() == ::absl::StatusCode::kInvalidArgument) {
     return status;
   }
   return status.ok();
@@ -155,13 +154,13 @@ StatusOr<const Message*> GetSubmessageByPath(const Message& message,
   auto got =
       GetSubmessageByPathInternal(&(const_cast<Message&>(message)), field_path,
                                   EmptyFieldsBehavior::RETURN_NOT_FOUND);
-  TF_RETURN_IF_ERROR(got.status());
+  FHIR_RETURN_IF_ERROR(got.status());
   return const_cast<const Message*>(got.ValueOrDie());
 }
 
 Status ClearFieldByPath(Message* message, const std::string& field_path) {
   if (EndsInIndex(field_path)) {
-    return InvalidArgument(
+    return InvalidArgumentError(
         absl::StrCat("Cannot clear indexed repeated field: ", field_path));
   }
   // Get parent message, so we can clear the leaf field from it.
@@ -171,22 +170,23 @@ Status ClearFieldByPath(Message* message, const std::string& field_path) {
   // First check if the parent message exists, to avoid adding an empty
   // parent message.
   auto got = HasSubmessageByPath(*message, parent_path);
-  TF_RETURN_IF_ERROR(got.status());
+  FHIR_RETURN_IF_ERROR(got.status());
   const bool has_submessage = got.ValueOrDie();
   if (!has_submessage) {
-    return Status::OK();
+    return absl::OkStatus();
   }
   auto parent_got = GetMutableSubmessageByPath(message, parent_path);
-  TF_RETURN_IF_ERROR(parent_got.status());
+  FHIR_RETURN_IF_ERROR(parent_got.status());
   Message* parent_message = parent_got.ValueOrDie();
   const auto* parent_reflection = parent_message->GetReflection();
   const auto* field_descriptor =
       parent_message->GetDescriptor()->FindFieldByCamelcaseName(field_name);
   if (field_descriptor == nullptr) {
-    return InvalidArgument(absl::StrCat("Invalid field path: ", field_path));
+    return InvalidArgumentError(
+        absl::StrCat("Invalid field path: ", field_path));
   }
   parent_reflection->ClearField(parent_message, field_descriptor);
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 Message* MutableOrAddMessage(Message* message, const FieldDescriptor* field) {
@@ -258,17 +258,17 @@ Status CopyCommonField(const Message& source, Message* target,
       source_field->message_type()->full_name() !=
           target_field->message_type()->full_name() ||
       (source_field->is_repeated() != target_field->is_repeated())) {
-    return InvalidArgument("Error in CopyCommonField: Field ", field_name,
-                           " is not present in both ",
-                           source_descriptor->full_name(), " and ",
-                           target_descriptor->full_name(),
-                           ", or they are not the same type and size.");
+    return InvalidArgumentError(
+        absl::StrCat("Error in CopyCommonField: Field ", field_name,
+                     " is not present in both ", source_descriptor->full_name(),
+                     " and ", target_descriptor->full_name(),
+                     ", or they are not the same type and size."));
   }
 
   ForEachMessage<Message>(source, source_field, [&](const Message& message) {
     MutableOrAddMessage(target, target_field)->CopyFrom(message);
   });
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 Status ClearField(Message* message, const std::string& field_name) {
@@ -276,11 +276,12 @@ Status ClearField(Message* message, const std::string& field_name) {
   const FieldDescriptor* field = descriptor->FindFieldByName(field_name);
 
   if (!field) {
-    return InvalidArgument("Error in ClearField:  ", descriptor->full_name(),
-                           " has no field ", field_name);
+    return InvalidArgumentError(
+        absl::StrCat("Error in ClearField:  ", descriptor->full_name(),
+                     " has no field ", field_name));
   }
   message->GetReflection()->ClearField(message, field);
-  return Status::OK();
+  return absl::OkStatus();
 }
 
 }  // namespace fhir

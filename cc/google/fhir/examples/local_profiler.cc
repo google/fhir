@@ -49,7 +49,7 @@ void ConvertToProfile(const absl::TimeZone time_zone, std::string dir) {
                 .ValueOrDie();
     P profiled;
     auto status = ConvertToProfileLenientR4(raw, &profiled);
-    CHECK(status.ok()) << status.error_message();
+    CHECK(status.ok()) << status.message();
     write_stream << google::fhir::r4::PrintFhirToJsonStringForAnalytics(
                         profiled)
                         .ValueOrDie();

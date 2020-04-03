@@ -22,6 +22,7 @@
 
 #include "google/protobuf/descriptor.h"
 #include "absl/memory/memory.h"
+#include "absl/status/status.h"
 #include "absl/strings/string_view.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/codes.h"
@@ -36,15 +37,14 @@
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/google_extensions.pb.h"
 #include "include/json/json.h"
-#include "tensorflow/core/lib/core/errors.h"
 
 namespace google {
 namespace fhir {
 namespace r4 {
 
+using ::absl::InvalidArgumentError;
 using primitives_internal::PrimitiveWrapper;
 using ::google::protobuf::Descriptor;
-using ::tensorflow::errors::InvalidArgument;
 
 StatusOr<std::unique_ptr<PrimitiveWrapper>> R4PrimitiveHandler::GetWrapper(
     const Descriptor* target_descriptor) const {
@@ -57,8 +57,8 @@ StatusOr<std::unique_ptr<PrimitiveWrapper>> R4PrimitiveHandler::GetWrapper(
     return std::move(wrapper.value());
   }
 
-  return InvalidArgument("Unexpected R4 primitive FHIR type: ",
-                         target_descriptor->full_name());
+  return InvalidArgumentError(absl::StrCat(
+      "Unexpected R4 primitive FHIR type: ", target_descriptor->full_name()));
 }
 
 const R4PrimitiveHandler* R4PrimitiveHandler::GetInstance() {
