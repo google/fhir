@@ -38,8 +38,6 @@
 #include "proto/r4/core/resources/patient.pb.h"
 #include "proto/r4/core/resources/structure_definition.pb.h"
 #include "proto/r4/core/resources/value_set.pb.h"
-#include "proto/r4/uscore.pb.h"
-#include "proto/r4/uscore_codes.pb.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/metadatatypes.pb.h"
@@ -54,12 +52,8 @@ namespace fhir_path {
 namespace {
 
 using ::absl::InvalidArgumentError;
-using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
-using r4::uscore::BirthSexValueSet;
-using r4::uscore::USCorePatientProfile;
 using ::testing::ElementsAreArray;
-using ::testing::EndsWith;
 using ::testing::Eq;
 using ::testing::StrEq;
 using ::testing::UnorderedElementsAreArray;
@@ -222,16 +216,6 @@ template <typename T>
 T ValidValueSet() {
   return ParseFromString<T>(R"proto(
     url { value: "http://example.com/valueset" }
-  )proto");
-}
-
-// TODO: Templatize methods to work with both STU3 and R4
-USCorePatientProfile ValidUsCorePatient() {
-  return ParseFromString<USCorePatientProfile>(R"proto(
-    identifier {
-      system { value: "foo" },
-      value: { value: "http://example.com/patient" }
-    }
   )proto");
 }
 
