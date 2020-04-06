@@ -261,7 +261,7 @@ void TestPrintWithFilepaths(const std::string& proto_path,
       << "Failed Printing on: " << proto_path << ": "
       << from_proto_status.status().message();
   std::string from_proto = from_proto_status.ValueOrDie();
-  std::string from_json = ReadFile(absl::StrCat(json_path));
+  std::string from_json = ReadFile(json_path);
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
     // This assert will fail, but we get terrible diff messages comparing
