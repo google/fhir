@@ -1915,7 +1915,7 @@ static Status MessageToDouble(const PrimitiveHandler* primitive_handler,
 
     if (!absl::SimpleAtod(string_value, value)) {
       return InvalidArgumentError(
-          absl::StrCat("Could not convert to numeric: ", string_value));
+          "Could not convert decimal to numeric double.");
     }
 
     return absl::OkStatus();
