@@ -31,7 +31,6 @@
 #include "proto/r4/core/resources/observation.pb.h"
 #include "proto/r4/core/resources/patient.pb.h"
 #include "proto/r4/google_extensions.pb.h"
-#include "tensorflow/core/lib/core/status_test_util.h"
 
 namespace google {
 namespace fhir {

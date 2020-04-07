@@ -27,7 +27,6 @@
 #include "google/fhir/status/status.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
-#include "tensorflow/core/platform/logging.h"
 
 namespace google {
 namespace fhir {

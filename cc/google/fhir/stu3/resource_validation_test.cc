@@ -23,7 +23,6 @@
 #include "google/fhir/test_helper.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
-#include "tensorflow/core/lib/core/status_test_util.h"
 
 namespace google {
 namespace fhir {

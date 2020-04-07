@@ -25,7 +25,6 @@
 #include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/r4/core/resources/encounter.pb.h"
 #include "proto/r4/core/resources/observation.pb.h"
-#include "tensorflow/core/lib/core/status_test_util.h"
 
 namespace google {
 namespace fhir {

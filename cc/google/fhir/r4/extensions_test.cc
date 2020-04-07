@@ -27,7 +27,6 @@
 #include "proto/r4/core/resources/composition.pb.h"
 #include "proto/r4/google_extensions.pb.h"
 #include "testdata/r4/profiles/test_extensions.pb.h"
-#include "tensorflow/core/lib/core/status_test_util.h"
 
 namespace google {
 namespace fhir {

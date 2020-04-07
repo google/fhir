@@ -70,7 +70,6 @@ cc_library(
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:optional",
         "@com_google_protobuf//:protobuf",
-        "@org_tensorflow//tensorflow/core:lib",
     ],
 )
 
@@ -355,7 +354,6 @@ cc_test(
         "//testdata/r4/profiles:test_cc_proto",
         "//testdata/stu3/profiles:test_cc_proto",
         "@com_google_googletest//:gtest_main",
-        "@org_tensorflow//tensorflow/core:test",
     ],
 )
 

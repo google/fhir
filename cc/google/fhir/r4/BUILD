@@ -62,6 +62,7 @@ cc_library(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/types:optional",
         "@com_google_protobuf//:protobuf",
+        "@org_tensorflow//tensorflow/core:lib",
     ],
 )
 
@@ -78,7 +79,6 @@ cc_test(
         "//proto/r4/core:datatypes_cc_proto",
         "//testdata/r4/profiles:test_cc_proto",
         "@com_google_googletest//:gtest_main",
-        "@org_tensorflow//tensorflow/core:test",
     ],
 )
 
@@ -114,7 +114,6 @@ cc_test(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
-        "@org_tensorflow//tensorflow/core:test",
     ],
 )
 
@@ -166,7 +165,6 @@ cc_test(
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
-        "@org_tensorflow//tensorflow/core:test",
     ],
 )
 
@@ -368,7 +366,6 @@ cc_library(
         "//cc/google/fhir/fhir_path:r4_fhir_path_validation",
         "@com_google_absl//absl/status",
         "@com_google_protobuf//:protobuf",
-        "@org_tensorflow//tensorflow/core:lib",
     ],
 )
 
@@ -388,6 +385,5 @@ cc_test(
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
-        "@org_tensorflow//tensorflow/core:test",
     ],
 )
