@@ -2132,25 +2132,9 @@ class ComparisonOperator : public BinaryOperator {
 
     } else if (left_precision == DateTimePrecision::kSecond ||
                right_precision == DateTimePrecision::kSecond) {
-      absl::CivilSecond left_second = absl::ToCivilSecond(left_time, left_zone);
-      absl::CivilSecond right_second =
-          absl::ToCivilSecond(right_time, right_zone);
-      time_difference = left_second - right_second;
+      time_difference = absl::ToInt64Seconds(left_time - right_time);
     } else {
-      // Abseil does not support sub-second civil time precision, so we handle
-      // them by first comparing seconds (to resolve timezone differences)
-      // and then comparing the sub-second component if the seconds are
-      // equal.
-      absl::CivilSecond left_second = absl::ToCivilSecond(left_time, left_zone);
-      absl::CivilSecond right_second =
-          absl::ToCivilSecond(right_time, right_zone);
-      time_difference = left_second - right_second;
-
-      // In the same second, so check for sub-second differences.
-      if (time_difference == 0) {
-        time_difference = absl::ToUnixMicros(left_time) % 1000000 -
-                          absl::ToUnixMicros(right_time) % 1000000;
-      }
+      time_difference = absl::ToInt64Microseconds(left_time - right_time);
     }
 
     switch (comparison_type_) {
