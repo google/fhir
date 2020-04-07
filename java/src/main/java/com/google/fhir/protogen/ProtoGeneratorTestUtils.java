@@ -128,8 +128,9 @@ public final class ProtoGeneratorTestUtils {
             .toProto();
 
     generatedFile =
-        withAdditionalImports(
-            withSortedMessages(withoutProtoGeneratorAnnotations(generatedFile)), additionalImports);
+        withSortedMessages(
+            withAdditionalImports(
+                withoutProtoGeneratorAnnotations(generatedFile), additionalImports));
     fileInSource = withSortedMessages(withoutProtoGeneratorAnnotations(fileInSource));
 
     assertWithMessage(
