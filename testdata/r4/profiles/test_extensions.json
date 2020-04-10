@@ -1,13 +1,16 @@
 {
   "resourceType": "Bundle",
+  "type": "collection",
   "entry": [
     {
       "resource": {
         "resourceType": "StructureDefinition",
         "id": "SimpleDecimalExt",
-        "url": "http://test/url/base/SimpleDecimalExt",
+        "url": "http://test/url/base/StructureDefinition/SimpleDecimalExt",
         "name": "SimpleDecimalExt",
-        "date": "2020-04-02",
+        "title": "SimpleDecimalExt",
+        "status": "draft",
+        "date": "2020-04-07",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -25,7 +28,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Extension",
@@ -209,7 +213,7 @@
                   "code": "http://hl7.org/fhirpath/System.String"
                 }
               ],
-              "fixedUri": "http://test/url/base/SimpleDecimalExt",
+              "fixedUri": "http://test/url/base/StructureDefinition/SimpleDecimalExt",
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -278,7 +282,7 @@
             {
               "id": "Extension.url",
               "path": "Extension.url",
-              "fixedUri": "http://test/url/base/SimpleDecimalExt"
+              "fixedUri": "http://test/url/base/StructureDefinition/SimpleDecimalExt"
             },
             {
               "id": "Extension.valueDecimal",
@@ -297,9 +301,11 @@
       "resource": {
         "resourceType": "StructureDefinition",
         "id": "SimpleCodeableConceptExtension",
-        "url": "http://test/url/base/SimpleCodeableConceptExtension",
+        "url": "http://test/url/base/StructureDefinition/SimpleCodeableConceptExtension",
         "name": "SimpleCodeableConceptExtension",
-        "date": "2020-04-02",
+        "title": "SimpleCodeableConceptExtension",
+        "status": "draft",
+        "date": "2020-04-07",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -317,7 +323,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Extension",
@@ -501,7 +508,7 @@
                   "code": "http://hl7.org/fhirpath/System.String"
                 }
               ],
-              "fixedUri": "http://test/url/base/SimpleCodeableConceptExtension",
+              "fixedUri": "http://test/url/base/StructureDefinition/SimpleCodeableConceptExtension",
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -580,7 +587,7 @@
             {
               "id": "Extension.url",
               "path": "Extension.url",
-              "fixedUri": "http://test/url/base/SimpleCodeableConceptExtension"
+              "fixedUri": "http://test/url/base/StructureDefinition/SimpleCodeableConceptExtension"
             },
             {
               "id": "Extension.valueCode",
@@ -603,9 +610,11 @@
       "resource": {
         "resourceType": "StructureDefinition",
         "id": "DigitalMediaType",
-        "url": "http://test/url/base/DigitalMediaType",
+        "url": "http://test/url/base/StructureDefinition/DigitalMediaType",
         "name": "DigitalMediaType",
-        "date": "2020-04-02",
+        "title": "DigitalMediaType",
+        "status": "draft",
+        "date": "2020-04-07",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -623,7 +632,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Extension",
@@ -807,7 +817,7 @@
                   "code": "http://hl7.org/fhirpath/System.String"
                 }
               ],
-              "fixedUri": "http://test/url/base/DigitalMediaType",
+              "fixedUri": "http://test/url/base/StructureDefinition/DigitalMediaType",
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -886,7 +896,7 @@
             {
               "id": "Extension.url",
               "path": "Extension.url",
-              "fixedUri": "http://test/url/base/DigitalMediaType"
+              "fixedUri": "http://test/url/base/StructureDefinition/DigitalMediaType"
             },
             {
               "id": "Extension.valueCode",
@@ -909,9 +919,11 @@
       "resource": {
         "resourceType": "StructureDefinition",
         "id": "FavoriteBrewery",
-        "url": "http://test/url/base/FavoriteBrewery",
+        "url": "http://test/url/base/StructureDefinition/FavoriteBrewery",
         "name": "FavoriteBrewery",
-        "date": "2020-04-02",
+        "title": "FavoriteBrewery",
+        "status": "draft",
+        "date": "2020-04-07",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -928,7 +940,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Extension",
@@ -1112,7 +1125,7 @@
                   "code": "http://hl7.org/fhirpath/System.String"
                 }
               ],
-              "fixedUri": "http://test/url/base/FavoriteBrewery",
+              "fixedUri": "http://test/url/base/StructureDefinition/FavoriteBrewery",
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -1189,7 +1202,7 @@
             {
               "id": "Extension.url",
               "path": "Extension.url",
-              "fixedUri": "http://test/url/base/FavoriteBrewery"
+              "fixedUri": "http://test/url/base/StructureDefinition/FavoriteBrewery"
             },
             {
               "id": "Extension.valueCode",
@@ -1212,9 +1225,11 @@
       "resource": {
         "resourceType": "StructureDefinition",
         "id": "FavoriteCalifornian",
-        "url": "http://test/url/base/FavoriteCalifornian",
+        "url": "http://test/url/base/StructureDefinition/FavoriteCalifornian",
         "name": "FavoriteCalifornian",
-        "date": "2020-04-02",
+        "title": "FavoriteCalifornian",
+        "status": "draft",
+        "date": "2020-04-07",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1231,7 +1246,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Extension",
@@ -1415,7 +1431,7 @@
                   "code": "http://hl7.org/fhirpath/System.String"
                 }
               ],
-              "fixedUri": "http://test/url/base/FavoriteCalifornian",
+              "fixedUri": "http://test/url/base/StructureDefinition/FavoriteCalifornian",
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -1492,7 +1508,7 @@
             {
               "id": "Extension.url",
               "path": "Extension.url",
-              "fixedUri": "http://test/url/base/FavoriteCalifornian"
+              "fixedUri": "http://test/url/base/StructureDefinition/FavoriteCalifornian"
             },
             {
               "id": "Extension.valueCode",
@@ -1515,9 +1531,11 @@
       "resource": {
         "resourceType": "StructureDefinition",
         "id": "ComplexExt",
-        "url": "http://test/url/base/ComplexExt",
+        "url": "http://test/url/base/StructureDefinition/ComplexExt",
         "name": "ComplexExt",
-        "date": "2020-04-02",
+        "title": "ComplexExt",
+        "status": "draft",
+        "date": "2020-04-07",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1535,7 +1553,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Extension",
@@ -1719,7 +1738,7 @@
                   "code": "http://hl7.org/fhirpath/System.String"
                 }
               ],
-              "fixedUri": "http://test/url/base/ComplexExt",
+              "fixedUri": "http://test/url/base/StructureDefinition/ComplexExt",
               "isModifier": false,
               "isSummary": false,
               "mapping": [
@@ -2966,7 +2985,7 @@
             {
               "id": "Extension.url",
               "path": "Extension.url",
-              "fixedUri": "http://test/url/base/ComplexExt"
+              "fixedUri": "http://test/url/base/StructureDefinition/ComplexExt"
             },
             {
               "id": "Extension.value[x]",

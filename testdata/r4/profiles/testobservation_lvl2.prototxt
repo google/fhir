@@ -24,6 +24,6 @@ my_complex_extension {
 }
 
 extension {
-  url { value: "http://test/url/base/SimpleDecimalExt" }
+  url { value: "http://test/url/base/StructureDefinition/SimpleDecimalExt" }
   value { decimal { value: "3.1415" } }
 }

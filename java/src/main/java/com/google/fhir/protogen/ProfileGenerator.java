@@ -40,6 +40,7 @@ import com.google.fhir.proto.SizeRestriction;
 import com.google.fhir.proto.Terminologies;
 import com.google.fhir.r4.core.BindingStrengthCode;
 import com.google.fhir.r4.core.Bundle;
+import com.google.fhir.r4.core.BundleTypeCode;
 import com.google.fhir.r4.core.Canonical;
 import com.google.fhir.r4.core.Code;
 import com.google.fhir.r4.core.CodeableConcept;
@@ -57,6 +58,7 @@ import com.google.fhir.r4.core.Extension;
 import com.google.fhir.r4.core.ExtensionContextTypeCode;
 import com.google.fhir.r4.core.Id;
 import com.google.fhir.r4.core.Markdown;
+import com.google.fhir.r4.core.PublicationStatusCode;
 import com.google.fhir.r4.core.SlicingRulesCode;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinition.Differential;
@@ -108,7 +110,9 @@ final class ProfileGenerator {
   }
 
   Bundle generateProfiles(Profiles profiles) {
-    Bundle.Builder bundle = Bundle.newBuilder();
+    Bundle.Builder bundle =
+        Bundle.newBuilder()
+            .setType(Bundle.TypeCode.newBuilder().setValue(BundleTypeCode.Value.COLLECTION));
     for (Profile profile : profiles.getProfileList()) {
       StructureDefinition structDef = makeProfile(profile);
       bundle.addEntry(
@@ -120,7 +124,9 @@ final class ProfileGenerator {
   }
 
   Bundle generateExtensions(Extensions extensions) {
-    Bundle.Builder bundle = Bundle.newBuilder();
+    Bundle.Builder bundle =
+        Bundle.newBuilder()
+            .setType(Bundle.TypeCode.newBuilder().setValue(BundleTypeCode.Value.COLLECTION));
     for (SimpleExtension simpleExtension : extensions.getSimpleExtensionList()) {
       bundle.addEntry(
           Bundle.Entry.newBuilder()
@@ -325,8 +331,8 @@ final class ProfileGenerator {
 
     // Value Element
     ElementDefinition.Builder valueElement =
-        getElementBuilderById("Extension.value[x]", elementList);
-    valueElement.setBase(buildBase("Extension.value[x]", extensionBaseStructDef));
+        getElementBuilderById("Extension.value[x]", elementList)
+            .setBase(buildBase("Extension.value[x]", extensionBaseStructDef));
     if (extensionProto.getTypeCount() > 0 && extensionProto.hasCodeType()) {
       throw new IllegalArgumentException(
           "SimpleExtension must have either a type or code_type set, but not both: "
@@ -383,8 +389,9 @@ final class ProfileGenerator {
     if (!elementData.getDescription().isEmpty()) {
       rootElement.setDefinition(Markdown.newBuilder().setValue(elementData.getDescription()));
     }
-    rootElement.setMin(minSize(elementData.getSizeRestriction()));
-    rootElement.setMax(maxSize(elementData.getSizeRestriction()));
+    rootElement
+        .setMin(minSize(elementData.getSizeRestriction()))
+        .setMax(maxSize(elementData.getSizeRestriction()));
     if (!elementData.getShort().isEmpty() || !elementData.getDescription().isEmpty()) {
       rootElement
           .getShortBuilder()
@@ -410,9 +417,10 @@ final class ProfileGenerator {
 
     // If this is a slice (in other words, not a top-level extension), type it.
     if (isSliceId(rootId)) {
-      rootElement.addType(ElementDefinition.TypeRef.newBuilder().setCode(fhirUri("Extension")));
-      rootElement.setSliceName(fhirString(rootId.substring(rootId.lastIndexOf(":") + 1)));
-      rootElement.clearMapping();
+      rootElement
+          .addType(ElementDefinition.TypeRef.newBuilder().setCode(fhirUri("Extension")))
+          .setSliceName(fhirString(rootId.substring(rootId.lastIndexOf(":") + 1)))
+          .clearMapping();
     }
   }
 
@@ -642,13 +650,13 @@ final class ProfileGenerator {
         elementData);
     extensionElement.setBase(buildBase("Extension", getExtensionStructDef()));
     setIdAndPath(extensionElement, rootId, rootPath, "");
-    extensionElement
+    return extensionElement
         .clearType()
         .addType(
             ElementDefinition.TypeRef.newBuilder()
                 .setCode(fhirUri("Extension"))
-                .addProfile(fhirCanonical(extensionSlice.getUrl())));
-    return extensionElement.build();
+                .addProfile(fhirCanonical(extensionSlice.getUrl())))
+        .build();
   }
 
   private List<ElementDefinition> buildCodeableConceptSliceElements(
@@ -704,8 +712,12 @@ final class ProfileGenerator {
         .setId(Id.newBuilder().setValue(elementData.getName()))
         .setUrl(fhirUri(url))
         .setName(fhirString(elementData.getName()))
+        .setTitle(fhirString(elementData.getName()))
         .setDate(creationDateTime)
         .setPublisher(fhirString(packageInfo.getPublisher()))
+        // TODO: read status from profile_config
+        .setStatus(
+            StructureDefinition.StatusCode.newBuilder().setValue(PublicationStatusCode.Value.DRAFT))
         .setFhirVersion(
             StructureDefinition.FhirVersionCode.newBuilder()
                 .setValue(FhirVersion.fromAnnotation(packageInfo.getFhirVersion()).minorVersion))
@@ -715,7 +727,9 @@ final class ProfileGenerator {
             StructureDefinition.Context.newBuilder()
                 .setType(
                     StructureDefinition.Context.TypeCode.newBuilder()
-                        .setValue(ExtensionContextTypeCode.Value.ELEMENT)))
+                        .setValue(ExtensionContextTypeCode.Value.ELEMENT))
+                // TODO: read from extension config.
+                .setExpression(fhirString("Element")))
         .setType(fhirUri(type))
         .setBaseDefinition(fhirCanonical(baseDefinitionUrl))
         .setDerivation(
@@ -825,19 +839,17 @@ final class ProfileGenerator {
   }
 
   private static ElementDefinitionBinding buildCodeBinding(CodeData codeData) {
-    ElementDefinitionBinding.Builder binding =
-        ElementDefinitionBinding.newBuilder()
-            .setValueSet(fhirCanonical(codeData.getSystem()))
-            .setStrength(
-                ElementDefinition.ElementDefinitionBinding.StrengthCode.newBuilder()
-                    .setValue(
-                        codeData
-                                .getBindingStrength()
-                                .equals(BindingStrengthCode.Value.INVALID_UNINITIALIZED)
-                            ? BindingStrengthCode.Value.REQUIRED
-                            : codeData.getBindingStrength()));
-
-    return binding.build();
+    return ElementDefinitionBinding.newBuilder()
+        .setValueSet(fhirCanonical(codeData.getSystem()))
+        .setStrength(
+            ElementDefinition.ElementDefinitionBinding.StrengthCode.newBuilder()
+                .setValue(
+                    codeData
+                            .getBindingStrength()
+                            .equals(BindingStrengthCode.Value.INVALID_UNINITIALIZED)
+                        ? BindingStrengthCode.Value.REQUIRED
+                        : codeData.getBindingStrength()))
+        .build();
   }
 
   private static ElementDefinition.Builder setIdAndPath(
@@ -897,7 +909,7 @@ final class ProfileGenerator {
 
   private String getStructureDefinitionUrl(ElementData elementData) {
     return elementData.getUrlOverride().isEmpty()
-        ? packageInfo.getBaseUrl() + "/" + elementData.getName()
+        ? packageInfo.getBaseUrl() + "/StructureDefinition/" + elementData.getName()
         : elementData.getUrlOverride();
   }
 

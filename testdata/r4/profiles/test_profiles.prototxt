@@ -36,21 +36,21 @@ profile {
       description: "Decimal Extension"
       size_restriction: REQUIRED
     }
-    url: "http://test/url/base/SimpleDecimalExt"
+    url: "http://test/url/base/StructureDefinition/SimpleDecimalExt"
   }
 
   extension_slice {
     element_data {
       name: "favoriteBrewery"
     }
-    url: "http://test/url/base/FavoriteBrewery"
+    url: "http://test/url/base/StructureDefinition/FavoriteBrewery"
   }
 
   extension_slice {
     element_data {
       name: "favoriteCalifornian"
     }
-    url: "http://test/url/base/FavoriteCalifornian"
+    url: "http://test/url/base/StructureDefinition/FavoriteCalifornian"
   }
 }
 
@@ -134,7 +134,7 @@ profile {
       name: "myComplexExtension"
       size_restriction: OPTIONAL
     }
-    url: "http://test/url/base/ComplexExt"
+    url: "http://test/url/base/StructureDefinition/ComplexExt"
   }
 
   extension_slice {
@@ -142,7 +142,7 @@ profile {
       name: "onNested"
       size_restriction: OPTIONAL
     }
-    url: "http://test/url/base/SimpleDecimalExt"
+    url: "http://test/url/base/StructureDefinition/SimpleDecimalExt"
     field_id: "Observation.component"
   }
 
@@ -165,13 +165,13 @@ profile {
     name: "TestObservationLvl2"
     description: "Level 2 Observation"
   }
-  base_url: "http://test/url/base/TestObservation"
+  base_url: "http://test/url/base/StructureDefinition/TestObservation"
 
   extension_slice {
     element_data {
       name: "newExt"
     }
-    url: "http://test/url/base/SimpleDecimalExt"
+    url: "http://test/url/base/StructureDefinition/SimpleDecimalExt"
   }
 
   codeable_concept_slice {

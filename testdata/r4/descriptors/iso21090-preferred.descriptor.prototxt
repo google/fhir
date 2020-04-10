@@ -1,4 +1,4 @@
-name: "ElementPreferred"
+name: "Preferred"
 field {
   name: "id"
   number: 1

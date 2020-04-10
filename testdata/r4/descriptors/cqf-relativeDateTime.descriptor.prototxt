@@ -1,4 +1,4 @@
-name: "ElementRelativeDateTime"
+name: "RelativeDateTime"
 field {
   name: "id"
   number: 1
@@ -46,7 +46,7 @@ field {
   number: 6
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.ElementRelativeDateTime.RelationshipCode"
+  type_name: ".google.fhir.r4.core.RelativeDateTime.RelationshipCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "before-start | before | before-end | concurrent-with-start | concurrent | concurrent-with-end | after-start | after | after-end"
@@ -57,7 +57,7 @@ field {
   number: 7
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.ElementRelativeDateTime.OffsetX"
+  type_name: ".google.fhir.r4.core.RelativeDateTime.OffsetX"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "How long"

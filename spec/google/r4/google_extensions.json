@@ -1,5 +1,6 @@
 {
   "resourceType": "Bundle",
+  "type": "collection",
   "entry": [
     {
       "resource": {
@@ -7,7 +8,9 @@
         "id": "PrimitiveHasNoValue",
         "url": "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
         "name": "PrimitiveHasNoValue",
-        "date": "2020-01-09",
+        "title": "PrimitiveHasNoValue",
+        "status": "draft",
+        "date": "2020-04-02",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -25,7 +28,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Extension",
@@ -305,7 +309,9 @@
         "id": "Base64BinarySeparatorStride",
         "url": "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
         "name": "Base64BinarySeparatorStride",
-        "date": "2020-01-09",
+        "title": "Base64BinarySeparatorStride",
+        "status": "draft",
+        "date": "2020-04-02",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -323,7 +329,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Extension",
@@ -1292,7 +1299,9 @@
         "id": "EventLabel",
         "url": "https://g.co/fhir/StructureDefinition/eventLabel",
         "name": "EventLabel",
-        "date": "2020-01-09",
+        "title": "EventLabel",
+        "status": "draft",
+        "date": "2020-04-02",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -1310,7 +1319,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Extension",
@@ -3802,7 +3812,9 @@
         "id": "EventTrigger",
         "url": "https://g.co/fhir/StructureDefinition/eventTrigger",
         "name": "EventTrigger",
-        "date": "2020-01-09",
+        "title": "EventTrigger",
+        "status": "draft",
+        "date": "2020-04-02",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -3820,7 +3832,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Extension",

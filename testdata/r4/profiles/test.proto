@@ -28,13 +28,13 @@ option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for Bundle.
 // Contains a collection of resources.
-// See http://test/url/base/Bundle
+// See http://test/url/base/StructureDefinition/Bundle
 message Bundle {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Bundle";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/Bundle";
+      "http://test/url/base/StructureDefinition/Bundle";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "total.empty() or (type = 'searchset') or (type = 'history')";
   option (.google.fhir.proto.fhir_path_message_constraint) =
@@ -255,13 +255,13 @@ message Bundle {
 
 // Auto-generated from StructureDefinition for TestPatient.
 // Information about an individual or animal receiving health care services.
-// See http://test/url/base/TestPatient
+// See http://test/url/base/StructureDefinition/TestPatient
 message TestPatient {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Patient";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/TestPatient";
+      "http://test/url/base/StructureDefinition/TestPatient";
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -530,29 +530,29 @@ message TestPatient {
   core.Decimal dec_ext = 26 [
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
     (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://test/url/base/SimpleDecimalExt"
+        "http://test/url/base/StructureDefinition/SimpleDecimalExt"
   ];
 
   // Optional Extensions Element
   FavoriteBrewery.ValueCode favorite_brewery = 27
       [(.google.fhir.proto.fhir_inlined_extension_url) =
-           "http://test/url/base/FavoriteBrewery"];
+           "http://test/url/base/StructureDefinition/FavoriteBrewery"];
 
   // Optional Extensions Element
   FavoriteCalifornian.ValueCode favorite_californian = 28
       [(.google.fhir.proto.fhir_inlined_extension_url) =
-           "http://test/url/base/FavoriteCalifornian"];
+           "http://test/url/base/StructureDefinition/FavoriteCalifornian"];
 }
 
 // Auto-generated from StructureDefinition for TestObservation.
 // Measurements and simple assertions.
-// See http://test/url/base/TestObservation
+// See http://test/url/base/StructureDefinition/TestObservation
 message TestObservation {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Observation";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/TestObservation";
+      "http://test/url/base/StructureDefinition/TestObservation";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "dataAbsentReason.empty() or value.empty()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
@@ -1050,27 +1050,27 @@ message TestObservation {
     // Optional Extensions Element
     core.Decimal on_nested = 9
         [(.google.fhir.proto.fhir_inlined_extension_url) =
-             "http://test/url/base/SimpleDecimalExt"];
+             "http://test/url/base/StructureDefinition/SimpleDecimalExt"];
   }
   repeated Component component = 33;
 
   // Optional Extensions Element
   ComplexExt my_complex_extension = 34
       [(.google.fhir.proto.fhir_inlined_extension_url) =
-           "http://test/url/base/ComplexExt"];
+           "http://test/url/base/StructureDefinition/ComplexExt"];
 }
 
 // Auto-generated from StructureDefinition for TestObservationLvl2.
 // Measurements and simple assertions.
-// See http://test/url/base/TestObservationLvl2
+// See http://test/url/base/StructureDefinition/TestObservationLvl2
 message TestObservationLvl2 {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_profile_base) =
-      "http://test/url/base/TestObservation";
+      "http://test/url/base/StructureDefinition/TestObservation";
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Observation";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/TestObservationLvl2";
+      "http://test/url/base/StructureDefinition/TestObservationLvl2";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "dataAbsentReason.empty() or value.empty()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
@@ -1604,29 +1604,30 @@ message TestObservationLvl2 {
     // Optional Extensions Element
     core.Decimal on_nested = 9
         [(.google.fhir.proto.fhir_inlined_extension_url) =
-             "http://test/url/base/SimpleDecimalExt"];
+             "http://test/url/base/StructureDefinition/SimpleDecimalExt"];
   }
   repeated Component component = 33;
 
   // Optional Extensions Element
   ComplexExt my_complex_extension = 34
       [(.google.fhir.proto.fhir_inlined_extension_url) =
-           "http://test/url/base/ComplexExt"];
+           "http://test/url/base/StructureDefinition/ComplexExt"];
 
   // Optional Extensions Element
-  core.Decimal new_ext = 35 [(.google.fhir.proto.fhir_inlined_extension_url) =
-                                 "http://test/url/base/SimpleDecimalExt"];
+  core.Decimal new_ext = 35
+      [(.google.fhir.proto.fhir_inlined_extension_url) =
+           "http://test/url/base/StructureDefinition/SimpleDecimalExt"];
 }
 
 // Auto-generated from StructureDefinition for TestEncounter.
 // An interaction during which services are provided to the patient.
-// See http://test/url/base/TestEncounter
+// See http://test/url/base/StructureDefinition/TestEncounter
 message TestEncounter {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Encounter";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/TestEncounter";
+      "http://test/url/base/StructureDefinition/TestEncounter";
 
   // Logical id of this artifact
   core.Id id = 1;

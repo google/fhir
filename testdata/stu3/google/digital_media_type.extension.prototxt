@@ -1,2 +1,2 @@
-url { value: "http://test/url/base/DigitalMediaType" }
+url { value: "http://test/url/base/StructureDefinition/DigitalMediaType" }
 value { code: { value: "video" } }

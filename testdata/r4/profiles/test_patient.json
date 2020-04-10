@@ -81,7 +81,7 @@
   ],
   "extension": [
     {
-      "url": "http://test/url/base/SimpleDecimalExt",
+      "url": "http://test/url/base/StructureDefinition/SimpleDecimalExt",
       "valueDecimal": 0.5
     }
   ]

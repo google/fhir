@@ -1,4 +1,4 @@
-name: "ElementInitialValue"
+name: "InitialValue"
 field {
   name: "id"
   number: 1

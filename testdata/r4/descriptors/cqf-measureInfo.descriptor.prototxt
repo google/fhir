@@ -1,4 +1,4 @@
-name: "ElementMeasureInfo"
+name: "MeasureInfo"
 field {
   name: "id"
   number: 1

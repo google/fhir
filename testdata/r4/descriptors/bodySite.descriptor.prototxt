@@ -1,4 +1,4 @@
-name: "ElementBodyStructureReference"
+name: "BodyStructureReference"
 field {
   name: "id"
   number: 1

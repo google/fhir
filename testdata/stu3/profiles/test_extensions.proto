@@ -69,7 +69,7 @@ message DigitalMediaType {
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/DigitalMediaType";
+      "http://test/url/base/StructureDefinition/DigitalMediaType";
 
   // xml:id (or equivalent in JSON)
   proto.String id = 1;

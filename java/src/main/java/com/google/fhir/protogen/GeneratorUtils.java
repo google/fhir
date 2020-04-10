@@ -257,6 +257,8 @@ final class GeneratorUtils {
           .put("http://hl7.org/fhir/StructureDefinition/lipidprofile", "LipidProfile")
           .put("http://hl7.org/fhir/StructureDefinition/cholesterol", "Cholesterol")
           .put("http://hl7.org/fhir/StructureDefinition/triglyceride", "Triglyceride")
+          .put("http://hl7.org/fhir/StructureDefinition/cqf-expression", "CqfExpression")
+          .put("http://hl7.org/fhir/StructureDefinition/cqf-library", "CqfLibrary")
           .build();
 
   // Given a structure definition, gets the name of the top-level message that will be generated.
@@ -273,7 +275,12 @@ final class GeneratorUtils {
    * prefix. If the element is a simple extension, returns the type defined by the extension.
    */
   private static String getProfileTypeName(StructureDefinition def) {
-    String name = toFieldTypeCase(def.getName().getValue());
+    String name = def.getName().getValue();
+
+    if (!isExtensionProfile(def)) {
+      return toFieldTypeCase(name);
+    }
+
     Set<String> contexts = new HashSet<>();
     Splitter splitter = Splitter.on('.').limit(2);
     for (StructureDefinition.Context context : def.getContextList()) {
@@ -284,8 +291,8 @@ final class GeneratorUtils {
     }
     if (contexts.size() == 1) {
       String context = Iterables.getOnlyElement(contexts);
-      if (!context.equals("*")) {
-        name = context + name;
+      if (!context.equals("*") && !context.equals("Element")) {
+        return toFieldTypeCase(context) + toFieldTypeCase(name);
       }
     }
     return toFieldTypeCase(name);

@@ -1,4 +1,4 @@
-name: "ElementNarrativeLink"
+name: "NarrativeLink"
 field {
   name: "id"
   number: 1

@@ -8,7 +8,7 @@
         "name": "Brewery",
         "title": "Brewery",
         "status": "draft",
-        "date": "2020-04-02",
+        "date": "2020-04-07",
         "publisher": "Testington Inc.",
         "description": "The brewery of origin.",
         "content": "complete",
@@ -39,7 +39,7 @@
         "name": "FootballTeams",
         "title": "FootballTeams",
         "status": "draft",
-        "date": "2020-04-02",
+        "date": "2020-04-07",
         "publisher": "Testington Inc.",
         "description": "NFL Football Teams",
         "content": "complete",
@@ -60,7 +60,7 @@
         "name": "Brewery",
         "title": "Brewery",
         "status": "draft",
-        "date": "2020-04-02",
+        "date": "2020-04-07",
         "publisher": "Testington Inc.",
         "description": "ValueSet for Brewery Code System.",
         "compose": {
@@ -79,7 +79,7 @@
         "name": "CaliforniaBreweries",
         "title": "CaliforniaBreweries",
         "status": "draft",
-        "date": "2020-04-02",
+        "date": "2020-04-07",
         "publisher": "Testington Inc.",
         "description": "ValueSet for California breweries.",
         "compose": {
@@ -106,7 +106,7 @@
         "name": "AmericanBreweries",
         "title": "AmericanBreweries",
         "status": "draft",
-        "date": "2020-04-02",
+        "date": "2020-04-07",
         "publisher": "Testington Inc.",
         "description": "ValueSet for Brewery Code System.",
         "compose": {
@@ -135,7 +135,7 @@
         "name": "Californians",
         "title": "Californians",
         "status": "draft",
-        "date": "2020-04-02",
+        "date": "2020-04-07",
         "publisher": "Testington Inc.",
         "description": "California businesses",
         "compose": {

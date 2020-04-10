@@ -1,4 +1,4 @@
-name: "ElementCalculatedValue"
+name: "CalculatedValue"
 field {
   name: "id"
   number: 1

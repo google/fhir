@@ -27,13 +27,13 @@ option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for SimpleDecimalExt.
 // This is the A-Extension.
-// See http://test/url/base/SimpleDecimalExt
+// See http://test/url/base/StructureDefinition/SimpleDecimalExt
 message SimpleDecimalExt {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/SimpleDecimalExt";
+      "http://test/url/base/StructureDefinition/SimpleDecimalExt";
 
   // Unique id for inter-element referencing
   core.String id = 1;
@@ -47,13 +47,13 @@ message SimpleDecimalExt {
 
 // Auto-generated from StructureDefinition for SimpleCodeableConceptExtension.
 // SimpleCodeableConcept Extension.
-// See http://test/url/base/SimpleCodeableConceptExtension
+// See http://test/url/base/StructureDefinition/SimpleCodeableConceptExtension
 message SimpleCodeableConceptExtension {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/SimpleCodeableConceptExtension";
+      "http://test/url/base/StructureDefinition/SimpleCodeableConceptExtension";
 
   // Unique id for inter-element referencing
   core.String id = 1;
@@ -77,13 +77,13 @@ message SimpleCodeableConceptExtension {
 
 // Auto-generated from StructureDefinition for DigitalMediaType.
 // Extension for Digital Media Type code.
-// See http://test/url/base/DigitalMediaType
+// See http://test/url/base/StructureDefinition/DigitalMediaType
 message DigitalMediaType {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/DigitalMediaType";
+      "http://test/url/base/StructureDefinition/DigitalMediaType";
 
   // Unique id for inter-element referencing
   core.String id = 1;
@@ -119,13 +119,13 @@ message DigitalMediaType {
 
 // Auto-generated from StructureDefinition for FavoriteBrewery.
 // Optional Extensions Element.
-// See http://test/url/base/FavoriteBrewery
+// See http://test/url/base/StructureDefinition/FavoriteBrewery
 message FavoriteBrewery {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/FavoriteBrewery";
+      "http://test/url/base/StructureDefinition/FavoriteBrewery";
 
   // Unique id for inter-element referencing
   core.String id = 1;
@@ -149,13 +149,13 @@ message FavoriteBrewery {
 
 // Auto-generated from StructureDefinition for FavoriteCalifornian.
 // Optional Extensions Element.
-// See http://test/url/base/FavoriteCalifornian
+// See http://test/url/base/StructureDefinition/FavoriteCalifornian
 message FavoriteCalifornian {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/FavoriteCalifornian";
+      "http://test/url/base/StructureDefinition/FavoriteCalifornian";
 
   // Unique id for inter-element referencing
   core.String id = 1;
@@ -179,13 +179,13 @@ message FavoriteCalifornian {
 
 // Auto-generated from StructureDefinition for ComplexExt.
 // complex extension.
-// See http://test/url/base/ComplexExt
+// See http://test/url/base/StructureDefinition/ComplexExt
 message ComplexExt {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/ComplexExt";
+      "http://test/url/base/StructureDefinition/ComplexExt";
 
   // Unique id for inter-element referencing
   core.String id = 1;

@@ -1,13 +1,16 @@
 {
   "resourceType": "Bundle",
+  "type": "collection",
   "entry": [
     {
       "resource": {
         "resourceType": "StructureDefinition",
         "id": "Bundle",
-        "url": "http://test/url/base/Bundle",
+        "url": "http://test/url/base/StructureDefinition/Bundle",
         "name": "Bundle",
-        "date": "2020-01-06",
+        "title": "Bundle",
+        "status": "draft",
+        "date": "2020-04-02",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -24,7 +27,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Bundle",
@@ -1157,9 +1161,11 @@
       "resource": {
         "resourceType": "StructureDefinition",
         "id": "TestPatient",
-        "url": "http://test/url/base/TestPatient",
+        "url": "http://test/url/base/StructureDefinition/TestPatient",
         "name": "TestPatient",
-        "date": "2020-01-06",
+        "title": "TestPatient",
+        "status": "draft",
+        "date": "2020-04-02",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1177,7 +1183,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Patient",
@@ -2941,7 +2948,7 @@
                 {
                   "code": "Extension",
                   "profile": [
-                    "http://test/url/base/SimpleDecimalExt"
+                    "http://test/url/base/StructureDefinition/SimpleDecimalExt"
                   ]
                 }
               ],
@@ -2989,7 +2996,7 @@
                 {
                   "code": "Extension",
                   "profile": [
-                    "http://test/url/base/SimpleDecimalExt"
+                    "http://test/url/base/StructureDefinition/SimpleDecimalExt"
                   ]
                 }
               ],
@@ -3023,9 +3030,11 @@
       "resource": {
         "resourceType": "StructureDefinition",
         "id": "TestObservation",
-        "url": "http://test/url/base/TestObservation",
+        "url": "http://test/url/base/StructureDefinition/TestObservation",
         "name": "TestObservation",
-        "date": "2020-01-06",
+        "title": "TestObservation",
+        "status": "draft",
+        "date": "2020-04-02",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -3043,7 +3052,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Observation",
@@ -5038,7 +5048,7 @@
                 {
                   "code": "Extension",
                   "profile": [
-                    "http://test/url/base/ComplexExt"
+                    "http://test/url/base/StructureDefinition/ComplexExt"
                   ]
                 }
               ],
@@ -5081,7 +5091,7 @@
                 {
                   "code": "Extension",
                   "profile": [
-                    "http://test/url/base/SimpleDecimalExt"
+                    "http://test/url/base/StructureDefinition/SimpleDecimalExt"
                   ]
                 }
               ],
@@ -7029,7 +7039,7 @@
                 {
                   "code": "Extension",
                   "profile": [
-                    "http://test/url/base/ComplexExt"
+                    "http://test/url/base/StructureDefinition/ComplexExt"
                   ]
                 }
               ],
@@ -7066,7 +7076,7 @@
                 {
                   "code": "Extension",
                   "profile": [
-                    "http://test/url/base/SimpleDecimalExt"
+                    "http://test/url/base/StructureDefinition/SimpleDecimalExt"
                   ]
                 }
               ],
@@ -7384,9 +7394,11 @@
       "resource": {
         "resourceType": "StructureDefinition",
         "id": "TestObservationLvl2",
-        "url": "http://test/url/base/TestObservationLvl2",
+        "url": "http://test/url/base/StructureDefinition/TestObservationLvl2",
         "name": "TestObservationLvl2",
-        "date": "2020-01-06",
+        "title": "TestObservationLvl2",
+        "status": "draft",
+        "date": "2020-04-02",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -7403,11 +7415,12 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Observation",
-        "baseDefinition": "http://test/url/base/TestObservation",
+        "baseDefinition": "http://test/url/base/StructureDefinition/TestObservation",
         "derivation": "constraint",
         "snapshot": {
           "element": [
@@ -9398,7 +9411,7 @@
                 {
                   "code": "Extension",
                   "profile": [
-                    "http://test/url/base/ComplexExt"
+                    "http://test/url/base/StructureDefinition/ComplexExt"
                   ]
                 }
               ],
@@ -9441,7 +9454,7 @@
                 {
                   "code": "Extension",
                   "profile": [
-                    "http://test/url/base/SimpleDecimalExt"
+                    "http://test/url/base/StructureDefinition/SimpleDecimalExt"
                   ]
                 }
               ],
@@ -11391,7 +11404,7 @@
                 {
                   "code": "Extension",
                   "profile": [
-                    "http://test/url/base/SimpleDecimalExt"
+                    "http://test/url/base/StructureDefinition/SimpleDecimalExt"
                   ]
                 }
               ],
@@ -11772,7 +11785,7 @@
                 {
                   "code": "Extension",
                   "profile": [
-                    "http://test/url/base/ComplexExt"
+                    "http://test/url/base/StructureDefinition/ComplexExt"
                   ]
                 }
               ],
@@ -11809,7 +11822,7 @@
                 {
                   "code": "Extension",
                   "profile": [
-                    "http://test/url/base/SimpleDecimalExt"
+                    "http://test/url/base/StructureDefinition/SimpleDecimalExt"
                   ]
                 }
               ],
@@ -12288,7 +12301,7 @@
                 {
                   "code": "Extension",
                   "profile": [
-                    "http://test/url/base/SimpleDecimalExt"
+                    "http://test/url/base/StructureDefinition/SimpleDecimalExt"
                   ]
                 }
               ],

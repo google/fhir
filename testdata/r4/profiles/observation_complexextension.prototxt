@@ -13,7 +13,7 @@ code {
 component {
   id { value: "12345" }
   extension {
-    url { value: "http://test/url/base/SimpleDecimalExt" }
+    url { value: "http://test/url/base/StructureDefinition/SimpleDecimalExt" }
     value { decimal { value: "1.234" } }
   }
   code {
@@ -25,7 +25,7 @@ component {
 }
 extension {
   url {
-    value: "http://test/url/base/ComplexExt"
+    value: "http://test/url/base/StructureDefinition/ComplexExt"
   }
   extension {
     url {

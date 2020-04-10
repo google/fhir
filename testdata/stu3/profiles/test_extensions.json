@@ -1,13 +1,16 @@
 {
   "resourceType": "Bundle",
+  "type": "collection",
   "entry": [
     {
       "resource": {
         "resourceType": "StructureDefinition",
         "id": "SimpleDecimalExt",
-        "url": "http://test/url/base/SimpleDecimalExt",
+        "url": "http://test/url/base/StructureDefinition/SimpleDecimalExt",
         "name": "SimpleDecimalExt",
-        "date": "2020-01-06",
+        "title": "SimpleDecimalExt",
+        "status": "draft",
+        "date": "2020-04-02",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -25,7 +28,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Extension",
@@ -164,7 +168,7 @@
                   "code": "uri"
                 }
               ],
-              "fixedUri": "http://test/url/base/SimpleDecimalExt",
+              "fixedUri": "http://test/url/base/StructureDefinition/SimpleDecimalExt",
               "mapping": [
                 {
                   "identity": "rim",
@@ -220,7 +224,7 @@
             {
               "id": "Extension.url",
               "path": "Extension.url",
-              "fixedUri": "http://test/url/base/SimpleDecimalExt"
+              "fixedUri": "http://test/url/base/StructureDefinition/SimpleDecimalExt"
             },
             {
               "id": "Extension.valueDecimal",
@@ -239,9 +243,11 @@
       "resource": {
         "resourceType": "StructureDefinition",
         "id": "SimpleCodeableConceptExtension",
-        "url": "http://test/url/base/SimpleCodeableConceptExtension",
+        "url": "http://test/url/base/StructureDefinition/SimpleCodeableConceptExtension",
         "name": "SimpleCodeableConceptExtension",
-        "date": "2020-01-06",
+        "title": "SimpleCodeableConceptExtension",
+        "status": "draft",
+        "date": "2020-04-02",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -259,7 +265,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Extension",
@@ -398,7 +405,7 @@
                   "code": "uri"
                 }
               ],
-              "fixedUri": "http://test/url/base/SimpleCodeableConceptExtension",
+              "fixedUri": "http://test/url/base/StructureDefinition/SimpleCodeableConceptExtension",
               "mapping": [
                 {
                   "identity": "rim",
@@ -463,7 +470,7 @@
             {
               "id": "Extension.url",
               "path": "Extension.url",
-              "fixedUri": "http://test/url/base/SimpleCodeableConceptExtension"
+              "fixedUri": "http://test/url/base/StructureDefinition/SimpleCodeableConceptExtension"
             },
             {
               "id": "Extension.valueCode",
@@ -486,9 +493,11 @@
       "resource": {
         "resourceType": "StructureDefinition",
         "id": "DigitalMediaType",
-        "url": "http://test/url/base/DigitalMediaType",
+        "url": "http://test/url/base/StructureDefinition/DigitalMediaType",
         "name": "DigitalMediaType",
-        "date": "2020-01-06",
+        "title": "DigitalMediaType",
+        "status": "draft",
+        "date": "2020-04-02",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -506,7 +515,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Extension",
@@ -645,7 +655,7 @@
                   "code": "uri"
                 }
               ],
-              "fixedUri": "http://test/url/base/DigitalMediaType",
+              "fixedUri": "http://test/url/base/StructureDefinition/DigitalMediaType",
               "mapping": [
                 {
                   "identity": "rim",
@@ -710,7 +720,7 @@
             {
               "id": "Extension.url",
               "path": "Extension.url",
-              "fixedUri": "http://test/url/base/DigitalMediaType"
+              "fixedUri": "http://test/url/base/StructureDefinition/DigitalMediaType"
             },
             {
               "id": "Extension.valueCode",
@@ -733,9 +743,11 @@
       "resource": {
         "resourceType": "StructureDefinition",
         "id": "ComplexExt",
-        "url": "http://test/url/base/ComplexExt",
+        "url": "http://test/url/base/StructureDefinition/ComplexExt",
         "name": "ComplexExt",
-        "date": "2020-01-06",
+        "title": "ComplexExt",
+        "status": "draft",
+        "date": "2020-04-02",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -753,7 +765,8 @@
         "abstract": false,
         "context": [
           {
-            "type": "element"
+            "type": "element",
+            "expression": "Element"
           }
         ],
         "type": "Extension",
@@ -892,7 +905,7 @@
                   "code": "uri"
                 }
               ],
-              "fixedUri": "http://test/url/base/ComplexExt",
+              "fixedUri": "http://test/url/base/StructureDefinition/ComplexExt",
               "mapping": [
                 {
                   "identity": "rim",
@@ -1817,7 +1830,7 @@
             {
               "id": "Extension.url",
               "path": "Extension.url",
-              "fixedUri": "http://test/url/base/ComplexExt"
+              "fixedUri": "http://test/url/base/StructureDefinition/ComplexExt"
             },
             {
               "id": "Extension.value[x]",

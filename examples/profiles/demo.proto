@@ -15,7 +15,7 @@ option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for DemoPatient.
 // Information about an individual or animal receiving health care services.
-// See https://company.com/fhir/demo/DemoPatient
+// See https://company.com/fhir/demo/StructureDefinition/DemoPatient
 message DemoPatient {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_profile_base) =
@@ -23,7 +23,7 @@ message DemoPatient {
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Patient";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "https://company.com/fhir/demo/DemoPatient";
+      "https://company.com/fhir/demo/StructureDefinition/DemoPatient";
 
   // Logical id of this artifact
   .google.fhir.r4.core.Id id = 1;

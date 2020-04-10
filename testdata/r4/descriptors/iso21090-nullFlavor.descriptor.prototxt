@@ -1,4 +1,4 @@
-name: "ElementNullFlavor"
+name: "NullFlavor"
 field {
   name: "id"
   number: 1
@@ -14,7 +14,7 @@ field {
   number: 3
   label: LABEL_OPTIONAL
   type: TYPE_MESSAGE
-  type_name: ".google.fhir.r4.core.ElementNullFlavor.ValueCode"
+  type_name: ".google.fhir.r4.core.NullFlavor.ValueCode"
   options {
     [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
     [google.fhir.proto.field_description]: "Value of extension"

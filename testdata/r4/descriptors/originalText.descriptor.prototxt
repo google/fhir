@@ -1,4 +1,4 @@
-name: "ElementOriginalText"
+name: "OriginalText"
 field {
   name: "id"
   number: 1
