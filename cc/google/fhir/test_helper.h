@@ -24,6 +24,7 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
 #include "google/fhir/annotations.h"
@@ -90,7 +91,7 @@ class FhirProtoParseHelper {
                          << " in file " << file_;
       return T();
     }
-    Status valid_status;
+    Status valid_status = absl::OkStatus();
     const bool is_profile =
         IsProfile(T::descriptor()) && IsResource(T::descriptor());
     switch (GetFhirVersion(tmp)) {

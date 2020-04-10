@@ -58,3 +58,27 @@ def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = [], **kwarg
         ],
         **kwargs
     )
+
+def _fhir_individual_resource_rules(resource_files, deps):
+    for resource_file in resource_files:
+        fhir_proto_library(
+            srcs = [resource_file],
+            proto_deps = deps,
+            proto_library_prefix = resource_file[:-6],
+        )
+
+def fhir_resource_rules(resource_files, deps):
+    resource_files.remove("bundle_and_contained_resource.proto")
+
+    _fhir_individual_resource_rules(resource_files, deps)
+
+    resources_as_dep = [":" + file[:-6] + "_proto" for file in resource_files]
+
+    fhir_proto_library(
+        srcs = ["bundle_and_contained_resource.proto"],
+        proto_deps = deps + resources_as_dep,
+        proto_library_prefix = "bundle_and_contained_resource",
+    )
+
+def fhir_profile_rules(resource_files, deps):
+    _fhir_individual_resource_rules(resource_files, deps)

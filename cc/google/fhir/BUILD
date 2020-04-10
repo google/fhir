@@ -208,6 +208,7 @@ cc_library(
         "//cc/google/fhir/stu3:profiles",
         "//cc/google/fhir/stu3:resource_validation",
         "//proto:annotations_cc_proto",
+        "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest",
         "@com_google_protobuf//:protobuf",
