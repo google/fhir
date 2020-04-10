@@ -145,7 +145,7 @@ message ExtensionSlice {
   // Must be an absolute url for the Structure Definition that defines this
   // extension.
   // e.g., http://hl7.org/fhir/StructureDefinition/patient-birthTime
-  // or g.co/fhir/extensions/BinaryClassificationMetadata
+  // or https://g.co/fhir/extensions/BinaryClassificationMetadata
   string url = 3;
 }
 
