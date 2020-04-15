@@ -485,8 +485,7 @@ Status ConvertToExtension(const ::google::protobuf::Message& message,
           reflection->GetMessage(message, value_field), extension,
           IsChoiceType(value_field));
     } else {
-      // TODO(nickgeorge, sundberg): This is an invalid extension.  Maybe we
-      // should be erroring out here?
+       // TODO: Invalid FHIR; throw an error here?
       return absl::OkStatus();
     }
   } else {
