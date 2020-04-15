@@ -16,6 +16,7 @@
 
 #include <utility>
 
+#include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/util/message_differencer.h"
 #include "absl/memory/memory.h"
@@ -177,6 +178,23 @@ StatusOr<std::string> MessagesToString(
   return MessageToString(primitive_handler, messages[0]);
 }
 
+// Returns a function that creates a new message of the provided descriptor type
+// that is flagged to be deleted when the workspace is destroyed.
+std::function<Message*(const Descriptor*)> MakeWorkSpaceMessageFactory(
+    WorkSpace* work_space) {
+  return [=](const Descriptor* descriptor) -> Message* {
+    const Message* prototype =
+        ::google::protobuf::MessageFactory::generated_factory()->GetPrototype(descriptor);
+    if (prototype == nullptr) {
+      return nullptr;
+    }
+
+    Message* message = prototype->New();
+    work_space->DeleteWhenFinished(message);
+    return message;
+  };
+}
+
 StatusOr<WorkspaceMessage> WorkspaceMessage::NearestResource() const {
   if (IsResource(result_->GetDescriptor())) {
     return *this;
@@ -276,8 +294,9 @@ class InvokeTermNode : public ExpressionNode {
     }
 
     std::vector<const Message*> result_protos;
-    FHIR_RETURN_IF_ERROR(
-        RetrieveField(*message.Message(), *field, &result_protos));
+    FHIR_RETURN_IF_ERROR(RetrieveField(*message.Message(), *field,
+                                       MakeWorkSpaceMessageFactory(work_space),
+                                       &result_protos));
     for (const Message* result : result_protos) {
       results->push_back(WorkspaceMessage(message, result));
     }
@@ -335,8 +354,9 @@ class InvokeExpressionNode : public ExpressionNode {
       }
 
       std::vector<const Message*> result_protos;
-      FHIR_RETURN_IF_ERROR(
-          RetrieveField(*child_message.Message(), *field, &result_protos));
+      FHIR_RETURN_IF_ERROR(RetrieveField(
+          *child_message.Message(), *field,
+          MakeWorkSpaceMessageFactory(work_space), &result_protos));
       for (const Message* result : result_protos) {
         results->push_back(WorkspaceMessage(child_message, result));
       }
@@ -1801,7 +1821,8 @@ class ChildrenFunction : public ZeroParameterFunctionNode {
       for (int i = 0; i < descriptor->field_count(); i++) {
         std::vector<const Message*> messages;
         FHIR_RETURN_IF_ERROR(
-            RetrieveField(*child.Message(), *descriptor->field(i), &messages));
+            RetrieveField(*child.Message(), *descriptor->field(i),
+                          MakeWorkSpaceMessageFactory(work_space), &messages));
         for (const Message* message : messages) {
             results->push_back(WorkspaceMessage(child, message));
         }
@@ -1845,8 +1866,9 @@ class DescendantsFunction : public ZeroParameterFunctionNode {
 
     for (int i = 0; i < descriptor->field_count(); i++) {
       std::vector<const Message*> messages;
-      FHIR_RETURN_IF_ERROR(RetrieveField(
-          *parent.Message(), *descriptor->field(i), &messages));
+      FHIR_RETURN_IF_ERROR(
+          RetrieveField(*parent.Message(), *descriptor->field(i),
+                        MakeWorkSpaceMessageFactory(work_space), &messages));
       for (const Message* message : messages) {
         WorkspaceMessage child(parent, message);
         results->push_back(child);
@@ -2735,7 +2757,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       }
 
       const FieldDescriptor* field =
-          descriptor != nullptr
+          descriptor != nullptr &&
+                  !IsMessageType<google::protobuf::Any>(descriptor)
               ? FindFieldByJsonName(descriptor, definition->name)
               : nullptr;
       return ToAny(std::make_shared<InvokeExpressionNode>(expression, field,
@@ -2778,7 +2801,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     }
 
     const FieldDescriptor* field =
-        descriptor != nullptr
+        descriptor != nullptr &&
+                !IsMessageType<google::protobuf::Any>(descriptor)
             ? FindFieldByJsonName(descriptor, definition->name)
             : nullptr;
     return ToAny(std::make_shared<InvokeTermNode>(field, definition->name));

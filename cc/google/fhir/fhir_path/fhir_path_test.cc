@@ -1614,6 +1614,17 @@ FHIR_VERSION_TEST(FhirPathTest, PathNavigationAfterContainedResourceAndValueX, {
   EXPECT_THAT(result.GetMessages(), ElementsAreArray({EqualsProto(expected)}));
 })
 
+TEST(FhirPathTest, PathNavigationAfterContainedResourceR4Any) {
+  auto contained = ParseFromString<r4::core::ContainedResource>(
+      "observation { value: { string_value: { value: 'bar' } } } ");
+  auto patient = ParseFromString<r4::core::Patient>(
+      "deceased: { boolean: { value: true } }");
+  patient.add_contained()->PackFrom(contained);
+
+  EXPECT_THAT(r4test::Evaluate(patient, "contained.value"),
+              EvalsToStringThatMatches(StrEq("bar")));
+}
+
 FHIR_VERSION_TEST(FhirPathTest, ResourceReference, {
   Bundle bundle = ParseFromString<Bundle>(
       R"proto(entry: {

@@ -31,6 +31,7 @@ namespace internal {
 namespace {
 
 using ::google::fhir::testutil::EqualsProto;
+using ::google::protobuf::Descriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::TextFormat;
 using ::testing::UnorderedElementsAreArray;
@@ -45,7 +46,7 @@ TEST(Utils, RetrieveFieldPrimitive) {
   std::vector<const Message*> results;
   FHIR_ASSERT_OK(RetrieveField(
       primitive, *r4::Boolean::GetDescriptor()->FindFieldByName("value"),
-      &results));
+      [](const Descriptor*) {return nullptr;}, &results));
 
   ASSERT_THAT(results, UnorderedElementsAreArray({EqualsProto(primitive)}));
 }
@@ -63,7 +64,7 @@ TEST(Utils, RetrieveFieldR4ContainedResource) {
   std::vector<const Message*> results;
   FHIR_ASSERT_OK(RetrieveField(
       entry, *r4::Bundle_Entry::GetDescriptor()->FindFieldByName("resource"),
-      &results));
+      [](const Descriptor*) {return nullptr;}, &results));
 
   ASSERT_THAT(results, UnorderedElementsAreArray({EqualsProto(patient)}));
 }
@@ -78,11 +79,12 @@ TEST(Utils, RetrieveFieldR4ContainedResourceAny) {
 
   r4::ContainedResource unpack_to;
   std::vector<const Message*> results;
-  Status result = RetrieveField(
+  FHIR_ASSERT_OK(RetrieveField(
       patient, *r4::Patient::GetDescriptor()->FindFieldByName("contained"),
-      &results);
+      [&unpack_to](const Descriptor*) { return &unpack_to; }, &results));
 
-  EXPECT_EQ(result.code(), absl::StatusCode::kUnimplemented) << result;
+  ASSERT_THAT(results,
+              UnorderedElementsAreArray({EqualsProto(contained.patient())}));
 }
 
 TEST(Utils, RetrieveFieldR4WrongAny) {
@@ -90,13 +92,12 @@ TEST(Utils, RetrieveFieldR4WrongAny) {
   r4::Patient patient;
   patient.add_contained()->PackFrom(boolean);
 
-  r4::ContainedResource unpack_to;
   std::vector<const Message*> results;
   Status result = RetrieveField(
       patient, *r4::Patient::GetDescriptor()->FindFieldByName("contained"),
-      &results);
+      [](const Descriptor*) {return nullptr;}, &results);
 
-  EXPECT_EQ(result.code(), absl::StatusCode::kUnimplemented) << result;
+  EXPECT_EQ(result.code(), absl::StatusCode::kInvalidArgument) << result;
 }
 
 TEST(Utils, RetrieveFieldStu3ContainedResource) {
@@ -112,7 +113,7 @@ TEST(Utils, RetrieveFieldStu3ContainedResource) {
   std::vector<const Message*> results;
   FHIR_ASSERT_OK(RetrieveField(
       entry, *stu3::Bundle_Entry::GetDescriptor()->FindFieldByName("resource"),
-      &results));
+      [](const Descriptor*) {return nullptr;}, &results));
 
   ASSERT_THAT(results, UnorderedElementsAreArray({EqualsProto(patient)}));
 }
@@ -126,7 +127,7 @@ TEST(Utils, RetrieveFieldR4Choice) {
   std::vector<const Message*> results;
   FHIR_ASSERT_OK(RetrieveField(
       patient, *r4::Patient::GetDescriptor()->FindFieldByName("deceased"),
-      &results));
+      [](const Descriptor*) {return nullptr;}, &results));
 
   ASSERT_THAT(results, UnorderedElementsAreArray({EqualsProto(deceased)}));
 }
@@ -140,7 +141,7 @@ TEST(Utils, RetrieveFieldStu3Choice) {
   std::vector<const Message*> results;
   FHIR_ASSERT_OK(RetrieveField(
       patient, *stu3::Patient::GetDescriptor()->FindFieldByName("deceased"),
-      &results));
+      [](const Descriptor*) {return nullptr;}, &results));
 
   ASSERT_THAT(results, UnorderedElementsAreArray({EqualsProto(deceased)}));
 }
@@ -157,7 +158,7 @@ TEST(Utils, RetrieveFieldRepeated) {
   std::vector<const Message*> results;
   FHIR_ASSERT_OK(RetrieveField(
       patient, *r4::Patient::GetDescriptor()->FindFieldByName("communication"),
-      &results));
+      [](const Descriptor*) {return nullptr;}, &results));
 
   ASSERT_THAT(results,
               UnorderedElementsAreArray(

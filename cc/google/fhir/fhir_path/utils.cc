@@ -24,8 +24,11 @@ namespace fhir_path {
 namespace internal {
 
 using ::absl::NotFoundError;
+using ::absl::InvalidArgumentError;
+using ::absl::InternalError;
 using ::absl::UnimplementedError;
 using ::google::protobuf::FieldDescriptor;
+using ::google::protobuf::Descriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 
@@ -63,8 +66,46 @@ Status OneofMessageFromContainer(const Message& container_message,
   return absl::OkStatus();
 }
 
-Status RetrieveField(const Message& root, const FieldDescriptor& field,
-                     std::vector<const Message*>* results) {
+StatusOr<Message*> UnpackAnyAsContainedResource(
+    const google::protobuf::Any& any,
+    std::function<google::protobuf::Message*(const Descriptor*)> message_factory) {
+  std::string full_type_name;
+  if (!google::protobuf::Any::ParseAnyTypeUrl(std::string(any.type_url()),
+                                              &full_type_name)) {
+    return InvalidArgumentError(
+        absl::StrCat("google.protobuf.Any has an invalid type URL. \"",
+                     any.type_url(), "\""));
+  }
+
+  const Descriptor* type_descriptor =
+      ::google::protobuf::DescriptorPool::generated_pool()->FindMessageTypeByName(
+          full_type_name);
+  if (type_descriptor == nullptr) {
+    // TODO: Ensure the necessary protos are available.
+    return UnimplementedError(
+        absl::StrCat("Unknown message type packed into google.protobuf.Any \"",
+                     full_type_name, "\""));
+  }
+
+  if (!IsContainedResource(type_descriptor)) {
+    return InvalidArgumentError(absl::StrCat(
+        "google.protobuf.Any messages must store a ContainedResource. Got \"",
+        full_type_name, "\"."));
+  }
+
+  Message* unpacked_message = message_factory(type_descriptor);
+
+  if (!any.UnpackTo(unpacked_message)) {
+    return InternalError("Failed to unpack google.protobuf.Any.");
+  }
+
+  return unpacked_message;
+}
+
+Status RetrieveField(
+    const Message& root, const FieldDescriptor& field,
+    std::function<google::protobuf::Message*(const Descriptor*)> message_factory,
+    std::vector<const Message*>* results) {
   // FHIR .value invocations on primitive types should return the FHIR
   // primitive message type rather than the underlying native primitive.
   if (IsFhirPrimitiveValue(field)) {
@@ -76,9 +117,13 @@ Status RetrieveField(const Message& root, const FieldDescriptor& field,
       root, &field, [&](const Message& child) {
         // R4+ packs contained resources in Any protos.
         if (IsMessageType<google::protobuf::Any>(child)) {
-          // TODO: Add support for ContainedResource packed in Any.
-          return UnimplementedError(
-              "Contained resources packed in protobuf.Any are not supported");
+          auto any = dynamic_cast<const google::protobuf::Any&>(child);
+
+          FHIR_ASSIGN_OR_RETURN(
+              Message * unpacked_message,
+              UnpackAnyAsContainedResource(any, message_factory));
+
+          return OneofMessageFromContainer(*unpacked_message, results);
         }
 
         if (IsChoiceType(&field) || IsContainedResource(field.message_type())) {
@@ -90,7 +135,7 @@ Status RetrieveField(const Message& root, const FieldDescriptor& field,
       });
 }
 
-bool HasFieldWithJsonName(const google::protobuf::Descriptor* descriptor,
+bool HasFieldWithJsonName(const Descriptor* descriptor,
                           absl::string_view json_name) {
   if (IsContainedResource(descriptor) || IsChoiceTypeContainer(descriptor)) {
     for (int i = 0; i < descriptor->field_count(); i++) {
@@ -105,8 +150,8 @@ bool HasFieldWithJsonName(const google::protobuf::Descriptor* descriptor,
   return FindFieldByJsonName(descriptor, json_name);
 }
 
-const google::protobuf::FieldDescriptor* FindFieldByJsonName(
-    const google::protobuf::Descriptor* descriptor, absl::string_view json_name) {
+const FieldDescriptor* FindFieldByJsonName(
+    const Descriptor* descriptor, absl::string_view json_name) {
   for (int i = 0; i < descriptor->field_count(); ++i) {
     if (json_name == descriptor->field(i)->json_name()) {
       return descriptor->field(i);

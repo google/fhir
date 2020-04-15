@@ -33,11 +33,18 @@ namespace internal {
 // the resource or value. This method handles traversing over these abstractions
 // and returning the desired message.
 //
+// The provided message_factory must create a new message on each call for the
+// provided descriptor. If it is unable to create a message for the provided
+// descriptor it shall return nullptr. The lifetime of created Message objects
+// is owned by the factory. It is responsible for deleting them when they are no
+// longer in use.
+//
 // NOTE: The messages in the results vector will no longer be accessible when
 // the root message is deleted.
-absl::Status RetrieveField(const google::protobuf::Message& root,
-                           const google::protobuf::FieldDescriptor& field,
-                           std::vector<const google::protobuf::Message*>* results);
+absl::Status RetrieveField(
+    const google::protobuf::Message& root, const google::protobuf::FieldDescriptor& field,
+    std::function<google::protobuf::Message*(const google::protobuf::Descriptor*)> message_factory,
+    std::vector<const google::protobuf::Message*>* results);
 
 // Returns true if the message descriptor contains a field whose JSON name
 // matches the provided json_name. In the case that the descriptor describes a
