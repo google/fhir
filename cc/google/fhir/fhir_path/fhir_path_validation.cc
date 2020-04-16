@@ -173,11 +173,12 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
 
 // Validates that the given message satisfies the given FHIRPath expression.
 ValidationResult ValidateMessageConstraint(
+    const absl::string_view parent_path,
     const internal::WorkspaceMessage& message,
     const CompiledExpression& expression) {
   StatusOr<EvaluationResult> expr_result = expression.Evaluate(message);
   return ValidationResult(
-      message.Message()->GetDescriptor()->name(), expression.fhir_path(),
+      std::string(parent_path), expression.fhir_path(),
       expr_result.ok() ? expr_result.ValueOrDie().GetBoolean()
                        : expr_result.status());
 }
@@ -185,18 +186,20 @@ ValidationResult ValidateMessageConstraint(
 // Validates that the given field in the given parent satisfies the given
 // FHIRPath expression.
 ValidationResult ValidateFieldConstraint(
+    const absl::string_view parent_path,
     const Message& parent, const FieldDescriptor* field,
     const internal::WorkspaceMessage& field_value,
     const CompiledExpression& expression) {
   StatusOr<EvaluationResult> expr_result = expression.Evaluate(field_value);
   return ValidationResult(
-      absl::StrCat(field->containing_type()->name(), ".", field->json_name()),
+      absl::StrCat(parent_path, ".", field->json_name()),
       expression.fhir_path(),
       expr_result.ok() ? expr_result.ValueOrDie().GetBoolean()
                        : expr_result.status());
 }
 
-void FhirPathValidator::Validate(const internal::WorkspaceMessage& message,
+void FhirPathValidator::Validate(absl::string_view path,
+                                 const internal::WorkspaceMessage& message,
                                  std::vector<ValidationResult>* results) {
   // ConstraintsFor may recursively build constraints so
   // we lock the mutex here to ensure thread safety.
@@ -207,7 +210,7 @@ void FhirPathValidator::Validate(const internal::WorkspaceMessage& message,
 
   // Validate the constraints attached to the message root.
   for (const CompiledExpression& expr : constraints->message_expressions) {
-    results->push_back(ValidateMessageConstraint(message, expr));
+    results->push_back(ValidateMessageConstraint(path, message, expr));
   }
 
   // Validate the constraints attached to the message's fields.
@@ -218,7 +221,7 @@ void FhirPathValidator::Validate(const internal::WorkspaceMessage& message,
     ForEachMessage<Message>(
         *message.Message(), field, [&](const Message& child) {
           results->push_back(ValidateFieldConstraint(
-              *message.Message(), field,
+              path, *message.Message(), field,
               internal::WorkspaceMessage(message, &child), expr));
         });
   }
@@ -227,7 +230,13 @@ void FhirPathValidator::Validate(const internal::WorkspaceMessage& message,
   for (const FieldDescriptor* field : constraints->nested_with_constraints) {
     ForEachMessage<Message>(
         *message.Message(), field, [&](const Message& child) {
-          Validate(internal::WorkspaceMessage(message, &child), results);
+          std::string path_term =
+              IsContainedResource(*message.Message()) ||
+                      IsChoiceTypeContainer(message.Message()->GetDescriptor())
+                  ? absl::StrCat("ofType(", field->message_type()->name(), ")")
+                  : field->json_name();
+          Validate(absl::StrCat(path, ".", path_term),
+                   internal::WorkspaceMessage(message, &child), results);
         });
   }
 }
@@ -250,7 +259,8 @@ Status ValidationResults::LegacyValidationResult() const {
 ValidationResults FhirPathValidator::Validate(
     const ::google::protobuf::Message& message) {
   std::vector<ValidationResult> results;
-  Validate(internal::WorkspaceMessage(&message), &results);
+  Validate(message.GetDescriptor()->name(),
+           internal::WorkspaceMessage(&message), &results);
   return ValidationResults(results);
 }
 

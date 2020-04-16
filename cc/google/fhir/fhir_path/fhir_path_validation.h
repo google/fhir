@@ -40,8 +40,12 @@ class ValidationResult {
         fhirpath_constraint_(fhirpath_constraint),
         result_(result) {}
 
-  // Returns the message or field that the FHIRPath constraint was evaluated on.
-  // Either MessageName or MessageName.field.
+  // Returns a FHIRPath expression to the node that the FHIRPath constraint was
+  // evaluated on.
+  //
+  // Example: "Bundle.entry.resource.ofType(Organization).telecom"
+  //
+  // TODO: Report the correct index when dealing with collections.
   std::string DebugPath() const { return debug_path_; }
 
   // Returns the FHIRPath constraint that was evaluated.
@@ -133,7 +137,8 @@ class FhirPathValidator {
 
   // Recursively called validation method that aggregates results into the
   // provided vector.
-  void Validate(const internal::WorkspaceMessage& message,
+  void Validate(absl::string_view path,
+                const internal::WorkspaceMessage& message,
                 std::vector<ValidationResult>* results);
 
   const PrimitiveHandler* primitive_handler_;

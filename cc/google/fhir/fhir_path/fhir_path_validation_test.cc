@@ -18,10 +18,11 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/fhir_path/r4_fhir_path_validation.h"
 #include "google/fhir/fhir_path/stu3_fhir_path_validation.h"
+#include "google/fhir/status/statusor.h"
+#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/resources/encounter.pb.h"
 #include "proto/r4/core/resources/medication_knowledge.pb.h"
@@ -41,12 +42,34 @@ namespace google {
 namespace fhir {
 namespace fhir_path {
 
+// Provides a human-readable string representation of a ValidationResult object
+// for googletest.
+//
+// https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#teaching-googletest-how-to-print-your-values
+void PrintTo(const ValidationResult& result, std::ostream* os) {
+  *os << "[constraint = \"" << result.Constraint() << "\", debug_path = \""
+      << result.DebugPath() << "\", result = "
+      << (result.EvaluationResult().ok()
+              ? (result.EvaluationResult().ValueOrDie() ? "true" : "false")
+              : result.EvaluationResult().status().ToString())
+      << "]";
+}
+
 namespace {
+
+using ::testing::AllOf;
+using ::testing::Contains;
+using ::testing::Eq;
+using ::testing::IsSupersetOf;
+using ::testing::Property;
+using ::testing::ResultOf;
+using ::testing::StrEq;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
 
 #define USING(FhirNamespace) \
 using FhirNamespace::Boolean; \
+using FhirNamespace::Bundle; \
 using FhirNamespace::Decimal; \
 using FhirNamespace::Encounter; \
 using FhirNamespace::Observation; \
@@ -67,8 +90,7 @@ namespace stu3test { \
 TEST(CaseName, TestName##STU3) { \
 Body \
 } \
-} \
-
+}
 
 template <typename T>
 T ParseFromString(const std::string& str) {
@@ -131,14 +153,41 @@ FHIR_VERSION_TEST(FhirPathTest, ConstraintViolation, {
       VersionedMessageValidator().Validate(organization);
   EXPECT_FALSE(results.IsValid());
 
-  std::vector<ValidationResult> result_vector = results.Results();
-  auto result =
-      find_if(result_vector.begin(), result_vector.end(), [](auto result) {
-        return result.Constraint() == "where(use = 'home').empty()" &&
-               result.DebugPath() == "Organization.telecom";
-      });
-  ASSERT_TRUE(result != result_vector.end());
-  ASSERT_FALSE((*result).EvaluationResult().ValueOrDie());
+  ASSERT_THAT(
+      results.Results(),
+      Contains(AllOf(
+          Property(&ValidationResult::Constraint,
+                   StrEq("where(use = 'home').empty()")),
+          Property(&ValidationResult::DebugPath, StrEq("Organization.telecom")),
+          ResultOf([](auto x) { return x.EvaluationResult().ValueOrDie(); },
+                   Eq(false)))));
+})
+
+FHIR_VERSION_TEST(FhirPathTest, ConstraintViolationResultDebugPaths, {
+  auto bundle = ParseFromString<Bundle>(
+      R"proto(entry: {
+                resource: {
+                  organization: { telecom: { use: { value: HOME } } }
+                }
+              })proto");
+
+  ValidationResults results = VersionedMessageValidator().Validate(bundle);
+
+  ASSERT_THAT(
+      results.Results(),
+      IsSupersetOf(
+          {AllOf(
+               Property(&ValidationResult::Constraint,
+                        StrEq("where(use = 'home').empty()")),
+               Property(
+                   &ValidationResult::DebugPath,
+                   StrEq(
+                       "Bundle.entry.resource.ofType(Organization).telecom"))),
+           AllOf(Property(&ValidationResult::Constraint,
+                          StrEq("resource.exists() or request.exists() or "
+                                "response.exists()")),
+                 Property(&ValidationResult::DebugPath,
+                          StrEq("Bundle.entry")))}));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, ConstraintSatisfied, {
@@ -172,14 +221,15 @@ FHIR_VERSION_TEST(FhirPathTest, NestedConstraintViolated, {
   ValidationResults results = VersionedMessageValidator().Validate(value_set);
   EXPECT_FALSE(results.IsValid());
 
-  std::vector<ValidationResult> result_vector = results.Results();
-  auto result =
-      find_if(result_vector.begin(), result_vector.end(), [](auto result) {
-        return result.Constraint() ==
-               "code.exists() or display.exists()";
-      });
-  ASSERT_TRUE(result != result_vector.end());
-  ASSERT_FALSE((*result).EvaluationResult().ValueOrDie());
+  ASSERT_THAT(
+      results.Results(),
+      Contains(AllOf(
+          Property(&ValidationResult::Constraint,
+                   StrEq("code.exists() or display.exists()")),
+          Property(&ValidationResult::DebugPath,
+                   StrEq("ValueSet.expansion.contains")),
+          ResultOf([](auto x) { return x.EvaluationResult().ValueOrDie(); },
+                   Eq(false)))));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, NestedConstraintSatisfied, {
