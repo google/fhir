@@ -50,22 +50,19 @@ using ::google::protobuf::Message;
 using ::google::fhir::ForEachMessage;
 using ::google::fhir::StatusOr;
 
-bool ValidationResults::IsValid(ValidationBehavior behavior) const {
-  for (const ValidationResult& result : results_) {
-    if (!result.EvaluationResult().ok()) {
-      if (behavior == ValidationBehavior::kStrict) {
-        return false;
-      }
+bool ValidationResults::StrictValidationFn(const ValidationResult& result) {
+  return result.EvaluationResult().ok() &&
+         result.EvaluationResult().ValueOrDie();
+}
 
-      continue;
-    }
+bool ValidationResults::RelaxedValidationFn(const ValidationResult& result) {
+  return !result.EvaluationResult().ok() ||
+         result.EvaluationResult().ValueOrDie();
+}
 
-    if (!result.EvaluationResult().ValueOrDie()) {
-      return false;
-    }
-  }
-
-  return true;
+bool ValidationResults::IsValid(
+    std::function<bool(const ValidationResult&)> validation_fn) const {
+  return std::all_of(results_.begin(), results_.end(), validation_fn);
 }
 
 std::vector<ValidationResult> ValidationResults::Results() const {
@@ -242,7 +239,7 @@ void FhirPathValidator::Validate(absl::string_view path,
 }
 
 Status ValidationResults::LegacyValidationResult() const {
-  if (IsValid(ValidationResults::ValidationBehavior::kRelaxed)) {
+  if (IsValid(&ValidationResults::RelaxedValidationFn)) {
     return absl::OkStatus();
   }
 

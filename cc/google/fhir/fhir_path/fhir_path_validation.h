@@ -67,27 +67,29 @@ class ValidationResult {
 // on a particular resource.
 class ValidationResults {
  public:
-  enum class ValidationBehavior {
-    // All constraints must return true, if they evaluated to a boolean.
-    // Expressions that fail to evaluate to a boolean value are ignored. Common
-    // causes of an expression failing to evaluate to a boolean could be:
-    //   - the constraint uses a portion of FHIRPath not currently supported by
-    //     this library
-    //   - the constraint is not a valid FHIRPath expression
-    //   - the constraint does not yield a boolean value
-    kRelaxed = 0,
+  // Returns the result of the constraint's evaluation, if it evaluated to a
+  // boolean. Otherwise returns true. Common causes of an expression failing to
+  // evaluate to a boolean could be:
+  //   - the constraint uses a portion of FHIRPath not currently supported by
+  //     this library
+  //   - the constraint is not a valid FHIRPath expression
+  //   - the constraint does not yield a boolean value
+  static bool StrictValidationFn(const ValidationResult& result);
 
-    // All constraints must evaluate and return true.
-    kStrict = 1,
-  };
+  // Returns true if the result of the constraint's evaluation is true. False
+  // if the constraint was unmet or failed to evaluate to a boolean.
+  static bool RelaxedValidationFn(const ValidationResult& result);
 
-  ValidationResults(std::vector<ValidationResult> results)
+  explicit ValidationResults(std::vector<ValidationResult> results)
       : results_(results) {}
 
-  // Returns true if all FHIRPath constraints on the particular resource are
-  // met. See ValidationBehavior for details on possible definitions of
-  // validity. By default kStrict is used.
-  bool IsValid(ValidationBehavior behavior = ValidationBehavior::kStrict) const;
+  // Returns true if all FHIRPath constraints on the particular resource satisfy
+  // the provided validation function.
+  //
+  // See ValidationResults::StrictValidationFn and
+  // ValidationResults::RelaxedValidationFn for common definitions of validity.
+  bool IsValid(std::function<bool(const ValidationResult&)> validation_fn =
+                   &ValidationResults::StrictValidationFn) const;
 
   // Returns Status::OK or the status of the first constraint violation
   // encountered.
