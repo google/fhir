@@ -139,7 +139,6 @@ class Printer {
     const Descriptor* descriptor = proto.GetDescriptor();
     const Reflection* reflection = proto.GetReflection();
 
-
     // TODO: Use an annotation here.
     if (descriptor->name() == "ContainedResource") {
       return PrintContainedResource(proto);

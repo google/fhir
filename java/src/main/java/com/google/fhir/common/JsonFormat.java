@@ -729,6 +729,7 @@ public final class JsonFormat {
     }
 
     private void mergeMessage(JsonObject json, Message.Builder builder) {
+      // TODO: Use an annotation here.
       if (builder.getDescriptorForType().getName().equals("ContainedResource")) {
         // We handle contained resources in a special way, since we need to inspect the input to
         // determine its type.
