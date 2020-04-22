@@ -137,6 +137,10 @@ class FhirPathValidator {
   // Loads constraints for the given descriptor.
   MessageConstraints* ConstraintsFor(const ::google::protobuf::Descriptor* descriptor);
 
+  // Adds message-level constraints
+  void AddMessageConstraints(const ::google::protobuf::Descriptor* descriptor,
+                             MessageConstraints* constraints);
+
   // Recursively called validation method that aggregates results into the
   // provided vector.
   void Validate(absl::string_view path,

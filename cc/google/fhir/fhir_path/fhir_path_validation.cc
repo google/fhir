@@ -83,28 +83,7 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
   }
 
   auto constraints = absl::make_unique<MessageConstraints>();
-
-  int ext_size =
-      descriptor->options().ExtensionSize(proto::fhir_path_message_constraint);
-
-  for (int i = 0; i < ext_size; ++i) {
-    const std::string& fhir_path = descriptor->options().GetExtension(
-        proto::fhir_path_message_constraint, i);
-    auto constraint =
-        CompiledExpression::Compile(descriptor, primitive_handler_, fhir_path);
-    if (constraint.ok()) {
-      CompiledExpression expression = constraint.ValueOrDie();
-      constraints->message_expressions.push_back(expression);
-    } else {
-      LOG(WARNING) << "Ignoring message constraint on " << descriptor->name()
-                   << " (" << fhir_path << "). "
-                   << constraint.status().message();
-    }
-
-    // TODO: Unsupported FHIRPath expressions are simply not
-    // validated for now; this should produce an error once we support
-    // all of FHIRPath.
-  }
+  AddMessageConstraints(descriptor, constraints.get());
 
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
@@ -166,6 +145,33 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
   }
 
   return constraints_local;
+}
+
+// Build the message constraints for the given message type and
+// add it to the constraints cache.
+void FhirPathValidator::AddMessageConstraints(const Descriptor* descriptor,
+                                              MessageConstraints* constraints) {
+  int ext_size =
+      descriptor->options().ExtensionSize(proto::fhir_path_message_constraint);
+
+  for (int i = 0; i < ext_size; ++i) {
+    const std::string& fhir_path = descriptor->options().GetExtension(
+        proto::fhir_path_message_constraint, i);
+    auto constraint =
+        CompiledExpression::Compile(descriptor, primitive_handler_, fhir_path);
+    if (constraint.ok()) {
+      CompiledExpression expression = constraint.ValueOrDie();
+      constraints->message_expressions.push_back(expression);
+    } else {
+      LOG(WARNING) << "Ignoring message constraint on " << descriptor->name()
+                   << " (" << fhir_path << "). "
+                   << constraint.status().message();
+    }
+
+    // TODO: Unsupported FHIRPath expressions are simply not
+    // validated for now; this should produce an error once we support
+    // all of FHIRPath.
+  }
 }
 
 // Validates that the given message satisfies the given FHIRPath expression.
