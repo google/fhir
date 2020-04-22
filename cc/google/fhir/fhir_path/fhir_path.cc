@@ -3102,6 +3102,20 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     return ToAny(std::make_shared<ThisReference>(descriptor_stack_.back()));
   }
 
+  antlrcpp::Any visitTotalInvocation(
+      FhirPathParser::TotalInvocationContext* ctx) override {
+    // TODO: Add support for $total.
+    SetError(UnimplementedError("$total is not implemented"));
+    return nullptr;
+  }
+
+  antlrcpp::Any visitIndexInvocation(
+      FhirPathParser::IndexInvocationContext* ctx) override {
+    // TODO: Add support for $index.
+    SetError(UnimplementedError("$index is not implemented"));
+    return nullptr;
+  }
+
   antlrcpp::Any visitExternalConstant(
       FhirPathParser::ExternalConstantContext* ctx) override {
     std::string name = ctx->children[1]->getText();
@@ -3146,63 +3160,79 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     return nullptr;
   }
 
-  antlrcpp::Any visitTerminal(TerminalNode* node) override {
-    const std::string& text = node->getSymbol()->getText();
+  antlrcpp::Any visitNumberLiteral(
+      FhirPathParser::NumberLiteralContext* ctx) override {
+    const std::string& text = ctx->getText();
     const PrimitiveHandler* primitive_handler = primitive_handler_;
-
-    switch (node->getSymbol()->getType()) {
-      case FhirPathLexer::NUMBER:
-        // Determine if the number is an integer or decimal, propagating
-        // decimal types in string form to preserve precision.
-        if (text.find(".") != std::string::npos) {
-          return ToAny(std::make_shared<Literal<std::string>>(
-              text, primitive_handler_->DecimalDescriptor(),
-              [primitive_handler](const std::string& value) {
-                return primitive_handler->NewDecimal(value);
-              }));
-        } else {
-          int32_t value;
-          if (!absl::SimpleAtoi(text, &value)) {
-            SetError(
-                InvalidArgumentError(absl::StrCat("Malformed integer ", text)));
-            return nullptr;
-          }
-
-          return ToAny(std::make_shared<Literal<int32_t>>(
-              value, primitive_handler_->IntegerDescriptor(),
-              [primitive_handler](int32_t value) {
-                return primitive_handler->NewInteger(value);
-              }));
-        }
-
-      case FhirPathLexer::STRING: {
-        // The lexer keeps the quotes around string literals,
-        // so we remove them here. The following assert simply reflects
-        // the lexer's guarantees as defined.
-        assert(text.length() >= 2);
-        const std::string& trimmed = text.substr(1, text.length() - 2);
-        std::string unescaped;
-        // CUnescape handles additional escape sequences not allowed by
-        // FHIRPath. However, these additional sequences are disallowed by the
-        // grammar rules (FhirPath.g4) which are enforced by the parser. In
-        // addition, CUnescape does not handle escaped forward slashes.
-        absl::CUnescape(trimmed, &unescaped);
-        return ToAny(std::make_shared<Literal<std::string>>(
-            unescaped, primitive_handler_->StringDescriptor(),
-            [primitive_handler](const std::string& value) {
-              return primitive_handler->NewString(value);
-            }));
+    // Determine if the number is an integer or decimal, propagating
+    // decimal types in string form to preserve precision.
+    if (text.find(".") != std::string::npos) {
+      return ToAny(std::make_shared<Literal<std::string>>(
+          text, primitive_handler_->DecimalDescriptor(),
+          [primitive_handler](const std::string& value) {
+            return primitive_handler->NewDecimal(value);
+          }));
+    } else {
+      int32_t value;
+      if (!absl::SimpleAtoi(text, &value)) {
+        SetError(
+            InvalidArgumentError(absl::StrCat("Malformed integer ", text)));
+        return nullptr;
       }
 
-      case FhirPathLexer::BOOL:
-        return ToAny(std::make_shared<Literal<bool>>(
-            text == "true", primitive_handler_->BooleanDescriptor(),
-            [primitive_handler](bool value) {
-              return primitive_handler->NewBoolean(value);
-            }));
+      return ToAny(std::make_shared<Literal<int32_t>>(
+          value, primitive_handler_->IntegerDescriptor(),
+          [primitive_handler](int32_t value) {
+            return primitive_handler->NewInteger(value);
+          }));
+    }
+  }
 
-      case FhirPathLexer::EMPTY:
-        return ToAny(std::make_shared<EmptyLiteral>());
+  antlrcpp::Any visitStringLiteral(
+      FhirPathParser::StringLiteralContext* ctx) override {
+    const std::string& text = ctx->getText();
+    const PrimitiveHandler* primitive_handler = primitive_handler_;
+    // The lexer keeps the quotes around string literals,
+    // so we remove them here. The following assert simply reflects
+    // the lexer's guarantees as defined.
+    assert(text.length() >= 2);
+    const std::string& trimmed = text.substr(1, text.length() - 2);
+    std::string unescaped;
+    // CUnescape handles additional escape sequences not allowed by
+    // FHIRPath. However, these additional sequences are disallowed by the
+    // grammar rules (FhirPath.g4) which are enforced by the parser. In
+    // addition, CUnescape does not handle escaped forward slashes.
+    absl::CUnescape(trimmed, &unescaped);
+    return ToAny(std::make_shared<Literal<std::string>>(
+        unescaped, primitive_handler_->StringDescriptor(),
+        [primitive_handler](const std::string& value) {
+          return primitive_handler->NewString(value);
+        }));
+  }
+
+  antlrcpp::Any visitBooleanLiteral(
+      FhirPathParser::BooleanLiteralContext* ctx) override {
+    const std::string& text = ctx->getText();
+    const PrimitiveHandler* primitive_handler = primitive_handler_;
+
+    return ToAny(std::make_shared<Literal<bool>>(
+        text == "true", primitive_handler_->BooleanDescriptor(),
+        [primitive_handler](bool value) {
+          return primitive_handler->NewBoolean(value);
+        }));
+  }
+
+  antlrcpp::Any visitNullLiteral(
+      FhirPathParser::NullLiteralContext* ctx) override {
+    return ToAny(std::make_shared<EmptyLiteral>());
+  }
+
+  antlrcpp::Any visitTerminal(TerminalNode* node) override {
+    switch (node->getSymbol()->getType()) {
+      case FhirPathLexer::DATE:
+        // TODO: Add support for Date literals.
+        SetError(UnimplementedError("Date literals are not yet supported."));
+        return nullptr;
 
       case FhirPathLexer::DATETIME:
         // TODO: Add support for DateTime literals.
@@ -3216,7 +3246,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
         return nullptr;
 
       default:
-        SetError(InternalError(absl::StrCat("Unknown terminal type: ", text)));
+        SetError(InternalError(absl::StrCat("Unknown terminal type: ",
+                                            node->getSymbol()->getText())));
         return nullptr;
     }
   }
