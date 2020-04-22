@@ -1138,12 +1138,6 @@ FHIR_VERSION_TEST(FhirPathTest, TestXor, {
   EXPECT_THAT(Evaluate("({} xor {})"), EvalsToEmpty());
 })
 
-FHIR_VERSION_TEST(FhirPathTest, TestOrShortCircuit, {
-  Quantity quantity;
-  EXPECT_THAT(Evaluate(quantity, "value.hasValue().not() or value < 100"),
-              EvalsToTrue());
-})
-
 FHIR_VERSION_TEST(FhirPathTest, TestMultiOrShortCircuit, {
   Period no_end_period = ParseFromString<Period>(R"proto(
     start: { value_us: 1556750000000 timezone: "America/Los_Angeles" }
@@ -1156,52 +1150,42 @@ FHIR_VERSION_TEST(FhirPathTest, TestMultiOrShortCircuit, {
       EvalsToTrue());
 })
 
-FHIR_VERSION_TEST(FhirPathTest, TestOrFalseWithEmptyReturnsEmpty, {
-  Quantity quantity;
-  EXPECT_THAT(Evaluate(quantity, "value.hasValue() or value < 100"),
-              EvalsToEmpty());
+FHIR_VERSION_TEST(FhirPathTest, TestOr, {
+  EXPECT_THAT(Evaluate("true or true"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("true or false"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("true or {}"), EvalsToTrue());
+
+  EXPECT_THAT(Evaluate("false or true"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("false or false"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("false or {}"), EvalsToEmpty());
+
+  EXPECT_THAT(Evaluate("{} or true"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("{} or false"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("{} or {}"), EvalsToEmpty());
 })
 
-FHIR_VERSION_TEST(FhirPathTest, TestOrOneIsTrue, {
-  Encounter test_encounter = ValidEncounter<Encounter>();
+FHIR_VERSION_TEST(FhirPathTest, TestAnd, {
+  EXPECT_THAT(Evaluate("true and true"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("true and false"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("true and {}"), EvalsToEmpty());
 
-  EXPECT_THAT(
-      Evaluate(test_encounter, "period.start.exists() or period.end.exists()"),
-      EvalsToTrue());
+  EXPECT_THAT(Evaluate("false and true"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("false and false"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("false and {}"), EvalsToFalse());
+
+  EXPECT_THAT(Evaluate("{} and true"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("{} and false"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("{} and {}"), EvalsToEmpty());
 })
 
-FHIR_VERSION_TEST(FhirPathTest, TestOrNeitherAreTrue, {
-  Encounter test_encounter = ValidEncounter<Encounter>();
+FHIR_VERSION_TEST(FhirPathTest, TestSingletonEvaluationOfCollections, {
+  EXPECT_THAT(Evaluate("'string' and true"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'string' and false"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("'string' or false"), EvalsToTrue());
 
-  EXPECT_THAT(
-      Evaluate(test_encounter, "hospitalization.exists() or location.exists()"),
-      EvalsToFalse());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestAndShortCircuit, {
-  Quantity quantity;
-  EXPECT_THAT(Evaluate(quantity, "value.hasValue() and value < 100"),
-              EvalsToFalse());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestAndTrueWithEmptyReturnsEmpty, {
-  Quantity quantity;
-  EXPECT_THAT(Evaluate(quantity, "value.hasValue().not() and value < 100"),
-              EvalsToEmpty());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestAndOneIsTrue, {
-  Encounter test_encounter = ValidEncounter<Encounter>();
-  EXPECT_THAT(
-      Evaluate(test_encounter, "period.start.exists() and period.end.exists()"),
-      EvalsToFalse());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestAndBothAreTrue, {
-  Encounter test_encounter = ValidEncounter<Encounter>();
-  EXPECT_THAT(
-      Evaluate(test_encounter, "period.start.exists() and status.exists()"),
-      EvalsToTrue());
+  EXPECT_THAT(Evaluate("1 and true"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("1 and false"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("1 or false"), EvalsToTrue());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestEmptyLiteral, {

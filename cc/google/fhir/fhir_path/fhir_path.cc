@@ -122,6 +122,7 @@ StatusOr<absl::optional<int32_t>> IntegerOrEmpty(
   return absl::optional<int32_t>(value);
 }
 
+// See http://hl7.org/fhirpath/N1/#singleton-evaluation-of-collections
 StatusOr<absl::optional<bool>> BooleanOrEmpty(
     const PrimitiveHandler* primitive_handler,
     const std::vector<WorkspaceMessage>& messages) {
@@ -129,10 +130,13 @@ StatusOr<absl::optional<bool>> BooleanOrEmpty(
     return absl::optional<bool>();
   }
 
-  if (messages.size() > 1 ||
-      !IsPrimitive(messages[0].Message()->GetDescriptor())) {
+  if (messages.size() > 1) {
     return InvalidArgumentError(
-        "Expression must be empty or represent a single primitive value.");
+        "Expression must be empty or contain a single value.");
+  }
+
+  if (!IsBoolean(*messages[0].Message())) {
+    return absl::optional<bool>(true);
   }
 
   FHIR_ASSIGN_OR_RETURN(
