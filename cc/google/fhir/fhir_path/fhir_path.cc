@@ -44,8 +44,10 @@ namespace google {
 namespace fhir {
 namespace fhir_path {
 
+using ::absl::InternalError;
 using ::absl::InvalidArgumentError;
 using ::absl::NotFoundError;
+using ::absl::UnimplementedError;
 using ::antlr4::ANTLRInputStream;
 using ::antlr4::BaseErrorListener;
 using ::antlr4::CommonTokenStream;
@@ -206,7 +208,7 @@ StatusOr<WorkspaceMessage> WorkspaceMessage::NearestResource() const {
                          });
 
   if (it == ancestry_stack_.rend()) {
-    return ::absl::NotFoundError("No Resource found in ancestry.");
+    return NotFoundError("No Resource found in ancestry.");
   }
 
   std::vector<const google::protobuf::Message*> resource_ancestry(
@@ -2695,6 +2697,13 @@ struct InvocationDefinition {
   const std::vector<FhirPathParser::ExpressionContext*> params;
 };
 
+StatusOr<ExpressionNode*> UnimplementedFunction(
+    std::shared_ptr<ExpressionNode>,
+    const std::vector<FhirPathParser::ExpressionContext*>&,
+    FhirPathBaseVisitor*, FhirPathBaseVisitor*) {
+  return UnimplementedError("Function is not yet supported.");
+}
+
 // ANTLR Visitor implementation to translate the AST
 // into ExpressionNodes that can run the expression over
 // given protocol buffers.
@@ -2727,7 +2736,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     // This could be a simple member name or a parameterized function...
     antlrcpp::Any invocation = node->children[2]->accept(this);
 
-    if (!CheckOk()) {
+    if (!GetError().ok()) {
       return nullptr;
     }
 
@@ -2740,7 +2749,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       auto function_node =
           createFunction(definition->name, expr, definition->params);
 
-      if (function_node == nullptr || !CheckOk()) {
+      if (function_node == nullptr || !GetError().ok()) {
         return nullptr;
       } else {
         return ToAny(function_node);
@@ -2752,7 +2761,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       // doesn't have the referenced field, set an error and return.
       if (descriptor != nullptr && !HasFieldWithJsonName(descriptor,
                                                          definition->name)) {
-        SetError(absl::StrCat("Unable to find field ", definition->name));
+        SetError(NotFoundError(
+            absl::StrCat("Unable to find field ", definition->name)));
         return nullptr;
       }
 
@@ -2770,7 +2780,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       FhirPathParser::InvocationTermContext* ctx) override {
     antlrcpp::Any invocation = visitChildren(ctx);
 
-    if (!CheckOk()) {
+    if (!GetError().ok()) {
       return nullptr;
     }
 
@@ -2786,8 +2796,9 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
           std::make_shared<ThisReference>(descriptor_stack_.back()),
           definition->params);
 
-      return function_node == nullptr || !CheckOk() ? nullptr
-                                                    : ToAny(function_node);
+      return function_node == nullptr || !GetError().ok()
+                 ? nullptr
+                 : ToAny(function_node);
     }
 
     const Descriptor* descriptor = descriptor_stack_.back();
@@ -2796,7 +2807,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     // doesn't have the referenced field, set an error and return.
     if (descriptor != nullptr && !HasFieldWithJsonName(descriptor,
                                                        definition->name)) {
-      SetError(absl::StrCat("Unable to find field ", definition->name));
+      SetError(NotFoundError(
+          absl::StrCat("Unable to find field ", definition->name)));
       return nullptr;
     }
 
@@ -2813,7 +2825,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
-    if (!CheckOk()) {
+    if (!GetError().ok()) {
       return nullptr;
     }
 
@@ -2829,7 +2841,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
-    if (!CheckOk()) {
+    if (!GetError().ok()) {
       return nullptr;
     }
 
@@ -2845,7 +2857,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     std::string op = ctx->children[1]->getText();
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
-    if (!CheckOk()) {
+    if (!GetError().ok()) {
       return nullptr;
     }
 
@@ -2860,9 +2872,14 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return ToAny(std::make_shared<StrCatOperator>(left, right));
     }
 
-    // TODO: Support "-"
+    if (op == "-") {
+      // TODO: Support "-"
+      SetError(UnimplementedError("'-' operator is not supported yet."));
+      return nullptr;
+    }
 
-    SetError(absl::StrCat("Unsupported additive operator: ", op));
+    // FhirPath.g4 does not define any additional additive operators.
+    SetError(InternalError(absl::StrCat("Unknown additive operator: ", op)));
     return nullptr;
   }
 
@@ -2871,7 +2888,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     std::string op = ctx->children[0]->getText();
     antlrcpp::Any operand_any = ctx->children[1]->accept(this);
 
-    if (!CheckOk()) {
+    if (!GetError().ok()) {
       return nullptr;
     }
 
@@ -2887,7 +2904,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
           PolarityOperator::kNegative, operand));
     }
 
-    SetError(absl::StrCat("Unsupported polarity operator: ", op));
+    // FhirPath.g4 does not define any additional polarity operators.
+    SetError(InternalError(absl::StrCat("Unknown polarity operator: ", op)));
     return nullptr;
   }
 
@@ -2897,7 +2915,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     std::string op = ctx->children[1]->getText();
     std::string type = ctx->children[2]->getText();
 
-    if (!CheckOk()) {
+    if (!GetError().ok()) {
       return nullptr;
     }
 
@@ -2911,7 +2929,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return ToAny(std::make_shared<AsFunction>(left, type));
     }
 
-    SetError(absl::StrCat("Unsupported type operator: ", op));
+    // FhirPath.g4 does not define any additional type operators.
+    SetError(InternalError(absl::StrCat("Unknown type operator: ", op)));
     return nullptr;
   }
 
@@ -2921,7 +2940,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     std::string op = ctx->children[1]->getText();
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
-    if (!CheckOk()) {
+    if (!GetError().ok()) {
       return nullptr;
     }
 
@@ -2937,7 +2956,14 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return ToAny(std::make_shared<NotFunction>(equals_op));
     }
 
-    SetError(absl::StrCat("Unsupported equality operator: ", op));
+    if (op == "~" || op == "!~") {
+      SetError(
+          UnimplementedError("'~' and '!~' operators are not yet supported"));
+      return nullptr;
+    }
+
+    // FhirPath.g4 does not define any additional equality operators.
+    SetError(InternalError(absl::StrCat("Unknown equality operator: ", op)));
     return nullptr;
   }
 
@@ -2947,7 +2973,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     std::string op = ctx->children[1]->getText();
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
-    if (!CheckOk()) {
+    if (!GetError().ok()) {
       return nullptr;
     }
 
@@ -2965,7 +2991,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     } else if (op == ">=") {
       op_type = ComparisonOperator::kGreaterThanEqualTo;
     } else {
-      SetError(absl::StrCat("Unsupported comparison operator: ", op));
+      SetError(
+          InternalError(absl::StrCat("Unknown comparison operator: ", op)));
       return nullptr;
     }
 
@@ -2978,7 +3005,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     std::string op = ctx->children[1]->getText();
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
-    if (!CheckOk()) {
+    if (!GetError().ok()) {
       return nullptr;
     }
 
@@ -2991,7 +3018,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return ToAny(std::make_shared<ContainsOperator>(left, right));
     }
 
-    SetError(absl::StrCat("Unsupported membership operator: ", op));
+    SetError(InternalError(absl::StrCat("Unknown membership operator: ", op)));
     return nullptr;
   }
 
@@ -3003,7 +3030,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitFunctionInvocation(
       FhirPathParser::FunctionInvocationContext* ctx) override {
-    if (!CheckOk()) {
+    if (!GetError().ok()) {
       return nullptr;
     }
 
@@ -3021,7 +3048,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
-    if (!CheckOk()) {
+    if (!GetError().ok()) {
       return nullptr;
     }
 
@@ -3037,7 +3064,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     std::string op = ctx->children[1]->getText();
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
-    if (!CheckOk()) {
+    if (!GetError().ok()) {
       return nullptr;
     }
 
@@ -3054,7 +3081,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
-    if (!CheckOk()) {
+    if (!GetError().ok()) {
       return nullptr;
     }
 
@@ -3102,9 +3129,20 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
           std::make_shared<ContextReference>(descriptor_stack_.front()));
     } else if (name == "resource") {
       return ToAny(std::make_shared<ResourceReference>());
+    } else if (name == "rootResource") {
+      // TODO: Add suport for %rootResource
+      SetError(UnimplementedError("%rootResource is not implemented"));
+    } else if (absl::StartsWith(name, "vs-")) {
+      // TODO: Add support for %vs-[name]
+      SetError(UnimplementedError("%vs-[name] is not implemented"));
+    } else if (absl::StartsWith(name, "ext-")) {
+      // TODO: Add support for %ext-[name]
+      SetError(UnimplementedError("%ext-[name] is not implemented"));
+    } else {
+      SetError(
+          NotFoundError(absl::StrCat("Unknown external constant: ", name)));
     }
 
-    SetError(absl::StrCat("Unknown external constant: ", name));
     return nullptr;
   }
 
@@ -3125,7 +3163,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
         } else {
           int32_t value;
           if (!absl::SimpleAtoi(text, &value)) {
-            SetError(absl::StrCat("Malformed integer ", text));
+            SetError(
+                InvalidArgumentError(absl::StrCat("Malformed integer ", text)));
             return nullptr;
           }
 
@@ -3165,18 +3204,32 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       case FhirPathLexer::EMPTY:
         return ToAny(std::make_shared<EmptyLiteral>());
 
-      default:
+      case FhirPathLexer::DATETIME:
+        // TODO: Add support for DateTime literals.
+        SetError(
+            UnimplementedError("DateTime literals are not yet supported."));
+        return nullptr;
 
-        SetError(absl::StrCat("Unknown terminal type: ", text));
+      case FhirPathLexer::TIME:
+        // TODO: Add spport for time literals.
+        SetError(UnimplementedError("Time literals are not yet supported."));
+        return nullptr;
+
+      default:
+        SetError(InternalError(absl::StrCat("Unknown terminal type: ", text)));
         return nullptr;
     }
   }
 
+  antlrcpp::Any visitErrorNode(antlr4::tree::ErrorNode* node) override {
+    SetError(InternalError(
+        absl::StrCat("Unknown error encountered: ", node->toString())));
+    return nullptr;
+  }
+
   antlrcpp::Any defaultResult() override { return nullptr; }
 
-  bool CheckOk() { return error_message_.empty(); }
-
-  std::string GetError() { return error_message_; }
+  absl::Status GetError() { return error_; }
 
   BaseErrorListener* GetErrorListener() { return &error_listener_; }
 
@@ -3216,6 +3269,49 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"ofType", OfTypeFunction::Create},
       {"children", FunctionNode::Create<ChildrenFunction>},
       {"descendants", FunctionNode::Create<DescendantsFunction>},
+      {"allTrue", UnimplementedFunction},
+      {"anyTrue", UnimplementedFunction},
+      {"allFalse", UnimplementedFunction},
+      {"anyFalse", UnimplementedFunction},
+      {"subsetOf", UnimplementedFunction},
+      {"supersetOf", UnimplementedFunction},
+      {"repeat", UnimplementedFunction},
+      {"single", UnimplementedFunction},
+      {"last", UnimplementedFunction},
+      {"skip", UnimplementedFunction},
+      {"take", UnimplementedFunction},
+      {"exclude", UnimplementedFunction},
+      {"union", UnimplementedFunction},
+      {"convertsToBoolean", UnimplementedFunction},
+      {"toBoolean", UnimplementedFunction},
+      {"convertsToInteger", UnimplementedFunction},
+      {"convertsToDate", UnimplementedFunction},
+      {"toDate", UnimplementedFunction},
+      {"convertsToDateTime", UnimplementedFunction},
+      {"toDateTime", UnimplementedFunction},
+      {"convertsToDecimal", UnimplementedFunction},
+      {"toDecimal", UnimplementedFunction},
+      {"convertsToQuantity", UnimplementedFunction},
+      {"toQuantity", UnimplementedFunction},
+      {"convertsToString", UnimplementedFunction},
+      {"convertsToTime", UnimplementedFunction},
+      {"toTime", UnimplementedFunction},
+      {"indexOf", UnimplementedFunction},
+      {"substring", UnimplementedFunction},
+      {"endsWith", UnimplementedFunction},
+      {"upper", UnimplementedFunction},
+      {"lower", UnimplementedFunction},
+      {"replace", UnimplementedFunction},
+      {"toChars", UnimplementedFunction},
+      {"today", UnimplementedFunction},
+      {"now", UnimplementedFunction},
+      {"getValue", UnimplementedFunction},
+      {"elementDefinition", UnimplementedFunction},
+      {"slice", UnimplementedFunction},
+      {"checkModifiers", UnimplementedFunction},
+      {"memberOf", UnimplementedFunction},
+      {"subsumes", UnimplementedFunction},
+      {"subsumedBy", UnimplementedFunction},
   };
 
   // Returns an ExpressionNode that implements the specified FHIRPath function.
@@ -3240,20 +3336,19 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       StatusOr<ExpressionNode*> result = function_factory->second(
           child_expression, params, this, &child_context_visitor);
       if (!result.ok()) {
-        this->SetError(absl::StrCat(
+        this->SetError(absl::InvalidArgumentError(absl::StrCat(
             "Failed to compile call to ", function_name,
             "(): ", result.status().message(),
-            !child_context_visitor.CheckOk()
-                ? absl::StrCat("; ", child_context_visitor.GetError())
-                : ""));
+            !child_context_visitor.GetError().ok()
+                ? absl::StrCat("; ", child_context_visitor.GetError().message())
+                : "")));
         return std::shared_ptr<ExpressionNode>(nullptr);
       }
 
       return std::shared_ptr<ExpressionNode>(result.ValueOrDie());
     } else {
-      // TODO: Implement set of functions for initial use cases.
-      SetError(absl::StrCat("The function ", function_name,
-                            " is not yet implemented"));
+      SetError(NotFoundError(
+          absl::StrCat("The function ", function_name, " does not exist.")));
 
       return std::shared_ptr<ExpressionNode>(nullptr);
     }
@@ -3269,20 +3364,18 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
                      antlr4::Token* offending_symbol, size_t line,
                      size_t position_in_line, const std::string& message,
                      std::exception_ptr e) override {
-      visitor_->SetError(message);
+      visitor_->SetError(absl::InvalidArgumentError(message));
     }
 
    private:
     FhirPathCompilerVisitor* visitor_;
   };
 
-  void SetError(const std::string& error_message) {
-    error_message_ = error_message;
-  }
+  void SetError(const absl::Status& error) { error_ = error; }
 
   FhirPathErrorListener error_listener_;
   std::vector<const Descriptor*> descriptor_stack_;
-  std::string error_message_;
+  absl::Status error_;
   const PrimitiveHandler* primitive_handler_;
 };
 
@@ -3393,13 +3486,11 @@ StatusOr<CompiledExpression> CompiledExpression::Compile(
   lexer.addErrorListener(visitor.GetErrorListener());
   antlrcpp::Any result = visitor.visit(parser.expression());
 
-  // TODO: the visitor error check should be redundant
-  if (result.isNotNull() && visitor.CheckOk()) {
+  if (result.isNotNull() && visitor.GetError().ok()) {
     auto root_node = result.as<std::shared_ptr<internal::ExpressionNode>>();
     return CompiledExpression(fhir_path, root_node, primitive_handler);
   } else {
-    auto status = InvalidArgumentError(visitor.GetError());
-    return InvalidArgumentError(visitor.GetError());
+    return visitor.GetError();
   }
 }
 
