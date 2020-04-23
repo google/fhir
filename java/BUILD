@@ -671,7 +671,7 @@ java_test(
 
 java_test(
     name = "FhirPackageTest",
-    size = "small",
+    size = "medium",
     srcs = ["src/test/java/com/google/fhir/protogen/FhirPackageTest.java"],
     data = [
         "//spec:fhir_r4_package.zip",
