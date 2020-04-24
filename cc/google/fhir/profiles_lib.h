@@ -196,6 +196,11 @@ StatusOr<const FieldDescriptor*> FindTargetField(
     const Message& source, const Message* target,
     const FieldDescriptor* source_field);
 
+Status CopyProtoPrimitiveField(const Message& source,
+                               const FieldDescriptor* source_field,
+                               Message* target,
+                               const FieldDescriptor* target_field);
+
 template <typename ExtensionLike,
           typename CodeableConceptLike = FHIR_DATATYPE(ExtensionLike,
                                                        codeable_concept),
@@ -220,6 +225,8 @@ Status CopyToProfile(const Message& source, Message* target) {
 
   for (int i = 0; i < source_descriptor->field_count(); i++) {
     const FieldDescriptor* source_field = source_descriptor->field(i);
+    const Descriptor* source_field_type = source_field->message_type();
+
     if (!FieldHasValue(source, source_field)) continue;
 
     // Skip over extensions field because it was handled by
@@ -228,6 +235,7 @@ Status CopyToProfile(const Message& source, Message* target) {
 
     FHIR_ASSIGN_OR_RETURN(const FieldDescriptor* target_field,
                           FindTargetField(source, target, source_field));
+
     if (!target_field) {
       // Since CodeableConcepts are handled via a different code path,
       // the only time that a field on source might not exist on target is if
@@ -260,8 +268,13 @@ Status CopyToProfile(const Message& source, Message* target) {
       continue;
     }
 
-    // Make sure the source data fits into the size restriction of the target
-    // field.
+    if (!source_field_type) {
+      FHIR_RETURN_IF_ERROR(
+          CopyProtoPrimitiveField(source, source_field, target, target_field));
+      continue;
+    }
+
+    // Make sure the source data fits into the size of the target field.
     if (source_field->is_repeated() && !target_field->is_repeated() &&
         source_reflection->FieldSize(source, source_field) > 1) {
       return InvalidArgumentError(absl::StrCat(
@@ -270,13 +283,6 @@ Status CopyToProfile(const Message& source, Message* target) {
           ", source has multiple entries but target field is not repeated."));
     }
 
-    const Descriptor* source_field_type = source_field->message_type();
-
-    if (!source_field_type) {
-      return InvalidArgumentError(
-          absl::StrCat("Encountered unexpected primitive type on field: ",
-                       source_field->full_name()));
-    }
     if (IsTypeOrProfileOfCode(target_field->message_type())) {
       FHIR_RETURN_IF_ERROR(ForEachMessageWithStatus<Message>(
           source, source_field,

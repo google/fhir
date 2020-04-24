@@ -209,3 +209,31 @@ profile {
     }
   }
 }
+
+profile {
+  element_data {
+    name: "ProfiledDatatypesObservation"
+    description: "Test of extensions on datatypes."
+  }
+  base_url: "http://hl7.org/fhir/StructureDefinition/Observation"
+
+  extension_slice {
+    element_data {
+      name: "extensionOnMeta"
+      description: "an example extension on a meta type."
+      size_restriction: REPEATED
+    }
+    url: "http://test/url/base/StructureDefinition/SimpleDecimalExt"
+    field_id: "Observation.meta"
+  }
+
+  extension_slice {
+    element_data {
+      name: "extensionOnString"
+      description: "an example extension on a string type."
+      size_restriction: REPEATED
+    }
+    url: "http://test/url/base/StructureDefinition/SimpleDecimalExt"
+    field_id: "Observation.referenceRange.text"
+  }
+}

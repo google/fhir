@@ -14,6 +14,7 @@
 
 package com.google.fhir.protogen;
 
+import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static com.google.fhir.protogen.GeneratorUtils.getElementById;
 import static com.google.fhir.protogen.GeneratorUtils.getParent;
 import static com.google.fhir.protogen.GeneratorUtils.isExtensionProfile;
@@ -23,6 +24,8 @@ import static com.google.fhir.protogen.GeneratorUtils.lastIdToken;
 import static com.google.fhir.protogen.GeneratorUtils.nameFromQualifiedName;
 import static com.google.fhir.protogen.GeneratorUtils.toFieldNameCase;
 import static com.google.fhir.protogen.GeneratorUtils.toFieldTypeCase;
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
 
 import com.google.common.base.Ascii;
 import com.google.common.base.CaseFormat;
@@ -82,6 +85,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /** A class which turns FHIR StructureDefinitions into protocol messages. */
@@ -292,7 +296,7 @@ public class ProtoGenerator {
             .filter(
                 def -> def.getDerivation().getValue() != TypeDerivationRuleCode.Value.CONSTRAINT)
             .filter(def -> knownUrls.add(def.getUrl().getValue()))
-            .collect(ImmutableMap.toImmutableMap(def -> def.getId().getValue(), def -> def));
+            .collect(toImmutableMap(def -> def.getId().getValue(), def -> def));
   }
 
   // Given a structure definition, gets the name of the top-level message that will be generated.
@@ -313,30 +317,6 @@ public class ProtoGenerator {
    * https://www.hl7.org/fhir/structuredefinition.html.
    */
   public DescriptorProto generateProto(StructureDefinition def) {
-    if (RECONCILE_SNAPSHOTS) {
-      def = reconcileSnapshotAndDifferential(def);
-    }
-
-    // Make sure the package the proto declared in is the same as it will be generated in.
-    StructureDefinitionData structDefData = structDefDataByUrl.get(def.getUrl().getValue());
-    if (structDefData == null) {
-      throw new IllegalArgumentException(
-          "No StructureDefinition data found for: " + def.getUrl().getValue());
-    }
-    if (!structDefData.protoPackage.equals(packageInfo.getProtoPackage())
-        && !isSingleTypedExtensionDefinition(structDefData.structDef)) {
-      throw new IllegalArgumentException(
-          "Inconsistent package name for "
-              + def.getUrl().getValue()
-              + ".  Registered in --known_types in "
-              + structDefData.protoPackage
-              + " but being generated in "
-              + packageInfo.getProtoPackage());
-    }
-
-    boolean isPrimitive =
-        def.getKind().getValue() == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE;
-
     // Build a top-level message description.
     StringBuilder comment =
         new StringBuilder()
@@ -376,7 +356,7 @@ public class ProtoGenerator {
     builder.setOptions(optionsBuilder);
 
     // If this is a primitive type, generate the value field first.
-    if (isPrimitive) {
+    if (def.getKind().getValue() == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE) {
       generatePrimitiveValue(def, builder);
     }
 
@@ -436,6 +416,7 @@ public class ProtoGenerator {
     options.setExtension(Annotations.fhirVersion, fhirVersion.toAnnotation());
     builder.setOptions(options);
     for (StructureDefinition def : defs) {
+      validateDefinition(def);
       DescriptorProto proto = generateProto(def);
       builder.addMessageType(proto);
     }
@@ -458,6 +439,29 @@ public class ProtoGenerator {
     }
     dependencies.forEach(dep -> builder.addDependency(dep));
     return builder.build();
+  }
+
+  private void validateDefinition(StructureDefinition def) {
+    if (RECONCILE_SNAPSHOTS) {
+      def = reconcileSnapshotAndDifferential(def);
+    }
+
+    // Make sure the package the proto declared in is the same as it will be generated in.
+    StructureDefinitionData structDefData = structDefDataByUrl.get(def.getUrl().getValue());
+    if (structDefData == null) {
+      throw new IllegalArgumentException(
+          "No StructureDefinition data found for: " + def.getUrl().getValue());
+    }
+    if (!structDefData.protoPackage.equals(packageInfo.getProtoPackage())
+        && !isSingleTypedExtensionDefinition(structDefData.structDef)) {
+      throw new IllegalArgumentException(
+          "Inconsistent package name for "
+              + def.getUrl().getValue()
+              + ".  Registered in --known_types in "
+              + structDefData.protoPackage
+              + " but being generated in "
+              + packageInfo.getProtoPackage());
+    }
   }
 
   // Returns true if the file proto uses a type from a set of types, but does not define it.
@@ -749,7 +753,7 @@ public class ProtoGenerator {
             ? Optional.empty()
             : Optional.of(choiceType.get().getNestedType(0));
       }
-      return Optional.of(choiceType.get());
+      return choiceType;
     }
     return buildNonChoiceTypeNestedTypeIfNeeded(element, elementList);
   }
@@ -772,6 +776,13 @@ public class ProtoGenerator {
     Optional<DescriptorProto> profiledCode = makeProfiledCodeIfRequired(element, elementList);
     if (profiledCode.isPresent()) {
       return profiledCode;
+    }
+
+    // Check for all other profiled datatypes
+    Optional<DescriptorProto> profiledDatatype =
+        makeProfiledDatatypeIfRequired(element, elementList);
+    if (profiledDatatype.isPresent()) {
+      return profiledDatatype;
     }
 
     // If this is a container type, or a complex internal extension, define the inner message.
@@ -890,6 +901,47 @@ public class ProtoGenerator {
     return Optional.of(
         valueSetGenerator.generateCodeBoundToValueSet(
             boundValueSetUrl.get(), typeWithBoundValueSet.get()));
+  }
+
+  private Optional<DescriptorProto> makeProfiledDatatypeIfRequired(
+      ElementDefinition element, List<ElementDefinition> elementList) {
+    if (isContainer(element)
+        || isExtensionBackboneElement(element)
+        || !descendantsHaveSlices(element, elementList)) {
+      return Optional.empty();
+    }
+
+    String baseId = element.getType(0).getCode().getValue();
+    StructureDefinition baseStructureDefinition = baseStructDefsById.get(baseId);
+
+    DescriptorProto.Builder builder = generateProto(baseStructureDefinition).toBuilder();
+    MessageOptions.Builder options = builder.getOptionsBuilder();
+    options
+        .clearExtension(ProtoGeneratorAnnotations.messageDescription)
+        .addExtension(
+            Annotations.fhirProfileBase,
+            options.getExtension(Annotations.fhirStructureDefinitionUrl))
+        .clearExtension(Annotations.fhirStructureDefinitionUrl);
+
+    QualifiedType qualifiedType = getQualifiedFieldType(element, elementList);
+    String fieldType = qualifiedType.type;
+    String name = fieldType.substring(fieldType.lastIndexOf(".") + 1);
+
+    int nextTag = builder.getField(builder.getFieldCount() - 1).getNumber() + 1;
+
+    String extensionSlicePattern =
+        Pattern.quote(element.getId().getValue() + ".") + "extension:[^.:]*";
+
+    List<ElementDefinition> extensionSlices =
+        getDescendants(element, elementList).stream()
+            .filter(child -> child.getId().getValue().matches(extensionSlicePattern))
+            .collect(toList());
+
+    for (ElementDefinition slice : extensionSlices) {
+      buildAndAddField(slice, elementList, nextTag++, builder);
+    }
+
+    return Optional.of(builder.setName(name).build());
   }
 
   private Optional<DescriptorProto> makeProfiledCodeableConceptIfRequired(
@@ -1321,9 +1373,7 @@ public class ProtoGenerator {
         normalizedFhirTypeName = "String";
       }
 
-      // Note: slicing is currently only supported on CodeableConcepts.
-      if (normalizedFhirTypeName.equals("CodeableConcept")
-          && descendantsHaveSlices(element, elementList)) {
+      if (!isContainer(element) && descendantsHaveSlices(element, elementList)) {
         // This is not a backbone element, but it has children that have slices.  This means we
         // cannot use the "stock" FHIR datatype here.
         // A common example of this is CodeableConcepts.  These are not themselves sliced, but the
@@ -1339,12 +1389,12 @@ public class ProtoGenerator {
           // because we don't need to disambiguate anymore.  This is a "Hack".
           containerTypeName = containerTypeName.substring(0, containerTypeName.length() - 4);
         }
+        String name =
+            Ascii.equalsIgnoreCase(normalizedFhirTypeName, containerTypeName)
+                ? ("Profiled" + containerTypeName)
+                : (normalizedFhirTypeName + "For" + containerTypeName);
         return new QualifiedType(
-            containerType.substring(0, lastDotIndex + 1)
-                + normalizedFhirTypeName
-                + "For"
-                + containerTypeName,
-            packageInfo.getProtoPackage());
+            containerType.substring(0, lastDotIndex + 1) + name, packageInfo.getProtoPackage());
       }
 
       if (normalizedFhirTypeName.equals("Resource")) {
@@ -1553,7 +1603,7 @@ public class ProtoGenerator {
   private static String getNameForElement(
       ElementDefinition element, List<ElementDefinition> elementList) {
     IdToken lastToken = lastIdToken(element);
-    if (lastToken.slicename == null || element.getId().getValue().indexOf(".") == -1) {
+    if (lastToken.slicename == null || !element.getId().getValue().contains(".")) {
       if (isValueElementOfSingleTypedExtension(element, elementList)) {
         String type = element.getType(0).getCode().getValue();
         return "value" + Ascii.toUpperCase(type.charAt(0)) + type.substring(1);
@@ -1561,7 +1611,7 @@ public class ProtoGenerator {
       return hyphenToCamel(lastToken.pathpart);
     }
     String sliceName = element.getSliceName().getValue();
-    if (!lastToken.slicename.equals(sliceName.toLowerCase())) {
+    if (!lastToken.slicename.equals(Ascii.toLowerCase(sliceName))) {
       // TODO: pull this into a common validator that runs ealier.
       logDiscrepancies(
           "Warning: Inconsistent slice name for element with id "
@@ -1810,9 +1860,9 @@ public class ProtoGenerator {
     FieldDescriptorProto.Builder builder =
         FieldDescriptorProto.newBuilder()
             .setNumber(tag)
-            .setType(FieldDescriptorProto.Type.TYPE_MESSAGE);
-    builder.setLabel(size);
-    builder.setTypeName("." + fieldPackage + "." + fieldType);
+            .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+            .setLabel(size)
+            .setTypeName("." + fieldPackage + "." + fieldType);
 
     String fieldName =
         RESERVED_FIELD_NAMES.contains(fhirName)
@@ -1959,7 +2009,7 @@ public class ProtoGenerator {
         typeList.stream()
             .flatMap(type -> type.getTargetProfileList().stream())
             .map(profile -> profile.getValue())
-            .collect(Collectors.toCollection(TreeSet::new));
+            .collect(toCollection(TreeSet::new));
 
     String refType = null;
     for (String r : refTypes) {

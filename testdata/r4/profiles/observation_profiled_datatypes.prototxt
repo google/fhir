@@ -1,0 +1,33 @@
+id {
+  value: "example"
+}
+status {
+  value: FINAL
+}
+
+meta {
+  source { value: "https://foo.bar.com" }
+
+  extension {
+    url { value: "http://test/url/base/StructureDefinition/SimpleDecimalExt" }
+    value { decimal { value: "2.4" } }
+  }
+  extension {
+    url { value: "http://test/url/base/StructureDefinition/SimpleDecimalExt" }
+    value { decimal { value: "6.8" } }
+  }
+}
+
+reference_range {
+  text {
+    value: "ref range"
+    extension {
+      url { value: "http://test/url/base/StructureDefinition/SimpleDecimalExt" }
+      value { decimal { value: "99" } }
+    }
+    extension {
+      url { value: "http://test/url/base/StructureDefinition/SimpleDecimalExt" }
+      value { decimal { value: "32" } }
+    }
+  }
+}

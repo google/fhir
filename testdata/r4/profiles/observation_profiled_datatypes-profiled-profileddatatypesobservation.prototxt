@@ -1,0 +1,21 @@
+id {
+  value: "example"
+}
+status {
+  value: FINAL
+}
+
+meta {
+  source { value: "https://foo.bar.com" }
+
+  extension_on_meta { value: "2.4" }
+  extension_on_meta { value: "6.8" }
+}
+
+reference_range {
+  text {
+    value: "ref range"
+    extension_on_string { value: "99" }
+    extension_on_string { value: "32" }
+  }
+}

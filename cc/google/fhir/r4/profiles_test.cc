@@ -39,6 +39,7 @@ namespace {
 using ::google::fhir::r4::core::Encounter;
 using ::google::fhir::r4::core::Observation;
 using ::google::fhir::r4::core::Patient;
+using ::google::fhir::r4::testing::ProfiledDatatypesObservation;
 using ::google::fhir::r4::testing::TestEncounter;
 using ::google::fhir::r4::testing::TestObservation;
 using ::google::fhir::r4::testing::TestObservationLvl2;
@@ -221,6 +222,11 @@ TEST(ProfilesTest, ContainedResourcesWithUnmatchedProfileNames) {
       ConvertToProfileR4(entry.resource().patient(), &test_patient_roundtrip));
   EXPECT_THAT(test_patient_roundtrip,
               EqualsProtoIgnoringReordering(test_patient));
+}
+
+TEST(ProfilesTest, ProfiledDatatypes) {
+  TestPair<Observation, ProfiledDatatypesObservation>(
+      "testdata/r4/profiles/observation_profiled_datatypes");
 }
 
 }  // namespace

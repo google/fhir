@@ -18,6 +18,7 @@
 
 #include <string>
 
+#include "absl/status/status.h"
 #include "absl/synchronization/mutex.h"
 
 namespace google {
@@ -136,6 +137,62 @@ StatusOr<const FieldDescriptor*> FindTargetField(
     return target_descriptor->FindFieldByName(base_field_name);
   }
   return nullptr;
+}
+
+Status CopyProtoPrimitiveField(const Message& source,
+                               const FieldDescriptor* source_field,
+                               Message* target,
+                               const FieldDescriptor* target_field) {
+  if (source_field->type() != target_field->type()) {
+    return InvalidArgumentError(absl::StrCat(
+        "Primitive field type mismatch between ", source_field->full_name(),
+        " and ", target_field->full_name()));
+  }
+  const auto* source_reflection = source.GetReflection();
+  const auto* target_reflection = target->GetReflection();
+
+  switch (source_field->type()) {
+    case google::protobuf::FieldDescriptor::TYPE_STRING:
+      target_reflection->SetString(
+          target, target_field,
+          source_reflection->GetString(source, source_field));
+      break;
+    case google::protobuf::FieldDescriptor::TYPE_BOOL:
+      target_reflection->SetBool(
+          target, target_field,
+          source_reflection->GetBool(source, source_field));
+      break;
+    case google::protobuf::FieldDescriptor::TYPE_DOUBLE:
+      target_reflection->SetDouble(
+          target, target_field,
+          source_reflection->GetDouble(source, source_field));
+      break;
+    case google::protobuf::FieldDescriptor::TYPE_INT64:
+      target_reflection->SetInt64(
+          target, target_field,
+          source_reflection->GetInt64(source, source_field));
+      break;
+    case google::protobuf::FieldDescriptor::TYPE_SINT32:
+      target_reflection->SetInt32(
+          target, target_field,
+          source_reflection->GetInt32(source, source_field));
+      break;
+    case google::protobuf::FieldDescriptor::TYPE_UINT32:
+      target_reflection->SetUInt32(
+          target, target_field,
+          source_reflection->GetUInt32(source, source_field));
+      break;
+    case google::protobuf::FieldDescriptor::TYPE_ENUM:
+      target_reflection->SetEnum(
+          target, target_field,
+          source_reflection->GetEnum(source, source_field));
+      break;
+    default:
+      return InvalidArgumentError(absl::StrCat(
+          "Invalid primitive type for FHIR: ",
+          google::protobuf::FieldDescriptor::TypeName(source_field->type())));
+  }
+  return absl::OkStatus();
 }
 
 }  // namespace profiles_internal
