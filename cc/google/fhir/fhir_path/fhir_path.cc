@@ -1977,13 +1977,16 @@ class ComparisonOperator : public BinaryOperator {
           "Comparison operators must have one element on each side.");
     }
 
-    FHIR_ASSIGN_OR_RETURN(bool result, EvalComparison(
-        work_space->GetPrimitiveHandler(), left_results[0], right_results[0]));
+    FHIR_ASSIGN_OR_RETURN(absl::optional<bool> result,
+                          EvalComparison(work_space->GetPrimitiveHandler(),
+                                         left_results[0], right_results[0]));
 
-    Message* result_message =
-        work_space->GetPrimitiveHandler()->NewBoolean(result);
-    work_space->DeleteWhenFinished(result_message);
-    out_results->push_back(WorkspaceMessage(result_message));
+    if (result.has_value()) {
+      Message* result_message =
+          work_space->GetPrimitiveHandler()->NewBoolean(result.value());
+      work_space->DeleteWhenFinished(result_message);
+      out_results->push_back(WorkspaceMessage(result_message));
+    }
     return absl::OkStatus();
   }
 
@@ -1997,8 +2000,9 @@ class ComparisonOperator : public BinaryOperator {
       : BinaryOperator(left, right), comparison_type_(comparison_type) {}
 
  private:
-  StatusOr<bool> EvalComparison(const PrimitiveHandler* primitive_handler,
-      const WorkspaceMessage& left, const WorkspaceMessage& right) const {
+  StatusOr<absl::optional<bool>> EvalComparison(
+      const PrimitiveHandler* primitive_handler, const WorkspaceMessage& left,
+      const WorkspaceMessage& right) const {
     const Message* left_result = left.Message();
     const Message* right_result = right.Message();
 
@@ -2028,20 +2032,21 @@ class ComparisonOperator : public BinaryOperator {
     }
   }
 
-  bool EvalIntegerComparison(int32_t left, int32_t right) const {
+  absl::optional<bool> EvalIntegerComparison(int32_t left,
+                                             int32_t right) const {
     switch (comparison_type_) {
       case kLessThan:
-        return left < right;
+        return absl::make_optional(left < right);
       case kGreaterThan:
-        return left > right;
+        return absl::make_optional(left > right);
       case kLessThanEqualTo:
-        return left <= right;
+        return absl::make_optional(left <= right);
       case kGreaterThanEqualTo:
-        return left >= right;
+        return absl::make_optional(left >= right);
     }
   }
 
-  StatusOr<bool> EvalDecimalComparison(
+  StatusOr<absl::optional<bool>> EvalDecimalComparison(
       const PrimitiveHandler* primitive_handler, const Message* left_message,
       const Message* right_message) const {
     // Handle decimal comparisons, converting integer types
@@ -2055,31 +2060,31 @@ class ComparisonOperator : public BinaryOperator {
 
     switch (comparison_type_) {
       case kLessThan:
-        return left < right;
+        return absl::make_optional(left < right);
       case kGreaterThan:
-        return left > right;
+        return absl::make_optional(left > right);
       case kLessThanEqualTo:
         // Fallback to literal comparison for equality to avoid
         // rounding errors.
         return
-            left <= right ||
+            absl::make_optional(left <= right ||
             (left_message->GetDescriptor() == right_message->GetDescriptor() &&
-             MessageDifferencer::Equals(*left_message, *right_message));
+             MessageDifferencer::Equals(*left_message, *right_message)));
       case kGreaterThanEqualTo:
         // Fallback to literal comparison for equality to avoid
         // rounding errors.
         return
-            left >= right ||
+            absl::make_optional(left >= right ||
             (left_message->GetDescriptor() == right_message->GetDescriptor() &&
-             MessageDifferencer::Equals(*left_message, *right_message));
+             MessageDifferencer::Equals(*left_message, *right_message)));
     }
 
     return absl::OkStatus();
   }
 
-  StatusOr<bool> EvalStringComparison(const PrimitiveHandler* primitive_handler,
-                                      const Message* left_message,
-                                      const Message* right_message) const {
+  StatusOr<absl::optional<bool>> EvalStringComparison(
+      const PrimitiveHandler* primitive_handler, const Message* left_message,
+      const Message* right_message) const {
     FHIR_ASSIGN_OR_RETURN(const std::string left,
                           primitive_handler->GetStringValue(*left_message));
     FHIR_ASSIGN_OR_RETURN(const std::string right,
@@ -2098,29 +2103,19 @@ class ComparisonOperator : public BinaryOperator {
 
     switch (comparison_type_) {
       case kLessThan:
-        return compare_result < 0;
+        return absl::make_optional(compare_result < 0);
       case kGreaterThan:
-        return compare_result > 0;
+        return absl::make_optional(compare_result > 0);
       case kLessThanEqualTo:
-        return compare_result <= 0;
+        return absl::make_optional(compare_result <= 0);
       case kGreaterThanEqualTo:
-        return compare_result >= 0;
+        return absl::make_optional(compare_result >= 0);
     }
   }
 
-  StatusOr<bool> EvalDateTimeComparison(
+  StatusOr<absl::optional<bool>> EvalDateTimeComparison(
       const PrimitiveHandler* primitive_handler, const Message& left_message,
       const Message& right_message) const {
-    FHIR_ASSIGN_OR_RETURN(absl::Time left_time,
-                          primitive_handler->GetDateTimeValue(left_message));
-    FHIR_ASSIGN_OR_RETURN(absl::Time right_time,
-                          primitive_handler->GetDateTimeValue(right_message));
-
-    FHIR_ASSIGN_OR_RETURN(absl::TimeZone left_zone,
-                          primitive_handler->GetDateTimeZone(left_message));
-    FHIR_ASSIGN_OR_RETURN(absl::TimeZone right_zone,
-                          primitive_handler->GetDateTimeZone(right_message));
-
     FHIR_ASSIGN_OR_RETURN(
         DateTimePrecision left_precision,
         primitive_handler->GetDateTimePrecision(left_message));
@@ -2128,51 +2123,36 @@ class ComparisonOperator : public BinaryOperator {
         DateTimePrecision right_precision,
         primitive_handler->GetDateTimePrecision(right_message));
 
-    // negative if left < right, positive if left > right, 0 if equal
-    absl::civil_diff_t time_difference;
-
-    // The FHIRPath spec (http://hl7.org/fhirpath/#comparison) states that
-    // datetime comparison is done at the finest precision BOTH
-    // dates support. This is equivalent to finding the looser precision
-    // between the two and comparing them, which is simpler to implement here.
-    if (left_precision == DateTimePrecision::kYear ||
-        right_precision == DateTimePrecision::kYear) {
-      absl::CivilYear left_year = absl::ToCivilYear(left_time, left_zone);
-      absl::CivilYear right_year = absl::ToCivilYear(right_time, right_zone);
-      time_difference = left_year - right_year;
-
-    } else if (left_precision == DateTimePrecision::kMonth ||
-               right_precision == DateTimePrecision::kMonth) {
-      absl::CivilMonth left_month = absl::ToCivilMonth(left_time, left_zone);
-      absl::CivilMonth right_month = absl::ToCivilMonth(right_time, right_zone);
-      time_difference = left_month - right_month;
-
-    } else if (left_precision == DateTimePrecision::kDay ||
-               right_precision == DateTimePrecision::kDay) {
-      absl::CivilDay left_day = absl::ToCivilDay(left_time, left_zone);
-      absl::CivilDay right_day = absl::ToCivilDay(right_time, right_zone);
-      time_difference = left_day - right_day;
-
-    } else if (left_precision == DateTimePrecision::kSecond ||
-               right_precision == DateTimePrecision::kSecond) {
-      time_difference = absl::ToInt64Seconds(left_time - right_time);
-    } else {
-      time_difference = absl::ToInt64Microseconds(left_time - right_time);
+    // The FHIRPath spec (http://hl7.org/fhirpath/#comparison) states that "If
+    // one value is specified to a different level of precision than the other,
+    // the result is empty ({ }) to indicate that the result of the comparison
+    // is unknown."
+    if (left_precision != right_precision) {
+      return absl::optional<bool>();
     }
+
+    FHIR_ASSIGN_OR_RETURN(absl::Time left_time,
+                          primitive_handler->GetDateTimeValue(left_message));
+    FHIR_ASSIGN_OR_RETURN(absl::Time right_time,
+                          primitive_handler->GetDateTimeValue(right_message));
+
+    // negative if left < right, positive if left > right, 0 if equal
+    absl::civil_diff_t time_difference =
+        absl::ToInt64Microseconds(left_time - right_time);
 
     switch (comparison_type_) {
       case kLessThan:
-        return time_difference < 0;
+        return absl::make_optional(time_difference < 0);
       case kGreaterThan:
-        return time_difference > 0;
+        return absl::make_optional(time_difference > 0);
       case kLessThanEqualTo:
-        return time_difference <= 0;
+        return absl::make_optional(time_difference <= 0);
       case kGreaterThanEqualTo:
-        return time_difference >= 0;
+        return absl::make_optional(time_difference >= 0);
     }
   }
 
-  StatusOr<bool> EvalSimpleQuantityComparison(
+  StatusOr<absl::optional<bool>> EvalSimpleQuantityComparison(
       const PrimitiveHandler* primitive_handler,
       const Message& left_wrapper,
       const Message& right_wrapper) const {

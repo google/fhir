@@ -1451,7 +1451,7 @@ FHIR_VERSION_TEST(FhirPathTest, TimeCompareDifferentPrecision, {
                    ToDateTime<DateTime, DateTime::Precision>(
                        absl::CivilDay(2019, 5, 2), zone, DateTime::DAY)),
                "start <= end"),
-      EvalsToTrue());
+      EvalsToEmpty());
 
   EXPECT_THAT(
       Evaluate(CreatePeriod<Period, DateTime>(
@@ -1461,7 +1461,7 @@ FHIR_VERSION_TEST(FhirPathTest, TimeCompareDifferentPrecision, {
                    ToDateTime<DateTime, DateTime::Precision>(
                        absl::CivilDay(2019, 5, 1), zone, DateTime::DAY)),
                "start <= end"),
-      EvalsToFalse());
+      EvalsToEmpty());
 
   EXPECT_THAT(
       Evaluate(CreatePeriod<Period, DateTime>(
@@ -1471,7 +1471,7 @@ FHIR_VERSION_TEST(FhirPathTest, TimeCompareDifferentPrecision, {
                    ToDateTime<DateTime, DateTime::Precision>(
                        absl::CivilDay(2019, 5, 1), zone, DateTime::MONTH)),
                "start <= end"),
-      EvalsToTrue());
+      EvalsToEmpty());
 
   EXPECT_THAT(
       Evaluate(CreatePeriod<Period, DateTime>(
@@ -1481,7 +1481,7 @@ FHIR_VERSION_TEST(FhirPathTest, TimeCompareDifferentPrecision, {
                    ToDateTime<DateTime, DateTime::Precision>(
                        absl::CivilDay(2019, 1, 1), zone, DateTime::MONTH)),
                "start <= end"),
-      EvalsToFalse());
+      EvalsToEmpty());
 
   EXPECT_THAT(
       Evaluate(CreatePeriod<Period, DateTime>(
@@ -1491,8 +1491,10 @@ FHIR_VERSION_TEST(FhirPathTest, TimeCompareDifferentPrecision, {
                    ToDateTime<DateTime, DateTime::Precision>(
                        absl::CivilDay(2019, 1, 1), zone, DateTime::YEAR)),
                "start <= end"),
-      EvalsToTrue());
+      EvalsToEmpty());
+})
 
+FHIR_VERSION_TEST(FhirPathTest, TimeCompareMicroseconds, {
   // Test edge case for very high precision comparisons.
   DateTime start_micros;
   start_micros.set_value_us(1556750000000011);
