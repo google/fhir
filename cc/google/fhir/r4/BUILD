@@ -157,6 +157,7 @@ cc_test(
         "//cc/google/fhir:annotations",
         "//cc/google/fhir:json_format",
         "//cc/google/fhir:test_helper",
+        "//cc/google/fhir/testutil:proto_matchers",
         "//proto/r4:google_extensions_cc_proto",
         "//proto/r4/core:datatypes_cc_proto",
         "//proto/r4/core/resources:binary_cc_proto",

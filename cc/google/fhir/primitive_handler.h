@@ -138,6 +138,12 @@ class PrimitiveHandler {
   virtual StatusOr<std::string> GetSimpleQuantityValue(
       const ::google::protobuf::Message& simple_quantity) const = 0;
 
+  virtual const ::google::protobuf::Descriptor* DateTimeDescriptor() const = 0;
+
+  virtual ::google::protobuf::Message* NewDateTime(
+      const absl::Time& time, const absl::TimeZone& zone,
+      const DateTimePrecision precision) const = 0;
+
   virtual StatusOr<absl::Time> GetDateTimeValue(
       const ::google::protobuf::Message& date_time) const = 0;
 
@@ -396,6 +402,44 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
       const ::google::protobuf::Message& simple_quantity) const override {
     FHIR_RETURN_IF_ERROR(CheckType<SimpleQuantity>(simple_quantity));
     return dynamic_cast<const SimpleQuantity&>(simple_quantity).value().value();
+  }
+
+  const ::google::protobuf::Descriptor* DateTimeDescriptor() const override {
+    return DateTime::GetDescriptor();
+  }
+
+  ::google::protobuf::Message* NewDateTime(
+      const absl::Time& time, const absl::TimeZone& zone,
+      const DateTimePrecision precision) const override {
+    DateTime* msg = new DateTime();
+    msg->set_value_us(absl::ToUnixMicros(time));
+    msg->set_timezone(zone.name());
+
+    switch (precision) {
+      case DateTimePrecision::kYear:
+        msg->set_precision(DateTime::YEAR);
+        break;
+      case DateTimePrecision::kMonth:
+        msg->set_precision(DateTime::MONTH);
+        break;
+      case DateTimePrecision::kDay:
+        msg->set_precision(DateTime::DAY);
+        break;
+      case DateTimePrecision::kSecond:
+        msg->set_precision(DateTime::SECOND);
+        break;
+      case DateTimePrecision::kMillisecond:
+        msg->set_precision(DateTime::MILLISECOND);
+        break;
+      case DateTimePrecision::kMicrosecond:
+        msg->set_precision(DateTime::MICROSECOND);
+        break;
+      case DateTimePrecision::kUnspecified:
+        msg->set_precision(DateTime::PRECISION_UNSPECIFIED);
+        break;
+    }
+
+    return msg;
   }
 
   StatusOr<absl::Time> GetDateTimeValue(

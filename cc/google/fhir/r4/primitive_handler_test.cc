@@ -31,6 +31,7 @@
 #include "proto/r4/core/resources/observation.pb.h"
 #include "proto/r4/core/resources/patient.pb.h"
 #include "proto/r4/google_extensions.pb.h"
+#include "google/fhir/testutil/proto_matchers.h"
 
 namespace google {
 namespace fhir {
@@ -38,6 +39,8 @@ namespace r4 {
 
 namespace {
 
+using ::google::fhir::testutil::EqualsProto;
+using ::testing::Pointee;
 using namespace ::google::fhir::r4::core;  // NOLINT
 
 static const char* const kTimeZoneString = "Australia/Sydney";
@@ -290,6 +293,19 @@ HANDLER_TYPE_TEST(Integer, 87, R4PrimitiveHandler);
 HANDLER_TYPE_TEST(UnsignedInt, 86, R4PrimitiveHandler);
 HANDLER_TYPE_TEST(PositiveInt, 85, R4PrimitiveHandler);
 HANDLER_TYPE_TEST(Decimal, "4.7", R4PrimitiveHandler);
+
+TEST(PrimitiveHandlerTest, NewDateTime) {
+  DateTime expected_date_time;
+  expected_date_time.set_value_us(5000);
+  expected_date_time.set_timezone(kTimeZoneString);
+  expected_date_time.set_precision(DateTime::DAY);
+
+  std::unique_ptr<::google::protobuf::Message> generated_date_time(
+      R4PrimitiveHandler::GetInstance()->NewDateTime(
+          absl::FromUnixMicros(5000), kTimeZone, DateTimePrecision::kDay));
+
+  ASSERT_THAT(generated_date_time, Pointee(EqualsProto(expected_date_time)));
+}
 
 TEST(PrimitiveHandlerTest, DateTimeGetters) {
   DateTime date_time;
