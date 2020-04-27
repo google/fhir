@@ -229,30 +229,25 @@ std::vector<const google::protobuf::Message*> WorkspaceMessage::Ancestry() const
 
 // Expression node that returns literals wrapped in the corresponding
 // protbuf wrapper
-template <typename PrimitiveType>
 class Literal : public ExpressionNode {
  public:
-  Literal(PrimitiveType value, const Descriptor* descriptor,
-                   std::function<Message*(PrimitiveType)> factory)
-      : value_(value), descriptor_(descriptor), factory_(factory) {}
+  Literal(const Descriptor* descriptor, std::function<Message*()> factory)
+      : descriptor_(descriptor), factory_(factory) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<WorkspaceMessage>* results) const override {
-    Message* value = factory_(value_);
+    Message* value = factory_();
     work_space->DeleteWhenFinished(value);
     results->push_back(WorkspaceMessage(value));
 
     return absl::OkStatus();
   }
 
-  const Descriptor* ReturnType() const override {
-    return descriptor_;
-  }
+  const Descriptor* ReturnType() const override { return descriptor_; }
 
  private:
-  const PrimitiveType value_;
   const Descriptor* descriptor_;
-  std::function<Message*(PrimitiveType)> factory_;
+  std::function<Message*()> factory_;
 };
 
 // Expression node for the empty literal.
@@ -3125,22 +3120,19 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     std::string name = ctx->children[1]->getText();
     const PrimitiveHandler* primitive_handler = primitive_handler_;
     if (name == "ucum") {
-      return ToAny(std::make_shared<Literal<std::string>>(
-          "http://unitsofmeasure.org", primitive_handler_->StringDescriptor(),
-          [primitive_handler](const std::string& value) {
-            return primitive_handler->NewString(value);
+      return ToAny(std::make_shared<Literal>(
+          primitive_handler_->StringDescriptor(), [primitive_handler]() {
+            return primitive_handler->NewString("http://unitsofmeasure.org");
           }));
     } else if (name == "sct") {
-      return ToAny(std::make_shared<Literal<std::string>>(
-          "http://snomed.info/sct", primitive_handler_->StringDescriptor(),
-          [primitive_handler](const std::string& value) {
-            return primitive_handler->NewString(value);
+      return ToAny(std::make_shared<Literal>(
+          primitive_handler_->StringDescriptor(), [primitive_handler]() {
+            return primitive_handler->NewString("http://snomed.info/sct");
           }));
     } else if (name == "loinc") {
-      return ToAny(std::make_shared<Literal<std::string>>(
-          "http://loinc.org", primitive_handler_->StringDescriptor(),
-          [primitive_handler](const std::string& value) {
-            return primitive_handler->NewString(value);
+      return ToAny(std::make_shared<Literal>(
+          primitive_handler_->StringDescriptor(), [primitive_handler]() {
+            return primitive_handler->NewString("http://loinc.org");
           }));
     } else if (name == "context") {
       return ToAny(
@@ -3171,10 +3163,9 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     // Determine if the number is an integer or decimal, propagating
     // decimal types in string form to preserve precision.
     if (text.find(".") != std::string::npos) {
-      return ToAny(std::make_shared<Literal<std::string>>(
-          text, primitive_handler_->DecimalDescriptor(),
-          [primitive_handler](const std::string& value) {
-            return primitive_handler->NewDecimal(value);
+      return ToAny(std::make_shared<Literal>(
+          primitive_handler_->DecimalDescriptor(), [primitive_handler, text]() {
+            return primitive_handler->NewDecimal(text);
           }));
     } else {
       int32_t value;
@@ -3184,9 +3175,9 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
         return nullptr;
       }
 
-      return ToAny(std::make_shared<Literal<int32_t>>(
-          value, primitive_handler_->IntegerDescriptor(),
-          [primitive_handler](int32_t value) {
+      return ToAny(std::make_shared<Literal>(
+          primitive_handler_->IntegerDescriptor(),
+          [primitive_handler, value]() {
             return primitive_handler->NewInteger(value);
           }));
     }
@@ -3207,21 +3198,20 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     // grammar rules (FhirPath.g4) which are enforced by the parser. In
     // addition, CUnescape does not handle escaped forward slashes.
     absl::CUnescape(trimmed, &unescaped);
-    return ToAny(std::make_shared<Literal<std::string>>(
-        unescaped, primitive_handler_->StringDescriptor(),
-        [primitive_handler](const std::string& value) {
-          return primitive_handler->NewString(value);
+    return ToAny(std::make_shared<Literal>(
+        primitive_handler_->StringDescriptor(),
+        [primitive_handler, unescaped]() {
+          return primitive_handler->NewString(unescaped);
         }));
   }
 
   antlrcpp::Any visitBooleanLiteral(
       FhirPathParser::BooleanLiteralContext* ctx) override {
-    const std::string& text = ctx->getText();
+    const bool value = ctx->getText() == "true";
     const PrimitiveHandler* primitive_handler = primitive_handler_;
 
-    return ToAny(std::make_shared<Literal<bool>>(
-        text == "true", primitive_handler_->BooleanDescriptor(),
-        [primitive_handler](bool value) {
+    return ToAny(std::make_shared<Literal>(
+        primitive_handler_->BooleanDescriptor(), [primitive_handler, value]() {
           return primitive_handler->NewBoolean(value);
         }));
   }
