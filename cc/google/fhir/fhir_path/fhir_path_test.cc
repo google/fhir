@@ -33,7 +33,6 @@
 #include "proto/r4/core/resources/encounter.pb.h"
 #include "proto/r4/core/resources/medication_knowledge.pb.h"
 #include "proto/r4/core/resources/observation.pb.h"
-#include "proto/r4/core/resources/organization.pb.h"
 #include "proto/r4/core/resources/parameters.pb.h"
 #include "proto/r4/core/resources/patient.pb.h"
 #include "proto/r4/core/resources/structure_definition.pb.h"
@@ -49,9 +48,33 @@ namespace google {
 namespace fhir {
 namespace fhir_path {
 
+// Provides a human-readable string representation of an EvaluationResult object
+// for googletest.
+//
+// https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#teaching-googletest-how-to-print-your-values
+void PrintTo(const EvaluationResult& result, std::ostream* os) {
+  *os << "evaluated to [";
+  absl::string_view sep("");
+  for (const auto message : result.GetMessages()) {
+    *os << sep << message->DebugString();
+    sep = ", ";
+  }
+  *os << "]";
+}
+
+void PrintTo(const StatusOr<EvaluationResult>& result, std::ostream* os) {
+  if (result.ok()) {
+    *os << ::testing::PrintToString(result.ValueOrDie());
+  } else {
+    *os << "failed to evaluate (" << result.status().code()
+        << ") with message \"" << result.status().message() << "\"";
+  }
+}
+
 namespace {
 
 using ::absl::InvalidArgumentError;
+using ::absl::StatusCode;
 using ::google::protobuf::Message;
 using ::testing::ElementsAreArray;
 using ::testing::Eq;
@@ -72,15 +95,12 @@ using FhirNamespace::Encounter; \
 using FhirNamespace::EncounterStatusCode; \
 using FhirNamespace::Integer; \
 using FhirNamespace::Observation; \
-using FhirNamespace::Organization; \
 using FhirNamespace::Parameters; \
 using FhirNamespace::Patient; \
 using FhirNamespace::Period; \
 using FhirNamespace::Quantity; \
-using FhirNamespace::SimpleQuantity; \
 using FhirNamespace::String; \
 using FhirNamespace::StructureDefinition; \
-using FhirNamespace::ValueSet; \
 
 #define FHIR_VERSION_TEST(CaseName, TestName, Body) \
 namespace r4test { \
@@ -177,6 +197,12 @@ MATCHER_P(EvalsToStringThatMatches, string_matcher, "") {
                                                result_listener);
 }
 
+// Matcher for StatusOr<T> that checks to see that a status is present with the
+// provided code.
+MATCHER_P(HasStatusCode, status_code, "") {
+  return !arg.ok() && arg.status().code() == status_code;
+}
+
 template <typename T>
 T ParseFromString(const std::string& str) {
   google::protobuf::TextFormat::Parser parser;
@@ -209,13 +235,6 @@ T ValidObservation() {
       }
     }
     id { value: "123" }
-  )proto");
-}
-
-template <typename T>
-T ValidValueSet() {
-  return ParseFromString<T>(R"proto(
-    url { value: "http://example.com/valueset" }
   )proto");
 }
 
@@ -312,7 +331,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestExternalConstants, {
   EXPECT_THAT(Evaluate("%loinc"),
               EvalsToStringThatMatches(StrEq("http://loinc.org")));
 
-  EXPECT_FALSE(Evaluate("%unknown").ok());
+  EXPECT_THAT(Evaluate("%unknown"), HasStatusCode(StatusCode::kNotFound));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestExternalConstantsContext, {
@@ -335,7 +354,7 @@ FHIR_VERSION_TEST(
 FHIR_VERSION_TEST(FhirPathTest, TestMalformed, {
   auto expr = Compile(Encounter::descriptor(), "expression->not->valid");
 
-  EXPECT_FALSE(expr.ok());
+  EXPECT_THAT(expr, HasStatusCode(StatusCode::kInternal));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestGetDirectChild, {
@@ -390,13 +409,13 @@ FHIR_VERSION_TEST(FhirPathTest, TestFieldExists, {
 FHIR_VERSION_TEST(FhirPathTest, TestNoSuchField, {
   auto root_expr = Compile(Encounter::descriptor(), "bogusrootfield");
 
-  EXPECT_FALSE(root_expr.ok());
+  EXPECT_THAT(root_expr, HasStatusCode(StatusCode::kNotFound));
   EXPECT_NE(root_expr.status().message().find("bogusrootfield"),
             std::string::npos);
 
   auto child_expr = Compile(Encounter::descriptor(), "period.boguschildfield");
 
-  EXPECT_FALSE(child_expr.ok());
+  EXPECT_THAT(child_expr, HasStatusCode(StatusCode::kNotFound));
   EXPECT_NE(child_expr.status().message().find("boguschildfield"),
             std::string::npos);
 
@@ -408,7 +427,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestNoSuchField, {
 FHIR_VERSION_TEST(FhirPathTest, TestNoSuchFunction, {
   auto root_expr = Compile(Encounter::descriptor(), "period.bogusfunction()");
 
-  EXPECT_FALSE(root_expr.ok());
+  EXPECT_THAT(root_expr, HasStatusCode(StatusCode::kNotFound));
   EXPECT_NE(root_expr.status().message().find("bogusfunction"),
             std::string::npos);
 })
@@ -518,9 +537,12 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionDescendantsOnEmptyCollection, {
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionContains, {
   // Wrong number and/or types of arguments.
-  EXPECT_FALSE(Evaluate("'foo'.contains()").ok());
-  EXPECT_FALSE(Evaluate("'foo'.contains(1)").ok());
-  EXPECT_FALSE(Evaluate("'foo'.contains('a', 'b')").ok());
+  EXPECT_THAT(Evaluate("'foo'.contains()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("'foo'.contains(1)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("'foo'.contains('a', 'b')"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 
   EXPECT_THAT(Evaluate("'foo'.contains('')"), EvalsToTrue());
   EXPECT_THAT(Evaluate("'foo'.contains('o')"), EvalsToTrue());
@@ -534,20 +556,28 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionContains, {
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionStartsWith, {
   // Missing argument
-  EXPECT_FALSE(Evaluate("'foo'.startsWith()").ok());
+  EXPECT_THAT(Evaluate("'foo'.startsWith()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 
   // Too many arguments
-  EXPECT_FALSE(Evaluate("'foo'.startsWith('foo', 'foo')").ok());
+  EXPECT_THAT(Evaluate("'foo'.startsWith('foo', 'foo')"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 
   // Wrong argument type
-  EXPECT_FALSE(Evaluate("'foo'.startsWith(1)").ok());
-  EXPECT_FALSE(Evaluate("'foo'.startsWith(1.0)").ok());
-  EXPECT_FALSE(Evaluate("'foo'.startsWith(@2015-02-04T14:34:28Z)").ok());
-  EXPECT_FALSE(Evaluate("'foo'.startsWith(true)").ok());
+  EXPECT_THAT(Evaluate("'foo'.startsWith(1)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("'foo'.startsWith(1.0)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("'foo'.startsWith(@2015-02-04T14:34:28Z)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("'foo'.startsWith(true)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 
   // Function does not exist for non-string type
-  EXPECT_FALSE(Evaluate("1.startsWith(1)").ok());
-  EXPECT_FALSE(Evaluate("1.startsWith('1')").ok());
+  EXPECT_THAT(Evaluate("1.startsWith(1)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("1.startsWith('1')"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 
   // Basic cases
   EXPECT_THAT(Evaluate("''.startsWith('')"), EvalsToTrue());
@@ -564,8 +594,9 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionStartsWithSelfReference, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionStartsWithInvokedOnNonString, {
-  EXPECT_FALSE(
-      Evaluate(ValidObservation<Observation>(), "code.startsWith('foo')").ok());
+  EXPECT_THAT(
+      Evaluate(ValidObservation<Observation>(), "code.startsWith('foo')"),
+      HasStatusCode(StatusCode::kInvalidArgument));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionMatches, {
@@ -600,7 +631,8 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionLength, {
   EXPECT_THAT(Evaluate("''.length() = 0"), EvalsToTrue());
   EXPECT_THAT(Evaluate("'abc'.length() = 3"), EvalsToTrue());
 
-  EXPECT_FALSE(Evaluate("3.length()").ok());
+  EXPECT_THAT(Evaluate("3.length()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionToInteger, {
@@ -618,7 +650,8 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionToInteger, {
   EXPECT_THAT(Evaluate("(3.3).toInteger()"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("'a'.toInteger()"), EvalsToEmpty());
 
-  EXPECT_FALSE(Evaluate("(1 | 2).toInteger()").ok());
+  EXPECT_THAT(Evaluate("(1 | 2).toInteger()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionToString, {
@@ -631,7 +664,8 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionToString, {
               EvalsToStringThatMatches(StrEq("true")));
   EXPECT_THAT(Evaluate("{}.toString()"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("toString()"), EvalsToEmpty());
-  EXPECT_FALSE(Evaluate("(1 | 2).toString()").ok());
+  EXPECT_THAT(Evaluate("(1 | 2).toString()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionTrace, {
@@ -953,8 +987,10 @@ FHIR_VERSION_TEST(FhirPathTest, TestIndexer, {
   EXPECT_THAT(Evaluate("false[0]"), EvalsToFalse());
   EXPECT_THAT(Evaluate("false[1]"), EvalsToEmpty());
 
-  EXPECT_FALSE(Evaluate("true['foo']").ok());
-  EXPECT_FALSE(Evaluate("true[(1 | 2)]").ok());
+  EXPECT_THAT(Evaluate("true['foo']"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("true[(1 | 2)]"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestContains, {
@@ -968,8 +1004,10 @@ FHIR_VERSION_TEST(FhirPathTest, TestContains, {
   EXPECT_THAT(Evaluate("({} contains {})"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("(true contains {})"), EvalsToEmpty());
 
-  EXPECT_FALSE(Evaluate("{} contains (true | false)").ok());
-  EXPECT_FALSE(Evaluate("true contains (true | false)").ok());
+  EXPECT_THAT(Evaluate("{} contains (true | false)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("true contains (true | false)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestIn, {
@@ -983,8 +1021,10 @@ FHIR_VERSION_TEST(FhirPathTest, TestIn, {
   EXPECT_THAT(Evaluate("({} in {})"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("({} in true)"), EvalsToEmpty());
 
-  EXPECT_FALSE(Evaluate("(true | false) in {}").ok());
-  EXPECT_FALSE(Evaluate("(true | false) in {}").ok());
+  EXPECT_THAT(Evaluate("(true | false) in {}"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("(true | false) in {}"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestImplies, {
@@ -1032,9 +1072,11 @@ FHIR_VERSION_TEST(FhirPathTest, TestWhereNoMatches, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestWhereValidatesArguments, {
-  EXPECT_FALSE(Evaluate("{}.where()").ok());
-  EXPECT_TRUE(Evaluate("{}.where(true)").ok());
-  EXPECT_FALSE(Evaluate("{}.where(true, false)").ok());
+  EXPECT_THAT(Evaluate("{}.where()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("{}.where(true)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("{}.where(true, false)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestAll, {
@@ -1044,8 +1086,10 @@ FHIR_VERSION_TEST(FhirPathTest, TestAll, {
   EXPECT_THAT(Evaluate("(1 | 2 | 3).all($this > 4)"), EvalsToFalse());
 
   // Verify that all() fails when called with the wrong number of arguments.
-  EXPECT_FALSE(Evaluate("{}.all()").ok());
-  EXPECT_FALSE(Evaluate("{}.all(true, false)").ok());
+  EXPECT_THAT(Evaluate("{}.all()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("{}.all(true, false)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestAllReadsFieldFromDifferingTypes, {
@@ -1094,9 +1138,11 @@ FHIR_VERSION_TEST(FhirPathTest, TestSelectEmptyResult, {
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestSelectValidatesArguments, {
-  EXPECT_FALSE(Evaluate("{}.select()").ok());
-  EXPECT_TRUE(Evaluate("{}.select(true)").ok());
-  EXPECT_FALSE(Evaluate("{}.select(true, false)").ok());
+  EXPECT_THAT(Evaluate("{}.select()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("{}.select(true)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("{}.select(true, false)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestIif, {
@@ -1114,14 +1160,17 @@ FHIR_VERSION_TEST(FhirPathTest, TestIif, {
             2);
 
   EXPECT_THAT(Evaluate("{}.iif(true, false)"), EvalsToEmpty());
-  EXPECT_FALSE(Evaluate("(1 | 2).iif(true, false)").ok());
+  EXPECT_THAT(Evaluate("(1 | 2).iif(true, false)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestIifValidatesArguments, {
-  EXPECT_FALSE(Evaluate("{}.iif()").ok());
-  EXPECT_FALSE(Evaluate("{}.iif(true)").ok());
-  EXPECT_FALSE(
-      Evaluate("{}.iif(true, false, true, false)").ok());
+  EXPECT_THAT(Evaluate("{}.iif()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("{}.iif(true)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("{}.iif(true, false, true, false)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestXor, {
@@ -1226,7 +1275,8 @@ FHIR_VERSION_TEST(FhirPathTest, TestPolarityOperator, {
   EXPECT_THAT(Evaluate("+{}"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("-{}"), EvalsToEmpty());
 
-  EXPECT_FALSE(Evaluate("+(1 | 2)").ok());
+  EXPECT_THAT(Evaluate("+(1 | 2)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestIntegerAddition, {
@@ -1565,14 +1615,12 @@ FHIR_VERSION_TEST(FhirPathTest, SimpleQuantityComparisons, {
               EvalsToFalse());
 
   // Different quantity codes
-  EXPECT_FALSE(Evaluate(
-                   kinetics, "areaUnderCurve[0] > areaUnderCurve[2]")
-                   .ok());
+  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] > areaUnderCurve[2]"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 
   // Different quantity systems
-  EXPECT_FALSE(Evaluate(
-                   kinetics, "areaUnderCurve[0] > areaUnderCurve[3]")
-                   .ok());
+  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] > areaUnderCurve[3]"),
+              HasStatusCode(StatusCode::kInvalidArgument));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestCompareEnumToString, {
