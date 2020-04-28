@@ -1,0 +1,37 @@
+I have a FHIR connectathon meeting in 2 weeks and want to hack up something using google's grpc FHIR as an example over json BUT have questions and not sure
+where to ask them so I am doing a pull request so this gets seen.
+
+I am getting into FHIR and the README has no mention of where to post questions (stack overflow with grpc-fhir tag?)
+
+I am wondering how to file issues too(I don't see an issues link) AND checking out the repo has file collisions reported on mac which is weird as I see all those files BUT on windows, that would totally screw up.  I will delete the upper case named files as part of this pull request
+
+Deans-MacBook-Pro:workspace dean$ git clone git@github.com:deanorderly/fhir.git
+Cloning into 'fhir'...
+remote: Enumerating objects: 23, done.
+remote: Counting objects: 100% (23/23), done.
+remote: Compressing objects: 100% (9/9), done.
+remote: Total 50840 (delta 9), reused 18 (delta 8), pack-reused 50817
+Receiving objects: 100% (50840/50840), 69.70 MiB | 16.59 MiB/s, done.
+Resolving deltas: 100% (41157/41157), done.
+Updating files: 100% (34780/34780), done.
+warning: the following paths have collided (e.g. case-sensitive paths
+on a case-insensitive filesystem) and only one from the same
+colliding group is in the working tree:
+
+  'spec/hl7.fhir.core/3.0.1/package/CodeSystem-example.json'
+  'spec/hl7.fhir.core/3.0.1/package/codesystem-example.json'
+  'spec/hl7.fhir.core/3.0.1/package/CodeSystem-list-example-codes.json'
+  'spec/hl7.fhir.core/3.0.1/package/codesystem-list-example-codes.json'
+  'spec/hl7.fhir.core/3.0.1/package/ValueSet-example-expansion.json'
+  'spec/hl7.fhir.core/3.0.1/package/valueset-example-expansion.json'
+  'spec/hl7.fhir.core/3.0.1/package/ValueSet-example-intensional.json'
+  'spec/hl7.fhir.core/3.0.1/package/valueset-example-intensional.json'
+  'spec/hl7.fhir.core/3.0.1/package/ValueSet-list-example-codes.json'
+  'spec/hl7.fhir.core/3.0.1/package/valueset-list-example-codes.json'
+
+***************************************************************
+**************************************************************
+  Also, is there a java example of depending on a certain version of this repo...OR do I just check out based on tag and depend on proto files on the filesystem?  Trying to figure out the best strategy here and hoping someone has options
+
+
+***********************************************************************************************************************
