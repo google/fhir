@@ -1,35 +1,3 @@
-Skip to content
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@deanorderly 
-google
-/
-fhir
-71
-419
-101
- Code
- Pull requests 2 Actions
- Projects 0
- Security 0
- Insights
-where to ask questions #7
- Closed	deanorderly wants to merge 1 commit into google:master from unknown repository
-+37 −0 
- Conversation 5  Commits 1  Checks 0  Files changed 1
-File filter... 
-where to ask questions
-
-@deanhiller
-deanhiller committed 36 minutes ago
-commit b6c59134245134b227a9a2f48eba91c923358b7c
- 37  WHERE_TO_ASK_QUESTIONS 
-@@ -0,0 +1,37 @@
 I have a FHIR connectathon meeting in 2 weeks and want to hack up something using google's grpc FHIR as an example over json BUT have questions and not sure
 where to ask them so I am doing a pull request so this gets seen.
 
