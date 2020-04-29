@@ -1,9 +1,5 @@
 load("//bazel:cython.bzl", "pyx_library")
 
-licenses(["notice"])
-
-package(default_visibility = ["//visibility:public"])
-
 load(
     "@rules_python//python:python.bzl",
     "py_binary",
@@ -12,6 +8,10 @@ load(
 )
 
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
+
+licenses(["notice"])
+
+package(default_visibility = ["//visibility:public"])
 
 # @rules_python may not be able to pull in transitive dependency correctly
 # (related issues: https://github.com/bazelbuild/rules_python/pull/90,
@@ -44,7 +44,7 @@ py_test(
     data = [
         "//proto/stu3:version_config.textproto",
     ],
-    python_version = "PY2",
+    python_version = "PY3",
     deps = [
         ":bundle_seqex_converter",
         "//proto/stu3:extensions_py_pb2",
@@ -77,7 +77,7 @@ pyx_library(
 py_test(
     name = "bundle_to_seqex_util_test",
     srcs = ["bundle_to_seqex_util_test.py"],
-    python_version = "PY2",
+    python_version = "PY3",
     deps = [
         ":bundle_to_seqex_util",
         "//proto/stu3:extensions_py_pb2",
@@ -112,7 +112,7 @@ py_test(
     data = [
         "//proto/stu3:version_config.textproto",
     ],
-    python_version = "PY2",
+    python_version = "PY3",
     deps = [
         ":bundle_to_seqex",
         ":bundle_seqex_converter",
@@ -135,7 +135,7 @@ py_binary(
     srcs = [
         "bundle_to_seqex_main.py",
     ],
-    python_version = "PY2",
+    python_version = "PY3",
     deps = [
         ":bundle_to_seqex",
         "@com_google_protobuf//:protobuf_python",

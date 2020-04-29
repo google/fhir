@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -12,12 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 """Tests for model run and export."""
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 import os
 import shutil
@@ -42,10 +38,11 @@ class ExperimentTest(tf.test.TestCase, parameterized.TestCase):
 
   def setUp(self):
     super(ExperimentTest, self).setUp()
-    self.seqex_list = [test_utils.read_seqex_ascii(
-        filename,
-        os.path.join(absltest.get_default_test_srcdir(), TESTDATA_DIR))
-                       for filename in ['example1.ascii', 'example2.ascii']]
+    filedir = os.path.join(absltest.get_default_test_srcdir(), TESTDATA_DIR)
+    self.seqex_list = [
+        test_utils.read_seqex_ascii(filename, filedir)
+        for filename in ['example1.ascii', 'example2.ascii']
+    ]
     self.input_data_dir = tempfile.mkdtemp()
     test_utils.create_input_tfrecord(
         self.seqex_list, self.input_data_dir, 'train')
@@ -96,7 +93,7 @@ class ExperimentTest(tf.test.TestCase, parameterized.TestCase):
         print('max_class')
         print(max_class)
         print(predictions)
-        self.assertAllEqual('above_14', predictions['classes'][0][max_class])
+        self.assertAllEqual(b'above_14', predictions['classes'][0][max_class])
 
 
 if __name__ == '__main__':

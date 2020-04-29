@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -14,10 +15,6 @@
 # limitations under the License.
 
 """Tests for bundle_to_seqex."""
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 import os
 
@@ -39,6 +36,7 @@ _VERSION_CONFIG_PATH = "com_google_fhir/proto/stu3/version_config.textproto"
 class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
 
   def setUp(self):
+    super(BundleToSeqexTest, self).setUp()
     with open(
         os.path.join(absltest.get_default_test_srcdir(),
                      _VERSION_CONFIG_PATH)) as f:
@@ -60,9 +58,9 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
 
       def check_result(got):
         try:
-          self.assertEqual(1, len(got))
+          self.assertLen(got, 1)
           (got_key, got_bundle) = got[0]
-          self.assertEqual("Patient/14", got_key)
+          self.assertEqual(b"Patient/14", got_key)
           self.assertProtoEqual(got_bundle, bundle)
 
         except AssertionError as err:
@@ -90,9 +88,9 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
 
       def check_result(got):
         try:
-          self.assertEqual(1, len(got))
+          self.assertLen(got, 1)
           (got_key, got_event_label) = got[0]
-          self.assertEqual("Patient/14", got_key)
+          self.assertEqual(b"Patient/14", got_key)
           self.assertProtoEqual(got_event_label, event_label)
 
         except AssertionError as err:
@@ -134,10 +132,10 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
 
       def check_result(got):
         try:
-          self.assertEqual(1, len(got))
+          self.assertLen(got, 1)
           (got_key, got_trigger_labels_pairs_list) = got[0]
-          self.assertEqual("Patient/14", got_key)
-          self.assertEqual(2, len(got_trigger_labels_pairs_list))
+          self.assertEqual(b"Patient/14", got_key)
+          self.assertLen(got_trigger_labels_pairs_list, 2)
           # Sort got_trigger_labels_pairs_list by trigger.event_time, so that
           # the ordering is always consistent in ordering.
           sorted_list = sorted(
@@ -145,11 +143,11 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
               key=lambda x: x[0].event_time.value_us)
           (got_trigger1, got_label_list1) = sorted_list[0]
           self.assertProtoEqual(got_trigger1, trigger1)
-          self.assertEqual(1, len(got_label_list1))
+          self.assertLen(got_label_list1, 1)
           self.assertProtoEqual(got_label_list1[0], label1)
           (got_trigger2, got_label_list2) = sorted_list[1]
           self.assertProtoEqual(got_trigger2, trigger2)
-          self.assertEqual(1, len(got_label_list2))
+          self.assertLen(got_label_list2, 1)
           self.assertProtoEqual(got_label_list2[0], label2)
 
         except AssertionError as err:
@@ -206,24 +204,24 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
     ]
     with test_pipeline.TestPipeline() as p:
       bundle_pcoll = p | "CreateBundles" >> beam.Create([
-          ("Patient/14", bundle1),
-          ("Patient/30", bundle3),
+          (b"Patient/14", bundle1),
+          (b"Patient/30", bundle3),
       ])
       trigger_list_pcoll = p | "CreateTriggerLists" >> beam.Create([
-          ("Patient/14", bundle1_event_trigger_labels_list),
-          ("Patient/20", bundle2_event_trigger_labels_list),
+          (b"Patient/14", bundle1_event_trigger_labels_list),
+          (b"Patient/20", bundle2_event_trigger_labels_list),
       ])
       result = bundle_to_seqex.CreateBundleAndLabels(bundle_pcoll,
                                                      trigger_list_pcoll)
 
       def check_result(got):
         try:
-          self.assertEqual(1, len(got))
+          self.assertLen(got, 1)
           (got_key, got_bundle_and_labels) = got[0]
-          self.assertEqual("Patient/14", got_key)
+          self.assertEqual(b"Patient/14", got_key)
           (got_bundle, got_trigger_labels_list) = got_bundle_and_labels
           self.assertProtoEqual(got_bundle, bundle1)
-          self.assertEqual(1, len(got_trigger_labels_list))
+          self.assertLen(got_trigger_labels_list, 1)
           self.assertProtoEqual(got_trigger_labels_list[0][0],
                                 bundle1_event_trigger)
           self.assertFalse(len(got_trigger_labels_list[0][1]))
@@ -439,7 +437,7 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
     with test_pipeline.TestPipeline() as p:
       result = (
           p
-          | beam.Create([("Patient/14", (bundle, event_trigger_labels_list))])
+          | beam.Create([(b"Patient/14", (bundle, event_trigger_labels_list))])
           | "BundleAndLabelsToSeqex" >> beam.ParDo(
               bundle_to_seqex.BundleAndLabelsToSeqexDoFn(
                   version_config=self._version_config,
@@ -448,7 +446,7 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
 
       def check_result(got):
         try:
-          self.assertEqual(2, len(got), "got: %s" % got)
+          self.assertLen(got, 2, "got: %s" % got)
           got_seqex1 = got[0]
           got_seqex2 = got[1]
           self.assertProtoEqual(expected_seqex1, got_seqex1)

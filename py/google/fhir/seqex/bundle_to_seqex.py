@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -14,10 +15,6 @@
 # limitations under the License.
 
 """Python beam functions for bundle-to-seqex."""
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 import apache_beam as beam
 
@@ -38,10 +35,10 @@ typehints_trigger_labels_pair_list = beam.typehints.List[
 
 
 @beam.typehints.with_input_types(resources_pb2.Bundle)
-@beam.typehints.with_output_types(
-    beam.typehints.Tuple[bytes, resources_pb2.Bundle])
+@beam.typehints.with_output_types(beam.typehints.Tuple[bytes,
+                                                       resources_pb2.Bundle])
 class KeyBundleByPatientIdFn(beam.DoFn):
-  """ Key bundle by patient id."""
+  """Key bundle by patient id."""
 
   def process(self, bundle):
     patient = util.GetPatient(bundle)
@@ -49,29 +46,29 @@ class KeyBundleByPatientIdFn(beam.DoFn):
       beam.metrics.Metrics.counter("medical_records",
                                    "num-bundle-without-patient").inc()
       return
-    yield (bytes("Patient/" + patient.id.value), bundle)
+    yield (("Patient/" + patient.id.value).encode("utf-8"), bundle)
 
 
 @beam.typehints.with_input_types(google_extensions_pb2.EventLabel)
 @beam.typehints.with_output_types(
     beam.typehints.Tuple[bytes, google_extensions_pb2.EventLabel])
 class KeyEventLabelByPatientIdFn(beam.DoFn):
-  """ Key EventLabel by patient id."""
+  """Key EventLabel by patient id."""
 
   def process(self, event_label):
     if not event_label.HasField("patient"):
       beam.metrics.Metrics.counter("medical_records",
                                    "num-eventlabel-without-patient").inc()
       return
-    yield (bytes("Patient/" + event_label.patient.patient_id.value),
+    yield (("Patient/" + event_label.patient.patient_id.value).encode("utf-8"),
            event_label)
 
 
 @beam.typehints.with_input_types(
     beam.typehints.Tuple[bytes, beam.typehints.Dict[bytes, beam.typehints.Any]])
-@beam.typehints.with_output_types(
-    beam.typehints.Tuple[bytes, beam.typehints.Tuple[
-        resources_pb2.Bundle, typehints_trigger_labels_pair_list]])
+@beam.typehints.with_output_types(beam.typehints.Tuple[
+    bytes, beam.typehints.Tuple[resources_pb2.Bundle,
+                                typehints_trigger_labels_pair_list]])
 class _JoinBundleAndTriggersDoFn(beam.DoFn):
   """Join bundle and trigger labels from the join result."""
 
@@ -140,13 +137,12 @@ def CreateBundleAndLabels(bundles, trigger_labels_pair_lists):
           | "JoinBundleAndTriggers" >> beam.ParDo(_JoinBundleAndTriggersDoFn()))
 
 
-@beam.typehints.with_input_types(
-    beam.typehints.Tuple[bytes, beam.typehints.Tuple[
-        resources_pb2.Bundle, typehints_trigger_labels_pair_list]])
+@beam.typehints.with_input_types(beam.typehints.Tuple[
+    bytes, beam.typehints.Tuple[resources_pb2.Bundle,
+                                typehints_trigger_labels_pair_list]])
 @beam.typehints.with_output_types(example_pb2.SequenceExample)
 class BundleAndLabelsToSeqexDoFn(beam.DoFn):
-  """ A DoFn converting bundle and labels into sequence examples.
-  """
+  """A DoFn converting bundle and labels into sequence examples."""
 
   def __init__(self, version_config, enable_attribution,
                generate_sequence_label):

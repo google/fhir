@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -27,12 +28,8 @@ Labels: divide LOS into following ranges: (1, 3], (3, 7], (7, 14], (14, inf)
 in terms of days.
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import datetime
-import typing
+from typing import Iterator, Optional
 
 from proto.stu3 import datatypes_pb2
 from proto.stu3 import google_extensions_pb2
@@ -48,9 +45,8 @@ LOS_RANGE_LABEL = 'length_of_stay_range'
 LOS_BOUNDARIES = [3, 7, 14]
 
 
-def ExtractCodeBySystem(
-    codable_concept: datatypes_pb2.CodeableConcept,
-    system: str) -> typing.Optional[bytes]:
+def ExtractCodeBySystem(codable_concept: datatypes_pb2.CodeableConcept,
+                        system: str) -> Optional[str]:
   """Extract code in codable_concept."""
   for coding in codable_concept.coding:
     if (coding.HasField('system') and coding.HasField('code') and
@@ -67,7 +63,7 @@ def ToMicroSeconds(dt: datetime.datetime) -> int:
 # Note: this API only compose encounter level API.
 def ComposeLabel(
     patient: resources_pb2.Patient, enc: resources_pb2.Encounter,
-    label_name: bytes, label_val: bytes,
+    label_name: str, label_val: str,
     label_time: datetime.datetime) -> google_extensions_pb2.EventLabel:
   """Compose an event_label proto given inputs.
 
@@ -97,7 +93,9 @@ def ComposeLabel(
   return event_label
 
 
-def LengthOfStayRangeAt24Hours(patient, enc):
+def LengthOfStayRangeAt24Hours(
+    patient: resources_pb2.Patient,
+    enc: resources_pb2.Encounter) -> Iterator[google_extensions_pb2.EventLabel]:
   """Generate length of stay range labels at 24 hours after admission.
 
   Args:
@@ -105,7 +103,7 @@ def LengthOfStayRangeAt24Hours(patient, enc):
     enc: encounter, caller needs to do the proper cohort filterings.
 
   Yields:
-    (label_name, value, label_time) tuple.
+    An instance of google_extensions_pb2.EventLabel.
   """
   label_time = encounter.AtDuration(enc, 24)
   ecounter_length_days = encounter.EncounterLengthDays(enc)

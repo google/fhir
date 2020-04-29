@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -16,14 +17,11 @@
 r"""Run the model locally.
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import glob
 import os
-from absl import flags
+from typing import List
 
+from absl import flags
 import tensorflow.compat.v1 as tf
 
 from py.google.fhir.models import model
@@ -52,7 +50,7 @@ flags.DEFINE_integer('num_train_steps', 100, 'Total training steps.')
 flags.DEFINE_integer('num_eval_steps', 100, 'Total evaluation steps.')
 
 
-def main(unused_argv):
+def main(unused_argv: List[str]):
   hparams = model.create_hparams(FLAGS.hparams_override)
   tf.logging.info('Using hyperparameters %s', hparams)
   time_crossed_features = [

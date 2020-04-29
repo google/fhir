@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -13,20 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""The main python function for bundle_to_seqex.
+"""The main python function for bundle_to_seqex."""
 
-"""
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from typing import List
 
 from absl import app
 from absl import flags
 import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import StandardOptions
+
 from google.protobuf import text_format
+
 from proto import version_config_pb2
 from proto.stu3 import google_extensions_pb2
 from proto.stu3 import resources_pb2
@@ -46,12 +45,12 @@ flags.DEFINE_string('fhir_version_config', None,
                     'Location of the fhir version config ')
 
 
-def _get_version_config(version_config_path):
+def _get_version_config(version_config_path: str):
   with open(version_config_path) as f:
     return text_format.Parse(f.read(), version_config_pb2.VersionConfig())
 
 
-def main(argv):
+def main(argv: List[str]):
   del argv  # Unused.
 
   # Always use DirectRunner.

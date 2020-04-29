@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -14,10 +15,6 @@
 # limitations under the License.
 
 """Tests for model."""
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 import os
 import shutil
@@ -42,10 +39,11 @@ class ModelTest(tf.test.TestCase, parameterized.TestCase):
 
   def setUp(self):
     super(ModelTest, self).setUp()
-    seqex_list = [test_utils.read_seqex_ascii(
-        filename,
-        os.path.join(absltest.get_default_test_srcdir(), TESTDATA_DIR))
-                  for filename in ['example1.ascii', 'example2.ascii']]
+    filedir = os.path.join(absltest.get_default_test_srcdir(), TESTDATA_DIR)
+    seqex_list = [
+        test_utils.read_seqex_ascii(filename, filedir)
+        for filename in ['example1.ascii', 'example2.ascii']
+    ]
     self.input_data_dir = test_utils.create_input_tfrecord(
         seqex_list, tempfile.mkdtemp(), 'input')
     self.log_dir = tempfile.mkdtemp()
@@ -83,12 +81,12 @@ class ModelTest(tf.test.TestCase, parameterized.TestCase):
       tf.train.start_queue_runners(sess=sess, coord=coord)
       feature_map['label'] = label
       results = sess.run(feature_map)
-      self.assertAllEqual(['above_14'], results['label'])
+      self.assertAllEqual([b'above_14'], results['label'])
       key = (model.SEQUENCE_KEY_PREFIX +
              'Observation.code-til-%d' % 0)
       self.assertAllEqual(
           #  Second "loinc:6" will be de-duped.
-          ['loinc:2', 'loinc:4', 'loinc:6'][num_too_old_events:],
+          [b'loinc:2', b'loinc:4', b'loinc:6'][num_too_old_events:],
           results[key].values)
       self.assertAllEqual(
           [[0, 0], [0, 1], [0, 2]][:3 - num_too_old_events],
@@ -100,8 +98,8 @@ class ModelTest(tf.test.TestCase, parameterized.TestCase):
           model.SEQUENCE_KEY_PREFIX +
           'Observation.code_Observation.value.quantity.value_'
           'Observation.value.quantity.unit-til-0')
-      all_loincs = ['loinc:2-1.000000-mg/L', 'loinc:4-2.000000-n/a',
-                    'loinc:6-n/a-n/a']
+      all_loincs = [b'loinc:2-1.000000-mg/L', b'loinc:4-2.000000-n/a',
+                    b'loinc:6-n/a-n/a']
       self.assertAllEqual(
           all_loincs[num_too_old_events:],
           results[cross_key].values)
@@ -139,13 +137,13 @@ class ModelTest(tf.test.TestCase, parameterized.TestCase):
       tf.train.start_queue_runners(sess=sess, coord=coord)
       feature_map['label'] = label
       results = sess.run(feature_map)
-      self.assertAllEqual(['above_14', 'above_14'], results['label'])
+      self.assertAllEqual([b'above_14', b'above_14'], results['label'])
 
       code_key = (
           model.SEQUENCE_KEY_PREFIX + 'Observation.code-til-%d' % 0)
       self.assertAllEqual(
           #  First loinc:2 from example1 is out of range.
-          ['loinc:4', 'loinc:6', 'loinc:6', 'loinc:1', 'loinc:4'],
+          [b'loinc:4', b'loinc:6', b'loinc:6', b'loinc:1', b'loinc:4'],
           results[code_key].values)
       # When not deduping, original indices are kept in the SparseTensor.
       self.assertAllEqual(
@@ -198,14 +196,14 @@ class ModelTest(tf.test.TestCase, parameterized.TestCase):
       tf.train.start_queue_runners(sess=sess, coord=coord)
       feature_map['label'] = label
       results = sess.run(feature_map)
-      self.assertAllEqual(['above_14', 'above_14'], results['label'])
+      self.assertAllEqual([b'above_14', b'above_14'], results['label'])
 
       code_key = (
           model.SEQUENCE_KEY_PREFIX + 'Observation.code-til-%d' % 0)
       self.assertAllEqual(
           #  First loinc:2 from example1 is out of range.
           #  Second "loinc:6" will be deduped.
-          ['loinc:4', 'loinc:6', 'loinc:1', 'loinc:4'],
+          [b'loinc:4', b'loinc:6', b'loinc:1', b'loinc:4'],
           results[code_key].values)
       # Indices are reordered on axis 1 due to deduping.
       self.assertAllEqual(

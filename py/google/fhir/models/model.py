@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -15,10 +16,7 @@
 
 """Define the input_fn and estimator."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import tensorflow.compat.v1 as tf
 from tensorflow.contrib import data as contrib_data
@@ -34,7 +32,9 @@ SEQUENCE_KEY_PREFIX = 's-'
 AGE_KEY = 'Patient.ageInYears'
 
 
-def _example_index_to_sparse_index(example_indices, batch_size):
+def _example_index_to_sparse_index(
+    example_indices: tf.Tensor,
+    batch_size: tf.Tensor) -> Tuple[tf.Tensor, tf.Tensor]:
   """Creates a sparse index tensor from a list of example indices.
 
   For example, this would do the transformation:
@@ -56,7 +56,7 @@ def _example_index_to_sparse_index(example_indices, batch_size):
   return tf.where(tf.sequence_mask(binned_counts)), max_len
 
 
-def _dedup_tensor(sp_tensor):
+def _dedup_tensor(sp_tensor: tf.SparseTensor) -> tf.SparseTensor:
   """Dedup values of a SparseTensor along each row.
 
   Args:
@@ -101,9 +101,11 @@ def _dedup_tensor(sp_tensor):
       dense_shape=[tf.to_int64(batch_size), max_len])
 
 
-def _make_parsing_fn(mode, label_name, include_age,
-                     categorical_context_features, sequence_features,
-                     time_crossed_features):
+def _make_parsing_fn(
+    mode: tf.estimator.ModeKeys, label_name: str, include_age: bool,
+    categorical_context_features: List[str], sequence_features: List[str],
+    time_crossed_features: List[List[str]]
+) -> Callable[[Union[tf.train.SequenceExample, tf.Tensor]], Dict[str, Any]]:
   """Creates an input function to an estimator.
 
   Args:
@@ -152,7 +154,8 @@ def _make_parsing_fn(mode, label_name, include_age,
     context_features_config[label_name] = tf.FixedLenFeature(
         [], tf.string, default_value='MISSING')
 
-  def _parse_fn_old(serialized_example):
+  def _parse_fn_old(
+      serialized_example: tf.train.SequenceExample) -> Dict[str, Any]:
     """Parses tf.(Sparse)Tensors from the serialized tf.SequenceExample.
 
     Also works with TF versions < 1.12 but is slower than _parse_fn_new.
@@ -176,7 +179,7 @@ def _make_parsing_fn(mode, label_name, include_age,
       feature_map[SEQUENCE_KEY_PREFIX + k] = v
     return feature_map
 
-  def _parse_fn_new(serialized_examples):
+  def _parse_fn_new(serialized_examples: tf.Tensor) -> Dict[str, Any]:
     """Parses tf.(Sparse)Tensors from the serialized tf.SequenceExamples.
 
     Requires TF versions >= 1.12 but is faster than _parse_fn_old.
@@ -203,8 +206,10 @@ def _make_parsing_fn(mode, label_name, include_age,
   return parse_fn
 
 
-def _make_feature_engineering_fn(dedup, time_windows, include_age,
-                                 sequence_features, time_crossed_features):
+def _make_feature_engineering_fn(
+    dedup: bool, time_windows: List[int], include_age: bool,
+    sequence_features: List[str], time_crossed_features: List[List[str]]
+) -> Callable[[Dict[str, Any]], Dict[str, Any]]:
   """Creates an input function to an estimator.
 
   Args:
@@ -221,19 +226,18 @@ def _make_feature_engineering_fn(dedup, time_windows, include_age,
     Two dictionaries with the parsing config for the context features and
     sequence features.
   """
-  def _process(examples):
+
+  def _process(examples: Dict[str, Any]) -> Dict[str, Any]:
     """Supplies input to our model.
 
     This function supplies input to our model after parsing.
 
     Args:
-      examples: The dictionary from key to (Sparse)Tensors with context
-        and sequence features.
+      examples: The dictionary from key to (Sparse)Tensors with context and
+        sequence features.
 
     Returns:
-      A tuple consisting of 1) a dictionary of tensors whose keys are
-      the feature names, and 2) a tensor of target labels if the mode
-      is not INFER (and None, otherwise).
+      A dictionary of tensors whose keys are the feature names.
     """
     # Combine into a single dictionary.
     feature_map = {}
@@ -354,17 +358,19 @@ def _make_feature_engineering_fn(dedup, time_windows, include_age,
   return _process
 
 
-def get_input_fn(mode,
-                 input_files,
-                 label_name,
-                 dedup,
-                 time_windows,
-                 include_age,
-                 categorical_context_features,
-                 sequence_features,
-                 time_crossed_features,
-                 batch_size,
-                 shuffle=True):
+def get_input_fn(
+    mode: tf.estimator.ModeKeys,
+    input_files: List[str],
+    label_name: str,
+    dedup: bool,
+    time_windows: List[int],
+    include_age: bool,
+    categorical_context_features: List[str],
+    sequence_features: List[str],
+    time_crossed_features: List[List[str]],
+    batch_size: int,
+    shuffle: bool = True
+) -> Callable[[], Tuple[Dict[str, Any], Optional[tf.Tensor]]]:
   """Creates an input function to an estimator.
 
   Args:
@@ -390,7 +396,7 @@ def get_input_fn(mode,
     A function that returns a dictionary of features and the target labels.
   """
 
-  def input_fn():
+  def input_fn() -> Tuple[Dict[str, Any], Optional[tf.Tensor]]:
     """Supplies input to our model.
 
     This function supplies input to our model, where this input is a
@@ -456,12 +462,10 @@ def get_input_fn(mode,
   return input_fn
 
 
-def get_serving_input_fn(dedup,
-                         time_windows,
-                         include_age,
-                         categorical_context_features,
-                         sequence_features,
-                         time_crossed_features):
+def get_serving_input_fn(
+    dedup: bool, time_windows: List[int], include_age: bool,
+    categorical_context_features: List[str], sequence_features: List[str],
+    time_crossed_features: List[List[str]]) -> Callable[[], Dict[str, Any]]:
   """Creates an input function to an estimator.
 
   Args:
@@ -487,7 +491,7 @@ def get_serving_input_fn(dedup,
       dedup, time_windows, include_age, sequence_features,
       time_crossed_features)
 
-  def example_serving_input_fn():
+  def example_serving_input_fn() -> Dict[str, Any]:
     """Build the serving inputs."""
     shape = [None] if tf.__version__ >= '1.12.0' else [1]
     examples = tf.placeholder(
@@ -514,7 +518,9 @@ def get_serving_input_fn(dedup,
   return example_serving_input_fn
 
 
-def sparse_expand_dims(s_tensor, axis=0, index_value=None):
+def sparse_expand_dims(s_tensor: tf.SparseTensor,
+                       axis: int = 0,
+                       index_value: Optional[int] = None):
   """Add a new dimension to a sparse tensor while setting its index.
 
   For example, if s is a 2d sparse tensor with 1 at (0, 0) and 2 at (8, 7) then
@@ -549,7 +555,9 @@ def sparse_expand_dims(s_tensor, axis=0, index_value=None):
   return tf.SparseTensor(indices, s_tensor.values, shape)
 
 
-def make_metrics(label_values):
+def make_metrics(
+    label_values: List[str]
+) -> Callable[[List[str], tf.Tensor], Dict[str, Any]]:
   """Creates a function to compute precsion/recall@k metrics for each class.
 
   Args:
@@ -559,7 +567,8 @@ def make_metrics(label_values):
     A function to compute precsion/recall@k metrics for each class.
   """
 
-  def multiclass_metrics_fn(labels, predictions):
+  def multiclass_metrics_fn(labels: List[str],
+                            predictions: tf.Tensor) -> Dict[str, Any]:
     """Computes precsion/recall@k metrics for each class and micro-weighted.
 
     Args:
@@ -633,7 +642,8 @@ def make_metrics(label_values):
   return multiclass_metrics_fn
 
 
-def make_estimator(hparams, label_values, output_dir):
+def make_estimator(hparams: contrib_training.HParams, label_values: List[str],
+                   output_dir: str) -> tf.estimator.Estimator:
   """Creates an Estimator.
 
   Args:
@@ -730,7 +740,7 @@ def make_estimator(hparams, label_values, output_dir):
   return contrib_estimator.add_metrics(estimator, make_metrics(label_values))
 
 
-def create_hparams(hparams_override_str=''):
+def create_hparams(hparams_override_str: str = '') -> contrib_training.HParams:
   """Creates default HParams with the option of overrides.
 
   Args:

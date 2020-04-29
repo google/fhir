@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -12,14 +13,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 """Tests for encounter."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
-from datetime import datetime
+import datetime
 import os
 
 from absl.testing import absltest
@@ -34,6 +30,7 @@ _TESTDATA_PATH = 'com_google_fhir/testdata/stu3/labels'
 class EncounterTest(absltest.TestCase):
 
   def setUp(self):
+    super(EncounterTest, self).setUp()
     self._test_data_dir = os.path.join(absltest.get_default_test_srcdir(),
                                        _TESTDATA_PATH)
     self._enc = resources_pb2.Encounter()
@@ -61,11 +58,9 @@ class EncounterTest(absltest.TestCase):
     at_duration_0 = encounter.AtDuration(enc, 0)
     at_duration_24 = encounter.AtDuration(enc, 24)
     self.assertEqual(at_duration_24_before,
-                     datetime(2009, 2, 12, 23, 31, 30))
-    self.assertEqual(at_duration_0,
-                     datetime(2009, 2, 13, 23, 31, 30))
-    self.assertEqual(at_duration_24,
-                     datetime(2009, 2, 14, 23, 31, 30))
+                     datetime.datetime(2009, 2, 12, 23, 31, 30))
+    self.assertEqual(at_duration_0, datetime.datetime(2009, 2, 13, 23, 31, 30))
+    self.assertEqual(at_duration_24, datetime.datetime(2009, 2, 14, 23, 31, 30))
 
   def testEncounterLengthDays(self):
     inp24hr = [inp for inp in encounter.Inpatient24HrEncounters(self._bundle)]

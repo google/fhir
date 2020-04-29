@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -20,13 +21,8 @@ get data elements from encounter or yeild eligible encounter from
 FHIR bundle.
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
-from datetime import datetime
-from datetime import timedelta
-import typing
+import datetime
+from typing import Iterator, Optional
 
 from proto.stu3 import codes_pb2
 from proto.stu3 import datatypes_pb2
@@ -39,7 +35,7 @@ SECS_PER_HOUR = 3600
 SECS_PER_DAY = 3600 * 24
 
 
-def ToTime(date_and_time: datatypes_pb2.DateTime) -> datetime:
+def ToTime(date_and_time: datatypes_pb2.DateTime) -> datetime.datetime:
   """Get utc seconds from FHIR DateTime.
 
   Args:
@@ -49,7 +45,7 @@ def ToTime(date_and_time: datatypes_pb2.DateTime) -> datetime:
   Returns:
     datetime.datetime in seconds precision, UTC timezone.
   """
-  return datetime.utcfromtimestamp(date_and_time.value_us / 1000000)
+  return datetime.datetime.utcfromtimestamp(date_and_time.value_us / 1000000)
 
 
 def EncounterIsFinished(encounter: resources_pb2.Encounter) -> bool:
@@ -74,9 +70,9 @@ def EncounterIsValidHospitalizationForSynthea(
 
 
 def AtDuration(encounter: resources_pb2.Encounter,
-               hours: int) -> datetime:
+               hours: int) -> datetime.datetime:
   # encounter.start + hours
-  result = ToTime(encounter.period.start) + timedelta(hours=hours)
+  result = ToTime(encounter.period.start) + datetime.timedelta(hours=hours)
   assert result <= ToTime(encounter.period.end)
   return result
 
@@ -87,8 +83,7 @@ def EncounterLengthDays(encounter: resources_pb2.Encounter) -> float:
   return float(length_delta.total_seconds()) / SECS_PER_DAY
 
 
-def GetPatient(
-    bundle: resources_pb2.Bundle) -> typing.Optional[resources_pb2.Patient]:
+def GetPatient(bundle: resources_pb2.Bundle) -> Optional[resources_pb2.Patient]:
   for entry in bundle.entry:
     if entry.resource.HasField('patient'):
       return entry.resource.patient
@@ -98,11 +93,13 @@ def GetPatient(
 ###############################################
 # Use generator to be memory efficient.
 #
-def AllEncounters(bundle):
+def AllEncounters(
+    bundle: resources_pb2.Bundle) -> Iterator[resources_pb2.Encounter]:
   """Yields all encounters in a bundle.
 
   Args:
     bundle: Bundle proto.
+
   Yields:
     all encounters in a bundle.
   """
@@ -111,7 +108,9 @@ def AllEncounters(bundle):
       yield entry.resource.encounter
 
 
-def InpatientEncounters(bundle, for_synthea=False):
+def InpatientEncounters(
+    bundle: resources_pb2.Bundle,
+    for_synthea: bool = False) -> Iterator[resources_pb2.Encounter]:
   """Yields all inpatient encounters in a bundle.
 
   Args:
@@ -128,7 +127,9 @@ def InpatientEncounters(bundle, for_synthea=False):
       yield encounter
 
 
-def InpatientEncountersLongerThan(bundle, n_hours, for_synthea=False):
+def InpatientEncountersLongerThan(bundle: resources_pb2.Bundle,
+                                  n_hours: int,
+                                  for_synthea: bool = False):
   """Yields all inpatient encounters in a bundle that is longer than N hours.
 
   Args:
@@ -141,10 +142,11 @@ def InpatientEncountersLongerThan(bundle, n_hours, for_synthea=False):
   """
   for encounter in InpatientEncounters(bundle, for_synthea):
     if (ToTime(encounter.period.end) - ToTime(encounter.period.start) >
-        timedelta(seconds=n_hours * SECS_PER_HOUR)):
+        datetime.timedelta(seconds=n_hours * SECS_PER_HOUR)):
       yield encounter
 
 
 # One line wrapper for 24.
-def Inpatient24HrEncounters(bundle, for_synthea=False):
+def Inpatient24HrEncounters(bundle: resources_pb2.Bundle,
+                            for_synthea: bool = False):
   return InpatientEncountersLongerThan(bundle, 24, for_synthea)

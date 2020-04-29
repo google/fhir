@@ -22,6 +22,7 @@ py_library(
     srcs = [
         "test_utils.py",
     ],
+    srcs_version = "PY3",
     deps = [
         "@com_google_protobuf//:protobuf_python",
         requirement("tensorflow"),
@@ -31,14 +32,6 @@ py_library(
 py_library(
     name = "model",
     srcs = ["model.py"],
-    deps = [":model_lib"],
-)
-
-py_library(
-    name = "model_lib",
-    srcs = [
-        "model.py",
-    ],
     deps = [
         requirement("tensorflow"),
     ],
@@ -47,8 +40,7 @@ py_library(
 py_binary(
     name = "mle_task",
     srcs = ["mle_task.py"],
-    # TODO: Upgrade external users to Python 3
-    python_version = "PY2",
+    python_version = "PY3",
     deps = [
         ":mle_task_main_lib",
     ],
@@ -70,8 +62,7 @@ py_binary(
     srcs = [
         "run_locally.py",
     ],
-    # TODO: Upgrade external users to Python 3
-    python_version = "PY2",
+    python_version = "PY3",
     deps = [
         ":model",
         "@absl_py//absl/flags",
@@ -88,10 +79,9 @@ py_test(
     data = [
         "//testdata/stu3:tensorflow",
     ],
-    # TODO: Upgrade external users to Python 3
-    python_version = "PY2",
+    python_version = "PY3",
     deps = [
-        ":model_lib",
+        ":model",
         ":test_utils",
         "@absl_py//absl/testing:absltest",
         "@absl_py//absl/testing:parameterized",
@@ -108,11 +98,11 @@ py_test(
     data = [
         "//testdata/stu3:tensorflow",
     ],
-    # TODO: Upgrade external users to Python 3
-    python_version = "PY2",
+    python_version = "PY3",
     deps = [
         ":mle_task_main_lib",
         ":test_utils",
+        "@absl_py//absl/flags",
         "@absl_py//absl/testing:absltest",
         "@absl_py//absl/testing:parameterized",
         requirement("tensorflow"),

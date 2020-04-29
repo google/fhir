@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -33,13 +34,18 @@ And preview on port 6006
 
 import argparse
 import os
+from typing import Any, Callable
+
 from . import model  # Using a relative import for ease of use with Cloud.
 import tensorflow.compat.v1 as tf
+
 from tensorflow.contrib import learn as contrib_learn
 
 
-def make_experiment_fn(input_dir, num_train_steps, num_eval_steps, label_name,
-                       label_values, hparams_overrides, **experiment_args):
+def make_experiment_fn(
+    input_dir: str, num_train_steps: int, num_eval_steps: int, label_name: str,
+    label_values: str, hparams_overrides: str,
+    **experiment_args: Any) -> Callable[[str], contrib_learn.Experiment]:
   """Creates the function used to create the Experiment object.
 
   This function creates a function that is used by the learn_runner
@@ -62,7 +68,7 @@ def make_experiment_fn(input_dir, num_train_steps, num_eval_steps, label_name,
     A function that creates an Experiment object for the runner.
   """
 
-  def experiment_fn(output_dir):
+  def experiment_fn(output_dir: str):
     """Function used in creating the Experiment object."""
     hparams = model.create_hparams(hparams_overrides)
     tf.logging.info('Using tf %s', str(tf.__version__))

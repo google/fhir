@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -14,10 +15,6 @@
 # limitations under the License.
 
 """Tests for bundle_to_seqex_util."""
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 from absl.testing import absltest
 from google.protobuf import text_format
@@ -59,14 +56,14 @@ class BundleToSeqexUtilTest(protobuf_compare.ProtoAssertions,
     """, google_extensions_pb2.EventLabel())
     got_list = bundle_to_seqex_util.get_trigger_labels_from_input_labels(
         [label1, label2])
-    self.assertEqual(2, len(got_list))
+    self.assertLen(got_list, 2)
     (got_trigger_1, got_label_list1) = got_list[0]
     (got_trigger_2, got_label_list2) = got_list[1]
     self.assertProtoEqual(got_trigger_1, trigger1)
-    self.assertEqual(1, len(got_label_list1))
+    self.assertLen(got_label_list1, 1)
     self.assertProtoEqual(got_label_list1[0], label1)
     self.assertProtoEqual(got_trigger_2, trigger2)
-    self.assertEqual(1, len(got_label_list2))
+    self.assertLen(got_label_list2, 1)
     self.assertProtoEqual(got_label_list2[0], label2)
 
   def test_get_trigger_labels_pair(self):
@@ -199,16 +196,16 @@ class BundleToSeqexUtilTest(protobuf_compare.ProtoAssertions,
     # pylint: enable=line-too-long
 
     (filtered_count, got_list) = bundle_to_seqex_util.get_trigger_labels_pair(
-        bundle, ["test1"], "at_discharge")
+        bundle, [b"test1"], b"at_discharge")
     self.assertEqual(0, filtered_count)
-    self.assertEqual(2, len(got_list))
+    self.assertLen(got_list, 2)
     (got_trigger_1, got_label_list1) = got_list[0]
     (got_trigger_2, got_label_list2) = got_list[1]
     self.assertProtoEqual(got_trigger_1, trigger1)
-    self.assertEqual(1, len(got_label_list1))
+    self.assertLen(got_label_list1, 1)
     self.assertProtoEqual(got_label_list1[0], label1)
     self.assertProtoEqual(got_trigger_2, trigger2)
-    self.assertEqual(1, len(got_label_list2))
+    self.assertLen(got_label_list2, 1)
     self.assertProtoEqual(got_label_list2[0], label2)
 
 

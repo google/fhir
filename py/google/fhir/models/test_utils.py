@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -12,20 +13,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 """Utilities for reading and wrting testdata."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import os
+from typing import List
 
 import tensorflow.compat.v1 as tf
+
 from google.protobuf import text_format
 
 
-def read_seqex_ascii(filename, testdata_dir):
+def read_seqex_ascii(filename: str,
+                     testdata_dir: str) -> tf.train.SequenceExample:
   """Read a tf.SequenceExample in ascii format from disk."""
   seqex_pb = tf.train.SequenceExample()
   example_file = os.path.join(testdata_dir, filename)
@@ -34,7 +33,8 @@ def read_seqex_ascii(filename, testdata_dir):
     return seqex_pb
 
 
-def create_input_tfrecord(seqex_list, tmp_dir, filename):
+def create_input_tfrecord(seqex_list: List[tf.train.SequenceExample],
+                          tmp_dir: str, filename: str):
   """Create a temporary TFRecord file on disk with the tf.SequenceExamples.
 
   Args:

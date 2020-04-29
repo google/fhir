@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Setup script to configure dependencies for bundle_to_label binary.
-"""
+"""Setup script to configure dependencies for bundle_to_label binary."""
 
 from distutils.core import setup
 

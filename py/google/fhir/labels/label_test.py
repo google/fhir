@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -15,10 +16,7 @@
 
 """Tests for label."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from datetime import datetime
+import datetime
 import os
 
 from absl.testing import absltest
@@ -36,6 +34,7 @@ _TESTDATA_PATH = 'com_google_fhir/testdata/stu3/labels'
 class LabelTest(parameterized.TestCase):
 
   def setUp(self):
+    super(LabelTest, self).setUp()
     self._test_data_dir = os.path.join(absltest.get_default_test_srcdir(),
                                        _TESTDATA_PATH)
     self._enc = resources_pb2.Encounter()
@@ -74,9 +73,9 @@ class LabelTest(parameterized.TestCase):
     self.assertEqual('sample_code', code)
 
   def testComposeLabel(self):
-    output_label = label.ComposeLabel(self._patient, self._enc,
-                                      'label.test', 'true',
-                                      datetime(2003, 1, 2, 4, 5, 6))
+    output_label = label.ComposeLabel(self._patient, self._enc, 'label.test',
+                                      'true',
+                                      datetime.datetime(2003, 1, 2, 4, 5, 6))
     self.assertEqual(self._expected_label, output_label)
 
   @parameterized.parameters(
@@ -100,11 +99,12 @@ class LabelTest(parameterized.TestCase):
     labels = [l for l in label.LengthOfStayRangeAt24Hours(
         self._patient, enc)]
     expected_label = label.ComposeLabel(
-        self._patient, self._enc,
+        self._patient,
+        self._enc,
         label.LOS_RANGE_LABEL,
         label_val,
         # 24 hours after admission
-        datetime(2009, 2, 14, 23, 31, 30))
+        datetime.datetime(2009, 2, 14, 23, 31, 30))
     self.assertEqual([expected_label], labels)
 
   def testLengthOfStayRangeAt24HoursLT24Hours(self):

@@ -7,9 +7,9 @@ load(
 
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 
-licenses(["notice"])
-
 package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
 
 # @rules_python may not be able to pull in transitive dependency correctly
 # (related issues: https://github.com/bazelbuild/rules_python/pull/90,
@@ -22,6 +22,7 @@ py_library(
     srcs = [
         "encounter.py",
     ],
+    srcs_version = "PY3",
     deps = [
         "//proto/stu3:codes_py_pb2",
         "//proto/stu3:datatypes_py_pb2",
@@ -37,7 +38,7 @@ py_test(
     data = [
         "//testdata/stu3:labels",
     ],
-    python_version = "PY2",
+    python_version = "PY3",
     deps = [
         ":encounter",
         "//proto/stu3:resources_py_pb2",
@@ -51,6 +52,7 @@ py_library(
     srcs = [
         "label.py",
     ],
+    srcs_version = "PY3",
     deps = [
         ":encounter",
         "//proto/stu3:datatypes_py_pb2",
@@ -67,7 +69,7 @@ py_test(
     data = [
         "//testdata/stu3:labels",
     ],
-    python_version = "PY2",
+    python_version = "PY3",
     deps = [
         ":label",
         "//proto/stu3:datatypes_py_pb2",
@@ -82,7 +84,7 @@ py_test(
 py_binary(
     name = "bundle_to_label",
     srcs = ["bundle_to_label.py"],
-    python_version = "PY2",
+    python_version = "PY3",
     deps = [":bundle_to_label_lib"],
 )
 
@@ -91,6 +93,7 @@ py_library(
     srcs = [
         "bundle_to_label.py",
     ],
+    srcs_version = "PY3",
     deps = [
         ":encounter",
         ":label",
@@ -111,7 +114,7 @@ py_test(
     data = [
         "//testdata/stu3:labels",
     ],
-    python_version = "PY2",
+    python_version = "PY3",
     deps = [
         ":bundle_to_label_lib",
         ":label",

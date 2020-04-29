@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -12,12 +13,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 """Tests for bundle_to_label."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 import datetime
 import os
 
@@ -38,10 +35,11 @@ _TESTDATA_PATH = 'com_google_fhir/testdata/stu3/labels'
 class BundleToLabelTest(absltest.TestCase):
 
   def setUp(self):
+    super(BundleToLabelTest, self).setUp()
     self._test_data_dir = os.path.join(absltest.get_default_test_srcdir(),
                                        _TESTDATA_PATH)
 
-  def _VerifyPipeline(self, for_synthea):
+  def _VerifyPipeline(self, for_synthea: bool):
     bundle_text_file = 'bundle_1.pbtxt'
     if for_synthea:
       bundle_text_file = 'bundle_synthea.pbtxt'

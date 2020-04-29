@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -14,9 +15,7 @@
 # limitations under the License.
 """Util function for stu3 protos."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+import typing
 
 from proto.stu3 import resources_pb2
 

@@ -1,3 +1,4 @@
+
 #
 # Copyright 2018 Google LLC
 #
@@ -15,11 +16,8 @@
 
 """Tests for bundle_to_seqex_converter python wrapper."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import os
+from typing import Any, List, Tuple
 
 from absl import flags
 from absl.testing import absltest
@@ -38,14 +36,19 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
                                  absltest.TestCase):
 
   def setUp(self):
+    super(BundleToSeqexConverterTest, self).setUp()
     with open(
         os.path.join(absltest.get_default_test_srcdir(),
                      _VERSION_CONFIG_PATH)) as f:
       self._version_config = text_format.Parse(
           f.read(), version_config_pb2.VersionConfig())
 
-  def _runTest(self, patient_key, bundle, event_trigger_labels_list,
-               expected_outcomes):
+  def _runTest(
+      self, patient_key: bytes, bundle: resources_pb2.Bundle,
+      event_trigger_labels_list: Tuple[google_extensions_pb2.EventTrigger,
+                                       List[Any]],
+      expected_outcomes: Tuple[Tuple[bytes, example_pb2.SequenceExample, int],
+                               Any]):
     converter = bundle_to_seqex_converter.PyBundleToSeqexConverter(
         self._version_config, False, False)
     (begin_result, stats) = converter.begin(patient_key, bundle,
@@ -148,11 +151,11 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
         }
     """, example_pb2.SequenceExample())
     got_stats = self._runTest(
-        "Patient/14", bundle, event_trigger_labels_list,
-        (("Patient/14:0-1@1420102800", expected_seqex, 1),))
+        b"Patient/14", bundle, event_trigger_labels_list,
+        ((b"Patient/14:0-1@1420102800", expected_seqex, 1),))
     # We only spot check a few counters here. The main goal is to make sure
     # we get the counters back from c++ land.
-    self.assertEqual(1, got_stats.get("num-examples"))
+    self.assertEqual(1, got_stats.get(b"num-examples"))
 
   def testSingleTriggerAndLabel(self):
     event_trigger = text_format.Parse(
@@ -331,8 +334,8 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
     """, example_pb2.SequenceExample())
     # pylint: enable=line-too-long
     _ = self._runTest(
-        "Patient/14", bundle, event_trigger_labels_list,
-        (("Patient/14:0-5@1420102800:Encounter/1", expected_seqex, 5),))
+        b"Patient/14", bundle, event_trigger_labels_list,
+        ((b"Patient/14:0-5@1420102800:Encounter/1", expected_seqex, 5),))
 
   def testMultipleTriggersAndExamples(self):
     event_trigger1 = text_format.Parse(
@@ -538,9 +541,9 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
         }
     """, example_pb2.SequenceExample())
     # pylint: enable=line-too-long
-    _ = self._runTest("Patient/14", bundle, event_trigger_labels_list, (
-        ("Patient/14:0-2@1417424400:Encounter/1", expected_seqex1, 2),
-        ("Patient/14:0-4@1420102800:Encounter/2", expected_seqex2, 4),
+    _ = self._runTest(b"Patient/14", bundle, event_trigger_labels_list, (
+        (b"Patient/14:0-2@1417424400:Encounter/1", expected_seqex1, 2),
+        (b"Patient/14:0-4@1420102800:Encounter/2", expected_seqex2, 4),
     ))
 
 
