@@ -25,6 +25,7 @@
 #include "absl/strings/match.h"
 #include "absl/strings/numbers.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/strip.h"
 #include "absl/time/civil_time.h"
 #include "absl/time/time.h"
 #include "absl/types/optional.h"
@@ -157,6 +158,16 @@ StatusOr<std::string> MessageToString(const PrimitiveHandler* primitive_handler,
     return InvalidArgumentError("Expression must be a primitive.");
   }
 
+  // These types are represented as Strings in JSON but are not implicitly
+  // convertible to System.String. Eventually, we should maintain a mapping
+  // of FHIR primitive to FHIRPath primitives
+  // (https://www.hl7.org/fhir/fhirpath.html#types), but for now this is used as
+  // a quick work-around.
+  if (IsDateTime(*message.Message()) || IsTime(*message.Message()) ||
+      IsDecimal(*message.Message())) {
+    return InvalidArgumentError("Expression is not a string.");
+  }
+
   StatusOr<JsonPrimitive> json_primitive =
       primitive_handler->WrapPrimitiveProto(*message.Message());
   std::string json_string = json_primitive.ValueOrDie().value;
@@ -231,12 +242,13 @@ std::vector<const google::protobuf::Message*> WorkspaceMessage::Ancestry() const
 // protbuf wrapper
 class Literal : public ExpressionNode {
  public:
-  Literal(const Descriptor* descriptor, std::function<Message*()> factory)
+  Literal(const Descriptor* descriptor,
+          std::function<StatusOr<Message*>()> factory)
       : descriptor_(descriptor), factory_(factory) {}
 
   Status Evaluate(WorkSpace* work_space,
                   std::vector<WorkspaceMessage>* results) const override {
-    Message* value = factory_();
+    FHIR_ASSIGN_OR_RETURN(Message * value, factory_());
     work_space->DeleteWhenFinished(value);
     results->push_back(WorkspaceMessage(value));
 
@@ -247,7 +259,7 @@ class Literal : public ExpressionNode {
 
  private:
   const Descriptor* descriptor_;
-  std::function<Message*()> factory_;
+  std::function<StatusOr<Message*>()> factory_;
 };
 
 // Expression node for the empty literal.
@@ -2113,6 +2125,15 @@ class ComparisonOperator : public BinaryOperator {
     }
   }
 
+  static DateTimePrecision NormalizePrecisionForComparison(
+      DateTimePrecision original) {
+    if (original == DateTimePrecision::kMillisecond ||
+        original == DateTimePrecision::kMicrosecond) {
+      return DateTimePrecision::kSecond;
+    }
+    return original;
+  }
+
   StatusOr<absl::optional<bool>> EvalDateTimeComparison(
       const PrimitiveHandler* primitive_handler, const Message& left_message,
       const Message& right_message) const {
@@ -2127,7 +2148,8 @@ class ComparisonOperator : public BinaryOperator {
     // one value is specified to a different level of precision than the other,
     // the result is empty ({ }) to indicate that the result of the comparison
     // is unknown."
-    if (left_precision != right_precision) {
+    if (NormalizePrecisionForComparison(left_precision) !=
+        NormalizePrecisionForComparison(right_precision)) {
       return absl::optional<bool>();
     }
 
@@ -3136,6 +3158,45 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     return nullptr;
   }
 
+  StatusOr<std::shared_ptr<Literal>> ParseDateTime(absl::string_view text) {
+    std::string date_time_str;
+    std::string subseconds_str;
+    std::string time_zone_str;
+    if (!RE2::FullMatch(text, R"(@([\d-]+T[\d:]*)(\.\d+)?(Z|([+-]\d\d:\d\d))?)",
+                        &date_time_str, &subseconds_str, &time_zone_str)) {
+      return InvalidArgumentError(absl::StrCat(
+          "DateTime literal does not match expected pattern: ", text));
+    }
+
+    if (date_time_str.size() == 13 || date_time_str.size() == 16) {
+      // TODO: Support hour and minute precision
+      return UnimplementedError(
+          "Hour and minute level precision is not supported yet.");
+    }
+
+    bool no_time = date_time_str.back() == 'T';
+    std::string normalized_date_time_string =
+        absl::StrCat(absl::StripSuffix(date_time_str, "T"), subseconds_str,
+                     !no_time && time_zone_str.empty() ? "Z" : time_zone_str);
+    return std::make_shared<Literal>(
+        primitive_handler_->DateTimeDescriptor(),
+        [=, primitive_handler = primitive_handler_]() {
+          return primitive_handler->NewDateTime(normalized_date_time_string);
+        });
+  }
+
+  antlrcpp::Any visitDateTimeLiteral(
+      FhirPathParser::DateTimeLiteralContext* ctx) override {
+    StatusOr<std::shared_ptr<Literal>> status_or_date_time_literal =
+        ParseDateTime(ctx->getText());
+    if (status_or_date_time_literal.ok()) {
+      return ToAny(status_or_date_time_literal.ValueOrDie());
+    } else {
+      SetError(status_or_date_time_literal.status());
+      return nullptr;
+    }
+  }
+
   antlrcpp::Any visitNumberLiteral(
       FhirPathParser::NumberLiteralContext* ctx) override {
     const std::string& text = ctx->getText();
@@ -3206,12 +3267,6 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       case FhirPathLexer::DATE:
         // TODO: Add support for Date literals.
         SetError(UnimplementedError("Date literals are not yet supported."));
-        return nullptr;
-
-      case FhirPathLexer::DATETIME:
-        // TODO: Add support for DateTime literals.
-        SetError(
-            UnimplementedError("DateTime literals are not yet supported."));
         return nullptr;
 
       case FhirPathLexer::TIME:

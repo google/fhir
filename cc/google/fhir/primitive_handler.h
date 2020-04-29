@@ -140,6 +140,13 @@ class PrimitiveHandler {
 
   virtual const ::google::protobuf::Descriptor* DateTimeDescriptor() const = 0;
 
+  // Creates a new DateTime message. Format of provided string must match the
+  // FHIR specification for DateTime.
+  //
+  // See https://www.hl7.org/fhir/datatypes.html#dateTime
+  virtual StatusOr<::google::protobuf::Message*> NewDateTime(
+      const std::string& str) const = 0;
+
   virtual ::google::protobuf::Message* NewDateTime(
       const absl::Time& time, const absl::TimeZone& zone,
       const DateTimePrecision precision) const = 0;
@@ -406,6 +413,16 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 
   const ::google::protobuf::Descriptor* DateTimeDescriptor() const override {
     return DateTime::GetDescriptor();
+  }
+
+  StatusOr<::google::protobuf::Message*> NewDateTime(
+      const std::string& str) const override {
+    Json::Value json_string(str);
+
+    std::unique_ptr<DateTime> msg = std::make_unique<DateTime>();
+    FHIR_RETURN_IF_ERROR(ParseInto(json_string, msg.get()));
+
+    return msg.release();
   }
 
   ::google::protobuf::Message* NewDateTime(

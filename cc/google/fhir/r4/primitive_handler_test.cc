@@ -294,6 +294,48 @@ HANDLER_TYPE_TEST(UnsignedInt, 86, R4PrimitiveHandler);
 HANDLER_TYPE_TEST(PositiveInt, 85, R4PrimitiveHandler);
 HANDLER_TYPE_TEST(Decimal, "4.7", R4PrimitiveHandler);
 
+TEST(PrimitiveHandlerTest, NewDateTimeFromString) {
+  DateTime expected_date_time_year;
+  expected_date_time_year.set_value_us(1546300800000000);
+  expected_date_time_year.set_timezone("UTC");
+  expected_date_time_year.set_precision(DateTime::YEAR);
+
+  StatusOr<::google::protobuf::Message*> generated_date_time_year_or_status(
+      R4PrimitiveHandler::GetInstance()->NewDateTime("2019"));
+  FHIR_ASSERT_OK(generated_date_time_year_or_status.status());
+  std::unique_ptr<::google::protobuf::Message> generated_date_time_year(
+      generated_date_time_year_or_status.ValueOrDie());
+  ASSERT_THAT(generated_date_time_year,
+              Pointee(EqualsProto(expected_date_time_year)));
+
+  DateTime expected_date_time_month;
+  expected_date_time_month.set_value_us(1548979200000000);
+  expected_date_time_month.set_timezone("UTC");
+  expected_date_time_month.set_precision(DateTime::MONTH);
+
+  StatusOr<::google::protobuf::Message*> generated_date_time_month_or_status(
+      R4PrimitiveHandler::GetInstance()->NewDateTime("2019-02"));
+  FHIR_ASSERT_OK(generated_date_time_month_or_status.status());
+  std::unique_ptr<::google::protobuf::Message> generated_date_time_month(
+      generated_date_time_month_or_status.ValueOrDie());
+  ASSERT_THAT(generated_date_time_month,
+              Pointee(EqualsProto(expected_date_time_month)));
+
+  DateTime expected_date_time_ms;
+  expected_date_time_ms.set_value_us(1549221133100000);
+  expected_date_time_ms.set_timezone("-08:00");
+  expected_date_time_ms.set_precision(DateTime::MILLISECOND);
+
+  StatusOr<::google::protobuf::Message*> generated_date_time_ms_or_status(
+      R4PrimitiveHandler::GetInstance()->NewDateTime(
+          "2019-02-03T11:12:13.1-08:00"));
+  FHIR_ASSERT_OK(generated_date_time_ms_or_status.status());
+  std::unique_ptr<::google::protobuf::Message> generated_date_time_ms(
+      generated_date_time_ms_or_status.ValueOrDie());
+  ASSERT_THAT(generated_date_time_ms,
+              Pointee(EqualsProto(expected_date_time_ms)));
+}
+
 TEST(PrimitiveHandlerTest, NewDateTime) {
   DateTime expected_date_time;
   expected_date_time.set_value_us(5000);

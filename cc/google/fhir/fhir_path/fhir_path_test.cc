@@ -1462,6 +1462,127 @@ FHIR_VERSION_TEST(FhirPathTest, TestStringComparisons, {
   EXPECT_THAT(Evaluate("'foo' <= 'bar'"), EvalsToFalse());
 })
 
+FHIR_VERSION_TEST(FhirPathTest, TestDateTimeLiteral, {
+  DateTime millisecond_precision;
+  millisecond_precision.set_value_us(1390660214559000);
+  millisecond_precision.set_timezone("Z");
+  millisecond_precision.set_precision(DateTime::MILLISECOND);
+  EXPECT_THAT(Evaluate("@2014-01-25T14:30:14.559").ValueOrDie().GetMessages(),
+              ElementsAreArray({EqualsProto(millisecond_precision)}));
+
+  DateTime second_precision;
+  second_precision.set_value_us(1390660214000000);
+  second_precision.set_timezone("Z");
+  second_precision.set_precision(DateTime::SECOND);
+  EXPECT_THAT(Evaluate("@2014-01-25T14:30:14").ValueOrDie().GetMessages(),
+              ElementsAreArray({EqualsProto(second_precision)}));
+
+  // TODO: MINUTE precision should be supported.
+  EXPECT_THAT(Evaluate("@2014-01-25T14:30"),
+              HasStatusCode(StatusCode::kUnimplemented));
+
+  // TODO: HOUR precision should be supported.
+  EXPECT_THAT(Evaluate("@2014-01-25T14"),
+              HasStatusCode(StatusCode::kUnimplemented));
+
+  EXPECT_THAT(
+      Evaluate("@2014-01-25T").ValueOrDie().GetMessages(),
+      ElementsAreArray({EqualsProto(ToDateTime<DateTime, DateTime::Precision>(
+          absl::CivilSecond(2014, 1, 25, 0, 0, 0), absl::UTCTimeZone(),
+          DateTime::DAY))}));
+
+  EXPECT_THAT(
+      Evaluate("@2014-01T").ValueOrDie().GetMessages(),
+      ElementsAreArray({EqualsProto(ToDateTime<DateTime, DateTime::Precision>(
+          absl::CivilSecond(2014, 1, 1, 0, 0, 0), absl::UTCTimeZone(),
+          DateTime::MONTH))}));
+
+  EXPECT_THAT(
+      Evaluate("@2014T").ValueOrDie().GetMessages(),
+      ElementsAreArray({EqualsProto(ToDateTime<DateTime, DateTime::Precision>(
+          absl::CivilSecond(2014, 1, 1, 0, 0, 0), absl::UTCTimeZone(),
+          DateTime::YEAR))}));
+})
+
+FHIR_VERSION_TEST(FhirPathTest, TestTimeComparisonsWithLiterals, {
+  // Test cases form http://hl7.org/fhirpath/#datetime-equality
+  // TODO: This should evaluate to true.
+  EXPECT_THAT(Evaluate("@2012-01-01T10:30 = @2012-01-01T10:30"),
+              HasStatusCode(StatusCode::kUnimplemented));
+  // TODO: This should evaluate to false.
+  EXPECT_THAT(Evaluate("@2012-01-01T10:30 = @2012-01-01T10:31"),
+              HasStatusCode(StatusCode::kUnimplemented));
+  // TODO: This should evaluate to empty.
+  EXPECT_THAT(Evaluate("@2012-01-01T10:30:31 = @2012-01-01T10:30"),
+              HasStatusCode(StatusCode::kUnimplemented));
+  // TODO: This should evaluate to true.
+  EXPECT_THAT(Evaluate("@2012-01-01T10:30:31.0 = @2012-01-01T10:30:31"),
+              EvalsToFalse());
+  EXPECT_THAT(Evaluate("@2012-01-01T10:30:31.1 = @2012-01-01T10:30:31"),
+              EvalsToFalse());
+  // Additional test case to cover unimplemented example above.
+  // TODO: This should evaluate to empty.
+  EXPECT_THAT(Evaluate("@2018-03-01T = @2018-03-01T10:30:00"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 = @2018-03-01T10:30:00"),
+              EvalsToTrue());
+
+  EXPECT_THAT(
+      Evaluate("@2017-11-05T01:30:00.0-04:00 < @2017-11-05T01:15:00.0-05:00"),
+      EvalsToTrue());
+  EXPECT_THAT(
+      Evaluate("@2017-11-05T01:30:00.0-04:00 > @2017-11-05T01:15:00.0-05:00"),
+      EvalsToFalse());
+  // TODO: This should evaluate to true.
+  EXPECT_THAT(
+      Evaluate("@2017-11-05T01:30:00.0-04:00 = @2017-11-05T00:30:00.0-05:00"),
+      EvalsToFalse());
+  EXPECT_THAT(
+      Evaluate("@2017-11-05T01:30:00.0-04:00 = @2017-11-05T01:15:00.0-05:00"),
+      EvalsToFalse());
+
+  // Test cases form http://hl7.org/fhirpath/#greater-than
+  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 > @2018-03-01T10:00:00"),
+              EvalsToTrue());
+  // TODO: This should evaluate to empty.
+  EXPECT_THAT(Evaluate("@2018-03-01T10 > @2018-03-01T10:30"),
+              HasStatusCode(StatusCode::kUnimplemented));
+  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 > @2018-03-01T10:30:00.0"),
+              EvalsToFalse());
+  // Additional test case to cover unimplemented example above.
+  EXPECT_THAT(Evaluate("@2018-03-01T > @2018-03-01T10:30:00"), EvalsToEmpty());
+
+  // Test cases form http://hl7.org/fhirpath/#less-than
+  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 < @2018-03-01T10:00:00"),
+              EvalsToFalse());
+  // TODO: This should evaluate to empty.
+  EXPECT_THAT(Evaluate("@2018-03-01T10 < @2018-03-01T10:30"),
+              HasStatusCode(StatusCode::kUnimplemented));
+  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 < @2018-03-01T10:30:00.0"),
+              EvalsToFalse());
+  // Additional test case to cover unimplemented example above.
+  EXPECT_THAT(Evaluate("@2018-03-01T < @2018-03-01T10:30:00"), EvalsToEmpty());
+
+  // Test cases from http://hl7.org/fhirpath/#less-or-equal
+  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 <= @2018-03-01T10:00:00"),
+              EvalsToFalse());
+  // TODO: This should evaluate to empty.
+  EXPECT_THAT(Evaluate("@2018-03-01T10 <= @2018-03-01T10:30"),
+              HasStatusCode(StatusCode::kUnimplemented));
+  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 <= @2018-03-01T10:30:00.0"),
+              EvalsToTrue());
+  // Additional test case to cover unimplemented example above.
+  EXPECT_THAT(Evaluate("@2018-03-01T <= @2018-03-01T10:30:00"), EvalsToEmpty());
+
+  // Test cases from http://hl7.org/fhirpath/#greater-or-equal
+  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 >= @2018-03-01T10:00:00"),
+              EvalsToTrue());
+  // TODO: This should evaluate to empty.
+  EXPECT_THAT(Evaluate("@2018-03-01T10 >= @2018-03-01T10:30"),
+              HasStatusCode(StatusCode::kUnimplemented));
+  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 >= @2018-03-01T10:30:00.0"),
+              EvalsToTrue());
+})
+
 FHIR_VERSION_TEST(FhirPathTest, TimeComparison, {
   Period start_before_end_period = ParseFromString<Period>(R"proto(
     start: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
