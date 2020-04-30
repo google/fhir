@@ -380,6 +380,7 @@ cc_library(
         "//proto:annotations_cc_proto",
         "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
         "//proto/stu3:resources_cc_proto",
+        "@com_google_absl//absl/container:node_hash_map",
         "@com_google_absl//absl/memory",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",

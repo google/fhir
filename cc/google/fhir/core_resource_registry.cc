@@ -20,6 +20,7 @@
 
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/message.h"
+#include "absl/container/node_hash_map.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
@@ -43,7 +44,7 @@ namespace {
 // Given a profiled resource descriptor, return the base resource in the core
 // FHIR spec
 StatusOr<std::string> GetCoreStructureDefinition(const Descriptor* descriptor) {
-  static std::unordered_map<std::string, std::string> memos;
+  static absl::node_hash_map<std::string, std::string> memos;
   auto iter = memos.find(descriptor->full_name());
   if (iter != memos.end()) {
     return iter->second;
