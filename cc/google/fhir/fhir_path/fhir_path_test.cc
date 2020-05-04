@@ -1079,6 +1079,28 @@ FHIR_VERSION_TEST(FhirPathTest, TestWhereValidatesArguments, {
               HasStatusCode(StatusCode::kInvalidArgument));
 })
 
+FHIR_VERSION_TEST(FhirPathTest, TestAllTrue, {
+  EXPECT_THAT(Evaluate("{}.allTrue()"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(false).allTrue()"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("(true).allTrue()"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(false | true).allTrue()"), EvalsToFalse());
+
+  // Verify that allTrue() fails when called with the wrong number of arguments.
+  EXPECT_THAT(Evaluate("{}.allTrue(true)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+})
+
+FHIR_VERSION_TEST(FhirPathTest, TestAllFalse, {
+  EXPECT_THAT(Evaluate("{}.allFalse()"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(false).allFalse()"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(true).allFalse()"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("(false | true).allFalse()"), EvalsToFalse());
+
+  // Verify that alFalse() fails when called with the wrong number of arguments.
+  EXPECT_THAT(Evaluate("{}.allFalse(true)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+})
+
 FHIR_VERSION_TEST(FhirPathTest, TestAll, {
   EXPECT_THAT(Evaluate("{}.all(false)"), EvalsToTrue());
   EXPECT_THAT(Evaluate("(false).all(true)"), EvalsToTrue());

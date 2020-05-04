@@ -280,6 +280,57 @@ class EmptyLiteral : public ExpressionNode {
   }
 };
 
+// Expression node for a reference to $this.
+class ThisReference : public ExpressionNode {
+ public:
+  explicit ThisReference(const Descriptor* descriptor)
+      : descriptor_(descriptor) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<WorkspaceMessage>* results) const override {
+    results->push_back(work_space->MessageContext());
+    return absl::OkStatus();
+  }
+
+  const Descriptor* ReturnType() const override { return descriptor_; }
+
+ private:
+  const Descriptor* descriptor_;
+};
+
+// Expression node for a reference to %context.
+class ContextReference : public ExpressionNode {
+ public:
+  explicit ContextReference(const Descriptor* descriptor)
+      : descriptor_(descriptor) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<WorkspaceMessage>* results) const override {
+    results->push_back(work_space->BottomMessageContext());
+    return absl::OkStatus();
+  }
+
+  const Descriptor* ReturnType() const override { return descriptor_; }
+
+ private:
+  const Descriptor* descriptor_;
+};
+
+// Expression node for a reference to %resource.
+class ResourceReference : public ExpressionNode {
+ public:
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<WorkspaceMessage>* results) const override {
+    FHIR_ASSIGN_OR_RETURN(WorkspaceMessage result,
+                          work_space->MessageContext().NearestResource());
+    results->push_back(result);
+    return absl::OkStatus();
+  }
+
+  // TODO: Track %resource type during compilation.
+  const Descriptor* ReturnType() const override { return nullptr; }
+};
+
 // Implements the InvocationTerm from the FHIRPath grammar,
 // producing a term from the root context message.
 class InvokeTermNode : public ExpressionNode {
@@ -1522,6 +1573,37 @@ class AllFunction : public FunctionNode {
   }
 };
 
+// Implements the FHIRPath .allTrue() function.
+class AllTrueFunction : public AllFunction {
+ public:
+  static Status ValidateParams(
+      const std::vector<std::shared_ptr<ExpressionNode>>& params) {
+    return params.empty()
+               ? absl::OkStatus()
+               : InvalidArgumentError("Function requires zero arguments.");
+  }
+
+  AllTrueFunction(const std::shared_ptr<ExpressionNode>& child,
+                  const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : AllFunction(child, {std::make_shared<ThisReference>(nullptr)}) {}
+};
+
+// Implements the FHIRPath .allFalse() function.
+class AllFalseFunction : public AllFunction {
+ public:
+  static Status ValidateParams(
+      const std::vector<std::shared_ptr<ExpressionNode>>& params) {
+    return params.empty()
+               ? absl::OkStatus()
+               : InvalidArgumentError("Function requires zero arguments.");
+  }
+
+  AllFalseFunction(const std::shared_ptr<ExpressionNode>& child,
+                   const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : AllFunction(child, {std::make_shared<NotFunction>(
+                               std::make_shared<ThisReference>(nullptr))}) {}
+};
+
 // Implements the FHIRPath .select() function.
 class SelectFunction : public FunctionNode {
  public:
@@ -2618,57 +2700,6 @@ class ContainsOperator : public BinaryOperator {
   }
 };
 
-// Expression node for a reference to $this.
-class ThisReference : public ExpressionNode {
- public:
-  explicit ThisReference(const Descriptor* descriptor)
-      : descriptor_(descriptor){}
-
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
-    results->push_back(work_space->MessageContext());
-    return absl::OkStatus();
-  }
-
-  const Descriptor* ReturnType() const override { return descriptor_; }
-
- private:
-  const Descriptor* descriptor_;
-};
-
-// Expression node for a reference to %context.
-class ContextReference : public ExpressionNode {
- public:
-  explicit ContextReference(const Descriptor* descriptor)
-      : descriptor_(descriptor) {}
-
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
-    results->push_back(work_space->BottomMessageContext());
-    return absl::OkStatus();
-  }
-
-  const Descriptor* ReturnType() const override { return descriptor_; }
-
- private:
-  const Descriptor* descriptor_;
-};
-
-// Expression node for a reference to %resource.
-class ResourceReference : public ExpressionNode {
- public:
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
-    FHIR_ASSIGN_OR_RETURN(WorkspaceMessage result,
-                          work_space->MessageContext().NearestResource());
-    results->push_back(result);
-    return absl::OkStatus();
-  }
-
-  // TODO: Track %resource type during compilation.
-  const Descriptor* ReturnType() const override { return nullptr; }
-};
-
 // Produces a shared pointer explicitly of ExpressionNode rather
 // than a subclass to work well with ANTLR's "Any" semantics.
 inline std::shared_ptr<ExpressionNode> ToAny(
@@ -3329,9 +3360,9 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"ofType", OfTypeFunction::Create},
       {"children", FunctionNode::Create<ChildrenFunction>},
       {"descendants", FunctionNode::Create<DescendantsFunction>},
-      {"allTrue", UnimplementedFunction},
+      {"allTrue", FunctionNode::Create<AllTrueFunction>},
       {"anyTrue", UnimplementedFunction},
-      {"allFalse", UnimplementedFunction},
+      {"allFalse", FunctionNode::Create<AllFalseFunction>},
       {"anyFalse", UnimplementedFunction},
       {"subsetOf", UnimplementedFunction},
       {"supersetOf", UnimplementedFunction},
