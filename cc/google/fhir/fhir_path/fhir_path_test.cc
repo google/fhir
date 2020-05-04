@@ -180,6 +180,23 @@ MATCHER(EvalsToTrue, "") {
   return result.ValueOrDie();
 }
 
+// Matcher for StatusOr<EvaluationResult> that checks to see that the evaluation
+// succeeded and evaluated to an integer equal to the provided value.
+MATCHER_P(EvalsToInteger, expected, "") {
+  if (!arg.ok()) {
+    return false;
+  }
+
+  StatusOr<int> result = arg.ValueOrDie().GetInteger();
+  if (!result.ok()) {
+    *result_listener << "did not resolve to a integer: "
+                     << result.status().message();
+    return false;
+  }
+
+  return result.ValueOrDie() == expected;
+}
+
 MATCHER_P(EvalsToStringThatMatches, string_matcher, "") {
   if (!arg.ok()) {
     *result_listener << "evaluation error: " << arg.status().message();
@@ -749,8 +766,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionAsPrimitives, {
   EXPECT_THAT(Evaluate("true.as(Decimal)"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("true.as(Integer)"), EvalsToEmpty());
 
-  EXPECT_EQ(Evaluate("1.as(Integer)").ValueOrDie().GetInteger().ValueOrDie(),
-            1);
+  EXPECT_THAT(Evaluate("1.as(Integer)"), EvalsToInteger(1));
   EXPECT_THAT(Evaluate("1.as(Decimal)"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("1.as(Boolean)"), EvalsToEmpty());
 
@@ -780,7 +796,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestOperatorAsPrimitives, {
   EXPECT_THAT(Evaluate("true as Decimal"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("true as Integer"), EvalsToEmpty());
 
-  EXPECT_EQ(Evaluate("1 as Integer").ValueOrDie().GetInteger().ValueOrDie(), 1);
+  EXPECT_THAT(Evaluate("1 as Integer"), EvalsToInteger(1));
   EXPECT_THAT(Evaluate("1 as Decimal"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("1 as Boolean"), EvalsToEmpty());
 
@@ -1169,17 +1185,14 @@ FHIR_VERSION_TEST(FhirPathTest, TestSelectValidatesArguments, {
 
 FHIR_VERSION_TEST(FhirPathTest, TestIif, {
   // 2 parameter invocations
-  EXPECT_EQ(Evaluate("iif(true, 1)").ValueOrDie().GetInteger().ValueOrDie(), 1);
+  EXPECT_THAT(Evaluate("iif(true, 1)"), EvalsToInteger(1));
   EXPECT_THAT(Evaluate("iif(false, 1)"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("iif({}, 1)"), EvalsToEmpty());
 
   // 3 parameters invocations
-  EXPECT_EQ(Evaluate("iif(true, 1, 2)").ValueOrDie().GetInteger().ValueOrDie(),
-            1);
-  EXPECT_EQ(Evaluate("iif(false, 1, 2)").ValueOrDie().GetInteger().ValueOrDie(),
-            2);
-  EXPECT_EQ(Evaluate("iif({}, 1, 2)").ValueOrDie().GetInteger().ValueOrDie(),
-            2);
+  EXPECT_THAT(Evaluate("iif(true, 1, 2)"), EvalsToInteger(1));
+  EXPECT_THAT(Evaluate("iif(false, 1, 2)"), EvalsToInteger(2));
+  EXPECT_THAT(Evaluate("iif({}, 1, 2)"), EvalsToInteger(2));
 
   EXPECT_THAT(Evaluate("{}.iif(true, false)"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("(1 | 2).iif(true, false)"),
