@@ -20,6 +20,7 @@ import "proto/annotations.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.qicore";
+option go_package = "github.com/google/fhir/go/proto/r4/qicore";
 
 // The RAND scoring for appropriateness of the procedure.
 // See http://hl7.org/fhir/us/qicore/CodeSystem/appropriateness-score

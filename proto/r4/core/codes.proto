@@ -20,6 +20,7 @@ import "proto/annotations.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
+option go_package = "github.com/google/fhir/go/proto/r4/core";
 
 // A list of the base types defined by this version of the FHIR specification -
 // types that are defined, but for which only specializations actually are

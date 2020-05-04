@@ -23,6 +23,7 @@ import "google/protobuf/descriptor.proto";
 
 option java_outer_classname = "Annotations";
 option java_package = "com.google.fhir.proto";
+option go_package = "github.com/google/fhir/go/proto";
 
 enum FhirVersion {
   FHIR_VERSION_UNKNOWN = 0;

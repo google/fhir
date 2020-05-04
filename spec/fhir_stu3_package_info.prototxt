@@ -1,5 +1,6 @@
 proto_package: "google.fhir.stu3.proto"
 java_proto_package: "com.google.fhir.stu3.proto"
+go_proto_package: "github.com/google/fhir/go/proto/stu3"
 fhir_version: STU3
 license: APACHE
 license_date: "2018"

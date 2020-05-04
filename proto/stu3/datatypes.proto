@@ -20,6 +20,7 @@ import "proto/annotations.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.proto";
+option go_package = "github.com/google/fhir/go/proto/stu3";
 option (.google.fhir.proto.fhir_version) = STU3;
 
 // Auto-generated from StructureDefinition for base64Binary, last updated

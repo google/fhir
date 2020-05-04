@@ -1,5 +1,6 @@
 load("//bazel:proto.bzl", "fhir_proto_library")
 load("//bazel:protogen.bzl", "gen_fhir_definitions_and_protos")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 
 licenses(["notice"])
 
@@ -43,4 +44,16 @@ filegroup(
         "*.prototxt",
         "*.json",
     ]),
+)
+
+go_proto_library(
+    name = "go_proto",
+    importpath = "github.com/google/fhir/go/testdata/stu3/profiles",
+    protos = [
+        "//testdata/stu3/profiles:test_proto",
+    ],
+    deps = [
+        "//proto:go_proto",
+        "//proto/stu3:go_proto",
+    ],
 )

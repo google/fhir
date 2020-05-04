@@ -25,6 +25,7 @@ import "proto/r4/uscore_codes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.uscore";
+option go_package = "github.com/google/fhir/go/proto/r4/uscore";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for USCoreProcedureProfile.

@@ -20,6 +20,7 @@ import "proto/annotations.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.testing";
+option go_package = "github.com/google/fhir/go/r4/testing";
 
 // The brewery of origin.
 // See http://test/url/base/Brewery

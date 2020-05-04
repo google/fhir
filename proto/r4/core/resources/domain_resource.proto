@@ -22,6 +22,7 @@ import "proto/r4/core/datatypes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
+option go_package = "github.com/google/fhir/go/proto/r4/core";
 option (.google.fhir.proto.fhir_version) = R4;
 
 // Auto-generated from StructureDefinition for DomainResource, last updated

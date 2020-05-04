@@ -1,6 +1,7 @@
 base_url: "https://g.co/fhir/StructureDefinition"
 proto_package: "google.fhir.stu3.google"
 java_proto_package: "com.google.fhir.stu3.google"
+go_proto_package: "github.com/google/fhir/go/proto/stu3/google"
 publisher: "Google LLC"
 fhir_version: STU3
 telcom_url: "https://www.google.com"

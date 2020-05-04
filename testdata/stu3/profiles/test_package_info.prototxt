@@ -1,7 +1,7 @@
 base_url: "http://test/url/base"
 proto_package: "google.fhir.stu3.testing"
 java_proto_package: "com.google.fhir.stu3.testing"
-go_proto_package: "google/fhir/stu3/testing"
+go_proto_package: "github.com/google/fhir/go/testdata/stu3/profiles"
 publisher: "Testington Inc."
 fhir_version: STU3
 telcom_url: "http://www.testington.com"
