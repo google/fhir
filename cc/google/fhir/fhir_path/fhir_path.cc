@@ -1021,6 +1021,37 @@ class CountFunction : public ZeroParameterFunctionNode {
   }
 };
 
+// Implements the FHIRPath .single() function.
+//
+// Returns the sole element of the input collection. Signals an error if
+// there is more than one element in the input collection.
+class SingleFunction : public ZeroParameterFunctionNode {
+ public:
+  SingleFunction(const std::shared_ptr<ExpressionNode>& child,
+                 const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.size() > 1) {
+      return absl::FailedPreconditionError(
+          "single() may not be called on a collection with size greater than "
+          "1.");
+    }
+
+    if (!child_results.empty()) {
+      results->push_back(child_results.back());
+    }
+
+    return absl::OkStatus();
+  }
+
+  const Descriptor* ReturnType() const override { return child_->ReturnType(); }
+};
+
 // Implements the FHIRPath .first() function.
 //
 // Returns the first element of the input collection. Or an empty collection if
@@ -1047,6 +1078,31 @@ class FirstFunction : public ZeroParameterFunctionNode {
   const Descriptor* ReturnType() const override {
     return child_->ReturnType();
   }
+};
+
+// Implements the FHIRPath .last() function.
+//
+// Returns the last element of the input collection. Or an empty collection if
+// if the input collection is empty.
+class LastFunction : public ZeroParameterFunctionNode {
+ public:
+  LastFunction(const std::shared_ptr<ExpressionNode>& child,
+               const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (!child_results.empty()) {
+      results->push_back(child_results.back());
+    }
+
+    return absl::OkStatus();
+  }
+
+  const Descriptor* ReturnType() const override { return child_->ReturnType(); }
 };
 
 // Implements the FHIRPath .tail() function.
@@ -3367,8 +3423,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"subsetOf", UnimplementedFunction},
       {"supersetOf", UnimplementedFunction},
       {"repeat", UnimplementedFunction},
-      {"single", UnimplementedFunction},
-      {"last", UnimplementedFunction},
+      {"single", FunctionNode::Create<SingleFunction>},
+      {"last", FunctionNode::Create<LastFunction>},
       {"skip", UnimplementedFunction},
       {"take", UnimplementedFunction},
       {"exclude", UnimplementedFunction},

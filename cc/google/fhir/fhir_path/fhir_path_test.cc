@@ -720,6 +720,19 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionFirst, {
   EXPECT_TRUE(Evaluate("(false | true).first()").ok());
 })
 
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionLast, {
+  EXPECT_THAT(Evaluate("{}.last()"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("true.last()"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("true.combine(true).last()"), EvalsToTrue());
+})
+
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionSingle, {
+  EXPECT_THAT(Evaluate("{}.single()"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("true.single()"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(false | true).single()"),
+              HasStatusCode(StatusCode::kFailedPrecondition));
+})
+
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionTail, {
   EXPECT_THAT(Evaluate("{}.tail()"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("true.tail()"), EvalsToEmpty());
