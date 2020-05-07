@@ -10,8 +10,8 @@ cc_binary(
     deps = [
         "//cc/google/fhir/r4:json_format",
         "//cc/google/fhir/r4:profiles",
-        "//examples/profiles:demo_cc_proto",
         "//proto/r4/core/resources:patient_cc_proto",
+        "//examples/profiles:demo_cc_proto",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
     ],
