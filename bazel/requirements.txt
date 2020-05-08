@@ -5,3 +5,4 @@ tensorflow>=1.12.0,<2.0.0
 funcsigs
 python-dateutil>=2.8.1
 protobuf
+google-cloud-bigquery
