@@ -571,6 +571,36 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionContains, {
   EXPECT_THAT(Evaluate("{}.contains('foo')"), EvalsToEmpty());
 })
 
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionEndsWith, {
+  // Missing argument
+  EXPECT_THAT(Evaluate("'foo'.endsWith()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+
+  // Empty colection argument
+  EXPECT_THAT(Evaluate("'foo'.endsWith({})"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+
+  // Too many arguments
+  EXPECT_THAT(Evaluate("'foo'.endsWith('foo', 'foo')"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+
+  // Wrong argument type
+  EXPECT_THAT(Evaluate("'foo'.endsWith(1)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+
+  // Function does not exist for non-string type
+  EXPECT_THAT(Evaluate("1.endsWith('1')"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+
+  // Basic cases
+  EXPECT_THAT(Evaluate("{}.endsWith('')"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("''.endsWith('')"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo'.endsWith('')"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo'.endsWith('o')"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo'.endsWith('foo')"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("'foo'.endsWith('bfoo')"), EvalsToFalse());
+})
+
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionStartsWith, {
   // Missing argument
   EXPECT_THAT(Evaluate("'foo'.startsWith()"),
@@ -597,6 +627,7 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionStartsWith, {
               HasStatusCode(StatusCode::kInvalidArgument));
 
   // Basic cases
+  EXPECT_THAT(Evaluate("{}.startsWith('')"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("''.startsWith('')"), EvalsToTrue());
   EXPECT_THAT(Evaluate("'foo'.startsWith('')"), EvalsToTrue());
   EXPECT_THAT(Evaluate("'foo'.startsWith('f')"), EvalsToTrue());

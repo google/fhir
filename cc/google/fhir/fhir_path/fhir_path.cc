@@ -676,6 +676,48 @@ class HasValueFunction : public ZeroParameterFunctionNode {
   }
 };
 
+class StringTestFunction : public SingleValueFunctionNode {
+ public:
+  StringTestFunction(const std::shared_ptr<ExpressionNode>& child,
+                     const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : SingleValueFunctionNode(child, params) {}
+
+  Status EvaluateWithParam(
+      WorkSpace* work_space, const WorkspaceMessage& param,
+      std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.size() > 1) {
+      return InvalidArgumentError("Function must be invoked on a string.");
+    }
+
+    if (child_results.empty()) {
+      return absl::OkStatus();
+    }
+
+    FHIR_ASSIGN_OR_RETURN(
+        std::string item,
+        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string test_string,
+        MessageToString(work_space->GetPrimitiveHandler(), param));
+
+    Message* result =
+        work_space->GetPrimitiveHandler()->NewBoolean(Test(item, test_string));
+    work_space->DeleteWhenFinished(result);
+    results->push_back(WorkspaceMessage(result));
+    return absl::OkStatus();
+  }
+
+  virtual bool Test(absl::string_view input,
+                    absl::string_view test_string) const = 0;
+
+  const Descriptor* ReturnType() const override {
+    return Boolean::descriptor();
+  }
+};
+
 // Implements the FHIRPath .startsWith() function, which returns true if and
 // only if the child string starts with the given string. When the given string
 // is the empty string .startsWith() returns true.
@@ -688,87 +730,40 @@ class HasValueFunction : public ZeroParameterFunctionNode {
 // Specifically, any type for which its JsonPrimitive value is a string. This
 // differs from the allowed implicit conversions defined in
 // https://hl7.org/fhirpath/2018Sep/index.html#conversion.
-class StartsWithFunction : public SingleValueFunctionNode {
+class StartsWithFunction : public StringTestFunction {
  public:
-  explicit StartsWithFunction(
-      const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>>& params)
-      : SingleValueFunctionNode(child, params) {}
-
-  Status EvaluateWithParam(
-      WorkSpace* work_space, const WorkspaceMessage& param,
-      std::vector<WorkspaceMessage>* results) const override {
-    std::vector<WorkspaceMessage> child_results;
-    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
-
-    if (child_results.size() != 1) {
-      return InvalidArgumentError(kInvalidArgumentMessage);
-    }
-
-    FHIR_ASSIGN_OR_RETURN(
-        std::string item,
-        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
-    FHIR_ASSIGN_OR_RETURN(
-        std::string prefix,
-        MessageToString(work_space->GetPrimitiveHandler(), param));
-
-    Message* result = work_space->GetPrimitiveHandler()->NewBoolean(
-        absl::StartsWith(item, prefix));
-    work_space->DeleteWhenFinished(result);
-    results->push_back(WorkspaceMessage(result));
-    return absl::OkStatus();
+  StartsWithFunction(const std::shared_ptr<ExpressionNode>& child,
+                     const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : StringTestFunction(child, params) {}
+  bool Test(absl::string_view input,
+            absl::string_view test_string) const override {
+    return absl::StartsWith(input, test_string);
   }
-
-  const Descriptor* ReturnType() const override {
-    return Boolean::descriptor();
-  }
-
- private:
-  static constexpr char kInvalidArgumentMessage[] =
-      "startsWith must be invoked on a string with a single string "
-      "argument";
 };
-constexpr char StartsWithFunction::kInvalidArgumentMessage[];
+
+// Implements the FHIRPath .endsWith() function.
+class EndsWithFunction : public StringTestFunction {
+ public:
+  EndsWithFunction(const std::shared_ptr<ExpressionNode>& child,
+                   const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : StringTestFunction(child, params) {}
+  bool Test(absl::string_view input,
+            absl::string_view test_string) const override {
+    return absl::EndsWith(input, test_string);
+  }
+};
 
 // Implements the FHIRPath .contains() function.
-class ContainsFunction : public SingleValueFunctionNode {
+class ContainsFunction : public StringTestFunction {
  public:
   explicit ContainsFunction(
       const std::shared_ptr<ExpressionNode>& child,
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
-      : SingleValueFunctionNode(child, params) {}
+      : StringTestFunction(child, params) {}
 
-  Status EvaluateWithParam(
-      WorkSpace* work_space, const WorkspaceMessage& param,
-      std::vector<WorkspaceMessage>* results) const override {
-    std::vector<WorkspaceMessage> child_results;
-    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
-
-    if (child_results.empty()) {
-      return absl::OkStatus();
-    }
-
-    if (child_results.size() > 1) {
-      return InvalidArgumentError(
-          "contains() must be invoked on a single string.");
-    }
-
-    FHIR_ASSIGN_OR_RETURN(
-        std::string haystack,
-        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
-    FHIR_ASSIGN_OR_RETURN(
-        std::string needle,
-        MessageToString(work_space->GetPrimitiveHandler(), param));
-
-    Message* result = work_space->GetPrimitiveHandler()->NewBoolean(
-        absl::StrContains(haystack, needle));
-    work_space->DeleteWhenFinished(result);
-    results->push_back(WorkspaceMessage(result));
-    return absl::OkStatus();
-  }
-
-  const Descriptor* ReturnType() const override {
-    return Boolean::descriptor();
+  bool Test(absl::string_view input,
+            absl::string_view test_string) const override {
+    return absl::StrContains(input, test_string);
   }
 };
 
@@ -3445,10 +3440,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"toTime", UnimplementedFunction},
       {"indexOf", UnimplementedFunction},
       {"substring", UnimplementedFunction},
-      {"endsWith", UnimplementedFunction},
       {"upper", UnimplementedFunction},
       {"lower", UnimplementedFunction},
       {"replace", UnimplementedFunction},
+      {"endsWith", FunctionNode::Create<EndsWithFunction>},
       {"toChars", UnimplementedFunction},
       {"today", UnimplementedFunction},
       {"now", UnimplementedFunction},
