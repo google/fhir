@@ -163,7 +163,7 @@ namespace {
 template <class TypedDateTime>
 absl::Duration InternalGetDurationFromTimelikeElement(
     const TypedDateTime& datetime) {
-  // TODO: handle YEAR and MONTH properly, instead of approximating.
+  // TODO: handle YEAR and MONTH properly
   switch (datetime.precision()) {
     case TypedDateTime::YEAR:
       return absl::Hours(24 * 366);

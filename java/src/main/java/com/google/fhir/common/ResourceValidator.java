@@ -51,8 +51,7 @@ public final class ResourceValidator {
 
     if (message instanceof Any) {
       // We do not validate "Any" contained resources.
-      // TODO: maybe we should though... we'd need a registry that
-      // allows us to automatically unpack into the correct type based on url.
+      // TODO: Potentially unpack the correct type and validate?
       return;
     }
 

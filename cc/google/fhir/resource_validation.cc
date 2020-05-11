@@ -59,13 +59,13 @@ Status ValidatePeriod(const Message& period, const std::string& base) {
     // since the precisions can be different.  So we need to compare the end
     // time at the upper bound of end element.
     // Example: If the start time is "Tuesday at noon", and the end time is
-    // "some time Tuesday", this is valid, even thought the timestamp used for
+    // "some time Tuesday", this is valid, even though the timestamp used for
     // "some time Tuesday" is Tuesday 00:00, since the precision for the start
     // is higher than the end.
     //
     // Also note the GetUpperBoundFromTimelikeElement is always greater than
     // the time itself by exactly one time unit, and hence start needs to be
-    // strictly less than end upper bound of end, so as to not allow ranges like
+    // strictly less than the upper bound of end, so as to not allow ranges like
     // [Tuesday, Monday] to be valid.
     if (google::fhir::GetTimeFromTimelikeElement(start) >=
         google::fhir::GetUpperBoundFromTimelikeElement(end)) {
@@ -93,8 +93,7 @@ Status ValidateFhirConstraints(const Message& message,
 
   if (IsMessageType<::google::protobuf::Any>(message)) {
     // We do not validate "Any" contained resources.
-    // TODO: maybe we should though... we'd need a registry that
-    // allows us to automatically unpack into the correct type based on url.
+    // TODO: Potentially unpack the correct type and validate?
     return absl::OkStatus();
   }
 
