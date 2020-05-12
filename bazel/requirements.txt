@@ -1,8 +1,9 @@
-nose>=1.3.7
 apache_beam>=2.14.0
+funcsigs
+google-cloud-bigquery
+nose>=1.3.7
+protobuf
+python-dateutil>=2.8.1
 request
 tensorflow>=1.12.0,<2.0.0
-funcsigs
-python-dateutil>=2.8.1
-protobuf
-google-cloud-bigquery
+wheel
