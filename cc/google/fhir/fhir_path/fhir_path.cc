@@ -676,6 +676,47 @@ class HasValueFunction : public ZeroParameterFunctionNode {
   }
 };
 
+class IndexOfFunction : public SingleParameterFunctionNode {
+ public:
+  IndexOfFunction(const std::shared_ptr<ExpressionNode>& child,
+                  const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : SingleParameterFunctionNode(child, params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  const std::vector<WorkspaceMessage>& first_param,
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.size() > 1 || first_param.size() > 1) {
+      return InvalidArgumentError(
+          "indexOf() must be invoked on a string with a string argument.");
+    }
+
+    if (child_results.empty() || first_param.empty()) {
+      return absl::OkStatus();
+    }
+
+    FHIR_ASSIGN_OR_RETURN(
+        std::string haystack,
+        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string needle,
+        MessageToString(work_space->GetPrimitiveHandler(), first_param[0]));
+
+    size_t position = haystack.find(needle);
+    Message* result = work_space->GetPrimitiveHandler()->NewInteger(
+        position == std::string::npos ? -1 : position);
+    work_space->DeleteWhenFinished(result);
+    results->push_back(WorkspaceMessage(result));
+    return absl::OkStatus();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Integer::descriptor();
+  }
+};
+
 class StringTestFunction : public SingleValueFunctionNode {
  public:
   StringTestFunction(const std::shared_ptr<ExpressionNode>& child,
@@ -3438,7 +3479,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"convertsToString", UnimplementedFunction},
       {"convertsToTime", UnimplementedFunction},
       {"toTime", UnimplementedFunction},
-      {"indexOf", UnimplementedFunction},
+      {"indexOf", FunctionNode::Create<IndexOfFunction>},
       {"substring", UnimplementedFunction},
       {"upper", UnimplementedFunction},
       {"lower", UnimplementedFunction},

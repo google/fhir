@@ -647,6 +647,18 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionStartsWithInvokedOnNonString, {
       HasStatusCode(StatusCode::kInvalidArgument));
 })
 
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionIndexOf, {
+  EXPECT_THAT(Evaluate("'abcdefg'.indexOf('bc')"), EvalsToInteger(1));
+  EXPECT_THAT(Evaluate("'abcdefg'.indexOf('x')"), EvalsToInteger(-1));
+  EXPECT_THAT(Evaluate("'abcdefg'.indexOf('abcdefg')"), EvalsToInteger(0));
+  EXPECT_THAT(Evaluate("'abcdefg'.indexOf('')"), EvalsToInteger(0));
+
+  // http://hl7.org/fhirpath/N1/#indexofsubstring-string-integer
+  // If the input or substring is empty ({ }), the result is empty ({ }).
+  EXPECT_THAT(Evaluate("{}.indexOf('')"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("''.indexOf({})"), EvalsToEmpty());
+})
+
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionMatches, {
   EXPECT_THAT(Evaluate("{}.matches('')"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("''.matches('')"), EvalsToTrue());
