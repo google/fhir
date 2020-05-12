@@ -40,6 +40,7 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/r4/core/datatypes.pb.h"
+#include "icu4c/source/common/unicode/unistr.h"
 
 namespace google {
 namespace fhir {
@@ -794,6 +795,70 @@ class EndsWithFunction : public StringTestFunction {
   }
 };
 
+class StringTransformationFunction : public ZeroParameterFunctionNode {
+ public:
+  StringTransformationFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.size() > 1) {
+      return InvalidArgumentError("Function must be invoked on a string.");
+    }
+
+    if (child_results.empty()) {
+      return absl::OkStatus();
+    }
+
+    FHIR_ASSIGN_OR_RETURN(
+        std::string item,
+        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
+
+    Message* result =
+        work_space->GetPrimitiveHandler()->NewString(Transform(item));
+    work_space->DeleteWhenFinished(result);
+    results->push_back(WorkspaceMessage(result));
+    return absl::OkStatus();
+  }
+
+  virtual std::string Transform(const std::string& input) const = 0;
+
+  const Descriptor* ReturnType() const override { return String::descriptor(); }
+};
+
+class LowerFunction : public StringTransformationFunction {
+ public:
+  LowerFunction(const std::shared_ptr<ExpressionNode>& child,
+                const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : StringTransformationFunction(child, params) {}
+
+  std::string Transform(const std::string& input) const override {
+    std::string uppercase_string;
+    icu::UnicodeString::fromUTF8(input).toLower().toUTF8String(
+        uppercase_string);
+    return uppercase_string;
+  }
+};
+
+class UpperFunction : public StringTransformationFunction {
+ public:
+  UpperFunction(const std::shared_ptr<ExpressionNode>& child,
+                const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : StringTransformationFunction(child, params) {}
+
+  std::string Transform(const std::string& input) const override {
+    std::string uppercase_string;
+    icu::UnicodeString::fromUTF8(input).toUpper().toUTF8String(
+        uppercase_string);
+    return uppercase_string;
+  }
+};
+
 // Implements the FHIRPath .contains() function.
 class ContainsFunction : public StringTestFunction {
  public:
@@ -849,6 +914,84 @@ class MatchesFunction : public SingleValueFunctionNode {
 
   const Descriptor* ReturnType() const override {
     return Boolean::descriptor();
+  }
+};
+
+class ReplaceFunction : public FunctionNode {
+ public:
+  ReplaceFunction(const std::shared_ptr<ExpressionNode>& child,
+                  const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : FunctionNode(child, params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> pattern_param;
+    FHIR_RETURN_IF_ERROR(params_[0]->Evaluate(work_space, &pattern_param));
+
+    std::vector<WorkspaceMessage> replacement_param;
+    FHIR_RETURN_IF_ERROR(params_[1]->Evaluate(work_space, &replacement_param));
+
+    return EvaluateWithParam(work_space, pattern_param, replacement_param,
+                             results);
+  }
+
+  Status EvaluateWithParam(
+      WorkSpace* work_space, const std::vector<WorkspaceMessage>& pattern_param,
+      const std::vector<WorkspaceMessage>& replacement_param,
+      std::vector<WorkspaceMessage>* results) const {
+    std::vector<WorkspaceMessage> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    // If the input collection, pattern, or substitution are empty, the result
+    // is empty ({ }).
+    // http://hl7.org/fhirpath/N1/#replacepattern-string-substitution-string-string
+    if (child_results.empty() || pattern_param.empty() ||
+        replacement_param.empty()) {
+      return absl::OkStatus();
+    }
+
+    FHIR_ASSIGN_OR_RETURN(
+        std::string item,
+        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string pattern,
+        MessagesToString(work_space->GetPrimitiveHandler(), pattern_param));
+    FHIR_ASSIGN_OR_RETURN(
+        std::string replacement,
+        MessagesToString(work_space->GetPrimitiveHandler(), replacement_param));
+
+    if (!item.empty() && pattern.empty()) {
+      // "If pattern is the empty string (''), every character in the input
+      // string is surrounded by the substitution, e.g. 'abc'.replace('','x')
+      // becomes 'xaxbxcx'."
+      std::string replaced(replacement);
+      replaced.reserve(replacement.length() * (item.length() + 1) +
+                       item.length());
+      icu::UnicodeString original = icu::UnicodeString::fromUTF8(item);
+      for (int i = 0; i < original.length(); i++) {
+        original.tempSubStringBetween(i, i + 1).toUTF8String(replaced);
+        replaced.append(replacement);
+      }
+      item = std::move(replaced);
+    } else {
+      item = absl::StrReplaceAll(item, {{pattern, replacement}});
+    }
+
+    Message* result = work_space->GetPrimitiveHandler()->NewString(item);
+    work_space->DeleteWhenFinished(result);
+    results->push_back(WorkspaceMessage(result));
+    return absl::OkStatus();
+  }
+
+  const Descriptor* ReturnType() const override { return String::descriptor(); }
+
+  static Status ValidateParams(
+      const std::vector<std::shared_ptr<ExpressionNode>>& params) {
+    return params.size() == 2
+               ? absl::OkStatus()
+               : InvalidArgumentError(absl::StrCat(
+                     "replace() requires exactly two parameters. Got ",
+                     params.size(), "."));
   }
 };
 
@@ -3481,9 +3624,9 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"toTime", UnimplementedFunction},
       {"indexOf", FunctionNode::Create<IndexOfFunction>},
       {"substring", UnimplementedFunction},
-      {"upper", UnimplementedFunction},
-      {"lower", UnimplementedFunction},
-      {"replace", UnimplementedFunction},
+      {"upper", FunctionNode::Create<UpperFunction>},
+      {"lower", FunctionNode::Create<LowerFunction>},
+      {"replace", FunctionNode::Create<ReplaceFunction>},
       {"endsWith", FunctionNode::Create<EndsWithFunction>},
       {"toChars", UnimplementedFunction},
       {"today", UnimplementedFunction},

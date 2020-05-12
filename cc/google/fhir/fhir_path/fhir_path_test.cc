@@ -659,6 +659,24 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionIndexOf, {
   EXPECT_THAT(Evaluate("''.indexOf({})"), EvalsToEmpty());
 })
 
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionUpper, {
+  EXPECT_THAT(Evaluate("{}.upper()"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("''.upper()"), EvalsToStringThatMatches(StrEq("")));
+  EXPECT_THAT(Evaluate("'aBa'.upper()"),
+              EvalsToStringThatMatches(StrEq("ABA")));
+  EXPECT_THAT(Evaluate("'ABA'.upper()"),
+              EvalsToStringThatMatches(StrEq("ABA")));
+})
+
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionLower, {
+  EXPECT_THAT(Evaluate("{}.lower()"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("''.lower()"), EvalsToStringThatMatches(StrEq("")));
+  EXPECT_THAT(Evaluate("'aBa'.lower()"),
+              EvalsToStringThatMatches(StrEq("aba")));
+  EXPECT_THAT(Evaluate("'aba'.lower()"),
+              EvalsToStringThatMatches(StrEq("aba")));
+})
+
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionMatches, {
   EXPECT_THAT(Evaluate("{}.matches('')"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("''.matches('')"), EvalsToTrue());
@@ -671,6 +689,24 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionReplaceMatches, {
   EXPECT_THAT(Evaluate("{}.replaceMatches('', '')"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("'a'.replaceMatches('.', 'b')"),
               EvalsToStringThatMatches(StrEq("b")));
+})
+
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionReplace, {
+  EXPECT_THAT(Evaluate("{}.replace('', '')"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("''.replace({}, '')"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("''.replace('', {})"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("''.replace('', 'x')"),
+              EvalsToStringThatMatches(StrEq("")));
+  EXPECT_THAT(Evaluate("'abcdefg'.replace('x', '123')"),
+              EvalsToStringThatMatches(StrEq("abcdefg")));
+  EXPECT_THAT(Evaluate("'abcdefg'.replace('cde', '123')"),
+              EvalsToStringThatMatches(StrEq("ab123fg")));
+  EXPECT_THAT(Evaluate("'abcdefg'.replace('cde', '')"),
+              EvalsToStringThatMatches(StrEq("abfg")));
+  EXPECT_THAT(Evaluate("'abc'.replace('', 'x')"),
+              EvalsToStringThatMatches(StrEq("xaxbxcx")));
+  EXPECT_THAT(Evaluate("'£'.replace('', 'x')"),
+              EvalsToStringThatMatches(StrEq("x£x")));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionReplaceMatchesWrongArgCount, {
