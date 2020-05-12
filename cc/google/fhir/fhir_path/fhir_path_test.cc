@@ -1723,6 +1723,22 @@ FHIR_VERSION_TEST(FhirPathTest, TimeComparison, {
   )proto");
   EXPECT_THAT(Evaluate(end_before_start_period, "start <= end"),
               EvalsToFalse());
+
+  Period dst_transition = ParseFromString<Period>(R"proto(
+    # 2001-10-28T01:59:00
+    start: {
+      value_us: 1004248740000000
+      timezone: "America/New_York"
+      precision: SECOND
+    }
+    # 2001-10-28T01:00:00 (the 2nd 1 AM of the day)
+    end: {
+      value_us: 1004248800000000
+      timezone: "America/New_York"
+      precision: SECOND
+    }
+  )proto");
+  EXPECT_THAT(Evaluate(dst_transition, "start <= end"), EvalsToTrue());
 })
 
 FHIR_VERSION_TEST(FhirPathTest, TimeCompareDifferentPrecision, {

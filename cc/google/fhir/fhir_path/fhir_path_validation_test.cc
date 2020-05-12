@@ -262,25 +262,6 @@ FHIR_VERSION_TEST(FhirPathTest, MessageLevelConstraint, {
   EXPECT_TRUE(VersionedMessageValidator().Validate(period).IsValid());
 })
 
-// TODO: Move this to fhir_path_test.cc once DateTime literals are
-// supported.
-TEST(FhirPathTest, DateTimeComparisonRespectsDstTransitions) {
-  auto period = ParseFromString<r4::core::Period>(R"proto(
-    start: {
-      value_us: 1004248740000000 # 2001-10-28T01:59:00
-      timezone: "America/New_York"
-      precision: SECOND
-    }
-    end: {
-      value_us: 1004248800000000 # 2001-10-28T01:00:00 (the 2nd 1 AM of the day)
-      timezone: "America/New_York"
-      precision: SECOND
-    }
-  )proto");
-
-  EXPECT_TRUE(r4::FhirPathValidator().Validate(period).IsValid());
-}
-
 // TODO: Templatize tests to work with both STU3 and R4
 TEST(FhirPathTest, MessageLevelConstraintViolated) {
   auto end_before_start_period = ParseFromString<r4::core::Period>(R"proto(
