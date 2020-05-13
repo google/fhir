@@ -159,8 +159,8 @@ def gen_fhir_protos(
                 "//java:proto_generator_test_utils",
                 "//java:protogen",
                 "@maven//:com_google_guava_guava",
-                "@com_google_protobuf//:protobuf_java",
                 "@maven//:junit_junit",
+                "@com_google_protobuf//:protobuf_java",
             ],
         )
 
