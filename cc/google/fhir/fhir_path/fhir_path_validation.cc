@@ -43,12 +43,12 @@ namespace fhir {
 namespace fhir_path {
 
 using ::google::fhir::ForEachMessage;
+using ::google::fhir::GetPotentiallyRepeatedMessage;
+using ::google::fhir::PotentiallyRepeatedFieldSize;
 using ::google::fhir::StatusOr;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
-using ::google::fhir::ForEachMessage;
-using ::google::fhir::StatusOr;
 
 bool ValidationResults::StrictValidationFn(const ValidationResult& result) {
   return result.EvaluationResult().ok() &&
@@ -175,33 +175,28 @@ void FhirPathValidator::AddMessageConstraints(const Descriptor* descriptor,
 }
 
 // Validates that the given message satisfies the given FHIRPath expression.
-ValidationResult ValidateMessageConstraint(
-    const absl::string_view parent_path,
+ValidationResult ValidateConstraint(
+    const absl::string_view constraint_parent_path,
+    const absl::string_view node_parent_path,
     const internal::WorkspaceMessage& message,
     const CompiledExpression& expression) {
   StatusOr<EvaluationResult> expr_result = expression.Evaluate(message);
-  return ValidationResult(
-      std::string(parent_path), expression.fhir_path(),
-      expr_result.ok() ? expr_result.ValueOrDie().GetBoolean()
-                       : expr_result.status());
+  return ValidationResult(std::string(constraint_parent_path),
+                          std::string(node_parent_path), expression.fhir_path(),
+                          expr_result.ok()
+                              ? expr_result.ValueOrDie().GetBoolean()
+                              : expr_result.status());
 }
 
-// Validates that the given field in the given parent satisfies the given
-// FHIRPath expression.
-ValidationResult ValidateFieldConstraint(
-    const absl::string_view parent_path,
-    const Message& parent, const FieldDescriptor* field,
-    const internal::WorkspaceMessage& field_value,
-    const CompiledExpression& expression) {
-  StatusOr<EvaluationResult> expr_result = expression.Evaluate(field_value);
-  return ValidationResult(
-      absl::StrCat(parent_path, ".", field->json_name()),
-      expression.fhir_path(),
-      expr_result.ok() ? expr_result.ValueOrDie().GetBoolean()
-                       : expr_result.status());
+std::string PathTerm(const Message& message, const FieldDescriptor* field) {
+  return IsContainedResource(message) ||
+                 IsChoiceTypeContainer(message.GetDescriptor())
+             ? absl::StrCat("ofType(", field->message_type()->name(), ")")
+             : field->json_name();
 }
 
-void FhirPathValidator::Validate(absl::string_view path,
+void FhirPathValidator::Validate(absl::string_view constraint_path,
+                                 absl::string_view node_path,
                                  const internal::WorkspaceMessage& message,
                                  std::vector<ValidationResult>* results) {
   // ConstraintsFor may recursively build constraints so
@@ -213,34 +208,43 @@ void FhirPathValidator::Validate(absl::string_view path,
 
   // Validate the constraints attached to the message root.
   for (const CompiledExpression& expr : constraints->message_expressions) {
-    results->push_back(ValidateMessageConstraint(path, message, expr));
+    results->push_back(
+        ValidateConstraint(constraint_path, node_path, message, expr));
   }
 
   // Validate the constraints attached to the message's fields.
   for (const auto& expression : constraints->field_expressions) {
     const FieldDescriptor* field = expression.first;
     const CompiledExpression& expr = expression.second;
+    const std::string path_term = PathTerm(*message.Message(), field);
+    const Message& proto = *message.Message();
 
-    ForEachMessage<Message>(
-        *message.Message(), field, [&](const Message& child) {
-          results->push_back(ValidateFieldConstraint(
-              path, *message.Message(), field,
-              internal::WorkspaceMessage(message, &child), expr));
-        });
+    for (int i = 0; i < PotentiallyRepeatedFieldSize(proto, field); i++) {
+      const Message& child = GetPotentiallyRepeatedMessage(proto, field, i);
+
+      results->push_back(ValidateConstraint(
+          absl::StrCat(constraint_path, ".", path_term),
+          field->is_repeated()
+              ? absl::StrCat(node_path, ".", path_term, "[", i, "]")
+              : absl::StrCat(node_path, ".", path_term),
+          internal::WorkspaceMessage(message, &child), expr));
+    }
   }
 
   // Recursively validate constraints for nested messages that have them.
   for (const FieldDescriptor* field : constraints->nested_with_constraints) {
-    ForEachMessage<Message>(
-        *message.Message(), field, [&](const Message& child) {
-          std::string path_term =
-              IsContainedResource(*message.Message()) ||
-                      IsChoiceTypeContainer(message.Message()->GetDescriptor())
-                  ? absl::StrCat("ofType(", field->message_type()->name(), ")")
-                  : field->json_name();
-          Validate(absl::StrCat(path, ".", path_term),
-                   internal::WorkspaceMessage(message, &child), results);
-        });
+    const std::string path_term = PathTerm(*message.Message(), field);
+    const Message& proto = *message.Message();
+
+    for (int i = 0; i < PotentiallyRepeatedFieldSize(proto, field); i++) {
+      const Message& child = GetPotentiallyRepeatedMessage(proto, field, i);
+
+      Validate(absl::StrCat(constraint_path, ".", path_term),
+               field->is_repeated()
+                   ? absl::StrCat(node_path, ".", path_term, "[", i, "]")
+                   : absl::StrCat(node_path, ".", path_term),
+               internal::WorkspaceMessage(message, &child), results);
+    }
   }
 }
 
@@ -255,14 +259,14 @@ Status ValidationResults::LegacyValidationResult() const {
   });
 
   return ::absl::FailedPreconditionError(
-      absl::StrCat("fhirpath-constraint-violation-", (*result).DebugPath(),
+      absl::StrCat("fhirpath-constraint-violation-", (*result).ConstraintPath(),
                    ": \"", (*result).Constraint(), "\""));
 }
 
 ValidationResults FhirPathValidator::Validate(
     const ::google::protobuf::Message& message) {
   std::vector<ValidationResult> results;
-  Validate(message.GetDescriptor()->name(),
+  Validate(message.GetDescriptor()->name(), message.GetDescriptor()->name(),
            internal::WorkspaceMessage(&message), &results);
   return ValidationResults(results);
 }

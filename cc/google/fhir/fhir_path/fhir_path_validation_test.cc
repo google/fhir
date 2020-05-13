@@ -47,8 +47,9 @@ namespace fhir_path {
 //
 // https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#teaching-googletest-how-to-print-your-values
 void PrintTo(const ValidationResult& result, std::ostream* os) {
-  *os << "[constraint = \"" << result.Constraint() << "\", debug_path = \""
-      << result.DebugPath() << "\", result = "
+  *os << "[constraint = \"" << result.Constraint() << "\", constraint_path = \""
+      << result.ConstraintPath() << "\", node_path = " << result.NodePath()
+      << "\", result = "
       << (result.EvaluationResult().ok()
               ? (result.EvaluationResult().ValueOrDie() ? "true" : "false")
               : result.EvaluationResult().status().ToString())
@@ -158,12 +159,15 @@ FHIR_VERSION_TEST(FhirPathTest, ConstraintViolation, {
       Contains(AllOf(
           Property(&ValidationResult::Constraint,
                    StrEq("where(use = 'home').empty()")),
-          Property(&ValidationResult::DebugPath, StrEq("Organization.telecom")),
+          Property(&ValidationResult::ConstraintPath,
+                   StrEq("Organization.telecom")),
+          Property(&ValidationResult::NodePath,
+                   StrEq("Organization.telecom[0]")),
           ResultOf([](auto x) { return x.EvaluationResult().ValueOrDie(); },
                    Eq(false)))));
 })
 
-FHIR_VERSION_TEST(FhirPathTest, ConstraintViolationResultDebugPaths, {
+FHIR_VERSION_TEST(FhirPathTest, ConstraintViolationResultPaths, {
   auto bundle = ParseFromString<Bundle>(
       R"proto(entry: {
                 resource: {
@@ -180,14 +184,18 @@ FHIR_VERSION_TEST(FhirPathTest, ConstraintViolationResultDebugPaths, {
                Property(&ValidationResult::Constraint,
                         StrEq("where(use = 'home').empty()")),
                Property(
-                   &ValidationResult::DebugPath,
-                   StrEq(
-                       "Bundle.entry.resource.ofType(Organization).telecom"))),
+                   &ValidationResult::ConstraintPath,
+                   StrEq("Bundle.entry.resource.ofType(Organization).telecom")),
+               Property(&ValidationResult::NodePath,
+                        StrEq("Bundle.entry[0].resource.ofType(Organization)."
+                              "telecom[0]"))),
            AllOf(Property(&ValidationResult::Constraint,
                           StrEq("resource.exists() or request.exists() or "
                                 "response.exists()")),
-                 Property(&ValidationResult::DebugPath,
-                          StrEq("Bundle.entry")))}));
+                 Property(&ValidationResult::ConstraintPath,
+                          StrEq("Bundle.entry")),
+                 Property(&ValidationResult::NodePath,
+                          StrEq("Bundle.entry[0]")))}));
 })
 
 FHIR_VERSION_TEST(FhirPathTest, ConstraintSatisfied, {
@@ -226,8 +234,10 @@ FHIR_VERSION_TEST(FhirPathTest, NestedConstraintViolated, {
       Contains(AllOf(
           Property(&ValidationResult::Constraint,
                    StrEq("code.exists() or display.exists()")),
-          Property(&ValidationResult::DebugPath,
+          Property(&ValidationResult::ConstraintPath,
                    StrEq("ValueSet.expansion.contains")),
+          Property(&ValidationResult::NodePath,
+                   StrEq("ValueSet.expansion.contains[0]")),
           ResultOf([](auto x) { return x.EvaluationResult().ValueOrDie(); },
                    Eq(false)))));
 })

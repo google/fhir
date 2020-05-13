@@ -33,20 +33,28 @@ namespace fhir_path {
 // FHIR resource.
 class ValidationResult {
  public:
-  ValidationResult(const std::string& debug_path,
+  ValidationResult(const std::string& constraint_path,
+                   const std::string& node_path,
                    const std::string& fhirpath_constraint,
                    StatusOr<bool> result)
-      : debug_path_(debug_path),
+      : constraint_path_(constraint_path),
+        node_path_(node_path),
         fhirpath_constraint_(fhirpath_constraint),
         result_(result) {}
 
-  // Returns a FHIRPath expression to the node that the FHIRPath constraint was
-  // evaluated on.
+  // Returns a FHIRPath expression to the generic node that the FHIRPath
+  // constraint is attached to.
   //
   // Example: "Bundle.entry.resource.ofType(Organization).telecom"
   //
-  // TODO: Report the correct index when dealing with collections.
-  std::string DebugPath() const { return debug_path_; }
+  std::string ConstraintPath() const { return constraint_path_; }
+
+  // Returns a FHIRPath expression to the specific node that the FHIRPath
+  // constraint was evaluated on.
+  //
+  // Example: "Bundle.entry[3].resource.ofType(Organization).telecom[2]"
+  //
+  std::string NodePath() const { return node_path_; }
 
   // Returns the FHIRPath constraint that was evaluated.
   std::string Constraint() const { return fhirpath_constraint_; }
@@ -58,7 +66,8 @@ class ValidationResult {
   StatusOr<bool> EvaluationResult() const { return result_; }
 
  private:
-  const std::string debug_path_;
+  const std::string constraint_path_;
+  const std::string node_path_;
   const std::string fhirpath_constraint_;
   const StatusOr<bool> result_;
 };
@@ -143,7 +152,7 @@ class FhirPathValidator {
 
   // Recursively called validation method that aggregates results into the
   // provided vector.
-  void Validate(absl::string_view path,
+  void Validate(absl::string_view constraint_path, absl::string_view node_path,
                 const internal::WorkspaceMessage& message,
                 std::vector<ValidationResult>* results);
 
