@@ -65,3 +65,7 @@ def fhirproto_workspace(core_lib = False):
         name = "protogen",
         actual = protogen_prefix + "java:protogen",
     )
+    native.bind(
+        name = "GeneratedProtoTest.java",
+        actual = protogen_prefix + "java:GeneratedProtoTest.java",
+    )

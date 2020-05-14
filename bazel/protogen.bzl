@@ -148,7 +148,7 @@ def gen_fhir_protos(
         native.java_test(
             name = "GeneratedProtoTest_" + name,
             size = "medium",
-            srcs = ["//java:GeneratedProtoTest.java"],
+            srcs = ["//external:GeneratedProtoTest.java"],
             jvm_flags = test_flags,
             data = src_pkgs,
             test_class = "com.google.fhir.protogen.GeneratedProtoTest",
