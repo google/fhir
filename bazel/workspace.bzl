@@ -4,7 +4,7 @@ load("@rules_python//python:pip.bzl", "pip_import", "pip_repositories")
 load("@org_tensorflow//tensorflow:workspace.bzl", "tf_workspace")
 load("@rules_jvm_external//:defs.bzl", "maven_install")
 
-def fhirproto_workspace():
+def fhirproto_workspace(core_lib = False):
     """ Sets up FhirProto workspace """
 
     pip_import(
@@ -54,4 +54,14 @@ def fhirproto_workspace():
     native.bind(
         name = "error_prone_annotations",
         actual = "@maven//:com_google_errorprone_error_prone_annotations",
+    )
+
+    protogen_prefix = "//" if core_lib else "@com_google_fhir//"
+    native.bind(
+        name = "proto_generator_test_utils",
+        actual = protogen_prefix + "java:proto_generator_test_utils",
+    )
+    native.bind(
+        name = "protogen",
+        actual = protogen_prefix + "java:protogen",
     )

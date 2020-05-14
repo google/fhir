@@ -156,8 +156,8 @@ def gen_fhir_protos(
                 _get_java_proto_rule_for_pkg(package, name),
             ],
             deps = [
-                "//java:proto_generator_test_utils",
-                "//java:protogen",
+                "//external:proto_generator_test_utils",
+                "//external:protogen",
                 "@maven//:com_google_guava_guava",
                 "@maven//:junit_junit",
                 "@com_google_protobuf//:protobuf_java",
