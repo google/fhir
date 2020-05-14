@@ -47,10 +47,10 @@ py_test(
     python_version = "PY3",
     deps = [
         ":bundle_seqex_converter",
+        "//proto:version_config_py_pb2",
         "//proto/stu3:extensions_py_pb2",
         "//proto/stu3:resources_py_pb2",
         "//py/google/fhir/testutil:protobuf_compare",
-        "//proto:version_config_py_pb2",
         "@absl_py//absl/flags",
         "@absl_py//absl/testing:absltest",
         "@com_google_protobuf//:protobuf_python",

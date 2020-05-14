@@ -34,11 +34,11 @@ output than assertEqual() for proto2 messages, e.g. this:
 
 AssertionError: <my.Msg object at 0x9fb353c> != <my.Msg object at 0x9fb35cc>
 
-Call it inside your unit test's googletest.TestCase subclasses like this:
+Call it inside your unit test's unittest.TestCase subclasses like this:
 
   from fhir.py.testutil import protobuf_compare
 
-  class MyTest(googletest.TestCase):
+  class MyTest(unittest.TestCase):
     ...
     def testXXX(self):
       ...
@@ -48,7 +48,7 @@ Alternatively:
 
   from fhir.py.testutil import protobuf_compare
 
-  class MyTest(protobuf_compare.ProtoAssertions, googletest.TestCase):
+  class MyTest(protobuf_compare.ProtoAssertions, unittest.TestCase):
     ...
     def testXXX(self):
       ...
@@ -78,7 +78,7 @@ def assertProtoEqual(  # pylint: disable=invalid-name
   unittest.TestCase.assertEqual(), ie order and extra duplicates fields matter.
 
   Args:
-    self: googletest.TestCase
+    self: unittest.TestCase
     a: proto2 PB instance, or text string representing one.
     b: proto2 PB instance -- message.Message or subclass thereof.
     check_initialized: boolean, whether to fail if either a or b isn't
@@ -174,11 +174,11 @@ def NormalizeNumberFields(pb):
 
 
 class ProtoAssertions(object):
-  """Mix this into a googletest.TestCase class to get proto2 assertions.
+  """Mix this into a unittest.TestCase class to get proto2 assertions.
 
   Usage:
 
-  class SomeTestCase(protobuf_compare.ProtoAssertions, googletest.TestCase):
+  class SomeTestCase(protobuf_compare.ProtoAssertions, unittest.TestCase):
     ...
     def testSomething(self):
       ...
