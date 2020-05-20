@@ -15,6 +15,7 @@
 package com.google.fhir.protogen;
 
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +23,9 @@ import org.junit.runners.JUnit4;
 
 /**
  * Generic test case for ensuring generated protos are up to date. This rule is automatically added
- * to every profile set by the generation rules.
+ * to every profile set by the generation rules. Note: this file should be kept clear of
+ * dependencies on the core fhir package other than ProtoGeneratorTestUtils, so that it works both
+ * inside and outside of the core lib.
  */
 @RunWith(JUnit4.class)
 public final class GeneratedProtoTest {
@@ -34,6 +37,9 @@ public final class GeneratedProtoTest {
     ProtoGeneratorTestUtils.testGeneratedProto(
         System.getProperty("fhir_package"),
         System.getProperty("rule_name"),
+        ImmutableMap.of(
+            "STU3", System.getProperty("stu3_core_dep"),
+            "R4", System.getProperty("r4_core_dep")),
         ImmutableSet.copyOf(splitter.splitToList(System.getProperty("dependencies"))),
         ImmutableSet.copyOf(splitter.splitToList(System.getProperty("imports"))));
   }

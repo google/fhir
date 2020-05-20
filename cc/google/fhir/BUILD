@@ -121,7 +121,6 @@ cc_library(
         "//proto/r4/core:datatypes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/status",
-        "@org_tensorflow//tensorflow/core:lib",
         "@com_googlesource_code_re2//:re2",
     ],
 )

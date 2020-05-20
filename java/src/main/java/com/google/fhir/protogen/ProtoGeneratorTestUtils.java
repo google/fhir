@@ -18,10 +18,11 @@ import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static java.util.stream.Collectors.toList;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.fhir.common.FhirVersion;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.proto.Annotations;
+import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.PackageInfo.FileSplittingBehavior;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.r4.core.StructureDefinition;
@@ -51,29 +52,34 @@ public final class ProtoGeneratorTestUtils {
   }
 
   public static ProtoGenerator makeProtoGenerator(
-      String packageLocation, ImmutableSet<String> dependencyLocations) throws IOException {
+      String packageLocation,
+      ImmutableMap<String, String> coreDepMap,
+      ImmutableSet<String> dependencyLocations)
+      throws IOException {
     FhirPackage packageToGenerate = FhirPackage.load(packageLocation);
+    PackageInfo packageInfo = packageToGenerate.packageInfo;
 
     Set<FhirPackage> packages = new HashSet<>();
     packages.add(packageToGenerate);
     for (String location : dependencyLocations) {
       packages.add(FhirPackage.load(location));
     }
-    // Add core dependency
-    packages.add(
-        FhirPackage.load(
-            FhirVersion.fromAnnotation(packageToGenerate.packageInfo.getFhirVersion())
-                .coreFhirPackageZip));
+
+    String coreDep = coreDepMap.get(packageInfo.getFhirVersion().toString());
+    if (coreDep == null) {
+      throw new IllegalArgumentException(
+          "Unable to load core dep for fhir version: " + packageInfo.getFhirVersion());
+    }
+    packages.add(FhirPackage.load(coreDep));
 
     return new ProtoGenerator(
-        packageToGenerate.packageInfo,
-        ImmutableSet.copyOf(packages),
-        new ValueSetGenerator(packageToGenerate.packageInfo, packages));
+        packageInfo, ImmutableSet.copyOf(packages), new ValueSetGenerator(packageInfo, packages));
   }
 
   public static void testGeneratedProto(
       String packageLocation,
       String ruleName,
+      ImmutableMap<String, String> coreDepMap,
       ImmutableSet<String> dependencyLocations,
       ImmutableSet<String> additionalImports)
       throws Exception {
@@ -85,7 +91,7 @@ public final class ProtoGeneratorTestUtils {
       return;
     }
 
-    ProtoGenerator generator = makeProtoGenerator(packageLocation, dependencyLocations);
+    ProtoGenerator generator = makeProtoGenerator(packageLocation, coreDepMap, dependencyLocations);
 
     // TODO: Also test generated extension files when split.
     boolean hasSplitExtensionFile =

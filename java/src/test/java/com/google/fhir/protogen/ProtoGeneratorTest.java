@@ -18,6 +18,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.fail;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
@@ -1429,7 +1430,9 @@ public class ProtoGeneratorTest {
   public void generateR4() throws Exception {
     ProtoGenerator protoGenerator =
         ProtoGeneratorTestUtils.makeProtoGenerator(
-            "spec/fhir_r4_package.zip", ImmutableSet.of() /* no dependencies */);
+            "spec/fhir_r4_package.zip",
+            ImmutableMap.of("R4", "spec/fhir_r4_package.zip"),
+            ImmutableSet.of() /* no dependencies */);
     String suffix = ".descriptor.prototxt";
     int fileCount = 0;
     for (File file :
