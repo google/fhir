@@ -120,6 +120,8 @@ message FieldRestriction {
   ReferenceRestriction reference_restriction = 3;
 
   ChoiceTypeRestriction choice_type_restriction = 4;
+
+  repeated FhirPathConstraint fhir_path_constraint = 5;
 }
 
 // For Reference types, additional restrictions to apply
@@ -132,6 +134,25 @@ message ReferenceRestriction {
 
 message ChoiceTypeRestriction {
   repeated string allowed = 1;
+}
+
+// Structure used to create constraints as described in
+// https://www.hl7.org/fhir/elementdefinition-definitions.html#ElementDefinition.constraint
+message FhirPathConstraint {
+  // Constraint severity.
+  enum Severity {
+    // Generator defaults to error if unset
+    DEFAULT = 0;
+    ERROR = 1;
+    WARNING = 2;
+  }
+  Severity severity = 1;
+
+  // Human-readable description of the constraint
+  string description = 2;
+
+  // The FHIRPath expression defining the constraint
+  string expression = 3;
 }
 
 message ExtensionSlice {

@@ -30,6 +30,7 @@ import com.google.fhir.proto.ComplexExtension;
 import com.google.fhir.proto.ElementData;
 import com.google.fhir.proto.ExtensionSlice;
 import com.google.fhir.proto.Extensions;
+import com.google.fhir.proto.FhirPathConstraint;
 import com.google.fhir.proto.FieldRestriction;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.Profile;
@@ -45,6 +46,7 @@ import com.google.fhir.r4.core.Canonical;
 import com.google.fhir.r4.core.Code;
 import com.google.fhir.r4.core.CodeableConcept;
 import com.google.fhir.r4.core.Coding;
+import com.google.fhir.r4.core.ConstraintSeverityCode;
 import com.google.fhir.r4.core.ContactDetail;
 import com.google.fhir.r4.core.ContactPoint;
 import com.google.fhir.r4.core.ContactPointSystemCode;
@@ -77,6 +79,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -91,11 +94,30 @@ final class ProfileGenerator {
   private final Map<String, StructureDefinition> urlToStructDefMap;
   private final Map<String, StructureDefinition> idToBaseStructDefMap;
   private final DateTime creationDateTime;
+  private final String keyPrefix;
 
+  /**
+   * Creates a new ProfileGenerator using the package name for the element key prefix. See the full
+   * constructor below for details.
+   */
+  ProfileGenerator(
+      PackageInfo packageInfo, List<StructureDefinition> knownTypesList, LocalDate creationTime) {
+    this(packageInfo, knownTypesList, creationTime, packageInfo.getProtoPackage() + "-");
+  }
+
+  /**
+   * Creates a new ProfileGenerator with the following metadata.
+   *
+   * @param packageInfo package-wide metadata
+   * @param knownTypesList known StructureDefinitions that may be referenced here
+   * @param creationTime the timestamp used on generated profiles
+   * @param keyPrefix the prefix for generated keys used in element restrictions.
+   */
   ProfileGenerator(
       PackageInfo packageInfo,
       List<StructureDefinition> knownTypesList,
-      LocalDate creationTime) {
+      LocalDate creationTime,
+      String keyPrefix) {
     this.packageInfo = packageInfo;
     this.urlToStructDefMap =
         knownTypesList.stream().collect(Collectors.toMap(def -> def.getUrl().getValue(), f -> f));
@@ -107,6 +129,7 @@ final class ProfileGenerator {
     this.creationDateTime = GeneratorUtils.buildCreationDateTime(creationTime);
 
     this.terminologyGenerator = new TerminologyGenerator(packageInfo, creationTime);
+    this.keyPrefix = keyPrefix;
   }
 
   Bundle generateProfiles(Profiles profiles) {
@@ -167,9 +190,13 @@ final class ProfileGenerator {
             .map(element -> element.toBuilder().build())
             .collect(Collectors.toList());
 
+    // Counter that is incremented to generate unique element keys for the profile.
+    AtomicInteger elementKeyCounter = new AtomicInteger(1);
     profile
         .getRestrictionList()
-        .forEach(restriction -> applyFieldRestriction(restriction, elementList, elementData));
+        .forEach(
+            restriction ->
+                applyFieldRestriction(restriction, elementList, elementData, elementKeyCounter));
 
     profile
         .getExtensionSliceList()
@@ -253,7 +280,6 @@ final class ProfileGenerator {
       ComplexExtension extensionProto, String rootId, String rootPath, String url) {
     List<ElementDefinition> complexElements = new ArrayList<>();
     complexElements.addAll(buildBackboneExtensionElements(extensionProto, rootId, rootPath, url));
-    extensionProto.getElementData();
     for (SimpleExtension field : extensionProto.getSimpleFieldList()) {
       String name = field.getElementData().getName();
       complexElements.addAll(
@@ -500,7 +526,10 @@ final class ProfileGenerator {
   }
 
   private void applyFieldRestriction(
-      FieldRestriction restriction, List<ElementDefinition> elementList, ElementData elementData) {
+      FieldRestriction restriction,
+      List<ElementDefinition> elementList,
+      ElementData elementData,
+      AtomicInteger elementKeyCounter) {
     ElementDefinition elementToModify =
         getOptionalElementById(restriction.getFieldId(), elementList)
             .orElseThrow(
@@ -535,6 +564,23 @@ final class ProfileGenerator {
               newTypes, restriction.getReferenceRestriction(), elementToModify.getId().getValue());
       modifiedElement.clearType().addAllType(newTypes);
     }
+
+    for (FhirPathConstraint constraint : restriction.getFhirPathConstraintList()) {
+      ConstraintSeverityCode.Value severity =
+          constraint.getSeverity() == FhirPathConstraint.Severity.DEFAULT
+                  || constraint.getSeverity() == FhirPathConstraint.Severity.ERROR
+              ? ConstraintSeverityCode.Value.ERROR
+              : ConstraintSeverityCode.Value.WARNING;
+
+      modifiedElement
+          .addConstraintBuilder()
+          .setKey(fhirId(keyPrefix + elementKeyCounter.getAndIncrement()))
+          .setSeverity(
+              ElementDefinition.Constraint.SeverityCode.newBuilder().setValue(severity).build())
+          .setHuman(fhirString(constraint.getDescription()))
+          .setExpression(fhirString(constraint.getExpression()));
+    }
+
     elementList.set(elementList.indexOf(elementToModify), modifiedElement.build());
   }
 
@@ -867,6 +913,10 @@ final class ProfileGenerator {
 
   private static Uri fhirUri(String value) {
     return Uri.newBuilder().setValue(value).build();
+  }
+
+  private static Id fhirId(String value) {
+    return Id.newBuilder().setValue(value).build();
   }
 
   private static Canonical fhirCanonical(String value) {

@@ -13,6 +13,20 @@ profile {
   }
   base_url: "http://hl7.org/fhir/StructureDefinition/Patient"
 
+  # Test adding a FHIRPath constraint
+  restriction {
+    field_id: "Patient.address"
+    fhir_path_constraint {
+      description: "If the city has a value the state must too."
+      expression: "city.exists() implies state.exists()"
+    }
+    fhir_path_constraint {
+      severity: WARNING
+      description: "Postal codes should have at least five characters."
+      expression: "postalCode.length() >= 5"
+    }
+  }
+
   restriction {
     field_id: "Patient.name"
     size_restriction: REQUIRED

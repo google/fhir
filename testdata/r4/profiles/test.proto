@@ -335,7 +335,9 @@ message TestPatient {
   DeceasedX deceased = 16;
 
   // An address for the individual
-  repeated core.Address address = 17;
+  repeated core.Address address = 17
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "city.exists() implies state.exists()"];
 
   // Marital (civil) status of a patient
   message CodeableConceptForMaritalStatus {

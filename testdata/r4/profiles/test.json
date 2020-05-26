@@ -10,7 +10,7 @@
         "name": "Bundle",
         "title": "Bundle",
         "status": "draft",
-        "date": "2020-04-15",
+        "date": "2020-05-26",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1888,7 +1888,7 @@
         "name": "TestPatient",
         "title": "TestPatient",
         "status": "draft",
-        "date": "2020-04-15",
+        "date": "2020-05-26",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -2690,6 +2690,18 @@
                   "expression": "hasValue() or (children().count() > id.count())",
                   "xpath": "@value|f:*|h:div",
                   "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "google.fhir.r4.testing-1",
+                  "severity": "error",
+                  "human": "If the city has a value the state must too.",
+                  "expression": "city.exists() implies state.exists()"
+                },
+                {
+                  "key": "google.fhir.r4.testing-2",
+                  "severity": "warning",
+                  "human": "Postal codes should have at least five characters.",
+                  "expression": "postalCode.length() >= 5"
                 }
               ],
               "isModifier": false,
@@ -4688,6 +4700,32 @@
               "max": "1"
             },
             {
+              "id": "Patient.address",
+              "path": "Patient.address",
+              "constraint": [
+                {
+                  "key": "ele-1",
+                  "severity": "error",
+                  "human": "All FHIR elements must have a @value or children",
+                  "expression": "hasValue() or (children().count() > id.count())",
+                  "xpath": "@value|f:*|h:div",
+                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "google.fhir.r4.testing-1",
+                  "severity": "error",
+                  "human": "If the city has a value the state must too.",
+                  "expression": "city.exists() implies state.exists()"
+                },
+                {
+                  "key": "google.fhir.r4.testing-2",
+                  "severity": "warning",
+                  "human": "Postal codes should have at least five characters.",
+                  "expression": "postalCode.length() >= 5"
+                }
+              ]
+            },
+            {
               "id": "Patient.extension:decExt",
               "extension": [
                 {
@@ -4870,7 +4908,7 @@
         "name": "TestObservation",
         "title": "TestObservation",
         "status": "draft",
-        "date": "2020-04-15",
+        "date": "2020-05-26",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -10938,7 +10976,7 @@
         "name": "TestObservationLvl2",
         "title": "TestObservationLvl2",
         "status": "draft",
-        "date": "2020-04-15",
+        "date": "2020-05-26",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -17809,7 +17847,7 @@
         "name": "TestEncounter",
         "title": "TestEncounter",
         "status": "draft",
-        "date": "2020-04-15",
+        "date": "2020-05-26",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -21772,7 +21810,7 @@
         "name": "ProfiledDatatypesObservation",
         "title": "ProfiledDatatypesObservation",
         "status": "draft",
-        "date": "2020-04-15",
+        "date": "2020-05-26",
         "publisher": "Testington Inc.",
         "contact": [
           {
