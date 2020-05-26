@@ -53,6 +53,7 @@ public final class ProtoGeneratorTestUtils {
 
   public static ProtoGenerator makeProtoGenerator(
       String packageLocation,
+      String codesProtoImport,
       ImmutableMap<String, String> coreDepMap,
       ImmutableSet<String> dependencyLocations)
       throws IOException {
@@ -73,12 +74,16 @@ public final class ProtoGeneratorTestUtils {
     packages.add(FhirPackage.load(coreDep));
 
     return new ProtoGenerator(
-        packageInfo, ImmutableSet.copyOf(packages), new ValueSetGenerator(packageInfo, packages));
+        packageInfo,
+        codesProtoImport,
+        ImmutableSet.copyOf(packages),
+        new ValueSetGenerator(packageInfo, packages));
   }
 
   public static void testGeneratedProto(
       String packageLocation,
       String ruleName,
+      String codesImport,
       ImmutableMap<String, String> coreDepMap,
       ImmutableSet<String> dependencyLocations,
       ImmutableSet<String> additionalImports)
@@ -91,7 +96,8 @@ public final class ProtoGeneratorTestUtils {
       return;
     }
 
-    ProtoGenerator generator = makeProtoGenerator(packageLocation, coreDepMap, dependencyLocations);
+    ProtoGenerator generator =
+        makeProtoGenerator(packageLocation, codesImport, coreDepMap, dependencyLocations);
 
     // TODO: Also test generated extension files when split.
     boolean hasSplitExtensionFile =

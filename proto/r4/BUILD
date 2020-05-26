@@ -21,9 +21,6 @@ fhir_proto_library(
 
 gen_fhir_protos(
     name = "uscore",
-    additional_proto_imports = [
-        "proto/r4/uscore_codes.proto",
-    ],
     package = "//spec:uscore_r4_package",
 )
 

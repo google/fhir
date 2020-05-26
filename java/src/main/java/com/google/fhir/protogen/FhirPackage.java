@@ -78,6 +78,18 @@ public class FhirPackage {
     return packageInfo.getProtoPackage().hashCode();
   }
 
+  public static boolean isCorePackage(PackageInfo packageInfo) {
+    return packageInfo
+        .getProtoPackage()
+        .equals(
+            com.google.fhir.common.FhirVersion.fromAnnotation(packageInfo.getFhirVersion())
+                .coreProtoPackage);
+  }
+
+  public boolean isCorePackage() {
+    return isCorePackage(packageInfo);
+  }
+
   public static FhirPackage load(String zipFilePath) throws IOException {
     ZipFile zipFile = new ZipFile(new File(zipFilePath));
     Enumeration<? extends ZipEntry> entries = zipFile.entries();

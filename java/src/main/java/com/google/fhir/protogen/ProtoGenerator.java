@@ -222,6 +222,10 @@ public class ProtoGenerator {
 
   private final ValueSetGenerator valueSetGenerator;
 
+  // File location of the codes proto generated with this IG.  If there are no local
+  // code proto references, this will be ignored.
+  private final String codesProtoImport;
+
   private static class StructureDefinitionData {
     final StructureDefinition structDef;
     final String inlineType;
@@ -234,13 +238,18 @@ public class ProtoGenerator {
     }
   }
 
-  public ProtoGenerator(PackageInfo packageInfo, Set<FhirPackage> fhirPackages) {
-    this(packageInfo, fhirPackages, null);
+  public ProtoGenerator(
+      PackageInfo packageInfo, String codesProtoImport, Set<FhirPackage> fhirPackages) {
+    this(packageInfo, codesProtoImport, fhirPackages, null);
   }
 
   public ProtoGenerator(
-      PackageInfo packageInfo, Set<FhirPackage> fhirPackages, ValueSetGenerator valueSetGenerator) {
+      PackageInfo packageInfo,
+      String codesProtoImport,
+      Set<FhirPackage> fhirPackages,
+      ValueSetGenerator valueSetGenerator) {
     this.packageInfo = packageInfo;
+    this.codesProtoImport = codesProtoImport;
     this.fhirVersion = FhirVersion.fromAnnotation(packageInfo.getFhirVersion());
     this.valueSetGenerator = valueSetGenerator;
 
@@ -438,6 +447,10 @@ public class ProtoGenerator {
       dependencies.add("google/protobuf/any.proto");
     }
     dependencies.forEach(dep -> builder.addDependency(dep));
+
+    if (!FhirPackage.isCorePackage(packageInfo) && hasLocalCode(builder)) {
+      builder.addDependency(codesProtoImport);
+    }
     return builder.build();
   }
 
@@ -491,10 +504,10 @@ public class ProtoGenerator {
       if (!field.getTypeName().isEmpty() && types.contains(field.getTypeName().substring(1))) {
         return true;
       }
-      for (DescriptorProto nested : proto.getNestedTypeList()) {
-        if (usesTypeFromSet(nested, types)) {
-          return true;
-        }
+    }
+    for (DescriptorProto nested : proto.getNestedTypeList()) {
+      if (usesTypeFromSet(nested, types)) {
+        return true;
       }
     }
     return false;
@@ -2277,5 +2290,34 @@ public class ProtoGenerator {
       }
     }
     return reconciledElement.build();
+  }
+
+  private boolean hasLocalCode(FileDescriptorProtoOrBuilder file) {
+    for (DescriptorProto descriptor : file.getMessageTypeList()) {
+      if (hasLocalCode(descriptor)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean hasLocalCode(DescriptorProto descriptor) {
+    for (FieldDescriptorProto field : descriptor.getFieldList()) {
+      if (field.getType() != FieldDescriptorProto.Type.TYPE_ENUM) {
+        continue;
+      }
+      if (field
+          .getTypeName()
+          .matches("\\." + packageInfo.getProtoPackage() + "\\.[^.]+\\.Value$")) {
+        return true;
+      }
+    }
+    for (DescriptorProto nested : descriptor.getNestedTypeList()) {
+      if (hasLocalCode(nested)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

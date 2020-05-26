@@ -48,6 +48,9 @@ def fhir_package(
         tags = MANUAL_TAGS,
     )
 
+def _src_dir(label):
+    return "\"$$(dirname $(rootpath %s))\"" % label
+
 def gen_fhir_protos(
         name,
         package,
@@ -86,19 +89,18 @@ def gen_fhir_protos(
         for proto_import in additional_proto_imports
     ])
 
+    # Get the directory that the rule is being run out of by using the directory of a known output.
+    src_dir = _src_dir(":_genfiles_" + name + ".proto")
+    codes_import = "%s/%s_codes.proto" % (src_dir, name)
     if separate_extensions:
         # Also add the extensions proto files as an import to the main file.
-        # Unfortunately we don't have an easy way to get the directory that
-        # a genrule runs out of, but it's pretty easy to deduce from the output
-        # directory - we just cut off everything up to and including "genfiles/"
-        src_dir = ("\"$$(GENDIR=$(execpath %s) && dirname $${GENDIR##*genfiles/})\"" %
-                   _get_zip_for_pkg(package))
         additional_proto_imports_flags += " --additional_import %s/%s_extensions.proto" % (src_dir, name)
 
     cmd = """
         $(location %s) \
             --emit_proto \
             --emit_codes \
+            --codes_import %s \
             --output_directory $(@D) \
             --stu3_core_dep $(location %s) \
             --r4_core_dep $(location %s) \
@@ -106,6 +108,7 @@ def gen_fhir_protos(
             --input_package $(location %s) \
             """ % (
         PROTO_GENERATOR,
+        codes_import,
         _get_zip_for_pkg(STU3_PACKAGE_DEP),
         _get_zip_for_pkg(R4_PACKAGE_DEP),
         name,
@@ -141,6 +144,7 @@ def gen_fhir_protos(
         test_flags = [
             "-Dfhir_package=$(location %s)" % _get_zip_for_pkg(package),
             "-Drule_name=" + name,
+            "-Dcodes_import=" + "%s/%s_codes.proto" % (_src_dir(_get_proto_rule_for_pkg(package, name)), name),
             "-Ddependencies=" + deps_test_flag,
             "-Dimports=" + additional_import_test_flag,
             "-Dstu3_core_dep=$(location %s)" % _get_zip_for_pkg(STU3_PACKAGE_DEP),
@@ -158,6 +162,7 @@ def gen_fhir_protos(
                 _get_java_proto_rule_for_pkg(package, name),
             ],
             deps = [
+                _get_proto_rule_for_pkg(package, name),
                 "//external:proto_generator_test_utils",
                 "//external:protogen",
                 "@maven//:com_google_guava_guava",
@@ -268,6 +273,9 @@ def gen_fhir_definitions_and_protos(
 
 def _get_zip_for_pkg(pkg):
     return pkg + ".zip"
+
+def _get_proto_rule_for_pkg(pkg, name):
+    return ":".split(pkg)[0] + name + "_proto"
 
 def _get_java_proto_rule_for_pkg(pkg, name):
     return ":".split(pkg)[0] + name + "_java_proto"

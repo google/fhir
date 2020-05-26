@@ -206,14 +206,14 @@ public final class ProtoFilePrinterTest {
 
   @Before
   public void setUp() throws IOException {
-    String packageName = "google.fhir.stu3.proto";
-    jsonParser = JsonFormat.getSpecParser(Annotations.FhirVersion.STU3);
+    String packageName = "google.fhir.r4.proto";
+    jsonParser = JsonFormat.getSpecParser(Annotations.FhirVersion.R4);
     runfiles = Runfiles.create();
     PackageInfo packageInfo =
         PackageInfo.newBuilder()
             .setProtoPackage(packageName)
-            .setJavaProtoPackage("com.google.fhir.stu3.proto")
-            .setFhirVersion(Annotations.FhirVersion.STU3)
+            .setJavaProtoPackage("com.google.fhir.r4.proto")
+            .setFhirVersion(Annotations.FhirVersion.R4)
             .setLicense(PackageInfo.License.APACHE)
             .setLicenseDate("2019")
             .build();
@@ -222,6 +222,7 @@ public final class ProtoFilePrinterTest {
     protoGenerator =
         new ProtoGenerator(
             fhirPackage.packageInfo,
+            "codes.proto",
             ImmutableSet.of(fhirPackage),
             new ValueSetGenerator(fhirPackage.packageInfo, ImmutableSet.of(fhirPackage)));
 

@@ -92,6 +92,11 @@ class ProtoGeneratorMain {
     private Boolean emitCodesProto = false;
 
     @Parameter(
+        names = {"--codes_import"},
+        description = "The proto import to use to reference a locally generated codes proto.")
+    private String codesProtoImport = null;
+
+    @Parameter(
         names = {"--filter"},
         description =
             "Filter for types of definitions in input package to use.  If set, must be one of"
@@ -218,9 +223,9 @@ class ProtoGeneratorMain {
     ValueSetGenerator valueSetGenerator = new ValueSetGenerator(packageInfo, fhirPackages);
     ProtoGenerator generator =
         packageInfo.getFhirVersion() != FhirVersion.R4
-            ? new ProtoGenerator(packageInfo, fhirPackages)
+            ? new ProtoGenerator(packageInfo, args.codesProtoImport, fhirPackages)
             : new ProtoGenerator(
-                packageInfo, fhirPackages, valueSetGenerator);
+                packageInfo, args.codesProtoImport, fhirPackages, valueSetGenerator);
     ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
 
     if (args.emitCodesProto) {

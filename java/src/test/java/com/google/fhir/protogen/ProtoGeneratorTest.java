@@ -1431,6 +1431,7 @@ public class ProtoGeneratorTest {
     ProtoGenerator protoGenerator =
         ProtoGeneratorTestUtils.makeProtoGenerator(
             "spec/fhir_r4_package.zip",
+            "codes.proto",
             ImmutableMap.of("R4", "spec/fhir_r4_package.zip"),
             ImmutableSet.of() /* no dependencies */);
     String suffix = ".descriptor.prototxt";

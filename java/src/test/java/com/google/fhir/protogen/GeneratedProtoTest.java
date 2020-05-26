@@ -37,6 +37,7 @@ public final class GeneratedProtoTest {
     ProtoGeneratorTestUtils.testGeneratedProto(
         System.getProperty("fhir_package"),
         System.getProperty("rule_name"),
+        System.getProperty("codes_import"),
         ImmutableMap.of(
             "STU3", System.getProperty("stu3_core_dep"),
             "R4", System.getProperty("r4_core_dep")),
