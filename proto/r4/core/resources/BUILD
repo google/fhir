@@ -1955,5 +1955,5 @@ filegroup(
 fhir_proto_library(
     proto_deps = PROTO_DEPS + [":bundle_and_contained_resource_proto"],
     proto_library_prefix = "all",
-    visibility = ["//visibility:private"],
+    visibility = ["//java/src/main/java/com/google/fhir/release:__pkg__"],
 )
