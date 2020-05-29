@@ -14,6 +14,8 @@
 
 #include "google/fhir/fhir_path/fhir_path.h"
 
+#include <algorithm>
+#include <iterator>
 #include <utility>
 
 #include "google/protobuf/any.pb.h"
@@ -1300,6 +1302,60 @@ class TailFunction : public ZeroParameterFunctionNode {
       results->insert(results->begin(), std::next(child_results.begin()),
                       child_results.end());
     }
+
+    return absl::OkStatus();
+  }
+
+  const Descriptor* ReturnType() const override { return child_->ReturnType(); }
+};
+
+class SkipFunction : public SingleValueFunctionNode {
+ public:
+  explicit SkipFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : SingleValueFunctionNode(child, params) {}
+
+  Status EvaluateWithParam(
+      WorkSpace* work_space, const WorkspaceMessage& param,
+      std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+    FHIR_ASSIGN_OR_RETURN(
+        int num,
+        ToSystemInteger(work_space->GetPrimitiveHandler(), *param.Message()));
+
+    auto start = child_results.begin();
+    std::advance(start, std::min(num < 0 ? 0 : static_cast<size_t>(num),
+                                 child_results.size()));
+    results->insert(results->begin(), start, child_results.end());
+
+    return absl::OkStatus();
+  }
+
+  const Descriptor* ReturnType() const override { return child_->ReturnType(); }
+};
+
+class TakeFunction : public SingleValueFunctionNode {
+ public:
+  explicit TakeFunction(
+      const std::shared_ptr<ExpressionNode>& child,
+      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : SingleValueFunctionNode(child, params) {}
+
+  Status EvaluateWithParam(
+      WorkSpace* work_space, const WorkspaceMessage& param,
+      std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+    FHIR_ASSIGN_OR_RETURN(
+        int num,
+        ToSystemInteger(work_space->GetPrimitiveHandler(), *param.Message()));
+
+    auto end = child_results.begin();
+    std::advance(end, std::min(num < 0 ? 0 : static_cast<size_t>(num),
+                               child_results.size()));
+    results->insert(results->begin(), child_results.begin(), end);
 
     return absl::OkStatus();
   }
@@ -3604,8 +3660,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"repeat", UnimplementedFunction},
       {"single", FunctionNode::Create<SingleFunction>},
       {"last", FunctionNode::Create<LastFunction>},
-      {"skip", UnimplementedFunction},
-      {"take", UnimplementedFunction},
+      {"skip", FunctionNode::Create<SkipFunction>},
+      {"take", FunctionNode::Create<TakeFunction>},
       {"exclude", UnimplementedFunction},
       {"union", UnimplementedFunction},
       {"convertsToBoolean", UnimplementedFunction},

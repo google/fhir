@@ -818,6 +818,52 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionTail, {
   EXPECT_THAT(Evaluate("true.combine(true).tail()"), EvalsToTrue());
 })
 
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionSkip, {
+  EXPECT_THAT(Evaluate("{}.skip(-1)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("{}.skip(0)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("{}.skip(1)"), EvalsToEmpty());
+
+  EXPECT_THAT(Evaluate("(true).skip(-1)"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(true).skip(0)"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(true).skip(1)"), EvalsToEmpty());
+
+  EXPECT_THAT(Evaluate("true.combine(true).skip(-1) = true.combine(true)"),
+              EvalsToTrue());
+  EXPECT_THAT(Evaluate("true.combine(true).skip(0) = true.combine(true)"),
+              EvalsToTrue());
+  EXPECT_THAT(Evaluate("true.combine(true).skip(1)"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("true.combine(true).skip(2)"), EvalsToEmpty());
+
+  EXPECT_THAT(Evaluate("(true).skip()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("(true).skip('1')"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+})
+
+FHIR_VERSION_TEST(FhirPathTest, TestFunctionTake, {
+  EXPECT_THAT(Evaluate("{}.take(-1)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("{}.take(0)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("{}.take(1)"), EvalsToEmpty());
+
+  EXPECT_THAT(Evaluate("(true).take(-1)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("(true).take(0)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("(true).take(1)"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(true).take(2)"), EvalsToTrue());
+
+  EXPECT_THAT(Evaluate("true.combine(true).take(-1)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("true.combine(true).take(0)"), EvalsToEmpty());
+  EXPECT_THAT(Evaluate("true.combine(true).take(1)"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("true.combine(true).take(2) = true.combine(true)"),
+              EvalsToTrue());
+  EXPECT_THAT(Evaluate("true.combine(true).take(3) = true.combine(true)"),
+              EvalsToTrue());
+
+  EXPECT_THAT(Evaluate("(true).take()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(Evaluate("(true).take('1')"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+})
+
 FHIR_VERSION_TEST(FhirPathTest, TestFunctionOfTypePrimitives, {
   EXPECT_THAT(Evaluate("{}.ofType(Boolean)"), EvalsToEmpty());
 
