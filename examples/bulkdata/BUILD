@@ -1,8 +1,12 @@
 # Simple client to download data from FHIR server (using bulk data protocol)
-licenses(["notice"])
+load(
+    "@rules_python//python:python.bzl",
+    "py_binary",
+)
 
-load("@rules_python//python:python.bzl", "py_binary")
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
+
+licenses(["notice"])
 
 # @rules_python may not be able to pull in transitive dependency correctly
 # (related issues: https://github.com/bazelbuild/rules_python/pull/90,
@@ -13,7 +17,7 @@ load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 py_binary(
     name = "bulkload",
     srcs = ["bulkload.py"],
-    python_version = "PY2",
+    python_version = "PY3",
     deps = [
         "@absl_py//absl:app",
         "@absl_py//absl/flags",

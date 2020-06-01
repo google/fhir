@@ -24,10 +24,12 @@ Possible bulkdata servers to read from:
 Example client. Not for production use. No support for authentication.
 """
 
-from multiprocessing.dummy import Pool as ThreadPool
+import multiprocessing.dummy
 import sys
 import tempfile
 import time
+from typing import List, Tuple, Union
+
 from absl import app
 from absl import flags
 import requests
@@ -39,25 +41,35 @@ flags.DEFINE_string("epic_client_id", None, "Client ID for Epic servers")
 flags.DEFINE_boolean("debug", False, "Print debug info")
 
 
-def download(url, resource_type):
+def download(url: str, resource_type: str) -> Union[Tuple[str, bytes], str]:
+  """Downloads a resource of type resource_type from the specified url.
+
+  Args:
+    url: The URL of the resource.
+    resource_type: The HTTP content-type of the resource.
+
+  Returns:
+    A tuple of (resource_type, bytes) on success (HTTP code 200), otherwise
+    returns an empty string.
+  """
   headers = {"Accept": "application/fhir+json"}
   if FLAGS.epic_client_id:
     headers["Epic-Client-ID"] = FLAGS.epic_client_id
 
   if FLAGS.debug:
-    print "GET %s" % url
+    print("GET %s" % url)
   r = requests.get(url, headers=headers)
   if r.status_code == 200:
     if FLAGS.debug:
-      print "DONE %s" % url
+      print("DONE %s" % url)
     return (resource_type, r.content)
   else:
     if FLAGS.debug:
-      print "ERROR: ", r
+      print("ERROR: ", r)
     return ""
 
 
-def main(argv):
+def main(argv: List[str]):
   del argv  # Unused.
   headers = {"Prefer": "respond-async", "Accept": "application/fhir+json"}
   if FLAGS.epic_client_id:
@@ -70,12 +82,12 @@ def main(argv):
     url += "/Patient/$export"
 
   if FLAGS.debug:
-    print "GET ", url, headers
+    print("GET ", url, headers)
   wait = requests.get(url=url, headers=headers)
   if FLAGS.debug:
-    print "HTTP ", wait.status_code
-    print("response header: %s" % "\n".join(
-        ["%s: %s" % (k, v) for k, v in wait.headers.iteritems()]))
+    print("HTTP ", wait.status_code)
+    print("response header: %s" %
+          "\n".join(["%s: %s" % (k, v) for k, v in wait.headers.items()]))
   poll_url = wait.headers["Content-Location"]
 
   links = []
@@ -87,16 +99,16 @@ def main(argv):
   sys.stdout.write("polling ")
   while True:
     done = s.get(url=poll_url, headers=poll_headers)
-    print done.status_code
+    print(done.status_code)
     if done.status_code == 200:
       links = done.json().get("output", [])
       break
     sys.stdout.write(".")
     sys.stdout.flush()
     time.sleep(0.1)
-  print "\n"
+  print("\n")
 
-  pool = ThreadPool(len(links))
+  pool = multiprocessing.dummy.Pool(len(links))
   results = pool.map(lambda d: download(d["url"], d["type"]), links)
 
   pool.close()
@@ -108,11 +120,11 @@ def main(argv):
     outputs[k] += v
 
   tempdir = tempfile.mkdtemp()
-  for fname, content in outputs.iteritems():
+  for fname, content in outputs.items():
     f = open("%s/%s.ndjson" % (tempdir, fname), "w")
     f.write("\n".join(content.splitlines()))
     f.close()
-  print "FHIR data written to %s" % tempdir
+  print("FHIR data written to %s" % tempdir)
 
 
 if __name__ == "__main__":
