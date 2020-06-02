@@ -68,7 +68,6 @@ def pyx_library(name, deps = [], py_deps = [], srcs = [], **kwargs):
         name = name,
         srcs = py_srcs,
         deps = py_deps,
-        srcs_version = "PY2AND3",
         data = shared_objects,
         **kwargs
     )
