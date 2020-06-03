@@ -40,9 +40,9 @@ def fhirproto_dependencies():
 
     http_archive(
         name = "rules_python",
-        sha256 = "fa53cc0afe276d8f6675df1a424592e00e4f37b2a497e48399123233902e2e76",
-        strip_prefix = "rules_python-0.0.1",
-        urls = ["https://github.com/bazelbuild/rules_python/archive/0.0.1.tar.gz"],
+        url = "https://github.com/bazelbuild/rules_python/releases/download/0.0.2/rules_python-0.0.2.tar.gz",
+        strip_prefix = "rules_python-0.0.2",
+        sha256 = "b5668cde8bb6e3515057ef465a35ad712214962f0b3a314e551204266c7be90c",
     )
 
     http_archive(
