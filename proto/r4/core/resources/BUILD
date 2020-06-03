@@ -1950,10 +1950,10 @@ filegroup(
     ]),
 )
 
-# Generate a proto library that includes all core resources for distributing as a maven jar.
-# No bazel targets should ever depend on this.
-fhir_proto_library(
-    proto_deps = PROTO_DEPS + [":bundle_and_contained_resource_proto"],
-    proto_library_prefix = "all",
+# Generate a java proto library that includes all core resources for distributing
+# as a maven jar. No bazel targets should ever depend on this.
+java_proto_library(
+    name = "all_java_proto",
     visibility = ["//java/src/main/java/com/google/fhir/release:__pkg__"],
+    deps = PROTO_DEPS + [":bundle_and_contained_resource_proto"],
 )
