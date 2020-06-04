@@ -1747,6 +1747,23 @@ class CombineFunction : public SingleParameterFunctionNode {
   }
 };
 
+// Factory method for creating FHIRPath's union() function.
+StatusOr<ExpressionNode*> static CreateUnionFunction(
+    const std::shared_ptr<ExpressionNode>& child_expression,
+    const std::vector<FhirPathParser::ExpressionContext*>& params,
+    FhirPathBaseVisitor* base_context_visitor,
+    FhirPathBaseVisitor* child_context_visitor) {
+  if (params.size() != 1) {
+    return InvalidArgumentError("union() requires exactly one argument.");
+  }
+
+  FHIR_ASSIGN_OR_RETURN(
+      std::vector<std::shared_ptr<ExpressionNode>> compiled_params,
+      FunctionNode::CompileParams(params, base_context_visitor));
+
+  return new UnionOperator(child_expression, compiled_params[0]);
+}
+
 // Implements the FHIRPath .where() function.
 class WhereFunction : public FunctionNode {
  public:
@@ -1797,6 +1814,40 @@ class WhereFunction : public FunctionNode {
 
   const Descriptor* ReturnType() const override { return child_->ReturnType(); }
 };
+
+// Factory method for creating FHIRPath's anyTrue() function.
+StatusOr<FunctionNode*> static CreateAnyTrueFunction(
+    const std::shared_ptr<ExpressionNode>& child_expression,
+    const std::vector<FhirPathParser::ExpressionContext*>& params,
+    FhirPathBaseVisitor* base_context_visitor,
+    FhirPathBaseVisitor* child_context_visitor) {
+  if (!params.empty()) {
+    return InvalidArgumentError("anyTrue() requires zero arguments.");
+  }
+
+  std::vector<std::shared_ptr<ExpressionNode>> where_params = {
+      std::make_shared<ThisReference>(nullptr)};
+
+  return new ExistsFunction(
+      std::make_shared<WhereFunction>(child_expression, where_params), {});
+}
+
+// Factory method for creating FHIRPath's anyFalse() function.
+StatusOr<FunctionNode*> static CreateAnyFalseFunction(
+    const std::shared_ptr<ExpressionNode>& child_expression,
+    const std::vector<FhirPathParser::ExpressionContext*>& params,
+    FhirPathBaseVisitor* base_context_visitor,
+    FhirPathBaseVisitor* child_context_visitor) {
+  if (!params.empty()) {
+    return InvalidArgumentError("anyFalse() requires zero arguments.");
+  }
+
+  std::vector<std::shared_ptr<ExpressionNode>> where_params = {
+      std::make_shared<NotFunction>(std::make_shared<ThisReference>(nullptr))};
+
+  return new ExistsFunction(
+      std::make_shared<WhereFunction>(child_expression, where_params), {});
+}
 
 // Implements the FHIRPath .all() function.
 class AllFunction : public FunctionNode {
@@ -3652,9 +3703,9 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"children", FunctionNode::Create<ChildrenFunction>},
       {"descendants", FunctionNode::Create<DescendantsFunction>},
       {"allTrue", FunctionNode::Create<AllTrueFunction>},
-      {"anyTrue", UnimplementedFunction},
+      {"anyTrue", CreateAnyTrueFunction},
       {"allFalse", FunctionNode::Create<AllFalseFunction>},
-      {"anyFalse", UnimplementedFunction},
+      {"anyFalse", CreateAnyFalseFunction},
       {"subsetOf", UnimplementedFunction},
       {"supersetOf", UnimplementedFunction},
       {"repeat", UnimplementedFunction},
@@ -3663,7 +3714,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"skip", FunctionNode::Create<SkipFunction>},
       {"take", FunctionNode::Create<TakeFunction>},
       {"exclude", UnimplementedFunction},
-      {"union", UnimplementedFunction},
+      {"union", CreateUnionFunction},
       {"convertsToBoolean", UnimplementedFunction},
       {"toBoolean", UnimplementedFunction},
       {"convertsToInteger", UnimplementedFunction},

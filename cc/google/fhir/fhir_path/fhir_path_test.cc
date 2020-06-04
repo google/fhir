@@ -1076,6 +1076,50 @@ FHIR_VERSION_TEST(FhirPathTest, TestUnionDeduplicationObjects, {
                    EqualsProto(test_encounter.period())}));
 })
 
+FHIR_VERSION_TEST(FhirPathTest, TestUnionFunction, {
+  EXPECT_THAT(Evaluate("{}.union({})"), EvalsToEmpty());
+
+  EXPECT_THAT(Evaluate("true.union({})"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("true.union(true)"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("false.union({})"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("false.union(false)"), EvalsToFalse());
+})
+
+FHIR_VERSION_TEST(FhirPathTest, TestUnionFunctionDeduplicationPrimitives, {
+  EvaluationResult evaluation_result =
+      Evaluate(
+          "true.union(false).union(1).union('foo').union(2).union(1).union('"
+          "foo')")
+          .ValueOrDie();
+  std::vector<const Message*> result = evaluation_result.GetMessages();
+
+  Boolean true_proto = ParseFromString<Boolean>("value: true");
+  Boolean false_proto = ParseFromString<Boolean>("value: false");
+  Integer integer_1_proto = ParseFromString<Integer>("value: 1");
+  Integer integer_2_proto = ParseFromString<Integer>("value: 2");
+  String string_foo_proto = ParseFromString<String>("value: 'foo'");
+
+  ASSERT_THAT(result,
+              UnorderedElementsAreArray(
+                  {EqualsProto(true_proto), EqualsProto(false_proto),
+                   EqualsProto(integer_1_proto), EqualsProto(integer_2_proto),
+                   EqualsProto(string_foo_proto)}));
+})
+
+FHIR_VERSION_TEST(FhirPathTest, TestUnionFunctionDeduplicationObjects, {
+  Encounter test_encounter = ValidEncounter<Encounter>();
+
+  EvaluationResult evaluation_result =
+      Evaluate(test_encounter,
+               "period.union(status).union(status).union(period)")
+          .ValueOrDie();
+  std::vector<const Message*> result = evaluation_result.GetMessages();
+
+  ASSERT_THAT(result, UnorderedElementsAreArray(
+                          {EqualsProto(test_encounter.status()),
+                           EqualsProto(test_encounter.period())}));
+})
+
 FHIR_VERSION_TEST(FhirPathTest, TestCombine, {
   EXPECT_THAT(Evaluate("{}.combine({})"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("true.combine({})"), EvalsToTrue());
@@ -1230,6 +1274,29 @@ FHIR_VERSION_TEST(FhirPathTest, TestWhereValidatesArguments, {
               HasStatusCode(StatusCode::kInvalidArgument));
   EXPECT_THAT(Evaluate("{}.where(true)"), EvalsToEmpty());
   EXPECT_THAT(Evaluate("{}.where(true, false)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+})
+
+FHIR_VERSION_TEST(FhirPathTest, TestAnyTrue, {
+  EXPECT_THAT(Evaluate("{}.anyTrue()"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("(false).anyTrue()"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("(true).anyTrue()"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(false | true).anyTrue()"), EvalsToTrue());
+
+  // Verify that anyTrue() fails when called with the wrong number of arguments.
+  EXPECT_THAT(Evaluate("{}.anyTrue(true)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+})
+
+FHIR_VERSION_TEST(FhirPathTest, TestAnyFalse, {
+  EXPECT_THAT(Evaluate("{}.anyFalse()"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("(false).anyFalse()"), EvalsToTrue());
+  EXPECT_THAT(Evaluate("(true).anyFalse()"), EvalsToFalse());
+  EXPECT_THAT(Evaluate("(false | true).anyFalse()"), EvalsToTrue());
+
+  // Verify that anyFalse() fails when called with the wrong number of
+  // arguments.
+  EXPECT_THAT(Evaluate("{}.anyFalse(true)"),
               HasStatusCode(StatusCode::kInvalidArgument));
 })
 
