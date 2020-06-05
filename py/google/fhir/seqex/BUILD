@@ -28,7 +28,7 @@ pyx_library(
     py_deps = [
         "@org_tensorflow//tensorflow/core:protos_all_py",
     ],
-    srcs_version = "PY3",
+    srcs_version = "PY3ONLY",
     deps = [
         "//cc/google/fhir/seqex:bundle_to_seqex_converter",
         "//cc/google/fhir/seqex:text_tokenizer",
@@ -68,7 +68,7 @@ pyx_library(
     py_deps = [
         "//proto/stu3:extensions_py_pb2",
     ],
-    srcs_version = "PY3",
+    srcs_version = "PY3ONLY",
     deps = [
         "//cc/google/fhir/seqex:bundle_to_seqex_util",
         "//proto/stu3:extensions_cc_proto",
