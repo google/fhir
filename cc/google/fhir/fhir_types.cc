@@ -102,6 +102,7 @@ FHIR_SIMPLE_TYPE_CHECK(Decimal,
                        "http://hl7.org/fhir/StructureDefinition/decimal");
 FHIR_SIMPLE_TYPE_CHECK(DateTime,
                        "http://hl7.org/fhir/StructureDefinition/dateTime");
+FHIR_SIMPLE_TYPE_CHECK(Date, "http://hl7.org/fhir/StructureDefinition/date");
 FHIR_SIMPLE_TYPE_CHECK(Time, "http://hl7.org/fhir/StructureDefinition/time");
 FHIR_SIMPLE_TYPE_CHECK(Quantity,
                        "http://hl7.org/fhir/StructureDefinition/Quantity");

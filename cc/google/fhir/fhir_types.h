@@ -79,6 +79,9 @@ bool IsDecimal(const ::google::protobuf::Descriptor* descriptor);
 bool IsDateTime(const ::google::protobuf::Message& message);
 bool IsDateTime(const ::google::protobuf::Descriptor* descriptor);
 
+bool IsDate(const ::google::protobuf::Message& message);
+bool IsDate(const ::google::protobuf::Descriptor* descriptor);
+
 bool IsTime(const ::google::protobuf::Message& message);
 bool IsTime(const ::google::protobuf::Descriptor* descriptor);
 
