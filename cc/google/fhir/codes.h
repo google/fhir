@@ -34,6 +34,8 @@ StatusOr<const ::google::protobuf::EnumValueDescriptor*> CodeStringToEnumValue(
     const std::string& code_string,
     const ::google::protobuf::EnumDescriptor* target_enum_type);
 
+StatusOr<std::string> GetCodeAsString(const ::google::protobuf::Message& code);
+
 Status CopyCoding(const ::google::protobuf::Message& source, google::protobuf::Message* target);
 Status CopyCode(const ::google::protobuf::Message& source, google::protobuf::Message* target);
 

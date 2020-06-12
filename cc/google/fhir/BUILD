@@ -16,6 +16,7 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":annotations",
+        ":fhir_types",
         ":proto_util",
         ":util",
         "//cc/google/fhir/status",

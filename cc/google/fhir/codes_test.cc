@@ -34,6 +34,7 @@ namespace fhir {
 namespace {
 
 using ::google::fhir::testutil::EqualsProto;
+using r4::core::Code;
 using r4::core::ContainedResource;
 using r4::core::Encounter;
 using r4::core::FamilyMemberHistory;
@@ -112,6 +113,26 @@ TEST(CodesTest, CodeStringToEnumValue) {
   EXPECT_EQ(
       CodeStringToEnumValue(">", enum_descriptor).ValueOrDie()->full_name(),
       enum_value_descriptor->full_name());
+}
+
+TEST(CodesTest, GetCodeAsString_StringType) {
+  Code code;
+  code.set_value("foo");
+
+  ASSERT_EQ("foo", GetCodeAsString(code).ValueOrDie());
+}
+
+TEST(CodesTest, GetCodeAsString_EnumType) {
+  Patient::GenderCode code;
+  code.set_value(r4::core::AdministrativeGenderCode::FEMALE);
+
+  ASSERT_EQ("female", GetCodeAsString(code).ValueOrDie());
+}
+
+TEST(CodesTest, GetCodeAsString_InvalidType) {
+  r4::core::String not_a_code;
+  not_a_code.set_value("foo");
+  ASSERT_FALSE(GetCodeAsString(not_a_code).ok());
 }
 
 }  // namespace

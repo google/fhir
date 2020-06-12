@@ -21,6 +21,7 @@
 #include "absl/strings/ascii.h"
 #include "absl/synchronization/mutex.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/fhir_types.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
@@ -301,6 +302,32 @@ StatusOr<std::string> GetSystemForCode(const ::google::protobuf::Message& code) 
         "Invalid profiled Coding: missing system information on enum code");
   }
   return GetSourceCodeSystem(enum_descriptor);
+}
+
+StatusOr<std::string> GetCodeAsString(const ::google::protobuf::Message& code) {
+  const Descriptor* descriptor = code.GetDescriptor();
+  if (!IsTypeOrProfileOfCode(code)) {
+    return InvalidArgumentError(absl::StrCat(
+        "Invalid type for GetCodeAsString: ", descriptor->full_name()));
+  }
+
+  const FieldDescriptor* value_field = descriptor->FindFieldByName("value");
+  if (!value_field) {
+    return InvalidArgumentError(absl::StrCat(
+        "Invalid code type for GetCodeAsString: ", descriptor->full_name()));
+  }
+  const Reflection* reflection = code.GetReflection();
+
+  switch (value_field->type()) {
+    case FieldDescriptor::Type::TYPE_STRING:
+      return reflection->GetString(code, value_field);
+    case FieldDescriptor::Type::TYPE_ENUM:
+      return EnumValueToString(reflection->GetEnum(code, value_field));
+    default:
+      return InvalidArgumentError(
+          absl::StrCat("Invalid value type field for GetCodeAsString: ",
+                       descriptor->full_name()));
+  }
 }
 
 }  // namespace fhir
