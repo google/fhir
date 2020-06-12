@@ -9,6 +9,9 @@ fhirproto_workspace(core_lib = True)
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "pip_install")
 pip_install()
 
+load("//bazel:go_dependencies.bzl", "fhir_go_dependencies")
+fhir_go_dependencies()
+
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 http_archive(
     name = "google_bazel_common",

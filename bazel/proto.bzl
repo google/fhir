@@ -3,12 +3,13 @@
 
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@rules_cc//cc:defs.bzl", "cc_proto_library")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 
 WELL_KNOWN_PROTOS = ["descriptor_proto", "any_proto"]
 
 def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = [], **kwargs):
-    """Generates proto_library target, as well as {py,cc,java}_proto_library targets.
+    """Generates proto_library target, as well as {py,cc,java,go}_proto_library targets.
 
     Args:
       proto_library_prefix: Name prefix to be added to various proto libraries.
@@ -18,6 +19,7 @@ def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = [], **kwarg
     """
     py_deps = []
     cc_deps = []
+    go_deps = []
     has_well_known_dep = False
     for x in proto_deps:
         tokens = x.split(":")
@@ -29,6 +31,7 @@ def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = [], **kwarg
         elif x.endswith("_proto"):
             py_deps.append(x[:-6] + "_py_pb2")
             cc_deps.append(x[:-6] + "_cc_proto")
+            go_deps.append(x[:-6] + "_go_proto")
 
     proto_library(
         name = proto_library_prefix + "_proto",
@@ -56,6 +59,14 @@ def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = [], **kwarg
         deps = [
             ":" + proto_library_prefix + "_proto",
         ],
+        **kwargs
+    )
+
+    go_proto_library(
+        name = proto_library_prefix + "_go_proto",
+        deps = go_deps,
+        proto = ":" + proto_library_prefix + "_proto",
+        importpath = "google/fhir/" + native.package_name() + "/" + proto_library_prefix + "_go_proto",
         **kwargs
     )
 

@@ -8,5 +8,6 @@ exports_files(
         "cython.BUILD",
         "requirements.txt",
         "dependencies.bzl",
+        "go_dependencies.bzl",
     ],
 )
