@@ -160,6 +160,15 @@ class PrimitiveHandler {
   virtual StatusOr<DateTimePrecision> GetDateTimePrecision(
       const ::google::protobuf::Message& date_time) const = 0;
 
+  virtual StatusOr<std::string> GetCodingSystem(
+      const ::google::protobuf::Message& coding) const = 0;
+
+  virtual StatusOr<std::string> GetCodingCode(
+      const ::google::protobuf::Message& coding) const = 0;
+
+  virtual StatusOr<std::string> GetCodingDisplay(
+      const ::google::protobuf::Message& coding) const = 0;
+
  protected:
   explicit PrimitiveHandler(proto::FhirVersion version) : version_(version) {}
 
@@ -265,11 +274,13 @@ template <typename BundleType,
           typename DecimalType = FHIR_DATATYPE(BundleType, decimal),
           typename BooleanType = FHIR_DATATYPE(BundleType, boolean),
           typename ReferenceType = FHIR_DATATYPE(BundleType, reference),
+          typename CodingType = FHIR_DATATYPE(BundleType, coding),
           typename SimpleQuantityType =
               FHIR_DATATYPE(BundleType, sampled_data().origin)>
 class PrimitiveHandlerTemplate : public PrimitiveHandler {
  public:
   typedef BundleType Bundle;
+  typedef CodingType Coding;
   typedef ContainedResourceType ContainedResource;
   typedef ExtensionType Extension;
   typedef StringType String;
@@ -409,6 +420,24 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
       const ::google::protobuf::Message& simple_quantity) const override {
     FHIR_RETURN_IF_ERROR(CheckType<SimpleQuantity>(simple_quantity));
     return dynamic_cast<const SimpleQuantity&>(simple_quantity).value().value();
+  }
+
+  StatusOr<std::string> GetCodingSystem(
+      const ::google::protobuf::Message& coding) const override {
+    FHIR_RETURN_IF_ERROR(CheckType<Coding>(coding));
+    return dynamic_cast<const Coding&>(coding).system().value();
+  }
+
+  StatusOr<std::string> GetCodingCode(
+      const ::google::protobuf::Message& coding) const override {
+    FHIR_RETURN_IF_ERROR(CheckType<Coding>(coding));
+    return dynamic_cast<const Coding&>(coding).code().value();
+  }
+
+  StatusOr<std::string> GetCodingDisplay(
+      const ::google::protobuf::Message& coding) const override {
+    FHIR_RETURN_IF_ERROR(CheckType<Coding>(coding));
+    return dynamic_cast<const Coding&>(coding).display().value();
   }
 
   const ::google::protobuf::Descriptor* DateTimeDescriptor() const override {

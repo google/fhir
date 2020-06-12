@@ -466,6 +466,49 @@ TEST(PrimitiveHandlerTest, GetSimpleQuantitySystem) {
                 .status());
 }
 
+TEST(PrimitiveHandlerTest, GetCodingDisplay) {
+  Coding coding;
+  coding.mutable_display()->set_value("Philadelphia Eagles");
+
+  StatusOr<std::string> extracted_value =
+      Stu3PrimitiveHandler::GetInstance()->GetCodingDisplay(coding);
+  FHIR_ASSERT_OK(extracted_value.status());
+  ASSERT_EQ(extracted_value.ValueOrDie(), "Philadelphia Eagles");
+
+  ASSERT_NE(::absl::OkStatus(),
+            Stu3PrimitiveHandler::GetInstance()
+                ->GetCodingDisplay(::google::protobuf::Any())
+                .status());
+}
+
+TEST(PrimitiveHandlerTest, GetCodingCode) {
+  Coding coding;
+  coding.mutable_code()->set_value("12345");
+
+  StatusOr<std::string> extracted_code =
+      Stu3PrimitiveHandler::GetInstance()->GetCodingCode(coding);
+  FHIR_ASSERT_OK(extracted_code.status());
+  ASSERT_EQ(extracted_code.ValueOrDie(), "12345");
+
+  ASSERT_NE(::absl::OkStatus(), Stu3PrimitiveHandler::GetInstance()
+                                    ->GetCodingCode(::google::protobuf::Any())
+                                    .status());
+}
+
+TEST(PrimitiveHandlerTest, GetCodingSystem) {
+  Coding coding;
+  coding.mutable_system()->set_value("http://example.org");
+
+  StatusOr<std::string> extracted_system =
+      Stu3PrimitiveHandler::GetInstance()->GetCodingSystem(coding);
+  FHIR_ASSERT_OK(extracted_system.status());
+  ASSERT_EQ(extracted_system.ValueOrDie(), "http://example.org");
+
+  ASSERT_NE(::absl::OkStatus(), Stu3PrimitiveHandler::GetInstance()
+                                    ->GetCodingSystem(::google::protobuf::Any())
+                                    .status());
+}
+
 }  // namespace
 
 }  // namespace stu3
