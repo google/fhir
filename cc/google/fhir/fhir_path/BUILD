@@ -92,6 +92,22 @@ cc_library(
 )
 
 cc_library(
+    name = "fhir_path_validation_rule",
+    srcs = [
+        "fhir_path_validation_rule.cc",
+    ],
+    hdrs = [
+        "fhir_path_validation_rule.h",
+    ],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":fhir_path_validation",
+        "@com_google_absl//absl/container:flat_hash_set",
+        "@com_google_absl//absl/hash",
+    ],
+)
+
+cc_library(
     name = "r4_fhir_path_validation",
     srcs = [
         "r4_fhir_path_validation.cc",
@@ -213,6 +229,19 @@ cc_test(
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "fhir_path_validation_rule_test",
+    size = "small",
+    srcs = [
+        "fhir_path_validation_rule_test.cc",
+    ],
+    deps = [
+        ":fhir_path_validation",
+        ":fhir_path_validation_rule",
+        "@com_google_googletest//:gtest_main",
     ],
 )
 

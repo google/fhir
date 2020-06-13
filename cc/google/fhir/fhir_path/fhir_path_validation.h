@@ -72,6 +72,13 @@ class ValidationResult {
   const StatusOr<bool> result_;
 };
 
+// A ValidationRule is a function that takes a ValidationResult and returns
+// false if the resource under consideration should be considered invalid and
+// true in all other cases. In order for a resource to be considered valid, from
+// the perspective of FHIRPath, this function must return true for all
+// ValidationResult objects for that resource.
+using ValidationRule = std::function<bool(const ValidationResult&)>;
+
 // Class the holds the results of evaluating all FHIRPath constraints defined
 // on a particular resource.
 class ValidationResults {
@@ -97,7 +104,7 @@ class ValidationResults {
   //
   // See ValidationResults::StrictValidationFn and
   // ValidationResults::RelaxedValidationFn for common definitions of validity.
-  bool IsValid(std::function<bool(const ValidationResult&)> validation_fn =
+  bool IsValid(ValidationRule validation_fn =
                    &ValidationResults::StrictValidationFn) const;
 
   // Returns Status::OK or the status of the first constraint violation
