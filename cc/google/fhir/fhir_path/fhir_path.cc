@@ -27,6 +27,7 @@
 #include "absl/strings/match.h"
 #include "absl/strings/numbers.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/str_replace.h"
 #include "absl/strings/strip.h"
 #include "absl/time/civil_time.h"
 #include "absl/time/time.h"
