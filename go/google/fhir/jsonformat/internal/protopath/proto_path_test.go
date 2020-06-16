@@ -603,23 +603,6 @@ func TestGet_Errors(t *testing.T) {
 	}
 }
 
-func TestGetString(t *testing.T) {
-	msg := &rfpb.Account{}
-	path := NewProtoPath("meta.id.value")
-	v, err := GetString(msg, path)
-	if err != nil {
-		t.Fatalf("GetString(%v, %v) got error %v, expected <nil>", msg, path, err)
-	}
-	if v != "" {
-		t.Fatalf(`GetString(%v, %v) got %v, expected ""`, msg, path, v)
-	}
-
-	path = NewProtoPath("foo")
-	if _, err := GetString(msg, path); err == nil {
-		t.Fatalf("GetString(%v, %v) got error <nil>, expected error", msg, path)
-	}
-}
-
 func TestString(t *testing.T) {
 	tests := []string{
 		"normal",
