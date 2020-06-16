@@ -1,0 +1,41 @@
+// Dummy proto to facilitate testing of the protopath library.
+syntax = "proto3";
+
+package fhir.go.jsonformat.internal.protopath;
+
+// Message type that will never be present in Message.
+message Missing {}
+
+enum MessageType {
+  INVALID_UNINITIALIZED = 0;
+  TYPE_1 = 1;
+  TYPE_2 = 2;
+}
+
+message Message {
+  int32 int32 = 1;
+
+  message InnerMessage {
+    int32 inner_field = 1;
+  }
+
+  message InnerMessage2 {}
+
+  oneof oneof {
+    bool oneof_primitive_field = 2;
+
+    // Duplicate primitive fields to test type conflict.
+    int32 oneof_conflicting_primitive_field_1 = 3;
+    int32 oneof_conflicting_primitive_field_2 = 4;
+
+    InnerMessage oneof_message_field = 5;
+
+    // Duplicate message fields to test type conflict.
+    InnerMessage2 oneof_conflicting_message_field_1 = 6;
+    InnerMessage2 oneof_conflicting_message_field_2 = 7;
+  }
+
+  MessageType type = 8;
+
+  InnerMessage message_field = 9;
+}
