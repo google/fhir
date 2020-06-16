@@ -17,12 +17,12 @@ go_test(
         "//testdata/stu3:examples",
     ],
     deps = [
-        "//go/google/fhir/jsonformat",
-        "//go/google/fhir/jsonformat/internal/jsonpbhelper",
-        "//go/google/fhir/jsonformat/internal/protopath",
         "@com_bitbucket_creachadair_stringset//:go_default_library",
         "@com_github_golang_protobuf//proto:go_default_library",
         "@com_github_google_go_cmp//cmp:go_default_library",
+        "@com_google_fhir//go/google/fhir/jsonformat",
+        "@com_google_fhir//go/google/fhir/jsonformat/internal/jsonpbhelper",
+        "@com_google_fhir//go/google/fhir/jsonformat/internal/protopath",
         "@com_google_fhir//proto/r4/core/resources:bundle_and_contained_resource_go_proto",
         "@com_google_fhir//proto/r4/core/resources:composition_go_proto",
         "@com_google_fhir//proto/r4/core/resources:observation_go_proto",
@@ -46,7 +46,7 @@ go_test(
         ":testdata",
     ],
     deps = [
-        "//go/google/fhir/jsonformat",
+        "@com_google_fhir//go/google/fhir/jsonformat",
         "@io_bazel_rules_go//go/tools/bazel:go_default_library",
     ],
 )
