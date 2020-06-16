@@ -28,7 +28,7 @@ import (
 )
 
 // protoToExtension converts a FHIR extension proto (e.g. Base64BinarySeparatorStride or
-// PrimitiveHasNoValue) into a Google-internal FHIR extension describing the proto.
+// PrimitiveHasNoValue) into a Google-defined FHIR extension describing the proto.
 func protoToExtension(pb, ext proto.Message) error {
 	rpb := proto.MessageReflect(pb)
 	url, err := jsonpbhelper.InternalExtensionURL(rpb.Descriptor())

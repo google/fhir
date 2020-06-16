@@ -85,18 +85,6 @@ func (p Path) String() string {
 	return strings.Join(strParts, ".")
 }
 
-// NewPath creates a Path from a string definition using Go field names.
-//
-// Deprecated: Opaque protos will break this indexing Go proto structs by field
-// name. Please use NewProtoPath instead.
-func NewPath(p string) Path {
-	path := Path{}
-	for _, part := range strings.Split(p, ".") {
-		path.parts = append(path.parts, goPathPart(part))
-	}
-	return path
-}
-
 // NewProtoPath creates a Path from a string definition using proto field names.
 func NewProtoPath(p string) Path {
 	path := Path{}
@@ -591,17 +579,4 @@ func Get(m proto.Message, path Path, defVal interface{}) (interface{}, error) {
 		return nil, fmt.Errorf("invalid path %v", path)
 	}
 	return get(m.ProtoReflect(), defVal, path.parts)
-}
-
-// GetString retrieves a string value from a proto at `path`, or returns an
-// empty string. An error will occur if the path is invalid.
-//
-// Deprecated: use Get and cast the result yourself.
-func GetString(m protov1.Message, path Path) (string, error) {
-	v, err := Get(protov1.MessageV2(m), path, "")
-	if err != nil {
-		return "", err
-	}
-	// Cannot panic because we've already checked that the value is a string.
-	return v.(string), nil
 }
