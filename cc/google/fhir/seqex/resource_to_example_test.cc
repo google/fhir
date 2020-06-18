@@ -23,6 +23,7 @@
 #include "absl/flags/flag.h"
 #include "absl/memory/memory.h"
 #include "google/fhir/seqex/text_tokenizer.h"
+#include "google/fhir/stu3/primitive_handler.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/resources.pb.h"
@@ -35,7 +36,17 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
+namespace {
+
 using ::google::fhir::testutil::EqualsProto;
+
+void Stu3ResourceToExample(const google::protobuf::Message& message,
+                           const TextTokenizer& tokenizer,
+                           ::tensorflow::Example* example,
+                           bool enable_attribution) {
+  ResourceToExample(message, tokenizer, example, enable_attribution,
+                    stu3::Stu3PrimitiveHandler::GetInstance());
+}
 
 class ResourceToExampleTest : public ::testing::Test {
  public:
@@ -83,7 +94,7 @@ TEST_F(ResourceToExampleTest, Patient) {
   )proto", &expected));
 
   ::tensorflow::Example output;
-  ResourceToExample(patient, *tokenizer_, &output, false);
+  Stu3ResourceToExample(patient, *tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
 
@@ -116,7 +127,7 @@ TEST_F(ResourceToExampleTest, PositiveInt) {
         })proto",
       &expected));
   ::tensorflow::Example output;
-  ResourceToExample(input, *tokenizer_, &output, false);
+  Stu3ResourceToExample(input, *tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
 
@@ -137,7 +148,7 @@ TEST_F(ResourceToExampleTest, HandlesCodeValueAsString) {
         })proto",
       &expected));
   ::tensorflow::Example output;
-  ResourceToExample(input, *tokenizer_, &output, false);
+  Stu3ResourceToExample(input, *tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
 
@@ -159,7 +170,7 @@ TEST_F(ResourceToExampleTest, BinaryResourceWithContent) {
         })proto",
       &expected));
   ::tensorflow::Example output;
-  ResourceToExample(input, *tokenizer_, &output, false);
+  Stu3ResourceToExample(input, *tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
 
@@ -192,9 +203,11 @@ TEST_F(ResourceToExampleTest, SingletonCodeableConcepts) {
         })proto",
       &expected));
   ::tensorflow::Example output;
-  ResourceToExample(input, *tokenizer_, &output, false);
+  Stu3ResourceToExample(input, *tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
+
+}  // namespace
 
 }  // namespace seqex
 }  // namespace fhir

@@ -61,6 +61,9 @@ bool IsTypeOrProfileOfExtension(const ::google::protobuf::Descriptor* descriptor
 bool IsBoolean(const ::google::protobuf::Message& message);
 bool IsBoolean(const ::google::protobuf::Descriptor* descriptor);
 
+bool IsBase64Binary(const ::google::protobuf::Message& message);
+bool IsBase64Binary(const ::google::protobuf::Descriptor* descriptor);
+
 bool IsString(const ::google::protobuf::Message& message);
 bool IsString(const ::google::protobuf::Descriptor* descriptor);
 
@@ -85,11 +88,23 @@ bool IsDate(const ::google::protobuf::Descriptor* descriptor);
 bool IsTime(const ::google::protobuf::Message& message);
 bool IsTime(const ::google::protobuf::Descriptor* descriptor);
 
+bool IsIdentifier(const ::google::protobuf::Message& message);
+bool IsIdentifier(const ::google::protobuf::Descriptor* descriptor);
+
+bool IsInstant(const ::google::protobuf::Message& message);
+bool IsInstant(const ::google::protobuf::Descriptor* descriptor);
+
+bool IsUri(const ::google::protobuf::Message& message);
+bool IsUri(const ::google::protobuf::Descriptor* descriptor);
+
 bool IsQuantity(const ::google::protobuf::Message& message);
 bool IsQuantity(const ::google::protobuf::Descriptor* descriptor);
 
 bool IsSimpleQuantity(const ::google::protobuf::Message& message);
 bool IsSimpleQuantity(const ::google::protobuf::Descriptor* descriptor);
+
+bool IsXhtml(const ::google::protobuf::Message& message);
+bool IsXhtml(const ::google::protobuf::Descriptor* descriptor);
 
 }  // namespace fhir
 }  // namespace google

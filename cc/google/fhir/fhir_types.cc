@@ -104,6 +104,15 @@ FHIR_SIMPLE_TYPE_CHECK(DateTime,
                        "http://hl7.org/fhir/StructureDefinition/dateTime");
 FHIR_SIMPLE_TYPE_CHECK(Date, "http://hl7.org/fhir/StructureDefinition/date");
 FHIR_SIMPLE_TYPE_CHECK(Time, "http://hl7.org/fhir/StructureDefinition/time");
+FHIR_SIMPLE_TYPE_CHECK(Instant,
+                       "http://hl7.org/fhir/StructureDefinition/instant");
+FHIR_SIMPLE_TYPE_CHECK(Xhtml, "http://hl7.org/fhir/StructureDefinition/xhtml");
+FHIR_SIMPLE_TYPE_CHECK(Base64Binary,
+                       "http://hl7.org/fhir/StructureDefinition/base64Binary");
+FHIR_SIMPLE_TYPE_CHECK(Uri, "http://hl7.org/fhir/StructureDefinition/uri");
+FHIR_SIMPLE_TYPE_CHECK(Identifier,
+                       "http://hl7.org/fhir/StructureDefinition/Identifier");
+
 FHIR_SIMPLE_TYPE_CHECK(Quantity,
                        "http://hl7.org/fhir/StructureDefinition/Quantity");
 FHIR_SIMPLE_TYPE_CHECK(

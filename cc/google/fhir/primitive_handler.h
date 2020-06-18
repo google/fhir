@@ -160,6 +160,8 @@ class PrimitiveHandler {
   virtual StatusOr<DateTimePrecision> GetDateTimePrecision(
       const ::google::protobuf::Message& date_time) const = 0;
 
+  virtual ::google::protobuf::Message* NewCoding() const = 0;
+
   virtual StatusOr<std::string> GetCodingSystem(
       const ::google::protobuf::Message& coding) const = 0;
 
@@ -421,6 +423,8 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     FHIR_RETURN_IF_ERROR(CheckType<SimpleQuantity>(simple_quantity));
     return dynamic_cast<const SimpleQuantity&>(simple_quantity).value().value();
   }
+
+  ::google::protobuf::Message* NewCoding() const override { return new Coding(); }
 
   StatusOr<std::string> GetCodingSystem(
       const ::google::protobuf::Message& coding) const override {

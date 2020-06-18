@@ -35,6 +35,7 @@
 #include "google/fhir/seqex/example_key.h"
 #include "google/fhir/seqex/feature_keys.h"
 #include "google/fhir/seqex/resource_to_example.h"
+#include "google/fhir/seqex/stu3.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/util.h"
 #include "proto/stu3/codes.pb.h"
@@ -211,8 +212,8 @@ class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
     const absl::Time version_time = google::fhir::GetTimeFromTimelikeElement(
         resource.meta().last_updated());
     ::tensorflow::Example example;
-    seqex::ResourceToExample(resource, *tokenizer_, &example,
-                             enable_attribution_);
+    seqex_stu3::ResourceToExample(resource, *tokenizer_, &example,
+                                  enable_attribution_);
     if (enable_attribution_) {
       (*example.mutable_features()
             ->mutable_feature())[seqex::kResourceIdFeatureKey]
@@ -225,6 +226,9 @@ class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
   }
 };
 
+// Concrete BundleToSeqexConverter specification for use by python-c++ boundary
+// TODO: move this to stu3.h once that file is no longer a
+// dependency of this file.
 typedef BundleToSeqexConverter<stu3::proto::Bundle>
     UnprofiledBundleToSeqexConverter;
 
@@ -393,7 +397,8 @@ void BundleToSeqexConverter<BundleLike>::BundleToContext(
       }
       patient.clear_meta();
       patient.clear_deceased();
-      ResourceToExample(patient, *tokenizer_, &context_, enable_attribution_);
+      seqex_stu3::ResourceToExample(patient, *tokenizer_, &context_,
+                                    enable_attribution_);
       CHECK(patient.has_id());
       // Add patientId to context feature for cross validation.
       (*context_.mutable_features()->mutable_feature())[kPatientIdFeatureKey]

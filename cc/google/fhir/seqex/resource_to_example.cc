@@ -23,21 +23,23 @@
 #include "absl/algorithm/container.h"
 #include "absl/flags/flag.h"
 #include "absl/memory/memory.h"
+#include "absl/status/status.h"
 #include "absl/strings/match.h"
 #include "absl/strings/numbers.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_replace.h"
 #include "absl/strings/str_split.h"
 #include "absl/time/time.h"
+#include "google/fhir/annotations.h"
 #include "google/fhir/codeable_concepts.h"
 #include "google/fhir/codes.h"
 #include "google/fhir/fhir_types.h"
+#include "google/fhir/primitive_handler.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/seqex/text_tokenizer.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
-#include "proto/stu3/datatypes.pb.h"
 #include "tensorflow/core/example/example.pb.h"
 #include "tensorflow/core/example/feature.pb.h"
 #include "tensorflow/core/platform/logging.h"
@@ -62,115 +64,170 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-using ::google::fhir::stu3::proto::Base64Binary;
-using ::google::fhir::stu3::proto::Boolean;
-using ::google::fhir::stu3::proto::Coding;
-using ::google::fhir::stu3::proto::Date;
-using ::google::fhir::stu3::proto::DateTime;
-using ::google::fhir::stu3::proto::Decimal;
-using ::google::fhir::stu3::proto::Extension;
-using ::google::fhir::stu3::proto::Id;
-using ::google::fhir::stu3::proto::Identifier;
-using ::google::fhir::stu3::proto::Instant;
-using ::google::fhir::stu3::proto::Integer;
-using ::google::fhir::stu3::proto::PositiveInt;
-using ::google::fhir::stu3::proto::Reference;
-using ::google::fhir::stu3::proto::String;
-using ::google::fhir::stu3::proto::Time;
-using ::google::fhir::stu3::proto::Uri;
-using ::google::fhir::stu3::proto::Xhtml;
+using ::google::protobuf::Descriptor;
+using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
+using ::google::protobuf::Reflection;
 
 namespace {
 
-void AddTokensToExample(const std::string& name, const std::string& value,
+class Converter {
+ public:
+  explicit Converter(const PrimitiveHandler* primitive_handler)
+      : primitive_handler_(primitive_handler) {}
+
+  void MessageToExample(const Message& message, const std::string& prefix,
                         const TextTokenizer& tokenizer,
                         ::tensorflow::Example* example,
-                        bool enable_attribution) {
-  auto tokens = tokenizer.Tokenize(value);
-  auto* token_list =
-      (*example->mutable_features()
-            ->mutable_feature())[absl::StrCat(name, ".tokenized")]
-          .mutable_bytes_list();
-  ::tensorflow::Int64List* start_list = nullptr;
-  ::tensorflow::Int64List* end_list = nullptr;
-  if (enable_attribution) {
-    start_list = (*example->mutable_features()
-                       ->mutable_feature())[absl::StrCat(name, ".token_start")]
-                     .mutable_int64_list();
-    end_list = (*example->mutable_features()
-                     ->mutable_feature())[absl::StrCat(name, ".token_end")]
-                   .mutable_int64_list();
-  }
-  for (const auto& token : tokens) {
-    token_list->add_value(token.text);
+                        bool enable_attribution);
+
+ private:
+  void AddTokensToExample(const std::string& name, const std::string& value,
+                          const TextTokenizer& tokenizer,
+                          ::tensorflow::Example* example,
+                          bool enable_attribution) {
+    auto tokens = tokenizer.Tokenize(value);
+    auto* token_list =
+        (*example->mutable_features()
+              ->mutable_feature())[absl::StrCat(name, ".tokenized")]
+            .mutable_bytes_list();
+    ::tensorflow::Int64List* start_list = nullptr;
+    ::tensorflow::Int64List* end_list = nullptr;
     if (enable_attribution) {
-      start_list->add_value(token.char_start);
-      end_list->add_value(token.char_end);
+      start_list =
+          (*example->mutable_features()
+                ->mutable_feature())[absl::StrCat(name, ".token_start")]
+              .mutable_int64_list();
+      end_list = (*example->mutable_features()
+                       ->mutable_feature())[absl::StrCat(name, ".token_end")]
+                     .mutable_int64_list();
+    }
+    for (const auto& token : tokens) {
+      token_list->add_value(token.text);
+      if (enable_attribution) {
+        start_list->add_value(token.char_start);
+        end_list->add_value(token.char_end);
+      }
     }
   }
-}
 
-// This function does not support the case where the intersection of
-// tokenize_feature_set and add_tokenize_feature_set is not empty, because that
-// case is ambiguous.
-void AddValueAndOrTokensToExample(
-    const std::set<std::string>& tokenize_feature_set,
-    const std::set<std::string>& add_tokenize_feature_set,
-    const TextTokenizer& tokenizer, const std::string& name,
-    const std::string& value, ::tensorflow::Example* example,
-    bool enable_attribution) {
-  if (tokenize_feature_set.count(name) != 0) {
-    AddTokensToExample(name, value, tokenizer, example, enable_attribution);
-    return;
-  }
-
-  if (add_tokenize_feature_set.count(name) != 0) {
-    AddTokensToExample(name, value, tokenizer, example, enable_attribution);
-  }
-
-  (*example->mutable_features()->mutable_feature())[name]
-      .mutable_bytes_list()
-      ->add_value(value);
-}
-
-}  // namespace
-
-void AddCodingToExample(const Coding& coding, const std::string& name,
-                        bool append_system_to_feature_name,
-                        ::tensorflow::Example* example,
-                        std::set<std::string>* tokenize_feature_set,
-                        const std::set<std::string>& add_tokenize_feature_set,
-                        const TextTokenizer& tokenizer,
-                        bool enable_attribution) {
-  CHECK(coding.has_system() && coding.has_code());
-  const std::string system =
-      absl::StrReplaceAll(coding.system().value(),
-                          {{"://", "-"}, {":", "-"}, {"/", "-"}, {".", "-"}});
-  const std::string feature_name =
-      append_system_to_feature_name ? absl::StrCat(name, ".", system) : name;
-  const std::string code =
-      append_system_to_feature_name
-          ? coding.code().value()
-          : absl::StrCat(system, ":", coding.code().value());
-  (*example->mutable_features()->mutable_feature())[feature_name]
-      .mutable_bytes_list()
-      ->add_value(code);
-  if (coding.has_display()) {
-    const std::string full_name = absl::StrCat(feature_name, ".display");
-    if (absl::GetFlag(FLAGS_tokenize_code_text_features)) {
-      tokenize_feature_set->insert(full_name);
+  // This function does not support the case where the intersection of
+  // tokenize_feature_set and add_tokenize_feature_set is not empty, because
+  // that case is ambiguous.
+  void AddValueAndOrTokensToExample(
+      const std::set<std::string>& tokenize_feature_set,
+      const std::set<std::string>& add_tokenize_feature_set,
+      const TextTokenizer& tokenizer, const std::string& name,
+      const std::string& value, ::tensorflow::Example* example,
+      bool enable_attribution) {
+    if (tokenize_feature_set.count(name) != 0) {
+      AddTokensToExample(name, value, tokenizer, example, enable_attribution);
+      return;
     }
-    AddValueAndOrTokensToExample(
-        *tokenize_feature_set, add_tokenize_feature_set, tokenizer,
-        absl::StrCat(name, ".", system, ".display"), coding.display().value(),
-        example, enable_attribution);
+
+    if (add_tokenize_feature_set.count(name) != 0) {
+      AddTokensToExample(name, value, tokenizer, example, enable_attribution);
+    }
+
+    (*example->mutable_features()->mutable_feature())[name]
+        .mutable_bytes_list()
+        ->add_value(value);
   }
+
+  absl::Status AddLegacyFixedSystemCodingToExample(
+      const std::string& original_system,
+      const ::google::protobuf::Message& fixed_system_coding, const std::string& name,
+      bool append_system_to_feature_name, ::tensorflow::Example* example,
+      std::set<std::string>* tokenize_feature_set,
+      const std::set<std::string>& add_tokenize_feature_set,
+      const TextTokenizer& tokenizer, bool enable_attribution) {
+    const Descriptor* descriptor = fixed_system_coding.GetDescriptor();
+    const FieldDescriptor* code_field = descriptor->FindFieldByName("code");
+    const FieldDescriptor* display_field =
+        descriptor->FindFieldByName("display");
+
+    if (!code_field || !code_field->message_type() || !display_field ||
+        !display_field->message_type()) {
+      return absl::InvalidArgumentError(absl::StrCat(
+          "Invalid coding for AddLegacyFixedSystemCodingToExample: ",
+          descriptor->full_name()));
+    }
+
+    const Reflection* reflection = fixed_system_coding.GetReflection();
+    std::string code_scratch;
+    FHIR_ASSIGN_OR_RETURN(
+        const std::string& original_code,
+        GetPrimitiveStringValue(
+            reflection->GetMessage(fixed_system_coding, code_field),
+            &code_scratch));
+    std::string display_scratch;
+    FHIR_ASSIGN_OR_RETURN(
+        const std::string& original_display,
+        GetPrimitiveStringValue(
+            reflection->GetMessage(fixed_system_coding, display_field),
+            &display_scratch));
+
+    return AddCodingToExample(original_system, original_code, original_display,
+                              name, append_system_to_feature_name, example,
+                              tokenize_feature_set, add_tokenize_feature_set,
+                              tokenizer, enable_attribution);
+  }
+
+  absl::Status AddCodingToExample(
+      const std::string& original_system, const std::string& original_code,
+      const std::string& original_display, const std::string& name,
+      bool append_system_to_feature_name, ::tensorflow::Example* example,
+      std::set<std::string>* tokenize_feature_set,
+      const std::set<std::string>& add_tokenize_feature_set,
+      const TextTokenizer& tokenizer, bool enable_attribution) {
+    if (original_system.empty() || original_code.empty()) {
+      return absl::InvalidArgumentError(
+          "Encountered invalid Coding: must have `code` and `system`.");
+    }
+    const std::string system = absl::StrReplaceAll(
+        original_system, {{"://", "-"}, {":", "-"}, {"/", "-"}, {".", "-"}});
+    const std::string feature_name =
+        append_system_to_feature_name ? absl::StrCat(name, ".", system) : name;
+    const std::string code = append_system_to_feature_name
+                                 ? original_code
+                                 : absl::StrCat(system, ":", original_code);
+    (*example->mutable_features()->mutable_feature())[feature_name]
+        .mutable_bytes_list()
+        ->add_value(code);
+    if (!original_display.empty()) {
+      const std::string full_name = absl::StrCat(feature_name, ".display");
+      if (absl::GetFlag(FLAGS_tokenize_code_text_features)) {
+        tokenize_feature_set->insert(full_name);
+      }
+      AddValueAndOrTokensToExample(
+          *tokenize_feature_set, add_tokenize_feature_set, tokenizer,
+          absl::StrCat(name, ".", system, ".display"), original_display,
+          example, enable_attribution);
+    }
+    return absl::OkStatus();
+  }
+
+  const PrimitiveHandler* primitive_handler_;
+};
+
+StatusOr<int64_t> GetUnixSeconds(const Message& timelike) {
+  const ::google::protobuf::Descriptor* descriptor = timelike.GetDescriptor();
+  const ::google::protobuf::FieldDescriptor* value_field =
+      descriptor->FindFieldByName("value_us");
+  if (!IsPrimitive(descriptor) || !value_field ||
+      value_field->type() != ::google::protobuf::FieldDescriptor::Type::TYPE_INT64) {
+    return absl::InvalidArgumentError(absl::StrCat(
+        "Invalid type for GetAsAbslTime: ", descriptor->full_name()));
+  }
+  return absl::ToUnixSeconds(absl::FromUnixMicros(
+      timelike.GetReflection()->GetInt64(timelike, value_field)));
 }
 
-void MessageToExample(const google::protobuf::Message& message, const std::string& prefix,
-                      const TextTokenizer& tokenizer,
-                      ::tensorflow::Example* example, bool enable_attribution) {
+void Converter::MessageToExample(const Message& message,
+                                 const std::string& prefix,
+                                 const TextTokenizer& tokenizer,
+                                 ::tensorflow::Example* example,
+                                 bool enable_attribution) {
   std::set<std::string> tokenize_feature_set;
   const std::string& tokenize_feature_list =
       absl::GetFlag(FLAGS_tokenize_feature_list);
@@ -203,154 +260,100 @@ void MessageToExample(const google::protobuf::Message& message, const std::strin
       count = 1;
     }
     const std::string name = absl::StrCat(prefix, ".", field->json_name());
+    const auto* field_type = field->message_type();
     for (int i = 0; i < count; i++) {
       if (field->cpp_type() == google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
-        const google::protobuf::Message& child =
+        const Message& child =
             field->is_repeated()
                 ? reflection->GetRepeatedMessage(message, field, i)
                 : reflection->GetMessage(message, field);
 
-        // Handle some fhir types explicitly, including primitive STU3 types.
+        // Handle some fhir types explicitly, including primitive types.
         if (IsTypeOrProfileOfCode(child)) {
-          // Codes are emitted as-is, without tokenization.
-          stu3::proto::Code code;
-          CHECK(CopyCode(child, &code).ok());
           (*example->mutable_features()->mutable_feature())[name]
               .mutable_bytes_list()
-              ->add_value(code.value());
-        } else if (field->message_type()->full_name() ==
-                   Date::descriptor()->full_name()) {
-          Date date;
-          date.CopyFrom(child);
+              ->add_value(GetCodeAsString(child).ValueOrDie());
+        } else if (IsDate(field_type) || IsDateTime(field_type) ||
+                   IsTime(field_type) || IsInstant(field_type)) {
           (*example->mutable_features()->mutable_feature())[name]
               .mutable_int64_list()
-              ->add_value(
-                  absl::ToUnixSeconds(absl::FromUnixMicros(date.value_us())));
-        } else if (field->message_type()->full_name() ==
-                   DateTime::descriptor()->full_name()) {
-          DateTime datetime;
-          datetime.CopyFrom(child);
-          (*example->mutable_features()->mutable_feature())[name]
-              .mutable_int64_list()
-              ->add_value(absl::ToUnixSeconds(
-                  absl::FromUnixMicros(datetime.value_us())));
-        } else if (field->message_type()->full_name() ==
-                   Time::descriptor()->full_name()) {
-          Time time;
-          time.CopyFrom(child);
-          (*example->mutable_features()->mutable_feature())[name]
-              .mutable_int64_list()
-              ->add_value(
-                  absl::ToUnixSeconds(absl::FromUnixMicros(time.value_us())));
-        } else if (field->message_type()->full_name() ==
-                   Instant::descriptor()->full_name()) {
-          Instant instant;
-          instant.CopyFrom(child);
-          (*example->mutable_features()->mutable_feature())[name]
-              .mutable_int64_list()
-              ->add_value(absl::ToUnixSeconds(
-                  absl::FromUnixMicros(instant.value_us())));
-        } else if (field->message_type()->full_name() ==
-                   String::descriptor()->full_name()) {
-          String s;
-          s.CopyFrom(child);
+              ->add_value(GetUnixSeconds(child).ValueOrDie());
+        } else if (IsString(child)) {
+          const std::string& value =
+              primitive_handler_->GetStringValue(child).ValueOrDie();
           if (absl::GetFlag(FLAGS_tokenize_code_text_features) &&
               field->name() == "text" &&
               IsTypeOrProfileOfCodeableConcept(message)) {
-            AddTokensToExample(name, s.value(), tokenizer, example,
+            AddTokensToExample(name, value, tokenizer, example,
                                enable_attribution);
           } else {
             AddValueAndOrTokensToExample(
                 tokenize_feature_set, add_tokenize_feature_set, tokenizer, name,
-                s.value(), example, enable_attribution);
+                value, example, enable_attribution);
           }
-        } else if (field->message_type()->full_name() ==
-                   Xhtml::descriptor()->full_name()) {
-          Xhtml xhtml;
-          xhtml.CopyFrom(child);
+        } else if (IsXhtml(child)) {
+          std::string scratch;
           AddValueAndOrTokensToExample(
               tokenize_feature_set, add_tokenize_feature_set, tokenizer, name,
-              xhtml.value(), example, enable_attribution);
-        } else if (field->message_type()->full_name() ==
-                   Boolean::descriptor()->full_name()) {
-          Boolean boolean;
-          boolean.CopyFrom(child);
+              GetPrimitiveStringValue(child, &scratch).ValueOrDie(), example,
+              enable_attribution);
+        } else if (IsBoolean(child)) {
           (*example->mutable_features()->mutable_feature())[name]
               .mutable_bytes_list()
-              ->add_value(boolean.value() ? "true" : "false");
-        } else if (field->message_type()->full_name() ==
-                   Integer::descriptor()->full_name()) {
-          Integer integer;
-          integer.CopyFrom(child);
+              ->add_value(
+                  primitive_handler_->GetBooleanValue(child).ValueOrDie()
+                      ? "true"
+                      : "false");
+        } else if (IsInteger(child)) {
           (*example->mutable_features()->mutable_feature())[name]
               .mutable_int64_list()
-              ->add_value(integer.value());
-        } else if (field->message_type()->full_name() ==
-                   PositiveInt::descriptor()->full_name()) {
-          PositiveInt positive_int;
-          positive_int.CopyFrom(child);
+              ->add_value(
+                  primitive_handler_->GetIntegerValue(child).ValueOrDie());
+        } else if (IsPositiveInt(child)) {
           (*example->mutable_features()->mutable_feature())[name]
               .mutable_int64_list()
-              ->add_value(positive_int.value());
-        } else if (field->message_type()->full_name() ==
-                   Decimal::descriptor()->full_name()) {
-          Decimal decimal;
-          decimal.CopyFrom(child);
+              ->add_value(
+                  primitive_handler_->GetPositiveIntValue(child).ValueOrDie());
+        } else if (IsDecimal(child)) {
+          const std::string& value_as_string =
+              primitive_handler_->GetDecimalValue(child).ValueOrDie();
           double value_as_double;
-          CHECK(absl::SimpleAtod(decimal.value(), &value_as_double));
+          CHECK(absl::SimpleAtod(value_as_string, &value_as_double));
           (*example->mutable_features()->mutable_feature())[name]
               .mutable_float_list()
               ->add_value(value_as_double);
-        } else if (IsTypeOrProfileOfCoding(field->message_type())) {
+        } else if (IsTypeOrProfileOfCoding(field_type)) {
           // Codings are emitted with the system if we know it, as raw codes
           // otherwise.
           bool use_name_in_feature_name =
               IsTypeOrProfileOfCodeableConcept(message);
-          Coding coding;
-          auto status = CopyCoding(child, &coding);
-          if (!status.ok() &&
-              field->message_type()->full_name() ==
-                  stu3::proto::CodingWithFixedSystem::descriptor()
-                      ->full_name()) {
-            // TODO: remove this code path.
-            stu3::proto::CodingWithFixedSystem fixed_coding;
-            fixed_coding.CopyFrom(child);
-            *coding.mutable_code() = fixed_coding.code();
-            *coding.mutable_system()->mutable_value() =
-                GetInlinedCodingSystem(field);
-            if (fixed_coding.has_display()) {
-              *coding.mutable_display() = fixed_coding.display();
-            }
-            AddCodingToExample(coding, prefix, true, example,
-                               &tokenize_feature_set, add_tokenize_feature_set,
-                               tokenizer, enable_attribution);
+          if (field->message_type()->full_name() ==
+              "google.fhir.stu3.proto.CodingWithFixedSystem") {
+            // Legacy codepath for Stu3 fixed-system codings
+            FHIR_CHECK_OK(AddLegacyFixedSystemCodingToExample(
+                GetInlinedCodingSystem(field), child,
+                use_name_in_feature_name ? prefix : name,
+                use_name_in_feature_name, example, &tokenize_feature_set,
+                add_tokenize_feature_set, tokenizer, enable_attribution));
           } else {
-            CHECK(status.ok()) << status;
-            AddCodingToExample(coding, use_name_in_feature_name ? prefix : name,
-                               use_name_in_feature_name, example,
-                               &tokenize_feature_set, add_tokenize_feature_set,
-                               tokenizer, enable_attribution);
+            FHIR_CHECK_OK(AddCodingToExample(
+                primitive_handler_->GetCodingSystem(child).ValueOrDie(),
+                primitive_handler_->GetCodingCode(child).ValueOrDie(),
+                primitive_handler_->GetCodingDisplay(child).ValueOrDie(),
+                use_name_in_feature_name ? prefix : name,
+                use_name_in_feature_name, example, &tokenize_feature_set,
+                add_tokenize_feature_set, tokenizer, enable_attribution));
           }
-        } else if (field->message_type()->full_name() ==
-                   Extension::descriptor()->full_name()) {
+        } else if (IsExtension(child)) {
           // We do not emit extensions. To include data encoded in extensions
-          // in generated examples, please use profiled bundles as input.
-        } else if (field->message_type()->full_name() ==
-                       Identifier::descriptor()->full_name() ||
-                   field->message_type()->full_name() ==
-                       Id::descriptor()->full_name()) {
+          // in generated examples, use profiled bundles as input.
+        } else if (IsIdentifier(child)) {
           // We don't emit identifiers.
           // TODO: are there situations where we should?
-        } else if (field->message_type()->full_name() ==
-                   Base64Binary::descriptor()->full_name()) {
+        } else if (IsBase64Binary(child)) {
           // We don't emit Base64Binary.
           // TODO: are there situations where we should?
-        } else if (field->message_type()->full_name() ==
-                       Reference::descriptor()->full_name() ||
-                   field->message_type()->options().ExtensionSize(
-                       proto::fhir_reference_type) > 0 ||
-                   field->message_type()->full_name() ==
-                       Uri::descriptor()->full_name()) {
+        } else if (IsReference(child.GetDescriptor()) || IsUri(child)) {
           // We don't emit any stu3 references or URIs.
         } else {
           // We currently flatten repeated submessages. That could potentially
@@ -367,13 +370,15 @@ void MessageToExample(const google::protobuf::Message& message, const std::strin
   }
 }
 
-void ResourceToExample(const google::protobuf::Message& message,
-                       const TextTokenizer& tokenizer,
-                       ::tensorflow::Example* example,
-                       bool enable_attribution) {
+}  // namespace
+
+void ResourceToExample(const Message& message, const TextTokenizer& tokenizer,
+                       ::tensorflow::Example* example, bool enable_attribution,
+                       const PrimitiveHandler* primitive_handler) {
   const google::protobuf::Descriptor* descriptor = message.GetDescriptor();
-  MessageToExample(message, descriptor->name(), tokenizer, example,
-                   enable_attribution);
+  Converter(primitive_handler)
+      .MessageToExample(message, descriptor->name(), tokenizer, example,
+                        enable_attribution);
 }
 
 }  // namespace seqex

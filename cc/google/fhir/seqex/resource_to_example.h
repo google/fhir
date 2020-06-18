@@ -18,6 +18,7 @@
 #define GOOGLE_FHIR_SEQEX_RESOURCE_TO_EXAMPLE_H_
 
 #include "google/protobuf/message.h"
+#include "google/fhir/primitive_handler.h"
 #include "google/fhir/seqex/text_tokenizer.h"
 #include "tensorflow/core/example/example.pb.h"
 
@@ -31,7 +32,8 @@ namespace seqex {
 // tokenizer.
 void ResourceToExample(const google::protobuf::Message& message,
                        const TextTokenizer& tokenizer,
-                       ::tensorflow::Example* example, bool enable_attribution);
+                       ::tensorflow::Example* example, bool enable_attribution,
+                       const PrimitiveHandler* primitive_handler);
 
 }  // namespace seqex
 }  // namespace fhir

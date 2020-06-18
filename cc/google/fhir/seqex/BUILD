@@ -11,6 +11,7 @@ cc_library(
         ":example_key",
         ":feature_keys",
         ":resource_to_example",
+        ":stu3",
         "//cc/google/fhir:bundle_to_versioned_resources_converter",
         "//cc/google/fhir:util",
         "//cc/google/fhir/status",
@@ -122,17 +123,19 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":text_tokenizer",
+        "//cc/google/fhir:annotations",
         "//cc/google/fhir:codeable_concepts",
         "//cc/google/fhir:codes",
         "//cc/google/fhir:fhir_types",
+        "//cc/google/fhir:primitive_handler",
         "//cc/google/fhir:proto_util",
         "//cc/google/fhir:util",
         "//cc/google/fhir/status",
         "//proto:annotations_cc_proto",
-        "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/algorithm:container",
         "@com_google_absl//absl/flags:flag",
         "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
         "@com_google_protobuf//:protobuf",
@@ -149,6 +152,7 @@ cc_test(
         ":resource_to_example",
         ":text_tokenizer",
         "//cc/google/fhir:test_helper",
+        "//cc/google/fhir/stu3:primitive_handler",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/stu3:resources_cc_proto",
         "@com_google_absl//absl/flags:flag",
@@ -181,5 +185,16 @@ cc_test(
         "@com_google_absl//absl/flags:flag",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_library(
+    name = "stu3",
+    hdrs = ["stu3.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":resource_to_example",
+        ":text_tokenizer",
+        "//cc/google/fhir/stu3:primitive_handler",
     ],
 )
