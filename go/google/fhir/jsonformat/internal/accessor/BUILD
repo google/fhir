@@ -21,11 +21,11 @@ go_test(
     srcs = ["getter_setter_test.go"],
     embed = [":accessor"],
     deps = [
+        "//proto:version_config_go_proto",
+        "//proto/stu3:datatypes_go_proto",
+        "//proto/stu3:resources_go_proto",
         "@com_github_golang_protobuf//proto:go_default_library",
         "@com_github_google_go_cmp//cmp:go_default_library",
-        "@com_google_fhir//proto:version_config_go_proto",
-        "@com_google_fhir//proto/stu3:datatypes_go_proto",
-        "@com_google_fhir//proto/stu3:resources_go_proto",
         "@org_golang_google_protobuf//testing/protocmp:go_default_library",
     ],
 )
