@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+package fhir.go.jsonformat.internal.accessor;
+
+// StringList is a merely a list of strings which is supposed to be used only in
+// proto accessor test.
+message StringList {
+  // The list of strings
+  repeated string strings = 1;
+}

@@ -24,9 +24,9 @@ import (
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/protobuf/testing/protocmp"
 
+	atpb "google/fhir/jsonformat/internal/accessor/accessor_test_go_proto"
 	d3pb "google/fhir/proto/stu3/datatypes_go_proto"
 	r3pb "google/fhir/proto/stu3/resources_go_proto"
-	vc3pb "google/fhir/proto/version_config_go_proto"
 )
 
 func TestGetMessage(t *testing.T) {
@@ -199,8 +199,8 @@ func TestGetList(t *testing.T) {
 		},
 		{
 			name:            "get list of primitive type",
-			pb:              &vc3pb.ResourceConfig{DefaultTimestampFields: []string{"a", "b", "c"}},
-			path:            []string{"default_timestamp_fields"},
+			pb:              &atpb.StringList{Strings: []string{"a", "b", "c"}},
+			path:            []string{"strings"},
 			isListOfMessage: false,
 			expect:          append([]interface{}{}, "a", "b", "c"),
 		},
@@ -375,9 +375,9 @@ func TestGetString_Invalid(t *testing.T) {
 		},
 		{
 			name:          "get repeated string field",
-			pb:            &vc3pb.ResourceConfig{DefaultTimestampFields: []string{"a", "b", "c"}},
-			path:          []string{"default_timestamp_fields"},
-			expectInError: "field: default_timestamp_fields in google.fhir.proto.ResourceConfig is repeated",
+			pb:            &atpb.StringList{Strings: []string{"a", "b", "c"}},
+			path:          []string{"strings"},
+			expectInError: "field: strings in fhir.go.jsonformat.internal.accessor.StringList is repeated",
 		},
 		{
 			name: "get through repeated field",
@@ -1020,10 +1020,10 @@ func TestAppendValue(t *testing.T) {
 	}{
 		{
 			name:   "pritimive string",
-			pb:     &vc3pb.ResourceConfig{DefaultTimestampFields: []string{"a", "b", "c"}},
-			path:   []string{"default_timestamp_fields"},
+			pb:     &atpb.StringList{Strings: []string{"a", "b", "c"}},
+			path:   []string{"strings"},
 			value:  "d",
-			expect: &vc3pb.ResourceConfig{DefaultTimestampFields: []string{"a", "b", "c", "d"}},
+			expect: &atpb.StringList{Strings: []string{"a", "b", "c", "d"}},
 		},
 		{
 			name:   "message",
@@ -1065,7 +1065,7 @@ func TestAppendValue_Invalid(t *testing.T) {
 	}{
 		{
 			name:          "no field",
-			pb:            &vc3pb.ResourceConfig{DefaultTimestampFields: []string{"a", "b", "c"}},
+			pb:            &atpb.StringList{Strings: []string{"a", "b", "c"}},
 			path:          []string{},
 			value:         "d",
 			expectInError: "none given field, at least one field is required",
@@ -1086,10 +1086,10 @@ func TestAppendValue_Invalid(t *testing.T) {
 		},
 		{
 			name:          "primitive go kind mismatch",
-			pb:            &vc3pb.ResourceConfig{DefaultTimestampFields: []string{"a", "b", "c"}},
-			path:          []string{"default_timestamp_fields"},
+			pb:            &atpb.StringList{Strings: []string{"a", "b", "c"}},
+			path:          []string{"strings"},
 			value:         int32(123),
-			expectInError: "go kind mismatch, field: default_timestamp_fields in google.fhir.proto.ResourceConfig is repeated of kind: string, given value is of kind: int32",
+			expectInError: "go kind mismatch, field: strings in fhir.go.jsonformat.internal.accessor.StringList is repeated of kind: string, given value is of kind: int32",
 		},
 		{
 			name:          "not a proto message",

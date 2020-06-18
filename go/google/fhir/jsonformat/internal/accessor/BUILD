@@ -3,6 +3,7 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 
 go_library(
     name = "accessor",
@@ -21,11 +22,22 @@ go_test(
     srcs = ["getter_setter_test.go"],
     embed = [":accessor"],
     deps = [
-        "//proto:version_config_go_proto",
+        ":accessor_test_go_proto",
         "//proto/stu3:datatypes_go_proto",
         "//proto/stu3:resources_go_proto",
         "@com_github_golang_protobuf//proto:go_default_library",
         "@com_github_google_go_cmp//cmp:go_default_library",
         "@org_golang_google_protobuf//testing/protocmp:go_default_library",
     ],
+)
+
+proto_library(
+    name = "accessor_test_proto",
+    srcs = ["accessor_test.proto"],
+)
+
+go_proto_library(
+    name = "accessor_test_go_proto",
+    importpath = "google/fhir/jsonformat/internal/accessor/accessor_test_go_proto",
+    proto = ":accessor_test_proto",
 )
