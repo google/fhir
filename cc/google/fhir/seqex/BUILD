@@ -8,19 +8,15 @@ cc_library(
     hdrs = ["bundle_to_seqex_converter.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":converter_types",
         ":example_key",
         ":feature_keys",
         ":resource_to_example",
-        ":stu3",
         "//cc/google/fhir:bundle_to_versioned_resources_converter",
         "//cc/google/fhir:util",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto:version_config_cc_proto",
-        "//proto/stu3:codes_cc_proto",
-        "//proto/stu3:datatypes_cc_proto",
-        "//proto/stu3:extensions_cc_proto",
-        "//proto/stu3:resources_cc_proto",
         "@com_google_absl//absl/flags:flag",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
@@ -39,8 +35,11 @@ cc_test(
     ],
     deps = [
         ":bundle_to_seqex_converter",
+        ":converter_types",
         ":example_key",
+        ":stu3",
         ":text_tokenizer",
+        "//cc/google/fhir/stu3:primitive_handler",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/stu3:extensions_cc_proto",
         "//proto/stu3:resources_cc_proto",
@@ -55,20 +54,12 @@ cc_test(
 
 cc_library(
     name = "bundle_to_seqex_util",
-    srcs = ["bundle_to_seqex_util.cc"],
     hdrs = ["bundle_to_seqex_util.h"],
     strip_include_prefix = "//cc/",
     deps = [
-        ":bundle_to_seqex_converter",
         "//cc/google/fhir:extensions",
         "//cc/google/fhir:util",
         "//cc/google/fhir/status:statusor",
-        "//cc/google/fhir/stu3:extensions",
-        "//proto/stu3:datatypes_cc_proto",
-        "//proto/stu3:extensions_cc_proto",
-        "//proto/stu3:resources_cc_proto",
-        "@com_google_absl//absl/status",
-        "@com_google_absl//absl/time",
         "@com_google_protobuf//:protobuf",
     ],
 )
@@ -78,9 +69,11 @@ cc_test(
     srcs = ["bundle_to_seqex_util_test.cc"],
     deps = [
         ":bundle_to_seqex_util",
+        ":stu3",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:extensions_cc_proto",
+        "//proto/stu3:resources_cc_proto",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
     ],
@@ -189,12 +182,22 @@ cc_test(
 )
 
 cc_library(
+    name = "converter_types",
+    hdrs = ["converter_types.h"],
+    strip_include_prefix = "//cc/",
+)
+
+cc_library(
     name = "stu3",
     hdrs = ["stu3.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":bundle_to_seqex_converter",
+        ":bundle_to_seqex_util",
+        ":converter_types",
         ":resource_to_example",
         ":text_tokenizer",
         "//cc/google/fhir/stu3:primitive_handler",
+        "//proto/stu3:extensions_cc_proto",
     ],
 )

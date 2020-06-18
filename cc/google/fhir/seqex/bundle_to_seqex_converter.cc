@@ -33,8 +33,6 @@
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/google_extensions.pb.h"
 #include "proto/version_config.pb.h"
 #include "tensorflow/core/platform/env.h"
 
@@ -54,12 +52,7 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-using ::absl::Status;
-using ::google::fhir::StatusOr;
 using ::google::fhir::proto::VersionConfig;
-using ::google::fhir::stu3::google::EventLabel;
-using ::google::fhir::stu3::google::EventTrigger;
-using ::google::fhir::stu3::proto::ReferenceId;
 using ::tensorflow::Example;
 using ::tensorflow::Feature;
 using ::tensorflow::Features;
@@ -230,162 +223,13 @@ void AddBaggingFeatures(absl::Time event_time,
       ->add_value(encounter_id);
 }
 
-// TODO: StatusOr<Reference>
-bool GetReferenceId(const google::protobuf::Message& message,
-                    const std::string& field_name, ReferenceId* reference_id) {
-  const google::protobuf::Reflection* reflection = message.GetReflection();
-
-  const std::string base_name =
-      absl::StrCat(message.GetDescriptor()->name(), ".");
-  std::vector<const google::protobuf::FieldDescriptor*> fields;
-  reflection->ListFields(message, &fields);
-  for (const auto* field : fields) {
-    const std::string name = absl::StrCat(base_name, field->json_name());
-    if (name == field_name) {
-      CHECK_EQ(field->cpp_type(), google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE)
-          << "Field " << field_name << " has invalid cpp_type "
-          << field->cpp_type();
-      CHECK(!field->is_repeated())
-          << "Field " << field_name << " is a repeated field";
-      CHECK_EQ(field->message_type()->full_name(),
-               ReferenceId::descriptor()->full_name())
-          << "Field " << field_name << " has invalid message type "
-          << field->message_type()->full_name();
-      const google::protobuf::Message& child = reflection->GetMessage(message, field);
-      reference_id->CopyFrom(child);
-      return true;
-    } else if (absl::StartsWith(field_name, name) &&
-               field->type() == google::protobuf::FieldDescriptor::TYPE_MESSAGE) {
-      const google::protobuf::Message& reference = reflection->GetMessage(message, field);
-      std::string replaced_string;
-      absl::string_view::size_type pos = field_name.find(name, 0);
-      if (pos != absl::string_view::npos) {
-        replaced_string.append(field_name.data(), pos);
-        replaced_string.append(reference.GetDescriptor()->name());
-        absl::string_view::size_type remaining_pos = pos + name.length();
-        replaced_string.append(field_name.data() + remaining_pos,
-                               field_name.length() - remaining_pos);
-      } else {
-        replaced_string = field_name;
-      }
-      return GetReferenceId(reference, replaced_string, reference_id);
-    }
-  }
-  return false;
-}
-
-StatusOr<ExampleKey> ConvertTriggerEventToExampleKey(
-    const std::string& patient_id, const EventTrigger& trigger) {
-  if (!trigger.has_event_time()) {
-    return ::absl::InvalidArgumentError("trigger-without-time");
-  }
-  ExampleKey key;
-  key.patient_id = patient_id;
-
-  key.trigger_timestamp = absl::FromUnixMicros(trigger.event_time().value_us());
-  if (trigger.has_source()) {
-    key.source = ReferenceProtoToString(trigger.source()).ValueOrDie();
-  }
-  // ExampleKey here only used in testing code, thus without start / end is OK,
-  // but may make production debugging easier.
-  key.start = -1;
-  key.end = -1;
-  return key;
-}
-
-Features ConvertCurrentEventLabelToTensorflowFeatures(
-    const std::vector<EventLabel>& event_labels, absl::Time trigger_time) {
-  Features result;
-  for (const auto& event_label : event_labels) {
-    Feature class_names;
-    Feature integers;
-    Feature floats;
-    Feature booleans;
-    Feature datetime_secs;
-    for (const auto& label : event_label.label()) {
-      if (label.class_name().has_code()) {
-        auto bytes_list = class_names.mutable_bytes_list();
-        if (!label.class_name().code().value().empty()) {
-          bytes_list->add_value(label.class_name().code().value());
-        }
-      }
-      if (label.has_class_value()) {
-        if (label.class_value().has_integer()) {
-          integers.mutable_int64_list()->add_value(
-              label.class_value().integer().value());
-        }
-        if (label.class_value().has_decimal()) {
-          floats.mutable_float_list()->add_value(
-              GetDecimalValue(label.class_value().decimal()).ValueOrDie());
-        }
-        if (label.class_value().has_boolean()) {
-          booleans.mutable_int64_list()->add_value(
-              label.class_value().boolean().value());
-        }
-        if (label.class_value().has_date_time()) {
-          ::absl::Time date_time =
-              GetTimeFromTimelikeElement(label.class_value().date_time());
-          datetime_secs.mutable_int64_list()->add_value(
-              absl::ToUnixSeconds(date_time));
-        }
-        // Currently unused.
-        CHECK(!label.class_value().has_string_value());
-      }
-    }
-    // Even for current label, it's nice to have a .class suffix, as there are
-    // companion features e.g. label event time for metrics.
-    const std::string label_prefix =
-        absl::StrCat("label.", event_label.type().code().value());
-    (*result.mutable_feature())[absl::StrCat(label_prefix, ".class")] =
-        class_names;
-    ::absl::Time event_time =
-        GetTimeFromTimelikeElement(event_label.event_time());
-    (*result.mutable_feature())[absl::StrCat(label_prefix, ".timestamp_secs")]
-        .mutable_int64_list()
-        ->add_value(absl::ToUnixSeconds(event_time));
-    if (integers.int64_list().value_size() > 0) {
-      (*result
-            .mutable_feature())[absl::StrCat(label_prefix, ".value_integer")] =
-          integers;
-    }
-    if (floats.float_list().value_size() > 0) {
-      (*result.mutable_feature())[absl::StrCat(label_prefix, ".value_float")] =
-          floats;
-    }
-    if (booleans.int64_list().value_size() > 0) {
-      (*result
-            .mutable_feature())[absl::StrCat(label_prefix, ".value_boolean")] =
-          booleans;
-    }
-    if (datetime_secs.int64_list().value_size() > 0) {
-      (*result.mutable_feature())[absl::StrCat(
-          label_prefix, ".value_datetime_secs")] = datetime_secs;
-    }
-  }
-  return result;
-}
-
-Status BuildLabelsFromTriggerLabelPair(
-    const std::string& patient_id, const std::vector<TriggerLabelsPair>& labels,
-    std::map<ExampleKey, Features>* label_map) {
-  for (const auto& pair : labels) {
-    auto result = ConvertTriggerEventToExampleKey(patient_id, pair.first);
-    FHIR_RETURN_IF_ERROR(result.status());
-    const ExampleKey key = result.ValueOrDie();
-    if (label_map->find(key) == label_map->end()) {
-      label_map->insert(
-          std::make_pair(key, ConvertCurrentEventLabelToTensorflowFeatures(
-                                  pair.second, key.trigger_timestamp)));
-    }
-  }
-  return absl::OkStatus();
-}
-
 BaseBundleToSeqexConverter::BaseBundleToSeqexConverter(
+    const PrimitiveHandler* primitive_handler,
     const proto::VersionConfig& fhir_version_config,
     std::shared_ptr<const TextTokenizer> tokenizer,
     const bool enable_attribution, const bool generate_sequence_label)
-    : version_config_(fhir_version_config),
+    : primitive_handler_(primitive_handler),
+      version_config_(fhir_version_config),
       tokenizer_(tokenizer),
       enable_attribution_(enable_attribution),
       generate_sequence_label_(generate_sequence_label) {

@@ -54,7 +54,7 @@ cdef extern from "google/fhir/seqex/text_tokenizer.h" namespace "google::fhir::s
     @staticmethod
     shared_ptr[const TextTokenizer] FromFlags()
 
-cdef extern from "google/fhir/seqex/bundle_to_seqex_converter.h" namespace "google::fhir::seqex" nogil:
+cdef extern from "google/fhir/seqex/stu3.h" namespace "google::fhir::seqex_stu3" nogil:
   cdef cppclass UnprofiledBundleToSeqexConverter:
 
     UnprofiledBundleToSeqexConverter(const VersionConfig&, shared_ptr[const TextTokenizer], const bool, const bool),

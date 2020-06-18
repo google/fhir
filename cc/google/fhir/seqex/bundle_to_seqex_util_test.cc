@@ -19,12 +19,12 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "google/fhir/seqex/stu3.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/google_extensions.pb.h"
+#include "proto/stu3/resources.pb.h"
 
-using ::google::fhir::stu3::google::EventLabel;
-using ::google::fhir::stu3::google::EventTrigger;
 using ::google::fhir::stu3::proto::Bundle;
 using ::google::fhir::testutil::EqualsProto;
 using ::testing::ElementsAre;
@@ -35,8 +35,11 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-
 namespace {
+
+typedef seqex_stu3::ConverterTypes::EventLabel EventLabel;
+typedef seqex_stu3::ConverterTypes::EventTrigger EventTrigger;
+typedef seqex_stu3::ConverterTypes::TriggerLabelsPair TriggerLabelsPair;
 
 TEST(BundleToSeqexUtilTest, GetTriggerLabelsPairFromInputLabels) {
   EventLabel input_labels1;
@@ -100,7 +103,7 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPairFromInputLabels) {
     }
   )proto", &label3));
   std::vector<TriggerLabelsPair> got;
-  GetTriggerLabelsPairFromInputLabels(
+  GetTriggerLabelsPairFromInputLabels<seqex_stu3::ConverterTypes>(
       {input_labels1, input_labels2, input_labels3}, &got);
   EXPECT_EQ(2, got.size());
   EXPECT_THAT(
@@ -238,8 +241,9 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_NoLabel) {
   )proto", &trigger2));
   std::vector<TriggerLabelsPair> got_trigger_labels_pair_vector;
   int num_triggers_filtered = 0;
-  GetTriggerLabelsPair(bundle, label_names, "at_discharge",
-                       &got_trigger_labels_pair_vector, &num_triggers_filtered);
+  GetTriggerLabelsPair<seqex_stu3::ConverterTypes>(
+      bundle, label_names, "at_discharge", &got_trigger_labels_pair_vector,
+      &num_triggers_filtered);
   EXPECT_THAT(got_trigger_labels_pair_vector,
               UnorderedElementsAre(Pair(EqualsProto(trigger1), ElementsAre()),
                                    Pair(EqualsProto(trigger2), ElementsAre())));
@@ -396,8 +400,9 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithLabels) {
   )proto", &label2));
   std::vector<TriggerLabelsPair> got_trigger_labels_pair_vector;
   int num_triggers_filtered = 0;
-  GetTriggerLabelsPair(bundle, label_names, "at_discharge",
-                       &got_trigger_labels_pair_vector, &num_triggers_filtered);
+  GetTriggerLabelsPair<seqex_stu3::ConverterTypes>(
+      bundle, label_names, "at_discharge", &got_trigger_labels_pair_vector,
+      &num_triggers_filtered);
   EXPECT_THAT(
       got_trigger_labels_pair_vector,
       UnorderedElementsAre(
@@ -459,8 +464,9 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_TriggerFiltered) {
 
   std::vector<TriggerLabelsPair> got_trigger_labels_pair_vector;
   int num_triggers_filtered = 0;
-  GetTriggerLabelsPair(bundle, label_names, "at_discharge",
-                       &got_trigger_labels_pair_vector, &num_triggers_filtered);
+  GetTriggerLabelsPair<seqex_stu3::ConverterTypes>(
+      bundle, label_names, "at_discharge", &got_trigger_labels_pair_vector,
+      &num_triggers_filtered);
   EXPECT_TRUE(got_trigger_labels_pair_vector.empty());
   EXPECT_EQ(1, num_triggers_filtered);
 }
@@ -580,8 +586,9 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithMultipleTriggers) {
   )proto", &label1));
   std::vector<TriggerLabelsPair> got_trigger_labels_pair_vector;
   int num_triggers_filtered = 0;
-  GetTriggerLabelsPair(bundle, label_names, "at_7am",
-                       &got_trigger_labels_pair_vector, &num_triggers_filtered);
+  GetTriggerLabelsPair<seqex_stu3::ConverterTypes>(
+      bundle, label_names, "at_7am", &got_trigger_labels_pair_vector,
+      &num_triggers_filtered);
   EXPECT_THAT(
       got_trigger_labels_pair_vector,
       UnorderedElementsAre(
@@ -650,8 +657,9 @@ TEST(BundleToSeqexUtilTest, ExtractEventLabelProtoFromBundle) {
       }
     }
   )proto", &label));
-  EXPECT_THAT(ExtractLabelsFromBundle(bundle, {"test1"}),
-              UnorderedElementsAre(EqualsProto(label)));
+  EXPECT_THAT(
+      ExtractLabelsFromBundle<seqex_stu3::ConverterTypes>(bundle, {"test1"}),
+      UnorderedElementsAre(EqualsProto(label)));
 }
 }  // namespace
 

@@ -30,7 +30,7 @@ pyx_library(
     ],
     srcs_version = "PY3ONLY",
     deps = [
-        "//cc/google/fhir/seqex:bundle_to_seqex_converter",
+        "//cc/google/fhir/seqex:stu3",
         "//cc/google/fhir/seqex:text_tokenizer",
         "//proto:version_config_cc_proto",
         "//proto/stu3:extensions_cc_proto",
@@ -70,7 +70,7 @@ pyx_library(
     ],
     srcs_version = "PY3ONLY",
     deps = [
-        "//cc/google/fhir/seqex:bundle_to_seqex_util",
+        "//cc/google/fhir/seqex:stu3",
         "//proto/stu3:extensions_cc_proto",
         "//proto/stu3:resources_cc_proto",
     ],

@@ -26,8 +26,11 @@
 #include "absl/flags/declare.h"
 #include "absl/flags/flag.h"
 #include "absl/strings/substitute.h"
+#include "google/fhir/seqex/converter_types.h"
 #include "google/fhir/seqex/example_key.h"
+#include "google/fhir/seqex/stu3.h"
 #include "google/fhir/seqex/text_tokenizer.h"
+#include "google/fhir/stu3/primitive_handler.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/google_extensions.pb.h"
 #include "proto/stu3/resources.pb.h"
@@ -40,11 +43,16 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
+namespace {
+
 using google::fhir::proto::VersionConfig;
-using google::fhir::stu3::google::EventTrigger;
 using google::fhir::stu3::proto::Bundle;
 using ::google::fhir::testutil::EqualsProto;
 using ::tensorflow::SequenceExample;
+
+typedef seqex_stu3::ConverterTypes::EventLabel EventLabel;
+typedef seqex_stu3::ConverterTypes::EventTrigger EventTrigger;
+typedef seqex_stu3::ConverterTypes::TriggerLabelsPair TriggerLabelsPair;
 
 class BundleToSeqexConverterTest : public ::testing::Test {
  public:
@@ -67,9 +75,10 @@ class BundleToSeqexConverterTest : public ::testing::Test {
                    const std::map<std::string, SequenceExample>& expected) {
     // Until all config options for this object can be passed as args, we need
     // to initialize it after overriing the flags settings.
-    BundleToSeqexConverter<> converter(fhir_version_config_, tokenizer_,
-                                       false /* enable_attribution */,
-                                       false /* generate_sequence_label */);
+    BundleToSeqexConverter<seqex_stu3::ConverterTypes, stu3::proto::Bundle>
+        converter(fhir_version_config_, tokenizer_,
+                  false /* enable_attribution */,
+                  false /* generate_sequence_label */);
     std::map<std::string, int> counter_stats;
     ASSERT_TRUE(converter.Begin(input_key, bundle, trigger_labels_pair,
                                 &counter_stats));
@@ -1297,8 +1306,8 @@ TEST_F(BundleToSeqexConverterTest, RedactedFeatures) {
     }
     source { encounter_id { value: "1" } }
   )proto", &trigger));
-  std::vector<google::fhir::seqex::TriggerLabelsPair> trigger_labels_pair(
-      {{trigger, {}}});
+  std::vector<seqex_stu3::ConverterTypes::TriggerLabelsPair>
+      trigger_labels_pair({{trigger, {}}});
   Bundle bundle;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
@@ -1490,8 +1499,8 @@ TEST_F(BundleToSeqexConverterTest, JoinMedication) {
       timezone: "America/New_York"
     }
   )proto", &trigger));
-  std::vector<google::fhir::seqex::TriggerLabelsPair> trigger_labels_pair(
-      {{trigger, {}}});
+  std::vector<seqex_stu3::ConverterTypes::TriggerLabelsPair>
+      trigger_labels_pair({{trigger, {}}});
   Bundle bundle;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
@@ -1665,8 +1674,8 @@ TEST_F(BundleToSeqexConverterTest, EmptyLabel) {
       timezone: "America/New_York"
     }
   )proto", &trigger));
-  std::vector<google::fhir::seqex::TriggerLabelsPair> trigger_labels_pair(
-      {{trigger, {}}});
+  std::vector<seqex_stu3::ConverterTypes::TriggerLabelsPair>
+      trigger_labels_pair({{trigger, {}}});
   Bundle bundle;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
@@ -1848,8 +1857,8 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples) {
     }
     source { encounter_id { value: "2" } }
   )proto", &trigger2));
-  std::vector<google::fhir::seqex::TriggerLabelsPair> trigger_labels_pair(
-      {{trigger1, {}}, {trigger2, {}}});
+  std::vector<seqex_stu3::ConverterTypes::TriggerLabelsPair>
+      trigger_labels_pair({{trigger1, {}}, {trigger2, {}}});
   Bundle bundle;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
@@ -2117,9 +2126,10 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples) {
         })proto",
       &seqex2));
 
-  BundleToSeqexConverter<> converter(fhir_version_config_, tokenizer_,
-                                     false /* enable_attribution */,
-                                     false /*generate_sequence_label */);
+  BundleToSeqexConverter<seqex_stu3::ConverterTypes, stu3::proto::Bundle>
+      converter(fhir_version_config_,
+                tokenizer_, false /* enable_attribution */,
+                false /*generate_sequence_label */);
   std::map<std::string, int> counter_stats;
   ASSERT_TRUE(converter.Begin("Patient/14", bundle, trigger_labels_pair,
                               &counter_stats));
@@ -2154,8 +2164,8 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples_EnableAttribution) {
     }
     source { encounter_id { value: "2" } }
   )proto", &trigger2));
-  std::vector<google::fhir::seqex::TriggerLabelsPair> trigger_labels_pair(
-      {{trigger1, {}}, {trigger2, {}}});
+  std::vector<seqex_stu3::ConverterTypes::TriggerLabelsPair>
+      trigger_labels_pair({{trigger1, {}}, {trigger2, {}}});
   Bundle bundle;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
@@ -2471,9 +2481,10 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples_EnableAttribution) {
         })proto",
       &seqex2));
 
-  BundleToSeqexConverter<> converter(fhir_version_config_, tokenizer_,
-                                     true /* enable_attribution */,
-                                     false /* generate_sequence_label */);
+  BundleToSeqexConverter<seqex_stu3::ConverterTypes, stu3::proto::Bundle>
+      converter(fhir_version_config_,
+                tokenizer_, true /* enable_attribution */,
+                false /* generate_sequence_label */);
   std::map<std::string, int> counter_stats;
   ASSERT_TRUE(converter.Begin("Patient/14", bundle, trigger_labels_pair,
                               &counter_stats));
@@ -2489,6 +2500,8 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples_EnableAttribution) {
   ASSERT_TRUE(converter.Next());
   ASSERT_TRUE(converter.Done());
 }
+
+}  // namespace
 
 }  // namespace seqex
 }  // namespace fhir

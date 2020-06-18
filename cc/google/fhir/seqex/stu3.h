@@ -17,9 +17,13 @@
 #ifndef GOOGLE_FHIR_SEQEX_STU3_H_
 #define GOOGLE_FHIR_SEQEX_STU3_H_
 
+#include "google/fhir/seqex/bundle_to_seqex_converter.h"
+#include "google/fhir/seqex/bundle_to_seqex_util.h"
+#include "google/fhir/seqex/converter_types.h"
 #include "google/fhir/seqex/resource_to_example.h"
 #include "google/fhir/seqex/text_tokenizer.h"
 #include "google/fhir/stu3/primitive_handler.h"
+#include "proto/stu3/google_extensions.pb.h"
 
 namespace google {
 namespace fhir {
@@ -34,6 +38,39 @@ inline void ResourceToExample(const google::protobuf::Message& message,
   ResourceToExample(message, tokenizer, example, enable_attribution,
                     ::google::fhir::stu3::Stu3PrimitiveHandler::GetInstance());
 }
+
+typedef seqex::ConverterTypes<google::fhir::stu3::google::EventTrigger,
+                              google::fhir::stu3::google::EventLabel,
+                              stu3::Stu3PrimitiveHandler>
+    ConverterTypes;
+
+inline void GetTriggerLabelsPairFromInputLabels(
+    const std::vector<ConverterTypes::EventLabel>& input_labels,
+    std::vector<ConverterTypes::TriggerLabelsPair>* trigger_labels_pair) {
+  seqex::GetTriggerLabelsPairFromInputLabels<ConverterTypes>(
+      input_labels, trigger_labels_pair);
+}
+
+template <typename BundleLike>
+inline void GetTriggerLabelsPair(
+    const BundleLike& bundle, const std::set<std::string>& label_names,
+    const std::string& trigger_event_name,
+    std::vector<typename ConverterTypes::TriggerLabelsPair>*
+        trigger_labels_pair,
+    int* num_triggers_filtered) {
+  seqex::GetTriggerLabelsPair<ConverterTypes, BundleLike>(
+      bundle, label_names, trigger_event_name, trigger_labels_pair,
+      num_triggers_filtered);
+}
+
+template <typename BundleType>
+using BundleToSeqexConverter =
+    seqex::BundleToSeqexConverter<ConverterTypes, BundleType>;
+
+// Concrete unprofiled BundleToSeqexConverter specification for use by
+// python-c++ boundary
+typedef BundleToSeqexConverter<stu3::proto::Bundle>
+    UnprofiledBundleToSeqexConverter;
 
 }  // namespace seqex_stu3
 }  // namespace fhir

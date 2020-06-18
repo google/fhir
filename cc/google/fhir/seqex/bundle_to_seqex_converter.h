@@ -32,15 +32,12 @@
 #include "absl/strings/str_split.h"
 #include "absl/time/time.h"
 #include "google/fhir/bundle_to_versioned_resources_converter.h"
+#include "google/fhir/seqex/converter_types.h"
 #include "google/fhir/seqex/example_key.h"
 #include "google/fhir/seqex/feature_keys.h"
 #include "google/fhir/seqex/resource_to_example.h"
-#include "google/fhir/seqex/stu3.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/util.h"
-#include "proto/stu3/codes.pb.h"
-#include "proto/stu3/google_extensions.pb.h"
-#include "proto/stu3/resources.pb.h"
 #include "proto/version_config.pb.h"
 #include "tensorflow/core/example/example.pb.h"
 #include "tensorflow/core/example/feature.pb.h"
@@ -53,17 +50,9 @@ namespace google {
 namespace fhir {
 namespace seqex {
 
-typedef std::pair<stu3::google::EventTrigger,
-                  std::vector<stu3::google::EventLabel>>
-    TriggerLabelsPair;
-
 namespace internal {
 
 extern const char kClassInpatient[];
-
-Status BuildLabelsFromTriggerLabelPair(
-    const std::string& patient_id, const std::vector<TriggerLabelsPair>& labels,
-    std::map<ExampleKey, tensorflow::Features>* label_map);
 
 // Add resource-independent, label-independent dense features for bagging.
 void AddBaggingFeatures(absl::Time event_time,
@@ -90,9 +79,31 @@ void GetContextFeatures(
     google::protobuf::Map<std::string, tensorflow::Feature>* feature_map,
     const bool generate_sequence_label);
 
+template <typename ConverterTypes>
+StatusOr<ExampleKey> ConvertTriggerEventToExampleKey(
+    const std::string& patient_id,
+    const typename ConverterTypes::EventTrigger& trigger) {
+  if (!trigger.has_event_time()) {
+    return ::absl::InvalidArgumentError("trigger-without-time");
+  }
+  ExampleKey key;
+  key.patient_id = patient_id;
+
+  key.trigger_timestamp = absl::FromUnixMicros(trigger.event_time().value_us());
+  if (trigger.has_source()) {
+    key.source = ReferenceProtoToString(trigger.source()).ValueOrDie();
+  }
+  // ExampleKey here only used in testing code, thus without start / end is OK,
+  // but may make production debugging easier.
+  key.start = -1;
+  key.end = -1;
+  return key;
+}
+
 class BaseBundleToSeqexConverter {
  public:
-  BaseBundleToSeqexConverter(const proto::VersionConfig& fhir_version_config,
+  BaseBundleToSeqexConverter(const PrimitiveHandler* primitive_handler,
+                             const proto::VersionConfig& fhir_version_config,
                              std::shared_ptr<const TextTokenizer> tokenizer,
                              const bool enable_attribution,
                              const bool generate_sequence_label);
@@ -110,6 +121,7 @@ class BaseBundleToSeqexConverter {
       const std::vector<std::pair<std::pair<absl::Time, std::string>,
                                   tensorflow::Example>>& event_sequence);
 
+  const PrimitiveHandler* primitive_handler_;
   proto::VersionConfig version_config_;
   std::shared_ptr<const TextTokenizer> tokenizer_;
   std::set<std::string> redacted_features_;
@@ -141,20 +153,102 @@ class BaseBundleToSeqexConverter {
   bool generate_sequence_label_;
 };
 
+template <typename ConverterTypes, typename BundleLike>
+::tensorflow::Features ConvertCurrentEventLabelToTensorflowFeatures(
+    const std::vector<typename ConverterTypes::EventLabel>& event_labels,
+    absl::Time trigger_time) {
+  ::tensorflow::Features result;
+  for (const auto& event_label : event_labels) {
+    ::tensorflow::Feature class_names;
+    ::tensorflow::Feature integers;
+    ::tensorflow::Feature floats;
+    ::tensorflow::Feature booleans;
+    ::tensorflow::Feature datetime_secs;
+    for (const auto& label : event_label.label()) {
+      if (label.class_name().has_code()) {
+        auto bytes_list = class_names.mutable_bytes_list();
+        if (!label.class_name().code().value().empty()) {
+          bytes_list->add_value(label.class_name().code().value());
+        }
+      }
+      if (label.has_class_value()) {
+        if (label.class_value().has_integer()) {
+          integers.mutable_int64_list()->add_value(
+              label.class_value().integer().value());
+        }
+        if (label.class_value().has_decimal()) {
+          floats.mutable_float_list()->add_value(
+              GetDecimalValue(label.class_value().decimal()).ValueOrDie());
+        }
+        if (label.class_value().has_boolean()) {
+          booleans.mutable_int64_list()->add_value(
+              label.class_value().boolean().value());
+        }
+        if (label.class_value().has_date_time()) {
+          ::absl::Time date_time =
+              GetTimeFromTimelikeElement(label.class_value().date_time());
+          datetime_secs.mutable_int64_list()->add_value(
+              absl::ToUnixSeconds(date_time));
+        }
+        // Currently unused.
+        CHECK(!label.class_value().has_string_value());
+      }
+    }
+    // Even for current label, it's nice to have a .class suffix, as there are
+    // companion features e.g. label event time for metrics.
+    const std::string label_prefix =
+        absl::StrCat("label.", event_label.type().code().value());
+    (*result.mutable_feature())[absl::StrCat(label_prefix, ".class")] =
+        class_names;
+    ::absl::Time event_time =
+        GetTimeFromTimelikeElement(event_label.event_time());
+    (*result.mutable_feature())[absl::StrCat(label_prefix, ".timestamp_secs")]
+        .mutable_int64_list()
+        ->add_value(absl::ToUnixSeconds(event_time));
+    if (integers.int64_list().value_size() > 0) {
+      (*result
+            .mutable_feature())[absl::StrCat(label_prefix, ".value_integer")] =
+          integers;
+    }
+    if (floats.float_list().value_size() > 0) {
+      (*result.mutable_feature())[absl::StrCat(label_prefix, ".value_float")] =
+          floats;
+    }
+    if (booleans.int64_list().value_size() > 0) {
+      (*result
+            .mutable_feature())[absl::StrCat(label_prefix, ".value_boolean")] =
+          booleans;
+    }
+    if (datetime_secs.int64_list().value_size() > 0) {
+      (*result.mutable_feature())[absl::StrCat(
+          label_prefix, ".value_datetime_secs")] = datetime_secs;
+    }
+  }
+  return result;
+}
+
 }  // namespace internal
 
 // This class is not thread-safe.
-template <typename BundleLike = stu3::proto::Bundle>
+template <typename ConverterTypes, typename BundleLike>
 class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
  public:
-  using BaseBundleToSeqexConverter::BaseBundleToSeqexConverter;
+  BundleToSeqexConverter(const proto::VersionConfig& fhir_version_config,
+                         std::shared_ptr<const TextTokenizer> tokenizer,
+                         const bool enable_attribution,
+                         const bool generate_sequence_label)
+      : BaseBundleToSeqexConverter(
+            ConverterTypes::PrimitiveHandler::GetInstance(),
+            fhir_version_config, tokenizer, enable_attribution,
+            generate_sequence_label) {}
 
   // This API should be called once per bundle. When it returns, either the
   // iterator is Done(), or a valid key/example pair can be accessed using the
   // key() and example() accessors. To move to the next example, call Next();
-  bool Begin(const std::string& patient_id, const BundleLike& bundle,
-             const std::vector<TriggerLabelsPair>& labels,
-             std::map<std::string, int>* counter_stats);
+  bool Begin(
+      const std::string& patient_id, const BundleLike& bundle,
+      const std::vector<typename ConverterTypes::TriggerLabelsPair>& labels,
+      std::map<std::string, int>* counter_stats);
 
   // Return the example key.
   // Requires: !Done().
@@ -212,8 +306,9 @@ class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
     const absl::Time version_time = google::fhir::GetTimeFromTimelikeElement(
         resource.meta().last_updated());
     ::tensorflow::Example example;
-    seqex_stu3::ResourceToExample(resource, *tokenizer_, &example,
-                                  enable_attribution_);
+    seqex::ResourceToExample(resource, *tokenizer_, &example,
+                             enable_attribution_,
+                             ConverterTypes::PrimitiveHandler::GetInstance());
     if (enable_attribution_) {
       (*example.mutable_features()
             ->mutable_feature())[seqex::kResourceIdFeatureKey]
@@ -226,16 +321,10 @@ class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
   }
 };
 
-// Concrete BundleToSeqexConverter specification for use by python-c++ boundary
-// TODO: move this to stu3.h once that file is no longer a
-// dependency of this file.
-typedef BundleToSeqexConverter<stu3::proto::Bundle>
-    UnprofiledBundleToSeqexConverter;
-
 // Class implementation below.
 
-template <typename BundleLike>
-bool BundleToSeqexConverter<BundleLike>::Begin(
+template <typename ConverterTypes, typename BundleLike>
+bool BundleToSeqexConverter<ConverterTypes, BundleLike>::Begin(
     const std::string& patient_id, const BundleLike& bundle,
     const std::map<struct seqex::ExampleKey, ::tensorflow::Features>& label_map,
     std::map<std::string, int>* counter_stats) {
@@ -255,24 +344,34 @@ bool BundleToSeqexConverter<BundleLike>::Begin(
   return Next();
 }
 
-template <typename BundleLike>
-bool BundleToSeqexConverter<BundleLike>::Begin(
+template <typename ConverterTypes, typename BundleLike>
+bool BundleToSeqexConverter<ConverterTypes, BundleLike>::Begin(
     const std::string& patient_id, const BundleLike& bundle,
-    const std::vector<TriggerLabelsPair>& labels,
+    const std::vector<typename ConverterTypes::TriggerLabelsPair>& labels,
     std::map<std::string, int>* counter_stats) {
   std::map<struct ExampleKey, ::tensorflow::Features> label_map;
-  // TODO: Fail gracefully.
-  CHECK(
-      internal::BuildLabelsFromTriggerLabelPair(patient_id, labels, &label_map)
-          .ok());
+  for (const auto& pair : labels) {
+    auto result = internal::ConvertTriggerEventToExampleKey<ConverterTypes>(
+        patient_id, pair.first);
+    FHIR_CHECK_OK(result.status());
+    const seqex::ExampleKey key = result.ValueOrDie();
+    if (label_map.find(key) == label_map.end()) {
+      label_map.insert(std::make_pair(
+          key,
+          internal::ConvertCurrentEventLabelToTensorflowFeatures<ConverterTypes,
+                                                                 BundleLike>(
+              pair.second, key.trigger_timestamp)));
+    }
+  }
+
   return Begin(patient_id, bundle, label_map, counter_stats);
 }
 
 // Get a list of non-overlapping encounter boundaries. For now, we use only
 // inpatient encounters, and merge any encounters that overlap.
 
-template <typename BundleLike>
-void BundleToSeqexConverter<BundleLike>::GetEncounterBoundaries(
+template <typename ConverterTypes, typename BundleLike>
+void BundleToSeqexConverter<ConverterTypes, BundleLike>::GetEncounterBoundaries(
     const BundleLike& bundle,
     std::map<absl::Time, absl::Time>* encounter_boundaries) {
   // List inpatient encounter start and end times.
@@ -314,8 +413,8 @@ void BundleToSeqexConverter<BundleLike>::GetEncounterBoundaries(
   }
 }
 
-template <typename BundleLike>
-void BundleToSeqexConverter<BundleLike>::BundleToExamples(
+template <typename ConverterTypes, typename BundleLike>
+void BundleToSeqexConverter<ConverterTypes, BundleLike>::BundleToExamples(
     const BundleLike& bundle) {
   // Make a sequence sorted by timestamp.
   std::vector<
@@ -384,8 +483,8 @@ void BundleToSeqexConverter<BundleLike>::BundleToExamples(
   EventSequenceToExamples(encounter_boundaries, event_sequence);
 }
 
-template <typename BundleLike>
-void BundleToSeqexConverter<BundleLike>::BundleToContext(
+template <typename ConverterTypes, typename BundleLike>
+void BundleToSeqexConverter<ConverterTypes, BundleLike>::BundleToContext(
     const BundleLike& bundle) {
   // Add patient features to the context.
   for (const auto& entry : bundle.entry()) {
@@ -397,8 +496,9 @@ void BundleToSeqexConverter<BundleLike>::BundleToContext(
       }
       patient.clear_meta();
       patient.clear_deceased();
-      seqex_stu3::ResourceToExample(patient, *tokenizer_, &context_,
-                                    enable_attribution_);
+      seqex::ResourceToExample(patient, *tokenizer_, &context_,
+                               enable_attribution_,
+                               ConverterTypes::PrimitiveHandler::GetInstance());
       CHECK(patient.has_id());
       // Add patientId to context feature for cross validation.
       (*context_.mutable_features()->mutable_feature())[kPatientIdFeatureKey]

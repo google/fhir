@@ -39,7 +39,7 @@ cdef extern from "proto/stu3/resources.pb.h" namespace "google::fhir::stu3::prot
 
 ctypedef pair[EventTrigger, vector[EventLabel]] TriggerLabelsPair
 
-cdef extern from "google/fhir/seqex/bundle_to_seqex_util.h" namespace "google::fhir::seqex" nogil:
+cdef extern from "google/fhir/seqex/stu3.h" namespace "google::fhir::seqex_stu3" nogil:
 
   void GetTriggerLabelsPairFromInputLabels(
     const vector[EventLabel]&, vector[TriggerLabelsPair]*)
