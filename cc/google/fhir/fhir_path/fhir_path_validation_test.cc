@@ -68,30 +68,40 @@ using ::testing::StrEq;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
 
-#define USING(FhirNamespace) \
-using FhirNamespace::Boolean; \
-using FhirNamespace::Bundle; \
-using FhirNamespace::Decimal; \
-using FhirNamespace::Encounter; \
-using FhirNamespace::Observation; \
-using FhirNamespace::Organization; \
-using FhirNamespace::Period; \
-using FhirNamespace::Quantity; \
-using FhirNamespace::SimpleQuantity; \
-using FhirNamespace::String; \
-using FhirNamespace::ValueSet; \
+template <typename BundleType>
+struct FhirTypes {
+  using Boolean = FHIR_DATATYPE(BundleType, boolean);
+  using Bundle = BundleType;
+  using Decimal = FHIR_DATATYPE(BundleType, decimal);
+  using Encounter = BUNDLE_TYPE(BundleType, encounter);
+  using Observation = BUNDLE_TYPE(BundleType, observation);
+  using Organization = BUNDLE_TYPE(BundleType, organization);
+  using Period = FHIR_DATATYPE(BundleType, period);
+  using Quantity = FHIR_DATATYPE(BundleType, quantity);
+  using String = FHIR_DATATYPE(BundleType, string_value);
+  using ValueSet = BUNDLE_TYPE(BundleType, value_set);
+};
 
-#define FHIR_VERSION_TEST(CaseName, TestName, Body) \
-namespace r4test { \
-TEST(CaseName, TestName##R4) { \
-Body \
-} \
-} \
-namespace stu3test { \
-TEST(CaseName, TestName##STU3) { \
-Body \
-} \
-}
+struct Stu3Types : public FhirTypes<::google::fhir::stu3::proto::Bundle> {
+  using VersionedMessageValidator = ::google::fhir::stu3::FhirPathValidator;
+  using SimpleQuantity = ::google::fhir::stu3::proto::SimpleQuantity;
+};
+
+struct R4Types : public FhirTypes<::google::fhir::r4::core::Bundle> {
+  using VersionedMessageValidator = ::google::fhir::r4::FhirPathValidator;
+  using SimpleQuantity = ::google::fhir::r4::core::SimpleQuantity;
+};
+
+template <typename T>
+class FhirPathValidationTest : public ::testing::Test {
+ public:
+  static ValidationResults Validate(const ::google::protobuf::Message& message) {
+    return typename T::VersionedMessageValidator().Validate(message);
+  }
+};
+
+using TestTypes = ::testing::Types<Stu3Types, R4Types>;
+TYPED_TEST_SUITE(FhirPathValidationTest, TestTypes);
 
 template <typename T>
 T ParseFromString(const std::string& str) {
@@ -133,25 +143,13 @@ T ValidUsCorePatient() {
   )proto");
 }
 
-namespace r4test {
-USING(::google::fhir::r4::core)
-typedef ::google::fhir::r4::FhirPathValidator VersionedMessageValidator;
-}  // namespace r4test
-
-namespace stu3test {
-USING(::google::fhir::stu3::proto)
-typedef ::google::fhir::stu3::FhirPathValidator VersionedMessageValidator;
-}  // namespace stu3test
-
-
-FHIR_VERSION_TEST(FhirPathTest, ConstraintViolation, {
-  auto organization = ParseFromString<Organization>(R"proto(
-    name: {value: 'myorg'}
-    telecom: { use: {value: HOME}}
+TYPED_TEST(FhirPathValidationTest, ConstraintViolation) {
+  auto organization = ParseFromString<typename TypeParam::Organization>(R"proto(
+    name: { value: 'myorg' }
+    telecom: { use: { value: HOME } }
   )proto");
 
-  ValidationResults results =
-      VersionedMessageValidator().Validate(organization);
+  ValidationResults results = TestFixture::Validate(organization);
   EXPECT_FALSE(results.IsValid());
 
   ASSERT_THAT(
@@ -165,17 +163,17 @@ FHIR_VERSION_TEST(FhirPathTest, ConstraintViolation, {
                    StrEq("Organization.telecom[0]")),
           ResultOf([](auto x) { return x.EvaluationResult().ValueOrDie(); },
                    Eq(false)))));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, ConstraintViolationResultPaths, {
-  auto bundle = ParseFromString<Bundle>(
+TYPED_TEST(FhirPathValidationTest, ConstraintViolationResultPaths) {
+  auto bundle = ParseFromString<typename TypeParam::Bundle>(
       R"proto(entry: {
                 resource: {
                   organization: { telecom: { use: { value: HOME } } }
                 }
               })proto");
 
-  ValidationResults results = VersionedMessageValidator().Validate(bundle);
+  ValidationResults results = TestFixture::Validate(bundle);
 
   ASSERT_THAT(
       results.Results(),
@@ -196,37 +194,37 @@ FHIR_VERSION_TEST(FhirPathTest, ConstraintViolationResultPaths, {
                           StrEq("Bundle.entry")),
                  Property(&ValidationResult::NodePath,
                           StrEq("Bundle.entry[0]")))}));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, ConstraintSatisfied, {
-  Observation observation = ValidObservation<Observation>();
+TYPED_TEST(FhirPathValidationTest, ConstraintSatisfied) {
+  auto observation = ValidObservation<typename TypeParam::Observation>();
 
   // Ensure constraint succeeds with a value in the reference range
   // as required by FHIR.
   auto ref_range = observation.add_reference_range();
 
-  auto value = new Decimal();
+  auto value = new typename TypeParam::Decimal();
   value->set_allocated_value(new std::string("123.45"));
 
-  auto high = new SimpleQuantity();
+  auto high = new typename TypeParam::SimpleQuantity();
   high->set_allocated_value(value);
 
   ref_range->set_allocated_high(high);
 
-  EXPECT_TRUE(VersionedMessageValidator().Validate(observation).IsValid());
-})
+  EXPECT_TRUE(TestFixture::Validate(observation).IsValid());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, NestedConstraintViolated, {
-  ValueSet value_set = ValidValueSet<ValueSet>();
+TYPED_TEST(FhirPathValidationTest, NestedConstraintViolated) {
+  auto value_set = ValidValueSet<typename TypeParam::ValueSet>();
 
-  auto expansion = new ValueSet::Expansion;
+  auto expansion = new typename TypeParam::ValueSet::Expansion;
 
   // Add empty contains structure to violate FHIR constraint.
   expansion->add_contains();
   value_set.mutable_name()->set_value("Placeholder");
   value_set.set_allocated_expansion(expansion);
 
-  ValidationResults results = VersionedMessageValidator().Validate(value_set);
+  ValidationResults results = TestFixture::Validate(value_set);
   EXPECT_FALSE(results.IsValid());
 
   ASSERT_THAT(
@@ -240,40 +238,40 @@ FHIR_VERSION_TEST(FhirPathTest, NestedConstraintViolated, {
                    StrEq("ValueSet.expansion.contains[0]")),
           ResultOf([](auto x) { return x.EvaluationResult().ValueOrDie(); },
                    Eq(false)))));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, NestedConstraintSatisfied, {
-  ValueSet value_set = ValidValueSet<ValueSet>();
+TYPED_TEST(FhirPathValidationTest, NestedConstraintSatisfied) {
+  auto value_set = ValidValueSet<typename TypeParam::ValueSet>();
   value_set.mutable_name()->set_value("Placeholder");
 
-  auto expansion = new ValueSet::Expansion;
+  auto expansion = new typename TypeParam::ValueSet::Expansion;
   auto contains = expansion->add_contains();
 
   // Contains struct has value to satisfy FHIR constraint.
-  auto proto_string = new String();
+  auto proto_string = new typename TypeParam::String();
   proto_string->set_value("Placeholder value");
   contains->set_allocated_display(proto_string);
 
-  auto proto_boolean = new Boolean();
+  auto proto_boolean = new typename TypeParam::Boolean();
   proto_boolean->set_value(true);
   contains->set_allocated_abstract(proto_boolean);
 
   value_set.set_allocated_expansion(expansion);
 
-  EXPECT_TRUE(VersionedMessageValidator().Validate(value_set).IsValid());
-})
+  EXPECT_TRUE(TestFixture::Validate(value_set).IsValid());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, MessageLevelConstraint, {
-  Period period = ParseFromString<Period>(R"proto(
+TYPED_TEST(FhirPathValidationTest, MessageLevelConstraint) {
+  auto period = ParseFromString<typename TypeParam::Period>(R"proto(
     start: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
     end: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
   )proto");
 
-  EXPECT_TRUE(VersionedMessageValidator().Validate(period).IsValid());
-})
+  EXPECT_TRUE(TestFixture::Validate(period).IsValid());
+}
 
 // TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, MessageLevelConstraintViolated) {
+TEST(FhirPathValidationTest, MessageLevelConstraintViolated) {
   auto end_before_start_period = ParseFromString<r4::core::Period>(R"proto(
     start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
     end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
@@ -283,21 +281,20 @@ TEST(FhirPathTest, MessageLevelConstraintViolated) {
       r4::FhirPathValidator().Validate(end_before_start_period).IsValid());
 }
 
-FHIR_VERSION_TEST(FhirPathTest, NestedMessageLevelConstraint, {
-  auto start_with_no_end_encounter = ParseFromString<Encounter>(R"proto(
-    status { value: TRIAGED }
-    id { value: "123" }
-    period {
-      start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
-    }
-  )proto");
+TYPED_TEST(FhirPathValidationTest, NestedMessageLevelConstraint) {
+  auto start_with_no_end_encounter =
+      ParseFromString<typename TypeParam::Encounter>(R"proto(
+        status { value: TRIAGED }
+        id { value: "123" }
+        period {
+          start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
+        }
+      )proto");
 
-  EXPECT_TRUE(VersionedMessageValidator()
-                  .Validate(start_with_no_end_encounter)
-                  .IsValid());
-})
+  EXPECT_TRUE(TestFixture::Validate(start_with_no_end_encounter).IsValid());
+}
 
-TEST(FhirPathTest, NestedMessageLevelConstraintViolated) {
+TEST(FhirPathValidationTest, NestedMessageLevelConstraintViolated) {
   auto end_before_start_encounter = ParseFromString<r4::core::Encounter>(R"proto(
     status { value: TRIAGED }
     id { value: "123" }
@@ -312,13 +309,13 @@ TEST(FhirPathTest, NestedMessageLevelConstraintViolated) {
 }
 
 // TODO: Templatize tests to work with both STU3 and R4
-TEST(FhirPathTest, ProfiledEmptyExtension) {
+TEST(FhirPathValidationTest, ProfiledEmptyExtension) {
   r4::uscore::USCorePatientProfile patient =
       ValidUsCorePatient<r4::uscore::USCorePatientProfile>();
   EXPECT_TRUE(r4::FhirPathValidator().Validate(patient).IsValid());
 }
 
-TEST(FhirPathTest, ProfiledWithExtensionsR4) {
+TEST(FhirPathValidationTest, ProfiledWithExtensionsR4) {
   auto patient = ValidUsCorePatient<r4::uscore::USCorePatientProfile>();
   auto race = new r4::uscore::PatientUSCoreRaceExtension();
 
@@ -333,7 +330,7 @@ TEST(FhirPathTest, ProfiledWithExtensionsR4) {
   EXPECT_TRUE(r4::FhirPathValidator().Validate(patient).IsValid());
 }
 
-TEST(FhirPathTest, ProfiledWithExtensionsSTU3) {
+TEST(FhirPathValidationTest, ProfiledWithExtensionsSTU3) {
   auto patient = ValidUsCorePatient<stu3::uscore::UsCorePatient>();
   auto race = new stu3::uscore::PatientUSCoreRaceExtension();
 

@@ -225,7 +225,6 @@ cc_test(
         "//proto/stu3:resources_cc_proto",
         "//proto/stu3:uscore_cc_proto",
         "//proto/stu3:uscore_codes_cc_proto",
-        "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",

@@ -84,36 +84,6 @@ using testutil::EqualsProto;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
 
-#define USING(FhirNamespace) \
-using FhirNamespace::Boolean; \
-using FhirNamespace::Bundle; \
-using FhirNamespace::Code; \
-using FhirNamespace::CodeableConcept; \
-using FhirNamespace::DateTime; \
-using FhirNamespace::Decimal; \
-using FhirNamespace::Encounter; \
-using FhirNamespace::EncounterStatusCode; \
-using FhirNamespace::Integer; \
-using FhirNamespace::Observation; \
-using FhirNamespace::Parameters; \
-using FhirNamespace::Patient; \
-using FhirNamespace::Period; \
-using FhirNamespace::Quantity; \
-using FhirNamespace::String; \
-using FhirNamespace::StructureDefinition; \
-
-#define FHIR_VERSION_TEST(CaseName, TestName, Body) \
-namespace r4test { \
-TEST(CaseName, TestName##R4) { \
-Body \
-} \
-} \
-namespace stu3test { \
-TEST(CaseName, TestName##STU3) { \
-Body \
-} \
-} \
-
 MATCHER(EvalsToEmpty, "") {
   if (!arg.ok()) {
     *result_listener << "evaluation error: " << arg.status().message();
@@ -255,74 +225,9 @@ T ValidObservation() {
   )proto");
 }
 
-StatusOr<const ::google::fhir::PrimitiveHandler*> GetPrimitiveHandler(
-    const ::google::protobuf::Descriptor* descriptor) {
-  const auto version = GetFhirVersion(descriptor);
-  switch (version) {
-    case proto::FhirVersion::STU3:
-      return ::google::fhir::stu3::Stu3PrimitiveHandler::GetInstance();
-    case proto::FhirVersion::R4:
-      return ::google::fhir::r4::R4PrimitiveHandler::GetInstance();
-    default:
-      return InvalidArgumentError(
-          absl::StrCat("Unsupported FHIR version for FhirPath: ",
-                       FhirVersion_Name(version)));
-  }
-}
-
-StatusOr<CompiledExpression> Compile(
-      const ::google::protobuf::Descriptor* descriptor, const std::string& fhir_path) {
-  FHIR_ASSIGN_OR_RETURN(auto primitive_handler,
-                        GetPrimitiveHandler(descriptor));
-  return CompiledExpression::Compile(descriptor, primitive_handler, fhir_path);
-}
-
-namespace r4test {
-USING(::google::fhir::r4::core)
-
-template <typename T>
-StatusOr<EvaluationResult> Evaluate(const T& message,
-    const std::string& expression) {
-  FHIR_ASSIGN_OR_RETURN(auto compiled_expression,
-                        Compile(message.GetDescriptor(), expression));
-
-  return compiled_expression.Evaluate(message);
-}
-
-StatusOr<EvaluationResult> Evaluate(
-    const std::string& expression) {
-  // FHIRPath assumes a resource object during evaluation, so we use an
-  // encounter as a placeholder.
-  auto test_encounter = ValidEncounter<r4::core::Encounter>();
-  return Evaluate<r4::core::Encounter>(test_encounter, expression);
-}
-}  // namespace r4test
-
-namespace stu3test {
-USING(::google::fhir::stu3::proto)
-
-template <typename T>
-StatusOr<EvaluationResult> Evaluate(const T& message,
-    const std::string& expression) {
-  FHIR_ASSIGN_OR_RETURN(auto compiled_expression,
-                        Compile(message.GetDescriptor(), expression));
-
-  return compiled_expression.Evaluate(message);
-}
-
-StatusOr<EvaluationResult> Evaluate(
-    const std::string& expression) {
-  // FHIRPath assumes a resource object during evaluation, so we use an
-  // encounter as a placeholder.
-  auto test_encounter = ValidEncounter<stu3::proto::Encounter>();
-  return Evaluate<stu3::proto::Encounter>(test_encounter, expression);
-}
-}  // namespace stu3test
-
 template <typename T, typename P>
-T ToDateTime(const absl::CivilSecond civil_time,
-                    const absl::TimeZone zone,
-                    const P& precision) {
+T ToDateTime(const absl::CivilSecond civil_time, const absl::TimeZone zone,
+             const P& precision) {
   T date_time;
   date_time.set_value_us(absl::ToUnixMicros(absl::FromCivil(civil_time, zone)));
   date_time.set_timezone(zone.name());
@@ -338,78 +243,147 @@ P CreatePeriod(const D& start, const D& end) {
   return period;
 }
 
-FHIR_VERSION_TEST(FhirPathTest, TestExternalConstants, {
-  EXPECT_THAT(Evaluate("%ucum"),
+template <typename PrimitiveHandlerType>
+struct FhirTypes {
+  using Bundle = typename PrimitiveHandlerType::Bundle;
+
+  using Boolean = FHIR_DATATYPE(Bundle, boolean);
+  using Code = FHIR_DATATYPE(Bundle, code);
+  using CodeableConcept = FHIR_DATATYPE(Bundle, codeable_concept);
+  using DateTime = FHIR_DATATYPE(Bundle, date_time);
+  using Decimal = FHIR_DATATYPE(Bundle, decimal);
+  using Encounter = BUNDLE_TYPE(Bundle, encounter);
+  using Integer = FHIR_DATATYPE(Bundle, integer);
+  using Observation = BUNDLE_TYPE(Bundle, observation);
+  using Parameters = BUNDLE_TYPE(Bundle, parameters);
+  using Patient = BUNDLE_TYPE(Bundle, patient);
+  using Period = FHIR_DATATYPE(Bundle, period);
+  using Quantity = FHIR_DATATYPE(Bundle, quantity);
+  using Range = FHIR_DATATYPE(Bundle, range);
+  using String = FHIR_DATATYPE(Bundle, string_value);
+  using StructureDefinition = BUNDLE_TYPE(Bundle, structure_definition);
+
+  static const PrimitiveHandler* GetPrimitiveHandler() {
+    return PrimitiveHandlerType::GetInstance();
+  }
+};
+
+struct Stu3Types
+    : public FhirTypes<::google::fhir::stu3::Stu3PrimitiveHandler> {
+  using EncounterStatusCode = ::google::fhir::stu3::proto::EncounterStatusCode;
+};
+
+struct R4Types : public FhirTypes<::google::fhir::r4::R4PrimitiveHandler> {
+  using EncounterStatusCode = ::google::fhir::r4::core::EncounterStatusCode;
+};
+
+template <typename T>
+class FhirPathTest : public ::testing::Test {
+ public:
+  static StatusOr<CompiledExpression> Compile(
+      const ::google::protobuf::Descriptor* descriptor, const std::string& fhir_path) {
+    return CompiledExpression::Compile(descriptor, T::GetPrimitiveHandler(),
+                                       fhir_path);
+  }
+
+  template <typename R>
+  static StatusOr<EvaluationResult> Evaluate(const R& message,
+                                             const std::string& expression) {
+    FHIR_ASSIGN_OR_RETURN(auto compiled_expression,
+                          Compile(message.GetDescriptor(), expression));
+
+    return compiled_expression.Evaluate(message);
+  }
+
+  static StatusOr<EvaluationResult> Evaluate(const std::string& expression) {
+    // FHIRPath assumes a resource object during evaluation, so we use an
+    // encounter as a placeholder.
+    auto test_encounter = ValidEncounter<typename T::Encounter>();
+    return Evaluate<typename T::Encounter>(test_encounter, expression);
+  }
+};
+
+using TestTypes = ::testing::Types<Stu3Types, R4Types>;
+TYPED_TEST_SUITE(FhirPathTest, TestTypes);
+
+TYPED_TEST(FhirPathTest, TestExternalConstants) {
+  EXPECT_THAT(TestFixture::Evaluate("%ucum"),
               EvalsToStringThatMatches(StrEq("http://unitsofmeasure.org")));
 
-  EXPECT_THAT(Evaluate("%sct"),
+  EXPECT_THAT(TestFixture::Evaluate("%sct"),
               EvalsToStringThatMatches(StrEq("http://snomed.info/sct")));
 
-  EXPECT_THAT(Evaluate("%loinc"),
+  EXPECT_THAT(TestFixture::Evaluate("%loinc"),
               EvalsToStringThatMatches(StrEq("http://loinc.org")));
 
-  EXPECT_THAT(Evaluate("%unknown"), HasStatusCode(StatusCode::kNotFound));
-})
+  EXPECT_THAT(TestFixture::Evaluate("%unknown"),
+              HasStatusCode(StatusCode::kNotFound));
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestExternalConstantsContext, {
-  Encounter test_encounter = ValidEncounter<Encounter>();
+TYPED_TEST(FhirPathTest, TestExternalConstantsContext) {
+  auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
 
-  auto result = Evaluate(test_encounter, "%context").ValueOrDie();
+  auto result = TestFixture::Evaluate(test_encounter, "%context").ValueOrDie();
   EXPECT_THAT(result.GetMessages(),
               UnorderedElementsAreArray({EqualsProto(test_encounter)}));
-})
+}
 
-FHIR_VERSION_TEST(
-    FhirPathTest, TestExternalConstantsContextReferenceInExpressionParam, {
-      Encounter test_encounter = ValidEncounter<Encounter>();
+TYPED_TEST(FhirPathTest,
+           TestExternalConstantsContextReferenceInExpressionParam) {
+  auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
 
-      EXPECT_THAT(
-          Evaluate(test_encounter, "%context").ValueOrDie().GetMessages(),
-          UnorderedElementsAreArray({EqualsProto(test_encounter)}));
-    })
+  EXPECT_THAT(TestFixture::Evaluate(test_encounter, "%context")
+                  .ValueOrDie()
+                  .GetMessages(),
+              UnorderedElementsAreArray({EqualsProto(test_encounter)}));
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestMalformed, {
-  auto expr = Compile(Encounter::descriptor(), "expression->not->valid");
+TYPED_TEST(FhirPathTest, TestMalformed) {
+  auto expr = TestFixture::Compile(TypeParam::Encounter::descriptor(),
+                                   "expression->not->valid");
 
   EXPECT_THAT(expr, HasStatusCode(StatusCode::kInternal));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestGetDirectChild, {
-  Encounter test_encounter = ValidEncounter<Encounter>();
-  EvaluationResult result = Evaluate(test_encounter, "status").ValueOrDie();
+TYPED_TEST(FhirPathTest, TestGetDirectChild) {
+  auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
+  EvaluationResult result =
+      TestFixture::Evaluate(test_encounter, "status").ValueOrDie();
 
   EXPECT_THAT(
       result.GetMessages(),
       UnorderedElementsAreArray({EqualsProto(test_encounter.status())}));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestGetGrandchild, {
-  Encounter test_encounter = ValidEncounter<Encounter>();
+TYPED_TEST(FhirPathTest, TestGetGrandchild) {
+  auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
   EvaluationResult result =
-      Evaluate(test_encounter, "period.start").ValueOrDie();
+      TestFixture::Evaluate(test_encounter, "period.start").ValueOrDie();
 
   EXPECT_THAT(result.GetMessages(), UnorderedElementsAreArray({EqualsProto(
                                         test_encounter.period().start())}));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestGetEmptyGrandchild, {
-  EXPECT_THAT(Evaluate(ValidEncounter<Encounter>(), "period.end"),
-              EvalsToEmpty());
-})
+TYPED_TEST(FhirPathTest, TestGetEmptyGrandchild) {
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
+                            "period.end"),
+      EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFieldExists, {
-  Encounter test_encounter = ValidEncounter<Encounter>();
+TYPED_TEST(FhirPathTest, TestFieldExists) {
+  auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
   test_encounter.mutable_class_value()->mutable_display()->set_value("foo");
 
   EvaluationResult root_result =
-      Evaluate(test_encounter, "period").ValueOrDie();
+      TestFixture::Evaluate(test_encounter, "period").ValueOrDie();
   EXPECT_THAT(
       root_result.GetMessages(),
       UnorderedElementsAreArray({EqualsProto(test_encounter.period())}));
 
   // Tests the conversion from camelCase to snake_case
   EvaluationResult camel_case_result =
-      Evaluate(test_encounter, "statusHistory").ValueOrDie();
+      TestFixture::Evaluate(test_encounter, "statusHistory").ValueOrDie();
   EXPECT_THAT(camel_case_result.GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(test_encounter.status_history(0))}));
@@ -417,123 +391,139 @@ FHIR_VERSION_TEST(FhirPathTest, TestFieldExists, {
   // Test that the json_name field annotation is used when searching for a
   // field.
   EvaluationResult json_name_alias_result =
-      Evaluate(test_encounter, "class").ValueOrDie();
+      TestFixture::Evaluate(test_encounter, "class").ValueOrDie();
   EXPECT_THAT(
       json_name_alias_result.GetMessages(),
       UnorderedElementsAreArray({EqualsProto(test_encounter.class_value())}));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestNoSuchField, {
-  auto root_expr = Compile(Encounter::descriptor(), "bogusrootfield");
+TYPED_TEST(FhirPathTest, TestNoSuchField) {
+  auto root_expr = TestFixture::Compile(TypeParam::Encounter::descriptor(),
+                                        "bogusrootfield");
 
   EXPECT_THAT(root_expr, HasStatusCode(StatusCode::kNotFound));
   EXPECT_NE(root_expr.status().message().find("bogusrootfield"),
             std::string::npos);
 
-  auto child_expr = Compile(Encounter::descriptor(), "period.boguschildfield");
+  auto child_expr = TestFixture::Compile(TypeParam::Encounter::descriptor(),
+                                         "period.boguschildfield");
 
   EXPECT_THAT(child_expr, HasStatusCode(StatusCode::kNotFound));
   EXPECT_NE(child_expr.status().message().find("boguschildfield"),
             std::string::npos);
 
-  EXPECT_THAT(Evaluate(ValidEncounter<Encounter>(),
-                       "(period | status).boguschildfield"),
-              EvalsToEmpty());
-})
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
+                            "(period | status).boguschildfield"),
+      EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestNoSuchFunction, {
-  auto root_expr = Compile(Encounter::descriptor(), "period.bogusfunction()");
+TYPED_TEST(FhirPathTest, TestNoSuchFunction) {
+  auto root_expr = TestFixture::Compile(TypeParam::Encounter::descriptor(),
+                                        "period.bogusfunction()");
 
   EXPECT_THAT(root_expr, HasStatusCode(StatusCode::kNotFound));
   EXPECT_NE(root_expr.status().message().find("bogusfunction"),
             std::string::npos);
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionTopLevelInvocation, {
-  EXPECT_THAT(Evaluate("exists()"), EvalsToTrue());
-})
+TYPED_TEST(FhirPathTest, TestFunctionTopLevelInvocation) {
+  EXPECT_THAT(TestFixture::Evaluate("exists()"), EvalsToTrue());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionExists, {
-  EXPECT_THAT(Evaluate(ValidEncounter<Encounter>(), "period.start.exists()"),
-              EvalsToTrue());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionExistsNegation, {
+TYPED_TEST(FhirPathTest, TestFunctionExists) {
   EXPECT_THAT(
-      Evaluate(ValidEncounter<Encounter>(), "period.start.exists().not()"),
-      EvalsToFalse());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionNotExists, {
-  EXPECT_THAT(
-      Evaluate(ValidEncounter<Encounter>(), "period.end.exists()"),
-      EvalsToFalse());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionNotExistsNegation, {
-  EXPECT_THAT(
-      Evaluate(ValidEncounter<Encounter>(), "period.end.exists().not()"),
+      TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
+                            "period.start.exists()"),
       EvalsToTrue());
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionHasValue, {
-  EXPECT_THAT(Evaluate(ValidEncounter<Encounter>(), "period.start.hasValue()"),
-              EvalsToTrue());
-})
+TYPED_TEST(FhirPathTest, TestFunctionExistsNegation) {
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
+                            "period.start.exists().not()"),
+      EvalsToFalse());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestLogicalValueFieldExists, {
+TYPED_TEST(FhirPathTest, TestFunctionNotExists) {
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
+                            "period.end.exists()"),
+      EvalsToFalse());
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionNotExistsNegation) {
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
+                            "period.end.exists().not()"),
+      EvalsToTrue());
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionHasValue) {
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
+                            "period.start.hasValue()"),
+      EvalsToTrue());
+}
+
+TYPED_TEST(FhirPathTest, TestLogicalValueFieldExists) {
   // The logical .value field on primitives should return the primitive itself.
-  Quantity quantity;
+  typename TypeParam::Quantity quantity;
   quantity.mutable_value()->set_value("100");
-  EXPECT_THAT(Evaluate(quantity, "value.value.exists()"), EvalsToTrue());
-})
+  EXPECT_THAT(TestFixture::Evaluate(quantity, "value.value.exists()"),
+              EvalsToTrue());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionHasValueNegation, {
-  Encounter test_encounter = ValidEncounter<Encounter>();
-  EXPECT_THAT(Evaluate(test_encounter, "period.start.hasValue().not()"),
-              EvalsToFalse());
+TYPED_TEST(FhirPathTest, TestFunctionHasValueNegation) {
+  auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
+  EXPECT_THAT(
+      TestFixture::Evaluate(test_encounter, "period.start.hasValue().not()"),
+      EvalsToFalse());
 
   test_encounter.mutable_period()->clear_start();
-  EXPECT_THAT(Evaluate(test_encounter, "period.start.hasValue().not()"),
-              EvalsToTrue());
-})
+  EXPECT_THAT(
+      TestFixture::Evaluate(test_encounter, "period.start.hasValue().not()"),
+      EvalsToTrue());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionChildren, {
-  StructureDefinition structure_definition =
-      ParseFromString<StructureDefinition>(R"proto(
-        name {value: "foo"}
-        context_invariant {value: "bar"}
-        snapshot {element {label {value: "snapshot"}}}
-        differential {element {label {value: "differential"}}}
+TYPED_TEST(FhirPathTest, TestFunctionChildren) {
+  auto structure_definition =
+      ParseFromString<typename TypeParam::StructureDefinition>(R"proto(
+        name { value: "foo" }
+        context_invariant { value: "bar" }
+        snapshot { element { label { value: "snapshot" } } }
+        differential { element { label { value: "differential" } } }
       )proto");
 
-  EXPECT_THAT(
-      Evaluate(structure_definition, "children()").ValueOrDie().GetMessages(),
-      UnorderedElementsAreArray(
-          {EqualsProto(structure_definition.name()),
-           EqualsProto(structure_definition.context_invariant(0)),
-           EqualsProto(structure_definition.snapshot()),
-           EqualsProto(structure_definition.differential())}));
+  EXPECT_THAT(TestFixture::Evaluate(structure_definition, "children()")
+                  .ValueOrDie()
+                  .GetMessages(),
+              UnorderedElementsAreArray(
+                  {EqualsProto(structure_definition.name()),
+                   EqualsProto(structure_definition.context_invariant(0)),
+                   EqualsProto(structure_definition.snapshot()),
+                   EqualsProto(structure_definition.differential())}));
 
   EXPECT_THAT(
-      Evaluate(structure_definition, "children().element")
-          .ValueOrDie().GetMessages(),
+      TestFixture::Evaluate(structure_definition, "children().element")
+          .ValueOrDie()
+          .GetMessages(),
       UnorderedElementsAreArray(
           {EqualsProto(structure_definition.snapshot().element(0)),
            EqualsProto(structure_definition.differential().element(0))}));
-});
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionDescendants, {
-  StructureDefinition structure_definition =
-      ParseFromString<StructureDefinition>(R"proto(
-        name {value: "foo"}
-        context_invariant {value: "bar"}
-        snapshot {element {label {value: "snapshot"}}}
-        differential {element {label {value: "differential"}}}
+TYPED_TEST(FhirPathTest, TestFunctionDescendants) {
+  auto structure_definition =
+      ParseFromString<typename TypeParam::StructureDefinition>(R"proto(
+        name { value: "foo" }
+        context_invariant { value: "bar" }
+        snapshot { element { label { value: "snapshot" } } }
+        differential { element { label { value: "differential" } } }
       )proto");
 
   EXPECT_THAT(
-      Evaluate(structure_definition, "descendants()")
+      TestFixture::Evaluate(structure_definition, "descendants()")
           .ValueOrDie()
           .GetMessages(),
       UnorderedElementsAreArray(
@@ -546,1295 +536,1433 @@ FHIR_VERSION_TEST(FhirPathTest, TestFunctionDescendants, {
            EqualsProto(structure_definition.differential().element(0)),
            EqualsProto(
                structure_definition.differential().element(0).label())}));
-});
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionDescendantsOnEmptyCollection, {
-  EXPECT_THAT(Evaluate("{}.descendants()"), EvalsToEmpty());
-});
+TYPED_TEST(FhirPathTest, TestFunctionDescendantsOnEmptyCollection) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.descendants()"), EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionContains, {
+TYPED_TEST(FhirPathTest, TestFunctionContains) {
   // Wrong number and/or types of arguments.
-  EXPECT_THAT(Evaluate("'foo'.contains()"),
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.contains()"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("'foo'.contains(1)"),
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.contains(1)"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("'foo'.contains('a', 'b')"),
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.contains('a', 'b')"),
               HasStatusCode(StatusCode::kInvalidArgument));
 
-  EXPECT_THAT(Evaluate("'foo'.contains('')"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo'.contains('o')"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo'.contains('foo')"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo'.contains('foob')"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("''.contains('')"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("''.contains('foo')"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.contains('')"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.contains('o')"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.contains('foo')"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.contains('foob')"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("''.contains('')"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("''.contains('foo')"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("{}.contains('foo')"), EvalsToEmpty());
-})
+  EXPECT_THAT(TestFixture::Evaluate("{}.contains('foo')"), EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionEndsWith, {
+TYPED_TEST(FhirPathTest, TestFunctionEndsWith) {
   // Missing argument
-  EXPECT_THAT(Evaluate("'foo'.endsWith()"),
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.endsWith()"),
               HasStatusCode(StatusCode::kInvalidArgument));
 
   // Empty colection argument
-  EXPECT_THAT(Evaluate("'foo'.endsWith({})"),
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.endsWith({})"),
               HasStatusCode(StatusCode::kInvalidArgument));
 
   // Too many arguments
-  EXPECT_THAT(Evaluate("'foo'.endsWith('foo', 'foo')"),
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.endsWith('foo', 'foo')"),
               HasStatusCode(StatusCode::kInvalidArgument));
 
   // Wrong argument type
-  EXPECT_THAT(Evaluate("'foo'.endsWith(1)"),
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.endsWith(1)"),
               HasStatusCode(StatusCode::kInvalidArgument));
 
   // Function does not exist for non-string type
-  EXPECT_THAT(Evaluate("1.endsWith('1')"),
+  EXPECT_THAT(TestFixture::Evaluate("1.endsWith('1')"),
               HasStatusCode(StatusCode::kInvalidArgument));
 
   // Basic cases
-  EXPECT_THAT(Evaluate("{}.endsWith('')"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("''.endsWith('')"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo'.endsWith('')"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo'.endsWith('o')"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo'.endsWith('foo')"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo'.endsWith('bfoo')"), EvalsToFalse());
-})
+  EXPECT_THAT(TestFixture::Evaluate("{}.endsWith('')"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("''.endsWith('')"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.endsWith('')"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.endsWith('o')"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.endsWith('foo')"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.endsWith('bfoo')"), EvalsToFalse());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionStartsWith, {
+TYPED_TEST(FhirPathTest, TestFunctionStartsWith) {
   // Missing argument
-  EXPECT_THAT(Evaluate("'foo'.startsWith()"),
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.startsWith()"),
               HasStatusCode(StatusCode::kInvalidArgument));
 
   // Too many arguments
-  EXPECT_THAT(Evaluate("'foo'.startsWith('foo', 'foo')"),
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.startsWith('foo', 'foo')"),
               HasStatusCode(StatusCode::kInvalidArgument));
 
   // Wrong argument type
-  EXPECT_THAT(Evaluate("'foo'.startsWith(1)"),
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.startsWith(1)"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("'foo'.startsWith(1.0)"),
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.startsWith(1.0)"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("'foo'.startsWith(@2015-02-04T14:34:28Z)"),
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.startsWith(@2015-02-04T14:34:28Z)"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("'foo'.startsWith(true)"),
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.startsWith(true)"),
               HasStatusCode(StatusCode::kInvalidArgument));
 
   // Function does not exist for non-string type
-  EXPECT_THAT(Evaluate("1.startsWith(1)"),
+  EXPECT_THAT(TestFixture::Evaluate("1.startsWith(1)"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("1.startsWith('1')"),
+  EXPECT_THAT(TestFixture::Evaluate("1.startsWith('1')"),
               HasStatusCode(StatusCode::kInvalidArgument));
 
   // Basic cases
-  EXPECT_THAT(Evaluate("{}.startsWith('')"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("''.startsWith('')"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo'.startsWith('')"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo'.startsWith('f')"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo'.startsWith('foo')"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo'.startsWith('foob')"), EvalsToFalse());
-})
+  EXPECT_THAT(TestFixture::Evaluate("{}.startsWith('')"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("''.startsWith('')"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.startsWith('')"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.startsWith('f')"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.startsWith('foo')"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.startsWith('foob')"),
+              EvalsToFalse());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionStartsWithSelfReference, {
-  EXPECT_THAT(Evaluate(ValidObservation<Observation>(),
-                       "code.coding.code.startsWith(code.coding.code)"),
-              EvalsToTrue());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionStartsWithInvokedOnNonString, {
+TYPED_TEST(FhirPathTest, TestFunctionStartsWithSelfReference) {
   EXPECT_THAT(
-      Evaluate(ValidObservation<Observation>(), "code.startsWith('foo')"),
-      HasStatusCode(StatusCode::kInvalidArgument));
-})
+      TestFixture::Evaluate(ValidObservation<typename TypeParam::Observation>(),
+                            "code.coding.code.startsWith(code.coding.code)"),
+      EvalsToTrue());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionIndexOf, {
-  EXPECT_THAT(Evaluate("'abcdefg'.indexOf('bc')"), EvalsToInteger(1));
-  EXPECT_THAT(Evaluate("'abcdefg'.indexOf('x')"), EvalsToInteger(-1));
-  EXPECT_THAT(Evaluate("'abcdefg'.indexOf('abcdefg')"), EvalsToInteger(0));
-  EXPECT_THAT(Evaluate("'abcdefg'.indexOf('')"), EvalsToInteger(0));
+TYPED_TEST(FhirPathTest, TestFunctionStartsWithInvokedOnNonString) {
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidObservation<typename TypeParam::Observation>(),
+                            "code.startsWith('foo')"),
+      HasStatusCode(StatusCode::kInvalidArgument));
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionIndexOf) {
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.indexOf('bc')"),
+              EvalsToInteger(1));
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.indexOf('x')"),
+              EvalsToInteger(-1));
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.indexOf('abcdefg')"),
+              EvalsToInteger(0));
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.indexOf('')"),
+              EvalsToInteger(0));
 
   // http://hl7.org/fhirpath/N1/#indexofsubstring-string-integer
   // If the input or substring is empty ({ }), the result is empty ({ }).
-  EXPECT_THAT(Evaluate("{}.indexOf('')"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("''.indexOf({})"), EvalsToEmpty());
-})
+  EXPECT_THAT(TestFixture::Evaluate("{}.indexOf('')"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("''.indexOf({})"), EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionUpper, {
-  EXPECT_THAT(Evaluate("{}.upper()"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("''.upper()"), EvalsToStringThatMatches(StrEq("")));
-  EXPECT_THAT(Evaluate("'aBa'.upper()"),
-              EvalsToStringThatMatches(StrEq("ABA")));
-  EXPECT_THAT(Evaluate("'ABA'.upper()"),
-              EvalsToStringThatMatches(StrEq("ABA")));
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionLower, {
-  EXPECT_THAT(Evaluate("{}.lower()"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("''.lower()"), EvalsToStringThatMatches(StrEq("")));
-  EXPECT_THAT(Evaluate("'aBa'.lower()"),
-              EvalsToStringThatMatches(StrEq("aba")));
-  EXPECT_THAT(Evaluate("'aba'.lower()"),
-              EvalsToStringThatMatches(StrEq("aba")));
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionMatches, {
-  EXPECT_THAT(Evaluate("{}.matches('')"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("''.matches('')"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'a'.matches('a')"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'abc'.matches('a')"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("'abc'.matches('...')"), EvalsToTrue());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionReplaceMatches, {
-  EXPECT_THAT(Evaluate("{}.replaceMatches('', '')"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("'a'.replaceMatches('.', 'b')"),
-              EvalsToStringThatMatches(StrEq("b")));
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionReplace, {
-  EXPECT_THAT(Evaluate("{}.replace('', '')"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("''.replace({}, '')"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("''.replace('', {})"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("''.replace('', 'x')"),
+TYPED_TEST(FhirPathTest, TestFunctionUpper) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.upper()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("''.upper()"),
               EvalsToStringThatMatches(StrEq("")));
-  EXPECT_THAT(Evaluate("'abcdefg'.replace('x', '123')"),
+  EXPECT_THAT(TestFixture::Evaluate("'aBa'.upper()"),
+              EvalsToStringThatMatches(StrEq("ABA")));
+  EXPECT_THAT(TestFixture::Evaluate("'ABA'.upper()"),
+              EvalsToStringThatMatches(StrEq("ABA")));
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionLower) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.lower()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("''.lower()"),
+              EvalsToStringThatMatches(StrEq("")));
+  EXPECT_THAT(TestFixture::Evaluate("'aBa'.lower()"),
+              EvalsToStringThatMatches(StrEq("aba")));
+  EXPECT_THAT(TestFixture::Evaluate("'aba'.lower()"),
+              EvalsToStringThatMatches(StrEq("aba")));
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionMatches) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.matches('')"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("''.matches('')"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'a'.matches('a')"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'abc'.matches('a')"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("'abc'.matches('...')"), EvalsToTrue());
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionReplaceMatches) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.replaceMatches('', '')"),
+              EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("'a'.replaceMatches('.', 'b')"),
+              EvalsToStringThatMatches(StrEq("b")));
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionReplace) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.replace('', '')"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("''.replace({}, '')"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("''.replace('', {})"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("''.replace('', 'x')"),
+              EvalsToStringThatMatches(StrEq("")));
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.replace('x', '123')"),
               EvalsToStringThatMatches(StrEq("abcdefg")));
-  EXPECT_THAT(Evaluate("'abcdefg'.replace('cde', '123')"),
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.replace('cde', '123')"),
               EvalsToStringThatMatches(StrEq("ab123fg")));
-  EXPECT_THAT(Evaluate("'abcdefg'.replace('cde', '')"),
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.replace('cde', '')"),
               EvalsToStringThatMatches(StrEq("abfg")));
-  EXPECT_THAT(Evaluate("'abc'.replace('', 'x')"),
+  EXPECT_THAT(TestFixture::Evaluate("'abc'.replace('', 'x')"),
               EvalsToStringThatMatches(StrEq("xaxbxcx")));
-  EXPECT_THAT(Evaluate("'£'.replace('', 'x')"),
+  EXPECT_THAT(TestFixture::Evaluate("'£'.replace('', 'x')"),
               EvalsToStringThatMatches(StrEq("x£x")));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionReplaceMatchesWrongArgCount, {
-  StatusOr<EvaluationResult> result = Evaluate("''.replaceMatches()");
-  EXPECT_THAT(result.status().code(), Eq(absl::StatusCode::kInvalidArgument))
-      << result.status();
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionReplaceMatchesBadRegex, {
+TYPED_TEST(FhirPathTest, TestFunctionReplaceMatchesWrongArgCount) {
   StatusOr<EvaluationResult> result =
-      Evaluate("''.replaceMatches('(', 'a')").status();
+      TestFixture::Evaluate("''.replaceMatches()");
   EXPECT_THAT(result.status().code(), Eq(absl::StatusCode::kInvalidArgument))
       << result.status();
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionLength, {
-  EXPECT_THAT(Evaluate("{}.length()"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("''.length() = 0"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'abc'.length() = 3"), EvalsToTrue());
+TYPED_TEST(FhirPathTest, TestFunctionReplaceMatchesBadRegex) {
+  StatusOr<EvaluationResult> result =
+      TestFixture::Evaluate("''.replaceMatches('(', 'a')").status();
+  EXPECT_THAT(result.status().code(), Eq(absl::StatusCode::kInvalidArgument))
+      << result.status();
+}
 
-  EXPECT_THAT(Evaluate("3.length()"),
+TYPED_TEST(FhirPathTest, TestFunctionLength) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.length()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("''.length() = 0"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'abc'.length() = 3"), EvalsToTrue());
+
+  EXPECT_THAT(TestFixture::Evaluate("3.length()"),
               HasStatusCode(StatusCode::kInvalidArgument));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionToInteger, {
-  EXPECT_EQ(Evaluate("1.toInteger()")
+TYPED_TEST(FhirPathTest, TestFunctionToInteger) {
+  EXPECT_EQ(TestFixture::Evaluate("1.toInteger()")
                 .ValueOrDie()
                 .GetInteger()
                 .ValueOrDie(),
             1);
-  EXPECT_EQ(Evaluate("'2'.toInteger()")
+  EXPECT_EQ(TestFixture::Evaluate("'2'.toInteger()")
                 .ValueOrDie()
                 .GetInteger()
                 .ValueOrDie(),
             2);
 
-  EXPECT_THAT(Evaluate("(3.3).toInteger()"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("'a'.toInteger()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("(3.3).toInteger()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("'a'.toInteger()"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("(1 | 2).toInteger()"),
+  EXPECT_THAT(TestFixture::Evaluate("(1 | 2).toInteger()"),
               HasStatusCode(StatusCode::kInvalidArgument));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionToString, {
-  EXPECT_THAT(Evaluate("1.toString()"), EvalsToStringThatMatches(StrEq("1")));
-  EXPECT_THAT(Evaluate("1.1.toString()"),
+TYPED_TEST(FhirPathTest, TestFunctionToString) {
+  EXPECT_THAT(TestFixture::Evaluate("1.toString()"),
+              EvalsToStringThatMatches(StrEq("1")));
+  EXPECT_THAT(TestFixture::Evaluate("1.1.toString()"),
               EvalsToStringThatMatches(StrEq("1.1")));
-  EXPECT_THAT(Evaluate("'foo'.toString()"),
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.toString()"),
               EvalsToStringThatMatches(StrEq("foo")));
-  EXPECT_THAT(Evaluate("true.toString()"),
+  EXPECT_THAT(TestFixture::Evaluate("true.toString()"),
               EvalsToStringThatMatches(StrEq("true")));
-  EXPECT_THAT(Evaluate("{}.toString()"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("toString()"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("(1 | 2).toString()"),
+  EXPECT_THAT(TestFixture::Evaluate("{}.toString()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("toString()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("(1 | 2).toString()"),
               HasStatusCode(StatusCode::kInvalidArgument));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionTrace, {
-  EXPECT_THAT(Evaluate("true.trace('debug')"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("{}.trace('debug')"), EvalsToEmpty());
-})
+TYPED_TEST(FhirPathTest, TestFunctionTrace) {
+  EXPECT_THAT(TestFixture::Evaluate("true.trace('debug')"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("{}.trace('debug')"), EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionHasValueComplex, {
+TYPED_TEST(FhirPathTest, TestFunctionHasValueComplex) {
   // hasValue should return false for non-primitive types.
-  EXPECT_THAT(Evaluate(ValidEncounter<Encounter>(), "period.hasValue()"),
-              EvalsToFalse());
-})
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
+                            "period.hasValue()"),
+      EvalsToFalse());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionEmpty, {
-  EXPECT_THAT(Evaluate("{}.empty()"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true.empty()"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("(false | true).empty()"), EvalsToFalse());
-})
+TYPED_TEST(FhirPathTest, TestFunctionEmpty) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.empty()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true.empty()"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("(false | true).empty()"), EvalsToFalse());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionCount, {
-  EXPECT_EQ(Evaluate("{}.count()").ValueOrDie()
-                .GetInteger().ValueOrDie(),
+TYPED_TEST(FhirPathTest, TestFunctionCount) {
+  EXPECT_EQ(TestFixture::Evaluate("{}.count()")
+                .ValueOrDie()
+                .GetInteger()
+                .ValueOrDie(),
             0);
-  EXPECT_EQ(Evaluate("'a'.count()").ValueOrDie()
-                .GetInteger().ValueOrDie(),
+  EXPECT_EQ(TestFixture::Evaluate("'a'.count()")
+                .ValueOrDie()
+                .GetInteger()
+                .ValueOrDie(),
             1);
-  EXPECT_EQ(Evaluate("('a' | 1).count()").ValueOrDie()
-                .GetInteger().ValueOrDie(),
+  EXPECT_EQ(TestFixture::Evaluate("('a' | 1).count()")
+                .ValueOrDie()
+                .GetInteger()
+                .ValueOrDie(),
             2);
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionFirst, {
-  EXPECT_THAT(Evaluate("{}.first()"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("true.first()"), EvalsToTrue());
-  EXPECT_TRUE(Evaluate("(false | true).first()").ok());
-})
+TYPED_TEST(FhirPathTest, TestFunctionFirst) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.first()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("true.first()"), EvalsToTrue());
+  EXPECT_TRUE(TestFixture::Evaluate("(false | true).first()").ok());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionLast, {
-  EXPECT_THAT(Evaluate("{}.last()"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("true.last()"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true.combine(true).last()"), EvalsToTrue());
-})
+TYPED_TEST(FhirPathTest, TestFunctionLast) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.last()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("true.last()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true.combine(true).last()"),
+              EvalsToTrue());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionSingle, {
-  EXPECT_THAT(Evaluate("{}.single()"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("true.single()"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(false | true).single()"),
+TYPED_TEST(FhirPathTest, TestFunctionSingle) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.single()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("true.single()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(false | true).single()"),
               HasStatusCode(StatusCode::kFailedPrecondition));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionTail, {
-  EXPECT_THAT(Evaluate("{}.tail()"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("true.tail()"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("true.combine(true).tail()"), EvalsToTrue());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionSkip, {
-  EXPECT_THAT(Evaluate("{}.skip(-1)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{}.skip(0)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{}.skip(1)"), EvalsToEmpty());
-
-  EXPECT_THAT(Evaluate("(true).skip(-1)"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(true).skip(0)"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(true).skip(1)"), EvalsToEmpty());
-
-  EXPECT_THAT(Evaluate("true.combine(true).skip(-1) = true.combine(true)"),
+TYPED_TEST(FhirPathTest, TestFunctionTail) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.tail()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("true.tail()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("true.combine(true).tail()"),
               EvalsToTrue());
-  EXPECT_THAT(Evaluate("true.combine(true).skip(0) = true.combine(true)"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate("true.combine(true).skip(1)"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true.combine(true).skip(2)"), EvalsToEmpty());
+}
 
-  EXPECT_THAT(Evaluate("(true).skip()"),
-              HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("(true).skip('1')"),
-              HasStatusCode(StatusCode::kInvalidArgument));
-})
+TYPED_TEST(FhirPathTest, TestFunctionSkip) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.skip(-1)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{}.skip(0)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{}.skip(1)"), EvalsToEmpty());
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionTake, {
-  EXPECT_THAT(Evaluate("{}.take(-1)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{}.take(0)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{}.take(1)"), EvalsToEmpty());
-
-  EXPECT_THAT(Evaluate("(true).take(-1)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("(true).take(0)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("(true).take(1)"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(true).take(2)"), EvalsToTrue());
-
-  EXPECT_THAT(Evaluate("true.combine(true).take(-1)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("true.combine(true).take(0)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("true.combine(true).take(1)"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true.combine(true).take(2) = true.combine(true)"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate("true.combine(true).take(3) = true.combine(true)"),
-              EvalsToTrue());
-
-  EXPECT_THAT(Evaluate("(true).take()"),
-              HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("(true).take('1')"),
-              HasStatusCode(StatusCode::kInvalidArgument));
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionOfTypePrimitives, {
-  EXPECT_THAT(Evaluate("{}.ofType(Boolean)"), EvalsToEmpty());
-
-  EXPECT_THAT(Evaluate("(true | 1 | 2.0 | 'foo').ofType(Boolean)"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate("(true | 1 | 2.0 | 'foo').ofType(String)"),
-              EvalsToStringThatMatches(StrEq("foo")));
+  EXPECT_THAT(TestFixture::Evaluate("(true).skip(-1)"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(true).skip(0)"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(true).skip(1)"), EvalsToEmpty());
 
   EXPECT_THAT(
-      Evaluate("(true | 1 | 2.0 | 'foo').ofType(Integer)")
-          .ValueOrDie()
-          .GetMessages(),
-      ElementsAreArray({EqualsProto(ParseFromString<Integer>("value: 1"))}));
-  EXPECT_THAT(Evaluate("(true | 1 | 2.0 | 'foo').ofType(Decimal)")
+      TestFixture::Evaluate("true.combine(true).skip(-1) = true.combine(true)"),
+      EvalsToTrue());
+  EXPECT_THAT(
+      TestFixture::Evaluate("true.combine(true).skip(0) = true.combine(true)"),
+      EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true.combine(true).skip(1)"),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true.combine(true).skip(2)"),
+              EvalsToEmpty());
+
+  EXPECT_THAT(TestFixture::Evaluate("(true).skip()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(TestFixture::Evaluate("(true).skip('1')"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionTake) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.take(-1)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{}.take(0)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{}.take(1)"), EvalsToEmpty());
+
+  EXPECT_THAT(TestFixture::Evaluate("(true).take(-1)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("(true).take(0)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("(true).take(1)"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(true).take(2)"), EvalsToTrue());
+
+  EXPECT_THAT(TestFixture::Evaluate("true.combine(true).take(-1)"),
+              EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("true.combine(true).take(0)"),
+              EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("true.combine(true).take(1)"),
+              EvalsToTrue());
+  EXPECT_THAT(
+      TestFixture::Evaluate("true.combine(true).take(2) = true.combine(true)"),
+      EvalsToTrue());
+  EXPECT_THAT(
+      TestFixture::Evaluate("true.combine(true).take(3) = true.combine(true)"),
+      EvalsToTrue());
+
+  EXPECT_THAT(TestFixture::Evaluate("(true).take()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(TestFixture::Evaluate("(true).take('1')"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionOfTypePrimitives) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.ofType(Boolean)"), EvalsToEmpty());
+
+  EXPECT_THAT(TestFixture::Evaluate("(true | 1 | 2.0 | 'foo').ofType(Boolean)"),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(true | 1 | 2.0 | 'foo').ofType(String)"),
+              EvalsToStringThatMatches(StrEq("foo")));
+
+  EXPECT_THAT(TestFixture::Evaluate("(true | 1 | 2.0 | 'foo').ofType(Integer)")
                   .ValueOrDie()
                   .GetMessages(),
-              ElementsAreArray(
-                  {EqualsProto(ParseFromString<Decimal>("value: '2.0'"))}));
-})
+              ElementsAreArray({EqualsProto(
+                  ParseFromString<typename TypeParam::Integer>("value: 1"))}));
+  EXPECT_THAT(
+      TestFixture::Evaluate("(true | 1 | 2.0 | 'foo').ofType(Decimal)")
+          .ValueOrDie()
+          .GetMessages(),
+      ElementsAreArray({EqualsProto(
+          ParseFromString<typename TypeParam::Decimal>("value: '2.0'"))}));
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionOfTypeResources, {
-  Observation observation = ParseFromString<Observation>(R"proto()proto");
+TYPED_TEST(FhirPathTest, TestFunctionOfTypeResources) {
+  auto observation =
+      ParseFromString<typename TypeParam::Observation>(R"proto()proto");
 
-  EXPECT_THAT(Evaluate(observation, "$this.ofType(Boolean)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate(observation, "$this.ofType(CodeableConcept)"),
+  EXPECT_THAT(TestFixture::Evaluate(observation, "$this.ofType(Boolean)"),
               EvalsToEmpty());
+  EXPECT_THAT(
+      TestFixture::Evaluate(observation, "$this.ofType(CodeableConcept)"),
+      EvalsToEmpty());
 
   EvaluationResult as_observation_evaluation_result =
-      Evaluate(observation, "$this.ofType(Observation)").ValueOrDie();
+      TestFixture::Evaluate(observation, "$this.ofType(Observation)")
+          .ValueOrDie();
   EXPECT_THAT(as_observation_evaluation_result.GetMessages(),
               ElementsAreArray({EqualsProto(observation)}));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionAsPrimitives, {
-  EXPECT_THAT(Evaluate("{}.as(Boolean)"), EvalsToEmpty());
+TYPED_TEST(FhirPathTest, TestFunctionAsPrimitives) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.as(Boolean)"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("true.as(Boolean)"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true.as(Decimal)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("true.as(Integer)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("true.as(Boolean)"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true.as(Decimal)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("true.as(Integer)"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("1.as(Integer)"), EvalsToInteger(1));
-  EXPECT_THAT(Evaluate("1.as(Decimal)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("1.as(Boolean)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("1.as(Integer)"), EvalsToInteger(1));
+  EXPECT_THAT(TestFixture::Evaluate("1.as(Decimal)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("1.as(Boolean)"), EvalsToEmpty());
 
-  EXPECT_EQ(Evaluate("1.1.as(Decimal)").ValueOrDie().GetDecimal().ValueOrDie(),
+  EXPECT_EQ(TestFixture::Evaluate("1.1.as(Decimal)")
+                .ValueOrDie()
+                .GetDecimal()
+                .ValueOrDie(),
             "1.1");
-  EXPECT_THAT(Evaluate("1.1.as(Integer)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("1.1.as(Boolean)"), EvalsToEmpty());
-})
+  EXPECT_THAT(TestFixture::Evaluate("1.1.as(Integer)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("1.1.as(Boolean)"), EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionAsResources, {
-  Observation observation = ParseFromString<Observation>(R"proto()proto");
+TYPED_TEST(FhirPathTest, TestFunctionAsResources) {
+  auto observation =
+      ParseFromString<typename TypeParam::Observation>(R"proto()proto");
 
-  EXPECT_THAT(Evaluate(observation, "$this.as(Boolean)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate(observation, "$this.as(CodeableConcept)"),
+  EXPECT_THAT(TestFixture::Evaluate(observation, "$this.as(Boolean)"),
+              EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate(observation, "$this.as(CodeableConcept)"),
               EvalsToEmpty());
 
   EvaluationResult as_observation_evaluation_result =
-      Evaluate(observation, "$this.as(Observation)").ValueOrDie();
-  EXPECT_THAT(as_observation_evaluation_result.GetMessages(),
-              ElementsAreArray({EqualsProto(observation)}));;
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestOperatorAsPrimitives, {
-  EXPECT_THAT(Evaluate("{} as Boolean"), EvalsToEmpty());
-
-  EXPECT_THAT(Evaluate("true as Boolean"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true as Decimal"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("true as Integer"), EvalsToEmpty());
-
-  EXPECT_THAT(Evaluate("1 as Integer"), EvalsToInteger(1));
-  EXPECT_THAT(Evaluate("1 as Decimal"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("1 as Boolean"), EvalsToEmpty());
-
-  EXPECT_EQ(Evaluate("1.1 as Decimal").ValueOrDie().GetDecimal().ValueOrDie(),
-            "1.1");
-  EXPECT_THAT(Evaluate("1.1 as Integer"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("1.1 as Boolean"), EvalsToEmpty());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestOperatorAsResources, {
-  Observation observation = ParseFromString<Observation>(R"proto()proto");
-
-  EXPECT_THAT(Evaluate(observation, "$this as Boolean"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate(observation, "$this as CodeableConcept"),
-              EvalsToEmpty());
-
-  EvaluationResult as_observation_evaluation_result =
-      Evaluate(observation, "$this as Observation").ValueOrDie();
+      TestFixture::Evaluate(observation, "$this.as(Observation)").ValueOrDie();
   EXPECT_THAT(as_observation_evaluation_result.GetMessages(),
               ElementsAreArray({EqualsProto(observation)}));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionIsPrimitives, {
-  EXPECT_THAT(Evaluate("{}.is(Boolean)"), EvalsToEmpty());
+TYPED_TEST(FhirPathTest, TestOperatorAsPrimitives) {
+  EXPECT_THAT(TestFixture::Evaluate("{} as Boolean"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("true.is(Boolean)"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true.is(Decimal)"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("true.is(Integer)"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("true as Boolean"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true as Decimal"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("true as Integer"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("1.is(Integer)"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1.is(Decimal)"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("1.is(Boolean)"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("1 as Integer"), EvalsToInteger(1));
+  EXPECT_THAT(TestFixture::Evaluate("1 as Decimal"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("1 as Boolean"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("1.1.is(Decimal)"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1.1.is(Integer)"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("1.1.is(Boolean)"), EvalsToFalse());
-})
+  EXPECT_EQ(TestFixture::Evaluate("1.1 as Decimal")
+                .ValueOrDie()
+                .GetDecimal()
+                .ValueOrDie(),
+            "1.1");
+  EXPECT_THAT(TestFixture::Evaluate("1.1 as Integer"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("1.1 as Boolean"), EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionIsResources, {
-  Observation observation = ParseFromString<Observation>(R"proto()proto");
+TYPED_TEST(FhirPathTest, TestOperatorAsResources) {
+  auto observation =
+      ParseFromString<typename TypeParam::Observation>(R"proto()proto");
 
-  EXPECT_THAT(Evaluate(observation, "$this.is(Boolean)"), EvalsToFalse());
-  EXPECT_THAT(Evaluate(observation, "$this.is(CodeableConcept)"),
+  EXPECT_THAT(TestFixture::Evaluate(observation, "$this as Boolean"),
+              EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate(observation, "$this as CodeableConcept"),
+              EvalsToEmpty());
+
+  EvaluationResult as_observation_evaluation_result =
+      TestFixture::Evaluate(observation, "$this as Observation").ValueOrDie();
+  EXPECT_THAT(as_observation_evaluation_result.GetMessages(),
+              ElementsAreArray({EqualsProto(observation)}));
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionIsPrimitives) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.is(Boolean)"), EvalsToEmpty());
+
+  EXPECT_THAT(TestFixture::Evaluate("true.is(Boolean)"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true.is(Decimal)"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("true.is(Integer)"), EvalsToFalse());
+
+  EXPECT_THAT(TestFixture::Evaluate("1.is(Integer)"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.is(Decimal)"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("1.is(Boolean)"), EvalsToFalse());
+
+  EXPECT_THAT(TestFixture::Evaluate("1.1.is(Decimal)"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.1.is(Integer)"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("1.1.is(Boolean)"), EvalsToFalse());
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionIsResources) {
+  auto observation =
+      ParseFromString<typename TypeParam::Observation>(R"proto()proto");
+
+  EXPECT_THAT(TestFixture::Evaluate(observation, "$this.is(Boolean)"),
               EvalsToFalse());
-  EXPECT_THAT(Evaluate(observation, "$this.is(Observation)"), EvalsToTrue());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestOperatorIsPrimitives, {
-  EXPECT_THAT(Evaluate("{} is Boolean"), EvalsToEmpty());
-
-  EXPECT_THAT(Evaluate("true is Boolean"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true is Decimal"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("true is Integer"), EvalsToFalse());
-
-  EXPECT_THAT(Evaluate("1 is Integer"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1 is Decimal"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("1 is Boolean"), EvalsToFalse());
-
-  EXPECT_THAT(Evaluate("1.1 is Decimal"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1.1 is Integer"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("1.1 is Boolean"), EvalsToFalse());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestOperatorIsResources, {
-  Observation observation = ParseFromString<Observation>(R"proto()proto");
-
-  EXPECT_THAT(Evaluate(observation, "$this is Boolean"), EvalsToFalse());
-  EXPECT_THAT(Evaluate(observation, "$this is CodeableConcept"),
+  EXPECT_THAT(TestFixture::Evaluate(observation, "$this.is(CodeableConcept)"),
               EvalsToFalse());
-  EXPECT_THAT(Evaluate(observation, "$this is Observation"), EvalsToTrue());
-})
+  EXPECT_THAT(TestFixture::Evaluate(observation, "$this.is(Observation)"),
+              EvalsToTrue());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestFunctionTailMaintainsOrder, {
-  CodeableConcept codeable_concept = ParseFromString<CodeableConcept>(R"proto(
-    coding {
-      system { value: "foo" }
-      code { value: "abc" }
-    }
-    coding {
-      system { value: "bar" }
-      code { value: "def" }
-    }
-    coding {
-      system { value: "foo" }
-      code { value: "ghi" }
-    }
-  )proto");
+TYPED_TEST(FhirPathTest, TestOperatorIsPrimitives) {
+  EXPECT_THAT(TestFixture::Evaluate("{} is Boolean"), EvalsToEmpty());
 
-  Code code_def = ParseFromString<Code>("value: 'def'");
-  Code code_ghi = ParseFromString<Code>("value: 'ghi'");
+  EXPECT_THAT(TestFixture::Evaluate("true is Boolean"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true is Decimal"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("true is Integer"), EvalsToFalse());
+
+  EXPECT_THAT(TestFixture::Evaluate("1 is Integer"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1 is Decimal"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("1 is Boolean"), EvalsToFalse());
+
+  EXPECT_THAT(TestFixture::Evaluate("1.1 is Decimal"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.1 is Integer"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("1.1 is Boolean"), EvalsToFalse());
+}
+
+TYPED_TEST(FhirPathTest, TestOperatorIsResources) {
+  auto observation =
+      ParseFromString<typename TypeParam::Observation>(R"proto()proto");
+
+  EXPECT_THAT(TestFixture::Evaluate(observation, "$this is Boolean"),
+              EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate(observation, "$this is CodeableConcept"),
+              EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate(observation, "$this is Observation"),
+              EvalsToTrue());
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionTailMaintainsOrder) {
+  auto codeable_concept =
+      ParseFromString<typename TypeParam::CodeableConcept>(R"proto(
+        coding {
+          system { value: "foo" }
+          code { value: "abc" }
+        }
+        coding {
+          system { value: "bar" }
+          code { value: "def" }
+        }
+        coding {
+          system { value: "foo" }
+          code { value: "ghi" }
+        }
+      )proto");
+
+  auto code_def = ParseFromString<typename TypeParam::Code>("value: 'def'");
+  auto code_ghi = ParseFromString<typename TypeParam::Code>("value: 'ghi'");
   EvaluationResult evaluation_result =
-      Evaluate(codeable_concept, "coding.tail().code").ValueOrDie();
+      TestFixture::Evaluate(codeable_concept, "coding.tail().code")
+          .ValueOrDie();
   EXPECT_THAT(evaluation_result.GetMessages(),
               ElementsAreArray({EqualsProto(code_def), EqualsProto(code_ghi)}));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestUnion, {
-  EXPECT_THAT(Evaluate("({} | {})"), EvalsToEmpty());
+TYPED_TEST(FhirPathTest, TestUnion) {
+  EXPECT_THAT(TestFixture::Evaluate("({} | {})"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("(true | {})"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(true | true)"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(false | {})"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("(false | false)"), EvalsToFalse());
-})
+  EXPECT_THAT(TestFixture::Evaluate("(true | {})"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(true | true)"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(false | {})"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("(false | false)"), EvalsToFalse());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestUnionDeduplicationPrimitives, {
+TYPED_TEST(FhirPathTest, TestUnionDeduplicationPrimitives) {
   EvaluationResult evaluation_result =
-      Evaluate("true | false | 1 | 'foo' | 2 | 1 | 'foo'")
+      TestFixture::Evaluate("true | false | 1 | 'foo' | 2 | 1 | 'foo'")
           .ValueOrDie();
   std::vector<const Message*> result = evaluation_result.GetMessages();
 
-  Boolean true_proto = ParseFromString<Boolean>("value: true");
-  Boolean false_proto = ParseFromString<Boolean>("value: false");
-  Integer integer_1_proto = ParseFromString<Integer>("value: 1");
-  Integer integer_2_proto = ParseFromString<Integer>("value: 2");
-  String string_foo_proto = ParseFromString<String>("value: 'foo'");
-
-  ASSERT_THAT(result,
-              UnorderedElementsAreArray(
-                  {EqualsProto(true_proto),
-                   EqualsProto(false_proto),
-                   EqualsProto(integer_1_proto),
-                   EqualsProto(integer_2_proto),
-                   EqualsProto(string_foo_proto)}));
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestUnionDeduplicationObjects, {
-  Encounter test_encounter = ValidEncounter<Encounter>();
-
-  EvaluationResult evaluation_result =
-      Evaluate(test_encounter, ("period | status | status | period"))
-          .ValueOrDie();
-  std::vector<const Message*> result = evaluation_result
-          .GetMessages();
-
-  ASSERT_THAT(result,
-              UnorderedElementsAreArray(
-                  {EqualsProto(test_encounter.status()),
-                   EqualsProto(test_encounter.period())}));
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestUnionFunction, {
-  EXPECT_THAT(Evaluate("{}.union({})"), EvalsToEmpty());
-
-  EXPECT_THAT(Evaluate("true.union({})"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true.union(true)"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("false.union({})"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("false.union(false)"), EvalsToFalse());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestUnionFunctionDeduplicationPrimitives, {
-  EvaluationResult evaluation_result =
-      Evaluate(
-          "true.union(false).union(1).union('foo').union(2).union(1).union('"
-          "foo')")
-          .ValueOrDie();
-  std::vector<const Message*> result = evaluation_result.GetMessages();
-
-  Boolean true_proto = ParseFromString<Boolean>("value: true");
-  Boolean false_proto = ParseFromString<Boolean>("value: false");
-  Integer integer_1_proto = ParseFromString<Integer>("value: 1");
-  Integer integer_2_proto = ParseFromString<Integer>("value: 2");
-  String string_foo_proto = ParseFromString<String>("value: 'foo'");
+  auto true_proto = ParseFromString<typename TypeParam::Boolean>("value: true");
+  auto false_proto =
+      ParseFromString<typename TypeParam::Boolean>("value: false");
+  auto integer_1_proto =
+      ParseFromString<typename TypeParam::Integer>("value: 1");
+  auto integer_2_proto =
+      ParseFromString<typename TypeParam::Integer>("value: 2");
+  auto string_foo_proto =
+      ParseFromString<typename TypeParam::String>("value: 'foo'");
 
   ASSERT_THAT(result,
               UnorderedElementsAreArray(
                   {EqualsProto(true_proto), EqualsProto(false_proto),
                    EqualsProto(integer_1_proto), EqualsProto(integer_2_proto),
                    EqualsProto(string_foo_proto)}));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestUnionFunctionDeduplicationObjects, {
-  Encounter test_encounter = ValidEncounter<Encounter>();
+TYPED_TEST(FhirPathTest, TestUnionDeduplicationObjects) {
+  auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
 
   EvaluationResult evaluation_result =
-      Evaluate(test_encounter,
-               "period.union(status).union(status).union(period)")
+      TestFixture::Evaluate(test_encounter,
+                            ("period | status | status | period"))
           .ValueOrDie();
   std::vector<const Message*> result = evaluation_result.GetMessages();
 
   ASSERT_THAT(result, UnorderedElementsAreArray(
                           {EqualsProto(test_encounter.status()),
                            EqualsProto(test_encounter.period())}));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestCombine, {
-  EXPECT_THAT(Evaluate("{}.combine({})"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("true.combine({})"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("{}.combine(true)"), EvalsToTrue());
+TYPED_TEST(FhirPathTest, TestUnionFunction) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.union({})"), EvalsToEmpty());
 
-  Boolean true_proto = ParseFromString<Boolean>("value: true");
-  Boolean false_proto = ParseFromString<Boolean>("value: false");
+  EXPECT_THAT(TestFixture::Evaluate("true.union({})"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true.union(true)"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("false.union({})"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("false.union(false)"), EvalsToFalse());
+}
+
+TYPED_TEST(FhirPathTest, TestUnionFunctionDeduplicationPrimitives) {
   EvaluationResult evaluation_result =
-      Evaluate("true.combine(true).combine(false)")
+      TestFixture::Evaluate(
+          "true.union(false).union(1).union('foo').union(2).union(1).union('"
+          "foo')")
           .ValueOrDie();
+  std::vector<const Message*> result = evaluation_result.GetMessages();
+
+  auto true_proto = ParseFromString<typename TypeParam::Boolean>("value: true");
+  auto false_proto =
+      ParseFromString<typename TypeParam::Boolean>("value: false");
+  auto integer_1_proto =
+      ParseFromString<typename TypeParam::Integer>("value: 1");
+  auto integer_2_proto =
+      ParseFromString<typename TypeParam::Integer>("value: 2");
+  auto string_foo_proto =
+      ParseFromString<typename TypeParam::String>("value: 'foo'");
+
+  ASSERT_THAT(result,
+              UnorderedElementsAreArray(
+                  {EqualsProto(true_proto), EqualsProto(false_proto),
+                   EqualsProto(integer_1_proto), EqualsProto(integer_2_proto),
+                   EqualsProto(string_foo_proto)}));
+}
+
+TYPED_TEST(FhirPathTest, TestUnionFunctionDeduplicationObjects) {
+  auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
+
+  EvaluationResult evaluation_result =
+      TestFixture::Evaluate(test_encounter,
+                            "period.union(status).union(status).union(period)")
+          .ValueOrDie();
+  std::vector<const Message*> result = evaluation_result.GetMessages();
+
+  ASSERT_THAT(result, UnorderedElementsAreArray(
+                          {EqualsProto(test_encounter.status()),
+                           EqualsProto(test_encounter.period())}));
+}
+
+TYPED_TEST(FhirPathTest, TestCombine) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.combine({})"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("true.combine({})"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("{}.combine(true)"), EvalsToTrue());
+
+  auto true_proto = ParseFromString<typename TypeParam::Boolean>("value: true");
+  auto false_proto =
+      ParseFromString<typename TypeParam::Boolean>("value: false");
+  EvaluationResult evaluation_result =
+      TestFixture::Evaluate("true.combine(true).combine(false)").ValueOrDie();
   EXPECT_THAT(evaluation_result.GetMessages(),
               UnorderedElementsAreArray({EqualsProto(true_proto),
                                          EqualsProto(true_proto),
                                          EqualsProto(false_proto)}));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestIntersect, {
-  EXPECT_THAT(Evaluate("{}.intersect({})"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("true.intersect({})"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("true.intersect(false)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{}.intersect(true)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("true.intersect(true)"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(true | false).intersect(true)"), EvalsToTrue());
+TYPED_TEST(FhirPathTest, TestIntersect) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.intersect({})"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("true.intersect({})"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("true.intersect(false)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{}.intersect(true)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("true.intersect(true)"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(true | false).intersect(true)"),
+              EvalsToTrue());
 
-  EXPECT_THAT(Evaluate("(true.combine(true)).intersect(true))"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(true).intersect(true.combine(true))"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(true.combine(true)).intersect(true))"),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(true).intersect(true.combine(true))"),
+              EvalsToTrue());
 
-  Boolean true_proto = ParseFromString<Boolean>("value: true");
-  Boolean false_proto = ParseFromString<Boolean>("value: false");
+  auto true_proto = ParseFromString<typename TypeParam::Boolean>("value: true");
+  auto false_proto =
+      ParseFromString<typename TypeParam::Boolean>("value: false");
   EvaluationResult evaluation_result =
-      Evaluate("(true | false).intersect(true | false)")
+      TestFixture::Evaluate("(true | false).intersect(true | false)")
           .ValueOrDie();
   EXPECT_THAT(evaluation_result.GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(true_proto), EqualsProto(false_proto)}));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestDistinct, {
-  EXPECT_THAT(Evaluate("{}.distinct()"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("true.distinct()"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true.combine(true).distinct()"), EvalsToTrue());
+TYPED_TEST(FhirPathTest, TestDistinct) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.distinct()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("true.distinct()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true.combine(true).distinct()"),
+              EvalsToTrue());
 
-  Boolean true_proto = ParseFromString<Boolean>("value: true");
-  Boolean false_proto = ParseFromString<Boolean>("value: false");
+  auto true_proto = ParseFromString<typename TypeParam::Boolean>("value: true");
+  auto false_proto =
+      ParseFromString<typename TypeParam::Boolean>("value: false");
   EvaluationResult evaluation_result =
-      Evaluate("(true | false).distinct()").ValueOrDie();
+      TestFixture::Evaluate("(true | false).distinct()").ValueOrDie();
   EXPECT_THAT(evaluation_result.GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(true_proto), EqualsProto(false_proto)}));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestIsDistinct, {
-  EXPECT_THAT(Evaluate("{}.isDistinct()"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true.isDistinct()"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(true | false).isDistinct()"), EvalsToTrue());
+TYPED_TEST(FhirPathTest, TestIsDistinct) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.isDistinct()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true.isDistinct()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(true | false).isDistinct()"),
+              EvalsToTrue());
 
-  EXPECT_THAT(Evaluate("true.combine(true).isDistinct()"), EvalsToFalse());
-})
+  EXPECT_THAT(TestFixture::Evaluate("true.combine(true).isDistinct()"),
+              EvalsToFalse());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestIndexer, {
-  EXPECT_THAT(Evaluate("true[0]"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true[1]"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("false[0]"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("false[1]"), EvalsToEmpty());
+TYPED_TEST(FhirPathTest, TestIndexer) {
+  EXPECT_THAT(TestFixture::Evaluate("true[0]"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true[1]"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("false[0]"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("false[1]"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("true['foo']"),
+  EXPECT_THAT(TestFixture::Evaluate("true['foo']"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("true[(1 | 2)]"),
+  EXPECT_THAT(TestFixture::Evaluate("true[(1 | 2)]"),
               HasStatusCode(StatusCode::kInvalidArgument));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestContains, {
-  EXPECT_THAT(Evaluate("true contains true"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(false | true) contains true"), EvalsToTrue());
+TYPED_TEST(FhirPathTest, TestContains) {
+  EXPECT_THAT(TestFixture::Evaluate("true contains true"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(false | true) contains true"),
+              EvalsToTrue());
 
-  EXPECT_THAT(Evaluate("true contains false"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("(false | true) contains 1"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("{} contains true"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("true contains false"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("(false | true) contains 1"),
+              EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("{} contains true"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("({} contains {})"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("(true contains {})"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("({} contains {})"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("(true contains {})"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("{} contains (true | false)"),
+  EXPECT_THAT(TestFixture::Evaluate("{} contains (true | false)"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("true contains (true | false)"),
+  EXPECT_THAT(TestFixture::Evaluate("true contains (true | false)"),
               HasStatusCode(StatusCode::kInvalidArgument));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestIn, {
-  EXPECT_THAT(Evaluate("true in true"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true in (false | true)"), EvalsToTrue());
+TYPED_TEST(FhirPathTest, TestIn) {
+  EXPECT_THAT(TestFixture::Evaluate("true in true"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true in (false | true)"), EvalsToTrue());
 
-  EXPECT_THAT(Evaluate("false in true"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("1 in (false | true)"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("true in {}"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("false in true"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("1 in (false | true)"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("true in {}"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("({} in {})"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("({} in true)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("({} in {})"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("({} in true)"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("(true | false) in {}"),
+  EXPECT_THAT(TestFixture::Evaluate("(true | false) in {}"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("(true | false) in {}"),
+  EXPECT_THAT(TestFixture::Evaluate("(true | false) in {}"),
               HasStatusCode(StatusCode::kInvalidArgument));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestImplies, {
-  EXPECT_THAT(Evaluate("(true implies true) = true"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(true implies false) = false"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(true implies {})"), EvalsToEmpty());
+TYPED_TEST(FhirPathTest, TestImplies) {
+  EXPECT_THAT(TestFixture::Evaluate("(true implies true) = true"),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(true implies false) = false"),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(true implies {})"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("(false implies true) = true"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(false implies false) = true"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(false implies {}) = true"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(false implies true) = true"),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(false implies false) = true"),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(false implies {}) = true"),
+              EvalsToTrue());
 
-  EXPECT_THAT(Evaluate("({} implies true) = true"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("({} implies false)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("({} implies {})"), EvalsToEmpty());
-})
+  EXPECT_THAT(TestFixture::Evaluate("({} implies true) = true"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("({} implies false)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("({} implies {})"), EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestWhere, {
-  CodeableConcept observation = ParseFromString<CodeableConcept>(R"proto(
-    coding {
-      system { value: "foo" }
-      code { value: "abc" }
-    }
-    coding {
-      system { value: "bar" }
-      code { value: "def" }
-    }
-    coding {
-      system { value: "foo" }
-      code { value: "ghi" }
-    }
-  )proto");
-
-  Code code_abc = ParseFromString<Code>("value: 'abc'");
-  Code code_ghi = ParseFromString<Code>("value: 'ghi'");
-  EvaluationResult evaluation_result =
-      Evaluate(observation, "coding.where(system = 'foo').code").ValueOrDie();
-  EXPECT_THAT(evaluation_result.GetMessages(),
-              UnorderedElementsAreArray(
-                  {EqualsProto(code_abc), EqualsProto(code_ghi)}));
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestWhereNoMatches, {
-  EXPECT_THAT(Evaluate("('a' | 'b' | 'c').where(false)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{}.where(true)"), EvalsToEmpty());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestWhereValidatesArguments, {
-  EXPECT_THAT(Evaluate("{}.where()"),
-              HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("{}.where(true)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{}.where(true, false)"),
-              HasStatusCode(StatusCode::kInvalidArgument));
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestAnyTrue, {
-  EXPECT_THAT(Evaluate("{}.anyTrue()"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("(false).anyTrue()"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("(true).anyTrue()"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(false | true).anyTrue()"), EvalsToTrue());
-
-  // Verify that anyTrue() fails when called with the wrong number of arguments.
-  EXPECT_THAT(Evaluate("{}.anyTrue(true)"),
-              HasStatusCode(StatusCode::kInvalidArgument));
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestAnyFalse, {
-  EXPECT_THAT(Evaluate("{}.anyFalse()"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("(false).anyFalse()"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(true).anyFalse()"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("(false | true).anyFalse()"), EvalsToTrue());
-
-  // Verify that anyFalse() fails when called with the wrong number of
-  // arguments.
-  EXPECT_THAT(Evaluate("{}.anyFalse(true)"),
-              HasStatusCode(StatusCode::kInvalidArgument));
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestAllTrue, {
-  EXPECT_THAT(Evaluate("{}.allTrue()"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(false).allTrue()"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("(true).allTrue()"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(false | true).allTrue()"), EvalsToFalse());
-
-  // Verify that allTrue() fails when called with the wrong number of arguments.
-  EXPECT_THAT(Evaluate("{}.allTrue(true)"),
-              HasStatusCode(StatusCode::kInvalidArgument));
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestAllFalse, {
-  EXPECT_THAT(Evaluate("{}.allFalse()"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(false).allFalse()"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(true).allFalse()"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("(false | true).allFalse()"), EvalsToFalse());
-
-  // Verify that alFalse() fails when called with the wrong number of arguments.
-  EXPECT_THAT(Evaluate("{}.allFalse(true)"),
-              HasStatusCode(StatusCode::kInvalidArgument));
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestAll, {
-  EXPECT_THAT(Evaluate("{}.all(false)"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(false).all(true)"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(1 | 2 | 3).all($this < 4)"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(1 | 2 | 3).all($this > 4)"), EvalsToFalse());
-
-  // Verify that all() fails when called with the wrong number of arguments.
-  EXPECT_THAT(Evaluate("{}.all()"),
-              HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("{}.all(true, false)"),
-              HasStatusCode(StatusCode::kInvalidArgument));
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestAllReadsFieldFromDifferingTypes, {
-  StructureDefinition structure_definition =
-      ParseFromString<StructureDefinition>(R"proto(
-        snapshot {
-          element {}
+TYPED_TEST(FhirPathTest, TestWhere) {
+  auto observation =
+      ParseFromString<typename TypeParam::CodeableConcept>(R"proto(
+        coding {
+          system { value: "foo" }
+          code { value: "abc" }
         }
-        differential {
-          element {}
+        coding {
+          system { value: "bar" }
+          code { value: "def" }
+        }
+        coding {
+          system { value: "foo" }
+          code { value: "ghi" }
         }
       )proto");
 
-  EXPECT_THAT(Evaluate(structure_definition,
-                       "(snapshot | differential).all(element.exists())"),
-              EvalsToTrue());
-})
-
-FHIR_VERSION_TEST(FhirPathTest, TestSelect, {
+  auto code_abc = ParseFromString<typename TypeParam::Code>("value: 'abc'");
+  auto code_ghi = ParseFromString<typename TypeParam::Code>("value: 'ghi'");
   EvaluationResult evaluation_result =
-      Evaluate("(1 | 2 | 3).select(($this > 2) | $this)")
+      TestFixture::Evaluate(observation, "coding.where(system = 'foo').code")
+          .ValueOrDie();
+  EXPECT_THAT(evaluation_result.GetMessages(),
+              UnorderedElementsAreArray(
+                  {EqualsProto(code_abc), EqualsProto(code_ghi)}));
+}
+
+TYPED_TEST(FhirPathTest, TestWhereNoMatches) {
+  EXPECT_THAT(TestFixture::Evaluate("('a' | 'b' | 'c').where(false)"),
+              EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{}.where(true)"), EvalsToEmpty());
+}
+
+TYPED_TEST(FhirPathTest, TestWhereValidatesArguments) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.where()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(TestFixture::Evaluate("{}.where(true)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{}.where(true, false)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+}
+
+TYPED_TEST(FhirPathTest, TestAnyTrue) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.anyTrue()"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("(false).anyTrue()"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("(true).anyTrue()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(false | true).anyTrue()"), EvalsToTrue());
+
+  // Verify that anyTrue() fails when called with the wrong number of arguments.
+  EXPECT_THAT(TestFixture::Evaluate("{}.anyTrue(true)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+}
+
+TYPED_TEST(FhirPathTest, TestAnyFalse) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.anyFalse()"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("(false).anyFalse()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(true).anyFalse()"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("(false | true).anyFalse()"),
+              EvalsToTrue());
+
+  // Verify that anyFalse() fails when called with the wrong number of
+  // arguments.
+  EXPECT_THAT(TestFixture::Evaluate("{}.anyFalse(true)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+}
+
+TYPED_TEST(FhirPathTest, TestAllTrue) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.allTrue()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(false).allTrue()"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("(true).allTrue()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(false | true).allTrue()"),
+              EvalsToFalse());
+
+  // Verify that allTrue() fails when called with the wrong number of arguments.
+  EXPECT_THAT(TestFixture::Evaluate("{}.allTrue(true)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+}
+
+TYPED_TEST(FhirPathTest, TestAllFalse) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.allFalse()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(false).allFalse()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(true).allFalse()"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("(false | true).allFalse()"),
+              EvalsToFalse());
+
+  // Verify that alFalse() fails when called with the wrong number of arguments.
+  EXPECT_THAT(TestFixture::Evaluate("{}.allFalse(true)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+}
+
+TYPED_TEST(FhirPathTest, TestAll) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.all(false)"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(false).all(true)"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(1 | 2 | 3).all($this < 4)"),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(1 | 2 | 3).all($this > 4)"),
+              EvalsToFalse());
+
+  // Verify that all() fails when called with the wrong number of arguments.
+  EXPECT_THAT(TestFixture::Evaluate("{}.all()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(TestFixture::Evaluate("{}.all(true, false)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+}
+
+TYPED_TEST(FhirPathTest, TestAllReadsFieldFromDifferingTypes) {
+  auto structure_definition =
+      ParseFromString<typename TypeParam::StructureDefinition>(R"proto(
+        snapshot { element {} }
+        differential { element {} }
+      )proto");
+
+  EXPECT_THAT(
+      TestFixture::Evaluate(structure_definition,
+                            "(snapshot | differential).all(element.exists())"),
+      EvalsToTrue());
+}
+
+TYPED_TEST(FhirPathTest, TestSelect) {
+  EvaluationResult evaluation_result =
+      TestFixture::Evaluate("(1 | 2 | 3).select(($this > 2) | $this)")
           .ValueOrDie();
   std::vector<const Message*> result = evaluation_result.GetMessages();
 
-  Boolean true_proto = ParseFromString<Boolean>("value: true");
-  Boolean false_proto = ParseFromString<Boolean>("value: false");
-  Integer integer_1_proto = ParseFromString<Integer>("value: 1");
-  Integer integer_2_proto = ParseFromString<Integer>("value: 2");
-  Integer integer_3_proto = ParseFromString<Integer>("value: 3");
+  auto true_proto = ParseFromString<typename TypeParam::Boolean>("value: true");
+  auto false_proto =
+      ParseFromString<typename TypeParam::Boolean>("value: false");
+  auto integer_1_proto =
+      ParseFromString<typename TypeParam::Integer>("value: 1");
+  auto integer_2_proto =
+      ParseFromString<typename TypeParam::Integer>("value: 2");
+  auto integer_3_proto =
+      ParseFromString<typename TypeParam::Integer>("value: 3");
 
   ASSERT_THAT(
       result,
-      UnorderedElementsAreArray({
-        EqualsProto(true_proto),
-        EqualsProto(false_proto),
-        EqualsProto(false_proto),
-        EqualsProto(integer_1_proto),
-        EqualsProto(integer_2_proto),
-        EqualsProto(integer_3_proto)
-      }));
-})
+      UnorderedElementsAreArray(
+          {EqualsProto(true_proto), EqualsProto(false_proto),
+           EqualsProto(false_proto), EqualsProto(integer_1_proto),
+           EqualsProto(integer_2_proto), EqualsProto(integer_3_proto)}));
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestSelectEmptyResult, {
-  EXPECT_THAT(Evaluate("{}.where(true)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("(1 | 2 | 3).where(false)"), EvalsToEmpty());
-})
+TYPED_TEST(FhirPathTest, TestSelectEmptyResult) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.where(true)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("(1 | 2 | 3).where(false)"),
+              EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestSelectValidatesArguments, {
-  EXPECT_THAT(Evaluate("{}.select()"),
+TYPED_TEST(FhirPathTest, TestSelectValidatesArguments) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.select()"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("{}.select(true)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{}.select(true, false)"),
+  EXPECT_THAT(TestFixture::Evaluate("{}.select(true)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{}.select(true, false)"),
               HasStatusCode(StatusCode::kInvalidArgument));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestIif, {
+TYPED_TEST(FhirPathTest, TestIif) {
   // 2 parameter invocations
-  EXPECT_THAT(Evaluate("iif(true, 1)"), EvalsToInteger(1));
-  EXPECT_THAT(Evaluate("iif(false, 1)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("iif({}, 1)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("iif(true, 1)"), EvalsToInteger(1));
+  EXPECT_THAT(TestFixture::Evaluate("iif(false, 1)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("iif({}, 1)"), EvalsToEmpty());
 
   // 3 parameters invocations
-  EXPECT_THAT(Evaluate("iif(true, 1, 2)"), EvalsToInteger(1));
-  EXPECT_THAT(Evaluate("iif(false, 1, 2)"), EvalsToInteger(2));
-  EXPECT_THAT(Evaluate("iif({}, 1, 2)"), EvalsToInteger(2));
+  EXPECT_THAT(TestFixture::Evaluate("iif(true, 1, 2)"), EvalsToInteger(1));
+  EXPECT_THAT(TestFixture::Evaluate("iif(false, 1, 2)"), EvalsToInteger(2));
+  EXPECT_THAT(TestFixture::Evaluate("iif({}, 1, 2)"), EvalsToInteger(2));
 
-  EXPECT_THAT(Evaluate("{}.iif(true, false)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("(1 | 2).iif(true, false)"),
+  EXPECT_THAT(TestFixture::Evaluate("{}.iif(true, false)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("(1 | 2).iif(true, false)"),
               HasStatusCode(StatusCode::kInvalidArgument));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestIifValidatesArguments, {
-  EXPECT_THAT(Evaluate("{}.iif()"),
+TYPED_TEST(FhirPathTest, TestIifValidatesArguments) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.iif()"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("{}.iif(true)"),
+  EXPECT_THAT(TestFixture::Evaluate("{}.iif(true)"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(Evaluate("{}.iif(true, false, true, false)"),
+  EXPECT_THAT(TestFixture::Evaluate("{}.iif(true, false, true, false)"),
               HasStatusCode(StatusCode::kInvalidArgument));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestXor, {
-  EXPECT_THAT(Evaluate("(true xor true) = false"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(true xor false) = true"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(true xor {})"), EvalsToEmpty());
+TYPED_TEST(FhirPathTest, TestXor) {
+  EXPECT_THAT(TestFixture::Evaluate("(true xor true) = false"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(true xor false) = true"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(true xor {})"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("(false xor true) = true"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(false xor false) = false"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("(false xor {})"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("(false xor true) = true"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(false xor false) = false"),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("(false xor {})"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("({} xor true)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("({} xor false)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("({} xor {})"), EvalsToEmpty());
-})
+  EXPECT_THAT(TestFixture::Evaluate("({} xor true)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("({} xor false)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("({} xor {})"), EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestMultiOrShortCircuit, {
-  Period no_end_period = ParseFromString<Period>(R"proto(
+TYPED_TEST(FhirPathTest, TestMultiOrShortCircuit) {
+  auto no_end_period = ParseFromString<typename TypeParam::Period>(R"proto(
     start: { value_us: 1556750000000 timezone: "America/Los_Angeles" }
   )proto");
 
   EXPECT_THAT(
-      Evaluate(
+      TestFixture::Evaluate(
           no_end_period,
           "start.hasValue().not() or end.hasValue().not() or start <= end"),
       EvalsToTrue());
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestOr, {
-  EXPECT_THAT(Evaluate("true or true"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true or false"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true or {}"), EvalsToTrue());
+TYPED_TEST(FhirPathTest, TestOr) {
+  EXPECT_THAT(TestFixture::Evaluate("true or true"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true or false"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true or {}"), EvalsToTrue());
 
-  EXPECT_THAT(Evaluate("false or true"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("false or false"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("false or {}"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("false or true"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("false or false"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("false or {}"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("{} or true"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("{} or false"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{} or {}"), EvalsToEmpty());
-})
+  EXPECT_THAT(TestFixture::Evaluate("{} or true"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("{} or false"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{} or {}"), EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestAnd, {
-  EXPECT_THAT(Evaluate("true and true"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("true and false"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("true and {}"), EvalsToEmpty());
+TYPED_TEST(FhirPathTest, TestAnd) {
+  EXPECT_THAT(TestFixture::Evaluate("true and true"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true and false"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("true and {}"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("false and true"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("false and false"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("false and {}"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("false and true"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("false and false"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("false and {}"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("{} and true"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{} and false"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("{} and {}"), EvalsToEmpty());
-})
+  EXPECT_THAT(TestFixture::Evaluate("{} and true"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{} and false"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("{} and {}"), EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestSingletonEvaluationOfCollections, {
-  EXPECT_THAT(Evaluate("'string' and true"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'string' and false"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("'string' or false"), EvalsToTrue());
+TYPED_TEST(FhirPathTest, TestSingletonEvaluationOfCollections) {
+  EXPECT_THAT(TestFixture::Evaluate("'string' and true"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'string' and false"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("'string' or false"), EvalsToTrue());
 
-  EXPECT_THAT(Evaluate("1 and true"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1 and false"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("1 or false"), EvalsToTrue());
-})
+  EXPECT_THAT(TestFixture::Evaluate("1 and true"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1 and false"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("1 or false"), EvalsToTrue());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestEmptyLiteral, {
-  EXPECT_THAT(Evaluate("{}"), EvalsToEmpty());
-})
+TYPED_TEST(FhirPathTest, TestEmptyLiteral) {
+  EXPECT_THAT(TestFixture::Evaluate("{}"), EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestBooleanLiteral, {
-  EXPECT_THAT(Evaluate("true"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("false"), EvalsToFalse());
-})
+TYPED_TEST(FhirPathTest, TestBooleanLiteral) {
+  EXPECT_THAT(TestFixture::Evaluate("true"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("false"), EvalsToFalse());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestIntegerLiteral, {
-  EvaluationResult result = Evaluate("42").ValueOrDie();
+TYPED_TEST(FhirPathTest, TestIntegerLiteral) {
+  EvaluationResult result = TestFixture::Evaluate("42").ValueOrDie();
   EXPECT_EQ(42, result.GetInteger().ValueOrDie());
 
   // Ensure evaluation of an out-of-range literal fails.
   const char* overflow_value = "10000000000";
   Status bad_int_status =
-      Compile(Encounter::descriptor(), overflow_value).status();
+      TestFixture::Compile(TypeParam::Encounter::descriptor(), overflow_value)
+          .status();
 
   EXPECT_FALSE(bad_int_status.ok());
   // Failure message should contain the bad string.
   EXPECT_TRUE(bad_int_status.message().find(overflow_value) !=
               std::string::npos);
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestPolarityOperator, {
-  EXPECT_THAT(Evaluate("+1 = 1"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("-(+1) = -1"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("+(-1) = -1"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("-(-1) = 1"), EvalsToTrue());
+TYPED_TEST(FhirPathTest, TestPolarityOperator) {
+  EXPECT_THAT(TestFixture::Evaluate("+1 = 1"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("-(+1) = -1"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("+(-1) = -1"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("-(-1) = 1"), EvalsToTrue());
 
-  EXPECT_THAT(Evaluate("+1.2 = 1.2"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("-(+1.2) = -1.2"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("+(-1.2) = -1.2"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("-(-1.2) = 1.2"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("+1.2 = 1.2"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("-(+1.2) = -1.2"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("+(-1.2) = -1.2"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("-(-1.2) = 1.2"), EvalsToTrue());
 
-  EXPECT_THAT(Evaluate("+{}"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("-{}"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("+{}"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("-{}"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("+(1 | 2)"),
+  EXPECT_THAT(TestFixture::Evaluate("+(1 | 2)"),
               HasStatusCode(StatusCode::kInvalidArgument));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestIntegerAddition, {
-  EXPECT_THAT(Evaluate("(2 + 3) = 5"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("({} + 3)"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("(2 + {})"), EvalsToEmpty());
-})
+TYPED_TEST(FhirPathTest, TestIntegerAddition) {
+  EXPECT_THAT(TestFixture::Evaluate("(2 + 3) = 5"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("({} + 3)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("(2 + {})"), EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestStringAddition, {
-  EXPECT_THAT(Evaluate("('foo' + 'bar') = 'foobar'"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("({} + 'bar')"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("('foo' + {})"), EvalsToEmpty());
-})
+TYPED_TEST(FhirPathTest, TestStringAddition) {
+  EXPECT_THAT(TestFixture::Evaluate("('foo' + 'bar') = 'foobar'"),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("({} + 'bar')"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("('foo' + {})"), EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestStringConcatenation, {
-  EXPECT_THAT(Evaluate("('foo' & 'bar')"),
+TYPED_TEST(FhirPathTest, TestStringConcatenation) {
+  EXPECT_THAT(TestFixture::Evaluate("('foo' & 'bar')"),
               EvalsToStringThatMatches(StrEq("foobar")));
-  EXPECT_THAT(Evaluate("{} & 'bar'"), EvalsToStringThatMatches(StrEq("bar")));
-  EXPECT_THAT(Evaluate("'foo' & {}"), EvalsToStringThatMatches(StrEq("foo")));
-  EXPECT_THAT(Evaluate("{} & {}"), EvalsToStringThatMatches(StrEq("")));
-})
+  EXPECT_THAT(TestFixture::Evaluate("{} & 'bar'"),
+              EvalsToStringThatMatches(StrEq("bar")));
+  EXPECT_THAT(TestFixture::Evaluate("'foo' & {}"),
+              EvalsToStringThatMatches(StrEq("foo")));
+  EXPECT_THAT(TestFixture::Evaluate("{} & {}"),
+              EvalsToStringThatMatches(StrEq("")));
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestEmptyComparisons, {
-  EXPECT_THAT(Evaluate("{} = 42"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("42 = {}"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{} = {}"), EvalsToEmpty());
+TYPED_TEST(FhirPathTest, TestEmptyComparisons) {
+  EXPECT_THAT(TestFixture::Evaluate("{} = 42"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("42 = {}"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{} = {}"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("{} != 42"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("42 != {}"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{} != {}"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{} != 42"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("42 != {}"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{} != {}"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("{} < 42"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("42 < {}"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{} < {}"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{} < 42"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("42 < {}"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{} < {}"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("{} > 42"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("42 > {}"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{} > {}"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{} > 42"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("42 > {}"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{} > {}"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("{} >= 42"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("42 >= {}"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{} >= {}"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{} >= 42"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("42 >= {}"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{} >= {}"), EvalsToEmpty());
 
-  EXPECT_THAT(Evaluate("{} <= 42"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("42 <= {}"), EvalsToEmpty());
-  EXPECT_THAT(Evaluate("{} <= {}"), EvalsToEmpty());
-})
+  EXPECT_THAT(TestFixture::Evaluate("{} <= 42"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("42 <= {}"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{} <= {}"), EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestIntegerComparisons, {
-  EXPECT_THAT(Evaluate("42 = 42"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("42 = 43"), EvalsToFalse());
+TYPED_TEST(FhirPathTest, TestIntegerComparisons) {
+  EXPECT_THAT(TestFixture::Evaluate("42 = 42"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("42 = 43"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("42 != 43"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("42 != 42"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("42 != 43"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("42 != 42"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("42 < 43"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("42 < 42"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("42 < 43"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("42 < 42"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("43 > 42"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("42 > 42"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("43 > 42"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("42 > 42"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("42 >= 42"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("43 >= 42"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("42 >= 43"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("42 >= 42"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("43 >= 42"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("42 >= 43"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("42 <= 42"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("42 <= 43"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("43 <= 42"), EvalsToFalse());
-})
+  EXPECT_THAT(TestFixture::Evaluate("42 <= 42"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("42 <= 43"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("43 <= 42"), EvalsToFalse());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestIntegerLikeComparison, {
-  Parameters parameters =
-      ParseFromString<Parameters>(R"proto(
-        parameter {value {integer {value: -1}}}
-        parameter {value {integer {value: 0}}}
-        parameter {value {integer {value: 1}}}
-        parameter {value {unsigned_int {value: 0}}}
-      )proto");
+TYPED_TEST(FhirPathTest, TestIntegerLikeComparison) {
+  auto parameters = ParseFromString<typename TypeParam::Parameters>(R"proto(
+    parameter { value { integer { value: -1 } } }
+    parameter { value { integer { value: 0 } } }
+    parameter { value { integer { value: 1 } } }
+    parameter { value { unsigned_int { value: 0 } } }
+  )proto");
 
   // lhs = -1 (signed), rhs = 0 (unsigned)
-  EXPECT_THAT(Evaluate(parameters, "parameter[0].value < parameter[3].value"),
+  EXPECT_THAT(TestFixture::Evaluate(parameters,
+                                    "parameter[0].value < parameter[3].value"),
               EvalsToTrue());
-  EXPECT_THAT(Evaluate(parameters, "parameter[0].value <= parameter[3].value"),
+  EXPECT_THAT(TestFixture::Evaluate(parameters,
+                                    "parameter[0].value <= parameter[3].value"),
               EvalsToTrue());
-  EXPECT_THAT(Evaluate(parameters, "parameter[0].value >= parameter[3].value"),
+  EXPECT_THAT(TestFixture::Evaluate(parameters,
+                                    "parameter[0].value >= parameter[3].value"),
               EvalsToFalse());
-  EXPECT_THAT(Evaluate(parameters, "parameter[0].value > parameter[3].value"),
+  EXPECT_THAT(TestFixture::Evaluate(parameters,
+                                    "parameter[0].value > parameter[3].value"),
               EvalsToFalse());
 
   // lhs = 0 (signed), rhs = 0 (unsigned)
-  EXPECT_THAT(Evaluate(parameters, "parameter[1].value < parameter[3].value"),
+  EXPECT_THAT(TestFixture::Evaluate(parameters,
+                                    "parameter[1].value < parameter[3].value"),
               EvalsToFalse());
-  EXPECT_THAT(Evaluate(parameters, "parameter[1].value <= parameter[3].value"),
+  EXPECT_THAT(TestFixture::Evaluate(parameters,
+                                    "parameter[1].value <= parameter[3].value"),
               EvalsToTrue());
-  EXPECT_THAT(Evaluate(parameters, "parameter[1].value >= parameter[3].value"),
+  EXPECT_THAT(TestFixture::Evaluate(parameters,
+                                    "parameter[1].value >= parameter[3].value"),
               EvalsToTrue());
-  EXPECT_THAT(Evaluate(parameters, "parameter[1].value > parameter[3].value"),
+  EXPECT_THAT(TestFixture::Evaluate(parameters,
+                                    "parameter[1].value > parameter[3].value"),
               EvalsToFalse());
 
   // lhs = 1 (signed), rhs = 0 (unsigned)
-  EXPECT_THAT(Evaluate(parameters, "parameter[2].value < parameter[3].value"),
+  EXPECT_THAT(TestFixture::Evaluate(parameters,
+                                    "parameter[2].value < parameter[3].value"),
               EvalsToFalse());
-  EXPECT_THAT(Evaluate(parameters, "parameter[2].value <= parameter[3].value"),
+  EXPECT_THAT(TestFixture::Evaluate(parameters,
+                                    "parameter[2].value <= parameter[3].value"),
               EvalsToFalse());
-  EXPECT_THAT(Evaluate(parameters, "parameter[2].value >= parameter[3].value"),
+  EXPECT_THAT(TestFixture::Evaluate(parameters,
+                                    "parameter[2].value >= parameter[3].value"),
               EvalsToTrue());
-  EXPECT_THAT(Evaluate(parameters, "parameter[2].value > parameter[3].value"),
+  EXPECT_THAT(TestFixture::Evaluate(parameters,
+                                    "parameter[2].value > parameter[3].value"),
               EvalsToTrue());
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestDecimalLiteral, {
-  EvaluationResult result = Evaluate("1.25").ValueOrDie();
+TYPED_TEST(FhirPathTest, TestDecimalLiteral) {
+  EvaluationResult result = TestFixture::Evaluate("1.25").ValueOrDie();
   EXPECT_EQ("1.25", result.GetDecimal().ValueOrDie());
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestDecimalComparisons, {
-  EXPECT_THAT(Evaluate("1.25 = 1.25"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1.25 = 1.3"), EvalsToFalse());
+TYPED_TEST(FhirPathTest, TestDecimalComparisons) {
+  EXPECT_THAT(TestFixture::Evaluate("1.25 = 1.25"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.25 = 1.3"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("1.25 != 1.26"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1.25 != 1.25"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("1.25 != 1.26"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.25 != 1.25"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("1.25 < 1.26"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1 < 1.26"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1.25 < 1.25"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("1.25 < 1.26"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1 < 1.26"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.25 < 1.25"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("1.26 > 1.25"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1.26 > 1"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1.25 > 1.25"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("1.26 > 1.25"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.26 > 1"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.25 > 1.25"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("1.25 >= 1.25"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1.25 >= 1"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1.26 >= 1.25"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1.25 >= 1.26"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("1.25 >= 1.25"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.25 >= 1"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.26 >= 1.25"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.25 >= 1.26"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("1.25 <= 1.25"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1.25 <= 1.26"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("1.26 <= 1.25"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("1.26 <= 1"), EvalsToFalse());
-})
+  EXPECT_THAT(TestFixture::Evaluate("1.25 <= 1.25"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.25 <= 1.26"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.26 <= 1.25"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("1.26 <= 1"), EvalsToFalse());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestStringLiteral, {
-  EXPECT_THAT(Evaluate("'foo'"), EvalsToStringThatMatches(StrEq("foo")));
-})
+TYPED_TEST(FhirPathTest, TestStringLiteral) {
+  EXPECT_THAT(TestFixture::Evaluate("'foo'"),
+              EvalsToStringThatMatches(StrEq("foo")));
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestStringLiteralEscaping, {
-  EXPECT_THAT(Evaluate("'\\\\'"), EvalsToStringThatMatches(StrEq("\\")));
-  EXPECT_THAT(Evaluate("'\\f'"), EvalsToStringThatMatches(StrEq("\f")));
-  EXPECT_THAT(Evaluate("'\\n'"), EvalsToStringThatMatches(StrEq("\n")));
-  EXPECT_THAT(Evaluate("'\\r'"), EvalsToStringThatMatches(StrEq("\r")));
-  EXPECT_THAT(Evaluate("'\\t'"), EvalsToStringThatMatches(StrEq("\t")));
-  EXPECT_THAT(Evaluate("'\\\"'"), EvalsToStringThatMatches(StrEq("\"")));
-  EXPECT_THAT(Evaluate("'\\\''"), EvalsToStringThatMatches(StrEq("'")));
-  EXPECT_THAT(Evaluate("'\\t'"), EvalsToStringThatMatches(StrEq("\t")));
-  EXPECT_THAT(Evaluate("'\\u0020'"), EvalsToStringThatMatches(StrEq(" ")));
+TYPED_TEST(FhirPathTest, TestStringLiteralEscaping) {
+  EXPECT_THAT(TestFixture::Evaluate("'\\\\'"),
+              EvalsToStringThatMatches(StrEq("\\")));
+  EXPECT_THAT(TestFixture::Evaluate("'\\f'"),
+              EvalsToStringThatMatches(StrEq("\f")));
+  EXPECT_THAT(TestFixture::Evaluate("'\\n'"),
+              EvalsToStringThatMatches(StrEq("\n")));
+  EXPECT_THAT(TestFixture::Evaluate("'\\r'"),
+              EvalsToStringThatMatches(StrEq("\r")));
+  EXPECT_THAT(TestFixture::Evaluate("'\\t'"),
+              EvalsToStringThatMatches(StrEq("\t")));
+  EXPECT_THAT(TestFixture::Evaluate("'\\\"'"),
+              EvalsToStringThatMatches(StrEq("\"")));
+  EXPECT_THAT(TestFixture::Evaluate("'\\\''"),
+              EvalsToStringThatMatches(StrEq("'")));
+  EXPECT_THAT(TestFixture::Evaluate("'\\t'"),
+              EvalsToStringThatMatches(StrEq("\t")));
+  EXPECT_THAT(TestFixture::Evaluate("'\\u0020'"),
+              EvalsToStringThatMatches(StrEq(" ")));
 
   // Escape sequences that should be ignored (but are not currently.)
   // TODO: These sequences should not be unescaped.
-  EXPECT_THAT(Evaluate("'\\x20'"), EvalsToStringThatMatches(StrEq(" ")));
-  EXPECT_THAT(Evaluate("'\\123'"), EvalsToStringThatMatches(StrEq("S")));
-  EXPECT_THAT(Evaluate("'\\x00000020'"), EvalsToStringThatMatches(StrEq(" ")));
-})
+  EXPECT_THAT(TestFixture::Evaluate("'\\x20'"),
+              EvalsToStringThatMatches(StrEq(" ")));
+  EXPECT_THAT(TestFixture::Evaluate("'\\123'"),
+              EvalsToStringThatMatches(StrEq("S")));
+  EXPECT_THAT(TestFixture::Evaluate("'\\x00000020'"),
+              EvalsToStringThatMatches(StrEq(" ")));
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestStringComparisons, {
-  EXPECT_THAT(Evaluate("'foo' = 'foo'"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo' = 'bar'"), EvalsToFalse());
+TYPED_TEST(FhirPathTest, TestStringComparisons) {
+  EXPECT_THAT(TestFixture::Evaluate("'foo' = 'foo'"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo' = 'bar'"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("'foo' != 'bar'"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo' != 'foo'"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("'foo' != 'bar'"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo' != 'foo'"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("'bar' < 'foo'"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo' < 'foo'"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("'bar' < 'foo'"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo' < 'foo'"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("'foo' > 'bar'"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo' > 'foo'"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("'foo' > 'bar'"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo' > 'foo'"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("'foo' >= 'foo'"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo' >= 'bar'"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'bar' >= 'foo'"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("'foo' >= 'foo'"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo' >= 'bar'"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'bar' >= 'foo'"), EvalsToFalse());
 
-  EXPECT_THAT(Evaluate("'foo' <= 'foo'"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'bar' <= 'foo'"), EvalsToTrue());
-  EXPECT_THAT(Evaluate("'foo' <= 'bar'"), EvalsToFalse());
-})
+  EXPECT_THAT(TestFixture::Evaluate("'foo' <= 'foo'"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'bar' <= 'foo'"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo' <= 'bar'"), EvalsToFalse());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestDateTimeLiteral, {
+TYPED_TEST(FhirPathTest, TestDateTimeLiteral) {
+  using DateTime = typename TypeParam::DateTime;
+  using DateTimePrecision = typename TypeParam::DateTime::Precision;
+
   DateTime millisecond_precision;
   millisecond_precision.set_value_us(1390660214559000);
   millisecond_precision.set_timezone("Z");
   millisecond_precision.set_precision(DateTime::MILLISECOND);
-  EXPECT_THAT(Evaluate("@2014-01-25T14:30:14.559").ValueOrDie().GetMessages(),
+  EXPECT_THAT(TestFixture::Evaluate("@2014-01-25T14:30:14.559")
+                  .ValueOrDie()
+                  .GetMessages(),
               ElementsAreArray({EqualsProto(millisecond_precision)}));
 
   DateTime second_precision;
   second_precision.set_value_us(1390660214000000);
   second_precision.set_timezone("Z");
   second_precision.set_precision(DateTime::SECOND);
-  EXPECT_THAT(Evaluate("@2014-01-25T14:30:14").ValueOrDie().GetMessages(),
-              ElementsAreArray({EqualsProto(second_precision)}));
+  EXPECT_THAT(
+      TestFixture::Evaluate("@2014-01-25T14:30:14").ValueOrDie().GetMessages(),
+      ElementsAreArray({EqualsProto(second_precision)}));
 
   // TODO: MINUTE precision should be supported.
-  EXPECT_THAT(Evaluate("@2014-01-25T14:30"),
+  EXPECT_THAT(TestFixture::Evaluate("@2014-01-25T14:30"),
               HasStatusCode(StatusCode::kUnimplemented));
 
   // TODO: HOUR precision should be supported.
-  EXPECT_THAT(Evaluate("@2014-01-25T14"),
+  EXPECT_THAT(TestFixture::Evaluate("@2014-01-25T14"),
               HasStatusCode(StatusCode::kUnimplemented));
 
   EXPECT_THAT(
-      Evaluate("@2014-01-25T").ValueOrDie().GetMessages(),
-      ElementsAreArray({EqualsProto(ToDateTime<DateTime, DateTime::Precision>(
+      TestFixture::Evaluate("@2014-01-25T").ValueOrDie().GetMessages(),
+      ElementsAreArray({EqualsProto(ToDateTime<DateTime, DateTimePrecision>(
           absl::CivilSecond(2014, 1, 25, 0, 0, 0), absl::UTCTimeZone(),
           DateTime::DAY))}));
 
   EXPECT_THAT(
-      Evaluate("@2014-01T").ValueOrDie().GetMessages(),
-      ElementsAreArray({EqualsProto(ToDateTime<DateTime, DateTime::Precision>(
+      TestFixture::Evaluate("@2014-01T").ValueOrDie().GetMessages(),
+      ElementsAreArray({EqualsProto(ToDateTime<DateTime, DateTimePrecision>(
           absl::CivilSecond(2014, 1, 1, 0, 0, 0), absl::UTCTimeZone(),
           DateTime::MONTH))}));
 
   EXPECT_THAT(
-      Evaluate("@2014T").ValueOrDie().GetMessages(),
-      ElementsAreArray({EqualsProto(ToDateTime<DateTime, DateTime::Precision>(
+      TestFixture::Evaluate("@2014T").ValueOrDie().GetMessages(),
+      ElementsAreArray({EqualsProto(ToDateTime<DateTime, DateTimePrecision>(
           absl::CivilSecond(2014, 1, 1, 0, 0, 0), absl::UTCTimeZone(),
           DateTime::YEAR))}));
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TestTimeComparisonsWithLiterals, {
+TYPED_TEST(FhirPathTest, TestTimeComparisonsWithLiterals) {
   // Test cases form http://hl7.org/fhirpath/#datetime-equality
   // TODO: This should evaluate to true.
-  EXPECT_THAT(Evaluate("@2012-01-01T10:30 = @2012-01-01T10:30"),
+  EXPECT_THAT(TestFixture::Evaluate("@2012-01-01T10:30 = @2012-01-01T10:30"),
               HasStatusCode(StatusCode::kUnimplemented));
   // TODO: This should evaluate to false.
-  EXPECT_THAT(Evaluate("@2012-01-01T10:30 = @2012-01-01T10:31"),
+  EXPECT_THAT(TestFixture::Evaluate("@2012-01-01T10:30 = @2012-01-01T10:31"),
               HasStatusCode(StatusCode::kUnimplemented));
   // TODO: This should evaluate to empty.
-  EXPECT_THAT(Evaluate("@2012-01-01T10:30:31 = @2012-01-01T10:30"),
+  EXPECT_THAT(TestFixture::Evaluate("@2012-01-01T10:30:31 = @2012-01-01T10:30"),
               HasStatusCode(StatusCode::kUnimplemented));
   // TODO: This should evaluate to true.
-  EXPECT_THAT(Evaluate("@2012-01-01T10:30:31.0 = @2012-01-01T10:30:31"),
-              EvalsToFalse());
-  EXPECT_THAT(Evaluate("@2012-01-01T10:30:31.1 = @2012-01-01T10:30:31"),
-              EvalsToFalse());
+  EXPECT_THAT(
+      TestFixture::Evaluate("@2012-01-01T10:30:31.0 = @2012-01-01T10:30:31"),
+      EvalsToFalse());
+  EXPECT_THAT(
+      TestFixture::Evaluate("@2012-01-01T10:30:31.1 = @2012-01-01T10:30:31"),
+      EvalsToFalse());
   // Additional test case to cover unimplemented example above.
   // TODO: This should evaluate to empty.
-  EXPECT_THAT(Evaluate("@2018-03-01T = @2018-03-01T10:30:00"), EvalsToFalse());
-  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 = @2018-03-01T10:30:00"),
-              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("@2018-03-01T = @2018-03-01T10:30:00"),
+              EvalsToFalse());
+  EXPECT_THAT(
+      TestFixture::Evaluate("@2018-03-01T10:30:00 = @2018-03-01T10:30:00"),
+      EvalsToTrue());
 
   EXPECT_THAT(
-      Evaluate("@2017-11-05T01:30:00.0-04:00 < @2017-11-05T01:15:00.0-05:00"),
+      TestFixture::Evaluate(
+          "@2017-11-05T01:30:00.0-04:00 < @2017-11-05T01:15:00.0-05:00"),
       EvalsToTrue());
   EXPECT_THAT(
-      Evaluate("@2017-11-05T01:30:00.0-04:00 > @2017-11-05T01:15:00.0-05:00"),
+      TestFixture::Evaluate(
+          "@2017-11-05T01:30:00.0-04:00 > @2017-11-05T01:15:00.0-05:00"),
       EvalsToFalse());
   // TODO: This should evaluate to true.
   EXPECT_THAT(
-      Evaluate("@2017-11-05T01:30:00.0-04:00 = @2017-11-05T00:30:00.0-05:00"),
+      TestFixture::Evaluate(
+          "@2017-11-05T01:30:00.0-04:00 = @2017-11-05T00:30:00.0-05:00"),
       EvalsToFalse());
   EXPECT_THAT(
-      Evaluate("@2017-11-05T01:30:00.0-04:00 = @2017-11-05T01:15:00.0-05:00"),
+      TestFixture::Evaluate(
+          "@2017-11-05T01:30:00.0-04:00 = @2017-11-05T01:15:00.0-05:00"),
       EvalsToFalse());
 
   // Test cases form http://hl7.org/fhirpath/#greater-than
-  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 > @2018-03-01T10:00:00"),
-              EvalsToTrue());
+  EXPECT_THAT(
+      TestFixture::Evaluate("@2018-03-01T10:30:00 > @2018-03-01T10:00:00"),
+      EvalsToTrue());
   // TODO: This should evaluate to empty.
-  EXPECT_THAT(Evaluate("@2018-03-01T10 > @2018-03-01T10:30"),
+  EXPECT_THAT(TestFixture::Evaluate("@2018-03-01T10 > @2018-03-01T10:30"),
               HasStatusCode(StatusCode::kUnimplemented));
-  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 > @2018-03-01T10:30:00.0"),
-              EvalsToFalse());
+  EXPECT_THAT(
+      TestFixture::Evaluate("@2018-03-01T10:30:00 > @2018-03-01T10:30:00.0"),
+      EvalsToFalse());
   // Additional test case to cover unimplemented example above.
-  EXPECT_THAT(Evaluate("@2018-03-01T > @2018-03-01T10:30:00"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("@2018-03-01T > @2018-03-01T10:30:00"),
+              EvalsToEmpty());
 
   // Test cases form http://hl7.org/fhirpath/#less-than
-  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 < @2018-03-01T10:00:00"),
-              EvalsToFalse());
+  EXPECT_THAT(
+      TestFixture::Evaluate("@2018-03-01T10:30:00 < @2018-03-01T10:00:00"),
+      EvalsToFalse());
   // TODO: This should evaluate to empty.
-  EXPECT_THAT(Evaluate("@2018-03-01T10 < @2018-03-01T10:30"),
+  EXPECT_THAT(TestFixture::Evaluate("@2018-03-01T10 < @2018-03-01T10:30"),
               HasStatusCode(StatusCode::kUnimplemented));
-  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 < @2018-03-01T10:30:00.0"),
-              EvalsToFalse());
+  EXPECT_THAT(
+      TestFixture::Evaluate("@2018-03-01T10:30:00 < @2018-03-01T10:30:00.0"),
+      EvalsToFalse());
   // Additional test case to cover unimplemented example above.
-  EXPECT_THAT(Evaluate("@2018-03-01T < @2018-03-01T10:30:00"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("@2018-03-01T < @2018-03-01T10:30:00"),
+              EvalsToEmpty());
 
   // Test cases from http://hl7.org/fhirpath/#less-or-equal
-  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 <= @2018-03-01T10:00:00"),
-              EvalsToFalse());
+  EXPECT_THAT(
+      TestFixture::Evaluate("@2018-03-01T10:30:00 <= @2018-03-01T10:00:00"),
+      EvalsToFalse());
   // TODO: This should evaluate to empty.
-  EXPECT_THAT(Evaluate("@2018-03-01T10 <= @2018-03-01T10:30"),
+  EXPECT_THAT(TestFixture::Evaluate("@2018-03-01T10 <= @2018-03-01T10:30"),
               HasStatusCode(StatusCode::kUnimplemented));
-  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 <= @2018-03-01T10:30:00.0"),
-              EvalsToTrue());
+  EXPECT_THAT(
+      TestFixture::Evaluate("@2018-03-01T10:30:00 <= @2018-03-01T10:30:00.0"),
+      EvalsToTrue());
   // Additional test case to cover unimplemented example above.
-  EXPECT_THAT(Evaluate("@2018-03-01T <= @2018-03-01T10:30:00"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("@2018-03-01T <= @2018-03-01T10:30:00"),
+              EvalsToEmpty());
 
   // Test cases from http://hl7.org/fhirpath/#greater-or-equal
-  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 >= @2018-03-01T10:00:00"),
-              EvalsToTrue());
+  EXPECT_THAT(
+      TestFixture::Evaluate("@2018-03-01T10:30:00 >= @2018-03-01T10:00:00"),
+      EvalsToTrue());
   // TODO: This should evaluate to empty.
-  EXPECT_THAT(Evaluate("@2018-03-01T10 >= @2018-03-01T10:30"),
+  EXPECT_THAT(TestFixture::Evaluate("@2018-03-01T10 >= @2018-03-01T10:30"),
               HasStatusCode(StatusCode::kUnimplemented));
-  EXPECT_THAT(Evaluate("@2018-03-01T10:30:00 >= @2018-03-01T10:30:00.0"),
-              EvalsToTrue());
-})
+  EXPECT_THAT(
+      TestFixture::Evaluate("@2018-03-01T10:30:00 >= @2018-03-01T10:30:00.0"),
+      EvalsToTrue());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TimeComparison, {
+TYPED_TEST(FhirPathTest, TimeComparison) {
+  using Period = typename TypeParam::Period;
+
   Period start_before_end_period = ParseFromString<Period>(R"proto(
     start: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
     end: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
   )proto");
-  EXPECT_THAT(Evaluate(start_before_end_period, "start <= end"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate(start_before_end_period, "start <= end"),
+              EvalsToTrue());
 
   Period end_before_start_period = ParseFromString<Period>(R"proto(
     start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
     end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
   )proto");
-  EXPECT_THAT(Evaluate(end_before_start_period, "start <= end"),
+  EXPECT_THAT(TestFixture::Evaluate(end_before_start_period, "start <= end"),
               EvalsToFalse());
 
   Period dst_transition = ParseFromString<Period>(R"proto(
@@ -1851,77 +1979,85 @@ FHIR_VERSION_TEST(FhirPathTest, TimeComparison, {
       precision: SECOND
     }
   )proto");
-  EXPECT_THAT(Evaluate(dst_transition, "start <= end"), EvalsToTrue());
-})
+  EXPECT_THAT(TestFixture::Evaluate(dst_transition, "start <= end"),
+              EvalsToTrue());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TimeCompareDifferentPrecision, {
+TYPED_TEST(FhirPathTest, TimeCompareDifferentPrecision) {
+  using DateTime = typename TypeParam::DateTime;
+  using DateTimePrecision = typename TypeParam::DateTime::Precision;
+  using Period = typename TypeParam::Period;
+
   absl::TimeZone zone;
   absl::LoadTimeZone("America/Los_Angeles", &zone);
 
   // Ensure comparison returns false on fine-grained checks but true
   // on corresponding coarse-grained checks.
-  EXPECT_THAT(
-      Evaluate(CreatePeriod<Period, DateTime>(
-                   ToDateTime<DateTime, DateTime::Precision>(
-                       absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                       DateTime::SECOND),
-                   ToDateTime<DateTime, DateTime::Precision>(
-                       absl::CivilDay(2019, 5, 2), zone, DateTime::SECOND)),
-               "start <= end"),
-      EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate(
+                  CreatePeriod<Period, DateTime>(
+                      ToDateTime<DateTime, DateTimePrecision>(
+                          absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                          DateTime::SECOND),
+                      ToDateTime<DateTime, DateTimePrecision>(
+                          absl::CivilDay(2019, 5, 2), zone, DateTime::SECOND)),
+                  "start <= end"),
+              EvalsToFalse());
 
-  EXPECT_THAT(
-      Evaluate(CreatePeriod<Period, DateTime>(
-                   ToDateTime<DateTime, DateTime::Precision>(
-                       absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                       DateTime::SECOND),
-                   ToDateTime<DateTime, DateTime::Precision>(
-                       absl::CivilDay(2019, 5, 2), zone, DateTime::DAY)),
-               "start <= end"),
-      EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate(
+                  CreatePeriod<Period, DateTime>(
+                      ToDateTime<DateTime, DateTimePrecision>(
+                          absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                          DateTime::SECOND),
+                      ToDateTime<DateTime, DateTimePrecision>(
+                          absl::CivilDay(2019, 5, 2), zone, DateTime::DAY)),
+                  "start <= end"),
+              EvalsToEmpty());
 
-  EXPECT_THAT(
-      Evaluate(CreatePeriod<Period, DateTime>(
-                   ToDateTime<DateTime, DateTime::Precision>(
-                       absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                       DateTime::SECOND),
-                   ToDateTime<DateTime, DateTime::Precision>(
-                       absl::CivilDay(2019, 5, 1), zone, DateTime::DAY)),
-               "start <= end"),
-      EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate(
+                  CreatePeriod<Period, DateTime>(
+                      ToDateTime<DateTime, DateTimePrecision>(
+                          absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                          DateTime::SECOND),
+                      ToDateTime<DateTime, DateTimePrecision>(
+                          absl::CivilDay(2019, 5, 1), zone, DateTime::DAY)),
+                  "start <= end"),
+              EvalsToEmpty());
 
-  EXPECT_THAT(
-      Evaluate(CreatePeriod<Period, DateTime>(
-                   ToDateTime<DateTime, DateTime::Precision>(
-                       absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                       DateTime::SECOND),
-                   ToDateTime<DateTime, DateTime::Precision>(
-                       absl::CivilDay(2019, 5, 1), zone, DateTime::MONTH)),
-               "start <= end"),
-      EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate(
+                  CreatePeriod<Period, DateTime>(
+                      ToDateTime<DateTime, DateTimePrecision>(
+                          absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                          DateTime::SECOND),
+                      ToDateTime<DateTime, DateTimePrecision>(
+                          absl::CivilDay(2019, 5, 1), zone, DateTime::MONTH)),
+                  "start <= end"),
+              EvalsToEmpty());
 
-  EXPECT_THAT(
-      Evaluate(CreatePeriod<Period, DateTime>(
-                   ToDateTime<DateTime, DateTime::Precision>(
-                       absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                       DateTime::SECOND),
-                   ToDateTime<DateTime, DateTime::Precision>(
-                       absl::CivilDay(2019, 1, 1), zone, DateTime::MONTH)),
-               "start <= end"),
-      EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate(
+                  CreatePeriod<Period, DateTime>(
+                      ToDateTime<DateTime, DateTimePrecision>(
+                          absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                          DateTime::SECOND),
+                      ToDateTime<DateTime, DateTimePrecision>(
+                          absl::CivilDay(2019, 1, 1), zone, DateTime::MONTH)),
+                  "start <= end"),
+              EvalsToEmpty());
 
-  EXPECT_THAT(
-      Evaluate(CreatePeriod<Period, DateTime>(
-                   ToDateTime<DateTime, DateTime::Precision>(
-                       absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
-                       DateTime::SECOND),
-                   ToDateTime<DateTime, DateTime::Precision>(
-                       absl::CivilDay(2019, 1, 1), zone, DateTime::YEAR)),
-               "start <= end"),
-      EvalsToEmpty());
-})
+  EXPECT_THAT(TestFixture::Evaluate(
+                  CreatePeriod<Period, DateTime>(
+                      ToDateTime<DateTime, DateTimePrecision>(
+                          absl::CivilSecond(2019, 5, 2, 22, 33, 53), zone,
+                          DateTime::SECOND),
+                      ToDateTime<DateTime, DateTimePrecision>(
+                          absl::CivilDay(2019, 1, 1), zone, DateTime::YEAR)),
+                  "start <= end"),
+              EvalsToEmpty());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, TimeCompareMicroseconds, {
+TYPED_TEST(FhirPathTest, TimeCompareMicroseconds) {
+  using DateTime = typename TypeParam::DateTime;
+  using Period = typename TypeParam::Period;
+
   // Test edge case for very high precision comparisons.
   DateTime start_micros;
   start_micros.set_value_us(1556750000000011);
@@ -1929,101 +2065,108 @@ FHIR_VERSION_TEST(FhirPathTest, TimeCompareMicroseconds, {
   start_micros.set_precision(DateTime::MICROSECOND);
 
   DateTime end_micros = start_micros;
-  EXPECT_THAT(Evaluate(CreatePeriod<Period, DateTime>(start_micros, end_micros),
-                       "start <= end"),
+  EXPECT_THAT(TestFixture::Evaluate(
+                  CreatePeriod<Period, DateTime>(start_micros, end_micros),
+                  "start <= end"),
               EvalsToTrue());
 
   end_micros.set_value_us(end_micros.value_us() - 1);
-  EXPECT_THAT(Evaluate(CreatePeriod<Period, DateTime>(start_micros, end_micros),
-                       "start <= end"),
+  EXPECT_THAT(TestFixture::Evaluate(
+                  CreatePeriod<Period, DateTime>(start_micros, end_micros),
+                  "start <= end"),
               EvalsToFalse());
-})
+}
 
-FHIR_VERSION_TEST(FhirPathTest, SimpleQuantityComparisons, {
-  auto kinetics =
-      ParseFromString<r4::core::MedicationKnowledge_Kinetics>(R"proto(
-        area_under_curve {
+TYPED_TEST(FhirPathTest, SimpleQuantityComparisons) {
+  auto range = ParseFromString<typename TypeParam::Range>(R"proto(
+    low {
+      value { value: "1.1" }
+      system { value: "http://valuesystem.example.org/foo" }
+      code { value: "bar" }
+    }
+    high {
+      value { value: "1.2" }
+      system { value: "http://valuesystem.example.org/foo" }
+      code { value: "bar" }
+    }
+  )proto");
+
+  EXPECT_THAT(TestFixture::Evaluate(range, "low < low"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate(range, "low <= low"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate(range, "low >= low"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate(range, "low > low"), EvalsToFalse());
+
+  EXPECT_THAT(TestFixture::Evaluate(range, "high < low"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate(range, "high <= low"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate(range, "high >= low"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate(range, "high > low"), EvalsToTrue());
+
+  EXPECT_THAT(TestFixture::Evaluate(range, "low < high"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate(range, "low <= high"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate(range, "low >= high"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate(range, "low > high"), EvalsToFalse());
+
+  // Different quantity codes
+  auto range_different_codes =
+      ParseFromString<typename TypeParam::Range>(R"proto(
+        low {
           value { value: "1.1" }
           system { value: "http://valuesystem.example.org/foo" }
           code { value: "bar" }
         }
-        area_under_curve {
-          value { value: "1.2" }
-          system { value: "http://valuesystem.example.org/foo" }
-          code { value: "bar" }
-        }
-        area_under_curve {
+        high {
           value { value: "1.1" }
           system { value: "http://valuesystem.example.org/foo" }
           code { value: "different" }
         }
-        area_under_curve {
+      )proto");
+  EXPECT_THAT(TestFixture::Evaluate(range_different_codes, "low > high"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+
+  // Different quantity systems
+  auto range_different_systems =
+      ParseFromString<typename TypeParam::Range>(R"proto(
+        low {
+          value { value: "1.1" }
+          system { value: "http://valuesystem.example.org/foo" }
+          code { value: "bar" }
+        }
+        high {
           value { value: "1.1" }
           system { value: "http://valuesystem.example.org/different" }
           code { value: "bar" }
         }
       )proto");
-
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] < areaUnderCurve[0]"),
-              EvalsToFalse());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] <= areaUnderCurve[0]"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] >= areaUnderCurve[0]"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] > areaUnderCurve[0]"),
-              EvalsToFalse());
-
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[1] < areaUnderCurve[0]"),
-              EvalsToFalse());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[1] <= areaUnderCurve[0]"),
-              EvalsToFalse());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[1] >= areaUnderCurve[0]"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[1] > areaUnderCurve[0]"),
-              EvalsToTrue());
-
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] < areaUnderCurve[1]"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] <= areaUnderCurve[1]"),
-              EvalsToTrue());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] >= areaUnderCurve[1]"),
-              EvalsToFalse());
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] > areaUnderCurve[1]"),
-              EvalsToFalse());
-
-  // Different quantity codes
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] > areaUnderCurve[2]"),
+  EXPECT_THAT(TestFixture::Evaluate(range_different_systems, "low > high"),
               HasStatusCode(StatusCode::kInvalidArgument));
+}
 
-  // Different quantity systems
-  EXPECT_THAT(Evaluate(kinetics, "areaUnderCurve[0] > areaUnderCurve[3]"),
-              HasStatusCode(StatusCode::kInvalidArgument));
-})
+TYPED_TEST(FhirPathTest, TestCompareEnumToString) {
+  auto encounter = ValidEncounter<typename TypeParam::Encounter>();
 
-FHIR_VERSION_TEST(FhirPathTest, TestCompareEnumToString, {
-  auto encounter = ValidEncounter<Encounter>();
-
-  EXPECT_THAT(Evaluate(encounter, "status = 'triaged'"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate(encounter, "status = 'triaged'"),
+              EvalsToTrue());
 
   encounter.mutable_status()->set_value(
-      EncounterStatusCode::FINISHED);
-  EXPECT_THAT(Evaluate(encounter, "status = 'triaged'"), EvalsToFalse());
-})
+      TypeParam::EncounterStatusCode::FINISHED);
+  EXPECT_THAT(TestFixture::Evaluate(encounter, "status = 'triaged'"),
+              EvalsToFalse());
+}
 
-FHIR_VERSION_TEST(FhirPathTest, PathNavigationAfterContainedResourceAndValueX, {
-  Bundle bundle = ParseFromString<Bundle>(
+TYPED_TEST(FhirPathTest, PathNavigationAfterContainedResourceAndValueX) {
+  auto bundle = ParseFromString<typename TypeParam::Bundle>(
       R"proto(entry: {
                 resource: {
                   patient: { deceased: { boolean: { value: true } } }
                 }
               })proto");
 
-  Boolean expected = ParseFromString<Boolean>("value: true");
+  auto expected = ParseFromString<typename TypeParam::Boolean>("value: true");
 
-  FHIR_ASSERT_OK_AND_ASSIGN(auto result,
-                            Evaluate(bundle, "entry[0].resource.deceased"));
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      auto result, TestFixture::Evaluate(bundle, "entry[0].resource.deceased"));
   EXPECT_THAT(result.GetMessages(), ElementsAreArray({EqualsProto(expected)}));
-})
+}
 
 TEST(FhirPathTest, PathNavigationAfterContainedResourceR4Any) {
   auto contained = ParseFromString<r4::core::ContainedResource>(
@@ -2032,12 +2175,12 @@ TEST(FhirPathTest, PathNavigationAfterContainedResourceR4Any) {
       "deceased: { boolean: { value: true } }");
   patient.add_contained()->PackFrom(contained);
 
-  EXPECT_THAT(r4test::Evaluate(patient, "contained.value"),
+  EXPECT_THAT(FhirPathTest<R4Types>::Evaluate(patient, "contained.value"),
               EvalsToStringThatMatches(StrEq("bar")));
 }
 
-FHIR_VERSION_TEST(FhirPathTest, ResourceReference, {
-  Bundle bundle = ParseFromString<Bundle>(
+TYPED_TEST(FhirPathTest, ResourceReference) {
+  auto bundle = ParseFromString<typename TypeParam::Bundle>(
       R"proto(entry: {
                 resource: {
                   patient: { deceased: { boolean: { value: true } } }
@@ -2062,47 +2205,53 @@ FHIR_VERSION_TEST(FhirPathTest, ResourceReference, {
                 }
               })proto");
 
-  EXPECT_THAT(Evaluate(bundle, "%resource").ValueOrDie().GetMessages(),
-              ElementsAreArray({EqualsProto(bundle)}));
+  EXPECT_THAT(
+      TestFixture::Evaluate(bundle, "%resource").ValueOrDie().GetMessages(),
+      ElementsAreArray({EqualsProto(bundle)}));
 
   EXPECT_THAT(
-      Evaluate(bundle, "entry[0].resource.select(%resource)")
+      TestFixture::Evaluate(bundle, "entry[0].resource.select(%resource)")
           .ValueOrDie()
           .GetMessages(),
       ElementsAreArray({EqualsProto(bundle.entry(0).resource().patient())}));
 
   EXPECT_THAT(
-      Evaluate(bundle, "entry[0].resource.select(%resource).select(%resource)")
+      TestFixture::Evaluate(
+          bundle, "entry[0].resource.select(%resource).select(%resource)")
           .ValueOrDie()
           .GetMessages(),
       ElementsAreArray({EqualsProto(bundle.entry(0).resource().patient())}));
 
   EXPECT_THAT(
-      Evaluate(bundle, "entry[0].resource.deceased.select(%resource)")
+      TestFixture::Evaluate(bundle,
+                            "entry[0].resource.deceased.select(%resource)")
           .ValueOrDie()
           .GetMessages(),
       ElementsAreArray({EqualsProto(bundle.entry(0).resource().patient())}));
 
-  EXPECT_THAT(Evaluate(bundle, "entry[1].resource.select(%resource)")
-                  .ValueOrDie()
-                  .GetMessages(),
-              ElementsAreArray(
-                  {EqualsProto(bundle.entry(1).resource().observation())}));
-
-  EXPECT_THAT(Evaluate(bundle, "entry[1].resource.value.select(%resource)")
-                  .ValueOrDie()
-                  .GetMessages(),
-              ElementsAreArray(
-                  {EqualsProto(bundle.entry(1).resource().observation())}));
+  EXPECT_THAT(
+      TestFixture::Evaluate(bundle, "entry[1].resource.select(%resource)")
+          .ValueOrDie()
+          .GetMessages(),
+      ElementsAreArray(
+          {EqualsProto(bundle.entry(1).resource().observation())}));
 
   EXPECT_THAT(
-      Evaluate(bundle, "entry[2].resource.select(%resource)")
+      TestFixture::Evaluate(bundle, "entry[1].resource.value.select(%resource)")
+          .ValueOrDie()
+          .GetMessages(),
+      ElementsAreArray(
+          {EqualsProto(bundle.entry(1).resource().observation())}));
+
+  EXPECT_THAT(
+      TestFixture::Evaluate(bundle, "entry[2].resource.select(%resource)")
           .ValueOrDie()
           .GetMessages(),
       ElementsAreArray({EqualsProto(bundle.entry(2).resource().bundle())}));
 
   EXPECT_THAT(
-      Evaluate(bundle, "entry[2].resource.entry[0].resource.select(%resource)")
+      TestFixture::Evaluate(
+          bundle, "entry[2].resource.entry[0].resource.select(%resource)")
           .ValueOrDie()
           .GetMessages(),
       ElementsAreArray({EqualsProto(bundle.entry(2)
@@ -2112,7 +2261,7 @@ FHIR_VERSION_TEST(FhirPathTest, ResourceReference, {
                                         .resource()
                                         .observation())}));
 
-  EXPECT_THAT(Evaluate(bundle, "entry.resource.select(%resource)")
+  EXPECT_THAT(TestFixture::Evaluate(bundle, "entry.resource.select(%resource)")
                   .ValueOrDie()
                   .GetMessages(),
               UnorderedElementsAreArray(
@@ -2124,20 +2273,24 @@ FHIR_VERSION_TEST(FhirPathTest, ResourceReference, {
   // contains the original node that is in %context." Given that the literal
   // 'true' is not contained by any resources it is believed that this should
   // result in an error.
-  EXPECT_EQ(Evaluate(bundle, "true.select(%resource)").status().message(),
-            "No Resource found in ancestry.");
-
-  // Likewise, derived values do not have a defined %resource.
-  EXPECT_EQ(Evaluate(bundle,
-                     "(entry[2].resource.entry[0].resource.value & "
-                     "entry[1].resource.value).select(%resource)")
+  EXPECT_EQ(TestFixture::Evaluate(bundle, "true.select(%resource)")
                 .status()
                 .message(),
             "No Resource found in ancestry.");
 
-  EXPECT_THAT(Evaluate(bundle,
-                       "(entry[2].resource.entry[0].resource.value | "
-                       "entry[1].resource.value | %resource).select(%resource)")
+  // Likewise, derived values do not have a defined %resource.
+  EXPECT_EQ(
+      TestFixture::Evaluate(bundle,
+                            "(entry[2].resource.entry[0].resource.value & "
+                            "entry[1].resource.value).select(%resource)")
+          .status()
+          .message(),
+      "No Resource found in ancestry.");
+
+  EXPECT_THAT(TestFixture::Evaluate(
+                  bundle,
+                  "(entry[2].resource.entry[0].resource.value | "
+                  "entry[1].resource.value | %resource).select(%resource)")
                   .ValueOrDie()
                   .GetMessages(),
               UnorderedElementsAreArray(
@@ -2149,7 +2302,7 @@ FHIR_VERSION_TEST(FhirPathTest, ResourceReference, {
                                    .observation()),
                    EqualsProto(bundle.entry(1).resource().observation()),
                    EqualsProto(bundle)}));
-})
+}
 
 }  // namespace
 
