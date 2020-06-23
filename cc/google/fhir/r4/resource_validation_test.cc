@@ -89,14 +89,6 @@ TEST(ResourceValidationTest, EmptyOneof) {
 
 TEST(BundleValidationTest, Valid) { ValidTest<Bundle>("bundle_valid"); }
 
-TEST(EncounterValidationTest, StartLaterThanEnd) {
-  InvalidTest<Encounter>("encounter_invalid_start_later_than_end");
-}
-
-TEST(EncounterValidationTest, StartLaterThanEndButEndHasDayPrecision) {
-  ValidTest<Encounter>("encounter_valid_start_later_than_end_day_precision");
-}
-
 TEST(EncounterValidationTest, Valid) {
   ValidTest<Encounter>("encounter_valid");
 }

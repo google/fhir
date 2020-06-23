@@ -154,58 +154,6 @@ TEST(BundleValidationTest, Valid) {
   EXPECT_TRUE(ValidateResource(bundle).ok());
 }
 
-TEST(EncounterValidationTest, StartLaterThanEnd) {
-  google::protobuf::TextFormat::Parser parser;
-  parser.AllowPartialMessage(true);
-  Encounter encounter;
-  ASSERT_TRUE(parser.ParseFromString(R"proto(
-    id { value: "123" }
-    status { value: FINISHED }
-    subject { patient_id { value: "4" } }
-    period {
-      start {
-        value_us: 5515680100000000  # "2144-10-13T21:21:40+00:00"
-        timezone: "UTC"
-        precision: SECOND
-      }
-      end {
-        value_us: 5515679100000000  # "2144-10-13T21:05:00+00:00"
-        timezone: "UTC"
-        precision: SECOND
-      }
-    }
-  )proto", &encounter));
-
-  EXPECT_EQ(ValidateResource(encounter),
-            ::absl::FailedPreconditionError(
-                "Encounter.period-start-time-later-than-end-time"));
-}
-
-TEST(EncounterValidationTest, StartLaterThanEndButEndHasDayPrecision) {
-  google::protobuf::TextFormat::Parser parser;
-  parser.AllowPartialMessage(true);
-  Encounter encounter;
-  ASSERT_TRUE(parser.ParseFromString(R"proto(
-    id { value: "123" }
-    status { value: FINISHED }
-    subject { patient_id { value: "4" } }
-    period {
-      start {
-        value_us: 5515680100000000  # "2144-10-13T21:21:40+00:00"
-        timezone: "UTC"
-        precision: SECOND
-      }
-      end {
-        value_us: 5515679100000000  # "2144-10-13T21:05:00+00:00"
-        timezone: "UTC"
-        precision: DAY
-      }
-    }
-  )proto", &encounter));
-
-  FHIR_ASSERT_OK(ValidateResource(encounter));
-}
-
 TEST(EncounterValidationTest, Valid) {
   google::protobuf::TextFormat::Parser parser;
   parser.AllowPartialMessage(true);

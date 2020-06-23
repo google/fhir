@@ -38,6 +38,7 @@
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/r4/profiles.h"
+#include "google/fhir/references.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/profiles.h"
@@ -474,7 +475,7 @@ class Printer {
     // Note that setting the uri clears the typed references, since they share
     // a oneof
     FHIR_ASSIGN_OR_RETURN(const std::string& reference_string,
-                          ReferenceMessageToString(reference));
+                          ReferenceProtoToString(reference));
     FHIR_RETURN_IF_ERROR(SetPrimitiveStringValue(uri, reference_string));
     return mutable_reference;
   }

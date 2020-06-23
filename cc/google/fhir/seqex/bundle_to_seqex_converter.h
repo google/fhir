@@ -32,6 +32,7 @@
 #include "absl/strings/str_split.h"
 #include "absl/time/time.h"
 #include "google/fhir/bundle_to_versioned_resources_converter.h"
+#include "google/fhir/references.h"
 #include "google/fhir/seqex/converter_types.h"
 #include "google/fhir/seqex/example_key.h"
 #include "google/fhir/seqex/feature_keys.h"
@@ -313,10 +314,10 @@ class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
       (*example.mutable_features()
             ->mutable_feature())[seqex::kResourceIdFeatureKey]
           .mutable_bytes_list()
-          ->add_value(GetReferenceToResource(resource));
+          ->add_value(GetReferenceStringToResource(resource));
     }
     event_sequence->push_back(std::make_pair(
-        std::make_pair(version_time, GetReferenceToResource(resource)),
+        std::make_pair(version_time, GetReferenceStringToResource(resource)),
         example));
   }
 };

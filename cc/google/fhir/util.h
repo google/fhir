@@ -40,41 +40,9 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/type_macros.h"
 #include "proto/annotations.pb.h"
-#include "proto/r4/core/datatypes.pb.h"
-#include "proto/stu3/datatypes.pb.h"
 #include "re2/re2.h"
-
-// Macro for specifying the ContainedResources type within a bundle-like object,
-// given the Bundle-like type
-#define BUNDLE_CONTAINED_RESOURCE(b)                                  \
-  typename std::remove_const<typename std::remove_reference<decltype( \
-      std::declval<b>().entry(0).resource())>::type>::type
-
-// Macro for specifying a type contained within a bundle-like object, given
-// the Bundle-like type, and a field on the contained resource from that bundle.
-// E.g., in a template with a BundleLike type,
-// BUNDLE_TYPE(BundleLike, observation)
-// will return the Observation type from that bundle.
-#define BUNDLE_TYPE(b, r)                                             \
-  typename std::remove_const<typename std::remove_reference<decltype( \
-      std::declval<b>().entry(0).resource().r())>::type>::type
-
-// Macro for specifying the extension type associated with a FHIR type.
-#define EXTENSION_TYPE(t)                                             \
-  typename std::remove_const<typename std::remove_reference<decltype( \
-      std::declval<t>().id().extension(0))>::type>::type
-
-// Given a FHIR type, returns the datatype with a given name associated with
-// the input type's version of fhir
-#define FHIR_DATATYPE(t, d)                                           \
-  typename std::remove_const<typename std::remove_reference<decltype( \
-      std::declval<t>().id().extension(0).value().d())>::type>::type
-
-// Given a FHIR Reference type, gets the corresponding ReferenceId type.
-#define REFERENCE_ID_TYPE(r)                                          \
-  typename std::remove_const<typename std::remove_reference<decltype( \
-      std::declval<r>().patient_id())>::type>::type
 
 namespace google {
 namespace fhir {
@@ -83,28 +51,6 @@ namespace fhir {
 // will result in the patientId field getting the value "ABCD".
 Status SplitIfRelativeReference(::google::protobuf::Message* reference);
 
-StatusOr<stu3::proto::Reference> ReferenceStringToProtoStu3(
-    const std::string& input);
-
-StatusOr<r4::core::Reference> ReferenceStringToProtoR4(
-    const std::string& input);
-
-// Return the full string representation of a reference.
-StatusOr<std::string> ReferenceProtoToString(
-    const stu3::proto::Reference& reference);
-
-// Return the full string representation of a reference.
-StatusOr<std::string> ReferenceProtoToString(
-    const r4::core::Reference& reference);
-
-// When a message is not of a known type at compile time, this overload can
-// be used to cast to a reference and then call ReferenceProtoToString.
-// This is provided as a separate API rather than relying on the caller to cast
-// so that version-agnostic libraries don't need to link in multiple versions
-// of FHIR.
-StatusOr<std::string> ReferenceMessageToString(
-    const ::google::protobuf::Message& reference);
-
 // Builds an absl::Time from a time-like fhir Element.
 // Must have a value_us field.
 template <class T>
@@ -112,21 +58,8 @@ absl::Time GetTimeFromTimelikeElement(const T& timelike) {
   return absl::FromUnixMicros(timelike.value_us());
 }
 
-absl::Duration GetDurationFromTimelikeElement(
-    const ::google::fhir::stu3::proto::DateTime& datetime);
-
-absl::Duration GetDurationFromTimelikeElement(
-    const ::google::fhir::r4::core::DateTime& datetime);
-
-// Builds a absl::Time from a time-like fhir Element, corresponding to the
-// smallest time greater than this time element. For elements with DAY
-// precision, for example, this will be 86400 seconds past value_us of this
-// field.
-template <class T>
-absl::Time GetUpperBoundFromTimelikeElement(const T& timelike) {
-  return absl::FromUnixMicros(timelike.value_us()) +
-         GetDurationFromTimelikeElement(timelike);
-}
+StatusOr<absl::Time> GetTimeFromTimelikeElement(
+    const ::google::protobuf::Message& timelike);
 
 // Converts a time zone string of the forms found in time-like primitive types
 // into an absl::TimeZone
@@ -229,18 +162,6 @@ StatusOr<PatientLike*> GetMutablePatient(BundleLike* bundle) {
   return status;
 }
 
-// Returns a reference, e.g. "Encounter/1234" for a FHIR resource.
-std::string GetReferenceToResource(const ::google::protobuf::Message& message);
-
-// Returns a typed Reference for a FHIR resource.  If the message is not a FHIR
-// resource, an error will be returned.
-// TODO: Split version-specific functionality into separate files.
-StatusOr<stu3::proto::Reference> GetTypedReferenceToResourceStu3(
-    const ::google::protobuf::Message& resource);
-
-StatusOr<r4::core::Reference> GetTypedReferenceToResourceR4(
-    const ::google::protobuf::Message& resource);
-
 // Extract the value of a Decimal field as a double.
 template <class DecimalLike>
 StatusOr<double> GetDecimalValue(const DecimalLike& decimal) {
@@ -282,6 +203,9 @@ Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
                                const std::string& value);
 StatusOr<std::string> GetPrimitiveStringValue(
     const ::google::protobuf::Message& primitive, std::string* scratch);
+StatusOr<std::string> GetPrimitiveStringValue(const ::google::protobuf::Message& parent,
+                                              const std::string& field_name,
+                                              std::string* scratch);
 
 // Finds a resource of a templatized type within a bundle, by reference id.
 template <typename R, typename BundleLike, typename ReferenceIdLike>
@@ -327,30 +251,6 @@ Status GetResourceByReferenceId(const BundleLike& bundle,
       "No matching resource in bundle.\nReference:", reference_id.value(),
       "\nBundle:\n", bundle.DebugString()));
 }
-
-template <typename ResourceType, typename ReferenceLike>
-StatusOr<std::string> GetResourceIdFromReference(
-    const ReferenceLike& reference) {
-  auto value = ReferenceProtoToString(reference);
-  if (!value.ok()) {
-    return value;
-  }
-  ::absl::string_view r(value.ValueOrDie());
-  if (!::absl::ConsumePrefix(
-          &r, absl::StrCat(ResourceType::descriptor()->name(), "/"))) {
-    return ::absl::InvalidArgumentError(
-        absl::StrCat("Reference type doesn't match"));
-  }
-  return std::string(r);
-}
-
-void BuildDateTime(const absl::Time time, const std::string& time_zone,
-                   const stu3::proto::DateTime::Precision precision,
-                   stu3::proto::DateTime* datetime);
-
-void BuildDateTime(const absl::Time time, const std::string& time_zone,
-                   const r4::core::DateTime::Precision precision,
-                   r4::core::DateTime* datetime);
 
 template <typename ContainedResourceLike>
 StatusOr<::google::protobuf::Message*> MutableContainedResource(

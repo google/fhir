@@ -75,6 +75,36 @@ cc_library(
 )
 
 cc_library(
+    name = "references",
+    srcs = ["references.cc"],
+    hdrs = ["references.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":type_macros",
+        ":util",
+        "//cc/google/fhir/status:statusor",
+        "@com_google_absl//absl/strings",
+        "@com_google_protobuf//:protobuf",
+        "@com_googlesource_code_re2//:re2",
+    ],
+)
+
+cc_test(
+    name = "references_test",
+    srcs = ["references_test.cc"],
+    deps = [
+        ":references",
+        "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/stu3:codes_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:resources_cc_proto",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/time",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_library(
     name = "profiles_lib",
     srcs = ["profiles_lib.cc"],
     hdrs = ["profiles_lib.h"],
@@ -111,17 +141,16 @@ cc_library(
     deps = [
         ":annotations",
         ":proto_util",
-        "@com_google_protobuf//:protobuf",
-        "@com_google_absl//absl/base:core_headers",
-        "@com_google_absl//absl/memory",
-        "@com_google_absl//absl/strings",
-        "@com_google_absl//absl/time",
+        ":type_macros",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto:annotations_cc_proto",
-        "//proto/r4/core:datatypes_cc_proto",
-        "//proto/stu3:datatypes_cc_proto",
+        "@com_google_absl//absl/base:core_headers",
+        "@com_google_absl//absl/memory",
         "@com_google_absl//absl/status",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
+        "@com_google_protobuf//:protobuf",
         "@com_googlesource_code_re2//:re2",
     ],
 )
@@ -148,6 +177,7 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":annotations",
+        ":fhir_types",
         ":primitive_handler",
         ":proto_util",
         ":util",
@@ -155,8 +185,6 @@ cc_library(
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto:annotations_cc_proto",
-        "//proto/r4/core:datatypes_cc_proto",
-        "//proto/stu3:datatypes_cc_proto",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_protobuf//:protobuf",
@@ -299,6 +327,7 @@ cc_library(
         ":primitive_handler",
         ":primitive_wrapper",
         ":proto_util",
+        ":references",
         ":resource_validation",
         ":util",
         "//cc/google/fhir/r4:profiles",
@@ -453,4 +482,10 @@ cc_library(
         "@com_google_protobuf//:protobuf",
         "@jsoncpp_git//:jsoncpp",
     ],
+)
+
+cc_library(
+    name = "type_macros",
+    hdrs = ["type_macros.h"],
+    strip_include_prefix = "//cc/",
 )

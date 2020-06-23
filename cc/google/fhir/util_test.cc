@@ -41,46 +41,6 @@ using ::google::fhir::stu3::proto::EncounterStatusCode;
 using ::google::fhir::stu3::proto::Patient;
 using ::google::fhir::stu3::proto::Reference;
 
-TEST(GetResourceIdFromReferenceTest, PatientId) {
-  Reference r;
-  r.mutable_patient_id()->set_value("123");
-  auto got = google::fhir::GetResourceIdFromReference<Patient>(r);
-  ASSERT_TRUE(got.status().ok());
-  EXPECT_EQ(got.ValueOrDie(), "123");
-}
-
-TEST(GetResourceIdFromReferenceTest, PatientIdAsUri) {
-  Reference r;
-  r.mutable_uri()->set_value("Patient/123");
-  auto got = google::fhir::GetResourceIdFromReference<Patient>(r);
-  ASSERT_TRUE(got.status().ok());
-  EXPECT_EQ(got.ValueOrDie(), "123");
-}
-
-TEST(GetResourceIdFromReferenceTest, EncounterId) {
-  Reference r;
-  r.mutable_encounter_id()->set_value("456");
-  auto got = google::fhir::GetResourceIdFromReference<Encounter>(r);
-  ASSERT_TRUE(got.status().ok());
-  EXPECT_EQ(got.ValueOrDie(), "456");
-}
-
-TEST(GetResourceIdFromReferenceTest, EncounterIdAsUri) {
-  Reference r;
-  r.mutable_uri()->set_value("Encounter/456");
-  auto got = google::fhir::GetResourceIdFromReference<Encounter>(r);
-  ASSERT_TRUE(got.status().ok());
-  EXPECT_EQ(got.ValueOrDie(), "456");
-}
-
-TEST(GetResourceIdFromReferenceTest, ReferenceDoesNotMatch) {
-  Reference r;
-  r.mutable_uri()->set_value("Patient/123");
-  auto got = google::fhir::GetResourceIdFromReference<Encounter>(r);
-  EXPECT_EQ(got.status(),
-            ::absl::InvalidArgumentError("Reference type doesn't match"));
-}
-
 TEST(GetResourceFromBundleEntryTest, GetResourceFromEncounter) {
   Bundle::Entry entry;
   Encounter* encounter = entry.mutable_resource()->mutable_encounter();

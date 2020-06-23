@@ -25,6 +25,7 @@
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 
 namespace google {

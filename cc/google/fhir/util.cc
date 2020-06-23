@@ -20,8 +20,10 @@
 
 
 #include "google/protobuf/descriptor.pb.h"
+#include "google/protobuf/descriptor.h"
 #include "google/protobuf/reflection.h"
 #include "absl/memory/memory.h"
+#include "absl/status/status.h"
 #include "absl/strings/numbers.h"
 #include "absl/strings/str_cat.h"
 #include "absl/time/time.h"
@@ -29,9 +31,6 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "absl/status/status.h"
-#include "proto/r4/core/datatypes.pb.h"
-#include "proto/stu3/datatypes.pb.h"
 
 namespace google {
 namespace fhir {
@@ -41,158 +40,6 @@ using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
-
-namespace {
-
-StatusOr<const FieldDescriptor*> GetReferenceFieldForResource(
-    const Message& reference, const std::string& resource_type) {
-  const std::string field_name =
-      absl::StrCat(ToSnakeCase(resource_type), "_id");
-  const FieldDescriptor* field =
-      reference.GetDescriptor()->FindFieldByName(field_name);
-  if (field == nullptr) {
-    return InvalidArgumentError(
-        absl::StrCat("Resource type ", resource_type,
-                     " is not valid for a reference (field ", field_name,
-                     " does not exist)."));
-  }
-  return field;
-}
-
-Status PopulateTypedReferenceId(const std::string& resource_id,
-                                const std::string& version,
-                                Message* reference_id) {
-  FHIR_RETURN_IF_ERROR(SetPrimitiveStringValue(reference_id, resource_id));
-  if (!version.empty()) {
-    const FieldDescriptor* history_field =
-        reference_id->GetDescriptor()->FindFieldByName("history");
-    if (history_field == nullptr) {
-      return InvalidArgumentError(
-          absl::StrCat("Not a valid ReferenceId message: ",
-                       reference_id->GetDescriptor()->full_name(),
-                       ".  Field history does not exist)."));
-    }
-    FHIR_RETURN_IF_ERROR(
-        SetPrimitiveStringValue(reference_id->GetReflection()->MutableMessage(
-                                    reference_id, history_field),
-                                version));
-  }
-  return absl::OkStatus();
-}
-
-template <typename ReferenceLike,
-          typename ReferenceIdLike = REFERENCE_ID_TYPE(ReferenceLike)>
-StatusOr<std::string> ReferenceProtoToStringInternal(
-    const ReferenceLike& reference) {
-  if (reference.has_uri()) {
-    return reference.uri().value();
-  } else if (reference.has_fragment()) {
-    return absl::StrCat("#", reference.fragment().value());
-  }
-
-  const Reflection* reflection = reference.GetReflection();
-  static const google::protobuf::OneofDescriptor* oneof =
-      ReferenceLike::descriptor()->FindOneofByName("reference");
-  const FieldDescriptor* field =
-      reflection->GetOneofFieldDescriptor(reference, oneof);
-  if (field == nullptr) {
-    return ::absl::NotFoundError("Reference not set");
-  }
-  std::string prefix;
-  bool start = true;
-  for (const char c : field->name()) {
-    if (start) {
-      start = false;
-      prefix.push_back(c + 'A' - 'a');
-    } else if (c == '_') {
-      start = true;
-    } else {
-      prefix.push_back(c);
-    }
-  }
-  static LazyRE2 re = {"Id$"};
-  RE2::Replace(&prefix, *re, "");
-  const ReferenceIdLike& id =
-      (const ReferenceIdLike&)reflection->GetMessage(reference, field);
-  std::string reference_string = absl::StrCat(prefix, "/", id.value());
-  if (id.has_history()) {
-    absl::StrAppend(&reference_string, "/_history/", id.history().value());
-  }
-  return reference_string;
-}
-
-Status ReferenceStringToProto(const std::string& input, Message* reference) {
-  const Descriptor* descriptor = reference->GetDescriptor();
-  const Reflection* reflection = reference->GetReflection();
-  const FieldDescriptor* uri_field = descriptor->FindFieldByName("uri");
-  FHIR_RETURN_IF_ERROR(SetPrimitiveStringValue(
-      reflection->MutableMessage(reference, uri_field), input));
-  return SplitIfRelativeReference(reference);
-}
-
-}  // namespace
-
-StatusOr<std::string> ReferenceProtoToString(
-    const stu3::proto::Reference& reference) {
-  return ReferenceProtoToStringInternal(reference);
-}
-
-StatusOr<std::string> ReferenceProtoToString(
-    const r4::core::Reference& reference) {
-  return ReferenceProtoToStringInternal(reference);
-}
-
-// TODO: Split these into separate files, each that accepts only
-// one type.
-StatusOr<std::string> ReferenceMessageToString(
-    const ::google::protobuf::Message& reference) {
-  if (IsMessageType<stu3::proto::Reference>(reference)) {
-    return ReferenceProtoToString(
-        dynamic_cast<const stu3::proto::Reference&>(reference));
-  } else if (IsMessageType<r4::core::Reference>(reference)) {
-    return ReferenceProtoToString(
-        dynamic_cast<const r4::core::Reference&>(reference));
-  }
-  return InvalidArgumentError(
-      absl::StrCat("Invalid Reference type for ReferenceMessageToString: ",
-                   reference.GetDescriptor()->full_name()));
-}
-
-namespace {
-
-template <class TypedDateTime>
-absl::Duration InternalGetDurationFromTimelikeElement(
-    const TypedDateTime& datetime) {
-  // TODO: handle YEAR and MONTH properly
-  switch (datetime.precision()) {
-    case TypedDateTime::YEAR:
-      return absl::Hours(24 * 366);
-    case TypedDateTime::MONTH:
-      return absl::Hours(24 * 31);
-    case TypedDateTime::DAY:
-      return absl::Hours(24);
-    case TypedDateTime::SECOND:
-      return absl::Seconds(1);
-    case TypedDateTime::MILLISECOND:
-      return absl::Milliseconds(1);
-    case TypedDateTime::MICROSECOND:
-      return absl::Microseconds(1);
-    default:
-      LOG(FATAL) << "Unsupported datetime precision: " << datetime.precision();
-  }
-}
-
-}  // namespace
-
-absl::Duration GetDurationFromTimelikeElement(
-    const stu3::proto::DateTime& datetime) {
-  return InternalGetDurationFromTimelikeElement(datetime);
-}
-
-absl::Duration GetDurationFromTimelikeElement(
-    const r4::core::DateTime& datetime) {
-  return InternalGetDurationFromTimelikeElement(datetime);
-}
 
 StatusOr<absl::TimeZone> BuildTimeZoneFromString(
     const std::string& time_zone_string) {
@@ -235,7 +82,6 @@ StatusOr<absl::TimeZone> BuildTimeZoneFromString(
 
 StatusOr<std::string> GetResourceId(const Message& message) {
   const auto* desc = message.GetDescriptor();
-  const Reflection* ref = message.GetReflection();
   const FieldDescriptor* field = desc->FindFieldByName("id");
   if (!field) {
     return InvalidArgumentError(
@@ -248,146 +94,13 @@ StatusOr<std::string> GetResourceId(const Message& message) {
   if (field->cpp_type() != FieldDescriptor::CPPTYPE_MESSAGE) {
     return InvalidArgumentError("No id field found on message");
   }
-  if (IsMessageType<stu3::proto::Id>(field->message_type())) {
-    const auto* id_message =
-        dynamic_cast<const stu3::proto::Id*>(&ref->GetMessage(message, field));
-    return id_message->value();
-  } else if (IsMessageType<r4::core::Id>(field->message_type())) {
-    const auto* id_message =
-        dynamic_cast<const r4::core::Id*>(&ref->GetMessage(message, field));
-    return id_message->value();
-  } else {
-    return InvalidArgumentError(
-        absl::StrCat("id field is not a valid Id type: ", desc->full_name()));
-  }
+
+  std::string id_value;
+  return GetPrimitiveStringValue(message, "id", &id_value);
 }
 
 bool ResourceHasId(const Message& message) {
   return !GetResourceId(message).ValueOrDie().empty();
-}
-
-std::string GetReferenceToResource(const Message& message) {
-  return absl::StrCat(message.GetDescriptor()->name(), "/",
-                      GetResourceId(message).ValueOrDie());
-}
-
-Status PopulateReferenceToResource(const Message& resource,
-                                   Message* reference) {
-  FHIR_ASSIGN_OR_RETURN(const std::string resource_id, GetResourceId(resource));
-  FHIR_ASSIGN_OR_RETURN(const FieldDescriptor* reference_id_field,
-                        GetReferenceFieldForResource(
-                            *reference, resource.GetDescriptor()->name()));
-  Message* reference_id =
-      reference->GetReflection()->MutableMessage(reference, reference_id_field);
-  return PopulateTypedReferenceId(resource_id, "" /* no version */,
-                                  reference_id);
-}
-
-StatusOr<stu3::proto::Reference> GetTypedReferenceToResourceStu3(
-    const ::google::protobuf::Message& resource) {
-  stu3::proto::Reference reference;
-  FHIR_RETURN_IF_ERROR(PopulateReferenceToResource(resource, &reference));
-  return reference;
-}
-
-StatusOr<r4::core::Reference> GetTypedReferenceToResourceR4(
-    const ::google::protobuf::Message& resource) {
-  r4::core::Reference reference;
-  FHIR_RETURN_IF_ERROR(PopulateReferenceToResource(resource, &reference));
-  return reference;
-}
-
-// Splits relative references into their components, for example, "Patient/ABCD"
-// will result in the patientId field getting the value "ABCD".
-Status SplitIfRelativeReference(Message* reference) {
-  const Descriptor* descriptor = reference->GetDescriptor();
-  const Reflection* reflection = reference->GetReflection();
-
-  const FieldDescriptor* uri_field = descriptor->FindFieldByName("uri");
-  const FieldDescriptor* fragment_field =
-      descriptor->FindFieldByName("fragment");
-  if (!reflection->HasField(*reference, uri_field)) {
-    // There is no uri to split
-    return absl::OkStatus();
-  }
-
-  const Message& uri = reflection->GetMessage(*reference, uri_field);
-
-  std::string uri_scratch;
-  FHIR_ASSIGN_OR_RETURN(const std::string& uri_string,
-                        GetPrimitiveStringValue(uri, &uri_scratch));
-
-  static const LazyRE2 kInternalReferenceRegex{
-      "([0-9A-Za-z_]+)/([A-Za-z0-9.-]{1,64})(?:/_history/"
-      "([A-Za-z0-9.-]{1,64}))?"};
-  std::string resource_type;
-  std::string resource_id;
-  std::string version;
-  if (RE2::FullMatch(uri_string, *kInternalReferenceRegex, &resource_type,
-                     &resource_id, &version)) {
-    FHIR_ASSIGN_OR_RETURN(
-        const FieldDescriptor* reference_id_field,
-        GetReferenceFieldForResource(*reference, resource_type));
-    // Note that we make the reference_id off of the reference before adding it,
-    // since adding the reference_id would destroy the uri field, since they are
-    // in the same oneof.  This way allows us to copy fields from uri to
-    // reference_id without an extra copy.
-    std::unique_ptr<Message> reference_id =
-        absl::WrapUnique(reflection->GetMessageFactory()
-                             ->GetPrototype(reference_id_field->message_type())
-                             ->New());
-    FHIR_RETURN_IF_ERROR(
-        PopulateTypedReferenceId(resource_id, version, reference_id.get()));
-    const Message& uri = reflection->GetMessage(*reference, uri_field);
-    reference_id->GetTypeName();
-    FHIR_RETURN_IF_ERROR(CopyCommonField(uri, reference_id.get(), "id"));
-    FHIR_RETURN_IF_ERROR(CopyCommonField(uri, reference_id.get(), "extension"));
-    reflection->SetAllocatedMessage(reference, reference_id.release(),
-                                    reference_id_field);
-    return absl::OkStatus();
-  }
-
-  static const LazyRE2 kFragmentReferenceRegex{"#[A-Za-z0-9.-]{1,64}"};
-  if (RE2::FullMatch(uri_string, *kFragmentReferenceRegex)) {
-    // Note that we make the fragment off of the reference before adding it,
-    // since adding the fragment would destroy the uri field, since they are in
-    // the same oneof.  This way allows us to copy fields from uri to fragment
-    // without an extra copy.
-    std::unique_ptr<Message> fragment =
-        absl::WrapUnique(reflection->GetMessageFactory()
-                             ->GetPrototype(fragment_field->message_type())
-                             ->New());
-    FHIR_RETURN_IF_ERROR(
-        SetPrimitiveStringValue(fragment.get(), uri_string.substr(1)));
-    FHIR_RETURN_IF_ERROR(CopyCommonField(uri, fragment.get(), "id"));
-    FHIR_RETURN_IF_ERROR(CopyCommonField(uri, fragment.get(), "extension"));
-    reflection->SetAllocatedMessage(reference, fragment.release(),
-                                    fragment_field);
-    return absl::OkStatus();
-  }
-
-  // We're permissive about various full url schemes.
-  static LazyRE2 kUrlReference = {"(http|https|urn):.*"};
-  if (RE2::FullMatch(uri_string, *kUrlReference)) {
-    // There's no way to rewrite the URI, but it's valid as is.
-    return absl::OkStatus();
-  }
-  return InvalidArgumentError(absl::StrCat(
-      "String \"", uri_string, "\" cannot be parsed as a reference."));
-}
-
-StatusOr<stu3::proto::Reference> ReferenceStringToProtoStu3(
-    const std::string& input) {
-  stu3::proto::Reference reference;
-  FHIR_RETURN_IF_ERROR(ReferenceStringToProto(input, &reference));
-  return reference;
-}
-
-StatusOr<r4::core::Reference> ReferenceStringToProtoR4(
-    const std::string& input) {
-  r4::core::Reference reference;
-  FHIR_RETURN_IF_ERROR(ReferenceStringToProto(input, &reference));
-  return reference;
 }
 
 Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
@@ -404,6 +117,21 @@ Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
   return absl::OkStatus();
 }
 
+StatusOr<std::string> GetPrimitiveStringValue(const ::google::protobuf::Message& parent,
+                                              const std::string& field_name,
+                                              std::string* scratch) {
+  const Descriptor* descriptor = parent.GetDescriptor();
+  const FieldDescriptor* field = descriptor->FindFieldByName(field_name);
+  if (!field || !field->message_type()) {
+    return InvalidArgumentError(absl::StrCat(
+        "Invalid message for GetPrimitiveStringValue: no message field `",
+        field->name(), "` on `", descriptor->full_name()));
+  }
+  auto result = GetPrimitiveStringValue(
+      parent.GetReflection()->GetMessage(parent, field), scratch);
+  return result;
+}
+
 StatusOr<std::string> GetPrimitiveStringValue(
     const ::google::protobuf::Message& primitive, std::string* scratch) {
   const FieldDescriptor* value_field =
@@ -414,24 +142,9 @@ StatusOr<std::string> GetPrimitiveStringValue(
         absl::StrCat("Not a valid String-type primitive: ",
                      primitive.GetDescriptor()->full_name()));
   }
-  return primitive.GetReflection()->GetStringReference(primitive, value_field,
-                                                       scratch);
-}
-
-void BuildDateTime(const absl::Time time, const std::string& time_zone,
-                   const stu3::proto::DateTime::Precision precision,
-                   stu3::proto::DateTime* datetime) {
-  datetime->set_value_us(absl::ToUnixMicros(time));
-  datetime->set_timezone(time_zone);
-  datetime->set_precision(precision);
-}
-
-void BuildDateTime(const absl::Time time, const std::string& time_zone,
-                   const r4::core::DateTime::Precision precision,
-                   r4::core::DateTime* datetime) {
-  datetime->set_value_us(absl::ToUnixMicros(time));
-  datetime->set_timezone(time_zone);
-  datetime->set_precision(precision);
+  auto result = primitive.GetReflection()->GetStringReference(
+      primitive, value_field, scratch);
+  return result;
 }
 
 std::string ToSnakeCase(absl::string_view input) {
@@ -468,6 +181,22 @@ std::string ToSnakeCase(absl::string_view input) {
     }
   }
   return result;
+}
+
+StatusOr<absl::Time> GetTimeFromTimelikeElement(
+    const ::google::protobuf::Message& timelike) {
+  const Descriptor* descriptor = timelike.GetDescriptor();
+  const FieldDescriptor* value_us_field =
+      descriptor->FindFieldByName("value_us");
+
+  if (!value_us_field ||
+      value_us_field->type() != google::protobuf::FieldDescriptor::TYPE_INT64) {
+    return absl::InvalidArgumentError(absl::StrCat(
+        "No int64 value_us on Time-like: ", descriptor->full_name()));
+  }
+
+  return absl::FromUnixMicros(
+      timelike.GetReflection()->GetInt64(timelike, value_us_field));
 }
 
 }  // namespace fhir

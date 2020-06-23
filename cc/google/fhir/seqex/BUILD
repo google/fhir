@@ -13,6 +13,7 @@ cc_library(
         ":feature_keys",
         ":resource_to_example",
         "//cc/google/fhir:bundle_to_versioned_resources_converter",
+        "//cc/google/fhir:references",
         "//cc/google/fhir:util",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
@@ -60,6 +61,7 @@ cc_library(
         "//cc/google/fhir:extensions",
         "//cc/google/fhir:util",
         "//cc/google/fhir/status:statusor",
+        "//proto/stu3:datatypes_cc_proto",
         "@com_google_protobuf//:protobuf",
     ],
 )

@@ -113,6 +113,9 @@ FHIR_SIMPLE_TYPE_CHECK(Uri, "http://hl7.org/fhir/StructureDefinition/uri");
 FHIR_SIMPLE_TYPE_CHECK(Identifier,
                        "http://hl7.org/fhir/StructureDefinition/Identifier");
 
+FHIR_SIMPLE_TYPE_CHECK(Period,
+                       "http://hl7.org/fhir/StructureDefinition/Period");
+
 FHIR_SIMPLE_TYPE_CHECK(Quantity,
                        "http://hl7.org/fhir/StructureDefinition/Quantity");
 FHIR_SIMPLE_TYPE_CHECK(

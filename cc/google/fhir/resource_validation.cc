@@ -20,14 +20,13 @@
 #include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/fhir_types.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
-#include "proto/r4/core/datatypes.pb.h"
-#include "proto/stu3/datatypes.pb.h"
 
 namespace google {
 namespace fhir {
@@ -40,42 +39,6 @@ using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 
 namespace {
-
-template <class TypedDateTime>
-Status ValidatePeriod(const Message& period, const std::string& base) {
-  const Descriptor* descriptor = period.GetDescriptor();
-  const Reflection* reflection = period.GetReflection();
-  const FieldDescriptor* start_field = descriptor->FindFieldByName("start");
-  const FieldDescriptor* end_field = descriptor->FindFieldByName("end");
-
-  if (reflection->HasField(period, start_field) &&
-      reflection->HasField(period, end_field)) {
-    FHIR_ASSIGN_OR_RETURN(
-        const TypedDateTime& start,
-        GetMessageInField<TypedDateTime>(period, start_field));
-    FHIR_ASSIGN_OR_RETURN(const TypedDateTime& end,
-                          GetMessageInField<TypedDateTime>(period, end_field));
-    // Start time is greater than end time, but that's not necessarily invalid,
-    // since the precisions can be different.  So we need to compare the end
-    // time at the upper bound of end element.
-    // Example: If the start time is "Tuesday at noon", and the end time is
-    // "some time Tuesday", this is valid, even though the timestamp used for
-    // "some time Tuesday" is Tuesday 00:00, since the precision for the start
-    // is higher than the end.
-    //
-    // Also note the GetUpperBoundFromTimelikeElement is always greater than
-    // the time itself by exactly one time unit, and hence start needs to be
-    // strictly less than the upper bound of end, so as to not allow ranges like
-    // [Tuesday, Monday] to be valid.
-    if (google::fhir::GetTimeFromTimelikeElement(start) >=
-        google::fhir::GetUpperBoundFromTimelikeElement(end)) {
-      return ::absl::FailedPreconditionError(
-          absl::StrCat(base, "-start-time-later-than-end-time"));
-    }
-  }
-
-  return absl::OkStatus();
-}
 
 Status CheckField(const Message& message, const FieldDescriptor* field,
                   const std::string& field_name,
@@ -146,20 +109,6 @@ Status CheckField(const Message& message, const FieldDescriptor* field,
       const auto& submessage = GetPotentiallyRepeatedMessage(message, field, i);
       FHIR_RETURN_IF_ERROR(
           ValidateFhirConstraints(submessage, field_name, primitive_handler));
-
-      // Run extra validation for some types, until FHIRPath validation covers
-      // these cases as well.
-      if (IsMessageType<::google::fhir::stu3::proto::Period>(
-              field->message_type())) {
-        FHIR_RETURN_IF_ERROR(
-            ValidatePeriod<::google::fhir::stu3::proto::DateTime>(submessage,
-                                                                  field_name));
-      }
-      if (IsMessageType<::google::fhir::r4::core::Period>(
-              field->message_type())) {
-        FHIR_RETURN_IF_ERROR(ValidatePeriod<::google::fhir::r4::core::DateTime>(
-            submessage, field_name));
-      }
     }
   }
 
