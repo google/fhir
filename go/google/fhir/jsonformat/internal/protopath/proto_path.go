@@ -229,6 +229,9 @@ func oneOfFieldByMessageType(oneOfDesc protoreflect.OneofDescriptor, valPB proto
 }
 
 func canAssignValueToField(val interface{}, fd protoreflect.FieldDescriptor) bool {
+	if val == nil {
+		return fd.Kind() == protoreflect.MessageKind || fd.IsList()
+	}
 	valType := reflect.TypeOf(val)
 	if valType.Kind() == reflect.Slice {
 		valType = valType.Elem()

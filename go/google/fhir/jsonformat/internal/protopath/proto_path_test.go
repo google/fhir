@@ -121,6 +121,13 @@ func TestSet(t *testing.T) {
 			&pptpb.Message{},
 		},
 		{
+			"untyped nil message",
+			NewProtoPath("message_field"),
+			nil,
+			&pptpb.Message{},
+			&pptpb.Message{},
+		},
+		{
 			"missing field - zero value of string",
 			NewProtoPath("meta.id.value"),
 			Zero,
