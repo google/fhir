@@ -52,16 +52,6 @@ type pathPart interface {
 	isPathPart()
 }
 
-type goPathPart string
-
-func (gpp goPathPart) isPathPart() {}
-
-func (gpp goPathPart) String() string { return string(gpp) }
-
-func (gpp goPathPart) Name() protoreflect.Name {
-	return protoreflect.Name(snaker.CamelToSnake(string(gpp)))
-}
-
 type protoPathPart string
 
 func (ppp protoPathPart) isPathPart() {}
@@ -85,8 +75,8 @@ func (p Path) String() string {
 	return strings.Join(strParts, ".")
 }
 
-// NewProtoPath creates a Path from a string definition using proto field names.
-func NewProtoPath(p string) Path {
+// NewPath creates a Path from a string definition using proto field names.
+func NewPath(p string) Path {
 	path := Path{}
 	for _, part := range strings.Split(p, ".") {
 		path.parts = append(path.parts, protoPathPart(part))
@@ -471,11 +461,6 @@ func getDefaultValueAtPath(m protoreflect.Message, fd protoreflect.FieldDescript
 	oneOfDesc := t.Oneofs().ByName(path[0].Name())
 	if oneOfDesc == nil {
 		ft = t.Fields().ByName(path[0].Name())
-	} else if _, ok := path[0].(goPathPart); ok && len(path) > 1 {
-		// Special case for backwards compatibility where Go paths include the oneof
-		// name.
-		ft = oneOfDesc.Fields().ByName(path[1].Name())
-		path = path[1:]
 	} else {
 		return nil, nil, fmt.Errorf("cannot return default value for oneof %s in %s", path[0], t.FullName())
 	}
