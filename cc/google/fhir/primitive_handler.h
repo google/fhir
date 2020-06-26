@@ -281,7 +281,6 @@ template <typename BundleType,
               FHIR_DATATYPE(BundleType, sampled_data().origin)>
 class PrimitiveHandlerTemplate : public PrimitiveHandler {
  public:
-  typedef BundleType Bundle;
   typedef CodingType Coding;
   typedef ContainedResourceType ContainedResource;
   typedef ExtensionType Extension;

@@ -14,16 +14,21 @@
 
 #include "google/fhir/fhir_path/fhir_path_validation.h"
 
+#include <ostream>
+#include <string>
+#include <utility>
+
 #include "google/protobuf/message.h"
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "absl/strings/str_cat.h"
+#include "absl/status/status.h"
 #include "google/fhir/fhir_path/r4_fhir_path_validation.h"
 #include "google/fhir/fhir_path/stu3_fhir_path_validation.h"
 #include "google/fhir/status/statusor.h"
-#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "google/fhir/testutil/fhir_test_env.h"
 #include "proto/r4/core/datatypes.pb.h"
+#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/r4/core/resources/encounter.pb.h"
 #include "proto/r4/core/resources/medication_knowledge.pb.h"
 #include "proto/r4/core/resources/observation.pb.h"
@@ -68,40 +73,26 @@ using ::testing::StrEq;
 
 static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
 
-template <typename BundleType>
-struct FhirTypes {
-  using Boolean = FHIR_DATATYPE(BundleType, boolean);
-  using Bundle = BundleType;
-  using Decimal = FHIR_DATATYPE(BundleType, decimal);
-  using Encounter = BUNDLE_TYPE(BundleType, encounter);
-  using Observation = BUNDLE_TYPE(BundleType, observation);
-  using Organization = BUNDLE_TYPE(BundleType, organization);
-  using Period = FHIR_DATATYPE(BundleType, period);
-  using Quantity = FHIR_DATATYPE(BundleType, quantity);
-  using String = FHIR_DATATYPE(BundleType, string_value);
-  using ValueSet = BUNDLE_TYPE(BundleType, value_set);
-};
-
-struct Stu3Types : public FhirTypes<::google::fhir::stu3::proto::Bundle> {
-  using VersionedMessageValidator = ::google::fhir::stu3::FhirPathValidator;
-  using SimpleQuantity = ::google::fhir::stu3::proto::SimpleQuantity;
-};
-
-struct R4Types : public FhirTypes<::google::fhir::r4::core::Bundle> {
-  using VersionedMessageValidator = ::google::fhir::r4::FhirPathValidator;
-  using SimpleQuantity = ::google::fhir::r4::core::SimpleQuantity;
-};
-
 template <typename T>
 class FhirPathValidationTest : public ::testing::Test {
  public:
   static ValidationResults Validate(const ::google::protobuf::Message& message) {
-    return typename T::VersionedMessageValidator().Validate(message);
+    return typename T::FhirPathValidator().Validate(message);
   }
 };
 
-using TestTypes = ::testing::Types<Stu3Types, R4Types>;
-TYPED_TEST_SUITE(FhirPathValidationTest, TestTypes);
+struct Stu3CoreTestEnv : public testutil::Stu3CoreTestEnv {
+  using FhirPathValidator = ::google::fhir::stu3::FhirPathValidator;
+  using SimpleQuantity = ::google::fhir::stu3::proto::SimpleQuantity;
+};
+
+struct R4CoreTestEnv : public testutil::R4CoreTestEnv {
+  using FhirPathValidator = ::google::fhir::r4::FhirPathValidator;
+  using SimpleQuantity = ::google::fhir::r4::core::SimpleQuantity;
+};
+
+using TesEnvs = ::testing::Types<Stu3CoreTestEnv, R4CoreTestEnv>;
+TYPED_TEST_SUITE(FhirPathValidationTest, TesEnvs);
 
 template <typename T>
 T ParseFromString(const std::string& str) {
@@ -144,10 +135,11 @@ T ValidUsCorePatient() {
 }
 
 TYPED_TEST(FhirPathValidationTest, ConstraintViolation) {
-  auto organization = ParseFromString<typename TypeParam::Organization>(R"proto(
-    name: { value: 'myorg' }
-    telecom: { use: { value: HOME } }
-  )proto");
+  auto organization = ParseFromString<typename TypeParam::Organization>(
+      R"proto(
+        name: { value: 'myorg' }
+        telecom: { use: { value: HOME } }
+      )proto");
 
   ValidationResults results = TestFixture::Validate(organization);
   EXPECT_FALSE(results.IsValid());
@@ -216,7 +208,6 @@ TYPED_TEST(FhirPathValidationTest, ConstraintSatisfied) {
 
 TYPED_TEST(FhirPathValidationTest, NestedConstraintViolated) {
   auto value_set = ValidValueSet<typename TypeParam::ValueSet>();
-
   auto expansion = new typename TypeParam::ValueSet::Expansion;
 
   // Add empty contains structure to violate FHIR constraint.

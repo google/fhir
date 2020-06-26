@@ -15,3 +15,17 @@ cc_library(
         "@com_google_protobuf//:protobuf",
     ],
 )
+
+cc_library(
+    name = "fhir_test_env",
+    testonly = 1,
+    hdrs = ["fhir_test_env.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "//cc/google/fhir:primitive_handler",
+        "//cc/google/fhir:util",
+        "//cc/google/fhir/r4:primitive_handler",
+        "//cc/google/fhir/stu3:primitive_handler",
+        "//proto/stu3:resources_cc_proto",
+    ],
+)

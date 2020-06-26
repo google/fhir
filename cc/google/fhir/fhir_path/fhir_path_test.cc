@@ -14,18 +14,28 @@
 
 #include "google/fhir/fhir_path/fhir_path.h"
 
+#include <stdint.h>
+
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "google/protobuf/any.pb.h"
+#include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
-#include "absl/strings/str_cat.h"
+#include "absl/strings/string_view.h"
 #include "absl/time/civil_time.h"
 #include "absl/time/time.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/primitive_handler.h"
+#include "google/fhir/testutil/fhir_test_env.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/r4/core/codes.pb.h"
 #include "proto/r4/core/datatypes.pb.h"
@@ -73,7 +83,6 @@ void PrintTo(const StatusOr<EvaluationResult>& result, std::ostream* os) {
 
 namespace {
 
-using ::absl::InvalidArgumentError;
 using ::absl::StatusCode;
 using ::google::protobuf::Message;
 using ::testing::ElementsAreArray;
@@ -243,37 +252,11 @@ P CreatePeriod(const D& start, const D& end) {
   return period;
 }
 
-template <typename PrimitiveHandlerType>
-struct FhirTypes {
-  using Bundle = typename PrimitiveHandlerType::Bundle;
-
-  using Boolean = FHIR_DATATYPE(Bundle, boolean);
-  using Code = FHIR_DATATYPE(Bundle, code);
-  using CodeableConcept = FHIR_DATATYPE(Bundle, codeable_concept);
-  using DateTime = FHIR_DATATYPE(Bundle, date_time);
-  using Decimal = FHIR_DATATYPE(Bundle, decimal);
-  using Encounter = BUNDLE_TYPE(Bundle, encounter);
-  using Integer = FHIR_DATATYPE(Bundle, integer);
-  using Observation = BUNDLE_TYPE(Bundle, observation);
-  using Parameters = BUNDLE_TYPE(Bundle, parameters);
-  using Patient = BUNDLE_TYPE(Bundle, patient);
-  using Period = FHIR_DATATYPE(Bundle, period);
-  using Quantity = FHIR_DATATYPE(Bundle, quantity);
-  using Range = FHIR_DATATYPE(Bundle, range);
-  using String = FHIR_DATATYPE(Bundle, string_value);
-  using StructureDefinition = BUNDLE_TYPE(Bundle, structure_definition);
-
-  static const PrimitiveHandler* GetPrimitiveHandler() {
-    return PrimitiveHandlerType::GetInstance();
-  }
-};
-
-struct Stu3Types
-    : public FhirTypes<::google::fhir::stu3::Stu3PrimitiveHandler> {
+struct Stu3CoreTestEnv : public testutil::Stu3CoreTestEnv {
   using EncounterStatusCode = ::google::fhir::stu3::proto::EncounterStatusCode;
 };
 
-struct R4Types : public FhirTypes<::google::fhir::r4::R4PrimitiveHandler> {
+struct R4CoreTestEnv : public testutil::R4CoreTestEnv {
   using EncounterStatusCode = ::google::fhir::r4::core::EncounterStatusCode;
 };
 
@@ -282,8 +265,8 @@ class FhirPathTest : public ::testing::Test {
  public:
   static StatusOr<CompiledExpression> Compile(
       const ::google::protobuf::Descriptor* descriptor, const std::string& fhir_path) {
-    return CompiledExpression::Compile(descriptor, T::GetPrimitiveHandler(),
-                                       fhir_path);
+    return CompiledExpression::Compile(
+        descriptor, T::PrimitiveHandler::GetInstance(), fhir_path);
   }
 
   template <typename R>
@@ -303,8 +286,8 @@ class FhirPathTest : public ::testing::Test {
   }
 };
 
-using TestTypes = ::testing::Types<Stu3Types, R4Types>;
-TYPED_TEST_SUITE(FhirPathTest, TestTypes);
+using TestEnvs = ::testing::Types<Stu3CoreTestEnv, R4CoreTestEnv>;
+TYPED_TEST_SUITE(FhirPathTest, TestEnvs);
 
 TYPED_TEST(FhirPathTest, TestExternalConstants) {
   EXPECT_THAT(TestFixture::Evaluate("%ucum"),
@@ -2175,7 +2158,7 @@ TEST(FhirPathTest, PathNavigationAfterContainedResourceR4Any) {
       "deceased: { boolean: { value: true } }");
   patient.add_contained()->PackFrom(contained);
 
-  EXPECT_THAT(FhirPathTest<R4Types>::Evaluate(patient, "contained.value"),
+  EXPECT_THAT(FhirPathTest<R4CoreTestEnv>::Evaluate(patient, "contained.value"),
               EvalsToStringThatMatches(StrEq("bar")));
 }
 
