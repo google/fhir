@@ -45,24 +45,9 @@ const Zero zeroType = 0
 // zeroType is the type of Zero and solely used for Zero.
 type zeroType int
 
-type pathPart interface {
-	fmt.Stringer
-	Name() protoreflect.Name
-
-	isPathPart()
-}
-
-type protoPathPart string
-
-func (ppp protoPathPart) isPathPart() {}
-
-func (ppp protoPathPart) String() string { return string(ppp) }
-
-func (ppp protoPathPart) Name() protoreflect.Name { return protoreflect.Name(ppp) }
-
 // Path is a selector for a proto field.
 type Path struct {
-	parts []pathPart
+	parts []protoreflect.Name
 }
 
 // String implements the Stringer interface, returns a string representation of
@@ -70,7 +55,7 @@ type Path struct {
 func (p Path) String() string {
 	var strParts []string
 	for _, part := range p.parts {
-		strParts = append(strParts, part.String())
+		strParts = append(strParts, string(part))
 	}
 	return strings.Join(strParts, ".")
 }
@@ -79,7 +64,7 @@ func (p Path) String() string {
 func NewPath(p string) Path {
 	path := Path{}
 	for _, part := range strings.Split(p, ".") {
-		path.parts = append(path.parts, protoPathPart(part))
+		path.parts = append(path.parts, protoreflect.Name(part))
 	}
 	return path
 }
@@ -89,18 +74,18 @@ func isValidPath(p Path) bool {
 		return false
 	}
 	for _, part := range p.parts {
-		if part.String() == "" {
+		if part == "" {
 			return false
 		}
 	}
 	return true
 }
 
-func getMessageField(rpb protoreflect.Message, fieldName pathPart) (protoreflect.Descriptor, error) {
+func getMessageField(rpb protoreflect.Message, fieldName protoreflect.Name) (protoreflect.Descriptor, error) {
 	desc := rpb.Descriptor()
-	f := rpb.Descriptor().Fields().ByName(fieldName.Name())
+	f := rpb.Descriptor().Fields().ByName(fieldName)
 	if f == nil {
-		oneof := desc.Oneofs().ByName(fieldName.Name())
+		oneof := desc.Oneofs().ByName(fieldName)
 		if oneof == nil {
 			return nil, fmt.Errorf("no field %s in %v", fieldName, desc.FullName())
 		}
@@ -109,8 +94,8 @@ func getMessageField(rpb protoreflect.Message, fieldName pathPart) (protoreflect
 	return f, nil
 }
 
-func getSliceElement(m protoreflect.Message, fd protoreflect.FieldDescriptor, i pathPart, allowExtend bool) (protoreflect.Value, error) {
-	idx, err := strconv.Atoi(i.String())
+func getSliceElement(m protoreflect.Message, fd protoreflect.FieldDescriptor, i protoreflect.Name, allowExtend bool) (protoreflect.Value, error) {
+	idx, err := strconv.Atoi(string(i))
 	if err != nil {
 		return protoreflect.Value{}, err
 	}
@@ -142,7 +127,7 @@ func getSliceElement(m protoreflect.Message, fd protoreflect.FieldDescriptor, i 
 // the path refers to a field that is currently nil. The new value and path
 // will be returned. A new path is returned when selecting into a slice because
 // the field returned is an element of the slice.
-func fillField(m protoreflect.Message, field protoreflect.FieldDescriptor, path []pathPart) (protoreflect.Value, []pathPart, error) {
+func fillField(m protoreflect.Message, field protoreflect.FieldDescriptor, path []protoreflect.Name) (protoreflect.Value, []protoreflect.Name, error) {
 	if field.IsList() && len(path) > 1 {
 		f, err := getSliceElement(m, field, path[1], true)
 		if err != nil {
@@ -163,8 +148,8 @@ func fillField(m protoreflect.Message, field protoreflect.FieldDescriptor, path 
 	return m.Mutable(field), path, nil
 }
 
-func getOneOfField(pb protoreflect.Message, oneofField protoreflect.OneofDescriptor, name pathPart, fill bool) (protoreflect.FieldDescriptor, error) {
-	caseField := oneofField.Fields().ByName(name.Name())
+func getOneOfField(pb protoreflect.Message, oneofField protoreflect.OneofDescriptor, name protoreflect.Name, fill bool) (protoreflect.FieldDescriptor, error) {
+	caseField := oneofField.Fields().ByName(name)
 	if caseField == nil {
 		return nil, fmt.Errorf("could not find field %v in %v", name, oneofField.Name())
 	}
@@ -295,7 +280,7 @@ func setOneOfFieldByType(m protoreflect.Message, oneOfDesc protoreflect.OneofDes
 	return nil
 }
 
-func set(m protoreflect.Message, value interface{}, path []pathPart) error {
+func set(m protoreflect.Message, value interface{}, path []protoreflect.Name) error {
 	fieldDesc, err := getMessageField(m, path[0])
 	if err != nil {
 		return err
@@ -331,7 +316,7 @@ func set(m protoreflect.Message, value interface{}, path []pathPart) error {
 	return assignValue(m, fd, path, value)
 }
 
-func assignValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path []pathPart, value interface{}) error {
+func assignValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path []protoreflect.Name, value interface{}) error {
 	// Allow Zero to enables us to set proto fields to zero regardless of the
 	// underlying type.
 	if value == Zero {
@@ -356,7 +341,7 @@ func assignValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path [
 		}
 		return nil
 	}
-	i, err := strconv.Atoi(path[0].String())
+	i, err := strconv.Atoi(string(path[0]))
 	if err != nil {
 		return err
 	}
@@ -444,7 +429,7 @@ func Set(m proto.Message, path Path, value interface{}) error {
 	return set(m.ProtoReflect(), value, path.parts)
 }
 
-func getDefaultValueAtPath(m protoreflect.Message, fd protoreflect.FieldDescriptor, path []pathPart) (protoreflect.Message, protoreflect.FieldDescriptor, error) {
+func getDefaultValueAtPath(m protoreflect.Message, fd protoreflect.FieldDescriptor, path []protoreflect.Name) (protoreflect.Message, protoreflect.FieldDescriptor, error) {
 	if len(path) == 0 {
 		return m, fd, nil
 	}
@@ -458,9 +443,9 @@ func getDefaultValueAtPath(m protoreflect.Message, fd protoreflect.FieldDescript
 	}
 
 	var ft protoreflect.FieldDescriptor
-	oneOfDesc := t.Oneofs().ByName(path[0].Name())
+	oneOfDesc := t.Oneofs().ByName(path[0])
 	if oneOfDesc == nil {
-		ft = t.Fields().ByName(path[0].Name())
+		ft = t.Fields().ByName(path[0])
 	} else {
 		return nil, nil, fmt.Errorf("cannot return default value for oneof %s in %s", path[0], t.FullName())
 	}
@@ -479,7 +464,7 @@ func getDefaultValueAtPath(m protoreflect.Message, fd protoreflect.FieldDescript
 	return getDefaultValueAtPath(m, ft, path[1:])
 }
 
-func checkDefaultValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path []pathPart, defVal interface{}) (interface{}, error) {
+func checkDefaultValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path []protoreflect.Name, defVal interface{}) (interface{}, error) {
 	m, ft, err := getDefaultValueAtPath(m, fd, path)
 	if err != nil {
 		return nil, err
@@ -500,7 +485,7 @@ func checkDefaultValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, 
 	return defVal, nil
 }
 
-func get(m protoreflect.Message, defVal interface{}, path []pathPart) (interface{}, error) {
+func get(m protoreflect.Message, defVal interface{}, path []protoreflect.Name) (interface{}, error) {
 	field, err := getMessageField(m, path[0])
 	if err != nil {
 		return nil, err
