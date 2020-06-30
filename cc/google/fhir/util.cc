@@ -35,11 +35,12 @@
 namespace google {
 namespace fhir {
 
+using ::absl::InternalError;
 using ::absl::InvalidArgumentError;
+using ::absl::UnimplementedError;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
-using ::google::protobuf::Reflection;
 
 StatusOr<absl::TimeZone> BuildTimeZoneFromString(
     const std::string& time_zone_string) {
@@ -197,6 +198,58 @@ StatusOr<absl::Time> GetTimeFromTimelikeElement(
 
   return absl::FromUnixMicros(
       timelike.GetReflection()->GetInt64(timelike, value_us_field));
+}
+
+StatusOr<Message*> UnpackAnyAsContainedResource(
+    const google::protobuf::Any& any) {
+  return UnpackAnyAsContainedResource(
+      any, [](const Descriptor* type_descriptor) -> StatusOr<Message*> {
+        const Message* prototype =
+            ::google::protobuf::MessageFactory::generated_factory()->GetPrototype(
+                type_descriptor);
+        if (prototype == nullptr) {
+          return InvalidArgumentError(
+              absl::StrCat("Unable to construct a message of type: ",
+                           type_descriptor->full_name()));
+        }
+        return prototype->New();
+      });
+}
+
+StatusOr<Message*> UnpackAnyAsContainedResource(
+    const google::protobuf::Any& any,
+    std::function<StatusOr<Message*>(const Descriptor*)> message_factory) {
+  std::string full_type_name;
+  if (!google::protobuf::Any::ParseAnyTypeUrl(any.type_url(),
+                                              &full_type_name)) {
+    return absl::InvalidArgumentError(
+        absl::StrCat("google.protobuf.Any has an invalid type URL. \"",
+                     any.type_url(), "\""));
+  }
+
+  const Descriptor* type_descriptor =
+      ::google::protobuf::DescriptorPool::generated_pool()->FindMessageTypeByName(
+          full_type_name);
+  if (type_descriptor == nullptr) {
+    // TODO: Ensure the necessary protos are available.
+    return UnimplementedError(
+        absl::StrCat("Unknown message type packed into google.protobuf.Any \"",
+                     full_type_name, "\""));
+  }
+
+  if (!IsContainedResource(type_descriptor)) {
+    return InvalidArgumentError(absl::StrCat(
+        "google.protobuf.Any messages must store a ContainedResource. Got \"",
+        full_type_name, "\"."));
+  }
+  FHIR_ASSIGN_OR_RETURN(Message* unpacked_message,
+                        message_factory(type_descriptor));
+
+  if (!any.UnpackTo(unpacked_message)) {
+    return InternalError("Failed to unpack google.protobuf.Any.");
+  }
+
+  return unpacked_message;
 }
 
 }  // namespace fhir

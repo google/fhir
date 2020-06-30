@@ -25,6 +25,7 @@
 #include <utility>
 
 
+#include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
@@ -290,6 +291,24 @@ StatusOr<const R*> GetTypedContainedResource(
 }
 
 std::string ToSnakeCase(absl::string_view input);
+
+// Given an Any representing a packed ContainedResource, returns a pointer to
+// a newly-created ContainedResource message of the correct type.  Ownership
+// of the object is passed to the call site.
+// Returns a status failure if the Any is not an encoded ContainedResource,
+// or if the correct ContainedResource is not known to the default descriptor
+// pool.
+// Note that this method has no application for Implementation Guide protos that
+// do not use Any to represent contained resources (e.g., STU3).
+StatusOr<::google::protobuf::Message*> UnpackAnyAsContainedResource(
+    const google::protobuf::Any& any);
+
+// Allows calling UnpackAnyAsContainedResource with a custom message factory,
+// e.g., to allow more sophisticated memory management of the created object.
+StatusOr<::google::protobuf::Message*> UnpackAnyAsContainedResource(
+    const google::protobuf::Any& any,
+    std::function<fhir::StatusOr<google::protobuf::Message*>(const ::google::protobuf::Descriptor*)>
+        message_factory);
 
 }  // namespace fhir
 }  // namespace google

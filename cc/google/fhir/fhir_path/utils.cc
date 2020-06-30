@@ -24,9 +24,6 @@ namespace fhir_path {
 namespace internal {
 
 using ::absl::NotFoundError;
-using ::absl::InvalidArgumentError;
-using ::absl::InternalError;
-using ::absl::UnimplementedError;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::Message;
@@ -64,42 +61,6 @@ Status OneofMessageFromContainer(const Message& container_message,
       container_reflection->GetMessage(container_message, oneof_field);
   results->push_back(&oneof_message);
   return absl::OkStatus();
-}
-
-StatusOr<Message*> UnpackAnyAsContainedResource(
-    const google::protobuf::Any& any,
-    std::function<google::protobuf::Message*(const Descriptor*)> message_factory) {
-  std::string full_type_name;
-  if (!google::protobuf::Any::ParseAnyTypeUrl(std::string(any.type_url()),
-                                              &full_type_name)) {
-    return InvalidArgumentError(
-        absl::StrCat("google.protobuf.Any has an invalid type URL. \"",
-                     any.type_url(), "\""));
-  }
-
-  const Descriptor* type_descriptor =
-      ::google::protobuf::DescriptorPool::generated_pool()->FindMessageTypeByName(
-          full_type_name);
-  if (type_descriptor == nullptr) {
-    // TODO: Ensure the necessary protos are available.
-    return UnimplementedError(
-        absl::StrCat("Unknown message type packed into google.protobuf.Any \"",
-                     full_type_name, "\""));
-  }
-
-  if (!IsContainedResource(type_descriptor)) {
-    return InvalidArgumentError(absl::StrCat(
-        "google.protobuf.Any messages must store a ContainedResource. Got \"",
-        full_type_name, "\"."));
-  }
-
-  Message* unpacked_message = message_factory(type_descriptor);
-
-  if (!any.UnpackTo(unpacked_message)) {
-    return InternalError("Failed to unpack google.protobuf.Any.");
-  }
-
-  return unpacked_message;
 }
 
 Status RetrieveField(

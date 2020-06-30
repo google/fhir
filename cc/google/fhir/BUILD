@@ -159,14 +159,23 @@ cc_test(
     name = "util_test",
     srcs = ["util_test.cc"],
     deps = [
+        ":test_helper",
         ":util",
+        "//cc/google/fhir/status",
         "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/r4/core:datatypes_cc_proto",
+        "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
+        "//proto/r4/core/resources:medication_cc_proto",
+        "//proto/r4/core/resources:medication_request_cc_proto",
         "//proto/stu3:codes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:resources_cc_proto",
+        "//testdata/r4/profiles:test_cc_proto",
+        "@com_google_absl//absl/memory",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/time",
         "@com_google_googletest//:gtest_main",
+        "@com_google_protobuf//:protobuf",
     ],
 )
 

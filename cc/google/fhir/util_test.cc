@@ -14,14 +14,23 @@
 
 #include "google/fhir/util.h"
 
+#include "google/protobuf/descriptor.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/memory/memory.h"
 #include "absl/status/status.h"
 #include "absl/time/time.h"
+#include "google/fhir/status/status.h"
+#include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
+#include "proto/r4/core/datatypes.pb.h"
+#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/r4/core/resources/medication.pb.h"
+#include "proto/r4/core/resources/medication_request.pb.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/resources.pb.h"
+#include "testdata/r4/profiles/test.pb.h"
 
 namespace google {
 namespace fhir {
@@ -40,6 +49,9 @@ using ::google::fhir::stu3::proto::AllergyIntolerance;
 using ::google::fhir::stu3::proto::EncounterStatusCode;
 using ::google::fhir::stu3::proto::Patient;
 using ::google::fhir::stu3::proto::Reference;
+
+using ::google::protobuf::Descriptor;
+using ::google::protobuf::Message;
 
 TEST(GetResourceFromBundleEntryTest, GetResourceFromEncounter) {
   Bundle::Entry entry;
@@ -253,6 +265,131 @@ TEST(GetMutablePatient, StatusOr) {
 
   EXPECT_EQ(GetMutablePatient(&bundle).ValueOrDie()->mutable_id()->value(),
             "5");
+}
+
+TEST(Util, UnpackAnyAsContainedResourceR4) {
+  r4::core::MedicationRequest med_req = PARSE_VALID_FHIR_PROTO(
+      R"proto(
+        medication { reference { medication_id { value: "med" } } }
+        status { value: ACTIVE }
+        intent { value: ORDER }
+        id { value: "1" }
+        subject { patient_id { value: "14" } }
+        authored_on {
+          value_us: 1421240400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      )proto");
+
+  const r4::core::ContainedResource contained_medication =
+      PARSE_VALID_FHIR_PROTO(
+          R"proto(
+            medication {
+              id { value: "med" }
+              code {
+                coding {
+                  system { value: "http://hl7.org/fhir/sid/ndc" }
+                  code { value: "123" }
+                }
+              }
+            }
+          )proto");
+
+  med_req.add_contained()->PackFrom(contained_medication);
+
+  auto result_statusor = UnpackAnyAsContainedResource(med_req.contained(0));
+  FHIR_ASSERT_OK(result_statusor.status());
+
+  std::unique_ptr<Message> result =
+      absl::WrapUnique(result_statusor.ValueOrDie());
+
+  ASSERT_THAT(*result, EqualsProto(contained_medication));
+}
+
+TEST(Util, UnpackAnyAsContainedResourceR4WrongAny) {
+  r4::core::Boolean boolean;
+  r4::core::MedicationRequest med_req;
+  med_req.add_contained()->PackFrom(boolean);
+  auto result_status =
+      UnpackAnyAsContainedResource(med_req.contained(0)).status();
+  ASSERT_EQ(result_status.message(),
+            "google.protobuf.Any messages must store a ContainedResource. Got "
+            "\"google.fhir.r4.core.Boolean\".");
+}
+
+TEST(Util, UnpackAnyAsContainedResourceR4CustomFactory) {
+  r4::core::MedicationRequest med_req = PARSE_VALID_FHIR_PROTO(
+      R"proto(
+        medication { reference { medication_id { value: "med" } } }
+        status { value: ACTIVE }
+        intent { value: ORDER }
+        id { value: "1" }
+        subject { patient_id { value: "14" } }
+        authored_on {
+          value_us: 1421240400000000
+          timezone: "Australia/Sydney"
+          precision: DAY
+        }
+      )proto");
+
+  const r4::core::ContainedResource contained_medication =
+      PARSE_VALID_FHIR_PROTO(
+          R"proto(
+            medication {
+              id { value: "med" }
+              code {
+                coding {
+                  system { value: "http://hl7.org/fhir/sid/ndc" }
+                  code { value: "123" }
+                }
+              }
+            }
+          )proto");
+
+  med_req.add_contained()->PackFrom(contained_medication);
+
+  // Use a message factory that just returns a custom instance
+  auto local_memory = absl::make_unique<r4::core::ContainedResource>();
+  auto result_statusor = UnpackAnyAsContainedResource(
+      med_req.contained(0),
+      [&](const Descriptor* descriptor) -> StatusOr<Message*>{
+        return local_memory.get();
+      });
+
+  FHIR_ASSERT_OK(result_statusor.status());
+  Message* result = result_statusor.ValueOrDie();
+
+  // Compare memory addresses
+  ASSERT_EQ(result, local_memory.get());
+}
+
+TEST(Util, UnpackAnyAsContainedResourceR4NonStandardIG) {
+  r4::testing::TestObservation med_req = PARSE_VALID_FHIR_PROTO(
+      R"proto(
+        status {value: FINAL}
+        code { sys_a { code {value: "blah"} } }
+      )proto");
+
+  r4::testing::ContainedResource contained_encounter =
+      PARSE_VALID_FHIR_PROTO(
+          R"proto(
+            test_encounter {
+              status {value: FINISHED}
+              class_value { system {value: "foo"} code {value: "bar"} }
+              priority { act { code {value: EM} } }
+            }
+          )proto");
+
+  med_req.add_contained()->PackFrom(contained_encounter);
+
+  auto result_statusor = UnpackAnyAsContainedResource(med_req.contained(0));
+  FHIR_ASSERT_OK(result_statusor.status());
+
+  std::unique_ptr<Message> result =
+      absl::WrapUnique(result_statusor.ValueOrDie());
+
+  ASSERT_THAT(*result, EqualsProto(contained_encounter));
 }
 
 }  // namespace
