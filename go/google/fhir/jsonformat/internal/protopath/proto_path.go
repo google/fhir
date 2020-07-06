@@ -23,6 +23,7 @@
 package protopath
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -422,11 +423,20 @@ func goValueFromProtoValue(fd protoreflect.FieldDescriptor, v protoreflect.Value
 // If the last value of `path` is a oneof then the field of the oneof that is
 // assignable to value will be set. If multiple fields have the same type an
 // error is returned.
+//
+// If the input message is nil, an error will be returned.
 func Set(m proto.Message, path Path, value interface{}) error {
 	if !isValidPath(path) {
 		return fmt.Errorf("invalid path %v", path)
 	}
-	return set(m.ProtoReflect(), value, path.parts)
+	if m == nil {
+		return errors.New("cannot call Set() on nil message")
+	}
+	r := m.ProtoReflect()
+	if !r.IsValid() {
+		return errors.New("cannot call Set() on nil message")
+	}
+	return set(r, value, path.parts)
 }
 
 func getDefaultValueAtPath(m protoreflect.Message, fd protoreflect.FieldDescriptor, path []protoreflect.Name) (protoreflect.Message, protoreflect.FieldDescriptor, error) {
@@ -547,9 +557,14 @@ func get(m protoreflect.Message, defVal interface{}, path []protoreflect.Name) (
 // If the last value of `path` is a oneof then the populated field of the oneof
 // will be returned. `defVal` is ignored in this case, an error will be returned
 // if the oneof is not populated.
+//
+// If the input message is nil, the default value will be returned.
 func Get(m proto.Message, path Path, defVal interface{}) (interface{}, error) {
 	if !isValidPath(path) {
 		return nil, fmt.Errorf("invalid path %v", path)
+	}
+	if m == nil {
+		return defVal, nil
 	}
 	return get(m.ProtoReflect(), defVal, path.parts)
 }

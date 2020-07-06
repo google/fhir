@@ -114,14 +114,14 @@ func TestSet(t *testing.T) {
 			&rfpb.Account{Meta: &rdpb.Meta{}},
 		},
 		{
-			"nil message",
+			"typed nil value",
 			NewPath("message_field"),
 			(*pptpb.Message_InnerMessage)(nil),
 			&pptpb.Message{},
 			&pptpb.Message{},
 		},
 		{
-			"untyped nil message",
+			"untyped nil value",
 			NewPath("message_field"),
 			nil,
 			&pptpb.Message{},
@@ -236,6 +236,18 @@ func TestSet_Errors(t *testing.T) {
 			Path{},
 			Zero,
 			&rfpb.Account{},
+		},
+		{
+			"typed nil message",
+			NewPath("meta"),
+			&rdpb.Meta{},
+			(*rfpb.Account)(nil),
+		},
+		{
+			"untyped nil message",
+			NewPath("meta"),
+			&rdpb.Meta{},
+			nil,
 		},
 		{
 			"invalid field",
@@ -417,6 +429,20 @@ func TestGet(t *testing.T) {
 			Zero,
 			&rfpb.Account{},
 			(*rdpb.String)(nil),
+		},
+		{
+			"typed nil message",
+			NewPath("meta.id.value"),
+			"id",
+			(*rfpb.Account)(nil),
+			"id",
+		},
+		{
+			"untyped nil message",
+			NewPath("meta.id.value"),
+			"id",
+			nil,
+			"id",
 		},
 		{
 			"oneof",
