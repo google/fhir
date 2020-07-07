@@ -15,8 +15,8 @@ limitations under the License.
 
 #include "google/fhir/status/statusor.h"
 
-#include "absl/status/status.h"
 #include "tensorflow/core/platform/logging.h"
+#include "absl/status/status.h"
 
 namespace google {
 namespace fhir {

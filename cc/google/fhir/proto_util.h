@@ -21,13 +21,13 @@
 #include <string>
 
 
+#include "tensorflow/core/platform/logging.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "tensorflow/core/platform/logging.h"
 
 namespace google {
 namespace fhir {

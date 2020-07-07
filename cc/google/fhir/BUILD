@@ -206,13 +206,13 @@ cc_library(
     hdrs = ["proto_util.h"],
     strip_include_prefix = "//cc/",
     deps = [
-        "//cc/google/fhir/status",
-        "//cc/google/fhir/status:statusor",
+        "@com_google_protobuf//:protobuf",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
-        "@com_google_protobuf//:protobuf",
-        "@com_googlesource_code_re2//:re2",
+        "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
         "@org_tensorflow//tensorflow/core:lib",
+        "@com_googlesource_code_re2//:re2",
     ],
 )
 
