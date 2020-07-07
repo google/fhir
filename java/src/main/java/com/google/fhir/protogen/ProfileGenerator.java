@@ -541,7 +541,7 @@ final class ProfileGenerator {
                             + restriction.getFieldId()));
     ElementDefinition.Builder modifiedElement = elementToModify.toBuilder();
     SizeRestriction newSize = restriction.getSizeRestriction();
-    if (newSize != SizeRestriction.UNKNOWN) {
+    if (newSize != SizeRestriction.UNSET) {
       if (!validateSizeChange(restriction.getSizeRestriction(), elementToModify)) {
         throw new IllegalArgumentException(
             "Invalid size change for "
@@ -1009,12 +1009,12 @@ final class ProfileGenerator {
         return SizeRestriction.AT_LEAST_ONE;
       }
     }
-    return SizeRestriction.UNKNOWN;
+    return SizeRestriction.UNSET;
   }
 
   private static UnsignedInt minSize(SizeRestriction size) {
     switch (size) {
-      case UNKNOWN: // no size specified is treated as optional.
+      case UNSET: // no size specified is treated as optional.
       case ABSENT:
       case OPTIONAL:
       case REPEATED:
@@ -1031,7 +1031,7 @@ final class ProfileGenerator {
     switch (size) {
       case ABSENT:
         return fhirString("0");
-      case UNKNOWN: // no size specified is treated as optional.
+      case UNSET: // no size specified is treated as optional.
       case OPTIONAL:
       case REQUIRED:
         return fhirString("1");
