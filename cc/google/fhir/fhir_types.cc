@@ -107,9 +107,17 @@ FHIR_SIMPLE_TYPE_CHECK(Time, "http://hl7.org/fhir/StructureDefinition/time");
 FHIR_SIMPLE_TYPE_CHECK(Instant,
                        "http://hl7.org/fhir/StructureDefinition/instant");
 FHIR_SIMPLE_TYPE_CHECK(Xhtml, "http://hl7.org/fhir/StructureDefinition/xhtml");
+FHIR_SIMPLE_TYPE_CHECK(Markdown,
+                       "http://hl7.org/fhir/StructureDefinition/markdown");
 FHIR_SIMPLE_TYPE_CHECK(Base64Binary,
                        "http://hl7.org/fhir/StructureDefinition/base64Binary");
 FHIR_SIMPLE_TYPE_CHECK(Uri, "http://hl7.org/fhir/StructureDefinition/uri");
+FHIR_SIMPLE_TYPE_CHECK(Url, "http://hl7.org/fhir/StructureDefinition/url");
+FHIR_SIMPLE_TYPE_CHECK(Canonical,
+                       "http://hl7.org/fhir/StructureDefinition/canonical");
+FHIR_SIMPLE_TYPE_CHECK(Oid, "http://hl7.org/fhir/StructureDefinition/oid");
+FHIR_SIMPLE_TYPE_CHECK(Id, "http://hl7.org/fhir/StructureDefinition/id");
+FHIR_SIMPLE_TYPE_CHECK(Uuid, "http://hl7.org/fhir/StructureDefinition/uuid");
 FHIR_SIMPLE_TYPE_CHECK(Identifier,
                        "http://hl7.org/fhir/StructureDefinition/Identifier");
 

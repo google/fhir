@@ -88,6 +88,12 @@ bool IsDate(const ::google::protobuf::Descriptor* descriptor);
 bool IsTime(const ::google::protobuf::Message& message);
 bool IsTime(const ::google::protobuf::Descriptor* descriptor);
 
+bool IsId(const ::google::protobuf::Message& message);
+bool IsId(const ::google::protobuf::Descriptor* descriptor);
+
+bool IsUuid(const ::google::protobuf::Message& message);
+bool IsUuid(const ::google::protobuf::Descriptor* descriptor);
+
 bool IsIdentifier(const ::google::protobuf::Message& message);
 bool IsIdentifier(const ::google::protobuf::Descriptor* descriptor);
 
@@ -100,6 +106,15 @@ bool IsUri(const ::google::protobuf::Descriptor* descriptor);
 bool IsPeriod(const ::google::protobuf::Message& message);
 bool IsPeriod(const ::google::protobuf::Descriptor* descriptor);
 
+bool IsUrl(const ::google::protobuf::Message& message);
+bool IsUrl(const ::google::protobuf::Descriptor* descriptor);
+
+bool IsCanonical(const ::google::protobuf::Message& message);
+bool IsCanonical(const ::google::protobuf::Descriptor* descriptor);
+
+bool IsOid(const ::google::protobuf::Message& message);
+bool IsOid(const ::google::protobuf::Descriptor* descriptor);
+
 bool IsQuantity(const ::google::protobuf::Message& message);
 bool IsQuantity(const ::google::protobuf::Descriptor* descriptor);
 
@@ -108,6 +123,9 @@ bool IsSimpleQuantity(const ::google::protobuf::Descriptor* descriptor);
 
 bool IsXhtml(const ::google::protobuf::Message& message);
 bool IsXhtml(const ::google::protobuf::Descriptor* descriptor);
+
+bool IsMarkdown(const ::google::protobuf::Message& message);
+bool IsMarkdown(const ::google::protobuf::Descriptor* descriptor);
 
 }  // namespace fhir
 }  // namespace google

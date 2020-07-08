@@ -22,9 +22,11 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
+#include "google/fhir/proto_util.h"
 #include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/r4/profiles.h"
 #include "google/fhir/test_helper.h"
+#include "google/fhir/testutil/generator.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/annotations.pb.h"
 #include "proto/r4/core/codes.pb.h"
@@ -1632,6 +1634,48 @@ TEST(JsonFormatR4Test, TestVisionPrescription) {
                                  "VisionPrescription-33124"};
   TestPair<VisionPrescription>(files);
 }
+
+TEST(JsonFormatR4Test, PrintAndParseAllResources) {
+  // Populate all fields to test edge cases, but recur only rarely to keep
+  // the test fast.
+  auto value_provider =
+      absl::make_unique<google::fhir::testutil::RandomValueProvider>(1.0, 0.05);
+  google::fhir::testutil::FhirGenerator generator(
+      std::move(value_provider),
+      google::fhir::r4::R4PrimitiveHandler::GetInstance());
+  const google::protobuf::Descriptor* descriptor =
+      google::fhir::r4::core::ContainedResource::GetDescriptor();
+
+  // Test populating all resources by iterating through all oneof fields
+  // in the contained resource.
+  for (int i = 0; i < descriptor->field_count(); ++i) {
+    const google::protobuf::FieldDescriptor* resource_field = descriptor->field(i);
+
+    google::fhir::r4::core::ContainedResource container;
+    google::protobuf::Message* resource =
+        container.GetReflection()->MutableMessage(&container, resource_field);
+
+    // Skip bundle since all resources are covered elsewhere.
+    if (google::fhir::IsMessageType<google::fhir::r4::core::Bundle>(
+            *resource)) {
+      continue;
+    }
+
+    FHIR_ASSERT_OK(generator.Fill(resource));
+    FHIR_ASSERT_OK_AND_ASSIGN(
+        std::string json, ::google::fhir::r4::PrintFhirToJsonString(*resource));
+
+    google::fhir::r4::core::ContainedResource parsed_container;
+    google::protobuf::Message* parsed_resource =
+        parsed_container.GetReflection()->MutableMessage(&parsed_container,
+                                                         resource_field);
+    EXPECT_OK(::google::fhir::r4::MergeJsonFhirStringIntoProto(
+        json, parsed_resource, absl::UTCTimeZone(), false));
+    EXPECT_THAT(*resource,
+                google::fhir::testutil::EqualsProto(*parsed_resource));
+  }
+}
+
 }  // namespace
 
 }  // namespace r4
