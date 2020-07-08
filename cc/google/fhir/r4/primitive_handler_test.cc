@@ -195,6 +195,8 @@ TEST(PrimitiveValidationTestJson, Decimal) { TestJsonValidation<Decimal>(); }
 
 TEST(PrimitiveValidationTestJson, Id) { TestJsonValidation<Id>(); }
 
+TEST(PrimitiveValidationTestJson, Uuid) { TestJsonValidation<Uuid>(); }
+
 TEST(PrimitiveValidationTestJson, Instant) { TestJsonValidation<Instant>(); }
 
 TEST(PrimitiveValidationTestJson, Integer) { TestJsonValidation<Integer>(); }
@@ -242,6 +244,8 @@ TEST(PrimitiveValidationTestProto, DateTime) {
 TEST(PrimitiveValidationTestProto, Decimal) { TestProtoValidation<Decimal>(); }
 
 TEST(PrimitiveValidationTestProto, Id) { TestProtoValidation<Id>(); }
+
+TEST(PrimitiveValidationTestProto, Uuid) { TestProtoValidation<Uuid>(); }
 
 TEST(PrimitiveValidationTestProto, Instant) { TestProtoValidation<Instant>(); }
 

@@ -642,6 +642,11 @@ absl::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForR4Types(
     return std::unique_ptr<PrimitiveWrapper>(
         new StringTypeWrapper<FHIR_DATATYPE(ExtensionType, url)>());
   }
+
+  if (IsMessageType<FHIR_DATATYPE(ExtensionType, uuid)>(target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new StringTypeWrapper<FHIR_DATATYPE(ExtensionType, uuid)>());
+  }
   return absl::optional<std::unique_ptr<PrimitiveWrapper>>();
 }
 
