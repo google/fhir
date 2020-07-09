@@ -95,3 +95,16 @@ value_set {
     include: "Niners"
   }
 }
+
+value_set {
+  name: "SomeSnomedCodes",
+  status: DRAFT
+  description: "ValueSet with codes from a CodeSystem that has a defining resource but no defined codes"
+
+  system {
+    url: "http://snomed.info/sct"
+
+    include: "foo"
+    include: "bar"
+  }
+}

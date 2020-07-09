@@ -643,21 +643,48 @@ public class ValueSetGenerator {
             .map(concept -> concept.getCode().getValue())
             .collect(Collectors.toSet());
     if (isKnownSystem) {
-      if (conceptSet.getConceptList().isEmpty()) {
-        // There is no explicit concept list, so default to all codes from that system that aren't
-        // in the excludes set.
-        return buildEnumValues(codeSystemsByUrl.get(system), system, conceptSet.getFilterList())
-            .stream()
-            .filter(enumValue -> !excludeCodes.contains(CodeWrapper.getOriginalCode(enumValue)))
-            .collect(Collectors.toList());
+      CodeSystem codeSystem = codeSystemsByUrl.get(system);
+      boolean codeSystemHasConcepts = !codeSystem.getConceptList().isEmpty();
+      boolean valueSetHasConcepts = !conceptSet.getConceptList().isEmpty();
+      if (valueSetHasConcepts) {
+        if (codeSystemHasConcepts) {
+          // The ValueSet lists concepts to use explicitly, and the source code system explicitly
+          // lists concepts.
+          // Only include those Codes from the code system that are explicitly mentioned
+          final Map<String, EnumValueDescriptorProto.Builder> valuesByCode =
+              buildEnumValues(codeSystemsByUrl.get(system), system, conceptSet.getFilterList())
+                  .stream()
+                  .collect(Collectors.toMap(c -> JsonFormat.getOriginalCode(c), c -> c));
+          return conceptSet.getConceptList().stream()
+              .map(concept -> valuesByCode.get(concept.getCode().getValue()))
+              .collect(Collectors.toList());
+        } else {
+          // The ValueSet lists concepts to use explicitly, but the source system has no enumerated
+          // codes (e.g., http://snomed.info/sct).
+          // Take the ValueSet at its word that the codes are valid codes from that system, and
+          // generate an enum with those.
+          return toEnumValueList(
+              conceptSet.getConceptList().stream()
+                  .map(
+                      concept ->
+                          buildEnumValue(
+                              concept.getCode(), concept.getDisplay().getValue(), system))
+                  .collect(Collectors.toList()));
+        }
+      } else {
+        if (codeSystemHasConcepts) {
+          // There are CodeSystem enums, but no explicit concept list on the ValueSet, so default
+          // to all codes from that system that aren't in the excludes set.
+          return buildEnumValues(codeSystem, system, conceptSet.getFilterList()).stream()
+              .filter(enumValue -> !excludeCodes.contains(CodeWrapper.getOriginalCode(enumValue)))
+              .collect(Collectors.toList());
+        } else {
+          // There are no enums listed on the code system, and no enums listed in the value set
+          // include list.  This is not a valid definition.
+          printNoEnumWarning(system, "Could not find any valid codes for CodeSystem");
+          return new ArrayList<>();
+        }
       }
-      // Only take the codes from that system that are explicitly listed.
-      final Map<String, EnumValueDescriptorProto.Builder> valuesByCode =
-          buildEnumValues(codeSystemsByUrl.get(system), system, conceptSet.getFilterList()).stream()
-              .collect(Collectors.toMap(c -> JsonFormat.getOriginalCode(c), c -> c));
-      return conceptSet.getConceptList().stream()
-          .map(concept -> valuesByCode.get(concept.getCode().getValue()))
-          .collect(Collectors.toList());
     } else {
       return toEnumValueList(
           conceptSet.getConceptList().stream()
