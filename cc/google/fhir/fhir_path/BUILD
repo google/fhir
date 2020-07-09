@@ -141,6 +141,25 @@ cc_library(
 )
 
 cc_library(
+    name = "fhir_path_types",
+    srcs = [
+        "fhir_path_types.cc",
+    ],
+    hdrs = [
+        "fhir_path_types.h",
+    ],
+    strip_include_prefix = "//cc/",
+    visibility = [":__pkg__"],
+    deps = [
+        "//cc/google/fhir:annotations",
+        "//cc/google/fhir/status:statusor",
+        "@com_google_absl//absl/container:flat_hash_map",
+        "@com_google_absl//absl/strings",
+        "@com_google_protobuf//:protobuf",
+    ],
+)
+
+cc_library(
     name = "utils",
     srcs = [
         "utils.cc",
@@ -239,6 +258,24 @@ cc_test(
     deps = [
         ":fhir_path_validation",
         ":fhir_path_validation_rule",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "fhir_path_types_test",
+    size = "small",
+    srcs = [
+        "fhir_path_types_test.cc",
+    ],
+    deps = [
+        ":fhir_path_types",
+        "//cc/google/fhir:type_macros",
+        "//cc/google/fhir:util",
+        "//proto/r4/core:datatypes_cc_proto",
+        "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
+        "//proto/stu3:datatypes_cc_proto",
+        "//proto/stu3:resources_cc_proto",
         "@com_google_googletest//:gtest_main",
     ],
 )
