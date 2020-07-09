@@ -20,22 +20,14 @@
 #include "google/protobuf/util/message_differencer.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
-#include "absl/strings/escaping.h"
 #include "absl/strings/match.h"
-#include "absl/strings/numbers.h"
 #include "absl/strings/str_cat.h"
-#include "absl/time/civil_time.h"
-#include "absl/time/time.h"
 #include "absl/types/optional.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/fhir_path/fhir_path.h"
-#include "google/fhir/fhir_path/utils.h"
 #include "google/fhir/proto_util.h"
-#include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "google/fhir/util.h"
 #include "proto/annotations.pb.h"
-#include "proto/r4/core/datatypes.pb.h"
 
 namespace google {
 namespace fhir {
