@@ -17,12 +17,12 @@ package jsonformat
 import (
 	"encoding/json"
 	"math"
-	"reflect"
 	"strconv"
 	"strings"
 	"testing"
 
 	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
 	c4pb "google/fhir/proto/r4/core/codes_go_proto"
@@ -1524,8 +1524,9 @@ func TestParseURIs(t *testing.T) {
 				t.Run(i.ver.String(), func(t *testing.T) {
 					u := setupUnmarshaller(t, i.ver)
 					r := proto.Clone(i.r)
-					reflect.ValueOf(r).Elem().FieldByName("Value").Set(reflect.ValueOf(test))
-					got, err := u.parsePrimitiveType("value", proto.MessageReflect(r), json.RawMessage(strconv.Quote(test)))
+					rpb := proto.MessageReflect(r)
+					rpb.Set(rpb.Descriptor().Fields().ByName("value"), protoreflect.ValueOfString(test))
+					got, err := u.parsePrimitiveType("value", rpb, json.RawMessage(strconv.Quote(test)))
 					if err != nil {
 						t.Fatalf("parse Uri, got err %v, want <nil>", err)
 					}

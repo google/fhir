@@ -72,6 +72,10 @@ go_test(
     embed = [":jsonformat"],
     deps = [
         "//go/google/fhir/jsonformat/internal/jsonpbhelper",
+        "//proto/dstu2:codes_go_proto",
+        "//proto/dstu2:datatypes_go_proto",
+        "//proto/dstu2:metadatatypes_go_proto",
+        "//proto/dstu2:resources_go_proto",
         "//proto/r4/core:codes_go_proto",
         "//proto/r4/core:datatypes_go_proto",
         "//proto/r4/core/resources:bundle_and_contained_resource_go_proto",
@@ -88,6 +92,7 @@ go_test(
         "@com_github_golang_protobuf//proto:go_default_library",
         "@com_github_golang_protobuf//ptypes:go_default_library_gen",
         "@com_github_google_go_cmp//cmp:go_default_library",
+        "@org_golang_google_protobuf//reflect/protoreflect:go_default_library",
         "@org_golang_google_protobuf//types/known/anypb:go_default_library",
     ],
 )
