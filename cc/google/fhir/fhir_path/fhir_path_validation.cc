@@ -30,7 +30,6 @@
 #include "google/fhir/annotations.h"
 #include "google/fhir/fhir_path/fhir_path.h"
 #include "google/fhir/fhir_path/utils.h"
-#include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"

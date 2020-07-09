@@ -716,22 +716,36 @@ TYPED_TEST(FhirPathTest, TestFunctionLength) {
 }
 
 TYPED_TEST(FhirPathTest, TestFunctionToInteger) {
-  EXPECT_EQ(TestFixture::Evaluate("1.toInteger()")
-                .ValueOrDie()
-                .GetInteger()
-                .ValueOrDie(),
-            1);
-  EXPECT_EQ(TestFixture::Evaluate("'2'.toInteger()")
-                .ValueOrDie()
-                .GetInteger()
-                .ValueOrDie(),
-            2);
+  EXPECT_THAT(TestFixture::Evaluate("1.toInteger()"), EvalsToInteger(1));
+  EXPECT_THAT(TestFixture::Evaluate("'2'.toInteger()"), EvalsToInteger(2));
 
   EXPECT_THAT(TestFixture::Evaluate("(3.3).toInteger()"), EvalsToEmpty());
   EXPECT_THAT(TestFixture::Evaluate("'a'.toInteger()"), EvalsToEmpty());
 
+  EXPECT_THAT(TestFixture::Evaluate("{}.toInteger()"), EvalsToEmpty());
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
+                            "toInteger()"),
+      EvalsToEmpty());
   EXPECT_THAT(TestFixture::Evaluate("(1 | 2).toInteger()"),
               HasStatusCode(StatusCode::kInvalidArgument));
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionConvertsToInteger) {
+  EXPECT_THAT(TestFixture::Evaluate("1.convertsToInteger()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'2'.convertsToInteger()"), EvalsToTrue());
+
+  EXPECT_THAT(TestFixture::Evaluate("(3.3).convertsToInteger()"),
+              EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("'a'.convertsToInteger()"), EvalsToFalse());
+
+  EXPECT_THAT(TestFixture::Evaluate("{}.convertsToInteger()"), EvalsToEmpty());
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
+                            "convertsToInteger()"),
+      EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("(1 | 2).convertsToInteger()"),
+              HasStatusCode(StatusCode::kFailedPrecondition));
 }
 
 TYPED_TEST(FhirPathTest, TestFunctionToString) {
@@ -744,9 +758,97 @@ TYPED_TEST(FhirPathTest, TestFunctionToString) {
   EXPECT_THAT(TestFixture::Evaluate("true.toString()"),
               EvalsToStringThatMatches(StrEq("true")));
   EXPECT_THAT(TestFixture::Evaluate("{}.toString()"), EvalsToEmpty());
-  EXPECT_THAT(TestFixture::Evaluate("toString()"), EvalsToEmpty());
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
+                            "toString()"),
+      EvalsToEmpty());
   EXPECT_THAT(TestFixture::Evaluate("(1 | 2).toString()"),
               HasStatusCode(StatusCode::kInvalidArgument));
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionConvertsToString) {
+  EXPECT_THAT(TestFixture::Evaluate("1.convertsToString()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.1.convertsToString()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.convertsToString()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("true.convertsToString()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("{}.convertsToString()"), EvalsToEmpty());
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
+                            "convertsToString()"),
+      EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("(1 | 2).convertsToString()"),
+              HasStatusCode(StatusCode::kFailedPrecondition));
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionToBoolean) {
+  EXPECT_THAT(TestFixture::Evaluate("'true'.toBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'t'.toBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'yes'.toBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'y'.toBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'1'.toBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'1.0'.toBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.toBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.0.toBoolean()"), EvalsToTrue());
+
+  EXPECT_THAT(TestFixture::Evaluate("'false'.toBoolean()"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("'f'.toBoolean()"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("'no'.toBoolean()"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("'n'.toBoolean()"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("'0'.toBoolean()"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("'0.0'.toBoolean()"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("0.toBoolean()"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("'0.0'.toBoolean()"), EvalsToFalse());
+
+  EXPECT_THAT(TestFixture::Evaluate("{}.toBoolean()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.toBoolean()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("2.toBoolean()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("2.0.toBoolean()"), EvalsToEmpty());
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
+                            "toBoolean()"),
+      EvalsToEmpty());
+
+  EXPECT_THAT(TestFixture::Evaluate("(1 | 2).toBoolean()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionConvertsToBoolean) {
+  EXPECT_THAT(TestFixture::Evaluate("'true'.convertsToBoolean()"),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'t'.convertsToBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'yes'.convertsToBoolean()"),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'y'.convertsToBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'1'.convertsToBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'1.0'.convertsToBoolean()"),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.convertsToBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("1.0.convertsToBoolean()"), EvalsToTrue());
+
+  EXPECT_THAT(TestFixture::Evaluate("'false'.convertsToBoolean()"),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'f'.convertsToBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'no'.convertsToBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'n'.convertsToBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'0'.convertsToBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'0.0'.convertsToBoolean()"),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("0.convertsToBoolean()"), EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate("'0.0'.convertsToBoolean()"),
+              EvalsToTrue());
+
+  EXPECT_THAT(TestFixture::Evaluate("{}.convertsToBoolean()"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("'foo'.convertsToBoolean()"),
+              EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("2.convertsToBoolean()"), EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("2.0.convertsToBoolean()"), EvalsToFalse());
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
+                            "convertsToBoolean()"),
+      EvalsToFalse());
+
+  EXPECT_THAT(TestFixture::Evaluate("(1 | 2).convertsToBoolean()"),
+              HasStatusCode(StatusCode::kFailedPrecondition));
 }
 
 TYPED_TEST(FhirPathTest, TestFunctionTrace) {
@@ -769,21 +871,9 @@ TYPED_TEST(FhirPathTest, TestFunctionEmpty) {
 }
 
 TYPED_TEST(FhirPathTest, TestFunctionCount) {
-  EXPECT_EQ(TestFixture::Evaluate("{}.count()")
-                .ValueOrDie()
-                .GetInteger()
-                .ValueOrDie(),
-            0);
-  EXPECT_EQ(TestFixture::Evaluate("'a'.count()")
-                .ValueOrDie()
-                .GetInteger()
-                .ValueOrDie(),
-            1);
-  EXPECT_EQ(TestFixture::Evaluate("('a' | 1).count()")
-                .ValueOrDie()
-                .GetInteger()
-                .ValueOrDie(),
-            2);
+  EXPECT_THAT(TestFixture::Evaluate("{}.count()"), EvalsToInteger(0));
+  EXPECT_THAT(TestFixture::Evaluate("'a'.count()"), EvalsToInteger(1));
+  EXPECT_THAT(TestFixture::Evaluate("('a' | 1).count()"), EvalsToInteger(2));
 }
 
 TYPED_TEST(FhirPathTest, TestFunctionFirst) {
@@ -1541,8 +1631,7 @@ TYPED_TEST(FhirPathTest, TestBooleanLiteral) {
 }
 
 TYPED_TEST(FhirPathTest, TestIntegerLiteral) {
-  EvaluationResult result = TestFixture::Evaluate("42").ValueOrDie();
-  EXPECT_EQ(42, result.GetInteger().ValueOrDie());
+  EXPECT_THAT(TestFixture::Evaluate("42"), EvalsToInteger(42));
 
   // Ensure evaluation of an out-of-range literal fails.
   const char* overflow_value = "10000000000";

@@ -36,8 +36,8 @@
 #include "google/fhir/fhir_path/FhirPathBaseVisitor.h"
 #include "google/fhir/fhir_path/FhirPathLexer.h"
 #include "google/fhir/fhir_path/FhirPathParser.h"
+#include "google/fhir/fhir_path/fhir_path_types.h"
 #include "google/fhir/fhir_path/utils.h"
-#include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
@@ -76,13 +76,6 @@ namespace internal {
 
 // Default number of buckets to create when constructing a std::unordered_set.
 constexpr int kDefaultSetBucketCount = 10;
-
-// Returns true if the provided FHIR message converts to System.Integer.
-//
-// See https://www.hl7.org/fhir/fhirpath.html#types
-bool IsSystemInteger(const Message& message) {
-  return IsInteger(message) || IsUnsignedInt(message) || IsPositiveInt(message);
-}
 
 // Returns the integer value of the FHIR message if it can be converted to
 // a System.Integer
@@ -149,54 +142,53 @@ StatusOr<absl::optional<bool>> BooleanOrEmpty(
   return absl::optional<bool>(value);
 }
 
-// Returns the string representation of the provided message for messages that
-// are represented in JSON as strings. For primitive messages that are not
-// represented as a string in JSON a status other than OK will be returned.
-StatusOr<std::string> MessageToString(const PrimitiveHandler* primitive_handler,
-                                      const WorkspaceMessage& message) {
-  if (IsString(*message.Message())) {
-    return primitive_handler->GetStringValue(*message.Message());
-  }
-
-  if (!IsPrimitive(message.Message()->GetDescriptor())) {
-    return InvalidArgumentError("Expression must be a primitive.");
-  }
-
-  // These types are represented as Strings in JSON but are not implicitly
-  // convertible to System.String. Eventually, we should maintain a mapping
-  // of FHIR primitive to FHIRPath primitives
-  // (https://www.hl7.org/fhir/fhirpath.html#types), but for now this is used as
-  // a quick work-around.
-  if (IsDateTime(*message.Message()) || IsTime(*message.Message()) ||
-      IsDecimal(*message.Message())) {
+// Returns the string representation of the provided message if the message is a
+// System.String or a FHIR primitive that implicitly converts to System.String.
+// Otherwise a status other than OK will be returned.
+StatusOr<std::string> MessageToString(const WorkspaceMessage& message) {
+  if (!IsSystemString(*message.Message())) {
     return InvalidArgumentError("Expression is not a string.");
   }
 
-  StatusOr<JsonPrimitive> json_primitive =
-      primitive_handler->WrapPrimitiveProto(*message.Message());
-  std::string json_string = json_primitive.ValueOrDie().value;
-
-  if (!absl::StartsWith(json_string, "\"")) {
-    return InvalidArgumentError("Expression must evaluate to a string.");
-  }
-
-  // Trim the starting and ending double quotation marks from the string (added
-  // by JsonPrimitive.)
-  return json_string.substr(1, json_string.size() - 2);
+  std::string value;
+  return GetPrimitiveStringValue(*message.Message(), &value);
 }
 
-// Returns the string representation of the provided message for messages that
-// are represented in JSON as strings. Requires the presence of exactly one
-// message in the provided collection. For primitive messages that are not
-// represented as a string in JSON a status other than OK will be returned.
+// Returns the string representation of the provided messages if there is
+// exactly one message in the collection and that message is a System.String or
+// a FHIR primitive that implicitly converts to System.String. Otherwise a
+// status other than OK will be returned.
 StatusOr<std::string> MessagesToString(
-    const PrimitiveHandler* primitive_handler,
     const std::vector<WorkspaceMessage>& messages) {
   if (messages.size() != 1) {
     return InvalidArgumentError("Expression must represent a single value.");
   }
 
-  return MessageToString(primitive_handler, messages[0]);
+  return MessageToString(messages[0]);
+}
+
+// Converts decimal or integer container messages to a double value.
+static Status MessageToDouble(const PrimitiveHandler* primitive_handler,
+                              const Message& message, double* value) {
+  if (IsDecimal(message)) {
+    FHIR_ASSIGN_OR_RETURN(std::string string_value,
+                          primitive_handler->GetDecimalValue(message));
+
+    if (!absl::SimpleAtod(string_value, value)) {
+      return InvalidArgumentError(
+          "Could not convert decimal to numeric double.");
+    }
+
+    return absl::OkStatus();
+
+  } else if (IsSystemInteger(message)) {
+    FHIR_ASSIGN_OR_RETURN(*value, ToSystemInteger(primitive_handler, message));
+    return absl::OkStatus();
+  }
+
+  return InvalidArgumentError(
+      absl::StrCat("Message type cannot be converted to double: ",
+                   message.GetDescriptor()->full_name()));
 }
 
 // Returns a function that creates a new message of the provided descriptor type
@@ -701,12 +693,9 @@ class IndexOfFunction : public SingleParameterFunctionNode {
       return absl::OkStatus();
     }
 
-    FHIR_ASSIGN_OR_RETURN(
-        std::string haystack,
-        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
-    FHIR_ASSIGN_OR_RETURN(
-        std::string needle,
-        MessageToString(work_space->GetPrimitiveHandler(), first_param[0]));
+    FHIR_ASSIGN_OR_RETURN(std::string haystack,
+                          MessagesToString(child_results));
+    FHIR_ASSIGN_OR_RETURN(std::string needle, MessageToString(first_param[0]));
 
     size_t position = haystack.find(needle);
     Message* result = work_space->GetPrimitiveHandler()->NewInteger(
@@ -741,12 +730,8 @@ class StringTestFunction : public SingleValueFunctionNode {
       return absl::OkStatus();
     }
 
-    FHIR_ASSIGN_OR_RETURN(
-        std::string item,
-        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
-    FHIR_ASSIGN_OR_RETURN(
-        std::string test_string,
-        MessageToString(work_space->GetPrimitiveHandler(), param));
+    FHIR_ASSIGN_OR_RETURN(std::string item, MessagesToString(child_results));
+    FHIR_ASSIGN_OR_RETURN(std::string test_string, MessageToString(param));
 
     Message* result =
         work_space->GetPrimitiveHandler()->NewBoolean(Test(item, test_string));
@@ -770,11 +755,6 @@ class StringTestFunction : public SingleValueFunctionNode {
 // Missing or incorrect parameters will end evaluation and cause Evaluate to
 // return a status other than OK. See
 // http://hl7.org/fhirpath/2018Sep/index.html#functions-2.
-//
-// Please note that execution will proceed on any String-like type.
-// Specifically, any type for which its JsonPrimitive value is a string. This
-// differs from the allowed implicit conversions defined in
-// https://hl7.org/fhirpath/2018Sep/index.html#conversion.
 class StartsWithFunction : public StringTestFunction {
  public:
   StartsWithFunction(const std::shared_ptr<ExpressionNode>& child,
@@ -818,9 +798,7 @@ class StringTransformationFunction : public ZeroParameterFunctionNode {
       return absl::OkStatus();
     }
 
-    FHIR_ASSIGN_OR_RETURN(
-        std::string item,
-        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
+    FHIR_ASSIGN_OR_RETURN(std::string item, MessagesToString(child_results));
 
     Message* result =
         work_space->GetPrimitiveHandler()->NewString(Transform(item));
@@ -893,12 +871,8 @@ class MatchesFunction : public SingleValueFunctionNode {
       return absl::OkStatus();
     }
 
-    FHIR_ASSIGN_OR_RETURN(
-        std::string item,
-        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
-    FHIR_ASSIGN_OR_RETURN(
-        std::string re_string,
-        MessageToString(work_space->GetPrimitiveHandler(), param));
+    FHIR_ASSIGN_OR_RETURN(std::string item, MessagesToString(child_results));
+    FHIR_ASSIGN_OR_RETURN(std::string re_string, MessageToString(param));
 
     RE2 re(re_string);
 
@@ -953,15 +927,10 @@ class ReplaceFunction : public FunctionNode {
       return absl::OkStatus();
     }
 
-    FHIR_ASSIGN_OR_RETURN(
-        std::string item,
-        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
-    FHIR_ASSIGN_OR_RETURN(
-        std::string pattern,
-        MessagesToString(work_space->GetPrimitiveHandler(), pattern_param));
-    FHIR_ASSIGN_OR_RETURN(
-        std::string replacement,
-        MessagesToString(work_space->GetPrimitiveHandler(), replacement_param));
+    FHIR_ASSIGN_OR_RETURN(std::string item, MessagesToString(child_results));
+    FHIR_ASSIGN_OR_RETURN(std::string pattern, MessagesToString(pattern_param));
+    FHIR_ASSIGN_OR_RETURN(std::string replacement,
+                          MessagesToString(replacement_param));
 
     if (!item.empty() && pattern.empty()) {
       // "If pattern is the empty string (''), every character in the input
@@ -1028,15 +997,11 @@ class ReplaceMatchesFunction : public FunctionNode {
       return absl::OkStatus();
     }
 
-    FHIR_ASSIGN_OR_RETURN(
-        std::string item,
-        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
-    FHIR_ASSIGN_OR_RETURN(
-        std::string re_string,
-        MessagesToString(work_space->GetPrimitiveHandler(), pattern_param));
-    FHIR_ASSIGN_OR_RETURN(
-        std::string replacement_string,
-        MessagesToString(work_space->GetPrimitiveHandler(), replacement_param));
+    FHIR_ASSIGN_OR_RETURN(std::string item, MessagesToString(child_results));
+    FHIR_ASSIGN_OR_RETURN(std::string re_string,
+                          MessagesToString(pattern_param));
+    FHIR_ASSIGN_OR_RETURN(std::string replacement_string,
+                          MessagesToString(replacement_param));
 
     RE2 re(re_string);
 
@@ -1090,8 +1055,11 @@ class ToStringFunction : public ZeroParameterFunctionNode {
 
     const WorkspaceMessage& child = child_results[0];
 
-    if (IsString(*child.Message())) {
-      results->push_back(child);
+    if (IsSystemString(*child.Message())) {
+      FHIR_ASSIGN_OR_RETURN(std::string value, MessageToString(child));
+      Message* result = work_space->GetPrimitiveHandler()->NewString(value);
+      work_space->DeleteWhenFinished(result);
+      results->push_back(WorkspaceMessage(result));
       return absl::OkStatus();
     }
 
@@ -1133,9 +1101,7 @@ class LengthFunction : public ZeroParameterFunctionNode {
       return absl::OkStatus();
     }
 
-    FHIR_ASSIGN_OR_RETURN(
-        std::string item,
-        MessagesToString(work_space->GetPrimitiveHandler(), child_results));
+    FHIR_ASSIGN_OR_RETURN(std::string item, MessagesToString(child_results));
 
     Message* result =
         work_space->GetPrimitiveHandler()->NewInteger(item.length());
@@ -1376,9 +1342,7 @@ class TraceFunction : public SingleValueFunctionNode {
       WorkSpace* work_space, const WorkspaceMessage& param,
       std::vector<WorkspaceMessage>* results) const override {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, results));
-    FHIR_ASSIGN_OR_RETURN(
-        std::string name,
-        MessageToString(work_space->GetPrimitiveHandler(), param));
+    FHIR_ASSIGN_OR_RETURN(std::string name, MessageToString(param));
 
     DVLOG(1) << "trace(" << name << "):";
     for (auto it = results->begin(); it != results->end(); it++) {
@@ -1436,8 +1400,7 @@ class ToIntegerFunction : public ZeroParameterFunctionNode {
       return absl::OkStatus();
     }
 
-    auto child_as_string =
-        MessagesToString(work_space->GetPrimitiveHandler(), child_results);
+    auto child_as_string = MessagesToString(child_results);
     if (child_as_string.ok()) {
       int32_t value;
       if (absl::SimpleAtoi(child_as_string.ValueOrDie(), &value)) {
@@ -1453,6 +1416,91 @@ class ToIntegerFunction : public ZeroParameterFunctionNode {
 
   const Descriptor* ReturnType() const override {
     return Integer::descriptor();
+  }
+};
+
+// Implements the FHIRPath .toBoolean() function.
+class ToBooleanFunction : public ZeroParameterFunctionNode {
+ public:
+  ToBooleanFunction(const std::shared_ptr<ExpressionNode>& child,
+                    const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : ZeroParameterFunctionNode(child, params) {}
+
+  Status Evaluate(WorkSpace* work_space,
+                  std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.size() > 1) {
+      return InvalidArgumentError(
+          "toBoolean() requires a collection with no more than 1 item.");
+    }
+
+    if (child_results.empty()) {
+      return absl::OkStatus();
+    }
+
+    const WorkspaceMessage& child_result = child_results[0];
+
+    if (!IsPrimitive(child_result.Message()->GetDescriptor())) {
+      return absl::OkStatus();
+    }
+
+    if (IsBoolean(*child_result.Message())) {
+      results->push_back(child_result);
+      return absl::OkStatus();
+    }
+
+    if (IsSystemInteger(*child_result.Message())) {
+      FHIR_ASSIGN_OR_RETURN(int32_t value,
+                            ToSystemInteger(work_space->GetPrimitiveHandler(),
+                                            *child_result.Message()));
+      if (value != 0 && value != 1) {
+        return absl::OkStatus();
+      }
+      Message* result = work_space->GetPrimitiveHandler()->NewBoolean(value);
+      work_space->DeleteWhenFinished(result);
+      results->push_back(WorkspaceMessage(result));
+      return absl::OkStatus();
+    }
+
+    if (IsSystemString(*child_result.Message())) {
+      FHIR_ASSIGN_OR_RETURN(std::string value, MessageToString(child_result));
+      bool is_true = value == "true" || value == "t" || value == "yes" ||
+                     value == "y" || value == "1" || value == "1.0";
+      bool is_false = value == "false" || value == "f" || value == "no" ||
+                      value == "n" || value == "0" || value == "0.0";
+      if (is_true == is_false) {
+        return absl::OkStatus();
+      }
+
+      Message* result = work_space->GetPrimitiveHandler()->NewBoolean(is_true);
+      work_space->DeleteWhenFinished(result);
+      results->push_back(WorkspaceMessage(result));
+      return absl::OkStatus();
+    }
+
+    if (IsSystemDecimal(*child_result.Message())) {
+      double value;
+      FHIR_RETURN_IF_ERROR(MessageToDouble(work_space->GetPrimitiveHandler(),
+                                           *child_result.Message(), &value));
+      bool is_true = value == 1.0;
+      bool is_false = value == 0.0;
+      if (is_true == is_false) {
+        return absl::OkStatus();
+      }
+
+      Message* result = work_space->GetPrimitiveHandler()->NewBoolean(is_true);
+      work_space->DeleteWhenFinished(result);
+      results->push_back(WorkspaceMessage(result));
+      return absl::OkStatus();
+    }
+
+    return absl::OkStatus();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Boolean::descriptor();
   }
 };
 
@@ -2072,6 +2120,26 @@ class IifFunction : public FunctionNode {
   const Descriptor* ReturnType() const override { return child_->ReturnType(); }
 };
 
+// Factory method for creating FHIRPath's convertsTo*() function. Type parameter
+// T should be the ExpressionNode type that converts to the type in question.
+template <typename T>
+StatusOr<ExpressionNode*> static CreateConvertsToFunction(
+    const std::shared_ptr<ExpressionNode>& child_expression,
+    const std::vector<FhirPathParser::ExpressionContext*>& params,
+    FhirPathBaseVisitor* base_context_visitor,
+    FhirPathBaseVisitor* child_context_visitor) {
+  if (!params.empty()) {
+    return InvalidArgumentError("convertsTo*() requires zero arguments.");
+  }
+
+  // .convertsTo*() is equivalent to .single().select(to*().exists()).
+  std::vector<std::shared_ptr<ExpressionNode>> empty_params = {};
+  return new SelectFunction(
+      std::make_shared<SingleFunction>(child_expression, empty_params),
+      {std::make_shared<ExistsFunction>(
+          std::make_shared<T>(child_expression, empty_params), empty_params)});
+}
+
 // Implements the FHIRPath .ofType() function.
 //
 // TODO: This does not currently validate that the tested type exists.
@@ -2366,30 +2434,6 @@ class IntersectFunction : public SingleParameterFunctionNode {
   }
 };
 
-// Converts decimal or integer container messages to a double value
-static Status MessageToDouble(const PrimitiveHandler* primitive_handler,
-                              const Message& message, double* value) {
-  if (IsDecimal(message)) {
-    FHIR_ASSIGN_OR_RETURN(std::string string_value,
-                          primitive_handler->GetDecimalValue(message));
-
-    if (!absl::SimpleAtod(string_value, value)) {
-      return InvalidArgumentError(
-          "Could not convert decimal to numeric double.");
-    }
-
-    return absl::OkStatus();
-
-  } else if (IsSystemInteger(message)) {
-    FHIR_ASSIGN_OR_RETURN(*value, ToSystemInteger(primitive_handler, message));
-    return absl::OkStatus();
-  }
-
-  return InvalidArgumentError(
-      absl::StrCat("Message type cannot be converted to double: ",
-                   message.GetDescriptor()->full_name()));
-}
-
 class ComparisonOperator : public BinaryOperator {
  public:
   // Types of comparisons supported by this operator.
@@ -2453,8 +2497,8 @@ class ComparisonOperator : public BinaryOperator {
       return EvalDecimalComparison(primitive_handler, left_result,
                                    right_result);
 
-    } else if (IsString(*left_result) && IsString(*right_result)) {
-      return EvalStringComparison(primitive_handler, left_result, right_result);
+    } else if (IsSystemString(*left_result) && IsSystemString(*right_result)) {
+      return EvalStringComparison(primitive_handler, left, right);
     } else if (IsDateTime(*left_result) && IsDateTime(*right_result)) {
       return EvalDateTimeComparison(primitive_handler, *left_result,
                                     *right_result);
@@ -2520,12 +2564,13 @@ class ComparisonOperator : public BinaryOperator {
   }
 
   StatusOr<absl::optional<bool>> EvalStringComparison(
-      const PrimitiveHandler* primitive_handler, const Message* left_message,
-      const Message* right_message) const {
+      const PrimitiveHandler* primitive_handler,
+      const WorkspaceMessage& left_message,
+      const WorkspaceMessage& right_message) const {
     FHIR_ASSIGN_OR_RETURN(const std::string left,
-                          primitive_handler->GetStringValue(*left_message));
+                          MessageToString(left_message));
     FHIR_ASSIGN_OR_RETURN(const std::string right,
-                          primitive_handler->GetStringValue(*right_message));
+                          MessageToString(right_message));
 
     // FHIR defines string comparisons to be based on unicode values,
     // so simply comparison operators are not sufficient.
@@ -2672,11 +2717,10 @@ class AdditionOperator : public BinaryOperator {
       Message* result = work_space->GetPrimitiveHandler()->NewInteger(value);
       work_space->DeleteWhenFinished(result);
       out_results->push_back(WorkspaceMessage(result));
-    } else if (IsString(*left_result) && IsString(*right_result)) {
+    } else if (IsSystemString(*left_result) && IsSystemString(*right_result)) {
       FHIR_ASSIGN_OR_RETURN(
           std::string value,
-          EvalStringAddition(work_space->GetPrimitiveHandler(), *left_result,
-                             *right_result));
+          EvalStringAddition(left_results[0], right_results[0]));
       Message* result = work_space->GetPrimitiveHandler()->NewString(value);
       work_space->DeleteWhenFinished(result);
       out_results->push_back(WorkspaceMessage(result));
@@ -2709,12 +2753,10 @@ class AdditionOperator : public BinaryOperator {
   }
 
   StatusOr<std::string> EvalStringAddition(
-      const PrimitiveHandler* primitive_handler, const Message& left_message,
-      const Message& right_message) const {
-    FHIR_ASSIGN_OR_RETURN(std::string left,
-                          primitive_handler->GetStringValue(left_message));
-    FHIR_ASSIGN_OR_RETURN(std::string right,
-                          primitive_handler->GetStringValue(right_message));
+      const WorkspaceMessage& left_message,
+      const WorkspaceMessage& right_message) const {
+    FHIR_ASSIGN_OR_RETURN(std::string left, MessageToString(left_message));
+    FHIR_ASSIGN_OR_RETURN(std::string right, MessageToString(right_message));
 
     return absl::StrCat(left, right);
   }
@@ -2737,14 +2779,10 @@ class StrCatOperator : public BinaryOperator {
     std::string right;
 
     if (!left_results.empty()) {
-      FHIR_ASSIGN_OR_RETURN(
-          left,
-          MessageToString(work_space->GetPrimitiveHandler(), left_results[0]));
+      FHIR_ASSIGN_OR_RETURN(left, MessageToString(left_results[0]));
     }
     if (!right_results.empty()) {
-      FHIR_ASSIGN_OR_RETURN(
-          right,
-          MessageToString(work_space->GetPrimitiveHandler(), right_results[0]));
+      FHIR_ASSIGN_OR_RETURN(right, MessageToString(right_results[0]));
     }
 
     Message* result =
@@ -3716,9 +3754,9 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"take", FunctionNode::Create<TakeFunction>},
       {"exclude", UnimplementedFunction},
       {"union", CreateUnionFunction},
-      {"convertsToBoolean", UnimplementedFunction},
-      {"toBoolean", UnimplementedFunction},
-      {"convertsToInteger", UnimplementedFunction},
+      {"convertsToBoolean", CreateConvertsToFunction<ToBooleanFunction>},
+      {"toBoolean", FunctionNode::Create<ToBooleanFunction>},
+      {"convertsToInteger", CreateConvertsToFunction<ToIntegerFunction>},
       {"convertsToDate", UnimplementedFunction},
       {"toDate", UnimplementedFunction},
       {"convertsToDateTime", UnimplementedFunction},
@@ -3727,7 +3765,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"toDecimal", UnimplementedFunction},
       {"convertsToQuantity", UnimplementedFunction},
       {"toQuantity", UnimplementedFunction},
-      {"convertsToString", UnimplementedFunction},
+      {"convertsToString", CreateConvertsToFunction<ToStringFunction>},
       {"convertsToTime", UnimplementedFunction},
       {"toTime", UnimplementedFunction},
       {"indexOf", FunctionNode::Create<IndexOfFunction>},
