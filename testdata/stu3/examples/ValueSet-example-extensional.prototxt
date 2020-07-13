@@ -2,6 +2,11 @@ id {
   value: "example-extensional"
 }
 meta {
+  last_updated {
+    value_us: 1492551883294000
+    timezone: "+10:00"
+    precision: MILLISECOND
+  }
   profile {
     value: "http://hl7.org/fhir/StructureDefinition/shareablevalueset"
   }
@@ -11,7 +16,26 @@ text {
     value: GENERATED
   }
   div {
-    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<p>Value set &quot;LOINC Codes for Cholesterol&quot;: This is an example value set that includes \n        all the  codes for serum cholesterol from LOINC v2.36.</p>\n\t\t\t<p>Developed by: FHIR project team (example)</p>\n\t\t\t<p>Published for testing on 13-June 2012</p>\n\t\t\t<p>This value set includes the following LOINC codes:</p>\n\t\t\t<ul>\n\t\t\t\t<li>14647-2: Cholesterol [Moles/Volume]</li>\n\t\t\t\t<li>2093-3: Cholesterol [Mass/Volume]</li>\n\t\t\t\t<li>35200-5: Cholesterol [Mass Or Moles/Volume] </li>\n\t\t\t\t<li>9342-7: Cholesterol [Percentile]</li>\n\t\t\t</ul>\n\t\t\t<p>This content from LOINC\302\256 is copyright \302\251 1995 Regenstrief Institute, Inc. and the LOINC Committee, and available at no cost under the license at http://loinc.org/terms-of-use.</p>\n\t\t</div>"
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\n            <p>Value set &quot;LOINC Codes for Cholesterol&quot;: This is an example value set that includes \n        all the  codes for serum cholesterol from LOINC v2.36.</p>\n\t\t\t\n            <p>Developed by: FHIR project team (example)</p>\n\t\t\t\n            <p>Published for testing on 13-June 2012</p>\n\t\t\t\n            <p>This value set includes the following LOINC codes:</p>\n\t\t\t\n            <ul>\n\t\t\t\t\n              <li>14647-2: Cholesterol [Moles/Volume]</li>\n\t\t\t\t\n              <li>2093-3: Cholesterol [Mass/Volume]</li>\n\t\t\t\t\n              <li>35200-5: Cholesterol [Mass Or Moles/Volume] </li>\n\t\t\t\t\n              <li>9342-7: Cholesterol [Percentile]</li>\n\t\t\t\n            </ul>\n\t\t\t\n            <p>This content from LOINC\302\256 is copyright \302\251 1995 Regenstrief Institute, Inc. and the LOINC Committee, and available at no cost under the license at http://loinc.org/terms-of-use.</p>\n\t\t\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-ballot-status"
+  }
+  value {
+    string_value {
+      value: "Informative"
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+    }
   }
 }
 url {

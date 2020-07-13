@@ -2,6 +2,11 @@ id {
   value: "example"
 }
 meta {
+  last_updated {
+    value_us: 1492551883294000
+    timezone: "+10:00"
+    precision: MILLISECOND
+  }
   profile {
     value: "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
   }
@@ -11,7 +16,7 @@ text {
     value: GENERATED
   }
   div {
-    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>CodeSystem &quot;ACME Codes for Cholesterol&quot;: This is an example code system that includes \n        all the codes for serum cholesterol defined by ACME inc.</p>\n      <p>Developed by: FHIR project team (example)</p>\n      <p>Published for testing on 28-Jan 2016</p>\n      <p>This code system defines all the ACME codes for serum cholesterol:</p>\n      <table class=\"grid\">\n        <tr>\n          <td>\n            <b>Code</b>\n          </td>\n          <td>\n            <b>Display</b>\n          </td>\n          <td>\n            <b>Definition</b>\n          </td>\n        </tr>\n        <tr>\n          <td>chol-mmol</td>\n          <td>SChol (mmol/L)</td>\n          <td>Serum Cholesterol, in mmol/L</td>\n        </tr>\n        <tr>\n          <td>chol-mass</td>\n          <td>SChol (mg/L)</td>\n          <td>Serum Cholesterol, in mg/L</td>\n        </tr>\n        <tr>\n          <td>chol</td>\n          <td>SChol</td>\n          <td>Serum Cholesterol</td>\n        </tr>\n      </table>\n    </div>"
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      \n            <p>CodeSystem &quot;ACME Codes for Cholesterol&quot;: This is an example code system that includes \n        all the codes for serum cholesterol defined by ACME inc.</p>\n      \n            <p>Developed by: FHIR project team (example)</p>\n      \n            <p>Published for testing on 28-Jan 2016</p>\n      \n            <p>This code system defines all the ACME codes for serum cholesterol:</p>\n      \n            <table class=\"grid\">\n        \n              <tr>\n          \n                <td>\n            \n                  <b>Code</b>\n          \n                </td>\n          \n                <td>\n            \n                  <b>Display</b>\n          \n                </td>\n          \n                <td>\n            \n                  <b>Definition</b>\n          \n                </td>\n        \n              </tr>\n        \n              <tr>\n          \n                <td>chol-mmol</td>\n          \n                <td>SChol (mmol/L)</td>\n          \n                <td>Serum Cholesterol, in mmol/L</td>\n        \n              </tr>\n        \n              <tr>\n          \n                <td>chol-mass</td>\n          \n                <td>SChol (mg/L)</td>\n          \n                <td>Serum Cholesterol, in mg/L</td>\n        \n              </tr>\n        \n              <tr>\n          \n                <td>chol</td>\n          \n                <td>SChol</td>\n          \n                <td>Serum Cholesterol</td>\n        \n              </tr>\n      \n            </table>\n    \n          </div>"
   }
 }
 url {

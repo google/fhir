@@ -2,6 +2,11 @@ id {
   value: "example-expansion"
 }
 meta {
+  last_updated {
+    value_us: 1492551883294000
+    timezone: "+10:00"
+    precision: MILLISECOND
+  }
   profile {
     value: "http://hl7.org/fhir/StructureDefinition/shareablevalueset"
   }
@@ -11,7 +16,26 @@ text {
     value: GENERATED
   }
   div {
-    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t<table class=\"grid\">\n\t\t\t\t<tr>\n\t\t\t\t\t<td>http://loinc.org</td>\n\t\t\t\t\t<td>14647-2</td>\n\t\t\t\t\t<td>Cholesterol [Moles/volume] in Serum or Plasma</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<td colspan=\"3\">\n\t\t\t\t\t\t<b>Additional Cholesterol codes</b>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<td>http://loinc.org</td>\n\t\t\t\t\t<td>2093-3</td>\n\t\t\t\t\t<td>Cholesterol [Mass/volume] in Serum or Plasma</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<td>http://loinc.org</td>\n\t\t\t\t\t<td>48620-9</td>\n\t\t\t\t\t<td>Cholesterol [Mass/volume] in Serum or Plasma ultracentrifugate</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<td>http://loinc.org</td>\n\t\t\t\t\t<td>9342-7</td>\n\t\t\t\t\t<td>Cholesterol [Percentile]</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<td colspan=\"3\">\n\t\t\t\t\t\t<b>Cholesterol Ratios</b>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<td>http://loinc.org</td>\n\t\t\t\t\t<td>2096-6</td>\n\t\t\t\t\t<td>Cholesterol/Triglyceride [Mass Ratio] in Serum or Plasma</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<td>http://loinc.org</td>\n\t\t\t\t\t<td>35200-5</td>\n\t\t\t\t\t<td>Cholesterol/Triglyceride [Mass Ratio] in Serum or Plasma</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<td>http://loinc.org</td>\n\t\t\t\t\t<td>48089-7</td>\n\t\t\t\t\t<td>Cholesterol/Apolipoprotein B [Molar ratio] in Serum or Plasma</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<td>http://loinc.org</td>\n\t\t\t\t\t<td>55838-7</td>\n\t\t\t\t\t<td>Cholesterol/Phospholipid [Molar ratio] in Serum or Plasma</td>\n\t\t\t\t</tr>\n\t\t\t</table>\n\t\t</div>"
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\n            <table class=\"grid\">\n\t\t\t\t\n              <tr>\n\t\t\t\t\t\n                <td>http://loinc.org</td>\n\t\t\t\t\t\n                <td>14647-2</td>\n\t\t\t\t\t\n                <td>Cholesterol [Moles/volume] in Serum or Plasma</td>\n\t\t\t\t\n              </tr>\n\t\t\t\t\n              <tr>\n\t\t\t\t\t\n                <td colspan=\"3\">\n\t\t\t\t\t\t\n                  <b>Additional Cholesterol codes</b>\n\t\t\t\t\t\n                </td>\n\t\t\t\t\n              </tr>\n\t\t\t\t\n              <tr>\n\t\t\t\t\t\n                <td>http://loinc.org</td>\n\t\t\t\t\t\n                <td>2093-3</td>\n\t\t\t\t\t\n                <td>Cholesterol [Mass/volume] in Serum or Plasma</td>\n\t\t\t\t\n              </tr>\n\t\t\t\t\n              <tr>\n\t\t\t\t\t\n                <td>http://loinc.org</td>\n\t\t\t\t\t\n                <td>48620-9</td>\n\t\t\t\t\t\n                <td>Cholesterol [Mass/volume] in Serum or Plasma ultracentrifugate</td>\n\t\t\t\t\n              </tr>\n\t\t\t\t\n              <tr>\n\t\t\t\t\t\n                <td>http://loinc.org</td>\n\t\t\t\t\t\n                <td>9342-7</td>\n\t\t\t\t\t\n                <td>Cholesterol [Percentile]</td>\n\t\t\t\t\n              </tr>\n\t\t\t\t\n              <tr>\n\t\t\t\t\t\n                <td colspan=\"3\">\n\t\t\t\t\t\t\n                  <b>Cholesterol Ratios</b>\n\t\t\t\t\t\n                </td>\n\t\t\t\t\n              </tr>\n\t\t\t\t\n              <tr>\n\t\t\t\t\t\n                <td>http://loinc.org</td>\n\t\t\t\t\t\n                <td>2096-6</td>\n\t\t\t\t\t\n                <td>Cholesterol/Triglyceride [Mass Ratio] in Serum or Plasma</td>\n\t\t\t\t\n              </tr>\n\t\t\t\t\n              <tr>\n\t\t\t\t\t\n                <td>http://loinc.org</td>\n\t\t\t\t\t\n                <td>35200-5</td>\n\t\t\t\t\t\n                <td>Cholesterol/Triglyceride [Mass Ratio] in Serum or Plasma</td>\n\t\t\t\t\n              </tr>\n\t\t\t\t\n              <tr>\n\t\t\t\t\t\n                <td>http://loinc.org</td>\n\t\t\t\t\t\n                <td>48089-7</td>\n\t\t\t\t\t\n                <td>Cholesterol/Apolipoprotein B [Molar ratio] in Serum or Plasma</td>\n\t\t\t\t\n              </tr>\n\t\t\t\t\n              <tr>\n\t\t\t\t\t\n                <td>http://loinc.org</td>\n\t\t\t\t\t\n                <td>55838-7</td>\n\t\t\t\t\t\n                <td>Cholesterol/Phospholipid [Molar ratio] in Serum or Plasma</td>\n\t\t\t\t\n              </tr>\n\t\t\t\n            </table>\n\t\t\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-ballot-status"
+  }
+  value {
+    string_value {
+      value: "Informative"
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+    }
   }
 }
 url {

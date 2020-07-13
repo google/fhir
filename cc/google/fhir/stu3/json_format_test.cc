@@ -343,9 +343,8 @@ TEST(JsonFormatStu3Test, ClinicalImpressionParse) {
 
 /** Test parsing of the CodeSystem FHIR resource. */
 TEST(JsonFormatStu3Test, CodeSystemParse) {
-  TestParse<CodeSystem>("codesystem-example");
-  TestParse<CodeSystem>("codesystem-example-summary");
-  TestParse<CodeSystem>("codesystem-list-example-codes");
+  TestParse<CodeSystem>("CodeSystem-example");
+  TestParse<CodeSystem>("CodeSystem-list-example-codes");
 }
 
 /** Test parsing of the Communication FHIR resource. */
@@ -1181,12 +1180,9 @@ TEST(JsonFormatStu3Test, TestScriptParse) {
 
 /** Test parsing of the ValueSet FHIR resource. */
 TEST(JsonFormatStu3Test, ValueSetParse) {
-  TestParse<ValueSet>("valueset-example");
-  TestParse<ValueSet>("valueset-example-expansion");
-  TestParse<ValueSet>("valueset-example-inactive");
-  TestParse<ValueSet>("valueset-example-intensional");
-  TestParse<ValueSet>("valueset-example-yesnodontknow");
-  TestParse<ValueSet>("valueset-list-example-codes");
+  TestParse<ValueSet>("ValueSet-example-expansion");
+  TestParse<ValueSet>("ValueSet-example-extensional");
+  TestParse<ValueSet>("ValueSet-example-intensional");
 }
 
 /** Test parsing of the VisionPrescription FHIR resource. */
@@ -1347,9 +1343,8 @@ TEST(JsonFormatStu3Test, ClinicalImpressionPrint) {
 
 /** Test printing of the CodeSystem FHIR resource. */
 TEST(JsonFormatStu3Test, CodeSystemPrint) {
-  TestPrint<CodeSystem>("codesystem-example");
-  TestPrint<CodeSystem>("codesystem-example-summary");
-  TestPrint<CodeSystem>("codesystem-list-example-codes");
+  TestPrint<CodeSystem>("CodeSystem-example");
+  TestPrint<CodeSystem>("CodeSystem-list-example-codes");
 }
 
 /** Test printing of the Communication FHIR resource. */
@@ -2184,12 +2179,9 @@ TEST(JsonFormatTest, TestScriptPrint) {
 
 /** Test printing of the ValueSet FHIR resource. */
 TEST(JsonFormatTest, ValueSetPrint) {
-  TestPrint<ValueSet>("valueset-example");
-  TestPrint<ValueSet>("valueset-example-expansion");
-  TestPrint<ValueSet>("valueset-example-inactive");
-  TestPrint<ValueSet>("valueset-example-intensional");
-  TestPrint<ValueSet>("valueset-example-yesnodontknow");
-  TestPrint<ValueSet>("valueset-list-example-codes");
+  TestPrint<ValueSet>("ValueSet-example-expansion");
+  TestPrint<ValueSet>("ValueSet-example-extensional");
+  TestPrint<ValueSet>("ValueSet-example-intensional");
 }
 
 /** Test printing of the VisionPrescription FHIR resource. */

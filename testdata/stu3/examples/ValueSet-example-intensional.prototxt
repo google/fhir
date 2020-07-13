@@ -2,6 +2,11 @@ id {
   value: "example-intensional"
 }
 meta {
+  last_updated {
+    value_us: 1492551883294000
+    timezone: "+10:00"
+    precision: MILLISECOND
+  }
   profile {
     value: "http://hl7.org/fhir/StructureDefinition/shareablevalueset"
   }
@@ -11,7 +16,26 @@ text {
     value: GENERATED
   }
   div {
-    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Value set &quot;LOINC Codes for Cholesterol&quot;: This is an example value set that includes \n        all the  codes for serum cholesterol from LOINC v2.36.</p>\n      <p>Developed by: FHIR project team (example)</p>\n      <p>Published for testing on 13-June 2012</p>\n      <p>This value set includes all the LOINC codes in LOINC Part Concept Cholesterol | Bld-Ser-Plas (LP43571-6), except for 5932-9 Cholesterol [Presence] in Blood by Test strip</p>\n      <p>This content from LOINC\302\256 is copyright \302\251 1995 Regenstrief Institute, Inc. and the LOINC Committee, and available at no cost under the license at http://loinc.org/terms-of-use</p>\n    </div>"
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      \n            <p>Value set &quot;LOINC Codes for Cholesterol&quot;: This is an example value set that includes \n        all the  codes for serum cholesterol from LOINC v2.36.</p>\n      \n            <p>Developed by: FHIR project team (example)</p>\n      \n            <p>Published for testing on 13-June 2012</p>\n      \n            <p>This value set includes all the LOINC codes in LOINC Part Concept Cholesterol | Bld-Ser-Plas (LP43571-6), except for 5932-9 Cholesterol [Presence] in Blood by Test strip</p>\n      \n            <p>This content from LOINC\302\256 is copyright \302\251 1995 Regenstrief Institute, Inc. and the LOINC Committee, and available at no cost under the license at http://loinc.org/terms-of-use</p>\n    \n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-ballot-status"
+  }
+  value {
+    string_value {
+      value: "Informative"
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+    }
   }
 }
 url {

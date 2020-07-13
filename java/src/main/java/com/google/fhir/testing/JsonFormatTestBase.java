@@ -15,6 +15,8 @@
 package com.google.fhir.testing;
 
 import static com.google.common.truth.Truth.assertThat;
+import static java.lang.Math.min;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.fail;
 
 import com.google.common.io.Files;
@@ -23,6 +25,7 @@ import com.google.fhir.common.JsonFormat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.google.protobuf.Message;
 import com.google.protobuf.Message.Builder;
@@ -30,7 +33,6 @@ import com.google.protobuf.TextFormat;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
 import java.time.ZoneId;
 import java.util.Map;
 import java.util.TreeSet;
@@ -54,7 +56,7 @@ public abstract class JsonFormatTestBase {
   /** Read the specifed json file from the testdata directory as a String. */
   protected String loadJson(String filename) throws IOException {
     File file = new File(runfiles.rlocation("com_google_fhir/" + filename));
-    return Files.asCharSource(file, StandardCharsets.UTF_8).read();
+    return Files.asCharSource(file, UTF_8).read();
   }
 
   /** Read the specifed prototxt file from the testdata directory and parse it. */
@@ -63,7 +65,7 @@ public abstract class JsonFormatTestBase {
         new File(
             runfiles.rlocation(
                 "com_google_fhir/testdata/" + versionName + "/" + filename));
-    textParser.merge(Files.asCharSource(file, StandardCharsets.UTF_8).read(), builder);
+    textParser.merge(Files.asCharSource(file, UTF_8).read(), builder);
   }
 
   protected void parseToProto(String name, Builder builder) throws IOException {
@@ -88,7 +90,7 @@ public abstract class JsonFormatTestBase {
       }
 
       // Test printer
-      boolean goldenIsNdJson = goldenJson.indexOf("\n") == -1;
+      boolean goldenIsNdJson = !goldenJson.contains("\n");
       String testJson = (goldenIsNdJson ? ndjsonPrinter : jsonPrinter).print(goldenProto);
       if (!testJson.equals(goldenJson)) {
         // They're not exactly equal - try testing canonical before failing.
@@ -100,7 +102,7 @@ public abstract class JsonFormatTestBase {
             assertThat(testJson).isEqualTo(goldenJson);
           } else {
             // Full output is too big to diff - try diffing in chunks
-            for (int i = 0; i < Math.min(goldenJson.length(), testJson.length()); i += 1000) {
+            for (int i = 0; i < min(goldenJson.length(), testJson.length()); i += 1000) {
               assertThat(testJson.substring(i, i + 1000))
                   .isEqualTo(goldenJson.substring(i, i + 1000));
             }
@@ -155,7 +157,7 @@ public abstract class JsonFormatTestBase {
   }
 
   protected String canonicalizeJson(String json) {
-    com.google.gson.JsonParser gsonParser = new com.google.gson.JsonParser();
+    JsonParser gsonParser = new JsonParser();
     JsonElement testJson = canonicalize(gsonParser.parse(new JsonReader(new StringReader(json))));
     return testJson.toString();
   }
@@ -167,7 +169,8 @@ public abstract class JsonFormatTestBase {
     // Load the json version of the input as a String.
     String jsonGolden = loadJson("spec/" + examplesDir + "/package/" + name + ".json");
     // Print the proto as json and compare.
-    String testJson = jsonPrinter.print(textBuilder);
+    boolean goldenIsNdJson = !jsonGolden.contains("\n");
+    String testJson = (goldenIsNdJson ? ndjsonPrinter : jsonPrinter).print(textBuilder);
 
     if (!testJson.equals(jsonGolden)) {
       System.out.println("Failed Printing on: " + name);

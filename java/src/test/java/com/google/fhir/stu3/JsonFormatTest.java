@@ -540,17 +540,15 @@ public class JsonFormatTest extends JsonFormatTestBase {
   /** Test parsing of the CodeSystem FHIR resource. */
   @Test
   public void parseCodeSystem() throws Exception {
-    testParse("codesystem-example", CodeSystem.newBuilder());
-    testParse("codesystem-example-summary", CodeSystem.newBuilder());
-    testParse("codesystem-list-example-codes", CodeSystem.newBuilder());
+    testParse("CodeSystem-example", CodeSystem.newBuilder());
+    testParse("CodeSystem-list-example-codes", CodeSystem.newBuilder());
   }
 
   /** Test printing of the CodeSystem FHIR resource. */
   @Test
   public void printCodeSystem() throws Exception {
-    testPrint("codesystem-example", CodeSystem.newBuilder());
-    testPrint("codesystem-example-summary", CodeSystem.newBuilder());
-    testPrint("codesystem-list-example-codes", CodeSystem.newBuilder());
+    testPrint("CodeSystem-example", CodeSystem.newBuilder());
+    testPrint("CodeSystem-list-example-codes", CodeSystem.newBuilder());
   }
 
   /** Test parsing of the Communication FHIR resource. */
@@ -2404,23 +2402,17 @@ public class JsonFormatTest extends JsonFormatTestBase {
   /** Test parsing of the ValueSet FHIR resource. */
   @Test
   public void parseValueSet() throws Exception {
-    testParse("valueset-example", ValueSet.newBuilder());
-    testParse("valueset-example-expansion", ValueSet.newBuilder());
-    testParse("valueset-example-inactive", ValueSet.newBuilder());
-    testParse("valueset-example-intensional", ValueSet.newBuilder());
-    testParse("valueset-example-yesnodontknow", ValueSet.newBuilder());
-    testParse("valueset-list-example-codes", ValueSet.newBuilder());
+    testParse("ValueSet-example-expansion", ValueSet.newBuilder());
+    testParse("ValueSet-example-extensional", ValueSet.newBuilder());
+    testParse("ValueSet-example-intensional", ValueSet.newBuilder());
   }
 
   /** Test printing of the ValueSet FHIR resource. */
   @Test
   public void printValueSet() throws Exception {
-    testPrint("valueset-example", ValueSet.newBuilder());
-    testPrint("valueset-example-expansion", ValueSet.newBuilder());
-    testPrint("valueset-example-inactive", ValueSet.newBuilder());
-    testPrint("valueset-example-intensional", ValueSet.newBuilder());
-    testPrint("valueset-example-yesnodontknow", ValueSet.newBuilder());
-    testPrint("valueset-list-example-codes", ValueSet.newBuilder());
+    testPrint("ValueSet-example-expansion", ValueSet.newBuilder());
+    testPrint("ValueSet-example-extensional", ValueSet.newBuilder());
+    testPrint("ValueSet-example-intensional", ValueSet.newBuilder());
   }
 
   /** Test parsing of the VisionPrescription FHIR resource. */
