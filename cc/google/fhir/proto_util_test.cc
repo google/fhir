@@ -376,6 +376,43 @@ TEST(StripIndex, Present) { ASSERT_EQ("A.b.c", StripIndex("A.b.c[5]")); }
 
 TEST(StripIndex, Absent) { ASSERT_EQ("A.b.c", StripIndex("A.b.c")); }
 
+TEST(ProtoUtilTest, GetMessageInField) {
+  const Encounter encounter = MakeTestEncounter();
+  ASSERT_THAT(GetMessageInField(encounter, "id").ValueOrDie(),
+              EqualsProto(encounter.id()));
+}
+
+TEST(ProtoUtilTest, GetMessageInField_MissingField) {
+  const Encounter encounter = MakeTestEncounter();
+  ASSERT_EQ(GetMessageInField(encounter, "garbage").status().code(),
+            absl::StatusCode::kInvalidArgument);
+}
+
+TEST(ProtoUtilTest, GetMessageInField_WrongType) {
+  const Encounter encounter = MakeTestEncounter();
+  ASSERT_EQ(GetMessageInField(encounter.id(), "value").status().code(),
+            absl::StatusCode::kInvalidArgument);
+}
+
+TEST(ProtoUtilTest, MutableMessageInField) {
+  Encounter encounter = MakeTestEncounter();
+  ASSERT_THAT(MutableMessageInField(&encounter, "id").ValueOrDie(),
+              EqualsProto(encounter.id()));
+}
+
+TEST(ProtoUtilTest, MutableMessageInField_MissingField) {
+  Encounter encounter = MakeTestEncounter();
+  ASSERT_EQ(MutableMessageInField(&encounter, "garbage").status().code(),
+            absl::StatusCode::kInvalidArgument);
+}
+
+TEST(ProtoUtilTest, MutableMessageInField_WrongType) {
+  Encounter encounter = MakeTestEncounter();
+  ASSERT_EQ(
+      MutableMessageInField(encounter.mutable_id(), "value").status().code(),
+      absl::StatusCode::kInvalidArgument);
+}
+
 }  // namespace
 }  // namespace fhir
 }  // namespace google

@@ -284,5 +284,29 @@ Status ClearField(Message* message, const std::string& field_name) {
   return absl::OkStatus();
 }
 
+StatusOr<const google::protobuf::Message*> GetMessageInField(
+    const ::google::protobuf::Message& message, const std::string& field_name) {
+  const ::google::protobuf::FieldDescriptor* field =
+      message.GetDescriptor()->FindFieldByName(field_name);
+  if (!field || !field->message_type()) {
+    return absl::InvalidArgumentError(absl::StrCat(
+        "Invalid arguments to GetMessageInField: No message field ", field_name,
+        " in type ", message.GetDescriptor()->full_name()));
+  }
+  return &message.GetReflection()->GetMessage(message, field);
+}
+
+StatusOr<google::protobuf::Message*> MutableMessageInField(
+    ::google::protobuf::Message* message, const std::string& field_name) {
+  const ::google::protobuf::FieldDescriptor* field =
+      message->GetDescriptor()->FindFieldByName(field_name);
+  if (!field || !field->message_type()) {
+    return absl::InvalidArgumentError(absl::StrCat(
+        "Invalid arguments to GetMessageInField: No message field ", field_name,
+        " in type ", message->GetDescriptor()->full_name()));
+  }
+  return message->GetReflection()->MutableMessage(message, field);
+}
+
 }  // namespace fhir
 }  // namespace google

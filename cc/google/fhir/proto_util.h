@@ -215,6 +215,12 @@ bool IsMessageType(const ::google::protobuf::Message& message) {
   return IsMessageType<T>(message.GetDescriptor());
 }
 
+StatusOr<const google::protobuf::Message*> GetMessageInField(
+    const ::google::protobuf::Message& message, const std::string& field_name);
+
+StatusOr<google::protobuf::Message*> MutableMessageInField(::google::protobuf::Message* message,
+                                                 const std::string& field_name);
+
 template <typename T>
 StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
                               const ::google::protobuf::FieldDescriptor* field) {
