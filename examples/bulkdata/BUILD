@@ -21,6 +21,6 @@ py_binary(
     deps = [
         "@absl_py//absl:app",
         "@absl_py//absl/flags",
-        requirement("request"),
+        requirement("requests"),
     ],
 )

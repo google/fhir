@@ -4,6 +4,6 @@ google-cloud-bigquery
 nose>=1.3.7
 protobuf
 python-dateutil>=2.8.1
-request
+requests>=2.24.0
 tensorflow>=1.12.0,<2.0.0
 wheel
