@@ -823,7 +823,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			errs: []string{`error at "Patient": unknown field`},
 		},
 		{
-			name: "Extension of non-primitive field",
+			name: "Extension of non-primitive, non-repeated field",
 			json: `
 		{
       "resourceType": "Patient",
@@ -831,35 +831,34 @@ func TestUnmarshal_Errors(t *testing.T) {
 			"_managingOrganization": {"foo": "bar"}
     }`,
 			vers: []Version{STU3, R4},
-			errs: []string{`error at "Patient": unknown field`},
+			errs: []string{
+				`error at "Patient._managingOrganization": invalid extension field`,
+				`error at "Patient._managingOrganization": unknown field`,
+			},
 		},
 		{
 			name: "Extension type mismatch",
 			json: `
 		{
       "resourceType": "Patient",
-			"name": [{
-          "given": ["Pat"],
-          "_given": {"id": "1"}
-      }]
+			"name": [{"given": ["Pat"]}],
+			"_name": {"foo": "bar"}
     }`,
 			vers: []Version{STU3, R4},
-			errs: []string{`error at "Patient.name[0]._given": expected array`},
+			errs: []string{`error at "Patient._name": expected array`},
 		},
 		{
 			name: "Extension length mismatch",
 			json: `
-			{
-				"resourceType": "Patient",
-				"name": [{
-					"given": ["Pat"],
-					"_given": [{"id": "1"}, {"id": "2"}]
-				}]
-			}`,
+		{
+      "resourceType": "Patient",
+			"name": [{"given": ["Pat"]}],
+			"_name": [{"id":"1"},{"id":"2"}]
+    }`,
 			vers: []Version{STU3, R4},
 			errs: []string{
-				`error at "Patient.name[0]._given": array length mismatch, expected 1, found 2`,
-				`error at "Patient.name[0].given": array length mismatch, expected 2, found 1`,
+				`error at "Patient._name": array length mismatch, expected 1, found 2`,
+				`error at "Patient.name": array length mismatch, expected 2, found 1`,
 			},
 		},
 		{
@@ -961,19 +960,6 @@ func TestUnmarshal_Errors(t *testing.T) {
     `,
 			vers: []Version{STU3, R4},
 			errs: []string{`error at "Observation.effectiveDateTime": expected datetime`},
-		},
-		{
-			name: "missing value type for choice type",
-			json: `
-		{
-			"resourceType": "Patient",
-			"extension": [{
-				"url": "https://example.com",
-				"value": "x"
-			}]
-		}`,
-			vers: []Version{STU3, R4},
-			errs: []string{`error at "Patient.extension[0]": unknown field`},
 		},
 		{
 			name: "string field contains invalid UTF-8",

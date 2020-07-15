@@ -22,7 +22,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 	"unicode/utf8"
 
@@ -153,9 +152,6 @@ var (
 
 	referenceFieldToType = map[protoreflect.Name]string{}
 	referenceTypeToField = map[string]protoreflect.Name{}
-
-	messageFieldsMutex = sync.RWMutex{}
-	messageFields      = map[protoreflect.MessageDescriptor]map[string]protoreflect.FieldDescriptor{}
 
 	// RegexValues stores the proto message full names and the regex validation
 	// for its value fields. This map is supposed to be populated during
@@ -412,11 +408,6 @@ func IsResourceType(d protoreflect.MessageDescriptor) bool {
 	ext, err := proto.GetExtension(d.Options().(*dpb.MessageOptions), apb.E_StructureDefinitionKind)
 	return err == nil && *(ext.(*apb.StructureDefinitionKindValue)) ==
 		apb.StructureDefinitionKindValue_KIND_RESOURCE
-}
-
-// IsChoice returns true iff the message type d is a FHIR choice type.
-func IsChoice(d protoreflect.MessageDescriptor) bool {
-	return d != nil && proto.HasExtension(d.Options().(*dpb.MessageOptions), apb.E_IsChoiceType)
 }
 
 // GetExtensionFieldDesc returns the extension field descriptor.
@@ -911,47 +902,4 @@ func UnmarshalCode(jsonPath string, in protoreflect.Message, rm json.RawMessage)
 	default:
 		return nil, fmt.Errorf("unexpected field kind %v, want enum", f.Kind())
 	}
-}
-
-// FieldMap returns a lookup table for a message's fields from the FHIR JSON
-// field names. Choice fields map to the choice message type.
-func FieldMap(desc protoreflect.MessageDescriptor) map[string]protoreflect.FieldDescriptor {
-	messageFieldsMutex.RLock()
-	fieldMap, ok := messageFields[desc]
-	if ok {
-		messageFieldsMutex.RUnlock()
-		return fieldMap
-	}
-	messageFieldsMutex.RUnlock()
-
-	messageFieldsMutex.Lock()
-	defer messageFieldsMutex.Unlock()
-	fieldMap = buildFieldMap(desc)
-	messageFields[desc] = fieldMap
-	return fieldMap
-}
-
-func buildFieldMap(desc protoreflect.MessageDescriptor) map[string]protoreflect.FieldDescriptor {
-	fields := desc.Fields()
-	fieldMap := map[string]protoreflect.FieldDescriptor{}
-	for i := 0; i < fields.Len(); i++ {
-		f := fields.Get(i)
-		if IsChoice(f.Message()) {
-			choiceFields := buildFieldMap(f.Message())
-			for name := range choiceFields {
-				if strings.HasPrefix(name, "_") {
-					name = "_" + f.JSONName() + strings.Title(name[1:])
-				} else {
-					name = f.JSONName() + strings.Title(name)
-				}
-				fieldMap[name] = f
-			}
-		} else {
-			fieldMap[f.JSONName()] = f
-			if f.Kind() == protoreflect.MessageKind && IsPrimitiveType(f.Message()) {
-				fieldMap["_"+f.JSONName()] = f
-			}
-		}
-	}
-	return fieldMap
 }
