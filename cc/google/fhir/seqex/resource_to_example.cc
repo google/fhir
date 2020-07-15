@@ -18,6 +18,7 @@
 #include <memory>
 #include <string>
 
+#include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "absl/algorithm/container.h"
@@ -359,7 +360,17 @@ void Converter::MessageToExample(const Message& message,
           // We currently flatten repeated submessages. That could potentially
           // be problematic.
           // TODO: figure out something better to do here.
-          MessageToExample(child, name, tokenizer, example, enable_attribution);
+          if (IsMessageType<protobuf::Any>(child)) {
+            std::unique_ptr<Message> unpacked_child =
+                absl::WrapUnique(UnpackAnyAsContainedResource(
+                                     dynamic_cast<const protobuf::Any&>(child))
+                                     .ValueOrDie());
+            MessageToExample(*unpacked_child, name, tokenizer, example,
+                             enable_attribution);
+          } else {
+            MessageToExample(child, name, tokenizer, example,
+                             enable_attribution);
+          }
         }
       } else {
         LOG(ERROR) << "Unable to handle field " << name
