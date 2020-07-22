@@ -15,7 +15,9 @@
 package jsonformat
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 
 	"github.com/golang/protobuf/proto"
 	"bitbucket.org/creachadair/stringset"
@@ -69,4 +71,34 @@ func (u *Unmarshaller) UnmarshalR4(in []byte) (*rpb.ContainedResource, error) {
 		return nil, err
 	}
 	return p.(*rpb.ContainedResource), nil
+}
+
+// ContainedResourceOrError holds a ContainedResource or an error as a single entity. If Error is
+// set, that indicates there was an error unmarshaling this contained resource (and the error is
+// propogated through from the underlying UnmarshalR4 call).
+type ContainedResourceOrError struct {
+	ContainedResource *rpb.ContainedResource
+	Error             error
+}
+
+// UnmarshalR4Streaming reads FHIR NDJSON from the provided io.Reader and writes parsed
+// ContainedResources (or an error) to the returned channel. When the input io.Reader is exhausted
+// and there are no more messages to be parsed, the output channel will be closed.
+func (u *Unmarshaller) UnmarshalR4Streaming(in io.Reader) <-chan *ContainedResourceOrError {
+	s := bufio.NewScanner(in)
+	out := make(chan *ContainedResourceOrError)
+
+	go func() {
+		for s.Scan() {
+			resource, err := u.UnmarshalR4(s.Bytes())
+			out <- &ContainedResourceOrError{resource, err}
+		}
+		if err := s.Err(); err != nil {
+			out <- &ContainedResourceOrError{nil, err}
+		}
+		close(out)
+	}()
+
+	return out
+
 }

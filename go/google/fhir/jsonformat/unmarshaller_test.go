@@ -15,7 +15,9 @@
 package jsonformat
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -25,6 +27,7 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
+
 	c4pb "google/fhir/proto/r4/core/codes_go_proto"
 	d4pb "google/fhir/proto/r4/core/datatypes_go_proto"
 	r4pb "google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
@@ -1925,6 +1928,7 @@ func TestUnmarshalVersioned(t *testing.T) {
 	if _, err := u4.UnmarshalR3([]byte(patient)); err == nil {
 		t.Errorf("UnmarshalR3(%s) didn't return expected error", patient)
 	}
+
 }
 
 func TestUnmarshal_NestingDepth(t *testing.T) {
@@ -2021,4 +2025,87 @@ func TestUnmarshal_NestingDepth(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestUnmarshaller_UnmarshalR4Streaming(t *testing.T) {
+	t.Run("streaming unmarshal", func(t *testing.T) {
+		json := `{"resourceType":"Patient", "id": "exampleID1"}
+	{"resourceType":"Patient", "id": "exampleID2"}
+	{"resourceType":"Patient", "id": "exampleID3"}`
+		expectedResults := []*r4pb.ContainedResource{
+			&r4pb.ContainedResource{
+				OneofResource: &r4pb.ContainedResource_Patient{
+					Patient: &r4patientpb.Patient{
+						Id: &d4pb.Id{Value: "exampleID1"},
+					},
+				},
+			},
+			&r4pb.ContainedResource{
+				OneofResource: &r4pb.ContainedResource_Patient{
+					Patient: &r4patientpb.Patient{
+						Id: &d4pb.Id{Value: "exampleID2"},
+					},
+				},
+			},
+			&r4pb.ContainedResource{
+				OneofResource: &r4pb.ContainedResource_Patient{
+					Patient: &r4patientpb.Patient{
+						Id: &d4pb.Id{Value: "exampleID3"},
+					},
+				},
+			}}
+
+		u, err := NewUnmarshaller("America/Los_Angeles", R4)
+		if err != nil {
+			fmt.Println("error")
+		}
+
+		jsonReader := bytes.NewReader([]byte(json))
+		resourceChan := u.UnmarshalR4Streaming(jsonReader)
+
+		var results []*r4pb.ContainedResource
+
+		for r := range resourceChan {
+			if r.Error != nil {
+				t.Fatalf("UnmarshalR4Streaming(%s) unexpected error when receiving from the output channel: %v", json, r.Error)
+			} else {
+				results = append(results, r.ContainedResource)
+			}
+		}
+
+		// Assert size is correct
+		if len(results) != len(expectedResults) {
+			t.Fatalf("UnmarshalR4Streaming(%s) channel returned unexpected size of result. want: %d got: %d", json, len(expectedResults), len(results))
+		}
+
+		for i, result := range results {
+			if !proto.Equal(result, expectedResults[i]) {
+				t.Fatalf("UnmarshalR4Streaming(%s) channel returned unexpected result. want: %v got %v", json, expectedResults[i], result)
+			}
+		}
+	})
+
+}
+
+func ExampleUnmarshaller_UnmarshalR4Streaming() {
+	json := `{"resourceType":"Patient", "id": "exampleID1"}
+	{"resourceType":"Patient", "id": "exampleID2"}`
+	u, err := NewUnmarshaller("America/Los_Angeles", R4)
+	if err != nil {
+		fmt.Println("error")
+	}
+	jsonReader := bytes.NewReader([]byte(json))
+	resourceChan := u.UnmarshalR4Streaming(jsonReader)
+
+	for r := range resourceChan {
+		if r.Error != nil {
+			fmt.Printf("err: %v", r.Error)
+		} else {
+			fmt.Printf("%s\n", r.ContainedResource.GetPatient().Id.GetValue())
+		}
+	}
+
+	// Output:
+	// exampleID1
+	// exampleID2
 }
