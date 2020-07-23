@@ -55,9 +55,7 @@ std::string TitleCaseToUpperUnderscores(const std::string& src) {
 
 }  // namespace codes_internal
 
-namespace {
-
-std::string EnumValueToString(const EnumValueDescriptor* enum_value) {
+std::string EnumValueToCodeString(const EnumValueDescriptor* enum_value) {
   if (enum_value->options().HasExtension(
           ::google::fhir::proto::fhir_original_code)) {
     return enum_value->options().GetExtension(
@@ -70,8 +68,6 @@ std::string EnumValueToString(const EnumValueDescriptor* enum_value) {
   std::replace(code_string.begin(), code_string.end(), '_', '-');
   return code_string;
 }
-
-}  // namespace
 
 StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
     const std::string& code_string, const EnumDescriptor* target_enum_type) {
@@ -239,7 +235,7 @@ Status CopyCode(const Message& source, Message* target) {
     } else if (target_type == FieldDescriptor::Type::TYPE_STRING) {
       // Enum to String
       target_reflection->SetString(target, target_value_field,
-                                   EnumValueToString(source_value));
+                                   EnumValueToCodeString(source_value));
       return absl::OkStatus();
     } else {
       return InvalidArgumentError(absl::StrCat(
@@ -322,7 +318,7 @@ StatusOr<std::string> GetCodeAsString(const ::google::protobuf::Message& code) {
     case FieldDescriptor::Type::TYPE_STRING:
       return reflection->GetString(code, value_field);
     case FieldDescriptor::Type::TYPE_ENUM:
-      return EnumValueToString(reflection->GetEnum(code, value_field));
+      return EnumValueToCodeString(reflection->GetEnum(code, value_field));
     default:
       return InvalidArgumentError(
           absl::StrCat("Invalid value type field for GetCodeAsString: ",

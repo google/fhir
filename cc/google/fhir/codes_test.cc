@@ -14,6 +14,7 @@
 
 #include "google/fhir/codes.h"
 
+#include "google/protobuf/descriptor.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "google/fhir/proto_util.h"
@@ -78,6 +79,24 @@ TEST(CodesTest, GetCodeForResourceType_AllContainedTypesValid) {
   }
 }
 
+void TestDescriptorForResourceType(const ::google::protobuf::Message& resource,
+                                   const ResourceTypeCode::Value value) {
+  const ::google::protobuf::EnumValueDescriptor* value_desc =
+      ResourceTypeCode::Value_descriptor()->FindValueByNumber(value);
+  const auto statusOrValue =
+      GetDescriptorForResourceType<ContainedResource>(value_desc);
+  EXPECT_TRUE(statusOrValue.ok())
+      << "failed getting descriptor for " << resource.GetTypeName();
+  EXPECT_EQ(statusOrValue.ValueOrDie()->full_name(), resource.GetTypeName());
+}
+
+TEST(CodesTest, GetDescriptorForResourceType) {
+  TestDescriptorForResourceType(Encounter(), ResourceTypeCode::ENCOUNTER);
+  TestDescriptorForResourceType(Patient(), ResourceTypeCode::PATIENT);
+  TestDescriptorForResourceType(FamilyMemberHistory(),
+                                ResourceTypeCode::FAMILY_MEMBER_HISTORY);
+}
+
 void TestTypedCodingConversion(const std::string& typed_file,
                                const std::string& untyped_file) {
   auto typed_golden =
@@ -133,6 +152,20 @@ TEST(CodesTest, GetCodeAsString_InvalidType) {
   r4::core::String not_a_code;
   not_a_code.set_value("foo");
   ASSERT_FALSE(GetCodeAsString(not_a_code).ok());
+}
+
+TEST(CodesTest, EnumValueToCodeString) {
+  ASSERT_EQ(
+      "female",
+      EnumValueToCodeString(
+          r4::core::AdministrativeGenderCode::Value_descriptor()
+              ->FindValueByNumber(r4::core::AdministrativeGenderCode::FEMALE)));
+  ASSERT_EQ(
+      ">",
+      EnumValueToCodeString(
+          r4::core::QuestionnaireItemOperatorCode::Value_descriptor()
+              ->FindValueByNumber(
+                  r4::core::QuestionnaireItemOperatorCode::GREATER_THAN)));
 }
 
 }  // namespace

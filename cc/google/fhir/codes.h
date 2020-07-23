@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GOOGLE_FHIR_STU3_CODES_H_
-#define GOOGLE_FHIR_STU3_CODES_H_
+#ifndef GOOGLE_FHIR_CODES_H_
+#define GOOGLE_FHIR_CODES_H_
 
+#include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
@@ -33,6 +34,8 @@ std::string TitleCaseToUpperUnderscores(const std::string& src);
 StatusOr<const ::google::protobuf::EnumValueDescriptor*> CodeStringToEnumValue(
     const std::string& code_string,
     const ::google::protobuf::EnumDescriptor* target_enum_type);
+std::string EnumValueToCodeString(
+    const ::google::protobuf::EnumValueDescriptor* enum_value);
 
 StatusOr<std::string> GetCodeAsString(const ::google::protobuf::Message& code);
 
@@ -41,10 +44,11 @@ Status CopyCode(const ::google::protobuf::Message& source, google::protobuf::Mes
 
 StatusOr<std::string> GetSystemForCode(const ::google::protobuf::Message& code);
 
+
 template <typename TypedResourceTypeCode>
 StatusOr<typename TypedResourceTypeCode::Value> GetCodeForResourceType(
     const ::google::protobuf::Message& resource) {
-  const std::string& enum_string = codes_internal::TitleCaseToUpperUnderscores(
+  const std::string enum_string = codes_internal::TitleCaseToUpperUnderscores(
       resource.GetDescriptor()->name());
   typename TypedResourceTypeCode::Value value;
   if (TypedResourceTypeCode::Value_Parse(enum_string, &value)) {
@@ -55,7 +59,37 @@ StatusOr<typename TypedResourceTypeCode::Value> GetCodeForResourceType(
                    resource.GetDescriptor()->name()));
 }
 
+template <typename TypedContainedResource>
+StatusOr<const ::google::protobuf::Descriptor*> GetDescriptorForResourceType(
+    const ::google::protobuf::EnumValueDescriptor* code) {
+  const std::string code_string = EnumValueToCodeString(code);
+  const ::google::protobuf::OneofDescriptor* resource_oneof =
+      TypedContainedResource::descriptor()->FindOneofByName("oneof_resource");
+  if (resource_oneof == nullptr) {
+    return ::absl::InvalidArgumentError(
+        ::absl::StrCat("Invalid ContainedResource type",
+                       TypedContainedResource::descriptor()->full_name()));
+  }
+  const ::google::protobuf::FieldDescriptor* resource_field = nullptr;
+  for (int i = 0; i < resource_oneof->field_count(); i++) {
+    const ::google::protobuf::FieldDescriptor* field = resource_oneof->field(i);
+    if (field->cpp_type() != ::google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
+      return ::absl::InvalidArgumentError(
+          absl::StrCat("Field ", field->full_name(), "is not a message"));
+    }
+    if (field->message_type()->name() == code_string) {
+      resource_field = field;
+    }
+  }
+  if (resource_field == nullptr) {
+    return ::absl::InvalidArgumentError(
+        absl::StrCat("Resource type ", code_string, " not found in ",
+                     TypedContainedResource::descriptor()->full_name()));
+  }
+  return resource_field->message_type();
+}
+
 }  // namespace fhir
 }  // namespace google
 
-#endif  // GOOGLE_FHIR_STU3_CODES_H_
+#endif  // GOOGLE_FHIR_CODES_H_

@@ -50,6 +50,7 @@ cc_test(
         "//proto/r4/core/resources:metadata_resource_cc_proto",
         "//proto/r4/core/resources:patient_cc_proto",
         "@com_google_googletest//:gtest_main",
+        "@com_google_protobuf//:protobuf",
     ],
 )
 
