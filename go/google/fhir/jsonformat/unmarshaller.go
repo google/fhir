@@ -221,30 +221,34 @@ func (u *Unmarshaller) mergeMessage(jsonPath string, decmap map[string]json.RawM
 		proto.Merge(protoMessage(pb), any)
 		return nil
 	}
+	fieldMap := jsonpbhelper.FieldMap(pbdesc)
 	// Iterate through all fields, and merge to the proto.
 	for k, v := range decmap {
 		if u.cfg.keysToSkip().Contains(k) {
 			continue
 		}
-		f := jsonpbhelper.GetField(pbdesc, strings.TrimPrefix(k, "_"))
-		if f == nil {
-			merged, err := u.mergeOneof(jsonPath, pb, pbdesc, k, v)
-			if err != nil {
+
+		// TODO: reject upper camel case fields names after suitable deprecation warning.
+		var normalizedFieldName string
+		if strings.HasPrefix(k, "_") {
+			normalizedFieldName = "_" + lowerFirst(k[1:])
+		} else {
+			normalizedFieldName = lowerFirst(k)
+		}
+
+		f, ok := fieldMap[normalizedFieldName]
+		if !ok {
+			return &jsonpbhelper.UnmarshalError{
+				Path:        jsonPath,
+				Details:     "unknown field",
+				Diagnostics: strconv.Quote(k),
+			}
+		}
+		if jsonpbhelper.IsChoice(f.Message()) {
+			if err := u.mergeChoiceField(jsonPath, f, k, v, pb); err != nil {
 				return err
 			}
-			if !merged {
-				return &jsonpbhelper.UnmarshalError{
-					Path:        jsonPath,
-					Details:     "unknown field",
-					Diagnostics: strconv.Quote(k),
-				}
-			}
-			continue
-		}
-		if f.Message() == nil {
-			return fmt.Errorf("unexpected type %v: %v", f.Kind(), f.Name())
-		}
-		if err := u.mergeField(addFieldToPath(jsonPath, k), f, v, pb); err != nil {
+		} else if err := u.mergeField(addFieldToPath(jsonPath, k), f, v, pb); err != nil {
 			return err
 		}
 	}
@@ -254,6 +258,41 @@ func (u *Unmarshaller) mergeMessage(jsonPath string, decmap map[string]json.RawM
 		}
 	}
 	return nil
+}
+
+// returns a copy of the input string with a lower case first character.
+func lowerFirst(s string) string {
+	if len(s) == 0 {
+		return s
+	}
+	return strings.ToLower(s[0:1]) + s[1:]
+}
+
+func (u *Unmarshaller) mergeChoiceField(jsonPath string, f protoreflect.FieldDescriptor, k string, v json.RawMessage, pb protoreflect.Message) error {
+	fieldMap := jsonpbhelper.FieldMap(f.Message())
+
+	// TODO: reject upper camel case fields names after suitable deprecation warning.
+	var choiceFieldName string
+	if strings.HasPrefix(k, "_") {
+		// Convert ex: "_valueString" and "_ValueString" interchangeably to "_string".
+		choiceFieldName = "_" + lowerFirst(k[1:])
+		choiceFieldName = strings.TrimPrefix(choiceFieldName, "_"+f.JSONName())
+		choiceFieldName = "_" + lowerFirst(choiceFieldName)
+	} else {
+		// Convert ex: "ValueString" and "valueString" interchangeably to "string".
+		choiceFieldName = lowerFirst(k)
+		choiceFieldName = lowerFirst(strings.TrimPrefix(choiceFieldName, f.JSONName()))
+	}
+
+	choiceField, ok := fieldMap[choiceFieldName]
+	if !ok {
+		return &jsonpbhelper.UnmarshalError{
+			Path:        jsonPath,
+			Details:     "unknown field",
+			Diagnostics: strconv.Quote(k),
+		}
+	}
+	return u.mergeField(addFieldToPath(jsonPath, k), choiceField, v, pb.Mutable(f).Message())
 }
 
 func (u *Unmarshaller) mergeField(jsonPath string, f protoreflect.FieldDescriptor, v json.RawMessage, pb protoreflect.Message) error {
@@ -351,64 +390,6 @@ func (u *Unmarshaller) mergeReference(jsonPath string, rm json.RawMessage, pb pr
 	return NormalizeReference(protoMessage(pb))
 }
 
-// mergeOneof splits a key into parts using camel-casing rules, and attempts to
-// set a field inside a oneof. Returns false if no such field could be found.
-func (u *Unmarshaller) mergeOneof(jsonPath string, pb protoreflect.Message, pbdesc protoreflect.MessageDescriptor, k string, v json.RawMessage) (bool, error) {
-	sn := jsonpbhelper.CamelToSnake(strings.TrimPrefix(k, "_"))
-	parts := strings.Split(sn, "_")
-	if len(parts) == 1 {
-		return false, nil
-	}
-
-	// This is a oneof field.
-	var rerr error
-	for i := 0; i < len(parts)-1; i++ {
-		fName := protoreflect.Name(strings.Join(parts[:i+1], "_"))
-		fd := pbdesc.Fields().ByName(fName)
-		if fd == nil || fd.Cardinality() == protoreflect.Repeated {
-			continue
-		}
-
-		// Work on a copy and of the field and set it back, since it could be mutated in
-		// mergeNestedOneof even when there are errors.
-		pbClone := proto.Clone(protoMessage(pb.Mutable(fd).Message()))
-		pbCopy := proto.MessageReflect(pbClone)
-		nestedFName := strings.Join(parts[i+1:], "_")
-		found, err := u.mergeNestedOneof(addFieldToPath(jsonPath, k), pbCopy, nestedFName, v)
-		if err != nil {
-			rerr = err
-			continue
-		}
-		if !found {
-			continue
-		}
-
-		pb.Set(fd, protoreflect.ValueOf(pbCopy))
-		return true, nil
-	}
-	return false, rerr
-}
-
-// mergeNestedOneof is a helper for mergeOneof that tries to find a field inside
-// a oneof. Returns false if no such field could be found.
-func (u *Unmarshaller) mergeNestedOneof(jsonPath string, pb protoreflect.Message, nestedFieldName string, v json.RawMessage) (bool, error) {
-	if pb.Descriptor().Oneofs().Len() != 1 {
-		return false, nil
-	}
-	od := pb.Descriptor().Oneofs().Get(0)
-	fields := od.Fields()
-	for i := 0; i < fields.Len(); i++ {
-		f := fields.Get(i)
-		if f.JSONName() == jsonpbhelper.SnakeToLowerCamel(nestedFieldName) {
-			// Don't add the field to jsonPath because want the full JSON name of this
-			// field, set in the parent method, not a path that is split into the
-			// oneof part and the nested part.
-			return true, u.mergeField(jsonPath, f, v, pb)
-		}
-	}
-	return false, nil
-}
-
 func (u *Unmarshaller) mergePrimitiveType(dst, src proto.Message) error {
 	if proto.Size(src) == 0 {
 		// No merging necessary.
@@ -474,8 +455,8 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 	case "Code", "Id", "Oid", "String", "Url", "Uri", "Canonical", "Markdown", "Xhtml", "Uuid":
 		if !utf8.Valid(rm) {
 			return nil, &jsonpbhelper.UnmarshalError{
-				Path: jsonPath,
-				Details: "expected UTF-8 encoding",
+				Path:        jsonPath,
+				Details:     "expected UTF-8 encoding",
 				Diagnostics: fmt.Sprintf("found %q", rm),
 			}
 		}
