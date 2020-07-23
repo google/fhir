@@ -22,11 +22,13 @@
 #include <unordered_set>
 #include <utility>
 
+#include "google/protobuf/message.h"
+#include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/type_macros.h"
 #include "google/fhir/util.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/resources.pb.h"
 #include "proto/version_config.pb.h"
+#include "tensorflow/core/lib/hash/hash.h"
 
 namespace google {
 namespace fhir {
@@ -36,13 +38,54 @@ namespace internal {
 extern const absl::Duration kGapAfterLastEncounterForUnknownDeath;
 extern const absl::Duration kGapBeforeFirstEncounterForUnknownBirth;
 
+// Expands a TimestampOverride config for a repeated field.
+// Example: a Composition can have several attesters, each of which has a
+// timestamp for when that attestment was added.  This can be represented by
+//
+// timestamp_override {
+//   timestamp_field: "Resource.repeatedField[].time"
+//   resource_field: "Resource.repeatedField[].fieldToAdd"
+//   resource_field: "Resource.repeatedField[].otherFieldToAdd"
+// }
+//
+// indicating that those fields should be added at that repeatedField's time.
+// For a field with size N, this will return a vector with N configs,
+// each of which will be identical except populating the array brackets with an
+// index in 1-N.  E.g., if the above config was expanded with a repeatedField of
+// size 2, this would expand to
+//
+// timestamp_override {
+//   timestamp_field: "Resource.repeatedField[0].time"
+//   resource_field: "Resource.repeatedField[0].fieldToAdd"
+//   resource_field: "Resource.repeatedField[0].otherFieldToAdd"
+// }
+// timestamp_override {
+//   timestamp_field: "Resource.repeatedField[1].time"
+//   resource_field: "Resource.repeatedField[1].fieldToAdd"
+//   resource_field: "Resource.repeatedField[1].otherFieldToAdd"
+// }
+//
+// It's also fine to add the entire message at that time, e.g.,
+// timestamp_override {
+//   timestamp_field: "Resource.repeatedField[].time"
+//   resource_field: "Resource.repeatedField[]"
+// }
+//
+// This doesn't support arbitrary branching - there must be at most one
+// instance of "[]" in the timestamp_field, and if found,
+// each resource_field must have an identical branching. I.e., the strings up
+// until [] must be identical.
+std::vector<proto::ResourceConfig::TimestampOverride> ExpandIfNecessary(
+    const proto::ResourceConfig::TimestampOverride& original_override,
+    const ::google::protobuf::Message& resource);
+
 // Finds the Encounter in the bundle with the last end time.
 // Returns ::tensorflow::errors:NotFoundError if there are no encounters
 // in the bundle.
 template <typename BundleLike,
-          typename EncounterLike = BUNDLE_TYPE(BundleLike, encounter)>
-StatusOr<const stu3::proto::DateTime*> GetEndOfLastEncounter(
-    const BundleLike& bundle) {
+          typename EncounterLike = BUNDLE_TYPE(BundleLike, encounter),
+          typename DateTimeLike = FHIR_DATATYPE(BundleLike, date_time)>
+StatusOr<const DateTimeLike*> GetEndOfLastEncounter(const BundleLike& bundle) {
   const EncounterLike* last_encounter = nullptr;
 
   for (const auto& entry : bundle.entry()) {
@@ -64,8 +107,9 @@ StatusOr<const stu3::proto::DateTime*> GetEndOfLastEncounter(
 // Returns ::tensorflow::errors:NotFoundError if there are no encounters
 // in the bundle.
 template <typename BundleLike,
-          typename EncounterLike = BUNDLE_TYPE(BundleLike, encounter)>
-StatusOr<const stu3::proto::DateTime*> GetStartOfFirstEncounter(
+          typename EncounterLike = BUNDLE_TYPE(BundleLike, encounter),
+          typename DateTimeLike = FHIR_DATATYPE(BundleLike, date_time)>
+StatusOr<const DateTimeLike*> GetStartOfFirstEncounter(
     const BundleLike& bundle) {
   const EncounterLike* first_encounter = nullptr;
 
@@ -84,22 +128,96 @@ StatusOr<const stu3::proto::DateTime*> GetStartOfFirstEncounter(
   return &(first_encounter->period().start());
 }
 
-const std::vector<
-    std::pair<stu3::proto::DateTime, std::unordered_set<std::string>>>
+template <typename DateTimeLike>
+struct DateTimeHash {
+  size_t operator()(const DateTimeLike& date_time) const {
+    ::tensorflow::uint64 h = std::hash<uint64_t>()(date_time.value_us());
+    h = tensorflow::Hash64Combine(
+        h, std::hash<std::string>()(date_time.timezone()));
+    h = tensorflow::Hash64Combine(h,
+                                  std::hash<int32_t>()(date_time.precision()));
+    return h;
+  }
+};
+
+// TODO: determine if timezone should be used in this comparison
+template <typename DateTimeLike>
+struct DateTimeEquiv {
+  bool operator()(const DateTimeLike& lhs, const DateTimeLike& rhs) const {
+    return lhs.value_us() == rhs.value_us() &&
+           lhs.precision() == rhs.precision() &&
+           lhs.timezone() == rhs.timezone();
+  }
+};
+
+template <typename DateTimeLike>
+const std::vector<std::pair<DateTimeLike, std::unordered_set<std::string>>>
 GetSortedOverrides(const proto::ResourceConfig& resource_config,
-                   const ::google::protobuf::Message& resource);
+                   const ::google::protobuf::Message& resource) {
+  // First off, build a map from timestamp override time to fields that
+  // should be introduced at that time.
+  // Also builds a map of all fields with overrides, to ensure fields aren't
+  // duplicated.
+  // DateTimeHash/Equiv are only using 3 fields (value_us, timezone, and
+  // precision) not all the fields.
+  std::unordered_map<DateTimeLike, std::unordered_set<std::string>,
+                     DateTimeHash<DateTimeLike>, DateTimeEquiv<DateTimeLike>>
+      override_to_fields_map;
+  std::unordered_set<std::string> fields_with_override;
+  for (const auto& orig_ts_override : resource_config.timestamp_override()) {
+    std::vector<proto::ResourceConfig::TimestampOverride>
+        expanded_ts_overrides =
+            internal::ExpandIfNecessary(orig_ts_override, resource);
+    for (const auto& ts_override : expanded_ts_overrides) {
+      const auto& time_status = GetSubmessageByPathAndCheckType<DateTimeLike>(
+          resource, ts_override.timestamp_field());
+      // Ignore if requested override is not present
+      if (time_status.status().code() == ::absl::StatusCode::kNotFound) {
+        continue;
+      }
+
+      for (const std::string& field : ts_override.resource_field()) {
+        CHECK(fields_with_override.insert(field).second)
+            << "Duplicate timestamp overrides for field " << field;
+        override_to_fields_map[*time_status.ValueOrDie()].insert(field);
+      }
+    }
+  }
+  // Sort the overrides map in descending order,
+  // because we'll use it to strip out fields as we move back in time
+  // (most recent version has most data, earliest version has least data).
+  std::vector<std::pair<DateTimeLike, std::unordered_set<std::string>>>
+      sorted_override_to_fields_pairs(override_to_fields_map.begin(),
+                                      override_to_fields_map.end());
+  std::sort(
+      sorted_override_to_fields_pairs.begin(),
+      sorted_override_to_fields_pairs.end(),
+      [](const std::pair<DateTimeLike, std::unordered_set<std::string>>& a,
+         const std::pair<DateTimeLike, std::unordered_set<std::string>>& b) {
+        return a.first.value_us() < b.first.value_us();
+      });
+  return sorted_override_to_fields_pairs;
+}
 
 // Stamps a resource with a version + time metadata,
 // Wraps it into a ContainedResource, and
 // Adds it along with a time to a versioned resources list
 // Works for any Time-like fhir element that has a value_us, timezone,
 // and precision, e.g.: Date, DateTime, Instant.
-template <typename ContainedResourceLike, typename T, typename R>
+template <typename ContainedResourceLike, typename T,
+          typename InstantLike = FHIR_DATATYPE(T, instant)>
 void StampWrapAndAdd(std::vector<ContainedResourceLike>* versioned_resources,
-                     const T& timelike, const int version_id, R* resource) {
-  stu3::proto::Meta* meta = resource->mutable_meta();
-  meta->mutable_version_id()->set_value(absl::StrCat(version_id));
-  stu3::proto::Instant* last_updated = meta->mutable_last_updated();
+                     const T& timelike, const int version_id,
+                     ::google::protobuf::Message* resource) {
+  ::google::protobuf::Message* meta =
+      MutableMessageInField(resource, "meta").ValueOrDie();
+  ::google::protobuf::Message* meta_version_id =
+      MutableMessageInField(meta, "version_id").ValueOrDie();
+  CHECK(
+      SetPrimitiveStringValue(meta_version_id, absl::StrCat(version_id)).ok());
+
+  InstantLike* last_updated = dynamic_cast<InstantLike*>(
+      MutableMessageInField(meta, "last_updated").ValueOrDie());
   last_updated->set_timezone(timelike.timezone());
 
   // NOTE: We can't directly set last_updated.precision from timelike.precision,
@@ -108,14 +226,14 @@ void StampWrapAndAdd(std::vector<ContainedResourceLike>* versioned_resources,
   // The most coarse precision available to Instant is SECOND, though, so
   // anything more coarse (e.g., Date measured in DAY) will require us to
   // "round up" value to the nearest unit of precision avoid any leaks.
-  stu3::proto::Instant::Precision precision;
-  const bool parse_successful = stu3::proto::Instant::Precision_Parse(
+  typename InstantLike::Precision precision;
+  const bool parse_successful = InstantLike::Precision_Parse(
       T::Precision_Name(timelike.precision()), &precision);
   if (parse_successful) {
     last_updated->set_value_us(timelike.value_us());
     last_updated->set_precision(precision);
   } else {
-    last_updated->set_precision(stu3::proto::Instant::SECOND);
+    last_updated->set_precision(InstantLike::SECOND);
     absl::TimeZone tz =
         BuildTimeZoneFromString(timelike.timezone()).ValueOrDie();
     const std::string precision_string =
@@ -147,16 +265,39 @@ void StampWrapAndAdd(std::vector<ContainedResourceLike>* versioned_resources,
 // Gets the default date time to use for fields in this message.
 // Any fields that aren't present in a TimestampOverride config will be entered
 // at this default time.
-StatusOr<stu3::proto::DateTime> GetDefaultDateTime(
-    const proto::ResourceConfig& config, const ::google::protobuf::Message& message);
+template <typename DateTimeLike>
+StatusOr<DateTimeLike> GetDefaultDateTime(const proto::ResourceConfig& config,
+                                          const ::google::protobuf::Message& message) {
+  // Try to find a field indicated by default_timestamp_field.
+  if (config.default_timestamp_fields_size() > 0) {
+    // Find default datetime from default_timestamp_field in config
+    for (const std::string& default_timestamp_field :
+         config.default_timestamp_fields()) {
+      const auto& default_date_time_status =
+          GetSubmessageByPathAndCheckType<DateTimeLike>(
+              message, default_timestamp_field);
+      if (default_date_time_status.status().code() !=
+          ::absl::StatusCode::kNotFound) {
+        return *default_date_time_status.ValueOrDie();
+      }
+    }
+  }
+  return ::absl::InvalidArgumentError(
+      absl::StrCat("split-failed-no-default_timestamp_field-",
+                   message.GetDescriptor()->name()));
+}
 
-template <typename R, typename ContainedResourceLike>
-void SplitResource(const R& resource, const proto::VersionConfig& config,
+template <
+    typename BundleLike,
+    typename ContainedResourceLike = BUNDLE_CONTAINED_RESOURCE(BundleLike),
+    typename DateTimeLike = FHIR_DATATYPE(BundleLike, date_time)>
+void SplitResource(const ::google::protobuf::Message& resource,
+                   const proto::VersionConfig& config,
                    std::vector<ContainedResourceLike>* versioned_resources,
                    std::map<std::string, int>* counter_stats) {
   // Make a mutable copy of the resource, that we will modify and copy into
   // the result vector along the way.
-  std::unique_ptr<R> current_resource(resource.New());
+  std::unique_ptr<::google::protobuf::Message> current_resource(resource.New());
   current_resource->CopyFrom(resource);
 
   const ::google::protobuf::Descriptor* descriptor = resource.GetDescriptor();
@@ -169,13 +310,13 @@ void SplitResource(const R& resource, const proto::VersionConfig& config,
   }
   const auto& resource_config = iter->second;
 
-  StatusOr<stu3::proto::DateTime> default_time_status =
-      GetDefaultDateTime(resource_config, resource);
+  StatusOr<DateTimeLike> default_time_status =
+      GetDefaultDateTime<DateTimeLike>(resource_config, resource);
   if (!default_time_status.ok()) {
     (*counter_stats)[std::string(default_time_status.status().message())]++;
     return;
   }
-  stu3::proto::DateTime default_time = default_time_status.ValueOrDie();
+  DateTimeLike default_time = default_time_status.ValueOrDie();
 
   if (resource_config.timestamp_override_size() == 0) {
     // If there are no per-field timestamp overrides, we can just enter the
@@ -191,9 +332,9 @@ void SplitResource(const R& resource, const proto::VersionConfig& config,
   // First off, get a list of override pairs, where each pair is
   // override time -> fields that should use that time, sorted in ascending
   // order.
-  const std::vector<
-      std::pair<stu3::proto::DateTime, std::unordered_set<std::string>>>&
-      sorted_overrides = GetSortedOverrides(resource_config, resource);
+  const std::vector<std::pair<DateTimeLike, std::unordered_set<std::string>>>&
+      sorted_overrides =
+          GetSortedOverrides<DateTimeLike>(resource_config, resource);
 
   // Strip out all fields with overrides, to get the "base" version.
   // This is the version that goes in at the "default" time.
@@ -204,10 +345,10 @@ void SplitResource(const R& resource, const proto::VersionConfig& config,
   for (const auto& timestamp_override : resource_config.timestamp_override()) {
     for (const std::string& field_path : timestamp_override.resource_field()) {
       if (field_path.find_last_of('[') == std::string::npos) {
-        CHECK(ClearFieldByPath(current_resource.get(), field_path).ok());
+        FHIR_CHECK_OK(ClearFieldByPath(current_resource.get(), field_path));
       } else {
-        CHECK(ClearFieldByPath(current_resource.get(), StripIndex(field_path))
-                  .ok());
+        FHIR_CHECK_OK(
+            ClearFieldByPath(current_resource.get(), StripIndex(field_path)));
       }
     }
   }
@@ -291,7 +432,7 @@ void SplitResource(const R& resource, const proto::VersionConfig& config,
         target_repeated_field.CopyFrom(source_repeated_field);
       }
     }
-    stu3::proto::DateTime override_time = override_map_entry.first;
+    DateTimeLike override_time = override_map_entry.first;
     // TODO: Once we've switched the version config to use latest
     // timestamp as default, enforce that here by failing on any override time
     // greater than the default (accounting for precision).
@@ -301,7 +442,8 @@ void SplitResource(const R& resource, const proto::VersionConfig& config,
 }
 
 template <typename BundleLike, typename PatientLike,
-          typename ContainedResourceLike>
+          typename ContainedResourceLike,
+          typename DateTimeLike = FHIR_DATATYPE(BundleLike, date_time)>
 void SplitPatient(PatientLike patient, const BundleLike& bundle,
                   const proto::VersionConfig& config,
                   std::vector<ContainedResourceLike>* versioned_resources,
@@ -314,12 +456,11 @@ void SplitPatient(PatientLike patient, const BundleLike& bundle,
                     &patient);
   } else if (patient.deceased().boolean().value()) {
     // All we know is that the patient died.
-    StatusOr<const stu3::proto::DateTime*> last_time =
-        GetEndOfLastEncounter(bundle);
+    StatusOr<const DateTimeLike*> last_time = GetEndOfLastEncounter(bundle);
     if (last_time.ok()) {
       // Use end of last encounter as time of death, with a delay to put it
       // a safe distance in the future.
-      stu3::proto::DateTime input_time(*last_time.ValueOrDie());
+      DateTimeLike input_time(*last_time.ValueOrDie());
       input_time.set_value_us(
           last_time.ValueOrDie()->value_us() +
           absl::ToInt64Microseconds(kGapAfterLastEncounterForUnknownDeath));
@@ -345,12 +486,11 @@ void SplitPatient(PatientLike patient, const BundleLike& bundle,
 
     StampWrapAndAdd(versioned_resources, patient.birth_date(), 0, &patient);
   } else {
-    StatusOr<const stu3::proto::DateTime*> first_time =
-        GetStartOfFirstEncounter(bundle);
+    StatusOr<const DateTimeLike*> first_time = GetStartOfFirstEncounter(bundle);
     if (first_time.ok()) {
       // Use start of first encounter as time for V0 of the patient.
       // Subtract a delay to guarantee it is the first entry into the system.
-      stu3::proto::DateTime input_time(*first_time.ValueOrDie());
+      DateTimeLike input_time(*first_time.ValueOrDie());
       input_time.set_value_us(
           first_time.ValueOrDie()->value_us() -
           absl::ToInt64Microseconds(kGapBeforeFirstEncounterForUnknownBirth));
@@ -361,6 +501,38 @@ void SplitPatient(PatientLike patient, const BundleLike& bundle,
       (*counter_stats)["patient-unknown-entry-time-needs-attention"]++;
     }
   }
+}
+
+// Helper function for splitting ContainedResources that contain resources that
+// are common in FHIR >=STU3 These can be handled statically without needing
+// reflection. A return value of true indicates that the contained resource
+// contained a common resource, and it was handled successfully.
+template <typename BundleLike, typename ContainedResourceLike =
+                                   BUNDLE_CONTAINED_RESOURCE(BundleLike)>
+void SplitContainedResource(
+    const ContainedResourceLike contained_resource, const BundleLike& bundle,
+    const proto::VersionConfig& config,
+    std::vector<ContainedResourceLike>* versioned_resources,
+    std::map<std::string, int>* counter_stats) {
+  if (contained_resource.has_patient()) {
+    // Patient is slightly different.
+    // The first version timestamp comes from the start time of the first
+    // encounter in the system.
+    // If the patient died, but there is no death timestamp, we need to reach
+    // into the last encounter for the time to use.
+    // TODO: if this turns out to be a more common pattern,
+    // we could have a way to encode this logic into the config proto as a
+    // new kind of override.
+    internal::SplitPatient(contained_resource.patient(), bundle, config,
+                           versioned_resources, counter_stats);
+    return;
+  }
+
+  const ::google::protobuf::Message* resource =
+      GetContainedResource(contained_resource).ValueOrDie();
+
+  internal::SplitResource<BundleLike>(*resource, config, versioned_resources,
+                                      counter_stats);
 }
 
 }  // namespace internal
@@ -380,45 +552,8 @@ std::vector<ContainedResourceLike> BundleToVersionedResources(
     (*counter_stats)["num-unversioned-resources-in"]++;
     int initial_size = versioned_resources.size();
     const auto& resource = entry.resource();
-    if (resource.has_patient()) {
-      // Patient is slightly different.
-      // The first version timestamp comes from the start time of the first
-      // encounter in the system.
-      // If the patient died, but there is no death timestamp, we need to reach
-      // into the last encounter for the time to use.
-      // TODO: if this turns out to be a more common pattern,
-      // we could have a way to encode this logic into the config proto as a
-      // new kind of override.
-      internal::SplitPatient(resource.patient(), bundle, config,
-                             &versioned_resources, counter_stats);
-    } else if (resource.has_claim()) {
-      internal::SplitResource(resource.claim(), config, &versioned_resources,
-                              counter_stats);
-    } else if (resource.has_composition()) {
-      internal::SplitResource(resource.composition(), config,
-                              &versioned_resources, counter_stats);
-    } else if (resource.has_condition()) {
-      internal::SplitResource(resource.condition(), config,
-                              &versioned_resources, counter_stats);
-    } else if (resource.has_encounter()) {
-      internal::SplitResource(resource.encounter(), config,
-                              &versioned_resources, counter_stats);
-    } else if (resource.has_medication_administration()) {
-      internal::SplitResource(resource.medication_administration(), config,
-                              &versioned_resources, counter_stats);
-    } else if (resource.has_medication_request()) {
-      internal::SplitResource(resource.medication_request(), config,
-                              &versioned_resources, counter_stats);
-    } else if (resource.has_observation()) {
-      internal::SplitResource(resource.observation(), config,
-                              &versioned_resources, counter_stats);
-    } else if (resource.has_procedure()) {
-      internal::SplitResource(resource.procedure(), config,
-                              &versioned_resources, counter_stats);
-    } else if (resource.has_procedure_request()) {
-      internal::SplitResource(resource.procedure_request(), config,
-                              &versioned_resources, counter_stats);
-    }
+    internal::SplitContainedResource(resource, bundle, config,
+                                     &versioned_resources, counter_stats);
     const int new_size = versioned_resources.size();
     const std::string resource_name =
         resource.GetReflection()

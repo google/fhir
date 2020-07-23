@@ -168,6 +168,7 @@ cc_test(
         "//proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
         "//proto/r4/core/resources:medication_cc_proto",
         "//proto/r4/core/resources:medication_request_cc_proto",
+        "//proto/r4/core/resources:patient_cc_proto",
         "//proto/stu3:codes_cc_proto",
         "//proto/stu3:datatypes_cc_proto",
         "//proto/stu3:resources_cc_proto",
@@ -261,12 +262,11 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":proto_util",
+        ":type_macros",
         ":util",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto:version_config_cc_proto",
-        "//proto/stu3:datatypes_cc_proto",
-        "//proto/stu3:resources_cc_proto",
         "@com_google_absl//absl/flags:flag",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
@@ -275,18 +275,25 @@ cc_library(
     ],
 )
 
-cc_test(
-    name = "bundle_to_versioned_resources_converter_test",
-    srcs = ["bundle_to_versioned_resources_converter_test.cc"],
-    data = ["//proto/stu3:version_config.textproto"],
-    deps = [
-        ":bundle_to_versioned_resources_converter",
-        "//cc/google/fhir/testutil:proto_matchers",
-        "@com_google_googletest//:gtest_main",
-        "@com_google_protobuf//:protobuf",
-        "@org_tensorflow//tensorflow/core:lib",
-    ],
-)
+# cc_test(
+#     name = "bundle_to_versioned_resources_converter_test",
+#     srcs = ["bundle_to_versioned_resources_converter_test.cc"],
+#     data = [
+#         "//proto/r4:version_config.textproto",
+#         "//proto/stu3:version_config.textproto",
+#     ],
+#     deps = [
+#         ":bundle_to_versioned_resources_converter",
+#         "//net/proto2/public:proto2",
+#         "//testing/base/public:gunit_main",
+#         "@com_google_absl//absl/strings",
+#         "//cc/google/fhir/seqex:r4",
+#         "//cc/google/fhir/seqex:stu3",
+#         "//cc/google/fhir/testutil:fhir_test_env",
+#         "//cc/google/fhir/testutil:proto_matchers",
+#         "@org_tensorflow//tensorflow/core:lib",
+#     ],
+# )
 
 cc_library(
     name = "primitive_wrapper",

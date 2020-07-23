@@ -32,8 +32,6 @@
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "tensorflow/core/lib/hash/hash.h"
 #include "tensorflow/core/platform/env.h"
 #include "tensorflow/core/platform/logging.h"
 #include "tensorflow/core/platform/types.h"
@@ -47,7 +45,6 @@ namespace fhir {
 
 using ::google::fhir::proto::ResourceConfig;
 using ::google::fhir::proto::VersionConfig;
-using ::google::fhir::stu3::proto::DateTime;
 using ::google::protobuf::Message;
 
 namespace internal {
@@ -56,86 +53,6 @@ const absl::Duration kGapAfterLastEncounterForUnknownDeath =
     absl::Hours(24) * 365;
 const absl::Duration kGapBeforeFirstEncounterForUnknownBirth = absl::Hours(24);
 
-struct DateTimeHash {
-  size_t operator()(const DateTime& date_time) const {
-    ::tensorflow::uint64 h = std::hash<uint64_t>()(date_time.value_us());
-    h = tensorflow::Hash64Combine(
-        h, std::hash<std::string>()(date_time.timezone()));
-    h = tensorflow::Hash64Combine(h,
-                                  std::hash<int32_t>()(date_time.precision()));
-    return h;
-  }
-};
-
-struct DateTimeEquiv {
-  bool operator()(const DateTime& lhs, const DateTime& rhs) const {
-    return lhs.value_us() == rhs.value_us() &&
-           lhs.precision() == rhs.precision() &&
-           lhs.timezone() == rhs.timezone();
-  }
-};
-
-// Gets the default date time to use for fields in this message.
-// Any fields that aren't present in a TimestampOverride config will be entered
-// at this default time.
-StatusOr<DateTime> GetDefaultDateTime(const ResourceConfig& config,
-                                      const Message& message) {
-  // Try to find a field indicated by default_timestamp_field.
-  if (config.default_timestamp_fields_size() > 0) {
-    // Find default datetime from default_timestamp_field in config
-    for (const std::string& default_timestamp_field :
-         config.default_timestamp_fields()) {
-      const auto& default_date_time_status =
-          GetSubmessageByPathAndCheckType<DateTime>(message,
-                                                    default_timestamp_field);
-      if (default_date_time_status.status().code() !=
-          ::absl::StatusCode::kNotFound) {
-        return *default_date_time_status.ValueOrDie();
-      }
-    }
-  }
-  return ::absl::InvalidArgumentError(
-      absl::StrCat("split-failed-no-default_timestamp_field-",
-                   message.GetDescriptor()->name()));
-}
-
-// Expands a TimestampOverride config for a repeated field.
-// Example: a Composition can have several attesters, each of which has a
-// timestamp for when that attestment was added.  This can be represented by
-//
-// timestamp_override {
-//   timestamp_field: "Resource.repeatedField[].time"
-//   resource_field: "Resource.repeatedField[].fieldToAdd"
-//   resource_field: "Resource.repeatedField[].otherFieldToAdd"
-// }
-//
-// indicating that those fields should be added at that repeatedField's time.
-// For a field with size N, this will return a vector with N configs,
-// each of which will be identical except populating the array brackets with an
-// index in 1-N.  E.g., if the above config was expanded with a repeatedField of
-// size 2, this would expand to
-//
-// timestamp_override {
-//   timestamp_field: "Resource.repeatedField[0].time"
-//   resource_field: "Resource.repeatedField[0].fieldToAdd"
-//   resource_field: "Resource.repeatedField[0].otherFieldToAdd"
-// }
-// timestamp_override {
-//   timestamp_field: "Resource.repeatedField[1].time"
-//   resource_field: "Resource.repeatedField[1].fieldToAdd"
-//   resource_field: "Resource.repeatedField[1].otherFieldToAdd"
-// }
-//
-// It's also fine to add the entire message at that time, e.g.,
-// timestamp_override {
-//   timestamp_field: "Resource.repeatedField[].time"
-//   resource_field: "Resource.repeatedField[]"
-// }
-//
-// This doesn't support arbitrary branching - there must be at most one
-// instance of "[]" in the timestamp_field, and if found,
-// each resource_field must have an identical branching. I.e., the strings up
-// until [] must be identical.
 std::vector<ResourceConfig::TimestampOverride> ExpandIfNecessary(
     const ResourceConfig::TimestampOverride& original_override,
     const Message& resource) {
@@ -195,52 +112,6 @@ std::vector<ResourceConfig::TimestampOverride> ExpandIfNecessary(
     expanded_overrides.push_back(indexed_override);
   }
   return expanded_overrides;
-}
-
-const std::vector<std::pair<DateTime, std::unordered_set<std::string>>>
-GetSortedOverrides(const ResourceConfig& resource_config,
-                   const Message& resource) {
-  // First off, build a map from timestamp override time to fields that
-  // should be introduced at that time.
-  // Also builds a map of all fields with overrides, to ensure fields aren't
-  // duplicated.
-  // DateTimeHash/Equiv are only using 3 fields (value_us, timezone, and
-  // precision) not all the fields.
-  std::unordered_map<DateTime, std::unordered_set<std::string>, DateTimeHash,
-                     DateTimeEquiv>
-      override_to_fields_map;
-  std::unordered_set<std::string> fields_with_override;
-  for (const auto& orig_ts_override : resource_config.timestamp_override()) {
-    std::vector<ResourceConfig::TimestampOverride> expanded_ts_overrides =
-        ExpandIfNecessary(orig_ts_override, resource);
-    for (const auto& ts_override : expanded_ts_overrides) {
-      const auto& time_status = GetSubmessageByPathAndCheckType<DateTime>(
-          resource, ts_override.timestamp_field());
-      // Ignore if requested override is not present
-      if (time_status.status().code() == ::absl::StatusCode::kNotFound) {
-        continue;
-      }
-
-      for (const std::string& field : ts_override.resource_field()) {
-        CHECK(fields_with_override.insert(field).second)
-            << "Duplicate timestamp overrides for field " << field;
-        override_to_fields_map[*time_status.ValueOrDie()].insert(field);
-      }
-    }
-  }
-  // Sort the overrides map in descending order,
-  // because we'll use it to strip out fields as we move back in time
-  // (most recent version has most data, earliest version has least data).
-  std::vector<std::pair<DateTime, std::unordered_set<std::string>>>
-      sorted_override_to_fields_pairs(override_to_fields_map.begin(),
-                                      override_to_fields_map.end());
-  std::sort(sorted_override_to_fields_pairs.begin(),
-            sorted_override_to_fields_pairs.end(),
-            [](const std::pair<DateTime, std::unordered_set<std::string>>& a,
-               const std::pair<DateTime, std::unordered_set<std::string>>& b) {
-              return a.first.value_us() < b.first.value_us();
-            });
-  return sorted_override_to_fields_pairs;
 }
 
 }  // namespace internal
