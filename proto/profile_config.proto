@@ -4,7 +4,6 @@ package google.fhir.proto;
 
 import "proto/annotations.proto";
 import "proto/r4/core/codes.proto";
-import "proto/r4/core/datatypes.proto";
 
 option java_package = "com.google.fhir.proto";
 option java_multiple_files = true;
