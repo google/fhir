@@ -14,36 +14,46 @@
  * limitations under the License.
  */
 
-#ifndef GOOGLE_FHIR_SEQEX_STU3_H_
-#define GOOGLE_FHIR_SEQEX_STU3_H_
+#ifndef GOOGLE_FHIR_SEQEX_R4_H_
+#define GOOGLE_FHIR_SEQEX_R4_H_
 
-#include "absl/status/status.h"
+#include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/seqex/bundle_to_seqex_converter.h"
 #include "google/fhir/seqex/bundle_to_seqex_util.h"
 #include "google/fhir/seqex/converter_types.h"
 #include "google/fhir/seqex/resource_to_example.h"
 #include "google/fhir/seqex/text_tokenizer.h"
-#include "google/fhir/stu3/primitive_handler.h"
-#include "proto/stu3/google_extensions.pb.h"
-#include "proto/stu3/resources.pb.h"
+#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/r4/core/resources/claim.pb.h"
+#include "proto/r4/core/resources/composition.pb.h"
+#include "proto/r4/core/resources/condition.pb.h"
+#include "proto/r4/core/resources/encounter.pb.h"
+#include "proto/r4/core/resources/medication.pb.h"
+#include "proto/r4/core/resources/medication_administration.pb.h"
+#include "proto/r4/core/resources/medication_request.pb.h"
+#include "proto/r4/core/resources/observation.pb.h"
+#include "proto/r4/core/resources/patient.pb.h"
+#include "proto/r4/core/resources/procedure.pb.h"
+#include "proto/r4/core/resources/service_request.pb.h"
+#include "proto/r4/google_extensions.pb.h"
 
 namespace google {
 namespace fhir {
-namespace seqex_stu3 {
+namespace seqex_r4 {
 
-// Namespace for aliases for seqex functions for use with the STU3 FHIR version.
+// Namespace for aliases for seqex functions for use with the R4 FHIR version.
 
 inline void ResourceToExample(const google::protobuf::Message& message,
                               const seqex::TextTokenizer& tokenizer,
                               ::tensorflow::Example* example,
                               bool enable_attribution) {
   ResourceToExample(message, tokenizer, example, enable_attribution,
-                    ::google::fhir::stu3::Stu3PrimitiveHandler::GetInstance());
+                    ::google::fhir::r4::R4PrimitiveHandler::GetInstance());
 }
 
-typedef seqex::ConverterTypes<google::fhir::stu3::google::EventTrigger,
-                              google::fhir::stu3::google::EventLabel,
-                              stu3::Stu3PrimitiveHandler>
+typedef seqex::ConverterTypes<google::fhir::r4::google::EventTrigger,
+                              google::fhir::r4::google::EventLabel,
+                              r4::R4PrimitiveHandler>
     ConverterTypes;
 
 inline void GetTriggerLabelsPairFromInputLabels(
@@ -87,10 +97,11 @@ class BundleToSeqexConverter
           event_sequence) const override {
     FHIR_RETURN_IF_ERROR(
         BundleToSeqexConverter::AddCommonResource(contained, event_sequence));
-    if (contained.has_procedure_request()) {
-      seqex::BundleToSeqexConverter<ConverterTypes, BundleType>::
-          ConvertResourceToExamples(contained.procedure_request(),
-                                    event_sequence);
+    if (contained.has_service_request()) {
+      FHIR_RETURN_IF_ERROR(
+          (seqex::BundleToSeqexConverter<ConverterTypes, BundleType>::
+               ConvertResourceToExamples(contained.service_request(),
+                                         event_sequence)));
     }
     return absl::OkStatus();
   }
@@ -98,11 +109,11 @@ class BundleToSeqexConverter
 
 // Concrete unprofiled BundleToSeqexConverter specification for use by
 // python-c++ boundary
-typedef BundleToSeqexConverter<stu3::proto::Bundle>
+typedef BundleToSeqexConverter<r4::core::Bundle>
     UnprofiledBundleToSeqexConverter;
 
-}  // namespace seqex_stu3
+}  // namespace seqex_r4
 }  // namespace fhir
 }  // namespace google
 
-#endif  // GOOGLE_FHIR_SEQEX_STU3_H_
+#endif  // GOOGLE_FHIR_SEQEX_R4_H_

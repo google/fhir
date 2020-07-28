@@ -38,6 +38,7 @@
 #include "google/fhir/seqex/feature_keys.h"
 #include "google/fhir/seqex/resource_to_example.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/type_macros.h"
 #include "google/fhir/util.h"
 #include "proto/version_config.pb.h"
 #include "tensorflow/core/example/example.pb.h"
@@ -62,6 +63,10 @@ void AddBaggingFeatures(absl::Time event_time,
 
 bool FeaturePrefixMatch(const std::string& feature,
                         const std::set<std::string>& prefix_set);
+
+// Returns the time that a resource version should be stamped as, from the
+// lastUpdated metadata.
+StatusOr<absl::Time> GetVersionTime(const ::google::protobuf::Message& resource);
 
 void GetSequenceFeatures(
     absl::Time trigger_timestamp,
@@ -277,6 +282,24 @@ class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
     return key_.end - key_.start;
   }
 
+ protected:
+  using ContainedResourceLike = BUNDLE_CONTAINED_RESOURCE(BundleLike);
+
+  absl::Status AddCommonResource(
+      const ContainedResourceLike& resource,
+      std::vector<std::pair<std::pair<absl::Time, std::string>,
+                            tensorflow::Example>>* event_sequence) const;
+
+  virtual absl::Status AddContainedResource(
+      const ContainedResourceLike& contained,
+      std::vector<std::pair<std::pair<absl::Time, std::string>,
+                            tensorflow::Example>>* event_sequence) const = 0;
+
+  absl::Status ConvertResourceToExamples(
+      const google::protobuf::Message& resource,
+      std::vector<std::pair<std::pair<absl::Time, std::string>,
+                            ::tensorflow::Example>>* event_sequence) const;
+
  private:
   bool Begin(const std::string& patient_id, const BundleLike& bundle,
              const std::map<struct seqex::ExampleKey, ::tensorflow::Features>&
@@ -291,35 +314,11 @@ class BundleToSeqexConverter : public internal::BaseBundleToSeqexConverter {
 
   // Convert a fhir bundle to a sequence of tf examples.
   // The result is stored in class member variables.
-  void BundleToExamples(const BundleLike& bundle);
+  absl::Status BundleToExamples(const BundleLike& bundle);
 
   // Extract context features from a fhir bundle. The result is stored in
   // class member variables.
   void BundleToContext(const BundleLike& bundle);
-
-  // Converts a resource to one or more examples.
-  template <typename R>
-  void ConvertResourceToExamples(
-      R resource,
-      std::vector<std::pair<std::pair<absl::Time, std::string>,
-                            ::tensorflow::Example>>* event_sequence) {
-    // Conversion from versioned resource to example is 1-1.
-    const absl::Time version_time = google::fhir::GetTimeFromTimelikeElement(
-        resource.meta().last_updated());
-    ::tensorflow::Example example;
-    seqex::ResourceToExample(resource, *tokenizer_, &example,
-                             enable_attribution_,
-                             ConverterTypes::PrimitiveHandler::GetInstance());
-    if (enable_attribution_) {
-      (*example.mutable_features()
-            ->mutable_feature())[seqex::kResourceIdFeatureKey]
-          .mutable_bytes_list()
-          ->add_value(GetReferenceStringToResource(resource));
-    }
-    event_sequence->push_back(std::make_pair(
-        std::make_pair(version_time, GetReferenceStringToResource(resource)),
-        example));
-  }
 };
 
 // Class implementation below.
@@ -415,54 +414,26 @@ void BundleToSeqexConverter<ConverterTypes, BundleLike>::GetEncounterBoundaries(
 }
 
 template <typename ConverterTypes, typename BundleLike>
-void BundleToSeqexConverter<ConverterTypes, BundleLike>::BundleToExamples(
+absl::Status
+BundleToSeqexConverter<ConverterTypes, BundleLike>::BundleToExamples(
     const BundleLike& bundle) {
   // Make a sequence sorted by timestamp.
   std::vector<
       std::pair<std::pair<absl::Time, std::string>, tensorflow::Example>>
       event_sequence;
   for (const auto& entry : bundle.entry()) {
-    if (entry.resource().has_claim()) {
-      ConvertResourceToExamples(entry.resource().claim(), &event_sequence);
-    }
-    if (entry.resource().has_composition()) {
-      ConvertResourceToExamples(entry.resource().composition(),
-                                &event_sequence);
-    }
-    if (entry.resource().has_condition()) {
-      ConvertResourceToExamples(entry.resource().condition(), &event_sequence);
-    }
-    if (entry.resource().has_encounter()) {
-      ConvertResourceToExamples(entry.resource().encounter(), &event_sequence);
-    }
-    if (entry.resource().has_medication_administration()) {
-      ConvertResourceToExamples(entry.resource().medication_administration(),
-                                &event_sequence);
-    }
-    if (entry.resource().has_medication_request()) {
-      ConvertResourceToExamples(entry.resource().medication_request(),
-                                &event_sequence);
-    }
-    if (entry.resource().has_observation()) {
-      ConvertResourceToExamples(entry.resource().observation(),
-                                &event_sequence);
-    }
-    if (entry.resource().has_procedure()) {
-      ConvertResourceToExamples(entry.resource().procedure(), &event_sequence);
-    }
-    if (entry.resource().has_procedure_request()) {
-      ConvertResourceToExamples(entry.resource().procedure_request(),
-                                &event_sequence);
-    }
+    FHIR_RETURN_IF_ERROR(
+        AddContainedResource(entry.resource(), &event_sequence));
   }
 
   if (generate_sequence_label_) {
     // TODO: Either delete or fix seconds_until_label.
-    for (auto entry : label_map_) {
+    for (const auto& label_entry : label_map_) {
       tensorflow::Example example;
-      *example.mutable_features() = entry.second;
+      *example.mutable_features() = label_entry.second;
       event_sequence.push_back(std::make_pair(
-          std::make_pair(entry.first.trigger_timestamp, "label"), example));
+          std::make_pair(label_entry.first.trigger_timestamp, "label"),
+          example));
     }
   }
 
@@ -482,6 +453,7 @@ void BundleToSeqexConverter<ConverterTypes, BundleLike>::BundleToExamples(
   GetEncounterBoundaries(bundle, &encounter_boundaries);
 
   EventSequenceToExamples(encounter_boundaries, event_sequence);
+  return absl::OkStatus();
 }
 
 template <typename ConverterTypes, typename BundleLike>
@@ -507,6 +479,66 @@ void BundleToSeqexConverter<ConverterTypes, BundleLike>::BundleToContext(
           ->add_value(patient.id().value());
     }
   }
+}
+
+template <typename ConverterTypes, typename BundleLike>
+absl::Status
+BundleToSeqexConverter<ConverterTypes, BundleLike>::AddCommonResource(
+    const ContainedResourceLike& resource,
+    std::vector<std::pair<std::pair<absl::Time, std::string>,
+                          tensorflow::Example>>* event_sequence) const {
+  if (resource.has_claim()) {
+    ConvertResourceToExamples(resource.claim(), event_sequence);
+  }
+  if (resource.has_composition()) {
+    ConvertResourceToExamples(resource.composition(), event_sequence);
+  }
+  if (resource.has_condition()) {
+    ConvertResourceToExamples(resource.condition(), event_sequence);
+  }
+  if (resource.has_encounter()) {
+    ConvertResourceToExamples(resource.encounter(), event_sequence);
+  }
+  if (resource.has_medication_administration()) {
+    ConvertResourceToExamples(resource.medication_administration(),
+                              event_sequence);
+  }
+  if (resource.has_medication_request()) {
+    ConvertResourceToExamples(resource.medication_request(), event_sequence);
+  }
+  if (resource.has_observation()) {
+    ConvertResourceToExamples(resource.observation(), event_sequence);
+  }
+  if (resource.has_procedure()) {
+    ConvertResourceToExamples(resource.procedure(), event_sequence);
+  }
+  return absl::OkStatus();
+}
+
+// Converts a single resource into one or more TensorFlow Examples, and adds
+// them to an event sequence.
+template <typename ConverterTypes, typename BundleLike>
+absl::Status
+BundleToSeqexConverter<ConverterTypes, BundleLike>::ConvertResourceToExamples(
+    const google::protobuf::Message& resource,
+    std::vector<std::pair<std::pair<absl::Time, std::string>,
+                          ::tensorflow::Example>>* event_sequence) const {
+  // Conversion from versioned resource to example is 1-1.
+  FHIR_ASSIGN_OR_RETURN(const absl::Time version_time,
+                        internal::GetVersionTime(resource));
+  ::tensorflow::Example example;
+  seqex::ResourceToExample(resource, *tokenizer_, &example, enable_attribution_,
+                           ConverterTypes::PrimitiveHandler::GetInstance());
+  if (enable_attribution_) {
+    (*example.mutable_features()
+          ->mutable_feature())[seqex::kResourceIdFeatureKey]
+        .mutable_bytes_list()
+        ->add_value(GetReferenceStringToResource(resource));
+  }
+  event_sequence->push_back(std::make_pair(
+      std::make_pair(version_time, GetReferenceStringToResource(resource)),
+      example));
+  return absl::OkStatus();
 }
 
 }  // namespace seqex

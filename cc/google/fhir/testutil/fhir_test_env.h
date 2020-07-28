@@ -18,7 +18,22 @@
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/stu3/primitive_handler.h"
+#include "google/fhir/type_macros.h"
 #include "google/fhir/util.h"
+#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/r4/core/resources/claim.pb.h"
+#include "proto/r4/core/resources/composition.pb.h"
+#include "proto/r4/core/resources/condition.pb.h"
+#include "proto/r4/core/resources/encounter.pb.h"
+#include "proto/r4/core/resources/medication_administration.pb.h"
+#include "proto/r4/core/resources/medication_request.pb.h"
+#include "proto/r4/core/resources/observation.pb.h"
+#include "proto/r4/core/resources/organization.pb.h"
+#include "proto/r4/core/resources/parameters.pb.h"
+#include "proto/r4/core/resources/patient.pb.h"
+#include "proto/r4/core/resources/procedure.pb.h"
+#include "proto/r4/core/resources/structure_definition.pb.h"
+#include "proto/r4/core/resources/value_set.pb.h"
 #include "proto/stu3/resources.pb.h"
 
 namespace google {
@@ -52,11 +67,22 @@ struct FhirTestEnv {
 
   // Resources
   using Bundle = BundleType;
+  using ContainedResource = BUNDLE_CONTAINED_RESOURCE(BundleType);
+
+  using Binary = BUNDLE_TYPE(BundleType, binary);
   using Encounter = BUNDLE_TYPE(BundleType, encounter);
+  using Claim = BUNDLE_TYPE(BundleType, claim);
+  using Condition = BUNDLE_TYPE(BundleType, condition);
+  using Composition = BUNDLE_TYPE(BundleType, composition);
+  using Medication = BUNDLE_TYPE(BundleType, medication);
+  using MedicationAdministration = BUNDLE_TYPE(BundleType,
+                                               medication_administration);
+  using MedicationRequest = BUNDLE_TYPE(BundleType, medication_request);
   using Observation = BUNDLE_TYPE(BundleType, observation);
   using Organization = BUNDLE_TYPE(BundleType, organization);
   using Parameters = BUNDLE_TYPE(BundleType, parameters);
   using Patient = BUNDLE_TYPE(BundleType, patient);
+  using Procedure = BUNDLE_TYPE(BundleType, procedure);
   using StructureDefinition = BUNDLE_TYPE(BundleType, structure_definition);
   using ValueSet = BUNDLE_TYPE(BundleType, value_set);
 };

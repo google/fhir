@@ -26,14 +26,16 @@
 #include "absl/flags/declare.h"
 #include "absl/flags/flag.h"
 #include "absl/strings/substitute.h"
+#include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/seqex/converter_types.h"
 #include "google/fhir/seqex/example_key.h"
+#include "google/fhir/seqex/r4.h"
 #include "google/fhir/seqex/stu3.h"
 #include "google/fhir/seqex/text_tokenizer.h"
-#include "google/fhir/stu3/primitive_handler.h"
+#include "google/fhir/test_helper.h"
+#include "google/fhir/testutil/fhir_test_env.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/stu3/google_extensions.pb.h"
-#include "proto/stu3/resources.pb.h"
+#include "google/fhir/type_macros.h"
 #include "tensorflow/core/example/example.pb.h"
 #include "tensorflow/core/platform/env.h"
 
@@ -46,45 +48,81 @@ namespace seqex {
 namespace {
 
 using google::fhir::proto::VersionConfig;
-using google::fhir::stu3::proto::Bundle;
 using ::google::fhir::testutil::EqualsProto;
+using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
 using ::tensorflow::SequenceExample;
 
-typedef seqex_stu3::ConverterTypes::EventLabel EventLabel;
-typedef seqex_stu3::ConverterTypes::EventTrigger EventTrigger;
-typedef seqex_stu3::ConverterTypes::TriggerLabelsPair TriggerLabelsPair;
+struct Stu3ConverterTestEnv : public testutil::Stu3CoreTestEnv,
+                              public seqex_stu3::ConverterTypes {
+  using BundleToSeqexConverter = seqex_stu3::UnprofiledBundleToSeqexConverter;
 
+  constexpr static auto& observation_part_of_field() { return "basedOn"; }
+  constexpr static auto& encounter_reason_code_field() { return "reason"; }
+  constexpr static auto& condition_recorded_date() { return "assertedDate"; }
+
+  constexpr static auto& config_path() {
+    return "/com_google_fhir/proto/stu3/version_config.textproto";
+  }
+
+  template <typename Resource>
+  static void AddContainedResource(const google::protobuf::Message& contained,
+                                   Resource* resource) {
+    CHECK(SetContainedResource(contained, resource->add_contained()).ok());
+  }
+};
+
+struct R4ConverterTestEnv : public testutil::R4CoreTestEnv,
+                            public seqex_r4::ConverterTypes {
+  using BundleToSeqexConverter = seqex_r4::UnprofiledBundleToSeqexConverter;
+
+  constexpr static auto& observation_part_of_field() { return "partOf"; }
+  constexpr static auto& encounter_reason_code_field() { return "reasonCode"; }
+  constexpr static auto& condition_recorded_date() { return "recordedDate"; }
+  constexpr static auto& config_path() {
+    return "/com_google_fhir/proto/r4/version_config.textproto";
+  }
+
+  template <typename Resource>
+  static void AddContainedResource(const google::protobuf::Message& child,
+                                   Resource* parent) {
+    using ContainedResource = BUNDLE_CONTAINED_RESOURCE(Bundle);
+    ContainedResource contained_resource;
+    CHECK(SetContainedResource(child, &contained_resource).ok());
+    parent->add_contained()->PackFrom(contained_resource);
+  }
+};
+
+template <typename FhirTestEnv>
 class BundleToSeqexConverterTest : public ::testing::Test {
  public:
   void SetUp() override {
     TF_CHECK_OK(::tensorflow::ReadTextProto(
         ::tensorflow::Env::Default(),
-        absl::StrCat(
-            getenv("TEST_SRCDIR"),
-            "/com_google_fhir/proto/stu3/version_config.textproto"),
+        absl::StrCat(getenv("TEST_SRCDIR"), FhirTestEnv::config_path()),
         &fhir_version_config_));
-    parser_.AllowPartialMessage(true);
     // Reset command line flags to default values between tests.
     absl::SetFlag(&FLAGS_tokenize_code_text_features, true);
     absl::SetFlag(&FLAGS_trigger_time_redacted_features, "");
     tokenizer_ = TextTokenizer::FromFlags();
   }
 
-  void PerformTest(const std::string& input_key, const Bundle& bundle,
-                   const std::vector<TriggerLabelsPair>& trigger_labels_pair,
+  void PerformTest(const std::string& input_key,
+                   const typename FhirTestEnv::Bundle& bundle,
+                   const std::vector<typename FhirTestEnv::TriggerLabelsPair>&
+                       trigger_labels_pair,
                    const std::map<std::string, SequenceExample>& expected) {
     // Until all config options for this object can be passed as args, we need
     // to initialize it after overriing the flags settings.
-    BundleToSeqexConverter<seqex_stu3::ConverterTypes, stu3::proto::Bundle>
-        converter(fhir_version_config_, tokenizer_,
-                  false /* enable_attribution */,
-                  false /* generate_sequence_label */);
+    typename FhirTestEnv::BundleToSeqexConverter converter(
+        this->fhir_version_config_, this->tokenizer_,
+        false /* enable_attribution */, false /* generate_sequence_label */);
     std::map<std::string, int> counter_stats;
     ASSERT_TRUE(converter.Begin(input_key, bundle, trigger_labels_pair,
                                 &counter_stats));
     for (const auto& iter : expected) {
       EXPECT_EQ(converter.ExampleKey(), iter.first);
-      EXPECT_THAT(converter.GetExample(), EqualsProto(iter.second))
+      EXPECT_THAT(converter.GetExample(),
+                  EqualsProtoIgnoringReordering(iter.second))
           << "\nfor key: " << converter.ExampleKey();
       ASSERT_TRUE(converter.Next());
     }
@@ -100,351 +138,390 @@ class BundleToSeqexConverterTest : public ::testing::Test {
   google::protobuf::TextFormat::Parser parser_;
 };
 
-TEST_F(BundleToSeqexConverterTest, TestMultipleResources) {
-  EventTrigger trigger;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time {
-      value_us: 1420102800000000
-      precision: SECOND
-      timezone: "America/New_York"
-    }
-    source { encounter_id { value: "1" } }
-  )proto", &trigger));
-  std::vector<TriggerLabelsPair> trigger_labels_pair({{trigger, {}}});
-  Bundle bundle;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        patient {
-          id { value: "14" }
-          birth_date {
-            value_us: -1323388800000000
-            precision: DAY
-            timezone: "America/New_York"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        condition {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          code {
-            coding {
-              system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
-              code { value: "bar" }
-            }
-          }
-          asserted_date {
-            value_us: 1417392000000000  # "2014-12-01T00:00:00+00:00"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        condition {
-          id { value: "2" }
-          subject { patient_id { value: "14" } }
-          code {
-            coding {
-              system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
-              code { value: "baz" }
-            }
-          }
-          asserted_date {
-            value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        composition {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          encounter { encounter_id { value: "1" } }
-          section { text { div { value: "test text" } } }
-          date { value_us: 1420102800000000 timezone: "UTC" precision: SECOND }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          class_value {
-            system { value: "http://hl7.org/fhir/v3/ActCode" }
-            code { value: "IMP" }
-          }
-          reason {
-            coding {
-              system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
-              code { value: "191.4" }
-              display { value: "Malignant neoplasm of occipital lobe" }
-            }
-          }
-          period {
-            start {
-              value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
-            }
-            end {
-              value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
-            }
-          }
-        }
-      }
-    })proto", &bundle));
+using TestEnvs = ::testing::Types<Stu3ConverterTestEnv, R4ConverterTestEnv>;
+TYPED_TEST_SUITE(BundleToSeqexConverterTest, TestEnvs);
 
-  SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
-      R"proto(
-        context: {
-          feature: {
-            key: "Patient.birthDate"
-            value { int64_list { value: -1323388800 } }
-          }
-          feature {
-            key: "currentEncounterId"
-            value { int64_list { value: 1420099200 } }
-          }
-          feature {
-            key: "patientId"
-            value { bytes_list { value: "14" } }
-          }
-          feature {
-            key: "sequenceLength"
-            value { int64_list { value: 5 } }
-          }
-          feature {
-            key: "timestamp"
-            value { int64_list { value: 1420102800 } }
-          }
-        }
-        feature_lists: {
-          feature_list {
-            key: "Composition.date"
-            value {
-              feature { int64_list {} }
-              feature { int64_list {} }
-              feature { int64_list {} }
-              feature { int64_list { value: 1420102800 } }
-              feature { int64_list {} }
-            }
-          }
-          feature_list {
-            key: "Composition.meta.lastUpdated"
-            value {
-              feature { int64_list {} }
-              feature { int64_list {} }
-              feature { int64_list {} }
-              feature { int64_list { value: 1420102800 } }
-              feature { int64_list {} }
-            }
-          }
-          feature_list {
-            key: "Composition.section.text.div.tokenized"
-            value {
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-              feature { bytes_list { value: "test" value: "text" } }
-              feature { bytes_list {} }
-            }
-          }
-          feature_list {
-            key: "Condition.meta.lastUpdated"
-            value {
-              feature { int64_list { value: 1417392000 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list {} }
-              feature { int64_list {} }
-              feature { int64_list {} }
-            }
-          }
-          feature_list {
-            key: "Condition.code.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
-            value {
-              feature { bytes_list { value: "bar" } }
-              feature { bytes_list { value: "baz" } }
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-            }
-          }
-          feature_list {
-            key: "Condition.assertedDate"
-            value {
-              feature { int64_list { value: 1417392000 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list {} }
-              feature { int64_list {} }
-              feature { int64_list {} }
-            }
-          }
-          feature_list {
-            key: "Encounter.meta.lastUpdated"
-            value {
-              feature { int64_list {} }
-              feature { int64_list {} }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list {} }
-              feature { int64_list { value: 1420102800 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.class"
-            value {
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-              feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
-              }
-              feature { bytes_list {} }
-              feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
-              }
-            }
-          }
-          feature_list {
-            key: "Encounter.period.end"
-            value {
-              feature { int64_list {} }
-              feature { int64_list {} }
-              feature { int64_list {} }
-              feature { int64_list {} }
-              feature { int64_list { value: 1420102800 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.period.start"
-            value {
-              feature { int64_list {} }
-              feature { int64_list {} }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list {} }
-              feature { int64_list { value: 1420099200 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
-            value {
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-              feature { bytes_list { value: "191.4" } }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
-            value {
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-              feature {
-                bytes_list {
-                  value: "malignant"
-                  value: "neoplasm"
-                  value: "of"
-                  value: "occipital"
-                  value: "lobe"
+TYPED_TEST(BundleToSeqexConverterTest, TestMultipleResources) {
+  typename TypeParam::EventTrigger trigger;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      event_time {
+                                        value_us: 1420102800000000
+                                        precision: SECOND
+                                        timezone: "America/New_York"
+                                      }
+                                      source { encounter_id { value: "1" } }
+                                    )proto",
+                                    &trigger));
+  std::vector<typename TypeParam::TriggerLabelsPair> trigger_labels_pair(
+      {{trigger, {}}});
+  typename TypeParam::Bundle bundle;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      absl::Substitute(
+          R"proto(
+            entry {
+              resource {
+                patient {
+                  id { value: "14" }
+                  birth_date {
+                    value_us: -1323388800000000
+                    precision: DAY
+                    timezone: "America/New_York"
+                  }
                 }
               }
             }
-          }
-          feature_list {
-            key: "encounterId"
-            value {
-              feature { int64_list { value: 1417392000 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420099200 } }
+            entry {
+              resource {
+                condition {
+                  id { value: "1" }
+                  subject { patient_id { value: "14" } }
+                  code {
+                    coding {
+                      system {
+                        value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis"
+                      }
+                      code { value: "bar" }
+                    }
+                  }
+                  $1 {
+                    value_us: 1417392000000000  # "2014-12-01T00:00:00+00:00"
+                  }
+                }
+              }
             }
-          }
-          feature_list {
-            key: "eventId"
-            value {
-              feature { int64_list { value: 1417392000 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420102800 } }
-              feature { int64_list { value: 1420102800 } }
+            entry {
+              resource {
+                condition {
+                  id { value: "2" }
+                  subject { patient_id { value: "14" } }
+                  code {
+                    coding {
+                      system {
+                        value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis"
+                      }
+                      code { value: "baz" }
+                    }
+                  }
+                  $1 {
+                    value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
+                  }
+                }
+              }
             }
-          }
-        })proto",
+            entry {
+              resource {
+                composition {
+                  id { value: "1" }
+                  subject { patient_id { value: "14" } }
+                  encounter { encounter_id { value: "1" } }
+                  section { text { div { value: "test text" } } }
+                  date {
+                    value_us: 1420102800000000
+                    timezone: "UTC"
+                    precision: SECOND
+                  }
+                }
+              }
+            }
+            entry {
+              resource {
+                encounter {
+                  id { value: "1" }
+                  subject { patient_id { value: "14" } }
+                  class_value {
+                    system { value: "http://hl7.org/fhir/v3/ActCode" }
+                    code { value: "IMP" }
+                  }
+                  $2 {
+                    coding {
+                      system {
+                        value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis"
+                      }
+                      code { value: "191.4" }
+                      display { value: "Malignant neoplasm of occipital lobe" }
+                    }
+                  }
+                  period {
+                    start {
+                      value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
+                    }
+                    end {
+                      value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            }
+          )proto",
+          ToSnakeCase(TypeParam::observation_part_of_field()),
+          ToSnakeCase(TypeParam::condition_recorded_date()),
+          ToSnakeCase(TypeParam::encounter_reason_code_field())),
+      &bundle));
+
+  SequenceExample seqex;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      absl::Substitute(
+          R"proto(
+            context: {
+              feature: {
+                key: "Patient.birthDate"
+                value { int64_list { value: -1323388800 } }
+              }
+              feature {
+                key: "currentEncounterId"
+                value { int64_list { value: 1420099200 } }
+              }
+              feature {
+                key: "patientId"
+                value { bytes_list { value: "14" } }
+              }
+              feature {
+                key: "sequenceLength"
+                value { int64_list { value: 5 } }
+              }
+              feature {
+                key: "timestamp"
+                value { int64_list { value: 1420102800 } }
+              }
+            }
+            feature_lists: {
+              feature_list {
+                key: "Composition.date"
+                value {
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                  feature { int64_list { value: 1420102800 } }
+                  feature { int64_list {} }
+                }
+              }
+              feature_list {
+                key: "Composition.meta.lastUpdated"
+                value {
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                  feature { int64_list { value: 1420102800 } }
+                  feature { int64_list {} }
+                }
+              }
+              feature_list {
+                key: "Composition.section.text.div.tokenized"
+                value {
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                  feature { bytes_list { value: "test" value: "text" } }
+                  feature { bytes_list {} }
+                }
+              }
+              feature_list {
+                key: "Condition.meta.lastUpdated"
+                value {
+                  feature { int64_list { value: 1417392000 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                }
+              }
+              feature_list {
+                key: "Condition.code.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+                value {
+                  feature { bytes_list { value: "bar" } }
+                  feature { bytes_list { value: "baz" } }
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                }
+              }
+              feature_list {
+                key: "Condition.$1"
+                value {
+                  feature { int64_list { value: 1417392000 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                }
+              }
+              feature_list {
+                key: "Encounter.meta.lastUpdated"
+                value {
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list {} }
+                  feature { int64_list { value: 1420102800 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.class"
+                value {
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                  feature { bytes_list {} }
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                }
+              }
+              feature_list {
+                key: "Encounter.period.end"
+                value {
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                  feature { int64_list { value: 1420102800 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.period.start"
+                value {
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list {} }
+                  feature { int64_list { value: 1420099200 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.$2.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+                value {
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                  feature { bytes_list { value: "191.4" } }
+                }
+              }
+              feature_list {
+                key: "Encounter.$2.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+                value {
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                  feature {
+                    bytes_list {
+                      value: "malignant"
+                      value: "neoplasm"
+                      value: "of"
+                      value: "occipital"
+                      value: "lobe"
+                    }
+                  }
+                }
+              }
+              feature_list {
+                key: "encounterId"
+                value {
+                  feature { int64_list { value: 1417392000 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420099200 } }
+                }
+              }
+              feature_list {
+                key: "eventId"
+                value {
+                  feature { int64_list { value: 1417392000 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420102800 } }
+                  feature { int64_list { value: 1420102800 } }
+                }
+              }
+            })proto",
+          TypeParam::observation_part_of_field(),
+          TypeParam::condition_recorded_date(),
+          TypeParam::encounter_reason_code_field()),
       &seqex));
 
-  PerformTest("Patient/14", bundle, trigger_labels_pair,
-              {{"Patient/14:0-5@1420102800:Encounter/1", seqex}});
+  this->PerformTest("Patient/14", bundle, trigger_labels_pair,
+                    {{"Patient/14:0-5@1420102800:Encounter/1", seqex}});
 }
 
 // Test the case where multiple triggers have the exact same timestamp, but are
 // associated with different source encounters.
-TEST_F(BundleToSeqexConverterTest, MultipleLabelsSameTimestamp) {
-  EventTrigger trigger1;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time { value_us: 1420099200000000 }
-    source { encounter_id { value: "1" } }
-  )proto", &trigger1));
-  EventTrigger trigger2;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time { value_us: 1420101000000000 }
-    source { encounter_id { value: "3" } }
-  )proto", &trigger2));
-  EventTrigger trigger3;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time { value_us: 1420099200000000 }
-    source { encounter_id { value: "2" } }
-  )proto", &trigger3));
-  std::vector<TriggerLabelsPair> trigger_labels_pair(
+TYPED_TEST(BundleToSeqexConverterTest, MultipleLabelsSameTimestamp) {
+  typename TypeParam::EventTrigger trigger1;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      event_time { value_us: 1420099200000000 }
+                                      source { encounter_id { value: "1" } }
+                                    )proto",
+                                    &trigger1));
+  typename TypeParam::EventTrigger trigger2;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      event_time { value_us: 1420101000000000 }
+                                      source { encounter_id { value: "3" } }
+                                    )proto",
+                                    &trigger2));
+  typename TypeParam::EventTrigger trigger3;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      event_time { value_us: 1420099200000000 }
+                                      source { encounter_id { value: "2" } }
+                                    )proto",
+                                    &trigger3));
+  std::vector<typename TypeParam::TriggerLabelsPair> trigger_labels_pair(
       {{trigger1, {}}, {trigger2, {}}, {trigger3, {}}});
 
-  Bundle bundle;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        patient {
-          id { value: "14" }
-          birth_date {
-            value_us: -1323388800000000
-            precision: DAY
-            timezone: "America/New_York"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          class_value {
-            system { value: "http://hl7.org/fhir/v3/ActCode" }
-            code { value: "IMP" }
-          }
-          reason {
-            coding {
-              system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
-              code { value: "191.4" }
-              display { value: "Malignant neoplasm of occipital lobe" }
+  typename TypeParam::Bundle bundle;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      absl::Substitute(
+          R"proto(
+            entry {
+              resource {
+                patient {
+                  id { value: "14" }
+                  birth_date {
+                    value_us: -1323388800000000
+                    precision: DAY
+                    timezone: "America/New_York"
+                  }
+                }
+              }
             }
-          }
-          period {
-            start {
-              value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
-            }
-            end {
-              value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
-            }
-          }
-        }
-      }
-    })proto", &bundle));
+            entry {
+              resource {
+                encounter {
+                  id { value: "1" }
+                  subject { patient_id { value: "14" } }
+                  class_value {
+                    system { value: "http://hl7.org/fhir/v3/ActCode" }
+                    code { value: "IMP" }
+                  }
+                  $0 {
+                    coding {
+                      system {
+                        value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis"
+                      }
+                      code { value: "191.4" }
+                      display { value: "Malignant neoplasm of occipital lobe" }
+                    }
+                  }
+                  period {
+                    start {
+                      value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
+                    }
+                    end {
+                      value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            })proto",
+          ToSnakeCase(TypeParam::encounter_reason_code_field())),
+      &bundle));
 
   std::string seqex_tmpl = R"(
       context: {
@@ -485,11 +562,11 @@ TEST_F(BundleToSeqexConverterTest, MultipleLabelsSameTimestamp) {
           value { feature { int64_list { value: 1420099200 } } }
         }
         feature_list {
-          key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+          key: "Encounter.$2.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
           value { feature { bytes_list { } } }
         }
         feature_list {
-          key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+          key: "Encounter.$2.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
           value { feature { bytes_list { } } }
         }
         feature_list {
@@ -502,62 +579,71 @@ TEST_F(BundleToSeqexConverterTest, MultipleLabelsSameTimestamp) {
         }
       })";
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
-      absl::Substitute(seqex_tmpl, "", "1420099200"), &seqex));
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      absl::Substitute(seqex_tmpl, "", "1420099200",
+                       TypeParam::encounter_reason_code_field()),
+      &seqex));
   SequenceExample seqex2;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
-      absl::Substitute(seqex_tmpl, "", "1420101000"), &seqex2));
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      absl::Substitute(seqex_tmpl, "", "1420101000",
+                       TypeParam::encounter_reason_code_field()),
+      &seqex2));
 
-  PerformTest("Patient/14", bundle, trigger_labels_pair,
-              {{"Patient/14:0-1@1420099200:Encounter/1", seqex},
-               {"Patient/14:0-1@1420099200:Encounter/2", seqex},
-               {"Patient/14:0-1@1420101000:Encounter/3", seqex2}});
+  this->PerformTest("Patient/14", bundle, trigger_labels_pair,
+                    {{"Patient/14:0-1@1420099200:Encounter/1", seqex},
+                     {"Patient/14:0-1@1420099200:Encounter/2", seqex},
+                     {"Patient/14:0-1@1420101000:Encounter/3", seqex2}});
 }
 
-TEST_F(BundleToSeqexConverterTest, TestClassLabel) {
-  EventTrigger trigger;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time { value_us: 1420444800000000 }
-    source { encounter_id { value: "1" } }
-  )proto", &trigger));
-  std::vector<TriggerLabelsPair> trigger_labels_pair({{trigger, {}}});
-  Bundle bundle;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        patient {
-          id { value: "14" }
-          birth_date {
-            value_us: -1323388800000000
-            precision: DAY
-            timezone: "America/New_York"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          class_value {
-            system { value: "http://hl7.org/fhir/v3/ActCode" }
-            code { value: "IMP" }
-          }
-          period {
-            start {
-              value_us: 1420444800000000  # "2015-01-05T08:00:00+00:00"
-            }
-            end {
-              value_us: 1420455600000000  # "2015-01-05T11:00:00+00:00"
+TYPED_TEST(BundleToSeqexConverterTest, TestClassLabel) {
+  typename TypeParam::EventTrigger trigger;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      event_time { value_us: 1420444800000000 }
+                                      source { encounter_id { value: "1" } }
+                                    )proto",
+                                    &trigger));
+  std::vector<typename TypeParam::TriggerLabelsPair> trigger_labels_pair(
+      {{trigger, {}}});
+  typename TypeParam::Bundle bundle;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      R"proto(
+        entry {
+          resource {
+            patient {
+              id { value: "14" }
+              birth_date {
+                value_us: -1323388800000000
+                precision: DAY
+                timezone: "America/New_York"
+              }
             }
           }
         }
-      }
-    })proto", &bundle));
+        entry {
+          resource {
+            encounter {
+              id { value: "1" }
+              subject { patient_id { value: "14" } }
+              class_value {
+                system { value: "http://hl7.org/fhir/v3/ActCode" }
+                code { value: "IMP" }
+              }
+              period {
+                start {
+                  value_us: 1420444800000000  # "2015-01-05T08:00:00+00:00"
+                }
+                end {
+                  value_us: 1420455600000000  # "2015-01-05T11:00:00+00:00"
+                }
+              }
+            }
+          }
+        })proto",
+      &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+  ASSERT_TRUE(this->parser_.ParseFromString(
       R"proto(
         context: {
           feature {
@@ -613,69 +699,70 @@ TEST_F(BundleToSeqexConverterTest, TestClassLabel) {
         })proto",
       &seqex));
 
-  PerformTest("Patient/14", bundle, trigger_labels_pair,
-              {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
+  this->PerformTest("Patient/14", bundle, trigger_labels_pair,
+                    {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
 }
 
-TEST_F(BundleToSeqexConverterTest, TestBooleanLabelTrue) {
-  EventTrigger trigger;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time { value_us: 1420444800000000 }
-    source { encounter_id { value: "1" } }
-  )proto", &trigger));
-  stu3::google::EventLabel label;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    type {
-      system { value: "test_boolean_system" }
-      code { value: "test_boolean_label" }
-    }
-    event_time { value_us: 1420444800000000 }
-    label {
-      class_value {
-        boolean {
-          value: 1
+TYPED_TEST(BundleToSeqexConverterTest, TestBooleanLabelTrue) {
+  typename TypeParam::EventTrigger trigger;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      event_time { value_us: 1420444800000000 }
+                                      source { encounter_id { value: "1" } }
+                                    )proto",
+                                    &trigger));
+  typename TypeParam::EventLabel label;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      R"proto(
+        type {
+          system { value: "test_boolean_system" }
+          code { value: "test_boolean_label" }
         }
-      }
-    }
-  )proto", &label));
-  std::vector<TriggerLabelsPair> trigger_labels_pair({{trigger, {label}}});
-  Bundle bundle;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        patient {
-          id { value: "14" }
-          birth_date {
-            value_us: -1323388800000000
-            precision: DAY
-            timezone: "America/New_York"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          class_value {
-            system { value: "http://hl7.org/fhir/v3/ActCode" }
-            code { value: "IMP" }
-          }
-          period {
-            start {
-              value_us: 1420444800000000  # "2015-01-05T08:00:00+00:00"
-            }
-            end {
-              value_us: 1420455600000000  # "2015-01-05T11:00:00+00:00"
+        event_time { value_us: 1420444800000000 }
+        label { class_value { boolean { value: 1 } } }
+      )proto",
+      &label));
+  std::vector<typename TypeParam::TriggerLabelsPair> trigger_labels_pair(
+      {{trigger, {label}}});
+  typename TypeParam::Bundle bundle;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      R"proto(
+        entry {
+          resource {
+            patient {
+              id { value: "14" }
+              birth_date {
+                value_us: -1323388800000000
+                precision: DAY
+                timezone: "America/New_York"
+              }
             }
           }
         }
-      }
-    })proto", &bundle));
+        entry {
+          resource {
+            encounter {
+              id { value: "1" }
+              subject { patient_id { value: "14" } }
+              class_value {
+                system { value: "http://hl7.org/fhir/v3/ActCode" }
+                code { value: "IMP" }
+              }
+              period {
+                start {
+                  value_us: 1420444800000000  # "2015-01-05T08:00:00+00:00"
+                }
+                end {
+                  value_us: 1420455600000000  # "2015-01-05T11:00:00+00:00"
+                }
+              }
+            }
+          }
+        })proto",
+      &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+  ASSERT_TRUE(this->parser_.ParseFromString(
       R"proto(
         context: {
           feature {
@@ -743,69 +830,70 @@ TEST_F(BundleToSeqexConverterTest, TestBooleanLabelTrue) {
         })proto",
       &seqex));
 
-  PerformTest("Patient/14", bundle, trigger_labels_pair,
-              {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
+  this->PerformTest("Patient/14", bundle, trigger_labels_pair,
+                    {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
 }
 
-TEST_F(BundleToSeqexConverterTest, TestBooleanLabelFalse) {
-  EventTrigger trigger;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time { value_us: 1420444800000000 }
-    source { encounter_id { value: "1" } }
-  )proto", &trigger));
-  stu3::google::EventLabel label;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    type {
-      system { value: "test_boolean_system" }
-      code { value: "test_boolean_label" }
-    }
-    event_time { value_us: 1420444800000000 }
-    label {
-      class_value {
-        boolean {
-          value: 0
+TYPED_TEST(BundleToSeqexConverterTest, TestBooleanLabelFalse) {
+  typename TypeParam::EventTrigger trigger;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      event_time { value_us: 1420444800000000 }
+                                      source { encounter_id { value: "1" } }
+                                    )proto",
+                                    &trigger));
+  typename TypeParam::EventLabel label;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      R"proto(
+        type {
+          system { value: "test_boolean_system" }
+          code { value: "test_boolean_label" }
         }
-      }
-    }
-  )proto", &label));
-  std::vector<TriggerLabelsPair> trigger_labels_pair({{trigger, {label}}});
-  Bundle bundle;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        patient {
-          id { value: "14" }
-          birth_date {
-            value_us: -1323388800000000
-            precision: DAY
-            timezone: "America/New_York"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          class_value {
-            system { value: "http://hl7.org/fhir/v3/ActCode" }
-            code { value: "IMP" }
-          }
-          period {
-            start {
-              value_us: 1420444800000000  # "2015-01-05T08:00:00+00:00"
-            }
-            end {
-              value_us: 1420455600000000  # "2015-01-05T11:00:00+00:00"
+        event_time { value_us: 1420444800000000 }
+        label { class_value { boolean { value: 0 } } }
+      )proto",
+      &label));
+  std::vector<typename TypeParam::TriggerLabelsPair> trigger_labels_pair(
+      {{trigger, {label}}});
+  typename TypeParam::Bundle bundle;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      R"proto(
+        entry {
+          resource {
+            patient {
+              id { value: "14" }
+              birth_date {
+                value_us: -1323388800000000
+                precision: DAY
+                timezone: "America/New_York"
+              }
             }
           }
         }
-      }
-    })proto", &bundle));
+        entry {
+          resource {
+            encounter {
+              id { value: "1" }
+              subject { patient_id { value: "14" } }
+              class_value {
+                system { value: "http://hl7.org/fhir/v3/ActCode" }
+                code { value: "IMP" }
+              }
+              period {
+                start {
+                  value_us: 1420444800000000  # "2015-01-05T08:00:00+00:00"
+                }
+                end {
+                  value_us: 1420455600000000  # "2015-01-05T11:00:00+00:00"
+                }
+              }
+            }
+          }
+        })proto",
+      &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+  ASSERT_TRUE(this->parser_.ParseFromString(
       R"proto(
         context: {
           feature {
@@ -873,86 +961,77 @@ TEST_F(BundleToSeqexConverterTest, TestBooleanLabelFalse) {
         })proto",
       &seqex));
 
-  PerformTest("Patient/14", bundle, trigger_labels_pair,
-              {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
+  this->PerformTest("Patient/14", bundle, trigger_labels_pair,
+                    {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
 }
 
-TEST_F(BundleToSeqexConverterTest, TestClassNameWithClassValueBoolean) {
-  EventTrigger trigger;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time { value_us: 1420444800000000 }
-    source { encounter_id { value: "1" } }
-  )proto", &trigger));
-  stu3::google::EventLabel label;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    type {
-      system { value: "test_system" }
-      code { value: "code1" }
-    }
-    event_time { value_us: 1420444800000000 }
-    label {
-      class_name {
-        code {
-          value: "value1"
-        }
-      }
-      class_value {
-        boolean {
-          value: 0
-        }
-      }
-    }
-    label {
-      class_name {
-        code {
-          value: "value2"
-        }
-      }
-      class_value {
-        boolean {
-          value: 1
-        }
-      }
-    }
-  )proto", &label));
-  std::vector<TriggerLabelsPair> trigger_labels_pair({{trigger, {label}}});
-  Bundle bundle;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        patient {
-          id { value: "14" }
-          birth_date {
-            value_us: -1323388800000000
-            precision: DAY
-            timezone: "America/New_York"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          class_value {
-            system { value: "http://hl7.org/fhir/v3/ActCode" }
-            code { value: "IMP" }
-          }
-          period {
-            start {
-              value_us: 1420444800000000  # "2015-01-05T08:00:00+00:00"
-            }
-            end {
-              value_us: 1420455600000000  # "2015-01-05T11:00:00+00:00"
+TYPED_TEST(BundleToSeqexConverterTest, TestClassNameWithClassValueBoolean) {
+  typename TypeParam::EventTrigger trigger;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      event_time { value_us: 1420444800000000 }
+                                      source { encounter_id { value: "1" } }
+                                    )proto",
+                                    &trigger));
+  typename TypeParam::EventLabel label;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      type {
+                                        system { value: "test_system" }
+                                        code { value: "code1" }
+                                      }
+                                      event_time { value_us: 1420444800000000 }
+                                      label {
+                                        class_name { code { value: "value1" } }
+                                        class_value { boolean { value: 0 } }
+                                      }
+                                      label {
+                                        class_name { code { value: "value2" } }
+                                        class_value { boolean { value: 1 } }
+                                      }
+                                    )proto",
+                                    &label));
+  std::vector<typename TypeParam::TriggerLabelsPair> trigger_labels_pair(
+      {{trigger, {label}}});
+  typename TypeParam::Bundle bundle;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      R"proto(
+        entry {
+          resource {
+            patient {
+              id { value: "14" }
+              birth_date {
+                value_us: -1323388800000000
+                precision: DAY
+                timezone: "America/New_York"
+              }
             }
           }
         }
-      }
-    })proto", &bundle));
+        entry {
+          resource {
+            encounter {
+              id { value: "1" }
+              subject { patient_id { value: "14" } }
+              class_value {
+                system { value: "http://hl7.org/fhir/v3/ActCode" }
+                code { value: "IMP" }
+              }
+              period {
+                start {
+                  value_us: 1420444800000000  # "2015-01-05T08:00:00+00:00"
+                }
+                end {
+                  value_us: 1420455600000000  # "2015-01-05T11:00:00+00:00"
+                }
+              }
+            }
+          }
+        })proto",
+      &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+  ASSERT_TRUE(this->parser_.ParseFromString(
       R"proto(
         context: {
           feature {
@@ -1020,76 +1099,71 @@ TEST_F(BundleToSeqexConverterTest, TestClassNameWithClassValueBoolean) {
         })proto",
       &seqex));
 
-  PerformTest("Patient/14", bundle, trigger_labels_pair,
-              {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
+  this->PerformTest("Patient/14", bundle, trigger_labels_pair,
+                    {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
 }
 
-TEST_F(BundleToSeqexConverterTest, TestBooleanLabelMultiple) {
-  EventTrigger trigger;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time { value_us: 1420444800000000 }
-    source { encounter_id { value: "1" } }
-  )proto", &trigger));
-  stu3::google::EventLabel label;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    type {
-      system { value: "test_boolean_system" }
-      code { value: "test_boolean_label" }
-    }
-    event_time { value_us: 1420444800000000 }
-    label {
-      class_value {
-        boolean {
-          value: 0
+TYPED_TEST(BundleToSeqexConverterTest, TestBooleanLabelMultiple) {
+  typename TypeParam::EventTrigger trigger;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      event_time { value_us: 1420444800000000 }
+                                      source { encounter_id { value: "1" } }
+                                    )proto",
+                                    &trigger));
+  typename TypeParam::EventLabel label;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      R"proto(
+        type {
+          system { value: "test_boolean_system" }
+          code { value: "test_boolean_label" }
         }
-      }
-    }
-    label {
-      class_value {
-        boolean {
-          value: 1
-        }
-      }
-    }
-  )proto", &label));
-  std::vector<TriggerLabelsPair> trigger_labels_pair({{trigger, {label}}});
-  Bundle bundle;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        patient {
-          id { value: "14" }
-          birth_date {
-            value_us: -1323388800000000
-            precision: DAY
-            timezone: "America/New_York"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          class_value {
-            system { value: "http://hl7.org/fhir/v3/ActCode" }
-            code { value: "IMP" }
-          }
-          period {
-            start {
-              value_us: 1420444800000000  # "2015-01-05T08:00:00+00:00"
-            }
-            end {
-              value_us: 1420455600000000  # "2015-01-05T11:00:00+00:00"
+        event_time { value_us: 1420444800000000 }
+        label { class_value { boolean { value: 0 } } }
+        label { class_value { boolean { value: 1 } } }
+      )proto",
+      &label));
+  std::vector<typename TypeParam::TriggerLabelsPair> trigger_labels_pair(
+      {{trigger, {label}}});
+  typename TypeParam::Bundle bundle;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      R"proto(
+        entry {
+          resource {
+            patient {
+              id { value: "14" }
+              birth_date {
+                value_us: -1323388800000000
+                precision: DAY
+                timezone: "America/New_York"
+              }
             }
           }
         }
-      }
-    })proto", &bundle));
+        entry {
+          resource {
+            encounter {
+              id { value: "1" }
+              subject { patient_id { value: "14" } }
+              class_value {
+                system { value: "http://hl7.org/fhir/v3/ActCode" }
+                code { value: "IMP" }
+              }
+              period {
+                start {
+                  value_us: 1420444800000000  # "2015-01-05T08:00:00+00:00"
+                }
+                end {
+                  value_us: 1420455600000000  # "2015-01-05T11:00:00+00:00"
+                }
+              }
+            }
+          }
+        })proto",
+      &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+  ASSERT_TRUE(this->parser_.ParseFromString(
       R"proto(
         context: {
           feature {
@@ -1157,71 +1231,78 @@ TEST_F(BundleToSeqexConverterTest, TestBooleanLabelMultiple) {
         })proto",
       &seqex));
 
-  PerformTest("Patient/14", bundle, trigger_labels_pair,
-              {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
+  this->PerformTest("Patient/14", bundle, trigger_labels_pair,
+                    {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
 }
 
-TEST_F(BundleToSeqexConverterTest, TestDateTimeLabel) {
-  EventTrigger trigger;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time { value_us: 1420444800000000 }
-    source { encounter_id { value: "1" } }
-  )proto", &trigger));
-  stu3::google::EventLabel label;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    type {
-      system { value: "test_datetime_system" }
-      code { value: "test_datetime_label" }
-    }
-    event_time { value_us: 1420444800000000 }
-    label {
-      class_value {
-        date_time {
-          value_us: 1515980100000000  # Monday, January 15, 2018 1:35:00 AM
-          timezone: "UTC"
-          precision: DAY
+TYPED_TEST(BundleToSeqexConverterTest, TestDateTimeLabel) {
+  typename TypeParam::EventTrigger trigger;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      event_time { value_us: 1420444800000000 }
+                                      source { encounter_id { value: "1" } }
+                                    )proto",
+                                    &trigger));
+  typename TypeParam::EventLabel label;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      R"proto(
+        type {
+          system { value: "test_datetime_system" }
+          code { value: "test_datetime_label" }
         }
-      }
-    }
-  )proto", &label));
-  std::vector<TriggerLabelsPair> trigger_labels_pair({{trigger, {label}}});
-  Bundle bundle;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        patient {
-          id { value: "14" }
-          birth_date {
-            value_us: -1323388800000000
-            precision: DAY
-            timezone: "America/New_York"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
+        event_time { value_us: 1420444800000000 }
+        label {
           class_value {
-            system { value: "http://hl7.org/fhir/v3/ActCode" }
-            code { value: "IMP" }
-          }
-          period {
-            start {
-              value_us: 1420444800000000  # "2015-01-05T08:00:00+00:00"
-            }
-            end {
-              value_us: 1420455600000000  # "2015-01-05T11:00:00+00:00"
+            date_time {
+              value_us: 1515980100000000  # Monday, January 15, 2018 1:35:00 AM
+              timezone: "UTC"
+              precision: DAY
             }
           }
         }
-      }
-    })proto", &bundle));
+      )proto",
+      &label));
+  std::vector<typename TypeParam::TriggerLabelsPair> trigger_labels_pair(
+      {{trigger, {label}}});
+  typename TypeParam::Bundle bundle;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      R"proto(
+        entry {
+          resource {
+            patient {
+              id { value: "14" }
+              birth_date {
+                value_us: -1323388800000000
+                precision: DAY
+                timezone: "America/New_York"
+              }
+            }
+          }
+        }
+        entry {
+          resource {
+            encounter {
+              id { value: "1" }
+              subject { patient_id { value: "14" } }
+              class_value {
+                system { value: "http://hl7.org/fhir/v3/ActCode" }
+                code { value: "IMP" }
+              }
+              period {
+                start {
+                  value_us: 1420444800000000  # "2015-01-05T08:00:00+00:00"
+                }
+                end {
+                  value_us: 1420455600000000  # "2015-01-05T11:00:00+00:00"
+                }
+              }
+            }
+          }
+        })proto",
+      &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+  ASSERT_TRUE(this->parser_.ParseFromString(
       R"proto(
         context: {
           feature {
@@ -1289,258 +1370,266 @@ TEST_F(BundleToSeqexConverterTest, TestDateTimeLabel) {
         })proto",
       &seqex));
 
-  PerformTest("Patient/14", bundle, trigger_labels_pair,
-              {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
+  this->PerformTest("Patient/14", bundle, trigger_labels_pair,
+                    {{"Patient/14:0-1@1420444800:Encounter/1", seqex}});
 }
 
-TEST_F(BundleToSeqexConverterTest, RedactedFeatures) {
-  absl::SetFlag(&FLAGS_trigger_time_redacted_features,
-                "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis");
+TYPED_TEST(BundleToSeqexConverterTest, RedactedFeatures) {
+  absl::SetFlag(
+      &FLAGS_trigger_time_redacted_features,
+      absl::Substitute("Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis",
+                       TypeParam::encounter_reason_code_field()));
 
-  EventTrigger trigger;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time {
-      value_us: 1420102800000000
-      precision: SECOND
-      timezone: "America/New_York"
-    }
-    source { encounter_id { value: "1" } }
-  )proto", &trigger));
-  std::vector<seqex_stu3::ConverterTypes::TriggerLabelsPair>
-      trigger_labels_pair({{trigger, {}}});
-  Bundle bundle;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        patient {
-          id { value: "14" }
-          birth_date {
-            value_us: -1323388800000000
-            precision: DAY
-            timezone: "America/New_York"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          class_value {
-            system { value: "http://hl7.org/fhir/v3/ActCode" }
-            code { value: "IMP" }
-          }
-          reason {
-            coding {
-              system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
-              code { value: "V410.9" }
-              display { value: "Standard issue" }
+  typename TypeParam::EventTrigger trigger;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      event_time {
+                                        value_us: 1420102800000000
+                                        precision: SECOND
+                                        timezone: "America/New_York"
+                                      }
+                                      source { encounter_id { value: "1" } }
+                                    )proto",
+                                    &trigger));
+  std::vector<typename TypeParam::TriggerLabelsPair> trigger_labels_pair(
+      {{trigger, {}}});
+  typename TypeParam::Bundle bundle;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      absl::Substitute(
+          R"proto(
+            entry {
+              resource {
+                patient {
+                  id { value: "14" }
+                  birth_date {
+                    value_us: -1323388800000000
+                    precision: DAY
+                    timezone: "America/New_York"
+                  }
+                }
+              }
             }
-          }
-          period {
-            start {
-              value_us: 1417420800000000  # "2014-12-01T08:00:00+00:00"
+            entry {
+              resource {
+                encounter {
+                  id { value: "1" }
+                  subject { patient_id { value: "14" } }
+                  class_value {
+                    system { value: "http://hl7.org/fhir/v3/ActCode" }
+                    code { value: "IMP" }
+                  }
+                  $0 {
+                    coding {
+                      system {
+                        value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis"
+                      }
+                      code { value: "V410.9" }
+                      display { value: "Standard issue" }
+                    }
+                  }
+                  period {
+                    start {
+                      value_us: 1417420800000000  # "2014-12-01T08:00:00+00:00"
+                    }
+                    end {
+                      value_us: 1417424400000000  # "2014-12-01T09:00:00+00:00"
+                    }
+                  }
+                }
+              }
             }
-            end {
-              value_us: 1417424400000000  # "2014-12-01T09:00:00+00:00"
-            }
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "2" }
-          subject { patient_id { value: "14" } }
-          class_value {
-            system { value: "http://hl7.org/fhir/v3/ActCode" }
-            code { value: "IMP" }
-          }
-          reason {
-            coding {
-              system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
-              code { value: "191.4" }
-              display { value: "Malignant neoplasm of occipital lobe" }
-            }
-          }
-          period {
-            start {
-              value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
-            }
-            end {
-              value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
-            }
-          }
-        }
-      }
-    })proto", &bundle));
+            entry {
+              resource {
+                encounter {
+                  id { value: "2" }
+                  subject { patient_id { value: "14" } }
+                  class_value {
+                    system { value: "http://hl7.org/fhir/v3/ActCode" }
+                    code { value: "IMP" }
+                  }
+                  $0 {
+                    coding {
+                      system {
+                        value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis"
+                      }
+                      code { value: "191.4" }
+                      display { value: "Malignant neoplasm of occipital lobe" }
+                    }
+                  }
+                  period {
+                    start {
+                      value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
+                    }
+                    end {
+                      value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            })proto",
+          ToSnakeCase(TypeParam::encounter_reason_code_field())),
+      &bundle));
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
-      R"proto(
-        context: {
-          feature {
-            key: "Patient.birthDate"
-            value { int64_list { value: -1323388800 } }
-          }
-          feature {
-            key: "currentEncounterId"
-            value { int64_list { value: 1420099200 } }
-          }
-          feature {
-            key: "patientId"
-            value { bytes_list { value: "14" } }
-          }
-          feature {
-            key: "sequenceLength"
-            value { int64_list { value: 4 } }
-          }
-          feature {
-            key: "timestamp"
-            value { int64_list { value: 1420102800 } }
-          }
-        }
-        feature_lists: {
-          feature_list: {
-            key: "Encounter.meta.lastUpdated"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417424400 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420102800 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.class"
-            value {
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      absl::Substitute(
+          R"proto(
+            context: {
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "Patient.birthDate"
+                value { int64_list { value: -1323388800 } }
               }
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "currentEncounterId"
+                value { int64_list { value: 1420099200 } }
               }
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "patientId"
+                value { bytes_list { value: "14" } }
               }
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "sequenceLength"
+                value { int64_list { value: 4 } }
+              }
+              feature {
+                key: "timestamp"
+                value { int64_list { value: 1420102800 } }
               }
             }
-          }
-          feature_list {
-            key: "Encounter.period.end"
-            value {
-              feature { int64_list {} }
-              feature { int64_list { value: 1417424400 } }
-              feature { int64_list {} }
-              feature { int64_list { value: 1420102800 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.period.start"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420099200 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
-            value {
-              feature { bytes_list {} }
-              feature { bytes_list { value: "V410.9" } }
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
-            value {
-              feature { bytes_list {} }
-              feature { bytes_list { value: "standard" value: "issue" } }
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-            }
-          }
-          feature_list {
-            key: "encounterId"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420099200 } }
-            }
-          }
-          feature_list {
-            key: "eventId"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417424400 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420102800 } }
-            }
-          }
-        })proto",
+            feature_lists: {
+              feature_list: {
+                key: "Encounter.meta.lastUpdated"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417424400 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420102800 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.class"
+                value {
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                }
+              }
+              feature_list {
+                key: "Encounter.period.end"
+                value {
+                  feature { int64_list {} }
+                  feature { int64_list { value: 1417424400 } }
+                  feature { int64_list {} }
+                  feature { int64_list { value: 1420102800 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.period.start"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420099200 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+                value {
+                  feature { bytes_list {} }
+                  feature { bytes_list { value: "V410.9" } }
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                }
+              }
+              feature_list {
+                key: "Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+                value {
+                  feature { bytes_list {} }
+                  feature { bytes_list { value: "standard" value: "issue" } }
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                }
+              }
+              feature_list {
+                key: "encounterId"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420099200 } }
+                }
+              }
+              feature_list {
+                key: "eventId"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417424400 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420102800 } }
+                }
+              }
+            })proto",
+          TypeParam::encounter_reason_code_field()),
       &seqex));
 
-  PerformTest("Patient/14", bundle, trigger_labels_pair,
-              {{"Patient/14:0-4@1420102800:Encounter/1", seqex}});
+  this->PerformTest("Patient/14", bundle, trigger_labels_pair,
+                    {{"Patient/14:0-4@1420102800:Encounter/1", seqex}});
 }
 
-TEST_F(BundleToSeqexConverterTest, JoinMedication) {
-  EventTrigger trigger;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time {
-      value_us: 1420102800000000
-      precision: SECOND
-      timezone: "America/New_York"
-    }
-  )proto", &trigger));
-  std::vector<seqex_stu3::ConverterTypes::TriggerLabelsPair>
-      trigger_labels_pair({{trigger, {}}});
-  Bundle bundle;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        patient {
-          id { value: "14" }
-          birth_date {
-            value_us: -1323388800000000
-            precision: DAY
-            timezone: "America/New_York"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          period {
-            start {
-              value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
-            }
-            end {
-              value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
+TYPED_TEST(BundleToSeqexConverterTest, JoinMedication) {
+  typename TypeParam::EventTrigger trigger;
+  ASSERT_TRUE(this->parser_.ParseFromString(R"proto(
+                                              event_time {
+                                                value_us: 1420102800000000
+                                                precision: SECOND
+                                                timezone: "America/New_York"
+                                              }
+                                            )proto",
+                                            &trigger));
+  std::vector<typename TypeParam::TriggerLabelsPair> trigger_labels_pair(
+      {{trigger, {}}});
+  typename TypeParam::Bundle bundle;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      R"proto(
+        entry {
+          resource {
+            patient {
+              id { value: "14" }
+              birth_date {
+                value_us: -1323388800000000
+                precision: DAY
+                timezone: "America/New_York"
+              }
             }
           }
         }
-      }
-    }
-    entry {
-      resource {
-        medication_request {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          authored_on {
-            value_us: 1420102700000000  # "2015-01-01T07:00:00+00:00"
+        entry {
+          resource {
+            encounter {
+              id { value: "1" }
+              subject { patient_id { value: "14" } }
+              period {
+                start {
+                  value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
+                }
+                end {
+                  value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
+                }
+              }
+            }
           }
-          medication { reference { medication_id { value: "med" } } }
-          contained {
+        }
+        entry {
+          resource {
             medication {
               id { value: "med" }
               code {
@@ -1551,25 +1640,34 @@ TEST_F(BundleToSeqexConverterTest, JoinMedication) {
               }
             }
           }
-        }
-      }
-    }
-    entry {
-      resource {
-        medication {
-          id { value: "med" }
-          code {
-            coding {
-              system { value: "http://hl7.org/fhir/sid/ndc" }
-              code { value: "123" }
-            }
+        })proto",
+      &bundle));
+
+  typename TypeParam::MedicationRequest med_req = PARSE_INVALID_FHIR_PROTO(
+      R"proto(
+        medication { reference { medication_id { value: "med" } } }
+        id { value: "1" }
+        subject { patient_id { value: "14" } }
+        authored_on { value_us: 1420102700000000 }
+      )proto");
+  const typename TypeParam::Medication medication = PARSE_VALID_FHIR_PROTO(
+      R"proto(
+        id { value: "med" }
+        code {
+          coding {
+            system { value: "http://hl7.org/fhir/sid/ndc" }
+            code { value: "123" }
           }
         }
-      }
-    })proto", &bundle));
+      )proto");
+
+  TypeParam::AddContainedResource(medication, &med_req);
+
+  *bundle.add_entry()->mutable_resource()->mutable_medication_request() =
+      med_req;
 
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+  ASSERT_TRUE(this->parser_.ParseFromString(
       R"proto(
         context: {
           feature {
@@ -1661,61 +1759,55 @@ TEST_F(BundleToSeqexConverterTest, JoinMedication) {
         })proto",
       &seqex));
 
-  PerformTest("Patient/14", bundle, trigger_labels_pair,
-              {{"Patient/14:0-3@1420102800", seqex}});
+  this->PerformTest("Patient/14", bundle, trigger_labels_pair,
+                    {{"Patient/14:0-3@1420102800", seqex}});
 }
 
-TEST_F(BundleToSeqexConverterTest, EmptyLabel) {
-  EventTrigger trigger;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time {
-      value_us: 1420102800000000
-      precision: SECOND
-      timezone: "America/New_York"
-    }
-  )proto", &trigger));
-  std::vector<seqex_stu3::ConverterTypes::TriggerLabelsPair>
-      trigger_labels_pair({{trigger, {}}});
-  Bundle bundle;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        patient {
-          id { value: "14" }
-          birth_date {
-            value_us: -1323388800000000
-            precision: DAY
-            timezone: "America/New_York"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          period {
-            start {
-              value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
-            }
-            end {
-              value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
+TYPED_TEST(BundleToSeqexConverterTest, EmptyLabel) {
+  typename TypeParam::EventTrigger trigger;
+  ASSERT_TRUE(this->parser_.ParseFromString(R"proto(
+                                              event_time {
+                                                value_us: 1420102800000000
+                                                precision: SECOND
+                                                timezone: "America/New_York"
+                                              }
+                                            )proto",
+                                            &trigger));
+  std::vector<typename TypeParam::TriggerLabelsPair> trigger_labels_pair(
+      {{trigger, {}}});
+  typename TypeParam::Bundle bundle;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      R"proto(
+        entry {
+          resource {
+            patient {
+              id { value: "14" }
+              birth_date {
+                value_us: -1323388800000000
+                precision: DAY
+                timezone: "America/New_York"
+              }
             }
           }
         }
-      }
-    }
-    entry {
-      resource {
-        medication_request {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          authored_on {
-            value_us: 1420100000000000
+        entry {
+          resource {
+            encounter {
+              id { value: "1" }
+              subject { patient_id { value: "14" } }
+              period {
+                start {
+                  value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
+                }
+                end {
+                  value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
+                }
+              }
+            }
           }
-          medication { reference { medication_id { value: "med" } } }
-          contained {
+        }
+        entry {
+          resource {
             medication {
               id { value: "med" }
               code {
@@ -1726,24 +1818,32 @@ TEST_F(BundleToSeqexConverterTest, EmptyLabel) {
               }
             }
           }
-        }
-      }
-    }
-    entry {
-      resource {
-        medication {
-          id { value: "med" }
-          code {
-            coding {
-              system { value: "http://hl7.org/fhir/sid/ndc" }
-              code { value: "123" }
-            }
+        })proto",
+      &bundle));
+
+  typename TypeParam::MedicationRequest med_req = PARSE_INVALID_FHIR_PROTO(
+      R"proto(
+        medication { reference { medication_id { value: "med" } } }
+        id { value: "1" }
+        subject { patient_id { value: "14" } }
+        authored_on { value_us: 1420100000000000 }
+      )proto");
+  const typename TypeParam::Medication medication = PARSE_VALID_FHIR_PROTO(
+      R"proto(
+        id { value: "med" }
+        code {
+          coding {
+            system { value: "http://hl7.org/fhir/sid/ndc" }
+            code { value: "123" }
           }
         }
-      }
-    })proto", &bundle));
+      )proto");
+  TypeParam::AddContainedResource(medication, &med_req);
+  *bundle.add_entry()->mutable_resource()->mutable_medication_request() =
+      med_req;
+
   SequenceExample seqex;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+  ASSERT_TRUE(this->parser_.ParseFromString(
       R"proto(
         context: {
           feature: {
@@ -1835,301 +1935,318 @@ TEST_F(BundleToSeqexConverterTest, EmptyLabel) {
         })proto",
       &seqex));
 
-  PerformTest("Patient/14", bundle, trigger_labels_pair,
-              {{"Patient/14:0-3@1420102800", seqex}});
+  this->PerformTest("Patient/14", bundle, trigger_labels_pair,
+                    {{"Patient/14:0-3@1420102800", seqex}});
 }
 
-TEST_F(BundleToSeqexConverterTest, TwoExamples) {
-  absl::SetFlag(&FLAGS_trigger_time_redacted_features,
-                "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis");
+TYPED_TEST(BundleToSeqexConverterTest, TwoExamples) {
+  absl::SetFlag(
+      &FLAGS_trigger_time_redacted_features,
+      absl::Substitute("Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis",
+                       TypeParam::encounter_reason_code_field()));
 
-  EventTrigger trigger1;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time { value_us: 1417424400000000 }
-    source { encounter_id { value: "1" } }
-  )proto", &trigger1));
-  EventTrigger trigger2;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time {
-      value_us: 1420102800000000
-      precision: SECOND
-      timezone: "America/New_York"
-    }
-    source { encounter_id { value: "2" } }
-  )proto", &trigger2));
-  std::vector<seqex_stu3::ConverterTypes::TriggerLabelsPair>
-      trigger_labels_pair({{trigger1, {}}, {trigger2, {}}});
-  Bundle bundle;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        patient {
-          id { value: "14" }
-          birth_date {
-            value_us: -1323388800000000
-            precision: DAY
-            timezone: "America/New_York"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          class_value {
-            system { value: "http://hl7.org/fhir/v3/ActCode" }
-            code { value: "IMP" }
-          }
-          reason {
-            coding {
-              system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
-              code { value: "V410.9" }
-              display { value: "Standard issue" }
+  typename TypeParam::EventTrigger trigger1;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      event_time { value_us: 1417424400000000 }
+                                      source { encounter_id { value: "1" } }
+                                    )proto",
+                                    &trigger1));
+  typename TypeParam::EventTrigger trigger2;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      event_time {
+                                        value_us: 1420102800000000
+                                        precision: SECOND
+                                        timezone: "America/New_York"
+                                      }
+                                      source { encounter_id { value: "2" } }
+                                    )proto",
+                                    &trigger2));
+  std::vector<typename TypeParam::TriggerLabelsPair> trigger_labels_pair(
+      {{trigger1, {}}, {trigger2, {}}});
+  typename TypeParam::Bundle bundle;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      absl::Substitute(
+          R"proto(
+            entry {
+              resource {
+                patient {
+                  id { value: "14" }
+                  birth_date {
+                    value_us: -1323388800000000
+                    precision: DAY
+                    timezone: "America/New_York"
+                  }
+                }
+              }
             }
-          }
-          period {
-            start {
-              value_us: 1417420800000000  # "2014-12-01T08:00:00+00:00"
+            entry {
+              resource {
+                encounter {
+                  id { value: "1" }
+                  subject { patient_id { value: "14" } }
+                  class_value {
+                    system { value: "http://hl7.org/fhir/v3/ActCode" }
+                    code { value: "IMP" }
+                  }
+                  $0 {
+                    coding {
+                      system {
+                        value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis"
+                      }
+                      code { value: "V410.9" }
+                      display { value: "Standard issue" }
+                    }
+                  }
+                  period {
+                    start {
+                      value_us: 1417420800000000  # "2014-12-01T08:00:00+00:00"
+                    }
+                    end {
+                      value_us: 1417424400000000  # "2014-12-01T09:00:00+00:00"
+                    }
+                  }
+                }
+              }
             }
-            end {
-              value_us: 1417424400000000  # "2014-12-01T09:00:00+00:00"
-            }
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "2" }
-          subject { patient_id { value: "14" } }
-          class_value {
-            system { value: "http://hl7.org/fhir/v3/ActCode" }
-            code { value: "IMP" }
-          }
-          reason {
-            coding {
-              system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
-              code { value: "191.4" }
-              display { value: "Malignant neoplasm of occipital lobe" }
-            }
-          }
-          period {
-            start {
-              value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
-            }
-            end {
-              value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
-            }
-          }
-        }
-      }
-    })proto", &bundle));
+            entry {
+              resource {
+                encounter {
+                  id { value: "2" }
+                  subject { patient_id { value: "14" } }
+                  class_value {
+                    system { value: "http://hl7.org/fhir/v3/ActCode" }
+                    code { value: "IMP" }
+                  }
+                  $0 {
+                    coding {
+                      system {
+                        value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis"
+                      }
+                      code { value: "191.4" }
+                      display { value: "Malignant neoplasm of occipital lobe" }
+                    }
+                  }
+                  period {
+                    start {
+                      value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
+                    }
+                    end {
+                      value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            })proto",
+          ToSnakeCase(TypeParam::encounter_reason_code_field())),
+      &bundle));
 
   SequenceExample seqex1;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
-      R"proto(
-        context: {
-          feature {
-            key: "Patient.birthDate"
-            value { int64_list { value: -1323388800 } }
-          }
-          feature {
-            key: "currentEncounterId"
-            value { int64_list { value: 1417420800 } }
-          }
-          feature {
-            key: "patientId"
-            value { bytes_list { value: "14" } }
-          }
-          feature {
-            key: "sequenceLength"
-            value { int64_list { value: 2 } }
-          }
-          feature {
-            key: "timestamp"
-            value { int64_list { value: 1417424400 } }
-          }
-        }
-        feature_lists: {
-          feature_list {
-            key: "Encounter.meta.lastUpdated"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417424400 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.class"
-            value {
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      absl::Substitute(
+          R"proto(
+            context: {
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "Patient.birthDate"
+                value { int64_list { value: -1323388800 } }
               }
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "currentEncounterId"
+                value { int64_list { value: 1417420800 } }
+              }
+              feature {
+                key: "patientId"
+                value { bytes_list { value: "14" } }
+              }
+              feature {
+                key: "sequenceLength"
+                value { int64_list { value: 2 } }
+              }
+              feature {
+                key: "timestamp"
+                value { int64_list { value: 1417424400 } }
               }
             }
-          }
-          feature_list {
-            key: "Encounter.period.end"
-            value {
-              feature { int64_list {} }
-              feature { int64_list { value: 1417424400 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.period.start"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417420800 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
-            value {
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
-            value {
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-            }
-          }
-          feature_list {
-            key: "encounterId"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417420800 } }
-            }
-          }
-          feature_list {
-            key: "eventId"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417424400 } }
-            }
-          }
-        })proto",
+            feature_lists: {
+              feature_list {
+                key: "Encounter.meta.lastUpdated"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417424400 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.class"
+                value {
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                }
+              }
+              feature_list {
+                key: "Encounter.period.end"
+                value {
+                  feature { int64_list {} }
+                  feature { int64_list { value: 1417424400 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.period.start"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417420800 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+                value {
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                }
+              }
+              feature_list {
+                key: "Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+                value {
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                }
+              }
+              feature_list {
+                key: "encounterId"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417420800 } }
+                }
+              }
+              feature_list {
+                key: "eventId"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417424400 } }
+                }
+              }
+            })proto",
+          TypeParam::encounter_reason_code_field()),
       &seqex1));
 
   SequenceExample seqex2;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
-      R"proto(
-        context: {
-          feature {
-            key: "Patient.birthDate"
-            value { int64_list { value: -1323388800 } }
-          }
-          feature {
-            key: "currentEncounterId"
-            value { int64_list { value: 1420099200 } }
-          }
-          feature {
-            key: "patientId"
-            value { bytes_list { value: "14" } }
-          }
-          feature {
-            key: "sequenceLength"
-            value { int64_list { value: 4 } }
-          }
-          feature {
-            key: "timestamp"
-            value { int64_list { value: 1420102800 } }
-          }
-        }
-        feature_lists: {
-          feature_list {
-            key: "Encounter.meta.lastUpdated"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417424400 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420102800 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.class"
-            value {
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      absl::Substitute(
+          R"proto(
+            context: {
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "Patient.birthDate"
+                value { int64_list { value: -1323388800 } }
               }
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "currentEncounterId"
+                value { int64_list { value: 1420099200 } }
               }
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "patientId"
+                value { bytes_list { value: "14" } }
               }
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "sequenceLength"
+                value { int64_list { value: 4 } }
+              }
+              feature {
+                key: "timestamp"
+                value { int64_list { value: 1420102800 } }
               }
             }
-          }
-          feature_list {
-            key: "Encounter.period.end"
-            value {
-              feature { int64_list {} }
-              feature { int64_list { value: 1417424400 } }
-              feature { int64_list {} }
-              feature { int64_list { value: 1420102800 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.period.start"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420099200 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
-            value {
-              feature { bytes_list {} }
-              feature { bytes_list { value: "V410.9" } }
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
-            value {
-              feature { bytes_list {} }
-              feature { bytes_list { value: "standard" value: "issue" } }
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-            }
-          }
-          feature_list {
-            key: "encounterId"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420099200 } }
-            }
-          }
-          feature_list {
-            key: "eventId"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417424400 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420102800 } }
-            }
-          }
-        })proto",
+            feature_lists: {
+              feature_list {
+                key: "Encounter.meta.lastUpdated"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417424400 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420102800 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.class"
+                value {
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                }
+              }
+              feature_list {
+                key: "Encounter.period.end"
+                value {
+                  feature { int64_list {} }
+                  feature { int64_list { value: 1417424400 } }
+                  feature { int64_list {} }
+                  feature { int64_list { value: 1420102800 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.period.start"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420099200 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+                value {
+                  feature { bytes_list {} }
+                  feature { bytes_list { value: "V410.9" } }
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                }
+              }
+              feature_list {
+                key: "Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+                value {
+                  feature { bytes_list {} }
+                  feature { bytes_list { value: "standard" value: "issue" } }
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                }
+              }
+              feature_list {
+                key: "encounterId"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420099200 } }
+                }
+              }
+              feature_list {
+                key: "eventId"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417424400 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420102800 } }
+                }
+              }
+            })proto",
+          TypeParam::encounter_reason_code_field()),
       &seqex2));
 
-  BundleToSeqexConverter<seqex_stu3::ConverterTypes, stu3::proto::Bundle>
-      converter(fhir_version_config_,
-                tokenizer_, false /* enable_attribution */,
-                false /*generate_sequence_label */);
+  typename TypeParam::BundleToSeqexConverter converter(
+      this->fhir_version_config_, this->tokenizer_,
+      false /* enable_attribution */, false /*generate_sequence_label */);
   std::map<std::string, int> counter_stats;
   ASSERT_TRUE(converter.Begin("Patient/14", bundle, trigger_labels_pair,
                               &counter_stats));
@@ -2146,345 +2263,362 @@ TEST_F(BundleToSeqexConverterTest, TwoExamples) {
   ASSERT_TRUE(converter.Done());
 }
 
-TEST_F(BundleToSeqexConverterTest, TwoExamples_EnableAttribution) {
-  absl::SetFlag(&FLAGS_trigger_time_redacted_features,
-                "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis");
+TYPED_TEST(BundleToSeqexConverterTest, TwoExamples_EnableAttribution) {
+  absl::SetFlag(
+      &FLAGS_trigger_time_redacted_features,
+      absl::Substitute("Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis",
+                       TypeParam::encounter_reason_code_field()));
 
-  EventTrigger trigger1;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time { value_us: 1417424400000000 }
-    source { encounter_id { value: "1" } }
-  )proto", &trigger1));
-  EventTrigger trigger2;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    event_time {
-      value_us: 1420102800000000
-      precision: SECOND
-      timezone: "America/New_York"
-    }
-    source { encounter_id { value: "2" } }
-  )proto", &trigger2));
-  std::vector<seqex_stu3::ConverterTypes::TriggerLabelsPair>
-      trigger_labels_pair({{trigger1, {}}, {trigger2, {}}});
-  Bundle bundle;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        patient {
-          id { value: "14" }
-          birth_date {
-            value_us: -1323388800000000
-            precision: DAY
-            timezone: "America/New_York"
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          class_value {
-            system { value: "http://hl7.org/fhir/v3/ActCode" }
-            code { value: "IMP" }
-          }
-          reason {
-            coding {
-              system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
-              code { value: "V410.9" }
-              display { value: "Standard issue" }
+  typename TypeParam::EventTrigger trigger1;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      event_time { value_us: 1417424400000000 }
+                                      source { encounter_id { value: "1" } }
+                                    )proto",
+                                    &trigger1));
+  typename TypeParam::EventTrigger trigger2;
+  ASSERT_TRUE(
+      this->parser_.ParseFromString(R"proto(
+                                      event_time {
+                                        value_us: 1420102800000000
+                                        precision: SECOND
+                                        timezone: "America/New_York"
+                                      }
+                                      source { encounter_id { value: "2" } }
+                                    )proto",
+                                    &trigger2));
+  std::vector<typename TypeParam::TriggerLabelsPair> trigger_labels_pair(
+      {{trigger1, {}}, {trigger2, {}}});
+  typename TypeParam::Bundle bundle;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      absl::Substitute(
+          R"proto(
+            entry {
+              resource {
+                patient {
+                  id { value: "14" }
+                  birth_date {
+                    value_us: -1323388800000000
+                    precision: DAY
+                    timezone: "America/New_York"
+                  }
+                }
+              }
             }
-          }
-          period {
-            start {
-              value_us: 1417420800000000  # "2014-12-01T08:00:00+00:00"
+            entry {
+              resource {
+                encounter {
+                  id { value: "1" }
+                  subject { patient_id { value: "14" } }
+                  class_value {
+                    system { value: "http://hl7.org/fhir/v3/ActCode" }
+                    code { value: "IMP" }
+                  }
+                  $0 {
+                    coding {
+                      system {
+                        value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis"
+                      }
+                      code { value: "V410.9" }
+                      display { value: "Standard issue" }
+                    }
+                  }
+                  period {
+                    start {
+                      value_us: 1417420800000000  # "2014-12-01T08:00:00+00:00"
+                    }
+                    end {
+                      value_us: 1417424400000000  # "2014-12-01T09:00:00+00:00"
+                    }
+                  }
+                }
+              }
             }
-            end {
-              value_us: 1417424400000000  # "2014-12-01T09:00:00+00:00"
-            }
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "2" }
-          subject { patient_id { value: "14" } }
-          class_value {
-            system { value: "http://hl7.org/fhir/v3/ActCode" }
-            code { value: "IMP" }
-          }
-          reason {
-            coding {
-              system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
-              code { value: "191.4" }
-              display { value: "Malignant neoplasm of occipital lobe" }
-            }
-          }
-          period {
-            start {
-              value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
-            }
-            end {
-              value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
-            }
-          }
-        }
-      }
-    })proto", &bundle));
+            entry {
+              resource {
+                encounter {
+                  id { value: "2" }
+                  subject { patient_id { value: "14" } }
+                  class_value {
+                    system { value: "http://hl7.org/fhir/v3/ActCode" }
+                    code { value: "IMP" }
+                  }
+                  $0 {
+                    coding {
+                      system {
+                        value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis"
+                      }
+                      code { value: "191.4" }
+                      display { value: "Malignant neoplasm of occipital lobe" }
+                    }
+                  }
+                  period {
+                    start {
+                      value_us: 1420099200000000  # "2015-01-01T08:00:00+00:00"
+                    }
+                    end {
+                      value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            })proto",
+          ToSnakeCase(TypeParam::encounter_reason_code_field())),
+      &bundle));
 
   SequenceExample seqex1;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
-      R"proto(
-        context: {
-          feature {
-            key: "Patient.birthDate"
-            value { int64_list { value: -1323388800 } }
-          }
-          feature {
-            key: "currentEncounterId"
-            value { int64_list { value: 1417420800 } }
-          }
-          feature {
-            key: "patientId"
-            value { bytes_list { value: "14" } }
-          }
-          feature {
-            key: "sequenceLength"
-            value { int64_list { value: 2 } }
-          }
-          feature {
-            key: "timestamp"
-            value { int64_list { value: 1417424400 } }
-          }
-        }
-        feature_lists: {
-          feature_list {
-            key: "Encounter.meta.lastUpdated"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417424400 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.class"
-            value {
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      absl::Substitute(
+          R"proto(
+            context: {
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "Patient.birthDate"
+                value { int64_list { value: -1323388800 } }
               }
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "currentEncounterId"
+                value { int64_list { value: 1417420800 } }
+              }
+              feature {
+                key: "patientId"
+                value { bytes_list { value: "14" } }
+              }
+              feature {
+                key: "sequenceLength"
+                value { int64_list { value: 2 } }
+              }
+              feature {
+                key: "timestamp"
+                value { int64_list { value: 1417424400 } }
               }
             }
-          }
-          feature_list {
-            key: "Encounter.period.end"
-            value {
-              feature { int64_list {} }
-              feature { int64_list { value: 1417424400 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.period.start"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417420800 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
-            value {
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
-            value {
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.token_start"
-            value {
-              feature { int64_list {} }
-              feature { int64_list {} }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.token_end"
-            value {
-              feature { int64_list {} }
-              feature { int64_list {} }
-            }
-          }
-          feature_list {
-            key: "encounterId"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417420800 } }
-            }
-          }
-          feature_list {
-            key: "eventId"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417424400 } }
-            }
-          }
-          feature_list {
-            key: "resourceId"
-            value {
-              feature { bytes_list { value: "Encounter/1" } }
-              feature { bytes_list { value: "Encounter/1" } }
-            }
-          }
-        })proto",
+            feature_lists: {
+              feature_list {
+                key: "Encounter.meta.lastUpdated"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417424400 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.class"
+                value {
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                }
+              }
+              feature_list {
+                key: "Encounter.period.end"
+                value {
+                  feature { int64_list {} }
+                  feature { int64_list { value: 1417424400 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.period.start"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417420800 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+                value {
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                }
+              }
+              feature_list {
+                key: "Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+                value {
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                }
+              }
+              feature_list {
+                key: "Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.token_start"
+                value {
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                }
+              }
+              feature_list {
+                key: "Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.token_end"
+                value {
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                }
+              }
+              feature_list {
+                key: "encounterId"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417420800 } }
+                }
+              }
+              feature_list {
+                key: "eventId"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417424400 } }
+                }
+              }
+              feature_list {
+                key: "resourceId"
+                value {
+                  feature { bytes_list { value: "Encounter/1" } }
+                  feature { bytes_list { value: "Encounter/1" } }
+                }
+              }
+            })proto",
+          TypeParam::encounter_reason_code_field()),
       &seqex1));
 
   SequenceExample seqex2;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
-      R"proto(
-        context: {
-          feature {
-            key: "Patient.birthDate"
-            value { int64_list { value: -1323388800 } }
-          }
-          feature {
-            key: "currentEncounterId"
-            value { int64_list { value: 1420099200 } }
-          }
-          feature {
-            key: "patientId"
-            value { bytes_list { value: "14" } }
-          }
-          feature {
-            key: "sequenceLength"
-            value { int64_list { value: 4 } }
-          }
-          feature {
-            key: "timestamp"
-            value { int64_list { value: 1420102800 } }
-          }
-        }
-        feature_lists: {
-          feature_list {
-            key: "Encounter.meta.lastUpdated"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417424400 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420102800 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.class"
-            value {
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      absl::Substitute(
+          R"proto(
+            context: {
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "Patient.birthDate"
+                value { int64_list { value: -1323388800 } }
               }
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "currentEncounterId"
+                value { int64_list { value: 1420099200 } }
               }
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "patientId"
+                value { bytes_list { value: "14" } }
               }
               feature {
-                bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                key: "sequenceLength"
+                value { int64_list { value: 4 } }
+              }
+              feature {
+                key: "timestamp"
+                value { int64_list { value: 1420102800 } }
               }
             }
-          }
-          feature_list {
-            key: "Encounter.period.end"
-            value {
-              feature { int64_list {} }
-              feature { int64_list { value: 1417424400 } }
-              feature { int64_list {} }
-              feature { int64_list { value: 1420102800 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.period.start"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420099200 } }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
-            value {
-              feature { bytes_list {} }
-              feature { bytes_list { value: "V410.9" } }
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
-            value {
-              feature { bytes_list {} }
-              feature { bytes_list { value: "standard" value: "issue" } }
-              feature { bytes_list {} }
-              feature { bytes_list {} }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.token_start"
-            value {
-              feature { int64_list {} }
-              feature { int64_list { value: 0 value: 9 } }
-              feature { int64_list {} }
-              feature { int64_list {} }
-            }
-          }
-          feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.token_end"
-            value {
-              feature { int64_list {} }
-              feature { int64_list { value: 8 value: 14 } }
-              feature { int64_list {} }
-              feature { int64_list {} }
-            }
-          }
-          feature_list {
-            key: "encounterId"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420099200 } }
-            }
-          }
-          feature_list {
-            key: "eventId"
-            value {
-              feature { int64_list { value: 1417420800 } }
-              feature { int64_list { value: 1417424400 } }
-              feature { int64_list { value: 1420099200 } }
-              feature { int64_list { value: 1420102800 } }
-            }
-          }
-          feature_list {
-            key: "resourceId"
-            value {
-              feature { bytes_list { value: "Encounter/1" } }
-              feature { bytes_list { value: "Encounter/1" } }
-              feature { bytes_list { value: "Encounter/2" } }
-              feature { bytes_list { value: "Encounter/2" } }
-            }
-          }
-        })proto",
+            feature_lists: {
+              feature_list {
+                key: "Encounter.meta.lastUpdated"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417424400 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420102800 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.class"
+                value {
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                  feature {
+                    bytes_list { value: "http-hl7-org-fhir-v3-ActCode:IMP" }
+                  }
+                }
+              }
+              feature_list {
+                key: "Encounter.period.end"
+                value {
+                  feature { int64_list {} }
+                  feature { int64_list { value: 1417424400 } }
+                  feature { int64_list {} }
+                  feature { int64_list { value: 1420102800 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.period.start"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420099200 } }
+                }
+              }
+              feature_list {
+                key: "Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+                value {
+                  feature { bytes_list {} }
+                  feature { bytes_list { value: "V410.9" } }
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                }
+              }
+              feature_list {
+                key: "Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+                value {
+                  feature { bytes_list {} }
+                  feature { bytes_list { value: "standard" value: "issue" } }
+                  feature { bytes_list {} }
+                  feature { bytes_list {} }
+                }
+              }
+              feature_list {
+                key: "Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.token_start"
+                value {
+                  feature { int64_list {} }
+                  feature { int64_list { value: 0 value: 9 } }
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                }
+              }
+              feature_list {
+                key: "Encounter.$0.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.token_end"
+                value {
+                  feature { int64_list {} }
+                  feature { int64_list { value: 8 value: 14 } }
+                  feature { int64_list {} }
+                  feature { int64_list {} }
+                }
+              }
+              feature_list {
+                key: "encounterId"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420099200 } }
+                }
+              }
+              feature_list {
+                key: "eventId"
+                value {
+                  feature { int64_list { value: 1417420800 } }
+                  feature { int64_list { value: 1417424400 } }
+                  feature { int64_list { value: 1420099200 } }
+                  feature { int64_list { value: 1420102800 } }
+                }
+              }
+              feature_list {
+                key: "resourceId"
+                value {
+                  feature { bytes_list { value: "Encounter/1" } }
+                  feature { bytes_list { value: "Encounter/1" } }
+                  feature { bytes_list { value: "Encounter/2" } }
+                  feature { bytes_list { value: "Encounter/2" } }
+                }
+              }
+            })proto",
+          TypeParam::encounter_reason_code_field()),
       &seqex2));
 
-  BundleToSeqexConverter<seqex_stu3::ConverterTypes, stu3::proto::Bundle>
-      converter(fhir_version_config_,
-                tokenizer_, true /* enable_attribution */,
-                false /* generate_sequence_label */);
+  typename TypeParam::BundleToSeqexConverter converter(
+      this->fhir_version_config_, this->tokenizer_,
+      true /* enable_attribution */, false /* generate_sequence_label */);
   std::map<std::string, int> counter_stats;
   ASSERT_TRUE(converter.Begin("Patient/14", bundle, trigger_labels_pair,
                               &counter_stats));

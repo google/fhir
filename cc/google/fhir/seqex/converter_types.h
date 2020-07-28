@@ -25,11 +25,12 @@ namespace seqex {
 template <typename EventTriggerType, typename EventLabelType,
           typename PrimitiveHandlerType>
 struct ConverterTypes {
-  typedef EventTriggerType EventTrigger;
-  typedef EventLabelType EventLabel;
-  typedef std::pair<EventTrigger, std::vector<EventLabel>> TriggerLabelsPair;
+  using EventTrigger = EventTriggerType;
+  using EventLabel = EventLabelType;
+  using TriggerLabelsPair =
+      std::pair<EventTriggerType, std::vector<EventLabelType>>;
 
-  typedef PrimitiveHandlerType PrimitiveHandler;
+  using PrimitiveHandler = PrimitiveHandlerType;
 };
 
 }  // namespace seqex

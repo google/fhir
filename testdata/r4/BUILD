@@ -51,6 +51,13 @@ filegroup(
     ]),
 )
 
+filegroup(
+    name = "labels",
+    srcs = glob([
+        "labels/*",
+    ]),
+)
+
 alias(
     name = "profiles",
     actual = "//testdata/r4/profiles:testdata",

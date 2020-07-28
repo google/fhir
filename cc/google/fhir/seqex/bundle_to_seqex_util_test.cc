@@ -19,13 +19,12 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/strings/substitute.h"
+#include "google/fhir/seqex/r4.h"
 #include "google/fhir/seqex/stu3.h"
+#include "google/fhir/testutil/fhir_test_env.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/google_extensions.pb.h"
-#include "proto/stu3/resources.pb.h"
 
-using ::google::fhir::stu3::proto::Bundle;
 using ::google::fhir::testutil::EqualsProto;
 using ::testing::ElementsAre;
 using ::testing::Pair;
@@ -37,25 +36,43 @@ namespace seqex {
 
 namespace {
 
-typedef seqex_stu3::ConverterTypes::EventLabel EventLabel;
-typedef seqex_stu3::ConverterTypes::EventTrigger EventTrigger;
-typedef seqex_stu3::ConverterTypes::TriggerLabelsPair TriggerLabelsPair;
+template <typename TestEnv>
+class BundleToSeqexUtilTest : public ::testing::Test {};
 
-TEST(BundleToSeqexUtilTest, GetTriggerLabelsPairFromInputLabels) {
-  EventLabel input_labels1;
+struct Stu3TestEnv : public testutil::Stu3CoreTestEnv,
+                     public seqex_stu3::ConverterTypes {
+  using ConverterTypes = seqex_stu3::ConverterTypes;
+  constexpr static auto& condition_recorded_date_field() {
+    return "assertedDate";
+  }
+};
+
+struct R4TestEnv : public testutil::R4CoreTestEnv,
+                   public seqex_r4::ConverterTypes {
+  using ConverterTypes = seqex_r4::ConverterTypes;
+  constexpr static auto& condition_recorded_date_field() {
+    return "recordedDate";
+  }
+};
+
+using TestEnvs = ::testing::Types<Stu3TestEnv, R4TestEnv>;
+TYPED_TEST_SUITE(BundleToSeqexUtilTest, TestEnvs);
+
+TYPED_TEST(BundleToSeqexUtilTest, GetTriggerLabelsPairFromInputLabels) {
+  typename TypeParam::EventLabel input_labels1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     patient { patient_id { value: "14" } }
     type { code { value: "test1" } }
     event_time { value_us: 1417392000000000 }  # "2014-12-01T00:00:00+00:00"
     source { encounter_id { value: "1" } }
   )proto", &input_labels1));
-  EventLabel input_labels2;
+  typename TypeParam::EventLabel input_labels2;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     patient { patient_id { value: "14" } }
     type { code { value: "test2" } }
     event_time { value_us: 1417392000000000 }  # "2014-12-01T00:00:00+00:00"
   )proto", &input_labels2));
-  EventLabel input_labels3;
+  typename TypeParam::EventLabel input_labels3;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     patient { patient_id { value: "14" } }
     type { code { value: "test2" } }
@@ -67,30 +84,30 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPairFromInputLabels) {
       }
     }
   )proto", &input_labels3));
-  EventTrigger trigger1;
+  typename TypeParam::EventTrigger trigger1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     event_time { value_us: 1417392000000000 }  # "2014-12-01T00:00:00+00:00"
     source { encounter_id { value: "1" } }
   )proto", &trigger1));
-  EventTrigger trigger2;
+  typename TypeParam::EventTrigger trigger2;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     event_time { value_us: 1417428000000000 }  # "2014-12-01T01:00:00+00:00"
   )proto", &trigger2));
 
-  EventLabel label1;
+  typename TypeParam::EventLabel label1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     patient { patient_id { value: "14" } }
     type { code { value: "test1" } }
     event_time { value_us: 1417392000000000 }  # "2014-12-01T00:00:00+00:00"
     source { encounter_id { value: "1" } }
   )proto", &label1));
-  EventLabel label2;
+  typename TypeParam::EventLabel label2;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     patient { patient_id { value: "14" } }
     type { code { value: "test2" } }
     event_time { value_us: 1417392000000000 }  # "2014-12-01T00:00:00+00:00"
   )proto", &label2));
-  EventLabel label3;
+  typename TypeParam::EventLabel label3;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     patient { patient_id { value: "14" } }
     type { code { value: "test2" } }
@@ -102,8 +119,8 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPairFromInputLabels) {
       }
     }
   )proto", &label3));
-  std::vector<TriggerLabelsPair> got;
-  GetTriggerLabelsPairFromInputLabels<seqex_stu3::ConverterTypes>(
+  std::vector<typename TypeParam::TriggerLabelsPair> got;
+  GetTriggerLabelsPairFromInputLabels<typename TypeParam::ConverterTypes>(
       {input_labels1, input_labels2, input_labels3}, &got);
   EXPECT_EQ(2, got.size());
   EXPECT_THAT(
@@ -115,115 +132,129 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPairFromInputLabels) {
                UnorderedElementsAre(EqualsProto(label3)))));
 }
 
-TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_NoLabel) {
+TYPED_TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_NoLabel) {
   const std::set<std::string> label_names({"test1"});
-  Bundle bundle;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry { resource { patient { id { value: "14" } } } }
-    entry {
-      resource {
-        encounter {
-          id { value: "1" }
-          extension {
-            url { value: "https://g.co/fhir/StructureDefinition/eventTrigger" }
-            extension {
-              url { value: "type" }
-              value {
-                coding {
-                  system { value: "urn:test:trigger" }
-                  code { value: "at_discharge" }
-                }
-              }
-            }
-            extension {
-              url { value: "eventTime" }
-              value {
-                date_time {
-                  value_us: 1388566800000000  # "2014-01-01T09:00:00+00:00"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        encounter {
-          id { value: "2" }
-          extension {
-            url { value: "https://g.co/fhir/StructureDefinition/eventTrigger" }
-            extension {
-              url { value: "type" }
-              value {
-                coding {
-                  system { value: "urn:test:trigger" }
-                  code { value: "at_discharge" }
-                }
-              }
-            }
-            extension {
-              url { value: "eventTime" }
-              value {
-                date_time {
-                  value_us: 1420102800000000  # "2015-01-01T09:00:00+00:00"
-                }
-              }
-            }
-          }
-          extension {
-            url { value: "https://g.co/fhir/StructureDefinition/eventLabel" }
-            extension {
-              url { value: "type" }
-              value {
-                coding {
-                  system { value: "urn:test:label" }
-                  code { value: "green" }
-                }
-              }
-            }
-            extension {
-              url { value: "eventTime" }
-              value { date_time { value_us: 1420102800000000 } }
-            }
-            extension {
-              url { value: "source" }
-              value { reference { encounter_id { value: "2" } } }
-            }
-            extension {
-              url { value: "label" }
-              extension {
-                url { value: "className" }
-                value {
-                  coding {
-                    system { value: "urn:test:label" }
-                    code { value: "green" }
+  typename TypeParam::Bundle bundle;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      absl::Substitute(
+          R"proto(
+            entry { resource { patient { id { value: "14" } } } }
+            entry {
+              resource {
+                encounter {
+                  id { value: "1" }
+                  extension {
+                    url {
+                      value: "https://g.co/fhir/StructureDefinition/eventTrigger"
+                    }
+                    extension {
+                      url { value: "type" }
+                      value {
+                        coding {
+                          system { value: "urn:test:trigger" }
+                          code { value: "at_discharge" }
+                        }
+                      }
+                    }
+                    extension {
+                      url { value: "eventTime" }
+                      value {
+                        date_time {
+                          value_us:
+                              1388566800000000  # "2014-01-01T09:00:00+00:00"
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
-          }
-        }
-      }
-    }
-    entry {
-      resource {
-        condition {
-          id { value: "1" }
-          subject { patient_id { value: "14" } }
-          code {
-            coding {
-              system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
-              code { value: "bar" }
+            entry {
+              resource {
+                encounter {
+                  id { value: "2" }
+                  extension {
+                    url {
+                      value: "https://g.co/fhir/StructureDefinition/eventTrigger"
+                    }
+                    extension {
+                      url { value: "type" }
+                      value {
+                        coding {
+                          system { value: "urn:test:trigger" }
+                          code { value: "at_discharge" }
+                        }
+                      }
+                    }
+                    extension {
+                      url { value: "eventTime" }
+                      value {
+                        date_time {
+                          value_us:
+                              1420102800000000  # "2015-01-01T09:00:00+00:00"
+                        }
+                      }
+                    }
+                  }
+                  extension {
+                    url {
+                      value: "https://g.co/fhir/StructureDefinition/eventLabel"
+                    }
+                    extension {
+                      url { value: "type" }
+                      value {
+                        coding {
+                          system { value: "urn:test:label" }
+                          code { value: "green" }
+                        }
+                      }
+                    }
+                    extension {
+                      url { value: "eventTime" }
+                      value { date_time { value_us: 1420102800000000 } }
+                    }
+                    extension {
+                      url { value: "source" }
+                      value { reference { encounter_id { value: "2" } } }
+                    }
+                    extension {
+                      url { value: "label" }
+                      extension {
+                        url { value: "className" }
+                        value {
+                          coding {
+                            system { value: "urn:test:label" }
+                            code { value: "green" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
-          }
-          asserted_date {
-            value_us: 1417392000000000  # "2014-12-01T00:00:00+00:00"
-          }
-        }
-      }
-    })proto", &bundle));
-  EventTrigger trigger1;
+            entry {
+              resource {
+                condition {
+                  id { value: "1" }
+                  subject { patient_id { value: "14" } }
+                  code {
+                    coding {
+                      system {
+                        value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis"
+                      }
+                      code { value: "bar" }
+                    }
+                  }
+                  $0 {
+                    value_us: 1417392000000000  # "2014-12-01T00:00:00+00:00"
+                  }
+                }
+              }
+            })proto",
+          ToSnakeCase(TypeParam::condition_recorded_date_field())),
+      &bundle));
+  typename TypeParam::EventTrigger trigger1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     type {
       system { value: "urn:test:trigger" }
@@ -231,7 +262,7 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_NoLabel) {
     }
     event_time { value_us: 1388566800000000 }  # "2014-01-01T09:00:00+00:00"
   )proto", &trigger1));
-  EventTrigger trigger2;
+  typename TypeParam::EventTrigger trigger2;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     type {
       system { value: "urn:test:trigger" }
@@ -239,9 +270,10 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_NoLabel) {
     }
     event_time { value_us: 1420102800000000 }  # "2015-01-01T09:00:00+00:00"
   )proto", &trigger2));
-  std::vector<TriggerLabelsPair> got_trigger_labels_pair_vector;
+  std::vector<typename TypeParam::TriggerLabelsPair>
+      got_trigger_labels_pair_vector;
   int num_triggers_filtered = 0;
-  GetTriggerLabelsPair<seqex_stu3::ConverterTypes>(
+  GetTriggerLabelsPair<typename TypeParam::ConverterTypes>(
       bundle, label_names, "at_discharge", &got_trigger_labels_pair_vector,
       &num_triggers_filtered);
   EXPECT_THAT(got_trigger_labels_pair_vector,
@@ -250,9 +282,9 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_NoLabel) {
   EXPECT_EQ(0, num_triggers_filtered);
 }
 
-TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithLabels) {
+TYPED_TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithLabels) {
   const std::set<std::string> label_names({"test1"});
-  Bundle bundle;
+  typename TypeParam::Bundle bundle;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry { resource { patient { id { value: "20" } } } }
     entry {
@@ -358,7 +390,7 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithLabels) {
       }
     }
   )proto", &bundle));
-  EventTrigger trigger1;
+  typename TypeParam::EventTrigger trigger1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     type {
       system { value: "urn:test:trigger" }
@@ -367,7 +399,7 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithLabels) {
     event_time { value_us: 1388566800000000 }  # "2014-01-01T09:00:00+00:00"
   )proto", &trigger1));
   // Missing class means false binary label.
-  EventLabel label1;
+  typename TypeParam::EventLabel label1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     type {
       system { value: "urn:test:label" }
@@ -376,7 +408,7 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithLabels) {
     event_time { value_us: 1388566800000000 }
     source { encounter_id { value: "1" } }
   )proto", &label1));
-  EventTrigger trigger2;
+  typename TypeParam::EventTrigger trigger2;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     type {
       system { value: "urn:test:trigger" }
@@ -384,7 +416,7 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithLabels) {
     }
     event_time { value_us: 1420102800000000 }  # "2015-01-01T09:00:00+00:00"
   )proto", &trigger2));
-  EventLabel label2;
+  typename TypeParam::EventLabel label2;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     type {
       system { value: "urn:test:label" }
@@ -398,9 +430,10 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithLabels) {
       }
     }
   )proto", &label2));
-  std::vector<TriggerLabelsPair> got_trigger_labels_pair_vector;
+  std::vector<typename TypeParam::TriggerLabelsPair>
+      got_trigger_labels_pair_vector;
   int num_triggers_filtered = 0;
-  GetTriggerLabelsPair<seqex_stu3::ConverterTypes>(
+  GetTriggerLabelsPair<typename TypeParam::ConverterTypes>(
       bundle, label_names, "at_discharge", &got_trigger_labels_pair_vector,
       &num_triggers_filtered);
   EXPECT_THAT(
@@ -411,10 +444,10 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithLabels) {
   EXPECT_EQ(0, num_triggers_filtered);
 }
 
-TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_TriggerFiltered) {
+TYPED_TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_TriggerFiltered) {
   const std::set<std::string> label_names({"test2"});
   // The trigger would be filtered due to label time before trigger time.
-  Bundle bundle;
+  typename TypeParam::Bundle bundle;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry { resource { patient { id { value: "40" } } } }
     entry {
@@ -462,18 +495,19 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_TriggerFiltered) {
     }
   )proto", &bundle));
 
-  std::vector<TriggerLabelsPair> got_trigger_labels_pair_vector;
+  std::vector<typename TypeParam::TriggerLabelsPair>
+      got_trigger_labels_pair_vector;
   int num_triggers_filtered = 0;
-  GetTriggerLabelsPair<seqex_stu3::ConverterTypes>(
+  GetTriggerLabelsPair<typename TypeParam::ConverterTypes>(
       bundle, label_names, "at_discharge", &got_trigger_labels_pair_vector,
       &num_triggers_filtered);
   EXPECT_TRUE(got_trigger_labels_pair_vector.empty());
   EXPECT_EQ(1, num_triggers_filtered);
 }
 
-TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithMultipleTriggers) {
+TYPED_TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithMultipleTriggers) {
   const std::set<std::string> label_names({"test1"});
-  Bundle bundle;
+  typename TypeParam::Bundle bundle;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry { resource { patient { id { value: "20" } } } }
     entry {
@@ -554,7 +588,7 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithMultipleTriggers) {
       }
     }
   )proto", &bundle));
-  EventTrigger trigger1;
+  typename TypeParam::EventTrigger trigger1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     type {
       system { value: "urn:test:trigger" }
@@ -565,7 +599,7 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithMultipleTriggers) {
     }
     source { encounter_id { value: "1" } }
   )proto", &trigger1));
-  EventTrigger trigger2;
+  typename TypeParam::EventTrigger trigger2;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     type {
       system { value: "urn:test:trigger" }
@@ -575,7 +609,7 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithMultipleTriggers) {
     source { encounter_id { value: "1" } }
   )proto", &trigger2));
   // Missing class means false binary label.
-  EventLabel label1;
+  typename TypeParam::EventLabel label1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     type {
       system { value: "urn:test:label" }
@@ -584,9 +618,10 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithMultipleTriggers) {
     event_time { value_us: 1388566800000000 }  # "2014-01-01T09:00:00+00:00"
     source { encounter_id { value: "1" } }
   )proto", &label1));
-  std::vector<TriggerLabelsPair> got_trigger_labels_pair_vector;
+  std::vector<typename TypeParam::TriggerLabelsPair>
+      got_trigger_labels_pair_vector;
   int num_triggers_filtered = 0;
-  GetTriggerLabelsPair<seqex_stu3::ConverterTypes>(
+  GetTriggerLabelsPair<typename TypeParam::ConverterTypes>(
       bundle, label_names, "at_7am", &got_trigger_labels_pair_vector,
       &num_triggers_filtered);
   EXPECT_THAT(
@@ -597,9 +632,9 @@ TEST(BundleToSeqexUtilTest, GetTriggerLabelsPair_WithMultipleTriggers) {
   EXPECT_EQ(0, num_triggers_filtered);
 }
 
-TEST(BundleToSeqexUtilTest, ExtractEventLabelProtoFromBundle) {
+TYPED_TEST(BundleToSeqexUtilTest, ExtractEventLabelProtoFromBundle) {
   const std::set<std::string> label_names({"test1"});
-  Bundle bundle;
+  typename TypeParam::Bundle bundle;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry { resource { patient { id { value: "14" } } } }
     entry {
@@ -642,7 +677,7 @@ TEST(BundleToSeqexUtilTest, ExtractEventLabelProtoFromBundle) {
       }
     }
   )proto", &bundle));
-  EventLabel label;
+  typename TypeParam::EventLabel label;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     type {
       system { value: "urn:test:label" }
@@ -657,9 +692,9 @@ TEST(BundleToSeqexUtilTest, ExtractEventLabelProtoFromBundle) {
       }
     }
   )proto", &label));
-  EXPECT_THAT(
-      ExtractLabelsFromBundle<seqex_stu3::ConverterTypes>(bundle, {"test1"}),
-      UnorderedElementsAre(EqualsProto(label)));
+  EXPECT_THAT(ExtractLabelsFromBundle<typename TypeParam::ConverterTypes>(
+                  bundle, {"test1"}),
+              UnorderedElementsAre(EqualsProto(label)));
 }
 }  // namespace
 

@@ -22,11 +22,15 @@
 #include "absl/flags/declare.h"
 #include "absl/flags/flag.h"
 #include "absl/memory/memory.h"
+#include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/seqex/text_tokenizer.h"
-#include "google/fhir/stu3/primitive_handler.h"
 #include "google/fhir/test_helper.h"
+#include "google/fhir/testutil/fhir_test_env.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/stu3/resources.pb.h"
+#include "proto/r4/core/resources/binary.pb.h"
+#include "proto/r4/core/resources/encounter.pb.h"
+#include "proto/r4/core/resources/observation.pb.h"
+#include "proto/r4/core/resources/patient.pb.h"
 #include "tensorflow/core/example/example.pb.h"
 #include "tensorflow/core/platform/env.h"
 
@@ -40,28 +44,35 @@ namespace {
 
 using ::google::fhir::testutil::EqualsProto;
 
-void Stu3ResourceToExample(const google::protobuf::Message& message,
-                           const TextTokenizer& tokenizer,
-                           ::tensorflow::Example* example,
-                           bool enable_attribution) {
-  ResourceToExample(message, tokenizer, example, enable_attribution,
-                    stu3::Stu3PrimitiveHandler::GetInstance());
-}
-
+template <typename FhirTestEnv>
 class ResourceToExampleTest : public ::testing::Test {
  public:
   void SetUp() override {
-    parser_.AllowPartialMessage(true);
+    this->parser_.AllowPartialMessage(true);
     tokenizer_ = std::make_shared<SimpleWordTokenizer>();
   }
 
- protected:
+  void ResourceToExample(const google::protobuf::Message& message,
+                         const TextTokenizer& tokenizer,
+                         ::tensorflow::Example* example,
+                         bool enable_attribution) {
+    seqex::ResourceToExample(message, *tokenizer_, example, enable_attribution,
+                             FhirTestEnv::PrimitiveHandler::GetInstance());
+  }
+
   google::protobuf::TextFormat::Parser parser_;
   std::shared_ptr<TextTokenizer> tokenizer_;
 };
 
-TEST_F(ResourceToExampleTest, Patient) {
-  stu3::proto::Patient patient = PARSE_VALID_STU3_PROTO(R"(
+using TestEnvs =
+    ::testing::Types<testutil::Stu3CoreTestEnv, testutil::R4CoreTestEnv>;
+TYPED_TEST_SUITE(ResourceToExampleTest, TestEnvs);
+
+using ResourceToExampleTestR4Only =
+    ResourceToExampleTest<testutil::R4CoreTestEnv>;
+
+TYPED_TEST(ResourceToExampleTest, Patient) {
+  typename TypeParam::Patient patient = PARSE_VALID_FHIR_PROTO(R"(
     id { value: "1" }
     gender { value: FEMALE }
     birth_date {
@@ -76,44 +87,48 @@ TEST_F(ResourceToExampleTest, Patient) {
     } }
   )");
   ::tensorflow::Example expected;
-  ASSERT_TRUE(parser_.ParseFromString(R"proto(
-    features {
-      feature {
-        key: "Patient.birthDate"
-        value { int64_list { value: 2167084800 } }
-      }
-      feature {
-        key: "Patient.deceased.dateTime"
-        value { int64_list { value: 4915468800 } }
-      }
-      feature {
-        key: "Patient.gender"
-        value { bytes_list { value: "female" } }
-      }
-    }
-  )proto", &expected));
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      R"proto(
+        features {
+          feature {
+            key: "Patient.birthDate"
+            value { int64_list { value: 2167084800 } }
+          }
+          feature {
+            key: "Patient.deceased.dateTime"
+            value { int64_list { value: 4915468800 } }
+          }
+          feature {
+            key: "Patient.gender"
+            value { bytes_list { value: "female" } }
+          }
+        }
+      )proto",
+      &expected));
 
   ::tensorflow::Example output;
-  Stu3ResourceToExample(patient, *tokenizer_, &output, false);
+  this->ResourceToExample(patient, *this->tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
 
-TEST_F(ResourceToExampleTest, PositiveInt) {
-  stu3::proto::Encounter input;
-  ASSERT_TRUE(parser_.ParseFromString(R"proto(
-    diagnosis {
-      condition { condition_id { value: "5845379952480009077" } }
-      role {
-        coding {
-          system { value: "http://hl7.org/fhir/diagnosis-role" }
-          code { value: "DD" }
+TEST_F(ResourceToExampleTestR4Only, PositiveInt) {
+  r4::core::Encounter input;
+  ASSERT_TRUE(this->parser_.ParseFromString(
+      R"proto(
+        diagnosis {
+          condition { condition_id { value: "5845379952480009077" } }
+          use {
+            coding {
+              system { value: "http://hl7.org/fhir/diagnosis-role" }
+              code { value: "DD" }
+            }
+          }
+          rank { value: 6789 }
         }
-      }
-      rank { value: 6789 }
-    }
-  )proto", &input));
+      )proto",
+      &input));
   ::tensorflow::Example expected;
-  ASSERT_TRUE(parser_.ParseFromString(
+  ASSERT_TRUE(this->parser_.ParseFromString(
       R"proto(
         features {
           feature {
@@ -121,24 +136,24 @@ TEST_F(ResourceToExampleTest, PositiveInt) {
             value { int64_list { value: 6789 } }
           }
           feature {
-            key: "Encounter.diagnosis.role.http-hl7-org-fhir-diagnosis-role"
+            key: "Encounter.diagnosis.use.http-hl7-org-fhir-diagnosis-role"
             value { bytes_list { value: "DD" } }
           }
         })proto",
       &expected));
   ::tensorflow::Example output;
-  Stu3ResourceToExample(input, *tokenizer_, &output, false);
+  this->ResourceToExample(input, *this->tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
 
-TEST_F(ResourceToExampleTest, HandlesCodeValueAsString) {
-  stu3::proto::Binary input;
-  ASSERT_TRUE(parser_.ParseFromString(R"proto(
-                                        content_type { value: "bin" }
-                                      )proto",
-                                      &input));
+TYPED_TEST(ResourceToExampleTest, HandlesCodeValueAsString) {
+  typename TypeParam::Binary input;
+  ASSERT_TRUE(this->parser_.ParseFromString(R"proto(
+                                              content_type { value: "bin" }
+                                            )proto",
+                                            &input));
   ::tensorflow::Example expected;
-  ASSERT_TRUE(parser_.ParseFromString(
+  ASSERT_TRUE(this->parser_.ParseFromString(
       R"proto(
         features {
           feature {
@@ -148,19 +163,19 @@ TEST_F(ResourceToExampleTest, HandlesCodeValueAsString) {
         })proto",
       &expected));
   ::tensorflow::Example output;
-  Stu3ResourceToExample(input, *tokenizer_, &output, false);
+  this->ResourceToExample(input, *this->tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
 
-TEST_F(ResourceToExampleTest, BinaryResourceWithContent) {
-  stu3::proto::Binary input;
-  ASSERT_TRUE(parser_.ParseFromString(R"proto(
-                                        content_type { value: "bin" }
-                                        content { value: "09832982033" }
-                                      )proto",
-                                      &input));
+TEST_F(ResourceToExampleTestR4Only, BinaryResourceWithContent) {
+  r4::core::Binary input;
+  ASSERT_TRUE(this->parser_.ParseFromString(R"proto(
+                                              content_type { value: "bin" }
+                                              data { value: "09832982033" }
+                                            )proto",
+                                            &input));
   ::tensorflow::Example expected;
-  ASSERT_TRUE(parser_.ParseFromString(
+  ASSERT_TRUE(this->parser_.ParseFromString(
       R"proto(
         features {
           feature {
@@ -170,14 +185,14 @@ TEST_F(ResourceToExampleTest, BinaryResourceWithContent) {
         })proto",
       &expected));
   ::tensorflow::Example output;
-  Stu3ResourceToExample(input, *tokenizer_, &output, false);
+  this->ResourceToExample(input, *this->tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
 
-TEST_F(ResourceToExampleTest, SingletonCodeableConcepts) {
+TYPED_TEST(ResourceToExampleTest, SingletonCodeableConcepts) {
   absl::SetFlag(&FLAGS_tokenize_code_text_features, true);
-  stu3::proto::Observation input;
-  ASSERT_TRUE(parser_.ParseFromString(
+  typename TypeParam::Observation input;
+  ASSERT_TRUE(this->parser_.ParseFromString(
       R"proto(
         code: {
           coding: {
@@ -189,7 +204,7 @@ TEST_F(ResourceToExampleTest, SingletonCodeableConcepts) {
       )proto",
       &input));
   ::tensorflow::Example expected;
-  ASSERT_TRUE(parser_.ParseFromString(
+  ASSERT_TRUE(this->parser_.ParseFromString(
       R"proto(
         features {
           feature {
@@ -203,7 +218,7 @@ TEST_F(ResourceToExampleTest, SingletonCodeableConcepts) {
         })proto",
       &expected));
   ::tensorflow::Example output;
-  Stu3ResourceToExample(input, *tokenizer_, &output, false);
+  this->ResourceToExample(input, *this->tokenizer_, &output, false);
   EXPECT_THAT(output, EqualsProto(expected));
 }
 

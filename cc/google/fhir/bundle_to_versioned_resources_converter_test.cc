@@ -19,17 +19,66 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/strings/substitute.h"
+#include "google/fhir/seqex/r4.h"
+#include "google/fhir/seqex/stu3.h"
+#include "google/fhir/testutil/fhir_test_env.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "tensorflow/core/platform/env.h"
 
 namespace google {
 namespace fhir {
 
-using ::google::fhir::stu3::proto::Bundle;
-using ::google::fhir::stu3::proto::ContainedResource;
+namespace {
+
 using ::google::fhir::testutil::EqualsProto;
 using ::testing::Contains;
 using ::testing::UnorderedElementsAre;
+
+template <typename TestEnv>
+class BundleToVersionedResourcesConverterTest : public ::testing::Test {
+ public:
+  static const proto::VersionConfig GetConfig() {
+    proto::VersionConfig result;
+    TF_CHECK_OK(::tensorflow::ReadTextProto(
+        ::tensorflow::Env::Default(),
+        absl::StrCat(getenv("TEST_SRCDIR"), TestEnv::config_path()), &result));
+    return result;
+  }
+
+  static std::vector<typename TestEnv::ContainedResource>
+  RunBundleToVersionedResources(const typename TestEnv::Bundle& input,
+                                std::map<std::string, int>* counter_stats) {
+    return BundleToVersionedResources(input, GetConfig(), counter_stats);
+  }
+};
+
+struct Stu3ConverterTestEnv : public testutil::Stu3CoreTestEnv,
+                              public seqex_stu3::ConverterTypes {
+  constexpr static auto& config_path() {
+    return "/com_google_fhir/proto/stu3/version_config.textproto";
+  }
+
+  constexpr static auto& condition_recorded_date_field() {
+    return "assertedDate";
+  }
+  constexpr static auto& condition_encounter_field() { return "context"; }
+};
+
+struct R4ConverterTestEnv : public testutil::R4CoreTestEnv,
+                            public seqex_r4::ConverterTypes {
+  constexpr static auto& config_path() {
+    return "/com_google_fhir/proto/r4/version_config.textproto";
+  }
+
+  constexpr static auto& condition_recorded_date_field() {
+    return "recordedDate";
+  }
+  constexpr static auto& condition_encounter_field() { return "encounter"; }
+};
+
+using TestEnvs = ::testing::Types<Stu3ConverterTestEnv, R4ConverterTestEnv>;
+TYPED_TEST_SUITE(BundleToVersionedResourcesConverterTest, TestEnvs);
 
 void AssertCounter(const std::map<std::string, int>& counter_stats,
                    const std::string& counter, int value) {
@@ -38,24 +87,8 @@ void AssertCounter(const std::map<std::string, int>& counter_stats,
       << counter_stats.find(counter)->second;
 }
 
-const proto::VersionConfig GetConfig() {
-  proto::VersionConfig result;
-  TF_CHECK_OK(::tensorflow::ReadTextProto(
-      ::tensorflow::Env::Default(),
-      absl::StrCat(
-          getenv("TEST_SRCDIR"),
-          "/com_google_fhir/proto/stu3/version_config.textproto"),
-      &result));
-  return result;
-}
-
-std::vector<ContainedResource> RunBundleToVersionedResources(
-    const Bundle& input, std::map<std::string, int>* counter_stats) {
-  return BundleToVersionedResources(input, GetConfig(), counter_stats);
-}
-
-TEST(BundleToVersionedResourcesConverterTest, PatientWithTimeOfDeath) {
-  Bundle input;
+TYPED_TEST(BundleToVersionedResourcesConverterTest, PatientWithTimeOfDeath) {
+  typename TypeParam::Bundle input;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
       resource {
@@ -113,7 +146,7 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithTimeOfDeath) {
       }
     })proto", &input));
 
-  ContainedResource patient_v1;
+  typename TypeParam::ContainedResource patient_v1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     patient {
       id { value: "14" }
@@ -131,7 +164,7 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithTimeOfDeath) {
         }
       }
     })proto", &patient_v1));
-  ContainedResource patient_v2;
+  typename TypeParam::ContainedResource patient_v2;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     patient {
       id { value: "14" }
@@ -159,7 +192,7 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithTimeOfDeath) {
   )proto", &patient_v2));
 
   std::map<std::string, int> counter_stats;
-  auto output = RunBundleToVersionedResources(input, &counter_stats);
+  auto output = this->RunBundleToVersionedResources(input, &counter_stats);
   // 2 patient versions + 2 versions of each encounter = 6
   ASSERT_EQ(6, output.size());
   ASSERT_THAT(output, Contains(EqualsProto(patient_v1)));
@@ -168,8 +201,9 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithTimeOfDeath) {
   AssertCounter(counter_stats, "num-patient-split-to-2", 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest, PatientWithDeceasedBoolean) {
-  Bundle input;
+TYPED_TEST(BundleToVersionedResourcesConverterTest,
+           PatientWithDeceasedBoolean) {
+  typename TypeParam::Bundle input;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
       resource {
@@ -221,7 +255,7 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithDeceasedBoolean) {
       }
     })proto", &input));
 
-  ContainedResource patient_v1;
+  typename TypeParam::ContainedResource patient_v1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     patient {
       id { value: "14" }
@@ -240,7 +274,7 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithDeceasedBoolean) {
       }
     })proto", &patient_v1));
 
-  ContainedResource patient_v2;
+  typename TypeParam::ContainedResource patient_v2;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     patient {
       id { value: "14" }
@@ -262,7 +296,7 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithDeceasedBoolean) {
   )proto", &patient_v2));
 
   std::map<std::string, int> counter_stats;
-  auto output = RunBundleToVersionedResources(input, &counter_stats);
+  auto output = this->RunBundleToVersionedResources(input, &counter_stats);
   // 2 patient versions + 2 versions of each encounter = 6
   ASSERT_EQ(6, output.size());
   ASSERT_THAT(output, Contains(EqualsProto(patient_v1)));
@@ -271,8 +305,8 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithDeceasedBoolean) {
   AssertCounter(counter_stats, "num-patient-split-to-2", 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest, PatientWithoutEncounters) {
-  Bundle input;
+TYPED_TEST(BundleToVersionedResourcesConverterTest, PatientWithoutEncounters) {
+  typename TypeParam::Bundle input;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
       resource {
@@ -288,7 +322,7 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithoutEncounters) {
       }
     })proto", &input));
 
-  ContainedResource patient_v1;
+  typename TypeParam::ContainedResource patient_v1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     patient {
       id { value: "14" }
@@ -308,15 +342,15 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithoutEncounters) {
     })proto", &patient_v1));
 
   std::map<std::string, int> counter_stats;
-  auto output = RunBundleToVersionedResources(input, &counter_stats);
+  auto output = this->RunBundleToVersionedResources(input, &counter_stats);
   ASSERT_EQ(1, output.size());
   ASSERT_THAT(output, testing::ElementsAre(EqualsProto(patient_v1)));
   AssertCounter(counter_stats, "patient-unknown-death-time-needs-attention", 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest,
-     PatientWithoutEncountersOrBirthdate) {
-  Bundle input;
+TYPED_TEST(BundleToVersionedResourcesConverterTest,
+           PatientWithoutEncountersOrBirthdate) {
+  typename TypeParam::Bundle input;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
       resource {
@@ -328,14 +362,14 @@ TEST(BundleToVersionedResourcesConverterTest,
     })proto", &input));
 
   std::map<std::string, int> counter_stats;
-  auto output = RunBundleToVersionedResources(input, &counter_stats);
+  auto output = this->RunBundleToVersionedResources(input, &counter_stats);
   ASSERT_EQ(0, output.size());
   AssertCounter(counter_stats, "patient-unknown-death-time-needs-attention", 1);
   AssertCounter(counter_stats, "patient-unknown-entry-time-needs-attention", 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest, PatientWithoutDeath) {
-  Bundle input;
+TYPED_TEST(BundleToVersionedResourcesConverterTest, PatientWithoutDeath) {
+  typename TypeParam::Bundle input;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
       resource {
@@ -368,7 +402,7 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithoutDeath) {
       }
     })proto", &input));
 
-  ContainedResource patient_v1;
+  typename TypeParam::ContainedResource patient_v1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     patient {
       id { value: "14" }
@@ -388,7 +422,7 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithoutDeath) {
     })proto", &patient_v1));
 
   std::map<std::string, int> counter_stats;
-  auto output = RunBundleToVersionedResources(input, &counter_stats);
+  auto output = this->RunBundleToVersionedResources(input, &counter_stats);
   // 1 patient versions + 2 versions of each encounter = 4
   ASSERT_EQ(3, output.size());
   ASSERT_THAT(output, Contains(EqualsProto(patient_v1)));
@@ -396,8 +430,8 @@ TEST(BundleToVersionedResourcesConverterTest, PatientWithoutDeath) {
   AssertCounter(counter_stats, "num-patient-split-to-1", 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest, DefaultTimestampOnly) {
-  Bundle input;
+TYPED_TEST(BundleToVersionedResourcesConverterTest, DefaultTimestampOnly) {
+  typename TypeParam::Bundle input;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
       resource {
@@ -412,7 +446,7 @@ TEST(BundleToVersionedResourcesConverterTest, DefaultTimestampOnly) {
       }
     })proto", &input));
 
-  ContainedResource claim_v1;
+  typename TypeParam::ContainedResource claim_v1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     claim {
       language { value: "Klingon" }
@@ -432,27 +466,27 @@ TEST(BundleToVersionedResourcesConverterTest, DefaultTimestampOnly) {
     })proto", &claim_v1));
 
   std::map<std::string, int> counter_stats;
-  ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
+  ASSERT_THAT(this->RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(claim_v1)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
   AssertCounter(counter_stats, "num-claim-split-to-1", 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest, DefaultTimestampOnlyEmpty) {
-  Bundle input;
+TYPED_TEST(BundleToVersionedResourcesConverterTest, DefaultTimestampOnlyEmpty) {
+  typename TypeParam::Bundle input;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry { resource { claim { language { value: "Klingon" } } } })proto",
                                                   &input));
 
   std::map<std::string, int> counter_stats;
-  ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
+  ASSERT_THAT(this->RunBundleToVersionedResources(input, &counter_stats),
               testing::ElementsAre());
   AssertCounter(counter_stats, "split-failed-no-default_timestamp_field-Claim",
                 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest, WithPopulatedOverride) {
-  Bundle input;
+TYPED_TEST(BundleToVersionedResourcesConverterTest, WithPopulatedOverride) {
+  typename TypeParam::Bundle input;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
       resource {
@@ -476,7 +510,7 @@ TEST(BundleToVersionedResourcesConverterTest, WithPopulatedOverride) {
       }
     })proto", &input));
 
-  ContainedResource v1;
+  typename TypeParam::ContainedResource v1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     encounter {
       period {
@@ -497,7 +531,7 @@ TEST(BundleToVersionedResourcesConverterTest, WithPopulatedOverride) {
       }
     })proto", &v1));
 
-  ContainedResource v2;
+  typename TypeParam::ContainedResource v2;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     encounter {
       period {
@@ -526,14 +560,14 @@ TEST(BundleToVersionedResourcesConverterTest, WithPopulatedOverride) {
     })proto", &v2));
 
   std::map<std::string, int> counter_stats;
-  ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
+  ASSERT_THAT(this->RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(v1), EqualsProto(v2)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
   AssertCounter(counter_stats, "num-encounter-split-to-2", 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest, WithEmptyOverride) {
-  Bundle input;
+TYPED_TEST(BundleToVersionedResourcesConverterTest, WithEmptyOverride) {
+  typename TypeParam::Bundle input;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
       resource {
@@ -552,7 +586,7 @@ TEST(BundleToVersionedResourcesConverterTest, WithEmptyOverride) {
       }
     })proto", &input));
 
-  ContainedResource v1;
+  typename TypeParam::ContainedResource v1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     encounter {
       period {
@@ -574,71 +608,81 @@ TEST(BundleToVersionedResourcesConverterTest, WithEmptyOverride) {
     })proto", &v1));
 
   std::map<std::string, int> counter_stats;
-  ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
+  ASSERT_THAT(this->RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(v1)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
   AssertCounter(counter_stats, "num-encounter-split-to-1", 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest,
-     WithPopulatedEncounterRefAndPopulatedDefault) {
-  Bundle input;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        encounter {
-          period {
-            start {
-              value_us: 500000000000
-              precision: MICROSECOND
-              timezone: "America/New_York"
+TYPED_TEST(BundleToVersionedResourcesConverterTest,
+           WithPopulatedEncounterRefAndPopulatedDefault) {
+  typename TypeParam::Bundle input;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      absl::Substitute(
+          R"proto(
+            entry {
+              resource {
+                encounter {
+                  period {
+                    start {
+                      value_us: 500000000000
+                      precision: MICROSECOND
+                      timezone: "America/New_York"
+                    }
+                    end {
+                      value_us: 1000000000000
+                      precision: MICROSECOND
+                      timezone: "America/New_York"
+                    }
+                  }
+                  id { value: "enc_id" }
+                }
+              }
             }
-            end {
-              value_us: 1000000000000
-              precision: MICROSECOND
-              timezone: "America/New_York"
-            }
-          }
-          id { value: "enc_id" }
-        }
-      }
-    }
-    entry {
-      resource {
-        condition {
-          language { value: "Klingon" }
-          asserted_date {
-            value_us: 4700000000000
-            precision: SECOND
-            timezone: "America/New_York"
-          }
-          context { encounter_id { value: "enc_id" } }
-        }
-      }
-    })proto", &input));
+            entry {
+              resource {
+                condition {
+                  language { value: "Klingon" }
+                  $0 {
+                    value_us: 4700000000000
+                    precision: SECOND
+                    timezone: "America/New_York"
+                  }
+                  $1 { encounter_id { value: "enc_id" } }
+                }
+              }
+            })proto",
+          ToSnakeCase(TypeParam::condition_recorded_date_field()),
+          ToSnakeCase(TypeParam::condition_encounter_field())),
+      &input));
 
-  ContainedResource v1;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    condition {
-      language { value: "Klingon" }
-      asserted_date {
-        value_us: 4700000000000
-        precision: SECOND
-        timezone: "America/New_York"
-      }
-      context { encounter_id { value: "enc_id" } }
-      meta {
-        version_id { value: "0" }
-        last_updated {
-          value_us: 4700000000000
-          precision: SECOND
-          timezone: "America/New_York"
-        }
-      }
-    })proto", &v1));
+  typename TypeParam::ContainedResource v1;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      absl::Substitute(
+          R"proto(
+            condition {
+              language { value: "Klingon" }
+              $0 {
+                value_us: 4700000000000
+                precision: SECOND
+                timezone: "America/New_York"
+              }
+              $1 { encounter_id { value: "enc_id" } }
+              meta {
+                version_id { value: "0" }
+                last_updated {
+                  value_us: 4700000000000
+                  precision: SECOND
+                  timezone: "America/New_York"
+                }
+              }
+            })proto",
+          ToSnakeCase(TypeParam::condition_recorded_date_field()),
+          ToSnakeCase(TypeParam::condition_encounter_field())),
+      &v1));
 
   std::map<std::string, int> counter_stats;
-  auto output = RunBundleToVersionedResources(input, &counter_stats);
+  auto output = this->RunBundleToVersionedResources(input, &counter_stats);
   // 2 encounters + 1 condition = 3
   ASSERT_EQ(3, output.size());
   // encounter/offset ignored
@@ -647,74 +691,88 @@ TEST(BundleToVersionedResourcesConverterTest,
   AssertCounter(counter_stats, "num-condition-split-to-1", 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest,
-     WithNonResolvingEncounterRefAndEmptyDefault) {
-  Bundle input;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        condition {
-          language { value: "Klingon" }
-          context { encounter_id { value: "enc_id" } }
-        }
-      }
-    })proto", &input));
+TYPED_TEST(BundleToVersionedResourcesConverterTest,
+           WithNonResolvingEncounterRefAndEmptyDefault) {
+  typename TypeParam::Bundle input;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      absl::Substitute(
+          R"proto(
+            entry {
+              resource {
+                condition {
+                  language { value: "Klingon" }
+                  $0 { encounter_id { value: "enc_id" } }
+                }
+              }
+            })proto",
+          TypeParam::condition_encounter_field()),
+      &input));
 
   std::map<std::string, int> counter_stats;
-  ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
+  ASSERT_THAT(this->RunBundleToVersionedResources(input, &counter_stats),
               testing::ElementsAre());
   AssertCounter(counter_stats,
                 "split-failed-no-default_timestamp_field-Condition", 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest,
-     WithNonResolvingEncounterRefAndSetDefault) {
-  Bundle input;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    entry {
-      resource {
-        condition {
-          language { value: "Klingon" }
-          context { encounter_id { value: "enc_id" } }
-          asserted_date {
-            value_us: 4700000000000
-            precision: MILLISECOND
-            timezone: "America/New_York"
-          }
-        }
-      }
-    })proto", &input));
+TYPED_TEST(BundleToVersionedResourcesConverterTest,
+           WithNonResolvingEncounterRefAndSetDefault) {
+  typename TypeParam::Bundle input;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      absl::Substitute(
+          R"proto(
+            entry {
+              resource {
+                condition {
+                  language { value: "Klingon" }
+                  $0 { encounter_id { value: "enc_id" } }
+                  $1 {
+                    value_us: 4700000000000
+                    precision: MILLISECOND
+                    timezone: "America/New_York"
+                  }
+                }
+              }
+            })proto",
+          ToSnakeCase(TypeParam::condition_encounter_field()),
+          ToSnakeCase(TypeParam::condition_recorded_date_field())),
+      &input));
 
-  ContainedResource v1;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    condition {
-      language { value: "Klingon" }
-      context { encounter_id { value: "enc_id" } }
-      asserted_date {
-        value_us: 4700000000000
-        precision: MILLISECOND
-        timezone: "America/New_York"
-      }
-      meta {
-        version_id { value: "0" }
-        last_updated {
-          value_us: 4700000000000
-          precision: MILLISECOND
-          timezone: "America/New_York"
-        }
-      }
-    })proto", &v1));
+  typename TypeParam::ContainedResource v1;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      absl::Substitute(
+          R"proto(
+            condition {
+              language { value: "Klingon" }
+              $0 { encounter_id { value: "enc_id" } }
+              $1 {
+                value_us: 4700000000000
+                precision: MILLISECOND
+                timezone: "America/New_York"
+              }
+              meta {
+                version_id { value: "0" }
+                last_updated {
+                  value_us: 4700000000000
+                  precision: MILLISECOND
+                  timezone: "America/New_York"
+                }
+              }
+            })proto",
+          ToSnakeCase(TypeParam::condition_encounter_field()),
+          ToSnakeCase(TypeParam::condition_recorded_date_field())),
+      &v1));
 
   std::map<std::string, int> counter_stats;
-  auto output = RunBundleToVersionedResources(input, &counter_stats);
+  auto output = this->RunBundleToVersionedResources(input, &counter_stats);
   // encounter/offset ignored
   ASSERT_THAT(output, UnorderedElementsAre(EqualsProto(v1)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
   AssertCounter(counter_stats, "num-condition-split-to-1", 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest, ExpandRepeatedTargets) {
-  Bundle input;
+TYPED_TEST(BundleToVersionedResourcesConverterTest, ExpandRepeatedTargets) {
+  typename TypeParam::Bundle input;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
       resource {
@@ -746,7 +804,7 @@ TEST(BundleToVersionedResourcesConverterTest, ExpandRepeatedTargets) {
       }
     })proto", &input));
 
-  ContainedResource v1;
+  typename TypeParam::ContainedResource v1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     composition {
       date {
@@ -766,7 +824,7 @@ TEST(BundleToVersionedResourcesConverterTest, ExpandRepeatedTargets) {
       }
     })proto", &v1));
 
-  ContainedResource v2;
+  typename TypeParam::ContainedResource v2;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     composition {
       date {
@@ -793,7 +851,7 @@ TEST(BundleToVersionedResourcesConverterTest, ExpandRepeatedTargets) {
         }
       }
     })proto", &v2));
-  ContainedResource v3;
+  typename TypeParam::ContainedResource v3;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     composition {
       date {
@@ -830,15 +888,15 @@ TEST(BundleToVersionedResourcesConverterTest, ExpandRepeatedTargets) {
     })proto", &v3));
 
   std::map<std::string, int> counter_stats;
-  auto output = RunBundleToVersionedResources(input, &counter_stats);
+  auto output = this->RunBundleToVersionedResources(input, &counter_stats);
   ASSERT_THAT(output, UnorderedElementsAre(EqualsProto(v1), EqualsProto(v2),
                                            EqualsProto(v3)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
   AssertCounter(counter_stats, "num-composition-split-to-3", 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest, PrecisionConversionDay) {
-  Bundle input;
+TYPED_TEST(BundleToVersionedResourcesConverterTest, PrecisionConversionDay) {
+  typename TypeParam::Bundle input;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
       resource {
@@ -853,7 +911,7 @@ TEST(BundleToVersionedResourcesConverterTest, PrecisionConversionDay) {
       }
     })proto", &input));
 
-  ContainedResource claim_v1;
+  typename TypeParam::ContainedResource claim_v1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     claim {
       language { value: "Klingon" }
@@ -873,14 +931,14 @@ TEST(BundleToVersionedResourcesConverterTest, PrecisionConversionDay) {
     })proto", &claim_v1));
 
   std::map<std::string, int> counter_stats;
-  ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
+  ASSERT_THAT(this->RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(claim_v1)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
   AssertCounter(counter_stats, "num-claim-split-to-1", 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest, PrecisionConversionMonth) {
-  Bundle input;
+TYPED_TEST(BundleToVersionedResourcesConverterTest, PrecisionConversionMonth) {
+  typename TypeParam::Bundle input;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
       resource {
@@ -895,7 +953,7 @@ TEST(BundleToVersionedResourcesConverterTest, PrecisionConversionMonth) {
       }
     })proto", &input));
 
-  ContainedResource claim_v1;
+  typename TypeParam::ContainedResource claim_v1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     claim {
       language { value: "Klingon" }
@@ -915,14 +973,14 @@ TEST(BundleToVersionedResourcesConverterTest, PrecisionConversionMonth) {
     })proto", &claim_v1));
 
   std::map<std::string, int> counter_stats;
-  ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
+  ASSERT_THAT(this->RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(claim_v1)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
   AssertCounter(counter_stats, "num-claim-split-to-1", 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest, PrecisionConversionYear) {
-  Bundle input;
+TYPED_TEST(BundleToVersionedResourcesConverterTest, PrecisionConversionYear) {
+  typename TypeParam::Bundle input;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
       resource {
@@ -937,7 +995,7 @@ TEST(BundleToVersionedResourcesConverterTest, PrecisionConversionYear) {
       }
     })proto", &input));
 
-  ContainedResource claim_v1;
+  typename TypeParam::ContainedResource claim_v1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     claim {
       language { value: "Klingon" }
@@ -957,14 +1015,14 @@ TEST(BundleToVersionedResourcesConverterTest, PrecisionConversionYear) {
     })proto", &claim_v1));
 
   std::map<std::string, int> counter_stats;
-  ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
+  ASSERT_THAT(this->RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(claim_v1)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
   AssertCounter(counter_stats, "num-claim-split-to-1", 1);
 }
 
-TEST(BundleToVersionedResourcesConverterTest, MultipleDefaultTimestamps) {
-  Bundle input;
+TYPED_TEST(BundleToVersionedResourcesConverterTest, MultipleDefaultTimestamps) {
+  typename TypeParam::Bundle input;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
       resource {
@@ -1035,7 +1093,7 @@ TEST(BundleToVersionedResourcesConverterTest, MultipleDefaultTimestamps) {
       }
     })proto", &input));
 
-  ContainedResource ma_1;
+  typename TypeParam::ContainedResource ma_1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     medication_administration {
       id { value: "1" }
@@ -1075,7 +1133,7 @@ TEST(BundleToVersionedResourcesConverterTest, MultipleDefaultTimestamps) {
       }
     })proto", &ma_1));
 
-  ContainedResource ma_2;
+  typename TypeParam::ContainedResource ma_2;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     medication_administration {
       id { value: "2" }
@@ -1118,14 +1176,14 @@ TEST(BundleToVersionedResourcesConverterTest, MultipleDefaultTimestamps) {
     })proto", &ma_2));
 
   std::map<std::string, int> counter_stats;
-  ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
+  ASSERT_THAT(this->RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(ma_1), EqualsProto(ma_2)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 2);
   AssertCounter(counter_stats, "num-medication_administration-split-to-1", 2);
 }
 
-TEST(BundleToVersionedResourcesConverterTest, TimeZoneWithFixedOffset) {
-  Bundle input;
+TYPED_TEST(BundleToVersionedResourcesConverterTest, TimeZoneWithFixedOffset) {
+  typename TypeParam::Bundle input;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     entry {
       resource {
@@ -1140,7 +1198,7 @@ TEST(BundleToVersionedResourcesConverterTest, TimeZoneWithFixedOffset) {
       }
     })proto", &input));
 
-  ContainedResource claim_v1;
+  typename TypeParam::ContainedResource claim_v1;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
     claim {
       language { value: "Klingon" }
@@ -1156,11 +1214,13 @@ TEST(BundleToVersionedResourcesConverterTest, TimeZoneWithFixedOffset) {
     })proto", &claim_v1));
 
   std::map<std::string, int> counter_stats;
-  ASSERT_THAT(RunBundleToVersionedResources(input, &counter_stats),
+  ASSERT_THAT(this->RunBundleToVersionedResources(input, &counter_stats),
               UnorderedElementsAre(EqualsProto(claim_v1)));
   AssertCounter(counter_stats, "num-unversioned-resources-in", 1);
   AssertCounter(counter_stats, "num-claim-split-to-1", 1);
 }
+
+}  // namespace
 
 }  // namespace fhir
 }  // namespace google

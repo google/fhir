@@ -1,0 +1,32 @@
+type {
+  system {
+    value: "urn:google:fhir:label"
+  }
+  code {
+    value: "label.test"
+  }
+}
+event_time {
+  # January 2, 2003 4:05:06 AM
+  value_us: 1041480306000000
+}
+source {
+  encounter_id {
+    value: "5678"
+  }
+}
+label {
+  class_name {
+    system: {
+      value: "urn:google:fhir:label"
+    }
+    code {
+      value: "true"
+    }
+  }
+}
+patient {
+  patient_id {
+    value: "Patient/1"
+  }
+}

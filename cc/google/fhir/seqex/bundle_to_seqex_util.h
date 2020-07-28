@@ -25,7 +25,6 @@
 #include "google/fhir/extensions.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
-#include "proto/stu3/datatypes.pb.h"
 
 namespace google {
 namespace fhir {
@@ -37,7 +36,9 @@ template <typename ConverterTypes>
 StatusOr<std::vector<typename ConverterTypes::EventLabel>>
 ExtractLabelsFromExtensions(
     const std::set<std::string>& label_names,
-    google::protobuf::RepeatedFieldRef<stu3::proto::Extension> extensions) {
+    google::protobuf::RepeatedFieldRef<
+        typename ConverterTypes::PrimitiveHandler::Extension>
+        extensions) {
   std::vector<typename ConverterTypes::EventLabel> labels;
   FHIR_RETURN_IF_ERROR(google::fhir::extensions_lib::GetRepeatedFromExtension(
       extensions, &labels));
@@ -52,7 +53,9 @@ ExtractLabelsFromExtensions(
 
 template <typename ConverterTypes>
 void GetTriggerLabelsPairFromExtensions(
-    const ::google::protobuf::RepeatedFieldRef<stu3::proto::Extension> extensions,
+    const ::google::protobuf::RepeatedFieldRef<
+        typename ConverterTypes::PrimitiveHandler::Extension>
+        extensions,
     const std::set<std::string>& label_names,
     const std::string& trigger_event_name,
     std::vector<typename ConverterTypes::TriggerLabelsPair>*

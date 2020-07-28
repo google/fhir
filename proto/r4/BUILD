@@ -7,6 +7,8 @@ package(
 
 licenses(["notice"])
 
+exports_files(["version_config.textproto"])
+
 fhir_proto_library(
     srcs = [
         "google_extensions.proto",

@@ -53,6 +53,7 @@ namespace fhir {
 namespace seqex {
 
 using ::google::fhir::proto::VersionConfig;
+using ::google::protobuf::Message;
 using ::tensorflow::Example;
 using ::tensorflow::Feature;
 using ::tensorflow::Features;
@@ -382,6 +383,14 @@ void BaseBundleToSeqexConverter::EventSequenceToExamples(
       }
     }
   }
+}
+
+StatusOr<absl::Time> GetVersionTime(const Message& resource) {
+  FHIR_ASSIGN_OR_RETURN(const Message* meta,
+                        GetMessageInField(resource, "meta"));
+  FHIR_ASSIGN_OR_RETURN(const Message* last_updated,
+                        GetMessageInField(*meta, "last_updated"));
+  return google::fhir::GetTimeFromTimelikeElement(*last_updated);
 }
 
 }  // namespace internal
