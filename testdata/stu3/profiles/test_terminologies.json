@@ -1,5 +1,6 @@
 {
   "resourceType": "Bundle",
+  "type": "collection",
   "entry": [
     {
       "resource": {
@@ -8,7 +9,7 @@
         "name": "Brewery",
         "title": "Brewery",
         "status": "draft",
-        "date": "2020-01-06",
+        "date": "2020-07-29",
         "publisher": "Testington Inc.",
         "description": "The brewery of origin.",
         "content": "complete",

@@ -23,6 +23,7 @@ import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.Terminologies;
 import com.google.fhir.proto.ValueSetConfig;
 import com.google.fhir.r4.core.Bundle;
+import com.google.fhir.r4.core.BundleTypeCode;
 import com.google.fhir.r4.core.Code;
 import com.google.fhir.r4.core.CodeSystem;
 import com.google.fhir.r4.core.CodeSystemContentModeCode;
@@ -46,6 +47,7 @@ final class TerminologyGenerator {
 
   Bundle generateTerminologies(Terminologies terminologies) {
     Bundle.Builder bundle = Bundle.newBuilder();
+    bundle.getTypeBuilder().setValue(BundleTypeCode.Value.COLLECTION);
     for (CodeSystemConfig codeSystemConfig : terminologies.getCodeSystemList()) {
       bundle
           .addEntryBuilder()
@@ -54,6 +56,12 @@ final class TerminologyGenerator {
     }
     for (ValueSetConfig valueSetConfig : terminologies.getValueSetList()) {
       bundle.addEntryBuilder().getResourceBuilder().setValueSet(buildValueSet(valueSetConfig));
+    }
+
+    try {
+      new ResourceValidator().validateResource(bundle);
+    } catch (InvalidFhirException e) {
+      throw new IllegalArgumentException(e);
     }
 
     return bundle.build();
