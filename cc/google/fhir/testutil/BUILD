@@ -47,7 +47,6 @@ cc_library(
 
 cc_library(
     name = "generator",
-    testonly = 1,
     srcs = ["generator.cc"],
     hdrs = ["generator.h"],
     strip_include_prefix = "//cc/",
@@ -81,7 +80,9 @@ cc_test(
         "//cc/google/fhir:proto_util",
         "//cc/google/fhir:test_helper",
         "//cc/google/fhir:util",
+        "//cc/google/fhir/r4:primitive_handler",
         "//proto/r4/core:datatypes_cc_proto",
+        "//proto/r4/core/resources:observation_cc_proto",
         "//proto/r4/core/resources:patient_cc_proto",
         "@com_google_absl//absl/time",
         "@com_google_googletest//:gtest_main",

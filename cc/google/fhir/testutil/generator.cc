@@ -323,30 +323,34 @@ Status FhirGenerator::FillReference(
   // Get the URI field to populate
   google::protobuf::Message* fhir_reference =
       ::google::fhir::MutableOrAddMessage(message, field);
-  const google::protobuf::FieldDescriptor* uri_field =
-      fhir_reference->GetDescriptor()->FindFieldByName("uri");
-  google::protobuf::Message* uri_message =
-      fhir_reference->GetReflection()->MutableMessage(fhir_reference,
-                                                      uri_field);
 
   // Set the URI value then split it into the ID fields per type.
   int recursion_depth = (*recursion_count)[field->message_type()];
   std::string reference_type =
       value_provider_->GetReferenceType(field, recursion_depth);
-  std::string reference_id =
-      value_provider_->GetReferenceId(field, recursion_depth);
-  FHIR_RETURN_IF_ERROR(primitive_handler_->ParseInto(
-      Json::Value(absl::StrCat(reference_type, "/", reference_id)),
-      uri_message));
 
-  // STU3 generated code did not have general resource_id fields, so
-  // we can't attempt to split the relative reference if that field
-  // does not exist.
-  if (reference_type == "Resource" &&
-      fhir_reference->GetDescriptor()->FindFieldByName("resource_id") ==
-          nullptr) {
-    return absl::OkStatus();
+  // References to the generic Resource type can't be relative URIs, so create
+  // an external identifier instead.
+  if (reference_type == "Resource") {
+    const google::protobuf::FieldDescriptor* identifier_field =
+        fhir_reference->GetDescriptor()->FindFieldByName("identifier");
+
+    google::protobuf::Message* identifier =
+        fhir_reference->GetReflection()->MutableMessage(fhir_reference,
+                                                        identifier_field);
+    return Fill(identifier);
+
   } else {
+    const google::protobuf::FieldDescriptor* uri_field =
+        fhir_reference->GetDescriptor()->FindFieldByName("uri");
+    google::protobuf::Message* uri_message =
+        fhir_reference->GetReflection()->MutableMessage(fhir_reference,
+                                                        uri_field);
+    std::string reference_id =
+        value_provider_->GetReferenceId(field, recursion_depth);
+    FHIR_RETURN_IF_ERROR(primitive_handler_->ParseInto(
+        Json::Value(absl::StrCat(reference_type, "/", reference_id)),
+        uri_message));
     return SplitIfRelativeReference(fhir_reference);
   }
 }
@@ -357,6 +361,17 @@ bool FhirGenerator::ShouldFill(
   // "Any" types and contained resources not currently supported.
   if (IsMessageType<::google::protobuf::Any>(field->message_type())) {
     return false;
+  }
+
+  // Always populate the id fields on FHIR resources so they are usable in
+  // FHIR stores and to track down errors.
+  if (field->name() == "id" &&
+      message->GetDescriptor()->options().HasExtension(
+          ::google::fhir::proto::structure_definition_kind) &&
+      message->GetDescriptor()->options().GetExtension(
+          ::google::fhir::proto::structure_definition_kind) ==
+          ::google::fhir::proto::KIND_RESOURCE) {
+    return true;
   }
 
   // Required fields and fields in choice types must always be filled.

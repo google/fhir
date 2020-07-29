@@ -18,8 +18,10 @@
 #include "gtest/gtest.h"
 #include "absl/time/time.h"
 #include "google/fhir/proto_util.h"
+#include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/testutil/fhir_test_env.h"
 #include "google/fhir/testutil/proto_matchers.h"
+#include "proto/r4/core/resources/observation.pb.h"
 #include "proto/r4/core/resources/patient.pb.h"
 
 namespace google {
@@ -60,7 +62,7 @@ TYPED_TEST(FhirGeneratorTest, TestAllRootFieldsSet) {
   }
 }
 
-TYPED_TEST(FhirGeneratorTest, TestOnlyRequiredFieldsSet) {
+TYPED_TEST(FhirGeneratorTest, TestOnlyRequiredAndIdFieldsSet) {
   // Create a random value provider that fills only required fields.
   FhirGenerator generator(absl::make_unique<RandomValueProvider>(0.0),
                           TypeParam::PrimitiveHandler::GetInstance());
@@ -69,12 +71,28 @@ TYPED_TEST(FhirGeneratorTest, TestOnlyRequiredFieldsSet) {
 
   for (int i = 0; i < patient.GetDescriptor()->field_count(); ++i) {
     const google::protobuf::FieldDescriptor* field = patient.GetDescriptor()->field(i);
-    if (IsRequiredField(field)) {
+    if (IsRequiredField(field) || field->name() == "id") {
       EXPECT_TRUE(FieldHasValue(patient, field)) << field->full_name();
     } else {
       EXPECT_FALSE(FieldHasValue(patient, field)) << field->full_name();
     }
   }
+}
+
+// Test to ensure FHIR references use generic FHIR identifiers
+// when the target resource type isn't known.
+TEST(FhirGeneratorFieldsTest, TestUntypedReference) {
+  // Use the R4 Observation focus field since it is a
+  // Reference(Any) field.
+  ::google::fhir::r4::core::Observation observation;
+  FhirGenerator generator(
+      absl::make_unique<RandomValueProvider>(1.0),
+      ::google::fhir::r4::R4PrimitiveHandler::GetInstance());
+
+  FHIR_ASSERT_OK(generator.Fill(&observation));
+  ASSERT_GT(observation.focus_size(), 0);
+  ASSERT_FALSE(observation.focus(0).has_uri());
+  ASSERT_TRUE(observation.focus(0).has_identifier());
 }
 
 }  // namespace
