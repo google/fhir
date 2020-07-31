@@ -124,19 +124,6 @@ fhir_proto_library(
 )
 
 fhir_proto_library(
-    srcs = ["data_element_constraint_on_element_definition_data_type.proto"],
-    proto_deps = [
-        "@com_google_protobuf//:any_proto",
-        "//proto:annotations_proto",
-        "//proto/r4/core:codes_proto",
-        "//proto/r4/core:datatypes_proto",
-        "//proto/r4/core:extensions_proto",
-        "//proto/r4/core:valuesets_proto",
-    ],
-    proto_library_prefix = "data_element_constraint_on_element_definition_data_type",
-)
-
-fhir_proto_library(
     srcs = ["device_metric_observation_profile.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
