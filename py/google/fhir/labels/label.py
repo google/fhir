@@ -31,7 +31,7 @@ import datetime
 from typing import Iterator, Optional
 
 from proto.stu3 import datatypes_pb2
-from proto.stu3 import google_extensions_pb2
+from proto.stu3 import ml_extensions_pb2
 from proto.stu3 import resources_pb2
 from py.google.fhir.labels import encounter
 
@@ -60,10 +60,9 @@ def ToMicroSeconds(dt: datetime.datetime) -> int:
 
 
 # Note: this API only compose encounter level API.
-def ComposeLabel(
-    patient: resources_pb2.Patient, enc: resources_pb2.Encounter,
-    label_name: str, label_val: str,
-    label_time: datetime.datetime) -> google_extensions_pb2.EventLabel:
+def ComposeLabel(patient: resources_pb2.Patient, enc: resources_pb2.Encounter,
+                 label_name: str, label_val: str,
+                 label_time: datetime.datetime) -> ml_extensions_pb2.EventLabel:
   """Compose an event_label proto given inputs.
 
   Args:
@@ -76,7 +75,7 @@ def ComposeLabel(
   Returns:
     event_label proto.
   """
-  event_label = google_extensions_pb2.EventLabel()
+  event_label = ml_extensions_pb2.EventLabel()
   # set patient_id
   event_label.patient.patient_id.value = patient.id.value
   event_label.type.system.value = GOOGLE_FHIR_LABEL_SYTEM
@@ -84,7 +83,7 @@ def ComposeLabel(
   event_label.event_time.value_us = ToMicroSeconds(label_time)
   event_label.source.encounter_id.value = enc.id.value
 
-  label = google_extensions_pb2.EventLabel.Label()
+  label = ml_extensions_pb2.EventLabel.Label()
   label.class_name.system.value = GOOGLE_FHIR_LABEL_SYTEM
   label.class_name.code.value = label_val
   event_label.label.add().CopyFrom(label)
@@ -94,7 +93,7 @@ def ComposeLabel(
 
 def LengthOfStayRangeAt24Hours(
     patient: resources_pb2.Patient,
-    enc: resources_pb2.Encounter) -> Iterator[google_extensions_pb2.EventLabel]:
+    enc: resources_pb2.Encounter) -> Iterator[ml_extensions_pb2.EventLabel]:
   """Generate length of stay range labels at 24 hours after admission.
 
   Args:
@@ -102,7 +101,7 @@ def LengthOfStayRangeAt24Hours(
     enc: encounter, caller needs to do the proper cohort filterings.
 
   Yields:
-    An instance of google_extensions_pb2.EventLabel.
+    An instance of ml_extensions_pb2.EventLabel.
   """
   label_time = encounter.AtDuration(enc, 24)
   ecounter_length_days = encounter.EncounterLengthDays(enc)

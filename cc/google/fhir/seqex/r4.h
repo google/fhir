@@ -35,7 +35,7 @@
 #include "proto/r4/core/resources/patient.pb.h"
 #include "proto/r4/core/resources/procedure.pb.h"
 #include "proto/r4/core/resources/service_request.pb.h"
-#include "proto/r4/google_extensions.pb.h"
+#include "proto/r4/ml_extensions.pb.h"
 
 namespace google {
 namespace fhir {
@@ -51,8 +51,8 @@ inline void ResourceToExample(const google::protobuf::Message& message,
                     ::google::fhir::r4::R4PrimitiveHandler::GetInstance());
 }
 
-typedef seqex::ConverterTypes<google::fhir::r4::google::EventTrigger,
-                              google::fhir::r4::google::EventLabel,
+typedef seqex::ConverterTypes<google::fhir::r4::ml::EventTrigger,
+                              google::fhir::r4::ml::EventLabel,
                               r4::R4PrimitiveHandler>
     ConverterTypes;
 

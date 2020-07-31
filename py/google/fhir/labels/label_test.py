@@ -22,7 +22,7 @@ from absl.testing import absltest
 from absl.testing import parameterized
 from google.protobuf import text_format
 from proto.stu3 import datatypes_pb2
-from proto.stu3 import google_extensions_pb2
+from proto.stu3 import ml_extensions_pb2
 from proto.stu3 import resources_pb2
 from py.google.fhir.labels import label
 
@@ -42,7 +42,7 @@ class LabelTest(parameterized.TestCase):
     self._patient = resources_pb2.Patient()
     self._patient.id.value = 'Patient/1'
 
-    self._expected_label = google_extensions_pb2.EventLabel()
+    self._expected_label = ml_extensions_pb2.EventLabel()
     with open(os.path.join(self._test_data_dir, 'label_1.pbtxt')) as f:
       text_format.Parse(f.read(), self._expected_label)
 

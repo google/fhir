@@ -21,7 +21,7 @@ import (
 	"bitbucket.org/creachadair/stringset"
 
 	dpb "google/fhir/proto/stu3/datatypes_go_proto"
-	epb "google/fhir/proto/stu3/extensions_go_proto"
+	epb "google/fhir/proto/stu3/fhirproto_extensions_go_proto"
 	rpb "google/fhir/proto/stu3/resources_go_proto"
 )
 

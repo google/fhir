@@ -24,7 +24,8 @@
 #include "google/fhir/seqex/resource_to_example.h"
 #include "google/fhir/seqex/text_tokenizer.h"
 #include "google/fhir/stu3/primitive_handler.h"
-#include "proto/stu3/google_extensions.pb.h"
+#include "proto/stu3/fhirproto_extensions.pb.h"
+#include "proto/stu3/ml_extensions.pb.h"
 #include "proto/stu3/resources.pb.h"
 
 namespace google {
@@ -41,8 +42,8 @@ inline void ResourceToExample(const google::protobuf::Message& message,
                     ::google::fhir::stu3::Stu3PrimitiveHandler::GetInstance());
 }
 
-typedef seqex::ConverterTypes<google::fhir::stu3::google::EventTrigger,
-                              google::fhir::stu3::google::EventLabel,
+typedef seqex::ConverterTypes<google::fhir::stu3::ml::EventTrigger,
+                              google::fhir::stu3::ml::EventLabel,
                               stu3::Stu3PrimitiveHandler>
     ConverterTypes;
 

@@ -24,7 +24,8 @@
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/datatypes.pb.h"
 #include "proto/stu3/extensions.pb.h"
-#include "proto/stu3/google_extensions.pb.h"
+#include "proto/stu3/fhirproto_extensions.pb.h"
+#include "proto/stu3/ml_extensions.pb.h"
 #include "proto/stu3/resources.pb.h"
 #include "testdata/stu3/profiles/test_extensions.pb.h"
 
@@ -34,11 +35,11 @@ namespace stu3 {
 
 namespace {
 
-using google::Base64BinarySeparatorStride;
-using google::EventLabel;
-using google::EventTrigger;
-using google::PrimitiveHasNoValue;
+using fhirproto::Base64BinarySeparatorStride;
+using fhirproto::PrimitiveHasNoValue;
 using ::google::fhir::testutil::EqualsProto;
+using ml::EventLabel;
+using ml::EventTrigger;
 using proto::CapabilityStatementSearchParameterCombination;
 using proto::Composition;
 using testing::DigitalMediaType;

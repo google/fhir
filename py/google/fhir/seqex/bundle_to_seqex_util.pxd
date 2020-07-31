@@ -20,13 +20,13 @@ from libcpp.utility cimport pair
 
 from libcpp.string cimport string
 
-cdef extern from "proto/stu3/google_extensions.pb.h" namespace "google::fhir::stu3::google" nogil:
+cdef extern from "proto/stu3/ml_extensions.pb.h" namespace "google::fhir::stu3::ml" nogil:
   cdef cppclass EventLabel:
     bool ParseFromString(const string& input)
     string SerializeAsString() const
     pass
 
-cdef extern from "proto/stu3/google_extensions.pb.h" namespace "google::fhir::stu3::google" nogil:
+cdef extern from "proto/stu3/ml_extensions.pb.h" namespace "google::fhir::stu3::ml" nogil:
   cdef cppclass EventTrigger:
     bool ParseFromString(const string& input)
     string SerializeAsString() const

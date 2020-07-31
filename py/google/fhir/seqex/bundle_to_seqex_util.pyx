@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from proto.stu3 import google_extensions_pb2
+from proto.stu3 import ml_extensions_pb2
 
 
 def get_trigger_labels_from_input_labels(event_label_list):
@@ -37,10 +37,10 @@ def get_trigger_labels_from_input_labels(event_label_list):
   for c_trigger_labels_pair in c_trigger_labels_pair_vector:
     c_trigger_event = c_trigger_labels_pair.first
     c_event_label_vector = c_trigger_labels_pair.second
-    trigger_event = google_extensions_pb2.EventTrigger().FromString(
+    trigger_event = ml_extensions_pb2.EventTrigger().FromString(
       c_trigger_event.SerializeAsString())
     event_label_list = [
-      google_extensions_pb2.EventLabel().FromString(
+      ml_extensions_pb2.EventLabel().FromString(
         c_event_label.SerializeAsString()) for c_event_label in c_event_label_vector
     ]
     trigger_labels_tuple_list.append((trigger_event, event_label_list))
@@ -71,10 +71,10 @@ def get_trigger_labels_pair(bundle, label_names, trigger_event_name):
   for c_trigger_labels_pair in c_trigger_labels_pair_vector:
     c_trigger_event = c_trigger_labels_pair.first
     c_event_label_vector = c_trigger_labels_pair.second
-    trigger_event = google_extensions_pb2.EventTrigger().FromString(
+    trigger_event = ml_extensions_pb2.EventTrigger().FromString(
       c_trigger_event.SerializeAsString())
     event_label_list = [
-      google_extensions_pb2.EventLabel().FromString(
+      ml_extensions_pb2.EventLabel().FromString(
         c_event_label.SerializeAsString()) for c_event_label in c_event_label_vector
     ]
     trigger_labels_tuple_list.append((trigger_event, event_label_list))

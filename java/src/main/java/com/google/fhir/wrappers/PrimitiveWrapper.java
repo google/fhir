@@ -19,7 +19,7 @@ import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.r4.core.Boolean;
 import com.google.fhir.r4.core.Element;
 import com.google.fhir.r4.core.Extension;
-import com.google.fhir.r4.google.PrimitiveHasNoValue;
+import com.google.fhir.r4.fhirproto.PrimitiveHasNoValue;
 import com.google.gson.JsonPrimitive;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;

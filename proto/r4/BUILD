@@ -11,14 +11,26 @@ exports_files(["version_config.textproto"])
 
 fhir_proto_library(
     srcs = [
-        "google_extensions.proto",
+        "fhirproto_extensions.proto",
     ],
     proto_deps = [
         "//proto:annotations_proto",
         "//proto/r4/core:codes_proto",
         "//proto/r4/core:datatypes_proto",
     ],
-    proto_library_prefix = "google_extensions",
+    proto_library_prefix = "fhirproto_extensions",
+)
+
+fhir_proto_library(
+    srcs = [
+        "ml_extensions.proto",
+    ],
+    proto_deps = [
+        "//proto:annotations_proto",
+        "//proto/r4/core:codes_proto",
+        "//proto/r4/core:datatypes_proto",
+    ],
+    proto_library_prefix = "ml_extensions",
 )
 
 gen_fhir_protos(

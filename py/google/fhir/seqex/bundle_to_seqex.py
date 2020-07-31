@@ -17,7 +17,7 @@
 
 import apache_beam as beam
 
-from proto.stu3 import google_extensions_pb2
+from proto.stu3 import ml_extensions_pb2
 from proto.stu3 import resources_pb2
 from py.google.fhir.seqex import bundle_to_seqex_converter
 from py.google.fhir.seqex import bundle_to_seqex_util
@@ -28,9 +28,8 @@ from tensorflow.core.example import example_pb2
 _BUNDLE_TAG = "bundle"
 _TRIGGERS_TAG = "trigger_labels_pair_lists"
 
-typehints_trigger_labels_pair_list = beam.typehints.List[
-    beam.typehints.Tuple[google_extensions_pb2.EventTrigger, beam.typehints
-                         .List[beam.typehints.Any]]]
+typehints_trigger_labels_pair_list = beam.typehints.List[beam.typehints.Tuple[
+    ml_extensions_pb2.EventTrigger, beam.typehints.List[beam.typehints.Any]]]
 
 
 @beam.typehints.with_input_types(resources_pb2.Bundle)
@@ -48,9 +47,9 @@ class KeyBundleByPatientIdFn(beam.DoFn):
     yield (("Patient/" + patient.id.value).encode("utf-8"), bundle)
 
 
-@beam.typehints.with_input_types(google_extensions_pb2.EventLabel)
+@beam.typehints.with_input_types(ml_extensions_pb2.EventLabel)
 @beam.typehints.with_output_types(
-    beam.typehints.Tuple[bytes, google_extensions_pb2.EventLabel])
+    beam.typehints.Tuple[bytes, ml_extensions_pb2.EventLabel])
 class KeyEventLabelByPatientIdFn(beam.DoFn):
   """Key EventLabel by patient id."""
 

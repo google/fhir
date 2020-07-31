@@ -14,14 +14,14 @@ proto_library(
 
 go_proto_library(
     name = "protopathtest_go_proto",
-    importpath = "google/fhir/jsonformat/internal/protopath/protopathtest_go_proto",
+    importpath = "jsonformat/internal/protopath/protopathtest_go_proto",
     proto = ":protopathtest_proto",
 )
 
 go_library(
     name = "protopath",
     srcs = ["proto_path.go"],
-    importpath = "google/fhir/jsonformat/internal/protopath/protopath",
+    importpath = "github.com/google/fhir/go/jsonformat/internal/protopath",
     deps = [
         "@com_github_golang_protobuf//proto:go_default_library",
         "@com_github_serenize_snaker//:go_default_library",

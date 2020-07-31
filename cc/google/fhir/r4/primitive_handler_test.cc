@@ -26,12 +26,12 @@
 #include "google/fhir/json_format.h"
 #include "google/fhir/r4/json_format.h"
 #include "google/fhir/test_helper.h"
+#include "google/fhir/testutil/proto_matchers.h"
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/resources/binary.pb.h"
 #include "proto/r4/core/resources/observation.pb.h"
 #include "proto/r4/core/resources/patient.pb.h"
-#include "proto/r4/google_extensions.pb.h"
-#include "google/fhir/testutil/proto_matchers.h"
+#include "proto/r4/fhirproto_extensions.pb.h"
 
 namespace google {
 namespace fhir {
@@ -107,8 +107,8 @@ void TestJsonValidation() {
 template <class W>
 void AddPrimitiveHasNoValue(W* primitive) {
   Extension* e = primitive->add_extension();
-  e->mutable_url()->set_value(
-      GetStructureDefinitionUrl(r4::google::PrimitiveHasNoValue::descriptor()));
+  e->mutable_url()->set_value(GetStructureDefinitionUrl(
+      r4::fhirproto::PrimitiveHasNoValue::descriptor()));
   e->mutable_value()->mutable_boolean()->set_value(true);
 }
 

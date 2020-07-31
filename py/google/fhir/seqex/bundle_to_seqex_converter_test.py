@@ -22,7 +22,7 @@ from absl import flags
 from absl.testing import absltest
 from google.protobuf import text_format
 from proto import version_config_pb2
-from proto.stu3 import google_extensions_pb2
+from proto.stu3 import ml_extensions_pb2
 from proto.stu3 import resources_pb2
 from py.google.fhir.seqex import bundle_to_seqex_converter
 from py.google.fhir.testutil import protobuf_compare
@@ -42,12 +42,12 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
       self._version_config = text_format.Parse(
           f.read(), version_config_pb2.VersionConfig())
 
-  def _runTest(
-      self, patient_key: bytes, bundle: resources_pb2.Bundle,
-      event_trigger_labels_list: Tuple[google_extensions_pb2.EventTrigger,
-                                       List[Any]],
-      expected_outcomes: Tuple[Tuple[bytes, example_pb2.SequenceExample, int],
-                               Any]):
+  def _runTest(self, patient_key: bytes, bundle: resources_pb2.Bundle,
+               event_trigger_labels_list: Tuple[ml_extensions_pb2.EventTrigger,
+                                                List[Any]],
+               expected_outcomes: Tuple[Tuple[bytes,
+                                              example_pb2.SequenceExample, int],
+                                        Any]):
     converter = bundle_to_seqex_converter.PyBundleToSeqexConverter(
         self._version_config, False, False)
     (begin_result, stats) = converter.begin(patient_key, bundle,
@@ -71,7 +71,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
     event_trigger = text_format.Parse(
         """
       event_time { value_us: 1420102800000000 }
-    """, google_extensions_pb2.EventTrigger())
+    """, ml_extensions_pb2.EventTrigger())
     event_trigger_labels = (event_trigger, list())
     event_trigger_labels_list = (event_trigger_labels,)
 
@@ -161,7 +161,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
         """
       event_time { value_us: 1420102800000000 }
       source { encounter_id { value: "1" } }
-    """, google_extensions_pb2.EventTrigger())
+    """, ml_extensions_pb2.EventTrigger())
     event_label = text_format.Parse(
         """
       patient { patient_id { value: "14" } }
@@ -174,7 +174,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
           code { value: "red" }
         }
       }
-    """, google_extensions_pb2.EventLabel())
+    """, ml_extensions_pb2.EventLabel())
     event_trigger_labels = (
         event_trigger,
         (event_label,),
@@ -341,12 +341,12 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
         """
       event_time { value_us: 1417424400000000 }
       source { encounter_id { value: "1" } }
-    """, google_extensions_pb2.EventTrigger())
+    """, ml_extensions_pb2.EventTrigger())
     event_trigger2 = text_format.Parse(
         """
       event_time { value_us: 1420102800000000 }
       source { encounter_id { value: "2" } }
-    """, google_extensions_pb2.EventTrigger())
+    """, ml_extensions_pb2.EventTrigger())
     event_trigger_labels1 = (
         event_trigger1,
         list(),

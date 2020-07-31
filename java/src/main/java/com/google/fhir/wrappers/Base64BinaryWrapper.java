@@ -19,7 +19,7 @@ import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.r4.core.Base64Binary;
 import com.google.fhir.r4.core.PositiveInt;
-import com.google.fhir.r4.google.Base64BinarySeparatorStride;
+import com.google.fhir.r4.fhirproto.Base64BinarySeparatorStride;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;

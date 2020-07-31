@@ -56,7 +56,7 @@ py_library(
     deps = [
         ":encounter",
         "//proto/stu3:datatypes_py_pb2",
-        "//proto/stu3:extensions_py_pb2",
+        "//proto/stu3:ml_extensions_py_pb2",
         "//proto/stu3:resources_py_pb2",
     ],
 )
@@ -97,11 +97,10 @@ py_library(
     deps = [
         ":encounter",
         ":label",
-        "//proto/stu3:extensions_py_pb2",
+        "//proto/stu3:ml_extensions_py_pb2",
         "//proto/stu3:resources_py_pb2",
         "@absl_py//absl:app",
         "@absl_py//absl/flags",
-        "@absl_py//absl/logging",
         requirement("apache_beam"),
     ],
 )

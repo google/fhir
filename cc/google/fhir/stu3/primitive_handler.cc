@@ -35,7 +35,7 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/google_extensions.pb.h"
+#include "proto/stu3/fhirproto_extensions.pb.h"
 #include "include/json/json.h"
 
 namespace google {
@@ -50,8 +50,8 @@ StatusOr<std::unique_ptr<PrimitiveWrapper>> Stu3PrimitiveHandler::GetWrapper(
     const Descriptor* target_descriptor) const {
   absl::optional<std::unique_ptr<PrimitiveWrapper>> wrapper =
       primitives_internal::GetWrapperForStu3Types<
-          proto::Extension, proto::Xhtml, google::Base64BinarySeparatorStride>(
-          target_descriptor);
+          proto::Extension, proto::Xhtml,
+          fhirproto::Base64BinarySeparatorStride>(target_descriptor);
 
   if (wrapper.has_value()) {
     return std::move(wrapper.value());

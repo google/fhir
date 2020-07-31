@@ -18,7 +18,7 @@ import (
 	"bytes"
 	"testing"
 
-	"google/fhir/jsonformat/internal/jsonpbhelper/jsonpbhelper"
+	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/go-cmp/cmp"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"

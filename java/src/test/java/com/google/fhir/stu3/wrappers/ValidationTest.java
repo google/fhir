@@ -16,7 +16,7 @@ package com.google.fhir.stu3.wrappers;
 
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.common.JsonFormat;
-import com.google.fhir.stu3.google.PrimitiveHasNoValue;
+import com.google.fhir.stu3.fhirproto.PrimitiveHasNoValue;
 import com.google.fhir.stu3.proto.Boolean;
 import com.google.fhir.stu3.uscore.UsCoreDirectEmail;
 import com.google.fhir.testing.ValidationTestBase;

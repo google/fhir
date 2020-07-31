@@ -30,7 +30,7 @@ import (
 	r4patientpb "google/fhir/proto/r4/core/resources/patient_go_proto"
 	c3pb "google/fhir/proto/stu3/codes_go_proto"
 	d3pb "google/fhir/proto/stu3/datatypes_go_proto"
-	e3pb "google/fhir/proto/stu3/extensions_go_proto"
+	e3pb "google/fhir/proto/stu3/fhirproto_extensions_go_proto"
 	r3pb "google/fhir/proto/stu3/resources_go_proto"
 )
 

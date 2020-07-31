@@ -24,7 +24,7 @@ import (
 
 	dpb "google/fhir/proto/r4/core/datatypes_go_proto"
 	rpb "google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
-	epb "google/fhir/proto/r4/google_extensions_go_proto"
+	epb "google/fhir/proto/r4/fhirproto_extensions_go_proto"
 )
 
 const (

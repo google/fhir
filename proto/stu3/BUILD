@@ -37,7 +37,6 @@ fhir_proto_library(
 fhir_proto_library(
     srcs = [
         "extensions.proto",
-        "google_extensions.proto",
     ],
     proto_deps = [
         ":codes_proto",
@@ -45,6 +44,30 @@ fhir_proto_library(
         "//proto:annotations_proto",
     ],
     proto_library_prefix = "extensions",
+)
+
+fhir_proto_library(
+    srcs = [
+        "fhirproto_extensions.proto",
+    ],
+    proto_deps = [
+        ":codes_proto",
+        ":datatypes_proto",
+        "//proto:annotations_proto",
+    ],
+    proto_library_prefix = "fhirproto_extensions",
+)
+
+fhir_proto_library(
+    srcs = [
+        "ml_extensions.proto",
+    ],
+    proto_deps = [
+        ":codes_proto",
+        ":datatypes_proto",
+        "//proto:annotations_proto",
+    ],
+    proto_library_prefix = "ml_extensions",
 )
 
 fhir_proto_library(

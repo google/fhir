@@ -33,7 +33,7 @@ pyx_library(
         "//cc/google/fhir/seqex:stu3",
         "//cc/google/fhir/seqex:text_tokenizer",
         "//proto:version_config_cc_proto",
-        "//proto/stu3:extensions_cc_proto",
+        "//proto/stu3:ml_extensions_cc_proto",
         "//proto/stu3:resources_cc_proto",
         "@org_tensorflow//tensorflow/core:protos_all_cc",
     ],
@@ -49,7 +49,7 @@ py_test(
     deps = [
         ":bundle_seqex_converter",
         "//proto:version_config_py_pb2",
-        "//proto/stu3:extensions_py_pb2",
+        "//proto/stu3:ml_extensions_py_pb2",
         "//proto/stu3:resources_py_pb2",
         "//py/google/fhir/testutil:protobuf_compare",
         "@absl_py//absl/flags",
@@ -66,12 +66,12 @@ pyx_library(
         "bundle_to_seqex_util.pyx",
     ],
     py_deps = [
-        "//proto/stu3:extensions_py_pb2",
+        "//proto/stu3:ml_extensions_py_pb2",
     ],
     srcs_version = "PY3ONLY",
     deps = [
         "//cc/google/fhir/seqex:stu3",
-        "//proto/stu3:extensions_cc_proto",
+        "//proto/stu3:ml_extensions_cc_proto",
         "//proto/stu3:resources_cc_proto",
     ],
 )
@@ -82,7 +82,7 @@ py_test(
     python_version = "PY3",
     deps = [
         ":bundle_to_seqex_util",
-        "//proto/stu3:extensions_py_pb2",
+        "//proto/stu3:ml_extensions_py_pb2",
         "//proto/stu3:resources_py_pb2",
         "//py/google/fhir/testutil:protobuf_compare",
         "@absl_py//absl/testing:absltest",
@@ -99,7 +99,7 @@ py_library(
     deps = [
         ":bundle_seqex_converter",
         ":bundle_to_seqex_util",
-        "//proto/stu3:extensions_py_pb2",
+        "//proto/stu3:ml_extensions_py_pb2",
         "//proto/stu3:resources_py_pb2",
         "//py/google/fhir/stu3:util",
         "@org_tensorflow//tensorflow/core:protos_all_py",
@@ -120,7 +120,7 @@ py_test(
         ":bundle_to_seqex",
         ":bundle_seqex_converter",
         "@com_google_protobuf//:protobuf_python",
-        "//proto/stu3:extensions_py_pb2",
+        "//proto/stu3:ml_extensions_py_pb2",
         "//proto/stu3:resources_py_pb2",
         "//proto:version_config_py_pb2",
         "//py/google/fhir/testutil:protobuf_compare",
@@ -142,12 +142,11 @@ py_binary(
     deps = [
         ":bundle_to_seqex",
         "@com_google_protobuf//:protobuf_python",
-        "//proto/stu3:extensions_py_pb2",
+        "//proto/stu3:ml_extensions_py_pb2",
         "//proto/stu3:resources_py_pb2",
         "//proto:version_config_py_pb2",
         "@absl_py//absl:app",
         "@absl_py//absl/flags",
-        "@absl_py//absl/logging",
         "@org_tensorflow//tensorflow/core:protos_all_py",
         requirement("apache_beam"),
     ],

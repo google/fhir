@@ -19,17 +19,17 @@ import (
 	"strconv"
 	"testing"
 
-	"google/fhir/jsonformat/internal/accessor/accessor"
-	"google/fhir/jsonformat/internal/jsonpbhelper/jsonpbhelper"
+	"github.com/google/fhir/go/jsonformat/internal/accessor"
+	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/go-cmp/cmp"
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/testing/protocmp"
 
 	d4pb "google/fhir/proto/r4/core/datatypes_go_proto"
-	e4pb "google/fhir/proto/r4/google_extensions_go_proto"
+	e4pb "google/fhir/proto/r4/fhirproto_extensions_go_proto"
 	d3pb "google/fhir/proto/stu3/datatypes_go_proto"
-	e3pb "google/fhir/proto/stu3/extensions_go_proto"
+	e3pb "google/fhir/proto/stu3/fhirproto_extensions_go_proto"
 )
 
 func appendSeparatorAndStrideExtensions(extListOwner protoreflect.Message, sep string, stride uint32) {

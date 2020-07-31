@@ -10,7 +10,7 @@ go_library(
         "fhirutil.go",
         "json_format.go",
     ],
-    importpath = "google/fhir/jsonformat/internal/jsonpbhelper/jsonpbhelper",
+    importpath = "github.com/google/fhir/go/jsonformat/internal/jsonpbhelper",
     deps = [
         "//proto:annotations_go_proto",
         "//proto/r4/core:datatypes_go_proto",
@@ -42,7 +42,7 @@ go_test(
         "//proto/r4/core/resources:patient_go_proto",
         "//proto/stu3:codes_go_proto",
         "//proto/stu3:datatypes_go_proto",
-        "//proto/stu3:extensions_go_proto",
+        "//proto/stu3:fhirproto_extensions_go_proto",
         "//proto/stu3:resources_go_proto",
         "@com_github_golang_protobuf//proto:go_default_library",
         "@com_github_google_go_cmp//cmp:go_default_library",

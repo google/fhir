@@ -25,7 +25,8 @@
 #include "proto/r4/core/datatypes.pb.h"
 #include "proto/r4/core/extensions.pb.h"
 #include "proto/r4/core/resources/composition.pb.h"
-#include "proto/r4/google_extensions.pb.h"
+#include "proto/r4/fhirproto_extensions.pb.h"
+#include "proto/r4/ml_extensions.pb.h"
 #include "testdata/r4/profiles/test_extensions.pb.h"
 
 namespace google {
@@ -37,11 +38,11 @@ namespace {
 using core::CapabilityStatementSearchParameterCombination;
 using core::Composition;
 using core::Extension;
-using google::Base64BinarySeparatorStride;
-using google::EventLabel;
-using google::EventTrigger;
-using google::PrimitiveHasNoValue;
+using fhirproto::Base64BinarySeparatorStride;
+using fhirproto::PrimitiveHasNoValue;
 using ::google::fhir::testutil::EqualsProto;
+using ml::EventLabel;
+using ml::EventTrigger;
 using testing::DigitalMediaType;
 
 template <class T>

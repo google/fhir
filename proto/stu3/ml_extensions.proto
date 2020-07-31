@@ -14,60 +14,15 @@
 
 syntax = "proto3";
 
-package google.fhir.stu3.google;
+package google.fhir.stu3.ml;
 
 import "proto/annotations.proto";
 import "proto/stu3/datatypes.proto";
 
 option java_multiple_files = true;
-option java_package = "com.google.fhir.stu3.google";
+option java_package = "com.google.fhir.stu3.ml";
 option go_package = "google/fhir/stu3/proto";
 option (.google.fhir.proto.fhir_version) = STU3;
-
-// Auto-generated from StructureDefinition for PrimitiveHasNoValue.
-// Whether or not the primitive is missing a value.
-// See https://g.co/fhir/StructureDefinition/primitiveHasNoValue
-message PrimitiveHasNoValue {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (.google.fhir.proto.fhir_profile_base) =
-      "http://hl7.org/fhir/StructureDefinition/Extension";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "https://g.co/fhir/StructureDefinition/primitiveHasNoValue";
-
-  // xml:id (or equivalent in JSON)
-  proto.String id = 1;
-
-  // Value of extension
-  proto.Boolean value_boolean = 3;
-}
-
-// Auto-generated from StructureDefinition for Base64BinarySeparatorStride.
-// Base64Binary rendering parameters.
-// See https://g.co/fhir/StructureDefinition/base64Binary-separatorStride
-message Base64BinarySeparatorStride {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (.google.fhir.proto.fhir_profile_base) =
-      "http://hl7.org/fhir/StructureDefinition/Extension";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride";
-
-  // xml:id (or equivalent in JSON)
-  proto.String id = 1;
-
-  // The separator, usually a sequence of spaces.
-  proto.String separator = 4 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
-  ];
-
-  // The stride.
-  proto.PositiveInt stride = 5 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_path_constraint) =
-        "extension.exists() != value.exists()"
-  ];
-}
 
 // Auto-generated from StructureDefinition for EventLabel.
 // EventLabels define labels used for TensorFlow model training and evaluation.

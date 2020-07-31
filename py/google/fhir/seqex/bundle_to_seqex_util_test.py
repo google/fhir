@@ -17,7 +17,7 @@
 
 from absl.testing import absltest
 from google.protobuf import text_format
-from proto.stu3 import google_extensions_pb2
+from proto.stu3 import ml_extensions_pb2
 from proto.stu3 import resources_pb2
 from py.google.fhir.seqex import bundle_to_seqex_util
 from py.google.fhir.testutil import protobuf_compare
@@ -31,18 +31,18 @@ class BundleToSeqexUtilTest(protobuf_compare.ProtoAssertions,
         """
       event_time { value_us: 1417392000000000 } # "2014-12-01T00:00:00+00:00"
       source { encounter_id { value: "1" } }
-    """, google_extensions_pb2.EventTrigger())
+    """, ml_extensions_pb2.EventTrigger())
     trigger2 = text_format.Parse(
         """
       event_time { value_us: 1417428000000000 } # "2014-12-01T01:00:00+00:00"
-    """, google_extensions_pb2.EventTrigger())
+    """, ml_extensions_pb2.EventTrigger())
     label1 = text_format.Parse(
         """
       patient { patient_id { value: "14" } }
       type { code { value: "test1" } }
       event_time { value_us: 1417392000000000 } # "2014-12-01T00:00:00+00:00"
       source { encounter_id { value: "1" } }
-    """, google_extensions_pb2.EventLabel())
+    """, ml_extensions_pb2.EventLabel())
     label2 = text_format.Parse(
         """
       patient { patient_id { value: "14" } }
@@ -52,7 +52,7 @@ class BundleToSeqexUtilTest(protobuf_compare.ProtoAssertions,
         system { value: "urn:test:label" }
         code { value: "green " }
       } }
-    """, google_extensions_pb2.EventLabel())
+    """, ml_extensions_pb2.EventLabel())
     got_list = bundle_to_seqex_util.get_trigger_labels_from_input_labels(
         [label1, label2])
     self.assertLen(got_list, 2)
@@ -160,7 +160,7 @@ class BundleToSeqexUtilTest(protobuf_compare.ProtoAssertions,
         code { value: "at_discharge" }
       }
       event_time { value_us: 1388566800000000 }  # "2014-01-01T09:00:00+00:00"
-    """, google_extensions_pb2.EventTrigger())
+    """, ml_extensions_pb2.EventTrigger())
     trigger2 = text_format.Parse(
         """
       type {
@@ -168,7 +168,7 @@ class BundleToSeqexUtilTest(protobuf_compare.ProtoAssertions,
         code { value: "at_discharge" }
       }
       event_time { value_us: 1420102800000000 }  # "2015-01-01T09:00:00+00:00"
-    """, google_extensions_pb2.EventTrigger())
+    """, ml_extensions_pb2.EventTrigger())
     label1 = text_format.Parse(
         """
       type {
@@ -177,7 +177,7 @@ class BundleToSeqexUtilTest(protobuf_compare.ProtoAssertions,
       }
       event_time { value_us: 1388566800000000 }
       source { encounter_id { value: "1" } }
-    """, google_extensions_pb2.EventLabel())
+    """, ml_extensions_pb2.EventLabel())
     label2 = text_format.Parse(
         """
       type {
@@ -191,7 +191,7 @@ class BundleToSeqexUtilTest(protobuf_compare.ProtoAssertions,
           code { value: "red" }
         }
       }
-    """, google_extensions_pb2.EventLabel())
+    """, ml_extensions_pb2.EventLabel())
     # pylint: enable=line-too-long
 
     (filtered_count, got_list) = bundle_to_seqex_util.get_trigger_labels_pair(

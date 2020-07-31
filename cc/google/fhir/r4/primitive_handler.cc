@@ -35,7 +35,7 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/r4/core/datatypes.pb.h"
-#include "proto/r4/google_extensions.pb.h"
+#include "proto/r4/fhirproto_extensions.pb.h"
 #include "include/json/json.h"
 
 namespace google {
@@ -50,7 +50,7 @@ StatusOr<std::unique_ptr<PrimitiveWrapper>> R4PrimitiveHandler::GetWrapper(
     const Descriptor* target_descriptor) const {
   absl::optional<std::unique_ptr<PrimitiveWrapper>> wrapper =
       primitives_internal::GetWrapperForR4Types<
-          core::Extension, core::Xhtml, google::Base64BinarySeparatorStride>(
+          core::Extension, core::Xhtml, fhirproto::Base64BinarySeparatorStride>(
           target_descriptor);
 
   if (wrapper.has_value()) {

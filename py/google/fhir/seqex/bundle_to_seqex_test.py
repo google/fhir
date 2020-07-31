@@ -23,7 +23,7 @@ from apache_beam.testing import test_pipeline
 from apache_beam.testing import util
 from google.protobuf import text_format
 from proto import version_config_pb2
-from proto.stu3 import google_extensions_pb2
+from proto.stu3 import ml_extensions_pb2
 from proto.stu3 import resources_pb2
 from py.google.fhir.seqex import bundle_to_seqex
 from py.google.fhir.testutil import protobuf_compare
@@ -77,7 +77,7 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
         system { value: "urn:test:label" }
         code { value: "green" }
       } }
-    """, google_extensions_pb2.EventLabel())
+    """, ml_extensions_pb2.EventLabel())
     with test_pipeline.TestPipeline() as p:
       result = (
           p
@@ -102,18 +102,18 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
         """
       event_time { value_us: 1417392000000000 } # "2014-12-01T00:00:00+00:00"
       source { encounter_id { value: "1" } }
-    """, google_extensions_pb2.EventTrigger())
+    """, ml_extensions_pb2.EventTrigger())
     trigger2 = text_format.Parse(
         """
       event_time { value_us: 1417428000000000 } # "2014-12-01T01:00:00+00:00"
-    """, google_extensions_pb2.EventTrigger())
+    """, ml_extensions_pb2.EventTrigger())
     label1 = text_format.Parse(
         """
       patient { patient_id { value: "14" } }
       type { code { value: "test1" } }
       event_time { value_us: 1417392000000000 } # "2014-12-01T00:00:00+00:00"
       source { encounter_id { value: "1" } }
-    """, google_extensions_pb2.EventLabel())
+    """, ml_extensions_pb2.EventLabel())
     label2 = text_format.Parse(
         """
       patient { patient_id { value: "14" } }
@@ -123,7 +123,7 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
         system { value: "urn:test:label" }
         code { value: "green" }
       } }
-    """, google_extensions_pb2.EventLabel())
+    """, ml_extensions_pb2.EventLabel())
     with test_pipeline.TestPipeline() as p:
       event_labels_pcoll = (
           p | "CreateEventLabels" >> beam.Create([label1, label2]))
@@ -176,13 +176,13 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
     bundle1_event_trigger = text_format.Parse(
         """
       event_time { value_us: 1388566800000000 }  # "2014-01-01T09:00:00+00:00"
-    """, google_extensions_pb2.EventTrigger())
+    """, ml_extensions_pb2.EventTrigger())
 
     # For the purpose of testing, bundle2 does not exist.
     bundle2_event_trigger = text_format.Parse(
         """
       event_time { value_us: 1388566800000000 }  # "2014-01-01T09:00:00+00:00"
-    """, google_extensions_pb2.EventTrigger())
+    """, ml_extensions_pb2.EventTrigger())
 
     bundle3 = text_format.Parse(
         """
@@ -235,12 +235,12 @@ class BundleToSeqexTest(protobuf_compare.ProtoAssertions, absltest.TestCase):
         """
       event_time { value_us: 1417424400000000 }
       source { encounter_id { value: "1" } }
-    """, google_extensions_pb2.EventTrigger())
+    """, ml_extensions_pb2.EventTrigger())
     event_trigger2 = text_format.Parse(
         """
       event_time { value_us: 1420102800000000 }
       source { encounter_id { value: "2" } }
-    """, google_extensions_pb2.EventTrigger())
+    """, ml_extensions_pb2.EventTrigger())
     event_trigger_labels1 = (
         event_trigger1,
         list(),

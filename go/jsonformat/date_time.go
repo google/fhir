@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"time"
 
-	"google/fhir/jsonformat/internal/accessor/accessor"
-	"google/fhir/jsonformat/internal/jsonpbhelper/jsonpbhelper"
+	"github.com/google/fhir/go/jsonformat/internal/accessor"
+	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )

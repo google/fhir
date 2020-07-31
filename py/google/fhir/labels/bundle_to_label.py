@@ -21,7 +21,7 @@ from absl import flags
 import apache_beam as beam
 from apache_beam.options import pipeline_options
 
-from proto.stu3 import google_extensions_pb2
+from proto.stu3 import ml_extensions_pb2
 from proto.stu3 import resources_pb2
 from py.google.fhir.labels import encounter
 from py.google.fhir.labels import label
@@ -45,7 +45,7 @@ flags.DEFINE_string('setup_file', '',
 
 
 @beam.typehints.with_input_types(resources_pb2.Bundle)
-@beam.typehints.with_output_types(google_extensions_pb2.EventLabel)
+@beam.typehints.with_output_types(ml_extensions_pb2.EventLabel)
 class LengthOfStayRangeLabelAt24HoursFn(beam.DoFn):
   """Converts Bundle into length of stay range at 24 hours label.
 
@@ -58,8 +58,8 @@ class LengthOfStayRangeLabelAt24HoursFn(beam.DoFn):
     self._for_synthea = for_synthea
 
   def process(
-      self, bundle: resources_pb2.Bundle
-  ) -> Iterator[google_extensions_pb2.EventLabel]:
+      self,
+      bundle: resources_pb2.Bundle) -> Iterator[ml_extensions_pb2.EventLabel]:
     """Iterate through bundle and yield label.
 
     Args:
@@ -111,7 +111,7 @@ def main(argv: List[str]):
       LengthOfStayRangeLabelAt24HoursFn(for_synthea=flags.FLAGS.for_synthea))
   _ = labels | beam.io.WriteToTFRecord(
       flags.FLAGS.output_path,
-      coder=beam.coders.ProtoCoder(google_extensions_pb2.EventLabel),
+      coder=beam.coders.ProtoCoder(ml_extensions_pb2.EventLabel),
       file_name_suffix='.tfrecords')
 
   p.run()

@@ -21,7 +21,7 @@ import com.google.common.collect.Table;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.r4.core.Element;
-import com.google.fhir.stu3.google.PrimitiveHasNoValue;
+import com.google.fhir.r4.fhirproto.PrimitiveHasNoValue;
 import com.google.fhir.wrappers.CodeWrapper;
 import com.google.fhir.wrappers.ExtensionWrapper;
 import com.google.fhir.wrappers.PrimitiveWrapper;
@@ -61,10 +61,9 @@ public final class JsonFormat {
 
   private JsonFormat() {}
 
-  // TODO: Use r4 extension once generated.
   private static final PrimitiveHasNoValue PRIMITIVE_HAS_NO_VALUE =
       PrimitiveHasNoValue.newBuilder()
-          .setValueBoolean(com.google.fhir.stu3.proto.Boolean.newBuilder().setValue(true))
+          .setValueBoolean(com.google.fhir.r4.core.Boolean.newBuilder().setValue(true))
           .build();
 
   private static boolean isPrimitiveType(FieldDescriptor field) {

@@ -8,7 +8,7 @@ load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 go_library(
     name = "accessor",
     srcs = ["getter_setter.go"],
-    importpath = "google/fhir/jsonformat/internal/accessor/accessor",
+    importpath = "github.com/google/fhir/go/jsonformat/internal/accessor",
     deps = [
         "@com_github_golang_protobuf//proto:go_default_library",
         "@com_github_pkg_errors//:go_default_library",
@@ -38,6 +38,6 @@ proto_library(
 
 go_proto_library(
     name = "accessor_test_go_proto",
-    importpath = "google/fhir/jsonformat/internal/accessor/accessor_test_go_proto",
+    importpath = "jsonformat/internal/accessor/accessor_test_go_proto",
     proto = ":accessor_test_proto",
 )

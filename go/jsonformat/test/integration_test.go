@@ -28,9 +28,9 @@ import (
 	"testing"
 
 	"github.com/bazelbuild/rules_go/go/tools/bazel"
-	"google/fhir/jsonformat/internal/jsonpbhelper/jsonpbhelper"
-	"google/fhir/jsonformat/internal/protopath/protopath"
-	"google/fhir/jsonformat/jsonformat"
+	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
+	"github.com/google/fhir/go/jsonformat/internal/protopath"
+	"github.com/google/fhir/go/jsonformat"
 	"github.com/google/go-cmp/cmp"
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/protobuf/testing/protocmp"

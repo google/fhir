@@ -17,9 +17,9 @@ go_test(
         "//testdata/stu3:examples",
     ],
     deps = [
-        "//go/google/fhir/jsonformat",
-        "//go/google/fhir/jsonformat/internal/jsonpbhelper",
-        "//go/google/fhir/jsonformat/internal/protopath",
+        "//go/jsonformat",
+        "//go/jsonformat/internal/jsonpbhelper",
+        "//go/jsonformat/internal/protopath",
         "//proto/r4/core/resources:bundle_and_contained_resource_go_proto",
         "//proto/r4/core/resources:composition_go_proto",
         "//proto/r4/core/resources:observation_go_proto",
@@ -46,7 +46,7 @@ go_test(
         ":testdata",
     ],
     deps = [
-        "//go/google/fhir/jsonformat",
+        "//go/jsonformat",
         "@io_bazel_rules_go//go/tools/bazel:go_default_library",
     ],
 )

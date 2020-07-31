@@ -20,7 +20,7 @@ import (
 	"testing"
 	"time"
 
-	"google/fhir/jsonformat/internal/accessor/accessor"
+	"github.com/google/fhir/go/jsonformat/internal/accessor"
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 

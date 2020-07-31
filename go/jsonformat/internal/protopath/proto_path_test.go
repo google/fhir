@@ -23,7 +23,7 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/testing/protocmp"
 
-	pptpb "google/fhir/jsonformat/internal/protopath/protopathtest_go_proto"
+	pptpb "jsonformat/internal/protopath/protopathtest_go_proto"
 	rdpb "google/fhir/proto/stu3/datatypes_go_proto"
 	rfpb "google/fhir/proto/stu3/resources_go_proto"
 )

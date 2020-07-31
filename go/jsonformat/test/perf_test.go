@@ -22,7 +22,7 @@ import (
 	"testing"
 
 	"github.com/bazelbuild/rules_go/go/tools/bazel"
-	"google/fhir/jsonformat/jsonformat"
+	"github.com/google/fhir/go/jsonformat"
 )
 
 const (

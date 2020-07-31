@@ -24,7 +24,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/protobuf/testing/protocmp"
 
-	atpb "google/fhir/jsonformat/internal/accessor/accessor_test_go_proto"
+	atpb "jsonformat/internal/accessor/accessor_test_go_proto"
 	d3pb "google/fhir/proto/stu3/datatypes_go_proto"
 	r3pb "google/fhir/proto/stu3/resources_go_proto"
 )

@@ -29,11 +29,11 @@
 #include "google/fhir/json_format.h"
 #include "google/fhir/stu3/json_format.h"
 #include "google/fhir/test_helper.h"
+#include "google/fhir/testutil/proto_matchers.h"
 #include "proto/stu3/codes.pb.h"
 #include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/google_extensions.pb.h"
+#include "proto/stu3/fhirproto_extensions.pb.h"
 #include "proto/stu3/resources.pb.h"
-#include "google/fhir/testutil/proto_matchers.h"
 
 namespace google {
 namespace fhir {
@@ -110,7 +110,7 @@ template <class W>
 void AddPrimitiveHasNoValue(W* primitive) {
   Extension* e = primitive->add_extension();
   e->mutable_url()->set_value(GetStructureDefinitionUrl(
-      stu3::google::PrimitiveHasNoValue::descriptor()));
+      stu3::fhirproto::PrimitiveHasNoValue::descriptor()));
   e->mutable_value()->mutable_boolean()->set_value(true);
 }
 

@@ -25,8 +25,8 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"google/fhir/jsonformat/internal/accessor/accessor"
-	"google/fhir/jsonformat/internal/jsonpbhelper/jsonpbhelper"
+	"github.com/google/fhir/go/jsonformat/internal/accessor"
+	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/json-iterator/go"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"

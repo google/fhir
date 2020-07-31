@@ -17,7 +17,7 @@ package com.google.fhir.r4.wrappers;
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.r4.core.Boolean;
-import com.google.fhir.r4.google.PrimitiveHasNoValue;
+import com.google.fhir.r4.fhirproto.PrimitiveHasNoValue;
 import com.google.fhir.r4.uscore.UsCoreDirectEmail;
 import com.google.fhir.testing.ValidationTestBase;
 import com.google.protobuf.TextFormat;

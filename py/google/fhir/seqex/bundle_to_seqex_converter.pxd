@@ -27,12 +27,12 @@ cdef extern from "tensorflow/core/example/example.pb.h" namespace "tensorflow" n
     bool ParseFromString(const string& input)
     string SerializeAsString() const
 
-cdef extern from "proto/stu3/google_extensions.pb.h" namespace "google::fhir::stu3::google" nogil:
+cdef extern from "proto/stu3/ml_extensions.pb.h" namespace "google::fhir::stu3::ml" nogil:
   cdef cppclass EventTrigger:
     bool ParseFromString(const string& input)
     pass
 
-cdef extern from "proto/stu3/google_extensions.pb.h" namespace "google::fhir::stu3::google" nogil:
+cdef extern from "proto/stu3/ml_extensions.pb.h" namespace "google::fhir::stu3::ml" nogil:
   cdef cppclass EventLabel:
     bool ParseFromString(const string& input)
     pass

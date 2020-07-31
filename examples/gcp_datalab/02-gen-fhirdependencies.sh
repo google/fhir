@@ -46,7 +46,7 @@ mkdir out-bin
 cp -fr bazel-bin/py ./out-bin/.
 cp -fr bazel-bin/proto ./out-bin/.
 
-#Importing google_extensions_pb2
+#Importing fhirproto_extensions_pb2
 touch ./out-genfiles/proto/__init__.py
 touch ./out-genfiles/proto/stu3/__init__.py
 

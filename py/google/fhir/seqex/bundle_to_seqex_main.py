@@ -26,7 +26,7 @@ from apache_beam.options.pipeline_options import StandardOptions
 from google.protobuf import text_format
 
 from proto import version_config_pb2
-from proto.stu3 import google_extensions_pb2
+from proto.stu3 import ml_extensions_pb2
 from proto.stu3 import resources_pb2
 from py.google.fhir.seqex import bundle_to_seqex
 from tensorflow.core.example import example_pb2
@@ -68,7 +68,7 @@ def main(argv: List[str]):
   event_labels = (
       p | 'readEventLabels' >> beam.io.ReadFromTFRecord(
           FLAGS.label_path,
-          coder=beam.coders.ProtoCoder(google_extensions_pb2.EventLabel)))
+          coder=beam.coders.ProtoCoder(ml_extensions_pb2.EventLabel)))
   keyed_event_labels = bundle_to_seqex.CreateTriggerLabelsPairLists(
       event_labels)
   bundles_and_labels = bundle_to_seqex.CreateBundleAndLabels(
