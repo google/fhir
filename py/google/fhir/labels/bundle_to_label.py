@@ -21,8 +21,8 @@ from absl import flags
 import apache_beam as beam
 from apache_beam.options import pipeline_options
 
-from proto.stu3 import ml_extensions_pb2
-from proto.stu3 import resources_pb2
+from proto.r4 import ml_extensions_pb2
+from proto.r4.core.resources import bundle_and_contained_resource_pb2
 from py.google.fhir.labels import encounter
 from py.google.fhir.labels import label
 
@@ -44,7 +44,7 @@ flags.DEFINE_string('setup_file', '',
                     'The setup file for Dataflow dependencies')
 
 
-@beam.typehints.with_input_types(resources_pb2.Bundle)
+@beam.typehints.with_input_types(bundle_and_contained_resource_pb2.Bundle)
 @beam.typehints.with_output_types(ml_extensions_pb2.EventLabel)
 class LengthOfStayRangeLabelAt24HoursFn(beam.DoFn):
   """Converts Bundle into length of stay range at 24 hours label.
@@ -58,12 +58,12 @@ class LengthOfStayRangeLabelAt24HoursFn(beam.DoFn):
     self._for_synthea = for_synthea
 
   def process(
-      self,
-      bundle: resources_pb2.Bundle) -> Iterator[ml_extensions_pb2.EventLabel]:
+      self, bundle: bundle_and_contained_resource_pb2.Bundle
+  ) -> Iterator[ml_extensions_pb2.EventLabel]:
     """Iterate through bundle and yield label.
 
     Args:
-      bundle: input stu3.Bundle proto
+      bundle: input R4 Bundle proto
 
     Yields:
       stu3.EventLabel proto.
@@ -106,7 +106,7 @@ def main(argv: List[str]):
   p = beam.Pipeline(options=GetPipelineOptions())
   bundles = p | 'read' >> beam.io.ReadFromTFRecord(
       flags.FLAGS.input_path,
-      coder=beam.coders.ProtoCoder(resources_pb2.Bundle))
+      coder=beam.coders.ProtoCoder(bundle_and_contained_resource_pb2.Bundle))
   labels = bundles | 'BundleToLabel' >> beam.ParDo(
       LengthOfStayRangeLabelAt24HoursFn(for_synthea=flags.FLAGS.for_synthea))
   _ = labels | beam.io.WriteToTFRecord(

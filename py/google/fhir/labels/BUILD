@@ -24,9 +24,11 @@ py_library(
     ],
     srcs_version = "PY3",
     deps = [
-        "//proto/stu3:codes_py_pb2",
-        "//proto/stu3:datatypes_py_pb2",
-        "//proto/stu3:resources_py_pb2",
+        "//proto/r4/core:codes_py_pb2",
+        "//proto/r4/core:datatypes_py_pb2",
+        "//proto/r4/core/resources:bundle_and_contained_resource_py_pb2",
+        "//proto/r4/core/resources:encounter_py_pb2",
+        "//proto/r4/core/resources:patient_py_pb2",
     ],
 )
 
@@ -36,12 +38,13 @@ py_test(
         "encounter_test.py",
     ],
     data = [
-        "//testdata/stu3:labels",
+        "//testdata/r4:labels",
     ],
     python_version = "PY3",
     deps = [
         ":encounter",
-        "//proto/stu3:resources_py_pb2",
+        "//proto/r4/core/resources:bundle_and_contained_resource_py_pb2",
+        "//proto/r4/core/resources:encounter_py_pb2",
         "@absl_py//absl/testing:absltest",
         "@com_google_protobuf//:protobuf_python",
     ],
@@ -55,9 +58,10 @@ py_library(
     srcs_version = "PY3",
     deps = [
         ":encounter",
-        "//proto/stu3:datatypes_py_pb2",
-        "//proto/stu3:ml_extensions_py_pb2",
-        "//proto/stu3:resources_py_pb2",
+        "//proto/r4:ml_extensions_py_pb2",
+        "//proto/r4/core:datatypes_py_pb2",
+        "//proto/r4/core/resources:encounter_py_pb2",
+        "//proto/r4/core/resources:patient_py_pb2",
     ],
 )
 
@@ -67,14 +71,14 @@ py_test(
         "label_test.py",
     ],
     data = [
-        "//testdata/stu3:labels",
+        "//testdata/r4:labels",
     ],
     python_version = "PY3",
     deps = [
         ":label",
-        "//proto/stu3:datatypes_py_pb2",
-        "//proto/stu3:extensions_py_pb2",
-        "//proto/stu3:resources_py_pb2",
+        "//proto/r4:ml_extensions_py_pb2",
+        "//proto/r4/core:datatypes_py_pb2",
+        "//proto/r4/core/resources:encounter_py_pb2",
         "@absl_py//absl/testing:absltest",
         "@absl_py//absl/testing:parameterized",
         "@com_google_protobuf//:protobuf_python",
@@ -97,8 +101,8 @@ py_library(
     deps = [
         ":encounter",
         ":label",
-        "//proto/stu3:ml_extensions_py_pb2",
-        "//proto/stu3:resources_py_pb2",
+        "//proto/r4/core/resources:bundle_and_contained_resource_py_pb2",
+        "//proto/r4:ml_extensions_py_pb2",
         "@absl_py//absl:app",
         "@absl_py//absl/flags",
         requirement("apache_beam"),
@@ -111,14 +115,14 @@ py_test(
         "bundle_to_label_test.py",
     ],
     data = [
-        "//testdata/stu3:labels",
+        "//testdata/r4:labels",
     ],
     python_version = "PY3",
     deps = [
         ":bundle_to_label_lib",
         ":label",
         "@com_google_protobuf//:protobuf_python",
-        "//proto/stu3:resources_py_pb2",
+        "//proto/r4/core/resources:bundle_and_contained_resource_py_pb2",
         "@absl_py//absl/testing:absltest",
         requirement("apache_beam"),
         requirement("nose"),

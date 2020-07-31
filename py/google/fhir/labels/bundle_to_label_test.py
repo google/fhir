@@ -22,13 +22,11 @@ import apache_beam as beam
 from apache_beam.testing import test_pipeline
 from apache_beam.testing import util
 from google.protobuf import text_format
-from proto.stu3 import resources_pb2
+from proto.r4.core.resources import bundle_and_contained_resource_pb2
 from py.google.fhir.labels import bundle_to_label
 from py.google.fhir.labels import label
 
-
-# TODO(kunzhang, cykoo): Move this to a proper location.
-_TESTDATA_PATH = 'com_google_fhir/testdata/stu3/labels'
+_TESTDATA_PATH = 'com_google_fhir/testdata/r4/labels'
 
 
 class BundleToLabelTest(absltest.TestCase):
@@ -42,7 +40,7 @@ class BundleToLabelTest(absltest.TestCase):
     bundle_text_file = 'bundle_1.pbtxt'
     if for_synthea:
       bundle_text_file = 'bundle_synthea.pbtxt'
-    bundle = resources_pb2.Bundle()
+    bundle = bundle_and_contained_resource_pb2.Bundle()
     with open(os.path.join(self._test_data_dir, bundle_text_file)) as f:
       text_format.Parse(f.read(), bundle)
     enc = bundle.entry[0].resource.encounter

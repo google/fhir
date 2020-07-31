@@ -26,8 +26,9 @@ from apache_beam.options.pipeline_options import StandardOptions
 from google.protobuf import text_format
 
 from proto import version_config_pb2
-from proto.stu3 import ml_extensions_pb2
-from proto.stu3 import resources_pb2
+from proto.r4 import ml_extensions_pb2
+
+from proto.r4.core.resources import bundle_and_contained_resource_pb2
 from py.google.fhir.seqex import bundle_to_seqex
 from tensorflow.core.example import example_pb2
 
@@ -62,7 +63,9 @@ def main(argv: List[str]):
   keyed_bundles = (
       p
       | 'readBundles' >> beam.io.ReadFromTFRecord(
-          FLAGS.bundle_path, coder=beam.coders.ProtoCoder(resources_pb2.Bundle))
+          FLAGS.bundle_path,
+          coder=beam.coders.ProtoCoder(
+              bundle_and_contained_resource_pb2.Bundle))
       | 'KeyBundlesByPatientId' >> beam.ParDo(
           bundle_to_seqex.KeyBundleByPatientIdFn()))
   event_labels = (

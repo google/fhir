@@ -22,13 +22,14 @@ from absl import flags
 from absl.testing import absltest
 from google.protobuf import text_format
 from proto import version_config_pb2
-from proto.stu3 import ml_extensions_pb2
-from proto.stu3 import resources_pb2
+from proto.r4 import ml_extensions_pb2
+
+from proto.r4.core.resources import bundle_and_contained_resource_pb2
 from py.google.fhir.seqex import bundle_to_seqex_converter
 from py.google.fhir.testutil import protobuf_compare
 from tensorflow.core.example import example_pb2
 
-_VERSION_CONFIG_PATH = "com_google_fhir/proto/stu3/version_config.textproto"
+_VERSION_CONFIG_PATH = "com_google_fhir/proto/r4/version_config.textproto"
 
 
 class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
@@ -42,12 +43,13 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
       self._version_config = text_format.Parse(
           f.read(), version_config_pb2.VersionConfig())
 
-  def _runTest(self, patient_key: bytes, bundle: resources_pb2.Bundle,
-               event_trigger_labels_list: Tuple[ml_extensions_pb2.EventTrigger,
-                                                List[Any]],
-               expected_outcomes: Tuple[Tuple[bytes,
-                                              example_pb2.SequenceExample, int],
-                                        Any]):
+  def _runTest(
+      self, patient_key: bytes,
+      bundle: bundle_and_contained_resource_pb2.Bundle,
+      event_trigger_labels_list: Tuple[ml_extensions_pb2.EventTrigger,
+                                       List[Any]],
+      expected_outcomes: Tuple[Tuple[bytes, example_pb2.SequenceExample, int],
+                               Any]):
     converter = bundle_to_seqex_converter.PyBundleToSeqexConverter(
         self._version_config, False, False)
     (begin_result, stats) = converter.begin(patient_key, bundle,
@@ -84,7 +86,16 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
       entry { resource { medication_request {
         id { value: "1" }
         subject { patient_id { value: "14" } }
-        contained {
+        authored_on {
+          value_us: 1420095600000000 # "2015-01-01T07:00:00+00:00"
+        }
+        medication { reference {
+          medication_id { value: "med" }
+        } }
+      } } }
+    """, bundle_and_contained_resource_pb2.Bundle())
+    contained_medication = text_format.Parse(
+        """
           medication {
             id { value: "med" }
             code { coding {
@@ -94,15 +105,9 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
               code { value: "123" }
             } }
           }
-        }
-        authored_on {
-          value_us: 1420095600000000 # "2015-01-01T07:00:00+00:00"
-        }
-        medication { reference {
-          medication_id { value: "med" }
-        } }
-      } } }
-    """, resources_pb2.Bundle())
+        """, bundle_and_contained_resource_pb2.ContainedResource())
+    bundle.entry[1].resource.medication_request.contained.add().Pack(
+        contained_medication)
     expected_seqex = text_format.Parse(
         """
       context: {
@@ -193,7 +198,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
           system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
           code { value: "bar" }
         } }
-        asserted_date {
+        recorded_date {
           value_us: 1417392000000000 # "2014-12-01T00:00:00+00:00"
         }
       } } }
@@ -204,7 +209,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
           system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
           code { value: "baz" }
         } }
-        asserted_date {
+        recorded_date {
           value_us: 1420099200000000 # "2015-01-01T08:00:00+00:00"
         }
       } } }
@@ -226,7 +231,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
           system { value: "http://hl7.org/fhir/v3/ActCode" }
           code { value: "IMP" }
         }
-        reason {
+        reason_code {
           coding {
             system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
             code { value: "191.4" }
@@ -242,7 +247,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
           }
         }
       } } }
-    """, resources_pb2.Bundle())
+    """, bundle_and_contained_resource_pb2.Bundle())
     # pylint: disable=line-too-long
     expected_seqex = text_format.Parse(
         """
@@ -294,7 +299,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
           value { feature { bytes_list { value: "bar" } } feature { bytes_list { value: "baz" } } feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { } } }
         }
         feature_list {
-          key: "Condition.assertedDate"
+          key: "Condition.recordedDate"
           value { feature { int64_list { value: 1417392000 } } feature { int64_list { value: 1420099200 } } feature { int64_list { } } feature { int64_list { } } feature { int64_list { } } }
         }
         feature_list {
@@ -314,11 +319,11 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
           value { feature { int64_list { } } feature { int64_list { } } feature { int64_list { } } feature { int64_list { } } feature { int64_list { value: 1420102800 } } }
         }
         feature_list {
-          key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+          key: "Encounter.reasonCode.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
           value { feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { value: "191.4" } } }
         }
         feature_list {
-          key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+          key: "Encounter.reasonCode.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
           value { feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { } } feature { bytes_list { value: "malignant" value: "neoplasm" value: "of" value: "occipital" value: "lobe" } } }
         }
         feature_list {
@@ -373,7 +378,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
             system { value: "http://hl7.org/fhir/v3/ActCode" }
             code { value: "IMP" }
           }
-          reason {
+          reason_code {
             coding {
               system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
               code { value: "V410.9" }
@@ -398,7 +403,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
             system { value: "http://hl7.org/fhir/v3/ActCode" }
             code { value: "IMP" }
           }
-          reason {
+          reason_code {
             coding {
               system { value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis" }
               code { value: "191.4" }
@@ -415,7 +420,7 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
           }
         } }
       }
-    """, resources_pb2.Bundle())
+    """, bundle_and_contained_resource_pb2.Bundle())
     # pylint: disable=line-too-long
     expected_seqex1 = text_format.Parse(
         """
@@ -454,11 +459,11 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
             value { feature { int64_list { } } feature { int64_list { value: 1417424400 } } }
           }
           feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+            key: "Encounter.reasonCode.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
             value { feature { bytes_list { } } feature { bytes_list { value: "V410.9" } } }
           }
           feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+            key: "Encounter.reasonCode.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
             value { feature { bytes_list { } } feature { bytes_list { value: "standard" value: "issue" } } }
           }
           feature_list {
@@ -514,13 +519,13 @@ class BundleToSeqexConverterTest(protobuf_compare.ProtoAssertions,
             }
           }
           feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
+            key: "Encounter.reasonCode.http-hl7-org-fhir-sid-icd-9-cm-diagnosis"
             value {
               feature { bytes_list { } } feature { bytes_list { value: "V410.9" } } feature { bytes_list { } } feature { bytes_list { value: "191.4" } }
             }
           }
           feature_list {
-            key: "Encounter.reason.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
+            key: "Encounter.reasonCode.http-hl7-org-fhir-sid-icd-9-cm-diagnosis.display.tokenized"
             value {
               feature { bytes_list { } } feature { bytes_list { value: "standard" value: "issue" } } feature { bytes_list { } } feature { bytes_list { value: "malignant" value: "neoplasm" value: "of" value: "occipital" value: "lobe" } }
             }

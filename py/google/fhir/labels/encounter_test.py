@@ -19,11 +19,11 @@ import os
 
 from absl.testing import absltest
 from google.protobuf import text_format
-from proto.stu3 import resources_pb2
+from proto.r4.core.resources import bundle_and_contained_resource_pb2
+from proto.r4.core.resources import encounter_pb2
 from py.google.fhir.labels import encounter
 
-
-_TESTDATA_PATH = 'com_google_fhir/testdata/stu3/labels'
+_TESTDATA_PATH = 'com_google_fhir/testdata/r4/labels'
 
 
 class EncounterTest(absltest.TestCase):
@@ -32,16 +32,16 @@ class EncounterTest(absltest.TestCase):
     super(EncounterTest, self).setUp()
     self._test_data_dir = os.path.join(absltest.get_default_test_srcdir(),
                                        _TESTDATA_PATH)
-    self._enc = resources_pb2.Encounter()
+    self._enc = encounter_pb2.Encounter()
     with open(os.path.join(self._test_data_dir, 'encounter_1.pbtxt')) as f:
       text_format.Parse(f.read(), self._enc)
-    self._bundle = resources_pb2.Bundle()
+    self._bundle = bundle_and_contained_resource_pb2.Bundle()
     self._bundle.entry.add().resource.encounter.CopyFrom(self._enc)
-    self._synthea_enc = resources_pb2.Encounter()
+    self._synthea_enc = encounter_pb2.Encounter()
     with open(os.path.join(self._test_data_dir,
                            'encounter_synthea.pbtxt')) as f:
       text_format.Parse(f.read(), self._synthea_enc)
-    self._synthea_bundle = resources_pb2.Bundle()
+    self._synthea_bundle = bundle_and_contained_resource_pb2.Bundle()
     self._synthea_bundle.entry.add().resource.encounter.CopyFrom(
         self._synthea_enc)
 

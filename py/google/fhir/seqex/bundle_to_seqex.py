@@ -15,13 +15,14 @@
 
 """Python beam functions for bundle-to-seqex."""
 
+import typing
 import apache_beam as beam
 
-from proto.stu3 import ml_extensions_pb2
-from proto.stu3 import resources_pb2
+from proto.r4 import ml_extensions_pb2
+from proto.r4.core.resources import bundle_and_contained_resource_pb2
+from proto.r4.core.resources import patient_pb2
 from py.google.fhir.seqex import bundle_to_seqex_converter
 from py.google.fhir.seqex import bundle_to_seqex_util
-from py.google.fhir.stu3 import util
 from tensorflow.core.example import example_pb2
 
 
@@ -32,14 +33,25 @@ typehints_trigger_labels_pair_list = beam.typehints.List[beam.typehints.Tuple[
     ml_extensions_pb2.EventTrigger, beam.typehints.List[beam.typehints.Any]]]
 
 
-@beam.typehints.with_input_types(resources_pb2.Bundle)
-@beam.typehints.with_output_types(beam.typehints.Tuple[bytes,
-                                                       resources_pb2.Bundle])
+def GetPatient(
+    bundle: bundle_and_contained_resource_pb2.Bundle
+) -> typing.Optional[patient_pb2.Patient]:
+  """Returns the patient resource from the bundle, if it exists."""
+  for entry in bundle.entry:
+    if entry.resource.HasField("patient"):
+      return entry.resource.patient
+  return None
+
+
+@beam.typehints.with_input_types(bundle_and_contained_resource_pb2.Bundle)
+@beam.typehints.with_output_types(
+    beam.typehints.Tuple[bytes, bundle_and_contained_resource_pb2.Bundle])
 class KeyBundleByPatientIdFn(beam.DoFn):
   """Key bundle by patient id."""
 
   def process(self, bundle):
-    patient = util.GetPatient(bundle)
+    patient = GetPatient(bundle)
+
     if not patient:
       beam.metrics.Metrics.counter("medical_records",
                                    "num-bundle-without-patient").inc()
@@ -65,7 +77,7 @@ class KeyEventLabelByPatientIdFn(beam.DoFn):
 @beam.typehints.with_input_types(
     beam.typehints.Tuple[bytes, beam.typehints.Dict[bytes, beam.typehints.Any]])
 @beam.typehints.with_output_types(beam.typehints.Tuple[
-    bytes, beam.typehints.Tuple[resources_pb2.Bundle,
+    bytes, beam.typehints.Tuple[bundle_and_contained_resource_pb2.Bundle,
                                 typehints_trigger_labels_pair_list]])
 class _JoinBundleAndTriggersDoFn(beam.DoFn):
   """Join bundle and trigger labels from the join result."""
@@ -136,7 +148,7 @@ def CreateBundleAndLabels(bundles, trigger_labels_pair_lists):
 
 
 @beam.typehints.with_input_types(beam.typehints.Tuple[
-    bytes, beam.typehints.Tuple[resources_pb2.Bundle,
+    bytes, beam.typehints.Tuple[bundle_and_contained_resource_pb2.Bundle,
                                 typehints_trigger_labels_pair_list]])
 @beam.typehints.with_output_types(example_pb2.SequenceExample)
 class BundleAndLabelsToSeqexDoFn(beam.DoFn):

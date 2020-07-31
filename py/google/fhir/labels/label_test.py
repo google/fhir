@@ -21,13 +21,14 @@ import os
 from absl.testing import absltest
 from absl.testing import parameterized
 from google.protobuf import text_format
-from proto.stu3 import datatypes_pb2
-from proto.stu3 import ml_extensions_pb2
-from proto.stu3 import resources_pb2
+from proto.r4 import ml_extensions_pb2
+from proto.r4.core import datatypes_pb2
+from proto.r4.core.resources import encounter_pb2
+from proto.r4.core.resources import patient_pb2
 from py.google.fhir.labels import label
 
 
-_TESTDATA_PATH = 'com_google_fhir/testdata/stu3/labels'
+_TESTDATA_PATH = 'com_google_fhir/testdata/r4/labels'
 
 
 class LabelTest(parameterized.TestCase):
@@ -36,10 +37,10 @@ class LabelTest(parameterized.TestCase):
     super(LabelTest, self).setUp()
     self._test_data_dir = os.path.join(absltest.get_default_test_srcdir(),
                                        _TESTDATA_PATH)
-    self._enc = resources_pb2.Encounter()
+    self._enc = encounter_pb2.Encounter()
     with open(os.path.join(self._test_data_dir, 'encounter_1.pbtxt')) as f:
       text_format.Parse(f.read(), self._enc)
-    self._patient = resources_pb2.Patient()
+    self._patient = patient_pb2.Patient()
     self._patient.id.value = 'Patient/1'
 
     self._expected_label = ml_extensions_pb2.EventLabel()
@@ -92,7 +93,7 @@ class LabelTest(parameterized.TestCase):
       {'end_us': 1234827090000000, 'label_val': 'less_or_equal_3'}
   )
   def testLengthOfStayRangeAt24Hours(self, end_us, label_val):
-    enc = resources_pb2.Encounter()
+    enc = encounter_pb2.Encounter()
     enc.CopyFrom(self._enc)
     enc.period.end.value_us = end_us
     labels = [l for l in label.LengthOfStayRangeAt24Hours(
@@ -107,7 +108,7 @@ class LabelTest(parameterized.TestCase):
     self.assertEqual([expected_label], labels)
 
   def testLengthOfStayRangeAt24HoursLT24Hours(self):
-    enc = resources_pb2.Encounter()
+    enc = encounter_pb2.Encounter()
     enc.CopyFrom(self._enc)
     enc.period.end.value_us = 1234567891000000
     with self.assertRaises(AssertionError):

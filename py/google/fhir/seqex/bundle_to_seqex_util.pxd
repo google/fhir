@@ -20,26 +20,26 @@ from libcpp.utility cimport pair
 
 from libcpp.string cimport string
 
-cdef extern from "proto/stu3/ml_extensions.pb.h" namespace "google::fhir::stu3::ml" nogil:
+cdef extern from "proto/r4/ml_extensions.pb.h" namespace "::google::fhir::r4::ml" nogil:
   cdef cppclass EventLabel:
     bool ParseFromString(const string& input)
     string SerializeAsString() const
     pass
 
-cdef extern from "proto/stu3/ml_extensions.pb.h" namespace "google::fhir::stu3::ml" nogil:
+cdef extern from "proto/r4/ml_extensions.pb.h" namespace "::google::fhir::r4::ml" nogil:
   cdef cppclass EventTrigger:
     bool ParseFromString(const string& input)
     string SerializeAsString() const
     pass
 
-cdef extern from "proto/stu3/resources.pb.h" namespace "google::fhir::stu3::proto" nogil:
+cdef extern from "proto/r4/core/resources/bundle_and_contained_resource.pb.h" namespace "google::fhir::r4::core" nogil:
   cdef cppclass Bundle:
     bool ParseFromString(const string& input)
     pass
 
 ctypedef pair[EventTrigger, vector[EventLabel]] TriggerLabelsPair
 
-cdef extern from "google/fhir/seqex/stu3.h" namespace "google::fhir::seqex_stu3" nogil:
+cdef extern from "google/fhir/seqex/r4.h" namespace "::google::fhir::seqex_r4" nogil:
 
   void GetTriggerLabelsPairFromInputLabels(
     const vector[EventLabel]&, vector[TriggerLabelsPair]*)

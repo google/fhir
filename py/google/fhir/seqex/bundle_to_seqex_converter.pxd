@@ -27,17 +27,17 @@ cdef extern from "tensorflow/core/example/example.pb.h" namespace "tensorflow" n
     bool ParseFromString(const string& input)
     string SerializeAsString() const
 
-cdef extern from "proto/stu3/ml_extensions.pb.h" namespace "google::fhir::stu3::ml" nogil:
+cdef extern from "proto/r4/ml_extensions.pb.h" namespace "::google::fhir::r4::ml" nogil:
   cdef cppclass EventTrigger:
     bool ParseFromString(const string& input)
     pass
 
-cdef extern from "proto/stu3/ml_extensions.pb.h" namespace "google::fhir::stu3::ml" nogil:
+cdef extern from "proto/r4/ml_extensions.pb.h" namespace "::google::fhir::r4::ml" nogil:
   cdef cppclass EventLabel:
     bool ParseFromString(const string& input)
     pass
 
-cdef extern from "proto/stu3/resources.pb.h" namespace "google::fhir::stu3::proto" nogil:
+cdef extern from "proto/r4/core/resources/bundle_and_contained_resource.pb.h" namespace "::google::fhir::r4::core" nogil:
   cdef cppclass Bundle:
     bool ParseFromString(const string& input)
     pass
@@ -54,7 +54,7 @@ cdef extern from "google/fhir/seqex/text_tokenizer.h" namespace "google::fhir::s
     @staticmethod
     shared_ptr[const TextTokenizer] FromFlags()
 
-cdef extern from "google/fhir/seqex/stu3.h" namespace "google::fhir::seqex_stu3" nogil:
+cdef extern from "google/fhir/seqex/r4.h" namespace "google::fhir::seqex_r4" nogil:
   cdef cppclass UnprofiledBundleToSeqexConverter:
 
     UnprofiledBundleToSeqexConverter(const VersionConfig&, shared_ptr[const TextTokenizer], const bool, const bool),

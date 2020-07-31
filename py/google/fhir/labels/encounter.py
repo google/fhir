@@ -23,9 +23,11 @@ FHIR bundle.
 import datetime
 from typing import Iterator, Optional
 
-from proto.stu3 import codes_pb2
-from proto.stu3 import datatypes_pb2
-from proto.stu3 import resources_pb2
+from proto.r4.core import codes_pb2
+from proto.r4.core import datatypes_pb2
+from proto.r4.core.resources import bundle_and_contained_resource_pb2
+from proto.r4.core.resources import encounter_pb2
+from proto.r4.core.resources import patient_pb2
 
 
 ENCOUNTER_CLASS_CODESYSTEM = 'http://hl7.org/fhir/v3/ActCode'
@@ -47,14 +49,14 @@ def ToTime(date_and_time: datatypes_pb2.DateTime) -> datetime.datetime:
   return datetime.datetime.utcfromtimestamp(date_and_time.value_us / 1000000)
 
 
-def EncounterIsFinished(encounter: resources_pb2.Encounter) -> bool:
+def EncounterIsFinished(encounter: encounter_pb2.Encounter) -> bool:
   return (encounter.period.HasField('start') and
           encounter.period.HasField('end') and
           encounter.status.value ==
           codes_pb2.EncounterStatusCode.FINISHED)
 
 
-def EncounterIsValidHospitalization(encounter: resources_pb2.Encounter) -> bool:
+def EncounterIsValidHospitalization(encounter: encounter_pb2.Encounter) -> bool:
   enc_class = encounter.class_value
   return (EncounterIsFinished(encounter) and
           enc_class.system.value == ENCOUNTER_CLASS_CODESYSTEM and
@@ -62,13 +64,13 @@ def EncounterIsValidHospitalization(encounter: resources_pb2.Encounter) -> bool:
 
 
 def EncounterIsValidHospitalizationForSynthea(
-    encounter: resources_pb2.Encounter) -> bool:
+    encounter: encounter_pb2.Encounter) -> bool:
   enc_class = encounter.class_value
   return (EncounterIsFinished(encounter) and
           enc_class.code.value == 'inpatient')
 
 
-def AtDuration(encounter: resources_pb2.Encounter,
+def AtDuration(encounter: encounter_pb2.Encounter,
                hours: int) -> datetime.datetime:
   # encounter.start + hours
   result = ToTime(encounter.period.start) + datetime.timedelta(hours=hours)
@@ -76,13 +78,15 @@ def AtDuration(encounter: resources_pb2.Encounter,
   return result
 
 
-def EncounterLengthDays(encounter: resources_pb2.Encounter) -> float:
+def EncounterLengthDays(encounter: encounter_pb2.Encounter) -> float:
   # Needs a float to properly put encounters in ranges.
   length_delta = ToTime(encounter.period.end) - ToTime(encounter.period.start)
   return float(length_delta.total_seconds()) / SECS_PER_DAY
 
 
-def GetPatient(bundle: resources_pb2.Bundle) -> Optional[resources_pb2.Patient]:
+def GetPatient(
+    bundle: bundle_and_contained_resource_pb2.Bundle
+) -> Optional[patient_pb2.Patient]:
   for entry in bundle.entry:
     if entry.resource.HasField('patient'):
       return entry.resource.patient
@@ -93,7 +97,8 @@ def GetPatient(bundle: resources_pb2.Bundle) -> Optional[resources_pb2.Patient]:
 # Use generator to be memory efficient.
 #
 def AllEncounters(
-    bundle: resources_pb2.Bundle) -> Iterator[resources_pb2.Encounter]:
+    bundle: bundle_and_contained_resource_pb2.Bundle
+) -> Iterator[encounter_pb2.Encounter]:
   """Yields all encounters in a bundle.
 
   Args:
@@ -108,8 +113,8 @@ def AllEncounters(
 
 
 def InpatientEncounters(
-    bundle: resources_pb2.Bundle,
-    for_synthea: bool = False) -> Iterator[resources_pb2.Encounter]:
+    bundle: bundle_and_contained_resource_pb2.Bundle,
+    for_synthea: bool = False) -> Iterator[encounter_pb2.Encounter]:
   """Yields all inpatient encounters in a bundle.
 
   Args:
@@ -126,9 +131,10 @@ def InpatientEncounters(
       yield encounter
 
 
-def InpatientEncountersLongerThan(bundle: resources_pb2.Bundle,
-                                  n_hours: int,
-                                  for_synthea: bool = False):
+def InpatientEncountersLongerThan(
+    bundle: bundle_and_contained_resource_pb2.Bundle,
+    n_hours: int,
+    for_synthea: bool = False):
   """Yields all inpatient encounters in a bundle that is longer than N hours.
 
   Args:
@@ -146,6 +152,6 @@ def InpatientEncountersLongerThan(bundle: resources_pb2.Bundle,
 
 
 # One line wrapper for 24.
-def Inpatient24HrEncounters(bundle: resources_pb2.Bundle,
+def Inpatient24HrEncounters(bundle: bundle_and_contained_resource_pb2.Bundle,
                             for_synthea: bool = False):
   return InpatientEncountersLongerThan(bundle, 24, for_synthea)

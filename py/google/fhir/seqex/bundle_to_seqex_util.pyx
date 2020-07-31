@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from proto.stu3 import ml_extensions_pb2
+from proto.r4 import ml_extensions_pb2
 
 
 def get_trigger_labels_from_input_labels(event_label_list):

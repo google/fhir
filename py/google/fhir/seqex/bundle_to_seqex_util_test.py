@@ -17,8 +17,9 @@
 
 from absl.testing import absltest
 from google.protobuf import text_format
-from proto.stu3 import ml_extensions_pb2
-from proto.stu3 import resources_pb2
+from proto.r4 import ml_extensions_pb2
+
+from proto.r4.core.resources import bundle_and_contained_resource_pb2
 from py.google.fhir.seqex import bundle_to_seqex_util
 from py.google.fhir.testutil import protobuf_compare
 
@@ -152,7 +153,7 @@ class BundleToSeqexUtilTest(protobuf_compare.ProtoAssertions,
           }
         }
       } } }
-    """, resources_pb2.Bundle())
+    """, bundle_and_contained_resource_pb2.Bundle())
     trigger1 = text_format.Parse(
         """
       type {

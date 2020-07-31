@@ -30,9 +30,10 @@ in terms of days.
 import datetime
 from typing import Iterator, Optional
 
-from proto.stu3 import datatypes_pb2
-from proto.stu3 import ml_extensions_pb2
-from proto.stu3 import resources_pb2
+from proto.r4 import ml_extensions_pb2
+from proto.r4.core import datatypes_pb2
+from proto.r4.core.resources import encounter_pb2
+from proto.r4.core.resources import patient_pb2
 from py.google.fhir.labels import encounter
 
 
@@ -60,9 +61,10 @@ def ToMicroSeconds(dt: datetime.datetime) -> int:
 
 
 # Note: this API only compose encounter level API.
-def ComposeLabel(patient: resources_pb2.Patient, enc: resources_pb2.Encounter,
-                 label_name: str, label_val: str,
-                 label_time: datetime.datetime) -> ml_extensions_pb2.EventLabel:
+def ComposeLabel(
+    patient: patient_pb2.Patient, enc: encounter_pb2.Encounter, label_name: str,
+    label_val: str,
+    label_time: datetime.datetime) -> ml_extensions_pb2.EventLabel:
   """Compose an event_label proto given inputs.
 
   Args:
@@ -92,8 +94,8 @@ def ComposeLabel(patient: resources_pb2.Patient, enc: resources_pb2.Encounter,
 
 
 def LengthOfStayRangeAt24Hours(
-    patient: resources_pb2.Patient,
-    enc: resources_pb2.Encounter) -> Iterator[ml_extensions_pb2.EventLabel]:
+    patient: patient_pb2.Patient,
+    enc: encounter_pb2.Encounter) -> Iterator[ml_extensions_pb2.EventLabel]:
   """Generate length of stay range labels at 24 hours after admission.
 
   Args:
