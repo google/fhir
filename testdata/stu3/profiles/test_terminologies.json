@@ -5,6 +5,7 @@
     {
       "resource": {
         "resourceType": "CodeSystem",
+        "id": "Brewery",
         "url": "http://test/url/base/Brewery",
         "name": "Brewery",
         "title": "Brewery",

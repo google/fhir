@@ -70,6 +70,7 @@ final class TerminologyGenerator {
   private CodeSystem buildCodeSystem(CodeSystemConfig config) {
     CodeSystem.Builder builder = CodeSystem.newBuilder();
     builder.getNameBuilder().setValue(config.getName());
+    builder.getIdBuilder().setValue(config.getName());
     builder.getTitleBuilder().setValue(config.getName());
     if (!config.getDescription().isEmpty()) {
       builder.getDescriptionBuilder().setValue(config.getDescription());
@@ -117,6 +118,7 @@ final class TerminologyGenerator {
     ValueSet.Builder builder = ValueSet.newBuilder();
 
     builder.getNameBuilder().setValue(config.getName());
+    builder.getIdBuilder().setValue(config.getName());
     builder.getTitleBuilder().setValue(config.getName());
     if (!config.getDescription().isEmpty()) {
       builder.getDescriptionBuilder().setValue(config.getDescription());
