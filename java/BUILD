@@ -60,7 +60,6 @@ java_library(
         "src/main/java/com/google/fhir/examples/JsonParserArgs.java",
         "src/main/java/com/google/fhir/examples/JsonToProtoMain.java",
         "src/main/java/com/google/fhir/examples/SplitBundleMain.java",
-        "src/main/java/com/google/fhir/examples/SyntheaToTFRecordsMain.java",
     ],
     deps = [
         ":big_query_schema",
@@ -73,32 +72,6 @@ java_library(
         "@maven//:com_google_apis_google_api_services_bigquery",
         "@maven//:com_google_guava_guava",
         "@maven//:com_google_http_client_google_http_client_gson",
-        "@maven//:org_apache_beam_beam_sdks_java_core",
-    ],
-)
-
-java_library(
-    name = "beam-runners",
-    runtime_deps = [
-        "@maven//:com_fasterxml_jackson_core_jackson_annotations",
-        "@maven//:com_fasterxml_jackson_core_jackson_core",
-        "@maven//:com_fasterxml_jackson_core_jackson_databind",
-        "@maven//:com_google_api_client_google_api_client",
-        "@maven//:com_google_apis_google_api_services_clouddebugger",
-        "@maven//:com_google_apis_google_api_services_dataflow",
-        "@maven//:com_google_apis_google_api_services_storage",
-        "@maven//:com_google_auth_google_auth_library_credentials",
-        "@maven//:com_google_cloud_bigdataoss_util",
-        "@maven//:joda_time_joda_time",
-        "@maven//:org_apache_beam_beam_model_pipeline",
-        "@maven//:org_apache_beam_beam_runners_direct_java",
-        "@maven//:org_apache_beam_beam_runners_google_cloud_dataflow_java",
-        "@maven//:org_apache_beam_beam_sdks_java_extensions_google_cloud_platform_core",
-        "@maven//:org_apache_beam_beam_sdks_java_io_google_cloud_platform",
-        "@maven//:org_apache_beam_beam_vendor_grpc_v1_13_1",
-        "@maven//:org_slf4j_slf4j_api",
-        "@maven//:org_slf4j_slf4j_simple",
-        "@maven//:org_xerial_snappy_snappy_java",
     ],
 )
 
@@ -118,15 +91,6 @@ java_binary(
     name = "SplitBundle",
     main_class = "com.google.fhir.examples.SplitBundleMain",
     runtime_deps = [":examples"],
-)
-
-java_binary(
-    name = "SyntheaToTFRecords",
-    main_class = "com.google.fhir.examples.SyntheaToTFRecordsMain",
-    runtime_deps = [
-        ":beam-runners",
-        ":examples",
-    ],
 )
 
 java_library(

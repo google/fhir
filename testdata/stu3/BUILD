@@ -1,4 +1,4 @@
-# Testdata for the parsers
+# STU3 Testdata
 
 package(default_visibility = ["//visibility:public"])
 
@@ -52,20 +52,6 @@ filegroup(
     name = "validation",
     srcs = glob([
         "validation/*",
-    ]),
-)
-
-filegroup(
-    name = "labels",
-    srcs = glob([
-        "labels/*",
-    ]),
-)
-
-filegroup(
-    name = "tensorflow",
-    srcs = glob([
-        "tensorflow/*",
     ]),
 )
 

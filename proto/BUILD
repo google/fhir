@@ -24,13 +24,6 @@ fhir_proto_library(
 
 fhir_proto_library(
     srcs = [
-        "version_config.proto",
-    ],
-    proto_library_prefix = "version_config",
-)
-
-fhir_proto_library(
-    srcs = [
         "profile_config.proto",
     ],
     proto_deps = [

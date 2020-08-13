@@ -1,6 +1,6 @@
 licenses(["notice"])
 
-package(default_visibility = ["//visibility:public"],)
+package(default_visibility = ["//visibility:public"])
 
 py_library(
     name = "protobuf_compare",
