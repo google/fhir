@@ -1,0 +1,9 @@
+status { value: FINAL }
+code {
+  coding {
+    system { value: "foo" }
+    code { value: "bar" }
+  }
+}
+value { quantity { value { value: "1.2.3" } } }
+id { value: "123" }

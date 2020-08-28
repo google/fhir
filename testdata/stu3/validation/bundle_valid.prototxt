@@ -1,0 +1,3 @@
+type { value: COLLECTION }
+id { value: "123" }
+entry { resource { patient {} } }

@@ -1,0 +1,7 @@
+code {
+  coding {
+    system { value: "foo" }
+    code { value: "bar" }
+  }
+}
+id { value: "123" }

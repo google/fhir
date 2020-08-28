@@ -1,0 +1,10 @@
+system { value: "http://terminology.hl7.org/CodeSystem/v3-NullFlavor" }
+code { value: "ASKU" }
+id { value: "5" }
+user_selected {value: true}
+extension {
+  url { value: "foo" }
+  value { string_value { value: "bar" } }
+}
+version { value: "2" }
+display { value: "baz" }
