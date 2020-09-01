@@ -13,11 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Note that setuptools==50.0.0 results in breaking changes with distutils. See
+# more at: https://github.com/pypa/setuptools/issues/2350.
+SETUPTOOLS_VERSION='>=49.0.0,<50.0.0'
+
 function run_bazel_in_venv {
   python3 -m venv venv
   source venv/bin/activate
   pip install --upgrade pip
-  pip install --upgrade setuptools
+  pip install setuptools"${SETUPTOOLS_VERSION}"
+  pip install wheel
   pip install -r bazel/requirements.txt
 
   # Show versions of packages installed
