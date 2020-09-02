@@ -5,9 +5,7 @@ load(
 
 package(
     default_testonly = 1,
-    default_visibility = [
-        "//py/google/fhir:__subpackages__",
-    ],
+    default_visibility = ["//visibility:public"],
 )
 
 licenses(["notice"])
