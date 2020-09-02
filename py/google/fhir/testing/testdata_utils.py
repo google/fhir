@@ -30,7 +30,7 @@ _TEST_DATA_DIR_STU3 = os.path.join('testdata', 'stu3')
 _T = TypeVar('_T', bound=message.Message)
 
 
-def _FhirFilepathFrom(filename: str) -> str:
+def _fhir_filepath_from(filename: str) -> str:
   """Returns a filepath from filename relative to the fhir/ root dir."""
   filepath = os.path.join(os.getenv("TEST_SRCDIR"), 'com_google_fhir/',
                           filename)
@@ -39,9 +39,9 @@ def _FhirFilepathFrom(filename: str) -> str:
   return filepath
 
 
-def ReadData(filename: str, delimiter: Optional[str] = None) -> List[str]:
+def read_data(filename: str, delimiter: Optional[str] = None) -> List[str]:
   """Reads the raw contents of a file and returns as a string."""
-  filepath = _FhirFilepathFrom(filename)
+  filepath = _fhir_filepath_from(filename)
 
   raw_text = ''
   with open(filepath, 'r', encoding='utf-8') as f:
@@ -52,11 +52,11 @@ def ReadData(filename: str, delimiter: Optional[str] = None) -> List[str]:
   return raw_text.strip(delimiter).split(delimiter)
 
 
-def ReadProtos(filename: str,
-               proto_cls: Type[_T],
-               delimiter: Optional[str] = None) -> List[_T]:
+def read_protos(filename: str,
+                proto_cls: Type[_T],
+                delimiter: Optional[str] = None) -> List[_T]:
   """Reads protobuf information from filename relative to the fhir/ root dir."""
-  raw_protos = ReadData(filename, delimiter)
+  raw_protos = read_data(filename, delimiter)
 
   results = []
   for raw_proto in raw_protos:
@@ -67,27 +67,27 @@ def ReadProtos(filename: str,
   return results
 
 
-def ReadStu3Json(filename: str, delimiter: Optional[str] = None) -> List[str]:
+def read_stu3_json(filename: str, delimiter: Optional[str] = None) -> List[str]:
   """Reads STU3 JSON information relative to the testdata/stu3 dir."""
-  return ReadData(os.path.join(_TEST_DATA_DIR_STU3, filename), delimiter)
+  return read_data(os.path.join(_TEST_DATA_DIR_STU3, filename), delimiter)
 
 
-def ReadR4Json(filename: str, delimiter: Optional[str] = None) -> List[str]:
+def read_r4_json(filename: str, delimiter: Optional[str] = None) -> List[str]:
   """Reads R4 JSON information relative to the testdata/r4 dir."""
-  return ReadData(os.path.join(_TEST_DATA_DIR_R4, filename), delimiter)
+  return read_data(os.path.join(_TEST_DATA_DIR_R4, filename), delimiter)
 
 
-def ReadStu3Protos(filename: str,
-                   proto_cls: Type[_T],
-                   delimiter: Optional[str] = None) -> List[_T]:
+def read_stu3_protos(filename: str,
+                     proto_cls: Type[_T],
+                     delimiter: Optional[str] = None) -> List[_T]:
   """Reads STU3 protobuf information relative to the testdata/stu3 dir."""
-  return ReadProtos(
+  return read_protos(
       os.path.join(_TEST_DATA_DIR_STU3, filename), proto_cls, delimiter)
 
 
-def ReadR4Protos(filename: str,
-                 proto_cls: Type[_T],
-                 delimiter: Optional[str] = None) -> List[_T]:
+def read_r4_protos(filename: str,
+                   proto_cls: Type[_T],
+                   delimiter: Optional[str] = None) -> List[_T]:
   """Reads R4 protobuf information relative to testdata/r4 dir."""
-  return ReadProtos(
+  return read_protos(
       os.path.join(_TEST_DATA_DIR_R4, filename), proto_cls, delimiter)

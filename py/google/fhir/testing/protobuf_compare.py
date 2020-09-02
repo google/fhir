@@ -98,7 +98,7 @@ def assertProtoEqual(self,
         cast(absltest.TestCase,
              self).fail(f'Initialization errors: {errors}\n{pb}')
     if normalize_numbers:
-      NormalizeNumberFields(pb)
+      normalize_number_fields(pb)
 
   cast(absltest.TestCase, self).assertMultiLineEqual(
       text_format.MessageToString(a, descriptor_pool=pool),
@@ -106,7 +106,7 @@ def assertProtoEqual(self,
       msg=msg)
 
 
-def NormalizeNumberFields(pb: _T) -> _T:
+def normalize_number_fields(pb: _T) -> _T:
   """Normalizes types and precisions of number fields in a protocol buffer.
 
   Due to subtleties in the python protocol buffer implementation, it is possible
@@ -162,14 +162,14 @@ def NormalizeNumberFields(pb: _T) -> _T:
           desc.message_type.has_options and
           desc.message_type.GetOptions().map_entry):
         # This is a map, only recurse if the values have a message type.
-        if (desc.message_type.fields_by_number[2].type == descriptor
-            .FieldDescriptor.TYPE_MESSAGE):
+        if (desc.message_type.fields_by_number[2].type ==
+            descriptor.FieldDescriptor.TYPE_MESSAGE):
           for v in values:
-            NormalizeNumberFields(v)
+            normalize_number_fields(v)
       else:
         for v in values:
           # recursive step
-          NormalizeNumberFields(v)
+          normalize_number_fields(v)
 
   return pb
 
