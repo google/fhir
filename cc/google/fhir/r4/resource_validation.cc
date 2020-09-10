@@ -24,11 +24,11 @@ namespace google {
 namespace fhir {
 namespace r4 {
 
-Status ValidateResource(const ::google::protobuf::Message& resource) {
+absl::Status ValidateResource(const ::google::protobuf::Message& resource) {
   return ValidateResource(resource, R4PrimitiveHandler::GetInstance());
 }
 
-Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource) {
+absl::Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource) {
   return ValidateResourceWithFhirPath(
       resource, R4PrimitiveHandler::GetInstance(), GetFhirPathValidator());
 }

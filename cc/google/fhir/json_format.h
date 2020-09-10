@@ -21,13 +21,13 @@
 
 #include "google/protobuf/message.h"
 #include "absl/status/status.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/match.h"
 #include "absl/time/time.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/r4/profiles.h"
 #include "google/fhir/status/status.h"
-#include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/profiles.h"
 
 namespace google {
@@ -42,9 +42,10 @@ class Parser {
   // Takes a default timezone for timelike data that does not specify timezone.
   // For reading JSON into a new resource, it is recommended to use
   // JsonFhirStringToProto or JsonFhirStringToProtoWithoutValidating.
-  ::google::fhir::Status MergeJsonFhirStringIntoProto(
-      const std::string& raw_json, google::protobuf::Message* target,
-      absl::TimeZone default_timezone, const bool validate) const;
+  ::absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
+                                              google::protobuf::Message* target,
+                                              absl::TimeZone default_timezone,
+                                              const bool validate) const;
 
   // Given a template for a FHIR resource type, creates a resource proto of that
   // type and merges a std::string of raw FHIR json into it.
@@ -52,7 +53,7 @@ class Parser {
   // according to the requirements of the requested FHIR proto. Takes a default
   // timezone for timelike data that does not specify timezone.
   template <typename R>
-  ::google::fhir::StatusOr<R> JsonFhirStringToProto(
+  ::absl::StatusOr<R> JsonFhirStringToProto(
       const std::string& raw_json,
       const absl::TimeZone default_timezone) const {
     R resource;
@@ -67,7 +68,7 @@ class Parser {
   // if it encounters a field it cannot convert.
   // Takes a default timezone for timelike data that does not specify timezone.
   template <typename R>
-  ::google::fhir::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
+  ::absl::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
       const std::string& raw_json,
       const absl::TimeZone default_timezone) const {
     R resource;
@@ -87,24 +88,24 @@ class Printer {
 
   // Prints a FHIR primitive to string for display.  This string conforms to the
   // FHIR regex for this primitive.
-  ::google::fhir::StatusOr<std::string> PrintFhirPrimitive(
+  ::absl::StatusOr<std::string> PrintFhirPrimitive(
       const ::google::protobuf::Message& primitive_message) const;
 
   // Prints a FHIR proto to a single line of FHIR JSON, suitable for NDJSON
-  ::google::fhir::StatusOr<std::string> PrintFhirToJsonString(
+  ::absl::StatusOr<std::string> PrintFhirToJsonString(
       const google::protobuf::Message& fhir_proto) const;
 
   // Prints a FHIR proto to "pretty" (i.e., multi-line) FHIR JSON.
-  ::google::fhir::StatusOr<std::string> PrettyPrintFhirToJsonString(
+  ::absl::StatusOr<std::string> PrettyPrintFhirToJsonString(
       const google::protobuf::Message& fhir_proto) const;
 
   // Prints a FHIR proto to a single line of FHIR Analytic JSON,
   // suitable for NDJSON
-  ::google::fhir::StatusOr<std::string> PrintFhirToJsonStringForAnalytics(
+  ::absl::StatusOr<std::string> PrintFhirToJsonStringForAnalytics(
       const google::protobuf::Message& fhir_proto) const;
 
   // Prints a FHIR proto to "pretty" (i.e., multi-line) FHIR Analytic JSON.
-  ::google::fhir::StatusOr<std::string> PrettyPrintFhirToJsonStringForAnalytics(
+  ::absl::StatusOr<std::string> PrettyPrintFhirToJsonStringForAnalytics(
       const google::protobuf::Message& fhir_proto) const;
 
  private:

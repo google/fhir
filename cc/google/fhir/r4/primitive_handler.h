@@ -21,6 +21,7 @@
 
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
+#include "absl/status/statusor.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/status/status.h"
@@ -39,8 +40,7 @@ class R4PrimitiveHandler
   static const R4PrimitiveHandler* GetInstance();
 
  protected:
-  ::google::fhir::StatusOr<
-      std::unique_ptr<primitives_internal::PrimitiveWrapper>>
+  ::absl::StatusOr<std::unique_ptr<primitives_internal::PrimitiveWrapper>>
   GetWrapper(const ::google::protobuf::Descriptor* target_descriptor) const override;
 };
 

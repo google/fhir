@@ -24,15 +24,15 @@ namespace fhir {
 
 using ::google::protobuf::Message;
 
-Status ConvertToProfileStu3(const ::google::protobuf::Message& source,
-                            ::google::protobuf::Message* target) {
+absl::Status ConvertToProfileStu3(const ::google::protobuf::Message& source,
+                                  ::google::protobuf::Message* target) {
   return profiles_internal::ConvertToProfileInternal<
       stu3::Stu3PrimitiveHandler>(source, target);
 }
 
 // Identical to ConvertToProfile, except does not run the validation step.
-Status ConvertToProfileLenientStu3(const ::google::protobuf::Message& source,
-                                   ::google::protobuf::Message* target) {
+absl::Status ConvertToProfileLenientStu3(const ::google::protobuf::Message& source,
+                                         ::google::protobuf::Message* target) {
   return profiles_internal::ConvertToProfileLenientInternal<
       stu3::Stu3PrimitiveHandler>(source, target);
 }

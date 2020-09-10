@@ -176,20 +176,17 @@ TEST(CodeableConceptsTest, GetCodesWithSystemFixedCode) {
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemUnprofiled) {
   const auto concept = GetConcept();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysf.org").value(),
-            "fcode");
+  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysf.org").value(), "fcode");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemFixedSystem) {
   const auto concept = GetConcept();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysa.org").value(),
-            "acode");
+  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysa.org").value(), "acode");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemFixedCode) {
   const auto concept = GetConcept();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysc.org").value(),
-            "8472");
+  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysc.org").value(), "8472");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemUnprofiledTooMany) {

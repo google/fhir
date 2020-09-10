@@ -44,16 +44,16 @@ namespace fhir {
 //
 // All versions return an INVALID_ARGUMENT status if the field_path does not
 // resolve to a message
-StatusOr<::google::protobuf::Message*> GetMutableSubmessageByPath(
+absl::StatusOr<::google::protobuf::Message*> GetMutableSubmessageByPath(
     ::google::protobuf::Message* message, const std::string& field_path);
 
-StatusOr<const ::google::protobuf::Message*> GetSubmessageByPath(
+absl::StatusOr<const ::google::protobuf::Message*> GetSubmessageByPath(
     const ::google::protobuf::Message& message, const std::string& field_path);
 
 // Typed variants that return the requested type, or INVALID_ARGUMENT if
 // the located message is not of the expected type.
 template <typename T>
-StatusOr<T*> GetMutableSubmessageByPathAndCheckType(
+absl::StatusOr<T*> GetMutableSubmessageByPathAndCheckType(
     ::google::protobuf::Message* message, const std::string& field_path) {
   const std::string& message_name = message->GetDescriptor()->name();
   auto got = GetMutableSubmessageByPath(message, field_path);
@@ -71,7 +71,7 @@ StatusOr<T*> GetMutableSubmessageByPathAndCheckType(
 }
 
 template <typename T>
-StatusOr<const T*> GetSubmessageByPathAndCheckType(
+absl::StatusOr<const T*> GetSubmessageByPathAndCheckType(
     const ::google::protobuf::Message& message, const std::string& field_path) {
   const std::string& message_name = message.GetDescriptor()->name();
   auto got = GetSubmessageByPath(message, field_path);
@@ -91,8 +91,8 @@ StatusOr<const T*> GetSubmessageByPathAndCheckType(
 // Returns true if the field specified by field_path is set on a message,
 // false if the field is unset, and InvalidArgument if the field_path doesn't
 // resolve to a field, or the field is an unindexed repeated.
-StatusOr<const bool> HasSubmessageByPath(const ::google::protobuf::Message& message,
-                                         const std::string& field_path);
+absl::StatusOr<const bool> HasSubmessageByPath(const ::google::protobuf::Message& message,
+                                               const std::string& field_path);
 
 // Clears a field at the location specified by field path.
 // If this points to a singular field, will just delete that element.
@@ -185,19 +185,19 @@ void ForEachMessage(const ::google::protobuf::Message& message,
 // that status.  Returns Status::OK if the function returned OK for all messages
 // in the field.
 template <typename FieldType>
-Status ForEachMessageWithStatus(
+absl::Status ForEachMessageWithStatus(
     const ::google::protobuf::Message& message, const ::google::protobuf::FieldDescriptor* field,
-    std::function<Status(const FieldType& message)> func) {
-  Status status = absl::OkStatus();
-  ForEachMessageHalting<FieldType>(message, field,
-                                   [&func, &status](const FieldType& message) {
-                                     const Status func_status = func(message);
-                                     if (!func_status.ok()) {
-                                       status = func_status;
-                                       return true;  // Halt
-                                     }
-                                     return false;
-                                   });
+    std::function<absl::Status(const FieldType& message)> func) {
+  absl::Status status = absl::OkStatus();
+  ForEachMessageHalting<FieldType>(
+      message, field, [&func, &status](const FieldType& message) {
+        const absl::Status func_status = func(message);
+        if (!func_status.ok()) {
+          status = func_status;
+          return true;  // Halt
+        }
+        return false;
+      });
   return status;
 }
 
@@ -215,15 +215,15 @@ bool IsMessageType(const ::google::protobuf::Message& message) {
   return IsMessageType<T>(message.GetDescriptor());
 }
 
-StatusOr<const google::protobuf::Message*> GetMessageInField(
+absl::StatusOr<const google::protobuf::Message*> GetMessageInField(
     const ::google::protobuf::Message& message, const std::string& field_name);
 
-StatusOr<google::protobuf::Message*> MutableMessageInField(::google::protobuf::Message* message,
-                                                 const std::string& field_name);
+absl::StatusOr<google::protobuf::Message*> MutableMessageInField(
+    ::google::protobuf::Message* message, const std::string& field_name);
 
 template <typename T>
-StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
-                              const ::google::protobuf::FieldDescriptor* field) {
+absl::StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
+                                    const ::google::protobuf::FieldDescriptor* field) {
   if (field->message_type()->full_name() != T::descriptor()->full_name()) {
     return absl::InvalidArgumentError(absl::StrCat(
         "Invalid arguments to GetMessageInField: ", field->full_name(),
@@ -235,8 +235,8 @@ StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
 }
 
 template <typename T>
-StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
-                              const std::string& field_name) {
+absl::StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
+                                    const std::string& field_name) {
   const ::google::protobuf::FieldDescriptor* field =
       message.GetDescriptor()->FindFieldByName(field_name);
   if (!field) {
@@ -251,13 +251,14 @@ StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
 // If both |source| and |target| contain a field with the given name, and the
 // fields are of the same type, copies over the value.
 // Otherwise, returns InvalidArgument.
-Status CopyCommonField(const ::google::protobuf::Message& source,
-                       ::google::protobuf::Message* target,
-                       const std::string& field_name);
+absl::Status CopyCommonField(const ::google::protobuf::Message& source,
+                             ::google::protobuf::Message* target,
+                             const std::string& field_name);
 
 // Clears a field by name on a message.  Returns InvalidArgument if the field
 // does not exist on the message.
-Status ClearField(::google::protobuf::Message* message, const std::string& field_name);
+absl::Status ClearField(::google::protobuf::Message* message,
+                        const std::string& field_name);
 
 }  // namespace fhir
 }  // namespace google

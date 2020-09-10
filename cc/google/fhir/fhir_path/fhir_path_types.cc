@@ -21,7 +21,7 @@ namespace google::fhir::fhir_path::internal {
 
 using ::google::protobuf::Message;
 
-StatusOr<FhirPathSystemType> GetSystemType(
+absl::StatusOr<FhirPathSystemType> GetSystemType(
     const ::google::protobuf::Message& fhir_primitive) {
   static const auto* type_map =
       new absl::flat_hash_map<absl::string_view, FhirPathSystemType>(
@@ -79,17 +79,17 @@ StatusOr<FhirPathSystemType> GetSystemType(
 }
 
 bool IsSystemInteger(const Message& message) {
-  StatusOr<FhirPathSystemType> type = GetSystemType(message);
+  absl::StatusOr<FhirPathSystemType> type = GetSystemType(message);
   return type.ok() && type.value() == FhirPathSystemType::kInteger;
 }
 
 bool IsSystemString(const Message& message) {
-  StatusOr<FhirPathSystemType> type = GetSystemType(message);
+  absl::StatusOr<FhirPathSystemType> type = GetSystemType(message);
   return type.ok() && type.value() == FhirPathSystemType::kString;
 }
 
 bool IsSystemDecimal(const Message& message) {
-  StatusOr<FhirPathSystemType> type = GetSystemType(message);
+  absl::StatusOr<FhirPathSystemType> type = GetSystemType(message);
   return type.ok() && type.value() == FhirPathSystemType::kDecimal;
 }
 

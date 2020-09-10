@@ -116,7 +116,7 @@ const unordered_map<std::string, const FieldDescriptor*>& GetExtensionMap(
 // Returns a status error if any subprocess encounters a problem.
 // Note that the inability to find a suitable target field does NOT constitute
 // a failure with a status return.
-StatusOr<const FieldDescriptor*> FindTargetField(
+absl::StatusOr<const FieldDescriptor*> FindTargetField(
     const Message& source, const Message* target,
     const FieldDescriptor* source_field) {
   const Descriptor* target_descriptor = target->GetDescriptor();
@@ -139,10 +139,10 @@ StatusOr<const FieldDescriptor*> FindTargetField(
   return nullptr;
 }
 
-Status CopyProtoPrimitiveField(const Message& source,
-                               const FieldDescriptor* source_field,
-                               Message* target,
-                               const FieldDescriptor* target_field) {
+absl::Status CopyProtoPrimitiveField(const Message& source,
+                                     const FieldDescriptor* source_field,
+                                     Message* target,
+                                     const FieldDescriptor* target_field) {
   if (source_field->type() != target_field->type()) {
     return InvalidArgumentError(absl::StrCat(
         "Primitive field type mismatch between ", source_field->full_name(),

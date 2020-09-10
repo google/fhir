@@ -40,13 +40,13 @@ using ::google::protobuf::Reflection;
 
 namespace {
 
-Status CheckField(const Message& message, const FieldDescriptor* field,
-                  const std::string& field_name,
-                  const PrimitiveHandler* primitive_handler);
+absl::Status CheckField(const Message& message, const FieldDescriptor* field,
+                        const std::string& field_name,
+                        const PrimitiveHandler* primitive_handler);
 
-Status ValidateFhirConstraints(const Message& message,
-                               const std::string& base_name,
-                               const PrimitiveHandler* primitive_handler) {
+absl::Status ValidateFhirConstraints(
+    const Message& message, const std::string& base_name,
+    const PrimitiveHandler* primitive_handler) {
   if (IsPrimitive(message.GetDescriptor())) {
     return primitive_handler->ValidatePrimitive(message).ok()
                ? absl::OkStatus()
@@ -86,9 +86,9 @@ Status ValidateFhirConstraints(const Message& message,
 }
 
 // Check if a required field is missing.
-Status CheckField(const Message& message, const FieldDescriptor* field,
-                  const std::string& field_name,
-                  const PrimitiveHandler* primitive_handler) {
+absl::Status CheckField(const Message& message, const FieldDescriptor* field,
+                        const std::string& field_name,
+                        const PrimitiveHandler* primitive_handler) {
   if (field->options().HasExtension(validation_requirement) &&
       field->options().GetExtension(validation_requirement) ==
           ::google::fhir::proto::REQUIRED_BY_FHIR) {
@@ -120,7 +120,7 @@ Status CheckField(const Message& message, const FieldDescriptor* field,
 // TODO: Invert the default here for FHIRPath handling, and have
 // ValidateWithoutFhirPath instead of ValidateWithFhirPath
 
-Status ValidateResourceWithFhirPath(
+absl::Status ValidateResourceWithFhirPath(
     const Message& resource, const PrimitiveHandler* primitive_handler,
     fhir_path::FhirPathValidator* message_validator) {
   FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(
@@ -128,8 +128,8 @@ Status ValidateResourceWithFhirPath(
   return message_validator->Validate(resource).LegacyValidationResult();
 }
 
-Status ValidateResource(const Message& resource,
-                        const PrimitiveHandler* primitive_handler) {
+absl::Status ValidateResource(const Message& resource,
+                              const PrimitiveHandler* primitive_handler) {
   return ValidateFhirConstraints(resource, resource.GetDescriptor()->name(),
                                  primitive_handler);
 }

@@ -59,8 +59,7 @@ TEST(GetResourceFromBundleEntryTest, GetResourceFromEncounter) {
   encounter->mutable_status()->set_value(EncounterStatusCode::FINISHED);
   encounter->mutable_id()->set_value("2468");
 
-  const google::protobuf::Message* resource =
-      GetResourceFromBundleEntry(entry).value();
+  const google::protobuf::Message* resource = GetResourceFromBundleEntry(entry).value();
   auto* desc = resource->GetDescriptor();
   EXPECT_EQ("Encounter", desc->name());
   const Encounter* result_encounter = dynamic_cast<const Encounter*>(resource);
@@ -76,8 +75,7 @@ TEST(GetResourceFromBundleEntryTest, GetResourceFromPatient) {
   patient->mutable_birth_date()->set_value_us(-77641200000000);
   patient->mutable_id()->set_value("2468");
 
-  const google::protobuf::Message* resource =
-      GetResourceFromBundleEntry(entry).value();
+  const google::protobuf::Message* resource = GetResourceFromBundleEntry(entry).value();
   auto* desc = resource->GetDescriptor();
   EXPECT_EQ("Patient", desc->name());
   const Patient* result_patient = dynamic_cast<const Patient*>(resource);
@@ -263,8 +261,7 @@ TEST(GetMutablePatient, StatusOr) {
       ->mutable_id()
       ->set_value("5");
 
-  EXPECT_EQ(GetMutablePatient(&bundle).value()->mutable_id()->value(),
-            "5");
+  EXPECT_EQ(GetMutablePatient(&bundle).value()->mutable_id()->value(), "5");
 }
 
 TEST(Util, UnpackAnyAsContainedResourceR4) {
@@ -301,8 +298,7 @@ TEST(Util, UnpackAnyAsContainedResourceR4) {
   auto result_statusor = UnpackAnyAsContainedResource(med_req.contained(0));
   FHIR_ASSERT_OK(result_statusor.status());
 
-  std::unique_ptr<Message> result =
-      absl::WrapUnique(result_statusor.value());
+  std::unique_ptr<Message> result = absl::WrapUnique(result_statusor.value());
 
   ASSERT_THAT(*result, EqualsProto(contained_medication));
 }
@@ -353,7 +349,7 @@ TEST(Util, UnpackAnyAsContainedResourceR4CustomFactory) {
   auto local_memory = absl::make_unique<r4::core::ContainedResource>();
   auto result_statusor = UnpackAnyAsContainedResource(
       med_req.contained(0),
-      [&](const Descriptor* descriptor) -> StatusOr<Message*>{
+      [&](const Descriptor* descriptor) -> absl::StatusOr<Message*> {
         return local_memory.get();
       });
 
@@ -386,8 +382,7 @@ TEST(Util, UnpackAnyAsContainedResourceR4NonStandardIG) {
   auto result_statusor = UnpackAnyAsContainedResource(med_req.contained(0));
   FHIR_ASSERT_OK(result_statusor.status());
 
-  std::unique_ptr<Message> result =
-      absl::WrapUnique(result_statusor.value());
+  std::unique_ptr<Message> result = absl::WrapUnique(result_statusor.value());
 
   ASSERT_THAT(*result, EqualsProto(contained_encounter));
 }

@@ -57,7 +57,7 @@ namespace fhir {
 
 namespace extensions_lib {
 
-Status ValidateExtension(const ::google::protobuf::Descriptor* descriptor);
+absl::Status ValidateExtension(const ::google::protobuf::Descriptor* descriptor);
 
 // Extract all matching extensions from a container into a vector, and parse
 // them into protos. Example usage:
@@ -65,20 +65,20 @@ Status ValidateExtension(const ::google::protobuf::Descriptor* descriptor);
 // std::vector<MyExtension> my_extensions;
 // auto status = GetRepeatedFromExtension(patient.extension(), &my_extension);
 template <class C, class T>
-Status GetRepeatedFromExtension(const C& extension_container,
-                                std::vector<T>* result);
+absl::Status GetRepeatedFromExtension(const C& extension_container,
+                                      std::vector<T>* result);
 
 // Extracts a single extension of type T from 'entity'. Returns a NotFound error
 // if there are zero extensions of that type. Returns an InvalidArgument error
 // if there are more than one.
 template <class T, class C>
-StatusOr<T> ExtractOnlyMatchingExtension(const C& entity);
+absl::StatusOr<T> ExtractOnlyMatchingExtension(const C& entity);
 
-Status ClearTypedExtensions(const ::google::protobuf::Descriptor* descriptor,
-                            ::google::protobuf::Message* message);
+absl::Status ClearTypedExtensions(const ::google::protobuf::Descriptor* descriptor,
+                                  ::google::protobuf::Message* message);
 
-Status ClearExtensionsWithUrl(const std::string& url,
-                              ::google::protobuf::Message* message);
+absl::Status ClearExtensionsWithUrl(const std::string& url,
+                                    ::google::protobuf::Message* message);
 
 std::string GetInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* field);
 
@@ -93,38 +93,38 @@ const std::string& GetExtensionSystem(const google::protobuf::Message& extension
 namespace extensions_templates {
 
 template <class ExtensionLike>
-Status ValueToMessage(const ExtensionLike& extension,
-                      ::google::protobuf::Message* message,
-                      const ::google::protobuf::FieldDescriptor* field);
+absl::Status ValueToMessage(const ExtensionLike& extension,
+                            ::google::protobuf::Message* message,
+                            const ::google::protobuf::FieldDescriptor* field);
 
 template <class ExtensionLike>
-Status ExtensionToMessage(const ExtensionLike& extension,
-                          ::google::protobuf::Message* message);
+absl::Status ExtensionToMessage(const ExtensionLike& extension,
+                                ::google::protobuf::Message* message);
 
 // Given a datatype message (E.g., String, Code, Boolean, etc.),
 // finds the appropriate field on the target extension and sets it.
 // Returns ::absl::InvalidArgumentError if there's no matching oneof
 // type on the extension for the message.
 template <class ExtensionLike>
-Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
-                              ExtensionLike* extension);
+absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
+                                    ExtensionLike* extension);
 
 template <class ExtensionLike>
-Status ConvertToExtension(const ::google::protobuf::Message& message,
-                          ExtensionLike* extension);
+absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
+                                ExtensionLike* extension);
 
 }  // namespace extensions_templates
 
 namespace extensions_internal {
 
-Status CheckIsMessage(const ::google::protobuf::FieldDescriptor* field);
+absl::Status CheckIsMessage(const ::google::protobuf::FieldDescriptor* field);
 
 const std::vector<const ::google::protobuf::FieldDescriptor*> FindValueFields(
     const ::google::protobuf::Descriptor* descriptor);
 
 template <class ExtensionLike>
-Status AddValueToExtension(const ::google::protobuf::Message& message,
-                           ExtensionLike* extension, bool is_choice_type);
+absl::Status AddValueToExtension(const ::google::protobuf::Message& message,
+                                 ExtensionLike* extension, bool is_choice_type);
 
 // For the Extension message in the template, returns the appropriate field on
 // the extension for a descriptor of a given type.
@@ -158,8 +158,8 @@ GetExtensionValueFieldByType(const ::google::protobuf::Descriptor* field_type) {
 // type in the value oneof.
 // Returns an InvalidArgument status if no value field is set on the extension.
 template <class ExtensionLike>
-StatusOr<const ::google::protobuf::FieldDescriptor*> GetPopulatedExtensionValueField(
-    const ExtensionLike& extension) {
+absl::StatusOr<const ::google::protobuf::FieldDescriptor*>
+GetPopulatedExtensionValueField(const ExtensionLike& extension) {
   static const google::protobuf::OneofDescriptor* value_oneof =
       ExtensionLike::ValueX::descriptor()->FindOneofByName("choice");
   const auto& value = extension.value();
@@ -174,8 +174,8 @@ StatusOr<const ::google::protobuf::FieldDescriptor*> GetPopulatedExtensionValueF
 }
 
 template <class ExtensionLike>
-Status AddFieldsToExtension(const ::google::protobuf::Message& message,
-                            ExtensionLike* extension) {
+absl::Status AddFieldsToExtension(const ::google::protobuf::Message& message,
+                                  ExtensionLike* extension) {
   const ::google::protobuf::Descriptor* descriptor = message.GetDescriptor();
   const ::google::protobuf::Reflection* reflection = message.GetReflection();
   std::vector<const ::google::protobuf::FieldDescriptor*> fields;
@@ -209,8 +209,9 @@ Status AddFieldsToExtension(const ::google::protobuf::Message& message,
 }
 
 template <class ExtensionLike>
-Status AddValueToExtension(const ::google::protobuf::Message& message,
-                           ExtensionLike* extension, bool is_choice_type) {
+absl::Status AddValueToExtension(const ::google::protobuf::Message& message,
+                                 ExtensionLike* extension,
+                                 bool is_choice_type) {
   const ::google::protobuf::Descriptor* descriptor = message.GetDescriptor();
 
   if (is_choice_type) {
@@ -244,8 +245,8 @@ Status AddValueToExtension(const ::google::protobuf::Message& message,
 namespace extensions_lib {
 
 template <class C, class T>
-Status GetRepeatedFromExtension(const C& extension_container,
-                                std::vector<T>* result) {
+absl::Status GetRepeatedFromExtension(const C& extension_container,
+                                      std::vector<T>* result) {
   // This function will be called a huge number of times, usually when no
   // extensions are present.  Return early in this case to keep overhead as low
   // as possible.
@@ -269,7 +270,7 @@ Status GetRepeatedFromExtension(const C& extension_container,
 }
 
 template <class T, class C>
-StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
+absl::StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
   std::vector<T> result;
   FHIR_RETURN_IF_ERROR(GetRepeatedFromExtension(entity.extension(), &result));
   if (result.empty()) {
@@ -292,9 +293,9 @@ StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
 namespace extensions_templates {
 
 template <class ExtensionLike>
-Status ValueToMessage(const ExtensionLike& extension,
-                      ::google::protobuf::Message* message,
-                      const ::google::protobuf::FieldDescriptor* field) {
+absl::Status ValueToMessage(const ExtensionLike& extension,
+                            ::google::protobuf::Message* message,
+                            const ::google::protobuf::FieldDescriptor* field) {
   const ::google::protobuf::Descriptor* descriptor = message->GetDescriptor();
   if (field->cpp_type() != ::google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
     return ::absl::InvalidArgumentError(
@@ -358,8 +359,8 @@ Status ValueToMessage(const ExtensionLike& extension,
 }
 
 template <class ExtensionLike>
-Status ExtensionToMessage(const ExtensionLike& extension,
-                          ::google::protobuf::Message* message) {
+absl::Status ExtensionToMessage(const ExtensionLike& extension,
+                                ::google::protobuf::Message* message) {
   const ::google::protobuf::Descriptor* descriptor = message->GetDescriptor();
   const ::google::protobuf::Reflection* reflection = message->GetReflection();
 
@@ -425,8 +426,8 @@ Status ExtensionToMessage(const ExtensionLike& extension,
 }
 
 template <class ExtensionLike>
-Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
-                              ExtensionLike* extension) {
+absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
+                                    ExtensionLike* extension) {
   const ::google::protobuf::Descriptor* descriptor = datum.GetDescriptor();
   auto value_field_optional =
       extensions_internal::GetExtensionValueFieldByType<ExtensionLike>(
@@ -453,8 +454,8 @@ Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
 }
 
 template <class ExtensionLike>
-Status ConvertToExtension(const ::google::protobuf::Message& message,
-                          ExtensionLike* extension) {
+absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
+                                ExtensionLike* extension) {
   const ::google::protobuf::Descriptor* descriptor = message.GetDescriptor();
   FHIR_RETURN_IF_ERROR(extensions_lib::ValidateExtension(descriptor));
 

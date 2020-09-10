@@ -19,7 +19,6 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":status",
-        "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
     ],
 )

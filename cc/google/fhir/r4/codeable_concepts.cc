@@ -130,8 +130,8 @@ const bool ForEachInternalCodingHalting(
 // Notably, this will *not* fail if the field is present on the target but not
 // the source, or present on the source but not the target but the field is not
 // set, since no information will be lost in these cases.
-Status CopyFieldIfPresent(const Message& source, Message* target,
-                          const std::string& field_name) {
+absl::Status CopyFieldIfPresent(const Message& source, Message* target,
+                                const std::string& field_name) {
   const FieldDescriptor* field =
       source.GetDescriptor()->FindFieldByName(field_name);
   if (!field && FieldHasValue(source, field)) {
@@ -247,7 +247,7 @@ const std::vector<std::string> GetCodesWithSystem(
   return codes;
 }
 
-StatusOr<const std::string> GetOnlyCodeWithSystem(
+absl::StatusOr<const std::string> GetOnlyCodeWithSystem(
     const Message& concept, const absl::string_view system) {
   const std::vector<std::string>& codes = GetCodesWithSystem(concept, system);
   if (codes.empty()) {
@@ -259,7 +259,7 @@ StatusOr<const std::string> GetOnlyCodeWithSystem(
   return codes.front();
 }
 
-Status AddCoding(Message* concept, const Coding& coding) {
+absl::Status AddCoding(Message* concept, const Coding& coding) {
   if (!IsTypeOrProfileOfCodeableConcept(*concept)) {
     return InvalidArgumentError(absl::StrCat(
         "Error adding coding: ", concept->GetDescriptor()->full_name(),
@@ -305,8 +305,8 @@ Status AddCoding(Message* concept, const Coding& coding) {
   return absl::OkStatus();
 }
 
-Status AddCoding(Message* concept, const std::string& system,
-                 const std::string& code) {
+absl::Status AddCoding(Message* concept, const std::string& system,
+                       const std::string& code) {
   const google::protobuf::FieldDescriptor* field_descriptor =
       concept->GetDescriptor()->FindFieldByName("coding");
   if (field_descriptor == nullptr ||
@@ -384,11 +384,11 @@ void ForEachCoding(const Message& concept, const CodingFunc& func) {
   });
 }
 
-Status ForEachCodingWithStatus(const Message& concept,
-                               const CodingStatusFunc& func) {
-  Status return_status = absl::OkStatus();
+absl::Status ForEachCodingWithStatus(const Message& concept,
+                                     const CodingStatusFunc& func) {
+  absl::Status return_status = absl::OkStatus();
   FindCoding(concept, [&func, &return_status](const Coding& coding) {
-    Status status = func(coding);
+    absl::Status status = func(coding);
     if (status.ok()) {
       return false;
     }
@@ -398,7 +398,7 @@ Status ForEachCodingWithStatus(const Message& concept,
   return return_status;
 }
 
-Status CopyCodeableConcept(const Message& source, Message* target) {
+absl::Status CopyCodeableConcept(const Message& source, Message* target) {
   // Copy common fields.
   // These will fail if the field is present & populated on the source,
   // but does not have an identical field on the target.

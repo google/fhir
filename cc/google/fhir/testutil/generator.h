@@ -237,7 +237,7 @@ class FhirGenerator {
 
   // Fills the given FHIR resource with values provided by the
   // value provider.
-  Status Fill(::google::protobuf::Message* message) {
+  absl::Status Fill(::google::protobuf::Message* message) {
     absl::flat_hash_map<const ::google::protobuf::Descriptor*, int> recursion_count;
     return Fill(message, &recursion_count);
   }
@@ -247,15 +247,15 @@ class FhirGenerator {
   // The recursion_count parameter to these methods is a map that counts the
   // number of times the given descriptor has been encountered recursively,
   // allowing value providers to use that in their logic.
-  Status Fill(
+  absl::Status Fill(
       ::google::protobuf::Message* message,
       absl::flat_hash_map<const ::google::protobuf::Descriptor*, int>* recursion_count);
 
-  Status FillPrimitive(
+  absl::Status FillPrimitive(
       const ::google::protobuf::FieldDescriptor* field, ::google::protobuf::Message* message,
       absl::flat_hash_map<const ::google::protobuf::Descriptor*, int>* recursion_count);
 
-  Status FillReference(
+  absl::Status FillReference(
       const ::google::protobuf::FieldDescriptor* field, ::google::protobuf::Message* message,
       absl::flat_hash_map<const ::google::protobuf::Descriptor*, int>* recursion_count);
 

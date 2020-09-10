@@ -126,7 +126,7 @@ TEST(ProfilesTest, Normalize) {
   const stu3::testing::TestObservation unnormalized =
       ReadProto<stu3::testing::TestObservation>(absl::StrCat(
           "testdata/stu3/profiles/observation_complexextension.prototxt"));
-  StatusOr<stu3::testing::TestObservation> normalized =
+  absl::StatusOr<stu3::testing::TestObservation> normalized =
       NormalizeStu3(unnormalized);
   if (!normalized.status().ok()) {
     LOG(ERROR) << normalized.status().message();
@@ -143,7 +143,8 @@ TEST(ProfilesTest, NormalizeAndValidate_Invalid) {
   TestObservation unnormalized = ReadProto<TestObservation>(absl::StrCat(
       "testdata/stu3/profiles/observation_complexextension.prototxt"));
   unnormalized.clear_status();
-  StatusOr<TestObservation> normalized = NormalizeAndValidateStu3(unnormalized);
+  absl::StatusOr<TestObservation> normalized =
+      NormalizeAndValidateStu3(unnormalized);
   EXPECT_FALSE(normalized.ok());
   EXPECT_EQ(normalized.status().message(), "missing-TestObservation.status");
 }
@@ -151,7 +152,8 @@ TEST(ProfilesTest, NormalizeAndValidate_Invalid) {
 TEST(ProfilesTest, NormalizeAndValidate_Valid) {
   const TestObservation unnormalized = ReadProto<TestObservation>(absl::StrCat(
       "testdata/stu3/profiles/observation_complexextension.prototxt"));
-  StatusOr<TestObservation> normalized = NormalizeAndValidateStu3(unnormalized);
+  absl::StatusOr<TestObservation> normalized =
+      NormalizeAndValidateStu3(unnormalized);
   FHIR_ASSERT_OK(normalized.status());
   EXPECT_THAT(
       normalized.value(),
@@ -186,7 +188,7 @@ TEST(ProfilesTest, NormalizeBundle) {
       GetProfiled<stu3::testing::TestObservationLvl2>(
           "testdata/stu3/profiles/testobservation_lvl2");
 
-  StatusOr<stu3::testing::Bundle> normalized =
+  absl::StatusOr<stu3::testing::Bundle> normalized =
       NormalizeStu3(unnormalized_bundle);
   EXPECT_THAT(normalized.value(),
               EqualsProtoIgnoringReordering(expected_normalized));

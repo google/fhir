@@ -32,7 +32,7 @@ using testing::Truly;
 template <typename T>
 void TestType(FhirPathSystemType expected_type) {
   T proto;
-  StatusOr<FhirPathSystemType> system_type = GetSystemType(proto);
+  absl::StatusOr<FhirPathSystemType> system_type = GetSystemType(proto);
 
   if (!system_type.ok()) {
     ADD_FAILURE() << "No system type defined for " << proto.GetTypeName()

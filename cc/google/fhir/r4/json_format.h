@@ -26,14 +26,14 @@ namespace r4 {
 // R4-only API for cc/json_format.h
 // See cc/json_format.h for documentation on these methods
 
-Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
-                                    google::protobuf::Message* target,
-                                    absl::TimeZone default_timezone,
-                                    const bool validate);
+absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
+                                          google::protobuf::Message* target,
+                                          absl::TimeZone default_timezone,
+                                          const bool validate);
 
 template <typename R>
-StatusOr<R> JsonFhirStringToProto(const std::string& raw_json,
-                                  const absl::TimeZone default_timezone) {
+absl::StatusOr<R> JsonFhirStringToProto(const std::string& raw_json,
+                                        const absl::TimeZone default_timezone) {
   R resource;
   FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(raw_json, &resource,
                                                     default_timezone, true));
@@ -41,7 +41,7 @@ StatusOr<R> JsonFhirStringToProto(const std::string& raw_json,
 }
 
 template <typename R>
-StatusOr<R> JsonFhirStringToProtoWithoutValidating(
+absl::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
     const std::string& raw_json, const absl::TimeZone default_timezone) {
   R resource;
   FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(raw_json, &resource,
@@ -49,17 +49,19 @@ StatusOr<R> JsonFhirStringToProtoWithoutValidating(
   return resource;
 }
 
-StatusOr<std::string> PrintFhirPrimitive(const ::google::protobuf::Message& message);
+absl::StatusOr<std::string> PrintFhirPrimitive(
+    const ::google::protobuf::Message& message);
 
-StatusOr<std::string> PrintFhirToJsonString(const google::protobuf::Message& fhir_proto);
-
-StatusOr<std::string> PrettyPrintFhirToJsonString(
+absl::StatusOr<std::string> PrintFhirToJsonString(
     const google::protobuf::Message& fhir_proto);
 
-StatusOr<std::string> PrintFhirToJsonStringForAnalytics(
+absl::StatusOr<std::string> PrettyPrintFhirToJsonString(
     const google::protobuf::Message& fhir_proto);
 
-StatusOr<std::string> PrettyPrintFhirToJsonStringForAnalytics(
+absl::StatusOr<std::string> PrintFhirToJsonStringForAnalytics(
+    const google::protobuf::Message& fhir_proto);
+
+absl::StatusOr<std::string> PrettyPrintFhirToJsonStringForAnalytics(
     const google::protobuf::Message& fhir_proto);
 
 }  // namespace r4

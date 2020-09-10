@@ -91,7 +91,7 @@ class FhirProtoParseHelper {
                          << " in file " << file_;
       return T();
     }
-    Status valid_status = absl::OkStatus();
+    absl::Status valid_status = absl::OkStatus();
     const bool is_profile =
         IsProfile(T::descriptor()) && IsResource(T::descriptor());
     switch (GetFhirVersion(tmp)) {

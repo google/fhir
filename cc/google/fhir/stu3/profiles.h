@@ -42,12 +42,12 @@ namespace fhir {
 // Any data that is in an inlined field in the profiled message,
 // that does not exists in the base message will be converted back to the
 // original format (e.g., extension).
-Status ConvertToProfileStu3(const ::google::protobuf::Message& source,
-                            ::google::protobuf::Message* target);
+absl::Status ConvertToProfileStu3(const ::google::protobuf::Message& source,
+                                  ::google::protobuf::Message* target);
 
 // Identical to ConvertToProfile, except does not run the validation step.
-Status ConvertToProfileLenientStu3(const ::google::protobuf::Message& source,
-                                   ::google::protobuf::Message* target);
+absl::Status ConvertToProfileLenientStu3(const ::google::protobuf::Message& source,
+                                         ::google::protobuf::Message* target);
 
 // Given a Message, returns a copy with all data is stored in typed fields where
 // possible.
@@ -55,7 +55,7 @@ Status ConvertToProfileLenientStu3(const ::google::protobuf::Message& source,
 // has a corresponding typed field, the return copy will have the data in the
 // typed field.
 template <typename T>
-StatusOr<T> NormalizeStu3(const T& message) {
+absl::StatusOr<T> NormalizeStu3(const T& message) {
   T normalized;
   FHIR_RETURN_IF_ERROR(ConvertToProfileLenientStu3(message, &normalized));
   return normalized;
@@ -67,7 +67,7 @@ StatusOr<T> NormalizeStu3(const T& message) {
 // is both in normalized form, and valid according to all restrictions of
 // the profile.
 template <typename T>
-StatusOr<T> NormalizeAndValidateStu3(const T& message) {
+absl::StatusOr<T> NormalizeAndValidateStu3(const T& message) {
   T normalized;
   FHIR_RETURN_IF_ERROR(ConvertToProfileStu3(message, &normalized));
   return normalized;

@@ -73,7 +73,7 @@ const std::vector<std::string> GetCodesWithSystem(
 // If no code is found with that system, returns a NotFound status.
 // If more than one code is found with that system, returns AlreadyExists
 // status.
-StatusOr<const std::string> GetOnlyCodeWithSystem(
+absl::StatusOr<const std::string> GetOnlyCodeWithSystem(
     const ::google::protobuf::Message& concept, const absl::string_view system);
 
 // Extract first code value with a given system.
@@ -81,7 +81,7 @@ StatusOr<const std::string> GetOnlyCodeWithSystem(
 // This is different from GetOnlyCodeWithSystem in that it doesn't fail if
 // there is more than one code with the given system.
 template <typename CodeableConceptLike>
-StatusOr<std::string> ExtractCodeBySystem(
+absl::StatusOr<std::string> ExtractCodeBySystem(
     const CodeableConceptLike& codeable_concept,
     absl::string_view system_value) {
   switch (google::fhir::GetFhirVersion(codeable_concept)) {
@@ -98,12 +98,12 @@ StatusOr<std::string> ExtractCodeBySystem(
   }
 }
 
-Status AddCoding(::google::protobuf::Message* concept, const std::string& system,
-                 const std::string& code);
+absl::Status AddCoding(::google::protobuf::Message* concept, const std::string& system,
+                       const std::string& code);
 
 template <typename CodeableConceptLike>
-Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
-                                 const std::string& system) {
+absl::Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
+                                       const std::string& system) {
   switch (google::fhir::GetFhirVersion(*concept)) {
     case google::fhir::proto::STU3:
       return stu3::ClearAllCodingsWithSystem(concept, system);
@@ -121,8 +121,8 @@ Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
 // Copies any codeable concept-like message into any other codeable concept-like
 // message.  An ok status guarantees that all codings present on the source will
 // be present on the target, in the correct profiled fields on the target.
-Status CopyCodeableConcept(const ::google::protobuf::Message& source,
-                           ::google::protobuf::Message* target);
+absl::Status CopyCodeableConcept(const ::google::protobuf::Message& source,
+                                 ::google::protobuf::Message* target);
 
 int CodingSize(const ::google::protobuf::Message& concept);
 

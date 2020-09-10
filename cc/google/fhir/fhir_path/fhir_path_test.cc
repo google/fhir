@@ -72,7 +72,7 @@ void PrintTo(const EvaluationResult& result, std::ostream* os) {
   *os << "]";
 }
 
-void PrintTo(const StatusOr<EvaluationResult>& result, std::ostream* os) {
+void PrintTo(const absl::StatusOr<EvaluationResult>& result, std::ostream* os) {
   if (result.ok()) {
     *os << ::testing::PrintToString(result.value());
   } else {
@@ -109,8 +109,8 @@ MATCHER(EvalsToEmpty, "") {
   return true;
 }
 
-// Matcher for StatusOr<EvaluationResult> that checks to see that the evaluation
-// succeeded and evaluated to a single boolean with value of false.
+// Matcher for absl::StatusOr<EvaluationResult> that checks to see that the
+// evaluation succeeded and evaluated to a single boolean with value of false.
 //
 // NOTE: Not(EvalsToFalse()) is not the same as EvalsToTrue() as the former
 // will match cases where evaluation fails.
@@ -120,7 +120,7 @@ MATCHER(EvalsToFalse, "") {
     return false;
   }
 
-  StatusOr<bool> result = arg.value().GetBoolean();
+  absl::StatusOr<bool> result = arg.value().GetBoolean();
   if (!result.ok()) {
     *result_listener << "did not resolve to a boolean: "
                      << result.status().message();
@@ -134,8 +134,8 @@ MATCHER(EvalsToFalse, "") {
   return !result.value();
 }
 
-// Matcher for StatusOr<EvaluationResult> that checks to see that the evaluation
-// succeeded and evaluated to a single boolean with value of true.
+// Matcher for absl::StatusOr<EvaluationResult> that checks to see that the
+// evaluation succeeded and evaluated to a single boolean with value of true.
 //
 // NOTE: Not(EvalsToTrue()) is not the same as EvalsToFalse() as the former
 // will match cases where evaluation fails.
@@ -145,7 +145,7 @@ MATCHER(EvalsToTrue, "") {
     return false;
   }
 
-  StatusOr<bool> result = arg.value().GetBoolean();
+  absl::StatusOr<bool> result = arg.value().GetBoolean();
   if (!result.ok()) {
     *result_listener << "did not resolve to a boolean: "
                      << result.status().message();
@@ -159,14 +159,14 @@ MATCHER(EvalsToTrue, "") {
   return result.value();
 }
 
-// Matcher for StatusOr<EvaluationResult> that checks to see that the evaluation
-// succeeded and evaluated to an integer equal to the provided value.
+// Matcher for absl::StatusOr<EvaluationResult> that checks to see that the
+// evaluation succeeded and evaluated to an integer equal to the provided value.
 MATCHER_P(EvalsToInteger, expected, "") {
   if (!arg.ok()) {
     return false;
   }
 
-  StatusOr<int> result = arg.value().GetInteger();
+  absl::StatusOr<int> result = arg.value().GetInteger();
   if (!result.ok()) {
     *result_listener << "did not resolve to a integer: "
                      << result.status().message();
@@ -182,19 +182,18 @@ MATCHER_P(EvalsToStringThatMatches, string_matcher, "") {
     return false;
   }
 
-  StatusOr<std::string> result = arg.value().GetString();
+  absl::StatusOr<std::string> result = arg.value().GetString();
   if (!result.ok()) {
     *result_listener << "did not resolve to a string: "
                      << result.status().message();
     return false;
   }
 
-  return string_matcher.impl().MatchAndExplain(result.value(),
-                                               result_listener);
+  return string_matcher.impl().MatchAndExplain(result.value(), result_listener);
 }
 
-// Matcher for StatusOr<T> that checks to see that a status is present with the
-// provided code.
+// Matcher for absl::StatusOr<T> that checks to see that a status is present
+// with the provided code.
 MATCHER_P(HasStatusCode, status_code, "") {
   return !arg.ok() && arg.status().code() == status_code;
 }
@@ -263,22 +262,23 @@ struct R4CoreTestEnv : public testutil::R4CoreTestEnv {
 template <typename T>
 class FhirPathTest : public ::testing::Test {
  public:
-  static StatusOr<CompiledExpression> Compile(
+  static absl::StatusOr<CompiledExpression> Compile(
       const ::google::protobuf::Descriptor* descriptor, const std::string& fhir_path) {
     return CompiledExpression::Compile(
         descriptor, T::PrimitiveHandler::GetInstance(), fhir_path);
   }
 
   template <typename R>
-  static StatusOr<EvaluationResult> Evaluate(const R& message,
-                                             const std::string& expression) {
+  static absl::StatusOr<EvaluationResult> Evaluate(
+      const R& message, const std::string& expression) {
     FHIR_ASSIGN_OR_RETURN(auto compiled_expression,
                           Compile(message.GetDescriptor(), expression));
 
     return compiled_expression.Evaluate(message);
   }
 
-  static StatusOr<EvaluationResult> Evaluate(const std::string& expression) {
+  static absl::StatusOr<EvaluationResult> Evaluate(
+      const std::string& expression) {
     // FHIRPath assumes a resource object during evaluation, so we use an
     // encounter as a placeholder.
     auto test_encounter = ValidEncounter<typename T::Encounter>();
@@ -315,10 +315,9 @@ TYPED_TEST(FhirPathTest,
            TestExternalConstantsContextReferenceInExpressionParam) {
   auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
 
-  EXPECT_THAT(TestFixture::Evaluate(test_encounter, "%context")
-                  .value()
-                  .GetMessages(),
-              UnorderedElementsAreArray({EqualsProto(test_encounter)}));
+  EXPECT_THAT(
+      TestFixture::Evaluate(test_encounter, "%context").value().GetMessages(),
+      UnorderedElementsAreArray({EqualsProto(test_encounter)}));
 }
 
 TYPED_TEST(FhirPathTest, TestMalformed) {
@@ -693,14 +692,14 @@ TYPED_TEST(FhirPathTest, TestFunctionReplace) {
 }
 
 TYPED_TEST(FhirPathTest, TestFunctionReplaceMatchesWrongArgCount) {
-  StatusOr<EvaluationResult> result =
+  absl::StatusOr<EvaluationResult> result =
       TestFixture::Evaluate("''.replaceMatches()");
   EXPECT_THAT(result.status().code(), Eq(absl::StatusCode::kInvalidArgument))
       << result.status();
 }
 
 TYPED_TEST(FhirPathTest, TestFunctionReplaceMatchesBadRegex) {
-  StatusOr<EvaluationResult> result =
+  absl::StatusOr<EvaluationResult> result =
       TestFixture::Evaluate("''.replaceMatches('(', 'a')").status();
   EXPECT_THAT(result.status().code(), Eq(absl::StatusCode::kInvalidArgument))
       << result.status();
@@ -990,8 +989,7 @@ TYPED_TEST(FhirPathTest, TestFunctionOfTypeResources) {
       EvalsToEmpty());
 
   EvaluationResult as_observation_evaluation_result =
-      TestFixture::Evaluate(observation, "$this.ofType(Observation)")
-          .value();
+      TestFixture::Evaluate(observation, "$this.ofType(Observation)").value();
   EXPECT_THAT(as_observation_evaluation_result.GetMessages(),
               ElementsAreArray({EqualsProto(observation)}));
 }
@@ -1007,11 +1005,9 @@ TYPED_TEST(FhirPathTest, TestFunctionAsPrimitives) {
   EXPECT_THAT(TestFixture::Evaluate("1.as(Decimal)"), EvalsToEmpty());
   EXPECT_THAT(TestFixture::Evaluate("1.as(Boolean)"), EvalsToEmpty());
 
-  EXPECT_EQ(TestFixture::Evaluate("1.1.as(Decimal)")
-                .value()
-                .GetDecimal()
-                .value(),
-            "1.1");
+  EXPECT_EQ(
+      TestFixture::Evaluate("1.1.as(Decimal)").value().GetDecimal().value(),
+      "1.1");
   EXPECT_THAT(TestFixture::Evaluate("1.1.as(Integer)"), EvalsToEmpty());
   EXPECT_THAT(TestFixture::Evaluate("1.1.as(Boolean)"), EvalsToEmpty());
 }
@@ -1042,11 +1038,9 @@ TYPED_TEST(FhirPathTest, TestOperatorAsPrimitives) {
   EXPECT_THAT(TestFixture::Evaluate("1 as Decimal"), EvalsToEmpty());
   EXPECT_THAT(TestFixture::Evaluate("1 as Boolean"), EvalsToEmpty());
 
-  EXPECT_EQ(TestFixture::Evaluate("1.1 as Decimal")
-                .value()
-                .GetDecimal()
-                .value(),
-            "1.1");
+  EXPECT_EQ(
+      TestFixture::Evaluate("1.1 as Decimal").value().GetDecimal().value(),
+      "1.1");
   EXPECT_THAT(TestFixture::Evaluate("1.1 as Integer"), EvalsToEmpty());
   EXPECT_THAT(TestFixture::Evaluate("1.1 as Boolean"), EvalsToEmpty());
 }
@@ -1142,8 +1136,7 @@ TYPED_TEST(FhirPathTest, TestFunctionTailMaintainsOrder) {
   auto code_def = ParseFromString<typename TypeParam::Code>("value: 'def'");
   auto code_ghi = ParseFromString<typename TypeParam::Code>("value: 'ghi'");
   EvaluationResult evaluation_result =
-      TestFixture::Evaluate(codeable_concept, "coding.tail().code")
-          .value();
+      TestFixture::Evaluate(codeable_concept, "coding.tail().code").value();
   EXPECT_THAT(evaluation_result.GetMessages(),
               ElementsAreArray({EqualsProto(code_def), EqualsProto(code_ghi)}));
 }
@@ -1159,8 +1152,7 @@ TYPED_TEST(FhirPathTest, TestUnion) {
 
 TYPED_TEST(FhirPathTest, TestUnionDeduplicationPrimitives) {
   EvaluationResult evaluation_result =
-      TestFixture::Evaluate("true | false | 1 | 'foo' | 2 | 1 | 'foo'")
-          .value();
+      TestFixture::Evaluate("true | false | 1 | 'foo' | 2 | 1 | 'foo'").value();
   std::vector<const Message*> result = evaluation_result.GetMessages();
 
   auto true_proto = ParseFromString<typename TypeParam::Boolean>("value: true");
@@ -1276,8 +1268,7 @@ TYPED_TEST(FhirPathTest, TestIntersect) {
   auto false_proto =
       ParseFromString<typename TypeParam::Boolean>("value: false");
   EvaluationResult evaluation_result =
-      TestFixture::Evaluate("(true | false).intersect(true | false)")
-          .value();
+      TestFixture::Evaluate("(true | false).intersect(true | false)").value();
   EXPECT_THAT(evaluation_result.GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(true_proto), EqualsProto(false_proto)}));
@@ -1495,8 +1486,7 @@ TYPED_TEST(FhirPathTest, TestAllReadsFieldFromDifferingTypes) {
 
 TYPED_TEST(FhirPathTest, TestSelect) {
   EvaluationResult evaluation_result =
-      TestFixture::Evaluate("(1 | 2 | 3).select(($this > 2) | $this)")
-          .value();
+      TestFixture::Evaluate("(1 | 2 | 3).select(($this > 2) | $this)").value();
   std::vector<const Message*> result = evaluation_result.GetMessages();
 
   auto true_proto = ParseFromString<typename TypeParam::Boolean>("value: true");
@@ -1635,7 +1625,7 @@ TYPED_TEST(FhirPathTest, TestIntegerLiteral) {
 
   // Ensure evaluation of an out-of-range literal fails.
   const char* overflow_value = "10000000000";
-  Status bad_int_status =
+  absl::Status bad_int_status =
       TestFixture::Compile(TypeParam::Encounter::descriptor(), overflow_value)
           .status();
 
@@ -1882,10 +1872,9 @@ TYPED_TEST(FhirPathTest, TestDateTimeLiteral) {
   millisecond_precision.set_value_us(1390660214559000);
   millisecond_precision.set_timezone("Z");
   millisecond_precision.set_precision(DateTime::MILLISECOND);
-  EXPECT_THAT(TestFixture::Evaluate("@2014-01-25T14:30:14.559")
-                  .value()
-                  .GetMessages(),
-              ElementsAreArray({EqualsProto(millisecond_precision)}));
+  EXPECT_THAT(
+      TestFixture::Evaluate("@2014-01-25T14:30:14.559").value().GetMessages(),
+      ElementsAreArray({EqualsProto(millisecond_precision)}));
 
   DateTime second_precision;
   second_precision.set_value_us(1390660214000000);
@@ -2277,9 +2266,8 @@ TYPED_TEST(FhirPathTest, ResourceReference) {
                 }
               })proto");
 
-  EXPECT_THAT(
-      TestFixture::Evaluate(bundle, "%resource").value().GetMessages(),
-      ElementsAreArray({EqualsProto(bundle)}));
+  EXPECT_THAT(TestFixture::Evaluate(bundle, "%resource").value().GetMessages(),
+              ElementsAreArray({EqualsProto(bundle)}));
 
   EXPECT_THAT(
       TestFixture::Evaluate(bundle, "entry[0].resource.select(%resource)")

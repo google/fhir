@@ -30,22 +30,22 @@ namespace stu3 {
 // and can just import the r4 version
 using namespace extensions_lib;  // NOLINT
 
-Status ExtensionToMessage(const proto::Extension& extension,
-                          ::google::protobuf::Message* message);
+absl::Status ExtensionToMessage(const proto::Extension& extension,
+                                ::google::protobuf::Message* message);
 
-Status ConvertToExtension(const ::google::protobuf::Message& message,
-                          proto::Extension* extension);
+absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
+                                proto::Extension* extension);
 
 // Given a datatype message (E.g., String, Code, Boolean, etc.),
 // finds the appropriate field on the target extension and sets it.
 // Returns InvalidArgument if there's no matching oneof type on the extension
 // for the message.
-Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
-                              proto::Extension* extension);
+absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
+                                    proto::Extension* extension);
 
-Status ValueToMessage(const ::google::fhir::stu3::proto::Extension& extension,
-                      ::google::protobuf::Message* message,
-                      const ::google::protobuf::FieldDescriptor* field);
+absl::Status ValueToMessage(
+    const ::google::fhir::stu3::proto::Extension& extension,
+    ::google::protobuf::Message* message, const ::google::protobuf::FieldDescriptor* field);
 
 }  // namespace stu3
 }  // namespace fhir

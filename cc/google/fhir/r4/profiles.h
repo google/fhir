@@ -41,13 +41,13 @@ namespace fhir {
 // Any data that is in an inlined field in the profiled message,
 // that does not exists in the base message will be converted back to the
 // original format (e.g., extension).
-Status ConvertToProfileR4(const ::google::protobuf::Message& source,
-                          ::google::protobuf::Message* target);
+absl::Status ConvertToProfileR4(const ::google::protobuf::Message& source,
+                                ::google::protobuf::Message* target);
 
 // Similar to ConvertToProfileR4, but does not validate that the proto is valid
 // according to the target profile.
-Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,
-                                 ::google::protobuf::Message* target);
+absl::Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,
+                                       ::google::protobuf::Message* target);
 
 // Normalizing a profiled proto ensures that all data that CAN be stored in
 // profiled fields IS stored in profiled fields.
@@ -55,7 +55,7 @@ Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,
 // has a corresponding typed field, the return copy will have the data in the
 // typed field.
 template <typename T>
-StatusOr<T> NormalizeR4(const T& message) {
+absl::StatusOr<T> NormalizeR4(const T& message) {
   T normalized;
   FHIR_RETURN_IF_ERROR(ConvertToProfileLenientR4(message, &normalized));
   return normalized;
@@ -67,7 +67,7 @@ StatusOr<T> NormalizeR4(const T& message) {
 // is both in normalized form, and valid according to all restrictions of
 // the profile.
 template <typename T>
-StatusOr<T> NormalizeAndValidateR4(const T& message) {
+absl::StatusOr<T> NormalizeAndValidateR4(const T& message) {
   T normalized;
   FHIR_RETURN_IF_ERROR(ConvertToProfileR4(message, &normalized));
   return normalized;

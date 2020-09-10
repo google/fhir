@@ -39,7 +39,7 @@ using ::google::protobuf::Reflection;
 
 namespace extensions_internal {
 
-Status CheckIsMessage(const FieldDescriptor* field) {
+absl::Status CheckIsMessage(const FieldDescriptor* field) {
   if (field->type() != FieldDescriptor::Type::TYPE_MESSAGE) {
     return InvalidArgumentError(absl::StrCat(
         "Encountered unexpected proto primitive: ", field->full_name(),
@@ -64,7 +64,7 @@ const std::vector<const FieldDescriptor*> FindValueFields(
 
 namespace extensions_lib {
 
-Status ValidateExtension(const Descriptor* descriptor) {
+absl::Status ValidateExtension(const Descriptor* descriptor) {
   if (!IsProfileOfExtension(descriptor)) {
     return InvalidArgumentError(
         absl::StrCat(descriptor->full_name(), " is not a FHIR extension type"));
@@ -79,12 +79,13 @@ Status ValidateExtension(const Descriptor* descriptor) {
   return absl::OkStatus();
 }
 
-Status ClearTypedExtensions(const Descriptor* descriptor, Message* message) {
+absl::Status ClearTypedExtensions(const Descriptor* descriptor,
+                                  Message* message) {
   FHIR_RETURN_IF_ERROR(ValidateExtension(descriptor));
   return ClearExtensionsWithUrl(GetStructureDefinitionUrl(descriptor), message);
 }
 
-Status ClearExtensionsWithUrl(const std::string& url, Message* message) {
+absl::Status ClearExtensionsWithUrl(const std::string& url, Message* message) {
   const Reflection* reflection = message->GetReflection();
   const FieldDescriptor* field =
       message->GetDescriptor()->FindFieldByName("extension");

@@ -18,6 +18,7 @@
 
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/ascii.h"
 #include "absl/synchronization/mutex.h"
 #include "google/fhir/annotations.h"
@@ -30,8 +31,6 @@ namespace google {
 namespace fhir {
 
 using ::absl::InvalidArgumentError;
-using ::google::fhir::Status;
-using ::google::fhir::StatusOr;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::EnumDescriptor;
 using ::google::protobuf::EnumValueDescriptor;
@@ -69,7 +68,7 @@ std::string EnumValueToCodeString(const EnumValueDescriptor* enum_value) {
   return code_string;
 }
 
-StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
+absl::StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
     const std::string& code_string, const EnumDescriptor* target_enum_type) {
   // Map from (target_enum_type->full_name() x code_string) -> result
   // for previous runs.
@@ -122,7 +121,7 @@ StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
                    target_enum_type->full_name(), ": No matching enum found."));
 }
 
-Status CopyCoding(const Message& source, Message* target) {
+absl::Status CopyCoding(const Message& source, Message* target) {
   const Descriptor* source_descriptor = source.GetDescriptor();
   const Descriptor* target_descriptor = target->GetDescriptor();
 
@@ -175,7 +174,7 @@ Status CopyCoding(const Message& source, Message* target) {
   return absl::OkStatus();
 }
 
-Status CopyCode(const Message& source, Message* target) {
+absl::Status CopyCode(const Message& source, Message* target) {
   const Descriptor* source_descriptor = source.GetDescriptor();
   const Descriptor* target_descriptor = target->GetDescriptor();
 
@@ -268,7 +267,7 @@ Status CopyCode(const Message& source, Message* target) {
   }
 }
 
-StatusOr<std::string> GetSystemForCode(const ::google::protobuf::Message& code) {
+absl::StatusOr<std::string> GetSystemForCode(const ::google::protobuf::Message& code) {
   const Descriptor* descriptor = code.GetDescriptor();
   const FieldDescriptor* system_field = descriptor->FindFieldByName("system");
   if (system_field) {
@@ -300,7 +299,7 @@ StatusOr<std::string> GetSystemForCode(const ::google::protobuf::Message& code) 
   return GetSourceCodeSystem(enum_descriptor);
 }
 
-StatusOr<std::string> GetCodeAsString(const ::google::protobuf::Message& code) {
+absl::StatusOr<std::string> GetCodeAsString(const ::google::protobuf::Message& code) {
   const Descriptor* descriptor = code.GetDescriptor();
   if (!IsTypeOrProfileOfCode(code)) {
     return InvalidArgumentError(absl::StrCat(

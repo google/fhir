@@ -97,7 +97,7 @@ void TestJsonValidation() {
   std::vector<std::string> invalid_lines =
       ReadLines(absl::StrCat(file_base, ".invalid.ndjson"));
   for (auto line_iter : invalid_lines) {
-    StatusOr<W> parsed = JsonFhirStringToProto<W>(line_iter, kTimeZone);
+    absl::StatusOr<W> parsed = JsonFhirStringToProto<W>(line_iter, kTimeZone);
     if (parsed.ok()) {
       FAIL() << "Invalid string should have failed parsing: " << line_iter
              << " of type " << W::descriptor()->name() << "\nParsed as:\n"
@@ -116,7 +116,8 @@ void AddPrimitiveHasNoValue(W* primitive) {
 
 template <class W>
 void TestBadProto(const W& w) {
-  Status status = Stu3PrimitiveHandler::GetInstance()->ValidatePrimitive(w);
+  absl::Status status =
+      Stu3PrimitiveHandler::GetInstance()->ValidatePrimitive(w);
   ASSERT_FALSE(status.ok()) << "Should have failed: " << w.DebugString();
 }
 
@@ -316,7 +317,7 @@ TEST(PrimitiveHandlerTest, NewDateTimeFromString) {
   expected_date_time_year.set_timezone("UTC");
   expected_date_time_year.set_precision(DateTime::YEAR);
 
-  StatusOr<::google::protobuf::Message*> generated_date_time_year_or_status(
+  absl::StatusOr<::google::protobuf::Message*> generated_date_time_year_or_status(
       Stu3PrimitiveHandler::GetInstance()->NewDateTime("2019"));
   FHIR_ASSERT_OK(generated_date_time_year_or_status.status());
   std::unique_ptr<::google::protobuf::Message> generated_date_time_year(
@@ -329,7 +330,7 @@ TEST(PrimitiveHandlerTest, NewDateTimeFromString) {
   expected_date_time_month.set_timezone("UTC");
   expected_date_time_month.set_precision(DateTime::MONTH);
 
-  StatusOr<::google::protobuf::Message*> generated_date_time_month_or_status(
+  absl::StatusOr<::google::protobuf::Message*> generated_date_time_month_or_status(
       Stu3PrimitiveHandler::GetInstance()->NewDateTime("2019-02"));
   FHIR_ASSERT_OK(generated_date_time_month_or_status.status());
   std::unique_ptr<::google::protobuf::Message> generated_date_time_month(
@@ -342,7 +343,7 @@ TEST(PrimitiveHandlerTest, NewDateTimeFromString) {
   expected_date_time_ms.set_timezone("-08:00");
   expected_date_time_ms.set_precision(DateTime::MILLISECOND);
 
-  StatusOr<::google::protobuf::Message*> generated_date_time_ms_or_status(
+  absl::StatusOr<::google::protobuf::Message*> generated_date_time_ms_or_status(
       Stu3PrimitiveHandler::GetInstance()->NewDateTime(
           "2019-02-03T11:12:13.1-08:00"));
   FHIR_ASSERT_OK(generated_date_time_ms_or_status.status());
@@ -358,17 +359,17 @@ TEST(PrimitiveHandlerTest, DateTimeGetters) {
   date_time.set_timezone(kTimeZoneString);
   date_time.set_precision(DateTime::DAY);
 
-  StatusOr<absl::Time> extracted_time =
+  absl::StatusOr<absl::Time> extracted_time =
       Stu3PrimitiveHandler::GetInstance()->GetDateTimeValue(date_time);
   FHIR_ASSERT_OK(extracted_time.status());
   ASSERT_EQ(extracted_time.value(), absl::FromUnixMicros(5000));
 
-  StatusOr<absl::TimeZone> extracted_time_zone =
+  absl::StatusOr<absl::TimeZone> extracted_time_zone =
       Stu3PrimitiveHandler::GetInstance()->GetDateTimeZone(date_time);
   FHIR_ASSERT_OK(extracted_time_zone.status());
   ASSERT_EQ(extracted_time_zone.value(), kTimeZone);
 
-  StatusOr<DateTimePrecision> extracted_precision =
+  absl::StatusOr<DateTimePrecision> extracted_precision =
       Stu3PrimitiveHandler::GetInstance()->GetDateTimePrecision(date_time);
   FHIR_ASSERT_OK(extracted_precision.status());
   ASSERT_EQ(extracted_precision.value(), DateTimePrecision::kDay);
@@ -378,7 +379,7 @@ TEST(PrimitiveHandlerTest, GetDateTimeValue) {
   DateTime date_time;
   date_time.set_value_us(5000);
 
-  StatusOr<absl::Time> extracted_time =
+  absl::StatusOr<absl::Time> extracted_time =
       Stu3PrimitiveHandler::GetInstance()->GetDateTimeValue(date_time);
   FHIR_ASSERT_OK(extracted_time.status());
   ASSERT_EQ(extracted_time.value(), absl::FromUnixMicros(5000));
@@ -393,7 +394,7 @@ TEST(PrimitiveHandlerTest, GetDateTimeZone) {
   DateTime date_time;
   date_time.set_timezone(kTimeZoneString);
 
-  StatusOr<absl::TimeZone> extracted_time_zone =
+  absl::StatusOr<absl::TimeZone> extracted_time_zone =
       Stu3PrimitiveHandler::GetInstance()->GetDateTimeZone(date_time);
   FHIR_ASSERT_OK(extracted_time_zone.status());
   ASSERT_EQ(extracted_time_zone.value(), kTimeZone);
@@ -407,7 +408,7 @@ TEST(PrimitiveHandlerTest, GetDateTimePrecision) {
   DateTime date_time;
   date_time.set_precision(DateTime::DAY);
 
-  StatusOr<DateTimePrecision> extracted_precision =
+  absl::StatusOr<DateTimePrecision> extracted_precision =
       Stu3PrimitiveHandler::GetInstance()->GetDateTimePrecision(date_time);
   FHIR_ASSERT_OK(extracted_precision.status());
   ASSERT_EQ(extracted_precision.value(), DateTimePrecision::kDay);
@@ -422,7 +423,7 @@ TEST(PrimitiveHandlerTest, GetSimpleQuantityValue) {
   SimpleQuantity simple_quantity;
   simple_quantity.mutable_value()->set_value("1.5");
 
-  StatusOr<std::string> extracted_value =
+  absl::StatusOr<std::string> extracted_value =
       Stu3PrimitiveHandler::GetInstance()->GetSimpleQuantityValue(
           simple_quantity);
   FHIR_ASSERT_OK(extracted_value.status());
@@ -438,7 +439,7 @@ TEST(PrimitiveHandlerTest, GetSimpleQuantityCode) {
   SimpleQuantity simple_quantity;
   simple_quantity.mutable_code()->set_value("12345");
 
-  StatusOr<std::string> extracted_code =
+  absl::StatusOr<std::string> extracted_code =
       Stu3PrimitiveHandler::GetInstance()->GetSimpleQuantityCode(
           simple_quantity);
   FHIR_ASSERT_OK(extracted_code.status());
@@ -454,7 +455,7 @@ TEST(PrimitiveHandlerTest, GetSimpleQuantitySystem) {
   SimpleQuantity simple_quantity;
   simple_quantity.mutable_system()->set_value("http://example.org");
 
-  StatusOr<std::string> extracted_system =
+  absl::StatusOr<std::string> extracted_system =
       Stu3PrimitiveHandler::GetInstance()->GetSimpleQuantitySystem(
           simple_quantity);
   FHIR_ASSERT_OK(extracted_system.status());
@@ -470,7 +471,7 @@ TEST(PrimitiveHandlerTest, GetCodingDisplay) {
   Coding coding;
   coding.mutable_display()->set_value("Philadelphia Eagles");
 
-  StatusOr<std::string> extracted_value =
+  absl::StatusOr<std::string> extracted_value =
       Stu3PrimitiveHandler::GetInstance()->GetCodingDisplay(coding);
   FHIR_ASSERT_OK(extracted_value.status());
   ASSERT_EQ(extracted_value.value(), "Philadelphia Eagles");
@@ -485,7 +486,7 @@ TEST(PrimitiveHandlerTest, GetCodingCode) {
   Coding coding;
   coding.mutable_code()->set_value("12345");
 
-  StatusOr<std::string> extracted_code =
+  absl::StatusOr<std::string> extracted_code =
       Stu3PrimitiveHandler::GetInstance()->GetCodingCode(coding);
   FHIR_ASSERT_OK(extracted_code.status());
   ASSERT_EQ(extracted_code.value(), "12345");
@@ -499,7 +500,7 @@ TEST(PrimitiveHandlerTest, GetCodingSystem) {
   Coding coding;
   coding.mutable_system()->set_value("http://example.org");
 
-  StatusOr<std::string> extracted_system =
+  absl::StatusOr<std::string> extracted_system =
       Stu3PrimitiveHandler::GetInstance()->GetCodingSystem(coding);
   FHIR_ASSERT_OK(extracted_system.status());
   ASSERT_EQ(extracted_system.value(), "http://example.org");

@@ -27,7 +27,8 @@ using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 
-Status ReferenceStringToProto(const std::string& input, Message* reference) {
+absl::Status ReferenceStringToProto(const std::string& input,
+                                    Message* reference) {
   const Descriptor* descriptor = reference->GetDescriptor();
   const Reflection* reflection = reference->GetReflection();
   const FieldDescriptor* uri_field = descriptor->FindFieldByName("uri");
@@ -41,7 +42,7 @@ std::string GetReferenceStringToResource(const Message& message) {
                       GetResourceId(message).value());
 }
 
-StatusOr<std::string> ReferenceProtoToString(
+absl::StatusOr<std::string> ReferenceProtoToString(
     const ::google::protobuf::Message& reference) {
   const ::google::protobuf::Descriptor* descriptor = reference.GetDescriptor();
   const ::google::protobuf::Reflection* reflection = reference.GetReflection();
@@ -104,7 +105,7 @@ StatusOr<std::string> ReferenceProtoToString(
 
 // Splits relative references into their components, for example, "Patient/ABCD"
 // will result in the patientId field getting the value "ABCD".
-Status SplitIfRelativeReference(Message* reference) {
+absl::Status SplitIfRelativeReference(Message* reference) {
   const Descriptor* descriptor = reference->GetDescriptor();
   const Reflection* reflection = reference->GetReflection();
 
@@ -183,9 +184,9 @@ Status SplitIfRelativeReference(Message* reference) {
 
 namespace internal {
 
-Status PopulateTypedReferenceId(const std::string& resource_id,
-                                const std::string& version,
-                                Message* reference_id) {
+absl::Status PopulateTypedReferenceId(const std::string& resource_id,
+                                      const std::string& version,
+                                      Message* reference_id) {
   FHIR_RETURN_IF_ERROR(SetPrimitiveStringValue(reference_id, resource_id));
   if (!version.empty()) {
     const FieldDescriptor* history_field =
@@ -204,7 +205,7 @@ Status PopulateTypedReferenceId(const std::string& resource_id,
   return absl::OkStatus();
 }
 
-StatusOr<const FieldDescriptor*> GetReferenceFieldForResource(
+absl::StatusOr<const FieldDescriptor*> GetReferenceFieldForResource(
     const Message& reference, const std::string& resource_type) {
   const std::string field_name =
       absl::StrCat(ToSnakeCase(resource_type), "_id");

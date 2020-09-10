@@ -57,7 +57,7 @@ class WorkspaceMessage {
   // The nearest resource may be the message wrapped by this class or one of
   // its ancestors. In the case where this message is derived (i.e. not
   // explicitly a node in a resource) a status of NotFound is returned.
-  StatusOr<WorkspaceMessage> NearestResource() const;
+  absl::StatusOr<WorkspaceMessage> NearestResource() const;
 
  private:
   // Returns the ancestry of this message.
@@ -189,9 +189,8 @@ class ExpressionNode {
   // The work_space parameter is used to access information about the
   // root message and any temporary data needed for this specific evaluation,
   // so a new work_space is provided on each call.
-  virtual Status Evaluate(
-      WorkSpace* work_space,
-      std::vector<WorkspaceMessage>* results) const = 0;
+  virtual absl::Status Evaluate(
+      WorkSpace* work_space, std::vector<WorkspaceMessage>* results) const = 0;
 
   // The descriptor of the message type returned by the expression.
   virtual const ::google::protobuf::Descriptor* ReturnType() const = 0;
@@ -245,25 +244,25 @@ class EvaluationResult {
   // a boolean value per FHIRPath. That is, if it has a single message
   // that contains a boolean. A failure status is returned if the expression
   // did not resolve to a boolean value.
-  StatusOr<bool> GetBoolean() const;
+  absl::StatusOr<bool> GetBoolean() const;
 
   // Returns success with an integer value if the EvaluationResult represents
   // a integer value per FHIRPath. That is, if it has a single message
   // that contains an integer. A failure status is returned if the expression
   // did not resolve to an integer value.
-  StatusOr<int32_t> GetInteger() const;
+  absl::StatusOr<int32_t> GetInteger() const;
 
   // Returns success with a decimal value if the EvaluationResult represents
   // a decimal value per FHIRPath. That is, if it has a single message
   // that contains a decimal. A failure status is returned if the expression
   // did not resolve to a decimal value.
-  StatusOr<std::string> GetDecimal() const;
+  absl::StatusOr<std::string> GetDecimal() const;
 
   // Returns success with a string value if the EvaluationResult represents
   // a string value per FHIRPath. That is, if it has a single message
   // that contains a string. A failure status is returned if the expression
   // did not resolve to a string value.
-  StatusOr<std::string> GetString() const;
+  absl::StatusOr<std::string> GetString() const;
 
  private:
   friend class CompiledExpression;
@@ -292,19 +291,20 @@ class CompiledExpression {
 
   // Compiles a FHIRPath expression into a structure that will efficiently
   // execute that expression.
-  static StatusOr<CompiledExpression> Compile(
+  static absl::StatusOr<CompiledExpression> Compile(
       const ::google::protobuf::Descriptor* descriptor,
       const PrimitiveHandler* primitive_handler, const std::string& fhir_path);
 
   // Evaluates the compiled expression against the given message.
-  StatusOr<EvaluationResult> Evaluate(const ::google::protobuf::Message& message) const;
+  absl::StatusOr<EvaluationResult> Evaluate(
+      const ::google::protobuf::Message& message) const;
 
   // Evaluates the compiled expression against the given message.
   //
   // Use this over Evaluate(const ::google::protobuf::Message&) when additional metadata
   // needs to be included with the message that the expression is being
   // evaluated against (e.g. the message's ancestry.)
-  StatusOr<EvaluationResult> Evaluate(
+  absl::StatusOr<EvaluationResult> Evaluate(
       const internal::WorkspaceMessage& message) const;
 
  private:

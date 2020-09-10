@@ -42,7 +42,7 @@ static const char* const kTimeZoneString = "Australia/Sydney";
 
 // json_path should be relative to fhir root
 template <typename R>
-StatusOr<R> ParseJsonToProto(const std::string& json_path) {
+absl::StatusOr<R> ParseJsonToProto(const std::string& json_path) {
   std::string json = ReadFile(json_path);
   absl::TimeZone tz;
   absl::LoadTimeZone(kTimeZoneString, &tz);
@@ -58,7 +58,7 @@ StatusOr<R> ParseJsonToProto(const std::string& json_path) {
 template <typename R>
 void TestParseWithFilepaths(const std::string& proto_path,
                             const std::string& json_path) {
-  StatusOr<R> from_json_status = ParseJsonToProto<R>(json_path);
+  absl::StatusOr<R> from_json_status = ParseJsonToProto<R>(json_path);
   ASSERT_TRUE(from_json_status.ok()) << "Failed parsing: " << json_path << "\n"
                                      << from_json_status.status();
   R from_json = from_json_status.value();

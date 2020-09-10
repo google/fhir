@@ -64,22 +64,23 @@ class PrimitiveHandler {
  public:
   virtual ~PrimitiveHandler() {}
 
-  Status ParseInto(const Json::Value& json, const absl::TimeZone tz,
-                   ::google::protobuf::Message* target) const;
+  absl::Status ParseInto(const Json::Value& json, const absl::TimeZone tz,
+                         ::google::protobuf::Message* target) const;
 
-  Status ParseInto(const Json::Value& json, ::google::protobuf::Message* target) const;
+  absl::Status ParseInto(const Json::Value& json,
+                         ::google::protobuf::Message* target) const;
 
-  StatusOr<JsonPrimitive> WrapPrimitiveProto(
+  absl::StatusOr<JsonPrimitive> WrapPrimitiveProto(
       const ::google::protobuf::Message& proto) const;
 
-  Status ValidatePrimitive(const ::google::protobuf::Message& primitive) const;
+  absl::Status ValidatePrimitive(const ::google::protobuf::Message& primitive) const;
 
   // Validates that a reference field conforms to spec.
   // The types of resources that can be referenced is controlled via annotations
   // on the proto, e.g., R4 Patient.general_practitioner must be a reference to
   // an Organization, Practitioner, or PractitionerRole, or it must be an
   // untyped reference, like uri.
-  virtual Status ValidateReferenceField(
+  virtual absl::Status ValidateReferenceField(
       const ::google::protobuf::Message& parent,
       const ::google::protobuf::FieldDescriptor* field) const = 0;
 
@@ -87,55 +88,55 @@ class PrimitiveHandler {
 
   virtual const ::google::protobuf::Descriptor* ContainedResourceDescriptor() const = 0;
 
-  virtual StatusOr<std::string> GetStringValue(
+  virtual absl::StatusOr<std::string> GetStringValue(
       const ::google::protobuf::Message& primitive) const = 0;
 
   virtual ::google::protobuf::Message* NewString(const std::string& str) const = 0;
 
   virtual const ::google::protobuf::Descriptor* StringDescriptor() const = 0;
 
-  virtual StatusOr<bool> GetBooleanValue(
+  virtual absl::StatusOr<bool> GetBooleanValue(
       const ::google::protobuf::Message& primitive) const = 0;
 
   virtual ::google::protobuf::Message* NewBoolean(const bool value) const = 0;
 
   virtual const ::google::protobuf::Descriptor* BooleanDescriptor() const = 0;
 
-  virtual StatusOr<int> GetIntegerValue(
+  virtual absl::StatusOr<int> GetIntegerValue(
       const ::google::protobuf::Message& primitive) const = 0;
 
   virtual ::google::protobuf::Message* NewInteger(const int value) const = 0;
 
   virtual const ::google::protobuf::Descriptor* IntegerDescriptor() const = 0;
 
-  virtual StatusOr<int> GetUnsignedIntValue(
+  virtual absl::StatusOr<int> GetUnsignedIntValue(
       const ::google::protobuf::Message& primitive) const = 0;
 
   virtual ::google::protobuf::Message* NewUnsignedInt(const int value) const = 0;
 
   virtual const ::google::protobuf::Descriptor* UnsignedIntDescriptor() const = 0;
 
-  virtual StatusOr<int> GetPositiveIntValue(
+  virtual absl::StatusOr<int> GetPositiveIntValue(
       const ::google::protobuf::Message& primitive) const = 0;
 
   virtual ::google::protobuf::Message* NewPositiveInt(const int value) const = 0;
 
   virtual const ::google::protobuf::Descriptor* PositiveIntDescriptor() const = 0;
 
-  virtual StatusOr<std::string> GetDecimalValue(
+  virtual absl::StatusOr<std::string> GetDecimalValue(
       const ::google::protobuf::Message& primitive) const = 0;
 
   virtual ::google::protobuf::Message* NewDecimal(const std::string value) const = 0;
 
   virtual const ::google::protobuf::Descriptor* DecimalDescriptor() const = 0;
 
-  virtual StatusOr<std::string> GetSimpleQuantityCode(
+  virtual absl::StatusOr<std::string> GetSimpleQuantityCode(
       const ::google::protobuf::Message& simple_quantity) const = 0;
 
-  virtual StatusOr<std::string> GetSimpleQuantitySystem(
+  virtual absl::StatusOr<std::string> GetSimpleQuantitySystem(
       const ::google::protobuf::Message& simple_quantity) const = 0;
 
-  virtual StatusOr<std::string> GetSimpleQuantityValue(
+  virtual absl::StatusOr<std::string> GetSimpleQuantityValue(
       const ::google::protobuf::Message& simple_quantity) const = 0;
 
   virtual const ::google::protobuf::Descriptor* DateTimeDescriptor() const = 0;
@@ -144,41 +145,41 @@ class PrimitiveHandler {
   // FHIR specification for DateTime.
   //
   // See https://www.hl7.org/fhir/datatypes.html#dateTime
-  virtual StatusOr<::google::protobuf::Message*> NewDateTime(
+  virtual absl::StatusOr<::google::protobuf::Message*> NewDateTime(
       const std::string& str) const = 0;
 
   virtual ::google::protobuf::Message* NewDateTime(
       const absl::Time& time, const absl::TimeZone& zone,
       const DateTimePrecision precision) const = 0;
 
-  virtual StatusOr<absl::Time> GetDateTimeValue(
+  virtual absl::StatusOr<absl::Time> GetDateTimeValue(
       const ::google::protobuf::Message& date_time) const = 0;
 
-  virtual StatusOr<absl::TimeZone> GetDateTimeZone(
+  virtual absl::StatusOr<absl::TimeZone> GetDateTimeZone(
       const ::google::protobuf::Message& date_time) const = 0;
 
-  virtual StatusOr<DateTimePrecision> GetDateTimePrecision(
+  virtual absl::StatusOr<DateTimePrecision> GetDateTimePrecision(
       const ::google::protobuf::Message& date_time) const = 0;
 
   virtual ::google::protobuf::Message* NewCoding() const = 0;
 
-  virtual StatusOr<std::string> GetCodingSystem(
+  virtual absl::StatusOr<std::string> GetCodingSystem(
       const ::google::protobuf::Message& coding) const = 0;
 
-  virtual StatusOr<std::string> GetCodingCode(
+  virtual absl::StatusOr<std::string> GetCodingCode(
       const ::google::protobuf::Message& coding) const = 0;
 
-  virtual StatusOr<std::string> GetCodingDisplay(
+  virtual absl::StatusOr<std::string> GetCodingDisplay(
       const ::google::protobuf::Message& coding) const = 0;
 
  protected:
   explicit PrimitiveHandler(proto::FhirVersion version) : version_(version) {}
 
-  virtual StatusOr<std::unique_ptr<primitives_internal::PrimitiveWrapper>>
+  virtual absl::StatusOr<std::unique_ptr<primitives_internal::PrimitiveWrapper>>
   GetWrapper(const ::google::protobuf::Descriptor* target_descriptor) const = 0;
 
-  Status CheckVersion(const ::google::protobuf::Message& message) const;
-  Status CheckVersion(const ::google::protobuf::Descriptor* descriptor) const;
+  absl::Status CheckVersion(const ::google::protobuf::Message& message) const;
+  absl::Status CheckVersion(const ::google::protobuf::Descriptor* descriptor) const;
 
   const proto::FhirVersion version_;
 };
@@ -188,7 +189,8 @@ namespace primitives_internal {
 using ::google::protobuf::OneofDescriptor;
 
 template <typename Expected>
-ABSL_MUST_USE_RESULT Status CheckType(const ::google::protobuf::Descriptor* descriptor) {
+ABSL_MUST_USE_RESULT absl::Status CheckType(
+    const ::google::protobuf::Descriptor* descriptor) {
   return IsMessageType<Expected>(descriptor)
              ? absl::OkStatus()
              : InvalidArgumentError(absl::StrCat(
@@ -197,14 +199,14 @@ ABSL_MUST_USE_RESULT Status CheckType(const ::google::protobuf::Descriptor* desc
 }
 
 template <typename Expected>
-ABSL_MUST_USE_RESULT Status CheckType(const ::google::protobuf::Message& message) {
+ABSL_MUST_USE_RESULT absl::Status CheckType(const ::google::protobuf::Message& message) {
   return CheckType<Expected>(message.GetDescriptor());
 }
 
 template <class TypedReference,
           class TypedReferenceId = REFERENCE_ID_TYPE(TypedReference)>
-Status ValidateReferenceField(const Message& parent,
-                              const FieldDescriptor* field) {
+absl::Status ValidateReferenceField(const Message& parent,
+                                    const FieldDescriptor* field) {
   static const Descriptor* descriptor = TypedReference::descriptor();
   static const OneofDescriptor* oneof = descriptor->oneof_decl(0);
 
@@ -294,8 +296,8 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
   typedef ReferenceType Reference;
   typedef SimpleQuantityType SimpleQuantity;
 
-  Status ValidateReferenceField(const Message& parent,
-                                const FieldDescriptor* field) const override {
+  absl::Status ValidateReferenceField(
+      const Message& parent, const FieldDescriptor* field) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Reference>(field->message_type()));
     return primitives_internal::ValidateReferenceField<Reference>(parent,
                                                                   field);
@@ -309,7 +311,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     return ContainedResource::GetDescriptor();
   }
 
-  StatusOr<std::string> GetStringValue(
+  absl::StatusOr<std::string> GetStringValue(
       const ::google::protobuf::Message& primitive) const override {
     FHIR_RETURN_IF_ERROR(CheckType<String>(primitive));
     return dynamic_cast<const String&>(primitive).value();
@@ -325,7 +327,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     return String::GetDescriptor();
   }
 
-  StatusOr<bool> GetBooleanValue(
+  absl::StatusOr<bool> GetBooleanValue(
       const ::google::protobuf::Message& primitive) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Boolean>(primitive));
     return dynamic_cast<const Boolean&>(primitive).value();
@@ -341,7 +343,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     return Boolean::GetDescriptor();
   }
 
-  StatusOr<int> GetIntegerValue(
+  absl::StatusOr<int> GetIntegerValue(
       const ::google::protobuf::Message& primitive) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Integer>(primitive));
     return dynamic_cast<const Integer&>(primitive).value();
@@ -357,7 +359,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     return Integer::GetDescriptor();
   }
 
-  StatusOr<int> GetPositiveIntValue(
+  absl::StatusOr<int> GetPositiveIntValue(
       const ::google::protobuf::Message& primitive) const override {
     FHIR_RETURN_IF_ERROR(CheckType<PositiveInt>(primitive));
     return dynamic_cast<const PositiveInt&>(primitive).value();
@@ -373,7 +375,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     return PositiveInt::GetDescriptor();
   }
 
-  StatusOr<int> GetUnsignedIntValue(
+  absl::StatusOr<int> GetUnsignedIntValue(
       const ::google::protobuf::Message& primitive) const override {
     FHIR_RETURN_IF_ERROR(CheckType<UnsignedInt>(primitive));
     return dynamic_cast<const UnsignedInt&>(primitive).value();
@@ -389,7 +391,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     return UnsignedInt::GetDescriptor();
   }
 
-  StatusOr<std::string> GetDecimalValue(
+  absl::StatusOr<std::string> GetDecimalValue(
       const ::google::protobuf::Message& primitive) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Decimal>(primitive));
     return dynamic_cast<const Decimal&>(primitive).value();
@@ -405,19 +407,19 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     return Decimal::GetDescriptor();
   }
 
-  StatusOr<std::string> GetSimpleQuantityCode(
+  absl::StatusOr<std::string> GetSimpleQuantityCode(
       const ::google::protobuf::Message& simple_quantity) const override {
     FHIR_RETURN_IF_ERROR(CheckType<SimpleQuantity>(simple_quantity));
     return dynamic_cast<const SimpleQuantity&>(simple_quantity).code().value();
   }
 
-  StatusOr<std::string> GetSimpleQuantitySystem(
+  absl::StatusOr<std::string> GetSimpleQuantitySystem(
       const ::google::protobuf::Message& simple_quantity) const override {
     FHIR_RETURN_IF_ERROR(CheckType<SimpleQuantity>(simple_quantity));
     return dynamic_cast<const SimpleQuantity&>(simple_quantity).system().value();
   }
 
-  StatusOr<std::string> GetSimpleQuantityValue(
+  absl::StatusOr<std::string> GetSimpleQuantityValue(
       const ::google::protobuf::Message& simple_quantity) const override {
     FHIR_RETURN_IF_ERROR(CheckType<SimpleQuantity>(simple_quantity));
     return dynamic_cast<const SimpleQuantity&>(simple_quantity).value().value();
@@ -425,19 +427,19 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 
   ::google::protobuf::Message* NewCoding() const override { return new Coding(); }
 
-  StatusOr<std::string> GetCodingSystem(
+  absl::StatusOr<std::string> GetCodingSystem(
       const ::google::protobuf::Message& coding) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Coding>(coding));
     return dynamic_cast<const Coding&>(coding).system().value();
   }
 
-  StatusOr<std::string> GetCodingCode(
+  absl::StatusOr<std::string> GetCodingCode(
       const ::google::protobuf::Message& coding) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Coding>(coding));
     return dynamic_cast<const Coding&>(coding).code().value();
   }
 
-  StatusOr<std::string> GetCodingDisplay(
+  absl::StatusOr<std::string> GetCodingDisplay(
       const ::google::protobuf::Message& coding) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Coding>(coding));
     return dynamic_cast<const Coding&>(coding).display().value();
@@ -447,7 +449,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     return DateTime::GetDescriptor();
   }
 
-  StatusOr<::google::protobuf::Message*> NewDateTime(
+  absl::StatusOr<::google::protobuf::Message*> NewDateTime(
       const std::string& str) const override {
     Json::Value json_string(str);
 
@@ -491,21 +493,21 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
     return msg;
   }
 
-  StatusOr<absl::Time> GetDateTimeValue(
+  absl::StatusOr<absl::Time> GetDateTimeValue(
       const ::google::protobuf::Message& date_time) const override {
     FHIR_RETURN_IF_ERROR(CheckType<DateTime>(date_time));
     return absl::FromUnixMicros(
         dynamic_cast<const DateTime&>(date_time).value_us());
   }
 
-  StatusOr<absl::TimeZone> GetDateTimeZone(
+  absl::StatusOr<absl::TimeZone> GetDateTimeZone(
       const ::google::protobuf::Message& date_time) const override {
     FHIR_RETURN_IF_ERROR(CheckType<DateTime>(date_time));
     return BuildTimeZoneFromString(
         dynamic_cast<const DateTime&>(date_time).timezone());
   }
 
-  StatusOr<DateTimePrecision> GetDateTimePrecision(
+  absl::StatusOr<DateTimePrecision> GetDateTimePrecision(
       const ::google::protobuf::Message& date_time) const override {
     FHIR_RETURN_IF_ERROR(CheckType<DateTime>(date_time));
     switch (dynamic_cast<const DateTime&>(date_time).precision()) {

@@ -42,7 +42,7 @@ using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 
-StatusOr<absl::TimeZone> BuildTimeZoneFromString(
+absl::StatusOr<absl::TimeZone> BuildTimeZoneFromString(
     const std::string& time_zone_string) {
   if (time_zone_string == "UTC" || time_zone_string == "Z") {
     return absl::UTCTimeZone();
@@ -81,7 +81,7 @@ StatusOr<absl::TimeZone> BuildTimeZoneFromString(
   return tz;
 }
 
-StatusOr<std::string> GetResourceId(const Message& message) {
+absl::StatusOr<std::string> GetResourceId(const Message& message) {
   const auto* desc = message.GetDescriptor();
   const FieldDescriptor* field = desc->FindFieldByName("id");
   if (!field) {
@@ -104,8 +104,8 @@ bool ResourceHasId(const Message& message) {
   return !GetResourceId(message).value().empty();
 }
 
-Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
-                               const std::string& value) {
+absl::Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
+                                     const std::string& value) {
   const FieldDescriptor* value_field =
       primitive->GetDescriptor()->FindFieldByName("value");
   if (!value_field || value_field->is_repeated() ||
@@ -118,9 +118,9 @@ Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
   return absl::OkStatus();
 }
 
-StatusOr<std::string> GetPrimitiveStringValue(const ::google::protobuf::Message& parent,
-                                              const std::string& field_name,
-                                              std::string* scratch) {
+absl::StatusOr<std::string> GetPrimitiveStringValue(
+    const ::google::protobuf::Message& parent, const std::string& field_name,
+    std::string* scratch) {
   const Descriptor* descriptor = parent.GetDescriptor();
   const FieldDescriptor* field = descriptor->FindFieldByName(field_name);
   if (!field || !field->message_type()) {
@@ -133,7 +133,7 @@ StatusOr<std::string> GetPrimitiveStringValue(const ::google::protobuf::Message&
   return result;
 }
 
-StatusOr<std::string> GetPrimitiveStringValue(
+absl::StatusOr<std::string> GetPrimitiveStringValue(
     const ::google::protobuf::Message& primitive, std::string* scratch) {
   const FieldDescriptor* value_field =
       primitive.GetDescriptor()->FindFieldByName("value");
@@ -184,7 +184,7 @@ std::string ToSnakeCase(absl::string_view input) {
   return result;
 }
 
-StatusOr<absl::Time> GetTimeFromTimelikeElement(
+absl::StatusOr<absl::Time> GetTimeFromTimelikeElement(
     const ::google::protobuf::Message& timelike) {
   const Descriptor* descriptor = timelike.GetDescriptor();
   const FieldDescriptor* value_us_field =
@@ -200,10 +200,10 @@ StatusOr<absl::Time> GetTimeFromTimelikeElement(
       timelike.GetReflection()->GetInt64(timelike, value_us_field));
 }
 
-StatusOr<Message*> UnpackAnyAsContainedResource(
+absl::StatusOr<Message*> UnpackAnyAsContainedResource(
     const google::protobuf::Any& any) {
   return UnpackAnyAsContainedResource(
-      any, [](const Descriptor* type_descriptor) -> StatusOr<Message*> {
+      any, [](const Descriptor* type_descriptor) -> absl::StatusOr<Message*> {
         const Message* prototype =
             ::google::protobuf::MessageFactory::generated_factory()->GetPrototype(
                 type_descriptor);
@@ -216,9 +216,10 @@ StatusOr<Message*> UnpackAnyAsContainedResource(
       });
 }
 
-StatusOr<Message*> UnpackAnyAsContainedResource(
+absl::StatusOr<Message*> UnpackAnyAsContainedResource(
     const google::protobuf::Any& any,
-    std::function<StatusOr<Message*>(const Descriptor*)> message_factory) {
+    std::function<absl::StatusOr<Message*>(const Descriptor*)>
+        message_factory) {
   std::string full_type_name;
   if (!google::protobuf::Any::ParseAnyTypeUrl(any.type_url(),
                                               &full_type_name)) {
@@ -242,7 +243,7 @@ StatusOr<Message*> UnpackAnyAsContainedResource(
         "google.protobuf.Any messages must store a ContainedResource. Got \"",
         full_type_name, "\"."));
   }
-  FHIR_ASSIGN_OR_RETURN(Message* unpacked_message,
+  FHIR_ASSIGN_OR_RETURN(Message * unpacked_message,
                         message_factory(type_descriptor));
 
   if (!any.UnpackTo(unpacked_message)) {

@@ -39,7 +39,7 @@
 namespace google {
 namespace fhir {
 
-Status BuildHasNoValueExtension(::google::protobuf::Message* extension);
+absl::Status BuildHasNoValueExtension(::google::protobuf::Message* extension);
 
 namespace primitives_internal {
 
@@ -61,7 +61,7 @@ using ::google::protobuf::Reflection;
 // int, or the empty string).
 // Returns an error status if the message has more than one PrimitiveHasNoValue
 // extension.
-StatusOr<bool> HasPrimitiveHasNoValue(const Message& message);
+absl::StatusOr<bool> HasPrimitiveHasNoValue(const Message& message);
 
 static const char* kPrimitiveHasNoValueUrl =
     "https://g.co/fhir/StructureDefinition/primitiveHasNoValue";
@@ -77,16 +77,17 @@ const std::vector<const char*>* const kConversionOnlyExtensionUrls =
 class PrimitiveWrapper {
  public:
   virtual ~PrimitiveWrapper() {}
-  virtual Status MergeInto(::google::protobuf::Message* target) const = 0;
-  virtual Status Parse(const Json::Value& json,
-                       const absl::TimeZone& default_time_zone) = 0;
-  virtual Status Wrap(const ::google::protobuf::Message&) = 0;
+  virtual absl::Status MergeInto(::google::protobuf::Message* target) const = 0;
+  virtual absl::Status Parse(const Json::Value& json,
+                             const absl::TimeZone& default_time_zone) = 0;
+  virtual absl::Status Wrap(const ::google::protobuf::Message&) = 0;
   virtual bool HasElement() const = 0;
-  virtual StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement() const = 0;
+  virtual absl::StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement()
+      const = 0;
 
-  virtual Status ValidateProto() const = 0;
+  virtual absl::Status ValidateProto() const = 0;
 
-  StatusOr<std::string> ToValueString() const {
+  absl::StatusOr<std::string> ToValueString() const {
     static const char* kNullString = "null";
     if (HasValue()) {
       return ToNonNullValueString();
@@ -96,13 +97,13 @@ class PrimitiveWrapper {
 
  protected:
   virtual bool HasValue() const = 0;
-  virtual StatusOr<std::string> ToNonNullValueString() const = 0;
+  virtual absl::StatusOr<std::string> ToNonNullValueString() const = 0;
 };
 
 template <typename T>
 class SpecificWrapper : public PrimitiveWrapper {
  public:
-  Status MergeInto(Message* target) const override {
+  absl::Status MergeInto(Message* target) const override {
     if (T::descriptor()->full_name() != target->GetDescriptor()->full_name()) {
       return InvalidArgumentError(absl::StrCat(
           "Type mismatch in SpecificWrapper#MergeInto: ", "Attempted to merge ",
@@ -113,7 +114,7 @@ class SpecificWrapper : public PrimitiveWrapper {
     return absl::OkStatus();
   }
 
-  Status Wrap(const ::google::protobuf::Message& message) override {
+  absl::Status Wrap(const ::google::protobuf::Message& message) override {
     if (T::descriptor()->full_name() != message.GetDescriptor()->full_name()) {
       return InvalidArgumentError(absl::StrCat(
           "Type mismatch in SpecificWrapper#Wrap: ", "Attempted to wrap ",
@@ -135,7 +136,7 @@ class SpecificWrapper : public PrimitiveWrapper {
     wrapped_ = managed_memory_.get();
   }
 
-  static Status ValidateString(const std::string& input) {
+  static absl::Status ValidateString(const std::string& input) {
     static const RE2* regex_pattern = [] {
       const std::string value_regex_string = GetValueRegex(T::descriptor());
       return value_regex_string.empty() ? nullptr : new RE2(value_regex_string);
@@ -158,9 +159,10 @@ class XhtmlWrapper : public SpecificWrapper<XhtmlLike> {
   bool HasElement() const override { return this->GetWrapped()->has_id(); }
 
   // Xhtml can't have extensions, it's always valid
-  Status ValidateProto() const override { return absl::OkStatus(); }
+  absl::Status ValidateProto() const override { return absl::OkStatus(); }
 
-  StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement() const override {
+  absl::StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement()
+      const override {
     std::unique_ptr<Message> element =
         absl::WrapUnique(this->GetWrapped()->New());
     XhtmlLike* typed_element = dynamic_cast<XhtmlLike*>(element.get());
@@ -171,8 +173,8 @@ class XhtmlWrapper : public SpecificWrapper<XhtmlLike> {
     return std::move(element);
   }
 
-  Status Parse(const Json::Value& json,
-               const absl::TimeZone& default_time_zone) override {
+  absl::Status Parse(const Json::Value& json,
+                     const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       return InvalidArgumentError("Unexpected null xhtml");
     }
@@ -189,8 +191,8 @@ class XhtmlWrapper : public SpecificWrapper<XhtmlLike> {
   }
 
  protected:
-  StatusOr<std::string> ToNonNullValueString() const override {
-    return StatusOr<std::string>(
+  absl::StatusOr<std::string> ToNonNullValueString() const override {
+    return absl::StatusOr<std::string>(
         Json::valueToQuotedString(this->GetWrapped()->value().c_str()));
   }
 };
@@ -198,7 +200,7 @@ class XhtmlWrapper : public SpecificWrapper<XhtmlLike> {
 template <typename T>
 class ExtensibleWrapper : public SpecificWrapper<T> {
  public:
-  Status ValidateProto() const override {
+  absl::Status ValidateProto() const override {
     FHIR_ASSIGN_OR_RETURN(const bool has_no_value_extension,
                           HasPrimitiveHasNoValue(*this->GetWrapped()));
     const T& typed = dynamic_cast<const T&>(*this->GetWrapped());
@@ -210,7 +212,8 @@ class ExtensibleWrapper : public SpecificWrapper<T> {
     return ValidateTypeSpecific(has_no_value_extension);
   }
 
-  StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement() const override {
+  absl::StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement()
+      const override {
     std::unique_ptr<Message> element =
         absl::WrapUnique(this->GetWrapped()->New());
     T* typed_element = dynamic_cast<T*>(element.get());
@@ -255,10 +258,10 @@ class ExtensibleWrapper : public SpecificWrapper<T> {
   }
 
  protected:
-  virtual Status ValidateTypeSpecific(
+  virtual absl::Status ValidateTypeSpecific(
       const bool has_no_value_extension) const = 0;
 
-  Status InitializeNull() {
+  absl::Status InitializeNull() {
     this->managed_memory_ = absl::make_unique<T>();
     FHIR_RETURN_IF_ERROR(
         BuildHasNoValueExtension(this->managed_memory_->add_extension()));
@@ -272,8 +275,8 @@ class ExtensibleWrapper : public SpecificWrapper<T> {
 template <typename T>
 class StringInputWrapper : public ExtensibleWrapper<T> {
  public:
-  Status Parse(const Json::Value& json,
-               const absl::TimeZone& default_time_zone) override {
+  absl::Status Parse(const Json::Value& json,
+                     const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       return this->InitializeNull();
     }
@@ -286,19 +289,19 @@ class StringInputWrapper : public ExtensibleWrapper<T> {
   }
 
  protected:
-  virtual Status ParseString(const std::string& json_string) = 0;
+  virtual absl::Status ParseString(const std::string& json_string) = 0;
 };
 
 // Template for wrappers that represent data as a string.
 template <typename T>
 class StringTypeWrapper : public StringInputWrapper<T> {
  public:
-  StatusOr<std::string> ToNonNullValueString() const override {
-    return StatusOr<std::string>(
+  absl::StatusOr<std::string> ToNonNullValueString() const override {
+    return absl::StatusOr<std::string>(
         Json::valueToQuotedString(this->GetWrapped()->value().c_str()));
   }
 
-  Status ValidateTypeSpecific(
+  absl::Status ValidateTypeSpecific(
       const bool has_no_value_extension) const override {
     if (has_no_value_extension) {
       return this->GetWrapped()->value().empty()
@@ -308,7 +311,7 @@ class StringTypeWrapper : public StringInputWrapper<T> {
                                     " has both a value, and a "
                                     "PrimitiveHasNoValueExtension."));
     }
-    Status string_validation =
+    absl::Status string_validation =
         this->ValidateString(this->GetWrapped()->value());
     return string_validation.ok()
                ? absl::OkStatus()
@@ -316,7 +319,7 @@ class StringTypeWrapper : public StringInputWrapper<T> {
   }
 
  protected:
-  Status ParseString(const std::string& json_string) override {
+  absl::Status ParseString(const std::string& json_string) override {
     FHIR_RETURN_IF_ERROR(this->ValidateString(json_string));
     std::unique_ptr<T> wrapped = absl::make_unique<T>();
     wrapped->set_value(json_string);
@@ -346,7 +349,7 @@ static const std::unordered_map<std::string, std::string>* const
 template <typename T>
 class TimeTypeWrapper : public ExtensibleWrapper<T> {
  public:
-  StatusOr<std::string> ToNonNullValueString() const override {
+  absl::StatusOr<std::string> ToNonNullValueString() const override {
     const T& timelike = *this->GetWrapped();
     absl::Time absolute_time = absl::FromUnixMicros(timelike.value_us());
     FHIR_ASSIGN_OR_RETURN(absl::TimeZone time_zone,
@@ -370,7 +373,7 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
                : value;
   }
 
-  Status ValidateTypeSpecific(
+  absl::Status ValidateTypeSpecific(
       const bool has_no_value_extension) const override {
     const T* wrapped = this->GetWrapped();
     if (has_no_value_extension) {
@@ -400,8 +403,8 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
   }
 
  protected:
-  Status Parse(const Json::Value& json,
-               const absl::TimeZone& default_time_zone) override {
+  absl::Status Parse(const Json::Value& json,
+                     const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       return this->InitializeNull();
     }
@@ -459,8 +462,8 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
   }
 
  private:
-  Status SetValue(absl::Time time, const std::string& timezone_string,
-                  const std::string& precision_string) {
+  absl::Status SetValue(absl::Time time, const std::string& timezone_string,
+                        const std::string& precision_string) {
     std::unique_ptr<T> wrapped = absl::make_unique<T>();
     wrapped->set_value_us(ToUnixMicros(time));
     wrapped->set_timezone(timezone_string);
@@ -490,7 +493,7 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
     return absl::OkStatus();
   }
 
-  static StatusOr<std::string> ParseTimeZoneString(
+  static absl::StatusOr<std::string> ParseTimeZoneString(
       const std::string& date_string) {
     static const LazyRE2 TIMEZONE_PATTERN = {
         "(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))$"};
@@ -508,8 +511,8 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
 template <typename T>
 class IntegerTypeWrapper : public ExtensibleWrapper<T> {
  public:
-  Status Parse(const Json::Value& json,
-               const absl::TimeZone& default_time_zone) override {
+  absl::Status Parse(const Json::Value& json,
+                     const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       return this->InitializeNull();
     }
@@ -526,16 +529,16 @@ class IntegerTypeWrapper : public ExtensibleWrapper<T> {
     return absl::OkStatus();
   }
 
-  StatusOr<std::string> ToNonNullValueString() const override {
+  absl::StatusOr<std::string> ToNonNullValueString() const override {
     return absl::StrCat(this->GetWrapped()->value());
   }
 
  protected:
-  virtual Status ValidateInteger(const int int_value) const {
+  virtual absl::Status ValidateInteger(const int int_value) const {
     return absl::OkStatus();
   }
 
-  Status ValidateTypeSpecific(
+  absl::Status ValidateTypeSpecific(
       const bool has_no_value_extension) const override {
     if (has_no_value_extension) {
       if (this->GetWrapped()->value() != 0) {
@@ -545,7 +548,8 @@ class IntegerTypeWrapper : public ExtensibleWrapper<T> {
       }
       return absl::OkStatus();
     }
-    Status int_validation = this->ValidateInteger(this->GetWrapped()->value());
+    absl::Status int_validation =
+        this->ValidateInteger(this->GetWrapped()->value());
     return int_validation.ok()
                ? absl::OkStatus()
                : FailedPreconditionError(int_validation.message());
@@ -555,14 +559,14 @@ class IntegerTypeWrapper : public ExtensibleWrapper<T> {
 template <typename CodeType>
 class CodeWrapper : public StringTypeWrapper<CodeType> {
  public:
-  Status Wrap(const ::google::protobuf::Message& codelike) override {
+  absl::Status Wrap(const ::google::protobuf::Message& codelike) override {
     std::unique_ptr<CodeType> wrapped = absl::make_unique<CodeType>();
     FHIR_RETURN_IF_ERROR(CopyCode(codelike, wrapped.get()));
     this->WrapAndManage(std::move(wrapped));
     return absl::OkStatus();
   }
 
-  Status MergeInto(Message* target) const override {
+  absl::Status MergeInto(Message* target) const override {
     if (IsMessageType<CodeType>(*target)) {
       target->MergeFrom(*this->GetWrapped());
     }
@@ -570,7 +574,7 @@ class CodeWrapper : public StringTypeWrapper<CodeType> {
   }
 
  private:
-  Status ValidateCodelike() const {
+  absl::Status ValidateCodelike() const {
     const Descriptor* descriptor = this->GetWrapped()->GetDescriptor();
     const Reflection* reflection = this->GetWrapped()->GetReflection();
     const FieldDescriptor* value_field = descriptor->FindFieldByName("value");
@@ -623,7 +627,7 @@ template <typename Base64BinaryType, typename SeparatorStrideExtensionType,
           typename ExtensionType = EXTENSION_TYPE(Base64BinaryType)>
 class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
  public:
-  StatusOr<std::string> ToNonNullValueString() const override {
+  absl::StatusOr<std::string> ToNonNullValueString() const override {
     std::string escaped;
     absl::Base64Escape(this->GetWrapped()->value(), &escaped);
     std::vector<SeparatorStrideExtensionType> separator_extensions;
@@ -642,7 +646,8 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
     return absl::StrCat("\"", escaped, "\"");
   }
 
-  StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement() const override {
+  absl::StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement()
+      const override {
     FHIR_ASSIGN_OR_RETURN(auto extension_message,
                           ExtensibleWrapper<Base64BinaryType>::GetElement());
     FHIR_RETURN_IF_ERROR(ClearTypedExtensions(
@@ -651,7 +656,7 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
   }
 
  protected:
-  Status ValidateTypeSpecific(
+  absl::Status ValidateTypeSpecific(
       const bool has_no_value_extension) const override {
     if (has_no_value_extension) {
       return this->GetWrapped()->value().empty()
@@ -661,7 +666,7 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
                                     "a PrimitiveHasNoValueExtension."));
     }
     FHIR_ASSIGN_OR_RETURN(const std::string& as_string, this->ToValueString());
-    Status string_validation =
+    absl::Status string_validation =
         this->ValidateString(as_string.substr(1, as_string.length() - 2));
     return string_validation.ok()
                ? absl::OkStatus()
@@ -669,7 +674,7 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
   }
 
  private:
-  Status ParseString(const std::string& json_string) override {
+  absl::Status ParseString(const std::string& json_string) override {
     std::unique_ptr<Base64BinaryType> wrapped =
         absl::make_unique<Base64BinaryType>();
     size_t stride = json_string.find(' ');
@@ -701,7 +706,7 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
 template <typename BooleanType>
 class BooleanWrapper : public ExtensibleWrapper<BooleanType> {
  protected:
-  Status ValidateTypeSpecific(
+  absl::Status ValidateTypeSpecific(
       const bool has_no_value_extension) const override {
     if (has_no_value_extension && this->GetWrapped()->value()) {
       return FailedPreconditionError(absl::StrCat(
@@ -711,8 +716,8 @@ class BooleanWrapper : public ExtensibleWrapper<BooleanType> {
   }
 
  private:
-  Status Parse(const Json::Value& json,
-               const absl::TimeZone& default_time_zone) override {
+  absl::Status Parse(const Json::Value& json,
+                     const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       return this->InitializeNull();
     }
@@ -727,7 +732,7 @@ class BooleanWrapper : public ExtensibleWrapper<BooleanType> {
     return absl::OkStatus();
   }
 
-  StatusOr<std::string> ToNonNullValueString() const override {
+  absl::StatusOr<std::string> ToNonNullValueString() const override {
     return absl::StrCat(this->GetWrapped()->value() ? "true" : "false");
   }
 };
@@ -743,12 +748,12 @@ class BooleanWrapper : public ExtensibleWrapper<BooleanType> {
 template <typename DecimalType>
 class DecimalWrapper : public StringInputWrapper<DecimalType> {
  public:
-  StatusOr<std::string> ToNonNullValueString() const override {
+  absl::StatusOr<std::string> ToNonNullValueString() const override {
     return absl::StrCat(this->GetWrapped()->value());
   }
 
  protected:
-  Status ValidateTypeSpecific(
+  absl::Status ValidateTypeSpecific(
       const bool has_no_value_extension) const override {
     if (has_no_value_extension) {
       return this->GetWrapped()->value().empty()
@@ -757,7 +762,7 @@ class DecimalWrapper : public StringInputWrapper<DecimalType> {
                        absl::StrCat("Decimal has both a value, and a "
                                     "PrimitiveHasNoValueExtension."));
     }
-    Status string_validation =
+    absl::Status string_validation =
         this->ValidateString(this->GetWrapped()->value());
     return string_validation.ok()
                ? absl::OkStatus()
@@ -765,8 +770,8 @@ class DecimalWrapper : public StringInputWrapper<DecimalType> {
   }
 
  private:
-  Status Parse(const Json::Value& json,
-               const absl::TimeZone& default_time_zone) override {
+  absl::Status Parse(const Json::Value& json,
+                     const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       return this->InitializeNull();
     }
@@ -786,7 +791,7 @@ class DecimalWrapper : public StringInputWrapper<DecimalType> {
                      "have been escaped prior to parsing by JsonFormat."));
   }
 
-  Status ParseString(const std::string& json_string) override {
+  absl::Status ParseString(const std::string& json_string) override {
     FHIR_RETURN_IF_ERROR(this->ValidateString(json_string));
     // TODO: range check
     std::unique_ptr<DecimalType> wrapped = absl::make_unique<DecimalType>();
@@ -799,7 +804,7 @@ class DecimalWrapper : public StringInputWrapper<DecimalType> {
 template <typename PositiveIntType>
 class PositiveIntWrapper : public IntegerTypeWrapper<PositiveIntType> {
  protected:
-  Status ValidateInteger(const int int_value) const {
+  absl::Status ValidateInteger(const int int_value) const {
     return int_value > 0 ? absl::OkStatus()
                          : InvalidArgumentError(absl::StrCat(
                                "Cannot parse ", int_value,
@@ -812,7 +817,7 @@ constexpr uint64_t DAY_IN_US = 24L * 60 * 60 * 1000 * 1000;
 template <typename TimeLike>
 class TimeWrapper : public StringInputWrapper<TimeLike> {
  public:
-  StatusOr<std::string> ToNonNullValueString() const override {
+  absl::StatusOr<std::string> ToNonNullValueString() const override {
     static const std::unordered_map<int, std::string>* const formatters =
         new std::unordered_map<int, std::string>{
             {TimeLike::Precision::Time_Precision_SECOND, "%H:%M:%S"},
@@ -835,7 +840,7 @@ class TimeWrapper : public StringInputWrapper<TimeLike> {
   }
 
  protected:
-  Status ValidateTypeSpecific(
+  absl::Status ValidateTypeSpecific(
       const bool has_no_value_extension) const override {
     const TimeLike* wrapped = this->GetWrapped();
     if (has_no_value_extension) {
@@ -863,7 +868,7 @@ class TimeWrapper : public StringInputWrapper<TimeLike> {
   }
 
  private:
-  Status ParseString(const std::string& json_string) override {
+  absl::Status ParseString(const std::string& json_string) override {
     static LazyRE2 PATTERN{
         "([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])(?:\\.([0-9]+))?"};
     int hours;
@@ -901,7 +906,7 @@ class TimeWrapper : public StringInputWrapper<TimeLike> {
 template <typename UnsignedIntType>
 class UnsignedIntWrapper : public IntegerTypeWrapper<UnsignedIntType> {
  protected:
-  Status ValidateInteger(const int int_value) const {
+  absl::Status ValidateInteger(const int int_value) const {
     return int_value >= 0 ? absl::OkStatus()
                           : InvalidArgumentError(
                                 absl::StrCat("Cannot parse ", int_value,

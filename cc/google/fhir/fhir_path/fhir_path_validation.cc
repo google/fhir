@@ -36,19 +36,16 @@ namespace fhir_path {
 using ::google::fhir::ForEachMessage;
 using ::google::fhir::GetPotentiallyRepeatedMessage;
 using ::google::fhir::PotentiallyRepeatedFieldSize;
-using ::google::fhir::StatusOr;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 
 bool ValidationResults::StrictValidationFn(const ValidationResult& result) {
-  return result.EvaluationResult().ok() &&
-         result.EvaluationResult().value();
+  return result.EvaluationResult().ok() && result.EvaluationResult().value();
 }
 
 bool ValidationResults::RelaxedValidationFn(const ValidationResult& result) {
-  return !result.EvaluationResult().ok() ||
-         result.EvaluationResult().value();
+  return !result.EvaluationResult().ok() || result.EvaluationResult().value();
 }
 
 bool ValidationResults::IsValid(
@@ -171,12 +168,11 @@ ValidationResult ValidateConstraint(
     const absl::string_view node_parent_path,
     const internal::WorkspaceMessage& message,
     const CompiledExpression& expression) {
-  StatusOr<EvaluationResult> expr_result = expression.Evaluate(message);
+  absl::StatusOr<EvaluationResult> expr_result = expression.Evaluate(message);
   return ValidationResult(std::string(constraint_parent_path),
                           std::string(node_parent_path), expression.fhir_path(),
-                          expr_result.ok()
-                              ? expr_result.value().GetBoolean()
-                              : expr_result.status());
+                          expr_result.ok() ? expr_result.value().GetBoolean()
+                                           : expr_result.status());
 }
 
 std::string PathTerm(const Message& message, const FieldDescriptor* field) {
@@ -239,7 +235,7 @@ void FhirPathValidator::Validate(absl::string_view constraint_path,
   }
 }
 
-Status ValidationResults::LegacyValidationResult() const {
+absl::Status ValidationResults::LegacyValidationResult() const {
   if (IsValid(&ValidationResults::RelaxedValidationFn)) {
     return absl::OkStatus();
   }

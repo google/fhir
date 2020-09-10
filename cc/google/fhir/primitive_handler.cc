@@ -28,9 +28,9 @@ using primitives_internal::PrimitiveWrapper;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::Message;
 
-::google::fhir::Status PrimitiveHandler::ParseInto(const Json::Value& json,
-                                                   const absl::TimeZone tz,
-                                                   Message* target) const {
+::absl::Status PrimitiveHandler::ParseInto(const Json::Value& json,
+                                           const absl::TimeZone tz,
+                                           Message* target) const {
   FHIR_RETURN_IF_ERROR(CheckVersion(*target));
 
   if (json.type() == Json::ValueType::arrayValue ||
@@ -44,12 +44,12 @@ using ::google::protobuf::Message;
   return wrapper->MergeInto(target);
 }
 
-::google::fhir::Status PrimitiveHandler::ParseInto(const Json::Value& json,
-                                                   Message* target) const {
+::absl::Status PrimitiveHandler::ParseInto(const Json::Value& json,
+                                           Message* target) const {
   return ParseInto(json, absl::UTCTimeZone(), target);
 }
 
-StatusOr<JsonPrimitive> PrimitiveHandler::WrapPrimitiveProto(
+absl::StatusOr<JsonPrimitive> PrimitiveHandler::WrapPrimitiveProto(
     const Message& proto) const {
   FHIR_RETURN_IF_ERROR(CheckVersion(proto));
 
@@ -67,7 +67,7 @@ StatusOr<JsonPrimitive> PrimitiveHandler::WrapPrimitiveProto(
   return JsonPrimitive{value, nullptr};
 }
 
-Status PrimitiveHandler::ValidatePrimitive(
+absl::Status PrimitiveHandler::ValidatePrimitive(
     const ::google::protobuf::Message& primitive) const {
   FHIR_RETURN_IF_ERROR(CheckVersion(primitive));
 
@@ -84,11 +84,12 @@ Status PrimitiveHandler::ValidatePrimitive(
   return wrapper->ValidateProto();
 }
 
-Status PrimitiveHandler::CheckVersion(const Message& message) const {
+absl::Status PrimitiveHandler::CheckVersion(const Message& message) const {
   return CheckVersion(message.GetDescriptor());
 }
 
-Status PrimitiveHandler::CheckVersion(const Descriptor* descriptor) const {
+absl::Status PrimitiveHandler::CheckVersion(
+    const Descriptor* descriptor) const {
   auto test_version = GetFhirVersion(descriptor);
   if (test_version != version_) {
     return InvalidArgumentError(

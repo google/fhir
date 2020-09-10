@@ -30,6 +30,7 @@
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/escaping.h"
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
@@ -51,8 +52,6 @@ namespace google {
 namespace fhir {
 
 using ::absl::InvalidArgumentError;
-using ::google::fhir::Status;
-using ::google::fhir::StatusOr;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
@@ -60,7 +59,7 @@ using ::google::protobuf::Reflection;
 
 namespace primitives_internal {
 
-StatusOr<bool> HasPrimitiveHasNoValue(const Message& message) {
+absl::StatusOr<bool> HasPrimitiveHasNoValue(const Message& message) {
   const FieldDescriptor* field =
       message.GetDescriptor()->FindFieldByName("extension");
   std::vector<const Message*> no_value_extensions;
@@ -92,7 +91,7 @@ StatusOr<bool> HasPrimitiveHasNoValue(const Message& message) {
 
 }  // namespace primitives_internal
 
-Status BuildHasNoValueExtension(Message* extension) {
+absl::Status BuildHasNoValueExtension(Message* extension) {
   const Descriptor* descriptor = extension->GetDescriptor();
   const Reflection* reflection = extension->GetReflection();
 

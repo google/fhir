@@ -53,8 +53,6 @@ using ::absl::InvalidArgumentError;
 using ::google::fhir::IsChoiceType;
 using ::google::fhir::IsPrimitive;
 using ::google::fhir::IsReference;
-using ::google::fhir::Status;
-using ::google::fhir::StatusOr;
 using ::google::protobuf::Any;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
@@ -82,7 +80,7 @@ class Printer {
         add_newlines_(add_newlines),
         json_format_(json_format) {}
 
-  StatusOr<std::string> WriteMessage(const Message& message) {
+  absl::StatusOr<std::string> WriteMessage(const Message& message) {
     output_.clear();
     current_indent_ = 0;
     FHIR_RETURN_IF_ERROR(PrintNonPrimitive(message));
@@ -116,7 +114,7 @@ class Printer {
     absl::StrAppend(&output_, "\"", name, "\": ");
   }
 
-  Status PrintNonPrimitive(const Message& proto) {
+  absl::Status PrintNonPrimitive(const Message& proto) {
     if (IsReference(proto.GetDescriptor()) && json_format_ == kFormatPure) {
       // For printing reference, we don't want typed reference fields,
       // just standard FHIR reference fields.
@@ -136,7 +134,7 @@ class Printer {
     return PrintStandardNonPrimitive(proto);
   }
 
-  Status PrintStandardNonPrimitive(const Message& proto) {
+  absl::Status PrintStandardNonPrimitive(const Message& proto) {
     const Descriptor* descriptor = proto.GetDescriptor();
     const Reflection* reflection = proto.GetReflection();
 
@@ -194,7 +192,7 @@ class Printer {
     return absl::OkStatus();
   }
 
-  Status PrintContainedResource(const Message& proto) {
+  absl::Status PrintContainedResource(const Message& proto) {
     std::vector<const FieldDescriptor*> set_fields;
     proto.GetReflection()->ListFields(proto, &set_fields);
 
@@ -213,8 +211,8 @@ class Printer {
     return absl::OkStatus();
   }
 
-  Status PrintField(const Message& containing_proto,
-                    const FieldDescriptor* field) {
+  absl::Status PrintField(const Message& containing_proto,
+                          const FieldDescriptor* field) {
     if (field->containing_type() != containing_proto.GetDescriptor()) {
       return InvalidArgumentError(
           absl::StrCat("Field ", field->full_name(), " not found on ",
@@ -260,8 +258,8 @@ class Printer {
     return absl::OkStatus();
   }
 
-  Status PrintPrimitiveField(const Message& proto,
-                             const std::string& field_name) {
+  absl::Status PrintPrimitiveField(const Message& proto,
+                                   const std::string& field_name) {
     // TODO: check for ReferenceId using an annotation.
     if (json_format_ == kFormatAnalytic &&
         proto.GetDescriptor()->name() == "ReferenceId") {
@@ -292,8 +290,8 @@ class Printer {
     return absl::OkStatus();
   }
 
-  Status PrintChoiceTypeField(const Message& choice_container,
-                              const std::string& json_name) {
+  absl::Status PrintChoiceTypeField(const Message& choice_container,
+                                    const std::string& json_name) {
     const google::protobuf::Reflection* choice_reflection =
         choice_container.GetReflection();
     const google::protobuf::Descriptor* choice_descriptor =
@@ -327,8 +325,8 @@ class Printer {
     return absl::OkStatus();
   }
 
-  Status PrintRepeatedPrimitiveField(const Message& containing_proto,
-                                     const FieldDescriptor* field) {
+  absl::Status PrintRepeatedPrimitiveField(const Message& containing_proto,
+                                           const FieldDescriptor* field) {
     if (field->containing_type() != containing_proto.GetDescriptor()) {
       return InvalidArgumentError(
           absl::StrCat("Field ", field->full_name(), " not found on ",
@@ -400,7 +398,7 @@ class Printer {
   // Does this by making a copy of the original, clearing the coding field,
   // and then coping all codings on the original (profiled and unprofiled)
   // onto the coding field of the copy.
-  StatusOr<std::unique_ptr<Message>> MakeAnalyticCodeableConcept(
+  absl::StatusOr<std::unique_ptr<Message>> MakeAnalyticCodeableConcept(
       const Message& profiled_codeable_concept) {
     auto analytic_codeable_concept =
         absl::WrapUnique(profiled_codeable_concept.New());
@@ -448,7 +446,7 @@ class Printer {
   // If reference is typed Returns a unique pointer to a new standardized
   // reference
   // Returns nullptr if reference is alrady standard.
-  StatusOr<std::unique_ptr<Message>> StandardizeReference(
+  absl::StatusOr<std::unique_ptr<Message>> StandardizeReference(
       const Message& reference) {
     const Descriptor* descriptor = reference.GetDescriptor();
     const Reflection* reflection = reference.GetReflection();
@@ -489,7 +487,8 @@ class Printer {
   int current_indent_;
 };
 
-StatusOr<std::string> WriteMessage(Printer printer, const Message& message) {
+absl::StatusOr<std::string> WriteMessage(Printer printer,
+                                         const Message& message) {
   if (IsProfile(message.GetDescriptor())) {
     // Unprofile before writing, since JSON should be based on raw proto
     // Note that these are "lenient" profilings, because it doesn't make sense
@@ -521,7 +520,7 @@ StatusOr<std::string> WriteMessage(Printer printer, const Message& message) {
 
 }  // namespace internal
 
-::google::fhir::StatusOr<std::string> Printer::PrintFhirPrimitive(
+::absl::StatusOr<std::string> Printer::PrintFhirPrimitive(
     const Message& primitive_message) const {
   FHIR_ASSIGN_OR_RETURN(
       const JsonPrimitive& primitive,
@@ -529,27 +528,27 @@ StatusOr<std::string> WriteMessage(Printer printer, const Message& message) {
   return primitive.value;
 }
 
-StatusOr<std::string> Printer::PrettyPrintFhirToJsonString(
+absl::StatusOr<std::string> Printer::PrettyPrintFhirToJsonString(
     const Message& fhir_proto) const {
   internal::Printer printer{primitive_handler_, 2, true, internal::kFormatPure};
   return WriteMessage(printer, fhir_proto);
 }
 
-StatusOr<std::string> Printer::PrintFhirToJsonString(
+absl::StatusOr<std::string> Printer::PrintFhirToJsonString(
     const Message& fhir_proto) const {
   internal::Printer printer{primitive_handler_, 0, false,
                             internal::kFormatPure};
   return WriteMessage(printer, fhir_proto);
 }
 
-StatusOr<std::string> Printer::PrintFhirToJsonStringForAnalytics(
+absl::StatusOr<std::string> Printer::PrintFhirToJsonStringForAnalytics(
     const Message& fhir_proto) const {
   internal::Printer printer{primitive_handler_, 0, false,
                             internal::kFormatAnalytic};
   return printer.WriteMessage(fhir_proto);
 }
 
-StatusOr<std::string> Printer::PrettyPrintFhirToJsonStringForAnalytics(
+absl::StatusOr<std::string> Printer::PrettyPrintFhirToJsonStringForAnalytics(
     const Message& fhir_proto) const {
   internal::Printer printer{primitive_handler_, 2, true,
                             internal::kFormatAnalytic};

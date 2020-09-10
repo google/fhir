@@ -43,7 +43,8 @@ namespace {
 
 // Given a profiled resource descriptor, return the base resource in the core
 // FHIR spec
-StatusOr<std::string> GetCoreStructureDefinition(const Descriptor* descriptor) {
+absl::StatusOr<std::string> GetCoreStructureDefinition(
+    const Descriptor* descriptor) {
   static absl::node_hash_map<std::string, std::string> memos;
   auto iter = memos.find(descriptor->full_name());
   if (iter != memos.end()) {
@@ -90,8 +91,8 @@ std::unordered_map<std::string, std::unique_ptr<Message>> BuildRegistry() {
 }
 
 template <typename ContainedResourceLike>
-StatusOr<std::unique_ptr<::google::protobuf::Message>> GetBaseResourceInstanceForVersion(
-    const ::google::protobuf::Descriptor* descriptor) {
+absl::StatusOr<std::unique_ptr<::google::protobuf::Message>>
+GetBaseResourceInstanceForVersion(const ::google::protobuf::Descriptor* descriptor) {
   static const std::unordered_map<std::string, std::unique_ptr<Message>>
       registry = BuildRegistry<ContainedResourceLike>();
 
@@ -108,7 +109,7 @@ StatusOr<std::unique_ptr<::google::protobuf::Message>> GetBaseResourceInstanceFo
 
 // TODO: Split into versioned files so we don't pull in both STU3
 // and R4
-StatusOr<std::unique_ptr<::google::protobuf::Message>>
+absl::StatusOr<std::unique_ptr<::google::protobuf::Message>>
 GetBaseResourceInstanceFromDescriptor(const Descriptor* descriptor) {
   switch (GetFhirVersion(descriptor)) {
     case proto::STU3:
@@ -126,12 +127,12 @@ GetBaseResourceInstanceFromDescriptor(const Descriptor* descriptor) {
 
 }  // namespace
 
-StatusOr<std::unique_ptr<::google::protobuf::Message>> GetBaseResourceInstance(
+absl::StatusOr<std::unique_ptr<::google::protobuf::Message>> GetBaseResourceInstance(
     const ::google::protobuf::Message& message) {
   return GetBaseResourceInstanceFromDescriptor(message.GetDescriptor());
 }
 
-StatusOr<const Descriptor*> GetBaseResourceDescriptor(
+absl::StatusOr<const Descriptor*> GetBaseResourceDescriptor(
     const ::google::protobuf::Descriptor* descriptor) {
   FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> instance,
                         GetBaseResourceInstanceFromDescriptor(descriptor));

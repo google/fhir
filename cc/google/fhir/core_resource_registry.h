@@ -26,12 +26,12 @@ namespace fhir {
 
 // Given a profiled resource, returns a new instance of the core (base)
 // resource.
-StatusOr<std::unique_ptr<::google::protobuf::Message>> GetBaseResourceInstance(
+absl::StatusOr<std::unique_ptr<::google::protobuf::Message>> GetBaseResourceInstance(
     const ::google::protobuf::Message& message);
 
 // Given a profiled resource descriptor, returns the descriptor of the core
 // (base) resource.
-StatusOr<const ::google::protobuf::Descriptor*> GetBaseResourceDescriptor(
+absl::StatusOr<const ::google::protobuf::Descriptor*> GetBaseResourceDescriptor(
     const ::google::protobuf::Descriptor* descriptor);
 
 }  // namespace fhir

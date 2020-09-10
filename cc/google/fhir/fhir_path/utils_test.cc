@@ -93,9 +93,9 @@ TEST(Utils, RetrieveFieldR4WrongAny) {
   patient.add_contained()->PackFrom(boolean);
 
   std::vector<const Message*> results;
-  Status result = RetrieveField(
+  absl::Status result = RetrieveField(
       patient, *r4::Patient::GetDescriptor()->FindFieldByName("contained"),
-      [](const Descriptor*) {return nullptr;}, &results);
+      [](const Descriptor*) { return nullptr; }, &results);
 
   EXPECT_EQ(result.code(), absl::StatusCode::kInvalidArgument) << result;
 }

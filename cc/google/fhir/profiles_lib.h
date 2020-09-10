@@ -62,7 +62,7 @@ const unordered_map<std::string, const FieldDescriptor*>& GetExtensionMap(
 // cannot are put into the extension field on the target.
 template <typename ExtensionLike,
           typename CodeLike = FHIR_DATATYPE(ExtensionLike, code)>
-Status PerformExtensionSlicing(const Message& source, Message* target) {
+absl::Status PerformExtensionSlicing(const Message& source, Message* target) {
   const Descriptor* source_descriptor = source.GetDescriptor();
   const Reflection* source_reflection = source.GetReflection();
   const Descriptor* target_descriptor = target->GetDescriptor();
@@ -147,9 +147,9 @@ Status PerformExtensionSlicing(const Message& source, Message* target) {
 }
 
 template <typename ExtensionLike>
-Status UnsliceExtension(const Message& typed_extension,
-                        const FieldDescriptor* source_field,
-                        ExtensionLike* target) {
+absl::Status UnsliceExtension(const Message& typed_extension,
+                              const FieldDescriptor* source_field,
+                              ExtensionLike* target) {
   if (IsProfileOfExtension(typed_extension)) {
     // This a profile on extension, and therefore a complex extension
     return extensions_templates::ConvertToExtension<ExtensionLike>(
@@ -192,20 +192,20 @@ bool CanHaveSlicing(const FieldDescriptor* field) {
              absl::StrCat(field->containing_type()->full_name(), "."), 0) == 0;
 }
 
-StatusOr<const FieldDescriptor*> FindTargetField(
+absl::StatusOr<const FieldDescriptor*> FindTargetField(
     const Message& source, const Message* target,
     const FieldDescriptor* source_field);
 
-Status CopyProtoPrimitiveField(const Message& source,
-                               const FieldDescriptor* source_field,
-                               Message* target,
-                               const FieldDescriptor* target_field);
+absl::Status CopyProtoPrimitiveField(const Message& source,
+                                     const FieldDescriptor* source_field,
+                                     Message* target,
+                                     const FieldDescriptor* target_field);
 
 template <typename ExtensionLike,
           typename CodeableConceptLike = FHIR_DATATYPE(ExtensionLike,
                                                        codeable_concept),
           typename CodeLike = FHIR_DATATYPE(ExtensionLike, code)>
-Status CopyToProfile(const Message& source, Message* target) {
+absl::Status CopyToProfile(const Message& source, Message* target) {
   target->Clear();
   // Handle all the raw extensions on source.  This slot extensions that have
   // profiled fields, and copy the rest over to the target raw extensions field.
@@ -345,7 +345,8 @@ Status CopyToProfile(const Message& source, Message* target) {
 
 template <typename PrimitiveHandlerVersion,
           typename ExtensionLike = typename PrimitiveHandlerVersion::Extension>
-Status ConvertToProfileLenientInternal(const Message& source, Message* target) {
+absl::Status ConvertToProfileLenientInternal(const Message& source,
+                                             Message* target) {
   if (!SharesCommonAncestor(source.GetDescriptor(), target->GetDescriptor())) {
     return absl::InvalidArgumentError(absl::StrCat(
         "Incompatible profile types: ", source.GetDescriptor()->full_name(),
@@ -356,11 +357,11 @@ Status ConvertToProfileLenientInternal(const Message& source, Message* target) {
 
 template <typename PrimitiveHandlerVersion,
           typename ExtensionLike = typename PrimitiveHandlerVersion::Extension>
-Status ConvertToProfileInternal(const Message& source, Message* target) {
+absl::Status ConvertToProfileInternal(const Message& source, Message* target) {
   const auto& status =
       ConvertToProfileLenientInternal<PrimitiveHandlerVersion>(source, target);
   FHIR_RETURN_IF_ERROR(status);
-  Status validation =
+  absl::Status validation =
       ValidateResource(*target, PrimitiveHandlerVersion::GetInstance());
   if (validation.ok()) {
     return absl::OkStatus();

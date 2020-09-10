@@ -84,20 +84,20 @@ const std::vector<std::string> GetCodesWithSystem(
       std::vector<std::string>(), GetCodesWithSystem, concept, target_system);
 }
 
-StatusOr<const std::string> GetOnlyCodeWithSystem(
+absl::StatusOr<const std::string> GetOnlyCodeWithSystem(
     const ::google::protobuf::Message& concept, const absl::string_view system) {
   CODEABLE_CONCEPTS_VERSION_DISPATCH_WITH_STATUS(GetOnlyCodeWithSystem, concept,
                                                  system);
 }
 
-StatusOr<const std::string> ExtractCodeBySystem(
+absl::StatusOr<const std::string> ExtractCodeBySystem(
     const ::google::protobuf::Message& concept, const absl::string_view system) {
   CODEABLE_CONCEPTS_VERSION_DISPATCH_WITH_STATUS(ExtractCodeBySystem, concept,
                                                  system);
 }
 
-Status AddCoding(::google::protobuf::Message* concept, const std::string& system,
-                 const std::string& code) {
+absl::Status AddCoding(::google::protobuf::Message* concept, const std::string& system,
+                       const std::string& code) {
   switch (google::fhir::GetFhirVersion(*concept)) {
     case google::fhir::proto::STU3:
       return stu3::AddCoding(concept, system, code);
@@ -112,8 +112,8 @@ Status AddCoding(::google::protobuf::Message* concept, const std::string& system
   }
 }
 
-Status CopyCodeableConcept(const ::google::protobuf::Message& source,
-                           ::google::protobuf::Message* target) {
+absl::Status CopyCodeableConcept(const ::google::protobuf::Message& source,
+                                 ::google::protobuf::Message* target) {
   CODEABLE_CONCEPTS_VERSION_DISPATCH_WITH_STATUS(CopyCodeableConcept, source,
                                                  target);
 }

@@ -129,9 +129,8 @@ TEST(CodesTest, CodeStringToEnumValue) {
   auto enum_value_descriptor = enum_descriptor->FindValueByName("GREATER_THAN");
   auto result = CodeStringToEnumValue(">", enum_descriptor);
   ASSERT_TRUE(result.ok());
-  EXPECT_EQ(
-      CodeStringToEnumValue(">", enum_descriptor).value()->full_name(),
-      enum_value_descriptor->full_name());
+  EXPECT_EQ(CodeStringToEnumValue(">", enum_descriptor).value()->full_name(),
+            enum_value_descriptor->full_name());
 }
 
 TEST(CodesTest, GetCodeAsString_StringType) {

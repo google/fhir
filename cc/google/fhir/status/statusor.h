@@ -62,8 +62,6 @@ limitations under the License.
 namespace google {
 namespace fhir {
 
-using ::absl::Status;
-
 template <typename T>
 using StatusOr = ::absl::StatusOr<T>;
 

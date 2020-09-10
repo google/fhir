@@ -194,7 +194,7 @@ static const char* const kTimeZoneString = "Australia/Sydney";
 
 // json_path should be relative to fhir root
 template <typename R>
-StatusOr<R> ParseJsonToProto(const std::string& json_path) {
+absl::StatusOr<R> ParseJsonToProto(const std::string& json_path) {
   // Some examples are invalid fhir.
   // See:
   // https://gforge.hl7.org/gf/project/fhir/tracker/?action=TrackerItemEdit&tracker_item_id=24933
@@ -228,7 +228,7 @@ StatusOr<R> ParseJsonToProto(const std::string& json_path) {
 template <typename R>
 void TestParseWithFilepaths(const std::string& proto_path,
                             const std::string& json_path) {
-  StatusOr<R> from_json_status = ParseJsonToProto<R>(json_path);
+  absl::StatusOr<R> from_json_status = ParseJsonToProto<R>(json_path);
   ASSERT_TRUE(from_json_status.ok()) << "Failed parsing: " << json_path << "\n"
                                      << from_json_status.status();
   R from_json = from_json_status.value();
@@ -258,7 +258,8 @@ template <typename R>
 void TestPrintWithFilepaths(const std::string& proto_path,
                             const std::string& json_path) {
   const R proto = ReadR4Proto<R>(proto_path);
-  StatusOr<std::string> from_proto_status = PrettyPrintFhirToJsonString(proto);
+  absl::StatusOr<std::string> from_proto_status =
+      PrettyPrintFhirToJsonString(proto);
   ASSERT_TRUE(from_proto_status.ok())
       << "Failed Printing on: " << proto_path << ": "
       << from_proto_status.status().message();

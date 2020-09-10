@@ -23,25 +23,25 @@ namespace google {
 namespace fhir {
 namespace r4 {
 
-Status ExtensionToMessage(const core::Extension& extension,
-                          ::google::protobuf::Message* message) {
+absl::Status ExtensionToMessage(const core::Extension& extension,
+                                ::google::protobuf::Message* message) {
   return extensions_templates::ExtensionToMessage<core::Extension>(extension,
                                                                    message);
 }
 
-Status ConvertToExtension(const ::google::protobuf::Message& message,
-                          core::Extension* extension) {
+absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
+                                core::Extension* extension) {
   return extensions_templates::ConvertToExtension(message, extension);
 }
 
-Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
-                              core::Extension* extension) {
+absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
+                                    core::Extension* extension) {
   return extensions_templates::SetDatatypeOnExtension(message, extension);
 }
 
-Status ValueToMessage(const ::google::fhir::r4::core::Extension& extension,
-                      ::google::protobuf::Message* message,
-                      const ::google::protobuf::FieldDescriptor* field) {
+absl::Status ValueToMessage(
+    const ::google::fhir::r4::core::Extension& extension,
+    ::google::protobuf::Message* message, const ::google::protobuf::FieldDescriptor* field) {
   return extensions_templates::ValueToMessage(extension, message, field);
 }
 

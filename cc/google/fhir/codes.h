@@ -31,22 +31,22 @@ std::string TitleCaseToUpperUnderscores(const std::string& src);
 
 }
 
-StatusOr<const ::google::protobuf::EnumValueDescriptor*> CodeStringToEnumValue(
+absl::StatusOr<const ::google::protobuf::EnumValueDescriptor*> CodeStringToEnumValue(
     const std::string& code_string,
     const ::google::protobuf::EnumDescriptor* target_enum_type);
 std::string EnumValueToCodeString(
     const ::google::protobuf::EnumValueDescriptor* enum_value);
 
-StatusOr<std::string> GetCodeAsString(const ::google::protobuf::Message& code);
+absl::StatusOr<std::string> GetCodeAsString(const ::google::protobuf::Message& code);
 
-Status CopyCoding(const ::google::protobuf::Message& source, google::protobuf::Message* target);
-Status CopyCode(const ::google::protobuf::Message& source, google::protobuf::Message* target);
+absl::Status CopyCoding(const ::google::protobuf::Message& source,
+                        google::protobuf::Message* target);
+absl::Status CopyCode(const ::google::protobuf::Message& source, google::protobuf::Message* target);
 
-StatusOr<std::string> GetSystemForCode(const ::google::protobuf::Message& code);
-
+absl::StatusOr<std::string> GetSystemForCode(const ::google::protobuf::Message& code);
 
 template <typename TypedResourceTypeCode>
-StatusOr<typename TypedResourceTypeCode::Value> GetCodeForResourceType(
+absl::StatusOr<typename TypedResourceTypeCode::Value> GetCodeForResourceType(
     const ::google::protobuf::Message& resource) {
   const std::string enum_string = codes_internal::TitleCaseToUpperUnderscores(
       resource.GetDescriptor()->name());
@@ -60,7 +60,7 @@ StatusOr<typename TypedResourceTypeCode::Value> GetCodeForResourceType(
 }
 
 template <typename TypedContainedResource>
-StatusOr<const ::google::protobuf::Descriptor*> GetDescriptorForResourceType(
+absl::StatusOr<const ::google::protobuf::Descriptor*> GetDescriptorForResourceType(
     const ::google::protobuf::EnumValueDescriptor* code) {
   const std::string code_string = EnumValueToCodeString(code);
   const ::google::protobuf::OneofDescriptor* resource_oneof =

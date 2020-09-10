@@ -31,30 +31,30 @@ namespace fhir {
 
 namespace internal {
 
-Status PopulateTypedReferenceId(const std::string& resource_id,
-                                const std::string& version,
-                                ::google::protobuf::Message* reference_id);
-StatusOr<const ::google::protobuf::FieldDescriptor*> GetReferenceFieldForResource(
+absl::Status PopulateTypedReferenceId(const std::string& resource_id,
+                                      const std::string& version,
+                                      ::google::protobuf::Message* reference_id);
+absl::StatusOr<const ::google::protobuf::FieldDescriptor*> GetReferenceFieldForResource(
     const ::google::protobuf::Message& reference, const std::string& resource_type);
 
 }  // namespace internal
 
 // Return the full string representation of a reference.
-StatusOr<std::string> ReferenceProtoToString(
+absl::StatusOr<std::string> ReferenceProtoToString(
     const ::google::protobuf::Message& reference);
 
-Status ReferenceStringToProto(const std::string& input,
-                              ::google::protobuf::Message* reference);
+absl::Status ReferenceStringToProto(const std::string& input,
+                                    ::google::protobuf::Message* reference);
 
 template <typename ReferenceType>
-StatusOr<ReferenceType> ReferenceStringToProto(const std::string& input) {
+absl::StatusOr<ReferenceType> ReferenceStringToProto(const std::string& input) {
   ReferenceType reference;
   FHIR_RETURN_IF_ERROR(ReferenceStringToProto(input, &reference));
   return reference;
 }
 
 template <typename ResourceType, typename ReferenceLike>
-StatusOr<std::string> GetResourceIdFromReference(
+absl::StatusOr<std::string> GetResourceIdFromReference(
     const ReferenceLike& reference) {
   auto value = ReferenceProtoToString(reference);
   if (!value.ok()) {
@@ -77,7 +77,7 @@ std::string GetReferenceStringToResource(const ::google::protobuf::Message& mess
 
 // Gets a typed reference to a resource.
 template <typename ReferenceType>
-StatusOr<ReferenceType> GetReferenceProtoToResource(
+absl::StatusOr<ReferenceType> GetReferenceProtoToResource(
     const ::google::protobuf::Message& resource) {
   ReferenceType reference;
   FHIR_ASSIGN_OR_RETURN(const std::string resource_id, GetResourceId(resource));

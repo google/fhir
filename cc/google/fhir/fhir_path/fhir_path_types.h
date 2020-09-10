@@ -36,7 +36,7 @@ enum class FhirPathSystemType {
 // and a FHIRPath primitive type.
 //
 // See https://www.hl7.org/fhir/fhirpath.html#types
-StatusOr<FhirPathSystemType> GetSystemType(
+absl::StatusOr<FhirPathSystemType> GetSystemType(
     const ::google::protobuf::Message& fhir_primitive);
 
 // Returns true if the provided FHIR message converts to System.Integer. False

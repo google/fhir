@@ -36,7 +36,7 @@ class ValidationResult {
   ValidationResult(const std::string& constraint_path,
                    const std::string& node_path,
                    const std::string& fhirpath_constraint,
-                   StatusOr<bool> result)
+                   absl::StatusOr<bool> result)
       : constraint_path_(constraint_path),
         node_path_(node_path),
         fhirpath_constraint_(fhirpath_constraint),
@@ -63,13 +63,13 @@ class ValidationResult {
   //
   // For constraints that fail to compile/evaluate or do not evaluate to a
   // boolean, a status other than OK is returned.
-  StatusOr<bool> EvaluationResult() const { return result_; }
+  absl::StatusOr<bool> EvaluationResult() const { return result_; }
 
  private:
   const std::string constraint_path_;
   const std::string node_path_;
   const std::string fhirpath_constraint_;
-  const StatusOr<bool> result_;
+  const absl::StatusOr<bool> result_;
 };
 
 // A ValidationRule is a function that takes a ValidationResult and returns
@@ -109,7 +109,7 @@ class ValidationResults {
 
   // Returns Status::OK or the status of the first constraint violation
   // encountered.
-  Status LegacyValidationResult() const;
+  absl::Status LegacyValidationResult() const;
 
   // Returns the result for each FHIRPath expressions that was evaluated.
   // TODO: Expose expressions that failed to compile.

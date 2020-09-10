@@ -62,7 +62,6 @@ using ::antlr_parser::FhirPathLexer;
 using ::antlr_parser::FhirPathParser;
 using ::google::fhir::AreSameMessageType;
 using ::google::fhir::JsonPrimitive;
-using ::google::fhir::StatusOr;
 using ::google::fhir::r4::core::Boolean;
 using ::google::fhir::r4::core::Integer;
 using ::google::fhir::r4::core::String;
@@ -81,7 +80,7 @@ constexpr int kDefaultSetBucketCount = 10;
 // a System.Integer
 //
 // See https://www.hl7.org/fhir/fhirpath.html#types
-StatusOr<int32_t> ToSystemInteger(
+absl::StatusOr<int32_t> ToSystemInteger(
     const PrimitiveHandler* primitive_handler, const Message& message) {
   // It isn't necessary to widen the values from 32 to 64 bits when converting
   // a UnsignedInt or PositiveInt to an int32_t because FHIR restricts the
@@ -102,7 +101,7 @@ StatusOr<int32_t> ToSystemInteger(
       absl::StrCat(message.GetTypeName(), " cannot be cast to an integer."));
 }
 
-StatusOr<absl::optional<int32_t>> IntegerOrEmpty(
+absl::StatusOr<absl::optional<int32_t>> IntegerOrEmpty(
     const PrimitiveHandler* primitive_handler,
     const std::vector<WorkspaceMessage>& messages) {
   if (messages.empty()) {
@@ -121,7 +120,7 @@ StatusOr<absl::optional<int32_t>> IntegerOrEmpty(
 }
 
 // See http://hl7.org/fhirpath/N1/#singleton-evaluation-of-collections
-StatusOr<absl::optional<bool>> BooleanOrEmpty(
+absl::StatusOr<absl::optional<bool>> BooleanOrEmpty(
     const PrimitiveHandler* primitive_handler,
     const std::vector<WorkspaceMessage>& messages) {
   if (messages.empty()) {
@@ -145,7 +144,7 @@ StatusOr<absl::optional<bool>> BooleanOrEmpty(
 // Returns the string representation of the provided message if the message is a
 // System.String or a FHIR primitive that implicitly converts to System.String.
 // Otherwise a status other than OK will be returned.
-StatusOr<std::string> MessageToString(const WorkspaceMessage& message) {
+absl::StatusOr<std::string> MessageToString(const WorkspaceMessage& message) {
   if (!IsSystemString(*message.Message())) {
     return InvalidArgumentError("Expression is not a string.");
   }
@@ -157,8 +156,8 @@ StatusOr<std::string> MessageToString(const WorkspaceMessage& message) {
 // Returns the string representation of the provided messages if there is
 // exactly one message in the collection and that message is a System.String or
 // a FHIR primitive that implicitly converts to System.String. Otherwise a
-// status other than OK will be returned.
-StatusOr<std::string> MessagesToString(
+// absl::Status other than OK will be returned.
+absl::StatusOr<std::string> MessagesToString(
     const std::vector<WorkspaceMessage>& messages) {
   if (messages.size() != 1) {
     return InvalidArgumentError("Expression must represent a single value.");
@@ -168,8 +167,8 @@ StatusOr<std::string> MessagesToString(
 }
 
 // Converts decimal or integer container messages to a double value.
-static Status MessageToDouble(const PrimitiveHandler* primitive_handler,
-                              const Message& message, double* value) {
+static absl::Status MessageToDouble(const PrimitiveHandler* primitive_handler,
+                                    const Message& message, double* value) {
   if (IsDecimal(message)) {
     FHIR_ASSIGN_OR_RETURN(std::string string_value,
                           primitive_handler->GetDecimalValue(message));
@@ -208,7 +207,7 @@ std::function<Message*(const Descriptor*)> MakeWorkSpaceMessageFactory(
   };
 }
 
-StatusOr<WorkspaceMessage> WorkspaceMessage::NearestResource() const {
+absl::StatusOr<WorkspaceMessage> WorkspaceMessage::NearestResource() const {
   if (IsResource(result_->GetDescriptor())) {
     return *this;
   }
@@ -242,8 +241,8 @@ class Literal : public ExpressionNode {
           std::function<StatusOr<Message*>()> factory)
       : descriptor_(descriptor), factory_(factory) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     FHIR_ASSIGN_OR_RETURN(Message * value, factory_());
     work_space->DeleteWhenFinished(value);
     results->push_back(WorkspaceMessage(value));
@@ -263,8 +262,8 @@ class EmptyLiteral : public ExpressionNode {
  public:
   EmptyLiteral() {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     return absl::OkStatus();
   }
 
@@ -282,8 +281,8 @@ class ThisReference : public ExpressionNode {
   explicit ThisReference(const Descriptor* descriptor)
       : descriptor_(descriptor) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     results->push_back(work_space->MessageContext());
     return absl::OkStatus();
   }
@@ -300,8 +299,8 @@ class ContextReference : public ExpressionNode {
   explicit ContextReference(const Descriptor* descriptor)
       : descriptor_(descriptor) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     results->push_back(work_space->BottomMessageContext());
     return absl::OkStatus();
   }
@@ -315,8 +314,8 @@ class ContextReference : public ExpressionNode {
 // Expression node for a reference to %resource.
 class ResourceReference : public ExpressionNode {
  public:
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     FHIR_ASSIGN_OR_RETURN(WorkspaceMessage result,
                           work_space->MessageContext().NearestResource());
     results->push_back(result);
@@ -335,8 +334,8 @@ class InvokeTermNode : public ExpressionNode {
                           const std::string& field_name)
       : field_(field), field_name_(field_name) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     const WorkspaceMessage& message = work_space->MessageContext();
     const FieldDescriptor* field =
         field_ != nullptr
@@ -385,8 +384,8 @@ class InvokeExpressionNode : public ExpressionNode {
         field_(field),
         field_name_(field_name) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
 
     FHIR_RETURN_IF_ERROR(
@@ -440,7 +439,7 @@ class InvokeExpressionNode : public ExpressionNode {
 class FunctionNode : public ExpressionNode {
  public:
   template <class T>
-  StatusOr<T*> static Create(
+  absl::StatusOr<T*> static Create(
       const std::shared_ptr<ExpressionNode>& child_expression,
       const std::vector<FhirPathParser::ExpressionContext*>& params,
       FhirPathBaseVisitor* base_context_visitor,
@@ -452,16 +451,16 @@ class FunctionNode : public ExpressionNode {
     return new T(child_expression, compiled_params);
   }
 
-  static StatusOr<std::vector<std::shared_ptr<ExpressionNode>>> CompileParams(
-      const std::vector<FhirPathParser::ExpressionContext*>& params,
-      FhirPathBaseVisitor* base_context_visitor,
-      FhirPathBaseVisitor*) {
+  static absl::StatusOr<std::vector<std::shared_ptr<ExpressionNode>>>
+  CompileParams(const std::vector<FhirPathParser::ExpressionContext*>& params,
+                FhirPathBaseVisitor* base_context_visitor,
+                FhirPathBaseVisitor*) {
     return CompileParams(params, base_context_visitor);
   }
 
-  static StatusOr<std::vector<std::shared_ptr<ExpressionNode>>> CompileParams(
-      const std::vector<FhirPathParser::ExpressionContext*>& params,
-      FhirPathBaseVisitor* visitor) {
+  static absl::StatusOr<std::vector<std::shared_ptr<ExpressionNode>>>
+  CompileParams(const std::vector<FhirPathParser::ExpressionContext*>& params,
+                FhirPathBaseVisitor* visitor) {
     std::vector<std::shared_ptr<ExpressionNode>> compiled_params;
 
     for (auto it = params.begin(); it != params.end(); ++it) {
@@ -478,7 +477,7 @@ class FunctionNode : public ExpressionNode {
 
   // This is the default implementation. FunctionNodes's that need to validate
   // params at compile time should overwrite this definition with their own.
-  static Status ValidateParams(
+  static absl::Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     return absl::OkStatus();
   }
@@ -494,7 +493,7 @@ class FunctionNode : public ExpressionNode {
 
 class ZeroParameterFunctionNode : public FunctionNode {
  public:
-  static Status ValidateParams(
+  static absl::Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     if (!params.empty()) {
       return InvalidArgumentError("Function does not accept any arguments.");
@@ -514,8 +513,8 @@ class ZeroParameterFunctionNode : public FunctionNode {
 
 class SingleParameterFunctionNode : public FunctionNode {
  private:
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     //  requires a single parameter
     if (params_.size() != 1) {
       return InvalidArgumentError("this function requires a single parameter.");
@@ -528,7 +527,7 @@ class SingleParameterFunctionNode : public FunctionNode {
   }
 
  public:
-  static Status ValidateParams(
+  static absl::Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     if (params.size() != 1) {
       return InvalidArgumentError("Function requires exactly one argument.");
@@ -545,16 +544,16 @@ class SingleParameterFunctionNode : public FunctionNode {
     FHIR_DCHECK_OK(ValidateParams(params));
   }
 
-  virtual Status Evaluate(WorkSpace* work_space,
-                          const std::vector<WorkspaceMessage>& first_param,
-                          std::vector<WorkspaceMessage>* results) const = 0;
+  virtual absl::Status Evaluate(
+      WorkSpace* work_space, const std::vector<WorkspaceMessage>& first_param,
+      std::vector<WorkspaceMessage>* results) const = 0;
 };
 
 class SingleValueFunctionNode : public SingleParameterFunctionNode {
  private:
-  Status Evaluate(WorkSpace* work_space,
-                  const std::vector<WorkspaceMessage>& first_param,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        const std::vector<WorkspaceMessage>& first_param,
+                        std::vector<WorkspaceMessage>* results) const override {
     //  requires a single parameter
     if (first_param.size() != 1) {
       return InvalidArgumentError(
@@ -570,7 +569,7 @@ class SingleValueFunctionNode : public SingleParameterFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleParameterFunctionNode(child, params) {}
 
-  virtual Status EvaluateWithParam(
+  virtual absl::Status EvaluateWithParam(
       WorkSpace* work_space, const WorkspaceMessage& param,
       std::vector<WorkspaceMessage>* results) const = 0;
 };
@@ -582,8 +581,8 @@ class ExistsFunction : public ZeroParameterFunctionNode {
                  const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -608,8 +607,8 @@ class NotFunction : public ZeroParameterFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params = {})
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
 
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
@@ -653,8 +652,8 @@ class HasValueFunction : public ZeroParameterFunctionNode {
                    const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
 
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
@@ -678,9 +677,9 @@ class IndexOfFunction : public SingleParameterFunctionNode {
                   const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  const std::vector<WorkspaceMessage>& first_param,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        const std::vector<WorkspaceMessage>& first_param,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -716,7 +715,7 @@ class StringTestFunction : public SingleValueFunctionNode {
                      const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleValueFunctionNode(child, params) {}
 
-  Status EvaluateWithParam(
+  absl::Status EvaluateWithParam(
       WorkSpace* work_space, const WorkspaceMessage& param,
       std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
@@ -785,8 +784,8 @@ class StringTransformationFunction : public ZeroParameterFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -861,7 +860,7 @@ class MatchesFunction : public SingleValueFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleValueFunctionNode(child, params) {}
 
-  Status EvaluateWithParam(
+  absl::Status EvaluateWithParam(
       WorkSpace* work_space, const WorkspaceMessage& param,
       std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
@@ -900,8 +899,8 @@ class ReplaceFunction : public FunctionNode {
                   const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : FunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> pattern_param;
     FHIR_RETURN_IF_ERROR(params_[0]->Evaluate(work_space, &pattern_param));
 
@@ -912,7 +911,7 @@ class ReplaceFunction : public FunctionNode {
                              results);
   }
 
-  Status EvaluateWithParam(
+  absl::Status EvaluateWithParam(
       WorkSpace* work_space, const std::vector<WorkspaceMessage>& pattern_param,
       const std::vector<WorkspaceMessage>& replacement_param,
       std::vector<WorkspaceMessage>* results) const {
@@ -957,7 +956,7 @@ class ReplaceFunction : public FunctionNode {
 
   const Descriptor* ReturnType() const override { return String::descriptor(); }
 
-  static Status ValidateParams(
+  static absl::Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     return params.size() == 2
                ? absl::OkStatus()
@@ -974,8 +973,8 @@ class ReplaceMatchesFunction : public FunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : FunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> pattern_param;
     FHIR_RETURN_IF_ERROR(params_[0]->Evaluate(work_space, &pattern_param));
 
@@ -986,7 +985,7 @@ class ReplaceMatchesFunction : public FunctionNode {
                              results);
   }
 
-  Status EvaluateWithParam(
+  absl::Status EvaluateWithParam(
       WorkSpace* work_space, const std::vector<WorkspaceMessage>& pattern_param,
       const std::vector<WorkspaceMessage>& replacement_param,
       std::vector<WorkspaceMessage>* results) const {
@@ -1021,7 +1020,7 @@ class ReplaceMatchesFunction : public FunctionNode {
 
   const Descriptor* ReturnType() const override { return String::descriptor(); }
 
-  static Status ValidateParams(
+  static absl::Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     if (params.size() != 2) {
       return InvalidArgumentError(
@@ -1039,8 +1038,8 @@ class ToStringFunction : public ZeroParameterFunctionNode {
                    const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1092,8 +1091,8 @@ class LengthFunction : public ZeroParameterFunctionNode {
                  const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1125,8 +1124,8 @@ class EmptyFunction : public ZeroParameterFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1152,8 +1151,8 @@ class CountFunction : public ZeroParameterFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1179,8 +1178,8 @@ class SingleFunction : public ZeroParameterFunctionNode {
                  const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1211,8 +1210,8 @@ class FirstFunction : public ZeroParameterFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1238,8 +1237,8 @@ class LastFunction : public ZeroParameterFunctionNode {
                const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1260,8 +1259,8 @@ class TailFunction : public ZeroParameterFunctionNode {
                const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1283,7 +1282,7 @@ class SkipFunction : public SingleValueFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleValueFunctionNode(child, params) {}
 
-  Status EvaluateWithParam(
+  absl::Status EvaluateWithParam(
       WorkSpace* work_space, const WorkspaceMessage& param,
       std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
@@ -1310,7 +1309,7 @@ class TakeFunction : public SingleValueFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleValueFunctionNode(child, params) {}
 
-  Status EvaluateWithParam(
+  absl::Status EvaluateWithParam(
       WorkSpace* work_space, const WorkspaceMessage& param,
       std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
@@ -1338,7 +1337,7 @@ class TraceFunction : public SingleValueFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleValueFunctionNode(child, params) {}
 
-  Status EvaluateWithParam(
+  absl::Status EvaluateWithParam(
       WorkSpace* work_space, const WorkspaceMessage& param,
       std::vector<WorkspaceMessage>* results) const override {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, results));
@@ -1365,8 +1364,8 @@ class ToIntegerFunction : public ZeroParameterFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1426,8 +1425,8 @@ class ToBooleanFunction : public ZeroParameterFunctionNode {
                     const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1507,8 +1506,8 @@ class ToBooleanFunction : public ZeroParameterFunctionNode {
 // Base class for FHIRPath binary operators.
 class BinaryOperator : public ExpressionNode {
  public:
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> left_results;
     FHIR_RETURN_IF_ERROR(left_->Evaluate(work_space, &left_results));
 
@@ -1523,7 +1522,7 @@ class BinaryOperator : public ExpressionNode {
       : left_(left), right_(right) {}
 
   // Perform the actual boolean evaluation.
-  virtual Status EvaluateOperator(
+  virtual absl::Status EvaluateOperator(
       const std::vector<WorkspaceMessage>& left_results,
       const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
       std::vector<WorkspaceMessage>* out_results) const = 0;
@@ -1541,7 +1540,7 @@ class IndexerExpression : public BinaryOperator {
                     std::shared_ptr<ExpressionNode> right)
       : BinaryOperator(left, right), primitive_handler_(primitive_handler) {}
 
-  Status EvaluateOperator(
+  absl::Status EvaluateOperator(
       const std::vector<WorkspaceMessage>& left_results,
       const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
       std::vector<WorkspaceMessage>* out_results) const override {
@@ -1567,7 +1566,7 @@ class IndexerExpression : public BinaryOperator {
 
 class EqualsOperator : public BinaryOperator {
  public:
-  Status EvaluateOperator(
+  absl::Status EvaluateOperator(
       const std::vector<WorkspaceMessage>& left_results,
       const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
       std::vector<WorkspaceMessage>* out_results) const override {
@@ -1608,16 +1607,15 @@ class EqualsOperator : public BinaryOperator {
       // primitive type (like an enum) to a literal string, which is
       // supported. Therefore we simply convert both to string form
       // and consider them unequal if either is not a string.
-      StatusOr<JsonPrimitive> left_primitive =
+      absl::StatusOr<JsonPrimitive> left_primitive =
           primitive_handler->WrapPrimitiveProto(left);
-      StatusOr<JsonPrimitive> right_primitive =
+      absl::StatusOr<JsonPrimitive> right_primitive =
           primitive_handler->WrapPrimitiveProto(right);
 
       // Comparisons between primitives and non-primitives are valid
       // in FHIRPath and should simply return false rather than an error.
       return left_primitive.ok() && right_primitive.ok() &&
-             left_primitive.value().value ==
-                 right_primitive.value().value;
+             left_primitive.value().value == right_primitive.value().value;
     }
   }
 
@@ -1672,7 +1670,7 @@ class UnionOperator : public BinaryOperator {
                 std::shared_ptr<ExpressionNode> right)
       : BinaryOperator(std::move(left), std::move(right)) {}
 
-  Status EvaluateOperator(
+  absl::Status EvaluateOperator(
       const std::vector<WorkspaceMessage>& left_results,
       const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
       std::vector<WorkspaceMessage>* out_results) const override {
@@ -1711,8 +1709,8 @@ class IsDistinctFunction : public ZeroParameterFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1742,8 +1740,8 @@ class DistinctFunction : public ZeroParameterFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1767,9 +1765,9 @@ class CombineFunction : public SingleParameterFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  const std::vector<WorkspaceMessage>& first_param,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        const std::vector<WorkspaceMessage>& first_param,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1797,7 +1795,7 @@ class CombineFunction : public SingleParameterFunctionNode {
 };
 
 // Factory method for creating FHIRPath's union() function.
-StatusOr<ExpressionNode*> static CreateUnionFunction(
+absl::StatusOr<ExpressionNode*> static CreateUnionFunction(
     const std::shared_ptr<ExpressionNode>& child_expression,
     const std::vector<FhirPathParser::ExpressionContext*>& params,
     FhirPathBaseVisitor* base_context_visitor,
@@ -1816,7 +1814,7 @@ StatusOr<ExpressionNode*> static CreateUnionFunction(
 // Implements the FHIRPath .where() function.
 class WhereFunction : public FunctionNode {
  public:
-  static Status ValidateParams(
+  static absl::Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     if (params.size() != 1) {
       return InvalidArgumentError("Function requires exactly one argument.");
@@ -1825,10 +1823,10 @@ class WhereFunction : public FunctionNode {
     return absl::OkStatus();
   }
 
-  static StatusOr<std::vector<std::shared_ptr<ExpressionNode>>> CompileParams(
-      const std::vector<FhirPathParser::ExpressionContext*>& params,
-      FhirPathBaseVisitor*,
-      FhirPathBaseVisitor* child_context_visitor) {
+  static absl::StatusOr<std::vector<std::shared_ptr<ExpressionNode>>>
+  CompileParams(const std::vector<FhirPathParser::ExpressionContext*>& params,
+                FhirPathBaseVisitor*,
+                FhirPathBaseVisitor* child_context_visitor) {
     return FunctionNode::CompileParams(params, child_context_visitor);
   }
 
@@ -1838,8 +1836,8 @@ class WhereFunction : public FunctionNode {
     FHIR_DCHECK_OK(ValidateParams(params));
   }
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -1851,7 +1849,7 @@ class WhereFunction : public FunctionNode {
       FHIR_RETURN_IF_ERROR(
           params_[0]->Evaluate(&expression_work_space, &param_results));
       FHIR_ASSIGN_OR_RETURN(
-          StatusOr<absl::optional<bool>> allowed,
+          absl::StatusOr<absl::optional<bool>> allowed,
           (BooleanOrEmpty(work_space->GetPrimitiveHandler(), param_results)));
       if (allowed.value().value_or(false)) {
         results->push_back(message);
@@ -1865,7 +1863,7 @@ class WhereFunction : public FunctionNode {
 };
 
 // Factory method for creating FHIRPath's anyTrue() function.
-StatusOr<FunctionNode*> static CreateAnyTrueFunction(
+absl::StatusOr<FunctionNode*> static CreateAnyTrueFunction(
     const std::shared_ptr<ExpressionNode>& child_expression,
     const std::vector<FhirPathParser::ExpressionContext*>& params,
     FhirPathBaseVisitor* base_context_visitor,
@@ -1882,7 +1880,7 @@ StatusOr<FunctionNode*> static CreateAnyTrueFunction(
 }
 
 // Factory method for creating FHIRPath's anyFalse() function.
-StatusOr<FunctionNode*> static CreateAnyFalseFunction(
+absl::StatusOr<FunctionNode*> static CreateAnyFalseFunction(
     const std::shared_ptr<ExpressionNode>& child_expression,
     const std::vector<FhirPathParser::ExpressionContext*>& params,
     FhirPathBaseVisitor* base_context_visitor,
@@ -1901,7 +1899,7 @@ StatusOr<FunctionNode*> static CreateAnyFalseFunction(
 // Implements the FHIRPath .all() function.
 class AllFunction : public FunctionNode {
  public:
-  static Status ValidateParams(
+  static absl::Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     if (params.size() != 1) {
       return InvalidArgumentError("Function requires exactly one argument.");
@@ -1910,10 +1908,10 @@ class AllFunction : public FunctionNode {
     return absl::OkStatus();
   }
 
-  static StatusOr<std::vector<std::shared_ptr<ExpressionNode>>> CompileParams(
-      const std::vector<FhirPathParser::ExpressionContext*>& params,
-      FhirPathBaseVisitor*,
-      FhirPathBaseVisitor* child_context_visitor) {
+  static absl::StatusOr<std::vector<std::shared_ptr<ExpressionNode>>>
+  CompileParams(const std::vector<FhirPathParser::ExpressionContext*>& params,
+                FhirPathBaseVisitor*,
+                FhirPathBaseVisitor* child_context_visitor) {
     return FunctionNode::CompileParams(params, child_context_visitor);
   }
 
@@ -1924,8 +1922,8 @@ class AllFunction : public FunctionNode {
     FHIR_DCHECK_OK(ValidateParams(params));
   }
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
     FHIR_ASSIGN_OR_RETURN(bool result, Evaluate(work_space, child_results));
@@ -1942,7 +1940,7 @@ class AllFunction : public FunctionNode {
   }
 
  private:
-  StatusOr<bool> Evaluate(
+  absl::StatusOr<bool> Evaluate(
       WorkSpace* work_space,
       const std::vector<WorkspaceMessage>& child_results) const {
     for (const WorkspaceMessage& message : child_results) {
@@ -1953,7 +1951,7 @@ class AllFunction : public FunctionNode {
       FHIR_RETURN_IF_ERROR(
           params_[0]->Evaluate(&expression_work_space, &param_results));
       FHIR_ASSIGN_OR_RETURN(
-          StatusOr<absl::optional<bool>> criteria_met,
+          absl::StatusOr<absl::optional<bool>> criteria_met,
           (BooleanOrEmpty(work_space->GetPrimitiveHandler(), param_results)));
       if (!criteria_met.value().value_or(false)) {
         return false;
@@ -1967,7 +1965,7 @@ class AllFunction : public FunctionNode {
 // Implements the FHIRPath .allTrue() function.
 class AllTrueFunction : public AllFunction {
  public:
-  static Status ValidateParams(
+  static absl::Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     return params.empty()
                ? absl::OkStatus()
@@ -1982,7 +1980,7 @@ class AllTrueFunction : public AllFunction {
 // Implements the FHIRPath .allFalse() function.
 class AllFalseFunction : public AllFunction {
  public:
-  static Status ValidateParams(
+  static absl::Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     return params.empty()
                ? absl::OkStatus()
@@ -1998,7 +1996,7 @@ class AllFalseFunction : public AllFunction {
 // Implements the FHIRPath .select() function.
 class SelectFunction : public FunctionNode {
  public:
-  static Status ValidateParams(
+  static absl::Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     if (params.size() != 1) {
       return InvalidArgumentError("Function requires exactly one argument.");
@@ -2007,10 +2005,10 @@ class SelectFunction : public FunctionNode {
     return absl::OkStatus();
   }
 
-  static StatusOr<std::vector<std::shared_ptr<ExpressionNode>>> CompileParams(
-      const std::vector<FhirPathParser::ExpressionContext*>& params,
-      FhirPathBaseVisitor*,
-      FhirPathBaseVisitor* child_context_visitor) {
+  static absl::StatusOr<std::vector<std::shared_ptr<ExpressionNode>>>
+  CompileParams(const std::vector<FhirPathParser::ExpressionContext*>& params,
+                FhirPathBaseVisitor*,
+                FhirPathBaseVisitor* child_context_visitor) {
     return FunctionNode::CompileParams(params, child_context_visitor);
   }
 
@@ -2020,14 +2018,14 @@ class SelectFunction : public FunctionNode {
     FHIR_DCHECK_OK(ValidateParams(params));
   }
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     for (const WorkspaceMessage& message : child_results) {
       work_space->PushMessageContext(message);
-      Status status = params_[0]->Evaluate(work_space, results);
+      absl::Status status = params_[0]->Evaluate(work_space, results);
       work_space->PopMessageContext();
       FHIR_RETURN_IF_ERROR(status);
     }
@@ -2043,10 +2041,10 @@ class SelectFunction : public FunctionNode {
 // Implements the FHIRPath .iif() function.
 class IifFunction : public FunctionNode {
  public:
-  static StatusOr<std::vector<std::shared_ptr<ExpressionNode>>> CompileParams(
-      const std::vector<FhirPathParser::ExpressionContext*>& params,
-      FhirPathBaseVisitor* base_context_visitor,
-      FhirPathBaseVisitor* child_context_visitor) {
+  static absl::StatusOr<std::vector<std::shared_ptr<ExpressionNode>>>
+  CompileParams(const std::vector<FhirPathParser::ExpressionContext*>& params,
+                FhirPathBaseVisitor* base_context_visitor,
+                FhirPathBaseVisitor* child_context_visitor) {
     if (params.size() < 2 || params.size() > 3) {
       return InvalidArgumentError("iif() requires 2 or 3 arugments.");
     }
@@ -2084,8 +2082,8 @@ class IifFunction : public FunctionNode {
     FHIR_DCHECK_OK(ValidateParams(params));
   }
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -2106,7 +2104,7 @@ class IifFunction : public FunctionNode {
     FHIR_RETURN_IF_ERROR(
         params_[0]->Evaluate(&expression_work_space, &param_results));
     FHIR_ASSIGN_OR_RETURN(
-        StatusOr<absl::optional<bool>> criterion_met,
+        absl::StatusOr<absl::optional<bool>> criterion_met,
         (BooleanOrEmpty(work_space->GetPrimitiveHandler(), param_results)));
     if (criterion_met.value().value_or(false)) {
       FHIR_RETURN_IF_ERROR(params_[1]->Evaluate(work_space, results));
@@ -2123,7 +2121,7 @@ class IifFunction : public FunctionNode {
 // Factory method for creating FHIRPath's convertsTo*() function. Type parameter
 // T should be the ExpressionNode type that converts to the type in question.
 template <typename T>
-StatusOr<ExpressionNode*> static CreateConvertsToFunction(
+absl::StatusOr<ExpressionNode*> static CreateConvertsToFunction(
     const std::shared_ptr<ExpressionNode>& child_expression,
     const std::vector<FhirPathParser::ExpressionContext*>& params,
     FhirPathBaseVisitor* base_context_visitor,
@@ -2153,7 +2151,7 @@ StatusOr<ExpressionNode*> static CreateConvertsToFunction(
 // Patient if ofType(DomainResource) is used.
 class OfTypeFunction : public ExpressionNode {
  public:
-  StatusOr<OfTypeFunction*> static Create(
+  absl::StatusOr<OfTypeFunction*> static Create(
       const std::shared_ptr<ExpressionNode>& child_expression,
       const std::vector<FhirPathParser::ExpressionContext*>& params,
       FhirPathBaseVisitor* base_context_visitor,
@@ -2169,8 +2167,8 @@ class OfTypeFunction : public ExpressionNode {
              std::string type_name)
       : child_(child), type_name_(type_name) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -2206,7 +2204,7 @@ class OfTypeFunction : public ExpressionNode {
 // resource is a DomainResource, but this function, as is, will return false.
 class IsFunction : public ExpressionNode {
  public:
-  StatusOr<IsFunction*> static Create(
+  absl::StatusOr<IsFunction*> static Create(
       const std::shared_ptr<ExpressionNode>& child_expression,
       const std::vector<FhirPathParser::ExpressionContext*>& params,
       FhirPathBaseVisitor* base_context_visitor,
@@ -2222,8 +2220,8 @@ class IsFunction : public ExpressionNode {
              std::string type_name)
       : child_(child), type_name_(type_name) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -2266,7 +2264,7 @@ class IsFunction : public ExpressionNode {
 // a Patient is not a DomainResource and return an empty collection.
 class AsFunction : public ExpressionNode {
  public:
-  StatusOr<AsFunction*> static Create(
+  absl::StatusOr<AsFunction*> static Create(
       const std::shared_ptr<ExpressionNode>& child_expression,
       const std::vector<FhirPathParser::ExpressionContext*>& params,
       FhirPathBaseVisitor* base_context_visitor,
@@ -2282,8 +2280,8 @@ class AsFunction : public ExpressionNode {
              std::string type_name)
       : child_(child), type_name_(type_name) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -2317,8 +2315,8 @@ class ChildrenFunction : public ZeroParameterFunctionNode {
                  const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -2350,8 +2348,8 @@ class DescendantsFunction : public ZeroParameterFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -2362,9 +2360,9 @@ class DescendantsFunction : public ZeroParameterFunctionNode {
     return absl::OkStatus();
   }
 
-  Status AppendDescendants(const WorkspaceMessage& parent,
-                           WorkSpace* work_space,
-                           std::vector<WorkspaceMessage>* results) const {
+  absl::Status AppendDescendants(const WorkspaceMessage& parent,
+                                 WorkSpace* work_space,
+                                 std::vector<WorkspaceMessage>* results) const {
     const Descriptor* descriptor = parent.Message()->GetDescriptor();
     if (IsPrimitive(descriptor)) {
       return absl::OkStatus();
@@ -2396,9 +2394,9 @@ class IntersectFunction : public SingleParameterFunctionNode {
       const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleParameterFunctionNode(child, params) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  const std::vector<WorkspaceMessage>& first_param,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        const std::vector<WorkspaceMessage>& first_param,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
@@ -2444,7 +2442,7 @@ class ComparisonOperator : public BinaryOperator {
     kGreaterThanEqualTo
   };
 
-  Status EvaluateOperator(
+  absl::Status EvaluateOperator(
       const std::vector<WorkspaceMessage>& left_results,
       const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
       std::vector<WorkspaceMessage>* out_results) const override {
@@ -2481,7 +2479,7 @@ class ComparisonOperator : public BinaryOperator {
       : BinaryOperator(left, right), comparison_type_(comparison_type) {}
 
  private:
-  StatusOr<absl::optional<bool>> EvalComparison(
+  absl::StatusOr<absl::optional<bool>> EvalComparison(
       const PrimitiveHandler* primitive_handler, const WorkspaceMessage& left,
       const WorkspaceMessage& right) const {
     const Message* left_result = left.Message();
@@ -2489,10 +2487,8 @@ class ComparisonOperator : public BinaryOperator {
 
     if (IsSystemInteger(*left_result) && IsSystemInteger(*right_result)) {
       return EvalIntegerComparison(
-          ToSystemInteger(primitive_handler, *left_result)
-              .value(),
-          ToSystemInteger(primitive_handler, *right_result)
-              .value());
+          ToSystemInteger(primitive_handler, *left_result).value(),
+          ToSystemInteger(primitive_handler, *right_result).value());
     } else if (IsDecimal(*left_result) || IsDecimal(*right_result)) {
       return EvalDecimalComparison(primitive_handler, left_result,
                                    right_result);
@@ -2527,7 +2523,7 @@ class ComparisonOperator : public BinaryOperator {
     }
   }
 
-  StatusOr<absl::optional<bool>> EvalDecimalComparison(
+  absl::StatusOr<absl::optional<bool>> EvalDecimalComparison(
       const PrimitiveHandler* primitive_handler, const Message* left_message,
       const Message* right_message) const {
     // Handle decimal comparisons, converting integer types
@@ -2563,7 +2559,7 @@ class ComparisonOperator : public BinaryOperator {
     return absl::OkStatus();
   }
 
-  StatusOr<absl::optional<bool>> EvalStringComparison(
+  absl::StatusOr<absl::optional<bool>> EvalStringComparison(
       const PrimitiveHandler* primitive_handler,
       const WorkspaceMessage& left_message,
       const WorkspaceMessage& right_message) const {
@@ -2604,7 +2600,7 @@ class ComparisonOperator : public BinaryOperator {
     return original;
   }
 
-  StatusOr<absl::optional<bool>> EvalDateTimeComparison(
+  absl::StatusOr<absl::optional<bool>> EvalDateTimeComparison(
       const PrimitiveHandler* primitive_handler, const Message& left_message,
       const Message& right_message) const {
     FHIR_ASSIGN_OR_RETURN(
@@ -2644,9 +2640,8 @@ class ComparisonOperator : public BinaryOperator {
     }
   }
 
-  StatusOr<absl::optional<bool>> EvalSimpleQuantityComparison(
-      const PrimitiveHandler* primitive_handler,
-      const Message& left_wrapper,
+  absl::StatusOr<absl::optional<bool>> EvalSimpleQuantityComparison(
+      const PrimitiveHandler* primitive_handler, const Message& left_wrapper,
       const Message& right_wrapper) const {
     FHIR_ASSIGN_OR_RETURN(
         std::string left_code,
@@ -2693,7 +2688,7 @@ class ComparisonOperator : public BinaryOperator {
 // Implementation for FHIRPath's addition operator.
 class AdditionOperator : public BinaryOperator {
  public:
-  Status EvaluateOperator(
+  absl::Status EvaluateOperator(
       const std::vector<WorkspaceMessage>& left_results,
       const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
       std::vector<WorkspaceMessage>* out_results) const override {
@@ -2742,7 +2737,7 @@ class AdditionOperator : public BinaryOperator {
       : BinaryOperator(std::move(left), std::move(right)) {}
 
  private:
-  StatusOr<int32_t> EvalIntegerAddition(
+  absl::StatusOr<int32_t> EvalIntegerAddition(
       const PrimitiveHandler* primitive_handler, const Message& left_wrapper,
       const Message& right_wrapper) const {
     FHIR_ASSIGN_OR_RETURN(int32_t left,
@@ -2752,7 +2747,7 @@ class AdditionOperator : public BinaryOperator {
     return left + right;
   }
 
-  StatusOr<std::string> EvalStringAddition(
+  absl::StatusOr<std::string> EvalStringAddition(
       const WorkspaceMessage& left_message,
       const WorkspaceMessage& right_message) const {
     FHIR_ASSIGN_OR_RETURN(std::string left, MessageToString(left_message));
@@ -2765,7 +2760,7 @@ class AdditionOperator : public BinaryOperator {
 // Implementation for FHIRPath's string concatenation operator (&).
 class StrCatOperator : public BinaryOperator {
  public:
-  Status EvaluateOperator(
+  absl::Status EvaluateOperator(
       const std::vector<WorkspaceMessage>& left_results,
       const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
       std::vector<WorkspaceMessage>* out_results) const override {
@@ -2813,8 +2808,8 @@ class PolarityOperator : public ExpressionNode {
                    const std::shared_ptr<ExpressionNode>& operand)
       : operation_(operation), operand_(operand) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> operand_result;
     FHIR_RETURN_IF_ERROR(operand_->Evaluate(work_space, &operand_result));
 
@@ -2890,7 +2885,7 @@ class BooleanOperator : public ExpressionNode {
     results->push_back(WorkspaceMessage(result));
   }
 
-  StatusOr<absl::optional<bool>> EvaluateBooleanNode(
+  absl::StatusOr<absl::optional<bool>> EvaluateBooleanNode(
       std::shared_ptr<ExpressionNode> node, WorkSpace* work_space) const {
     std::vector<WorkspaceMessage> results;
     FHIR_RETURN_IF_ERROR(node->Evaluate(work_space, &results));
@@ -2912,8 +2907,8 @@ class ImpliesOperator : public BooleanOperator {
                   std::shared_ptr<ExpressionNode> right)
       : BooleanOperator(left, right) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> left_result,
                           EvaluateBooleanNode(left_, work_space));
 
@@ -2944,8 +2939,8 @@ class XorOperator : public BooleanOperator {
               std::shared_ptr<ExpressionNode> right)
       : BooleanOperator(left, right) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     // Logic from truth table spec: http://hl7.org/fhirpath/#boolean-logic
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> left_result,
                           EvaluateBooleanNode(left_, work_space));
@@ -2970,8 +2965,8 @@ class OrOperator : public BooleanOperator {
              std::shared_ptr<ExpressionNode> right)
       : BooleanOperator(left, right) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     // Logic from truth table spec: http://hl7.org/fhirpath/#boolean-logic
     // Short circuit and return true on the first true result.
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> left_result,
@@ -3006,8 +3001,8 @@ class AndOperator : public BooleanOperator {
               std::shared_ptr<ExpressionNode> right)
       : BooleanOperator(left, right) {}
 
-  Status Evaluate(WorkSpace* work_space,
-                  std::vector<WorkspaceMessage>* results) const override {
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
     // Logic from truth table spec: http://hl7.org/fhirpath/#boolean-logic
     // Short circuit and return false on the first false result.
     FHIR_ASSIGN_OR_RETURN(absl::optional<bool> left_result,
@@ -3046,7 +3041,7 @@ class ContainsOperator : public BinaryOperator {
                   std::shared_ptr<ExpressionNode> right)
       : BinaryOperator(std::move(left), std::move(right)) {}
 
-  Status EvaluateOperator(
+  absl::Status EvaluateOperator(
       const std::vector<WorkspaceMessage>& left_results,
       const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
       std::vector<WorkspaceMessage>* results) const override {
@@ -3110,7 +3105,7 @@ struct InvocationDefinition {
   const std::vector<FhirPathParser::ExpressionContext*> params;
 };
 
-StatusOr<ExpressionNode*> UnimplementedFunction(
+absl::StatusOr<ExpressionNode*> UnimplementedFunction(
     std::shared_ptr<ExpressionNode>,
     const std::vector<FhirPathParser::ExpressionContext*>&,
     FhirPathBaseVisitor*, FhirPathBaseVisitor*) {
@@ -3570,7 +3565,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     return nullptr;
   }
 
-  StatusOr<std::shared_ptr<Literal>> ParseDateTime(absl::string_view text) {
+  absl::StatusOr<std::shared_ptr<Literal>> ParseDateTime(
+      absl::string_view text) {
     std::string date_time_str;
     std::string subseconds_str;
     std::string time_zone_str;
@@ -3599,7 +3595,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitDateTimeLiteral(
       FhirPathParser::DateTimeLiteralContext* ctx) override {
-    StatusOr<std::shared_ptr<Literal>> status_or_date_time_literal =
+    absl::StatusOr<std::shared_ptr<Literal>> status_or_date_time_literal =
         ParseDateTime(ctx->getText());
     if (status_or_date_time_literal.ok()) {
       return ToAny(status_or_date_time_literal.value());
@@ -3805,7 +3801,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       FhirPathCompilerVisitor child_context_visitor(
           descriptor_stack_, child_expression->ReturnType(),
           primitive_handler_);
-      StatusOr<ExpressionNode*> result = function_factory->second(
+      absl::StatusOr<ExpressionNode*> result = function_factory->second(
           child_expression, params, this, &child_context_visitor);
       if (!result.ok()) {
         this->SetError(absl::InvalidArgumentError(absl::StrCat(
@@ -3872,7 +3868,7 @@ const std::vector<const Message*>& EvaluationResult::GetMessages() const {
   return work_space_->GetResultMessages();
 }
 
-StatusOr<bool> EvaluationResult::GetBoolean() const {
+absl::StatusOr<bool> EvaluationResult::GetBoolean() const {
   auto messages = work_space_->GetResultMessages();
   if (messages.size() != 1) {
     return InvalidArgumentError(
@@ -3881,7 +3877,7 @@ StatusOr<bool> EvaluationResult::GetBoolean() const {
   return work_space_->GetPrimitiveHandler()->GetBooleanValue(*messages[0]);
 }
 
-StatusOr<int32_t> EvaluationResult::GetInteger() const {
+absl::StatusOr<int32_t> EvaluationResult::GetInteger() const {
   auto messages = work_space_->GetResultMessages();
   if (messages.size() != 1) {
     return InvalidArgumentError(
@@ -3890,7 +3886,7 @@ StatusOr<int32_t> EvaluationResult::GetInteger() const {
   return work_space_->GetPrimitiveHandler()->GetIntegerValue(*messages[0]);
 }
 
-StatusOr<std::string> EvaluationResult::GetDecimal() const {
+absl::StatusOr<std::string> EvaluationResult::GetDecimal() const {
   auto messages = work_space_->GetResultMessages();
   if (messages.size() != 1) {
     return InvalidArgumentError(
@@ -3899,7 +3895,7 @@ StatusOr<std::string> EvaluationResult::GetDecimal() const {
   return work_space_->GetPrimitiveHandler()->GetDecimalValue(*messages[0]);
 }
 
-StatusOr<std::string> EvaluationResult::GetString() const {
+absl::StatusOr<std::string> EvaluationResult::GetString() const {
   auto messages = work_space_->GetResultMessages();
   if (messages.size() != 1) {
     return InvalidArgumentError(
@@ -3945,7 +3941,7 @@ CompiledExpression::CompiledExpression(
       root_expression_(root_expression),
       primitive_handler_(primitive_handler) {}
 
-StatusOr<CompiledExpression> CompiledExpression::Compile(
+absl::StatusOr<CompiledExpression> CompiledExpression::Compile(
     const Descriptor* descriptor, const PrimitiveHandler* primitive_handler,
     const std::string& fhir_path) {
   ANTLRInputStream input(fhir_path);
@@ -3966,12 +3962,12 @@ StatusOr<CompiledExpression> CompiledExpression::Compile(
   }
 }
 
-StatusOr<EvaluationResult> CompiledExpression::Evaluate(
+absl::StatusOr<EvaluationResult> CompiledExpression::Evaluate(
     const Message& message) const {
   return Evaluate(internal::WorkspaceMessage(&message));
 }
 
-StatusOr<EvaluationResult> CompiledExpression::Evaluate(
+absl::StatusOr<EvaluationResult> CompiledExpression::Evaluate(
     const internal::WorkspaceMessage& message) const {
   std::vector<internal::WorkspaceMessage> message_context_stack;
   auto work_space = absl::make_unique<internal::WorkSpace>(

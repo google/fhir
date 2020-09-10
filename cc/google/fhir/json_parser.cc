@@ -26,6 +26,7 @@
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
 #include "absl/synchronization/mutex.h"
 #include "google/fhir/annotations.h"
@@ -52,8 +53,6 @@ using ::google::fhir::IsChoiceType;
 using ::google::fhir::IsPrimitive;
 using ::google::fhir::IsReference;
 using ::google::fhir::IsResource;
-using ::google::fhir::Status;
-using ::google::fhir::StatusOr;
 using ::google::fhir::extensions_lib::ClearTypedExtensions;
 using ::google::fhir::proto::FhirVersion;
 using ::google::protobuf::Any;
@@ -140,7 +139,7 @@ std::unique_ptr<FieldMap> BuildResourceTypeMap(const Descriptor* descriptor) {
   return map;
 }
 
-StatusOr<const FieldDescriptor*> GetContainedResourceField(
+absl::StatusOr<const FieldDescriptor*> GetContainedResourceField(
     const Descriptor* contained_resource_desc,
     const std::string& resource_type) {
   static std::unordered_map<std::string, std::unique_ptr<FieldMap>>*
@@ -172,7 +171,7 @@ class Parser {
       : primitive_handler_(primitive_handler),
         default_timezone_(default_timezone) {}
 
-  Status MergeMessage(const Json::Value& value, Message* target) {
+  absl::Status MergeMessage(const Json::Value& value, Message* target) {
     const Descriptor* target_descriptor = target->GetDescriptor();
     // TODO: handle this with an annotation
     if (target_descriptor->name() == "ContainedResource") {
@@ -211,7 +210,8 @@ class Parser {
     return absl::OkStatus();
   }
 
-  Status MergeContainedResource(const Json::Value& value, Message* target) {
+  absl::Status MergeContainedResource(const Json::Value& value,
+                                      Message* target) {
     // We handle contained resources in a special way, because despite
     // internally being a Oneof, it is not acually a choice-type in FHIR. The
     // JSON field name is just "resource", which doesn't give us any clues
@@ -227,9 +227,10 @@ class Parser {
                                    target, contained_field));
   }
 
-  Status MergeChoiceField(const Json::Value& json,
-                          const FieldDescriptor* choice_field,
-                          const std::string& field_name, Message* parent) {
+  absl::Status MergeChoiceField(const Json::Value& json,
+                                const FieldDescriptor* choice_field,
+                                const std::string& field_name,
+                                Message* parent) {
     const Descriptor* choice_type_descriptor = choice_field->message_type();
     const auto& choice_type_field_map = GetFieldMap(choice_type_descriptor);
     std::string choice_field_name = field_name;
@@ -259,8 +260,8 @@ class Parser {
   // the given field on the parent.
   // Note that we cannot just pass the field message, as this behaves
   // differently if the field has been previously set or not.
-  Status MergeField(const Json::Value& json, const FieldDescriptor* field,
-                    Message* parent) {
+  absl::Status MergeField(const Json::Value& json, const FieldDescriptor* field,
+                          Message* parent) {
     const Reflection* parent_reflection = parent->GetReflection();
     // If the field is non-primitive make sure it hasn't been set yet.
     // Note that we allow primitive types to be set already, because FHIR
@@ -343,18 +344,18 @@ class Parser {
     return absl::OkStatus();
   }
 
-  Status AddPrimitiveHasNoValueExtension(Message* message) {
+  absl::Status AddPrimitiveHasNoValueExtension(Message* message) {
     Message* extension = message->GetReflection()->AddMessage(
         message, message->GetDescriptor()->FindFieldByName("extension"));
     return BuildHasNoValueExtension(extension);
   }
 
-  Status ClearPrimitiveHasNoValue(Message* message) {
+  absl::Status ClearPrimitiveHasNoValue(Message* message) {
     return extensions_lib::ClearExtensionsWithUrl(
         primitives_internal::kPrimitiveHasNoValueUrl, message);
   }
 
-  StatusOr<std::unique_ptr<Message>> ParseFieldValue(
+  absl::StatusOr<std::unique_ptr<Message>> ParseFieldValue(
       const FieldDescriptor* field, const Json::Value& json, Message* parent) {
     if (field->type() != FieldDescriptor::Type::TYPE_MESSAGE) {
       return InvalidArgumentError(
@@ -384,7 +385,7 @@ class Parser {
     }
   }
 
-  Status MergeValue(const Json::Value& json, Message* target) {
+  absl::Status MergeValue(const Json::Value& json, Message* target) {
     if (IsPrimitive(target->GetDescriptor())) {
       if (json.isObject()) {
         // This is a primitive type extension.
@@ -421,7 +422,7 @@ class Parser {
   const absl::TimeZone default_timezone_;
 };
 
-StatusOr<Json::Value> ParseJsonValue(const std::string& raw_json) {
+absl::StatusOr<Json::Value> ParseJsonValue(const std::string& raw_json) {
   Json::Reader reader;
   Json::Value value;
   if (!reader.parse(raw_json, value)) {
@@ -433,7 +434,7 @@ StatusOr<Json::Value> ParseJsonValue(const std::string& raw_json) {
 
 }  // namespace internal
 
-Status Parser::MergeJsonFhirStringIntoProto(
+absl::Status Parser::MergeJsonFhirStringIntoProto(
     const std::string& raw_json, Message* target,
     const absl::TimeZone default_timezone, const bool validate) const {
   std::string mutable_raw_json = raw_json;

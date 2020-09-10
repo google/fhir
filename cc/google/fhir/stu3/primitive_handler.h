@@ -20,6 +20,7 @@
 #include <memory>
 
 #include "google/protobuf/descriptor.h"
+#include "absl/status/statusor.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/status/statusor.h"
@@ -37,8 +38,7 @@ class Stu3PrimitiveHandler
   static const Stu3PrimitiveHandler* GetInstance();
 
  protected:
-  ::google::fhir::StatusOr<
-      std::unique_ptr<primitives_internal::PrimitiveWrapper>>
+  ::absl::StatusOr<std::unique_ptr<primitives_internal::PrimitiveWrapper>>
   GetWrapper(const ::google::protobuf::Descriptor* target_descriptor) const override;
 };
 

@@ -237,7 +237,7 @@ std::string RandomValueProvider::GetFullDate() {
       absl::Uniform<int>(bitgen_, 1, 13), absl::Uniform<int>(bitgen_, 1, 29));
 }
 
-Status FhirGenerator::FillPrimitive(
+absl::Status FhirGenerator::FillPrimitive(
     const google::protobuf::FieldDescriptor* field, google::protobuf::Message* message,
     absl::flat_hash_map<const google::protobuf::Descriptor*, int>* recursion_count) {
   int recursion_depth = (*recursion_count)[field->message_type()];
@@ -317,7 +317,7 @@ Status FhirGenerator::FillPrimitive(
   return absl::OkStatus();
 }
 
-Status FhirGenerator::FillReference(
+absl::Status FhirGenerator::FillReference(
     const google::protobuf::FieldDescriptor* field, google::protobuf::Message* message,
     absl::flat_hash_map<const google::protobuf::Descriptor*, int>* recursion_count) {
   // Get the URI field to populate
@@ -388,7 +388,7 @@ bool FhirGenerator::ShouldFill(
                                      (*recursion_count)[field->message_type()]);
 }
 
-Status FhirGenerator::Fill(
+absl::Status FhirGenerator::Fill(
     google::protobuf::Message* message,
     absl::flat_hash_map<const google::protobuf::Descriptor*, int>* recursion_count) {
   // Increment the recursion count for this message type.

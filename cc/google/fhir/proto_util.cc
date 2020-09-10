@@ -28,8 +28,6 @@ namespace google {
 namespace fhir {
 
 using ::absl::InvalidArgumentError;
-using ::absl::Status;
-using ::google::fhir::StatusOr;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
@@ -44,7 +42,7 @@ enum class EmptyFieldsBehavior { ADD_DEFAULT, RETURN_NOT_FOUND };
 // If RETURN_NOT_FOUND, this will return a NOT_FOUND if any part of the path is
 // not set.
 // If ADD_DEFAULT, this will return a default message.
-StatusOr<Message*> GetSubmessageByPathInternal(
+absl::StatusOr<Message*> GetSubmessageByPathInternal(
     Message* message, const std::string& field_path,
     const EmptyFieldsBehavior empty_fields_behavior) {
   const std::string& message_name = message->GetDescriptor()->name();
@@ -134,23 +132,23 @@ bool EndsInIndex(const std::string& field_path) {
 std::string StripIndex(const std::string& field_path) {
   return field_path.substr(0, field_path.find_last_of('['));
 }
-StatusOr<const bool> HasSubmessageByPath(const Message& message,
-                                         const std::string& field_path) {
-  const Status status = GetSubmessageByPath(message, field_path).status();
+absl::StatusOr<const bool> HasSubmessageByPath(const Message& message,
+                                               const std::string& field_path) {
+  const absl::Status status = GetSubmessageByPath(message, field_path).status();
   if (status.code() == ::absl::StatusCode::kInvalidArgument) {
     return status;
   }
   return status.ok();
 }
 
-StatusOr<Message*> GetMutableSubmessageByPath(Message* message,
-                                              const std::string& field_path) {
+absl::StatusOr<Message*> GetMutableSubmessageByPath(
+    Message* message, const std::string& field_path) {
   return GetSubmessageByPathInternal(message, field_path,
                                      EmptyFieldsBehavior::ADD_DEFAULT);
 }
 
-StatusOr<const Message*> GetSubmessageByPath(const Message& message,
-                                             const std::string& field_path) {
+absl::StatusOr<const Message*> GetSubmessageByPath(
+    const Message& message, const std::string& field_path) {
   auto got =
       GetSubmessageByPathInternal(&(const_cast<Message&>(message)), field_path,
                                   EmptyFieldsBehavior::RETURN_NOT_FOUND);
@@ -158,7 +156,7 @@ StatusOr<const Message*> GetSubmessageByPath(const Message& message,
   return const_cast<const Message*>(got.value());
 }
 
-Status ClearFieldByPath(Message* message, const std::string& field_path) {
+absl::Status ClearFieldByPath(Message* message, const std::string& field_path) {
   if (EndsInIndex(field_path)) {
     return InvalidArgumentError(
         absl::StrCat("Cannot clear indexed repeated field: ", field_path));
@@ -244,8 +242,8 @@ bool AreSameMessageType(const Descriptor* a, const Descriptor* b) {
   return a == b || a->full_name() == b->full_name();
 }
 
-Status CopyCommonField(const Message& source, Message* target,
-                       const std::string& field_name) {
+absl::Status CopyCommonField(const Message& source, Message* target,
+                             const std::string& field_name) {
   const Descriptor* source_descriptor = source.GetDescriptor();
   const Descriptor* target_descriptor = target->GetDescriptor();
 
@@ -271,7 +269,7 @@ Status CopyCommonField(const Message& source, Message* target,
   return absl::OkStatus();
 }
 
-Status ClearField(Message* message, const std::string& field_name) {
+absl::Status ClearField(Message* message, const std::string& field_name) {
   const Descriptor* descriptor = message->GetDescriptor();
   const FieldDescriptor* field = descriptor->FindFieldByName(field_name);
 
@@ -284,7 +282,7 @@ Status ClearField(Message* message, const std::string& field_name) {
   return absl::OkStatus();
 }
 
-StatusOr<const google::protobuf::Message*> GetMessageInField(
+absl::StatusOr<const google::protobuf::Message*> GetMessageInField(
     const ::google::protobuf::Message& message, const std::string& field_name) {
   const ::google::protobuf::FieldDescriptor* field =
       message.GetDescriptor()->FindFieldByName(field_name);
@@ -296,7 +294,7 @@ StatusOr<const google::protobuf::Message*> GetMessageInField(
   return &message.GetReflection()->GetMessage(message, field);
 }
 
-StatusOr<google::protobuf::Message*> MutableMessageInField(
+absl::StatusOr<google::protobuf::Message*> MutableMessageInField(
     ::google::protobuf::Message* message, const std::string& field_name) {
   const ::google::protobuf::FieldDescriptor* field =
       message->GetDescriptor()->FindFieldByName(field_name);

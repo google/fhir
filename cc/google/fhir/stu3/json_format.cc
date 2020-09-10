@@ -37,33 +37,35 @@ const Printer* GetPrinter() {
 
 }  // namespace
 
-Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
-                                    google::protobuf::Message* target,
-                                    absl::TimeZone default_timezone,
-                                    const bool validate) {
+absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
+                                          google::protobuf::Message* target,
+                                          absl::TimeZone default_timezone,
+                                          const bool validate) {
   return GetParser()->MergeJsonFhirStringIntoProto(raw_json, target,
                                                    default_timezone, validate);
 }
 
-StatusOr<std::string> PrintFhirPrimitive(const ::google::protobuf::Message& message) {
+absl::StatusOr<std::string> PrintFhirPrimitive(
+    const ::google::protobuf::Message& message) {
   return GetPrinter()->PrintFhirPrimitive(message);
 }
 
-StatusOr<std::string> PrintFhirToJsonString(const google::protobuf::Message& fhir_proto) {
+absl::StatusOr<std::string> PrintFhirToJsonString(
+    const google::protobuf::Message& fhir_proto) {
   return GetPrinter()->PrintFhirToJsonString(fhir_proto);
 }
 
-StatusOr<std::string> PrettyPrintFhirToJsonString(
+absl::StatusOr<std::string> PrettyPrintFhirToJsonString(
     const google::protobuf::Message& fhir_proto) {
   return GetPrinter()->PrettyPrintFhirToJsonString(fhir_proto);
 }
 
-StatusOr<std::string> PrintFhirToJsonStringForAnalytics(
+absl::StatusOr<std::string> PrintFhirToJsonStringForAnalytics(
     const google::protobuf::Message& fhir_proto) {
   return GetPrinter()->PrintFhirToJsonStringForAnalytics(fhir_proto);
 }
 
-StatusOr<std::string> PrettyPrintFhirToJsonStringForAnalytics(
+absl::StatusOr<std::string> PrettyPrintFhirToJsonStringForAnalytics(
     const google::protobuf::Message& fhir_proto) {
   return GetPrinter()->PrettyPrintFhirToJsonStringForAnalytics(fhir_proto);
 }

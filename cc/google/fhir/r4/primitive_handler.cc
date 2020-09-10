@@ -46,8 +46,8 @@ using ::absl::InvalidArgumentError;
 using primitives_internal::PrimitiveWrapper;
 using ::google::protobuf::Descriptor;
 
-StatusOr<std::unique_ptr<PrimitiveWrapper>> R4PrimitiveHandler::GetWrapper(
-    const Descriptor* target_descriptor) const {
+absl::StatusOr<std::unique_ptr<PrimitiveWrapper>>
+R4PrimitiveHandler::GetWrapper(const Descriptor* target_descriptor) const {
   absl::optional<std::unique_ptr<PrimitiveWrapper>> wrapper =
       primitives_internal::GetWrapperForR4Types<
           core::Extension, core::Xhtml, fhirproto::Base64BinarySeparatorStride>(

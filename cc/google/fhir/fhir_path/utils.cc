@@ -39,8 +39,8 @@ bool IsFhirPrimitiveValue(const FieldDescriptor& field) {
          IsPrimitive(field.containing_type());
 }
 
-Status OneofMessageFromContainer(const Message& container_message,
-                                 std::vector<const Message*>* results) {
+absl::Status OneofMessageFromContainer(const Message& container_message,
+                                       std::vector<const Message*>* results) {
   const Reflection* container_reflection = container_message.GetReflection();
   const google::protobuf::OneofDescriptor* oneof_descriptor =
       container_message.GetDescriptor()->oneof_decl(0);
@@ -63,7 +63,7 @@ Status OneofMessageFromContainer(const Message& container_message,
   return absl::OkStatus();
 }
 
-Status RetrieveField(
+absl::Status RetrieveField(
     const Message& root, const FieldDescriptor& field,
     std::function<google::protobuf::Message*(const Descriptor*)> message_factory,
     std::vector<const Message*>* results) {

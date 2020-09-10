@@ -46,8 +46,8 @@ using ::absl::InvalidArgumentError;
 using primitives_internal::PrimitiveWrapper;
 using ::google::protobuf::Descriptor;
 
-StatusOr<std::unique_ptr<PrimitiveWrapper>> Stu3PrimitiveHandler::GetWrapper(
-    const Descriptor* target_descriptor) const {
+absl::StatusOr<std::unique_ptr<PrimitiveWrapper>>
+Stu3PrimitiveHandler::GetWrapper(const Descriptor* target_descriptor) const {
   absl::optional<std::unique_ptr<PrimitiveWrapper>> wrapper =
       primitives_internal::GetWrapperForStu3Types<
           proto::Extension, proto::Xhtml,

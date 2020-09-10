@@ -172,7 +172,7 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionOneFound) {
     }
   )pb");
 
-  StatusOr<Base64BinarySeparatorStride> extracted =
+  absl::StatusOr<Base64BinarySeparatorStride> extracted =
       ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(composition);
 
   Base64BinarySeparatorStride expected;
@@ -221,7 +221,7 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionNoneFound) {
     }
   )pb");
 
-  StatusOr<Base64BinarySeparatorStride> extracted =
+  absl::StatusOr<Base64BinarySeparatorStride> extracted =
       ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(composition);
 
   EXPECT_FALSE(extracted.status().ok());
@@ -275,7 +275,7 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionMultipleFound) {
     }
   )pb");
 
-  StatusOr<Base64BinarySeparatorStride> extracted =
+  absl::StatusOr<Base64BinarySeparatorStride> extracted =
       ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(composition);
 
   EXPECT_FALSE(extracted.status().ok());

@@ -40,7 +40,8 @@ typedef std::function<void(const std::string& system, const std::string& code)>
 typedef std::function<bool(const std::string& system, const std::string& code)>
     CodeBoolFunc;
 typedef std::function<void(const stu3::proto::Coding&)> CodingFunc;
-typedef std::function<Status(const stu3::proto::Coding&)> CodingStatusFunc;
+typedef std::function<absl::Status(const stu3::proto::Coding&)>
+    CodingStatusFunc;
 typedef std::function<bool(const stu3::proto::Coding&)> CodingBoolFunc;
 
 namespace internal {
@@ -100,8 +101,8 @@ void ForEachCoding(const ::google::protobuf::Message& concept, const CodingFunc&
 // Similar to ForEachCoding, but takes a function that returns a status.
 // If the function ever returns anything other than OK,
 // this will halt and return that status.
-Status ForEachCodingWithStatus(const ::google::protobuf::Message& concept,
-                               const CodingStatusFunc& func);
+absl::Status ForEachCodingWithStatus(const ::google::protobuf::Message& concept,
+                                     const CodingStatusFunc& func);
 
 // Gets a vector of all codes with a given system, where codes are represented
 // as strings.
@@ -112,14 +113,14 @@ const std::vector<std::string> GetCodesWithSystem(
 // If no code is found with that system, returns a NotFound status.
 // If more than one code is found with that system, returns AlreadyExists
 // status.
-StatusOr<const std::string> GetOnlyCodeWithSystem(
+absl::StatusOr<const std::string> GetOnlyCodeWithSystem(
     const ::google::protobuf::Message& concept, const absl::string_view system);
 
 // Gets the first code with a given system.
 // This differs from GetOnlyCodeWithSystem in that it doesn't throw an error
 // if there are more than one codes with that syatem.
 template <typename CodeableConceptLike>
-StatusOr<std::string> ExtractCodeBySystem(
+absl::StatusOr<std::string> ExtractCodeBySystem(
     const CodeableConceptLike& codeable_concept,
     absl::string_view system_value) {
   const std::vector<std::string>& codes =
@@ -137,14 +138,15 @@ StatusOr<std::string> ExtractCodeBySystem(
 // Think about this a bit more.  It might just be illegal since a code might
 // fit into two different slices, but might be useful, e.g., if you want
 // to specify a required ICD9 code, but make it easy to add other ICD9 codes.
-Status AddCoding(::google::protobuf::Message* concept, const stu3::proto::Coding& coding);
+absl::Status AddCoding(::google::protobuf::Message* concept,
+                       const stu3::proto::Coding& coding);
 
-Status AddCoding(::google::protobuf::Message* concept, const std::string& system,
-                 const std::string& code);
+absl::Status AddCoding(::google::protobuf::Message* concept, const std::string& system,
+                       const std::string& code);
 
 template <typename CodeableConceptLike>
-Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
-                                 const std::string& system) {
+absl::Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
+                                       const std::string& system) {
   if (IsProfileOfCodeableConcept(*concept)) {
     const ::google::protobuf::FieldDescriptor* profiled_field =
         internal::ProfiledFieldForSystem(*concept, system);
@@ -172,8 +174,8 @@ Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
   return absl::OkStatus();
 }
 
-Status CopyCodeableConcept(const ::google::protobuf::Message& source,
-                           ::google::protobuf::Message* target);
+absl::Status CopyCodeableConcept(const ::google::protobuf::Message& source,
+                                 ::google::protobuf::Message* target);
 
 int CodingSize(const ::google::protobuf::Message& concept);
 
