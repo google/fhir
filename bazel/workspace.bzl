@@ -1,17 +1,10 @@
 """ Provides a function for setting up the FhirProto workspace """
 
-load("@rules_python//python:pip.bzl", "pip3_import", "pip_repositories")
 load("@org_tensorflow//tensorflow:workspace.bzl", "tf_workspace")
 load("@rules_jvm_external//:defs.bzl", "maven_install")
 
 def fhirproto_workspace(core_lib = False):
     """ Sets up FhirProto workspace """
-
-    pip3_import(
-        name = "fhir_bazel_pip_dependencies",
-        requirements = "@com_google_fhir//bazel:requirements.txt",
-    )
-    pip_repositories()
 
     tf_workspace("", "@org_tensorflow")
 

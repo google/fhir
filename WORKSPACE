@@ -6,6 +6,13 @@ fhirproto_dependencies()
 load("//bazel:workspace.bzl", "fhirproto_workspace")
 fhirproto_workspace(core_lib = True)
 
+load("@rules_python//python:pip.bzl", "pip3_import", "pip_repositories")
+pip3_import(
+    name = "fhir_bazel_pip_dependencies",
+    requirements = "//bazel:requirements.txt",
+)
+pip_repositories()
+
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "pip_install")
 pip_install()
 
