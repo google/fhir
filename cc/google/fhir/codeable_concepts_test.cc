@@ -75,19 +75,19 @@ TEST(CodeableConceptsTest, GetCodesWithSystemFixedCode) {
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemUnprofiled) {
   const auto concept = GetConceptStu3();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysf.org").ValueOrDie(),
+  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysf.org").value(),
             "fcode");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemFixedSystem) {
   const auto concept = GetConceptStu3();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysa.org").ValueOrDie(),
+  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysa.org").value(),
             "acode");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemFixedCode) {
   const auto concept = GetConceptStu3();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysc.org").ValueOrDie(),
+  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysc.org").value(),
             "8472");
 }
 
@@ -349,19 +349,19 @@ TEST(CodeableConceptsTest, GetCodesWithSystemFixedCodeR4) {
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemUnprofiledR4) {
   const auto concept = GetConceptR4();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysf.org").ValueOrDie(),
+  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysf.org").value(),
             "fcode");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemFixedSystemR4) {
   const auto concept = GetConceptR4();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysa.org").ValueOrDie(),
+  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysa.org").value(),
             "acode");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemFixedCodeR4) {
   const auto concept = GetConceptR4();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysc.org").ValueOrDie(),
+  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysc.org").value(),
             "8472");
 }
 

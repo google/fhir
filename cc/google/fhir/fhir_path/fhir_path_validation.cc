@@ -43,12 +43,12 @@ using ::google::protobuf::Message;
 
 bool ValidationResults::StrictValidationFn(const ValidationResult& result) {
   return result.EvaluationResult().ok() &&
-         result.EvaluationResult().ValueOrDie();
+         result.EvaluationResult().value();
 }
 
 bool ValidationResults::RelaxedValidationFn(const ValidationResult& result) {
   return !result.EvaluationResult().ok() ||
-         result.EvaluationResult().ValueOrDie();
+         result.EvaluationResult().value();
 }
 
 bool ValidationResults::IsValid(
@@ -95,7 +95,7 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
 
         if (constraint.ok()) {
           constraints->field_expressions.push_back(
-              std::make_pair(field, constraint.ValueOrDie()));
+              std::make_pair(field, constraint.value()));
         } else {
           LOG(WARNING) << "Ignoring field constraint on " << descriptor->name()
                        << "." << field_type->name() << " (" << fhir_path
@@ -151,7 +151,7 @@ void FhirPathValidator::AddMessageConstraints(const Descriptor* descriptor,
     auto constraint =
         CompiledExpression::Compile(descriptor, primitive_handler_, fhir_path);
     if (constraint.ok()) {
-      CompiledExpression expression = constraint.ValueOrDie();
+      CompiledExpression expression = constraint.value();
       constraints->message_expressions.push_back(expression);
     } else {
       LOG(WARNING) << "Ignoring message constraint on " << descriptor->name()
@@ -175,7 +175,7 @@ ValidationResult ValidateConstraint(
   return ValidationResult(std::string(constraint_parent_path),
                           std::string(node_parent_path), expression.fhir_path(),
                           expr_result.ok()
-                              ? expr_result.ValueOrDie().GetBoolean()
+                              ? expr_result.value().GetBoolean()
                               : expr_result.status());
 }
 
@@ -246,7 +246,7 @@ Status ValidationResults::LegacyValidationResult() const {
 
   auto result = find_if(results_.begin(), results_.end(), [](auto result) {
     return !result.EvaluationResult().ok() ||
-           !result.EvaluationResult().ValueOrDie();
+           !result.EvaluationResult().value();
   });
 
   return ::absl::FailedPreconditionError(

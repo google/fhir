@@ -74,7 +74,7 @@ void PrintTo(const EvaluationResult& result, std::ostream* os) {
 
 void PrintTo(const StatusOr<EvaluationResult>& result, std::ostream* os) {
   if (result.ok()) {
-    *os << ::testing::PrintToString(result.ValueOrDie());
+    *os << ::testing::PrintToString(result.value());
   } else {
     *os << "failed to evaluate (" << result.status().code()
         << ") with message \"" << result.status().message() << "\"";
@@ -99,7 +99,7 @@ MATCHER(EvalsToEmpty, "") {
     return false;
   }
 
-  std::vector<const Message*> results = arg.ValueOrDie().GetMessages();
+  std::vector<const Message*> results = arg.value().GetMessages();
 
   if (!results.empty()) {
     *result_listener << "has size of " << results.size();
@@ -120,18 +120,18 @@ MATCHER(EvalsToFalse, "") {
     return false;
   }
 
-  StatusOr<bool> result = arg.ValueOrDie().GetBoolean();
+  StatusOr<bool> result = arg.value().GetBoolean();
   if (!result.ok()) {
     *result_listener << "did not resolve to a boolean: "
                      << result.status().message();
     return false;
   }
 
-  if (result.ValueOrDie()) {
+  if (result.value()) {
     *result_listener << "evaluated to true";
   }
 
-  return !result.ValueOrDie();
+  return !result.value();
 }
 
 // Matcher for StatusOr<EvaluationResult> that checks to see that the evaluation
@@ -145,18 +145,18 @@ MATCHER(EvalsToTrue, "") {
     return false;
   }
 
-  StatusOr<bool> result = arg.ValueOrDie().GetBoolean();
+  StatusOr<bool> result = arg.value().GetBoolean();
   if (!result.ok()) {
     *result_listener << "did not resolve to a boolean: "
                      << result.status().message();
     return false;
   }
 
-  if (!result.ValueOrDie()) {
+  if (!result.value()) {
     *result_listener << "evaluated to false";
   }
 
-  return result.ValueOrDie();
+  return result.value();
 }
 
 // Matcher for StatusOr<EvaluationResult> that checks to see that the evaluation
@@ -166,14 +166,14 @@ MATCHER_P(EvalsToInteger, expected, "") {
     return false;
   }
 
-  StatusOr<int> result = arg.ValueOrDie().GetInteger();
+  StatusOr<int> result = arg.value().GetInteger();
   if (!result.ok()) {
     *result_listener << "did not resolve to a integer: "
                      << result.status().message();
     return false;
   }
 
-  return result.ValueOrDie() == expected;
+  return result.value() == expected;
 }
 
 MATCHER_P(EvalsToStringThatMatches, string_matcher, "") {
@@ -182,14 +182,14 @@ MATCHER_P(EvalsToStringThatMatches, string_matcher, "") {
     return false;
   }
 
-  StatusOr<std::string> result = arg.ValueOrDie().GetString();
+  StatusOr<std::string> result = arg.value().GetString();
   if (!result.ok()) {
     *result_listener << "did not resolve to a string: "
                      << result.status().message();
     return false;
   }
 
-  return string_matcher.impl().MatchAndExplain(result.ValueOrDie(),
+  return string_matcher.impl().MatchAndExplain(result.value(),
                                                result_listener);
 }
 
@@ -306,7 +306,7 @@ TYPED_TEST(FhirPathTest, TestExternalConstants) {
 TYPED_TEST(FhirPathTest, TestExternalConstantsContext) {
   auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
 
-  auto result = TestFixture::Evaluate(test_encounter, "%context").ValueOrDie();
+  auto result = TestFixture::Evaluate(test_encounter, "%context").value();
   EXPECT_THAT(result.GetMessages(),
               UnorderedElementsAreArray({EqualsProto(test_encounter)}));
 }
@@ -316,7 +316,7 @@ TYPED_TEST(FhirPathTest,
   auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
 
   EXPECT_THAT(TestFixture::Evaluate(test_encounter, "%context")
-                  .ValueOrDie()
+                  .value()
                   .GetMessages(),
               UnorderedElementsAreArray({EqualsProto(test_encounter)}));
 }
@@ -331,7 +331,7 @@ TYPED_TEST(FhirPathTest, TestMalformed) {
 TYPED_TEST(FhirPathTest, TestGetDirectChild) {
   auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
   EvaluationResult result =
-      TestFixture::Evaluate(test_encounter, "status").ValueOrDie();
+      TestFixture::Evaluate(test_encounter, "status").value();
 
   EXPECT_THAT(
       result.GetMessages(),
@@ -341,7 +341,7 @@ TYPED_TEST(FhirPathTest, TestGetDirectChild) {
 TYPED_TEST(FhirPathTest, TestGetGrandchild) {
   auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
   EvaluationResult result =
-      TestFixture::Evaluate(test_encounter, "period.start").ValueOrDie();
+      TestFixture::Evaluate(test_encounter, "period.start").value();
 
   EXPECT_THAT(result.GetMessages(), UnorderedElementsAreArray({EqualsProto(
                                         test_encounter.period().start())}));
@@ -359,14 +359,14 @@ TYPED_TEST(FhirPathTest, TestFieldExists) {
   test_encounter.mutable_class_value()->mutable_display()->set_value("foo");
 
   EvaluationResult root_result =
-      TestFixture::Evaluate(test_encounter, "period").ValueOrDie();
+      TestFixture::Evaluate(test_encounter, "period").value();
   EXPECT_THAT(
       root_result.GetMessages(),
       UnorderedElementsAreArray({EqualsProto(test_encounter.period())}));
 
   // Tests the conversion from camelCase to snake_case
   EvaluationResult camel_case_result =
-      TestFixture::Evaluate(test_encounter, "statusHistory").ValueOrDie();
+      TestFixture::Evaluate(test_encounter, "statusHistory").value();
   EXPECT_THAT(camel_case_result.GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(test_encounter.status_history(0))}));
@@ -374,7 +374,7 @@ TYPED_TEST(FhirPathTest, TestFieldExists) {
   // Test that the json_name field annotation is used when searching for a
   // field.
   EvaluationResult json_name_alias_result =
-      TestFixture::Evaluate(test_encounter, "class").ValueOrDie();
+      TestFixture::Evaluate(test_encounter, "class").value();
   EXPECT_THAT(
       json_name_alias_result.GetMessages(),
       UnorderedElementsAreArray({EqualsProto(test_encounter.class_value())}));
@@ -479,7 +479,7 @@ TYPED_TEST(FhirPathTest, TestFunctionChildren) {
       )proto");
 
   EXPECT_THAT(TestFixture::Evaluate(structure_definition, "children()")
-                  .ValueOrDie()
+                  .value()
                   .GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(structure_definition.name()),
@@ -489,7 +489,7 @@ TYPED_TEST(FhirPathTest, TestFunctionChildren) {
 
   EXPECT_THAT(
       TestFixture::Evaluate(structure_definition, "children().element")
-          .ValueOrDie()
+          .value()
           .GetMessages(),
       UnorderedElementsAreArray(
           {EqualsProto(structure_definition.snapshot().element(0)),
@@ -507,7 +507,7 @@ TYPED_TEST(FhirPathTest, TestFunctionDescendants) {
 
   EXPECT_THAT(
       TestFixture::Evaluate(structure_definition, "descendants()")
-          .ValueOrDie()
+          .value()
           .GetMessages(),
       UnorderedElementsAreArray(
           {EqualsProto(structure_definition.name()),
@@ -967,13 +967,13 @@ TYPED_TEST(FhirPathTest, TestFunctionOfTypePrimitives) {
               EvalsToStringThatMatches(StrEq("foo")));
 
   EXPECT_THAT(TestFixture::Evaluate("(true | 1 | 2.0 | 'foo').ofType(Integer)")
-                  .ValueOrDie()
+                  .value()
                   .GetMessages(),
               ElementsAreArray({EqualsProto(
                   ParseFromString<typename TypeParam::Integer>("value: 1"))}));
   EXPECT_THAT(
       TestFixture::Evaluate("(true | 1 | 2.0 | 'foo').ofType(Decimal)")
-          .ValueOrDie()
+          .value()
           .GetMessages(),
       ElementsAreArray({EqualsProto(
           ParseFromString<typename TypeParam::Decimal>("value: '2.0'"))}));
@@ -991,7 +991,7 @@ TYPED_TEST(FhirPathTest, TestFunctionOfTypeResources) {
 
   EvaluationResult as_observation_evaluation_result =
       TestFixture::Evaluate(observation, "$this.ofType(Observation)")
-          .ValueOrDie();
+          .value();
   EXPECT_THAT(as_observation_evaluation_result.GetMessages(),
               ElementsAreArray({EqualsProto(observation)}));
 }
@@ -1008,9 +1008,9 @@ TYPED_TEST(FhirPathTest, TestFunctionAsPrimitives) {
   EXPECT_THAT(TestFixture::Evaluate("1.as(Boolean)"), EvalsToEmpty());
 
   EXPECT_EQ(TestFixture::Evaluate("1.1.as(Decimal)")
-                .ValueOrDie()
+                .value()
                 .GetDecimal()
-                .ValueOrDie(),
+                .value(),
             "1.1");
   EXPECT_THAT(TestFixture::Evaluate("1.1.as(Integer)"), EvalsToEmpty());
   EXPECT_THAT(TestFixture::Evaluate("1.1.as(Boolean)"), EvalsToEmpty());
@@ -1026,7 +1026,7 @@ TYPED_TEST(FhirPathTest, TestFunctionAsResources) {
               EvalsToEmpty());
 
   EvaluationResult as_observation_evaluation_result =
-      TestFixture::Evaluate(observation, "$this.as(Observation)").ValueOrDie();
+      TestFixture::Evaluate(observation, "$this.as(Observation)").value();
   EXPECT_THAT(as_observation_evaluation_result.GetMessages(),
               ElementsAreArray({EqualsProto(observation)}));
 }
@@ -1043,9 +1043,9 @@ TYPED_TEST(FhirPathTest, TestOperatorAsPrimitives) {
   EXPECT_THAT(TestFixture::Evaluate("1 as Boolean"), EvalsToEmpty());
 
   EXPECT_EQ(TestFixture::Evaluate("1.1 as Decimal")
-                .ValueOrDie()
+                .value()
                 .GetDecimal()
-                .ValueOrDie(),
+                .value(),
             "1.1");
   EXPECT_THAT(TestFixture::Evaluate("1.1 as Integer"), EvalsToEmpty());
   EXPECT_THAT(TestFixture::Evaluate("1.1 as Boolean"), EvalsToEmpty());
@@ -1061,7 +1061,7 @@ TYPED_TEST(FhirPathTest, TestOperatorAsResources) {
               EvalsToEmpty());
 
   EvaluationResult as_observation_evaluation_result =
-      TestFixture::Evaluate(observation, "$this as Observation").ValueOrDie();
+      TestFixture::Evaluate(observation, "$this as Observation").value();
   EXPECT_THAT(as_observation_evaluation_result.GetMessages(),
               ElementsAreArray({EqualsProto(observation)}));
 }
@@ -1143,7 +1143,7 @@ TYPED_TEST(FhirPathTest, TestFunctionTailMaintainsOrder) {
   auto code_ghi = ParseFromString<typename TypeParam::Code>("value: 'ghi'");
   EvaluationResult evaluation_result =
       TestFixture::Evaluate(codeable_concept, "coding.tail().code")
-          .ValueOrDie();
+          .value();
   EXPECT_THAT(evaluation_result.GetMessages(),
               ElementsAreArray({EqualsProto(code_def), EqualsProto(code_ghi)}));
 }
@@ -1160,7 +1160,7 @@ TYPED_TEST(FhirPathTest, TestUnion) {
 TYPED_TEST(FhirPathTest, TestUnionDeduplicationPrimitives) {
   EvaluationResult evaluation_result =
       TestFixture::Evaluate("true | false | 1 | 'foo' | 2 | 1 | 'foo'")
-          .ValueOrDie();
+          .value();
   std::vector<const Message*> result = evaluation_result.GetMessages();
 
   auto true_proto = ParseFromString<typename TypeParam::Boolean>("value: true");
@@ -1186,7 +1186,7 @@ TYPED_TEST(FhirPathTest, TestUnionDeduplicationObjects) {
   EvaluationResult evaluation_result =
       TestFixture::Evaluate(test_encounter,
                             ("period | status | status | period"))
-          .ValueOrDie();
+          .value();
   std::vector<const Message*> result = evaluation_result.GetMessages();
 
   ASSERT_THAT(result, UnorderedElementsAreArray(
@@ -1208,7 +1208,7 @@ TYPED_TEST(FhirPathTest, TestUnionFunctionDeduplicationPrimitives) {
       TestFixture::Evaluate(
           "true.union(false).union(1).union('foo').union(2).union(1).union('"
           "foo')")
-          .ValueOrDie();
+          .value();
   std::vector<const Message*> result = evaluation_result.GetMessages();
 
   auto true_proto = ParseFromString<typename TypeParam::Boolean>("value: true");
@@ -1234,7 +1234,7 @@ TYPED_TEST(FhirPathTest, TestUnionFunctionDeduplicationObjects) {
   EvaluationResult evaluation_result =
       TestFixture::Evaluate(test_encounter,
                             "period.union(status).union(status).union(period)")
-          .ValueOrDie();
+          .value();
   std::vector<const Message*> result = evaluation_result.GetMessages();
 
   ASSERT_THAT(result, UnorderedElementsAreArray(
@@ -1251,7 +1251,7 @@ TYPED_TEST(FhirPathTest, TestCombine) {
   auto false_proto =
       ParseFromString<typename TypeParam::Boolean>("value: false");
   EvaluationResult evaluation_result =
-      TestFixture::Evaluate("true.combine(true).combine(false)").ValueOrDie();
+      TestFixture::Evaluate("true.combine(true).combine(false)").value();
   EXPECT_THAT(evaluation_result.GetMessages(),
               UnorderedElementsAreArray({EqualsProto(true_proto),
                                          EqualsProto(true_proto),
@@ -1277,7 +1277,7 @@ TYPED_TEST(FhirPathTest, TestIntersect) {
       ParseFromString<typename TypeParam::Boolean>("value: false");
   EvaluationResult evaluation_result =
       TestFixture::Evaluate("(true | false).intersect(true | false)")
-          .ValueOrDie();
+          .value();
   EXPECT_THAT(evaluation_result.GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(true_proto), EqualsProto(false_proto)}));
@@ -1293,7 +1293,7 @@ TYPED_TEST(FhirPathTest, TestDistinct) {
   auto false_proto =
       ParseFromString<typename TypeParam::Boolean>("value: false");
   EvaluationResult evaluation_result =
-      TestFixture::Evaluate("(true | false).distinct()").ValueOrDie();
+      TestFixture::Evaluate("(true | false).distinct()").value();
   EXPECT_THAT(evaluation_result.GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(true_proto), EqualsProto(false_proto)}));
@@ -1397,7 +1397,7 @@ TYPED_TEST(FhirPathTest, TestWhere) {
   auto code_ghi = ParseFromString<typename TypeParam::Code>("value: 'ghi'");
   EvaluationResult evaluation_result =
       TestFixture::Evaluate(observation, "coding.where(system = 'foo').code")
-          .ValueOrDie();
+          .value();
   EXPECT_THAT(evaluation_result.GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(code_abc), EqualsProto(code_ghi)}));
@@ -1496,7 +1496,7 @@ TYPED_TEST(FhirPathTest, TestAllReadsFieldFromDifferingTypes) {
 TYPED_TEST(FhirPathTest, TestSelect) {
   EvaluationResult evaluation_result =
       TestFixture::Evaluate("(1 | 2 | 3).select(($this > 2) | $this)")
-          .ValueOrDie();
+          .value();
   std::vector<const Message*> result = evaluation_result.GetMessages();
 
   auto true_proto = ParseFromString<typename TypeParam::Boolean>("value: true");
@@ -1787,8 +1787,8 @@ TYPED_TEST(FhirPathTest, TestIntegerLikeComparison) {
 }
 
 TYPED_TEST(FhirPathTest, TestDecimalLiteral) {
-  EvaluationResult result = TestFixture::Evaluate("1.25").ValueOrDie();
-  EXPECT_EQ("1.25", result.GetDecimal().ValueOrDie());
+  EvaluationResult result = TestFixture::Evaluate("1.25").value();
+  EXPECT_EQ("1.25", result.GetDecimal().value());
 }
 
 TYPED_TEST(FhirPathTest, TestDecimalComparisons) {
@@ -1883,7 +1883,7 @@ TYPED_TEST(FhirPathTest, TestDateTimeLiteral) {
   millisecond_precision.set_timezone("Z");
   millisecond_precision.set_precision(DateTime::MILLISECOND);
   EXPECT_THAT(TestFixture::Evaluate("@2014-01-25T14:30:14.559")
-                  .ValueOrDie()
+                  .value()
                   .GetMessages(),
               ElementsAreArray({EqualsProto(millisecond_precision)}));
 
@@ -1892,7 +1892,7 @@ TYPED_TEST(FhirPathTest, TestDateTimeLiteral) {
   second_precision.set_timezone("Z");
   second_precision.set_precision(DateTime::SECOND);
   EXPECT_THAT(
-      TestFixture::Evaluate("@2014-01-25T14:30:14").ValueOrDie().GetMessages(),
+      TestFixture::Evaluate("@2014-01-25T14:30:14").value().GetMessages(),
       ElementsAreArray({EqualsProto(second_precision)}));
 
   // TODO: MINUTE precision should be supported.
@@ -1904,19 +1904,19 @@ TYPED_TEST(FhirPathTest, TestDateTimeLiteral) {
               HasStatusCode(StatusCode::kUnimplemented));
 
   EXPECT_THAT(
-      TestFixture::Evaluate("@2014-01-25T").ValueOrDie().GetMessages(),
+      TestFixture::Evaluate("@2014-01-25T").value().GetMessages(),
       ElementsAreArray({EqualsProto(ToDateTime<DateTime, DateTimePrecision>(
           absl::CivilSecond(2014, 1, 25, 0, 0, 0), absl::UTCTimeZone(),
           DateTime::DAY))}));
 
   EXPECT_THAT(
-      TestFixture::Evaluate("@2014-01T").ValueOrDie().GetMessages(),
+      TestFixture::Evaluate("@2014-01T").value().GetMessages(),
       ElementsAreArray({EqualsProto(ToDateTime<DateTime, DateTimePrecision>(
           absl::CivilSecond(2014, 1, 1, 0, 0, 0), absl::UTCTimeZone(),
           DateTime::MONTH))}));
 
   EXPECT_THAT(
-      TestFixture::Evaluate("@2014T").ValueOrDie().GetMessages(),
+      TestFixture::Evaluate("@2014T").value().GetMessages(),
       ElementsAreArray({EqualsProto(ToDateTime<DateTime, DateTimePrecision>(
           absl::CivilSecond(2014, 1, 1, 0, 0, 0), absl::UTCTimeZone(),
           DateTime::YEAR))}));
@@ -2278,53 +2278,53 @@ TYPED_TEST(FhirPathTest, ResourceReference) {
               })proto");
 
   EXPECT_THAT(
-      TestFixture::Evaluate(bundle, "%resource").ValueOrDie().GetMessages(),
+      TestFixture::Evaluate(bundle, "%resource").value().GetMessages(),
       ElementsAreArray({EqualsProto(bundle)}));
 
   EXPECT_THAT(
       TestFixture::Evaluate(bundle, "entry[0].resource.select(%resource)")
-          .ValueOrDie()
+          .value()
           .GetMessages(),
       ElementsAreArray({EqualsProto(bundle.entry(0).resource().patient())}));
 
   EXPECT_THAT(
       TestFixture::Evaluate(
           bundle, "entry[0].resource.select(%resource).select(%resource)")
-          .ValueOrDie()
+          .value()
           .GetMessages(),
       ElementsAreArray({EqualsProto(bundle.entry(0).resource().patient())}));
 
   EXPECT_THAT(
       TestFixture::Evaluate(bundle,
                             "entry[0].resource.deceased.select(%resource)")
-          .ValueOrDie()
+          .value()
           .GetMessages(),
       ElementsAreArray({EqualsProto(bundle.entry(0).resource().patient())}));
 
   EXPECT_THAT(
       TestFixture::Evaluate(bundle, "entry[1].resource.select(%resource)")
-          .ValueOrDie()
+          .value()
           .GetMessages(),
       ElementsAreArray(
           {EqualsProto(bundle.entry(1).resource().observation())}));
 
   EXPECT_THAT(
       TestFixture::Evaluate(bundle, "entry[1].resource.value.select(%resource)")
-          .ValueOrDie()
+          .value()
           .GetMessages(),
       ElementsAreArray(
           {EqualsProto(bundle.entry(1).resource().observation())}));
 
   EXPECT_THAT(
       TestFixture::Evaluate(bundle, "entry[2].resource.select(%resource)")
-          .ValueOrDie()
+          .value()
           .GetMessages(),
       ElementsAreArray({EqualsProto(bundle.entry(2).resource().bundle())}));
 
   EXPECT_THAT(
       TestFixture::Evaluate(
           bundle, "entry[2].resource.entry[0].resource.select(%resource)")
-          .ValueOrDie()
+          .value()
           .GetMessages(),
       ElementsAreArray({EqualsProto(bundle.entry(2)
                                         .resource()
@@ -2334,7 +2334,7 @@ TYPED_TEST(FhirPathTest, ResourceReference) {
                                         .observation())}));
 
   EXPECT_THAT(TestFixture::Evaluate(bundle, "entry.resource.select(%resource)")
-                  .ValueOrDie()
+                  .value()
                   .GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(bundle.entry(0).resource().patient()),
@@ -2363,7 +2363,7 @@ TYPED_TEST(FhirPathTest, ResourceReference) {
                   bundle,
                   "(entry[2].resource.entry[0].resource.value | "
                   "entry[1].resource.value | %resource).select(%resource)")
-                  .ValueOrDie()
+                  .value()
                   .GetMessages(),
               UnorderedElementsAreArray(
                   {EqualsProto(bundle.entry(2)

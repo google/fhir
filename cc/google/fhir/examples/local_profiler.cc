@@ -46,13 +46,13 @@ void ConvertToProfile(const absl::TimeZone time_zone, std::string dir) {
     std::getline(read_stream, line);
     if (!line.length()) continue;
     R raw = google::fhir::r4::JsonFhirStringToProto<Patient>(line, time_zone)
-                .ValueOrDie();
+                .value();
     P profiled;
     auto status = ConvertToProfileLenientR4(raw, &profiled);
     CHECK(status.ok()) << status.message();
     write_stream << google::fhir::r4::PrintFhirToJsonStringForAnalytics(
                         profiled)
-                        .ValueOrDie();
+                        .value();
     write_stream << "\n";
   }
 }

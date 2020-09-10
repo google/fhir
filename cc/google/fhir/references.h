@@ -60,7 +60,7 @@ StatusOr<std::string> GetResourceIdFromReference(
   if (!value.ok()) {
     return value;
   }
-  ::absl::string_view reference_string(value.ValueOrDie());
+  ::absl::string_view reference_string(value.value());
   if (!::absl::ConsumePrefix(
           &reference_string,
           absl::StrCat(ResourceType::descriptor()->name(), "/"))) {

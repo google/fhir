@@ -133,7 +133,7 @@ TEST(ProfilesTest, Normalize) {
     ASSERT_TRUE(normalized.status().ok());
   }
   EXPECT_THAT(
-      normalized.ValueOrDie(),
+      normalized.value(),
       EqualsProto(ReadProto<stu3::testing::TestObservation>(absl::StrCat(
           "testdata/stu3/profiles/"
           "observation_complexextension-profiled-testobservation.prototxt"))));
@@ -154,7 +154,7 @@ TEST(ProfilesTest, NormalizeAndValidate_Valid) {
   StatusOr<TestObservation> normalized = NormalizeAndValidateStu3(unnormalized);
   FHIR_ASSERT_OK(normalized.status());
   EXPECT_THAT(
-      normalized.ValueOrDie(),
+      normalized.value(),
       EqualsProto(ReadProto<TestObservation>(absl::StrCat(
           "testdata/stu3/profiles/"
           "observation_complexextension-profiled-testobservation.prototxt"))));
@@ -188,7 +188,7 @@ TEST(ProfilesTest, NormalizeBundle) {
 
   StatusOr<stu3::testing::Bundle> normalized =
       NormalizeStu3(unnormalized_bundle);
-  EXPECT_THAT(normalized.ValueOrDie(),
+  EXPECT_THAT(normalized.value(),
               EqualsProtoIgnoringReordering(expected_normalized));
 }
 

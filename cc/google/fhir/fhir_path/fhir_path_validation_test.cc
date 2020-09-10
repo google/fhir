@@ -56,7 +56,7 @@ void PrintTo(const ValidationResult& result, std::ostream* os) {
       << result.ConstraintPath() << "\", node_path = " << result.NodePath()
       << "\", result = "
       << (result.EvaluationResult().ok()
-              ? (result.EvaluationResult().ValueOrDie() ? "true" : "false")
+              ? (result.EvaluationResult().value() ? "true" : "false")
               : result.EvaluationResult().status().ToString())
       << "]";
 }
@@ -153,7 +153,7 @@ TYPED_TEST(FhirPathValidationTest, ConstraintViolation) {
                    StrEq("Organization.telecom")),
           Property(&ValidationResult::NodePath,
                    StrEq("Organization.telecom[0]")),
-          ResultOf([](auto x) { return x.EvaluationResult().ValueOrDie(); },
+          ResultOf([](auto x) { return x.EvaluationResult().value(); },
                    Eq(false)))));
 }
 
@@ -227,7 +227,7 @@ TYPED_TEST(FhirPathValidationTest, NestedConstraintViolated) {
                    StrEq("ValueSet.expansion.contains")),
           Property(&ValidationResult::NodePath,
                    StrEq("ValueSet.expansion.contains[0]")),
-          ResultOf([](auto x) { return x.EvaluationResult().ValueOrDie(); },
+          ResultOf([](auto x) { return x.EvaluationResult().value(); },
                    Eq(false)))));
 }
 

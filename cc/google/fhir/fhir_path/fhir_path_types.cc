@@ -80,17 +80,17 @@ StatusOr<FhirPathSystemType> GetSystemType(
 
 bool IsSystemInteger(const Message& message) {
   StatusOr<FhirPathSystemType> type = GetSystemType(message);
-  return type.ok() && type.ValueOrDie() == FhirPathSystemType::kInteger;
+  return type.ok() && type.value() == FhirPathSystemType::kInteger;
 }
 
 bool IsSystemString(const Message& message) {
   StatusOr<FhirPathSystemType> type = GetSystemType(message);
-  return type.ok() && type.ValueOrDie() == FhirPathSystemType::kString;
+  return type.ok() && type.value() == FhirPathSystemType::kString;
 }
 
 bool IsSystemDecimal(const Message& message) {
   StatusOr<FhirPathSystemType> type = GetSystemType(message);
-  return type.ok() && type.ValueOrDie() == FhirPathSystemType::kDecimal;
+  return type.ok() && type.value() == FhirPathSystemType::kDecimal;
 }
 
 }  // namespace google::fhir::fhir_path::internal

@@ -37,7 +37,7 @@ TEST(GetResourceIdFromReferenceTest, PatientId) {
   r.mutable_patient_id()->set_value("123");
   auto got = google::fhir::GetResourceIdFromReference<Patient>(r);
   FHIR_CHECK_OK(got.status());
-  EXPECT_EQ(got.ValueOrDie(), "123");
+  EXPECT_EQ(got.value(), "123");
 }
 
 TEST(GetResourceIdFromReferenceTest, PatientIdAsUri) {
@@ -45,7 +45,7 @@ TEST(GetResourceIdFromReferenceTest, PatientIdAsUri) {
   r.mutable_uri()->set_value("Patient/123");
   auto got = google::fhir::GetResourceIdFromReference<Patient>(r);
   FHIR_CHECK_OK(got.status());
-  EXPECT_EQ(got.ValueOrDie(), "123");
+  EXPECT_EQ(got.value(), "123");
 }
 
 TEST(GetResourceIdFromReferenceTest, EncounterId) {
@@ -53,7 +53,7 @@ TEST(GetResourceIdFromReferenceTest, EncounterId) {
   r.mutable_encounter_id()->set_value("456");
   auto got = google::fhir::GetResourceIdFromReference<Encounter>(r);
   FHIR_CHECK_OK(got.status());
-  EXPECT_EQ(got.ValueOrDie(), "456");
+  EXPECT_EQ(got.value(), "456");
 }
 
 TEST(GetResourceIdFromReferenceTest, EncounterIdAsUri) {
@@ -61,7 +61,7 @@ TEST(GetResourceIdFromReferenceTest, EncounterIdAsUri) {
   r.mutable_uri()->set_value("Encounter/456");
   auto got = google::fhir::GetResourceIdFromReference<Encounter>(r);
   FHIR_CHECK_OK(got.status());
-  EXPECT_EQ(got.ValueOrDie(), "456");
+  EXPECT_EQ(got.value(), "456");
 }
 
 TEST(GetResourceIdFromReferenceTest, ReferenceDoesNotMatch) {

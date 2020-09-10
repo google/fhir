@@ -99,7 +99,7 @@ void TestJsonValidation() {
     if (parsed.ok()) {
       FAIL() << "Invalid string should have failed parsing: " << line_iter
              << " of type " << W::descriptor()->name() << "\nParsed as:\n"
-             << parsed.ValueOrDie().DebugString();
+             << parsed.value().DebugString();
     }
   }
 }
@@ -308,7 +308,7 @@ TEST(PrimitiveHandlerTest, NewDateTimeFromString) {
       R4PrimitiveHandler::GetInstance()->NewDateTime("2019"));
   FHIR_ASSERT_OK(generated_date_time_year_or_status.status());
   std::unique_ptr<::google::protobuf::Message> generated_date_time_year(
-      generated_date_time_year_or_status.ValueOrDie());
+      generated_date_time_year_or_status.value());
   ASSERT_THAT(generated_date_time_year,
               Pointee(EqualsProto(expected_date_time_year)));
 
@@ -321,7 +321,7 @@ TEST(PrimitiveHandlerTest, NewDateTimeFromString) {
       R4PrimitiveHandler::GetInstance()->NewDateTime("2019-02"));
   FHIR_ASSERT_OK(generated_date_time_month_or_status.status());
   std::unique_ptr<::google::protobuf::Message> generated_date_time_month(
-      generated_date_time_month_or_status.ValueOrDie());
+      generated_date_time_month_or_status.value());
   ASSERT_THAT(generated_date_time_month,
               Pointee(EqualsProto(expected_date_time_month)));
 
@@ -335,7 +335,7 @@ TEST(PrimitiveHandlerTest, NewDateTimeFromString) {
           "2019-02-03T11:12:13.1-08:00"));
   FHIR_ASSERT_OK(generated_date_time_ms_or_status.status());
   std::unique_ptr<::google::protobuf::Message> generated_date_time_ms(
-      generated_date_time_ms_or_status.ValueOrDie());
+      generated_date_time_ms_or_status.value());
   ASSERT_THAT(generated_date_time_ms,
               Pointee(EqualsProto(expected_date_time_ms)));
 }
@@ -362,17 +362,17 @@ TEST(PrimitiveHandlerTest, DateTimeGetters) {
   StatusOr<absl::Time> extracted_time =
       R4PrimitiveHandler::GetInstance()->GetDateTimeValue(date_time);
   FHIR_ASSERT_OK(extracted_time.status());
-  ASSERT_EQ(extracted_time.ValueOrDie(), absl::FromUnixMicros(5000));
+  ASSERT_EQ(extracted_time.value(), absl::FromUnixMicros(5000));
 
   StatusOr<absl::TimeZone> extracted_time_zone =
       R4PrimitiveHandler::GetInstance()->GetDateTimeZone(date_time);
   FHIR_ASSERT_OK(extracted_time_zone.status());
-  ASSERT_EQ(extracted_time_zone.ValueOrDie(), kTimeZone);
+  ASSERT_EQ(extracted_time_zone.value(), kTimeZone);
 
   StatusOr<DateTimePrecision> extracted_precision =
       R4PrimitiveHandler::GetInstance()->GetDateTimePrecision(date_time);
   FHIR_ASSERT_OK(extracted_precision.status());
-  ASSERT_EQ(extracted_precision.ValueOrDie(), DateTimePrecision::kDay);
+  ASSERT_EQ(extracted_precision.value(), DateTimePrecision::kDay);
 }
 
 TEST(PrimitiveHandlerTest, GetDateTimeValue) {
@@ -382,7 +382,7 @@ TEST(PrimitiveHandlerTest, GetDateTimeValue) {
   StatusOr<absl::Time> extracted_time =
       R4PrimitiveHandler::GetInstance()->GetDateTimeValue(date_time);
   FHIR_ASSERT_OK(extracted_time.status());
-  ASSERT_EQ(extracted_time.ValueOrDie(), absl::FromUnixMicros(5000));
+  ASSERT_EQ(extracted_time.value(), absl::FromUnixMicros(5000));
 
   ASSERT_NE(::absl::OkStatus(),
             R4PrimitiveHandler::GetInstance()
@@ -397,7 +397,7 @@ TEST(PrimitiveHandlerTest, GetDateTimeZone) {
   StatusOr<absl::TimeZone> extracted_time_zone =
       R4PrimitiveHandler::GetInstance()->GetDateTimeZone(date_time);
   FHIR_ASSERT_OK(extracted_time_zone.status());
-  ASSERT_EQ(extracted_time_zone.ValueOrDie(), kTimeZone);
+  ASSERT_EQ(extracted_time_zone.value(), kTimeZone);
 
   ASSERT_NE(::absl::OkStatus(), R4PrimitiveHandler::GetInstance()
                                     ->GetDateTimeZone(::google::protobuf::Any())
@@ -411,7 +411,7 @@ TEST(PrimitiveHandlerTest, GetDateTimePrecision) {
   StatusOr<DateTimePrecision> extracted_precision =
       R4PrimitiveHandler::GetInstance()->GetDateTimePrecision(date_time);
   FHIR_ASSERT_OK(extracted_precision.status());
-  ASSERT_EQ(extracted_precision.ValueOrDie(), DateTimePrecision::kDay);
+  ASSERT_EQ(extracted_precision.value(), DateTimePrecision::kDay);
 
   ASSERT_NE(::absl::OkStatus(),
             R4PrimitiveHandler::GetInstance()
@@ -427,7 +427,7 @@ TEST(PrimitiveHandlerTest, GetSimpleQuantityValue) {
       R4PrimitiveHandler::GetInstance()->GetSimpleQuantityValue(
           simple_quantity);
   FHIR_ASSERT_OK(extracted_value.status());
-  ASSERT_EQ(extracted_value.ValueOrDie(), "1.5");
+  ASSERT_EQ(extracted_value.value(), "1.5");
 
   ASSERT_NE(::absl::OkStatus(),
             R4PrimitiveHandler::GetInstance()
@@ -442,7 +442,7 @@ TEST(PrimitiveHandlerTest, GetSimpleQuantityCode) {
   StatusOr<std::string> extracted_code =
       R4PrimitiveHandler::GetInstance()->GetSimpleQuantityCode(simple_quantity);
   FHIR_ASSERT_OK(extracted_code.status());
-  ASSERT_EQ(extracted_code.ValueOrDie(), "12345");
+  ASSERT_EQ(extracted_code.value(), "12345");
 
   ASSERT_NE(::absl::OkStatus(),
             R4PrimitiveHandler::GetInstance()
@@ -458,7 +458,7 @@ TEST(PrimitiveHandlerTest, GetSimpleQuantitySystem) {
       R4PrimitiveHandler::GetInstance()->GetSimpleQuantitySystem(
           simple_quantity);
   FHIR_ASSERT_OK(extracted_system.status());
-  ASSERT_EQ(extracted_system.ValueOrDie(), "http://example.org");
+  ASSERT_EQ(extracted_system.value(), "http://example.org");
 
   ASSERT_NE(::absl::OkStatus(),
             R4PrimitiveHandler::GetInstance()
@@ -473,7 +473,7 @@ TEST(PrimitiveHandlerTest, GetCodingDisplay) {
   StatusOr<std::string> extracted_value =
       R4PrimitiveHandler::GetInstance()->GetCodingDisplay(coding);
   FHIR_ASSERT_OK(extracted_value.status());
-  ASSERT_EQ(extracted_value.ValueOrDie(), "Philadelphia Eagles");
+  ASSERT_EQ(extracted_value.value(), "Philadelphia Eagles");
 
   ASSERT_NE(::absl::OkStatus(),
             R4PrimitiveHandler::GetInstance()
@@ -488,7 +488,7 @@ TEST(PrimitiveHandlerTest, GetCodingCode) {
   StatusOr<std::string> extracted_code =
       R4PrimitiveHandler::GetInstance()->GetCodingCode(coding);
   FHIR_ASSERT_OK(extracted_code.status());
-  ASSERT_EQ(extracted_code.ValueOrDie(), "12345");
+  ASSERT_EQ(extracted_code.value(), "12345");
 
   ASSERT_NE(::absl::OkStatus(), R4PrimitiveHandler::GetInstance()
                                     ->GetCodingCode(::google::protobuf::Any())
@@ -502,7 +502,7 @@ TEST(PrimitiveHandlerTest, GetCodingSystem) {
   StatusOr<std::string> extracted_system =
       R4PrimitiveHandler::GetInstance()->GetCodingSystem(coding);
   FHIR_ASSERT_OK(extracted_system.status());
-  ASSERT_EQ(extracted_system.ValueOrDie(), "http://example.org");
+  ASSERT_EQ(extracted_system.value(), "http://example.org");
 
   ASSERT_NE(::absl::OkStatus(), R4PrimitiveHandler::GetInstance()
                                     ->GetCodingSystem(::google::protobuf::Any())

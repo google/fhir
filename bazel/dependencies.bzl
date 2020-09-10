@@ -7,9 +7,9 @@ def fhirproto_dependencies():
 
     http_archive(
         name = "com_google_absl",
-        sha256 = "0db0d26f43ba6806a8a3338da3e646bb581f0ca5359b3a201d8fb8e4752fd5f8",
-        strip_prefix = "abseil-cpp-20200225.1",
-        url = "https://github.com/abseil/abseil-cpp/archive/20200225.1.tar.gz",
+        sha256 = "5dd8763b3616afff3f79fc628e025b612b33c7b6f75ffa38e55125fbddc5bbbd",
+        strip_prefix = "abseil-cpp-0e9921b75a0fdd639a504ec8443fc1fe801becd7",
+        url = "https://github.com/abseil/abseil-cpp/archive/0e9921b75a0fdd639a504ec8443fc1fe801becd7.tar.gz",
     )
 
     http_archive(

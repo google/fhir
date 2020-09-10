@@ -168,7 +168,7 @@ class XhtmlWrapper : public SpecificWrapper<XhtmlLike> {
       *typed_element->mutable_id() = this->GetWrapped()->id();
     }
 
-    return element;
+    return std::move(element);
   }
 
   Status Parse(const Json::Value& json,
@@ -225,7 +225,7 @@ class ExtensibleWrapper : public SpecificWrapper<T> {
       FHIR_RETURN_IF_ERROR(ClearExtensionsWithUrl(internal_url, typed_element));
     }
 
-    return element;
+    return std::move(element);
   }
 
   bool HasValue() const override {

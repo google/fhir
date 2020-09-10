@@ -101,7 +101,7 @@ StatusOr<std::string> GetResourceId(const Message& message) {
 }
 
 bool ResourceHasId(const Message& message) {
-  return !GetResourceId(message).ValueOrDie().empty();
+  return !GetResourceId(message).value().empty();
 }
 
 Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,

@@ -183,7 +183,7 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionOneFound) {
                                                     &expected));
 
   FHIR_ASSERT_OK(extracted.status());
-  EXPECT_THAT(extracted.ValueOrDie(), EqualsProto(expected));
+  EXPECT_THAT(extracted.value(), EqualsProto(expected));
 }
 
 TEST(ExtensionsTest, ExtractOnlyMatchingExtensionNoneFound) {

@@ -60,7 +60,7 @@ TEST(GetResourceFromBundleEntryTest, GetResourceFromEncounter) {
   encounter->mutable_id()->set_value("2468");
 
   const google::protobuf::Message* resource =
-      GetResourceFromBundleEntry(entry).ValueOrDie();
+      GetResourceFromBundleEntry(entry).value();
   auto* desc = resource->GetDescriptor();
   EXPECT_EQ("Encounter", desc->name());
   const Encounter* result_encounter = dynamic_cast<const Encounter*>(resource);
@@ -77,7 +77,7 @@ TEST(GetResourceFromBundleEntryTest, GetResourceFromPatient) {
   patient->mutable_id()->set_value("2468");
 
   const google::protobuf::Message* resource =
-      GetResourceFromBundleEntry(entry).ValueOrDie();
+      GetResourceFromBundleEntry(entry).value();
   auto* desc = resource->GetDescriptor();
   EXPECT_EQ("Patient", desc->name());
   const Patient* result_patient = dynamic_cast<const Patient*>(resource);
@@ -115,21 +115,21 @@ TEST(GetTimeFromTimelikeElement, Date) {
 TEST(BuildTimeZoneFromString, ValidAndInvalidInputs) {
   // Valid cases.
   // "Z" and "UTC" are valid specifiers of the UTC time zone.
-  ASSERT_EQ(BuildTimeZoneFromString("Z").ValueOrDie().name(), "UTC");
-  ASSERT_EQ(BuildTimeZoneFromString("UTC").ValueOrDie().name(), "UTC");
+  ASSERT_EQ(BuildTimeZoneFromString("Z").value().name(), "UTC");
+  ASSERT_EQ(BuildTimeZoneFromString("UTC").value().name(), "UTC");
   // {+,-}HH:MM specifies a UTC offset of up to 14 h.
-  ASSERT_EQ(BuildTimeZoneFromString("-06:00").ValueOrDie().name(),
+  ASSERT_EQ(BuildTimeZoneFromString("-06:00").value().name(),
             "Fixed/UTC-06:00:00");
-  ASSERT_EQ(BuildTimeZoneFromString("+06:00").ValueOrDie().name(),
+  ASSERT_EQ(BuildTimeZoneFromString("+06:00").value().name(),
             "Fixed/UTC+06:00:00");
-  ASSERT_EQ(BuildTimeZoneFromString("-06:30").ValueOrDie().name(),
+  ASSERT_EQ(BuildTimeZoneFromString("-06:30").value().name(),
             "Fixed/UTC-06:30:00");
-  ASSERT_EQ(BuildTimeZoneFromString("-14:00").ValueOrDie().name(),
+  ASSERT_EQ(BuildTimeZoneFromString("-14:00").value().name(),
             "Fixed/UTC-14:00:00");
-  ASSERT_EQ(BuildTimeZoneFromString("+14:00").ValueOrDie().name(),
+  ASSERT_EQ(BuildTimeZoneFromString("+14:00").value().name(),
             "Fixed/UTC+14:00:00");
   // tz dataase time zone names are also accepted.
-  ASSERT_EQ(BuildTimeZoneFromString("America/New_York").ValueOrDie().name(),
+  ASSERT_EQ(BuildTimeZoneFromString("America/New_York").value().name(),
             "America/New_York");
 
   // Error cases.
@@ -152,7 +152,7 @@ TEST(WrapContainedResource, Valid) {
   *(expected.mutable_encounter()) = encounter;
   auto result = WrapContainedResource<ContainedResource>(encounter);
   ASSERT_TRUE(result.status().ok());
-  EXPECT_THAT(result.ValueOrDie(), EqualsProto(expected));
+  EXPECT_THAT(result.value(), EqualsProto(expected));
 }
 
 TEST(WrapContainedResource, InvalidType) {
@@ -190,7 +190,7 @@ TEST(GetPatient, StatusOr) {
       ->mutable_id()
       ->set_value("5");
 
-  EXPECT_EQ(GetPatient(bundle).ValueOrDie()->id().value(), "5");
+  EXPECT_EQ(GetPatient(bundle).value()->id().value(), "5");
 }
 
 TEST(GetTypedContainedResource, Valid) {
@@ -199,7 +199,7 @@ TEST(GetTypedContainedResource, Valid) {
 
   ASSERT_EQ("47", google::fhir::GetTypedContainedResource<AllergyIntolerance>(
                       contained)
-                      .ValueOrDie()
+                      .value()
                       ->id()
                       .value());
 }
@@ -228,7 +228,7 @@ TEST(GetDecimalValue, NormalValue) {
   Decimal decimal;
   decimal.set_value("1.2345e3");
 
-  EXPECT_EQ(GetDecimalValue(decimal).ValueOrDie(), 1234.5);
+  EXPECT_EQ(GetDecimalValue(decimal).value(), 1234.5);
 }
 
 TEST(GetDecimalValue, NotANumber) {
@@ -263,7 +263,7 @@ TEST(GetMutablePatient, StatusOr) {
       ->mutable_id()
       ->set_value("5");
 
-  EXPECT_EQ(GetMutablePatient(&bundle).ValueOrDie()->mutable_id()->value(),
+  EXPECT_EQ(GetMutablePatient(&bundle).value()->mutable_id()->value(),
             "5");
 }
 
@@ -302,7 +302,7 @@ TEST(Util, UnpackAnyAsContainedResourceR4) {
   FHIR_ASSERT_OK(result_statusor.status());
 
   std::unique_ptr<Message> result =
-      absl::WrapUnique(result_statusor.ValueOrDie());
+      absl::WrapUnique(result_statusor.value());
 
   ASSERT_THAT(*result, EqualsProto(contained_medication));
 }
@@ -358,7 +358,7 @@ TEST(Util, UnpackAnyAsContainedResourceR4CustomFactory) {
       });
 
   FHIR_ASSERT_OK(result_statusor.status());
-  Message* result = result_statusor.ValueOrDie();
+  Message* result = result_statusor.value();
 
   // Compare memory addresses
   ASSERT_EQ(result, local_memory.get());
@@ -387,7 +387,7 @@ TEST(Util, UnpackAnyAsContainedResourceR4NonStandardIG) {
   FHIR_ASSERT_OK(result_statusor.status());
 
   std::unique_ptr<Message> result =
-      absl::WrapUnique(result_statusor.ValueOrDie());
+      absl::WrapUnique(result_statusor.value());
 
   ASSERT_THAT(*result, EqualsProto(contained_encounter));
 }

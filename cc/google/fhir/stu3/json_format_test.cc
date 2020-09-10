@@ -61,7 +61,7 @@ void TestParseWithFilepaths(const std::string& proto_path,
   StatusOr<R> from_json_status = ParseJsonToProto<R>(json_path);
   ASSERT_TRUE(from_json_status.ok()) << "Failed parsing: " << json_path << "\n"
                                      << from_json_status.status();
-  R from_json = from_json_status.ValueOrDie();
+  R from_json = from_json_status.value();
   R from_disk = ReadStu3Proto<R>(proto_path);
 
   ::google::protobuf::util::MessageDifferencer differencer;
@@ -88,7 +88,7 @@ template <typename R>
 void TestPrintWithFilepaths(const std::string& proto_path,
                             const std::string& json_path) {
   const R proto = ReadStu3Proto<R>(proto_path);
-  std::string from_proto = PrettyPrintFhirToJsonString(proto).ValueOrDie();
+  std::string from_proto = PrettyPrintFhirToJsonString(proto).value();
   std::string from_json = ReadFile(json_path);
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
@@ -111,7 +111,7 @@ void TestPrintForAnalytics(const std::string& name) {
       ReadStu3Proto<R>(absl::StrCat("examples/", name, ".prototxt"));
   auto result = PrettyPrintFhirToJsonStringForAnalytics(proto);
   ASSERT_TRUE(result.ok()) << result.status();
-  std::string from_proto = result.ValueOrDie();
+  std::string from_proto = result.value();
   std::string from_json =
       ReadFile(absl::StrCat("testdata/stu3/bigquery/", name + ".json"));
 
@@ -129,7 +129,7 @@ void TestPrintForAnalytics(const std::string& name, bool pretty) {
   auto result = pretty ? PrettyPrintFhirToJsonStringForAnalytics(proto)
                        : PrintFhirToJsonStringForAnalytics(proto);
   ASSERT_TRUE(result.ok()) << result.status();
-  std::string from_proto = result.ValueOrDie();
+  std::string from_proto = result.value();
   std::string from_json =
       ReadFile(absl::StrCat("testdata/stu3/bigquery/", name + ".json"));
 
@@ -163,7 +163,7 @@ TEST(JsonFormatStu3Test, ParseProfile) {
   // that changes.
   ASSERT_EQ("Duck", ParseJsonToProto<stu3::testing::TestPatient>(
                         "testdata/stu3/profiles/test_patient.json")
-                        .ValueOrDie()
+                        .value()
                         .name()
                         .given(0)
                         .value());

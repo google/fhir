@@ -442,7 +442,7 @@ class Printer {
             profiled_codeable_concept.GetDescriptor()->full_name());
     }
 
-    return analytic_codeable_concept;
+    return std::move(analytic_codeable_concept);
   }
 
   // If reference is typed Returns a unique pointer to a new standardized
@@ -477,7 +477,7 @@ class Printer {
     FHIR_ASSIGN_OR_RETURN(const std::string& reference_string,
                           ReferenceProtoToString(reference));
     FHIR_RETURN_IF_ERROR(SetPrimitiveStringValue(uri, reference_string));
-    return mutable_reference;
+    return std::move(mutable_reference);
   }
 
   const PrimitiveHandler* primitive_handler_;

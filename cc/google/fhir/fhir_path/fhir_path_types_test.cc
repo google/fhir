@@ -39,7 +39,7 @@ void TestType(FhirPathSystemType expected_type) {
                   << ": " << system_type.status();
   }
 
-  EXPECT_EQ(system_type.ValueOrDie(), expected_type)
+  EXPECT_EQ(system_type.value(), expected_type)
       << "Wrong system type for " << proto.GetTypeName();
 }
 

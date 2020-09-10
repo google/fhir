@@ -117,7 +117,7 @@ TEST(GetSubmessageByPath, Valid) {
   auto result = google::fhir::GetSubmessageByPathAndCheckType<DateTime>(
       request, "MedicationRequest.dispenseRequest.validityPeriod.start");
   ASSERT_TRUE(result.ok());
-  ASSERT_THAT(*result.ValueOrDie(), EqualsProto(expected));
+  ASSERT_THAT(*result.value(), EqualsProto(expected));
 }
 
 TEST(GetSubmessageByPath, NotFound) {
@@ -133,7 +133,7 @@ TEST(GetMutableSubmessageByPath, NotFoundIsOk) {
   auto result = google::fhir::GetMutableSubmessageByPathAndCheckType<DateTime>(
       &request, "MedicationRequest.dispenseRequest.validityPeriod.start");
   ASSERT_TRUE(result.ok());
-  ASSERT_THAT(*result.ValueOrDie(), EqualsProto(expected));
+  ASSERT_THAT(*result.value(), EqualsProto(expected));
 }
 
 TEST(GetSubmessageByPath, BadPath) {
@@ -186,7 +186,7 @@ TEST(GetSubmessageByPath, HasIndex) {
   auto result = google::fhir::GetSubmessageByPathAndCheckType<DateTime>(
       encounter, "Encounter.location[1].period.start");
   ASSERT_TRUE(result.ok());
-  ASSERT_THAT(*result.ValueOrDie(), EqualsProto(expected));
+  ASSERT_THAT(*result.value(), EqualsProto(expected));
 }
 
 TEST(GetSubmessageByPath, EndsInIndex) {
@@ -199,7 +199,7 @@ TEST(GetSubmessageByPath, EndsInIndex) {
       google::fhir::GetSubmessageByPathAndCheckType<Encounter::Location>(
           encounter, "Encounter.location[1]");
   ASSERT_TRUE(result.ok());
-  ASSERT_THAT(*result.ValueOrDie(), EqualsProto(expected));
+  ASSERT_THAT(*result.value(), EqualsProto(expected));
 }
 
 TEST(GetSubmessageByPath, UnindexedRepeatedAtEnd) {
@@ -247,7 +247,7 @@ TEST(GetSubmessageByPath, Untemplatized) {
       request_as_message,
       "MedicationRequest.dispenseRequest.validityPeriod.start");
   ASSERT_TRUE(result.ok());
-  ASSERT_THAT(*result.ValueOrDie(), EqualsProto(expected));
+  ASSERT_THAT(*result.value(), EqualsProto(expected));
 }
 
 TEST(ClearFieldByPath, SingularPresent) {
@@ -311,14 +311,14 @@ TEST(HasSubmessageByPath, SingularPresent) {
   auto got =
       HasSubmessageByPath(encounter, "Encounter.location[1].period.start");
   ASSERT_TRUE(got.ok());
-  ASSERT_TRUE(got.ValueOrDie());
+  ASSERT_TRUE(got.value());
 }
 
 TEST(HasSubmessageByPath, SingularAbsent) {
   Encounter encounter = MakeTestEncounter();
   auto got = HasSubmessageByPath(encounter, "Encounter.location[1].period.id");
   ASSERT_TRUE(got.ok());
-  ASSERT_FALSE(got.ValueOrDie());
+  ASSERT_FALSE(got.value());
 }
 
 TEST(HasSubmessageByPath, SingularInvalid) {
@@ -333,14 +333,14 @@ TEST(HasSubmessageByPath, RepeatedIndexedPresent) {
   Encounter encounter = MakeTestEncounter();
   auto got = HasSubmessageByPath(encounter, "Encounter.location[1]");
   ASSERT_TRUE(got.ok());
-  ASSERT_TRUE(got.ValueOrDie());
+  ASSERT_TRUE(got.value());
 }
 
 TEST(HasSubmessageByPath, RepeatedIndexedAbsent) {
   Encounter encounter = MakeTestEncounter();
   auto got = HasSubmessageByPath(encounter, "Encounter.location[10]");
   ASSERT_TRUE(got.ok());
-  ASSERT_FALSE(got.ValueOrDie());
+  ASSERT_FALSE(got.value());
 }
 
 TEST(HasSubmessageByPath, RepeatedIndexedInvalid) {
@@ -378,7 +378,7 @@ TEST(StripIndex, Absent) { ASSERT_EQ("A.b.c", StripIndex("A.b.c")); }
 
 TEST(ProtoUtilTest, GetMessageInField) {
   const Encounter encounter = MakeTestEncounter();
-  ASSERT_THAT(GetMessageInField(encounter, "id").ValueOrDie(),
+  ASSERT_THAT(GetMessageInField(encounter, "id").value(),
               EqualsProto(encounter.id()));
 }
 
@@ -396,7 +396,7 @@ TEST(ProtoUtilTest, GetMessageInField_WrongType) {
 
 TEST(ProtoUtilTest, MutableMessageInField) {
   Encounter encounter = MakeTestEncounter();
-  ASSERT_THAT(MutableMessageInField(&encounter, "id").ValueOrDie(),
+  ASSERT_THAT(MutableMessageInField(&encounter, "id").value(),
               EqualsProto(encounter.id()));
 }
 

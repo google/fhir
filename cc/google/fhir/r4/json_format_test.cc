@@ -231,7 +231,7 @@ void TestParseWithFilepaths(const std::string& proto_path,
   StatusOr<R> from_json_status = ParseJsonToProto<R>(json_path);
   ASSERT_TRUE(from_json_status.ok()) << "Failed parsing: " << json_path << "\n"
                                      << from_json_status.status();
-  R from_json = from_json_status.ValueOrDie();
+  R from_json = from_json_status.value();
   R from_disk = ReadR4Proto<R>(proto_path);
 
   ::google::protobuf::util::MessageDifferencer differencer;
@@ -262,7 +262,7 @@ void TestPrintWithFilepaths(const std::string& proto_path,
   ASSERT_TRUE(from_proto_status.ok())
       << "Failed Printing on: " << proto_path << ": "
       << from_proto_status.status().message();
-  std::string from_proto = from_proto_status.ValueOrDie();
+  std::string from_proto = from_proto_status.value();
   std::string from_json = ReadFile(json_path);
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
@@ -314,14 +314,14 @@ void TestPrintForAnalytics(const std::string& proto_filepath,
                            const std::string& json_filepath, bool pretty) {
   R proto = ReadR4Proto<R>(proto_filepath);
   if (IsProfile(R::descriptor())) {
-    proto = NormalizeR4(proto).ValueOrDie();
+    proto = NormalizeR4(proto).value();
   }
   auto result = pretty ? PrettyPrintFhirToJsonStringForAnalytics(proto)
                        : PrintFhirToJsonStringForAnalytics(proto);
   ASSERT_TRUE(result.ok()) << "Failed PrintForAnalytics on: " << proto_filepath
                            << "\n"
                            << result.status();
-  std::string from_proto = result.ValueOrDie();
+  std::string from_proto = result.value();
   std::string from_json = ReadFile(json_filepath);
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
@@ -376,7 +376,7 @@ TEST(JsonFormatR4Test, PrintForAnalyticsWithContained) {
       << "Failed PrintForAnalytics on Patient with Contained\n"
       << result.status();
 
-  std::string from_proto = result.ValueOrDie();
+  std::string from_proto = result.value();
   std::string from_json = ReadFile("testdata/r4/examples/with_contained.json");
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {

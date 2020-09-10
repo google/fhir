@@ -52,7 +52,7 @@ void TestCodeForResourceType(const google::protobuf::Message& resource,
       GetCodeForResourceType<ResourceTypeCode>(resource);
   EXPECT_TRUE(statusOrValue.ok())
       << "failed getting code for " << resource.GetTypeName();
-  EXPECT_EQ(statusOrValue.ValueOrDie(), value);
+  EXPECT_EQ(statusOrValue.value(), value);
 }
 
 TEST(CodesTest, GetCodeForResourceType) {
@@ -87,7 +87,7 @@ void TestDescriptorForResourceType(const ::google::protobuf::Message& resource,
       GetDescriptorForResourceType<ContainedResource>(value_desc);
   EXPECT_TRUE(statusOrValue.ok())
       << "failed getting descriptor for " << resource.GetTypeName();
-  EXPECT_EQ(statusOrValue.ValueOrDie()->full_name(), resource.GetTypeName());
+  EXPECT_EQ(statusOrValue.value()->full_name(), resource.GetTypeName());
 }
 
 TEST(CodesTest, GetDescriptorForResourceType) {
@@ -130,7 +130,7 @@ TEST(CodesTest, CodeStringToEnumValue) {
   auto result = CodeStringToEnumValue(">", enum_descriptor);
   ASSERT_TRUE(result.ok());
   EXPECT_EQ(
-      CodeStringToEnumValue(">", enum_descriptor).ValueOrDie()->full_name(),
+      CodeStringToEnumValue(">", enum_descriptor).value()->full_name(),
       enum_value_descriptor->full_name());
 }
 
@@ -138,14 +138,14 @@ TEST(CodesTest, GetCodeAsString_StringType) {
   Code code;
   code.set_value("foo");
 
-  ASSERT_EQ("foo", GetCodeAsString(code).ValueOrDie());
+  ASSERT_EQ("foo", GetCodeAsString(code).value());
 }
 
 TEST(CodesTest, GetCodeAsString_EnumType) {
   Patient::GenderCode code;
   code.set_value(r4::core::AdministrativeGenderCode::FEMALE);
 
-  ASSERT_EQ("female", GetCodeAsString(code).ValueOrDie());
+  ASSERT_EQ("female", GetCodeAsString(code).value());
 }
 
 TEST(CodesTest, GetCodeAsString_InvalidType) {

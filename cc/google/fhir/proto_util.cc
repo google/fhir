@@ -155,7 +155,7 @@ StatusOr<const Message*> GetSubmessageByPath(const Message& message,
       GetSubmessageByPathInternal(&(const_cast<Message&>(message)), field_path,
                                   EmptyFieldsBehavior::RETURN_NOT_FOUND);
   FHIR_RETURN_IF_ERROR(got.status());
-  return const_cast<const Message*>(got.ValueOrDie());
+  return const_cast<const Message*>(got.value());
 }
 
 Status ClearFieldByPath(Message* message, const std::string& field_path) {
@@ -171,13 +171,13 @@ Status ClearFieldByPath(Message* message, const std::string& field_path) {
   // parent message.
   auto got = HasSubmessageByPath(*message, parent_path);
   FHIR_RETURN_IF_ERROR(got.status());
-  const bool has_submessage = got.ValueOrDie();
+  const bool has_submessage = got.value();
   if (!has_submessage) {
     return absl::OkStatus();
   }
   auto parent_got = GetMutableSubmessageByPath(message, parent_path);
   FHIR_RETURN_IF_ERROR(parent_got.status());
-  Message* parent_message = parent_got.ValueOrDie();
+  Message* parent_message = parent_got.value();
   const auto* parent_reflection = parent_message->GetReflection();
   const auto* field_descriptor =
       parent_message->GetDescriptor()->FindFieldByCamelcaseName(field_name);

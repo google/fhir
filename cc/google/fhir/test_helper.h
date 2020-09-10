@@ -100,7 +100,7 @@ class FhirProtoParseHelper {
         if (is_profile) {
           auto status_or_normalized = NormalizeStu3(tmp);
           EXPECT_TRUE(status_or_normalized.ok());
-          tmp = status_or_normalized.ValueOrDie();
+          tmp = status_or_normalized.value();
         }
         break;
       }
@@ -109,7 +109,7 @@ class FhirProtoParseHelper {
         if (is_profile) {
           auto status_or_normalized = NormalizeR4(tmp);
           EXPECT_TRUE(status_or_normalized.ok());
-          tmp = status_or_normalized.ValueOrDie();
+          tmp = status_or_normalized.value();
         }
         break;
       }
@@ -164,14 +164,15 @@ inline std::string ReadFile(const std::string& filename) {
   return result;
 }
 
-#define HANDLER_TYPE_TEST(type, value, handlerType)                           \
+#define HANDLER_TYPE_TEST(type, primitive_value, handlerType)                 \
   TEST(HandlerTypeTest##handlerType, type) {                                  \
-    ::google::protobuf::Message* msg = handlerType::GetInstance()->New##type(value);    \
+    ::google::protobuf::Message* msg =                                                  \
+        handlerType::GetInstance()->New##type(primitive_value);               \
     ASSERT_EQ(msg->GetDescriptor()->name(), #type);                           \
     auto extracted_status =                                                   \
         handlerType::GetInstance()->Get##type##Value(*msg);                   \
     FHIR_ASSERT_OK(extracted_status.status());                                \
-    ASSERT_EQ(extracted_status.ValueOrDie(), value);                          \
+    ASSERT_EQ(extracted_status.value(), primitive_value);                     \
     ASSERT_EQ(handlerType::GetInstance()->type##Descriptor()->name(), #type); \
     delete msg;                                                               \
                                                                               \

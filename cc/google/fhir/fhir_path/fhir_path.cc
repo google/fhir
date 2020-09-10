@@ -87,15 +87,15 @@ StatusOr<int32_t> ToSystemInteger(
   // a UnsignedInt or PositiveInt to an int32_t because FHIR restricts the
   // values of those types to 31 bits.
   if (IsInteger(message)) {
-    return primitive_handler->GetIntegerValue(message).ValueOrDie();
+    return primitive_handler->GetIntegerValue(message).value();
   }
 
   if (IsUnsignedInt(message)) {
-    return primitive_handler->GetUnsignedIntValue(message).ValueOrDie();
+    return primitive_handler->GetUnsignedIntValue(message).value();
   }
 
   if (IsPositiveInt(message)) {
-    return primitive_handler->GetPositiveIntValue(message).ValueOrDie();
+    return primitive_handler->GetPositiveIntValue(message).value();
   }
 
   return InvalidArgumentError(
@@ -1403,7 +1403,7 @@ class ToIntegerFunction : public ZeroParameterFunctionNode {
     auto child_as_string = MessagesToString(child_results);
     if (child_as_string.ok()) {
       int32_t value;
-      if (absl::SimpleAtoi(child_as_string.ValueOrDie(), &value)) {
+      if (absl::SimpleAtoi(child_as_string.value(), &value)) {
         Message* result = work_space->GetPrimitiveHandler()->NewInteger(value);
         work_space->DeleteWhenFinished(result);
         results->push_back(WorkspaceMessage(result));
@@ -1616,8 +1616,8 @@ class EqualsOperator : public BinaryOperator {
       // Comparisons between primitives and non-primitives are valid
       // in FHIRPath and should simply return false rather than an error.
       return left_primitive.ok() && right_primitive.ok() &&
-             left_primitive.ValueOrDie().value ==
-                 right_primitive.ValueOrDie().value;
+             left_primitive.value().value ==
+                 right_primitive.value().value;
     }
   }
 
@@ -1659,7 +1659,7 @@ struct ProtoPtrHash {
     // That's probably ok for now but we should fix this to never crash ASAP.
     if (IsPrimitive(message->GetDescriptor())) {
       return std::hash<std::string>{}(
-          primitive_handler->WrapPrimitiveProto(*message).ValueOrDie().value);
+          primitive_handler->WrapPrimitiveProto(*message).value().value);
     }
 
     return std::hash<std::string>{}(message->SerializeAsString());
@@ -1853,7 +1853,7 @@ class WhereFunction : public FunctionNode {
       FHIR_ASSIGN_OR_RETURN(
           StatusOr<absl::optional<bool>> allowed,
           (BooleanOrEmpty(work_space->GetPrimitiveHandler(), param_results)));
-      if (allowed.ValueOrDie().value_or(false)) {
+      if (allowed.value().value_or(false)) {
         results->push_back(message);
       }
     }
@@ -1955,7 +1955,7 @@ class AllFunction : public FunctionNode {
       FHIR_ASSIGN_OR_RETURN(
           StatusOr<absl::optional<bool>> criteria_met,
           (BooleanOrEmpty(work_space->GetPrimitiveHandler(), param_results)));
-      if (!criteria_met.ValueOrDie().value_or(false)) {
+      if (!criteria_met.value().value_or(false)) {
         return false;
       }
     }
@@ -2108,7 +2108,7 @@ class IifFunction : public FunctionNode {
     FHIR_ASSIGN_OR_RETURN(
         StatusOr<absl::optional<bool>> criterion_met,
         (BooleanOrEmpty(work_space->GetPrimitiveHandler(), param_results)));
-    if (criterion_met.ValueOrDie().value_or(false)) {
+    if (criterion_met.value().value_or(false)) {
       FHIR_RETURN_IF_ERROR(params_[1]->Evaluate(work_space, results));
     } else if (params_.size() > 2) {
       FHIR_RETURN_IF_ERROR(params_[2]->Evaluate(work_space, results));
@@ -2490,9 +2490,9 @@ class ComparisonOperator : public BinaryOperator {
     if (IsSystemInteger(*left_result) && IsSystemInteger(*right_result)) {
       return EvalIntegerComparison(
           ToSystemInteger(primitive_handler, *left_result)
-              .ValueOrDie(),
+              .value(),
           ToSystemInteger(primitive_handler, *right_result)
-              .ValueOrDie());
+              .value());
     } else if (IsDecimal(*left_result) || IsDecimal(*right_result)) {
       return EvalDecimalComparison(primitive_handler, left_result,
                                    right_result);
@@ -3602,7 +3602,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     StatusOr<std::shared_ptr<Literal>> status_or_date_time_literal =
         ParseDateTime(ctx->getText());
     if (status_or_date_time_literal.ok()) {
-      return ToAny(status_or_date_time_literal.ValueOrDie());
+      return ToAny(status_or_date_time_literal.value());
     } else {
       SetError(status_or_date_time_literal.status());
       return nullptr;
@@ -3817,7 +3817,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
         return std::shared_ptr<ExpressionNode>(nullptr);
       }
 
-      return std::shared_ptr<ExpressionNode>(result.ValueOrDie());
+      return std::shared_ptr<ExpressionNode>(result.value());
     } else {
       SetError(NotFoundError(
           absl::StrCat("The function ", function_name, " does not exist.")));

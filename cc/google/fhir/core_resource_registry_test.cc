@@ -32,14 +32,14 @@ namespace {
 TEST(CoreResourceRegistryTest, Stu3Test) {
   auto result = GetBaseResourceInstance(stu3::testing::TestObservationLvl2());
   ASSERT_TRUE(result.ok());
-  ASSERT_TRUE(IsMessageType<stu3::proto::Observation>(*result.ValueOrDie()))
-      << result.ValueOrDie()->GetDescriptor()->full_name();
+  ASSERT_TRUE(IsMessageType<stu3::proto::Observation>(*result.value()))
+      << result.value()->GetDescriptor()->full_name();
 }
 
 TEST(CoreResourceRegistryTest, R4Test) {
   auto result = GetBaseResourceInstance(r4::testing::TestObservationLvl2());
   ASSERT_TRUE(result.ok());
-  ASSERT_TRUE(IsMessageType<r4::core::Observation>(*result.ValueOrDie()));
+  ASSERT_TRUE(IsMessageType<r4::core::Observation>(*result.value()));
 }
 
 TEST(CoreResourceRegistryTest, NonResourceIsError) {

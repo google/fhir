@@ -38,7 +38,7 @@ Status ReferenceStringToProto(const std::string& input, Message* reference) {
 
 std::string GetReferenceStringToResource(const Message& message) {
   return absl::StrCat(message.GetDescriptor()->name(), "/",
-                      GetResourceId(message).ValueOrDie());
+                      GetResourceId(message).value());
 }
 
 StatusOr<std::string> ReferenceProtoToString(

@@ -58,7 +58,7 @@ StatusOr<T*> GetMutableSubmessageByPathAndCheckType(
   const std::string& message_name = message->GetDescriptor()->name();
   auto got = GetMutableSubmessageByPath(message, field_path);
   FHIR_RETURN_IF_ERROR(got.status());
-  ::google::protobuf::Message* submessage = got.ValueOrDie();
+  ::google::protobuf::Message* submessage = got.value();
   if (T::descriptor()->full_name() !=
       submessage->GetDescriptor()->full_name()) {
     return ::absl::InvalidArgumentError(
@@ -76,7 +76,7 @@ StatusOr<const T*> GetSubmessageByPathAndCheckType(
   const std::string& message_name = message.GetDescriptor()->name();
   auto got = GetSubmessageByPath(message, field_path);
   FHIR_RETURN_IF_ERROR(got.status());
-  const ::google::protobuf::Message* submessage = got.ValueOrDie();
+  const ::google::protobuf::Message* submessage = got.value();
   if (T::descriptor()->full_name() !=
       submessage->GetDescriptor()->full_name()) {
     return ::absl::InvalidArgumentError(
