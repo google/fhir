@@ -250,7 +250,6 @@ cc_test(
         "fhir_path_validation_rule_test.cc",
     ],
     deps = [
-        ":fhir_path_validation",
         ":fhir_path_validation_rule",
         "@com_google_googletest//:gtest_main",
     ],

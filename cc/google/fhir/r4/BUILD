@@ -89,9 +89,9 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         "//cc/google/fhir:extensions",
-        "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto/r4/core:datatypes_cc_proto",
+        "@com_google_absl//absl/status",
         "@com_google_protobuf//:protobuf",
     ],
 )
