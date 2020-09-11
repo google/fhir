@@ -18,9 +18,4 @@ py_binary(
     name = "bulkload",
     srcs = ["bulkload.py"],
     python_version = "PY3",
-    deps = [
-        "@absl_py//absl:app",
-        "@absl_py//absl/flags",
-        requirement("requests"),
-    ],
 )

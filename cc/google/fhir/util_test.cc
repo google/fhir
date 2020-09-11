@@ -48,7 +48,6 @@ using ::google::fhir::testutil::EqualsProto;
 using ::google::fhir::stu3::proto::AllergyIntolerance;
 using ::google::fhir::stu3::proto::EncounterStatusCode;
 using ::google::fhir::stu3::proto::Patient;
-using ::google::fhir::stu3::proto::Reference;
 
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::Message;
@@ -363,19 +362,21 @@ TEST(Util, UnpackAnyAsContainedResourceR4CustomFactory) {
 TEST(Util, UnpackAnyAsContainedResourceR4NonStandardIG) {
   r4::testing::TestObservation med_req = PARSE_VALID_FHIR_PROTO(
       R"proto(
-        status {value: FINAL}
-        code { sys_a { code {value: "blah"} } }
+        status { value: FINAL }
+        code { sys_a { code { value: "blah" } } }
       )proto");
 
-  r4::testing::ContainedResource contained_encounter =
-      PARSE_VALID_FHIR_PROTO(
-          R"proto(
-            test_encounter {
-              status {value: FINISHED}
-              class_value { system {value: "foo"} code {value: "bar"} }
-              priority { act { code {value: EM} } }
-            }
-          )proto");
+  r4::testing::ContainedResource contained_encounter = PARSE_VALID_FHIR_PROTO(
+      R"proto(
+        test_encounter {
+          status { value: FINISHED }
+          class_value {
+            system { value: "foo" }
+            code { value: "bar" }
+          }
+          priority { act { code { value: EM } } }
+        }
+      )proto");
 
   med_req.add_contained()->PackFrom(contained_encounter);
 

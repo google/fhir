@@ -33,7 +33,6 @@ namespace google {
 namespace fhir {
 namespace fhir_path {
 
-using ::google::fhir::ForEachMessage;
 using ::google::fhir::GetPotentiallyRepeatedMessage;
 using ::google::fhir::PotentiallyRepeatedFieldSize;
 using ::google::protobuf::Descriptor;
