@@ -59,13 +59,4 @@ limitations under the License.
     ASSERT_EQ(lhs, statusor.value());       \
   }
 
-namespace google {
-namespace fhir {
-
-template <typename T>
-using StatusOr = ::absl::StatusOr<T>;
-
-}  // namespace fhir
-}  // namespace google
-
 #endif  // GOOGLE_FHIR_STATUS_STATUSOR_H_

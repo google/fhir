@@ -23,6 +23,7 @@
 #include "google/protobuf/util/message_differencer.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/escaping.h"
 #include "absl/strings/match.h"
 #include "absl/strings/numbers.h"
@@ -238,7 +239,7 @@ std::vector<const google::protobuf::Message*> WorkspaceMessage::Ancestry() const
 class Literal : public ExpressionNode {
  public:
   Literal(const Descriptor* descriptor,
-          std::function<StatusOr<Message*>()> factory)
+          std::function<absl::StatusOr<Message*>()> factory)
       : descriptor_(descriptor), factory_(factory) {}
 
   absl::Status Evaluate(WorkSpace* work_space,
@@ -254,7 +255,7 @@ class Literal : public ExpressionNode {
 
  private:
   const Descriptor* descriptor_;
-  std::function<StatusOr<Message*>()> factory_;
+  std::function<absl::StatusOr<Message*>()> factory_;
 };
 
 // Expression node for the empty literal.
@@ -3702,7 +3703,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   BaseErrorListener* GetErrorListener() { return &error_listener_; }
 
  private:
-  typedef std::function<StatusOr<ExpressionNode*>(
+  typedef std::function<absl::StatusOr<ExpressionNode*>(
       std::shared_ptr<ExpressionNode>,
       const std::vector<FhirPathParser::ExpressionContext*>&,
       FhirPathBaseVisitor*, FhirPathBaseVisitor*)>
