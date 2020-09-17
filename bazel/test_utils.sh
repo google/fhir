@@ -23,10 +23,6 @@ function run_bazel_in_venv {
   pip install --upgrade pip
   pip install setuptools"${SETUPTOOLS_VERSION}"
   pip install wheel
-  pip install -r bazel/requirements.txt
-
-  # Show versions of packages installed
-  pip freeze
 
   # Run bazel test command. We run bazel test //... first so that the tests
   # can start before all targets have been built. In particular, it takes

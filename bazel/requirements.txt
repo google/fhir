@@ -1,5 +1,9 @@
-apache_beam>=2.14.0
-google-cloud-bigquery==1.25.0
-protobuf
-python-dateutil>=2.8.1
-requests>=2.24.0
+absl-py==0.10.0
+certifi==2020.6.20
+chardet==3.0.4
+idna==2.10
+protobuf==3.9.2
+python-dateutil==2.8.1
+requests==2.24.0
+six==1.15.0
+urllib3==1.25.10
