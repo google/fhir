@@ -225,6 +225,42 @@ func TestNormalizeDenormalizeReference(t *testing.T) {
 	}
 }
 
+func TestNormalizeReference_Errors(t *testing.T) {
+	tests := []struct {
+		name string
+		in   proto.Message
+	}{
+		{
+			name: "r3 non-existing resource type in reference",
+			in: &d3pb.Reference{
+				Reference: &d3pb.Reference_Uri{
+					Uri: &d3pb.String{
+						Value: "SubstanceSpecification/123",
+					},
+				},
+			},
+		},
+		{
+			name: "r4 non-existing resource type in reference",
+			in: &d4pb.Reference{
+				Reference: &d4pb.Reference_Uri{
+					Uri: &d4pb.String{
+						Value: "BodySite/123",
+					},
+				},
+			},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			if err := NormalizeReference(tc.in); err == nil {
+				t.Errorf("NormalizeReference(%v) did not return an error", tc.in)
+			}
+		})
+	}
+}
+
 func TestNormalizeRelativeReferenceAndIgnoreHistory(t *testing.T) {
 	tests := []struct {
 		name                     string

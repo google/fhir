@@ -90,38 +90,45 @@ func normalizeRelativeReferenceAndIgnoreHistory(pb proto.Message) error {
 func NormalizeReference(pb proto.Message) error {
 	switch ref := pb.(type) {
 	case *d3pb.Reference:
-		normalizeR3Reference(ref)
+		return normalizeR3Reference(ref)
 	case *d4pb.Reference:
-		normalizeR4Reference(ref)
+		return normalizeR4Reference(ref)
 	default:
 		return fmt.Errorf("invalid reference type %T", ref)
 	}
+}
+
+func setReferenceID(ref protoreflect.Message, resType string, refID protoreflect.Message) error {
+	fName, ok := jsonpbhelper.ReferenceFieldForType(resType)
+	if !ok {
+		// The assumed resource type is not a proper FHIR reference resource type. This is OK as
+		// callers may make incorrect assumption from random reference URIs.
+		return nil
+	}
+	rr := ref.Descriptor().Fields().ByName(fName)
+	if rr == nil {
+		// This is an error because the reference resource type cannot be found. This is likely due
+		// to referencing to a FHIR resource type that only exists in other FHIR versions.
+		return fmt.Errorf("unsupported reference field %s", fName)
+	}
+	ref.Set(rr, protoreflect.ValueOfMessage(refID))
 	return nil
 }
 
-func setReferenceID(ref protoreflect.Message, resType string, refID protoreflect.Message) {
-	fName, ok := jsonpbhelper.ReferenceFieldForType(resType)
-	if !ok {
-		return
-	}
-
-	ref.Set(ref.Descriptor().Fields().ByName(fName), protoreflect.ValueOfMessage(refID))
-}
-
-func normalizeR3Reference(ref *d3pb.Reference) {
+func normalizeR3Reference(ref *d3pb.Reference) error {
 	uri := ref.GetUri().GetValue()
 	if uri == "" {
-		return
+		return nil
 	}
 
 	if strings.HasPrefix(uri, jsonpbhelper.RefFragmentPrefix) {
 		fragVal := uri[len(jsonpbhelper.RefFragmentPrefix):]
 		ref.Reference = &d3pb.Reference_Fragment{Fragment: &d3pb.String{Value: fragVal}}
-		return
+		return nil
 	}
 	parts := strings.Split(uri, "/")
 	if !(len(parts) == 2 || len(parts) == 4 && parts[2] == jsonpbhelper.RefHistory) {
-		return
+		return nil
 	}
 
 	refID := &d3pb.ReferenceId{Value: parts[1]}
@@ -129,23 +136,23 @@ func normalizeR3Reference(ref *d3pb.Reference) {
 		refID.History = &d3pb.Id{Value: parts[3]}
 	}
 
-	setReferenceID(ref.ProtoReflect(), parts[0], refID.ProtoReflect())
+	return setReferenceID(ref.ProtoReflect(), parts[0], refID.ProtoReflect())
 }
 
-func normalizeR4Reference(ref *d4pb.Reference) {
+func normalizeR4Reference(ref *d4pb.Reference) error {
 	uri := ref.GetUri().GetValue()
 	if uri == "" {
-		return
+		return nil
 	}
 
 	if strings.HasPrefix(uri, jsonpbhelper.RefFragmentPrefix) {
 		fragVal := uri[len(jsonpbhelper.RefFragmentPrefix):]
 		ref.Reference = &d4pb.Reference_Fragment{Fragment: &d4pb.String{Value: fragVal}}
-		return
+		return nil
 	}
 	parts := strings.Split(uri, "/")
 	if !(len(parts) == 2 || len(parts) == 4 && parts[2] == jsonpbhelper.RefHistory) {
-		return
+		return nil
 	}
 
 	refID := &d4pb.ReferenceId{Value: parts[1]}
@@ -153,7 +160,7 @@ func normalizeR4Reference(ref *d4pb.Reference) {
 		refID.History = &d4pb.Id{Value: parts[3]}
 	}
 
-	setReferenceID(ref.ProtoReflect(), parts[0], refID.ProtoReflect())
+	return setReferenceID(ref.ProtoReflect(), parts[0], refID.ProtoReflect())
 }
 
 // DenormalizeReference recovers the absolute reference URI from a normalized representation.
