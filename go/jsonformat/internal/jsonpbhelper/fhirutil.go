@@ -30,12 +30,12 @@ import (
 	"github.com/json-iterator/go"
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
-	"github.com/serenize/snaker"
 	"bitbucket.org/creachadair/stringset"
 
 	dpb "google.golang.org/protobuf/types/descriptorpb"
 	apb "google/fhir/proto/annotations_go_proto"
 	protov2 "google.golang.org/protobuf/proto"
+
 	d4pb "google/fhir/proto/r4/core/datatypes_go_proto"
 	r4pb "google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
 	d3pb "google/fhir/proto/stu3/datatypes_go_proto"
@@ -285,8 +285,6 @@ func initReferenceTypes() {
 			ext := f.Options().ProtoReflect().Get(apb.E_ReferencedFhirType.TypeDescriptor())
 			if ext.IsValid() {
 				refType = ext.String()
-			} else {
-				refType = snaker.SnakeToCamel(strings.TrimSuffix(string(f.Name()), RefFieldSuffix))
 			}
 			if refType == "" {
 				continue

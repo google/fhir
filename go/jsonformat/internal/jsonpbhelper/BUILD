@@ -21,7 +21,6 @@ go_library(
         "@com_github_golang_glog//:go_default_library",
         "@com_github_golang_protobuf//proto:go_default_library",
         "@com_github_json_iterator_go//:go_default_library",
-        "@com_github_serenize_snaker//:go_default_library",
         "@org_golang_google_protobuf//proto:go_default_library",
         "@org_golang_google_protobuf//reflect/protoreflect:go_default_library",
         "@org_golang_google_protobuf//types/descriptorpb:go_default_library",

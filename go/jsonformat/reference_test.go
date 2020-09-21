@@ -84,13 +84,13 @@ func TestNormalizeDenormalizeReference(t *testing.T) {
 			&d3pb.Reference{
 				Reference: &d3pb.Reference_Uri{
 					Uri: &d3pb.String{
-						Value: "Patient/abc123",
+						Value: "AdverseEvent/abc123",
 					},
 				},
 			},
 			&d3pb.Reference{
-				Reference: &d3pb.Reference_PatientId{
-					PatientId: &d3pb.ReferenceId{
+				Reference: &d3pb.Reference_AdverseEventId{
+					AdverseEventId: &d3pb.ReferenceId{
 						Value: "abc123",
 					},
 				},
@@ -155,13 +155,13 @@ func TestNormalizeDenormalizeReference(t *testing.T) {
 			&d4pb.Reference{
 				Reference: &d4pb.Reference_Uri{
 					Uri: &d4pb.String{
-						Value: "Patient/abc123",
+						Value: "SubstanceSpecification/abc123",
 					},
 				},
 			},
 			&d4pb.Reference{
-				Reference: &d4pb.Reference_PatientId{
-					PatientId: &d4pb.ReferenceId{
+				Reference: &d4pb.Reference_SubstanceSpecificationId{
+					SubstanceSpecificationId: &d4pb.ReferenceId{
 						Value: "abc123",
 					},
 				},
