@@ -11,8 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-// TODO: migrate tests to use test proto instead of FHIR.
 package protopath
 
 import (
@@ -24,8 +22,6 @@ import (
 	"google.golang.org/protobuf/testing/protocmp"
 
 	pptpb "jsonformat/internal/protopath/protopathtest_go_proto"
-	rdpb "google/fhir/proto/stu3/datatypes_go_proto"
-	rfpb "google/fhir/proto/stu3/resources_go_proto"
 )
 
 func TestSet(t *testing.T) {
@@ -38,80 +34,73 @@ func TestSet(t *testing.T) {
 	}{
 		{
 			"single field",
-			NewPath("meta"),
-			&rdpb.Meta{Id: &rdpb.String{Value: "id"}},
-			&rfpb.Account{},
-			&rfpb.Account{Meta: &rdpb.Meta{Id: &rdpb.String{Value: "id"}}},
+			NewPath("message_field"),
+			&pptpb.Message_InnerMessage{InnerField: 1},
+			&pptpb.Message{},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{InnerField: 1}},
 		},
 		{
 			"nested field - parent exists",
-			NewPath("meta.id"),
-			&rdpb.String{Value: "id"},
-			&rfpb.Account{Meta: &rdpb.Meta{}},
-			&rfpb.Account{Meta: &rdpb.Meta{Id: &rdpb.String{Value: "id"}}},
+			NewPath("message_field.inner_field"),
+			int32(1),
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{}},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{InnerField: 1}},
 		},
 		{
 			"nested field - no parent",
-			NewPath("meta.id"),
-			&rdpb.String{Value: "id"},
-			&rfpb.Account{},
-			&rfpb.Account{Meta: &rdpb.Meta{Id: &rdpb.String{Value: "id"}}},
-		},
-		{
-			"nested field - set primitive",
-			NewPath("meta.id.value"),
-			"id",
-			&rfpb.Account{},
-			&rfpb.Account{Meta: &rdpb.Meta{Id: &rdpb.String{Value: "id"}}},
+			NewPath("message_field.inner_field"),
+			int32(1),
+			&pptpb.Message{},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{InnerField: 1}},
 		},
 		{
 			"repeated field - index exists",
-			NewPath("meta.security.0.id.value"),
-			"code2",
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code1"}}}}},
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code2"}}}}},
+			NewPath("repeated_message_field.0.inner_field"),
+			int32(2),
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 2}}},
 		},
 		{
 			"repeated field - end",
-			NewPath("meta.security.-1.id.value"),
-			"code",
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{}}},
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code"}}}}},
+			NewPath("repeated_message_field.-1.inner_field"),
+			int32(1),
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{}},
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
 		},
 		{
 			"repeated field - no parent",
-			NewPath("meta.security.0.id.value"),
-			"code",
-			&rfpb.Account{},
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code"}}}}},
+			NewPath("repeated_message_field.0.inner_field"),
+			int32(1),
+			&pptpb.Message{},
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
 		},
 		{
 			"repeated field - clear",
-			NewPath("meta.security"),
+			NewPath("repeated_message_field"),
 			Zero,
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code"}}}}},
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{}}},
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{}},
 		},
 		{
 			"repeated field - set",
-			NewPath("meta.security"),
-			[]*rdpb.Coding{{Id: &rdpb.String{Value: "code"}}, {Id: &rdpb.String{Value: "text"}}},
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code"}}}}},
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code"}}, {Id: &rdpb.String{Value: "text"}}}}},
+			NewPath("repeated_message_field"),
+			[]*pptpb.Message_InnerMessage{{InnerField: 1}, {InnerField: 2}},
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 3}}},
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}, {InnerField: 2}}},
 		},
 		{
 			"repeated field element",
-			NewPath("meta.security.-1"),
-			&rdpb.Coding{Id: &rdpb.String{Value: "code"}},
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{}}},
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code"}}}}},
+			NewPath("repeated_message_field.-1"),
+			&pptpb.Message_InnerMessage{InnerField: 1},
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{}},
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
 		},
 		{
 			"missing field - zero value of pointer",
-			NewPath("meta.id"),
+			NewPath("message_field.inner_field"),
 			Zero,
-			&rfpb.Account{Meta: &rdpb.Meta{Id: &rdpb.String{Value: "id"}}},
-			&rfpb.Account{Meta: &rdpb.Meta{}},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{InnerField: 1}},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{}},
 		},
 		{
 			"typed nil value",
@@ -128,46 +117,54 @@ func TestSet(t *testing.T) {
 			&pptpb.Message{},
 		},
 		{
-			"missing field - zero value of string",
-			NewPath("meta.id.value"),
+			"clear primitive field",
+			NewPath("message_field.inner_field"),
 			Zero,
-			&rfpb.Account{Meta: &rdpb.Meta{Id: &rdpb.String{Value: "id"}}},
-			&rfpb.Account{Meta: &rdpb.Meta{Id: &rdpb.String{}}},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{InnerField: 1}},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{}},
 		},
 		{
 			"oneof",
-			NewPath("observation.id.value"),
-			"id",
-			&rfpb.ContainedResource{
-				OneofResource: &rfpb.ContainedResource_Observation{
-					Observation: &rfpb.Observation{
-						Id:       &rdpb.Id{Value: ""},
-						Language: &rdpb.LanguageCode{Value: "xyz"}}}},
-			&rfpb.ContainedResource{
-				OneofResource: &rfpb.ContainedResource_Observation{
-					Observation: &rfpb.Observation{
-						Id:       &rdpb.Id{Value: "id"},
-						Language: &rdpb.LanguageCode{Value: "xyz"}}}},
+			NewPath("oneof_message_field.inner_field"),
+			int32(1),
+			&pptpb.Message{
+				Oneof: &pptpb.Message_OneofMessageField{
+					OneofMessageField: &pptpb.Message_InnerMessage{
+						InnerField: 0}}},
+			&pptpb.Message{
+				Oneof: &pptpb.Message_OneofMessageField{
+					OneofMessageField: &pptpb.Message_InnerMessage{
+						InnerField: 1}}},
+		},
+		{
+			"oneof and case",
+			NewPath("oneof.oneof_message_field"),
+			&pptpb.Message_InnerMessage{InnerField: 1},
+			&pptpb.Message{},
+			&pptpb.Message{
+				Oneof: &pptpb.Message_OneofMessageField{
+					OneofMessageField: &pptpb.Message_InnerMessage{
+						InnerField: 1}}},
 		},
 		{
 			"oneof - empty",
-			NewPath("observation.id.value"),
-			"id",
-			&rfpb.ContainedResource{},
-			&rfpb.ContainedResource{
-				OneofResource: &rfpb.ContainedResource_Observation{
-					Observation: &rfpb.Observation{
-						Id: &rdpb.Id{Value: "id"}}}},
+			NewPath("oneof_message_field.inner_field"),
+			int32(1),
+			&pptpb.Message{},
+			&pptpb.Message{
+				Oneof: &pptpb.Message_OneofMessageField{
+					OneofMessageField: &pptpb.Message_InnerMessage{
+						InnerField: 1}}},
 		},
 		{
-			"oneof - wrap resource",
-			NewPath("observation"),
-			&rfpb.Observation{Id: &rdpb.Id{Value: "id"}},
-			&rfpb.ContainedResource{},
-			&rfpb.ContainedResource{
-				OneofResource: &rfpb.ContainedResource_Observation{
-					Observation: &rfpb.Observation{
-						Id: &rdpb.Id{Value: "id"}}}},
+			"oneof - wrap",
+			NewPath("oneof_message_field"),
+			&pptpb.Message_InnerMessage{InnerField: 1},
+			&pptpb.Message{},
+			&pptpb.Message{
+				Oneof: &pptpb.Message_OneofMessageField{
+					OneofMessageField: &pptpb.Message_InnerMessage{
+						InnerField: 1}}},
 		},
 		{
 			"oneof - primitive",
@@ -229,73 +226,97 @@ func TestSet_Errors(t *testing.T) {
 			"empty path part",
 			NewPath("foo."),
 			Zero,
-			&rfpb.Account{},
+			&pptpb.Message{},
 		},
 		{
 			"empty path",
 			Path{},
 			Zero,
-			&rfpb.Account{},
+			&pptpb.Message{},
 		},
 		{
 			"typed nil message",
-			NewPath("meta"),
-			&rdpb.Meta{},
-			(*rfpb.Account)(nil),
+			NewPath("message_field"),
+			&pptpb.Message_InnerMessage{},
+			(*pptpb.Message)(nil),
 		},
 		{
 			"untyped nil message",
-			NewPath("meta"),
-			&rdpb.Meta{},
+			NewPath("message_field"),
+			&pptpb.Message_InnerMessage{},
 			nil,
 		},
 		{
 			"invalid field",
 			NewPath("meta2"),
-			&rdpb.Meta{Id: &rdpb.String{Value: "id"}},
-			&rfpb.Account{},
+			&pptpb.Message_InnerMessage{InnerField: 1},
+			&pptpb.Message{},
+		},
+		{
+			"invalid field - primitive",
+			NewPath("message_field.inner_field.value"),
+			Zero,
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{InnerField: 1}},
 		},
 		{
 			"invalid nested field - parent exists",
-			NewPath("meta.id2"),
-			&rdpb.String{Value: "id"},
-			&rfpb.Account{Meta: &rdpb.Meta{}},
-		},
-		{
-			"nested field - incorrect type - primitive",
-			NewPath("meta.id.value"),
+			NewPath("message_field.inner_field2"),
 			1,
-			&rfpb.Account{},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{}},
 		},
 		{
-			"nested field - incorrect type - message",
-			NewPath("meta.id"),
-			&rdpb.Uri{Value: "uri"},
-			&rfpb.Account{},
+			"invalid nested field - no parent",
+			NewPath("message_field.inner_field2"),
+			1,
+			&pptpb.Message{},
+		},
+		{
+			"nested primitive field - incorrect type - primitive",
+			NewPath("message_field.inner_field"),
+			int64(1),
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{}},
+		},
+		{
+			"nested primitive field - incorrect type - message",
+			NewPath("message_field.inner_field"),
+			&pptpb.Message_InnerMessage{},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{}},
+		},
+		{
+			"nested message field - incorrect type - primitive",
+			NewPath("message_field.inner_message_field"),
+			int64(1),
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{}},
+		},
+		{
+			"nested primitive field - incorrect type - message",
+			NewPath("message_field.inner_message_field"),
+			&pptpb.Message_InnerMessage2{},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{}},
 		},
 		{
 			"repeated field - negative index",
-			NewPath("meta.security.-2.id.value"),
-			"code2",
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code1"}}}}},
+			NewPath("repeated_message_field.-2.inner_field"),
+			1,
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
 		},
 		{
 			"repeated field - invalid index",
-			NewPath("meta.security.foo.id.value"),
+			NewPath("repeated_message_field.foo.inner_field"),
 			"code2",
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code1"}}}}},
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
 		},
 		{
 			"repeated field - index too high",
-			NewPath("meta.security.2.id.value"),
-			"code",
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code1"}}}}},
+			NewPath("repeated_message_field.2.inner_field"),
+			1,
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
 		},
 		{
 			"oneof",
-			NewPath("foo.id.value"),
+			NewPath("foo.inner_field"),
 			Zero,
-			&rfpb.ContainedResource{},
+			&pptpb.Message{},
 		},
 		{
 			"oneof - set oneof - missing proto",
@@ -322,10 +343,16 @@ func TestSet_Errors(t *testing.T) {
 			&pptpb.Message{},
 		},
 		{
+			"oneof - set case",
+			NewPath("oneof.foo"),
+			&pptpb.Message_InnerMessage{},
+			&pptpb.Message{},
+		},
+		{
 			"complex value",
-			NewPath("meta"),
+			NewPath("message_field"),
 			struct{}{},
-			&rfpb.Account{},
+			&pptpb.Message{},
 		},
 	}
 	for _, test := range tests {
@@ -348,122 +375,140 @@ func TestGet(t *testing.T) {
 	}{
 		{
 			"single field",
-			NewPath("meta"),
-			(*rdpb.Meta)(nil),
-			&rfpb.Account{Meta: &rdpb.Meta{Id: &rdpb.String{Value: "id"}}},
-			&rdpb.Meta{Id: &rdpb.String{Value: "id"}},
+			NewPath("message_field"),
+			(*pptpb.Message_InnerMessage)(nil),
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{InnerField: 1}},
+			&pptpb.Message_InnerMessage{InnerField: 1},
 		},
 		{
 			"nested field",
-			NewPath("meta.id.value"),
-			"id1",
-			&rfpb.Account{Meta: &rdpb.Meta{Id: &rdpb.String{Value: "id"}}},
-			"id",
+			NewPath("message_field.inner_field"),
+			int32(2),
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{InnerField: 1}},
+			int32(1),
 		},
 		{
 			"repeated field - positive index",
-			NewPath("meta.security.0.id.value"),
-			"",
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code1"}}}}},
-			"code1",
+			NewPath("repeated_message_field.0.inner_field"),
+			Zero,
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
+			int32(1),
 		},
 		{
 			"repeated field - end",
-			NewPath("meta.security.-1.id.value"),
-			"",
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code"}}}}},
-			"code",
+			NewPath("repeated_message_field.-1.inner_field"),
+			Zero,
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
+			int32(1),
 		},
 		{
 			"repeated field element",
-			NewPath("meta.security.-1"),
+			NewPath("repeated_message_field.-1"),
 			Zero,
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code"}}}}},
-			&rdpb.Coding{Id: &rdpb.String{Value: "code"}},
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
+			&pptpb.Message_InnerMessage{InnerField: 1},
 		},
 		{
 			"missing field",
-			NewPath("meta.id.value"),
-			"code",
-			&rfpb.Account{},
-			"code",
+			NewPath("message_field.inner_field"),
+			int32(1),
+			&pptpb.Message{},
+			int32(1),
 		},
 		{
 			"missing field - nil",
-			NewPath("meta.id"),
-			(*rdpb.String)(nil),
-			&rfpb.Account{},
-			(*rdpb.String)(nil),
+			NewPath("message_field.repeated_inner_message_field"),
+			(*pptpb.Message_InnerMessage2)(nil),
+			&pptpb.Message{},
+			(*pptpb.Message_InnerMessage2)(nil),
 		},
 		{
 			"missing field - repeated parent",
-			NewPath("meta.security.-1.id.value"),
-			"code",
-			&rfpb.Account{},
-			"code",
+			NewPath("message_field.repeated_inner_message_field.-1.inner_field2"),
+			Zero,
+			&pptpb.Message{},
+			int32(0),
+		},
+		{
+			"missing repeated field - parent exists",
+			NewPath("repeated_message_field.-1.inner_field"),
+			Zero,
+			&pptpb.Message{},
+			int32(0),
 		},
 		{
 			"missing field - untyped nil",
-			NewPath("meta"),
+			NewPath("message_field"),
 			nil,
-			&rfpb.Account{},
-			(*rdpb.Meta)(nil),
+			&pptpb.Message{},
+			(*pptpb.Message_InnerMessage)(nil),
 		},
 		{
 			"missing field - nested untyped nil",
-			NewPath("meta.id"),
+			NewPath("message_field"),
 			nil,
-			&rfpb.Account{},
-			(*rdpb.String)(nil),
+			&pptpb.Message{},
+			(*pptpb.Message_InnerMessage)(nil),
 		},
 		{
 			"missing field - repeated",
-			NewPath("meta.security"),
+			NewPath("repeated_message_field"),
 			Zero,
-			&rfpb.Account{Meta: &rdpb.Meta{}},
-			[]*rdpb.Coding{},
+			&pptpb.Message{},
+			[]*pptpb.Message_InnerMessage{},
 		},
 		{
 			"missing field - zero",
-			NewPath("meta.id"),
+			NewPath("message_field"),
 			Zero,
-			&rfpb.Account{},
-			(*rdpb.String)(nil),
+			&pptpb.Message{},
+			(*pptpb.Message_InnerMessage)(nil),
 		},
 		{
 			"typed nil message",
-			NewPath("meta.id.value"),
-			"id",
-			(*rfpb.Account)(nil),
-			"id",
+			NewPath("message_field.inner_field"),
+			int32(1),
+			(*pptpb.Message)(nil),
+			int32(1),
 		},
 		{
 			"untyped nil message",
-			NewPath("meta.id.value"),
-			"id",
+			NewPath("message_field.inner_field"),
+			int32(1),
 			nil,
-			"id",
+			int32(1),
 		},
 		{
 			"oneof",
-			NewPath("observation.id.value"),
+			NewPath("oneof_message_field.inner_field"),
 			Zero,
-			&rfpb.ContainedResource{
-				OneofResource: &rfpb.ContainedResource_Observation{
-					Observation: &rfpb.Observation{
-						Id: &rdpb.Id{Value: "id"}}}},
-			"id",
+			&pptpb.Message{
+				Oneof: &pptpb.Message_OneofMessageField{
+					OneofMessageField: &pptpb.Message_InnerMessage{
+						InnerField: 1}}},
+			int32(1),
 		},
 		{
 			"oneof - zero",
-			NewPath("observation.id.value"),
+			NewPath("oneof_message_field.inner_field"),
 			Zero,
-			&rfpb.ContainedResource{},
-			"",
+			&pptpb.Message{},
+			int32(0),
 		},
 		{
 			"oneof - message",
 			NewPath("oneof"),
+			Zero,
+			&pptpb.Message{
+				Oneof: &pptpb.Message_OneofMessageField{
+					OneofMessageField: &pptpb.Message_InnerMessage{InnerField: 1},
+				},
+			},
+			&pptpb.Message_InnerMessage{InnerField: 1},
+		},
+		{
+			"oneof and case",
+			NewPath("oneof.oneof_message_field"),
 			Zero,
 			&pptpb.Message{
 				Oneof: &pptpb.Message_OneofMessageField{
@@ -485,25 +530,25 @@ func TestGet(t *testing.T) {
 		},
 		{
 			"oneof - multiple interfaces - ends on concrete type",
-			NewPath("observation.effective.date_time.value_us"),
+			NewPath("oneof_message_field.inner_field"),
 			Zero,
-			&rfpb.ContainedResource{
-				OneofResource: &rfpb.ContainedResource_Observation{}},
-			int64(0),
+			&pptpb.Message{
+				Oneof: &pptpb.Message_OneofMessageField{}},
+			int32(0),
 		},
 		{
 			"whole repeated field - not empty",
-			NewPath("meta.security"),
+			NewPath("repeated_message_field"),
 			Zero,
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code1"}}}}},
-			[]*rdpb.Coding{{Id: &rdpb.String{Value: "code1"}}},
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
+			[]*pptpb.Message_InnerMessage{{InnerField: 1}},
 		},
 		{
 			"whole repeated field - empty",
-			NewPath("meta.security"),
+			NewPath("repeated_message_field"),
 			Zero,
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{}}},
-			[]*rdpb.Coding{},
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{}},
+			[]*pptpb.Message_InnerMessage{},
 		},
 		{
 			"enum",
@@ -552,79 +597,79 @@ func TestGet_Errors(t *testing.T) {
 			"empty path part",
 			NewPath("foo."),
 			Zero,
-			&rfpb.Account{},
+			&pptpb.Message{},
 		},
 		{
 			"empty path",
 			Path{},
 			Zero,
-			&rfpb.Account{},
+			&pptpb.Message{},
 		},
 		{
 			"invalid field",
-			NewPath("meta2"),
+			NewPath("message_field2"),
 			nil,
-			&rfpb.Account{},
+			&pptpb.Message{},
+		},
+		{
+			"invalid field - parent exists",
+			NewPath("message_field.inner_field.value"),
+			Zero,
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{InnerField: 1}},
 		},
 		{
 			"invalid nested field - parent exists",
-			NewPath("meta.id2"),
+			NewPath("message_field.inner_field2"),
 			nil,
-			&rfpb.Account{Meta: &rdpb.Meta{}},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{}},
 		},
 		{
-			"nested field - incorrect default value type - primitive",
-			NewPath("meta.id.value"),
-			1,
-			&rfpb.Account{},
+			"field by type - incorrect default value type - primitive",
+			NewPath("message_field.inner_field"),
+			int64(1),
+			&pptpb.Message{},
 		},
 		{
-			"nested field - incorrect default value type - message",
-			NewPath("meta.id"),
-			&rdpb.Uri{Value: "uri"},
-			&rfpb.Account{},
+			"field by type - incorrect default value type - message",
+			NewPath("message_field.repeated_inner_message_field"),
+			&pptpb.Message_InnerMessage{},
+			&pptpb.Message{},
 		},
 		{
-			"nested field - trailing path",
-			NewPath("meta.id.value.foo"),
-			Zero,
-			&rfpb.Account{},
-		},
-		{
-			"nested field - invalid path",
-			NewPath("meta.id.foo"),
-			Zero,
-			&rfpb.Account{},
-		},
-		{
-			"repeated field - negative index",
-			NewPath("meta.security.-2.id.value"),
-			"code2",
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code1"}}}}},
-		},
-		{
-			"repeated field - invalid index",
-			NewPath("meta.security.foo.id.value"),
-			"code2",
-			&rfpb.Account{Meta: &rdpb.Meta{Security: []*rdpb.Coding{{Id: &rdpb.String{Value: "code1"}}}}},
-		},
-		{
-			"unknown oneof",
-			NewPath("foo.id.value"),
-			Zero,
-			&rfpb.ContainedResource{},
-		},
-		{
-			"oneof - empty",
-			NewPath("oneof"),
+			"field by type - trailing path",
+			NewPath("message_field.inner_field.value"),
 			Zero,
 			&pptpb.Message{},
 		},
 		{
-			"nested oneof - empty",
-			NewPath("extension.0.value.choice"),
+			"field by type - invalid path",
+			NewPath("message_field.inner_field2"),
 			Zero,
-			&rfpb.Account{},
+			&pptpb.Message{},
+		},
+		{
+			"field by type - oneof",
+			NewPath("message_field.inner_oneof"),
+			Zero,
+			&pptpb.Message{},
+		},
+		{
+			"repeated field - negative index",
+			NewPath("repeated_message_field.-2.inner_field"),
+			int32(1),
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
+		},
+		{
+			"repeated field - invalid index",
+			NewPath("repeated_message_field.foo.inner_field"),
+			Zero,
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
+		},
+		{
+			"unknown oneof",
+			NewPath("foo.inner_field"),
+			Zero,
+			&pptpb.Message{},
 		},
 	}
 	for _, test := range tests {

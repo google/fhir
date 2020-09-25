@@ -17,9 +17,17 @@ message Message {
 
   message InnerMessage {
     int32 inner_field = 1;
+    repeated int32 repeated_inner_field = 2;
+    repeated InnerMessage2 repeated_inner_message_field = 3;
+
+    oneof inner_oneof {
+      InnerMessage2 inner_oneof_message_field = 4;
+    }
   }
 
-  message InnerMessage2 {}
+  message InnerMessage2 {
+    int32 inner_field2 = 1;
+  }
 
   oneof oneof {
     bool oneof_primitive_field = 2;
@@ -38,4 +46,8 @@ message Message {
   MessageType type = 8;
 
   InnerMessage message_field = 9;
+
+  repeated InnerMessage repeated_message_field = 10;
+
+  string string_field = 11;
 }

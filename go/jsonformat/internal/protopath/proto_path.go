@@ -312,7 +312,11 @@ func set(m protoreflect.Message, value interface{}, path []protoreflect.Name) er
 		}
 	}
 	if len(path) > 1 {
-		return set(v.Message(), value, path[1:])
+		m, ok := v.Interface().(protoreflect.Message)
+		if !ok {
+			return fmt.Errorf("found trailing path for scalar at %s", path[0])
+		}
+		return set(m, value, path[1:])
 	}
 	return assignValue(m, fd, path, value)
 }
@@ -547,7 +551,11 @@ func get(m protoreflect.Message, defVal interface{}, path []protoreflect.Name) (
 	if len(path) == 1 {
 		return goValueFromProtoValue(fd, v)
 	}
-	return get(v.Message(), defVal, path[1:])
+	m, ok := v.Interface().(protoreflect.Message)
+	if !ok {
+		return nil, fmt.Errorf("found trailing path for scalar at %s", path[0])
+	}
+	return get(m, defVal, path[1:])
 }
 
 // Get retrieves a value from a V2 proto at `path`, or returns a default value. An
