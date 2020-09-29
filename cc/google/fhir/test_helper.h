@@ -17,6 +17,8 @@
 #ifndef GOOGLE_FHIR_STU3_TEST_HELPER_H_
 #define GOOGLE_FHIR_STU3_TEST_HELPER_H_
 
+#include <fstream>
+#include <ostream>
 #include <string>
 
 #include "google/protobuf/descriptor.h"
@@ -36,7 +38,6 @@
 #include "google/fhir/stu3/profiles.h"
 #include "google/fhir/stu3/resource_validation.h"
 #include "proto/annotations.pb.h"
-#include "tensorflow/core/platform/env.h"
 
 // When comparing converted FHIR resources to their expected value, you should
 // also check whether that resource is considered valid. Invalid resources are
@@ -135,13 +136,20 @@ class FhirProtoParseHelper {
   int line_;
 };
 
+inline std::string ReadFile(const std::string& filename) {
+  std::ifstream infile;
+  infile.open(
+      absl::StrCat(getenv("TEST_SRCDIR"), "/com_google_fhir/", filename));
+
+  std::ostringstream out;
+  out << infile.rdbuf();
+  return out.str();
+}
+
 template <class T>
 T ReadProto(const std::string& filename) {
   T result;
-  TF_CHECK_OK(::tensorflow::ReadTextProto(
-      ::tensorflow::Env::Default(),
-      absl::StrCat(getenv("TEST_SRCDIR"), "/com_google_fhir/", filename),
-      &result));
+  google::protobuf::TextFormat::ParseFromString(ReadFile(filename), &result);
   return result;
 }
 
@@ -153,15 +161,6 @@ T ReadStu3Proto(const std::string& filename) {
 template <class T>
 T ReadR4Proto(const std::string& filename) {
   return ReadProto<T>(absl::StrCat("testdata/r4/", filename));
-}
-
-inline std::string ReadFile(const std::string& filename) {
-  std::string result;
-  TF_CHECK_OK(::tensorflow::ReadFileToString(
-      ::tensorflow::Env::Default(),
-      absl::StrCat(getenv("TEST_SRCDIR"), "/com_google_fhir/", filename),
-      &result));
-  return result;
 }
 
 #define HANDLER_TYPE_TEST(type, primitive_value, handlerType)                 \

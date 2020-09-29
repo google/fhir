@@ -19,6 +19,7 @@
 #include <string>
 #include <vector>
 
+#include "glog/logging.h"
 #include "absl/strings/str_split.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"

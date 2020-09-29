@@ -1,12 +1,9 @@
 """ Provides a function for setting up the FhirProto workspace """
 
-load("@org_tensorflow//tensorflow:workspace.bzl", "tf_workspace")
 load("@rules_jvm_external//:defs.bzl", "maven_install")
 
 def fhirproto_workspace(core_lib = False):
     """ Sets up FhirProto workspace """
-
-    tf_workspace("", "@org_tensorflow")
 
     maven_install(
         artifacts = [

@@ -7,6 +7,10 @@ load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 
 WELL_KNOWN_PROTOS = ["descriptor_proto", "any_proto"]
+GO_WELL_KNOWN_PROTOS = {
+    "descriptor_proto": "@org_golang_google_protobuf//types/descriptorpb:go_default_library",
+    "any_proto": "@org_golang_google_protobuf//types/known/anypb:go_default_library",
+}
 
 def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = [], **kwargs):
     """Generates proto_library target, as well as {py,cc,java,go}_proto_library targets.
@@ -24,6 +28,7 @@ def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = [], **kwarg
     for x in proto_deps:
         tokens = x.split(":")
         if len(tokens) == 2 and tokens[1] in WELL_KNOWN_PROTOS:
+            go_deps.append(GO_WELL_KNOWN_PROTOS[tokens[1]])
             if not has_well_known_dep:
                 py_deps.append(tokens[0] + ":protobuf_python")
                 cc_deps.append(tokens[0] + ":cc_wkt_protos")

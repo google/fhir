@@ -21,7 +21,7 @@
 #include <string>
 
 
-#include "tensorflow/core/platform/logging.h"
+#include "glog/logging.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/status/status.h"

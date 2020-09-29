@@ -3567,7 +3567,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   }
 
   absl::StatusOr<std::shared_ptr<Literal>> ParseDateTime(
-      absl::string_view text) {
+      const std::string& text) {
     std::string date_time_str;
     std::string subseconds_str;
     std::string time_zone_str;

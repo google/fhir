@@ -1670,7 +1670,7 @@ TEST(JsonFormatR4Test, PrintAndParseAllResources) {
     google::protobuf::Message* parsed_resource =
         parsed_container.GetReflection()->MutableMessage(&parsed_container,
                                                          resource_field);
-    EXPECT_OK(::google::fhir::r4::MergeJsonFhirStringIntoProto(
+    FHIR_ASSERT_OK(::google::fhir::r4::MergeJsonFhirStringIntoProto(
         json, parsed_resource, absl::UTCTimeZone(), false));
     EXPECT_THAT(*resource,
                 google::fhir::testutil::EqualsProto(*parsed_resource));

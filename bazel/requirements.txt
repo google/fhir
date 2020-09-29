@@ -2,7 +2,7 @@ absl-py==0.10.0
 certifi==2020.6.20
 chardet==3.0.4
 idna==2.10
-protobuf==3.9.2
+protobuf==3.13.0
 python-dateutil==2.8.1
 requests==2.24.0
 six==1.15.0
