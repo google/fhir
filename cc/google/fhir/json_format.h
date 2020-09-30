@@ -33,6 +33,13 @@
 namespace google {
 namespace fhir {
 
+// Generic Parser and Printer classes for moving between JSON format and
+// Proto format.
+// Note that for most normal use cases, these classes shouldn't be used
+// directly.
+// If the version of FHIR you are using is known, you should use
+// use the version-specific API at //cc/google/fhir/$VERSION/json_format.h
+
 class Parser {
  public:
   explicit Parser(const PrimitiveHandler* primitive_handler)

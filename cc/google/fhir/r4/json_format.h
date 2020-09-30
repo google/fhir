@@ -23,8 +23,8 @@ namespace google {
 namespace fhir {
 namespace r4 {
 
-// R4-only API for cc/json_format.h
-// See cc/json_format.h for documentation on these methods
+// R4-only API for cc/google/fhir/json_format.h
+// See cc/google/fhir/json_format.h for documentation on these methods
 
 absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
                                           google::protobuf::Message* target,
