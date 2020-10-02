@@ -1,0 +1,374 @@
+syntax = "proto3";
+
+package google.fhir.proto;
+
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r4/core/codes.proto";
+
+option java_package = "com.google.fhir.proto";
+option java_multiple_files = true;
+
+// Metadata for generating FHIR packages
+message PackageInfo {
+  // FHIR version for the package (e.g., STU3, R4, R5, etc).
+  proto.FhirVersion fhir_version = 1;
+  // Base url to use for all profiles defined here.
+  // e.g., g.co/fhir/profiles
+  string base_url = 2;
+
+  // Package for the generated protos for the resources.
+  string proto_package = 3;
+  // Java package for the generated protos for the resources.
+  string java_proto_package = 4;
+  // Go package for the generated protos for the resources.
+  string go_proto_package = 5;
+
+  // Defines whether to generate a local ContainedResource proto or reuse one.
+  // If neither of these fields are set, use the core contained resource on
+  // all generated files.
+  oneof contained_resource {
+    bool local_contained_resource = 6; // Generates a local ContainedResource
+                                       // for the profiles being created.
+    string contained_resource_package = 7; // A fully-qualified
+                                           // some.package.ContainedResource
+                                           // to use for contained resources.
+  }
+
+  string publisher = 8;
+  string telcom_url = 9;
+
+  // The license to include in the generated profile, if any.
+  enum License {
+    NONE = 0;
+    APACHE = 1;
+  }
+  License license = 10;
+
+  // The copyright date to be included in the license text, which
+  // may simply be a year. The generator will use the current year
+  // if this is unset.
+  string license_date = 11;
+
+  enum ContainedResourceBehavior {
+    DEFAULT = 0; // See field below for default behavior.
+    ANY = 1; // Uses protobuf.Any for contained resource fields.
+    TYPED_CONTAINED_RESOURCE = 2; // Use the corresponding resource protos
+                                  // for contained resources.
+  }
+  // If unset, defaults to TYPED_CONTAINED_RESOURCE for DSTU2 and STU3, and
+  // ANY for later versions.
+  ContainedResourceBehavior contained_resource_behavior = 12;
+
+  // How the output messages should be divided into files.
+  enum FileSplittingBehavior {
+    DEFAULT_SPLITTING_BEHAVIOR = 0;  // Default is NO_SPLITTING
+    NO_SPLITTING = 1;         // All messages will be output into a single file,
+                              // regardless of type
+    SEPARATE_EXTENSIONS = 2;  // All extensions will be put into a single file,
+                              // and all other types will be put into a second
+                              // file
+    SPLIT_RESOURCES = 3;      // Like SEPARATE_EXTENSIONS, all extensions will
+                              // be put in a single fileone file, and all
+                              // resources will be put in their own individual
+                              // files.  Note that since this requires each to
+                              // be individually compilable, this is only valid
+                              //  with "ANY" contained resource behavior.
+  }
+  // If unset, defaults to no splitting
+  FileSplittingBehavior file_splitting_behavior = 13;
+}
+
+enum SizeRestriction {
+  UNSET = 0; // Does not set a size restriction on the field.
+  ABSENT = 1; // Field should have zero values, i.e. omitted from the record.
+  REQUIRED = 2; // Field must have exactly one value.
+  OPTIONAL = 3; // Field may have zero or one value.
+  AT_LEAST_ONE = 4;  // Repeated field that should have at least one value.
+  REPEATED = 5; // Repeated field that may have zero or more values.
+}
+
+// Config for definition of Profiles that are part of an Implementation
+// Guide to be generated
+message Profiles {
+  repeated Profile profile = 2;
+}
+
+// Config for definition of Extensions  that are part of an Implementation
+// Guide to be generated
+message Extensions {
+  repeated SimpleExtension simple_extension = 2;
+  repeated ComplexExtension complex_extension = 3;
+}
+
+// Config for definition of Terminologies (CodeSysems and ValueSets) that are
+// part of an Implementation Guide to be generated
+message Terminologies {
+  repeated CodeSystemConfig code_system = 1;
+  repeated ValueSetConfig value_set = 2;
+}
+
+// Defines a profile for a specific FHIR resource.
+message Profile {
+  // Description of the top-level element of the FHIR profile. For instance,
+  // this would be "Patient" in a patient profile.
+  ElementData element_data = 1;
+
+  // Url of the Structure Definition being profiled
+  // e.g., http://hl7.org/fhir/StructureDefinition/Patient
+  string base_url = 2;
+
+  // Restrictions to existing fields (does not add new fields/slices)
+  repeated FieldRestriction restriction = 3;
+
+  // Extensions to be inlined as fields
+  repeated ExtensionSlice extension_slice = 4;
+
+  // CodeableConcept field to slice by Coding system uri.
+  repeated CodeableConceptSlice codeable_concept_slice = 5;
+}
+
+// A restriction on a single field.
+message FieldRestriction {
+  // Id in the Structure Definition of the field to modify.
+  // e.g., Patient.birthDate
+  string field_id = 1;
+
+  // Restriction on the size of the field.  Must be stricter than the
+  // original - the new size must be a valid subset of the original.
+  SizeRestriction size_restriction = 2;
+
+  // For reference fields, restricts what resources the reference
+  // can point to. Must be a subset of the original.
+  ReferenceRestriction reference_restriction = 3;
+
+  // For choice fields, restricts what types the choice can have.
+  // Must be a subset of the original.
+  ChoiceTypeRestriction choice_type_restriction = 4;
+
+  repeated FhirPathConstraint fhir_path_constraint = 5;
+}
+
+// For Reference types, additional restrictions to apply
+message ReferenceRestriction {
+  // Allowed types to refer to.
+  // Must use unprofiled FHIR resource type name,
+  // e.g., Patient, Observation, Medication
+  repeated string allowed = 1;
+}
+
+// Which types are allowed for Choice types. These typically come from
+// the types at https://www.hl7.org/fhir/valueset-defined-types.html
+// but custom types ccan be used as well.
+message ChoiceTypeRestriction {
+  repeated string allowed = 1;
+}
+
+// Structure used to create constraints as described in
+// https://www.hl7.org/fhir/elementdefinition-definitions.html#ElementDefinition.constraint
+message FhirPathConstraint {
+  // Constraint severity.
+  enum Severity {
+    // Generator defaults to error if unset
+    DEFAULT = 0;
+    ERROR = 1;
+    WARNING = 2;
+  }
+  Severity severity = 1;
+
+  // Human-readable description of the constraint
+  string description = 2;
+
+  // The FHIRPath expression defining the constraint
+  string expression = 3;
+}
+
+// Declares an extension to add to a profile. Modeled as a slice because
+// extensions are always sliced by URL, per the FHIR spec.
+message ExtensionSlice {
+  // Id in the Structure Definition of the field to add the extension to.
+  // e.g., Patient.birthDate
+  // Optional - if empty, defaults to top-level element.
+  string field_id = 1;
+
+  ElementData element_data = 2;
+
+  // Must be an absolute url for the Structure Definition that defines this
+  // extension.
+  // e.g., http://hl7.org/fhir/StructureDefinition/patient-birthTime
+  // or https://g.co/fhir/extensions/BinaryClassificationMetadata
+  string url = 3;
+}
+
+// Defines a FHIR slice on a codeable concept as described in
+// https://www.hl7.org/fhir/profiling.html#slicing
+// These are used in the protobuf representation of profiled resources
+// to create concrete fields for specific code systems.
+message CodeableConceptSlice {
+  // Id in the Structure Definition of the CodeableConcept to slice.
+  // e.g., Observation.code, or RiskAssessment.prediction.qualitativeRisk
+  // Note that this should be of type CodeableConcept, NOT type Coding.
+  string field_id = 1;
+
+  message CodingSlice {
+    ElementData element_data = 1;
+
+    CodeData code_data = 2;
+  }
+  repeated CodingSlice coding_slice = 2;
+
+  // Whether or not to allow Codings that do not fit into any of the above
+  // slices.
+  // Optional - defaults to OPEN
+  google.fhir.r4.core.SlicingRulesCode.Value rules = 4;
+}
+
+// Definition for a complex extension, i.e. one that contains one or more nested
+// simple or complex extension fields.
+message ComplexExtension {
+  ElementData element_data = 1;
+  bool can_have_additional_extensions = 2;
+
+  repeated SimpleExtension simple_field = 3;
+  repeated ComplexExtension complex_field = 4;
+
+  // TODO: support choice-type fields as well.
+}
+
+// Definition for a simple extension, i.e. one that contains
+// only a primitive data type.
+// TODO: support references with target profiles.
+message SimpleExtension {
+  ElementData element_data = 1;
+
+  // SimpleExtensions should have either types or a code_type.
+  // These are effectively a oneof, but type must be repeated to support
+  // choice-types, and repeated fields are forbidden in oneofs.
+
+  // Must be one of the types listed in the Extension.value[x] element here:
+  // http://hl7.org/fhir/extension.profile.json
+  // If this field has size > 1 it will generate a choice-type value
+  repeated string type = 2;
+
+  // Code types can have further specifications -
+  // e.g., fixed system, proto code type, or fixed values.
+  CodeData code_type = 3;
+
+  bool can_have_extensions = 4;
+}
+
+// Description of a data element being profiled.
+message ElementData {
+  // Name for the element.
+  // For top-level elements:
+  // * This will be the name of the generated message
+  // * Must TitleCased and unique within all top-level elements in the package.
+  // * The url will be this name appended to Extensions#base_url.
+  // For subfields:
+  // * This will be the name of the field
+  // * Must jsonCased and unique within the containing message.
+  // * If this represents a container field, the generated message will be
+  //   this name in TitleCase.
+  // * The url will be equal to the name.
+  string name = 1;
+
+  // Size constraints for the element.
+  SizeRestriction size_restriction = 2;
+
+  // Human-readable description ofthe element.
+  string description = 3;
+
+  // Short description.
+  // Optional - will re-use description if absent
+  string short = 4;
+
+  // Free-form comment
+  // Optional
+  string comment = 5;
+
+  // If set, provides an override for the structure definition URL.
+  // Should ONLY be used on top-level elements.
+  string url_override = 6;
+}
+
+// Describes a code type with additional metadata
+// (e.g., fixed system, binding name, or value)
+message CodeData {
+  // Fixed Url of the value set to use
+  string system = 1;
+
+  // "Strength" of value set binding - i.e., whether to allow codes that
+  // are not in that value set.
+  // Optional - defaults to required.
+  google.fhir.r4.core.BindingStrengthCode.Value binding_strength = 2;
+
+  // Optional - if set, this code will have a fixed value, and will not be
+  // inlined as a field.
+  string fixed_value = 3;
+}
+
+// A compact representation of a code system used by the
+// TerminologyGenerator to build the FHIR equivalent.
+// See https://www.hl7.org/fhir/codesystem.html for
+// the FHIR resource this will generate.
+message CodeSystemConfig {
+  // Sets the FHIR CodeSystem.name field.
+  string name = 1;
+  // Sets the FHIR CodeSystem.status field.
+  google.fhir.r4.core.PublicationStatusCode.Value status = 2;
+  // Sets the FHIR CodeSystem.description field.
+  string description = 3;
+  // Overrides the URL for the generated code system. The generator
+  // will use the PackageInfo.baseUrl/ValuesetConfig.name if this is unset.
+  string url_override = 4;
+
+  // Defines the CodeSystem.concept structure to be generated.
+  message Concept {
+    // Sets the FHIR Codesystem.concept.code field.
+    string code = 1;
+
+    // Sets the FHIR Codesystem.concept.display field.
+    string display = 2;
+
+    // Sets the FHIR Codesystem.concept.definition field.
+    string definition = 3;
+
+    // TODO: Concepts can have "child" concepts representing
+    // is-a/contains/categorizes relationships
+  }
+  repeated Concept concept = 5;
+}
+
+// A compact representation of a value set used by the
+// TerminologyGenerator to build the FHIR equivalent.
+// See https://www.hl7.org/fhir/valueset.html for the FHIR
+// resource this will generate.
+message ValueSetConfig {
+  // Sets the FHIR ValueSet.name field.
+  string name = 1;
+
+  // Sets the FHIR ValueSet.status field with the publication status.
+  google.fhir.r4.core.PublicationStatusCode.Value status = 2;
+
+  // Sets the FHIR ValueSet.description field.
+  string description = 3;
+
+  // Overrides the URL for the generated valueset. The generator
+  // will use the PackageInfo.baseUrl/ValuesetConfig.name if this is unset.
+  string url_override = 4;
+
+  // A code system and the subset of its values to include in the value set.
+  message System {
+    // The code system URL.
+    string url = 1;
+
+    // At most one of {include, exclude} fields should be set.
+    // If neither is set, all codes from that system will included.
+
+    // Codes from this system to include.
+    repeated string include = 2;
+
+    // Codes from this system to exclude.
+    repeated string exclude = 3;
+  }
+  repeated System system = 5;
+}

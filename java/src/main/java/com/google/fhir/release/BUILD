@@ -38,7 +38,7 @@ java_binary(
         "//java:primitive_wrappers",
         "//java:resource_utils",
         "//java:resource_validator",
-        "//proto/r4/core/resources:all_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:all_java_proto",
     ],
 )
 

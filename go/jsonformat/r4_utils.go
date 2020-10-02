@@ -22,9 +22,9 @@ import (
 	"github.com/golang/protobuf/proto"
 	"bitbucket.org/creachadair/stringset"
 
-	dpb "google/fhir/proto/r4/core/datatypes_go_proto"
-	rpb "google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
-	epb "google/fhir/proto/r4/fhirproto_extensions_go_proto"
+	dpb "proto/google/fhir/proto/r4/core/datatypes_go_proto"
+	rpb "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
+	epb "proto/google/fhir/proto/r4/fhirproto_extensions_go_proto"
 )
 
 const (

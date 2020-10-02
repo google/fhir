@@ -26,7 +26,7 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/util.h"
-#include "proto/annotations.pb.h"
+#include "proto/google/fhir/proto/annotations.pb.h"
 
 namespace google {
 namespace fhir {

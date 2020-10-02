@@ -20,14 +20,14 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/r4/core/codes.pb.h"
-#include "proto/r4/core/datatypes.pb.h"
-#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
-#include "proto/r4/core/resources/encounter.pb.h"
-#include "proto/r4/core/resources/family_member_history.pb.h"
-#include "proto/r4/core/resources/metadata_resource.pb.h"
-#include "proto/r4/core/resources/patient.pb.h"
-#include "proto/r4/uscore.pb.h"
+#include "proto/google/fhir/proto/r4/core/codes.pb.h"
+#include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/encounter.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/family_member_history.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/metadata_resource.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
+#include "proto/google/fhir/proto/r4/uscore.pb.h"
 
 namespace google {
 namespace fhir {

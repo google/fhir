@@ -18,7 +18,7 @@
 #include "gtest/gtest.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/r4/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 #include "testdata/r4/profiles/test.pb.h"
 
 namespace google {

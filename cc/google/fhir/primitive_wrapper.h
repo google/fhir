@@ -32,7 +32,7 @@
 #include "google/fhir/extensions.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "proto/annotations.pb.h"
+#include "proto/google/fhir/proto/annotations.pb.h"
 #include "include/json/json.h"
 #include "re2/re2.h"
 

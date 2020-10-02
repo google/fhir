@@ -34,8 +34,8 @@
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/fhirproto_extensions.pb.h"
+#include "proto/google/fhir/proto/stu3/datatypes.pb.h"
+#include "proto/google/fhir/proto/stu3/fhirproto_extensions.pb.h"
 #include "include/json/json.h"
 
 namespace google {

@@ -28,8 +28,8 @@
 #include "google/fhir/fhir_types.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/statusor.h"
-#include "proto/annotations.pb.h"
-#include "proto/r4/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/annotations.pb.h"
+#include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 
 namespace google {
 namespace fhir {

@@ -21,8 +21,8 @@
 #include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/testutil/fhir_test_env.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/r4/core/resources/observation.pb.h"
-#include "proto/r4/core/resources/patient.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
 
 namespace google {
 namespace fhir {

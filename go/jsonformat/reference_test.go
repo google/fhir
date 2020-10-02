@@ -20,9 +20,9 @@ import (
 
 	"github.com/golang/protobuf/proto"
 
-	apb "google/fhir/proto/annotations_go_proto"
-	d4pb "google/fhir/proto/r4/core/datatypes_go_proto"
-	d3pb "google/fhir/proto/stu3/datatypes_go_proto"
+	apb "proto/google/fhir/proto/annotations_go_proto"
+	d4pb "proto/google/fhir/proto/r4/core/datatypes_go_proto"
+	d3pb "proto/google/fhir/proto/stu3/datatypes_go_proto"
 )
 
 func referenceProto(ver apb.FhirVersion) proto.Message {

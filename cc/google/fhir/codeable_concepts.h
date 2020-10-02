@@ -31,9 +31,9 @@
 #include "google/fhir/r4/codeable_concepts.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/codeable_concepts.h"
-#include "proto/annotations.pb.h"
-#include "proto/r4/core/datatypes.pb.h"
-#include "proto/stu3/datatypes.pb.h"
+#include "proto/google/fhir/proto/annotations.pb.h"
+#include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 
 namespace google {
 namespace fhir {

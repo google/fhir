@@ -28,17 +28,17 @@ import (
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
 
-	c4pb "google/fhir/proto/r4/core/codes_go_proto"
-	d4pb "google/fhir/proto/r4/core/datatypes_go_proto"
-	r4pb "google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
-	r4devicepb "google/fhir/proto/r4/core/resources/device_go_proto"
-	r4observationpb "google/fhir/proto/r4/core/resources/observation_go_proto"
-	r4patientpb "google/fhir/proto/r4/core/resources/patient_go_proto"
-	r4searchparampb "google/fhir/proto/r4/core/resources/search_parameter_go_proto"
-	c3pb "google/fhir/proto/stu3/codes_go_proto"
-	d3pb "google/fhir/proto/stu3/datatypes_go_proto"
-	m3pb "google/fhir/proto/stu3/metadatatypes_go_proto"
-	r3pb "google/fhir/proto/stu3/resources_go_proto"
+	c4pb "proto/google/fhir/proto/r4/core/codes_go_proto"
+	d4pb "proto/google/fhir/proto/r4/core/datatypes_go_proto"
+	r4pb "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
+	r4devicepb "proto/google/fhir/proto/r4/core/resources/device_go_proto"
+	r4observationpb "proto/google/fhir/proto/r4/core/resources/observation_go_proto"
+	r4patientpb "proto/google/fhir/proto/r4/core/resources/patient_go_proto"
+	r4searchparampb "proto/google/fhir/proto/r4/core/resources/search_parameter_go_proto"
+	c3pb "proto/google/fhir/proto/stu3/codes_go_proto"
+	d3pb "proto/google/fhir/proto/stu3/datatypes_go_proto"
+	m3pb "proto/google/fhir/proto/stu3/metadatatypes_go_proto"
+	r3pb "proto/google/fhir/proto/stu3/resources_go_proto"
 )
 
 // TODO: Find a better way to maintain the versioned unit tests.

@@ -18,10 +18,10 @@
 #include "gtest/gtest.h"
 #include "google/fhir/util.h"
 #include "google/fhir/type_macros.h"
-#include "proto/r4/core/datatypes.pb.h"
-#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/resources.pb.h"
+#include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/google/fhir/proto/stu3/datatypes.pb.h"
+#include "proto/google/fhir/proto/stu3/resources.pb.h"
 
 namespace google::fhir::fhir_path::internal {
 

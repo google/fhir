@@ -20,7 +20,7 @@
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
-#include "proto/annotations.pb.h"
+#include "proto/google/fhir/proto/annotations.pb.h"
 
 namespace google {
 namespace fhir {

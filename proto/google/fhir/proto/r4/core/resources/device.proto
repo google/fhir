@@ -1,0 +1,293 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r4/core/codes.proto";
+import "proto/google/fhir/proto/r4/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.core";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for Device, last updated
+// 2019-11-01T09:29:23.356+11:00. Item used in healthcare. See
+// http://hl7.org/fhir/StructureDefinition/Device
+message Device {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Device";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Device.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Instance identifier
+  repeated Identifier identifier = 10;
+
+  // The reference to the definition for the device
+  Reference definition = 11
+      [(.google.fhir.proto.valid_reference_type) = "DeviceDefinition"];
+
+  // Unique Device Identifier (UDI) Barcode string
+  message UdiCarrier {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Mandatory fixed portion of UDI
+    String device_identifier = 4;
+
+    // UDI Issuing Organization
+    Uri issuer = 5;
+
+    // Regional UDI authority
+    Uri jurisdiction = 6;
+
+    // UDI Machine Readable Barcode String
+    Base64Binary carrier_aidc = 7 [json_name = "carrierAIDC"];
+
+    // UDI Human Readable Barcode String
+    String carrier_hrf = 8 [json_name = "carrierHRF"];
+
+    // barcode | rfid | manual +
+    message EntryTypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/udi-entry-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      UDIEntryTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    EntryTypeCode entry_type = 9;
+  }
+  repeated UdiCarrier udi_carrier = 12;
+
+  // active | inactive | entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/device-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    FHIRDeviceStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 13;
+
+  // online | paused | standby | offline | not-ready | transduc-discon |
+  // hw-discon | off
+  repeated CodeableConcept status_reason = 14;
+
+  // The distinct identification string
+  String distinct_identifier = 15;
+
+  // Name of device manufacturer
+  String manufacturer = 16;
+
+  // Date when the device was made
+  DateTime manufacture_date = 17;
+
+  // Date and time of expiry of this device (if applicable)
+  DateTime expiration_date = 18;
+
+  // Lot number of manufacture
+  String lot_number = 19;
+
+  // Serial number assigned by the manufacturer
+  String serial_number = 20;
+
+  // The name of the device as given by the manufacturer
+  message DeviceName {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The name of the device
+    String name = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // udi-label-name | user-friendly-name | patient-reported-name |
+    // manufacturer-name | model-name | other
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/device-nametype";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      DeviceNameTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated DeviceName device_name = 21;
+
+  // The model number for the device
+  String model_number = 22;
+
+  // The part number of the device
+  String part_number = 23;
+
+  // The kind or type of device
+  CodeableConcept type = 24;
+
+  // The capabilities supported on a  device, the standards to which the device
+  // conforms for a particular purpose, and used for the communication
+  message Specialization {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The standard that is used to operate and communicate
+    CodeableConcept system_type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // The version of the standard that is used to operate and communicate
+    String version = 5;
+  }
+  repeated Specialization specialization = 25;
+
+  // The actual design of the device or software version running on the device
+  message Version {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The type of the device version
+    CodeableConcept type = 4;
+
+    // A single component of the device version
+    Identifier component = 5;
+
+    // The version text
+    String value = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Version version = 26;
+
+  // The actual configuration settings of a device as it actually operates,
+  // e.g., regulation status, time properties
+  message Property {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Code that specifies the property DeviceDefinitionPropetyCode (Extensible)
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Property value as a quantity
+    repeated Quantity value_quantity = 5;
+
+    // Property value as a code, e.g., NTP4 (synced to NTP)
+    repeated CodeableConcept value_code = 6;
+  }
+  repeated Property property = 27;
+
+  // Patient to whom Device is affixed
+  Reference patient = 28
+      [(.google.fhir.proto.valid_reference_type) = "Patient"];
+
+  // Organization responsible for device
+  Reference owner = 29
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Details for human/organization for support
+  repeated ContactPoint contact = 30;
+
+  // Where the device is found
+  Reference location = 31
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Network address to contact device
+  Uri url = 32;
+
+  // Device notes and comments
+  repeated Annotation note = 33;
+
+  // Safety Characteristics of Device
+  repeated CodeableConcept safety = 34;
+
+  // The parent device
+  Reference parent = 35 [(.google.fhir.proto.valid_reference_type) = "Device"];
+}

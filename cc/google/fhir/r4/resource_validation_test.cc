@@ -22,9 +22,9 @@
 #include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/test_helper.h"
-#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
-#include "proto/r4/core/resources/encounter.pb.h"
-#include "proto/r4/core/resources/observation.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/encounter.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
 
 namespace google {
 namespace fhir {

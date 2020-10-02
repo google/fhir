@@ -20,7 +20,7 @@
 #include "google/protobuf/message.h"
 #include "google/fhir/extensions.h"
 #include "absl/status/status.h"
-#include "proto/r4/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 
 namespace google {
 namespace fhir {

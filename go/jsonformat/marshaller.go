@@ -28,7 +28,7 @@ import (
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
 	descpb "google.golang.org/protobuf/types/descriptorpb"
-	apb "google/fhir/proto/annotations_go_proto"
+	apb "proto/google/fhir/proto/annotations_go_proto"
 )
 
 // jsonFormat is the format in which the marshaller will represent the FHIR

@@ -19,9 +19,9 @@
 #include "absl/status/status.h"
 #include "absl/time/time.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/stu3/codes.pb.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/resources.pb.h"
+#include "proto/google/fhir/proto/stu3/codes.pb.h"
+#include "proto/google/fhir/proto/stu3/datatypes.pb.h"
+#include "proto/google/fhir/proto/stu3/resources.pb.h"
 
 namespace google {
 namespace fhir {

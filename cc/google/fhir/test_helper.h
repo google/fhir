@@ -37,7 +37,7 @@
 #include "google/fhir/stu3/primitive_handler.h"
 #include "google/fhir/stu3/profiles.h"
 #include "google/fhir/stu3/resource_validation.h"
-#include "proto/annotations.pb.h"
+#include "proto/google/fhir/proto/annotations.pb.h"
 
 // When comparing converted FHIR resources to their expected value, you should
 // also check whether that resource is considered valid. Invalid resources are

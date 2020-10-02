@@ -17,7 +17,7 @@
 #include "google/fhir/stu3/extensions.h"
 
 #include "google/fhir/status/statusor.h"
-#include "proto/stu3/datatypes.pb.h"
+#include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 
 namespace google {
 namespace fhir {

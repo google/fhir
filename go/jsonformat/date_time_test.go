@@ -24,8 +24,8 @@ import (
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 
-	d4pb "google/fhir/proto/r4/core/datatypes_go_proto"
-	d3pb "google/fhir/proto/stu3/datatypes_go_proto"
+	d4pb "proto/google/fhir/proto/r4/core/datatypes_go_proto"
+	d3pb "proto/google/fhir/proto/stu3/datatypes_go_proto"
 )
 
 func newDatesForTest(val int64, precName string, tz string) []proto.Message {

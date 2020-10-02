@@ -24,11 +24,11 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
-#include "proto/r4/core/resources/encounter.pb.h"
-#include "proto/r4/core/resources/observation.pb.h"
-#include "proto/r4/core/resources/patient.pb.h"
-#include "proto/r4/uscore.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/encounter.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
+#include "proto/google/fhir/proto/r4/uscore.pb.h"
 #include "testdata/r4/profiles/test.pb.h"
 
 namespace google {

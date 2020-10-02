@@ -21,8 +21,8 @@
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
 #include "google/fhir/test_helper.h"
-#include "proto/stu3/datatypes.pb.h"
-#include "proto/stu3/resources.pb.h"
+#include "proto/google/fhir/proto/stu3/datatypes.pb.h"
+#include "proto/google/fhir/proto/stu3/resources.pb.h"
 
 namespace google {
 namespace fhir {

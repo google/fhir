@@ -1,0 +1,135 @@
+//    Copyright 2018 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.stu3.ml;
+
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/stu3/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.stu3.ml";
+option go_package = "google/fhir/stu3/proto";
+option (.google.fhir.proto.fhir_version) = STU3;
+
+// Auto-generated from StructureDefinition for EventLabel.
+// EventLabels define labels used for TensorFlow model training and evaluation.
+// See https://g.co/fhir/StructureDefinition/eventLabel
+message EventLabel {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "https://g.co/fhir/StructureDefinition/eventLabel";
+
+  // xml:id (or equivalent in JSON)
+  proto.String id = 1;
+
+  // Additional Content defined by implementations
+  repeated proto.Extension extension = 2;
+
+  // The patient associated with this label
+  proto.Reference patient = 4 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
+
+  // The type of label, part of the prediction task definition
+  proto.Coding type = 5 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
+
+  // Time associated with the label event, if available
+  proto.DateTime event_time = 6 [(.google.fhir.proto.fhir_path_constraint) =
+                                     "extension.exists() != value.exists()"];
+
+  // Resource that owns this label
+  proto.Reference source = 7 [(.google.fhir.proto.fhir_path_constraint) =
+                                  "extension.exists() != value.exists()"];
+
+  // List of labels associated with this event
+  message Label {
+    // xml:id (or equivalent in JSON)
+    proto.String id = 1;
+
+    // Extension.extension.extension not present on profile.
+    reserved 2;
+
+    // Extension.extension.value[x] not present on profile.
+    reserved 3;
+
+    // Class name in multi-class prediction tasks, e.g. code "780.60" for icd9
+    proto.Coding class_name = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.fhir_path_constraint) =
+          "extension.exists() != value.exists()"
+    ];
+
+    // The value of the label
+    message ClassValue {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof class_value {
+        proto.Boolean boolean = 1;
+        proto.Decimal decimal = 2;
+        proto.Integer integer = 3;
+        proto.String string_value = 4 [json_name = "string"];
+        proto.DateTime date_time = 5;
+      }
+    }
+    ClassValue class_value = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.fhir_path_constraint) =
+          "extension.exists() != value.exists()"
+    ];
+  }
+  repeated Label label = 8 [(.google.fhir.proto.fhir_path_constraint) =
+                                "extension.exists() != value.exists()"];
+}
+
+// Auto-generated from StructureDefinition for EventTrigger.
+// EventTriggers specify cutoff times for generated TensorFlow examples.
+// See https://g.co/fhir/StructureDefinition/eventTrigger
+message EventTrigger {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "https://g.co/fhir/StructureDefinition/eventTrigger";
+
+  // xml:id (or equivalent in JSON)
+  proto.String id = 1;
+
+  // The type of trigger, part of the prediction task definition.
+  proto.Coding type = 4 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
+
+  // Prediction event time, more recent data will be elided.
+  proto.DateTime event_time = 5 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_constraint) =
+        "extension.exists() != value.exists()"
+  ];
+
+  // Resource that owns this trigger.
+  proto.Reference source = 6 [(.google.fhir.proto.fhir_path_constraint) =
+                                  "extension.exists() != value.exists()"];
+}

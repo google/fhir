@@ -27,12 +27,12 @@ fhir_proto_library(
         "test_extensions.proto",
     ],
     proto_deps = [
-        "//proto:annotations_proto",
-        "//proto/stu3:codes_proto",
-        "//proto/stu3:datatypes_proto",
-        "//proto/stu3:extensions_proto",
-        "//proto/stu3:metadatatypes_proto",
-        "//proto/stu3:resources_proto",
+        "//proto/google/fhir/proto:annotations_proto",
+        "//proto/google/fhir/proto/stu3:codes_proto",
+        "//proto/google/fhir/proto/stu3:datatypes_proto",
+        "//proto/google/fhir/proto/stu3:extensions_proto",
+        "//proto/google/fhir/proto/stu3:metadatatypes_proto",
+        "//proto/google/fhir/proto/stu3:resources_proto",
     ],
     proto_library_prefix = "test",
 )

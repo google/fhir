@@ -16,10 +16,10 @@ syntax = "proto3";
 
 package google.fhir.stu3.testing;
 
-import "proto/annotations.proto";
-import "proto/stu3/codes.proto";
-import "proto/stu3/datatypes.proto";
-import "proto/stu3/metadatatypes.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/stu3/codes.proto";
+import "proto/google/fhir/proto/stu3/datatypes.proto";
+import "proto/google/fhir/proto/stu3/metadatatypes.proto";
 import "testdata/stu3/profiles/test_extensions.proto";
 
 option java_multiple_files = true;

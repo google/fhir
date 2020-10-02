@@ -1,0 +1,282 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r4/core/codes.proto";
+import "proto/google/fhir/proto/r4/core/datatypes.proto";
+import "proto/google/fhir/proto/r4/core/extensions.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.core";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for ServiceRequest-Genetics.
+// A request for a service to be performed.
+// See http://hl7.org/fhir/StructureDefinition/servicerequest-genetics
+message ServiceRequestGenetics {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/ServiceRequest";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/servicerequest-genetics";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "orderDetail.empty() or code.exists()";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ServiceRequest.contained
+  reserved 7;
+
+  // Extension
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Identifiers assigned to this order
+  repeated Identifier identifier = 10;
+
+  // Instantiates FHIR protocol or definition
+  repeated Canonical instantiates_canonical = 11;
+
+  // Instantiates external protocol or definition
+  repeated Uri instantiates_uri = 12;
+
+  // What request fulfills
+  repeated Reference based_on = 13 [
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "ServiceRequest",
+    (.google.fhir.proto.valid_reference_type) = "MedicationRequest"
+  ];
+
+  // What request replaces
+  repeated Reference replaces = 14
+      [(.google.fhir.proto.valid_reference_type) = "ServiceRequest"];
+
+  // Composite Request ID
+  Identifier requisition = 15;
+
+  // draft | active | on-hold | revoked | completed | entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // proposal | plan | directive | order | original-order | reflex-order |
+  // filler-order | instance-order | option
+  message IntentCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-intent";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestIntentCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  IntentCode intent = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of service
+  repeated CodeableConcept category = 18;
+
+  // routine | urgent | asap | stat
+  message PriorityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-priority";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestPriorityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  PriorityCode priority = 19;
+
+  // True if service/procedure should not be performed
+  Boolean do_not_perform = 20;
+
+  // What is being requested/ordered
+  CodeableConcept code = 21;
+
+  // Additional order information
+  repeated CodeableConcept order_detail = 22;
+
+  // Service amount
+  message QuantityX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Quantity quantity = 1;
+      Ratio ratio = 2;
+      Range range = 3;
+    }
+  }
+  QuantityX quantity = 23;
+
+  // Individual or Entity the service is ordered for
+  Reference subject = 24 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "Location",
+    (.google.fhir.proto.valid_reference_type) = "Device"
+  ];
+
+  // Encounter in which the request was created
+  Reference encounter = 25
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // When service should occur
+  message OccurrenceX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      DateTime date_time = 1;
+      Period period = 2;
+      Timing timing = 3;
+    }
+  }
+  OccurrenceX occurrence = 26;
+
+  // Preconditions for service
+  message AsNeededX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Boolean boolean = 1;
+      CodeableConcept codeable_concept = 2;
+    }
+  }
+  AsNeededX as_needed = 27;
+
+  // Date request signed
+  DateTime authored_on = 28;
+
+  // Who/what is requesting service
+  Reference requester = 29 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.proto.valid_reference_type) = "Device"
+  ];
+
+  // Performer role
+  CodeableConcept performer_type = 30;
+
+  // Requested performer
+  repeated Reference performer = 31 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "CareTeam",
+    (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+  ];
+
+  // Requested location
+  repeated CodeableConcept location_code = 32;
+
+  // Requested location
+  repeated Reference location_reference = 33
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Explanation/Justification for procedure or service
+  repeated CodeableConcept reason_code = 34;
+
+  // Explanation/Justification for service or service
+  repeated Reference reason_reference = 35 [
+    (.google.fhir.proto.valid_reference_type) = "Condition",
+    (.google.fhir.proto.valid_reference_type) = "Observation",
+    (.google.fhir.proto.valid_reference_type) = "DiagnosticReport",
+    (.google.fhir.proto.valid_reference_type) = "DocumentReference"
+  ];
+
+  // Associated insurance coverage
+  repeated Reference insurance = 36 [
+    (.google.fhir.proto.valid_reference_type) = "Coverage",
+    (.google.fhir.proto.valid_reference_type) = "ClaimResponse"
+  ];
+
+  // Additional clinical information
+  repeated Reference supporting_info = 37
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Procedure Samples
+  repeated Reference specimen = 38
+      [(.google.fhir.proto.valid_reference_type) = "Specimen"];
+
+  // Location on Body
+  repeated CodeableConcept body_site = 39;
+
+  // Comments
+  repeated Annotation note = 40;
+
+  // Patient or consumer-oriented instructions
+  String patient_instruction = 41;
+
+  // Request provenance
+  repeated Reference relevant_history = 42
+      [(.google.fhir.proto.valid_reference_type) = "Provenance"];
+
+  // The items the orderer requested
+  repeated DiagnosticReportItem item = 43 [
+    (.google.fhir.proto.fhir_inlined_extension_url) =
+        "http://hl7.org/fhir/StructureDefinition/servicerequest-geneticsItem",
+    json_name = "Item"
+  ];
+}

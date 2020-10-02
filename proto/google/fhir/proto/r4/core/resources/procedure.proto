@@ -1,0 +1,258 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r4/core/codes.proto";
+import "proto/google/fhir/proto/r4/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.core";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for Procedure, last updated
+// 2019-11-01T09:29:23.356+11:00. An action that is being or was performed on a
+// patient. See http://hl7.org/fhir/StructureDefinition/Procedure
+message Procedure {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Procedure";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Procedure.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // External Identifiers for this procedure
+  repeated Identifier identifier = 10;
+
+  // Instantiates FHIR protocol or definition
+  repeated Canonical instantiates_canonical = 11;
+
+  // Instantiates external protocol or definition
+  repeated Uri instantiates_uri = 12;
+
+  // A request for this procedure
+  repeated Reference based_on = 13 [
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "ServiceRequest"
+  ];
+
+  // Part of referenced event
+  repeated Reference part_of = 14 [
+    (.google.fhir.proto.valid_reference_type) = "Procedure",
+    (.google.fhir.proto.valid_reference_type) = "Observation",
+    (.google.fhir.proto.valid_reference_type) = "MedicationAdministration"
+  ];
+
+  // preparation | in-progress | not-done | on-hold | stopped | completed |
+  // entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/event-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    EventStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 15
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Reason for current status
+  CodeableConcept status_reason = 16;
+
+  // Classification of the procedure
+  CodeableConcept category = 17;
+
+  // Identification of the procedure
+  CodeableConcept code = 18;
+
+  // Who the procedure was performed on
+  Reference subject = 19 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // Encounter created as part of
+  Reference encounter = 20
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // When the procedure was performed
+  message PerformedX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      DateTime date_time = 1;
+      Period period = 2;
+      String string_value = 3 [json_name = "string"];
+      Age age = 4;
+      Range range = 5;
+    }
+  }
+  PerformedX performed = 21;
+
+  // Who recorded the procedure
+  Reference recorder = 22 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // Person who asserts this procedure
+  Reference asserter = 23 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // The people who performed the procedure
+  message Performer {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Type of performance
+    CodeableConcept function = 4;
+
+    // The reference to the practitioner
+    Reference actor = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+      (.google.fhir.proto.valid_reference_type) = "Device"
+    ];
+
+    // Organization the device or practitioner was acting for
+    Reference on_behalf_of = 6
+        [(.google.fhir.proto.valid_reference_type) = "Organization"];
+  }
+  repeated Performer performer = 24;
+
+  // Where the procedure happened
+  Reference location = 25
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Coded reason procedure performed
+  repeated CodeableConcept reason_code = 26;
+
+  // The justification that the procedure was performed
+  repeated Reference reason_reference = 27 [
+    (.google.fhir.proto.valid_reference_type) = "Condition",
+    (.google.fhir.proto.valid_reference_type) = "Observation",
+    (.google.fhir.proto.valid_reference_type) = "Procedure",
+    (.google.fhir.proto.valid_reference_type) = "DiagnosticReport",
+    (.google.fhir.proto.valid_reference_type) = "DocumentReference"
+  ];
+
+  // Target body sites
+  repeated CodeableConcept body_site = 28;
+
+  // The result of procedure
+  CodeableConcept outcome = 29;
+
+  // Any report resulting from the procedure
+  repeated Reference report = 30 [
+    (.google.fhir.proto.valid_reference_type) = "DiagnosticReport",
+    (.google.fhir.proto.valid_reference_type) = "DocumentReference",
+    (.google.fhir.proto.valid_reference_type) = "Composition"
+  ];
+
+  // Complication following the procedure
+  repeated CodeableConcept complication = 31;
+
+  // A condition that is a result of the procedure
+  repeated Reference complication_detail = 32
+      [(.google.fhir.proto.valid_reference_type) = "Condition"];
+
+  // Instructions for follow up
+  repeated CodeableConcept follow_up = 33;
+
+  // Additional information about the procedure
+  repeated Annotation note = 34;
+
+  // Manipulated, implanted, or removed device
+  message FocalDevice {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Kind of change to device
+    CodeableConcept action = 4;
+
+    // Device that was changed
+    Reference manipulated = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Device"
+    ];
+  }
+  repeated FocalDevice focal_device = 35;
+
+  // Items used during procedure
+  repeated Reference used_reference = 36 [
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Medication",
+    (.google.fhir.proto.valid_reference_type) = "Substance"
+  ];
+
+  // Coded items used during the procedure
+  repeated CodeableConcept used_code = 37;
+}

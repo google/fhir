@@ -22,11 +22,11 @@
 #include "absl/strings/str_cat.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/r4/core/datatypes.pb.h"
-#include "proto/r4/core/extensions.pb.h"
-#include "proto/r4/core/resources/composition.pb.h"
-#include "proto/r4/fhirproto_extensions.pb.h"
-#include "proto/r4/ml_extensions.pb.h"
+#include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/r4/core/extensions.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/composition.pb.h"
+#include "proto/google/fhir/proto/r4/fhirproto_extensions.pb.h"
+#include "proto/google/fhir/proto/r4/ml_extensions.pb.h"
 #include "testdata/r4/profiles/test_extensions.pb.h"
 
 namespace google {

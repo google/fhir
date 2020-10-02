@@ -25,8 +25,8 @@ import (
 	"google.golang.org/protobuf/testing/protocmp"
 
 	atpb "jsonformat/internal/accessor/accessor_test_go_proto"
-	d3pb "google/fhir/proto/stu3/datatypes_go_proto"
-	r3pb "google/fhir/proto/stu3/resources_go_proto"
+	d3pb "proto/google/fhir/proto/stu3/datatypes_go_proto"
+	r3pb "proto/google/fhir/proto/stu3/resources_go_proto"
 )
 
 func TestGetMessage(t *testing.T) {

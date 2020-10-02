@@ -21,7 +21,7 @@
 #include "google/fhir/r4/json_format.h"
 #include "google/fhir/r4/profiles.h"
 #include "examples/profiles/demo.pb.h"
-#include "proto/r4/core/resources/patient.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
 
 
 using ::company::fhir::r4::demo::DemoPatient;

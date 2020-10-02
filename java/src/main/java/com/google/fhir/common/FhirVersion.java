@@ -26,7 +26,7 @@ public enum FhirVersion {
   STU3(
       "google.fhir.stu3.proto",
       "spec/fhir_stu3_package.zip",
-      "proto/stu3",
+      "proto/google/fhir/proto/stu3",
       ImmutableList.of(
           com.google.fhir.stu3.proto.AbstractTypeCode.getDescriptor().getFile(),
           com.google.fhir.stu3.proto.AddressTypeCode.getDescriptor().getFile()),
@@ -44,7 +44,7 @@ public enum FhirVersion {
   R4(
       "google.fhir.r4.core",
       "spec/fhir_r4_package.zip",
-      "proto/r4/core",
+      "proto/google/fhir/proto/r4/core",
       ImmutableList.of(
           com.google.fhir.r4.core.AccountStatusCode.getDescriptor().getFile(),
           com.google.fhir.r4.core.BodyLengthUnitsValueSet.getDescriptor().getFile()),

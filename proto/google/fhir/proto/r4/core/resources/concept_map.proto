@@ -1,0 +1,310 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r4/core/codes.proto";
+import "proto/google/fhir/proto/r4/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.core";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for ConceptMap, last updated
+// 2019-11-01T09:29:23.356+11:00. A map from one set of concepts to one or more
+// other concepts. See http://hl7.org/fhir/StructureDefinition/ConceptMap
+message ConceptMap {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ConceptMap";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ConceptMap.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this concept map, represented as a URI (globally
+  // unique)
+  Uri url = 10;
+
+  // Additional identifier for the concept map
+  Identifier identifier = 11;
+
+  // Business version of the concept map
+  String version = 12;
+
+  // Name for this concept map (computer friendly)
+  String name = 13;
+
+  // Name for this concept map (human friendly)
+  String title = 14;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 15
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 16;
+
+  // Date last changed
+  DateTime date = 17;
+
+  // Name of the publisher (organization or individual)
+  String publisher = 18;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 19;
+
+  // Natural language description of the concept map
+  Markdown description = 20;
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 21;
+
+  // Intended jurisdiction for concept map (if applicable)
+  repeated CodeableConcept jurisdiction = 22;
+
+  // Why this concept map is defined
+  Markdown purpose = 23;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 24;
+
+  // The source value set that contains the concepts that are being mapped
+  message SourceX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Uri uri = 1;
+      Canonical canonical = 2;
+    }
+  }
+  SourceX source = 25;
+
+  // The target value set which provides context for the mappings
+  message TargetX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Uri uri = 1;
+      Canonical canonical = 2;
+    }
+  }
+  TargetX target = 26;
+
+  // Same source and target systems
+  message Group {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Source system where concepts to be mapped are defined
+    Uri source = 4;
+
+    // Specific version of the  code system
+    String source_version = 5;
+
+    // Target system that the concepts are to be mapped to
+    Uri target = 6;
+
+    // Specific version of the  code system
+    String target_version = 7;
+
+    // Mappings for a concept from the source set
+    message SourceElement {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Identifies element being mapped
+      Code code = 4;
+
+      // Display for the code
+      String display = 5;
+
+      // Concept in target system for element
+      message TargetElement {
+        option (.google.fhir.proto.fhir_path_message_constraint) =
+            "comment.exists() or equivalence.empty() or ((equivalence != 'narrower') and (equivalence != 'inexact'))";
+
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Code that identifies the target element
+        Code code = 4;
+
+        // Display for the code
+        String display = 5;
+
+        // relatedto | equivalent | equal | wider | subsumes | narrower |
+        // specializes | inexact | unmatched | disjoint
+        message EquivalenceCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/concept-map-equivalence";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          ConceptMapEquivalenceCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        EquivalenceCode equivalence = 6
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // Description of status/issues in mapping
+        String comment = 7;
+
+        // Other elements required for this mapping (from context)
+        message OtherElement {
+          // Unique id for inter-element referencing
+          String id = 1;
+
+          // Additional content defined by implementations
+          repeated Extension extension = 2;
+
+          // Extensions that cannot be ignored even if unrecognized
+          repeated Extension modifier_extension = 3;
+
+          // Reference to property mapping depends on
+          Uri property = 4
+              [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+          // Code System (if necessary)
+          Canonical system = 5;
+
+          // Value of the referenced element
+          String value = 6
+              [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+          // Display for the code (if value is a code)
+          String display = 7;
+        }
+        repeated OtherElement depends_on = 8;
+
+        // Other concepts that this mapping also produces
+        repeated OtherElement product = 9;
+      }
+      repeated TargetElement target = 6;
+    }
+    repeated SourceElement element = 8
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // What to do when there is no mapping for the source concept
+    message Unmapped {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "(mode = 'fixed') implies code.exists()";
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "(mode = 'other-map') implies url.exists()";
+
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // provided | fixed | other-map
+      message ModeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/conceptmap-unmapped-mode";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ConceptMapGroupUnmappedModeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      ModeCode mode = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Fixed code when mode = fixed
+      Code code = 5;
+
+      // Display for the code
+      String display = 6;
+
+      // canonical reference to an additional ConceptMap to use for mapping if
+      // the source concept is unmapped
+      Canonical url = 7;
+    }
+    Unmapped unmapped = 9;
+  }
+  repeated Group group = 27;
+}

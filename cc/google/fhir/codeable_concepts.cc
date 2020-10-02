@@ -26,7 +26,7 @@
 #include "google/fhir/r4/codeable_concepts.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/codeable_concepts.h"
-#include "proto/annotations.pb.h"
+#include "proto/google/fhir/proto/annotations.pb.h"
 
 #define CODEABLE_CONCEPTS_VERSION_DISPATCH(default_return_val, function_name, \
                                            first_arg, args...)                \

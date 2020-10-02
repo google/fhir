@@ -1,0 +1,482 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r4/core/codes.proto";
+import "proto/google/fhir/proto/r4/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.core";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for MedicationKnowledge, last updated
+// 2019-11-01T09:29:23.356+11:00. Definition of Medication Knowledge. See
+// http://hl7.org/fhir/StructureDefinition/MedicationKnowledge
+message MedicationKnowledge {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MedicationKnowledge";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // MedicationKnowledge.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Code that identifies this medication
+  CodeableConcept code = 10;
+
+  // active | inactive | entered-in-error
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/medicationknowledge-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    MedicationKnowledgeStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11;
+
+  // Manufacturer of the item
+  Reference manufacturer = 12
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // powder | tablets | capsule +
+  CodeableConcept dose_form = 13;
+
+  // Amount of drug in package
+  SimpleQuantity amount = 14;
+
+  // Additional names for a medication
+  repeated String synonym = 15;
+
+  // Associated or related medication information
+  message RelatedMedicationKnowledge {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Category of medicationKnowledge
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Associated documentation about the associated medication knowledge
+    repeated Reference reference = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "MedicationKnowledge"
+    ];
+  }
+  repeated RelatedMedicationKnowledge related_medication_knowledge = 16;
+
+  // A medication resource that is associated with this medication
+  repeated Reference associated_medication = 17
+      [(.google.fhir.proto.valid_reference_type) = "Medication"];
+
+  // Category of the medication or product
+  repeated CodeableConcept product_type = 18;
+
+  // Associated documentation about the medication
+  message Monograph {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The category of medication document
+    CodeableConcept type = 4;
+
+    // Associated documentation about the medication
+    Reference source = 5 [
+      (.google.fhir.proto.valid_reference_type) = "DocumentReference",
+      (.google.fhir.proto.valid_reference_type) = "Media"
+    ];
+  }
+  repeated Monograph monograph = 19;
+
+  // Active or inactive ingredient
+  message Ingredient {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Medication(s) or substance(s) contained in the medication
+    message ItemX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2
+            [(.google.fhir.proto.valid_reference_type) = "Substance"];
+      }
+    }
+    ItemX item = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Active ingredient indicator
+    Boolean is_active = 5;
+
+    // Quantity of ingredient present
+    Ratio strength = 6;
+  }
+  repeated Ingredient ingredient = 20;
+
+  // The instructions for preparing the medication
+  Markdown preparation_instruction = 21;
+
+  // The intended or approved route of administration
+  repeated CodeableConcept intended_route = 22;
+
+  // The pricing of the medication
+  message Cost {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The category of the cost information
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // The source or owner for the price information
+    String source = 5;
+
+    // The price of the medication
+    Money cost = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Cost cost = 23;
+
+  // Program under which a medication is reviewed
+  message MonitoringProgram {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Type of program under which the medication is monitored
+    CodeableConcept type = 4;
+
+    // Name of the reviewing program
+    String name = 5;
+  }
+  repeated MonitoringProgram monitoring_program = 24;
+
+  // Guidelines for administration of the medication
+  message AdministrationGuidelines {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Dosage for the medication for the specific guidelines
+    message Dosage {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Type of dosage
+      CodeableConcept type = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Dosage for the medication for the specific guidelines
+      repeated .google.fhir.r4.core.Dosage dosage = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated Dosage dosage = 4;
+
+    // Indication for use that apply to the specific administration guidelines
+    message IndicationX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2 [(.google.fhir.proto.valid_reference_type) =
+                                     "ObservationDefinition"];
+      }
+    }
+    IndicationX indication = 5;
+
+    // Characteristics of the patient that are relevant to the administration
+    // guidelines
+    message PatientCharacteristics {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Specific characteristic that is relevant to the administration
+      // guideline
+      message CharacteristicX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          CodeableConcept codeable_concept = 1;
+          SimpleQuantity quantity = 2;
+        }
+      }
+      CharacteristicX characteristic = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // The specific characteristic
+      repeated String value = 5;
+    }
+    repeated PatientCharacteristics patient_characteristics = 6;
+  }
+  repeated AdministrationGuidelines administration_guidelines = 25;
+
+  // Categorization of the medication within a formulary or classification
+  // system
+  message MedicineClassification {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The type of category for the medication (for example, therapeutic
+    // classification, therapeutic sub-classification)
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Specific category assigned to the medication
+    repeated CodeableConcept classification = 5;
+  }
+  repeated MedicineClassification medicine_classification = 26;
+
+  // Details about packaged medications
+  message Packaging {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // A code that defines the specific type of packaging that the medication
+    // can be found in
+    CodeableConcept type = 4;
+
+    // The number of product units the package would contain if fully loaded
+    SimpleQuantity quantity = 5;
+  }
+  Packaging packaging = 27;
+
+  // Specifies descriptive properties of the medicine
+  message DrugCharacteristic {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Code specifying the type of characteristic of medication
+    CodeableConcept type = 4;
+
+    // Description of the characteristic
+    message ValueX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        CodeableConcept codeable_concept = 1;
+        String string_value = 2 [json_name = "string"];
+        SimpleQuantity quantity = 3;
+        Base64Binary base64_binary = 4;
+      }
+    }
+    ValueX value = 5;
+  }
+  repeated DrugCharacteristic drug_characteristic = 28;
+
+  // Potential clinical issue with or between medication(s)
+  repeated Reference contraindication = 29
+      [(.google.fhir.proto.valid_reference_type) = "DetectedIssue"];
+
+  // Regulatory information about a medication
+  message Regulatory {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Specifies the authority of the regulation
+    Reference regulatory_authority = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // Specifies if changes are allowed when dispensing a medication from a
+    // regulatory perspective
+    message Substitution {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Specifies the type of substitution allowed
+      CodeableConcept type = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Specifies if regulation allows for changes in the medication when
+      // dispensing
+      Boolean allowed = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated Substitution substitution = 5;
+
+    // Specifies the schedule of a medication in jurisdiction
+    message Schedule {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Specifies the specific drug schedule
+      CodeableConcept schedule = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated Schedule schedule = 6;
+
+    // The maximum number of units of the medication that can be dispensed in a
+    // period
+    message MaxDispense {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The maximum number of units of the medication that can be dispensed
+      SimpleQuantity quantity = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // The period that applies to the maximum number of units
+      Duration period = 5;
+    }
+    MaxDispense max_dispense = 7;
+  }
+  repeated Regulatory regulatory = 30;
+
+  // The time course of drug absorption, distribution, metabolism and excretion
+  // of a medication from the body
+  message Kinetics {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The drug concentration measured at certain discrete points in time
+    repeated SimpleQuantity area_under_curve = 4;
+
+    // The median lethal dose of a drug
+    repeated SimpleQuantity lethal_dose50 = 5;
+
+    // Time required for concentration in the body to decrease by half
+    Duration half_life_period = 6;
+  }
+  repeated Kinetics kinetics = 31;
+}

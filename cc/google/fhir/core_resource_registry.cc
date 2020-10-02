@@ -26,9 +26,9 @@
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/status/statusor.h"
-#include "proto/annotations.pb.h"
-#include "proto/r4/core/resources/bundle_and_contained_resource.pb.h"
-#include "proto/stu3/resources.pb.h"
+#include "proto/google/fhir/proto/annotations.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/google/fhir/proto/stu3/resources.pb.h"
 
 namespace google {
 namespace fhir {

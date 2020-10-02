@@ -93,7 +93,7 @@ public final class ProtoFilePrinterTest {
     File file =
         new File(
             runfiles.rlocation(
-                "com_google_fhir/proto/r4/core/"
+                "com_google_fhir/proto/google/fhir/proto/r4/core/"
                     + (isResource ? "resources/" : "")
                     + filename
                     + ".proto"));

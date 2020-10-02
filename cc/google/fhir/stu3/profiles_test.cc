@@ -24,9 +24,9 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/stu3/profiles.pb.h"
-#include "proto/stu3/resources.pb.h"
-#include "proto/stu3/uscore.pb.h"
+#include "proto/google/fhir/proto/stu3/profiles.pb.h"
+#include "proto/google/fhir/proto/stu3/resources.pb.h"
+#include "proto/google/fhir/proto/stu3/uscore.pb.h"
 #include "testdata/stu3/profiles/test.pb.h"
 
 namespace google {

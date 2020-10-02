@@ -17,7 +17,7 @@
 #include "google/fhir/r4/extensions.h"
 
 #include "google/fhir/extensions.h"
-#include "proto/r4/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 
 namespace google {
 namespace fhir {

@@ -33,10 +33,10 @@ fhir_proto_library(
     ],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
-        "//proto:annotations_proto",
-        "//proto/r4/core:codes_proto",
-        "//proto/r4/core:datatypes_proto",
-        "//proto/r4/core:extensions_proto",
+        "//proto/google/fhir/proto:annotations_proto",
+        "//proto/google/fhir/proto/r4/core:codes_proto",
+        "//proto/google/fhir/proto/r4/core:datatypes_proto",
+        "//proto/google/fhir/proto/r4/core:extensions_proto",
     ],
     proto_library_prefix = "test",
 )

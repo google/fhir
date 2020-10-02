@@ -3,11 +3,11 @@ syntax = "proto3";
 package company.fhir.r4.demo;
 
 import "google/protobuf/any.proto";
-import "proto/annotations.proto";
-import "proto/r4/core/codes.proto";
-import "proto/r4/core/datatypes.proto";
-import "proto/r4/uscore.proto";
-import "proto/r4/uscore_codes.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r4/core/codes.proto";
+import "proto/google/fhir/proto/r4/core/datatypes.proto";
+import "proto/google/fhir/proto/r4/uscore.proto";
+import "proto/google/fhir/proto/r4/uscore_codes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.company.fhir.r4.demo";
