@@ -71,7 +71,7 @@ def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = [], **kwarg
         name = proto_library_prefix + "_go_proto",
         deps = go_deps,
         proto = ":" + proto_library_prefix + "_proto",
-        importpath = "google/fhir/" + native.package_name() + "/" + proto_library_prefix + "_go_proto",
+        importpath = native.package_name() + "/" + proto_library_prefix + "_go_proto",
         **kwargs
     )
 

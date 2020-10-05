@@ -83,7 +83,7 @@ public enum FhirVersion {
   public final FHIRVersionCode.Value minorVersion;
 
   // The path for annotation definition of proto options.
-  public static final String ANNOTATION_PATH = "proto";
+  public static final String ANNOTATION_PATH = "proto/google/fhir/proto";
 
   private FhirVersion(
       String coreProtoPackage,
