@@ -2,8 +2,14 @@
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-def fhirproto_dependencies():
-    """ Loads dependencies of FhirProto """
+def fhirproto_dependencies(core_lib = False):
+    """ Sets up FhirProto dependencies
+
+    Args:
+      core_lib: Whether or not this is the core FHIR lib github.com/google/fhir
+    """
+
+    main_fhir_location = "" if core_lib else "@com_google_fhir"
 
     http_archive(
         name = "com_google_absl",
@@ -58,7 +64,7 @@ def fhirproto_dependencies():
         url = "https://www.antlr.org/download/antlr4-cpp-runtime-4.7.1-source.zip",
         sha256 = "23bebc0411052a260f43ae097aa1ab39869eb6b6aa558b046c367a4ea33d1ccc",
         strip_prefix = "runtime/src",
-        build_file = "@com_google_fhir//bazel:antlr.BUILD",
+        build_file = main_fhir_location + "//bazel:antlr.BUILD",
     )
 
     http_archive(
@@ -97,7 +103,7 @@ def fhirproto_dependencies():
         name = "jsoncpp_git",
         sha256 = "77a402fb577b2e0e5d0bdc1cf9c65278915cdb25171e3452c68b6da8a561f8f0",
         strip_prefix = "jsoncpp-1.9.2",
-        build_file = "//bazel/buildfiles:jsoncpp.BUILD",
+        build_file = main_fhir_location + "//bazel/buildfiles:jsoncpp.BUILD",
         urls = [
             "https://storage.googleapis.com/mirror.tensorflow.org/github.com/open-source-parsers/jsoncpp/archive/1.9.2.tar.gz",
             "https://github.com/open-source-parsers/jsoncpp/archive/1.9.2.tar.gz",
@@ -108,7 +114,7 @@ def fhirproto_dependencies():
         name = "icu",
         sha256 = "dfc62618aa4bd3ca14a3df548cd65fe393155edd213e49c39f3a30ccd618fc27",
         strip_prefix = "icu-release-64-2",
-        build_file = "//bazel/buildfiles:icu.BUILD",
+        build_file = main_fhir_location + "//bazel/buildfiles:icu.BUILD",
         urls = [
             "https://storage.googleapis.com/mirror.tensorflow.org/github.com/unicode-org/icu/archive/release-64-2.zip",
             "https://github.com/unicode-org/icu/archive/release-64-2.zip",

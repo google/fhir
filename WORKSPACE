@@ -1,7 +1,7 @@
 workspace(name = "com_google_fhir")
 
 load("//bazel:dependencies.bzl", "fhirproto_dependencies")
-fhirproto_dependencies()
+fhirproto_dependencies(core_lib = True)
 
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 protobuf_deps()
