@@ -1,0 +1,4 @@
+# Files needed when creating sdist or bdist_wheel distributions.
+include requirements.txt
+include README.md
+global-exclude *_test.py
