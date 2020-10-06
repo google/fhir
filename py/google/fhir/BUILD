@@ -38,8 +38,8 @@ py_library(
     srcs_version = "PY3",
     deps = [
         ":fhir_errors",
-        "//proto/google/fhir/proto:annotations_py_pb2",
         "//py",
+        "//proto/google/fhir/proto:annotations_py_pb2",
         "//py/google/fhir/utils:annotation_utils",
         "//py/google/fhir/utils:fhir_types",
         "//py/google/fhir/utils:proto_utils",
@@ -57,8 +57,8 @@ py_library(
     deps = [
         ":codes",
         ":fhir_errors",
-        "//proto/google/fhir/proto:annotations_py_pb2",
         "//py",
+        "//proto/google/fhir/proto:annotations_py_pb2",
         "//py/google/fhir/utils:annotation_utils",
         "//py/google/fhir/utils:fhir_types",
         "//py/google/fhir/utils:proto_utils",
@@ -117,8 +117,8 @@ py_library(
     deps = [
         ":fhir_errors",
         ":primitive_handler",
-        "//proto/google/fhir/proto:annotations_py_pb2",
         "//py",
+        "//proto/google/fhir/proto:annotations_py_pb2",
         "//py/google/fhir:primitive_time_utils",
         "//py/google/fhir/utils:annotation_utils",
         "//py/google/fhir/utils:fhir_types",

@@ -36,8 +36,8 @@ py_library(
     deps = [
         ":annotation_utils",
         ":proto_utils",
-        "//proto/google/fhir/proto:annotations_py_pb2",
         "//py",
+        "//proto/google/fhir/proto:annotations_py_pb2",
     ],
 )
 
@@ -50,8 +50,8 @@ py_library(
     srcs_version = "PY3",
     deps = [
         ":proto_utils",
-        "//proto/google/fhir/proto:annotations_py_pb2",
         "//py",
+        "//proto/google/fhir/proto:annotations_py_pb2",
         "@com_google_protobuf//:protobuf_python",
     ],
 )

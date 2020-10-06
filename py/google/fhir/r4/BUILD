@@ -38,10 +38,10 @@ py_library(
     ],
     srcs_version = "PY3",
     deps = [
+        "//py",
         "//proto/google/fhir/proto/r4:fhirproto_extensions_py_pb2",
         "//proto/google/fhir/proto/r4/core:datatypes_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_py_pb2",
-        "//py",
         "//py/google/fhir:primitive_handler",
         "//py/google/fhir:primitive_time_utils",
         "//py/google/fhir/json_format/wrappers:base64_binary",
