@@ -20,6 +20,8 @@ from google.protobuf import descriptor
 from google.protobuf import message
 from google.protobuf import message_factory
 
+_factory = message_factory.MessageFactory()
+
 MessageOrDescriptorBase = Union[descriptor_pb2.DescriptorProto, message.Message,
                                 descriptor.DescriptorBase]
 
@@ -270,8 +272,7 @@ def set_in_parent_or_add(
 def get_message_class_from_descriptor(
     desc: descriptor.Descriptor) -> Type[message.Message]:
   """Returns the class of the message type corresponding to the descriptor."""
-  factory = message_factory.MessageFactory()
-  return factory.GetPrototype(desc)
+  return _factory.GetPrototype(desc)
 
 
 def create_message_from_descriptor(desc: descriptor.Descriptor,
