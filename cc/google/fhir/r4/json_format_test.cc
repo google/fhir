@@ -1640,7 +1640,15 @@ TEST(JsonFormatR4Test, PrintAndParseAllResources) {
   // Populate all fields to test edge cases, but recur only rarely to keep
   // the test fast.
   auto value_provider =
-      absl::make_unique<google::fhir::testutil::RandomValueProvider>(1.0, 0.05);
+      absl::make_unique<google::fhir::testutil::RandomValueProvider>(
+          /*optional_set_probability=*/1.0,
+          /*optional_set_ratio_per_level*/ 0.05,
+          /*min_repeated=*/1,
+          /*max_repeated=*/2,
+          /*high_value=*/10000000,
+          /*low_value=*/-10000000,
+          /*max_string_length=*/200);
+
   google::fhir::testutil::FhirGenerator generator(
       std::move(value_provider),
       google::fhir::r4::R4PrimitiveHandler::GetInstance());

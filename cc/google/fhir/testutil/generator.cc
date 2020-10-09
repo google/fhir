@@ -30,11 +30,37 @@ namespace testutil {
 
 namespace {
 
-// Characters to use in strings.
-constexpr char kLegalCharacters[] =
+// Characters to use in ids.
+const absl::string_view kLegalIdCharacters =
     "abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "0123456789";
+
+// Characters to use in strings. Should be compatible
+// with the FHIR string regex which is "[ \r\n\t\S]+"
+const absl::string_view kLegalStringCharacters =
+    u8"abcdefghijklmnopqrstuvwxyz"
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "0123456789"
+    "!@#$%?^&*()-+=_{}[]|<>,.\\"
+    " \n\r\t";
+
+// Returns a randomly generated string consisting of legal_characters
+// and of length between the given min and max string lengths, inclusive.
+std::string RandomString(absl::string_view legal_characters,
+                         int min_string_length, int max_string_length,
+                         absl::BitGen& bitgen) {
+  int length = absl::Uniform<int>(bitgen, min_string_length, max_string_length);
+  std::string str;
+  str.reserve(length);
+  for (int i = 0; i < length; i++) {
+    char c = kLegalStringCharacters[absl::Uniform<size_t>(
+        bitgen, 0, legal_characters.length())];
+    str += c;
+  }
+  return str;
+}
+
 }  // namespace
 
 bool RandomValueProvider::ShouldFill(const google::protobuf::FieldDescriptor* field,
@@ -73,15 +99,7 @@ int RandomValueProvider::GetInteger(const google::protobuf::FieldDescriptor* fie
 
 std::string RandomValueProvider::GetString(const google::protobuf::FieldDescriptor* field,
                                            int recursion_depth) {
-  int length = absl::Uniform<int>(bitgen_, 1, max_string_length_);
-  std::string str;
-  str.reserve(length);
-  size_t legal_length = strlen(kLegalCharacters);
-  for (int i = 0; i < length; i++) {
-    char c = kLegalCharacters[absl::Uniform<size_t>(bitgen_, 0, legal_length)];
-    str += c;
-  }
-  return str;
+  return RandomString(kLegalStringCharacters, 1, max_string_length_, bitgen_);
 }
 
 int RandomValueProvider::GetPositiveInt(const google::protobuf::FieldDescriptor* field,
@@ -141,7 +159,9 @@ std::string RandomValueProvider::GetInstant(
 
 std::string RandomValueProvider::GetId(const google::protobuf::FieldDescriptor* field,
                                        int recursion_depth) {
-  return GetString(field, recursion_depth);
+  // Ensure ids have a reasonable min and max length to stay readable and with
+  // few collisions.
+  return RandomString(kLegalIdCharacters, 5, 10, bitgen_);
 }
 
 std::string RandomValueProvider::GetUuid(const google::protobuf::FieldDescriptor* field,
@@ -152,7 +172,7 @@ std::string RandomValueProvider::GetUuid(const google::protobuf::FieldDescriptor
 
 std::string RandomValueProvider::GetIdentifier(
     const google::protobuf::FieldDescriptor* field, int recursion_depth) {
-  return GetString(field, recursion_depth);
+  return GetId(field, recursion_depth);
 }
 
 std::string RandomValueProvider::GetUri(const google::protobuf::FieldDescriptor* field,
@@ -162,8 +182,7 @@ std::string RandomValueProvider::GetUri(const google::protobuf::FieldDescriptor*
 
 std::string RandomValueProvider::GetUrl(const google::protobuf::FieldDescriptor* field,
                                         int recursion_depth) {
-  return absl::StrCat("http://www.example.com/",
-                      GetString(field, recursion_depth));
+  return absl::StrCat("http://www.example.com/", GetId(field, recursion_depth));
 }
 
 std::string RandomValueProvider::GetCanonical(
@@ -183,7 +202,7 @@ std::string RandomValueProvider::GetOid(const google::protobuf::FieldDescriptor*
 
 std::string RandomValueProvider::GetCode(const google::protobuf::FieldDescriptor* field,
                                          int recursion_depth) {
-  return RandomValueProvider::GetString(field, recursion_depth);
+  return RandomValueProvider::GetId(field, recursion_depth);
 }
 
 const google::protobuf::EnumValueDescriptor* RandomValueProvider::GetCodeEnum(
@@ -219,7 +238,7 @@ std::string RandomValueProvider::GetReferenceType(
 
 std::string RandomValueProvider::GetReferenceId(
     const google::protobuf::FieldDescriptor* field, int recursion_depth) {
-  return GetString(field, recursion_depth);
+  return GetId(field, recursion_depth);
 }
 
 std::string RandomValueProvider::GetYear() {
@@ -250,8 +269,6 @@ absl::Status FhirGenerator::FillPrimitive(
   } else if (google::fhir::IsBase64Binary(*fhir_primitive)) {
     value =
         Json::Value(value_provider_->GetBase64Binary(field, recursion_depth));
-  } else if (google::fhir::IsId(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetString(field, recursion_depth));
   } else if (google::fhir::IsString(*fhir_primitive)) {
     value = Json::Value(value_provider_->GetString(field, recursion_depth));
   } else if (google::fhir::IsInteger(*fhir_primitive)) {

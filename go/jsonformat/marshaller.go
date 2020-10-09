@@ -24,7 +24,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/protobuf/reflect/protoreflect"
-	"github.com/vitessio/vitess/go/jsonutil"
+	"vitess.io/vitess/go/jsonutil"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
 	descpb "google.golang.org/protobuf/types/descriptorpb"
