@@ -52,7 +52,9 @@ const bool IsProfile(const ::google::protobuf::Descriptor* descriptor) {
                "google.fhir.stu3.proto.ContainedResource" &&
            descriptor->full_name() != "google.fhir.r4.core.ContainedResource" &&
            descriptor->full_name() !=
-               "google.fhir.r5.proto.ContainedResource"));
+               "google.fhir.r5.proto.ContainedResource" &&
+           descriptor->full_name() !=
+               "google.fhir.dstu2.proto.ContainedResource"));
 }
 
 const bool IsChoiceTypeContainer(const ::google::protobuf::Descriptor* descriptor) {
