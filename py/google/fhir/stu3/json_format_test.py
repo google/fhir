@@ -967,9 +967,8 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
       ('_withBase64Binary', 'base64_binary', datatypes_pb2.Base64Binary),
       ('_withBoolean', 'boolean', datatypes_pb2.Boolean),
       ('_withCode', 'code', datatypes_pb2.Code),
-      # TODO: Ensure that printing correctly accounts for DST.
-      # ('_withDate', 'date', datatypes_pb2.Date),
-      # ('_withDateTime', 'date_time', datatypes_pb2.DateTime),
+      ('_withDate', 'date', datatypes_pb2.Date),
+      ('_withDateTime', 'date_time', datatypes_pb2.DateTime),
       ('_withDecimal', 'decimal', datatypes_pb2.Decimal),
       ('_withId', 'id', datatypes_pb2.Id),
       ('_withInstant', 'instant', datatypes_pb2.Instant),

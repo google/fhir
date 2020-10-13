@@ -12,9 +12,3 @@ precision: MONTH
 value_us: -36000000000
 timezone: "Australia/Sydney"
 precision: DAY
-
----
-# default value_us 0
-
-timezone: "Australia/Sydney"
-precision: DAY

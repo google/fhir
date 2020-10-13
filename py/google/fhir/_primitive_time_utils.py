@@ -20,6 +20,7 @@ import re
 
 from typing import cast, Any, Tuple, Type, TypeVar
 
+from backports import zoneinfo
 from dateutil import parser
 from dateutil import tz
 from google.protobuf import message
@@ -164,7 +165,7 @@ def timezone_info_for_timezone(tzstr: str) -> datetime.tzinfo:
     offset_err = e  # Fall through
 
   try:
-    return cast(datetime.tzinfo, tz.gettz(tzstr))
+    return cast(datetime.tzinfo, zoneinfo.ZoneInfo(tzstr))
   except ValueError as e:
     tzname_err = e  # Fall through
 

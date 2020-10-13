@@ -1646,9 +1646,8 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
       ('_withBoolean', 'boolean', datatypes_pb2.Boolean),
       ('_withCanonical', 'canonical', datatypes_pb2.Canonical),
       ('_withCode', 'code', datatypes_pb2.Code),
-      # TODO: Ensure that printing correctly accounts for DST.
-      # ('_withDate', 'date', datatypes_pb2.Date),
-      # ('_withDateTime', 'date_time', datatypes_pb2.DateTime),
+      ('_withDate', 'date', datatypes_pb2.Date),
+      ('_withDateTime', 'date_time', datatypes_pb2.DateTime),
       ('_withDecimal', 'decimal', datatypes_pb2.Decimal),
       ('_withId', 'id', datatypes_pb2.Id),
       ('_withInstant', 'instant', datatypes_pb2.Instant),
