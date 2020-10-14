@@ -15,6 +15,7 @@
 """Common functionality for version-specific json_format tests."""
 
 import collections
+import copy
 import decimal
 import json
 from typing import Any, Callable, Optional, Type, TypeVar
@@ -102,10 +103,12 @@ class JsonFormatTest(parameterized.TestCase):
           json_str, parse_int=decimal.Decimal, parse_float=decimal.Decimal)
 
       # Test case
+      orig_proto = copy.deepcopy(proto)
       raw_json_str = print_f(proto, **print_kwargs)
       from_proto = json.loads(
           raw_json_str, parse_int=decimal.Decimal, parse_float=decimal.Decimal)
 
+      self.assertEqual(proto, orig_proto)  # Ensure print did not mutate proto
       self.assertEqual(from_json, from_proto)
 
   def assert_parse_equals_golden(self,
