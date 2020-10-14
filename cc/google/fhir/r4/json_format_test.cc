@@ -21,6 +21,7 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/r4/primitive_handler.h"

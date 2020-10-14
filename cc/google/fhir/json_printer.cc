@@ -26,6 +26,7 @@
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
 #include "absl/time/time.h"
 #include "google/fhir/annotations.h"

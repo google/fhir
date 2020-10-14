@@ -23,6 +23,7 @@
 #include "absl/container/node_hash_map.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/status/statusor.h"

@@ -19,6 +19,7 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"

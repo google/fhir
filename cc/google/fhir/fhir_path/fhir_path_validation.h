@@ -19,6 +19,7 @@
 
 #include "google/protobuf/message.h"
 #include "absl/base/macros.h"
+#include "absl/status/statusor.h"
 #include "absl/synchronization/mutex.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/fhir_path/fhir_path.h"

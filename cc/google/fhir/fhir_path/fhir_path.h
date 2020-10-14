@@ -16,6 +16,7 @@
 #define GOOGLE_FHIR_FHIR_PATH_FHIR_PATH_H_
 
 #include "google/protobuf/message.h"
+#include "absl/status/statusor.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/status/statusor.h"

@@ -14,6 +14,7 @@
 
 #include "google/fhir/fhir_path/fhir_path_types.h"
 
+#include "absl/status/statusor.h"
 #include "absl/strings/string_view.h"
 #include "google/fhir/annotations.h"
 

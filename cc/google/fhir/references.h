@@ -20,6 +20,7 @@
 #include <string>
 
 #include "google/protobuf/message.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/strip.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/type_macros.h"

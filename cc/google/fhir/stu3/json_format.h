@@ -17,6 +17,7 @@
 #ifndef GOOGLE_FHIR_STU3_JSON_FORMAT_H_
 #define GOOGLE_FHIR_STU3_JSON_FORMAT_H_
 
+#include "absl/status/statusor.h"
 #include "google/fhir/json_format.h"
 
 namespace google {

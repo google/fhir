@@ -16,6 +16,7 @@
 
 #include "google/fhir/references.h"
 
+#include "absl/status/statusor.h"
 #include "google/fhir/util.h"
 
 namespace google {

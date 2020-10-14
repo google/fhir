@@ -20,6 +20,7 @@
 #include "google/protobuf/util/message_differencer.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
 #include "absl/types/optional.h"

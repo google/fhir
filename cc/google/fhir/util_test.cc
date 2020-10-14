@@ -19,6 +19,7 @@
 #include "gtest/gtest.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
+#include "absl/status/statusor.h"
 #include "absl/time/time.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/test_helper.h"

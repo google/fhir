@@ -19,6 +19,7 @@
 #include <string>
 
 #include "absl/status/status.h"
+#include "absl/status/statusor.h"
 #include "absl/synchronization/mutex.h"
 
 namespace google {

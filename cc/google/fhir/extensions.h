@@ -26,6 +26,7 @@
 #include "google/protobuf/message.h"
 #include "google/protobuf/reflection.h"
 #include "absl/status/status.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
 #include "absl/types/optional.h"
 #include "google/fhir/codes.h"

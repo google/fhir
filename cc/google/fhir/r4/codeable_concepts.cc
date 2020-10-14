@@ -20,6 +20,7 @@
 #include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
+#include "absl/status/statusor.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/codes.h"
 #include "google/fhir/fhir_types.h"

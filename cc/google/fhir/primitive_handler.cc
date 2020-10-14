@@ -17,6 +17,7 @@
 #include "google/fhir/primitive_handler.h"
 
 #include "absl/status/status.h"
+#include "absl/status/statusor.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/primitive_wrapper.h"
 

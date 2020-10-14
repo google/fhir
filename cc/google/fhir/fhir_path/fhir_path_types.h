@@ -17,6 +17,7 @@
 
 #include "google/protobuf/message.h"
 #include "absl/container/flat_hash_map.h"
+#include "absl/status/statusor.h"
 #include "google/fhir/status/statusor.h"
 
 namespace google::fhir::fhir_path::internal {

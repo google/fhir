@@ -18,6 +18,7 @@
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "absl/status/status.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/fhir_types.h"

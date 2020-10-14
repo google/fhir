@@ -16,6 +16,7 @@
 
 #include "google/fhir/stu3/json_format.h"
 
+#include "absl/status/statusor.h"
 #include "google/fhir/json_format.h"
 #include "google/fhir/stu3/primitive_handler.h"
 

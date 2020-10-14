@@ -15,6 +15,7 @@ cc_library(
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
         "@com_google_protobuf//:protobuf",
     ],
 )
@@ -40,6 +41,7 @@ cc_test(
         "//proto/google/fhir/proto/r4/core/resources:observation_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:patient_cc_proto",
         "//testdata/r4/profiles:test_cc_proto",
+        "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
     ],
@@ -60,6 +62,7 @@ cc_library(
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
         "@com_google_absl//absl/memory",
         "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/types:optional",
         "@com_google_protobuf//:protobuf",
     ],
@@ -112,6 +115,7 @@ cc_test(
         "//proto/google/fhir/proto/r4/core/resources:composition_cc_proto",
         "//testdata/r4/profiles:test_cc_proto",
         "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
     ],
@@ -163,6 +167,7 @@ cc_test(
         "//proto/google/fhir/proto/r4/core/resources:binary_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:observation_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:patient_cc_proto",
+        "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
@@ -177,6 +182,7 @@ cc_library(
     deps = [
         ":primitive_handler",
         "//cc/google/fhir:json_format",
+        "@com_google_absl//absl/status:statusor",
     ],
 )
 
@@ -351,6 +357,7 @@ cc_test(
         "//proto/google/fhir/proto/r4/core/resources:verification_result_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:vision_prescription_cc_proto",
         "//testdata/r4/profiles:test_cc_proto",
+        "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",

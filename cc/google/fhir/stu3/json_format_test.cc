@@ -19,6 +19,7 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/json_format.h"
 #include "google/fhir/test_helper.h"
