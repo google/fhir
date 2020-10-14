@@ -279,10 +279,11 @@ class JsonPrinter:
         self.generator.add_field(f'_{field_name}')
         self._print_list(elements, self._print)
     else:  # Singular field
-      # TODO: Detect ResourceId using an annotation
+      # TODO: Detect ReferenceId using an annotation
       if (self.json_format == _FhirJsonFormat.ANALYTIC and
-          field.message_type.DESCRIPTOR.name == 'ReferenceId'):
-        self.generator.add_field(field_name, f'"{value}"')
+          field.message_type.name == 'ReferenceId'):
+        str_value = proto_utils.get_value_at_field(value, 'value')
+        self.generator.add_field(field_name, f'"{str_value}"')
       else:  # Wrap and print primitive value and (optionally), its element
         wrapper = self.primitive_handler.primitive_wrapper_from_primitive(value)
         if wrapper.has_value():
@@ -338,23 +339,26 @@ class JsonPrinter:
   def _print_reference(self, reference: message.Message):
     """Standardizes and prints the provided reference.
 
-    Note that "standardization" in this case refers to un-typing the typed-
-    reference prior to printing.
+    Note that "standardization" in the case of PURE FHIR JSON refers to
+    un-typing the typed-reference prior to printing.
 
     Args:
       reference: The reference to print.
     """
     set_oneof = reference.WhichOneof('reference')
-    if set_oneof is None or set_oneof == 'uri':  # Reference is already standard
-      self._print_message(reference)
-    else:
-      new_reference = copy.copy(reference)
+    if (self.json_format == _FhirJsonFormat.PURE and set_oneof is not None and
+        set_oneof != 'uri'):
+      # In pure FHIR mode, we have to serialize structured references
+      # into FHIR uri strings.
+      standardized_reference = copy.copy(reference)
 
-      # Setting the new URI field will overwrite the oneof
-      new_uri = proto_utils.get_value_at_field(new_reference, 'uri')
+      # Setting the new URI field will overwrite the original oneof
+      new_uri = proto_utils.get_value_at_field(standardized_reference, 'uri')
       proto_utils.set_value_at_field(new_uri, 'value',
                                      references.reference_to_string(reference))
-      self._print_message(new_reference)
+      self._print_message(standardized_reference)
+    else:
+      self._print_message(reference)
 
   def _print_message(self, msg: message.Message):
     """Prints the representation of message."""

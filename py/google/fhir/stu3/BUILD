@@ -117,6 +117,7 @@ py_test(
     ],
     data = [
         "//spec:stu3",
+        "//testdata/stu3:bigquery",
         "//testdata/stu3:examples",
         "//testdata/stu3:validation",
     ],

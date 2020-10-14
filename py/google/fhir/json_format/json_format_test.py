@@ -14,11 +14,10 @@
 # limitations under the License.
 """Common functionality for version-specific json_format tests."""
 
-import abc
 import collections
 import decimal
 import json
-from typing import Optional, Type, TypeVar
+from typing import Any, Callable, Optional, Type, TypeVar
 
 from google.protobuf import message
 from absl.testing import parameterized
@@ -31,27 +30,8 @@ _JsonFormatTestdata = collections.namedtuple('_JsonFormatTestdata',
                                              ['json_strs', 'protos'])
 
 
-class _ParameterizedABCMetaclass(parameterized.TestGeneratorMetaclass,
-                                 abc.ABCMeta):
-  pass
-
-
-class JsonFormatTest(
-    parameterized.TestCase, metaclass=_ParameterizedABCMetaclass):
-  """An abstract base class for testing the extensions module."""
-
-  @abc.abstractmethod
-  def parse_json_to_proto(self, json_str: str, json_path: str,
-                          proto_cls: Type[_T]) -> _T:
-    """Parses the given json_str (loaded from json_path) into a proto_cls."""
-    raise NotImplementedError(
-        'Subclasses *must* implement parse_json_to_proto.')
-
-  @abc.abstractmethod
-  def print_proto_to_json(self, proto: message.Message, proto_path: str) -> str:
-    """Prints the given proto (loaded from proto_path) into a JSON string."""
-    raise NotImplementedError(
-        'Subclasses *must* implement print_proto_to_json.')
+class JsonFormatTest(parameterized.TestCase):
+  """A base class for testing FHIR version-specific json_format modules."""
 
   def _read_json_and_protos(
       self,
@@ -83,8 +63,10 @@ class JsonFormatTest(
                                  proto_path: str,
                                  proto_cls: Type[message.Message],
                                  *,
+                                 print_f: Callable[..., str],
                                  json_delimiter: Optional[str] = None,
-                                 proto_delimiter: Optional[str] = None):
+                                 proto_delimiter: Optional[str] = None,
+                                 **print_kwargs: Any):
     """Compare printer output against 'golden' file.
 
     Note that we perform a comparison between Python native types after calling
@@ -99,10 +81,13 @@ class JsonFormatTest(
       proto_path: The filepath to the .prototxt file (loaded as a 'test case').
       proto_cls: The type of protobuf message to serialize to and print from
         (type under test).
+      print_f: The print function to execute and examine.
       json_delimiter: An optional delimiter for the .json file to load multiple
         representations. Defaults to None.
       proto_delimiter: An optional delimiter for the .prototxt file to load
         multiple representations. Defaults to None.
+      **print_kwargs: An optional list of key/value arguments to supply to the
+        print function.
     """
     testdata = self._read_json_and_protos(
         json_path,
@@ -117,10 +102,9 @@ class JsonFormatTest(
           json_str, parse_int=decimal.Decimal, parse_float=decimal.Decimal)
 
       # Test case
+      raw_json_str = print_f(proto, **print_kwargs)
       from_proto = json.loads(
-          self.print_proto_to_json(proto, proto_path),
-          parse_int=decimal.Decimal,
-          parse_float=decimal.Decimal)
+          raw_json_str, parse_int=decimal.Decimal, parse_float=decimal.Decimal)
 
       self.assertEqual(from_json, from_proto)
 
@@ -129,8 +113,10 @@ class JsonFormatTest(
                                  proto_path: str,
                                  proto_cls: Type[message.Message],
                                  *,
+                                 parse_f: Callable[..., message.Message],
                                  json_delimiter: Optional[str] = None,
-                                 proto_delimiter: Optional[str] = None):
+                                 proto_delimiter: Optional[str] = None,
+                                 **parse_kwargs: Any):
     """Compare parser output against 'golden' file.
 
     Note that we perform a comparison between protobuf representations.
@@ -142,10 +128,12 @@ class JsonFormatTest(
       json_path: The filepath to the .json file (loaded as a 'test case').
       proto_path: The filepath to the .prototxt file (loaded as a 'golden').
       proto_cls: The type of protobuf message to parse into.
+      parse_f: The function responsible for parsing FHIR JSON to exmaine.
       json_delimiter: An optional delimiter for the .json file to load multiple
         representations. Defaults to None.
       proto_delimiter: An optional delimiter for the .prototxt file to load
         multiple representations. Defaults to None.
+      **parse_kwargs: Optional key/value arguments to supply to parse_f.
     """
     testdata = self._read_json_and_protos(
         json_path,
@@ -156,29 +144,7 @@ class JsonFormatTest(
 
     for (json_str, proto) in zip(testdata.json_strs, testdata.protos):
       # Test case
-      from_json = self.parse_json_to_proto(json_str, json_path, proto_cls)
+      from_json = parse_f(json_str, proto_cls, **parse_kwargs)
 
       # Golden (expected)
       self.assertEqual(from_json, proto)
-
-  def assert_parse_and_print_equals_golden(
-      self,
-      json_path: str,
-      proto_path: str,
-      proto_cls: Type[message.Message],
-      *,
-      json_delimiter: Optional[str] = None,
-      proto_delimiter: Optional[str] = None):
-
-    self.assert_print_equals_golden(
-        json_path,
-        proto_path,
-        proto_cls,
-        json_delimiter=json_delimiter,
-        proto_delimiter=proto_delimiter)
-    self.assert_parse_equals_golden(
-        json_path,
-        proto_path,
-        proto_cls,
-        json_delimiter=json_delimiter,
-        proto_delimiter=proto_delimiter)

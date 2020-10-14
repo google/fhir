@@ -160,6 +160,7 @@ from proto.google.fhir.proto.r4.core.resources import vision_prescription_pb2
 from google.fhir.json_format import json_format_test
 from google.fhir.r4 import json_format
 
+_BIGQUERY_PATH = os.path.join('testdata', 'r4', 'bigquery')
 _EXAMPLES_PATH = os.path.join('testdata', 'r4', 'examples')
 _FHIR_SPEC_PATH = os.path.join('spec', 'hl7.fhir.r4.examples', '4.0.1',
                                'package')
@@ -1665,10 +1666,22 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
   )
   def testJsonFormat_forValidPrimitive_succeeds(
       self, file_name: str, primitive_cls: Type[message.Message]):
-    self.assert_parse_and_print_equals_golden(
-        os.path.join(_VALIDATION_PATH, file_name + '.valid.ndjson'),
-        os.path.join(_VALIDATION_PATH, file_name + '.valid.prototxt'),
+    json_path = os.path.join(_VALIDATION_PATH, file_name + '.valid.ndjson')
+    proto_path = os.path.join(_VALIDATION_PATH, file_name + '.valid.prototxt')
+    self.assert_parse_equals_golden(
+        json_path,
+        proto_path,
         primitive_cls,
+        parse_f=json_format.json_fhir_string_to_proto,
+        json_delimiter='\n',
+        proto_delimiter='\n---\n',
+        validate=True,
+        default_timezone='Australia/Sydney')
+    self.assert_print_equals_golden(
+        json_path,
+        proto_path,
+        primitive_cls,
+        print_f=json_format.pretty_print_fhir_to_json_string,
         json_delimiter='\n',
         proto_delimiter='\n---\n')
 
@@ -1983,25 +1996,58 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
     self.assert_parse_and_print_spec_equals_golden(
         file_name, vision_prescription_pb2.VisionPrescription)
 
-  def parse_json_to_proto(self, json_str: str, json_path: str,
-                          proto_cls: Type[_T]) -> _T:
-    validate = json_path not in _INVALID_RECORDS
-    return json_format.json_fhir_string_to_proto(
-        json_str,
-        proto_cls,
-        validate=validate,
-        default_timezone='Australia/Sydney')
+  @parameterized.named_parameters(
+      ('_withCompositionExample', 'Composition-example',
+       composition_pb2.Composition),
+      ('_withEcounterHome', 'Encounter-home', encounter_pb2.Encounter),
+      ('_withObservationExampleGenetics1', 'Observation-example-genetics-1',
+       observation_pb2.Observation),
+      ('_withPatientExample', 'Patient-example', patient_pb2.Patient),
+  )
+  def testPrintForAnalytics_forValidResource_succeeds(
+      self, file_name: str, proto_cls: Type[message.Message]):
+    json_path = os.path.join(_BIGQUERY_PATH, file_name + '.json')
+    proto_path = os.path.join(_EXAMPLES_PATH, file_name + '.prototxt')
 
-  def print_proto_to_json(self, proto: message.Message,
-                          unused_proto_path: str) -> str:
-    return json_format.pretty_print_fhir_to_json_string(proto)
+    # Assert print for analytics (standard and "pretty")
+    self.assert_print_equals_golden(
+        json_path,
+        proto_path,
+        proto_cls,
+        print_f=json_format.print_fhir_to_json_string_for_analytics)
+    self.assert_print_equals_golden(
+        json_path,
+        proto_path,
+        proto_cls,
+        print_f=json_format.pretty_print_fhir_to_json_string_for_analytics)
 
   def assert_parse_and_print_spec_equals_golden(
       self, file_name: str, proto_cls: Type[message.Message]):
     """Convenience method for performing assertions between the FHIR R4 spec."""
     json_path = os.path.join(_FHIR_SPEC_PATH, file_name + '.json')
     proto_path = os.path.join(_EXAMPLES_PATH, file_name + '.prototxt')
-    self.assert_parse_and_print_equals_golden(json_path, proto_path, proto_cls)
+
+    # Assert parse
+    validate = json_path not in _INVALID_RECORDS
+    self.assert_parse_equals_golden(
+        json_path,
+        proto_path,
+        proto_cls,
+        parse_f=json_format.json_fhir_string_to_proto,
+        validate=validate,
+        default_timezone='Australia/Sydney')
+
+    # Assert print (standard and "pretty")
+    self.assert_print_equals_golden(
+        json_path,
+        proto_path,
+        proto_cls,
+        print_f=json_format.print_fhir_to_json_string)
+    self.assert_print_equals_golden(
+        json_path,
+        proto_path,
+        proto_cls,
+        print_f=json_format.pretty_print_fhir_to_json_string)
 
 
 if __name__ == '__main__':
