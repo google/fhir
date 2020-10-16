@@ -152,7 +152,7 @@ public final class ProtoGeneratorTestUtils {
                 + packageLocation
                 + ".\n"
                 + "If you modified either that package or the ProtoGenerator, make sure to"
-                + " regenerate this target.  For any questions, contact fhir-team@google.com\n"
+                + " regenerate this target.\n"
                 + "***\n")
         .that(generatedFile)
         .isEqualTo(fileInSource);
