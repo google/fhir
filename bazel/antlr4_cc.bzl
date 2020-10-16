@@ -180,7 +180,7 @@ def _make_namespace_adjustment_command(namespaces, out_files):
         if filepath.endswith(".h"):
             commands.append("sed -i '/namespace %s {/ a%s' $(@D)/%s" % (namespaces[0], extra_header_namespaces, filepath))
             for namespace in namespaces[1:]:
-                commands.append("sed -i '/}  \/\/ namespace %s/i}  \/\/ namespace %s' $(@D)/%s" % (namespaces[0], namespace, filepath))
+                commands.append("sed -i '/}  \\/\\/ namespace %s/i}  \\/\\/ namespace %s' $(@D)/%s" % (namespaces[0], namespace, filepath))
         else:
             commands.append("sed -i 's/using namespace %s;/using namespace %s;/' $(@D)/%s" % (namespaces[0], "::".join(namespaces), filepath))
     return ";\n".join(commands)
