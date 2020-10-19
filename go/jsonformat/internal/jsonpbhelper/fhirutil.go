@@ -59,12 +59,20 @@ const (
 	LayoutMonth = "2006-01"
 	// LayoutDay for day layout.
 	LayoutDay = "2006-01-02"
+	// LayoutMinutesNoTZ for minute layout without timezone.
+	LayoutMinutesNoTZ = "2006-01-02T15:04"
+	// LayoutSecondsNoTZ for second layout without timezone.
+	LayoutSecondsNoTZ = "2006-01-02T15:04:05"
+	// LayoutMinutes for minute layout.
+	LayoutMinutes = "2006-01-02T15:04-07:00"
 	// LayoutSeconds for second layout.
 	LayoutSeconds = "2006-01-02T15:04:05-07:00"
 	// LayoutMillis for millisecond layout.
 	LayoutMillis = "2006-01-02T15:04:05.000-07:00"
 	// LayoutMicros for microsecond layout.
 	LayoutMicros = "2006-01-02T15:04:05.000000-07:00"
+	// LayoutMinutesUTC for minute layout plus UTC.
+	LayoutMinutesUTC = "2006-01-02T15:04Z"
 	// LayoutSecondsUTC for second layout plus UTC.
 	LayoutSecondsUTC = "2006-01-02T15:04:05Z"
 	// LayoutMillisUTC for millisecond layout plus UTC.
@@ -103,6 +111,9 @@ const (
 )
 
 var (
+	// SearchDateCompiledRegex for date regex used within searches only. Does
+	// not have the correct precision for Date, DateTime, Time or Instant types.
+	SearchDateCompiledRegex *regexp.Regexp
 	// DateCompiledRegex for date regex.
 	DateCompiledRegex *regexp.Regexp
 	// DateTimeCompiledRegex for datetime regex.
@@ -225,6 +236,7 @@ func init() {
 	subSecondRegex := "([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]+"
 	subSecondDateCompiledRegex = compileOrDie("T" + subSecondRegex)
 	subSecondTimeCompiledRegex = compileOrDie(subSecondRegex)
+	SearchDateCompiledRegex = compileOrDie(`^-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9](\.[0-9]+)?)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))?)?)?)?$`)
 	DateCompiledRegex = compileOrDie(`^-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?$`)
 	DateTimeCompiledRegex = compileOrDie(`^-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$`)
 	TimeCompiledRegex = compileOrDie(`^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?$`)

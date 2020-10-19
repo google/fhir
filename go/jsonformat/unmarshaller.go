@@ -512,7 +512,7 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 		return m, nil
 	case "DateTime":
 		m := in.New().Interface().(proto.Message)
-		if err := ParseDateTimeFromJSON(rm, u.TimeZone, m); err != nil {
+		if err := parseDateTimeFromJSON(rm, u.TimeZone, m); err != nil {
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
 				Details:     "expected datetime",

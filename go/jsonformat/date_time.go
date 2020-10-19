@@ -189,8 +189,8 @@ func parseDateTimeFromStr(date string, l *time.Location, m proto.Message) error 
 	return fmt.Errorf("invalid dateTime layout: %v", date)
 }
 
-// ParseDateTimeFromJSON parses a FHIR date string into a DateTime proto, m.
-func ParseDateTimeFromJSON(rm json.RawMessage, l *time.Location, m proto.Message) error {
+// parseDateTimeFromJSON parses a FHIR date string into a DateTime proto, m.
+func parseDateTimeFromJSON(rm json.RawMessage, l *time.Location, m proto.Message) error {
 	var date string
 	if err := jsonpbhelper.JSP.Unmarshal(rm, &date); err != nil {
 		return err

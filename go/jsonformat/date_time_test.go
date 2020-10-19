@@ -298,8 +298,8 @@ func TestDateTime(t *testing.T) {
 			dts := newDateTimesForTest(test.val, test.prec, test.protoTz)
 			for _, dt := range dts {
 				parsed := proto.MessageReflect(dt).Interface().(proto.Message)
-				if err := ParseDateTimeFromJSON(json.RawMessage(strconv.Quote(test.json)), l, parsed); err != nil {
-					t.Fatalf("ParseDateTimeFromJSON(%q, %q, %T): %v", test.json, l, parsed, err)
+				if err := parseDateTimeFromJSON(json.RawMessage(strconv.Quote(test.json)), l, parsed); err != nil {
+					t.Fatalf("parseDateTimeFromJSON(%q, %q, %T): %v", test.json, l, parsed, err)
 				}
 				if want := dt; !proto.Equal(want, parsed) {
 					t.Errorf("ParseDateTimeFromJSON(%q, %q, %T): got %v, want %v", test.json, l, parsed, parsed, want)
@@ -329,6 +329,9 @@ func TestParseDateTimeFromJSON_Invalid(t *testing.T) {
 			json.RawMessage(`"2018-06-01T12:61"`),
 		},
 		{
+			json.RawMessage(`"2018-06-01T12:61-07:00"`),
+		},
+		{
 			json.RawMessage(`"2018-06-01T12:34:56.789+14:61"`),
 		},
 		{
@@ -344,8 +347,8 @@ func TestParseDateTimeFromJSON_Invalid(t *testing.T) {
 			&d4pb.DateTime{},
 		}
 		for _, m := range messages {
-			if err := ParseDateTimeFromJSON(test.date, loc, m); err == nil {
-				t.Errorf("ParseDateTimeFromJSON(%q, %q, %T) succeeded, want error", string(test.date), loc, m)
+			if err := parseDateTimeFromJSON(test.date, loc, m); err == nil {
+				t.Errorf("parseDateTimeFromJSON(%q, %q, %T) succeeded, want error", string(test.date), loc, m)
 			}
 		}
 	}
