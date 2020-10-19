@@ -69,11 +69,12 @@ def _generate_python_protos(proto_files: List[str], *, python_out: str = '.'):
     if (not os.path.exists(output) or
         (os.path.exists(proto_file) and
          os.path.getmtime(proto_file) > os.path.getmtime(output))):
-      sys.stdout.write(f'Generating file: {os.path.basename(output)}\n')
+      sys.stdout.write(f'Generating file: {output}\n')
       protoc_cmd = (
           _protoc,
           f'-I={_ROOT}',
           f'--python_out={python_out}',
+          f'--mypy_out={python_out}',
           proto_file,
       )
 

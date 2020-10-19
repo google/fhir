@@ -2,4 +2,5 @@
 include requirements.txt
 include README.md
 include google/fhir/py.typed
+recursive-include proto/google/fhir/proto *.pyi
 global-exclude *_test.py
