@@ -132,6 +132,7 @@ py_test(
         "//py/google/fhir/json_format:json_format_test",
         "//py/google/fhir/stu3:json_format",
         "//py/google/fhir/testing:testdata_utils",
+        "//py/google/fhir/utils:proto_utils",
         requirement("absl-py"),
         requirement("six"),
     ],

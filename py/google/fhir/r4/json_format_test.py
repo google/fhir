@@ -159,6 +159,8 @@ from proto.google.fhir.proto.r4.core.resources import verification_result_pb2
 from proto.google.fhir.proto.r4.core.resources import vision_prescription_pb2
 from google.fhir.json_format import json_format_test
 from google.fhir.r4 import json_format
+from google.fhir.testing import testdata_utils
+from google.fhir.utils import proto_utils
 
 _BIGQUERY_PATH = os.path.join('testdata', 'r4', 'bigquery')
 _EXAMPLES_PATH = os.path.join('testdata', 'r4', 'examples')
@@ -539,6 +541,44 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
   def testJsonFormat_forValidConsent_succeeds(self, file_name: str):
     self.assert_parse_and_print_spec_equals_golden(file_name,
                                                    consent_pb2.Consent)
+
+  @parameterized.named_parameters(
+      ('_withAllergyIntoleranceExample', 'AllergyIntolerance-example',
+       allergy_intolerance_pb2.AllergyIntolerance, 'allergy_intolerance'),
+      ('_withCapabilityStatementBase', 'CapabilityStatement-base',
+       capability_statement_pb2.CapabilityStatement, 'capability_statement'),
+      ('_withImmunizationExample', 'Immunization-example',
+       immunization_pb2.Immunization, 'immunization'),
+      ('_withMedicationMed0305', 'Medication-med0305',
+       medication_pb2.Medication, 'medication'),
+      ('_withObservationF004', 'Observation-f004', observation_pb2.Observation,
+       'observation'),
+      ('_withPatientAnimal', 'Patient-animal', patient_pb2.Patient, 'patient'),
+      ('_withPractitionerF003', 'Practitioner-f003',
+       practitioner_pb2.Practitioner, 'practitioner'),
+      ('_withProcedureAmbulation', 'Procedure-ambulation',
+       procedure_pb2.Procedure, 'procedure'),
+      ('_withTaskExample4', 'Task-example4', task_pb2.Task, 'task'),
+  )
+  def testJsonFormat_forValidContainedResource_succeeds(
+      self, file_name: str, proto_cls: Type[message.Message],
+      contained_field: str):
+    """Checks equality of print-parse 'round-trip' for a contained resource."""
+    proto_path = os.path.join(_EXAMPLES_PATH, file_name + '.prototxt')
+    golden_proto = testdata_utils.read_protos(proto_path, proto_cls)[0]
+
+    # Construct the contained resource to validate
+    contained = bundle_and_contained_resource_pb2.ContainedResource()
+    proto_utils.set_value_at_field(contained, contained_field, golden_proto)
+
+    # Validate printing and then parsing the print output against the golden
+    contained_json_str = json_format.print_fhir_to_json_string(contained)
+    parsed_contained = json_format.json_fhir_string_to_proto(
+        contained_json_str,
+        bundle_and_contained_resource_pb2.ContainedResource,
+        validate=True,
+        default_timezone='Australia/Sydney')
+    self.assertEqual(contained, parsed_contained)
 
   @parameterized.named_parameters(
       ('_withContractC123', 'Contract-C-123'),
