@@ -390,11 +390,15 @@ def get_options(
     return message_or_descriptor.options
   elif isinstance(message_or_descriptor, message.Message):
     return message_or_descriptor.DESCRIPTOR.GetOptions()
+  elif isinstance(message_or_descriptor, descriptor.DescriptorBase):
+    return message_or_descriptor.GetOptions()
+
   # The C++ implementation of protocol buffers don't have a public
   # base type visible to python, so we check for the common GetOptions
   # method to work in both Python and C++ settings.
-  elif 'GetOptions' in dir(message_or_descriptor):
+  try:
     return message_or_descriptor.GetOptions()
-
-  raise ValueError('Unable to retrieve options for type: {}.'.format(
-      type(message_or_descriptor)))
+  except AttributeError as ae:
+    raise ValueError(
+        f'Unable to retrieve options for type: {type(message_or_descriptor)}'
+    ) from ae

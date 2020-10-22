@@ -53,7 +53,6 @@ py_library(
         "//py/google/fhir/json_format/wrappers:time",
         "//py/google/fhir/utils:annotation_utils",
         "//py/google/fhir/utils:fhir_types",
-        "//py/google/fhir/utils:proto_utils",
         "@com_google_protobuf//:protobuf_python",
     ],
 )

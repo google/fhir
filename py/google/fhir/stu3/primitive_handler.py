@@ -14,7 +14,7 @@
 # limitations under the License.
 """Concrete implementation of the FHIR PrimitiveHandler for STU3 datatypes."""
 
-from typing import Any, Optional, Type
+from typing import Any, Dict, Optional, Type
 
 from google.protobuf import message
 from proto.google.fhir.proto.stu3 import datatypes_pb2
@@ -31,11 +31,46 @@ from google.fhir.json_format.wrappers import _primitive_wrappers
 from google.fhir.json_format.wrappers import _time
 from google.fhir.utils import annotation_utils
 from google.fhir.utils import fhir_types
-from google.fhir.utils import proto_utils
 
 
 class PrimitiveHandler(primitive_handler.PrimitiveHandler):
   """An implementation of PrimitiveHandler for vending STU3 FHIR datatypes."""
+
+  _DESC_TO_PRIMITIVE_WRAPPER_TYPE: Dict[
+      str, Type[_primitive_wrappers.PrimitiveWrapper]] = {
+          datatypes_pb2.Base64Binary.DESCRIPTOR.full_name:
+              _base64_binary.Base64BinaryWrapper,
+          datatypes_pb2.Boolean.DESCRIPTOR.full_name:
+              _primitive_wrappers.BooleanWrapper,
+          datatypes_pb2.Date.DESCRIPTOR.full_name:
+              _date.DateWrapper,
+          datatypes_pb2.DateTime.DESCRIPTOR.full_name:
+              _date_time.DateTimeWrapper,
+          datatypes_pb2.Decimal.DESCRIPTOR.full_name:
+              _decimal.DecimalWrapper,
+          datatypes_pb2.Id.DESCRIPTOR.full_name:
+              _primitive_wrappers.StringLikePrimitiveWrapper,
+          datatypes_pb2.Instant.DESCRIPTOR.full_name:
+              _instant.InstantWrapper,
+          datatypes_pb2.Integer.DESCRIPTOR.full_name:
+              _primitive_wrappers.IntegerLikePrimitiveWrapper,
+          datatypes_pb2.Markdown.DESCRIPTOR.full_name:
+              _primitive_wrappers.StringLikePrimitiveWrapper,
+          datatypes_pb2.Oid.DESCRIPTOR.full_name:
+              _primitive_wrappers.StringLikePrimitiveWrapper,
+          datatypes_pb2.PositiveInt.DESCRIPTOR.full_name:
+              _primitive_wrappers.IntegerLikePrimitiveWrapper,
+          datatypes_pb2.String.DESCRIPTOR.full_name:
+              _primitive_wrappers.StringLikePrimitiveWrapper,
+          datatypes_pb2.Time.DESCRIPTOR.full_name:
+              _time.TimeWrapper,
+          datatypes_pb2.UnsignedInt.DESCRIPTOR.full_name:
+              _primitive_wrappers.IntegerLikePrimitiveWrapper,
+          datatypes_pb2.Uri.DESCRIPTOR.full_name:
+              _primitive_wrappers.StringLikePrimitiveWrapper,
+          datatypes_pb2.Xhtml.DESCRIPTOR.full_name:
+              _primitive_wrappers.XhtmlWrapper,
+      }
 
   @property
   def base64_binary_cls(self) -> Type[datatypes_pb2.Base64Binary]:
@@ -126,57 +161,14 @@ class PrimitiveHandler(primitive_handler.PrimitiveHandler):
   ) -> Type[_primitive_wrappers.PrimitiveWrapper]:
     if fhir_types.is_type_or_profile_of_code(primitive_cls.DESCRIPTOR):
       return _primitive_wrappers.CodeWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.base64_binary_cls.DESCRIPTOR):
-      return _base64_binary.Base64BinaryWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.boolean_cls.DESCRIPTOR):
-      return _primitive_wrappers.BooleanWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.date_cls.DESCRIPTOR):
-      return _date.DateWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.date_time_cls.DESCRIPTOR):
-      return _date_time.DateTimeWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.decimal_cls.DESCRIPTOR):
-      return _decimal.DecimalWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.id_cls.DESCRIPTOR):
-      return _primitive_wrappers.StringLikePrimitiveWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.instant_cls.DESCRIPTOR):
-      return _instant.InstantWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.integer_cls.DESCRIPTOR):
-      return _primitive_wrappers.IntegerLikePrimitiveWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.markdown_cls.DESCRIPTOR):
-      return _primitive_wrappers.StringLikePrimitiveWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.oid_cls.DESCRIPTOR):
-      return _primitive_wrappers.StringLikePrimitiveWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.positive_int_cls.DESCRIPTOR):
-      return _primitive_wrappers.IntegerLikePrimitiveWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.string_cls.DESCRIPTOR):
-      return _primitive_wrappers.StringLikePrimitiveWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.time_cls.DESCRIPTOR):
-      return _time.TimeWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.unsigned_int_cls.DESCRIPTOR):
-      return _primitive_wrappers.IntegerLikePrimitiveWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.uri_cls.DESCRIPTOR):
-      return _primitive_wrappers.StringLikePrimitiveWrapper
-    elif proto_utils.are_same_message_type(primitive_cls.DESCRIPTOR,
-                                           self.xhtml_cls.DESCRIPTOR):
-      return _primitive_wrappers.XhtmlWrapper
-    raise ValueError(
-        'Unexpected STU3 FHIR primitive: '
-        f'{primitive_cls.DESCRIPTOR.full_name!r} for handler: {type(self)}.')
+
+    primitive_wrapper_cls = self._DESC_TO_PRIMITIVE_WRAPPER_TYPE.get(
+        primitive_cls.DESCRIPTOR.full_name)
+    if primitive_wrapper_cls is None:
+      raise ValueError(
+          'Unexpected STU3 FHIR primitive: '
+          f'{primitive_cls.DESCRIPTOR.full_name!r} for handler: {type(self)}.')
+    return primitive_wrapper_cls
 
   def primitive_wrapper_from_primitive(
       self,
