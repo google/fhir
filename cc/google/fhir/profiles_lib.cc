@@ -81,7 +81,7 @@ const bool SharesCommonAncestor(const ::google::protobuf::Descriptor* first,
   return AddSharedCommonAncestorMemo(first_url, second_url, false, &memos);
 }
 
-const unordered_map<std::string, const FieldDescriptor*>& GetExtensionMap(
+const unordered_map<std::string, const FieldDescriptor*> GetExtensionMap(
     const Descriptor* descriptor) {
   // Note that we memoize on descriptor address, since the values include
   // FieldDescriptor addresses, which will only be valid for a given address
@@ -93,13 +93,13 @@ const unordered_map<std::string, const FieldDescriptor*>& GetExtensionMap(
 
   const intptr_t memo_key = (intptr_t)descriptor;
 
-  memos_mutex.ReaderLock();
-  const auto iter = memos->find(memo_key);
-  if (iter != memos->end()) {
-    memos_mutex.ReaderUnlock();
-    return iter->second;
+  {
+    absl::ReaderMutexLock l(&memos_mutex);
+    const auto iter = memos->find(memo_key);
+    if (iter != memos->end()) {
+      return iter->second;
+    }
   }
-  memos_mutex.ReaderUnlock();
 
   absl::MutexLock lock(&memos_mutex);
   auto& extension_map = (*memos)[memo_key];

@@ -55,7 +55,7 @@ const bool SharesCommonAncestor(const ::google::protobuf::Descriptor* first,
 
 // Gets a map from profiled extension urls to the fields that they are profiled
 // in on a target message.
-const unordered_map<std::string, const FieldDescriptor*>& GetExtensionMap(
+const unordered_map<std::string, const FieldDescriptor*> GetExtensionMap(
     const Descriptor* descriptor);
 
 // Copies the contents of the extension field on source to the target message.
