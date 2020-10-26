@@ -326,6 +326,20 @@ TEST(PrimitiveHandlerTest, NewDateTimeFromString) {
   ASSERT_THAT(generated_date_time_month,
               Pointee(EqualsProto(expected_date_time_month)));
 
+  DateTime expected_date_time_second;
+  expected_date_time_second.set_value_us(1549221133000000);
+  expected_date_time_second.set_timezone("-08:00");
+  expected_date_time_second.set_precision(DateTime::SECOND);
+
+  absl::StatusOr<::google::protobuf::Message*> generated_date_time_second_or_status(
+      R4PrimitiveHandler::GetInstance()->NewDateTime(
+          "2019-02-03T11:12:13-08:00"));
+  FHIR_ASSERT_OK(generated_date_time_second_or_status.status());
+  std::unique_ptr<::google::protobuf::Message> generated_date_time_second(
+      generated_date_time_second_or_status.value());
+  ASSERT_THAT(generated_date_time_second,
+              Pointee(EqualsProto(expected_date_time_second)));
+
   DateTime expected_date_time_ms;
   expected_date_time_ms.set_value_us(1549221133100000);
   expected_date_time_ms.set_timezone("-08:00");
@@ -339,6 +353,30 @@ TEST(PrimitiveHandlerTest, NewDateTimeFromString) {
       generated_date_time_ms_or_status.value());
   ASSERT_THAT(generated_date_time_ms,
               Pointee(EqualsProto(expected_date_time_ms)));
+
+  DateTime expected_date_time_us;
+  expected_date_time_us.set_value_us(1549221133100000);
+  expected_date_time_us.set_timezone("-08:00");
+  expected_date_time_us.set_precision(DateTime::MICROSECOND);
+
+  absl::StatusOr<::google::protobuf::Message*> generated_date_time_us_or_status(
+      R4PrimitiveHandler::GetInstance()->NewDateTime(
+          "2019-02-03T11:12:13.1000-08:00"));
+  FHIR_ASSERT_OK(generated_date_time_us_or_status.status());
+  std::unique_ptr<::google::protobuf::Message> generated_date_time_us(
+      generated_date_time_us_or_status.value());
+  ASSERT_THAT(generated_date_time_us,
+              Pointee(EqualsProto(expected_date_time_us)));
+
+  // DateTime values are truncated to microsecond precision.
+  absl::StatusOr<::google::protobuf::Message*> generated_date_time_ns_or_status(
+      R4PrimitiveHandler::GetInstance()->NewDateTime(
+          "2019-02-03T11:12:13.1000001-08:00"));
+  FHIR_ASSERT_OK(generated_date_time_ns_or_status.status());
+  std::unique_ptr<::google::protobuf::Message> generated_date_time_ns(
+      generated_date_time_ns_or_status.value());
+  ASSERT_THAT(generated_date_time_ns,
+              Pointee(EqualsProto(expected_date_time_us)));
 }
 
 TEST(PrimitiveHandlerTest, NewDateTime) {

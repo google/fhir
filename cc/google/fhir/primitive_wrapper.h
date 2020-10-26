@@ -335,10 +335,6 @@ static const std::unordered_map<std::string, std::string>* const tz_formatters =
         {"SECOND", "%Y-%m-%dT%H:%M:%S%Ez"},
         {"MILLISECOND", "%Y-%m-%dT%H:%M:%E3S%Ez"},
         {"MICROSECOND", "%Y-%m-%dT%H:%M:%E6S%Ez"}};
-// Note: %E#S accepts UP TO # decimal places, so we need to be sure to iterate
-// from most restrictive to least restrictive when checking input strings.
-static const std::vector<std::string>* const tz_formatters_iteration_order =
-    new std::vector<std::string>{"SECOND", "MILLISECOND", "MICROSECOND"};
 // Date Formats that are expected to not include time zones, and use the default
 // time zone.
 static const std::unordered_map<std::string, std::string>* const
@@ -416,11 +412,17 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
     }
     const std::string& json_string = json.asString();
     FHIR_RETURN_IF_ERROR(this->ValidateString(json_string));
-    // Note that this will handle any level of precision - it's up to various
-    // wrappers' validation pattern to ensure that the precision of the value
-    // is valid.  There's no risk of accidentally using an invalid precision
-    // though, as it will fail to find an appropriate precision enum type.
-    for (std::string precision : *tz_formatters_iteration_order) {
+
+    static const LazyRE2 fractional_seconds_regex{
+        R"regex(T\d+:\d+:\d+(?:\.(\d+))?[zZ\+-])regex"};
+    std::string fractional_seconds;
+    if (RE2::PartialMatch(
+            json_string, *fractional_seconds_regex, &fractional_seconds)) {
+      std::string precision =
+          fractional_seconds.length() == 0 ? "SECOND"
+              : (fractional_seconds.length() <= 3 ? "MILLISECOND"
+                                                  : "MICROSECOND");
+
       auto format_iter = tz_formatters->find(precision);
       std::string err;
       absl::Time time;
