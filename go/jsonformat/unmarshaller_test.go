@@ -1217,21 +1217,6 @@ func TestUnmarshal_Errors(t *testing.T) {
 			vers: []Version{R4},
 			errs: []string{`error at "Patient.Contained[0]": unknown field`},
 		},
-		{
-			name: "leading upper case fhir_comments",
-			json: `
-			{
-				"resourceType": "Patient",
-				"careProvider": [
-					{
-						"reference": "Practitioner/1",
-						"Fhir_comments": ["c1", "c2"]
-					}
-				]
-			}`,
-			vers: []Version{DSTU2},
-			errs: []string{`error at "Patient.careProvider[0]": unknown field`},
-		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
