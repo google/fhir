@@ -35,7 +35,7 @@ def fhir_go_dependencies():
 
     go_repository(
         name = "com_github_vitessio",
-        importpath = "github.com/vitessio/vitess",
+        importpath = "vitess.io/vitess",
         tag = "vitess-parent-3.0.0",
     )
 
