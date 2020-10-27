@@ -115,7 +115,7 @@ long_description = pathlib.Path(_HERE).joinpath('README.md').read_text()
 
 setuptools.setup(
     name='google-fhir',
-    version='0.6.1',
+    version='0.6.2',
     description='Tools for parsing and printing FHIR JSON.',
     long_description=long_description,
     long_description_content_type='text/markdown',
