@@ -49,9 +49,9 @@ template <class T>
 void ReadStu3TestData(const std::string& type, T* message,
                       proto::Extension* extension) {
   *message =
-      ReadStu3Proto<T>(absl::StrCat("google/", type, ".message.prototxt"));
+      ReadStu3Proto<T>(absl::StrCat("extensions/", type, ".message.prototxt"));
   *extension = ReadStu3Proto<proto::Extension>(
-      absl::StrCat("google/", type, ".extension.prototxt"));
+      absl::StrCat("extensions/", type, ".extension.prototxt"));
 }
 
 template <class T>

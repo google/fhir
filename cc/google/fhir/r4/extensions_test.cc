@@ -48,9 +48,10 @@ using testing::DigitalMediaType;
 
 template <class T>
 void ReadR4TestData(const std::string& type, T* message, Extension* extension) {
-  *message = ReadR4Proto<T>(absl::StrCat("google/", type, ".message.prototxt"));
+  *message =
+      ReadR4Proto<T>(absl::StrCat("extensions/", type, ".message.prototxt"));
   *extension = ReadR4Proto<Extension>(
-      absl::StrCat("google/", type, ".extension.prototxt"));
+      absl::StrCat("extensions/", type, ".extension.prototxt"));
 }
 
 template <class T>

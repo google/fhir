@@ -35,7 +35,6 @@ cc_test(
     srcs = ["codes_test.cc"],
     data = [
         "//testdata/r4/codes:testdata",
-        "//testdata/stu3:google",
     ],
     deps = [
         ":codes",

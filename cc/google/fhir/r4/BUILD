@@ -102,7 +102,7 @@ cc_test(
     name = "extensions_test",
     srcs = ["extensions_test.cc"],
     data = [
-        "//testdata/r4:google",
+        "//testdata/r4:extensions",
     ],
     deps = [
         ":extensions",

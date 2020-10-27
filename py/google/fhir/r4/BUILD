@@ -253,7 +253,7 @@ py_test(
         "extensions_test.py",
     ],
     data = [
-        "//testdata/r4:google",
+        "//testdata/r4:extensions",
     ],
     legacy_create_init = 0,
     python_version = "PY3",

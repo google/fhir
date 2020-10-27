@@ -327,7 +327,7 @@ java_test(
     size = "medium",
     srcs = ["src/test/java/com/google/fhir/wrappers/ExtensionWrapperTest.java"],
     data = [
-        "//testdata/stu3:google",
+        "//testdata/stu3:extensions",
     ],
     test_class = "com.google.fhir.wrappers.ExtensionWrapperTest",
     deps = [
@@ -617,7 +617,6 @@ java_test(
         "//spec:uscore_stu3_package_filegroup",
         "//testdata/r4:descriptors",
         "//testdata/stu3:descriptors",
-        "//testdata/stu3:google",
     ],
     test_class = "com.google.fhir.protogen.ProtoGeneratorTest",
     deps = [

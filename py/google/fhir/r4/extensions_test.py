@@ -28,7 +28,7 @@ from google.fhir import extensions
 from google.fhir import extensions_test
 from testdata.r4.profiles import test_extensions_pb2
 
-_EXTENSIONS_DIR = os.path.join('testdata', 'r4', 'google')
+_EXTENSIONS_DIR = os.path.join('testdata', 'r4', 'extensions')
 
 
 class ExtensionsTest(extensions_test.ExtensionsTest):

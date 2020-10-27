@@ -36,11 +36,11 @@ filegroup(
     ]),
 )
 
-# These files contain google extensions.
+# These files contain extensions in both profiled and unprofiled form.
 filegroup(
-    name = "google",
+    name = "extensions",
     srcs = glob([
-        "google/*",
+        "extensions/*",
     ]),
 )
 

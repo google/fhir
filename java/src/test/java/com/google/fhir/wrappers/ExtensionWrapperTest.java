@@ -43,7 +43,8 @@ public final class ExtensionWrapperTest {
   /** Read the specifed prototxt file from the testdata directory and parse it. */
   private void mergeText(java.lang.String filename, Message.Builder builder) throws IOException {
     File file =
-        new File(runfiles.rlocation("com_google_fhir/testdata/stu3/google/" + filename));
+        new File(
+            runfiles.rlocation("com_google_fhir/testdata/stu3/extensions/" + filename));
     textParser.merge(Files.asCharSource(file, StandardCharsets.UTF_8).read(), builder);
   }
 

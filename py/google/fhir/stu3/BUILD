@@ -88,7 +88,7 @@ py_test(
         "extensions_test.py",
     ],
     data = [
-        "//testdata/stu3:google",
+        "//testdata/stu3:extensions",
     ],
     legacy_create_init = 0,
     python_version = "PY3",
