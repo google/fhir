@@ -43,7 +43,7 @@ if _protoc is None:
 
 
 def _generate_python_protos(proto_files: List[str], *, python_out: str = '.'):
-  """Generates FHIR R4 Python protobuf classes.
+  """Generates FHIR Python protobuf classes.
 
   Args:
     proto_files: A list of .proto file paths.
@@ -51,6 +51,10 @@ def _generate_python_protos(proto_files: List[str], *, python_out: str = '.'):
       Defaults to '.', which indicates to place alongside the .proto definition.
       This directory will be created if it does not exist.
   """
+  if not proto_files:
+    return
+
+  subpackages = []
   for proto_file in proto_files:
     proto_dir = os.path.dirname(os.path.abspath(proto_file))
 
@@ -61,7 +65,9 @@ def _generate_python_protos(proto_files: List[str], *, python_out: str = '.'):
     # Create Python package
     init_py = os.path.join(python_out, relpath, '__init__.py')
     if not os.path.exists(init_py):
-      pathlib.Path(os.path.dirname(init_py)).mkdir(parents=True)
+      subpackage = os.path.dirname(init_py)
+      subpackages.append(subpackage)
+      pathlib.Path(subpackage).mkdir(parents=True)
       pathlib.Path(init_py).touch()
 
     # Generate _py_pb2.py file
@@ -80,6 +86,10 @@ def _generate_python_protos(proto_files: List[str], *, python_out: str = '.'):
 
       if subprocess.call(protoc_cmd) != 0:
         sys.exit(-1)
+
+  # Add py.typed for PEP0561 compliance
+  root_package = os.path.commonpath(subpackages)
+  pathlib.Path(os.path.join(root_package, 'py.typed')).touch()
 
 
 def _parse_requirements(path: str) -> List[str]:
