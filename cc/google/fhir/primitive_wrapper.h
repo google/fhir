@@ -27,6 +27,7 @@
 #include "absl/status/statusor.h"
 #include "absl/strings/escaping.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/str_format.h"
 #include "absl/strings/str_replace.h"
 #include "absl/time/time.h"
 #include "google/fhir/codes.h"
@@ -349,6 +350,17 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
   absl::StatusOr<std::string> ToNonNullValueString() const override {
     const T& timelike = *this->GetWrapped();
     absl::Time absolute_time = absl::FromUnixMicros(timelike.value_us());
+
+    if (timelike.timezone().empty()) {
+      return InvalidArgumentError(absl::StrFormat(
+          "Cannot print %s: Missing timezone", T::descriptor()->full_name()));
+    }
+
+    if (timelike.precision() == T::PRECISION_UNSPECIFIED) {
+      return InvalidArgumentError(absl::StrFormat(
+          "Cannot print %s: Missing precision", T::descriptor()->full_name()));
+    }
+
     FHIR_ASSIGN_OR_RETURN(absl::TimeZone time_zone,
                           BuildTimeZoneFromString(timelike.timezone()));
 
@@ -359,8 +371,9 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
           no_tz_formatters->find(T::Precision_Name(timelike.precision()));
     }
     if (format_iter == no_tz_formatters->end()) {
-      return InvalidArgumentError(
-          absl::StrCat("Invalid precision on Time: ", timelike.DebugString()));
+      return InvalidArgumentError(absl::StrFormat("Invalid precision on %s: %i",
+                                                  T::descriptor()->name(),
+                                                  timelike.precision()));
     }
     std::string value = absl::StrCat(
         "\"", absl::FormatTime(format_iter->second, absolute_time, time_zone),
