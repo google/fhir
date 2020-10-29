@@ -9,7 +9,6 @@ licenses(["notice"])
 
 fhir_proto_library(
     srcs = [
-        "codes.proto",
         "qicore.proto",
     ],
     proto_deps = [
@@ -21,8 +20,19 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:extensions_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
+        "//proto/google/fhir/proto/r4/qicore:codes_proto",
     ],
     proto_library_prefix = "qicore",
+)
+
+fhir_proto_library(
+    srcs = [
+        "codes.proto",
+    ],
+    proto_deps = [
+        "//proto/google/fhir/proto:annotations_proto",
+    ],
+    proto_library_prefix = "codes",
 )
 
 gen_fhir_protos(
