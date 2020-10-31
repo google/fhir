@@ -28,17 +28,38 @@ gen_fhir_definitions_and_protos(
 fhir_proto_library(
     srcs = [
         "test.proto",
-        "test_codes.proto",
-        "test_extensions.proto",
     ],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
         "//proto/google/fhir/proto:annotations_proto",
         "//proto/google/fhir/proto/r4/core:codes_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
-        "//proto/google/fhir/proto/r4/core:extensions_proto",
+        "//testdata/r4/profiles:test_extensions_proto",
     ],
     proto_library_prefix = "test",
+)
+
+fhir_proto_library(
+    srcs = [
+        "test_extensions.proto",
+    ],
+    proto_deps = [
+        "//proto/google/fhir/proto:annotations_proto",
+        "//proto/google/fhir/proto/r4/core:codes_proto",
+        "//proto/google/fhir/proto/r4/core:datatypes_proto",
+        "//testdata/r4/profiles:test_codes_proto",
+    ],
+    proto_library_prefix = "test_extensions",
+)
+
+fhir_proto_library(
+    srcs = [
+        "test_codes.proto",
+    ],
+    proto_deps = [
+        "//proto/google/fhir/proto:annotations_proto",
+    ],
+    proto_library_prefix = "test_codes",
 )
 
 filegroup(

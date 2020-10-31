@@ -267,7 +267,7 @@ py_test(
         "//proto/google/fhir/proto/r4/core/resources:patient_py_pb2",
         "//py/google/fhir:extensions",
         "//py/google/fhir:extensions_test",
-        "//testdata/r4/profiles:test_py_pb2",
+        "//testdata/r4/profiles:test_extensions_py_pb2",
         requirement("absl-py"),
         requirement("six"),
     ],

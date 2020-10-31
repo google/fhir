@@ -109,7 +109,7 @@ cc_test(
         "//proto/google/fhir/proto/stu3:fhirproto_extensions_cc_proto",
         "//proto/google/fhir/proto/stu3:ml_extensions_cc_proto",
         "//proto/google/fhir/proto/stu3:resources_cc_proto",
-        "//testdata/stu3/profiles:test_cc_proto",
+        "//testdata/stu3/profiles:test_extensions_cc_proto",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",

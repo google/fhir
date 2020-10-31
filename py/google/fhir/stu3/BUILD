@@ -103,6 +103,7 @@ py_test(
         "//py/google/fhir:extensions",
         "//py/google/fhir:extensions_test",
         "//testdata/stu3/profiles:test_py_pb2",
+        "//testdata/stu3/profiles:test_extensions_py_pb2",
         requirement("absl-py"),
         requirement("six"),
     ],
