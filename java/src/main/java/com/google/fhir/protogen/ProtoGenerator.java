@@ -362,6 +362,9 @@ public class ProtoGenerator {
     if (def.getAbstract().getValue()) {
       optionsBuilder.setExtension(Annotations.isAbstractType, def.getAbstract().getValue());
     }
+    if (isSingleValueComplexExtension(def)) {
+      optionsBuilder.setExtension(Annotations.isComplexExtension, true);
+    }
     builder.setOptions(optionsBuilder);
 
     // If this is a primitive type, generate the value field first.
@@ -609,7 +612,7 @@ public class ProtoGenerator {
     // Get the name of this message
     builder.setName(nameFromQualifiedName(getContainerType(currentElement, elementList)));
 
-    // Add message-level constraints.
+    // Add message-level FHIRPath constraints.
     List<String> expressions = getFhirPathConstraints(currentElement);
     if (!expressions.isEmpty()) {
       builder.getOptionsBuilder().setExtension(Annotations.fhirPathMessageConstraint, expressions);
@@ -1256,7 +1259,8 @@ public class ProtoGenerator {
   }
 
   /** Extract the type of a container field, possibly by reference. */
-  private String getContainerType(ElementDefinition element, List<ElementDefinition> elementList) {
+  private static String getContainerType(
+      ElementDefinition element, List<ElementDefinition> elementList) {
     if (element.hasContentReference()) {
       // Find the named element which was referenced. We'll use the type of that element.
       // Strip the first character from the content reference since it is a '#'
@@ -2319,5 +2323,18 @@ public class ProtoGenerator {
     }
 
     return false;
+  }
+
+  private static boolean isSingleValueComplexExtension(StructureDefinition def) {
+    if (!isExtensionProfile(def)) {
+      return false;
+    }
+    // Filter for top-level extensions "fields". These are identifiable as elements of the form:
+    // Extensions.extension:$FIELD_NAME
+    List<ElementDefinition> valueElements =
+        def.getSnapshot().getElementList().stream()
+            .filter(element -> element.getId().getValue().matches("^Extension\\.extension:[\\w]+$"))
+            .collect(Collectors.toList());
+    return valueElements.size() == 1 && valueElements.get(0).getMax().getValue().equals("1");
   }
 }

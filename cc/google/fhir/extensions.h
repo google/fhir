@@ -290,6 +290,11 @@ absl::StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
   return result.front();
 }
 
+// Returns true if the passed-in descriptor descriptor describes a "Simple"
+// extension, which corresponds to an unprofiled extension with the "value"
+// choice type set, rather than itself having extensions.
+bool IsSimpleExtension(const ::google::protobuf::Descriptor* descriptor);
+
 }  // namespace extensions_lib
 
 namespace extensions_templates {
@@ -480,7 +485,7 @@ absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
     return ::absl::InvalidArgumentError(
         absl::StrCat("Extension has no value fields: ", descriptor->name()));
   }
-  if (value_fields.size() == 1 && !value_fields[0]->is_repeated()) {
+  if (extensions_lib::IsSimpleExtension(descriptor)) {
     const ::google::protobuf::FieldDescriptor* value_field = value_fields[0];
     FHIR_RETURN_IF_ERROR(extensions_internal::CheckIsMessage(value_field));
     if (reflection->HasField(message, value_field)) {

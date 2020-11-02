@@ -79,6 +79,7 @@ public class ProtoFilePrinter {
               Annotations.fhirStructureDefinitionUrl,
               Annotations.fhirPathMessageConstraint,
               Annotations.isChoiceType,
+              Annotations.isComplexExtension,
               Annotations.fhirFixedSystem);
 
   /** Creates a ProtoFilePrinter with default parameters. */

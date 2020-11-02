@@ -97,3 +97,19 @@ simple_extension {
 }
 
 
+complex_extension {
+  element_data {
+    name: "SingleValueComplexExtension"
+    size_restriction: OPTIONAL
+  }
+
+  simple_field {
+    element_data {
+      name: "stringField"
+      description: "single field"
+    }
+    type: "string"
+  }
+}
+
+

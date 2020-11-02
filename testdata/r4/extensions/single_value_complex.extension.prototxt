@@ -1,0 +1,7 @@
+url {
+  value: "http://test/url/base/StructureDefinition/SingleValueComplexExtension"
+}
+extension {
+  url { value: "stringField" }
+  value { string_value { value "foo" } }
+}

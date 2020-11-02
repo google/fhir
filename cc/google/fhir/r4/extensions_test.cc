@@ -76,54 +76,66 @@ void TestConvertToExtension(const std::string& name) {
   EXPECT_THAT(output, EqualsProto(extension));
 }
 
-TEST(ExtensionsTest, ParseEventTrigger) {
+TEST(ExtensionsTest, ConvertToProfiledEventTrigger) {
   TestExtensionToMessage<EventTrigger>("trigger");
 }
 
-TEST(ExtensionsTest, PrintEventTrigger) {
+TEST(ExtensionsTest, ConvertToUnprofiledEventTrigger) {
   TestConvertToExtension<EventTrigger>("trigger");
 }
 
-TEST(ExtensionsTest, ParseEventLabel) {
+TEST(ExtensionsTest, ConvertToProfiledEventLabel) {
   TestExtensionToMessage<EventLabel>("label");
 }
 
-TEST(ExtensionsTest, PrintEventLabel) {
+TEST(ExtensionsTest, ConvertToUnprofiledEventLabel) {
   TestConvertToExtension<EventLabel>("label");
 }
 
-TEST(ExtensionsTest, ParsePrimitiveHasNoValue) {
+TEST(ExtensionsTest, ConvertToProfiledPrimitiveHasNoValue) {
   TestExtensionToMessage<PrimitiveHasNoValue>("primitive_has_no_value");
 }
 
-TEST(ExtensionsTest, PrintPrimitiveHasNoValue) {
+TEST(ExtensionsTest, ConvertToUnprofiledPrimitiveHasNoValue) {
   TestConvertToExtension<PrimitiveHasNoValue>("primitive_has_no_value");
 }
 
-TEST(ExtensionsTest, ParsePrimitiveHasNoValue_Empty) {
+TEST(ExtensionsTest, ConvertToProfiledPrimitiveHasNoValue_Empty) {
   TestExtensionToMessage<PrimitiveHasNoValue>("empty");
 }
 
-TEST(ExtensionsTest, PrintPrimitiveHasNoValue_Empty) {
+TEST(ExtensionsTest, ConvertToUnprofiledPrimitiveHasNoValue_Empty) {
   TestConvertToExtension<PrimitiveHasNoValue>("empty");
 }
 
-TEST(ExtensionsTest, ParseCapabilityStatementSearchParameterCombination) {
+TEST(ExtensionsTest,
+     ConvertToProfiledCapabilityStatementSearchParameterCombination) {
   TestExtensionToMessage<CapabilityStatementSearchParameterCombination>(
       "capability");
 }
 
-TEST(ExtensionsTest, PrintCapabilityStatementSearchParameterCombination) {
+TEST(ExtensionsTest,
+     ConvertToUnprofiledCapabilityStatementSearchParameterCombination) {
   TestConvertToExtension<CapabilityStatementSearchParameterCombination>(
       "capability");
 }
 
-TEST(ExtensionsTest, ParseBoundCodeExtension) {
+TEST(ExtensionsTest, ConvertToProfiledBoundCodeExtension) {
   TestExtensionToMessage<DigitalMediaType>("digital_media_type");
 }
 
-TEST(ExtensionsTest, PrintBoundCodeExtension) {
+TEST(ExtensionsTest, ConvertToUnprofiledBoundCodeExtension) {
   TestConvertToExtension<DigitalMediaType>("digital_media_type");
+}
+
+TEST(ExtensionsTest, ConvertToProfiledSingleValueComplexExtension) {
+  TestExtensionToMessage<testing::SingleValueComplexExtension>(
+      "single_value_complex");
+}
+
+TEST(ExtensionsTest, ConvertToUnprofiledSingleValueComplexExtension) {
+  TestConvertToExtension<testing::SingleValueComplexExtension>(
+      "single_value_complex");
 }
 
 TEST(ExtensionsTest, ExtractOnlyMatchingExtensionOneFound) {
@@ -282,6 +294,19 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionMultipleFound) {
 
   EXPECT_FALSE(extracted.status().ok());
   EXPECT_EQ(absl::StatusCode::kInvalidArgument, extracted.status().code());
+}
+
+TEST(ExtensionsTest, IsSimpleExtensionTrue) {
+  EXPECT_TRUE(IsSimpleExtension(r4::testing::SimpleDecimalExt::descriptor()));
+}
+
+TEST(ExtensionsTest, IsSimpleExtensionFalseManyFields) {
+  EXPECT_FALSE(IsSimpleExtension(r4::testing::ComplexExt::descriptor()));
+}
+
+TEST(ExtensionsTest, IsSimpleExtensionFalseOneField) {
+  EXPECT_FALSE(IsSimpleExtension(
+      r4::testing::SingleValueComplexExtension::descriptor()));
 }
 
 }  // namespace

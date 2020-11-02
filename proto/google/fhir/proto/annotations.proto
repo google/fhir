@@ -87,6 +87,15 @@ extend google.protobuf.MessageOptions {
   // field on the FHIR ElementDefinition and may be used for data validation.
   repeated string fhir_path_message_constraint = 276863075;
 
+  // Used to differentiate complex vs simple extensions in the case where it is
+  // ambiguous.  Specifically, any extension with only a single fhir datatype
+  // field will be assumed to be a simple extension UNLESS this annotation is
+  // present.
+  // Note that this option is NOT set on messages where it can be determined
+  // they are complex extensions via inspecting the structure alone (e.g., an
+  // extension with more than one data field).
+  bool is_complex_extension = 339293157;
+
   // DEPRECATED: use fhir_profile_base to identify extension, and
   // fhir_structure_definition_url to get the extension url.
   string fhir_extension_url = 177048773 [deprecated = true];

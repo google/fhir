@@ -132,6 +132,15 @@ std::string GetInlinedExtensionUrl(const FieldDescriptor* field) {
              : field->json_name();
 }
 
+bool IsSimpleExtension(const ::google::protobuf::Descriptor* descriptor) {
+  // Simple extensions have two fields: an id and a value field.
+  // However, complex extensions that only have a single field also have two
+  // fields.  In that case, is_complex_extension is used to disambiguate.
+  return IsProfileOfExtension(descriptor) &&
+         extensions_internal::FindValueFields(descriptor).size() == 1 &&
+         !descriptor->options().GetExtension(proto::is_complex_extension);
+}
+
 }  // namespace extensions_lib
 }  // namespace fhir
 }  // namespace google
