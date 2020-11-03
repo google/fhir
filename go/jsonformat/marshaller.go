@@ -16,6 +16,7 @@ package jsonformat
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -24,7 +25,6 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/protobuf/reflect/protoreflect"
-	"vitess.io/vitess/go/jsonutil"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
 	descpb "google.golang.org/protobuf/types/descriptorpb"
@@ -145,20 +145,20 @@ func (m *Marshaller) Marshal(pb proto.Message) ([]byte, error) {
 }
 
 func (m *Marshaller) render(data jsonpbhelper.IsJSON) ([]byte, error) {
-	// We continue to use jsonutil instead of jsoniter for serialization because jsoniter has a bug in
+	// We continue to use json instead of jsoniter for serialization because jsoniter has a bug in
 	// how it creates streams from its shared pool. The consequence of this is that indentation gets
 	// reset at every level.
-	var (
-		res []byte
-		err error
-	)
+	buf := bytes.Buffer{}
+	enc := json.NewEncoder(&buf)
+	enc.SetEscapeHTML(false)
 	if m.enableIndent {
-		res, err = jsonutil.MarshalIndentNoEscape(data, m.prefix, m.indent)
-	} else {
-		res, err = jsonutil.MarshalNoEscape(data)
+		enc.SetIndent(m.prefix, m.indent)
 	}
-	// jsonutil.MarshalIndentNoEscape seems to always have a trailing newline.
-	return bytes.TrimSuffix(res, []byte("\n")), err
+	if err := enc.Encode(data); err != nil {
+		return nil, err
+	}
+	// Encode seems to always have a trailing newline.
+	return bytes.TrimSuffix(buf.Bytes(), []byte("\n")), nil
 }
 
 // MarshalResource functions identically to Marshal, but accepts a fhir.Resource
