@@ -21,7 +21,7 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/testing/protocmp"
 
@@ -67,7 +67,7 @@ func TestIsPrimitiveType(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		des := proto.MessageReflect(test.pb).Descriptor()
+		des := test.pb.ProtoReflect().Descriptor()
 		if got := IsPrimitiveType(des); got != test.want {
 			t.Errorf("IsPrimitiveType for %v: got %v, want %v", test.name, got, test.want)
 		}
@@ -791,9 +791,9 @@ func TestValidateReferenceType(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			msg := proto.MessageReflect(test.msg)
+			msg := test.msg.ProtoReflect()
 			field := msg.Descriptor().Fields().ByName(protoreflect.Name(test.fieldName))
-			ref := proto.MessageReflect(test.ref)
+			ref := test.ref.ProtoReflect()
 
 			err := ValidateReferenceType(field, ref)
 			valid := err == nil
@@ -841,7 +841,7 @@ func TestValidateRequiredFields(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			msg := proto.MessageReflect(test.msg)
+			msg := test.msg.ProtoReflect()
 			err := ValidateRequiredFields(msg)
 			valid := err == nil
 			if valid != test.valid {

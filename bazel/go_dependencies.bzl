@@ -53,8 +53,8 @@ def fhir_go_dependencies():
 
     go_repository(
         name = "org_golang_google_protobuf",
-        commit = "d165be301fb1e13390ad453281ded24385fd8ebc",
         importpath = "google.golang.org/protobuf",
+        tag = "v1.25.0",
     )
 
     go_repository(

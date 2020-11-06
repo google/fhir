@@ -17,7 +17,7 @@ package jsonformat
 import (
 	"fmt"
 
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"bitbucket.org/creachadair/stringset"
 )
@@ -61,5 +61,5 @@ func getConfig(ver Version) (config, error) {
 // proto provided by the given config
 func containedResourceProtoName(cfg config) protoreflect.Name {
 	cr := cfg.newEmptyContainedResource()
-	return proto.MessageReflect(cr).Descriptor().Name()
+	return cr.ProtoReflect().Descriptor().Name()
 }

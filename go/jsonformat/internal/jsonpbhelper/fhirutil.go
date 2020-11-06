@@ -28,13 +28,11 @@ import (
 
 	"log"
 	"github.com/json-iterator/go"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"bitbucket.org/creachadair/stringset"
 
-	dpb "google.golang.org/protobuf/types/descriptorpb"
 	apb "proto/google/fhir/proto/annotations_go_proto"
-	protov2 "google.golang.org/protobuf/proto"
 
 	d4pb "proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	r4pb "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
@@ -256,20 +254,20 @@ func init() {
 	// populate STU3 required fields
 	emptyCR = &r3pb.ContainedResource{}
 	dfsProtoMessageFields(
-		proto.MessageReflect(emptyCR).Descriptor(),
+		emptyCR.ProtoReflect().Descriptor(),
 		func(node protoreflect.MessageDescriptor) { collectDirectRequiredFields(node, requiredFields) },
 	)
 	// populate R4 required fields
 	emptyCR = &r4pb.ContainedResource{}
 	dfsProtoMessageFields(
-		proto.MessageReflect(emptyCR).Descriptor(),
+		emptyCR.ProtoReflect().Descriptor(),
 		func(node protoreflect.MessageDescriptor) { collectDirectRequiredFields(node, requiredFields) },
 	)
 
 	RegexValues = make(map[protoreflect.FullName]*regexp.Regexp)
 	primitivesWithRegex := []protoreflect.Message{
-		proto.MessageReflect(&d3pb.Decimal{}),
-		proto.MessageReflect(&d4pb.Decimal{}),
+		(&d3pb.Decimal{}).ProtoReflect(),
+		(&d4pb.Decimal{}).ProtoReflect(),
 	}
 	for _, p := range primitivesWithRegex {
 		p.Descriptor().Options().ProtoReflect().Range(func(f protoreflect.FieldDescriptor, v protoreflect.Value) bool {
@@ -285,7 +283,7 @@ func init() {
 }
 
 func initReferenceTypes() {
-	for _, refPB := range []protov2.Message{
+	for _, refPB := range []proto.Message{
 		&d3pb.Reference{},
 		&d4pb.Reference{},
 	} {
@@ -412,21 +410,19 @@ func GetTimeFromUsec(us int64, tz string) (time.Time, error) {
 
 // IsPrimitiveType returns true iff the message type d is a primitive FHIR data type.
 func IsPrimitiveType(d protoreflect.MessageDescriptor) bool {
-	ext, err := proto.GetExtension(d.Options().(*dpb.MessageOptions), apb.E_StructureDefinitionKind)
-	return err == nil && *(ext.(*apb.StructureDefinitionKindValue)) ==
-		apb.StructureDefinitionKindValue_KIND_PRIMITIVE_TYPE
+	ext := proto.GetExtension(d.Options(), apb.E_StructureDefinitionKind)
+	return ext.(apb.StructureDefinitionKindValue) == apb.StructureDefinitionKindValue_KIND_PRIMITIVE_TYPE
 }
 
 // IsResourceType returns true iff the message type d is a FHIR resource type.
 func IsResourceType(d protoreflect.MessageDescriptor) bool {
-	ext, err := proto.GetExtension(d.Options().(*dpb.MessageOptions), apb.E_StructureDefinitionKind)
-	return err == nil && *(ext.(*apb.StructureDefinitionKindValue)) ==
-		apb.StructureDefinitionKindValue_KIND_RESOURCE
+	ext := proto.GetExtension(d.Options(), apb.E_StructureDefinitionKind)
+	return ext.(apb.StructureDefinitionKindValue) == apb.StructureDefinitionKindValue_KIND_RESOURCE
 }
 
 // IsChoice returns true iff the message type d is a FHIR choice type.
 func IsChoice(d protoreflect.MessageDescriptor) bool {
-	return d != nil && proto.HasExtension(d.Options().(*dpb.MessageOptions), apb.E_IsChoiceType)
+	return d != nil && proto.HasExtension(d.Options(), apb.E_IsChoiceType)
 }
 
 // GetExtensionFieldDesc returns the extension field descriptor.
@@ -514,11 +510,11 @@ func HasInternalExtension(pb, ext proto.Message) bool {
 	if pb == nil || ext == nil {
 		return false
 	}
-	url, err := InternalExtensionURL(proto.MessageReflect(ext).Descriptor())
+	url, err := InternalExtensionURL(ext.ProtoReflect().Descriptor())
 	if err != nil {
 		return false
 	}
-	m := proto.MessageReflect(pb)
+	m := pb.ProtoReflect()
 	extField, err := GetExtensionFieldDesc(m.Descriptor())
 	if err != nil {
 		return false
@@ -534,7 +530,7 @@ func HasInternalExtension(pb, ext proto.Message) bool {
 
 // AddInternalExtension adds a Google-internal extension ext if it is not existing in proto pb.
 func AddInternalExtension(pb, ext proto.Message) error {
-	m := proto.MessageReflect(pb)
+	m := pb.ProtoReflect()
 	extField, err := GetExtensionFieldDesc(m.Descriptor())
 	if err != nil {
 		return err
@@ -546,18 +542,18 @@ func AddInternalExtension(pb, ext proto.Message) error {
 			return nil
 		}
 	}
-	list.Append(protoreflect.ValueOf(proto.MessageReflect(ext)))
+	list.Append(protoreflect.ValueOf(ext.ProtoReflect()))
 	return nil
 }
 
 // RemoveInternalExtension removes extension ext from proto pb if it exists. Only the extension type
 // is used, and its values, if populated, in the input extension is ignored.
 func RemoveInternalExtension(pb, ext proto.Message) error {
-	url, err := InternalExtensionURL(proto.MessageReflect(ext).Descriptor())
+	url, err := InternalExtensionURL(ext.ProtoReflect().Descriptor())
 	if err != nil {
 		return err
 	}
-	m := proto.MessageReflect(pb)
+	m := pb.ProtoReflect()
 	extField, err := GetExtensionFieldDesc(m.Descriptor())
 	if err != nil {
 		return err
@@ -586,11 +582,11 @@ func RemoveInternalExtension(pb, ext proto.Message) error {
 // from proto pb, and nil if there is no match. Only the extension type is used, and its values, if
 // populated, in the input extension is ignored.
 func GetInternalExtension(pb, ext proto.Message) (proto.Message, error) {
-	url, err := InternalExtensionURL(proto.MessageReflect(ext).Descriptor())
+	url, err := InternalExtensionURL(ext.ProtoReflect().Descriptor())
 	if err != nil {
 		return nil, err
 	}
-	m := proto.MessageReflect(pb)
+	m := pb.ProtoReflect()
 	extField, err := GetExtensionFieldDesc(m.Descriptor())
 	if err != nil {
 		return nil, err
@@ -607,13 +603,9 @@ func GetInternalExtension(pb, ext proto.Message) (proto.Message, error) {
 
 // InternalExtensionURL returns the internal extension URL.
 func InternalExtensionURL(desc protoreflect.MessageDescriptor) (string, error) {
-	opt := desc.Options().(*dpb.MessageOptions)
-	baseBytes, err := proto.GetExtension(opt, apb.E_FhirProfileBase)
-	if err != nil {
-		return "", fmt.Errorf("get fhir_profile_base: %v", err)
-	}
-	baseStrs, ok := baseBytes.([]string)
-	if !ok {
+	baseBytes := proto.GetExtension(desc.Options(), apb.E_FhirProfileBase)
+	baseStrs := baseBytes.([]string)
+	if len(baseStrs) == 0 {
 		return "", fmt.Errorf("unable to get fhir_profile_base strings")
 	}
 	found := false
@@ -625,18 +617,15 @@ func InternalExtensionURL(desc protoreflect.MessageDescriptor) (string, error) {
 	if !found {
 		return "", fmt.Errorf("message does not have Extension as a profile base")
 	}
-	if !proto.HasExtension(opt, apb.E_FhirStructureDefinitionUrl) {
+	if !proto.HasExtension(desc.Options(), apb.E_FhirStructureDefinitionUrl) {
 		return "", fmt.Errorf("missing required fhir_structure_definition extension")
 	}
-	ext, err := proto.GetExtension(opt, apb.E_FhirStructureDefinitionUrl)
-	if err != nil {
-		return "", fmt.Errorf("get fhir_structure_definition_url: %v", err)
-	}
-	url, ok := ext.(*string)
-	if !ok {
+	ext := proto.GetExtension(desc.Options(), apb.E_FhirStructureDefinitionUrl)
+	url := ext.(string)
+	if url == "" {
 		return "", fmt.Errorf("unable to get fhir_structure_definition string")
 	}
-	return *url, nil
+	return url, nil
 }
 
 // ExtensionURL returns the extension URL value.
@@ -684,7 +673,7 @@ func ExtensionValue(pb protoreflect.Message) (protoreflect.Message, error) {
 
 // ExtensionHasURL checks if an extension proto has the given URL.
 func ExtensionHasURL(pb proto.Message, url string) bool {
-	return extensionHasURL(proto.MessageReflect(pb), url)
+	return extensionHasURL(pb.ProtoReflect(), url)
 }
 
 func extensionHasURL(pb protoreflect.Message, url string) bool {
@@ -828,11 +817,8 @@ func collectDirectRequiredFields(msgDesc protoreflect.MessageDescriptor, sink ma
 	required := []protoreflect.FieldNumber{}
 	for i := 0; i < fields.Len(); i++ {
 		f := fields.Get(i)
-		ext, err := proto.GetExtension(f.Options().(*dpb.FieldOptions), apb.E_ValidationRequirement)
-		if err != nil {
-			continue
-		}
-		if *ext.(*apb.Requirement) == apb.Requirement_REQUIRED_BY_FHIR {
+		ext := proto.GetExtension(f.Options(), apb.E_ValidationRequirement).(apb.Requirement)
+		if ext == apb.Requirement_REQUIRED_BY_FHIR {
 			required = append(required, f.Number())
 		}
 	}
@@ -905,11 +891,10 @@ func UnmarshalCode(jsonPath string, in protoreflect.Message, rm json.RawMessage)
 		values := f.Enum().Values()
 		for i := 0; i < values.Len(); i++ {
 			ev := values.Get(i)
-			if ext, err := proto.GetExtension(ev.Options().(*dpb.EnumValueOptions), apb.E_FhirOriginalCode); err == nil {
-				if origCode, ok := ext.(*string); ok && *origCode == val {
-					pb.Set(f, protoreflect.ValueOf(ev.Number()))
-					return pb.Interface().(proto.Message), nil
-				}
+			ext := proto.GetExtension(ev.Options(), apb.E_FhirOriginalCode)
+			if origCode := ext.(string); origCode == val {
+				pb.Set(f, protoreflect.ValueOf(ev.Number()))
+				return pb.Interface().(proto.Message), nil
 			}
 		}
 		typeName := f.Enum().FullName().Parent().Name()

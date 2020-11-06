@@ -22,13 +22,12 @@ import (
 
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
-	descpb "google.golang.org/protobuf/types/descriptorpb"
 	apb "proto/google/fhir/proto/annotations_go_proto"
+	protov1 "github.com/golang/protobuf/proto"
 )
 
 // jsonFormat is the format in which the marshaller will represent the FHIR
@@ -110,10 +109,10 @@ func newAnalyticsMarshaller(maxDepth int, ver Version, format jsonFormat) (*Mars
 }
 
 // MarshalToString returns serialized JSON object of a ContainedResource protobuf message as string.
-func (m *Marshaller) MarshalToString(pb proto.Message) (string, error) {
-	pbTypeName := proto.MessageReflect(pb).Descriptor().FullName()
+func (m *Marshaller) MarshalToString(pb protov1.Message) (string, error) {
+	pbTypeName := protov1.MessageV2(pb).ProtoReflect().Descriptor().FullName()
 	emptyCR := m.cfg.newEmptyContainedResource()
-	expTypeName := proto.MessageReflect(emptyCR).Descriptor().FullName()
+	expTypeName := emptyCR.ProtoReflect().Descriptor().FullName()
 	if pbTypeName != expTypeName {
 		return "", fmt.Errorf("type mismatch, given proto is a message of type: %v, marshaller expects message of type: %v", pbTypeName, expTypeName)
 	}
@@ -124,20 +123,21 @@ func (m *Marshaller) MarshalToString(pb proto.Message) (string, error) {
 // MarshalResourceToString functions identically to MarshalToString, but accepts
 // a fhir.Resource interface instead of a ContainedResource. See
 // MarshalResource() for rationale.
-func (m *Marshaller) MarshalResourceToString(r proto.Message) (string, error) {
+func (m *Marshaller) MarshalResourceToString(r protov1.Message) (string, error) {
 	res, err := m.MarshalResource(r)
 	return string(res), err
 }
 
 // Marshal returns serialized JSON object of a ContainedResource protobuf message.
-func (m *Marshaller) Marshal(pb proto.Message) ([]byte, error) {
-	pbTypeName := proto.MessageReflect(pb).Descriptor().FullName()
+func (m *Marshaller) Marshal(pb protov1.Message) ([]byte, error) {
+	pb2 := protov1.MessageV2(pb)
+	pbTypeName := pb2.ProtoReflect().Descriptor().FullName()
 	emptyCR := m.cfg.newEmptyContainedResource()
-	expTypeName := proto.MessageReflect(emptyCR).Descriptor().FullName()
+	expTypeName := emptyCR.ProtoReflect().Descriptor().FullName()
 	if pbTypeName != expTypeName {
 		return nil, fmt.Errorf("type mismatch, given proto is a message of type: %v, marshaller expects message of type: %v", pbTypeName, expTypeName)
 	}
-	data, err := m.marshal(proto.MessageReflect(pb))
+	data, err := m.marshal(pb2.ProtoReflect())
 	if err != nil {
 		return nil, err
 	}
@@ -165,8 +165,8 @@ func (m *Marshaller) render(data jsonpbhelper.IsJSON) ([]byte, error) {
 // interface instead of a ContainedResource. This allows for reduced nesting in
 // declaring messages, and does not require knowledge of the specific Resource
 // type.
-func (m *Marshaller) MarshalResource(r proto.Message) ([]byte, error) {
-	data, err := m.marshalResource(proto.MessageReflect(r))
+func (m *Marshaller) MarshalResource(r protov1.Message) ([]byte, error) {
+	data, err := m.marshalResource(protov1.MessageV2(r).ProtoReflect())
 	if err != nil {
 		return nil, err
 	}
@@ -371,22 +371,21 @@ func (m *Marshaller) marshalFieldValue(decmap jsonpbhelper.JSONObject, f protore
 	if m.jsonFormat == formatPure {
 		// for choice type fields in non-analytics output, we need to zoom into the field within oneof.
 		// e.g. value.quantity changed to valueQuantity
-		if ext, err := proto.GetExtension(pb.Descriptor().Options().(*descpb.MessageOptions), apb.E_IsChoiceType); err == nil {
-			if ict, ok := ext.(*bool); ok && *ict {
-				fn := f.Name()
-				if pb.Descriptor().Oneofs().Len() != 1 {
-					return fmt.Errorf("Choice type must have exactly one oneof: %v", f.FullName())
-				}
-				od := pb.Descriptor().Oneofs().Get(0)
-				fd := pb.WhichOneof(od)
-				if fd == nil {
-					return fmt.Errorf("no oneof set in choice type %v", fn)
-				}
-				// Zoom into the field within oneof.
-				f = fd
-				jsonName = jsonpbhelper.SnakeToLowerCamel(string(fn) + "_" + jsonpbhelper.CamelToSnake(fd.JSONName()))
-				pb = pb.Get(fd).Message()
+		ext := proto.GetExtension(pb.Descriptor().Options(), apb.E_IsChoiceType)
+		if ict := ext.(bool); ict {
+			fn := f.Name()
+			if pb.Descriptor().Oneofs().Len() != 1 {
+				return fmt.Errorf("Choice type must have exactly one oneof: %v", f.FullName())
 			}
+			od := pb.Descriptor().Oneofs().Get(0)
+			fd := pb.WhichOneof(od)
+			if fd == nil {
+				return fmt.Errorf("no oneof set in choice type %v", fn)
+			}
+			// Zoom into the field within oneof.
+			f = fd
+			jsonName = jsonpbhelper.SnakeToLowerCamel(string(fn) + "_" + jsonpbhelper.CamelToSnake(fd.JSONName()))
+			pb = pb.Get(fd).Message()
 		}
 	}
 	if jsonpbhelper.IsPrimitiveType(f.Message()) {
@@ -444,13 +443,14 @@ func (m *Marshaller) marshalNonPrimitiveFieldValue(f protoreflect.FieldDescripto
 			return nil, nil
 		}
 		crpb := m.cfg.newEmptyContainedResource()
-		if err := ptypes.UnmarshalAny(pb.Interface().(*anypb.Any), crpb); err != nil {
-			return nil, fmt.Errorf("unmarsahlling Any, err: %v", err)
+		pbAny := pb.Interface().(*anypb.Any)
+		if err := pbAny.UnmarshalTo(crpb); err != nil {
+			return nil, fmt.Errorf("unmarshalling Any, err: %v", err)
 		}
-		return m.marshal(proto.MessageReflect(crpb))
+		return m.marshal(crpb.ProtoReflect())
 	}
 
-	if proto.HasExtension(d.Options().(*descpb.MessageOptions), apb.E_FhirReferenceType) {
+	if proto.HasExtension(d.Options(), apb.E_FhirReferenceType) {
 		return m.marshalReference(pb)
 	}
 	return m.marshalMessageToMap(pb)
@@ -458,7 +458,7 @@ func (m *Marshaller) marshalNonPrimitiveFieldValue(f protoreflect.FieldDescripto
 
 func (m *Marshaller) marshalReference(rpb protoreflect.Message) (jsonpbhelper.IsJSON, error) {
 	pb := rpb.Interface().(proto.Message)
-	if err := DenormalizeReference(pb); err != nil {
+	if err := DenormalizeReference(protov1.MessageV1(pb)); err != nil {
 		return nil, err
 	}
 	if m.jsonFormat != formatPure {
@@ -552,13 +552,13 @@ func (m *Marshaller) marshalPrimitiveType(rpb protoreflect.Message) (jsonpbhelpe
 		}
 		return jsonpbhelper.JSONString(t), nil
 	case "Instant":
-		t, err := SerializeInstant(pb)
+		t, err := SerializeInstant(protov1.MessageV1(pb))
 		if err != nil {
 			return nil, fmt.Errorf("serialize instant: %v", err)
 		}
 		return jsonpbhelper.JSONString(t), nil
 	default:
-		if !proto.HasExtension(desc.Options().(*descpb.MessageOptions), apb.E_FhirValuesetUrl) {
+		if !proto.HasExtension(desc.Options(), apb.E_FhirValuesetUrl) {
 			return nil, fmt.Errorf("not a supported primitive type: %v", desc.Name())
 		}
 		// Handle specialized codes
@@ -578,10 +578,9 @@ func (m *Marshaller) marshalPrimitiveType(rpb protoreflect.Message) (jsonpbhelpe
 			// Observe the FHIR original codes if set.
 			ed := f.Enum()
 			ev := ed.Values().ByNumber(num)
-			if ext, err := proto.GetExtension(ev.Options().(*descpb.EnumValueOptions), apb.E_FhirOriginalCode); err == nil {
-				if origCode, ok := ext.(*string); ok {
-					return jsonpbhelper.JSONString(*origCode), nil
-				}
+			ext := proto.GetExtension(ev.Options(), apb.E_FhirOriginalCode)
+			if origCode := ext.(string); origCode != "" {
+				return jsonpbhelper.JSONString(origCode), nil
 			}
 			enum := string(ev.Name())
 			return jsonpbhelper.JSONString(strings.Replace(strings.ToLower(enum), "_", "-", -1)), nil

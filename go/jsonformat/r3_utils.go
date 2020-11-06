@@ -17,7 +17,7 @@ package jsonformat
 import (
 	"fmt"
 
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"bitbucket.org/creachadair/stringset"
 
 	dpb "proto/google/fhir/proto/stu3/datatypes_go_proto"

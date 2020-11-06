@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"bitbucket.org/creachadair/stringset"
 
 	dpb "proto/google/fhir/proto/r4/core/datatypes_go_proto"

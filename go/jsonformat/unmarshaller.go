@@ -28,13 +28,12 @@ import (
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/json-iterator/go"
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
-	descpb "google.golang.org/protobuf/types/descriptorpb"
 	apb "proto/google/fhir/proto/annotations_go_proto"
+	protov1 "github.com/golang/protobuf/proto"
 )
 
 var (
@@ -86,13 +85,14 @@ func newUnmarshaller(tz string, ver Version, enableValidation bool) (*Unmarshall
 }
 
 // Unmarshal returns the corresponding protobuf message given a serialized FHIR JSON object
-func (u *Unmarshaller) Unmarshal(in []byte) (proto.Message, error) {
+func (u *Unmarshaller) Unmarshal(in []byte) (protov1.Message, error) {
 	// Decode the JSON object into a map.
 	var decoded map[string]json.RawMessage
 	if err := jsp.Unmarshal(in, &decoded); err != nil {
 		return nil, &jsonpbhelper.UnmarshalError{Details: "invalid JSON", Diagnostics: err.Error()}
 	}
-	return u.parseContainedResource("", decoded)
+	res, err := u.parseContainedResource("", decoded)
+	return protov1.MessageV1(res), err
 }
 
 func addFieldToPath(jsonPath, field string) string {
@@ -157,7 +157,7 @@ func (u *Unmarshaller) parseContainedResource(jsonPath string, decmap map[string
 	// Populate the fields in the protobuf message to return.
 	// Encapsulate in a ContainedResource.
 	cr := u.cfg.newEmptyContainedResource()
-	rcr := proto.MessageReflect(cr)
+	rcr := cr.ProtoReflect()
 	pbdesc := rcr.Descriptor()
 	oneofDesc := pbdesc.Oneofs().ByName(jsonpbhelper.OneofName)
 	if oneofDesc == nil {
@@ -214,8 +214,8 @@ func (u *Unmarshaller) mergeMessage(jsonPath string, decmap map[string]json.RawM
 		if err != nil {
 			return err
 		}
-		any, err := ptypes.MarshalAny(cr)
-		if err != nil {
+		any := &anypb.Any{}
+		if err := any.MarshalFrom(cr); err != nil {
 			return err
 		}
 		proto.Merge(protoMessage(pb), any)
@@ -376,7 +376,7 @@ func (u *Unmarshaller) mergeSingleField(jsonPath string, f protoreflect.FieldDes
 		}
 		return u.mergePrimitiveType(protoMessage(pb), p)
 	}
-	if !proto.HasExtension(d.Options().(*descpb.MessageOptions), apb.E_FhirReferenceType) {
+	if !proto.HasExtension(d.Options(), apb.E_FhirReferenceType) {
 		return u.mergeRawMessage(jsonPath, rm, pb)
 	}
 
@@ -395,7 +395,7 @@ func (u *Unmarshaller) mergeReference(jsonPath string, rm json.RawMessage, pb pr
 	if err := u.mergeRawMessage(jsonPath, rm, pb); err != nil {
 		return err
 	}
-	return NormalizeReference(protoMessage(pb))
+	return NormalizeReference(protoMessageV1(pb))
 }
 
 func (u *Unmarshaller) mergePrimitiveType(dst, src proto.Message) error {
@@ -710,14 +710,16 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 	}
 
 	// Handles specialized codes.
-	if proto.HasExtension(d.Options().(*descpb.MessageOptions), apb.E_FhirValuesetUrl) {
+	if proto.HasExtension(d.Options(), apb.E_FhirValuesetUrl) {
 		return jsonpbhelper.UnmarshalCode(jsonPath, in, rm)
 	}
 	return nil, fmt.Errorf("unsupported FHIR primitive type: %v", d.Name())
 }
 
+func protoMessageV1(pb protoreflect.Message) protov1.Message { return pb.Interface().(protov1.Message) }
+
 func protoMessage(pb protoreflect.Message) proto.Message { return pb.Interface().(proto.Message) }
 
 func protoName(pb proto.Message) protoreflect.Name {
-	return proto.MessageReflect(pb).Descriptor().Name()
+	return pb.ProtoReflect().Descriptor().Name()
 }

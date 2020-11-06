@@ -21,11 +21,12 @@ import (
 	"time"
 
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 
 	d4pb "proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	d3pb "proto/google/fhir/proto/stu3/datatypes_go_proto"
+	protov1 "github.com/golang/protobuf/proto"
 )
 
 func newDatesForTest(val int64, precName string, tz string) []proto.Message {
@@ -34,7 +35,7 @@ func newDatesForTest(val int64, precName string, tz string) []proto.Message {
 		&d4pb.Date{ValueUs: val, Timezone: tz},
 	}
 	for _, p := range ret {
-		rp := proto.MessageReflect(p)
+		rp := p.ProtoReflect()
 		precEnum, _ := accessor.GetEnumDescriptor(rp.Descriptor(), "precision")
 		prec := precEnum.Values().ByName(protoreflect.Name(precName)).Number()
 		_ = accessor.SetValue(rp, prec, "precision")
@@ -125,7 +126,7 @@ func TestDate(t *testing.T) {
 		l, _ := time.LoadLocation(test.tz)
 		dates := newDatesForTest(test.val, test.prec, test.protoTz)
 		for _, d := range dates {
-			parsed := proto.MessageReflect(d).New().Interface().(proto.Message)
+			parsed := d.ProtoReflect().New().Interface().(proto.Message)
 			if err := parseDateFromJSON(json.RawMessage(strconv.Quote(test.json)), l, parsed); err != nil {
 				t.Fatalf("ParseDateFromJSON(%q, %s, %T): %v", test.json, l, parsed, err)
 			}
@@ -184,7 +185,7 @@ func newDateTimesForTest(val int64, precName string, tz string) []proto.Message 
 		&d4pb.DateTime{ValueUs: val, Timezone: tz},
 	}
 	for _, p := range ret {
-		rp := proto.MessageReflect(p)
+		rp := p.ProtoReflect()
 		precEnum, _ := accessor.GetEnumDescriptor(rp.Descriptor(), "precision")
 		prec := precEnum.Values().ByName(protoreflect.Name(precName)).Number()
 		_ = accessor.SetValue(rp, prec, "precision")
@@ -297,7 +298,7 @@ func TestDateTime(t *testing.T) {
 			l, _ := time.LoadLocation(test.tz)
 			dts := newDateTimesForTest(test.val, test.prec, test.protoTz)
 			for _, dt := range dts {
-				parsed := proto.MessageReflect(dt).Interface().(proto.Message)
+				parsed := dt.ProtoReflect().Interface().(proto.Message)
 				if err := parseDateTimeFromJSON(json.RawMessage(strconv.Quote(test.json)), l, parsed); err != nil {
 					t.Fatalf("parseDateTimeFromJSON(%q, %q, %T): %v", test.json, l, parsed, err)
 				}
@@ -360,7 +361,7 @@ func newTimesForTest(val int64, precName string) []proto.Message {
 		&d4pb.Time{ValueUs: val},
 	}
 	for _, p := range ret {
-		rp := proto.MessageReflect(p)
+		rp := p.ProtoReflect()
 		precEnum, _ := accessor.GetEnumDescriptor(rp.Descriptor(), "precision")
 		prec := precEnum.Values().ByName(protoreflect.Name(precName)).Number()
 		_ = accessor.SetValue(rp, prec, "precision")
@@ -393,7 +394,7 @@ func TestTime(t *testing.T) {
 	for _, test := range tests {
 		ts := newTimesForTest(test.val, test.prec)
 		for _, tm := range ts {
-			parsed := proto.MessageReflect(tm).New().Interface().(proto.Message)
+			parsed := tm.ProtoReflect().New().Interface().(proto.Message)
 			if err := parseTime(json.RawMessage(strconv.Quote(test.json)), parsed); err != nil {
 				t.Fatalf("parseTime(m, %q): %v", test.json, err)
 			}
@@ -445,7 +446,7 @@ func newInstantsForTest(val int64, precName string, tz string) []proto.Message {
 		&d4pb.Instant{ValueUs: val, Timezone: tz},
 	}
 	for _, p := range ret {
-		rp := proto.MessageReflect(p)
+		rp := p.ProtoReflect()
 		precEnum, _ := accessor.GetEnumDescriptor(rp.Descriptor(), "precision")
 		prec := precEnum.Values().ByName(protoreflect.Name(precName)).Number()
 		_ = accessor.SetValue(rp, prec, "precision")
@@ -528,7 +529,7 @@ func TestInstant(t *testing.T) {
 	for _, test := range tests {
 		instants := newInstantsForTest(test.value, test.precision, test.protoTz)
 		for _, it := range instants {
-			parsed := proto.MessageReflect(it).New().Interface().(proto.Message)
+			parsed := it.ProtoReflect().New().Interface().(proto.Message)
 			if err := parseInstant(json.RawMessage(strconv.Quote(test.datetime)), parsed); err != nil {
 				t.Fatalf("%s parseInstant(%q, %T): %v", test.name, test.datetime, parsed, err)
 			}
@@ -536,7 +537,7 @@ func TestInstant(t *testing.T) {
 				t.Errorf("%s parseInstant(%q): got %v, want %v", test.name, test.datetime, parsed, want)
 			}
 
-			serialized, err := SerializeInstant(it)
+			serialized, err := SerializeInstant(protov1.MessageV1(it))
 			if err != nil {
 				t.Fatalf("%s SerializeInstant(%q): %v", test.name, it, err)
 			}
@@ -577,18 +578,18 @@ func TestParseInstant_Invalid(t *testing.T) {
 func TestSerializeInstant_Invalid(t *testing.T) {
 	tests := []struct {
 		name   string
-		protos []proto.Message
+		protos []protov1.Message
 	}{
 		{
 			"zero'd precision",
-			[]proto.Message{
+			[]protov1.Message{
 				&d3pb.Instant{Timezone: "UTC", Precision: d3pb.Instant_PRECISION_UNSPECIFIED},
 				&d4pb.Instant{Timezone: "UTC", Precision: d4pb.Instant_PRECISION_UNSPECIFIED},
 			},
 		},
 		{
 			"invalid timezone",
-			[]proto.Message{
+			[]protov1.Message{
 				&d3pb.Instant{Timezone: "XYZ", Precision: d3pb.Instant_SECOND},
 				&d4pb.Instant{Timezone: "XYZ", Precision: d4pb.Instant_SECOND},
 			},

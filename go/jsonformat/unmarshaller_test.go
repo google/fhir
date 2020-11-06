@@ -23,7 +23,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
@@ -39,6 +39,7 @@ import (
 	d3pb "proto/google/fhir/proto/stu3/datatypes_go_proto"
 	m3pb "proto/google/fhir/proto/stu3/metadatatypes_go_proto"
 	r3pb "proto/google/fhir/proto/stu3/resources_go_proto"
+	protov1 "github.com/golang/protobuf/proto"
 )
 
 // TODO: Find a better way to maintain the versioned unit tests.
@@ -883,7 +884,7 @@ func TestUnmarshal(t *testing.T) {
 					if err != nil {
 						t.Fatalf("unmarshal %v failed: %v", test.name, err)
 					}
-					if !proto.Equal(got, w.r) {
+					if !protov1.Equal(got, w.r) {
 						t.Errorf("unmarshal %v: got %v, want %v", test.name, got, w.r)
 					}
 				})
@@ -1712,11 +1713,12 @@ func TestParsePrimitiveType(t *testing.T) {
 			for _, w := range test.wants {
 				t.Run(w.ver.String(), func(t *testing.T) {
 					u := setupUnmarshaller(t, w.ver)
-					got, err := u.parsePrimitiveType("value", proto.MessageReflect(w.r), test.value)
+					r2 := protov1.MessageV2(w.r)
+					got, err := u.parsePrimitiveType("value", r2.ProtoReflect(), test.value)
 					if err != nil {
 						t.Fatalf("parse primitive type: %v", err)
 					}
-					if !proto.Equal(got, w.r) {
+					if !proto.Equal(got, r2) {
 						t.Errorf("parse primitive type %v: got %v, want %v", test.pType, got, w.r)
 					}
 				})
@@ -1755,8 +1757,8 @@ func TestParseURIs(t *testing.T) {
 			for _, i := range inputs {
 				t.Run(i.ver.String(), func(t *testing.T) {
 					u := setupUnmarshaller(t, i.ver)
-					r := proto.Clone(i.r)
-					rpb := proto.MessageReflect(r)
+					r := proto.Clone(protov1.MessageV2(i.r))
+					rpb := r.ProtoReflect()
 					rpb.Set(rpb.Descriptor().Fields().ByName("value"), protoreflect.ValueOfString(test))
 					got, err := u.parsePrimitiveType("value", rpb, json.RawMessage(strconv.Quote(test)))
 					if err != nil {
@@ -2143,7 +2145,7 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			for _, msg := range test.msgs {
 				t.Run(msg.ver.String(), func(t *testing.T) {
 					u := setupUnmarshaller(t, msg.ver)
-					_, err := u.parsePrimitiveType("value", proto.MessageReflect(msg.r), test.value)
+					_, err := u.parsePrimitiveType("value", protov1.MessageV2(msg.r).ProtoReflect(), test.value)
 					if err == nil {
 						t.Errorf("parsePrimitiveType() %v succeeded, expect error", test.name)
 					}

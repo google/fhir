@@ -23,19 +23,19 @@ import (
 
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 // protoToExtension converts a FHIR extension proto (e.g. Base64BinarySeparatorStride or
 // PrimitiveHasNoValue) into a Google-defined FHIR extension describing the proto.
 func protoToExtension(pb, ext proto.Message) error {
-	rpb := proto.MessageReflect(pb)
+	rpb := pb.ProtoReflect()
 	url, err := jsonpbhelper.InternalExtensionURL(rpb.Descriptor())
 	if err != nil {
 		return err
 	}
-	ret := proto.MessageReflect(ext)
+	ret := ext.ProtoReflect()
 	if err := accessor.SetValue(ret, url, "url", "value"); err != nil {
 		return fmt.Errorf("setting url value in a new extension proto: %v, err: %v", ret.Interface(), err)
 	}
@@ -103,7 +103,7 @@ func protoToExtension(pb, ext proto.Message) error {
 
 // parseDecimal parses a FHIR decimal data object into a Decimal proto message, m.
 func parseDecimal(decimal json.RawMessage, m proto.Message) error {
-	mr := proto.MessageReflect(m)
+	mr := m.ProtoReflect()
 	fn := mr.Descriptor().FullName()
 	regex, has := jsonpbhelper.RegexValues[fn]
 	if !has {
@@ -124,7 +124,7 @@ type base64BinarySeparatorStrideCreator func(sep string, stride uint32) proto.Me
 
 // parseBinary parses a FHIR Binary resource object into a Binary proto message, m.
 func parseBinary(binary json.RawMessage, m proto.Message, createSepStride base64BinarySeparatorStrideCreator) error {
-	mr := proto.MessageReflect(m)
+	mr := m.ProtoReflect()
 	var val string
 	if err := jsonpbhelper.JSP.Unmarshal(binary, &val); err != nil {
 		return err
@@ -173,7 +173,7 @@ func serializeBinary(binary proto.Message, createSepStride base64BinarySeparator
 	if err != nil {
 		return "", err
 	}
-	rBinary := proto.MessageReflect(binary)
+	rBinary := binary.ProtoReflect()
 	binVal, err := accessor.GetBytes(rBinary, "value")
 	if err != nil {
 		return "", err
@@ -185,7 +185,7 @@ func serializeBinary(binary proto.Message, createSepStride base64BinarySeparator
 	if err := jsonpbhelper.RemoveInternalExtension(binary, createSepStride("", 0)); err != nil {
 		return "", err
 	}
-	extList, err := accessor.GetList(proto.MessageReflect(ext), "extension")
+	extList, err := accessor.GetList(ext.ProtoReflect(), "extension")
 	if err != nil {
 		return "", err
 	}

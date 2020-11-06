@@ -22,8 +22,10 @@ import (
 
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
+
+	protov1 "github.com/golang/protobuf/proto"
 )
 
 func checkEnumValueNames(enum protoreflect.EnumDescriptor, valueNames ...string) error {
@@ -38,7 +40,7 @@ func checkEnumValueNames(enum protoreflect.EnumDescriptor, valueNames ...string)
 
 // parseDateFromStr parses a FHIR date string into a Date proto message, m.
 func parseDateFromStr(date string, l *time.Location, m proto.Message) error {
-	mr := proto.MessageReflect(m)
+	mr := m.ProtoReflect()
 	// Date regular expression definition from https://www.hl7.org/fhir/datatypes.html
 	matched := jsonpbhelper.DateCompiledRegex.MatchString(date)
 	timeZone := l.String()
@@ -90,7 +92,7 @@ func parseDateFromJSON(rm json.RawMessage, l *time.Location, m proto.Message) er
 
 // serializeDate serializes a FHIR Date proto message to a JSON string.
 func serializeDate(d proto.Message) (string, error) {
-	rd := proto.MessageReflect(d)
+	rd := d.ProtoReflect()
 	valueUs, err := accessor.GetInt64(rd, "value_us")
 	if err != nil {
 		return "", err
@@ -136,7 +138,7 @@ func serializeDate(d proto.Message) (string, error) {
 // parseDateTimeFromStr parses a FHIR dateTime string, and returns, if successful, a DateTime proto
 // message with the parsed date/time information.
 func parseDateTimeFromStr(date string, l *time.Location, m proto.Message) error {
-	mr := proto.MessageReflect(m)
+	mr := m.ProtoReflect()
 	// DateTime regular expression definition from https://www.hl7.org/fhir/datatypes.html
 	matched := jsonpbhelper.DateTimeCompiledRegex.MatchString(date)
 	if !matched {
@@ -200,7 +202,7 @@ func parseDateTimeFromJSON(rm json.RawMessage, l *time.Location, m proto.Message
 
 // serializeDateTime serializes a FHIR DateTime proto message to a JSON string.
 func serializeDateTime(dt proto.Message) (string, error) {
-	rdt := proto.MessageReflect(dt)
+	rdt := dt.ProtoReflect()
 	valueUs, err := accessor.GetInt64(rdt, "value_us")
 	if err != nil {
 		return "", err
@@ -268,7 +270,7 @@ func serializeDateTime(dt proto.Message) (string, error) {
 
 // parseTime parses a FHIR time string into a Time proto message.
 func parseTime(rm json.RawMessage, m proto.Message) error {
-	mr := proto.MessageReflect(m)
+	mr := m.ProtoReflect()
 	t, err := jsonpbhelper.ParseTime(rm)
 	if err != nil {
 		return err
@@ -306,7 +308,7 @@ func parseTime(rm json.RawMessage, m proto.Message) error {
 
 // serializeTime serializes a FHIR Time proto message to a JSON string.
 func serializeTime(t proto.Message) (string, error) {
-	rt := proto.MessageReflect(t)
+	rt := t.ProtoReflect()
 	precEnum, err := accessor.GetEnumDescriptor(rt.Descriptor(), "precision")
 	if err != nil {
 		return "", err
@@ -341,7 +343,7 @@ func serializeTime(t proto.Message) (string, error) {
 
 // parseInstant parses a FHIR instant string into an Instant proto message, m.
 func parseInstant(rm json.RawMessage, m proto.Message) error {
-	mr := proto.MessageReflect(m)
+	mr := m.ProtoReflect()
 	var instant string
 	if err := jsonpbhelper.JSP.Unmarshal(rm, &instant); err != nil {
 		return err
@@ -391,8 +393,8 @@ func parseInstant(rm json.RawMessage, m proto.Message) error {
 }
 
 // SerializeInstant takes an Instant proto message and serializes it to a datetime string.
-func SerializeInstant(instant proto.Message) (string, error) {
-	rinstant := proto.MessageReflect(instant)
+func SerializeInstant(instant protov1.Message) (string, error) {
+	rinstant := protov1.MessageV2(instant).ProtoReflect()
 	precEnum, err := accessor.GetEnumDescriptor(rinstant.Descriptor(), "precision")
 	if err != nil {
 		return "", err

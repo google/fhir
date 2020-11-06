@@ -20,16 +20,17 @@ import (
 
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 
 	d4pb "proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	d3pb "proto/google/fhir/proto/stu3/datatypes_go_proto"
+	protov1 "github.com/golang/protobuf/proto"
 )
 
 // normalizeFragmentReference normalizes an internal reference into its specialized field.
 func normalizeFragmentReference(pb proto.Message) error {
-	rpb := proto.MessageReflect(pb)
+	rpb := pb.ProtoReflect()
 	uriField := rpb.Descriptor().Fields().ByName(jsonpbhelper.RefRawURI)
 	if uriField == nil {
 		return fmt.Errorf("invalid reference: %v", pb)
@@ -56,7 +57,7 @@ func normalizeFragmentReference(pb proto.Message) error {
 // normalizeRelativeReferenceAndIgnoreHistory normalizes a relative reference into its specialized
 // field. If history is included in the original reference, it would be ignored.
 func normalizeRelativeReferenceAndIgnoreHistory(pb proto.Message) error {
-	rpb := proto.MessageReflect(pb)
+	rpb := pb.ProtoReflect()
 	field, err := jsonpbhelper.GetOneofField(rpb.Descriptor(), jsonpbhelper.RefOneofName, jsonpbhelper.RefRawURI)
 	if err != nil {
 		return err
@@ -87,8 +88,9 @@ func normalizeRelativeReferenceAndIgnoreHistory(pb proto.Message) error {
 }
 
 // NormalizeReference normalizes a relative or internal reference into its specialized field.
-func NormalizeReference(pb proto.Message) error {
-	switch ref := pb.(type) {
+func NormalizeReference(pb protov1.Message) error {
+	pb2 := protov1.MessageV2(pb)
+	switch ref := pb2.(type) {
 	case *d3pb.Reference:
 		return normalizeR3Reference(ref)
 	case *d4pb.Reference:
@@ -164,8 +166,9 @@ func normalizeR4Reference(ref *d4pb.Reference) error {
 }
 
 // DenormalizeReference recovers the absolute reference URI from a normalized representation.
-func DenormalizeReference(pb proto.Message) error {
-	switch ref := pb.(type) {
+func DenormalizeReference(pb protov1.Message) error {
+	pb2 := protov1.MessageV2(pb)
+	switch ref := pb2.(type) {
 	case *d3pb.Reference:
 		denormalizeR3Reference(ref)
 	case *d4pb.Reference:

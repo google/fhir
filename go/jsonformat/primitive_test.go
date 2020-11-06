@@ -22,7 +22,7 @@ import (
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/go-cmp/cmp"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/testing/protocmp"
 
@@ -112,8 +112,8 @@ func newBinarySeparatorStrideAndExtensionTestData(sep string, stride uint32) []p
 		},
 	)
 	for _, r := range ret {
-		rSrc := proto.MessageReflect(r.srcProto)
-		rDst := proto.MessageReflect(r.dstExtension)
+		rSrc := r.srcProto.ProtoReflect()
+		rDst := r.dstExtension.ProtoReflect()
 		_ = accessor.SetValue(rSrc, sep, "separator", "value")
 		_ = accessor.SetValue(rSrc, stride, "stride", "value")
 		_ = accessor.SetValue(rDst, "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride", "url", "value")
@@ -154,8 +154,8 @@ func newPrimitiveHasNoValueTestData(b bool) []protoToExtensionTestData {
 		},
 	)
 	for _, r := range ret {
-		rSrc := proto.MessageReflect(r.srcProto)
-		rDst := proto.MessageReflect(r.dstExtension)
+		rSrc := r.srcProto.ProtoReflect()
+		rDst := r.dstExtension.ProtoReflect()
 		_ = accessor.SetValue(rSrc, b, "value_boolean", "value")
 		_ = accessor.SetValue(rDst, "https://g.co/fhir/StructureDefinition/primitiveHasNoValue", "url", "value")
 		_ = accessor.SetValue(rDst, b, "value", "choice", "boolean", "value")
@@ -180,7 +180,7 @@ func TestProtoExtension(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			for _, d := range tc.data {
-				got := proto.MessageReflect(d.dstExtension).New().Interface().(proto.Message)
+				got := d.dstExtension.ProtoReflect().New().Interface().(proto.Message)
 				if err := protoToExtension(d.srcProto, got); err != nil {
 					t.Fatalf("ProtoToExtension(%v, %T): %v", d.srcProto, got, err)
 				}
@@ -252,9 +252,9 @@ func newAddInternalExtensionTestData(bin []byte, sep string, stride uint32, alre
 	)
 	protoToExtData := newBinarySeparatorStrideAndExtensionTestData(sep, stride)
 	for i, r := range ret {
-		addExtensionWithNestingSeparatorAndStrideExtensions(proto.MessageReflect(r.dstBinary), sep, stride)
+		addExtensionWithNestingSeparatorAndStrideExtensions(r.dstBinary.ProtoReflect(), sep, stride)
 		if alreadyExist {
-			addExtensionWithNestingSeparatorAndStrideExtensions(proto.MessageReflect(r.srcBinary), sep, stride)
+			addExtensionWithNestingSeparatorAndStrideExtensions(r.srcBinary.ProtoReflect(), sep, stride)
 		}
 		ret[i].protoToExtensionTestData = protoToExtData[i]
 	}
@@ -288,7 +288,7 @@ func TestAddInternalExtension(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			data := newAddInternalExtensionTestData(tc.bin, tc.sep, tc.stride, tc.extensionsAlreadyInBin)
 			for _, d := range data {
-				ext := proto.MessageReflect(d.dstExtension).New().Interface().(proto.Message)
+				ext := d.dstExtension.ProtoReflect().New().Interface().(proto.Message)
 				if err := protoToExtension(d.srcProto, ext); err != nil {
 					t.Errorf("ProtoToExtension(%v, %T) got error: %v", d.srcProto, ext, err)
 				}
@@ -330,7 +330,7 @@ func TestDecimal(t *testing.T) {
 			}
 			for _, ver := range test.vers {
 				e := expects[ver]
-				got := proto.MessageReflect(e).New().Interface().(proto.Message)
+				got := e.ProtoReflect().New().Interface().(proto.Message)
 				if err := parseDecimal(json.RawMessage(test.value), got); err != nil {
 					t.Fatalf("ParseDecimal(%q, %T) got error: %v", test, got, err)
 				}
@@ -429,11 +429,11 @@ func TestBinary(t *testing.T) {
 			}
 			for _, tnc := range typesAndCreators {
 				// Test parsing
-				parsed := proto.MessageReflect(tnc.message).New().Interface().(proto.Message)
+				parsed := tnc.message.ProtoReflect().New().Interface().(proto.Message)
 				if err := parseBinary(json.RawMessage(strconv.Quote(test.json)), parsed, tnc.creator); err != nil {
 					t.Fatalf("ParseBinary(%q, %T, %v) got error: %v", test.json, parsed, tnc.creator, err)
 				}
-				binary := proto.MessageReflect(tnc.message).New()
+				binary := tnc.message.ProtoReflect().New()
 				_ = accessor.SetValue(binary, test.binVal, "value")
 				if test.hasExtensions {
 					addExtensionWithNestingSeparatorAndStrideExtensions(binary, test.sep, test.stride)
@@ -503,7 +503,7 @@ func TestParseBinary_Invalid(t *testing.T) {
 				},
 			}
 			for _, tnc := range typesAndCreators {
-				m := proto.MessageReflect(tnc.message).New().Interface().(proto.Message)
+				m := tnc.message.ProtoReflect().New().Interface().(proto.Message)
 				if err := parseBinary(json.RawMessage(strconv.Quote(test.json)), m, tnc.creator); err == nil {
 					t.Errorf("ParseBinary(%q, %T, %v) succeeded, want error", test.json, m, tnc.creator)
 				}
