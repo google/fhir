@@ -109,6 +109,7 @@ const (
 )
 
 var (
+
 	// SearchDateCompiledRegex for date regex used within searches only. Does
 	// not have the correct precision for Date, DateTime, Time or Instant types.
 	SearchDateCompiledRegex *regexp.Regexp
@@ -120,18 +121,10 @@ var (
 	TimeCompiledRegex *regexp.Regexp
 	// InstantCompiledRegex for instant regex.
 	InstantCompiledRegex *regexp.Regexp
-	// IDCompiledRegex for ID regex.
-	IDCompiledRegex *regexp.Regexp
-	// OIDCompiledRegex for OID regex.
-	OIDCompiledRegex *regexp.Regexp
 	// PositiveIntCompiledRegex for positive integer regex.
 	PositiveIntCompiledRegex *regexp.Regexp
 	// UnsignedIntCompiledRegex for unsigned integer regex.
 	UnsignedIntCompiledRegex *regexp.Regexp
-	// CodeCompiledRegex for decimal regex.
-	CodeCompiledRegex *regexp.Regexp
-	// UUIDCompiledRegex for UUID regex.
-	UUIDCompiledRegex *regexp.Regexp
 	// JSP for JSP regex.
 	JSP jsoniter.API
 
@@ -220,6 +213,16 @@ func (e *UnmarshalError) Error() string {
 	return msg + e.Details
 }
 
+// AnnotateUnmarshalErrorWithPath to help the user in debugging what field
+// caused the error.
+func AnnotateUnmarshalErrorWithPath(err error, jsonPath string) error {
+	if umErr, ok := err.(*UnmarshalError); ok {
+		umErr.Path = jsonPath
+		return umErr
+	}
+	return err
+}
+
 func init() {
 	compileOrDie := func(expr string) *regexp.Regexp {
 		r, err := regexp.Compile(expr)
@@ -239,12 +242,8 @@ func init() {
 	DateTimeCompiledRegex = compileOrDie(`^-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$`)
 	TimeCompiledRegex = compileOrDie(`^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?$`)
 	InstantCompiledRegex = compileOrDie(`^-?[0-9]{4}-(0[1-9]|1[0-2])-(0[0-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))$`)
-	IDCompiledRegex = compileOrDie(`^([[:alnum:]]|\-|\.){1,64}$`)
-	OIDCompiledRegex = compileOrDie(`^urn:oid:[0-2](\.[1-9]\d*)+$`)
 	PositiveIntCompiledRegex = compileOrDie(`^[+]?[1-9][0-9]*$`)
 	UnsignedIntCompiledRegex = compileOrDie(`^(0|([1-9][0-9]*))$`)
-	CodeCompiledRegex = compileOrDie(`^[^\s]+([\s]?[^\s]+)*$`)
-	UUIDCompiledRegex = compileOrDie(`^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
 	JSP = jsoniter.ConfigCompatibleWithStandardLibrary
 
 	// populate the required fields map.
@@ -267,7 +266,16 @@ func init() {
 	RegexValues = make(map[protoreflect.FullName]*regexp.Regexp)
 	primitivesWithRegex := []protoreflect.Message{
 		(&d3pb.Decimal{}).ProtoReflect(),
+		(&d3pb.Oid{}).ProtoReflect(),
+		(&d3pb.Id{}).ProtoReflect(),
+		(&d3pb.Uuid{}).ProtoReflect(),
+		(&d3pb.Code{}).ProtoReflect(),
+
 		(&d4pb.Decimal{}).ProtoReflect(),
+		(&d4pb.Oid{}).ProtoReflect(),
+		(&d4pb.Id{}).ProtoReflect(),
+		(&d4pb.Uuid{}).ProtoReflect(),
+		(&d4pb.Code{}).ProtoReflect(),
 	}
 	for _, p := range primitivesWithRegex {
 		p.Descriptor().Options().ProtoReflect().Range(func(f protoreflect.FieldDescriptor, v protoreflect.Value) bool {
@@ -949,4 +957,17 @@ func buildFieldMap(desc protoreflect.MessageDescriptor) map[string]protoreflect.
 		}
 	}
 	return fieldMap
+}
+
+// AddFieldToPath extends a JSON path with another field.
+func AddFieldToPath(jsonPath, field string) string {
+	if jsonPath == "" {
+		return field
+	}
+	return strings.Join([]string{jsonPath, field}, ".")
+}
+
+// AddIndexToPath extends a JSON path with an index.
+func AddIndexToPath(jsonPath string, index int) string {
+	return jsonPath + "[" + strconv.Itoa(index) + "]"
 }

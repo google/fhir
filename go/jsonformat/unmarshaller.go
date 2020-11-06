@@ -18,13 +18,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"math"
-	"net/url"
 	"strconv"
 	"strings"
 	"time"
 	"unicode/utf8"
 
+	"github.com/google/fhir/go/jsonformat/fhirvalidate"
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/json-iterator/go"
@@ -92,18 +91,10 @@ func (u *Unmarshaller) Unmarshal(in []byte) (protov1.Message, error) {
 		return nil, &jsonpbhelper.UnmarshalError{Details: "invalid JSON", Diagnostics: err.Error()}
 	}
 	res, err := u.parseContainedResource("", decoded)
-	return protov1.MessageV1(res), err
-}
-
-func addFieldToPath(jsonPath, field string) string {
-	if jsonPath == "" {
-		return field
+	if err != nil || !u.enableValidation {
+		return protov1.MessageV1(res), err
 	}
-	return strings.Join([]string{jsonPath, field}, ".")
-}
-
-func addIndexToPath(jsonPath string, index int) string {
-	return jsonPath + "[" + strconv.Itoa(index) + "]"
+	return protov1.MessageV1(res), fhirvalidate.Validate(res)
 }
 
 func (u *Unmarshaller) checkCurrentDepth(jsonPath string) error {
@@ -126,14 +117,6 @@ func lastFieldInPath(jsonPath string) string {
 	return strings.Split(s, "[")[0]
 }
 
-func annotateUnmarshalErrorWithPath(err error, jsonPath string) error {
-	if umErr, ok := err.(*jsonpbhelper.UnmarshalError); ok {
-		umErr.Path = jsonPath
-		return umErr
-	}
-	return err
-}
-
 func (u *Unmarshaller) parseContainedResource(jsonPath string, decmap map[string]json.RawMessage) (proto.Message, error) {
 	// Determine the type of the resource.
 	rt, ok := decmap[jsonpbhelper.ResourceTypeField]
@@ -152,7 +135,7 @@ func (u *Unmarshaller) parseContainedResource(jsonPath string, decmap map[string
 		}
 	}
 	delete(decmap, jsonpbhelper.ResourceTypeField)
-	jsonPath = addFieldToPath(jsonPath, rtstr)
+	jsonPath = jsonpbhelper.AddFieldToPath(jsonPath, rtstr)
 
 	// Populate the fields in the protobuf message to return.
 	// Encapsulate in a ContainedResource.
@@ -248,13 +231,8 @@ func (u *Unmarshaller) mergeMessage(jsonPath string, decmap map[string]json.RawM
 			if err := u.mergeChoiceField(jsonPath, f, k, v, pb); err != nil {
 				return err
 			}
-		} else if err := u.mergeField(addFieldToPath(jsonPath, k), f, v, pb); err != nil {
+		} else if err := u.mergeField(jsonpbhelper.AddFieldToPath(jsonPath, k), f, v, pb); err != nil {
 			return err
-		}
-	}
-	if u.enableValidation {
-		if err := jsonpbhelper.ValidateRequiredFields(pb); err != nil {
-			return annotateUnmarshalErrorWithPath(err, jsonPath)
 		}
 	}
 	return nil
@@ -292,7 +270,7 @@ func (u *Unmarshaller) mergeChoiceField(jsonPath string, f protoreflect.FieldDes
 			Diagnostics: strconv.Quote(k),
 		}
 	}
-	return u.mergeField(addFieldToPath(jsonPath, k), choiceField, v, pb.Mutable(f).Message())
+	return u.mergeField(jsonpbhelper.AddFieldToPath(jsonPath, k), choiceField, v, pb.Mutable(f).Message())
 }
 
 func (u *Unmarshaller) mergeField(jsonPath string, f protoreflect.FieldDescriptor, v json.RawMessage, pb protoreflect.Message) error {
@@ -348,13 +326,13 @@ func (u *Unmarshaller) mergeRepeatedField(jsonPath string, f protoreflect.FieldD
 	case 0:
 		for i, e := range rms {
 			msg := rf.AppendMutable().Message()
-			if err := u.mergeSingleField(addIndexToPath(jsonPath, i), f, e, msg); err != nil {
+			if err := u.mergeSingleField(jsonpbhelper.AddIndexToPath(jsonPath, i), f, e, msg); err != nil {
 				return err
 			}
 		}
 	case len(rms):
 		for i, e := range rms {
-			if err := u.mergeSingleField(addIndexToPath(jsonPath, i), f, e, rf.Get(i).Message()); err != nil {
+			if err := u.mergeSingleField(jsonpbhelper.AddIndexToPath(jsonPath, i), f, e, rf.Get(i).Message()); err != nil {
 				return err
 			}
 		}
@@ -382,11 +360,6 @@ func (u *Unmarshaller) mergeSingleField(jsonPath string, f protoreflect.FieldDes
 
 	if err := u.mergeReference(jsonPath, rm, pb); err != nil {
 		return err
-	}
-	if u.enableValidation {
-		if err := jsonpbhelper.ValidateReferenceType(f, pb); err != nil {
-			return annotateUnmarshalErrorWithPath(err, jsonPath)
-		}
 	}
 	return nil
 }
@@ -499,14 +472,6 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 				Diagnostics: fmt.Sprintf("found %s", rm),
 			}
 		}
-		// Code cannot start or end with a blank.
-		if matched := jsonpbhelper.CodeCompiledRegex.MatchString(val); !matched {
-			return nil, &jsonpbhelper.UnmarshalError{
-				Path:        jsonPath,
-				Details:     "invalid code",
-				Diagnostics: fmt.Sprintf("found %s", rm),
-			}
-		}
 		return createAndSetValue(val)
 	case "Date":
 		m := in.New().Interface().(proto.Message)
@@ -547,16 +512,6 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 				Diagnostics: fmt.Sprintf("found %s", rm),
 			}
 		}
-		// FHIR id's must be no longer than 64 characters and contain only letters, numbers,
-		// dashes (-) and dots (.).
-		matched := jsonpbhelper.IDCompiledRegex.MatchString(val)
-		if !matched {
-			return nil, &jsonpbhelper.UnmarshalError{
-				Path:        jsonPath,
-				Details:     "invalid ID",
-				Diagnostics: fmt.Sprintf("found %s", rm),
-			}
-		}
 		return createAndSetValue(val)
 	case "Instant":
 		m := in.New().Interface().(proto.Message)
@@ -587,15 +542,6 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 				Diagnostics: fmt.Sprintf("found %s", rm),
 			}
 		}
-		// FHIR oid's must be RFC 3001 compliant.
-		matched := jsonpbhelper.OIDCompiledRegex.MatchString(val)
-		if !matched {
-			return nil, &jsonpbhelper.UnmarshalError{
-				Path:        jsonPath,
-				Details:     "invalid OID",
-				Diagnostics: fmt.Sprintf("found %s", rm),
-			}
-		}
 		return createAndSetValue(val)
 	case "PositiveInt":
 		// Ensure that the JSON object to parse is a positive integer
@@ -608,7 +554,7 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 			}
 		}
 		var val uint32
-		if err := jsp.Unmarshal(rm, &val); err != nil || val > math.MaxInt32 {
+		if err := jsp.Unmarshal(rm, &val); err != nil {
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
 				Details:     "invalid positive integer",
@@ -624,9 +570,6 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 				Details:     "expected string",
 				Diagnostics: fmt.Sprintf("found %s", rm),
 			}
-		}
-		if err := jsonpbhelper.ValidateString(val); err != nil {
-			return nil, annotateUnmarshalErrorWithPath(err, jsonPath)
 		}
 		return createAndSetValue(val)
 	case "Time":
@@ -650,9 +593,7 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 			}
 		}
 		var val uint32
-		// The spec doesn't actually allow the full range of an unsigned integer, it's only the range of
-		// PositiveInt plus 0.
-		if err := jsp.Unmarshal(rm, &val); err != nil || val > math.MaxInt32 {
+		if err := jsp.Unmarshal(rm, &val); err != nil {
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:    jsonPath,
 				Details: "non-negative integer out of range 0..2,147,483,647",
@@ -666,13 +607,6 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
 				Details:     fmt.Sprintf("expected %s", valType),
-				Diagnostics: fmt.Sprintf("found %s", rm),
-			}
-		}
-		if _, err := url.Parse(val); err != nil {
-			return nil, &jsonpbhelper.UnmarshalError{
-				Path:        jsonPath,
-				Details:     fmt.Sprintf("invalid %s", valType),
 				Diagnostics: fmt.Sprintf("found %s", rm),
 			}
 		}
@@ -694,15 +628,6 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
 				Details:     "expected UUID",
-				Diagnostics: fmt.Sprintf("found %s", rm),
-			}
-		}
-		// UUID must be of RFC4122 format.
-		matched := jsonpbhelper.UUIDCompiledRegex.MatchString(val)
-		if !matched {
-			return nil, &jsonpbhelper.UnmarshalError{
-				Path:        jsonPath,
-				Details:     "invalid UUID",
 				Diagnostics: fmt.Sprintf("found %s", rm),
 			}
 		}

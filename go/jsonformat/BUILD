@@ -18,6 +18,7 @@ go_library(
     ],
     importpath = "github.com/google/fhir/go/jsonformat",
     deps = [
+        "//go/jsonformat/fhirvalidate",
         "//go/jsonformat/internal/accessor",
         "//go/jsonformat/internal/jsonpbhelper",
         "//proto/google/fhir/proto:annotations_go_proto",

@@ -16,6 +16,7 @@ package jsonpbhelper
 
 import (
 	"encoding/json"
+	"regexp"
 	"strconv"
 	"testing"
 	"time"
@@ -463,13 +464,17 @@ func TestExtensionFieldName(t *testing.T) {
 	}
 }
 
+func regexForType(msg proto.Message) *regexp.Regexp {
+	return RegexValues[msg.ProtoReflect().Descriptor().FullName()]
+}
+
 func TestValidateOID(t *testing.T) {
 	tests := []string{
 		"urn:oid:1.2.3.4",
 		"urn:oid:1.100",
 	}
 	for _, test := range tests {
-		if ok := OIDCompiledRegex.MatchString(test); !ok {
+		if ok := regexForType(&d4pb.Oid{}).MatchString(test); !ok {
 			t.Errorf("OID regex: expected %q to be valid", test)
 		}
 	}
@@ -482,7 +487,7 @@ func TestValidateOID_Invalid(t *testing.T) {
 		"urn:oid:01",
 	}
 	for _, test := range tests {
-		if ok := OIDCompiledRegex.MatchString(test); ok {
+		if ok := regexForType(&d4pb.Oid{}).MatchString(test); ok {
 			t.Errorf("OID regex: expected %q to be invalid", test)
 		}
 	}
@@ -498,7 +503,7 @@ func TestValidateID(t *testing.T) {
 		"1234567890123456789012345678901234567890123456789012345678901234",
 	}
 	for _, test := range tests {
-		if ok := IDCompiledRegex.MatchString(test); !ok {
+		if ok := regexForType(&d4pb.Id{}).MatchString(test); !ok {
 			t.Errorf("ID regex: expected %q to be valid", test)
 		}
 	}
@@ -513,7 +518,7 @@ func TestValidateID_Invalid(t *testing.T) {
 		"",
 	}
 	for _, test := range tests {
-		if ok := IDCompiledRegex.MatchString(test); ok {
+		if ok := regexForType(&d4pb.Id{}).MatchString(test); ok {
 			t.Errorf("ID regex: expected %q to be invalid", test)
 		}
 	}
@@ -527,7 +532,7 @@ func TestValidateCode(t *testing.T) {
 		"a value",
 	}
 	for _, test := range tests {
-		if ok := CodeCompiledRegex.MatchString(test); !ok {
+		if ok := regexForType(&d4pb.Code{}).MatchString(test); !ok {
 			t.Errorf("Code regex: expected %q to be valid", test)
 		}
 	}
@@ -542,7 +547,7 @@ func TestValidateCode_Invalid(t *testing.T) {
 		"bad  value",
 	}
 	for _, test := range tests {
-		if ok := CodeCompiledRegex.MatchString(test); ok {
+		if ok := regexForType(&d4pb.Code{}).MatchString(test); ok {
 			t.Errorf("Code regex: expected %q to be invalid", test)
 		}
 	}

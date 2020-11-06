@@ -46,9 +46,7 @@ import (
 
 func setupUnmarshaller(t *testing.T, ver Version) *Unmarshaller {
 	t.Helper()
-	var u *Unmarshaller
-	var err error
-	u, err = NewUnmarshaller("America/Los_Angeles", ver)
+	u, err := NewUnmarshaller("America/Los_Angeles", ver)
 	if err != nil {
 		t.Fatalf("failed to create unmarshaler; %v", err)
 	}
@@ -1780,62 +1778,6 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 		msgs  []mvr
 	}{
 		{
-			name:  "Code left spaces",
-			value: json.RawMessage(`"    left has spaces"`),
-			msgs: []mvr{
-				{
-					ver: STU3,
-					r:   &d3pb.Code{},
-				},
-				{
-					ver: R4,
-					r:   &d4pb.Code{},
-				},
-			},
-		},
-		{
-			name:  "Code right tabs",
-			value: json.RawMessage(`"right has tabs\t\t"`),
-			msgs: []mvr{
-				{
-					ver: STU3,
-					r:   &d3pb.Code{},
-				},
-				{
-					ver: R4,
-					r:   &d4pb.Code{},
-				},
-			},
-		},
-		{
-			name:  "Code left carriage return",
-			value: json.RawMessage(`"\rleft has carriage return"`),
-			msgs: []mvr{
-				{
-					ver: STU3,
-					r:   &d3pb.Code{},
-				},
-				{
-					ver: R4,
-					r:   &d4pb.Code{},
-				},
-			},
-		},
-		{
-			name:  "Code right new line",
-			value: json.RawMessage(`"right has newlines\n\n"`),
-			msgs: []mvr{
-				{
-					ver: STU3,
-					r:   &d3pb.Code{},
-				},
-				{
-					ver: R4,
-					r:   &d4pb.Code{},
-				},
-			},
-		},
-		{
 			name:  "Code",
 			value: json.RawMessage(`false`),
 			msgs: []mvr{
@@ -1846,54 +1788,6 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 				{
 					ver: R4,
 					r:   &d4pb.Code{},
-				},
-			},
-		},
-		{
-			name:  "Id too long",
-			value: json.RawMessage(`"this.is.a.pretty.long.id-in.fact.it.has.65.characters--1.too.many"`),
-			msgs: []mvr{
-				{
-					ver: STU3,
-					r:   &d3pb.Id{},
-				},
-			},
-		},
-		{
-			name:  "Id has illegal character",
-			value: json.RawMessage(`"#Ah0!"`),
-			msgs: []mvr{
-				{
-					ver: STU3,
-					r:   &d3pb.Id{},
-				},
-			},
-		},
-		{
-			name:  "Oid has wrong prefix",
-			value: json.RawMessage(`"wrong:prefix:0.12.34"`),
-			msgs: []mvr{
-				{
-					ver: STU3,
-					r:   &d3pb.Oid{},
-				},
-				{
-					ver: R4,
-					r:   &d4pb.Oid{},
-				},
-			},
-		},
-		{
-			name:  "Oid has illegal character",
-			value: json.RawMessage(`"urn:old:1.23.0x97"`),
-			msgs: []mvr{
-				{
-					ver: STU3,
-					r:   &d3pb.Oid{},
-				},
-				{
-					ver: R4,
-					r:   &d4pb.Oid{},
 				},
 			},
 		},
@@ -1922,20 +1816,6 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 				{
 					ver: R4,
 					r:   &d4pb.PositiveInt{},
-				},
-			},
-		},
-		{
-			name:  "PositiveInt out of range",
-			value: json.RawMessage(strconv.FormatUint(math.MaxInt32+1, 10)),
-			msgs: []mvr{
-				{
-					ver: R4,
-					r:   &d4pb.PositiveInt{},
-				},
-				{
-					ver: STU3,
-					r:   &d3pb.PositiveInt{},
 				},
 			},
 		},
@@ -1977,20 +1857,6 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			name:  "UnsignedInt 0123",
 			value: json.RawMessage(`0123`),
 			msgs: []mvr{
-				{
-					ver: STU3,
-					r:   &d3pb.UnsignedInt{},
-				},
-			},
-		},
-		{
-			name:  "UnsignedInt out of range",
-			value: json.RawMessage(strconv.FormatUint(math.MaxInt32+1, 10)),
-			msgs: []mvr{
-				{
-					ver: R4,
-					r:   &d4pb.UnsignedInt{},
-				},
 				{
 					ver: STU3,
 					r:   &d3pb.UnsignedInt{},
