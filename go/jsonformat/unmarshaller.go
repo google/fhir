@@ -314,6 +314,14 @@ func (u *Unmarshaller) mergeField(jsonPath string, f protoreflect.FieldDescripto
 			}
 			return u.mergePrimitiveType(protoMessage(pb.Mutable(f).Message()), p)
 		}
+		// f is expected to be a singular message (i.e. mutable), otherwise it is trying to merge
+		// an invalid field such as primitive type's "value" field here.
+		if f.Message() == nil {
+			return &jsonpbhelper.UnmarshalError{
+				Path:    jsonPath,
+				Details: "invalid field",
+			}
+		}
 		if err := u.mergeSingleField(jsonPath, f, v, pb.Mutable(f).Message()); err != nil {
 			return err
 		}

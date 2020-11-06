@@ -1217,6 +1217,18 @@ func TestUnmarshal_Errors(t *testing.T) {
 			vers: []Version{R4},
 			errs: []string{`error at "Patient.Contained[0]": unknown field`},
 		},
+		{
+			name: "directly assigning primitive type's value field",
+			json: `
+			{
+				"resourceType": "Patient",
+				"gender": {
+					"value": "female"
+				}
+			}`,
+			vers: []Version{STU3, R4},
+			errs: []string{`error at "Patient.gender.value": invalid field`},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
