@@ -12,11 +12,11 @@ filegroup(
     ]),
 )
 
-# These files are prototxt representations of sample resources provided by FHIR.
+# These files are representations of sample resources provided by FHIR.
 filegroup(
     name = "examples",
     srcs = glob([
-        "examples/*.prototxt",
+        "examples/*",
     ]),
 )
 

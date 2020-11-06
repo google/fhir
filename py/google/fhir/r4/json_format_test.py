@@ -120,6 +120,7 @@ from proto.google.fhir.proto.r4.core.resources import operation_definition_pb2
 from proto.google.fhir.proto.r4.core.resources import operation_outcome_pb2
 from proto.google.fhir.proto.r4.core.resources import organization_affiliation_pb2
 from proto.google.fhir.proto.r4.core.resources import organization_pb2
+from proto.google.fhir.proto.r4.core.resources import parameters_pb2
 from proto.google.fhir.proto.r4.core.resources import patient_pb2
 from proto.google.fhir.proto.r4.core.resources import payment_notice_pb2
 from proto.google.fhir.proto.r4.core.resources import payment_reconciliation_pb2
@@ -709,6 +710,13 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
       self, file_name: str):
     self.assert_parse_and_print_spec_equals_golden(
         file_name, effect_evidence_synthesis_pb2.EffectEvidenceSynthesis)
+
+  @parameterized.named_parameters(
+      ('_withParametersEmptyResource', 'Parameters-empty-resource',
+       parameters_pb2.Parameters),)
+  def testJsonFormat_forValidEmptyNestedResource_succeeds(
+      self, file_name: str, proto_cls: Type[message.Message]):
+    self.assert_parse_and_print_examples_equals_golden(file_name, proto_cls)
 
   @parameterized.named_parameters(
       ('_withEncounterEmerg', 'Encounter-emerg'),
@@ -2061,12 +2069,24 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
         proto_cls,
         print_f=json_format.pretty_print_fhir_to_json_string_for_analytics)
 
+  def assert_parse_and_print_examples_equals_golden(
+      self, file_name: str, proto_cls: Type[message.Message]):
+    """Convenience method for performing assertions on FHIR R4 examples."""
+    json_path = os.path.join(_EXAMPLES_PATH, file_name + '.json')
+    proto_path = os.path.join(_EXAMPLES_PATH, file_name + '.prototxt')
+    self.assert_parse_and_print_equals_golden(json_path, proto_path, proto_cls)
+
   def assert_parse_and_print_spec_equals_golden(
       self, file_name: str, proto_cls: Type[message.Message]):
-    """Convenience method for performing assertions between the FHIR R4 spec."""
+    """Convenience method for performing assertions on the FHIR R4 spec."""
     json_path = os.path.join(_FHIR_SPEC_PATH, file_name + '.json')
     proto_path = os.path.join(_EXAMPLES_PATH, file_name + '.prototxt')
+    self.assert_parse_and_print_equals_golden(json_path, proto_path, proto_cls)
 
+  def assert_parse_and_print_equals_golden(self, json_path: str,
+                                           proto_path: str,
+                                           proto_cls: Type[message.Message]):
+    """Convenience method for performing assertions against goldens."""
     # Assert parse
     validate = json_path not in _INVALID_RECORDS
     self.assert_parse_equals_golden(

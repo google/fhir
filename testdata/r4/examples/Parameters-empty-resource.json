@@ -1,0 +1,11 @@
+{
+  "resourceType": "Parameters",
+  "parameter": [
+    {
+      "name": "My parameter",
+      "resource": {
+        "resourceType": "Parameters"
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+parameter {
+  name {
+    value: "My parameter"
+  }
+  resource {
+    parameters {
+    }
+  }
+}

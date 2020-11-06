@@ -482,6 +482,13 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
         file_name, resources_pb2.EligibilityResponse)
 
   @parameterized.named_parameters(
+      ('_withParametersEmptyResource', 'Parameters-empty-resource',
+       resources_pb2.Parameters),)
+  def testJsonFormat_forValidEmptyNestedResource_succeeds(
+      self, file_name: str, proto_cls: Type[message.Message]):
+    self.assert_parse_and_print_examples_equals_golden(file_name, proto_cls)
+
+  @parameterized.named_parameters(
       ('_withEncounterExample', 'Encounter-example'),
       ('_withEncounterEmerg', 'Encounter-emerg'),
       ('_withEncounterF001', 'Encounter-f001'),
@@ -1390,12 +1397,24 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
         proto_cls,
         print_f=json_format.pretty_print_fhir_to_json_string_for_analytics)
 
+  def assert_parse_and_print_examples_equals_golden(
+      self, file_name: str, proto_cls: Type[message.Message]):
+    """Convenience method for performing assertions on FHIR STU3 examples."""
+    json_path = os.path.join(_EXAMPLES_PATH, file_name + '.json')
+    proto_path = os.path.join(_EXAMPLES_PATH, file_name + '.prototxt')
+    self.assert_parse_and_print_equals_golden(json_path, proto_path, proto_cls)
+
   def assert_parse_and_print_spec_equals_golden(
       self, file_name: str, proto_cls: Type[message.Message]):
     """Convenience method for performing assertions on the FHIR STU3 spec."""
     json_path = os.path.join(_FHIR_SPEC_PATH, file_name + '.json')
     proto_path = os.path.join(_EXAMPLES_PATH, file_name + '.prototxt')
+    self.assert_parse_and_print_equals_golden(json_path, proto_path, proto_cls)
 
+  def assert_parse_and_print_equals_golden(self, json_path: str,
+                                           proto_path: str,
+                                           proto_cls: Type[message.Message]):
+    """Convenience method for performing assertions against goldens."""
     # Assert parse
     self.assert_parse_equals_golden(
         json_path,

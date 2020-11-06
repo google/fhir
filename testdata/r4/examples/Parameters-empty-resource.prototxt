@@ -1,0 +1,9 @@
+parameter {
+  name {
+    value: "My parameter"
+  }
+  resource {
+    type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
+    value: "\262\006\000"
+  }
+}

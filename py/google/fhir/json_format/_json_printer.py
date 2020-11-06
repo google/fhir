@@ -365,13 +365,15 @@ class JsonPrinter:
     self.generator.open_json_object()
 
     # Add the resource type preamble if necessary
+    set_fields = msg.ListFields()
     if (annotation_utils.is_resource(msg) and
         self.json_format == _FhirJsonFormat.PURE):
-      self.generator.add_field('resourceType', f'"{msg.DESCRIPTOR.name}",')
-      self.generator.add_newline()
+      self.generator.add_field('resourceType', f'"{msg.DESCRIPTOR.name}"')
+      if set_fields:
+        self.generator.push(',')
+        self.generator.add_newline()
 
-    # print all fields
-    set_fields = msg.ListFields()
+    # Print all fields
     for (i, (set_field, value)) in enumerate(set_fields):
       if (annotation_utils.is_choice_type_field(set_field) and
           self.json_format == _FhirJsonFormat.PURE):
@@ -394,7 +396,11 @@ class JsonPrinter:
       self._print_contained_resource(msg)
     elif msg.DESCRIPTOR.full_name == any_pb2.Any.DESCRIPTOR.full_name:
       contained_resource = self.primitive_handler.new_contained_resource()
-      cast(any_pb2.Any, msg).Unpack(contained_resource)
+      if not cast(any_pb2.Any, msg).Unpack(contained_resource):
+        # If we can't unpack the Any, drop it.
+        # TODO: Use a registry to determine the correct
+        # ContainedResource to unpack to
+        return
       self._print_contained_resource(contained_resource)
     elif fhir_types.is_extension(msg):
       self._print_extension(msg)

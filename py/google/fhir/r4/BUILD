@@ -176,6 +176,7 @@ py_test(
         "//proto/google/fhir/proto/r4/core/resources:operation_outcome_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:organization_affiliation_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:organization_py_pb2",
+        "//proto/google/fhir/proto/r4/core/resources:parameters_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:patient_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:payment_notice_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:payment_reconciliation_py_pb2",
