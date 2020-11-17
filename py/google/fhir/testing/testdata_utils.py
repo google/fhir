@@ -32,7 +32,7 @@ _T = TypeVar('_T', bound=message.Message)
 
 def _fhir_filepath_from(filename: str) -> str:
   """Returns a filepath from filename relative to the fhir/ root dir."""
-  filepath = os.path.join(os.getenv("TEST_SRCDIR"), 'com_google_fhir/',
+  filepath = os.path.join(FLAGS.test_srcdir, 'com_google_fhir/',
                           filename)
   if not os.path.exists(filepath):
     raise FileNotFoundError('File at {} does not exist.'.format(filepath))
