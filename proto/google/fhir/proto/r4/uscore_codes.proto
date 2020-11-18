@@ -6122,6 +6122,3666 @@ message OmbRaceCategoriesValueSet {
   }
 }
 
+// Documentation of substances suspected of (or not suspected of) causing an
+// allergy or intolerance reaction in an individual. **Inclusion Criteria:**
+// specific or general substances to which a patient may be exposed and which
+// may be suspected of causing an adverse reaction; assertions refuting these
+// suspicions. This includes:  1. Common dietary substances for allergy and
+// intolerance documentation (SNOMEDCT) 2. Common drug classes for allergy and
+// intolerance documentation (SNOMEDCT) 3. Common drug substances for allergy
+// and intolerance documentation (RXNORM) 4. Common environmental substances for
+// allergy and intolerance documentation (SNOMEDCT) 5. Common refutations and
+// null values for substance causes for allergy and intolerance documentation
+// (SNOMEDCT)  **Exclusion Criteria:** actual conditions caused by exposure
+// (reactions, allergies) See
+// http://hl7.org/fhir/us/core/ValueSet/us-core-allergy-substance
+message USCoreAllergySubstanceValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/us/core/ValueSet/us-core-allergy-substance";
+
+    INVALID_UNINITIALIZED = 0;
+    FORMOTEROL_MOMETASONE = 1 [
+      (.google.fhir.proto.fhir_original_code) = "1002293",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LACTASE_RENNET = 2 [
+      (.google.fhir.proto.fhir_original_code) = "1007388",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_CAFFEINE_CHLORPHENIRAMINE_HYDROCODONE_PHENYLEPHRINE = 3 [
+      (.google.fhir.proto.fhir_original_code) = "1008298",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GUAIACOLSULFONATE_HYDROCODONE = 4 [
+      (.google.fhir.proto.fhir_original_code) = "1008519",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    AMPICILLIN_SULBACTAM = 5 [
+      (.google.fhir.proto.fhir_original_code) = "1009148",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    STREPTOMYCIN = 6 [
+      (.google.fhir.proto.fhir_original_code) = "10109",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SUCCINYLCHOLINE = 7 [
+      (.google.fhir.proto.fhir_original_code) = "10154",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SUCRALFATE = 8 [
+      (.google.fhir.proto.fhir_original_code) = "10156",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SULFACETAMIDE = 9 [
+      (.google.fhir.proto.fhir_original_code) = "10169",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SULFADIAZINE = 10 [
+      (.google.fhir.proto.fhir_original_code) = "10171",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SULFAMETHOXAZOLE = 11 [
+      (.google.fhir.proto.fhir_original_code) = "10180",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SULFISOXAZOLE = 12 [
+      (.google.fhir.proto.fhir_original_code) = "10207",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SULFUR = 13 [
+      (.google.fhir.proto.fhir_original_code) = "10223",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SULINDAC = 14 [
+      (.google.fhir.proto.fhir_original_code) = "10237",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TAMOXIFEN = 15 [
+      (.google.fhir.proto.fhir_original_code) = "10324",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TEMAZEPAM = 16 [
+      (.google.fhir.proto.fhir_original_code) = "10355",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TERBUTALINE = 17 [
+      (.google.fhir.proto.fhir_original_code) = "10368",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DABIGATRAN_ETEXILATE = 18 [
+      (.google.fhir.proto.fhir_original_code) = "1037042",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TESTOSTERONE = 19 [
+      (.google.fhir.proto.fhir_original_code) = "10379",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TETRACYCLINE = 20 [
+      (.google.fhir.proto.fhir_original_code) = "10395",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CARBIDOPA_LEVODOPA = 21 [
+      (.google.fhir.proto.fhir_original_code) = "103990",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LURASIDONE = 22 [
+      (.google.fhir.proto.fhir_original_code) = "1040028",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    THEOPHYLLINE = 23 [
+      (.google.fhir.proto.fhir_original_code) = "10438",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    THIMEROSAL = 24 [
+      (.google.fhir.proto.fhir_original_code) = "10472",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    THIOPENTAL = 25 [
+      (.google.fhir.proto.fhir_original_code) = "10493",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    THIORIDAZINE = 26 [
+      (.google.fhir.proto.fhir_original_code) = "10502",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    THIOTHIXENE = 27 [
+      (.google.fhir.proto.fhir_original_code) = "10510",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LEVOTHYROXINE = 28 [
+      (.google.fhir.proto.fhir_original_code) = "10582",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TICLOPIDINE = 29 [
+      (.google.fhir.proto.fhir_original_code) = "10594",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TIMOLOL = 30 [
+      (.google.fhir.proto.fhir_original_code) = "10600",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TOBRAMYCIN = 31 [
+      (.google.fhir.proto.fhir_original_code) = "10627",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TOLMETIN = 32 [
+      (.google.fhir.proto.fhir_original_code) = "10636",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TRAMADOL = 33 [
+      (.google.fhir.proto.fhir_original_code) = "10689",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TRAZODONE = 34 [
+      (.google.fhir.proto.fhir_original_code) = "10737",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TRIAMCINOLONE = 35 [
+      (.google.fhir.proto.fhir_original_code) = "10759",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    EPINEPHRINE_LIDOCAINE = 36 [
+      (.google.fhir.proto.fhir_original_code) = "107602",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TRIAMTERENE = 37 [
+      (.google.fhir.proto.fhir_original_code) = "10763",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TRIAZOLAM = 38 [
+      (.google.fhir.proto.fhir_original_code) = "10767",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TRIFLUOPERAZINE = 39 [
+      (.google.fhir.proto.fhir_original_code) = "10800",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MOMETASONE = 40 [
+      (.google.fhir.proto.fhir_original_code) = "108118",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TRIMETHOPRIM = 41 [
+      (.google.fhir.proto.fhir_original_code) = "10829",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SULFAMETHOXAZOLE_TRIMETHOPRIM = 42 [
+      (.google.fhir.proto.fhir_original_code) = "10831",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    VANCOMYCIN = 43 [
+      (.google.fhir.proto.fhir_original_code) = "11124",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    RIVAROXABAN = 44 [
+      (.google.fhir.proto.fhir_original_code) = "1114195",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TICAGRELOR = 45 [
+      (.google.fhir.proto.fhir_original_code) = "1116632",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    VERAPAMIL = 46 [
+      (.google.fhir.proto.fhir_original_code) = "11170",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    VITAMIN_B_12 = 47 [
+      (.google.fhir.proto.fhir_original_code) = "11248",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    VITAMIN_D = 48 [
+      (.google.fhir.proto.fhir_original_code) = "11253",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    VITAMIN_E = 49 [
+      (.google.fhir.proto.fhir_original_code) = "11256",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    WARFARIN = 50 [
+      (.google.fhir.proto.fhir_original_code) = "11289",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ERYTHROMYCIN_SULFISOXAZOLE = 51 [
+      (.google.fhir.proto.fhir_original_code) = "113588",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ZINC = 52 [
+      (.google.fhir.proto.fhir_original_code) = "11416",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ZINC_OXIDE = 53 [
+      (.google.fhir.proto.fhir_original_code) = "11423",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LEVETIRACETAM = 54 [
+      (.google.fhir.proto.fhir_original_code) = "114477",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ZAFIRLUKAST = 55 [
+      (.google.fhir.proto.fhir_original_code) = "114970",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    RABEPRAZOLE = 56 [
+      (.google.fhir.proto.fhir_original_code) = "114979",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ASCORBIC_ACID = 57 [
+      (.google.fhir.proto.fhir_original_code) = "1151",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    IBANDRONATE = 58 [
+      (.google.fhir.proto.fhir_original_code) = "115264",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TROVAFLOXACIN = 59 [
+      (.google.fhir.proto.fhir_original_code) = "115552",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ZIPRASIDONE = 60 [
+      (.google.fhir.proto.fhir_original_code) = "115698",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ASPIRIN = 61 [
+      (.google.fhir.proto.fhir_original_code) = "1191",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TOLTERODINE = 62 [
+      (.google.fhir.proto.fhir_original_code) = "119565",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ATENOLOL = 63 [
+      (.google.fhir.proto.fhir_original_code) = "1202",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    RITUXIMAB = 64 [
+      (.google.fhir.proto.fhir_original_code) = "121191",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ATROPINE = 65 [
+      (.google.fhir.proto.fhir_original_code) = "1223",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    AZATHIOPRINE = 66 [
+      (.google.fhir.proto.fhir_original_code) = "1256",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    AZTREONAM = 67 [
+      (.google.fhir.proto.fhir_original_code) = "1272",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BACITRACIN = 68 [
+      (.google.fhir.proto.fhir_original_code) = "1291",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BACLOFEN = 69 [
+      (.google.fhir.proto.fhir_original_code) = "1292",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GADOLINIUM = 70 [
+      (.google.fhir.proto.fhir_original_code) = "1310171",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    XANTHINE = 71 [
+      (.google.fhir.proto.fhir_original_code) = "1311085",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ASPARTAME = 72 [
+      (.google.fhir.proto.fhir_original_code) = "1311524",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NICKEL = 73 [
+      (.google.fhir.proto.fhir_original_code) = "1311629",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LATEX = 74 [
+      (.google.fhir.proto.fhir_original_code) = "1314891",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BARIUM_SULFATE = 75 [
+      (.google.fhir.proto.fhir_original_code) = "1331",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BRIMONIDINE = 76 [
+      (.google.fhir.proto.fhir_original_code) = "134615",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BECLOMETHASONE = 77 [
+      (.google.fhir.proto.fhir_original_code) = "1347",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DONEPEZIL = 78 [
+      (.google.fhir.proto.fhir_original_code) = "135447",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ZOLMITRIPTAN = 79 [
+      (.google.fhir.proto.fhir_original_code) = "135775",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BELLADONNA_ALKALOIDS = 80 [
+      (.google.fhir.proto.fhir_original_code) = "1359",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SULFUR_DIOXIDE = 81 [
+      (.google.fhir.proto.fhir_original_code) = "1362879",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ETHYL_ETHER = 82 [
+      (.google.fhir.proto.fhir_original_code) = "1363043",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SILDENAFIL = 83 [
+      (.google.fhir.proto.fhir_original_code) = "136411",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    APIXABAN = 84 [
+      (.google.fhir.proto.fhir_original_code) = "1364430",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GEMIFLOXACIN = 85 [
+      (.google.fhir.proto.fhir_original_code) = "138099",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MOXIFLOXACIN = 86 [
+      (.google.fhir.proto.fhir_original_code) = "139462",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BENZOCAINE = 87 [
+      (.google.fhir.proto.fhir_original_code) = "1399",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CELECOXIB = 88 [
+      (.google.fhir.proto.fhir_original_code) = "140587",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BENZOIN_RESIN = 89 [
+      (.google.fhir.proto.fhir_original_code) = "1406",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    COLESEVELAM = 90 [
+      (.google.fhir.proto.fhir_original_code) = "141626",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BENZOYL_PEROXIDE = 91 [
+      (.google.fhir.proto.fhir_original_code) = "1418",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BENZTROPINE = 92 [
+      (.google.fhir.proto.fhir_original_code) = "1424",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BETAMETHASONE = 93 [
+      (.google.fhir.proto.fhir_original_code) = "1514",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYOSCYAMINE = 94 [
+      (.google.fhir.proto.fhir_original_code) = "153970",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GENTAMICIN = 95 [
+      (.google.fhir.proto.fhir_original_code) = "1596450",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MIRTAZAPINE = 96 [
+      (.google.fhir.proto.fhir_original_code) = "15996",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN = 97 [
+      (.google.fhir.proto.fhir_original_code) = "161",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACARBOSE = 98 [
+      (.google.fhir.proto.fhir_original_code) = "16681",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAZOLAMIDE = 99 [
+      (.google.fhir.proto.fhir_original_code) = "167",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LANSOPRAZOLE = 100 [
+      (.google.fhir.proto.fhir_original_code) = "17128",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TETANUS_IMMUNE_GLOBULIN = 101 [
+      (.google.fhir.proto.fhir_original_code) = "1727875",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ALFUZOSIN = 102 [
+      (.google.fhir.proto.fhir_original_code) = "17300",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    AMLODIPINE = 103 [
+      (.google.fhir.proto.fhir_original_code) = "17767",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BUSPIRONE = 104 [
+      (.google.fhir.proto.fhir_original_code) = "1827",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    RIVASTIGMINE = 105 [
+      (.google.fhir.proto.fhir_original_code) = "183379",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BUTORPHANOL = 106 [
+      (.google.fhir.proto.fhir_original_code) = "1841",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    AZITHROMYCIN = 107 [
+      (.google.fhir.proto.fhir_original_code) = "18631",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PREGABALIN = 108 [
+      (.google.fhir.proto.fhir_original_code) = "187832",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CAFFEINE = 109 [
+      (.google.fhir.proto.fhir_original_code) = "1886",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BENAZEPRIL = 110 [
+      (.google.fhir.proto.fhir_original_code) = "18867",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CALCIUM = 111 [
+      (.google.fhir.proto.fhir_original_code) = "1895",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CALCIUM_CARBONATE = 112 [
+      (.google.fhir.proto.fhir_original_code) = "1897",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BENZONATATE = 113 [
+      (.google.fhir.proto.fhir_original_code) = "18993",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LINEZOLID = 114 [
+      (.google.fhir.proto.fhir_original_code) = "190376",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    INFLIXIMAB = 115 [
+      (.google.fhir.proto.fhir_original_code) = "191831",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BISMUTH_SUBSALICYLATE = 116 [
+      (.google.fhir.proto.fhir_original_code) = "19478",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CEFPROZIL = 117 [
+      (.google.fhir.proto.fhir_original_code) = "19552",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    AMOXICILLIN_CLAVULANATE = 118 [
+      (.google.fhir.proto.fhir_original_code) = "19711",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BUDESONIDE = 119 [
+      (.google.fhir.proto.fhir_original_code) = "19831",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CAPTOPRIL = 120 [
+      (.google.fhir.proto.fhir_original_code) = "1998",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CARBAMAZEPINE = 121 [
+      (.google.fhir.proto.fhir_original_code) = "2002",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CARVEDILOL = 122 [
+      (.google.fhir.proto.fhir_original_code) = "20352",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CEFEPIME = 123 [
+      (.google.fhir.proto.fhir_original_code) = "20481",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CEFPODOXIME = 124 [
+      (.google.fhir.proto.fhir_original_code) = "20489",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CETIRIZINE = 125 [
+      (.google.fhir.proto.fhir_original_code) = "20610",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CARISOPRODOL = 126 [
+      (.google.fhir.proto.fhir_original_code) = "2101",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CILOSTAZOL = 127 [
+      (.google.fhir.proto.fhir_original_code) = "21107",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CITRIC_ACID = 128 [
+      (.google.fhir.proto.fhir_original_code) = "21183",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CLARITHROMYCIN = 129 [
+      (.google.fhir.proto.fhir_original_code) = "21212",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_BUTALBITAL_CAFFEINE = 130 [
+      (.google.fhir.proto.fhir_original_code) = "214130",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_DICHLORALPHENAZONE_ISOMETHEPTENE = 131 [
+      (.google.fhir.proto.fhir_original_code) = "214153",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ASPIRIN_BUTALBITAL_CAFFEINE = 132 [
+      (.google.fhir.proto.fhir_original_code) = "214159",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ASPIRIN_BUTALBITAL_CAFFEINE_CODEINE = 133 [
+      (.google.fhir.proto.fhir_original_code) = "214160",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_DIPHENHYDRAMINE = 134 [
+      (.google.fhir.proto.fhir_original_code) = "214181",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_HYDROCODONE = 135 [
+      (.google.fhir.proto.fhir_original_code) = "214182",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_OXYCODONE = 136 [
+      (.google.fhir.proto.fhir_original_code) = "214183",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ALBUTEROL_IPRATROPIUM = 137 [
+      (.google.fhir.proto.fhir_original_code) = "214199",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    AMLODIPINE_BENAZEPRIL = 138 [
+      (.google.fhir.proto.fhir_original_code) = "214223",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ASPIRIN_CAFFEINE = 139 [
+      (.google.fhir.proto.fhir_original_code) = "214250",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ASPIRIN_OXYCODONE = 140 [
+      (.google.fhir.proto.fhir_original_code) = "214256",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ASPIRIN_PENTAZOCINE = 141 [
+      (.google.fhir.proto.fhir_original_code) = "214257",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BISOPROLOL_HYDROCHLOROTHIAZIDE = 142 [
+      (.google.fhir.proto.fhir_original_code) = "214317",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CAFFEINE_ERGOTAMINE = 143 [
+      (.google.fhir.proto.fhir_original_code) = "214336",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CANDESARTAN = 144 [
+      (.google.fhir.proto.fhir_original_code) = "214354",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CARBINOXAMINE_PSEUDOEPHEDRINE = 145 [
+      (.google.fhir.proto.fhir_original_code) = "214364",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CHLORPHENIRAMINE_HYDROCODONE = 146 [
+      (.google.fhir.proto.fhir_original_code) = "214392",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CODEINE_GUAIFENESIN = 147 [
+      (.google.fhir.proto.fhir_original_code) = "214442",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CODEINE_PSEUDOEPHEDRINE = 148 [
+      (.google.fhir.proto.fhir_original_code) = "214445",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DEXTROMETHORPHAN_GUAIFENESIN = 149 [
+      (.google.fhir.proto.fhir_original_code) = "214488",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DICLOFENAC_MISOPROSTOL = 150 [
+      (.google.fhir.proto.fhir_original_code) = "214502",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ETANERCEPT = 151 [
+      (.google.fhir.proto.fhir_original_code) = "214555",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ETHINYL_ESTRADIOL_LEVONORGESTREL = 152 [
+      (.google.fhir.proto.fhir_original_code) = "214558",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FEXOFENADINE_PSEUDOEPHEDRINE = 153 [
+      (.google.fhir.proto.fhir_original_code) = "214565",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GUAIFENESIN_PSEUDOEPHEDRINE = 154 [
+      (.google.fhir.proto.fhir_original_code) = "214599",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HOMATROPINE_HYDROCODONE = 155 [
+      (.google.fhir.proto.fhir_original_code) = "214614",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDROCHLOROTHIAZIDE_IRBESARTAN = 156 [
+      (.google.fhir.proto.fhir_original_code) = "214617",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDROCHLOROTHIAZIDE_LISINOPRIL = 157 [
+      (.google.fhir.proto.fhir_original_code) = "214618",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDROCHLOROTHIAZIDE_LOSARTAN = 158 [
+      (.google.fhir.proto.fhir_original_code) = "214619",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDROCHLOROTHIAZIDE_VALSARTAN = 159 [
+      (.google.fhir.proto.fhir_original_code) = "214626",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDROCODONE_IBUPROFEN = 160 [
+      (.google.fhir.proto.fhir_original_code) = "214627",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDROCODONE_PSEUDOEPHEDRINE = 161 [
+      (.google.fhir.proto.fhir_original_code) = "214631",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LORATADINE_PSEUDOEPHEDRINE = 162 [
+      (.google.fhir.proto.fhir_original_code) = "214682",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NALOXONE_PENTAZOCINE = 163 [
+      (.google.fhir.proto.fhir_original_code) = "214721",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PSEUDOEPHEDRINE_TRIPROLIDINE = 164 [
+      (.google.fhir.proto.fhir_original_code) = "214807",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CEFACLOR = 165 [
+      (.google.fhir.proto.fhir_original_code) = "2176",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDROCORTISONE_NEOMYCIN_POLYMYXIN_B = 166 [
+      (.google.fhir.proto.fhir_original_code) = "217627",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CEFADROXIL = 167 [
+      (.google.fhir.proto.fhir_original_code) = "2177",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CEFAZOLIN = 168 [
+      (.google.fhir.proto.fhir_original_code) = "2180",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CEFOXITIN = 169 [
+      (.google.fhir.proto.fhir_original_code) = "2189",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CEFTAZIDIME = 170 [
+      (.google.fhir.proto.fhir_original_code) = "2191",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CEFTRIAXONE = 171 [
+      (.google.fhir.proto.fhir_original_code) = "2193",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    POLYMYXIN_B_TRIMETHOPRIM = 172 [
+      (.google.fhir.proto.fhir_original_code) = "219314",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    IRON_POLYSACCHARIDE = 173 [
+      (.google.fhir.proto.fhir_original_code) = "219315",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CEFUROXIME = 174 [
+      (.google.fhir.proto.fhir_original_code) = "2194",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CYCLOBENZAPRINE = 175 [
+      (.google.fhir.proto.fhir_original_code) = "21949",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    POLYETHYLENE_GLYCOL_3350 = 176 [
+      (.google.fhir.proto.fhir_original_code) = "221147",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DAPTOMYCIN = 177 [
+      (.google.fhir.proto.fhir_original_code) = "22299",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CEPHALEXIN = 178 [
+      (.google.fhir.proto.fhir_original_code) = "2231",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ASPIRIN_DIPYRIDAMOLE = 179 [
+      (.google.fhir.proto.fhir_original_code) = "226716",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GATIFLOXACIN = 180 [
+      (.google.fhir.proto.fhir_original_code) = "228476",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DUTASTERIDE = 181 [
+      (.google.fhir.proto.fhir_original_code) = "228790",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ROFECOXIB = 182 [
+      (.google.fhir.proto.fhir_original_code) = "232158",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DRONEDARONE = 183 [
+      (.google.fhir.proto.fhir_original_code) = "233698",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CHLORAMPHENICOL = 184 [
+      (.google.fhir.proto.fhir_original_code) = "2348",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CHLORDIAZEPOXIDE = 185 [
+      (.google.fhir.proto.fhir_original_code) = "2356",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CHLORHEXIDINE = 186 [
+      (.google.fhir.proto.fhir_original_code) = "2358",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TROSPIUM = 187 [
+      (.google.fhir.proto.fhir_original_code) = "236778",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LEVALBUTEROL = 188 [
+      (.google.fhir.proto.fhir_original_code) = "237159",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CHLOROQUINE = 189 [
+      (.google.fhir.proto.fhir_original_code) = "2393",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CHLORPHENIRAMINE = 190 [
+      (.google.fhir.proto.fhir_original_code) = "2400",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CHLORPROMAZINE = 191 [
+      (.google.fhir.proto.fhir_original_code) = "2403",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CHLORTHALIDONE = 192 [
+      (.google.fhir.proto.fhir_original_code) = "2409",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CHLORZOXAZONE = 193 [
+      (.google.fhir.proto.fhir_original_code) = "2410",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CHOLECALCIFEROL = 194 [
+      (.google.fhir.proto.fhir_original_code) = "2418",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CHOLESTYRAMINE_RESIN = 195 [
+      (.google.fhir.proto.fhir_original_code) = "2447",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ETODOLAC = 196 [
+      (.google.fhir.proto.fhir_original_code) = "24605",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FERROUS_SULFATE = 197 [
+      (.google.fhir.proto.fhir_original_code) = "24947",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FINASTERIDE = 198 [
+      (.google.fhir.proto.fhir_original_code) = "25025",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CEFIXIME = 199 [
+      (.google.fhir.proto.fhir_original_code) = "25033",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CEFDINIR = 200 [
+      (.google.fhir.proto.fhir_original_code) = "25037",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FLUNISOLIDE = 201 [
+      (.google.fhir.proto.fhir_original_code) = "25120",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FORMOTEROL = 202 [
+      (.google.fhir.proto.fhir_original_code) = "25255",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BEE_POLLEN = 203 [
+      (.google.fhir.proto.fhir_original_code) = "253157",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CIMETIDINE = 204 [
+      (.google.fhir.proto.fhir_original_code) = "2541",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GABAPENTIN = 205 [
+      (.google.fhir.proto.fhir_original_code) = "25480",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CIPROFLOXACIN = 206 [
+      (.google.fhir.proto.fhir_original_code) = "2551",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CITALOPRAM = 207 [
+      (.google.fhir.proto.fhir_original_code) = "2556",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GLIMEPIRIDE = 208 [
+      (.google.fhir.proto.fhir_original_code) = "25789",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CLINDAMYCIN = 209 [
+      (.google.fhir.proto.fhir_original_code) = "2582",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDROCHLOROTHIAZIDE_TRIAMTERENE = 210 [
+      (.google.fhir.proto.fhir_original_code) = "258337",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CLONAZEPAM = 211 [
+      (.google.fhir.proto.fhir_original_code) = "2598",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CLONIDINE = 212 [
+      (.google.fhir.proto.fhir_original_code) = "2599",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    OSELTAMIVIR = 213 [
+      (.google.fhir.proto.fhir_original_code) = "260101",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ONDANSETRON = 214 [
+      (.google.fhir.proto.fhir_original_code) = "26225",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CLOTRIMAZOLE = 215 [
+      (.google.fhir.proto.fhir_original_code) = "2623",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CODEINE = 216 [
+      (.google.fhir.proto.fhir_original_code) = "2670",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    COLCHICINE = 217 [
+      (.google.fhir.proto.fhir_original_code) = "2683",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    COLESTIPOL = 218 [
+      (.google.fhir.proto.fhir_original_code) = "2685",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LEFLUNOMIDE = 219 [
+      (.google.fhir.proto.fhir_original_code) = "27169",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    INSULIN_GLARGINE = 220 [
+      (.google.fhir.proto.fhir_original_code) = "274783",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TELITHROMYCIN = 221 [
+      (.google.fhir.proto.fhir_original_code) = "274786",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    IODINATED_GLYCEROL = 222 [
+      (.google.fhir.proto.fhir_original_code) = "27723",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    VALDECOXIB = 223 [
+      (.google.fhir.proto.fhir_original_code) = "278567",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ITRACONAZOLE = 224 [
+      (.google.fhir.proto.fhir_original_code) = "28031",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACYCLOVIR = 225 [
+      (.google.fhir.proto.fhir_original_code) = "281",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ESOMEPRAZOLE = 226 [
+      (.google.fhir.proto.fhir_original_code) = "283742",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TRAVOPROST = 227 [
+      (.google.fhir.proto.fhir_original_code) = "283809",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LAMOTRIGINE = 228 [
+      (.google.fhir.proto.fhir_original_code) = "28439",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FLUTICASONE_SALMETEROL = 229 [
+      (.google.fhir.proto.fhir_original_code) = "284635",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CORTISONE = 230 [
+      (.google.fhir.proto.fhir_original_code) = "2878",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LORATADINE = 231 [
+      (.google.fhir.proto.fhir_original_code) = "28889",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LORACARBEF = 232 [
+      (.google.fhir.proto.fhir_original_code) = "28981",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LISINOPRIL = 233 [
+      (.google.fhir.proto.fhir_original_code) = "29046",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MERCURY_AMMONIATED = 234 [
+      (.google.fhir.proto.fhir_original_code) = "29542",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MEROPENEM = 235 [
+      (.google.fhir.proto.fhir_original_code) = "29561",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ADENOSINE = 236 [
+      (.google.fhir.proto.fhir_original_code) = "296",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CYCLOSPORINE = 237 [
+      (.google.fhir.proto.fhir_original_code) = "3008",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ROSUVASTATIN = 238 [
+      (.google.fhir.proto.fhir_original_code) = "301542",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    VARDENAFIL = 239 [
+      (.google.fhir.proto.fhir_original_code) = "306674",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DAPSONE = 240 [
+      (.google.fhir.proto.fhir_original_code) = "3108",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PRASTERONE = 241 [
+      (.google.fhir.proto.fhir_original_code) = "3143",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NABUMETONE = 242 [
+      (.google.fhir.proto.fhir_original_code) = "31448",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NEBIVOLOL = 243 [
+      (.google.fhir.proto.fhir_original_code) = "31555",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NEFAZODONE = 244 [
+      (.google.fhir.proto.fhir_original_code) = "31565",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NICKEL_SULFATE = 245 [
+      (.google.fhir.proto.fhir_original_code) = "31738",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ALOE_VERA_PREPARATION = 246 [
+      (.google.fhir.proto.fhir_original_code) = "318340",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    OLMESARTAN = 247 [
+      (.google.fhir.proto.fhir_original_code) = "321064",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ESCITALOPRAM = 248 [
+      (.google.fhir.proto.fhir_original_code) = "321988",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SOLIFENACIN = 249 [
+      (.google.fhir.proto.fhir_original_code) = "322167",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DESIPRAMINE = 250 [
+      (.google.fhir.proto.fhir_original_code) = "3247",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ERTAPENEM = 251 [
+      (.google.fhir.proto.fhir_original_code) = "325642",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    OXALIPLATIN = 252 [
+      (.google.fhir.proto.fhir_original_code) = "32592",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    OXAPROZIN = 253 [
+      (.google.fhir.proto.fhir_original_code) = "32613",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    OXCARBAZEPINE = 254 [
+      (.google.fhir.proto.fhir_original_code) = "32624",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DEXAMETHASONE = 255 [
+      (.google.fhir.proto.fhir_original_code) = "3264",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    OXYBUTYNIN = 256 [
+      (.google.fhir.proto.fhir_original_code) = "32675",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ADALIMUMAB = 257 [
+      (.google.fhir.proto.fhir_original_code) = "327361",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DEXTROMETHORPHAN = 258 [
+      (.google.fhir.proto.fhir_original_code) = "3289",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PAROXETINE = 259 [
+      (.google.fhir.proto.fhir_original_code) = "32937",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CLOPIDOGREL = 260 [
+      (.google.fhir.proto.fhir_original_code) = "32968",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DIAZEPAM = 261 [
+      (.google.fhir.proto.fhir_original_code) = "3322",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PHENYLTOLOXAMINE = 262 [
+      (.google.fhir.proto.fhir_original_code) = "33408",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DICLOFENAC = 263 [
+      (.google.fhir.proto.fhir_original_code) = "3355",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DICLOXACILLIN = 264 [
+      (.google.fhir.proto.fhir_original_code) = "3356",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DICYCLOMINE = 265 [
+      (.google.fhir.proto.fhir_original_code) = "3361",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PIOGLITAZONE = 266 [
+      (.google.fhir.proto.fhir_original_code) = "33738",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DIFLUNISAL = 267 [
+      (.google.fhir.proto.fhir_original_code) = "3393",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DIGOXIN = 268 [
+      (.google.fhir.proto.fhir_original_code) = "3407",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    EZETIMIBE = 269 [
+      (.google.fhir.proto.fhir_original_code) = "341248",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DIHYDROERGOTAMINE = 270 [
+      (.google.fhir.proto.fhir_original_code) = "3418",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDROMORPHONE = 271 [
+      (.google.fhir.proto.fhir_original_code) = "3423",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DILTIAZEM = 272 [
+      (.google.fhir.proto.fhir_original_code) = "3443",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DIMENHYDRINATE = 273 [
+      (.google.fhir.proto.fhir_original_code) = "3444",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DIPHENHYDRAMINE = 274 [
+      (.google.fhir.proto.fhir_original_code) = "3498",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    QUINAPRIL = 275 [
+      (.google.fhir.proto.fhir_original_code) = "35208",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DIPYRIDAMOLE = 276 [
+      (.google.fhir.proto.fhir_original_code) = "3521",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_TRAMADOL = 277 [
+      (.google.fhir.proto.fhir_original_code) = "352362",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    RAMIPRIL = 278 [
+      (.google.fhir.proto.fhir_original_code) = "35296",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    RESORCINOL = 279 [
+      (.google.fhir.proto.fhir_original_code) = "35382",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    RISPERIDONE = 280 [
+      (.google.fhir.proto.fhir_original_code) = "35636",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TADALAFIL = 281 [
+      (.google.fhir.proto.fhir_original_code) = "358263",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    KETOROLAC = 282 [
+      (.google.fhir.proto.fhir_original_code) = "35827",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    RANOLAZINE = 283 [
+      (.google.fhir.proto.fhir_original_code) = "35829",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SALSALATE = 284 [
+      (.google.fhir.proto.fhir_original_code) = "36108",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SALMETEROL = 285 [
+      (.google.fhir.proto.fhir_original_code) = "36117",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DOBUTAMINE = 286 [
+      (.google.fhir.proto.fhir_original_code) = "3616",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DOXEPIN = 287 [
+      (.google.fhir.proto.fhir_original_code) = "3638",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DOXYCYCLINE = 288 [
+      (.google.fhir.proto.fhir_original_code) = "3640",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SERTRALINE = 289 [
+      (.google.fhir.proto.fhir_original_code) = "36437",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DROPERIDOL = 290 [
+      (.google.fhir.proto.fhir_original_code) = "3648",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SIMVASTATIN = 291 [
+      (.google.fhir.proto.fhir_original_code) = "36567",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SUMATRIPTAN = 292 [
+      (.google.fhir.proto.fhir_original_code) = "37418",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TAZOBACTAM = 293 [
+      (.google.fhir.proto.fhir_original_code) = "37617",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TERAZOSIN = 294 [
+      (.google.fhir.proto.fhir_original_code) = "37798",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TERBINAFINE = 295 [
+      (.google.fhir.proto.fhir_original_code) = "37801",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ENALAPRIL = 296 [
+      (.google.fhir.proto.fhir_original_code) = "3827",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ENALAPRILAT = 297 [
+      (.google.fhir.proto.fhir_original_code) = "3829",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ATOMOXETINE = 298 [
+      (.google.fhir.proto.fhir_original_code) = "38400",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TOPIRAMATE = 299 [
+      (.google.fhir.proto.fhir_original_code) = "38404",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TORSEMIDE = 300 [
+      (.google.fhir.proto.fhir_original_code) = "38413",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TRICHLOROACETALDEHYDE = 301 [
+      (.google.fhir.proto.fhir_original_code) = "38574",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TRIMETHOBENZAMIDE = 302 [
+      (.google.fhir.proto.fhir_original_code) = "38685",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BUDESONIDE_FORMOTEROL = 303 [
+      (.google.fhir.proto.fhir_original_code) = "389132",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    EPHEDRINE = 304 [
+      (.google.fhir.proto.fhir_original_code) = "3966",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    VENLAFAXINE = 305 [
+      (.google.fhir.proto.fhir_original_code) = "39786",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    EPINEPHRINE = 306 [
+      (.google.fhir.proto.fhir_original_code) = "3992",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ZOLPIDEM = 307 [
+      (.google.fhir.proto.fhir_original_code) = "39993",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ZONISAMIDE = 308 [
+      (.google.fhir.proto.fhir_original_code) = "39998",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CARBOPLATIN = 309 [
+      (.google.fhir.proto.fhir_original_code) = "40048",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DEXBROMPHENIRAMINE_PSEUDOEPHEDRINE = 310 [
+      (.google.fhir.proto.fhir_original_code) = "400674",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ERGOTAMINE = 311 [
+      (.google.fhir.proto.fhir_original_code) = "4025",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    VALPROATE = 312 [
+      (.google.fhir.proto.fhir_original_code) = "40254",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ERYTHROMYCIN = 313 [
+      (.google.fhir.proto.fhir_original_code) = "4053",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ZILEUTON = 314 [
+      (.google.fhir.proto.fhir_original_code) = "40575",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PANTOPRAZOLE = 315 [
+      (.google.fhir.proto.fhir_original_code) = "40790",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ESTRADIOL = 316 [
+      (.google.fhir.proto.fhir_original_code) = "4083",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ESTROGENS_CONJUGATED_USP = 317 [
+      (.google.fhir.proto.fhir_original_code) = "4099",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FLUTICASONE = 318 [
+      (.google.fhir.proto.fhir_original_code) = "41126",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FLUVASTATIN = 319 [
+      (.google.fhir.proto.fhir_original_code) = "41127",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ETHINYL_ESTRADIOL = 320 [
+      (.google.fhir.proto.fhir_original_code) = "4124",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LACTASE = 321 [
+      (.google.fhir.proto.fhir_original_code) = "41397",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MELOXICAM = 322 [
+      (.google.fhir.proto.fhir_original_code) = "41493",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TERFENADINE = 323 [
+      (.google.fhir.proto.fhir_original_code) = "42330",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MISOPROSTOL = 324 [
+      (.google.fhir.proto.fhir_original_code) = "42331",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BUPROPION = 325 [
+      (.google.fhir.proto.fhir_original_code) = "42347",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LITHIUM_CARBONATE = 326 [
+      (.google.fhir.proto.fhir_original_code) = "42351",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MUPIROCIN = 327 [
+      (.google.fhir.proto.fhir_original_code) = "42372",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PRAVASTATIN = 328 [
+      (.google.fhir.proto.fhir_original_code) = "42463",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FAMOTIDINE = 329 [
+      (.google.fhir.proto.fhir_original_code) = "4278",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FELODIPINE = 330 [
+      (.google.fhir.proto.fhir_original_code) = "4316",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FENTANYL = 331 [
+      (.google.fhir.proto.fhir_original_code) = "4337",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ALBUTEROL = 332 [
+      (.google.fhir.proto.fhir_original_code) = "435",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LATANOPROST = 333 [
+      (.google.fhir.proto.fhir_original_code) = "43611",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FISH_OILS = 334 [
+      (.google.fhir.proto.fhir_original_code) = "4419",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FLECAINIDE = 335 [
+      (.google.fhir.proto.fhir_original_code) = "4441",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FLUCONAZOLE = 336 [
+      (.google.fhir.proto.fhir_original_code) = "4450",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ETHANOL = 337 [
+      (.google.fhir.proto.fhir_original_code) = "448",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FLUOROURACIL = 338 [
+      (.google.fhir.proto.fhir_original_code) = "4492",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FLUOXETINE = 339 [
+      (.google.fhir.proto.fhir_original_code) = "4493",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FLUPHENAZINE = 340 [
+      (.google.fhir.proto.fhir_original_code) = "4496",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FLURANDRENOLIDE = 341 [
+      (.google.fhir.proto.fhir_original_code) = "4500",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FORMALDEHYDE = 342 [
+      (.google.fhir.proto.fhir_original_code) = "4530",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FUROSEMIDE = 343 [
+      (.google.fhir.proto.fhir_original_code) = "4603",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ALENDRONATE = 344 [
+      (.google.fhir.proto.fhir_original_code) = "46041",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ESZOPICLONE = 345 [
+      (.google.fhir.proto.fhir_original_code) = "461016",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GALANTAMINE = 346 [
+      (.google.fhir.proto.fhir_original_code) = "4637",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CIPROFLOXACIN_DEXAMETHASONE = 347 [
+      (.google.fhir.proto.fhir_original_code) = "465397",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DIPHENHYDRAMINE_ZINC_ACETATE = 348 [
+      (.google.fhir.proto.fhir_original_code) = "466522",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NEOMYCIN_POLYMYXIN_B = 349 [
+      (.google.fhir.proto.fhir_original_code) = "466541",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ASPIRIN_CAFFEINE_ORPHENADRINE = 350 [
+      (.google.fhir.proto.fhir_original_code) = "466549",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PENICILLIN_G_BENZATHINE_PENICILLIN_G_PROCAINE = 351 [
+      (.google.fhir.proto.fhir_original_code) = "466553",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_DEXTROMETHORPHAN_DIPHENHYDRAMINE_PSEUDOEPHEDRINE = 352 [
+      (.google.fhir.proto.fhir_original_code) = "466566",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_ASPIRIN_CAFFEINE = 353 [
+      (.google.fhir.proto.fhir_original_code) = "466584",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GEMFIBROZIL = 354 [
+      (.google.fhir.proto.fhir_original_code) = "4719",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LIRAGLUTIDE = 355 [
+      (.google.fhir.proto.fhir_original_code) = "475968",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GLYBURIDE = 356 [
+      (.google.fhir.proto.fhir_original_code) = "4815",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CLAVULANATE = 357 [
+      (.google.fhir.proto.fhir_original_code) = "48203",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GLIPIZIDE = 358 [
+      (.google.fhir.proto.fhir_original_code) = "4821",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_PROPOXYPHENE = 359 [
+      (.google.fhir.proto.fhir_original_code) = "48274",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CHLORHEXIDINE_ISOPROPYL_ALCOHOL = 360 [
+      (.google.fhir.proto.fhir_original_code) = "484139",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    EZETIMIBE_SIMVASTATIN = 361 [
+      (.google.fhir.proto.fhir_original_code) = "484211",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GLUCOSE = 362 [
+      (.google.fhir.proto.fhir_original_code) = "4850",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NITROGLYCERIN = 363 [
+      (.google.fhir.proto.fhir_original_code) = "4917",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DOXAZOSIN = 364 [
+      (.google.fhir.proto.fhir_original_code) = "49276",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FOSINOPRIL = 365 [
+      (.google.fhir.proto.fhir_original_code) = "50166",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GRISEOFULVIN = 366 [
+      (.google.fhir.proto.fhir_original_code) = "5021",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GUAIFENESIN = 367 [
+      (.google.fhir.proto.fhir_original_code) = "5032",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HALOPERIDOL = 368 [
+      (.google.fhir.proto.fhir_original_code) = "5093",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    QUETIAPINE = 369 [
+      (.google.fhir.proto.fhir_original_code) = "51272",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ALLOPURINOL = 370 [
+      (.google.fhir.proto.fhir_original_code) = "519",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LOSARTAN = 371 [
+      (.google.fhir.proto.fhir_original_code) = "52175",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HEPARIN = 372 [
+      (.google.fhir.proto.fhir_original_code) = "5224",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MESALAMINE = 373 [
+      (.google.fhir.proto.fhir_original_code) = "52582",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDRALAZINE = 374 [
+      (.google.fhir.proto.fhir_original_code) = "5470",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDROCHLOROTHIAZIDE = 375 [
+      (.google.fhir.proto.fhir_original_code) = "5487",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDROCODONE = 376 [
+      (.google.fhir.proto.fhir_original_code) = "5489",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDROCORTISONE = 377 [
+      (.google.fhir.proto.fhir_original_code) = "5492",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDROGEN_PEROXIDE = 378 [
+      (.google.fhir.proto.fhir_original_code) = "5499",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDROXYCHLOROQUINE = 379 [
+      (.google.fhir.proto.fhir_original_code) = "5521",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    HYDROXYZINE = 380 [
+      (.google.fhir.proto.fhir_original_code) = "5553",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    IBUPROFEN = 381 [
+      (.google.fhir.proto.fhir_original_code) = "5640",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    IMIPRAMINE = 382 [
+      (.google.fhir.proto.fhir_original_code) = "5691",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PACLITAXEL = 383 [
+      (.google.fhir.proto.fhir_original_code) = "56946",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TIZANIDINE = 384 [
+      (.google.fhir.proto.fhir_original_code) = "57258",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    INDAPAMIDE = 385 [
+      (.google.fhir.proto.fhir_original_code) = "5764",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    INDOMETHACIN = 386 [
+      (.google.fhir.proto.fhir_original_code) = "5781",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MILNACIPRAN = 387 [
+      (.google.fhir.proto.fhir_original_code) = "588250",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    METAXALONE = 388 [
+      (.google.fhir.proto.fhir_original_code) = "59078",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    VARENICLINE = 389 [
+      (.google.fhir.proto.fhir_original_code) = "591622",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    IODINE = 390 [
+      (.google.fhir.proto.fhir_original_code) = "5933",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SITAGLIPTIN = 391 [
+      (.google.fhir.proto.fhir_original_code) = "593411",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ATROPINE_DIPHENOXYLATE = 392 [
+      (.google.fhir.proto.fhir_original_code) = "594040",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    IOHEXOL = 393 [
+      (.google.fhir.proto.fhir_original_code) = "5956",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ALPRAZOLAM = 394 [
+      (.google.fhir.proto.fhir_original_code) = "596",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CERIVASTATIN = 395 [
+      (.google.fhir.proto.fhir_original_code) = "596723",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BRIMONIDINE_TIMOLOL = 396 [
+      (.google.fhir.proto.fhir_original_code) = "597142",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    IRON_DEXTRAN_COMPLEX = 397 [
+      (.google.fhir.proto.fhir_original_code) = "5992",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DORZOLAMIDE = 398 [
+      (.google.fhir.proto.fhir_original_code) = "60207",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ISONIAZID = 399 [
+      (.google.fhir.proto.fhir_original_code) = "6038",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    EXENATIDE = 400 [
+      (.google.fhir.proto.fhir_original_code) = "60548",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ISOSORBIDE = 401 [
+      (.google.fhir.proto.fhir_original_code) = "6057",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ISOSORBIDE_DINITRATE = 402 [
+      (.google.fhir.proto.fhir_original_code) = "6058",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CHLORDIAZEPOXIDE_CLIDINIUM = 403 [
+      (.google.fhir.proto.fhir_original_code) = "611854",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    KETAMINE = 404 [
+      (.google.fhir.proto.fhir_original_code) = "6130",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    KETOCONAZOLE = 405 [
+      (.google.fhir.proto.fhir_original_code) = "6135",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    OLANZAPINE = 406 [
+      (.google.fhir.proto.fhir_original_code) = "61381",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    KETOPROFEN = 407 [
+      (.google.fhir.proto.fhir_original_code) = "6142",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LABETALOL = 408 [
+      (.google.fhir.proto.fhir_original_code) = "6185",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    AMANTADINE = 409 [
+      (.google.fhir.proto.fhir_original_code) = "620",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LACTULOSE = 410 [
+      (.google.fhir.proto.fhir_original_code) = "6218",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LANOLIN = 411 [
+      (.google.fhir.proto.fhir_original_code) = "6227",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LIDOCAINE = 412 [
+      (.google.fhir.proto.fhir_original_code) = "6387",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LINCOMYCIN = 413 [
+      (.google.fhir.proto.fhir_original_code) = "6398",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LITHIUM = 414 [
+      (.google.fhir.proto.fhir_original_code) = "6448",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BACITRACIN_POLYMYXIN_B = 415 [
+      (.google.fhir.proto.fhir_original_code) = "645555",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LOPERAMIDE = 416 [
+      (.google.fhir.proto.fhir_original_code) = "6468",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LORAZEPAM = 417 [
+      (.google.fhir.proto.fhir_original_code) = "6470",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LOVASTATIN = 418 [
+      (.google.fhir.proto.fhir_original_code) = "6472",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MAGNESIUM = 419 [
+      (.google.fhir.proto.fhir_original_code) = "6574",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MAGNESIUM_SULFATE = 420 [
+      (.google.fhir.proto.fhir_original_code) = "6585",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DORZOLAMIDE_TIMOLOL = 421 [
+      (.google.fhir.proto.fhir_original_code) = "662263",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MECLIZINE = 422 [
+      (.google.fhir.proto.fhir_original_code) = "6676",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MEDROXYPROGESTERONE = 423 [
+      (.google.fhir.proto.fhir_original_code) = "6691",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ENOXAPARIN = 424 [
+      (.google.fhir.proto.fhir_original_code) = "67108",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MELATONIN = 425 [
+      (.google.fhir.proto.fhir_original_code) = "6711",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MEMANTINE = 426 [
+      (.google.fhir.proto.fhir_original_code) = "6719",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MENTHOL = 427 [
+      (.google.fhir.proto.fhir_original_code) = "6750",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MEPERIDINE = 428 [
+      (.google.fhir.proto.fhir_original_code) = "6754",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    METFORMIN = 429 [
+      (.google.fhir.proto.fhir_original_code) = "6809",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    METHADONE = 430 [
+      (.google.fhir.proto.fhir_original_code) = "6813",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    METHIMAZOLE = 431 [
+      (.google.fhir.proto.fhir_original_code) = "6835",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    METHOCARBAMOL = 432 [
+      (.google.fhir.proto.fhir_original_code) = "6845",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    METHOTREXATE = 433 [
+      (.google.fhir.proto.fhir_original_code) = "6851",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    METHYLDOPA = 434 [
+      (.google.fhir.proto.fhir_original_code) = "6876",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    AMINOPHYLLINE = 435 [
+      (.google.fhir.proto.fhir_original_code) = "689",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    OXYTETRACYCLINE_POLYMYXIN_B = 436 [
+      (.google.fhir.proto.fhir_original_code) = "689467",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ASPIRIN_CAFFEINE_PROPOXYPHENE = 437 [
+      (.google.fhir.proto.fhir_original_code) = "689518",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_ASPIRIN_PHENYLPROPANOLAMINE = 438 [
+      (.google.fhir.proto.fhir_original_code) = "689556",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_BROMPHENIRAMINE_PSEUDOEPHEDRINE = 439 [
+      (.google.fhir.proto.fhir_original_code) = "689558",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_BUTALBITAL_CAFFEINE_CODEINE = 440 [
+      (.google.fhir.proto.fhir_original_code) = "689561",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_CHLORPHENIRAMINE_DEXTROMETHORPHAN_PSEUDOEPHEDRINE = 441 [
+      (.google.fhir.proto.fhir_original_code) = "689582",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ATROPINE_HYOSCYAMINE_PHENOBARBITAL_SCOPOLAMINE = 442 [
+      (.google.fhir.proto.fhir_original_code) = "689606",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BACITRACIN_HYDROCORTISONE_NEOMYCIN_POLYMYXIN_B = 443 [
+      (.google.fhir.proto.fhir_original_code) = "689623",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BENZALKONIUM_LIDOCAINE = 444 [
+      (.google.fhir.proto.fhir_original_code) = "690077",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    METHYLPHENIDATE = 445 [
+      (.google.fhir.proto.fhir_original_code) = "6901",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    METHYLPREDNISOLONE = 446 [
+      (.google.fhir.proto.fhir_original_code) = "6902",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DIPHENHYDRAMINE_PHENYLEPHRINE = 447 [
+      (.google.fhir.proto.fhir_original_code) = "690693",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BROMPHENIRAMINE_DEXTROMETHORPHAN_PSEUDOEPHEDRINE = 448 [
+      (.google.fhir.proto.fhir_original_code) = "690808",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TIOTROPIUM = 449 [
+      (.google.fhir.proto.fhir_original_code) = "69120",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    METOCLOPRAMIDE = 450 [
+      (.google.fhir.proto.fhir_original_code) = "6915",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    METOLAZONE = 451 [
+      (.google.fhir.proto.fhir_original_code) = "6916",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    METOPROLOL = 452 [
+      (.google.fhir.proto.fhir_original_code) = "6918",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    METRONIDAZOLE = 453 [
+      (.google.fhir.proto.fhir_original_code) = "6922",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    BACITRACIN_NEOMYCIN_POLYMYXIN_B = 454 [
+      (.google.fhir.proto.fhir_original_code) = "692572",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    GRAMICIDIN_NEOMYCIN_POLYMYXIN_B = 455 [
+      (.google.fhir.proto.fhir_original_code) = "692794",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MICONAZOLE = 456 [
+      (.google.fhir.proto.fhir_original_code) = "6932",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MIDAZOLAM = 457 [
+      (.google.fhir.proto.fhir_original_code) = "6960",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    VALSARTAN = 458 [
+      (.google.fhir.proto.fhir_original_code) = "69749",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MINOCYCLINE = 459 [
+      (.google.fhir.proto.fhir_original_code) = "6980",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MINOXIDIL = 460 [
+      (.google.fhir.proto.fhir_original_code) = "6984",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    AMIODARONE = 461 [
+      (.google.fhir.proto.fhir_original_code) = "703",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    AMITRIPTYLINE = 462 [
+      (.google.fhir.proto.fhir_original_code) = "704",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MORPHINE = 463 [
+      (.google.fhir.proto.fhir_original_code) = "7052",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_DEXTROMETHORPHAN_DOXYLAMINE = 464 [
+      (.google.fhir.proto.fhir_original_code) = "705258",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    IPRATROPIUM = 465 [
+      (.google.fhir.proto.fhir_original_code) = "7213",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    RALOXIFENE = 466 [
+      (.google.fhir.proto.fhir_original_code) = "72143",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FOSPHENYTOIN = 467 [
+      (.google.fhir.proto.fhir_original_code) = "72236",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    AMOXICILLIN = 468 [
+      (.google.fhir.proto.fhir_original_code) = "723",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ROPINIROLE = 469 [
+      (.google.fhir.proto.fhir_original_code) = "72302",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NAFCILLIN = 470 [
+      (.google.fhir.proto.fhir_original_code) = "7233",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NALBUPHINE = 471 [
+      (.google.fhir.proto.fhir_original_code) = "7238",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NALTREXONE = 472 [
+      (.google.fhir.proto.fhir_original_code) = "7243",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    AMPHETAMINE = 473 [
+      (.google.fhir.proto.fhir_original_code) = "725",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NAPROXEN = 474 [
+      (.google.fhir.proto.fhir_original_code) = "7258",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DULOXETINE = 475 [
+      (.google.fhir.proto.fhir_original_code) = "72625",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NEOMYCIN = 476 [
+      (.google.fhir.proto.fhir_original_code) = "7299",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    RISEDRONATE = 477 [
+      (.google.fhir.proto.fhir_original_code) = "73056",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    AMPICILLIN = 478 [
+      (.google.fhir.proto.fhir_original_code) = "733",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TELMISARTAN = 479 [
+      (.google.fhir.proto.fhir_original_code) = "73494",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    VALACYCLOVIR = 480 [
+      (.google.fhir.proto.fhir_original_code) = "73645",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NIACIN = 481 [
+      (.google.fhir.proto.fhir_original_code) = "7393",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NICOTINE = 482 [
+      (.google.fhir.proto.fhir_original_code) = "7407",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PIPERACILLIN_TAZOBACTAM = 483 [
+      (.google.fhir.proto.fhir_original_code) = "74169",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NIFEDIPINE = 484 [
+      (.google.fhir.proto.fhir_original_code) = "7417",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NITROFURANTOIN = 485 [
+      (.google.fhir.proto.fhir_original_code) = "7454",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PRAMIPEXOLE = 486 [
+      (.google.fhir.proto.fhir_original_code) = "746741",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NITROUS_OXIDE = 487 [
+      (.google.fhir.proto.fhir_original_code) = "7486",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NORFLOXACIN = 488 [
+      (.google.fhir.proto.fhir_original_code) = "7517",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NORTRIPTYLINE = 489 [
+      (.google.fhir.proto.fhir_original_code) = "7531",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    NYSTATIN = 490 [
+      (.google.fhir.proto.fhir_original_code) = "7597",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    OFLOXACIN = 491 [
+      (.google.fhir.proto.fhir_original_code) = "7623",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    OMEPRAZOLE = 492 [
+      (.google.fhir.proto.fhir_original_code) = "7646",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    OPIUM = 493 [
+      (.google.fhir.proto.fhir_original_code) = "7676",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ORPHENADRINE = 494 [
+      (.google.fhir.proto.fhir_original_code) = "7715",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TAMSULOSIN = 495 [
+      (.google.fhir.proto.fhir_original_code) = "77492",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    OXYCODONE = 496 [
+      (.google.fhir.proto.fhir_original_code) = "7804",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    OXYTETRACYCLINE = 497 [
+      (.google.fhir.proto.fhir_original_code) = "7821",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    TAPENTADOL = 498 [
+      (.google.fhir.proto.fhir_original_code) = "787390",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PENICILLAMINE = 499 [
+      (.google.fhir.proto.fhir_original_code) = "7975",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ISOPROPYL_ALCOHOL = 500 [
+      (.google.fhir.proto.fhir_original_code) = "797541",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PENICILLIN_G = 501 [
+      (.google.fhir.proto.fhir_original_code) = "7980",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PENICILLIN_V = 502 [
+      (.google.fhir.proto.fhir_original_code) = "7984",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PENTAMIDINE = 503 [
+      (.google.fhir.proto.fhir_original_code) = "7994",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PENTAZOCINE = 504 [
+      (.google.fhir.proto.fhir_original_code) = "8001",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PHENAZOPYRIDINE = 505 [
+      (.google.fhir.proto.fhir_original_code) = "8120",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PHENOBARBITAL = 506 [
+      (.google.fhir.proto.fhir_original_code) = "8134",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DEXTROMETHORPHAN_DOXYLAMINE = 507 [
+      (.google.fhir.proto.fhir_original_code) = "815166",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PHENYLEPHRINE = 508 [
+      (.google.fhir.proto.fhir_original_code) = "8163",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DEXLANSOPRAZOLE = 509 [
+      (.google.fhir.proto.fhir_original_code) = "816346",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PHENYLPROPANOLAMINE = 510 [
+      (.google.fhir.proto.fhir_original_code) = "8175",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ACETAMINOPHEN_CODEINE = 511 [
+      (.google.fhir.proto.fhir_original_code) = "817579",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ASPIRIN_CALCIUM_CARBONATE = 512 [
+      (.google.fhir.proto.fhir_original_code) = "817958",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PHENYTOIN = 513 [
+      (.google.fhir.proto.fhir_original_code) = "8183",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    LEVOFLOXACIN = 514 [
+      (.google.fhir.proto.fhir_original_code) = "82122",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    AMPHETAMINE_ASPARTATE_AMPHETAMINE_SULFATE_DEXTROAMPHETAMINE_SACCHARATE_DEXTROAMPHETAMINE_SULFATE =
+        515 [
+          (.google.fhir.proto.fhir_original_code) = "822929",
+          (.google.fhir.proto.source_code_system) =
+              "http://www.nlm.nih.gov/research/umls/rxnorm"
+        ];
+    ATORVASTATIN = 516 [
+      (.google.fhir.proto.fhir_original_code) = "83367",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PIROXICAM = 517 [
+      (.google.fhir.proto.fhir_original_code) = "8356",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    IRBESARTAN = 518 [
+      (.google.fhir.proto.fhir_original_code) = "83818",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ROSIGLITAZONE = 519 [
+      (.google.fhir.proto.fhir_original_code) = "84108",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    POLYMYXIN_B = 520 [
+      (.google.fhir.proto.fhir_original_code) = "8536",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SAXAGLIPTIN = 521 [
+      (.google.fhir.proto.fhir_original_code) = "857974",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    POTASSIUM = 522 [
+      (.google.fhir.proto.fhir_original_code) = "8588",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    POTASSIUM_CHLORIDE = 523 [
+      (.google.fhir.proto.fhir_original_code) = "8591",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    POVIDONE = 524 [
+      (.google.fhir.proto.fhir_original_code) = "8610",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    POVIDONE_IODINE = 525 [
+      (.google.fhir.proto.fhir_original_code) = "8611",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PITAVASTATIN = 526 [
+      (.google.fhir.proto.fhir_original_code) = "861634",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PRAZOSIN = 527 [
+      (.google.fhir.proto.fhir_original_code) = "8629",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PREDNISOLONE = 528 [
+      (.google.fhir.proto.fhir_original_code) = "8638",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PREDNISONE = 529 [
+      (.google.fhir.proto.fhir_original_code) = "8640",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PRIMAQUINE = 530 [
+      (.google.fhir.proto.fhir_original_code) = "8687",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PRIMIDONE = 531 [
+      (.google.fhir.proto.fhir_original_code) = "8691",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PROBENECID = 532 [
+      (.google.fhir.proto.fhir_original_code) = "8698",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PROCAINAMIDE = 533 [
+      (.google.fhir.proto.fhir_original_code) = "8700",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PROCAINE = 534 [
+      (.google.fhir.proto.fhir_original_code) = "8701",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FENOFIBRATE = 535 [
+      (.google.fhir.proto.fhir_original_code) = "8703",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PROCHLORPERAZINE = 536 [
+      (.google.fhir.proto.fhir_original_code) = "8704",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PROGESTERONE = 537 [
+      (.google.fhir.proto.fhir_original_code) = "8727",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PROMETHAZINE = 538 [
+      (.google.fhir.proto.fhir_original_code) = "8745",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PROPAFENONE = 539 [
+      (.google.fhir.proto.fhir_original_code) = "8754",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    FEXOFENADINE = 540 [
+      (.google.fhir.proto.fhir_original_code) = "87636",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PROPOFOL = 541 [
+      (.google.fhir.proto.fhir_original_code) = "8782",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PROPOXYPHENE = 542 [
+      (.google.fhir.proto.fhir_original_code) = "8785",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PROPRANOLOL = 543 [
+      (.google.fhir.proto.fhir_original_code) = "8787",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PROPYLTHIOURACIL = 544 [
+      (.google.fhir.proto.fhir_original_code) = "8794",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    RIZATRIPTAN = 545 [
+      (.google.fhir.proto.fhir_original_code) = "88014",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    MONTELUKAST = 546 [
+      (.google.fhir.proto.fhir_original_code) = "88249",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    DEXAMETHASONE_TOBRAMYCIN = 547 [
+      (.google.fhir.proto.fhir_original_code) = "883815",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PSEUDOEPHEDRINE = 548 [
+      (.google.fhir.proto.fhir_original_code) = "8896",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ARIPIPRAZOLE = 549 [
+      (.google.fhir.proto.fhir_original_code) = "89013",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PSYLLIUM = 550 [
+      (.google.fhir.proto.fhir_original_code) = "8928",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    PURIFIED_PROTEIN_DERIVATIVE_OF_TUBERCULIN = 551 [
+      (.google.fhir.proto.fhir_original_code) = "8948",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    IRON = 552 [
+      (.google.fhir.proto.fhir_original_code) = "90176",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    QUINIDINE = 553 [
+      (.google.fhir.proto.fhir_original_code) = "9068",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    QUININE = 554 [
+      (.google.fhir.proto.fhir_original_code) = "9071",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    ALOE_EXTRACT = 555 [
+      (.google.fhir.proto.fhir_original_code) = "91263",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    RANITIDINE = 556 [
+      (.google.fhir.proto.fhir_original_code) = "9143",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    RIFAMPIN = 557 [
+      (.google.fhir.proto.fhir_original_code) = "9384",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SULFASALAZINE = 558 [
+      (.google.fhir.proto.fhir_original_code) = "9524",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SCOPOLAMINE = 559 [
+      (.google.fhir.proto.fhir_original_code) = "9601",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SILICONES = 560 [
+      (.google.fhir.proto.fhir_original_code) = "9778",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SILVER_SULFADIAZINE = 561 [
+      (.google.fhir.proto.fhir_original_code) = "9793",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SOTALOL = 562 [
+      (.google.fhir.proto.fhir_original_code) = "9947",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    SPIRONOLACTONE = 563 [
+      (.google.fhir.proto.fhir_original_code) = "9997",
+      (.google.fhir.proto.source_code_system) =
+          "http://www.nlm.nih.gov/research/umls/rxnorm"
+    ];
+    CITRUS_FRUIT_SUBSTANCE = 564 [
+      (.google.fhir.proto.fhir_original_code) = "102259006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    STRAWBERRY_SUBSTANCE = 565 [
+      (.google.fhir.proto.fhir_original_code) = "102261002",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CHOCOLATE_SUBSTANCE = 566 [
+      (.google.fhir.proto.fhir_original_code) = "102262009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    EGGS_EDIBLE_SUBSTANCE = 567 [
+      (.google.fhir.proto.fhir_original_code) = "102263004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CHEESE_SUBSTANCE = 568 [
+      (.google.fhir.proto.fhir_original_code) = "102264005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    LATEX_SUBSTANCE = 569 [
+      (.google.fhir.proto.fhir_original_code) = "111088007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ANABOLIC_STEROID_SUBSTANCE = 570 [
+      (.google.fhir.proto.fhir_original_code) = "111151007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ASPARTAME_SUBSTANCE = 571 [
+      (.google.fhir.proto.fhir_original_code) = "11526002",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ARTIFICIAL_SWEETENER_SUBSTANCE = 572 [
+      (.google.fhir.proto.fhir_original_code) = "116274004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    STEROID_SUBSTANCE = 573 [
+      (.google.fhir.proto.fhir_original_code) = "116566001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    NUT_SUBSTANCE = 574 [
+      (.google.fhir.proto.fhir_original_code) = "13577000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SUBSTANCE_WITH_AMINOGLYCOSIDE_STRUCTURE_AND_ANTIBACTERIAL_MECHANISM_OF_ACTION_SUBSTANCE =
+        575 [
+          (.google.fhir.proto.fhir_original_code) = "14443002",
+          (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+        ];
+    BUCKWHEAT_CEREAL_SUBSTANCE = 576 [
+      (.google.fhir.proto.fhir_original_code) = "226723006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    WHEATGERM_SUBSTANCE = 577 [
+      (.google.fhir.proto.fhir_original_code) = "226734009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    DAIRY_FOODS_SUBSTANCE = 578 [
+      (.google.fhir.proto.fhir_original_code) = "226760005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    RED_MEAT_SUBSTANCE = 579 [
+      (.google.fhir.proto.fhir_original_code) = "226915003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    BEEF_SUBSTANCE = 580 [
+      (.google.fhir.proto.fhir_original_code) = "226916002",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PORK_SUBSTANCE = 581 [
+      (.google.fhir.proto.fhir_original_code) = "226934003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CHICKEN_MEAT_SUBSTANCE = 582 [
+      (.google.fhir.proto.fhir_original_code) = "226955001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    TURKEY_MEAT_SUBSTANCE = 583 [
+      (.google.fhir.proto.fhir_original_code) = "226967004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    TUNA_FISH_SUBSTANCE = 584 [
+      (.google.fhir.proto.fhir_original_code) = "227144008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PRAWNS_SUBSTANCE = 585 [
+      (.google.fhir.proto.fhir_original_code) = "227151004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ABALONE_CANNED_IN_BRINE_SUBSTANCE = 586 [
+      (.google.fhir.proto.fhir_original_code) = "227208008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    AUBERGINE_SUBSTANCE = 587 [
+      (.google.fhir.proto.fhir_original_code) = "227219006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PULSE_VEGETABLES_SUBSTANCE = 588 [
+      (.google.fhir.proto.fhir_original_code) = "227313005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CINNAMON_SUBSTANCE = 589 [
+      (.google.fhir.proto.fhir_original_code) = "227388008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    GINGER_SUBSTANCE = 590 [
+      (.google.fhir.proto.fhir_original_code) = "227400003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CRANBERRIES_SUBSTANCE = 591 [
+      (.google.fhir.proto.fhir_original_code) = "227421003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    RASPBERRIES_SUBSTANCE = 592 [
+      (.google.fhir.proto.fhir_original_code) = "227444000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CASHEW_NUT_SUBSTANCE = 593 [
+      (.google.fhir.proto.fhir_original_code) = "227493005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PISTACHIO_NUT_SUBSTANCE = 594 [
+      (.google.fhir.proto.fhir_original_code) = "227512001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    HONEY_SUBSTANCE = 595 [
+      (.google.fhir.proto.fhir_original_code) = "227598003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SODIUM_NITRATE_SUBSTANCE = 596 [
+      (.google.fhir.proto.fhir_original_code) = "228102000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ANTICONVULSANT_SUBSTANCE = 597 [
+      (.google.fhir.proto.fhir_original_code) = "255632006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SALICYLATE_SUBSTANCE = 598 [
+      (.google.fhir.proto.fhir_original_code) = "255637000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CAFFEINE_SUBSTANCE = 599 [
+      (.google.fhir.proto.fhir_original_code) = "255641001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    POLLEN_SUBSTANCE = 600 [
+      (.google.fhir.proto.fhir_original_code) = "256259004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    GRASS_POLLEN_SUBSTANCE = 601 [
+      (.google.fhir.proto.fhir_original_code) = "256277009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ORANGE_FRUIT_SUBSTANCE = 602 [
+      (.google.fhir.proto.fhir_original_code) = "256306003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    BANANA_SUBSTANCE = 603 [
+      (.google.fhir.proto.fhir_original_code) = "256307007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PINEAPPLE_SUBSTANCE = 604 [
+      (.google.fhir.proto.fhir_original_code) = "256313003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    GRAPEFRUIT_SUBSTANCE = 605 [
+      (.google.fhir.proto.fhir_original_code) = "256315005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    GRAPES_SUBSTANCE = 606 [
+      (.google.fhir.proto.fhir_original_code) = "256317002",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CARROT_SUBSTANCE = 607 [
+      (.google.fhir.proto.fhir_original_code) = "256319004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CELERY_SUBSTANCE = 608 [
+      (.google.fhir.proto.fhir_original_code) = "256326004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SPINACH_SUBSTANCE = 609 [
+      (.google.fhir.proto.fhir_original_code) = "256329006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ALMOND_SUBSTANCE = 610 [
+      (.google.fhir.proto.fhir_original_code) = "256350002",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    BRAZIL_NUT_SUBSTANCE = 611 [
+      (.google.fhir.proto.fhir_original_code) = "256351003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    WALNUT_NUT_SUBSTANCE = 612 [
+      (.google.fhir.proto.fhir_original_code) = "256352005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    HAZELNUT_SUBSTANCE = 613 [
+      (.google.fhir.proto.fhir_original_code) = "256353000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    BEAN_SUBSTANCE = 614 [
+      (.google.fhir.proto.fhir_original_code) = "256354006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    HORSE_DANDER_SUBSTANCE = 615 [
+      (.google.fhir.proto.fhir_original_code) = "256417003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    WASP_VENOM_SUBSTANCE = 616 [
+      (.google.fhir.proto.fhir_original_code) = "256440004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    VARICELLA_ZOSTER_VIRUS_ANTIBODY_SUBSTANCE = 617 [
+      (.google.fhir.proto.fhir_original_code) = "259858000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CAT_DANDER_SUBSTANCE = 618 [
+      (.google.fhir.proto.fhir_original_code) = "260152009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    DOG_DANDER_SUBSTANCE = 619 [
+      (.google.fhir.proto.fhir_original_code) = "260154005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SESAME_SEED_SUBSTANCE = 620 [
+      (.google.fhir.proto.fhir_original_code) = "260167008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    KIWI_FRUIT_SUBSTANCE = 621 [
+      (.google.fhir.proto.fhir_original_code) = "260176001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    MELON_SUBSTANCE = 622 [
+      (.google.fhir.proto.fhir_original_code) = "260177005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    MANGO_FRUIT_SUBSTANCE = 623 [
+      (.google.fhir.proto.fhir_original_code) = "260179008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PEAS_SUBSTANCE = 624 [
+      (.google.fhir.proto.fhir_original_code) = "260184002",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PECAN_NUT_SUBSTANCE = 625 [
+      (.google.fhir.proto.fhir_original_code) = "260189007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SUNFLOWER_SEED_SUBSTANCE = 626 [
+      (.google.fhir.proto.fhir_original_code) = "260205009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ANIMAL_DANDER_SUBSTANCE = 627 [
+      (.google.fhir.proto.fhir_original_code) = "264287008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SEED_SUBSTANCE = 628 [
+      (.google.fhir.proto.fhir_original_code) = "264337003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    POULTRY_SUBSTANCE = 629 [
+      (.google.fhir.proto.fhir_original_code) = "28230009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    BEE_VENOM_SUBSTANCE = 630 [
+      (.google.fhir.proto.fhir_original_code) = "288328004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    COCONUT_OIL_SUBSTANCE = 631 [
+      (.google.fhir.proto.fhir_original_code) = "28942008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    COFFEE_SUBSTANCE = 632 [
+      (.google.fhir.proto.fhir_original_code) = "29263009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CORTICOSTEROID_AND_CORTICOSTEROID_DERIVATIVE_SUBSTANCE = 633 [
+      (.google.fhir.proto.fhir_original_code) = "304275008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    DUST_SUBSTANCE = 634 [
+      (.google.fhir.proto.fhir_original_code) = "33008008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    DIPHTHERIA_PLUS_TETANUS_VACCINE_PRODUCT = 635 [
+      (.google.fhir.proto.fhir_original_code) = "350327004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    WINE_SUBSTANCE = 636 [
+      (.google.fhir.proto.fhir_original_code) = "35748005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    NITROFURAN_DERIVATIVE_SUBSTANCE = 637 [
+      (.google.fhir.proto.fhir_original_code) = "360201004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SODIUM_SULFITE_SUBSTANCE = 638 [
+      (.google.fhir.proto.fhir_original_code) = "3692009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SUBSTANCE_WITH_MACROLIDE_STRUCTURE_AND_ANTIBACTERIAL_MECHANISM_OF_ACTION_SUBSTANCE =
+        639 [
+          (.google.fhir.proto.fhir_original_code) = "372480009",
+          (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+        ];
+    BENZODIAZEPINE_SUBSTANCE = 640 [
+      (.google.fhir.proto.fhir_original_code) = "372664007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    NON_STEROIDAL_ANTI_INFLAMMATORY_AGENT_SUBSTANCE = 641 [
+      (.google.fhir.proto.fhir_original_code) = "372665008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SULFONYLUREA_SUBSTANCE = 642 [
+      (.google.fhir.proto.fhir_original_code) = "372711004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SUBSTANCE_WITH_QUINOLONE_STRUCTURE_AND_ANTIBACTERIAL_MECHANISM_OF_ACTION_SUBSTANCE =
+        643 [
+          (.google.fhir.proto.fhir_original_code) = "372722000",
+          (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+        ];
+    SUBSTANCE_WITH_ANGIOTENSIN_CONVERTING_ENZYME_INHIBITOR_MECHANISM_OF_ACTION_SUBSTANCE =
+        644 [
+          (.google.fhir.proto.fhir_original_code) = "372733002",
+          (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+        ];
+    THIAZIDE_DIURETIC_SUBSTANCE = 645 [
+      (.google.fhir.proto.fhir_original_code) = "372747003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ANTIPARKINSONIAN_AGENT_SUBSTANCE = 646 [
+      (.google.fhir.proto.fhir_original_code) = "372783007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    BARBITURATE_SUBSTANCE = 647 [
+      (.google.fhir.proto.fhir_original_code) = "372798009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SUBSTANCE_WITH_HISTAMINE_RECEPTOR_ANTAGONIST_MECHANISM_OF_ACTION_SUBSTANCE =
+        648 [
+          (.google.fhir.proto.fhir_original_code) = "372806008",
+          (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+        ];
+    FIRST_GENERATION_CEPHALOSPORIN_SUBSTANCE = 649 [
+      (.google.fhir.proto.fhir_original_code) = "372889003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SUBSTANCE_WITH_3_HYDROXY_3_METHYLGLUTARYL_COENZYME_A_REDUCTASE_INHIBITOR_MECHANISM_OF_ACTION_SUBSTANCE =
+        650 [
+          (.google.fhir.proto.fhir_original_code) = "372912004",
+          (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+        ];
+    SUBSTANCE_WITH_ANGIOTENSIN_II_RECEPTOR_ANTAGONIST_MECHANISM_OF_ACTION_SUBSTANCE =
+        651 [
+          (.google.fhir.proto.fhir_original_code) = "372913009",
+          (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+        ];
+    SUBSTANCE_WITH_TETRACYCLINE_STRUCTURE_AND_ANTIBACTERIAL_MECHANISM_OF_ACTION_SUBSTANCE =
+        652 [
+          (.google.fhir.proto.fhir_original_code) = "373206009",
+          (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+        ];
+    TRICYCLIC_ANTIDEPRESSANT_SUBSTANCE = 653 [
+      (.google.fhir.proto.fhir_original_code) = "373253007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SUBSTANCE_WITH_BETA_ADRENERGIC_RECEPTOR_ANTAGONIST_MECHANISM_OF_ACTION_SUBSTANCE =
+        654 [
+          (.google.fhir.proto.fhir_original_code) = "373254001",
+          (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+        ];
+    SUBSTANCE_WITH_CEPHALOSPORIN_STRUCTURE_AND_ANTIBACTERIAL_MECHANISM_OF_ACTION_SUBSTANCE =
+        655 [
+          (.google.fhir.proto.fhir_original_code) = "373262009",
+          (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+        ];
+    SUBSTANCE_WITH_PENICILLIN_STRUCTURE_AND_ANTIBACTERIAL_MECHANISM_OF_ACTION_SUBSTANCE =
+        656 [
+          (.google.fhir.proto.fhir_original_code) = "373270004",
+          (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+        ];
+    SUBSTANCE_WITH_BETA_LACTAM_STRUCTURE_AND_ANTIBACTERIAL_MECHANISM_OF_ACTION_SUBSTANCE =
+        657 [
+          (.google.fhir.proto.fhir_original_code) = "373297006",
+          (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+        ];
+    SUBSTANCE_WITH_CALCIUM_CHANNEL_BLOCKER_MECHANISM_OF_ACTION_SUBSTANCE = 658 [
+      (.google.fhir.proto.fhir_original_code) = "373304005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    GELATIN_SUBSTANCE = 659 [
+      (.google.fhir.proto.fhir_original_code) = "373531009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CONTRAST_MEDIA_SUBSTANCE = 660 [
+      (.google.fhir.proto.fhir_original_code) = "385420005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    FORMULA_MILK_SUBSTANCE = 661 [
+      (.google.fhir.proto.fhir_original_code) = "386127005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PLASMA_PROTEIN_FRACTION_SUBSTANCE = 662 [
+      (.google.fhir.proto.fhir_original_code) = "386962001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SUBSTANCE_WITH_PROSTAGLANDIN_ENDOPEROXIDE_SYNTHASE_ISOFORM_2_INHIBITOR_MECHANISM_OF_ACTION_SUBSTANCE =
+        663 [
+          (.google.fhir.proto.fhir_original_code) = "387050005",
+          (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+        ];
+    SULFONAMIDE_SUBSTANCE = 664 [
+      (.google.fhir.proto.fhir_original_code) = "387406002",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ALMOND_OIL_SUBSTANCE = 665 [
+      (.google.fhir.proto.fhir_original_code) = "391737006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ALOE_SUBSTANCE = 666 [
+      (.google.fhir.proto.fhir_original_code) = "391739009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CARBAPENEM_SUBSTANCE = 667 [
+      (.google.fhir.proto.fhir_original_code) = "396345004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ANTHRAX_VACCINE_SUBSTANCE = 668 [
+      (.google.fhir.proto.fhir_original_code) = "396420001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    INFLUENZA_VIRUS_VACCINE_SUBSTANCE = 669 [
+      (.google.fhir.proto.fhir_original_code) = "396425006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PERTUSSIS_VACCINE_SUBSTANCE = 670 [
+      (.google.fhir.proto.fhir_original_code) = "396433007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SMALLPOX_VACCINE_SUBSTANCE = 671 [
+      (.google.fhir.proto.fhir_original_code) = "396439006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    TYPHOID_VACCINE_SUBSTANCE = 672 [
+      (.google.fhir.proto.fhir_original_code) = "396441007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    VARICELLA_VIRUS_VACCINE_SUBSTANCE = 673 [
+      (.google.fhir.proto.fhir_original_code) = "396442000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PNEUMOCOCCAL_VACCINE_SUBSTANCE = 674 [
+      (.google.fhir.proto.fhir_original_code) = "398730001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    HYDROCOLLOID_SUBSTANCE = 675 [
+      (.google.fhir.proto.fhir_original_code) = "400872007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SUBSTANCE_WITH_OPIOID_RECEPTOR_AGONIST_MECHANISM_OF_ACTION_SUBSTANCE = 676 [
+      (.google.fhir.proto.fhir_original_code) = "404642006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CARBAMATE_SUBSTANCE = 677 [
+      (.google.fhir.proto.fhir_original_code) = "406748003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    NO_KNOWN_DRUG_ALLERGY_SITUATION = 678 [
+      (.google.fhir.proto.fhir_original_code) = "409137002",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    BLUEBERRIES_SUBSTANCE = 679 [
+      (.google.fhir.proto.fhir_original_code) = "412061001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CANTALOUPE_SUBSTANCE = 680 [
+      (.google.fhir.proto.fhir_original_code) = "412062008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PEPPER_SUBSTANCE = 681 [
+      (.google.fhir.proto.fhir_original_code) = "412066006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    RYE_SUBSTANCE = 682 [
+      (.google.fhir.proto.fhir_original_code) = "412068007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    WHEAT_SUBSTANCE = 683 [
+      (.google.fhir.proto.fhir_original_code) = "412071004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    HORSE_SERUM_PROTEIN_SUBSTANCE = 684 [
+      (.google.fhir.proto.fhir_original_code) = "412138001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CORN_SUBSTANCE = 685 [
+      (.google.fhir.proto.fhir_original_code) = "412357001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    DIPHTHERIA_PLUS_PERTUSSIS_PLUS_TETANUS_PLUS_HAEMOPHILUS_INFLUENZAE_TYPE_B_VACCINE_PRODUCT =
+        686 [
+          (.google.fhir.proto.fhir_original_code) = "412373007",
+          (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+        ];
+    TETANUS_VACCINE_SUBSTANCE = 687 [
+      (.google.fhir.proto.fhir_original_code) = "412375000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    WHEAT_BRAN_SUBSTANCE = 688 [
+      (.google.fhir.proto.fhir_original_code) = "412533000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    YEAST_SUBSTANCE = 689 [
+      (.google.fhir.proto.fhir_original_code) = "412534006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    BEE_POLLEN_SUBSTANCE = 690 [
+      (.google.fhir.proto.fhir_original_code) = "412583005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ESTROGEN_SUBSTANCE = 691 [
+      (.google.fhir.proto.fhir_original_code) = "41598000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ARACHIS_OIL_SUBSTANCE = 692 [
+      (.google.fhir.proto.fhir_original_code) = "417889008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    METHADONE_ANALOG_SUBSTANCE = 693 [
+      (.google.fhir.proto.fhir_original_code) = "418000008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    OATS_SUBSTANCE = 694 [
+      (.google.fhir.proto.fhir_original_code) = "418504009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ADHESIVE_AGENT_SUBSTANCE = 695 [
+      (.google.fhir.proto.fhir_original_code) = "418920007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    WATERMELON_SUBSTANCE = 696 [
+      (.google.fhir.proto.fhir_original_code) = "419420009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    GLUCOCORTICOID_SUBSTANCE = 697 [
+      (.google.fhir.proto.fhir_original_code) = "419933005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    DIPHTHERIA_PLUS_PERTUSSIS_PLUS_TETANUS_VACCINE_PRODUCT = 698 [
+      (.google.fhir.proto.fhir_original_code) = "421245007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PRODUCT_CONTAINING_BETA_GALACTOSIDASE_MEDICINAL_PRODUCT = 699 [
+      (.google.fhir.proto.fhir_original_code) = "424369009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    IODINATED_CONTRAST_MEDIA_SUBSTANCE = 700 [
+      (.google.fhir.proto.fhir_original_code) = "426722004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    NO_KNOWN_ENVIRONMENTAL_ALLERGY_SITUATION = 701 [
+      (.google.fhir.proto.fhir_original_code) = "428607008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    NO_KNOWN_FOOD_ALLERGY_SITUATION = 702 [
+      (.google.fhir.proto.fhir_original_code) = "429625007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SULFUR_SUBSTANCE = 703 [
+      (.google.fhir.proto.fhir_original_code) = "43735007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    NICKEL_COMPOUND_SUBSTANCE = 704 [
+      (.google.fhir.proto.fhir_original_code) = "43921001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SEAFOOD_SUBSTANCE = 705 [
+      (.google.fhir.proto.fhir_original_code) = "44027008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    BLUE_FOOD_COLORING_SUBSTANCE = 706 [
+      (.google.fhir.proto.fhir_original_code) = "442381000124103",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    TREE_NUT_SUBSTANCE = 707 [
+      (.google.fhir.proto.fhir_original_code) = "442571000124108",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PEPPERONI_SUBSTANCE = 708 [
+      (.google.fhir.proto.fhir_original_code) = "442771000124102",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    IODINE_SUBSTANCE = 709 [
+      (.google.fhir.proto.fhir_original_code) = "44588005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    RED_FOOD_COLORING_SUBSTANCE = 710 [
+      (.google.fhir.proto.fhir_original_code) = "446273004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    YELLOW_FOOD_COLORING_SUBSTANCE = 711 [
+      (.google.fhir.proto.fhir_original_code) = "446274005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    LACTOSE_SUBSTANCE = 712 [
+      (.google.fhir.proto.fhir_original_code) = "47703008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    FOOD_PRESERVATIVE_SUBSTANCE = 713 [
+      (.google.fhir.proto.fhir_original_code) = "51386004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    MUSTARD_SUBSTANCE = 714 [
+      (.google.fhir.proto.fhir_original_code) = "51905005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ALCOHOL_SUBSTANCE = 715 [
+      (.google.fhir.proto.fhir_original_code) = "53041004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    DYE_SUBSTANCE = 716 [
+      (.google.fhir.proto.fhir_original_code) = "61789006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    BERRY_SUBSTANCE = 717 [
+      (.google.fhir.proto.fhir_original_code) = "63045006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    RICE_SUBSTANCE = 718 [
+      (.google.fhir.proto.fhir_original_code) = "67324005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    INSULIN_SUBSTANCE = 719 [
+      (.google.fhir.proto.fhir_original_code) = "67866001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    MILK_SUBSTANCE = 720 [
+      (.google.fhir.proto.fhir_original_code) = "70813002",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    LUPINE_SEED_SUBSTANCE = 721 [
+      (.google.fhir.proto.fhir_original_code) = "710179004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    NO_KNOWN_LATEX_ALLERGY_SITUATION = 722 [
+      (.google.fhir.proto.fhir_original_code) = "716184000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    NO_KNOWN_ALLERGY_SITUATION = 723 [
+      (.google.fhir.proto.fhir_original_code) = "716186003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    DUST_MITE_PROTEIN_SUBSTANCE = 724 [
+      (.google.fhir.proto.fhir_original_code) = "720687003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    FRUIT_SUBSTANCE = 725 [
+      (.google.fhir.proto.fhir_original_code) = "72511004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    YAM_SUBSTANCE = 726 [
+      (.google.fhir.proto.fhir_original_code) = "726730005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    TOMATO_SUBSTANCE = 727 [
+      (.google.fhir.proto.fhir_original_code) = "734881000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SQUID_SUBSTANCE = 728 [
+      (.google.fhir.proto.fhir_original_code) = "735006003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SALMON_SUBSTANCE = 729 [
+      (.google.fhir.proto.fhir_original_code) = "735009005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SHELLFISH_SUBSTANCE = 730 [
+      (.google.fhir.proto.fhir_original_code) = "735029006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    GARLIC_SUBSTANCE = 731 [
+      (.google.fhir.proto.fhir_original_code) = "735030001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    MACKEREL_SUBSTANCE = 732 [
+      (.google.fhir.proto.fhir_original_code) = "735043001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    MUSHROOM_SUBSTANCE = 733 [
+      (.google.fhir.proto.fhir_original_code) = "735045008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    ONION_SUBSTANCE = 734 [
+      (.google.fhir.proto.fhir_original_code) = "735047000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PEACH_SUBSTANCE = 735 [
+      (.google.fhir.proto.fhir_original_code) = "735049002",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PEAR_SUBSTANCE = 736 [
+      (.google.fhir.proto.fhir_original_code) = "735050002",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PLUM_SUBSTANCE = 737 [
+      (.google.fhir.proto.fhir_original_code) = "735051003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    POTATO_SUBSTANCE = 738 [
+      (.google.fhir.proto.fhir_original_code) = "735053000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    BROCCOLI_SUBSTANCE = 739 [
+      (.google.fhir.proto.fhir_original_code) = "735123009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    BARLEY_SUBSTANCE = 740 [
+      (.google.fhir.proto.fhir_original_code) = "735124003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    COCONUT_SUBSTANCE = 741 [
+      (.google.fhir.proto.fhir_original_code) = "735211005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PAPAYA_SUBSTANCE = 742 [
+      (.google.fhir.proto.fhir_original_code) = "735212003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CUCUMBER_SUBSTANCE = 743 [
+      (.google.fhir.proto.fhir_original_code) = "735213008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    APRICOT_SUBSTANCE = 744 [
+      (.google.fhir.proto.fhir_original_code) = "735214002",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    APPLE_SUBSTANCE = 745 [
+      (.google.fhir.proto.fhir_original_code) = "735215001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CHERRY_SUBSTANCE = 746 [
+      (.google.fhir.proto.fhir_original_code) = "735248001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    AVOCADO_SUBSTANCE = 747 [
+      (.google.fhir.proto.fhir_original_code) = "735249009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    LEMON_SUBSTANCE = 748 [
+      (.google.fhir.proto.fhir_original_code) = "735340006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    MARINE_MOLLUSK_SUBSTANCE = 749 [
+      (.google.fhir.proto.fhir_original_code) = "735959004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    FISH_SUBSTANCE = 750 [
+      (.google.fhir.proto.fhir_original_code) = "735971005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    MARINE_CRUSTACEAN_SUBSTANCE = 751 [
+      (.google.fhir.proto.fhir_original_code) = "735977009",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SCALLOP_SUBSTANCE = 752 [
+      (.google.fhir.proto.fhir_original_code) = "736027000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CLAM_SUBSTANCE = 753 [
+      (.google.fhir.proto.fhir_original_code) = "736030007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    OYSTER_SUBSTANCE = 754 [
+      (.google.fhir.proto.fhir_original_code) = "736031006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CRAB_SUBSTANCE = 755 [
+      (.google.fhir.proto.fhir_original_code) = "736159005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    LOBSTER_SUBSTANCE = 756 [
+      (.google.fhir.proto.fhir_original_code) = "736162008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SUGAR_SUBSTANCE = 757 [
+      (.google.fhir.proto.fhir_original_code) = "74801000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    MONOSODIUM_GLUTAMATE_SUBSTANCE = 758 [
+      (.google.fhir.proto.fhir_original_code) = "75665004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    PEANUT_SUBSTANCE = 759 [
+      (.google.fhir.proto.fhir_original_code) = "762952008",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SOY_PROTEIN_SUBSTANCE = 760 [
+      (.google.fhir.proto.fhir_original_code) = "7791007",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    FOOD_FLAVORING_AGENT_SUBSTANCE = 761 [
+      (.google.fhir.proto.fhir_original_code) = "80259003",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    MOLD_ORGANISM = 762 [
+      (.google.fhir.proto.fhir_original_code) = "84489001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    NITRATE_SALT_SUBSTANCE = 763 [
+      (.google.fhir.proto.fhir_original_code) = "89119000",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SESAME_OIL_SUBSTANCE = 764 [
+      (.google.fhir.proto.fhir_original_code) = "89707004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    GLUTEN_SUBSTANCE = 765 [
+      (.google.fhir.proto.fhir_original_code) = "89811004",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+  }
+}
+
 // The US Core Clinical Note Type Value Set is a 'starter set' of types
 // supported for fetching and storing clinical notes. See
 // http://hl7.org/fhir/us/core/ValueSet/us-core-clinical-note-type
@@ -6174,6 +9834,25 @@ message USCoreConditionCategoryCodesValueSet {
     HEALTH_CONCERN = 3
         [(.google.fhir.proto.source_code_system) =
              "http://hl7.org/fhir/us/core/CodeSystem/condition-category"];
+  }
+}
+
+// This describes the problem. Diagnosis/Problem List is broadly defined as a
+// series of brief statements that catalog a patient's medical, nursing, dental,
+// social, preventative and psychiatric events and issues that are relevant to
+// that patient's healthcare (e.g., signs, symptoms, and defined conditions).
+// ICD-10 is appropriate for Diagnosis information, and ICD-9 for historical
+// information. See http://hl7.org/fhir/us/core/ValueSet/us-core-condition-code
+message USCoreConditionCodeValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/us/core/ValueSet/us-core-condition-code";
+
+    INVALID_UNINITIALIZED = 0;
+    V_160245001 = 1 [
+      (.google.fhir.proto.fhir_original_code) = "160245001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
   }
 }
 
@@ -7503,6 +11182,49 @@ message USCoreSmokingStatusObservationCodesValueSet {
     TOBACCO_SMOKING_STATUS_NHIS = 1 [
       (.google.fhir.proto.fhir_original_code) = "72166-2",
       (.google.fhir.proto.source_code_system) = "http://loinc.org"
+    ];
+  }
+}
+
+// This value set indicates the current smoking status of a patient.
+// See http://hl7.org/fhir/us/core/ValueSet/us-core-observation-smokingstatus
+message USCoreSmokingStatusValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/us/core/ValueSet/us-core-observation-smokingstatus";
+
+    INVALID_UNINITIALIZED = 0;
+    CURRENT_EVERY_DAY_SMOKER = 1 [
+      (.google.fhir.proto.fhir_original_code) = "449868002",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CURRENT_SOME_DAY_SMOKER = 2 [
+      (.google.fhir.proto.fhir_original_code) = "428041000124106",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    FORMER_SMOKER = 3 [
+      (.google.fhir.proto.fhir_original_code) = "8517006",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    NEVER_SMOKER = 4 [
+      (.google.fhir.proto.fhir_original_code) = "266919005",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    SMOKER_CURRENT_STATUS_UNKNOWN = 5 [
+      (.google.fhir.proto.fhir_original_code) = "77176002",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    UNKNOWN_IF_EVER_SMOKED = 6 [
+      (.google.fhir.proto.fhir_original_code) = "266927001",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CURRENT_HEAVY_TOBACCO_SMOKER = 7 [
+      (.google.fhir.proto.fhir_original_code) = "428071000124103",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
+    ];
+    CURRENT_LIGHT_TOBACCO_SMOKER = 8 [
+      (.google.fhir.proto.fhir_original_code) = "428061000124105",
+      (.google.fhir.proto.source_code_system) = "http://snomed.info/sct"
     ];
   }
 }
