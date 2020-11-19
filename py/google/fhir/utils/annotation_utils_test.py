@@ -14,6 +14,8 @@
 # limitations under the License.
 """Test annotation_utils functionality."""
 
+import sys
+
 from google.protobuf import descriptor_pb2
 from absl.testing import absltest
 from proto.google.fhir.proto.r4 import uscore_codes_pb2
@@ -23,7 +25,12 @@ from proto.google.fhir.proto.r4.core import valuesets_pb2
 from proto.google.fhir.proto.r4.core.resources import observation_pb2
 from proto.google.fhir.proto.r4.core.resources import patient_pb2
 from google.fhir.utils import annotation_utils
-from testdata.r4.profiles import test_pb2
+
+try:
+  from testdata.r4.profiles import test_pb2
+except ImportError:
+  # TODO: Add test protos to PYTHONPATH during dist testing.
+  pass  # Fall through
 
 _ADDRESS_USECODE_FHIR_VALUESET_URL = 'http://hl7.org/fhir/ValueSet/address-use'
 _BODY_LENGTH_UNITS_VALUESET_URL = 'http://hl7.org/fhir/ValueSet/ucum-bodylength'
@@ -143,6 +150,9 @@ class AnnotationUtilsTest(absltest.TestCase):
     self.assertFalse(annotation_utils.is_reference(boolean_descriptor_proto))
     self.assertFalse(annotation_utils.is_reference(code_descriptor_proto))
 
+  @absltest.skipIf(
+      'testdata' not in sys.modules,
+      'google-fhir package does not build+install tertiary testdata protos.')
   def testGetFixedCodingSystem_withValidFixedCodingSystem_returnsValue(self):
     """Test get_fixed_coding_system functionality when annotation is present."""
     expected_system = 'http://hl7.org/fhir/metric-color'

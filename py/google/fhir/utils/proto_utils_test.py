@@ -306,9 +306,11 @@ class ProtoUtilsTest(absltest.TestCase):
 
   def testGetMessageClassFromDescriptor_returnsMessageClass(self):
     """Tests that the correct class is returned for a message."""
-    self.assertEqual(
-        proto_utils.get_message_class_from_descriptor(
-            patient_pb2.Patient.DESCRIPTOR), patient_pb2.Patient)
+    actual = proto_utils.get_message_class_from_descriptor(
+        patient_pb2.Patient.DESCRIPTOR)
+    self.assertTrue(
+        proto_utils.are_same_message_type(actual.DESCRIPTOR,
+                                          patient_pb2.Patient.DESCRIPTOR))
 
   def testCreateMessageFromDescriptor_returnsMessage(self):
     """Tests that the correct class is returned for a message."""

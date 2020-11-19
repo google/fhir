@@ -4,4 +4,3 @@ include README.md
 include google/fhir/py.typed
 include proto/google/fhir/proto/py.typed
 recursive-include proto/google/fhir/proto *.pyi
-global-exclude *_test.py

@@ -15,6 +15,7 @@
 """Test extensions functionality."""
 
 import os
+import sys
 from typing import Type
 
 from google.protobuf import message
@@ -26,7 +27,12 @@ from proto.google.fhir.proto.r4.core import extensions_pb2
 from proto.google.fhir.proto.r4.core.resources import patient_pb2
 from google.fhir import extensions
 from google.fhir import extensions_test
-from testdata.r4.profiles import test_extensions_pb2
+
+try:
+  from testdata.r4.profiles import test_extensions_pb2
+except ImportError:
+  # TODO: Add test protos to PYTHONPATH during dist testing.
+  pass  # Fall through
 
 _EXTENSIONS_DIR = os.path.join('testdata', 'r4', 'extensions')
 
@@ -125,10 +131,16 @@ class ExtensionsTest(extensions_test.ExtensionsTest):
         'capability',
         extensions_pb2.CapabilityStatementSearchParameterCombination)
 
+  @absltest.skipIf(
+      'testdata' not in sys.modules,
+      'google-fhir package does not build+install tertiary testdata protos.')
   def testExtensionToMessage_withDigitalMediaType_succeeds(self):
     self.assert_extension_to_message_equals_golden(
         'digital_media_type', test_extensions_pb2.DigitalMediaType)
 
+  @absltest.skipIf(
+      'testdata' not in sys.modules,
+      'google-fhir package does not build+install tertiary testdata protos.')
   def testMessageToExtension_withDigitalMediaType_succeeds(self):
     self.assert_message_to_extension_equals_golden(
         'digital_media_type', test_extensions_pb2.DigitalMediaType)
