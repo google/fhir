@@ -145,10 +145,10 @@ func TestMarshal_STU3(t *testing.T) {
 	tests := readTestCases(t, jsonformat.STU3)
 	for _, tc := range tests {
 		tc := tc
-		t.Run(tc.name, func(t *testing.T) {
+		t.Run(tc, func(t *testing.T) {
 			t.Parallel()
-			if stu3Ignores.Contains(tc.name) {
-				t.Skipf("Skipping %s", tc.name)
+			if stu3Ignores.Contains(tc) {
+				t.Skipf("Skipping %s", tc)
 			}
 			testMarshal(t, tc, jsonformat.STU3)
 		})
@@ -160,22 +160,26 @@ func TestMarshal_R4(t *testing.T) {
 	tests := readTestCases(t, jsonformat.R4)
 	for _, tc := range tests {
 		tc := tc
-		t.Run(tc.name, func(t *testing.T) {
+		t.Run(tc, func(t *testing.T) {
 			t.Parallel()
-			if r4Ignores.Contains(tc.name) {
-				t.Skipf("Skipping %s", tc.name)
+			if r4Ignores.Contains(tc) {
+				t.Skipf("Skipping %s", tc)
 			}
 			testMarshal(t, tc, jsonformat.R4)
 		})
 	}
 }
 
-func testMarshal(t *testing.T, tc *testCase, ver jsonformat.Version) {
-	res, err := getZeroResource(tc.jsonData, ver)
+func testMarshal(t *testing.T, name string, ver jsonformat.Version) {
+	jsonData, protoData, err := readTestCaseFile(ver, name)
+	if err != nil {
+		t.Fatal(err)
+	}
+	res, err := getZeroResource(jsonData, ver)
 	if err != nil {
 		t.Fatalf("Failed to get empty resource from JSON data %v", err)
 	}
-	if err = proto.UnmarshalText(string(tc.protoData), res); err != nil {
+	if err = proto.UnmarshalText(string(protoData), res); err != nil {
 		t.Fatalf("Failed to unmarshal resource text proto: %v", err)
 	}
 	containedRes, err := wrapInContainedResource(res, ver)
@@ -196,11 +200,11 @@ func testMarshal(t *testing.T, tc *testCase, ver jsonformat.Version) {
 	if err := json.Unmarshal(marshalled, &got); err != nil {
 		t.Fatalf("Failed to unmarshal JSON")
 	}
-	if err := json.Unmarshal(tc.jsonData, &want); err != nil {
+	if err := json.Unmarshal(jsonData, &want); err != nil {
 		t.Fatalf("Failed to unmarshal JSON")
 	}
 	if diff := cmp.Diff(want, got); diff != "" {
-		t.Errorf("Unexpected diff between want and marshalled %v: (-want, +got) %v", tc.name, diff)
+		t.Errorf("Unexpected diff between want and marshalled %v: (-want, +got) %v", name, diff)
 	}
 }
 
@@ -317,10 +321,10 @@ func TestUnmarshal_STU3(t *testing.T) {
 	tests := readTestCases(t, jsonformat.STU3)
 	for _, tc := range tests {
 		tc := tc
-		t.Run(tc.name, func(t *testing.T) {
+		t.Run(tc, func(t *testing.T) {
 			t.Parallel()
-			if stu3Ignores.Contains(tc.name) {
-				t.Skipf("Skipping %s", tc.name)
+			if stu3Ignores.Contains(tc) {
+				t.Skipf("Skipping %s", tc)
 			}
 			testUnmarshal(t, tc, jsonformat.STU3)
 		})
@@ -332,22 +336,26 @@ func TestUnmarshal_R4(t *testing.T) {
 	tests := readTestCases(t, jsonformat.R4)
 	for _, tc := range tests {
 		tc := tc
-		t.Run(tc.name, func(t *testing.T) {
+		t.Run(tc, func(t *testing.T) {
 			t.Parallel()
-			if r4Ignores.Contains(tc.name) {
-				t.Skipf("Skipping %s", tc.name)
+			if r4Ignores.Contains(tc) {
+				t.Skipf("Skipping %s", tc)
 			}
 			testUnmarshal(t, tc, jsonformat.R4)
 		})
 	}
 }
 
-func testUnmarshal(t *testing.T, tc *testCase, ver jsonformat.Version) {
+func testUnmarshal(t *testing.T, name string, ver jsonformat.Version) {
+	jsonData, protoData, err := readTestCaseFile(ver, name)
+	if err != nil {
+		t.Fatal(err)
+	}
 	um, err := jsonformat.NewUnmarshaller(timeZone, ver)
 	if err != nil {
 		t.Fatalf("Failed to create unmarshaller: %v", err)
 	}
-	unmarshalled, err := um.Unmarshal(tc.jsonData)
+	unmarshalled, err := um.Unmarshal(jsonData)
 	if err != nil {
 		t.Fatalf("Failed to unmarshal resource JSON: %v", err)
 	}
@@ -356,15 +364,15 @@ func testUnmarshal(t *testing.T, tc *testCase, ver jsonformat.Version) {
 		t.Fatalf("Failed to unwrap resource: %v", err)
 	}
 
-	want, err := getZeroResource(tc.jsonData, ver)
+	want, err := getZeroResource(jsonData, ver)
 	if err != nil {
 		t.Fatalf("Failed to get zero resource from JSON %v", err)
 	}
-	if err = proto.UnmarshalText(string(tc.protoData), want); err != nil {
+	if err = proto.UnmarshalText(string(protoData), want); err != nil {
 		t.Fatalf("Failed to unmarshal resource text proto: %v", err)
 	}
 	if diff := cmp.Diff(want, res, protocmp.Transform()); diff != "" {
-		t.Errorf("Unexpected diff between want and unmarshalled %v: (-want, +got) %v", tc.name, diff)
+		t.Errorf("Unexpected diff between want and unmarshalled %v: (-want, +got) %v", name, diff)
 	}
 }
 
@@ -504,41 +512,41 @@ func newContainedResource(ver jsonformat.Version) (proto.Message, error) {
 	}
 }
 
-type testCase struct {
-	name                string
-	jsonData, protoData []byte
-}
-
-// readTestCases reads test files and builds all test cases for a given version.
-func readTestCases(t *testing.T, ver jsonformat.Version) []*testCase {
+// readTestCases reads the JSON example files and returns the ones that have a
+// matching prototxt file, to be used as a test case.
+func readTestCases(t *testing.T, ver jsonformat.Version) []string {
 	t.Helper()
 	fileNames := readTestCaseFileNames(t, versionToJSONPath[ver])
-
-	// Read JSON and text proto file for each file name and create a test case if both exist.
-	var tcs []*testCase
-	for _, name := range fileNames {
-		jsonData, err := readFile(versionToJSONPath[ver], name, jsonExt)
+	var withGolden []string
+	for _, fileName := range fileNames {
+		root, err := bazel.RunfilesPath()
 		if err != nil {
-			t.Fatalf("Failed to read resource json file %s: %v", name, err)
+			t.Fatalf("failed to read runfiles root: %v", err)
 		}
-
-		protoData, err := readFile(versionToProtoPath[ver], name, txtprotoExt)
-		if err != nil {
+		fullPath := path.Join(root, versionToProtoPath[ver], fmt.Sprintf("%s.%s", fileName, txtprotoExt))
+		if _, err := os.Stat(fullPath); err != nil {
 			if os.IsNotExist(err) {
-				// Silently skip test case if there is no corresponding text proto to reduce noise.
 				continue
 			}
-			t.Fatalf("Failed to read resource text proto file %s: %v", name, err)
+			t.Fatalf("failed to read %s: %v", fullPath, err)
 		}
+		withGolden = append(withGolden, fileName)
+	}
+	return withGolden
+}
 
-		tcs = append(tcs, &testCase{
-			name:      name,
-			jsonData:  jsonData,
-			protoData: protoData,
-		})
+func readTestCaseFile(ver jsonformat.Version, name string) ([]byte, []byte, error) {
+	jsonData, err := readFile(versionToJSONPath[ver], name, jsonExt)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to read resource json file %s: %v", name, err)
 	}
 
-	return tcs
+	protoData, err := readFile(versionToProtoPath[ver], name, txtprotoExt)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to read resource text proto file %s: %v", name, err)
+	}
+
+	return jsonData, protoData, nil
 }
 
 func readTestCaseFileNames(t *testing.T, basePath string) []string {
