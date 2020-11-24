@@ -18,6 +18,7 @@
 
 #include <string>
 
+#include "absl/container/node_hash_map.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/synchronization/mutex.h"
@@ -47,7 +48,7 @@ const std::set<std::string> GetAncestorSet(
 bool AddSharedCommonAncestorMemo(
     const std::string& first_url, const std::string& second_url,
     const bool value,
-    std::unordered_map<std::string, std::unordered_map<std::string, bool>>*
+    absl::node_hash_map<std::string, absl::node_hash_map<std::string, bool>>*
         memos) {
   (*memos)[first_url][second_url] = value;
   (*memos)[second_url][first_url] = value;
@@ -58,7 +59,8 @@ bool AddSharedCommonAncestorMemo(
 
 const bool SharesCommonAncestor(const ::google::protobuf::Descriptor* first,
                                 const ::google::protobuf::Descriptor* second) {
-  static std::unordered_map<std::string, std::unordered_map<std::string, bool>>
+  static absl::node_hash_map<std::string,
+                             absl::node_hash_map<std::string, bool>>
       memos;
   static absl::Mutex memos_mutex;
 
