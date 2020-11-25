@@ -1830,6 +1830,47 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "Extension name collides with first-class field",
+			inputs: []mvr{
+				{
+					ver: STU3,
+					r: &r3pb.Patient{
+						Id: &d3pb.Id{Value: "id1"},
+						Extension: []*d3pb.Extension{
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: R4,
+					r: &r4patientpb.Patient{
+						Id: &d4pb.Id{Value: "id1"},
+						Extension: []*d4pb.Extension{
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+			},
+			want: jsonpbhelper.JSONObject{
+				"id": jsonpbhelper.JSONString("id1"),
+				"id_extension": jsonpbhelper.JSONObject{
+					"value": jsonpbhelper.JSONObject{
+						"string": jsonpbhelper.JSONString("id2"),
+					},
+				},
+			},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -1845,6 +1886,192 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					}
 					if !cmp.Equal(got, test.want) {
 						t.Errorf("marshal %v: got %v, want %v", test.name, got, test.want)
+					}
+				})
+			}
+		})
+	}
+}
+
+func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
+	tests := []struct {
+		name   string
+		inputs []mvr
+	}{
+		{
+			name: "Extensions as first-class fields",
+			inputs: []mvr{
+				{
+					ver: STU3,
+					r: &r3pb.Patient{
+						Id: &d3pb.Id{Value: "id1"},
+						Extension: []*d3pb.Extension{
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id2"}},
+								},
+							},
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id3"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: R4,
+					r: &r4patientpb.Patient{
+						Id: &d4pb.Id{Value: "id1"},
+						Extension: []*d4pb.Extension{
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id2"}},
+								},
+							},
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id3"}},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "Primitive extension",
+			inputs: []mvr{
+				{
+					ver: STU3,
+					r: &r3pb.Patient{
+						BirthDate: &d3pb.Date{
+							ValueUs:   1463529600000000,
+							Precision: d3pb.Date_DAY,
+							Id: &d3pb.String{
+								Value: "a3",
+							},
+							Extension: []*d3pb.Extension{
+								{
+									Url: &d3pb.Uri{
+										Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+									},
+									Value: &d3pb.Extension_ValueX{
+										Choice: &d3pb.Extension_ValueX_DateTime{
+											DateTime: &d3pb.DateTime{
+												ValueUs:   1463567325000000,
+												Timezone:  "Z",
+												Precision: d3pb.DateTime_SECOND,
+											},
+										},
+									},
+								},
+								{
+									Url: &d3pb.Uri{
+										Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+									},
+									Value: &d3pb.Extension_ValueX{
+										Choice: &d3pb.Extension_ValueX_DateTime{
+											DateTime: &d3pb.DateTime{
+												ValueUs:   1463567325000012,
+												Timezone:  "Z",
+												Precision: d3pb.DateTime_SECOND,
+											},
+										},
+									},
+								},
+								{
+									Url: &d3pb.Uri{
+										Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+									},
+									Value: &d3pb.Extension_ValueX{
+										Choice: &d3pb.Extension_ValueX_DateTime{
+											DateTime: &d3pb.DateTime{
+												ValueUs:   1463567325000012,
+												Timezone:  "Z",
+												Precision: d3pb.DateTime_SECOND,
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: R4,
+					r: &r4patientpb.Patient{
+						BirthDate: &d4pb.Date{
+							ValueUs:   1463529600000000,
+							Precision: d4pb.Date_DAY,
+							Id: &d4pb.String{
+								Value: "a3",
+							},
+							Extension: []*d4pb.Extension{
+								{
+									Url: &d4pb.Uri{
+										Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+									},
+									Value: &d4pb.Extension_ValueX{
+										Choice: &d4pb.Extension_ValueX_DateTime{
+											DateTime: &d4pb.DateTime{
+												ValueUs:   1463567325000000,
+												Timezone:  "Z",
+												Precision: d4pb.DateTime_SECOND,
+											},
+										},
+									},
+								},
+								{
+									Url: &d4pb.Uri{
+										Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+									},
+									Value: &d4pb.Extension_ValueX{
+										Choice: &d4pb.Extension_ValueX_DateTime{
+											DateTime: &d4pb.DateTime{
+												ValueUs:   1463567325000012,
+												Timezone:  "Z",
+												Precision: d4pb.DateTime_SECOND,
+											},
+										},
+									},
+								},
+								{
+									Url: &d4pb.Uri{
+										Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+									},
+									Value: &d4pb.Extension_ValueX{
+										Choice: &d4pb.Extension_ValueX_DateTime{
+											DateTime: &d4pb.DateTime{
+												ValueUs:   1463567325000012,
+												Timezone:  "Z",
+												Precision: d4pb.DateTime_SECOND,
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			for _, i := range test.inputs {
+				t.Run(i.ver.String(), func(t *testing.T) {
+					marshaller, err := NewAnalyticsMarshallerWithInferredSchema(10, i.ver)
+					if err != nil {
+						t.Fatalf("failed to create marshaller %v: %v", test.name, err)
+					}
+					_, err = marshaller.marshalMessageToMap(proto.MessageReflect(i.r))
+					if err == nil {
+						t.Errorf("marshalMessageToMap on %v did not return an error", test.name)
 					}
 				})
 			}

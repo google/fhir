@@ -275,6 +275,15 @@ func (m *Marshaller) marshalExtensionsAsFirstClassFields(decmap jsonpbhelper.JSO
 		}
 		fieldName := jsonpbhelper.ExtensionFieldName(urlVal)
 
+		if _, has := decmap[fieldName]; has {
+			// Extension field name collides with existing field name. Append _extension to field name.
+			fieldName = fmt.Sprintf("%s_extension", fieldName)
+			if _, has := decmap[fieldName]; has {
+				// Throw an error when it still collides.
+				return fmt.Errorf("extension field %s ran into collision", fieldName)
+			}
+		}
+
 		value, err := jsonpbhelper.ExtensionValue(pb)
 		if err != nil {
 			return err
