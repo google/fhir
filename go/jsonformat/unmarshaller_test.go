@@ -891,6 +891,110 @@ func TestUnmarshal(t *testing.T) {
 	}
 }
 
+func TestUnmarshal_NoExtendedValidation(t *testing.T) {
+	tests := []struct {
+		name  string
+		json  []byte
+		wants []mvr
+	}{
+		{
+			name: "resource missing required fields",
+			json: []byte(`
+    {
+      "resourceType": "Patient",
+      "link": [{}]
+    }`),
+			wants: []mvr{
+				{
+					ver: STU3,
+					r: &r3pb.ContainedResource{
+						OneofResource: &r3pb.ContainedResource_Patient{
+							Patient: &r3pb.Patient{
+								Link: []*r3pb.Patient_Link{{}},
+							},
+						},
+					},
+				},
+				{
+					ver: R4,
+					r: &r4pb.ContainedResource{
+						OneofResource: &r4pb.ContainedResource_Patient{
+							Patient: &r4patientpb.Patient{
+								Link: []*r4patientpb.Patient_Link{{}},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "invalid reference type",
+			json: []byte(`
+    {
+      "resourceType": "Patient",
+      "managingOrganization": {
+				"reference": "Patient/1"
+			}
+    }`),
+			wants: []mvr{
+				{
+					ver: STU3,
+					r: &r3pb.ContainedResource{
+						OneofResource: &r3pb.ContainedResource_Patient{
+							Patient: &r3pb.Patient{
+								ManagingOrganization: &d3pb.Reference{
+									Reference: &d3pb.Reference_PatientId{
+										PatientId: &d3pb.ReferenceId{Value: "1"},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: R4,
+					r: &r4pb.ContainedResource{
+						OneofResource: &r4pb.ContainedResource_Patient{
+							Patient: &r4patientpb.Patient{
+								ManagingOrganization: &d4pb.Reference{
+									Reference: &d4pb.Reference_PatientId{
+										PatientId: &d4pb.ReferenceId{Value: "1"},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			for _, w := range test.wants {
+				t.Run(w.ver.String(), func(t *testing.T) {
+					u := setupUnmarshaller(t, w.ver)
+					_, err := u.Unmarshal(test.json)
+					if err == nil {
+						t.Fatalf("unmarshal %v should have failed with extended validation", test.name)
+					}
+
+					u, err = NewUnmarshallerWithoutValidation("America/Los_Angeles", w.ver)
+					if err != nil {
+						t.Fatalf("failed to create unmarshaler; %v", err)
+					}
+					got, err := u.Unmarshal(test.json)
+					if err != nil {
+						t.Fatalf("unmarshal %v failed: %v", test.name, err)
+					}
+					if !protov1.Equal(got, w.r) {
+						t.Errorf("unmarshal %v: got %v, want %v", test.name, got, w.r)
+					}
+				})
+			}
+		})
+	}
+}
+
 func TestUnmarshal_Errors(t *testing.T) {
 	tests := []struct {
 		name string

@@ -84,6 +84,21 @@ var (
 		"Questionnaire-qs1",
 		// Missing required field "name".
 		"ImplementationGuide-fhir",
+		// Failing FHIRPath constraints.
+		"DataElement-base64Binary.id",
+		"DataElement-boolean.id",
+		"DataElement-date.id",
+		"DataElement-dateTime.id",
+		"DataElement-decimal.id",
+		"DataElement-DomainResource.modifierExtension",
+		"DataElement-DomainResource.extension",
+		"DataElement-Element.extension",
+		"DataElement-instant.id",
+		"DataElement-integer.id",
+		"DataElement-string.id",
+		"DataElement-time.id",
+		"DataElement-uri.id",
+		"DataElement-xhtml.id",
 		// Other ignores.
 		"Patient-null",
 	)
@@ -124,6 +139,11 @@ var (
 		"MedicationRequest-medrx0301",
 		"DeviceMetric-example",
 		"DeviceUseStatement-example",
+		// Failing FHIRPath constraints.
+		"StructureDefinition-Definition",
+		"StructureDefinition-Event",
+		"StructureDefinition-FiveWs",
+		"StructureDefinition-Request",
 	)
 
 	versionToJSONPath = map[jsonformat.Version]string{

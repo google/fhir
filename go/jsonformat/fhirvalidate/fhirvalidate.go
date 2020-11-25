@@ -143,6 +143,12 @@ func Validate(msg proto.Message) error {
 	return walkMessage(msg.ProtoReflect(), nil, "", validationSteps)
 }
 
+// ValidatePrimitives on the msg according to the FHIR spec. This includes
+// regexes for string-based types and bounds checking for integers.
+func ValidatePrimitives(msg proto.Message) error {
+	return walkMessage(msg.ProtoReflect(), nil, "", []validationStep{validatePrimitives})
+}
+
 func addFieldToPath(jsonPath, field string) string {
 	if len(jsonPath) == 0 {
 		field = strings.Title(field)

@@ -51,22 +51,24 @@ type Unmarshaller struct {
 	// MaxNestingDepth is the maximum number of levels a field can have. The unmarshaller will
 	// return an error when a resource has a field exceeding this limit. If the value is negative
 	// or 0, then the maximum nesting depth is unbounded.
-	MaxNestingDepth  int
-	enableValidation bool
-	cfg              config
+	MaxNestingDepth int
+	// Stores whether extended validation checks like required fields and
+	// reference checking should be run.
+	enableExtendedValidation bool
+	cfg                      config
 }
 
 // NewUnmarshaller returns an Unmarshaller that performs resource validation.
 func NewUnmarshaller(tz string, ver Version) (*Unmarshaller, error) {
-	return newUnmarshaller(tz, ver, true /*enableValidation*/)
+	return newUnmarshaller(tz, ver, true /*enableExtendedValidation*/)
 }
 
 // NewUnmarshallerWithoutValidation returns an Unmarshaller that doesn't perform resource validation.
 func NewUnmarshallerWithoutValidation(tz string, ver Version) (*Unmarshaller, error) {
-	return newUnmarshaller(tz, ver, false /*enableValidation*/)
+	return newUnmarshaller(tz, ver, false /*enableExtendedValidation*/)
 }
 
-func newUnmarshaller(tz string, ver Version, enableValidation bool) (*Unmarshaller, error) {
+func newUnmarshaller(tz string, ver Version, enableExtendedValidation bool) (*Unmarshaller, error) {
 	cfg, err := getConfig(ver)
 	if err != nil {
 		return nil, err
@@ -77,13 +79,15 @@ func newUnmarshaller(tz string, ver Version, enableValidation bool) (*Unmarshall
 	}
 
 	return &Unmarshaller{
-		TimeZone:         l,
-		cfg:              cfg,
-		enableValidation: enableValidation,
+		TimeZone:                 l,
+		cfg:                      cfg,
+		enableExtendedValidation: enableExtendedValidation,
 	}, nil
 }
 
-// Unmarshal returns the corresponding protobuf message given a serialized FHIR JSON object
+// Unmarshal a FHIR resource from JSON into a ContainedResource proto. The FHIR
+// version of the proto is determined by the version the Unmarshaller was
+// created with.
 func (u *Unmarshaller) Unmarshal(in []byte) (protov1.Message, error) {
 	// Decode the JSON object into a map.
 	var decoded map[string]json.RawMessage
@@ -91,10 +95,13 @@ func (u *Unmarshaller) Unmarshal(in []byte) (protov1.Message, error) {
 		return nil, &jsonpbhelper.UnmarshalError{Details: "invalid JSON", Diagnostics: err.Error()}
 	}
 	res, err := u.parseContainedResource("", decoded)
-	if err != nil || !u.enableValidation {
+	if err != nil {
 		return protov1.MessageV1(res), err
 	}
-	return protov1.MessageV1(res), fhirvalidate.Validate(res)
+	if u.enableExtendedValidation {
+		return protov1.MessageV1(res), fhirvalidate.Validate(res)
+	}
+	return protov1.MessageV1(res), fhirvalidate.ValidatePrimitives(res)
 }
 
 func (u *Unmarshaller) checkCurrentDepth(jsonPath string) error {
