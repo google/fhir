@@ -21,7 +21,7 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/testing/protocmp"
 
-	pptpb "jsonformat/internal/protopath/protopathtest_go_proto"
+	pptpb "github.com/google/fhir/go/jsonformat/internal/protopath/protopathtest_go_proto"
 )
 
 func TestSet(t *testing.T) {

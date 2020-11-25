@@ -32,12 +32,12 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"bitbucket.org/creachadair/stringset"
 
-	apb "proto/google/fhir/proto/annotations_go_proto"
+	apb "github.com/google/fhir/go/proto/google/fhir/proto/annotations_go_proto"
 
-	d4pb "proto/google/fhir/proto/r4/core/datatypes_go_proto"
-	r4pb "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
-	d3pb "proto/google/fhir/proto/stu3/datatypes_go_proto"
-	r3pb "proto/google/fhir/proto/stu3/resources_go_proto"
+	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
+	r4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
+	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
+	r3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
 )
 
 const (

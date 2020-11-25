@@ -26,13 +26,13 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/testing/protocmp"
 
-	d4pb "proto/google/fhir/proto/r4/core/datatypes_go_proto"
-	r4basicpb "proto/google/fhir/proto/r4/core/resources/basic_go_proto"
-	r4patientpb "proto/google/fhir/proto/r4/core/resources/patient_go_proto"
-	c3pb "proto/google/fhir/proto/stu3/codes_go_proto"
-	d3pb "proto/google/fhir/proto/stu3/datatypes_go_proto"
-	e3pb "proto/google/fhir/proto/stu3/fhirproto_extensions_go_proto"
-	r3pb "proto/google/fhir/proto/stu3/resources_go_proto"
+	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
+	r4basicpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/basic_go_proto"
+	r4patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/patient_go_proto"
+	c3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/codes_go_proto"
+	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
+	e3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/fhirproto_extensions_go_proto"
+	r3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
 )
 
 func TestIsPrimitiveType(t *testing.T) {

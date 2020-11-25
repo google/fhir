@@ -17,7 +17,7 @@ syntax = "proto3";
 
 package fhir.go.jsonformat.internal.protopath;
 
-option go_package = "github.com/google/fhir/go/jsonformat/internal/protopath/proto_path_test_go_proto";
+option go_package = "github.com/google/fhir/go/jsonformat/internal/protopath/protopathtest_go_proto";
 
 // Message type that will never be present in Message.
 message Missing {}

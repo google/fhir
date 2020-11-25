@@ -31,7 +31,7 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
-	apb "proto/google/fhir/proto/annotations_go_proto"
+	apb "github.com/google/fhir/go/proto/google/fhir/proto/annotations_go_proto"
 	protov1 "github.com/golang/protobuf/proto"
 )
 

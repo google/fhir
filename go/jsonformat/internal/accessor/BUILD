@@ -38,6 +38,6 @@ proto_library(
 
 go_proto_library(
     name = "accessor_test_go_proto",
-    importpath = "jsonformat/internal/accessor/accessor_test_go_proto",
+    importpath = "github.com/google/fhir/go/jsonformat/internal/accessor/accessor_test_go_proto",
     proto = ":accessor_test_proto",
 )

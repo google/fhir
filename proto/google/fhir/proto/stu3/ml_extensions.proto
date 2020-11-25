@@ -21,7 +21,6 @@ import "proto/google/fhir/proto/stu3/datatypes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.ml";
-option go_package = "google/fhir/stu3/proto";
 option (.google.fhir.proto.fhir_version) = STU3;
 
 // Auto-generated from StructureDefinition for EventLabel.

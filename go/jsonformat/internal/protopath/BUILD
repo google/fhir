@@ -8,13 +8,13 @@ load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 proto_library(
     name = "protopathtest_proto",
     srcs = [
-        "proto_path_test.proto",
+        "protopathtest.proto",
     ],
 )
 
 go_proto_library(
     name = "protopathtest_go_proto",
-    importpath = "jsonformat/internal/protopath/protopathtest_go_proto",
+    importpath = "github.com/google/fhir/go/jsonformat/internal/protopath/protopathtest_go_proto",
     proto = ":protopathtest_proto",
 )
 

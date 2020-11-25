@@ -36,11 +36,11 @@ import (
 	"google.golang.org/protobuf/testing/protocmp"
 	"bitbucket.org/creachadair/stringset"
 
-	r4pb "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
-	r4compositionpb "proto/google/fhir/proto/r4/core/resources/composition_go_proto"
-	r4observationpb "proto/google/fhir/proto/r4/core/resources/observation_go_proto"
-	r4patientpb "proto/google/fhir/proto/r4/core/resources/patient_go_proto"
-	r3pb "proto/google/fhir/proto/stu3/resources_go_proto"
+	r4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
+	r4compositionpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/composition_go_proto"
+	r4observationpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/observation_go_proto"
+	r4patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/patient_go_proto"
+	r3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
 )
 
 const (

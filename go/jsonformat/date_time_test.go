@@ -24,8 +24,8 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 
-	d4pb "proto/google/fhir/proto/r4/core/datatypes_go_proto"
-	d3pb "proto/google/fhir/proto/stu3/datatypes_go_proto"
+	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
+	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 	protov1 "github.com/golang/protobuf/proto"
 )
 

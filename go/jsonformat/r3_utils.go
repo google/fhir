@@ -20,9 +20,9 @@ import (
 	"google.golang.org/protobuf/proto"
 	"bitbucket.org/creachadair/stringset"
 
-	dpb "proto/google/fhir/proto/stu3/datatypes_go_proto"
-	epb "proto/google/fhir/proto/stu3/fhirproto_extensions_go_proto"
-	rpb "proto/google/fhir/proto/stu3/resources_go_proto"
+	dpb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
+	epb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/fhirproto_extensions_go_proto"
+	rpb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
 )
 
 type r3Config struct{}
