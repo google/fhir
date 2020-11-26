@@ -699,7 +699,10 @@ func extensionHasURL(pb protoreflect.Message, url string) bool {
 func ExtensionFieldName(url string) string {
 	parts := strings.Split(url, "/")
 	fieldName := parts[len(parts)-1]
+	return sanitizeFieldName(fieldName)
+}
 
+func sanitizeFieldName(fieldName string) string {
 	// Replace all invalid characters with an underscore.
 	fieldName = invalidBQChar.ReplaceAllString(fieldName, "_")
 
@@ -709,6 +712,14 @@ func ExtensionFieldName(url string) string {
 	}
 
 	return fieldName
+}
+
+// FullExtensionFieldName uses the url to construct a full extension field name that's compliant
+// with BigQuery field name requirement.
+func FullExtensionFieldName(url string) string {
+	fieldName := strings.TrimPrefix(url, "http://")
+	fieldName = strings.TrimPrefix(fieldName, "https://")
+	return sanitizeFieldName(fieldName)
 }
 
 // ValidateString returns an error is the string does not conform to FHIR

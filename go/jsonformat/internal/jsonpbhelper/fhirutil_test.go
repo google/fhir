@@ -464,6 +464,38 @@ func TestExtensionFieldName(t *testing.T) {
 	}
 }
 
+func TestFullExtensionFieldName(t *testing.T) {
+	tests := []struct {
+		url, want string
+	}{
+		{
+			"http://example.org/ext1",
+			"example_org_ext1",
+		},
+		{
+			"https://example.org/ext1",
+			"example_org_ext1",
+		},
+		{
+			"http://example.org?f1=1&f2=2",
+			"example_org_f1_1_f2_2",
+		},
+		{
+			"http://example.org/ext-1",
+			"example_org_ext_1",
+		},
+		{
+			"1",
+			"_1",
+		},
+	}
+	for _, test := range tests {
+		if got := FullExtensionFieldName(test.url); got != test.want {
+			t.Errorf("FullExtensionFieldName(%q): got %v, want %v", test.url, got, test.want)
+		}
+	}
+}
+
 func regexForType(msg proto.Message) *regexp.Regexp {
 	return RegexValues[msg.ProtoReflect().Descriptor().FullName()]
 }
