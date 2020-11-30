@@ -23,6 +23,9 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
+	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 
@@ -40,6 +43,15 @@ import (
 	m3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/metadatatypes_go_proto"
 	r3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
 	protov1 "github.com/golang/protobuf/proto"
+)
+
+var (
+	unnestErrorListOpt = cmpopts.AcyclicTransformer("UnnestedErrorList", func(v interface{}) interface{} {
+		if el, ok := v.(jsonpbhelper.UnmarshalErrorList); ok && len(el) == 1 {
+			return el[0]
+		}
+		return v
+	})
 )
 
 // TODO: Find a better way to maintain the versioned unit tests.
@@ -1318,7 +1330,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			"resourceType":"Patient"
 			}`,
 			vers: []Version{R4},
-			errs: []string{`error at "Patient.Contained[0]": unknown field`},
+			errs: []string{`error at "Patient.Contained[0]": unknown field` + "\n" + `error at "Patient.Contained[0]": unknown field`},
 		},
 		{
 			name: "directly assigning primitive type's value field",
@@ -1362,7 +1374,7 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 	tests := []struct {
 		name string
 		json string
-		err  string
+		err  error
 		vers []Version
 	}{
 		{
@@ -1372,7 +1384,10 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
       "resourceType": "Patient",
       "link": [{}]
     }`,
-			`error at "Patient.link[0]": missing required field "other"`,
+			jsonpbhelper.UnmarshalErrorList{
+				{Path: "Patient.link[0]", Details: `missing required field "other"`},
+				{Path: "Patient.link[0]", Details: `missing required field "type"`},
+			},
 			[]Version{STU3, R4},
 		},
 		{
@@ -1381,7 +1396,7 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 		{
       "resourceType": "OperationOutcome"
     }`,
-			`error at "OperationOutcome": missing required field "issue"`,
+			&jsonpbhelper.UnmarshalError{Path: "OperationOutcome", Details: `missing required field "issue"`},
 			[]Version{STU3, R4},
 		},
 		{
@@ -1391,7 +1406,7 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 				"resourceType": "Patient",
 				"managingOrganization": {"reference": "Patient/2"}
 			}`,
-			`error at "Patient.managingOrganization": invalid reference to a Patient resource, want Organization`,
+			&jsonpbhelper.UnmarshalError{Path: "Patient.managingOrganization", Details: `invalid reference to a Patient resource, want Organization`},
 			[]Version{STU3, R4},
 		},
 	}
@@ -1401,11 +1416,8 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 				t.Run(v.String(), func(t *testing.T) {
 					u := setupUnmarshaller(t, v)
 					_, err := u.Unmarshal([]byte(test.json))
-					if err == nil {
-						t.Fatalf("unmarshal %s failed: got error < nil >, want %q", test.name, test.err)
-					}
-					if err.Error() != test.err {
-						t.Errorf("unmarshal %s: got error %q, want %q", test.name, err.Error(), test.err)
+					if diff := cmp.Diff(test.err, err, unnestErrorListOpt); diff != "" {
+						t.Errorf("unmarshal %s: got error %q, want %q\ndiff: %s", test.name, err.Error(), test.err, diff)
 					}
 				})
 			}

@@ -49,7 +49,8 @@ func TestRequiredFields(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		wantErr := `error at "Patient.link[0]": missing required field "other"`
+		wantErr := `error at "Patient.link[0]": missing required field "other"
+error at "Patient.link[0]": missing required field "type"`
 		err := Validate(test)
 		if err == nil {
 			t.Fatalf("Validate %v failed: got error < nil >, want %q", test, wantErr)

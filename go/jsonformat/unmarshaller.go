@@ -125,6 +125,7 @@ func lastFieldInPath(jsonPath string) string {
 }
 
 func (u *Unmarshaller) parseContainedResource(jsonPath string, decmap map[string]json.RawMessage) (proto.Message, error) {
+	var errors jsonpbhelper.UnmarshalErrorList
 	// Determine the type of the resource.
 	rt, ok := decmap[jsonpbhelper.ResourceTypeField]
 	if !ok {
@@ -157,16 +158,21 @@ func (u *Unmarshaller) parseContainedResource(jsonPath string, decmap map[string
 		f := oneofDesc.Fields().Get(i)
 		if f.Message() != nil && string(f.Message().Name()) == rtstr {
 			if err := u.mergeMessage(jsonPath, decmap, rcr.Mutable(f).Message()); err != nil {
-				return nil, err
+				if err := jsonpbhelper.AppendUnmarshalError(&errors, err); err != nil {
+					return nil, err
+				}
+			}
+			if len(errors) > 0 {
+				return nil, errors
 			}
 			return cr, nil
 		}
 	}
-	return nil, &jsonpbhelper.UnmarshalError{
+	return nil, append(errors, &jsonpbhelper.UnmarshalError{
 		Path:        jsonPath,
 		Details:     fmt.Sprintf("unknown resource type"),
 		Diagnostics: strconv.Quote(rtstr),
-	}
+	})
 }
 
 func (u *Unmarshaller) mergeRawMessage(jsonPath string, rm json.RawMessage, pb protoreflect.Message) error {
@@ -211,6 +217,7 @@ func (u *Unmarshaller) mergeMessage(jsonPath string, decmap map[string]json.RawM
 		proto.Merge(protoMessage(pb), any)
 		return nil
 	}
+	var errors jsonpbhelper.UnmarshalErrorList
 	fieldMap := jsonpbhelper.FieldMap(pbdesc)
 	// Iterate through all fields, and merge to the proto.
 	for k, v := range decmap {
@@ -228,19 +235,29 @@ func (u *Unmarshaller) mergeMessage(jsonPath string, decmap map[string]json.RawM
 
 		f, ok := fieldMap[normalizedFieldName]
 		if !ok {
-			return &jsonpbhelper.UnmarshalError{
+			errors = append(errors, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
 				Details:     "unknown field",
 				Diagnostics: strconv.Quote(k),
-			}
+			})
+			continue
 		}
 		if jsonpbhelper.IsChoice(f.Message()) {
 			if err := u.mergeChoiceField(jsonPath, f, k, v, pb); err != nil {
-				return err
+				if err := jsonpbhelper.AppendUnmarshalError(&errors, err); err != nil {
+					return err
+				}
+				continue
 			}
 		} else if err := u.mergeField(jsonpbhelper.AddFieldToPath(jsonPath, k), f, v, pb); err != nil {
-			return err
+			if err := jsonpbhelper.AppendUnmarshalError(&errors, err); err != nil {
+				return err
+			}
+			continue
 		}
+	}
+	if len(errors) > 0 {
+		return errors
 	}
 	return nil
 }
@@ -327,27 +344,33 @@ func (u *Unmarshaller) mergeField(jsonPath string, f protoreflect.FieldDescripto
 	return nil
 }
 
-func (u *Unmarshaller) mergeRepeatedField(jsonPath string, f protoreflect.FieldDescriptor, rms []json.RawMessage, pb protoreflect.Message) error {
-	rf := pb.Mutable(f).List()
-	switch rf.Len() {
-	case 0:
-		for i, e := range rms {
-			msg := rf.AppendMutable().Message()
-			if err := u.mergeSingleField(jsonpbhelper.AddIndexToPath(jsonPath, i), f, e, msg); err != nil {
-				return err
-			}
-		}
-	case len(rms):
-		for i, e := range rms {
-			if err := u.mergeSingleField(jsonpbhelper.AddIndexToPath(jsonPath, i), f, e, rf.Get(i).Message()); err != nil {
-				return err
-			}
-		}
-	default:
+func (u *Unmarshaller) mergeRepeatedField(jsonPath string, fd protoreflect.FieldDescriptor, sourceElems []json.RawMessage, targetMsg protoreflect.Message) error {
+	targetList := targetMsg.Mutable(fd).List()
+	if !(targetList.Len() == 0 || targetList.Len() == len(sourceElems)) {
 		return &jsonpbhelper.UnmarshalError{
 			Path:    jsonPath,
-			Details: fmt.Sprintf("array length mismatch, expected %d, found %d", rf.Len(), len(rms)),
+			Details: fmt.Sprintf("array length mismatch, expected %d, found %d", targetList.Len(), len(sourceElems)),
 		}
+	}
+
+	var errors jsonpbhelper.UnmarshalErrorList
+	fill := targetList.Len() == 0
+	for i, sourceElem := range sourceElems {
+		var targetElem protoreflect.Message
+		if fill {
+			targetElem = targetList.AppendMutable().Message()
+		} else {
+			targetElem = targetList.Get(i).Message()
+		}
+		if err := u.mergeSingleField(jsonpbhelper.AddIndexToPath(jsonPath, i), fd, sourceElem, targetElem); err != nil {
+			if err := jsonpbhelper.AppendUnmarshalError(&errors, err); err != nil {
+				return err
+			}
+			continue
+		}
+	}
+	if len(errors) > 0 {
+		return errors
 	}
 	return nil
 }
@@ -365,10 +388,7 @@ func (u *Unmarshaller) mergeSingleField(jsonPath string, f protoreflect.FieldDes
 		return u.mergeRawMessage(jsonPath, rm, pb)
 	}
 
-	if err := u.mergeReference(jsonPath, rm, pb); err != nil {
-		return err
-	}
-	return nil
+	return u.mergeReference(jsonPath, rm, pb)
 }
 
 func (u *Unmarshaller) mergeReference(jsonPath string, rm json.RawMessage, pb protoreflect.Message) error {

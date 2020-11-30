@@ -157,12 +157,15 @@ func addFieldToPath(jsonPath, field string) string {
 }
 
 func walkMessage(msg protoreflect.Message, fd protoreflect.FieldDescriptor, jsonPath string, validators []validationStep) error {
+	var errors jsonpbhelper.UnmarshalErrorList
 	for _, validator := range validators {
 		if err := validator(fd, msg); err != nil {
-			return jsonpbhelper.AnnotateUnmarshalErrorWithPath(err, jsonPath)
+			if err := jsonpbhelper.AppendUnmarshalError(&errors, jsonpbhelper.AnnotateUnmarshalErrorWithPath(err, jsonPath)); err != nil {
+				return err
+			}
 		}
 	}
-	var err error
+	var fatalErr error
 	msg.Range(func(fd protoreflect.FieldDescriptor, value protoreflect.Value) bool {
 		if fd.Message() == nil {
 			return true
@@ -171,14 +174,27 @@ func walkMessage(msg protoreflect.Message, fd protoreflect.FieldDescriptor, json
 		if fd.IsList() {
 			l := value.List()
 			for i := 0; i < l.Len(); i++ {
-				if err = walkMessage(l.Get(i).Message(), fd, jsonpbhelper.AddIndexToPath(jsonPath, i), validators); err != nil {
-					break
+				if err := walkMessage(l.Get(i).Message(), fd, jsonpbhelper.AddIndexToPath(jsonPath, i), validators); err != nil {
+					if err := jsonpbhelper.AppendUnmarshalError(&errors, err); err != nil {
+						fatalErr = err
+						return false
+					}
 				}
 			}
 		} else {
-			err = walkMessage(value.Message(), fd, jsonPath, validators)
+			err := walkMessage(value.Message(), fd, jsonPath, validators)
+			if err := jsonpbhelper.AppendUnmarshalError(&errors, err); err != nil {
+				fatalErr = err
+				return false
+			}
 		}
-		return err == nil
+		return true
 	})
-	return err
+	if fatalErr != nil {
+		return fatalErr
+	}
+	if len(errors) > 0 {
+		return errors
+	}
+	return nil
 }

@@ -17,6 +17,7 @@ package jsonpbhelper
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"math"
 	"regexp"
@@ -213,14 +214,52 @@ func (e *UnmarshalError) Error() string {
 	return msg + e.Details
 }
 
+// UnmarshalErrorList is a list of UnmarshalError that implements the Error
+// interface itself.
+type UnmarshalErrorList []*UnmarshalError
+
+func (el UnmarshalErrorList) Error() string {
+	var msgs []string
+	for _, e := range el {
+		msgs = append(msgs, e.Error())
+	}
+	return strings.Join(msgs, "\n")
+}
+
+// IsUnmarshalError returns true if the provided error is an UnmarshalError or
+// UnmarshalErrorList.
+func IsUnmarshalError(err error) bool {
+	var umErr *UnmarshalError
+	var el UnmarshalErrorList
+	return errors.As(err, &umErr) || errors.As(err, &el)
+}
+
 // AnnotateUnmarshalErrorWithPath to help the user in debugging what field
 // caused the error.
 func AnnotateUnmarshalErrorWithPath(err error, jsonPath string) error {
-	if umErr, ok := err.(*UnmarshalError); ok {
+	switch umErr := err.(type) {
+	case *UnmarshalError:
 		umErr.Path = jsonPath
-		return umErr
+	case UnmarshalErrorList:
+		for _, err := range umErr {
+			err.Path = jsonPath
+		}
 	}
 	return err
+}
+
+// AppendUnmarshalError to the current error list, or ignore it if another type
+// of fatal error has occurred.
+func AppendUnmarshalError(el *UnmarshalErrorList, newErr error) error {
+	switch umErr := newErr.(type) {
+	case *UnmarshalError:
+		*el = append(*el, umErr)
+	case UnmarshalErrorList:
+		*el = append(*el, umErr...)
+	default:
+		return newErr
+	}
+	return nil
 }
 
 func init() {
@@ -817,13 +856,17 @@ func ValidateReferenceType(msgField protoreflect.FieldDescriptor, ref protorefle
 // ValidateRequiredFields returns an error if any field isn't populated in pb
 // that should be, according to the ValidationRequirement annotation.
 func ValidateRequiredFields(pb protoreflect.Message) error {
+	var el UnmarshalErrorList
 	for _, requiredField := range requiredFields[pb.Descriptor().FullName()] {
 		field := pb.Descriptor().Fields().ByNumber(requiredField)
 		if !pb.Has(field) {
-			return &UnmarshalError{
+			el = append(el, &UnmarshalError{
 				Details: fmt.Sprintf("missing required field %q", field.JSONName()),
-			}
+			})
 		}
+	}
+	if len(el) > 0 {
+		return el
 	}
 	return nil
 }
