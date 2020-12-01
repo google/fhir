@@ -34,3 +34,22 @@ function run_bazel_in_venv {
   # Deactivate venv
   deactivate
 }
+
+function go_modules_tests {
+    mkdir -p /tmp/go/src/github.com/google/fhir
+    export GOPATH=/tmp/go
+    export GO111MODULE=on
+    cp -r ./ /tmp/go/src/github.com/google/fhir
+    pushd /tmp/go/src/github.com/google/fhir/go
+    go1.15.5 mod download  # Download module dependnecies
+    go1.15.5 build ./...  # Build everything in go/
+    go1.15.5 test ./...  # Test everything in go/
+    popd
+}
+
+# This runs all builds and tests (e.g. all of Bazel tests, Go module tests,
+# etc).
+function run_all_tests {
+  run_bazel_in_venv
+  go_modules_tests
+}
