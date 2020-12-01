@@ -27,6 +27,8 @@ import (
 	"strings"
 	"testing"
 
+	"runtime"
+
 	"github.com/bazelbuild/rules_go/go/tools/bazel"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/fhir/go/jsonformat/internal/protopath"
@@ -532,6 +534,25 @@ func newContainedResource(ver jsonformat.Version) (proto.Message, error) {
 	}
 }
 
+var (
+	_, b, _, _ = runtime.Caller(0)
+	callerRoot = filepath.Dir(b)
+)
+// getRootPath returns the root bazel runfiles path if running in a bazel
+// environment, otherwise it will return the root path of the FHIR proto
+// repository. Typically this is used to access files such as testdata.
+// As usual, the caller should check to see if the expected file(s)
+// exist, and if not, report an error.
+func getRootPath() string {
+	var root string
+ 	root, err := bazel.RunfilesPath()
+ 	if err != nil {
+		// Fall back to the non-bazel way to get to the root directory.
+		root = callerRoot + "/../../../../"
+	}
+	return root
+}
+
 // readTestCases reads the JSON example files and returns the ones that have a
 // matching prototxt file, to be used as a test case.
 func readTestCases(t *testing.T, ver jsonformat.Version) []string {
@@ -539,11 +560,7 @@ func readTestCases(t *testing.T, ver jsonformat.Version) []string {
 	fileNames := readTestCaseFileNames(t, versionToJSONPath[ver])
 	var withGolden []string
 	for _, fileName := range fileNames {
-		root, err := bazel.RunfilesPath()
-		if err != nil {
-			t.Fatalf("failed to read runfiles root: %v", err)
-		}
-		fullPath := path.Join(root, versionToProtoPath[ver], fmt.Sprintf("%s.%s", fileName, txtprotoExt))
+		fullPath := path.Join(getRootPath(), versionToProtoPath[ver], fmt.Sprintf("%s.%s", fileName, txtprotoExt))
 		if _, err := os.Stat(fullPath); err != nil {
 			if os.IsNotExist(err) {
 				continue
@@ -571,11 +588,7 @@ func readTestCaseFile(ver jsonformat.Version, name string) ([]byte, []byte, erro
 
 func readTestCaseFileNames(t *testing.T, basePath string) []string {
 	t.Helper()
-	rp, err := bazel.RunfilesPath()
-	if err != nil {
-		t.Fatalf("Failed to get runfiles tree path: %v", err)
-	}
-	files, err := filepath.Glob(path.Join(rp, fmt.Sprintf("%s*.json", basePath)))
+	files, err := filepath.Glob(path.Join(getRootPath(), fmt.Sprintf("%s*.json", basePath)))
 	if err != nil {
 		t.Fatalf("Failed to read test cases with err: %v", err)
 	}
@@ -591,11 +604,7 @@ func readTestCaseFileNames(t *testing.T, basePath string) []string {
 }
 
 func readFile(basePath, fileName, ext string) ([]byte, error) {
-	root, err := bazel.RunfilesPath()
-	if err != nil {
-		return nil, err
-	}
-	filePath := path.Join(root, basePath, fmt.Sprintf("%s.%s", fileName, ext))
+	filePath := path.Join(getRootPath(), basePath, fmt.Sprintf("%s.%s", fileName, ext))
 	return ioutil.ReadFile(filePath)
 }
 
