@@ -18,7 +18,7 @@ if [[ $# -eq 0 ]] ; then
     exit 1
 fi
 
-bazel build -c opt //java:SyntheaToTFRecords
+bazel build -c opt //java/com/google/fhir/examples:SyntheaToTFRecords
 
 SYNTHEA_TO_TF_RECORDS=$(pwd)/../../bazel-bin/java/SyntheaToTFRecords
 

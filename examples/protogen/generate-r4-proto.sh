@@ -31,7 +31,7 @@ COMMON_FLAGS=" \
   --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH "
 #
 # Build the binary.
-bazel build //java:ProtoGenerator
+bazel build //java/com/google/fhir/protogen:ProtoGenerator
 
 if [ $? -ne 0 ]
 then

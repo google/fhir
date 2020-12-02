@@ -1,0 +1,20 @@
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+licenses(["notice"])
+
+java_library(
+    name = "primitive_wrappers",
+    srcs = glob(["*.java"]),
+    deps = [
+        "//java/com/google/fhir/common",
+        "//proto/google/fhir/proto:annotations_java_proto",
+        "//proto/google/fhir/proto/r4:fhirproto_extensions_java_proto",
+        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
+        "//proto/google/fhir/proto/stu3:datatypes_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_code_gson_gson",
+        "@maven//:com_google_guava_guava",
+    ],
+)

@@ -1954,6 +1954,6 @@ filegroup(
 # as a maven jar. No bazel targets should ever depend on this.
 java_proto_library(
     name = "all_java_proto",
-    visibility = ["//java/src/main/java/com/google/fhir/release:__pkg__"],
+    visibility = ["//java/com/google/fhir/release:__pkg__"],
     deps = PROTO_DEPS + [":bundle_and_contained_resource_proto"],
 )

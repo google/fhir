@@ -29,15 +29,15 @@ java_binary(
     ],
     main_class = "com.google.fhir.release.Release",
     runtime_deps = [
-        "//java:big_query_schema",
-        "//java:big_query_schema_generator_lib",
-        "//java:common",
-        "//java:fhir_version",
-        "//java:file_utils",
-        "//java:json_format",
-        "//java:primitive_wrappers",
-        "//java:resource_utils",
-        "//java:resource_validator",
+        "//java/com/google/fhir/common:common",
+        "//java/com/google/fhir/common:fhir_version",
+        "//java/com/google/fhir/common:file_utils",
+        "//java/com/google/fhir/common:json_format",
+        "//java/com/google/fhir/common:resource_utils",
+        "//java/com/google/fhir/common:resource_validator",
+        "//java/com/google/fhir/common:big_query_schema",
+        "//java/com/google/fhir/examples:big_query_schema_generator_lib",
+        "//java/com/google/fhir/wrappers:primitive_wrappers",
         "//proto/google/fhir/proto/r4/core/resources:all_java_proto",
     ],
 )
@@ -45,7 +45,7 @@ java_binary(
 jarjar_library(
     name = "r4_lib",
     jars = [
-        "//java/src/main/java/com/google/fhir/release:r4_bin_deploy.jar",
+        "//java/com/google/fhir/release:r4_bin_deploy.jar",
     ],
     rules = SHADE_RULES,
 )

@@ -18,9 +18,9 @@ if [[ $# -eq 0 ]] ; then
     exit 1
 fi
 
-bazel build //java:SplitBundle
+bazel build //java/com/google/fhir/examples:SplitBundle
 
-SPLIT_BUNDLE=bazel-bin/java/SplitBundle
+SPLIT_BUNDLE=bazel-bin/java/com/google/examples/SplitBundle
 
 $SPLIT_BUNDLE $1 $1/synthea/output/fhir/*.json
 

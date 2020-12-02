@@ -20,5 +20,5 @@ fi
 
 echo "converting FHIR files in $1"
 
-bazel run //java:ConvertNdJsonForBigQuery -- --output_directory $1 $1/*.ndjson
+bazel run //java/com/google/fhir/examples:ConvertNdJsonForBigQuery -- --output_directory $1 $1/*.ndjson
 gzip $1/*.prototxt

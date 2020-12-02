@@ -12,7 +12,7 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-package com.google.fhir.stu3.wrappers;
+package com.google.fhir.stu3;
 
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.common.JsonFormat;

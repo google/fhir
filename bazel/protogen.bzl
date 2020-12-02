@@ -16,8 +16,8 @@
 
 STU3_PACKAGE_DEP = "@com_google_fhir//spec:fhir_stu3_package"
 R4_PACKAGE_DEP = "@com_google_fhir//spec:fhir_r4_package"
-PROTO_GENERATOR = "@com_google_fhir//java:ProtoGenerator"
-PROFILE_GENERATOR = "@com_google_fhir//java:ProfileGenerator"
+PROTO_GENERATOR = "@com_google_fhir//java/com/google/fhir/protogen:ProtoGenerator"
+PROFILE_GENERATOR = "@com_google_fhir//java/com/google/fhir/protogen:ProfileGenerator"
 
 MANUAL_TAGS = ["manual"]
 

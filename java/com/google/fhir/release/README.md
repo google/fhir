@@ -6,5 +6,5 @@ contain generated Java code for FHIR resources.
 ## R4
 
 ```
-$ bazel build //java/src/main/java/com/google/fhir/release:r4_lib.jar
+$ bazel build //java/com/google/fhir/release:r4_lib.jar
 ```
