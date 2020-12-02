@@ -5,3 +5,4 @@
 {"reference": "FamilyMemberHistory/1"}
 {"reference": "urn:uuid:49a86246-4004-42eb-9bdc-f542f93f9228"}
 {"display": "Display Field Only"}
+{"reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999999959"}

@@ -21,6 +21,7 @@
 #include "google/fhir/annotations.h"
 #include "google/fhir/fhir_types.h"
 #include "google/fhir/proto_util.h"
+#include "google/fhir/references.h"
 #include "google/fhir/util.h"
 #include "include/json/json.h"
 

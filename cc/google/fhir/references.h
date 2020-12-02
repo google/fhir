@@ -40,6 +40,25 @@ absl::StatusOr<const ::google::protobuf::FieldDescriptor*> GetReferenceFieldForR
 
 }  // namespace internal
 
+// If possible, parses a reference `uri` field into more structured fields.
+// This is only possible for two forms of reference uris:
+// * Relative references of the form $TYPE/$ID, e.g., "Patient/1234"
+//    In this case, this will be parsed to a proto of the form:
+//    {patient_id: {value: "1234"}}
+// * Fragments of the form "#$FRAGMENT", e.g., "#vs1".  In this case, this would
+//    be parsed into a proto of the form:
+//    {fragment: {value: "vs1"} }
+//
+// If the reference URI matches one of these schemas, the `uri` field will be
+// cleared, and the appropriate structured fields set.
+//
+// If it does not match any of these schemas, the reference will be unchanged,
+// and an OK status will be returned.
+//
+// If the message is not a valid FHIR Reference proto, this will return a
+// failure status.
+absl::Status SplitIfRelativeReference(::google::protobuf::Message* reference);
+
 // Return the full string representation of a reference.
 absl::StatusOr<std::string> ReferenceProtoToString(
     const ::google::protobuf::Message& reference);

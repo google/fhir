@@ -70,14 +70,5 @@ class ReferencesTest(absltest.TestCase):
         datatypes_pb2.String(
             value='http://acme.com/ehr/fhir/Practitioner/2323-33-4'))
 
-  def testSplitIfRelativeReference_withMalformedUri_raises(self):
-    ref = datatypes_pb2.Reference(uri=datatypes_pb2.String(value='InvalidUri'))
-
-    with self.assertRaises(ValueError) as e:
-      references.split_if_relative_reference(ref)
-
-    self.assertIsInstance(e.exception, ValueError)
-
-
 if __name__ == '__main__':
   absltest.main()

@@ -173,14 +173,8 @@ absl::Status SplitIfRelativeReference(Message* reference) {
     return absl::OkStatus();
   }
 
-  // We're permissive about various full url schemes.
-  static LazyRE2 kUrlReference = {"(http|https|urn):.*"};
-  if (RE2::FullMatch(uri_string, *kUrlReference)) {
-    // There's no way to rewrite the URI, but it's valid as is.
-    return absl::OkStatus();
-  }
-  return InvalidArgumentError(absl::StrCat(
-      "String \"", uri_string, "\" cannot be parsed as a reference."));
+  // There's no way to rewrite the URI, but it's valid as is.
+  return absl::OkStatus();
 }
 
 namespace internal {

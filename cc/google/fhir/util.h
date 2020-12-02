@@ -49,10 +49,6 @@
 namespace google {
 namespace fhir {
 
-// Splits relative references into their components, for example, "Patient/ABCD"
-// will result in the patientId field getting the value "ABCD".
-absl::Status SplitIfRelativeReference(::google::protobuf::Message* reference);
-
 // Builds an absl::Time from a time-like fhir Element.
 // Must have a value_us field.
 template <class T>

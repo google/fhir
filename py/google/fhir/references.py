@@ -27,7 +27,6 @@ _FRAGMENT_REFERENCE_PATTERN = re.compile(r'^#[A-Za-z0-9.-]{1,64}$')
 _INTERNAL_REFERENCE_PATTERN = re.compile(
     r'^(?P<resource_type>[0-9A-Za-z_]+)/(?P<resource_id>[A-Za-z0-9.-]{1,64})'
     r'(?:/_history/(?P<version>[A-Za-z0-9.-]{1,64}))?$')
-_URL_REFERENCE_PATTERN = re.compile(r'^(http|https|urn):.*$')
 
 
 def _validate_reference(reference: message.Message):
@@ -68,13 +67,25 @@ def populate_typed_reference_id(reference_id: message.Message, resource_id: str,
 
 
 def split_if_relative_reference(reference: message.Message):
-  """Splits relative references into their components.
+  """If possible, parses a `Reference` `uri` into more structured fields.
 
-  For example, a reference with the uri set to "Patient/ABCD" will be changed
-  into a reference with the patientId set to "ABCD".
+  This is only possible for two forms of reference uris:
+  * Relative references of the form $TYPE/$ID, e.g., "Patient/1234"
+    In this case, this will be parsed to a proto of the form:
+    {patient_id: {value: "1234"}}
+  * Fragments of the form "#$FRAGMENT", e.g., "#vs1".  In this case, this would
+    be parsed into a proto of the form:
+    {fragment: {value: "vs1"} }
+
+  If the reference URI matches one of these schemas, the `uri` field will be
+  cleared, and the appropriate structured fields set. Otherwise, the reference
+  will be unchanged.
 
   Args:
     reference: The FHIR reference to potentially split.
+
+  Raises:
+    ValueError: If the message is not a valid FHIR Reference proto.
   """
   _validate_reference(reference)
   uri_field = reference.DESCRIPTOR.fields_by_name.get('uri')
@@ -82,12 +93,6 @@ def split_if_relative_reference(reference: message.Message):
     return  # No URI to split
 
   uri = proto_utils.get_value_at_field(reference, uri_field)
-
-  # We're permissive about various full URL schemes. If we're able to find a
-  # match, the URI is valid as-is.
-  url_match = re.fullmatch(_URL_REFERENCE_PATTERN, uri.value)
-  if url_match is not None:
-    return  # URI is valid
 
   internal_match = re.fullmatch(_INTERNAL_REFERENCE_PATTERN, uri.value)
   if internal_match is not None:
@@ -124,8 +129,6 @@ def split_if_relative_reference(reference: message.Message):
     proto_utils.copy_common_field(uri, fragment, 'extension')
     proto_utils.set_value_at_field(reference, fragment_field, fragment)
     return
-
-  raise ValueError(f'String {uri.value!r} cannot be parsed as a reference.')
 
 
 def reference_to_string(reference: message.Message) -> str:
