@@ -268,15 +268,15 @@ func (m *Marshaller) marshalRepeatedFieldValue(decmap jsonpbhelper.JSONObject, f
 }
 
 func (m *Marshaller) marshalExtensionsAsFirstClassFields(decmap jsonpbhelper.JSONObject, pbs []protoreflect.Message) error {
-	// Loop through the extenions first to get all the field name occurence.
-	fieldNameOccurence := map[string]int{}
+	// Loop through the extenions first to get all the field name occurrence.
+	fieldNameOccurrence := map[string]int{}
 	for _, pb := range pbs {
 		urlVal, err := jsonpbhelper.ExtensionURL(pb)
 		if err != nil {
 			return err
 		}
 		fieldName := jsonpbhelper.ExtensionFieldName(urlVal)
-		fieldNameOccurence[fieldName]++
+		fieldNameOccurrence[fieldName]++
 	}
 	for _, pb := range pbs {
 		urlVal, err := jsonpbhelper.ExtensionURL(pb)
@@ -284,7 +284,7 @@ func (m *Marshaller) marshalExtensionsAsFirstClassFields(decmap jsonpbhelper.JSO
 			return err
 		}
 		fieldName := jsonpbhelper.ExtensionFieldName(urlVal)
-		if _, has := decmap[fieldName]; has || fieldNameOccurence[fieldName] > 1 {
+		if _, has := decmap[fieldName]; has || fieldNameOccurrence[fieldName] > 1 {
 			// Collision with proto fields or other extensions. Switch to use full extension url.
 			fieldName = jsonpbhelper.FullExtensionFieldName(urlVal)
 			if _, has := decmap[fieldName]; has {
