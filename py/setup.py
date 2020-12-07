@@ -15,6 +15,7 @@
 """The setuptools script for the Google FHIR Python distribution package."""
 
 from distutils import spawn
+from distutils.command import clean
 import glob
 import os
 import pathlib
@@ -119,6 +120,19 @@ class _FhirSdist(sdist.sdist):
     _generate_python_protos(_PROTO_FILES, python_out=base_dir)
 
 
+class _FhirClean(clean.clean):
+  """Removes generated distribution files."""
+
+  def run(self):
+    clean.clean.run(self)
+    targets = (
+        os.path.join(_HERE, 'build'),
+        os.path.join(_HERE, 'dist'),
+        os.path.join(_HERE, '*.egg-info'),
+    )
+    os.system(f"shopt -s globstar; rm -vrf {' '.join(targets)}")
+
+
 requirements = _parse_requirements('requirements.txt')
 namespace_packages = setuptools.find_namespace_packages(where=_HERE)
 long_description = pathlib.Path(_HERE).joinpath('README.md').read_text()
@@ -142,6 +156,7 @@ setuptools.setup(
     keywords='google fhir python healthcare',
     cmdclass={
         'build_py': _FhirBuildPy,
+        'clean': _FhirClean,
         'sdist': _FhirSdist,
     },
     classifiers=[

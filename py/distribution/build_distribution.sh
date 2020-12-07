@@ -110,9 +110,7 @@ function initialize_workspace() {
 function cleanup() {
   local -r workspace="$1"
   rm -rf "${workspace}" && \
-  rm -rf *.egg-info && \
-  rm -rf build && \
-  rm -rf dist
+  python3 setup.py clean
 }
 
 function main() {
