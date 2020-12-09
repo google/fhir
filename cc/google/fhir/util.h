@@ -31,6 +31,7 @@
 #include "google/protobuf/message.h"
 #include "google/protobuf/reflection.h"
 #include "absl/base/macros.h"
+#include "absl/container/flat_hash_set.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/match.h"
@@ -90,6 +91,33 @@ absl::Status SetContainedResource(const ::google::protobuf::Message& resource,
   const ::google::protobuf::Reflection* ref = contained->GetReflection();
   ref->MutableMessage(contained, resource_field)->CopyFrom(resource);
   return absl::OkStatus();
+}
+
+// Returns whether or not passed in descriptor is a oneof resource in the
+// contained resource.
+template <typename ContainedResourceType>
+absl::StatusOr<bool> IsResourceFromContainedResourceType(
+    const ::google::protobuf::Descriptor* descriptor) {
+  // Get oneof descriptor from `ContainedResourceType` if it exists.
+  const ::google::protobuf::OneofDescriptor* resource_oneof =
+      ContainedResourceType::descriptor()->FindOneofByName("oneof_resource");
+  if (!resource_oneof) {
+    return ::absl::NotFoundError(::absl::StrCat(
+        "Template type '", ContainedResourceType::descriptor()->full_name(),
+        "' is not a contained resource."));
+  }
+  static const absl::flat_hash_set<std::string>* resource_types =
+      [resource_oneof] {
+        auto* resource_types = new absl::flat_hash_set<std::string>();
+        // Iterate through all `oneof` fields to get names of resources.
+        for (int i = 0; i < resource_oneof->field_count(); i++) {
+          resource_types->insert(
+              resource_oneof->field(i)->message_type()->full_name());
+        }
+        return resource_types;
+      }();
+
+  return resource_types->contains(descriptor->full_name());
 }
 
 template <typename ContainedResourceLike>

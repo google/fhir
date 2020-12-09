@@ -28,6 +28,7 @@
 #include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/medication.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/medication_request.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
 #include "proto/google/fhir/proto/stu3/codes.pb.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 #include "proto/google/fhir/proto/stu3/resources.pb.h"
@@ -178,6 +179,80 @@ TEST(SetContainedResource, InvalidType) {
   EXPECT_EQ(SetContainedResource(datetime, &result),
             ::absl::InvalidArgumentError("Resource type DateTime not found in "
                                          "fhir::Bundle::Entry::resource"));
+}
+
+TEST(IsResourceFromContainedResourceType, Stu3EncounterStu3ContainedResource) {
+  Encounter encounter;
+  const auto& statusOrValue =
+      IsResourceFromContainedResourceType<ContainedResource>(
+          encounter.GetDescriptor());
+  EXPECT_TRUE(statusOrValue.ok());
+  EXPECT_EQ(statusOrValue.value(), true);
+}
+
+TEST(IsResourceFromContainedResourceType, R4MedicationR4ContainedResource) {
+  r4::core::Medication medication;
+  const auto& statusOrValue =
+      IsResourceFromContainedResourceType<r4::core::ContainedResource>(
+          medication.GetDescriptor());
+  EXPECT_TRUE(statusOrValue.ok());
+  EXPECT_EQ(statusOrValue.value(), true);
+}
+
+TEST(IsResourceFromContainedResourceType, Stu3EncounterR4ContainedResource) {
+  Encounter encounter;
+  const auto& statusOrValue =
+      IsResourceFromContainedResourceType<r4::core::ContainedResource>(
+          encounter.GetDescriptor());
+  EXPECT_TRUE(statusOrValue.ok());
+  EXPECT_EQ(statusOrValue.value(), false);
+}
+
+TEST(IsResourceFromContainedResourceType, R4MedicationStu3ContainedResource) {
+  r4::core::Medication medication;
+
+  const auto& statusOrValue =
+      IsResourceFromContainedResourceType<ContainedResource>(
+          medication.GetDescriptor());
+  EXPECT_TRUE(statusOrValue.ok());
+  EXPECT_EQ(statusOrValue.value(), false);
+}
+
+TEST(IsResourceFromContainedResourceType, TestPatientTestContainedResource) {
+  r4::testing::TestPatient patient;
+  const auto& statusOrValue =
+      IsResourceFromContainedResourceType<r4::testing::ContainedResource>(
+          patient.GetDescriptor());
+  EXPECT_TRUE(statusOrValue.ok());
+  EXPECT_EQ(statusOrValue.value(), true);
+}
+
+TEST(IsResourceFromContainedResourceType, CorePatientTestContainedResource) {
+  r4::core::Patient patient;
+  const auto& statusOrValue =
+      IsResourceFromContainedResourceType<r4::testing::ContainedResource>(
+          patient.GetDescriptor());
+  EXPECT_TRUE(statusOrValue.ok());
+  EXPECT_EQ(statusOrValue.value(), false);
+}
+
+TEST(IsResourceFromContainedResourceType, TestPatientCoreContainedResource) {
+  r4::testing::TestPatient patient;
+  const auto& statusOrValue =
+      IsResourceFromContainedResourceType<ContainedResource>(
+          patient.GetDescriptor());
+  EXPECT_TRUE(statusOrValue.ok());
+  EXPECT_EQ(statusOrValue.value(), false);
+}
+
+TEST(IsResourceFromContainedResourceType, TemplateNotContainedResource) {
+  r4::testing::TestPatient patient;
+  EXPECT_EQ(IsResourceFromContainedResourceType<r4::testing::TestPatient>(
+                patient.GetDescriptor())
+                .status(),
+            ::absl::NotFoundError(
+                "Template type 'google.fhir.r4.testing.TestPatient' is not a "
+                "contained resource."));
 }
 
 TEST(GetPatient, StatusOr) {
