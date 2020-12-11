@@ -276,6 +276,9 @@ func (m *Marshaller) marshalExtensionsAsFirstClassFields(decmap jsonpbhelper.JSO
 			return err
 		}
 		fieldName := jsonpbhelper.ExtensionFieldName(urlVal)
+		if fieldName == "" {
+			return fmt.Errorf("extension field name is empty for url %q", urlVal)
+		}
 		fieldNameOccurrence[fieldName]++
 	}
 	for _, pb := range pbs {

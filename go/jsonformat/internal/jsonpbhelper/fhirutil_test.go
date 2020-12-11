@@ -456,6 +456,14 @@ func TestExtensionFieldName(t *testing.T) {
 			"1",
 			"_1",
 		},
+		{
+			"http://example.org/ext1/",
+			"ext1",
+		},
+		{
+			"http://example.org//",
+			"",
+		},
 	}
 	for _, test := range tests {
 		if got := ExtensionFieldName(test.url); got != test.want {

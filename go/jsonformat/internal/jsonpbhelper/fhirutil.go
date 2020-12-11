@@ -732,10 +732,12 @@ func extensionHasURL(pb protoreflect.Message, url string) bool {
 }
 
 // ExtensionFieldName takes the extension url and returns the field name for the extension.
-// The new field name will be the substring after the last occurrence of "/" in the url.
-// Any invalid BigQuery field name characters will be replaced with an underscore, and an
+// The new field name will be the substring after the last occurrence of "/" in the url, if it
+// is empty, the field name will be the substring between the last two occurrences of "/" in the
+// url. Any invalid BigQuery field name characters will be replaced with an underscore, and an
 // underscore prefix will be added if the field name does not start with a letter or underscore.
 func ExtensionFieldName(url string) string {
+	url = strings.TrimSuffix(url, "/")
 	parts := strings.Split(url, "/")
 	fieldName := parts[len(parts)-1]
 	return sanitizeFieldName(fieldName)
