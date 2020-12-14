@@ -9,7 +9,6 @@ java_library(
     srcs = [
         "ConvertNdJsonForBigQueryMain.java",
         "JsonParserArgs.java",
-        "JsonToProtoMain.java",
         "SplitBundleMain.java",
     ],
     deps = [
