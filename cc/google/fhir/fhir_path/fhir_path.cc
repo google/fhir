@@ -3612,7 +3612,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     const PrimitiveHandler* primitive_handler = primitive_handler_;
     // Determine if the number is an integer or decimal, propagating
     // decimal types in string form to preserve precision.
-    if (text.find(".") != std::string::npos) {
+    if (text.find('.') != std::string::npos) {
       return ToAny(std::make_shared<Literal>(
           primitive_handler_->DecimalDescriptor(), [primitive_handler, text]() {
             return primitive_handler->NewDecimal(text);
