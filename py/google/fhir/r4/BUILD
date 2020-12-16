@@ -243,6 +243,7 @@ py_test(
         "//proto/google/fhir/proto/r4/core/resources:patient_py_pb2",
         "//py/google/fhir:codes",
         "//py/google/fhir/testing:testdata_utils",
+        "//py/google/fhir:fhir_errors",
         requirement("absl-py"),
         requirement("six"),
     ],

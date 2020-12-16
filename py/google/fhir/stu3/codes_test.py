@@ -23,6 +23,7 @@ from absl.testing import parameterized
 from proto.google.fhir.proto.stu3 import codes_pb2
 from proto.google.fhir.proto.stu3 import datatypes_pb2
 from google.fhir import codes
+from google.fhir import fhir_errors
 from google.fhir.testing import testdata_utils
 
 _CODES_DIR = os.path.join('testdata', 'stu3', 'codes')
@@ -58,13 +59,21 @@ class CodesTest(parameterized.TestCase):
         'female',
         codes.enum_value_descriptor_to_code_string(female_value_descriptor))
 
-  def testCodeStringToEnumValueDescriptor(self):
+  def testCodeStringToEnumValueDescriptor_withValidCodeString(self):
     """Tests code_string_to_enum_value_descriptor functionality."""
     enum_descriptor = codes_pb2.AssertionOperatorTypeCode.Value.DESCRIPTOR
     enum_value_descriptor = enum_descriptor.values_by_name['GREATERTHAN']
     result = codes.code_string_to_enum_value_descriptor('greaterthan',
                                                         enum_descriptor)
     self.assertEqual(result.name, enum_value_descriptor.name)
+
+  def testCodeStringToEnumValueDescriptor_withInvalidCodeString(self):
+    """Tests code_string_to_enum_value_descriptor error handling."""
+    enum_descriptor = codes_pb2.AssertionOperatorTypeCode.Value.DESCRIPTOR
+    with self.assertRaises(fhir_errors.InvalidFhirError) as fe:
+      _ = codes.code_string_to_enum_value_descriptor('InvalidCode!',
+                                                     enum_descriptor)
+    self.assertIsInstance(fe.exception, fhir_errors.InvalidFhirError)
 
   def testCopyCode_fromTypedToGeneric(self):
     """Tests copy_code from a generic to typed Code."""

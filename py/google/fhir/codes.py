@@ -86,8 +86,8 @@ def code_string_to_enum_value_descriptor(
     An instance of EnumValueDescriptor that the code_string represents.
 
   Raises:
-    ValueError: In the event that a conversion from code_string was
-    unsuccessful.
+    fhir_errors.InvalidFhirError: In the event that a conversion from
+    code_string was unsuccessful.
   """
   # Check the shared memos mapping
   value_descriptor = _get_enum_value_descriptor_memo(enum_descriptor,
@@ -116,8 +116,9 @@ def code_string_to_enum_value_descriptor(
                                       value_descriptor)
       return value_descriptor
 
-  raise ValueError(f'Failed to convert {code_string} to '
-                   f'{enum_descriptor.full_name}. No matching enum found')
+  raise fhir_errors.InvalidFhirError(
+      f'Failed to convert {code_string!r} to {enum_descriptor.full_name}. No '
+      f'matching enum found.')
 
 
 def copy_coding(source: message.Message, target: message.Message):
