@@ -268,7 +268,9 @@ func (m *Marshaller) marshalRepeatedFieldValue(decmap jsonpbhelper.JSONObject, f
 }
 
 func (m *Marshaller) marshalExtensionsAsFirstClassFields(decmap jsonpbhelper.JSONObject, pbs []protoreflect.Message) error {
-	// Loop through the extenions first to get all the field name occurrence.
+	// Loop through the extenions first to get all the field name occurrence, lowercase field name
+	// is used for counting since duplicate field names are not allowed in BigQuery even if the
+	// case differs.
 	fieldNameOccurrence := map[string]int{}
 	for _, pb := range pbs {
 		urlVal, err := jsonpbhelper.ExtensionURL(pb)
@@ -279,7 +281,7 @@ func (m *Marshaller) marshalExtensionsAsFirstClassFields(decmap jsonpbhelper.JSO
 		if fieldName == "" {
 			return fmt.Errorf("extension field name is empty for url %q", urlVal)
 		}
-		fieldNameOccurrence[fieldName]++
+		fieldNameOccurrence[strings.ToLower(fieldName)]++
 	}
 	for _, pb := range pbs {
 		urlVal, err := jsonpbhelper.ExtensionURL(pb)
@@ -287,10 +289,11 @@ func (m *Marshaller) marshalExtensionsAsFirstClassFields(decmap jsonpbhelper.JSO
 			return err
 		}
 		fieldName := jsonpbhelper.ExtensionFieldName(urlVal)
-		if _, has := decmap[fieldName]; has || fieldNameOccurrence[fieldName] > 1 {
+		if _, has := decmap[fieldName]; has || fieldNameOccurrence[strings.ToLower(fieldName)] > 1 {
 			// Collision with proto fields or other extensions. Switch to use full extension url.
 			fieldName = jsonpbhelper.FullExtensionFieldName(urlVal)
-			if _, has := decmap[fieldName]; has {
+			fieldNameOccurrence[strings.ToLower(fieldName)]++
+			if _, has := decmap[fieldName]; has || fieldNameOccurrence[strings.ToLower(fieldName)] > 1 {
 				// Throw an error when it still collides.
 				return fmt.Errorf("extension field %s ran into collision", fieldName)
 			}

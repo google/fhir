@@ -1926,6 +1926,61 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "Extension collides with other extension with different case",
+			inputs: []mvr{
+				{
+					ver: STU3,
+					r: &r3pb.Patient{
+						Extension: []*d3pb.Extension{
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition1/id"},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/ID"},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: R4,
+					r: &r4patientpb.Patient{
+						Extension: []*d4pb.Extension{
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition1/id"},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/ID"},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+			},
+			want: jsonpbhelper.JSONObject{
+				"hl7_org_fhir_StructureDefinition1_id": jsonpbhelper.JSONObject{
+					"value": jsonpbhelper.JSONObject{
+						"string": jsonpbhelper.JSONString("id1"),
+					},
+				},
+				"hl7_org_fhir_StructureDefinition2_ID": jsonpbhelper.JSONObject{
+					"value": jsonpbhelper.JSONObject{
+						"string": jsonpbhelper.JSONString("id2"),
+					},
+				},
+			},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
