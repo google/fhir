@@ -463,7 +463,9 @@ def create_primitive_has_no_value(
 
   # Silencing the type checkers as pytype doesn't fully support structural
   # subtyping yet.
+  # pylint: disable=line-too-long
   # See: https://mypy.readthedocs.io/en/stable/casts.html#casts-and-type-assertions.
+  # pylint: enable=line-too-long
   # Soon: https://www.python.org/dev/peps/pep-0544/.
   cast(Any, primitive_has_no_value).url.value = PRIMITIVE_HAS_NO_VALUE_URL
   cast(Any, primitive_has_no_value).value.boolean.value = True

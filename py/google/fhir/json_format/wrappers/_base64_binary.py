@@ -92,7 +92,9 @@ def _parse(json_str: str, primitive_cls: Type[Base64Binary], *,
 
     # Silencing the type checkers as pytype doesn't fully support structural
     # subtyping yet.
+    # pylint: disable=line-too-long
     # See: https://mypy.readthedocs.io/en/stable/casts.html#casts-and-type-assertions.
+    # pylint: enable=line-too-long
     # Soon: https://www.python.org/dev/peps/pep-0544/.
     separator_stride_extension = cast(Any, separator_stride_cls())
     separator_stride_extension.separator.value = separator

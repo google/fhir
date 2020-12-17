@@ -66,6 +66,7 @@ from absl.testing import absltest
 _T = TypeVar('_T', bound=message.Message)
 
 
+# pylint: disable=invalid-name
 def assertProtoEqual(self,
                      a: message.Message,
                      b: message.Message,
@@ -188,5 +189,6 @@ class ProtoAssertions:
   See module-level definitions for method documentation.
   """
 
+  # pylint: disable=invalid-name
   def assertProtoEqual(self, *args, **kwargs):
     assertProtoEqual(self, *args, **kwargs)
