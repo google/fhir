@@ -22,14 +22,23 @@ from google.protobuf import message
 from proto.google.fhir.proto import annotations_pb2
 from google.fhir.utils import proto_utils
 
+MessageOrDescriptorBase = Union[message.Message, descriptor.DescriptorBase]
 
-def is_resource(
-    message_or_descriptor: proto_utils.MessageOrDescriptorBase) -> bool:
+DescriptorOptions = Union[descriptor_pb2.MessageOptions,
+                          descriptor_pb2.FieldOptions,
+                          descriptor_pb2.EnumOptions,
+                          descriptor_pb2.EnumValueOptions,
+                          descriptor_pb2.OneofOptions,
+                          descriptor_pb2.ServiceOptions,
+                          descriptor_pb2.MethodOptions,
+                          descriptor_pb2.FileOptions,]
+
+
+def is_resource(message_or_descriptor: MessageOrDescriptorBase) -> bool:
   """Returns true if message_or_descriptor is of a resource type.
 
   Args:
-    message_or_descriptor: A protobuf DescriptorProto, Message, or
-      DescriptorBase to examine.
+    message_or_descriptor: A protobuf Message or DescriptorBase to examine.
 
   Returns:
     A Boolean indicating whether or not message_or_descriptor is a resource.
@@ -42,13 +51,11 @@ def is_resource(
           annotations_pb2.StructureDefinitionKindValue.KIND_RESOURCE)
 
 
-def is_primitive_type(
-    message_or_descriptor: proto_utils.MessageOrDescriptorBase) -> bool:
+def is_primitive_type(message_or_descriptor: MessageOrDescriptorBase) -> bool:
   """Returns true if message_or_descriptor is of a primitive type.
 
   Args:
-    message_or_descriptor: A protobuf DescriptorProto, Message, or
-      DescriptorBase to examine.
+    message_or_descriptor: A protobuf Message or DescriptorBase to examine.
 
   Returns:
     A Boolean indicating whether or not message_or_descriptor is a primitive.
@@ -80,13 +87,11 @@ def is_choice_type_field(field_descriptor: descriptor.FieldDescriptor) -> bool:
                   annotations_pb2.is_choice_type)))
 
 
-def is_reference(
-    message_or_descriptor: proto_utils.MessageOrDescriptorBase) -> bool:
+def is_reference(message_or_descriptor: MessageOrDescriptorBase) -> bool:
   """Returns true if message_or_descriptor is of a reference type.
 
   Args:
-    message_or_descriptor: A protobuf DescriptorProto, Message, or
-      DescriptorBase to examine.
+    message_or_descriptor: A protobuf Message or DescriptorBase to examine.
 
   Returns:
     A Boolean indicating whether or not message_or_descriptor is a reference.
@@ -138,13 +143,11 @@ def field_is_required(field_descriptor: descriptor.FieldDescriptor) -> bool:
 
 
 def get_fixed_coding_system(
-    message_or_descriptor: proto_utils.MessageOrDescriptorBase
-) -> Optional[str]:
+    message_or_descriptor: MessageOrDescriptorBase) -> Optional[str]:
   """Returns the value associated with the fhir_fixed_system annotation.
 
   Args:
-    message_or_descriptor: A protobuf DescriptorProto, Message, or
-      DescriptorBase to examine.
+    message_or_descriptor: A protobuf Message or DescriptorBase to examine.
 
   Returns:
     The string value associated with the fhir_fixed_system annotation, if one
@@ -177,13 +180,11 @@ def get_source_code_system(
 
 
 def get_value_regex_for_primitive_type(
-    message_or_descriptor: proto_utils.MessageOrDescriptorBase
-) -> Optional[str]:
+    message_or_descriptor: MessageOrDescriptorBase) -> Optional[str]:
   """Returns the value regex associated with a primitive type.
 
   Args:
-    message_or_descriptor: A protobuf DescriptorProto, Message, or
-      DescriptorBase to examine.
+    message_or_descriptor: A protobuf Message or DescriptorBase to examine.
 
   Returns:
     The value regex associated with a given primitive, or None if the provided
@@ -200,13 +201,11 @@ def get_value_regex_for_primitive_type(
 
 
 def get_structure_definition_url(
-    message_or_descriptor: proto_utils.MessageOrDescriptorBase
-) -> Optional[str]:
+    message_or_descriptor: MessageOrDescriptorBase) -> Optional[str]:
   """Returns the URL for the structure definition the message was built from.
 
   Args:
-    message_or_descriptor: A protobuf DescriptorProto, Message, or
-      DescriptorBase to examine.
+    message_or_descriptor: A protobuf Message or DescriptorBase to examine.
 
   Returns:
     The URL for the structure definition the corresponding message was built
@@ -220,13 +219,11 @@ def get_structure_definition_url(
 
 
 def get_fhir_valueset_url(
-    message_or_descriptor: proto_utils.MessageOrDescriptorBase
-) -> Optional[str]:
+    message_or_descriptor: MessageOrDescriptorBase) -> Optional[str]:
   """Returns a code's valueset identifier.
 
   Args:
-    message_or_descriptor: A protobuf DescriptorProto, Message, or
-      DescriptorBase to examine.
+    message_or_descriptor: A protobuf Message or DescriptorBase to examine.
 
   Returns:
     If the message being described is a Code constrained to a specific valueset,
@@ -276,7 +273,7 @@ def get_enum_value_original_code(
 
 
 def has_fhir_valueset_url(
-    message_or_descriptor: proto_utils.MessageOrDescriptorBase) -> bool:
+    message_or_descriptor: MessageOrDescriptorBase) -> bool:
   """Returns True if message_or_descriptor has a FHIR valueset url."""
   return get_fhir_valueset_url(message_or_descriptor) is not None
 
@@ -287,14 +284,13 @@ def has_source_code_system(
   return get_source_code_system(enum_value_descriptor) is not None
 
 
-def is_profile_of(base: proto_utils.MessageOrDescriptorBase,
-                  test: proto_utils.MessageOrDescriptorBase) -> bool:
+def is_profile_of(base: MessageOrDescriptorBase,
+                  test: MessageOrDescriptorBase) -> bool:
   """Returns True if test is a profile of base.
 
   Args:
-    base: A protobuf DescriptorProto, Message, or DescriptorBase.
-    test: A protobuf DescriptorProto, Message, or DescriptorBase to validate
-      against base.
+    base: A protobuf Message or DescriptorBase.
+    test: A protobuf Message or DescriptorBase to validate against base.
 
   Returns:
     True if test is a profile of base, otherwise False.
@@ -345,13 +341,12 @@ def get_fhir_version(
 
 
 def get_value_for_annotation_extension(
-    message_or_descriptor: proto_utils.MessageOrDescriptorBase,
+    message_or_descriptor: MessageOrDescriptorBase,
     extension_field: descriptor.FieldDescriptor) -> Optional[Any]:
   """Returns the value associated with the annotation extension field.
 
   Args:
-    message_or_descriptor: A protobuf DescriptorProto, Message, or
-      DescriptorBase to examine.
+    message_or_descriptor: A protobuf Message or DescriptorBase to examine.
     extension_field: A FieldDescriptor describing the annotation whose value to
       retrieve.
 
@@ -372,33 +367,20 @@ def get_value_for_annotation_extension(
 
 
 def get_options(
-    message_or_descriptor: proto_utils.MessageOrDescriptorBase
-) -> descriptor_pb2.MessageOptions:
+    message_or_descriptor: MessageOrDescriptorBase) -> DescriptorOptions:
   """Returns the underlying message options for message_or_descriptor.
 
   Args:
-    message_or_descriptor: A protobuf DescriptorProto, Message, or
-      DescriptorBase to examine.
+    message_or_descriptor: A protobuf Message or DescriptorBase to examine.
 
   Returns:
-    The message options.
+    The ProtoOptions for the given Message or DescriptorBase. The type of
+    Descriptor, if provided, will determine the options returned. All options
+    are derived from message.Message.
 
   Raises:
     ValueError: Unable to retrieve options for type: <type>.
   """
-  if isinstance(message_or_descriptor, descriptor_pb2.DescriptorProto):
-    return message_or_descriptor.options
-  elif isinstance(message_or_descriptor, message.Message):
+  if isinstance(message_or_descriptor, message.Message):
     return message_or_descriptor.DESCRIPTOR.GetOptions()
-  elif isinstance(message_or_descriptor, descriptor.DescriptorBase):
-    return message_or_descriptor.GetOptions()
-
-  # The C++ implementation of protocol buffers don't have a public
-  # base type visible to python, so we check for the common GetOptions
-  # method to work in both Python and C++ settings.
-  try:
-    return message_or_descriptor.GetOptions()
-  except AttributeError as ae:
-    raise ValueError(
-        f'Unable to retrieve options for type: {type(message_or_descriptor)}'
-    ) from ae
+  return message_or_descriptor.GetOptions()

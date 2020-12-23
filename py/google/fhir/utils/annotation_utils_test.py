@@ -16,7 +16,6 @@
 
 import sys
 
-from google.protobuf import descriptor_pb2
 from absl.testing import absltest
 from proto.google.fhir.proto.r4 import uscore_codes_pb2
 from proto.google.fhir.proto.r4 import uscore_pb2
@@ -63,52 +62,32 @@ class AnnotationUtilsTest(absltest.TestCase):
   def testIsResource_withPatient_returnsTrue(self):
     """Test is_resource functionality on non-primitive input."""
     patient = patient_pb2.Patient()
-    patient_descriptor_proto = self._descriptor_proto_for_descriptor(
-        patient.DESCRIPTOR)
     self.assertTrue(annotation_utils.is_resource(patient))
     self.assertTrue(annotation_utils.is_resource(patient.DESCRIPTOR))
-    self.assertTrue(annotation_utils.is_resource(patient_descriptor_proto))
 
   def testIsResource_withPrimitives_returnsFalse(self):
     """Test is_resource functionality on primitive input."""
     boolean = datatypes_pb2.Boolean()
-    boolean_descriptor_proto = self._descriptor_proto_for_descriptor(
-        boolean.DESCRIPTOR)
     code = datatypes_pb2.Code()
-    code_descriptor_proto = self._descriptor_proto_for_descriptor(
-        code.DESCRIPTOR)
     self.assertFalse(annotation_utils.is_resource(boolean))
     self.assertFalse(annotation_utils.is_resource(boolean.DESCRIPTOR))
     self.assertFalse(annotation_utils.is_resource(code))
     self.assertFalse(annotation_utils.is_resource(code.DESCRIPTOR))
-    self.assertFalse(annotation_utils.is_resource(boolean_descriptor_proto))
-    self.assertFalse(annotation_utils.is_resource(code_descriptor_proto))
 
   def testIsPrimitiveType_withPrimitives_returnsTrue(self):
     """Test is_primitive_type functionality on primitive input."""
     boolean = datatypes_pb2.Boolean()
-    boolean_descriptor_proto = self._descriptor_proto_for_descriptor(
-        boolean.DESCRIPTOR)
     code = datatypes_pb2.Code()
-    code_descriptor_proto = self._descriptor_proto_for_descriptor(
-        code.DESCRIPTOR)
     self.assertTrue(annotation_utils.is_primitive_type(boolean))
     self.assertTrue(annotation_utils.is_primitive_type(boolean.DESCRIPTOR))
     self.assertTrue(annotation_utils.is_primitive_type(code))
     self.assertTrue(annotation_utils.is_primitive_type(code.DESCRIPTOR))
-    self.assertTrue(
-        annotation_utils.is_primitive_type(boolean_descriptor_proto))
-    self.assertTrue(annotation_utils.is_primitive_type(code_descriptor_proto))
 
   def testIsPrimitiveType_withPatient_returnsFalse(self):
     """Test is_primitive_type functionality on non-primitive input."""
     patient = patient_pb2.Patient()
-    patient_descriptor_proto = self._descriptor_proto_for_descriptor(
-        patient.DESCRIPTOR)
     self.assertFalse(annotation_utils.is_primitive_type(patient))
     self.assertFalse(annotation_utils.is_primitive_type(patient.DESCRIPTOR))
-    self.assertFalse(
-        annotation_utils.is_primitive_type(patient_descriptor_proto))
 
   def testIsChoiceType_withValidChoiceType_returnsTrue(self):
     """Test is_choice_type functionality on valid input."""
@@ -129,26 +108,17 @@ class AnnotationUtilsTest(absltest.TestCase):
   def testIsReference_withValidReferenceType_returnsTrue(self):
     """Test is_reference functionality on valid input."""
     reference = datatypes_pb2.Reference()
-    ref_descriptor_proto = self._descriptor_proto_for_descriptor(
-        reference.DESCRIPTOR)
     self.assertTrue(annotation_utils.is_reference(reference))
     self.assertTrue(annotation_utils.is_reference(reference.DESCRIPTOR))
-    self.assertTrue(annotation_utils.is_reference(ref_descriptor_proto))
 
   def testIsReference_withInvalidReferenceType_returnsFalse(self):
     """Test is_reference functionality on invalid input."""
     boolean = datatypes_pb2.Boolean()
-    boolean_descriptor_proto = self._descriptor_proto_for_descriptor(
-        boolean.DESCRIPTOR)
     code = datatypes_pb2.Code()
-    code_descriptor_proto = self._descriptor_proto_for_descriptor(
-        code.DESCRIPTOR)
     self.assertFalse(annotation_utils.is_reference(boolean))
     self.assertFalse(annotation_utils.is_reference(boolean.DESCRIPTOR))
     self.assertFalse(annotation_utils.is_reference(code))
     self.assertFalse(annotation_utils.is_reference(code.DESCRIPTOR))
-    self.assertFalse(annotation_utils.is_reference(boolean_descriptor_proto))
-    self.assertFalse(annotation_utils.is_reference(code_descriptor_proto))
 
   @absltest.skipIf(
       'testdata' not in sys.modules,
@@ -159,15 +129,10 @@ class AnnotationUtilsTest(absltest.TestCase):
     coding = (
         test_pb2.TestPatient.CodeableConceptForMaritalStatus.ColorCoding
         .FixedCode())
-    coding_descriptor_proto = self._descriptor_proto_for_descriptor(
-        coding.DESCRIPTOR)
     self.assertEqual(
         annotation_utils.get_fixed_coding_system(coding), expected_system)
     self.assertEqual(
         annotation_utils.get_fixed_coding_system(coding.DESCRIPTOR),
-        expected_system)
-    self.assertEqual(
-        annotation_utils.get_fixed_coding_system(coding_descriptor_proto),
         expected_system)
 
   def testGetFixedCodingSystem_withInvalidMessage_returnsNone(self):
@@ -242,11 +207,7 @@ class AnnotationUtilsTest(absltest.TestCase):
   def testGetValueRegexForPrimitiveType_withPrimitive_returnsValue(self):
     """Test get_value_regex_for_primitive_type functionality on primitives."""
     boolean = datatypes_pb2.Boolean()
-    boolean_descriptor_proto = self._descriptor_proto_for_descriptor(
-        boolean.DESCRIPTOR)
     code = datatypes_pb2.Code()
-    code_descriptor_proto = self._descriptor_proto_for_descriptor(
-        code.DESCRIPTOR)
     self.assertEqual(
         annotation_utils.get_value_regex_for_primitive_type(boolean),
         _BOOLEAN_VALUE_REGEX)
@@ -259,37 +220,20 @@ class AnnotationUtilsTest(absltest.TestCase):
     self.assertEqual(
         annotation_utils.get_value_regex_for_primitive_type(code.DESCRIPTOR),
         _CODE_VALUE_REGEX)
-    self.assertEqual(
-        annotation_utils.get_value_regex_for_primitive_type(
-            boolean_descriptor_proto), _BOOLEAN_VALUE_REGEX)
-    self.assertEqual(
-        annotation_utils.get_value_regex_for_primitive_type(
-            code_descriptor_proto), _CODE_VALUE_REGEX)
 
   def testGetValueRegexForPrimitiveType_withCompound_returnsNone(self):
     """Test get_value_regex_for_primitive_type on non-primitives."""
     patient = patient_pb2.Patient()
-    patient_descriptor_proto = self._descriptor_proto_for_descriptor(
-        patient.DESCRIPTOR)
     self.assertIsNone(
         annotation_utils.get_value_regex_for_primitive_type(patient))
     self.assertIsNone(
         annotation_utils.get_value_regex_for_primitive_type(patient.DESCRIPTOR))
-    self.assertIsNone(
-        annotation_utils.get_value_regex_for_primitive_type(
-            patient_descriptor_proto))
 
   def testGetStructureDefinitionUrl_withFhirType_returnsValue(self):
     """Test get_structure_definition_url functionality on FHIR types."""
     boolean = datatypes_pb2.Boolean()
-    boolean_descriptor_proto = self._descriptor_proto_for_descriptor(
-        boolean.DESCRIPTOR)
     code = datatypes_pb2.Code()
-    code_descriptor_proto = self._descriptor_proto_for_descriptor(
-        code.DESCRIPTOR)
     patient = patient_pb2.Patient()
-    patient_descriptor_proto = self._descriptor_proto_for_descriptor(
-        patient.DESCRIPTOR)
     self.assertEqual(
         annotation_utils.get_structure_definition_url(boolean),
         _BOOLEAN_STRUCTURE_DEFINITION_URL)
@@ -304,15 +248,6 @@ class AnnotationUtilsTest(absltest.TestCase):
         _PATIENT_STRUCTURE_DEFINITION_URL)
     self.assertEqual(
         annotation_utils.get_structure_definition_url(patient.DESCRIPTOR),
-        _PATIENT_STRUCTURE_DEFINITION_URL)
-    self.assertEqual(
-        annotation_utils.get_structure_definition_url(boolean_descriptor_proto),
-        _BOOLEAN_STRUCTURE_DEFINITION_URL)
-    self.assertEqual(
-        annotation_utils.get_structure_definition_url(code_descriptor_proto),
-        _CODE_STRUCTURE_DEFINITION_URL)
-    self.assertEqual(
-        annotation_utils.get_structure_definition_url(patient_descriptor_proto),
         _PATIENT_STRUCTURE_DEFINITION_URL)
 
   def testGetFhirValuesetUrl_withFhirValueSet_returnsCorrectValue(self):
@@ -399,19 +334,6 @@ class AnnotationUtilsTest(absltest.TestCase):
     self.assertEqual(
         annotation_utils.get_fhir_version(uscore_patient.DESCRIPTOR.file),
         _R4_FHIR_VERSION)
-
-  def _descriptor_proto_for_descriptor(self, descriptor):
-    """Convenience method to convert a Descriptor to a DescriptorProto.
-
-    Args:
-      descriptor: The protobuf.descriptor.Descriptor to convert.
-
-    Returns:
-      An instance of descriptor_pb2.DescriptorProto representing descriptor.
-    """
-    descriptor_proto = descriptor_pb2.DescriptorProto()
-    descriptor.CopyToProto(descriptor_proto)
-    return descriptor_proto
 
 
 if __name__ == '__main__':

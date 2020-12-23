@@ -35,7 +35,6 @@ py_library(
     srcs_version = "PY3",
     deps = [
         ":annotation_utils",
-        ":proto_utils",
         "//py",
         "//proto/google/fhir/proto:annotations_py_pb2",
     ],
@@ -115,7 +114,6 @@ py_test(
     python_version = "PY3",
     srcs_version = "PY3",
     deps = [
-        "@com_google_protobuf//:protobuf_python",
         "//py",
         "//proto/google/fhir/proto/r4:uscore_py_pb2",
         "//proto/google/fhir/proto/r4/core:datatypes_py_pb2",

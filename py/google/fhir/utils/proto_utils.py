@@ -15,15 +15,11 @@
 """Utilities to make it easier to work with proto reflection."""
 from typing import Any, Type, Union
 
-from google.protobuf import descriptor_pb2
 from google.protobuf import descriptor
 from google.protobuf import message
 from google.protobuf import message_factory
 
 _factory = message_factory.MessageFactory()
-
-MessageOrDescriptorBase = Union[descriptor_pb2.DescriptorProto, message.Message,
-                                descriptor.DescriptorBase]
 
 
 def _field_descriptor_for_name(msg: message.Message,
