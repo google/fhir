@@ -5,14 +5,24 @@ package(
 licenses(["notice"])
 
 java_library(
-    name = "common",
-    srcs = [
-        "AnnotationUtils.java",
-        "InvalidFhirException.java",
-        "ProtoUtils.java",
-    ],
+    name = "exceptions",
+    srcs = ["InvalidFhirException.java"],
+)
+
+java_library(
+    name = "annotation_utils",
+    srcs = ["AnnotationUtils.java"],
     deps = [
         "//proto/google/fhir/proto:annotations_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+    ],
+)
+
+java_library(
+    name = "proto_utils",
+    srcs = ["ProtoUtils.java"],
+    deps = [
+        "//java/com/google/fhir/common:annotation_utils",
         "@com_google_protobuf//:protobuf_java",
     ],
 )
@@ -43,7 +53,8 @@ java_library(
     name = "big_query_schema",
     srcs = ["BigQuerySchema.java"],
     deps = [
-        ":common",
+        ":annotation_utils",
+        "//java/com/google/fhir/common:proto_utils",
         "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
         "@com_google_protobuf//:protobuf_java",
@@ -56,8 +67,9 @@ java_library(
     name = "json_format",
     srcs = ["JsonFormat.java"],
     deps = [
-        ":common",
+        ":annotation_utils",
         ":proto_gen_transformer",
+        ":proto_utils",
         ":resource_utils",
         "//java/com/google/fhir/wrappers:primitive_wrappers",
         "//proto/google/fhir/proto:annotations_java_proto",
@@ -89,7 +101,8 @@ java_library(
         "ResourceUtils.java",
     ],
     deps = [
-        ":common",
+        ":annotation_utils",
+        ":proto_utils",
         "//java/com/google/fhir/wrappers:primitive_wrappers",
         "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_java_proto",
@@ -103,7 +116,9 @@ java_library(
     name = "resource_validator",
     srcs = ["ResourceValidator.java"],
     deps = [
-        ":common",
+        ":annotation_utils",
+        ":proto_utils",
+        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/wrappers:primitive_wrappers",
         "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_java_proto",

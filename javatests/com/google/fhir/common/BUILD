@@ -31,7 +31,7 @@ java_test(
     ],
     test_class = "com.google.fhir.common.ResourceValidatorR4Test",
     deps = [
-        "//java/com/google/fhir/common",
+        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:resource_validator",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:encounter_java_proto",
@@ -50,7 +50,7 @@ java_test(
     srcs = ["AnnotationUtilsTest.java"],
     test_class = "com.google.fhir.common.AnnotationUtilsTest",
     deps = [
-        "//java/com/google/fhir/common",
+        "//java/com/google/fhir/common:annotation_utils",
         "//proto/google/fhir/proto/stu3:datatypes_java_proto",
         "//proto/google/fhir/proto/stu3:resources_java_proto",
         "//proto/google/fhir/proto/stu3:uscore_java_proto",

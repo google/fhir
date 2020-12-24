@@ -10,7 +10,7 @@ java_library(
     srcs = ["ProtoGeneratorTestUtils.java"],
     deps = [
         ":protogen",
-        "//java/com/google/fhir/common",
+        "//java/com/google/fhir/common:proto_utils",
         "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto:profile_config_java_proto",
         "//proto/google/fhir/proto:protogenerator_annotations_java_proto",
@@ -48,9 +48,11 @@ java_library(
         ],
     ),
     deps = [
-        "//java/com/google/fhir/common",
+        "//java/com/google/fhir/common:annotation_utils",
+        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:fhir_version",
         "//java/com/google/fhir/common:json_format",
+        "//java/com/google/fhir/common:proto_utils",
         "//java/com/google/fhir/common:resource_utils",
         "//java/com/google/fhir/common:resource_validator",
         "//java/com/google/fhir/wrappers:primitive_wrappers",
@@ -77,7 +79,8 @@ java_binary(
     main_class = "com.google.fhir.protogen.ProtoGeneratorMain",
     deps = [
         ":protogen",
-        "//java/com/google/fhir/common",
+        "//java/com/google/fhir/common:annotation_utils",
+        "//java/com/google/fhir/common:exceptions",
         "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto:profile_config_java_proto",
         "//proto/google/fhir/proto/r4/core:codes_java_proto",

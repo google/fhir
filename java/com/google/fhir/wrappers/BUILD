@@ -8,7 +8,8 @@ java_library(
     name = "primitive_wrappers",
     srcs = glob(["*.java"]),
     deps = [
-        "//java/com/google/fhir/common",
+        "//java/com/google/fhir/common:annotation_utils",
+        "//java/com/google/fhir/common:proto_utils",
         "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto/r4:fhirproto_extensions_java_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
