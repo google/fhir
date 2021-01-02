@@ -16,6 +16,7 @@ package com.google.fhir.wrappers;
 
 import com.google.common.collect.ImmutableList;
 import com.google.fhir.common.AnnotationUtils;
+import com.google.fhir.common.FhirTypes;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.r4.core.Extension;
@@ -150,7 +151,7 @@ public final class ExtensionWrapper {
    */
   private void validateFhirExtension(MessageOrBuilder message) {
     MessageOptions options = message.getDescriptorForType().getOptions();
-    if (!AnnotationUtils.isProfileOf(Extension.getDescriptor(), message.getDescriptorForType())) {
+    if (!FhirTypes.isProfileOf(Extension.getDescriptor(), message.getDescriptorForType())) {
       throw new IllegalArgumentException(
           "Message type "
               + message.getDescriptorForType().getFullName()

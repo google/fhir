@@ -107,17 +107,6 @@ public final class AnnotationUtils {
     return descriptor.getOptions().getExtension(Annotations.enumValuesetUrl);
   }
 
-  public static boolean isProfileOf(Descriptor base, Descriptor test) {
-    for (int i = 0; i < test.getOptions().getExtensionCount(Annotations.fhirProfileBase); i++) {
-      if (test.getOptions()
-          .getExtension(Annotations.fhirProfileBase, i)
-          .equals(base.getOptions().getExtension(Annotations.fhirStructureDefinitionUrl))) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   public static FhirVersion getFhirVersion(Descriptor descriptor) {
     return descriptor.getFile().getOptions().getExtension(Annotations.fhirVersion);
   }

@@ -146,3 +146,13 @@ java_library(
         "@maven//:com_google_guava_guava",
     ],
 )
+
+java_library(
+    name = "fhir_types",
+    srcs = ["FhirTypes.java"],
+    deps = [
+        ":annotation_utils",
+        "//proto/google/fhir/proto:annotations_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+    ],
+)

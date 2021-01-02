@@ -53,8 +53,31 @@ java_test(
         "//java/com/google/fhir/common:annotation_utils",
         "//proto/google/fhir/proto/stu3:datatypes_java_proto",
         "//proto/google/fhir/proto/stu3:resources_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:junit_junit",
+    ],
+)
+
+java_test(
+    name = "FhirTypesTest",
+    size = "small",
+    srcs = ["FhirTypesTest.java"],
+    test_class = "com.google.fhir.common.FhirTypesTest",
+    deps = [
+        "//java/com/google/fhir/common:fhir_types",
+        "//proto/google/fhir/proto/r4:uscore_java_proto",
+        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
+        "//proto/google/fhir/proto/r4/core:extensions_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:binary_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:patient_java_proto",
+        "//proto/google/fhir/proto/stu3:codes_java_proto",
+        "//proto/google/fhir/proto/stu3:datatypes_java_proto",
+        "//proto/google/fhir/proto/stu3:extensions_java_proto",
+        "//proto/google/fhir/proto/stu3:resources_java_proto",
         "//proto/google/fhir/proto/stu3:uscore_java_proto",
         "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
         "@maven//:junit_junit",
     ],
 )
