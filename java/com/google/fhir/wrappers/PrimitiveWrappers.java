@@ -35,17 +35,15 @@ public class PrimitiveWrappers {
    */
   // TODO: convert this to throwing a checked InvalidFhirException
   public static void validatePrimitive(MessageOrBuilder primitive) {
-    primitiveWrapperOf(primitive, null /* default timezone irrelevant */).validateWrapped();
+    primitiveWrapperOf(primitive).validateWrapped();
   }
 
   /**
    * Given a message containing a primitive message, returns a PrimitiveWrapper around the message.
    * This allows some useful API calls like printValue, which prints the primitive to its JSON
-   * value.
-   * Throws an InvalidArgumentException if the message is not a FHIR primitive.
+   * value. Throws an InvalidArgumentException if the message is not a FHIR primitive.
    */
-  public static PrimitiveWrapper<?> primitiveWrapperOf(
-      MessageOrBuilder message, ZoneId defaultTimeZone) {
+  public static PrimitiveWrapper<?> primitiveWrapperOf(MessageOrBuilder message) {
     Descriptor descriptor = message.getDescriptorForType();
     if (descriptor.getOptions().hasExtension(Annotations.fhirValuesetUrl)) {
       return CodeWrapper.of(message);
@@ -60,11 +58,7 @@ public class PrimitiveWrappers {
       case "Date":
         return new DateWrapper(message);
       case "DateTime":
-        if (defaultTimeZone == null) {
-          return new DateTimeWrapper(message);
-        } else {
-          return new DateTimeWrapper(message, defaultTimeZone);
-        }
+        return new DateTimeWrapper(message);
       case "Decimal":
         return new DecimalWrapper(message);
       case "Id":

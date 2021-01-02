@@ -66,10 +66,6 @@ public class DateWrapper extends PrimitiveWrapper<Date> {
     super(date);
   }
 
-  public DateWrapper(MessageOrBuilder message, ZoneId defaultTimeZone) {
-    super(ProtoUtils.fieldWiseCopy(message, Date.newBuilder()).build());
-  }
-
   /** Create a DateWrapper from a java String and a default timezone. */
   public DateWrapper(String input, ZoneId defaultTimeZone) {
     super(input == null ? NULL_DATE : parseAndValidate(input, defaultTimeZone));

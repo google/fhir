@@ -76,22 +76,18 @@ public final class JsonFormat {
    * system default.
    */
   public static Printer getPrinter() {
-    return new Printer(
-        false /*omittingInsignificantWhitespace*/, ZoneId.systemDefault(), FhirJsonFormat.PURE);
+    return new Printer(false /*omittingInsignificantWhitespace*/, FhirJsonFormat.PURE);
   }
 
   /** A Printer converts protobuf message to JSON format. */
   public static class Printer {
     private final boolean omittingInsignificantWhitespace;
-    private final ZoneId defaultTimeZone;
     private final FhirJsonFormat jsonFormat;
 
     private Printer(
         boolean omittingInsignificantWhitespace,
-        ZoneId defaultTimeZone,
         FhirJsonFormat jsonFormat) {
       this.omittingInsignificantWhitespace = omittingInsignificantWhitespace;
-      this.defaultTimeZone = defaultTimeZone;
       this.jsonFormat = jsonFormat;
     }
 
@@ -113,17 +109,7 @@ public final class JsonFormat {
      * current {@link Printer}.
      */
     public Printer omittingInsignificantWhitespace() {
-      return new Printer(true, defaultTimeZone, jsonFormat);
-    }
-
-    /*
-     * Create a new {@link Printer} with a default timezone. Any Dates and DateTimes printed by
-     * this printer which have values in this timezone will be printed without timezone qualifiers.
-     * If the default timezone is null, a timezone will be emitted whenever allowed by the FHIR
-     * standard, currently always in the form of a time offset.
-     */
-    public Printer withDefaultTimeZone(ZoneId defaultTimeZone) {
-      return new Printer(omittingInsignificantWhitespace, defaultTimeZone, jsonFormat);
+      return new Printer(true, jsonFormat);
     }
 
     /*
@@ -132,7 +118,7 @@ public final class JsonFormat {
      * https://github.com/rbrush/sql-on-fhir/blob/master/sql-on-fhir.md
      */
     public Printer forAnalytics() {
-      return new Printer(omittingInsignificantWhitespace, defaultTimeZone, FhirJsonFormat.ANALYTIC);
+      return new Printer(omittingInsignificantWhitespace, FhirJsonFormat.ANALYTIC);
     }
 
     /**
@@ -141,8 +127,7 @@ public final class JsonFormat {
      * @throws IOException if writing to the output fails.
      */
     public void appendTo(MessageOrBuilder message, Appendable output) throws IOException {
-      new PrinterImpl(output, omittingInsignificantWhitespace, defaultTimeZone, jsonFormat)
-          .print(message);
+      new PrinterImpl(output, omittingInsignificantWhitespace, jsonFormat).print(message);
     }
 
     /** Converts a protobuf message to JSON format. */
@@ -251,13 +236,11 @@ public final class JsonFormat {
     private final TextGenerator generator;
     private final CharSequence blankOrSpace;
     private final CharSequence blankOrNewLine;
-    private final ZoneId defaultTimeZone;
     private final FhirJsonFormat jsonFormat;
 
     PrinterImpl(
         Appendable jsonOutput,
         boolean omittingInsignificantWhitespace,
-        ZoneId defaultTimeZone,
         FhirJsonFormat jsonFormat) {
       // json format related properties, determined by printerType
       if (omittingInsignificantWhitespace) {
@@ -269,7 +252,6 @@ public final class JsonFormat {
         this.blankOrSpace = " ";
         this.blankOrNewLine = "\n";
       }
-      this.defaultTimeZone = defaultTimeZone;
       this.jsonFormat = jsonFormat;
     }
 
@@ -508,7 +490,7 @@ public final class JsonFormat {
         List<PrimitiveWrapper> wrappers = new ArrayList<>();
         List<MessageOrBuilder> elements = new ArrayList<>();
         for (MessageOrBuilder message : list) {
-          PrimitiveWrapper wrapper = PrimitiveWrappers.primitiveWrapperOf(message, defaultTimeZone);
+          PrimitiveWrapper wrapper = PrimitiveWrappers.primitiveWrapperOf(message);
           wrappers.add(wrapper);
           hasValue = hasValue || wrapper.hasValue();
           Element element = wrapper.getElement();
@@ -545,7 +527,7 @@ public final class JsonFormat {
               (String) message.getField(message.getDescriptorForType().findFieldByName("value"));
           generator.print("\"" + name + "\":" + blankOrSpace + "\"" + referenceValue + "\"");
         } else {
-          PrimitiveWrapper wrapper = PrimitiveWrappers.primitiveWrapperOf(message, defaultTimeZone);
+          PrimitiveWrapper wrapper = PrimitiveWrappers.primitiveWrapperOf(message);
           if (wrapper.hasValue()) {
             generator.print("\"" + name + "\":" + blankOrSpace + wrapper.toJson());
             printedElement = true;
