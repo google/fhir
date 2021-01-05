@@ -30,7 +30,6 @@ java_binary(
     main_class = "com.google.fhir.release.Release",
     runtime_deps = [
         "//java/com/google/fhir/common:fhir_version",
-        "//java/com/google/fhir/common:file_utils",
         "//java/com/google/fhir/common:json_format",
         "//java/com/google/fhir/common:resource_utils",
         "//java/com/google/fhir/common:resource_validator",

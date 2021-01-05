@@ -97,11 +97,11 @@ java_binary(
     main_class = "com.google.fhir.protogen.ProfileGeneratorMain",
     deps = [
         ":protogen",
-        "//java/com/google/fhir/common:file_utils",
         "//java/com/google/fhir/common:json_format",
         "//proto/google/fhir/proto:profile_config_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
+        "@com_google_protobuf//:protobuf_java",
         "@maven//:com_beust_jcommander",
         "@maven//:com_google_guava_guava",
     ],

@@ -83,17 +83,6 @@ java_library(
 )
 
 java_library(
-    name = "file_utils",
-    srcs = ["FileUtils.java"],
-    deps = [
-        ":json_format",
-        "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
-        "@com_google_protobuf//:protobuf_java",
-        "@maven//:com_google_guava_guava",
-    ],
-)
-
-java_library(
     name = "resource_utils",
     srcs = [
         "ResourceUtils.java",

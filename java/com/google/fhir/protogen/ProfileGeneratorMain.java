@@ -14,11 +14,12 @@
 
 package com.google.fhir.protogen;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.google.common.io.Files;
-import com.google.fhir.common.FileUtils;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Extensions;
 import com.google.fhir.proto.PackageInfo;
@@ -26,6 +27,8 @@ import com.google.fhir.proto.Profiles;
 import com.google.fhir.proto.Terminologies;
 import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.StructureDefinition;
+import com.google.protobuf.Message;
+import com.google.protobuf.TextFormat;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -91,20 +94,27 @@ public class ProfileGeneratorMain {
 
   private ProfileGeneratorMain() {}
 
+  /** Read the specifed prototxt file and parse it. */
+  private static <T extends Message.Builder> T mergeText(String filename, T builder)
+      throws IOException {
+    TextFormat.getParser().merge(Files.asCharSource(new File(filename), UTF_8).read(), builder);
+    return builder;
+  }
+
   private static Profiles readProfiles(String filename) throws IOException {
-    return FileUtils.mergeText(new File(filename), Profiles.newBuilder()).build();
+    return mergeText(filename, Profiles.newBuilder()).build();
   }
 
   private static Extensions readExtensions(String filename) throws IOException {
-    return FileUtils.mergeText(new File(filename), Extensions.newBuilder()).build();
+    return mergeText(filename, Extensions.newBuilder()).build();
   }
 
   private static Terminologies readTerminologies(String filename) throws IOException {
-    return FileUtils.mergeText(new File(filename), Terminologies.newBuilder()).build();
+    return mergeText(filename, Terminologies.newBuilder()).build();
   }
 
   private static PackageInfo readPackageInfo(String filename) throws IOException {
-    return FileUtils.mergeText(new File(filename), PackageInfo.newBuilder()).build();
+    return mergeText(filename, PackageInfo.newBuilder()).build();
   }
 
   public static void main(String[] argv) throws IOException {
