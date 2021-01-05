@@ -140,6 +140,26 @@ java_test(
 )
 
 java_test(
+    name = "CodesTest",
+    size = "small",
+    srcs = ["CodesTest.java"],
+    test_class = "com.google.fhir.common.CodesTest",
+    deps = [
+        "//java/com/google/fhir/common:codes",
+        "//java/com/google/fhir/common:proto_utils",
+        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:binary_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:patient_java_proto",
+        "//proto/google/fhir/proto/stu3:codes_java_proto",
+        "//proto/google/fhir/proto/stu3:datatypes_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
+    ],
+)
+
+java_test(
     name = "DescriptorMemosMapTest",
     size = "small",
     srcs = ["DescriptorMemosMapTest.java"],

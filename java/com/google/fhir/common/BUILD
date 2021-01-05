@@ -159,3 +159,16 @@ java_library(
         "@com_google_protobuf//:protobuf_java",
     ],
 )
+
+java_library(
+    name = "codes",
+    srcs = ["Codes.java"],
+    deps = [
+        ":descriptor_memos_map",
+        ":fhir_types",
+        ":proto_utils",
+        "//proto/google/fhir/proto:annotations_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
+    ],
+)
