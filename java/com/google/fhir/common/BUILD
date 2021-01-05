@@ -1,6 +1,4 @@
-package(
-    default_visibility = ["//visibility:public"],
-)
+package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
 
@@ -155,4 +153,10 @@ java_library(
         "//proto/google/fhir/proto:annotations_java_proto",
         "@com_google_protobuf//:protobuf_java",
     ],
+)
+
+java_library(
+    name = "descriptor_memos_map",
+    srcs = ["DescriptorMemosMap.java"],
+    deps = ["@com_google_protobuf//:protobuf_java"],
 )

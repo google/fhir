@@ -104,3 +104,18 @@ java_test(
         "@maven//:junit_junit",
     ],
 )
+
+java_test(
+    name = "DescriptorMemosMapTest",
+    size = "small",
+    srcs = ["DescriptorMemosMapTest.java"],
+    test_class = "com.google.fhir.common.DescriptorMemosMapTest",
+    deps = [
+        "//java/com/google/fhir/common:descriptor_memos_map",
+        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
+        "//proto/google/fhir/proto/stu3:datatypes_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
+    ],
+)
