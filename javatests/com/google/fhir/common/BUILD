@@ -83,6 +83,40 @@ java_test(
 )
 
 java_test(
+    name = "ExtensionsTest",
+    size = "small",
+    srcs = ["ExtensionsTest.java"],
+    test_class = "com.google.fhir.common.ExtensionsTest",
+    deps = [
+        "//java/com/google/fhir/common:extensions",
+        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:patient_java_proto",
+        "//proto/google/fhir/proto/stu3:datatypes_java_proto",
+        "//proto/google/fhir/proto/stu3:resources_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
+    ],
+)
+
+java_test(
+    name = "ProtoUtilsTest",
+    size = "small",
+    srcs = ["ProtoUtilsTest.java"],
+    test_class = "com.google.fhir.common.ProtoUtilsTest",
+    deps = [
+        "//java/com/google/fhir/common:proto_utils",
+        "//proto/google/fhir/proto/r4/core/resources:patient_java_proto",
+        "//proto/google/fhir/proto/stu3:resources_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
+    ],
+)
+
+java_test(
     name = "BigQuerySchemaTest",
     size = "small",
     srcs = ["BigQuerySchemaTest.java"],

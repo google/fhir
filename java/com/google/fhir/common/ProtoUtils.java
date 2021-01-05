@@ -134,4 +134,22 @@ public class ProtoUtils {
   public static boolean areSameMessageType(Descriptor first, Descriptor second) {
     return first.equals(second) || first.getFullName().equals(second.getFullName());
   }
+
+  /**
+   * Variant of Descriptor#findFieldByName that throws IllegalArgumentException
+   * if the field is not found.
+   */
+  public static FieldDescriptor findField(MessageOrBuilder builder, String name) {
+    return findField(builder.getDescriptorForType(), name);
+  }
+
+  // TODO: Consider using checked exception.
+  public static FieldDescriptor findField(Descriptor type, String name) {
+    FieldDescriptor field = type.findFieldByName(name);
+    if (field == null) {
+      throw new IllegalArgumentException(
+          "Field `" + name + "` not found on message: " + type.getFullName());
+    }
+    return field;
+  }
 }

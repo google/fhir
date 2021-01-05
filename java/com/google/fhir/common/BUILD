@@ -160,3 +160,13 @@ java_library(
     srcs = ["DescriptorMemosMap.java"],
     deps = ["@com_google_protobuf//:protobuf_java"],
 )
+
+java_library(
+    name = "extensions",
+    srcs = ["Extensions.java"],
+    deps = [
+        ":fhir_types",
+        ":proto_utils",
+        "@com_google_protobuf//:protobuf_java",
+    ],
+)
