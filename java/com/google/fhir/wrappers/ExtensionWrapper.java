@@ -151,7 +151,7 @@ public final class ExtensionWrapper {
    */
   private void validateFhirExtension(MessageOrBuilder message) {
     MessageOptions options = message.getDescriptorForType().getOptions();
-    if (!FhirTypes.isProfileOf(Extension.getDescriptor(), message.getDescriptorForType())) {
+    if (!FhirTypes.isProfileOfExtension(message.getDescriptorForType())) {
       throw new IllegalArgumentException(
           "Message type "
               + message.getDescriptorForType().getFullName()

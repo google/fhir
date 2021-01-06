@@ -75,6 +75,8 @@ java_test(
         "//proto/google/fhir/proto/stu3:extensions_java_proto",
         "//proto/google/fhir/proto/stu3:resources_java_proto",
         "//proto/google/fhir/proto/stu3:uscore_java_proto",
+        "//testdata/r4/profiles:test_java_proto",
+        "//testdata/stu3/profiles:test_java_proto",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_guava_guava",
         "@maven//:com_google_truth_truth",
