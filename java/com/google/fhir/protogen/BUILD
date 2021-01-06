@@ -64,6 +64,7 @@ java_library(
         "//proto/google/fhir/proto/r4/core:extensions_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:code_system_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:search_parameter_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:value_set_java_proto",
         "//proto/google/fhir/proto/stu3:datatypes_java_proto",

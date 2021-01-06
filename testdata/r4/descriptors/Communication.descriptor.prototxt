@@ -486,4 +486,79 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Communication, last updated 2019-11-01T09:29:23.356+11:00.\nA record of information transmitted from a sender to a receiver.\nSee http://hl7.org/fhir/StructureDefinition/Communication"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Communication"
+  [google.fhir.proto.search_parameter] {
+    name: "based-on"
+    type: REFERENCE
+    expression: "Communication.basedOn"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "category"
+    type: TOKEN
+    expression: "Communication.category"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "encounter"
+    type: REFERENCE
+    expression: "Communication.encounter"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "Communication.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "instantiates-canonical"
+    type: REFERENCE
+    expression: "Communication.instantiatesCanonical"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "instantiates-uri"
+    type: URI
+    expression: "Communication.instantiatesUri"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "medium"
+    type: TOKEN
+    expression: "Communication.medium"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "part-of"
+    type: REFERENCE
+    expression: "Communication.partOf"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "patient"
+    type: REFERENCE
+    expression: "Communication.subject.where(resolve() is Patient)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "received"
+    type: DATE
+    expression: "Communication.received"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "recipient"
+    type: REFERENCE
+    expression: "Communication.recipient"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "sender"
+    type: REFERENCE
+    expression: "Communication.sender"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "sent"
+    type: DATE
+    expression: "Communication.sent"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "Communication.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "subject"
+    type: REFERENCE
+    expression: "Communication.subject"
+  }
 }

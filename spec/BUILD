@@ -85,6 +85,11 @@ fhir_package(
             ],
         ) + glob(
             ["hl7.fhir.core/4.0.1/package/CodeSystem-*.json"],
+        ) + glob(
+            ["hl7.fhir.core/4.0.1/package/SearchParameter-*.json"],
+            exclude = [
+                "hl7.fhir.core/4.0.1/package/SearchParameter-*-extensions-*.json",
+            ],
         ),
     package_info = "fhir_r4_package_info.prototxt",
 )

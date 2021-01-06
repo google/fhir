@@ -1035,4 +1035,74 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for RequestGroup, last updated 2019-11-01T09:29:23.356+11:00.\nA group of related requests.\nSee http://hl7.org/fhir/StructureDefinition/RequestGroup"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/RequestGroup"
+  [google.fhir.proto.search_parameter] {
+    name: "author"
+    type: REFERENCE
+    expression: "RequestGroup.author"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "authored"
+    type: DATE
+    expression: "RequestGroup.authoredOn"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "code"
+    type: TOKEN
+    expression: "RequestGroup.code"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "encounter"
+    type: REFERENCE
+    expression: "RequestGroup.encounter"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "group-identifier"
+    type: TOKEN
+    expression: "RequestGroup.groupIdentifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "RequestGroup.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "instantiates-canonical"
+    type: REFERENCE
+    expression: "RequestGroup.instantiatesCanonical"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "instantiates-uri"
+    type: URI
+    expression: "RequestGroup.instantiatesUri"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "intent"
+    type: TOKEN
+    expression: "RequestGroup.intent"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "participant"
+    type: REFERENCE
+    expression: "RequestGroup.action.participant"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "patient"
+    type: REFERENCE
+    expression: "RequestGroup.subject.where(resolve() is Patient)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "priority"
+    type: TOKEN
+    expression: "RequestGroup.priority"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "RequestGroup.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "subject"
+    type: REFERENCE
+    expression: "RequestGroup.subject"
+  }
 }

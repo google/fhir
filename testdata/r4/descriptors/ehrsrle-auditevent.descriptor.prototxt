@@ -773,4 +773,94 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for EHRS FM Record Lifecycle Event - Audit Event.\nEvent record kept for security purposes.\nSee http://hl7.org/fhir/StructureDefinition/ehrsrle-auditevent"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/AuditEvent"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ehrsrle-auditevent"
+  [google.fhir.proto.search_parameter] {
+    name: "action"
+    type: TOKEN
+    expression: "AuditEvent.action"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address"
+    type: STRING
+    expression: "AuditEvent.agent.network.address"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "agent"
+    type: REFERENCE
+    expression: "AuditEvent.agent.who"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "agent-name"
+    type: STRING
+    expression: "AuditEvent.agent.name"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "agent-role"
+    type: TOKEN
+    expression: "AuditEvent.agent.role"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "altid"
+    type: TOKEN
+    expression: "AuditEvent.agent.altId"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "date"
+    type: DATE
+    expression: "AuditEvent.recorded"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "entity"
+    type: REFERENCE
+    expression: "AuditEvent.entity.what"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "entity-name"
+    type: STRING
+    expression: "AuditEvent.entity.name"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "entity-role"
+    type: TOKEN
+    expression: "AuditEvent.entity.role"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "entity-type"
+    type: TOKEN
+    expression: "AuditEvent.entity.type"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "outcome"
+    type: TOKEN
+    expression: "AuditEvent.outcome"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "patient"
+    type: REFERENCE
+    expression: "AuditEvent.agent.who.where(resolve() is Patient) | AuditEvent.entity.what.where(resolve() is Patient)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "policy"
+    type: URI
+    expression: "AuditEvent.agent.policy"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "site"
+    type: TOKEN
+    expression: "AuditEvent.source.site"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "source"
+    type: REFERENCE
+    expression: "AuditEvent.source.observer"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "subtype"
+    type: TOKEN
+    expression: "AuditEvent.subtype"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "type"
+    type: TOKEN
+    expression: "AuditEvent.type"
+  }
 }

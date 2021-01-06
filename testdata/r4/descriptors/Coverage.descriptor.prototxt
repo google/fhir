@@ -510,4 +510,59 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Coverage, last updated 2019-11-01T09:29:23.356+11:00.\nInsurance or medical plan or a payment agreement.\nSee http://hl7.org/fhir/StructureDefinition/Coverage"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Coverage"
+  [google.fhir.proto.search_parameter] {
+    name: "beneficiary"
+    type: REFERENCE
+    expression: "Coverage.beneficiary"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "class-type"
+    type: TOKEN
+    expression: "Coverage.class.type"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "class-value"
+    type: STRING
+    expression: "Coverage.class.value"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "dependent"
+    type: STRING
+    expression: "Coverage.dependent"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "Coverage.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "patient"
+    type: REFERENCE
+    expression: "Coverage.beneficiary"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "payor"
+    type: REFERENCE
+    expression: "Coverage.payor"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "policy-holder"
+    type: REFERENCE
+    expression: "Coverage.policyHolder"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "Coverage.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "subscriber"
+    type: REFERENCE
+    expression: "Coverage.subscriber"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "type"
+    type: TOKEN
+    expression: "Coverage.type"
+  }
 }

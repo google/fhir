@@ -233,4 +233,44 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Slot, last updated 2019-11-01T09:29:23.356+11:00.\nA slot of time on a schedule that may be available for booking appointments.\nSee http://hl7.org/fhir/StructureDefinition/Slot"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Slot"
+  [google.fhir.proto.search_parameter] {
+    name: "appointment-type"
+    type: TOKEN
+    expression: "Slot.appointmentType"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "Slot.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "schedule"
+    type: REFERENCE
+    expression: "Slot.schedule"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "service-category"
+    type: TOKEN
+    expression: "Slot.serviceCategory"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "service-type"
+    type: TOKEN
+    expression: "Slot.serviceType"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "specialty"
+    type: TOKEN
+    expression: "Slot.specialty"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "start"
+    type: DATE
+    expression: "Slot.start"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "Slot.status"
+  }
 }

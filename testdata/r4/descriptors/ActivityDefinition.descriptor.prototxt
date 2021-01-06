@@ -922,4 +922,114 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ActivityDefinition, last updated 2019-11-01T09:29:23.356+11:00.\nThe definition of a specific activity to be taken, independent of any particular patient or context.\nSee http://hl7.org/fhir/StructureDefinition/ActivityDefinition"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ActivityDefinition"
+  [google.fhir.proto.search_parameter] {
+    name: "composed-of"
+    type: REFERENCE
+    expression: "ActivityDefinition.relatedArtifact.where(type=\'composed-of\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context"
+    type: TOKEN
+    expression: "(ActivityDefinition.useContext.value as CodeableConcept)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-quantity"
+    type: QUANTITY
+    expression: "(ActivityDefinition.useContext.value as Quantity) | (ActivityDefinition.useContext.value as Range)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-type"
+    type: TOKEN
+    expression: "ActivityDefinition.useContext.code"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-type-quantity"
+    type: COMPOSITE
+    expression: "ActivityDefinition.useContext"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-type-value"
+    type: COMPOSITE
+    expression: "ActivityDefinition.useContext"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "date"
+    type: DATE
+    expression: "ActivityDefinition.date"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "depends-on"
+    type: REFERENCE
+    expression: "ActivityDefinition.relatedArtifact.where(type=\'depends-on\').resource | ActivityDefinition.library"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "derived-from"
+    type: REFERENCE
+    expression: "ActivityDefinition.relatedArtifact.where(type=\'derived-from\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "description"
+    type: STRING
+    expression: "ActivityDefinition.description"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "effective"
+    type: DATE
+    expression: "ActivityDefinition.effectivePeriod"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "ActivityDefinition.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "jurisdiction"
+    type: TOKEN
+    expression: "ActivityDefinition.jurisdiction"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "name"
+    type: STRING
+    expression: "ActivityDefinition.name"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "predecessor"
+    type: REFERENCE
+    expression: "ActivityDefinition.relatedArtifact.where(type=\'predecessor\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "publisher"
+    type: STRING
+    expression: "ActivityDefinition.publisher"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "ActivityDefinition.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "successor"
+    type: REFERENCE
+    expression: "ActivityDefinition.relatedArtifact.where(type=\'successor\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "title"
+    type: STRING
+    expression: "ActivityDefinition.title"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "topic"
+    type: TOKEN
+    expression: "ActivityDefinition.topic"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "url"
+    type: URI
+    expression: "ActivityDefinition.url"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "version"
+    type: TOKEN
+    expression: "ActivityDefinition.version"
+  }
 }

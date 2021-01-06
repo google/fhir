@@ -872,4 +872,114 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ResearchElementDefinition, last updated 2019-11-01T09:29:23.356+11:00.\nA population, intervention, or exposure definition.\nSee http://hl7.org/fhir/StructureDefinition/ResearchElementDefinition"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ResearchElementDefinition"
+  [google.fhir.proto.search_parameter] {
+    name: "composed-of"
+    type: REFERENCE
+    expression: "ResearchElementDefinition.relatedArtifact.where(type=\'composed-of\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context"
+    type: TOKEN
+    expression: "(ResearchElementDefinition.useContext.value as CodeableConcept)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-quantity"
+    type: QUANTITY
+    expression: "(ResearchElementDefinition.useContext.value as Quantity) | (ResearchElementDefinition.useContext.value as Range)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-type"
+    type: TOKEN
+    expression: "ResearchElementDefinition.useContext.code"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-type-quantity"
+    type: COMPOSITE
+    expression: "ResearchElementDefinition.useContext"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-type-value"
+    type: COMPOSITE
+    expression: "ResearchElementDefinition.useContext"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "date"
+    type: DATE
+    expression: "ResearchElementDefinition.date"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "depends-on"
+    type: REFERENCE
+    expression: "ResearchElementDefinition.relatedArtifact.where(type=\'depends-on\').resource | ResearchElementDefinition.library"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "derived-from"
+    type: REFERENCE
+    expression: "ResearchElementDefinition.relatedArtifact.where(type=\'derived-from\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "description"
+    type: STRING
+    expression: "ResearchElementDefinition.description"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "effective"
+    type: DATE
+    expression: "ResearchElementDefinition.effectivePeriod"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "ResearchElementDefinition.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "jurisdiction"
+    type: TOKEN
+    expression: "ResearchElementDefinition.jurisdiction"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "name"
+    type: STRING
+    expression: "ResearchElementDefinition.name"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "predecessor"
+    type: REFERENCE
+    expression: "ResearchElementDefinition.relatedArtifact.where(type=\'predecessor\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "publisher"
+    type: STRING
+    expression: "ResearchElementDefinition.publisher"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "ResearchElementDefinition.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "successor"
+    type: REFERENCE
+    expression: "ResearchElementDefinition.relatedArtifact.where(type=\'successor\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "title"
+    type: STRING
+    expression: "ResearchElementDefinition.title"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "topic"
+    type: TOKEN
+    expression: "ResearchElementDefinition.topic"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "url"
+    type: URI
+    expression: "ResearchElementDefinition.url"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "version"
+    type: TOKEN
+    expression: "ResearchElementDefinition.version"
+  }
 }

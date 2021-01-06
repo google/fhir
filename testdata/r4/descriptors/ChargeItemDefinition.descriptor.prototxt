@@ -572,4 +572,79 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ChargeItemDefinition, last updated 2019-11-01T09:29:23.356+11:00.\nDefinition of properties and rules about how the price and the applicability of a ChargeItem can be determined.\nSee http://hl7.org/fhir/StructureDefinition/ChargeItemDefinition"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ChargeItemDefinition"
+  [google.fhir.proto.search_parameter] {
+    name: "context"
+    type: TOKEN
+    expression: "(ChargeItemDefinition.useContext.value as CodeableConcept)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-quantity"
+    type: QUANTITY
+    expression: "(ChargeItemDefinition.useContext.value as Quantity) | (ChargeItemDefinition.useContext.value as Range)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-type"
+    type: TOKEN
+    expression: "ChargeItemDefinition.useContext.code"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-type-quantity"
+    type: COMPOSITE
+    expression: "ChargeItemDefinition.useContext"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-type-value"
+    type: COMPOSITE
+    expression: "ChargeItemDefinition.useContext"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "date"
+    type: DATE
+    expression: "ChargeItemDefinition.date"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "description"
+    type: STRING
+    expression: "ChargeItemDefinition.description"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "effective"
+    type: DATE
+    expression: "ChargeItemDefinition.effectivePeriod"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "ChargeItemDefinition.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "jurisdiction"
+    type: TOKEN
+    expression: "ChargeItemDefinition.jurisdiction"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "publisher"
+    type: STRING
+    expression: "ChargeItemDefinition.publisher"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "ChargeItemDefinition.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "title"
+    type: STRING
+    expression: "ChargeItemDefinition.title"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "url"
+    type: URI
+    expression: "ChargeItemDefinition.url"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "version"
+    type: TOKEN
+    expression: "ChargeItemDefinition.version"
+  }
 }

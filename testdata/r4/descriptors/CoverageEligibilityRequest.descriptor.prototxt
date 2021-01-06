@@ -665,4 +665,39 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for CoverageEligibilityRequest, last updated 2019-11-01T09:29:23.356+11:00.\nCoverageEligibilityRequest resource.\nSee http://hl7.org/fhir/StructureDefinition/CoverageEligibilityRequest"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/CoverageEligibilityRequest"
+  [google.fhir.proto.search_parameter] {
+    name: "created"
+    type: DATE
+    expression: "CoverageEligibilityRequest.created"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "enterer"
+    type: REFERENCE
+    expression: "CoverageEligibilityRequest.enterer"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "facility"
+    type: REFERENCE
+    expression: "CoverageEligibilityRequest.facility"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "CoverageEligibilityRequest.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "patient"
+    type: REFERENCE
+    expression: "CoverageEligibilityRequest.patient"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "provider"
+    type: REFERENCE
+    expression: "CoverageEligibilityRequest.provider"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "CoverageEligibilityRequest.status"
+  }
 }

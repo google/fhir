@@ -593,4 +593,29 @@ options {
   [google.fhir.proto.fhir_path_message_constraint]: "type = \'document\' implies (timestamp.hasValue())"
   [google.fhir.proto.fhir_path_message_constraint]: "type = \'document\' implies entry.first().resource.is(Composition)"
   [google.fhir.proto.fhir_path_message_constraint]: "type = \'message\' implies entry.first().resource.is(MessageHeader)"
+  [google.fhir.proto.search_parameter] {
+    name: "composition"
+    type: REFERENCE
+    expression: "Bundle.entry[0].resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "Bundle.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "message"
+    type: REFERENCE
+    expression: "Bundle.entry[0].resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "timestamp"
+    type: DATE
+    expression: "Bundle.timestamp"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "type"
+    type: TOKEN
+    expression: "Bundle.type"
+  }
 }

@@ -529,4 +529,89 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ChargeItem, last updated 2019-11-01T09:29:23.356+11:00.\nItem containing charge code(s) associated with the provision of healthcare provider products.\nSee http://hl7.org/fhir/StructureDefinition/ChargeItem"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ChargeItem"
+  [google.fhir.proto.search_parameter] {
+    name: "account"
+    type: REFERENCE
+    expression: "ChargeItem.account"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "code"
+    type: TOKEN
+    expression: "ChargeItem.code"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context"
+    type: REFERENCE
+    expression: "ChargeItem.context"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "entered-date"
+    type: DATE
+    expression: "ChargeItem.enteredDate"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "enterer"
+    type: REFERENCE
+    expression: "ChargeItem.enterer"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "factor-override"
+    type: NUMBER
+    expression: "ChargeItem.factorOverride"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "ChargeItem.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "occurrence"
+    type: DATE
+    expression: "ChargeItem.occurrence"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "patient"
+    type: REFERENCE
+    expression: "ChargeItem.subject.where(resolve() is Patient)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "performer-actor"
+    type: REFERENCE
+    expression: "ChargeItem.performer.actor"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "performer-function"
+    type: TOKEN
+    expression: "ChargeItem.performer.function"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "performing-organization"
+    type: REFERENCE
+    expression: "ChargeItem.performingOrganization"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "price-override"
+    type: QUANTITY
+    expression: "ChargeItem.priceOverride"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "quantity"
+    type: QUANTITY
+    expression: "ChargeItem.quantity"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "requesting-organization"
+    type: REFERENCE
+    expression: "ChargeItem.requestingOrganization"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "service"
+    type: REFERENCE
+    expression: "ChargeItem.service"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "subject"
+    type: REFERENCE
+    expression: "ChargeItem.subject"
+  }
 }

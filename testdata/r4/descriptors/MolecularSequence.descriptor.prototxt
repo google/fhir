@@ -1201,4 +1201,69 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MolecularSequence, last updated 2019-11-01T09:29:23.356+11:00.\nInformation about a biological sequence.\nSee http://hl7.org/fhir/StructureDefinition/MolecularSequence"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MolecularSequence"
   [google.fhir.proto.fhir_path_message_constraint]: "coordinateSystem = 1 or coordinateSystem = 0"
+  [google.fhir.proto.search_parameter] {
+    name: "chromosome"
+    type: TOKEN
+    expression: "MolecularSequence.referenceSeq.chromosome"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "chromosome-variant-coordinate"
+    type: COMPOSITE
+    expression: "MolecularSequence.variant"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "chromosome-window-coordinate"
+    type: COMPOSITE
+    expression: "MolecularSequence.referenceSeq"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "MolecularSequence.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "patient"
+    type: REFERENCE
+    expression: "MolecularSequence.patient"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "referenceseqid"
+    type: TOKEN
+    expression: "MolecularSequence.referenceSeq.referenceSeqId"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "referenceseqid-variant-coordinate"
+    type: COMPOSITE
+    expression: "MolecularSequence.variant"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "referenceseqid-window-coordinate"
+    type: COMPOSITE
+    expression: "MolecularSequence.referenceSeq"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "type"
+    type: TOKEN
+    expression: "MolecularSequence.type"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "variant-end"
+    type: NUMBER
+    expression: "MolecularSequence.variant.end"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "variant-start"
+    type: NUMBER
+    expression: "MolecularSequence.variant.start"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "window-end"
+    type: NUMBER
+    expression: "MolecularSequence.referenceSeq.windowEnd"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "window-start"
+    type: NUMBER
+    expression: "MolecularSequence.referenceSeq.windowStart"
+  }
 }

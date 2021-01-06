@@ -406,4 +406,114 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Evidence Synthesis Profile.\nA research context or question.\nSee http://hl7.org/fhir/StructureDefinition/synthesis"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Evidence"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/synthesis"
+  [google.fhir.proto.search_parameter] {
+    name: "composed-of"
+    type: REFERENCE
+    expression: "Evidence.relatedArtifact.where(type=\'composed-of\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context"
+    type: TOKEN
+    expression: "(Evidence.useContext.value as CodeableConcept)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-quantity"
+    type: QUANTITY
+    expression: "(Evidence.useContext.value as Quantity) | (Evidence.useContext.value as Range)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-type"
+    type: TOKEN
+    expression: "Evidence.useContext.code"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-type-quantity"
+    type: COMPOSITE
+    expression: "Evidence.useContext"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-type-value"
+    type: COMPOSITE
+    expression: "Evidence.useContext"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "date"
+    type: DATE
+    expression: "Evidence.date"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "depends-on"
+    type: REFERENCE
+    expression: "Evidence.relatedArtifact.where(type=\'depends-on\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "derived-from"
+    type: REFERENCE
+    expression: "Evidence.relatedArtifact.where(type=\'derived-from\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "description"
+    type: STRING
+    expression: "Evidence.description"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "effective"
+    type: DATE
+    expression: "Evidence.effectivePeriod"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "Evidence.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "jurisdiction"
+    type: TOKEN
+    expression: "Evidence.jurisdiction"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "name"
+    type: STRING
+    expression: "Evidence.name"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "predecessor"
+    type: REFERENCE
+    expression: "Evidence.relatedArtifact.where(type=\'predecessor\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "publisher"
+    type: STRING
+    expression: "Evidence.publisher"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "Evidence.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "successor"
+    type: REFERENCE
+    expression: "Evidence.relatedArtifact.where(type=\'successor\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "title"
+    type: STRING
+    expression: "Evidence.title"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "topic"
+    type: TOKEN
+    expression: "Evidence.topic"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "url"
+    type: URI
+    expression: "Evidence.url"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "version"
+    type: TOKEN
+    expression: "Evidence.version"
+  }
 }

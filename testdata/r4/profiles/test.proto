@@ -53,6 +53,31 @@ message Bundle {
       "type = 'document' implies entry.first().resource.is(Composition)";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "type = 'message' implies entry.first().resource.is(MessageHeader)";
+  option (.google.fhir.proto.search_parameter) = {
+    name: "composition"
+    type: REFERENCE
+    expression: "Bundle.entry[0].resource"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "identifier"
+    type: TOKEN
+    expression: "Bundle.identifier"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "message"
+    type: REFERENCE
+    expression: "Bundle.entry[0].resource"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "timestamp"
+    type: DATE
+    expression: "Bundle.timestamp"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "type"
+    type: TOKEN
+    expression: "Bundle.type"
+  };
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -262,6 +287,126 @@ message TestPatient {
       "http://hl7.org/fhir/StructureDefinition/Patient";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/StructureDefinition/TestPatient";
+  option (.google.fhir.proto.search_parameter) = {
+    name: "Example Search Parameter on an extension"
+    type: REFERENCE
+    expression: "DocumentReference.extension('http://example.org/fhir/StructureDefinition/participation-agreement')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "active"
+    type: TOKEN
+    expression: "Patient.active"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "address"
+    type: STRING
+    expression: "Patient.address | Person.address | Practitioner.address | RelatedPerson.address"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "address-city"
+    type: STRING
+    expression: "Patient.address.city | Person.address.city | Practitioner.address.city | RelatedPerson.address.city"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "address-country"
+    type: STRING
+    expression: "Patient.address.country | Person.address.country | Practitioner.address.country | RelatedPerson.address.country"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "address-postalcode"
+    type: STRING
+    expression: "Patient.address.postalCode | Person.address.postalCode | Practitioner.address.postalCode | RelatedPerson.address.postalCode"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "address-state"
+    type: STRING
+    expression: "Patient.address.state | Person.address.state | Practitioner.address.state | RelatedPerson.address.state"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "address-use"
+    type: TOKEN
+    expression: "Patient.address.use | Person.address.use | Practitioner.address.use | RelatedPerson.address.use"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "birthdate"
+    type: DATE
+    expression: "Patient.birthDate | Person.birthDate | RelatedPerson.birthDate"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "death-date"
+    type: DATE
+    expression: "(Patient.deceased as dateTime)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "deceased"
+    type: TOKEN
+    expression: "Patient.deceased.exists() and Patient.deceased != false"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "email"
+    type: TOKEN
+    expression: "Patient.telecom.where(system='email') | Person.telecom.where(system='email') | Practitioner.telecom.where(system='email') | PractitionerRole.telecom.where(system='email') | RelatedPerson.telecom.where(system='email')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "family"
+    type: STRING
+    expression: "Patient.name.family | Practitioner.name.family"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gender"
+    type: TOKEN
+    expression: "Patient.gender | Person.gender | Practitioner.gender | RelatedPerson.gender"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "general-practitioner"
+    type: REFERENCE
+    expression: "Patient.generalPractitioner"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "given"
+    type: STRING
+    expression: "Patient.name.given | Practitioner.name.given"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "identifier"
+    type: TOKEN
+    expression: "Patient.identifier"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "language"
+    type: TOKEN
+    expression: "Patient.communication.language"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "link"
+    type: REFERENCE
+    expression: "Patient.link.other"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "name"
+    type: STRING
+    expression: "Patient.name"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "organization"
+    type: REFERENCE
+    expression: "Patient.managingOrganization"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "phone"
+    type: TOKEN
+    expression: "Patient.telecom.where(system='phone') | Person.telecom.where(system='phone') | Practitioner.telecom.where(system='phone') | PractitionerRole.telecom.where(system='phone') | RelatedPerson.telecom.where(system='phone')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "phonetic"
+    type: STRING
+    expression: "Patient.name | Person.name | Practitioner.name | RelatedPerson.name"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "telecom"
+    type: TOKEN
+    expression: "Patient.telecom | Person.telecom | Practitioner.telecom | PractitionerRole.telecom | RelatedPerson.telecom"
+  };
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -559,6 +704,221 @@ message TestObservation {
       "dataAbsentReason.empty() or value.empty()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()";
+  option (.google.fhir.proto.search_parameter) = {
+    name: "amino-acid-change"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "based-on"
+    type: REFERENCE
+    expression: "Observation.basedOn"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "category"
+    type: TOKEN
+    expression: "Observation.category"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code"
+    type: TOKEN
+    expression: "AllergyIntolerance.code | AllergyIntolerance.reaction.substance | Condition.code | (DeviceRequest.code as CodeableConcept) | DiagnosticReport.code | FamilyMemberHistory.condition.code | List.code | Medication.code | (MedicationAdministration.medication as CodeableConcept) | (MedicationDispense.medication as CodeableConcept) | (MedicationRequest.medication as CodeableConcept) | (MedicationStatement.medication as CodeableConcept) | Observation.code | Procedure.code | ServiceRequest.code"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-concept"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-date"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-quantity"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-string"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-code"
+    type: TOKEN
+    expression: "Observation.code | Observation.component.code"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-code-value-concept"
+    type: COMPOSITE
+    expression: "Observation | Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-code-value-quantity"
+    type: COMPOSITE
+    expression: "Observation | Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-data-absent-reason"
+    type: TOKEN
+    expression: "Observation.dataAbsentReason | Observation.component.dataAbsentReason"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-value-concept"
+    type: TOKEN
+    expression: "(Observation.value as CodeableConcept) | (Observation.component.value as CodeableConcept)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-value-quantity"
+    type: QUANTITY
+    expression: "(Observation.value as Quantity) | (Observation.value as SampledData) | (Observation.component.value as Quantity) | (Observation.component.value as SampledData)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-code"
+    type: TOKEN
+    expression: "Observation.component.code"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-code-value-concept"
+    type: COMPOSITE
+    expression: "Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-code-value-quantity"
+    type: COMPOSITE
+    expression: "Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-data-absent-reason"
+    type: TOKEN
+    expression: "Observation.component.dataAbsentReason"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-value-concept"
+    type: TOKEN
+    expression: "(Observation.component.value as CodeableConcept)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-value-quantity"
+    type: QUANTITY
+    expression: "(Observation.component.value as Quantity) | (Observation.component.value as SampledData)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "data-absent-reason"
+    type: TOKEN
+    expression: "Observation.dataAbsentReason"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "date"
+    type: DATE
+    expression: "AllergyIntolerance.recordedDate | CarePlan.period | CareTeam.period | ClinicalImpression.date | Composition.date | Consent.dateTime | DiagnosticReport.effective | Encounter.period | EpisodeOfCare.period | FamilyMemberHistory.date | Flag.period | Immunization.occurrence | List.date | Observation.effective | Procedure.performed | (RiskAssessment.occurrence as dateTime) | SupplyRequest.authoredOn"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "derived-from"
+    type: REFERENCE
+    expression: "Observation.derivedFrom"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "device"
+    type: REFERENCE
+    expression: "Observation.device"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "dna-variant"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsDnaVariant')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "encounter"
+    type: REFERENCE
+    expression: "Composition.encounter | DeviceRequest.encounter | DiagnosticReport.encounter | DocumentReference.context.encounter | Flag.encounter | List.encounter | NutritionOrder.encounter | Observation.encounter | Procedure.encounter | RiskAssessment.encounter | ServiceRequest.encounter | VisionPrescription.encounter"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "focus"
+    type: REFERENCE
+    expression: "Observation.focus"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gene-amino-acid-change"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gene-dnavariant"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsDnaVariant')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gene-identifier"
+    type: TOKEN
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsGene')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "has-member"
+    type: REFERENCE
+    expression: "Observation.hasMember"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "identifier"
+    type: TOKEN
+    expression: "AllergyIntolerance.identifier | CarePlan.identifier | CareTeam.identifier | Composition.identifier | Condition.identifier | Consent.identifier | DetectedIssue.identifier | DeviceRequest.identifier | DiagnosticReport.identifier | DocumentManifest.masterIdentifier | DocumentManifest.identifier | DocumentReference.masterIdentifier | DocumentReference.identifier | Encounter.identifier | EpisodeOfCare.identifier | FamilyMemberHistory.identifier | Goal.identifier | ImagingStudy.identifier | Immunization.identifier | List.identifier | MedicationAdministration.identifier | MedicationDispense.identifier | MedicationRequest.identifier | MedicationStatement.identifier | NutritionOrder.identifier | Observation.identifier | Procedure.identifier | RiskAssessment.identifier | ServiceRequest.identifier | SupplyDelivery.identifier | SupplyRequest.identifier | VisionPrescription.identifier"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "method"
+    type: TOKEN
+    expression: "Observation.method"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "part-of"
+    type: REFERENCE
+    expression: "Observation.partOf"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "patient"
+    type: REFERENCE
+    expression: "AllergyIntolerance.patient | CarePlan.subject.where(resolve() is Patient) | CareTeam.subject.where(resolve() is Patient) | ClinicalImpression.subject.where(resolve() is Patient) | Composition.subject.where(resolve() is Patient) | Condition.subject.where(resolve() is Patient) | Consent.patient | DetectedIssue.patient | DeviceRequest.subject.where(resolve() is Patient) | DeviceUseStatement.subject | DiagnosticReport.subject.where(resolve() is Patient) | DocumentManifest.subject.where(resolve() is Patient) | DocumentReference.subject.where(resolve() is Patient) | Encounter.subject.where(resolve() is Patient) | EpisodeOfCare.patient | FamilyMemberHistory.patient | Flag.subject.where(resolve() is Patient) | Goal.subject.where(resolve() is Patient) | ImagingStudy.subject.where(resolve() is Patient) | Immunization.patient | List.subject.where(resolve() is Patient) | MedicationAdministration.subject.where(resolve() is Patient) | MedicationDispense.subject.where(resolve() is Patient) | MedicationRequest.subject.where(resolve() is Patient) | MedicationStatement.subject.where(resolve() is Patient) | NutritionOrder.patient | Observation.subject.where(resolve() is Patient) | Procedure.subject.where(resolve() is Patient) | RiskAssessment.subject.where(resolve() is Patient) | ServiceRequest.subject.where(resolve() is Patient) | SupplyDelivery.patient | VisionPrescription.patient"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "performer"
+    type: REFERENCE
+    expression: "Observation.performer"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "specimen"
+    type: REFERENCE
+    expression: "Observation.specimen"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "status"
+    type: TOKEN
+    expression: "Observation.status"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "subject"
+    type: REFERENCE
+    expression: "Observation.subject"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-concept"
+    type: TOKEN
+    expression: "(Observation.value as CodeableConcept)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-date"
+    type: DATE
+    expression: "(Observation.value as dateTime) | (Observation.value as Period)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-quantity"
+    type: QUANTITY
+    expression: "(Observation.value as Quantity) | (Observation.value as SampledData)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-string"
+    type: STRING
+    expression: "(Observation.value as string) | (Observation.value as CodeableConcept).text"
+  };
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -1077,6 +1437,221 @@ message TestObservationLvl2 {
       "dataAbsentReason.empty() or value.empty()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()";
+  option (.google.fhir.proto.search_parameter) = {
+    name: "amino-acid-change"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "based-on"
+    type: REFERENCE
+    expression: "Observation.basedOn"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "category"
+    type: TOKEN
+    expression: "Observation.category"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code"
+    type: TOKEN
+    expression: "AllergyIntolerance.code | AllergyIntolerance.reaction.substance | Condition.code | (DeviceRequest.code as CodeableConcept) | DiagnosticReport.code | FamilyMemberHistory.condition.code | List.code | Medication.code | (MedicationAdministration.medication as CodeableConcept) | (MedicationDispense.medication as CodeableConcept) | (MedicationRequest.medication as CodeableConcept) | (MedicationStatement.medication as CodeableConcept) | Observation.code | Procedure.code | ServiceRequest.code"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-concept"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-date"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-quantity"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-string"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-code"
+    type: TOKEN
+    expression: "Observation.code | Observation.component.code"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-code-value-concept"
+    type: COMPOSITE
+    expression: "Observation | Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-code-value-quantity"
+    type: COMPOSITE
+    expression: "Observation | Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-data-absent-reason"
+    type: TOKEN
+    expression: "Observation.dataAbsentReason | Observation.component.dataAbsentReason"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-value-concept"
+    type: TOKEN
+    expression: "(Observation.value as CodeableConcept) | (Observation.component.value as CodeableConcept)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-value-quantity"
+    type: QUANTITY
+    expression: "(Observation.value as Quantity) | (Observation.value as SampledData) | (Observation.component.value as Quantity) | (Observation.component.value as SampledData)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-code"
+    type: TOKEN
+    expression: "Observation.component.code"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-code-value-concept"
+    type: COMPOSITE
+    expression: "Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-code-value-quantity"
+    type: COMPOSITE
+    expression: "Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-data-absent-reason"
+    type: TOKEN
+    expression: "Observation.component.dataAbsentReason"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-value-concept"
+    type: TOKEN
+    expression: "(Observation.component.value as CodeableConcept)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-value-quantity"
+    type: QUANTITY
+    expression: "(Observation.component.value as Quantity) | (Observation.component.value as SampledData)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "data-absent-reason"
+    type: TOKEN
+    expression: "Observation.dataAbsentReason"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "date"
+    type: DATE
+    expression: "AllergyIntolerance.recordedDate | CarePlan.period | CareTeam.period | ClinicalImpression.date | Composition.date | Consent.dateTime | DiagnosticReport.effective | Encounter.period | EpisodeOfCare.period | FamilyMemberHistory.date | Flag.period | Immunization.occurrence | List.date | Observation.effective | Procedure.performed | (RiskAssessment.occurrence as dateTime) | SupplyRequest.authoredOn"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "derived-from"
+    type: REFERENCE
+    expression: "Observation.derivedFrom"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "device"
+    type: REFERENCE
+    expression: "Observation.device"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "dna-variant"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsDnaVariant')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "encounter"
+    type: REFERENCE
+    expression: "Composition.encounter | DeviceRequest.encounter | DiagnosticReport.encounter | DocumentReference.context.encounter | Flag.encounter | List.encounter | NutritionOrder.encounter | Observation.encounter | Procedure.encounter | RiskAssessment.encounter | ServiceRequest.encounter | VisionPrescription.encounter"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "focus"
+    type: REFERENCE
+    expression: "Observation.focus"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gene-amino-acid-change"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gene-dnavariant"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsDnaVariant')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gene-identifier"
+    type: TOKEN
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsGene')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "has-member"
+    type: REFERENCE
+    expression: "Observation.hasMember"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "identifier"
+    type: TOKEN
+    expression: "AllergyIntolerance.identifier | CarePlan.identifier | CareTeam.identifier | Composition.identifier | Condition.identifier | Consent.identifier | DetectedIssue.identifier | DeviceRequest.identifier | DiagnosticReport.identifier | DocumentManifest.masterIdentifier | DocumentManifest.identifier | DocumentReference.masterIdentifier | DocumentReference.identifier | Encounter.identifier | EpisodeOfCare.identifier | FamilyMemberHistory.identifier | Goal.identifier | ImagingStudy.identifier | Immunization.identifier | List.identifier | MedicationAdministration.identifier | MedicationDispense.identifier | MedicationRequest.identifier | MedicationStatement.identifier | NutritionOrder.identifier | Observation.identifier | Procedure.identifier | RiskAssessment.identifier | ServiceRequest.identifier | SupplyDelivery.identifier | SupplyRequest.identifier | VisionPrescription.identifier"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "method"
+    type: TOKEN
+    expression: "Observation.method"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "part-of"
+    type: REFERENCE
+    expression: "Observation.partOf"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "patient"
+    type: REFERENCE
+    expression: "AllergyIntolerance.patient | CarePlan.subject.where(resolve() is Patient) | CareTeam.subject.where(resolve() is Patient) | ClinicalImpression.subject.where(resolve() is Patient) | Composition.subject.where(resolve() is Patient) | Condition.subject.where(resolve() is Patient) | Consent.patient | DetectedIssue.patient | DeviceRequest.subject.where(resolve() is Patient) | DeviceUseStatement.subject | DiagnosticReport.subject.where(resolve() is Patient) | DocumentManifest.subject.where(resolve() is Patient) | DocumentReference.subject.where(resolve() is Patient) | Encounter.subject.where(resolve() is Patient) | EpisodeOfCare.patient | FamilyMemberHistory.patient | Flag.subject.where(resolve() is Patient) | Goal.subject.where(resolve() is Patient) | ImagingStudy.subject.where(resolve() is Patient) | Immunization.patient | List.subject.where(resolve() is Patient) | MedicationAdministration.subject.where(resolve() is Patient) | MedicationDispense.subject.where(resolve() is Patient) | MedicationRequest.subject.where(resolve() is Patient) | MedicationStatement.subject.where(resolve() is Patient) | NutritionOrder.patient | Observation.subject.where(resolve() is Patient) | Procedure.subject.where(resolve() is Patient) | RiskAssessment.subject.where(resolve() is Patient) | ServiceRequest.subject.where(resolve() is Patient) | SupplyDelivery.patient | VisionPrescription.patient"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "performer"
+    type: REFERENCE
+    expression: "Observation.performer"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "specimen"
+    type: REFERENCE
+    expression: "Observation.specimen"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "status"
+    type: TOKEN
+    expression: "Observation.status"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "subject"
+    type: REFERENCE
+    expression: "Observation.subject"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-concept"
+    type: TOKEN
+    expression: "(Observation.value as CodeableConcept)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-date"
+    type: DATE
+    expression: "(Observation.value as dateTime) | (Observation.value as Period)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-quantity"
+    type: QUANTITY
+    expression: "(Observation.value as Quantity) | (Observation.value as SampledData)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-string"
+    type: STRING
+    expression: "(Observation.value as string) | (Observation.value as CodeableConcept).text"
+  };
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -1630,6 +2205,121 @@ message TestEncounter {
       "http://hl7.org/fhir/StructureDefinition/Encounter";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://test/url/base/StructureDefinition/TestEncounter";
+  option (.google.fhir.proto.search_parameter) = {
+    name: "account"
+    type: REFERENCE
+    expression: "Encounter.account"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "appointment"
+    type: REFERENCE
+    expression: "Encounter.appointment"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "based-on"
+    type: REFERENCE
+    expression: "Encounter.basedOn"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "class"
+    type: TOKEN
+    expression: "Encounter.class"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "date"
+    type: DATE
+    expression: "AllergyIntolerance.recordedDate | CarePlan.period | CareTeam.period | ClinicalImpression.date | Composition.date | Consent.dateTime | DiagnosticReport.effective | Encounter.period | EpisodeOfCare.period | FamilyMemberHistory.date | Flag.period | Immunization.occurrence | List.date | Observation.effective | Procedure.performed | (RiskAssessment.occurrence as dateTime) | SupplyRequest.authoredOn"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "diagnosis"
+    type: REFERENCE
+    expression: "Encounter.diagnosis.condition"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "episode-of-care"
+    type: REFERENCE
+    expression: "Encounter.episodeOfCare"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "identifier"
+    type: TOKEN
+    expression: "AllergyIntolerance.identifier | CarePlan.identifier | CareTeam.identifier | Composition.identifier | Condition.identifier | Consent.identifier | DetectedIssue.identifier | DeviceRequest.identifier | DiagnosticReport.identifier | DocumentManifest.masterIdentifier | DocumentManifest.identifier | DocumentReference.masterIdentifier | DocumentReference.identifier | Encounter.identifier | EpisodeOfCare.identifier | FamilyMemberHistory.identifier | Goal.identifier | ImagingStudy.identifier | Immunization.identifier | List.identifier | MedicationAdministration.identifier | MedicationDispense.identifier | MedicationRequest.identifier | MedicationStatement.identifier | NutritionOrder.identifier | Observation.identifier | Procedure.identifier | RiskAssessment.identifier | ServiceRequest.identifier | SupplyDelivery.identifier | SupplyRequest.identifier | VisionPrescription.identifier"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "length"
+    type: QUANTITY
+    expression: "Encounter.length"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "location"
+    type: REFERENCE
+    expression: "Encounter.location.location"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "location-period"
+    type: DATE
+    expression: "Encounter.location.period"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "part-of"
+    type: REFERENCE
+    expression: "Encounter.partOf"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "participant"
+    type: REFERENCE
+    expression: "Encounter.participant.individual"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "participant-type"
+    type: TOKEN
+    expression: "Encounter.participant.type"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "patient"
+    type: REFERENCE
+    expression: "AllergyIntolerance.patient | CarePlan.subject.where(resolve() is Patient) | CareTeam.subject.where(resolve() is Patient) | ClinicalImpression.subject.where(resolve() is Patient) | Composition.subject.where(resolve() is Patient) | Condition.subject.where(resolve() is Patient) | Consent.patient | DetectedIssue.patient | DeviceRequest.subject.where(resolve() is Patient) | DeviceUseStatement.subject | DiagnosticReport.subject.where(resolve() is Patient) | DocumentManifest.subject.where(resolve() is Patient) | DocumentReference.subject.where(resolve() is Patient) | Encounter.subject.where(resolve() is Patient) | EpisodeOfCare.patient | FamilyMemberHistory.patient | Flag.subject.where(resolve() is Patient) | Goal.subject.where(resolve() is Patient) | ImagingStudy.subject.where(resolve() is Patient) | Immunization.patient | List.subject.where(resolve() is Patient) | MedicationAdministration.subject.where(resolve() is Patient) | MedicationDispense.subject.where(resolve() is Patient) | MedicationRequest.subject.where(resolve() is Patient) | MedicationStatement.subject.where(resolve() is Patient) | NutritionOrder.patient | Observation.subject.where(resolve() is Patient) | Procedure.subject.where(resolve() is Patient) | RiskAssessment.subject.where(resolve() is Patient) | ServiceRequest.subject.where(resolve() is Patient) | SupplyDelivery.patient | VisionPrescription.patient"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "practitioner"
+    type: REFERENCE
+    expression: "Encounter.participant.individual.where(resolve() is Practitioner)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "reason-code"
+    type: TOKEN
+    expression: "Encounter.reasonCode"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "reason-reference"
+    type: REFERENCE
+    expression: "Encounter.reasonReference"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "service-provider"
+    type: REFERENCE
+    expression: "Encounter.serviceProvider"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "special-arrangement"
+    type: TOKEN
+    expression: "Encounter.hospitalization.specialArrangement"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "status"
+    type: TOKEN
+    expression: "Encounter.status"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "subject"
+    type: REFERENCE
+    expression: "Encounter.subject"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "type"
+    type: TOKEN
+    expression: "AllergyIntolerance.type | Composition.type | DocumentManifest.type | DocumentReference.type | Encounter.type | EpisodeOfCare.type"
+  };
 
   // Logical id of this artifact
   core.Id id = 1;
@@ -2027,6 +2717,221 @@ message ProfiledDatatypesObservation {
       "dataAbsentReason.empty() or value.empty()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()";
+  option (.google.fhir.proto.search_parameter) = {
+    name: "amino-acid-change"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "based-on"
+    type: REFERENCE
+    expression: "Observation.basedOn"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "category"
+    type: TOKEN
+    expression: "Observation.category"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code"
+    type: TOKEN
+    expression: "AllergyIntolerance.code | AllergyIntolerance.reaction.substance | Condition.code | (DeviceRequest.code as CodeableConcept) | DiagnosticReport.code | FamilyMemberHistory.condition.code | List.code | Medication.code | (MedicationAdministration.medication as CodeableConcept) | (MedicationDispense.medication as CodeableConcept) | (MedicationRequest.medication as CodeableConcept) | (MedicationStatement.medication as CodeableConcept) | Observation.code | Procedure.code | ServiceRequest.code"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-concept"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-date"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-quantity"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-string"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-code"
+    type: TOKEN
+    expression: "Observation.code | Observation.component.code"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-code-value-concept"
+    type: COMPOSITE
+    expression: "Observation | Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-code-value-quantity"
+    type: COMPOSITE
+    expression: "Observation | Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-data-absent-reason"
+    type: TOKEN
+    expression: "Observation.dataAbsentReason | Observation.component.dataAbsentReason"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-value-concept"
+    type: TOKEN
+    expression: "(Observation.value as CodeableConcept) | (Observation.component.value as CodeableConcept)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-value-quantity"
+    type: QUANTITY
+    expression: "(Observation.value as Quantity) | (Observation.value as SampledData) | (Observation.component.value as Quantity) | (Observation.component.value as SampledData)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-code"
+    type: TOKEN
+    expression: "Observation.component.code"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-code-value-concept"
+    type: COMPOSITE
+    expression: "Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-code-value-quantity"
+    type: COMPOSITE
+    expression: "Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-data-absent-reason"
+    type: TOKEN
+    expression: "Observation.component.dataAbsentReason"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-value-concept"
+    type: TOKEN
+    expression: "(Observation.component.value as CodeableConcept)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-value-quantity"
+    type: QUANTITY
+    expression: "(Observation.component.value as Quantity) | (Observation.component.value as SampledData)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "data-absent-reason"
+    type: TOKEN
+    expression: "Observation.dataAbsentReason"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "date"
+    type: DATE
+    expression: "AllergyIntolerance.recordedDate | CarePlan.period | CareTeam.period | ClinicalImpression.date | Composition.date | Consent.dateTime | DiagnosticReport.effective | Encounter.period | EpisodeOfCare.period | FamilyMemberHistory.date | Flag.period | Immunization.occurrence | List.date | Observation.effective | Procedure.performed | (RiskAssessment.occurrence as dateTime) | SupplyRequest.authoredOn"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "derived-from"
+    type: REFERENCE
+    expression: "Observation.derivedFrom"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "device"
+    type: REFERENCE
+    expression: "Observation.device"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "dna-variant"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsDnaVariant')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "encounter"
+    type: REFERENCE
+    expression: "Composition.encounter | DeviceRequest.encounter | DiagnosticReport.encounter | DocumentReference.context.encounter | Flag.encounter | List.encounter | NutritionOrder.encounter | Observation.encounter | Procedure.encounter | RiskAssessment.encounter | ServiceRequest.encounter | VisionPrescription.encounter"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "focus"
+    type: REFERENCE
+    expression: "Observation.focus"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gene-amino-acid-change"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gene-dnavariant"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsDnaVariant')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gene-identifier"
+    type: TOKEN
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsGene')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "has-member"
+    type: REFERENCE
+    expression: "Observation.hasMember"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "identifier"
+    type: TOKEN
+    expression: "AllergyIntolerance.identifier | CarePlan.identifier | CareTeam.identifier | Composition.identifier | Condition.identifier | Consent.identifier | DetectedIssue.identifier | DeviceRequest.identifier | DiagnosticReport.identifier | DocumentManifest.masterIdentifier | DocumentManifest.identifier | DocumentReference.masterIdentifier | DocumentReference.identifier | Encounter.identifier | EpisodeOfCare.identifier | FamilyMemberHistory.identifier | Goal.identifier | ImagingStudy.identifier | Immunization.identifier | List.identifier | MedicationAdministration.identifier | MedicationDispense.identifier | MedicationRequest.identifier | MedicationStatement.identifier | NutritionOrder.identifier | Observation.identifier | Procedure.identifier | RiskAssessment.identifier | ServiceRequest.identifier | SupplyDelivery.identifier | SupplyRequest.identifier | VisionPrescription.identifier"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "method"
+    type: TOKEN
+    expression: "Observation.method"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "part-of"
+    type: REFERENCE
+    expression: "Observation.partOf"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "patient"
+    type: REFERENCE
+    expression: "AllergyIntolerance.patient | CarePlan.subject.where(resolve() is Patient) | CareTeam.subject.where(resolve() is Patient) | ClinicalImpression.subject.where(resolve() is Patient) | Composition.subject.where(resolve() is Patient) | Condition.subject.where(resolve() is Patient) | Consent.patient | DetectedIssue.patient | DeviceRequest.subject.where(resolve() is Patient) | DeviceUseStatement.subject | DiagnosticReport.subject.where(resolve() is Patient) | DocumentManifest.subject.where(resolve() is Patient) | DocumentReference.subject.where(resolve() is Patient) | Encounter.subject.where(resolve() is Patient) | EpisodeOfCare.patient | FamilyMemberHistory.patient | Flag.subject.where(resolve() is Patient) | Goal.subject.where(resolve() is Patient) | ImagingStudy.subject.where(resolve() is Patient) | Immunization.patient | List.subject.where(resolve() is Patient) | MedicationAdministration.subject.where(resolve() is Patient) | MedicationDispense.subject.where(resolve() is Patient) | MedicationRequest.subject.where(resolve() is Patient) | MedicationStatement.subject.where(resolve() is Patient) | NutritionOrder.patient | Observation.subject.where(resolve() is Patient) | Procedure.subject.where(resolve() is Patient) | RiskAssessment.subject.where(resolve() is Patient) | ServiceRequest.subject.where(resolve() is Patient) | SupplyDelivery.patient | VisionPrescription.patient"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "performer"
+    type: REFERENCE
+    expression: "Observation.performer"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "specimen"
+    type: REFERENCE
+    expression: "Observation.specimen"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "status"
+    type: TOKEN
+    expression: "Observation.status"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "subject"
+    type: REFERENCE
+    expression: "Observation.subject"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-concept"
+    type: TOKEN
+    expression: "(Observation.value as CodeableConcept)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-date"
+    type: DATE
+    expression: "(Observation.value as dateTime) | (Observation.value as Period)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-quantity"
+    type: QUANTITY
+    expression: "(Observation.value as Quantity) | (Observation.value as SampledData)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-string"
+    type: STRING
+    expression: "(Observation.value as string) | (Observation.value as CodeableConcept).text"
+  };
 
   // Logical id of this artifact
   core.Id id = 1;

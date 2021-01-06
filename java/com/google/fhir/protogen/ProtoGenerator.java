@@ -49,6 +49,8 @@ import com.google.fhir.r4.core.CodeableConcept;
 import com.google.fhir.r4.core.ConstraintSeverityCode;
 import com.google.fhir.r4.core.ElementDefinition;
 import com.google.fhir.r4.core.Extension;
+import com.google.fhir.r4.core.ResourceTypeCode;
+import com.google.fhir.r4.core.SearchParameter;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
@@ -57,6 +59,7 @@ import com.google.fhir.stu3.proto.CodingWithFixedSystem;
 import com.google.fhir.stu3.proto.ElementDefinitionExplicitTypeName;
 import com.google.fhir.stu3.proto.Instant;
 import com.google.fhir.wrappers.CanonicalWrapper;
+import com.google.fhir.wrappers.CodeWrapper;
 import com.google.fhir.wrappers.ExtensionWrapper;
 import com.google.fhir.wrappers.InstantWrapper;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
@@ -71,6 +74,7 @@ import com.google.protobuf.DescriptorProtos.MessageOptions;
 import com.google.protobuf.DescriptorProtos.OneofDescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumDescriptor;
+import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Descriptors.FileDescriptor;
 import com.google.protobuf.Message;
@@ -221,6 +225,8 @@ public class ProtoGenerator {
   private final FhirVersion fhirVersion;
 
   private final ValueSetGenerator valueSetGenerator;
+  private final Map<ResourceTypeCode.Value, List<SearchParameter>> searchParameterMap =
+      new HashMap<>();
 
   // File location of the codes proto generated with this IG.  If there are no local
   // code proto references, this will be ignored.
@@ -265,6 +271,7 @@ public class ProtoGenerator {
       allDefinitions.putAll(
           fhirPackage.structureDefinitions.stream()
               .collect(Collectors.toMap(def -> def, def -> info.getProtoPackage())));
+      searchParameterMap.putAll(GeneratorUtils.getSearchParameterMap(fhirPackage.searchParameters));
     }
 
     Map<String, StructureDefinitionData> mutableStructDefDataByUrl = new HashMap<>();
@@ -325,7 +332,8 @@ public class ProtoGenerator {
    * definition. For a more elaborate discussion of these versions, see
    * https://www.hl7.org/fhir/structuredefinition.html.
    */
-  public DescriptorProto generateProto(StructureDefinition def) {
+  public DescriptorProto generateProto(
+      StructureDefinition def, List<SearchParameter> searchParameters) {
     // Build a top-level message description.
     StringBuilder comment =
         new StringBuilder()
@@ -365,6 +373,26 @@ public class ProtoGenerator {
     if (isSingleValueComplexExtension(def)) {
       optionsBuilder.setExtension(Annotations.isComplexExtension, true);
     }
+
+    // Add search parameters
+    List<Annotations.SearchParameter> searchParameterAnnotations = new ArrayList<>();
+    for (SearchParameter searchParameter :
+        searchParameters.stream()
+            .sorted((p1, p2) -> p1.getName().getValue().compareTo(p2.getName().getValue()))
+            .collect(Collectors.toList())) {
+      searchParameterAnnotations.add(
+          Annotations.SearchParameter.newBuilder()
+              .setName(searchParameter.getName().getValue())
+              .setType(
+                  Annotations.SearchParameterType.forNumber(
+                      searchParameter.getType().getValue().getNumber()))
+              .setExpression(searchParameter.getExpression().getValue())
+              .build());
+    }
+    if (!searchParameterAnnotations.isEmpty()) {
+      optionsBuilder.setExtension(Annotations.searchParameter, searchParameterAnnotations);
+    }
+
     builder.setOptions(optionsBuilder);
 
     // If this is a primitive type, generate the value field first.
@@ -414,7 +442,10 @@ public class ProtoGenerator {
     return builder.build();
   }
 
-  /** Generate a .proto file descriptor from a list of StructureDefinitions. */
+  /**
+   * Generate a .proto file descriptor from a list of StructureDefinitions and a list of
+   * SearchParameters.
+   */
   public FileDescriptorProto generateFileDescriptor(List<StructureDefinition> defs) {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
     builder.setPackage(packageInfo.getProtoPackage()).setSyntax("proto3");
@@ -429,7 +460,24 @@ public class ProtoGenerator {
     builder.setOptions(options);
     for (StructureDefinition def : defs) {
       validateDefinition(def);
-      DescriptorProto proto = generateProto(def);
+
+      List<SearchParameter> searchParameters;
+      if (def.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE) {
+        // If this is a resource, add search parameters.
+        String enumValue = def.getSnapshot().getElementList().get(0).getId().getValue();
+        // Get the string representation of the enum value for the resource type.
+        EnumValueDescriptor enumValueDescriptor =
+            CodeWrapper.getEnumValueDescriptor(ResourceTypeCode.Value.getDescriptor(), enumValue);
+        searchParameters =
+            searchParameterMap.getOrDefault(
+                ResourceTypeCode.Value.forNumber(enumValueDescriptor.getNumber()),
+                new ArrayList<>());
+      } else {
+        // Not a resource - no search parameters to add.
+        searchParameters = new ArrayList<>();
+      }
+
+      DescriptorProto proto = generateProto(def, searchParameters);
       builder.addMessageType(proto);
     }
     // Add imports. Annotations is always needed.
@@ -930,7 +978,8 @@ public class ProtoGenerator {
     String baseId = element.getType(0).getCode().getValue();
     StructureDefinition baseStructureDefinition = baseStructDefsById.get(baseId);
 
-    DescriptorProto.Builder builder = generateProto(baseStructureDefinition).toBuilder();
+    DescriptorProto.Builder builder =
+        generateProto(baseStructureDefinition, new ArrayList<>()).toBuilder();
     MessageOptions.Builder options = builder.getOptionsBuilder();
     options
         .clearExtension(ProtoGeneratorAnnotations.messageDescription)

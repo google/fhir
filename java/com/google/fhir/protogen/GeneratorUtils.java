@@ -24,14 +24,18 @@ import com.google.fhir.proto.Annotations;
 import com.google.fhir.r4.core.DateTime;
 import com.google.fhir.r4.core.ElementDefinition;
 import com.google.fhir.r4.core.ExtensionContextTypeCode;
+import com.google.fhir.r4.core.ResourceTypeCode;
+import com.google.fhir.r4.core.SearchParameter;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
 import com.google.fhir.wrappers.DateTimeWrapper;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -308,5 +312,18 @@ final class GeneratorUtils {
   static boolean isExtensionProfile(StructureDefinition def) {
     return def.getType().getValue().equals("Extension")
         && def.getDerivation().getValue() == TypeDerivationRuleCode.Value.CONSTRAINT;
+  }
+
+  // Create a map from resource types to search parameters.
+  static Map<ResourceTypeCode.Value, List<SearchParameter>> getSearchParameterMap(
+      List<SearchParameter> searchParameters) {
+    return searchParameters.stream()
+        .flatMap(
+            searchParameter ->
+                searchParameter.getBaseList().stream()
+                    .map(base -> new SimpleEntry<>(base.getValue(), searchParameter)))
+        .collect(
+            Collectors.groupingBy(
+                Map.Entry::getKey, Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
   }
 }

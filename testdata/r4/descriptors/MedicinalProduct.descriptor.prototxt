@@ -707,4 +707,19 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MedicinalProduct, last updated 2019-11-01T09:29:23.356+11:00.\nDetailed definition of a medicinal product, typically for uses other than direct patient care (e.g. regulatory use).\nSee http://hl7.org/fhir/StructureDefinition/MedicinalProduct"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MedicinalProduct"
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "MedicinalProduct.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "name"
+    type: STRING
+    expression: "MedicinalProduct.name.productName"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "name-language"
+    type: TOKEN
+    expression: "MedicinalProduct.name.countryLanguage.language"
+  }
 }

@@ -40,9 +40,11 @@ public final class FhirPackageTest {
                 PackageInfo.newBuilder().setProtoPackage("foo").build(),
                 new ArrayList<>(),
                 new ArrayList<>(),
+                new ArrayList<>(),
                 new ArrayList<>()),
             new FhirPackage(
                 PackageInfo.newBuilder().setProtoPackage("foo").build(),
+                new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>()))
@@ -51,9 +53,11 @@ public final class FhirPackageTest {
                 PackageInfo.newBuilder().setProtoPackage("bar").build(),
                 new ArrayList<>(),
                 new ArrayList<>(),
+                new ArrayList<>(),
                 new ArrayList<>()),
             new FhirPackage(
                 PackageInfo.newBuilder().setProtoPackage("bar").build(),
+                new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>()))
@@ -63,6 +67,7 @@ public final class FhirPackageTest {
   private static final int R4_DEFINITIONS_COUNT = 653;
   private static final int R4_CODESYSTEMS_COUNT = 1062;
   private static final int R4_VALUESETS_COUNT = 1316;
+  private static final int R4_SEARCH_PARAMETERS_COUNT = 1385;
 
   @Test
   public void loadTest() throws IOException {
@@ -71,6 +76,7 @@ public final class FhirPackageTest {
     assertThat(fhirPackage.structureDefinitions).hasSize(R4_DEFINITIONS_COUNT);
     assertThat(fhirPackage.codeSystems).hasSize(R4_CODESYSTEMS_COUNT);
     assertThat(fhirPackage.valueSets).hasSize(R4_VALUESETS_COUNT);
+    assertThat(fhirPackage.searchParameters).hasSize(R4_SEARCH_PARAMETERS_COUNT);
   }
 
   @Test

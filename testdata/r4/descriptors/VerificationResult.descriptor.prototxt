@@ -550,4 +550,9 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for VerificationResult, last updated 2019-11-01T09:29:23.356+11:00.\nDescribes validation requirements, source(s), status and dates for one or more elements.\nSee http://hl7.org/fhir/StructureDefinition/VerificationResult"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/VerificationResult"
+  [google.fhir.proto.search_parameter] {
+    name: "target"
+    type: REFERENCE
+    expression: "VerificationResult.target"
+  }
 }

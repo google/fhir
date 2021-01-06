@@ -149,6 +149,7 @@ def gen_fhir_protos(
             "-Dimports=" + additional_import_test_flag,
             "-Dstu3_core_dep=$(location %s)" % _get_zip_for_pkg(STU3_PACKAGE_DEP),
             "-Dr4_core_dep=$(location %s)" % _get_zip_for_pkg(R4_PACKAGE_DEP),
+            "-Xmx4096M",
         ]
 
         native.java_test(

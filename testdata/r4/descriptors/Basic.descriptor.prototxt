@@ -146,4 +146,34 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Basic, last updated 2019-11-01T09:29:23.356+11:00.\nResource for non-supported content.\nSee http://hl7.org/fhir/StructureDefinition/Basic"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Basic"
+  [google.fhir.proto.search_parameter] {
+    name: "author"
+    type: REFERENCE
+    expression: "Basic.author"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "code"
+    type: TOKEN
+    expression: "Basic.code"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "created"
+    type: DATE
+    expression: "Basic.created"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "Basic.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "patient"
+    type: REFERENCE
+    expression: "Basic.subject.where(resolve() is Patient)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "subject"
+    type: REFERENCE
+    expression: "Basic.subject"
+  }
 }

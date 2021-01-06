@@ -440,4 +440,19 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MedicinalProductPharmaceutical, last updated 2019-11-01T09:29:23.356+11:00.\nA pharmaceutical product described in terms of its composition and dose form.\nSee http://hl7.org/fhir/StructureDefinition/MedicinalProductPharmaceutical"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MedicinalProductPharmaceutical"
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "MedicinalProductPharmaceutical.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "route"
+    type: TOKEN
+    expression: "MedicinalProductPharmaceutical.routeOfAdministration.code"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "target-species"
+    type: TOKEN
+    expression: "MedicinalProductPharmaceutical.routeOfAdministration.targetSpecies.code"
+  }
 }

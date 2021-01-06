@@ -24,12 +24,20 @@ import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations.FhirVersion;
+import com.google.fhir.r4.core.ResourceTypeCode;
+import com.google.fhir.r4.core.SearchParameter;
 import com.google.fhir.r4.core.StructureDefinition;
+import com.google.fhir.r4.core.StructureDefinitionKindCode;
+import com.google.fhir.wrappers.CodeWrapper;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
+import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.TextFormat;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,6 +54,8 @@ public class ProtoGeneratorTest {
   private TextFormat.Parser textParser;
   private ExtensionRegistry registry;
   private Runfiles runfiles;
+  private FhirPackage fhirPackage;
+  private Map<ResourceTypeCode.Value, List<SearchParameter>> searchParameterMap;
 
   /** Read the specifed file from the testdata directory into a String. */
   private String loadFile(String relativePath) throws IOException {
@@ -140,6 +150,8 @@ public class ProtoGeneratorTest {
     jsonParser = JsonFormat.getParser();
     textParser = TextFormat.getParser();
     runfiles = Runfiles.create();
+    fhirPackage = FhirPackage.load("spec/fhir_r4_package.zip");
+    searchParameterMap = GeneratorUtils.getSearchParameterMap(fhirPackage.searchParameters);
 
     registry = ExtensionRegistry.newInstance();
     ProtoGeneratorTestUtils.initializeRegistry(registry);
@@ -1415,7 +1427,22 @@ public class ProtoGeneratorTest {
   private void testGeneratedR4Proto(ProtoGenerator protoGenerator, String resourceName)
       throws IOException {
     StructureDefinition resource = readStructureDefinition(resourceName, FhirVersion.R4);
-    DescriptorProto generatedProto = protoGenerator.generateProto(resource);
+    List<SearchParameter> searchParameters;
+    if (resource.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE) {
+      // If this is a resource, add search parameters.
+      String enumValue = resource.getSnapshot().getElementList().get(0).getId().getValue();
+      // Get the string representation of the enum value for the resource type.
+      EnumValueDescriptor enumValueDescriptor =
+          CodeWrapper.getEnumValueDescriptor(ResourceTypeCode.Value.getDescriptor(), enumValue);
+      searchParameters =
+          searchParameterMap.getOrDefault(
+              ResourceTypeCode.Value.forNumber(enumValueDescriptor.getNumber()),
+              new ArrayList<>());
+    } else {
+      // Not a resource - no search parameters to add.
+      searchParameters = new ArrayList<>();
+    }
+    DescriptorProto generatedProto = protoGenerator.generateProto(resource, searchParameters);
     DescriptorProto golden = readDescriptorProto(resourceName, FhirVersion.R4);
     if (!generatedProto.equals(golden)) {
       System.out.println("Failed on: " + resourceName);

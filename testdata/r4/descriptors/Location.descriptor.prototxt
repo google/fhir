@@ -487,4 +487,79 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Location, last updated 2019-11-01T09:29:23.356+11:00.\nDetails and position information for a physical place.\nSee http://hl7.org/fhir/StructureDefinition/Location"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Location"
+  [google.fhir.proto.search_parameter] {
+    name: "address"
+    type: STRING
+    expression: "Location.address"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address-city"
+    type: STRING
+    expression: "Location.address.city"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address-country"
+    type: STRING
+    expression: "Location.address.country"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address-postalcode"
+    type: STRING
+    expression: "Location.address.postalCode"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address-state"
+    type: STRING
+    expression: "Location.address.state"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address-use"
+    type: TOKEN
+    expression: "Location.address.use"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "endpoint"
+    type: REFERENCE
+    expression: "Location.endpoint"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "Location.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "name"
+    type: STRING
+    expression: "Location.name | Location.alias"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "near"
+    type: SPECIAL
+    expression: "Location.position"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "operational-status"
+    type: TOKEN
+    expression: "Location.operationalStatus"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "organization"
+    type: REFERENCE
+    expression: "Location.managingOrganization"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "partof"
+    type: REFERENCE
+    expression: "Location.partOf"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "Location.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "type"
+    type: TOKEN
+    expression: "Location.type"
+  }
 }

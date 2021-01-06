@@ -44,4 +44,51 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Resource, last updated 2019-11-01T09:29:23.356+11:00.\nBase Resource.\nSee http://hl7.org/fhir/StructureDefinition/Resource"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Resource"
   [google.fhir.proto.is_abstract_type]: true
+  [google.fhir.proto.search_parameter] {
+    name: "FilterSearchParameter"
+    type: SPECIAL
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "ID-SEARCH-PARAMETER"
+    type: TOKEN
+    expression: "id"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "_content"
+    type: STRING
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "_id"
+    type: TOKEN
+    expression: "Resource.id"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "_lastUpdated"
+    type: DATE
+    expression: "Resource.meta.lastUpdated"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "_profile"
+    type: URI
+    expression: "Resource.meta.profile"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "_query"
+    type: TOKEN
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "_security"
+    type: TOKEN
+    expression: "Resource.meta.security"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "_source"
+    type: URI
+    expression: "Resource.meta.source"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "_tag"
+    type: TOKEN
+    expression: "Resource.meta.tag"
+  }
 }

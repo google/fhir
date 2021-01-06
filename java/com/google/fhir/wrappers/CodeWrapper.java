@@ -21,6 +21,7 @@ import com.google.fhir.proto.Annotations;
 import com.google.fhir.r4.core.Code;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProtoOrBuilder;
 import com.google.protobuf.Descriptors.Descriptor;
+import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
@@ -119,32 +120,36 @@ public class CodeWrapper extends PrimitiveWrapper<Code> {
       throw new IllegalArgumentException("Invalid target message: " + descriptor.getFullName());
     }
 
+    EnumValueDescriptor enumValue =
+        getEnumValueDescriptor(valueField.getEnumType(), getWrapped().getValue());
+    return (B) builder.setField(valueField, enumValue);
+  }
+
+  public static EnumValueDescriptor getEnumValueDescriptor(
+      EnumDescriptor enumDescriptor, String value) {
     // TODO: improve strictness of this parsing step.
     EnumValueDescriptor enumValue =
-        valueField
-            .getEnumType()
-            .findValueByName(getWrapped().getValue().toUpperCase().replace('-', '_'));
+        enumDescriptor.findValueByName(value.toUpperCase().replace('-', '_'));
     if (enumValue != null
         && enumValue.getNumber() != 0
         && !enumValue.getOptions().hasExtension(Annotations.fhirOriginalCode)) {
-      return (B) builder.setField(valueField, enumValue);
+      return enumValue;
     }
-
     // Try again, explicitly looking for original codes.
-    for (EnumValueDescriptor value : valueField.getEnumType().getValues()) {
-      if (value.getOptions().hasExtension(Annotations.fhirOriginalCode)
-          && value
+    for (EnumValueDescriptor enumValueDescriptor : enumDescriptor.getValues()) {
+      if (enumValueDescriptor.getOptions().hasExtension(Annotations.fhirOriginalCode)
+          && enumValueDescriptor
               .getOptions()
               .getExtension(Annotations.fhirOriginalCode)
-              .equals(getWrapped().getValue())) {
-        return (B) builder.setField(valueField, value);
+              .equals(value)) {
+        return enumValueDescriptor;
       }
     }
     throw new IllegalArgumentException(
-        "Failed to convert to "
-            + descriptor.getFullName()
+        "Failed to get enum value for "
+            + enumDescriptor.getFullName()
             + ": \""
-            + this
+            + value
             + "\" is not a valid enum entry");
   }
 

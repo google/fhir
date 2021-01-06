@@ -23,6 +23,7 @@ import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.CodeSystem;
+import com.google.fhir.r4.core.SearchParameter;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.ValueSet;
 import com.google.protobuf.Message;
@@ -50,16 +51,19 @@ import java.util.zip.ZipFile;
 public class FhirPackage {
   public final PackageInfo packageInfo;
   public final List<StructureDefinition> structureDefinitions;
+  public final List<SearchParameter> searchParameters;
   public final List<CodeSystem> codeSystems;
   public final List<ValueSet> valueSets;
 
   public FhirPackage(
       PackageInfo packageInfo,
       List<StructureDefinition> structureDefinitions,
+      List<SearchParameter> searchParameters,
       List<CodeSystem> codeSystems,
       List<ValueSet> valueSets) {
     this.packageInfo = packageInfo;
     this.structureDefinitions = structureDefinitions;
+    this.searchParameters = searchParameters;
     this.codeSystems = codeSystems;
     this.valueSets = valueSets;
   }
@@ -126,6 +130,7 @@ public class FhirPackage {
     List<ValueSet> valueSets = new ArrayList<>();
     List<CodeSystem> codeSystems = new ArrayList<>();
     List<StructureDefinition> structureDefinitions = new ArrayList<>();
+    List<SearchParameter> searchParameters = new ArrayList<>();
     JsonFormat.Parser parser = JsonFormat.getSpecParser(packageInfo.getFhirVersion());
 
     for (Map.Entry<String, String> jsonFile : jsonFiles.entrySet()) {
@@ -142,6 +147,8 @@ public class FhirPackage {
         codeSystems.add(parser.merge(json, CodeSystem.newBuilder()).build());
       } else if (expectedType.get().equals("StructureDefinition")) {
         structureDefinitions.add(parser.merge(json, StructureDefinition.newBuilder()).build());
+      } else if (expectedType.get().equals("SearchParameter")) {
+        searchParameters.add(parser.merge(json, SearchParameter.newBuilder()).build());
       } else if (expectedType.get().equals("Bundle")) {
         Bundle bundle = parser.merge(json, Bundle.newBuilder()).build();
         for (Bundle.Entry bundleEntry : bundle.getEntryList()) {
@@ -164,13 +171,15 @@ public class FhirPackage {
               + zipFilePath
               + ".  The package info file must end in package_info.prototxt");
     }
-    return new FhirPackage(packageInfo, structureDefinitions, codeSystems, valueSets);
+    return new FhirPackage(
+        packageInfo, structureDefinitions, searchParameters, codeSystems, valueSets);
   }
 
   FhirPackage filterResources(Predicate<StructureDefinition> filter) {
     return new FhirPackage(
         packageInfo,
         structureDefinitions.stream().filter(filter).collect(Collectors.toList()),
+        searchParameters,
         codeSystems,
         valueSets);
   }

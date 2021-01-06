@@ -1513,4 +1513,99 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Task, last updated 2019-11-01T09:29:23.356+11:00.\nA task to be performed.\nSee http://hl7.org/fhir/StructureDefinition/Task"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Task"
   [google.fhir.proto.fhir_path_message_constraint]: "lastModified.exists().not() or authoredOn.exists().not() or lastModified >= authoredOn"
+  [google.fhir.proto.search_parameter] {
+    name: "authored-on"
+    type: DATE
+    expression: "Task.authoredOn"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "based-on"
+    type: REFERENCE
+    expression: "Task.basedOn"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "business-status"
+    type: TOKEN
+    expression: "Task.businessStatus"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "code"
+    type: TOKEN
+    expression: "Task.code"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "encounter"
+    type: REFERENCE
+    expression: "Task.encounter"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "focus"
+    type: REFERENCE
+    expression: "Task.focus"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "group-identifier"
+    type: TOKEN
+    expression: "Task.groupIdentifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "Task.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "intent"
+    type: TOKEN
+    expression: "Task.intent"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "modified"
+    type: DATE
+    expression: "Task.lastModified"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "owner"
+    type: REFERENCE
+    expression: "Task.owner"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "part-of"
+    type: REFERENCE
+    expression: "Task.partOf"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "patient"
+    type: REFERENCE
+    expression: "Task.for.where(resolve() is Patient)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "performer"
+    type: TOKEN
+    expression: "Task.performerType"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "period"
+    type: DATE
+    expression: "Task.executionPeriod"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "priority"
+    type: TOKEN
+    expression: "Task.priority"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "requester"
+    type: REFERENCE
+    expression: "Task.requester"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "Task.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "subject"
+    type: REFERENCE
+    expression: "Task.for"
+  }
 }

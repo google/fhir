@@ -332,4 +332,34 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Subscription, last updated 2019-11-01T09:29:23.356+11:00.\nServer push subscription criteria.\nSee http://hl7.org/fhir/StructureDefinition/Subscription"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Subscription"
+  [google.fhir.proto.search_parameter] {
+    name: "contact"
+    type: TOKEN
+    expression: "Subscription.contact"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "criteria"
+    type: STRING
+    expression: "Subscription.criteria"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "payload"
+    type: TOKEN
+    expression: "Subscription.channel.payload"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "Subscription.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "type"
+    type: TOKEN
+    expression: "Subscription.channel.type"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "url"
+    type: URI
+    expression: "Subscription.channel.endpoint"
+  }
 }

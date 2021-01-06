@@ -401,4 +401,54 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for EHRS FM Record Lifecycle Event - Provenance.\nWho, What, When for a set of resources.\nSee http://hl7.org/fhir/StructureDefinition/ehrsrle-provenance"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Provenance"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ehrsrle-provenance"
+  [google.fhir.proto.search_parameter] {
+    name: "agent"
+    type: REFERENCE
+    expression: "Provenance.agent.who"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "agent-role"
+    type: TOKEN
+    expression: "Provenance.agent.role"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "agent-type"
+    type: TOKEN
+    expression: "Provenance.agent.type"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "entity"
+    type: REFERENCE
+    expression: "Provenance.entity.what"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "location"
+    type: REFERENCE
+    expression: "Provenance.location"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "patient"
+    type: REFERENCE
+    expression: "Provenance.target.where(resolve() is Patient)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "recorded"
+    type: DATE
+    expression: "Provenance.recorded"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "signature-type"
+    type: TOKEN
+    expression: "Provenance.signature.type"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "target"
+    type: REFERENCE
+    expression: "Provenance.target"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "when"
+    type: DATE
+    expression: "(Provenance.occurred as dateTime)"
+  }
 }

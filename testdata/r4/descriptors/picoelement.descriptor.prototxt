@@ -654,4 +654,114 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for PICO Element Profile.\nA population, intervention, or exposure definition.\nSee http://hl7.org/fhir/StructureDefinition/picoelement"
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/EvidenceVariable"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/picoelement"
+  [google.fhir.proto.search_parameter] {
+    name: "composed-of"
+    type: REFERENCE
+    expression: "EvidenceVariable.relatedArtifact.where(type=\'composed-of\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context"
+    type: TOKEN
+    expression: "(EvidenceVariable.useContext.value as CodeableConcept)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-quantity"
+    type: QUANTITY
+    expression: "(EvidenceVariable.useContext.value as Quantity) | (EvidenceVariable.useContext.value as Range)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-type"
+    type: TOKEN
+    expression: "EvidenceVariable.useContext.code"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-type-quantity"
+    type: COMPOSITE
+    expression: "EvidenceVariable.useContext"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "context-type-value"
+    type: COMPOSITE
+    expression: "EvidenceVariable.useContext"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "date"
+    type: DATE
+    expression: "EvidenceVariable.date"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "depends-on"
+    type: REFERENCE
+    expression: "EvidenceVariable.relatedArtifact.where(type=\'depends-on\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "derived-from"
+    type: REFERENCE
+    expression: "EvidenceVariable.relatedArtifact.where(type=\'derived-from\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "description"
+    type: STRING
+    expression: "EvidenceVariable.description"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "effective"
+    type: DATE
+    expression: "EvidenceVariable.effectivePeriod"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "EvidenceVariable.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "jurisdiction"
+    type: TOKEN
+    expression: "EvidenceVariable.jurisdiction"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "name"
+    type: STRING
+    expression: "EvidenceVariable.name"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "predecessor"
+    type: REFERENCE
+    expression: "EvidenceVariable.relatedArtifact.where(type=\'predecessor\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "publisher"
+    type: STRING
+    expression: "EvidenceVariable.publisher"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "EvidenceVariable.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "successor"
+    type: REFERENCE
+    expression: "EvidenceVariable.relatedArtifact.where(type=\'successor\').resource"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "title"
+    type: STRING
+    expression: "EvidenceVariable.title"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "topic"
+    type: TOKEN
+    expression: "EvidenceVariable.topic"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "url"
+    type: URI
+    expression: "EvidenceVariable.url"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "version"
+    type: TOKEN
+    expression: "EvidenceVariable.version"
+  }
 }

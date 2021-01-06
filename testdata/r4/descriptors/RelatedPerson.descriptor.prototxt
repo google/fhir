@@ -294,4 +294,89 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for RelatedPerson, last updated 2019-11-01T09:29:23.356+11:00.\nA person that is related to a patient, but who is not a direct target of care.\nSee http://hl7.org/fhir/StructureDefinition/RelatedPerson"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/RelatedPerson"
+  [google.fhir.proto.search_parameter] {
+    name: "active"
+    type: TOKEN
+    expression: "RelatedPerson.active"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address"
+    type: STRING
+    expression: "Patient.address | Person.address | Practitioner.address | RelatedPerson.address"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address-city"
+    type: STRING
+    expression: "Patient.address.city | Person.address.city | Practitioner.address.city | RelatedPerson.address.city"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address-country"
+    type: STRING
+    expression: "Patient.address.country | Person.address.country | Practitioner.address.country | RelatedPerson.address.country"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address-postalcode"
+    type: STRING
+    expression: "Patient.address.postalCode | Person.address.postalCode | Practitioner.address.postalCode | RelatedPerson.address.postalCode"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address-state"
+    type: STRING
+    expression: "Patient.address.state | Person.address.state | Practitioner.address.state | RelatedPerson.address.state"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address-use"
+    type: TOKEN
+    expression: "Patient.address.use | Person.address.use | Practitioner.address.use | RelatedPerson.address.use"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "birthdate"
+    type: DATE
+    expression: "Patient.birthDate | Person.birthDate | RelatedPerson.birthDate"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "email"
+    type: TOKEN
+    expression: "Patient.telecom.where(system=\'email\') | Person.telecom.where(system=\'email\') | Practitioner.telecom.where(system=\'email\') | PractitionerRole.telecom.where(system=\'email\') | RelatedPerson.telecom.where(system=\'email\')"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "gender"
+    type: TOKEN
+    expression: "Patient.gender | Person.gender | Practitioner.gender | RelatedPerson.gender"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "RelatedPerson.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "name"
+    type: STRING
+    expression: "RelatedPerson.name"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "patient"
+    type: REFERENCE
+    expression: "RelatedPerson.patient"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "phone"
+    type: TOKEN
+    expression: "Patient.telecom.where(system=\'phone\') | Person.telecom.where(system=\'phone\') | Practitioner.telecom.where(system=\'phone\') | PractitionerRole.telecom.where(system=\'phone\') | RelatedPerson.telecom.where(system=\'phone\')"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "phonetic"
+    type: STRING
+    expression: "Patient.name | Person.name | Practitioner.name | RelatedPerson.name"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "relationship"
+    type: TOKEN
+    expression: "RelatedPerson.relationship"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "telecom"
+    type: TOKEN
+    expression: "Patient.telecom | Person.telecom | Practitioner.telecom | PractitionerRole.telecom | RelatedPerson.telecom"
+  }
 }

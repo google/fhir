@@ -347,4 +347,54 @@ options {
   [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Group"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/groupdefinition"
   [google.fhir.proto.fhir_path_message_constraint]: "member.empty() or (actual = true)"
+  [google.fhir.proto.search_parameter] {
+    name: "actual"
+    type: TOKEN
+    expression: "Group.actual"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "characteristic"
+    type: TOKEN
+    expression: "Group.characteristic.code"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "characteristic-value"
+    type: COMPOSITE
+    expression: "Group.characteristic"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "code"
+    type: TOKEN
+    expression: "Group.code"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "exclude"
+    type: TOKEN
+    expression: "Group.characteristic.exclude"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "Group.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "managing-entity"
+    type: REFERENCE
+    expression: "Group.managingEntity"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "member"
+    type: REFERENCE
+    expression: "Group.member.entity"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "type"
+    type: TOKEN
+    expression: "Group.type"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "value"
+    type: TOKEN
+    expression: "(Group.characteristic.value as CodeableConcept) | (Group.characteristic.value as boolean)"
+  }
 }

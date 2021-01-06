@@ -870,4 +870,74 @@ options {
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for InsurancePlan, last updated 2019-11-01T09:29:23.356+11:00.\nDetails of a Health Insurance product/plan provided by an organization.\nSee http://hl7.org/fhir/StructureDefinition/InsurancePlan"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/InsurancePlan"
   [google.fhir.proto.fhir_path_message_constraint]: "(identifier.count() + name.count()) > 0"
+  [google.fhir.proto.search_parameter] {
+    name: "address"
+    type: STRING
+    expression: "InsurancePlan.contact.address"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address-city"
+    type: STRING
+    expression: "InsurancePlan.contact.address.city"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address-country"
+    type: STRING
+    expression: "InsurancePlan.contact.address.country"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address-postalcode"
+    type: STRING
+    expression: "InsurancePlan.contact.address.postalCode"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address-state"
+    type: STRING
+    expression: "InsurancePlan.contact.address.state"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "address-use"
+    type: TOKEN
+    expression: "InsurancePlan.contact.address.use"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "administered-by"
+    type: REFERENCE
+    expression: "InsurancePlan.administeredBy"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "endpoint"
+    type: REFERENCE
+    expression: "InsurancePlan.endpoint"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "InsurancePlan.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "name"
+    type: STRING
+    expression: "name | alias"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "owned-by"
+    type: REFERENCE
+    expression: "InsurancePlan.ownedBy"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "phonetic"
+    type: STRING
+    expression: "InsurancePlan.name"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "InsurancePlan.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "type"
+    type: TOKEN
+    expression: "InsurancePlan.type"
+  }
 }

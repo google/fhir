@@ -47,6 +47,25 @@ enum Requirement {
   REQUIRED_BY_FHIR = 1;
 }
 
+enum SearchParameterType {
+  INVALID_SEARCH_PARAMETER_TYPE = 0;
+  NUMBER = 1;
+  DATE = 2;
+  STRING = 3;
+  TOKEN = 4;
+  REFERENCE = 5;
+  COMPOSITE = 6;
+  QUANTITY = 7;
+  URI = 8;
+  SPECIAL = 9;
+}
+
+message SearchParameter {
+  string name = 1;
+  SearchParameterType type = 2;
+  string expression = 3;
+}
+
 extend google.protobuf.MessageOptions {
   // If this message is a Code constrained to a specific valueset, this is the
   // valueset identifier.
@@ -99,6 +118,9 @@ extend google.protobuf.MessageOptions {
   // DEPRECATED: use fhir_profile_base to identify extension, and
   // fhir_structure_definition_url to get the extension url.
   string fhir_extension_url = 177048773 [deprecated = true];
+
+  // A list of search parameters defined on the Resource.
+  repeated SearchParameter search_parameter = 325037910;
 }
 
 extend google.protobuf.EnumOptions {

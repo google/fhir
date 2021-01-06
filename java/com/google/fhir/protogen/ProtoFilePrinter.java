@@ -36,6 +36,7 @@ import com.google.protobuf.DescriptorProtos.FileOptions;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Extension;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -80,7 +81,8 @@ public class ProtoFilePrinter {
               Annotations.fhirPathMessageConstraint,
               Annotations.isChoiceType,
               Annotations.isComplexExtension,
-              Annotations.fhirFixedSystem);
+              Annotations.fhirFixedSystem,
+              Annotations.searchParameter);
 
   /** Creates a ProtoFilePrinter with default parameters. */
   public ProtoFilePrinter() {
@@ -194,37 +196,39 @@ public class ProtoFilePrinter {
     String optionPackage = getOptionsPackage(packageName);
     for (Extension<MessageOptions, ? extends Object> extension : MESSAGE_EXTENSIONS) {
       boolean isStringType = extension.getDescriptor().getType() == FieldDescriptor.Type.STRING;
+      boolean isMessageType = extension.getDescriptor().getType() == FieldDescriptor.Type.MESSAGE;
+      List<Object> extensionInstances = new ArrayList<>();
       if (extension.isRepeated()) {
         @SuppressWarnings("unchecked") // Cast to list extension
         Extension<MessageOptions, List<Object>> listExtension =
             (Extension<MessageOptions, List<Object>>) extension;
         for (int i = 0; i < options.getExtensionCount(listExtension); i++) {
-          message
-              .append(fieldIndent)
-              .append("option (")
-              .append(optionPackage)
-              .append(listExtension.getDescriptor().getName())
-              .append(") = ")
-              .append(isStringType ? "\"" : "")
-              .append(EXTENSION_ESCAPER.escape(options.getExtension(listExtension, i).toString()))
-              .append(isStringType ? "\"" : "")
-              .append(";\n");
-          printedField = true;
+          extensionInstances.add(options.getExtension(listExtension, i));
         }
       } else {
         if (options.hasExtension(extension)) {
-          message
-              .append(fieldIndent)
-              .append("option (")
-              .append(optionPackage)
-              .append(extension.getDescriptor().getName())
-              .append(") = ")
-              .append(isStringType ? "\"" : "")
-              .append(EXTENSION_ESCAPER.escape(options.getExtension(extension).toString()))
-              .append(isStringType ? "\"" : "")
-              .append(";\n");
-          printedField = true;
+          extensionInstances.add(options.getExtension(extension));
         }
+      }
+      for (Object extensionInstance : extensionInstances) {
+        message
+            .append(fieldIndent)
+            .append("option (")
+            .append(optionPackage)
+            .append(extension.getDescriptor().getName())
+            .append(") = ")
+            .append(isStringType ? "\"" : isMessageType ? "{\n" : "")
+            .append(
+                EXTENSION_ESCAPER.escape(
+                    isMessageType
+                        ? extensionInstance
+                            .toString()
+                            .replaceAll("(?m)^", fieldIndent + "  ")
+                            .replaceAll("\\\\", "") // remove additional backslash in messages
+                        : extensionInstance.toString()))
+            .append(isStringType ? "\"" : isMessageType ? fieldIndent + "}" : "")
+            .append(";\n");
+        printedField = true;
       }
     }
 

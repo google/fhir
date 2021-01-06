@@ -33,6 +33,10 @@ message DomainResource {
   option (.google.fhir.proto.is_abstract_type) = true;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/DomainResource";
+  option (.google.fhir.proto.search_parameter) = {
+    name: "_text"
+    type: STRING
+  };
 
   // Logical id of this artifact
   Id id = 1;

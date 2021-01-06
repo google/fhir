@@ -502,4 +502,89 @@ options {
   [google.fhir.proto.fhir_path_message_constraint]: "start.exists() = end.exists()"
   [google.fhir.proto.fhir_path_message_constraint]: "(start.exists() and end.exists()) or (status in (\'proposed\' | \'cancelled\' | \'waitlist\'))"
   [google.fhir.proto.fhir_path_message_constraint]: "Appointment.cancelationReason.exists() implies (Appointment.status=\'no-show\' or Appointment.status=\'cancelled\')"
+  [google.fhir.proto.search_parameter] {
+    name: "actor"
+    type: REFERENCE
+    expression: "Appointment.participant.actor"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "appointment-type"
+    type: TOKEN
+    expression: "Appointment.appointmentType"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "based-on"
+    type: REFERENCE
+    expression: "Appointment.basedOn"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "date"
+    type: DATE
+    expression: "Appointment.start"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "Appointment.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "location"
+    type: REFERENCE
+    expression: "Appointment.participant.actor.where(resolve() is Location)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "part-status"
+    type: TOKEN
+    expression: "Appointment.participant.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "patient"
+    type: REFERENCE
+    expression: "Appointment.participant.actor.where(resolve() is Patient)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "practitioner"
+    type: REFERENCE
+    expression: "Appointment.participant.actor.where(resolve() is Practitioner)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "reason-code"
+    type: TOKEN
+    expression: "Appointment.reasonCode"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "reason-reference"
+    type: REFERENCE
+    expression: "Appointment.reasonReference"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "service-category"
+    type: TOKEN
+    expression: "Appointment.serviceCategory"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "service-type"
+    type: TOKEN
+    expression: "Appointment.serviceType"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "slot"
+    type: REFERENCE
+    expression: "Appointment.slot"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "specialty"
+    type: TOKEN
+    expression: "Appointment.specialty"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "Appointment.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "supporting-info"
+    type: REFERENCE
+    expression: "Appointment.supportingInformation"
+  }
 }

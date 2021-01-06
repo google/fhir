@@ -215,4 +215,74 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for OrganizationAffiliation, last updated 2019-11-01T09:29:23.356+11:00.\nDefines an affiliation/assotiation/relationship between 2 distinct oganizations, that is not a part-of relationship/sub-division relationship.\nSee http://hl7.org/fhir/StructureDefinition/OrganizationAffiliation"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/OrganizationAffiliation"
+  [google.fhir.proto.search_parameter] {
+    name: "active"
+    type: TOKEN
+    expression: "OrganizationAffiliation.active"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "date"
+    type: DATE
+    expression: "OrganizationAffiliation.period"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "email"
+    type: TOKEN
+    expression: "OrganizationAffiliation.telecom.where(system=\'email\')"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "endpoint"
+    type: REFERENCE
+    expression: "OrganizationAffiliation.endpoint"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "OrganizationAffiliation.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "location"
+    type: REFERENCE
+    expression: "OrganizationAffiliation.location"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "network"
+    type: REFERENCE
+    expression: "OrganizationAffiliation.network"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "participating-organization"
+    type: REFERENCE
+    expression: "OrganizationAffiliation.participatingOrganization"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "phone"
+    type: TOKEN
+    expression: "OrganizationAffiliation.telecom.where(system=\'phone\')"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "primary-organization"
+    type: REFERENCE
+    expression: "OrganizationAffiliation.organization"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "role"
+    type: TOKEN
+    expression: "OrganizationAffiliation.code"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "service"
+    type: REFERENCE
+    expression: "OrganizationAffiliation.healthcareService"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "specialty"
+    type: TOKEN
+    expression: "OrganizationAffiliation.specialty"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "telecom"
+    type: TOKEN
+    expression: "OrganizationAffiliation.telecom"
+  }
 }

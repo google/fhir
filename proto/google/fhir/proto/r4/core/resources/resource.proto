@@ -31,6 +31,53 @@ message Resource {
   option (.google.fhir.proto.is_abstract_type) = true;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Resource";
+  option (.google.fhir.proto.search_parameter) = {
+    name: "FilterSearchParameter"
+    type: SPECIAL
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "ID-SEARCH-PARAMETER"
+    type: TOKEN
+    expression: "id"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "_content"
+    type: STRING
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "_id"
+    type: TOKEN
+    expression: "Resource.id"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "_lastUpdated"
+    type: DATE
+    expression: "Resource.meta.lastUpdated"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "_profile"
+    type: URI
+    expression: "Resource.meta.profile"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "_query"
+    type: TOKEN
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "_security"
+    type: TOKEN
+    expression: "Resource.meta.security"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "_source"
+    type: URI
+    expression: "Resource.meta.source"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "_tag"
+    type: TOKEN
+    expression: "Resource.meta.tag"
+  };
 
   // Logical id of this artifact
   Id id = 1;

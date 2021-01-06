@@ -3143,4 +3143,89 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ExplanationOfBenefit, last updated 2019-11-01T09:29:23.356+11:00.\nExplanation of Benefit resource.\nSee http://hl7.org/fhir/StructureDefinition/ExplanationOfBenefit"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ExplanationOfBenefit"
+  [google.fhir.proto.search_parameter] {
+    name: "care-team"
+    type: REFERENCE
+    expression: "ExplanationOfBenefit.careTeam.provider"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "claim"
+    type: REFERENCE
+    expression: "ExplanationOfBenefit.claim"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "coverage"
+    type: REFERENCE
+    expression: "ExplanationOfBenefit.insurance.coverage"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "created"
+    type: DATE
+    expression: "ExplanationOfBenefit.created"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "detail-udi"
+    type: REFERENCE
+    expression: "ExplanationOfBenefit.item.detail.udi"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "disposition"
+    type: STRING
+    expression: "ExplanationOfBenefit.disposition"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "encounter"
+    type: REFERENCE
+    expression: "ExplanationOfBenefit.item.encounter"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "enterer"
+    type: REFERENCE
+    expression: "ExplanationOfBenefit.enterer"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "facility"
+    type: REFERENCE
+    expression: "ExplanationOfBenefit.facility"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "ExplanationOfBenefit.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "item-udi"
+    type: REFERENCE
+    expression: "ExplanationOfBenefit.item.udi"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "patient"
+    type: REFERENCE
+    expression: "ExplanationOfBenefit.patient"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "payee"
+    type: REFERENCE
+    expression: "ExplanationOfBenefit.payee.party"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "procedure-udi"
+    type: REFERENCE
+    expression: "ExplanationOfBenefit.procedure.udi"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "provider"
+    type: REFERENCE
+    expression: "ExplanationOfBenefit.provider"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "ExplanationOfBenefit.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "subdetail-udi"
+    type: REFERENCE
+    expression: "ExplanationOfBenefit.item.detail.subDetail.udi"
+  }
 }

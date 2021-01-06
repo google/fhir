@@ -542,4 +542,64 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for HealthcareService, last updated 2019-11-01T09:29:23.356+11:00.\nThe details of a healthcare service available at a location.\nSee http://hl7.org/fhir/StructureDefinition/HealthcareService"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/HealthcareService"
+  [google.fhir.proto.search_parameter] {
+    name: "active"
+    type: TOKEN
+    expression: "HealthcareService.active"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "characteristic"
+    type: TOKEN
+    expression: "HealthcareService.characteristic"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "coverage-area"
+    type: REFERENCE
+    expression: "HealthcareService.coverageArea"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "endpoint"
+    type: REFERENCE
+    expression: "HealthcareService.endpoint"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "HealthcareService.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "location"
+    type: REFERENCE
+    expression: "HealthcareService.location"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "name"
+    type: STRING
+    expression: "HealthcareService.name"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "organization"
+    type: REFERENCE
+    expression: "HealthcareService.providedBy"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "program"
+    type: TOKEN
+    expression: "HealthcareService.program"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "service-category"
+    type: TOKEN
+    expression: "HealthcareService.category"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "service-type"
+    type: TOKEN
+    expression: "HealthcareService.type"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "specialty"
+    type: TOKEN
+    expression: "HealthcareService.specialty"
+  }
 }

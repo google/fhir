@@ -411,4 +411,44 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ImmunizationRecommendation, last updated 2019-11-01T09:29:23.356+11:00.\nGuidance or advice relating to an immunization.\nSee http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation"
+  [google.fhir.proto.search_parameter] {
+    name: "date"
+    type: DATE
+    expression: "ImmunizationRecommendation.date"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "ImmunizationRecommendation.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "information"
+    type: REFERENCE
+    expression: "ImmunizationRecommendation.recommendation.supportingPatientInformation"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "patient"
+    type: REFERENCE
+    expression: "ImmunizationRecommendation.patient"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "ImmunizationRecommendation.recommendation.forecastStatus"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "support"
+    type: REFERENCE
+    expression: "ImmunizationRecommendation.recommendation.supportingImmunization"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "target-disease"
+    type: TOKEN
+    expression: "ImmunizationRecommendation.recommendation.targetDisease"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "vaccine-type"
+    type: TOKEN
+    expression: "ImmunizationRecommendation.recommendation.vaccineCode"
+  }
 }

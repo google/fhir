@@ -480,4 +480,64 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for AdverseEvent, last updated 2019-11-01T09:29:23.356+11:00.\nMedical care, research study or other healthcare event causing physical injury.\nSee http://hl7.org/fhir/StructureDefinition/AdverseEvent"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/AdverseEvent"
+  [google.fhir.proto.search_parameter] {
+    name: "actuality"
+    type: TOKEN
+    expression: "AdverseEvent.actuality"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "category"
+    type: TOKEN
+    expression: "AdverseEvent.category"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "date"
+    type: DATE
+    expression: "AdverseEvent.date"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "event"
+    type: TOKEN
+    expression: "AdverseEvent.event"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "location"
+    type: REFERENCE
+    expression: "AdverseEvent.location"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "recorder"
+    type: REFERENCE
+    expression: "AdverseEvent.recorder"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "resultingcondition"
+    type: REFERENCE
+    expression: "AdverseEvent.resultingCondition"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "seriousness"
+    type: TOKEN
+    expression: "AdverseEvent.seriousness"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "severity"
+    type: TOKEN
+    expression: "AdverseEvent.severity"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "study"
+    type: REFERENCE
+    expression: "AdverseEvent.study"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "subject"
+    type: REFERENCE
+    expression: "AdverseEvent.subject"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "substance"
+    type: REFERENCE
+    expression: "AdverseEvent.suspectEntity.instance"
+  }
 }

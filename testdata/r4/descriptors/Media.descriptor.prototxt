@@ -386,4 +386,69 @@ options {
   [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
   [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Media, last updated 2019-11-01T09:29:23.356+11:00.\nA photo, video, or audio recording acquired or used in healthcare. The actual content may be inline or provided by direct reference.\nSee http://hl7.org/fhir/StructureDefinition/Media"
   [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Media"
+  [google.fhir.proto.search_parameter] {
+    name: "based-on"
+    type: REFERENCE
+    expression: "Media.basedOn"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "created"
+    type: DATE
+    expression: "Media.created"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "device"
+    type: REFERENCE
+    expression: "Media.device"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "encounter"
+    type: REFERENCE
+    expression: "Media.encounter"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "identifier"
+    type: TOKEN
+    expression: "Media.identifier"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "modality"
+    type: TOKEN
+    expression: "Media.modality"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "operator"
+    type: REFERENCE
+    expression: "Media.operator"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "patient"
+    type: REFERENCE
+    expression: "Media.subject.where(resolve() is Patient)"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "site"
+    type: TOKEN
+    expression: "Media.bodySite"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "status"
+    type: TOKEN
+    expression: "Media.status"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "subject"
+    type: REFERENCE
+    expression: "Media.subject"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "type"
+    type: TOKEN
+    expression: "Media.type"
+  }
+  [google.fhir.proto.search_parameter] {
+    name: "view"
+    type: TOKEN
+    expression: "Media.view"
+  }
 }
