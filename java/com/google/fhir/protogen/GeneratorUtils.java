@@ -14,6 +14,8 @@
 
 package com.google.fhir.protogen;
 
+import static java.time.ZoneOffset.UTC;
+
 import com.google.common.base.Ascii;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
@@ -21,6 +23,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.MoreCollectors;
 import com.google.fhir.proto.Annotations;
+import com.google.fhir.r4.core.Canonical;
 import com.google.fhir.r4.core.DateTime;
 import com.google.fhir.r4.core.ElementDefinition;
 import com.google.fhir.r4.core.ExtensionContextTypeCode;
@@ -28,10 +31,7 @@ import com.google.fhir.r4.core.ResourceTypeCode;
 import com.google.fhir.r4.core.SearchParameter;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
-import com.google.fhir.wrappers.DateTimeWrapper;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashSet;
 import java.util.List;
@@ -44,7 +44,6 @@ import java.util.stream.Collectors;
 
 /** Common Utilites for proto generation. */
 final class GeneratorUtils {
-
   private GeneratorUtils() {}
 
   private static final Pattern WORD_BREAK_PATTERN = Pattern.compile("[^A-Za-z0-9]+([A-Za-z0-9])");
@@ -229,6 +228,14 @@ final class GeneratorUtils {
         .collect(Collectors.toList());
   }
 
+  // Extract the uri component from a canonical, which can be of the form
+  // uri|version
+  static String getCanonicalUri(Canonical canonical) {
+    String value = canonical.getValue();
+    int pipeIndex = value.indexOf("|");
+    return pipeIndex != -1 ? value.substring(0, pipeIndex) : value;
+  }
+
   // Map from StructureDefinition url to explicit renaming for the type that should be generated.
   // This is necessary for cases where the generated name type is problematic, e.g., when two
   // generated name types collide, or just to provide nicer names.
@@ -302,10 +309,12 @@ final class GeneratorUtils {
     return toFieldTypeCase(name);
   }
 
+  /** Coverts a LocalDate to a FHIR DateTime for use as a creation time in generated resources. */
   static DateTime buildCreationDateTime(LocalDate localDate) {
-    return new DateTimeWrapper(
-            localDate.format(DateTimeFormatter.ISO_LOCAL_DATE), ZoneId.of("US/Pacific"))
-        .copyInto(DateTime.newBuilder())
+    return DateTime.newBuilder()
+        .setTimezone("+00:00")
+        .setPrecision(DateTime.Precision.DAY)
+        .setValueUs(localDate.atStartOfDay().toInstant(UTC).toEpochMilli() * 1000)
         .build();
   }
 

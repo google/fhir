@@ -20,8 +20,8 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.fhir.common.AnnotationUtils;
+import com.google.fhir.common.Codes;
 import com.google.fhir.common.FhirVersion;
-import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
@@ -36,8 +36,6 @@ import com.google.fhir.r4.core.FilterOperatorCode;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.ValueSet;
 import com.google.fhir.r4.core.ValueSet.Compose.ConceptSet.Filter;
-import com.google.fhir.wrappers.CanonicalWrapper;
-import com.google.fhir.wrappers.CodeWrapper;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
@@ -654,7 +652,7 @@ public class ValueSetGenerator {
           final Map<String, EnumValueDescriptorProto.Builder> valuesByCode =
               buildEnumValues(codeSystemsByUrl.get(system), system, conceptSet.getFilterList())
                   .stream()
-                  .collect(Collectors.toMap(c -> JsonFormat.getOriginalCode(c), c -> c));
+                  .collect(Collectors.toMap(Codes::enumValueToCodeString, c -> c));
           return conceptSet.getConceptList().stream()
               .map(concept -> valuesByCode.get(concept.getCode().getValue()))
               .collect(Collectors.toList());
@@ -676,7 +674,7 @@ public class ValueSetGenerator {
           // There are CodeSystem enums, but no explicit concept list on the ValueSet, so default
           // to all codes from that system that aren't in the excludes set.
           return buildEnumValues(codeSystem, system, conceptSet.getFilterList()).stream()
-              .filter(enumValue -> !excludeCodes.contains(CodeWrapper.getOriginalCode(enumValue)))
+              .filter(enumValue -> !excludeCodes.contains(Codes.enumValueToCodeString(enumValue)))
               .collect(Collectors.toList());
         } else {
           // There are no enums listed on the code system, and no enums listed in the value set
@@ -704,7 +702,7 @@ public class ValueSetGenerator {
                   if (filter.getOp().getValue() != FilterOperatorCode.Value.IS_A) {
                     System.out.println(
                         "Warning: value filters other than is-a are ignored.  Found: "
-                            + CodeWrapper.getOriginalCode(
+                            + Codes.enumValueToCodeString(
                                 filter.getOp().getValue().getValueDescriptor().toProto()));
                     return false;
                   }
@@ -791,7 +789,8 @@ public class ValueSetGenerator {
 
     EnumValueDescriptorProto.Builder builder =
         EnumValueDescriptorProto.newBuilder().setName(enumCase);
-    if (!JsonFormat.enumCodeToFhirCase(enumCase).equals(originalCode)) {
+
+    if (!Codes.enumValueToCodeString(builder).equals(originalCode)) {
       builder.getOptionsBuilder().setExtension(Annotations.fhirOriginalCode, originalCode);
     }
     if (system != null) {
@@ -1012,7 +1011,7 @@ public class ValueSetGenerator {
     if (element.getBinding().getStrength().getValue() != BindingStrengthCode.Value.REQUIRED) {
       return Optional.empty();
     }
-    String url = CanonicalWrapper.getUri(element.getBinding().getValueSet());
+    String url = GeneratorUtils.getCanonicalUri(element.getBinding().getValueSet());
     return url.isEmpty() ? Optional.empty() : Optional.<String>of(url);
   }
 }

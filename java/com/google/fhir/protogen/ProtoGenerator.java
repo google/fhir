@@ -35,8 +35,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.fhir.common.AnnotationUtils;
+import com.google.fhir.common.Extensions;
 import com.google.fhir.common.FhirVersion;
-import com.google.fhir.common.ProtoUtils;
+import com.google.fhir.common.ResourceUtils;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.PackageInfo.ContainedResourceBehavior;
@@ -56,11 +57,7 @@ import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
 import com.google.fhir.r4.core.Uri;
 import com.google.fhir.stu3.proto.CodingWithFixedSystem;
-import com.google.fhir.stu3.proto.ElementDefinitionExplicitTypeName;
-import com.google.fhir.stu3.proto.Instant;
-import com.google.fhir.wrappers.CanonicalWrapper;
 import com.google.fhir.wrappers.CodeWrapper;
-import com.google.fhir.wrappers.ExtensionWrapper;
 import com.google.fhir.wrappers.InstantWrapper;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
@@ -95,6 +92,10 @@ import java.util.stream.Collectors;
 /** A class which turns FHIR StructureDefinitions into protocol messages. */
 // TODO: Move a bunch of the public static methods into ProtoGeneratorUtils.
 public class ProtoGenerator {
+
+  public static final String REGEX_EXTENSION_URL = "http://hl7.org/fhir/StructureDefinition/regex";
+  public static final String EXPLICIT_TYPE_NAME_EXTENSION_URL =
+      "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name";
 
   // Map of time-like primitive type ids to supported granularity
   private static final ImmutableMap<String, List<String>> TIME_LIKE_PRECISION_MAP =
@@ -342,10 +343,7 @@ public class ProtoGenerator {
     if (def.getMeta().hasLastUpdated()) {
       comment
           .append(", last updated ")
-          .append(
-              new InstantWrapper(
-                  ProtoUtils.fieldWiseCopy(def.getMeta().getLastUpdated(), Instant.newBuilder())
-                      .build()));
+          .append(new InstantWrapper(def.getMeta().getLastUpdated()));
     }
     comment.append(".");
     if (def.getSnapshot().getElement(0).hasShort()) {
@@ -1168,27 +1166,20 @@ public class ProtoGenerator {
       ElementDefinition.TypeRef.newBuilder().setCode(Uri.newBuilder().setValue("string")).build();
 
   private Optional<String> getPrimitiveRegex(ElementDefinition element) {
-    switch (packageInfo.getFhirVersion()) {
-      case STU3:
-        List<com.google.fhir.stu3.proto.ElementDefinitionRegex> stu3Regex =
-            ExtensionWrapper.fromExtensionsIn(element.getType(0))
-                .getMatchingExtensions(
-                    com.google.fhir.stu3.proto.ElementDefinitionRegex.getDefaultInstance());
-        return stu3Regex.size() == 1
-            ? Optional.of(stu3Regex.get(0).getValueString().getValue())
-            : Optional.empty();
-      case R4:
-        List<com.google.fhir.r4.core.Regex> r4Regex =
-            ExtensionWrapper.fromExtensionsIn(element.getType(0))
-                .getMatchingExtensions(com.google.fhir.r4.core.Regex.getDefaultInstance());
-        return r4Regex.size() == 1
-            ? Optional.of(r4Regex.get(0).getValueString().getValue())
-            : Optional.empty();
-      default:
-        throw new IllegalArgumentException(
-            "Unrecognized fhir version: " + packageInfo.getFhirVersion());
+    List<Message> regexExtensions =
+        Extensions.getExtensionsWithUrl(REGEX_EXTENSION_URL, element.getType(0));
+    if (regexExtensions.isEmpty()) {
+      return Optional.empty();
     }
+    if (regexExtensions.size() > 1) {
+      // TODO: Use InvalidFhirException
+      throw new IllegalArgumentException(
+          "Multiple regex extensions found on " + element.getId().getValue());
+    }
+    return Optional.of(
+        (String) Extensions.getExtensionValue(regexExtensions.get(0), "string_value"));
   }
+
   /** Generate the primitive value part of a datatype. */
   private void generatePrimitiveValue(StructureDefinition def, DescriptorProto.Builder builder) {
     String defId = def.getId().getValue();
@@ -1340,9 +1331,14 @@ public class ProtoGenerator {
     // However, any parent in the path could have been renamed via a explicit type name extensions.
 
     // Check for explicit renamings on this element.
-    List<ElementDefinitionExplicitTypeName> explicitTypeNames =
-        ExtensionWrapper.fromExtensionsIn(element)
-            .getMatchingExtensions(ElementDefinitionExplicitTypeName.getDefaultInstance());
+    List<Message> explicitTypeNames =
+        Extensions.getExtensionsWithUrl(EXPLICIT_TYPE_NAME_EXTENSION_URL, element);
+
+    if (explicitTypeNames.size() > 1) {
+      // TODO: Convert to InvalidFhirException
+      throw new IllegalArgumentException(
+          "Element has multiple explicit type names: " + ResourceUtils.getResourceId(element));
+    }
 
     // Use explicit type name if present.  Otherwise, use the field_name, converted to FieldType
     // casing, as the submessage name.
@@ -1350,7 +1346,7 @@ public class ProtoGenerator {
         toFieldTypeCase(
             explicitTypeNames.isEmpty()
                 ? getNameForElement(element, elementList)
-                : explicitTypeNames.get(0).getValueString().getValue());
+                : (String) Extensions.getExtensionValue(explicitTypeNames.get(0), "string_value"));
     if (isChoiceType(element) && !isValueElementOfSingleTypedExtension(element, elementList)) {
       typeName = typeName + "X";
     }
@@ -1495,7 +1491,7 @@ public class ProtoGenerator {
         && element.getBinding().getStrength().getValue() != BindingStrengthCode.Value.REQUIRED) {
       return Optional.empty();
     }
-    String url = CanonicalWrapper.getUri(element.getBinding().getValueSet());
+    String url = GeneratorUtils.getCanonicalUri(element.getBinding().getValueSet());
     if (url.isEmpty()) {
       return Optional.empty();
     }
