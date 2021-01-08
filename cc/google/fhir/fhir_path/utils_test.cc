@@ -132,6 +132,53 @@ TEST(Utils, RetrieveFieldR4Choice) {
   ASSERT_THAT(results, UnorderedElementsAreArray({EqualsProto(deceased)}));
 }
 
+absl::Status RetrieveR4Reference(const r4::Reference& source,
+                                 std::unique_ptr<Message>& message_holder,
+                                 std::vector<const Message*>* results) {
+  return RetrieveField(
+      source, *r4::Reference::GetDescriptor()->FindFieldByName("uri"),
+      [&message_holder](const Descriptor* descriptor) {
+        const Message* prototype =
+            ::google::protobuf::MessageFactory::generated_factory()->GetPrototype(
+                descriptor);
+        message_holder = absl::WrapUnique(prototype->New());
+        return message_holder.get();
+      },
+      results);
+}
+
+TEST(Utils, RetrieveFieldR4Reference) {
+  r4::Patient patient;
+  ASSERT_TRUE(TextFormat::ParseFromString(
+      "managing_organization { organization_id { value: '1' } }", &patient));
+
+  std::unique_ptr<Message> message_holder;
+  std::vector<const Message*> results;
+  FHIR_ASSERT_OK(RetrieveR4Reference(patient.managing_organization(),
+                                     message_holder, &results));
+
+  r4::String expected;
+  expected.set_value("Organization/1");
+  ASSERT_THAT(results, UnorderedElementsAreArray({EqualsProto(expected)}));
+}
+
+TEST(Utils, RetrieveFieldR4ReferenceFullyQualifiedId) {
+  r4::Patient patient;
+  ASSERT_TRUE(
+      TextFormat::ParseFromString("managing_organization { uri { value: "
+                                  "'https://foo/bar/Organization/1' } }",
+                                  &patient));
+
+  std::unique_ptr<Message> message_holder;
+  std::vector<const Message*> results;
+  FHIR_ASSERT_OK(RetrieveR4Reference(patient.managing_organization(),
+                                     message_holder, &results));
+
+  r4::String expected;
+  expected.set_value("https://foo/bar/Organization/1");
+  ASSERT_THAT(results, UnorderedElementsAreArray({EqualsProto(expected)}));
+}
+
 TEST(Utils, RetrieveFieldStu3Choice) {
   stu3::Patient patient;
   ASSERT_TRUE(TextFormat::ParseFromString(

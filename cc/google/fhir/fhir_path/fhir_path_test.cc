@@ -380,6 +380,26 @@ TYPED_TEST(FhirPathTest, TestFieldExists) {
       UnorderedElementsAreArray({EqualsProto(test_encounter.class_value())}));
 }
 
+TYPED_TEST(FhirPathTest, TestEvaluateReferenceField) {
+  auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
+  test_encounter.mutable_service_provider()
+      ->mutable_organization_id()
+      ->set_value("1");
+
+  // Check that a string representation of the FHIR reference is created.
+  EvaluationResult result =
+      TestFixture::Evaluate(test_encounter, "serviceProvider.reference")
+          .value();
+  EXPECT_THAT(result.GetString().value(), Eq("Organization/1"));
+
+  // Check that retrieval works for a different representation of the reference.
+  test_encounter.mutable_service_provider()->mutable_uri()->set_value(
+      "Organization/2");
+  result = TestFixture::Evaluate(test_encounter, "serviceProvider.reference")
+               .value();
+  EXPECT_THAT(result.GetString().value(), Eq("Organization/2"));
+}
+
 TYPED_TEST(FhirPathTest, TestNoSuchField) {
   auto root_expr = TestFixture::Compile(TypeParam::Encounter::descriptor(),
                                         "bogusrootfield");

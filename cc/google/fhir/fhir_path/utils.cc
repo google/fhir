@@ -16,6 +16,9 @@
 
 #include "google/protobuf/any.pb.h"
 #include "absl/status/status.h"
+#include "absl/strings/str_cat.h"
+#include "absl/strings/str_format.h"
+#include "google/fhir/references.h"
 #include "google/fhir/util.h"
 
 namespace google {
@@ -63,6 +66,21 @@ absl::Status OneofMessageFromContainer(const Message& container_message,
   return absl::OkStatus();
 }
 
+namespace {
+
+// Returns true if `message` is a Reference and field_descriptor is a field
+// within `message` that resolves to 'reference' in FHIR.
+// Note: the json_name corresponds to fields in FHIR.
+bool IsReference(const Message& message,
+                 const google::protobuf::FieldDescriptor& field_descriptor) {
+  return message.GetDescriptor()->options().GetExtension(
+             ::google::fhir::proto::fhir_structure_definition_url) ==
+             "http://hl7.org/fhir/StructureDefinition/Reference" &&
+         field_descriptor.json_name() == "reference";
+}
+
+}  // namespace
+
 absl::Status RetrieveField(
     const Message& root, const FieldDescriptor& field,
     std::function<google::protobuf::Message*(const Descriptor*)> message_factory,
@@ -71,6 +89,32 @@ absl::Status RetrieveField(
   // primitive message type rather than the underlying native primitive.
   if (IsFhirPrimitiveValue(field)) {
     results->push_back(&root);
+    return absl::OkStatus();
+  }
+
+  // If asked to retrieve a reference, retrieve a String value with a standard
+  // representation (i.e. ResourceType/id) regardless of how the reference is
+  // stored in the source message.
+  if (IsReference(root, field)) {
+    Message* string_message = message_factory(field.message_type());
+    if (string_message == nullptr) {
+      return absl::InternalError(
+          absl::StrFormat("Unable to create message with same type as '%s'",
+                          field.full_name()));
+    }
+    absl::StatusOr<std::string> reference_uri = ReferenceProtoToString(root);
+    if (!reference_uri.ok()) {
+      return absl::Status(
+          reference_uri.status().code(),
+          absl::StrCat(reference_uri.status().message(),
+                       " while extracting reference from message ",
+                       root.GetDescriptor()->full_name()));
+    }
+    string_message->GetReflection()->SetString(
+        string_message,
+        string_message->GetDescriptor()->FindFieldByName(kPrimitiveValueField),
+        reference_uri.value());
+    results->push_back(string_message);
     return absl::OkStatus();
   }
 
@@ -111,8 +155,8 @@ bool HasFieldWithJsonName(const Descriptor* descriptor,
   return FindFieldByJsonName(descriptor, json_name);
 }
 
-const FieldDescriptor* FindFieldByJsonName(
-    const Descriptor* descriptor, absl::string_view json_name) {
+const FieldDescriptor* FindFieldByJsonName(const Descriptor* descriptor,
+                                           absl::string_view json_name) {
   for (int i = 0; i < descriptor->field_count(); ++i) {
     if (json_name == descriptor->field(i)->json_name()) {
       return descriptor->field(i);

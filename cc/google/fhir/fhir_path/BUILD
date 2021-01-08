@@ -167,9 +167,12 @@ cc_library(
     strip_include_prefix = "//cc/",
     visibility = [":__pkg__"],
     deps = [
+        "//cc/google/fhir:references",
         "//cc/google/fhir:util",
         "//cc/google/fhir/status",
         "@com_google_absl//absl/status",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/strings:str_format",
         "@com_google_protobuf//:protobuf",
     ],
 )
