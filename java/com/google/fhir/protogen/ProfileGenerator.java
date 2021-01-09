@@ -16,10 +16,10 @@ package com.google.fhir.protogen;
 
 import static com.google.fhir.protogen.GeneratorUtils.getElementById;
 import static com.google.fhir.protogen.GeneratorUtils.getOptionalElementById;
+import static java.util.stream.Collectors.toList;
 
 import com.google.common.base.Ascii;
 import com.google.common.base.Splitter;
-import com.google.common.collect.MoreCollectors;
 import com.google.fhir.common.FhirVersion;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.ChoiceTypeRestriction;
@@ -822,15 +822,15 @@ final class ProfileGenerator {
 
   private static ElementDefinition.Builder getElementBuilderById(
       String id, List<ElementDefinition.Builder> elements) {
-    return getOptionalElementBuilderById(id, elements)
-        .orElseThrow(() -> new IllegalArgumentException("No element with id: " + id));
-  }
-
-  private static Optional<ElementDefinition.Builder> getOptionalElementBuilderById(
-      String id, List<ElementDefinition.Builder> elements) {
-    return elements.stream()
+     List<ElementDefinition.Builder> matchingElements =
+         elements.stream()
         .filter(element -> element.getId().getValue().equals(id))
-        .collect(MoreCollectors.toOptional());
+        .collect(toList());
+    if (matchingElements.size() == 1) {
+      return matchingElements.get(0);
+    } else {
+      throw new IllegalArgumentException("Multiple elements found matching id: " + id);
+    }
   }
 
   private static final Pattern SUB_EXTENSION_PATH_PATTERN =

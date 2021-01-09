@@ -109,10 +109,9 @@ java_test(
     test_class = "com.google.fhir.common.ProtoUtilsTest",
     deps = [
         "//java/com/google/fhir/common:proto_utils",
-        "//proto/google/fhir/proto/r4/core/resources:patient_java_proto",
-        "//proto/google/fhir/proto/stu3:resources_java_proto",
+        "//testdata:generic_proto_java_proto",
         "@com_google_protobuf//:protobuf_java",
-        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_extensions_truth_proto_extension",
         "@maven//:com_google_truth_truth",
         "@maven//:junit_junit",
     ],

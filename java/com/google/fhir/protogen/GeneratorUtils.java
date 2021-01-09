@@ -21,7 +21,6 @@ import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.MoreCollectors;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.r4.core.Canonical;
 import com.google.fhir.r4.core.DateTime;
@@ -190,11 +189,20 @@ final class GeneratorUtils {
   // Returns the only element in the list matching a given id, or an empty optional if none are
   // found.
   // Throws IllegalArgumentException if more than one matching element is found.
-  static Optional<ElementDefinition> getOptionalElementById(
+  // TODO: Consider using checked exception.
+  static Optional<ElementDefinition> getOptionalElementById (
       String id, List<ElementDefinition> elements) {
-    return elements.stream()
+     List<ElementDefinition> matchingElements =
+         elements.stream()
         .filter(element -> element.getId().getValue().equals(id))
-        .collect(MoreCollectors.toOptional());
+        .collect(Collectors.toList());
+    if (matchingElements.isEmpty()) {
+      return Optional.empty();
+    } else if (matchingElements.size() == 1) {
+      return Optional.of(matchingElements.get(0));
+    } else {
+      throw new IllegalArgumentException("Multiple elements found matching id: " + id);
+    }
   }
 
   static Optional<ElementDefinition> getParent(

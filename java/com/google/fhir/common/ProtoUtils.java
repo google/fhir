@@ -82,13 +82,23 @@ public class ProtoUtils {
     }
   }
 
-  public static <B extends Message.Builder> B getOrAddBuilder(
-      Message.Builder builder, FieldDescriptor field) {
+  public static <B extends Message.Builder> void forEachBuilder(
+      Message.Builder message, FieldDescriptor field, BiConsumer<B, Integer> function) {
+    if (field.isRepeated()) {
+      for (int i = 0; i < message.getRepeatedFieldCount(field); i++) {
+        function.accept((B) message.getRepeatedFieldBuilder(field, i), i);
+      }
+    } else {
+      function.accept((B) message.getFieldBuilder(field), 0);
+    }
+  }
+
+  public static Message.Builder getOrAddBuilder(Message.Builder builder, FieldDescriptor field) {
     if (field.isRepeated()) {
       builder.addRepeatedField(field, builder.newBuilderForField(field).build());
-      return (B) builder.getRepeatedFieldBuilder(field, builder.getRepeatedFieldCount(field) - 1);
+      return builder.getRepeatedFieldBuilder(field, builder.getRepeatedFieldCount(field) - 1);
     }
-    return (B) builder.getFieldBuilder(field);
+    return builder.getFieldBuilder(field);
   }
 
   public static <B extends Message.Builder> B fieldWiseCopy(MessageOrBuilder source, B target) {
