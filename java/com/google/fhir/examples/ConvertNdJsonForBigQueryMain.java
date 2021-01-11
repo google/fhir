@@ -34,6 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * This example reads FHIR resources in standard ndjson format, containing one message per line, and
@@ -62,7 +63,12 @@ public class ConvertNdJsonForBigQueryMain {
         ContainedResource.Builder builder = ContainedResource.newBuilder();
         fhirParser.merge(line, builder);
         // Extract and print the (one) parsed resource.
-        Message parsed = ResourceUtils.getContainedResource(builder.build());
+        Optional<Message> parsedOptional = ResourceUtils.getContainedResource(builder.build());
+        if (!parsedOptional.isPresent()) {
+          throw new IllegalArgumentException("Found empty contained resource.");
+        }
+        Message parsed = parsedOptional.get();
+
         if (schema == null) {
           // Generate a schema for this file. Note that we do this purely based on a single message,
           // which could potentially cause issues with extensions.

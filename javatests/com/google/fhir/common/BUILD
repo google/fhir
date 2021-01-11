@@ -174,3 +174,27 @@ java_test(
         "@maven//:junit_junit",
     ],
 )
+
+java_test(
+    name = "ResourceUtilsTest",
+    size = "small",
+    srcs = ["ResourceUtilsTest.java"],
+    data = [
+        "//testdata:resource_utils_testdata",
+    ],
+    test_class = "com.google.fhir.common.ResourceUtilsTest",
+    deps = [
+        "//java/com/google/fhir/common:proto_utils",
+        "//java/com/google/fhir/common:resource_utils",
+        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_java_proto",
+        "//proto/google/fhir/proto/stu3:datatypes_java_proto",
+        "//proto/google/fhir/proto/stu3:resources_java_proto",
+        "@bazel_tools//tools/java/runfiles",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_extensions_truth_proto_extension",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
+    ],
+)

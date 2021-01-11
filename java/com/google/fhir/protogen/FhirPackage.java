@@ -152,7 +152,13 @@ public class FhirPackage {
       } else if (expectedType.get().equals("Bundle")) {
         Bundle bundle = parser.merge(json, Bundle.newBuilder()).build();
         for (Bundle.Entry bundleEntry : bundle.getEntryList()) {
-          Message contained = ResourceUtils.getContainedResource(bundleEntry.getResource());
+          Optional<Message> containedOptional =
+              ResourceUtils.getContainedResource(bundleEntry.getResource());
+          if (!containedOptional.isPresent()) {
+            // TODO: Convert to InvalidFhirException
+            throw new IllegalArgumentException("Encountered empty ContainedResource.");
+          }
+          Message contained = containedOptional.get();
           if (contained instanceof ValueSet) {
             valueSets.add((ValueSet) contained);
           } else if (contained instanceof CodeSystem) {

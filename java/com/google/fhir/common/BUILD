@@ -90,10 +90,6 @@ java_library(
     deps = [
         ":annotation_utils",
         ":proto_utils",
-        "//java/com/google/fhir/wrappers:primitive_wrappers",
-        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
-        "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_java_proto",
-        "//proto/google/fhir/proto/stu3:resources_java_proto",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_guava_guava",
     ],

@@ -361,18 +361,20 @@ public final class JsonFormat {
       }
     }
 
+    // TODO: Replace with utility that throws a checked exception
+    private static Object getValue(Message primitive) {
+      return primitive.getField(primitive.getDescriptorForType().findFieldByName("value"));
+    }
+
     private static String referenceIdToStringUri(FieldDescriptor field, Message refId) {
       // Convert to CamelCase and strip out the trailing "Id"
       String type = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, field.getName());
       type = type.substring(0, type.length() - 2);
       Descriptor refIdDescriptor = refId.getDescriptorForType();
-      String uri = type + "/" + ResourceUtils.<String>getValue(refId);
+      String uri = type + "/" + (String) getValue(refId);
       FieldDescriptor historyField = refIdDescriptor.findFieldByName("history");
       if (refId.hasField(historyField)) {
-        uri =
-            uri
-                + "/_history/"
-                + ResourceUtils.<String>getValue((Message) refId.getField(historyField));
+        uri = uri + "/_history/" + (String) getValue((Message) refId.getField(historyField));
       }
       return uri;
     }
@@ -387,7 +389,7 @@ public final class JsonFormat {
         String newUri = null;
         FieldDescriptor fragment = reference.getDescriptorForType().findFieldByName("fragment");
         if (reference.hasField(fragment)) {
-          newUri = "#" + ResourceUtils.<String>getValue((Message) reference.getField(fragment));
+          newUri = "#" + (String) getValue((Message) reference.getField(fragment));
         } else {
           for (Map.Entry<FieldDescriptor, Object> entry : reference.getAllFields().entrySet()) {
             if (entry.getKey().getContainingOneof() != null) {

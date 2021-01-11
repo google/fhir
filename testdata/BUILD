@@ -10,3 +10,10 @@ fhir_proto_library(
     srcs = ["generic_proto.proto"],
     proto_library_prefix = "generic_proto",
 )
+
+filegroup(
+    name = "resource_utils_testdata",
+    srcs = glob([
+        "resource_utils-*",
+    ]),
+)

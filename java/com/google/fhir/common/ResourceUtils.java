@@ -14,163 +14,136 @@
 
 package com.google.fhir.common;
 
+import static com.google.fhir.common.ProtoUtils.findField;
+
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
-import com.google.fhir.r4.core.Bundle;
-import com.google.fhir.r4.core.Id;
-import com.google.fhir.r4.core.ReferenceId;
-import com.google.fhir.wrappers.IdWrapper;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /** Helper methods for handling FHIR resource protos. */
+// TODO: Break reference utils into standalone References.java
 public final class ResourceUtils {
 
-  public static String getResourceType(Message message) {
-    if (!AnnotationUtils.isResource(message)) {
-      throw new IllegalArgumentException(
-          "Message type " + message.getDescriptorForType().getFullName() + " is not a resource.");
-    }
-    return message.getDescriptorForType().getName();
-  }
+  private ResourceUtils() {}
 
-  public static String getResourceId(Message message) {
-    FieldDescriptor id = message.getDescriptorForType().findFieldByName("id");
-    if (!AnnotationUtils.isResource(message) || id == null) {
+  public static Optional<Message> getContainedResource(Message resource) {
+    // TODO: Use an annotation here.
+    if (!resource.getDescriptorForType().getName().equals("ContainedResource")) {
       throw new IllegalArgumentException(
-          "Message type " + message.getDescriptorForType().getFullName() + " is not a resource.");
+          "Not a ContainedResource: " + resource.getDescriptorForType().getName());
     }
-    if (!message.hasField(id)) {
-      return null;
-    }
-    return ((Id) message.getField(id)).getValue();
-  }
-
-  private static Message getContainedResourceInternal(Message resource) {
     Collection<Object> values = resource.getAllFields().values();
-    if (values.size() == 1) {
-      return (Message) values.iterator().next();
-    } else {
-      return null;
-    }
-  }
-
-  public static Message getContainedResource(
-      com.google.fhir.stu3.proto.ContainedResource resource) {
-    return getContainedResourceInternal(resource);
-  }
-
-  public static Message getContainedResource(com.google.fhir.r4.core.ContainedResource resource) {
-    return getContainedResourceInternal(resource);
-  }
-
-  @SuppressWarnings("unchecked")
-  public static <V> V getValue(Message primitive) {
-    return (V) primitive.getField(primitive.getDescriptorForType().findFieldByName("value"));
+    return values.size() == 1 ? Optional.of((Message) values.iterator().next()) : Optional.empty();
   }
 
   /*
    * Convert any absolute references in the provided bundle to relative references, assuming the
    * targets of the references are also present in the bundle.
    */
-  public static Bundle resolveBundleReferences(Bundle bundle) {
+  public static void resolveBundleReferences(Message.Builder bundle) {
     Map<String, String> referenceMap = new HashMap<>();
-    for (Bundle.Entry entry : bundle.getEntryList()) {
-      if (entry.hasFullUrl()) {
-        Message resource = ResourceUtils.getContainedResource(entry.getResource());
-        String resourceType = ResourceUtils.getResourceType(resource);
-        String resourceId = ResourceUtils.getResourceId(resource);
-        String relativeReference = resourceType + "/" + resourceId;
-        referenceMap.put(entry.getFullUrl().getValue(), relativeReference);
-      }
-    }
-    return (Bundle) replaceReferences(bundle, referenceMap);
+    FieldDescriptor entryField = findField(bundle, "entry");
+    FieldDescriptor entryFullUrlField = findField(entryField.getMessageType(), "full_url");
+    FieldDescriptor entryResourceField = findField(entryField.getMessageType(), "resource");
+
+    ProtoUtils.<Message>forEachInstance(
+        bundle,
+        entryField,
+        (entry, index) -> {
+          if (entry.hasField(entryFullUrlField)) {
+            Optional<Message> resourceOptional =
+                ResourceUtils.getContainedResource((Message) entry.getField(entryResourceField));
+            if (!resourceOptional.isPresent()) {
+              return;
+            }
+            Message resource = resourceOptional.get();
+            String id = (String) getValue((Message) resource.getField(findField(resource, "id")));
+            String relativeReference = resource.getDescriptorForType().getName() + "/" + id;
+            referenceMap.put(
+                (String) getValue((Message) entry.getField(entryFullUrlField)), relativeReference);
+          }
+        });
+    replaceReferences(bundle, referenceMap);
   }
 
-  private static Message replaceOneReference(Message message, Map<String, String> referenceMap) {
-    FieldDescriptor uri = message.getDescriptorForType().findFieldByName("uri");
-    if (!message.hasField(uri)) {
-      return message;
+  private static void replaceOneReference(
+      Message.Builder builder, Map<String, String> referenceMap) {
+    FieldDescriptor uriField = builder.getDescriptorForType().findFieldByName("uri");
+    FieldDescriptor uriValueField = uriField.getMessageType().findFieldByName("value");
+    if (!builder.hasField(uriField)) {
+      return;
     }
-    String oldValue = ((com.google.fhir.r4.core.String) message.getField(uri)).getValue();
+    String oldValue = (String) ((Message) builder.getField(uriField)).getField(uriValueField);
     if (!referenceMap.containsKey(oldValue)) {
-      return message;
+      return;
     }
-    Message.Builder builder = message.toBuilder();
     String newValue = referenceMap.get(oldValue);
-    builder.setField(uri, com.google.fhir.r4.core.String.newBuilder().setValue(newValue).build());
-    return splitIfRelativeReference(builder);
+    builder.getFieldBuilder(uriField).setField(uriValueField, newValue);
+    splitIfRelativeReference(builder);
   }
 
-  @SuppressWarnings("unchecked")
-  private static Message replaceReferences(Message message, Map<String, String> referenceMap) {
-    Message.Builder builder = null;
-    for (Map.Entry<FieldDescriptor, Object> field : message.getAllFields().entrySet()) {
-      if (field.getKey().getType() == FieldDescriptor.Type.MESSAGE) {
-        Object newValue = field.getValue();
-        if (field.getKey().isRepeated()) {
-          List<Message> newList = new ArrayList<>();
-          for (Message item : (List<Message>) field.getValue()) {
-            Message newItem;
-            if (AnnotationUtils.isReference(item)) {
-              newItem = replaceOneReference(item, referenceMap);
-            } else {
-              newItem = replaceReferences(item, referenceMap);
-            }
-            if (newItem != item) {
-              newValue = newList;
-            }
-            newList.add(newItem);
-          }
-        } else {
-          Message value = (Message) field.getValue();
-          if (AnnotationUtils.isReference(field.getKey().getMessageType())) {
-            newValue = replaceOneReference(value, referenceMap);
-          } else {
-            newValue = replaceReferences(value, referenceMap);
-          }
-        }
-        if (newValue != field.getValue()) {
-          if (builder == null) {
-            builder = message.toBuilder();
-          }
-          builder.setField(field.getKey(), newValue);
-        }
+  private static void replaceReferences(Message.Builder bundle, Map<String, String> referenceMap) {
+    for (FieldDescriptor field : bundle.getAllFields().keySet()) {
+      if (field.getType() == FieldDescriptor.Type.MESSAGE) {
+        ProtoUtils.forEachBuilder(
+            bundle,
+            field,
+            (itemBuilder, index) -> {
+              if (AnnotationUtils.isReference(itemBuilder)) {
+                replaceOneReference(itemBuilder, referenceMap);
+              } else {
+                replaceReferences(itemBuilder, referenceMap);
+              }
+            });
       }
     }
-    if (builder == null) {
-      return message;
-    } else {
-      return builder.build();
-    }
   }
 
-  /*
-   * Split relative references into their components, for example, "Patient/ABCD" will result in
-   * the patientId field getting the value "ABCD".
+  private static Message.Builder setStringField(
+      Message.Builder builder, String field, String idString) {
+    Message.Builder idBuilder = builder.getFieldBuilder(findField(builder, field));
+    idBuilder.setField(findField(idBuilder, "value"), idString);
+    return builder;
+  }
+
+  /**
+   * Given a reference that uses the generic {@code uri} field, splits the reference URI into
+   * component fields. For example,
+   *
+   * <ol>
+   *   <li>"Patient/ABCD" would be split into the {@code patientId} field getting the value "ABCD".
+   *   <li>"Patient/ABCD/_history/1234" would also populate the {@code history} field with "1234".
+   *   <li>A fragment, such as "#my-fragment", results in the {@code fragment} field being populated
+   *       with "my-fragment"
+   * </ol>
+   *
+   * If the reference URI matches one of these schemas, the {@code uri} field will be cleared, and
+   * the appropriate structured fields set. If it does not match any of these schemas, the reference
+   * will be unchanged, and an OK status will be returned.
+   *
+   * <p>For more information on the form of uri references, see {@link
+   * https://www.hl7.org/fhir/references.html#Reference}.
    */
-  public static Message splitIfRelativeReference(Message.Builder builder) {
+  // TODO: Ensure consistent behavior/testing with python/c++.
+  public static void splitIfRelativeReference(Message.Builder builder) {
     Descriptor descriptor = builder.getDescriptorForType();
     FieldDescriptor uriField = descriptor.findFieldByName("uri");
     if (!builder.hasField(uriField)) {
-      return builder.build();
+      return;
     }
     Message uri = (Message) builder.getField(uriField);
-    String uriValue = (String) uri.getField(uri.getDescriptorForType().findFieldByName("value"));
+    String uriValue = (String) uri.getField(findField(uri, "value"));
     if (uriValue.startsWith("#")) {
-      FieldDescriptor fragmentField = descriptor.findFieldByName("fragment");
-      Message.Builder fragmentBuilder = builder.getFieldBuilder(fragmentField);
-      return ProtoUtils.fieldWiseCopy(
-              com.google.fhir.r4.core.String.newBuilder()
-                  .setValue(new IdWrapper(uriValue.substring(1)).getWrapped().getValue()),
-              fragmentBuilder)
-          .build();
+      Message.Builder fragmentBuilder = builder.getFieldBuilder(findField(builder, "fragment"));
+      fragmentBuilder.setField(findField(fragmentBuilder, "value"), uriValue.substring(1));
+      return;
     }
     // Look for references of type "ResourceType/ResourceId"
     List<String> parts = Splitter.on('/').splitToList(uriValue);
@@ -179,19 +152,21 @@ public final class ResourceUtils {
           CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, parts.get(0)) + "_id";
       FieldDescriptor field = descriptor.findFieldByName(resourceFieldName);
       if (field == null) {
+        // TODO: Convert to InvalidFhirException
         throw new IllegalArgumentException(
             "Invalid resource type in reference: " + resourceFieldName + ":" + parts.get(0));
       } else {
-        ReferenceId.Builder refId =
-            ReferenceId.newBuilder().setValue(new IdWrapper(parts.get(1)).getWrapped().getValue());
+        Message.Builder referenceIdBuilder = builder.getFieldBuilder(field);
+        referenceIdBuilder.setField(findField(referenceIdBuilder, "value"), parts.get(1));
         if (parts.size() == 4) {
-          refId.setHistory(new IdWrapper(parts.get(3)).getWrapped());
+          setStringField(referenceIdBuilder, "history", parts.get(3));
         }
-        ProtoUtils.fieldWiseCopy(refId, builder.getFieldBuilder(field));
-        return builder.build();
       }
     }
-    // Keep the uri field.
-    return builder.build();
+  }
+
+  // TODO: Replace with utility that throws a checked exception
+  public static Object getValue(Message primitive) {
+    return primitive.getField(primitive.getDescriptorForType().findFieldByName("value"));
   }
 }

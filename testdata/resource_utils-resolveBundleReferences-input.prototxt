@@ -1,0 +1,59 @@
+entry {
+  full_url { value: "alpha-patient-url" }
+  resource {
+    patient {
+      id { value: "alpha-patient-id" }
+      general_practitioner { uri { value: "alpha-practitioner-url" } }
+      link { other { uri { value: "beta-patient-url" } } }
+    }
+  }
+}
+
+entry {
+  full_url { value: "beta-patient-url" }
+  resource {
+    patient {
+      id { value: "beta-patient-id" }
+      general_practitioner { uri { value: "beta-practitioner-url" } }
+      link { other { uri { value: "alpha-patient-url" } } }
+    }
+  }
+}
+
+entry {
+  full_url { value: "beta-observation-url" }
+  resource {
+    observation {
+      id { value: "beta-observation-id" }
+      subject { uri { value: "beta-patient-url" } }
+      performer { uri { value: "beta-practitioner-url" } }
+    }
+  }
+}
+
+entry {
+  full_url { value: "gamma-observation-url" }
+  resource {
+    observation {
+      id { value: "gamma-observation-id" }
+      subject { uri { value: "gamma-patient-url" } }
+      performer { uri { value: "gamma-practitioner-url" } }
+    }
+  }
+}
+
+entry {
+  full_url { value: "alpha-practitioner-url" }
+  resource {
+    practitioner { id { value: "alpha-practitioner-id" } }
+  }
+}
+
+entry {
+  full_url { value: "gamma-practitioner-url" }
+  resource {
+    practitioner { id { value: "gamma-practitioner-id" } }
+  }
+}
+
+

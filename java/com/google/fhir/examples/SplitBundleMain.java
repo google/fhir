@@ -28,11 +28,11 @@ import com.google.protobuf.Message;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * This example splits a set of FHIR bundles into individual resources, saved as ndjson files. The
@@ -62,8 +62,8 @@ public class SplitBundleMain {
       String input = new String(Files.readAllBytes(Paths.get(file)), UTF_8);
 
       // Parse the input bundle.
-      Bundle.Builder builder = Bundle.newBuilder();
-      fhirParser.merge(input, builder);
+      Bundle.Builder bundleBuilder = Bundle.newBuilder();
+      fhirParser.merge(input, bundleBuilder);
 
       // Some FHIR implementations use absolute urls for references, such as urn:uuid:<identifier>,
       // we'd like to resolve them to for example Patient/<identifier> instead. Here we do it in an
@@ -71,13 +71,18 @@ public class SplitBundleMain {
       // directly to the input string. It's fragile and slow, but enough for an example application.
       // For more details on resolving references in bundles, see
       // https://www.hl7.org/fhir/bundle.html#references
-      Bundle bundle = ResourceUtils.resolveBundleReferences(builder.build());
+      ResourceUtils.resolveBundleReferences(bundleBuilder);
 
       // Split the bundle.
-      for (Bundle.Entry entry : bundle.getEntryList()) {
-        Message resource = ResourceUtils.getContainedResource(entry.getResource());
-        String resourceType = ResourceUtils.getResourceType(resource);
-        int count = counts.containsKey(resourceType) ? counts.get(resourceType) : 0;
+      for (Bundle.Entry entry : bundleBuilder.getEntryList()) {
+        Optional<Message> resourceOptional =
+            ResourceUtils.getContainedResource(entry.getResource());
+        if (!resourceOptional.isPresent()) {
+          throw new IllegalArgumentException("Encountered empty ContainedResource");
+        }
+        Message resource = resourceOptional.get();
+        String resourceType = resource.getDescriptorForType().getName();
+        int count = counts.getOrDefault(resourceType, 0);
         counts.put(resourceType, count + 1);
         if (!fhirOutput.containsKey(resourceType)) {
           fhirOutput.put(
@@ -111,7 +116,7 @@ public class SplitBundleMain {
     GsonFactory gsonFactory = new GsonFactory();
     for (String resourceType : schema.keySet()) {
       String filename = Paths.get(outputDir, resourceType + ".schema.json").toString();
-      com.google.common.io.Files.asCharSink(new File(filename), StandardCharsets.UTF_8)
+      com.google.common.io.Files.asCharSink(new File(filename), UTF_8)
           .write(gsonFactory.toPrettyString(schema.get(resourceType).getFields()));
     }
     System.out.println("Processed " + args.length + " input files. Total number of resources:");

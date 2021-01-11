@@ -37,7 +37,6 @@ import com.google.common.collect.Iterables;
 import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.Extensions;
 import com.google.fhir.common.FhirVersion;
-import com.google.fhir.common.ResourceUtils;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.PackageInfo.ContainedResourceBehavior;
@@ -1337,7 +1336,7 @@ public class ProtoGenerator {
     if (explicitTypeNames.size() > 1) {
       // TODO: Convert to InvalidFhirException
       throw new IllegalArgumentException(
-          "Element has multiple explicit type names: " + ResourceUtils.getResourceId(element));
+          "Element has multiple explicit type names: " + element.getId().getValue());
     }
 
     // Use explicit type name if present.  Otherwise, use the field_name, converted to FieldType
