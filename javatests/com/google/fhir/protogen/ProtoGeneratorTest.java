@@ -22,13 +22,13 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
+import com.google.fhir.common.Codes;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.r4.core.ResourceTypeCode;
 import com.google.fhir.r4.core.SearchParameter;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
-import com.google.fhir.wrappers.CodeWrapper;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.ExtensionRegistry;
@@ -1425,15 +1425,14 @@ public class ProtoGeneratorTest {
   //   }
 
   private void testGeneratedR4Proto(ProtoGenerator protoGenerator, String resourceName)
-      throws IOException {
+      throws Exception {
     StructureDefinition resource = readStructureDefinition(resourceName, FhirVersion.R4);
     List<SearchParameter> searchParameters;
     if (resource.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE) {
-      // If this is a resource, add search parameters.
-      String enumValue = resource.getSnapshot().getElementList().get(0).getId().getValue();
+      String resourceTypeId = resource.getSnapshot().getElementList().get(0).getId().getValue();
       // Get the string representation of the enum value for the resource type.
       EnumValueDescriptor enumValueDescriptor =
-          CodeWrapper.getEnumValueDescriptor(ResourceTypeCode.Value.getDescriptor(), enumValue);
+          Codes.codeStringToEnumValue(ResourceTypeCode.Value.getDescriptor(), resourceTypeId);
       searchParameters =
           searchParameterMap.getOrDefault(
               ResourceTypeCode.Value.forNumber(enumValueDescriptor.getNumber()),

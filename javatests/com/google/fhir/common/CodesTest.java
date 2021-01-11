@@ -16,6 +16,7 @@ package com.google.fhir.common;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.fhir.common.ProtoUtils.findField;
+import static org.junit.Assert.assertThrows;
 
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
@@ -102,5 +103,24 @@ public final class CodesTest {
     Message.Builder builder = stringTypeCode.newBuilderForType();
     builder.setField(findField(builder, "value"), "flower");
     assertThat(Codes.getCodeAsString(builder)).isEqualTo("flower");
+  }
+
+  @Test
+  public void testCodeStringToEnumValue_success() throws Exception {
+    assertThat(
+            Codes.codeStringToEnumValue(
+                comparatorCodeType.getDescriptorForType().findFieldByName("value").getEnumType(),
+                ">="))
+        .isEqualTo(getEnumDescriptor(comparatorCodeType).findValueByNumber(3));
+  }
+
+  @Test
+  public void testCodeStringToEnumValue_notFound() {
+    assertThrows(
+        InvalidFhirException.class,
+        () ->
+            Codes.codeStringToEnumValue(
+                comparatorCodeType.getDescriptorForType().findFieldByName("value").getEnumType(),
+                "monkey"));
   }
 }

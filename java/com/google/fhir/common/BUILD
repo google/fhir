@@ -161,6 +161,7 @@ java_library(
     srcs = ["Codes.java"],
     deps = [
         ":descriptor_memos_map",
+        ":exceptions",
         ":fhir_types",
         ":proto_utils",
         "//proto/google/fhir/proto:annotations_java_proto",

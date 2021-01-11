@@ -147,6 +147,7 @@ java_test(
     test_class = "com.google.fhir.common.CodesTest",
     deps = [
         "//java/com/google/fhir/common:codes",
+        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:proto_utils",
         "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:binary_java_proto",

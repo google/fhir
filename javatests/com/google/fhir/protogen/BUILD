@@ -42,11 +42,11 @@ java_test(
     ],
     test_class = "com.google.fhir.protogen.ProtoGeneratorTest",
     deps = [
+        "//java/com/google/fhir/common:codes",
         "//java/com/google/fhir/common:json_format",
         "//java/com/google/fhir/protogen",
         "//java/com/google/fhir/protogen:generator_utils",
         "//java/com/google/fhir/protogen:proto_generator_test_utils",
-        "//java/com/google/fhir/wrappers:primitive_wrappers",
         "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto/r4/core:codes_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:search_parameter_java_proto",

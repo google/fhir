@@ -35,8 +35,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.fhir.common.AnnotationUtils;
+import com.google.fhir.common.Codes;
 import com.google.fhir.common.Extensions;
 import com.google.fhir.common.FhirVersion;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.PackageInfo.ContainedResourceBehavior;
@@ -56,7 +58,6 @@ import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
 import com.google.fhir.r4.core.Uri;
 import com.google.fhir.stu3.proto.CodingWithFixedSystem;
-import com.google.fhir.wrappers.CodeWrapper;
 import com.google.fhir.wrappers.InstantWrapper;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
@@ -460,15 +461,19 @@ public class ProtoGenerator {
 
       List<SearchParameter> searchParameters;
       if (def.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE) {
-        // If this is a resource, add search parameters.
-        String enumValue = def.getSnapshot().getElementList().get(0).getId().getValue();
+        String resourceTypeId = def.getSnapshot().getElementList().get(0).getId().getValue();
         // Get the string representation of the enum value for the resource type.
-        EnumValueDescriptor enumValueDescriptor =
-            CodeWrapper.getEnumValueDescriptor(ResourceTypeCode.Value.getDescriptor(), enumValue);
-        searchParameters =
-            searchParameterMap.getOrDefault(
-                ResourceTypeCode.Value.forNumber(enumValueDescriptor.getNumber()),
-                new ArrayList<>());
+        try {
+          EnumValueDescriptor enumValueDescriptor =
+              Codes.codeStringToEnumValue(ResourceTypeCode.Value.getDescriptor(), resourceTypeId);
+          searchParameters =
+              searchParameterMap.getOrDefault(
+                  ResourceTypeCode.Value.forNumber(enumValueDescriptor.getNumber()),
+                  new ArrayList<>());
+        } catch (InvalidFhirException e) {
+          throw new IllegalArgumentException(
+              "Encountered unrecognized resource id: " + resourceTypeId, e);
+        }
       } else {
         // Not a resource - no search parameters to add.
         searchParameters = new ArrayList<>();

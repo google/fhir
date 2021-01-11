@@ -15,9 +15,11 @@
 package com.google.fhir.common;
 
 import com.google.common.base.Ascii;
+import com.google.common.collect.ImmutableMap;
 import com.google.fhir.proto.Annotations;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProtoOrBuilder;
 import com.google.protobuf.Descriptors.Descriptor;
+import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.MessageOrBuilder;
@@ -40,6 +42,37 @@ public final class Codes {
 
   private static final DescriptorMemosMap<EnumValueDescriptor, String>
       ENUM_VALUE_TO_CODE_STRING_MEMOS = new DescriptorMemosMap<>();
+
+  public static EnumValueDescriptor codeStringToEnumValue(
+      EnumDescriptor enumSet, String stringValue) throws InvalidFhirException {
+    ImmutableMap<String, EnumValueDescriptor> enumValueMap =
+        CODE_LOOKUP_MEMOS.computeIfAbsent(
+            enumSet,
+            enumSetArg -> {
+              ImmutableMap.Builder<String, EnumValueDescriptor> enumMap =
+                  new ImmutableMap.Builder<>();
+
+              for (EnumValueDescriptor enumValue : enumSetArg.getValues()) {
+                enumMap.put(Codes.enumValueToCodeString(enumValue), enumValue);
+              }
+
+              return enumMap.build();
+            });
+
+    EnumValueDescriptor enumValue = enumValueMap.get(stringValue);
+
+    if (enumValue == null) {
+      throw new InvalidFhirException(
+          "Could not find enum value for string: "
+              + stringValue
+              + ".  Enum type: "
+              + enumSet.getFullName());
+    }
+    return enumValue;
+  }
+
+  private static final DescriptorMemosMap<EnumDescriptor, ImmutableMap<String, EnumValueDescriptor>>
+      CODE_LOOKUP_MEMOS = new DescriptorMemosMap<>();
 
   public static String getCodeAsString(MessageOrBuilder code) {
     Descriptor descriptor = code.getDescriptorForType();
