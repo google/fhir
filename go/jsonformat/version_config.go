@@ -27,6 +27,7 @@ type Version string
 
 // FHIR converter versions.
 const (
+	DSTU2 = Version("DSTU2")
 	STU3  = Version("STU3")
 	R4    = Version("R4")
 )
@@ -48,6 +49,8 @@ type config interface {
 // getConfig returns the converter config for the given FHIR version.
 func getConfig(ver Version) (config, error) {
 	switch ver {
+	case DSTU2:
+		return dstu2Config{}, nil
 	case STU3:
 		return r3Config{}, nil
 	case R4:

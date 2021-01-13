@@ -18,12 +18,13 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
-	"github.com/google/go-cmp/cmp"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
+	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
+	"github.com/google/go-cmp/cmp"
 
-	anypb "google.golang.org/protobuf/types/known/anypb"
+	d2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/datatypes_go_proto"
+	r2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/resources_go_proto"
 	c4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/codes_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	r4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
@@ -36,6 +37,7 @@ import (
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 	m3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/metadatatypes_go_proto"
 	r3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
+	anypb "google.golang.org/protobuf/types/known/anypb"
 )
 
 // TODO: Find a better way to maintain the versioned unit tests.
@@ -66,6 +68,38 @@ func TestMarshalContainedResource(t *testing.T) {
 			name:   "PrimitiveExtension",
 			pretty: true,
 			inputs: []mvr{
+				{
+					ver: DSTU2,
+					r: &r2pb.ContainedResource{
+						OneofResource: &r2pb.ContainedResource_Patient{
+							Patient: &r2pb.Patient{
+								Active: &d2pb.Boolean{
+									Value: true,
+								},
+								Name: []*d2pb.HumanName{{
+									Given: []*d2pb.String{{
+										Value: "Toby",
+										Id: &d2pb.Id{
+											Value: "a3",
+										},
+										Extension: []*d2pb.Extension{{
+											Url: &d2pb.Uri{
+												Value: "http://hl7.org/fhir/StructureDefinition/qualifier",
+											},
+											Value: &d2pb.Extension_ValueX{
+												Choice: &d2pb.Extension_ValueX_Code{
+													Code: &d2pb.Code{
+														Value: "MID",
+													},
+												},
+											},
+										}},
+									}},
+								}},
+							},
+						},
+					},
+				},
 				{
 					ver: STU3,
 					r: &r3pb.ContainedResource{

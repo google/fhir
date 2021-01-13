@@ -18,6 +18,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+
+	c2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/codes_go_proto"
+	d2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/datatypes_go_proto"
+	r2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/resources_go_proto"
+
 	"math"
 	"strconv"
 	"strings"
@@ -71,6 +76,38 @@ func TestUnmarshal(t *testing.T) {
 		json  []byte
 		wants []mvr
 	}{
+		{
+			name: "DSTU2 SearchParameter",
+			json: []byte(`
+	{
+      "resourceType": "SearchParameter",
+			"url": "http://example.com/SearchParameter",
+			"name": "Search-parameter",
+			"status": "active",
+			"description": "custom search parameter",
+      "code": "value-quantity",
+			"base": "Observation",
+			"type": "number"
+    }`),
+			wants: []mvr{
+				{
+					ver: DSTU2,
+					r: &r2pb.ContainedResource{
+						OneofResource: &r2pb.ContainedResource_SearchParameter{
+							SearchParameter: &r2pb.SearchParameter{
+								Url:         &d2pb.Uri{Value: "http://example.com/SearchParameter"},
+								Name:        &d2pb.String{Value: "Search-parameter"},
+								Status:      &c2pb.ConformanceResourceStatusCode{Value: c2pb.ConformanceResourceStatusCode_ACTIVE},
+								Description: &d2pb.String{Value: "custom search parameter"},
+								Code:        &d2pb.Code{Value: "value-quantity"},
+								Base:        &c2pb.ResourceTypeCode{Value: c2pb.ResourceTypeCode_OBSERVATION},
+								Type:        &c2pb.SearchParamTypeCode{Value: c2pb.SearchParamTypeCode_NUMBER},
+							},
+						},
+					},
+				},
+			},
+		},
 		{
 			name: "R3/R4 SearchParameter",
 			json: []byte(`
