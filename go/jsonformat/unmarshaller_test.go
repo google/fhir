@@ -19,10 +19,6 @@ import (
 	"encoding/json"
 	"fmt"
 
-	c2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/codes_go_proto"
-	d2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/datatypes_go_proto"
-	r2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/resources_go_proto"
-
 	"math"
 	"strconv"
 	"strings"
@@ -36,6 +32,11 @@ import (
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
 
+	protov1 "github.com/golang/protobuf/proto"
+	c2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/codes_go_proto"
+	d2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/datatypes_go_proto"
+	m2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/metadatatypes_go_proto"
+	r2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/resources_go_proto"
 	c4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/codes_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	r4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
@@ -47,7 +48,6 @@ import (
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 	m3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/metadatatypes_go_proto"
 	r3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
-	protov1 "github.com/golang/protobuf/proto"
 )
 
 var (
@@ -173,6 +173,28 @@ func TestUnmarshal(t *testing.T) {
     }`),
 			wants: []mvr{
 				{
+					ver: DSTU2,
+					r: &r2pb.ContainedResource{
+						OneofResource: &r2pb.ContainedResource_Observation{
+							Observation: &r2pb.Observation{
+								Id: &d2pb.Id{
+									Value: "example",
+								},
+								Status: &c2pb.ObservationStatusCode{Value: c2pb.ObservationStatusCode_FINAL},
+								Code:   &d2pb.CodeableConcept{Text: &d2pb.String{Value: "test"}},
+								Text: &m2pb.Narrative{
+									Status: &c2pb.NarrativeStatusCode{
+										Value: c2pb.NarrativeStatusCode_GENERATED,
+									},
+									Div: &d2pb.Xhtml{
+										Value: `<div xmlns="http://www.w3.org/1999/xhtml">[Put rendering here]</div>`,
+									},
+								},
+							},
+						},
+					},
+				},
+				{
 					ver: STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Observation{
@@ -226,6 +248,18 @@ func TestUnmarshal(t *testing.T) {
       "multipleBirthBoolean": false
     }`),
 			wants: []mvr{
+				{
+					ver: DSTU2,
+					r: &r2pb.ContainedResource{
+						OneofResource: &r2pb.ContainedResource_Patient{
+							Patient: &r2pb.Patient{
+								MultipleBirth: &r2pb.Patient_MultipleBirth{
+									MultipleBirth: &r2pb.Patient_MultipleBirth_Boolean{
+										Boolean: &d2pb.Boolean{Value: false}}},
+							},
+						},
+					},
+				},
 				{
 					ver: STU3,
 					r: &r3pb.ContainedResource{
