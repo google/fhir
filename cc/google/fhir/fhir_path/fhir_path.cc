@@ -3433,7 +3433,20 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitMemberInvocation(
       FhirPathParser::MemberInvocationContext* ctx) override {
-    std::string text = ctx->identifier()->IDENTIFIER()->getSymbol()->getText();
+    std::string text;
+    if (ctx->identifier()->IDENTIFIER()) {
+      text = ctx->identifier()->IDENTIFIER()->getSymbol()->getText();
+    } else if (ctx->identifier()->DELIMITEDIDENTIFIER()) {
+      text = ctx->identifier()->DELIMITEDIDENTIFIER()->getSymbol()->getText();
+      if (text.size() < 2 || text.front() != '`' || text.back() != '`') {
+        SetError(
+            InternalError(absl::StrCat("Invalid DELIMITEDIDENTIFIER ", text)));
+      }
+      text = text.substr(1, text.size() - 2);
+    } else {
+      SetError(InternalError(
+          "Member visit missing both IDENTIFIER and DELIMITEDIDENTIFIER."));
+    }
     return std::make_shared<InvocationDefinition>(text, false);
   }
 
