@@ -88,7 +88,6 @@ using ::absl::StatusCode;
 using ::google::protobuf::Message;
 using ::testing::ElementsAreArray;
 using ::testing::Eq;
-using ::testing::HasSubstr;
 using ::testing::StrEq;
 using ::testing::UnorderedElementsAreArray;
 using testutil::EqualsProto;
@@ -346,23 +345,6 @@ TYPED_TEST(FhirPathTest, TestGetGrandchild) {
 
   EXPECT_THAT(result.GetMessages(), UnorderedElementsAreArray({EqualsProto(
                                         test_encounter.period().start())}));
-}
-
-TYPED_TEST(FhirPathTest, TestFieldNameIsReservedWord) {
-  auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
-  test_encounter.mutable_text()->mutable_div()->set_value("some string");
-  absl::StatusOr<EvaluationResult> result =
-      TestFixture::Evaluate(test_encounter, "text.div");
-
-  ASSERT_THAT(result, HasStatusCode(StatusCode::kInternal));
-  EXPECT_THAT(result.status().message(),
-              HasSubstr("Unknown terminal type: div"));
-
-  result = TestFixture::Evaluate(test_encounter, "text.`div`");
-  ASSERT_OK(result.status());
-  EXPECT_THAT(
-      result.value().GetMessages(),
-      UnorderedElementsAreArray({EqualsProto(test_encounter.text().div())}));
 }
 
 TYPED_TEST(FhirPathTest, TestGetEmptyGrandchild) {
