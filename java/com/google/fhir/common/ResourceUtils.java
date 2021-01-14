@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /** Helper methods for handling FHIR resource protos. */
 // TODO: Break reference utils into standalone References.java
@@ -33,48 +32,48 @@ public final class ResourceUtils {
 
   private ResourceUtils() {}
 
-  public static Optional<Message> getContainedResource(Message resource) {
+  public static Message getContainedResource(Message resource) throws InvalidFhirException {
     // TODO: Use an annotation here.
     if (!resource.getDescriptorForType().getName().equals("ContainedResource")) {
-      throw new IllegalArgumentException(
+      throw new InvalidFhirException(
           "Not a ContainedResource: " + resource.getDescriptorForType().getName());
     }
     Collection<Object> values = resource.getAllFields().values();
-    return values.size() == 1 ? Optional.of((Message) values.iterator().next()) : Optional.empty();
+    if (values.size() != 1) {
+      throw new InvalidFhirException("ContainedResource has no resource field set.");
+    }
+    return (Message) values.iterator().next();
   }
 
-  /*
+  /**
    * Convert any absolute references in the provided bundle to relative references, assuming the
    * targets of the references are also present in the bundle.
    */
-  public static void resolveBundleReferences(Message.Builder bundle) {
+  @SuppressWarnings("unchecked") // Cast to List<Message> guaranteed by preceding inspection
+  public static void resolveBundleReferences(Message.Builder bundle) throws InvalidFhirException {
     Map<String, String> referenceMap = new HashMap<>();
     FieldDescriptor entryField = findField(bundle, "entry");
     FieldDescriptor entryFullUrlField = findField(entryField.getMessageType(), "full_url");
     FieldDescriptor entryResourceField = findField(entryField.getMessageType(), "resource");
 
-    ProtoUtils.<Message>forEachInstance(
-        bundle,
-        entryField,
-        (entry, index) -> {
-          if (entry.hasField(entryFullUrlField)) {
-            Optional<Message> resourceOptional =
-                ResourceUtils.getContainedResource((Message) entry.getField(entryResourceField));
-            if (!resourceOptional.isPresent()) {
-              return;
-            }
-            Message resource = resourceOptional.get();
-            String id = (String) getValue((Message) resource.getField(findField(resource, "id")));
-            String relativeReference = resource.getDescriptorForType().getName() + "/" + id;
-            referenceMap.put(
-                (String) getValue((Message) entry.getField(entryFullUrlField)), relativeReference);
-          }
-        });
+    if (!entryField.isRepeated() || entryField.getType() != FieldDescriptor.Type.MESSAGE) {
+      throw new InvalidFhirException("Unexpected Bundle entry field: " + entryField.getFullName());
+    }
+    for (Message entry : (List<Message>) bundle.getField(entryField)) {
+      if (entry.hasField(entryFullUrlField) && entry.hasField(entryResourceField)) {
+        Message resource =
+            ResourceUtils.getContainedResource((Message) entry.getField(entryResourceField));
+        String id = (String) getValue((Message) resource.getField(findField(resource, "id")));
+        String relativeReference = resource.getDescriptorForType().getName() + "/" + id;
+        referenceMap.put(
+            (String) getValue((Message) entry.getField(entryFullUrlField)), relativeReference);
+      }
+    }
     replaceReferences(bundle, referenceMap);
   }
 
-  private static void replaceOneReference(
-      Message.Builder builder, Map<String, String> referenceMap) {
+  private static void replaceOneReference(Message.Builder builder, Map<String, String> referenceMap)
+      throws InvalidFhirException {
     FieldDescriptor uriField = builder.getDescriptorForType().findFieldByName("uri");
     FieldDescriptor uriValueField = uriField.getMessageType().findFieldByName("value");
     if (!builder.hasField(uriField)) {
@@ -89,25 +88,24 @@ public final class ResourceUtils {
     splitIfRelativeReference(builder);
   }
 
-  private static void replaceReferences(Message.Builder bundle, Map<String, String> referenceMap) {
-    for (FieldDescriptor field : bundle.getAllFields().keySet()) {
+  private static void replaceReferences(Message.Builder builder, Map<String, String> referenceMap)
+      throws InvalidFhirException {
+    for (FieldDescriptor field : builder.getAllFields().keySet()) {
       if (field.getType() == FieldDescriptor.Type.MESSAGE) {
-        ProtoUtils.forEachBuilder(
-            bundle,
-            field,
-            (itemBuilder, index) -> {
-              if (AnnotationUtils.isReference(itemBuilder)) {
-                replaceOneReference(itemBuilder, referenceMap);
-              } else {
-                replaceReferences(itemBuilder, referenceMap);
-              }
-            });
+        for (int i = 0; i < ProtoUtils.fieldSize(builder, field); i++) {
+          Message.Builder itemBuilder = ProtoUtils.getBuilderAtIndex(builder, field, i);
+          if (AnnotationUtils.isReference(itemBuilder)) {
+            replaceOneReference(itemBuilder, referenceMap);
+          } else {
+            replaceReferences(itemBuilder, referenceMap);
+          }
+        }
       }
     }
   }
 
   private static Message.Builder setStringField(
-      Message.Builder builder, String field, String idString) {
+      Message.Builder builder, String field, String idString) throws InvalidFhirException {
     Message.Builder idBuilder = builder.getFieldBuilder(findField(builder, field));
     idBuilder.setField(findField(idBuilder, "value"), idString);
     return builder;
@@ -132,7 +130,7 @@ public final class ResourceUtils {
    * https://www.hl7.org/fhir/references.html#Reference}.
    */
   // TODO: Ensure consistent behavior/testing with python/c++.
-  public static void splitIfRelativeReference(Message.Builder builder) {
+  public static void splitIfRelativeReference(Message.Builder builder) throws InvalidFhirException {
     Descriptor descriptor = builder.getDescriptorForType();
     FieldDescriptor uriField = descriptor.findFieldByName("uri");
     if (!builder.hasField(uriField)) {
@@ -152,8 +150,7 @@ public final class ResourceUtils {
           CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, parts.get(0)) + "_id";
       FieldDescriptor field = descriptor.findFieldByName(resourceFieldName);
       if (field == null) {
-        // TODO: Convert to InvalidFhirException
-        throw new IllegalArgumentException(
+        throw new InvalidFhirException(
             "Invalid resource type in reference: " + resourceFieldName + ":" + parts.get(0));
       } else {
         Message.Builder referenceIdBuilder = builder.getFieldBuilder(field);

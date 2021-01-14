@@ -43,7 +43,7 @@ public final class ResourceValidator {
     if (AnnotationUtils.isPrimitiveType(message)) {
       try {
         PrimitiveWrappers.validatePrimitive(message);
-      } catch (IllegalArgumentException e) {
+      } catch (IllegalArgumentException | InvalidFhirException e) {
         throw new InvalidFhirException("invalid-primitive-" + baseName, e);
       }
       return;

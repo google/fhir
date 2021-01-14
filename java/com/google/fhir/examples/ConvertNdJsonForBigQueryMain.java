@@ -19,6 +19,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.bigquery.model.TableSchema;
 import com.google.fhir.common.BigQuerySchema;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat.Parser;
 import com.google.fhir.common.ResourceUtils;
 import com.google.fhir.r4.core.ContainedResource;
@@ -29,12 +30,10 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * This example reads FHIR resources in standard ndjson format, containing one message per line, and
@@ -45,7 +44,7 @@ import java.util.Optional;
  */
 public class ConvertNdJsonForBigQueryMain {
 
-  public static void main(String[] argv) throws IOException {
+  public static void main(String[] argv) throws IOException, InvalidFhirException {
     JsonParserArgs args = new JsonParserArgs(argv);
     Parser fhirParser = Parser.withDefaultTimeZone(args.getDefaultTimezone());
     Printer protoPrinter = JsonFormat.printer().omittingInsignificantWhitespace();
@@ -63,11 +62,7 @@ public class ConvertNdJsonForBigQueryMain {
         ContainedResource.Builder builder = ContainedResource.newBuilder();
         fhirParser.merge(line, builder);
         // Extract and print the (one) parsed resource.
-        Optional<Message> parsedOptional = ResourceUtils.getContainedResource(builder.build());
-        if (!parsedOptional.isPresent()) {
-          throw new IllegalArgumentException("Found empty contained resource.");
-        }
-        Message parsed = parsedOptional.get();
+        Message parsed = ResourceUtils.getContainedResource(builder.build());
 
         if (schema == null) {
           // Generate a schema for this file. Note that we do this purely based on a single message,
@@ -78,14 +73,14 @@ public class ConvertNdJsonForBigQueryMain {
         output.newLine();
         // Count the number of parsed resources.
         String resourceType = parsed.getDescriptorForType().getName();
-        int count = counts.containsKey(resourceType) ? counts.get(resourceType) : 0;
+        int count = counts.getOrDefault(resourceType, 0);
         counts.put(resourceType, count + 1);
       }
       output.close();
       if (schema != null) {
-        String filename = Paths.get(entry.output.toString() + ".schema.json").toString();
+        String filename = Paths.get(entry.output + ".schema.json").toString();
         System.out.println("Writing schema to " + filename + "...");
-        com.google.common.io.Files.asCharSink(new File(filename), StandardCharsets.UTF_8)
+        com.google.common.io.Files.asCharSink(new File(filename), UTF_8)
             .write(gsonFactory.toPrettyString(schema.getFields()));
       }
     }

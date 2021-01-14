@@ -146,18 +146,19 @@ public class ProtoUtils {
   }
 
   /**
-   * Variant of Descriptor#findFieldByName that throws IllegalArgumentException
-   * if the field is not found.
+   * Variant of {@link Descriptor#findFieldByName} that throws {@link InvalidFhirException} if the
+   * field is not found.
    */
-  public static FieldDescriptor findField(MessageOrBuilder builder, String name) {
+  public static FieldDescriptor findField(MessageOrBuilder builder, String name)
+      throws InvalidFhirException {
     return findField(builder.getDescriptorForType(), name);
   }
 
-  // TODO: Consider using checked exception.
-  public static FieldDescriptor findField(Descriptor type, String name) {
+  public static FieldDescriptor findField(Descriptor type, String name)
+      throws InvalidFhirException {
     FieldDescriptor field = type.findFieldByName(name);
     if (field == null) {
-      throw new IllegalArgumentException(
+      throw new InvalidFhirException(
           "Field `" + name + "` not found on message: " + type.getFullName());
     }
     return field;

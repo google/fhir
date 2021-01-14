@@ -34,24 +34,24 @@ public final class Extensions {
   public static final String BINARY_STRIDE_EXTENSION_URL =
       "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride";
 
-  @SuppressWarnings("unchecked")  // safe by specification
-  public static List<Message> getExtensions(MessageOrBuilder message) {
+  @SuppressWarnings("unchecked") // safe by specification
+  public static List<Message> getExtensions(MessageOrBuilder message) throws InvalidFhirException {
     return (List<Message>) message.getField(getExtensionField(message));
   }
 
-  // TODO: consider checked exceptions
   public static void addExtensionToMessage(Message extension, Message.Builder builder) {
-    checkIsExtension(extension);
     FieldDescriptor extensionField = builder.getDescriptorForType().findFieldByName("extension");
     builder.addRepeatedField(extensionField, extension);
   }
 
-  public static void forEachExtension(MessageOrBuilder message, Consumer<Message> function) {
+  public static void forEachExtension(MessageOrBuilder message, Consumer<Message> function)
+      throws InvalidFhirException {
     ProtoUtils.<Message>forEachInstance(
         message, getExtensionField(message), (extension, index) -> function.accept(extension));
   }
 
-  public static List<Message> getExtensionsWithUrl(String url, MessageOrBuilder message) {
+  public static List<Message> getExtensionsWithUrl(String url, MessageOrBuilder message)
+      throws InvalidFhirException {
     FieldDescriptor extensionField = getExtensionField(message);
     List<Message> result = new ArrayList<>();
     ProtoUtils.<Message>forEachInstance(
@@ -72,26 +72,22 @@ public final class Extensions {
         urlMessage.getField(urlMessage.getDescriptorForType().findFieldByName("value"));
   }
 
-  public static Object getExtensionValue(MessageOrBuilder extension, String valueField) {
+  public static Object getExtensionValue(MessageOrBuilder extension, String valueField)
+      throws InvalidFhirException {
     Message valueChoice = (Message) extension.getField(findField(extension, "value"));
     Message valueBuilder = (Message) valueChoice.getField(findField(valueChoice, valueField));
     return valueBuilder.getField(findField(valueBuilder, "value"));
   }
 
-  public static void setExtensionValue(Message.Builder extension, String valueField, Object value) {
+  public static void setExtensionValue(Message.Builder extension, String valueField, Object value)
+      throws InvalidFhirException {
     Message.Builder valueChoice = extension.getFieldBuilder(findField(extension, "value"));
     Message.Builder valueBuilder = valueChoice.getFieldBuilder(findField(valueChoice, valueField));
     valueBuilder.setField(findField(valueBuilder, "value"), value);
   }
 
-  private static FieldDescriptor getExtensionField(MessageOrBuilder message) {
+  private static FieldDescriptor getExtensionField(MessageOrBuilder message)
+      throws InvalidFhirException {
     return findField(message, "extension");
-  }
-
-  private static void checkIsExtension(MessageOrBuilder message) {
-    if (!FhirTypes.isExtension(message.getDescriptorForType())) {
-      throw new IllegalArgumentException(
-          "Message is not an untyped Extension: " + message.getDescriptorForType().getFullName());
-    }
   }
 }

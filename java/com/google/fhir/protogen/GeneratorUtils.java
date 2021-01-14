@@ -21,6 +21,7 @@ import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.r4.core.Canonical;
 import com.google.fhir.r4.core.DateTime;
@@ -181,17 +182,17 @@ final class GeneratorUtils {
 
   // Returns the only element in the list matching a given id.
   // Throws IllegalArgumentException if zero or more than one matching element is found.
-  static ElementDefinition getElementById(String id, List<ElementDefinition> elements) {
+  static ElementDefinition getElementById(String id, List<ElementDefinition> elements)
+      throws InvalidFhirException {
     return getOptionalElementById(id, elements)
-        .orElseThrow(() -> new IllegalArgumentException("No element with id: " + id));
+        .orElseThrow(() -> new InvalidFhirException("No element with id: " + id));
   }
 
   // Returns the only element in the list matching a given id, or an empty optional if none are
   // found.
   // Throws IllegalArgumentException if more than one matching element is found.
-  // TODO: Consider using checked exception.
-  static Optional<ElementDefinition> getOptionalElementById (
-      String id, List<ElementDefinition> elements) {
+  static Optional<ElementDefinition> getOptionalElementById(
+      String id, List<ElementDefinition> elements) throws InvalidFhirException {
      List<ElementDefinition> matchingElements =
          elements.stream()
         .filter(element -> element.getId().getValue().equals(id))
@@ -201,12 +202,12 @@ final class GeneratorUtils {
     } else if (matchingElements.size() == 1) {
       return Optional.of(matchingElements.get(0));
     } else {
-      throw new IllegalArgumentException("Multiple elements found matching id: " + id);
+      throw new InvalidFhirException("Multiple elements found matching id: " + id);
     }
   }
 
   static Optional<ElementDefinition> getParent(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     String elementId = element.getId().getValue();
     int lastDotIndex = elementId.lastIndexOf('.');
     if (lastDotIndex == -1) {

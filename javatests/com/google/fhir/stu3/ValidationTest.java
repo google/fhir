@@ -50,182 +50,182 @@ public final class ValidationTest extends ValidationTestBase {
   }
 
   @Test
-  public void testBase64Binary() throws IOException {
+  public void testBase64Binary() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.Base64Binary.newBuilder());
   }
 
   @Test
-  public void testBoolean() throws IOException {
+  public void testBoolean() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.Boolean.newBuilder());
   }
 
   @Test
-  public void testCode() throws IOException {
+  public void testCode() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.Code.newBuilder());
   }
 
   @Test
-  public void testDate() throws IOException {
+  public void testDate() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.Date.newBuilder());
   }
 
   @Test
-  public void testDateTime() throws IOException {
+  public void testDateTime() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.DateTime.newBuilder());
   }
 
   @Test
-  public void testDecimal() throws IOException {
+  public void testDecimal() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.Decimal.newBuilder());
   }
 
   @Test
-  public void testId() throws IOException {
+  public void testId() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.Id.newBuilder());
   }
 
   @Test
-  public void testInstant() throws IOException {
+  public void testInstant() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.Instant.newBuilder());
   }
 
   @Test
-  public void testInteger() throws IOException {
+  public void testInteger() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.Integer.newBuilder());
   }
 
   @Test
-  public void testMarkdown() throws IOException {
+  public void testMarkdown() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.Markdown.newBuilder());
   }
 
   @Test
-  public void testOid() throws IOException {
+  public void testOid() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.Oid.newBuilder());
   }
 
   @Test
-  public void testPositiveInt() throws IOException {
+  public void testPositiveInt() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.PositiveInt.newBuilder());
   }
 
   @Test
-  public void testReference() throws IOException {
+  public void testReference() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.Reference.newBuilder());
   }
 
   @Test
-  public void testString() throws IOException {
+  public void testString() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.String.newBuilder());
   }
 
   @Test
-  public void testTime() throws IOException {
+  public void testTime() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.Time.newBuilder());
   }
 
   @Test
-  public void testUnsignedInt() throws IOException {
+  public void testUnsignedInt() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.UnsignedInt.newBuilder());
   }
 
   @Test
-  public void testUri() throws IOException {
+  public void testUri() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.Uri.newBuilder());
   }
 
   @Test
-  public void testXhtml() throws IOException {
+  public void testXhtml() throws Exception {
     testJsonValidation(com.google.fhir.stu3.proto.Xhtml.newBuilder());
   }
 
   @Test
-  public void testValidatePrimitiveBase64Binary() throws IOException {
+  public void testValidatePrimitiveBase64Binary() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.Base64Binary.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveBoolean() throws IOException {
+  public void testValidatePrimitiveBoolean() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.Boolean.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveCode() throws IOException {
+  public void testValidatePrimitiveCode() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.Code.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveDate() throws IOException {
+  public void testValidatePrimitiveDate() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.Date.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveDateTime() throws IOException {
+  public void testValidatePrimitiveDateTime() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.DateTime.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveDecimal() throws IOException {
+  public void testValidatePrimitiveDecimal() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.Decimal.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveId() throws IOException {
+  public void testValidatePrimitiveId() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.Id.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveInstant() throws IOException {
+  public void testValidatePrimitiveInstant() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.Instant.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveInteger() throws IOException {
+  public void testValidatePrimitiveInteger() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.Integer.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveMarkdown() throws IOException {
+  public void testValidatePrimitiveMarkdown() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.Markdown.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveOid() throws IOException {
+  public void testValidatePrimitiveOid() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.Oid.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitivePositiveInt() throws IOException {
+  public void testValidatePrimitivePositiveInt() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.PositiveInt.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveString() throws IOException {
+  public void testValidatePrimitiveString() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.String.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveTime() throws IOException {
+  public void testValidatePrimitiveTime() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.Time.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveUnsignedInt() throws IOException {
+  public void testValidatePrimitiveUnsignedInt() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.UnsignedInt.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveUri() throws IOException {
+  public void testValidatePrimitiveUri() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.Uri.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveTypedCode() throws IOException {
+  public void testValidatePrimitiveTypedCode() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.AdministrativeGenderCode.getDefaultInstance());
   }
 
   @Test
-  public void testValidatePrimitiveStringCode() throws IOException {
+  public void testValidatePrimitiveStringCode() throws Exception {
     testProtoValidation(com.google.fhir.stu3.proto.MimeTypeCode.getDefaultInstance());
   }
 }

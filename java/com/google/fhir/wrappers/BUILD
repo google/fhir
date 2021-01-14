@@ -9,6 +9,7 @@ java_library(
     srcs = glob(["*.java"]),
     deps = [
         "//java/com/google/fhir/common:annotation_utils",
+        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:fhir_types",
         "//java/com/google/fhir/common:proto_utils",
         "//proto/google/fhir/proto:annotations_java_proto",

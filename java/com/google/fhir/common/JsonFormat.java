@@ -126,12 +126,13 @@ public final class JsonFormat {
      *
      * @throws IOException if writing to the output fails.
      */
-    public void appendTo(MessageOrBuilder message, Appendable output) throws IOException {
+    public void appendTo(MessageOrBuilder message, Appendable output)
+        throws IOException, InvalidFhirException {
       new PrinterImpl(output, omittingInsignificantWhitespace, jsonFormat).print(message);
     }
 
     /** Converts a protobuf message to JSON format. */
-    public String print(MessageOrBuilder message) throws IOException {
+    public String print(MessageOrBuilder message) throws IOException, InvalidFhirException {
       StringBuilder builder = new StringBuilder();
       appendTo(message, builder);
       return builder.toString();
@@ -197,7 +198,7 @@ public final class JsonFormat {
     public void outdent() {
       final int length = indent.length();
       if (length < 2) {
-        throw new IllegalArgumentException("Outdent() without matching Indent().");
+        throw new IllegalStateException("Outdent() without matching Indent().");
       }
       indent.delete(length - 2, length);
     }
@@ -255,7 +256,7 @@ public final class JsonFormat {
       this.jsonFormat = jsonFormat;
     }
 
-    void print(MessageOrBuilder message) throws IOException {
+    void print(MessageOrBuilder message) throws IOException, InvalidFhirException {
       WellKnownTypePrinter specialPrinter =
           wellKnownTypePrinters.get(message.getDescriptorForType().getFullName());
       if (specialPrinter != null) {
@@ -268,7 +269,8 @@ public final class JsonFormat {
     }
 
     private interface WellKnownTypePrinter {
-      void print(PrinterImpl printer, MessageOrBuilder message) throws IOException;
+      void print(PrinterImpl printer, MessageOrBuilder message)
+          throws IOException, InvalidFhirException;
     }
 
     private static final Map<String, WellKnownTypePrinter> wellKnownTypePrinters =
@@ -280,7 +282,8 @@ public final class JsonFormat {
       WellKnownTypePrinter containedResourcesPrinter =
           new WellKnownTypePrinter() {
             @Override
-            public void print(PrinterImpl printer, MessageOrBuilder message) throws IOException {
+            public void print(PrinterImpl printer, MessageOrBuilder message)
+                throws IOException, InvalidFhirException {
               printer.printContainedResource(message);
             }
           };
@@ -294,14 +297,16 @@ public final class JsonFormat {
       WellKnownTypePrinter stu3ExtensionPrinter =
           new WellKnownTypePrinter() {
             @Override
-            public void print(PrinterImpl printer, MessageOrBuilder message) throws IOException {
+            public void print(PrinterImpl printer, MessageOrBuilder message)
+                throws IOException, InvalidFhirException {
               printer.printExtension((com.google.fhir.stu3.proto.Extension) message);
             }
           };
       WellKnownTypePrinter r4ExtensionPrinter =
           new WellKnownTypePrinter() {
             @Override
-            public void print(PrinterImpl printer, MessageOrBuilder message) throws IOException {
+            public void print(PrinterImpl printer, MessageOrBuilder message)
+                throws IOException, InvalidFhirException {
               printer.printExtension((com.google.fhir.r4.core.Extension) message);
             }
           };
@@ -313,7 +318,8 @@ public final class JsonFormat {
       WellKnownTypePrinter anyPrinter =
           new WellKnownTypePrinter() {
             @Override
-            public void print(PrinterImpl printer, MessageOrBuilder message) throws IOException {
+            public void print(PrinterImpl printer, MessageOrBuilder message)
+                throws IOException, InvalidFhirException {
               // TODO: handle STU3 Any.
               printer.printContainedResource(
                   ((Any) message).unpack(com.google.fhir.r4.core.ContainedResource.class));
@@ -325,7 +331,8 @@ public final class JsonFormat {
     }
 
     /** Prints a contained resource field. */
-    private void printContainedResource(MessageOrBuilder message) throws IOException {
+    private void printContainedResource(MessageOrBuilder message)
+        throws IOException, InvalidFhirException {
       for (Map.Entry<FieldDescriptor, Object> field : message.getAllFields().entrySet()) {
         if (jsonFormat == FhirJsonFormat.ANALYTIC) {
           /* We print only the type of the contained resource here. */
@@ -344,7 +351,8 @@ public final class JsonFormat {
     }
 
     /** Prints an extension field. */
-    private void printExtension(com.google.fhir.stu3.proto.Extension extension) throws IOException {
+    private void printExtension(com.google.fhir.stu3.proto.Extension extension)
+        throws IOException, InvalidFhirException {
       if (jsonFormat == FhirJsonFormat.ANALYTIC) {
         generator.print("\"" + extension.getUrl().getValue() + "\"");
       } else {
@@ -353,7 +361,8 @@ public final class JsonFormat {
     }
 
     /** Prints an extension field. */
-    private void printExtension(com.google.fhir.r4.core.Extension extension) throws IOException {
+    private void printExtension(com.google.fhir.r4.core.Extension extension)
+        throws IOException, InvalidFhirException {
       if (jsonFormat == FhirJsonFormat.ANALYTIC) {
         generator.print("\"" + extension.getUrl().getValue() + "\"");
       } else {
@@ -380,7 +389,8 @@ public final class JsonFormat {
     }
 
     /** Prints a reference field. */
-    private void printReference(MessageOrBuilder reference) throws IOException {
+    private void printReference(MessageOrBuilder reference)
+        throws IOException, InvalidFhirException {
       FieldDescriptor uriField = reference.getDescriptorForType().findFieldByName("uri");
       if (reference.hasField(uriField) || jsonFormat == FhirJsonFormat.ANALYTIC) {
         printMessage(reference);
@@ -428,7 +438,7 @@ public final class JsonFormat {
     }
 
     /** Prints a regular message. */
-    private void printMessage(MessageOrBuilder message) throws IOException {
+    private void printMessage(MessageOrBuilder message) throws IOException, InvalidFhirException {
       boolean printedField = false;
 
       if (AnnotationUtils.isResource(message.getDescriptorForType())
@@ -463,10 +473,11 @@ public final class JsonFormat {
       }
     }
 
-    private void printChoiceField(FieldDescriptor field, Object value) throws IOException {
+    private void printChoiceField(FieldDescriptor field, Object value)
+        throws IOException, InvalidFhirException {
       Message message = (Message) value;
       if (message.getAllFields().size() != 1) {
-        throw new IllegalArgumentException(
+        throw new InvalidFhirException(
             "Invalid value for choice field " + field.getName() + ": " + message);
       }
       Map.Entry<FieldDescriptor, Object> entry =
@@ -483,7 +494,7 @@ public final class JsonFormat {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void printPrimitiveField(String name, FieldDescriptor field, Object value)
-        throws IOException {
+        throws IOException, InvalidFhirException {
       boolean printedElement = false;
       if (field.isRepeated()) {
         boolean hasValue = false;
@@ -546,7 +557,7 @@ public final class JsonFormat {
 
     @SuppressWarnings("unchecked")
     private void printMessageField(String name, FieldDescriptor field, Object value)
-        throws IOException {
+        throws IOException, InvalidFhirException {
       generator.print("\"" + name + "\":" + blankOrSpace);
       if (field.isRepeated()) {
         printRepeatedMessage((List<MessageOrBuilder>) value);
@@ -555,7 +566,8 @@ public final class JsonFormat {
       }
     }
 
-    private void printRepeatedMessage(List<MessageOrBuilder> value) throws IOException {
+    private void printRepeatedMessage(List<MessageOrBuilder> value)
+        throws IOException, InvalidFhirException {
       generator.print("[" + blankOrNewLine);
       generator.indent();
       boolean printedElement = false;
@@ -657,7 +669,8 @@ public final class JsonFormat {
     /**
      * Parse a text-format message from {@code input} and merge the contents into {@code builder}.
      */
-    public <T extends Message.Builder> T merge(final Reader input, final T builder) {
+    public <T extends Message.Builder> T merge(final Reader input, final T builder)
+        throws InvalidFhirException {
       JsonReader reader = new JsonReader(input);
       JsonElement json = jsonParser.parse(reader);
       if (json.isJsonObject()) {
@@ -671,12 +684,14 @@ public final class JsonFormat {
     /**
      * Parse a text-format message from {@code input} and merge the contents into {@code builder}.
      */
-    public <T extends Message.Builder> T merge(final CharSequence input, final T builder) {
+    public <T extends Message.Builder> T merge(final CharSequence input, final T builder)
+        throws InvalidFhirException {
       merge(new StringReader(input.toString()), builder);
       return builder;
     }
 
-    private Map<String, FieldDescriptor> getFieldMap(Descriptor descriptor) {
+    private static Map<String, FieldDescriptor> getFieldMap(Descriptor descriptor)
+        throws InvalidFhirException {
       Map<String, FieldDescriptor> nameToDescriptorMap = new HashMap<>();
       for (FieldDescriptor field : descriptor.getFields()) {
         if (AnnotationUtils.isChoiceType(field)) {
@@ -711,7 +726,8 @@ public final class JsonFormat {
       return nameToDescriptorMap;
     }
 
-    private void mergeMessage(JsonObject json, Message.Builder builder) {
+    private void mergeMessage(JsonObject json, Message.Builder builder)
+        throws InvalidFhirException {
       // TODO: Use an annotation here.
       if (builder.getDescriptorForType().getName().equals("ContainedResource")) {
         // We handle contained resources in a special way, since we need to inspect the input to
@@ -750,7 +766,7 @@ public final class JsonFormat {
         } else if (fieldName.equals("resourceType")) {
           String inputType = element.getAsString();
           if (!AnnotationUtils.isResource(descriptor) || !inputType.equals(descriptor.getName())) {
-            throw new IllegalArgumentException(
+            throw new InvalidFhirException(
                 "Trying to parse a resource of type "
                     + inputType
                     + ", but the target field is of type "
@@ -761,7 +777,7 @@ public final class JsonFormat {
           for (Map.Entry<String, FieldDescriptor> e : nameToDescriptorMap.entrySet()) {
             names = names + " " + e.getKey();
           }
-          throw new IllegalArgumentException(
+          throw new InvalidFhirException(
               "Unknown field "
                   + fieldName
                   + " in input of expected type "
@@ -777,7 +793,8 @@ public final class JsonFormat {
     }
 
     private void mergeChoiceField(
-        FieldDescriptor field, String fieldName, JsonElement json, Message.Builder builder) {
+        FieldDescriptor field, String fieldName, JsonElement json, Message.Builder builder)
+        throws InvalidFhirException {
       Descriptor descriptor = field.getMessageType();
       Map<String, FieldDescriptor> nameToDescriptorMap = getFieldMap(descriptor);
       String choiceFieldName;
@@ -793,7 +810,7 @@ public final class JsonFormat {
       }
       FieldDescriptor choiceField = nameToDescriptorMap.get(choiceFieldName);
       if (choiceField == null) {
-        throw new IllegalArgumentException(
+        throw new InvalidFhirException(
             "Can't find field: "
                 + choiceFieldName
                 + " in type "
@@ -811,18 +828,18 @@ public final class JsonFormat {
       builder.setField(field, choiceTypeBuilder.build());
     }
 
-    private void mergeField(FieldDescriptor field, JsonElement json, Message.Builder builder) {
+    private void mergeField(FieldDescriptor field, JsonElement json, Message.Builder builder)
+        throws InvalidFhirException {
       if (!isPrimitiveType(field)) {
         if ((field.isRepeated() && builder.getRepeatedFieldCount(field) > 0)
             || (!field.isRepeated() && builder.hasField(field))) {
-          throw new IllegalArgumentException(
-              "Field " + field.getFullName() + " has already been set.");
+          throw new InvalidFhirException("Field " + field.getFullName() + " has already been set.");
         }
 
         if (field.getContainingOneof() != null) {
           FieldDescriptor existing = builder.getOneofFieldDescriptor(field.getContainingOneof());
           if (existing != null) {
-            throw new IllegalArgumentException(
+            throw new InvalidFhirException(
                 "Cannot set field "
                     + field.getFullName()
                     + " because another field "
@@ -833,7 +850,7 @@ public final class JsonFormat {
       }
       if (field.isRepeated()) {
         if (!json.isJsonArray()) {
-          throw new IllegalArgumentException(
+          throw new InvalidFhirException(
               "Expected JsonArray for repeated field: " + field.getFullName());
         }
         mergeRepeatedField(field, json.getAsJsonArray(), builder);
@@ -847,7 +864,7 @@ public final class JsonFormat {
       }
     }
 
-    private Message mergePrimitiveField(Message first, Message second) {
+    private static Message mergePrimitiveField(Message first, Message second) {
       boolean firstHasValue = PrimitiveWrapper.hasValue(first);
       boolean secondHasValue = PrimitiveWrapper.hasValue(second);
       boolean hasValue = firstHasValue || secondHasValue;
@@ -870,11 +887,11 @@ public final class JsonFormat {
       return fieldMerger.build();
     }
 
-    private void mergeRepeatedField(
-        FieldDescriptor field, JsonArray json, Message.Builder builder) {
+    private void mergeRepeatedField(FieldDescriptor field, JsonArray json, Message.Builder builder)
+        throws InvalidFhirException {
       boolean hasExistingField = builder.getRepeatedFieldCount(field) > 0;
       if (hasExistingField && builder.getRepeatedFieldCount(field) != json.size()) {
-        throw new IllegalArgumentException("Repeated field length mismatch for field: " + field);
+        throw new InvalidFhirException("Repeated field length mismatch for field: " + field);
       }
 
       for (int i = 0; i < json.size(); ++i) {
@@ -904,25 +921,27 @@ public final class JsonFormat {
       return ImmutableTable.copyOf(table);
     }
 
-    private void parseContainedResource(JsonObject json, Message.Builder builder) {
+    private void parseContainedResource(JsonObject json, Message.Builder builder)
+        throws InvalidFhirException {
       String resourceType = json.get("resourceType").getAsString();
       FieldDescriptor resource =
           RESOURCE_TYPES.get(
               AnnotationUtils.getFhirVersion(builder.getDescriptorForType()), resourceType);
       if (resource == null) {
-        throw new IllegalArgumentException("Unsupported resource type: " + resourceType);
+        throw new InvalidFhirException("Unsupported resource type: " + resourceType);
       }
       Message.Builder innerBuilder = builder.newBuilderForField(resource);
       mergeMessage(json, innerBuilder);
-      builder.setField(resource, innerBuilder.build()).build();
+      builder.setField(resource, innerBuilder.build());
     }
 
     // Supress lack of compile-time type safety because of proto newBuilderForType
     private Message parseFieldValue(
-        FieldDescriptor field, JsonElement json, Message.Builder builder) {
+        FieldDescriptor field, JsonElement json, Message.Builder builder)
+        throws InvalidFhirException {
       // Everything at the fhir-spec level should be a Message.
       if (field.getType() != FieldDescriptor.Type.MESSAGE) {
-        throw new IllegalArgumentException(
+        throw new InvalidFhirException(
             "Error in FHIR proto definition: Field " + field + " is not a message.");
       }
 
@@ -937,8 +956,8 @@ public final class JsonFormat {
           return PrimitiveWrappers.parseAndWrap(json, subBuilder, defaultTimeZone)
               .copyInto(subBuilder)
               .build();
-        } catch (IllegalArgumentException e) {
-          throw new IllegalArgumentException("Error parsing field: " + field.getFullName(), e);
+        } catch (InvalidFhirException e) {
+          throw new InvalidFhirException("Error parsing field: " + field.getFullName(), e);
         }
       }
 
@@ -950,7 +969,7 @@ public final class JsonFormat {
             return subBuilder.build();
           }
         }
-        throw new IllegalArgumentException("Expected JsonObject for field " + field);
+        throw new InvalidFhirException("Expected JsonObject for field " + field);
       } else {
         mergeMessage(json.getAsJsonObject(), subBuilder);
         return subBuilder.build();
@@ -958,12 +977,13 @@ public final class JsonFormat {
     }
   } // End JsonFormat class
 
-  private static Message.Builder getContainedResourceForMessage(MessageOrBuilder input) {
+  private static Message.Builder getContainedResourceForMessage(MessageOrBuilder input)
+      throws InvalidFhirException {
     switch (AnnotationUtils.getFhirVersion(input.getDescriptorForType())) {
       case R4:
         return com.google.fhir.r4.core.ContainedResource.newBuilder();
       default:
-        throw new IllegalArgumentException(
+        throw new InvalidFhirException(
             "Any packing not supported for fhir version: "
                 + AnnotationUtils.getFhirVersion(input.getDescriptorForType()));
     }

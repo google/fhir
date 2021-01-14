@@ -51,7 +51,8 @@ public final class ProtoGenTransformerTest {
     return Parser.newBuilder().withProtoGenTransformer(transformer).build();
   }
 
-  private static StructureDefinition parse(ProtoGenTransformer transformer, String json) {
+  private static StructureDefinition parse(ProtoGenTransformer transformer, String json)
+      throws InvalidFhirException {
     StructureDefinition.Builder def = StructureDefinition.newBuilder();
     return makeParser(transformer).merge(json, def).build();
   }

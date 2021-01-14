@@ -19,6 +19,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.bigquery.model.TableSchema;
 import com.google.fhir.common.BigQuerySchema;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.common.JsonFormat.Parser;
 import com.google.fhir.common.JsonFormat.Printer;
@@ -32,7 +33,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * This example splits a set of FHIR bundles into individual resources, saved as ndjson files. The
@@ -41,7 +41,7 @@ import java.util.Optional;
  */
 public class SplitBundleMain {
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws IOException, InvalidFhirException {
     Parser fhirParser = com.google.fhir.common.JsonFormat.getParser();
     Printer fhirPrinter = JsonFormat.getPrinter().omittingInsignificantWhitespace();
     Printer analyticPrinter =
@@ -75,12 +75,7 @@ public class SplitBundleMain {
 
       // Split the bundle.
       for (Bundle.Entry entry : bundleBuilder.getEntryList()) {
-        Optional<Message> resourceOptional =
-            ResourceUtils.getContainedResource(entry.getResource());
-        if (!resourceOptional.isPresent()) {
-          throw new IllegalArgumentException("Encountered empty ContainedResource");
-        }
-        Message resource = resourceOptional.get();
+        Message resource = ResourceUtils.getContainedResource(entry.getResource());
         String resourceType = resource.getDescriptorForType().getName();
         int count = counts.getOrDefault(resourceType, 0);
         counts.put(resourceType, count + 1);

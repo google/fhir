@@ -17,6 +17,7 @@ package com.google.fhir.protogen;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.common.io.ByteStreams;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.common.ResourceUtils;
 import com.google.fhir.proto.Annotations.FhirVersion;
@@ -94,7 +95,7 @@ public class FhirPackage {
     return isCorePackage(packageInfo);
   }
 
-  public static FhirPackage load(String zipFilePath) throws IOException {
+  public static FhirPackage load(String zipFilePath) throws IOException, InvalidFhirException {
     ZipFile zipFile = new ZipFile(new File(zipFilePath));
     Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
@@ -152,13 +153,7 @@ public class FhirPackage {
       } else if (expectedType.get().equals("Bundle")) {
         Bundle bundle = parser.merge(json, Bundle.newBuilder()).build();
         for (Bundle.Entry bundleEntry : bundle.getEntryList()) {
-          Optional<Message> containedOptional =
-              ResourceUtils.getContainedResource(bundleEntry.getResource());
-          if (!containedOptional.isPresent()) {
-            // TODO: Convert to InvalidFhirException
-            throw new IllegalArgumentException("Encountered empty ContainedResource.");
-          }
-          Message contained = containedOptional.get();
+          Message contained = ResourceUtils.getContainedResource(bundleEntry.getResource());
           if (contained instanceof ValueSet) {
             valueSets.add((ValueSet) contained);
           } else if (contained instanceof CodeSystem) {

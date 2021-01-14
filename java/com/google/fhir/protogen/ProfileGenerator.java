@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.toList;
 import com.google.common.base.Ascii;
 import com.google.common.base.Splitter;
 import com.google.fhir.common.FhirVersion;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.ChoiceTypeRestriction;
 import com.google.fhir.proto.CodeData;
@@ -132,7 +133,7 @@ final class ProfileGenerator {
     this.keyPrefix = keyPrefix;
   }
 
-  Bundle generateProfiles(Profiles profiles) {
+  Bundle generateProfiles(Profiles profiles) throws InvalidFhirException {
     Bundle.Builder bundle =
         Bundle.newBuilder()
             .setType(Bundle.TypeCode.newBuilder().setValue(BundleTypeCode.Value.COLLECTION));
@@ -146,7 +147,7 @@ final class ProfileGenerator {
     return bundle.build();
   }
 
-  Bundle generateExtensions(Extensions extensions) {
+  Bundle generateExtensions(Extensions extensions) throws InvalidFhirException {
     Bundle.Builder bundle =
         Bundle.newBuilder()
             .setType(Bundle.TypeCode.newBuilder().setValue(BundleTypeCode.Value.COLLECTION));
@@ -171,7 +172,7 @@ final class ProfileGenerator {
     return terminologyGenerator.generateTerminologies(terminologies);
   }
 
-  private StructureDefinition makeProfile(Profile profile) {
+  private StructureDefinition makeProfile(Profile profile) throws InvalidFhirException {
     ElementData elementData = profile.getElementData();
     StructureDefinition baseStructDef = getStructDefForUrl(profile.getBaseUrl());
 
@@ -192,15 +193,13 @@ final class ProfileGenerator {
 
     // Counter that is incremented to generate unique element keys for the profile.
     AtomicInteger elementKeyCounter = new AtomicInteger(1);
-    profile
-        .getRestrictionList()
-        .forEach(
-            restriction ->
-                applyFieldRestriction(restriction, elementList, elementData, elementKeyCounter));
+    for (FieldRestriction restriction : profile.getRestrictionList()) {
+      applyFieldRestriction(restriction, elementList, elementData, elementKeyCounter);
+    }
 
-    profile
-        .getExtensionSliceList()
-        .forEach(slice -> elementList.add(buildExtensionSliceElement(slice, elementList)));
+    for (ExtensionSlice slice : profile.getExtensionSliceList()) {
+      elementList.add(buildExtensionSliceElement(slice, elementList));
+    }
 
     for (CodeableConceptSlice codeableConceptSlice : profile.getCodeableConceptSliceList()) {
       // Make sure there is a valid CodeableConcept field to slice.
@@ -252,7 +251,8 @@ final class ProfileGenerator {
     return structDefBuilder.build();
   }
 
-  private StructureDefinition makeComplexExtension(ComplexExtension extensionProto) {
+  private StructureDefinition makeComplexExtension(ComplexExtension extensionProto)
+      throws InvalidFhirException {
     ElementData elementData = extensionProto.getElementData();
 
     StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
@@ -277,7 +277,8 @@ final class ProfileGenerator {
   }
 
   private List<ElementDefinition> buildComplexExtensionElements(
-      ComplexExtension extensionProto, String rootId, String rootPath, String url) {
+      ComplexExtension extensionProto, String rootId, String rootPath, String url)
+      throws InvalidFhirException {
     List<ElementDefinition> complexElements = new ArrayList<>();
     complexElements.addAll(buildBackboneExtensionElements(extensionProto, rootId, rootPath, url));
     for (SimpleExtension field : extensionProto.getSimpleFieldList()) {
@@ -296,7 +297,8 @@ final class ProfileGenerator {
   }
 
   private List<ElementDefinition> buildBackboneExtensionElements(
-      ComplexExtension complexExtension, String rootId, String rootPath, String url) {
+      ComplexExtension complexExtension, String rootId, String rootPath, String url)
+      throws InvalidFhirException {
     SimpleExtension simpleExtension =
         SimpleExtension.newBuilder()
             .setElementData(complexExtension.getElementData())
@@ -307,7 +309,8 @@ final class ProfileGenerator {
     return backboneElements;
   }
 
-  private StructureDefinition makeSimpleExtension(SimpleExtension extensionProto) {
+  private StructureDefinition makeSimpleExtension(SimpleExtension extensionProto)
+      throws InvalidFhirException {
     ElementData elementData = extensionProto.getElementData();
 
     StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
@@ -331,7 +334,8 @@ final class ProfileGenerator {
   }
 
   private List<ElementDefinition> buildSimpleExtensionElements(
-      SimpleExtension extensionProto, String rootId, String rootPath, String url) {
+      SimpleExtension extensionProto, String rootId, String rootPath, String url)
+      throws InvalidFhirException {
     StructureDefinition extensionBaseStructDef = getExtensionStructDef();
     List<ElementDefinition> extensionBaseElements =
         extensionBaseStructDef.getSnapshot().getElementList();
@@ -452,7 +456,8 @@ final class ProfileGenerator {
 
   @SuppressWarnings("unchecked")
   private void addDifferentialElements(
-      StructureDefinition.Builder structDefBuilder, List<ElementDefinition> baseElements) {
+      StructureDefinition.Builder structDefBuilder, List<ElementDefinition> baseElements)
+      throws InvalidFhirException {
     List<ElementDefinition> newElements = structDefBuilder.getSnapshot().getElementList();
     Differential.Builder differentialBuilder = Differential.newBuilder();
     Descriptor elementDescriptor = ElementDefinition.getDescriptor();
@@ -529,7 +534,8 @@ final class ProfileGenerator {
       FieldRestriction restriction,
       List<ElementDefinition> elementList,
       ElementData elementData,
-      AtomicInteger elementKeyCounter) {
+      AtomicInteger elementKeyCounter)
+      throws InvalidFhirException {
     ElementDefinition elementToModify =
         getOptionalElementById(restriction.getFieldId(), elementList)
             .orElseThrow(
@@ -680,7 +686,8 @@ final class ProfileGenerator {
   }
 
   private ElementDefinition buildExtensionSliceElement(
-      ExtensionSlice extensionSlice, List<ElementDefinition> elementList) {
+      ExtensionSlice extensionSlice, List<ElementDefinition> elementList)
+      throws InvalidFhirException {
     ElementDefinition.Builder extensionElement =
         getExtensionStructDef().getSnapshot().getElement(0).toBuilder();
     ElementData elementData = extensionSlice.getElementData();
@@ -706,7 +713,7 @@ final class ProfileGenerator {
   }
 
   private List<ElementDefinition> buildCodeableConceptSliceElements(
-      String codingFieldId, CodingSlice codingSlice) {
+      String codingFieldId, CodingSlice codingSlice) throws InvalidFhirException {
     ElementData elementData = codingSlice.getElementData();
     CodeData codeData = codingSlice.getCodeData();
     StructureDefinition baseStructDef = getStructDef(Coding.getDescriptor());
@@ -797,7 +804,8 @@ final class ProfileGenerator {
     }
   }
 
-  private ElementDefinition.Base buildBase(String path, StructureDefinition parentStructDef) {
+  private ElementDefinition.Base buildBase(String path, StructureDefinition parentStructDef)
+      throws InvalidFhirException {
     ElementDefinition parentElement =
         getElementById(path, parentStructDef.getSnapshot().getElementList());
     Optional<ElementDefinition> parentElementInDifferential =
@@ -837,7 +845,7 @@ final class ProfileGenerator {
       Pattern.compile("^Extension(\\.extension)+(\\.[a-zA-Z]+)$");
 
   private ElementDefinition getBaseElement(
-      ElementDefinition element, List<ElementDefinition> elements) {
+      ElementDefinition element, List<ElementDefinition> elements) throws InvalidFhirException {
     String path = element.getPath().getValue();
     Optional<ElementDefinition> exactMatch = getOptionalElementById(path, elements);
     if (exactMatch.isPresent()) {
@@ -946,7 +954,7 @@ final class ProfileGenerator {
 
   private ElementDefinition codeableConceptCodingStructDef = null;
 
-  private ElementDefinition getCodeableConceptCodingElement() {
+  private ElementDefinition getCodeableConceptCodingElement() throws InvalidFhirException {
     if (codeableConceptCodingStructDef != null) {
       return codeableConceptCodingStructDef;
     }

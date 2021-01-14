@@ -14,6 +14,7 @@ java_test(
     shard_count = 10,
     test_class = "com.google.fhir.r4.JsonFormatTest",
     deps = [
+        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/testing:json_format_test_base",
         "//proto/google/fhir/proto/r4/core/resources:account_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:activity_definition_java_proto",

@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.common.Codes;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.r4.core.ResourceTypeCode;
@@ -65,7 +66,7 @@ public class ProtoGeneratorTest {
 
   /** Read and parse the specified StructureDefinition. */
   private StructureDefinition readStructureDefinition(String resourceName, FhirVersion version)
-      throws IOException {
+      throws IOException, InvalidFhirException {
     String pathPrefix;
     switch (version) {
       case STU3:
@@ -146,7 +147,7 @@ public class ProtoGeneratorTest {
   //   }
 
   @Before
-  public void setUp() throws IOException {
+  public void setUp() throws IOException, InvalidFhirException {
     jsonParser = JsonFormat.getParser();
     textParser = TextFormat.getParser();
     runfiles = Runfiles.create();

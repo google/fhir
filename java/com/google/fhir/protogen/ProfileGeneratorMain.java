@@ -20,6 +20,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.google.common.io.Files;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Extensions;
 import com.google.fhir.proto.PackageInfo;
@@ -31,7 +32,6 @@ import com.google.protobuf.Message;
 import com.google.protobuf.TextFormat;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,7 +117,7 @@ public class ProfileGeneratorMain {
     return mergeText(filename, PackageInfo.newBuilder()).build();
   }
 
-  public static void main(String[] argv) throws IOException {
+  public static void main(String[] argv) throws IOException, InvalidFhirException {
     Args args = new Args();
     JCommander jcommander = new JCommander(args);
 
@@ -194,8 +194,9 @@ public class ProfileGeneratorMain {
         args.name + "_terminologies");
   }
 
-  private static void writeBundle(Bundle bundle, String dir, String name) throws IOException {
+  private static void writeBundle(Bundle bundle, String dir, String name)
+      throws IOException, InvalidFhirException {
     String filename = dir + "/" + name + ".json";
-    Files.asCharSink(new File(filename), StandardCharsets.UTF_8).write(jsonPrinter.print(bundle));
+    Files.asCharSink(new File(filename), UTF_8).write(jsonPrinter.print(bundle));
   }
 }

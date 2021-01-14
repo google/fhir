@@ -24,6 +24,7 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
@@ -58,7 +59,8 @@ public final class ProtoFilePrinterTest {
   private Runfiles runfiles;
 
   /** Read and parse the specified StructureDefinition. */
-  private StructureDefinition readStructureDefinition(String resourceName) throws IOException {
+  private StructureDefinition readStructureDefinition(String resourceName)
+      throws IOException, InvalidFhirException {
     System.out.println(resourceName);
     File file =
         new File(
@@ -192,7 +194,8 @@ public final class ProtoFilePrinterTest {
           "CodingWithFixedSystem",
           "Element");
 
-  private List<StructureDefinition> getResourcesInFile(FileDescriptor compiled) throws IOException {
+  private List<StructureDefinition> getResourcesInFile(FileDescriptor compiled)
+      throws IOException, InvalidFhirException {
     List<StructureDefinition> resourceDefinitions = new ArrayList<>();
     for (Descriptor message : compiled.getMessageTypes()) {
       if (!message.getFields().isEmpty()
@@ -205,7 +208,7 @@ public final class ProtoFilePrinterTest {
   }
 
   @Before
-  public void setUp() throws IOException {
+  public void setUp() throws IOException, InvalidFhirException {
     String packageName = "google.fhir.r4.proto";
     jsonParser = JsonFormat.getSpecParser(Annotations.FhirVersion.R4);
     runfiles = Runfiles.create();

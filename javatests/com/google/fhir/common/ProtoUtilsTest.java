@@ -90,14 +90,14 @@ public final class ProtoUtilsTest {
   }
 
   @Test
-  public void testFindField_descriptor_success() {
+  public void testFindField_descriptor_success() throws Exception {
     Descriptor descriptor = GenericMessage.getDescriptor();
     assertThat(findField(descriptor, "singular_primitive"))
         .isEqualTo(descriptor.findFieldByName("singular_primitive"));
   }
 
   @Test
-  public void testFindField_message_success() {
+  public void testFindField_message_success() throws Exception {
     Descriptor descriptor = GenericMessage.getDescriptor();
     assertThat(findField(GenericMessage.getDefaultInstance(), "singular_primitive"))
         .isEqualTo(descriptor.findFieldByName("singular_primitive"));
@@ -106,13 +106,13 @@ public final class ProtoUtilsTest {
   @Test
   public void testFindField_descriptor_failure() {
     Descriptor descriptor = GenericMessage.getDescriptor();
-    assertThrows(IllegalArgumentException.class, () -> findField(descriptor, "wizbang"));
+    assertThrows(InvalidFhirException.class, () -> findField(descriptor, "wizbang"));
   }
 
   @Test
   public void testFindField_message_failure() {
     assertThrows(
-        IllegalArgumentException.class,
+        InvalidFhirException.class,
         () -> findField(GenericMessage.getDefaultInstance(), "wizbang"));
   }
 

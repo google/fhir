@@ -21,6 +21,7 @@ import static org.junit.Assert.fail;
 
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -28,7 +29,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.google.protobuf.Message;
-import com.google.protobuf.Message.Builder;
 import com.google.protobuf.TextFormat;
 import java.io.File;
 import java.io.IOException;
@@ -68,21 +68,25 @@ public abstract class JsonFormatTestBase {
     textParser.merge(Files.asCharSource(file, UTF_8).read(), builder);
   }
 
-  protected void parseToProto(String name, Builder builder) throws IOException {
-    jsonParser.merge(loadJson("spec/" + examplesDir + "/package/" + name + ".json"), builder);
+  protected void parseToProto(String name, Message.Builder builder)
+      throws IOException, InvalidFhirException {
+    String filename = "spec/" + examplesDir + "/package/" + name + ".json";
+
+    jsonParser.merge(loadJson(filename), builder);
   }
 
-  public void testPair(String name, Builder builder) throws IOException {
+  public void testPair(String name, Message.Builder builder)
+      throws IOException, InvalidFhirException {
     try {
       // Load golden JSON
       String goldenJson = loadJson("spec/" + examplesDir + "/package/" + name + ".json");
 
       // Load golden proto
-      Builder goldenProto = builder.clone();
+      Message.Builder goldenProto = builder.clone();
       mergeText("examples/" + name + ".prototxt", goldenProto);
 
       // Test Parser
-      Builder testProto = builder.clone();
+      Message.Builder testProto = builder.clone();
       jsonParser.merge(goldenJson, testProto);
       if (!testProto.build().toString().equals(goldenProto.build().toString())) {
         System.err.println("Failed Parsing on: " + name);
@@ -119,12 +123,13 @@ public abstract class JsonFormatTestBase {
     }
   }
 
-  protected void testParse(String name, Builder builder) throws IOException {
+  protected void testParse(String name, Message.Builder builder)
+      throws IOException, InvalidFhirException {
     // Parse the json version of the input.
-    Builder jsonBuilder = builder.clone();
+    Message.Builder jsonBuilder = builder.clone();
     parseToProto(name, jsonBuilder);
     // Parse the proto text version of the input.
-    Builder textBuilder = builder.clone();
+    Message.Builder textBuilder = builder.clone();
     mergeText("examples/" + name + ".prototxt", textBuilder);
 
     if (!jsonBuilder.build().toString().equals(textBuilder.build().toString())) {
@@ -162,9 +167,10 @@ public abstract class JsonFormatTestBase {
     return testJson.toString();
   }
 
-  protected void testPrint(String name, Builder builder) throws IOException {
+  protected void testPrint(String name, Message.Builder builder)
+      throws IOException, InvalidFhirException {
     // Parse the proto text version of the input.
-    Builder textBuilder = builder.clone();
+    Message.Builder textBuilder = builder.clone();
     mergeText("examples/" + name + ".prototxt", textBuilder);
     // Load the json version of the input as a String.
     String jsonGolden = loadJson("spec/" + examplesDir + "/package/" + name + ".json");
@@ -178,9 +184,10 @@ public abstract class JsonFormatTestBase {
     }
   }
 
-  protected void testConvertForAnalytics(String name, Builder builder) throws IOException {
+  protected void testConvertForAnalytics(String name, Message.Builder builder)
+      throws IOException, InvalidFhirException {
     // Parse the json version of the input.
-    Builder jsonBuilder = builder.clone();
+    Message.Builder jsonBuilder = builder.clone();
     jsonParser.merge(loadJson("spec/" + examplesDir + "/package/" + name + ".json"), jsonBuilder);
     // Load the analytics version of the input as a String.
     String analyticsGolden = loadJson("testdata/" + versionName + "/bigquery/" + name + ".json");

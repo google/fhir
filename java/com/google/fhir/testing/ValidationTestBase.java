@@ -21,6 +21,7 @@ import static org.junit.Assert.assertThrows;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.devtools.build.runfiles.Runfiles;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.wrappers.ExtensionWrapper;
 import com.google.fhir.wrappers.PrimitiveWrappers;
@@ -55,7 +56,7 @@ public abstract class ValidationTestBase {
   }
 
   /** Test parsing a set of valid and invalid inputs for the given type. */
-  protected void testJsonValidation(Message.Builder type) throws IOException {
+  protected void testJsonValidation(Message.Builder type) throws IOException, InvalidFhirException {
     for (java.lang.String line : readLines(type.clone(), true)) {
       expectValid(line, type.clone());
     }
@@ -85,9 +86,9 @@ public abstract class ValidationTestBase {
     Message.Builder justNoValue = message.newBuilderForType();
     ExtensionWrapper.of().add(primitiveHasNoValue).addToMessage(justNoValue);
 
-    IllegalArgumentException primitiveException =
+    InvalidFhirException primitiveException =
         assertThrows(
-            IllegalArgumentException.class, () -> PrimitiveWrappers.validatePrimitive(justNoValue));
+            InvalidFhirException.class, () -> PrimitiveWrappers.validatePrimitive(justNoValue));
     assertThat(primitiveException).hasMessageThat().contains("PrimitiveHasNoValue");
 
     // Run individual cases from testdata files.
@@ -142,14 +143,15 @@ public abstract class ValidationTestBase {
   }
 
   /** Parse the given line, expecting it to be valid. */
-  private void expectValid(String line, Message.Builder builder) throws IOException {
+  private void expectValid(String line, Message.Builder builder)
+      throws IOException, InvalidFhirException {
     jsonParser.merge(line, builder);
   }
 
   /** Parse the given line, expecting it to be invalid. */
   private void expectInvalid(String line, Message.Builder builder) throws IOException {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> jsonParser.merge(line, builder));
+    InvalidFhirException exception =
+        assertThrows(InvalidFhirException.class, () -> jsonParser.merge(line, builder));
     assertThat(exception).hasMessageThat().containsMatch("Invalid|Unknown|Error");
   }
 

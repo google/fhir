@@ -246,7 +246,8 @@ public class ProtoGenerator {
   }
 
   public ProtoGenerator(
-      PackageInfo packageInfo, String codesProtoImport, Set<FhirPackage> fhirPackages) {
+      PackageInfo packageInfo, String codesProtoImport, Set<FhirPackage> fhirPackages)
+      throws InvalidFhirException {
     this(packageInfo, codesProtoImport, fhirPackages, null);
   }
 
@@ -254,7 +255,8 @@ public class ProtoGenerator {
       PackageInfo packageInfo,
       String codesProtoImport,
       Set<FhirPackage> fhirPackages,
-      ValueSetGenerator valueSetGenerator) {
+      ValueSetGenerator valueSetGenerator)
+      throws InvalidFhirException {
     this.packageInfo = packageInfo;
     this.codesProtoImport = codesProtoImport;
     this.fhirVersion = FhirVersion.fromAnnotation(packageInfo.getFhirVersion());
@@ -334,7 +336,7 @@ public class ProtoGenerator {
    * https://www.hl7.org/fhir/structuredefinition.html.
    */
   public DescriptorProto generateProto(
-      StructureDefinition def, List<SearchParameter> searchParameters) {
+      StructureDefinition def, List<SearchParameter> searchParameters) throws InvalidFhirException {
     // Build a top-level message description.
     StringBuilder comment =
         new StringBuilder()
@@ -444,7 +446,8 @@ public class ProtoGenerator {
    * Generate a .proto file descriptor from a list of StructureDefinitions and a list of
    * SearchParameters.
    */
-  public FileDescriptorProto generateFileDescriptor(List<StructureDefinition> defs) {
+  public FileDescriptorProto generateFileDescriptor(List<StructureDefinition> defs)
+      throws InvalidFhirException {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
     builder.setPackage(packageInfo.getProtoPackage()).setSyntax("proto3");
     FileOptions.Builder options = FileOptions.newBuilder();
@@ -658,7 +661,8 @@ public class ProtoGenerator {
   private DescriptorProto generateMessage(
       ElementDefinition currentElement,
       List<ElementDefinition> elementList,
-      DescriptorProto.Builder builder) {
+      DescriptorProto.Builder builder)
+      throws InvalidFhirException {
     // Get the name of this message
     builder.setName(nameFromQualifiedName(getContainerType(currentElement, elementList)));
 
@@ -758,7 +762,8 @@ public class ProtoGenerator {
       ElementDefinition element,
       List<ElementDefinition> elementList,
       int tag,
-      DescriptorProto.Builder builder) {
+      DescriptorProto.Builder builder)
+      throws InvalidFhirException {
     // Generate the field. If this field doesn't actually exist in this version of the
     // message, for example, the max attribute is 0, buildField returns null and no field
     // should be added.
@@ -806,7 +811,7 @@ public class ProtoGenerator {
   }
 
   private Optional<DescriptorProto> buildNestedTypeIfNeeded(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     Optional<DescriptorProto> choiceType = buildChoiceTypeIfRequired(element, elementList);
     if (choiceType.isPresent()) {
       if (isValueElementOfSingleTypedExtension(element, elementList)) {
@@ -825,7 +830,7 @@ public class ProtoGenerator {
   }
 
   private Optional<DescriptorProto> buildNonChoiceTypeNestedTypeIfNeeded(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     if (element.getTypeCount() != 1) {
       return Optional.empty();
     }
@@ -863,7 +868,7 @@ public class ProtoGenerator {
 
   // Generates the nested type descriptor proto for a choice type if required.
   private Optional<DescriptorProto> buildChoiceTypeIfRequired(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     if (isChoiceTypeExtension(element, elementList)) {
       return Optional.of(
           makeChoiceType(getExtensionValueElement(element, elementList), elementList));
@@ -921,19 +926,19 @@ public class ProtoGenerator {
    * in that version to a true choice type.
    */
   private static boolean isValueElementOfSingleTypedExtension(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     return isValueElementOfSimpleExtension(element, elementList)
         && getDistinctTypeCount(element) == 1;
   }
 
   private static boolean isValueElementOfChoiceTypeExtension(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     return isValueElementOfSimpleExtension(element, elementList)
         && getDistinctTypeCount(element) > 1;
   }
 
   private static boolean isValueElementOfSimpleExtension(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     Optional<ElementDefinition> parent = GeneratorUtils.getParent(element, elementList);
     if (!parent.isPresent()) {
       return false;
@@ -943,7 +948,7 @@ public class ProtoGenerator {
   }
 
   private Optional<DescriptorProto> makeProfiledCodeIfRequired(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     ElementDefinition valueElement =
         isSimpleExtension(element, elementList)
             ? getExtensionValueElement(element, elementList)
@@ -970,7 +975,7 @@ public class ProtoGenerator {
   }
 
   private Optional<DescriptorProto> makeProfiledDatatypeIfRequired(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     if (isContainer(element)
         || isExtensionBackboneElement(element)
         || !descendantsHaveSlices(element, elementList)) {
@@ -1012,7 +1017,7 @@ public class ProtoGenerator {
   }
 
   private Optional<DescriptorProto> makeProfiledCodeableConceptIfRequired(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     if (element.getTypeCount() != 1
         || !element.getType(0).getCode().getValue().equals("CodeableConcept")) {
       return Optional.empty();
@@ -1169,15 +1174,15 @@ public class ProtoGenerator {
   private static final ElementDefinition.TypeRef STRING_TYPE =
       ElementDefinition.TypeRef.newBuilder().setCode(Uri.newBuilder().setValue("string")).build();
 
-  private Optional<String> getPrimitiveRegex(ElementDefinition element) {
+  private static Optional<String> getPrimitiveRegex(ElementDefinition element)
+      throws InvalidFhirException {
     List<Message> regexExtensions =
         Extensions.getExtensionsWithUrl(REGEX_EXTENSION_URL, element.getType(0));
     if (regexExtensions.isEmpty()) {
       return Optional.empty();
     }
     if (regexExtensions.size() > 1) {
-      // TODO: Use InvalidFhirException
-      throw new IllegalArgumentException(
+      throw new InvalidFhirException(
           "Multiple regex extensions found on " + element.getId().getValue());
     }
     return Optional.of(
@@ -1185,7 +1190,8 @@ public class ProtoGenerator {
   }
 
   /** Generate the primitive value part of a datatype. */
-  private void generatePrimitiveValue(StructureDefinition def, DescriptorProto.Builder builder) {
+  private void generatePrimitiveValue(StructureDefinition def, DescriptorProto.Builder builder)
+      throws InvalidFhirException {
     String defId = def.getId().getValue();
     String valueFieldId = defId + ".value";
     // Find the value field.
@@ -1304,7 +1310,7 @@ public class ProtoGenerator {
 
   /** Extract the type of a container field, possibly by reference. */
   private static String getContainerType(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     if (element.hasContentReference()) {
       // Find the named element which was referenced. We'll use the type of that element.
       // Strip the first character from the content reference since it is a '#'
@@ -1339,8 +1345,7 @@ public class ProtoGenerator {
         Extensions.getExtensionsWithUrl(EXPLICIT_TYPE_NAME_EXTENSION_URL, element);
 
     if (explicitTypeNames.size() > 1) {
-      // TODO: Convert to InvalidFhirException
-      throw new IllegalArgumentException(
+      throw new InvalidFhirException(
           "Element has multiple explicit type names: " + element.getId().getValue());
     }
 
@@ -1390,7 +1395,7 @@ public class ProtoGenerator {
    * types that reference other elements, references, profiles, etc.
    */
   private QualifiedType getQualifiedFieldType(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     Optional<QualifiedType> valueSetType = checkForTypeWithBoundValueSet(element, elementList);
     if (valueSetType.isPresent()) {
       return valueSetType.get();
@@ -1504,7 +1509,8 @@ public class ProtoGenerator {
 
   /** Build a single field for the proto. */
   private Optional<FieldDescriptorProto> buildField(
-      ElementDefinition element, List<ElementDefinition> elementList, int nextTag) {
+      ElementDefinition element, List<ElementDefinition> elementList, int nextTag)
+      throws InvalidFhirException {
     FieldDescriptorProto.Label fieldSize = getFieldSize(element);
     if (fieldSize == null) {
       // This field has a max size of zero.  Do not emit a field.
@@ -1667,7 +1673,7 @@ public class ProtoGenerator {
    */
   // TODO: Handle reslices. Could be as easy as adding it to the end of SliceName.
   private static String getNameForElement(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     IdToken lastToken = lastIdToken(element);
     if (lastToken.slicename == null || !element.getId().getValue().contains(".")) {
       if (isValueElementOfSingleTypedExtension(element, elementList)) {
@@ -1711,7 +1717,8 @@ public class ProtoGenerator {
   // TODO: This only checks against non-slice names.  Theoretically, you could have
   // two identically-named slices of different base fields.
   private static String resolveSliceNameConflicts(
-      String fieldName, ElementDefinition element, List<ElementDefinition> elementList) {
+      String fieldName, ElementDefinition element, List<ElementDefinition> elementList)
+      throws InvalidFhirException {
     if (RESERVED_FIELD_NAMES.contains(fieldName)) {
       return fieldName + "Slice";
     }
@@ -1733,7 +1740,8 @@ public class ProtoGenerator {
   }
 
   // TODO: memoize
-  private Optional<ElementDefinition> getChoiceTypeBase(ElementDefinition element) {
+  private Optional<ElementDefinition> getChoiceTypeBase(ElementDefinition element)
+      throws InvalidFhirException {
     if (!element.hasBase()) {
       return Optional.empty();
     }
@@ -1775,7 +1783,7 @@ public class ProtoGenerator {
 
   /** Add a choice type container message to the proto. */
   private DescriptorProto makeChoiceType(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     QualifiedType choiceQualifiedType = getQualifiedFieldType(element, elementList);
     DescriptorProto.Builder choiceType =
         DescriptorProto.newBuilder().setName(choiceQualifiedType.getName());
@@ -1975,7 +1983,7 @@ public class ProtoGenerator {
   }
 
   private Optional<QualifiedType> checkForTypeWithBoundValueSet(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     // Note that for Simple extensions that are inlined as a single type, we need to actually check
     // the internal value element on the extension, even though the element we're replacing and
     // naming the field after is the extension itself.  Thus, here we differentiate between
@@ -2032,7 +2040,7 @@ public class ProtoGenerator {
   }
 
   private Optional<DescriptorProto> makeProfiledCodingIfRequired(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     // Coding profiles don't exist in legacy type naming.
     if (useLegacyTypeNaming()) {
       return Optional.empty();
@@ -2119,7 +2127,7 @@ public class ProtoGenerator {
 
   // Returns the QualifiedType (type + package) of a simple extension.
   private QualifiedType getSimpleExtensionDefinitionType(
-      StructureDefinition def, String protoPackage) {
+      StructureDefinition def, String protoPackage) throws InvalidFhirException {
     if (!isExtensionProfile(def)) {
       throw new IllegalArgumentException(
           "StructureDefinition is not an extension profile: " + def.getId().getValue());
@@ -2165,7 +2173,7 @@ public class ProtoGenerator {
   }
 
   private QualifiedType getSimpleInternalExtensionType(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     ElementDefinition valueElement = getExtensionValueElement(element, elementList);
 
     if (valueElement.getMax().getValue().equals("0")) {
@@ -2217,7 +2225,7 @@ public class ProtoGenerator {
    * the element like a backbone container.
    */
   private QualifiedType getInternalExtensionType(
-      ElementDefinition element, List<ElementDefinition> elementList) {
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     return isSimpleExtension(element, elementList)
         ? getSimpleInternalExtensionType(element, elementList)
         : new QualifiedType(getContainerType(element, elementList), packageInfo.getProtoPackage());

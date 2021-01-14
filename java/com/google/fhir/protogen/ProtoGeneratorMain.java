@@ -23,6 +23,7 @@ import com.beust.jcommander.ParameterException;
 import com.google.common.base.CaseFormat;
 import com.google.common.io.Files;
 import com.google.fhir.common.AnnotationUtils;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
@@ -154,7 +155,7 @@ class ProtoGeneratorMain {
         description = "Ids of input StructureDefinitions to ignore.")
     private List<String> excludeIds = new ArrayList<>();
 
-    private Set<FhirPackage> getDependencies() throws IOException {
+    private Set<FhirPackage> getDependencies() throws IOException, InvalidFhirException {
       Set<FhirPackage> packages = new HashSet<>();
       for (String fhirDefinitionDep : fhirDefinitionDepList) {
         packages.add(FhirPackage.load(fhirDefinitionDep));
@@ -167,7 +168,7 @@ class ProtoGeneratorMain {
     this.writer = checkNotNull(writer);
   }
 
-  void run(Args args) throws IOException {
+  void run(Args args) throws IOException, InvalidFhirException {
     Set<FhirPackage> fhirPackages = args.getDependencies();
 
     FhirPackage unfilteredInputPackage = FhirPackage.load(args.inputPackageLocation);
@@ -302,7 +303,7 @@ class ProtoGeneratorMain {
       ProtoFilePrinter printer,
       PackageInfo packageInfo,
       Args args)
-      throws IOException {
+      throws IOException, InvalidFhirException {
     List<StructureDefinition> extensions = new ArrayList<>();
     List<StructureDefinition> profiles = new ArrayList<>();
     for (StructureDefinition structDef : definitions) {
@@ -332,7 +333,7 @@ class ProtoGeneratorMain {
       ProtoFilePrinter printer,
       PackageInfo packageInfo,
       Args args)
-      throws IOException {
+      throws IOException, InvalidFhirException {
     // Divide into three categories.
     // Extensions and datatypes will be printed into a single aggregate file each,
     // while resources will be printed into one file per resource.
@@ -487,7 +488,7 @@ class ProtoGeneratorMain {
     }
   }
 
-  public static void main(String[] argv) throws IOException {
+  public static void main(String[] argv) throws IOException, InvalidFhirException {
     // Each non-flag argument is assumed to be an input file.
     Args args = new Args();
     JCommander jcommander = new JCommander(args);

@@ -19,6 +19,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 import com.google.common.testing.EqualsTester;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.PackageInfo;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public final class FhirPackageTest {
   private static final int R4_SEARCH_PARAMETERS_COUNT = 1385;
 
   @Test
-  public void loadTest() throws IOException {
+  public void loadTest() throws IOException, InvalidFhirException {
     FhirPackage fhirPackage = FhirPackage.load("spec/fhir_r4_package.zip");
     assertThat(fhirPackage.packageInfo.getProtoPackage()).isEqualTo("google.fhir.r4.core");
     assertThat(fhirPackage.structureDefinitions).hasSize(R4_DEFINITIONS_COUNT);
@@ -80,7 +81,7 @@ public final class FhirPackageTest {
   }
 
   @Test
-  public void filterTest() throws IOException {
+  public void filterTest() throws IOException, InvalidFhirException {
     FhirPackage fhirPackage = FhirPackage.load("spec/fhir_r4_package.zip");
     assertTrue(
         fhirPackage.structureDefinitions.stream()

@@ -20,6 +20,7 @@ java_library(
     name = "proto_utils",
     srcs = ["ProtoUtils.java"],
     deps = [
+        ":exceptions",
         "//java/com/google/fhir/common:annotation_utils",
         "@com_google_protobuf//:protobuf_java",
     ],
@@ -66,6 +67,7 @@ java_library(
     srcs = ["JsonFormat.java"],
     deps = [
         ":annotation_utils",
+        ":exceptions",
         ":proto_gen_transformer",
         ":proto_utils",
         ":resource_utils",
@@ -89,6 +91,7 @@ java_library(
     ],
     deps = [
         ":annotation_utils",
+        ":exceptions",
         ":proto_utils",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_guava_guava",
@@ -150,7 +153,7 @@ java_library(
     name = "extensions",
     srcs = ["Extensions.java"],
     deps = [
-        ":fhir_types",
+        ":exceptions",
         ":proto_utils",
         "@com_google_protobuf//:protobuf_java",
     ],

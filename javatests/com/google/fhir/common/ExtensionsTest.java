@@ -76,7 +76,7 @@ public final class ExtensionsTest {
   }
 
   @Test
-  public void testAddExtensionToMessage_simpleExtension() throws ParseException {
+  public void testAddExtensionToMessage_simpleExtension() throws Exception {
     Message extension =
         makeExtension("url { value: \"myUrl\" } value { string_value { value: \"myValue\" } }");
 
@@ -88,7 +88,7 @@ public final class ExtensionsTest {
   }
 
   @Test
-  public void testAddExtensionToMessage_complexExtension() throws ParseException {
+  public void testAddExtensionToMessage_complexExtension() throws Exception {
     Message extension = makeComplexExtension();
 
     Message.Builder patient = patientType.newBuilderForType();
@@ -107,7 +107,7 @@ public final class ExtensionsTest {
   }
 
   @Test
-  public void testSetExtensionValue() throws ParseException {
+  public void testSetExtensionValue() throws Exception {
     Message.Builder stringExtension = extensionType.newBuilderForType();
     Extensions.setExtensionValue(stringExtension, "string_value", "myValue");
     assertThat(stringExtension.build())
@@ -124,7 +124,7 @@ public final class ExtensionsTest {
   }
 
   @Test
-  public void testGetExtensionValue() throws ParseException {
+  public void testGetExtensionValue() throws Exception {
     Message stringExtension =
         makeExtension("url { value: \"myUrl\" } value { string_value { value: \"myValue\" } }");
     assertThat(Extensions.getExtensionValue(stringExtension, "string_value")).isEqualTo("myValue");
@@ -139,7 +139,7 @@ public final class ExtensionsTest {
   }
 
   @Test
-  public void testGetExtensions() throws ParseException {
+  public void testGetExtensions() throws Exception {
     Message.Builder patientBuilder = patientType.newBuilderForType();
     TextFormat.merge(
         ""
@@ -163,7 +163,7 @@ public final class ExtensionsTest {
   }
 
   @Test
-  public void testGetExtensionsWithUrl() throws ParseException {
+  public void testGetExtensionsWithUrl() throws Exception {
     Message.Builder patientBuilder = patientType.newBuilderForType();
     TextFormat.merge(
         ""
@@ -190,7 +190,7 @@ public final class ExtensionsTest {
   }
 
   @Test
-  public void testForEachExtension() throws ParseException {
+  public void testForEachExtension() throws Exception {
     Message.Builder patientBuilder = patientType.newBuilderForType();
     TextFormat.merge(
         ""

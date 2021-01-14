@@ -46,7 +46,7 @@ public final class CodesTest {
     this.stringTypeCode = stringTypeCode;
   }
 
-  private static EnumDescriptor getEnumDescriptor(MessageOrBuilder message) {
+  private static EnumDescriptor getEnumDescriptor(MessageOrBuilder message) throws Exception {
     return findField(message, "value").getEnumType();
   }
 
@@ -68,7 +68,7 @@ public final class CodesTest {
   }
 
   @Test
-  public void testEnumValueToStringCode_withDefaultValue() {
+  public void testEnumValueToStringCode_withDefaultValue() throws Exception {
     assertThat(
             Codes.enumValueToCodeString(
                 getEnumDescriptor(administrativeGenderType).getValues().get(1)))
@@ -76,21 +76,21 @@ public final class CodesTest {
   }
 
   @Test
-  public void testEnumValueToStringCode_withJsonNameOverride() {
+  public void testEnumValueToStringCode_withJsonNameOverride() throws Exception {
     assertThat(
             Codes.enumValueToCodeString(getEnumDescriptor(comparatorCodeType).getValues().get(1)))
         .isEqualTo("<");
   }
 
   @Test
-  public void testGetCodeAsString_rawCode() {
+  public void testGetCodeAsString_rawCode() throws Exception {
     Message.Builder builder = rawCodeType.newBuilderForType();
     builder.setField(findField(builder, "value"), "flower");
     assertThat(Codes.getCodeAsString(builder)).isEqualTo("flower");
   }
 
   @Test
-  public void testGetCodeAsString_enumTypeCode() {
+  public void testGetCodeAsString_enumTypeCode() throws Exception {
     Message.Builder builder = comparatorCodeType.newBuilderForType();
     builder.setField(
         findField(builder, "value"), getEnumDescriptor(comparatorCodeType).findValueByNumber(3));
@@ -99,7 +99,7 @@ public final class CodesTest {
   }
 
   @Test
-  public void testGetCodeAsString_stringTypeCode() {
+  public void testGetCodeAsString_stringTypeCode() throws Exception {
     Message.Builder builder = stringTypeCode.newBuilderForType();
     builder.setField(findField(builder, "value"), "flower");
     assertThat(Codes.getCodeAsString(builder)).isEqualTo("flower");

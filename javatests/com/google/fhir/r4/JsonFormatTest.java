@@ -15,6 +15,7 @@
 package com.google.fhir.r4;
 
 import com.google.common.io.Files;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.r4.core.Account;
 import com.google.fhir.r4.core.ActivityDefinition;
 import com.google.fhir.r4.core.AdverseEvent;
@@ -171,25 +172,26 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Before
-  public void setUp() throws IOException {
+  public void setUp() throws IOException, InvalidFhirException {
     setUpParser();
   }
 
-  private void generateProtoTxt(String[] fileNames, Message.Builder type) throws IOException {
+  private void generateProtoTxt(String[] fileNames, Message.Builder type)
+      throws InvalidFhirException, IOException {
     for (String fileName : fileNames) {
       Message.Builder builder = type.clone();
       try {
         parseToProto(fileName, builder);
       } catch (Exception e) {
-        System.out.println("Failed parsing " + fileName);
-        throw e;
+        throw new InvalidFhirException("Failed parsing " + fileName, e);
       }
       File file = new File("/tmp/examples/" + fileName + ".prototxt");
       Files.asCharSink(file, StandardCharsets.UTF_8).write(builder.toString());
     }
   }
 
-  private void testOrGenerate(String[] fileNames, Message.Builder type) throws IOException {
+  private void testOrGenerate(String[] fileNames, Message.Builder type)
+      throws InvalidFhirException, IOException {
     if (GENERATE_GOLDEN) {
       generateProtoTxt(fileNames, type);
     } else {
@@ -209,13 +211,13 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testAccount() throws IOException {
+  public void testAccount() throws Exception {
     String[] files = {"Account-ewg", "Account-example"};
     testOrGenerate(files, Account.newBuilder());
   }
 
   @Test
-  public void testActivityDefinition() throws IOException {
+  public void testActivityDefinition() throws Exception {
     String[] files = {
       "ActivityDefinition-administer-zika-virus-exposure-assessment",
       "ActivityDefinition-blood-tubes-supply",
@@ -231,13 +233,13 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testAdverseEvent() throws IOException {
+  public void testAdverseEvent() throws Exception {
     String[] files = {"AdverseEvent-example"};
     testOrGenerate(files, AdverseEvent.newBuilder());
   }
 
   @Test
-  public void testAllergyIntolerance() throws IOException {
+  public void testAllergyIntolerance() throws Exception {
     String[] files = {
       "AllergyIntolerance-example",
       "AllergyIntolerance-fishallergy",
@@ -250,19 +252,19 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testAppointment() throws IOException {
+  public void testAppointment() throws Exception {
     String[] files = {"Appointment-2docs", "Appointment-example", "Appointment-examplereq"};
     testOrGenerate(files, Appointment.newBuilder());
   }
 
   @Test
-  public void testAppointmentResponse() throws IOException {
+  public void testAppointmentResponse() throws Exception {
     String[] files = {"AppointmentResponse-example", "AppointmentResponse-exampleresp"};
     testOrGenerate(files, AppointmentResponse.newBuilder());
   }
 
   @Test
-  public void testAuditEvent() throws IOException {
+  public void testAuditEvent() throws Exception {
     String[] files = {
       "AuditEvent-example-disclosure",
       "AuditEvent-example-error",
@@ -278,32 +280,32 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testBasic() throws IOException {
+  public void testBasic() throws Exception {
     String[] files = {"Basic-basic-example-narrative", "Basic-classModel", "Basic-referral"};
     testOrGenerate(files, Basic.newBuilder());
   }
 
   @Test
-  public void testBinary() throws IOException {
+  public void testBinary() throws Exception {
     String[] files = {"Binary-example", "Binary-f006"};
     testOrGenerate(files, Binary.newBuilder());
   }
 
   @Test
-  public void testBiologicallyDerivedProduct() throws IOException {
+  public void testBiologicallyDerivedProduct() throws Exception {
     String[] files = {"BiologicallyDerivedProduct-example"};
     testOrGenerate(files, BiologicallyDerivedProduct.newBuilder());
   }
 
   @Test
-  public void testBodyStructure() throws IOException {
+  public void testBodyStructure() throws Exception {
     String[] files = {"BodyStructure-fetus", "BodyStructure-skin-patch", "BodyStructure-tumor"};
     testOrGenerate(files, BodyStructure.newBuilder());
   }
 
   // Split bundles into several tests to enable better sharding.
   @Test
-  public void testBundlePt1() throws IOException {
+  public void testBundlePt1() throws Exception {
     String[] files = {
       "Bundle-101",
       "Bundle-10bb101f-a121-4264-a920-67be9cb82c74",
@@ -319,7 +321,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testBundlePt2() throws IOException {
+  public void testBundlePt2() throws Exception {
     String[] files = {
       "Bundle-bundle-example",
       "Bundle-bundle-references",
@@ -335,7 +337,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testBundlePt4() throws IOException {
+  public void testBundlePt4() throws Exception {
     testOrGenerate(new String[] {"Bundle-conceptmaps", "Bundle-dataelements"}, Bundle.newBuilder());
   }
   //   TODO: These tests don't seem to ever finish for some reason - while other large
@@ -343,7 +345,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   //   Seems to be a problem with the printer.  Figure out why, and reneable these tests.
 
   @Test
-  public void testBundlePt3() throws IOException {
+  public void testBundlePt3() throws Exception {
     String[] files = {
       "Bundle-dg2",
       "Bundle-extensions",
@@ -370,7 +372,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testResourcesBundle() throws IOException {
+  public void testResourcesBundle() throws Exception {
     String[] files = {
       "Bundle-resources",
     };
@@ -378,7 +380,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testValuesetsBundle() throws IOException {
+  public void testValuesetsBundle() throws Exception {
     String[] files = {
       "Bundle-valuesets",
     };
@@ -386,7 +388,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testV2ValuesetsBundle() throws IOException {
+  public void testV2ValuesetsBundle() throws Exception {
     String[] files = {
       "Bundle-v2-valuesets",
     };
@@ -394,7 +396,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testV3ValuesetsBundle() throws IOException {
+  public void testV3ValuesetsBundle() throws Exception {
     String[] files = {
       "Bundle-v3-valuesets",
     };
@@ -402,7 +404,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testCapabilityStatement() throws IOException {
+  public void testCapabilityStatement() throws Exception {
     String[] files = {
       "CapabilityStatement-base2",
       "CapabilityStatement-base",
@@ -417,7 +419,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testCarePlan() throws IOException {
+  public void testCarePlan() throws Exception {
     String[] files = {
       "CarePlan-example",
       "CarePlan-f001",
@@ -435,31 +437,31 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testCareTeam() throws IOException {
+  public void testCareTeam() throws Exception {
     String[] files = {"CareTeam-example"};
     testOrGenerate(files, CareTeam.newBuilder());
   }
 
   @Test
-  public void testCatalogEntry() throws IOException {
+  public void testCatalogEntry() throws Exception {
     String[] files = {"CatalogEntry-example"};
     testOrGenerate(files, CatalogEntry.newBuilder());
   }
 
   @Test
-  public void testChargeItem() throws IOException {
+  public void testChargeItem() throws Exception {
     String[] files = {"ChargeItem-example"};
     testOrGenerate(files, ChargeItem.newBuilder());
   }
 
   @Test
-  public void testChargeItemDefinition() throws IOException {
+  public void testChargeItemDefinition() throws Exception {
     String[] files = {"ChargeItemDefinition-device", "ChargeItemDefinition-ebm"};
     testOrGenerate(files, ChargeItemDefinition.newBuilder());
   }
 
   @Test
-  public void testClaim() throws IOException {
+  public void testClaim() throws Exception {
     String[] files = {
       "Claim-100150",
       "Claim-100151",
@@ -483,7 +485,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testClaimResponse() throws IOException {
+  public void testClaimResponse() throws Exception {
     String[] files = {
       "ClaimResponse-R3500",
       "ClaimResponse-R3501",
@@ -495,13 +497,13 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testClinicalImpression() throws IOException {
+  public void testClinicalImpression() throws Exception {
     String[] files = {"ClinicalImpression-example"};
     testOrGenerate(files, ClinicalImpression.newBuilder());
   }
 
   @Test
-  public void testCommunication() throws IOException {
+  public void testCommunication() throws Exception {
     String[] files = {
       "Communication-example", "Communication-fm-attachment", "Communication-fm-solicited"
     };
@@ -509,13 +511,13 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testCommunicationRequest() throws IOException {
+  public void testCommunicationRequest() throws Exception {
     String[] files = {"CommunicationRequest-example", "CommunicationRequest-fm-solicit"};
     testOrGenerate(files, CommunicationRequest.newBuilder());
   }
 
   @Test
-  public void testCompartmentDefinition() throws IOException {
+  public void testCompartmentDefinition() throws Exception {
     String[] files = {
       "CompartmentDefinition-device",
       "CompartmentDefinition-encounter",
@@ -528,13 +530,13 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testComposition() throws IOException {
+  public void testComposition() throws Exception {
     String[] files = {"Composition-example", "Composition-example-mixed"};
     testOrGenerate(files, Composition.newBuilder());
   }
 
   @Test
-  public void testCondition() throws IOException {
+  public void testCondition() throws Exception {
     String[] files = {
       "Condition-example2",
       "Condition-example",
@@ -553,7 +555,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testConsent() throws IOException {
+  public void testConsent() throws Exception {
     String[] files = {
       "Consent-consent-example-basic",
       "Consent-consent-example-Emergency",
@@ -572,7 +574,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testContract() throws IOException {
+  public void testContract() throws Exception {
     String[] files = {
       "Contract-C-123",
       "Contract-C-2121",
@@ -587,19 +589,19 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testCoverage() throws IOException {
+  public void testCoverage() throws Exception {
     String[] files = {"Coverage-7546D", "Coverage-7547E", "Coverage-9876B1", "Coverage-SP1234"};
     testOrGenerate(files, Coverage.newBuilder());
   }
 
   @Test
-  public void testCoverageEligibilityRequest() throws IOException {
+  public void testCoverageEligibilityRequest() throws Exception {
     String[] files = {"CoverageEligibilityRequest-52345", "CoverageEligibilityRequest-52346"};
     testOrGenerate(files, CoverageEligibilityRequest.newBuilder());
   }
 
   @Test
-  public void testCoverageEligibilityResponse() throws IOException {
+  public void testCoverageEligibilityResponse() throws Exception {
     String[] files = {
       "CoverageEligibilityResponse-E2500",
       "CoverageEligibilityResponse-E2501",
@@ -610,7 +612,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testDetectedIssue() throws IOException {
+  public void testDetectedIssue() throws Exception {
     String[] files = {
       "DetectedIssue-allergy", "DetectedIssue-ddi", "DetectedIssue-duplicate", "DetectedIssue-lab"
     };
@@ -618,25 +620,25 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testDevice() throws IOException {
+  public void testDevice() throws Exception {
     String[] files = {"Device-example", "Device-f001"};
     testOrGenerate(files, Device.newBuilder());
   }
 
   @Test
-  public void testDeviceDefinition() throws IOException {
+  public void testDeviceDefinition() throws Exception {
     String[] files = {"DeviceDefinition-example"};
     testOrGenerate(files, DeviceDefinition.newBuilder());
   }
 
   @Test
-  public void testDeviceMetric() throws IOException {
+  public void testDeviceMetric() throws Exception {
     String[] files = {"DeviceMetric-example"};
     testOrGenerate(files, DeviceMetric.newBuilder());
   }
 
   @Test
-  public void testDeviceRequest() throws IOException {
+  public void testDeviceRequest() throws Exception {
     String[] files = {
       "DeviceRequest-example",
       "DeviceRequest-insulinpump",
@@ -647,13 +649,13 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testDeviceUseStatement() throws IOException {
+  public void testDeviceUseStatement() throws Exception {
     String[] files = {"DeviceUseStatement-example"};
     testOrGenerate(files, DeviceUseStatement.newBuilder());
   }
 
   @Test
-  public void testDiagnosticReport() throws IOException {
+  public void testDiagnosticReport() throws Exception {
     String[] files = {
       "DiagnosticReport-102",
       "DiagnosticReport-example-pgx",
@@ -666,25 +668,25 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testDocumentManifest() throws IOException {
+  public void testDocumentManifest() throws Exception {
     String[] files = {"DocumentManifest-654789", "DocumentManifest-example"};
     testOrGenerate(files, DocumentManifest.newBuilder());
   }
 
   @Test
-  public void testDocumentReference() throws IOException {
+  public void testDocumentReference() throws Exception {
     String[] files = {"DocumentReference-example"};
     testOrGenerate(files, DocumentReference.newBuilder());
   }
 
   @Test
-  public void testEffectEvidenceSynthesis() throws IOException {
+  public void testEffectEvidenceSynthesis() throws Exception {
     String[] files = {"EffectEvidenceSynthesis-example"};
     testOrGenerate(files, EffectEvidenceSynthesis.newBuilder());
   }
 
   @Test
-  public void testEncounter() throws IOException {
+  public void testEncounter() throws Exception {
     String[] files = {
       "Encounter-emerg",
       "Encounter-example",
@@ -701,7 +703,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testEndpoint() throws IOException {
+  public void testEndpoint() throws Exception {
     String[] files = {
       "Endpoint-direct-endpoint",
       "Endpoint-example-iid",
@@ -712,103 +714,103 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testEnrollmentRequest() throws IOException {
+  public void testEnrollmentRequest() throws Exception {
     String[] files = {"EnrollmentRequest-22345"};
     testOrGenerate(files, EnrollmentRequest.newBuilder());
   }
 
   @Test
-  public void testEnrollmentResponse() throws IOException {
+  public void testEnrollmentResponse() throws Exception {
     String[] files = {"EnrollmentResponse-ER2500"};
     testOrGenerate(files, EnrollmentResponse.newBuilder());
   }
 
   @Test
-  public void testEpisodeOfCare() throws IOException {
+  public void testEpisodeOfCare() throws Exception {
     String[] files = {"EpisodeOfCare-example"};
     testOrGenerate(files, EpisodeOfCare.newBuilder());
   }
 
   @Test
-  public void testEventDefinition() throws IOException {
+  public void testEventDefinition() throws Exception {
     String[] files = {"EventDefinition-example"};
     testOrGenerate(files, EventDefinition.newBuilder());
   }
 
   @Test
-  public void testEvidence() throws IOException {
+  public void testEvidence() throws Exception {
     String[] files = {"Evidence-example"};
     testOrGenerate(files, Evidence.newBuilder());
   }
 
   @Test
-  public void testEvidenceVariable() throws IOException {
+  public void testEvidenceVariable() throws Exception {
     String[] files = {"EvidenceVariable-example"};
     testOrGenerate(files, EvidenceVariable.newBuilder());
   }
 
   @Test
-  public void testExampleScenario() throws IOException {
+  public void testExampleScenario() throws Exception {
     String[] files = {"ExampleScenario-example"};
     testOrGenerate(files, ExampleScenario.newBuilder());
   }
 
   @Test
-  public void testExplanationOfBenefit() throws IOException {
+  public void testExplanationOfBenefit() throws Exception {
     String[] files = {"ExplanationOfBenefit-EB3500", "ExplanationOfBenefit-EB3501"};
     testOrGenerate(files, ExplanationOfBenefit.newBuilder());
   }
 
   @Test
-  public void testFamilyMemberHistory() throws IOException {
+  public void testFamilyMemberHistory() throws Exception {
     String[] files = {"FamilyMemberHistory-father", "FamilyMemberHistory-mother"};
     testOrGenerate(files, FamilyMemberHistory.newBuilder());
   }
 
   @Test
-  public void testFlag() throws IOException {
+  public void testFlag() throws Exception {
     String[] files = {"Flag-example-encounter", "Flag-example"};
     testOrGenerate(files, Flag.newBuilder());
   }
 
   @Test
-  public void testGoal() throws IOException {
+  public void testGoal() throws Exception {
     String[] files = {"Goal-example", "Goal-stop-smoking"};
     testOrGenerate(files, Goal.newBuilder());
   }
 
   @Test
-  public void testGraphDefinition() throws IOException {
+  public void testGraphDefinition() throws Exception {
     String[] files = {"GraphDefinition-example"};
     testOrGenerate(files, GraphDefinition.newBuilder());
   }
 
   @Test
-  public void testGroup() throws IOException {
+  public void testGroup() throws Exception {
     String[] files = {"Group-101", "Group-102", "Group-example-patientlist", "Group-herd1"};
     testOrGenerate(files, Group.newBuilder());
   }
 
   @Test
-  public void testGuidanceResponse() throws IOException {
+  public void testGuidanceResponse() throws Exception {
     String[] files = {"GuidanceResponse-example"};
     testOrGenerate(files, GuidanceResponse.newBuilder());
   }
 
   @Test
-  public void testHealthcareService() throws IOException {
+  public void testHealthcareService() throws Exception {
     String[] files = {"HealthcareService-example"};
     testOrGenerate(files, HealthcareService.newBuilder());
   }
 
   @Test
-  public void testImagingStudy() throws IOException {
+  public void testImagingStudy() throws Exception {
     String[] files = {"ImagingStudy-example", "ImagingStudy-example-xr"};
     testOrGenerate(files, ImagingStudy.newBuilder());
   }
 
   @Test
-  public void testImmunization() throws IOException {
+  public void testImmunization() throws Exception {
     String[] files = {
       "Immunization-example",
       "Immunization-historical",
@@ -820,19 +822,19 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testImmunizationEvaluation() throws IOException {
+  public void testImmunizationEvaluation() throws Exception {
     String[] files = {"ImmunizationEvaluation-example", "ImmunizationEvaluation-notValid"};
     testOrGenerate(files, ImmunizationEvaluation.newBuilder());
   }
 
   @Test
-  public void testImmunizationRecommendation() throws IOException {
+  public void testImmunizationRecommendation() throws Exception {
     String[] files = {"ImmunizationRecommendation-example"};
     testOrGenerate(files, ImmunizationRecommendation.newBuilder());
   }
 
   @Test
-  public void testImplementationGuide() throws IOException {
+  public void testImplementationGuide() throws Exception {
     // "ImplementationGuide-fhir" and "ig-r4"do not parse because it contains a reference to an
     // invalid resource
     // https://gforge.hl7.org/gf/project/fhir/tracker/?action=TrackerItemEdit&tracker_item_id=22489
@@ -841,19 +843,19 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testInsurancePlan() throws IOException {
+  public void testInsurancePlan() throws Exception {
     String[] files = {"InsurancePlan-example"};
     testOrGenerate(files, InsurancePlan.newBuilder());
   }
 
   @Test
-  public void testInvoice() throws IOException {
+  public void testInvoice() throws Exception {
     String[] files = {"Invoice-example"};
     testOrGenerate(files, Invoice.newBuilder());
   }
 
   @Test
-  public void testLibrary() throws IOException {
+  public void testLibrary() throws Exception {
     String[] files = {
       "Library-composition-example",
       "Library-example",
@@ -881,13 +883,13 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testLinkage() throws IOException {
+  public void testLinkage() throws Exception {
     String[] files = {"Linkage-example"};
     testOrGenerate(files, Linkage.newBuilder());
   }
 
   @Test
-  public void testList() throws IOException {
+  public void testList() throws Exception {
     String[] files = {
       "List-current-allergies",
       "List-example-double-cousin-relationship",
@@ -904,7 +906,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testLocation() throws IOException {
+  public void testLocation() throws Exception {
     String[] files = {
       "Location-1", "Location-2", "Location-amb", "Location-hl7", "Location-ph", "Location-ukp"
     };
@@ -912,7 +914,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testMeasure() throws IOException {
+  public void testMeasure() throws Exception {
     String[] files = {
       "Measure-component-a-example",
       "Measure-component-b-example",
@@ -926,7 +928,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testMeasureReport() throws IOException {
+  public void testMeasureReport() throws Exception {
     String[] files = {
       "MeasureReport-hiv-indicators",
       "MeasureReport-measurereport-cms146-cat1-example",
@@ -937,7 +939,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testMedia() throws IOException {
+  public void testMedia() throws Exception {
     String[] files = {
       "Media-1.2.840.11361907579238403408700.3.1.04.19970327150033",
       "Media-example",
@@ -948,7 +950,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testMedication() throws IOException {
+  public void testMedication() throws Exception {
     String[] files = {
       "Medication-med0301",
       "Medication-med0302",
@@ -978,7 +980,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testMedicationAdministration() throws IOException {
+  public void testMedicationAdministration() throws Exception {
     String[] files = {
       "MedicationAdministration-medadmin0301",
       "MedicationAdministration-medadmin0302",
@@ -999,7 +1001,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testMedicationDispense() throws IOException {
+  public void testMedicationDispense() throws Exception {
     String[] files = {
       "MedicationDispense-meddisp008",
       "MedicationDispense-meddisp0301",
@@ -1037,13 +1039,13 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testMedicationKnowledge() throws IOException {
+  public void testMedicationKnowledge() throws Exception {
     String[] files = {"MedicationKnowledge-example"};
     testOrGenerate(files, MedicationKnowledge.newBuilder());
   }
 
   @Test
-  public void testMedicationRequest() throws IOException {
+  public void testMedicationRequest() throws Exception {
     String[] files = {
       "MedicationRequest-medrx002",
       "MedicationRequest-medrx0301",
@@ -1090,7 +1092,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testMedicationStatement() throws IOException {
+  public void testMedicationStatement() throws Exception {
     String[] files = {
       "MedicationStatement-example001",
       "MedicationStatement-example002",
@@ -1104,67 +1106,67 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testMedicinalProduct() throws IOException {
+  public void testMedicinalProduct() throws Exception {
     String[] files = {"MedicinalProduct-example"};
     testOrGenerate(files, MedicinalProduct.newBuilder());
   }
 
   @Test
-  public void testMedicinalProductAuthorization() throws IOException {
+  public void testMedicinalProductAuthorization() throws Exception {
     String[] files = {"MedicinalProductAuthorization-example"};
     testOrGenerate(files, MedicinalProductAuthorization.newBuilder());
   }
 
   @Test
-  public void testMedicinalProductContraindication() throws IOException {
+  public void testMedicinalProductContraindication() throws Exception {
     String[] files = {"MedicinalProductContraindication-example"};
     testOrGenerate(files, MedicinalProductContraindication.newBuilder());
   }
 
   @Test
-  public void testMedicinalProductIndication() throws IOException {
+  public void testMedicinalProductIndication() throws Exception {
     String[] files = {"MedicinalProductIndication-example"};
     testOrGenerate(files, MedicinalProductIndication.newBuilder());
   }
 
   @Test
-  public void testMedicinalProductIngredient() throws IOException {
+  public void testMedicinalProductIngredient() throws Exception {
     String[] files = {"MedicinalProductIngredient-example"};
     testOrGenerate(files, MedicinalProductIngredient.newBuilder());
   }
 
   @Test
-  public void testMedicinalProductInteraction() throws IOException {
+  public void testMedicinalProductInteraction() throws Exception {
     String[] files = {"MedicinalProductInteraction-example"};
     testOrGenerate(files, MedicinalProductInteraction.newBuilder());
   }
 
   @Test
-  public void testMedicinalProductManufactured() throws IOException {
+  public void testMedicinalProductManufactured() throws Exception {
     String[] files = {"MedicinalProductManufactured-example"};
     testOrGenerate(files, MedicinalProductManufactured.newBuilder());
   }
 
   @Test
-  public void testMedicinalProductPackaged() throws IOException {
+  public void testMedicinalProductPackaged() throws Exception {
     String[] files = {"MedicinalProductPackaged-example"};
     testOrGenerate(files, MedicinalProductPackaged.newBuilder());
   }
 
   @Test
-  public void testMedicinalProductPharmaceutical() throws IOException {
+  public void testMedicinalProductPharmaceutical() throws Exception {
     String[] files = {"MedicinalProductPharmaceutical-example"};
     testOrGenerate(files, MedicinalProductPharmaceutical.newBuilder());
   }
 
   @Test
-  public void testMedicinalProductUndesirableEffect() throws IOException {
+  public void testMedicinalProductUndesirableEffect() throws Exception {
     String[] files = {"MedicinalProductUndesirableEffect-example"};
     testOrGenerate(files, MedicinalProductUndesirableEffect.newBuilder());
   }
 
   @Test
-  public void testMessageDefinition() throws IOException {
+  public void testMessageDefinition() throws Exception {
     String[] files = {
       "MessageDefinition-example",
       "MessageDefinition-patient-link-notification",
@@ -1174,13 +1176,13 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testMessageHeader() throws IOException {
+  public void testMessageHeader() throws Exception {
     String[] files = {"MessageHeader-1cbdfb97-5859-48a4-8301-d54eab818d68"};
     testOrGenerate(files, MessageHeader.newBuilder());
   }
 
   @Test
-  public void testMolecularSequence() throws IOException {
+  public void testMolecularSequence() throws Exception {
     String[] files = {
       "MolecularSequence-breastcancer",
       "MolecularSequence-coord-0-base",
@@ -1204,13 +1206,13 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testNamingSystem() throws IOException {
+  public void testNamingSystem() throws Exception {
     String[] files = {"NamingSystem-example-id", "NamingSystem-example"};
     testOrGenerate(files, NamingSystem.newBuilder());
   }
 
   @Test
-  public void testNutritionOrder() throws IOException {
+  public void testNutritionOrder() throws Exception {
     String[] files = {
       "NutritionOrder-cardiacdiet",
       "NutritionOrder-diabeticdiet",
@@ -1230,7 +1232,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testObservation() throws IOException {
+  public void testObservation() throws Exception {
     String[] files = {
       "Observation-10minute-apgar-score",
       "Observation-1minute-apgar-score",
@@ -1301,13 +1303,13 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testObservationDefinition() throws IOException {
+  public void testObservationDefinition() throws Exception {
     String[] files = {"ObservationDefinition-example"};
     testOrGenerate(files, ObservationDefinition.newBuilder());
   }
 
   @Test
-  public void testOperationDefinition() throws IOException {
+  public void testOperationDefinition() throws Exception {
     String[] files = {
       "OperationDefinition-ActivityDefinition-apply",
       "OperationDefinition-ActivityDefinition-data-requirements",
@@ -1361,7 +1363,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testOperationOutcome() throws IOException {
+  public void testOperationOutcome() throws Exception {
     String[] files = {
       "OperationOutcome-101",
       "OperationOutcome-allok",
@@ -1374,7 +1376,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testOrganization() throws IOException {
+  public void testOrganization() throws Exception {
     String[] files = {
       "Organization-1832473e-2fe0-452d-abe9-3cdb9879522f",
       "Organization-1",
@@ -1394,7 +1396,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testOrganizationAffiliation() throws IOException {
+  public void testOrganizationAffiliation() throws Exception {
     String[] files = {
       "OrganizationAffiliation-example",
       "OrganizationAffiliation-orgrole1",
@@ -1404,7 +1406,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testPatient() throws IOException {
+  public void testPatient() throws Exception {
     String[] files = {
       "Patient-animal",
       "Patient-ch-example",
@@ -1433,25 +1435,25 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testPaymentNotice() throws IOException {
+  public void testPaymentNotice() throws Exception {
     String[] files = {"PaymentNotice-77654"};
     testOrGenerate(files, PaymentNotice.newBuilder());
   }
 
   @Test
-  public void testPaymentReconciliation() throws IOException {
+  public void testPaymentReconciliation() throws Exception {
     String[] files = {"PaymentReconciliation-ER2500"};
     testOrGenerate(files, PaymentReconciliation.newBuilder());
   }
 
   @Test
-  public void testPerson() throws IOException {
+  public void testPerson() throws Exception {
     String[] files = {"Person-example", "Person-f002", "Person-grahame", "Person-pd", "Person-pp"};
     testOrGenerate(files, Person.newBuilder());
   }
 
   @Test
-  public void testPlanDefinition() throws IOException {
+  public void testPlanDefinition() throws Exception {
     String[] files = {
       "PlanDefinition-chlamydia-screening-intervention",
       "PlanDefinition-example-cardiology-os",
@@ -1476,7 +1478,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testPractitioner() throws IOException {
+  public void testPractitioner() throws Exception {
     String[] files = {
       "Practitioner-example",
       "Practitioner-f001",
@@ -1497,13 +1499,13 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testPractitionerRole() throws IOException {
+  public void testPractitionerRole() throws Exception {
     String[] files = {"PractitionerRole-example"};
     testOrGenerate(files, PractitionerRole.newBuilder());
   }
 
   @Test
-  public void testProcedure() throws IOException {
+  public void testProcedure() throws Exception {
     String[] files = {
       "Procedure-ambulation",
       "Procedure-appendectomy-narrative",
@@ -1526,7 +1528,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testProvenance() throws IOException {
+  public void testProvenance() throws Exception {
     String[] files = {
       "Provenance-consent-signature",
       "Provenance-example-biocompute-object",
@@ -1538,7 +1540,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testQuestionnaire() throws IOException {
+  public void testQuestionnaire() throws Exception {
     String[] files = {
       "Questionnaire-3141",
       "Questionnaire-bb",
@@ -1552,7 +1554,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testQuestionnaireResponse() throws IOException {
+  public void testQuestionnaireResponse() throws Exception {
     String[] files = {
       "QuestionnaireResponse-3141",
       "QuestionnaireResponse-bb",
@@ -1564,7 +1566,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testRelatedPerson() throws IOException {
+  public void testRelatedPerson() throws Exception {
     String[] files = {
       "RelatedPerson-benedicte",
       "RelatedPerson-f001",
@@ -1576,37 +1578,37 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testRequestGroup() throws IOException {
+  public void testRequestGroup() throws Exception {
     String[] files = {"RequestGroup-example", "RequestGroup-kdn5-example"};
     testOrGenerate(files, RequestGroup.newBuilder());
   }
 
   @Test
-  public void testResearchDefinition() throws IOException {
+  public void testResearchDefinition() throws Exception {
     String[] files = {"ResearchDefinition-example"};
     testOrGenerate(files, ResearchDefinition.newBuilder());
   }
 
   @Test
-  public void testResearchElementDefinition() throws IOException {
+  public void testResearchElementDefinition() throws Exception {
     String[] files = {"ResearchElementDefinition-example"};
     testOrGenerate(files, ResearchElementDefinition.newBuilder());
   }
 
   @Test
-  public void testResearchStudy() throws IOException {
+  public void testResearchStudy() throws Exception {
     String[] files = {"ResearchStudy-example"};
     testOrGenerate(files, ResearchStudy.newBuilder());
   }
 
   @Test
-  public void testResearchSubject() throws IOException {
+  public void testResearchSubject() throws Exception {
     String[] files = {"ResearchSubject-example"};
     testOrGenerate(files, ResearchSubject.newBuilder());
   }
 
   @Test
-  public void testRiskAssessment() throws IOException {
+  public void testRiskAssessment() throws Exception {
     String[] files = {
       "RiskAssessment-breastcancer-risk",
       "RiskAssessment-cardiac",
@@ -1619,19 +1621,19 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testRiskEvidenceSynthesis() throws IOException {
+  public void testRiskEvidenceSynthesis() throws Exception {
     String[] files = {"RiskEvidenceSynthesis-example"};
     testOrGenerate(files, RiskEvidenceSynthesis.newBuilder());
   }
 
   @Test
-  public void testSchedule() throws IOException {
+  public void testSchedule() throws Exception {
     String[] files = {"Schedule-example", "Schedule-exampleloc1", "Schedule-exampleloc2"};
     testOrGenerate(files, Schedule.newBuilder());
   }
 
   @Test
-  public void testServiceRequest() throws IOException {
+  public void testServiceRequest() throws Exception {
     String[] files = {
       "ServiceRequest-ambulation",
       "ServiceRequest-appendectomy-narrative",
@@ -1658,13 +1660,13 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testSlot() throws IOException {
+  public void testSlot() throws Exception {
     String[] files = {"Slot-1", "Slot-2", "Slot-3", "Slot-example"};
     testOrGenerate(files, Slot.newBuilder());
   }
 
   @Test
-  public void testSpecimen() throws IOException {
+  public void testSpecimen() throws Exception {
     String[] files = {
       "Specimen-101",
       "Specimen-isolate",
@@ -1676,25 +1678,25 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testSpecimenDefinition() throws IOException {
+  public void testSpecimenDefinition() throws Exception {
     String[] files = {"SpecimenDefinition-2364"};
     testOrGenerate(files, SpecimenDefinition.newBuilder());
   }
 
   @Test
-  public void testStructureMap() throws IOException {
+  public void testStructureMap() throws Exception {
     String[] files = {"StructureMap-example", "StructureMap-supplyrequest-transform"};
     testOrGenerate(files, StructureMap.newBuilder());
   }
 
   @Test
-  public void testSubscription() throws IOException {
+  public void testSubscription() throws Exception {
     String[] files = {"Subscription-example-error", "Subscription-example"};
     testOrGenerate(files, Subscription.newBuilder());
   }
 
   @Test
-  public void testSubstance() throws IOException {
+  public void testSubstance() throws Exception {
     String[] files = {
       "Substance-example",
       "Substance-f201",
@@ -1707,25 +1709,25 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testSubstanceSpecification() throws IOException {
+  public void testSubstanceSpecification() throws Exception {
     String[] files = {"SubstanceSpecification-example"};
     testOrGenerate(files, SubstanceSpecification.newBuilder());
   }
 
   @Test
-  public void testSupplyDelivery() throws IOException {
+  public void testSupplyDelivery() throws Exception {
     String[] files = {"SupplyDelivery-pumpdelivery", "SupplyDelivery-simpledelivery"};
     testOrGenerate(files, SupplyDelivery.newBuilder());
   }
 
   @Test
-  public void testSupplyRequest() throws IOException {
+  public void testSupplyRequest() throws Exception {
     String[] files = {"SupplyRequest-simpleorder"};
     testOrGenerate(files, SupplyRequest.newBuilder());
   }
 
   @Test
-  public void testTask() throws IOException {
+  public void testTask() throws Exception {
     String[] files = {
       "Task-example1",
       "Task-example2",
@@ -1744,19 +1746,19 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testTerminologyCapabilities() throws IOException {
+  public void testTerminologyCapabilities() throws Exception {
     String[] files = {"TerminologyCapabilities-example"};
     testOrGenerate(files, TerminologyCapabilities.newBuilder());
   }
 
   @Test
-  public void testTestReport() throws IOException {
+  public void testTestReport() throws Exception {
     String[] files = {"TestReport-testreport-example"};
     testOrGenerate(files, TestReport.newBuilder());
   }
 
   @Test
-  public void testTestScript() throws IOException {
+  public void testTestScript() throws Exception {
     String[] files = {
       "TestScript-testscript-example-history",
       "TestScript-testscript-example",
@@ -1769,13 +1771,13 @@ public class JsonFormatTest extends JsonFormatTestBase {
   }
 
   @Test
-  public void testVerificationResult() throws IOException {
+  public void testVerificationResult() throws Exception {
     String[] files = {"VerificationResult-example"};
     testOrGenerate(files, VerificationResult.newBuilder());
   }
 
   @Test
-  public void testVisionPrescription() throws IOException {
+  public void testVisionPrescription() throws Exception {
     String[] files = {"VisionPrescription-33123", "VisionPrescription-33124"};
     testOrGenerate(files, VisionPrescription.newBuilder());
   }

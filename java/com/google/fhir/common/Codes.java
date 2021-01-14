@@ -74,7 +74,7 @@ public final class Codes {
   private static final DescriptorMemosMap<EnumDescriptor, ImmutableMap<String, EnumValueDescriptor>>
       CODE_LOOKUP_MEMOS = new DescriptorMemosMap<>();
 
-  public static String getCodeAsString(MessageOrBuilder code) {
+  public static String getCodeAsString(MessageOrBuilder code) throws InvalidFhirException {
     Descriptor descriptor = code.getDescriptorForType();
 
     if (!FhirTypes.isTypeOrProfileOfCode(code.getDescriptorForType())) {

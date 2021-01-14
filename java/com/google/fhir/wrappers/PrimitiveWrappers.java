@@ -14,6 +14,7 @@
 
 package com.google.fhir.wrappers;
 
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.Annotations;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -22,20 +23,28 @@ import com.google.protobuf.MessageOrBuilder;
 import java.time.ZoneId;
 
 /** Utility functions for working with primitive wrappers */
+// TODO: Some of these functions catch IllegalArgumentExceptions and rethrow as
+// InvalidFhirException.  Once wrappers all throw InvalidFhirException, remove this catch-and-throw
 public class PrimitiveWrappers {
 
   private PrimitiveWrappers() {}
 
   /**
-   * Throws an IllegalArgumentException if the primitive is invalid.
-   * The three main cases of this are:
-   * a) A primitive does not meet the primitive regex - e.g., a decimal with value "1.2.3"
-   * b) The primitive has no value, and has no extensions other than PrimitiveHasNoValue
-   * c) The primitive has no value, and does NOT have the PrimitiveHasNoValue extension.
+   * Throws an IllegalArgumentException if the primitive is invalid. The three main cases of this
+   * are:
+   *
+   * <ol>
+   *   <li>A primitive does not meet the primitive regex - e.g., a decimal with value "1.2.3"
+   *   <li>The primitive has no value, and has no extensions other than PrimitiveHasNoValue
+   *   <li>The primitive has no value, and does NOT have the PrimitiveHasNoValue extension
+   * </ol>
    */
-  // TODO: convert this to throwing a checked InvalidFhirException
-  public static void validatePrimitive(MessageOrBuilder primitive) {
-    primitiveWrapperOf(primitive).validateWrapped();
+  public static void validatePrimitive(MessageOrBuilder primitive) throws InvalidFhirException {
+    try {
+      primitiveWrapperOf(primitive).validateWrapped();
+    } catch (IllegalArgumentException e) {
+      throw new InvalidFhirException(e.getMessage(), e);
+    }
   }
 
   /**
@@ -43,7 +52,8 @@ public class PrimitiveWrappers {
    * This allows some useful API calls like printValue, which prints the primitive to its JSON
    * value. Throws an InvalidArgumentException if the message is not a FHIR primitive.
    */
-  public static PrimitiveWrapper<?> primitiveWrapperOf(MessageOrBuilder message) {
+  public static PrimitiveWrapper<?> primitiveWrapperOf(MessageOrBuilder message)
+      throws InvalidFhirException {
     Descriptor descriptor = message.getDescriptorForType();
     if (descriptor.getOptions().hasExtension(Annotations.fhirValuesetUrl)) {
       return CodeWrapper.of(message);
@@ -89,120 +99,122 @@ public class PrimitiveWrappers {
       case "Url":
         return new UrlWrapper(message);
       default:
-        throw new IllegalArgumentException(
-            "Unexpected primitive FHIR type: " + descriptor.getName());
+        throw new InvalidFhirException("Unexpected primitive FHIR type: " + descriptor.getName());
     }
   }
 
   /**
    * Given a JsonElement, and the expected target FHIR primitive type, wraps the JsonElement in the
-   * appropriate PrimitiveWrapper.
-   * Throws an IllegalArgumentException if the JsonElement is not valid for the message type
-   * requested - E.g., if the JsonElement is a string "foobar" and the message type is a FHIR
-   * Decimal.
+   * appropriate PrimitiveWrapper. Throws an IllegalArgumentException if the JsonElement is not
+   * valid for the message type requested - E.g., if the JsonElement is a string "foobar" and the
+   * message type is a FHIR Decimal.
    */
-  // TODO: This should throw a checked InvalidFhirException.
   public static PrimitiveWrapper<?> parseAndWrap(
-      JsonElement json, MessageOrBuilder message, ZoneId defaultTimeZone) {
-    Descriptor descriptor = message.getDescriptorForType();
-    if (json.isJsonArray()) {
-      // JsonArrays are not allowed here
-      throw new IllegalArgumentException("Cannot wrap a JsonArray.  Found: " + json.getClass());
-    }
-    // JSON objects represents extension on a primitive, and are treated as null values.
-    if (json.isJsonObject()) {
-      json = JsonNull.INSTANCE;
-    }
-    String jsonString = json.isJsonNull() ? null : json.getAsJsonPrimitive().getAsString();
+      JsonElement json, MessageOrBuilder message, ZoneId defaultTimeZone)
+      throws InvalidFhirException {
+    try {
+      Descriptor descriptor = message.getDescriptorForType();
+      if (json.isJsonArray()) {
+        // JsonArrays are not allowed here
+        throw new InvalidFhirException("Cannot wrap a JsonArray.  Found: " + json.getClass());
+      }
+      // JSON objects represents extension on a primitive, and are treated as null values.
+      if (json.isJsonObject()) {
+        json = JsonNull.INSTANCE;
+      }
+      String jsonString = json.isJsonNull() ? null : json.getAsJsonPrimitive().getAsString();
 
-    if (descriptor.getOptions().hasExtension(Annotations.fhirValuesetUrl)) {
-      return new CodeWrapper(jsonString);
-    }
-    // TODO: Make proper class hierarchy for wrapper input types,
-    // so these can all accept JsonElement in constructor, and do type checking there.
-    switch (descriptor.getName()) {
-      case "Base64Binary":
-        checkIsString(json);
-        return new Base64BinaryWrapper(jsonString);
-      case "Boolean":
-        checkIsBoolean(json);
-        return new BooleanWrapper(jsonString);
-      case "Code":
-        checkIsString(json);
+      if (descriptor.getOptions().hasExtension(Annotations.fhirValuesetUrl)) {
         return new CodeWrapper(jsonString);
-      case "Date":
-        checkIsString(json);
-        return new DateWrapper(jsonString, defaultTimeZone);
-      case "DateTime":
-        checkIsString(json);
-        return new DateTimeWrapper(jsonString, defaultTimeZone);
-      case "Decimal":
-        checkIsNumber(json);
-        return new DecimalWrapper(jsonString);
-      case "Id":
-        checkIsString(json);
-        return new IdWrapper(jsonString);
-      case "Instant":
-        checkIsString(json);
-        return new InstantWrapper(jsonString);
-      case "Integer":
-        checkIsNumber(json);
-        return new IntegerWrapper(jsonString);
-      case "Markdown":
-        checkIsString(json);
-        return new MarkdownWrapper(jsonString);
-      case "Oid":
-        checkIsString(json);
-        return new OidWrapper(jsonString);
-      case "PositiveInt":
-        checkIsNumber(json);
-        return new PositiveIntWrapper(jsonString);
-      case "String":
-        checkIsString(json);
-        return new StringWrapper(jsonString);
-      case "Time":
-        checkIsString(json);
-        return new TimeWrapper(jsonString);
-      case "UnsignedInt":
-        checkIsNumber(json);
-        return new UnsignedIntWrapper(jsonString);
-      case "Uri":
-        checkIsString(json);
-        return new UriWrapper(jsonString);
-      case "Xhtml":
-        checkIsString(json);
-        return new XhtmlWrapper(jsonString);
-        // R4 only
-      case "Canonical":
-        checkIsString(json);
-        return new CanonicalWrapper(jsonString);
-      case "Url":
-        checkIsString(json);
-        return new UrlWrapper(jsonString);
-      default:
-        throw new IllegalArgumentException(
-            "Unexpected primitive FHIR type: " + descriptor.getName());
+      }
+      // TODO: Make proper class hierarchy for wrapper input types,
+      // so these can all accept JsonElement in constructor, and do type checking there.
+      switch (descriptor.getName()) {
+        case "Base64Binary":
+          checkIsString(json);
+          return new Base64BinaryWrapper(jsonString);
+        case "Boolean":
+          checkIsBoolean(json);
+          return new BooleanWrapper(jsonString);
+        case "Code":
+          checkIsString(json);
+          return new CodeWrapper(jsonString);
+        case "Date":
+          checkIsString(json);
+          return new DateWrapper(jsonString, defaultTimeZone);
+        case "DateTime":
+          checkIsString(json);
+          return new DateTimeWrapper(jsonString, defaultTimeZone);
+        case "Decimal":
+          checkIsNumber(json);
+          return new DecimalWrapper(jsonString);
+        case "Id":
+          checkIsString(json);
+          return new IdWrapper(jsonString);
+        case "Instant":
+          checkIsString(json);
+          return new InstantWrapper(jsonString);
+        case "Integer":
+          checkIsNumber(json);
+          return new IntegerWrapper(jsonString);
+        case "Markdown":
+          checkIsString(json);
+          return new MarkdownWrapper(jsonString);
+        case "Oid":
+          checkIsString(json);
+          return new OidWrapper(jsonString);
+        case "PositiveInt":
+          checkIsNumber(json);
+          return new PositiveIntWrapper(jsonString);
+        case "String":
+          checkIsString(json);
+          return new StringWrapper(jsonString);
+        case "Time":
+          checkIsString(json);
+          return new TimeWrapper(jsonString);
+        case "UnsignedInt":
+          checkIsNumber(json);
+          return new UnsignedIntWrapper(jsonString);
+        case "Uri":
+          checkIsString(json);
+          return new UriWrapper(jsonString);
+        case "Xhtml":
+          checkIsString(json);
+          return new XhtmlWrapper(jsonString);
+          // R4 only
+        case "Canonical":
+          checkIsString(json);
+          return new CanonicalWrapper(jsonString);
+        case "Url":
+          checkIsString(json);
+          return new UrlWrapper(jsonString);
+        default:
+          throw new InvalidFhirException(
+              "Unexpected primitive FHIR type: " + descriptor.getName() + " : " + json);
+      }
+    } catch (IllegalArgumentException e) {
+      throw new InvalidFhirException(e.getMessage(), e);
     }
   }
 
-  private static void checkIsBoolean(JsonElement json) {
+  private static void checkIsBoolean(JsonElement json) throws InvalidFhirException {
     if (!(json.isJsonNull() || json.isJsonObject())
         && !(json.isJsonPrimitive() && json.getAsJsonPrimitive().isBoolean())) {
-      throw new IllegalArgumentException("Invalid JSON element for boolean: " + json);
+      throw new InvalidFhirException("Invalid JSON element for boolean: " + json);
     }
   }
 
-  private static void checkIsNumber(JsonElement json) {
+  private static void checkIsNumber(JsonElement json) throws InvalidFhirException {
     if (!(json.isJsonNull() || json.isJsonObject())
         && !(json.isJsonPrimitive() && json.getAsJsonPrimitive().isNumber())) {
-      throw new IllegalArgumentException("Invalid JSON element for number: " + json);
+      throw new InvalidFhirException("Invalid JSON element for number: " + json);
     }
   }
 
-  private static void checkIsString(JsonElement json) {
+  private static void checkIsString(JsonElement json) throws InvalidFhirException {
     if (!(json.isJsonNull() || json.isJsonObject())
         && !(json.isJsonPrimitive() && json.getAsJsonPrimitive().isString())) {
-      throw new IllegalArgumentException("Invalid JSON element for string-like: " + json);
+      throw new InvalidFhirException("Invalid JSON element for string-like: " + json);
     }
   }
 }

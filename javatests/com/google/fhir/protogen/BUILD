@@ -13,6 +13,7 @@ java_test(
     ],
     test_class = "com.google.fhir.protogen.ProtoFilePrinterTest",
     deps = [
+        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:json_format",
         "//java/com/google/fhir/protogen",
         "//proto/google/fhir/proto:annotations_java_proto",
@@ -43,6 +44,7 @@ java_test(
     test_class = "com.google.fhir.protogen.ProtoGeneratorTest",
     deps = [
         "//java/com/google/fhir/common:codes",
+        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:json_format",
         "//java/com/google/fhir/protogen",
         "//java/com/google/fhir/protogen:generator_utils",
@@ -72,6 +74,7 @@ java_test(
     ],
     test_class = "com.google.fhir.protogen.ProfileGeneratorTest",
     deps = [
+        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:json_format",
         "//java/com/google/fhir/protogen",
         "//proto/google/fhir/proto:annotations_java_proto",
@@ -94,6 +97,7 @@ java_test(
     ],
     test_class = "com.google.fhir.protogen.FhirPackageTest",
     deps = [
+        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/protogen",
         "//proto/google/fhir/proto:profile_config_java_proto",
         "@maven//:com_google_guava_guava_testlib",

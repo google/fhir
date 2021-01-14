@@ -20,6 +20,7 @@ import static java.util.stream.Collectors.toList;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
@@ -56,7 +57,7 @@ public final class ProtoGeneratorTestUtils {
       String codesProtoImport,
       ImmutableMap<String, String> coreDepMap,
       ImmutableSet<String> dependencyLocations)
-      throws IOException {
+      throws IOException, InvalidFhirException {
     FhirPackage packageToGenerate = FhirPackage.load(packageLocation);
     PackageInfo packageInfo = packageToGenerate.packageInfo;
 

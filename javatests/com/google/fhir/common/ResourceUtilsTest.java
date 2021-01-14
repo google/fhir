@@ -14,7 +14,6 @@
 
 package com.google.fhir.common;
 
-import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
 import static com.google.fhir.common.ProtoUtils.findField;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -64,7 +63,7 @@ public final class ResourceUtilsTest {
   }
 
   private static Message.Builder setStringField(
-      Message.Builder builder, String field, String stringValue) {
+      Message.Builder builder, String field, String stringValue) throws InvalidFhirException {
     Message.Builder fieldBuilder = builder.getFieldBuilder(findField(builder, field));
     fieldBuilder.setField(findField(fieldBuilder, "value"), stringValue);
     return builder;
@@ -77,7 +76,7 @@ public final class ResourceUtilsTest {
   }
 
   @Test
-  public void testGetContainedResource_hasContained() {
+  public void testGetContainedResource_hasContained() throws Exception {
     Message.Builder entryBuilder =
         bundleType.newBuilderForType().newBuilderForField(findField(bundleType, "entry"));
     Message.Builder containedResourceBuilder =
@@ -87,30 +86,32 @@ public final class ResourceUtilsTest {
             findField(containedResourceBuilder, "concept_map"));
     setStringField(conceptMap, "id", "my-concept-map");
 
-    assertThat(ResourceUtils.getContainedResource(containedResourceBuilder.build()).get())
+    assertThat(ResourceUtils.getContainedResource(containedResourceBuilder.build()))
         .isEqualTo(conceptMap.build());
   }
 
   @Test
-  public void testGetContainedResource_noContained() {
+  public void testGetContainedResource_noContained() throws Exception {
     Message.Builder entryBuilder =
         bundleType.newBuilderForType().newBuilderForField(findField(bundleType, "entry"));
     Message.Builder containedResourceBuilder =
         entryBuilder.newBuilderForField(findField(entryBuilder, "resource"));
 
-    assertThat(ResourceUtils.getContainedResource(containedResourceBuilder.build()).isPresent())
-        .isFalse();
+    assertThrows(
+        InvalidFhirException.class,
+        () -> ResourceUtils.getContainedResource(containedResourceBuilder.build()));
   }
 
   @Test
   public void testGetContainedResource_notContainedThrows() {
     assertThrows(
-        IllegalArgumentException.class,
+        InvalidFhirException.class,
         () -> ResourceUtils.getContainedResource(bundleType.getDefaultInstanceForType()));
   }
 
   @Test
-  public void testSplitIfRelativeReference_referenceWithoutUriUnchanged() {
+  public void testSplitIfRelativeReference_referenceWithoutUriUnchanged()
+      throws Exception {
     Message.Builder reference = referenceType.newBuilderForType();
     setStringField(reference, "fragment", "arbitrary-fragment");
 
@@ -120,7 +121,8 @@ public final class ResourceUtilsTest {
   }
 
   @Test
-  public void testSplitIfRelativeReference_fragmentMovedToFragmentField() {
+  public void testSplitIfRelativeReference_fragmentMovedToFragmentField()
+      throws Exception {
     Message.Builder reference = referenceType.newBuilderForType();
     setStringField(reference, "uri", "#someFragment");
 
@@ -132,7 +134,8 @@ public final class ResourceUtilsTest {
   }
 
   @Test
-  public void testSplitIfRelativeReference_relativeReferenceSlotted_withoutHistory() {
+  public void testSplitIfRelativeReference_relativeReferenceSlotted_withoutHistory()
+      throws Exception {
     Message.Builder reference = referenceType.newBuilderForType();
     setStringField(reference, "uri", "ActivityDefinition/ABCD");
 
@@ -144,7 +147,8 @@ public final class ResourceUtilsTest {
   }
 
   @Test
-  public void testSplitIfRelativeReference_relativeReferenceSlotted_withHistory() {
+  public void testSplitIfRelativeReference_relativeReferenceSlotted_withHistory()
+      throws Exception {
     Message.Builder reference = referenceType.newBuilderForType();
     setStringField(reference, "uri", "ActivityDefinition/ABCD/_history/some_version_id");
 
@@ -159,7 +163,7 @@ public final class ResourceUtilsTest {
   }
 
   @Test
-  public void testResolveBundleReferences() throws IOException {
+  public void testResolveBundleReferences() throws IOException, InvalidFhirException {
     Message.Builder bundle = bundleType.newBuilderForType();
     mergeText("resource_utils-resolveBundleReferences-input.prototxt", bundle);
 

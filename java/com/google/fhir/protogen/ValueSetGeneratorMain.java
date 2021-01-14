@@ -20,6 +20,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.google.common.io.Files;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
@@ -28,7 +29,6 @@ import com.google.fhir.r4.core.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -82,7 +82,7 @@ final class ValueSetGeneratorMain {
         required = true)
     private String inputPackage = null;
 
-    private Set<FhirPackage> getDependencies() throws IOException {
+    private Set<FhirPackage> getDependencies() throws IOException, InvalidFhirException {
       Set<FhirPackage> packages = new HashSet<>();
       for (String fhirDefinitionDep : fhirDefinitionDepList) {
         packages.add(FhirPackage.load(fhirDefinitionDep));
@@ -96,7 +96,7 @@ final class ValueSetGeneratorMain {
 
   private ValueSetGeneratorMain() {}
 
-  public static void main(String[] argv) throws IOException {
+  public static void main(String[] argv) throws IOException, InvalidFhirException {
     // Each non-flag argument is assumed to be an input file.
     Args args = new Args();
     JCommander jcommander = new JCommander(args);
@@ -161,13 +161,13 @@ final class ValueSetGeneratorMain {
   }
 
   private static Set<Bundle> loadBundles(Set<String> filenames, FhirVersion fhirVersion)
-      throws IOException {
+      throws IOException, InvalidFhirException {
     JsonFormat.Parser parser = JsonFormat.getSpecParser(fhirVersion);
     Set<Bundle> bundles = new HashSet<>();
     for (String filename : filenames) {
       Bundle.Builder builder = Bundle.newBuilder();
       if (filename.endsWith(".json")) {
-        String json = Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read();
+        String json = Files.asCharSource(new File(filename), UTF_8).read();
         parser.merge(json, builder);
       } else if (filename.endsWith(".zip")) {
         FhirPackage fhirPackage = FhirPackage.load(filename);

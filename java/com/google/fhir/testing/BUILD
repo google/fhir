@@ -9,6 +9,7 @@ java_library(
     testonly = 1,
     srcs = ["JsonFormatTestBase.java"],
     deps = [
+        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:json_format",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
@@ -24,6 +25,7 @@ java_library(
     testonly = 1,
     srcs = ["ValidationTestBase.java"],
     deps = [
+        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:json_format",
         "//java/com/google/fhir/wrappers:primitive_wrappers",
         "@bazel_tools//tools/java/runfiles",

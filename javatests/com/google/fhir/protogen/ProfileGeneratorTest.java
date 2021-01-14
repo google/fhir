@@ -17,6 +17,7 @@ package com.google.fhir.protogen;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.io.Files;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.Extensions;
@@ -78,8 +79,8 @@ public final class ProfileGeneratorTest {
     return projectInfo.build();
   }
 
-  private StructureDefinition loadStructureDefinition(String fullFilename, FhirVersion version)
-      throws IOException {
+  private static StructureDefinition loadStructureDefinition(
+      String fullFilename, FhirVersion version) throws IOException, InvalidFhirException {
     String structDefString =
         Files.asCharSource(new File(fullFilename), StandardCharsets.UTF_8).read();
     StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
@@ -91,12 +92,14 @@ public final class ProfileGeneratorTest {
     return Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read();
   }
 
-  private StructureDefinition loadStu3FhirStructureDefinition(String filename) throws IOException {
+  private static StructureDefinition loadStu3FhirStructureDefinition(String filename)
+      throws IOException, InvalidFhirException {
     return loadStructureDefinition(
         "spec/hl7.fhir.core/3.0.1/package/" + filename, FhirVersion.STU3);
   }
 
-  private StructureDefinition loadR4FhirStructureDefinition(String filename) throws IOException {
+  private static StructureDefinition loadR4FhirStructureDefinition(String filename)
+      throws IOException, InvalidFhirException {
     return loadStructureDefinition(
         "spec/hl7.fhir.core/4.0.1/package/" + filename, FhirVersion.R4);
   }
@@ -117,7 +120,7 @@ public final class ProfileGeneratorTest {
         Integer.parseInt(matcher.group(3)));
   }
 
-  private ProfileGenerator makeStu3Generator(String goldenJson) throws IOException {
+  private static ProfileGenerator makeStu3Generator(String goldenJson) throws Exception {
     List<StructureDefinition> knownTypes = new ArrayList<>();
     knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Coding.json"));
     knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-CodeableConcept.json"));
@@ -167,7 +170,7 @@ public final class ProfileGeneratorTest {
     assertThat(output).isEqualTo(goldenDefinition);
   }
 
-  private ProfileGenerator makeR4Generator(String goldenJson) throws IOException {
+  private static ProfileGenerator makeR4Generator(String goldenJson) throws Exception {
     List<StructureDefinition> knownTypes = new ArrayList<>();
     knownTypes.add(loadR4FhirStructureDefinition("StructureDefinition-Coding.json"));
     knownTypes.add(loadR4FhirStructureDefinition("StructureDefinition-CodeableConcept.json"));

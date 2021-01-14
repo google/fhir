@@ -9,6 +9,7 @@ java_test(
     ],
     test_class = "com.google.fhir.common.ProtoGenTransformerTest",
     deps = [
+        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:json_format",
         "//java/com/google/fhir/common:proto_gen_transformer",
         "//java/com/google/fhir/common:resource_validator",
@@ -108,6 +109,7 @@ java_test(
     srcs = ["ProtoUtilsTest.java"],
     test_class = "com.google.fhir.common.ProtoUtilsTest",
     deps = [
+        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:proto_utils",
         "//testdata:generic_proto_java_proto",
         "@com_google_protobuf//:protobuf_java",
@@ -185,6 +187,7 @@ java_test(
     ],
     test_class = "com.google.fhir.common.ResourceUtilsTest",
     deps = [
+        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:proto_utils",
         "//java/com/google/fhir/common:resource_utils",
         "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
@@ -195,7 +198,6 @@ java_test(
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_guava_guava",
         "@maven//:com_google_truth_extensions_truth_proto_extension",
-        "@maven//:com_google_truth_truth",
         "@maven//:junit_junit",
     ],
 )
