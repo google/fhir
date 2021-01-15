@@ -192,6 +192,7 @@ cc_test(
     srcs = ["json_format_test.cc"],
     data = [
         "//spec:r4_examples",
+        "//testdata/jsonformat",
         "//testdata/r4:bigquery",
         "//testdata/r4:examples",
         "//testdata/r4/profiles:testdata",

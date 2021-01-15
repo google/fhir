@@ -160,14 +160,17 @@ cc_library(
 
 cc_test(
     name = "json_format_test",
+    size = "large",
     srcs = ["json_format_test.cc"],
     data = [
         "//spec:stu3",
+        "//testdata/jsonformat",
         "//testdata/stu3:bigquery",
         "//testdata/stu3:examples",
         "//testdata/stu3:ndjson",
         "//testdata/stu3:profiles",
     ],
+    shard_count = 10,
     deps = [
         ":json_format",
         "//cc/google/fhir:json_format",

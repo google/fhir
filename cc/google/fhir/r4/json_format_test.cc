@@ -1686,6 +1686,20 @@ TEST(JsonFormatR4Test, PrintAndParseAllResources) {
   }
 }
 
+TEST(JsonFormatR4Test, InvalidControlCharactersDropped) {
+  const Observation proto = ReadProto<Observation>(
+      "testdata/jsonformat/observation_invalid_unicode.prototxt");
+  const std::string expected =
+      ReadFile("testdata/jsonformat/observation_invalid_unicode.json");
+
+  absl::StatusOr<std::string> printed_proto =
+      PrettyPrintFhirToJsonString(proto);
+  ASSERT_TRUE(printed_proto.ok());
+
+  EXPECT_EQ(ParseJsonStringToValue(*printed_proto),
+            ParseJsonStringToValue(expected));
+}
+
 }  // namespace
 
 }  // namespace r4

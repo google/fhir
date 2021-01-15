@@ -56,6 +56,28 @@ using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 
+// Converts a string_view into the "value" part of a JSON param, adding
+// quotes and escaping special characters.
+//
+// E.g., given the multiline string
+// R"(this is
+// "my favorite" string)"
+// this would return the literal:
+// R"("this is \n\"my favorite\" string")"
+//
+// This silently drops control characters other than \t, \r, and \n
+// since the FHIR spec forbids them.
+// See https://www.hl7.org/fhir/datatypes.html#string
+//
+// Note that this does NOT escape the "solidus" `/` as `\/`.
+// Per JSON spec, this optional but not required, so to maintain a minimal
+// touch it is left as is. See section 9:
+// http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf
+//
+// TODO: Make a determination about whether or not invalid control
+// characters should be considered an error rather than ignored.
+std::string ToJsonStringValue(absl::string_view raw_value);
+
 // Tests whether or not a message has the "PrimitiveHasNoValue" extension, which
 // indicates that a primitive has no value and only extensions.
 // This is necessary because proto3 does not differentiate between a primitive
@@ -195,7 +217,7 @@ class XhtmlWrapper : public SpecificWrapper<XhtmlLike> {
  protected:
   absl::StatusOr<std::string> ToNonNullValueString() const override {
     return absl::StatusOr<std::string>(
-        Json::valueToQuotedString(this->GetWrapped()->value().c_str()));
+        ToJsonStringValue(this->GetWrapped()->value()));
   }
 };
 
@@ -300,7 +322,7 @@ class StringTypeWrapper : public StringInputWrapper<T> {
  public:
   absl::StatusOr<std::string> ToNonNullValueString() const override {
     return absl::StatusOr<std::string>(
-        Json::valueToQuotedString(this->GetWrapped()->value().c_str()));
+        ToJsonStringValue(this->GetWrapped()->value()));
   }
 
   absl::Status ValidateTypeSpecific(

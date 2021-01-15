@@ -1,1 +1,5 @@
 value: "text"
+---
+value: "foo\tbar\rbaz\nquux"
+---
+value: "Andr\303\251 3000"

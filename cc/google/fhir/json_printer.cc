@@ -45,7 +45,6 @@
 #include "google/fhir/stu3/profiles.h"
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
-#include "include/json/json.h"
 
 namespace google {
 namespace fhir {

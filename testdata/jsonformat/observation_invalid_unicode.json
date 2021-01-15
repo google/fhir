@@ -1,0 +1,14 @@
+{
+  "resourceType": "Observation",
+  "id": "123",
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "foo",
+        "code": "bar"
+      }
+    ]
+  },
+  "valueString" : "foobarbaz\r\n\tquux"
+}
