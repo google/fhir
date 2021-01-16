@@ -278,6 +278,7 @@ cc_library(
         ":codes",
         ":extensions",
         ":fhir_types",
+        ":json_util",
         ":proto_util",
         ":util",
         "//cc/google/fhir/status",
@@ -482,4 +483,31 @@ cc_library(
     name = "type_macros",
     hdrs = ["type_macros.h"],
     strip_include_prefix = "//cc/",
+)
+
+cc_library(
+    name = "json_util",
+    srcs = ["json_util.cc"],
+    hdrs = ["json_util.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "@com_google_absl//absl/container:flat_hash_map",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings",
+    ],
+)
+
+cc_test(
+    name = "json_util_test",
+    srcs = ["json_util_test.cc"],
+    deps = [
+        ":json_util",
+        "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings",
+        "@com_google_googletest//:gtest_main",
+    ],
 )

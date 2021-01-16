@@ -92,41 +92,6 @@ absl::StatusOr<bool> HasPrimitiveHasNoValue(const Message& message) {
       boolean_msg, boolean_msg.GetDescriptor()->FindFieldByName("value"));
 }
 
-std::string ToJsonStringValue(absl::string_view raw_value) {
-  // For special characters that are permissible in FHIR strings,
-  // a map from special character to escaped string.
-  static const absl::flat_hash_map<char, std::string>*
-      CHARACTERS_TO_ESCAPED_CHARACTER_MAP =
-          new absl::flat_hash_map<char, std::string>({
-              {'\"', "\\\""},
-              {'\\', "\\\\"},
-              {'\n', "\\n"},
-              {'\r', "\\r"},
-              {'\t', "\\t"},
-          });
-
-  std::string result = "\"";
-  // For result string, reserve 110% the size of the original string,
-  // to give room for added escape characters.
-  // This doesn't need to be exact - result can still resize as needed.
-  result.reserve(1.1 * raw_value.length());
-  for (int i = 0; i < raw_value.length(); i++) {
-    const unsigned char char_byte = raw_value[i];
-    auto replacement = CHARACTERS_TO_ESCAPED_CHARACTER_MAP->find(char_byte);
-    if (replacement != CHARACTERS_TO_ESCAPED_CHARACTER_MAP->end()) {
-      absl::StrAppend(&result, replacement->second);
-    } else if (char_byte < 32) {
-      // This is an invalid control character.
-      // Silently drop it.
-    } else {
-      result.push_back(char_byte);
-    }
-  }
-  result.push_back('\"');
-
-  return result;
-}
-
 }  // namespace primitives_internal
 
 absl::Status BuildHasNoValueExtension(Message* extension) {

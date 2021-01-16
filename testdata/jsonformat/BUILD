@@ -6,5 +6,7 @@ licenses(["notice"])
 
 filegroup(
     name = "jsonformat",
-    srcs = glob(["*"]),
+    srcs = [
+        "observation_invalid_unicode.prototxt",
+    ],
 )
