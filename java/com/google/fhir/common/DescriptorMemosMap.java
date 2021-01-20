@@ -34,4 +34,24 @@ public final class DescriptorMemosMap<D extends GenericDescriptor, T> {
     return memos.computeIfAbsent(
         descriptor.getFullName(), fullName -> computeFunction.apply(descriptor));
   }
+
+  /** Compute function that throws an exception. */
+  @FunctionalInterface
+  public interface ThrowingComputeFunction<D, T, E extends Exception> {
+    T apply(D d) throws E;
+  }
+
+  /**
+   * Variant of {@link #computeIfAbsent} for compute functions that could throw an exception. This
+   * will propagate any exception thrown by the compute function.
+   */
+  public <E extends Exception> T computeOrThrowIfAbsent(
+      D descriptor, ThrowingComputeFunction<D, T, E> computeFunction) throws E {
+    if (memos.containsKey(descriptor.getFullName())) {
+      return memos.get(descriptor.getFullName());
+    }
+    T value = computeFunction.apply(descriptor);
+    memos.put(descriptor.getFullName(), value);
+    return value;
+  }
 }

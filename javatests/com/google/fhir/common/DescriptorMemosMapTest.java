@@ -15,6 +15,7 @@
 package com.google.fhir.common;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertThrows;
 
 import com.google.protobuf.Descriptors.Descriptor;
 import org.junit.Test;
@@ -36,8 +37,8 @@ public final class DescriptorMemosMapTest {
   public void testComputeIfAbsent() {
     DescriptorMemosMap<Descriptor, String> memos = new DescriptorMemosMap<>();
 
-    final MutableInt r4RunCount = new MutableInt();
-    final MutableInt stu3RunCount = new MutableInt();
+    MutableInt r4RunCount = new MutableInt();
+    MutableInt stu3RunCount = new MutableInt();
 
     for (int i = 0; i < 5; i++) {
       assertThat(
@@ -60,5 +61,58 @@ public final class DescriptorMemosMapTest {
       assertThat(r4RunCount.value).isEqualTo(1);
       assertThat(stu3RunCount.value).isEqualTo(1);
     }
+  }
+
+  @Test
+  public void testComputeOrThrowIfAbsent_noException() throws Exception {
+    DescriptorMemosMap<Descriptor, String> memos = new DescriptorMemosMap<>();
+
+    MutableInt r4RunCount = new MutableInt();
+    MutableInt stu3RunCount = new MutableInt();
+
+    for (int i = 0; i < 5; i++) {
+      assertThat(
+              memos.computeOrThrowIfAbsent(
+                  com.google.fhir.r4.core.String.getDescriptor(),
+                  param -> {
+                    r4RunCount.increment();
+                    return "r4";
+                  }))
+          .isEqualTo("r4");
+      assertThat(
+              memos.computeOrThrowIfAbsent(
+                  com.google.fhir.stu3.proto.String.getDescriptor(),
+                  param -> {
+                    stu3RunCount.increment();
+                    return "stu3";
+                  }))
+          .isEqualTo("stu3");
+
+      assertThat(r4RunCount.value).isEqualTo(1);
+      assertThat(stu3RunCount.value).isEqualTo(1);
+    }
+  }
+
+  @Test
+  public void testComputeOrThrowIfAbsent_throwsException() throws Exception {
+    DescriptorMemosMap<Descriptor, String> memos = new DescriptorMemosMap<>();
+
+    assertThrows(
+        InvalidFhirException.class,
+        () ->
+            memos.computeOrThrowIfAbsent(
+                com.google.fhir.r4.core.String.getDescriptor(),
+                param -> {
+                  throw new InvalidFhirException("failure");
+                }));
+    // Test twice with the same descriptor to ensure nothing is being improperly memoized.
+    assertThrows(
+        IllegalStateException.class,
+        () ->
+            memos.computeOrThrowIfAbsent(
+                com.google.fhir.r4.core.String.getDescriptor(),
+                param -> {
+                  throw new IllegalStateException("failure");
+                }));
   }
 }

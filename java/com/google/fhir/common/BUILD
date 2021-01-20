@@ -146,7 +146,9 @@ java_library(
 java_library(
     name = "descriptor_memos_map",
     srcs = ["DescriptorMemosMap.java"],
-    deps = ["@com_google_protobuf//:protobuf_java"],
+    deps = [
+        "@com_google_protobuf//:protobuf_java",
+    ],
 )
 
 java_library(

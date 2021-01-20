@@ -170,6 +170,7 @@ java_test(
     test_class = "com.google.fhir.common.DescriptorMemosMapTest",
     deps = [
         "//java/com/google/fhir/common:descriptor_memos_map",
+        "//java/com/google/fhir/common:exceptions",
         "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
         "//proto/google/fhir/proto/stu3:datatypes_java_proto",
         "@com_google_protobuf//:protobuf_java",
