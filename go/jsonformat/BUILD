@@ -91,6 +91,7 @@ go_test(
         "@com_github_google_go_cmp//cmp/cmpopts:go_default_library",
         "@org_golang_google_protobuf//proto:go_default_library",
         "@org_golang_google_protobuf//reflect/protoreflect:go_default_library",
+        "@org_golang_google_protobuf//testing/protocmp:go_default_library",
         "@org_golang_google_protobuf//types/known/anypb:go_default_library",
     ],
 )

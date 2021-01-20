@@ -18,7 +18,9 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/testing/protocmp"
 
 	apb "github.com/google/fhir/go/proto/google/fhir/proto/annotations_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
@@ -371,7 +373,7 @@ func TestNormalizeRelativeReferenceAndIgnoreHistory(t *testing.T) {
 		if err := normalizeRelativeReferenceAndIgnoreHistory(got); err != nil {
 			t.Fatalf("NormalizeRelativeReferenceAndIgnoreHistory(%q): %v", test.name, err)
 		}
-		if want := test.normalized; !proto.Equal(want, got) {
+		if want := test.normalized; !cmp.Equal(want, got, protocmp.Transform()) {
 			t.Errorf("NormalizeRelativeReferenceAndIgnoreHistory(%q): got %v, want %v", test.name, got, want)
 		}
 	}
@@ -490,7 +492,7 @@ func TestNormalizeInternalReference(t *testing.T) {
 		if err := normalizeFragmentReference(got); err != nil {
 			t.Fatalf("NormalizeFragmentReference(%v): %v", test.name, err)
 		}
-		if want := test.normalized; !proto.Equal(want, got) {
+		if want := test.normalized; !cmp.Equal(want, got, protocmp.Transform()) {
 			t.Errorf("NormalizeFragmentReference(%v): got %v, want %v", test.name, got, want)
 		}
 	}

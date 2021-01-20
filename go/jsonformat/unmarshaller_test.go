@@ -28,6 +28,7 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
+	"google.golang.org/protobuf/testing/protocmp"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
 
@@ -1832,7 +1833,7 @@ func TestParsePrimitiveType(t *testing.T) {
 					if err != nil {
 						t.Fatalf("parse primitive type: %v", err)
 					}
-					if !proto.Equal(got, r2) {
+					if !cmp.Equal(got, r2, protocmp.Transform()) {
 						t.Errorf("parse primitive type %v: got %v, want %v", test.pType, got, w.r)
 					}
 				})
@@ -1878,7 +1879,7 @@ func TestParseURIs(t *testing.T) {
 					if err != nil {
 						t.Fatalf("parse Uri, got err %v, want <nil>", err)
 					}
-					if !proto.Equal(got, r) {
+					if !cmp.Equal(got, r, protocmp.Transform()) {
 						t.Errorf("parse Uri: got %v, want %v", got, test)
 					}
 				})
@@ -2306,7 +2307,7 @@ func TestUnmarshaller_UnmarshalR4Streaming(t *testing.T) {
 		}
 
 		for i, result := range results {
-			if !proto.Equal(result, expectedResults[i]) {
+			if !cmp.Equal(result, expectedResults[i], protocmp.Transform()) {
 				t.Fatalf("UnmarshalR4Streaming(%s) channel returned unexpected result. want: %v got %v", json, expectedResults[i], result)
 			}
 		}

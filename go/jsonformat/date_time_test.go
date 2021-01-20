@@ -21,8 +21,10 @@ import (
 	"time"
 
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
+	"github.com/google/go-cmp/cmp"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
+	"google.golang.org/protobuf/testing/protocmp"
 
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
@@ -130,7 +132,7 @@ func TestDate(t *testing.T) {
 			if err := parseDateFromJSON(json.RawMessage(strconv.Quote(test.json)), l, parsed); err != nil {
 				t.Fatalf("ParseDateFromJSON(%q, %s, %T): %v", test.json, l, parsed, err)
 			}
-			if want := d; !proto.Equal(want, parsed) {
+			if want := d; !cmp.Equal(want, parsed, protocmp.Transform()) {
 				t.Errorf("ParseDateFromJSON(%q, %s, %T): got %v, want %v", test.json, l, parsed, parsed, want)
 			}
 
@@ -302,7 +304,7 @@ func TestDateTime(t *testing.T) {
 				if err := parseDateTimeFromJSON(json.RawMessage(strconv.Quote(test.json)), l, parsed); err != nil {
 					t.Fatalf("parseDateTimeFromJSON(%q, %q, %T): %v", test.json, l, parsed, err)
 				}
-				if want := dt; !proto.Equal(want, parsed) {
+				if want := dt; !cmp.Equal(want, parsed, protocmp.Transform()) {
 					t.Errorf("ParseDateTimeFromJSON(%q, %q, %T): got %v, want %v", test.json, l, parsed, parsed, want)
 				}
 
@@ -398,7 +400,7 @@ func TestTime(t *testing.T) {
 			if err := parseTime(json.RawMessage(strconv.Quote(test.json)), parsed); err != nil {
 				t.Fatalf("parseTime(m, %q): %v", test.json, err)
 			}
-			if want := tm; !proto.Equal(want, parsed) {
+			if want := tm; !cmp.Equal(want, parsed, protocmp.Transform()) {
 				t.Errorf("parseTime(m, %q): got %v, want %v", test.json, parsed, want)
 			}
 
@@ -533,7 +535,7 @@ func TestInstant(t *testing.T) {
 			if err := parseInstant(json.RawMessage(strconv.Quote(test.datetime)), parsed); err != nil {
 				t.Fatalf("%s parseInstant(%q, %T): %v", test.name, test.datetime, parsed, err)
 			}
-			if want := it; !proto.Equal(want, parsed) {
+			if want := it; !cmp.Equal(want, parsed, protocmp.Transform()) {
 				t.Errorf("%s parseInstant(%q): got %v, want %v", test.name, test.datetime, parsed, want)
 			}
 

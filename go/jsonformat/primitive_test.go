@@ -334,7 +334,7 @@ func TestDecimal(t *testing.T) {
 				if err := parseDecimal(json.RawMessage(test.value), got); err != nil {
 					t.Fatalf("ParseDecimal(%q, %T) got error: %v", test, got, err)
 				}
-				if !proto.Equal(e, got) {
+				if !cmp.Equal(e, got, protocmp.Transform()) {
 					t.Errorf("ParseDecimal(%q, %T): got %v, want: %v", test, got, got, e)
 				}
 			}
@@ -438,7 +438,7 @@ func TestBinary(t *testing.T) {
 				if test.hasExtensions {
 					addExtensionWithNestingSeparatorAndStrideExtensions(binary, test.sep, test.stride)
 				}
-				if want := binary.Interface().(proto.Message); !proto.Equal(want, parsed) {
+				if want := binary.Interface().(proto.Message); !cmp.Equal(want, parsed, protocmp.Transform()) {
 					t.Errorf("ParseBinary(%q, %T, %v) got %v, want: %v", test.json, binary.Interface(), tnc.creator, parsed, want)
 				}
 				// Test serialization
