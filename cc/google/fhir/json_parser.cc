@@ -202,6 +202,13 @@ class Parser {
               " into message of type", target_descriptor->name()));
         }
       } else {
+        if (sub_value_iter.key().asString() == "fhir_comments") {
+          // fhir_comments can exist in a valid FHIR json, however,
+          // it is not supported in the current FHIR protos.
+          // Hence, we simply ignore it.
+          continue;
+        }
+
         return InvalidArgumentError(absl::StrCat(
             "Unable to merge field ", sub_value_iter.key().asString(),
             " into resource of type ", target_descriptor->full_name()));
@@ -427,7 +434,8 @@ absl::StatusOr<Json::Value> ParseJsonValue(const std::string& raw_json) {
   Json::Value value;
   if (!reader.parse(raw_json, value)) {
     return InvalidArgumentError(
-        absl::StrCat("Failed parsing raw json: ", raw_json));
+        absl::StrCat("Failed with error: ", reader.getFormattedErrorMessages(),
+                     ", when parsing raw json: ", raw_json));
   }
   return value;
 }
