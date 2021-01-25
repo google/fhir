@@ -156,6 +156,15 @@ def copy_coding(source: message.Message, target: message.Message):
   copy_code(source_code, proto_utils.set_in_parent_or_add(target, 'code'))
 
   target_system_field = target.DESCRIPTOR.fields_by_name.get('system')
+
+  # TODO: This will fail if there is a target system field,
+  # *and* a source system field, since in this case the source code will not
+  # contain the system information, the containing Coding would.  In general,
+  # it's not quite right to get the system from Code, since unprofiled codes
+  # don't contain system information.  In practice, this isn't a problem,
+  # because the only kind of profiled Codings we currently support are
+  # Codings with typed Codes (which contain source information) but this is
+  # not neccessary according to FHIR spec.
   if target_system_field is not None:
     source_system_str = get_system_for_code(source_code)
     target_system_uri = proto_utils.set_in_parent_or_add(

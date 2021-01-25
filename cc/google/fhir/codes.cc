@@ -163,6 +163,15 @@ absl::Status CopyCoding(const Message& source, Message* target) {
   const FieldDescriptor* target_system_field =
       target_descriptor->FindFieldByName("system");
 
+  // TODO: This will fail if there is a target system field,
+  // *and* a source system field, since in this case the source code will not
+  // contain the system information, the containing Coding would.  In general,
+  // it's not quite right to get the system from Code, since unprofiled codes
+  // don't contain system information.  In practice, this isn't a problem,
+  // because the only kind of profiled Codings we currently support are
+  // Codings with typed Codes (which contain source information) but this is
+  // not neccessary according to FHIR spec.  Also,this method is NOT currently
+  // used by CopyCodeableConcept.
   if (target_system_field) {
     FHIR_ASSIGN_OR_RETURN(const std::string& source_system,
                           GetSystemForCode(source_code));
@@ -219,6 +228,8 @@ absl::Status CopyCode(const Message& source, Message* target) {
         target_reflection->SetEnum(target, target_value_field, source_value);
         return absl::OkStatus();
       } else {
+        // TODO: This conversion should go through FHIR code,
+        // since Enum value name is not meaningful.
         const EnumValueDescriptor* target_value =
             target_enum_type->FindValueByName(source_value->name());
         if (target_value) {
@@ -269,12 +280,6 @@ absl::Status CopyCode(const Message& source, Message* target) {
 
 absl::StatusOr<std::string> GetSystemForCode(const ::google::protobuf::Message& code) {
   const Descriptor* descriptor = code.GetDescriptor();
-  const FieldDescriptor* system_field = descriptor->FindFieldByName("system");
-  if (system_field) {
-    std::string system;
-    return GetPrimitiveStringValue(
-        code.GetReflection()->GetMessage(code, system_field), &system);
-  }
 
   const std::string& system = GetFixedCodingSystem(descriptor);
   if (!system.empty()) {
@@ -282,7 +287,7 @@ absl::StatusOr<std::string> GetSystemForCode(const ::google::protobuf::Message& 
     return system;
   }
 
-  // There is no single system for the whole coding - look for system
+  // There is no single system for the whole code - look for system
   // annotation on the enum.
   const FieldDescriptor* enum_field =
       code.GetDescriptor()->FindFieldByName("value");
