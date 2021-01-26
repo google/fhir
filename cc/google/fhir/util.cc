@@ -110,9 +110,10 @@ absl::Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
   const FieldDescriptor* value_field =
       primitive->GetDescriptor()->FindFieldByName("value");
   if (!value_field || value_field->is_repeated() ||
-      value_field->type() != FieldDescriptor::Type::TYPE_STRING) {
+      (value_field->type() != FieldDescriptor::Type::TYPE_STRING &&
+       value_field->type() != FieldDescriptor::Type::TYPE_BYTES)) {
     return InvalidArgumentError(
-        absl::StrCat("Not a valid String-type primitive: ",
+        absl::StrCat("Not a valid String or Bytes primitive: ",
                      primitive->GetDescriptor()->full_name()));
   }
   primitive->GetReflection()->SetString(primitive, value_field, value);

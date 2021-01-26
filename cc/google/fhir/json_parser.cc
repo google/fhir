@@ -485,7 +485,12 @@ absl::Status Parser::MergeJsonFhirStringIntoProto(
 
   internal::Parser parser{primitive_handler_, default_timezone};
 
-  if (IsProfile(target->GetDescriptor())) {
+  // If the target is a profiled resource, first parse to the base resource,
+  // and then profile to the target type.
+  // Note that we do not do this for primitive profiled types like Code,
+  // since those are handled directly by the primitive wrappers.
+  if (IsProfile(target->GetDescriptor()) &&
+      !IsPrimitive(target->GetDescriptor())) {
     FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> core_resource,
                           GetBaseResourceInstance(*target));
 
