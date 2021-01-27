@@ -33,6 +33,7 @@ public final class FhirTypesTest {
   private final Descriptor typedExtensionType;
   private final Descriptor enumTypedCode;
   private final Descriptor stringTypedCode;
+  private final Descriptor xhtmlType;
 
   // TODO: There are no profiled Codings in STU3.
   private final Optional<Descriptor> profiledCoding;
@@ -47,7 +48,8 @@ public final class FhirTypesTest {
       Descriptor enumTypedCode,
       Descriptor stringTypedCode,
       Optional<Descriptor> profiledCoding,
-      Descriptor profiledCodeableConcept) {
+      Descriptor profiledCodeableConcept,
+      Descriptor xhtmlType) {
     this.rawPatient = rawPatient;
     this.profiledPatient = profiledPatient;
     this.rawExtensionType = rawExtensionType;
@@ -56,6 +58,7 @@ public final class FhirTypesTest {
     this.stringTypedCode = stringTypedCode;
     this.profiledCoding = profiledCoding;
     this.profiledCodeableConcept = profiledCodeableConcept;
+    this.xhtmlType = xhtmlType;
   }
 
   @Parameterized.Parameters
@@ -72,6 +75,7 @@ public final class FhirTypesTest {
               com.google.fhir.r4.uscore.PatientUSCoreRaceExtension.OmbCategoryCoding
                   .getDescriptor()),
           com.google.fhir.r4.testing.TestObservation.CodeableConceptForCategory.getDescriptor(),
+          com.google.fhir.r4.core.Xhtml.getDescriptor(),
         },
         new Object[] {
           com.google.fhir.stu3.proto.Patient.getDescriptor(),
@@ -82,6 +86,7 @@ public final class FhirTypesTest {
           com.google.fhir.stu3.proto.MimeTypeCode.getDescriptor(),
           Optional.empty(), // TODO: There are no profiled Codings in STU3.
           com.google.fhir.stu3.testing.TestObservation.CodeableConceptForCategory.getDescriptor(),
+          com.google.fhir.stu3.proto.Xhtml.getDescriptor(),
         });
   }
 
@@ -212,5 +217,11 @@ public final class FhirTypesTest {
   public void testIsPeriod() {
     assertThat(FhirTypes.isPeriod(getRawType("code"))).isFalse();
     assertThat(FhirTypes.isPeriod(getRawType("period"))).isTrue();
+  }
+
+  @Test
+  public void testIsXhtml() {
+    assertThat(FhirTypes.isXhtml(getRawType("code"))).isFalse();
+    assertThat(FhirTypes.isXhtml(xhtmlType)).isTrue();
   }
 }

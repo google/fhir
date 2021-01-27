@@ -31,6 +31,7 @@ public final class FhirTypes {
   private static final String EXTENSION_URL = "http://hl7.org/fhir/StructureDefinition/Extension";
   private static final String PERIOD_URL = "http://hl7.org/fhir/StructureDefinition/Period";
   private static final String REFERENCE_URL = "http://hl7.org/fhir/StructureDefinition/Reference";
+  private static final String XHTML_URL = "http://hl7.org/fhir/StructureDefinition/xhtml";
 
   public static boolean isProfileOfType(Descriptor base, Descriptor test) {
     if (isCode(base)) {
@@ -106,6 +107,11 @@ public final class FhirTypes {
 
   public static boolean isTypeOrProfileOfCoding(Descriptor type) {
     return isCoding(type) || isProfileOfCoding(type);
+  }
+
+  // Xhtml
+  public static boolean isXhtml(Descriptor type) {
+    return isType(XHTML_URL, type);
   }
 
   // CodeableConcept
