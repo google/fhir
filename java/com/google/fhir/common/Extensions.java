@@ -72,6 +72,18 @@ public final class Extensions {
         urlMessage.getField(urlMessage.getDescriptorForType().findFieldByName("value"));
   }
 
+  public static Message.Builder makeExtensionWithUrl(String url, Message.Builder builder)
+      throws InvalidFhirException {
+    FieldDescriptor extensionField = findField(builder, "extension");
+    Message.Builder extension = builder.newBuilderForField(extensionField);
+
+    FieldDescriptor urlField = findField(extension, "url");
+    extension
+        .getFieldBuilder(urlField)
+        .setField(findField(urlField.getMessageType(), "value"), url);
+    return extension;
+  }
+
   public static Object getExtensionValue(MessageOrBuilder extension, String valueField)
       throws InvalidFhirException {
     Message valueChoice = (Message) extension.getField(findField(extension, "value"));
@@ -84,6 +96,19 @@ public final class Extensions {
     Message.Builder valueChoice = extension.getFieldBuilder(findField(extension, "value"));
     Message.Builder valueBuilder = valueChoice.getFieldBuilder(findField(valueChoice, valueField));
     valueBuilder.setField(findField(valueBuilder, "value"), value);
+  }
+
+  public static void addPrimitiveHasNoValue(Message.Builder builder) throws InvalidFhirException {
+    Message.Builder extensionBuilder =
+        makeExtensionWithUrl(Extensions.PRIMITIVE_HAS_NO_VALUE_URL, builder);
+    Message.Builder valueMessageBuilder =
+        extensionBuilder.getFieldBuilder(findField(extensionBuilder, "value"));
+    Message.Builder booleanBuilder =
+        valueMessageBuilder.getFieldBuilder(findField(valueMessageBuilder, "boolean"));
+
+    booleanBuilder.setField(findField(booleanBuilder, "value"), true);
+
+    Extensions.addExtensionToMessage(extensionBuilder.build(), builder);
   }
 
   private static FieldDescriptor getExtensionField(MessageOrBuilder message)

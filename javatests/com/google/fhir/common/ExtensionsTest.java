@@ -211,4 +211,27 @@ public final class ExtensionsTest {
 
     assertThat(urls).containsExactly("one", "two", "one").inOrder();
   }
+
+  @Test
+  public void testMakeExtensionWithUrl() throws Exception {
+    Message.Builder patientBuilder = patientType.newBuilderForType();
+    Message.Builder extension = Extensions.makeExtensionWithUrl("my-url", patientBuilder);
+
+    assertThat(Extensions.getExtensionUrl(extension)).isEqualTo("my-url");
+    // Assert that makeExtensionWithUrl doesn't modify the base
+    assertThat(patientBuilder.build()).isEqualTo(patientBuilder.getDefaultInstanceForType());
+    // Assert that the produced extension is valid to be added to patientBuilder
+    Extensions.addExtensionToMessage(extension.build(), patientBuilder);
+  }
+
+  @Test
+  public void testAddPrimitiveHasNoValue() throws Exception {
+    Message.Builder patientBuilder = patientType.newBuilderForType();
+    Extensions.addPrimitiveHasNoValue(patientBuilder);
+
+    List<Message> phnvExtensions =
+        Extensions.getExtensionsWithUrl(Extensions.PRIMITIVE_HAS_NO_VALUE_URL, patientBuilder);
+    assertThat(phnvExtensions).hasSize(1);
+    assertThat((boolean) Extensions.getExtensionValue(phnvExtensions.get(0), "boolean")).isTrue();
+  }
 }
