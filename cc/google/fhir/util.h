@@ -232,6 +232,7 @@ absl::StatusOr<std::string> GetPrimitiveStringValue(
 absl::StatusOr<std::string> GetPrimitiveStringValue(
     const ::google::protobuf::Message& parent, const std::string& field_name,
     std::string* scratch);
+absl::StatusOr<int> GetPrimitiveIntValue(const ::google::protobuf::Message& primitive);
 
 // Finds a resource of a templatized type within a bundle, by reference id.
 template <typename R, typename BundleLike, typename ReferenceIdLike>

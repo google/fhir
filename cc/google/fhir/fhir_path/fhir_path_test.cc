@@ -676,6 +676,37 @@ TYPED_TEST(FhirPathTest, TestFunctionIndexOf) {
   EXPECT_THAT(TestFixture::Evaluate("''.indexOf({})"), EvalsToEmpty());
 }
 
+TYPED_TEST(FhirPathTest, TestFunctionSubstring) {
+  // Test listed examples in
+  // http://hl7.org/fhirpath/#substringstart-integer-length-integer-string
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.substring(3)"),
+              EvalsToStringThatMatches(StrEq("defg")));
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.substring(1, 2)"),
+              EvalsToStringThatMatches(StrEq("bc")));
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.substring(6, 2)"),
+              EvalsToStringThatMatches(StrEq("g")));
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.substring(7, 1)"),
+              EvalsToEmpty());
+
+  // Test other requirements in
+  // http://hl7.org/fhirpath/#substringstart-integer-length-integer-string
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.substring(-1)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.substring({})"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{}.substring(3)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.substring(3, {})"),
+              EvalsToStringThatMatches(StrEq("defg")));
+  EXPECT_THAT(TestFixture::Evaluate("{'abc','defg'}.substring(1)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(TestFixture::Evaluate("{'abcdefg'}.substring()"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(TestFixture::Evaluate("{'abcdefg'}.substring(1, 2, 3)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(TestFixture::Evaluate("{'abcdefg'}.substring('ab')"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(TestFixture::Evaluate("{123}.substring(1)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+}
+
 TYPED_TEST(FhirPathTest, TestFunctionUpper) {
   EXPECT_THAT(TestFixture::Evaluate("{}.upper()"), EvalsToEmpty());
   EXPECT_THAT(TestFixture::Evaluate("''.upper()"),

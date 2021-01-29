@@ -150,6 +150,32 @@ absl::StatusOr<std::string> GetPrimitiveStringValue(
   return result;
 }
 
+absl::StatusOr<int> GetPrimitiveIntValue(const ::google::protobuf::Message& primitive) {
+  const FieldDescriptor* value_field =
+      primitive.GetDescriptor()->FindFieldByName("value");
+  if (!value_field || value_field->is_repeated()) {
+    return InvalidArgumentError(
+        absl::StrCat("Value does not exist or is repeated: ",
+                     primitive.GetDescriptor()->full_name()));
+  }
+  switch (value_field->type()) {
+    case FieldDescriptor::Type::TYPE_INT32:
+    case FieldDescriptor::Type::TYPE_SINT32:
+      return primitive.GetReflection()->GetInt32(primitive, value_field);
+    case FieldDescriptor::Type::TYPE_INT64:
+    case FieldDescriptor::Type::TYPE_SINT64:
+      return primitive.GetReflection()->GetInt64(primitive, value_field);
+    case FieldDescriptor::Type::TYPE_UINT32:
+      return primitive.GetReflection()->GetUInt32(primitive, value_field);
+    case FieldDescriptor::Type::TYPE_UINT64:
+      return primitive.GetReflection()->GetUInt64(primitive, value_field);
+    default:
+      return InvalidArgumentError(
+          absl::StrCat("Not a valid Int-type primitive: ",
+                       primitive.GetDescriptor()->full_name()));
+  }
+}
+
 std::string ToSnakeCase(absl::string_view input) {
   bool was_not_underscore = false;  // Initialize to false for case 1 (below)
   bool was_not_cap = false;

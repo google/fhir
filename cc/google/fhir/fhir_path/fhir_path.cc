@@ -167,6 +167,22 @@ absl::StatusOr<std::string> MessagesToString(
   return MessageToString(messages[0]);
 }
 
+// Extract integer from `messages`, returns error if messages contains 2 or
+// more elements, or if the contained value is not an integer.
+absl::StatusOr<absl::optional<int>> MessagesToInt(
+    const std::vector<WorkspaceMessage>& messages) {
+  if (messages.size() > 1) {
+    return InvalidArgumentError("Expression must represent a singular value.");
+  }
+  if (messages.empty() || messages[0].Message() == nullptr) {
+    return absl::nullopt;
+  }
+  if (!IsSystemInteger(*messages[0].Message())) {
+    return InvalidArgumentError("Expression is not a integer.");
+  }
+  return GetPrimitiveIntValue(*messages[0].Message());
+}
+
 // Converts decimal or integer container messages to a double value.
 static absl::Status MessageToDouble(const PrimitiveHandler* primitive_handler,
                                     const Message& message, double* value) {
@@ -708,6 +724,98 @@ class IndexOfFunction : public SingleParameterFunctionNode {
   const Descriptor* ReturnType() const override {
     return Integer::descriptor();
   }
+};
+
+class SubstringFunction : public FunctionNode {
+ public:
+  static absl::StatusOr<std::vector<std::shared_ptr<ExpressionNode>>>
+  CompileParams(const std::vector<FhirPathParser::ExpressionContext*>& params,
+                FhirPathBaseVisitor* base_context_visitor,
+                FhirPathBaseVisitor* child_context_visitor) {
+    if (params.empty() || params.size() > 2) {
+      return InvalidArgumentError(
+          "substring(start [, length]) requires 1 or 2 arugments.");
+    }
+
+    std::vector<std::shared_ptr<ExpressionNode>> compiled_params;
+
+    antlrcpp::Any start = params[0]->accept(base_context_visitor);
+    if (start.isNull()) {
+      return InvalidArgumentError("Failed to compile `start` parameter.");
+    }
+    compiled_params.push_back(start.as<std::shared_ptr<ExpressionNode>>());
+
+    if (params.size() > 1) {
+      antlrcpp::Any length = params[1]->accept(base_context_visitor);
+      if (length.isNull()) {
+        return InvalidArgumentError("Failed to compile `length` parameter.");
+      }
+      compiled_params.push_back(length.as<std::shared_ptr<ExpressionNode>>());
+    }
+
+    return compiled_params;
+  }
+
+  SubstringFunction(const std::shared_ptr<ExpressionNode>& child,
+                    const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : FunctionNode(child, params) {
+    FHIR_DCHECK_OK(ValidateParams(params));
+  }
+
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    if (child_results.size() > 1) {
+      return InvalidArgumentError(
+          "substring() requires a collection with no more than 1 item.");
+    }
+
+    if (child_results.empty()) {
+      return absl::OkStatus();
+    }
+
+    FHIR_ASSIGN_OR_RETURN(std::string full_string,
+                          MessagesToString(child_results));
+
+    std::vector<WorkspaceMessage> start_param, length_param;
+    FHIR_RETURN_IF_ERROR(params_[0]->Evaluate(work_space, &start_param));
+    if (start_param.size() > 1) {
+      return InvalidArgumentError(
+          "substring() `start` evaluated to more than 1 output.");
+    }
+
+    // Parameter `start` can be empty according to FHIR spec.
+    FHIR_ASSIGN_OR_RETURN(absl::optional<int> start,
+                          MessagesToInt(start_param));
+    if (!start.has_value() || start.value() < 0 ||
+        start.value() >= full_string.length()) {
+      return absl::OkStatus();
+    }
+
+    int length_value = full_string.length() - start.value();
+    if (params_.size() > 1) {
+      FHIR_RETURN_IF_ERROR(params_[1]->Evaluate(work_space, &length_param));
+      FHIR_ASSIGN_OR_RETURN(absl::optional<int> length,
+                            MessagesToInt(length_param));
+      if (length.has_value()) {
+        if (length.value() < 0) {
+          return InvalidArgumentError(
+              "substring() `length` cannot be negative.");
+        } else if (length.value() < length_value) {
+          length_value = length.value();
+        }
+      }
+    }
+    Message* result = work_space->GetPrimitiveHandler()->NewString(
+        full_string.substr(start.value(), length_value));
+    work_space->DeleteWhenFinished(result);
+    results->push_back(WorkspaceMessage(result));
+    return absl::OkStatus();
+  }
+
+  const Descriptor* ReturnType() const override { return String::descriptor(); }
 };
 
 class StringTestFunction : public SingleValueFunctionNode {
@@ -3779,7 +3887,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"convertsToTime", UnimplementedFunction},
       {"toTime", UnimplementedFunction},
       {"indexOf", FunctionNode::Create<IndexOfFunction>},
-      {"substring", UnimplementedFunction},
+      {"substring", FunctionNode::Create<SubstringFunction>},
       {"upper", FunctionNode::Create<UpperFunction>},
       {"lower", FunctionNode::Create<LowerFunction>},
       {"replace", FunctionNode::Create<ReplaceFunction>},
