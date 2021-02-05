@@ -167,22 +167,6 @@ absl::StatusOr<std::string> MessagesToString(
   return MessageToString(messages[0]);
 }
 
-// Extract integer from `messages`, returns error if messages contains 2 or
-// more elements, or if the contained value is not an integer.
-absl::StatusOr<absl::optional<int>> MessagesToInt(
-    const std::vector<WorkspaceMessage>& messages) {
-  if (messages.size() > 1) {
-    return InvalidArgumentError("Expression must represent a singular value.");
-  }
-  if (messages.empty() || messages[0].Message() == nullptr) {
-    return absl::nullopt;
-  }
-  if (!IsSystemInteger(*messages[0].Message())) {
-    return InvalidArgumentError("Expression is not a integer.");
-  }
-  return GetPrimitiveIntValue(*messages[0].Message());
-}
-
 // Converts decimal or integer container messages to a double value.
 static absl::Status MessageToDouble(const PrimitiveHandler* primitive_handler,
                                     const Message& message, double* value) {
@@ -787,8 +771,9 @@ class SubstringFunction : public FunctionNode {
     }
 
     // Parameter `start` can be empty according to FHIR spec.
-    FHIR_ASSIGN_OR_RETURN(absl::optional<int> start,
-                          MessagesToInt(start_param));
+    FHIR_ASSIGN_OR_RETURN(
+        absl::optional<int> start,
+        IntegerOrEmpty(work_space->GetPrimitiveHandler(), start_param));
     if (!start.has_value() || start.value() < 0 ||
         start.value() >= full_string.length()) {
       return absl::OkStatus();
@@ -797,8 +782,9 @@ class SubstringFunction : public FunctionNode {
     int length_value = full_string.length() - start.value();
     if (params_.size() > 1) {
       FHIR_RETURN_IF_ERROR(params_[1]->Evaluate(work_space, &length_param));
-      FHIR_ASSIGN_OR_RETURN(absl::optional<int> length,
-                            MessagesToInt(length_param));
+      FHIR_ASSIGN_OR_RETURN(
+          absl::optional<int> length,
+          IntegerOrEmpty(work_space->GetPrimitiveHandler(), length_param));
       if (length.has_value()) {
         if (length.value() < 0) {
           return InvalidArgumentError(
