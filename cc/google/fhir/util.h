@@ -72,6 +72,11 @@ absl::Status SetContainedResource(const ::google::protobuf::Message& resource,
                                   ContainedResourceLike* contained) {
   const ::google::protobuf::OneofDescriptor* resource_oneof =
       ContainedResourceLike::descriptor()->FindOneofByName("oneof_resource");
+  if (!resource_oneof) {
+    return ::absl::InvalidArgumentError(::absl::StrCat(
+        "Template type '", ContainedResourceLike::descriptor()->full_name(),
+        "' is not a contained resource."));
+  }
   const ::google::protobuf::FieldDescriptor* resource_field = nullptr;
   for (int i = 0; i < resource_oneof->field_count(); i++) {
     const ::google::protobuf::FieldDescriptor* field = resource_oneof->field(i);
@@ -127,6 +132,11 @@ absl::StatusOr<const ::google::protobuf::Message*> GetContainedResource(
   // Get the resource field corresponding to this resource.
   const ::google::protobuf::OneofDescriptor* resource_oneof =
       contained.GetDescriptor()->FindOneofByName("oneof_resource");
+  if (!resource_oneof) {
+    return ::absl::InvalidArgumentError(::absl::StrCat(
+        "Template type '", contained.GetDescriptor()->full_name(),
+        "' is not a contained resource."));
+  }
   const ::google::protobuf::FieldDescriptor* field =
       contained.GetReflection()->GetOneofFieldDescriptor(contained,
                                                          resource_oneof);
@@ -286,6 +296,11 @@ absl::StatusOr<::google::protobuf::Message*> MutableContainedResource(
   // Get the resource field corresponding to this resource.
   const ::google::protobuf::OneofDescriptor* resource_oneof =
       contained->GetDescriptor()->FindOneofByName("oneof_resource");
+  if (!resource_oneof) {
+    return ::absl::InvalidArgumentError(::absl::StrCat(
+        "Template type '", contained->GetDescriptor()->full_name(),
+        "' is not a contained resource."));
+  }
   const ::google::protobuf::FieldDescriptor* field =
       contained->GetReflection()->GetOneofFieldDescriptor(*contained,
                                                           resource_oneof);
@@ -300,6 +315,11 @@ absl::StatusOr<const R*> GetTypedContainedResource(
     const ContainedResourceLike& contained) {
   const ::google::protobuf::OneofDescriptor* contained_oneof =
       ContainedResourceLike::descriptor()->FindOneofByName("oneof_resource");
+  if (!contained_oneof) {
+    return ::absl::InvalidArgumentError(::absl::StrCat(
+        "Template type '", ContainedResourceLike::descriptor()->full_name(),
+        "' is not a contained resource."));
+  }
   for (int i = 0; i < contained_oneof->field_count(); i++) {
     const ::google::protobuf::FieldDescriptor* field = contained_oneof->field(i);
     if (field->message_type()->full_name() == R::descriptor()->full_name()) {
