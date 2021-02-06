@@ -695,15 +695,15 @@ TYPED_TEST(FhirPathTest, TestFunctionSubstring) {
   EXPECT_THAT(TestFixture::Evaluate("{}.substring(3)"), EvalsToEmpty());
   EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.substring(3, {})"),
               EvalsToStringThatMatches(StrEq("defg")));
-  EXPECT_THAT(TestFixture::Evaluate("{'abc','defg'}.substring(1)"),
+  EXPECT_THAT(TestFixture::Evaluate("('abc' | 'defg').substring(1)"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(TestFixture::Evaluate("{'abcdefg'}.substring()"),
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.substring()"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(TestFixture::Evaluate("{'abcdefg'}.substring(1, 2, 3)"),
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.substring(1, 2, 3)"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(TestFixture::Evaluate("{'abcdefg'}.substring('ab')"),
+  EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.substring('ab')"),
               HasStatusCode(StatusCode::kInvalidArgument));
-  EXPECT_THAT(TestFixture::Evaluate("{123}.substring(1)"),
+  EXPECT_THAT(TestFixture::Evaluate("123.substring(1)"),
               HasStatusCode(StatusCode::kInvalidArgument));
 }
 
