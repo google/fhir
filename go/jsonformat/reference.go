@@ -25,7 +25,6 @@ import (
 
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
-	protov1 "github.com/golang/protobuf/proto"
 )
 
 // normalizeFragmentReference normalizes an internal reference into its specialized field.
@@ -88,9 +87,8 @@ func normalizeRelativeReferenceAndIgnoreHistory(pb proto.Message) error {
 }
 
 // NormalizeReference normalizes a relative or internal reference into its specialized field.
-func NormalizeReference(pb protov1.Message) error {
-	pb2 := protov1.MessageV2(pb)
-	switch ref := pb2.(type) {
+func NormalizeReference(pb proto.Message) error {
+	switch ref := pb.(type) {
 	case *d3pb.Reference:
 		return normalizeR3Reference(ref)
 	case *d4pb.Reference:
@@ -166,9 +164,8 @@ func normalizeR4Reference(ref *d4pb.Reference) error {
 }
 
 // DenormalizeReference recovers the absolute reference URI from a normalized representation.
-func DenormalizeReference(pb protov1.Message) error {
-	pb2 := protov1.MessageV2(pb)
-	switch ref := pb2.(type) {
+func DenormalizeReference(pb proto.Message) error {
+	switch ref := pb.(type) {
 	case *d3pb.Reference:
 		denormalizeR3Reference(ref)
 	case *d4pb.Reference:

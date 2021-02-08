@@ -28,7 +28,6 @@ import (
 
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
-	protov1 "github.com/golang/protobuf/proto"
 )
 
 func newDatesForTest(val int64, precName string, tz string) []proto.Message {
@@ -539,7 +538,7 @@ func TestInstant(t *testing.T) {
 				t.Errorf("%s parseInstant(%q): got %v, want %v", test.name, test.datetime, parsed, want)
 			}
 
-			serialized, err := SerializeInstant(protov1.MessageV1(it))
+			serialized, err := SerializeInstant(it)
 			if err != nil {
 				t.Fatalf("%s SerializeInstant(%q): %v", test.name, it, err)
 			}
@@ -580,18 +579,18 @@ func TestParseInstant_Invalid(t *testing.T) {
 func TestSerializeInstant_Invalid(t *testing.T) {
 	tests := []struct {
 		name   string
-		protos []protov1.Message
+		protos []proto.Message
 	}{
 		{
 			"zero'd precision",
-			[]protov1.Message{
+			[]proto.Message{
 				&d3pb.Instant{Timezone: "UTC", Precision: d3pb.Instant_PRECISION_UNSPECIFIED},
 				&d4pb.Instant{Timezone: "UTC", Precision: d4pb.Instant_PRECISION_UNSPECIFIED},
 			},
 		},
 		{
 			"invalid timezone",
-			[]protov1.Message{
+			[]proto.Message{
 				&d3pb.Instant{Timezone: "XYZ", Precision: d3pb.Instant_SECOND},
 				&d4pb.Instant{Timezone: "XYZ", Precision: d4pb.Instant_SECOND},
 			},

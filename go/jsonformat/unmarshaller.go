@@ -32,7 +32,6 @@ import (
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
 	apb "github.com/google/fhir/go/proto/google/fhir/proto/annotations_go_proto"
-	protov1 "github.com/golang/protobuf/proto"
 )
 
 var (
@@ -88,7 +87,7 @@ func newUnmarshaller(tz string, ver Version, enableExtendedValidation bool) (*Un
 // Unmarshal a FHIR resource from JSON into a ContainedResource proto. The FHIR
 // version of the proto is determined by the version the Unmarshaller was
 // created with.
-func (u *Unmarshaller) Unmarshal(in []byte) (protov1.Message, error) {
+func (u *Unmarshaller) Unmarshal(in []byte) (proto.Message, error) {
 	// Decode the JSON object into a map.
 	var decoded map[string]json.RawMessage
 	if err := jsp.Unmarshal(in, &decoded); err != nil {
@@ -96,12 +95,12 @@ func (u *Unmarshaller) Unmarshal(in []byte) (protov1.Message, error) {
 	}
 	res, err := u.parseContainedResource("", decoded)
 	if err != nil {
-		return protov1.MessageV1(res), err
+		return res, err
 	}
 	if u.enableExtendedValidation {
-		return protov1.MessageV1(res), fhirvalidate.Validate(res)
+		return res, fhirvalidate.Validate(res)
 	}
-	return protov1.MessageV1(res), fhirvalidate.ValidatePrimitives(res)
+	return res, fhirvalidate.ValidatePrimitives(res)
 }
 
 func (u *Unmarshaller) checkCurrentDepth(jsonPath string) error {
@@ -201,7 +200,7 @@ func (u *Unmarshaller) mergeMessage(jsonPath string, decmap map[string]json.RawM
 		if err != nil {
 			return err
 		}
-		proto.Merge(protoMessage(pb), cr)
+		proto.Merge(pb.Interface(), cr)
 		return nil
 	}
 	if pbdesc.Name() == protoName(&anypb.Any{}) && lastFieldInPath(jsonPath) == jsonpbhelper.ContainedField {
@@ -214,7 +213,7 @@ func (u *Unmarshaller) mergeMessage(jsonPath string, decmap map[string]json.RawM
 		if err := any.MarshalFrom(cr); err != nil {
 			return err
 		}
-		proto.Merge(protoMessage(pb), any)
+		proto.Merge(pb.Interface(), any)
 		return nil
 	}
 	var errors jsonpbhelper.UnmarshalErrorList
@@ -314,7 +313,7 @@ func (u *Unmarshaller) mergeField(jsonPath string, f protoreflect.FieldDescripto
 			if err != nil {
 				return err
 			}
-			return u.mergePrimitiveType(protoMessage(pb.Mutable(f).Message()), p)
+			return u.mergePrimitiveType(pb.Mutable(f).Message().Interface(), p)
 		}
 		// f is expected to be a singular message (i.e. mutable), otherwise it is trying to merge
 		// an invalid field such as primitive type's "value" field here.
@@ -382,7 +381,7 @@ func (u *Unmarshaller) mergeSingleField(jsonPath string, f protoreflect.FieldDes
 		if err != nil {
 			return err
 		}
-		return u.mergePrimitiveType(protoMessage(pb), p)
+		return u.mergePrimitiveType(pb.Interface(), p)
 	}
 	if !proto.HasExtension(d.Options(), apb.E_FhirReferenceType) {
 		return u.mergeRawMessage(jsonPath, rm, pb)
@@ -395,7 +394,7 @@ func (u *Unmarshaller) mergeReference(jsonPath string, rm json.RawMessage, pb pr
 	if err := u.mergeRawMessage(jsonPath, rm, pb); err != nil {
 		return err
 	}
-	return NormalizeReference(protoMessageV1(pb))
+	return NormalizeReference(pb.Interface())
 }
 
 func (u *Unmarshaller) mergePrimitiveType(dst, src proto.Message) error {
@@ -441,14 +440,14 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 		if err != nil {
 			return nil, fmt.Errorf("get repeated field: extension failed, err: %v", err)
 		}
-		ext := extListInPb.NewElement().Message().Interface().(proto.Message)
+		ext := extListInPb.NewElement().Message().Interface()
 		if err := protoToExtension(u.cfg.newPrimitiveHasNoValue(true), ext); err != nil {
 			return nil, err
 		}
-		if err := jsonpbhelper.AddInternalExtension(protoMessage(pb), ext); err != nil {
+		if err := jsonpbhelper.AddInternalExtension(pb.Interface(), ext); err != nil {
 			return nil, err
 		}
-		return protoMessage(pb), nil
+		return pb.Interface(), nil
 	}
 	d := in.Descriptor()
 	createAndSetValue := func(val interface{}) (proto.Message, error) {
@@ -456,7 +455,7 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 		if err := accessor.SetValue(rpb, val, "value"); err != nil {
 			return nil, err
 		}
-		return rpb.Interface().(proto.Message), nil
+		return rpb.Interface(), nil
 	}
 	// Make sure string fields have valid UTF-8 encoding.
 	switch d.Name() {
@@ -471,7 +470,7 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 	}
 	switch d.Name() {
 	case "Base64Binary":
-		m := in.New().Interface().(proto.Message)
+		m := in.New().Interface()
 		if err := parseBinary(rm, m, u.cfg.newBase64BinarySeparatorStride); err != nil {
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
@@ -501,7 +500,7 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 		}
 		return createAndSetValue(val)
 	case "Date":
-		m := in.New().Interface().(proto.Message)
+		m := in.New().Interface()
 		if err := parseDateFromJSON(rm, u.TimeZone, m); err != nil {
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
@@ -511,7 +510,7 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 		}
 		return m, nil
 	case "DateTime":
-		m := in.New().Interface().(proto.Message)
+		m := in.New().Interface()
 		if err := parseDateTimeFromJSON(rm, u.TimeZone, m); err != nil {
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
@@ -521,7 +520,7 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 		}
 		return m, nil
 	case "Decimal":
-		m := in.New().Interface().(proto.Message)
+		m := in.New().Interface()
 		if err := parseDecimal(rm, m); err != nil {
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
@@ -541,7 +540,7 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 		}
 		return createAndSetValue(val)
 	case "Instant":
-		m := in.New().Interface().(proto.Message)
+		m := in.New().Interface()
 		if err := parseInstant(rm, m); err != nil {
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
@@ -600,7 +599,7 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 		}
 		return createAndSetValue(val)
 	case "Time":
-		m := in.New().Interface().(proto.Message)
+		m := in.New().Interface()
 		if err := parseTime(rm, m); err != nil {
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
@@ -667,10 +666,6 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 	}
 	return nil, fmt.Errorf("unsupported FHIR primitive type: %v", d.Name())
 }
-
-func protoMessageV1(pb protoreflect.Message) protov1.Message { return pb.Interface().(protov1.Message) }
-
-func protoMessage(pb protoreflect.Message) proto.Message { return pb.Interface().(proto.Message) }
 
 func protoName(pb proto.Message) protoreflect.Name {
 	return pb.ProtoReflect().Descriptor().Name()

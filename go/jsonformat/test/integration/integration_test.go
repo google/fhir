@@ -34,7 +34,8 @@ import (
 	"github.com/google/fhir/go/jsonformat/internal/protopath"
 	"github.com/google/fhir/go/jsonformat"
 	"github.com/google/go-cmp/cmp"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/encoding/prototext"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/testing/protocmp"
 	"bitbucket.org/creachadair/stringset"
 
@@ -201,7 +202,7 @@ func testMarshal(t *testing.T, name string, ver jsonformat.Version) {
 	if err != nil {
 		t.Fatalf("Failed to get empty resource from JSON data %v", err)
 	}
-	if err = proto.UnmarshalText(string(protoData), res); err != nil {
+	if err = prototext.Unmarshal(protoData, res); err != nil {
 		t.Fatalf("Failed to unmarshal resource text proto: %v", err)
 	}
 	containedRes, err := wrapInContainedResource(res, ver)
@@ -309,7 +310,7 @@ func testMarshalAnalytics(t *testing.T, file string, res proto.Message, ver json
 		t.Fatalf("Failed to read resource text proto file %s: %v", file, err)
 	}
 
-	if err := proto.UnmarshalText(string(protoData), res); err != nil {
+	if err := prototext.Unmarshal(protoData, res); err != nil {
 		t.Fatalf("Failed to unmarshal resource text proto: %v", err)
 	}
 	containedRes, err := wrapInContainedResource(res, ver)
@@ -390,7 +391,7 @@ func testUnmarshal(t *testing.T, name string, ver jsonformat.Version) {
 	if err != nil {
 		t.Fatalf("Failed to get zero resource from JSON %v", err)
 	}
-	if err = proto.UnmarshalText(string(protoData), want); err != nil {
+	if err = prototext.Unmarshal(protoData, want); err != nil {
 		t.Fatalf("Failed to unmarshal resource text proto: %v", err)
 	}
 	if diff := cmp.Diff(want, res, protocmp.Transform()); diff != "" {
@@ -475,7 +476,7 @@ func getZeroResource(jsonData []byte, ver jsonformat.Version) (proto.Message, er
 		return nil, fmt.Errorf("failed getting resource type from resource JSON")
 	}
 
-	rcr := proto.MessageReflect(cr)
+	rcr := cr.ProtoReflect()
 	crDesc := rcr.Descriptor()
 	oneofDesc := crDesc.Oneofs().ByName(jsonpbhelper.OneofName)
 	if oneofDesc == nil {
@@ -493,7 +494,7 @@ func getZeroResource(jsonData []byte, ver jsonformat.Version) (proto.Message, er
 
 // unwrapFromContainedResource returns the resource contained within a contained resource.
 func unwrapFromContainedResource(containedRes proto.Message) (proto.Message, error) {
-	res, err := protopath.Get(proto.MessageV2(containedRes), protopath.NewPath(oneofResourceProtopath), nil)
+	res, err := protopath.Get(containedRes, protopath.NewPath(oneofResourceProtopath), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -516,7 +517,7 @@ func wrapInContainedResource(res proto.Message, ver jsonformat.Version) (proto.M
 	resType = resType[idx+1:]
 
 	resPath := protopath.NewPath(fmt.Sprintf("%s.%s", oneofResourceProtopath, jsonpbhelper.CamelToSnake(resType)))
-	if err := protopath.Set(proto.MessageV2(contained), resPath, res); err != nil {
+	if err := protopath.Set(contained, resPath, res); err != nil {
 		return nil, err
 	}
 

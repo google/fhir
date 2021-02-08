@@ -43,7 +43,6 @@ import (
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 	m3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/metadatatypes_go_proto"
 	r3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
-	protov1 "github.com/golang/protobuf/proto"
 )
 
 var (
@@ -895,7 +894,7 @@ func TestUnmarshal(t *testing.T) {
 					if err != nil {
 						t.Fatalf("unmarshal %v failed: %v", test.name, err)
 					}
-					if !protov1.Equal(got, w.r) {
+					if !proto.Equal(got, w.r) {
 						t.Errorf("unmarshal %v: got %v, want %v", test.name, got, w.r)
 					}
 				})
@@ -999,7 +998,7 @@ func TestUnmarshal_NoExtendedValidation(t *testing.T) {
 					if err != nil {
 						t.Fatalf("unmarshal %v failed: %v", test.name, err)
 					}
-					if !protov1.Equal(got, w.r) {
+					if !proto.Equal(got, w.r) {
 						t.Errorf("unmarshal %v: got %v, want %v", test.name, got, w.r)
 					}
 				})
@@ -1828,12 +1827,11 @@ func TestParsePrimitiveType(t *testing.T) {
 			for _, w := range test.wants {
 				t.Run(w.ver.String(), func(t *testing.T) {
 					u := setupUnmarshaller(t, w.ver)
-					r2 := protov1.MessageV2(w.r)
-					got, err := u.parsePrimitiveType("value", r2.ProtoReflect(), test.value)
+					got, err := u.parsePrimitiveType("value", w.r.ProtoReflect(), test.value)
 					if err != nil {
 						t.Fatalf("parse primitive type: %v", err)
 					}
-					if !cmp.Equal(got, r2, protocmp.Transform()) {
+					if !cmp.Equal(got, w.r, protocmp.Transform()) {
 						t.Errorf("parse primitive type %v: got %v, want %v", test.pType, got, w.r)
 					}
 				})
@@ -1872,7 +1870,7 @@ func TestParseURIs(t *testing.T) {
 			for _, i := range inputs {
 				t.Run(i.ver.String(), func(t *testing.T) {
 					u := setupUnmarshaller(t, i.ver)
-					r := proto.Clone(protov1.MessageV2(i.r))
+					r := proto.Clone(i.r)
 					rpb := r.ProtoReflect()
 					rpb.Set(rpb.Descriptor().Fields().ByName("value"), protoreflect.ValueOfString(test))
 					got, err := u.parsePrimitiveType("value", rpb, json.RawMessage(strconv.Quote(test)))
@@ -2128,7 +2126,7 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			for _, msg := range test.msgs {
 				t.Run(msg.ver.String(), func(t *testing.T) {
 					u := setupUnmarshaller(t, msg.ver)
-					_, err := u.parsePrimitiveType("value", protov1.MessageV2(msg.r).ProtoReflect(), test.value)
+					_, err := u.parsePrimitiveType("value", msg.r.ProtoReflect(), test.value)
 					if err == nil {
 						t.Errorf("parsePrimitiveType() %v succeeded, expect error", test.name)
 					}

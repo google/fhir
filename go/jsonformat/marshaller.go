@@ -27,7 +27,6 @@ import (
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
 	apb "github.com/google/fhir/go/proto/google/fhir/proto/annotations_go_proto"
-	protov1 "github.com/golang/protobuf/proto"
 )
 
 // jsonFormat is the format in which the marshaller will represent the FHIR
@@ -109,8 +108,8 @@ func newAnalyticsMarshaller(maxDepth int, ver Version, format jsonFormat) (*Mars
 }
 
 // MarshalToString returns serialized JSON object of a ContainedResource protobuf message as string.
-func (m *Marshaller) MarshalToString(pb protov1.Message) (string, error) {
-	pbTypeName := protov1.MessageV2(pb).ProtoReflect().Descriptor().FullName()
+func (m *Marshaller) MarshalToString(pb proto.Message) (string, error) {
+	pbTypeName := pb.ProtoReflect().Descriptor().FullName()
 	emptyCR := m.cfg.newEmptyContainedResource()
 	expTypeName := emptyCR.ProtoReflect().Descriptor().FullName()
 	if pbTypeName != expTypeName {
@@ -123,21 +122,20 @@ func (m *Marshaller) MarshalToString(pb protov1.Message) (string, error) {
 // MarshalResourceToString functions identically to MarshalToString, but accepts
 // a fhir.Resource interface instead of a ContainedResource. See
 // MarshalResource() for rationale.
-func (m *Marshaller) MarshalResourceToString(r protov1.Message) (string, error) {
+func (m *Marshaller) MarshalResourceToString(r proto.Message) (string, error) {
 	res, err := m.MarshalResource(r)
 	return string(res), err
 }
 
 // Marshal returns serialized JSON object of a ContainedResource protobuf message.
-func (m *Marshaller) Marshal(pb protov1.Message) ([]byte, error) {
-	pb2 := protov1.MessageV2(pb)
-	pbTypeName := pb2.ProtoReflect().Descriptor().FullName()
+func (m *Marshaller) Marshal(pb proto.Message) ([]byte, error) {
+	pbTypeName := pb.ProtoReflect().Descriptor().FullName()
 	emptyCR := m.cfg.newEmptyContainedResource()
 	expTypeName := emptyCR.ProtoReflect().Descriptor().FullName()
 	if pbTypeName != expTypeName {
 		return nil, fmt.Errorf("type mismatch, given proto is a message of type: %v, marshaller expects message of type: %v", pbTypeName, expTypeName)
 	}
-	data, err := m.marshal(pb2.ProtoReflect())
+	data, err := m.marshal(pb.ProtoReflect())
 	if err != nil {
 		return nil, err
 	}
@@ -165,8 +163,8 @@ func (m *Marshaller) render(data jsonpbhelper.IsJSON) ([]byte, error) {
 // interface instead of a ContainedResource. This allows for reduced nesting in
 // declaring messages, and does not require knowledge of the specific Resource
 // type.
-func (m *Marshaller) MarshalResource(r protov1.Message) ([]byte, error) {
-	data, err := m.marshalResource(protov1.MessageV2(r).ProtoReflect())
+func (m *Marshaller) MarshalResource(r proto.Message) ([]byte, error) {
+	data, err := m.marshalResource(r.ProtoReflect())
 	if err != nil {
 		return nil, err
 	}
@@ -482,7 +480,7 @@ func (m *Marshaller) marshalNonPrimitiveFieldValue(f protoreflect.FieldDescripto
 
 func (m *Marshaller) marshalReference(rpb protoreflect.Message) (jsonpbhelper.IsJSON, error) {
 	pb := rpb.Interface().(proto.Message)
-	if err := DenormalizeReference(protov1.MessageV1(pb)); err != nil {
+	if err := DenormalizeReference(pb); err != nil {
 		return nil, err
 	}
 	if m.jsonFormat != formatPure {
@@ -576,7 +574,7 @@ func (m *Marshaller) marshalPrimitiveType(rpb protoreflect.Message) (jsonpbhelpe
 		}
 		return jsonpbhelper.JSONString(t), nil
 	case "Instant":
-		t, err := SerializeInstant(protov1.MessageV1(pb))
+		t, err := SerializeInstant(pb)
 		if err != nil {
 			return nil, fmt.Errorf("serialize instant: %v", err)
 		}

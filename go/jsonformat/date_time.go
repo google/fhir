@@ -24,8 +24,6 @@ import (
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
-
-	protov1 "github.com/golang/protobuf/proto"
 )
 
 func checkEnumValueNames(enum protoreflect.EnumDescriptor, valueNames ...string) error {
@@ -393,8 +391,8 @@ func parseInstant(rm json.RawMessage, m proto.Message) error {
 }
 
 // SerializeInstant takes an Instant proto message and serializes it to a datetime string.
-func SerializeInstant(instant protov1.Message) (string, error) {
-	rinstant := protov1.MessageV2(instant).ProtoReflect()
+func SerializeInstant(instant proto.Message) (string, error) {
+	rinstant := instant.ProtoReflect()
 	precEnum, err := accessor.GetEnumDescriptor(rinstant.Descriptor(), "precision")
 	if err != nil {
 		return "", err

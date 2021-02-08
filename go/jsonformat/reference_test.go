@@ -25,10 +25,9 @@ import (
 	apb "github.com/google/fhir/go/proto/google/fhir/proto/annotations_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
-	protov1 "github.com/golang/protobuf/proto"
 )
 
-func referenceProto(ver apb.FhirVersion) protov1.Message {
+func referenceProto(ver apb.FhirVersion) proto.Message {
 	switch ver {
 	case apb.FhirVersion_STU3:
 		return &d3pb.Reference{}
@@ -63,7 +62,7 @@ func TestAllReferenceTypes(t *testing.T) {
 func TestNormalizeDenormalizeReference(t *testing.T) {
 	tests := []struct {
 		name                     string
-		denormalized, normalized protov1.Message
+		denormalized, normalized proto.Message
 	}{
 		{
 			"stu3 absolute url",
@@ -209,20 +208,20 @@ func TestNormalizeDenormalizeReference(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		got := protov1.Clone(test.denormalized)
+		got := proto.Clone(test.denormalized)
 		if err := NormalizeReference(got); err != nil {
 			t.Fatalf("NormalizeReference(%q): %v", test.name, err)
 		}
-		if want := test.normalized; !protov1.Equal(want, got) {
+		if want := test.normalized; !proto.Equal(want, got) {
 			t.Errorf("NormalizeReference(%q): got %v, want %v", test.name, got, want)
 		}
 	}
 	for _, test := range tests {
-		got := protov1.Clone(test.normalized)
+		got := proto.Clone(test.normalized)
 		if err := DenormalizeReference(got); err != nil {
 			t.Fatalf("DenormalizeReference(%q): %v", test.name, err)
 		}
-		if want := test.denormalized; !protov1.Equal(want, got) {
+		if want := test.denormalized; !proto.Equal(want, got) {
 			t.Errorf("DenormalizeReference(%q): got %v, want %v", test.name, got, want)
 		}
 	}
@@ -231,7 +230,7 @@ func TestNormalizeDenormalizeReference(t *testing.T) {
 func TestNormalizeReference_Errors(t *testing.T) {
 	tests := []struct {
 		name string
-		in   protov1.Message
+		in   proto.Message
 	}{
 		{
 			name: "r3 non-existing resource type in reference",

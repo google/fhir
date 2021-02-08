@@ -20,8 +20,7 @@ import (
 
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/go-cmp/cmp"
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/proto"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
 	c4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/codes_go_proto"
@@ -48,8 +47,8 @@ type mvr struct {
 // TODO: merge with other copies of this function
 func marshalToAny(t *testing.T, pb proto.Message) *anypb.Any {
 	t.Helper()
-	any, err := ptypes.MarshalAny(pb)
-	if err != nil {
+	any := &anypb.Any{}
+	if err := any.MarshalFrom(pb); err != nil {
 		t.Errorf("failed to marshal %T:%+v to Any", pb, pb)
 	}
 	return any
@@ -858,7 +857,7 @@ func TestMarshalMessage(t *testing.T) {
 					if err != nil {
 						t.Fatalf("failed to create marshaler; %v", err)
 					}
-					got, err := marshaller.marshalMessageToMap(proto.MessageReflect(i.r))
+					got, err := marshaller.marshalMessageToMap(i.r.ProtoReflect())
 					if err != nil {
 						t.Fatalf("marshal failed on %v: %v", test.name, err)
 					}
@@ -1333,7 +1332,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 					if err != nil {
 						t.Fatalf("failed to create marshaller %v: %v", test.name, err)
 					}
-					got, err := marshaller.marshalMessageToMap(proto.MessageReflect(i.r))
+					got, err := marshaller.marshalMessageToMap(i.r.ProtoReflect())
 					if err != nil {
 						t.Fatalf("marshal failed on %v: %v", test.name, err)
 					}
@@ -1990,7 +1989,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					if err != nil {
 						t.Fatalf("failed to create marshaller %v: %v", test.name, err)
 					}
-					got, err := marshaller.marshalMessageToMap(proto.MessageReflect(i.r))
+					got, err := marshaller.marshalMessageToMap(i.r.ProtoReflect())
 					if err != nil {
 						t.Fatalf("marshal failed on %v: %v", test.name, err)
 					}
@@ -2151,7 +2150,7 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 					if err != nil {
 						t.Fatalf("failed to create marshaller %v: %v", test.name, err)
 					}
-					_, err = marshaller.marshalMessageToMap(proto.MessageReflect(i.r))
+					_, err = marshaller.marshalMessageToMap(i.r.ProtoReflect())
 					if err == nil {
 						t.Errorf("marshalMessageToMap on %v did not return an error", test.name)
 					}
@@ -2350,7 +2349,7 @@ func TestMarshalPrimitiveType(t *testing.T) {
 					if err != nil {
 						t.Fatalf("failed to create marshaler; %v", err)
 					}
-					got, err := marshaller.marshalPrimitiveType(proto.MessageReflect(i.r))
+					got, err := marshaller.marshalPrimitiveType(i.r.ProtoReflect())
 					if err != nil {
 						t.Fatalf("marshalPrimitiveType(%v): %v", test.name, err)
 					}
