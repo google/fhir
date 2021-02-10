@@ -24,14 +24,14 @@ public final class FhirTypes {
 
   private FhirTypes() {}
 
-  private static final String CODE_URL = "http://hl7.org/fhir/StructureDefinition/code";
-  private static final String CODEABLE_CONCEPT_URL =
+  public static final String CODE_URL = "http://hl7.org/fhir/StructureDefinition/code";
+  public static final String CODEABLE_CONCEPT_URL =
       "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
-  private static final String CODING_URL = "http://hl7.org/fhir/StructureDefinition/Coding";
-  private static final String EXTENSION_URL = "http://hl7.org/fhir/StructureDefinition/Extension";
-  private static final String PERIOD_URL = "http://hl7.org/fhir/StructureDefinition/Period";
-  private static final String REFERENCE_URL = "http://hl7.org/fhir/StructureDefinition/Reference";
-  private static final String XHTML_URL = "http://hl7.org/fhir/StructureDefinition/xhtml";
+  public static final String CODING_URL = "http://hl7.org/fhir/StructureDefinition/Coding";
+  public static final String EXTENSION_URL = "http://hl7.org/fhir/StructureDefinition/Extension";
+  public static final String PERIOD_URL = "http://hl7.org/fhir/StructureDefinition/Period";
+  public static final String REFERENCE_URL = "http://hl7.org/fhir/StructureDefinition/Reference";
+  public static final String XHTML_URL = "http://hl7.org/fhir/StructureDefinition/xhtml";
 
   public static boolean isProfileOfType(Descriptor base, Descriptor test) {
     if (isCode(base)) {
