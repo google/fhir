@@ -1,0 +1,36 @@
+valid_pairs {
+  json_string: "\"JVBERi0xLjUNJeLjz9MNCjEwIDAg\""
+  proto {
+    base64_binary {
+      value: "%PDF-1.5\r%\342\343\317\323\r\n10 0 "
+    }
+  }
+}
+
+valid_pairs {
+  json_string: "\"JV  BE  Ri  0x  Lj  UN  Je  Lj  z9  MN  Cj  Ew  ID  Ag\""
+  proto {
+    base64_binary {
+      value: "%PDF-1.5\r%\342\343\317\323\r\n10 0 "
+      extension {
+        url { value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride" }
+        extension {
+          url { value: "separator" }
+          value { string_value { value: "  " } }
+        }
+        extension {
+          url { value: "stride" }
+          value { positive_int { value: 2 } }
+        }
+      }
+    }
+  }
+}
+
+invalid_json: "\"using&invalid&characters\""
+invalid_json: "true"
+invalid_json: "1"
+invalid_json: "1.0"
+
+# TODO: Add test cases to be used by other languages, and filter them out in java
+no_invalid_protos_reason: "Due to limitations in regex engines, Base64Binary strings are not checked"

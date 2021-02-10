@@ -1,0 +1,15 @@
+valid_pairs {
+  json_string: "5"
+  proto { integer { value: 5 } }
+}
+
+valid_pairs {
+  json_string: "-5"
+  proto { integer { value: -5 } }
+}
+
+invalid_json: "1.0"
+invalid_json: "\"text\""
+invalid_json: "true"
+
+no_invalid_protos_reason: "Due to datatype, all values are valid"

@@ -49,6 +49,7 @@ public class DecimalWrapper extends NumericTypeWrapper<Decimal> {
     super(input == null ? NULL_DECIMAL : parseAndValidate(input));
   }
 
+  // TODO: This should throw a checked InvalidFhirException.
   private static void validate(String input) {
     try {
       // We don't use Double.parseDouble() here because that function simply
@@ -60,6 +61,18 @@ public class DecimalWrapper extends NumericTypeWrapper<Decimal> {
       }
     } catch (NumberFormatException e) {
       throw new IllegalArgumentException("Not a decimal value", e);
+    }
+  }
+
+  /** Override to also check that the string is within double bounds. */
+  // TODO: This should throw a checked InvalidFhirException.
+  @Override
+  public void validateWrapped() {
+    if (hasValue()) {
+      validateUsingPattern(getPattern(), printValue());
+      validate(printValue());
+    } else {
+      validatePrimitiveWithoutValue();
     }
   }
 

@@ -63,3 +63,11 @@ fhir_proto_library(
     ],
     proto_library_prefix = "uscore_codes",
 )
+
+fhir_proto_library(
+    srcs = ["primitive_test_suite.proto"],
+    proto_deps = [
+        "//proto/google/fhir/proto/r4/core:datatypes_proto",
+    ],
+    proto_library_prefix = "primitive_test_suite",
+)

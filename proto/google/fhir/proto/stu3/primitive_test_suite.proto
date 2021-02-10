@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package google.fhir.stu3.testing;
+
+import "proto/google/fhir/proto/stu3/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.stu3.testing";
+
+// Union type of all primitives that can be tested for STU3 FHIR.
+message PrimitiveProtoUnion {
+  oneof primitive_proto_oneof {
+    google.fhir.stu3.proto.Base64Binary base64_binary = 1;
+    google.fhir.stu3.proto.Boolean boolean = 2;
+    google.fhir.stu3.proto.Code code = 3;
+    google.fhir.stu3.proto.Date date = 4;
+    google.fhir.stu3.proto.DateTime date_time = 5;
+    google.fhir.stu3.proto.Decimal decimal = 6;
+    google.fhir.stu3.proto.Id id = 7;
+    google.fhir.stu3.proto.Instant instant = 8;
+    google.fhir.stu3.proto.Integer integer = 9;
+    google.fhir.stu3.proto.Markdown markdown = 10;
+    google.fhir.stu3.proto.Oid oid = 11;
+    google.fhir.stu3.proto.PositiveInt positive_int = 12;
+    google.fhir.stu3.proto.String string_proto = 13;
+    google.fhir.stu3.proto.Time time = 14;
+    google.fhir.stu3.proto.UnsignedInt unsigned_int = 15;
+    google.fhir.stu3.proto.Uri uri = 16;
+    google.fhir.stu3.proto.Uuid uuid = 17;
+    google.fhir.stu3.proto.Xhtml xhtml = 18;
+    google.fhir.stu3.proto.Reference reference = 19;
+  }
+}
+
+// Pair representing a FHIR primitive represented as both a json string and as a
+// proto.
+message ValidPair {
+  string json_string = 1;
+  PrimitiveProtoUnion proto = 2;
+}
+
+message PrimitiveTestSuite {
+  // Note: The test suite will fail if any of these are empty.
+  repeated ValidPair valid_pairs = 1;
+  repeated string invalid_json = 2;
+  repeated PrimitiveProtoUnion invalid_protos = 3;
+
+  // If it's impossible to formulate an invalid proto, set this string
+  // so that the tests don't fail.
+  // E.g., Boolean uses a boolean value datatype, so all values are valid
+  string no_invalid_protos_reason = 4;
+}

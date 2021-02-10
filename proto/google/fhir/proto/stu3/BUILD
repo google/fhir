@@ -132,6 +132,14 @@ fhir_proto_library(
     proto_library_prefix = "uscore_codes",
 )
 
+fhir_proto_library(
+    srcs = ["primitive_test_suite.proto"],
+    proto_deps = [
+        "//proto/google/fhir/proto/stu3:datatypes_proto",
+    ],
+    proto_library_prefix = "primitive_test_suite",
+)
+
 # We also make the .proto files readable for testing.
 filegroup(
     name = "testdata",

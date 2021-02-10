@@ -1,0 +1,15 @@
+valid_pairs {
+  json_string: "\"I've got a lovely bunch of coconuts\""
+  proto {
+    markdown {
+      value: "I've got a lovely bunch of coconuts"
+    }
+  }
+}
+
+invalid_json: "true"
+invalid_json: "1"
+invalid_json: "1.0"
+
+# TODO: Add additional string character validation beyond regex
+no_invalid_protos_reason: "Markdown regex is overly permissive"

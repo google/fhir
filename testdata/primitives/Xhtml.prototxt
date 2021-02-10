@@ -1,0 +1,15 @@
+valid_pairs {
+  json_string: "\"<div>text</div>\""
+  proto { xhtml { value: "<div>text</div>" } }
+}
+valid_pairs {
+  json_string: "\"\""
+  proto { xhtml { } }
+}
+
+invalid_json: "true"
+invalid_json: "1"
+invalid_json: "1.0"
+invalid_json: "null"
+
+no_invalid_protos_reason: "No regex on XHTML type"

@@ -1,0 +1,11 @@
+valid_pairs {
+  json_string: "5"
+  proto { positive_int { value: 5 } }
+}
+
+invalid_json: "-5"
+invalid_json: "1.0"
+invalid_json: "\"text\""
+invalid_json: "true"
+
+invalid_protos { positive_int { value: 0 } }

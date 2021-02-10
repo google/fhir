@@ -156,23 +156,3 @@ java_test(
         "@maven//:junit_junit",
     ],
 )
-
-java_test(
-    name = "ValidationR4Test",
-    size = "medium",
-    srcs = ["ValidationTest.java"],
-    data = [
-        "//testdata/r4:validation",
-    ],
-    test_class = "com.google.fhir.r4.ValidationTest",
-    deps = [
-        "//java/com/google/fhir/common:json_format",
-        "//java/com/google/fhir/testing:validation_test_base",
-        "//proto/google/fhir/proto/r4:fhirproto_extensions_java_proto",
-        "//proto/google/fhir/proto/r4:uscore_java_proto",
-        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
-        "@bazel_tools//tools/java/runfiles",
-        "@com_google_protobuf//:protobuf_java",
-        "@maven//:junit_junit",
-    ],
-)

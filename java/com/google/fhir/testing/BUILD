@@ -19,19 +19,3 @@ java_library(
         "@maven//:junit_junit",
     ],
 )
-
-java_library(
-    name = "validation_test_base",
-    testonly = 1,
-    srcs = ["ValidationTestBase.java"],
-    deps = [
-        "//java/com/google/fhir/common:exceptions",
-        "//java/com/google/fhir/common:json_format",
-        "//java/com/google/fhir/wrappers:primitive_wrappers",
-        "@bazel_tools//tools/java/runfiles",
-        "@com_google_protobuf//:protobuf_java",
-        "@maven//:com_google_guava_guava",
-        "@maven//:com_google_truth_truth",
-        "@maven//:junit_junit",
-    ],
-)
