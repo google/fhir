@@ -231,6 +231,7 @@ T ValidObservation() {
       }
     }
     id { value: "123" }
+    effective { date_time { value_us: 0 timezone: "America/Los_Angeles" } }
   )proto");
 }
 
@@ -1127,6 +1128,17 @@ TYPED_TEST(FhirPathTest, TestOperatorAsResources) {
       TestFixture::Evaluate(observation, "$this as Observation").value();
   EXPECT_THAT(as_observation_evaluation_result.GetMessages(),
               ElementsAreArray({EqualsProto(observation)}));
+}
+
+TYPED_TEST(FhirPathTest, TestOperatorAsDateTime) {
+  auto test_observation = ValidObservation<typename TypeParam::Observation>();
+  EvaluationResult result =
+      TestFixture::Evaluate(test_observation, "effective as DateTime")
+          .value();
+
+  EXPECT_THAT(result.GetMessages(),
+              UnorderedElementsAreArray(
+                  {EqualsProto(test_observation.effective().date_time())}));
 }
 
 TYPED_TEST(FhirPathTest, TestFunctionIsPrimitives) {

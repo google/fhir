@@ -3267,7 +3267,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       if (descriptor != nullptr && !HasFieldWithJsonName(descriptor,
                                                          definition->name)) {
         SetError(NotFoundError(
-            absl::StrCat("Unable to find field ", definition->name)));
+            absl::StrFormat("Unable to find field `%s` in `%s`",
+                            definition->name, descriptor->full_name())));
         return nullptr;
       }
 
@@ -3313,7 +3314,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     if (descriptor != nullptr && !HasFieldWithJsonName(descriptor,
                                                        definition->name)) {
       SetError(NotFoundError(
-          absl::StrCat("Unable to find field ", definition->name)));
+          absl::StrFormat("Unable to find field `%s` in `%s`", definition->name,
+                          descriptor->full_name())));
       return nullptr;
     }
 
@@ -3982,7 +3984,7 @@ absl::StatusOr<bool> EvaluationResult::GetBoolean() const {
   auto messages = work_space_->GetResultMessages();
   if (messages.size() != 1) {
     return InvalidArgumentError(
-        "Result collection must contain exactly one element");
+        "Result collection for GetBoolean must contain exactly one element");
   }
   return work_space_->GetPrimitiveHandler()->GetBooleanValue(*messages[0]);
 }
@@ -3991,7 +3993,7 @@ absl::StatusOr<int32_t> EvaluationResult::GetInteger() const {
   auto messages = work_space_->GetResultMessages();
   if (messages.size() != 1) {
     return InvalidArgumentError(
-        "Result collection must contain exactly one element");
+        "Result collection for GetInteger must contain exactly one element");
   }
   return work_space_->GetPrimitiveHandler()->GetIntegerValue(*messages[0]);
 }
@@ -4000,7 +4002,7 @@ absl::StatusOr<std::string> EvaluationResult::GetDecimal() const {
   auto messages = work_space_->GetResultMessages();
   if (messages.size() != 1) {
     return InvalidArgumentError(
-        "Result collection must contain exactly one element");
+        "Result collection for GetDecimal must contain exactly one element");
   }
   return work_space_->GetPrimitiveHandler()->GetDecimalValue(*messages[0]);
 }
@@ -4009,7 +4011,7 @@ absl::StatusOr<std::string> EvaluationResult::GetString() const {
   auto messages = work_space_->GetResultMessages();
   if (messages.size() != 1) {
     return InvalidArgumentError(
-        "Result collection must contain exactly one element");
+        "Result collection for GetString must contain exactly one element");
   }
   return work_space_->GetPrimitiveHandler()->GetStringValue(*messages[0]);
 }
