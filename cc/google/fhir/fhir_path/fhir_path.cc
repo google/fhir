@@ -21,6 +21,7 @@
 #include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/util/message_differencer.h"
+#include "absl/container/node_hash_set.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
@@ -1809,7 +1810,8 @@ class IsDistinctFunction : public ZeroParameterFunctionNode {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
-    std::unordered_set<WorkspaceMessage, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
+    absl::node_hash_set<WorkspaceMessage, ProtoPtrHash,
+                        ProtoPtrSameTypeAndEqual>
         child_results_set(
             child_results.begin(), child_results.end(), kDefaultSetBucketCount,
             ProtoPtrHash(work_space->GetPrimitiveHandler()),
