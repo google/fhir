@@ -1,0 +1,7 @@
+{
+  "resourceType": "Observation",
+  "id": "example",
+  "status": "final",
+  "code": {"coding": [{"system": "foo","code": "bar"}]},
+  "effectiveDateTime": "0385-07-25T07:06:40.000000+00:00"
+}

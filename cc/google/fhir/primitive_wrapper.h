@@ -332,14 +332,14 @@ class StringTypeWrapper : public StringInputWrapper<T> {
 // Date Formats that are expected to include time zones.
 static const std::unordered_map<std::string, std::string>* const tz_formatters =
     new std::unordered_map<std::string, std::string>{
-        {"SECOND", "%Y-%m-%dT%H:%M:%S%Ez"},
-        {"MILLISECOND", "%Y-%m-%dT%H:%M:%E3S%Ez"},
-        {"MICROSECOND", "%Y-%m-%dT%H:%M:%E6S%Ez"}};
+        {"SECOND", "%E4Y-%m-%dT%H:%M:%S%Ez"},
+        {"MILLISECOND", "%E4Y-%m-%dT%H:%M:%E3S%Ez"},
+        {"MICROSECOND", "%E4Y-%m-%dT%H:%M:%E6S%Ez"}};
 // Date Formats that are expected to not include time zones, and use the default
 // time zone.
 static const std::unordered_map<std::string, std::string>* const
     no_tz_formatters = new std::unordered_map<std::string, std::string>{
-        {"YEAR", "%Y"}, {"MONTH", "%Y-%m"}, {"DAY", "%Y-%m-%d"}};
+        {"YEAR", "%E4Y"}, {"MONTH", "%E4Y-%m"}, {"DAY", "%E4Y-%m-%d"}};
 
 // Template for wrappers that represent data as Timelike primitives
 // E.g.: Date, DateTime, Instant, etc.

@@ -1693,6 +1693,20 @@ TEST(JsonFormatR4Test, InvalidControlCharactersReturnsError) {
   ASSERT_FALSE(PrettyPrintFhirToJsonString(proto).ok());
 }
 
+TEST(JsonFormatR4Test, PadsThreeDigitYearToFourCharacters) {
+  const Observation proto = ReadProto<Observation>(
+      "testdata/jsonformat/observation_three_digit_year.prototxt");
+  const std::string expected_json =
+      ReadFile("testdata/jsonformat/observation_three_digit_year.json");
+
+  absl::StatusOr<std::string> printed_proto =
+      PrettyPrintFhirToJsonString(proto);
+  ASSERT_TRUE(printed_proto.ok());
+
+  EXPECT_EQ(ParseJsonStringToValue(*printed_proto),
+            ParseJsonStringToValue(expected_json));
+}
+
 }  // namespace
 
 }  // namespace r4

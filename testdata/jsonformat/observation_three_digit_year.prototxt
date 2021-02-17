@@ -1,0 +1,17 @@
+id {
+  value: "example"
+}
+code {
+  coding {
+    system { value: "foo" }
+    code { value: "bar" }
+  }
+}
+status { value: FINAL }
+effective {
+  date_time {
+    value_us: -50000000000000000
+    timezone: "UTC"
+    precision: MICROSECOND
+  }
+}
