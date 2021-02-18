@@ -11,7 +11,7 @@ status { value: FINAL }
 effective {
   date_time {
     value_us: -50000000000000000
-    timezone: "UTC"
+    timezone: "+00:00"
     precision: MICROSECOND
   }
 }
