@@ -7,6 +7,10 @@ valid_pairs {
   proto { string_proto { value: "foo\tbar\rbaz\nquux" } }
 }
 valid_pairs {
+  json_string: "\"\\u0000\""
+  proto { string_proto { value: "\0" } }
+}
+valid_pairs {
   json_string: "\"André 3000\""
   proto { string_proto { value: "Andr\303\251 3000" } }
 }
@@ -14,6 +18,6 @@ valid_pairs {
 invalid_json: "true"
 invalid_json: "1"
 invalid_json: "1.0"
+invalid_json: "\"\""
 
-# TODO: Add additional string character validation beyond regex
-no_invalid_protos_reason: "String regex is overly permissive"
+invalid_protos { string_proto { value: "" } }

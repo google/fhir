@@ -233,19 +233,12 @@ void TestParseWithFilepaths(const std::string& proto_path,
   ASSERT_TRUE(from_json_status.ok()) << "Failed parsing: " << json_path << "\n"
                                      << from_json_status.status();
   R from_json = from_json_status.value();
-  R from_disk = ReadR4Proto<R>(proto_path);
+  R from_disk = ReadProto<R>(proto_path);
 
   ::google::protobuf::util::MessageDifferencer differencer;
   std::string differences;
   differencer.ReportDifferencesToString(&differences);
   EXPECT_TRUE(differencer.Compare(from_disk, from_json)) << differences;
-}
-
-template <typename R>
-void TestParse(const std::string& name) {
-  TestParseWithFilepaths<R>(
-      absl::StrCat("examples/", name, ".prototxt"),
-      absl::StrCat("spec/hl7.fhir.r4.examples/4.0.1/package/", name + ".json"));
 }
 
 Json::Value ParseJsonStringToValue(const std::string& raw_json) {
@@ -258,7 +251,7 @@ Json::Value ParseJsonStringToValue(const std::string& raw_json) {
 template <typename R>
 void TestPrintWithFilepaths(const std::string& proto_path,
                             const std::string& json_path) {
-  const R proto = ReadR4Proto<R>(proto_path);
+  const R proto = ReadProto<R>(proto_path);
   absl::StatusOr<std::string> from_proto_status =
       PrettyPrintFhirToJsonString(proto);
   ASSERT_TRUE(from_proto_status.ok())
@@ -277,29 +270,38 @@ void TestPrintWithFilepaths(const std::string& proto_path,
 template <typename R>
 void TestPrint(const std::string& name) {
   TestPrintWithFilepaths<R>(
-      absl::StrCat("examples/", name, ".prototxt"),
+      absl::StrCat("testdata/r4/examples/", name, ".prototxt"),
       absl::StrCat("spec/hl7.fhir.r4.examples/4.0.1/package/", name + ".json"));
 }
 
 template <typename R>
+void TestPairWithFilePaths(const std::string& proto_path,
+                           const std::string& json_path) {
+  TestPrintWithFilepaths<R>(proto_path, json_path);
+  TestParseWithFilepaths<R>(proto_path, json_path);
+}
+
+template <typename R>
 void TestPair(const std::vector<std::string>& file_names) {
-  for (const std::string& file : file_names) {
-    TestPrint<R>(file);
-    TestParse<R>(file);
+  for (const std::string& name : file_names) {
+    TestPairWithFilePaths<R>(
+        absl::StrCat("testdata/r4/examples/", name, ".prototxt"),
+        absl::StrCat("spec/hl7.fhir.r4.examples/4.0.1/package/",
+                     name + ".json"));
   }
 }
 
 /** Test printing from a profile */
 TEST(JsonFormatR4Test, PrintProfile) {
   TestPrintWithFilepaths<r4::testing::TestPatient>(
-      "profiles/test_patient-profiled-testpatient.prototxt",
+      "testdata/r4/profiles/test_patient-profiled-testpatient.prototxt",
       "testdata/r4/profiles/test_patient.json");
 }
 
 /** Test parsing to a profile */
 TEST(JsonFormatR4Test, ParseProfile) {
   TestParseWithFilepaths<r4::testing::TestPatient>(
-      "profiles/test_patient-profiled-testpatient.prototxt",
+      "testdata/r4/profiles/test_patient-profiled-testpatient.prototxt",
       "testdata/r4/profiles/test_patient.json");
 }
 
@@ -314,7 +316,7 @@ TEST(JsonFormatR4Test, ParseProfileMismatch) {
 template <typename R>
 void TestPrintForAnalytics(const std::string& proto_filepath,
                            const std::string& json_filepath, bool pretty) {
-  R proto = ReadR4Proto<R>(proto_filepath);
+  R proto = ReadProto<R>(proto_filepath);
   if (IsProfile(R::descriptor())) {
     proto = NormalizeR4(proto).value();
   }
@@ -343,7 +345,7 @@ void TestPrintForAnalyticsWithFilepath(const std::string& proto_filepath,
 template <typename R>
 void TestPrintForAnalytics(const std::string& name) {
   TestPrintForAnalyticsWithFilepath<R>(
-      absl::StrCat("examples/", name, ".prototxt"),
+      absl::StrCat("testdata/r4/examples/", name, ".prototxt"),
       absl::StrCat("testdata/r4/bigquery/", name + ".json"));
 }
 
@@ -357,15 +359,15 @@ TEST(JsonFormatR4Test, PrintForAnalytics) {
 /** Test printing from a profile */
 TEST(JsonFormatR4Test, PrintProfileForAnalytics) {
   TestPrintForAnalyticsWithFilepath<r4::testing::TestPatient>(
-      "profiles/test_patient-profiled-testpatient.prototxt",
+      "testdata/r4/profiles/test_patient-profiled-testpatient.prototxt",
       "testdata/r4/bigquery/TestPatient.json");
 }
 
 TEST(JsonFormatR4Test, PrintForAnalyticsWithContained) {
-  r4::testing::TestPatient patient = ReadR4Proto<r4::testing::TestPatient>(
-      "profiles/test_patient-profiled-testpatient.prototxt");
+  r4::testing::TestPatient patient = ReadProto<r4::testing::TestPatient>(
+      "testdata/r4/profiles/test_patient-profiled-testpatient.prototxt");
   r4::testing::TestObservation observation =
-      ReadR4Proto<r4::testing::TestObservation>(
+      ReadProto<r4::testing::TestObservation>(
           "examples/Observation-example-genetics-1.prototxt");
 
   r4::testing::ContainedResource contained;
@@ -1686,11 +1688,10 @@ TEST(JsonFormatR4Test, PrintAndParseAllResources) {
   }
 }
 
-TEST(JsonFormatR4Test, InvalidControlCharactersReturnsError) {
-  const Observation proto = ReadProto<Observation>(
-      "testdata/jsonformat/observation_invalid_unicode.prototxt");
-
-  ASSERT_FALSE(PrettyPrintFhirToJsonString(proto).ok());
+TEST(JsonFormatR4Test, ControlCharacters) {
+  TestPairWithFilePaths<Observation>(
+      "testdata/jsonformat/observation_control_characters.prototxt",
+      "testdata/jsonformat/observation_control_characters.json");
 }
 
 TEST(JsonFormatR4Test, PadsThreeDigitYearToFourCharacters) {

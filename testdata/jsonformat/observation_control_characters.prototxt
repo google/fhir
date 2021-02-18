@@ -1,0 +1,11 @@
+status { value: FINAL }
+id { value: "123" }
+code {
+  coding {
+    system { value: "foo" }
+    code { value: "bar" }
+  }
+}
+reference_range { text { value:  "\u0000" } }
+reference_range { text { value:  "\r\n" } }
+reference_range { text { value:  "\n" } }

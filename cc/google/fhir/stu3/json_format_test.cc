@@ -63,7 +63,7 @@ void TestParseWithFilepaths(const std::string& proto_path,
   ASSERT_TRUE(from_json_status.ok()) << "Failed parsing: " << json_path << "\n"
                                      << from_json_status.status();
   R from_json = from_json_status.value();
-  R from_disk = ReadStu3Proto<R>(proto_path);
+  R from_disk = ReadProto<R>(proto_path);
 
   ::google::protobuf::util::MessageDifferencer differencer;
   std::string differences;
@@ -74,7 +74,7 @@ void TestParseWithFilepaths(const std::string& proto_path,
 template <typename R>
 void TestParse(const std::string& name) {
   TestParseWithFilepaths<R>(
-      absl::StrCat("examples/", name, ".prototxt"),
+      absl::StrCat("testdata/stu3/examples/", name, ".prototxt"),
       absl::StrCat("spec/hl7.fhir.core/3.0.1/package/", name + ".json"));
 }
 
@@ -88,7 +88,7 @@ Json::Value ParseJsonStringToValue(const std::string& raw_json) {
 template <typename R>
 void TestPrintWithFilepaths(const std::string& proto_path,
                             const std::string& json_path) {
-  const R proto = ReadStu3Proto<R>(proto_path);
+  const R proto = ReadProto<R>(proto_path);
   std::string from_proto = PrettyPrintFhirToJsonString(proto).value();
   std::string from_json = ReadFile(json_path);
 
@@ -102,14 +102,14 @@ void TestPrintWithFilepaths(const std::string& proto_path,
 template <typename R>
 void TestPrint(const std::string& name) {
   TestPrintWithFilepaths<R>(
-      absl::StrCat("examples/", name, ".prototxt"),
+      absl::StrCat("testdata/stu3/examples/", name, ".prototxt"),
       absl::StrCat("spec/hl7.fhir.core/3.0.1/package/", name + ".json"));
 }
 
 template <typename R>
 void TestPrintForAnalytics(const std::string& name) {
   const R proto =
-      ReadStu3Proto<R>(absl::StrCat("examples/", name, ".prototxt"));
+      ReadProto<R>(absl::StrCat("testdata/stu3/examples/", name, ".prototxt"));
   auto result = PrettyPrintFhirToJsonStringForAnalytics(proto);
   ASSERT_TRUE(result.ok()) << result.status();
   std::string from_proto = result.value();
@@ -126,7 +126,7 @@ void TestPrintForAnalytics(const std::string& name) {
 template <typename R>
 void TestPrintForAnalytics(const std::string& name, bool pretty) {
   const R proto =
-      ReadStu3Proto<R>(absl::StrCat("examples/", name, ".prototxt"));
+      ReadProto<R>(absl::StrCat("testdata/stu3/examples/", name, ".prototxt"));
   auto result = pretty ? PrettyPrintFhirToJsonStringForAnalytics(proto)
                        : PrintFhirToJsonStringForAnalytics(proto);
   ASSERT_TRUE(result.ok()) << result.status();
@@ -141,6 +141,13 @@ void TestPrintForAnalytics(const std::string& name, bool pretty) {
   }
 }
 
+template <typename R>
+void TestPairWithFilePaths(const std::string& proto_path,
+                           const std::string& json_path) {
+  TestPrintWithFilepaths<R>(proto_path, json_path);
+  TestParseWithFilepaths<R>(proto_path, json_path);
+}
+
 /* Edge Case Testing */
 
 /** Test parsing of FHIR edge cases. */
@@ -148,14 +155,15 @@ TEST(JsonFormatStu3Test, EdgeCasesParse) { TestParse<Patient>("Patient-null"); }
 
 /** Test parsing of FHIR edge casers from ndjson. */
 TEST(JsonFormatStu3Test, EdgeCasesNdjsonParse) {
-  TestParseWithFilepaths<Patient>("examples/Patient-null.prototxt",
-                                  "testdata/stu3/ndjson/Patient-null.ndjson");
+  TestParseWithFilepaths<Patient>(
+      "testdata/stu3/examples/Patient-null.prototxt",
+      "testdata/stu3/ndjson/Patient-null.ndjson");
 }
 
 /** Test parsing to a profile */
 TEST(JsonFormatStu3Test, ParseProfile) {
   TestParseWithFilepaths<stu3::testing::TestPatient>(
-      "profiles/test_patient-profiled-testpatient.prototxt",
+      "testdata/stu3/profiles/test_patient-profiled-testpatient.prototxt",
       "testdata/stu3/profiles/test_patient.json");
   // This test is only meaningful because Patient.name is singular in the
   // profile, unlike in the unprofiled resource.  This means it has array
@@ -173,7 +181,7 @@ TEST(JsonFormatStu3Test, ParseProfile) {
 /** Test printing from a profile */
 TEST(JsonFormatStu3Test, PrintProfile) {
   TestPrintWithFilepaths<stu3::testing::TestPatient>(
-      "profiles/test_patient-profiled-testpatient.prototxt",
+      "testdata/stu3/profiles/test_patient-profiled-testpatient.prototxt",
       "testdata/stu3/profiles/test_patient.json");
 }
 
@@ -2191,11 +2199,10 @@ TEST(JsonFormatTest, VisionPrescriptionPrint) {
   TestPrint<VisionPrescription>("VisionPrescription-33124");
 }
 
-TEST(JsonFormatTest, InvalidControlCharactersReturnsError) {
-  const Observation proto = ReadProto<Observation>(
-      "testdata/jsonformat/observation_invalid_unicode.prototxt");
-
-  ASSERT_FALSE(PrettyPrintFhirToJsonString(proto).ok());
+TEST(JsonFormatR4Test, ControlCharacters) {
+  TestPairWithFilePaths<Observation>(
+      "testdata/jsonformat/observation_control_characters.prototxt",
+      "testdata/jsonformat/observation_control_characters.json");
 }
 
 TEST(JsonFormatR4Test, PadsThreeDigitYearToFourCharacters) {

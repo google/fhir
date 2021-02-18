@@ -48,9 +48,8 @@ absl::StatusOr<std::string> ToJsonStringValue(absl::string_view raw_value) {
     if (replacement != CHARACTERS_TO_ESCAPED_CHARACTER_MAP->end()) {
       absl::StrAppend(&result, replacement->second);
     } else if (char_byte < 32) {
-      return absl::InvalidArgumentError(absl::StrCat(
-          "Invalid control character found in string.  Decimal value:",
-          static_cast<int>(char_byte)));
+      absl::StrAppend(&result, "\\u",
+                      absl::Hex(static_cast<int>(char_byte), absl::kZeroPad4));
     } else {
       result.push_back(char_byte);
     }
