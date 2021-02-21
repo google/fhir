@@ -1,0 +1,20 @@
+status { value: FINAL }
+id { value: "123" }
+code {
+  coding {
+    system { value: "foo" }
+    code { value: "bar" }
+  }
+}
+reference_range {
+ low {
+   unit { value: "anything" },
+   value { value: "4.2" }
+ }
+}
+
+reference_range { text { value: ":123. " } }
+reference_range { text { value: ":123.4 " } }
+reference_range { text { value: "\":123.4 " } }
+reference_range { text { value: "\\\":123.4 " } }
+reference_range { low { value { value: "123.4" } } }

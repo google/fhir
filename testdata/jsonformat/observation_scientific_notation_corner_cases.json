@@ -1,0 +1,19 @@
+{
+  "resourceType": "Observation",
+  "id": "123",
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "foo",
+        "code": "bar"
+      }
+    ]
+  },
+  "referenceRange" : [
+    {"text" : ":6.022e23 "},
+    {"text" : "\":6.022e23 "},
+    {"text" : "\\\":6.022e23 "},
+    {"low" : { "value" :  6.022e23 } }
+  ]
+}

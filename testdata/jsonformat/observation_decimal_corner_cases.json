@@ -1,0 +1,22 @@
+{
+  "resourceType": "Observation",
+  "id": "123",
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "foo",
+        "code": "bar"
+      }
+    ]
+  },
+  "referenceRange" : [
+    {"low":{"unit":"anything","value":4.2}},
+
+    {"text" : ":123. "},
+    {"text" : ":123.4 "},
+    {"text" : "\":123.4 "},
+    {"text" : "\\\":123.4 "},
+    {"low" : { "value" :  123.4 } }
+  ]
+}

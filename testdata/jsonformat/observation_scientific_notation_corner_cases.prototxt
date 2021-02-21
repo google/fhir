@@ -1,0 +1,12 @@
+status { value: FINAL }
+id { value: "123" }
+code {
+  coding {
+    system { value: "foo" }
+    code { value: "bar" }
+  }
+}
+reference_range { text {value: ":6.022e23 " } }
+reference_range { text {value: "\":6.022e23 " } }
+reference_range { text {value: "\\\":6.022e23 " } }
+reference_range { low { value { value: "6.022e23" } } }

@@ -2211,6 +2211,18 @@ TEST(JsonFormatR4Test, PadsThreeDigitYearToFourCharacters) {
       "testdata/jsonformat/observation_three_digit_year.json");
 }
 
+TEST(JsonFormatR4Test, DecimalCornerCases) {
+  TestPairWithFilePaths<Observation>(
+      "testdata/jsonformat/observation_decimal_corner_cases.prototxt",
+      "testdata/jsonformat/observation_decimal_corner_cases.json");
+}
+
+TEST(JsonFormatR4Test, NdjsonLocation) {
+  TestPairWithFilePaths<Location>(
+      "testdata/jsonformat/location_ndjson.prototxt",
+      "testdata/jsonformat/location_ndjson.json");
+}
+
 }  // namespace
 
 }  // namespace stu3

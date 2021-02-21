@@ -136,7 +136,7 @@ class FhirProtoParseHelper {
   int line_;
 };
 
-inline std::string ReadFile(const std::string& filename) {
+inline std::string ReadFile(absl::string_view filename) {
   std::ifstream infile;
   infile.open(
       absl::StrCat(getenv("TEST_SRCDIR"), "/com_google_fhir/", filename));
@@ -147,19 +147,19 @@ inline std::string ReadFile(const std::string& filename) {
 }
 
 template <class T>
-T ReadProto(const std::string& filename) {
+T ReadProto(absl::string_view filename) {
   T result;
   google::protobuf::TextFormat::ParseFromString(ReadFile(filename), &result);
   return result;
 }
 
 template <class T>
-T ReadStu3Proto(const std::string& filename) {
+T ReadStu3Proto(absl::string_view filename) {
   return ReadProto<T>(absl::StrCat("testdata/stu3/", filename));
 }
 
 template <class T>
-T ReadR4Proto(const std::string& filename) {
+T ReadR4Proto(absl::string_view filename) {
   return ReadProto<T>(absl::StrCat("testdata/r4/", filename));
 }
 

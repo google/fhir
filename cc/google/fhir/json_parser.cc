@@ -442,6 +442,47 @@ absl::StatusOr<Json::Value> ParseJsonValue(const std::string& raw_json) {
 
 }  // namespace internal
 
+namespace {
+
+static const char* const kJsonKeyRegex =
+    R"("[^\s"]*[^\\]")";  // Quote, non-whitespace, unescaped quote
+
+static const char* const kColonRegex =
+    R"(\s*:\s*)";  // Arbitary whitespace, colon, arbitrary white space
+
+static const char* const kDecimalRegex =
+    "-?\\d*\\.\\d*?"                      // Decimal of the form X.X
+    "|"                                   // OR
+    "-?\\d*(?:\\.\\d*)?[eE][+-]?[0-9]+";  // Scientific Notation
+
+static const char* const kEndTokenRegex = "[\\s,\\}\\]$]";
+
+// Makes a regex to capture Key/Values of Decimal type.
+// This regex contains 4 capture groups:
+// 1: The key, identified a Quote, followed by non-whitespace,
+// followed by an unescaped quote.
+// 2: Arbitrary whitespace, colon, arbitrary whitespace
+// 3: a decimal (either a number with a decimal, or scientific notation)
+// 4: any field-ending token.
+// Note that this does NOT match integers, so that only Decimal datatypes
+// are affected by this particular eccentricity.
+// Note that (1) is resiliant to the case of a string like
+// { "myString": "stuff\"myFakeField\": 123" }
+// because the end quote cannot be preceded by a backslash.
+const LazyRE2& GetDecimalRegex() {
+  const std::string re =
+      absl::StrFormat("(?m)(%s)(%s)(%s)(%s)", kJsonKeyRegex, kColonRegex,
+                      kDecimalRegex, kEndTokenRegex);
+  static LazyRE2 regex{re.c_str()};
+  // Dereference to cause init to run.
+  // This allows the string memory to be released, since LazyRE2 starts off by
+  // only holding on to the char* address.
+  *regex;
+  return regex;
+}
+
+}  // namespace
+
 absl::Status Parser::MergeJsonFhirStringIntoProto(
     const std::string& raw_json, Message* target,
     const absl::TimeZone default_timezone, const bool validate) const {
@@ -451,25 +492,8 @@ absl::Status Parser::MergeJsonFhirStringIntoProto(
   // parsed into C++ doubles.  To avoid this, add quotes around any decimal
   // fields to ensure that they are parsed as strings.  Note that any field
   // that is already in quotes will not match this regex, and thus be ignored.
-  //
-  // This regex is three capture groups:
-  // 1: a un-escaped double-quote followed by a colon and arbitrary whitespace,
-  //    to ensure this is a field value (and not inside a string).
-  // 2: a decimal
-  // 3: any field-ending token.
-  // TODO: Try to do this in a single pass, with a uglier regex.
-  //                   Alternatively, see if we can find a better json parser
-  //                   that doesn't use c++ decimals to back decimal fields.
-  static const LazyRE2 kDecimalKeyValuePattern{
-      "(?m)([^\\\\]\"\\s*:\\s*)(-?\\d*\\.\\d*?)([\\s,\\}\\]$])"};
-  RE2::GlobalReplace(&mutable_raw_json, *kDecimalKeyValuePattern,
-                     "\\1\"\\2\"\\3");
-
-  static const LazyRE2 kScientificNotationPattern{
-      "(?m)([^\\\\]\"\\s*:\\s*)(-?\\d*(\\.\\d*)?[eE][+-]?[0-9]+)([\\s,\\}\\]$]"
-      ")"};
-  RE2::GlobalReplace(&mutable_raw_json, *kScientificNotationPattern,
-                     "\\1\"\\2\"\\4");
+  static const LazyRE2& decimal_regex = GetDecimalRegex();
+  RE2::GlobalReplace(&mutable_raw_json, *decimal_regex, R"(\1\2"\3"\4)");
 
   Json::Value value;
 
