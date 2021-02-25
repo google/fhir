@@ -48,14 +48,10 @@ TEST(JsonUtilTest, ToJsonStringValueWithMultiByteCharacters) {
   TestToJsonStringValue("André", "\"André\"");
 }
 
-TEST(JsonUtilTest, ToJsonStringValueControlCharactersPrinted) {
-  std::string with_null_char{"\r\n\t\0\u0008", 5};
-  TestToJsonStringValue(with_null_char, R"("\r\n\t\u0000\u0008")");
-}
-
-TEST(JsonUtilTest, ToJsonStringValueOnlyNullChar) {
-  std::string only_null_char{"\0", 1};
-  TestToJsonStringValue(only_null_char, R"("\u0000")");
+TEST(JsonUtilTest, ToJsonStringValueInvalidControlCharactersReturnsError) {
+  std::string with_null_char{"foo\0bar", 7};
+  absl::StatusOr<std::string> result = ToJsonStringValue(with_null_char);
+  EXPECT_FALSE(result.ok());
 }
 
 }  // namespace

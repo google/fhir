@@ -2199,10 +2199,11 @@ TEST(JsonFormatTest, VisionPrescriptionPrint) {
   TestPrint<VisionPrescription>("VisionPrescription-33124");
 }
 
-TEST(JsonFormatR4Test, ControlCharacters) {
-  TestPairWithFilePaths<Observation>(
-      "testdata/jsonformat/observation_control_characters.prototxt",
-      "testdata/jsonformat/observation_control_characters.json");
+TEST(JsonFormatTest, InvalidControlCharactersReturnsError) {
+  const Observation proto = ReadProto<Observation>(
+      "testdata/jsonformat/observation_invalid_unicode.prototxt");
+
+  ASSERT_FALSE(PrettyPrintFhirToJsonString(proto).ok());
 }
 
 TEST(JsonFormatR4Test, PadsThreeDigitYearToFourCharacters) {

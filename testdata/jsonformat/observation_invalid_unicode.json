@@ -10,9 +10,5 @@
       }
     ]
   },
-  "referenceRange" : [
-    { "text": "\u0000" },
-    { "text": "\r\n" },
-    { "text": "\n" }
-  ]
+  "valueString" : "foobarbaz\r\n\tquux"
 }

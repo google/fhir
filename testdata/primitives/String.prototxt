@@ -7,10 +7,6 @@ valid_pairs {
   proto { string_proto { value: "foo\tbar\rbaz\nquux" } }
 }
 valid_pairs {
-  json_string: "\"\\u0000\""
-  proto { string_proto { value: "\0" } }
-}
-valid_pairs {
   json_string: "\"André 3000\""
   proto { string_proto { value: "Andr\303\251 3000" } }
 }

@@ -1,0 +1,11 @@
+status { value: FINAL }
+code {
+  coding {
+    system { value: "foo" }
+    code { value: "bar" }
+  }
+}
+# Note that the only valid control characters are [\r\n\t], these are preserved
+# Other control characters (like \0 and \u0001) are dropped
+value { string_value { value:  "foo\0bar\u0001baz\r\n\tquux" } }
+id { value: "123" }

@@ -1688,10 +1688,11 @@ TEST(JsonFormatR4Test, PrintAndParseAllResources) {
   }
 }
 
-TEST(JsonFormatR4Test, ControlCharacters) {
-  TestPairWithFilePaths<Observation>(
-      "testdata/jsonformat/observation_control_characters.prototxt",
-      "testdata/jsonformat/observation_control_characters.json");
+TEST(JsonFormatR4Test, InvalidControlCharactersReturnsError) {
+  const Observation proto = ReadProto<Observation>(
+      "testdata/jsonformat/observation_invalid_unicode.prototxt");
+
+  ASSERT_FALSE(PrettyPrintFhirToJsonString(proto).ok());
 }
 
 TEST(JsonFormatR4Test, PadsThreeDigitYearToFourCharacters) {

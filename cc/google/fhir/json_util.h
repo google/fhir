@@ -33,13 +33,10 @@ namespace google::fhir {
 // this would return the literal:
 // R"("this is \n\"my favorite\" string")"
 //
-// Note that this will print all control characters with their escape
-// counterparts. While the FHIR spec states that "Strings SHOULD not contain
-// Unicode character points below 32, except for u0009 (horizontal tab), u0010
-// (carriage return) and u0013 (line feed)", we take a permissive stance in what
-// it allows, and will not reject or otherwise surpress other control
-// characters.
-// See: https://www.hl7.org/fhir/datatypes.html#string
+// Per FHIR spec, the only valid control characters in the range [0,32)
+// are [\r\n\t].  This returns a status error if it encounters any other
+// characters in that range.
+// See https://www.hl7.org/fhir/datatypes.html#string
 //
 // Note that this does NOT escape the "solidus" `/` as `\/`.
 // Per JSON spec, this optional but not required, so to maintain a minimal

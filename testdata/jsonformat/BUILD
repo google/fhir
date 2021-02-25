@@ -6,8 +6,13 @@ licenses(["notice"])
 
 filegroup(
     name = "jsonformat",
-    srcs = glob([
-        "*.json",
-        "*.prototxt",
-    ]),
+    srcs = glob(
+        [
+            "*.json",
+            "*.prototxt",
+        ],
+        exclude = [
+            "observation_invalid_unicode.json",
+        ],
+    ),
 )
