@@ -20,6 +20,7 @@ import static java.util.stream.Collectors.toList;
 
 import com.google.common.base.Ascii;
 import com.google.common.base.Splitter;
+import com.google.fhir.common.FhirTypes;
 import com.google.fhir.common.FhirVersion;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.Annotations;
@@ -671,7 +672,9 @@ final class ProfileGenerator {
   }
 
   private boolean isAllowedReferenceTarget(String url, Set<String> allowedReferenceTargets) {
-    if (allowedReferenceTargets.contains(url)) {
+    // References to the base resource can be restricted to any child resource.
+    if (allowedReferenceTargets.contains(FhirTypes.RESOURCE_URL)
+            || allowedReferenceTargets.contains(url)) {
       return true;
     }
     StructureDefinition structDef = getStructDefForUrl(url);

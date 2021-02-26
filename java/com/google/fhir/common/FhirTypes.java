@@ -31,6 +31,7 @@ public final class FhirTypes {
   public static final String EXTENSION_URL = "http://hl7.org/fhir/StructureDefinition/Extension";
   public static final String PERIOD_URL = "http://hl7.org/fhir/StructureDefinition/Period";
   public static final String REFERENCE_URL = "http://hl7.org/fhir/StructureDefinition/Reference";
+  public static final String RESOURCE_URL = "http://hl7.org/fhir/StructureDefinition/Resource";
   public static final String XHTML_URL = "http://hl7.org/fhir/StructureDefinition/xhtml";
 
   public static boolean isProfileOfType(Descriptor base, Descriptor test) {

@@ -72,6 +72,7 @@ java_library(
         "//java/com/google/fhir/common:codes",
         "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:extensions",
+        "//java/com/google/fhir/common:fhir_types",
         "//java/com/google/fhir/common:fhir_version",
         "//java/com/google/fhir/common:json_format",
         "//java/com/google/fhir/common:resource_utils",
