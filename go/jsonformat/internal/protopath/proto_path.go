@@ -70,6 +70,28 @@ func NewPath(p string) Path {
 	return path
 }
 
+// Append a name to this Path, returns a new Path.
+func (p Path) Append(name protoreflect.Name) Path {
+	parts := make([]protoreflect.Name, len(p.parts))
+	copy(parts, p.parts)
+	parts = append(parts, name)
+	return Path{parts: parts}
+}
+
+// Parent of the current path, returns a new Path.
+func (p Path) Parent() Path {
+	n := len(p.parts) - 1
+	parts := make([]protoreflect.Name, n)
+	copy(parts, p.parts[:n])
+	return Path{parts: parts}
+}
+
+// IsValid reports whether s is a syntactically valid proto path.
+// An empty path, or one with blank parts, is invalid.
+func (p Path) IsValid() bool {
+	return isValidPath(p)
+}
+
 func isValidPath(p Path) bool {
 	if len(p.parts) == 0 {
 		return false
