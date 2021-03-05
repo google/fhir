@@ -1770,21 +1770,22 @@ class UnionOperator : public BinaryOperator {
       const std::vector<WorkspaceMessage>& left_results,
       const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
       std::vector<WorkspaceMessage>* out_results) const override {
-    if (left_results.empty()) {
-      out_results->insert(out_results->begin(), right_results.begin(),
-                          right_results.end());
-    } else if (right_results.empty()) {
-      out_results->insert(out_results->begin(), left_results.begin(),
-                          left_results.end());
-    } else {
-      std::unordered_set<WorkspaceMessage, ProtoPtrHash,
-                         ProtoPtrSameTypeAndEqual>
-          results(kDefaultSetBucketCount,
-                  ProtoPtrHash(work_space->GetPrimitiveHandler()),
-                  ProtoPtrSameTypeAndEqual(work_space->GetPrimitiveHandler()));
-      results.insert(left_results.begin(), left_results.end());
-      results.insert(right_results.begin(), right_results.end());
-      out_results->insert(out_results->begin(), results.begin(), results.end());
+    std::unordered_set<WorkspaceMessage, ProtoPtrHash, ProtoPtrSameTypeAndEqual>
+        seen_results(
+            kDefaultSetBucketCount,
+            ProtoPtrHash(work_space->GetPrimitiveHandler()),
+            ProtoPtrSameTypeAndEqual(work_space->GetPrimitiveHandler()));
+    for (const WorkspaceMessage& item : left_results) {
+      if (seen_results.find(item) == seen_results.end()) {
+        out_results->push_back(item);
+        seen_results.insert(item);
+      }
+    }
+    for (const WorkspaceMessage& item : right_results) {
+      if (seen_results.find(item) == seen_results.end()) {
+        out_results->push_back(item);
+        seen_results.insert(item);
+      }
     }
     return absl::OkStatus();
   }

@@ -1133,8 +1133,7 @@ TYPED_TEST(FhirPathTest, TestOperatorAsResources) {
 TYPED_TEST(FhirPathTest, TestOperatorAsDateTime) {
   auto test_observation = ValidObservation<typename TypeParam::Observation>();
   EvaluationResult result =
-      TestFixture::Evaluate(test_observation, "effective as DateTime")
-          .value();
+      TestFixture::Evaluate(test_observation, "effective as DateTime").value();
 
   EXPECT_THAT(result.GetMessages(),
               UnorderedElementsAreArray(
@@ -1222,7 +1221,7 @@ TYPED_TEST(FhirPathTest, TestFunctionTailMaintainsOrder) {
               ElementsAreArray({EqualsProto(code_def), EqualsProto(code_ghi)}));
 }
 
-TYPED_TEST(FhirPathTest, TestUnion) {
+TYPED_TEST(FhirPathTest, TestUnionOperator) {
   EXPECT_THAT(TestFixture::Evaluate("({} | {})"), EvalsToEmpty());
 
   EXPECT_THAT(TestFixture::Evaluate("(true | {})"), EvalsToTrue());
@@ -1231,7 +1230,7 @@ TYPED_TEST(FhirPathTest, TestUnion) {
   EXPECT_THAT(TestFixture::Evaluate("(false | false)"), EvalsToFalse());
 }
 
-TYPED_TEST(FhirPathTest, TestUnionDeduplicationPrimitives) {
+TYPED_TEST(FhirPathTest, TestUnionOperatorDeduplicationPrimitives) {
   EvaluationResult evaluation_result =
       TestFixture::Evaluate("true | false | 1 | 'foo' | 2 | 1 | 'foo'").value();
   std::vector<const Message*> result = evaluation_result.GetMessages();
@@ -1253,7 +1252,7 @@ TYPED_TEST(FhirPathTest, TestUnionDeduplicationPrimitives) {
                    EqualsProto(string_foo_proto)}));
 }
 
-TYPED_TEST(FhirPathTest, TestUnionDeduplicationObjects) {
+TYPED_TEST(FhirPathTest, TestUnionOperatorDeduplicationObjects) {
   auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
 
   EvaluationResult evaluation_result =
@@ -1265,6 +1264,22 @@ TYPED_TEST(FhirPathTest, TestUnionDeduplicationObjects) {
   ASSERT_THAT(result, UnorderedElementsAreArray(
                           {EqualsProto(test_encounter.status()),
                            EqualsProto(test_encounter.period())}));
+}
+
+TYPED_TEST(FhirPathTest, TestUnionOperatorWhenOneSideHasDuplicates) {
+  EXPECT_THAT(TestFixture::Evaluate("22.combine(22) | {}"), EvalsToInteger(22));
+
+  EXPECT_THAT(TestFixture::Evaluate("{} | 33.combine(33)"), EvalsToInteger(33));
+
+  auto integer_22_proto =
+      ParseFromString<typename TypeParam::Integer>("value: 22");
+  auto integer_33_proto =
+      ParseFromString<typename TypeParam::Integer>("value: 33");
+
+  EXPECT_THAT(
+      TestFixture::Evaluate("33 | 22.combine(22)").value().GetMessages(),
+      ElementsAreArray(
+          {EqualsProto(integer_33_proto), EqualsProto(integer_22_proto)}));
 }
 
 TYPED_TEST(FhirPathTest, TestUnionFunction) {
