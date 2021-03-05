@@ -19,13 +19,39 @@
 
 #include "google/protobuf/message.h"
 #include "absl/status/status.h"
+#include "absl/status/statusor.h"
+#include "google/fhir/error_reporter.h"
+#include "proto/google/fhir/proto/stu3/resources.pb.h"
 
 namespace google {
 namespace fhir {
 namespace stu3 {
 
+// Run resource-specific validation on the given FHIR resource and
+// report all errors to the given error reporter. Validation will continue
+// processing as long as the ErrorReporter returns an Ok status for all
+// errors it is given.
+//
+// Returns Ok if the error reporter handled all reported errors and
+// there was no internal issue (such as a malformed FHIR profile).
+::absl::Status Validate(const ::google::protobuf::Message& resource,
+                        ::google::fhir::ErrorReporter* reporter);
+
+// Run resource-specific validation on the given FHIR resource and
+// adds all errors to the returned OperationOutcome. Validation will continue
+// through all issues encountered so the given OperationOutcome will provide
+// a complete description of any issues.
+//
+// Returns an OperationOutcome with all data issues; this will only return
+// an error status if there is some unexpected issue like a malformed
+// FHIR profile.
+::absl::StatusOr<::google::fhir::stu3::proto::OperationOutcome>
+Validate(const ::google::protobuf::Message& resource);
+
+// Deprecated. Use one of the above Validate functions.
 ::absl::Status ValidateResource(const ::google::protobuf::Message& resource);
 
+// Deprecated. Use one of the above Validate functions.
 ::absl::Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource);
 
 }  // namespace stu3

@@ -20,14 +20,51 @@
 #include "google/protobuf/message.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
+#include "google/fhir/error_reporter.h"
+#include "proto/google/fhir/proto/r4/core/resources/operation_outcome.pb.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 
 namespace google {
 namespace fhir {
+namespace r4 {
 
-// TODO: move to r4 namespace, drop R4 suffix.
+// Converts FHIR resources between profiled and unprofiled, reporting any
+// conversion or validation errors to the given ErrorReporter.  Conversion will
+// continue processing as long as the ErrorReporter returns an Ok status for all
+// errors it is given.
+//
+// If <target> is a profiled type of <source>:
+// Converts a resource to a profiled version of that resource.
+// If the profile adds new inlined fields for Extensions or Codings within
+// CodeableConcepts, and those extensions or codings are present on the base
+// message, the data will be reorganized into the new fields in the profile.
+// Finally, this runs the Fhir resource validation code on the resulting
+// message, to ensure the result complies with the requirements of the profile
+// (e.g., fields that are considered required by the profile).
+//
+// If <target> is a base type of <source>:
+// Performs the inverse operation to the above.
+// Any data that is in an inlined field in the profiled message,
+// that does not exists in the base message will be converted back to the
+// original format (e.g., extension).
+absl::Status ConvertToProfile(const ::google::protobuf::Message& source,
+                              ::google::protobuf::Message* target,
+                              ::google::fhir::ErrorReporter* reporter);
 
+// Converts FHIR resources between profiled and unprofiled, returning any
+// conversion errors or warnings in an OperationOutcome. Users should check
+// the returned outcome and properly handle or report issues.
+//
+// See the above ConvertToProfile method for details on the source and target
+// parameters.
+absl::StatusOr<::google::fhir::r4::core::OperationOutcome>
+ConvertToProfile(const ::google::protobuf::Message& source,
+                 ::google::protobuf::Message* target);
+}  // namespace r4
+
+// Deprecated. Use ::google::fhir::r4::ConvertToProfile instead.
+//
 // If <target> is a profiled type of <source>:
 // Converts a resource to a profiled version of that resource.
 // If the profile adds new inlined fields for Extensions or Codings within
@@ -45,6 +82,10 @@ namespace fhir {
 absl::Status ConvertToProfileR4(const ::google::protobuf::Message& source,
                                 ::google::protobuf::Message* target);
 
+// Deprecated. Lenient conversions never had well-defined semantics,
+// so users should move to other ConvertToProfile functions where they can
+// chose whether to ignore specific validation errors.
+//
 // Similar to ConvertToProfileR4, but does not validate that the proto is valid
 // according to the target profile.
 absl::Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,

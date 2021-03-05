@@ -1,0 +1,14 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: INVALID
+  }
+  diagnostics {
+    value: "low.exists() or high.exists() or text.exists()"
+  }
+  expression {
+    value: "Observation.referenceRange[0]"
+  }
+}

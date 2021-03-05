@@ -36,6 +36,7 @@ namespace fhir {
 namespace {
 
 using ::google::fhir::stu3::proto::Observation;
+using ::google::fhir::stu3::proto::OperationOutcome;
 using ::google::fhir::stu3::proto::Patient;
 using ::google::fhir::stu3::testing::TestObservation;
 using ::google::fhir::stu3::testing::TestObservationLvl2;
@@ -58,27 +59,36 @@ template <class B, class P>
 void TestDownConvert(const std::string& filename) {
   const B unprofiled = GetUnprofiled<B>(filename);
   P profiled;
+  P expected_profiled = GetProfiled<P>(filename);
 
-  auto status = ConvertToProfileLenientStu3(unprofiled, &profiled);
-  if (!status.ok()) {
-    LOG(ERROR) << status.message();
-    ASSERT_TRUE(status.ok());
-  }
-  EXPECT_THAT(profiled, EqualsProto(GetProfiled<P>(filename)));
+  auto result = stu3::ConvertToProfile(unprofiled, &profiled);
+  // Ignore conversion OperationOutcome structure for bi-directional tests;
+  // failure modes are tested elsewhere.
+  EXPECT_TRUE(result.ok());
+  EXPECT_THAT(profiled, EqualsProto(expected_profiled));
+
+  // Test deprecated method as well.
+  profiled.Clear();
+  FHIR_ASSERT_OK(ConvertToProfileLenientStu3(unprofiled, &profiled));
+  EXPECT_THAT(profiled, EqualsProto(expected_profiled));
 }
 
 template <class B, class P>
 void TestUpConvert(const std::string& filename) {
   const P profiled = GetProfiled<P>(filename);
   B unprofiled;
+  B expected_unprofiled = ReadProto<B>(absl::StrCat(filename, ".prototxt"));
 
-  auto status = ConvertToProfileLenientStu3(profiled, &unprofiled);
-  if (!status.ok()) {
-    LOG(ERROR) << status.message();
-    ASSERT_TRUE(status.ok());
-  }
-  EXPECT_THAT(unprofiled, EqualsProtoIgnoringReordering(ReadProto<B>(
-                              absl::StrCat(filename, ".prototxt"))));
+  auto result = stu3::ConvertToProfile(profiled, &unprofiled);
+  // Ignore conversion OperationOutcome structure for bi-directional tests;
+  // failure modes are tested elsewhere.
+  EXPECT_TRUE(result.ok());
+  EXPECT_THAT(unprofiled, EqualsProtoIgnoringReordering(expected_unprofiled));
+
+  // Test deprecated method as well.
+  unprofiled.Clear();
+  FHIR_ASSERT_OK(ConvertToProfileLenientStu3(profiled, &unprofiled));
+  EXPECT_THAT(unprofiled, EqualsProtoIgnoringReordering(expected_unprofiled));
 }
 
 template <class B, class P>
@@ -223,6 +233,23 @@ TEST(ProfilesTest, MissingRequiredFields) {
   auto strict_status = ConvertToProfileStu3(unprofiled, &profiled);
   ASSERT_EQ(absl::StatusCode::kFailedPrecondition, strict_status.code())
       << "Incorrect status: " << strict_status.message();
+
+  auto outcome = stu3::ConvertToProfile(unprofiled, &profiled);
+  EXPECT_TRUE(outcome.ok());
+
+  OperationOutcome expected;
+  google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        issue {
+          severity { value: ERROR }
+          code { value: INVALID }
+          diagnostics { value: "missing-TestObservation.component.code" }
+          expression { value: "TestObservation.component.code" }
+        }
+      )proto",
+      &expected);
+
+  EXPECT_THAT(outcome.value(), EqualsProto(expected));
 }
 
 }  // namespace

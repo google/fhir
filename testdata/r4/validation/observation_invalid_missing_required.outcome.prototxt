@@ -1,0 +1,14 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: INVALID
+  }
+  diagnostics {
+    value: "missing-Observation.status"
+  }
+  expression {
+    value: "Observation.status"
+  }
+}

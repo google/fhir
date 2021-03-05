@@ -1,0 +1,30 @@
+# TODO: start/end times have duplicate reporting due to
+# previous validation logic -- this should be removed.
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: INVALID
+  }
+  diagnostics {
+    value: "Encounter.period-start-time-later-than-end-time"
+  }
+  expression {
+    value: "Encounter.period"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: INVALID
+  }
+  diagnostics {
+    value: "start.hasValue().not() or end.hasValue().not() or (start <= end)"
+  }
+  expression {
+    value: "Encounter.period"
+  }
+}

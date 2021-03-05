@@ -15,24 +15,49 @@
 #include "google/fhir/r4/profiles.h"
 
 #include "google/protobuf/message.h"
+#include "absl/status/status.h"
+#include "absl/status/statusor.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/profiles_lib.h"
+#include "google/fhir/r4/operation_error_reporter.h"
 #include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/status/status.h"
 
 namespace google {
 namespace fhir {
 
+using ::google::fhir::r4::OperationOutcomeErrorReporter;
+using ::google::fhir::r4::core::OperationOutcome;
+
+namespace r4 {
+
+absl::Status ConvertToProfile(const ::google::protobuf::Message& source,
+                              ::google::protobuf::Message* target,
+                              ::google::fhir::ErrorReporter* error_reporter) {
+  return profiles_internal::ConvertToProfileInternal<r4::R4PrimitiveHandler>(
+      source, target, error_reporter);
+}
+
+absl::StatusOr<OperationOutcome> ConvertToProfile(
+    const ::google::protobuf::Message& source, ::google::protobuf::Message* target) {
+  ::google::fhir::r4::core::OperationOutcome outcome;
+  OperationOutcomeErrorReporter error_reporter(&outcome);
+  FHIR_RETURN_IF_ERROR(ConvertToProfile(source, target, &error_reporter));
+  return outcome;
+}
+}  // namespace r4
+
 absl::Status ConvertToProfileR4(const ::google::protobuf::Message& source,
                                 ::google::protobuf::Message* target) {
   return profiles_internal::ConvertToProfileInternal<r4::R4PrimitiveHandler>(
-      source, target);
+      source, target, FailFastErrorReporter::Get());
 }
 
 // Identical to ConvertToProfile, except does not run the validation step.
 absl::Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,
                                        ::google::protobuf::Message* target) {
   return profiles_internal::ConvertToProfileLenientInternal<
-      r4::R4PrimitiveHandler>(source, target);
+      r4::R4PrimitiveHandler>(source, target, FailFastErrorReporter::Get());
 }
 
 }  // namespace fhir

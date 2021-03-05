@@ -122,6 +122,7 @@ cc_library(
         ":codeable_concepts",
         ":codes",
         ":core_resource_registry",
+        ":error_reporter",
         ":extensions",
         ":fhir_types",
         ":proto_util",
@@ -196,6 +197,7 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":annotations",
+        ":error_reporter",
         ":fhir_types",
         ":primitive_handler",
         ":proto_util",
@@ -494,6 +496,17 @@ cc_library(
         "@com_google_absl//absl/container:flat_hash_map",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings",
+    ],
+)
+
+cc_library(
+    name = "error_reporter",
+    srcs = ["error_reporter.cc"],
+    hdrs = ["error_reporter.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
     ],
 )

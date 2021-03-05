@@ -19,11 +19,28 @@
 
 #include "google/protobuf/message.h"
 #include "absl/status/status.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/fhir_path/fhir_path_validation.h"
 #include "google/fhir/primitive_handler.h"
 
+// TODO: Refactor this into an internal namespace and directory.
 namespace google {
 namespace fhir {
+
+// Run resource-specific validation on a single FHIR resource and
+// report all errors to the given error reporter.
+::absl::Status Validate(const ::google::protobuf::Message& resource,
+                        const PrimitiveHandler* primitive_handler,
+                        fhir_path::FhirPathValidator* message_validator,
+                        ErrorReporter* error_reporter);
+
+// Run resource-specific validation on a single FHIR resource and
+// report all errors to the error reporter, excluding FHIRPath constraints.
+//
+// This exists only to support backward compatibility in calling methods.
+::absl::Status ValidateWithoutFhirPath(const ::google::protobuf::Message& resource,
+                        const PrimitiveHandler* primitive_handler,
+                        ErrorReporter* error_reporter);
 
 // TODO: Invert the default here for FHIRPath handling, and have
 // ValidateWithoutFhirPath instead of ValidateWithFhirPath

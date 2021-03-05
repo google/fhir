@@ -29,6 +29,7 @@
 #include "google/fhir/codeable_concepts.h"
 #include "google/fhir/codes.h"
 #include "google/fhir/core_resource_registry.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/extensions.h"
 #include "google/fhir/fhir_types.h"
 #include "google/fhir/proto_util.h"
@@ -38,6 +39,7 @@
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 
+// TODO: Refactor this into an internal directory.
 namespace google {
 namespace fhir {
 
@@ -63,7 +65,8 @@ const unordered_map<std::string, const FieldDescriptor*> GetExtensionMap(
 // cannot are put into the extension field on the target.
 template <typename ExtensionLike,
           typename CodeLike = FHIR_DATATYPE(ExtensionLike, code)>
-absl::Status PerformExtensionSlicing(const Message& source, Message* target) {
+absl::Status PerformExtensionSlicing(const Message& source, Message* target,
+    ErrorReporter* error_reporter) {
   const Descriptor* source_descriptor = source.GetDescriptor();
   const Reflection* source_reflection = source.GetReflection();
   const Descriptor* target_descriptor = target->GetDescriptor();
@@ -100,10 +103,13 @@ absl::Status PerformExtensionSlicing(const Message& source, Message* target) {
             value.GetReflection()->GetOneofFieldDescriptor(
                 value, value.GetDescriptor()->FindOneofByName("choice"));
         if (src_datatype_field == nullptr) {
-          return InvalidArgumentError(
-              absl::StrCat("Invalid extension: neither value nor extensions "
-                           "set on extension ",
-                           url));
+          FHIR_RETURN_IF_ERROR(error_reporter->ReportError(
+              source_extension_field->full_name(), InvalidArgumentError(
+                  absl::StrCat(
+                      "Invalid extension: neither value nor extensions "
+                      "set on extension ",
+                      url))));
+          continue;
         }
         Message* typed_extension = MutableOrAddMessage(target, inlined_field);
         const Message& src_value =
@@ -115,10 +121,13 @@ absl::Status PerformExtensionSlicing(const Message& source, Message* target) {
           FHIR_RETURN_IF_ERROR(
               CopyCode(dynamic_cast<const CodeLike&>(src_value), typed_extension));
         } else {
-          return InvalidArgumentError(absl::StrCat(
-              "Profiled extension slice is incorrect type: ", url, "should be ",
-              destination_type->full_name(), " but is ",
-              src_datatype_field->message_type()->full_name()));
+          FHIR_RETURN_IF_ERROR(error_reporter->ReportError(
+              destination_type->full_name(),
+              absl::InvalidArgumentError(absl::StrCat(
+                  "Profiled extension slice is incorrect type: ", url,
+                  " should be ", destination_type->full_name(), " but is ",
+                  src_datatype_field->message_type()->full_name()))));
+          continue;
         }
       } else {
         // This is a complex extension
@@ -206,13 +215,15 @@ template <typename ExtensionLike,
           typename CodeableConceptLike = FHIR_DATATYPE(ExtensionLike,
                                                        codeable_concept),
           typename CodeLike = FHIR_DATATYPE(ExtensionLike, code)>
-absl::Status CopyToProfile(const Message& source, Message* target) {
+absl::Status CopyToProfile(const Message& source, Message* target,
+    ErrorReporter* error_reporter) {
   target->Clear();
   // Handle all the raw extensions on source.  This slot extensions that have
   // profiled fields, and copy the rest over to the target raw extensions field.
   // Noe that this will only handle raw extensions on source - typed extensions
   // on source will be handled when iterating through the fields.
-  FHIR_RETURN_IF_ERROR(PerformExtensionSlicing<ExtensionLike>(source, target));
+  FHIR_RETURN_IF_ERROR(
+      PerformExtensionSlicing<ExtensionLike>(source, target, error_reporter));
 
   const Descriptor* source_descriptor = source.GetDescriptor();
   const Reflection* source_reflection = source.GetReflection();
@@ -317,9 +328,11 @@ absl::Status CopyToProfile(const Message& source, Message* target) {
         CanHaveSlicing<ExtensionLike>(target_field)) {
       FHIR_RETURN_IF_ERROR(ForEachMessageWithStatus<Message>(
           source, source_field,
-          [&target, &target_field](const Message& source_message) {
+          [&target, &target_field,
+           error_reporter](const Message& source_message) {
             return CopyToProfile<ExtensionLike>(
-                source_message, MutableOrAddMessage(target, target_field));
+                source_message, MutableOrAddMessage(target, target_field),
+                error_reporter);
           }));
       continue;
     }
@@ -347,23 +360,27 @@ absl::Status CopyToProfile(const Message& source, Message* target) {
 template <typename PrimitiveHandlerVersion,
           typename ExtensionLike = typename PrimitiveHandlerVersion::Extension>
 absl::Status ConvertToProfileLenientInternal(const Message& source,
-                                             Message* target) {
+                                             Message* target,
+                                             ErrorReporter* error_reporter) {
   if (!SharesCommonAncestor(source.GetDescriptor(), target->GetDescriptor())) {
     return absl::InvalidArgumentError(absl::StrCat(
         "Incompatible profile types: ", source.GetDescriptor()->full_name(),
         " to ", target->GetDescriptor()->full_name()));
   }
-  return CopyToProfile<ExtensionLike>(source, target);
+  return CopyToProfile<ExtensionLike>(source, target, error_reporter);
 }
 
 template <typename PrimitiveHandlerVersion,
           typename ExtensionLike = typename PrimitiveHandlerVersion::Extension>
-absl::Status ConvertToProfileInternal(const Message& source, Message* target) {
+absl::Status ConvertToProfileInternal(const Message& source, Message* target,
+                                      ErrorReporter* error_reporter) {
   const auto& status =
-      ConvertToProfileLenientInternal<PrimitiveHandlerVersion>(source, target);
+      ConvertToProfileLenientInternal<PrimitiveHandlerVersion>(source, target,
+                                                               error_reporter);
   FHIR_RETURN_IF_ERROR(status);
   absl::Status validation =
-      ValidateResource(*target, PrimitiveHandlerVersion::GetInstance());
+      ValidateWithoutFhirPath(*target, PrimitiveHandlerVersion::GetInstance(),
+                       error_reporter);
   if (validation.ok()) {
     return absl::OkStatus();
   }

@@ -21,6 +21,7 @@
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
 #include "google/fhir/test_helper.h"
+#include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 #include "proto/google/fhir/proto/stu3/resources.pb.h"
 
@@ -31,6 +32,7 @@ namespace stu3 {
 namespace {
 
 using namespace stu3::proto;  // NOLINT
+using ::google::fhir::testutil::EqualsProto;
 
 static google::protobuf::TextFormat::Parser parser;
 
@@ -70,21 +72,45 @@ Encounter ValidEncounter() {
   )proto");
 }
 
+// Tests the given resource is valid using both the deprecated and new functions
 template <typename T>
 void ValidTest(const T& proto) {
   auto status = ValidateResource(proto);
   EXPECT_TRUE(status.ok()) << status;
+
+  absl::StatusOr<OperationOutcome> outcome = Validate(proto);
+  FHIR_ASSERT_OK(outcome.status());
+  EXPECT_THAT(*outcome, EqualsProto(OperationOutcome()));
 }
 
+// Tests the given resource is invalid using both the deprecated and new
+// functions
 template <typename T>
-void InvalidTest(const std::string& err_msg, const T& proto) {
+void InvalidTest(absl::string_view err_msg,
+                 const std::string& outcome_prototxt,
+                 const T& proto) {
   EXPECT_EQ(ValidateResource(proto), ::absl::FailedPreconditionError(err_msg));
+
+  OperationOutcome outcome_proto;
+  ASSERT_TRUE(parser.ParseFromString(outcome_prototxt, &outcome_proto));
+  absl::StatusOr<OperationOutcome> outcome = Validate(proto);
+  FHIR_ASSERT_OK(outcome.status());
+  EXPECT_THAT(*outcome, EqualsProto(outcome_proto));
 }
 
 TEST(ResourceValidationTest, MissingRequiredField) {
   Observation observation = ValidObservation();
   observation.clear_status();
-  InvalidTest("missing-Observation.status", observation);
+  InvalidTest("missing-Observation.status",
+              R"proto(
+                issue {
+                  severity { value: ERROR }
+                  code { value: INVALID }
+                  diagnostics { value: "missing-Observation.status" }
+                  expression { value: "Observation.status" }
+                }
+              )proto",
+              observation);
 }
 
 TEST(ResourceValidationTest, InvalidPrimitiveField) {
@@ -92,6 +118,16 @@ TEST(ResourceValidationTest, InvalidPrimitiveField) {
   observation.mutable_value()->mutable_quantity()->mutable_value()->set_value(
       "1.2.3");
   InvalidTest("invalid-primitive-Observation.value.quantity.value",
+              R"proto(
+                issue {
+                  severity { value: ERROR }
+                  code { value: INVALID }
+                  diagnostics {
+                    value: "invalid-primitive-Observation.value.quantity.value"
+                  }
+                  expression { value: "Observation.value.quantity.value" }
+                }
+              )proto",
               observation);
 }
 
@@ -110,6 +146,24 @@ TEST(ResourceValidationTest, InvalidReference) {
       "12345");
   InvalidTest(
       "invalid-reference-disallowed-type-Patient-at-Observation.related.target",
+      R"proto(
+        issue {
+          severity { value: ERROR }
+          code { value: INVALID }
+          diagnostics {
+            value: "invalid-reference-disallowed-type-Patient-at-Observation.related.target"
+          }
+          expression { value: "Observation.related.target" }
+        }
+        issue {
+          severity { value: ERROR }
+          code { value: INVALID }
+          diagnostics {
+            value: "invalid-primitive-Observation.related.target.patientId"
+          }
+          expression { value: "Observation.related.target.patientId" }
+        }
+      )proto",
       observation);
 }
 
@@ -126,8 +180,37 @@ TEST(ResourceValidationTest, RepeatedReferenceInvalid) {
   encounter.add_account()->mutable_account_id()->set_value("111");
   encounter.add_account()->mutable_patient_id()->set_value("222");
   encounter.add_account()->mutable_account_id()->set_value("333");
-  InvalidTest("invalid-reference-disallowed-type-Patient-at-Encounter.account",
-              encounter);
+  InvalidTest(
+      "invalid-reference-disallowed-type-Patient-at-Encounter.account",
+      R"proto(
+        issue {
+          severity { value: ERROR }
+          code { value: INVALID }
+          diagnostics {
+            value: "invalid-reference-disallowed-type-Patient-at-Encounter.account"
+          }
+          expression { value: "Encounter.account" }
+        }
+        issue {
+          severity { value: ERROR }
+          code { value: INVALID }
+          diagnostics { value: "invalid-primitive-Encounter.account.accountId" }
+          expression { value: "Encounter.account.accountId" }
+        }
+        issue {
+          severity { value: ERROR }
+          code { value: INVALID }
+          diagnostics { value: "invalid-primitive-Encounter.account.patientId" }
+          expression { value: "Encounter.account.patientId" }
+        }
+        issue {
+          severity { value: ERROR }
+          code { value: INVALID }
+          diagnostics { value: "invalid-primitive-Encounter.account.accountId" }
+          expression { value: "Encounter.account.accountId" }
+        }
+      )proto",
+      encounter);
 }
 
 TEST(ResourceValidationTest, EmptyOneof) {
@@ -138,6 +221,18 @@ TEST(ResourceValidationTest, EmptyOneof) {
   *(component->mutable_code()) = ValidCodeableConcept();
   InvalidTest(
       "empty-oneof-google.fhir.stu3.proto.Observation.Component.Value.value",
+      R"proto(
+        issue {
+          severity { value: ERROR }
+          code { value: INVALID }
+          diagnostics {
+            value: "empty-oneof-google.fhir.stu3.proto.Observation.Component.Value.value"
+          }
+          expression {
+            value: "google.fhir.stu3.proto.Observation.Component.Value.value"
+          }
+        }
+      )proto",
       observation);
 }
 

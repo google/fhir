@@ -17,24 +17,44 @@
 #include "google/protobuf/message.h"
 #include "google/fhir/profiles_lib.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/stu3/operation_error_reporter.h"
 #include "google/fhir/stu3/primitive_handler.h"
 
 namespace google {
 namespace fhir {
 
+using ::google::fhir::stu3::proto::OperationOutcome;
 using ::google::protobuf::Message;
+
+namespace stu3 {
+
+absl::Status ConvertToProfile(const ::google::protobuf::Message& source,
+                              ::google::protobuf::Message* target,
+                              ::google::fhir::ErrorReporter* error_reporter) {
+  return profiles_internal::ConvertToProfileInternal<
+      stu3::Stu3PrimitiveHandler>(source, target, error_reporter);
+}
+
+absl::StatusOr<OperationOutcome> ConvertToProfile(
+    const ::google::protobuf::Message& source, ::google::protobuf::Message* target) {
+  OperationOutcome outcome;
+  OperationOutcomeErrorReporter error_reporter(&outcome);
+  FHIR_RETURN_IF_ERROR(ConvertToProfile(source, target, &error_reporter));
+  return outcome;
+}
+}  // namespace stu3
 
 absl::Status ConvertToProfileStu3(const ::google::protobuf::Message& source,
                                   ::google::protobuf::Message* target) {
   return profiles_internal::ConvertToProfileInternal<
-      stu3::Stu3PrimitiveHandler>(source, target);
+      stu3::Stu3PrimitiveHandler>(source, target, FailFastErrorReporter::Get());
 }
 
 // Identical to ConvertToProfile, except does not run the validation step.
 absl::Status ConvertToProfileLenientStu3(const ::google::protobuf::Message& source,
                                          ::google::protobuf::Message* target) {
   return profiles_internal::ConvertToProfileLenientInternal<
-      stu3::Stu3PrimitiveHandler>(source, target);
+      stu3::Stu3PrimitiveHandler>(source, target, FailFastErrorReporter::Get());
 }
 
 }  // namespace fhir

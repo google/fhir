@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2021 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@
 #include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/test_helper.h"
+#include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/encounter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
@@ -33,18 +34,28 @@ namespace r4 {
 namespace {
 
 using namespace google::fhir::r4::core;  // NOLINT
+using ::google::fhir::testutil::EqualsProto;
 
+// Tests the given resource is valid using both the deprecated and new functions
 template <typename T>
 void ValidTest(const std::string& name) {
-  auto status = ValidateResourceWithFhirPath(
-      ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt")));
+  T resource =
+      ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt"));
+  auto status = ValidateResourceWithFhirPath(resource);
   EXPECT_TRUE(status.ok()) << status;
+
+  absl::StatusOr<OperationOutcome> outcome = Validate(resource);
+  FHIR_ASSERT_OK(outcome.status());
+  EXPECT_THAT(*outcome, EqualsProto(OperationOutcome()));
 }
 
+// Tests the given resource is invalid using both the deprecated and new
+// functions
 template <typename T>
 void InvalidTest(const std::string& name) {
-  auto status = ValidateResourceWithFhirPath(
-      ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt")));
+  T resource =
+      ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt"));
+  auto status = ValidateResourceWithFhirPath(resource);
 
   std::string error_msg =
       ReadFile(absl::StrCat("testdata/r4/validation/", name, ".result.txt"));
@@ -53,6 +64,13 @@ void InvalidTest(const std::string& name) {
   }
 
   EXPECT_EQ(status, ::absl::FailedPreconditionError(error_msg));
+
+  absl::StatusOr<OperationOutcome> outcome = Validate(resource);
+  FHIR_ASSERT_OK(outcome.status());
+
+  OperationOutcome expected_outcome = ReadProto<OperationOutcome>(
+      absl::StrCat("testdata/r4/validation/", name, ".outcome.prototxt"));
+  EXPECT_THAT(*outcome, EqualsProto(expected_outcome));
 }
 
 TEST(ResourceValidationTest, MissingRequiredField) {

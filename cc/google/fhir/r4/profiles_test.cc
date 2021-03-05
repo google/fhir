@@ -28,6 +28,7 @@
 #include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/encounter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/operation_outcome.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
 #include "proto/google/fhir/proto/r4/uscore.pb.h"
 #include "testdata/r4/profiles/test.pb.h"
@@ -39,6 +40,7 @@ namespace {
 
 using ::google::fhir::r4::core::Encounter;
 using ::google::fhir::r4::core::Observation;
+using ::google::fhir::r4::core::OperationOutcome;
 using ::google::fhir::r4::core::Patient;
 using ::google::fhir::r4::testing::ProfiledDatatypesObservation;
 using ::google::fhir::r4::testing::TestEncounter;
@@ -64,19 +66,36 @@ template <class B, class P>
 void TestDownConvert(const std::string& filename) {
   const B unprofiled = GetUnprofiled<B>(filename);
   P profiled;
+  P expected_profiled = GetProfiled<P>(filename);
 
+  auto result = r4::ConvertToProfile(unprofiled, &profiled);
+  // Ignore conversion OperationOutcome structure for bi-directional tests;
+  // failure modes are tested elsewhere.
+  FHIR_ASSERT_OK(result.status());
+  EXPECT_THAT(profiled, EqualsProto(expected_profiled));
+
+  // Test deprecated method as well.
+  profiled.Clear();
   FHIR_ASSERT_OK(ConvertToProfileLenientR4(unprofiled, &profiled));
-  EXPECT_THAT(profiled, EqualsProto(GetProfiled<P>(filename)));
+  EXPECT_THAT(profiled, EqualsProto(expected_profiled));
 }
 
 template <class B, class P>
 void TestUpConvert(const std::string& filename) {
   const P profiled = GetProfiled<P>(filename);
   B unprofiled;
+  B expected_unprofiled = ReadProto<B>(absl::StrCat(filename, ".prototxt"));
 
+  auto result = r4::ConvertToProfile(profiled, &unprofiled);
+  // Ignore conversion OperationOutcome structure for bi-directional tests;
+  // failure modes are tested elsewhere.
+  FHIR_ASSERT_OK(result.status());
+  EXPECT_THAT(unprofiled, EqualsProtoIgnoringReordering(expected_unprofiled));
+
+  // Test deprecated method as well.
+  unprofiled.Clear();
   FHIR_ASSERT_OK(ConvertToProfileLenientR4(profiled, &unprofiled));
-  EXPECT_THAT(unprofiled, EqualsProtoIgnoringReordering(ReadProto<B>(
-                              absl::StrCat(filename, ".prototxt"))));
+  EXPECT_THAT(unprofiled, EqualsProtoIgnoringReordering(expected_unprofiled));
 }
 
 template <class B, class P>
@@ -199,6 +218,23 @@ TEST(ProfilesTest, MissingRequiredFields) {
 
   auto strict_status = ConvertToProfileR4(unprofiled, &profiled);
   ASSERT_EQ(absl::StatusCode::kFailedPrecondition, strict_status.code());
+
+  auto outcome = r4::ConvertToProfile(unprofiled, &profiled);
+  EXPECT_TRUE(outcome.ok());
+
+  OperationOutcome expected;
+  google::protobuf::TextFormat::ParseFromString(
+      R"proto(
+        issue {
+          severity { value: ERROR }
+          code { value: INVALID }
+          diagnostics { value: "missing-TestObservation.component.code" }
+          expression { value: "TestObservation.component.code" }
+        }
+      )proto",
+      &expected);
+
+  EXPECT_THAT(outcome.value(), EqualsProto(expected));
 }
 
 TEST(ProfilesTest, ConvertToInlinedCodeEnum) {

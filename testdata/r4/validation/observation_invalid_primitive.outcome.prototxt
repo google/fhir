@@ -1,0 +1,14 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: INVALID
+  }
+  diagnostics {
+    value: "invalid-primitive-Observation.value.quantity.value"
+  }
+  expression {
+    value: "Observation.value.quantity.value"
+  }
+}

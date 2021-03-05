@@ -1,0 +1,56 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: INVALID
+  }
+  diagnostics {
+    value: "invalid-reference-disallowed-type-Patient-at-Encounter.account"
+  }
+  expression {
+    value: "Encounter.account"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: INVALID
+  }
+  diagnostics {
+    value: "invalid-primitive-Encounter.account.accountId"
+  }
+  expression {
+    value: "Encounter.account.accountId"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: INVALID
+  }
+  diagnostics {
+    value: "invalid-primitive-Encounter.account.patientId"
+  }
+  expression {
+    value: "Encounter.account.patientId"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: INVALID
+  }
+  diagnostics {
+    value: "invalid-primitive-Encounter.account.accountId"
+  }
+  expression {
+    value: "Encounter.account.accountId"
+  }
+}

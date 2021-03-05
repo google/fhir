@@ -10,10 +10,13 @@ cc_library(
     hdrs = ["profiles.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":operation_error_reporter",
         ":primitive_handler",
+        "//cc/google/fhir:error_reporter",
         "//cc/google/fhir:profiles_lib",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
+        "//proto/google/fhir/proto/r4/core/resources:operation_outcome_cc_proto",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_protobuf//:protobuf",
@@ -39,6 +42,7 @@ cc_test(
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:encounter_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:observation_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:operation_outcome_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:patient_cc_proto",
         "//testdata/r4/profiles:test_cc_proto",
         "@com_google_absl//absl/status:statusor",
@@ -372,11 +376,29 @@ cc_library(
     hdrs = ["resource_validation.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":operation_error_reporter",
         ":primitive_handler",
+        "//cc/google/fhir:error_reporter",
         "//cc/google/fhir:resource_validation",
         "//cc/google/fhir/fhir_path:r4_fhir_path_validation",
+        "//proto/google/fhir/proto/r4/core/resources:operation_outcome_cc_proto",
         "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
         "@com_google_protobuf//:protobuf",
+    ],
+)
+
+cc_library(
+    name = "operation_error_reporter",
+    srcs = ["operation_error_reporter.cc"],
+    hdrs = ["operation_error_reporter.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "//cc/google/fhir:error_reporter",
+        "//proto/google/fhir/proto/r4/core:codes_cc_proto",
+        "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:operation_outcome_cc_proto",
+        "@com_google_absl//absl/status",
     ],
 )
 
@@ -389,6 +411,7 @@ cc_test(
     deps = [
         ":resource_validation",
         "//cc/google/fhir:test_helper",
+        "//cc/google/fhir/testutil:proto_matchers",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:encounter_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:observation_cc_proto",

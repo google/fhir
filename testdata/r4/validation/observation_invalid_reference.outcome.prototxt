@@ -1,0 +1,28 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: INVALID
+  }
+  diagnostics {
+    value: "invalid-reference-disallowed-type-Device-at-Observation.specimen"
+  }
+  expression {
+    value: "Observation.specimen"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: INVALID
+  }
+  diagnostics {
+    value: "invalid-primitive-Observation.specimen.deviceId"
+  }
+  expression {
+    value: "Observation.specimen.deviceId"
+  }
+}

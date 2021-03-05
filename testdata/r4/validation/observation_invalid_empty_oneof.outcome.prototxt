@@ -1,0 +1,14 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: INVALID
+  }
+  diagnostics {
+    value: "empty-oneof-google.fhir.r4.core.Observation.Component.ValueX.choice"
+  }
+  expression {
+    value: "google.fhir.r4.core.Observation.Component.ValueX.choice"
+  }
+}
