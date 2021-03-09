@@ -1,6 +1,5 @@
 absl-py==0.10.0
 backports.zoneinfo==0.2.1
-mypy-protobuf==1.23
 protobuf==3.13.0
 python-dateutil==2.8.1
 six==1.15.0

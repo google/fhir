@@ -27,6 +27,7 @@ set -u
 
 FHIR_ROOT="${PWD}/.."
 FHIR_WORKSPACE='com_google_fhir'
+MYPY_PROTOBUF_VERSION='1.23.0'
 PROTOBUF_URL='https://github.com/protocolbuffers/protobuf/releases/download'
 PROTOC_SHA='4a3b26d1ebb9c1d23e933694a6669295f6a39ddc64c3db2adf671f0a6026f82e'
 PROTOC_VERSION='3.13.0'
@@ -135,10 +136,14 @@ function main() {
   pip3 install --upgrade setuptools
   pip3 install wheel
 
+  # `setuptools.setup` "setup_requires" kwarg does not currently install the
+  # mypy-protobuf plugin as an executable on the host's `PATH`.
+  #
+  # See more at: https://github.com/dropbox/mypy-protobuf/issues/137.
+  pip3 install "mypy-protobuf==${MYPY_PROTOBUF_VERSION}"
+
   # Generate output into a "release" subdir
-  # TODO: Separate "build" reqs (e.g. mypy-protobuf) from "install" reqs
   print_info 'Building distribution...'
-  pip3 install -r requirements.txt
   python3 setup.py sdist bdist_wheel
 
   local -r workspace="$(mktemp -d -t fhir-XXXXXXXXXX)"
@@ -153,7 +158,6 @@ function main() {
   print_info 'Testing bdist_wheel...'
   pip3 install dist/*.whl && test_google_fhir "${workspace}" && \
   pip3 uninstall -y google-fhir
-
 
   print_info 'Staging artifacts at /tmp/google/fhir/release/...'
   mkdir -p /tmp/google/fhir/release
