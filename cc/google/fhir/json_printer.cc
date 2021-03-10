@@ -172,6 +172,11 @@ class Printer {
     reflection->ListFields(proto, &set_fields);
     for (size_t i = 0; i < set_fields.size(); i++) {
       const FieldDescriptor* field = set_fields[i];
+      if (json_format_ == kFormatAnalytic && field->name() == "id" &&
+          !IsResource(proto.GetDescriptor())) {
+        // Skip over id fields at levels lower than resource in analytic mode.
+        continue;
+      }
       // Choice types in proto form have a containing message that is not part
       // of the FHIR spec, so we need a special method to print them as valid
       // fhir.
@@ -183,7 +188,7 @@ class Printer {
       } else {
         FHIR_RETURN_IF_ERROR(PrintField(proto, field));
       }
-      if (i != set_fields.size() - 1) {
+      if (i < set_fields.size() - 1) {
         output_ += ",";
         AddNewline();
       }

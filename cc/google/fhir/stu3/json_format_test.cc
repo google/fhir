@@ -107,14 +107,19 @@ void TestPrint(const std::string& name) {
 }
 
 template <typename R>
-void TestPrintForAnalytics(const std::string& name) {
-  const R proto =
-      ReadProto<R>(absl::StrCat("testdata/stu3/examples/", name, ".prototxt"));
-  auto result = PrettyPrintFhirToJsonStringForAnalytics(proto);
-  ASSERT_TRUE(result.ok()) << result.status();
+void TestPrintForAnalytics(const std::string& proto_filepath,
+                           const std::string& json_filepath, bool pretty) {
+  R proto = ReadProto<R>(proto_filepath);
+  if (IsProfile(R::descriptor())) {
+    proto = NormalizeR4(proto).value();
+  }
+  auto result = pretty ? PrettyPrintFhirToJsonStringForAnalytics(proto)
+                       : PrintFhirToJsonStringForAnalytics(proto);
+  ASSERT_TRUE(result.ok()) << "Failed PrintForAnalytics on: " << proto_filepath
+                           << "\n"
+                           << result.status();
   std::string from_proto = result.value();
-  std::string from_json =
-      ReadFile(absl::StrCat("testdata/stu3/bigquery/", name + ".json"));
+  std::string from_json = ReadFile(json_filepath);
 
   if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
     // This assert will fail, but we get terrible diff messages comparing
@@ -124,21 +129,17 @@ void TestPrintForAnalytics(const std::string& name) {
 }
 
 template <typename R>
-void TestPrintForAnalytics(const std::string& name, bool pretty) {
-  const R proto =
-      ReadProto<R>(absl::StrCat("testdata/stu3/examples/", name, ".prototxt"));
-  auto result = pretty ? PrettyPrintFhirToJsonStringForAnalytics(proto)
-                       : PrintFhirToJsonStringForAnalytics(proto);
-  ASSERT_TRUE(result.ok()) << result.status();
-  std::string from_proto = result.value();
-  std::string from_json =
-      ReadFile(absl::StrCat("testdata/stu3/bigquery/", name + ".json"));
+void TestPrintForAnalyticsWithFilepath(const std::string& proto_filepath,
+                                       const std::string& json_filepath) {
+  TestPrintForAnalytics<R>(proto_filepath, json_filepath, true);
+  TestPrintForAnalytics<R>(proto_filepath, json_filepath, false);
+}
 
-  if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
-    // This assert will fail, but we get terrible diff messages comparing
-    // JsonCPP, so fall back to string diffs.
-    ASSERT_EQ(from_json, from_proto);
-  }
+template <typename R>
+void TestPrintForAnalytics(const std::string& name) {
+  TestPrintForAnalyticsWithFilepath<R>(
+      absl::StrCat("testdata/stu3/examples/", name, ".prototxt"),
+      absl::StrCat("testdata/stu3/bigquery/", name + ".json"));
 }
 
 template <typename R>
@@ -188,18 +189,17 @@ TEST(JsonFormatStu3Test, PrintProfile) {
 /** Test printing of FHIR edge cases. */
 TEST(JsonFormatStu3Test, EdgeCasesPrint) { TestPrint<Patient>("Patient-null"); }
 
-TEST(JsonFormatStu3Test, PrettyPrintForAnalytics) {
-  TestPrintForAnalytics<Composition>("Composition-example", true);
-  TestPrintForAnalytics<Encounter>("Encounter-home", true);
-  TestPrintForAnalytics<Observation>("Observation-example-genetics-1", true);
-  TestPrintForAnalytics<Patient>("patient-example", true);
+TEST(JsonFormatStu3Test, PrintForAnalytics) {
+  TestPrintForAnalytics<Composition>("Composition-example");
+  TestPrintForAnalytics<Encounter>("Encounter-home");
+  TestPrintForAnalytics<Observation>("Observation-example-genetics-1");
+  TestPrintForAnalytics<Patient>("patient-example");
 }
 
-TEST(JsonFormatStu3Test, PrintForAnalytics) {
-  TestPrintForAnalytics<Composition>("Composition-example", false);
-  TestPrintForAnalytics<Encounter>("Encounter-home", false);
-  TestPrintForAnalytics<Observation>("Observation-example-genetics-1", false);
-  TestPrintForAnalytics<Patient>("patient-example", false);
+TEST(JsonFormatStu3Test, PrintAnalyticsElementIdsDropped) {
+  TestPrintForAnalyticsWithFilepath<Location>(
+      "testdata/jsonformat/location_element_with_ids.prototxt",
+      "testdata/jsonformat/location_element_with_ids_analytic.json");
 }
 
 /* Resource tests start here. */

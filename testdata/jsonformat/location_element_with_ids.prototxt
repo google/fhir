@@ -1,0 +1,6 @@
+id { value: "top-level-id" }
+position {
+  longitude { id { value: "sub-element-id" } value: "-83.6945691" }
+  latitude { value: "42.25475478" }
+  altitude { value: "0" }
+}

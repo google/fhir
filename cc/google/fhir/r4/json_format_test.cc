@@ -363,6 +363,12 @@ TEST(JsonFormatR4Test, PrintProfileForAnalytics) {
       "testdata/r4/bigquery/TestPatient.json");
 }
 
+TEST(JsonFormatR4Test, PrintAnalyticsElementIdsDropped) {
+  TestPrintForAnalyticsWithFilepath<Location>(
+      "testdata/jsonformat/location_element_with_ids.prototxt",
+      "testdata/jsonformat/location_element_with_ids_analytic.json");
+}
+
 TEST(JsonFormatR4Test, PrintForAnalyticsWithContained) {
   r4::testing::TestPatient patient = ReadProto<r4::testing::TestPatient>(
       "testdata/r4/profiles/test_patient-profiled-testpatient.prototxt");
