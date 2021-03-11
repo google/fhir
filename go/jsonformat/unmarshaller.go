@@ -394,7 +394,14 @@ func (u *Unmarshaller) mergeReference(jsonPath string, rm json.RawMessage, pb pr
 	if err := u.mergeRawMessage(jsonPath, rm, pb); err != nil {
 		return err
 	}
-	return NormalizeReference(pb.Interface())
+	if err := NormalizeReference(pb.Interface()); err != nil {
+		return &jsonpbhelper.UnmarshalError{
+			Path:        jsonPath,
+			Details:     "invalid reference",
+			Diagnostics: err.Error(),
+		}
+	}
+	return nil
 }
 
 func (u *Unmarshaller) mergePrimitiveType(dst, src proto.Message) error {

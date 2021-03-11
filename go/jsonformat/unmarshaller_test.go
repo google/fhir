@@ -1344,6 +1344,18 @@ func TestUnmarshal_Errors(t *testing.T) {
 			vers: []Version{STU3, R4},
 			errs: []string{`error at "Patient.gender.value": invalid field`},
 		},
+		{
+			name: "reference field of wrong FHIR version",
+			json: `
+			{
+				"resourceType": "Observation",
+				"device": {
+					"reference": "DeviceRequest/1"
+				}
+			}`,
+			vers: []Version{DSTU2},
+			errs: []string{`error at "Observation.device": invalid reference`},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
