@@ -539,7 +539,7 @@ func TestValidateID(t *testing.T) {
 		"abc",
 		"DEF",
 		"1.2.3.4",
-		// 65 characters, meets length limit.
+		// 64 characters, meets length limit.
 		"1234567890123456789012345678901234567890123456789012345678901234",
 	}
 	for _, test := range tests {
