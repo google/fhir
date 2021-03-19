@@ -140,7 +140,8 @@ absl::StatusOr<std::string> GetPrimitiveStringValue(
   const FieldDescriptor* value_field =
       primitive.GetDescriptor()->FindFieldByName("value");
   if (!value_field || value_field->is_repeated() ||
-      value_field->type() != FieldDescriptor::Type::TYPE_STRING) {
+      (value_field->type() != FieldDescriptor::Type::TYPE_STRING &&
+       value_field->type() != FieldDescriptor::Type::TYPE_BYTES)) {
     return InvalidArgumentError(
         absl::StrCat("Not a valid String-type primitive: ",
                      primitive.GetDescriptor()->full_name()));
