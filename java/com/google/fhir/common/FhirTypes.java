@@ -28,6 +28,7 @@ public final class FhirTypes {
   public static final String CODEABLE_CONCEPT_URL =
       "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
   public static final String CODING_URL = "http://hl7.org/fhir/StructureDefinition/Coding";
+  public static final String DECIMAL_URL = "http://hl7.org/fhir/StructureDefinition/decimal";
   public static final String EXTENSION_URL = "http://hl7.org/fhir/StructureDefinition/Extension";
   public static final String PERIOD_URL = "http://hl7.org/fhir/StructureDefinition/Period";
   public static final String REFERENCE_URL = "http://hl7.org/fhir/StructureDefinition/Reference";
