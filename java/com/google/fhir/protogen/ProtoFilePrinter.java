@@ -14,11 +14,14 @@
 
 package com.google.fhir.protogen;
 
+import com.google.common.base.Ascii;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.escape.CharEscaperBuilder;
 import com.google.common.escape.Escaper;
 import com.google.fhir.proto.Annotations;
@@ -35,16 +38,22 @@ import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileOptions;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
 import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.Extension;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /** A utility to turn protocol message descriptors into .proto files. */
 public class ProtoFilePrinter {
+
+  /** Enum represting the proto Syntax */
+  public static enum Syntax {
+    PROTO2,
+    PROTO3
+  };
 
   private static final String APACHE_LICENSE =
       "//    Copyright %1$s Google Inc.\n"
@@ -66,32 +75,41 @@ public class ProtoFilePrinter {
 
   private final PackageInfo packageInfo;
 
-  private static final Escaper EXTENSION_ESCAPER =
-      new CharEscaperBuilder().addEscape('\\', "\\\\").toEscaper();
+  private final Syntax syntax;
 
-  private static final ImmutableList<Extension<MessageOptions, ? extends Object>>
-      MESSAGE_EXTENSIONS =
-          ImmutableList.of(
-              Annotations.structureDefinitionKind,
-              Annotations.fhirValuesetUrl,
-              Annotations.isAbstractType,
-              Annotations.valueRegex,
-              Annotations.fhirProfileBase,
-              Annotations.fhirStructureDefinitionUrl,
-              Annotations.fhirPathMessageConstraint,
-              Annotations.isChoiceType,
-              Annotations.isComplexExtension,
-              Annotations.fhirFixedSystem,
-              Annotations.searchParameter);
+  // All Message options in this list will appear in this order, before any options not in this
+  // list.  The remainder will be alphabetized.
+  // This list exists largely to maintain backwards compatibility in ordering.
+  private static final ImmutableList<String> LEGACY_MESSAGE_OPTIONS_ORDERING =
+      ImmutableList.of(
+          "google.fhir.proto.structure_definition_kind",
+          "google.fhir.proto.is_abstract_type",
+          "google.fhir.proto.value_regex",
+          "google.fhir.proto.fhir_valueset_url",
+          "google.fhir.proto.fhir_profile_base",
+          "google.fhir.proto.fhir_structure_definition_url");
 
-  /** Creates a ProtoFilePrinter with default parameters. */
-  public ProtoFilePrinter() {
-    this(PackageInfo.getDefaultInstance());
-  }
+  // All Field options in this list will appear in this order, before any options not in this
+  // list.  The remainder will be alphabetized.
+  // This list exists largely to maintain backwards compatibility in ordering.
+  private static final ImmutableList<String> LEGACY_FIELD_OPTIONS_ORDERING =
+      ImmutableList.of(
+          "google.fhir.proto.validation_requirement",
+          "google.fhir.proto.fhir_inlined_extension_url",
+          "google.fhir.proto.fhir_inlined_coding_system",
+          "google.fhir.proto.fhir_inlined_coding_code",
+          "google.fhir.proto.valid_reference_type",
+          "google.fhir.proto.fhir_path_constraint");
 
   /** Creates a ProtoFilePrinter with default parameters. */
   public ProtoFilePrinter(PackageInfo packageInfo) {
+    this(packageInfo, Syntax.PROTO3);
+  }
+
+  /** Creates a ProtoFilePrinter with default parameters. */
+  public ProtoFilePrinter(PackageInfo packageInfo, Syntax syntax) {
     this.packageInfo = packageInfo;
+    this.syntax = syntax;
   }
 
   /** Generate a .proto file corresponding to the provided FileDescriptorProto. */
@@ -165,82 +183,52 @@ public class ProtoFilePrinter {
     // Get the name of this message.
     String messageName = descriptor.getName();
     String fullName = typePrefix + "." + messageName;
-    MessageOptions options = descriptor.getOptions();
+
+    // Use mutable options so we can clear {@link ProtoGeneratorAnnotation}s along the way.
+    MessageOptions.Builder optionsBuilder = descriptor.getOptions().toBuilder();
 
     CharMatcher matcher = CharMatcher.is('.');
     String indent =
         Strings.repeat("  ", matcher.countIn(typePrefix) - matcher.countIn(packageName));
     StringBuilder message = new StringBuilder();
 
-    if (options.hasExtension(ProtoGeneratorAnnotations.messageDescription)) {
+    if (optionsBuilder.hasExtension(ProtoGeneratorAnnotations.messageDescription)) {
       // Add the main documentation.
       message
           .append(indent)
           .append("// ")
           .append(
-              options
+              optionsBuilder
                   .getExtension(ProtoGeneratorAnnotations.messageDescription)
                   .replaceAll("[\\n\\r]", "\n" + indent + "// "))
           .append("\n");
+      optionsBuilder.clearExtension(ProtoGeneratorAnnotations.messageDescription);
     }
 
     // Start the main message.
     message.append(indent).append("message ").append(messageName).append(" {\n");
 
     String fieldIndent = indent + "  ";
-    boolean printedField = false;
 
     // Add options.
-    // For fhir options, fully type the package name if we are not writing to the same package
-    // as the annotations
-    String optionPackage = getOptionsPackage(packageName);
-    for (Extension<MessageOptions, ? extends Object> extension : MESSAGE_EXTENSIONS) {
-      boolean isStringType = extension.getDescriptor().getType() == FieldDescriptor.Type.STRING;
-      boolean isMessageType = extension.getDescriptor().getType() == FieldDescriptor.Type.MESSAGE;
-      List<Object> extensionInstances = new ArrayList<>();
-      if (extension.isRepeated()) {
-        @SuppressWarnings("unchecked") // Cast to list extension
-        Extension<MessageOptions, List<Object>> listExtension =
-            (Extension<MessageOptions, List<Object>>) extension;
-        for (int i = 0; i < options.getExtensionCount(listExtension); i++) {
-          extensionInstances.add(options.getExtension(listExtension, i));
-        }
-      } else {
-        if (options.hasExtension(extension)) {
-          extensionInstances.add(options.getExtension(extension));
-        }
-      }
-      for (Object extensionInstance : extensionInstances) {
-        message
-            .append(fieldIndent)
-            .append("option (")
-            .append(optionPackage)
-            .append(extension.getDescriptor().getName())
-            .append(") = ")
-            .append(isStringType ? "\"" : isMessageType ? "{\n" : "")
-            .append(
-                EXTENSION_ESCAPER.escape(
-                    isMessageType
-                        ? extensionInstance
-                            .toString()
-                            .replaceAll("(?m)^", fieldIndent + "  ")
-                            .replaceAll("\\\\", "") // remove additional backslash in messages
-                        : extensionInstance.toString()))
-            .append(isStringType ? "\"" : isMessageType ? fieldIndent + "}" : "")
-            .append(";\n");
-        printedField = true;
-      }
+    List<String> extensions =
+        addExtensions(
+            "." + MessageOptions.getDescriptor().getFullName(),
+            optionsBuilder.build().getAllFields(),
+            packageName,
+            fieldIndent,
+            LEGACY_MESSAGE_OPTIONS_ORDERING);
+    if (!extensions.isEmpty()) {
+      Joiner.on(";\n").appendTo(message, extensions).append(";\n");
     }
 
     // Loop over the elements.
     Set<String> printedNestedTypeDefinitions = new HashSet<>();
-    for (FieldDescriptorProto field : descriptor.getFieldList()) {
+    for (int i = 0; i < descriptor.getFieldCount(); i++) {
+      FieldDescriptorProto field = descriptor.getField(i);
+      // Use a mutable field in order to allow clearing protogenerator-only annotations.
+      FieldDescriptorProto.Builder fieldBuilder = field.toBuilder();
       if (!field.hasOneofIndex()) {
-        // Keep a newline between fields.
-        if (printedField) {
-          message.append("\n");
-        }
-
         if (field.getOptions().hasExtension(ProtoGeneratorAnnotations.reservedReason)) {
           message
               .append(fieldIndent)
@@ -250,7 +238,7 @@ public class ProtoFilePrinter {
               .append(fieldIndent)
               .append("reserved ")
               .append(field.getNumber())
-              .append(";\n");
+              .append(";\n\n");
           continue;
         }
 
@@ -263,23 +251,27 @@ public class ProtoFilePrinter {
               .append("// ")
               .append(description.replaceAll("[\\n\\r]", "\n" + indent + "// "))
               .append("\n");
+          fieldBuilder
+              .getOptionsBuilder()
+              .clearExtension(ProtoGeneratorAnnotations.fieldDescription);
         }
 
         // Add nested types if necessary.
         message.append(
             maybePrintNestedType(
                 descriptor, field, typePrefix, packageName, printedNestedTypeDefinitions));
-        message.append(printField(field, fullName, fieldIndent, optionPackage));
-        printedField = true;
+        message.append(
+            printField(
+                fieldBuilder.build(), fullName, fieldIndent, packageName, /*inOneof=*/ false));
+        if (i != descriptor.getFieldCount() - 1) {
+          message.append("\n");
+        }
       }
     }
 
     // Loop over the oneofs
     String oneofIndent = fieldIndent + "  ";
     for (int oneofIndex = 0; oneofIndex < descriptor.getOneofDeclCount(); oneofIndex++) {
-      if (printedField) {
-        message.append("\n");
-      }
       message
           .append(fieldIndent)
           .append("oneof ")
@@ -288,7 +280,7 @@ public class ProtoFilePrinter {
       // Loop over the elements.
       for (FieldDescriptorProto field : descriptor.getFieldList()) {
         if (field.getOneofIndex() == oneofIndex) {
-          message.append(printField(field, fullName, oneofIndent, optionPackage));
+          message.append(printField(field, fullName, oneofIndent, packageName, /*inOneof=*/ true));
         }
       }
       message.append(fieldIndent).append("}\n");
@@ -296,9 +288,6 @@ public class ProtoFilePrinter {
 
     // Print any enums that weren't already printed (i.e., enums that aren't used by any fields)
     for (EnumDescriptorProto enumProto : descriptor.getEnumTypeList()) {
-      if (printedField) {
-        message.append("\n");
-      }
       String fullTypeName = fullName + "." + enumProto.getName();
       if (printedNestedTypeDefinitions.add(fullTypeName)) {
         message.append(printEnum(enumProto, fullTypeName, packageName));
@@ -311,13 +300,9 @@ public class ProtoFilePrinter {
     return message.toString();
   }
 
-  private static final ImmutableList<Extension<EnumOptions, String>> ENUM_EXTENSIONS =
-      ImmutableList.of(Annotations.fhirCodeSystemUrl, Annotations.enumValuesetUrl);
-
   private String printEnum(EnumDescriptorProto descriptor, String typePrefix, String packageName) {
     // Get the name of this message.
     String messageName = descriptor.getName();
-    String optionPackage = getOptionsPackage(packageName);
 
     CharMatcher matcher = CharMatcher.is('.');
     String indent =
@@ -328,45 +313,35 @@ public class ProtoFilePrinter {
     message.append(indent).append("enum ").append(messageName).append(" {\n");
 
     String fieldIndent = indent + "  ";
-    for (Extension<EnumOptions, String> enumOption : ENUM_EXTENSIONS) {
-      if (descriptor.getOptions().hasExtension(enumOption)) {
-        message
-            .append(fieldIndent)
-            .append("option (")
-            .append(optionPackage)
-            .append(enumOption.getDescriptor().getName())
-            .append(") = ")
-            .append("\"")
-            .append(EXTENSION_ESCAPER.escape(descriptor.getOptions().getExtension(enumOption)))
-            .append("\"")
-            .append(";\n");
-      }
+
+    List<String> enumExtensionStrings =
+        addExtensions(
+            "." + EnumOptions.getDescriptor().getFullName(),
+            descriptor.getOptions().getAllFields(),
+            packageName,
+            fieldIndent,
+            ImmutableList.of());
+    if (!enumExtensionStrings.isEmpty()) {
+      Joiner.on(";\n").appendTo(message, enumExtensionStrings).append(";\n\n");
     }
 
     // Loop over the elements.
-    for (EnumValueDescriptorProto field : descriptor.getValueList()) {
-      message.append(fieldIndent).append(field.getName()).append(" = ").append(field.getNumber());
+    for (EnumValueDescriptorProto enumValue : descriptor.getValueList()) {
+      message
+          .append(fieldIndent)
+          .append(enumValue.getName())
+          .append(" = ")
+          .append(enumValue.getNumber());
 
-      boolean hasFieldOption = false;
-      EnumValueOptions options = field.getOptions();
-      if (options.hasExtension(Annotations.fhirOriginalCode)) {
-        hasFieldOption =
-            addFieldOption(
-                "(" + optionPackage + "fhir_original_code)",
-                "\"" + options.getExtension(Annotations.fhirOriginalCode) + "\"",
-                hasFieldOption,
-                message);
-      }
-      if (options.hasExtension(Annotations.sourceCodeSystem)) {
-        hasFieldOption =
-            addFieldOption(
-                "(" + optionPackage + "source_code_system)",
-                "\"" + options.getExtension(Annotations.sourceCodeSystem) + "\"",
-                hasFieldOption,
-                message);
-      }
-      if (hasFieldOption) {
-        message.append("]");
+      List<String> enumValueExtensionStrings =
+          addExtensions(
+              "." + EnumValueOptions.getDescriptor().getFullName(),
+              enumValue.getOptions().getAllFields(),
+              packageName,
+              "",
+              ImmutableList.of());
+      if (!enumValueExtensionStrings.isEmpty()) {
+        message.append(" [").append(Joiner.on(", ").join(enumValueExtensionStrings)).append("]");
       }
 
       message.append(";\n");
@@ -389,7 +364,7 @@ public class ProtoFilePrinter {
         && field.getTypeName().startsWith(prefix + ".")
         && !printedNestedTypeDefinitions.contains(field.getTypeName())) {
       List<String> typeNameParts = Splitter.on('.').splitToList(field.getTypeName());
-      String typeName = typeNameParts.get(typeNameParts.size() - 1);
+      String typeName = Iterables.getLast(typeNameParts);
       if (field.getType() == FieldDescriptorProto.Type.TYPE_MESSAGE) {
         for (DescriptorProto nested : descriptor.getNestedTypeList()) {
           if (nested.getName().equals(typeName)) {
@@ -411,13 +386,22 @@ public class ProtoFilePrinter {
   }
 
   private String printField(
-      FieldDescriptorProto field, String containingType, String indent, String optionPackage) {
+      FieldDescriptorProto field,
+      String containingType,
+      String indent,
+      String packageName,
+      boolean inOneof) {
     StringBuilder message = new StringBuilder();
     message.append(indent);
 
-    // Add the "repeated" keyword, if necessary.
+    // Add the "repeated" or "optional" keywords, if necessary.
     if (field.getLabel() == FieldDescriptorProto.Label.LABEL_REPEATED) {
       message.append("repeated ");
+    }
+    if (!inOneof
+        && field.getLabel() == FieldDescriptorProto.Label.LABEL_OPTIONAL
+        && syntax == Syntax.PROTO2) {
+      message.append("optional ");
     }
 
     // Add the type of the field.
@@ -451,13 +435,12 @@ public class ProtoFilePrinter {
       // Since absolute namespaces start with ".", the first token is is empty (and thus common).
       // If this is the only common token, don't drop anything
       if (tokensToDrop > 1) {
-        message.append(
-            Joiner.on('.').join(typeNameParts.subList(tokensToDrop, typeNameParts.size())));
+        Joiner.on('.').appendTo(message, typeNameParts.subList(tokensToDrop, typeNameParts.size()));
       } else {
         message.append(field.getTypeName());
       }
     } else if (field.getType().toString().startsWith("TYPE_")) {
-      message.append(field.getType().toString().substring(5).toLowerCase());
+      message.append(Ascii.toLowerCase(field.getType().toString().substring(5)));
     } else {
       message.append("INVALID_TYPE");
     }
@@ -466,86 +449,111 @@ public class ProtoFilePrinter {
     message.append(" ").append(field.getName()).append(" = ").append(field.getNumber());
 
     FieldOptions options = field.getOptions();
-    boolean hasFieldOption = false;
-    if (options.hasExtension(Annotations.validationRequirement)) {
-      hasFieldOption =
-          addFieldOption(
-              "(" + optionPackage + "validation_requirement)",
-              options.getExtension(Annotations.validationRequirement).toString(),
-              hasFieldOption,
-              message);
-    }
-    if (options.hasExtension(Annotations.fhirInlinedExtensionUrl)) {
-      hasFieldOption =
-          addFieldOption(
-              "(" + optionPackage + "fhir_inlined_extension_url)",
-              "\"" + options.getExtension(Annotations.fhirInlinedExtensionUrl) + "\"",
-              hasFieldOption,
-              message);
-    }
-    if (options.hasExtension(Annotations.fhirInlinedCodingSystem)) {
-      hasFieldOption =
-          addFieldOption(
-              "(" + optionPackage + "fhir_inlined_coding_system)",
-              "\"" + options.getExtension(Annotations.fhirInlinedCodingSystem) + "\"",
-              hasFieldOption,
-              message);
-    }
-    if (options.hasExtension(Annotations.fhirInlinedCodingCode)) {
-      hasFieldOption =
-          addFieldOption(
-              "(" + optionPackage + "fhir_inlined_coding_code)",
-              "\"" + options.getExtension(Annotations.fhirInlinedCodingCode) + "\"",
-              hasFieldOption,
-              message);
-    }
-    for (int i = 0; i < options.getExtensionCount(Annotations.validReferenceType); i++) {
-      String type = options.getExtension(Annotations.validReferenceType, i);
-      hasFieldOption =
-          addFieldOption(
-              "(" + optionPackage + "valid_reference_type)",
-              "\"" + type + "\"",
-              hasFieldOption,
-              message);
-    }
+
+    List<String> extensionStrings =
+        addExtensions(
+            "." + FieldOptions.getDescriptor().getFullName(),
+            options.getAllFields(),
+            packageName,
+            "",
+            LEGACY_FIELD_OPTIONS_ORDERING);
 
     if (field.hasJsonName()) {
-      hasFieldOption =
-          addFieldOption("json_name", "\"" + field.getJsonName() + "\"", hasFieldOption, message);
+      int insertIndex = 0;
+      // For legacy reasons, json_name appears before fhir_path_constraint.
+      for (insertIndex = 0;
+          insertIndex < extensionStrings.size()
+              && !extensionStrings.get(insertIndex).contains("fhir_path_constraint");
+          insertIndex++) {}
+
+      extensionStrings.add(insertIndex, "json_name = \"" + field.getJsonName() + "\"");
     }
 
-    for (int i = 0; i < options.getExtensionCount(Annotations.fhirPathConstraint); i++) {
-      String fhirPathConstraint = options.getExtension(Annotations.fhirPathConstraint, i);
-      hasFieldOption =
-          addFieldOption(
-              "(" + optionPackage + "fhir_path_constraint)",
-              "\"" + fhirPathConstraint + "\"",
-              hasFieldOption,
-              message);
-    }
-
-    if (hasFieldOption) {
-      message.append("]");
+    if (!extensionStrings.isEmpty()) {
+      message.append(" [").append(Joiner.on(", ").join(extensionStrings)).append("]");
     }
 
     return message.append(";\n").toString();
-  }
-
-  private boolean addFieldOption(
-      String option, String value, boolean hasFieldOption, StringBuilder message) {
-    if (!hasFieldOption) {
-      message.append(" [");
-      hasFieldOption = true;
-    } else {
-      message.append(", ");
-    }
-    message.append(option).append(" = ").append(value);
-    return true;
   }
 
   // For fhir options, fully type the package name if we are not writing to the same package
   // as the annotations
   private String getOptionsPackage(String packageName) {
     return packageName.equals("." + ANNOTATION_PACKAGE) ? "" : "." + ANNOTATION_PACKAGE + ".";
+  }
+
+  private static int getOptionPosition(FieldDescriptor messageOption, List<String> ordering) {
+    return ordering.contains(messageOption.getFullName())
+        ? ordering.indexOf(messageOption.getFullName())
+        : ordering.size();
+  }
+
+  private List<Map.Entry<FieldDescriptor, Object>> sortOptions(
+      Set<Map.Entry<FieldDescriptor, Object>> original, List<String> ordering) {
+    List<Map.Entry<FieldDescriptor, Object>> sorted = new ArrayList<>(original);
+    sorted.sort(
+        (first, second) -> {
+          int orderedDiff =
+              getOptionPosition(first.getKey(), ordering)
+                  - getOptionPosition(second.getKey(), ordering);
+          return orderedDiff != 0
+              ? orderedDiff
+              : first.getKey().getName().compareTo(second.getKey().getName());
+        });
+    return sorted;
+  }
+
+  private List<String> addExtensions(
+      String extendeeType,
+      Map<FieldDescriptor, Object> allFields,
+      String packageName,
+      String fieldIndent,
+      List<String> ordering) {
+    List<String> extensionStrings = new ArrayList<>();
+    for (Map.Entry<FieldDescriptor, Object> extension :
+        sortOptions(allFields.entrySet(), ordering)) {
+      FieldDescriptor extensionField = extension.getKey();
+      Object extensionValue = extension.getValue();
+      if (!extensionField.toProto().getExtendee().equals(extendeeType)) {
+        continue;
+      }
+      boolean isStringType = extensionField.getType() == FieldDescriptor.Type.STRING;
+      boolean isMessageType = extensionField.getType() == FieldDescriptor.Type.MESSAGE;
+
+      @SuppressWarnings("unchecked")
+      List<Object> extensionInstances =
+          extensionField.isRepeated()
+              ? (List<Object>) extensionValue
+              : Lists.newArrayList(extensionValue);
+
+      String optionPackage =
+          packageName.equals(extensionField.getFile().getPackage())
+              ? ""
+              : ("." + extensionField.getFile().getPackage() + ".");
+
+      Escaper escaper = new CharEscaperBuilder().addEscape('\\', "\\\\").toEscaper();
+
+      for (Object extensionInstance : extensionInstances) {
+        extensionStrings.add(
+            fieldIndent
+                + (extendeeType.equals("." + MessageOptions.getDescriptor().getFullName())
+                        || extendeeType.equals("." + EnumOptions.getDescriptor().getFullName())
+                    ? "option ("
+                    : "(")
+                + optionPackage
+                + extensionField.getName()
+                + ") = "
+                + (isStringType ? "\"" : isMessageType ? "{\n" : "")
+                + escaper.escape(
+                    isMessageType
+                        ? extensionInstance
+                            .toString()
+                            .replaceAll("(?m)^", fieldIndent + "  ")
+                            .replace("\\", "") // remove additional backslash in messages
+                        : extensionInstance.toString())
+                + (isStringType ? "\"" : isMessageType ? fieldIndent + "}" : ""));
+      }
+    }
+    return extensionStrings;
   }
 }

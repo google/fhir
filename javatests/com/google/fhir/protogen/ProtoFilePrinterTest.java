@@ -61,7 +61,6 @@ public final class ProtoFilePrinterTest {
   /** Read and parse the specified StructureDefinition. */
   private StructureDefinition readStructureDefinition(String resourceName)
       throws IOException, InvalidFhirException {
-    System.out.println(resourceName);
     File file =
         new File(
             runfiles.rlocation(
@@ -70,7 +69,6 @@ public final class ProtoFilePrinterTest {
                     + ".json"));
     if (!file.exists()) {
       String lowerCased = resourceName.substring(0, 1).toLowerCase() + resourceName.substring(1);
-      System.out.println(lowerCased);
       file =
           new File(
               runfiles.rlocation(
