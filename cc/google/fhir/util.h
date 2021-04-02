@@ -141,7 +141,7 @@ absl::StatusOr<const ::google::protobuf::Message*> GetContainedResource(
       contained.GetReflection()->GetOneofFieldDescriptor(contained,
                                                          resource_oneof);
   if (!field) {
-    return ::absl::NotFoundError("No Bundle Resource found");
+    return ::absl::NotFoundError("ContainedResource is empty.");
   }
   return &(ref->GetMessage(contained, field));
 }
@@ -305,7 +305,7 @@ absl::StatusOr<::google::protobuf::Message*> MutableContainedResource(
       contained->GetReflection()->GetOneofFieldDescriptor(*contained,
                                                           resource_oneof);
   if (!field) {
-    return ::absl::NotFoundError("No Bundle Resource found");
+    return ::absl::NotFoundError("ContainedResource is empty.");
   }
   return ref->MutableMessage(contained, field);
 }
