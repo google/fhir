@@ -151,8 +151,8 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
 
   // TODO: Consider using the ErrorReporter in the FHIRPath library
   // as well rather than translating ValidationResults here.
-  const fhir_path::ValidationResults results =
-      message_validator->Validate(resource);
+  FHIR_ASSIGN_OR_RETURN(const fhir_path::ValidationResults results,
+      message_validator->Validate(resource));
   for (const fhir_path::ValidationResult& result : results.Results()) {
     if (!result.EvaluationResult().ok()) {
       // Report failures to evaluate a FHIRPath expression against the incoming
@@ -195,7 +195,9 @@ absl::Status ValidateResourceWithFhirPath(
   FHIR_RETURN_IF_ERROR(
       ValidateFhirConstraints(resource, resource.GetDescriptor()->name(),
                               primitive_handler, FailFastErrorReporter::Get()));
-  return message_validator->Validate(resource).LegacyValidationResult();
+  FHIR_ASSIGN_OR_RETURN(const fhir_path::ValidationResults results,
+      message_validator->Validate(resource));
+  return results.LegacyValidationResult();
 }
 
 absl::Status ValidateResource(const Message& resource,

@@ -28,6 +28,7 @@
 #include "google/fhir/fhir_path/fhir_path.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 
 namespace google {
@@ -250,8 +251,17 @@ absl::Status ValidationResults::LegacyValidationResult() const {
                    ": \"", (*result).Constraint(), "\""));
 }
 
-ValidationResults FhirPathValidator::Validate(
-    const ::google::protobuf::Message& message) {
+absl::StatusOr<ValidationResults> FhirPathValidator::Validate(
+    const Message& message) {
+  // ContainedResource is an implementation detail of FHIR protos. Extract the
+  // resource from the wrapper before prcoessing so that wrapper is not included
+  // in the node/constraint path of the validation results.
+  if (IsContainedResource(message)) {
+    FHIR_ASSIGN_OR_RETURN(const Message* resource,
+                          GetContainedResource(message));
+    return Validate(*resource);
+  }
+
   std::vector<ValidationResult> results;
   Validate(message.GetDescriptor()->name(), message.GetDescriptor()->name(),
            internal::WorkspaceMessage(&message), &results);

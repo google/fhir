@@ -127,12 +127,13 @@ class ValidationResults {
 // This class is thread safe.
 class FhirPathValidator {
  public:
-  FhirPathValidator(const PrimitiveHandler* primitive_handler)
+  explicit FhirPathValidator(const PrimitiveHandler* primitive_handler)
       : primitive_handler_(primitive_handler) {}
   virtual ~FhirPathValidator();
 
+  // Validates the fhir_path_constraint annotations on the given message.
   ABSL_MUST_USE_RESULT
-  ValidationResults Validate(const ::google::protobuf::Message& message);
+  absl::StatusOr<ValidationResults> Validate(const ::google::protobuf::Message& message);
 
  private:
   // A cache of constraints for a given message definition
@@ -169,11 +170,6 @@ class FhirPathValidator {
   std::unordered_map<std::string, std::unique_ptr<MessageConstraints>>
       constraints_cache_;
 };
-
-// Validates the fhir_path_constraint annotations on the given message.
-ABSL_MUST_USE_RESULT
-ValidationResults ValidateMessage(const PrimitiveHandler* primitive_handler,
-                                  const ::google::protobuf::Message& message);
 
 }  // namespace fhir_path
 }  // namespace fhir

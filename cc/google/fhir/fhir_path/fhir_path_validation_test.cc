@@ -25,6 +25,7 @@
 #include "absl/status/status.h"
 #include "google/fhir/fhir_path/r4_fhir_path_validation.h"
 #include "google/fhir/fhir_path/stu3_fhir_path_validation.h"
+#include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/testutil/fhir_test_env.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
@@ -77,7 +78,7 @@ template <typename T>
 class FhirPathValidationTest : public ::testing::Test {
  public:
   static ValidationResults Validate(const ::google::protobuf::Message& message) {
-    return typename T::FhirPathValidator().Validate(message);
+    return *typename T::FhirPathValidator().Validate(message);
   }
 };
 
@@ -132,6 +133,14 @@ T ValidUsCorePatient() {
       value: { value: "http://example.com/patient" }
     }
   )proto");
+}
+
+TYPED_TEST(FhirPathValidationTest, EmptyContainedResource) {
+  auto resource = ParseFromString<typename TypeParam::ContainedResource>("");
+
+  FHIR_ASSERT_STATUS(
+      typename TypeParam::FhirPathValidator().Validate(resource).status(),
+      "ContainedResource is empty.");
 }
 
 TYPED_TEST(FhirPathValidationTest, ConstraintViolation) {
@@ -268,8 +277,10 @@ TEST(FhirPathValidationTest, MessageLevelConstraintViolated) {
     end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
   )proto");
 
-  EXPECT_FALSE(
-      r4::FhirPathValidator().Validate(end_before_start_period).IsValid());
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      ValidationResults results,
+      r4::FhirPathValidator().Validate(end_before_start_period));
+  EXPECT_FALSE(results.IsValid());
 }
 
 TYPED_TEST(FhirPathValidationTest, NestedMessageLevelConstraint) {
@@ -295,15 +306,20 @@ TEST(FhirPathValidationTest, NestedMessageLevelConstraintViolated) {
     }
   )proto");
 
-  EXPECT_FALSE(
-      r4::FhirPathValidator().Validate(end_before_start_encounter).IsValid());
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      ValidationResults results,
+      r4::FhirPathValidator().Validate(end_before_start_encounter));
+  EXPECT_FALSE(results.IsValid());
 }
 
 // TODO: Templatize tests to work with both STU3 and R4
 TEST(FhirPathValidationTest, ProfiledEmptyExtension) {
   r4::uscore::USCorePatientProfile patient =
       ValidUsCorePatient<r4::uscore::USCorePatientProfile>();
-  EXPECT_TRUE(r4::FhirPathValidator().Validate(patient).IsValid());
+
+  FHIR_ASSERT_OK_AND_ASSIGN(ValidationResults results,
+                            r4::FhirPathValidator().Validate(patient));
+  EXPECT_TRUE(results.IsValid());
 }
 
 TEST(FhirPathValidationTest, ProfiledWithExtensionsR4) {
@@ -318,7 +334,9 @@ TEST(FhirPathValidationTest, ProfiledWithExtensionsR4) {
 
   patient.mutable_birthsex()->set_value(r4::uscore::BirthSexValueSet::M);
 
-  EXPECT_TRUE(r4::FhirPathValidator().Validate(patient).IsValid());
+  FHIR_ASSERT_OK_AND_ASSIGN(ValidationResults results,
+                            r4::FhirPathValidator().Validate(patient));
+  EXPECT_TRUE(results.IsValid());
 }
 
 TEST(FhirPathValidationTest, ProfiledWithExtensionsSTU3) {
@@ -332,7 +350,9 @@ TEST(FhirPathValidationTest, ProfiledWithExtensionsSTU3) {
 
   patient.mutable_birthsex()->set_value(stu3::uscore::UsCoreBirthSexCode::MALE);
 
-  ASSERT_TRUE(stu3::FhirPathValidator().Validate(patient).IsValid());
+  FHIR_ASSERT_OK_AND_ASSIGN(ValidationResults results,
+                            stu3::FhirPathValidator().Validate(patient));
+  EXPECT_TRUE(results.IsValid());
 }
 
 }  // namespace
