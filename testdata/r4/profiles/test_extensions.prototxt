@@ -112,4 +112,19 @@ complex_extension {
   }
 }
 
+complex_extension {
+  element_data {
+    name: "SingleValueRepeatedComplexExtension"
+  }
+
+  simple_field {
+    element_data {
+      name: "stringField"
+      description: "single repeated field"
+      size_restriction: REPEATED
+    }
+    type: "string"
+  }
+}
+
 

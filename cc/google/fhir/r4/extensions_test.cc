@@ -304,9 +304,14 @@ TEST(ExtensionsTest, IsSimpleExtensionFalseManyFields) {
   EXPECT_FALSE(IsSimpleExtension(r4::testing::ComplexExt::descriptor()));
 }
 
-TEST(ExtensionsTest, IsSimpleExtensionFalseOneField) {
+TEST(ExtensionsTest, IsSimpleExtensionFalseOneFieldWithComplexAnnotation) {
   EXPECT_FALSE(IsSimpleExtension(
       r4::testing::SingleValueComplexExtension::descriptor()));
+}
+
+TEST(ExtensionsTest, IsSimpleExtensionFalseOneRepeatedField) {
+  EXPECT_FALSE(IsSimpleExtension(
+      r4::testing::SingleValueRepeatedComplexExtension::descriptor()));
 }
 
 }  // namespace

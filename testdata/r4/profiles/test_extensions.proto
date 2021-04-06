@@ -240,3 +240,20 @@ message SingleValueComplexExtension {
   // single field
   core.String string_field = 4;
 }
+
+// Auto-generated from StructureDefinition for
+// SingleValueRepeatedComplexExtension. Optional Extensions Element. See
+// http://test/url/base/StructureDefinition/SingleValueRepeatedComplexExtension
+message SingleValueRepeatedComplexExtension {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://test/url/base/StructureDefinition/SingleValueRepeatedComplexExtension";
+
+  // Unique id for inter-element referencing
+  core.String id = 1;
+
+  // single repeated field
+  repeated core.String string_field = 4;
+}

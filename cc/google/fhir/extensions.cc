@@ -133,11 +133,14 @@ std::string GetInlinedExtensionUrl(const FieldDescriptor* field) {
 }
 
 bool IsSimpleExtension(const ::google::protobuf::Descriptor* descriptor) {
-  // Simple extensions have two fields: an id and a value field.
-  // However, complex extensions that only have a single field also have two
-  // fields.  In that case, is_complex_extension is used to disambiguate.
-  return IsProfileOfExtension(descriptor) &&
-         extensions_internal::FindValueFields(descriptor).size() == 1 &&
+  // Simple extensions have only a single, non-repeated value field.
+  // However, it is also possible to have a complex extension with only
+  // a single non-repeated field.  In that case, is_complex_extension is used to
+  // disambiguate.
+  const std::vector<const FieldDescriptor*> value_fields =
+      extensions_internal::FindValueFields(descriptor);
+  return IsProfileOfExtension(descriptor) && value_fields.size() == 1 &&
+         !value_fields.front()->is_repeated() &&
          !descriptor->options().GetExtension(proto::is_complex_extension);
 }
 
