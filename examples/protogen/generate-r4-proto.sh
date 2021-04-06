@@ -14,19 +14,17 @@
 # limitations under the License.
 
 ROOT_PATH=../..
-PROTO_GENERATOR=$ROOT_PATH/bazel-bin/java/ProtoGenerator
+PROTO_GENERATOR=${ROOT_PATH}/bazel-bin/java/ProtoGenerator
 
 OUTPUT_PATH="$(dirname $0)/../../proto/r4/core"
-DESCRIPTOR_OUTPUT_PATH="$(dirname $0)/../../testdata/r4/descriptors/"
 
 bazel build //spec/fhir_r4_definitions.zip
-FHIR_PACKAGE="$ROOT_PATH/bazel-genfiles/spec/fhir_r4_definitions.zip"
+FHIR_PACKAGE="${ROOT_PATH}/bazel-genfiles/spec/fhir_r4_definitions.zip"
 
 COMMON_FLAGS=" \
-  --emit_proto \
   --sort \
   --r4_core_dep $FHIR_PACKAGE \
-  --input_package $FHIR_PACKAGE "
+  --input_package $FHIR_PACKAGE"
 
 # Build the binary.
 bazel build //java/com/google/fhir/protogen:ProtoGenerator
@@ -55,25 +53,32 @@ $PROTO_GENERATOR \
 # TODO: generate Extension proto with custom ordering.
 if [ $? -eq 0 ]
 then
-  echo -e "\n//End of auto-generated messages.\n" >> $OUTPUT_PATH/datatypes.proto
-  cat "$(dirname $0)/r4/datatypes_supplement.txt" >> $OUTPUT_PATH/datatypes.proto
+  echo -e "\n//End of auto-generated messages.\n" >> "${OUTPUT_PATH}/datatypes.proto"
+  cat "$(dirname $0)/r4/datatypes_supplement.txt" >> "${OUTPUT_PATH}/datatypes.proto"
 fi
 
 # generate resource protos
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
-  --output_directory $OUTPUT_PATH/resources \
-  --filter resource
+  --output_directory "${OUTPUT_PATH}/resources" \
+  --filter resource \
+  --output_name resources
+
+unzip -qo "${OUTPUT_PATH}/resources/resources.zip" -d "${OUTPUT_PATH}/resources"
+rm "${OUTPUT_PATH}/resources/resources.zip"
 
 # generate profiles.proto
 # exclude familymemberhistory-genetic due to
 # https://gforge.hl7.org/gf/project/fhir/tracker/?action=TrackerItemEdit&tracker_id=677&tracker_item_id=19239
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
-  --output_directory $OUTPUT_PATH/profiles \
+  --output_directory "${OUTPUT_PATH}/profiles" \
   --filter profile \
-  --exclude familymemberhistory-genetic
+  --exclude familymemberhistory-genetic \
+  --output_name profiles
 
+unzip -qo "${OUTPUT_PATH}/profiles/profiles.zip" -d "${OUTPUT_PATH}/profiles"
+rm "${OUTPUT_PATH}/profiles/profiles.zip"
 
 # generate extensions
 $PROTO_GENERATOR \

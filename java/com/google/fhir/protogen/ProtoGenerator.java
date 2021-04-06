@@ -448,6 +448,11 @@ public class ProtoGenerator {
    */
   public FileDescriptorProto generateFileDescriptor(List<StructureDefinition> defs)
       throws InvalidFhirException {
+    return generateFileDescriptor(defs, ImmutableList.of());
+  }
+
+  public FileDescriptorProto generateFileDescriptor(
+      List<StructureDefinition> defs, List<String> additionalImports) throws InvalidFhirException {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
     builder.setPackage(packageInfo.getProtoPackage()).setSyntax("proto3");
     FileOptions.Builder options = FileOptions.newBuilder();
@@ -506,6 +511,9 @@ public class ProtoGenerator {
 
     if (!FhirPackage.isCorePackage(packageInfo) && hasLocalCode(builder)) {
       builder.addDependency(codesProtoImport);
+    }
+    for (String additionalImport : additionalImports) {
+      builder.addDependency(new File(additionalImport).toString());
     }
     return builder.build();
   }
