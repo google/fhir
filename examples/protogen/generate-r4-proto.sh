@@ -24,12 +24,10 @@ FHIR_PACKAGE="$ROOT_PATH/bazel-genfiles/spec/fhir_r4_definitions.zip"
 
 COMMON_FLAGS=" \
   --emit_proto \
-  --emit_descriptors \
   --sort \
   --r4_core_dep $FHIR_PACKAGE \
-  --input_package $FHIR_PACKAGE \
-  --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH "
-#
+  --input_package $FHIR_PACKAGE "
+
 # Build the binary.
 bazel build //java/com/google/fhir/protogen:ProtoGenerator
 

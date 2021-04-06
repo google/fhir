@@ -43,11 +43,9 @@ FHIR_STRUCT_DEF_ZIP="$ROOT_PATH/bazel-genfiles/spec/fhir_stu3_structure_definiti
 
 COMMON_FLAGS=" \
   --emit_proto \
-  --emit_descriptors \
   --package_info $FHIR_PACKAGE_INFO \
   --r4_core_dep $FHIR_DEFINITION_ZIP \
-  --output_directory $OUTPUT_PATH \
-  --descriptor_output_directory $DESCRIPTOR_OUTPUT_PATH" \
+  --output_directory $OUTPUT_PATH "
 
 # Build the binary.
 bazel build //java:ProtoGenerator

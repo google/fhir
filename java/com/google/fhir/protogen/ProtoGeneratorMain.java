@@ -38,10 +38,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -55,31 +53,15 @@ class ProtoGeneratorMain {
 
   private final PrintWriter writer;
 
-  // The convention is to name profiles as the lowercased version of the element they define,
-  // but this is not guaranteed by the spec, so we don't rely on it.
-  // This mapping lets us keep track of source filenames for generated types.
-  private static final Map<String, String> typeToSourceFileBaseName = new HashMap<>();
-
   private static final String EXTENSION_STRUCTURE_DEFINITION_URL =
       "http://hl7.org/fhir/StructureDefinition/Extension";
 
   private static class Args {
     @Parameter(
-      names = {"--emit_descriptors"},
-      description = "Emit individual descriptor files"
-    )
-    private Boolean emitDescriptors = false;
-
-    @Parameter(
       names = {"--output_directory"},
       description = "Directory where generated output will be saved"
     )
     private String outputDirectory = ".";
-
-    @Parameter(
-        names = {"--descriptor_output_directory"},
-        description = "Directory where generated descriptor output will be saved")
-    private String descriptorOutputDirectory = ".";
 
     @Parameter(
       names = {"--emit_proto"},
@@ -204,12 +186,6 @@ class ProtoGeneratorMain {
       default:
         throw new IllegalArgumentException(
             "FHIR version not supported by ProfileGenerator: " + packageInfo.getFhirVersion());
-    }
-
-    for (StructureDefinition structDef : inputPackage.structureDefinitions) {
-      typeToSourceFileBaseName.put(
-          GeneratorUtils.getTypeName(structDef, packageInfo.getFhirVersion()),
-          structDef.getId().getValue());
     }
 
     List<StructureDefinition> inputDefinitions =
@@ -463,28 +439,6 @@ class ProtoGeneratorMain {
       writer.flush();
       File outputFile = new File(args.outputDirectory, protoFileName);
       Files.asCharSink(outputFile, UTF_8).write(protoFileContents);
-    }
-
-    if (args.emitDescriptors) {
-      // Save the result as individual .descriptor.prototxt files
-      writer.println("Writing individual descriptors to " + args.descriptorOutputDirectory + "...");
-      writer.flush();
-      for (DescriptorProto descriptor : proto.getMessageTypeList()) {
-        if (descriptor.getName().equals("ContainedResource")) {
-          continue;
-        }
-        String fileBaseName = typeToSourceFileBaseName.get(descriptor.getName());
-        if (fileBaseName == null) {
-          throw new IllegalArgumentException(
-              "No file basename associated with type: "
-                  + descriptor.getName()
-                  + "\n"
-                  + typeToSourceFileBaseName);
-        }
-        File outputFile =
-            new File(args.descriptorOutputDirectory, fileBaseName + ".descriptor.prototxt");
-        Files.asCharSink(outputFile, UTF_8).write(descriptor.toString());
-      }
     }
   }
 
