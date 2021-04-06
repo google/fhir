@@ -34,14 +34,17 @@ java_test(
     size = "medium",
     srcs = ["ProtoGeneratorTest.java"],
     data = [
+        "//proto/google/fhir/proto/r4/core:testdata",
+        "//proto/google/fhir/proto/r4/core/profiles:proto_files",
+        "//proto/google/fhir/proto/r4/core/resources:testdata",
         "//spec:fhir_r4_package.zip",
         "//spec:fhir_r4_package_filegroup",
-        "//spec:fhir_stu3_package_filegroup",
-        "//spec:uscore_stu3_package_filegroup",
         "//testdata/r4:descriptors",
-        "//testdata/stu3:descriptors",
     ],
     test_class = "com.google.fhir.protogen.ProtoGeneratorTest",
+    runtime_deps = [
+        "//proto/google/fhir/proto/r4/core/profiles:test_rule_java_proto",
+    ],
     deps = [
         "//java/com/google/fhir/common:codes",
         "//java/com/google/fhir/common:exceptions",
@@ -50,6 +53,7 @@ java_test(
         "//java/com/google/fhir/protogen:generator_utils",
         "//java/com/google/fhir/protogen:proto_generator_test_utils",
         "//proto/google/fhir/proto:annotations_java_proto",
+        "//proto/google/fhir/proto:protogenerator_annotations_java_proto",
         "//proto/google/fhir/proto/r4/core:codes_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:search_parameter_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",

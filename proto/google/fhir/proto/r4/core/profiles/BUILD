@@ -551,3 +551,37 @@ fhir_proto_library(
     ],
     proto_library_prefix = "triglyceride",
 )
+
+# We also make the protos and .proto files readable for testing.
+
+proto_library(
+    name = "test_rule_proto",
+    testonly = 1,
+    srcs = glob(
+        ["*.proto"],
+        exclude = ["datatypes.proto"],
+    ),
+    deps = [
+        "@com_google_protobuf//:any_proto",
+        "//proto/google/fhir/proto:annotations_proto",
+        "//proto/google/fhir/proto/r4/core:codes_proto",
+        "//proto/google/fhir/proto/r4/core:datatypes_proto",
+        "//proto/google/fhir/proto/r4/core:extensions_proto",
+        "//proto/google/fhir/proto/r4/core:valuesets_proto",
+    ],
+)
+
+java_proto_library(
+    name = "test_rule_java_proto",
+    testonly = 1,
+    deps = [":test_rule_proto"],
+)
+
+filegroup(
+    name = "proto_files",
+    testonly = 1,
+    srcs = glob(
+        ["*.proto"],
+        exclude = ["datatypes.proto"],
+    ),
+)
