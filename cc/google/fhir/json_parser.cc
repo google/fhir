@@ -24,6 +24,7 @@
 #include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
+#include "absl/container/flat_hash_map.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
@@ -36,12 +37,12 @@
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/r4/profiles.h"
+#include "google/fhir/references.h"
 #include "google/fhir/resource_validation.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/profiles.h"
 #include "google/fhir/util.h"
-#include "google/fhir/references.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 #include "include/json/json.h"
 #include "re2/re2.h"
@@ -68,34 +69,17 @@ namespace internal {
 // Since FHIR represents extensions to primitives as separate JSON fields,
 // prepended by underscore, we add that as a separate mapping to the primitive
 // field.
-const std::unordered_map<std::string, const FieldDescriptor*>& GetFieldMap(
-    const Descriptor* descriptor) {
-  // Note that we memoize on descriptor address, since the values include
-  // FieldDescriptor addresses, which will only be valid for a given address
-  // of input descriptor
-  static auto* memos = new std::unordered_map<
-      intptr_t, std::unique_ptr<
-                    std::unordered_map<std::string, const FieldDescriptor*>>>();
-  static absl::Mutex memos_mutex;
-
-  const intptr_t memo_key = (intptr_t)descriptor;
-
-  memos_mutex.ReaderLock();
-  const auto iter = memos->find(memo_key);
-  if (iter != memos->end()) {
-    memos_mutex.ReaderUnlock();
-    return *iter->second;
-  }
-  memos_mutex.ReaderUnlock();
-
+std::unique_ptr<const std::unordered_map<std::string, const FieldDescriptor*>>
+MakeFieldMap(const Descriptor* descriptor) {
   auto field_map = absl::make_unique<
       std::unordered_map<std::string, const FieldDescriptor*>>();
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
     if (IsChoiceType(field)) {
-      const std::unordered_map<std::string, const FieldDescriptor*>& inner_map =
-          GetFieldMap(field->message_type());
-      for (auto iter = inner_map.begin(); iter != inner_map.end(); iter++) {
+      std::unique_ptr<
+          const std::unordered_map<std::string, const FieldDescriptor*>>
+          inner_map = MakeFieldMap(field->message_type());
+      for (auto iter = inner_map->begin(); iter != inner_map->end(); iter++) {
         std::string child_field_name = iter->first;
         if (child_field_name[0] == '_') {
           // Convert primitive extension field name to field on choice type,
@@ -121,8 +105,43 @@ const std::unordered_map<std::string, const FieldDescriptor*>& GetFieldMap(
       }
     }
   }
+  return field_map;
+}
+
+// Gets a field map for a given descriptor.
+// This memoizes the results of MakeFieldMap.
+const std::unordered_map<std::string, const FieldDescriptor*>& GetFieldMap(
+    const Descriptor* descriptor) {
+  // Note that we memoize on descriptor address, since the values include
+  // FieldDescriptor addresses, which will only be valid for a given address
+  // of input descriptor
+  static auto* memos =
+      new absl::flat_hash_map<intptr_t,
+                              std::unique_ptr<const std::unordered_map<
+                                  std::string, const FieldDescriptor*>>>();
+  static absl::Mutex memos_mutex(absl::kConstInit);
+
+  const intptr_t memo_key = reinterpret_cast<intptr_t>(descriptor);
+
+  memos_mutex.ReaderLock();
+  const auto iter = memos->find(memo_key);
+  if (iter != memos->end()) {
+    memos_mutex.ReaderUnlock();
+    return *iter->second;
+  }
+  memos_mutex.ReaderUnlock();
+
   absl::MutexLock lock(&memos_mutex);
-  (*memos)[memo_key] = std::move(field_map);
+
+  // Check if anything created and wrote the new entry while we were waiting
+  // on the lock
+  const auto inside_lock_iter = memos->find(memo_key);
+  if (inside_lock_iter != memos->end()) {
+    return *inside_lock_iter->second;
+  }
+
+  // There's still no memo, and we're holding the lock.  Write a new entry.
+  (*memos)[memo_key] = MakeFieldMap(descriptor);
   return *(*memos)[memo_key];
 }
 
