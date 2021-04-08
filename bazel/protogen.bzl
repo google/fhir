@@ -98,7 +98,6 @@ def gen_fhir_protos(
 
     cmd = """
         $(location %s) \
-            --emit_proto \
             --emit_codes \
             --codes_import %s \
             --output_directory $(@D) \
