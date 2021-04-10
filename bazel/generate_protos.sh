@@ -42,6 +42,4 @@ source $(dirname "$BASH_SOURCE")/generate_protos_utils.sh
 # Build protos, and then copy them into source
 try_build "$dir:${label}_proto_files"
 
-copy_to_src_if_present ${label}.proto
-copy_to_src_if_present ${label}_extensions.proto
-copy_to_src_if_present ${label}_codes.proto
+unzip_to_src "${label}"

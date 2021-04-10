@@ -17,7 +17,6 @@ gen_fhir_definitions_and_protos(
     profiles = [
         "test_profiles.prototxt",
     ],
-    separate_extensions = True,
     terminologies = ["test_terminologies.prototxt"],
 )
 

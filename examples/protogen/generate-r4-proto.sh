@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -eu
+
 ROOT_PATH=../..
 PROTO_GENERATOR=${ROOT_PATH}/bazel-bin/java/ProtoGenerator
 
@@ -39,11 +41,14 @@ fi
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --output_directory $OUTPUT_PATH \
+  --output_name datatypes \
   --filter datatype \
   --exclude elementdefinition-de \
   --exclude Reference \
   --exclude Extension \
   --exclude Element
+unzip -qo "${OUTPUT_PATH}/datatypes.zip" -d "${OUTPUT_PATH}"
+rm "${OUTPUT_PATH}/datatypes.zip"
 
 # Some datatypes are manually generated.
 # These include:
@@ -83,5 +88,11 @@ rm "${OUTPUT_PATH}/profiles/profiles.zip"
 # generate extensions
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
+  --output_name extensions \
   --output_directory $OUTPUT_PATH \
   --filter extension
+
+unzip -qo "${OUTPUT_PATH}/extensions.zip" -d "${OUTPUT_PATH}"
+rm "${OUTPUT_PATH}/extensions.zip"
+mv "${OUTPUT_PATH}/extensions_extensions.proto" \
+   "${OUTPUT_PATH}/extensions.proto"

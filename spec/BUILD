@@ -26,7 +26,7 @@ filegroup(
 
 # STU3 core types.
 fhir_package(
-    package_name = "fhir_stu3_package",
+    package_name = "fhir_stu3",
     definitions = glob(
         ["hl7.fhir.core/3.0.1/package/StructureDefinition-*.json"],
         exclude = [
@@ -68,7 +68,7 @@ filegroup(
 )
 
 fhir_package(
-    package_name = "fhir_r4_package",
+    package_name = "fhir_r4",
     definitions =
         glob(
             ["hl7.fhir.core/4.0.1/package/StructureDefinition-*.json"],

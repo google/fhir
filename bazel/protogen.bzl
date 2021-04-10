@@ -14,8 +14,8 @@
 
 """Rules for generating Protos from FHIR definitions"""
 
-STU3_PACKAGE_DEP = "@com_google_fhir//spec:fhir_stu3_package"
-R4_PACKAGE_DEP = "@com_google_fhir//spec:fhir_r4_package"
+STU3_PACKAGE_DEP = "@com_google_fhir//spec:fhir_stu3"
+R4_PACKAGE_DEP = "@com_google_fhir//spec:fhir_r4"
 PROTO_GENERATOR = "@com_google_fhir//java/com/google/fhir/protogen:ProtoGenerator"
 PROFILE_GENERATOR = "@com_google_fhir//java/com/google/fhir/protogen:ProfileGenerator"
 
@@ -41,7 +41,7 @@ def fhir_package(
         srcs = definitions + [package_info],
     )
     native.genrule(
-        name = "_genrule_" + package_name,
+        name = package_name + "_package_zip",
         srcs = [filegroup_name],
         outs = [_get_zip_for_pkg(package_name)],
         cmd = "zip --quiet -j $@ $(locations %s)" % filegroup_name,
@@ -55,8 +55,7 @@ def gen_fhir_protos(
         name,
         package,
         package_deps = [],
-        additional_proto_imports = None,
-        separate_extensions = False,
+        additional_proto_imports = [],
         disable_test = False):
     """Generates a proto file from a fhir_package
 
@@ -66,60 +65,38 @@ def gen_fhir_protos(
     bazel/generate_protos.sh foo/bar:quux
 
     Args:
-      name: The name for the generated proto file (without .proto)
+      name: The name for the generated proto files (without .proto)
       package: The fhir_package to generate protos for.
       package_deps: Any fhir_packages these definitions depend on.
                     Core fhir definitions are automatically included.
       additional_proto_imports: Additional proto files the generated protos should import.
                                 FHIR datatypes, annotations, and codes are included automatically.
-      separate_extensions: If true, will produce two proto files, one for extensions
-                           and one for profiles.
       disable_test: If true, will not declare a GeneratedProtoTest
     """
 
-    struct_def_dep_flags = " ".join([
+    # Get the directory that the rule is being run out of by using the directory of a known output.
+    src_dir = _src_dir(":" + name + ".zip")
+
+    flags = [
+        "--output_directory $(@D)",
+        "--output_name " + name,
+        "--stu3_core_dep $(location %s)" % _get_zip_for_pkg(STU3_PACKAGE_DEP),
+        "--r4_core_dep $(location %s)" % _get_zip_for_pkg(R4_PACKAGE_DEP),
+        "--input_package $(location %s)" % _get_zip_for_pkg(package),
+    ]
+
+    flags.extend([
         "--fhir_definition_dep $(location %s)" % _get_zip_for_pkg(dep)
         for dep in (package_deps + [package])
     ])
-    if not additional_proto_imports:
-        additional_proto_imports = []
 
-    additional_proto_imports_flags = " ".join([
+    flags.extend([
         "--additional_import %s" % proto_import
         for proto_import in additional_proto_imports
     ])
 
-    # Get the directory that the rule is being run out of by using the directory of a known output.
-    src_dir = _src_dir(":_genfiles_" + name + ".proto")
-    codes_import = "%s/%s_codes.proto" % (src_dir, name)
-    if separate_extensions:
-        # Also add the extensions proto files as an import to the main file.
-        additional_proto_imports_flags += " --additional_import %s/%s_extensions.proto" % (src_dir, name)
-
-    cmd = """
-        $(location %s) \
-            --emit_codes \
-            --codes_import %s \
-            --output_directory $(@D) \
-            --stu3_core_dep $(location %s) \
-            --r4_core_dep $(location %s) \
-            --output_name _genfiles_%s \
-            --input_package $(location %s) \
-            """ % (
-        PROTO_GENERATOR,
-        codes_import,
-        _get_zip_for_pkg(STU3_PACKAGE_DEP),
-        _get_zip_for_pkg(R4_PACKAGE_DEP),
-        name,
-        _get_zip_for_pkg(package),
-    )
-
-    cmd += additional_proto_imports_flags + " " + struct_def_dep_flags
-
-    outs = ["_genfiles_" + name + ".proto", "_genfiles_" + name + "_codes.proto"]
-
-    if separate_extensions:
-        outs.append("_genfiles_" + name + "_extensions.proto")
+    flags.append("--codes_import %s/%s_codes.proto" % (src_dir, name))
+    flags.append("--extensions_import %s/%s_extensions.proto" % (src_dir, name))
 
     all_fhir_pkgs = package_deps + [
         package,
@@ -130,13 +107,16 @@ def gen_fhir_protos(
 
     native.genrule(
         name = name + "_proto_files",
-        outs = outs,
+        outs = ["%s.zip" % name],
         srcs = src_pkgs,
         tools = [PROTO_GENERATOR],
-        cmd = cmd,
+        cmd = PROTO_GENERATOR + " " + " ".join(flags),
         tags = MANUAL_TAGS,
     )
 
+    # TODO: Currently we can only auto-test a main resource proto file.
+    # We should change this to ProtoGeneratorMain with the same flags generated above,
+    # and compare the output to the source files.
     if not disable_test:
         additional_import_test_flag = ",".join(additional_proto_imports)
         deps_test_flag = ",".join(["$(location %s)" % _get_zip_for_pkg(dep) for dep in package_deps])
@@ -178,8 +158,7 @@ def gen_fhir_definitions_and_protos(
         profiles = [],
         terminologies = [],
         package_deps = [],
-        additional_proto_imports = [],
-        separate_extensions = False):
+        additional_proto_imports = []):
     """Generates structure definitions and protos based on Extensions and Profiles protos.
 
     These rules should be run by bazel/generate_protos.sh, which will generate the
@@ -199,8 +178,6 @@ def gen_fhir_definitions_and_protos(
                     Core fhir definitions are automatically included.
       additional_proto_imports: Additional proto files the generated profiles should import
                                 FHIR datatypes, annotations, and codes are included automatically.
-      separate_extensions: If true, will produce two proto files, one for extensions
-                                          and one for profiles.
     """
 
     profile_flags = " ".join([("--profiles $(location %s) " % profile) for profile in profiles])
@@ -223,9 +200,9 @@ def gen_fhir_definitions_and_protos(
                             [_get_zip_for_pkg(dep) for dep in package_deps])
 
     json_outs = [
-        "_genfiles_" + name + ".json",
-        "_genfiles_" + name + "_extensions.json",
-        "_genfiles_" + name + "_terminologies.json",
+        name + ".json",
+        name + "_extensions.json",
+        name + "_terminologies.json",
     ]
 
     native.genrule(
@@ -238,7 +215,7 @@ def gen_fhir_definitions_and_protos(
         cmd = ("""
             $(location %s) \
                 --output_directory $(@D) \
-                --name _genfiles_%s \
+                --name %s \
                 --package_info $(location %s) \
                 --stu3_struct_def_zip $(location %s) \
                 --r4_struct_def_zip $(location %s) \
@@ -267,12 +244,11 @@ def gen_fhir_definitions_and_protos(
         package = name,
         package_deps = package_deps,
         additional_proto_imports = additional_proto_imports,
-        separate_extensions = separate_extensions,
         disable_test = len(profiles) == 0,
     )
 
 def _get_zip_for_pkg(pkg):
-    return pkg + ".zip"
+    return pkg + "_package.zip"
 
 def _get_proto_rule_for_pkg(pkg, name):
     return ":".split(pkg)[0] + name + "_proto"

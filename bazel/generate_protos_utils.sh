@@ -23,11 +23,17 @@ function try_build() {
 }
 
 function copy_to_src_if_present() {
-  src=bazel-genfiles/$dir/_genfiles_$1
+  local -r src="bazel-genfiles/${dir}/$1"
 
   dst=$dir/$1
   if [ -e $src ] && [ $(wc -l < $src) -gt 20 ]
   then
     cp $src $dst
   fi
+}
+
+function unzip_to_src() {
+  local -r src="bazel-genfiles/${dir}/$1.zip"
+
+  unzip -qo "${src}" -d "${dir}"
 }
