@@ -106,28 +106,25 @@ def gen_fhir_protos(
     src_pkgs = [_get_zip_for_pkg(pkg) for pkg in all_fhir_pkgs]
 
     native.genrule(
-        name = name + "_proto_files",
+        name = name + "_proto_zip",
         outs = ["%s.zip" % name],
         srcs = src_pkgs,
         tools = [PROTO_GENERATOR],
-        cmd = PROTO_GENERATOR + " " + " ".join(flags),
+        cmd = "$(location %s)" % PROTO_GENERATOR + " " + " ".join(flags),
         tags = MANUAL_TAGS,
     )
 
-    # TODO: Currently we can only auto-test a main resource proto file.
-    # We should change this to ProtoGeneratorMain with the same flags generated above,
-    # and compare the output to the source files.
+    native.filegroup(
+        name = name + "_proto_golden_files",
+        srcs = native.glob(["*.proto"]),
+        testonly = 1,
+    )
     if not disable_test:
         additional_import_test_flag = ",".join(additional_proto_imports)
         deps_test_flag = ",".join(["$(location %s)" % _get_zip_for_pkg(dep) for dep in package_deps])
         test_flags = [
-            "-Dfhir_package=$(location %s)" % _get_zip_for_pkg(package),
-            "-Drule_name=" + name,
-            "-Dcodes_import=" + "%s/%s_codes.proto" % (_src_dir(_get_proto_rule_for_pkg(package, name)), name),
-            "-Ddependencies=" + deps_test_flag,
-            "-Dimports=" + additional_import_test_flag,
-            "-Dstu3_core_dep=$(location %s)" % _get_zip_for_pkg(STU3_PACKAGE_DEP),
-            "-Dr4_core_dep=$(location %s)" % _get_zip_for_pkg(R4_PACKAGE_DEP),
+            "-Dgenerated_zip=$(location :%s.zip)" % name,
+            "-Dgolden_dir=" + src_dir,
             "-Xmx4096M",
         ]
 
@@ -136,16 +133,13 @@ def gen_fhir_protos(
             size = "medium",
             srcs = ["//external:GeneratedProtoTest.java"],
             jvm_flags = test_flags,
-            data = src_pkgs,
+            data = src_pkgs + [":%s.zip" % name, "%s_proto_golden_files" % name],
             test_class = "com.google.fhir.protogen.GeneratedProtoTest",
-            runtime_deps = [
-                _get_java_proto_rule_for_pkg(package, name),
-            ],
             deps = [
-                _get_proto_rule_for_pkg(package, name),
                 "//external:proto_generator_test_utils",
                 "//external:protogen",
                 "@maven//:com_google_guava_guava",
+                "@maven//:com_google_truth_truth",
                 "@maven//:junit_junit",
                 "@com_google_protobuf//:protobuf_java",
             ],
@@ -158,7 +152,8 @@ def gen_fhir_definitions_and_protos(
         profiles = [],
         terminologies = [],
         package_deps = [],
-        additional_proto_imports = []):
+        additional_proto_imports = [],
+        disable_test = False):
     """Generates structure definitions and protos based on Extensions and Profiles protos.
 
     These rules should be run by bazel/generate_protos.sh, which will generate the
@@ -178,6 +173,7 @@ def gen_fhir_definitions_and_protos(
                     Core fhir definitions are automatically included.
       additional_proto_imports: Additional proto files the generated profiles should import
                                 FHIR datatypes, annotations, and codes are included automatically.
+      disable_test: If true, will not declare a GeneratedProtoTest
     """
 
     profile_flags = " ".join([("--profiles $(location %s) " % profile) for profile in profiles])
@@ -244,14 +240,11 @@ def gen_fhir_definitions_and_protos(
         package = name,
         package_deps = package_deps,
         additional_proto_imports = additional_proto_imports,
-        disable_test = len(profiles) == 0,
+        disable_test = disable_test,
     )
 
 def _get_zip_for_pkg(pkg):
     return pkg + "_package.zip"
-
-def _get_proto_rule_for_pkg(pkg, name):
-    return ":".split(pkg)[0] + name + "_proto"
 
 def _get_java_proto_rule_for_pkg(pkg, name):
     return ":".split(pkg)[0] + name + "_java_proto"

@@ -310,13 +310,15 @@ class ProtoGeneratorMain {
           zipOutputStream);
       args.additionalImports.add(args.extensionsProtoImport);
     }
-    FileDescriptorProto mainFileProto =
-        generator.generateFileDescriptor(profiles, args.additionalImports);
-    if (packageInfo.getLocalContainedResource()) {
-      mainFileProto =
-          generator.addContainedResource(mainFileProto, mainFileProto.getMessageTypeList());
+    if (!profiles.isEmpty()) {
+      FileDescriptorProto mainFileProto =
+          generator.generateFileDescriptor(profiles, args.additionalImports);
+      if (packageInfo.getLocalContainedResource()) {
+        mainFileProto =
+            generator.addContainedResource(mainFileProto, mainFileProto.getMessageTypeList());
+      }
+      addZipEntry(args.outputName + ".proto", mainFileProto, printer, zipOutputStream);
     }
-    addZipEntry(args.outputName + ".proto", mainFileProto, printer, zipOutputStream);
   }
 
   private void writeSplitResources(

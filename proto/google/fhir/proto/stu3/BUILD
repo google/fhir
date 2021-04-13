@@ -103,6 +103,8 @@ gen_fhir_protos(
     additional_proto_imports = [
         "proto/google/fhir/proto/stu3/uscore_codes.proto",
     ],
+    # Regression test disabled because generation of STU3 is frozen.
+    disable_test = True,
     package = "//spec:uscore_stu3_package",
 )
 

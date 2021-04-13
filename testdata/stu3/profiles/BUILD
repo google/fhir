@@ -7,6 +7,8 @@ package(default_visibility = ["//visibility:public"])
 
 gen_fhir_definitions_and_protos(
     name = "test",
+    # Regression test disabled because generation of STU3 is frozen.
+    disable_test = True,
     extensions = [
         "test_extensions.prototxt",
     ],

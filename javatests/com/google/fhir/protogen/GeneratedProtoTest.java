@@ -14,9 +14,19 @@
 
 package com.google.fhir.protogen;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import static com.google.common.truth.Truth.assertThat;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.fail;
+
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Files;
+import java.io.File;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -30,18 +40,35 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class GeneratedProtoTest {
 
-  private static final Splitter splitter = Splitter.on(",").omitEmptyStrings();
-
   @Test
   public void testGeneratedProto() throws Exception {
-    ProtoGeneratorTestUtils.testGeneratedProto(
-        System.getProperty("fhir_package"),
-        System.getProperty("rule_name"),
-        System.getProperty("codes_import"),
-        ImmutableMap.of(
-            "STU3", System.getProperty("stu3_core_dep"),
-            "R4", System.getProperty("r4_core_dep")),
-        ImmutableSet.copyOf(splitter.splitToList(System.getProperty("dependencies"))),
-        ImmutableSet.copyOf(splitter.splitToList(System.getProperty("imports"))));
+    Map<String, String> generatedContentsByFilename = new HashMap<>();
+    ZipFile zipFile = new ZipFile(new File(System.getProperty("generated_zip")));
+    Enumeration<? extends ZipEntry> entries = zipFile.entries();
+    while (entries.hasMoreElements()) {
+      ZipEntry entry = entries.nextElement();
+      InputStream stream = zipFile.getInputStream(entry);
+      generatedContentsByFilename.put(
+          entry.getName(), new String(ByteStreams.toByteArray(stream), UTF_8));
+    }
+
+    Map<String, String> goldenContentsByFilename = new HashMap<>();
+    File dir = new File(System.getProperty("golden_dir"));
+    File[] directoryListing = dir.listFiles();
+    if (directoryListing == null) {
+      fail("Unable to load files from directory: " + System.getProperty("golden_dir"));
+    }
+
+    for (File file : directoryListing) {
+      if (!file.isDirectory()) {
+        goldenContentsByFilename.put(file.getName(), Files.asCharSource(file, UTF_8).read());
+      }
+    }
+
+    for (String filename : generatedContentsByFilename.keySet()) {
+      assertThat(goldenContentsByFilename).containsKey(filename);
+      ProtoGeneratorTestUtils.testProtoFiles(
+          generatedContentsByFilename.get(filename), goldenContentsByFilename.get(filename));
+    }
   }
 }

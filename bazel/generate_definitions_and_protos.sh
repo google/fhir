@@ -53,5 +53,5 @@ copy_to_src_if_present ${label}_extensions.json
 copy_to_src_if_present ${label}_terminologies.json
 
 # Build protos, and then copy them into source
-try_build "${target}_proto_files"
+try_build "${target}_proto_zip"
 unzip_to_src "${label}"
