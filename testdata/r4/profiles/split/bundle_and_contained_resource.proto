@@ -1,0 +1,294 @@
+//    Copyright 2021 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.splittesting;
+
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r4/core/codes.proto";
+import "proto/google/fhir/proto/r4/core/datatypes.proto";
+import "testdata/r4/profiles/split/profiled_datatypes_observation.proto";
+import "testdata/r4/profiles/split/split_test_extensions.proto";
+import "testdata/r4/profiles/split/test_encounter.proto";
+import "testdata/r4/profiles/split/test_observation.proto";
+import "testdata/r4/profiles/split/test_observation_lvl2.proto";
+import "testdata/r4/profiles/split/test_patient.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.splittesting";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for Bundle.
+// Contains a collection of resources.
+// See http://test/url/base/StructureDefinition/Bundle
+message Bundle {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Bundle";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://test/url/base/StructureDefinition/Bundle";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "total.empty() or (type = 'searchset') or (type = 'history')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "entry.search.empty() or (type = 'searchset')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "entry.all(request.exists() = (%resource.type = 'batch' or %resource.type = 'transaction' or %resource.type = 'history'))";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "entry.all(response.exists() = (%resource.type = 'batch-response' or %resource.type = 'transaction-response' or %resource.type = 'history'))";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(type = 'history') or entry.where(fullUrl.exists()).select(fullUrl&resource.meta.versionId).isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "type = 'document' implies (identifier.system.exists() and identifier.value.exists())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "type = 'document' implies (timestamp.hasValue())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "type = 'document' implies entry.first().resource.is(Composition)";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "type = 'message' implies entry.first().resource.is(MessageHeader)";
+  option (.google.fhir.proto.search_parameter) = {
+    name: "composition"
+    type: REFERENCE
+    expression: "Bundle.entry[0].resource"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "identifier"
+    type: TOKEN
+    expression: "Bundle.identifier"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "message"
+    type: REFERENCE
+    expression: "Bundle.entry[0].resource"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "timestamp"
+    type: DATE
+    expression: "Bundle.timestamp"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "type"
+    type: TOKEN
+    expression: "Bundle.type"
+  };
+
+  // Logical id of this artifact
+  core.Id id = 1;
+
+  // Metadata about the resource
+  core.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  core.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  core.Code language = 4;
+
+  // Persistent identifier for the bundle
+  core.Identifier identifier = 5;
+
+  // document | message | transaction | transaction-response | batch |
+  // batch-response | history | searchset | collection
+  message TypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/bundle-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    core.BundleTypeCode.Value value = 1;
+
+    core.String id = 2;
+
+    repeated core.Extension extension = 3;
+  }
+  TypeCode type = 6
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // When the bundle was assembled
+  core.Instant timestamp = 7;
+
+  // If search, the total number of matches
+  core.UnsignedInt total = 8;
+
+  // Links related to this Bundle
+  message Link {
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // See
+    // http://www.iana.org/assignments/link-relations/link-relations.xhtml#link-relations-1
+    core.String relation = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Reference details for the link
+    core.Uri url = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Link link = 9;
+
+  // Entry in the bundle - will have a resource or information
+  message Entry {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "resource.exists() or request.exists() or response.exists()";
+
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // Links related to this entry
+    repeated Link link = 4;
+
+    // URI for resource (Absolute URL server address or URI for UUID/OID)
+    core.Uri full_url = 5;
+
+    // A resource in the bundle
+    ContainedResource resource = 6;
+
+    // Search related information
+    message Search {
+      // Unique id for inter-element referencing
+      core.String id = 1;
+
+      // Additional content defined by implementations
+      repeated core.Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated core.Extension modifier_extension = 3;
+
+      // match | include | outcome - why this is in the result set
+      message ModeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/search-entry-mode";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        core.SearchEntryModeCode.Value value = 1;
+
+        core.String id = 2;
+
+        repeated core.Extension extension = 3;
+      }
+      ModeCode mode = 4;
+
+      // Search ranking (between 0 and 1)
+      core.Decimal score = 5;
+    }
+    Search search = 7;
+
+    // Additional execution information (transaction/batch/history)
+    message Request {
+      // Unique id for inter-element referencing
+      core.String id = 1;
+
+      // Additional content defined by implementations
+      repeated core.Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated core.Extension modifier_extension = 3;
+
+      // GET | HEAD | POST | PUT | DELETE | PATCH
+      message MethodCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/http-verb";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        core.HTTPVerbCode.Value value = 1;
+
+        core.String id = 2;
+
+        repeated core.Extension extension = 3;
+      }
+      MethodCode method = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // URL for HTTP equivalent of this entry
+      core.Uri url = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // For managing cache currency
+      core.String if_none_match = 6;
+
+      // For managing cache currency
+      core.Instant if_modified_since = 7;
+
+      // For managing update contention
+      core.String if_match = 8;
+
+      // For conditional creates
+      core.String if_none_exist = 9;
+    }
+    Request request = 8;
+
+    // Results of execution (transaction/batch/history)
+    message Response {
+      // Unique id for inter-element referencing
+      core.String id = 1;
+
+      // Additional content defined by implementations
+      repeated core.Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated core.Extension modifier_extension = 3;
+
+      // Status response code (text optional)
+      core.String status = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // The location (if the operation returns a location)
+      core.Uri location = 5;
+
+      // The Etag for the resource (if relevant)
+      core.String etag = 6;
+
+      // Server's date time modified
+      core.Instant last_modified = 7;
+
+      // OperationOutcome with hints and warnings (for batch/transaction)
+      ContainedResource outcome = 8;
+    }
+    Response response = 9;
+  }
+  repeated Entry entry = 10;
+
+  // Digital Signature
+  core.Signature signature = 11;
+}
+
+message ContainedResource {
+  oneof oneof_resource {
+    Bundle bundle = 12;
+    TestPatient test_patient = 147;
+    TestObservation test_observation = 148;
+    TestObservationLvl2 test_observation_lvl2 = 149;
+    TestEncounter test_encounter = 150;
+    ProfiledDatatypesObservation profiled_datatypes_observation = 151;
+  }
+}

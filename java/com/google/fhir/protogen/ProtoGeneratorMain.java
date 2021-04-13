@@ -63,14 +63,11 @@ class ProtoGeneratorMain {
     private String outputDirectory = ".";
 
     @Parameter(
-        names = {"--codes_import"},
-        description = "The proto import to use to reference a locally generated codes proto.")
-    private String codesProtoImport = null;
-
-    @Parameter(
-        names = {"--extensions_import"},
-        description = "The proto import to use to reference a locally generated extensions proto.")
-    private String extensionsProtoImport = null;
+        names = {"--directory_in_source"},
+        description =
+            "The directory in the source tree that the proto files will be located. "
+                + "This allows for intra-package imports, like codes and extensions.")
+    private String directoryInSource = null;
 
     @Parameter(
         names = {"--filter"},
@@ -193,9 +190,15 @@ class ProtoGeneratorMain {
     ValueSetGenerator valueSetGenerator = new ValueSetGenerator(packageInfo, fhirPackages);
     ProtoGenerator generator =
         packageInfo.getFhirVersion() != FhirVersion.R4
-            ? new ProtoGenerator(packageInfo, args.codesProtoImport, fhirPackages)
+            ? new ProtoGenerator(
+                packageInfo,
+                args.directoryInSource + "/" + args.outputName + "_codes.proto",
+                fhirPackages)
             : new ProtoGenerator(
-                packageInfo, args.codesProtoImport, fhirPackages, valueSetGenerator);
+                packageInfo,
+                args.directoryInSource + "/" + args.outputName + "_codes.proto",
+                fhirPackages,
+                valueSetGenerator);
     ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
 
     try (ZipOutputStream zipOutputStream =
@@ -308,7 +311,8 @@ class ProtoGeneratorMain {
           generator.generateFileDescriptor(extensions),
           printer,
           zipOutputStream);
-      args.additionalImports.add(args.extensionsProtoImport);
+      args.additionalImports.add(
+          args.directoryInSource + "/" + args.outputName + "_extensions.proto");
     }
     if (!profiles.isEmpty()) {
       FileDescriptorProto mainFileProto =
@@ -353,7 +357,8 @@ class ProtoGeneratorMain {
           generator.generateFileDescriptor(extensions),
           printer,
           zipOutputStream);
-      args.additionalImports.add(args.extensionsProtoImport);
+      args.additionalImports.add(
+          args.directoryInSource + "/" + args.outputName + "_extensions.proto");
     }
 
     if (!datatypes.isEmpty()) {
@@ -370,7 +375,7 @@ class ProtoGeneratorMain {
       // before we can define ContainedResource, we defer printing the Bundle file until after
       // all other resources are generated, and after we've added in ContainedResource.
       FileDescriptorProto deferredBundleFile = null;
-      for (StructureDefinition structDef : definitions) {
+      for (StructureDefinition structDef : resources) {
         FileDescriptorProto fileProto =
             generator.generateFileDescriptor(ImmutableList.of(structDef), args.additionalImports);
         DescriptorProto type = fileProto.getMessageType(0);
@@ -390,7 +395,7 @@ class ProtoGeneratorMain {
         if (packageInfo.getLocalContainedResource()) {
           FileDescriptorProto.Builder fileBuilder =
               generator.addContainedResource(deferredBundleFile, containedTypes).toBuilder();
-          String importRoot = args.outputDirectory;
+          String importRoot = args.directoryInSource;
           while (importRoot.contains("/../")) {
             // resolve foo/bar/baz/../../quux into foo/quux
             importRoot = importRoot.replaceAll("/[^/]*/\\.\\./", "/");

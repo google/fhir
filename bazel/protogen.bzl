@@ -95,8 +95,7 @@ def gen_fhir_protos(
         for proto_import in additional_proto_imports
     ])
 
-    flags.append("--codes_import %s/%s_codes.proto" % (src_dir, name))
-    flags.append("--extensions_import %s/%s_extensions.proto" % (src_dir, name))
+    flags.append("--directory_in_source " + src_dir)
 
     all_fhir_pkgs = package_deps + [
         package,

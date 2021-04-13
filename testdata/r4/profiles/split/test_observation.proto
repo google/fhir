@@ -1,0 +1,758 @@
+//    Copyright 2021 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r4.splittesting;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r4/core/codes.proto";
+import "proto/google/fhir/proto/r4/core/datatypes.proto";
+import "testdata/r4/profiles/split/split_test_extensions.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r4.splittesting";
+option (.google.fhir.proto.fhir_version) = R4;
+
+// Auto-generated from StructureDefinition for TestObservation.
+// Measurements and simple assertions.
+// See http://test/url/base/StructureDefinition/TestObservation
+message TestObservation {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://test/url/base/StructureDefinition/TestObservation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "dataAbsentReason.empty() or value.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()";
+  option (.google.fhir.proto.search_parameter) = {
+    name: "amino-acid-change"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "based-on"
+    type: REFERENCE
+    expression: "Observation.basedOn"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "category"
+    type: TOKEN
+    expression: "Observation.category"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code"
+    type: TOKEN
+    expression: "AllergyIntolerance.code | AllergyIntolerance.reaction.substance | Condition.code | (DeviceRequest.code as CodeableConcept) | DiagnosticReport.code | FamilyMemberHistory.condition.code | List.code | Medication.code | (MedicationAdministration.medication as CodeableConcept) | (MedicationDispense.medication as CodeableConcept) | (MedicationRequest.medication as CodeableConcept) | (MedicationStatement.medication as CodeableConcept) | Observation.code | Procedure.code | ServiceRequest.code"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-concept"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-date"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-quantity"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-string"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-code"
+    type: TOKEN
+    expression: "Observation.code | Observation.component.code"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-code-value-concept"
+    type: COMPOSITE
+    expression: "Observation | Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-code-value-quantity"
+    type: COMPOSITE
+    expression: "Observation | Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-data-absent-reason"
+    type: TOKEN
+    expression: "Observation.dataAbsentReason | Observation.component.dataAbsentReason"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-value-concept"
+    type: TOKEN
+    expression: "(Observation.value as CodeableConcept) | (Observation.component.value as CodeableConcept)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-value-quantity"
+    type: QUANTITY
+    expression: "(Observation.value as Quantity) | (Observation.value as SampledData) | (Observation.component.value as Quantity) | (Observation.component.value as SampledData)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-code"
+    type: TOKEN
+    expression: "Observation.component.code"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-code-value-concept"
+    type: COMPOSITE
+    expression: "Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-code-value-quantity"
+    type: COMPOSITE
+    expression: "Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-data-absent-reason"
+    type: TOKEN
+    expression: "Observation.component.dataAbsentReason"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-value-concept"
+    type: TOKEN
+    expression: "(Observation.component.value as CodeableConcept)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-value-quantity"
+    type: QUANTITY
+    expression: "(Observation.component.value as Quantity) | (Observation.component.value as SampledData)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "data-absent-reason"
+    type: TOKEN
+    expression: "Observation.dataAbsentReason"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "date"
+    type: DATE
+    expression: "AllergyIntolerance.recordedDate | CarePlan.period | CareTeam.period | ClinicalImpression.date | Composition.date | Consent.dateTime | DiagnosticReport.effective | Encounter.period | EpisodeOfCare.period | FamilyMemberHistory.date | Flag.period | Immunization.occurrence | List.date | Observation.effective | Procedure.performed | (RiskAssessment.occurrence as dateTime) | SupplyRequest.authoredOn"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "derived-from"
+    type: REFERENCE
+    expression: "Observation.derivedFrom"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "device"
+    type: REFERENCE
+    expression: "Observation.device"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "dna-variant"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsDnaVariant')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "encounter"
+    type: REFERENCE
+    expression: "Composition.encounter | DeviceRequest.encounter | DiagnosticReport.encounter | DocumentReference.context.encounter | Flag.encounter | List.encounter | NutritionOrder.encounter | Observation.encounter | Procedure.encounter | RiskAssessment.encounter | ServiceRequest.encounter | VisionPrescription.encounter"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "focus"
+    type: REFERENCE
+    expression: "Observation.focus"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gene-amino-acid-change"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gene-dnavariant"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsDnaVariant')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gene-identifier"
+    type: TOKEN
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsGene')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "has-member"
+    type: REFERENCE
+    expression: "Observation.hasMember"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "identifier"
+    type: TOKEN
+    expression: "AllergyIntolerance.identifier | CarePlan.identifier | CareTeam.identifier | Composition.identifier | Condition.identifier | Consent.identifier | DetectedIssue.identifier | DeviceRequest.identifier | DiagnosticReport.identifier | DocumentManifest.masterIdentifier | DocumentManifest.identifier | DocumentReference.masterIdentifier | DocumentReference.identifier | Encounter.identifier | EpisodeOfCare.identifier | FamilyMemberHistory.identifier | Goal.identifier | ImagingStudy.identifier | Immunization.identifier | List.identifier | MedicationAdministration.identifier | MedicationDispense.identifier | MedicationRequest.identifier | MedicationStatement.identifier | NutritionOrder.identifier | Observation.identifier | Procedure.identifier | RiskAssessment.identifier | ServiceRequest.identifier | SupplyDelivery.identifier | SupplyRequest.identifier | VisionPrescription.identifier"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "method"
+    type: TOKEN
+    expression: "Observation.method"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "part-of"
+    type: REFERENCE
+    expression: "Observation.partOf"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "patient"
+    type: REFERENCE
+    expression: "AllergyIntolerance.patient | CarePlan.subject.where(resolve() is Patient) | CareTeam.subject.where(resolve() is Patient) | ClinicalImpression.subject.where(resolve() is Patient) | Composition.subject.where(resolve() is Patient) | Condition.subject.where(resolve() is Patient) | Consent.patient | DetectedIssue.patient | DeviceRequest.subject.where(resolve() is Patient) | DeviceUseStatement.subject | DiagnosticReport.subject.where(resolve() is Patient) | DocumentManifest.subject.where(resolve() is Patient) | DocumentReference.subject.where(resolve() is Patient) | Encounter.subject.where(resolve() is Patient) | EpisodeOfCare.patient | FamilyMemberHistory.patient | Flag.subject.where(resolve() is Patient) | Goal.subject.where(resolve() is Patient) | ImagingStudy.subject.where(resolve() is Patient) | Immunization.patient | List.subject.where(resolve() is Patient) | MedicationAdministration.subject.where(resolve() is Patient) | MedicationDispense.subject.where(resolve() is Patient) | MedicationRequest.subject.where(resolve() is Patient) | MedicationStatement.subject.where(resolve() is Patient) | NutritionOrder.patient | Observation.subject.where(resolve() is Patient) | Procedure.subject.where(resolve() is Patient) | RiskAssessment.subject.where(resolve() is Patient) | ServiceRequest.subject.where(resolve() is Patient) | SupplyDelivery.patient | VisionPrescription.patient"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "performer"
+    type: REFERENCE
+    expression: "Observation.performer"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "specimen"
+    type: REFERENCE
+    expression: "Observation.specimen"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "status"
+    type: TOKEN
+    expression: "Observation.status"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "subject"
+    type: REFERENCE
+    expression: "Observation.subject"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-concept"
+    type: TOKEN
+    expression: "(Observation.value as CodeableConcept)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-date"
+    type: DATE
+    expression: "(Observation.value as dateTime) | (Observation.value as Period)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-quantity"
+    type: QUANTITY
+    expression: "(Observation.value as Quantity) | (Observation.value as SampledData)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-string"
+    type: STRING
+    expression: "(Observation.value as string) | (Observation.value as CodeableConcept).text"
+  };
+
+  // Logical id of this artifact
+  core.Id id = 1;
+
+  // Metadata about the resource
+  core.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  core.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  core.Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  core.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Observation.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated core.Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated core.Extension modifier_extension = 9;
+
+  // Business Identifier for observation
+  repeated core.Identifier identifier = 10;
+
+  // Fulfills plan, proposal or order
+  repeated core.Reference based_on = 11 [
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "DeviceRequest",
+    (.google.fhir.proto.valid_reference_type) = "ImmunizationRecommendation",
+    (.google.fhir.proto.valid_reference_type) = "MedicationRequest",
+    (.google.fhir.proto.valid_reference_type) = "NutritionOrder",
+    (.google.fhir.proto.valid_reference_type) = "ServiceRequest"
+  ];
+
+  // Part of referenced event
+  repeated core.Reference part_of = 12 [
+    (.google.fhir.proto.valid_reference_type) = "MedicationAdministration",
+    (.google.fhir.proto.valid_reference_type) = "MedicationDispense",
+    (.google.fhir.proto.valid_reference_type) = "MedicationStatement",
+    (.google.fhir.proto.valid_reference_type) = "Procedure",
+    (.google.fhir.proto.valid_reference_type) = "Immunization",
+    (.google.fhir.proto.valid_reference_type) = "ImagingStudy"
+  ];
+
+  // registered | preliminary | final | amended +
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/observation-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    core.ObservationStatusCode.Value value = 1;
+
+    core.String id = 2;
+
+    repeated core.Extension extension = 3;
+  }
+  StatusCode status = 13
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  message CodeableConceptForCategory {
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
+
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Code defined by a terminology system
+    repeated core.Coding coding = 3;
+
+    // Plain text representation of the concept
+    core.String text = 4;
+
+    message CatACoding {
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/Coding";
+
+      core.String id = 1;
+
+      repeated core.Extension extension = 2;
+
+      core.String version = 4;
+
+      message FixedCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+        option (.google.fhir.proto.fhir_fixed_system) = "http://catA.org";
+
+        // Field 1 reserved to allow enumeration in the future.
+        reserved 1;
+
+        core.String id = 2;
+
+        repeated core.Extension extension = 3;
+
+        // This CodeSystem is not enumerable, and so is represented as a string.
+        string value = 4;
+      }
+      FixedCode code = 5;
+
+      core.String display = 6;
+
+      core.Boolean user_selected = 7;
+    }
+    repeated CatACoding cat_a = 5;
+  }
+  repeated CodeableConceptForCategory category = 14;
+
+  // Type of observation (code / type)
+  message CodeableConceptForCode {
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
+
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Code defined by a terminology system
+    repeated core.Coding coding = 3;
+
+    // Plain text representation of the concept
+    core.String text = 4;
+
+    message SysACoding {
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/Coding";
+
+      core.String id = 1;
+
+      repeated core.Extension extension = 2;
+
+      core.String version = 4;
+
+      message FixedCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+        option (.google.fhir.proto.fhir_fixed_system) = "http://sysa.org";
+
+        // Field 1 reserved to allow enumeration in the future.
+        reserved 1;
+
+        core.String id = 2;
+
+        repeated core.Extension extension = 3;
+
+        // This CodeSystem is not enumerable, and so is represented as a string.
+        string value = 4;
+      }
+      FixedCode code = 5;
+
+      core.String display = 6;
+
+      core.Boolean user_selected = 7;
+    }
+    SysACoding sys_a = 5;
+
+    message SysBCoding {
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/Coding";
+
+      core.String id = 1;
+
+      repeated core.Extension extension = 2;
+
+      core.String version = 4;
+
+      message FixedCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+        option (.google.fhir.proto.fhir_fixed_system) = "http://sysb.org";
+
+        // Field 1 reserved to allow enumeration in the future.
+        reserved 1;
+
+        core.String id = 2;
+
+        repeated core.Extension extension = 3;
+
+        // This CodeSystem is not enumerable, and so is represented as a string.
+        string value = 4;
+      }
+      FixedCode code = 5;
+
+      core.String display = 6;
+
+      core.Boolean user_selected = 7;
+    }
+    repeated SysBCoding sys_b = 6;
+
+    core.CodingWithFixedCode sys_c = 7 [
+      (.google.fhir.proto.fhir_inlined_coding_system) = "http://sysc.org",
+      (.google.fhir.proto.fhir_inlined_coding_code) = "8472"
+    ];
+
+    core.CodingWithFixedCode sys_d = 8 [
+      (.google.fhir.proto.fhir_inlined_coding_system) = "http://sysd.org",
+      (.google.fhir.proto.fhir_inlined_coding_code) = "8675329"
+    ];
+
+    message ColorCoding {
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/Coding";
+
+      core.String id = 1;
+
+      repeated core.Extension extension = 2;
+
+      core.String version = 4;
+
+      message FixedCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+        option (.google.fhir.proto.fhir_fixed_system) =
+            "http://hl7.org/fhir/metric-color";
+
+        core.DeviceMetricColorCode.Value value = 1;
+
+        core.String id = 2;
+
+        repeated core.Extension extension = 3;
+      }
+      FixedCode code = 5;
+
+      core.String display = 6;
+
+      core.Boolean user_selected = 7;
+    }
+    ColorCoding color = 9;
+  }
+  CodeableConceptForCode code = 15
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what the observation is about
+  core.Reference subject = 16 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Location"
+  ];
+
+  // What the observation is about, when it is not about the subject of record
+  repeated core.Reference focus = 17
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Healthcare event during which this observation is made
+  core.Reference encounter = 18
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // Clinically relevant time/time-period for observation
+  message EffectiveX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      core.DateTime date_time = 1;
+      core.Period period = 2;
+      core.Timing timing = 3;
+      core.Instant instant = 4;
+    }
+  }
+  EffectiveX effective = 19;
+
+  // Date/Time this version was made available
+  core.Instant issued = 20;
+
+  // Who is responsible for the observation
+  repeated core.Reference performer = 21 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "CareTeam",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+  ];
+
+  // Actual result
+  message ValueX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      core.Quantity quantity = 1;
+      core.CodeableConcept codeable_concept = 2;
+      core.String string_value = 3 [json_name = "string"];
+      core.Boolean boolean = 4;
+      core.Integer integer = 5;
+      core.Range range = 6;
+      core.Ratio ratio = 7;
+      core.SampledData sampled_data = 8;
+      core.Time time = 9;
+      core.DateTime date_time = 10;
+      core.Period period = 11;
+    }
+  }
+  ValueX value = 22;
+
+  // Why the result is missing
+  core.CodeableConcept data_absent_reason = 23;
+
+  // High, low, normal, etc.
+  repeated core.CodeableConcept interpretation = 24;
+
+  // Comments about the observation
+  repeated core.Annotation note = 25;
+
+  // Observed body part
+  core.CodeableConcept body_site = 26;
+
+  // How it was done
+  core.CodeableConcept method = 27;
+
+  // Specimen used for this observation
+  core.Reference specimen = 28
+      [(.google.fhir.proto.valid_reference_type) = "Specimen"];
+
+  // (Measurement) Device
+  core.Reference device = 29 [
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "DeviceMetric"
+  ];
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "low.exists() or high.exists() or text.exists()";
+
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    core.SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    core.SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    core.CodeableConcept type = 6;
+
+    // Reference range population
+    repeated core.CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    core.Range age = 8;
+
+    // Text based reference range in an observation
+    core.String text = 9;
+  }
+  repeated ReferenceRange reference_range = 30;
+
+  // Related resource that belongs to the Observation group
+  repeated core.Reference has_member = 31 [
+    (.google.fhir.proto.valid_reference_type) = "Observation",
+    (.google.fhir.proto.valid_reference_type) = "QuestionnaireResponse",
+    (.google.fhir.proto.valid_reference_type) = "MolecularSequence"
+  ];
+
+  // Related measurements the observation is made from
+  repeated core.Reference derived_from = 32 [
+    (.google.fhir.proto.valid_reference_type) = "DocumentReference",
+    (.google.fhir.proto.valid_reference_type) = "ImagingStudy",
+    (.google.fhir.proto.valid_reference_type) = "Media",
+    (.google.fhir.proto.valid_reference_type) = "QuestionnaireResponse",
+    (.google.fhir.proto.valid_reference_type) = "Observation",
+    (.google.fhir.proto.valid_reference_type) = "MolecularSequence"
+  ];
+
+  // Component results
+  message Component {
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    core.CodeableConcept code = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Actual component result
+    message ValueX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        core.Quantity quantity = 1;
+        core.CodeableConcept codeable_concept = 2;
+        core.String string_value = 3 [json_name = "string"];
+        core.Boolean boolean = 4;
+        core.Integer integer = 5;
+        core.Range range = 6;
+        core.Ratio ratio = 7;
+        core.SampledData sampled_data = 8;
+        core.Time time = 9;
+        core.DateTime date_time = 10;
+        core.Period period = 11;
+      }
+    }
+    ValueX value = 5;
+
+    // Why the component result is missing
+    core.CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    message CodeableConceptForInterpretation {
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
+
+      // Unique id for inter-element referencing
+      core.String id = 1;
+
+      // Additional content defined by implementations
+      repeated core.Extension extension = 2;
+
+      // Code defined by a terminology system
+      repeated core.Coding coding = 3;
+
+      // Plain text representation of the concept
+      core.String text = 4;
+
+      message OnNestedConceptCoding {
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/Coding";
+
+        core.String id = 1;
+
+        repeated core.Extension extension = 2;
+
+        core.String version = 4;
+
+        message FixedCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+          option (.google.fhir.proto.fhir_fixed_system) =
+              "http://nestedconcept.org";
+
+          // Field 1 reserved to allow enumeration in the future.
+          reserved 1;
+
+          core.String id = 2;
+
+          repeated core.Extension extension = 3;
+
+          // This CodeSystem is not enumerable, and so is represented as a
+          // string.
+          string value = 4;
+        }
+        FixedCode code = 5;
+
+        core.String display = 6;
+
+        core.Boolean user_selected = 7;
+      }
+      OnNestedConceptCoding on_nested_concept = 5;
+    }
+    repeated CodeableConceptForInterpretation interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+
+    // Optional Extensions Element
+    core.Decimal on_nested = 9
+        [(.google.fhir.proto.fhir_inlined_extension_url) =
+             "http://test/url/base/StructureDefinition/SimpleDecimalExt"];
+  }
+  repeated Component component = 33;
+
+  // Optional Extensions Element
+  ComplexExt my_complex_extension = 34
+      [(.google.fhir.proto.fhir_inlined_extension_url) =
+           "http://test/url/base/StructureDefinition/ComplexExt"];
+}

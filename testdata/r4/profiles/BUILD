@@ -68,3 +68,13 @@ filegroup(
         "*.json",
     ]),
 )
+
+# Export config files for use in "split" version of test profile.
+exports_files(
+    [
+        "test_extensions.prototxt",
+        "test_profiles.prototxt",
+        "test_terminologies.prototxt",
+    ],
+    visibility = ["//testdata/r4/profiles:__subpackages__"],
+)

@@ -1,0 +1,12 @@
+base_url: "http://test/url/base"
+proto_package: "google.fhir.r4.splittesting"
+java_proto_package: "com.google.fhir.r4.splittesting"
+go_proto_package: "google/fhir/r4/splittesting"
+publisher: "Testington Inc."
+fhir_version: R4
+telcom_url: "http://www.testington.com"
+license: APACHE
+license_date: "2021"
+
+local_contained_resource: true
+file_splitting_behavior: SPLIT_RESOURCES
