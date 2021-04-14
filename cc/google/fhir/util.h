@@ -346,7 +346,7 @@ std::string ToSnakeCase(absl::string_view input);
 // pool.
 // Note that this method has no application for Implementation Guide protos that
 // do not use Any to represent contained resources (e.g., STU3).
-absl::StatusOr<::google::protobuf::Message*> UnpackAnyAsContainedResource(
+absl::StatusOr<std::unique_ptr<::google::protobuf::Message>> UnpackAnyAsContainedResource(
     const google::protobuf::Any& any);
 
 // Allows calling UnpackAnyAsContainedResource with a custom message factory,

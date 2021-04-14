@@ -373,9 +373,7 @@ TEST(Util, UnpackAnyAsContainedResourceR4) {
   auto result_statusor = UnpackAnyAsContainedResource(med_req.contained(0));
   FHIR_ASSERT_OK(result_statusor.status());
 
-  std::unique_ptr<Message> result = absl::WrapUnique(result_statusor.value());
-
-  ASSERT_THAT(*result, EqualsProto(contained_medication));
+  ASSERT_THAT(**result_statusor, EqualsProto(contained_medication));
 }
 
 TEST(Util, UnpackAnyAsContainedResourceR4WrongAny) {
@@ -459,9 +457,7 @@ TEST(Util, UnpackAnyAsContainedResourceR4NonStandardIG) {
   auto result_statusor = UnpackAnyAsContainedResource(med_req.contained(0));
   FHIR_ASSERT_OK(result_statusor.status());
 
-  std::unique_ptr<Message> result = absl::WrapUnique(result_statusor.value());
-
-  ASSERT_THAT(*result, EqualsProto(contained_encounter));
+  ASSERT_THAT(**result_statusor, EqualsProto(contained_encounter));
 }
 
 }  // namespace

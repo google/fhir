@@ -229,20 +229,24 @@ absl::StatusOr<absl::Time> GetTimeFromTimelikeElement(
       timelike.GetReflection()->GetInt64(timelike, value_us_field));
 }
 
-absl::StatusOr<Message*> UnpackAnyAsContainedResource(
+absl::StatusOr<std::unique_ptr<Message>> UnpackAnyAsContainedResource(
     const google::protobuf::Any& any) {
-  return UnpackAnyAsContainedResource(
-      any, [](const Descriptor* type_descriptor) -> absl::StatusOr<Message*> {
-        const Message* prototype =
-            ::google::protobuf::MessageFactory::generated_factory()->GetPrototype(
-                type_descriptor);
-        if (prototype == nullptr) {
-          return InvalidArgumentError(
-              absl::StrCat("Unable to construct a message of type: ",
-                           type_descriptor->full_name()));
-        }
-        return prototype->New();
-      });
+  FHIR_ASSIGN_OR_RETURN(
+      Message * new_pointer,
+      UnpackAnyAsContainedResource(
+          any,
+          [](const Descriptor* type_descriptor) -> absl::StatusOr<Message*> {
+            const Message* prototype =
+                ::google::protobuf::MessageFactory::generated_factory()->GetPrototype(
+                    type_descriptor);
+            if (prototype == nullptr) {
+              return InvalidArgumentError(
+                  absl::StrCat("Unable to construct a message of type: ",
+                               type_descriptor->full_name()));
+            }
+            return prototype->New();
+          }));
+  return absl::WrapUnique(new_pointer);
 }
 
 absl::StatusOr<Message*> UnpackAnyAsContainedResource(
