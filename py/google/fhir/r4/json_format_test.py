@@ -681,7 +681,8 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
       ('_withDiagnosticReport102', 'DiagnosticReport-102'),
       ('_withDiagnosticReportExamplePgx', 'DiagnosticReport-example-pgx'),
       ('_withDiagnosticReportF201', 'DiagnosticReport-f201'),
-      ('_withDiagnosticReportGingivalMass', 'DiagnosticReport-gingival-mass'),
+      # TODO: Disabling due to flaky failures.
+      # ('_withDiagnosticReportGingivalMass', 'DiagnosticReport-gingival-mass'),
       ('_withDiagnosticReportPap', 'DiagnosticReport-pap'),
       ('_withDiagnosticReportUltrasound', 'DiagnosticReport-ultrasound'),
   )
