@@ -21,6 +21,7 @@
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/google/fhir/proto/stu3/codes.pb.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 #include "proto/google/fhir/proto/stu3/resources.pb.h"
 
@@ -89,11 +90,15 @@ struct FhirTypes {
   using Quantities = FhirPrimitiveTypes<FHIR_DATATYPE(BundleType, quantity)>;
 };
 
-struct Stu3Types : public FhirTypes<stu3::proto::Bundle> {};
+struct Stu3Types : public FhirTypes<stu3::proto::Bundle> {
+  using Strings =
+      FhirStringTypes<stu3::proto::Bundle, stu3::proto::BundleTypeCode>;
+};
 
 struct R4Types : public FhirTypes<r4::core::Bundle> {
-  using Strings = FhirStringTypes<r4::core::Bundle, r4::core::Uuid,
-                                  r4::core::Canonical, r4::core::Url>;
+  using Strings =
+      FhirStringTypes<r4::core::Bundle, r4::core::Uuid, r4::core::Canonical,
+                      r4::core::Url, r4::core::Bundle::TypeCode>;
 };
 
 template <typename T>

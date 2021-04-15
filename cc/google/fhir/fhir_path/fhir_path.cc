@@ -35,11 +35,13 @@
 #include "absl/time/time.h"
 #include "absl/types/optional.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/codes.h"
 #include "google/fhir/fhir_path/FhirPathBaseVisitor.h"
 #include "google/fhir/fhir_path/FhirPathLexer.h"
 #include "google/fhir/fhir_path/FhirPathParser.h"
 #include "google/fhir/fhir_path/fhir_path_types.h"
 #include "google/fhir/fhir_path/utils.h"
+#include "google/fhir/fhir_types.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
@@ -149,6 +151,10 @@ absl::StatusOr<absl::optional<bool>> BooleanOrEmpty(
 absl::StatusOr<std::string> MessageToString(const WorkspaceMessage& message) {
   if (!IsSystemString(*message.Message())) {
     return InvalidArgumentError("Expression is not a string.");
+  }
+
+  if (HasValueset(message.Message()->GetDescriptor())) {
+    return GetCodeAsString(*message.Message());
   }
 
   std::string value;
@@ -2237,12 +2243,15 @@ absl::StatusOr<ExpressionNode*> static CreateConvertsToFunction(
     return InvalidArgumentError("convertsTo*() requires zero arguments.");
   }
 
-  // .convertsTo*() is equivalent to .single().select(to*().exists()).
+  // .convertsTo*() is equivalent to .single().select($this.to*().exists()).
   std::vector<std::shared_ptr<ExpressionNode>> empty_params = {};
   return new SelectFunction(
       std::make_shared<SingleFunction>(child_expression, empty_params),
       {std::make_shared<ExistsFunction>(
-          std::make_shared<T>(child_expression, empty_params), empty_params)});
+          std::make_shared<T>(
+              std::make_shared<ThisReference>(child_expression->ReturnType()),
+              empty_params),
+          empty_params)});
 }
 
 // Implements the FHIRPath .ofType() function.

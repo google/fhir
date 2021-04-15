@@ -845,6 +845,10 @@ TYPED_TEST(FhirPathTest, TestFunctionConvertsToString) {
       TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
                             "convertsToString()"),
       EvalsToFalse());
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
+                            "status.convertsToString()"),
+      EvalsToTrue());
   EXPECT_THAT(TestFixture::Evaluate("(1 | 2).convertsToString()"),
               HasStatusCode(StatusCode::kFailedPrecondition));
 }
@@ -1762,6 +1766,12 @@ TYPED_TEST(FhirPathTest, TestStringAddition) {
   EXPECT_THAT(TestFixture::Evaluate("('foo' + {})"), EvalsToEmpty());
 }
 
+TYPED_TEST(FhirPathTest, TestStringAdditionWithCodeEnum) {
+  auto encounter = ValidEncounter<typename TypeParam::Encounter>();
+  EXPECT_THAT(TestFixture::Evaluate(encounter, "status + 'foo'"),
+              EvalsToStringThatMatches(StrEq("triagedfoo")));
+}
+
 TYPED_TEST(FhirPathTest, TestStringConcatenation) {
   EXPECT_THAT(TestFixture::Evaluate("('foo' & 'bar')"),
               EvalsToStringThatMatches(StrEq("foobar")));
@@ -1771,6 +1781,12 @@ TYPED_TEST(FhirPathTest, TestStringConcatenation) {
               EvalsToStringThatMatches(StrEq("foo")));
   EXPECT_THAT(TestFixture::Evaluate("{} & {}"),
               EvalsToStringThatMatches(StrEq("")));
+}
+
+TYPED_TEST(FhirPathTest, TestStringConcatenationWithCodeEnum) {
+  auto encounter = ValidEncounter<typename TypeParam::Encounter>();
+  EXPECT_THAT(TestFixture::Evaluate(encounter, "status & 'foo'"),
+              EvalsToStringThatMatches(StrEq("triagedfoo")));
 }
 
 TYPED_TEST(FhirPathTest, TestEmptyComparisons) {

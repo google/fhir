@@ -17,6 +17,7 @@
 #include "absl/status/statusor.h"
 #include "absl/strings/string_view.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/fhir_types.h"
 
 namespace google::fhir::fhir_path::internal {
 
@@ -71,12 +72,21 @@ absl::StatusOr<FhirPathSystemType> GetSystemType(
 
   auto type =
       type_map->find(GetStructureDefinitionUrl(fhir_primitive.GetDescriptor()));
-  if (type == type_map->end()) {
-    return absl::NotFoundError(
-        absl::StrCat(fhir_primitive.GetTypeName(),
-                     " does not map to a FHIRPath primitive type."));
+  if (type != type_map->end()) {
+    return type->second;
   }
-  return type->second;
+
+  // Codes don't necessarily have the correct structure definition set (i.e.
+  // http://hl7.org/fhir/StructureDefinition/code.) Instead, we must use
+  // `IsTypeOrProfileOfCode` which checks for additional annotations that
+  // indicate the message is a Code.
+  if (IsTypeOrProfileOfCode(fhir_primitive)) {
+    return FhirPathSystemType::kString;
+  }
+
+  return absl::NotFoundError(
+      absl::StrCat(fhir_primitive.GetTypeName(),
+                   " does not map to a FHIRPath primitive type."));
 }
 
 bool IsSystemInteger(const Message& message) {
