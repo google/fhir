@@ -50,6 +50,9 @@
 namespace google {
 namespace fhir {
 
+using ::google::protobuf::Message;
+using ::google::protobuf::Descriptor;
+
 // Builds an absl::Time from a time-like fhir Element.
 // Must have a value_us field.
 template <class T>
@@ -58,7 +61,7 @@ absl::Time GetTimeFromTimelikeElement(const T& timelike) {
 }
 
 absl::StatusOr<absl::Time> GetTimeFromTimelikeElement(
-    const ::google::protobuf::Message& timelike);
+    const Message& timelike);
 
 // Converts a time zone string of the forms found in time-like primitive types
 // into an absl::TimeZone
@@ -68,7 +71,7 @@ absl::StatusOr<absl::TimeZone> BuildTimeZoneFromString(
 // Populates the resource oneof on ContainedResource with the passed-in
 // resource.
 template <typename ContainedResourceLike>
-absl::Status SetContainedResource(const ::google::protobuf::Message& resource,
+absl::Status SetContainedResource(const Message& resource,
                                   ContainedResourceLike* contained) {
   const ::google::protobuf::OneofDescriptor* resource_oneof =
       ContainedResourceLike::descriptor()->FindOneofByName("oneof_resource");
@@ -102,7 +105,7 @@ absl::Status SetContainedResource(const ::google::protobuf::Message& resource,
 // contained resource.
 template <typename ContainedResourceType>
 absl::StatusOr<bool> IsResourceFromContainedResourceType(
-    const ::google::protobuf::Descriptor* descriptor) {
+    const Descriptor* descriptor) {
   // Get oneof descriptor from `ContainedResourceType` if it exists.
   const ::google::protobuf::OneofDescriptor* resource_oneof =
       ContainedResourceType::descriptor()->FindOneofByName("oneof_resource");
@@ -126,7 +129,7 @@ absl::StatusOr<bool> IsResourceFromContainedResourceType(
 }
 
 template <typename ContainedResourceLike>
-absl::StatusOr<const ::google::protobuf::Message*> GetContainedResource(
+absl::StatusOr<const Message*> GetContainedResource(
     const ContainedResourceLike& contained) {
   const ::google::protobuf::Reflection* ref = contained.GetReflection();
   // Get the resource field corresponding to this resource.
@@ -149,15 +152,15 @@ absl::StatusOr<const ::google::protobuf::Message*> GetContainedResource(
 // Returns the input resource, wrapped in a ContainedResource
 template <typename ContainedResourceLike>
 absl::StatusOr<ContainedResourceLike> WrapContainedResource(
-    const ::google::protobuf::Message& resource) {
+    const Message& resource) {
   ContainedResourceLike contained_resource;
   FHIR_RETURN_IF_ERROR(SetContainedResource(resource, &contained_resource));
   return contained_resource;
 }
 
-absl::StatusOr<std::string> GetResourceId(const ::google::protobuf::Message& message);
+absl::StatusOr<std::string> GetResourceId(const Message& message);
 
-bool ResourceHasId(const ::google::protobuf::Message& message);
+bool ResourceHasId(const Message& message);
 
 template <typename BundleLike, typename PatientLike>
 absl::Status GetPatient(const BundleLike& bundle, const PatientLike** patient) {
@@ -212,7 +215,7 @@ absl::StatusOr<double> GetDecimalValue(const DecimalLike& decimal) {
 
 // Extracts and returns the FHIR resource from a bundle entry.
 template <typename EntryLike>
-absl::StatusOr<const ::google::protobuf::Message*> GetResourceFromBundleEntry(
+absl::StatusOr<const Message*> GetResourceFromBundleEntry(
     const EntryLike& entry) {
   return GetContainedResource(entry.resource());
 }
@@ -223,7 +226,7 @@ template <typename EntryLike,
           typename ExtensionLike = EXTENSION_TYPE(EntryLike)>
 absl::StatusOr<const ::google::protobuf::RepeatedFieldRef<ExtensionLike>>
 GetResourceExtensionsFromBundleEntry(const EntryLike& entry) {
-  FHIR_ASSIGN_OR_RETURN(const ::google::protobuf::Message* resource,
+  FHIR_ASSIGN_OR_RETURN(const Message* resource,
                         GetResourceFromBundleEntry(entry));
   const ::google::protobuf::Reflection* ref = resource->GetReflection();
   // Get the bundle field corresponding to this resource.
@@ -235,14 +238,14 @@ GetResourceExtensionsFromBundleEntry(const EntryLike& entry) {
   return ref->GetRepeatedFieldRef<ExtensionLike>(*resource, field);
 }
 
-absl::Status SetPrimitiveStringValue(::google::protobuf::Message* primitive,
+absl::Status SetPrimitiveStringValue(Message* primitive,
                                      const std::string& value);
 absl::StatusOr<std::string> GetPrimitiveStringValue(
-    const ::google::protobuf::Message& primitive, std::string* scratch);
+    const Message& primitive, std::string* scratch);
 absl::StatusOr<std::string> GetPrimitiveStringValue(
-    const ::google::protobuf::Message& parent, const std::string& field_name,
+    const Message& parent, const std::string& field_name,
     std::string* scratch);
-absl::StatusOr<int> GetPrimitiveIntValue(const ::google::protobuf::Message& primitive);
+absl::StatusOr<int> GetPrimitiveIntValue(const Message& primitive);
 
 // Finds a resource of a templatized type within a bundle, by reference id.
 template <typename R, typename BundleLike, typename ReferenceIdLike>
@@ -271,7 +274,7 @@ absl::Status GetResourceByReferenceId(const BundleLike& bundle,
   // For each bundle entry, check if that field is populated with a resource
   // with the correct reference id.
   for (const auto& entry : bundle.entry()) {
-    const ::google::protobuf::Message& contained_resource = entry.resource();
+    const Message& contained_resource = entry.resource();
     const ::google::protobuf::Reflection* contained_reflection =
         contained_resource.GetReflection();
     if (contained_reflection->HasField(contained_resource, resource_field)) {
@@ -290,7 +293,7 @@ absl::Status GetResourceByReferenceId(const BundleLike& bundle,
 }
 
 template <typename ContainedResourceLike>
-absl::StatusOr<::google::protobuf::Message*> MutableContainedResource(
+absl::StatusOr<Message*> MutableContainedResource(
     ContainedResourceLike* contained) {
   const ::google::protobuf::Reflection* ref = contained->GetReflection();
   // Get the resource field corresponding to this resource.
@@ -346,15 +349,24 @@ std::string ToSnakeCase(absl::string_view input);
 // pool.
 // Note that this method has no application for Implementation Guide protos that
 // do not use Any to represent contained resources (e.g., STU3).
-absl::StatusOr<std::unique_ptr<::google::protobuf::Message>> UnpackAnyAsContainedResource(
+absl::StatusOr<std::unique_ptr<Message>> UnpackAnyAsContainedResource(
     const google::protobuf::Any& any);
 
 // Allows calling UnpackAnyAsContainedResource with a custom message factory,
 // e.g., to allow more sophisticated memory management of the created object.
-absl::StatusOr<::google::protobuf::Message*> UnpackAnyAsContainedResource(
+absl::StatusOr<Message*> UnpackAnyAsContainedResource(
     const google::protobuf::Any& any,
-    std::function<absl::StatusOr<google::protobuf::Message*>(const ::google::protobuf::Descriptor*)>
+    std::function<absl::StatusOr<google::protobuf::Message*>(const Descriptor*)>
         message_factory);
+
+// Given a descriptor for a ContainedResource and the name of a resource,
+// (e.g., "Patient") searches the resource for a field whose type has that name.
+// Returns an InvalidArgumentError if the descriptor is not a valid
+// ContainedResource, and a NotFoundError if there is no field whose type has
+// the provided name.
+absl::StatusOr<const Descriptor*> GetResourceDescriptorByName(
+    const Descriptor* contained_resource_type,
+    absl::string_view name);
 
 }  // namespace fhir
 }  // namespace google

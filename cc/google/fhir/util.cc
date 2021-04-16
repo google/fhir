@@ -27,6 +27,8 @@
 #include "absl/status/statusor.h"
 #include "absl/strings/numbers.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/str_format.h"
+#include "absl/strings/substitute.h"
 #include "absl/time/time.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/proto_util.h"
@@ -284,6 +286,23 @@ absl::StatusOr<Message*> UnpackAnyAsContainedResource(
   }
 
   return unpacked_message;
+}
+
+absl::StatusOr<const ::google::protobuf::Descriptor*> GetResourceDescriptorByName(
+    const Descriptor* contained_resource_type, absl::string_view name) {
+  for (int i = 0; i < contained_resource_type->field_count(); ++i) {
+    const FieldDescriptor* field = contained_resource_type->field(i);
+    if (field->type() != FieldDescriptor::Type::TYPE_MESSAGE) {
+      return InvalidArgumentError(
+          absl::StrCat("Unexpected primitive field: ", field->full_name()));
+    }
+    if (field->message_type()->name() == name) {
+      return field->message_type();
+    }
+  }
+  return absl::NotFoundError(
+      absl::Substitute("Resource type [$0] not found on [$1].", name,
+                       contained_resource_type->full_name()));
 }
 
 }  // namespace fhir

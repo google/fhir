@@ -150,7 +150,7 @@ TEST(WrapContainedResource, Valid) {
   ContainedResource expected;
   *(expected.mutable_encounter()) = encounter;
   auto result = WrapContainedResource<ContainedResource>(encounter);
-  ASSERT_TRUE(result.status().ok());
+  FHIR_ASSERT_OK(result.status());
   EXPECT_THAT(result.value(), EqualsProto(expected));
 }
 
@@ -169,7 +169,7 @@ TEST(SetContainedResource, Valid) {
   *(expected.mutable_encounter()) = encounter;
 
   ContainedResource result;
-  ASSERT_TRUE(SetContainedResource(encounter, &result).ok());
+  FHIR_ASSERT_OK(SetContainedResource(encounter, &result));
   EXPECT_THAT(result, EqualsProto(expected));
 }
 
@@ -458,6 +458,27 @@ TEST(Util, UnpackAnyAsContainedResourceR4NonStandardIG) {
   FHIR_ASSERT_OK(result_statusor.status());
 
   ASSERT_THAT(**result_statusor, EqualsProto(contained_encounter));
+}
+
+TEST(GetResourceDescriptorByName, Success) {
+  absl::StatusOr<const Descriptor*> result = GetResourceDescriptorByName(
+      r4::testing::ContainedResource::descriptor(), "TestPatient");
+  FHIR_ASSERT_OK(result.status());
+  EXPECT_EQ(*result, r4::testing::TestPatient::descriptor());
+}
+
+TEST(GetResourceDescriptorByName, InvalidArgument) {
+  absl::StatusOr<const Descriptor*> result = GetResourceDescriptorByName(
+      r4::core::Boolean::descriptor(), "TestPatient");
+  ASSERT_FALSE(result.ok());
+  EXPECT_EQ(result.status().code(), absl::StatusCode::kInvalidArgument);
+}
+
+TEST(GetResourceDescriptorByName, NotFound) {
+  absl::StatusOr<const Descriptor*> result = GetResourceDescriptorByName(
+      r4::testing::ContainedResource::descriptor(), "Elephant");
+  ASSERT_FALSE(result.ok());
+  EXPECT_EQ(result.status().code(), absl::StatusCode::kNotFound);
 }
 
 }  // namespace
