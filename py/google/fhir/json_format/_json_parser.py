@@ -207,9 +207,8 @@ class JsonParser:
     # field prepended by an underscore
     if (not annotation_utils.is_primitive_type(field.message_type) and
         proto_utils.field_is_set(parent, field)):
-      raise ValueError(
-          'Target field {} is already set. Unable to set value: {}.'.format(
-              field.full_name, json_value))
+      raise ValueError('Target field {} is already set.'.format(
+          field.full_name))
 
     # Consider it an error if a oneof field is already set.
     #
@@ -289,8 +288,7 @@ class JsonParser:
       elif field_name == 'resourceType':
         if (not annotation_utils.is_resource(target_descriptor) or
             target_descriptor.name != value):
-          raise ValueError(f'Error merging JSON resource of type '
-                           f'{value} into message of type '
+          raise ValueError(f'Error merging JSON resource into message of type '
                            f'{target_descriptor.name}.')
       else:
         raise ValueError(

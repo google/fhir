@@ -41,9 +41,9 @@ def _parse(json_str: str, primitive_cls: Type[Decimal]) -> Decimal:
   decimal_value = json.loads(
       json_str, parse_float=decimal.Decimal, parse_int=decimal.Decimal)
   if not isinstance(decimal_value, decimal.Decimal):
-    raise ValueError(f'Value provided is not a valid decimal: {json_str!r}.')
+    raise ValueError('Invalid Decimal format')
   if not decimal_value.is_finite():
-    raise ValueError(f'Out of range decimal value: {json_str!r}.')
+    raise ValueError('Decimal out of range.')
 
   return cast(Any, primitive_cls)(value=json_str)
 

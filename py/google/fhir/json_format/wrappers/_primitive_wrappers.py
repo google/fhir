@@ -79,8 +79,7 @@ def validate_primitive_json_representation(desc: descriptor.Descriptor,
 
   # Raise an exception if we're unable to detect the pattern
   if pattern is not None and pattern.fullmatch(json_str) is None:
-    raise fhir_errors.InvalidFhirError(
-        f'Unable to find pattern: {pattern!r}, for input string: {json_str!r}.')
+    raise fhir_errors.InvalidFhirError(f'Unable to find pattern: {pattern!r}.')
 
 
 def validate_primitive_without_value(fhir_primitive: message.Message):
@@ -170,7 +169,7 @@ class PrimitiveWrapper(abc.ABC):
       An instance of PrimitiveWrapper.
     """
     if isinstance(json_value, (list, tuple)):
-      raise ValueError(f'Error, unable to wrap sequence: {json_value}.')
+      raise ValueError('Error, unable to wrap sequence.')
 
     if json_value is None or isinstance(json_value, (dict,)):
       return cls(no_value_primitive(primitive_cls), context)
@@ -178,7 +177,7 @@ class PrimitiveWrapper(abc.ABC):
     if not isinstance(json_value,
                       cast(Tuple[Type[Any], ...], cls._PARSABLE_TYPES)):
       raise fhir_errors.InvalidFhirError(
-          f'Unable to parse {json_value!r}. {type(json_value)} is invalid.')
+          'Unable to parse JSON. {type(json_value)} is invalid FHIR JSON.')
 
     return cls.from_json_str(str(json_value), primitive_cls, context)
 
@@ -369,13 +368,12 @@ class XhtmlWrapper(StringLikePrimitiveWrapper):
     """See PrimitiveWrapper.from_json_value."""
     if json_value is None or isinstance(json_value, (dict,)):
       raise ValueError(
-          f'Invalid input: {json_value!r} for class: {primitive_cls!r}.'
-      )  # Disallow None
+          f'Invalid input for class: {primitive_cls!r}.')  # Disallow None
 
     if not isinstance(json_value, cast(Tuple[Type[Any], ...],
                                        cls.PARSABLE_TYPES)):
       raise fhir_errors.InvalidFhirError(
-          f'Unable to parse {json_value!r}. {type(json_value)} is invalid.')
+          f'Unable to parse Xhtml. {type(json_value)} is invalid.')
 
     return cast(XhtmlWrapper,
                 cls.from_json_str(str(json_value), primitive_cls, context))

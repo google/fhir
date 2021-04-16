@@ -75,7 +75,7 @@ def _parse(json_str: str, primitive_cls: Type[Instant]) -> Instant:
   except ValueError:
     pass  # Fall through
 
-  raise fhir_errors.InvalidFhirError(f'Invalid Instant: {json_str!r}.')
+  raise fhir_errors.InvalidFhirError('Invalid Instant.')
 
 
 class InstantWrapper(_primitive_wrappers.PrimitiveWrapper):
@@ -100,9 +100,7 @@ class InstantWrapper(_primitive_wrappers.PrimitiveWrapper):
     precision: int = proto_utils.get_value_at_field(self.wrapped, 'precision')
     f = _FORMAT_FUNCS.get(precision)
     if f is None:
-      raise fhir_errors.InvalidFhirError(
-          'No format string for precision: '
-          f'{_primitive_time_utils.TimePrecision(precision)!r}.')
+      raise fhir_errors.InvalidFhirError('Invalid precision on Instant.')
     value_us: int = proto_utils.get_value_at_field(self.wrapped, 'value_us')
     tzinfo = _primitive_time_utils.timezone_info_for_timezone(timezone)
     delta = datetime.timedelta(microseconds=value_us)

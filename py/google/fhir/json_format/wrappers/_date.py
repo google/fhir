@@ -77,7 +77,7 @@ def _parse(json_str: str, primitive_cls: Type[Date], *,
   except ValueError:
     pass  # Fall through
 
-  raise fhir_errors.InvalidFhirError(f'Invalid Date: {json_str!r}.')
+  raise fhir_errors.InvalidFhirError('Invalid Date.')
 
 
 class DateWrapper(_primitive_wrappers.PrimitiveWrapper):
@@ -103,9 +103,7 @@ class DateWrapper(_primitive_wrappers.PrimitiveWrapper):
     precision: int = proto_utils.get_value_at_field(self.wrapped, 'precision')
     f = _FORMAT_FUNCS.get(precision)
     if f is None:
-      raise fhir_errors.InvalidFhirError(
-          'No format string for precision: '
-          f'{_primitive_time_utils.DateTimePrecision(precision)!r}.')
+      raise fhir_errors.InvalidFhirError('Invalid precision on Date.')
 
     tzinfo = _primitive_time_utils.timezone_info_for_timezone(timezone)
     delta = datetime.timedelta(
