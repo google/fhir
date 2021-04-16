@@ -300,9 +300,7 @@ class Parser {
           !(!field->is_repeated() &&
             !parent_reflection->HasField(*parent, field))) {
         return InvalidArgumentError(
-            absl::StrCat("Target field already set: ", field->full_name(), "\n",
-                         parent->DebugString(), "\n", field->full_name(), "\n",
-                         json.toStyledString(), "\n done"));
+            absl::StrCat("Target field already set: ", field->full_name()));
       }
     }
 
@@ -452,9 +450,7 @@ absl::StatusOr<Json::Value> ParseJsonValue(const std::string& raw_json) {
   Json::Reader reader;
   Json::Value value;
   if (!reader.parse(raw_json, value)) {
-    return InvalidArgumentError(
-        absl::StrCat("Failed with error: ", reader.getFormattedErrorMessages(),
-                     ", when parsing raw json: ", raw_json));
+    return InvalidArgumentError("Failed parsing raw json.");
   }
   return value;
 }
