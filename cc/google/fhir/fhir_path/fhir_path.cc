@@ -801,8 +801,17 @@ class SubstringFunction : public FunctionNode {
         }
       }
     }
-    Message* result = work_space->GetPrimitiveHandler()->NewString(
-        full_string.substr(start.value(), length_value));
+
+    icu::UnicodeString unicode_string =
+        icu::UnicodeString::fromUTF8(full_string);
+    int start_index = unicode_string.moveIndex32(0, start.value());
+    int end_index = unicode_string.moveIndex32(start_index, length_value);
+
+    std::string substring;
+    unicode_string.tempSubStringBetween(start_index, end_index)
+        .toUTF8String(substring);
+
+    Message* result = work_space->GetPrimitiveHandler()->NewString(substring);
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
     return absl::OkStatus();

@@ -689,6 +689,18 @@ TYPED_TEST(FhirPathTest, TestFunctionSubstring) {
   EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.substring(7, 1)"),
               EvalsToEmpty());
 
+  // Test UTF-8 string with multibyte characters.
+  EXPECT_THAT(TestFixture::Evaluate("'🔥FHIR'.substring(2)"),
+              EvalsToStringThatMatches(StrEq("HIR")));
+  EXPECT_THAT(TestFixture::Evaluate("'🔥'.substring(0)"),
+              EvalsToStringThatMatches(StrEq("🔥")));
+  EXPECT_THAT(TestFixture::Evaluate("'🔥'.substring(0, 1)"),
+              EvalsToStringThatMatches(StrEq("🔥")));
+  EXPECT_THAT(TestFixture::Evaluate("'🔥'.substring(1, 1)"),
+              EvalsToStringThatMatches(StrEq("")));
+  EXPECT_THAT(TestFixture::Evaluate("'🔥'.substring(1, 0)"),
+              EvalsToStringThatMatches(StrEq("")));
+
   // Test other requirements in
   // http://hl7.org/fhirpath/#substringstart-integer-length-integer-string
   EXPECT_THAT(TestFixture::Evaluate("'abcdefg'.substring(-1)"), EvalsToEmpty());
