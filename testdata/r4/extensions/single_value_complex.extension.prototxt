@@ -3,5 +3,5 @@ url {
 }
 extension {
   url { value: "stringField" }
-  value { string_value { value "foo" } }
+  value { string_value { value: "foo" } }
 }

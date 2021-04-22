@@ -1,1 +1,1 @@
-string_field { "foo" }
+string_field { value: "foo" }

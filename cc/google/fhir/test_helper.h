@@ -149,7 +149,8 @@ inline std::string ReadFile(absl::string_view filename) {
 template <class T>
 T ReadProto(absl::string_view filename) {
   T result;
-  google::protobuf::TextFormat::ParseFromString(ReadFile(filename), &result);
+  CHECK(google::protobuf::TextFormat::ParseFromString(ReadFile(filename), &result))
+      << "Failed to parse proto in file " << filename;
   return result;
 }
 
