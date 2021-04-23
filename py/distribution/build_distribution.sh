@@ -25,12 +25,14 @@ set -e
 set -E
 set -u
 
-FHIR_ROOT="${PWD}/.."
-FHIR_WORKSPACE='com_google_fhir'
-MYPY_PROTOBUF_VERSION='1.23.0'
-PROTOBUF_URL='https://github.com/protocolbuffers/protobuf/releases/download'
-PROTOC_SHA='4a3b26d1ebb9c1d23e933694a6669295f6a39ddc64c3db2adf671f0a6026f82e'
-PROTOC_VERSION='3.13.0'
+readonly FHIR_ROOT="${PWD}/.."
+readonly FHIR_WORKSPACE='com_google_fhir'
+readonly MYPY_PROTOBUF_VERSION='1.23.0'
+readonly PROTOBUF_URL='https://github.com/protocolbuffers/protobuf/releases/download'
+readonly PROTOC_SHA='4a3b26d1ebb9c1d23e933694a6669295f6a39ddc64c3db2adf671f0a6026f82e'
+readonly PROTOC_VERSION='3.13.0'
+readonly PYTHON_BUILD_VERSION='3.9.0'
+readonly PYTHON_VERSIONS=('3.6.13' '3.7.9' '3.8.6' '3.9.0')
 
 # Helper around print statements.
 function print_info() {
@@ -86,8 +88,9 @@ function test_google_fhir() {
   popd
 }
 
-# Sets up a google-fhir "workspace" with appropriate subdirectory structure for
-# executing the full test suite against an installed google-fhir package.
+# Sets up a google-fhir "workspace" with appropriate system binaries and
+# subdirectory structure for building+executing the full test suite against an
+# installed google-fhir package.
 #
 # Globals:
 #   FHIR_ROOT: The parent directory of //py/; necessary for testdata/ and spec/.
@@ -96,6 +99,25 @@ function test_google_fhir() {
 #   workspace: An ephemeral directory for staging+testing distributions.
 function initialize_workspace() {
   local -r workspace="$1"
+
+  # protoc
+  local -r protoc_resource="protoc-${PROTOC_VERSION}-linux-x86_64.zip"
+  local -r protoc_url="${PROTOBUF_URL}/v${PROTOC_VERSION}/${protoc_resource}"
+  install_prebuilt_binary "${protoc_url}" \
+                          "${protoc_resource}" \
+                          "${PROTOC_SHA}" \
+                          "${workspace}/.local"
+  export PATH="${workspace}/.local/bin:${PATH}"
+  export PROTOC="${workspace}/.local/bin/protoc"
+
+  # pyenv
+  print_info 'Installing pyenv...'
+  local -r pyenv_root="${workspace}/.pyenv"
+  git clone 'https://github.com/pyenv/pyenv.git' "${pyenv_root}"
+  export PATH="${pyenv_root}/shims:${pyenv_root}/bin:${PATH}"
+  eval "$(pyenv init -)"
+
+  # Create FHIR test environment
   mkdir -p "${workspace}/${FHIR_WORKSPACE}"
   ln -s "${FHIR_ROOT}/testdata" "${workspace}/${FHIR_WORKSPACE}/testdata"
   ln -s "${FHIR_ROOT}/spec" "${workspace}/${FHIR_WORKSPACE}/spec"
@@ -110,31 +132,37 @@ function initialize_workspace() {
 #   workspace: An ephemeral directory for staging+testing distributions.
 function cleanup() {
   local -r workspace="$1"
-  rm -rf "${workspace}" && \
-  python3 setup.py clean
+  python3 setup.py clean && \
+  rm -rf "${workspace}"
 }
 
-function main() {
-  # TODO: Should try and perform some version validation to be more strict
-  if [[ "$(command -v protoc &> /dev/null; echo $?)" -ne 0 ]]; then
-    local -r protoc_resource="protoc-${PROTOC_VERSION}-linux-x86_64.zip"
-    local -r protoc_url="${PROTOBUF_URL}/v${PROTOC_VERSION}/${protoc_resource}"
-    install_prebuilt_binary "${protoc_url}" \
-                            "${protoc_resource}" \
-                            "${PROTOC_SHA}" \
-                            '/usr/local'
-  fi
+# Installs (if necessary) and activates the requested Python interpreter.
+#
+# Globals:
+#   None
+# Arguments:
+#   python_version: The version of the Python interpreter to install/activate.
+function activate_interpreter() {
+  local -r python_version="$1"
+  pyenv install -s "${python_version}"
+  pyenv global "${python_version}"
+  pyenv versions
 
-  # Set the Python version and standup a virtualenv
-  print_info 'Instantiating Python virtualenv...'
-  pip3 install virtualenv
-  python3 -m virtualenv /tmp/venv
-  source /tmp/venv/bin/activate
-
-  # Install/upgrade necessary distutils
+  # Upgrade build utilities
   pip3 install --upgrade pip
   pip3 install --upgrade setuptools
   pip3 install wheel
+}
+
+function main() {
+  local -r workspace="$(mktemp -d -t fhir-XXXXXXXXXX)"
+  print_info "Initializing workspace ${workspace}..."
+  initialize_workspace "${workspace}"
+  trap "cleanup ${workspace}" EXIT
+
+  # Build artifacts under one of the supported versions, this should be
+  # inconsequential for google-fhir.
+  activate_interpreter "${PYTHON_BUILD_VERSION}"
 
   # `setuptools.setup` "setup_requires" kwarg does not currently install the
   # mypy-protobuf plugin as an executable on the host's `PATH`.
@@ -142,22 +170,21 @@ function main() {
   # See more at: https://github.com/dropbox/mypy-protobuf/issues/137.
   pip3 install "mypy-protobuf==${MYPY_PROTOBUF_VERSION}"
 
-  # Generate output into a "release" subdir
-  print_info 'Building distribution...'
+  print_info "Building distribution ($(python --version))..."
   python3 setup.py sdist bdist_wheel
 
-  local -r workspace="$(mktemp -d -t fhir-XXXXXXXXXX)"
-  print_info "Initializing workspace ${workspace}..."
-  initialize_workspace "${workspace}"
-  trap "cleanup ${workspace}" EXIT
+  # Install and test under all supported major/minor Python interpreters
+  for python_version in "${PYTHON_VERSIONS[@]}"; do
+    activate_interpreter "${python_version}"
 
-  print_info 'Testing sdist...'
-  pip3 install dist/*.tar.gz && test_google_fhir "${workspace}" && \
-  pip3 uninstall -y google-fhir
+    print_info "Testing sdist ($(python --version))..."
+    pip3 install dist/*.tar.gz && test_google_fhir "${workspace}" && \
+    pip3 uninstall -y google-fhir
 
-  print_info 'Testing bdist_wheel...'
-  pip3 install dist/*.whl && test_google_fhir "${workspace}" && \
-  pip3 uninstall -y google-fhir
+    print_info "Testing bdist_wheel ($(python --version))..."
+    pip3 install dist/*.whl && test_google_fhir "${workspace}" && \
+    pip3 uninstall -y google-fhir
+  done
 
   print_info 'Staging artifacts at /tmp/google/fhir/release/...'
   mkdir -p /tmp/google/fhir/release

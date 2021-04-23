@@ -16,7 +16,7 @@ FROM python:3.8.6-buster
 
 # Copy repository contents and setup working directory
 COPY . fhir
-WORKDIR /fhir/py
+WORKDIR fhir/py
 
 # Establish host <=> container volume for release artifacts
 RUN mkdir -p /tmp/google/fhir/release

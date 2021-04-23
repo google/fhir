@@ -20,11 +20,18 @@ import re
 
 from typing import cast, Any, Tuple, Type, TypeVar
 
-from backports import zoneinfo
 from dateutil import parser
 from dateutil import tz
 from google.protobuf import message
 from google.fhir.utils import proto_utils
+
+# google-fhir supports multiple <major>.<minor>.x interpreters. If unable to
+# import zoneinfo from stdlib, fallback to the backports package. See more at:
+# https://pypi.org/project/backports.zoneinfo/.
+try:
+  import zoneinfo  # pytype: disable=import-error
+except ImportError:
+  from backports import zoneinfo
 
 _T = TypeVar('_T', bound=message.Message)
 
