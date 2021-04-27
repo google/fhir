@@ -262,6 +262,42 @@ func AppendUnmarshalError(el *UnmarshalErrorList, newErr error) error {
 	return nil
 }
 
+func unmarshalErrorString(umErr *UnmarshalError) string {
+	details := umErr.Details
+	if umErr.Diagnostics != "" {
+		// Strip invalid UTF-8 from the details to make sure we can marshal the error.
+		// The eventual OperationOutcome has to be valid UTF-8.
+		details += ": " + strings.ToValidUTF8(umErr.Diagnostics, "")
+	}
+	if umErr.Path != "" {
+		details = fmt.Sprintf("at %s: %s", umErr.Path, details)
+	}
+	return details
+}
+
+// PrintUnmarshalError to a string. May contain user data. limit controls the
+// number of error messages that will be returned if err is an
+// UnmarshalErrorList. Use -1 for no limit. If the error is not an
+// UnmarshalError then Error() will be called.
+func PrintUnmarshalError(err error, limit int) string {
+	switch umErr := err.(type) {
+	case *UnmarshalError:
+		return unmarshalErrorString(umErr)
+	case UnmarshalErrorList:
+		var msgs []string
+		for i, umSubErr := range umErr {
+			if limit >= 0 && i >= limit {
+				msgs = append(msgs, fmt.Sprintf("and %d other issue(s)", len(umErr)-limit))
+				break
+			}
+			msgs = append(msgs, unmarshalErrorString(umSubErr))
+		}
+		return strings.Join(msgs, "\n")
+	default:
+		return err.Error()
+	}
+}
+
 func init() {
 	compileOrDie := func(expr string) *regexp.Regexp {
 		r, err := regexp.Compile(expr)

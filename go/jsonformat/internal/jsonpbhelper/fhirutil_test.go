@@ -16,6 +16,7 @@ package jsonpbhelper
 
 import (
 	"encoding/json"
+	"errors"
 	"regexp"
 	"strconv"
 	"testing"
@@ -893,5 +894,80 @@ func TestValidateRequiredFields(t *testing.T) {
 				t.Errorf("ValidateRequiredFields(%v): got %v, want %v", test.name, valid, test.valid)
 			}
 		})
+	}
+}
+
+func TestPrintUnmarshalError(t *testing.T) {
+	tests := []struct {
+		name        string
+		err         error
+		wantMessage string
+	}{
+		{
+			name: "full error",
+			err: &UnmarshalError{
+				Path:        "Patient.name",
+				Details:     "invalid type",
+				Diagnostics: "want array",
+			},
+			wantMessage: "at Patient.name: invalid type: want array",
+		},
+		{
+			name: "no diagnostics",
+			err: &UnmarshalError{
+				Path:    "Patient.name",
+				Details: "invalid type",
+			},
+			wantMessage: "at Patient.name: invalid type",
+		},
+		{
+			name: "no path",
+			err: &UnmarshalError{
+				Details:     "invalid type",
+				Diagnostics: "want array",
+			},
+			wantMessage: "invalid type: want array",
+		},
+		{
+			name: "error list",
+			err: UnmarshalErrorList{
+				{
+					Path:    "Patient.name[0]",
+					Details: "error1",
+				},
+				{
+					Path:    "Patient.name[1]",
+					Details: "error2",
+				},
+			},
+			wantMessage: "at Patient.name[0]: error1\nat Patient.name[1]: error2",
+		},
+		{
+			name:        "other error",
+			err:         errors.New("other error"),
+			wantMessage: "other error",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := PrintUnmarshalError(test.err, -1)
+			if !cmp.Equal(test.wantMessage, got) {
+				t.Errorf("PrintUnmarshalError(%v, -1) got message %s, want %s", test.err, got, test.wantMessage)
+			}
+		})
+	}
+}
+
+func TestPrintUnmarshalError_Limit(t *testing.T) {
+	err := UnmarshalErrorList{
+		{Details: "error1"},
+		{Details: "error2"},
+		{Details: "error3"},
+	}
+
+	wantMessage := "error1\nerror2\nand 1 other issue(s)"
+	got := PrintUnmarshalError(err, 2)
+	if !cmp.Equal(wantMessage, got) {
+		t.Errorf("PrintUnmarshalError(%v, 2) got message %s, want %s", err, got, wantMessage)
 	}
 }
