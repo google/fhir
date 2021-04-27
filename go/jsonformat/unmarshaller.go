@@ -293,6 +293,16 @@ func (u *Unmarshaller) mergeChoiceField(jsonPath string, f protoreflect.FieldDes
 			Diagnostics: strconv.Quote(k),
 		}
 	}
+
+	choice := pb.Get(f).Message().WhichOneof(choiceField.ContainingOneof())
+	if choice != nil && choiceField.Name() != choice.Name() {
+		return &jsonpbhelper.UnmarshalError{
+			Path:        jsonPath,
+			Details:     fmt.Sprintf("cannot accept multiple values for %s field", string(f.Name())),
+			Diagnostics: strconv.Quote(k),
+		}
+	}
+
 	return u.mergeField(jsonpbhelper.AddFieldToPath(jsonPath, k), choiceField, v, pb.Mutable(f).Message())
 }
 

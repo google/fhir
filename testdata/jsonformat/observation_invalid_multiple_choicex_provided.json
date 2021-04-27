@@ -1,0 +1,11 @@
+{
+  "resourceType": "Observation",
+  "id": "f001",
+  "valueQuantity": {
+    "value": 6.3,
+    "unit": "mmol/l",
+    "system": "http://unitsofmeasure.org",
+    "code": "mmol/L"
+  },
+  "valueString": "6.3 mmol/L"
+}

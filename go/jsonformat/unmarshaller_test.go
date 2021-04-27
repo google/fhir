@@ -18,11 +18,18 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"math"
+	"path"
+
+	"path/filepath"
 	"strconv"
 	"strings"
 	"testing"
 
+	"runtime"
+
+	"github.com/bazelbuild/rules_go/go/tools/bazel"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
@@ -52,9 +59,13 @@ var (
 		}
 		return v
 	})
+	basePath = "testdata/jsonformat"
 )
 
 // TODO: Find a better way to maintain the versioned unit tests.
+// TODO: Legacy tests in this file use hardcoded data -
+// these should be moved to testdata files to make it easy to share testcases between languages.
+// New test cases should create new testdata files in the basePath above.
 
 func setupUnmarshaller(t *testing.T, ver Version) *Unmarshaller {
 	t.Helper()
@@ -63,6 +74,30 @@ func setupUnmarshaller(t *testing.T, ver Version) *Unmarshaller {
 		t.Fatalf("failed to create unmarshaler; %v", err)
 	}
 	return u
+}
+
+var (
+	_, b, _, _ = runtime.Caller(0)
+	callerRoot = filepath.Dir(b)
+)
+// getRootPath returns the root bazel runfiles path if running in a bazel
+// environment, otherwise it will return the root path of the FHIR proto
+// repository. Typically this is used to access files such as testdata.
+// As usual, the caller should check to see if the expected file(s)
+// exist, and if not, report an error.
+func getRootPath() string {
+	var root string
+ 	root, err := bazel.RunfilesPath()
+ 	if err != nil {
+		// Fall back to the non-bazel way to get to the root directory.
+		root = callerRoot + "/../../"
+	}
+	return root
+}
+
+func readFile(basePath, fileName string) ([]byte, error) {
+	filePath := path.Join(getRootPath(), basePath, fileName)
+	return ioutil.ReadFile(filePath)
 }
 
 func TestUnmarshal(t *testing.T) {
