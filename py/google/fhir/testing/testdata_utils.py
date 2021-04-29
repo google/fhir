@@ -67,6 +67,23 @@ def read_protos(filename: str,
   return results
 
 
+def read_proto(filename: str, proto_cls: Type[_T]) -> _T:
+  """Reads protobuf information from filename relative to the fhir/ root dir.
+
+  Data is serialized into an instance of `proto_cls`.
+
+  Args:
+    filename: The file to read from.
+    proto_cls: The type of protobuf message to look for and return.
+
+  Returns:
+    The protobuf message in the file.
+  """
+  # TODO Make the read_proto function independent of any delimiter
+  # path after we move to more centralized testing of version types.
+  return read_protos(filename, proto_cls)[0]
+
+
 def read_stu3_json(filename: str, delimiter: Optional[str] = None) -> List[str]:
   """Reads STU3 JSON information relative to the testdata/stu3 dir."""
   return read_data(os.path.join(_TEST_DATA_DIR_STU3, filename), delimiter)
