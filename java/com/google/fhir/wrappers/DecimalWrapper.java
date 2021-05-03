@@ -18,7 +18,6 @@ import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.ProtoUtils;
 import com.google.fhir.r4.core.Decimal;
 import com.google.protobuf.MessageOrBuilder;
-import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
 /** A wrapper around the Decimal FHIR primitive type. */
@@ -49,36 +48,8 @@ public class DecimalWrapper extends NumericTypeWrapper<Decimal> {
     super(input == null ? NULL_DECIMAL : parseAndValidate(input));
   }
 
-  // TODO: This should throw a checked InvalidFhirException.
-  private static void validate(String input) {
-    try {
-      // We don't use Double.parseDouble() here because that function simply
-      // accepts all values. Here we parse the value into a BigDecimal and do
-      // explicit range check on it.
-      double doubleValue = new BigDecimal(input).doubleValue();
-      if (Double.isInfinite(doubleValue)) {
-        throw new IllegalArgumentException("Out of range decimal value: " + input);
-      }
-    } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Not a decimal value", e);
-    }
-  }
-
-  /** Override to also check that the string is within double bounds. */
-  // TODO: This should throw a checked InvalidFhirException.
-  @Override
-  public void validateWrapped() {
-    if (hasValue()) {
-      validateUsingPattern(getPattern(), printValue());
-      validate(printValue());
-    } else {
-      validatePrimitiveWithoutValue();
-    }
-  }
-
   private static Decimal parseAndValidate(String input) {
     validateUsingPattern(REGEX_PATTERN, input);
-    validate(input);
     return Decimal.newBuilder().setValue(input).build();
   }
 

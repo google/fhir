@@ -18,7 +18,10 @@ valid_pairs {
   json_string: "1.0E-30"
   proto { decimal { value: "1.0E-30" } }
 }
-# TODO:  Add a decimal higher than the prev. Java limit here.
+valid_pairs {
+  json_string: "1.0E+401"
+  proto { decimal { value: "1.0E+401" } }
+}
 
 # TODO:  Add other variants of scientific notation.
 
