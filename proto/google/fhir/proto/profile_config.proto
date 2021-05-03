@@ -41,11 +41,11 @@ message PackageInfo {
   // If neither of these fields are set, use the core contained resource on
   // all generated files.
   oneof contained_resource {
-    bool local_contained_resource = 6; // Generates a local ContainedResource
-                                       // for the profiles being created.
-    string contained_resource_package = 7; // A fully-qualified
-                                           // some.package.ContainedResource
-                                           // to use for contained resources.
+    bool local_contained_resource = 6;  // Generates a local ContainedResource
+                                        // for the profiles being created.
+    string contained_resource_package = 7;  // A fully-qualified
+                                            // some.package.ContainedResource
+                                            // to use for contained resources.
   }
 
   string publisher = 8;
@@ -64,10 +64,10 @@ message PackageInfo {
   string license_date = 11;
 
   enum ContainedResourceBehavior {
-    DEFAULT = 0; // See field below for default behavior.
-    ANY = 1; // Uses protobuf.Any for contained resource fields.
-    TYPED_CONTAINED_RESOURCE = 2; // Use the corresponding resource protos
-                                  // for contained resources.
+    DEFAULT = 0;  // See field below for default behavior.
+    ANY = 1;      // Uses protobuf.Any for contained resource fields.
+    TYPED_CONTAINED_RESOURCE = 2;  // Use the corresponding resource protos
+                                   // for contained resources.
   }
   // If unset, defaults to TYPED_CONTAINED_RESOURCE for DSTU2 and STU3, and
   // ANY for later versions.
@@ -93,12 +93,12 @@ message PackageInfo {
 }
 
 enum SizeRestriction {
-  UNSET = 0; // Does not set a size restriction on the field.
-  ABSENT = 1; // Field should have zero values, i.e. omitted from the record.
-  REQUIRED = 2; // Field must have exactly one value.
-  OPTIONAL = 3; // Field may have zero or one value.
+  UNSET = 0;     // Does not set a size restriction on the field.
+  ABSENT = 1;    // Field should have zero values, i.e. omitted from the record.
+  REQUIRED = 2;  // Field must have exactly one value.
+  OPTIONAL = 3;  // Field may have zero or one value.
   AT_LEAST_ONE = 4;  // Repeated field that should have at least one value.
-  REPEATED = 5; // Repeated field that may have zero or more values.
+  REPEATED = 5;      // Repeated field that may have zero or more values.
 }
 
 // Config for definition of Profiles that are part of an Implementation
@@ -345,6 +345,9 @@ message CodeSystemConfig {
 
     // Sets the FHIR Codesystem.concept.definition field.
     string definition = 3;
+
+    // Flag indicating the code value is deprecated.
+    bool deprecated = 4;
 
     // TODO: Concepts can have "child" concepts representing
     // is-a/contains/categorizes relationships

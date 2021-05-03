@@ -139,6 +139,9 @@ extend google.protobuf.EnumValueOptions {
   // If the code system cannot be determined by the enum it is a part of,
   // (e.g., a valueset with multiple codesystems), this lists the source system.
   string source_code_system = 275176953;
+
+  // Flag indicating that the code value has been deprecated.
+  bool deprecated_code = 371253959;
 }
 
 extend google.protobuf.FieldOptions {

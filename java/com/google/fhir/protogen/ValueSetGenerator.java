@@ -729,7 +729,22 @@ public class ValueSetGenerator {
     List<EnumValueWithBackupName> valueList = new ArrayList<>();
     for (ConceptDefinition concept : concepts) {
       if (conceptMatchesFilters(concept, classifications, filters)) {
-        valueList.add(buildEnumValue(concept.getCode(), concept.getDisplay().getValue(), system));
+        // Check the http://hl7.org/fhir/concept-properties to determine if the code value
+        // has been deprecated.
+        boolean isDeprecated =
+            concept.getPropertyList().stream()
+                .anyMatch(
+                    property ->
+                        property.getCode().getValue().equals(TerminologyGenerator.CODE_VALUE_STATUS)
+                            && property.getValue().hasCode()
+                            && property
+                                .getValue()
+                                .getCode()
+                                .getValue()
+                                .equals(TerminologyGenerator.CODE_VALUE_STATUS_DEPRECATED));
+        valueList.add(
+            buildEnumValue(
+                concept.getCode(), concept.getDisplay().getValue(), system, isDeprecated));
       }
 
       Set<String> childClassifications = new HashSet<>(classifications);
@@ -783,6 +798,11 @@ public class ValueSetGenerator {
   }
 
   private static EnumValueWithBackupName buildEnumValue(Code code, String display, String system) {
+    return buildEnumValue(code, display, system, false);
+  }
+
+  private static EnumValueWithBackupName buildEnumValue(
+      Code code, String display, String system, boolean isDeprecated) {
     String originalCode = code.getValue();
     String enumCase = toEnumCase(code, display, false);
     String backupName = toEnumCase(code, display, true);
@@ -796,6 +816,11 @@ public class ValueSetGenerator {
     if (system != null) {
       builder.getOptionsBuilder().setExtension(Annotations.sourceCodeSystem, system);
     }
+
+    if (isDeprecated) {
+      builder.getOptionsBuilder().setExtension(Annotations.deprecatedCode, true);
+    }
+
     return new EnumValueWithBackupName(builder, backupName);
   }
 

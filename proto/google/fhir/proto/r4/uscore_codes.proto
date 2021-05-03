@@ -1148,7 +1148,7 @@ message USCoreConditionCategoryExtensionCode {
         "http://hl7.org/fhir/us/core/CodeSystem/condition-category";
 
     INVALID_UNINITIALIZED = 0;
-    PROBLEM = 1;
+    PROBLEM = 1 [(.google.fhir.proto.deprecated_code) = true];
     HEALTH_CONCERN = 2;
   }
 }

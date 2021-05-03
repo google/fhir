@@ -28,6 +28,7 @@ import com.google.fhir.r4.core.Code;
 import com.google.fhir.r4.core.CodeSystem;
 import com.google.fhir.r4.core.CodeSystemContentModeCode;
 import com.google.fhir.r4.core.DateTime;
+import com.google.fhir.r4.core.PropertyTypeCode;
 import com.google.fhir.r4.core.ValueSet;
 import java.time.LocalDate;
 
@@ -39,6 +40,12 @@ final class TerminologyGenerator {
   private final PackageInfo packageInfo;
   private final DateTime creationDateTime;
   private final ResourceValidator resourceValidator = new ResourceValidator();
+
+  // From http://hl7.org/fhir/concept-properties to tag code values as deprecated
+  public static final String CODE_VALUE_STATUS_PROPERTY =
+      "http://hl7.org/fhir/concept-properties#status";
+  public static final String CODE_VALUE_STATUS = "status";
+  public static final String CODE_VALUE_STATUS_DEPRECATED = "deprecated";
 
   TerminologyGenerator(PackageInfo packageInfo, LocalDate creationTime) {
     this.packageInfo = packageInfo;
@@ -86,6 +93,13 @@ final class TerminologyGenerator {
             : config.getUrlOverride();
     builder.getUrlBuilder().setValue(url);
 
+    // Declare the presence of the deprecated property on this value set so it can be
+    // used on individual concepts.
+    CodeSystem.Property.Builder propertyBuilder = builder.addPropertyBuilder();
+    propertyBuilder.getUriBuilder().setValue(CODE_VALUE_STATUS_PROPERTY);
+    propertyBuilder.getCodeBuilder().setValue(CODE_VALUE_STATUS);
+    propertyBuilder.getTypeBuilder().setValue(PropertyTypeCode.Value.CODE);
+
     for (CodeSystemConfig.Concept concept : config.getConceptList()) {
       addConcept(builder, concept);
     }
@@ -109,6 +123,13 @@ final class TerminologyGenerator {
     }
     if (!concept.getDefinition().isEmpty()) {
       conceptBuilder.getDefinitionBuilder().setValue(concept.getDefinition());
+    }
+
+    if (concept.getDeprecated()) {
+      CodeSystem.ConceptDefinition.ConceptProperty.Builder propertyBuilder =
+          conceptBuilder.addPropertyBuilder();
+      propertyBuilder.getCodeBuilder().setValue(CODE_VALUE_STATUS);
+      propertyBuilder.getValueBuilder().getCodeBuilder().setValue(CODE_VALUE_STATUS_DEPRECATED);
     }
 
     // TODO: handle child concepts.
