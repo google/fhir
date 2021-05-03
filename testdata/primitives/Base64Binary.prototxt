@@ -8,7 +8,7 @@ valid_pairs {
 }
 
 valid_pairs {
-  json_string: "\"JV  BE  Ri  0x  Lj  UN  Je  Lj  z9  MN  Cj  Ew  ID  Ag\""
+  json_string: "\"JVBE  Ri0x  LjUN  JeLj  z9MN  CjEw  IDAg\""
   proto {
     base64_binary {
       value: "%PDF-1.5\r%\342\343\317\323\r\n10 0 "
@@ -20,7 +20,7 @@ valid_pairs {
         }
         extension {
           url { value: "stride" }
-          value { positive_int { value: 2 } }
+          value { positive_int { value: 4 } }
         }
       }
     }

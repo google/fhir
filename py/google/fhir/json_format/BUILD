@@ -1,5 +1,6 @@
 load(
     "@rules_python//python:python.bzl",
+    "py_test",
     "py_library",
 )
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
@@ -45,6 +46,29 @@ py_library(
         "@com_google_protobuf//:protobuf_python",
         "//py",
         "//py/google/fhir/testing:testdata_utils",
+        requirement("absl-py"),
+        requirement("six"),
+    ],
+)
+
+py_test(
+    name = "json_format_primitives_test",
+    srcs = ["json_format_primitives_test.py"],
+    data = ["//testdata/primitives"],
+    legacy_create_init = 0,
+    python_version = "PY3",
+    deps = [
+        "@com_google_protobuf//:protobuf_python",
+        "//py",
+        "//proto/google/fhir/proto/r4:primitive_test_suite_py_pb2",
+        "//proto/google/fhir/proto/r4/core:datatypes_py_pb2",
+        "//py/google/fhir/testing:protobuf_compare",
+        "//py/google/fhir/testing:testdata_utils",
+        "//py/google/fhir/utils:proto_utils",
+        "//py/google/fhir/r4:json_format",
+        "//py/google/fhir/r4:primitive_handler",
+        "//py/google/fhir:extensions",
+        "//py/google/fhir:fhir_errors",
         requirement("absl-py"),
         requirement("six"),
     ],
