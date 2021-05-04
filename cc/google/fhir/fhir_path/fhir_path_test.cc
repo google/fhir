@@ -400,14 +400,20 @@ TYPED_TEST(FhirPathTest, TestFieldExists) {
 
 TYPED_TEST(FhirPathTest, TestEvaluateReferenceField) {
   auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
+
+  // Check that empty reference object results in empty collection.
+  EvaluationResult result =
+      TestFixture::Evaluate(test_encounter, "serviceProvider.reference")
+          .value();
+  EXPECT_TRUE(result.GetMessages().empty());
+
+  // Check that a string representation of the FHIR reference is created.
   test_encounter.mutable_service_provider()
       ->mutable_organization_id()
       ->set_value("1");
 
-  // Check that a string representation of the FHIR reference is created.
-  EvaluationResult result =
-      TestFixture::Evaluate(test_encounter, "serviceProvider.reference")
-          .value();
+  result = TestFixture::Evaluate(test_encounter, "serviceProvider.reference")
+               .value();
   EXPECT_THAT(result.GetString().value(), Eq("Organization/1"));
 
   // Check that retrieval works for a different representation of the reference.

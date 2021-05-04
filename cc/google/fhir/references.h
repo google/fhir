@@ -22,6 +22,7 @@
 #include "google/protobuf/message.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/strip.h"
+#include "absl/types/optional.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/type_macros.h"
 #include "google/fhir/util.h"
@@ -60,7 +61,9 @@ absl::StatusOr<const ::google::protobuf::FieldDescriptor*> GetReferenceFieldForR
 absl::Status SplitIfRelativeReference(::google::protobuf::Message* reference);
 
 // Return the full string representation of a reference.
-absl::StatusOr<std::string> ReferenceProtoToString(
+// If the message `reference` is a valid reference type, but does not contain
+// an actual reference (e.g. empty message), then returns nullopt.
+absl::StatusOr<absl::optional<std::string>> ReferenceProtoToString(
     const ::google::protobuf::Message& reference);
 
 absl::Status ReferenceStringToProto(const std::string& input,
@@ -76,11 +79,15 @@ absl::StatusOr<ReferenceType> ReferenceStringToProto(const std::string& input) {
 template <typename ResourceType, typename ReferenceLike>
 absl::StatusOr<std::string> GetResourceIdFromReference(
     const ReferenceLike& reference) {
-  auto value = ReferenceProtoToString(reference);
-  if (!value.ok()) {
-    return value;
+  auto status_or_reference_string = ReferenceProtoToString(reference);
+  if (!status_or_reference_string.ok()) {
+    return status_or_reference_string.status();
   }
-  ::absl::string_view reference_string(value.value());
+  if (!status_or_reference_string.value()) {  // is nullopt
+    return ::absl::NotFoundError("Reference is not populated.");
+  }
+  ::absl::string_view reference_string(
+      status_or_reference_string.value().value());
   if (!::absl::ConsumePrefix(
           &reference_string,
           absl::StrCat(ResourceType::descriptor()->name(), "/"))) {

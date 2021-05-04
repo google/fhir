@@ -43,7 +43,7 @@ std::string GetReferenceStringToResource(const Message& message) {
                       GetResourceId(message).value());
 }
 
-absl::StatusOr<std::string> ReferenceProtoToString(
+absl::StatusOr<absl::optional<std::string>> ReferenceProtoToString(
     const ::google::protobuf::Message& reference) {
   const ::google::protobuf::Descriptor* descriptor = reference.GetDescriptor();
   const ::google::protobuf::Reflection* reflection = reference.GetReflection();
@@ -65,11 +65,14 @@ absl::StatusOr<std::string> ReferenceProtoToString(
 
   static const google::protobuf::OneofDescriptor* oneof =
       descriptor->FindOneofByName("reference");
+  if (oneof == nullptr) {
+    return absl::InvalidArgumentError(
+        absl::StrCat("Invalid Reference type: ", descriptor->full_name()));
+  }
   const ::google::protobuf::FieldDescriptor* reference_field =
       reflection->GetOneofFieldDescriptor(reference, oneof);
   if (reference_field == nullptr) {
-    return absl::InvalidArgumentError(
-        absl::StrCat("Invalid Reference type: ", descriptor->full_name()));
+    return absl::nullopt;
   }
 
   std::string prefix;

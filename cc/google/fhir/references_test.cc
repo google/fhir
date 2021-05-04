@@ -64,6 +64,12 @@ TEST(GetResourceIdFromReferenceTest, EncounterIdAsUri) {
   EXPECT_EQ(got.value(), "456");
 }
 
+TEST(GetResourceIdFromReferenceTest, ReferenceIsEmpty) {
+  Reference r;
+  auto got = google::fhir::GetResourceIdFromReference<Encounter>(r);
+  EXPECT_EQ(got.status(), ::absl::NotFoundError("Reference is not populated."));
+}
+
 TEST(GetResourceIdFromReferenceTest, ReferenceDoesNotMatch) {
   Reference r;
   r.mutable_uri()->set_value("Patient/123");

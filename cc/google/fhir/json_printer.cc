@@ -477,9 +477,12 @@ class Printer {
         mutable_reference.get(), uri_field);
     // Note that setting the uri clears the typed references, since they share
     // a oneof
-    FHIR_ASSIGN_OR_RETURN(const std::string& reference_string,
+    FHIR_ASSIGN_OR_RETURN(const absl::optional<std::string> reference_string,
                           ReferenceProtoToString(reference));
-    FHIR_RETURN_IF_ERROR(SetPrimitiveStringValue(uri, reference_string));
+    if (reference_string) {
+      FHIR_RETURN_IF_ERROR(
+          SetPrimitiveStringValue(uri, reference_string.value()));
+    }
     return std::move(mutable_reference);
   }
 

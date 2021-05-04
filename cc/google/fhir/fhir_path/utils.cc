@@ -102,7 +102,8 @@ absl::Status RetrieveField(
           absl::StrFormat("Unable to create message with same type as '%s'",
                           field.full_name()));
     }
-    absl::StatusOr<std::string> reference_uri = ReferenceProtoToString(root);
+    absl::StatusOr<absl::optional<std::string>> reference_uri =
+        ReferenceProtoToString(root);
     if (!reference_uri.ok()) {
       return absl::Status(
           reference_uri.status().code(),
@@ -110,10 +111,13 @@ absl::Status RetrieveField(
                        " while extracting reference from message ",
                        root.GetDescriptor()->full_name()));
     }
+    if (!reference_uri.value()) {  // is nullopt
+      return absl::OkStatus();
+    }
     string_message->GetReflection()->SetString(
         string_message,
         string_message->GetDescriptor()->FindFieldByName(kPrimitiveValueField),
-        reference_uri.value());
+        reference_uri.value().value());
     results->push_back(string_message);
     return absl::OkStatus();
   }
