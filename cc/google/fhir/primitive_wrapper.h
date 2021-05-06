@@ -29,6 +29,7 @@
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
 #include "absl/strings/str_replace.h"
+#include "absl/strings/substitute.h"
 #include "absl/time/time.h"
 #include "google/fhir/codes.h"
 #include "google/fhir/extensions.h"
@@ -530,8 +531,15 @@ class IntegerTypeWrapper : public ExtensibleWrapper<T> {
     if (json.type() != Json::ValueType::intValue &&
         json.type() != Json::ValueType::uintValue) {
       return InvalidArgumentError(
-          absl::StrCat("Cannot parse as Integer.",
+          absl::StrCat("Cannot parse as ", T::descriptor()->full_name(),
                        json.isString() ? "  It is a quoted string." : ""));
+    }
+    // Before we can treat the jsoncpp value as an int, we need to make sure
+    // it fits into bounds of the corresponding datatype.
+    // Json::Value#isInt does these checks
+    if (!json.isInt()) {
+      return InvalidArgumentError(absl::Substitute(
+          "Cannot parse as $0: Out of range", T::descriptor()->full_name()));
     }
     FHIR_RETURN_IF_ERROR(ValidateInteger(json.asInt()));
     std::unique_ptr<T> wrapped = absl::make_unique<T>();
@@ -815,10 +823,11 @@ template <typename PositiveIntType>
 class PositiveIntWrapper : public IntegerTypeWrapper<PositiveIntType> {
  protected:
   absl::Status ValidateInteger(const int int_value) const {
-    return int_value > 0
-               ? absl::OkStatus()
-               : InvalidArgumentError(
-                     "Cannot parse as PositiveInt: must be greater than zero.");
+    return int_value > 0 ? absl::OkStatus()
+                         : InvalidArgumentError(absl::Substitute(
+                               "Cannot parse as $0: must be greater "
+                               "than zero.",
+                               PositiveIntType::descriptor()->full_name()));
   }
 };
 
@@ -918,9 +927,10 @@ class UnsignedIntWrapper : public IntegerTypeWrapper<UnsignedIntType> {
  protected:
   absl::Status ValidateInteger(const int int_value) const {
     return int_value >= 0 ? absl::OkStatus()
-                          : InvalidArgumentError(
-                                "Cannot parse as UnsignedInt: must be greater "
-                                "than or equal to zero.");
+                          : InvalidArgumentError(absl::Substitute(
+                                "Cannot parse as $0: must be greater "
+                                "than or equal to zero.",
+                                UnsignedIntType::descriptor()->full_name()));
   }
 };
 
