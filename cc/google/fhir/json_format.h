@@ -18,6 +18,7 @@
 #define GOOGLE_FHIR_JSON_FORMAT_H_
 
 #include <string>
+#include <unordered_map>
 
 #include "google/protobuf/message.h"
 #include "absl/status/status.h"
@@ -35,8 +36,7 @@ namespace fhir {
 
 // Generic Parser and Printer classes for moving between JSON format and
 // Proto format.
-// Note that for most normal use cases, these classes shouldn't be used
-// directly.
+// Note that for most use cases, these classes shouldn't be used directly.
 // If the version of FHIR you are using is known, you should use
 // use the version-specific API at //cc/google/fhir/$VERSION/json_format.h
 
@@ -45,6 +45,29 @@ class Parser {
   explicit Parser(const PrimitiveHandler* primitive_handler)
       : primitive_handler_(primitive_handler) {}
 
+  // Abstract base class for Parser users to create custom field sanitizers
+  // for string or message fields.
+  class JsonSanitizer {
+   public:
+    // Override this function to transform string `value` based on the
+    // field in question.
+    virtual absl::Status SanitizeStringField(
+        const google::protobuf::FieldDescriptor* field_descriptor,
+        std::string& value) const = 0;
+
+    virtual ~JsonSanitizer() {}
+  };
+
+  // Trivial derivation of JsonSanitizer that does not sanitize any fields.
+  class PassThroughSanitizer : public JsonSanitizer {
+   public:
+    absl::Status SanitizeStringField(
+        const google::protobuf::FieldDescriptor* field_descriptor,
+        std::string& value) const override {
+      return absl::OkStatus();
+    }
+  };
+
   // Merges a string of raw FHIR json into an existing message.
   // Takes a default timezone for timelike data that does not specify timezone.
   // For reading JSON into a new resource, it is recommended to use
@@ -52,6 +75,14 @@ class Parser {
   ::absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
                                               google::protobuf::Message* target,
                                               absl::TimeZone default_timezone,
+                                              const bool validate) const;
+
+  // Same as the previous function, but accepting a JsonSanitizer to clean
+  // up JSON values before mapping them into proto.
+  ::absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
+                                              google::protobuf::Message* target,
+                                              absl::TimeZone default_timezone,
+                                              const JsonSanitizer& sanitizer,
                                               const bool validate) const;
 
   // Given a template for a FHIR resource type, creates a resource proto of that
@@ -63,9 +94,19 @@ class Parser {
   ::absl::StatusOr<R> JsonFhirStringToProto(
       const std::string& raw_json,
       const absl::TimeZone default_timezone) const {
+    return JsonFhirStringToProto<R>(raw_json, default_timezone,
+                                    PassThroughSanitizer());
+  }
+
+  // Same as the previous function, but accepting a JsonSanitizer to clean
+  // up JSON values before mapping them into proto.
+  template <typename R>
+  ::absl::StatusOr<R> JsonFhirStringToProto(
+      const std::string& raw_json, const absl::TimeZone default_timezone,
+      const JsonSanitizer& sanitizer) const {
     R resource;
-    FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(raw_json, &resource,
-                                                      default_timezone, true));
+    FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(
+        raw_json, &resource, default_timezone, sanitizer, true));
     return resource;
   }
 
@@ -78,9 +119,19 @@ class Parser {
   ::absl::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
       const std::string& raw_json,
       const absl::TimeZone default_timezone) const {
+    return JsonFhirStringToProtoWithoutValidating<R>(raw_json, default_timezone,
+                                                     PassThroughSanitizer());
+  }
+
+  // Same as the previous function, but accepting a JsonSanitizer to clean
+  // up JSON values before mapping them into proto.
+  template <typename R>
+  ::absl::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
+      const std::string& raw_json, const absl::TimeZone default_timezone,
+      const JsonSanitizer& sanitizer) const {
     R resource;
-    FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(raw_json, &resource,
-                                                      default_timezone, false));
+    FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(
+        raw_json, &resource, default_timezone, sanitizer, false));
     return resource;
   }
 

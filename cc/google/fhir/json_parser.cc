@@ -29,6 +29,7 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/str_format.h"
 #include "absl/synchronization/mutex.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/core_resource_registry.h"
@@ -186,11 +187,13 @@ absl::StatusOr<const FieldDescriptor*> GetContainedResourceField(
 class Parser {
  public:
   explicit Parser(const PrimitiveHandler* primitive_handler,
-                  absl::TimeZone default_timezone)
+                  absl::TimeZone default_timezone,
+                  const google::fhir::Parser::JsonSanitizer& sanitizer)
       : primitive_handler_(primitive_handler),
-        default_timezone_(default_timezone) {}
+        default_timezone_(default_timezone),
+        sanitizer_(sanitizer) {}
 
-  absl::Status MergeMessage(const Json::Value& value, Message* target) {
+  absl::Status MergeMessage(const Json::Value& value, Message* target) const {
     const Descriptor* target_descriptor = target->GetDescriptor();
     // TODO: handle this with an annotation
     if (target_descriptor->name() == "ContainedResource") {
@@ -237,7 +240,7 @@ class Parser {
   }
 
   absl::Status MergeContainedResource(const Json::Value& value,
-                                      Message* target) {
+                                      Message* target) const {
     // We handle contained resources in a special way, because despite
     // internally being a Oneof, it is not acually a choice-type in FHIR. The
     // JSON field name is just "resource", which doesn't give us any clues
@@ -256,7 +259,7 @@ class Parser {
   absl::Status MergeChoiceField(const Json::Value& json,
                                 const FieldDescriptor* choice_field,
                                 const std::string& field_name,
-                                Message* parent) {
+                                Message* parent) const {
     const Descriptor* choice_type_descriptor = choice_field->message_type();
     const auto& choice_type_field_map = GetFieldMap(choice_type_descriptor);
     std::string choice_field_name = field_name;
@@ -287,7 +290,7 @@ class Parser {
   // Note that we cannot just pass the field message, as this behaves
   // differently if the field has been previously set or not.
   absl::Status MergeField(const Json::Value& json, const FieldDescriptor* field,
-                          Message* parent) {
+                          Message* parent) const {
     const Reflection* parent_reflection = parent->GetReflection();
     // If the field is non-primitive make sure it hasn't been set yet.
     // Note that we allow primitive types to be set already, because FHIR
@@ -338,13 +341,9 @@ class Parser {
             std::unique_ptr<Message> parsed_value,
             ParseFieldValue(field, json.get(i, Json::Value::null), parent));
         if (existing_field_size > 0) {
-          Message* field_value =
-              parent_reflection->MutableRepeatedMessage(parent, field, i);
-          // This is the second time we've visited this field - once for
-          // extensions, and once for value. We therefore clear the
-          // PrimitiveHasNoValue extension so that isn't duplicated.
-          FHIR_RETURN_IF_ERROR(ClearPrimitiveHasNoValue(field_value));
-          field_value->MergeFrom(*parsed_value);
+          FHIR_RETURN_IF_ERROR(MergeAndClearPrimitiveWithNoValue(
+              *parsed_value,
+              parent_reflection->MutableRepeatedMessage(parent, field, i)));
         } else {
           parent_reflection->AddAllocatedMessage(parent, field,
                                                  parsed_value.release());
@@ -354,12 +353,8 @@ class Parser {
       FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> parsed_value,
                             ParseFieldValue(field, json, parent));
       if (parent_reflection->HasField(*parent, field)) {
-        Message* field_value = parent_reflection->MutableMessage(parent, field);
-        field_value->MergeFrom(*parsed_value);
-        // This is the second time we've visited this field - once for
-        // extensions, and once for value.  So, make sure to clear the
-        // PrimitiveHasNoValue extension.
-        FHIR_RETURN_IF_ERROR(ClearPrimitiveHasNoValue(field_value));
+        FHIR_RETURN_IF_ERROR(MergeAndClearPrimitiveWithNoValue(
+            *parsed_value, parent_reflection->MutableMessage(parent, field)));
       } else {
         parent_reflection->SetAllocatedMessage(parent, parsed_value.release(),
                                                field);
@@ -368,19 +363,25 @@ class Parser {
     return absl::OkStatus();
   }
 
-  absl::Status AddPrimitiveHasNoValueExtension(Message* message) {
+  absl::Status AddPrimitiveHasNoValueExtension(Message* message) const {
     Message* extension = message->GetReflection()->AddMessage(
         message, message->GetDescriptor()->FindFieldByName("extension"));
     return BuildHasNoValueExtension(extension);
   }
 
-  absl::Status ClearPrimitiveHasNoValue(Message* message) {
+  absl::Status MergeAndClearPrimitiveWithNoValue(
+      const Message& parsed_value, Message* field_to_modify) const {
+    field_to_modify->MergeFrom(parsed_value);
+    // This is the second time we've visited this field - once for
+    // extensions, and once for value.  So, make sure to clear the
+    // PrimitiveHasNoValue extension.
     return extensions_lib::ClearExtensionsWithUrl(
-        primitives_internal::kPrimitiveHasNoValueUrl, message);
+        primitives_internal::kPrimitiveHasNoValueUrl, field_to_modify);
   }
 
   absl::StatusOr<std::unique_ptr<Message>> ParseFieldValue(
-      const FieldDescriptor* field, const Json::Value& json, Message* parent) {
+      const FieldDescriptor* field, const Json::Value& json,
+      Message* parent) const {
     if (field->type() != FieldDescriptor::Type::TYPE_MESSAGE) {
       return InvalidArgumentError(
           absl::StrCat("Error in FHIR proto definition: Field ",
@@ -399,17 +400,26 @@ class Parser {
                                ->GetMessageFactory()
                                ->GetPrototype(field->message_type())
                                ->New());
-      auto status = MergeValue(json, target.get());
-      if (!status.ok()) {
+      absl::Status merge_status;
+
+      // Sanitize JSON value depending on the type of JSON value.
+      if (json.isString()) {
+        std::string val = json.asString();
+        FHIR_RETURN_IF_ERROR(sanitizer_.SanitizeStringField(field, val));
+        merge_status = MergeValue(Json::Value(val), target.get());
+      } else {
+        merge_status = MergeValue(json, target.get());
+      }
+      if (!merge_status.ok()) {
         return InvalidArgumentError(absl::StrCat("Error parsing field ",
                                                  field->json_name(), ": ",
-                                                 status.message()));
+                                                 merge_status.message()));
       }
       return std::move(target);
     }
   }
 
-  absl::Status MergeValue(const Json::Value& json, Message* target) {
+  absl::Status MergeValue(const Json::Value& json, Message* target) const {
     if (IsPrimitive(target->GetDescriptor())) {
       if (json.isObject()) {
         // This is a primitive type extension.
@@ -444,6 +454,7 @@ class Parser {
  private:
   const PrimitiveHandler* primitive_handler_;
   const absl::TimeZone default_timezone_;
+  const google::fhir::Parser::JsonSanitizer& sanitizer_;
 };
 
 absl::StatusOr<Json::Value> ParseJsonValue(const std::string& raw_json) {
@@ -501,6 +512,14 @@ const LazyRE2& GetDecimalRegex() {
 absl::Status Parser::MergeJsonFhirStringIntoProto(
     const std::string& raw_json, Message* target,
     const absl::TimeZone default_timezone, const bool validate) const {
+  return MergeJsonFhirStringIntoProto(raw_json, target, default_timezone,
+                                      PassThroughSanitizer(), validate);
+}
+
+absl::Status Parser::MergeJsonFhirStringIntoProto(
+    const std::string& raw_json, Message* target,
+    const absl::TimeZone default_timezone, const JsonSanitizer& sanitizer,
+    const bool validate) const {
   std::string mutable_raw_json = raw_json;
   // FHIR JSON format stores decimals as unquoted rational numbers.  This is
   // problematic, because their representation could change when they are
@@ -522,7 +541,7 @@ absl::Status Parser::MergeJsonFhirStringIntoProto(
     FHIR_ASSIGN_OR_RETURN(value, internal::ParseJsonValue(mutable_raw_json));
   }
 
-  internal::Parser parser{primitive_handler_, default_timezone};
+  internal::Parser parser{primitive_handler_, default_timezone, sanitizer};
 
   // If the target is a profiled resource, first parse to the base resource,
   // and then profile to the target type.
