@@ -79,9 +79,14 @@ def read_proto(filename: str, proto_cls: Type[_T]) -> _T:
   Returns:
     The protobuf message in the file.
   """
-  # TODO Make the read_proto function independent of any delimiter
-  # path after we move to more centralized testing of version types.
-  return read_protos(filename, proto_cls)[0]
+  filepath = _fhir_filepath_from(filename)
+  proto = proto_cls()
+  raw_proto = ''
+  with open(filepath, 'r', encoding='utf-8') as f:
+    raw_proto = f.read()
+    text_format.Parse(raw_proto, proto)
+
+  return proto
 
 
 def read_stu3_json(filename: str, delimiter: Optional[str] = None) -> List[str]:
