@@ -15,16 +15,24 @@
 package com.google.fhir.protogen;
 
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.stream.Collectors.toList;
+import static org.junit.Assert.assertThrows;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations.FhirVersion;
+import com.google.fhir.proto.ElementData;
 import com.google.fhir.proto.Extensions;
+import com.google.fhir.proto.FieldRestriction;
 import com.google.fhir.proto.PackageInfo;
+import com.google.fhir.proto.Profile;
 import com.google.fhir.proto.Profiles;
+import com.google.fhir.proto.ReferenceRestriction;
 import com.google.fhir.proto.Terminologies;
 import com.google.fhir.r4.core.Bundle;
+import com.google.fhir.r4.core.ElementDefinition;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.protobuf.Message;
 import com.google.protobuf.TextFormat;
@@ -32,6 +40,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -218,5 +227,83 @@ public final class ProfileGeneratorTest {
                 loadTerminologiesProto(R4_TESTDATA_DIR + "test_terminologies.prototxt"));
     String output = jsonPrinter.print(terminologies).trim();
     assertThat(output).isEqualTo(goldenDefinition);
+  }
+
+  @Test
+  public void testReferenceRestriction_referenceBeforeDefine_validType() throws Exception {
+    Profiles profiles =
+        Profiles.newBuilder()
+            .addProfile(
+                Profile.newBuilder()
+                    .setBaseUrl("http://hl7.org/fhir/StructureDefinition/Observation")
+                    .addRestriction(
+                        FieldRestriction.newBuilder()
+                            .setFieldId("Observation.subject")
+                            .setReferenceRestriction(
+                                ReferenceRestriction.newBuilder()
+                                    .addAllowed("http://test_patient_url"))))
+            .addProfile(
+                Profile.newBuilder()
+                    .setBaseUrl("http://hl7.org/fhir/StructureDefinition/Patient")
+                    .setElementData(
+                        ElementData.newBuilder().setUrlOverride("http://test_patient_url")))
+            .build();
+
+    ProfileGenerator generator =
+        new ProfileGenerator(
+            loadPackageInfoProto(R4_TESTDATA_DIR + "test_package_info.prototxt"),
+            ImmutableList.of(
+                loadR4FhirStructureDefinition("StructureDefinition-Observation.json"),
+                loadR4FhirStructureDefinition("StructureDefinition-Patient.json")),
+            LocalDate.now(ZoneId.of("UTC")));
+    Bundle bundle = generator.generateProfiles(profiles);
+
+    StructureDefinition observationDefinition =
+        bundle.getEntry(0).getResource().getStructureDefinition();
+
+    List<ElementDefinition> observationSubject =
+        observationDefinition.getSnapshot().getElementList().stream()
+            .filter(element -> element.getId().getValue().equals("Observation.subject"))
+            .collect(toList());
+
+    assertThat(observationSubject).hasSize(1);
+    assertThat(observationSubject.get(0).getType(0).getTargetProfile(0).getValue())
+        .isEqualTo("http://test_patient_url");
+  }
+
+  @Test
+  public void testReferenceRestriction_referenceBeforeDefine_invalidType() throws Exception {
+    Profiles profiles =
+        Profiles.newBuilder()
+            .addProfile(
+                Profile.newBuilder()
+                    .setBaseUrl("http://hl7.org/fhir/StructureDefinition/Observation")
+                    .addRestriction(
+                        FieldRestriction.newBuilder()
+                            .setFieldId("Observation.subject")
+                            .setReferenceRestriction(
+                                ReferenceRestriction.newBuilder()
+                                    .addAllowed("http://test_medication_url"))))
+            .addProfile(
+                Profile.newBuilder()
+                    .setBaseUrl("http://hl7.org/fhir/StructureDefinition/Medication")
+                    .setElementData(
+                        ElementData.newBuilder().setUrlOverride("http://test_medication_url")))
+            .build();
+
+    ProfileGenerator generator =
+        new ProfileGenerator(
+            loadPackageInfoProto(R4_TESTDATA_DIR + "test_package_info.prototxt"),
+            ImmutableList.of(
+                loadR4FhirStructureDefinition("StructureDefinition-Observation.json"),
+                loadR4FhirStructureDefinition("StructureDefinition-Medication.json")),
+            LocalDate.now(ZoneId.of("UTC")));
+
+    // Observation.subject cannot refer to a Medication, which http://test_medication_url is a
+    // profile of.
+    IllegalArgumentException e =
+        assertThrows(IllegalArgumentException.class, () -> generator.generateProfiles(profiles));
+
+    assertThat(e).hasMessageThat().contains("Invalid ReferenceRestriction");
   }
 }

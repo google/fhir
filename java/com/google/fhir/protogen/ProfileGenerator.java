@@ -17,6 +17,7 @@ package com.google.fhir.protogen;
 import static com.google.fhir.protogen.GeneratorUtils.getElementById;
 import static com.google.fhir.protogen.GeneratorUtils.getOptionalElementById;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 import com.google.common.base.Ascii;
 import com.google.common.base.Splitter;
@@ -94,6 +95,13 @@ final class ProfileGenerator {
   private final PackageInfo packageInfo;
   private final TerminologyGenerator terminologyGenerator;
   private final Map<String, StructureDefinition> urlToStructDefMap;
+
+  /**
+   * Map from StructureDefintion URL to parent StructureDefinition URL. This abstraction allows
+   * looking up relationships even when full StructureDefinitions haven't been generated yet.
+   */
+  private final Map<String, String> urlToParentMap;
+
   private final Map<String, StructureDefinition> idToBaseStructDefMap;
   private final DateTime creationDateTime;
   private final String keyPrefix;
@@ -130,6 +138,14 @@ final class ProfileGenerator {
             .collect(Collectors.toMap(def -> def.getId().getValue(), f -> f));
     this.creationDateTime = GeneratorUtils.buildCreationDateTime(creationTime);
 
+    this.urlToParentMap =
+        knownTypesList.stream()
+            // Don't include base resources since they have no parent resource.
+            .filter(
+                def -> def.getDerivation().getValue() == TypeDerivationRuleCode.Value.CONSTRAINT)
+            .collect(
+                toMap(def -> def.getUrl().getValue(), def -> def.getBaseDefinition().getValue()));
+
     this.terminologyGenerator = new TerminologyGenerator(packageInfo, creationTime);
     this.keyPrefix = keyPrefix;
   }
@@ -138,6 +154,14 @@ final class ProfileGenerator {
     Bundle.Builder bundle =
         Bundle.newBuilder()
             .setType(Bundle.TypeCode.newBuilder().setValue(BundleTypeCode.Value.COLLECTION));
+
+    this.urlToParentMap.putAll(
+        profiles.getProfileList().stream()
+            .collect(
+                toMap(
+                    profile -> getStructureDefinitionUrl(profile.getElementData()),
+                    Profile::getBaseUrl)));
+
     for (Profile profile : profiles.getProfileList()) {
       StructureDefinition structDef = makeProfile(profile);
       bundle.addEntry(
@@ -205,14 +229,13 @@ final class ProfileGenerator {
     for (CodeableConceptSlice codeableConceptSlice : profile.getCodeableConceptSliceList()) {
       // Make sure there is a valid CodeableConcept field to slice.
       String codeableConceptFieldId = codeableConceptSlice.getFieldId();
-      getOptionalElementById(codeableConceptFieldId, elementList)
-          .orElseThrow(
-              () ->
-                  new IllegalArgumentException(
-                      "Unable to locate CodeableConcept field "
-                          + codeableConceptFieldId
-                          + " for profile "
-                          + elementData.getName()));
+      if (!getOptionalElementById(codeableConceptFieldId, elementList).isPresent()) {
+        throw new IllegalArgumentException(
+            "Unable to locate CodeableConcept field "
+                + codeableConceptFieldId
+                + " for profile "
+                + elementData.getName());
+      }
       // The slicing directive appears on the Coding element within CodeableConcept.
       // However, since the coding is a subfield of CodeableConcept, it does not appear on the base
       // element list.
@@ -677,13 +700,14 @@ final class ProfileGenerator {
             || allowedReferenceTargets.contains(url)) {
       return true;
     }
-    StructureDefinition structDef = getStructDefForUrl(url);
-    while (structDef.getDerivation().getValue() == TypeDerivationRuleCode.Value.CONSTRAINT) {
-      String parentUrl = structDef.getBaseDefinition().getValue();
+    // Check if any of the types in this type's inheritence path are allowed types.
+    // This is assumed to be acyclical.
+    String parentUrl = urlToParentMap.get(url);
+    while (parentUrl != null) {
       if (allowedReferenceTargets.contains(parentUrl)) {
         return true;
       }
-      structDef = getStructDefForUrl(parentUrl);
+      parentUrl = urlToParentMap.get(parentUrl);
     }
     return false;
   }
