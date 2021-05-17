@@ -23,6 +23,7 @@
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/plan_definition.pb.h"
 
 namespace google {
 namespace fhir {
@@ -47,8 +48,11 @@ TYPED_TEST_SUITE(FhirGeneratorTest, TesEnvs);
 
 TYPED_TEST(FhirGeneratorTest, TestAllRootFieldsSet) {
   // Create a random value provider that fills all non-recursive fields.
-  FhirGenerator generator(absl::make_unique<RandomValueProvider>(1.0),
+  RandomValueProvider::Params params = RandomValueProvider::DefaultParams();
+  params.optional_set_probability = 1;
+  FhirGenerator generator(absl::make_unique<RandomValueProvider>(params),
                           TypeParam::PrimitiveHandler::GetInstance());
+
   typename TypeParam::Patient patient;
   FHIR_ASSERT_OK(generator.Fill(&patient));
 
@@ -64,7 +68,9 @@ TYPED_TEST(FhirGeneratorTest, TestAllRootFieldsSet) {
 
 TYPED_TEST(FhirGeneratorTest, TestOnlyRequiredAndIdFieldsSet) {
   // Create a random value provider that fills only required fields.
-  FhirGenerator generator(absl::make_unique<RandomValueProvider>(0.0),
+  RandomValueProvider::Params params = RandomValueProvider::DefaultParams();
+  params.optional_set_probability = 0;
+  FhirGenerator generator(absl::make_unique<RandomValueProvider>(params),
                           TypeParam::PrimitiveHandler::GetInstance());
   typename TypeParam::Patient patient;
   FHIR_ASSERT_OK(generator.Fill(&patient));
@@ -82,17 +88,39 @@ TYPED_TEST(FhirGeneratorTest, TestOnlyRequiredAndIdFieldsSet) {
 // Test to ensure FHIR references use generic FHIR identifiers
 // when the target resource type isn't known.
 TEST(FhirGeneratorFieldsTest, TestUntypedReference) {
-  // Use the R4 Observation focus field since it is a
+  // Use the R4 Observation focus field since it has a
   // Reference(Any) field.
   ::google::fhir::r4::core::Observation observation;
+  RandomValueProvider::Params params = RandomValueProvider::DefaultParams();
+  params.optional_set_probability = 1;
   FhirGenerator generator(
-      absl::make_unique<RandomValueProvider>(1.0),
+      absl::make_unique<RandomValueProvider>(params),
       ::google::fhir::r4::R4PrimitiveHandler::GetInstance());
 
   FHIR_ASSERT_OK(generator.Fill(&observation));
   ASSERT_GT(observation.focus_size(), 0);
   ASSERT_FALSE(observation.focus(0).has_uri());
   ASSERT_TRUE(observation.focus(0).has_identifier());
+}
+
+TEST(RandomValueProviderTest, TestMaxRecursionDepth) {
+  RandomValueProvider::Params params = RandomValueProvider::DefaultParams();
+  params.optional_set_probability = 1;
+  // Disable decay in probability due to recursion
+  params.optional_set_ratio_per_level = 1;
+  // ... but max out at 2 levels deep.
+  params.max_recursion_depth = 2;
+  FhirGenerator generator(
+      absl::make_unique<RandomValueProvider>(params),
+      ::google::fhir::r4::R4PrimitiveHandler::GetInstance());
+
+  ::google::fhir::r4::core::PlanDefinition plan_definition;
+
+  FHIR_ASSERT_OK(generator.Fill(&plan_definition));
+
+  ASSERT_GT(plan_definition.action_size(), 0);
+  ASSERT_GT(plan_definition.action(0).action_size(), 0);
+  ASSERT_EQ(plan_definition.action(0).action(0).action_size(), 0);
 }
 
 }  // namespace

@@ -66,15 +66,19 @@ std::string RandomString(absl::string_view legal_characters,
 
 bool RandomValueProvider::ShouldFill(const google::protobuf::FieldDescriptor* field,
                                      int recursion_depth) {
-  return absl::Bernoulli(bitgen_, optional_set_probability_ *
-                                      std::pow(optional_set_ratio_per_level_,
-                                               recursion_depth));  // NOLINT
+  if (recursion_depth >= params_.max_recursion_depth) {
+    return false;
+  }
+  return absl::Bernoulli(bitgen_,
+                         params_.optional_set_probability *
+                             std::pow(params_.optional_set_ratio_per_level,
+                                      recursion_depth));  // NOLINT
 }
 
 int RandomValueProvider::GetNumRepeated(
     const google::protobuf::FieldDescriptor* descriptor, int recursion_depth) {
-  return absl::Uniform(absl::IntervalClosed, bitgen_, min_repeated_,
-                       max_repeated_);
+  return absl::Uniform(absl::IntervalClosed, bitgen_, params_.min_repeated,
+                       params_.max_repeated);
 }
 
 const google::protobuf::FieldDescriptor* RandomValueProvider::SelectOneOf(
@@ -95,22 +99,23 @@ std::string RandomValueProvider::GetBase64Binary(
 
 int RandomValueProvider::GetInteger(const google::protobuf::FieldDescriptor* field,
                                     int recursion_depth) {
-  return absl::Uniform<int>(bitgen_, low_value_, high_value_);
+  return absl::Uniform<int>(bitgen_, params_.low_value, params_.high_value);
 }
 
 std::string RandomValueProvider::GetString(const google::protobuf::FieldDescriptor* field,
                                            int recursion_depth) {
-  return RandomString(kLegalStringCharacters, 1, max_string_length_, bitgen_);
+  return RandomString(kLegalStringCharacters, 1, params_.max_string_length,
+                      bitgen_);
 }
 
 int RandomValueProvider::GetPositiveInt(const google::protobuf::FieldDescriptor* field,
                                         int recursion_depth) {
-  return absl::Uniform<int>(bitgen_, 1, high_value_);
+  return absl::Uniform<int>(bitgen_, 1, params_.high_value);
 }
 
 int RandomValueProvider::GetUnsignedInt(const google::protobuf::FieldDescriptor* field,
                                         int recursion_depth) {
-  return absl::Uniform<int>(bitgen_, 0, high_value_);
+  return absl::Uniform<int>(bitgen_, 0, params_.high_value);
 }
 
 std::string RandomValueProvider::GetDecimal(

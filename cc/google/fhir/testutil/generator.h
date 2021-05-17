@@ -105,8 +105,9 @@ class ValueProvider {
 // Provides random FHIR values for fuzzing or load testing needs.
 class RandomValueProvider : public ValueProvider {
  public:
-  // Constructs a random value provider. Each argument has a reasonable default
-  // so this works out of the box, but users may adjust for special needs.
+  // Parameters object to pass to the constructor to govern for field value
+  // generation. the `DefaultParams` function can be used to get reasonable
+  // values for most use cases.
   //
   // - optional_set_probability is the probability an optional field will
   //     be set. If the field is in a recursive structure, that probability
@@ -127,19 +128,38 @@ class RandomValueProvider : public ValueProvider {
   // - low_value is the low range for randomly generated numbers.
   //
   // - max_string_length defines the maximum length of generated strings
-  explicit RandomValueProvider(double optional_set_probability = 0.75,
-                               double optional_set_ratio_per_level = 0.1,
-                               int min_repeated = 1, int max_repeated = 2,
-                               int high_value = 10000000,
-                               int low_value = -10000000,
-                               int max_string_length = 20)
-      : optional_set_probability_(optional_set_probability),
-        optional_set_ratio_per_level_(optional_set_ratio_per_level),
-        min_repeated_(min_repeated),
-        max_repeated_(max_repeated),
-        high_value_(high_value),
-        low_value_(low_value),
-        max_string_length_(max_string_length) {}
+  //
+  // - max_recursion_depth is the max depth that recursive fields will be
+  //   populated.  This should be a positive integer, with 1 meaning
+  //   "root only, no recursion".  Note optional_set_ratio_per_level causes a
+  //   natural decay, so this can be set relatively high.
+  struct Params {
+    double optional_set_probability;
+    double optional_set_ratio_per_level;
+    int min_repeated;
+    int max_repeated;
+    int high_value;
+    int low_value;
+    int max_string_length;
+    int max_recursion_depth;
+  };
+
+  static Params DefaultParams() {
+    return {.optional_set_probability = 0.75,
+            .optional_set_ratio_per_level = 0.1,
+            .min_repeated = 1,
+            .max_repeated = 2,
+            .high_value = 10000000,
+            .low_value = -10000000,
+            .max_string_length = 20,
+            .max_recursion_depth = 10};
+  }
+
+  explicit RandomValueProvider(const Params& params)
+      : params_(params) {}
+
+  RandomValueProvider()
+      : RandomValueProvider(DefaultParams()) {}
 
   bool ShouldFill(const ::google::protobuf::FieldDescriptor*,
                   int recursion_depth) override;
@@ -212,13 +232,7 @@ class RandomValueProvider : public ValueProvider {
   std::string GetFullDate();
 
   absl::BitGen bitgen_;
-  double optional_set_probability_;
-  double optional_set_ratio_per_level_;
-  int min_repeated_;
-  int max_repeated_;
-  int high_value_;
-  int low_value_;
-  int max_string_length_;
+  const Params params_;
 };
 
 // Generates FHIR data. This is generally used for random values for
