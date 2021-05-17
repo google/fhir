@@ -31,6 +31,7 @@ readonly MYPY_PROTOBUF_VERSION='1.23.0'
 readonly PROTOBUF_URL='https://github.com/protocolbuffers/protobuf/releases/download'
 readonly PROTOC_SHA='4a3b26d1ebb9c1d23e933694a6669295f6a39ddc64c3db2adf671f0a6026f82e'
 readonly PROTOC_VERSION='3.13.0'
+readonly PYENV_VERSION='1.2.26'
 readonly PYTHON_BUILD_VERSION='3.9.0'
 readonly PYTHON_VERSIONS=('3.6.13' '3.7.9' '3.8.6' '3.9.0')
 
@@ -113,7 +114,8 @@ function initialize_workspace() {
   # pyenv
   print_info 'Installing pyenv...'
   local -r pyenv_root="${workspace}/.pyenv"
-  git clone 'https://github.com/pyenv/pyenv.git' "${pyenv_root}"
+  git clone 'https://github.com/pyenv/pyenv.git' --branch "${PYENV_VERSION}" \
+    "${pyenv_root}"
   export PATH="${pyenv_root}/shims:${pyenv_root}/bin:${PATH}"
   eval "$(pyenv init -)"
 
