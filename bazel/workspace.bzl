@@ -13,7 +13,7 @@ def fhirproto_workspace(core_lib = False):
             "com.fasterxml.jackson.core:jackson-databind:2.9.5",
             "com.fasterxml.jackson.core:jackson-annotations:2.9.5",
             "com.google.cloud:google-cloud-bigquery:1.38.0",
-            "com.google.code.gson:gson:2.8.5",
+            "com.google.code.gson:gson:2.8.6",
             "com.google.errorprone:error_prone_annotations:2.3.3",
             "com.google.guava:guava:30.1-jre",
             "com.google.guava:guava-testlib:30.1-jre",

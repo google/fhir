@@ -118,8 +118,7 @@ public final class PrimitiveWrappersTest {
 
   private static Message stringToProto(String jsonString, Message.Builder builder)
       throws InvalidFhirException {
-    return PrimitiveWrappers.parseAndWrap(
-            new JsonParser().parse(jsonString), builder, TIMEZONE)
+    return PrimitiveWrappers.parseAndWrap(JsonParser.parseString(jsonString), builder, TIMEZONE)
         .getWrapped();
   }
 

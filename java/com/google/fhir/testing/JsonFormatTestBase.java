@@ -162,8 +162,8 @@ public abstract class JsonFormatTestBase {
   }
 
   protected String canonicalizeJson(String json) {
-    JsonParser gsonParser = new JsonParser();
-    JsonElement testJson = canonicalize(gsonParser.parse(new JsonReader(new StringReader(json))));
+    JsonElement testJson =
+        canonicalize(JsonParser.parseReader(new JsonReader(new StringReader(json))));
     return testJson.toString();
   }
 

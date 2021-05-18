@@ -614,7 +614,6 @@ public final class JsonFormat {
    * control the parser behavior.
    */
   public static final class Parser {
-    private final JsonParser jsonParser = new JsonParser();
     private final ProtoGenTransformer protoGenTransformer;
     private final ZoneId defaultTimeZone;
 
@@ -672,7 +671,7 @@ public final class JsonFormat {
     public <T extends Message.Builder> T merge(final Reader input, final T builder)
         throws InvalidFhirException {
       JsonReader reader = new JsonReader(input);
-      JsonElement json = jsonParser.parse(reader);
+      JsonElement json = JsonParser.parseReader(reader);
       if (json.isJsonObject()) {
         mergeMessage(json.getAsJsonObject(), builder);
       } else {
