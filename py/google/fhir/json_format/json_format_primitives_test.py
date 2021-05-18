@@ -12,226 +12,278 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests json primitives in //com_google_fhir/testdata/primitives."""
-import os
-from typing import Any, Type, cast
 
+"""Tests json primitives in //com_google_fhir/testdata/primitives."""
+
+import abc
+import os
+from typing import Any, List, Type, cast
+
+from google.protobuf import descriptor
 from google.protobuf import message
 from absl.testing import absltest
-from absl.testing import parameterized
 from proto.google.fhir.proto.r4 import primitive_test_suite_pb2
 from proto.google.fhir.proto.r4.core import datatypes_pb2
 from google.fhir import extensions
 from google.fhir import fhir_errors
 from google.fhir.r4 import json_format
-from google.fhir.r4 import primitive_handler
 from google.fhir.testing import protobuf_compare
 from google.fhir.testing import testdata_utils
+from google.fhir.utils import annotation_utils
+from google.fhir.utils import fhir_types
+from google.fhir.utils import path_utils
 from google.fhir.utils import proto_utils
 
 _PRIMITIVE_TESTS_PATH = os.path.join('testdata', 'primitives')
 
 
-# TODO: Parameterize on version types (like STU3, R4) and
-# parameterize on primitive datatypes too.
-class PrimitivesFormatTest(protobuf_compare.ProtoAssertions,
-                           parameterized.TestCase):
+class _PrimitiveData:
+  """Stores data needed for each primitive test.
 
-  def setUp(self):
-    super().setUp()
+  Attributes:
+    name: Name of the primitive being tested.
+    field_name: Name of the proto field in valid_pairs containing the primitive.
+    field_type: The message class of the primitive.
+  """
+  name: str
+  field_name: str
+  field_type: Type[message.Message]
 
-    self.primitive_handler = primitive_handler.PrimitiveHandler()
+  def __init__(self, name: str, field_name: str,
+               field_type: Type[message.Message]):
+    self.name = name
+    self.field_name = field_name
+    self.field_type = field_type
 
-  def get_test_suite(
-      self, file_name: str) -> primitive_test_suite_pb2.PrimitiveTestSuite:
-    file_path = os.path.join(_PRIMITIVE_TESTS_PATH, file_name + '.prototxt')
-    return testdata_utils.read_proto(
-        file_path, primitive_test_suite_pb2.PrimitiveTestSuite)
 
-  def _set_primitive_has_no_value_extension(self, primitive: message.Message):
-    """Sets the PrimitiveHasNoValue FHIR extension on the provided primitive."""
-    extensions_field = primitive.DESCRIPTOR.fields_by_name['extension']
-    primitive_has_no_value = extensions.create_primitive_has_no_value(
-        extensions_field.message_type)
-    proto_utils.set_value_at_field(primitive, 'extension',
-                                   [primitive_has_no_value])
+class _Base():
 
-  @parameterized.named_parameters(
-      ('_withBase64Binary', 'Base64Binary', 'base64_binary',
-       datatypes_pb2.Base64Binary),
-      ('_withBoolean', 'Boolean', 'boolean', datatypes_pb2.Boolean),
-      ('_withCanonical', 'Canonical', 'canonical', datatypes_pb2.Canonical),
-      ('_withCode', 'Code', 'code', datatypes_pb2.Code),
-      ('_withDate', 'Date', 'date', datatypes_pb2.Date),
-      ('_withDateTime', 'DateTime', 'date_time', datatypes_pb2.DateTime),
-      ('_withDecimal', 'Decimal', 'decimal', datatypes_pb2.Decimal),
-      ('_withID', 'Id', 'id', datatypes_pb2.Id),
-      ('_withInstant', 'Instant', 'instant', datatypes_pb2.Instant),
-      ('_withInteger', 'Integer', 'integer', datatypes_pb2.Integer),
-      ('_withMarkdown', 'Markdown', 'markdown', datatypes_pb2.Markdown),
-      ('_withOid', 'Oid', 'oid', datatypes_pb2.Oid),
-      ('_withPositiveInt', 'PositiveInt', 'positive_int',
-       datatypes_pb2.PositiveInt),
-      ('_WithString', 'String', 'string_proto', datatypes_pb2.String),
-      ('_WithTime', 'Time', 'time', datatypes_pb2.Time),
-      ('_withUnsignedInt', 'UnsignedInt', 'unsigned_int',
-       datatypes_pb2.UnsignedInt),
-      ('_withUri', 'Uri', 'uri', datatypes_pb2.Uri),
-      ('_withUrl', 'Url', 'url', datatypes_pb2.Url),
-      ('_withXhtml', 'Xhtml', 'xhtml', datatypes_pb2.Xhtml),
-  )
-  def test_valid_pairs(
-      self, file_name: str, field_name: str, field_type: Type[message.Message]):
-    test_suite = self.get_test_suite(file_name)
+  class JsonFormatPrimitivesTest(
+      protobuf_compare.ProtoAssertions,
+      absltest.TestCase,
+      metaclass=abc.ABCMeta):
+    """A base class for testing json primitives in a common directory.
 
-    for pair in test_suite.valid_pairs:
-      expected_proto = proto_utils.get_value_at_field(pair.proto, field_name)
-      expected_json = pair.json_string
+    Attributes:
+      datatypes_descriptor: The datatypes_pb2.DESCRIPTOR of the version under
+        test.
+      primitive_test_suite_class: The primitive_test_suite class (The actual
+        class, not an instance of it) of the version under test.
+      json_format: The json_format module of the version under test.
+    """
 
-      actual_json = json_format.print_fhir_to_json_string(expected_proto)
-      actual_proto = json_format.json_fhir_string_to_proto(
-          actual_json, field_type, default_timezone='Australia/Sydney')
+    @property
+    @abc.abstractproperty
+    def datatypes_descriptor(self) -> descriptor.FileDescriptor:
+      raise NotImplementedError(
+          'Subclasses *must* implement `datatypes_descriptor`')
 
-      self.assertEqual(expected_json, actual_json)
-      self.assertProtoEqual(expected_proto, actual_proto)
+    @property
+    @abc.abstractproperty
+    def primitive_test_suite_class(
+        self) -> Type[primitive_test_suite_pb2.PrimitiveTestSuite]:
+      raise NotImplementedError(
+          'Subclasses *must* implement `primitive_test_suite_class`')
 
-  @parameterized.named_parameters(
-      ('_withBase64Binary', 'Base64Binary', datatypes_pb2.Base64Binary),
-      ('_withBoolean', 'Boolean', datatypes_pb2.Boolean),
-      ('_withCanonical', 'Canonical', datatypes_pb2.Canonical),
-      ('_withCode', 'Code', datatypes_pb2.Code),
-      ('_withDate', 'Date', datatypes_pb2.Date),
-      ('_withDateTime', 'DateTime', datatypes_pb2.DateTime),
-      ('_withDecimal', 'Decimal', datatypes_pb2.Decimal),
-      ('_withID', 'Id', datatypes_pb2.Id),
-      ('_withInstant', 'Instant', datatypes_pb2.Instant),
-      ('_withInteger', 'Integer', datatypes_pb2.Integer),
-      ('_withMarkdown', 'Markdown', datatypes_pb2.Markdown),
-      ('_withOid', 'Oid', datatypes_pb2.Oid),
-      ('_withPositiveInt', 'PositiveInt', datatypes_pb2.PositiveInt),
-      ('_WithString', 'String', datatypes_pb2.String),
-      ('_WithTime', 'Time', datatypes_pb2.Time),
-      ('_withUnsignedInt', 'UnsignedInt', datatypes_pb2.UnsignedInt),
-      ('_withUri', 'Uri', datatypes_pb2.Uri),
-      ('_withUrl', 'Url', datatypes_pb2.Url),
-      ('_withXhtml', 'Xhtml', datatypes_pb2.Xhtml),
-  )
-  def test_invalid_json(self, file_name: str,
-                        field_type: Type[message.Message]):
-    test_suite = self.get_test_suite(file_name)
+    @property
+    @abc.abstractproperty
+    def json_format(self) -> Any:
+      raise NotImplementedError('Subclasses *must* implement `json_format`')
 
-    if not test_suite.invalid_json:
-      self.fail('Must have at least one invalid json example!')
+    def setUp(self):
+      super().setUp()
+      self.primitive_data_list = _get_list_of_primitive_data(
+          self.datatypes_descriptor)
 
-    for invalid_json in test_suite.invalid_json:
-      # Some of the invalid examples may cause non InvalidFhirError errors,
-      # which is acceptable.
-      with self.assertRaises(Exception):
-        _ = json_format.json_fhir_string_to_proto(invalid_json, field_type)
+    def _set_primitive_has_no_value_extension(self, primitive: message.Message):
+      """Sets the PrimitiveHasNoValue FHIR extension on the primitive."""
+      extensions_field = primitive.DESCRIPTOR.fields_by_name['extension']
+      primitive_has_no_value = extensions.create_primitive_has_no_value(
+          extensions_field.message_type)
+      proto_utils.set_value_at_field(primitive, 'extension',
+                                     [primitive_has_no_value])
 
-  @parameterized.named_parameters(
-      ('_withBase64Binary', 'Base64Binary'),
-      ('_withBoolean', 'Boolean'),
-      ('_withCanonical', 'Canonical'),
-      ('_withCode', 'Code'),
-      ('_withDate', 'Date'),
-      ('_withDateTime', 'DateTime'),
-      ('_withDecimal', 'Decimal'),
-      ('_withID', 'Id'),
-      ('_withInstant', 'Instant'),
-      ('_withInteger', 'Integer'),
-      ('_withMarkdown', 'Markdown'),
-      ('_withOid', 'Oid'),
-      ('_withPositiveInt', 'PositiveInt'),
-      ('_WithString', 'String'),
-      ('_WithTime', 'Time'),
-      ('_withUnsignedInt', 'UnsignedInt'),
-      ('_withUri', 'Uri'),
-      ('_withUrl', 'Url'),
-      ('_withXhtml', 'Xhtml'),
-  )
-  def test_invalid_protos(self, file_name: str):
-    test_suite = self.get_test_suite(file_name)
+    def test_valid_pairs(self):
+      for primitive_data in self.primitive_data_list:
 
-    if not (test_suite.invalid_protos or test_suite.no_invalid_protos_reason):
-      self.fail('Must have at least one invalid_proto or set '
-                'no_invalid_protos_reason.')
+        file_name = primitive_data.name
+        field_name = primitive_data.field_name
+        field_type = primitive_data.field_type
 
-    for invalid_proto in test_suite.invalid_protos:
-      with self.assertRaises(fhir_errors.InvalidFhirError):
-        _ = json_format.print_fhir_to_json_string(invalid_proto)
+        file_path = os.path.join(_PRIMITIVE_TESTS_PATH, file_name + '.prototxt')
+        test_suite = testdata_utils.read_proto(file_path,
+                                               self.primitive_test_suite_class)
 
-  @parameterized.named_parameters(
-      ('_withBase64Binary', datatypes_pb2.Base64Binary),
-      ('_withBoolean', datatypes_pb2.Boolean),
-      ('_withCanonical', datatypes_pb2.Canonical),
-      ('_withCode', datatypes_pb2.Code),
-      ('_withDate', datatypes_pb2.Date),
-      ('_withDateTime', datatypes_pb2.DateTime),
-      ('_withDecimal', datatypes_pb2.Decimal),
-      ('_withID', datatypes_pb2.Id),
-      ('_withInstant', datatypes_pb2.Instant),
-      ('_withInteger', datatypes_pb2.Integer),
-      ('_withMarkdown', datatypes_pb2.Markdown),
-      ('_withOid', datatypes_pb2.Oid),
-      ('_withPositiveInt', datatypes_pb2.PositiveInt),
-      ('_WithString', datatypes_pb2.String),
-      ('_WithTime', datatypes_pb2.Time),
-      ('_withUnsignedInt', datatypes_pb2.UnsignedInt),
-      ('_withUri', datatypes_pb2.Uri),
-      ('_withUrl', datatypes_pb2.Url),
-      # Xhtml cannot have extentions. It is always consdered to have a value.
-  )
-  def test_no_value_behaviour_valid(self, field_type: Type[message.Message]):
-    # It's ok to have no value if there's another extension present
-    # (Two extensions in total).
-    primitive_with_no_value = field_type()
+        for pair in test_suite.valid_pairs:
+          expected_proto = proto_utils.get_value_at_field(
+              pair.proto, field_name)
+          expected_json = pair.json_string
 
-    self._set_primitive_has_no_value_extension(primitive_with_no_value)
+          actual_json = self.json_format.print_fhir_to_json_string(
+              expected_proto)
+          actual_proto = self.json_format.json_fhir_string_to_proto(
+              actual_json, field_type, default_timezone='Australia/Sydney')
 
-    # Add arbitrary extension.
-    extensions_field = primitive_with_no_value.DESCRIPTOR.fields_by_name[
-        'extension']
-    extension = proto_utils.create_message_from_descriptor(
-        extensions_field.message_type)
-    cast(Any, extension).url.value = 'abcd'
-    cast(Any, extension).value.boolean.value = True
+          self.assertEqual(expected_json, actual_json)
+          self.assertProtoEqual(expected_proto, actual_proto)
 
-    proto_utils.append_value_at_field(primitive_with_no_value, 'extension',
-                                      extension)
-    _ = json_format.print_fhir_to_json_string(primitive_with_no_value)
+    def test_invalid_json(self):
+      for primitive_data in self.primitive_data_list:
 
-  @parameterized.named_parameters(
-      ('_withBase64Binary', datatypes_pb2.Base64Binary),
-      ('_withBoolean', datatypes_pb2.Boolean),
-      ('_withCanonical', datatypes_pb2.Canonical),
-      ('_withCode', datatypes_pb2.Code),
-      ('_withDate', datatypes_pb2.Date),
-      ('_withDateTime', datatypes_pb2.DateTime),
-      ('_withDecimal', datatypes_pb2.Decimal),
-      ('_withID', datatypes_pb2.Id),
-      ('_withInstant', datatypes_pb2.Instant),
-      ('_withInteger', datatypes_pb2.Integer),
-      ('_withMarkdown', datatypes_pb2.Markdown),
-      ('_withOid', datatypes_pb2.Oid),
-      ('_withPositiveInt', datatypes_pb2.PositiveInt),
-      ('_WithString', datatypes_pb2.String),
-      ('_WithTime', datatypes_pb2.Time),
-      ('_withUnsignedInt', datatypes_pb2.UnsignedInt),
-      ('_withUri', datatypes_pb2.Uri),
-      ('_withUrl', datatypes_pb2.Url),
-      # Xhtml cannot have extentions. It is always consdered to have a value.
-  )
-  def test_no_value_behaviour_invalid_if_no_other_extensions(
-      self, field_type: Type[message.Message]):
-    # It's invalid to have no extensions (other than the no-value extension) and
-    # no value.
-    primitive_with_no_value = field_type()
+        file_name = primitive_data.name
+        field_type = primitive_data.field_type
 
-    self._set_primitive_has_no_value_extension(primitive_with_no_value)
+        file_path = os.path.join(_PRIMITIVE_TESTS_PATH, file_name + '.prototxt')
+        test_suite = testdata_utils.read_proto(file_path,
+                                               self.primitive_test_suite_class)
 
-    with self.assertRaises(fhir_errors.InvalidFhirError):
-      _ = json_format.print_fhir_to_json_string(primitive_with_no_value)
+        if not test_suite.invalid_json:
+          self.fail('Must have at least one invalid json example!')
+
+        for invalid_json in test_suite.invalid_json:
+          # Some of the invalid examples may cause non InvalidFhirError errors,
+          # which is acceptable.
+          with self.assertRaises(Exception):
+            _ = self.json_format.json_fhir_string_to_proto(
+                invalid_json, field_type)
+
+    def test_invalid_protos(self):
+      for primitive_data in self.primitive_data_list:
+
+        file_name = primitive_data.name
+
+        file_path = os.path.join(_PRIMITIVE_TESTS_PATH, file_name + '.prototxt')
+        test_suite = testdata_utils.read_proto(file_path,
+                                               self.primitive_test_suite_class)
+
+        if not (test_suite.invalid_protos or
+                test_suite.no_invalid_protos_reason):
+          self.fail('Must have at least one invalid_proto or set '
+                    'no_invalid_protos_reason.')
+
+        for invalid_proto in test_suite.invalid_protos:
+          with self.assertRaises(fhir_errors.InvalidFhirError):
+            _ = self.json_format.print_fhir_to_json_string(invalid_proto)
+
+    def test_no_value_behaviour_valid(self):
+      for primitive_data in self.primitive_data_list:
+
+        file_name = primitive_data.name
+        field_type = primitive_data.field_type
+
+        # Xhtml cannot have extentions. It is always consdered to have a value.
+        # So we are not testing it here.
+        if file_name == 'Xhtml':
+          continue
+
+        # It's ok to have no value if there's at least another extension present
+        # (More than one extension).
+        primitive_with_no_value = field_type()
+
+        self._set_primitive_has_no_value_extension(primitive_with_no_value)
+
+        # Add arbitrary extension.
+        extensions_field = primitive_with_no_value.DESCRIPTOR.fields_by_name[
+            'extension']
+        extension = proto_utils.create_message_from_descriptor(
+            extensions_field.message_type)
+        cast(Any, extension).url.value = 'abcd'
+        cast(Any, extension).value.boolean.value = True
+
+        proto_utils.append_value_at_field(primitive_with_no_value, 'extension',
+                                          extension)
+        _ = self.json_format.print_fhir_to_json_string(primitive_with_no_value)
+
+    def test_no_value_behaviour_invalid_if_no_other_extensions(self):
+
+      for primitive_data in self.primitive_data_list:
+
+        file_name = primitive_data.name
+        field_type = primitive_data.field_type
+
+        # Xhtml cannot have extentions. It is always consdered to have a value.
+        # So we are not testing it here.
+        if file_name == 'Xhtml':
+          continue
+
+        # It's invalid to have no extensions (other than the no-value extension)
+        # and no value.
+        primitive_with_no_value = field_type()
+
+        self._set_primitive_has_no_value_extension(primitive_with_no_value)
+
+        with self.assertRaises(fhir_errors.InvalidFhirError):
+          _ = self.json_format.print_fhir_to_json_string(
+              primitive_with_no_value)
+
+
+class R4JsonFormatPrimitivesTest(_Base.JsonFormatPrimitivesTest):
+
+  @property
+  def datatypes_descriptor(self) -> descriptor.FileDescriptor:
+    return datatypes_pb2.DESCRIPTOR
+
+  @property
+  def primitive_test_suite_class(
+      self) -> Type[primitive_test_suite_pb2.PrimitiveTestSuite]:
+    return primitive_test_suite_pb2.PrimitiveTestSuite
+
+  @property
+  def json_format(self) -> Any:
+    return json_format
+
+
+def _get_list_of_primitive_data(
+    datatypes_descriptor: descriptor.FileDescriptor,) -> List[_PrimitiveData]:
+  """Returns a list of data needed to test primitives.
+
+  Args:
+    datatypes_descriptor: The current FHIR version proto descriptor, (e.g
+      r4.core.datatypes_pb2.DESCRIPTOR or stu3.datatypes_pb2.DESCRIPTOR) that we
+      want to test.
+  Returns: A list of _PrimitiveData for all the primitves that need to be
+    tested.
+  """
+  all_messages_map: dict[
+      str, descriptor.Descriptor] = datatypes_descriptor.message_types_by_name
+
+  primitive_data_list: List[_PrimitiveData] = []
+
+  for name, msg_descriptor in all_messages_map.items():
+    if _is_only_primitive(name, msg_descriptor):
+
+      field_name = _normalize_field_name(
+          path_utils.camel_case_to_snake_case(name))
+
+      primtive_data = _PrimitiveData(
+          name, field_name,
+          proto_utils.get_message_class_from_descriptor(msg_descriptor))
+
+      primitive_data_list.append(primtive_data)
+
+  return primitive_data_list
+
+
+def _is_only_primitive(name: str,
+                       msg_descriptor: descriptor.Descriptor) -> bool:
+  """Returns if the message specified is only a primitive and nothing else."""
+  return (
+      annotation_utils.is_primitive_type(msg_descriptor)
+      # TODO: Add Uuid primitive suite.
+      and name != 'Uuid'
+      # TODO: Remove "ReferenceId" handling once ReferenceId
+      # is no longer (erroneously) marked as a primitive.
+      and name != 'ReferenceId'
+      # STU3 profiles of codes are marked as primitive types.
+      and not fhir_types.is_profile_of_code(msg_descriptor))
+
+
+def _normalize_field_name(field_name: str) -> str:
+  # There is an exception where the corresponding proto field for
+  # `String` is `string_proto` and not `string`.
+  if field_name == 'string':
+    return 'string_proto'
+  return field_name
 
 
 if __name__ == '__main__':
