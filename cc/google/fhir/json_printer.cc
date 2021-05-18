@@ -173,8 +173,10 @@ class Printer {
     for (size_t i = 0; i < set_fields.size(); i++) {
       const FieldDescriptor* field = set_fields[i];
       if (json_format_ == kFormatAnalytic && field->name() == "id" &&
-          !IsResource(proto.GetDescriptor())) {
-        // Skip over id fields at levels lower than resource in analytic mode.
+          !google::fhir::IsId(field->message_type())) {
+        // Skip over submessage id fields.
+        // Resource-level ids use the Id FHIR data type, but ids on sub-messages
+        // use Strings.
         continue;
       }
       // Choice types in proto form have a containing message that is not part
