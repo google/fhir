@@ -251,3 +251,23 @@ profile {
     field_id: "Observation.referenceRange.text"
   }
 }
+
+
+profile {
+  element_data {
+    name: "TestEncounterWithProfiledIdentifier"
+  }
+  base_url: "http://hl7.org/fhir/StructureDefinition/Encounter"
+
+  codeable_concept_slice {
+    field_id: "Encounter.identifier.type"
+    coding_slice {
+      element_data {
+        name: "act"
+      }
+      code_data {
+        system: "http://terminology.hl7.org/CodeSystem/v3-ActPriority"
+      }
+    }
+  }
+}

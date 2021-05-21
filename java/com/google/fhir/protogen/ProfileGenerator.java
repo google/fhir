@@ -227,15 +227,6 @@ final class ProfileGenerator {
     }
 
     for (CodeableConceptSlice codeableConceptSlice : profile.getCodeableConceptSliceList()) {
-      // Make sure there is a valid CodeableConcept field to slice.
-      String codeableConceptFieldId = codeableConceptSlice.getFieldId();
-      if (!getOptionalElementById(codeableConceptFieldId, elementList).isPresent()) {
-        throw new IllegalArgumentException(
-            "Unable to locate CodeableConcept field "
-                + codeableConceptFieldId
-                + " for profile "
-                + elementData.getName());
-      }
       // The slicing directive appears on the Coding element within CodeableConcept.
       // However, since the coding is a subfield of CodeableConcept, it does not appear on the base
       // element list.

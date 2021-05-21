@@ -22,6 +22,7 @@ import "proto/google/fhir/proto/r4/core/datatypes.proto";
 import "testdata/r4/profiles/split/profiled_datatypes_observation.proto";
 import "testdata/r4/profiles/split/split_test_extensions.proto";
 import "testdata/r4/profiles/split/test_encounter.proto";
+import "testdata/r4/profiles/split/test_encounter_with_profiled_identifier.proto";
 import "testdata/r4/profiles/split/test_observation.proto";
 import "testdata/r4/profiles/split/test_observation_lvl2.proto";
 import "testdata/r4/profiles/split/test_patient.proto";
@@ -290,5 +291,7 @@ message ContainedResource {
     TestObservationLvl2 test_observation_lvl2 = 149;
     TestEncounter test_encounter = 150;
     ProfiledDatatypesObservation profiled_datatypes_observation = 151;
+    TestEncounterWithProfiledIdentifier
+        test_encounter_with_profiled_identifier = 152;
   }
 }

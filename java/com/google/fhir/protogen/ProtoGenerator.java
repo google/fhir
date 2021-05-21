@@ -26,6 +26,7 @@ import static com.google.fhir.protogen.GeneratorUtils.toFieldNameCase;
 import static com.google.fhir.protogen.GeneratorUtils.toFieldTypeCase;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 import com.google.common.base.Ascii;
 import com.google.common.base.CaseFormat;
@@ -86,7 +87,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /** A class which turns FHIR StructureDefinitions into protocol messages. */
@@ -982,6 +982,15 @@ public class ProtoGenerator {
             boundValueSetUrl.get(), typeWithBoundValueSet.get()));
   }
 
+  /** Returns an element with a new parent by replacing part of the id and path with a new string */
+  private ElementDefinition reparentElement(
+      ElementDefinition original, String oldParent, String newParent) {
+    ElementDefinition.Builder builder = original.toBuilder();
+    builder.getIdBuilder().setValue(original.getId().getValue().replace(oldParent, newParent));
+    builder.getPathBuilder().setValue(original.getPath().getValue().replace(oldParent, newParent));
+    return builder.build();
+  }
+
   private Optional<DescriptorProto> makeProfiledDatatypeIfRequired(
       ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
     if (isContainer(element)
@@ -990,37 +999,73 @@ public class ProtoGenerator {
       return Optional.empty();
     }
 
+    // We need to generate a profiled version of this datatype.  Start by getting the base
+    // StructureDefinition of the datatype.
     String baseId = element.getType(0).getCode().getValue();
     StructureDefinition baseStructureDefinition = baseStructDefsById.get(baseId);
 
+    // Copy it to a new StructureDefinition with some modifications:
+    // * Uses the generated type name for the field
+    // * Sets the derivation to CONSTRAINT to indicate that this is a profile.
+    // * Adds all the profile slices on the datatype included in the resource profile
+    // * Replace any base elements on the datatype with ones described in the the resource profile
+    //   (e.g., with size restrictions).
+    StructureDefinition.Builder modifiedDataTypeBuilder = baseStructureDefinition.toBuilder();
+    String fieldType = getQualifiedFieldType(element, elementList).type;
+    modifiedDataTypeBuilder.getNameBuilder().setValue(lastIdToken(fieldType).pathpart);
+    modifiedDataTypeBuilder
+        .getDerivationBuilder()
+        .setValue(TypeDerivationRuleCode.Value.CONSTRAINT);
+
+    // Clear all the snapshot elements, and then add them back, IF they aren't replaced by
+    // ones by info from the profile.  Then add the definitions from the profile.
+    // This ensures that there aren't duplicated elements.
+    List<ElementDefinition> elementsFromProfile =
+        getDescendants(element, elementList).stream()
+            .map(
+                descendant ->
+                    reparentElement(
+                        descendant,
+                        element.getId().getValue(),
+                        baseStructureDefinition.getType().getValue()))
+            .collect(toList());
+    Set<String> idsDefinedInProfile =
+        elementsFromProfile.stream()
+            .map(definition -> definition.getId().getValue())
+            .collect(toSet());
+
+    modifiedDataTypeBuilder
+        .getSnapshotBuilder()
+        .clearElement()
+        .addAllElement(
+            baseStructureDefinition.getSnapshot().getElementList().stream()
+                .filter(definition -> !idsDefinedInProfile.contains(definition.getId().getValue()))
+                .collect(toList()))
+        .addAllElement(elementsFromProfile);
+
     DescriptorProto.Builder builder =
-        generateProto(baseStructureDefinition, new ArrayList<>()).toBuilder();
+        generateProto(modifiedDataTypeBuilder.build(), new ArrayList<>()).toBuilder();
+
+    // All references subtypes will be build as though the datatype is a top-level structure.
+    // Iterate through and replace type references to things defined on the parent type.
+    // e.g., when generating a custom Identifier for use on a Patient resource, it will be generated
+    // with internal references like my.package.Identifier.Subtype, which need to be replaced with
+    // my.package.Patient.Identifier.Subtype.
+    replaceType(
+        builder,
+        packageInfo.getProtoPackage() + "." + lastIdToken(fieldType).pathpart,
+        packageInfo.getProtoPackage() + "." + fieldType);
+
     MessageOptions.Builder options = builder.getOptionsBuilder();
     options
         .clearExtension(ProtoGeneratorAnnotations.messageDescription)
+        .clearExtension(Annotations.fhirProfileBase)
         .addExtension(
             Annotations.fhirProfileBase,
             options.getExtension(Annotations.fhirStructureDefinitionUrl))
         .clearExtension(Annotations.fhirStructureDefinitionUrl);
 
-    QualifiedType qualifiedType = getQualifiedFieldType(element, elementList);
-    String fieldType = qualifiedType.type;
     String name = fieldType.substring(fieldType.lastIndexOf(".") + 1);
-
-    int nextTag = builder.getField(builder.getFieldCount() - 1).getNumber() + 1;
-
-    String extensionSlicePattern =
-        Pattern.quote(element.getId().getValue() + ".") + "extension:[^.:]*";
-
-    List<ElementDefinition> extensionSlices =
-        getDescendants(element, elementList).stream()
-            .filter(child -> child.getId().getValue().matches(extensionSlicePattern))
-            .collect(toList());
-
-    for (ElementDefinition slice : extensionSlices) {
-      buildAndAddField(slice, elementList, nextTag++, builder);
-    }
-
     return Optional.of(builder.setName(name).build());
   }
 
