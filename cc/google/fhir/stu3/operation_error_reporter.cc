@@ -24,21 +24,29 @@ using ::google::fhir::stu3::proto::IssueSeverityCode;
 using ::google::fhir::stu3::proto::IssueTypeCode;
 using ::google::fhir::stu3::proto::OperationOutcome;
 
-absl::Status OperationOutcomeErrorReporter::ReportError(
+absl::Status OperationOutcomeErrorReporter::ReportConversionError(
     absl::string_view element_path, const absl::Status& error_status) {
-  return Report(element_path, error_status, IssueSeverityCode::ERROR);
+  return Report(element_path, error_status, IssueTypeCode::STRUCTURE,
+                IssueSeverityCode::ERROR);
 }
 
-absl::Status OperationOutcomeErrorReporter::ReportWarning(
+absl::Status OperationOutcomeErrorReporter::ReportValidationError(
     absl::string_view element_path, const absl::Status& error_status) {
-  return Report(element_path, error_status, IssueSeverityCode::WARNING);
+  return Report(element_path, error_status, IssueTypeCode::VALUE,
+                IssueSeverityCode::ERROR);
+}
+
+absl::Status OperationOutcomeErrorReporter::ReportValidationWarning(
+    absl::string_view element_path, const absl::Status& error_status) {
+  return Report(element_path, error_status, IssueTypeCode::VALUE,
+                IssueSeverityCode::WARNING);
 }
 
 absl::Status OperationOutcomeErrorReporter::Report(
     absl::string_view element_path, const absl::Status& error_status,
-    IssueSeverityCode::Value severity) {
+    IssueTypeCode::Value type, IssueSeverityCode::Value severity) {
   OperationOutcome::Issue* issue = outcome_->add_issue();
-  issue->mutable_code()->set_value(IssueTypeCode::INVALID);
+  issue->mutable_code()->set_value(type);
   issue->mutable_severity()->set_value(severity);
 
   issue->mutable_diagnostics()

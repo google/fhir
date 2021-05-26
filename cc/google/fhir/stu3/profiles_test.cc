@@ -239,14 +239,14 @@ TEST(ProfilesTest, MissingRequiredFields) {
 
   OperationOutcome expected;
   google::protobuf::TextFormat::ParseFromString(
-      R"proto(
+      R"pb(
         issue {
           severity { value: ERROR }
-          code { value: INVALID }
+          code { value: VALUE }
           diagnostics { value: "missing-TestObservation.component.code" }
           expression { value: "TestObservation.component.code" }
         }
-      )proto",
+      )pb",
       &expected);
 
   EXPECT_THAT(outcome.value(), EqualsProto(expected));

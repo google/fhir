@@ -3,7 +3,7 @@ issue {
     value: ERROR
   }
   code {
-    value: INVALID
+    value: VALUE
   }
   diagnostics {
     value: "low.exists() or high.exists() or text.exists()"

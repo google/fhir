@@ -102,14 +102,14 @@ TEST(ResourceValidationTest, MissingRequiredField) {
   Observation observation = ValidObservation();
   observation.clear_status();
   InvalidTest("missing-Observation.status",
-              R"proto(
+              R"pb(
                 issue {
                   severity { value: ERROR }
-                  code { value: INVALID }
+                  code { value: VALUE }
                   diagnostics { value: "missing-Observation.status" }
                   expression { value: "Observation.status" }
                 }
-              )proto",
+              )pb",
               observation);
 }
 
@@ -118,16 +118,16 @@ TEST(ResourceValidationTest, InvalidPrimitiveField) {
   observation.mutable_value()->mutable_quantity()->mutable_value()->set_value(
       "1.2.3");
   InvalidTest("invalid-primitive-Observation.value.quantity.value",
-              R"proto(
+              R"pb(
                 issue {
                   severity { value: ERROR }
-                  code { value: INVALID }
+                  code { value: VALUE }
                   diagnostics {
                     value: "invalid-primitive-Observation.value.quantity.value"
                   }
                   expression { value: "Observation.value.quantity.value" }
                 }
-              )proto",
+              )pb",
               observation);
 }
 
@@ -146,10 +146,10 @@ TEST(ResourceValidationTest, InvalidReference) {
       "12345");
   InvalidTest(
       "invalid-reference-disallowed-type-Patient-at-Observation.related.target",
-      R"proto(
+      R"pb(
         issue {
           severity { value: ERROR }
-          code { value: INVALID }
+          code { value: STRUCTURE }
           diagnostics {
             value: "invalid-reference-disallowed-type-Patient-at-Observation.related.target"
           }
@@ -157,13 +157,13 @@ TEST(ResourceValidationTest, InvalidReference) {
         }
         issue {
           severity { value: ERROR }
-          code { value: INVALID }
+          code { value: VALUE }
           diagnostics {
             value: "invalid-primitive-Observation.related.target.patientId"
           }
           expression { value: "Observation.related.target.patientId" }
         }
-      )proto",
+      )pb",
       observation);
 }
 
@@ -182,10 +182,10 @@ TEST(ResourceValidationTest, RepeatedReferenceInvalid) {
   encounter.add_account()->mutable_account_id()->set_value("333");
   InvalidTest(
       "invalid-reference-disallowed-type-Patient-at-Encounter.account",
-      R"proto(
+      R"pb(
         issue {
           severity { value: ERROR }
-          code { value: INVALID }
+          code { value: STRUCTURE }
           diagnostics {
             value: "invalid-reference-disallowed-type-Patient-at-Encounter.account"
           }
@@ -193,23 +193,23 @@ TEST(ResourceValidationTest, RepeatedReferenceInvalid) {
         }
         issue {
           severity { value: ERROR }
-          code { value: INVALID }
+          code { value: VALUE }
           diagnostics { value: "invalid-primitive-Encounter.account.accountId" }
           expression { value: "Encounter.account.accountId" }
         }
         issue {
           severity { value: ERROR }
-          code { value: INVALID }
+          code { value: VALUE }
           diagnostics { value: "invalid-primitive-Encounter.account.patientId" }
           expression { value: "Encounter.account.patientId" }
         }
         issue {
           severity { value: ERROR }
-          code { value: INVALID }
+          code { value: VALUE }
           diagnostics { value: "invalid-primitive-Encounter.account.accountId" }
           expression { value: "Encounter.account.accountId" }
         }
-      )proto",
+      )pb",
       encounter);
 }
 
@@ -221,10 +221,10 @@ TEST(ResourceValidationTest, EmptyOneof) {
   *(component->mutable_code()) = ValidCodeableConcept();
   InvalidTest(
       "empty-oneof-google.fhir.stu3.proto.Observation.Component.Value.value",
-      R"proto(
+      R"pb(
         issue {
           severity { value: ERROR }
-          code { value: INVALID }
+          code { value: VALUE }
           diagnostics {
             value: "empty-oneof-google.fhir.stu3.proto.Observation.Component.Value.value"
           }
@@ -232,7 +232,7 @@ TEST(ResourceValidationTest, EmptyOneof) {
             value: "google.fhir.stu3.proto.Observation.Component.Value.value"
           }
         }
-      )proto",
+      )pb",
       observation);
 }
 

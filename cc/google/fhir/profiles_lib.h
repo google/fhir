@@ -103,7 +103,7 @@ absl::Status PerformExtensionSlicing(const Message& source, Message* target,
             value.GetReflection()->GetOneofFieldDescriptor(
                 value, value.GetDescriptor()->FindOneofByName("choice"));
         if (src_datatype_field == nullptr) {
-          FHIR_RETURN_IF_ERROR(error_reporter->ReportError(
+          FHIR_RETURN_IF_ERROR(error_reporter->ReportConversionError(
               source_extension_field->full_name(), InvalidArgumentError(
                   absl::StrCat(
                       "Invalid extension: neither value nor extensions "
@@ -121,7 +121,7 @@ absl::Status PerformExtensionSlicing(const Message& source, Message* target,
           FHIR_RETURN_IF_ERROR(
               CopyCode(dynamic_cast<const CodeLike&>(src_value), typed_extension));
         } else {
-          FHIR_RETURN_IF_ERROR(error_reporter->ReportError(
+          FHIR_RETURN_IF_ERROR(error_reporter->ReportConversionError(
               destination_type->full_name(),
               absl::InvalidArgumentError(absl::StrCat(
                   "Profiled extension slice is incorrect type: ", url,

@@ -30,7 +30,7 @@ absl::Status ErrorReporter::ReportFhirPathError(
   absl::Status status = absl::FailedPreconditionError(
       message.empty() ? fhir_path_constraint
                       : absl::StrCat(fhir_path_constraint, ": ", message));
-  return ReportError(element_path, status);
+  return ReportValidationError(element_path, status);
 }
 
 absl::Status ErrorReporter::ReportFhirPathWarning(
@@ -39,7 +39,7 @@ absl::Status ErrorReporter::ReportFhirPathWarning(
   absl::Status status = absl::FailedPreconditionError(
       message.empty() ? fhir_path_constraint
                       : absl::StrCat(fhir_path_constraint, ": ", message));
-  return ReportWarning(element_path, status);
+  return ReportValidationWarning(element_path, status);
 }
 
 }  // namespace fhir

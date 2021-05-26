@@ -5,7 +5,7 @@ issue {
     value: ERROR
   }
   code {
-    value: INVALID
+    value: VALUE
   }
   diagnostics {
     value: "Encounter.period-start-time-later-than-end-time"
@@ -19,7 +19,7 @@ issue {
     value: ERROR
   }
   code {
-    value: INVALID
+    value: VALUE
   }
   diagnostics {
     value: "start.hasValue().not() or end.hasValue().not() or (start <= end)"

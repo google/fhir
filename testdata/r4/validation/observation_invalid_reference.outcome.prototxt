@@ -3,7 +3,7 @@ issue {
     value: ERROR
   }
   code {
-    value: INVALID
+    value: STRUCTURE
   }
   diagnostics {
     value: "invalid-reference-disallowed-type-Device-at-Observation.specimen"
@@ -17,7 +17,7 @@ issue {
     value: ERROR
   }
   code {
-    value: INVALID
+    value: VALUE
   }
   diagnostics {
     value: "invalid-primitive-Observation.specimen.deviceId"

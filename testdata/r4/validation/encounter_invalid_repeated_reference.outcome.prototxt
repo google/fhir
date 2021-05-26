@@ -3,7 +3,7 @@ issue {
     value: ERROR
   }
   code {
-    value: INVALID
+    value: STRUCTURE
   }
   diagnostics {
     value: "invalid-reference-disallowed-type-Patient-at-Encounter.account"
@@ -17,7 +17,7 @@ issue {
     value: ERROR
   }
   code {
-    value: INVALID
+    value: VALUE
   }
   diagnostics {
     value: "invalid-primitive-Encounter.account.accountId"
@@ -31,7 +31,7 @@ issue {
     value: ERROR
   }
   code {
-    value: INVALID
+    value: VALUE
   }
   diagnostics {
     value: "invalid-primitive-Encounter.account.patientId"
@@ -45,7 +45,7 @@ issue {
     value: ERROR
   }
   code {
-    value: INVALID
+    value: VALUE
   }
   diagnostics {
     value: "invalid-primitive-Encounter.account.accountId"

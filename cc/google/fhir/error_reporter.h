@@ -30,8 +30,27 @@ namespace fhir {
 class ErrorReporter {
  public:
   virtual ~ErrorReporter() {}
+
   /**
-   * Reports the given error during FHIR validation or conversion, indicating
+   * Reports the given error during FHIR conversion, indicating
+   * the resource does not fully comply with the FHIR specification or profile
+   * and the field could not be converted to the target structure. This
+   * indicates that data may have been lost during the conversion.
+   *
+   * If the error can be satisfactorily reported implementations should return
+   * an OK status, instructing the FHIR validation logic to proceed.
+   * Conversely, if this returns an error status, the validation flow will
+   * immediately return this status to the caller.
+   *
+   * Parameters:
+   *  * element_path: a path to the field that where the issue occurred.
+   *  * status: a status message with details on the issue.
+   */
+  virtual absl::Status ReportConversionError(absl::string_view element_path,
+                                             const absl::Status& status) = 0;
+
+  /**
+   * Reports the given error during FHIR validation, indicating
    * the resource does not fully comply with the FHIR specification or profile.
    *
    * If the error can be satisfactorily reported implementations should return
@@ -43,11 +62,11 @@ class ErrorReporter {
    *  * element_path: a path to the field that where the issue occurred.
    *  * status: a status message with details on the issue.
    */
-  virtual absl::Status ReportError(absl::string_view element_path,
-                                   const absl::Status& status) = 0;
+  virtual absl::Status ReportValidationError(absl::string_view element_path,
+                                             const absl::Status& status) = 0;
 
   /**
-   * Reports the given warning during FHIR validation or conversion, indicating
+   * Reports the given warning during FHIR validation, indicating
    * the complies with the FHIR specification but may be missing some desired
    * -but-not-required property, like additional fields that are useful to
    * consumers.
@@ -61,8 +80,8 @@ class ErrorReporter {
    *  * element_path: a path to the field that where the issue occurred.
    *  * status: a status message with details on the issue.
    */
-  virtual absl::Status ReportWarning(absl::string_view element_path,
-                                     const absl::Status& status) = 0;
+  virtual absl::Status ReportValidationWarning(absl::string_view element_path,
+                                               const absl::Status& status) = 0;
 
   /**
    * Reports a FHIRPath constraint error, as defined by a constraint
@@ -104,12 +123,17 @@ class FailFastErrorReporter : public ErrorReporter {
   // Returns a singleton instance of this error reporter for convenience.
   static FailFastErrorReporter* Get();
 
-  absl::Status ReportError(absl::string_view fhir_path,
+  absl::Status ReportConversionError(absl::string_view fhir_path,
                            const absl::Status& status) override {
     return status;
   }
 
-  absl::Status ReportWarning(absl::string_view fhir_path,
+  absl::Status ReportValidationError(absl::string_view fhir_path,
+                           const absl::Status& status) override {
+    return status;
+  }
+
+  absl::Status ReportValidationWarning(absl::string_view fhir_path,
                            const absl::Status& status) override {
     // The system should not fail on warnings.
     return absl::OkStatus();

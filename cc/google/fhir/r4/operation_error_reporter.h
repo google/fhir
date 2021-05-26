@@ -28,20 +28,28 @@ namespace fhir {
 namespace r4 {
 
 // Error reporter that creates FHIR R4 OperationOutcome records.
+// Conversion issues that can result in data loss are reported as a "structure"
+// error type as described at https://www.hl7.org/fhir/valueset-issue-type.html,
+// since the item could not be converted into the target structure. Validation
+// issues that preserve data use a "value" error type from that value set.
 class OperationOutcomeErrorReporter : public ErrorReporter {
  public:
   explicit OperationOutcomeErrorReporter(
       ::google::fhir::r4::core::OperationOutcome* outcome)
       : outcome_(outcome) {}
 
-  absl::Status ReportError(absl::string_view element_path,
+  absl::Status ReportConversionError(absl::string_view element_path,
                            const absl::Status& error_status) override;
 
-  absl::Status ReportWarning(absl::string_view element_path,
+  absl::Status ReportValidationError(absl::string_view element_path,
+                           const absl::Status& error_status) override;
+
+  absl::Status ReportValidationWarning(absl::string_view element_path,
                              const absl::Status& error_status) override;
  private:
   absl::Status Report(absl::string_view element_path,
                       const absl::Status& error_status,
+                      ::google::fhir::r4::core::IssueTypeCode::Value type,
                       ::google::fhir::r4::core::IssueSeverityCode::Value
                       severity);
 

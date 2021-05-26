@@ -44,12 +44,13 @@ namespace {
 
 // Helper function to report a response if it is an error and return
 // the expected status.
-absl::Status ReportIfError(absl::string_view field, const absl::Status& status,
-                           ErrorReporter* error_reporter) {
+absl::Status ReportIfValidationError(absl::string_view field,
+                                     const absl::Status& status,
+                                     ErrorReporter* error_reporter) {
   if (status.ok()) {
     return absl::OkStatus();
   }
-  return error_reporter->ReportError(field, status);
+  return error_reporter->ReportValidationError(field, status);
 }
 
 absl::Status CheckField(const Message& message, const FieldDescriptor* field,
@@ -62,12 +63,13 @@ absl::Status ValidateFhirConstraints(const Message& message,
                                      const PrimitiveHandler* primitive_handler,
                                      ErrorReporter* error_reporter) {
   if (IsPrimitive(message.GetDescriptor())) {
-    return ReportIfError(base_name,
-                         primitive_handler->ValidatePrimitive(message).ok()
-                             ? absl::OkStatus()
-                             : FailedPreconditionError(absl::StrCat(
-                                   "invalid-primitive-", base_name)),
-                         error_reporter);
+    return ReportIfValidationError(
+        base_name,
+        primitive_handler->ValidatePrimitive(message).ok()
+            ? absl::OkStatus()
+            : FailedPreconditionError(
+                  absl::StrCat("invalid-primitive-", base_name)),
+        error_reporter);
   }
 
   if (IsMessageType<::google::protobuf::Any>(message)) {
@@ -94,7 +96,7 @@ absl::Status ValidateFhirConstraints(const Message& message,
     if (!reflection->HasOneof(message, oneof) &&
         !oneof->options().GetExtension(
             ::google::fhir::proto::fhir_oneof_is_optional)) {
-      FHIR_RETURN_IF_ERROR(error_reporter->ReportError(
+      FHIR_RETURN_IF_ERROR(error_reporter->ReportValidationError(
           oneof->full_name(), ::absl::FailedPreconditionError(absl::StrCat(
                                   "empty-oneof-", oneof->full_name()))));
     }
@@ -111,7 +113,7 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
       field->options().GetExtension(validation_requirement) ==
           ::google::fhir::proto::REQUIRED_BY_FHIR) {
     if (!FieldHasValue(message, field)) {
-      FHIR_RETURN_IF_ERROR(error_reporter->ReportError(
+      FHIR_RETURN_IF_ERROR(error_reporter->ReportValidationError(
           field_name,
           FailedPreconditionError(absl::StrCat("missing-", field_name))));
     }
@@ -122,7 +124,7 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
     if (status.ok()) {
       return status;
     } else {
-      FHIR_RETURN_IF_ERROR(error_reporter->ReportError(
+      FHIR_RETURN_IF_ERROR(error_reporter->ReportConversionError(
           field_name, FailedPreconditionError(
                           absl::StrCat(status.message(), "-at-", field_name))));
     }
