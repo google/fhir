@@ -40,6 +40,6 @@ label=${tokens[1]}
 source $(dirname "$BASH_SOURCE")/generate_protos_utils.sh
 
 # Build protos, and then copy them into source
-try_build "$dir:${label}_proto_files"
+try_build "$dir:${label}_proto_zip"
 
 unzip_to_src "${label}"
