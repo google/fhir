@@ -1,5 +1,5 @@
 absl-py~=0.10.0
-backports.zoneinfo~=0.2.1
+backports.zoneinfo~=0.2.1;python_version<"3.9"
 protobuf~=3.13.0
 python-dateutil~=2.8.1
 requests~=2.24.0
