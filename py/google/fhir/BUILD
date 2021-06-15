@@ -24,7 +24,7 @@ py_library(
         "@com_google_protobuf//:protobuf_python",
         "//py",
         "//py/google/fhir/utils:proto_utils",
-        requirement("backports.zoneinfo"),
+        requirement("backports.zoneinfo; python_version < '3.9'"),
         requirement("python-dateutil"),
         requirement("six"),
     ],
