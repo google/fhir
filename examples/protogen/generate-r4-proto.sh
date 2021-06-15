@@ -16,6 +16,7 @@
 set -eu
 
 ROOT_PATH=../..
+SRC_ROOT="proto/r4/core"
 PROTO_GENERATOR=${ROOT_PATH}/bazel-bin/java/ProtoGenerator
 
 OUTPUT_PATH="$(dirname $0)/../../proto/r4/core"
@@ -40,7 +41,8 @@ fi
 # generate datatypes.proto
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
-  --output_directory $OUTPUT_PATH \
+  --output_directory "${OUTPUT_PATH}" \
+  --directory_in_source "${SRC_ROOT}" \
   --output_name datatypes \
   --filter datatype \
   --exclude elementdefinition-de \
@@ -66,6 +68,7 @@ fi
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --output_directory "${OUTPUT_PATH}/resources" \
+  --directory_in_source "${SRC_ROOT}/resources" \
   --filter resource \
   --output_name resources
 
@@ -78,6 +81,7 @@ rm "${OUTPUT_PATH}/resources/resources.zip"
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --output_directory "${OUTPUT_PATH}/profiles" \
+  --directory_in_source "${SRC_ROOT}/profiles" \
   --filter profile \
   --exclude familymemberhistory-genetic \
   --output_name profiles
@@ -89,7 +93,8 @@ rm "${OUTPUT_PATH}/profiles/profiles.zip"
 $PROTO_GENERATOR \
   $COMMON_FLAGS \
   --output_name extensions \
-  --output_directory $OUTPUT_PATH \
+  --output_directory ${OUTPUT_PATH} \
+  --directory_in_source "${SRC_ROOT}" \
   --filter extension
 
 unzip -qo "${OUTPUT_PATH}/extensions.zip" -d "${OUTPUT_PATH}"
