@@ -1,6 +1,7 @@
 load(
     "@rules_python//python:python.bzl",
     "py_library",
+    "py_test",
 )
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 
@@ -164,6 +165,20 @@ py_library(
         "//py/google/fhir/testing:testdata_utils",
         "//py/google/fhir/utils:path_utils",
         "//py/google/fhir/utils:proto_utils",
+        requirement("absl-py"),
+        requirement("six"),
+    ],
+)
+
+py_test(
+    name = "fhir_errors_test",
+    srcs = ["fhir_errors_test.py"],
+    legacy_create_init = 0,
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":fhir_errors",
+        "//py",
         requirement("absl-py"),
         requirement("six"),
     ],
