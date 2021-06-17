@@ -245,13 +245,7 @@ class ProtoGeneratorMain {
         def ->
             def.getKind().getValue() == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE
                 || def.getKind().getValue() == StructureDefinitionKindCode.Value.COMPLEX_TYPE;
-    Predicate<StructureDefinition> isResource =
-        def ->
-            def.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE
-                // Despite being categorized as "Logical" rather than a "Resource",
-                // MetadataResource is
-                // included here for historical reasons (and lack of a better place...)
-                || def.getId().getValue().equals("MetadataResource");
+    Predicate<StructureDefinition> isResource = def -> isResource(def);
     Predicate<StructureDefinition> isConstraint =
         def -> def.getDerivation().getValue() == TypeDerivationRuleCode.Value.CONSTRAINT;
     Predicate<StructureDefinition> isExtensionProfile =
@@ -344,8 +338,7 @@ class ProtoGeneratorMain {
       StructureDefinitionKindCode.Value kind = structDef.getKind().getValue();
       if (structDef.getBaseDefinition().getValue().equals(EXTENSION_STRUCTURE_DEFINITION_URL)) {
         extensions.add(structDef);
-      } else if (kind == StructureDefinitionKindCode.Value.RESOURCE
-          || structDef.getId().getValue().equals("MetadataResource")) {
+      } else if (isResource(structDef)) {
         resources.add(structDef);
       } else if (kind == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE
           || kind == StructureDefinitionKindCode.Value.COMPLEX_TYPE) {
@@ -459,6 +452,13 @@ class ProtoGeneratorMain {
           .build();
     }
     return proto;
+  }
+
+  private static boolean isResource(StructureDefinition definition) {
+    // Despite being categorized as "Logical" rather than a "Resource",
+    // MetadataResource is included here for historical reasons (and lack of a better place...)
+    return definition.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE
+        || definition.getId().getValue().equals("MetadataResource");
   }
 
   public static void main(String[] argv) throws IOException, InvalidFhirException {
