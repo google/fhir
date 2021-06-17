@@ -2591,8 +2591,11 @@ message USCoreImmunizationProfile {
   core.CodeableConcept status_reason = 12;
 
   // Vaccine Product Type (bind to CVX)
-  core.CodeableConcept vaccine_code = 13
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  core.CodeableConcept vaccine_code = 13 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_warning_constraint) =
+        "coding.where(system='http://hl7.org/fhir/sid/ndc').empty()"
+  ];
 
   // Who was immunized
   core.Reference patient = 14 [
@@ -3422,8 +3425,8 @@ message USCoreLaboratoryResultObservationProfile {
 
   // Result Value
   message ValueX {
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "valueQuantity.system.empty() or valueQuantity.system = 'http://unitsofmeasure.org'";
+    option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+        "valueCodeableConcept.coding.system.empty() or valueCodeableConcept.coding.system = 'http://snomed.info/sct'";
     option (.google.fhir.proto.is_choice_type) = true;
 
     oneof choice {
@@ -3836,6 +3839,10 @@ message UsCoreCondition {
       "abatement.empty() or clinicalStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-clinical' and (code='resolved' or code='remission' or code='inactive')).exists()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "verificationStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-ver-status' and code='entered-in-error').empty() or clinicalStatus.empty()";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "clinicalStatus.exists() or verificationStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-ver-status' and code = 'entered-in-error').exists() or category.select($this='problem-list-item').empty()";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "where(category in 'http://hl7.org/fhir/us/core/ValueSet/us-core-condition-category').exists()";
   option (.google.fhir.proto.search_parameter) = {
     name: "Example Search Parameter"
     type: REFERENCE

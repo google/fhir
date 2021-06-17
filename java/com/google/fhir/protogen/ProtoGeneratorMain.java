@@ -248,7 +248,7 @@ class ProtoGeneratorMain {
     Predicate<StructureDefinition> isResource =
         def ->
             def.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE
-                // Despite being categorized as "Logical" rather than a "Resourcde",
+                // Despite being categorized as "Logical" rather than a "Resource",
                 // MetadataResource is
                 // included here for historical reasons (and lack of a better place...)
                 || def.getId().getValue().equals("MetadataResource");
@@ -344,7 +344,8 @@ class ProtoGeneratorMain {
       StructureDefinitionKindCode.Value kind = structDef.getKind().getValue();
       if (structDef.getBaseDefinition().getValue().equals(EXTENSION_STRUCTURE_DEFINITION_URL)) {
         extensions.add(structDef);
-      } else if (kind == StructureDefinitionKindCode.Value.RESOURCE) {
+      } else if (kind == StructureDefinitionKindCode.Value.RESOURCE
+          || structDef.getId().getValue().equals("MetadataResource")) {
         resources.add(structDef);
       } else if (kind == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE
           || kind == StructureDefinitionKindCode.Value.COMPLEX_TYPE) {

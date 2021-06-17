@@ -675,9 +675,16 @@ public class ProtoGenerator {
     builder.setName(nameFromQualifiedName(getContainerType(currentElement, elementList)));
 
     // Add message-level FHIRPath constraints.
-    List<String> expressions = getFhirPathConstraints(currentElement);
+    List<String> expressions = getFhirPathErrorConstraints(currentElement);
     if (!expressions.isEmpty()) {
       builder.getOptionsBuilder().setExtension(Annotations.fhirPathMessageConstraint, expressions);
+    }
+    // Add warning constraints.
+    List<String> warnings = getFhirPathWarningConstraints(currentElement);
+    if (!warnings.isEmpty()) {
+      builder
+          .getOptionsBuilder()
+          .setExtension(Annotations.fhirPathMessageWarningConstraint, warnings);
     }
 
     // When generating a descriptor for a primitive type, the value part may already be present.
@@ -792,13 +799,23 @@ public class ProtoGenerator {
                 .build();
       } else {
         // There is no submessage defined for this field, so apply constraints to the field itself.
-        List<String> expressions = getFhirPathConstraints(element);
+        List<String> expressions = getFhirPathErrorConstraints(element);
         if (!expressions.isEmpty()) {
           field =
               field.toBuilder()
                   .setOptions(
                       field.getOptions().toBuilder()
                           .setExtension(Annotations.fhirPathConstraint, expressions))
+                  .build();
+        }
+        // Add warning constraints.
+        List<String> warnings = getFhirPathWarningConstraints(element);
+        if (!warnings.isEmpty()) {
+          field =
+              field.toBuilder()
+                  .setOptions(
+                      field.getOptions().toBuilder()
+                          .setExtension(Annotations.fhirPathWarningConstraint, warnings))
                   .build();
         }
       }
@@ -908,11 +925,18 @@ public class ProtoGenerator {
 
       // Constraints may be on the choice base element rather than the value element,
       // so reflect that here.
-      List<String> expressions = getFhirPathConstraints(element);
+      List<String> expressions = getFhirPathErrorConstraints(element);
       if (!expressions.isEmpty()) {
         newChoiceType.setOptions(
             baseChoiceType.getOptions().toBuilder()
                 .setExtension(Annotations.fhirPathMessageConstraint, expressions));
+      }
+      // Add warning constraints.
+      List<String> warnings = getFhirPathWarningConstraints(element);
+      if (!warnings.isEmpty()) {
+        newChoiceType.setOptions(
+            baseChoiceType.getOptions().toBuilder()
+                .setExtension(Annotations.fhirPathMessageWarningConstraint, warnings));
       }
 
       return Optional.of(newChoiceType.build());
@@ -1687,12 +1711,24 @@ public class ProtoGenerator {
     return element.getMin().getValue() == 1;
   }
 
-  // Returns the FHIRPath constraints on the given element, if any.
-  private static List<String> getFhirPathConstraints(ElementDefinition element) {
+  // Returns the FHIRPath Error constraints on the given element, if any.
+  private static List<String> getFhirPathErrorConstraints(ElementDefinition element) {
     return element.getConstraintList().stream()
         .filter(constraint -> constraint.hasExpression())
         .filter(
             constraint -> constraint.getSeverity().getValue() == ConstraintSeverityCode.Value.ERROR)
+        .map(constraint -> constraint.getExpression().getValue())
+        .filter(expression -> !EXCLUDED_FHIR_CONSTRAINTS.contains(expression))
+        .collect(Collectors.toList());
+  }
+
+  // Returns the FHIRPath Warning constraints on the given element, if any.
+  private static List<String> getFhirPathWarningConstraints(ElementDefinition element) {
+    return element.getConstraintList().stream()
+        .filter(constraint -> constraint.hasExpression())
+        .filter(
+            constraint ->
+                constraint.getSeverity().getValue() == ConstraintSeverityCode.Value.WARNING)
         .map(constraint -> constraint.getExpression().getValue())
         .filter(expression -> !EXCLUDED_FHIR_CONSTRAINTS.contains(expression))
         .collect(Collectors.toList());
@@ -1842,12 +1878,19 @@ public class ProtoGenerator {
         DescriptorProto.newBuilder().setName(choiceQualifiedType.getName());
     choiceType.getOptionsBuilder().setExtension(Annotations.isChoiceType, true);
 
-    // Add constraints on choice types.
-    List<String> expressions = getFhirPathConstraints(element);
+    // Add error constraints on choice types.
+    List<String> expressions = getFhirPathErrorConstraints(element);
     if (!expressions.isEmpty()) {
       choiceType
           .getOptionsBuilder()
           .setExtension(Annotations.fhirPathMessageConstraint, expressions);
+    }
+    // Add warning constraints.
+    List<String> warnings = getFhirPathWarningConstraints(element);
+    if (!warnings.isEmpty()) {
+      choiceType
+          .getOptionsBuilder()
+          .setExtension(Annotations.fhirPathMessageWarningConstraint, warnings);
     }
 
     choiceType.addOneofDeclBuilder().setName("choice");

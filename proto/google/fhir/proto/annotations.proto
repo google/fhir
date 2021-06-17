@@ -105,6 +105,7 @@ extend google.protobuf.MessageOptions {
   // These constraints are propagated from the constraint.expression
   // field on the FHIR ElementDefinition and may be used for data validation.
   repeated string fhir_path_message_constraint = 276863075;
+  repeated string fhir_path_message_warning_constraint = 378630899;
 
   // Used to differentiate complex vs simple extensions in the case where it is
   // ambiguous.  Specifically, any extension with only a single fhir datatype
@@ -186,6 +187,7 @@ extend google.protobuf.FieldOptions {
   // These constraints are propagated from the constraint.expression
   // field on the FHIR ElementDefinition and may be used for data validation.
   repeated string fhir_path_constraint = 244450286;
+  repeated string fhir_path_warning_constraint = 378479518;
 
   // Indicates which resource types can be valid references.
   repeated string valid_reference_type = 218884094;

@@ -33,6 +33,8 @@ message MessageDefinition {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/MessageDefinition";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
   option (.google.fhir.proto.search_parameter) = {
     name: "category"
     type: TOKEN

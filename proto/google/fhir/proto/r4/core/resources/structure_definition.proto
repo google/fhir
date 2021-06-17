@@ -64,6 +64,8 @@ message StructureDefinition {
       "url.startsWith('http://hl7.org/fhir/StructureDefinition') implies (snapshot.element.defaultValue.empty() and differential.element.defaultValue.empty())";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "(snapshot | differential).element.all(path.contains('.').not() implies sliceName.empty())";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
   option (.google.fhir.proto.search_parameter) = {
     name: "abstract"
     type: TOKEN

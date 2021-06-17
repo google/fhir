@@ -36,6 +36,8 @@ message NamingSystem {
       "kind != 'root' or uniqueId.all(type != 'uuid')";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "uniqueId.where(preferred = true).select(type).isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
   option (.google.fhir.proto.search_parameter) = {
     name: "contact"
     type: STRING

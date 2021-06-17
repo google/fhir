@@ -35,6 +35,8 @@ message ShareableActivityDefinition {
       "http://hl7.org/fhir/StructureDefinition/ActivityDefinition";
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/shareableactivitydefinition";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
   option (.google.fhir.proto.search_parameter) = {
     name: "composed-of"
     type: REFERENCE

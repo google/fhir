@@ -36,6 +36,8 @@ message ShareableCodeSystem {
       "http://hl7.org/fhir/StructureDefinition/shareablecodesystem";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "concept.code.combine($this.descendants().concept.code).isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
   option (.google.fhir.proto.search_parameter) = {
     name: "code"
     type: TOKEN

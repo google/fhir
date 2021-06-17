@@ -1269,6 +1269,8 @@ message ElementDefinition {
       "(isModifier.exists() and isModifier) implies isModifierReason.exists()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "sliceIsConstraining.exists() implies sliceName.exists()";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "path.matches('[A-Za-z][A-Za-z0-9]*(\\\\.[a-z][A-Za-z0-9]*(\\\\[x])?)*')";
 
   // Unique id for inter-element referencing
   String id = 1;
@@ -1788,6 +1790,9 @@ message ElementDefinition {
 
   // Condition that must evaluate to true
   message Constraint {
+    option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+        "expression.exists()";
+
     // Unique id for inter-element referencing
     String id = 1;
 

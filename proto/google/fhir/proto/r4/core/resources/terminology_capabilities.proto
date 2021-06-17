@@ -40,6 +40,8 @@ message TerminologyCapabilities {
       "(kind != 'capability') or (implementation.exists().not() and software.exists())";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "(kind!='requirements') or (implementation.exists().not() and software.exists().not())";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')";
   option (.google.fhir.proto.search_parameter) = {
     name: "context"
     type: TOKEN
