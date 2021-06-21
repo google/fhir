@@ -35,9 +35,10 @@ namespace stu3 {
 
 namespace {
 
-using namespace google::fhir::stu3::proto;  // NOLINT
+using namespace ::google::fhir::stu3::proto;  // NOLINT
 
-using google::fhir::stu3::proto::Condition;
+using ::google::fhir::stu3::proto::Condition;
+using ::testing::Eq;
 
 static const char* const kTimeZoneString = "Australia/Sydney";
 
@@ -111,7 +112,7 @@ void TestPrintForAnalytics(const std::string& proto_filepath,
                            const std::string& json_filepath, bool pretty) {
   R proto = ReadProto<R>(proto_filepath);
   if (IsProfile(R::descriptor())) {
-    proto = NormalizeR4(proto).value();
+    proto = NormalizeStu3(proto).value();
   }
   auto result = pretty ? PrettyPrintFhirToJsonStringForAnalytics(proto)
                        : PrintFhirToJsonStringForAnalytics(proto);
@@ -200,6 +201,19 @@ TEST(JsonFormatStu3Test, PrintAnalyticsElementIdsDropped) {
   TestPrintForAnalyticsWithFilepath<Location>(
       "testdata/jsonformat/location_element_with_ids.prototxt",
       "testdata/jsonformat/location_element_with_ids_analytic.json");
+}
+
+TEST(JsonFormatStu3Test, WithEmptyContainedResourcePrintsValidJson) {
+  const Parameters proto = ReadProto<Parameters>(
+      "testdata/stu3/examples/Parameters-empty-resource.prototxt");
+  absl::StatusOr<std::string> from_proto_status =
+      PrettyPrintFhirToJsonString(proto);
+  ASSERT_TRUE(from_proto_status.ok());
+  std::string expected =
+      ReadFile("testdata/stu3/examples/Parameters-empty-resource.json");
+  ASSERT_THAT(expected.back(), Eq('\n'));
+  expected = expected.substr(0, expected.length() - 1);
+  ASSERT_THAT(*from_proto_status, Eq(expected));
 }
 
 /* Resource tests start here. */
@@ -2206,19 +2220,19 @@ TEST(JsonFormatTest, InvalidControlCharactersReturnsError) {
   ASSERT_FALSE(PrettyPrintFhirToJsonString(proto).ok());
 }
 
-TEST(JsonFormatR4Test, PadsThreeDigitYearToFourCharacters) {
+TEST(JsonFormatStu3Test, PadsThreeDigitYearToFourCharacters) {
   TestPairWithFilePaths<Observation>(
       "testdata/jsonformat/observation_three_digit_year.prototxt",
       "testdata/jsonformat/observation_three_digit_year.json");
 }
 
-TEST(JsonFormatR4Test, DecimalCornerCases) {
+TEST(JsonFormatStu3Test, DecimalCornerCases) {
   TestPairWithFilePaths<Observation>(
       "testdata/jsonformat/observation_decimal_corner_cases.prototxt",
       "testdata/jsonformat/observation_decimal_corner_cases.json");
 }
 
-TEST(JsonFormatR4Test, NdjsonLocation) {
+TEST(JsonFormatStu3Test, NdjsonLocation) {
   TestPairWithFilePaths<Location>(
       "testdata/jsonformat/location_ndjson.prototxt",
       "testdata/jsonformat/location_ndjson.json");

@@ -163,13 +163,16 @@ class Printer {
     }
 
     OpenJsonObject();
-    if (IsResource(descriptor) && json_format_ == kFormatPure) {
-      absl::StrAppend(&output_, "\"resourceType\": \"", descriptor->name(),
-                      "\",");
-      AddNewline();
-    }
     std::vector<const FieldDescriptor*> set_fields;
     reflection->ListFields(proto, &set_fields);
+    if (IsResource(descriptor) && json_format_ == kFormatPure) {
+      absl::StrAppend(&output_, "\"resourceType\": \"", descriptor->name(),
+                      "\"");
+      if (!set_fields.empty()) {
+        absl::StrAppend(&output_, ",");
+        AddNewline();
+      }
+    }
     for (size_t i = 0; i < set_fields.size(); i++) {
       const FieldDescriptor* field = set_fields[i];
       if (json_format_ == kFormatAnalytic && field->name() == "id" &&

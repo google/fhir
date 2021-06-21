@@ -189,8 +189,9 @@ namespace r4 {
 
 namespace {
 
-using namespace google::fhir::r4::core;  // NOLINT
-using google::protobuf::FieldDescriptor;
+using namespace ::google::fhir::r4::core;  // NOLINT
+using ::google::protobuf::FieldDescriptor;
+using ::testing::Eq;
 
 static const char* const kTimeZoneString = "Australia/Sydney";
 
@@ -477,6 +478,19 @@ TEST(JsonFormatR4Test, PrintForAnalyticsWithContained) {
     // JsonCPP, so fall back to string diffs.
     ASSERT_EQ(from_json, from_proto);
   }
+}
+
+TEST(JsonFormatR4Test, WithEmptyContainedResourcePrintsValidJson) {
+  const Parameters proto = ReadProto<Parameters>(
+      "testdata/r4/examples/Parameters-empty-resource.prototxt");
+  absl::StatusOr<std::string> from_proto_status =
+      PrettyPrintFhirToJsonString(proto);
+  ASSERT_TRUE(from_proto_status.ok());
+  std::string expected =
+      ReadFile("testdata/r4/examples/Parameters-empty-resource.json");
+  ASSERT_THAT(expected.back(), Eq('\n'));
+  expected = expected.substr(0, expected.length() - 1);
+  ASSERT_THAT(*from_proto_status, Eq(expected));
 }
 
 TEST(JsonFormatR4Test, TestAccount) {
