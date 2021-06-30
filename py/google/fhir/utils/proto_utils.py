@@ -13,11 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Utilities to make it easier to work with proto reflection."""
-from typing import Any, Type, Union
+from typing import Any, Type, Union, TypeVar
 
 from google.protobuf import descriptor
 from google.protobuf import message
 from google.protobuf import message_factory
+from google.protobuf import text_format
+
+_T = TypeVar('_T', bound=message.Message)
 
 _factory = message_factory.MessageFactory()
 
@@ -321,3 +324,22 @@ def copy_common_field(source_message: message.Message,
   if field_is_set(source_message, source_field):
     source_value = get_value_at_field(source_message, source_field)
     set_value_at_field(target_message, target_field, source_value)
+
+
+def read_proto(file_name: str, proto_cls: Type[_T]) -> _T:
+  """Reads a protobuf in prototxt format from file_name.
+
+  Data is parsed into an instance of `proto_cls`.
+
+  Args:
+    file_name: The file to read from.
+    proto_cls: The type of protobuf message to parse as.
+
+  Returns:
+    The protobuf message in the file.
+  """
+  raw_text = ''
+  proto = proto_cls()
+  with open(file_name, 'r', encoding='utf-8') as f:
+    raw_text = f.read()
+  return text_format.Parse(raw_text, proto)
