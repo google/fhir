@@ -25,22 +25,17 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
-import com.google.fhir.common.Codes;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
-import com.google.fhir.r4.core.ResourceTypeCode;
-import com.google.fhir.r4.core.SearchParameter;
 import com.google.fhir.r4.core.StructureDefinition;
-import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.DescriptorProto.ReservedRange;
 import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
-import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.Message;
 import java.io.File;
@@ -48,7 +43,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,7 +60,6 @@ public class ProtoGeneratorTest {
 
   private JsonFormat.Parser jsonParser;
   private Runfiles runfiles;
-  private Map<ResourceTypeCode.Value, List<SearchParameter>> searchParameterMap;
   private final ProtoGenerator r4ProtoGenerator;
 
   public ProtoGeneratorTest() throws Exception {
@@ -110,8 +103,6 @@ public class ProtoGeneratorTest {
   public void setUp() throws IOException, InvalidFhirException {
     jsonParser = JsonFormat.getParser();
     runfiles = Runfiles.create();
-    FhirPackage fhirPackage = FhirPackage.load("spec/fhir_r4_package.zip");
-    searchParameterMap = GeneratorUtils.getSearchParameterMap(fhirPackage.searchParameters);
 
     ExtensionRegistry registry = ExtensionRegistry.newInstance();
     ProtoGeneratorTestUtils.initializeRegistry(registry);
@@ -178,24 +169,8 @@ public class ProtoGeneratorTest {
                 .splitToList(
                     golden.getOptions().getExtension(Annotations.fhirStructureDefinitionUrl)));
     StructureDefinition resource = readStructureDefinition(structDefName, FhirVersion.R4);
-    List<SearchParameter> searchParameters;
-    if (resource.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE) {
-      String resourceTypeId = resource.getSnapshot().getElementList().get(0).getId().getValue();
-      // Get the string representation of the enum value for the resource type.
-      EnumValueDescriptor enumValueDescriptor =
-          Codes.codeStringToEnumValue(ResourceTypeCode.Value.getDescriptor(), resourceTypeId);
-      searchParameters =
-          searchParameterMap.getOrDefault(
-              ResourceTypeCode.Value.forNumber(enumValueDescriptor.getNumber()),
-              new ArrayList<>());
-    } else {
-      // Not a resource - no search parameters to add.
-      searchParameters = new ArrayList<>();
-    }
     DescriptorProto generatedProto =
-        clearProtogenAnnotations(
-                protoGenerator.generateProto(resource, searchParameters).toBuilder())
-            .build();
+        clearProtogenAnnotations(protoGenerator.generateProto(resource).toBuilder()).build();
 
     if (!generatedProto.equals(golden)) {
       System.out.println("Failed on: " + resourceName);

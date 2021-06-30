@@ -16,7 +16,6 @@ package com.google.fhir.protogen;
 
 import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static com.google.fhir.protogen.GeneratorUtils.getElementById;
-import static com.google.fhir.protogen.GeneratorUtils.getParent;
 import static com.google.fhir.protogen.GeneratorUtils.isExtensionProfile;
 import static com.google.fhir.protogen.GeneratorUtils.isProfile;
 import static com.google.fhir.protogen.GeneratorUtils.isSlice;
@@ -57,7 +56,6 @@ import com.google.fhir.r4.core.SearchParameter;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
-import com.google.fhir.r4.core.Uri;
 import com.google.fhir.stu3.proto.CodingWithFixedSystem;
 import com.google.fhir.wrappers.InstantWrapper;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
@@ -287,9 +285,7 @@ public class ProtoGenerator {
             "Invalid FHIR structure definition: " + def.getId().getValue() + " has no url");
       }
       boolean isSimpleExtensionProfile =
-          isExtensionProfile(def)
-              && isSimpleExtension(
-                  def.getSnapshot().getElement(0), def.getSnapshot().getElementList());
+          isExtensionProfile(def) && isSingleTypedExtensionDefinition(def);
       String inlineType;
       String structDefPackage;
       if (isSimpleExtensionProfile) {
@@ -335,111 +331,1442 @@ public class ProtoGenerator {
    * definition. For a more elaborate discussion of these versions, see
    * https://www.hl7.org/fhir/structuredefinition.html.
    */
-  public DescriptorProto generateProto(
-      StructureDefinition def, List<SearchParameter> searchParameters) throws InvalidFhirException {
-    // Build a top-level message description.
-    StringBuilder comment =
-        new StringBuilder()
-            .append("Auto-generated from StructureDefinition for ")
-            .append(def.getName().getValue());
-    if (def.getMeta().hasLastUpdated()) {
-      comment
-          .append(", last updated ")
-          .append(new InstantWrapper(def.getMeta().getLastUpdated()));
+  public DescriptorProto generateProto(StructureDefinition def) throws InvalidFhirException {
+    return new PerDefinitionGenerator(def).generate();
+  }
+
+  private StructureDefinition fixIdBug(StructureDefinition def) {
+    if (def.getKind().getValue() != StructureDefinitionKindCode.Value.RESOURCE) {
+      return def;
     }
-    comment.append(".");
-    if (def.getSnapshot().getElement(0).hasShort()) {
-      String shortString = def.getSnapshot().getElement(0).getShort().getValue();
-      if (!shortString.endsWith(".")) {
-        shortString += ".";
+    // Fix bug in 4.0.1 where $RESOURCE.id types are strings instead of ids.
+    // See https://jira.hl7.org/browse/FHIR-25262
+    StructureDefinition.Builder defBuilder = def.toBuilder();
+    for (ElementDefinition.Builder elementBuilder :
+        defBuilder.getSnapshotBuilder().getElementBuilderList()) {
+      if (elementBuilder.getId().getValue().matches("[A-Za-z]*\\.id")) {
+        for (int i = 0; i < elementBuilder.getTypeBuilder(0).getExtensionCount(); i++) {
+          Extension.Builder extensionBuilder =
+              elementBuilder.getTypeBuilder(0).getExtensionBuilder(i);
+          if (extensionBuilder.getUrl().getValue().equals(FHIR_TYPE_EXTENSION_URL)) {
+            extensionBuilder.getValueBuilder().getUrlBuilder().setValue("id");
+          }
+        }
       }
-      comment.append("\n").append(shortString.replaceAll("[\\n\\r]", "\n"));
     }
-    comment.append("\nSee ").append(def.getUrl().getValue());
+    return defBuilder.build();
+  }
 
-    // Add message-level annotations.
-    DescriptorProto.Builder builder = DescriptorProto.newBuilder();
-    MessageOptions.Builder optionsBuilder =
-        MessageOptions.newBuilder()
+  private List<SearchParameter> getSearchParameters(StructureDefinition def) {
+    if (def.getKind().getValue() != StructureDefinitionKindCode.Value.RESOURCE) {
+      // Not a resource - no search parameters to add.
+      return new ArrayList<>();
+    }
+    String resourceTypeId = def.getSnapshot().getElementList().get(0).getId().getValue();
+    // Get the string representation of the enum value for the resource type.
+    try {
+      EnumValueDescriptor enumValueDescriptor =
+          Codes.codeStringToEnumValue(ResourceTypeCode.Value.getDescriptor(), resourceTypeId);
+      return searchParameterMap.getOrDefault(
+          ResourceTypeCode.Value.forNumber(enumValueDescriptor.getNumber()), new ArrayList<>());
+    } catch (InvalidFhirException e) {
+      throw new IllegalArgumentException(
+          "Encountered unrecognized resource id: " + resourceTypeId, e);
+    }
+  }
+
+  // Class for generating a single message from a single StructureDefinition.
+  // This contains additional context from the containing ProtoGenerator, specific to the definition
+  // it is the generator for.
+  private final class PerDefinitionGenerator {
+    private final StructureDefinition structureDefinition;
+    private final ImmutableList<ElementDefinition> allElements;
+
+    PerDefinitionGenerator(StructureDefinition structureDefinition) {
+      this.structureDefinition = fixIdBug(structureDefinition);
+      this.allElements =
+          ImmutableList.copyOf(this.structureDefinition.getSnapshot().getElementList());
+    }
+
+    DescriptorProto generate() throws InvalidFhirException {
+      DescriptorProto.Builder builder = DescriptorProto.newBuilder();
+      builder.setOptions(generateOptions());
+      generateMessage(allElements.get(0), builder);
+
+      if (isProfile(structureDefinition)) {
+        String name = getTypeName(structureDefinition);
+        // This is a profile on a pre-existing type.
+        // Make sure any nested subtypes use the profile name, not the base name
+        replaceType(builder, structureDefinition.getType().getValue(), name);
+
+        // Add all base structure definition url annotations
+        StructureDefinition defInChain = structureDefinition;
+        while (isProfile(defInChain)) {
+          String baseUrl = defInChain.getBaseDefinition().getValue();
+          builder
+              .setName(name)
+              .getOptionsBuilder()
+              .addExtension(Annotations.fhirProfileBase, baseUrl);
+          defInChain = getDefinitionDataByUrl(baseUrl).structDef;
+        }
+      }
+      return builder.build();
+    }
+
+    private MessageOptions generateOptions() {
+      // Build a top-level message description.
+      StringBuilder comment =
+          new StringBuilder()
+              .append("Auto-generated from StructureDefinition for ")
+              .append(structureDefinition.getName().getValue());
+      if (structureDefinition.getMeta().hasLastUpdated()) {
+        comment
+            .append(", last updated ")
+            .append(new InstantWrapper(structureDefinition.getMeta().getLastUpdated()));
+      }
+      comment.append(".");
+      if (structureDefinition.getSnapshot().getElement(0).hasShort()) {
+        String shortString = structureDefinition.getSnapshot().getElement(0).getShort().getValue();
+        if (!shortString.endsWith(".")) {
+          shortString += ".";
+        }
+        comment.append("\n").append(shortString.replaceAll("[\\n\\r]", "\n"));
+      }
+      comment.append("\nSee ").append(structureDefinition.getUrl().getValue());
+
+      // Add message-level annotations.
+      MessageOptions.Builder optionsBuilder =
+          MessageOptions.newBuilder()
+              .setExtension(
+                  Annotations.structureDefinitionKind,
+                  Annotations.StructureDefinitionKindValue.valueOf(
+                      "KIND_" + structureDefinition.getKind().getValue()))
+              .setExtension(ProtoGeneratorAnnotations.messageDescription, comment.toString())
+              .setExtension(
+                  Annotations.fhirStructureDefinitionUrl, structureDefinition.getUrl().getValue());
+      if (structureDefinition.getAbstract().getValue()) {
+        optionsBuilder.setExtension(
+            Annotations.isAbstractType, structureDefinition.getAbstract().getValue());
+      }
+      if (isSingleValueComplexExtension(structureDefinition)) {
+        optionsBuilder.setExtension(Annotations.isComplexExtension, true);
+      }
+
+      // Add search parameters
+      List<Annotations.SearchParameter> searchParameterAnnotations = new ArrayList<>();
+      for (SearchParameter searchParameter :
+          getSearchParameters(structureDefinition).stream()
+              .sorted((p1, p2) -> p1.getName().getValue().compareTo(p2.getName().getValue()))
+              .collect(Collectors.toList())) {
+        searchParameterAnnotations.add(
+            Annotations.SearchParameter.newBuilder()
+                .setName(searchParameter.getName().getValue())
+                .setType(
+                    Annotations.SearchParameterType.forNumber(
+                        searchParameter.getType().getValue().getNumber()))
+                .setExpression(searchParameter.getExpression().getValue())
+                .build());
+      }
+      if (!searchParameterAnnotations.isEmpty()) {
+        optionsBuilder.setExtension(Annotations.searchParameter, searchParameterAnnotations);
+      }
+      return optionsBuilder.build();
+    }
+
+    private DescriptorProto generateMessage(
+        ElementDefinition currentElement, DescriptorProto.Builder builder)
+        throws InvalidFhirException {
+      // Get the name of this message
+      builder.setName(nameFromQualifiedName(getContainerType(currentElement)));
+
+      // Add message-level FHIRPath constraints.
+      List<String> expressions = getFhirPathErrorConstraints(currentElement);
+      if (!expressions.isEmpty()) {
+        builder
+            .getOptionsBuilder()
+            .setExtension(Annotations.fhirPathMessageConstraint, expressions);
+      }
+      // Add warning constraints.
+      List<String> warnings = getFhirPathWarningConstraints(currentElement);
+      if (!warnings.isEmpty()) {
+        builder
+            .getOptionsBuilder()
+            .setExtension(Annotations.fhirPathMessageWarningConstraint, warnings);
+      }
+
+      // When generating a descriptor for a primitive type, the value part may already be present.
+      int nextTag = builder.getFieldCount() + 1;
+
+      // Some repeated fields can have profiled elements in them, that get inlined as fields.
+      // The most common case of this is typed extensions.  We defer adding these to the end of the
+      // message, so that non-profiled messages will be binary compatiple with this proto.
+      // Note that the inverse is not true - loading a profiled message bytes into the non-profiled
+      // will result in the data in the typed fields being dropped.
+      List<ElementDefinition> deferredElements = new ArrayList<>();
+
+      // Loop over the direct children of this element.
+      for (ElementDefinition element : getDirectChildren(currentElement)) {
+        if (element.getId().getValue().matches("[^.]*\\.value")
+            && (element.getType(0).getCode().getValue().isEmpty()
+                || element.getType(0).getCode().getValue().startsWith(FHIRPATH_TYPE_PREFIX))) {
+          // This is a primitive value element.
+          generatePrimitiveValue(element, builder);
+          nextTag++;
+          continue;
+        }
+
+        // Per spec, the fixed Extension.url on a top-level extension must match the
+        // StructureDefinition url.  Since that is already added to the message via the
+        // fhir_structure_definition_url, we can skip over it here.
+        if (element.getBase().getPath().getValue().equals("Extension.url")
+            && element.getFixed().hasUri()) {
+          continue;
+        }
+
+        // Slices on choice types are handled during the creation of the choice type itself.
+        // Ignore them here.
+        if (GeneratorUtils.isChoiceTypeSlice(element)) {
+          continue;
+        }
+
+        if (!isChoiceType(element) && !isSingleType(element)) {
+          throw new IllegalArgumentException(
+              "Illegal field has multiple types but is not a Choice Type:\n" + element);
+        }
+
+        if (lastIdToken(element).slicename != null) {
+          // This is a slice.  Defer this field until the end of the message, to keep base field
+          // numbers consistent across profiles.
+          deferredElements.add(element);
+        } else if (isContainedResourceField(element)
+            && getContainedResourceBehavior(packageInfo)
+                != ContainedResourceBehavior.TYPED_CONTAINED_RESOURCE) {
+          buildAndAddField(element, nextTag++, builder);
+          builder
+              .addFieldBuilder()
+              .setNumber(nextTag)
+              .getOptionsBuilder()
+              .setExtension(
+                  ProtoGeneratorAnnotations.reservedReason,
+                  "Field "
+                      + nextTag
+                      + " reserved for strongly-typed ContainedResource for id: "
+                      + element.getId().getValue());
+          nextTag++;
+        } else {
+          buildAndAddField(element, nextTag++, builder);
+        }
+      }
+
+      for (ElementDefinition deferredElement : deferredElements) {
+        // Currently we only support slicing for Extensions and Codings
+        if (isElementSupportedForSlicing(deferredElement)
+            || isContainedResourceField(deferredElement)) {
+          buildAndAddField(deferredElement, nextTag++, builder);
+        } else {
+          builder
+              .addFieldBuilder()
+              .setNumber(nextTag)
+              .getOptionsBuilder()
+              .setExtension(
+                  ProtoGeneratorAnnotations.reservedReason,
+                  "field "
+                      + nextTag
+                      + " reserved for "
+                      + deferredElement.getId().getValue()
+                      + " which uses an unsupported slicing on "
+                      + deferredElement.getType(0).getCode().getValue());
+          nextTag++;
+        }
+      }
+      return builder.build();
+    }
+
+    /** Generate the primitive value part of a datatype. */
+    private void generatePrimitiveValue(
+        ElementDefinition valueElement, DescriptorProto.Builder builder)
+        throws InvalidFhirException {
+      String defId = structureDefinition.getId().getValue();
+
+      // If a regex for this primitive type is present, add it as a message-level annotation.
+      if (valueElement.getTypeCount() == 1) {
+        Optional<String> regexOptional = getPrimitiveRegex(valueElement);
+        if (regexOptional.isPresent()) {
+          builder.setOptions(
+              builder.getOptions().toBuilder()
+                  .setExtension(Annotations.valueRegex, regexOptional.get())
+                  .build());
+        }
+      }
+
+      // For historical reasons, primitive value fields appear first in primitive protos.
+      // Therefore, we start numbering at one for these fields.
+      // At the end of this function, we will shift all other fields down by the number of fields
+      // we are adding.
+      List<FieldDescriptorProto> fieldsToAdd = new ArrayList<>();
+      if (TIME_LIKE_PRECISION_MAP.containsKey(defId)) {
+        // Handle time-like types.
+        EnumDescriptorProto.Builder enumBuilder = PRECISION_ENUM.toBuilder();
+        for (String value : TIME_LIKE_PRECISION_MAP.get(defId)) {
+          enumBuilder.addValue(
+              EnumValueDescriptorProto.newBuilder()
+                  .setName(value)
+                  .setNumber(enumBuilder.getValueCount()));
+        }
+        builder.addEnumType(enumBuilder);
+        FieldDescriptorProto.Builder valueField =
+            FieldDescriptorProto.newBuilder()
+                .setType(FieldDescriptorProto.Type.TYPE_INT64)
+                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                .setName("value_us")
+                .setNumber(1);
+        valueField
+            .getOptionsBuilder()
             .setExtension(
-                Annotations.structureDefinitionKind,
-                Annotations.StructureDefinitionKindValue.valueOf(
-                    "KIND_" + def.getKind().getValue()))
-            .setExtension(ProtoGeneratorAnnotations.messageDescription, comment.toString())
-            .setExtension(Annotations.fhirStructureDefinitionUrl, def.getUrl().getValue());
-    if (def.getAbstract().getValue()) {
-      optionsBuilder.setExtension(Annotations.isAbstractType, def.getAbstract().getValue());
-    }
-    if (isSingleValueComplexExtension(def)) {
-      optionsBuilder.setExtension(Annotations.isComplexExtension, true);
+                ProtoGeneratorAnnotations.fieldDescription, "Primitive value for " + defId);
+        fieldsToAdd.add(valueField.build());
+        if (TYPES_WITH_TIMEZONE.contains(defId)) {
+          fieldsToAdd.add(TIMEZONE_FIELD);
+        }
+        fieldsToAdd.add(
+            FieldDescriptorProto.newBuilder()
+                .setName("precision")
+                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                .setType(FieldDescriptorProto.Type.TYPE_ENUM)
+                .setTypeName(
+                    "."
+                        + packageInfo.getProtoPackage()
+                        + "."
+                        + toFieldTypeCase(defId)
+                        + ".Precision")
+                .setNumber(TYPES_WITH_TIMEZONE.contains(defId) ? 3 : 2)
+                .build());
+      } else {
+        // Handle non-time-like types by just adding the value field.
+        FieldDescriptorProto.Builder valueField =
+            FieldDescriptorProto.newBuilder()
+                .setType(
+                    PRIMITIVE_TYPE_OVERRIDES.getOrDefault(
+                        defId, FieldDescriptorProto.Type.TYPE_STRING))
+                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                .setName("value")
+                .setNumber(1);
+        String description =
+            valueElement.hasShort()
+                ? valueElement.getShort().getValue()
+                : "Primitive value for " + defId;
+        valueField
+            .getOptionsBuilder()
+            .setExtension(ProtoGeneratorAnnotations.fieldDescription, description);
+        if (isRequiredByFhir(valueElement)) {
+          valueField
+              .getOptionsBuilder()
+              .setExtension(
+                  Annotations.validationRequirement, Annotations.Requirement.REQUIRED_BY_FHIR);
+        }
+        fieldsToAdd.add(valueField.build());
+      }
+      // For historical reasons, the primitive value field (an correspoding timezone and precision
+      // fields in the case of timelike primitives) are the first tag numbers added.  Therefore,
+      // shift all pre-existing fields to be after those fields.
+      int shiftSize = fieldsToAdd.size();
+      for (FieldDescriptorProto oldField : builder.getFieldList()) {
+        fieldsToAdd.add(oldField.toBuilder().setNumber(oldField.getNumber() + shiftSize).build());
+      }
+      builder.clearField().addAllField(fieldsToAdd);
     }
 
-    // Add search parameters
-    List<Annotations.SearchParameter> searchParameterAnnotations = new ArrayList<>();
-    for (SearchParameter searchParameter :
-        searchParameters.stream()
-            .sorted((p1, p2) -> p1.getName().getValue().compareTo(p2.getName().getValue()))
-            .collect(Collectors.toList())) {
-      searchParameterAnnotations.add(
-          Annotations.SearchParameter.newBuilder()
-              .setName(searchParameter.getName().getValue())
-              .setType(
-                  Annotations.SearchParameterType.forNumber(
-                      searchParameter.getType().getValue().getNumber()))
-              .setExpression(searchParameter.getExpression().getValue())
-              .build());
-    }
-    if (!searchParameterAnnotations.isEmpty()) {
-      optionsBuilder.setExtension(Annotations.searchParameter, searchParameterAnnotations);
+    private void buildAndAddField(
+        ElementDefinition element, int tag, DescriptorProto.Builder builder)
+        throws InvalidFhirException {
+      // Generate the field. If this field doesn't actually exist in this version of the
+      // message, for example, the max attribute is 0, buildField returns null and no field
+      // should be added.
+      Optional<FieldDescriptorProto> fieldOptional = buildField(element, tag);
+      if (fieldOptional.isPresent()) {
+        FieldDescriptorProto field = fieldOptional.get();
+        Optional<DescriptorProto> optionalNestedType = buildNestedTypeIfNeeded(element);
+        if (optionalNestedType.isPresent()) {
+          builder.addNestedType(optionalNestedType.get());
+          // The nested type is defined in the local package, so replace the core FHIR package
+          // with the local packageName in the field type.
+          field =
+              field.toBuilder()
+                  .setTypeName(
+                      field
+                          .getTypeName()
+                          .replace(fhirVersion.coreProtoPackage, packageInfo.getProtoPackage()))
+                  .build();
+        } else {
+          // There is no submessage defined for this field, so apply constraints to the field
+          // itself.
+          List<String> expressions = getFhirPathErrorConstraints(element);
+          if (!expressions.isEmpty()) {
+            field =
+                field.toBuilder()
+                    .setOptions(
+                        field.getOptions().toBuilder()
+                            .setExtension(Annotations.fhirPathConstraint, expressions))
+                    .build();
+          }
+          // Add warning constraints.
+          List<String> warnings = getFhirPathWarningConstraints(element);
+          if (!warnings.isEmpty()) {
+            field =
+                field.toBuilder()
+                    .setOptions(
+                        field.getOptions().toBuilder()
+                            .setExtension(Annotations.fhirPathWarningConstraint, warnings))
+                    .build();
+          }
+        }
+
+        builder.addField(field);
+      } else if (!element.getPath().getValue().equals("Extension.extension")
+          && !element.getPath().getValue().equals("Extension.value[x]")) {
+        // Don't bother adding reserved messages for Extension.extension or Extension.value[x]
+        // since that's part of the extension definition, and adds a lot of unhelpful noise.
+        builder
+            .addFieldBuilder()
+            .setNumber(tag)
+            .getOptionsBuilder()
+            .setExtension(
+                ProtoGeneratorAnnotations.reservedReason,
+                element.getPath().getValue() + " not present on profile.");
+      }
     }
 
-    builder.setOptions(optionsBuilder);
-
-    // If this is a primitive type, generate the value field first.
-    if (def.getKind().getValue() == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE) {
-      generatePrimitiveValue(def, builder);
+    private Optional<DescriptorProto> buildNestedTypeIfNeeded(ElementDefinition element)
+        throws InvalidFhirException {
+      Optional<DescriptorProto> choiceType = buildChoiceTypeIfRequired(element);
+      if (choiceType.isPresent()) {
+        if (isValueElementOfSingleTypedExtension(element)) {
+          // In the case of a single-typed simple extension, we pull the field type out of the
+          // choice
+          // type rather than have a choice type with a single field.
+          // Thus, if the single type required a newly-defined message (e.g., a bound code), return
+          // that, otherwise (e.g., for a normal primitive like String) return empty (no nested type
+          // needed.
+          return choiceType.get().getNestedTypeList().isEmpty()
+              ? Optional.empty()
+              : Optional.of(choiceType.get().getNestedType(0));
+        }
+        return choiceType;
+      }
+      return buildNonChoiceTypeNestedTypeIfNeeded(element);
     }
 
-    if (def.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE) {
-      // Fix bug in 4.0.1 where $RESOURCE.id types are strings instead of ids.
-      // See https://jira.hl7.org/browse/FHIR-25262
-      StructureDefinition.Builder defBuilder = def.toBuilder();
-      for (ElementDefinition.Builder elementBuilder :
-          defBuilder.getSnapshotBuilder().getElementBuilderList()) {
-        if (elementBuilder.getId().getValue().matches("[A-Za-z]*\\.id")) {
-          for (int i = 0; i < elementBuilder.getTypeBuilder(0).getExtensionCount(); i++) {
-            Extension.Builder extensionBuilder =
-                elementBuilder.getTypeBuilder(0).getExtensionBuilder(i);
-            if (extensionBuilder.getUrl().getValue().equals(FHIR_TYPE_EXTENSION_URL)) {
-              extensionBuilder.getValueBuilder().getUrlBuilder().setValue("id");
+    private Optional<DescriptorProto> buildNonChoiceTypeNestedTypeIfNeeded(
+        ElementDefinition element) throws InvalidFhirException {
+      if (element.getTypeCount() != 1) {
+        return Optional.empty();
+      }
+
+      Optional<DescriptorProto> profiledCodeableConcept =
+          makeProfiledCodeableConceptIfRequired(element);
+      if (profiledCodeableConcept.isPresent()) {
+        return profiledCodeableConcept;
+      }
+      Optional<DescriptorProto> profiledCoding = makeProfiledCodingIfRequired(element);
+      if (profiledCoding.isPresent()) {
+        return profiledCoding;
+      }
+      Optional<DescriptorProto> profiledCode = makeProfiledCodeIfRequired(element);
+      if (profiledCode.isPresent()) {
+        return profiledCode;
+      }
+
+      // Check for all other profiled datatypes
+      Optional<DescriptorProto> profiledDatatype = makeProfiledDatatypeIfRequired(element);
+      if (profiledDatatype.isPresent()) {
+        return profiledDatatype;
+      }
+
+      // If this is a container type, or a complex internal extension, define the inner message.
+      // If this is a CodeableConcept, check for fixed coding slices.  Normally we don't add a
+      // message for CodeableConcept because it's defined as a datatype, but if there are slices
+      // on it we need to generate a custom version.
+      if (isContainer(element) || isComplexInternalExtension(element)) {
+        return Optional.of(generateMessage(element, DescriptorProto.newBuilder()));
+      }
+      return Optional.empty();
+    }
+
+    // Generates the nested type descriptor proto for a choice type if required.
+    private Optional<DescriptorProto> buildChoiceTypeIfRequired(ElementDefinition element)
+        throws InvalidFhirException {
+      if (isChoiceTypeExtension(element)) {
+        return Optional.of(makeChoiceType(getExtensionValueElement(element)));
+      }
+      Optional<ElementDefinition> choiceTypeBase = getChoiceTypeBase(element);
+      if (choiceTypeBase.isPresent()) {
+        List<ElementDefinition.TypeRef> baseTypes = choiceTypeBase.get().getTypeList();
+        Map<String, Integer> baseTypesToIndex = new HashMap<>();
+        for (int i = 0; i < baseTypes.size(); i++) {
+          String code = baseTypes.get(i).getCode().getValue();
+          // Only add each code type once.  This is only relevant for references, which can appear
+          // multiple times.
+          baseTypesToIndex.putIfAbsent(code, i);
+        }
+        DescriptorProto baseChoiceType = makeChoiceType(choiceTypeBase.get());
+        final Set<String> uniqueTypes = new HashSet<>();
+        List<FieldDescriptorProto> matchingFields =
+            element.getTypeList().stream()
+                .filter(type -> uniqueTypes.add(type.getCode().getValue()))
+                .map(
+                    type ->
+                        baseChoiceType.getField(baseTypesToIndex.get(type.getCode().getValue())))
+                .collect(Collectors.toList());
+
+        // TODO: If a choice type is a slice of another choice type (not a pure
+        // constraint, but actual slice) we'll need to update the name and type name as well.
+        DescriptorProto.Builder newChoiceType =
+            baseChoiceType.toBuilder().clearField().addAllField(matchingFields);
+
+        // Constraints may be on the choice base element rather than the value element,
+        // so reflect that here.
+        List<String> expressions = getFhirPathErrorConstraints(element);
+        if (!expressions.isEmpty()) {
+          newChoiceType.setOptions(
+              baseChoiceType.getOptions().toBuilder()
+                  .setExtension(Annotations.fhirPathMessageConstraint, expressions));
+        }
+        // Add warning constraints.
+        List<String> warnings = getFhirPathWarningConstraints(element);
+        if (!warnings.isEmpty()) {
+          newChoiceType.setOptions(
+              baseChoiceType.getOptions().toBuilder()
+                  .setExtension(Annotations.fhirPathMessageWarningConstraint, warnings));
+        }
+
+        return Optional.of(newChoiceType.build());
+      }
+
+      if (isChoiceType(element)) {
+        return Optional.of(makeChoiceType(element));
+      }
+
+      return Optional.empty();
+    }
+
+    /**
+     * Returns true if this is the value[x] element of an extension with a single type. This is a
+     * special case because we extract the type out of the choice type and into a simple field.
+     * Since extensions are handled specially anyway, and the vast majority of simple extensions are
+     * a single type, it's much nicer to use a single field rather than a single-typed choice type.
+     * Note that prior to FHIR 4.0.1, the structure definition was written as a single field, but
+     * changed in that version to a true choice type.
+     */
+    private boolean isValueElementOfSingleTypedExtension(ElementDefinition element)
+        throws InvalidFhirException {
+      return isValueElementOfSimpleExtension(element) && getDistinctTypeCount(element) == 1;
+    }
+
+    private boolean isValueElementOfChoiceTypeExtension(ElementDefinition element)
+        throws InvalidFhirException {
+      return isValueElementOfSimpleExtension(element) && getDistinctTypeCount(element) > 1;
+    }
+
+    private boolean isValueElementOfSimpleExtension(ElementDefinition element)
+        throws InvalidFhirException {
+      Optional<ElementDefinition> parent = GeneratorUtils.getParent(element, allElements);
+      if (!parent.isPresent()) {
+        return false;
+      }
+      return isSimpleExtension(parent.get()) && lastIdToken(element).pathpart.equals("value");
+    }
+
+    private Optional<DescriptorProto> makeProfiledCodeIfRequired(ElementDefinition element)
+        throws InvalidFhirException {
+      ElementDefinition valueElement =
+          isSimpleExtension(element) ? getExtensionValueElement(element) : element;
+      if (valueElement.getTypeCount() != 1
+          || !valueElement.getType(0).getCode().getValue().equals("code")) {
+        return Optional.empty();
+      }
+
+      Optional<String> boundValueSetUrl = getBindingValueSetUrl(element);
+      if (!boundValueSetUrl.isPresent()) {
+        return Optional.empty();
+      }
+
+      Optional<QualifiedType> typeWithBoundValueSet = checkForTypeWithBoundValueSet(element);
+      if (!typeWithBoundValueSet.isPresent()) {
+        return Optional.empty();
+      }
+
+      return Optional.of(
+          valueSetGenerator.generateCodeBoundToValueSet(
+              boundValueSetUrl.get(), typeWithBoundValueSet.get()));
+    }
+
+    private Optional<QualifiedType> checkForTypeWithBoundValueSet(ElementDefinition element)
+        throws InvalidFhirException {
+      // Note that for Simple extensions that are inlined as a single type, we need to actually
+      // check
+      // the internal value element on the extension, even though the element we're replacing and
+      // naming the field after is the extension itself.  Thus, here we differentiate between
+      // "value element" and "naming element".
+      // E.g., for element mySubExtension, which has a valueCoding element on it, the datatype will
+      // be
+      // generated from the valueElement, valueCoding in this case, but the name should be based on
+      // the original, mySubExtension element.
+      //
+      // For all cases other than simple sub extensions, the value element is equal to the naming
+      // element.
+      ElementDefinition namingElement = element;
+      ElementDefinition valueElement =
+          isSimpleExtension(element) ? getExtensionValueElement(element) : element;
+
+      // If this is a simple extension structure definition with a single possible
+      // type, make sure to check for a slice of that type to use to generate the field.  This
+      // special case is necessary, because when in a complex extension, this is handled when
+      // looking at the simple extension _field_.  In this case that field doesn't exist, so we need
+      // to make a special case for slicing.
+      // TODO: We should do a broader rewrite at somepoint that makes type and field
+      // co-generated.  That would remove this class of special case.
+      if (element.equals(valueElement)
+          && element.getPath().getValue().equals("Extension.value[x]")
+          && isValueElementOfSingleTypedExtension(element)
+          && !isSlice(element)) {
+        valueElement = checkForChoiceSlice(element.getType(0), element).orElse(element);
+      }
+
+      if (getDistinctTypeCount(valueElement) == 1) {
+        String containerName = getContainerType(namingElement);
+        ElementDefinition.TypeRef type = valueElement.getType(0);
+
+        String typeName = type.getCode().getValue();
+        Optional<String> valueSetUrl = getBindingValueSetUrl(valueElement);
+        if (valueSetUrl.isPresent()) {
+          if (typeName.equals("code")) {
+            if (!containerName.endsWith("Code") && !containerName.endsWith(".CodeType")) {
+              // Carve out some exceptions because CodeCode and CodeTypeCode sounds silly.
+              containerName = containerName + "Code";
+            }
+            return Optional.of(new QualifiedType(containerName, packageInfo.getProtoPackage()));
+          }
+          if (!useLegacyTypeNaming() && typeName.equals("Coding")) {
+            return Optional.of(
+                new QualifiedType(containerName + "Coding", packageInfo.getProtoPackage()));
+          }
+        }
+        // TODO: Handle bound systems on CodeableConcepts
+        // TODO: return an error for unhandled types with required bindings in strict
+        // mode
+      }
+      return Optional.empty();
+    }
+
+    private Optional<DescriptorProto> makeProfiledCodeableConceptIfRequired(
+        ElementDefinition element) throws InvalidFhirException {
+      if (element.getTypeCount() != 1
+          || !element.getType(0).getCode().getValue().equals("CodeableConcept")) {
+        return Optional.empty();
+      }
+      List<ElementDefinition> codingSlices =
+          getDirectChildren(element).stream()
+              .filter(ElementDefinition::hasSliceName)
+              .collect(Collectors.toList());
+      if (codingSlices.isEmpty()) {
+        return Optional.empty();
+      }
+      String codeableConceptStructDefUrl =
+          CodeableConcept.getDescriptor()
+              .getOptions()
+              .getExtension(Annotations.fhirStructureDefinitionUrl);
+      StructureDefinition codeableConceptDefinition =
+          structDefDataByUrl.get(codeableConceptStructDefUrl).structDef;
+      QualifiedType qualifiedType = getQualifiedFieldType(element);
+      String fieldType = qualifiedType.type;
+
+      DescriptorProto.Builder codeableConceptBuilder =
+          new PerDefinitionGenerator(codeableConceptDefinition).generate().toBuilder();
+      codeableConceptBuilder
+          .getOptionsBuilder()
+          .clearExtension(ProtoGeneratorAnnotations.messageDescription);
+      codeableConceptBuilder.setName(fieldType.substring(fieldType.lastIndexOf(".") + 1));
+      codeableConceptBuilder
+          .getOptionsBuilder()
+          .clearExtension(Annotations.structureDefinitionKind)
+          .clearExtension(Annotations.fhirStructureDefinitionUrl)
+          .addExtension(Annotations.fhirProfileBase, codeableConceptStructDefUrl);
+      for (ElementDefinition codingSlice : codingSlices) {
+        String fixedSystem = null;
+        ElementDefinition codeDefinition = null;
+        for (ElementDefinition codingField : getDirectChildren(codingSlice)) {
+          String basePath = codingField.getBase().getPath().getValue();
+          if (basePath.equals("Coding.system")) {
+            fixedSystem = codingField.getFixed().getUri().getValue();
+          }
+          if (basePath.equals("Coding.code")) {
+            codeDefinition = codingField;
+          }
+        }
+        if (fixedSystem == null || codeDefinition == null) {
+          System.out.println(
+              "Warning: Coding slicing not handled because it does not have both a fixed system and"
+                  + " a code slice:\n"
+                  + codingSlice.getId());
+        }
+
+        if (codeDefinition.getFixed().hasCode()) {
+          FieldDescriptorProto.Builder codingField =
+              codeableConceptBuilder
+                  .addFieldBuilder()
+                  .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                  .setTypeName("." + fhirVersion.coreProtoPackage + ".CodingWithFixedCode")
+                  .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
+                  .setLabel(getFieldSize(codingSlice))
+                  .setNumber(codeableConceptBuilder.getFieldCount());
+          if (!snakeCaseToJsonCase(codingField.getName())
+              .equals(codingSlice.getSliceName().getValue())) {
+            codingField.setJsonName(codingSlice.getSliceName().getValue());
+          }
+          codingField
+              .getOptionsBuilder()
+              .setExtension(Annotations.fhirInlinedCodingSystem, fixedSystem)
+              .setExtension(
+                  Annotations.fhirInlinedCodingCode,
+                  codeDefinition.getFixed().getCode().getValue());
+        } else {
+          // For codings with fixed systems, we should inline a custom Coding type that incorporates
+          // this information, e.g., inlining a strongly-typed Code enum.
+          // For legacy reasons, we're only doing this for R4.
+          // TODO: Do this for all versions before 1.0 release.
+          if (packageInfo.getFhirVersion() == Annotations.FhirVersion.R4) {
+            addCodingFieldWithFixedSystem(
+                codeableConceptBuilder, qualifiedType, codingSlice, fixedSystem);
+          } else {
+            // Legacy "CodingWithFixedSystem"
+            FieldDescriptorProto.Builder codingField =
+                codeableConceptBuilder
+                    .addFieldBuilder()
+                    .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                    .setTypeName(CodingWithFixedSystem.getDescriptor().getFullName())
+                    .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
+                    .setLabel(getFieldSize(codingSlice))
+                    .setNumber(codeableConceptBuilder.getFieldCount());
+            if (!snakeCaseToJsonCase(codingField.getName())
+                .equals(codingSlice.getSliceName().getValue())) {
+              codingField.setJsonName(codingSlice.getSliceName().getValue());
+            }
+            codingField
+                .getOptionsBuilder()
+                .setExtension(Annotations.fhirInlinedCodingSystem, fixedSystem);
+          }
+        }
+      }
+
+      return Optional.of(codeableConceptBuilder.build());
+    }
+
+    private Optional<DescriptorProto> makeProfiledDatatypeIfRequired(ElementDefinition element)
+        throws InvalidFhirException {
+      if (isContainer(element)
+          || isExtensionBackboneElement(element)
+          || !descendantsHaveSlices(element)) {
+        return Optional.empty();
+      }
+
+      // We need to generate a profiled version of this datatype.  Start by getting the base
+      // StructureDefinition of the datatype.
+      String baseId = element.getType(0).getCode().getValue();
+      StructureDefinition baseStructureDefinition = baseStructDefsById.get(baseId);
+
+      // Copy it to a new StructureDefinition with some modifications:
+      // * Uses the generated type name for the field
+      // * Sets the derivation to CONSTRAINT to indicate that this is a profile.
+      // * Adds all the profile slices on the datatype included in the resource profile
+      // * Replace any base elements on the datatype with ones described in the the resource profile
+      //   (e.g., with size restrictions).
+      StructureDefinition.Builder modifiedDataTypeBuilder = baseStructureDefinition.toBuilder();
+      String fieldType = getQualifiedFieldType(element).type;
+      modifiedDataTypeBuilder.getNameBuilder().setValue(lastIdToken(fieldType).pathpart);
+      modifiedDataTypeBuilder
+          .getDerivationBuilder()
+          .setValue(TypeDerivationRuleCode.Value.CONSTRAINT);
+
+      // Clear all the snapshot elements, and then add them back, IF they aren't replaced by
+      // ones by info from the profile.  Then add the definitions from the profile.
+      // This ensures that there aren't duplicated elements.
+      List<ElementDefinition> elementsFromProfile =
+          getDescendants(element).stream()
+              .map(
+                  descendant ->
+                      reparentElement(
+                          descendant,
+                          element.getId().getValue(),
+                          baseStructureDefinition.getType().getValue()))
+              .collect(toList());
+      Set<String> idsDefinedInProfile =
+          elementsFromProfile.stream()
+              .map(definition -> definition.getId().getValue())
+              .collect(toSet());
+
+      modifiedDataTypeBuilder
+          .getSnapshotBuilder()
+          .clearElement()
+          .addAllElement(
+              baseStructureDefinition.getSnapshot().getElementList().stream()
+                  .filter(
+                      definition -> !idsDefinedInProfile.contains(definition.getId().getValue()))
+                  .collect(toList()))
+          .addAllElement(elementsFromProfile);
+
+      DescriptorProto.Builder builder = generateProto(modifiedDataTypeBuilder.build()).toBuilder();
+
+      // All references subtypes will be build as though the datatype is a top-level structure.
+      // Iterate through and replace type references to things defined on the parent type.
+      // e.g., when generating a custom Identifier for use on a Patient resource, it will be
+      // generated
+      // with internal references like my.package.Identifier.Subtype, which need to be replaced with
+      // my.package.Patient.Identifier.Subtype.
+      replaceType(
+          builder,
+          packageInfo.getProtoPackage() + "." + lastIdToken(fieldType).pathpart,
+          packageInfo.getProtoPackage() + "." + fieldType);
+
+      MessageOptions.Builder options = builder.getOptionsBuilder();
+      options
+          .clearExtension(ProtoGeneratorAnnotations.messageDescription)
+          .clearExtension(Annotations.fhirProfileBase)
+          .addExtension(
+              Annotations.fhirProfileBase,
+              options.getExtension(Annotations.fhirStructureDefinitionUrl))
+          .clearExtension(Annotations.fhirStructureDefinitionUrl);
+
+      String name = fieldType.substring(fieldType.lastIndexOf(".") + 1);
+      return Optional.of(builder.setName(name).build());
+    }
+
+    private Optional<DescriptorProto> makeProfiledCodingIfRequired(ElementDefinition element)
+        throws InvalidFhirException {
+      // Coding profiles don't exist in legacy type naming.
+      if (useLegacyTypeNaming()) {
+        return Optional.empty();
+      }
+      // Note that in the case of sub extensions, the element will be an extension, but the field
+      // we're using to generate the type will be the "value" field on that extension.
+      // In all other cases, the value element is the same as the element passed in.
+      ElementDefinition valueElement =
+          isSimpleExtension(element) ? getExtensionValueElement(element) : element;
+
+      if (valueElement.getTypeCount() != 1
+          || !valueElement.getType(0).getCode().getValue().equals("Coding")) {
+        return Optional.empty();
+      }
+
+      Optional<String> boundValueSetUrl = getBindingValueSetUrl(valueElement);
+      if (!boundValueSetUrl.isPresent()) {
+        return Optional.empty();
+      }
+      Optional<QualifiedType> typeWithBoundValueSet = checkForTypeWithBoundValueSet(element);
+      if (!typeWithBoundValueSet.isPresent()) {
+        return Optional.empty();
+      }
+
+      return Optional.of(
+          valueSetGenerator.generateCodingWithBoundValueSet(
+              boundValueSetUrl.get(), typeWithBoundValueSet.get()));
+    }
+
+    /** Extract the type of a container field, possibly by reference. */
+    private String getContainerType(ElementDefinition element) throws InvalidFhirException {
+      if (element.hasContentReference()) {
+        // Find the named element which was referenced. We'll use the type of that element.
+        // Strip the first character from the content reference since it is a '#'
+        String referencedElementId = element.getContentReference().getValue().substring(1);
+        ElementDefinition referencedElement = getElementById(referencedElementId);
+        if (!isContainer(referencedElement)) {
+          throw new IllegalArgumentException(
+              "ContentReference does not reference a container: " + element.getContentReference());
+        }
+        if (lastIdToken(referencedElementId).slicename != null
+            && !isElementSupportedForSlicing(referencedElement)) {
+          // This is a reference to a slice of a field, but the slice isn't a supported slice type.
+          // Just use a reference to the base field.
+
+          // TODO:  This logic assumes only a single level of slicing is present - the
+          // base element could theoretically also be unsupported for slicing.
+          referencedElement =
+              getElementById(
+                  referencedElementId.substring(0, referencedElementId.lastIndexOf(":")));
+        }
+        return getContainerType(referencedElement);
+      }
+
+      // The container type is the full type of the message that will be generated (minus package).
+      // It is derived from the id (e.g., Medication.package.content), and these are usually equal
+      // other than casing (e.g., Medication.Package.Content).
+      // However, any parent in the path could have been renamed via a explicit type name
+      // extensions.
+
+      // Check for explicit renamings on this element.
+      List<Message> explicitTypeNames =
+          Extensions.getExtensionsWithUrl(EXPLICIT_TYPE_NAME_EXTENSION_URL, element);
+
+      if (explicitTypeNames.size() > 1) {
+        throw new InvalidFhirException(
+            "Element has multiple explicit type names: " + element.getId().getValue());
+      }
+
+      // Use explicit type name if present.  Otherwise, use the field_name, converted to FieldType
+      // casing, as the submessage name.
+      String typeName =
+          toFieldTypeCase(
+              explicitTypeNames.isEmpty()
+                  ? getNameForElement(element)
+                  : (String)
+                      Extensions.getExtensionValue(explicitTypeNames.get(0), "string_value"));
+      if (isChoiceType(element) && !isValueElementOfSingleTypedExtension(element)) {
+        typeName = typeName + "X";
+      }
+
+      Optional<ElementDefinition> parentOpt = GeneratorUtils.getParent(element, allElements);
+
+      String packageString;
+      if (parentOpt.isPresent()) {
+        ElementDefinition parent = parentOpt.get();
+        String parentType = getContainerType(parent);
+        packageString = parentType + ".";
+      } else {
+        packageString = "";
+      }
+
+      if (packageString.startsWith(typeName + ".")
+          || packageString.contains("." + typeName + ".")
+          || (typeName.equals("Code") && parentOpt.isPresent())) {
+        typeName = typeName + "Type";
+      }
+      return packageString + typeName;
+    }
+
+    // Returns the only element in the list matching a given id.
+    // Throws IllegalArgumentException if zero or more than one matching element is found.
+    private ElementDefinition getElementById(String id) throws InvalidFhirException {
+      return GeneratorUtils.getElementById(id, allElements);
+    }
+
+    /**
+     * Gets the field type and package of a potentially complex element. This handles choice types,
+     * types that reference other elements, references, profiles, etc.
+     */
+    private QualifiedType getQualifiedFieldType(ElementDefinition element)
+        throws InvalidFhirException {
+      Optional<QualifiedType> valueSetType = checkForTypeWithBoundValueSet(element);
+      if (valueSetType.isPresent()) {
+        return valueSetType.get();
+      }
+
+      if (isExtensionBackboneElement(element)) {
+        return getInternalExtensionType(element);
+      } else if (isValueElementOfChoiceTypeExtension(element)
+          && !element.getId().getValue().equals("Extension.value[x]")) {
+        // This is a choice type defined in a simple extension.
+        // We use this element to make the choice type, but name it using the parent to avoid an
+        // unnecessary choice-type wrapper.
+        // So, if there is a choice field myField on MyExtension, it should have type
+        // MyExtension.MyFieldX, not MyExtension.MyField.ValueX
+        String containerType = getContainerType(element);
+        return new QualifiedType(
+            containerType.substring(0, containerType.lastIndexOf('.')) + "X",
+            packageInfo.getProtoPackage());
+      } else if (isContainer(element)
+          || (isChoiceType(element) && !isValueElementOfSingleTypedExtension(element))) {
+        return new QualifiedType(getContainerType(element), packageInfo.getProtoPackage());
+      } else if (element.hasContentReference()) {
+        // Get the type for this container from a named reference to another element.
+        return new QualifiedType(
+            getContainerType(element),
+            isLocalContentReference(element)
+                ? packageInfo.getProtoPackage()
+                : fhirVersion.coreProtoPackage);
+      } else if (element.getType(0).getCode().getValue().equals("Reference")) {
+        return new QualifiedType(
+            USE_TYPED_REFERENCES ? getTypedReferenceName(element.getTypeList()) : "Reference",
+            fhirVersion.coreProtoPackage);
+      } else {
+        if (element.getTypeCount() > 1) {
+          throw new IllegalArgumentException(
+              "Unknown multiple type definition on element: " + element.getId());
+        }
+        // Note: this is the "fhir type", e.g., Resource, BackboneElement, boolean,
+        // not the field type name.
+        String normalizedFhirTypeName =
+            normalizeType(Iterables.getOnlyElement(element.getTypeList()));
+
+        // See https://jira.hl7.org/browse/FHIR-25262
+        if (element.getId().getValue().equals("xhtml.id")) {
+          normalizedFhirTypeName = "String";
+        }
+
+        if (!isContainer(element) && descendantsHaveSlices(element)) {
+          // This is not a backbone element, but it has children that have slices.  This means we
+          // cannot use the "stock" FHIR datatype here.
+          // A common example of this is CodeableConcepts.  These are not themselves sliced, but the
+          // repeated coding field on CodeableConcept can be.
+          // This means we have to generate a nested CodeableConcept message that has these
+          // additional
+          // fields.
+          String containerType = getContainerType(element);
+          int lastDotIndex = containerType.lastIndexOf(".");
+
+          String containerTypeName = containerType.substring(lastDotIndex + 1);
+          if (containerTypeName.endsWith("CodeType")) {
+            // If we added "Type" to the end of a Code field to disambiguate it, drop the "Type"
+            // because we don't need to disambiguate anymore.  This is a "Hack".
+            containerTypeName = containerTypeName.substring(0, containerTypeName.length() - 4);
+          }
+          String name =
+              Ascii.equalsIgnoreCase(normalizedFhirTypeName, containerTypeName)
+                  ? ("Profiled" + containerTypeName)
+                  : (normalizedFhirTypeName + "For" + containerTypeName);
+          return new QualifiedType(
+              containerType.substring(0, lastDotIndex + 1) + name, packageInfo.getProtoPackage());
+        }
+
+        if (normalizedFhirTypeName.equals("Resource")) {
+          // We represent "Resource" FHIR types as "Any",
+          // unless we are on the Bundle type, in which case we use "ContainedResources" type.
+          // This allows defining resources in separate files without circular dependencies.
+          if (allElements.get(0).getId().getValue().equals("Bundle")
+              || getContainedResourceBehavior(packageInfo)
+                  == ContainedResourceBehavior.TYPED_CONTAINED_RESOURCE) {
+            if (packageInfo.getLocalContainedResource()) {
+              return new QualifiedType("ContainedResource", packageInfo.getProtoPackage());
+            }
+            if (!packageInfo.getContainedResourcePackage().isEmpty()) {
+              return new QualifiedType(
+                  "ContainedResource", packageInfo.getContainedResourcePackage());
+            }
+            return new QualifiedType("ContainedResource", fhirVersion.coreProtoPackage);
+          } else {
+            return new QualifiedType("Any", "google.protobuf");
+          }
+        }
+        return new QualifiedType(normalizedFhirTypeName, fhirVersion.coreProtoPackage);
+      }
+    }
+
+    /**
+     * Returns the type that should be used for an internal extension. If this is a simple internal
+     * extension, uses the appropriate primitive type. If this is a complex internal extension,
+     * treats the element like a backbone container.
+     */
+    private QualifiedType getInternalExtensionType(ElementDefinition element)
+        throws InvalidFhirException {
+      return isSimpleExtension(element)
+          ? getSimpleInternalExtensionType(element)
+          : new QualifiedType(getContainerType(element), packageInfo.getProtoPackage());
+    }
+
+    private List<ElementDefinition> getDescendants(ElementDefinition element) {
+      // The id of descendants should start with the parent id + at least one more token.
+      String parentIdPrefix = element.getId().getValue() + ".";
+      return allElements.stream()
+          .filter(
+              candidateElement -> candidateElement.getId().getValue().startsWith(parentIdPrefix))
+          .collect(Collectors.toList());
+    }
+
+    private List<ElementDefinition> getDirectChildren(ElementDefinition element) {
+      List<String> messagePathParts = Splitter.on('.').splitToList(element.getId().getValue());
+      return getDescendants(element).stream()
+          .filter(
+              candidateElement -> {
+                List<String> parts =
+                    Splitter.on('.').splitToList(candidateElement.getId().getValue());
+                // To be a direct child, the id should start with the parent id, and add a single
+                // additional token.
+                return parts.size() == messagePathParts.size() + 1;
+              })
+          .collect(Collectors.toList());
+    }
+
+    private Optional<String> getBindingValueSetUrl(ElementDefinition element) {
+      if (isSimpleExtension(element)) {
+        return getBindingValueSetUrl(getExtensionValueElement(element));
+      }
+      if (!useLegacyTypeNaming()
+          && element.getBinding().getStrength().getValue() != BindingStrengthCode.Value.REQUIRED) {
+        return Optional.empty();
+      }
+      String url = GeneratorUtils.getCanonicalUri(element.getBinding().getValueSet());
+      if (url.isEmpty()) {
+        return Optional.empty();
+      }
+      return Optional.of(url);
+    }
+
+    private ElementDefinition getExtensionValueElement(ElementDefinition element) {
+      for (ElementDefinition child : getDirectChildren(element)) {
+        if (!isSlice(child) && child.getBase().getPath().getValue().endsWith(".value[x]")) {
+          if (child.getTypeCount() == 1
+              && !child.getType(0).getCode().getValue().equals("Extension")) {
+            // This is not a true choice type, since we don't generate choice types for extensions
+            // with only one valid type.  So, check if there's a slicing for that type and use
+            // that as the value element if present.
+            return checkForChoiceSlice(child.getType(0), child).orElse(child);
+          }
+          return child;
+        }
+      }
+      throw new IllegalArgumentException(
+          "Element " + element.getId().getValue() + " has no value element");
+    }
+
+    private QualifiedType getSimpleInternalExtensionType(ElementDefinition element)
+        throws InvalidFhirException {
+      ElementDefinition valueElement = getExtensionValueElement(element);
+
+      if (valueElement.getMax().getValue().equals("0")) {
+        // There is no value element, this is a complex extension.
+        throw new IllegalArgumentException(
+            "getSimpleInternalExtensionType called with complex extension: "
+                + element.getId().getValue());
+      }
+      return getQualifiedFieldType(valueElement);
+    }
+
+    /**
+     * Returns the field name that should be used for an element. If element is a slice, uses that
+     * slice name. Since the id token slice name is all-lowercase, uses the SliceName field.
+     * Otherwise, uses the last token's pathpart. Logs a warning if the slice name in the id token
+     * does not match the SliceName field.
+     */
+    // TODO: Handle reslices. Could be as easy as adding it to the end of SliceName.
+    private String getNameForElement(ElementDefinition element) throws InvalidFhirException {
+      IdToken lastToken = lastIdToken(element);
+      if (lastToken.slicename == null || !element.getId().getValue().contains(".")) {
+        if (isValueElementOfSingleTypedExtension(element)) {
+          String type = element.getType(0).getCode().getValue();
+          return "value" + Ascii.toUpperCase(type.charAt(0)) + type.substring(1);
+        }
+        return hyphenToCamel(lastToken.pathpart);
+      }
+      String sliceName = element.getSliceName().getValue();
+      if (!lastToken.slicename.equals(Ascii.toLowerCase(sliceName))) {
+        // TODO: pull this into a common validator that runs ealier.
+        logDiscrepancies(
+            "Warning: Inconsistent slice name for element with id "
+                + element.getId().getValue()
+                + " and slicename "
+                + element.getSliceName());
+      }
+      sliceName = hyphenToCamel(sliceName);
+      return resolveSliceNameConflicts(sliceName, element);
+    }
+
+    private long getDistinctTypeCount(ElementDefinition element) {
+      // Don't do fancier logic if fast logic is sufficient.
+      if (element.getTypeCount() < 2 || USE_TYPED_REFERENCES) {
+        return element.getTypeCount();
+      }
+      return element.getTypeList().stream().map(type -> type.getCode()).distinct().count();
+    }
+
+    private boolean isChoiceTypeExtension(ElementDefinition element) {
+      if (!isExtensionBackboneElement(element)) {
+        return false;
+      }
+      ElementDefinition valueElement = getExtensionValueElement(element);
+      return !valueElement.getMax().getValue().equals("0")
+          && getDistinctTypeCount(valueElement) > 1;
+    }
+
+    private boolean isSimpleExtension(ElementDefinition element) {
+      return isExtensionBackboneElement(element)
+          && !getExtensionValueElement(element).getMax().getValue().equals("0");
+    }
+
+    private boolean isComplexInternalExtension(ElementDefinition element) {
+      return isExtensionBackboneElement(element) && !isSimpleExtension(element);
+    }
+
+    private boolean descendantsHaveSlices(ElementDefinition element) {
+      return getDescendants(element).stream().anyMatch(ElementDefinition::hasSliceName);
+    }
+
+    // Given a potential slice field name and an element, returns true if that slice name would
+    // conflict with the field name of any siblings to that elements.
+    // TODO: This only checks against non-slice names.  Theoretically, you could have
+    // two identically-named slices of different base fields.
+    private String resolveSliceNameConflicts(String fieldName, ElementDefinition element)
+        throws InvalidFhirException {
+      if (RESERVED_FIELD_NAMES.contains(fieldName)) {
+        return fieldName + "Slice";
+      }
+      Optional<ElementDefinition> parent = GeneratorUtils.getParent(element, allElements);
+      if (!parent.isPresent()) {
+        // This is a profile on a top-level Element. There can't be any conflicts.
+        return fieldName;
+      }
+      List<ElementDefinition> elementsWithIdsConflictingWithSliceName =
+          getDirectChildren(parent.get()).stream()
+              .filter(
+                  candidateElement ->
+                      toFieldNameCase(lastIdToken(candidateElement).pathpart)
+                              .equals(toFieldNameCase(fieldName))
+                          && !candidateElement
+                              .getBase()
+                              .getPath()
+                              .getValue()
+                              .equals("Extension.url"))
+              .collect(Collectors.toList());
+
+      return elementsWithIdsConflictingWithSliceName.isEmpty() ? fieldName : fieldName + "Slice";
+    }
+
+    /** Build a single field for the proto. */
+    private Optional<FieldDescriptorProto> buildField(ElementDefinition element, int nextTag)
+        throws InvalidFhirException {
+      FieldDescriptorProto.Label fieldSize = getFieldSize(element);
+      if (fieldSize == null) {
+        // This field has a max size of zero.  Do not emit a field.
+        return Optional.empty();
+      }
+
+      FieldOptions.Builder options = FieldOptions.newBuilder();
+
+      // Add a short description of the field.
+      if (element.hasShort()) {
+        options.setExtension(
+            ProtoGeneratorAnnotations.fieldDescription, element.getShort().getValue());
+      }
+
+      if (isRequiredByFhir(element)) {
+        options.setExtension(
+            Annotations.validationRequirement, Annotations.Requirement.REQUIRED_BY_FHIR);
+      } else if (element.getMin().getValue() != 0) {
+        System.out.println("Unexpected minimum field count: " + element.getMin().getValue());
+      }
+
+      if (isExternalExtension(element)) {
+        // This is an extension with a single type defined by an external profile.
+        // If we know about it, we'll inline a field for it.
+        String profileUrl = element.getType(0).getProfile(0).getValue();
+        StructureDefinitionData profileData = structDefDataByUrl.get(profileUrl);
+        if (profileData == null) {
+          // Unrecognized url.
+          // TODO: add a lenient mode that just ignores this extension.
+          throw new IllegalArgumentException("Encountered unknown extension url: " + profileUrl);
+        }
+        options.setExtension(Annotations.fhirInlinedExtensionUrl, profileUrl);
+
+        return Optional.of(
+            buildFieldInternal(
+                    getNameForElement(element),
+                    profileData.inlineType,
+                    profileData.protoPackage,
+                    nextTag,
+                    fieldSize,
+                    options.build())
+                .build());
+      }
+
+      Optional<ElementDefinition> choiceTypeBase = getChoiceTypeBase(element);
+      if (choiceTypeBase.isPresent()) {
+        ElementDefinition choiceTypeBaseElement = choiceTypeBase.get();
+        String baseName = getNameForElement(choiceTypeBaseElement);
+        String baseContainerType = getContainerType(choiceTypeBaseElement);
+        String containerType = getContainerType(element);
+        containerType =
+            containerType.substring(0, containerType.lastIndexOf(".") + 1)
+                + baseContainerType.substring(baseContainerType.lastIndexOf(".") + 1);
+
+        return Optional.of(
+            buildFieldInternal(
+                    baseName,
+                    containerType,
+                    packageInfo.getProtoPackage(),
+                    nextTag,
+                    fieldSize,
+                    options.build())
+                .build());
+      }
+
+      boolean isChoiceType =
+          (!isValueElementOfSingleTypedExtension(element) && isChoiceType(element))
+              || isChoiceTypeExtension(element);
+      // Add typed reference options
+      if (!isChoiceType
+          && element.getTypeCount() > 0
+          && element.getType(0).getCode().getValue().equals("Reference")) {
+        for (ElementDefinition.TypeRef type : element.getTypeList()) {
+          if (type.getCode().getValue().equals("Reference") && type.getTargetProfileCount() > 0) {
+            for (Canonical referenceType : type.getTargetProfileList()) {
+              if (!referenceType.getValue().isEmpty()) {
+                addReferenceType(options, referenceType.getValue());
+              }
             }
           }
         }
       }
-      def = defBuilder.build();
-    }
 
-    List<ElementDefinition> elementList = def.getSnapshot().getElementList();
-    builder = generateMessage(elementList.get(0), elementList, builder).toBuilder();
-
-    if (isProfile(def)) {
-      String name = getTypeName(def);
-      // This is a profile on a pre-existing type.
-      // Make sure any nested subtypes use the profile name, not the base name
-      replaceType(builder, def.getType().getValue(), name);
-
-      // Add all base structure definition url annotations
-      StructureDefinition defInChain = def;
-      while (isProfile(defInChain)) {
-        String baseUrl = defInChain.getBaseDefinition().getValue();
-        builder
-            .setName(name)
-            .getOptionsBuilder()
-            .addExtension(Annotations.fhirProfileBase, baseUrl);
-        defInChain = getDefinitionDataByUrl(baseUrl).structDef;
+      QualifiedType fieldType = getQualifiedFieldType(element);
+      FieldDescriptorProto.Builder fieldBuilder =
+          buildFieldInternal(
+              getNameForElement(element),
+              fieldType.type,
+              fieldType.packageName,
+              nextTag,
+              fieldSize,
+              options.build());
+      if (isExtensionBackboneElement(element)) {
+        // For internal extension, the default is to assume the url is equal to the jsonName of the
+        // field. The json name of the field is the snake-to-json fieldName, unless a jsonName was
+        // explicitly set.
+        String url =
+            getElementById(element.getId().getValue() + ".url").getFixed().getUri().getValue();
+        if (fieldBuilder.hasJsonName()
+            ? !fieldBuilder.getJsonName().equals(url)
+            : !snakeCaseToJsonCase(fieldBuilder.getName()).equals(url)) {
+          fieldBuilder.getOptionsBuilder().setExtension(Annotations.fhirInlinedExtensionUrl, url);
+        }
       }
+      return Optional.of(fieldBuilder.build());
     }
-    return builder.build();
+
+    /** Add a choice type container message to the proto. */
+    private DescriptorProto makeChoiceType(ElementDefinition element) throws InvalidFhirException {
+      QualifiedType choiceQualifiedType = getQualifiedFieldType(element);
+      DescriptorProto.Builder choiceType =
+          DescriptorProto.newBuilder().setName(choiceQualifiedType.getName());
+      choiceType.getOptionsBuilder().setExtension(Annotations.isChoiceType, true);
+
+      // Add error constraints on choice types.
+      List<String> expressions = getFhirPathErrorConstraints(element);
+      if (!expressions.isEmpty()) {
+        choiceType
+            .getOptionsBuilder()
+            .setExtension(Annotations.fhirPathMessageConstraint, expressions);
+      }
+      // Add warning constraints.
+      List<String> warnings = getFhirPathWarningConstraints(element);
+      if (!warnings.isEmpty()) {
+        choiceType
+            .getOptionsBuilder()
+            .setExtension(Annotations.fhirPathMessageWarningConstraint, warnings);
+      }
+
+      choiceType.addOneofDeclBuilder().setName("choice");
+
+      int nextTag = 1;
+      // Group types.
+      List<ElementDefinition.TypeRef> types = new ArrayList<>();
+      List<String> referenceTypes = new ArrayList<>();
+      Set<String> foundTypes = new HashSet<>();
+      for (ElementDefinition.TypeRef type : element.getTypeList()) {
+        if (!foundTypes.contains(type.getCode().getValue())) {
+          types.add(type);
+          foundTypes.add(type.getCode().getValue());
+        }
+
+        if (type.getCode().getValue().equals("Reference") && type.getTargetProfileCount() > 0) {
+          for (Canonical referenceType : type.getTargetProfileList()) {
+            if (!referenceType.getValue().isEmpty()) {
+              referenceTypes.add(referenceType.getValue());
+            }
+          }
+        }
+      }
+
+      for (ElementDefinition.TypeRef type : types) {
+        String fieldName =
+            Ascii.toLowerCase(type.getCode().getValue().substring(0, 1))
+                + type.getCode().getValue().substring(1);
+
+        // There are two cases of choice type fields:
+        // a) we need to generate a custom type for the field (e.g., a bound code, or a profiled
+        // type)
+        // b) it's an already existing type, so just generate the field.
+
+        // Check for a slice of this type on the choice, e.g., value[x]:valueCode
+        // If one is found, use that to create the choice field and type.  Otherwise, just use the
+        // value[x] element itself.
+        ElementDefinition choiceFieldElement = checkForChoiceSlice(type, element).orElse(element);
+        Optional<DescriptorProto> typeFromChoiceElement =
+            buildNonChoiceTypeNestedTypeIfNeeded(choiceFieldElement);
+
+        if (typeFromChoiceElement.isPresent()) {
+          // There is a sub type
+          choiceType.addNestedType(typeFromChoiceElement.get());
+          QualifiedType sliceType =
+              choiceQualifiedType.childType(typeFromChoiceElement.get().getName());
+          FieldDescriptorProto.Builder fieldBuilder =
+              buildFieldInternal(
+                      fieldName,
+                      sliceType.type,
+                      sliceType.packageName,
+                      nextTag++,
+                      FieldDescriptorProto.Label.LABEL_OPTIONAL,
+                      FieldOptions.getDefaultInstance())
+                  .setOneofIndex(0);
+          choiceType.addField(fieldBuilder);
+        } else {
+          // If no custom type was generated, just use the type name from the core FHIR types.
+          // TODO:  This assumes all types in a oneof are core FHIR types.  In order to
+          // support custom types, we'll need to load the structure definition for the type and
+          // check
+          // against knownStructureDefinitionPackages
+          FieldOptions.Builder options = FieldOptions.newBuilder();
+          if (fieldName.equals("reference")) {
+            for (String referenceType : referenceTypes) {
+              addReferenceType(options, referenceType);
+            }
+          }
+          FieldDescriptorProto.Builder fieldBuilder =
+              buildFieldInternal(
+                      fieldName,
+                      normalizeType(type),
+                      fhirVersion.coreProtoPackage,
+                      nextTag++,
+                      FieldDescriptorProto.Label.LABEL_OPTIONAL,
+                      options.build())
+                  .setOneofIndex(0);
+          choiceType.addField(fieldBuilder);
+        }
+      }
+      return choiceType.build();
+    }
+
+    private Optional<ElementDefinition> checkForChoiceSlice(
+        ElementDefinition.TypeRef type, ElementDefinition element) {
+      Set<ElementDefinition> matchingSlices =
+          GeneratorUtils.getSlices(element, allElements).stream()
+              .filter(
+                  elmenent ->
+                      element.getTypeCount() == 1
+                          && element
+                              .getType(0)
+                              .getCode()
+                              .getValue()
+                              .equals(type.getCode().getValue()))
+              .collect(Collectors.toSet());
+      if (matchingSlices.isEmpty()) {
+        return Optional.empty();
+      }
+      // TODO: this might be something we need to eventually support, e.g., if oneof
+      // could
+      // be bound to multiple different systems.
+      if (matchingSlices.size() > 1) {
+        throw new IllegalArgumentException(
+            "Invalid choice type slicing: More than one slice of a given type on"
+                + element.getId().getValue()
+                + ".  Type: "
+                + type.getCode().getValue());
+      }
+      return Optional.of(Iterables.getOnlyElement(matchingSlices));
+    }
+
+    private boolean isRequiredByFhir(ElementDefinition element) {
+      if (isChoiceType(element) && element.getTypeCount() == 1) {
+        return checkForChoiceSlice(element.getType(0), element).orElse(element).getMin().getValue()
+            == 1;
+      }
+      return element.getMin().getValue() == 1;
+    }
   }
 
   /**
@@ -467,27 +1794,7 @@ public class ProtoGenerator {
     for (StructureDefinition def : defs) {
       validateDefinition(def);
 
-      List<SearchParameter> searchParameters;
-      if (def.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE) {
-        String resourceTypeId = def.getSnapshot().getElementList().get(0).getId().getValue();
-        // Get the string representation of the enum value for the resource type.
-        try {
-          EnumValueDescriptor enumValueDescriptor =
-              Codes.codeStringToEnumValue(ResourceTypeCode.Value.getDescriptor(), resourceTypeId);
-          searchParameters =
-              searchParameterMap.getOrDefault(
-                  ResourceTypeCode.Value.forNumber(enumValueDescriptor.getNumber()),
-                  new ArrayList<>());
-        } catch (InvalidFhirException e) {
-          throw new IllegalArgumentException(
-              "Encountered unrecognized resource id: " + resourceTypeId, e);
-        }
-      } else {
-        // Not a resource - no search parameters to add.
-        searchParameters = new ArrayList<>();
-      }
-
-      DescriptorProto proto = generateProto(def, searchParameters);
+      DescriptorProto proto = new PerDefinitionGenerator(def).generate();
       builder.addMessageType(proto);
     }
     // Add imports. Annotations is always needed.
@@ -507,7 +1814,7 @@ public class ProtoGenerator {
     if (needsDep(builder, "google.protobuf", ImmutableSet.of("google.protobuf.Any"))) {
       dependencies.add("google/protobuf/any.proto");
     }
-    dependencies.forEach(dep -> builder.addDependency(dep));
+    dependencies.forEach(builder::addDependency);
 
     if (!FhirPackage.isCorePackage(packageInfo) && hasLocalCode(builder)) {
       builder.addDependency(codesProtoImport);
@@ -539,6 +1846,10 @@ public class ProtoGenerator {
               + " but being generated in "
               + packageInfo.getProtoPackage());
     }
+  }
+
+  private boolean isSingleTypedExtensionDefinition(StructureDefinition def) {
+    return new PerDefinitionGenerator(def).isSimpleExtension(def.getSnapshot().getElement(0));
   }
 
   // Returns true if the file proto uses a type from a set of types, but does not define it.
@@ -638,7 +1949,7 @@ public class ProtoGenerator {
       List<String> resourcesToInclude =
           resourceTypes.stream()
               .filter(desc -> !desc.getOptions().getExtension(Annotations.isAbstractType))
-              .map(desc -> desc.getName())
+              .map(DescriptorProto::getName)
               .collect(Collectors.toList());
       for (FieldDescriptor field : baseContainedResource.getFields()) {
         String typename = field.getMessageType().getName();
@@ -666,346 +1977,6 @@ public class ProtoGenerator {
     return fileDescriptor.toBuilder().addMessageType(contained).build();
   }
 
-  private DescriptorProto generateMessage(
-      ElementDefinition currentElement,
-      List<ElementDefinition> elementList,
-      DescriptorProto.Builder builder)
-      throws InvalidFhirException {
-    // Get the name of this message
-    builder.setName(nameFromQualifiedName(getContainerType(currentElement, elementList)));
-
-    // Add message-level FHIRPath constraints.
-    List<String> expressions = getFhirPathErrorConstraints(currentElement);
-    if (!expressions.isEmpty()) {
-      builder.getOptionsBuilder().setExtension(Annotations.fhirPathMessageConstraint, expressions);
-    }
-    // Add warning constraints.
-    List<String> warnings = getFhirPathWarningConstraints(currentElement);
-    if (!warnings.isEmpty()) {
-      builder
-          .getOptionsBuilder()
-          .setExtension(Annotations.fhirPathMessageWarningConstraint, warnings);
-    }
-
-    // When generating a descriptor for a primitive type, the value part may already be present.
-    int nextTag = builder.getFieldCount() + 1;
-
-    // Some repeated fields can have profiled elements in them, that get inlined as fields.
-    // The most common case of this is typed extensions.  We defer adding these to the end of the
-    // message, so that non-profiled messages will be binary compatiple with this proto.
-    // Note that the inverse is not true - loading a profiled message bytes into the non-profiled
-    // will result in the data in the typed fields being dropped.
-    List<ElementDefinition> deferredElements = new ArrayList<>();
-
-    // Loop over the direct children of this element.
-    for (ElementDefinition element : getDirectChildren(currentElement, elementList)) {
-      if (element.getId().getValue().matches("[^.]*\\.value")
-          && (element.getType(0).getCode().getValue().isEmpty()
-              || element.getType(0).getCode().getValue().startsWith(FHIRPATH_TYPE_PREFIX))) {
-        // This is a primitive field.  Skip it, as primitive fields are handled specially.
-        continue;
-      }
-
-      // Per spec, the fixed Extension.url on a top-level extension must match the
-      // StructureDefinition url.  Since that is already added to the message via the
-      // fhir_structure_definition_url, we can skip over it here.
-      if (element.getBase().getPath().getValue().equals("Extension.url")
-          && element.getFixed().hasUri()) {
-        continue;
-      }
-
-      // Slices on choice types are handled during the creation of the choice type itself.
-      // Ignore them here.
-      if (GeneratorUtils.isChoiceTypeSlice(element)) {
-        continue;
-      }
-
-      if (!isChoiceType(element) && !isSingleType(element)) {
-        throw new IllegalArgumentException(
-            "Illegal field has multiple types but is not a Choice Type:\n" + element);
-      }
-
-      if (lastIdToken(element).slicename != null) {
-        // This is a slice.  Defer this field until the end of the message, to keep base field
-        // numbers consistent across profiles.
-        deferredElements.add(element);
-      } else if (isContainedResourceField(element)
-          && getContainedResourceBehavior(packageInfo)
-              != ContainedResourceBehavior.TYPED_CONTAINED_RESOURCE) {
-        buildAndAddField(element, elementList, nextTag++, builder);
-        builder
-            .addFieldBuilder()
-            .setNumber(nextTag)
-            .getOptionsBuilder()
-            .setExtension(
-                ProtoGeneratorAnnotations.reservedReason,
-                "Field "
-                    + nextTag
-                    + " reserved for strongly-typed ContainedResource for id: "
-                    + element.getId().getValue());
-        nextTag++;
-      } else {
-        buildAndAddField(element, elementList, nextTag++, builder);
-      }
-    }
-
-    for (ElementDefinition deferredElement : deferredElements) {
-      // Currently we only support slicing for Extensions and Codings
-      if (isElementSupportedForSlicing(deferredElement)
-          || isContainedResourceField(deferredElement)) {
-        buildAndAddField(deferredElement, elementList, nextTag++, builder);
-      } else {
-        builder
-            .addFieldBuilder()
-            .setNumber(nextTag)
-            .getOptionsBuilder()
-            .setExtension(
-                ProtoGeneratorAnnotations.reservedReason,
-                "field "
-                    + nextTag
-                    + " reserved for "
-                    + deferredElement.getId().getValue()
-                    + " which uses an unsupported slicing on "
-                    + deferredElement.getType(0).getCode().getValue());
-        nextTag++;
-      }
-    }
-    return builder.build();
-  }
-
-  private void buildAndAddField(
-      ElementDefinition element,
-      List<ElementDefinition> elementList,
-      int tag,
-      DescriptorProto.Builder builder)
-      throws InvalidFhirException {
-    // Generate the field. If this field doesn't actually exist in this version of the
-    // message, for example, the max attribute is 0, buildField returns null and no field
-    // should be added.
-    Optional<FieldDescriptorProto> fieldOptional = buildField(element, elementList, tag);
-    if (fieldOptional.isPresent()) {
-      FieldDescriptorProto field = fieldOptional.get();
-      Optional<DescriptorProto> optionalNestedType = buildNestedTypeIfNeeded(element, elementList);
-      if (optionalNestedType.isPresent()) {
-        builder.addNestedType(optionalNestedType.get());
-        // The nested type is defined in the local package, so replace the core FHIR package
-        // with the local packageName in the field type.
-        field =
-            field.toBuilder()
-                .setTypeName(
-                    field
-                        .getTypeName()
-                        .replace(fhirVersion.coreProtoPackage, packageInfo.getProtoPackage()))
-                .build();
-      } else {
-        // There is no submessage defined for this field, so apply constraints to the field itself.
-        List<String> expressions = getFhirPathErrorConstraints(element);
-        if (!expressions.isEmpty()) {
-          field =
-              field.toBuilder()
-                  .setOptions(
-                      field.getOptions().toBuilder()
-                          .setExtension(Annotations.fhirPathConstraint, expressions))
-                  .build();
-        }
-        // Add warning constraints.
-        List<String> warnings = getFhirPathWarningConstraints(element);
-        if (!warnings.isEmpty()) {
-          field =
-              field.toBuilder()
-                  .setOptions(
-                      field.getOptions().toBuilder()
-                          .setExtension(Annotations.fhirPathWarningConstraint, warnings))
-                  .build();
-        }
-      }
-
-      builder.addField(field);
-    } else if (!element.getPath().getValue().equals("Extension.extension")
-        && !element.getPath().getValue().equals("Extension.value[x]")) {
-      // Don't bother adding reserved messages for Extension.extension or Extension.value[x]
-      // since that's part of the extension definition, and adds a lot of unhelpful noise.
-      builder
-          .addFieldBuilder()
-          .setNumber(tag)
-          .getOptionsBuilder()
-          .setExtension(
-              ProtoGeneratorAnnotations.reservedReason,
-              element.getPath().getValue() + " not present on profile.");
-    }
-  }
-
-  private Optional<DescriptorProto> buildNestedTypeIfNeeded(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    Optional<DescriptorProto> choiceType = buildChoiceTypeIfRequired(element, elementList);
-    if (choiceType.isPresent()) {
-      if (isValueElementOfSingleTypedExtension(element, elementList)) {
-        // In the case of a single-typed simple extension, we pull the field type out of the choice
-        // type rather than have a choice type with a single field.
-        // Thus, if the single type required a newly-defined message (e.g., a bound code), return
-        // that, otherwise (e.g., for a normal primitive like String) return empty (no nested type
-        // needed.
-        return choiceType.get().getNestedTypeList().isEmpty()
-            ? Optional.empty()
-            : Optional.of(choiceType.get().getNestedType(0));
-      }
-      return choiceType;
-    }
-    return buildNonChoiceTypeNestedTypeIfNeeded(element, elementList);
-  }
-
-  private Optional<DescriptorProto> buildNonChoiceTypeNestedTypeIfNeeded(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    if (element.getTypeCount() != 1) {
-      return Optional.empty();
-    }
-
-    Optional<DescriptorProto> profiledCodeableConcept =
-        makeProfiledCodeableConceptIfRequired(element, elementList);
-    if (profiledCodeableConcept.isPresent()) {
-      return profiledCodeableConcept;
-    }
-    Optional<DescriptorProto> profiledCoding = makeProfiledCodingIfRequired(element, elementList);
-    if (profiledCoding.isPresent()) {
-      return profiledCoding;
-    }
-    Optional<DescriptorProto> profiledCode = makeProfiledCodeIfRequired(element, elementList);
-    if (profiledCode.isPresent()) {
-      return profiledCode;
-    }
-
-    // Check for all other profiled datatypes
-    Optional<DescriptorProto> profiledDatatype =
-        makeProfiledDatatypeIfRequired(element, elementList);
-    if (profiledDatatype.isPresent()) {
-      return profiledDatatype;
-    }
-
-    // If this is a container type, or a complex internal extension, define the inner message.
-    // If this is a CodeableConcept, check for fixed coding slices.  Normally we don't add a
-    // message for CodeableConcept because it's defined as a datatype, but if there are slices
-    // on it we need to generate a custom version.
-    if (isContainer(element) || isComplexInternalExtension(element, elementList)) {
-      return Optional.of(generateMessage(element, elementList, DescriptorProto.newBuilder()));
-    }
-    return Optional.empty();
-  }
-
-  // Generates the nested type descriptor proto for a choice type if required.
-  private Optional<DescriptorProto> buildChoiceTypeIfRequired(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    if (isChoiceTypeExtension(element, elementList)) {
-      return Optional.of(
-          makeChoiceType(getExtensionValueElement(element, elementList), elementList));
-    }
-    Optional<ElementDefinition> choiceTypeBase = getChoiceTypeBase(element);
-    if (choiceTypeBase.isPresent()) {
-      List<ElementDefinition.TypeRef> baseTypes = choiceTypeBase.get().getTypeList();
-      Map<String, Integer> baseTypesToIndex = new HashMap<>();
-      for (int i = 0; i < baseTypes.size(); i++) {
-        String code = baseTypes.get(i).getCode().getValue();
-        // Only add each code type once.  This is only relevant for references, which can appear
-        // multiple times.
-        if (!baseTypesToIndex.containsKey(code)) {
-          baseTypesToIndex.put(code, i);
-        }
-      }
-      DescriptorProto baseChoiceType = makeChoiceType(choiceTypeBase.get(), elementList);
-      final Set<String> uniqueTypes = new HashSet<>();
-      List<FieldDescriptorProto> matchingFields =
-          element.getTypeList().stream()
-              .filter(type -> uniqueTypes.add(type.getCode().getValue()))
-              .map(type -> baseChoiceType.getField(baseTypesToIndex.get(type.getCode().getValue())))
-              .collect(Collectors.toList());
-
-      // TODO: If a choice type is a slice of another choice type (not a pure
-      // constraint, but actual slice) we'll need to update the name and type name as well.
-      DescriptorProto.Builder newChoiceType =
-          baseChoiceType.toBuilder().clearField().addAllField(matchingFields);
-
-      // Constraints may be on the choice base element rather than the value element,
-      // so reflect that here.
-      List<String> expressions = getFhirPathErrorConstraints(element);
-      if (!expressions.isEmpty()) {
-        newChoiceType.setOptions(
-            baseChoiceType.getOptions().toBuilder()
-                .setExtension(Annotations.fhirPathMessageConstraint, expressions));
-      }
-      // Add warning constraints.
-      List<String> warnings = getFhirPathWarningConstraints(element);
-      if (!warnings.isEmpty()) {
-        newChoiceType.setOptions(
-            baseChoiceType.getOptions().toBuilder()
-                .setExtension(Annotations.fhirPathMessageWarningConstraint, warnings));
-      }
-
-      return Optional.of(newChoiceType.build());
-    }
-
-    if (isChoiceType(element)) {
-      return Optional.of(makeChoiceType(element, elementList));
-    }
-
-    return Optional.empty();
-  }
-
-  /**
-   * Returns true if this is the value[x] element of an extension with a single type. This is a
-   * special case because we extract the type out of the choice type and into a simple field. Since
-   * extensions are handled specially anyway, and the vast majority of simple extensions are a
-   * single type, it's much nicer to use a single field rather than a single-typed choice type. Note
-   * that prior to FHIR 4.0.1, the structure definition was written as a single field, but changed
-   * in that version to a true choice type.
-   */
-  private static boolean isValueElementOfSingleTypedExtension(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    return isValueElementOfSimpleExtension(element, elementList)
-        && getDistinctTypeCount(element) == 1;
-  }
-
-  private static boolean isValueElementOfChoiceTypeExtension(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    return isValueElementOfSimpleExtension(element, elementList)
-        && getDistinctTypeCount(element) > 1;
-  }
-
-  private static boolean isValueElementOfSimpleExtension(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    Optional<ElementDefinition> parent = GeneratorUtils.getParent(element, elementList);
-    if (!parent.isPresent()) {
-      return false;
-    }
-    return isSimpleExtension(parent.get(), elementList)
-        && lastIdToken(element).pathpart.equals("value");
-  }
-
-  private Optional<DescriptorProto> makeProfiledCodeIfRequired(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    ElementDefinition valueElement =
-        isSimpleExtension(element, elementList)
-            ? getExtensionValueElement(element, elementList)
-            : element;
-    if (valueElement.getTypeCount() != 1
-        || !valueElement.getType(0).getCode().getValue().equals("code")) {
-      return Optional.empty();
-    }
-
-    Optional<String> boundValueSetUrl = getBindingValueSetUrl(element, elementList);
-    if (!boundValueSetUrl.isPresent()) {
-      return Optional.empty();
-    }
-
-    Optional<QualifiedType> typeWithBoundValueSet =
-        checkForTypeWithBoundValueSet(element, elementList);
-    if (!typeWithBoundValueSet.isPresent()) {
-      return Optional.empty();
-    }
-
-    return Optional.of(
-        valueSetGenerator.generateCodeBoundToValueSet(
-            boundValueSetUrl.get(), typeWithBoundValueSet.get()));
-  }
-
   /** Returns an element with a new parent by replacing part of the id and path with a new string */
   private ElementDefinition reparentElement(
       ElementDefinition original, String oldParent, String newParent) {
@@ -1013,186 +1984,6 @@ public class ProtoGenerator {
     builder.getIdBuilder().setValue(original.getId().getValue().replace(oldParent, newParent));
     builder.getPathBuilder().setValue(original.getPath().getValue().replace(oldParent, newParent));
     return builder.build();
-  }
-
-  private Optional<DescriptorProto> makeProfiledDatatypeIfRequired(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    if (isContainer(element)
-        || isExtensionBackboneElement(element)
-        || !descendantsHaveSlices(element, elementList)) {
-      return Optional.empty();
-    }
-
-    // We need to generate a profiled version of this datatype.  Start by getting the base
-    // StructureDefinition of the datatype.
-    String baseId = element.getType(0).getCode().getValue();
-    StructureDefinition baseStructureDefinition = baseStructDefsById.get(baseId);
-
-    // Copy it to a new StructureDefinition with some modifications:
-    // * Uses the generated type name for the field
-    // * Sets the derivation to CONSTRAINT to indicate that this is a profile.
-    // * Adds all the profile slices on the datatype included in the resource profile
-    // * Replace any base elements on the datatype with ones described in the the resource profile
-    //   (e.g., with size restrictions).
-    StructureDefinition.Builder modifiedDataTypeBuilder = baseStructureDefinition.toBuilder();
-    String fieldType = getQualifiedFieldType(element, elementList).type;
-    modifiedDataTypeBuilder.getNameBuilder().setValue(lastIdToken(fieldType).pathpart);
-    modifiedDataTypeBuilder
-        .getDerivationBuilder()
-        .setValue(TypeDerivationRuleCode.Value.CONSTRAINT);
-
-    // Clear all the snapshot elements, and then add them back, IF they aren't replaced by
-    // ones by info from the profile.  Then add the definitions from the profile.
-    // This ensures that there aren't duplicated elements.
-    List<ElementDefinition> elementsFromProfile =
-        getDescendants(element, elementList).stream()
-            .map(
-                descendant ->
-                    reparentElement(
-                        descendant,
-                        element.getId().getValue(),
-                        baseStructureDefinition.getType().getValue()))
-            .collect(toList());
-    Set<String> idsDefinedInProfile =
-        elementsFromProfile.stream()
-            .map(definition -> definition.getId().getValue())
-            .collect(toSet());
-
-    modifiedDataTypeBuilder
-        .getSnapshotBuilder()
-        .clearElement()
-        .addAllElement(
-            baseStructureDefinition.getSnapshot().getElementList().stream()
-                .filter(definition -> !idsDefinedInProfile.contains(definition.getId().getValue()))
-                .collect(toList()))
-        .addAllElement(elementsFromProfile);
-
-    DescriptorProto.Builder builder =
-        generateProto(modifiedDataTypeBuilder.build(), new ArrayList<>()).toBuilder();
-
-    // All references subtypes will be build as though the datatype is a top-level structure.
-    // Iterate through and replace type references to things defined on the parent type.
-    // e.g., when generating a custom Identifier for use on a Patient resource, it will be generated
-    // with internal references like my.package.Identifier.Subtype, which need to be replaced with
-    // my.package.Patient.Identifier.Subtype.
-    replaceType(
-        builder,
-        packageInfo.getProtoPackage() + "." + lastIdToken(fieldType).pathpart,
-        packageInfo.getProtoPackage() + "." + fieldType);
-
-    MessageOptions.Builder options = builder.getOptionsBuilder();
-    options
-        .clearExtension(ProtoGeneratorAnnotations.messageDescription)
-        .clearExtension(Annotations.fhirProfileBase)
-        .addExtension(
-            Annotations.fhirProfileBase,
-            options.getExtension(Annotations.fhirStructureDefinitionUrl))
-        .clearExtension(Annotations.fhirStructureDefinitionUrl);
-
-    String name = fieldType.substring(fieldType.lastIndexOf(".") + 1);
-    return Optional.of(builder.setName(name).build());
-  }
-
-  private Optional<DescriptorProto> makeProfiledCodeableConceptIfRequired(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    if (element.getTypeCount() != 1
-        || !element.getType(0).getCode().getValue().equals("CodeableConcept")) {
-      return Optional.empty();
-    }
-    List<ElementDefinition> codingSlices =
-        getDirectChildren(element, elementList).stream()
-            .filter(candidateElement -> candidateElement.hasSliceName())
-            .collect(Collectors.toList());
-    if (codingSlices.isEmpty()) {
-      return Optional.empty();
-    }
-    String codeableConceptStructDefUrl =
-        CodeableConcept.getDescriptor()
-            .getOptions()
-            .getExtension(Annotations.fhirStructureDefinitionUrl);
-    StructureDefinition codeableConceptDefinition =
-        structDefDataByUrl.get(codeableConceptStructDefUrl).structDef;
-    QualifiedType qualifiedType = getQualifiedFieldType(element, elementList);
-    String fieldType = qualifiedType.type;
-    DescriptorProto.Builder codeableConceptBuilder =
-        generateMessage(
-                codeableConceptDefinition.getSnapshot().getElementList().get(0),
-                codeableConceptDefinition.getSnapshot().getElementList(),
-                DescriptorProto.newBuilder())
-            .toBuilder();
-    codeableConceptBuilder.setName(fieldType.substring(fieldType.lastIndexOf(".") + 1));
-    codeableConceptBuilder
-        .getOptionsBuilder()
-        .clearExtension(Annotations.structureDefinitionKind)
-        .clearExtension(Annotations.fhirStructureDefinitionUrl)
-        .addExtension(Annotations.fhirProfileBase, codeableConceptStructDefUrl);
-    for (ElementDefinition codingSlice : codingSlices) {
-      String fixedSystem = null;
-      ElementDefinition codeDefinition = null;
-      for (ElementDefinition codingField : getDirectChildren(codingSlice, elementList)) {
-        String basePath = codingField.getBase().getPath().getValue();
-        if (basePath.equals("Coding.system")) {
-          fixedSystem = codingField.getFixed().getUri().getValue();
-        }
-        if (basePath.equals("Coding.code")) {
-          codeDefinition = codingField;
-        }
-      }
-      if (fixedSystem == null || codeDefinition == null) {
-        System.out.println(
-            "Warning: Coding slicing not handled because it does not have both a fixed system and a"
-                + " code slice:\n"
-                + codingSlice.getId());
-      }
-
-      if (codeDefinition.getFixed().hasCode()) {
-        FieldDescriptorProto.Builder codingField =
-            codeableConceptBuilder
-                .addFieldBuilder()
-                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-                .setTypeName("." + fhirVersion.coreProtoPackage + ".CodingWithFixedCode")
-                .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
-                .setLabel(getFieldSize(codingSlice))
-                .setNumber(codeableConceptBuilder.getFieldCount());
-        if (!snakeCaseToJsonCase(codingField.getName())
-            .equals(codingSlice.getSliceName().getValue())) {
-          codingField.setJsonName(codingSlice.getSliceName().getValue());
-        }
-        codingField
-            .getOptionsBuilder()
-            .setExtension(Annotations.fhirInlinedCodingSystem, fixedSystem)
-            .setExtension(
-                Annotations.fhirInlinedCodingCode, codeDefinition.getFixed().getCode().getValue());
-      } else {
-        // For codings with fixed systems, we should inline a custom Coding type that incorporates
-        // this information, e.g., inlining a strongly-typed Code enum.
-        // For legacy reasons, we're only doing this for R4.
-        // TODO: Do this for all versions before 1.0 release.
-        if (packageInfo.getFhirVersion() == Annotations.FhirVersion.R4) {
-          addCodingFieldWithFixedSystem(
-              codeableConceptBuilder, qualifiedType, codingSlice, fixedSystem);
-        } else {
-          // Legacy "CodingWithFixedSystem"
-          FieldDescriptorProto.Builder codingField =
-              codeableConceptBuilder
-                  .addFieldBuilder()
-                  .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-                  .setTypeName(CodingWithFixedSystem.getDescriptor().getFullName())
-                  .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
-                  .setLabel(getFieldSize(codingSlice))
-                  .setNumber(codeableConceptBuilder.getFieldCount());
-          if (!snakeCaseToJsonCase(codingField.getName())
-              .equals(codingSlice.getSliceName().getValue())) {
-            codingField.setJsonName(codingSlice.getSliceName().getValue());
-          }
-          codingField
-              .getOptionsBuilder()
-              .setExtension(Annotations.fhirInlinedCodingSystem, fixedSystem);
-        }
-      }
-    }
-
-    return Optional.of(codeableConceptBuilder.build());
   }
 
   private void addCodingFieldWithFixedSystem(
@@ -1224,33 +2015,6 @@ public class ProtoGenerator {
     }
   }
 
-  private static List<ElementDefinition> getDirectChildren(
-      ElementDefinition element, List<ElementDefinition> elementList) {
-    List<String> messagePathParts = Splitter.on('.').splitToList(element.getId().getValue());
-    return getDescendants(element, elementList).stream()
-        .filter(
-            candidateElement -> {
-              List<String> parts =
-                  Splitter.on('.').splitToList(candidateElement.getId().getValue());
-              // To be a direct child, the id should start with the parent id, and add a single
-              // additional token.
-              return parts.size() == messagePathParts.size() + 1;
-            })
-        .collect(Collectors.toList());
-  }
-
-  private static List<ElementDefinition> getDescendants(
-      ElementDefinition element, List<ElementDefinition> elementList) {
-    // The id of descendants should start with the parent id + at least one more token.
-    String parentIdPrefix = element.getId().getValue() + ".";
-    return elementList.stream()
-        .filter(candidateElement -> candidateElement.getId().getValue().startsWith(parentIdPrefix))
-        .collect(Collectors.toList());
-  }
-
-  private static final ElementDefinition.TypeRef STRING_TYPE =
-      ElementDefinition.TypeRef.newBuilder().setCode(Uri.newBuilder().setValue("string")).build();
-
   private static Optional<String> getPrimitiveRegex(ElementDefinition element)
       throws InvalidFhirException {
     List<Message> regexExtensions =
@@ -1264,75 +2028,6 @@ public class ProtoGenerator {
     }
     return Optional.of(
         (String) Extensions.getExtensionValue(regexExtensions.get(0), "string_value"));
-  }
-
-  /** Generate the primitive value part of a datatype. */
-  private void generatePrimitiveValue(StructureDefinition def, DescriptorProto.Builder builder)
-      throws InvalidFhirException {
-    String defId = def.getId().getValue();
-    String valueFieldId = defId + ".value";
-    // Find the value field.
-    ElementDefinition valueElement =
-        getElementById(valueFieldId, def.getSnapshot().getElementList());
-    // If a regex for this primitive type is present, add it as a message-level annotation.
-    if (valueElement.getTypeCount() == 1) {
-      Optional<String> regexOptional = getPrimitiveRegex(valueElement);
-      if (regexOptional.isPresent()) {
-        builder.setOptions(
-            builder.getOptions().toBuilder()
-                .setExtension(Annotations.valueRegex, regexOptional.get())
-                .build());
-      }
-    }
-
-    // The value field sometimes has no type. We need to add a fake one here for buildField
-    // to succeed.  This will get overridden with the correct time,
-    ElementDefinition elementWithType =
-        valueElement.toBuilder().clearType().addType(STRING_TYPE).build();
-    Optional<FieldDescriptorProto> fieldOptional =
-        buildField(elementWithType, def.getSnapshot().getElementList(), 1 /* nextTag */);
-    if (fieldOptional.isPresent()) {
-      FieldDescriptorProto field = fieldOptional.get();
-      if (TIME_LIKE_PRECISION_MAP.containsKey(defId)) {
-        // Handle time-like types differently.
-        EnumDescriptorProto.Builder enumBuilder = PRECISION_ENUM.toBuilder();
-        for (String value : TIME_LIKE_PRECISION_MAP.get(defId)) {
-          enumBuilder.addValue(
-              EnumValueDescriptorProto.newBuilder()
-                  .setName(value)
-                  .setNumber(enumBuilder.getValueCount()));
-        }
-        builder.addEnumType(enumBuilder);
-        builder.addField(
-            field.toBuilder()
-                .clearTypeName()
-                .setType(FieldDescriptorProto.Type.TYPE_INT64)
-                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
-                .setName("value_us"));
-        if (TYPES_WITH_TIMEZONE.contains(defId)) {
-          builder.addField(TIMEZONE_FIELD);
-        }
-        builder.addField(
-            FieldDescriptorProto.newBuilder()
-                .setName("precision")
-                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
-                .setType(FieldDescriptorProto.Type.TYPE_ENUM)
-                .setTypeName(
-                    "."
-                        + packageInfo.getProtoPackage()
-                        + "."
-                        + toFieldTypeCase(defId)
-                        + ".Precision")
-                .setNumber(builder.getFieldCount() + 1));
-      } else {
-        // Handle non-time-like types.
-        // If they don't explicitly appear in the PRIMITIVE_TYPE_OVERRIDES, they are assumed
-        // to be of type TYPE_STRING.
-        FieldDescriptorProto.Type primitiveType =
-            PRIMITIVE_TYPE_OVERRIDES.getOrDefault(defId, FieldDescriptorProto.Type.TYPE_STRING);
-        builder.addField(field.toBuilder().clearTypeName().setType(primitiveType));
-      }
-    }
   }
 
   /**
@@ -1385,77 +2080,6 @@ public class ProtoGenerator {
     return lastIdToken(element).isChoiceType;
   }
 
-  /** Extract the type of a container field, possibly by reference. */
-  private static String getContainerType(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    if (element.hasContentReference()) {
-      // Find the named element which was referenced. We'll use the type of that element.
-      // Strip the first character from the content reference since it is a '#'
-      String referencedElementId = element.getContentReference().getValue().substring(1);
-      ElementDefinition referencedElement = getElementById(referencedElementId, elementList);
-      if (!isContainer(referencedElement)) {
-        throw new IllegalArgumentException(
-            "ContentReference does not reference a container: " + element.getContentReference());
-      }
-      if (lastIdToken(referencedElementId).slicename != null
-          && !isElementSupportedForSlicing(referencedElement)) {
-        // This is a reference to a slice of a field, but the slice isn't a supported slice type.
-        // Just use a reference to the base field.
-
-        // TODO:  This logic assumes only a single level of slicing is present - the
-        // base element could theoretically also be unsupported for slicing.
-        referencedElement =
-            getElementById(
-                referencedElementId.substring(0, referencedElementId.lastIndexOf(":")),
-                elementList);
-      }
-      return getContainerType(referencedElement, elementList);
-    }
-
-    // The container type is the full type of the message that will be generated (minus package).
-    // It is derived from the id (e.g., Medication.package.content), and these are usually equal
-    // other than casing (e.g., Medication.Package.Content).
-    // However, any parent in the path could have been renamed via a explicit type name extensions.
-
-    // Check for explicit renamings on this element.
-    List<Message> explicitTypeNames =
-        Extensions.getExtensionsWithUrl(EXPLICIT_TYPE_NAME_EXTENSION_URL, element);
-
-    if (explicitTypeNames.size() > 1) {
-      throw new InvalidFhirException(
-          "Element has multiple explicit type names: " + element.getId().getValue());
-    }
-
-    // Use explicit type name if present.  Otherwise, use the field_name, converted to FieldType
-    // casing, as the submessage name.
-    String typeName =
-        toFieldTypeCase(
-            explicitTypeNames.isEmpty()
-                ? getNameForElement(element, elementList)
-                : (String) Extensions.getExtensionValue(explicitTypeNames.get(0), "string_value"));
-    if (isChoiceType(element) && !isValueElementOfSingleTypedExtension(element, elementList)) {
-      typeName = typeName + "X";
-    }
-
-    Optional<ElementDefinition> parentOpt = getParent(element, elementList);
-
-    String packageString;
-    if (parentOpt.isPresent()) {
-      ElementDefinition parent = parentOpt.get();
-      String parentType = getContainerType(parent, elementList);
-      packageString = parentType + ".";
-    } else {
-      packageString = "";
-    }
-
-    if (packageString.startsWith(typeName + ".")
-        || packageString.contains("." + typeName + ".")
-        || (typeName.equals("Code") && parentOpt.isPresent())) {
-      typeName = typeName + "Type";
-    }
-    return packageString + typeName;
-  }
-
   // Commented out until STU3 generation is re-enabled.
   // private static String legacyRenaming(String typeName, String packageString) {
   //   return packageString.contains(".")
@@ -1467,254 +2091,10 @@ public class ProtoGenerator {
   //       : typeName;
   // }
 
-  /**
-   * Gets the field type and package of a potentially complex element. This handles choice types,
-   * types that reference other elements, references, profiles, etc.
-   */
-  private QualifiedType getQualifiedFieldType(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    Optional<QualifiedType> valueSetType = checkForTypeWithBoundValueSet(element, elementList);
-    if (valueSetType.isPresent()) {
-      return valueSetType.get();
-    }
-
-    if (isExtensionBackboneElement(element)) {
-      return getInternalExtensionType(element, elementList);
-    } else if (isValueElementOfChoiceTypeExtension(element, elementList)
-        && !element.getId().getValue().equals("Extension.value[x]")) {
-      // This is a choice type defined in a simple extension.
-      // We use this element to make the choice type, but name it using the parent to avoid an
-      // unnecessary choice-type wrapper.
-      // So, if there is a choice field myField on MyExtension, it should have type
-      // MyExtension.MyFieldX, not MyExtension.MyField.ValueX
-      String containerType = getContainerType(element, elementList);
-      return new QualifiedType(
-          containerType.substring(0, containerType.lastIndexOf('.')) + "X",
-          packageInfo.getProtoPackage());
-    } else if (isContainer(element)
-        || (isChoiceType(element) && !isValueElementOfSingleTypedExtension(element, elementList))) {
-      return new QualifiedType(
-          getContainerType(element, elementList), packageInfo.getProtoPackage());
-    } else if (element.hasContentReference()) {
-      // Get the type for this container from a named reference to another element.
-      return new QualifiedType(
-          getContainerType(element, elementList),
-          isLocalContentReference(element)
-              ? packageInfo.getProtoPackage()
-              : fhirVersion.coreProtoPackage);
-    } else if (element.getType(0).getCode().getValue().equals("Reference")) {
-      return new QualifiedType(
-          USE_TYPED_REFERENCES ? getTypedReferenceName(element.getTypeList()) : "Reference",
-          fhirVersion.coreProtoPackage);
-    } else {
-      if (element.getTypeCount() > 1) {
-        throw new IllegalArgumentException(
-            "Unknown multiple type definition on element: " + element.getId());
-      }
-      // Note: this is the "fhir type", e.g., Resource, BackboneElement, boolean,
-      // not the field type name.
-      String normalizedFhirTypeName =
-          normalizeType(Iterables.getOnlyElement(element.getTypeList()));
-
-      // See https://jira.hl7.org/browse/FHIR-25262
-      if (element.getId().getValue().equals("xhtml.id")) {
-        normalizedFhirTypeName = "String";
-      }
-
-      if (!isContainer(element) && descendantsHaveSlices(element, elementList)) {
-        // This is not a backbone element, but it has children that have slices.  This means we
-        // cannot use the "stock" FHIR datatype here.
-        // A common example of this is CodeableConcepts.  These are not themselves sliced, but the
-        // repeated coding field on CodeableConcept can be.
-        // This means we have to generate a nested CodeableConcept message that has these additional
-        // fields.
-        String containerType = getContainerType(element, elementList);
-        int lastDotIndex = containerType.lastIndexOf(".");
-
-        String containerTypeName = containerType.substring(lastDotIndex + 1);
-        if (containerTypeName.endsWith("CodeType")) {
-          // If we added "Type" to the end of a Code field to disambiguate it, drop the "Type"
-          // because we don't need to disambiguate anymore.  This is a "Hack".
-          containerTypeName = containerTypeName.substring(0, containerTypeName.length() - 4);
-        }
-        String name =
-            Ascii.equalsIgnoreCase(normalizedFhirTypeName, containerTypeName)
-                ? ("Profiled" + containerTypeName)
-                : (normalizedFhirTypeName + "For" + containerTypeName);
-        return new QualifiedType(
-            containerType.substring(0, lastDotIndex + 1) + name, packageInfo.getProtoPackage());
-      }
-
-      if (normalizedFhirTypeName.equals("Resource")) {
-        // We represent "Resource" FHIR types as "Any",
-        // unless we are on the Bundle type, in which case we use "ContainedResources" type.
-        // This allows defining resources in separate files without circular dependencies.
-        if (elementList.get(0).getId().getValue().equals("Bundle")
-            || getContainedResourceBehavior(packageInfo)
-                == ContainedResourceBehavior.TYPED_CONTAINED_RESOURCE) {
-          if (packageInfo.getLocalContainedResource()) {
-            return new QualifiedType("ContainedResource", packageInfo.getProtoPackage());
-          }
-          if (!packageInfo.getContainedResourcePackage().isEmpty()) {
-            return new QualifiedType(
-                "ContainedResource", packageInfo.getContainedResourcePackage());
-          }
-          return new QualifiedType("ContainedResource", fhirVersion.coreProtoPackage);
-        } else {
-          return new QualifiedType("Any", "google.protobuf");
-        }
-      }
-      return new QualifiedType(normalizedFhirTypeName, fhirVersion.coreProtoPackage);
-    }
-  }
-
-  private Optional<String> getBindingValueSetUrl(
-      ElementDefinition element, List<ElementDefinition> elementList) {
-    if (isSimpleExtension(element, elementList)) {
-      return getBindingValueSetUrl(getExtensionValueElement(element, elementList), elementList);
-    }
-    if (!useLegacyTypeNaming()
-        && element.getBinding().getStrength().getValue() != BindingStrengthCode.Value.REQUIRED) {
-      return Optional.empty();
-    }
-    String url = GeneratorUtils.getCanonicalUri(element.getBinding().getValueSet());
-    if (url.isEmpty()) {
-      return Optional.empty();
-    }
-    return Optional.of(url);
-  }
-
-  /** Build a single field for the proto. */
-  private Optional<FieldDescriptorProto> buildField(
-      ElementDefinition element, List<ElementDefinition> elementList, int nextTag)
-      throws InvalidFhirException {
-    FieldDescriptorProto.Label fieldSize = getFieldSize(element);
-    if (fieldSize == null) {
-      // This field has a max size of zero.  Do not emit a field.
-      return Optional.empty();
-    }
-
-    FieldOptions.Builder options = FieldOptions.newBuilder();
-
-    // Add a short description of the field.
-    if (element.hasShort()) {
-      options.setExtension(
-          ProtoGeneratorAnnotations.fieldDescription, element.getShort().getValue());
-    }
-
-    // Is this field required?
-    if (isRequiredByFhir(element, elementList)) {
-      options.setExtension(
-          Annotations.validationRequirement, Annotations.Requirement.REQUIRED_BY_FHIR);
-    } else if (element.getMin().getValue() != 0) {
-      System.out.println("Unexpected minimum field count: " + element.getMin().getValue());
-    }
-
-    if (isExternalExtension(element)) {
-      // This is an extension with a single type defined by an external profile.
-      // If we know about it, we'll inline a field for it.
-      String profileUrl = element.getType(0).getProfile(0).getValue();
-      StructureDefinitionData profileData = structDefDataByUrl.get(profileUrl);
-      if (profileData == null) {
-        // Unrecognized url.
-        // TODO: add a lenient mode that just ignores this extension.
-        throw new IllegalArgumentException("Encountered unknown extension url: " + profileUrl);
-      }
-      options.setExtension(Annotations.fhirInlinedExtensionUrl, profileUrl);
-
-      return Optional.of(
-          buildFieldInternal(
-                  getNameForElement(element, elementList),
-                  profileData.inlineType,
-                  profileData.protoPackage,
-                  nextTag,
-                  fieldSize,
-                  options.build())
-              .build());
-    }
-
-    Optional<ElementDefinition> choiceTypeBase = getChoiceTypeBase(element);
-    if (choiceTypeBase.isPresent()) {
-      ElementDefinition choiceTypeBaseElement = choiceTypeBase.get();
-      String baseName = getNameForElement(choiceTypeBaseElement, elementList);
-      String baseContainerType = getContainerType(choiceTypeBaseElement, elementList);
-      String containerType = getContainerType(element, elementList);
-      containerType =
-          containerType.substring(0, containerType.lastIndexOf(".") + 1)
-              + baseContainerType.substring(baseContainerType.lastIndexOf(".") + 1);
-
-      return Optional.of(
-          buildFieldInternal(
-                  baseName,
-                  containerType,
-                  packageInfo.getProtoPackage(),
-                  nextTag,
-                  fieldSize,
-                  options.build())
-              .build());
-    }
-
-    boolean isChoiceType =
-        (!isValueElementOfSingleTypedExtension(element, elementList) && isChoiceType(element))
-            || isChoiceTypeExtension(element, elementList);
-    // Add typed reference options
-    if (!isChoiceType
-        && element.getTypeCount() > 0
-        && element.getType(0).getCode().getValue().equals("Reference")) {
-      for (ElementDefinition.TypeRef type : element.getTypeList()) {
-        if (type.getCode().getValue().equals("Reference") && type.getTargetProfileCount() > 0) {
-          for (Canonical referenceType : type.getTargetProfileList()) {
-            if (!referenceType.getValue().isEmpty()) {
-              addReferenceType(options, referenceType.getValue());
-            }
-          }
-        }
-      }
-    }
-
-    QualifiedType fieldType = getQualifiedFieldType(element, elementList);
-    FieldDescriptorProto.Builder fieldBuilder =
-        buildFieldInternal(
-            getNameForElement(element, elementList),
-            fieldType.type,
-            fieldType.packageName,
-            nextTag,
-            fieldSize,
-            options.build());
-    if (isExtensionBackboneElement(element)) {
-      // For internal extension, the default is to assume the url is equal to the jsonName of the
-      // field. The json name of the field is the snake-to-json fieldName, unless a jsonName was
-      // explicitly set.
-      String url =
-          getElementById(element.getId().getValue() + ".url", elementList)
-              .getFixed()
-              .getUri()
-              .getValue();
-      if ((fieldBuilder.hasJsonName() && !fieldBuilder.getJsonName().equals(url))
-          || (!fieldBuilder.hasJsonName()
-              && !snakeCaseToJsonCase(fieldBuilder.getName()).equals(url))) {
-        fieldBuilder.getOptionsBuilder().setExtension(Annotations.fhirInlinedExtensionUrl, url);
-      }
-    }
-    return Optional.of(fieldBuilder.build());
-  }
-
-  private static boolean isRequiredByFhir(
-      ElementDefinition element, List<ElementDefinition> elementList) {
-    if (isChoiceType(element) && element.getTypeCount() == 1) {
-      return checkForChoiceSlice(element.getType(0), element, elementList)
-              .orElse(element)
-              .getMin()
-              .getValue()
-          == 1;
-    }
-    return element.getMin().getValue() == 1;
-  }
-
   // Returns the FHIRPath Error constraints on the given element, if any.
   private static List<String> getFhirPathErrorConstraints(ElementDefinition element) {
     return element.getConstraintList().stream()
-        .filter(constraint -> constraint.hasExpression())
+        .filter(ElementDefinition.Constraint::hasExpression)
         .filter(
             constraint -> constraint.getSeverity().getValue() == ConstraintSeverityCode.Value.ERROR)
         .map(constraint -> constraint.getExpression().getValue())
@@ -1725,7 +2105,7 @@ public class ProtoGenerator {
   // Returns the FHIRPath Warning constraints on the given element, if any.
   private static List<String> getFhirPathWarningConstraints(ElementDefinition element) {
     return element.getConstraintList().stream()
-        .filter(constraint -> constraint.hasExpression())
+        .filter(ElementDefinition.Constraint::hasExpression)
         .filter(
             constraint ->
                 constraint.getSeverity().getValue() == ConstraintSeverityCode.Value.WARNING)
@@ -1754,36 +2134,6 @@ public class ProtoGenerator {
     return element.getContentReference().getValue().startsWith("#" + rootType);
   }
 
-  /**
-   * Returns the field name that should be used for an element. If element is a slice, uses that
-   * slice name. Since the id token slice name is all-lowercase, uses the SliceName field.
-   * Otherwise, uses the last token's pathpart. Logs a warning if the slice name in the id token
-   * does not match the SliceName field.
-   */
-  // TODO: Handle reslices. Could be as easy as adding it to the end of SliceName.
-  private static String getNameForElement(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    IdToken lastToken = lastIdToken(element);
-    if (lastToken.slicename == null || !element.getId().getValue().contains(".")) {
-      if (isValueElementOfSingleTypedExtension(element, elementList)) {
-        String type = element.getType(0).getCode().getValue();
-        return "value" + Ascii.toUpperCase(type.charAt(0)) + type.substring(1);
-      }
-      return hyphenToCamel(lastToken.pathpart);
-    }
-    String sliceName = element.getSliceName().getValue();
-    if (!lastToken.slicename.equals(Ascii.toLowerCase(sliceName))) {
-      // TODO: pull this into a common validator that runs ealier.
-      logDiscrepancies(
-          "Warning: Inconsistent slice name for element with id "
-              + element.getId().getValue()
-              + " and slicename "
-              + element.getSliceName());
-    }
-    sliceName = hyphenToCamel(sliceName);
-    return resolveSliceNameConflicts(sliceName, element, elementList);
-  }
-
   private static String hyphenToCamel(String fieldName) {
     int i;
     while ((i = fieldName.indexOf("-")) != -1) {
@@ -1793,39 +2143,6 @@ public class ProtoGenerator {
               + fieldName.substring(i + 2);
     }
     return fieldName;
-  }
-
-  private static boolean descendantsHaveSlices(
-      ElementDefinition element, List<ElementDefinition> elementList) {
-    return getDescendants(element, elementList).stream()
-        .anyMatch(candidate -> candidate.hasSliceName());
-  }
-
-  // Given a potential slice field name and an element, returns true if that slice name would
-  // conflict with the field name of any siblings to that elements.
-  // TODO: This only checks against non-slice names.  Theoretically, you could have
-  // two identically-named slices of different base fields.
-  private static String resolveSliceNameConflicts(
-      String fieldName, ElementDefinition element, List<ElementDefinition> elementList)
-      throws InvalidFhirException {
-    if (RESERVED_FIELD_NAMES.contains(fieldName)) {
-      return fieldName + "Slice";
-    }
-    Optional<ElementDefinition> parent = GeneratorUtils.getParent(element, elementList);
-    if (!parent.isPresent()) {
-      // This is a profile on a top-level Element. There can't be any conflicts.
-      return fieldName;
-    }
-    List<ElementDefinition> elementsWithIdsConflictingWithSliceName =
-        getDirectChildren(parent.get(), elementList).stream()
-            .filter(
-                candidateElement ->
-                    toFieldNameCase(lastIdToken(candidateElement).pathpart)
-                            .equals(toFieldNameCase(fieldName))
-                        && !candidateElement.getBase().getPath().getValue().equals("Extension.url"))
-            .collect(Collectors.toList());
-
-    return elementsWithIdsConflictingWithSliceName.isEmpty() ? fieldName : fieldName + "Slice";
   }
 
   // TODO: memoize
@@ -1868,139 +2185,6 @@ public class ProtoGenerator {
 
   private static boolean useLegacyTypeNaming(Annotations.FhirVersion version) {
     return version != Annotations.FhirVersion.R4;
-  }
-
-  /** Add a choice type container message to the proto. */
-  private DescriptorProto makeChoiceType(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    QualifiedType choiceQualifiedType = getQualifiedFieldType(element, elementList);
-    DescriptorProto.Builder choiceType =
-        DescriptorProto.newBuilder().setName(choiceQualifiedType.getName());
-    choiceType.getOptionsBuilder().setExtension(Annotations.isChoiceType, true);
-
-    // Add error constraints on choice types.
-    List<String> expressions = getFhirPathErrorConstraints(element);
-    if (!expressions.isEmpty()) {
-      choiceType
-          .getOptionsBuilder()
-          .setExtension(Annotations.fhirPathMessageConstraint, expressions);
-    }
-    // Add warning constraints.
-    List<String> warnings = getFhirPathWarningConstraints(element);
-    if (!warnings.isEmpty()) {
-      choiceType
-          .getOptionsBuilder()
-          .setExtension(Annotations.fhirPathMessageWarningConstraint, warnings);
-    }
-
-    choiceType.addOneofDeclBuilder().setName("choice");
-
-    int nextTag = 1;
-    // Group types.
-    List<ElementDefinition.TypeRef> types = new ArrayList<>();
-    List<String> referenceTypes = new ArrayList<>();
-    Set<String> foundTypes = new HashSet<>();
-    for (ElementDefinition.TypeRef type : element.getTypeList()) {
-      if (!foundTypes.contains(type.getCode().getValue())) {
-        types.add(type);
-        foundTypes.add(type.getCode().getValue());
-      }
-
-      if (type.getCode().getValue().equals("Reference") && type.getTargetProfileCount() > 0) {
-        for (Canonical referenceType : type.getTargetProfileList()) {
-          if (!referenceType.getValue().isEmpty()) {
-            referenceTypes.add(referenceType.getValue());
-          }
-        }
-      }
-    }
-
-    for (ElementDefinition.TypeRef type : types) {
-      String fieldName =
-          Ascii.toLowerCase(type.getCode().getValue().substring(0, 1))
-              + type.getCode().getValue().substring(1);
-
-      // There are two cases of choice type fields:
-      // a) we need to generate a custom type for the field (e.g., a bound code, or a profiled type)
-      // b) it's an already existing type, so just generate the field.
-
-      // Check for a slice of this type on the choice, e.g., value[x]:valueCode
-      // If one is found, use that to create the choice field and type.  Otherwise, just use the
-      // value[x] element itself.
-      ElementDefinition choiceFieldElement =
-          checkForChoiceSlice(type, element, elementList).orElse(element);
-      Optional<DescriptorProto> typeFromChoiceElement =
-          buildNonChoiceTypeNestedTypeIfNeeded(choiceFieldElement, elementList);
-
-      if (typeFromChoiceElement.isPresent()) {
-        // There is a sub type
-        choiceType.addNestedType(typeFromChoiceElement.get());
-        QualifiedType sliceType =
-            choiceQualifiedType.childType(typeFromChoiceElement.get().getName());
-        FieldDescriptorProto.Builder fieldBuilder =
-            buildFieldInternal(
-                    fieldName,
-                    sliceType.type,
-                    sliceType.packageName,
-                    nextTag++,
-                    FieldDescriptorProto.Label.LABEL_OPTIONAL,
-                    FieldOptions.getDefaultInstance())
-                .setOneofIndex(0);
-        choiceType.addField(fieldBuilder);
-      } else {
-        // If no custom type was generated, just use the type name from the core FHIR types.
-        // TODO:  This assumes all types in a oneof are core FHIR types.  In order to
-        // support custom types, we'll need to load the structure definition for the type and check
-        // against knownStructureDefinitionPackages
-        FieldOptions.Builder options = FieldOptions.newBuilder();
-        if (fieldName.equals("reference")) {
-          for (String referenceType : referenceTypes) {
-            addReferenceType(options, referenceType);
-          }
-        }
-        FieldDescriptorProto.Builder fieldBuilder =
-            buildFieldInternal(
-                    fieldName,
-                    normalizeType(type),
-                    fhirVersion.coreProtoPackage,
-                    nextTag++,
-                    FieldDescriptorProto.Label.LABEL_OPTIONAL,
-                    options.build())
-                .setOneofIndex(0);
-        choiceType.addField(fieldBuilder);
-      }
-    }
-    return choiceType.build();
-  }
-
-  private static Optional<ElementDefinition> checkForChoiceSlice(
-      ElementDefinition.TypeRef type,
-      ElementDefinition element,
-      List<ElementDefinition> elementList) {
-    Set<ElementDefinition> matchingSlices =
-        GeneratorUtils.getSlices(element, elementList).stream()
-            .filter(
-                elmenent ->
-                    element.getTypeCount() == 1
-                        && element
-                            .getType(0)
-                            .getCode()
-                            .getValue()
-                            .equals(type.getCode().getValue()))
-            .collect(Collectors.toSet());
-    if (matchingSlices.isEmpty()) {
-      return Optional.empty();
-    }
-    // TODO: this might be something we need to eventually support, e.g., if oneof could
-    // be bound to multiple different systems.
-    if (matchingSlices.size() > 1) {
-      throw new IllegalArgumentException(
-          "Invalid choice type slicing: More than one slice of a given type on"
-              + element.getId().getValue()
-              + ".  Type: "
-              + type.getCode().getValue());
-    }
-    return Optional.of(Iterables.getOnlyElement(matchingSlices));
   }
 
   private void addReferenceType(FieldOptions.Builder options, String referenceUrl) {
@@ -2078,97 +2262,6 @@ public class ProtoGenerator {
     return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, snakeString);
   }
 
-  private Optional<QualifiedType> checkForTypeWithBoundValueSet(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    // Note that for Simple extensions that are inlined as a single type, we need to actually check
-    // the internal value element on the extension, even though the element we're replacing and
-    // naming the field after is the extension itself.  Thus, here we differentiate between
-    // "value element" and "naming element".
-    // E.g., for element mySubExtension, which has a valueCoding element on it, the datatype will be
-    // generated from the valueElement, valueCoding in this case, but the name should be based on
-    // the original, mySubExtension element.
-    //
-    // For all cases other than simple sub extensions, the value element is equal to the naming
-    // element.
-    ElementDefinition namingElement = element;
-    ElementDefinition valueElement =
-        isSimpleExtension(element, elementList)
-            ? getExtensionValueElement(element, elementList)
-            : element;
-
-    // If this is a simple extension structure definition with a single possible
-    // type, make sure to check for a slice of that type to use to generate the field.  This
-    // special case is necessary, because when in a complex extension, this is handled when looking
-    // at the simple extension _field_.  In this case that field doesn't exist, so we need to make a
-    // special case for slicing.
-    // TODO: We should do a broader rewrite at somepoint that makes type and field
-    // co-generated.  That would remove this class of special case.
-    if (element == valueElement
-        && element.getPath().getValue().equals("Extension.value[x]")
-        && isValueElementOfSingleTypedExtension(element, elementList)
-        && !isSlice(element)) {
-      valueElement = checkForChoiceSlice(element.getType(0), element, elementList).orElse(element);
-    }
-
-    if (getDistinctTypeCount(valueElement) == 1) {
-      String containerName = getContainerType(namingElement, elementList);
-      ElementDefinition.TypeRef type = valueElement.getType(0);
-
-      String typeName = type.getCode().getValue();
-      Optional<String> valueSetUrl = getBindingValueSetUrl(valueElement, elementList);
-      if (valueSetUrl.isPresent()) {
-        if (typeName.equals("code")) {
-          if (!containerName.endsWith("Code") && !containerName.endsWith(".CodeType")) {
-            // Carve out some exceptions because CodeCode and CodeTypeCode sounds silly.
-            containerName = containerName + "Code";
-          }
-          return Optional.of(new QualifiedType(containerName, packageInfo.getProtoPackage()));
-        }
-        if (!useLegacyTypeNaming() && typeName.equals("Coding")) {
-          return Optional.of(
-              new QualifiedType(containerName + "Coding", packageInfo.getProtoPackage()));
-        }
-      }
-      // TODO: Handle bound systems on CodeableConcepts
-      // TODO: return an error for unhandled types with required bindings in strict mode
-    }
-    return Optional.empty();
-  }
-
-  private Optional<DescriptorProto> makeProfiledCodingIfRequired(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    // Coding profiles don't exist in legacy type naming.
-    if (useLegacyTypeNaming()) {
-      return Optional.empty();
-    }
-    // Note that in the case of sub extensions, the element will be an extension, but the field
-    // we're using to generate the type will be the "value" field on that extension.
-    // In all other cases, the value element is the same as the element passed in.
-    ElementDefinition valueElement =
-        isSimpleExtension(element, elementList)
-            ? getExtensionValueElement(element, elementList)
-            : element;
-
-    if (valueElement.getTypeCount() != 1
-        || !valueElement.getType(0).getCode().getValue().equals("Coding")) {
-      return Optional.empty();
-    }
-
-    Optional<String> boundValueSetUrl = getBindingValueSetUrl(valueElement, elementList);
-    if (!boundValueSetUrl.isPresent()) {
-      return Optional.empty();
-    }
-    Optional<QualifiedType> typeWithBoundValueSet =
-        checkForTypeWithBoundValueSet(element, elementList);
-    if (!typeWithBoundValueSet.isPresent()) {
-      return Optional.empty();
-    }
-
-    return Optional.of(
-        valueSetGenerator.generateCodingWithBoundValueSet(
-            boundValueSetUrl.get(), typeWithBoundValueSet.get()));
-  }
-
   private static boolean isContainedResourceField(ElementDefinition element) {
     return element.getBase().getPath().getValue().equals("DomainResource.contained");
   }
@@ -2178,7 +2271,7 @@ public class ProtoGenerator {
     TreeSet<String> refTypes =
         typeList.stream()
             .flatMap(type -> type.getTargetProfileList().stream())
-            .map(profile -> profile.getValue())
+            .map(Canonical::getValue)
             .collect(toCollection(TreeSet::new));
 
     String refType = null;
@@ -2234,9 +2327,9 @@ public class ProtoGenerator {
     }
 
     ElementDefinition element = def.getSnapshot().getElement(0);
-    List<ElementDefinition> elementList = def.getSnapshot().getElementList();
-    ElementDefinition valueElement = getExtensionValueElement(element, elementList);
-    QualifiedType valueType = getQualifiedFieldType(valueElement, elementList);
+    PerDefinitionGenerator generator = new PerDefinitionGenerator(def);
+    ElementDefinition valueElement = generator.getExtensionValueElement(element);
+    QualifiedType valueType = generator.getQualifiedFieldType(valueElement);
 
     // getQualifiedFieldType is not package-aware, it assumes that anything that is not core is from
     // the "current" package (i.e., the package used in the constructor).  So, in the case where
@@ -2248,83 +2341,6 @@ public class ProtoGenerator {
 
     return new QualifiedType(
         valueType.type.replaceFirst("Extension", getTypeName(def)), valueType.packageName);
-  }
-
-  private static ElementDefinition getExtensionValueElement(
-      ElementDefinition element, List<ElementDefinition> elementList) {
-    for (ElementDefinition child : getDirectChildren(element, elementList)) {
-      if (!isSlice(child) && child.getBase().getPath().getValue().endsWith(".value[x]")) {
-        if (child.getTypeCount() == 1
-            && !child.getType(0).getCode().getValue().equals("Extension")) {
-          // This is not a true choice type, since we don't generate choice types for extensions
-          // with only one valid type.  So, check if there's a slicing for that type and use
-          // that as the value element if present.
-          return checkForChoiceSlice(child.getType(0), child, elementList).orElse(child);
-        }
-        return child;
-      }
-    }
-    throw new IllegalArgumentException(
-        "Element " + element.getId().getValue() + " has no value element");
-  }
-
-  private QualifiedType getSimpleInternalExtensionType(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    ElementDefinition valueElement = getExtensionValueElement(element, elementList);
-
-    if (valueElement.getMax().getValue().equals("0")) {
-      // There is no value element, this is a complex extension.
-      throw new IllegalArgumentException(
-          "getSimpleInternalExtensionType called with complex extension: "
-              + element.getId().getValue());
-    }
-    return getQualifiedFieldType(valueElement, elementList);
-  }
-
-  private static long getDistinctTypeCount(ElementDefinition element) {
-    // Don't do fancier logic if fast logic is sufficient.
-    if (element.getTypeCount() < 2 || USE_TYPED_REFERENCES) {
-      return element.getTypeCount();
-    }
-    return element.getTypeList().stream().map(type -> type.getCode()).distinct().count();
-  }
-
-  private static boolean isChoiceTypeExtension(
-      ElementDefinition element, List<ElementDefinition> elementList) {
-    if (!isExtensionBackboneElement(element)) {
-      return false;
-    }
-    ElementDefinition valueElement = getExtensionValueElement(element, elementList);
-    return !valueElement.getMax().getValue().equals("0") && getDistinctTypeCount(valueElement) > 1;
-  }
-
-  private static boolean isSimpleExtension(
-      ElementDefinition element, List<ElementDefinition> elementList) {
-    return isExtensionBackboneElement(element)
-        && !getExtensionValueElement(element, elementList).getMax().getValue().equals("0");
-  }
-
-  private static boolean isComplexInternalExtension(
-      ElementDefinition element, List<ElementDefinition> elementList) {
-    return isExtensionBackboneElement(element) && !isSimpleExtension(element, elementList);
-  }
-
-  private static boolean isSingleTypedExtensionDefinition(StructureDefinition def) {
-    ElementDefinition element = def.getSnapshot().getElement(0);
-    List<ElementDefinition> elementList = def.getSnapshot().getElementList();
-    return isSimpleExtension(element, elementList);
-  }
-
-  /**
-   * Returns the type that should be used for an internal extension. If this is a simple internal
-   * extension, uses the appropriate primitive type. If this is a complex internal extension, treats
-   * the element like a backbone container.
-   */
-  private QualifiedType getInternalExtensionType(
-      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    return isSimpleExtension(element, elementList)
-        ? getSimpleInternalExtensionType(element, elementList)
-        : new QualifiedType(getContainerType(element, elementList), packageInfo.getProtoPackage());
   }
 
   // TODO: consider supporting more types of slicing.
