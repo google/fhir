@@ -22,28 +22,27 @@ PROFILE_GENERATOR = "@com_google_fhir//java/com/google/fhir/protogen:ProfileGene
 MANUAL_TAGS = ["manual"]
 
 def fhir_package(
-        package_name,
+        name,
         definitions,
         package_info):
     """Generates a FHIR package in a way that can be referenced by other packages
 
     Given a zip of resources, and a package info proto, this generates a zip file and a filegroup for the package.
-    This zip file will have the name $(package_name).zip, which can be used to construct a java FhirPackage object.
 
     Args:
-        package_name: The name for the package, which other targets will use to refer to this
+        name: The name for the package, which other targets will use to refer to this
         definitions: the definitions to export with this package
         package_info: the package_info to export with this package
     """
-    filegroup_name = package_name + "_filegroup"
+    filegroup_name = name + "_filegroup"
     native.filegroup(
         name = filegroup_name,
         srcs = definitions + [package_info],
     )
     native.genrule(
-        name = package_name + "_package_zip",
+        name = name + "_package_zip",
         srcs = [filegroup_name],
-        outs = [_get_zip_for_pkg(package_name)],
+        outs = [_get_zip_for_pkg(name)],
         cmd = "zip --quiet -j $@ $(locations %s)" % filegroup_name,
         tags = MANUAL_TAGS,
     )
@@ -229,7 +228,7 @@ def gen_fhir_definitions_and_protos(
     )
 
     fhir_package(
-        package_name = name,
+        name = name,
         definitions = json_outs,
         package_info = package_info,
     )
@@ -244,6 +243,3 @@ def gen_fhir_definitions_and_protos(
 
 def _get_zip_for_pkg(pkg):
     return pkg + "_package.zip"
-
-def _get_java_proto_rule_for_pkg(pkg, name):
-    return ":".split(pkg)[0] + name + "_java_proto"

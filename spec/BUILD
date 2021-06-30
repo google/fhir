@@ -26,7 +26,7 @@ filegroup(
 
 # STU3 core types.
 fhir_package(
-    package_name = "fhir_stu3",
+    name = "fhir_stu3",
     definitions = glob(
         ["hl7.fhir.core/3.0.1/package/StructureDefinition-*.json"],
         exclude = [
@@ -68,7 +68,7 @@ filegroup(
 )
 
 fhir_package(
-    package_name = "fhir_r4",
+    name = "fhir_r4",
     definitions =
         glob(
             ["hl7.fhir.core/4.0.1/package/StructureDefinition-*.json"],
@@ -96,7 +96,7 @@ fhir_package(
 
 # US-Core profiles for FHIR STU3.
 fhir_package(
-    package_name = "uscore_stu3_package",
+    name = "uscore_stu3_package",
     definitions = glob([
         "hl7.fhir.us.core/2.0.0/package/StructureDefinition-*.json",
     ]),
@@ -106,7 +106,7 @@ fhir_package(
 # US-Core Profiles for FHIR R4
 
 fhir_package(
-    package_name = "uscore_r4_package",
+    name = "uscore_r4_package",
     definitions = glob([
         "hl7.fhir.us.core/3.1.0/package/StructureDefinition-*.json",
     ]) + glob(["hl7.fhir.us.core/3.1.0/package/ValueSet-*.json"]) + glob([
@@ -117,7 +117,7 @@ fhir_package(
 
 # US QI core profiles.
 fhir_package(
-    package_name = "qicore_3_2_0_package",
+    name = "qicore_3_2_0_package",
     definitions = glob([
         "hl7.fhir.us.qicore/3.2.0/*.json",
     ]),
@@ -126,7 +126,7 @@ fhir_package(
 
 # US QI core profiles.
 fhir_package(
-    package_name = "qicore_3_3_0_package",
+    name = "qicore_3_3_0_package",
     definitions = glob([
         "hl7.fhir.us.qicore/3.3.0/*.json",
     ]),
