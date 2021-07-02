@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/google/fhir/go/fhirversion"
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"google.golang.org/protobuf/proto"
@@ -58,7 +59,7 @@ type Marshaller struct {
 }
 
 // NewMarshaller returns a Marshaller.
-func NewMarshaller(enableIndent bool, prefix, indent string, ver Version) (*Marshaller, error) {
+func NewMarshaller(enableIndent bool, prefix, indent string, ver fhirversion.Version) (*Marshaller, error) {
 	cfg, err := getConfig(ver)
 	if err != nil {
 		return nil, err
@@ -73,24 +74,24 @@ func NewMarshaller(enableIndent bool, prefix, indent string, ver Version) (*Mars
 }
 
 // NewPrettyMarshaller returns a pretty Marshaller.
-func NewPrettyMarshaller(ver Version) (*Marshaller, error) {
+func NewPrettyMarshaller(ver fhirversion.Version) (*Marshaller, error) {
 	return NewMarshaller(true, "", "  ", ver)
 }
 
 // NewAnalyticsMarshaller returns an Analytics Marshaller with limited support
 // for extensions. A default maxDepth of 2 will be used if the input is 0.
-func NewAnalyticsMarshaller(maxDepth int, ver Version) (*Marshaller, error) {
+func NewAnalyticsMarshaller(maxDepth int, ver fhirversion.Version) (*Marshaller, error) {
 	return newAnalyticsMarshaller(maxDepth, ver, formatAnalytic)
 }
 
 // NewAnalyticsMarshallerWithInferredSchema returns an Analytics Marshaller with
 // support for extensions as first class fields. A default maxDepth of 2 will be
 // used if the input is 0.
-func NewAnalyticsMarshallerWithInferredSchema(maxDepth int, ver Version) (*Marshaller, error) {
+func NewAnalyticsMarshallerWithInferredSchema(maxDepth int, ver fhirversion.Version) (*Marshaller, error) {
 	return newAnalyticsMarshaller(maxDepth, ver, formatAnalyticWithInferredSchema)
 }
 
-func newAnalyticsMarshaller(maxDepth int, ver Version, format jsonFormat) (*Marshaller, error) {
+func newAnalyticsMarshaller(maxDepth int, ver fhirversion.Version, format jsonFormat) (*Marshaller, error) {
 	if maxDepth == 0 {
 		maxDepth = jsonpbhelper.DefaultAnalyticsRecurExpansionDepth
 	}

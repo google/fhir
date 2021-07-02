@@ -30,6 +30,7 @@ import (
 	"runtime"
 
 	"github.com/bazelbuild/rules_go/go/tools/bazel"
+	"github.com/google/fhir/go/fhirversion"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/fhir/go/jsonformat/internal/protopath"
 	"github.com/google/fhir/go/jsonformat"
@@ -149,23 +150,23 @@ var (
 		"StructureDefinition-Request",
 	)
 
-	versionToJSONPath = map[jsonformat.Version]string{
-		jsonformat.STU3:  "spec/hl7.fhir.core/3.0.1/package/",
-		jsonformat.R4:    "spec/hl7.fhir.r4.examples/4.0.1/package/",
+	versionToJSONPath = map[fhirversion.Version]string{
+		fhirversion.STU3:  "spec/hl7.fhir.core/3.0.1/package/",
+		fhirversion.R4:    "spec/hl7.fhir.r4.examples/4.0.1/package/",
 	}
-	versionToProtoPath = map[jsonformat.Version]string{
-		jsonformat.STU3: "testdata/stu3/examples",
-		jsonformat.R4:   "testdata/r4/examples",
+	versionToProtoPath = map[fhirversion.Version]string{
+		fhirversion.STU3: "testdata/stu3/examples",
+		fhirversion.R4:   "testdata/r4/examples",
 	}
-	versionToBigQueryJSONPath = map[jsonformat.Version]string{
-		jsonformat.STU3: "testdata/stu3/bigquery/",
-		jsonformat.R4:   "testdata/r4/bigquery/",
+	versionToBigQueryJSONPath = map[fhirversion.Version]string{
+		fhirversion.STU3: "testdata/stu3/bigquery/",
+		fhirversion.R4:   "testdata/r4/bigquery/",
 	}
 )
 
 func TestMarshal_STU3(t *testing.T) {
 	t.Parallel()
-	tests := readTestCases(t, jsonformat.STU3)
+	tests := readTestCases(t, fhirversion.STU3)
 	for _, tc := range tests {
 		tc := tc
 		t.Run(tc, func(t *testing.T) {
@@ -173,14 +174,14 @@ func TestMarshal_STU3(t *testing.T) {
 			if stu3Ignores.Contains(tc) {
 				t.Skipf("Skipping %s", tc)
 			}
-			testMarshal(t, tc, jsonformat.STU3)
+			testMarshal(t, tc, fhirversion.STU3)
 		})
 	}
 }
 
 func TestMarshal_R4(t *testing.T) {
 	t.Parallel()
-	tests := readTestCases(t, jsonformat.R4)
+	tests := readTestCases(t, fhirversion.R4)
 	for _, tc := range tests {
 		tc := tc
 		t.Run(tc, func(t *testing.T) {
@@ -188,12 +189,12 @@ func TestMarshal_R4(t *testing.T) {
 			if r4Ignores.Contains(tc) {
 				t.Skipf("Skipping %s", tc)
 			}
-			testMarshal(t, tc, jsonformat.R4)
+			testMarshal(t, tc, fhirversion.R4)
 		})
 	}
 }
 
-func testMarshal(t *testing.T, name string, ver jsonformat.Version) {
+func testMarshal(t *testing.T, name string, ver fhirversion.Version) {
 	jsonData, protoData, err := readTestCaseFile(ver, name)
 	if err != nil {
 		t.Fatal(err)
@@ -260,7 +261,7 @@ func TestMarshalAnalytics_STU3(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			for _, file := range tc.files {
-				testMarshalAnalytics(t, file, tc.zeroRes, jsonformat.STU3)
+				testMarshalAnalytics(t, file, tc.zeroRes, fhirversion.STU3)
 			}
 		})
 	}
@@ -294,13 +295,13 @@ func TestMarshalAnalytics_R4(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			for _, file := range tc.files {
-				testMarshalAnalytics(t, file, tc.zeroRes, jsonformat.R4)
+				testMarshalAnalytics(t, file, tc.zeroRes, fhirversion.R4)
 			}
 		})
 	}
 }
 
-func testMarshalAnalytics(t *testing.T, file string, res proto.Message, ver jsonformat.Version) {
+func testMarshalAnalytics(t *testing.T, file string, res proto.Message, ver fhirversion.Version) {
 	jsonData, err := readFile(versionToBigQueryJSONPath[ver], file, jsonExt)
 	if err != nil {
 		t.Fatalf("Failed to read resource json file %s: %v", file, err)
@@ -341,7 +342,7 @@ func testMarshalAnalytics(t *testing.T, file string, res proto.Message, ver json
 
 func TestUnmarshal_STU3(t *testing.T) {
 	t.Parallel()
-	tests := readTestCases(t, jsonformat.STU3)
+	tests := readTestCases(t, fhirversion.STU3)
 	for _, tc := range tests {
 		tc := tc
 		t.Run(tc, func(t *testing.T) {
@@ -349,14 +350,14 @@ func TestUnmarshal_STU3(t *testing.T) {
 			if stu3Ignores.Contains(tc) {
 				t.Skipf("Skipping %s", tc)
 			}
-			testUnmarshal(t, tc, jsonformat.STU3)
+			testUnmarshal(t, tc, fhirversion.STU3)
 		})
 	}
 }
 
 func TestUnmarshal_R4(t *testing.T) {
 	t.Parallel()
-	tests := readTestCases(t, jsonformat.R4)
+	tests := readTestCases(t, fhirversion.R4)
 	for _, tc := range tests {
 		tc := tc
 		t.Run(tc, func(t *testing.T) {
@@ -364,12 +365,12 @@ func TestUnmarshal_R4(t *testing.T) {
 			if r4Ignores.Contains(tc) {
 				t.Skipf("Skipping %s", tc)
 			}
-			testUnmarshal(t, tc, jsonformat.R4)
+			testUnmarshal(t, tc, fhirversion.R4)
 		})
 	}
 }
 
-func testUnmarshal(t *testing.T, name string, ver jsonformat.Version) {
+func testUnmarshal(t *testing.T, name string, ver fhirversion.Version) {
 	jsonData, protoData, err := readTestCaseFile(ver, name)
 	if err != nil {
 		t.Fatal(err)
@@ -401,7 +402,7 @@ func testUnmarshal(t *testing.T, name string, ver jsonformat.Version) {
 
 func TestMarshalUnmarshalIdentity_STU3(t *testing.T) {
 	t.Parallel()
-	tests := readTestCaseFileNames(t, versionToJSONPath[jsonformat.STU3])
+	tests := readTestCaseFileNames(t, versionToJSONPath[fhirversion.STU3])
 	for _, tc := range tests {
 		tc := tc
 		t.Run(tc, func(t *testing.T) {
@@ -409,14 +410,14 @@ func TestMarshalUnmarshalIdentity_STU3(t *testing.T) {
 			if stu3Ignores.Contains(tc) {
 				t.Skipf("Skipping %s", tc)
 			}
-			testMarshalUnmarshalIdentity(t, tc, jsonformat.STU3)
+			testMarshalUnmarshalIdentity(t, tc, fhirversion.STU3)
 		})
 	}
 }
 
 func TestMarshalUnmarshalIdentity_R4(t *testing.T) {
 	t.Parallel()
-	tests := readTestCaseFileNames(t, versionToJSONPath[jsonformat.R4])
+	tests := readTestCaseFileNames(t, versionToJSONPath[fhirversion.R4])
 	for _, tc := range tests {
 		tc := tc
 		t.Run(tc, func(t *testing.T) {
@@ -424,14 +425,14 @@ func TestMarshalUnmarshalIdentity_R4(t *testing.T) {
 			if r4Ignores.Contains(tc) {
 				t.Skipf("Skipping %s", tc)
 			}
-			testMarshalUnmarshalIdentity(t, tc, jsonformat.R4)
+			testMarshalUnmarshalIdentity(t, tc, fhirversion.R4)
 		})
 	}
 }
 
 // testMarshalUnmarshalIdentity tests that the unmarshalling and marshalling a
 // JSON resource results in equal JSON to the original.
-func testMarshalUnmarshalIdentity(t *testing.T, fileName string, ver jsonformat.Version) {
+func testMarshalUnmarshalIdentity(t *testing.T, fileName string, ver fhirversion.Version) {
 	t.Helper()
 	jsonData, err := readFile(versionToJSONPath[ver], fileName, jsonExt)
 	if err != nil {
@@ -461,7 +462,7 @@ func testMarshalUnmarshalIdentity(t *testing.T, fileName string, ver jsonformat.
 }
 
 // getZeroResource returns a zeroed version of a resource from its JSON.
-func getZeroResource(jsonData []byte, ver jsonformat.Version) (proto.Message, error) {
+func getZeroResource(jsonData []byte, ver fhirversion.Version) (proto.Message, error) {
 	cr, err := newContainedResource(ver)
 	if err != nil {
 		return nil, err
@@ -502,7 +503,7 @@ func unwrapFromContainedResource(containedRes proto.Message) (proto.Message, err
 }
 
 // wrapInContainedResource wraps a resource within a contained resource.
-func wrapInContainedResource(res proto.Message, ver jsonformat.Version) (proto.Message, error) {
+func wrapInContainedResource(res proto.Message, ver fhirversion.Version) (proto.Message, error) {
 	contained, err := newContainedResource(ver)
 	if err != nil {
 		return nil, err
@@ -524,11 +525,11 @@ func wrapInContainedResource(res proto.Message, ver jsonformat.Version) (proto.M
 	return contained, nil
 }
 
-func newContainedResource(ver jsonformat.Version) (proto.Message, error) {
+func newContainedResource(ver fhirversion.Version) (proto.Message, error) {
 	switch ver {
-	case jsonformat.STU3:
+	case fhirversion.STU3:
 		return &r3pb.ContainedResource{}, nil
-	case jsonformat.R4:
+	case fhirversion.R4:
 		return &r4pb.ContainedResource{}, nil
 	default:
 		panic(fmt.Sprintf("Invalid version specified %v", ver))
@@ -556,7 +557,7 @@ func getRootPath() string {
 
 // readTestCases reads the JSON example files and returns the ones that have a
 // matching prototxt file, to be used as a test case.
-func readTestCases(t *testing.T, ver jsonformat.Version) []string {
+func readTestCases(t *testing.T, ver fhirversion.Version) []string {
 	t.Helper()
 	fileNames := readTestCaseFileNames(t, versionToJSONPath[ver])
 	var withGolden []string
@@ -573,7 +574,7 @@ func readTestCases(t *testing.T, ver jsonformat.Version) []string {
 	return withGolden
 }
 
-func readTestCaseFile(ver jsonformat.Version, name string) ([]byte, []byte, error) {
+func readTestCaseFile(ver fhirversion.Version, name string) ([]byte, []byte, error) {
 	jsonData, err := readFile(versionToJSONPath[ver], name, jsonExt)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to read resource json file %s: %v", name, err)

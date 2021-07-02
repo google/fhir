@@ -17,6 +17,7 @@ package jsonformat
 import (
 	"fmt"
 
+	"github.com/google/fhir/go/fhirversion"
 	"google.golang.org/protobuf/proto"
 	"bitbucket.org/creachadair/stringset"
 
@@ -55,7 +56,7 @@ func (c r3Config) keysToSkip() stringset.Set {
 // UnmarshalR3 returns the corresponding protobuf message given a serialized FHIR JSON object
 func (u *Unmarshaller) UnmarshalR3(in []byte) (*rpb.ContainedResource, error) {
 	if _, ok := u.cfg.(r3Config); !ok {
-		return nil, fmt.Errorf("the unmarshaler is not for FHIR %s", STU3)
+		return nil, fmt.Errorf("the unmarshaler is not for FHIR %s", fhirversion.STU3)
 	}
 	p, err := u.Unmarshal(in)
 	if err != nil {

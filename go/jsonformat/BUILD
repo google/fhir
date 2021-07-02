@@ -18,6 +18,7 @@ go_library(
     ],
     importpath = "github.com/google/fhir/go/jsonformat",
     deps = [
+        "//go/fhirversion",
         "//go/jsonformat/fhirvalidate",
         "//go/jsonformat/internal/accessor",
         "//go/jsonformat/internal/jsonpbhelper",
@@ -46,6 +47,7 @@ go_test(
     ],
     embed = [":jsonformat"],
     deps = [
+        "//go/fhirversion",
         "//go/jsonformat/internal/accessor",
         "//go/jsonformat/internal/jsonpbhelper",
         "//proto/google/fhir/proto:annotations_go_proto",
@@ -72,6 +74,7 @@ go_test(
     ],
     embed = [":jsonformat"],
     deps = [
+        "//go/fhirversion",
         "//go/jsonformat/internal/jsonpbhelper",
         "//proto/google/fhir/proto/r4/core:codes_go_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",

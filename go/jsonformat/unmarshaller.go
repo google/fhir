@@ -23,6 +23,7 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"github.com/google/fhir/go/fhirversion"
 	"github.com/google/fhir/go/jsonformat/fhirvalidate"
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
@@ -58,16 +59,16 @@ type Unmarshaller struct {
 }
 
 // NewUnmarshaller returns an Unmarshaller that performs resource validation.
-func NewUnmarshaller(tz string, ver Version) (*Unmarshaller, error) {
+func NewUnmarshaller(tz string, ver fhirversion.Version) (*Unmarshaller, error) {
 	return newUnmarshaller(tz, ver, true /*enableExtendedValidation*/)
 }
 
 // NewUnmarshallerWithoutValidation returns an Unmarshaller that doesn't perform resource validation.
-func NewUnmarshallerWithoutValidation(tz string, ver Version) (*Unmarshaller, error) {
+func NewUnmarshallerWithoutValidation(tz string, ver fhirversion.Version) (*Unmarshaller, error) {
 	return newUnmarshaller(tz, ver, false /*enableExtendedValidation*/)
 }
 
-func newUnmarshaller(tz string, ver Version, enableExtendedValidation bool) (*Unmarshaller, error) {
+func newUnmarshaller(tz string, ver fhirversion.Version, enableExtendedValidation bool) (*Unmarshaller, error) {
 	cfg, err := getConfig(ver)
 	if err != nil {
 		return nil, err

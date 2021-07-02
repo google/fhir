@@ -30,6 +30,7 @@ import (
 	"runtime"
 
 	"github.com/bazelbuild/rules_go/go/tools/bazel"
+	"github.com/google/fhir/go/fhirversion"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
@@ -67,7 +68,7 @@ var (
 // these should be moved to testdata files to make it easy to share testcases between languages.
 // New test cases should create new testdata files in the basePath above.
 
-func setupUnmarshaller(t *testing.T, ver Version) *Unmarshaller {
+func setupUnmarshaller(t *testing.T, ver fhirversion.Version) *Unmarshaller {
 	t.Helper()
 	u, err := NewUnmarshaller("America/Los_Angeles", ver)
 	if err != nil {
@@ -121,7 +122,7 @@ func TestUnmarshal(t *testing.T) {
     }`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_SearchParameter{
 							SearchParameter: &r3pb.SearchParameter{
@@ -137,7 +138,7 @@ func TestUnmarshal(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_SearchParameter{
 							SearchParameter: &r4searchparampb.SearchParameter{
@@ -171,7 +172,7 @@ func TestUnmarshal(t *testing.T) {
     }`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Observation{
 							Observation: &r3pb.Observation{
@@ -193,7 +194,7 @@ func TestUnmarshal(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Observation{
 							Observation: &r4observationpb.Observation{
@@ -225,7 +226,7 @@ func TestUnmarshal(t *testing.T) {
     }`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Patient{
 							Patient: &r3pb.Patient{
@@ -237,7 +238,7 @@ func TestUnmarshal(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Patient{
 							Patient: &r4patientpb.Patient{
@@ -271,7 +272,7 @@ func TestUnmarshal(t *testing.T) {
     }`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Bundle{
 							Bundle: &r3pb.Bundle{
@@ -293,7 +294,7 @@ func TestUnmarshal(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Bundle{
 							Bundle: &r4pb.Bundle{
@@ -338,7 +339,7 @@ func TestUnmarshal(t *testing.T) {
     }`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Patient{
 							Patient: &r3pb.Patient{
@@ -367,7 +368,7 @@ func TestUnmarshal(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Patient{
 							Patient: &r4patientpb.Patient{
@@ -418,7 +419,7 @@ func TestUnmarshal(t *testing.T) {
         }`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Patient{
 							Patient: &r3pb.Patient{
@@ -457,7 +458,7 @@ func TestUnmarshal(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Patient{
 							Patient: &r4patientpb.Patient{
@@ -512,7 +513,7 @@ func TestUnmarshal(t *testing.T) {
     }`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Patient{
 							Patient: &r3pb.Patient{
@@ -534,7 +535,7 @@ func TestUnmarshal(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Patient{
 							Patient: &r4patientpb.Patient{
@@ -573,7 +574,7 @@ func TestUnmarshal(t *testing.T) {
       }`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_DataElement{
 							DataElement: &r3pb.DataElement{
@@ -598,7 +599,7 @@ func TestUnmarshal(t *testing.T) {
 			json: []byte(`{"id":"example","resourceType":"Device","udi":{"carrierHRF":"test"}}`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Device{
 							Device: &r3pb.Device{
@@ -619,7 +620,7 @@ func TestUnmarshal(t *testing.T) {
 			json: []byte(`{"id":"example","resourceType":"Device","udiCarrier":[{"carrierHRF":"test"}]}`),
 			wants: []mvr{
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Device{
 							Device: &r4devicepb.Device{
@@ -655,7 +656,7 @@ func TestUnmarshal(t *testing.T) {
 }`),
 			wants: []mvr{
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Patient{
 							Patient: &r4patientpb.Patient{
@@ -683,7 +684,7 @@ func TestUnmarshal(t *testing.T) {
 					},
 				},
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Patient{
 							Patient: &r3pb.Patient{
@@ -725,7 +726,7 @@ func TestUnmarshal(t *testing.T) {
     }`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Patient{
 							Patient: &r3pb.Patient{
@@ -741,7 +742,7 @@ func TestUnmarshal(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Patient{
 							Patient: &r4patientpb.Patient{
@@ -800,7 +801,7 @@ func TestUnmarshal(t *testing.T) {
 			}`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Patient{
 							Patient: &r3pb.Patient{
@@ -859,7 +860,7 @@ func TestUnmarshal(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Patient{
 							Patient: &r4patientpb.Patient{
@@ -953,7 +954,7 @@ func TestUnmarshal_NoExtendedValidation(t *testing.T) {
     }`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Patient{
 							Patient: &r3pb.Patient{
@@ -963,7 +964,7 @@ func TestUnmarshal_NoExtendedValidation(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Patient{
 							Patient: &r4patientpb.Patient{
@@ -985,7 +986,7 @@ func TestUnmarshal_NoExtendedValidation(t *testing.T) {
     }`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Patient{
 							Patient: &r3pb.Patient{
@@ -999,7 +1000,7 @@ func TestUnmarshal_NoExtendedValidation(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Patient{
 							Patient: &r4patientpb.Patient{
@@ -1046,7 +1047,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 	tests := []struct {
 		name string
 		json string
-		vers []Version
+		vers []fhirversion.Version
 		// Due to the random ordering of map keys we don't know which key will be
 		// processed first, but for extension fields it doesn't matter if the
 		// primitive or extension is processed first, both will cause an error but
@@ -1060,7 +1061,7 @@ func TestUnmarshal_Errors(t *testing.T) {
       "resourceType": "Patient",
 			"gender": ["male", "female"]
     }`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient.gender": invalid JSON`},
 		},
 		{
@@ -1070,7 +1071,7 @@ func TestUnmarshal_Errors(t *testing.T) {
       "resourceType": "Patient",
 			"gender": "f"
     }`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient.gender": code type mismatch`},
 		},
 		{
@@ -1080,7 +1081,7 @@ func TestUnmarshal_Errors(t *testing.T) {
       "resourceType": "Patient",
 			"gender": true
     }`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient.gender": expected code`},
 		},
 		{
@@ -1089,7 +1090,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 		{
       "resourceType": "Patient",
     }`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`invalid JSON`},
 		},
 		{
@@ -1098,7 +1099,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 		{
       "resourceType": 1
     }`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{"invalid resource type"},
 		},
 		{
@@ -1107,13 +1108,13 @@ func TestUnmarshal_Errors(t *testing.T) {
 		{
       "resourceType": "Patient1"
     }`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient1": unknown resource type`},
 		},
 		{
 			name: "Missing resource type",
 			json: "{}",
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`missing required field "resourceType"`},
 		},
 		{
@@ -1123,7 +1124,7 @@ func TestUnmarshal_Errors(t *testing.T) {
       "resourceType": "Patient",
 			"foo": [1, 2]
     }`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient": unknown field`},
 		},
 		{
@@ -1133,7 +1134,7 @@ func TestUnmarshal_Errors(t *testing.T) {
       "resourceType": "Patient",
 			"fooBar": "1"
     }`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient": unknown field`},
 		},
 		{
@@ -1144,7 +1145,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			"managingOrganization": {"reference": "Org/1"},
 			"_managingOrganization": {"foo": "bar"}
     }`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient": unknown field`},
 		},
 		{
@@ -1157,7 +1158,7 @@ func TestUnmarshal_Errors(t *testing.T) {
           "_given": {"id": "1"}
       }]
     }`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient.name[0]._given": expected array`},
 		},
 		{
@@ -1170,7 +1171,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 					"_given": [{"id": "1"}, {"id": "2"}]
 				}]
 			}`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{
 				`error at "Patient.name[0]._given": array length mismatch, expected 1, found 2`,
 				`error at "Patient.name[0].given": array length mismatch, expected 2, found 1`,
@@ -1183,7 +1184,7 @@ func TestUnmarshal_Errors(t *testing.T) {
       "resourceType": "Patient",
 			"managingOrganization": {"foo": "bar"}
     }`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient.managingOrganization": unknown field`},
 		},
 		{
@@ -1195,7 +1196,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"given": [1]
 			}]
     }`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient.name[0].given[0]": expected string`},
 		},
 		{
@@ -1210,7 +1211,7 @@ func TestUnmarshal_Errors(t *testing.T) {
       }
     }
     `,
-			vers: []Version{STU3},
+			vers: []Version{fhirversion.STU3},
 			errs: []string{`error at "Patient.animal.species.coding": expected array`},
 		},
 		{
@@ -1227,7 +1228,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			]
     }
     `,
-			vers: []Version{R4},
+			vers: []fhirversion.Version{fhirversion.R4},
 			errs: []string{`error at "Patient.communication[0].language.coding": expected array`},
 		},
 		{
@@ -1240,7 +1241,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			}]
     }
     `,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient.name[0].given[0]": string contains invalid characters: U+0008`},
 		},
 		{
@@ -1251,7 +1252,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			"implicitRules": "http://\u0000"
     }
     `,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient.implicitRules": invalid uri`},
 		},
 		{
@@ -1262,7 +1263,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			"implicitRules": " http://example.com/"
     }
     `,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient.implicitRules": invalid uri`},
 		},
 		{
@@ -1273,7 +1274,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			"effectiveDateTime": "invalid"
     }
     `,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Observation.effectiveDateTime": expected datetime`},
 		},
 		{
@@ -1286,7 +1287,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"value": "x"
 			}]
 		}`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient.extension[0]": unknown field`},
 		},
 		{
@@ -1297,7 +1298,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"name": [{ "text": "` + "\xa0\xa1" + `"}]
 			}
 			`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient.name[0].text": expected UTF-8 encoding`},
 		},
 		{
@@ -1308,7 +1309,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"language": "` + "\xa0\xa1" + `"
 			}
 			`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient.language": expected UTF-8 encoding`},
 		},
 		// TODO: add test for rejecting upper camel case fields once deprecated.
@@ -1319,7 +1320,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"resourceType": "Patient",
 				"GENDER": "female"
 			}`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient": unknown field`},
 		},
 		{
@@ -1329,7 +1330,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"resourceType": "Patient",
 				"managingorganization": {"reference": "Org/1"}
 			}`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient": unknown field`},
 		},
 		{
@@ -1339,7 +1340,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"resourceType": "Patient",
 				"gEnDeR": "female"
 			}`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient": unknown field`},
 		},
 		{
@@ -1349,7 +1350,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"ResourceType": "Patient",
 				"gender": "female"
 			}`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`missing required field "resourceType"`},
 		},
 		{
@@ -1364,7 +1365,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			"id":"example",
 			"resourceType":"Patient"
 			}`,
-			vers: []Version{R4},
+			vers: []fhirversion.Version{fhirversion.R4},
 			errs: []string{`error at "Patient.Contained[0]": unknown field` + "\n" + `error at "Patient.Contained[0]": unknown field`},
 		},
 		{
@@ -1376,7 +1377,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 					"value": "female"
 				}
 			}`,
-			vers: []Version{STU3, R4},
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient.gender.value": invalid field`},
 		},
 		{
@@ -1388,7 +1389,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 					"reference": "DeviceRequest/1"
 				}
 			}`,
-			vers: []Version{DSTU2},
+			vers: []fhirversion.Version{fhirversion.DSTU2},
 			errs: []string{`error at "Observation.device": invalid reference`},
 		},
 	}
@@ -1422,7 +1423,7 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 		name string
 		json string
 		err  error
-		vers []Version
+		vers []fhirversion.Version
 	}{
 		{
 			"Missing required field",
@@ -1435,7 +1436,7 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 				{Path: "Patient.link[0]", Details: `missing required field "other"`},
 				{Path: "Patient.link[0]", Details: `missing required field "type"`},
 			},
-			[]Version{STU3, R4},
+			[]Version{fhirversion.STU3, fhirversion.R4},
 		},
 		{
 			"Missing required repeated field",
@@ -1444,7 +1445,7 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
       "resourceType": "OperationOutcome"
     }`,
 			&jsonpbhelper.UnmarshalError{Path: "OperationOutcome", Details: `missing required field "issue"`},
-			[]Version{STU3, R4},
+			[]Version{fhirversion.STU3, fhirversion.R4},
 		},
 		{
 			"Invalid reference type",
@@ -1454,7 +1455,7 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 				"managingOrganization": {"reference": "Patient/2"}
 			}`,
 			&jsonpbhelper.UnmarshalError{Path: "Patient.managingOrganization", Details: `invalid reference to a Patient resource, want Organization`},
-			[]Version{STU3, R4},
+			[]Version{fhirversion.STU3, fhirversion.R4},
 		},
 	}
 	for _, test := range tests {
@@ -1483,13 +1484,13 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`"YmFzZTY0IGJ5dGVz"`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Base64Binary{
 						Value: []byte("base64 bytes"),
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Base64Binary{
 						Value: []byte("base64 bytes"),
 					},
@@ -1501,13 +1502,13 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`true`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Boolean{
 						Value: true,
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Boolean{
 						Value: true,
 					},
@@ -1519,7 +1520,7 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`"c"`),
 			wants: []mvr{
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Canonical{
 						Value: "c",
 					},
@@ -1531,13 +1532,13 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`"<some code>"`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Code{
 						Value: "<some code>",
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Code{
 						Value: "<some code>",
 					},
@@ -1549,13 +1550,13 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`"abc123"`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Id{
 						Value: "abc123",
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Id{
 						Value: "abc123",
 					},
@@ -1567,13 +1568,13 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`-1234`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Integer{
 						Value: -1234,
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Integer{
 						Value: -1234,
 					},
@@ -1585,13 +1586,13 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`"# md"`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Markdown{
 						Value: "# md",
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Markdown{
 						Value: "# md",
 					},
@@ -1603,13 +1604,13 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`"urn:oid:1.23"`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Oid{
 						Value: "urn:oid:1.23",
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Oid{
 						Value: "urn:oid:1.23",
 					},
@@ -1621,13 +1622,13 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`"urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6"`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Uuid{
 						Value: "urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Uuid{
 						Value: "urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
 					},
@@ -1639,13 +1640,13 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`5678`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.PositiveInt{
 						Value: 5678,
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.PositiveInt{
 						Value: 5678,
 					},
@@ -1657,13 +1658,13 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`"a given string"`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.String{
 						Value: "a given string",
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.String{
 						Value: "a given string",
 					},
@@ -1675,13 +1676,13 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`90`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.UnsignedInt{
 						Value: 90,
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.UnsignedInt{
 						Value: 90,
 					},
@@ -1693,7 +1694,7 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`"2017"`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Date{
 						ValueUs:   1483257600000000,
 						Precision: d3pb.Date_YEAR,
@@ -1701,7 +1702,7 @@ func TestParsePrimitiveType(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Date{
 						ValueUs:   1483257600000000,
 						Precision: d4pb.Date_YEAR,
@@ -1715,7 +1716,7 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`"2018"`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.DateTime{
 						ValueUs:   1514793600000000,
 						Precision: d3pb.DateTime_YEAR,
@@ -1723,7 +1724,7 @@ func TestParsePrimitiveType(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.DateTime{
 						ValueUs:   1514793600000000,
 						Precision: d4pb.DateTime_YEAR,
@@ -1737,7 +1738,7 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`"2018-01-01"`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.DateTime{
 						ValueUs:   1514793600000000,
 						Precision: d3pb.DateTime_DAY,
@@ -1745,7 +1746,7 @@ func TestParsePrimitiveType(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.DateTime{
 						ValueUs:   1514793600000000,
 						Precision: d4pb.DateTime_DAY,
@@ -1759,14 +1760,14 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`"12:00:00"`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Time{
 						ValueUs:   43200000000,
 						Precision: d3pb.Time_SECOND,
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Time{
 						ValueUs:   43200000000,
 						Precision: d4pb.Time_SECOND,
@@ -1779,7 +1780,7 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`"2018-01-01T12:00:00.000Z"`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Instant{
 						ValueUs:   1514808000000000,
 						Precision: d3pb.Instant_MILLISECOND,
@@ -1787,7 +1788,7 @@ func TestParsePrimitiveType(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Instant{
 						ValueUs:   1514808000000000,
 						Precision: d4pb.Instant_MILLISECOND,
@@ -1801,13 +1802,13 @@ func TestParsePrimitiveType(t *testing.T) {
 			value: json.RawMessage(`1.23`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Decimal{
 						Value: "1.23",
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Decimal{
 						Value: "1.23",
 					},
@@ -1825,7 +1826,7 @@ func TestParsePrimitiveType(t *testing.T) {
       }`),
 			wants: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &c3pb.AdministrativeGenderCode{
 						Extension: []*d3pb.Extension{{
 							Url: &d3pb.Uri{
@@ -1846,7 +1847,7 @@ func TestParsePrimitiveType(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient_GenderCode{
 						Extension: []*d4pb.Extension{{
 							Url: &d4pb.Uri{
@@ -1890,11 +1891,11 @@ func TestParsePrimitiveType(t *testing.T) {
 func TestParseURIs(t *testing.T) {
 	inputs := []mvr{
 		{
-			ver: STU3,
+			ver: fhirversion.STU3,
 			r:   &d3pb.Uri{},
 		},
 		{
-			ver: R4,
+			ver: fhirversion.R4,
 			r:   &d4pb.Uri{},
 		},
 	}
@@ -1944,11 +1945,11 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`false`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.Code{},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r:   &d4pb.Code{},
 				},
 			},
@@ -1958,11 +1959,11 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`0`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.Oid{},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r:   &d4pb.Oid{},
 				},
 			},
@@ -1972,11 +1973,11 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`-123`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.PositiveInt{},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r:   &d4pb.PositiveInt{},
 				},
 			},
@@ -1986,11 +1987,11 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(strconv.FormatUint(math.MaxUint64, 10)),
 			msgs: []mvr{
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r:   &d4pb.PositiveInt{},
 				},
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.PositiveInt{},
 				},
 			},
@@ -2000,7 +2001,7 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`00`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.UnsignedInt{},
 				},
 			},
@@ -2010,7 +2011,7 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`-123`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.UnsignedInt{},
 				},
 			},
@@ -2020,7 +2021,7 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`0123`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.UnsignedInt{},
 				},
 			},
@@ -2030,11 +2031,11 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(strconv.FormatUint(math.MaxUint64, 10)),
 			msgs: []mvr{
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r:   &d4pb.UnsignedInt{},
 				},
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.UnsignedInt{},
 				},
 			},
@@ -2044,7 +2045,7 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`"invalid"`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.Base64Binary{},
 				},
 			},
@@ -2054,11 +2055,11 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`"invalid"`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.Boolean{},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r:   &d4pb.Boolean{},
 				},
 			},
@@ -2068,11 +2069,11 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`"2018-01-01T12:00:00.000"`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.Instant{},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r:   &d4pb.Instant{},
 				},
 			},
@@ -2082,11 +2083,11 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`"2018-01-01T12:00Z"`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.Instant{},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r:   &d4pb.Instant{},
 				},
 			},
@@ -2096,7 +2097,7 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`01.23`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.Decimal{},
 				},
 			},
@@ -2106,7 +2107,7 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`1.0`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.Integer{},
 				},
 			},
@@ -2116,11 +2117,11 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`0`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.Markdown{},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r:   &d4pb.Markdown{},
 				},
 			},
@@ -2130,11 +2131,11 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`0`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.Uri{},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r:   &d4pb.Uri{},
 				},
 			},
@@ -2144,11 +2145,11 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`0`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.Uuid{},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r:   &d4pb.Uuid{},
 				},
 			},
@@ -2158,11 +2159,11 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			value: json.RawMessage(`0`),
 			msgs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r:   &d3pb.Xhtml{},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r:   &d4pb.Xhtml{},
 				},
 			},
@@ -2186,7 +2187,7 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 func TestUnmarshalVersioned(t *testing.T) {
 	patient := `{"resourceType":"Patient"}`
 
-	u3 := setupUnmarshaller(t, STU3)
+	u3 := setupUnmarshaller(t, fhirversion.STU3)
 	if _, err := u3.UnmarshalR3([]byte(patient)); err != nil {
 		t.Errorf("UnmarshalR3(%s) returned unexpected error; %v", patient, err)
 	}
@@ -2194,7 +2195,7 @@ func TestUnmarshalVersioned(t *testing.T) {
 		t.Errorf("UnmarshalR4(%s) didn't return expected error", patient)
 	}
 
-	u4 := setupUnmarshaller(t, R4)
+	u4 := setupUnmarshaller(t, fhirversion.R4)
 	if _, err := u4.UnmarshalR4([]byte(patient)); err != nil {
 		t.Errorf("UnmarshalR4(%s) returned unexpected error; %v", patient, err)
 	}
@@ -2282,7 +2283,7 @@ func TestUnmarshal_NestingDepth(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			versions := []Version{STU3, R4}
+			versions := []Version{fhirversion.STU3, fhirversion.R4}
 			for _, v := range versions {
 				t.Run(v.String(), func(t *testing.T) {
 					u := setupUnmarshaller(t, v)
@@ -2328,7 +2329,7 @@ func TestUnmarshaller_UnmarshalR4Streaming(t *testing.T) {
 				},
 			}}
 
-		u, err := NewUnmarshaller("America/Los_Angeles", R4)
+		u, err := NewUnmarshaller("America/Los_Angeles", fhirversion.R4)
 		if err != nil {
 			fmt.Println("error")
 		}
@@ -2363,7 +2364,7 @@ func TestUnmarshaller_UnmarshalR4Streaming(t *testing.T) {
 func ExampleUnmarshaller_UnmarshalR4Streaming() {
 	json := `{"resourceType":"Patient", "id": "exampleID1"}
 	{"resourceType":"Patient", "id": "exampleID2"}`
-	u, err := NewUnmarshaller("America/Los_Angeles", R4)
+	u, err := NewUnmarshaller("America/Los_Angeles", fhirversion.R4)
 	if err != nil {
 		fmt.Println("error")
 	}

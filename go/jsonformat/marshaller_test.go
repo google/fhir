@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/google/fhir/go/fhirversion"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/go-cmp/cmp"
 	"google.golang.org/protobuf/proto"
@@ -40,7 +41,7 @@ import (
 // TODO: Find a better way to maintain the versioned unit tests.
 
 type mvr struct {
-	ver Version
+	ver fhirversion.Version
 	r   proto.Message
 }
 
@@ -66,7 +67,7 @@ func TestMarshalContainedResource(t *testing.T) {
 			pretty: true,
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Patient{
 							Patient: &r3pb.Patient{
@@ -98,7 +99,7 @@ func TestMarshalContainedResource(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Patient{
 							Patient: &r4patientpb.Patient{
@@ -158,7 +159,7 @@ func TestMarshalContainedResource(t *testing.T) {
 			pretty: true,
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_ResearchStudy{
 							ResearchStudy: &r3pb.ResearchStudy{
@@ -196,7 +197,7 @@ func TestMarshalContainedResource(t *testing.T) {
 			pretty: true,
 			inputs: []mvr{
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_ResearchStudy{
 							ResearchStudy: &r4researchstudypb.ResearchStudy{
@@ -234,7 +235,7 @@ func TestMarshalContainedResource(t *testing.T) {
 			pretty: false,
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_ResearchStudy{
 							ResearchStudy: &r3pb.ResearchStudy{
@@ -263,7 +264,7 @@ func TestMarshalContainedResource(t *testing.T) {
 			name: "STU3 acronym field",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Device{
 							Device: &r3pb.Device{
@@ -284,7 +285,7 @@ func TestMarshalContainedResource(t *testing.T) {
 			name: "R4 acronym field",
 			inputs: []mvr{
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Device{
 							Device: &r4devicepb.Device{
@@ -305,7 +306,7 @@ func TestMarshalContainedResource(t *testing.T) {
 			name: "inline resource",
 			inputs: []mvr{
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Patient{
 							Patient: &r4patientpb.Patient{
@@ -337,7 +338,7 @@ func TestMarshalContainedResource(t *testing.T) {
 					},
 				},
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
 						OneofResource: &r3pb.ContainedResource_Patient{
 							Patient: &r3pb.Patient{
@@ -400,7 +401,7 @@ func TestMarshalResource(t *testing.T) {
 			name: "Patient",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						Active: &d3pb.Boolean{
 							Value: true,
@@ -428,7 +429,7 @@ func TestMarshalResource(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						Active: &d4pb.Boolean{
 							Value: true,
@@ -484,7 +485,7 @@ func TestMarshalResource(t *testing.T) {
 			name: "ResearchStudy",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ResearchStudy{
 						Id: &d3pb.Id{
 							Value: "example",
@@ -539,7 +540,7 @@ func TestMarshalMessage(t *testing.T) {
 			name: "ResearchStudy pretty",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ResearchStudy{
 						Id: &d3pb.Id{
 							Value: "example",
@@ -571,7 +572,7 @@ func TestMarshalMessage(t *testing.T) {
 			name: "Nested Resources",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Bundle{
 						Entry: []*r3pb.Bundle_Entry{{
 							Resource: &r3pb.ContainedResource{
@@ -596,7 +597,7 @@ func TestMarshalMessage(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4pb.Bundle{
 						Entry: []*r4pb.Bundle_Entry{{
 							Resource: &r4pb.ContainedResource{
@@ -642,7 +643,7 @@ func TestMarshalMessage(t *testing.T) {
 			name: "Patient with primitive extension",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						BirthDate: &d3pb.Date{
 							ValueUs:   1463529600000000,
@@ -668,7 +669,7 @@ func TestMarshalMessage(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						BirthDate: &d4pb.Date{
 							ValueUs:   1463529600000000,
@@ -711,7 +712,7 @@ func TestMarshalMessage(t *testing.T) {
 			name: "Patient with extension id",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						BirthDate: &d3pb.Date{
 							ValueUs:   1463529600000000,
@@ -734,7 +735,7 @@ func TestMarshalMessage(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						BirthDate: &d4pb.Date{
 							ValueUs:   1463529600000000,
@@ -773,7 +774,7 @@ func TestMarshalMessage(t *testing.T) {
 			name: "Patient with primitive extension no value",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						BirthDate: &d3pb.Date{
 							Extension: []*d3pb.Extension{{
@@ -805,7 +806,7 @@ func TestMarshalMessage(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						BirthDate: &d4pb.Date{
 							Extension: []*d4pb.Extension{{
@@ -881,7 +882,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 			name: "ID Fields Omitted",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ResearchStudy{
 						Id: &d3pb.Id{
 							Value: "keep resource id",
@@ -920,7 +921,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 			name: "Relative reference",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						ManagingOrganization: &d3pb.Reference{
 							Reference: &d3pb.Reference_Uri{
@@ -932,7 +933,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						ManagingOrganization: &d4pb.Reference{
 							Reference: &d4pb.Reference_Uri{
@@ -955,7 +956,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 			name: "Choice types",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						Deceased: &r3pb.Patient_Deceased{
 							Deceased: &r3pb.Patient_Deceased_Boolean{Boolean: &d3pb.Boolean{Value: false}},
@@ -963,7 +964,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						Deceased: &r4patientpb.Patient_DeceasedX{
 							Choice: &r4patientpb.Patient_DeceasedX_Boolean{Boolean: &d4pb.Boolean{Value: false}},
@@ -982,7 +983,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 			name: "Extensions as URL strings",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						Extension: []*d3pb.Extension{
 							{
@@ -1017,7 +1018,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						Extension: []*d4pb.Extension{
 							{
@@ -1064,7 +1065,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 			name: "Primitive extension",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						BirthDate: &d3pb.Date{
 							ValueUs:   1463529600000000,
@@ -1090,7 +1091,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						BirthDate: &d4pb.Date{
 							ValueUs:   1463529600000000,
@@ -1125,7 +1126,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 			name: "Primitive extension no value",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						BirthDate: &d3pb.Date{
 							Extension: []*d3pb.Extension{{
@@ -1157,7 +1158,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						BirthDate: &d4pb.Date{
 							Extension: []*d4pb.Extension{{
@@ -1196,7 +1197,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 			name: "max depth less than actual depth",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.CodeSystem{
 						Concept: []*r3pb.CodeSystem_ConceptDefinition{
 							{
@@ -1222,7 +1223,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4codesystempb.CodeSystem{
 						Concept: []*r4codesystempb.CodeSystem_ConceptDefinition{
 							{
@@ -1266,7 +1267,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 			name: "default depth",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.CodeSystem{
 						Concept: []*r3pb.CodeSystem_ConceptDefinition{
 							{
@@ -1292,7 +1293,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4codesystempb.CodeSystem{
 						Concept: []*r4codesystempb.CodeSystem_ConceptDefinition{
 							{
@@ -1356,7 +1357,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 			name: "ID Fields Omitted",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.ResearchStudy{
 						Id: &d3pb.Id{
 							Value: "keep resource id",
@@ -1395,7 +1396,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 			name: "Relative reference",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						ManagingOrganization: &d3pb.Reference{
 							Reference: &d3pb.Reference_Uri{
@@ -1407,7 +1408,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						ManagingOrganization: &d4pb.Reference{
 							Reference: &d4pb.Reference_Uri{
@@ -1430,7 +1431,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 			name: "Choice types",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						Deceased: &r3pb.Patient_Deceased{
 							Deceased: &r3pb.Patient_Deceased_Boolean{Boolean: &d3pb.Boolean{Value: false}},
@@ -1438,7 +1439,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						Deceased: &r4patientpb.Patient_DeceasedX{
 							Choice: &r4patientpb.Patient_DeceasedX_Boolean{Boolean: &d4pb.Boolean{Value: false}},
@@ -1457,7 +1458,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 			name: "Extensions as first-class fields",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						Extension: []*d3pb.Extension{
 							{
@@ -1492,7 +1493,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						Extension: []*d4pb.Extension{
 							{
@@ -1555,7 +1556,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 			name: "Primitive extension",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						BirthDate: &d3pb.Date{
 							ValueUs:   1463529600000000,
@@ -1581,7 +1582,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						BirthDate: &d4pb.Date{
 							ValueUs:   1463529600000000,
@@ -1623,7 +1624,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 			name: "Primitive extension no value",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						BirthDate: &d3pb.Date{
 							Extension: []*d3pb.Extension{{
@@ -1655,7 +1656,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						BirthDate: &d4pb.Date{
 							Extension: []*d4pb.Extension{{
@@ -1702,7 +1703,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 			name: "max depth less than actual depth",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.CodeSystem{
 						Concept: []*r3pb.CodeSystem_ConceptDefinition{
 							{
@@ -1728,7 +1729,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4codesystempb.CodeSystem{
 						Concept: []*r4codesystempb.CodeSystem_ConceptDefinition{
 							{
@@ -1772,7 +1773,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 			name: "default depth",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.CodeSystem{
 						Concept: []*r3pb.CodeSystem_ConceptDefinition{
 							{
@@ -1798,7 +1799,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4codesystempb.CodeSystem{
 						Concept: []*r4codesystempb.CodeSystem_ConceptDefinition{
 							{
@@ -1833,7 +1834,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 			name: "Extension last token collides with first-class field",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						Id: &d3pb.Id{Value: "id1"},
 						Extension: []*d3pb.Extension{
@@ -1847,7 +1848,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						Id: &d4pb.Id{Value: "id1"},
 						Extension: []*d4pb.Extension{
@@ -1874,7 +1875,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 			name: "Extension last token collides with other extensions",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						Extension: []*d3pb.Extension{
 							{
@@ -1893,7 +1894,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						Extension: []*d4pb.Extension{
 							{
@@ -1929,7 +1930,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 			name: "Extension collides with other extension with different case",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						Extension: []*d3pb.Extension{
 							{
@@ -1948,7 +1949,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						Extension: []*d4pb.Extension{
 							{
@@ -2011,7 +2012,7 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 			name: "Extensions as first-class fields",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						Id: &d3pb.Id{Value: "id1"},
 						Extension: []*d3pb.Extension{
@@ -2031,7 +2032,7 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						Id: &d4pb.Id{Value: "id1"},
 						Extension: []*d4pb.Extension{
@@ -2056,7 +2057,7 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 			name: "Primitive extension",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &r3pb.Patient{
 						BirthDate: &d3pb.Date{
 							ValueUs:   1463529600000000,
@@ -2098,7 +2099,7 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
 						BirthDate: &d4pb.Date{
 							ValueUs:   1463529600000000,
@@ -2170,13 +2171,13 @@ func TestMarshalPrimitiveType(t *testing.T) {
 			name: "Boolean",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Boolean{
 						Value: true,
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Boolean{
 						Value: true,
 					},
@@ -2188,13 +2189,13 @@ func TestMarshalPrimitiveType(t *testing.T) {
 			name: "Integer",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Integer{
 						Value: 1,
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Integer{
 						Value: 1,
 					},
@@ -2206,7 +2207,7 @@ func TestMarshalPrimitiveType(t *testing.T) {
 			name: "Canonical",
 			inputs: []mvr{
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Canonical{
 						Value: "c",
 					},
@@ -2218,13 +2219,13 @@ func TestMarshalPrimitiveType(t *testing.T) {
 			name: "Code",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Code{
 						Value: "some code",
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Code{
 						Value: "some code",
 					},
@@ -2236,13 +2237,13 @@ func TestMarshalPrimitiveType(t *testing.T) {
 			name: "Id",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Id{
 						Value: "patient1234",
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Id{
 						Value: "patient1234",
 					},
@@ -2254,13 +2255,13 @@ func TestMarshalPrimitiveType(t *testing.T) {
 			name: "String",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.String{
 						Value: "This is a string",
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.String{
 						Value: "This is a string",
 					},
@@ -2272,13 +2273,13 @@ func TestMarshalPrimitiveType(t *testing.T) {
 			name: "Markdown",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Markdown{
 						Value: "md",
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Markdown{
 						Value: "md",
 					},
@@ -2290,7 +2291,7 @@ func TestMarshalPrimitiveType(t *testing.T) {
 			name: "Url",
 			inputs: []mvr{
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Url{
 						Value: "u",
 					},
@@ -2302,13 +2303,13 @@ func TestMarshalPrimitiveType(t *testing.T) {
 			name: "Uuid",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &d3pb.Uuid{
 						Value: "uuid",
 					},
 				},
 				{
-					ver: R4,
+					ver: fhirversion.R4,
 					r: &d4pb.Uuid{
 						Value: "uuid",
 					},
@@ -2320,7 +2321,7 @@ func TestMarshalPrimitiveType(t *testing.T) {
 			name: "ResearchStudyStatusCode",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &c3pb.ResearchStudyStatusCode{
 						Value: c3pb.ResearchStudyStatusCode_IN_PROGRESS,
 					},
@@ -2332,7 +2333,7 @@ func TestMarshalPrimitiveType(t *testing.T) {
 			name: "ResearchStudyStatusCode uninitialized",
 			inputs: []mvr{
 				{
-					ver: STU3,
+					ver: fhirversion.STU3,
 					r: &c3pb.ResearchStudyStatusCode{
 						Value: c3pb.ResearchStudyStatusCode_INVALID_UNINITIALIZED,
 					},

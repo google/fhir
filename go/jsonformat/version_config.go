@@ -17,24 +17,11 @@ package jsonformat
 import (
 	"fmt"
 
+	"github.com/google/fhir/go/fhirversion"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"bitbucket.org/creachadair/stringset"
 )
-
-// A Version is a version of the FHIR standard.
-type Version string
-
-// FHIR converter versions.
-const (
-	STU3  = Version("STU3")
-	R4    = Version("R4")
-)
-
-// String returns the Version as a string.
-func (v Version) String() string {
-	return string(v)
-}
 
 // config encapsulates the configuration for the converter of a particular FHIR version.
 type config interface {
@@ -46,11 +33,11 @@ type config interface {
 }
 
 // getConfig returns the converter config for the given FHIR version.
-func getConfig(ver Version) (config, error) {
+func getConfig(ver fhirversion.Version) (config, error) {
 	switch ver {
-	case STU3:
+	case fhirversion.STU3:
 		return r3Config{}, nil
-	case R4:
+	case fhirversion.R4:
 		return r4Config{}, nil
 	default:
 		return nil, fmt.Errorf("unsupported FHIR version %s", ver)

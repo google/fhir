@@ -12,6 +12,7 @@ go_test(
         "//go/jsonformat/test:testdata",
     ],
     deps = [
+        "//go/fhirversion",
         "//go/jsonformat",
         "@io_bazel_rules_go//go/tools/bazel:go_default_library",
     ],

@@ -22,6 +22,7 @@ import (
 	"testing"
 
 	"github.com/bazelbuild/rules_go/go/tools/bazel"
+	"github.com/google/fhir/go/fhirversion"
 	"github.com/google/fhir/go/jsonformat"
 )
 
@@ -43,15 +44,15 @@ func prepare(b *testing.B, f string, enableValidation bool) ([]byte, *jsonformat
 	if err != nil {
 		b.Fatalf("Failed to read file %s due to error: %v", p, err)
 	}
-	m, err := jsonformat.NewMarshaller(false, "", "  ", jsonformat.STU3)
+	m, err := jsonformat.NewMarshaller(false, "", "  ", fhirversion.STU3)
 	if err != nil {
 		b.Fatalf("Failed to create the marshaller due to error: %v", err)
 	}
 	var um *jsonformat.Unmarshaller
 	if enableValidation {
-		um, err = jsonformat.NewUnmarshaller("UTC", jsonformat.STU3)
+		um, err = jsonformat.NewUnmarshaller("UTC", fhirversion.STU3)
 	} else {
-		um, err = jsonformat.NewUnmarshallerWithoutValidation("UTC", jsonformat.STU3)
+		um, err = jsonformat.NewUnmarshallerWithoutValidation("UTC", fhirversion.STU3)
 	}
 	if err != nil {
 		b.Fatalf("Failed to create the unmarshaller due to error: %v", err)

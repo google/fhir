@@ -17,6 +17,7 @@ go_test(
         "//testdata/stu3:examples",
     ],
     deps = [
+        "//go/fhirversion",
         "//go/jsonformat",
         "//go/jsonformat/internal/jsonpbhelper",
         "//go/jsonformat/internal/protopath",

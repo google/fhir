@@ -19,6 +19,7 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/google/fhir/go/fhirversion"
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/go-cmp/cmp"
@@ -305,10 +306,10 @@ func TestAddInternalExtension(t *testing.T) {
 }
 
 func TestDecimal(t *testing.T) {
-	allVers := []Version{STU3, R4}
+	allVers := []Version{fhirversion.STU3, fhirversion.R4}
 	tests := []struct {
 		value string
-		vers  []Version
+		vers  []fhirversion.Version
 	}{
 		{"123.45", allVers},
 		{"185", allVers},
@@ -319,14 +320,14 @@ func TestDecimal(t *testing.T) {
 		{"0", allVers},
 		{"0.00", allVers},
 		{"66.899999999999991", allVers},
-		{"4e2", []Version{R4}},
-		{"-2E8", []Version{R4}},
+		{"4e2", []fhirversion.Version{fhirversion.R4}},
+		{"-2E8", []fhirversion.Version{fhirversion.R4}},
 	}
 	for _, test := range tests {
 		t.Run(test.value, func(t *testing.T) {
-			expects := map[Version]proto.Message{
-				STU3:  &d3pb.Decimal{Value: test.value},
-				R4:    &d4pb.Decimal{Value: test.value},
+			expects := map[fhirversion.Version]proto.Message{
+				fhirversion.STU3:  &d3pb.Decimal{Value: test.value},
+				fhirversion.R4:    &d4pb.Decimal{Value: test.value},
 			}
 			for _, ver := range test.vers {
 				e := expects[ver]
@@ -343,11 +344,11 @@ func TestDecimal(t *testing.T) {
 }
 
 func TestDecimal_Invalid(t *testing.T) {
-	allVers := []Version{STU3, R4}
+	allVers := []Version{fhirversion.STU3, fhirversion.R4}
 	tests := []struct {
 		name string
 		json string
-		vers []Version
+		vers []fhirversion.Version
 	}{
 		{
 			"invalid characters",
@@ -357,7 +358,7 @@ func TestDecimal_Invalid(t *testing.T) {
 		{
 			"exponent",
 			"1e3",
-			[]Version{STU3},
+			[]fhirversion.Version{fhirversion.STU3},
 		},
 		{
 			"leading 0",
@@ -366,9 +367,9 @@ func TestDecimal_Invalid(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		msgs := map[Version]proto.Message{
-			STU3:  &d3pb.Decimal{},
-			R4:    &d4pb.Decimal{},
+		msgs := map[fhirversion.Version]proto.Message{
+			fhirversion.STU3:  &d3pb.Decimal{},
+			fhirversion.R4:    &d4pb.Decimal{},
 		}
 		for _, ver := range test.vers {
 			if err := parseDecimal(json.RawMessage(test.json), msgs[ver]); err == nil {
