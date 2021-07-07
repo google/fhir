@@ -126,3 +126,12 @@ java_binary(
         "@maven//:com_google_guava_guava",
     ],
 )
+
+java_library(
+    name = "field_retagger",
+    srcs = ["FieldRetagger.java"],
+    deps = [
+        "//proto/google/fhir/proto:protogenerator_annotations_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+    ],
+)

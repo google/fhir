@@ -107,4 +107,19 @@ java_test(
     ],
 )
 
+java_test(
+    name = "FieldRetaggerTest",
+    size = "medium",
+    srcs = ["FieldRetaggerTest.java"],
+    test_class = "com.google.fhir.protogen.FieldRetaggerTest",
+    deps = [
+        "//java/com/google/fhir/protogen:field_retagger",
+        "//proto/google/fhir/proto:protogenerator_annotations_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_extensions_truth_proto_extension",
+        "@maven//:junit_junit",
+    ],
+)
+
 exports_files(["GeneratedProtoTest.java"])
