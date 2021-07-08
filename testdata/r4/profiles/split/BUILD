@@ -34,3 +34,11 @@ fhir_proto_library(
     ],
     proto_library_prefix = "all",
 )
+
+# Export config files for use in "retagging split" version of test profile.
+exports_files(
+    [
+        "package_info.prototxt",
+    ],
+    visibility = ["//testdata/r4/profiles:__subpackages__"],
+)

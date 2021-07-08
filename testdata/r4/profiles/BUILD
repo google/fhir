@@ -12,6 +12,7 @@ gen_fhir_definitions_and_protos(
     extensions = [
         "test_extensions.prototxt",
     ],
+    golden_java_proto_rules = [":test_java_proto"],
     package_deps = [
         "//spec:uscore_r4_package",
     ],
@@ -72,6 +73,7 @@ filegroup(
 # Export config files for use in "split" version of test profile.
 exports_files(
     [
+        "test_package_info.prototxt",
         "test_extensions.prototxt",
         "test_profiles.prototxt",
         "test_terminologies.prototxt",

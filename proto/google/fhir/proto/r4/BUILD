@@ -35,6 +35,7 @@ fhir_proto_library(
 
 gen_fhir_protos(
     name = "uscore",
+    golden_java_proto_rules = [":uscore_java_proto"],
     package = "//spec:uscore_r4_package",
 )
 

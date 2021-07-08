@@ -1,0 +1,66 @@
+# This profile set acts as an integration test for field retagging by reordering
+# some profiled fields on the test profile in //testdata/r4/profiles, and
+# retagging against the generated protos there.
+# Therefore field order are meaningful in this testdata.
+profile {
+  element_data {
+    name: "Bundle",
+    description: "Test Bundle"
+  }
+  base_url: "http://hl7.org/fhir/StructureDefinition/Bundle"
+}
+
+profile {
+  element_data {
+    name: "TestPatient"
+    description: "Patient with some fields changed for test."
+  }
+  base_url: "http://hl7.org/fhir/StructureDefinition/Patient"
+
+  # Test adding a FHIRPath constraint
+  restriction {
+    field_id: "Patient.address"
+    fhir_path_constraint {
+      description: "If the city has a value the state must too."
+      expression: "city.exists() implies state.exists()"
+    }
+    fhir_path_constraint {
+      severity: WARNING
+      description: "Postal codes should have at least five characters."
+      expression: "postalCode.length() >= 5"
+    }
+  }
+
+  restriction {
+    field_id: "Patient.name"
+    size_restriction: REQUIRED
+  }
+
+  codeable_concept_slice {
+    coding_slice {
+      element_data {
+        name: "color"
+      }
+      code_data {
+        system: "http://hl7.org/fhir/metric-color"
+      }
+    }
+    field_id: "Patient.maritalStatus"
+  }
+
+  extension_slice {
+    element_data {
+      name: "favoriteBrewery"
+    }
+    url: "http://test/url/base/StructureDefinition/FavoriteBrewery"
+  }
+
+  extension_slice {
+    element_data {
+      name: "decExt"
+      description: "Decimal Extension"
+      size_restriction: REQUIRED
+    }
+    url: "http://test/url/base/StructureDefinition/SimpleDecimalExt"
+  }
+}

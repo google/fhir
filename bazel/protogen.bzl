@@ -55,7 +55,8 @@ def gen_fhir_protos(
         package,
         package_deps = [],
         additional_proto_imports = [],
-        disable_test = False):
+        disable_test = False,
+        golden_java_proto_rules = []):
     """Generates a proto file from a fhir_package
 
     These rules should be run by the generate_protos.sh script, which will generate the
@@ -67,10 +68,14 @@ def gen_fhir_protos(
       name: The name for the generated proto files (without .proto)
       package: The fhir_package to generate protos for.
       package_deps: Any fhir_packages these definitions depend on.
-                    Core fhir definitions are automatically included.
+          Core fhir definitions are automatically included.
       additional_proto_imports: Additional proto files the generated protos should import.
-                                FHIR datatypes, annotations, and codes are included automatically.
+          FHIR datatypes, annotations, and codes are included automatically.
       disable_test: If true, will not declare a GeneratedProtoTest
+      golden_java_proto_rules: If non-empty, will add these java proto rules as runtime deps to the
+          generator. Any generated proto with a corresponding proto available to the runtime will
+          preserve the tag numbers from that proto.  This should be left empty when generating the
+          first version of protos.
     """
 
     # Get the directory that the rule is being run out of by using the directory of a known output.
@@ -103,12 +108,17 @@ def gen_fhir_protos(
     ]
     src_pkgs = [_get_zip_for_pkg(pkg) for pkg in all_fhir_pkgs]
 
+    proto_generator_tool = PROTO_GENERATOR
+    if len(golden_java_proto_rules) > 0:
+        proto_generator_tool = "Generator_" + name
+        _proto_generator_with_runtime_deps_on_existing_protos(proto_generator_tool, golden_java_proto_rules)
+
     native.genrule(
         name = name + "_proto_zip",
         outs = ["%s.zip" % name],
         srcs = src_pkgs,
-        tools = [PROTO_GENERATOR],
-        cmd = "$(location %s)" % PROTO_GENERATOR + " " + " ".join(flags),
+        tools = [proto_generator_tool],
+        cmd = "$(location %s)" % proto_generator_tool + " " + " ".join(flags),
         tags = MANUAL_TAGS,
     )
 
@@ -151,7 +161,8 @@ def gen_fhir_definitions_and_protos(
         terminologies = [],
         package_deps = [],
         additional_proto_imports = [],
-        disable_test = False):
+        disable_test = False,
+        golden_java_proto_rules = []):
     """Generates structure definitions and protos based on Extensions and Profiles protos.
 
     These rules should be run by bazel/generate_protos.sh, which will generate the
@@ -172,6 +183,10 @@ def gen_fhir_definitions_and_protos(
       additional_proto_imports: Additional proto files the generated profiles should import
                                 FHIR datatypes, annotations, and codes are included automatically.
       disable_test: If true, will not declare a GeneratedProtoTest
+      golden_java_proto_rules: If non-empty, will add these java proto rules as runtime deps to the
+          generator. Any generated proto with a corresponding proto available to the runtime will
+          preserve the tag numbers from that proto.  This should be left empty when generating the
+          first version of protos.
     """
 
     profile_flags = " ".join([("--profiles $(location %s) " % profile) for profile in profiles])
@@ -239,7 +254,16 @@ def gen_fhir_definitions_and_protos(
         package_deps = package_deps,
         additional_proto_imports = additional_proto_imports,
         disable_test = disable_test,
+        golden_java_proto_rules = golden_java_proto_rules,
     )
 
 def _get_zip_for_pkg(pkg):
     return pkg + "_package.zip"
+
+def _proto_generator_with_runtime_deps_on_existing_protos(name, golden_java_protos_rules):
+    native.java_binary(
+        name = name,
+        main_class = "com.google.fhir.protogen.ProtoGeneratorMain",
+        runtime_deps = golden_java_protos_rules +
+                       ["//java/com/google/fhir/protogen:proto_generator_binary_lib"],
+    )

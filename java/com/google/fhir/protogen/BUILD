@@ -41,7 +41,6 @@ java_binary(
 java_library(
     name = "generator_utils",
     srcs = ["GeneratorUtils.java"],
-    visibility = ["//javatests/com/google/fhir/protogen:__pkg__"],
     deps = [
         "//java/com/google/fhir/common:exceptions",
         "//proto/google/fhir/proto:annotations_java_proto",
@@ -91,10 +90,9 @@ java_library(
     ],
 )
 
-java_binary(
-    name = "ProtoGenerator",
+java_library(
+    name = "proto_generator_binary_lib",
     srcs = ["ProtoGeneratorMain.java"],
-    main_class = "com.google.fhir.protogen.ProtoGeneratorMain",
     deps = [
         ":generator_utils",
         ":protogen",
@@ -108,6 +106,12 @@ java_binary(
         "@maven//:com_beust_jcommander",
         "@maven//:com_google_guava_guava",
     ],
+)
+
+java_binary(
+    name = "ProtoGenerator",
+    main_class = "com.google.fhir.protogen.ProtoGeneratorMain",
+    runtime_deps = ["//java/com/google/fhir/protogen:proto_generator_binary_lib"],
 )
 
 java_binary(

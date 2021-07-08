@@ -332,7 +332,28 @@ public class ProtoGenerator {
    * https://www.hl7.org/fhir/structuredefinition.html.
    */
   public DescriptorProto generateProto(StructureDefinition def) throws InvalidFhirException {
-    return new PerDefinitionGenerator(def).generate();
+    DescriptorProto generatedProto = new PerDefinitionGenerator(def).generate();
+
+    try {
+      @SuppressWarnings("unchecked") // Reflectively loaded class is known to be of type Message
+      Class<Message> referenceClass =
+          (Class<Message>)
+              getClass()
+                  .getClassLoader()
+                  .loadClass(packageInfo.getJavaProtoPackage() + "." + generatedProto.getName());
+      Message goldenInstance =
+          (Message) referenceClass.getMethod("getDefaultInstance").invoke(null);
+      return FieldRetagger.retagMessage(
+          generatedProto, goldenInstance.getDescriptorForType().toProto());
+    } catch (ReflectiveOperationException e) {
+      System.out.println(
+          "Warning: No golden proto found for "
+              + packageInfo.getJavaProtoPackage()
+              + "."
+              + generatedProto.getName());
+    }
+
+    return generatedProto;
   }
 
   private StructureDefinition fixIdBug(StructureDefinition def) {
@@ -1114,7 +1135,10 @@ public class ProtoGenerator {
                   .collect(toList()))
           .addAllElement(elementsFromProfile);
 
-      DescriptorProto.Builder builder = generateProto(modifiedDataTypeBuilder.build()).toBuilder();
+      // TODO: If the newly-generated type is not known to the Java runtime,
+      // run field remapping against the core datatype.
+      DescriptorProto.Builder builder =
+          new PerDefinitionGenerator(modifiedDataTypeBuilder.build()).generate().toBuilder();
 
       // All references subtypes will be build as though the datatype is a top-level structure.
       // Iterate through and replace type references to things defined on the parent type.
@@ -1794,7 +1818,7 @@ public class ProtoGenerator {
     for (StructureDefinition def : defs) {
       validateDefinition(def);
 
-      DescriptorProto proto = new PerDefinitionGenerator(def).generate();
+      DescriptorProto proto = generateProto(def);
       builder.addMessageType(proto);
     }
     // Add imports. Annotations is always needed.
