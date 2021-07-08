@@ -107,6 +107,11 @@ const (
 
 	// FHIR spec limits strings to 1 MB.
 	maxStringSize = 1024 * 1024
+
+	// ReferenceTypeError is the error occurred during reference type validation
+	ReferenceTypeError = ErrorType("ReferenceTypeError")
+	// RequiredFieldError is the error occurred during required field validation
+	RequiredFieldError = ErrorType("RequiredFieldError")
 )
 
 var (
@@ -192,6 +197,9 @@ type Time struct {
 	ValueUs   int64
 }
 
+// ErrorType is the type of validation error.
+type ErrorType string
+
 // UnmarshalError is a public error message for an error that occurred during unmarshaling.
 // This type allows us to return detailed error information without exposing user data.
 type UnmarshalError struct {
@@ -204,6 +212,8 @@ type UnmarshalError struct {
 	// `Details`. This may include PHI and should not be reported where PHI is prohibited. For
 	// example, a response is fine, but logs are not.
 	Diagnostics string
+	// Type is the type of the error occurred during validation
+	Type ErrorType
 }
 
 func (e *UnmarshalError) Error() string {
