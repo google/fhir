@@ -1419,6 +1419,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 }
 
 func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
+	[]Version{fhirversion.STU3, fhirversion.R4}
 	tests := []struct {
 		name string
 		json string
@@ -1436,7 +1437,7 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 				{Path: "Patient.link[0]", Details: `missing required field "other"`},
 				{Path: "Patient.link[0]", Details: `missing required field "type"`},
 			},
-			[]Version{fhirversion.STU3, fhirversion.R4},
+			allVers,
 		},
 		{
 			"Missing required repeated field",
@@ -1445,7 +1446,19 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
       "resourceType": "OperationOutcome"
     }`,
 			&jsonpbhelper.UnmarshalError{Path: "OperationOutcome", Details: `missing required field "issue"`},
-			[]Version{fhirversion.STU3, fhirversion.R4},
+			allVers,
+		},
+		// Covers possible issues with collecting requirements from datatype protos.
+		{
+			"Missing required field in datatype",
+			`{
+				"resourceType": "Patient",
+				"extension": [{
+					"valueReference": {"reference": "Patient/1"}
+				}]
+			}`,
+			&jsonpbhelper.UnmarshalError{Path: "Patient.extension[0]", Details: `missing required field "url"`},
+			allVers,
 		},
 		{
 			"Invalid reference type",
@@ -1455,7 +1468,7 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 				"managingOrganization": {"reference": "Patient/2"}
 			}`,
 			&jsonpbhelper.UnmarshalError{Path: "Patient.managingOrganization", Details: `invalid reference to a Patient resource, want Organization`},
-			[]Version{fhirversion.STU3, fhirversion.R4},
+			allVers,
 		},
 	}
 	for _, test := range tests {

@@ -337,13 +337,13 @@ func init() {
 	var emptyCR proto.Message
 	// populate STU3 required fields
 	emptyCR = &r3pb.ContainedResource{}
-	dfsProtoMessageFields(
+	findAllReferencedMessageTypes(
 		emptyCR.ProtoReflect().Descriptor(),
 		func(node protoreflect.MessageDescriptor) { collectDirectRequiredFields(node, requiredFields) },
 	)
 	// populate R4 required fields
 	emptyCR = &r4pb.ContainedResource{}
-	dfsProtoMessageFields(
+	findAllReferencedMessageTypes(
 		emptyCR.ProtoReflect().Descriptor(),
 		func(node protoreflect.MessageDescriptor) { collectDirectRequiredFields(node, requiredFields) },
 	)
@@ -932,33 +932,33 @@ func collectDirectRequiredFields(msgDesc protoreflect.MessageDescriptor, sink ma
 			required = append(required, f.Number())
 		}
 	}
-	sink[msgDesc.FullName()] = append(sink[msgDesc.FullName()], required...)
+	sink[msgDesc.FullName()] = required
 }
 
-// dfsProtoMessageFields does a DFS traversal from the given root message descriptor, visit all the message kind
-// fields starts from that root message descriptor, and call the given onVisit callback on the message descriptor
-// of each of the visited message kind fields.
-func dfsProtoMessageFields(root protoreflect.MessageDescriptor, onVisit func(node protoreflect.MessageDescriptor)) {
+// findAllReferencedMessageTypes does a BFS traversal of the message
+// descriptors fields starting from the provided root. `onVisit` is called once
+// for each unique message type that is found.
+func findAllReferencedMessageTypes(root protoreflect.MessageDescriptor, onVisit func(node protoreflect.MessageDescriptor)) {
 	visited := stringset.New()
 	worklist := []protoreflect.MessageDescriptor{root}
 	for len(worklist) > 0 {
 		node := worklist[0]
 		worklist = worklist[1:]
-		if onVisit != nil {
-			onVisit(node)
+		if visited.Contains(string(node.FullName())) {
+			continue
 		}
+
+		onVisit(node)
+
+		visited.Add(string(node.FullName()))
 		fields := node.Fields()
 		for i := 0; i < fields.Len(); i++ {
 			f := fields.Get(i)
 			if f.Kind() != protoreflect.MessageKind {
 				continue
 			}
-			m := f.Message()
-			if !visited.Contains(string(m.FullName())) {
-				worklist = append(worklist, m)
-			}
+			worklist = append(worklist, f.Message())
 		}
-		visited.Add(string(node.FullName()))
 	}
 }
 
