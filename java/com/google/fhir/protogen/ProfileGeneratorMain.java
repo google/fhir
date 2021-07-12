@@ -197,6 +197,6 @@ public class ProfileGeneratorMain {
   private static void writeBundle(Bundle bundle, String dir, String name)
       throws IOException, InvalidFhirException {
     String filename = dir + "/" + name + ".json";
-    Files.asCharSink(new File(filename), UTF_8).write(jsonPrinter.print(bundle));
+    Files.asCharSink(new File(filename), UTF_8).write(jsonPrinter.print(bundle) + '\n');
   }
 }
