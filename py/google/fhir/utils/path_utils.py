@@ -38,6 +38,6 @@ def snake_case_to_camel_case(input_str: str, upper: bool = False) -> str:
   """
   parts = input_str.split('_')
   if len(parts) == 1:
-    return input_str
+    return input_str.capitalize() if upper else input_str
   result = parts[0] + ''.join([w[0].upper() + w[1:] for w in parts[1:]])
   return result[0].upper() + result[1:] if upper else result

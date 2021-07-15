@@ -37,6 +37,11 @@ class PathUtilsTest(absltest.TestCase):
     self.assertEqual("apple", path_utils.snake_case_to_camel_case("apple"))
     self.assertEqual("applePie",
                      path_utils.snake_case_to_camel_case("apple_pie"))
+    self.assertEqual(
+        "ApplePie",
+        path_utils.snake_case_to_camel_case("apple_pie", upper=True))
+    self.assertEqual("Apple",
+                     path_utils.snake_case_to_camel_case("apple", upper=True))
 
 
 if __name__ == "__main__":
