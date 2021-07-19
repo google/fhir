@@ -65,6 +65,21 @@ py_library(
     deps = ["//py"],
 )
 
+py_library(
+    name = "resource_utils",
+    srcs = [
+        "__init__.py",
+        "resource_utils.py",
+    ],
+    srcs_version = "PY3",
+    deps = [
+        ":fhir_types",
+        ":path_utils",
+        "//py",
+        "@com_google_protobuf//:protobuf_python",
+    ],
+)
+
 py_test(
     name = "proto_utils_test",
     size = "small",
@@ -138,6 +153,27 @@ py_test(
     deps = [
         "//py",
         "//py/google/fhir/utils:path_utils",
+        requirement("absl-py"),
+        requirement("six"),
+    ],
+)
+
+py_test(
+    name = "resource_utils_test",
+    srcs = [
+        "resource_utils_test.py",
+    ],
+    legacy_create_init = 0,
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":resource_utils",
+        "//py",
+        "//proto/google/fhir/proto/r4/core/resources:account_py_pb2",
+        "//proto/google/fhir/proto/r4/core/resources:activity_definition_py_pb2",
+        "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_py_pb2",
+        "//proto/google/fhir/proto/r4/core/resources:structure_definition_py_pb2",
+        "//proto/google/fhir/proto/r4/core:datatypes_py_pb2",
         requirement("absl-py"),
         requirement("six"),
     ],
