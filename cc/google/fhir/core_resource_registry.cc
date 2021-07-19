@@ -24,7 +24,9 @@
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
+#include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
+#include "absl/synchronization/mutex.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
@@ -46,24 +48,15 @@ namespace {
 // FHIR spec
 absl::StatusOr<std::string> GetCoreStructureDefinition(
     const Descriptor* descriptor) {
-  static absl::node_hash_map<std::string, std::string> memos;
-  auto iter = memos.find(descriptor->full_name());
-  if (iter != memos.end()) {
-    return iter->second;
-  }
-
-  static const std::string* kCorePrefix =
-      new std::string("http://hl7.org/fhir/StructureDefinition/");
+  static constexpr absl::string_view kCorePrefix =
+      "http://hl7.org/fhir/StructureDefinition/";
 
   for (int i = 0;
        i < descriptor->options().ExtensionSize(proto::fhir_profile_base); i++) {
-    if (descriptor->options()
-            .GetExtension(proto::fhir_profile_base, i)
-            .substr(0, kCorePrefix->length()) == *kCorePrefix) {
-      const std::string& core_url =
-          descriptor->options().GetExtension(proto::fhir_profile_base, i);
-      memos[descriptor->full_name()] = core_url;
-      return core_url;
+    const std::string& profile_base =
+        descriptor->options().GetExtension(proto::fhir_profile_base, i);
+    if (absl::StartsWith(profile_base, kCorePrefix)) {
+      return profile_base;
     }
   }
   return InvalidArgumentError(absl::StrCat("Not a profile of a core resource: ",

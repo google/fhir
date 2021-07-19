@@ -18,6 +18,7 @@
 
 #include <iosfwd>
 #include <memory>
+#include <string>
 #include <unordered_map>
 #include <utility>
 
@@ -162,21 +163,33 @@ std::unique_ptr<FieldMap> BuildResourceTypeMap(const Descriptor* descriptor) {
 absl::StatusOr<const FieldDescriptor*> GetContainedResourceField(
     const Descriptor* contained_resource_desc,
     const std::string& resource_type) {
+  static absl::Mutex field_table_mutex(absl::kConstInit);
   static std::unordered_map<std::string, std::unique_ptr<FieldMap>>*
       field_table =
-          new std::unordered_map<std::string, std::unique_ptr<FieldMap>>;
+          new std::unordered_map<std::string, std::unique_ptr<FieldMap>>
+              ABSL_GUARDED_BY(field_table_mutex);
 
   const std::string& contained_resource_name =
       contained_resource_desc->full_name();
-  auto field_table_iter = field_table->find(contained_resource_name);
-  const FieldDescriptor* field;
-  if (field_table_iter == field_table->end()) {
-    auto field_map = BuildResourceTypeMap(contained_resource_desc);
-    field = (*field_map)[resource_type];
-    (*field_table)[contained_resource_name] = std::move(field_map);
-  } else {
-    field = (*field_table_iter->second)[resource_type];
+  {
+    absl::ReaderMutexLock reader_lock(&field_table_mutex);
+    auto field_table_iter = field_table->find(contained_resource_name);
+    if (field_table_iter != field_table->end()) {
+      const FieldDescriptor* field = (*field_table_iter->second)[resource_type];
+      if (!field) {
+        return InvalidArgumentError(absl::StrCat("No field on ",
+                                                 contained_resource_name,
+                                                 " with type ", resource_type));
+      }
+      return field;
+    }
   }
+
+  absl::MutexLock lock(&field_table_mutex);
+  auto field_map = BuildResourceTypeMap(contained_resource_desc);
+  const FieldDescriptor* field = (*field_map)[resource_type];
+  (*field_table)[contained_resource_name] = std::move(field_map);
+
   if (!field) {
     return InvalidArgumentError(absl::StrCat(
         "No field on ", contained_resource_name, " with type ", resource_type));
