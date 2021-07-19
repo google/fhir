@@ -168,3 +168,27 @@ func (oe *OperationErrorReporter) report(elementPath string, err error, typeCode
 	}
 	return nil
 }
+
+// BasicErrorReporter simply stores all errors during valudation.
+//
+// This is primarily for legacy use; most users should use an OperationOutcomeErrorReporter
+// or their own implementation.
+type BasicErrorReporter struct {
+	Errors []*error
+}
+
+// NewBasicErrorReporter creates a basic error reporter
+func NewBasicErrorReporter() *BasicErrorReporter {
+	return &BasicErrorReporter{}
+}
+
+// ReportValidationError stores the error by appending it to the errors field.
+func (be *BasicErrorReporter) ReportValidationError(_ string, err error) error {
+	be.Errors = append(be.Errors, &err)
+	return nil
+}
+
+// ReportValidationWarning does nothing.
+func (be *BasicErrorReporter) ReportValidationWarning(elementPath string, err error) error {
+	return nil
+}

@@ -25,6 +25,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/google/fhir/go/jsonformat/errorreporter"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
@@ -78,8 +79,26 @@ func collectDescriptorNames(msgs ...proto.Message) stringset.Set {
 
 type validationStep func(fd protoreflect.FieldDescriptor, msg protoreflect.Message) error
 
+type validationStepWithErrorReporter func(fd protoreflect.FieldDescriptor, msg protoreflect.Message, jsonPath string, er errorreporter.ErrorReporter) error
+
 func validateRequiredFields(_ protoreflect.FieldDescriptor, msg protoreflect.Message) error {
 	return jsonpbhelper.ValidateRequiredFields(msg)
+}
+
+func validateRequiredFieldsWithErrorReporter(fd protoreflect.FieldDescriptor, msg protoreflect.Message, jsonPath string, errorReporter errorreporter.ErrorReporter) error {
+	var errors jsonpbhelper.UnmarshalErrorList
+	if err := validateRequiredFields(fd, msg); err != nil {
+		if !jsonpbhelper.IsUnmarshalError(err) {
+			return err
+		}
+		if err := jsonpbhelper.AppendUnmarshalError(&errors, jsonpbhelper.AnnotateUnmarshalErrorWithPath(err, jsonPath)); err != nil {
+			return err
+		}
+		for _, error := range errors {
+			errorReporter.ReportValidationError(error.Path, error)
+		}
+	}
+	return nil
 }
 
 func validateReferenceTypes(fd protoreflect.FieldDescriptor, msg protoreflect.Message) error {
@@ -87,6 +106,22 @@ func validateReferenceTypes(fd protoreflect.FieldDescriptor, msg protoreflect.Me
 		return nil
 	}
 	return jsonpbhelper.ValidateReferenceType(fd, msg)
+}
+
+func validateReferenceTypesWithErrorReporter(fd protoreflect.FieldDescriptor, msg protoreflect.Message, jsonPath string, errorReporter errorreporter.ErrorReporter) error {
+	var errors jsonpbhelper.UnmarshalErrorList
+	if err := validateReferenceTypes(fd, msg); err != nil {
+		if !jsonpbhelper.IsUnmarshalError(err) {
+			return err
+		}
+		if err := jsonpbhelper.AppendUnmarshalError(&errors, jsonpbhelper.AnnotateUnmarshalErrorWithPath(err, jsonPath)); err != nil {
+			return err
+		}
+		for _, error := range errors {
+			errorReporter.ReportValidationError(error.Path, error)
+		}
+	}
+	return nil
 }
 
 func validatePrimitives(_ protoreflect.FieldDescriptor, msg protoreflect.Message) error {
@@ -127,6 +162,22 @@ func validatePrimitives(_ protoreflect.FieldDescriptor, msg protoreflect.Message
 	return nil
 }
 
+func validatePrimitivesWithErrorReporter(fd protoreflect.FieldDescriptor, msg protoreflect.Message, jsonPath string, errorReporter errorreporter.ErrorReporter) error {
+	var errors jsonpbhelper.UnmarshalErrorList
+	if err := validatePrimitives(fd, msg); err != nil {
+		if !jsonpbhelper.IsUnmarshalError(err) {
+			return err
+		}
+		if err := jsonpbhelper.AppendUnmarshalError(&errors, jsonpbhelper.AnnotateUnmarshalErrorWithPath(err, jsonPath)); err != nil {
+			return err
+		}
+		for _, error := range errors {
+			errorReporter.ReportValidationError(error.Path, err)
+		}
+	}
+	return nil
+}
+
 func validateStringPrimitiveRegex(msg protoreflect.Message) bool {
 	val := msg.Get(msg.Descriptor().Fields().ByName("value")).String()
 	return jsonpbhelper.RegexValues[msg.Descriptor().FullName()].MatchString(val)
@@ -143,10 +194,29 @@ func Validate(msg proto.Message) error {
 	return walkMessage(msg.ProtoReflect(), nil, "", validationSteps)
 }
 
+// ValidateWithErrorReporter validates a FHIR msg against the rules defined in the FHIR
+// spec, validation errors will be reported according to provided error reporter.
+// See package description for what is included.
+func ValidateWithErrorReporter(msg proto.Message, er errorreporter.ErrorReporter) error {
+	validationSteps := []validationStepWithErrorReporter{
+		validatePrimitivesWithErrorReporter,
+		validateRequiredFieldsWithErrorReporter,
+		validateReferenceTypesWithErrorReporter,
+	}
+	return walkMessageWithErrorReporter(msg.ProtoReflect(), nil, "", validationSteps, er)
+}
+
 // ValidatePrimitives on the msg according to the FHIR spec. This includes
 // regexes for string-based types and bounds checking for integers.
 func ValidatePrimitives(msg proto.Message) error {
 	return walkMessage(msg.ProtoReflect(), nil, "", []validationStep{validatePrimitives})
+}
+
+// ValidatePrimitivesWithErrorReporter on the msg according to the FHIR spec. This includes
+// regexes for string-based types and bounds checking for integers.
+// Validation errors will be reported according to provided error reporter.
+func ValidatePrimitivesWithErrorReporter(msg proto.Message, er errorreporter.ErrorReporter) error {
+	return walkMessageWithErrorReporter(msg.ProtoReflect(), nil, "", []validationStepWithErrorReporter{validatePrimitivesWithErrorReporter}, er)
 }
 
 func addFieldToPath(jsonPath, field string) string {
@@ -195,6 +265,40 @@ func walkMessage(msg protoreflect.Message, fd protoreflect.FieldDescriptor, json
 	}
 	if len(errors) > 0 {
 		return errors
+	}
+	return nil
+}
+
+func walkMessageWithErrorReporter(msg protoreflect.Message, fd protoreflect.FieldDescriptor, jsonPath string, validators []validationStepWithErrorReporter, er errorreporter.ErrorReporter) error {
+	for _, validator := range validators {
+		if err := validator(fd, msg, jsonPath, er); err != nil {
+			return err
+		}
+	}
+	var fatalErr error
+	msg.Range(func(fd protoreflect.FieldDescriptor, value protoreflect.Value) bool {
+		if fd.Message() == nil {
+			return true
+		}
+		jsonPath := addFieldToPath(jsonPath, fd.JSONName())
+		if fd.IsList() {
+			l := value.List()
+			for i := 0; i < l.Len(); i++ {
+				if err := walkMessageWithErrorReporter(l.Get(i).Message(), fd, jsonpbhelper.AddIndexToPath(jsonPath, i), validators, er); err != nil {
+					fatalErr = err
+					return false
+				}
+			}
+		} else {
+			if err := walkMessageWithErrorReporter(value.Message(), fd, jsonPath, validators, er); err != nil {
+				fatalErr = err
+				return false
+			}
+		}
+		return true
+	})
+	if fatalErr != nil {
+		return fatalErr
 	}
 	return nil
 }

@@ -24,6 +24,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/google/fhir/go/fhirversion"
+	"github.com/google/fhir/go/jsonformat/errorreporter"
 	"github.com/google/fhir/go/jsonformat/fhirvalidate"
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
@@ -56,6 +57,7 @@ type Unmarshaller struct {
 	// reference checking should be run.
 	enableExtendedValidation bool
 	cfg                      config
+	ver                      fhirversion.Version
 }
 
 // NewUnmarshaller returns an Unmarshaller that performs resource validation.
@@ -82,6 +84,7 @@ func newUnmarshaller(tz string, ver fhirversion.Version, enableExtendedValidatio
 		TimeZone:                 l,
 		cfg:                      cfg,
 		enableExtendedValidation: enableExtendedValidation,
+		ver:                      ver,
 	}, nil
 }
 
@@ -89,6 +92,30 @@ func newUnmarshaller(tz string, ver fhirversion.Version, enableExtendedValidatio
 // version of the proto is determined by the version the Unmarshaller was
 // created with.
 func (u *Unmarshaller) Unmarshal(in []byte) (proto.Message, error) {
+	var umErrList jsonpbhelper.UnmarshalErrorList
+	er := errorreporter.NewBasicErrorReporter()
+	res, err := u.UnmarshalWithErrorReporter(in, er)
+	if err != nil {
+		return res, err
+	}
+	for _, error := range er.Errors {
+		if err := jsonpbhelper.AppendUnmarshalError(&umErrList, *error); err != nil {
+			return res, err
+		}
+	}
+	if len(umErrList) > 0 {
+		return res, umErrList
+	}
+	return res, nil
+}
+
+// TODO: report parseContainedResource error with error reporter
+// UnmarshalWithErrorReporter unmarshalls a FHIR resource from JSON into a
+// ContainedResource proto. During the process, the validation errors are
+// reported according to user defined error reporter.
+// The FHIR version of the proto is determined by the version the Unmarshaller was
+// created with.
+func (u *Unmarshaller) UnmarshalWithErrorReporter(in []byte, er errorreporter.ErrorReporter) (proto.Message, error) {
 	// Decode the JSON object into a map.
 	var decoded map[string]json.RawMessage
 	if err := jsp.Unmarshal(in, &decoded); err != nil {
@@ -99,9 +126,27 @@ func (u *Unmarshaller) Unmarshal(in []byte) (proto.Message, error) {
 		return res, err
 	}
 	if u.enableExtendedValidation {
-		return res, fhirvalidate.Validate(res)
+		if err := fhirvalidate.ValidateWithErrorReporter(res, er); err != nil {
+			return res, err
+		}
+	} else if err := fhirvalidate.ValidatePrimitivesWithErrorReporter(res, er); err != nil {
+		return res, err
 	}
-	return res, fhirvalidate.ValidatePrimitives(res)
+	return res, nil
+}
+
+// UnmarshalWithOutcome unmarshalls a FHIR resource from JSON into a ContainedResource
+// proto. During the process, the validation errors are reported according to the predefined
+// OperationErrorReporter.
+// The FHIR version of the proto is determined by the version the Unmarshaller was
+// created with.
+func (u *Unmarshaller) UnmarshalWithOutcome(in []byte) (proto.Message, *errorreporter.MultiVersionOperationOutcome, error) {
+	er := errorreporter.NewOperationErrorReporter(u.ver)
+	res, err := u.UnmarshalWithErrorReporter(in, er)
+	if err != nil {
+		return res, nil, err
+	}
+	return res, er.Outcome, nil
 }
 
 func (u *Unmarshaller) checkCurrentDepth(jsonPath string) error {

@@ -31,6 +31,7 @@ import (
 
 	"github.com/bazelbuild/rules_go/go/tools/bazel"
 	"github.com/google/fhir/go/fhirversion"
+	"github.com/google/fhir/go/jsonformat/errorreporter"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
@@ -45,6 +46,7 @@ import (
 	r4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
 	r4devicepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/device_go_proto"
 	r4observationpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/observation_go_proto"
+	r4outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/operation_outcome_go_proto"
 	r4patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/patient_go_proto"
 	r4searchparampb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/search_parameter_go_proto"
 	c3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/codes_go_proto"
@@ -925,6 +927,7 @@ func TestUnmarshal(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			for _, w := range test.wants {
 				t.Run(w.ver.String(), func(t *testing.T) {
+					// test Unmarshal
 					u := setupUnmarshaller(t, w.ver)
 					got, err := u.Unmarshal(test.json)
 					if err != nil {
@@ -932,6 +935,48 @@ func TestUnmarshal(t *testing.T) {
 					}
 					if !proto.Equal(got, w.r) {
 						t.Errorf("unmarshal %v: got %v, want %v", test.name, got, w.r)
+					}
+
+					// test UnmarshalWithOutcome
+					got, mvo, err := u.UnmarshalWithOutcome(test.json)
+					if err != nil {
+						t.Fatalf("unmarshalWithOutcome %v failed with unexpected error: %v", test.name, err)
+					}
+					if !proto.Equal(got, w.r) {
+						t.Errorf("unmarshal %v: got %v, want %v", test.name, got, w.r)
+					}
+					var ic int
+					switch w.ver {
+					case fhirversion.STU3:
+						ic = len(mvo.R3Outcome.GetIssue())
+					case fhirversion.R4:
+						ic = len(mvo.R4Outcome.GetIssue())
+					default:
+						t.Fatalf("unmarshalWithOutcome %v had unexpected version %v", test.name, w.ver)
+					}
+					if ic != 0 {
+						t.Errorf("unmarshalWithOutcome %v got unexpected errors, expected issue number 0, got %v", test.name, ic)
+					}
+
+					// test UnmarshalWithErrorReporter
+					er := errorreporter.NewOperationErrorReporter(w.ver)
+					got, err = u.UnmarshalWithErrorReporter(test.json, er)
+					if err != nil {
+						t.Fatalf("UnmarshalWithErrorReporter %v failed with unexpected error: %v", test.name, err)
+					}
+					if !proto.Equal(got, w.r) {
+						t.Errorf("UnmarshalWithErrorReporter %v: got %v, want %v", test.name, got, w.r)
+					}
+					switch w.ver {
+					case fhirversion.STU3:
+						ic = len(er.Outcome.R3Outcome.GetIssue())
+					case fhirversion.R4:
+						ic = len(er.Outcome.R4Outcome.GetIssue())
+					default:
+						t.Fatalf("UnmarshalWithErrorReporter %v had unexpected version %v", test.name, w.ver)
+					}
+					if ic != 0 {
+						t.Errorf("UnmarshalWithErrorReporter %v got unexpected errors, expected issue number 0, got %v", test.name, ic)
 					}
 				})
 			}
@@ -1036,6 +1081,303 @@ func TestUnmarshal_NoExtendedValidation(t *testing.T) {
 					}
 					if !proto.Equal(got, w.r) {
 						t.Errorf("unmarshal %v: got %v, want %v", test.name, got, w.r)
+					}
+				})
+			}
+		})
+	}
+}
+
+func TestUnmarshalWithOutcome_Errors(t *testing.T) {
+	tests := []struct {
+		name         string
+		json         []byte
+		wantOutcomes []*errorreporter.MultiVersionOperationOutcome
+		wantMsgs     []proto.Message
+	}{
+		{
+			name: "invalid reference type",
+			json: []byte(`
+    {
+      "resourceType": "Patient",
+      "managingOrganization": {
+				"reference": "Patient/1"
+			}
+    }`),
+			wantOutcomes: []*errorreporter.MultiVersionOperationOutcome{
+				&errorreporter.MultiVersionOperationOutcome{
+					Version: fhirversion.STU3,
+					R3Outcome: &r3pb.OperationOutcome{
+						Issue: []*r3pb.OperationOutcome_Issue{
+							&r3pb.OperationOutcome_Issue{
+								Code: &c3pb.IssueTypeCode{
+									Value: c3pb.IssueTypeCode_VALUE,
+								},
+								Severity: &c3pb.IssueSeverityCode{
+									Value: c3pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d3pb.String{Value: `error at "Patient.managingOrganization": invalid reference to a Patient resource, want Organization`},
+								Expression: []*d3pb.String{
+									&d3pb.String{Value: `Patient.managingOrganization`},
+								},
+							},
+						},
+					},
+				},
+				&errorreporter.MultiVersionOperationOutcome{
+					Version: fhirversion.R4,
+					R4Outcome: &r4outcomepb.OperationOutcome{
+						Issue: []*r4outcomepb.OperationOutcome_Issue{
+							&r4outcomepb.OperationOutcome_Issue{
+								Code: &r4outcomepb.OperationOutcome_Issue_CodeType{
+									Value: c4pb.IssueTypeCode_VALUE,
+								},
+								Severity: &r4outcomepb.OperationOutcome_Issue_SeverityCode{
+									Value: c4pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d4pb.String{Value: `error at "Patient.managingOrganization": invalid reference to a Patient resource, want Organization`},
+								Expression: []*d4pb.String{
+									&d4pb.String{Value: `Patient.managingOrganization`},
+								},
+							},
+						},
+					},
+				},
+			},
+			wantMsgs: []proto.Message{
+				&r3pb.ContainedResource{
+					OneofResource: &r3pb.ContainedResource_Patient{
+						Patient: &r3pb.Patient{
+							ManagingOrganization: &d3pb.Reference{
+								Reference: &d3pb.Reference_PatientId{
+									PatientId: &d3pb.ReferenceId{Value: "1"},
+								},
+							},
+						},
+					},
+				},
+				&r4pb.ContainedResource{
+					OneofResource: &r4pb.ContainedResource_Patient{
+						Patient: &r4patientpb.Patient{
+							ManagingOrganization: &d4pb.Reference{
+								Reference: &d4pb.Reference_PatientId{
+									PatientId: &d4pb.ReferenceId{Value: "1"},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "missing required field",
+			json: []byte(`
+    {
+      "resourceType": "Patient",
+      "link": [{}]
+    }`),
+			wantOutcomes: []*errorreporter.MultiVersionOperationOutcome{
+				&errorreporter.MultiVersionOperationOutcome{
+					Version: fhirversion.STU3,
+					R3Outcome: &r3pb.OperationOutcome{
+						Issue: []*r3pb.OperationOutcome_Issue{
+							&r3pb.OperationOutcome_Issue{
+								Code: &c3pb.IssueTypeCode{
+									Value: c3pb.IssueTypeCode_VALUE,
+								},
+								Severity: &c3pb.IssueSeverityCode{
+									Value: c3pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d3pb.String{Value: `error at "Patient.link[0]": missing required field "other"`},
+								Expression: []*d3pb.String{
+									&d3pb.String{Value: `Patient.link[0]`},
+								},
+							},
+							&r3pb.OperationOutcome_Issue{
+								Code: &c3pb.IssueTypeCode{
+									Value: c3pb.IssueTypeCode_VALUE,
+								},
+								Severity: &c3pb.IssueSeverityCode{
+									Value: c3pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d3pb.String{Value: `error at "Patient.link[0]": missing required field "type"`},
+								Expression: []*d3pb.String{
+									&d3pb.String{Value: `Patient.link[0]`},
+								},
+							},
+						},
+					},
+				},
+				&errorreporter.MultiVersionOperationOutcome{
+					Version: fhirversion.R4,
+					R4Outcome: &r4outcomepb.OperationOutcome{
+						Issue: []*r4outcomepb.OperationOutcome_Issue{
+							&r4outcomepb.OperationOutcome_Issue{
+								Code: &r4outcomepb.OperationOutcome_Issue_CodeType{
+									Value: c4pb.IssueTypeCode_VALUE,
+								},
+								Severity: &r4outcomepb.OperationOutcome_Issue_SeverityCode{
+									Value: c4pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d4pb.String{Value: `error at "Patient.link[0]": missing required field "other"`},
+								Expression: []*d4pb.String{
+									&d4pb.String{Value: `Patient.link[0]`},
+								},
+							},
+							&r4outcomepb.OperationOutcome_Issue{
+								Code: &r4outcomepb.OperationOutcome_Issue_CodeType{
+									Value: c4pb.IssueTypeCode_VALUE,
+								},
+								Severity: &r4outcomepb.OperationOutcome_Issue_SeverityCode{
+									Value: c4pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d4pb.String{Value: `error at "Patient.link[0]": missing required field "type"`},
+								Expression: []*d4pb.String{
+									&d4pb.String{Value: `Patient.link[0]`},
+								},
+							},
+						},
+					},
+				},
+			},
+			wantMsgs: []proto.Message{
+				&r3pb.ContainedResource{
+					OneofResource: &r3pb.ContainedResource_Patient{
+						Patient: &r3pb.Patient{
+							Link: []*r3pb.Patient_Link{{}},
+						},
+					},
+				},
+				&r4pb.ContainedResource{
+					OneofResource: &r4pb.ContainedResource_Patient{
+						Patient: &r4patientpb.Patient{
+							Link: []*r4patientpb.Patient_Link{{}},
+						},
+					},
+				},
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			for i, wantOut := range test.wantOutcomes {
+				t.Run(wantOut.Version.String(), func(t *testing.T) {
+					wantMsg := test.wantMsgs[i]
+					u := setupUnmarshaller(t, wantOut.Version)
+					gotRes, gotOut, err := u.UnmarshalWithOutcome(test.json)
+					if err != nil {
+						t.Fatalf("unmarshal with outcome %v failed: %v", test.name, err)
+					}
+					if diff := cmp.Diff(gotOut, wantOut, protocmp.Transform()); diff != "" {
+						t.Errorf("unmarshal with outcome %v: got outcome %v, want %v", test.name, gotOut, wantOut)
+					}
+					if !proto.Equal(gotRes, wantMsg) {
+						t.Errorf("unmarshal with outcome %v: got resource %v, want %v", test.name, gotRes, wantMsg)
+					}
+				})
+			}
+		})
+	}
+}
+
+func TestUnmarshalWithErrorReporter_Errors(t *testing.T) {
+	tests := []struct {
+		name         string
+		json         []byte
+		wantOutcomes []*errorreporter.MultiVersionOperationOutcome
+		wantMsgs     []proto.Message
+	}{
+		{
+			name: "invalid reference type",
+			json: []byte(`
+    {
+      "resourceType": "Patient",
+      "managingOrganization": {
+				"reference": "Patient/1"
+			}
+    }`),
+			wantOutcomes: []*errorreporter.MultiVersionOperationOutcome{
+				&errorreporter.MultiVersionOperationOutcome{
+					Version: fhirversion.STU3,
+					R3Outcome: &r3pb.OperationOutcome{
+						Issue: []*r3pb.OperationOutcome_Issue{
+							&r3pb.OperationOutcome_Issue{
+								Code: &c3pb.IssueTypeCode{
+									Value: c3pb.IssueTypeCode_VALUE,
+								},
+								Severity: &c3pb.IssueSeverityCode{
+									Value: c3pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d3pb.String{Value: `error at "Patient.managingOrganization": invalid reference to a Patient resource, want Organization`},
+								Expression: []*d3pb.String{
+									&d3pb.String{Value: `Patient.managingOrganization`},
+								},
+							},
+						},
+					},
+				},
+				&errorreporter.MultiVersionOperationOutcome{
+					Version: fhirversion.R4,
+					R4Outcome: &r4outcomepb.OperationOutcome{
+						Issue: []*r4outcomepb.OperationOutcome_Issue{
+							&r4outcomepb.OperationOutcome_Issue{
+								Code: &r4outcomepb.OperationOutcome_Issue_CodeType{
+									Value: c4pb.IssueTypeCode_VALUE,
+								},
+								Severity: &r4outcomepb.OperationOutcome_Issue_SeverityCode{
+									Value: c4pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d4pb.String{Value: `error at "Patient.managingOrganization": invalid reference to a Patient resource, want Organization`},
+								Expression: []*d4pb.String{
+									&d4pb.String{Value: `Patient.managingOrganization`},
+								},
+							},
+						},
+					},
+				},
+			},
+			wantMsgs: []proto.Message{
+				&r3pb.ContainedResource{
+					OneofResource: &r3pb.ContainedResource_Patient{
+						Patient: &r3pb.Patient{
+							ManagingOrganization: &d3pb.Reference{
+								Reference: &d3pb.Reference_PatientId{
+									PatientId: &d3pb.ReferenceId{Value: "1"},
+								},
+							},
+						},
+					},
+				},
+				&r4pb.ContainedResource{
+					OneofResource: &r4pb.ContainedResource_Patient{
+						Patient: &r4patientpb.Patient{
+							ManagingOrganization: &d4pb.Reference{
+								Reference: &d4pb.Reference_PatientId{
+									PatientId: &d4pb.ReferenceId{Value: "1"},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			for i, wantOut := range test.wantOutcomes {
+				t.Run(wantOut.Version.String(), func(t *testing.T) {
+					wantMsg := test.wantMsgs[i]
+					u := setupUnmarshaller(t, wantOut.Version)
+					oer := errorreporter.NewOperationErrorReporter(wantOut.Version)
+					gotRes, err := u.UnmarshalWithErrorReporter(test.json, oer)
+					if err != nil {
+						t.Fatalf("unmarshal with outcome %v failed: %v", test.name, err)
+					}
+					if diff := cmp.Diff(oer.Outcome, wantOut, protocmp.Transform()); diff != "" {
+						t.Errorf("unmarshal with outcome %v: got outcome %v, want %v", test.name, oer.Outcome, wantOut)
+					}
+					if !proto.Equal(gotRes, wantMsg) {
+						t.Errorf("unmarshal with outcome %v: got resource %v, want %v", test.name, gotRes, wantMsg)
 					}
 				})
 			}
@@ -1434,8 +1776,8 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
       "link": [{}]
     }`,
 			jsonpbhelper.UnmarshalErrorList{
-				{Path: "Patient.link[0]", Details: `missing required field "other"`},
-				{Path: "Patient.link[0]", Details: `missing required field "type"`},
+				{Path: "Patient.link[0]", Details: `missing required field "other"`, Type: jsonpbhelper.RequiredFieldError},
+				{Path: "Patient.link[0]", Details: `missing required field "type"`, Type: jsonpbhelper.RequiredFieldError},
 			},
 			allVers,
 		},
@@ -1445,7 +1787,7 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 		{
       "resourceType": "OperationOutcome"
     }`,
-			&jsonpbhelper.UnmarshalError{Path: "OperationOutcome", Details: `missing required field "issue"`},
+			&jsonpbhelper.UnmarshalError{Path: "OperationOutcome", Details: `missing required field "issue"`, Type: jsonpbhelper.RequiredFieldError},
 			allVers,
 		},
 		// Covers possible issues with collecting requirements from datatype protos.
@@ -1457,7 +1799,7 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 					"valueReference": {"reference": "Patient/1"}
 				}]
 			}`,
-			&jsonpbhelper.UnmarshalError{Path: "Patient.extension[0]", Details: `missing required field "url"`},
+			&jsonpbhelper.UnmarshalError{Path: "Patient.extension[0]", Details: `missing required field "url"`, Type: jsonpbhelper.RequiredFieldError},
 			allVers,
 		},
 		{
@@ -1467,7 +1809,7 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 				"resourceType": "Patient",
 				"managingOrganization": {"reference": "Patient/2"}
 			}`,
-			&jsonpbhelper.UnmarshalError{Path: "Patient.managingOrganization", Details: `invalid reference to a Patient resource, want Organization`},
+			&jsonpbhelper.UnmarshalError{Path: "Patient.managingOrganization", Details: `invalid reference to a Patient resource, want Organization`, Type: jsonpbhelper.ReferenceTypeError},
 			allVers,
 		},
 	}

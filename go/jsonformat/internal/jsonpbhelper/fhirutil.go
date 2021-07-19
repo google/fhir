@@ -107,11 +107,6 @@ const (
 
 	// FHIR spec limits strings to 1 MB.
 	maxStringSize = 1024 * 1024
-
-	// ReferenceTypeError is the error occurred during reference type validation
-	ReferenceTypeError = ErrorType("ReferenceTypeError")
-	// RequiredFieldError is the error occurred during required field validation
-	RequiredFieldError = ErrorType("RequiredFieldError")
 )
 
 var (
@@ -199,6 +194,15 @@ type Time struct {
 
 // ErrorType is the type of validation error.
 type ErrorType string
+
+const (
+	// ReferenceTypeError is the error occurred during reference type validation
+	ReferenceTypeError = ErrorType("ReferenceTypeError")
+	// RequiredFieldError is the error occurred during required field validation
+	RequiredFieldError = ErrorType("RequiredFieldError")
+	// ParsingError is the error occurred during json parsing
+	ParsingError = ErrorType("ParsingError")
+)
 
 // UnmarshalError is a public error message for an error that occurred during unmarshaling.
 // This type allows us to return detailed error information without exposing user data.
@@ -897,6 +901,7 @@ func ValidateReferenceType(msgField protoreflect.FieldDescriptor, ref protorefle
 	return &UnmarshalError{
 		// refType must be one of the spec error types because it was in the Oneof. This means it can't
 		// contain any sensitive information.
+		Type:    ReferenceTypeError,
 		Details: fmt.Sprintf("invalid reference to a %v resource, want %v", refType, strings.Join(validRefTypes, ", ")),
 	}
 }
@@ -909,6 +914,7 @@ func ValidateRequiredFields(pb protoreflect.Message) error {
 		field := pb.Descriptor().Fields().ByNumber(requiredField)
 		if !pb.Has(field) {
 			el = append(el, &UnmarshalError{
+				Type:    RequiredFieldError,
 				Details: fmt.Sprintf("missing required field %q", field.JSONName()),
 			})
 		}

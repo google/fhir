@@ -19,6 +19,7 @@ go_library(
     importpath = "github.com/google/fhir/go/jsonformat",
     deps = [
         "//go/fhirversion",
+        "//go/jsonformat/errorreporter",
         "//go/jsonformat/fhirvalidate",
         "//go/jsonformat/internal/accessor",
         "//go/jsonformat/internal/jsonpbhelper",
@@ -75,6 +76,7 @@ go_test(
     embed = [":jsonformat"],
     deps = [
         "//go/fhirversion",
+        "//go/jsonformat/errorreporter",
         "//go/jsonformat/internal/jsonpbhelper",
         "//proto/google/fhir/proto/r4/core:codes_go_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
@@ -82,6 +84,7 @@ go_test(
         "//proto/google/fhir/proto/r4/core/resources:code_system_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:device_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:observation_go_proto",
+        "//proto/google/fhir/proto/r4/core/resources:operation_outcome_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:patient_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:research_study_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:search_parameter_go_proto",
