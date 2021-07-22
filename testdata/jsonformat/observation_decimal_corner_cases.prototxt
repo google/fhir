@@ -17,4 +17,5 @@ reference_range { text { value: ":123. " } }
 reference_range { text { value: ":123.4 " } }
 reference_range { text { value: "\":123.4 " } }
 reference_range { text { value: "\\\":123.4 " } }
+reference_range { text { value: ": 1234. \n" } }
 reference_range { low { value { value: "123.4" } } }

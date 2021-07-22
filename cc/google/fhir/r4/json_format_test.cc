@@ -193,6 +193,7 @@ namespace {
 // threads to test concurrency.
 
 using namespace ::google::fhir::r4::core;  // NOLINT
+using ::google::fhir::testutil::EqualsProto;
 using ::google::protobuf::FieldDescriptor;
 using ::testing::Eq;
 
@@ -1788,8 +1789,7 @@ TEST(JsonFormatR4Test, PrintAndParseAllResources) {
                                                          resource_field);
     FHIR_ASSERT_OK(::google::fhir::r4::MergeJsonFhirStringIntoProto(
         json, parsed_resource, absl::UTCTimeZone(), false));
-    EXPECT_THAT(*resource,
-                google::fhir::testutil::EqualsProto(*parsed_resource));
+    EXPECT_THAT(*resource, EqualsProto(*parsed_resource));
   }
 }
 

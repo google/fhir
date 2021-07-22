@@ -484,7 +484,8 @@ absl::StatusOr<Json::Value> ParseJsonValue(const std::string& raw_json) {
 namespace {
 
 static const char* const kJsonKeyRegex =
-    R"("[^\s"]*[^\\]")";  // Quote, non-whitespace, unescaped quote
+    R"("[^\s":]*[^\\\s:"]")";  // Quote, non-whitespace non-colon, unescaped
+                               // quote
 
 static const char* const kColonRegex =
     R"(\s*:\s*)";  // Arbitary whitespace, colon, arbitrary white space
