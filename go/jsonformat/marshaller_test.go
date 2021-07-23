@@ -2142,6 +2142,49 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "Repetitive extension",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						Extension: []*d3pb.Extension{
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/extension-field"},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/extension-field"},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						Extension: []*d4pb.Extension{
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/extension-field"},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/extension-field"},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
