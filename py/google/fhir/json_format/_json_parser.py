@@ -207,8 +207,7 @@ class JsonParser:
     # field prepended by an underscore
     if (not annotation_utils.is_primitive_type(field.message_type) and
         proto_utils.field_is_set(parent, field)):
-      raise ValueError('Target field {} is already set.'.format(
-          field.full_name))
+      raise ValueError(f'Target field {field.full_name} is already set.')
 
     # Consider it an error if a oneof field is already set.
     #
@@ -221,8 +220,8 @@ class JsonParser:
       if (annotation_utils.is_primitive_type(field.message_type) and
           oneof_field.full_name == field.full_name):
         raise ValueError(
-            'Cannot set field {} since oneof field {} is already set.'.format(
-                field.full_name, oneof_field.full_name))
+            f'Cannot set field {field.full_name} since oneof field '
+            f'{oneof_field.full_name} is already set.')
 
     # Ensure that repeated fields get proper list assignment
     existing_field_size = proto_utils.field_content_length(parent, field)
@@ -334,5 +333,5 @@ class JsonParser:
         # field to a maximum of 1.
         self._merge_message(json_value[0], target)
       else:
-        raise ValueError('Expected a JSON object for field of type: {}.'.format(
-            target_descriptor.full_name))
+        raise ValueError('Expected a JSON object for field of type: '
+                         f'{target_descriptor.full_name}.')

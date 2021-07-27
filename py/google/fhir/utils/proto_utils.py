@@ -30,8 +30,8 @@ def _field_descriptor_for_name(msg: message.Message,
   """Returns the FieldDescriptor corresponding to field_name."""
   result = msg.DESCRIPTOR.fields_by_name.get(field_name)
   if result is None:
-    raise ValueError('%s is not present on: %s.' %
-                     (repr(field_name), msg.DESCRIPTOR.name))
+    raise ValueError(
+        f'{field_name!r} is not present on: {msg.DESCRIPTOR.name}.')
   return result
 
 
@@ -131,8 +131,7 @@ def append_value_at_field(msg: message.Message,
     field = _field_descriptor_for_name(msg, field)
 
   if not field_is_repeated(field):
-    raise ValueError('%s is not repeated. Unable to append: %s.' %
-                     (field.name, repr(value)))
+    raise ValueError(f'{field.name} is not repeated. Unable to append value.')
   getattr(msg, field.name).append(value)
 
 
@@ -189,14 +188,14 @@ def get_value_at_field_index(msg: message.Message,
 
   if field_is_repeated(field):
     if index >= field_content_length(msg, field):
-      raise ValueError('Attempted to get index beyond size of field: %s.' %
-                       field.name)
+      raise ValueError(
+          f'Attempted to get index beyond size of field: {field.name}.')
     return get_value_at_field(msg, field)[index]
 
   # Singular field
   if index != 0:
-    raise ValueError('Attempted to get non-zero index on singular field: %s.' %
-                     field.name)
+    raise ValueError(
+        f'Attempted to get non-zero index on singular field: {field.name}.')
   return get_value_at_field(msg, field)
 
 
@@ -220,8 +219,8 @@ def set_value_at_field_index(msg: message.Message,
 
   if field_is_repeated(field):
     if index >= field_content_length(msg, field):
-      raise ValueError('Attempted to set index beyond size of field: %s.' %
-                       field.name)
+      raise ValueError(
+          f'Attempted to set index beyond size of field: {field.name}.')
     if field_is_primitive(field):
       getattr(msg, field.name)[index] = value
     else:  # Repeated composite fields do not support item assignment
@@ -231,7 +230,7 @@ def set_value_at_field_index(msg: message.Message,
   else:  # Singular field
     if index != 0:
       raise ValueError(
-          'Attempted to set non-zero index on singular field: %s.' % field.name)
+          f'Attempted to set non-zero index on singular field: {field.name}.')
     set_value_at_field(msg, field, value)
 
 
@@ -260,7 +259,7 @@ def set_in_parent_or_add(
     field = _field_descriptor_for_name(msg, field)
 
   if field_is_primitive(field):
-    raise ValueError('Expected a composite message type at: %s.' % field.name)
+    raise ValueError(f'Expected a composite message type at: {field.name}.')
 
   if field_is_repeated(field):
     return getattr(msg, field.name).add()
@@ -312,14 +311,14 @@ def copy_common_field(source_message: message.Message,
   target_field = _field_descriptor_for_name(target_message, field_name)
 
   if source_field.type != target_field.type:
-    raise ValueError(
-        'Field {} differs in type between {} ({}) and {} ({}).'.format(
-            field_name, source_descriptor.full_name, source_field.type,
-            target_descriptor.full_name, target_field.type))
+    raise ValueError(f'Field {field_name} differs in type between '
+                     f'{source_descriptor.full_name} ({source_field.type}) and '
+                     f'{target_descriptor.full_name} ({target_field.type}).')
 
   if field_is_repeated(source_field) != field_is_repeated(target_field):
-    raise ValueError('Field {} differs in size between {} and {}.'.format(
-        field_name, source_descriptor.full_name, target_descriptor.full_name))
+    raise ValueError(
+        f'Field {field_name} differs in size between '
+        f'{source_descriptor.full_name} and {target_descriptor.full_name}.')
 
   if field_is_set(source_message, source_field):
     source_value = get_value_at_field(source_message, source_field)

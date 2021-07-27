@@ -35,7 +35,7 @@ def _fhir_filepath_from(filename: str) -> str:
   filepath = os.path.join(FLAGS.test_srcdir, 'com_google_fhir/',
                           filename)
   if not os.path.exists(filepath):
-    raise FileNotFoundError('File at {} does not exist.'.format(filepath))
+    raise FileNotFoundError(f'File at {filepath} does not exist.')
   return filepath
 
 

@@ -334,8 +334,8 @@ def get_fhir_version(
   elif isinstance(message_or_descriptor, descriptor.FileDescriptor):
     file_descriptor = message_or_descriptor
   else:
-    raise ValueError('Cannot retrieve file_descriptor for type: {}'.format(
-        type(message_or_descriptor)))
+    raise ValueError('Cannot retrieve file_descriptor for type: '
+                     f'{type(message_or_descriptor)}.')
   return get_value_for_annotation_extension(file_descriptor,
                                             annotations_pb2.fhir_version)
 

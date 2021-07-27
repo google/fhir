@@ -203,8 +203,8 @@ class PrimitiveWrapperPrimitiveHasNoValueTest(
     try:
       self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     except fhir_errors.InvalidFhirError as e:
-      self.fail('PrimitiveHasNoValue validation failed for {}: {}.'.format(
-          primitive.DESCRIPTOR.full_name, e))
+      self.fail('PrimitiveHasNoValue validation failed for '
+                f'{primitive.DESCRIPTOR.full_name}: {e}.')
 
   def assert_set_invalid_primitive_has_no_value_raises(
       self, primitive_cls: Type[message.Message]):
@@ -367,7 +367,7 @@ class PrimitiveWrapperProtoValidationTest(
       try:
         self.primitive_handler.primitive_wrapper_from_primitive(valid_proto)
       except fhir_errors.InvalidFhirError as e:
-        self.fail('{} did not represent valid FHIR: {}.'.format(filename, e))
+        self.fail(f'{filename} did not represent valid FHIR: {e}.')
 
   def assert_validation_of_invalid_primitive_raises(
       self, primitive_cls: Type[message.Message]):
