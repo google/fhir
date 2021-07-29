@@ -204,6 +204,16 @@ const (
 	ParsingError = ErrorType("ParsingError")
 )
 
+// ErrorSeverity represents different UnmarshalError severity levels.
+type ErrorSeverity string
+
+// Values for IssueSeverity.
+const (
+	ErrorSeverityInformation = ErrorSeverity("informational")
+	ErrorSeverityWarning     = ErrorSeverity("warning")
+	ErrorSeverityError       = ErrorSeverity("error")
+)
+
 // UnmarshalError is a public error message for an error that occurred during unmarshaling.
 // This type allows us to return detailed error information without exposing user data.
 type UnmarshalError struct {
@@ -216,8 +226,10 @@ type UnmarshalError struct {
 	// `Details`. This may include PHI and should not be reported where PHI is prohibited. For
 	// example, a response is fine, but logs are not.
 	Diagnostics string
-	// Type is the type of the error occurred during validation
+	// Type is the type of the error occurred during validation.
 	Type ErrorType
+	// Severity represents different UnmarshalError severity levels.
+	Severity ErrorSeverity
 }
 
 func (e *UnmarshalError) Error() string {
@@ -257,6 +269,20 @@ func AnnotateUnmarshalErrorWithPath(err error, jsonPath string) error {
 	case UnmarshalErrorList:
 		for _, err := range umErr {
 			err.Path = jsonPath
+		}
+	}
+	return err
+}
+
+// AnnotateUnmarshalErrorWithSeverity to help the user distinguish different
+// error severity levels.
+func AnnotateUnmarshalErrorWithSeverity(err error, severity ErrorSeverity) error {
+	switch umErr := err.(type) {
+	case *UnmarshalError:
+		umErr.Severity = severity
+	case UnmarshalErrorList:
+		for _, err := range umErr {
+			err.Severity = severity
 		}
 	}
 	return err
