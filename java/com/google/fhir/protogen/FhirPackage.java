@@ -104,7 +104,8 @@ public class FhirPackage {
 
     while (entries.hasMoreElements()) {
       ZipEntry entry = entries.nextElement();
-      if (entry.getName().endsWith("package_info.prototxt")) {
+      if (entry.getName().endsWith("package_info.prototxt")
+          || entry.getName().endsWith("package_info.textproto")) {
         String protoTxt = new String(ByteStreams.toByteArray(zipFile.getInputStream(entry)), UTF_8);
         PackageInfo.Builder infoBuilder = PackageInfo.newBuilder();
         TextFormat.getParser().merge(protoTxt, infoBuilder);
