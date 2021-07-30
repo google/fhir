@@ -66,6 +66,20 @@ class ResourceUtilsTest(absltest.TestCase):
           non_bundle, resource_type=activity_definition_pb2.ActivityDefinition)
     self.assertIsInstance(te.exception, TypeError)
 
+  def testGetContainedResource_withValidContainedResource_succeeds(self):
+    expected_account = account_pb2.Account(
+        name=datatypes_pb2.String(value='TestAccount'))
+    contained_resource = bundle_and_contained_resource_pb2.ContainedResource(
+        account=expected_account)
+    actual_account = resource_utils.get_contained_resource(contained_resource)
+    self.assertEqual(actual_account, expected_account)
+
+  def testGetContainedResource_withInvalidContainedResource_raises(self):
+    not_contained_resource = account_pb2.Account()
+    with self.assertRaises(TypeError) as te:
+      _ = resource_utils.get_contained_resource(not_contained_resource)
+    self.assertIsInstance(te.exception, TypeError)
+
 
 if __name__ == '__main__':
   absltest.main()

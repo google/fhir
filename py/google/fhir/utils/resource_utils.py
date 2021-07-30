@@ -19,6 +19,7 @@ from typing import cast, Any, List, Type, TypeVar
 from google.protobuf import message
 from google.fhir.utils import fhir_types
 from google.fhir.utils import path_utils
+from google.fhir.utils import proto_utils
 
 _T = TypeVar('_T', bound=message.Message)
 
@@ -52,3 +53,28 @@ def extract_resources_from_bundle(bundle: message.Message, *,
       for entry in cast(Any, bundle).entry
       if entry.resource.HasField(contained_resource_field)
   ]
+
+
+def get_contained_resource(
+    contained_resource: message.Message) -> message.Message:
+  """Returns the resource instance contained within `contained_resource`.
+
+  Args:
+    contained_resource: The containing `ContainedResource` instance.
+
+  Returns:
+    The resource contained by `contained_resource`.
+
+  Raises:
+    TypeError: In the event that `contained_resource` is not of type
+    `ContainedResource`.
+    ValueError: In the event that the oneof on `contained_resource` is not set.
+  """
+  # TODO: Use an annotation here.
+  if contained_resource.DESCRIPTOR.name != 'ContainedResource':
+    raise TypeError('Expected `ContainedResource` but got: '
+                    f'{type(contained_resource)}.')
+  oneof_field = contained_resource.WhichOneof('oneof_resource')
+  if oneof_field is None:
+    raise ValueError('`ContainedResource` oneof not set.')
+  return proto_utils.get_value_at_field(contained_resource, oneof_field)
