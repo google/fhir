@@ -1,0 +1,174 @@
+id {
+  value: "example"
+}
+meta {
+  last_updated {
+    value_us: 1572560963356000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+  profile {
+    value: "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      \n            <p>CodeSystem &quot;ACME Codes for Cholesterol&quot;: This is an example code system that includes \n        all the codes for serum cholesterol defined by ACME inc.</p>\n      \n            <p>Developed by: FHIR project team (example)</p>\n      \n            <p>Published for testing on 28-Jan 2016</p>\n      \n            <p>This code system defines all the ACME codes for serum cholesterol:</p>\n      \n            <table class=\"grid\">\n        \n              <tr>\n          \n                <td>\n            \n                  <b>Code</b>\n          \n                </td>\n          \n                <td>\n            \n                  <b>Display</b>\n          \n                </td>\n          \n                <td>\n            \n                  <b>Definition</b>\n          \n                </td>\n        \n              </tr>\n        \n              <tr>\n          \n                <td>chol-mmol</td>\n          \n                <td>SChol (mmol/L)</td>\n          \n                <td>Serum Cholesterol, in mmol/L</td>\n        \n              </tr>\n        \n              <tr>\n          \n                <td>chol-mass</td>\n          \n                <td>SChol (mg/L)</td>\n          \n                <td>Serum Cholesterol, in mg/L</td>\n        \n              </tr>\n        \n              <tr>\n          \n                <td>chol</td>\n          \n                <td>SChol</td>\n          \n                <td>Serum Cholesterol</td>\n        \n              </tr>\n      \n            </table>\n    \n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg"
+  }
+  value {
+    code {
+      value: "fhir"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/CodeSystem/example"
+}
+identifier {
+  system {
+    value: "http://acme.com/identifiers/codesystems"
+  }
+  value {
+    value: "internal-cholesterol-inl"
+  }
+}
+version {
+  value: "4.0.1"
+}
+name {
+  value: "ACMECholCodesBlood"
+}
+title {
+  value: "ACME Codes for Cholesterol in Serum/Plasma"
+}
+status {
+  value: DRAFT
+}
+experimental {
+  value: true
+}
+date {
+  value_us: 1453899600000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+publisher {
+  value: "Acme Co"
+}
+contact {
+  name {
+    value: "FHIR project team"
+  }
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+}
+description {
+  value: "This is an example code system that includes all the ACME codes for serum/plasma cholesterol from v2.36."
+}
+case_sensitive {
+  value: true
+}
+content {
+  value: COMPLETE
+}
+filter {
+  code {
+    value: "acme-plasma"
+  }
+  description {
+    value: "An internal filter used to select codes that are only used with plasma"
+  }
+  operator {
+    value: EQUALS
+  }
+  value {
+    value: "the value of this filter is either \'true\' or \'false\'"
+  }
+}
+concept {
+  code {
+    value: "chol-mmol"
+  }
+  display {
+    value: "SChol (mmol/L)"
+  }
+  definition {
+    value: "Serum Cholesterol, in mmol/L"
+  }
+  designation {
+    use {
+      system {
+        value: "http://acme.com/config/fhir/codesystems/internal"
+      }
+      code {
+        value: "internal-label"
+      }
+    }
+    value {
+      value: "From ACME POC Testing"
+    }
+  }
+}
+concept {
+  code {
+    value: "chol-mass"
+  }
+  display {
+    value: "SChol (mg/L)"
+  }
+  definition {
+    value: "Serum Cholesterol, in mg/L"
+  }
+  designation {
+    use {
+      system {
+        value: "http://acme.com/config/fhir/codesystems/internal"
+      }
+      code {
+        value: "internal-label"
+      }
+    }
+    value {
+      value: "From Paragon Labs"
+    }
+  }
+}
+concept {
+  code {
+    value: "chol"
+  }
+  display {
+    value: "SChol"
+  }
+  definition {
+    value: "Serum Cholesterol"
+  }
+  designation {
+    use {
+      system {
+        value: "http://acme.com/config/fhir/codesystems/internal"
+      }
+      code {
+        value: "internal-label"
+      }
+    }
+    value {
+      value: "Obdurate Labs uses this with both kinds of units..."
+    }
+  }
+}
+

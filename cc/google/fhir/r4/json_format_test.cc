@@ -497,6 +497,15 @@ TEST(JsonFormatR4Test, WithEmptyContainedResourcePrintsValidJson) {
   ASSERT_THAT(*from_proto_status, Eq(expected));
 }
 
+/**
+ * Tests parsing/printing for a resource that has a primitive extension nested
+ * choice field.
+ */
+TEST(JsonFormatR4Test, WithPrimitiveExtensionNestedChoiceTypeField) {
+  std::vector<std::string> files{"CodeSystem-v2-0003", "CodeSystem-v2-0061"};
+  TestPair<CodeSystem>(files);
+}
+
 TEST(JsonFormatR4Test, TestAccount) {
   std::vector<std::string> files{"Account-ewg", "Account-example"};
   TestPair<Account>(files);
@@ -728,6 +737,12 @@ TEST(JsonFormatR4Test, TestClaimResponse) {
 TEST(JsonFormatR4Test, TestClinicalImpression) {
   std::vector<std::string> files{"ClinicalImpression-example"};
   TestPair<ClinicalImpression>(files);
+}
+
+TEST(JsonFormatR4Test, TestCodeSystem) {
+  std::vector<std::string> files{"CodeSystem-example",
+                                 "CodeSystem-list-example-codes"};
+  TestPair<CodeSystem>(files);
 }
 
 TEST(JsonFormatR4Test, TestCommunication) {

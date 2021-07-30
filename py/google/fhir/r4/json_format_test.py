@@ -42,6 +42,7 @@ from proto.google.fhir.proto.r4.core.resources import charge_item_pb2
 from proto.google.fhir.proto.r4.core.resources import claim_pb2
 from proto.google.fhir.proto.r4.core.resources import claim_response_pb2
 from proto.google.fhir.proto.r4.core.resources import clinical_impression_pb2
+from proto.google.fhir.proto.r4.core.resources import code_system_pb2
 from proto.google.fhir.proto.r4.core.resources import communication_pb2
 from proto.google.fhir.proto.r4.core.resources import communication_request_pb2
 from proto.google.fhir.proto.r4.core.resources import compartment_definition_pb2
@@ -183,6 +184,16 @@ _T = TypeVar('_T', bound=message.Message)
 
 class JsonFormatTest(json_format_test.JsonFormatTest):
   """Unit tests for functionality in json_format.py."""
+
+  @parameterized.named_parameters(
+      ('_withCodeSystemV20003', 'CodeSystem-v2-0003'),
+      ('_withCodeSystemv20061', 'CodeSystem-v2-0061'),
+  )
+  def testJsonFormat_forResourceWithPrimitiveExtensionNestedChoiceType_succeeds(
+      self, file_name: str):
+    """Tests parsing/printing with a primitive extension nested choice field."""
+    self.assert_parse_and_print_spec_equals_golden(file_name,
+                                                   code_system_pb2.CodeSystem)
 
   @parameterized.named_parameters(
       ('_withAccountEwg', 'Account-ewg'),
@@ -460,6 +471,14 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
   def testJsonFormat_forValidClinicalImpression_succeeds(self, file_name: str):
     self.assert_parse_and_print_spec_equals_golden(
         file_name, clinical_impression_pb2.ClinicalImpression)
+
+  @parameterized.named_parameters(
+      ('_withCodeSystemExample', 'CodeSystem-example'),
+      ('_withCodeSystemListExampleCodes', 'CodeSystem-list-example-codes'),
+  )
+  def testJsonFormat_forValidCodeSystem_succeeds(self, file_name: str):
+    self.assert_parse_and_print_spec_equals_golden(file_name,
+                                                   code_system_pb2.CodeSystem)
 
   @parameterized.named_parameters(
       ('_withCommunicationExample', 'Communication-example'),

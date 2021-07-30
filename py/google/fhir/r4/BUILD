@@ -76,6 +76,7 @@ py_test(
     deps = [
         "@com_google_protobuf//:protobuf_python",
         "//py",
+        "//proto/google/fhir/proto/r4/core/resources:code_system_py_pb2",
         "//proto/google/fhir/proto/r4/core:datatypes_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:account_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:activity_definition_py_pb2",
@@ -215,7 +216,7 @@ py_test(
         "//proto/google/fhir/proto/r4/core/resources:verification_result_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:vision_prescription_py_pb2",
         "//py/google/fhir/json_format:json_format_test",
-        "//py/google/fhir/r4:json_format",
+        ":json_format",
         "//py/google/fhir/testing:testdata_utils",
         "//py/google/fhir/utils:proto_utils",
         requirement("absl-py"),

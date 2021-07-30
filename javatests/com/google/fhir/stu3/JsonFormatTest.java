@@ -181,6 +181,20 @@ public class JsonFormatTest extends JsonFormatTestBase {
     testConvertForAnalytics("patient-example", Patient.newBuilder());
   }
 
+  /** Tests parsing for a resource that has a primitive extension nested choice field. */
+  @Test
+  public void parseResourceWithPrimitiveExtensionNestedChoiceTypeField() throws Exception {
+    testParse("CodeSystem-v2-0003", CodeSystem.newBuilder());
+    testParse("CodeSystem-v2-0061", CodeSystem.newBuilder());
+  }
+
+  /** Tests printing for a resource that has a primitive extension nested choice field. */
+  @Test
+  public void printResourceWithPrimitiveExtensionNestedChoiceTypeField() throws Exception {
+    testPrint("CodeSystem-v2-0003", CodeSystem.newBuilder());
+    testPrint("CodeSystem-v2-0061", CodeSystem.newBuilder());
+  }
+
   /** Test parsing to a profile */
   // TODO: Profiles aren't supported yet in Java.
   //   @Test

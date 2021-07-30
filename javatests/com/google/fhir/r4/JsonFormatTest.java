@@ -37,6 +37,7 @@ import com.google.fhir.r4.core.ChargeItemDefinition;
 import com.google.fhir.r4.core.Claim;
 import com.google.fhir.r4.core.ClaimResponse;
 import com.google.fhir.r4.core.ClinicalImpression;
+import com.google.fhir.r4.core.CodeSystem;
 import com.google.fhir.r4.core.Communication;
 import com.google.fhir.r4.core.CommunicationRequest;
 import com.google.fhir.r4.core.CompartmentDefinition;
@@ -208,6 +209,13 @@ public class JsonFormatTest extends JsonFormatTestBase {
     testConvertForAnalytics("Encounter-home", Encounter.newBuilder());
     testConvertForAnalytics("Observation-example-genetics-1", Observation.newBuilder());
     testConvertForAnalytics("Patient-example", Patient.newBuilder());
+  }
+
+  /** Tests parsing/printing for a resource that has a primitive extension nested choice field. */
+  @Test
+  public void testResourceWithPrimitiveExtensionNestedChoiceTypeField() throws Exception {
+    String[] files = {"CodeSystem-v2-0003", "CodeSystem-v2-0061"};
+    testOrGenerate(files, CodeSystem.newBuilder());
   }
 
   @Test
@@ -500,6 +508,12 @@ public class JsonFormatTest extends JsonFormatTestBase {
   public void testClinicalImpression() throws Exception {
     String[] files = {"ClinicalImpression-example"};
     testOrGenerate(files, ClinicalImpression.newBuilder());
+  }
+
+  @Test
+  public void testCodeSystem() throws Exception {
+    String[] files = {"CodeSystem-example", "CodeSystem-list-example-codes"};
+    testOrGenerate(files, CodeSystem.newBuilder());
   }
 
   @Test

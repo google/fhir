@@ -216,6 +216,19 @@ TEST(JsonFormatStu3Test, WithEmptyContainedResourcePrintsValidJson) {
   ASSERT_THAT(*from_proto_status, Eq(expected));
 }
 
+/**
+ * Tests parsing/printing for a resource that has a primitive extension nested
+ * choice-type field.
+ */
+TEST(JsonFormatStu3Test, WithPrimitiveExtensionNestedChoiceTypeField) {
+  TestPairWithFilePaths<CodeSystem>(
+      "testdata/stu3/examples/CodeSystem-v2-0003.prototxt",
+      "spec/hl7.fhir.core/3.0.1/package/CodeSystem-v2-0003.json");
+  TestPairWithFilePaths<CodeSystem>(
+      "testdata/stu3/examples/CodeSystem-v2-0061.prototxt",
+      "spec/hl7.fhir.core/3.0.1/package/CodeSystem-v2-0061.json");
+}
+
 /* Resource tests start here. */
 
 /** Test parsing of the Account FHIR resource. */

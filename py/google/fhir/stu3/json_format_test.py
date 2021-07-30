@@ -39,6 +39,16 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
   """Unit tests for functionality in json_format.py."""
 
   @parameterized.named_parameters(
+      ('_withCodeSystemV20003', 'CodeSystem-v2-0003'),
+      ('_withCodeSystemv20061', 'CodeSystem-v2-0061'),
+  )
+  def testJsonFormat_forResourceWithPrimitiveExtensionNestedChoiceType_succeeds(
+      self, file_name: str):
+    """Tests parsing/printing with a primitive extension nested choice field."""
+    self.assert_parse_and_print_spec_equals_golden(file_name,
+                                                   resources_pb2.CodeSystem)
+
+  @parameterized.named_parameters(
       ('_withAccountExample', 'Account-example'),
       ('_withAccountEwg', 'Account-ewg'),
   )

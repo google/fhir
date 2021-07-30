@@ -1,0 +1,286 @@
+id {
+  value: "v2-0061"
+}
+meta {
+  profile {
+    value: "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
+  }
+}
+language {
+  value: "en"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <p>Check Digit Scheme</p>\n\n            <table class=\"grid\">\n              <tr>\n                <td>\n                  <b>Code</b>\n                </td>\n                <td>\n                  <b>Description</b>\n                </td>\n                <td>\n                  <b>Comment</b>\n                </td>\n                <td>\n                  <b>Version</b>\n                </td>\n              </tr>\n              <tr>\n                <td>BCV\n                  <a name=\"BCV\"> </a>\n                </td>\n                <td>Bank Card Validation Number</td>\n                <td>A non-embossed number included on bank cards and used to validate authenticity of the card and the person presenting the card</td>\n                <td>added v2.6</td>\n              </tr>\n              <tr>\n                <td>ISO\n                  <a name=\"ISO\"> </a>\n                </td>\n                <td>ISO 7064: 1983</td>\n                <td/>\n                <td>added v2.3.1</td>\n              </tr>\n              <tr>\n                <td>M10\n                  <a name=\"M10\"> </a>\n                </td>\n                <td>Mod 10 algorithm</td>\n                <td/>\n                <td>added v2.2</td>\n              </tr>\n              <tr>\n                <td>M11\n                  <a name=\"M11\"> </a>\n                </td>\n                <td>Mod 11 algorithm</td>\n                <td/>\n                <td>from v2.1</td>\n              </tr>\n              <tr>\n                <td>NPI\n                  <a name=\"NPI\"> </a>\n                </td>\n                <td>Check digit algorithm in the US National Provider Identifier</td>\n                <td/>\n                <td>added v2.3.1</td>\n              </tr>\n            </table>\n\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status"
+  }
+  value {
+    code {
+      value: "external"
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm"
+  }
+  value {
+    integer {
+    }
+  }
+}
+url {
+  value: "http://terminology.hl7.org/CodeSystem/v2-0061"
+}
+identifier {
+  system {
+    value: "urn:ietf:rfc:3986"
+  }
+  value {
+    value: "urn:oid:2.16.840.1.113883.18.22"
+  }
+}
+version {
+  value: "2.9"
+}
+name {
+  value: "v2.0061"
+}
+title {
+  value: "v2 CHECK DIGIT SCHEME"
+}
+status {
+  value: ACTIVE
+}
+experimental {
+}
+publisher {
+  value: "HL7, Inc"
+}
+contact {
+  telecom {
+    system {
+      value: URL
+    }
+    value {
+      value: "http://hl7.org"
+    }
+  }
+}
+description {
+  value: "FHIR Value set/code system definition for HL7 v2 table 0061 ( CHECK DIGIT SCHEME)"
+}
+content {
+  value: COMPLETE
+}
+concept {
+  extension {
+    url {
+      value: "http://hl7.org/fhir/StructureDefinition/codesystem-concept-comments"
+    }
+    value {
+      string_value {
+        value: "A non-embossed number included on bank cards and used to validate authenticity of the card and the person presenting the card"
+        extension {
+          url {
+            value: "http://hl7.org/fhir/StructureDefinition/translation"
+          }
+          extension {
+            url {
+              value: "lang"
+            }
+            value {
+              code {
+                value: "nl"
+              }
+            }
+          }
+          extension {
+            url {
+              value: "content"
+            }
+            value {
+              string_value {
+                value: "Een niet-gestanst nummer op bancaire kaarten en gebruikt voor validatie van de autenticiteit van de kaart en de person die de kaart heeft"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  code {
+    value: "BCV"
+  }
+  display {
+    value: "Bank Card Validation Number"
+  }
+  designation {
+    language {
+      value: "nl"
+    }
+    use {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/designation-usage"
+      }
+      code {
+        value: "display"
+      }
+    }
+    value {
+      value: "Bancaire kaart validatienummer"
+    }
+  }
+}
+concept {
+  code {
+    value: "ISO"
+  }
+  display {
+    value: "ISO 7064: 1983"
+  }
+  designation {
+    language {
+      value: "de"
+    }
+    use {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/designation-usage"
+      }
+      code {
+        value: "display"
+      }
+    }
+    value {
+      value: "ISO 7064: 1983"
+    }
+  }
+  designation {
+    language {
+      value: "nl"
+    }
+    use {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/designation-usage"
+      }
+      code {
+        value: "display"
+      }
+    }
+    value {
+      value: "ISO 7064: 1983"
+    }
+  }
+}
+concept {
+  code {
+    value: "M10"
+  }
+  display {
+    value: "Mod 10 algorithm"
+  }
+  designation {
+    language {
+      value: "de"
+    }
+    use {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/designation-usage"
+      }
+      code {
+        value: "display"
+      }
+    }
+    value {
+      value: "Modulo10-Verfahren"
+    }
+  }
+  designation {
+    language {
+      value: "nl"
+    }
+    use {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/designation-usage"
+      }
+      code {
+        value: "display"
+      }
+    }
+    value {
+      value: "Mod 10 algoritme"
+    }
+  }
+}
+concept {
+  code {
+    value: "M11"
+  }
+  display {
+    value: "Mod 11 algorithm"
+  }
+  designation {
+    language {
+      value: "de"
+    }
+    use {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/designation-usage"
+      }
+      code {
+        value: "display"
+      }
+    }
+    value {
+      value: "Modulo11-Verfahren"
+    }
+  }
+  designation {
+    language {
+      value: "nl"
+    }
+    use {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/designation-usage"
+      }
+      code {
+        value: "display"
+      }
+    }
+    value {
+      value: "Mod 11 algoritme"
+    }
+  }
+}
+concept {
+  code {
+    value: "NPI"
+  }
+  display {
+    value: "Check digit algorithm in the US National Provider Identifier"
+  }
+  designation {
+    language {
+      value: "nl"
+    }
+    use {
+      system {
+        value: "http://terminology.hl7.org/CodeSystem/designation-usage"
+      }
+      code {
+        value: "display"
+      }
+    }
+    value {
+      value: "Controlegetal algoritme van de Amerikaanse Nationale Provider identificatie"
+    }
+  }
+}
+

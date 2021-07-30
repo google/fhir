@@ -37,6 +37,7 @@ java_test(
         "//proto/google/fhir/proto/r4/core/resources:claim_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:claim_response_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:clinical_impression_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:code_system_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:communication_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:communication_request_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:compartment_definition_java_proto",

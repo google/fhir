@@ -37,7 +37,7 @@ def _get_nested_choice_field_name(field: descriptor.FieldDescriptor,
     # For primitive extensions, prepend the leading underscore, e.g.:
     # value + _boolean = _valueBoolean
     return ('_' + field.json_name + child_field_name[1].upper() +
-            child_field_name[1:])
+            child_field_name[2:])
   else:
     # Otherwise, just append together the JSON name, e.g.:
     # value + boolean = valueBoolean
@@ -289,6 +289,10 @@ class JsonParser:
             target_descriptor.name != value):
           raise ValueError(f'Error merging JSON resource into message of type '
                            f'{target_descriptor.name}.')
+      elif field_name == 'fhir_comments':
+        # `fhir_comments` can exist in a valid FHIR JSON object, however, it is
+        # not supported in FHIR protos. Hence, we simply ignore it.
+        continue
       else:
         raise ValueError(
             f'Unable to merge {field_name!r} into {target_descriptor.name}.')
