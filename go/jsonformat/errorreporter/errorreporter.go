@@ -107,8 +107,6 @@ type OperationErrorReporter struct {
 func NewOperationErrorReporter(ver fhirversion.Version) *OperationErrorReporter {
 	outcome := &MultiVersionOperationOutcome{Version: ver}
 	switch ver {
-	case fhirversion.DSTU2:
-		outcome.R2Outcome = &r2pb.OperationOutcome{}
 	case fhirversion.STU3:
 		outcome.R3Outcome = &r3pb.OperationOutcome{}
 	case fhirversion.R4:
