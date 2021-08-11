@@ -100,8 +100,6 @@ public final class PrimitiveWrappersTest {
                     // TODO: Remove "ReferenceId" handling once ReferenceId is no
                     // longer (erroneously) marked as a primitive.
                     && !type.getName().equals("ReferenceId")
-                    // TODO: Add Java primitive handling for Uuid
-                    && !type.getName().equals("Uuid")
                     // STU3 profiles of codes are marked as primitive types.
                     && !FhirTypes.isProfileOfCode(type))
         .map(

@@ -98,6 +98,8 @@ public class PrimitiveWrappers {
         return new CanonicalWrapper(message);
       case "Url":
         return new UrlWrapper(message);
+      case "Uuid":
+        return new UuidWrapper(message);
       default:
         throw new InvalidFhirException("Unexpected primitive FHIR type: " + descriptor.getName());
     }
@@ -188,6 +190,9 @@ public class PrimitiveWrappers {
         case "Url":
           checkIsString(json);
           return new UrlWrapper(jsonString);
+        case "Uuid":
+          checkIsString(json);
+          return new UuidWrapper(jsonString);
         default:
           throw new InvalidFhirException(
               "Unexpected primitive FHIR type: " + descriptor.getName() + " : " + json);
