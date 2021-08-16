@@ -50,7 +50,7 @@ def _get_enum_value_descriptor_memo(
 
 def _set_enum_value_descriptor_memo(
     enum_descriptor: descriptor.EnumDescriptor, code_string: str,
-    value_descriptor: descriptor.EnumValueDescriptor):
+    value_descriptor: descriptor.EnumValueDescriptor) -> None:
   """Sets an EnumValueDescriptor in the shared memoization mapping."""
   with _memos_cv:
     _memos[enum_descriptor.full_name][code_string] = value_descriptor
@@ -121,7 +121,7 @@ def code_string_to_enum_value_descriptor(
       f'matching enum found.')
 
 
-def copy_coding(source: message.Message, target: message.Message):
+def copy_coding(source: message.Message, target: message.Message) -> None:
   """Copies all fields from source to target "Coding" messages.
 
   Args:
@@ -173,7 +173,7 @@ def copy_coding(source: message.Message, target: message.Message):
                                    source_system_str)
 
 
-def copy_code(source: message.Message, target: message.Message):
+def copy_code(source: message.Message, target: message.Message) -> None:
   """Adds all fields from source to target.
 
   Args:

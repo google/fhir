@@ -110,12 +110,12 @@ class JsonParser:
   @classmethod
   def json_parser_with_default_timezone(
       cls, primitive_handler_: primitive_handler.PrimitiveHandler,
-      default_timezone: str):
+      default_timezone: str) -> 'JsonParser':
     """Returns a new parser initialized with the default_timezone."""
     return cls(primitive_handler_, default_timezone)
 
   def __init__(self, primitive_handler_: primitive_handler.PrimitiveHandler,
-               default_timezone: str):
+               default_timezone: str) -> None:
     """Initializes an instance of the FHIR JSON parser.
 
     Note that this is for *internal-use* only. External clients should leverage
@@ -166,7 +166,7 @@ class JsonParser:
 
   def _merge_choice_field(self, json_value: Any,
                           choice_field: descriptor.FieldDescriptor,
-                          field_name: str, parent: message.Message):
+                          field_name: str, parent: message.Message) -> None:
     """Creates a Message based on the choice_field Descriptor and json_value.
 
     The resulting message is merged into parent.
@@ -189,7 +189,7 @@ class JsonParser:
     self._merge_field(json_value, choice_value_field, choice_message)
 
   def _merge_field(self, json_value: Any, field: descriptor.FieldDescriptor,
-                   parent: message.Message):
+                   parent: message.Message) -> None:
     """Merges the json_value into the provided field of the parent Message.
 
     Args:
@@ -252,7 +252,7 @@ class JsonParser:
         field_value.MergeFrom(parsed_value)
 
   def _merge_contained_resource(self, json_value: Dict[str, Any],
-                                target: message.Message):
+                                target: message.Message) -> None:
     """Merges json_value into a contained resource field within target."""
     # We handle contained resources in a special way, because despite internally
     # being a oneof, it is not actually a chosen-type in FHIR. The JSON field
@@ -268,7 +268,8 @@ class JsonParser:
         target, contained_field)
     self._merge_message(json_value, contained_message)
 
-  def _merge_message(self, json_value: Dict[str, Any], target: message.Message):
+  def _merge_message(self, json_value: Dict[str, Any],
+                     target: message.Message) -> None:
     """Merges the provided json object into the target Message."""
     target_descriptor = target.DESCRIPTOR
     if target_descriptor.name == 'ContainedResource':
@@ -297,7 +298,7 @@ class JsonParser:
         raise ValueError(
             f'Unable to merge {field_name!r} into {target_descriptor.name}.')
 
-  def merge_value(self, json_value: Any, target: message.Message):
+  def merge_value(self, json_value: Any, target: message.Message) -> None:
     """Merges the provided json_value into the target Message.
 
     Args:
@@ -314,7 +315,7 @@ class JsonParser:
         extension_field = target_descriptor.fields_by_name.get('extension')
         if extension_field is None:
           raise ValueError("Invalid primitive. No 'extension' field exists on "
-                           f"{target_descriptor.full_name}.")
+                           f'{target_descriptor.full_name}.')
         primitive_has_no_value = extensions.create_primitive_has_no_value(
             extension_field.message_type)
         proto_utils.append_value_at_field(target, extension_field,

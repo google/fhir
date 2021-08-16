@@ -38,7 +38,7 @@ class ExtensionsTest(absltest.TestCase, metaclass=abc.ABCMeta):
     raise NotImplementedError('Subclasses *must* implement testdata_dir.')
 
   def assert_extension_to_message_equals_golden(
-      self, name: str, message_cls: Type[message.Message]):
+      self, name: str, message_cls: Type[message.Message]) -> None:
     """Exercises the extensions.extension_to_message functionality."""
     msg = testdata_utils.read_protos(
         os.path.join(self.testdata_dir, name + '.message.prototxt'),
@@ -51,7 +51,7 @@ class ExtensionsTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(output, msg)
 
   def assert_message_to_extension_equals_golden(
-      self, name: str, message_cls: Type[message.Message]):
+      self, name: str, message_cls: Type[message.Message]) -> None:
     """Exercises the extensions.message_to_extension functionality."""
     msg = testdata_utils.read_protos(
         os.path.join(self.testdata_dir, name + '.message.prototxt'),

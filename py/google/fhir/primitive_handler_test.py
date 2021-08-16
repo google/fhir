@@ -164,7 +164,8 @@ class PrimitiveWrapperPrimitiveHasNoValueTest(
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.uri_cls)
 
-  def _set_primitive_has_no_value_extension(self, primitive: message.Message):
+  def _set_primitive_has_no_value_extension(self,
+                                            primitive: message.Message) -> None:
     """Sets the PrimitiveHasNoValue FHIR extension on the provided primitive."""
     extensions_field = primitive.DESCRIPTOR.fields_by_name['extension']
     primitive_has_no_value = extensions.create_primitive_has_no_value(
@@ -173,7 +174,7 @@ class PrimitiveWrapperPrimitiveHasNoValueTest(
                                    [primitive_has_no_value])
 
   def assert_set_valid_primitive_has_no_value_succeeds(
-      self, primitive_cls: Type[message.Message]):
+      self, primitive_cls: Type[message.Message]) -> None:
     """Tests setting PrimitiveHasNoValue with other extensions present.
 
     Having a PrimitiveHasNoValue extension is okay provided there are other
@@ -207,7 +208,7 @@ class PrimitiveWrapperPrimitiveHasNoValueTest(
                 f'{primitive.DESCRIPTOR.full_name}: {e}.')
 
   def assert_set_invalid_primitive_has_no_value_raises(
-      self, primitive_cls: Type[message.Message]):
+      self, primitive_cls: Type[message.Message]) -> None:
     """Tests setting PrimitiveHasNoValue with no other fields present.
 
     Having a PrimitiveHasNoValue extension is only acceptable provided there
@@ -355,7 +356,7 @@ class PrimitiveWrapperProtoValidationTest(
         self.primitive_handler.xhtml_cls)
 
   def assert_validation_of_valid_primitive_succeeds(
-      self, primitive_cls: Type[message.Message]):
+      self, primitive_cls: Type[message.Message]) -> None:
     """Performs a suite of validation tests on valid FHIR primitives."""
     filename = path_utils.camel_case_to_snake_case(
         primitive_cls.DESCRIPTOR.name)
@@ -370,7 +371,7 @@ class PrimitiveWrapperProtoValidationTest(
         self.fail(f'{filename} did not represent valid FHIR: {e}.')
 
   def assert_validation_of_invalid_primitive_raises(
-      self, primitive_cls: Type[message.Message]):
+      self, primitive_cls: Type[message.Message]) -> None:
     """Performs a suite of validation tests on invalid FHIR primitives."""
     filename = path_utils.camel_case_to_snake_case(
         primitive_cls.DESCRIPTOR.name)
@@ -508,7 +509,7 @@ class PrimitiveWrapperJsonValidationTest(
         self.primitive_handler.xhtml_cls)
 
   def assert_json_validation_with_valid_primitive_succeeds(
-      self, primitive_cls: Type[message.Message]):
+      self, primitive_cls: Type[message.Message]) -> None:
     """Performs a suite of validation tests on valid FHIR primitives."""
     filename = path_utils.camel_case_to_snake_case(
         primitive_cls.DESCRIPTOR.name)
@@ -524,7 +525,7 @@ class PrimitiveWrapperJsonValidationTest(
           value, primitive_cls)
 
   def assert_json_validation_with_invalid_primitive_raises(
-      self, primitive_cls: Type[message.Message]):
+      self, primitive_cls: Type[message.Message]) -> None:
     """Performs a suite of validation tests on invalid FHIR primitives."""
     filename = path_utils.camel_case_to_snake_case(
         primitive_cls.DESCRIPTOR.name)

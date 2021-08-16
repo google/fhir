@@ -83,12 +83,13 @@ class ResourceValidationTest(absltest.TestCase):
     self._valid_test('encounter_valid_numeric_timezone',
                      encounter_pb2.Encounter)
 
-  def _valid_test(self, name: str, message_cls: Type[message.Message]):
+  def _valid_test(self, name: str, message_cls: Type[message.Message]) -> None:
     msg = testdata_utils.read_protos(
         os.path.join(_VALIDATION_DIR, name + '.prototxt'), message_cls)[0]
     resource_validation.validate_resource(msg)
 
-  def _invalid_test(self, name: str, message_cls: Type[message.Message]):
+  def _invalid_test(self, name: str,
+                    message_cls: Type[message.Message]) -> None:
     msg = testdata_utils.read_protos(
         os.path.join(_VALIDATION_DIR, name + '.prototxt'), message_cls)[0]
 

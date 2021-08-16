@@ -29,7 +29,7 @@ _INTERNAL_REFERENCE_PATTERN = re.compile(
     r'(?:/_history/(?P<version>[A-Za-z0-9.-]{1,64}))?$')
 
 
-def _validate_reference(reference: message.Message):
+def _validate_reference(reference: message.Message) -> None:
   """Raises a ValueError if the provided Message is not a FHIR reference."""
   if not annotation_utils.is_reference(reference):
     raise ValueError(
@@ -50,7 +50,7 @@ def get_reference_id_field_for_resource(
 
 
 def populate_typed_reference_id(reference_id: message.Message, resource_id: str,
-                                version: Optional[str]):
+                                version: Optional[str]) -> None:
   """Sets the resource_id and optionally, version, on the reference."""
   reference_id_value_field = reference_id.DESCRIPTOR.fields_by_name['value']
   proto_utils.set_value_at_field(reference_id, reference_id_value_field,
@@ -66,7 +66,7 @@ def populate_typed_reference_id(reference_id: message.Message, resource_id: str,
     proto_utils.set_value_at_field(history, history_value_field, version)
 
 
-def split_if_relative_reference(reference: message.Message):
+def split_if_relative_reference(reference: message.Message) -> None:
   """If possible, parses a `Reference` `uri` into more structured fields.
 
   This is only possible for two forms of reference uris:

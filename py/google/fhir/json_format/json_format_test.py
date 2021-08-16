@@ -26,7 +26,6 @@ from google.fhir.testing import testdata_utils
 
 _T = TypeVar('_T', bound=message.Message)
 
-
 _JsonFormatTestdata = collections.namedtuple('_JsonFormatTestdata',
                                              ['json_strs', 'protos'])
 
@@ -67,7 +66,7 @@ class JsonFormatTest(parameterized.TestCase):
                                  print_f: Callable[..., str],
                                  json_delimiter: Optional[str] = None,
                                  proto_delimiter: Optional[str] = None,
-                                 **print_kwargs: Any):
+                                 **print_kwargs: Any) -> None:
     """Compare printer output against 'golden' file.
 
     Note that we perform a comparison between Python native types after calling
@@ -119,7 +118,7 @@ class JsonFormatTest(parameterized.TestCase):
                                  parse_f: Callable[..., message.Message],
                                  json_delimiter: Optional[str] = None,
                                  proto_delimiter: Optional[str] = None,
-                                 **parse_kwargs: Any):
+                                 **parse_kwargs: Any) -> None:
     """Compare parser output against 'golden' file.
 
     Note that we perform a comparison between protobuf representations.

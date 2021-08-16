@@ -57,14 +57,14 @@ def no_value_primitive(primitive_cls: Type[_T]) -> _T:
   extension_field = primitive_cls.DESCRIPTOR.fields_by_name.get('extension')
   if extension_field is None:
     raise ValueError("Invalid primitive. No 'extension' field exists on "
-                     f"{primitive_cls.DESCRIPTOR.full_name}.")
+                     f'{primitive_cls.DESCRIPTOR.full_name}.')
   primitive_has_no_value = extensions.create_primitive_has_no_value(
       extension_field.message_type)
   return cast(Any, primitive_cls)(extension=[primitive_has_no_value])
 
 
 def validate_primitive_json_representation(desc: descriptor.Descriptor,
-                                           json_str: str):
+                                           json_str: str) -> None:
   """Ensures that json_str matches the associated regex pattern, if one exists.
 
   Args:
@@ -82,7 +82,7 @@ def validate_primitive_json_representation(desc: descriptor.Descriptor,
     raise fhir_errors.InvalidFhirError(f'Unable to find pattern: {pattern!r}.')
 
 
-def validate_primitive_without_value(fhir_primitive: message.Message):
+def validate_primitive_without_value(fhir_primitive: message.Message) -> None:
   """Validates a Message which has the PrimitiveWithoutValue extension.
 
   Given that there is a PrimitiveWithoutValue extension present, there must be
@@ -114,7 +114,7 @@ class Context:
   """Dependency injection to pass necessary types to primitive wrappers."""
 
   def __init__(self, *, separator_stride_cls: Type[message.Message],
-               code_cls: Type[message.Message], default_timezone: str):
+               code_cls: Type[message.Message], default_timezone: str) -> None:
     """Creates a new instance of primitive_wrappers.Context.
 
     Args:
@@ -199,7 +199,7 @@ class PrimitiveWrapper(abc.ABC):
     """
     raise NotImplementedError('Subclasses *must* implement from_json_str.')
 
-  def __init__(self, wrapped: message.Message, unused_context: Context):
+  def __init__(self, wrapped: message.Message, unused_context: Context) -> None:
     """Initializes a new PrimitiveWrapper with wrapped.
 
     Args:
@@ -269,7 +269,7 @@ class PrimitiveWrapper(abc.ABC):
     """A JSON string representation of the wrapped primitive."""
     return json.dumps(self.string_value(), ensure_ascii=False)
 
-  def merge_into(self, target: message.Message):
+  def merge_into(self, target: message.Message) -> None:
     """Merges the underlying wrapped primitive into target."""
     if not proto_utils.are_same_message_type(self.wrapped.DESCRIPTOR,
                                              target.DESCRIPTOR):
@@ -281,7 +281,7 @@ class PrimitiveWrapper(abc.ABC):
   def string_value(self) -> str:
     return self._nonnull_string_value() if self.has_value() else 'null'
 
-  def validate_wrapped(self):
+  def validate_wrapped(self) -> None:
     """Validates the underlying wrapped value.
 
     Raises:
@@ -327,7 +327,7 @@ class CodeWrapper(PrimitiveWrapper):
     code = cast(Any, context.code_cls)(value=json_str)
     return cls(code, context)
 
-  def __init__(self, wrapped: message.Message, context: Context):
+  def __init__(self, wrapped: message.Message, context: Context) -> None:
     """Converts wrapped into an instance of context.code_cls and wraps."""
     if not proto_utils.are_same_message_type(wrapped.DESCRIPTOR,
                                              context.code_cls.DESCRIPTOR):
@@ -336,7 +336,7 @@ class CodeWrapper(PrimitiveWrapper):
       wrapped = tmp
     super(CodeWrapper, self).__init__(wrapped, context)
 
-  def merge_into(self, target: message.Message):
+  def merge_into(self, target: message.Message) -> None:
     """See PrimitiveWrapper.merge_into."""
     codes.copy_code(self.wrapped, target)
 

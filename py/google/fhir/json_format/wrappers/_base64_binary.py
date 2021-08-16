@@ -130,7 +130,7 @@ class Base64BinaryWrapper(_primitive_wrappers.PrimitiveWrapper):
     return cls(base64_binary, context)
 
   def __init__(self, wrapped: message.Message,
-               context: _primitive_wrappers.Context):
+               context: _primitive_wrappers.Context) -> None:
     super(Base64BinaryWrapper, self).__init__(wrapped, context)
     self._separator_stride_cls = context.separator_stride_cls
 

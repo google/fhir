@@ -27,7 +27,7 @@ from google.fhir.utils import proto_utils
 
 
 def _validate_reference_field(parent: message.Message,
-                              field: descriptor.FieldDescriptor):
+                              field: descriptor.FieldDescriptor) -> None:
   """Ensure that the provided reference field is valid.
 
   Args:
@@ -86,7 +86,7 @@ def _validate_reference_field(parent: message.Message,
             f'`{reference_field_name}`.')
 
 
-def _validate_period(period: message.Message, base_name: str):
+def _validate_period(period: message.Message, base_name: str) -> None:
   """Validates that a timelike period has a valid start and end value."""
   if not (proto_utils.field_is_set(period, 'start') and
           proto_utils.field_is_set(period, 'end')):
@@ -119,7 +119,7 @@ def _validate_period(period: message.Message, base_name: str):
 
 def _validate_fhir_constraints(
     msg: message.Message, base_name: str,
-    primitive_handler_: primitive_handler.PrimitiveHandler):
+    primitive_handler_: primitive_handler.PrimitiveHandler) -> None:
   """Iterates over fields of the provided message and validates constraints.
 
   Args:
@@ -157,9 +157,9 @@ def _validate_fhir_constraints(
       raise fhir_errors.InvalidFhirError(f'Empty oneof: `{oneof.full_name}`.')
 
 
-def _validate_field(msg: message.Message, field: descriptor.FieldDescriptor,
-                    field_name: str,
-                    primitive_handler_: primitive_handler.PrimitiveHandler):
+def _validate_field(
+    msg: message.Message, field: descriptor.FieldDescriptor, field_name: str,
+    primitive_handler_: primitive_handler.PrimitiveHandler) -> None:
   """Validates that required fields are set, and performs basic temporal checks.
 
   Args:
@@ -193,8 +193,9 @@ def _validate_field(msg: message.Message, field: descriptor.FieldDescriptor,
         _validate_period(submessage, field_name)
 
 
-def validate_resource(resource: message.Message,
-                      primitive_handler_: primitive_handler.PrimitiveHandler):
+def validate_resource(
+    resource: message.Message,
+    primitive_handler_: primitive_handler.PrimitiveHandler) -> None:
   """Performs basic FHIR constraint validation on the provided resource.
 
   This API works for all supported versions of FHIR, but requires a primitive

@@ -34,7 +34,6 @@ except ImportError:
   # TODO: Add test protos to PYTHONPATH during dist testing.
   pass  # Fall through
 
-
 _EXTENSIONS_DIR = os.path.join('testdata', 'stu3', 'extensions')
 
 

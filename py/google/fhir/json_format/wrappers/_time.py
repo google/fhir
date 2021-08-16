@@ -61,8 +61,8 @@ def _parse(json_str: str, primitive_cls: Type[Time]) -> Time:
 
   try:
     time = datetime.datetime.strptime(json_str, '%H:%M:%S.%f').time()
-    if (_primitive_time_utils.PRECISION_PATTERN_MILLISECOND.search(json_str) is
-        not None):
+    if (_primitive_time_utils.PRECISION_PATTERN_MILLISECOND.search(json_str)
+        is not None):
       return _primitive_time_utils.build_time(
           time, _primitive_time_utils.TimePrecision.MILLISECOND, primitive_cls)
     elif (_primitive_time_utils.PRECISION_PATTERN_MICROSECOND.search(json_str)

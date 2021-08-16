@@ -34,7 +34,7 @@ def merge_json_fhir_string_into_proto(
     target: message.Message,
     *,
     validate: bool = True,
-    default_timezone: str = _primitive_time_utils.SIMPLE_ZULU):
+    default_timezone: str = _primitive_time_utils.SIMPLE_ZULU) -> None:
   """Merges the provided raw_json string into a target Message.
 
   Args:

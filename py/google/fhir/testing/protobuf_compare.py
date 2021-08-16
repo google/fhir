@@ -55,7 +55,7 @@ Alternatively:
       self.assertProtoEqual(a, b)
 """
 
-from typing import cast, Optional, TypeVar
+from typing import cast, Any, Optional, TypeVar
 
 from google.protobuf import descriptor
 from google.protobuf import descriptor_pool
@@ -72,7 +72,7 @@ def assertProtoEqual(self,
                      b: message.Message,
                      check_initialized: bool = True,
                      normalize_numbers: bool = False,
-                     msg: Optional[str] = None):
+                     msg: Optional[str] = None) -> None:
   """Fails with a useful error if a and b aren't equal.
 
   Comparison of repeated fields matches the semantics of
@@ -190,5 +190,5 @@ class ProtoAssertions:
   """
 
   # pylint: disable=invalid-name
-  def assertProtoEqual(self, *args, **kwargs):
+  def assertProtoEqual(self, *args: Any, **kwargs: Any) -> None:
     assertProtoEqual(self, *args, **kwargs)

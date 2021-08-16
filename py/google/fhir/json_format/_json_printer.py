@@ -44,45 +44,45 @@ class _FhirJsonFormat(enum.Enum):
 class _JsonTextGenerator(abc.ABC):
   """An abstract base class defining how to generate JSON text."""
 
-  def __init__(self):
+  def __init__(self) -> None:
     self._output = []
 
   @abc.abstractmethod
-  def indent(self):
+  def indent(self) -> None:
     raise NotImplementedError('Subclasses *must* implement indent().')
 
   @abc.abstractmethod
-  def outdent(self):
+  def outdent(self) -> None:
     raise NotImplementedError('Subclasses *must* implement outdent().')
 
   @abc.abstractmethod
-  def add_newline(self):
+  def add_newline(self) -> None:
     raise NotImplementedError('Subclasses *must* implement add_newline().')
 
-  def push(self, value: str):
+  def push(self, value: str) -> None:
     self._output.append(value)
 
-  def add_field(self, field_name: str, value: Optional[str] = None):
+  def add_field(self, field_name: str, value: Optional[str] = None) -> None:
     self.push(f'"{field_name}": ')
     if value is not None:
       self.push(value)
 
-  def open_json_object(self):
+  def open_json_object(self) -> None:
     self.push('{')
     self.indent()
     self.add_newline()
 
-  def close_json_object(self):
+  def close_json_object(self) -> None:
     self.outdent()
     self.add_newline()
     self.push('}')
 
-  def open_json_list(self):
+  def open_json_list(self) -> None:
     self.push('[')
     self.indent()
     self.add_newline()
 
-  def close_json_list(self):
+  def close_json_list(self) -> None:
     self.outdent()
     self.add_newline()
     self.push(']')
@@ -91,7 +91,7 @@ class _JsonTextGenerator(abc.ABC):
     """Returns the contents of the output as a string."""
     return ''.join(self._output)
 
-  def clear(self):
+  def clear(self) -> None:
     """Resets the state of the receiver."""
     self._output.clear()
 
@@ -99,22 +99,22 @@ class _JsonTextGenerator(abc.ABC):
 class _PrettyJsonTextGenerator(_JsonTextGenerator):
   """A JSON text generator with a space delimiter indent and newlines."""
 
-  def __init__(self, indent_size: int):
+  def __init__(self, indent_size: int) -> None:
     super().__init__()
     self._indent_size = indent_size
     self._current_indent = 0
 
-  def indent(self):
+  def indent(self) -> None:
     self._current_indent += self._indent_size
 
-  def outdent(self):
+  def outdent(self) -> None:
     self._current_indent -= self._indent_size
 
-  def add_newline(self):
+  def add_newline(self) -> None:
     self.push('\n')
     self.push(' ' * self._current_indent)
 
-  def clear(self):
+  def clear(self) -> None:
     super().clear()
     self._current_indent = 0
 
@@ -122,13 +122,13 @@ class _PrettyJsonTextGenerator(_JsonTextGenerator):
 class _CompactJsonTextGenerator(_JsonTextGenerator):
   """A JSON text generator with no indentation or newlines."""
 
-  def indent(self):
+  def indent(self) -> None:
     pass  # No-op
 
-  def outdent(self):
+  def outdent(self) -> None:
     pass  # No-op
 
-  def add_newline(self):
+  def add_newline(self) -> None:
     pass  # No-op
 
 
@@ -138,7 +138,7 @@ class JsonPrinter:
   @classmethod
   def pretty_printer(cls,
                      primitive_handler_: primitive_handler.PrimitiveHandler,
-                     indent_size: int):
+                     indent_size: int) -> 'JsonPrinter':
     """Returns a printer for FHIR JSON with spaces and newlines.
 
     Args:
@@ -149,8 +149,9 @@ class JsonPrinter:
                _FhirJsonFormat.PURE)
 
   @classmethod
-  def compact_printer(cls,
-                      primitive_handler_: primitive_handler.PrimitiveHandler):
+  def compact_printer(
+      cls,
+      primitive_handler_: primitive_handler.PrimitiveHandler) -> 'JsonPrinter':
     """Returns a printer for FHIR JSON with no spaces or newlines."""
     return cls(primitive_handler_, _CompactJsonTextGenerator(),
                _FhirJsonFormat.PURE)
@@ -158,7 +159,7 @@ class JsonPrinter:
   @classmethod
   def pretty_printer_for_analytics(
       cls, primitive_handler_: primitive_handler.PrimitiveHandler,
-      indent_size: int):
+      indent_size: int) -> 'JsonPrinter':
     """Returns a printer for Analytic FHIR JSON with spaces and newlines.
 
     Args:
@@ -170,13 +171,15 @@ class JsonPrinter:
 
   @classmethod
   def compact_printer_for_analytics(
-      cls, primitive_handler_: primitive_handler.PrimitiveHandler):
+      cls,
+      primitive_handler_: primitive_handler.PrimitiveHandler) -> 'JsonPrinter':
     """Returns a printer for Analytic FHIR JSON with no spaces or newlines."""
     return cls(primitive_handler_, _CompactJsonTextGenerator(),
                _FhirJsonFormat.ANALYTIC)
 
   def __init__(self, primitive_handler_: primitive_handler.PrimitiveHandler,
-               generator: _JsonTextGenerator, json_format: _FhirJsonFormat):
+               generator: _JsonTextGenerator,
+               json_format: _FhirJsonFormat) -> None:
     """Creates a new instance of JsonPrinter.
 
     Note that this is for *internal-use* only. External clients should leverage
@@ -193,7 +196,8 @@ class JsonPrinter:
     self.generator = generator
     self.json_format = json_format
 
-  def _print_list(self, values: List[Any], print_func: Callable[[Any], None]):
+  def _print_list(self, values: List[Any], print_func: Callable[[Any],
+                                                                None]) -> None:
     """Adds the printed JSON list representation of values to _output.
 
     Args:
@@ -213,7 +217,7 @@ class JsonPrinter:
 
   def _print_choice_field(self, field_name: str,
                           field: descriptor.FieldDescriptor,
-                          choice_container: message.Message):
+                          choice_container: message.Message) -> None:
     """Prints a FHIR choice field.
 
     This field is expected to have one valid oneof set.
@@ -245,7 +249,8 @@ class JsonPrinter:
                                 value)
 
   def _print_primitive_field(self, field_name: str,
-                             field: descriptor.FieldDescriptor, value: Any):
+                             field: descriptor.FieldDescriptor,
+                             value: Any) -> None:
     """Prints the primitive field.
 
     Args:
@@ -296,7 +301,8 @@ class JsonPrinter:
           self._print(wrapper.get_element())
 
   def _print_message_field(self, field_name: str,
-                           field: descriptor.FieldDescriptor, value: Any):
+                           field: descriptor.FieldDescriptor,
+                           value: Any) -> None:
     """Prints singular and repeated fields from a message."""
     self.generator.add_field(field_name)
     if proto_utils.field_is_repeated(field):
@@ -304,7 +310,7 @@ class JsonPrinter:
     else:
       self._print(cast(message.Message, value))
 
-  def _print_extension(self, extension: message.Message):
+  def _print_extension(self, extension: message.Message) -> None:
     """Pushes the Extension into the JSON text generator.
 
     If the _FhirJsonFormat is set to ANALYTIC, this method only prints the url.
@@ -320,7 +326,8 @@ class JsonPrinter:
     else:
       self._print_message(extension)
 
-  def _print_contained_resource(self, contained_resource: message.Message):
+  def _print_contained_resource(self,
+                                contained_resource: message.Message) -> None:
     """Prints the set fields of the contained resource.
 
     If the _FhirJsonFormat is set to ANALYTIC, this method only prints the url.
@@ -336,7 +343,7 @@ class JsonPrinter:
       else:  # print the entire contained resource...
         self._print(set_field_value)
 
-  def _print_reference(self, reference: message.Message):
+  def _print_reference(self, reference: message.Message) -> None:
     """Standardizes and prints the provided reference.
 
     Note that "standardization" in the case of PURE FHIR JSON refers to
@@ -360,7 +367,7 @@ class JsonPrinter:
     else:
       self._print_message(reference)
 
-  def _print_message(self, msg: message.Message):
+  def _print_message(self, msg: message.Message) -> None:
     """Prints the representation of message."""
     self.generator.open_json_object()
 
@@ -389,7 +396,7 @@ class JsonPrinter:
 
     self.generator.close_json_object()
 
-  def _print(self, msg: message.Message):
+  def _print(self, msg: message.Message) -> None:
     """Prints the JSON representation of message to the underlying generator."""
     # TODO: Identify ContainedResource with an annotation
     if msg.DESCRIPTOR.name == 'ContainedResource':

@@ -166,12 +166,12 @@ class FhirPackage:
         code_systems=code_systems,
         value_sets=value_sets)
 
-  def __init__(
-      self, *, package_info: profile_config_pb2.PackageInfo,
-      structure_definitions: List[structure_definition_pb2.StructureDefinition],
-      search_parameters: List[search_parameter_pb2.SearchParameter],
-      code_systems: List[code_system_pb2.CodeSystem],
-      value_sets: List[value_set_pb2.ValueSet]):
+  def __init__(self, *, package_info: profile_config_pb2.PackageInfo,
+               structure_definitions: List[
+                   structure_definition_pb2.StructureDefinition],
+               search_parameters: List[search_parameter_pb2.SearchParameter],
+               code_systems: List[code_system_pb2.CodeSystem],
+               value_sets: List[value_set_pb2.ValueSet]) -> None:
     """Creates a new instance of `FhirPackage`. Callers should favor `load`."""
     self.package_info = package_info
     self.structure_definitions = structure_definitions

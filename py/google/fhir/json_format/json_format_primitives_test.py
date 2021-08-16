@@ -12,7 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 """Tests json primitives in //com_google_fhir/testdata/primitives."""
 
 import abc
@@ -50,7 +49,7 @@ class _PrimitiveData:
   field_type: Type[message.Message]
 
   def __init__(self, name: str, field_name: str,
-               field_type: Type[message.Message]):
+               field_type: Type[message.Message]) -> None:
     self.name = name
     self.field_name = field_name
     self.field_type = field_type
@@ -95,7 +94,8 @@ class _Base():
       self.primitive_data_list = _get_list_of_primitive_data(
           self.datatypes_descriptor)
 
-    def _set_primitive_has_no_value_extension(self, primitive: message.Message):
+    def _set_primitive_has_no_value_extension(
+        self, primitive: message.Message) -> None:
       """Sets the PrimitiveHasNoValue FHIR extension on the primitive."""
       extensions_field = primitive.DESCRIPTOR.fields_by_name['extension']
       primitive_has_no_value = extensions.create_primitive_has_no_value(

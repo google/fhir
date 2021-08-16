@@ -18,7 +18,7 @@ See also: https://www.hl7.org/fhir/extensibility.html.
 """
 
 import threading
-from typing import cast, Any, List, Type, TypeVar
+from typing import cast, Any, Dict, List, Type, TypeVar
 
 from google.protobuf import descriptor
 from google.protobuf import message
@@ -47,7 +47,8 @@ _value_field_map_cv = threading.Condition(threading.Lock())
 _T = TypeVar('_T', bound=message.Message)
 
 
-def _get_value_field_mapping_for_extension(extension: message.Message):
+def _get_value_field_mapping_for_extension(
+    extension: message.Message) -> Dict[str, message.Message]:
   """Returns a mapping for each possible value of the extension.value field.
 
   The mapping is from the full field name of each possible value in the
@@ -85,7 +86,8 @@ def _get_value_field_mapping_for_extension(extension: message.Message):
     return _value_field_map[extension.DESCRIPTOR.full_name]
 
 
-def _verify_field_is_proto_message_type(field: descriptor.FieldDescriptor):
+def _verify_field_is_proto_message_type(
+    field: descriptor.FieldDescriptor) -> None:
   """Verifies that the provided FieldDescriptor is a protobuf Message."""
   if field.type != descriptor.FieldDescriptor.TYPE_MESSAGE:
     raise ValueError(
@@ -107,9 +109,9 @@ def _get_populated_extension_value_field(
   return field
 
 
-def _add_extension_value_to_message(extension: message.Message,
-                                    msg: message.Message,
-                                    message_field: descriptor.FieldDescriptor):
+def _add_extension_value_to_message(
+    extension: message.Message, msg: message.Message,
+    message_field: descriptor.FieldDescriptor) -> None:
   """Serialize the provided extension and add it to the message.
 
   Args:
@@ -176,7 +178,8 @@ def _add_extension_value_to_message(extension: message.Message,
     proto_utils.set_value_at_field(msg, message_field, value)
 
 
-def add_extension_to_message(extension: message.Message, msg: message.Message):
+def add_extension_to_message(extension: message.Message,
+                             msg: message.Message) -> None:
   """Recursively parses extension and adds to message.
 
   Args:
@@ -261,7 +264,8 @@ def extension_to_message(extension: message.Message,
   return msg
 
 
-def _add_fields_to_extension(msg: message.Message, extension: message.Message):
+def _add_fields_to_extension(msg: message.Message,
+                             extension: message.Message) -> None:
   """Adds the fields from message to extension."""
   for field in msg.DESCRIPTOR.fields:
     _verify_field_is_proto_message_type(field)
@@ -276,7 +280,7 @@ def _add_fields_to_extension(msg: message.Message, extension: message.Message):
 
 
 def _add_value_to_extension(msg: message.Message, extension: message.Message,
-                            is_choice_type: bool):
+                            is_choice_type: bool) -> None:
   """Adds the fields from msg to a generic Extension.
 
   Attempts are first made to set the "value" field of the generic Extension
@@ -288,7 +292,7 @@ def _add_value_to_extension(msg: message.Message, extension: message.Message,
     msg: The message whose values to add to extension.
     extension: The generic Extension to populate.
     is_choice_type: Whether or not the provided message represents a "choice"
-    type.
+      type.
   """
   if is_choice_type:
     oneofs = msg.DESCRIPTOR.oneofs
@@ -310,7 +314,7 @@ def _add_value_to_extension(msg: message.Message, extension: message.Message,
     value_field = value_field_mapping.get(msg.DESCRIPTOR.full_name)
     if value_field is not None:
       proto_utils.set_value_at_field(
-          cast(Any, extension).value, value_field, msg)
+          cast(Any, extension).value, cast(Any, value_field), msg)
     elif annotation_utils.has_fhir_valueset_url(msg):
       codes.copy_code(msg, cast(Any, extension).value.code)
     elif fhir_types.is_type_or_profile_of_coding(msg):
@@ -319,7 +323,8 @@ def _add_value_to_extension(msg: message.Message, extension: message.Message,
       _add_fields_to_extension(msg, extension)
 
 
-def add_message_to_extension(msg: message.Message, extension: message.Message):
+def add_message_to_extension(msg: message.Message,
+                             extension: message.Message) -> None:
   """Adds the contents of msg to extension.
 
   Args:
@@ -384,7 +389,7 @@ def message_to_extension(msg: message.Message, extension_cls: Type[_T]) -> _T:
   return extension
 
 
-def clear_fhir_extensions_with_url(msg: message.Message, url: str):
+def clear_fhir_extensions_with_url(msg: message.Message, url: str) -> None:
   """Removes FHIR extensions that have the provided url."""
   fhir_extensions = get_fhir_extensions(msg)
   updated_fhir_extensions = [

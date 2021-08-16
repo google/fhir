@@ -21,6 +21,6 @@ from google.fhir.r4 import primitive_handler
 _PRIMITIVE_HANDLER = primitive_handler.PrimitiveHandler()
 
 
-def validate_resource(resource: message.Message):
+def validate_resource(resource: message.Message) -> None:
   """Performs basic FHIR constraint validation on the provided resource."""
   resource_validation.validate_resource(resource, _PRIMITIVE_HANDLER)

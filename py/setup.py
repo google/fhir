@@ -45,7 +45,9 @@ if _protoc is None:
   raise FileNotFoundError('protoc was not found.')
 
 
-def _generate_python_protos(proto_files: List[str], *, python_out: str = '.'):
+def _generate_python_protos(proto_files: List[str],
+                            *,
+                            python_out: str = '.') -> None:
   """Generates FHIR Python protobuf classes.
 
   Args:
@@ -108,7 +110,7 @@ def _parse_requirements(path: str) -> List[str]:
 class _FhirBuildPy(build_py.build_py):
   """Generates _py_pb2.py FHIR protobuf classes."""
 
-  def run(self):
+  def run(self) -> None:
     if not self.dry_run:
       _generate_python_protos(_PROTO_FILES, python_out=self.build_lib)
       build_py.build_py.run(self)
@@ -117,7 +119,7 @@ class _FhirBuildPy(build_py.build_py):
 class _FhirSdist(sdist.sdist):
   """Generates a Source Archive for the FHIR R4 specification."""
 
-  def make_release_tree(self, base_dir: str, files: List[str]):
+  def make_release_tree(self, base_dir: str, files: List[str]) -> None:
     sdist.sdist.make_release_tree(self, base_dir, files)
     _generate_python_protos(_PROTO_FILES, python_out=base_dir)
 
@@ -125,7 +127,7 @@ class _FhirSdist(sdist.sdist):
 class _FhirClean(clean.clean):
   """Removes generated distribution files."""
 
-  def run(self):
+  def run(self) -> None:
     clean.clean.run(self)
     targets = (
         os.path.join(_HERE, 'build'),

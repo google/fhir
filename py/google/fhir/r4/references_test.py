@@ -70,5 +70,6 @@ class ReferencesTest(absltest.TestCase):
         datatypes_pb2.String(
             value='http://acme.com/ehr/fhir/Practitioner/2323-33-4'))
 
+
 if __name__ == '__main__':
   absltest.main()

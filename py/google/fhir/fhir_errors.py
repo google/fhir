@@ -29,7 +29,7 @@ class ErrorReporter(abc.ABC):
   """An abstract base class for FHIRPath encoding errors."""
 
   @abc.abstractmethod
-  def report_conversion_error(self, element_path: str, msg: str):
+  def report_conversion_error(self, element_path: str, msg: str) -> None:
     """Reports the given error during FHIR conversion.
 
     This indicates that the resource does not fully comply with the FHIR
@@ -44,7 +44,7 @@ class ErrorReporter(abc.ABC):
         'Subclasses *must* override `report_conversion_error`.')
 
   @abc.abstractmethod
-  def report_validation_error(self, element_path: str, msg: str):
+  def report_validation_error(self, element_path: str, msg: str) -> None:
     """Reports the given error during FHIR validation.
 
     This indicates that the resource does not fully comply with the FHIR
@@ -58,7 +58,7 @@ class ErrorReporter(abc.ABC):
         'Subclasses *must* override `report_validation_error`.')
 
   @abc.abstractmethod
-  def report_validation_warning(self, element_path: str, msg: str):
+  def report_validation_warning(self, element_path: str, msg: str) -> None:
     """Reports the given warning during FHIR validation.
 
     This indicates that the element complies with the FHIR specification, but
@@ -74,7 +74,7 @@ class ErrorReporter(abc.ABC):
 
   @abc.abstractmethod
   def report_fhir_path_error(self, element_path: str, fhir_path_constraint: str,
-                             msg: str):
+                             msg: str) -> None:
     """Reports a FHIRPath constraint error during validation and/or encoding.
 
     The base implementation logs to the `error` context and raises `e` by
@@ -90,7 +90,7 @@ class ErrorReporter(abc.ABC):
 
   @abc.abstractmethod
   def report_fhir_path_warning(self, element_path: str,
-                               fhir_path_constraint: str, msg: str):
+                               fhir_path_constraint: str, msg: str) -> None:
     """Reports a FHIRPath constraint warning during validation and/or encoding.
 
     Args:
@@ -115,33 +115,33 @@ class ListErrorReporter(ErrorReporter):
     warnings: A list of warning messages encountered.
   """
 
-  def __init__(self):
+  def __init__(self) -> None:
     self.errors: List[str] = []
     self.warnings: List[str] = []
 
-  def report_conversion_error(self, element_path: str, msg: str):
+  def report_conversion_error(self, element_path: str, msg: str) -> None:
     """Logs to the `error` context and stores `msg` in `errors`."""
     logging.error('%s; %s', element_path, msg)
     self.errors.append(msg)
 
-  def report_validation_error(self, element_path: str, msg: str):
+  def report_validation_error(self, element_path: str, msg: str) -> None:
     """Logs to the `error` context and stores `msg` in `errors`."""
     logging.error('%s; %s', element_path, msg)
     self.errors.append(msg)
 
-  def report_validation_warning(self, element_path: str, msg: str):
+  def report_validation_warning(self, element_path: str, msg: str) -> None:
     """Logs to the `warning` context and stores `msg` in `warnings`."""
     logging.warning('%s; %s', element_path, msg)
     self.warnings.append(msg)
 
   def report_fhir_path_error(self, element_path: str, fhir_path_constraint: str,
-                             msg: str):
+                             msg: str) -> None:
     """Logs to the `error` context and stores `msg` in `errors`."""
     logging.error('%s:%s; %s', element_path, fhir_path_constraint, msg)
     self.errors.append(msg)
 
   def report_fhir_path_warning(self, element_path: str,
-                               fhir_path_constraint: str, msg: str):
+                               fhir_path_constraint: str, msg: str) -> None:
     """Logs to the `warning` context and stores `msg` in `warnings`."""
     logging.warning('%s:%s; %s', element_path, fhir_path_constraint, msg)
     self.warnings.append(msg)

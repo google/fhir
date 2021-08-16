@@ -14,6 +14,8 @@
 # limitations under the License.
 """Test proto_utils functionality."""
 
+from typing import List
+
 from absl.testing import absltest
 from proto.google.fhir.proto.r4 import uscore_pb2
 from proto.google.fhir.proto.r4.core import codes_pb2
@@ -331,7 +333,7 @@ class ProtoUtilsTest(absltest.TestCase):
         patient_pb2.Patient.DESCRIPTOR, name=[patient_name])
     self.assertEqual(expected_patient, actual_patient)
 
-  def _create_patient_with_names(self, names):
+  def _create_patient_with_names(self, names: List[str]) -> patient_pb2.Patient:
     patient = patient_pb2.Patient()
     for name in names:
       patient.name.append(
