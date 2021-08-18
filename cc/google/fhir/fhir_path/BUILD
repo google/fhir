@@ -4,6 +4,8 @@ licenses(["notice"])
 
 package(default_visibility = ["//visibility:public"])
 
+exports_files(["FhirPath.g4"])
+
 antlr4_cc_lexer(
     name = "fhir_path_lexer",
     src = "FhirPath.g4",
