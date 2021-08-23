@@ -537,16 +537,16 @@ func (m *Marshaller) marshalMessageToMap(pb protoreflect.Message) (jsonpbhelper.
 }
 
 func (m *Marshaller) marshalPrimitiveType(rpb protoreflect.Message) (jsonpbhelper.IsJSON, error) {
-	nv := m.cfg.newPrimitiveHasNoValue(true)
 	pb := rpb.Interface().(proto.Message)
-	if jsonpbhelper.HasInternalExtension(pb, nv) {
-		_ = jsonpbhelper.RemoveInternalExtension(pb, nv)
+	if jsonpbhelper.HasExtension(pb, jsonpbhelper.PrimitiveHasNoValueURL) {
+		_ = jsonpbhelper.RemoveExtension(pb, jsonpbhelper.PrimitiveHasNoValueURL)
 		return nil, nil
 	}
+
 	desc := rpb.Descriptor()
 	switch desc.Name() {
 	case "Base64Binary":
-		binary, err := serializeBinary(pb, m.cfg.newBase64BinarySeparatorStride)
+		binary, err := serializeBinary(pb)
 		if err != nil {
 			return nil, fmt.Errorf("serialize base64Binary: %v", err)
 		}

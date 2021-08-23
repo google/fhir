@@ -105,6 +105,13 @@ const (
 	// The canonical structure definition URL for extension.
 	extStructDefURL = "http://hl7.org/fhir/StructureDefinition/Extension"
 
+	// Base64BinarySeparatorStrideURL is the canonical structure definition URL
+	// for internal extension Base64BinarySeparatorStride.
+	Base64BinarySeparatorStrideURL = "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride"
+	// PrimitiveHasNoValueURL is the canonical structure definition URL
+	// for internal extension PrimitiveHasNoValue.
+	PrimitiveHasNoValueURL = "https://g.co/fhir/StructureDefinition/primitiveHasNoValue"
+
 	// FHIR spec limits strings to 1 MB.
 	maxStringSize = 1024 * 1024
 )
@@ -533,14 +540,14 @@ func GetTimeFromUsec(us int64, tz string) (time.Time, error) {
 
 // IsPrimitiveType returns true iff the message type d is a primitive FHIR data type.
 func IsPrimitiveType(d protoreflect.MessageDescriptor) bool {
-	ext := proto.GetExtension(d.Options(), apb.E_StructureDefinitionKind)
-	return ext.(apb.StructureDefinitionKindValue) == apb.StructureDefinitionKindValue_KIND_PRIMITIVE_TYPE
+	ext := proto.GetExtension(d.Options(), apb.E_StructureDefinitionKind).(apb.StructureDefinitionKindValue)
+	return ext == apb.StructureDefinitionKindValue_KIND_PRIMITIVE_TYPE
 }
 
 // IsResourceType returns true iff the message type d is a FHIR resource type.
 func IsResourceType(d protoreflect.MessageDescriptor) bool {
-	ext := proto.GetExtension(d.Options(), apb.E_StructureDefinitionKind)
-	return ext.(apb.StructureDefinitionKindValue) == apb.StructureDefinitionKindValue_KIND_RESOURCE
+	ext := proto.GetExtension(d.Options(), apb.E_StructureDefinitionKind).(apb.StructureDefinitionKindValue)
+	return ext == apb.StructureDefinitionKindValue_KIND_RESOURCE
 }
 
 // IsChoice returns true iff the message type d is a FHIR choice type.
@@ -637,18 +644,7 @@ func HasInternalExtension(pb, ext proto.Message) bool {
 	if err != nil {
 		return false
 	}
-	m := pb.ProtoReflect()
-	extField, err := GetExtensionFieldDesc(m.Descriptor())
-	if err != nil {
-		return false
-	}
-	list := m.Get(extField).List()
-	for i := 0; i < list.Len(); i++ {
-		if extensionHasURL(list.Get(i).Message(), url) {
-			return true
-		}
-	}
-	return false
+	return HasExtension(pb, url)
 }
 
 // AddInternalExtension adds a Google-internal extension ext if it is not existing in proto pb.
@@ -676,6 +672,90 @@ func RemoveInternalExtension(pb, ext proto.Message) error {
 	if err != nil {
 		return err
 	}
+	return RemoveExtension(pb, url)
+}
+
+// GetInternalExtension returns the first extension in pb whose URL matches that of extension ext
+// from proto pb, and nil if there is no match. Only the extension type is used, and its values, if
+// populated, in the input extension is ignored.
+func GetInternalExtension(pb, ext proto.Message) (proto.Message, error) {
+	url, err := InternalExtensionURL(ext.ProtoReflect().Descriptor())
+	if err != nil {
+		return nil, err
+	}
+	return GetExtension(pb, url)
+}
+
+// InternalExtensionURL returns the internal extension URL.
+func InternalExtensionURL(desc protoreflect.MessageDescriptor) (string, error) {
+	baseStrs := proto.GetExtension(desc.Options(), apb.E_FhirProfileBase).([]string)
+	if len(baseStrs) == 0 {
+		return "", fmt.Errorf("unable to get fhir_profile_base strings")
+	}
+	found := false
+	for _, baseStr := range baseStrs {
+		if baseStr == extStructDefURL {
+			found = true
+		}
+	}
+	if !found {
+		return "", fmt.Errorf("message does not have Extension as a profile base")
+	}
+	if !proto.HasExtension(desc.Options(), apb.E_FhirStructureDefinitionUrl) {
+		return "", fmt.Errorf("missing required fhir_structure_definition extension")
+	}
+	url := proto.GetExtension(desc.Options(), apb.E_FhirStructureDefinitionUrl).(string)
+	if url == "" {
+		return "", fmt.Errorf("unable to get fhir_structure_definition string")
+	}
+	return url, nil
+}
+
+// GetExtension returns the first extension in pb whose URL matches the given url,
+// and nil if there is no match.
+func GetExtension(pb proto.Message, url string) (proto.Message, error) {
+	if pb == nil {
+		return nil, nil
+	}
+	m := pb.ProtoReflect()
+	extField, err := GetExtensionFieldDesc(m.Descriptor())
+	if err != nil {
+		return nil, err
+	}
+	list := m.Get(extField).List()
+	for i := 0; i < list.Len(); i++ {
+		m := list.Get(i).Message()
+		if extensionHasURL(m, url) {
+			return m.Interface().(proto.Message), nil
+		}
+	}
+	return nil, nil
+}
+
+// HasExtension returns true iff the proto message has an extension with the given url
+func HasExtension(pb proto.Message, url string) bool {
+	if pb == nil {
+		return false
+	}
+	m := pb.ProtoReflect()
+	extField, err := GetExtensionFieldDesc(m.Descriptor())
+	if err != nil {
+		return false
+	}
+	list := m.Get(extField).List()
+	for i := 0; i < list.Len(); i++ {
+		if extensionHasURL(list.Get(i).Message(), url) {
+			return true
+		}
+	}
+	return false
+}
+
+// RemoveExtension removes extension with given url from proto pb if it exists.
+func RemoveExtension(pb proto.Message, url string) error {
+	if pb == nil {
+		return nil
+	}
 	m := pb.ProtoReflect()
 	extField, err := GetExtensionFieldDesc(m.Descriptor())
 	if err != nil {
@@ -699,56 +779,6 @@ func RemoveInternalExtension(pb, ext proto.Message) error {
 		}
 	}
 	return nil
-}
-
-// GetInternalExtension returns the first extension in pb whose URL matches that of extension ext
-// from proto pb, and nil if there is no match. Only the extension type is used, and its values, if
-// populated, in the input extension is ignored.
-func GetInternalExtension(pb, ext proto.Message) (proto.Message, error) {
-	url, err := InternalExtensionURL(ext.ProtoReflect().Descriptor())
-	if err != nil {
-		return nil, err
-	}
-	m := pb.ProtoReflect()
-	extField, err := GetExtensionFieldDesc(m.Descriptor())
-	if err != nil {
-		return nil, err
-	}
-	list := m.Get(extField).List()
-	for i := 0; i < list.Len(); i++ {
-		m := list.Get(i).Message()
-		if extensionHasURL(m, url) {
-			return m.Interface().(proto.Message), nil
-		}
-	}
-	return nil, nil
-}
-
-// InternalExtensionURL returns the internal extension URL.
-func InternalExtensionURL(desc protoreflect.MessageDescriptor) (string, error) {
-	baseBytes := proto.GetExtension(desc.Options(), apb.E_FhirProfileBase)
-	baseStrs := baseBytes.([]string)
-	if len(baseStrs) == 0 {
-		return "", fmt.Errorf("unable to get fhir_profile_base strings")
-	}
-	found := false
-	for _, baseStr := range baseStrs {
-		if baseStr == extStructDefURL {
-			found = true
-		}
-	}
-	if !found {
-		return "", fmt.Errorf("message does not have Extension as a profile base")
-	}
-	if !proto.HasExtension(desc.Options(), apb.E_FhirStructureDefinitionUrl) {
-		return "", fmt.Errorf("missing required fhir_structure_definition extension")
-	}
-	ext := proto.GetExtension(desc.Options(), apb.E_FhirStructureDefinitionUrl)
-	url := ext.(string)
-	if url == "" {
-		return "", fmt.Errorf("unable to get fhir_structure_definition string")
-	}
-	return url, nil
 }
 
 // ExtensionURL returns the extension URL value.
@@ -1033,8 +1063,8 @@ func UnmarshalCode(jsonPath string, in protoreflect.Message, rm json.RawMessage)
 		values := f.Enum().Values()
 		for i := 0; i < values.Len(); i++ {
 			ev := values.Get(i)
-			ext := proto.GetExtension(ev.Options(), apb.E_FhirOriginalCode)
-			if origCode := ext.(string); origCode == val {
+			origCode := proto.GetExtension(ev.Options(), apb.E_FhirOriginalCode).(string)
+			if origCode == val {
 				pb.Set(f, protoreflect.ValueOf(ev.Number()))
 				return pb.Interface().(proto.Message), nil
 			}

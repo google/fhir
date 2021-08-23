@@ -469,21 +469,23 @@ func (u *Unmarshaller) mergePrimitiveType(dst, src proto.Message) error {
 		proto.Merge(dst, src)
 		return nil
 	}
-	nv := u.cfg.newPrimitiveHasNoValue(true)
-	dnv := jsonpbhelper.HasInternalExtension(dst, nv)
+
+	dnv := jsonpbhelper.HasExtension(dst, jsonpbhelper.PrimitiveHasNoValueURL)
 	if dnv {
-		if err := jsonpbhelper.RemoveInternalExtension(dst, nv); err != nil {
+		if err := jsonpbhelper.RemoveExtension(dst, jsonpbhelper.PrimitiveHasNoValueURL); err != nil {
 			return err
 		}
 	}
-	snv := jsonpbhelper.HasInternalExtension(src, nv)
+
+	snv := jsonpbhelper.HasExtension(src, jsonpbhelper.PrimitiveHasNoValueURL)
 	proto.Merge(dst, src)
 	if !dnv && snv {
 		// Remove the HasNoValue extension if dst actually has value.
-		if err := jsonpbhelper.RemoveInternalExtension(dst, nv); err != nil {
+		if err := jsonpbhelper.RemoveExtension(dst, jsonpbhelper.PrimitiveHasNoValueURL); err != nil {
 			return err
 		}
 	}
+
 	return nil
 }
 

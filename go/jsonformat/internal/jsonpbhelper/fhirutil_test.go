@@ -441,6 +441,531 @@ func TestRemoveInternalExtension(t *testing.T) {
 	}
 }
 
+func TestHasExtension(t *testing.T) {
+	tests := []struct {
+		name string
+		pb   proto.Message
+		url  string
+		want bool
+	}{
+		{
+			"nil proto",
+			nil,
+			"",
+			false,
+		},
+		{
+			"R3 has extension",
+			&d3pb.String{
+				Extension: []*d3pb.Extension{{
+					Url: &d3pb.Uri{
+						Value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
+					},
+				}},
+			},
+			"https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
+			true,
+		},
+		{
+			"R3 has different extension",
+			&d3pb.String{
+				Extension: []*d3pb.Extension{{
+					Url: &d3pb.Uri{
+						Value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
+					},
+				}},
+			},
+			"https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
+			false,
+		},
+		{
+			"R3 has extension with empty URL",
+			&d3pb.String{
+				Extension: []*d3pb.Extension{{
+					Url: &d3pb.Uri{
+						Value: "",
+					},
+				}},
+			},
+			"",
+			true,
+		},
+		{
+			"R3 has extension with no URL",
+			&d3pb.String{
+				Extension: []*d3pb.Extension{{
+					Value: &d3pb.Extension_ValueX{
+						Choice: &d3pb.Extension_ValueX_StringValue{
+							StringValue: &d3pb.String{
+								Value: "  ",
+							},
+						},
+					},
+				},
+				},
+			},
+			"",
+			false,
+		},
+	}
+
+	for _, test := range tests {
+		if got := HasExtension(test.pb, test.url); got != test.want {
+			t.Errorf("HasExtension(%v): got %v, want %v", test.name, got, test.want)
+		}
+	}
+}
+
+func TestGetExtension(t *testing.T) {
+	tests := []struct {
+		name string
+		pb   proto.Message
+		url  string
+		want proto.Message
+	}{
+		{
+			"nil proto",
+			nil,
+			"",
+			nil,
+		},
+		{
+			"R3 got extension",
+			&d3pb.Base64Binary{
+				Value: []byte("val"),
+				Extension: []*d3pb.Extension{{
+					Url: &d3pb.Uri{
+						Value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
+					},
+					Extension: []*d3pb.Extension{{
+						Url: &d3pb.Uri{
+							Value: "separator",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_StringValue{
+								StringValue: &d3pb.String{
+									Value: "  ",
+								},
+							},
+						},
+					}, {
+						Url: &d3pb.Uri{
+							Value: "stride",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_PositiveInt{
+								PositiveInt: &d3pb.PositiveInt{
+									Value: 2,
+								},
+							},
+						},
+					}},
+				}},
+			},
+			"https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
+			&d3pb.Extension{
+				Url: &d3pb.Uri{
+					Value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
+				},
+				Extension: []*d3pb.Extension{{
+					Url: &d3pb.Uri{
+						Value: "separator",
+					},
+					Value: &d3pb.Extension_ValueX{
+						Choice: &d3pb.Extension_ValueX_StringValue{
+							StringValue: &d3pb.String{
+								Value: "  ",
+							},
+						},
+					},
+				}, {
+					Url: &d3pb.Uri{
+						Value: "stride",
+					},
+					Value: &d3pb.Extension_ValueX{
+						Choice: &d3pb.Extension_ValueX_PositiveInt{
+							PositiveInt: &d3pb.PositiveInt{
+								Value: 2,
+							},
+						},
+					},
+				}},
+			},
+		},
+		{
+			"R3 does not exists",
+			&d3pb.Base64Binary{
+				Value: []byte("val"),
+				Extension: []*d3pb.Extension{{
+					Url: &d3pb.Uri{
+						Value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
+					},
+					Extension: []*d3pb.Extension{{
+						Url: &d3pb.Uri{
+							Value: "separator",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_StringValue{
+								StringValue: &d3pb.String{
+									Value: "  ",
+								},
+							},
+						},
+					}, {
+						Url: &d3pb.Uri{
+							Value: "stride",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_PositiveInt{
+								PositiveInt: &d3pb.PositiveInt{
+									Value: 2,
+								},
+							},
+						},
+					}},
+				}},
+			},
+			"https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
+			nil,
+		},
+		{
+			"R3 remove extension with empty URL",
+			&d3pb.Base64Binary{
+				Value: []byte("val"),
+				Extension: []*d3pb.Extension{{
+					Url: &d3pb.Uri{
+						Value: "",
+					},
+					Extension: []*d3pb.Extension{{
+						Url: &d3pb.Uri{
+							Value: "separator",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_StringValue{
+								StringValue: &d3pb.String{
+									Value: "  ",
+								},
+							},
+						},
+					}, {
+						Url: &d3pb.Uri{
+							Value: "stride",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_PositiveInt{
+								PositiveInt: &d3pb.PositiveInt{
+									Value: 2,
+								},
+							},
+						},
+					}},
+				}},
+			},
+			"",
+			&d3pb.Extension{
+				Url: &d3pb.Uri{
+					Value: "",
+				},
+				Extension: []*d3pb.Extension{{
+					Url: &d3pb.Uri{
+						Value: "separator",
+					},
+					Value: &d3pb.Extension_ValueX{
+						Choice: &d3pb.Extension_ValueX_StringValue{
+							StringValue: &d3pb.String{
+								Value: "  ",
+							},
+						},
+					},
+				}, {
+					Url: &d3pb.Uri{
+						Value: "stride",
+					},
+					Value: &d3pb.Extension_ValueX{
+						Choice: &d3pb.Extension_ValueX_PositiveInt{
+							PositiveInt: &d3pb.PositiveInt{
+								Value: 2,
+							},
+						},
+					},
+				}},
+			},
+		},
+		{
+			"R3 extension with no URL",
+			&d3pb.Base64Binary{
+				Value: []byte("val"),
+				Extension: []*d3pb.Extension{{
+					Extension: []*d3pb.Extension{{
+						Url: &d3pb.Uri{
+							Value: "separator",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_StringValue{
+								StringValue: &d3pb.String{
+									Value: "  ",
+								},
+							},
+						},
+					}, {
+						Url: &d3pb.Uri{
+							Value: "stride",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_PositiveInt{
+								PositiveInt: &d3pb.PositiveInt{
+									Value: 2,
+								},
+							},
+						},
+					}},
+				}},
+			},
+			"",
+			nil,
+		},
+	}
+
+	for _, test := range tests {
+		got, err := GetExtension(test.pb, test.url)
+		if err != nil {
+			t.Errorf("RemoveExtension(%v): %v", test.name, err)
+		}
+		if diff := cmp.Diff(test.want, got, protocmp.Transform()); diff != "" {
+			t.Errorf("RemoveExtension(%v) returned unexpected diff: (-want, +got) %v", test.name, diff)
+		}
+	}
+}
+
+func TestRemoveExtension(t *testing.T) {
+	tests := []struct {
+		name string
+		pb   proto.Message
+		url  string
+		want proto.Message
+	}{
+		{
+			"nil proto",
+			nil,
+			"",
+			nil,
+		},
+		{
+			"R3 extension removed",
+			&d3pb.Base64Binary{
+				Value: []byte("val"),
+				Extension: []*d3pb.Extension{{
+					Url: &d3pb.Uri{
+						Value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
+					},
+					Extension: []*d3pb.Extension{{
+						Url: &d3pb.Uri{
+							Value: "separator",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_StringValue{
+								StringValue: &d3pb.String{
+									Value: "  ",
+								},
+							},
+						},
+					}, {
+						Url: &d3pb.Uri{
+							Value: "stride",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_PositiveInt{
+								PositiveInt: &d3pb.PositiveInt{
+									Value: 2,
+								},
+							},
+						},
+					}},
+				}},
+			},
+			"https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
+			&d3pb.Base64Binary{
+				Value: []byte("val"),
+			},
+		},
+		{
+			"R3 does not exists",
+			&d3pb.Base64Binary{
+				Value: []byte("val"),
+				Extension: []*d3pb.Extension{{
+					Url: &d3pb.Uri{
+						Value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
+					},
+					Extension: []*d3pb.Extension{{
+						Url: &d3pb.Uri{
+							Value: "separator",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_StringValue{
+								StringValue: &d3pb.String{
+									Value: "  ",
+								},
+							},
+						},
+					}, {
+						Url: &d3pb.Uri{
+							Value: "stride",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_PositiveInt{
+								PositiveInt: &d3pb.PositiveInt{
+									Value: 2,
+								},
+							},
+						},
+					}},
+				}},
+			},
+			"https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
+			&d3pb.Base64Binary{
+				Value: []byte("val"),
+				Extension: []*d3pb.Extension{{
+					Url: &d3pb.Uri{
+						Value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
+					},
+					Extension: []*d3pb.Extension{{
+						Url: &d3pb.Uri{
+							Value: "separator",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_StringValue{
+								StringValue: &d3pb.String{
+									Value: "  ",
+								},
+							},
+						},
+					}, {
+						Url: &d3pb.Uri{
+							Value: "stride",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_PositiveInt{
+								PositiveInt: &d3pb.PositiveInt{
+									Value: 2,
+								},
+							},
+						},
+					}},
+				}},
+			},
+		},
+		{
+			"R3 remove extension with empty URL",
+			&d3pb.Base64Binary{
+				Value: []byte("val"),
+				Extension: []*d3pb.Extension{{
+					Url: &d3pb.Uri{
+						Value: "",
+					},
+					Extension: []*d3pb.Extension{{
+						Url: &d3pb.Uri{
+							Value: "separator",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_StringValue{
+								StringValue: &d3pb.String{
+									Value: "  ",
+								},
+							},
+						},
+					}, {
+						Url: &d3pb.Uri{
+							Value: "stride",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_PositiveInt{
+								PositiveInt: &d3pb.PositiveInt{
+									Value: 2,
+								},
+							},
+						},
+					}},
+				}},
+			},
+			"",
+			&d3pb.Base64Binary{
+				Value: []byte("val"),
+			},
+		},
+		{
+			"R3 extension with no URL",
+			&d3pb.Base64Binary{
+				Value: []byte("val"),
+				Extension: []*d3pb.Extension{{
+					Extension: []*d3pb.Extension{{
+						Url: &d3pb.Uri{
+							Value: "separator",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_StringValue{
+								StringValue: &d3pb.String{
+									Value: "  ",
+								},
+							},
+						},
+					}, {
+						Url: &d3pb.Uri{
+							Value: "stride",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_PositiveInt{
+								PositiveInt: &d3pb.PositiveInt{
+									Value: 2,
+								},
+							},
+						},
+					}},
+				}},
+			},
+			"",
+			&d3pb.Base64Binary{
+				Value: []byte("val"),
+				Extension: []*d3pb.Extension{{
+					Extension: []*d3pb.Extension{{
+						Url: &d3pb.Uri{
+							Value: "separator",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_StringValue{
+								StringValue: &d3pb.String{
+									Value: "  ",
+								},
+							},
+						},
+					}, {
+						Url: &d3pb.Uri{
+							Value: "stride",
+						},
+						Value: &d3pb.Extension_ValueX{
+							Choice: &d3pb.Extension_ValueX_PositiveInt{
+								PositiveInt: &d3pb.PositiveInt{
+									Value: 2,
+								},
+							},
+						},
+					}},
+				}},
+			},
+		},
+	}
+
+	for _, test := range tests {
+		err := RemoveExtension(test.pb, test.url)
+		if err != nil {
+			t.Errorf("RemoveExtension(%v): %v", test.name, err)
+		}
+		if diff := cmp.Diff(test.want, test.pb, protocmp.Transform()); diff != "" {
+			t.Errorf("RemoveExtension(%v) returned unexpected diff: (-want, +got) %v", test.name, diff)
+		}
+	}
+
+}
+
 func TestExtensionFieldName(t *testing.T) {
 	tests := []struct {
 		url, want string

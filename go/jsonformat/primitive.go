@@ -168,8 +168,8 @@ func parseBinary(binary json.RawMessage, m proto.Message, createSepStride base64
 }
 
 // serializeBinary serializes proto representation of a FHIR Binary data object into a JSON message.
-func serializeBinary(binary proto.Message, createSepStride base64BinarySeparatorStrideCreator) (string, error) {
-	ext, err := jsonpbhelper.GetInternalExtension(binary, createSepStride("", 0))
+func serializeBinary(binary proto.Message) (string, error) {
+	ext, err := jsonpbhelper.GetExtension(binary, jsonpbhelper.Base64BinarySeparatorStrideURL)
 	if err != nil {
 		return "", err
 	}
@@ -182,7 +182,7 @@ func serializeBinary(binary proto.Message, createSepStride base64BinarySeparator
 	if ext == nil {
 		return encoded, nil
 	}
-	if err := jsonpbhelper.RemoveInternalExtension(binary, createSepStride("", 0)); err != nil {
+	if err := jsonpbhelper.RemoveExtension(binary, jsonpbhelper.Base64BinarySeparatorStrideURL); err != nil {
 		return "", err
 	}
 	extList, err := accessor.GetList(ext.ProtoReflect(), "extension")

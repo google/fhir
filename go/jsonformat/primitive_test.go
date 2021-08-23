@@ -443,7 +443,7 @@ func TestBinary(t *testing.T) {
 					t.Errorf("ParseBinary(%q, %T, %v) got %v, want: %v", test.json, binary.Interface(), tnc.creator, parsed, want)
 				}
 				// Test serialization
-				serialized, err := serializeBinary(binary.Interface().(proto.Message), tnc.creator)
+				serialized, err := serializeBinary(binary.Interface().(proto.Message))
 				if err != nil {
 					t.Fatalf("SerializeBinary(%q, %v) got error: %v", binary.Interface().(proto.Message), tnc.creator, err)
 				}
