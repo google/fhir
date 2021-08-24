@@ -122,7 +122,6 @@ class FhirPackage:
         logging.warning('Unhandled JSON entry: %s.', file_name)
         continue
 
-      logging.info('Parsing: %s (%s)...', expected_type, file_name)
       if expected_type == 'ValueSet':
         value_set = json_format.json_fhir_string_to_proto(
             raw_json, value_set_pb2.ValueSet)

@@ -14,6 +14,12 @@
 
 FROM python:3.8.6-buster
 
+# Install required packages
+RUN apt-get update && apt-get install -y \
+  unzip \
+  wget \
+  zip
+
 # Copy repository contents and setup working directory
 COPY . fhir
 WORKDIR fhir/py
