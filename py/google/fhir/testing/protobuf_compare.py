@@ -127,7 +127,7 @@ def normalize_number_fields(pb: _T) -> _T:
   """
   for desc, values in pb.ListFields():
     is_repeated = True
-    if desc.label is not descriptor.FieldDescriptor.LABEL_REPEATED:
+    if desc.label != descriptor.FieldDescriptor.LABEL_REPEATED:
       is_repeated = False
       values = [values]
 
