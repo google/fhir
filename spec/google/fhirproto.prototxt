@@ -1,0 +1,16 @@
+profile {
+  element_data {
+    name: "ValidationOutcome"
+    description: "An OperationOutcome describing the validation of a particular FHIR Resource."
+  }
+  base_url: "http://hl7.org/fhir/StructureDefinition/OperationOutcome"
+
+  extension_slice {
+    element_data {
+      name: "subject"
+      description: "The FHIR resource this Validation is for."
+      size_restriction: REQUIRED
+    }
+    url: "https://g.co/fhir/medicalrecords/OperationOutcomeSubject"
+  }
+}

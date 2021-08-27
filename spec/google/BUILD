@@ -26,4 +26,7 @@ gen_fhir_definitions_and_protos(
         "fhirproto_extensions.prototxt",
     ],
     package_info = "google_r4_package_info.prototxt",
+    profiles = [
+        "fhirproto.prototxt",
+    ],
 )

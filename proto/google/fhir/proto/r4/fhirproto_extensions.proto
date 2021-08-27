@@ -40,6 +40,23 @@ message PrimitiveHasNoValue {
   core.Boolean value_boolean = 3;
 }
 
+// Auto-generated from StructureDefinition for OperationOutcomeSubject.
+// Indicates the FHIR resource subject of this OperationOutcome.
+// See https://g.co/fhir/medicalrecords/OperationOutcomeSubject
+message OperationOutcomeSubject {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "https://g.co/fhir/medicalrecords/OperationOutcomeSubject";
+
+  // Unique id for inter-element referencing
+  core.String id = 1;
+
+  // Value of extension
+  core.Reference value_reference = 3;
+}
+
 // Auto-generated from StructureDefinition for Base64BinarySeparatorStride.
 // Base64Binary rendering parameters.
 // See https://g.co/fhir/StructureDefinition/base64Binary-separatorStride

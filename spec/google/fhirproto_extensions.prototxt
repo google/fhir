@@ -139,3 +139,12 @@ simple_extension {
   }
   type: "boolean"
 }
+
+simple_extension {
+  element_data {
+    name: "OperationOutcomeSubject"
+    description: "Indicates the FHIR resource subject of this OperationOutcome."
+    url_override: "https://g.co/fhir/medicalrecords/OperationOutcomeSubject"
+  }
+  type: "Reference"
+}
