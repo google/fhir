@@ -66,4 +66,6 @@ message Message {
   repeated InnerMessage repeated_message_field = 10;
 
   string string_field = 11;
+
+  string json_annotated_string_field = 12 [json_name = "jsonAnnotated"];
 }

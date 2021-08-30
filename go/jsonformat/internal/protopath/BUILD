@@ -20,7 +20,10 @@ go_proto_library(
 
 go_library(
     name = "protopath",
-    srcs = ["proto_path.go"],
+    srcs = [
+        "proto_path.go",
+        "proto_path_to_json.go",
+    ],
     importpath = "github.com/google/fhir/go/jsonformat/internal/protopath",
     deps = [
         "@com_github_golang_protobuf//proto:go_default_library",
@@ -34,7 +37,10 @@ go_library(
 go_test(
     name = "protopath_test",
     size = "small",
-    srcs = ["proto_path_test.go"],
+    srcs = [
+        "proto_path_test.go",
+        "proto_path_to_json_test.go",
+    ],
     embed = [":protopath"],
     deps = [
         ":protopathtest_go_proto",
