@@ -127,9 +127,7 @@ message ValidationOutcome {
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
   // The FHIR resource this Validation is for.
-  core.Reference subject = 11 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_inlined_extension_url) =
-        "https://g.co/fhir/medicalrecords/OperationOutcomeSubject"
-  ];
+  core.Reference subject = 11
+      [(.google.fhir.proto.fhir_inlined_extension_url) =
+           "https://g.co/fhir/medicalrecords/OperationOutcomeSubject"];
 }

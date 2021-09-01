@@ -9,7 +9,6 @@ profile {
     element_data {
       name: "subject"
       description: "The FHIR resource this Validation is for."
-      size_restriction: REQUIRED
     }
     url: "https://g.co/fhir/medicalrecords/OperationOutcomeSubject"
   }

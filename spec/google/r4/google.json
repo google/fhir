@@ -10,7 +10,7 @@
         "name": "ValidationOutcome",
         "title": "ValidationOutcome",
         "status": "draft",
-        "date": "2021-08-27",
+        "date": "2021-08-31",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -909,7 +909,7 @@
               "sliceName": "subject",
               "short": "The FHIR resource this Validation is for.",
               "definition": "The FHIR resource this Validation is for.",
-              "min": 1,
+              "min": 0,
               "max": "1",
               "base": {
                 "path": "Extension",
@@ -967,7 +967,6 @@
               "sliceName": "subject",
               "short": "The FHIR resource this Validation is for.",
               "definition": "The FHIR resource this Validation is for.",
-              "min": 1,
               "max": "1",
               "type": [
                 {
