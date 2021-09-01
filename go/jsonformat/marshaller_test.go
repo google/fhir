@@ -21,6 +21,7 @@ import (
 	"github.com/google/fhir/go/fhirversion"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/go-cmp/cmp"
+	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
@@ -2009,140 +2010,6 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 		inputs []mvr
 	}{
 		{
-			name: "Extensions as first-class fields",
-			inputs: []mvr{
-				{
-					ver: fhirversion.STU3,
-					r: &r3pb.Patient{
-						Id: &d3pb.Id{Value: "id1"},
-						Extension: []*d3pb.Extension{
-							{
-								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
-								Value: &d3pb.Extension_ValueX{
-									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id2"}},
-								},
-							},
-							{
-								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
-								Value: &d3pb.Extension_ValueX{
-									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id3"}},
-								},
-							},
-						},
-					},
-				},
-				{
-					ver: fhirversion.R4,
-					r: &r4patientpb.Patient{
-						Id: &d4pb.Id{Value: "id1"},
-						Extension: []*d4pb.Extension{
-							{
-								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
-								Value: &d4pb.Extension_ValueX{
-									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id2"}},
-								},
-							},
-							{
-								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
-								Value: &d4pb.Extension_ValueX{
-									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id3"}},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		{
-			name: "Primitive extension",
-			inputs: []mvr{
-				{
-					ver: fhirversion.STU3,
-					r: &r3pb.Patient{
-						BirthDate: &d3pb.Date{
-							ValueUs:   1463529600000000,
-							Precision: d3pb.Date_DAY,
-							Id: &d3pb.String{
-								Value: "a3",
-							},
-							Extension: []*d3pb.Extension{
-								{
-									Url: &d3pb.Uri{
-										Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
-									},
-									Value: &d3pb.Extension_ValueX{
-										Choice: &d3pb.Extension_ValueX_DateTime{
-											DateTime: &d3pb.DateTime{
-												ValueUs:   1463567325000000,
-												Timezone:  "Z",
-												Precision: d3pb.DateTime_SECOND,
-											},
-										},
-									},
-								},
-								{
-									Url: &d3pb.Uri{
-										Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
-									},
-									Value: &d3pb.Extension_ValueX{
-										Choice: &d3pb.Extension_ValueX_DateTime{
-											DateTime: &d3pb.DateTime{
-												ValueUs:   1463567325000012,
-												Timezone:  "Z",
-												Precision: d3pb.DateTime_SECOND,
-											},
-										},
-									},
-								},
-							},
-						},
-					},
-				},
-				{
-					ver: fhirversion.R4,
-					r: &r4patientpb.Patient{
-						BirthDate: &d4pb.Date{
-							ValueUs:   1463529600000000,
-							Precision: d4pb.Date_DAY,
-							Id: &d4pb.String{
-								Value: "a3",
-							},
-							Extension: []*d4pb.Extension{
-								{
-									Url: &d4pb.Uri{
-										Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
-									},
-									Value: &d4pb.Extension_ValueX{
-										Choice: &d4pb.Extension_ValueX_DateTime{
-											DateTime: &d4pb.DateTime{
-												ValueUs:   1463567325000000,
-												Timezone:  "Z",
-												Precision: d4pb.DateTime_SECOND,
-											},
-										},
-									},
-								},
-								{
-									Url: &d4pb.Uri{
-										Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
-									},
-									Value: &d4pb.Extension_ValueX{
-										Choice: &d4pb.Extension_ValueX_DateTime{
-											DateTime: &d4pb.DateTime{
-												ValueUs:   1463567325000012,
-												Timezone:  "Z",
-												Precision: d4pb.DateTime_SECOND,
-											},
-										},
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		{
 			name: "Repetitive extension",
 			inputs: []mvr{
 				{
@@ -2185,6 +2052,66 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "Extension with empty url",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						Extension: []*d3pb.Extension{
+							{
+								Url: &d3pb.Uri{Value: ""},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id1"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						Extension: []*d4pb.Extension{
+							{
+								Url: &d4pb.Uri{Value: ""},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id1"}},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "Extension with no url",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						Extension: []*d3pb.Extension{
+							{
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id1"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						Extension: []*d4pb.Extension{
+							{
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id1"}},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -2197,6 +2124,10 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 					_, err = marshaller.marshalMessageToMap(i.r.ProtoReflect())
 					if err == nil {
 						t.Errorf("marshalMessageToMap on %v did not return an error", test.name)
+					}
+					var e *ExtensionError
+					if !errors.As(err, &e) {
+						t.Errorf("marshalMessageToMap on %v expect ResourceError, got %T ", test.name, err)
 					}
 				})
 			}

@@ -418,7 +418,7 @@ func SerializeInstant(instant proto.Message) (string, error) {
 	}
 	ts, err := jsonpbhelper.GetTimeFromUsec(usec, tz)
 	if err != nil {
-		return "", fmt.Errorf("in GetTimeFromUsec(): %v", err)
+		return "", fmt.Errorf("in GetTimeFromUsec(): %w", err)
 	}
 	switch precision {
 	case second:

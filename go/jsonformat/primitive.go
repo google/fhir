@@ -37,7 +37,7 @@ func protoToExtension(pb, ext proto.Message) error {
 	}
 	ret := ext.ProtoReflect()
 	if err := accessor.SetValue(ret, url, "url", "value"); err != nil {
-		return fmt.Errorf("setting url value in a new extension proto: %v, err: %v", ret.Interface(), err)
+		return fmt.Errorf("setting url value in a new extension proto: %v, err: %w", ret.Interface(), err)
 	}
 
 	// Iterate over fields in deterministic order by sorting by number.
@@ -70,7 +70,7 @@ func protoToExtension(pb, ext proto.Message) error {
 			switch d.Name() {
 			case "Boolean":
 				if err := accessor.SetValue(ret, val.Message().Interface(), "value", "choice", "boolean"); err != nil {
-					return fmt.Errorf("setting boolean to extension value in extension: %v, err: %v", ret.Interface(), err)
+					return fmt.Errorf("setting boolean to extension value in extension: %v, err: %w", ret.Interface(), err)
 				}
 			default:
 				return fmt.Errorf("unsupported message type: %v", d.Name())
@@ -85,17 +85,17 @@ func protoToExtension(pb, ext proto.Message) error {
 		switch d.Name() {
 		case "String":
 			if err := accessor.SetValue(e, val.Message().Interface(), "value", "choice", "string_value"); err != nil {
-				return fmt.Errorf("setting string to extension value in extension: %v, err: %v", e.Interface(), err)
+				return fmt.Errorf("setting string to extension value in extension: %v, err: %w", e.Interface(), err)
 			}
 		case "PositiveInt":
 			if err := accessor.SetValue(e, val.Message().Interface(), "value", "choice", "positive_int"); err != nil {
-				return fmt.Errorf("setting poisitive integer to extension value in extension: %v, err: %v", e.Interface(), err)
+				return fmt.Errorf("setting poisitive integer to extension value in extension: %v, err: %w", e.Interface(), err)
 			}
 		default:
 			return fmt.Errorf("unsupported message type: %v", f.Message().Name())
 		}
 		if err := accessor.AppendValue(ret, e.Interface().(proto.Message), "extension"); err != nil {
-			return fmt.Errorf("appending extension to extension list in extension: %v, err: %v", ret.Interface(), err)
+			return fmt.Errorf("appending extension to extension list in extension: %v, err: %w", ret.Interface(), err)
 		}
 	}
 	return nil

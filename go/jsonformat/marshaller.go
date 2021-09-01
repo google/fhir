@@ -34,6 +34,17 @@ import (
 // proto in JSON form.
 type jsonFormat int
 
+// ExtensionError is an error that occurs when the extension is invalid for
+// the marshaller, such as when an extension has empty URL value.
+// TODO: Use ErrorReporter for more robust special case handling.
+type ExtensionError struct {
+	err string
+}
+
+func (e *ExtensionError) Error() string {
+	return e.err
+}
+
 const (
 	// formatPure indicates a lossless JSON representation of FHIR proto.
 	formatPure jsonFormat = iota
@@ -249,7 +260,7 @@ func (m *Marshaller) marshalRepeatedFieldValue(decmap jsonpbhelper.JSONObject, f
 		} else {
 			rm, err := m.marshalNonPrimitiveFieldValue(f, pb)
 			if err != nil {
-				return fmt.Errorf("marshalRepeatedFieldValue %v[%v]: %v", fieldName, i, err)
+				return fmt.Errorf("marshalRepeatedFieldValue %v[%v]: %w", fieldName, i, err)
 			}
 			rms = append(rms, rm)
 			if rm != nil {
@@ -274,18 +285,18 @@ func (m *Marshaller) marshalExtensionsAsFirstClassFields(decmap jsonpbhelper.JSO
 	for _, pb := range pbs {
 		urlVal, err := jsonpbhelper.ExtensionURL(pb)
 		if err != nil {
-			return err
+			return &ExtensionError{err: err.Error()}
 		}
 		fieldName := jsonpbhelper.ExtensionFieldName(urlVal)
 		if fieldName == "" {
-			return fmt.Errorf("extension field name is empty for url %q", urlVal)
+			return &ExtensionError{err: fmt.Sprintf("extension field name is empty for url %q", urlVal)}
 		}
 		fieldNameOccurrence[strings.ToLower(fieldName)]++
 	}
 	for _, pb := range pbs {
 		urlVal, err := jsonpbhelper.ExtensionURL(pb)
 		if err != nil {
-			return err
+			return &ExtensionError{err: err.Error()}
 		}
 		fieldName := jsonpbhelper.ExtensionFieldName(urlVal)
 		if _, has := decmap[fieldName]; has || fieldNameOccurrence[strings.ToLower(fieldName)] > 1 {
@@ -294,13 +305,13 @@ func (m *Marshaller) marshalExtensionsAsFirstClassFields(decmap jsonpbhelper.JSO
 			fieldNameOccurrence[strings.ToLower(fieldName)]++
 			if _, has := decmap[fieldName]; has || fieldNameOccurrence[strings.ToLower(fieldName)] > 1 {
 				// Throw an error when it still collides.
-				return fmt.Errorf("extension field %s ran into collision", fieldName)
+				return &ExtensionError{err: fmt.Sprintf("extension field %s ran into collision", fieldName)}
 			}
 		}
 
 		value, err := jsonpbhelper.ExtensionValue(pb)
 		if err != nil {
-			return err
+			return &ExtensionError{err: err.Error()}
 		}
 		if value != nil {
 			m, err := m.marshalMessageToMap(value)
@@ -468,7 +479,7 @@ func (m *Marshaller) marshalNonPrimitiveFieldValue(f protoreflect.FieldDescripto
 		crpb := m.cfg.newEmptyContainedResource()
 		pbAny := pb.Interface().(*anypb.Any)
 		if err := pbAny.UnmarshalTo(crpb); err != nil {
-			return nil, fmt.Errorf("unmarshalling Any, err: %v", err)
+			return nil, fmt.Errorf("unmarshalling Any, err: %w", err)
 		}
 		return m.marshal(crpb.ProtoReflect())
 	}
@@ -506,7 +517,7 @@ func (m *Marshaller) marshalMessageToMap(pb protoreflect.Message) (jsonpbhelper.
 		switch f.Cardinality() {
 		case protoreflect.Optional:
 			if err = m.marshalFieldValue(decmap, f, val.Message()); err != nil {
-				err = fmt.Errorf("marshalMessageToMap optional field %v: %v", f.Name(), err)
+				err = fmt.Errorf("marshalMessageToMap optional field %v: %w", f.Name(), err)
 				return false
 			}
 		case protoreflect.Repeated:
@@ -516,7 +527,7 @@ func (m *Marshaller) marshalMessageToMap(pb protoreflect.Message) (jsonpbhelper.
 				pbs = append(pbs, rf.Get(i).Message())
 			}
 			if err = m.marshalRepeatedFieldValue(decmap, f, pbs); err != nil {
-				err = fmt.Errorf("marshalMessageToMap repeated field %v: %v", f.Name(), err)
+				err = fmt.Errorf("marshalMessageToMap repeated field %v: %w", f.Name(), err)
 				return false
 			}
 		default:
@@ -548,7 +559,7 @@ func (m *Marshaller) marshalPrimitiveType(rpb protoreflect.Message) (jsonpbhelpe
 	case "Base64Binary":
 		binary, err := serializeBinary(pb)
 		if err != nil {
-			return nil, fmt.Errorf("serialize base64Binary: %v", err)
+			return nil, fmt.Errorf("serialize base64Binary: %w", err)
 		}
 		return jsonpbhelper.JSONString(binary), nil
 	case "Canonical", "Code", "Markdown", "Oid", "String", "Uri", "Url", "Uuid", "Xhtml", "ReferenceId", "Id":
@@ -559,25 +570,25 @@ func (m *Marshaller) marshalPrimitiveType(rpb protoreflect.Message) (jsonpbhelpe
 	case "Date":
 		date, err := serializeDate(pb)
 		if err != nil {
-			return nil, fmt.Errorf("serialize date: %v", err)
+			return nil, fmt.Errorf("serialize date: %w", err)
 		}
 		return jsonpbhelper.JSONString(date), nil
 	case "DateTime":
 		dateTime, err := serializeDateTime(pb)
 		if err != nil {
-			return nil, fmt.Errorf("serialize dateTime: %v", err)
+			return nil, fmt.Errorf("serialize dateTime: %w", err)
 		}
 		return jsonpbhelper.JSONString(dateTime), nil
 	case "Time":
 		t, err := serializeTime(pb)
 		if err != nil {
-			return nil, fmt.Errorf("serialize time: %v", err)
+			return nil, fmt.Errorf("serialize time: %w", err)
 		}
 		return jsonpbhelper.JSONString(t), nil
 	case "Instant":
 		t, err := SerializeInstant(pb)
 		if err != nil {
-			return nil, fmt.Errorf("serialize instant: %v", err)
+			return nil, fmt.Errorf("serialize instant: %w", err)
 		}
 		return jsonpbhelper.JSONString(t), nil
 	default:
