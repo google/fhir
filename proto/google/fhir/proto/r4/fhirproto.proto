@@ -14,13 +14,12 @@
 
 syntax = "proto3";
 
-package google.fhir.r4.google;
+package google.fhir.r4.fhirproto;
 
 import "google/protobuf/any.proto";
 import "proto/google/fhir/proto/annotations.proto";
 import "proto/google/fhir/proto/r4/core/codes.proto";
 import "proto/google/fhir/proto/r4/core/datatypes.proto";
-import "spec/google/r4_extensions.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.google";

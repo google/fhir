@@ -11,6 +11,19 @@ exports_files(["version_config.textproto"])
 
 fhir_proto_library(
     srcs = [
+        "fhirproto.proto",
+    ],
+    proto_deps = [
+        "@com_google_protobuf//:any_proto",
+        "//proto/google/fhir/proto:annotations_proto",
+        "//proto/google/fhir/proto/r4/core:codes_proto",
+        "//proto/google/fhir/proto/r4/core:datatypes_proto",
+    ],
+    proto_library_prefix = "fhirproto",
+)
+
+fhir_proto_library(
+    srcs = [
         "fhirproto_extensions.proto",
     ],
     proto_deps = [
