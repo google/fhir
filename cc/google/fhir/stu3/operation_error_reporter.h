@@ -19,45 +19,23 @@
 
 #include "absl/status/status.h"
 #include "google/fhir/error_reporter.h"
+#include "google/fhir/operation_error_reporter.h"
 #include "proto/google/fhir/proto/stu3/resources.pb.h"
 #include "proto/google/fhir/proto/stu3/codes.pb.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 
-namespace google {
-namespace fhir {
-namespace stu3 {
+namespace google::fhir::stu3 {
 
 // Error reporter that creates FHIR STU3 OperationOutcome records.
 // Conversion issues that can result in data loss are reported as a "structure"
 // error type as described at https://www.hl7.org/fhir/valueset-issue-type.html,
 // since the item could not be converted into the target structure. Validation
 // issues that preserve data use a "value" error type from that value set.
-class OperationOutcomeErrorReporter : public ErrorReporter {
- public:
-  explicit OperationOutcomeErrorReporter(
-      ::google::fhir::stu3::proto::OperationOutcome* outcome)
-      : outcome_(outcome) {}
+using OperationOutcomeErrorReporter =
+    OutcomeErrorReporter<::google::fhir::stu3::proto::OperationOutcome,
+                         ::google::fhir::stu3::proto::IssueSeverityCode,
+                         ::google::fhir::stu3::proto::IssueTypeCode>;
 
-  absl::Status ReportConversionError(absl::string_view element_path,
-                           const absl::Status& error_status) override;
-
-  absl::Status ReportValidationError(absl::string_view element_path,
-                           const absl::Status& error_status) override;
-
-  absl::Status ReportValidationWarning(absl::string_view element_path,
-                             const absl::Status& error_status) override;
- private:
-  absl::Status Report(absl::string_view element_path,
-                      const absl::Status& error_status,
-                      ::google::fhir::stu3::proto::IssueTypeCode::Value type,
-                      ::google::fhir::stu3::proto::IssueSeverityCode::Value
-                      severity);
-
-  ::google::fhir::stu3::proto::OperationOutcome* outcome_;
-};
-
-}  // namespace stu3
-}  // namespace fhir
-}  // namespace google
+}  // namespace google::fhir::stu3
 
 #endif  // GOOGLE_FHIR_STU3_OPERATION_ERROR_REPORTER_H_

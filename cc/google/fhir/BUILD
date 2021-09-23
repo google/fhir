@@ -529,3 +529,17 @@ cc_test(
         "@com_google_googletest//:gtest_main",
     ],
 )
+
+cc_library(
+    name = "operation_error_reporter",
+    hdrs = ["operation_error_reporter.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "//cc/google/fhir:error_reporter",
+        "//proto/google/fhir/proto/r4:fhirproto_cc_proto",
+        "//proto/google/fhir/proto/r4/core:codes_cc_proto",
+        "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:operation_outcome_cc_proto",
+        "@com_google_absl//absl/status",
+    ],
+)

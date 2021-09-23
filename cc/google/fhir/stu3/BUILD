@@ -210,11 +210,11 @@ cc_library(
 
 cc_library(
     name = "operation_error_reporter",
-    srcs = ["operation_error_reporter.cc"],
     hdrs = ["operation_error_reporter.h"],
     strip_include_prefix = "//cc/",
     deps = [
         "//cc/google/fhir:error_reporter",
+        "//cc/google/fhir:operation_error_reporter",
         "//proto/google/fhir/proto/stu3:codes_cc_proto",
         "//proto/google/fhir/proto/stu3:datatypes_cc_proto",
         "//proto/google/fhir/proto/stu3:resources_cc_proto",
