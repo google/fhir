@@ -227,21 +227,27 @@ func oneOfFieldByMessageType(oneOfDesc protoreflect.OneofDescriptor, valPB proto
 }
 
 func canAssignValueToField(val interface{}, fd protoreflect.FieldDescriptor) bool {
+	fdKind := fd.Kind()
 	if val == nil {
-		return fd.Kind() == protoreflect.MessageKind || fd.IsList()
+		return fdKind == protoreflect.MessageKind || fdKind == protoreflect.BytesKind || fd.IsList()
 	}
+
 	valType := reflect.TypeOf(val)
+	if fdKind == protoreflect.BytesKind {
+		return valType.AssignableTo(reflect.TypeOf([]byte{}))
+	}
+
 	if valType.Kind() == reflect.Slice {
 		valType = valType.Elem()
 	}
 
-	if fd.Kind() == protoreflect.MessageKind {
+	if fdKind == protoreflect.MessageKind {
 		rpb, ok := valAsReflectMessage(reflect.Zero(valType).Interface())
 		if !ok {
 			return false
 		}
 		return fd.Message() == rpb.Descriptor()
-	} else if fd.Kind() == protoreflect.EnumKind {
+	} else if fdKind == protoreflect.EnumKind {
 		enum, ok := val.(protoreflect.Enum)
 		if !ok {
 			return false

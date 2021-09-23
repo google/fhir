@@ -17,7 +17,7 @@ syntax = "proto3";
 
 package fhir.go.jsonformat.internal.protopath;
 
-option go_package = "github.com/google/fhir/go/jsonformat/internal/protopath/protopathtest_go_proto";
+option go_package = "github.com/google/fhir/go/jsonformat/internal/protopath/protopathtest_go_proto"; // NOLINT
 
 // Message type that will never be present in Message.
 message Missing {}
@@ -68,4 +68,6 @@ message Message {
   string string_field = 11;
 
   string json_annotated_string_field = 12 [json_name = "jsonAnnotated"];
+
+  bytes bytes_field = 13;
 }

@@ -200,6 +200,20 @@ func TestSet(t *testing.T) {
 			&pptpb.Message{},
 			&pptpb.Message{Type: pptpb.MessageType_TYPE_1},
 		},
+		{
+			"bytes",
+			NewPath("bytes_field"),
+			[]byte{1, 2, 3},
+			&pptpb.Message{},
+			&pptpb.Message{BytesField: []byte{1, 2, 3}},
+		},
+		{
+			"bytes - nil",
+			NewPath("bytes_field"),
+			nil,
+			&pptpb.Message{BytesField: []byte{1, 2, 3}},
+			&pptpb.Message{},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
