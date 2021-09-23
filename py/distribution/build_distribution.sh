@@ -37,6 +37,7 @@ readonly PROTOC_VERSION='3.13.0'
 readonly PYENV_VERSION='1.2.26'
 readonly PYTHON_BUILD_VERSION='3.9.0'
 readonly PYTHON_VERSIONS=('3.6.13' '3.7.9' '3.8.6' '3.9.0')
+readonly SIX_VERSION='1.16.0'
 
 # Helper around print statements.
 function print_info() {
@@ -217,6 +218,9 @@ function main() {
   #
   # See more at: https://github.com/dropbox/mypy-protobuf/issues/137.
   pip3 install "mypy-protobuf==${MYPY_PROTOBUF_VERSION}"
+
+  # Install PY2/PY3 compatibility package for build tooling.
+  pip3 install "six==${SIX_VERSION}"
 
   print_info "Building distribution ($(python --version))..."
   python3 setup.py sdist bdist_wheel
