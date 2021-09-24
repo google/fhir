@@ -21,12 +21,12 @@ import static java.util.stream.Collectors.toMap;
 
 import com.google.common.base.Ascii;
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 import com.google.fhir.common.FhirTypes;
 import com.google.fhir.common.FhirVersion;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.ChoiceTypeRestriction;
-import com.google.fhir.proto.CodeData;
 import com.google.fhir.proto.CodeableConceptSlice;
 import com.google.fhir.proto.CodeableConceptSlice.CodingSlice;
 import com.google.fhir.proto.ComplexExtension;
@@ -42,6 +42,7 @@ import com.google.fhir.proto.ReferenceRestriction;
 import com.google.fhir.proto.SimpleExtension;
 import com.google.fhir.proto.SizeRestriction;
 import com.google.fhir.proto.Terminologies;
+import com.google.fhir.proto.ValueSetBinding;
 import com.google.fhir.r4.core.BindingStrengthCode;
 import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.BundleTypeCode;
@@ -378,32 +379,30 @@ final class ProfileGenerator {
     ElementDefinition.Builder valueElement =
         getElementBuilderById("Extension.value[x]", elementList)
             .setBase(buildBase("Extension.value[x]", extensionBaseStructDef));
-    if (extensionProto.getTypeCount() > 0 && extensionProto.hasCodeType()) {
-      throw new IllegalArgumentException(
-          "SimpleExtension must have either a type or code_type set, but not both: "
-              + extensionProto.getElementData().getName());
-    }
     if (extensionProto.getTypeCount() == 0 && !extensionProto.hasCodeType()) {
       valueElement.getMaxBuilder().setValue("0");
       setIdAndPath(valueElement, rootId, rootPath, ".value[x]");
     } else {
       valueElement.clearType();
-      if (extensionProto.hasCodeType()) {
-        valueElement.addType(ElementDefinition.TypeRef.newBuilder().setCode(fhirUri("code")));
-        setIdAndPath(valueElement, rootId, rootPath, ".valueCode");
-        valueElement.setBinding(buildCodeBinding(extensionProto.getCodeType()));
-      } else {
-        for (String type : extensionProto.getTypeList()) {
-          valueElement.addType(ElementDefinition.TypeRef.newBuilder().setCode(fhirUri(type)));
-        }
-        String valueTail =
-            extensionProto.getTypeCount() > 1
-                ? ".value[x]"
-                : ".value"
-                    + (Ascii.toUpperCase(extensionProto.getType(0).substring(0, 1))
-                        + extensionProto.getType(0).substring(1));
-        setIdAndPath(valueElement, rootId, rootPath, valueTail);
+      List<String> typeList = extensionProto.getTypeList();
+      // For legacy reasons, if no type is set but CodeType is set, this is assumed to be of type
+      // `code`
+      if (extensionProto.getTypeCount() == 0 && extensionProto.hasCodeType()) {
+        typeList = ImmutableList.of("code");
       }
+      for (String type : typeList) {
+        valueElement.addType(ElementDefinition.TypeRef.newBuilder().setCode(fhirUri(type)));
+      }
+      String valueTail =
+          typeList.size() > 1
+              ? ".value[x]"
+              : ".value"
+                  + (Ascii.toUpperCase(typeList.get(0).substring(0, 1))
+                      + typeList.get(0).substring(1));
+      if (extensionProto.hasCodeType()) {
+        valueElement.setBinding(buildValueSetBinding(extensionProto.getCodeType()));
+      }
+      setIdAndPath(valueElement, rootId, rootPath, valueTail);
     }
 
     // Update Id, Path, and Base for all elements.
@@ -602,6 +601,10 @@ final class ProfileGenerator {
           .setExpression(fhirString(constraint.getExpression()));
     }
 
+    if (restriction.hasValueSetBinding()) {
+      modifiedElement.setBinding(buildValueSetBinding(restriction.getValueSetBinding()));
+    }
+
     elementList.set(elementList.indexOf(elementToModify), modifiedElement.build());
   }
 
@@ -733,7 +736,7 @@ final class ProfileGenerator {
   private List<ElementDefinition> buildCodeableConceptSliceElements(
       String codingFieldId, CodingSlice codingSlice) throws InvalidFhirException {
     ElementData elementData = codingSlice.getElementData();
-    CodeData codeData = codingSlice.getCodeData();
+    ValueSetBinding valueSetBinding = codingSlice.getCodeData();
     StructureDefinition baseStructDef = getStructDef(Coding.getDescriptor());
     List<ElementDefinition> codingBaseElements = baseStructDef.getSnapshot().getElementList();
     List<ElementDefinition.Builder> codingElements =
@@ -747,14 +750,14 @@ final class ProfileGenerator {
     // System Element
     ElementDefinition.Builder systemElement =
         getElementBuilderById("Coding.system", codingElements);
-    systemElement.getFixedBuilder().setUri(fhirUri(codeData.getSystem()));
+    systemElement.getFixedBuilder().setUri(fhirUri(valueSetBinding.getSystem()));
 
     // Code Element
     ElementDefinition.Builder codeElement = getElementBuilderById("Coding.code", codingElements);
     if (!codingSlice.getCodeData().getFixedValue().isEmpty()) {
-      codeElement.getFixedBuilder().setCode(fhirCode(codeData.getFixedValue()));
+      codeElement.getFixedBuilder().setCode(fhirCode(valueSetBinding.getFixedValue()));
     }
-    codeElement.setBinding(buildCodeBinding(codeData));
+    codeElement.setBinding(buildValueSetBinding(valueSetBinding));
 
     for (ElementDefinition.Builder element : codingElements) {
       String originalId = element.getId().getValue();
@@ -910,18 +913,22 @@ final class ProfileGenerator {
         "No matching base element for: " + element.getId().getValue());
   }
 
-  private static ElementDefinitionBinding buildCodeBinding(CodeData codeData) {
-    return ElementDefinitionBinding.newBuilder()
-        .setValueSet(fhirCanonical(codeData.getSystem()))
-        .setStrength(
-            ElementDefinition.ElementDefinitionBinding.StrengthCode.newBuilder()
-                .setValue(
-                    codeData
-                            .getBindingStrength()
-                            .equals(BindingStrengthCode.Value.INVALID_UNINITIALIZED)
-                        ? BindingStrengthCode.Value.REQUIRED
-                        : codeData.getBindingStrength()))
-        .build();
+  private static ElementDefinitionBinding buildValueSetBinding(ValueSetBinding bindingConfig) {
+    ElementDefinitionBinding.Builder builder =
+        ElementDefinitionBinding.newBuilder()
+            .setValueSet(fhirCanonical(bindingConfig.getSystem()))
+            .setStrength(
+                ElementDefinition.ElementDefinitionBinding.StrengthCode.newBuilder()
+                    .setValue(
+                        bindingConfig
+                                .getBindingStrength()
+                                .equals(BindingStrengthCode.Value.INVALID_UNINITIALIZED)
+                            ? BindingStrengthCode.Value.REQUIRED
+                            : bindingConfig.getBindingStrength()));
+    if (!bindingConfig.getDescription().isEmpty()) {
+      builder.setDescription(fhirString(bindingConfig.getDescription()));
+    }
+    return builder.build();
   }
 
   private static ElementDefinition.Builder setIdAndPath(

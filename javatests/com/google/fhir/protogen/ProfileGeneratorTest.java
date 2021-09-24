@@ -30,7 +30,10 @@ import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.Profile;
 import com.google.fhir.proto.Profiles;
 import com.google.fhir.proto.ReferenceRestriction;
+import com.google.fhir.proto.SimpleExtension;
 import com.google.fhir.proto.Terminologies;
+import com.google.fhir.proto.ValueSetBinding;
+import com.google.fhir.r4.core.BindingStrengthCode;
 import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.ElementDefinition;
 import com.google.fhir.r4.core.StructureDefinition;
@@ -269,6 +272,103 @@ public final class ProfileGeneratorTest {
     assertThat(observationSubject).hasSize(1);
     assertThat(observationSubject.get(0).getType(0).getTargetProfile(0).getValue())
         .isEqualTo("http://test_patient_url");
+  }
+
+  @Test
+  public void testRestriction_valueSetBindingAnnotation() throws Exception {
+    Profiles profiles =
+        Profiles.newBuilder()
+            .addProfile(
+                Profile.newBuilder()
+                    .setBaseUrl("http://hl7.org/fhir/StructureDefinition/Observation")
+                    .addRestriction(
+                        FieldRestriction.newBuilder()
+                            .setFieldId("Observation.code")
+                            .setValueSetBinding(
+                                ValueSetBinding.newBuilder()
+                                    .setSystem("http://test_system/Foo")
+                                    .setDescription("MUST have a Foo code.")))
+                    .addRestriction(
+                        FieldRestriction.newBuilder()
+                            .setFieldId("Observation.category")
+                            .setValueSetBinding(
+                                ValueSetBinding.newBuilder()
+                                    .setSystem("http://test_system/Bar")
+                                    .setBindingStrength(BindingStrengthCode.Value.PREFERRED)
+                                    .setDescription("SHOULD have a Bar code."))))
+            .build();
+
+    ProfileGenerator generator =
+        new ProfileGenerator(
+            loadPackageInfoProto(R4_TESTDATA_DIR + "test_package_info.prototxt"),
+            ImmutableList.of(loadR4FhirStructureDefinition("StructureDefinition-Observation.json")),
+            LocalDate.now(ZoneId.of("UTC")));
+    Bundle bundle = generator.generateProfiles(profiles);
+
+    StructureDefinition observationDefinition =
+        bundle.getEntry(0).getResource().getStructureDefinition();
+
+    ElementDefinition observationCode =
+        observationDefinition.getSnapshot().getElementList().stream()
+            .filter(element -> element.getId().getValue().equals("Observation.code"))
+            .collect(toList())
+            .get(0);
+    assertThat(observationCode.getBinding().getStrength().getValue())
+        .isEqualTo(BindingStrengthCode.Value.REQUIRED);
+    assertThat(observationCode.getBinding().getValueSet().getValue())
+        .isEqualTo("http://test_system/Foo");
+    assertThat(observationCode.getBinding().getDescription().getValue())
+        .isEqualTo("MUST have a Foo code.");
+
+    ElementDefinition observationCategory =
+        observationDefinition.getSnapshot().getElementList().stream()
+            .filter(element -> element.getId().getValue().equals("Observation.category"))
+            .collect(toList())
+            .get(0);
+    assertThat(observationCategory.getBinding().getStrength().getValue())
+        .isEqualTo(BindingStrengthCode.Value.PREFERRED);
+    assertThat(observationCategory.getBinding().getValueSet().getValue())
+        .isEqualTo("http://test_system/Bar");
+    assertThat(observationCategory.getBinding().getDescription().getValue())
+        .isEqualTo("SHOULD have a Bar code.");
+  }
+
+  @Test
+  public void testExtension_withValueSetBinding() throws Exception {
+    Extensions extensions =
+        Extensions.newBuilder()
+            .addSimpleExtension(
+                SimpleExtension.newBuilder()
+                    .setElementData(ElementData.newBuilder().setName("MyExtension"))
+                    .addType("CodeableConcept")
+                    .setCodeType(
+                        ValueSetBinding.newBuilder()
+                            .setSystem("http://test_system/Foo")
+                            .setDescription("MUST have a Foo code.")))
+            .build();
+
+    ProfileGenerator generator =
+        new ProfileGenerator(
+            loadPackageInfoProto(R4_TESTDATA_DIR + "test_package_info.prototxt"),
+            ImmutableList.of(
+                loadR4FhirStructureDefinition("StructureDefinition-Extension.json"),
+                loadR4FhirStructureDefinition("StructureDefinition-Element.json")),
+            LocalDate.now(ZoneId.of("UTC")));
+    Bundle bundle = generator.generateExtensions(extensions);
+
+    StructureDefinition extension = bundle.getEntry(0).getResource().getStructureDefinition();
+
+    ElementDefinition valueElement =
+        extension.getSnapshot().getElementList().stream()
+            .filter(element -> element.getId().getValue().equals("Extension.valueCodeableConcept"))
+            .collect(toList())
+            .get(0);
+    assertThat(valueElement.getBinding().getStrength().getValue())
+        .isEqualTo(BindingStrengthCode.Value.REQUIRED);
+    assertThat(valueElement.getBinding().getValueSet().getValue())
+        .isEqualTo("http://test_system/Foo");
+    assertThat(valueElement.getBinding().getDescription().getValue())
+        .isEqualTo("MUST have a Foo code.");
   }
 
   @Test

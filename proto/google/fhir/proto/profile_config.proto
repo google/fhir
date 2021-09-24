@@ -160,6 +160,10 @@ message FieldRestriction {
   ChoiceTypeRestriction choice_type_restriction = 4;
 
   repeated FhirPathConstraint fhir_path_constraint = 5;
+
+  // For fields of type code, Coding, or CodeableConcept, binding to a ValueSet.
+  // See: https://www.hl7.org/fhir/terminologies.html
+  ValueSetBinding value_set_binding = 6;
 }
 
 // For Reference types, additional restrictions to apply
@@ -226,7 +230,7 @@ message CodeableConceptSlice {
   message CodingSlice {
     ElementData element_data = 1;
 
-    CodeData code_data = 2;
+    ValueSetBinding code_data = 2;
   }
   repeated CodingSlice coding_slice = 2;
 
@@ -254,18 +258,16 @@ message ComplexExtension {
 message SimpleExtension {
   ElementData element_data = 1;
 
-  // SimpleExtensions should have either types or a code_type.
-  // These are effectively a oneof, but type must be repeated to support
-  // choice-types, and repeated fields are forbidden in oneofs.
-
   // Must be one of the types listed in the Extension.value[x] element here:
   // http://hl7.org/fhir/extension.profile.json
   // If this field has size > 1 it will generate a choice-type value
+  // For legacy reasons, if this is unset but `code_type` is set, this is
+  // assumed to be of type `code`.
   repeated string type = 2;
 
-  // Code types can have further specifications -
-  // e.g., fixed system, proto code type, or fixed values.
-  CodeData code_type = 3;
+  // For fields of type code, Coding, or CodeableConcept, binding to a ValueSet.
+  // See: https://www.hl7.org/fhir/terminologies.html
+  ValueSetBinding code_type = 3;
 
   bool can_have_extensions = 4;
 }
@@ -304,10 +306,9 @@ message ElementData {
   string url_override = 6;
 }
 
-// Describes a code type with additional metadata
-// (e.g., fixed system, binding name, or value)
-message CodeData {
-  // Fixed Url of the value set to use
+// Describes ValueSet bindings for terminology fields.
+message ValueSetBinding {
+  // Fixed ValueSet Url
   string system = 1;
 
   // "Strength" of value set binding - i.e., whether to allow codes that
@@ -318,6 +319,11 @@ message CodeData {
   // Optional - if set, this code will have a fixed value, and will not be
   // inlined as a field.
   string fixed_value = 3;
+
+  // Optional human-readable description of the binding.
+  // See:
+  // https://www.hl7.org/fhir/elementdefinition-definitions.html#ElementDefinition.binding.description
+  string description = 4;
 }
 
 // A compact representation of a code system used by the
