@@ -28,3 +28,6 @@ issue {
     value: "Encounter.period"
   }
 }
+subject {
+    encounter_id {value: "123"}
+}

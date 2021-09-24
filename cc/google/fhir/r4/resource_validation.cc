@@ -21,13 +21,20 @@
 #include "google/fhir/fhir_path/r4_fhir_path_validation.h"
 #include "google/fhir/r4/operation_error_reporter.h"
 #include "google/fhir/r4/primitive_handler.h"
+#include "google/fhir/r4/profiles.h"
+#include "google/fhir/references.h"
 #include "google/fhir/resource_validation.h"
+#include "google/fhir/status/statusor.h"
+#include "google/fhir/util.h"
+#include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/r4/fhirproto.pb.h"
 
 namespace google {
 namespace fhir {
 namespace r4 {
 
-using ::google::fhir::r4::core::OperationOutcome;
+using ::google::fhir::r4::fhirproto::ValidationOutcome;
+using ::google::fhir::r4::core::Reference;
 
 absl::Status Validate(const ::google::protobuf::Message& resource,
                       ErrorReporter* error_reporter) {
@@ -35,11 +42,18 @@ absl::Status Validate(const ::google::protobuf::Message& resource,
                                   GetFhirPathValidator(), error_reporter);
 }
 
-absl::StatusOr<OperationOutcome> Validate(const ::google::protobuf::Message& resource) {
-  OperationOutcome outcome;
-  OperationOutcomeErrorReporter error_reporter(&outcome);
+absl::StatusOr<ValidationOutcome> Validate(const ::google::protobuf::Message& resource) {
+  ValidationOutcome validation_outcome;
+
+  if (ResourceHasId(resource)) {
+    FHIR_ASSIGN_OR_RETURN(*validation_outcome.mutable_subject(),
+                          GetReferenceProtoToResource<Reference>(resource));
+  }
+
+  ValidationOutcomeErrorReporter error_reporter(&validation_outcome);
   FHIR_RETURN_IF_ERROR(Validate(resource, &error_reporter));
-  return outcome;
+
+  return validation_outcome;
 }
 
 absl::Status ValidateResource(const ::google::protobuf::Message& resource) {

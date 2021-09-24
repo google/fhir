@@ -54,3 +54,6 @@ issue {
     value: "Encounter.account.accountId"
   }
 }
+subject {
+    encounter_id {value: "123"}
+}

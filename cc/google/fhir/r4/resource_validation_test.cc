@@ -21,11 +21,14 @@
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
+#include "google/fhir/references.h"
+#include "google/fhir/status/statusor.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/encounter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
+#include "proto/google/fhir/proto/r4/fhirproto.pb.h"
 
 namespace google {
 namespace fhir {
@@ -33,20 +36,31 @@ namespace r4 {
 
 namespace {
 
-using namespace google::fhir::r4::core;  // NOLINT
+using namespace ::google::fhir::r4::core;  // NOLINT
 using ::google::fhir::testutil::EqualsProto;
+using ::google::fhir::r4::fhirproto::ValidationOutcome;
 
 // Tests the given resource is valid using both the deprecated and new functions
 template <typename T>
-void ValidTest(const std::string& name) {
+void ValidTest(const std::string& name, const bool has_resource_id = true) {
   T resource =
       ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt"));
   auto status = ValidateResourceWithFhirPath(resource);
   EXPECT_TRUE(status.ok()) << status;
 
-  absl::StatusOr<OperationOutcome> outcome = Validate(resource);
+  absl::StatusOr<ValidationOutcome> outcome = Validate(resource);
   FHIR_ASSERT_OK(outcome.status());
-  EXPECT_THAT(*outcome, EqualsProto(OperationOutcome()));
+
+  // The ValidationOutcome should be empty except for the subject, if the
+  // resource has an ID.
+  ValidationOutcome expected;
+  if (has_resource_id) {
+    FHIR_ASSERT_OK_AND_ASSIGN(
+        *expected.mutable_subject(),
+        GetReferenceProtoToResource<::google::fhir::r4::core::Reference>(
+            resource));
+  }
+  EXPECT_THAT(*outcome, EqualsProto(expected));
 }
 
 // Tests the given resource is invalid using both the deprecated and new
@@ -65,10 +79,10 @@ void InvalidTest(const std::string& name) {
 
   EXPECT_EQ(status, ::absl::FailedPreconditionError(error_msg));
 
-  absl::StatusOr<OperationOutcome> outcome = Validate(resource);
+  absl::StatusOr<ValidationOutcome> outcome = Validate(resource);
   FHIR_ASSERT_OK(outcome.status());
 
-  OperationOutcome expected_outcome = ReadProto<OperationOutcome>(
+  ValidationOutcome expected_outcome = ReadProto<ValidationOutcome>(
       absl::StrCat("testdata/r4/validation/", name, ".outcome.prototxt"));
   EXPECT_THAT(*outcome, EqualsProto(expected_outcome));
 }
@@ -105,6 +119,10 @@ TEST(ResourceValidationTest, EmptyOneof) {
   InvalidTest<Observation>("observation_invalid_empty_oneof");
 }
 
+TEST(ResourceValidationTest, EmptyOneofWithoutId) {
+  InvalidTest<Observation>("observation_invalid_empty_oneof_without_id");
+}
+
 TEST(BundleValidationTest, Valid) { ValidTest<Bundle>("bundle_valid"); }
 
 TEST(EncounterValidationTest, Valid) {
@@ -113,6 +131,10 @@ TEST(EncounterValidationTest, Valid) {
 
 TEST(EncounterValidationTest, ValidWithNumericTimezone) {
   ValidTest<Encounter>("encounter_valid_numeric_timezone");
+}
+
+TEST(EncounterValidationTest, ValidWithoutResourceId) {
+  ValidTest<Encounter>("encounter_valid_without_id", false);
 }
 
 }  // namespace

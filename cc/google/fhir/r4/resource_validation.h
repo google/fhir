@@ -21,11 +21,24 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "google/fhir/error_reporter.h"
+#include "google/fhir/stu3/operation_error_reporter.h"
 #include "proto/google/fhir/proto/r4/core/resources/operation_outcome.pb.h"
+#include "proto/google/fhir/proto/r4/fhirproto.pb.h"
 
 namespace google {
 namespace fhir {
 namespace r4 {
+
+// Error reporter that creates ValidationOutcome records (profiled
+// OperationOutcome that includes a subject resource reference).
+// Conversion issues that can result in data loss are reported as a "structure"
+// error type as described at https://www.hl7.org/fhir/valueset-issue-type.html,
+// since the item could not be converted into the target structure. Validation
+// issues that preserve data use a "value" error type from that value set.
+using ValidationOutcomeErrorReporter =
+    OutcomeErrorReporter<::google::fhir::r4::fhirproto::ValidationOutcome,
+                         ::google::fhir::r4::core::IssueSeverityCode,
+                         ::google::fhir::r4::core::IssueTypeCode>;
 
 // Run resource-specific validation on the given FHIR resource and
 // report all errors to the given error reporter. Validation will continue
@@ -42,10 +55,11 @@ namespace r4 {
 // through all issues encountered so the given OperationOutcome will provide
 // a complete description of any issues.
 //
-// Returns an OperationOutcome with all data issues; this will only return
-// an error status if there is some unexpected issue like a malformed
-// FHIR profile.
-::absl::StatusOr<::google::fhir::r4::core::OperationOutcome>
+// Returns a ValidationOutcome (a profiled OperationOutcome) with all data
+// issues; this will only return an error status if there is some unexpected
+// issue like a malformed FHIR profile. If the provided resources does not have
+// an ID the ValidationOutcome.subject will be empty.
+::absl::StatusOr<::google::fhir::r4::fhirproto::ValidationOutcome>
 Validate(const ::google::protobuf::Message& resource);
 
 // Deprecated. Use one of the above Validate functions.

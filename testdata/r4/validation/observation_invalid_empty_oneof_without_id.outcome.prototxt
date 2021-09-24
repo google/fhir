@@ -12,6 +12,3 @@ issue {
     value: "google.fhir.r4.core.Observation.Component.ValueX.choice"
   }
 }
-subject {
-    observation_id {value: "123"}
-}

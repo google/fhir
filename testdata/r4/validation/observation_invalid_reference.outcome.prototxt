@@ -26,3 +26,6 @@ issue {
     value: "Observation.specimen.deviceId"
   }
 }
+subject {
+    observation_id {value: "123"}
+}
