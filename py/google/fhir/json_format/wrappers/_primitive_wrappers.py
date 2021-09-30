@@ -172,7 +172,7 @@ class PrimitiveWrapper(abc.ABC):
       raise ValueError('Error, unable to wrap sequence.')
 
     if json_value is None or isinstance(json_value, (dict,)):
-      return cls(no_value_primitive(primitive_cls), context)
+      return cls(no_value_primitive(primitive_cls), context)  # pytype: disable=not-instantiable  # class-cleanup
 
     if not isinstance(json_value,
                       cast(Tuple[Type[Any], ...], cls._PARSABLE_TYPES)):
