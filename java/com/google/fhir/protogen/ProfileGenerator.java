@@ -757,7 +757,6 @@ final class ProfileGenerator {
     if (!codingSlice.getCodeData().getFixedValue().isEmpty()) {
       codeElement.getFixedBuilder().setCode(fhirCode(valueSetBinding.getFixedValue()));
     }
-    codeElement.setBinding(buildValueSetBinding(valueSetBinding));
 
     for (ElementDefinition.Builder element : codingElements) {
       String originalId = element.getId().getValue();

@@ -23,6 +23,8 @@ import com.google.common.io.Files;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations.FhirVersion;
+import com.google.fhir.proto.CodeableConceptSlice;
+import com.google.fhir.proto.CodeableConceptSlice.CodingSlice;
 import com.google.fhir.proto.ElementData;
 import com.google.fhir.proto.Extensions;
 import com.google.fhir.proto.FieldRestriction;
@@ -369,6 +371,58 @@ public final class ProfileGeneratorTest {
         .isEqualTo("http://test_system/Foo");
     assertThat(valueElement.getBinding().getDescription().getValue())
         .isEqualTo("MUST have a Foo code.");
+  }
+
+  @Test
+  public void testCodeableConceptSlice_withFixedValue() throws Exception {
+    Profiles profiles =
+        Profiles.newBuilder()
+            .addProfile(
+                Profile.newBuilder()
+                    .setBaseUrl("http://hl7.org/fhir/StructureDefinition/Observation")
+                    .addCodeableConceptSlice(
+                        CodeableConceptSlice.newBuilder()
+                            .setFieldId("Observation.code")
+                            .addCodingSlice(
+                                CodingSlice.newBuilder()
+                                    .setElementData(ElementData.newBuilder().setName("myslice"))
+                                    .setCodeData(
+                                        ValueSetBinding.newBuilder()
+                                            .setSystem("sys")
+                                            .setFixedValue("val")))))
+            .build();
+
+    ProfileGenerator generator =
+        new ProfileGenerator(
+            loadPackageInfoProto(R4_TESTDATA_DIR + "test_package_info.prototxt"),
+            ImmutableList.of(
+                loadR4FhirStructureDefinition("StructureDefinition-Observation.json"),
+                loadR4FhirStructureDefinition("StructureDefinition-Coding.json"),
+                loadR4FhirStructureDefinition("StructureDefinition-Element.json"),
+                loadR4FhirStructureDefinition("StructureDefinition-CodeableConcept.json")),
+            LocalDate.now(ZoneId.of("UTC")));
+    Bundle bundle = generator.generateProfiles(profiles);
+
+    StructureDefinition extension = bundle.getEntry(0).getResource().getStructureDefinition();
+
+    ElementDefinition sliceCodeElement =
+        extension.getSnapshot().getElementList().stream()
+            .filter(
+                element ->
+                    element.getId().getValue().equals("Observation.code.coding:myslice.code"))
+            .collect(toList())
+            .get(0);
+    assertThat(sliceCodeElement.getFixed().getCode().getValue()).isEqualTo("val");
+    assertThat(sliceCodeElement.hasBinding()).isFalse();
+
+    ElementDefinition sliceSystemElement =
+        extension.getSnapshot().getElementList().stream()
+            .filter(
+                element ->
+                    element.getId().getValue().equals("Observation.code.coding:myslice.system"))
+            .collect(toList())
+            .get(0);
+    assertThat(sliceSystemElement.getFixed().getUri().getValue()).isEqualTo("sys");
   }
 
   @Test
