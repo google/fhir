@@ -24,6 +24,7 @@
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "google/protobuf/text_format.h"
+#include "google/protobuf/util/message_differencer.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
@@ -191,6 +192,27 @@ MATCHER_P(EvalsToStringThatMatches, string_matcher, "") {
   }
 
   return string_matcher.impl().MatchAndExplain(result.value(), result_listener);
+}
+
+// Matcher for absl::StatusOr<T>, checks status is okay and uses inner_matcher
+// on the messages.
+MATCHER_P(IsOkWithMessages, elements_vector, "") {
+  if (!arg.ok()) {
+    *result_listener << "evaluation error: " << arg.status().message();
+    return false;
+  }
+  if (arg->GetMessages().size() != elements_vector.size()) {
+    *result_listener << "size mismatch, expected " << elements_vector.size()
+                     << ", actual " << arg->GetMessages().size();
+    return false;
+  }
+  for (int i = 0; i < arg->GetMessages().size(); ++i) {
+    if (!google::protobuf::util::MessageDifferencer::Equals(*arg->GetMessages()[i],
+                                                  elements_vector[i])) {
+      return false;
+    }
+  }
+  return true;
 }
 
 // Matcher for absl::StatusOr<T> that checks to see that a status is present
@@ -2492,6 +2514,151 @@ TYPED_TEST(FhirPathTest, ResourceReference) {
                                    .observation()),
                    EqualsProto(bundle.entry(1).resource().observation()),
                    EqualsProto(bundle)}));
+}
+
+TYPED_TEST(FhirPathTest, MemberOfWithoutValueSetRepository) {
+  auto obs = ParseFromString<typename TypeParam::Observation>(R"(
+      code {
+        coding {
+          code { value: "L" }
+        }
+      })");
+
+  EXPECT_THAT(
+      TestFixture::Evaluate(
+          obs, "code.memberOf('http://hl7.org/fhir/ValueSet/FHIR-version ')"),
+      HasStatusCode(absl::StatusCode::kFailedPrecondition));
+}
+
+// For testing value set related functions.
+template <typename T>
+class FhirPathTestForValueSets : public FhirPathTest<T> {
+ protected:
+  class FakeValueSetRepository : public ValueSetRepository {
+   public:
+    absl::StatusOr<bool> BelongsToValueSet(
+        const std::string& value_set_id, const std::string& code_string,
+        const absl::optional<std::string>& code_system_id) const override {
+      if (value_set_id == "Allergies") {
+        if (code_system_id.has_value() &&
+            code_system_id.value() !=
+                "http://terminology.hl7.org/CodeSystem/"
+                "allergyintolerance-clinical") {
+          return false;
+        }
+        return absl::EndsWith(code_string, "nuts");
+      }
+      if (value_set_id == "Range") {
+        return code_string == "H" || code_string == "L";
+      }
+      return absl::NotFoundError("");
+    }
+
+    absl::StatusOr<int> NumberOfCodeSystemsInValueSet(
+        const std::string& value_set_id) const override {
+      if (value_set_id == "Allergies") {
+        return 2;
+      }
+      if (value_set_id == "Range") {
+        return 1;
+      }
+      return absl::NotFoundError("");
+    }
+  };
+
+  absl::StatusOr<EvaluationResult> Evaluate(const Message& message,
+                                            const std::string& expression) {
+    FHIR_ASSIGN_OR_RETURN(auto compiled_expression,
+                          Compile(message.GetDescriptor(), expression));
+
+    return compiled_expression.Evaluate(message);
+  }
+
+ private:
+  FakeValueSetRepository fake_value_sets_;
+
+  absl::StatusOr<CompiledExpression> Compile(
+      const ::google::protobuf::Descriptor* descriptor, const std::string& fhir_path) {
+    return CompiledExpression::Compile(descriptor,
+                                       T::PrimitiveHandler::GetInstance(),
+                                       fhir_path, &fake_value_sets_);
+  }
+};
+TYPED_TEST_SUITE(FhirPathTestForValueSets, TestEnvs);
+
+TYPED_TEST(FhirPathTestForValueSets, MemberOf) {
+  auto obs = ParseFromString<typename TypeParam::Observation>(R"(
+      category {
+        coding {
+          code { value: "something else" }
+        }
+        coding {
+          # system not specified (expect to match)
+          code { value: "Peanuts" }
+        }
+        coding {
+          system { value: "wrong_system" }
+          code { value: "Walnuts" }
+        }
+        coding {
+          system { value: "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical" }
+          code { value: "Hazelnuts" }
+        }
+      }
+      code {
+        coding {
+          code { value: "L" }
+        }
+      }
+      reference_range {
+        text { value: "H" }
+      })");
+  auto true_obj = ParseFromString<typename TypeParam::Boolean>("value: true");
+  auto false_obj = ParseFromString<typename TypeParam::Boolean>("value: false");
+
+  // memberOf() invoked on "String" objects, the "Range" value set only has
+  // one code system in our fake value set repository, so this is OK.
+  EXPECT_THAT(
+      TestFixture::Evaluate(obs, "referenceRange.text.memberOf('Range')"),
+      IsOkWithMessages(std::vector<typename TypeParam::Boolean>{true_obj}));
+
+  // The "Allergies" value set has 2 code systems in our fake repository,
+  // so evaluating memberOf() gives an error.
+  EXPECT_THAT(
+      TestFixture::Evaluate(obs, "referenceRange.text.memberOf('Allergies')"),
+      HasStatusCode(absl::StatusCode::kFailedPrecondition));
+
+  // The "not_a_value_set" is not specified in the fake repository, hence
+  // memberOf gives a not found error.
+  EXPECT_THAT(TestFixture::Evaluate(
+                  obs, "referenceRange.text.memberOf('not_a_value_set')"),
+              HasStatusCode(absl::StatusCode::kNotFound));
+
+  // memberOf() cannot be invoked on "ReferenceRange" objects.
+  EXPECT_THAT(TestFixture::Evaluate(obs, "referenceRange.memberOf('Range')"),
+              HasStatusCode(absl::StatusCode::kInvalidArgument));
+
+  // memberOf() invoked on collection of "Code" objects.
+  EXPECT_THAT(
+      TestFixture::Evaluate(obs, "category.coding.code.memberOf('Allergies')"),
+      IsOkWithMessages(std::vector<typename TypeParam::Boolean>{
+          false_obj, true_obj, true_obj, true_obj}));
+  EXPECT_THAT(TestFixture::Evaluate(
+                  obs, "category.coding.code.memberOf('other_value_set')"),
+              HasStatusCode(absl::StatusCode::kNotFound));
+
+  // memberOf() cannot be invoked on "Coding" objects.
+  EXPECT_THAT(
+      TestFixture::Evaluate(obs, "category.coding.memberOf('Allergies')"),
+      HasStatusCode(absl::StatusCode::kInvalidArgument));
+
+  // memberOf() invoked on "CodeableConcept" objects.
+  EXPECT_THAT(
+      TestFixture::Evaluate(obs, "category.memberOf('Allergies')"),
+      IsOkWithMessages(std::vector<typename TypeParam::Boolean>{true_obj}));
+  EXPECT_THAT(
+      TestFixture::Evaluate(obs, "category.memberOf('Range')"),
+      IsOkWithMessages(std::vector<typename TypeParam::Boolean>{false_obj}));
 }
 
 }  // namespace

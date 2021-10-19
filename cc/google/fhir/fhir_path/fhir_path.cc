@@ -148,17 +148,22 @@ absl::StatusOr<absl::optional<bool>> BooleanOrEmpty(
 // Returns the string representation of the provided message if the message is a
 // System.String or a FHIR primitive that implicitly converts to System.String.
 // Otherwise a status other than OK will be returned.
-absl::StatusOr<std::string> MessageToString(const WorkspaceMessage& message) {
-  if (!IsSystemString(*message.Message())) {
+absl::StatusOr<std::string> MessageToString(const Message& message) {
+  if (!IsSystemString(message)) {
     return InvalidArgumentError("Expression is not a string.");
   }
 
-  if (HasValueset(message.Message()->GetDescriptor())) {
-    return GetCodeAsString(*message.Message());
+  if (HasValueset(message.GetDescriptor())) {
+    return GetCodeAsString(message);
   }
 
   std::string value;
-  return GetPrimitiveStringValue(*message.Message(), &value);
+  return GetPrimitiveStringValue(message, &value);
+}
+
+// Convenient wrapper of MessageToString for WorkspaceMessage input types.
+absl::StatusOr<std::string> MessageToString(const WorkspaceMessage& message) {
+  return MessageToString(*message.Message());
 }
 
 // Returns the string representation of the provided messages if there is
@@ -2557,6 +2562,145 @@ class IntersectFunction : public SingleParameterFunctionNode {
   }
 };
 
+// memberOf(valueset : string) : Boolean
+// When invoked on a code-valued element, returns true if the code is a member
+// of the given valueset.
+// When invoked on a concept-valued element, returns true if any code in the
+// concept is a member of the given valueset.
+// When invoked on a string, returns true if the string is equal to a code
+// in the valueset, so long as the valueset only contains one codesystem.
+// If the valueset in this case contains more than one codesystem, an error
+// is thrown.
+//
+// If the valueset cannot be resolved as a uri to a value set, an error
+// is thrown.
+class MemberOfFunction : public SingleValueFunctionNode {
+ public:
+  MemberOfFunction(const std::shared_ptr<ExpressionNode>& child,
+                   const std::vector<std::shared_ptr<ExpressionNode>>& params)
+      : SingleValueFunctionNode(child, params) {}
+
+  static absl::StatusOr<bool> StringIsMember(const std::string& code_str,
+                                             const std::string& value_set,
+                                             WorkSpace* work_space) {
+    FHIR_ASSIGN_OR_RETURN(
+        int num_code_systems,
+        work_space->GetValueSetRepository()->NumberOfCodeSystemsInValueSet(
+            value_set));
+    if (num_code_systems > 1) {
+      return absl::FailedPreconditionError(
+          absl::StrFormat("Value set %s contains more than one code system, "
+                          "hence cannot be evaluated on a string value.",
+                          value_set));
+    }
+    return work_space->GetValueSetRepository()->BelongsToValueSet(
+        value_set, code_str, /*code_system=*/absl::nullopt);
+  }
+
+  static absl::StatusOr<bool> CodeIsMember(
+      const Message& code_object,
+      const absl::optional<std::string>& code_system,
+      const std::string& value_set, WorkSpace* work_space) {
+    FHIR_ASSIGN_OR_RETURN(std::string code_str, GetCodeAsString(code_object));
+    return work_space->GetValueSetRepository()->BelongsToValueSet(
+        value_set, code_str, code_system);
+  }
+
+  static absl::StatusOr<bool> ConceptIsMember(const Message& concept_object,
+                                              const std::string& value_set,
+                                              WorkSpace* work_space) {
+    const ::google::protobuf::FieldDescriptor* coding_field =
+        concept_object.GetDescriptor()->FindFieldByName("coding");
+    const ::google::protobuf::FieldDescriptor* code_field = nullptr;
+    const ::google::protobuf::FieldDescriptor* system_field = nullptr;
+    if (coding_field == nullptr || !coding_field->is_repeated()) {
+      return absl::FailedPreconditionError(
+          "`concept_object` is not a valid CodeableConcept");
+    }
+    auto reflection = concept_object.GetReflection();
+    for (int i = 0; i < reflection->FieldSize(concept_object, coding_field);
+         ++i) {
+      const Message& coding =
+          reflection->GetRepeatedMessage(concept_object, coding_field, i);
+      if (code_field == nullptr) {
+        code_field = coding.GetDescriptor()->FindFieldByName("code");
+        if (code_field == nullptr || code_field->is_repeated()) {
+          return absl::FailedPreconditionError(
+              "`concept_object.coding` is not a valid Coding");
+        }
+      }
+      if (system_field == nullptr) {
+        system_field = coding.GetDescriptor()->FindFieldByName("system");
+      }
+      absl::optional<std::string> system = absl::nullopt;
+      if (system_field != nullptr &&
+          coding.GetReflection()->HasField(coding, system_field)) {
+        FHIR_ASSIGN_OR_RETURN(
+            system, MessageToString(coding.GetReflection()->GetMessage(
+                        coding, system_field)));
+      }
+      const Message& code =
+          coding.GetReflection()->GetMessage(coding, code_field);
+      FHIR_ASSIGN_OR_RETURN(bool is_member,
+                            CodeIsMember(code, system, value_set, work_space));
+      if (is_member) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  absl::Status EvaluateWithParam(
+      WorkSpace* work_space, const WorkspaceMessage& param,
+      std::vector<WorkspaceMessage>* results) const override {
+    if (work_space->GetValueSetRepository() == nullptr) {
+      return absl::FailedPreconditionError(
+          "memberOf() can only be called when `value_set_repository` has been "
+          "supplied to CompiledExpression::Compile()");
+    }
+
+    FHIR_ASSIGN_OR_RETURN(std::string value_set_id, MessageToString(param));
+    std::vector<WorkspaceMessage> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+
+    std::vector<bool> membership_results;
+    for (const auto& element : child_results) {
+      if (IsCodeableConcept(*element.Message())) {
+        FHIR_ASSIGN_OR_RETURN(
+            bool is_member,
+            ConceptIsMember(*element.Message(), value_set_id, work_space));
+        membership_results.push_back(is_member);
+      } else if (IsCode(*element.Message())) {
+        FHIR_ASSIGN_OR_RETURN(
+            bool is_member,
+            CodeIsMember(*element.Message(), /*code_system=*/absl::nullopt,
+                         value_set_id, work_space));
+        membership_results.push_back(is_member);
+      } else if (IsString(*element.Message())) {
+        FHIR_ASSIGN_OR_RETURN(std::string code_str, MessageToString(element));
+        FHIR_ASSIGN_OR_RETURN(
+            bool is_member, StringIsMember(code_str, value_set_id, work_space));
+        membership_results.push_back(is_member);
+      } else {
+        return absl::InvalidArgumentError(absl::StrFormat(
+            "`memberOf(valueset : string)` is not supported on `%s` types.",
+            element.Message()->GetDescriptor()->full_name()));
+      }
+    }
+    for (bool is_member : membership_results) {
+      Message* result =
+          work_space->GetPrimitiveHandler()->NewBoolean(is_member);
+      work_space->DeleteWhenFinished(result);
+      results->push_back(WorkspaceMessage(result));
+    }
+    return absl::OkStatus();
+  }
+
+  const Descriptor* ReturnType() const override {
+    return Boolean::descriptor();
+  }
+};
+
 class ComparisonOperator : public BinaryOperator {
  public:
   // Types of comparisons supported by this operator.
@@ -3917,7 +4061,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       {"elementDefinition", UnimplementedFunction},
       {"slice", UnimplementedFunction},
       {"checkModifiers", UnimplementedFunction},
-      {"memberOf", UnimplementedFunction},
+      {"memberOf", FunctionNode::Create<MemberOfFunction>},
       {"subsumes", UnimplementedFunction},
       {"subsumedBy", UnimplementedFunction},
   };
@@ -4047,12 +4191,14 @@ absl::StatusOr<std::string> EvaluationResult::GetString() const {
 CompiledExpression::CompiledExpression(CompiledExpression&& other)
     : fhir_path_(std::move(other.fhir_path_)),
       root_expression_(std::move(other.root_expression_)),
-      primitive_handler_(other.primitive_handler_) {}
+      primitive_handler_(other.primitive_handler_),
+      value_set_repository_(other.value_set_repository_) {}
 
 CompiledExpression& CompiledExpression::operator=(CompiledExpression&& other) {
   fhir_path_ = std::move(other.fhir_path_);
   root_expression_ = std::move(other.root_expression_);
   primitive_handler_ = other.primitive_handler_;
+  value_set_repository_ = other.value_set_repository_;
 
   return *this;
 }
@@ -4060,13 +4206,15 @@ CompiledExpression& CompiledExpression::operator=(CompiledExpression&& other) {
 CompiledExpression::CompiledExpression(const CompiledExpression& other)
     : fhir_path_(other.fhir_path_),
       root_expression_(other.root_expression_),
-      primitive_handler_(other.primitive_handler_) {}
+      primitive_handler_(other.primitive_handler_),
+      value_set_repository_(other.value_set_repository_) {}
 
 CompiledExpression& CompiledExpression::operator=(
     const CompiledExpression& other) {
   fhir_path_ = other.fhir_path_;
   root_expression_ = other.root_expression_;
   primitive_handler_ = other.primitive_handler_;
+  value_set_repository_ = other.value_set_repository_;
 
   return *this;
 }
@@ -4076,14 +4224,17 @@ const std::string& CompiledExpression::fhir_path() const { return fhir_path_; }
 CompiledExpression::CompiledExpression(
     const std::string& fhir_path,
     std::shared_ptr<internal::ExpressionNode> root_expression,
-    const PrimitiveHandler* primitive_handler)
+    const PrimitiveHandler* primitive_handler,
+    const ValueSetRepository* value_set_repository)
     : fhir_path_(fhir_path),
       root_expression_(root_expression),
-      primitive_handler_(primitive_handler) {}
+      primitive_handler_(primitive_handler),
+      value_set_repository_(value_set_repository) {}
 
 absl::StatusOr<CompiledExpression> CompiledExpression::Compile(
     const Descriptor* descriptor, const PrimitiveHandler* primitive_handler,
-    const std::string& fhir_path) {
+    const std::string& fhir_path,
+    const ValueSetRepository* value_set_repository) {
   ANTLRInputStream input(fhir_path);
   FhirPathLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
@@ -4096,7 +4247,8 @@ absl::StatusOr<CompiledExpression> CompiledExpression::Compile(
 
   if (result.isNotNull() && visitor.GetError().ok()) {
     auto root_node = result.as<std::shared_ptr<internal::ExpressionNode>>();
-    return CompiledExpression(fhir_path, root_node, primitive_handler);
+    return CompiledExpression(fhir_path, root_node, primitive_handler,
+                              value_set_repository);
   } else {
     return visitor.GetError();
   }
@@ -4111,7 +4263,8 @@ absl::StatusOr<EvaluationResult> CompiledExpression::Evaluate(
     const internal::WorkspaceMessage& message) const {
   std::vector<internal::WorkspaceMessage> message_context_stack;
   auto work_space = absl::make_unique<internal::WorkSpace>(
-      primitive_handler_, message_context_stack, message);
+      primitive_handler_, message_context_stack, message,
+      value_set_repository_);
 
   std::vector<internal::WorkspaceMessage> workspace_results;
   FHIR_RETURN_IF_ERROR(

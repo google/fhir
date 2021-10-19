@@ -20,6 +20,7 @@
 #include "google/fhir/annotations.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/value_set_repository.h"
 
 namespace google {
 namespace fhir {
@@ -89,7 +90,8 @@ class WorkSpace {
   explicit WorkSpace(const PrimitiveHandler* primitive_handler,
                      const ::google::protobuf::Message* message_context)
       : message_context_stack_({WorkspaceMessage(message_context)}),
-        primitive_handler_(primitive_handler) {}
+        primitive_handler_(primitive_handler),
+        value_set_repository_(nullptr) {}
 
   // Same as WorkSpace(const ::google::protobuf::Message*) but message_context_stack is
   // added the the bottom of the message context stack and message_context is
@@ -99,7 +101,20 @@ class WorkSpace {
       const std::vector<WorkspaceMessage>& message_context_stack,
       const WorkspaceMessage& message_context)
       : message_context_stack_(message_context_stack),
-        primitive_handler_(primitive_handler) {
+        primitive_handler_(primitive_handler),
+        value_set_repository_(nullptr) {
+    message_context_stack_.push_back(message_context);
+  }
+
+  // Same as above, with added parameter for const ValueSetRepository*.
+  explicit WorkSpace(
+      const PrimitiveHandler* primitive_handler,
+      const std::vector<WorkspaceMessage>& message_context_stack,
+      const WorkspaceMessage& message_context,
+      const ValueSetRepository* value_set_repository)
+      : message_context_stack_(message_context_stack),
+        primitive_handler_(primitive_handler),
+        value_set_repository_(value_set_repository) {
     message_context_stack_.push_back(message_context);
   }
 
@@ -158,6 +173,10 @@ class WorkSpace {
     return primitive_handler_;
   }
 
+  const ValueSetRepository* GetValueSetRepository() const {
+    return value_set_repository_;
+  }
+
  private:
   std::vector<const ::google::protobuf::Message*> messages_;
 
@@ -166,6 +185,8 @@ class WorkSpace {
   std::vector<std::unique_ptr<::google::protobuf::Message>> to_delete_;
 
   const PrimitiveHandler* primitive_handler_;
+
+  const ValueSetRepository* value_set_repository_;
 };
 
 // Abstract base class of "compiled" FHIRPath expressions. In this
@@ -294,7 +315,10 @@ class CompiledExpression {
   // execute that expression.
   static absl::StatusOr<CompiledExpression> Compile(
       const ::google::protobuf::Descriptor* descriptor,
-      const PrimitiveHandler* primitive_handler, const std::string& fhir_path);
+      const PrimitiveHandler* primitive_handler, const std::string& fhir_path,
+      // If `value_set_repository` is specified, it should be alive for as long
+      // as the returned CompiledExpression object is alive.
+      const ValueSetRepository* value_set_repository = nullptr);
 
   // Evaluates the compiled expression against the given message.
   absl::StatusOr<EvaluationResult> Evaluate(
@@ -312,11 +336,13 @@ class CompiledExpression {
   explicit CompiledExpression(
       const std::string& fhir_path,
       std::shared_ptr<internal::ExpressionNode> root_expression,
-      const PrimitiveHandler* primitive_handler_);
+      const PrimitiveHandler* primitive_handler,
+      const ValueSetRepository* value_set_repo);
 
   std::string fhir_path_;
   std::shared_ptr<const internal::ExpressionNode> root_expression_;
   const PrimitiveHandler* primitive_handler_;
+  const ValueSetRepository* value_set_repository_;
 };
 
 }  // namespace fhir_path
