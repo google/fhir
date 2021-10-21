@@ -495,6 +495,7 @@ final class ProfileGenerator {
         }
         if (field.equals(idField) || field.equals(pathField)) {
           diffElement.setField(field, newElement.getField(field));
+          continue;
         }
         if (field.isRepeated()) {
           if (field.getType() != FieldDescriptor.Type.MESSAGE) {
@@ -866,8 +867,8 @@ final class ProfileGenerator {
 
   private ElementDefinition getBaseElement(
       ElementDefinition element, List<ElementDefinition> elements) throws InvalidFhirException {
-    String path = element.getPath().getValue();
-    Optional<ElementDefinition> exactMatch = getOptionalElementById(path, elements);
+    String id = element.getId().getValue();
+    Optional<ElementDefinition> exactMatch = getOptionalElementById(id, elements);
     if (exactMatch.isPresent()) {
       return exactMatch.get();
     }
@@ -883,7 +884,7 @@ final class ProfileGenerator {
     // But, it's extensions all the way down, so we can drop all ".extension" tokens from the path
     // to get the root path.
     // E.g., the root path of Extension.extension.extension.id is Extension.id.
-    Matcher subExtensionMatcher = SUB_EXTENSION_PATH_PATTERN.matcher(path);
+    Matcher subExtensionMatcher = SUB_EXTENSION_PATH_PATTERN.matcher(element.getPath().getValue());
     if (subExtensionMatcher.matches()) {
       Optional<ElementDefinition> baseExtensionElement =
           getOptionalElementById("Extension" + subExtensionMatcher.group(2), elements);

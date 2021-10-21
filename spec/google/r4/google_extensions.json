@@ -10,7 +10,7 @@
         "name": "PrimitiveHasNoValue",
         "title": "PrimitiveHasNoValue",
         "status": "draft",
-        "date": "2021-08-27",
+        "date": "2021-10-19",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -311,7 +311,7 @@
         "name": "OperationOutcomeSubject",
         "title": "OperationOutcomeSubject",
         "status": "draft",
-        "date": "2021-08-27",
+        "date": "2021-10-19",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -612,7 +612,7 @@
         "name": "Base64BinarySeparatorStride",
         "title": "Base64BinarySeparatorStride",
         "status": "draft",
-        "date": "2021-08-27",
+        "date": "2021-10-19",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -1513,10 +1513,6 @@
               ]
             },
             {
-              "id": "Extension.extension:separator.id",
-              "path": "Extension.extension.id"
-            },
-            {
               "id": "Extension.extension:separator.extension",
               "path": "Extension.extension.extension",
               "max": "0"
@@ -1568,10 +1564,6 @@
               ]
             },
             {
-              "id": "Extension.extension:stride.id",
-              "path": "Extension.extension.id"
-            },
-            {
               "id": "Extension.extension:stride.extension",
               "path": "Extension.extension.extension",
               "max": "0"
@@ -1602,7 +1594,7 @@
         "name": "EventLabel",
         "title": "EventLabel",
         "status": "draft",
-        "date": "2021-08-27",
+        "date": "2021-10-19",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -3747,10 +3739,6 @@
               ]
             },
             {
-              "id": "Extension.extension:patient.id",
-              "path": "Extension.extension.id"
-            },
-            {
               "id": "Extension.extension:patient.extension",
               "path": "Extension.extension.extension",
               "max": "0"
@@ -3800,10 +3788,6 @@
                   "source": "Extension"
                 }
               ]
-            },
-            {
-              "id": "Extension.extension:type.id",
-              "path": "Extension.extension.id"
             },
             {
               "id": "Extension.extension:type.extension",
@@ -3856,10 +3840,6 @@
               ]
             },
             {
-              "id": "Extension.extension:eventTime.id",
-              "path": "Extension.extension.id"
-            },
-            {
               "id": "Extension.extension:eventTime.extension",
               "path": "Extension.extension.extension",
               "max": "0"
@@ -3908,10 +3888,6 @@
                   "source": "Extension"
                 }
               ]
-            },
-            {
-              "id": "Extension.extension:source.id",
-              "path": "Extension.extension.id"
             },
             {
               "id": "Extension.extension:source.extension",
@@ -3963,10 +3939,6 @@
               ]
             },
             {
-              "id": "Extension.extension:label.id",
-              "path": "Extension.extension.id"
-            },
-            {
               "id": "Extension.extension:label.extension",
               "path": "Extension.extension.extension",
               "max": "0"
@@ -4012,10 +3984,6 @@
                   "source": "Extension"
                 }
               ]
-            },
-            {
-              "id": "Extension.extension:label.extension:className.id",
-              "path": "Extension.extension.extension.id"
             },
             {
               "id": "Extension.extension:label.extension:className.extension",
@@ -4069,10 +4037,6 @@
               ]
             },
             {
-              "id": "Extension.extension:label.extension:classValue.id",
-              "path": "Extension.extension.extension.id"
-            },
-            {
               "id": "Extension.extension:label.extension:classValue.extension",
               "path": "Extension.extension.extension.extension",
               "max": "0"
@@ -4115,7 +4079,7 @@
         "name": "EventTrigger",
         "title": "EventTrigger",
         "status": "draft",
-        "date": "2021-08-27",
+        "date": "2021-10-19",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -5234,10 +5198,6 @@
               ]
             },
             {
-              "id": "Extension.extension:type.id",
-              "path": "Extension.extension.id"
-            },
-            {
               "id": "Extension.extension:type.extension",
               "path": "Extension.extension.extension",
               "max": "0"
@@ -5289,10 +5249,6 @@
               ]
             },
             {
-              "id": "Extension.extension:eventTime.id",
-              "path": "Extension.extension.id"
-            },
-            {
               "id": "Extension.extension:eventTime.extension",
               "path": "Extension.extension.extension",
               "max": "0"
@@ -5341,10 +5297,6 @@
                   "source": "Extension"
                 }
               ]
-            },
-            {
-              "id": "Extension.extension:source.id",
-              "path": "Extension.extension.id"
             },
             {
               "id": "Extension.extension:source.extension",

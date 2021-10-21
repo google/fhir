@@ -10,7 +10,7 @@
         "name": "Bundle",
         "title": "Bundle",
         "status": "draft",
-        "date": "2021-05-18",
+        "date": "2021-10-19",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1888,7 +1888,7 @@
         "name": "TestPatient",
         "title": "TestPatient",
         "status": "draft",
-        "date": "2021-05-18",
+        "date": "2021-10-19",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -4573,10 +4573,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://hl7.org/fhir/metric-color"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -4727,16 +4723,6 @@
             },
             {
               "id": "Patient.extension:decExt",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
               "path": "Patient.extension",
               "sliceName": "decExt",
               "short": "Decimal Extension",
@@ -4751,9 +4737,6 @@
                   ]
                 }
               ],
-              "condition": [
-                "ele-1"
-              ],
               "constraint": [
                 {
                   "key": "ext-1",
@@ -4767,20 +4750,8 @@
             },
             {
               "id": "Patient.extension:favoriteBrewery",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
               "path": "Patient.extension",
               "sliceName": "favoriteBrewery",
-              "short": "Optional Extensions Element",
-              "definition": "Optional Extension Element - found in all resources.",
               "max": "1",
               "type": [
                 {
@@ -4789,9 +4760,6 @@
                     "http://test/url/base/StructureDefinition/FavoriteBrewery"
                   ]
                 }
-              ],
-              "condition": [
-                "ele-1"
               ],
               "constraint": [
                 {
@@ -4806,20 +4774,8 @@
             },
             {
               "id": "Patient.extension:favoriteCalifornian",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
               "path": "Patient.extension",
               "sliceName": "favoriteCalifornian",
-              "short": "Optional Extensions Element",
-              "definition": "Optional Extension Element - found in all resources.",
               "max": "1",
               "type": [
                 {
@@ -4828,9 +4784,6 @@
                     "http://test/url/base/StructureDefinition/FavoriteCalifornian"
                   ]
                 }
-              ],
-              "condition": [
-                "ele-1"
               ],
               "constraint": [
                 {
@@ -4864,37 +4817,9 @@
               "max": "1"
             },
             {
-              "id": "Patient.maritalStatus.coding:color.id",
-              "path": "Patient.maritalStatus.coding.id"
-            },
-            {
-              "id": "Patient.maritalStatus.coding:color.extension",
-              "path": "Patient.maritalStatus.coding.extension"
-            },
-            {
               "id": "Patient.maritalStatus.coding:color.system",
               "path": "Patient.maritalStatus.coding.system",
               "fixedUri": "http://hl7.org/fhir/metric-color"
-            },
-            {
-              "id": "Patient.maritalStatus.coding:color.version",
-              "path": "Patient.maritalStatus.coding.version"
-            },
-            {
-              "id": "Patient.maritalStatus.coding:color.code",
-              "path": "Patient.maritalStatus.coding.code",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://hl7.org/fhir/metric-color"
-              }
-            },
-            {
-              "id": "Patient.maritalStatus.coding:color.display",
-              "path": "Patient.maritalStatus.coding.display"
-            },
-            {
-              "id": "Patient.maritalStatus.coding:color.userSelected",
-              "path": "Patient.maritalStatus.coding.userSelected"
             }
           ]
         }
@@ -4908,7 +4833,7 @@
         "name": "TestObservation",
         "title": "TestObservation",
         "status": "draft",
-        "date": "2021-05-18",
+        "date": "2021-10-19",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -7995,10 +7920,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysa.org"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -8384,10 +8305,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysb.org"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -8774,10 +8691,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysc.org"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -9164,10 +9077,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysd.org"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -9553,10 +9462,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://hl7.org/fhir/metric-color"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -9998,10 +9903,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://catA.org"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -10443,10 +10344,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://nestedconcept.org"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -10565,20 +10462,8 @@
           "element": [
             {
               "id": "Observation.extension:myComplexExtension",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
               "path": "Observation.extension",
               "sliceName": "myComplexExtension",
-              "short": "Optional Extensions Element",
-              "definition": "Optional Extension Element - found in all resources.",
               "max": "1",
               "type": [
                 {
@@ -10587,9 +10472,6 @@
                     "http://test/url/base/StructureDefinition/ComplexExt"
                   ]
                 }
-              ],
-              "condition": [
-                "ele-1"
               ],
               "constraint": [
                 {
@@ -10604,20 +10486,8 @@
             },
             {
               "id": "Observation.component.extension:onNested",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
               "path": "Observation.component.extension",
               "sliceName": "onNested",
-              "short": "Optional Extensions Element",
-              "definition": "Optional Extension Element - found in all resources.",
               "max": "1",
               "type": [
                 {
@@ -10626,9 +10496,6 @@
                     "http://test/url/base/StructureDefinition/SimpleDecimalExt"
                   ]
                 }
-              ],
-              "condition": [
-                "ele-1"
               ],
               "constraint": [
                 {
@@ -10664,37 +10531,9 @@
               "max": "1"
             },
             {
-              "id": "Observation.code.coding:sysA.id",
-              "path": "Observation.code.coding.id"
-            },
-            {
-              "id": "Observation.code.coding:sysA.extension",
-              "path": "Observation.code.coding.extension"
-            },
-            {
               "id": "Observation.code.coding:sysA.system",
               "path": "Observation.code.coding.system",
               "fixedUri": "http://sysa.org"
-            },
-            {
-              "id": "Observation.code.coding:sysA.version",
-              "path": "Observation.code.coding.version"
-            },
-            {
-              "id": "Observation.code.coding:sysA.code",
-              "path": "Observation.code.coding.code",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysa.org"
-              }
-            },
-            {
-              "id": "Observation.code.coding:sysA.display",
-              "path": "Observation.code.coding.display"
-            },
-            {
-              "id": "Observation.code.coding:sysA.userSelected",
-              "path": "Observation.code.coding.userSelected"
             },
             {
               "id": "Observation.code.coding:sysB",
@@ -10704,37 +10543,9 @@
               "definition": "SysB Code"
             },
             {
-              "id": "Observation.code.coding:sysB.id",
-              "path": "Observation.code.coding.id"
-            },
-            {
-              "id": "Observation.code.coding:sysB.extension",
-              "path": "Observation.code.coding.extension"
-            },
-            {
               "id": "Observation.code.coding:sysB.system",
               "path": "Observation.code.coding.system",
               "fixedUri": "http://sysb.org"
-            },
-            {
-              "id": "Observation.code.coding:sysB.version",
-              "path": "Observation.code.coding.version"
-            },
-            {
-              "id": "Observation.code.coding:sysB.code",
-              "path": "Observation.code.coding.code",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysb.org"
-              }
-            },
-            {
-              "id": "Observation.code.coding:sysB.display",
-              "path": "Observation.code.coding.display"
-            },
-            {
-              "id": "Observation.code.coding:sysB.userSelected",
-              "path": "Observation.code.coding.userSelected"
             },
             {
               "id": "Observation.code.coding:sysC",
@@ -10745,38 +10556,14 @@
               "max": "1"
             },
             {
-              "id": "Observation.code.coding:sysC.id",
-              "path": "Observation.code.coding.id"
-            },
-            {
-              "id": "Observation.code.coding:sysC.extension",
-              "path": "Observation.code.coding.extension"
-            },
-            {
               "id": "Observation.code.coding:sysC.system",
               "path": "Observation.code.coding.system",
               "fixedUri": "http://sysc.org"
             },
             {
-              "id": "Observation.code.coding:sysC.version",
-              "path": "Observation.code.coding.version"
-            },
-            {
               "id": "Observation.code.coding:sysC.code",
               "path": "Observation.code.coding.code",
-              "fixedCode": "8472",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysc.org"
-              }
-            },
-            {
-              "id": "Observation.code.coding:sysC.display",
-              "path": "Observation.code.coding.display"
-            },
-            {
-              "id": "Observation.code.coding:sysC.userSelected",
-              "path": "Observation.code.coding.userSelected"
+              "fixedCode": "8472"
             },
             {
               "id": "Observation.code.coding:sysD",
@@ -10787,38 +10574,14 @@
               "max": "1"
             },
             {
-              "id": "Observation.code.coding:sysD.id",
-              "path": "Observation.code.coding.id"
-            },
-            {
-              "id": "Observation.code.coding:sysD.extension",
-              "path": "Observation.code.coding.extension"
-            },
-            {
               "id": "Observation.code.coding:sysD.system",
               "path": "Observation.code.coding.system",
               "fixedUri": "http://sysd.org"
             },
             {
-              "id": "Observation.code.coding:sysD.version",
-              "path": "Observation.code.coding.version"
-            },
-            {
               "id": "Observation.code.coding:sysD.code",
               "path": "Observation.code.coding.code",
-              "fixedCode": "8675329",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysd.org"
-              }
-            },
-            {
-              "id": "Observation.code.coding:sysD.display",
-              "path": "Observation.code.coding.display"
-            },
-            {
-              "id": "Observation.code.coding:sysD.userSelected",
-              "path": "Observation.code.coding.userSelected"
+              "fixedCode": "8675329"
             },
             {
               "id": "Observation.code.coding:color",
@@ -10827,37 +10590,9 @@
               "max": "1"
             },
             {
-              "id": "Observation.code.coding:color.id",
-              "path": "Observation.code.coding.id"
-            },
-            {
-              "id": "Observation.code.coding:color.extension",
-              "path": "Observation.code.coding.extension"
-            },
-            {
               "id": "Observation.code.coding:color.system",
               "path": "Observation.code.coding.system",
               "fixedUri": "http://hl7.org/fhir/metric-color"
-            },
-            {
-              "id": "Observation.code.coding:color.version",
-              "path": "Observation.code.coding.version"
-            },
-            {
-              "id": "Observation.code.coding:color.code",
-              "path": "Observation.code.coding.code",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://hl7.org/fhir/metric-color"
-              }
-            },
-            {
-              "id": "Observation.code.coding:color.display",
-              "path": "Observation.code.coding.display"
-            },
-            {
-              "id": "Observation.code.coding:color.userSelected",
-              "path": "Observation.code.coding.userSelected"
             },
             {
               "id": "Observation.category.coding",
@@ -10879,37 +10614,9 @@
               "sliceName": "catA"
             },
             {
-              "id": "Observation.category.coding:catA.id",
-              "path": "Observation.category.coding.id"
-            },
-            {
-              "id": "Observation.category.coding:catA.extension",
-              "path": "Observation.category.coding.extension"
-            },
-            {
               "id": "Observation.category.coding:catA.system",
               "path": "Observation.category.coding.system",
               "fixedUri": "http://catA.org"
-            },
-            {
-              "id": "Observation.category.coding:catA.version",
-              "path": "Observation.category.coding.version"
-            },
-            {
-              "id": "Observation.category.coding:catA.code",
-              "path": "Observation.category.coding.code",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://catA.org"
-              }
-            },
-            {
-              "id": "Observation.category.coding:catA.display",
-              "path": "Observation.category.coding.display"
-            },
-            {
-              "id": "Observation.category.coding:catA.userSelected",
-              "path": "Observation.category.coding.userSelected"
             },
             {
               "id": "Observation.component.interpretation.coding",
@@ -10932,37 +10639,9 @@
               "max": "1"
             },
             {
-              "id": "Observation.component.interpretation.coding:onNestedConcept.id",
-              "path": "Observation.component.interpretation.coding.id"
-            },
-            {
-              "id": "Observation.component.interpretation.coding:onNestedConcept.extension",
-              "path": "Observation.component.interpretation.coding.extension"
-            },
-            {
               "id": "Observation.component.interpretation.coding:onNestedConcept.system",
               "path": "Observation.component.interpretation.coding.system",
               "fixedUri": "http://nestedconcept.org"
-            },
-            {
-              "id": "Observation.component.interpretation.coding:onNestedConcept.version",
-              "path": "Observation.component.interpretation.coding.version"
-            },
-            {
-              "id": "Observation.component.interpretation.coding:onNestedConcept.code",
-              "path": "Observation.component.interpretation.coding.code",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://nestedconcept.org"
-              }
-            },
-            {
-              "id": "Observation.component.interpretation.coding:onNestedConcept.display",
-              "path": "Observation.component.interpretation.coding.display"
-            },
-            {
-              "id": "Observation.component.interpretation.coding:onNestedConcept.userSelected",
-              "path": "Observation.component.interpretation.coding.userSelected"
             }
           ]
         }
@@ -10976,7 +10655,7 @@
         "name": "TestObservationLvl2",
         "title": "TestObservationLvl2",
         "status": "draft",
-        "date": "2021-05-18",
+        "date": "2021-10-19",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -14063,10 +13742,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysa.org"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -14452,10 +14127,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysb.org"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -14842,10 +14513,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysc.org"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -15232,10 +14899,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysd.org"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -15621,10 +15284,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://hl7.org/fhir/metric-color"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -16066,10 +15725,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://catA.org"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -16511,10 +16166,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://nestedconcept.org"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -17010,10 +16661,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://newonprofiled.org"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -17131,614 +16778,9 @@
         "differential": {
           "element": [
             {
-              "id": "Observation.extension:myComplexExtension",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
-              "path": "Observation.extension",
-              "sliceName": "myComplexExtension",
-              "short": "Optional Extensions Element",
-              "definition": "Optional Extension Element - found in all resources.",
-              "max": "1",
-              "type": [
-                {
-                  "code": "Extension",
-                  "profile": [
-                    "http://test/url/base/StructureDefinition/ComplexExt"
-                  ]
-                }
-              ],
-              "condition": [
-                "ele-1"
-              ],
-              "constraint": [
-                {
-                  "key": "ext-1",
-                  "severity": "error",
-                  "human": "Must have either extensions or value[x], not both",
-                  "expression": "extension.exists() != value.exists()",
-                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
-                  "source": "Extension"
-                }
-              ]
-            },
-            {
-              "id": "Observation.component.extension:onNested",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
-              "path": "Observation.component.extension",
-              "sliceName": "onNested",
-              "short": "Optional Extensions Element",
-              "definition": "Optional Extension Element - found in all resources.",
-              "max": "1",
-              "type": [
-                {
-                  "code": "Extension",
-                  "profile": [
-                    "http://test/url/base/StructureDefinition/SimpleDecimalExt"
-                  ]
-                }
-              ],
-              "condition": [
-                "ele-1"
-              ],
-              "constraint": [
-                {
-                  "key": "ext-1",
-                  "severity": "error",
-                  "human": "Must have either extensions or value[x], not both",
-                  "expression": "extension.exists() != value.exists()",
-                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
-                  "source": "Extension"
-                }
-              ]
-            },
-            {
-              "id": "Observation.code.coding:sysA",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
-              "path": "Observation.code.coding",
-              "sliceName": "sysA",
-              "short": "SysA Code",
-              "definition": "SysA Code",
-              "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
-              "max": "1",
-              "condition": [
-                "ele-1"
-              ],
-              "isSummary": false,
-              "mapping": [
-                {
-                  "identity": "rim",
-                  "map": "n/a"
-                },
-                {
-                  "identity": "v2",
-                  "map": "CE/CNE/CWE subset one of the sets of component 1-3 or 4-6"
-                },
-                {
-                  "identity": "rim",
-                  "map": "CV"
-                },
-                {
-                  "identity": "orim",
-                  "map": "fhir:Coding rdfs:subClassOf dt:CDCoding"
-                }
-              ]
-            },
-            {
-              "id": "Observation.code.coding:sysA.id",
-              "path": "Observation.code.coding.id"
-            },
-            {
-              "id": "Observation.code.coding:sysA.extension",
-              "path": "Observation.code.coding.extension"
-            },
-            {
-              "id": "Observation.code.coding:sysA.system",
-              "path": "Observation.code.coding.system",
-              "fixedUri": "http://sysa.org"
-            },
-            {
-              "id": "Observation.code.coding:sysA.version",
-              "path": "Observation.code.coding.version"
-            },
-            {
-              "id": "Observation.code.coding:sysA.code",
-              "path": "Observation.code.coding.code",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysa.org"
-              }
-            },
-            {
-              "id": "Observation.code.coding:sysA.display",
-              "path": "Observation.code.coding.display"
-            },
-            {
-              "id": "Observation.code.coding:sysA.userSelected",
-              "path": "Observation.code.coding.userSelected"
-            },
-            {
-              "id": "Observation.code.coding:sysB",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
-              "path": "Observation.code.coding",
-              "sliceName": "sysB",
-              "short": "SysB Code",
-              "definition": "SysB Code",
-              "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
-              "condition": [
-                "ele-1"
-              ],
-              "isSummary": false,
-              "mapping": [
-                {
-                  "identity": "rim",
-                  "map": "n/a"
-                },
-                {
-                  "identity": "v2",
-                  "map": "CE/CNE/CWE subset one of the sets of component 1-3 or 4-6"
-                },
-                {
-                  "identity": "rim",
-                  "map": "CV"
-                },
-                {
-                  "identity": "orim",
-                  "map": "fhir:Coding rdfs:subClassOf dt:CDCoding"
-                }
-              ]
-            },
-            {
-              "id": "Observation.code.coding:sysB.id",
-              "path": "Observation.code.coding.id"
-            },
-            {
-              "id": "Observation.code.coding:sysB.extension",
-              "path": "Observation.code.coding.extension"
-            },
-            {
-              "id": "Observation.code.coding:sysB.system",
-              "path": "Observation.code.coding.system",
-              "fixedUri": "http://sysb.org"
-            },
-            {
-              "id": "Observation.code.coding:sysB.version",
-              "path": "Observation.code.coding.version"
-            },
-            {
-              "id": "Observation.code.coding:sysB.code",
-              "path": "Observation.code.coding.code",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysb.org"
-              }
-            },
-            {
-              "id": "Observation.code.coding:sysB.display",
-              "path": "Observation.code.coding.display"
-            },
-            {
-              "id": "Observation.code.coding:sysB.userSelected",
-              "path": "Observation.code.coding.userSelected"
-            },
-            {
-              "id": "Observation.code.coding:sysC",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
-              "path": "Observation.code.coding",
-              "sliceName": "sysC",
-              "short": "SysC Code",
-              "definition": "SysC Code",
-              "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
-              "max": "1",
-              "condition": [
-                "ele-1"
-              ],
-              "isSummary": false,
-              "mapping": [
-                {
-                  "identity": "rim",
-                  "map": "n/a"
-                },
-                {
-                  "identity": "v2",
-                  "map": "CE/CNE/CWE subset one of the sets of component 1-3 or 4-6"
-                },
-                {
-                  "identity": "rim",
-                  "map": "CV"
-                },
-                {
-                  "identity": "orim",
-                  "map": "fhir:Coding rdfs:subClassOf dt:CDCoding"
-                }
-              ]
-            },
-            {
-              "id": "Observation.code.coding:sysC.id",
-              "path": "Observation.code.coding.id"
-            },
-            {
-              "id": "Observation.code.coding:sysC.extension",
-              "path": "Observation.code.coding.extension"
-            },
-            {
-              "id": "Observation.code.coding:sysC.system",
-              "path": "Observation.code.coding.system",
-              "fixedUri": "http://sysc.org"
-            },
-            {
-              "id": "Observation.code.coding:sysC.version",
-              "path": "Observation.code.coding.version"
-            },
-            {
-              "id": "Observation.code.coding:sysC.code",
-              "path": "Observation.code.coding.code",
-              "fixedCode": "8472",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysc.org"
-              }
-            },
-            {
-              "id": "Observation.code.coding:sysC.display",
-              "path": "Observation.code.coding.display"
-            },
-            {
-              "id": "Observation.code.coding:sysC.userSelected",
-              "path": "Observation.code.coding.userSelected"
-            },
-            {
-              "id": "Observation.code.coding:sysD",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
-              "path": "Observation.code.coding",
-              "sliceName": "sysD",
-              "short": "SysD Code",
-              "definition": "SysD Code",
-              "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
-              "max": "1",
-              "condition": [
-                "ele-1"
-              ],
-              "isSummary": false,
-              "mapping": [
-                {
-                  "identity": "rim",
-                  "map": "n/a"
-                },
-                {
-                  "identity": "v2",
-                  "map": "CE/CNE/CWE subset one of the sets of component 1-3 or 4-6"
-                },
-                {
-                  "identity": "rim",
-                  "map": "CV"
-                },
-                {
-                  "identity": "orim",
-                  "map": "fhir:Coding rdfs:subClassOf dt:CDCoding"
-                }
-              ]
-            },
-            {
-              "id": "Observation.code.coding:sysD.id",
-              "path": "Observation.code.coding.id"
-            },
-            {
-              "id": "Observation.code.coding:sysD.extension",
-              "path": "Observation.code.coding.extension"
-            },
-            {
-              "id": "Observation.code.coding:sysD.system",
-              "path": "Observation.code.coding.system",
-              "fixedUri": "http://sysd.org"
-            },
-            {
-              "id": "Observation.code.coding:sysD.version",
-              "path": "Observation.code.coding.version"
-            },
-            {
-              "id": "Observation.code.coding:sysD.code",
-              "path": "Observation.code.coding.code",
-              "fixedCode": "8675329",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://sysd.org"
-              }
-            },
-            {
-              "id": "Observation.code.coding:sysD.display",
-              "path": "Observation.code.coding.display"
-            },
-            {
-              "id": "Observation.code.coding:sysD.userSelected",
-              "path": "Observation.code.coding.userSelected"
-            },
-            {
-              "id": "Observation.code.coding:color",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
-              "path": "Observation.code.coding",
-              "sliceName": "color",
-              "short": "A reference to a code defined by a terminology system",
-              "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
-              "max": "1",
-              "condition": [
-                "ele-1"
-              ],
-              "isSummary": false,
-              "mapping": [
-                {
-                  "identity": "rim",
-                  "map": "n/a"
-                },
-                {
-                  "identity": "v2",
-                  "map": "CE/CNE/CWE subset one of the sets of component 1-3 or 4-6"
-                },
-                {
-                  "identity": "rim",
-                  "map": "CV"
-                },
-                {
-                  "identity": "orim",
-                  "map": "fhir:Coding rdfs:subClassOf dt:CDCoding"
-                }
-              ]
-            },
-            {
-              "id": "Observation.code.coding:color.id",
-              "path": "Observation.code.coding.id"
-            },
-            {
-              "id": "Observation.code.coding:color.extension",
-              "path": "Observation.code.coding.extension"
-            },
-            {
-              "id": "Observation.code.coding:color.system",
-              "path": "Observation.code.coding.system",
-              "fixedUri": "http://hl7.org/fhir/metric-color"
-            },
-            {
-              "id": "Observation.code.coding:color.version",
-              "path": "Observation.code.coding.version"
-            },
-            {
-              "id": "Observation.code.coding:color.code",
-              "path": "Observation.code.coding.code",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://hl7.org/fhir/metric-color"
-              }
-            },
-            {
-              "id": "Observation.code.coding:color.display",
-              "path": "Observation.code.coding.display"
-            },
-            {
-              "id": "Observation.code.coding:color.userSelected",
-              "path": "Observation.code.coding.userSelected"
-            },
-            {
-              "id": "Observation.category.coding:catA",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
-              "path": "Observation.category.coding",
-              "sliceName": "catA",
-              "short": "A reference to a code defined by a terminology system",
-              "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
-              "condition": [
-                "ele-1"
-              ],
-              "isSummary": false,
-              "mapping": [
-                {
-                  "identity": "rim",
-                  "map": "n/a"
-                },
-                {
-                  "identity": "v2",
-                  "map": "CE/CNE/CWE subset one of the sets of component 1-3 or 4-6"
-                },
-                {
-                  "identity": "rim",
-                  "map": "CV"
-                },
-                {
-                  "identity": "orim",
-                  "map": "fhir:Coding rdfs:subClassOf dt:CDCoding"
-                }
-              ]
-            },
-            {
-              "id": "Observation.category.coding:catA.id",
-              "path": "Observation.category.coding.id"
-            },
-            {
-              "id": "Observation.category.coding:catA.extension",
-              "path": "Observation.category.coding.extension"
-            },
-            {
-              "id": "Observation.category.coding:catA.system",
-              "path": "Observation.category.coding.system",
-              "fixedUri": "http://catA.org"
-            },
-            {
-              "id": "Observation.category.coding:catA.version",
-              "path": "Observation.category.coding.version"
-            },
-            {
-              "id": "Observation.category.coding:catA.code",
-              "path": "Observation.category.coding.code",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://catA.org"
-              }
-            },
-            {
-              "id": "Observation.category.coding:catA.display",
-              "path": "Observation.category.coding.display"
-            },
-            {
-              "id": "Observation.category.coding:catA.userSelected",
-              "path": "Observation.category.coding.userSelected"
-            },
-            {
-              "id": "Observation.component.interpretation.coding:onNestedConcept",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
-              "path": "Observation.component.interpretation.coding",
-              "sliceName": "onNestedConcept",
-              "short": "A reference to a code defined by a terminology system",
-              "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
-              "max": "1",
-              "condition": [
-                "ele-1"
-              ],
-              "isSummary": false,
-              "mapping": [
-                {
-                  "identity": "rim",
-                  "map": "n/a"
-                },
-                {
-                  "identity": "v2",
-                  "map": "CE/CNE/CWE subset one of the sets of component 1-3 or 4-6"
-                },
-                {
-                  "identity": "rim",
-                  "map": "CV"
-                },
-                {
-                  "identity": "orim",
-                  "map": "fhir:Coding rdfs:subClassOf dt:CDCoding"
-                }
-              ]
-            },
-            {
-              "id": "Observation.component.interpretation.coding:onNestedConcept.id",
-              "path": "Observation.component.interpretation.coding.id"
-            },
-            {
-              "id": "Observation.component.interpretation.coding:onNestedConcept.extension",
-              "path": "Observation.component.interpretation.coding.extension"
-            },
-            {
-              "id": "Observation.component.interpretation.coding:onNestedConcept.system",
-              "path": "Observation.component.interpretation.coding.system",
-              "fixedUri": "http://nestedconcept.org"
-            },
-            {
-              "id": "Observation.component.interpretation.coding:onNestedConcept.version",
-              "path": "Observation.component.interpretation.coding.version"
-            },
-            {
-              "id": "Observation.component.interpretation.coding:onNestedConcept.code",
-              "path": "Observation.component.interpretation.coding.code",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://nestedconcept.org"
-              }
-            },
-            {
-              "id": "Observation.component.interpretation.coding:onNestedConcept.display",
-              "path": "Observation.component.interpretation.coding.display"
-            },
-            {
-              "id": "Observation.component.interpretation.coding:onNestedConcept.userSelected",
-              "path": "Observation.component.interpretation.coding.userSelected"
-            },
-            {
               "id": "Observation.extension:newExt",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
               "path": "Observation.extension",
               "sliceName": "newExt",
-              "short": "Optional Extensions Element",
-              "definition": "Optional Extension Element - found in all resources.",
               "max": "1",
               "type": [
                 {
@@ -17747,9 +16789,6 @@
                     "http://test/url/base/StructureDefinition/SimpleDecimalExt"
                   ]
                 }
-              ],
-              "condition": [
-                "ele-1"
               ],
               "constraint": [
                 {
@@ -17764,76 +16803,14 @@
             },
             {
               "id": "Observation.code.coding:newCodeOnProfiled",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
               "path": "Observation.code.coding",
               "sliceName": "newCodeOnProfiled",
-              "short": "A reference to a code defined by a terminology system",
-              "comment": "Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - see the HL7 v3 Core Principles for more information.",
-              "max": "1",
-              "condition": [
-                "ele-1"
-              ],
-              "isSummary": false,
-              "mapping": [
-                {
-                  "identity": "rim",
-                  "map": "n/a"
-                },
-                {
-                  "identity": "v2",
-                  "map": "CE/CNE/CWE subset one of the sets of component 1-3 or 4-6"
-                },
-                {
-                  "identity": "rim",
-                  "map": "CV"
-                },
-                {
-                  "identity": "orim",
-                  "map": "fhir:Coding rdfs:subClassOf dt:CDCoding"
-                }
-              ]
-            },
-            {
-              "id": "Observation.code.coding:newCodeOnProfiled.id",
-              "path": "Observation.code.coding.id"
-            },
-            {
-              "id": "Observation.code.coding:newCodeOnProfiled.extension",
-              "path": "Observation.code.coding.extension"
+              "max": "1"
             },
             {
               "id": "Observation.code.coding:newCodeOnProfiled.system",
               "path": "Observation.code.coding.system",
               "fixedUri": "http://newonprofiled.org"
-            },
-            {
-              "id": "Observation.code.coding:newCodeOnProfiled.version",
-              "path": "Observation.code.coding.version"
-            },
-            {
-              "id": "Observation.code.coding:newCodeOnProfiled.code",
-              "path": "Observation.code.coding.code",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://newonprofiled.org"
-              }
-            },
-            {
-              "id": "Observation.code.coding:newCodeOnProfiled.display",
-              "path": "Observation.code.coding.display"
-            },
-            {
-              "id": "Observation.code.coding:newCodeOnProfiled.userSelected",
-              "path": "Observation.code.coding.userSelected"
             }
           ]
         }
@@ -17847,7 +16824,7 @@
         "name": "TestEncounter",
         "title": "TestEncounter",
         "status": "draft",
-        "date": "2021-05-18",
+        "date": "2021-10-19",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -21623,10 +20600,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://terminology.hl7.org/CodeSystem/v3-ActPriority"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -21766,37 +20739,9 @@
               "max": "1"
             },
             {
-              "id": "Encounter.priority.coding:act.id",
-              "path": "Encounter.priority.coding.id"
-            },
-            {
-              "id": "Encounter.priority.coding:act.extension",
-              "path": "Encounter.priority.coding.extension"
-            },
-            {
               "id": "Encounter.priority.coding:act.system",
               "path": "Encounter.priority.coding.system",
               "fixedUri": "http://terminology.hl7.org/CodeSystem/v3-ActPriority"
-            },
-            {
-              "id": "Encounter.priority.coding:act.version",
-              "path": "Encounter.priority.coding.version"
-            },
-            {
-              "id": "Encounter.priority.coding:act.code",
-              "path": "Encounter.priority.coding.code",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://terminology.hl7.org/CodeSystem/v3-ActPriority"
-              }
-            },
-            {
-              "id": "Encounter.priority.coding:act.display",
-              "path": "Encounter.priority.coding.display"
-            },
-            {
-              "id": "Encounter.priority.coding:act.userSelected",
-              "path": "Encounter.priority.coding.userSelected"
             }
           ]
         }
@@ -21810,7 +20755,7 @@
         "name": "ProfiledDatatypesObservation",
         "title": "ProfiledDatatypesObservation",
         "status": "draft",
-        "date": "2021-05-18",
+        "date": "2021-10-19",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -24634,7 +23579,7 @@
         "name": "TestEncounterWithProfiledIdentifier",
         "title": "TestEncounterWithProfiledIdentifier",
         "status": "draft",
-        "date": "2021-05-18",
+        "date": "2021-10-19",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -28409,10 +27354,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://terminology.hl7.org/CodeSystem/v3-ActPriority"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -28550,37 +27491,9 @@
               "max": "1"
             },
             {
-              "id": "Encounter.identifier.type.coding:act.id",
-              "path": "Encounter.identifier.type.coding.id"
-            },
-            {
-              "id": "Encounter.identifier.type.coding:act.extension",
-              "path": "Encounter.identifier.type.coding.extension"
-            },
-            {
               "id": "Encounter.identifier.type.coding:act.system",
               "path": "Encounter.identifier.type.coding.system",
               "fixedUri": "http://terminology.hl7.org/CodeSystem/v3-ActPriority"
-            },
-            {
-              "id": "Encounter.identifier.type.coding:act.version",
-              "path": "Encounter.identifier.type.coding.version"
-            },
-            {
-              "id": "Encounter.identifier.type.coding:act.code",
-              "path": "Encounter.identifier.type.coding.code",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://terminology.hl7.org/CodeSystem/v3-ActPriority"
-              }
-            },
-            {
-              "id": "Encounter.identifier.type.coding:act.display",
-              "path": "Encounter.identifier.type.coding.display"
-            },
-            {
-              "id": "Encounter.identifier.type.coding:act.userSelected",
-              "path": "Encounter.identifier.type.coding.userSelected"
             }
           ]
         }

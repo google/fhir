@@ -10,7 +10,7 @@
         "name": "DemoPatient",
         "title": "DemoPatient",
         "status": "draft",
-        "date": "2020-04-02",
+        "date": "2021-10-19",
         "publisher": "Demo Company LLC",
         "description": "Extension of US Core Patient for FHIR Profile demo",
         "fhirVersion": "4.0.1",
@@ -4351,133 +4351,7 @@
         "differential": {
           "element": [
             {
-              "id": "Patient.extension:race",
-              "path": "Patient.extension",
-              "sliceName": "race",
-              "short": "US Core Race Extension",
-              "definition": "Concepts classifying the person into a named category of humans sharing common history, traits, geographical origin or nationality.  The race codes used to represent these concepts are based upon the [CDC Race and Ethnicity Code Set Version 1.0](http://www.cdc.gov/phin/resources/vocabulary/index.html) which includes over 900 concepts for representing race and ethnicity of which 921 reference race.  The race concepts are grouped by and pre-mapped to the 5 OMB race categories:\n\n   - American Indian or Alaska Native\n   - Asian\n   - Black or African American\n   - Native Hawaiian or Other Pacific Islander\n   - White.",
-              "max": "1",
-              "type": [
-                {
-                  "code": "Extension",
-                  "profile": [
-                    "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"
-                  ]
-                }
-              ],
-              "condition": [
-                "ele-1"
-              ],
-              "constraint": [
-                {
-                  "key": "ext-1",
-                  "severity": "error",
-                  "human": "Must have either extensions or value[x], not both",
-                  "expression": "extension.exists() != value.exists()",
-                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
-                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
-                }
-              ],
-              "mustSupport": true,
-              "mapping": [
-                {
-                  "identity": "argonaut-dq-dstu2",
-                  "map": "Patient.extension"
-                }
-              ]
-            },
-            {
-              "id": "Patient.extension:ethnicity",
-              "path": "Patient.extension",
-              "sliceName": "ethnicity",
-              "short": "US Core ethnicity Extension",
-              "definition": "Concepts classifying the person into a named category of humans sharing common history, traits, geographical origin or nationality.  The ethnicity codes used to represent these concepts are based upon the [CDC ethnicity and Ethnicity Code Set Version 1.0](http://www.cdc.gov/phin/resources/vocabulary/index.html) which includes over 900 concepts for representing race and ethnicity of which 43 reference ethnicity.  The ethnicity concepts are grouped by and pre-mapped to the 2 OMB ethnicity categories: - Hispanic or Latino - Not Hispanic or Latino.",
-              "max": "1",
-              "type": [
-                {
-                  "code": "Extension",
-                  "profile": [
-                    "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"
-                  ]
-                }
-              ],
-              "condition": [
-                "ele-1"
-              ],
-              "constraint": [
-                {
-                  "key": "ext-1",
-                  "severity": "error",
-                  "human": "Must have either extensions or value[x], not both",
-                  "expression": "extension.exists() != value.exists()",
-                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
-                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
-                }
-              ],
-              "mustSupport": true,
-              "mapping": [
-                {
-                  "identity": "argonaut-dq-dstu2",
-                  "map": "Patient.extension"
-                }
-              ]
-            },
-            {
-              "id": "Patient.extension:birthsex",
-              "path": "Patient.extension",
-              "sliceName": "birthsex",
-              "definition": "A code classifying the person's sex assigned at birth  as specified by the [Office of the National Coordinator for Health IT (ONC)](https://www.healthit.gov/newsroom/about-onc).",
-              "comment": "The codes required are intended to present birth sex (i.e., the sex recorded on the patient’s birth certificate) and not gender identity or reassigned sex.",
-              "max": "1",
-              "type": [
-                {
-                  "code": "Extension",
-                  "profile": [
-                    "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
-                  ]
-                }
-              ],
-              "condition": [
-                "ele-1"
-              ],
-              "constraint": [
-                {
-                  "key": "ext-1",
-                  "severity": "error",
-                  "human": "Must have either extensions or value[x], not both",
-                  "expression": "extension.exists() != value.exists()",
-                  "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
-                  "source": "http://hl7.org/fhir/StructureDefinition/Extension"
-                }
-              ],
-              "mustSupport": true,
-              "mapping": [
-                {
-                  "identity": "rim",
-                  "map": "player[classCode=PSN|ANM and determinerCode=INSTANCE]/administrativeGender"
-                },
-                {
-                  "identity": "iso11179",
-                  "map": ".patient.administrativeGenderCode"
-                },
-                {
-                  "identity": "argonaut-dq-dstu2",
-                  "map": "Patient.extension"
-                }
-              ]
-            },
-            {
               "id": "Patient.extension:mothersMaidenName",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
               "path": "Patient.extension",
               "sliceName": "mothersMaidenName",
               "short": "Mother's Maiden Name",
@@ -4490,9 +4364,6 @@
                     "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"
                   ]
                 }
-              ],
-              "condition": [
-                "ele-1"
               ],
               "constraint": [
                 {
@@ -4507,16 +4378,6 @@
             },
             {
               "id": "Patient.extension:birthPlace",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
               "path": "Patient.extension",
               "sliceName": "birthPlace",
               "short": "Patient's Birth Place",
@@ -4529,9 +4390,6 @@
                     "http://hl7.org/fhir/StructureDefinition/patient-birthPlace"
                   ]
                 }
-              ],
-              "condition": [
-                "ele-1"
               ],
               "constraint": [
                 {

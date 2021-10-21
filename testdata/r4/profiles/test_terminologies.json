@@ -10,10 +10,17 @@
         "name": "Brewery",
         "title": "Brewery",
         "status": "draft",
-        "date": "2020-08-04",
+        "date": "2021-10-19",
         "publisher": "Testington Inc.",
         "description": "The brewery of origin.",
         "content": "complete",
+        "property": [
+          {
+            "code": "status",
+            "uri": "http://hl7.org/fhir/concept-properties#status",
+            "type": "code"
+          }
+        ],
         "concept": [
           {
             "code": "sante-adairius",
@@ -42,10 +49,17 @@
         "name": "FootballTeams",
         "title": "FootballTeams",
         "status": "draft",
-        "date": "2020-08-04",
+        "date": "2021-10-19",
         "publisher": "Testington Inc.",
         "description": "NFL Football Teams",
         "content": "complete",
+        "property": [
+          {
+            "code": "status",
+            "uri": "http://hl7.org/fhir/concept-properties#status",
+            "type": "code"
+          }
+        ],
         "concept": [
           {
             "code": "Niners"
@@ -64,7 +78,7 @@
         "name": "Brewery",
         "title": "Brewery",
         "status": "draft",
-        "date": "2020-08-04",
+        "date": "2021-10-19",
         "publisher": "Testington Inc.",
         "description": "ValueSet for Brewery Code System.",
         "compose": {
@@ -84,7 +98,7 @@
         "name": "CaliforniaBreweries",
         "title": "CaliforniaBreweries",
         "status": "draft",
-        "date": "2020-08-04",
+        "date": "2021-10-19",
         "publisher": "Testington Inc.",
         "description": "ValueSet for California breweries.",
         "compose": {
@@ -112,7 +126,7 @@
         "name": "AmericanBreweries",
         "title": "AmericanBreweries",
         "status": "draft",
-        "date": "2020-08-04",
+        "date": "2021-10-19",
         "publisher": "Testington Inc.",
         "description": "ValueSet for Brewery Code System.",
         "compose": {
@@ -142,7 +156,7 @@
         "name": "Californians",
         "title": "Californians",
         "status": "draft",
-        "date": "2020-08-04",
+        "date": "2021-10-19",
         "publisher": "Testington Inc.",
         "description": "California businesses",
         "compose": {
@@ -178,7 +192,7 @@
         "name": "SomeSnomedCodes",
         "title": "SomeSnomedCodes",
         "status": "draft",
-        "date": "2020-08-04",
+        "date": "2021-10-19",
         "publisher": "Testington Inc.",
         "description": "ValueSet with codes from a CodeSystem that has a defining resource but no defined codes",
         "compose": {
