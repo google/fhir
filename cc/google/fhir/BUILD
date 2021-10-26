@@ -83,6 +83,7 @@ cc_library(
     hdrs = ["references.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":core_resource_registry",
         ":type_macros",
         ":util",
         "//cc/google/fhir/status:statusor",

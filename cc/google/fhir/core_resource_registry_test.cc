@@ -29,15 +29,21 @@ namespace fhir {
 
 namespace {
 
-TEST(CoreResourceRegistryTest, Stu3Test) {
+TEST(CoreResourceRegistryTest, Stu3Profile) {
   auto result = GetBaseResourceInstance(stu3::testing::TestObservationLvl2());
   ASSERT_TRUE(result.ok());
   ASSERT_TRUE(IsMessageType<stu3::proto::Observation>(*result.value()))
       << result.value()->GetDescriptor()->full_name();
 }
 
-TEST(CoreResourceRegistryTest, R4Test) {
+TEST(CoreResourceRegistryTest, R4Profile) {
   auto result = GetBaseResourceInstance(r4::testing::TestObservationLvl2());
+  ASSERT_TRUE(result.ok());
+  ASSERT_TRUE(IsMessageType<r4::core::Observation>(*result.value()));
+}
+
+TEST(CoreResourceRegistryTest, R4CoreResource) {
+  auto result = GetBaseResourceInstance(r4::core::Observation());
   ASSERT_TRUE(result.ok());
   ASSERT_TRUE(IsMessageType<r4::core::Observation>(*result.value()));
 }

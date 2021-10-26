@@ -31,6 +31,7 @@ namespace {
 using ::google::fhir::stu3::proto::Encounter;
 using ::google::fhir::stu3::proto::Patient;
 using ::google::fhir::stu3::proto::Reference;
+using ::google::fhir::testutil::EqualsProto;
 
 TEST(GetResourceIdFromReferenceTest, PatientId) {
   Reference r;
@@ -77,6 +78,16 @@ TEST(GetResourceIdFromReferenceTest, ReferenceDoesNotMatch) {
   EXPECT_EQ(got.status(), ::absl::InvalidArgumentError(
                               "Reference `Patient/123` does not point to a "
                               "resource of type `Encounter`"));
+}
+
+TEST(GetReferenceProtoToResourceTest, UnprofiledProto) {
+  Encounter resource;
+  resource.mutable_id()->set_value("foo");
+
+  Reference expected;
+  expected.mutable_encounter_id()->set_value("foo");
+  EXPECT_THAT(*google::fhir::GetReferenceProtoToResource<Reference>(resource),
+              EqualsProto(expected));
 }
 
 }  // namespace

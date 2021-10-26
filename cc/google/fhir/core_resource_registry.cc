@@ -44,12 +44,17 @@ using ::google::protobuf::Reflection;
 
 namespace {
 
-// Given a profiled resource descriptor, return the base resource in the core
-// FHIR spec
+// Given a resource descriptor, return the base resource in the core FHIR spec.
+// If given a core resource, will return its own url.
 absl::StatusOr<std::string> GetCoreStructureDefinition(
     const Descriptor* descriptor) {
   static constexpr absl::string_view kCorePrefix =
       "http://hl7.org/fhir/StructureDefinition/";
+
+  const std::string url = GetStructureDefinitionUrl(descriptor);
+  if (absl::StartsWith(url, kCorePrefix)) {
+    return url;
+  }
 
   for (int i = 0;
        i < descriptor->options().ExtensionSize(proto::fhir_profile_base); i++) {
@@ -59,7 +64,7 @@ absl::StatusOr<std::string> GetCoreStructureDefinition(
       return profile_base;
     }
   }
-  return InvalidArgumentError(absl::StrCat("Not a profile of a core resource: ",
+  return InvalidArgumentError(absl::StrCat("Unable to find core resource for: ",
                                            descriptor->full_name()));
 }
 

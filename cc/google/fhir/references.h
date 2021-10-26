@@ -23,6 +23,7 @@
 #include "absl/status/statusor.h"
 #include "absl/strings/strip.h"
 #include "absl/types/optional.h"
+#include "google/fhir/core_resource_registry.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/type_macros.h"
 #include "google/fhir/util.h"
@@ -108,9 +109,11 @@ absl::StatusOr<ReferenceType> GetReferenceProtoToResource(
     const ::google::protobuf::Message& resource) {
   ReferenceType reference;
   FHIR_ASSIGN_OR_RETURN(const std::string resource_id, GetResourceId(resource));
+  FHIR_ASSIGN_OR_RETURN(const Descriptor* base_resource_type,
+                        GetBaseResourceDescriptor(resource.GetDescriptor()));
   FHIR_ASSIGN_OR_RETURN(const ::google::protobuf::FieldDescriptor* reference_id_field,
                         internal::GetReferenceFieldForResource(
-                            reference, resource.GetDescriptor()->name()));
+                            reference, base_resource_type->name()));
   ::google::protobuf::Message* reference_id =
       reference.GetReflection()->MutableMessage(&reference, reference_id_field);
   FHIR_RETURN_IF_ERROR(internal::PopulateTypedReferenceId(
