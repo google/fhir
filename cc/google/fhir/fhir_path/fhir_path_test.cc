@@ -30,6 +30,7 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/string_view.h"
+#include "absl/strings/substitute.h"
 #include "absl/time/civil_time.h"
 #include "absl/time/time.h"
 #include "google/fhir/proto_util.h"
@@ -37,6 +38,7 @@
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/primitive_handler.h"
+#include "google/fhir/terminology/terminology_resolver.h"
 #include "google/fhir/testutil/fhir_test_env.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/r4/core/codes.pb.h"
@@ -2516,7 +2518,7 @@ TYPED_TEST(FhirPathTest, ResourceReference) {
                    EqualsProto(bundle)}));
 }
 
-TYPED_TEST(FhirPathTest, MemberOfWithoutValueSetRepository) {
+TYPED_TEST(FhirPathTest, MemberOfWithoutTerminologyResolver) {
   auto obs = ParseFromString<typename TypeParam::Observation>(R"(
       code {
         coding {
@@ -2530,40 +2532,77 @@ TYPED_TEST(FhirPathTest, MemberOfWithoutValueSetRepository) {
       HasStatusCode(absl::StatusCode::kFailedPrecondition));
 }
 
+const char kAllergyValueSetUrl[] =
+    "http://terminology.hl7.org/ValueSet/allergyintolerance-clinical";
+
+const char kAllergyCodeSystemUrl[] =
+    "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical";
+
+const char kRangeValueSetUrl[] = "http://terminology.hl7.org/ValueSet/Range";
+
 // For testing value set related functions.
 template <typename T>
 class FhirPathTestForValueSets : public FhirPathTest<T> {
  protected:
-  class FakeValueSetRepository : public ValueSetRepository {
+  // TODO: Refactor this to use an in-memory resolver using real
+  // system values.
+  class FakeTerminologyResolver : public terminology::TerminologyResolver {
    public:
-    absl::StatusOr<bool> BelongsToValueSet(
-        const std::string& value_set_id, const std::string& code_string,
-        const absl::optional<std::string>& code_system_id) const override {
-      if (value_set_id == "Allergies") {
-        if (code_system_id.has_value() &&
-            code_system_id.value() !=
-                "http://terminology.hl7.org/CodeSystem/"
-                "allergyintolerance-clinical") {
-          return false;
-        }
-        return absl::EndsWith(code_string, "nuts");
+    absl::StatusOr<absl::flat_hash_set<std::string>> GetCodeStringsInCodeSystem(
+        absl::string_view code_system_url) const override {
+      return absl::UnimplementedError(
+          "GetCodeStringsInCodeSystem not implemented.");
+    }
+
+    absl::StatusOr<bool> IsCodeInCodeSystem(
+        absl::string_view code_value,
+        absl::string_view code_system_url) const override {
+      return absl::UnimplementedError("IsInCodeSystem not implemented.");
+    }
+
+    absl::StatusOr<absl::flat_hash_set<std::string>> GetCodeStringsInValueSet(
+        absl::string_view value_set_url) const override {
+      return absl::UnimplementedError(
+          "GetCodeStringsInValueSet not implemented.");
+    }
+
+    absl::StatusOr<bool> IsCodeInValueSet(
+        absl::string_view code_value,
+        absl::string_view value_set_url) const override {
+      if (value_set_url == kAllergyValueSetUrl) {
+        return absl::EndsWith(code_value, "nuts");
       }
-      if (value_set_id == "Range") {
-        return code_string == "H" || code_string == "L";
+      if (value_set_url == kRangeValueSetUrl) {
+        return code_value == "H" || code_value == "L";
       }
       return absl::NotFoundError("");
     }
 
-    absl::StatusOr<int> NumberOfCodeSystemsInValueSet(
-        const std::string& value_set_id) const override {
-      if (value_set_id == "Allergies") {
-        return 2;
+    absl::StatusOr<bool> IsCodeInValueSet(
+        absl::string_view code_value, absl::string_view code_system_url,
+        absl::string_view value_set_url) const override {
+      if (value_set_url == kAllergyValueSetUrl) {
+        if (code_system_url != kAllergyCodeSystemUrl) {
+          return false;
+        }
+        return absl::EndsWith(code_value, "nuts");
       }
-      if (value_set_id == "Range") {
-        return 1;
+      if (value_set_url == kRangeValueSetUrl) {
+        return code_value == "H" || code_value == "L";
       }
       return absl::NotFoundError("");
     }
+
+    absl::StatusOr<bool> ValueSetHasMultipleCodeSystems(
+        absl::string_view value_set_url) const override {
+      if (value_set_url == kAllergyValueSetUrl) {
+        return true;
+      }
+      if (value_set_url == kRangeValueSetUrl) {
+        return false;
+      }
+      return absl::NotFoundError("");
+    };
   };
 
   absl::StatusOr<EvaluationResult> Evaluate(const Message& message,
@@ -2575,13 +2614,13 @@ class FhirPathTestForValueSets : public FhirPathTest<T> {
   }
 
  private:
-  FakeValueSetRepository fake_value_sets_;
+  FakeTerminologyResolver fake_terminology_resolver_;
 
   absl::StatusOr<CompiledExpression> Compile(
       const ::google::protobuf::Descriptor* descriptor, const std::string& fhir_path) {
     return CompiledExpression::Compile(descriptor,
                                        T::PrimitiveHandler::GetInstance(),
-                                       fhir_path, &fake_value_sets_);
+                                       fhir_path, &fake_terminology_resolver_);
   }
 };
 TYPED_TEST_SUITE(FhirPathTestForValueSets, TestEnvs);
@@ -2619,14 +2658,17 @@ TYPED_TEST(FhirPathTestForValueSets, MemberOf) {
   // memberOf() invoked on "String" objects, the "Range" value set only has
   // one code system in our fake value set repository, so this is OK.
   EXPECT_THAT(
-      TestFixture::Evaluate(obs, "referenceRange.text.memberOf('Range')"),
+      TestFixture::Evaluate(
+          obs, absl::Substitute("referenceRange.text.memberOf('$0')",
+                                kRangeValueSetUrl)),
       IsOkWithMessages(std::vector<typename TypeParam::Boolean>{true_obj}));
 
   // The "Allergies" value set has 2 code systems in our fake repository,
   // so evaluating memberOf() gives an error.
-  EXPECT_THAT(
-      TestFixture::Evaluate(obs, "referenceRange.text.memberOf('Allergies')"),
-      HasStatusCode(absl::StatusCode::kFailedPrecondition));
+  EXPECT_THAT(TestFixture::Evaluate(
+                  obs, absl::Substitute("referenceRange.text.memberOf('$0')",
+                                        kAllergyValueSetUrl)),
+              HasStatusCode(absl::StatusCode::kFailedPrecondition));
 
   // The "not_a_value_set" is not specified in the fake repository, hence
   // memberOf gives a not found error.
@@ -2635,29 +2677,35 @@ TYPED_TEST(FhirPathTestForValueSets, MemberOf) {
               HasStatusCode(absl::StatusCode::kNotFound));
 
   // memberOf() cannot be invoked on "ReferenceRange" objects.
-  EXPECT_THAT(TestFixture::Evaluate(obs, "referenceRange.memberOf('Range')"),
+  EXPECT_THAT(TestFixture::Evaluate(
+                  obs, absl::Substitute("referenceRange.memberOf('$0')",
+                                        kRangeValueSetUrl)),
               HasStatusCode(absl::StatusCode::kInvalidArgument));
 
   // memberOf() invoked on collection of "Code" objects.
-  EXPECT_THAT(
-      TestFixture::Evaluate(obs, "category.coding.code.memberOf('Allergies')"),
-      IsOkWithMessages(std::vector<typename TypeParam::Boolean>{
-          false_obj, true_obj, true_obj, true_obj}));
+  EXPECT_THAT(TestFixture::Evaluate(
+                  obs, absl::Substitute("category.coding.code.memberOf('$0')",
+                                        kAllergyValueSetUrl)),
+              IsOkWithMessages(std::vector<typename TypeParam::Boolean>{
+                  false_obj, true_obj, true_obj, true_obj}));
   EXPECT_THAT(TestFixture::Evaluate(
                   obs, "category.coding.code.memberOf('other_value_set')"),
               HasStatusCode(absl::StatusCode::kNotFound));
 
   // memberOf() cannot be invoked on "Coding" objects.
-  EXPECT_THAT(
-      TestFixture::Evaluate(obs, "category.coding.memberOf('Allergies')"),
-      HasStatusCode(absl::StatusCode::kInvalidArgument));
+  EXPECT_THAT(TestFixture::Evaluate(
+                  obs, absl::Substitute("category.coding.memberOf('$0')",
+                                        kAllergyValueSetUrl)),
+              HasStatusCode(absl::StatusCode::kInvalidArgument));
 
   // memberOf() invoked on "CodeableConcept" objects.
   EXPECT_THAT(
-      TestFixture::Evaluate(obs, "category.memberOf('Allergies')"),
+      TestFixture::Evaluate(obs, absl::Substitute("category.memberOf('$0')",
+                                                  kAllergyValueSetUrl)),
       IsOkWithMessages(std::vector<typename TypeParam::Boolean>{true_obj}));
   EXPECT_THAT(
-      TestFixture::Evaluate(obs, "category.memberOf('Range')"),
+      TestFixture::Evaluate(
+          obs, absl::Substitute("category.memberOf('$0')", kRangeValueSetUrl)),
       IsOkWithMessages(std::vector<typename TypeParam::Boolean>{false_obj}));
 }
 

@@ -21,6 +21,7 @@
 #include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/util/message_differencer.h"
+#include "absl/container/flat_hash_set.h"
 #include "absl/container/node_hash_set.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
@@ -2584,17 +2585,17 @@ class MemberOfFunction : public SingleValueFunctionNode {
                                              const std::string& value_set,
                                              WorkSpace* work_space) {
     FHIR_ASSIGN_OR_RETURN(
-        int num_code_systems,
-        work_space->GetValueSetRepository()->NumberOfCodeSystemsInValueSet(
+        const bool has_multiple_code_systems,
+        work_space->GetTerminologyResolver()->ValueSetHasMultipleCodeSystems(
             value_set));
-    if (num_code_systems > 1) {
+    if (has_multiple_code_systems) {
       return absl::FailedPreconditionError(
           absl::StrFormat("Value set %s contains more than one code system, "
                           "hence cannot be evaluated on a string value.",
                           value_set));
     }
-    return work_space->GetValueSetRepository()->BelongsToValueSet(
-        value_set, code_str, /*code_system=*/absl::nullopt);
+    return work_space->GetTerminologyResolver()->IsCodeInValueSet(code_str,
+                                                                  value_set);
   }
 
   static absl::StatusOr<bool> CodeIsMember(
@@ -2602,8 +2603,13 @@ class MemberOfFunction : public SingleValueFunctionNode {
       const absl::optional<std::string>& code_system,
       const std::string& value_set, WorkSpace* work_space) {
     FHIR_ASSIGN_OR_RETURN(std::string code_str, GetCodeAsString(code_object));
-    return work_space->GetValueSetRepository()->BelongsToValueSet(
-        value_set, code_str, code_system);
+    if (code_system.has_value()) {
+      return work_space->GetTerminologyResolver()->IsCodeInValueSet(
+          code_str, *code_system, value_set);
+    } else {
+      return work_space->GetTerminologyResolver()->IsCodeInValueSet(code_str,
+                                                                    value_set);
+    }
   }
 
   static absl::StatusOr<bool> ConceptIsMember(const Message& concept_object,
@@ -2653,9 +2659,9 @@ class MemberOfFunction : public SingleValueFunctionNode {
   absl::Status EvaluateWithParam(
       WorkSpace* work_space, const WorkspaceMessage& param,
       std::vector<WorkspaceMessage>* results) const override {
-    if (work_space->GetValueSetRepository() == nullptr) {
+    if (work_space->GetTerminologyResolver() == nullptr) {
       return absl::FailedPreconditionError(
-          "memberOf() can only be called when `value_set_repository` has been "
+          "memberOf() can only be called when `terminology_resolver` has been "
           "supplied to CompiledExpression::Compile()");
     }
 
@@ -4192,13 +4198,13 @@ CompiledExpression::CompiledExpression(CompiledExpression&& other)
     : fhir_path_(std::move(other.fhir_path_)),
       root_expression_(std::move(other.root_expression_)),
       primitive_handler_(other.primitive_handler_),
-      value_set_repository_(other.value_set_repository_) {}
+      terminology_resolver_(other.terminology_resolver_) {}
 
 CompiledExpression& CompiledExpression::operator=(CompiledExpression&& other) {
   fhir_path_ = std::move(other.fhir_path_);
   root_expression_ = std::move(other.root_expression_);
   primitive_handler_ = other.primitive_handler_;
-  value_set_repository_ = other.value_set_repository_;
+  terminology_resolver_ = other.terminology_resolver_;
 
   return *this;
 }
@@ -4207,14 +4213,14 @@ CompiledExpression::CompiledExpression(const CompiledExpression& other)
     : fhir_path_(other.fhir_path_),
       root_expression_(other.root_expression_),
       primitive_handler_(other.primitive_handler_),
-      value_set_repository_(other.value_set_repository_) {}
+      terminology_resolver_(other.terminology_resolver_) {}
 
 CompiledExpression& CompiledExpression::operator=(
     const CompiledExpression& other) {
   fhir_path_ = other.fhir_path_;
   root_expression_ = other.root_expression_;
   primitive_handler_ = other.primitive_handler_;
-  value_set_repository_ = other.value_set_repository_;
+  terminology_resolver_ = other.terminology_resolver_;
 
   return *this;
 }
@@ -4225,16 +4231,16 @@ CompiledExpression::CompiledExpression(
     const std::string& fhir_path,
     std::shared_ptr<internal::ExpressionNode> root_expression,
     const PrimitiveHandler* primitive_handler,
-    const ValueSetRepository* value_set_repository)
+    const terminology::TerminologyResolver* terminology_resolver)
     : fhir_path_(fhir_path),
       root_expression_(root_expression),
       primitive_handler_(primitive_handler),
-      value_set_repository_(value_set_repository) {}
+      terminology_resolver_(terminology_resolver) {}
 
 absl::StatusOr<CompiledExpression> CompiledExpression::Compile(
     const Descriptor* descriptor, const PrimitiveHandler* primitive_handler,
     const std::string& fhir_path,
-    const ValueSetRepository* value_set_repository) {
+    const terminology::TerminologyResolver* terminology_resolver) {
   ANTLRInputStream input(fhir_path);
   FhirPathLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
@@ -4248,7 +4254,7 @@ absl::StatusOr<CompiledExpression> CompiledExpression::Compile(
   if (result.isNotNull() && visitor.GetError().ok()) {
     auto root_node = result.as<std::shared_ptr<internal::ExpressionNode>>();
     return CompiledExpression(fhir_path, root_node, primitive_handler,
-                              value_set_repository);
+                              terminology_resolver);
   } else {
     return visitor.GetError();
   }
@@ -4264,7 +4270,7 @@ absl::StatusOr<EvaluationResult> CompiledExpression::Evaluate(
   std::vector<internal::WorkspaceMessage> message_context_stack;
   auto work_space = absl::make_unique<internal::WorkSpace>(
       primitive_handler_, message_context_stack, message,
-      value_set_repository_);
+      terminology_resolver_);
 
   std::vector<internal::WorkspaceMessage> workspace_results;
   FHIR_RETURN_IF_ERROR(

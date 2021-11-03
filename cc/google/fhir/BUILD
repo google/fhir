@@ -544,13 +544,3 @@ cc_library(
         "@com_google_absl//absl/status",
     ],
 )
-
-cc_library(
-    name = "value_set_repository",
-    hdrs = ["value_set_repository.h"],
-    strip_include_prefix = "//cc/",
-    deps = [
-        "@com_google_absl//absl/status:statusor",
-        "@com_google_absl//absl/types:optional",
-    ],
-)
