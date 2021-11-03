@@ -20,6 +20,7 @@ import static org.junit.Assert.assertFalse;
 
 import com.google.common.testing.EqualsTester;
 import com.google.fhir.common.InvalidFhirException;
+import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,6 +75,22 @@ public final class FhirPackageTest {
   public void loadTest() throws IOException, InvalidFhirException {
     FhirPackage fhirPackage = FhirPackage.load("spec/fhir_r4_package.zip");
     assertThat(fhirPackage.packageInfo.getProtoPackage()).isEqualTo("google.fhir.r4.core");
+    assertThat(fhirPackage.structureDefinitions).hasSize(R4_DEFINITIONS_COUNT);
+    assertThat(fhirPackage.codeSystems).hasSize(R4_CODESYSTEMS_COUNT);
+    assertThat(fhirPackage.valueSets).hasSize(R4_VALUESETS_COUNT);
+    assertThat(fhirPackage.searchParameters).hasSize(R4_SEARCH_PARAMETERS_COUNT);
+  }
+
+  @Test
+  public void loadTest_withSideloadedPackageInfo() throws IOException, InvalidFhirException {
+    PackageInfo packageInfo =
+        PackageInfo.newBuilder()
+            .setProtoPackage("my.custom.package")
+            .setFhirVersion(FhirVersion.R4)
+            .build();
+    FhirPackage fhirPackage =
+        FhirPackage.load("spec/fhir_r4_package.zip", packageInfo);
+    assertThat(fhirPackage.packageInfo.getProtoPackage()).isEqualTo("my.custom.package");
     assertThat(fhirPackage.structureDefinitions).hasSize(R4_DEFINITIONS_COUNT);
     assertThat(fhirPackage.codeSystems).hasSize(R4_CODESYSTEMS_COUNT);
     assertThat(fhirPackage.valueSets).hasSize(R4_VALUESETS_COUNT);

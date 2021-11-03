@@ -95,6 +95,13 @@ public class FhirPackage {
     return isCorePackage(packageInfo);
   }
 
+  /**
+   * Loads a package zip into a FhirPackage. This will parse all the defining resources that are
+   * part of the spec. This API expects to find a PackageInfo text proto ending in either
+   * "package_info.prototxt" or "package_info.textproto", and will throw an InvalidFhirException if
+   * one is not found. To side load a PackageInfo proto, use the version of this that accepts a
+   * PackageInfo proto.
+   */
   public static FhirPackage load(String zipFilePath) throws IOException, InvalidFhirException {
     ZipFile zipFile = new ZipFile(new File(zipFilePath));
     Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -129,6 +136,59 @@ public class FhirPackage {
           "FhirPackage does not have a valid package_info.prototxt: " + zipFilePath);
     }
 
+    return makeFromJsonAndProfileConfig(jsonFiles, packageInfo);
+  }
+
+  /**
+   * Loads a package zip into a FhirPackage. This will parse all the defining resources that are
+   * part of the spec. This API will use the provided PackageInfo proto, and ignore any found in the
+   * zip itself. To read PackageInfo out of the zip itself, use the API variant that does not accept
+   * a PackageProto argument.
+   */
+  public static FhirPackage load(String zipFilePath, PackageInfo packageInfo)
+      throws IOException, InvalidFhirException {
+    ZipFile zipFile = new ZipFile(new File(zipFilePath));
+    Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+    Map<String, String> jsonFiles = new HashMap<>();
+
+    while (entries.hasMoreElements()) {
+      ZipEntry entry = entries.nextElement();
+      if (entry.getName().endsWith("package_info.prototxt")
+          || entry.getName().endsWith("package_info.textproto")) {
+        System.out.println(
+            "Warning: Ignoring PackageInfo in "
+                + zipFilePath
+                + " because PackageInfo was passed to loading function.  Use the API with no"
+                + " PackageInfo to use the one from the zip.");
+      } else if (entry.getName().endsWith(".json")) {
+        String json = new String(ByteStreams.toByteArray(zipFile.getInputStream(entry)), UTF_8);
+        jsonFiles.put(entry.getName(), json);
+      }
+    }
+
+    return makeFromJsonAndProfileConfig(jsonFiles, packageInfo);
+  }
+
+  FhirPackage filterResources(Predicate<StructureDefinition> filter) {
+    return new FhirPackage(
+        packageInfo,
+        structureDefinitions.stream().filter(filter).collect(Collectors.toList()),
+        searchParameters,
+        codeSystems,
+        valueSets);
+  }
+
+  private static final Pattern RESOURCE_TYPE_PATTERN =
+      Pattern.compile("\"resourceType\"\\s*:\\s*\"([A-Za-z]*)\"");
+
+  private static Optional<String> getResourceType(String json) {
+    Matcher matcher = RESOURCE_TYPE_PATTERN.matcher(json);
+    return matcher.find() ? Optional.of(matcher.group(1)) : Optional.empty();
+  }
+
+  private static FhirPackage makeFromJsonAndProfileConfig(
+      Map<String, String> jsonFiles, PackageInfo packageInfo) throws InvalidFhirException {
     List<ValueSet> valueSets = new ArrayList<>();
     List<CodeSystem> codeSystems = new ArrayList<>();
     List<StructureDefinition> structureDefinitions = new ArrayList<>();
@@ -167,30 +227,7 @@ public class FhirPackage {
         System.out.println("Unhandled JSON entry: " + jsonFile.getKey());
       }
     }
-    if (packageInfo == null) {
-      throw new IllegalArgumentException(
-          "No package info file found in "
-              + zipFilePath
-              + ".  The package info file must end in package_info.prototxt");
-    }
     return new FhirPackage(
         packageInfo, structureDefinitions, searchParameters, codeSystems, valueSets);
-  }
-
-  FhirPackage filterResources(Predicate<StructureDefinition> filter) {
-    return new FhirPackage(
-        packageInfo,
-        structureDefinitions.stream().filter(filter).collect(Collectors.toList()),
-        searchParameters,
-        codeSystems,
-        valueSets);
-  }
-
-  private static final Pattern RESOURCE_TYPE_PATTERN =
-      Pattern.compile("\"resourceType\"\\s*:\\s*\"([A-Za-z]*)\"");
-
-  private static Optional<String> getResourceType(String json) {
-    Matcher matcher = RESOURCE_TYPE_PATTERN.matcher(json);
-    return matcher.find() ? Optional.of(matcher.group(1)) : Optional.empty();
   }
 }

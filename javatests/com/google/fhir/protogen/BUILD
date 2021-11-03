@@ -101,6 +101,7 @@ java_test(
     deps = [
         "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/protogen",
+        "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto:profile_config_java_proto",
         "@maven//:com_google_guava_guava_testlib",
         "@maven//:com_google_truth_truth",
