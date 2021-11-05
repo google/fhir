@@ -531,6 +531,19 @@ cc_test(
     ],
 )
 
+cc_test(
+    name = "fhir_package_test",
+    srcs = ["fhir_package_test.cc"],
+    data = [
+        "//spec:fhir_r4_package.zip",
+    ],
+    deps = [
+        ":fhir_package",
+        "//cc/google/fhir/status:statusor",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
 cc_library(
     name = "operation_error_reporter",
     hdrs = ["operation_error_reporter.h"],
@@ -542,5 +555,28 @@ cc_library(
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:operation_outcome_cc_proto",
         "@com_google_absl//absl/status",
+    ],
+)
+
+cc_library(
+    name = "fhir_package",
+    srcs = ["fhir_package.cc"],
+    hdrs = ["fhir_package.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "//cc/google/fhir/r4:json_format",
+        "//proto/google/fhir/proto:profile_config_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:code_system_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:search_parameter_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:structure_definition_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_cc_proto",
+        "@com_google_absl//absl/container:flat_hash_map",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
+        "@com_google_protobuf//:protobuf",
+        "@com_googlesource_code_re2//:re2",
+        "@libarchive",
     ],
 )

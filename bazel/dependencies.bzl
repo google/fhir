@@ -110,6 +110,16 @@ def fhirproto_dependencies(core_lib = False):
     )
 
     http_archive(
+        name = "libarchive",
+        build_file = main_fhir_location + "//bazel/buildfiles:libarchive.BUILD",
+        sha256 = "ee1e749213c108cb60d53147f18c31a73d6717d7e3d2481c157e1b34c881ea39",
+        strip_prefix = "libarchive-3.4.3",
+        urls = [
+            "https://github.com/libarchive/libarchive/releases/download/v3.4.3/libarchive-3.4.3.tar.gz",
+        ],
+    )
+
+    http_archive(
         name = "icu",
         sha256 = "dfc62618aa4bd3ca14a3df548cd65fe393155edd213e49c39f3a30ccd618fc27",
         strip_prefix = "icu-release-64-2",
