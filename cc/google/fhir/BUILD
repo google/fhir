@@ -540,6 +540,8 @@ cc_test(
     deps = [
         ":fhir_package",
         "//cc/google/fhir/status:statusor",
+        "//proto/google/fhir/proto:annotations_cc_proto",
+        "//proto/google/fhir/proto:profile_config_cc_proto",
         "@com_google_googletest//:gtest_main",
     ],
 )
@@ -575,6 +577,7 @@ cc_library(
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/time",
+        "@com_google_absl//absl/types:optional",
         "@com_google_protobuf//:protobuf",
         "@com_googlesource_code_re2//:re2",
         "@libarchive",

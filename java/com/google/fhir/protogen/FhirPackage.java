@@ -136,7 +136,7 @@ public class FhirPackage {
           "FhirPackage does not have a valid package_info.prototxt: " + zipFilePath);
     }
 
-    return makeFromJsonAndProfileConfig(jsonFiles, packageInfo);
+    return makeFromJsonAndPackageInfo(jsonFiles, packageInfo);
   }
 
   /**
@@ -167,7 +167,7 @@ public class FhirPackage {
       }
     }
 
-    return makeFromJsonAndProfileConfig(jsonFiles, packageInfo);
+    return makeFromJsonAndPackageInfo(jsonFiles, packageInfo);
   }
 
   FhirPackage filterResources(Predicate<StructureDefinition> filter) {
@@ -187,7 +187,7 @@ public class FhirPackage {
     return matcher.find() ? Optional.of(matcher.group(1)) : Optional.empty();
   }
 
-  private static FhirPackage makeFromJsonAndProfileConfig(
+  private static FhirPackage makeFromJsonAndPackageInfo(
       Map<String, String> jsonFiles, PackageInfo packageInfo) throws InvalidFhirException {
     List<ValueSet> valueSets = new ArrayList<>();
     List<CodeSystem> codeSystems = new ArrayList<>();

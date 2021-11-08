@@ -15,7 +15,9 @@
 #ifndef GOOGLE_FHIR_FHIR_PACKAGE_H_
 #define GOOGLE_FHIR_FHIR_PACKAGE_H_
 
+#include "absl/container/flat_hash_map.h"
 #include "absl/status/statusor.h"
+#include "absl/types/optional.h"
 #include "proto/google/fhir/proto/profile_config.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/code_system.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/search_parameter.pb.h"
@@ -38,8 +40,16 @@ struct FhirPackage {
 
   static absl::StatusOr<FhirPackage> Load(absl::string_view zip_file_path);
 
+  // This Load variant will use the passed-in PackageInfo proto for the
+  // FhirPackage, regardless of whether or not one was found in the zip.
+  static absl::StatusOr<FhirPackage> Load(
+      absl::string_view zip_file_path, const proto::PackageInfo& package_info);
+
  private:
   FhirPackage() {}
+  static absl::StatusOr<FhirPackage> Load(
+      absl::string_view zip_file_path,
+      const absl::optional<proto::PackageInfo> optional_package_info);
 };
 
 }  // namespace google::fhir

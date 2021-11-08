@@ -14,12 +14,15 @@
 
 #include "google/fhir/fhir_package.h"
 
+#include <optional>
+
 #include "google/protobuf/text_format.h"
 #include "absl/container/flat_hash_map.h"
 #include "absl/status/status.h"
 #include "absl/strings/match.h"
 #include "absl/strings/string_view.h"
 #include "absl/time/time.h"
+#include "absl/types/optional.h"
 #include "google/fhir/r4/json_format.h"
 #include "proto/google/fhir/proto/profile_config.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/structure_definition.pb.h"
@@ -32,6 +35,7 @@ namespace google::fhir {
 
 namespace {
 
+using ::google::fhir::proto::PackageInfo;
 using ::google::fhir::r4::core::CodeSystem;
 using ::google::fhir::r4::core::SearchParameter;
 using ::google::fhir::r4::core::StructureDefinition;
@@ -50,6 +54,17 @@ absl::StatusOr<std::string> GetResourceType(const std::string& json) {
 }  // namespace
 
 absl::StatusOr<FhirPackage> FhirPackage::Load(absl::string_view zip_file_path) {
+  return Load(zip_file_path, absl::optional<PackageInfo>());
+}
+
+absl::StatusOr<FhirPackage> FhirPackage::Load(absl::string_view zip_file_path,
+                                              const PackageInfo& package_info) {
+  return Load(zip_file_path, absl::optional<PackageInfo>(package_info));
+}
+
+absl::StatusOr<FhirPackage> FhirPackage::Load(
+    absl::string_view zip_file_path,
+    const absl::optional<PackageInfo> optional_package_info) {
   struct archive* archive = archive_read_new();
   archive_read_support_filter_all(archive);
   archive_read_support_format_all(archive);
@@ -61,6 +76,9 @@ absl::StatusOr<FhirPackage> FhirPackage::Load(absl::string_view zip_file_path) {
   }
 
   FhirPackage fhir_package;
+  if (optional_package_info.has_value()) {
+    fhir_package.package_info = *optional_package_info;
+  }
   bool package_info_found = false;
   absl::flat_hash_map<const std::string, const std::string> json_files;
 
@@ -73,12 +91,19 @@ absl::StatusOr<FhirPackage> FhirPackage::Load(absl::string_view zip_file_path) {
 
     if (absl::EndsWith(entry_name, "package_info.prototxt") ||
         absl::EndsWith(entry_name, "package_info.textproto")) {
-      if (!google::protobuf::TextFormat::ParseFromString(contents,
-                                               &fhir_package.package_info)) {
-        return absl::InvalidArgumentError(
-            absl::StrCat("Invalid PackageInfo found for ", zip_file_path));
+      if (optional_package_info.has_value()) {
+        LOG(WARNING) << absl::StrCat(
+            "Warning: Ignoring PackageInfo in ", zip_file_path,
+            " because PackageInfo was passed to loading function.  Use the API "
+            "with no PackageInfo to use the one from the zip.");
+      } else {
+        if (!google::protobuf::TextFormat::ParseFromString(contents,
+                                                 &fhir_package.package_info)) {
+          return absl::InvalidArgumentError(
+              absl::StrCat("Invalid PackageInfo found for ", zip_file_path));
+        }
+        package_info_found = true;
       }
-      package_info_found = true;
     } else if (absl::EndsWith(entry_name, ".json")) {
       json_files.insert({entry_name, contents});
     }
@@ -88,7 +113,7 @@ absl::StatusOr<FhirPackage> FhirPackage::Load(absl::string_view zip_file_path) {
         absl::StrCat("Failed Freeing Zip: ", zip_file_path));
   }
 
-  if (!package_info_found) {
+  if (!optional_package_info.has_value() && !package_info_found) {
     return absl::InvalidArgumentError(absl::StrCat(
         "FhirPackage does not have a valid package_info.prototxt: ",
         zip_file_path));
