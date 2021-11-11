@@ -201,6 +201,13 @@ func TestSet(t *testing.T) {
 			&pptpb.Message{Type: pptpb.MessageType_TYPE_1},
 		},
 		{
+			"enum by name",
+			NewPath("type"),
+			"TYPE_1",
+			&pptpb.Message{},
+			&pptpb.Message{Type: pptpb.MessageType_TYPE_1},
+		},
+		{
 			"bytes",
 			NewPath("bytes_field"),
 			[]byte{1, 2, 3},
@@ -366,6 +373,12 @@ func TestSet_Errors(t *testing.T) {
 			"complex value",
 			NewPath("message_field"),
 			struct{}{},
+			&pptpb.Message{},
+		},
+		{
+			"enum",
+			NewPath("type"),
+			"INVALID",
 			&pptpb.Message{},
 		},
 	}

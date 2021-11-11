@@ -226,6 +226,17 @@ func oneOfFieldByMessageType(oneOfDesc protoreflect.OneofDescriptor, valPB proto
 	return messageField, nil
 }
 
+func getEnumValueByName(ed protoreflect.EnumDescriptor, val string) (protoreflect.EnumNumber, bool) {
+	enumVals := ed.Values()
+	for i := 0; i < enumVals.Len(); i++ {
+		enumVal := enumVals.Get(i)
+		if string(enumVal.Name()) == val {
+			return enumVal.Number(), true
+		}
+	}
+	return 0, false
+}
+
 func canAssignValueToField(val interface{}, fd protoreflect.FieldDescriptor) bool {
 	fdKind := fd.Kind()
 	if val == nil {
@@ -248,11 +259,15 @@ func canAssignValueToField(val interface{}, fd protoreflect.FieldDescriptor) boo
 		}
 		return fd.Message() == rpb.Descriptor()
 	} else if fdKind == protoreflect.EnumKind {
-		enum, ok := val.(protoreflect.Enum)
-		if !ok {
+		switch val := val.(type) {
+		case protoreflect.Enum:
+			return fd.Enum() == val.Descriptor()
+		case string:
+			_, ok := getEnumValueByName(fd.Enum(), val)
+			return ok
+		default:
 			return false
 		}
-		return fd.Enum() == enum.Descriptor()
 	}
 
 	def := reflect.ValueOf(fd.Default().Interface())
@@ -390,7 +405,14 @@ func assignValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path [
 
 func protoValueFromGoValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, i interface{}) protoreflect.Value {
 	switch v := i.(type) {
-	case nil, bool, int32, int64, uint32, uint64, float32, float64, string,
+	case string:
+		if fd.Kind() == protoreflect.EnumKind {
+			if enumVal, ok := getEnumValueByName(fd.Enum(), v); ok {
+				return protoreflect.ValueOfEnum(enumVal)
+			}
+		}
+		return protoreflect.ValueOf(v)
+	case nil, bool, int32, int64, uint32, uint64, float32, float64,
 		[]byte, protoreflect.EnumNumber, protoreflect.Message, protoreflect.List,
 		protoreflect.Map:
 		return protoreflect.ValueOf(v)
