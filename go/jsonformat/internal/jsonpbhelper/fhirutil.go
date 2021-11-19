@@ -509,6 +509,9 @@ func offsetToSeconds(offset string) (int, error) {
 
 // GetLocation parses tz as an IANA location or a UTC offset.
 func GetLocation(tz string) (*time.Location, error) {
+	if tz == UTC {
+		return time.UTC, nil
+	}
 	l, err := time.LoadLocation(tz)
 	if err != nil {
 		offset, err := offsetToSeconds(tz)
