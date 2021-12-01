@@ -26,6 +26,7 @@ import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.CodeableConceptSlice;
 import com.google.fhir.proto.CodeableConceptSlice.CodingSlice;
 import com.google.fhir.proto.ElementData;
+import com.google.fhir.proto.ExtensionSlice;
 import com.google.fhir.proto.Extensions;
 import com.google.fhir.proto.FieldRestriction;
 import com.google.fhir.proto.PackageInfo;
@@ -38,7 +39,9 @@ import com.google.fhir.proto.ValueSetBinding;
 import com.google.fhir.r4.core.BindingStrengthCode;
 import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.ElementDefinition;
+import com.google.fhir.r4.core.Markdown;
 import com.google.fhir.r4.core.StructureDefinition;
+import com.google.fhir.r4.core.UnsignedInt;
 import com.google.protobuf.Message;
 import com.google.protobuf.TextFormat;
 import java.io.File;
@@ -459,5 +462,106 @@ public final class ProfileGeneratorTest {
         assertThrows(IllegalArgumentException.class, () -> generator.generateProfiles(profiles));
 
     assertThat(e).hasMessageThat().contains("Invalid ReferenceRestriction");
+  }
+
+  @Test
+  public void testElementDefinitionsOverridesBase() throws Exception {
+    Profiles profiles =
+        Profiles.newBuilder()
+            .addProfile(
+                Profile.newBuilder()
+                    .setBaseUrl("http://hl7.org/fhir/StructureDefinition/Observation")
+                    .addElementDefinition(
+                        ElementDefinition.newBuilder()
+                            .setId(
+                                com.google.fhir.r4.core.String.newBuilder()
+                                    .setValue("Observation.component"))
+                            .setMin(UnsignedInt.newBuilder().setValue(1))
+                            .setMax(com.google.fhir.r4.core.String.newBuilder().setValue("1"))
+                            .setComment(Markdown.newBuilder().setValue("test comment"))))
+            .build();
+
+    ProfileGenerator generator =
+        new ProfileGenerator(
+            loadPackageInfoProto(R4_TESTDATA_DIR + "test_package_info.prototxt"),
+            ImmutableList.of(loadR4FhirStructureDefinition("StructureDefinition-Observation.json")),
+            LocalDate.now(ZoneId.of("UTC")));
+    Bundle bundle = generator.generateProfiles(profiles);
+
+    StructureDefinition observationDefinition =
+        bundle.getEntry(0).getResource().getStructureDefinition();
+
+    List<ElementDefinition> observationComponent =
+        observationDefinition.getSnapshot().getElementList().stream()
+            .filter(element -> element.getId().getValue().equals("Observation.component"))
+            .collect(toList());
+
+    assertThat(observationComponent).hasSize(1);
+    assertThat(observationComponent.get(0).getMin().getValue()).isEqualTo(1);
+    assertThat(observationComponent.get(0).getMax().getValue()).isEqualTo("1");
+    assertThat(observationComponent.get(0).getComment().getValue()).isEqualTo("test comment");
+  }
+
+  @Test
+  public void testElementDefinitions_invalidPath() throws Exception {
+    Profiles profiles =
+        Profiles.newBuilder()
+            .addProfile(
+                Profile.newBuilder()
+                    .setBaseUrl("http://hl7.org/fhir/StructureDefinition/Observation")
+                    .addElementDefinition(
+                        ElementDefinition.newBuilder()
+                            .setId(
+                                com.google.fhir.r4.core.String.newBuilder()
+                                    .setValue("Observation.garbage"))
+                            .setMin(UnsignedInt.newBuilder().setValue(1))
+                            .setMax(com.google.fhir.r4.core.String.newBuilder().setValue("1"))
+                            .setComment(Markdown.newBuilder().setValue("test comment"))))
+            .build();
+
+    ProfileGenerator generator =
+        new ProfileGenerator(
+            loadPackageInfoProto(R4_TESTDATA_DIR + "test_package_info.prototxt"),
+            ImmutableList.of(loadR4FhirStructureDefinition("StructureDefinition-Observation.json")),
+            LocalDate.now(ZoneId.of("UTC")));
+
+    assertThrows(IllegalArgumentException.class, () -> generator.generateProfiles(profiles));
+  }
+
+  @Test
+  public void testExtensionSlice_mustSupport() throws Exception {
+    Profiles profiles =
+        Profiles.newBuilder()
+            .addProfile(
+                Profile.newBuilder()
+                    .setBaseUrl("http://hl7.org/fhir/StructureDefinition/Patient")
+                    .addExtensionSlice(
+                        ExtensionSlice.newBuilder()
+                            .setFieldId("Patient.birthDate")
+                            .setElementData(ElementData.newBuilder().setName("birthTime"))
+                            .setUrl("http://hl7.org/fhir/StructureDefinition/patient-birthTime")
+                            .setMustSupport(true)))
+            .build();
+
+    ProfileGenerator generator =
+        new ProfileGenerator(
+            loadPackageInfoProto(R4_TESTDATA_DIR + "test_package_info.prototxt"),
+            ImmutableList.of(
+                loadR4FhirStructureDefinition("StructureDefinition-Patient.json"),
+                loadR4FhirStructureDefinition("StructureDefinition-Extension.json")),
+            LocalDate.now(ZoneId.of("UTC")));
+
+    Bundle bundle = generator.generateProfiles(profiles);
+    StructureDefinition observationDefinition =
+        bundle.getEntry(0).getResource().getStructureDefinition();
+
+    List<ElementDefinition> birthTimeExtension =
+        observationDefinition.getSnapshot().getElementList().stream()
+            .filter(
+                element ->
+                    element.getId().getValue().equals("Patient.birthDate.extension:birthTime"))
+            .collect(toList());
+    assertThat(birthTimeExtension).hasSize(1);
+    assertThat(birthTimeExtension.get(0).getMustSupport().getValue()).isTrue();
   }
 }

@@ -212,15 +212,16 @@ final class ProfileGenerator {
         StructureDefinitionKindCode.Value.RESOURCE);
 
     List<ElementDefinition> baseElements = baseStructDef.getSnapshot().getElementList();
-    List<ElementDefinition> elementList =
-        baseElements.stream()
-            .map(element -> element.toBuilder().build())
-            .collect(Collectors.toList());
+    List<ElementDefinition> elementList = new ArrayList<>(baseElements);
 
     // Counter that is incremented to generate unique element keys for the profile.
     AtomicInteger elementKeyCounter = new AtomicInteger(1);
     for (FieldRestriction restriction : profile.getRestrictionList()) {
       applyFieldRestriction(restriction, elementList, elementData, elementKeyCounter);
+    }
+
+    for (ElementDefinition elementDefinition : profile.getElementDefinitionList()) {
+      mergeElementDefinition(elementDefinition, elementList);
     }
 
     for (ExtensionSlice slice : profile.getExtensionSliceList()) {
@@ -320,9 +321,7 @@ final class ProfileGenerator {
             .setElementData(complexExtension.getElementData())
             .setCanHaveExtensions(complexExtension.getCanHaveAdditionalExtensions())
             .build();
-    List<ElementDefinition> backboneElements =
-        buildSimpleExtensionElements(simpleExtension, rootId, rootPath, url);
-    return backboneElements;
+    return buildSimpleExtensionElements(simpleExtension, rootId, rootPath, url);
   }
 
   private StructureDefinition makeSimpleExtension(SimpleExtension extensionProto)
@@ -545,6 +544,21 @@ final class ProfileGenerator {
     }
   }
 
+  private void mergeElementDefinition(
+      ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
+    ElementDefinition elementToModify =
+        getOptionalElementById(element.getId().getValue(), elementList)
+            .orElseThrow(
+                () ->
+                    new IllegalArgumentException(
+                        "Error applying ElementDefinition "
+                            + element.getId().getValue()
+                            + ": No base element with that id."));
+    elementList.set(
+        elementList.indexOf(elementToModify),
+        elementToModify.toBuilder().mergeFrom(element).build());
+  }
+
   private void applyFieldRestriction(
       FieldRestriction restriction,
       List<ElementDefinition> elementList,
@@ -725,6 +739,9 @@ final class ProfileGenerator {
         elementData);
     extensionElement.setBase(buildBase("Extension", getExtensionStructDef()));
     setIdAndPath(extensionElement, rootId, rootPath, "");
+    if (extensionSlice.getMustSupport()) {
+      extensionElement.getMustSupportBuilder().setValue(true);
+    }
     return extensionElement
         .clearType()
         .addType(

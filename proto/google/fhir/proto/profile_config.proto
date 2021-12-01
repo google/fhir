@@ -18,6 +18,7 @@ package google.fhir.proto;
 
 import "proto/google/fhir/proto/annotations.proto";
 import "proto/google/fhir/proto/r4/core/codes.proto";
+import "proto/google/fhir/proto/r4/core/datatypes.proto";
 
 option java_package = "com.google.fhir.proto";
 option java_multiple_files = true;
@@ -131,14 +132,23 @@ message Profile {
   // e.g., http://hl7.org/fhir/StructureDefinition/Patient
   string base_url = 2;
 
-  // Restrictions to existing fields (does not add new fields/slices)
-  repeated FieldRestriction restriction = 3;
+  // Element definitions to merge into the base definitions.
+  // Each ElementDefinition added here will be merged on top of the base
+  // definition for the element with the same ID, allowing adding new
+  // restrictions or documentation to the field. This cannot add any new fields,
+  // and it is invalid to supply an ElementDefinition whose id does not
+  // correspond to an id in the base definition.
+  repeated r4.core.ElementDefinition element_definition = 6;
 
   // Extensions to be inlined as fields
   repeated ExtensionSlice extension_slice = 4;
 
   // CodeableConcept field to slice by Coding system uri.
   repeated CodeableConceptSlice codeable_concept_slice = 5;
+
+  // Restrictions to existing fields (does not add new fields/slices)
+  // DEPRECATED - use `element_definition` instead
+  repeated FieldRestriction restriction = 3;
 }
 
 // A restriction on a single field.
@@ -215,6 +225,11 @@ message ExtensionSlice {
   // e.g., http://hl7.org/fhir/StructureDefinition/patient-birthTime
   // or https://g.co/fhir/extensions/BinaryClassificationMetadata
   string url = 3;
+
+  // Whether to set the "mustSupport" bit on the resulting ElementDefinition.
+  // See:
+  // http://hl7.org/fhir/elementdefinition-definitions.html#ElementDefinition.mustSupport
+  bool must_support = 4;
 }
 
 // Defines a FHIR slice on a codeable concept as described in

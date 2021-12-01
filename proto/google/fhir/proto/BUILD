@@ -29,6 +29,7 @@ fhir_proto_library(
     proto_deps = [
         "//proto/google/fhir/proto:annotations_proto",
         "//proto/google/fhir/proto/r4/core:codes_proto",
+        "//proto/google/fhir/proto/r4/core:datatypes_proto",
     ],
     proto_library_prefix = "profile_config",
 )
