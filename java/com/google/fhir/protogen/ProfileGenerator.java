@@ -546,17 +546,25 @@ final class ProfileGenerator {
 
   private void mergeElementDefinition(
       ElementDefinition element, List<ElementDefinition> elementList) throws InvalidFhirException {
-    ElementDefinition elementToModify =
-        getOptionalElementById(element.getId().getValue(), elementList)
-            .orElseThrow(
-                () ->
-                    new IllegalArgumentException(
-                        "Error applying ElementDefinition "
-                            + element.getId().getValue()
-                            + ": No base element with that id."));
-    elementList.set(
-        elementList.indexOf(elementToModify),
-        elementToModify.toBuilder().mergeFrom(element).build());
+    int index =
+        elementList.indexOf(
+            getOptionalElementById(element.getId().getValue(), elementList)
+                .orElseThrow(
+                    () ->
+                        new IllegalArgumentException(
+                            "Error applying ElementDefinition "
+                                + element.getId().getValue()
+                                + ": No base element with that id.")));
+    ElementDefinition.Builder builder = elementList.get(index).toBuilder();
+
+    if (!element.getTypeList().isEmpty()) {
+      // Types can only be modified or removed, never added.
+      // So, if a type list is specified, clear the old list before merging in the new list,
+      // to avoid having duplicates.
+      builder.clearType();
+    }
+
+    elementList.set(index, builder.mergeFrom(element).build());
   }
 
   private void applyFieldRestriction(

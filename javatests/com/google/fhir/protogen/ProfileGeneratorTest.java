@@ -38,10 +38,13 @@ import com.google.fhir.proto.Terminologies;
 import com.google.fhir.proto.ValueSetBinding;
 import com.google.fhir.r4.core.BindingStrengthCode;
 import com.google.fhir.r4.core.Bundle;
+import com.google.fhir.r4.core.ConstraintSeverityCode;
 import com.google.fhir.r4.core.ElementDefinition;
+import com.google.fhir.r4.core.Id;
 import com.google.fhir.r4.core.Markdown;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.UnsignedInt;
+import com.google.fhir.r4.core.Uri;
 import com.google.protobuf.Message;
 import com.google.protobuf.TextFormat;
 import java.io.File;
@@ -500,6 +503,86 @@ public final class ProfileGeneratorTest {
     assertThat(observationComponent.get(0).getMin().getValue()).isEqualTo(1);
     assertThat(observationComponent.get(0).getMax().getValue()).isEqualTo("1");
     assertThat(observationComponent.get(0).getComment().getValue()).isEqualTo("test comment");
+  }
+
+  @Test
+  public void testElementDefinitions_addingConstraint() throws Exception {
+    Profiles profiles =
+        Profiles.newBuilder()
+            .addProfile(
+                Profile.newBuilder()
+                    .setBaseUrl("http://hl7.org/fhir/StructureDefinition/Patient")
+                    .addElementDefinition(
+                        ElementDefinition.newBuilder()
+                            .setId(com.google.fhir.r4.core.String.newBuilder().setValue("Patient"))
+                            .addConstraint(
+                                ElementDefinition.Constraint.newBuilder()
+                                    .setKey(Id.newBuilder().setValue("some-unique-key"))
+                                    .setSeverity(
+                                        ElementDefinition.Constraint.SeverityCode.newBuilder()
+                                            .setValue(ConstraintSeverityCode.Value.ERROR))
+                                    .setExpression(
+                                        com.google.fhir.r4.core.String.newBuilder()
+                                            .setValue("some-expression"))
+                                    .setHuman(
+                                        com.google.fhir.r4.core.String.newBuilder()
+                                            .setValue("human")))))
+            .build();
+
+    ProfileGenerator generator =
+        new ProfileGenerator(
+            loadPackageInfoProto(R4_TESTDATA_DIR + "test_package_info.prototxt"),
+            ImmutableList.of(loadR4FhirStructureDefinition("StructureDefinition-Patient.json")),
+            LocalDate.now(ZoneId.of("UTC")));
+    Bundle bundle = generator.generateProfiles(profiles);
+
+    StructureDefinition patient = bundle.getEntry(0).getResource().getStructureDefinition();
+
+    List<ElementDefinition> root =
+        patient.getSnapshot().getElementList().stream()
+            .filter(element -> element.getId().getValue().equals("Patient"))
+            .collect(toList());
+
+    // The Root element should have 6 constraints - 5 from the base Patient, one that we've added
+    assertThat(root).hasSize(1);
+    assertThat(root.get(0).getConstraintCount()).isEqualTo(6);
+    assertThat(root.get(0).getConstraint(5).getKey().getValue()).isEqualTo("some-unique-key");
+  }
+
+  @Test
+  public void testElementDefinitions_newTypesOverwritesOldList() throws Exception {
+    Profiles profiles =
+        Profiles.newBuilder()
+            .addProfile(
+                Profile.newBuilder()
+                    .setBaseUrl("http://hl7.org/fhir/StructureDefinition/Patient")
+                    .addElementDefinition(
+                        ElementDefinition.newBuilder()
+                            .setId(
+                                com.google.fhir.r4.core.String.newBuilder()
+                                    .setValue("Patient.deceased[x]"))
+                            .addType(
+                                ElementDefinition.TypeRef.newBuilder()
+                                    .setCode(Uri.newBuilder().setValue("boolean")))))
+            .build();
+
+    ProfileGenerator generator =
+        new ProfileGenerator(
+            loadPackageInfoProto(R4_TESTDATA_DIR + "test_package_info.prototxt"),
+            ImmutableList.of(loadR4FhirStructureDefinition("StructureDefinition-Patient.json")),
+            LocalDate.now(ZoneId.of("UTC")));
+    Bundle bundle = generator.generateProfiles(profiles);
+
+    StructureDefinition patient = bundle.getEntry(0).getResource().getStructureDefinition();
+
+    List<ElementDefinition> typeElement =
+        patient.getSnapshot().getElementList().stream()
+            .filter(element -> element.getId().getValue().equals("Patient.deceased[x]"))
+            .collect(toList());
+
+    assertThat(typeElement).hasSize(1);
+    assertThat(typeElement.get(0).getTypeCount()).isEqualTo(1);
+    assertThat(typeElement.get(0).getType(0).getCode().getValue()).isEqualTo("boolean");
   }
 
   @Test
