@@ -57,6 +57,11 @@ const (
 	// specified maximum recursive depth and support for extensions as first class
 	// fields.
 	formatAnalyticWithInferredSchema
+
+	// formatAnalyticV2WithInferredSchema indicates a lossy JSON representation with
+	// specified maximum recursive depth and support for extensions as first class
+	// fields, allowing for repetitive extensions and including contained resources.
+	formatAnalyticV2WithInferredSchema
 )
 
 // Marshaller is an object for serializing FHIR protocol buffer messages into a JSON object.
@@ -100,6 +105,13 @@ func NewAnalyticsMarshaller(maxDepth int, ver fhirversion.Version) (*Marshaller,
 // used if the input is 0.
 func NewAnalyticsMarshallerWithInferredSchema(maxDepth int, ver fhirversion.Version) (*Marshaller, error) {
 	return newAnalyticsMarshaller(maxDepth, ver, formatAnalyticWithInferredSchema)
+}
+
+// NewAnalyticsV2MarshallerWithInferredSchema returns an Analytics Marshaller with
+// support for extensions as first class fields. A default maxDepth of 2 will be
+// used if the input is 0.
+func NewAnalyticsV2MarshallerWithInferredSchema(maxDepth int, ver fhirversion.Version) (*Marshaller, error) {
+	return newAnalyticsMarshaller(maxDepth, ver, formatAnalyticV2WithInferredSchema)
 }
 
 func newAnalyticsMarshaller(maxDepth int, ver fhirversion.Version, format jsonFormat) (*Marshaller, error) {
@@ -216,10 +228,15 @@ func (m *Marshaller) marshalResource(pb protoreflect.Message) (jsonpbhelper.IsJS
 
 func (m *Marshaller) marshalRepeatedFieldValue(decmap jsonpbhelper.JSONObject, f protoreflect.FieldDescriptor, pbs []protoreflect.Message) error {
 	fieldName := f.JSONName()
-	if m.jsonFormat == formatAnalytic && fieldName == jsonpbhelper.Extension {
-		return m.marshalExtensionsAsURLs(decmap, pbs)
-	} else if m.jsonFormat == formatAnalyticWithInferredSchema && fieldName == jsonpbhelper.Extension {
-		return m.marshalExtensionsAsFirstClassFields(decmap, pbs)
+	if fieldName == jsonpbhelper.Extension {
+		switch m.jsonFormat {
+		case formatAnalyticWithInferredSchema:
+			return m.marshalExtensionsAsFirstClassFields(decmap, pbs)
+		case formatAnalyticV2WithInferredSchema:
+			return m.marshalExtensionsAsFirstClassFieldsV2(decmap, pbs)
+		case formatAnalytic:
+			return m.marshalExtensionsAsURLs(decmap, pbs)
+		}
 	}
 
 	rms := make(jsonpbhelper.JSONArray, 0, len(pbs))
@@ -309,31 +326,121 @@ func (m *Marshaller) marshalExtensionsAsFirstClassFields(decmap jsonpbhelper.JSO
 			}
 		}
 
-		value, err := jsonpbhelper.ExtensionValue(pb)
+		rm, err := m.marshalSingleExtensionHelper(pb)
+		if err != nil {
+			return err
+		}
+		decmap[fieldName] = rm
+	}
+	return nil
+}
+
+func (m *Marshaller) marshalExtensionsAsFirstClassFieldsV2(decmap jsonpbhelper.JSONObject, pbs []protoreflect.Message) error {
+	// Loop through the extenions first to get all the field name occurrence, lowercase field name
+	// is used for counting since duplicate field names are not allowed in BigQuery even if the
+	// case differs.
+	fieldNameOccurrence := map[string]int{}
+	fullFieldNameOccurrence := map[string]int{}
+	for _, pb := range pbs {
+		urlVal, err := jsonpbhelper.ExtensionURL(pb)
 		if err != nil {
 			return &ExtensionError{err: err.Error()}
 		}
-		if value != nil {
-			m, err := m.marshalMessageToMap(value)
-			if err != nil {
-				return nil
-			}
-			decmap[fieldName] = jsonpbhelper.JSONObject{"value": m}
+		fn := jsonpbhelper.ExtensionFieldName(urlVal)
+		if fn == "" {
+			return &ExtensionError{err: fmt.Sprintf("extension field name is empty for url %q", urlVal)}
+		}
+		fieldNameOccurrence[strings.ToLower(fn)]++
+		ffn := jsonpbhelper.FullExtensionFieldName(urlVal)
+		fullFieldNameOccurrence[strings.ToLower(ffn)]++
+	}
+
+	useFullExtension := map[string]bool{}
+	for _, pb := range pbs {
+		urlVal, err := jsonpbhelper.ExtensionURL(pb)
+		if err != nil {
+			return &ExtensionError{err: err.Error()}
+		}
+		fn := jsonpbhelper.ExtensionFieldName(urlVal)
+		ffn := jsonpbhelper.FullExtensionFieldName(urlVal)
+
+		if fieldNameOccurrence[strings.ToLower(fn)] > fullFieldNameOccurrence[strings.ToLower(ffn)] {
+			useFullExtension[fn] = true
+		} else if _, has := decmap[fn]; has {
+			useFullExtension[fn] = true
 		} else {
-			// marshal sub-extensions
-			crf := pb.Get(pb.Descriptor().Fields().ByName(jsonpbhelper.Extension)).List()
-			cpbs := make([]protoreflect.Message, 0, crf.Len())
-			for i := 0; i < crf.Len(); i++ {
-				cpbs = append(cpbs, crf.Get(i).Message())
-			}
-			cm := jsonpbhelper.JSONObject{}
-			if err := m.marshalExtensionsAsFirstClassFields(cm, cpbs); err != nil {
-				return err
-			}
-			decmap[fieldName] = cm
+			useFullExtension[fn] = false
 		}
 	}
+
+	repExtMap := map[string]jsonpbhelper.JSONArray{}
+
+	for _, pb := range pbs {
+		urlVal, err := jsonpbhelper.ExtensionURL(pb)
+		if err != nil {
+			return &ExtensionError{err: err.Error()}
+		}
+		fn := jsonpbhelper.ExtensionFieldName(urlVal)
+		occurrence := fieldNameOccurrence[strings.ToLower(fn)]
+		if useFullExtension[fn] {
+			fn = jsonpbhelper.FullExtensionFieldName(urlVal)
+			occurrence = fullFieldNameOccurrence[strings.ToLower(fn)]
+		}
+
+		lfn := strings.ToLower(fn)
+
+		if _, has := repExtMap[lfn]; !has {
+			repExtMap[lfn] = make(jsonpbhelper.JSONArray, 0, len(pbs))
+		}
+		rms := repExtMap[lfn]
+
+		rm, err := m.marshalSingleExtensionHelper(pb)
+		if err != nil {
+			return err
+		}
+		rms = append(rms, rm)
+		repExtMap[lfn] = rms
+
+		// Add to decmap if this is the last repeated extension occurrence
+		if len(rms) == occurrence {
+			decmap[fn] = rms
+		}
+	}
+
 	return nil
+}
+
+func (m *Marshaller) marshalSingleExtensionHelper(pb protoreflect.Message) (jsonpbhelper.IsJSON, error) {
+	value, err := jsonpbhelper.ExtensionValue(pb)
+	if err != nil {
+		return nil, &ExtensionError{err: err.Error()}
+	}
+	if value != nil {
+		m, err := m.marshalMessageToMap(value)
+		if err != nil {
+			return nil, nil
+		}
+
+		return jsonpbhelper.JSONObject{"value": m}, nil
+	}
+	// marshal sub-extensions
+	crf := pb.Get(pb.Descriptor().Fields().ByName(jsonpbhelper.Extension)).List()
+	cpbs := make([]protoreflect.Message, 0, crf.Len())
+	for i := 0; i < crf.Len(); i++ {
+		cpbs = append(cpbs, crf.Get(i).Message())
+	}
+	cm := jsonpbhelper.JSONObject{}
+	if m.jsonFormat == formatAnalyticV2WithInferredSchema {
+		if err := m.marshalExtensionsAsFirstClassFieldsV2(cm, cpbs); err != nil {
+			return nil, err
+		}
+	} else {
+		if err := m.marshalExtensionsAsFirstClassFields(cm, cpbs); err != nil {
+			return nil, err
+		}
+	}
+	return cm, err
+
 }
 
 func (m *Marshaller) marshalExtensionsAsURLs(decmap jsonpbhelper.JSONObject, pbs []protoreflect.Message) error {
@@ -386,7 +493,7 @@ func (m *Marshaller) marshalPrimitiveExtensions(pb protoreflect.Message) (jsonpb
 			if m.jsonFormat == formatPure {
 				// Unmarshal primitive extensions to the "extension" field.
 				decmap[jsonpbhelper.Extension] = sm[jsonpbhelper.Extension]
-			} else if m.jsonFormat == formatAnalyticWithInferredSchema {
+			} else if m.jsonFormat == formatAnalyticWithInferredSchema || m.jsonFormat == formatAnalyticV2WithInferredSchema {
 				// Promote primitive extensions to first class fields.
 				for k, v := range sm {
 					decmap[k] = v
@@ -464,7 +571,13 @@ func (m *Marshaller) marshalNonPrimitiveFieldValue(f protoreflect.FieldDescripto
 		return nil, fmt.Errorf("unexpected primitive type field: %v", f.Name())
 	}
 	if d.Name() == containedResourceProtoName(m.cfg) {
-		if m.jsonFormat != formatPure {
+		if m.jsonFormat == formatAnalyticV2WithInferredSchema {
+			str, err := m.MarshalToString(pb.Interface())
+			if err != nil {
+				return nil, err
+			}
+			return jsonpbhelper.JSONString(str), nil
+		} else if m.jsonFormat != formatPure {
 			// Contained resources are dropped for analytics output
 			return nil, nil
 		}
@@ -472,7 +585,18 @@ func (m *Marshaller) marshalNonPrimitiveFieldValue(f protoreflect.FieldDescripto
 	}
 	// Handle inlined resources which are wrapped in Any proto. The JSON field name must be 'contained'.
 	if _, ok := pb.Interface().(*anypb.Any); ok && f.JSONName() == jsonpbhelper.ContainedField {
-		if m.jsonFormat != formatPure {
+		if m.jsonFormat == formatAnalyticV2WithInferredSchema {
+			crpb := m.cfg.newEmptyContainedResource()
+			pbAny := pb.Interface().(*anypb.Any)
+			if err := pbAny.UnmarshalTo(crpb); err != nil {
+				return nil, fmt.Errorf("unmarshalling Any, err: %w", err)
+			}
+			str, err := m.MarshalToString(crpb.ProtoReflect().Interface())
+			if err != nil {
+				return nil, err
+			}
+			return jsonpbhelper.JSONString(str), nil
+		} else if m.jsonFormat != formatPure {
 			// Contained resources are dropped for analytics output
 			return nil, nil
 		}

@@ -29,6 +29,7 @@ import (
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	r4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
 	r4codesystempb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/code_system_go_proto"
+	r4conditionpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/condition_go_proto"
 	r4devicepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/device_go_proto"
 	r4patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/patient_go_proto"
 	r4researchstudypb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/research_study_go_proto"
@@ -2128,6 +2129,439 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 					var e *ExtensionError
 					if !errors.As(err, &e) {
 						t.Errorf("marshalMessageToMap on %v expect ResourceError, got %T ", test.name, err)
+					}
+				})
+			}
+		})
+	}
+}
+
+func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
+	tests := []struct {
+		name   string
+		inputs []mvr
+		want   jsonpbhelper.IsJSON
+	}{
+		{
+			name: "Repetitive extension",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						Extension: []*d3pb.Extension{
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d3pb.Extension{
+									{
+										Url: &d3pb.Uri{Value: "ombCategory"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_Coding{
+												Coding: &d3pb.Coding{
+													System: &d3pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d3pb.Code{Value: "2076-8"},
+												},
+											},
+										},
+									},
+									{
+										Url: &d3pb.Uri{Value: "text"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "Native Hawaiian or Other Pacific Islander"}},
+										},
+									},
+									{
+										Url: &d3pb.Uri{Value: "ombCategory"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_Coding{
+												Coding: &d3pb.Coding{
+													System: &d3pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d3pb.Code{Value: "2028-9"},
+												},
+											},
+										},
+									},
+									{
+										Url: &d3pb.Uri{Value: "text"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "Asian"}},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						Extension: []*d4pb.Extension{
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d4pb.Extension{
+									{
+										Url: &d4pb.Uri{Value: "ombCategory"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_Coding{
+												Coding: &d4pb.Coding{
+													System: &d4pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d4pb.Code{Value: "2076-8"},
+												},
+											},
+										},
+									},
+									{
+										Url: &d4pb.Uri{Value: "text"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "Native Hawaiian or Other Pacific Islander"}},
+										},
+									},
+									{
+										Url: &d4pb.Uri{Value: "ombCategory"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_Coding{
+												Coding: &d4pb.Coding{
+													System: &d4pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d4pb.Code{Value: "2028-9"},
+												},
+											},
+										},
+									},
+									{
+										Url: &d4pb.Uri{Value: "text"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "Asian"}},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			want: jsonpbhelper.JSONObject{
+				"us_core_race": jsonpbhelper.JSONArray{
+					jsonpbhelper.JSONObject{
+						"ombCategory": jsonpbhelper.JSONArray{
+							jsonpbhelper.JSONObject{
+								"value": jsonpbhelper.JSONObject{
+									"coding": jsonpbhelper.JSONObject{
+										"system": jsonpbhelper.JSONString("urn:oid:2.16.840.1.113883.6.238"),
+										"code":   jsonpbhelper.JSONString("2076-8"),
+									},
+								},
+							},
+							jsonpbhelper.JSONObject{
+								"value": jsonpbhelper.JSONObject{
+									"coding": jsonpbhelper.JSONObject{
+										"system": jsonpbhelper.JSONString("urn:oid:2.16.840.1.113883.6.238"),
+										"code":   jsonpbhelper.JSONString("2028-9"),
+									},
+								},
+							},
+						},
+						"text": jsonpbhelper.JSONArray{jsonpbhelper.JSONObject{
+							"value": jsonpbhelper.JSONObject{
+								"string": jsonpbhelper.JSONString("Native Hawaiian or Other Pacific Islander"),
+							},
+						},
+							jsonpbhelper.JSONObject{
+								"value": jsonpbhelper.JSONObject{
+									"string": jsonpbhelper.JSONString("Asian"),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "Extension last token collides with first-class field",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						Id: &d3pb.Id{Value: "id1"},
+						Extension: []*d3pb.Extension{
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						Id: &d4pb.Id{Value: "id1"},
+						Extension: []*d4pb.Extension{
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+			},
+			want: jsonpbhelper.JSONObject{
+				"id": jsonpbhelper.JSONString("id1"),
+				"hl7_org_fhir_StructureDefinition_id": jsonpbhelper.JSONArray{
+					jsonpbhelper.JSONObject{
+						"value": jsonpbhelper.JSONObject{
+							"string": jsonpbhelper.JSONString("id2"),
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "Extension last token collides with other extensions",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						Extension: []*d3pb.Extension{
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition1/id"},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/id"},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						Extension: []*d4pb.Extension{
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition1/id"},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/id"},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+			},
+			want: jsonpbhelper.JSONObject{
+				"hl7_org_fhir_StructureDefinition1_id": jsonpbhelper.JSONArray{jsonpbhelper.JSONObject{
+					"value": jsonpbhelper.JSONObject{
+						"string": jsonpbhelper.JSONString("id1"),
+					},
+				}},
+				"hl7_org_fhir_StructureDefinition2_id": jsonpbhelper.JSONArray{jsonpbhelper.JSONObject{
+					"value": jsonpbhelper.JSONObject{
+						"string": jsonpbhelper.JSONString("id2"),
+					},
+				}},
+			},
+		},
+		{
+			name: "Extension collides with other extension with different case",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						Extension: []*d3pb.Extension{
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition1/id"},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/ID"},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						Extension: []*d4pb.Extension{
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition1/id"},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/ID"},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+			},
+			want: jsonpbhelper.JSONObject{
+				"hl7_org_fhir_StructureDefinition1_id": jsonpbhelper.JSONArray{jsonpbhelper.JSONObject{
+					"value": jsonpbhelper.JSONObject{
+						"string": jsonpbhelper.JSONString("id1"),
+					},
+				}},
+				"hl7_org_fhir_StructureDefinition2_ID": jsonpbhelper.JSONArray{jsonpbhelper.JSONObject{
+					"value": jsonpbhelper.JSONObject{
+						"string": jsonpbhelper.JSONString("id2"),
+					},
+				}},
+			},
+		},
+		{
+			name: "Primitive extension",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						BirthDate: &d3pb.Date{
+							ValueUs:   1463529600000000,
+							Precision: d3pb.Date_DAY,
+							Id: &d3pb.String{
+								Value: "a3",
+							},
+							Extension: []*d3pb.Extension{{
+								Url: &d3pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_DateTime{
+										DateTime: &d3pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d3pb.DateTime_SECOND,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						BirthDate: &d4pb.Date{
+							ValueUs:   1463529600000000,
+							Precision: d4pb.Date_DAY,
+							Id: &d4pb.String{
+								Value: "a3",
+							},
+							Extension: []*d4pb.Extension{{
+								Url: &d4pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_DateTime{
+										DateTime: &d4pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d4pb.DateTime_SECOND,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+			},
+			want: jsonpbhelper.JSONObject{
+				"_birthDate": jsonpbhelper.JSONObject{
+					"patient_birthTime": jsonpbhelper.JSONArray{jsonpbhelper.JSONObject{
+						"value": jsonpbhelper.JSONObject{
+							"dateTime": jsonpbhelper.JSONString("2016-05-18T10:28:45Z"),
+						},
+					}},
+				},
+				"birthDate": jsonpbhelper.JSONString("2016-05-18"),
+			},
+		},
+		{
+			name: "Contained Resource",
+			inputs: []mvr{
+				{
+					ver: fhirversion.R4,
+					r: &r4conditionpb.Condition{
+						Contained: []*anypb.Any{
+							marshalToAny(t, &r4pb.ContainedResource{
+								OneofResource: &r4pb.ContainedResource_Patient{
+									Patient: &r4patientpb.Patient{
+										Id: &d4pb.Id{
+											Value: "p1",
+										},
+									},
+								},
+							}),
+						},
+						Asserter: &d4pb.Reference{
+							Id: &d4pb.String{
+								Value: "#p1",
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Condition{
+						Contained: []*r3pb.ContainedResource{
+							{
+								OneofResource: &r3pb.ContainedResource_Patient{
+									Patient: &r3pb.Patient{
+										Id: &d3pb.Id{
+											Value: "p1",
+										},
+									},
+								},
+							},
+						},
+						Asserter: &d3pb.Reference{
+							Id: &d3pb.String{
+								Value: "#p1",
+							},
+						},
+					},
+				},
+			},
+			want: jsonpbhelper.JSONObject{
+				"contained": jsonpbhelper.JSONArray{
+					jsonpbhelper.JSONString("{\"id\":\"p1\"}"),
+				},
+				"asserter": jsonpbhelper.JSONObject{},
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			for _, i := range test.inputs {
+				t.Run(i.ver.String(), func(t *testing.T) {
+					marshaller, err := NewAnalyticsV2MarshallerWithInferredSchema(10, i.ver)
+					if err != nil {
+						t.Fatalf("failed to create marshaller %v: %v", test.name, err)
+					}
+					got, err := marshaller.marshalMessageToMap(i.r.ProtoReflect())
+					if err != nil {
+						t.Fatalf("marshal failed on %v: %v", test.name, err)
+					}
+					if !cmp.Equal(got, test.want) {
+						t.Errorf("marshal %v: got %v, want %v", test.name, got, test.want)
 					}
 				})
 			}
