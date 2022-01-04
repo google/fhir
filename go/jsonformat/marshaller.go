@@ -226,6 +226,15 @@ func (m *Marshaller) marshalResource(pb protoreflect.Message) (jsonpbhelper.IsJS
 	return decmap, nil
 }
 
+// MarshalElement marshals any FHIR complex value to JSON.
+func (m *Marshaller) MarshalElement(pb proto.Message) ([]byte, error) {
+	obj, err := m.marshalMessageToMap(pb.ProtoReflect())
+	if err != nil {
+		return nil, err
+	}
+	return m.render(obj)
+}
+
 func (m *Marshaller) marshalRepeatedFieldValue(decmap jsonpbhelper.JSONObject, f protoreflect.FieldDescriptor, pbs []protoreflect.Message) error {
 	fieldName := f.JSONName()
 	if fieldName == jsonpbhelper.Extension {
