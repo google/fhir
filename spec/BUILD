@@ -94,6 +94,30 @@ fhir_package(
     package_info = "fhir_r4_package_info.prototxt",
 )
 
+# Common FHIR R4 elements for lightweight use without the full specification.
+# TODO: Remove this and update users when the larger fhir_r4 package loads efficiently.
+fhir_package(
+    name = "fhir_r4_core_structures",
+    definitions =
+        [
+            "hl7.fhir.core/4.0.1/package/StructureDefinition-Address.json",
+            "hl7.fhir.core/4.0.1/package/StructureDefinition-Attachment.json",
+            "hl7.fhir.core/4.0.1/package/StructureDefinition-BackboneElement.json",
+            "hl7.fhir.core/4.0.1/package/StructureDefinition-CodeableConcept.json",
+            "hl7.fhir.core/4.0.1/package/StructureDefinition-ContactPoint.json",
+            "hl7.fhir.core/4.0.1/package/StructureDefinition-Extension.json",
+            "hl7.fhir.core/4.0.1/package/StructureDefinition-HumanName.json",
+            "hl7.fhir.core/4.0.1/package/StructureDefinition-Identifier.json",
+            "hl7.fhir.core/4.0.1/package/StructureDefinition-Meta.json",
+            "hl7.fhir.core/4.0.1/package/StructureDefinition-Narrative.json",
+            "hl7.fhir.core/4.0.1/package/StructureDefinition-Patient.json",
+            "hl7.fhir.core/4.0.1/package/StructureDefinition-Period.json",
+            "hl7.fhir.core/4.0.1/package/StructureDefinition-Reference.json",
+            "hl7.fhir.core/4.0.1/package/StructureDefinition-Resource.json",
+        ],
+    package_info = "fhir_r4_package_info.prototxt",
+)
+
 # US-Core profiles for FHIR STU3.
 fhir_package(
     name = "uscore_stu3_package",
