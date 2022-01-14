@@ -723,6 +723,11 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 			}
 		}
 		return createAndSetValue(val)
+	case "ReferenceId":
+		return nil, &jsonpbhelper.UnmarshalError{
+			Path:    jsonPath,
+			Details: fmt.Sprintf("invalid type: %v", d.Name()),
+		}
 	}
 
 	// Handles specialized codes.

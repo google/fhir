@@ -21,7 +21,6 @@ import (
 	"io/ioutil"
 	"math"
 	"path"
-
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -1733,6 +1732,18 @@ func TestUnmarshal_Errors(t *testing.T) {
 			}`,
 			vers: []fhirversion.Version{fhirversion.DSTU2},
 			errs: []string{`error at "Observation.device": invalid reference`},
+		},
+		{
+			name: "invalid reference proto type",
+			json: `
+    	{
+    		"resourceType": "Patient",
+				"managingOrganization": {
+					"organizationId": "2810efe9-f993-489d-8d07-86ad32e54923"
+				}
+			}`,
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			errs: []string{`error at "Patient.managingOrganization.organizationId": invalid type: ReferenceId`},
 		},
 	}
 	for _, test := range tests {
