@@ -215,6 +215,7 @@ py_test(
         "//proto/google/fhir/proto/r4/core/resources:test_script_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:verification_result_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:vision_prescription_py_pb2",
+        "//py/google/fhir:fhir_errors",
         "//py/google/fhir/json_format:json_format_test",
         ":json_format",
         "//py/google/fhir/testing:testdata_utils",

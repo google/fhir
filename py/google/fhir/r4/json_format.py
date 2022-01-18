@@ -16,7 +16,7 @@
 
 import decimal
 import json
-from typing import Type, TypeVar
+from typing import Any, Dict, Type, TypeVar
 
 from google.protobuf import message
 from google.fhir import _primitive_time_utils
@@ -27,6 +27,19 @@ from google.fhir.r4 import primitive_handler
 
 _T = TypeVar('_T', bound=message.Message)
 _PRIMITIVE_HANDLER = primitive_handler.PrimitiveHandler()
+
+
+def load_json(raw_json: str) -> Dict[str, Any]:
+  """Load JSON using Decimal objects for numerics.
+
+  Args:
+    raw_json: The JSON string to parse.
+
+  Returns:
+    A dictionary representation of the deserialized JSON.
+  """
+  return json.loads(
+      raw_json, parse_float=decimal.Decimal, parse_int=decimal.Decimal)
 
 
 def merge_json_fhir_string_into_proto(
@@ -45,15 +58,39 @@ def merge_json_fhir_string_into_proto(
       checks such as cardinality guarantees, required field adherence, etc. are
       met. Defaults to True.
     default_timezone: A string specifying the timezone string to use for time-
-      like FHIR data during parsing. Defaults to 'Z'.
+      like FHIR data during parsing. Defaults to 'Z' for UTC.
 
   Raises:
     fhir_errors.InvalidFhirError: In the event that validation fails after
     parsing.
   """
-  json_value = json.loads(
-      raw_json, parse_float=decimal.Decimal, parse_int=decimal.Decimal)
+  json_value = load_json(raw_json)
+  merge_json_fhir_object_into_proto(
+      json_value, target, validate=validate, default_timezone=default_timezone)
 
+
+def merge_json_fhir_object_into_proto(
+    json_value: Dict[str, Any],
+    target: message.Message,
+    *,
+    validate: bool = True,
+    default_timezone: str = _primitive_time_utils.SIMPLE_ZULU) -> None:
+  """Merges the provided json_value object into a target Message.
+
+  Args:
+    json_value: The parsed JSON object to merge into target.
+    target: The Message instance to merge raw_json into.
+    validate: A Boolean value indicating if validation should be performed on
+      the resultant Message. Validation takes the form of ensuring that basic
+      checks such as cardinality guarantees, required field adherence, etc. are
+      met. Defaults to True.
+    default_timezone: A string specifying the timezone string to use for time-
+      like FHIR data during parsing. Defaults to 'Z' for UTC.
+
+  Raises:
+    fhir_errors.InvalidFhirError: In the event that validation fails after
+    parsing.
+  """
   parser = _json_parser.JsonParser.json_parser_with_default_timezone(
       _PRIMITIVE_HANDLER, default_timezone=default_timezone)
   parser.merge_value(json_value, target)
@@ -77,7 +114,7 @@ def json_fhir_string_to_proto(
       checks such as cardinality guarantees, required field adherence, etc. are
       met. Defaults to True.
     default_timezone: A string specifying the timezone string to use for time-
-      like FHIR data during parsing. Defaults to 'Z'.
+      like FHIR data during parsing. Defaults to 'Z' for UTC.
 
   Raises:
     fhir_errors.InvalidFhirError: In the event that raw_json was not valid FHIR.
@@ -89,6 +126,40 @@ def json_fhir_string_to_proto(
   resource = proto_cls()
   merge_json_fhir_string_into_proto(
       raw_json, resource, validate=validate, default_timezone=default_timezone)
+  return resource
+
+
+def json_fhir_object_to_proto(
+    json_value: Dict[str, Any],
+    proto_cls: Type[_T],
+    *,
+    validate: bool = True,
+    default_timezone: str = _primitive_time_utils.SIMPLE_ZULU) -> _T:
+  """Creates a resource of proto_cls and merges contents of json_value into it.
+
+  Args:
+    json_value: The parsed FHIR JSON object to convert.
+    proto_cls: A subclass of message.Message to instantiate and return.
+    validate: A Boolean value indicating if validation should be performed on
+      the resultant Message. Validation takes the form of ensuring that basic
+      checks such as cardinality guarantees, required field adherence, etc. are
+      met. Defaults to True.
+    default_timezone: A string specifying the timezone string to use for time-
+      like FHIR data during parsing. Defaults to 'Z' for UTC.
+
+  Raises:
+    fhir_errors.InvalidFhirError: In the event that raw_json was not valid FHIR.
+
+  Returns:
+    An instance of proto_cls with FHIR JSON data from the raw_json
+    representation.
+  """
+  resource = proto_cls()
+  merge_json_fhir_object_into_proto(
+      json_value,
+      resource,
+      validate=validate,
+      default_timezone=default_timezone)
   return resource
 
 

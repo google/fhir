@@ -159,6 +159,7 @@ from proto.google.fhir.proto.r4.core.resources import test_report_pb2
 from proto.google.fhir.proto.r4.core.resources import test_script_pb2
 from proto.google.fhir.proto.r4.core.resources import verification_result_pb2
 from proto.google.fhir.proto.r4.core.resources import vision_prescription_pb2
+from google.fhir import fhir_errors
 from google.fhir.json_format import json_format_test
 from google.fhir.r4 import json_format
 from google.fhir.testing import testdata_utils
@@ -1736,11 +1737,26 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
       self, file_name: str, primitive_cls: Type[message.Message]):
     json_path = os.path.join(_VALIDATION_PATH, file_name + '.valid.ndjson')
     proto_path = os.path.join(_VALIDATION_PATH, file_name + '.valid.prototxt')
+
+    def json_object_parser(json_str, *args, **kwargs):
+      """Parsing function which exercises json_fhir_object_to_proto."""
+      json_value = json_format.load_json(json_str)
+      return json_format.json_fhir_object_to_proto(json_value, *args, **kwargs)
+
     self.assert_parse_equals_golden(
         json_path,
         proto_path,
         primitive_cls,
         parse_f=json_format.json_fhir_string_to_proto,
+        json_delimiter='\n',
+        proto_delimiter='\n---\n',
+        validate=True,
+        default_timezone='Australia/Sydney')
+    self.assert_parse_equals_golden(
+        json_path,
+        proto_path,
+        primitive_cls,
+        parse_f=json_object_parser,
         json_delimiter='\n',
         proto_delimiter='\n---\n',
         validate=True,
@@ -2088,6 +2104,36 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
         proto_path,
         proto_cls,
         print_f=json_format.pretty_print_fhir_to_json_string_for_analytics)
+
+  def testJsonFormat_forInvalidJson_failsValidation(self):
+    """Ensure we run validations by default."""
+    with self.assertRaises(fhir_errors.InvalidFhirError):
+      json_format.json_fhir_string_to_proto('{}', code_system_pb2.CodeSystem)
+
+    with self.assertRaises(fhir_errors.InvalidFhirError):
+      json_format.json_fhir_object_to_proto({}, code_system_pb2.CodeSystem)
+
+    with self.assertRaises(fhir_errors.InvalidFhirError):
+      json_format.merge_json_fhir_string_into_proto(
+          '{}', code_system_pb2.CodeSystem())
+
+    with self.assertRaises(fhir_errors.InvalidFhirError):
+      json_format.merge_json_fhir_object_into_proto(
+          {}, code_system_pb2.CodeSystem())
+
+  def testJsonFormat_forInvalidJson_skipsValidation(self):
+    """Ensure validations can be skipped."""
+    json_format.json_fhir_string_to_proto(
+        '{}', code_system_pb2.CodeSystem, validate=False)
+    json_format.json_fhir_object_to_proto({},
+                                          code_system_pb2.CodeSystem,
+                                          validate=False)
+
+    json_format.merge_json_fhir_string_into_proto(
+        '{}', code_system_pb2.CodeSystem(), validate=False)
+    json_format.merge_json_fhir_object_into_proto({},
+                                                  code_system_pb2.CodeSystem(),
+                                                  validate=False)
 
   def assert_parse_and_print_examples_equals_golden(
       self, file_name: str, proto_cls: Type[message.Message]) -> None:
