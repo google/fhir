@@ -89,12 +89,9 @@ py_library(
     ],
     srcs_version = "PY3",
     deps = [
-        ":proto_utils",
-        ":resource_utils",
         "//py",
         "//proto/google/fhir/proto:annotations_py_pb2",
         "//proto/google/fhir/proto:profile_config_py_pb2",
-        "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:code_system_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:search_parameter_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_py_pb2",
@@ -205,7 +202,7 @@ py_test(
 
 py_test(
     name = "fhir_package_test",
-    size = "large",
+    size = "medium",
     srcs = [
         "fhir_package_test.py",
     ],
@@ -217,8 +214,10 @@ py_test(
     srcs_version = "PY3",
     deps = [
         ":fhir_package",
+        ":proto_utils",
         "//py",
         "//proto/google/fhir/proto:profile_config_py_pb2",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
         requirement("absl-py"),
         requirement("six"),
     ],

@@ -14,33 +14,33 @@
 # limitations under the License.
 """Utility class for abstracting over FHIR definitions."""
 
-import re
-from typing import cast, Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Iterable, Iterator, Optional, Tuple, TypeVar
 import zipfile
 
 import logging
 
+from google.protobuf import message
 from google.protobuf import text_format
 
 from proto.google.fhir.proto import annotations_pb2
 from proto.google.fhir.proto import profile_config_pb2
-from proto.google.fhir.proto.r4.core.resources import bundle_and_contained_resource_pb2
 from proto.google.fhir.proto.r4.core.resources import code_system_pb2
 from proto.google.fhir.proto.r4.core.resources import search_parameter_pb2
 from proto.google.fhir.proto.r4.core.resources import structure_definition_pb2
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
 from google.fhir.r4 import json_format
-from google.fhir.utils import proto_utils
-from google.fhir.utils import resource_utils
+
+_T = TypeVar('_T', structure_definition_pb2.StructureDefinition,
+             search_parameter_pb2.SearchParameter, code_system_pb2.CodeSystem,
+             value_set_pb2.ValueSet)
+_PROTO_CLASSES_FOR_TYPES = {
+    'ValueSet': value_set_pb2.ValueSet,
+    'CodeSystem': code_system_pb2.CodeSystem,
+    'StructureDefinition': structure_definition_pb2.StructureDefinition,
+    'SearchParameter': search_parameter_pb2.SearchParameter,
+}
 
 # TODO: Currently only supports R4. Make FHIR-version agnostic.
-
-_RESOURCE_TYPE_PATTERN = re.compile(r'"resourceType"\s*:\s*"([A-Za-z]*)"')
-
-
-def _get_resource_type(raw_json: str) -> Optional[str]:
-  m = _RESOURCE_TYPE_PATTERN.search(raw_json)
-  return m.group(1) if m is not None else None
 
 
 def _read_fhir_package_zip(
@@ -85,6 +85,108 @@ def _read_fhir_package_zip(
   return (package_info, json_files)
 
 
+class ResourceCollection(Iterable[_T]):
+  """A collection of FHIR resources of a given type."""
+
+  def __init__(self, zip_file_path: str) -> None:
+    self.zip_file_path = zip_file_path
+
+    self.parsed_resources: Dict[str, _T] = {}
+    self.resource_paths_for_uris: Dict[str, Tuple[str, str]] = {}
+
+  def add_uri_at_path(self, uri: str, path: str, resource_type: str) -> None:
+    """Adds a resource with the given URI located at the given path.
+
+    Args:
+      uri: URI of the resource.
+      path: The path inside self.zip_file_path containing the JSON file for the
+        resource.
+      resource_type: The type of the resource located at `path`.
+    """
+    self.resource_paths_for_uris[uri] = (path, resource_type)
+
+  def get_resource(self, uri: str) -> Optional[_T]:
+    """Retrieves a protocol buffer for the resource with the given uri.
+
+    Args:
+      uri: URI of the resource to retrieve.
+
+    Returns:
+      A protocol buffer for the resource or `None` if the `uri` is not present
+      in the ResourceCollection.
+
+    Raises:
+      RuntimeError: The resource could not be found or the retrieved resource
+      did not have the expected URL. The .zip file may have changed on disk.
+    """
+    cached = self.parsed_resources.get(uri)
+    if cached is not None:
+      return cached
+
+    path, resource_type = self.resource_paths_for_uris.get(uri, (None, None))
+    if path is None and resource_type is None:
+      return None
+
+    parsed = self._parse_proto_from_file(uri, self.zip_file_path, path,
+                                         resource_type)
+    if parsed is None:
+      raise RuntimeError(
+          'Resource for url %s could no longer be found. The resource .zip '
+          'file may have changed on disk.' % uri)
+    elif parsed.url.value != uri:
+      raise RuntimeError(
+          'url for the retrieved resource did not match the url passed to '
+          '`get_resource`. The resource .zip file may have changed on disk. '
+          'Expected: %s, found: %s' % (uri, parsed.url.value))
+    else:
+      self.parsed_resources[uri] = parsed
+      return parsed
+
+  @staticmethod
+  def _parse_proto_from_file(uri: str, zip_file_path: str, path: str,
+                             resource_type: str) -> Optional[_T]:
+    """Parses a protocol buffer from the resource at the given path.
+
+    Args:
+      uri: The URI of the resource to parse.
+      zip_file_path: The file path to the zip file containing resource
+        definitions.
+      path: The path within the zip file to the resource file to parse.
+      resource_type: The type of the resource contained at `path`.
+
+    Returns:
+      The protocol buffer for the resource or `None` if it can not be found.
+    """
+    with zipfile.ZipFile(zip_file_path, mode='r') as f:
+      raw_json = f.read(path).decode('utf-8')
+
+    if resource_type in _PROTO_CLASSES_FOR_TYPES:
+      return json_format.json_fhir_string_to_proto(
+          raw_json, _PROTO_CLASSES_FOR_TYPES[resource_type])
+    elif resource_type == 'Bundle':
+      json_value = _find_resource_in_bundle(uri,
+                                            json_format.load_json(raw_json))
+      if json_value is None:
+        return None
+      else:
+        return json_format.json_fhir_object_to_proto(
+            json_value, _PROTO_CLASSES_FOR_TYPES[json_value['resourceType']])
+    else:
+      logging.warning(
+          'Unhandled JSON entry: %s for unexpected resource type %s.', path,
+          resource_type)
+      return None
+
+  def __iter__(self) -> Iterator[_T]:
+    for uri in self.resource_paths_for_uris:
+      resource = self.get_resource(uri)
+      if resource is not None:
+        yield resource
+
+  def __len__(self) -> int:
+    return len(self.resource_paths_for_uris)
+
+
 class FhirPackage:
   """Represents a FHIR Proto package.
 
@@ -109,74 +211,62 @@ class FhirPackage:
     """
     package_info, json_files = _read_fhir_package_zip(zip_file_path)
 
-    # Populate instance attrs
-    structure_definitions: List[
-        structure_definition_pb2.StructureDefinition] = []
-    search_parameters: List[search_parameter_pb2.SearchParameter] = []
-    code_systems: List[code_system_pb2.CodeSystem] = []
-    value_sets: List[value_set_pb2.ValueSet] = []
+    collections_per_resource_type = {
+        'StructureDefinition':
+            ResourceCollection[structure_definition_pb2.StructureDefinition]
+            (zip_file_path),
+        'SearchParameter':
+            ResourceCollection[search_parameter_pb2.SearchParameter]
+            (zip_file_path),
+        'CodeSystem':
+            ResourceCollection[code_system_pb2.CodeSystem](zip_file_path),
+        'ValueSet':
+            ResourceCollection[value_set_pb2.ValueSet](zip_file_path),
+    }
 
     for file_name, raw_json in json_files.items():
-      expected_type = _get_resource_type(raw_json)
-      if expected_type is None:
-        logging.warning('Unhandled JSON entry: %s.', file_name)
-        continue
-
-      if expected_type == 'ValueSet':
-        value_set = json_format.json_fhir_string_to_proto(
-            raw_json, value_set_pb2.ValueSet)
-        value_sets.append(value_set)
-      elif expected_type == 'CodeSystem':
-        code_system = json_format.json_fhir_string_to_proto(
-            raw_json, code_system_pb2.CodeSystem)
-        code_systems.append(code_system)
-      elif expected_type == 'StructureDefinition':
-        structure_definition = json_format.json_fhir_string_to_proto(
-            raw_json, structure_definition_pb2.StructureDefinition)
-        structure_definitions.append(structure_definition)
-      elif expected_type == 'SearchParameter':
-        search_parameter = json_format.json_fhir_string_to_proto(
-            raw_json, search_parameter_pb2.SearchParameter)
-        search_parameters.append(search_parameter)
-      elif expected_type == 'Bundle':
-        bundle = json_format.json_fhir_string_to_proto(
-            raw_json, bundle_and_contained_resource_pb2.Bundle)
-        for entry in bundle.entry:
-          contained = resource_utils.get_contained_resource(entry.resource)
-          if proto_utils.is_message_type(contained, value_set_pb2.ValueSet):
-            value_sets.append(cast(value_set_pb2.ValueSet, contained))
-          elif proto_utils.is_message_type(contained,
-                                           code_system_pb2.CodeSystem):
-            code_systems.append(cast(code_system_pb2.CodeSystem, contained))
-          elif proto_utils.is_message_type(
-              contained, structure_definition_pb2.StructureDefinition):
-            structure_definitions.append(
-                cast(structure_definition_pb2.StructureDefinition, contained))
-          else:
-            logging.warning('Unrecognized contained resource type: %s.',
-                            type(contained))
-      else:
-        logging.warning('Unhandled JSON entry: %s.', file_name)
+      resource_json = json_format.load_json(raw_json)
+      _add_resource_to_collection(resource_json, collections_per_resource_type,
+                                  file_name)
 
     return FhirPackage(
         package_info=package_info,
-        structure_definitions=structure_definitions,
-        search_parameters=search_parameters,
-        code_systems=code_systems,
-        value_sets=value_sets)
+        structure_definitions=collections_per_resource_type[
+            'StructureDefinition'],
+        search_parameters=collections_per_resource_type['SearchParameter'],
+        code_systems=collections_per_resource_type['CodeSystem'],
+        value_sets=collections_per_resource_type['ValueSet'])
 
   def __init__(self, *, package_info: profile_config_pb2.PackageInfo,
-               structure_definitions: List[
+               structure_definitions: ResourceCollection[
                    structure_definition_pb2.StructureDefinition],
-               search_parameters: List[search_parameter_pb2.SearchParameter],
-               code_systems: List[code_system_pb2.CodeSystem],
-               value_sets: List[value_set_pb2.ValueSet]) -> None:
+               search_parameters: ResourceCollection[
+                   search_parameter_pb2.SearchParameter],
+               code_systems: ResourceCollection[code_system_pb2.CodeSystem],
+               value_sets: ResourceCollection[value_set_pb2.ValueSet]) -> None:
     """Creates a new instance of `FhirPackage`. Callers should favor `load`."""
     self.package_info = package_info
     self.structure_definitions = structure_definitions
     self.search_parameters = search_parameters
     self.code_systems = code_systems
     self.value_sets = value_sets
+
+  def get_resource(self, uri: str) -> Optional[message.Message]:
+    """Retrieves a protocol buffer representation of the given resource.
+
+    Args:
+      uri: The URI of the resource to retrieve.
+
+    Returns:
+      Protocol buffer for the resource or `None` if the `uri` can not be found.
+    """
+    for collection in (self.structure_definitions, self.search_parameters,
+                       self.code_systems, self.value_sets):
+      resource = collection.get_resource(uri)
+      if resource is not None:
+        return resource
+
+    return None
 
   def __eq__(self, o: Any) -> bool:
     if not isinstance(o, FhirPackage):
@@ -185,3 +275,67 @@ class FhirPackage:
 
   def __hash__(self) -> int:
     return hash(self.package_info.proto_package)
+
+
+def _add_resource_to_collection(resource_json: Dict[str, Any],
+                                collections_per_resource_type: Dict[
+                                    str, ResourceCollection],
+                                path: str,
+                                is_in_bundle: bool = False) -> None:
+  """Adds an entry for the given resource to the appropriate collection.
+
+  Args:
+    resource_json: Parsed JSON object of the resource to add.
+    collections_per_resource_type: Set of `ResourceCollection`s to add the
+      resource to.
+    path: Path within the `ResourceCollection` zip file leading to the resource.
+    is_in_bundle: Used in recursive calls to indicate the resource is located in
+      a bundle file.
+  """
+  resource_type = resource_json.get('resourceType')
+  uri = resource_json.get('url')
+
+  if resource_type in collections_per_resource_type:
+    # If a resource doesn't have a URI, ignore it as the resource will
+    # subsequently be impossible to look up.
+    if not uri:
+      logging.warning(
+          'JSON entry: %s does not have a url. Skipping loading of the resource.',
+          path)
+    else:
+      # If the resource is a member of a bundle, pass the bundle's resource
+      # type to ensure the file is handled correctly later.
+      collections_per_resource_type[resource_type].add_uri_at_path(
+          uri, path, 'Bundle' if is_in_bundle else resource_type)
+  elif resource_type == 'Bundle':
+    for entry in resource_json.get('entry', ()):
+      resource = entry.get('resource')
+      if resource:
+        _add_resource_to_collection(
+            resource, collections_per_resource_type, path, is_in_bundle=True)
+  else:
+    logging.warning('Unhandled JSON entry: %s for unexpected resource type %s.',
+                    path, resource_type)
+
+
+def _find_resource_in_bundle(
+    uri: str, bundle_json: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+  """Finds the JSON object for the resource with `uri` inside `bundle_json`.
+
+  Args:
+    uri: The resource URI to search for.
+    bundle_json: Parsed JSON object for the bundle to search
+
+  Returns:
+    Parsed JSON object for the resource or `None` if it can not be found.
+  """
+  for entry in bundle_json.get('entry', ()):
+    resource = entry.get('resource', {})
+    if resource.get('url') == uri:
+      return resource
+    elif resource.get('resourceType') == 'Bundle':
+      bundled_resource = _find_resource_in_bundle(uri, resource)
+      if bundled_resource is not None:
+        return bundled_resource
+
+  return None
