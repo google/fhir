@@ -13,9 +13,9 @@ def fhirproto_dependencies(core_lib = False):
 
     http_archive(
         name = "com_google_absl",
-        sha256 = "5dd8763b3616afff3f79fc628e025b612b33c7b6f75ffa38e55125fbddc5bbbd",
-        strip_prefix = "abseil-cpp-0e9921b75a0fdd639a504ec8443fc1fe801becd7",
-        url = "https://github.com/abseil/abseil-cpp/archive/0e9921b75a0fdd639a504ec8443fc1fe801becd7.tar.gz",
+        sha256 = "5ec35586b685eea11f198bb6e75f870e37fde62d15b95a3897c37b2d0bbd9017",
+        strip_prefix = "abseil-cpp-143a27800eb35f4568b9be51647726281916aac9",
+        urls = ["https://github.com/abseil/abseil-cpp/archive/143a27800eb35f4568b9be51647726281916aac9.zip"],
     )
 
     http_archive(
@@ -107,6 +107,21 @@ def fhirproto_dependencies(core_lib = False):
             "https://storage.googleapis.com/mirror.tensorflow.org/github.com/open-source-parsers/jsoncpp/archive/1.9.2.tar.gz",
             "https://github.com/open-source-parsers/jsoncpp/archive/1.9.2.tar.gz",
         ],
+    )
+
+    http_archive(
+        name = "nlohmann_json",
+        url = "https://github.com/nlohmann/json/archive/v3.7.3.zip",
+        strip_prefix = "json-3.7.3",
+        sha256 = "e109cd4a9d1d463a62f0a81d7c6719ecd780a52fb80a22b901ed5b6fe43fb45b",
+        build_file_content = """cc_library(name = "json",
+                                           visibility = ["//visibility:public"],
+                                           hdrs = glob([
+                                               "include/nlohmann/*.hpp",
+                                               "include/nlohmann/**/*.hpp",
+                                               ]),
+                                           includes = ["include"],
+                                          )""",
     )
 
     http_archive(

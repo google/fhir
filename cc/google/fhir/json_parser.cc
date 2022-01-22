@@ -35,6 +35,7 @@
 #include "google/fhir/annotations.h"
 #include "google/fhir/core_resource_registry.h"
 #include "google/fhir/extensions.h"
+#include "google/fhir/json/json_sax_handler.h"
 #include "google/fhir/json_format.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
@@ -47,7 +48,6 @@
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 #include "include/json/json.h"
-#include "re2/re2.h"
 
 namespace google {
 namespace fhir {
@@ -57,7 +57,6 @@ using ::google::fhir::IsChoiceType;
 using ::google::fhir::IsPrimitive;
 using ::google::fhir::IsReference;
 using ::google::fhir::IsResource;
-using ::google::fhir::proto::FhirVersion;
 using ::google::protobuf::Any;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
@@ -470,58 +469,7 @@ class Parser {
   const google::fhir::Parser::JsonSanitizer& sanitizer_;
 };
 
-absl::StatusOr<Json::Value> ParseJsonValue(const std::string& raw_json) {
-  Json::Reader reader;
-  Json::Value value;
-  if (!reader.parse(raw_json, value)) {
-    return InvalidArgumentError("Failed parsing raw json.");
-  }
-  return value;
-}
-
 }  // namespace internal
-
-namespace {
-
-static const char* const kJsonKeyRegex =
-    R"("[^\s":]*[^\\\s:"]")";  // Quote, non-whitespace non-colon, unescaped
-                               // quote
-
-static const char* const kColonRegex =
-    R"(\s*:\s*)";  // Arbitary whitespace, colon, arbitrary white space
-
-static const char* const kDecimalRegex =
-    "-?\\d*\\.\\d*?"                      // Decimal of the form X.X
-    "|"                                   // OR
-    "-?\\d*(?:\\.\\d*)?[eE][+-]?[0-9]+";  // Scientific Notation
-
-static const char* const kEndTokenRegex = "[\\s,\\}\\]$]";
-
-// Makes a regex to capture Key/Values of Decimal type.
-// This regex contains 4 capture groups:
-// 1: The key, identified a Quote, followed by non-whitespace,
-// followed by an unescaped quote.
-// 2: Arbitrary whitespace, colon, arbitrary whitespace
-// 3: a decimal (either a number with a decimal, or scientific notation)
-// 4: any field-ending token.
-// Note that this does NOT match integers, so that only Decimal datatypes
-// are affected by this particular eccentricity.
-// Note that (1) is resiliant to the case of a string like
-// { "myString": "stuff\"myFakeField\": 123" }
-// because the end quote cannot be preceded by a backslash.
-const LazyRE2& GetDecimalRegex() {
-  const std::string re =
-      absl::StrFormat("(?m)(%s)(%s)(%s)(%s)", kJsonKeyRegex, kColonRegex,
-                      kDecimalRegex, kEndTokenRegex);
-  static LazyRE2 regex{re.c_str()};
-  // Dereference to cause init to run.
-  // This allows the string memory to be released, since LazyRE2 starts off by
-  // only holding on to the char* address.
-  *regex;
-  return regex;
-}
-
-}  // namespace
 
 absl::Status Parser::MergeJsonFhirStringIntoProto(
     const std::string& raw_json, Message* target,
@@ -534,26 +482,8 @@ absl::Status Parser::MergeJsonFhirStringIntoProto(
     const std::string& raw_json, Message* target,
     const absl::TimeZone default_timezone, const JsonSanitizer& sanitizer,
     const bool validate) const {
-  std::string mutable_raw_json = raw_json;
-  // FHIR JSON format stores decimals as unquoted rational numbers.  This is
-  // problematic, because their representation could change when they are
-  // parsed into C++ doubles.  To avoid this, add quotes around any decimal
-  // fields to ensure that they are parsed as strings.  Note that any field
-  // that is already in quotes will not match this regex, and thus be ignored.
-  static const LazyRE2& decimal_regex = GetDecimalRegex();
-  RE2::GlobalReplace(&mutable_raw_json, *decimal_regex, R"(\1\2"\3"\4)");
-
   Json::Value value;
-
-  // TODO: Decide if we want to support value-only JSON
-  if (IsDecimal(*target) && raw_json != "null") {
-    // Similar to above, if this is a standalone decimal, parse it as a string
-    // to avoid changing representation due to precision.
-    FHIR_ASSIGN_OR_RETURN(value, internal::ParseJsonValue(absl::StrCat(
-                                     "\"", mutable_raw_json, "\"")));
-  } else {
-    FHIR_ASSIGN_OR_RETURN(value, internal::ParseJsonValue(mutable_raw_json));
-  }
+  FHIR_ASSIGN_OR_RETURN(value, internal::ParseJsonValue(raw_json));
 
   internal::Parser parser{primitive_handler_, default_timezone, sanitizer};
 
