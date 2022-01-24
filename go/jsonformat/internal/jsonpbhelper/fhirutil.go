@@ -1138,3 +1138,9 @@ func AddFieldToPath(jsonPath, field string) string {
 func AddIndexToPath(jsonPath string, index int) string {
 	return jsonPath + "[" + strconv.Itoa(index) + "]"
 }
+
+// IsTimeLike FHIR data type. These are Date, DateTime, Time and Instant.
+func IsTimeLike(pb proto.Message) bool {
+	name := pb.ProtoReflect().Descriptor().Name()
+	return name == "Date" || name == "DateTime" || name == "Time" || name == "Instant"
+}
