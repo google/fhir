@@ -37,7 +37,6 @@
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 #include "proto/google/fhir/proto/stu3/fhirproto_extensions.pb.h"
-#include "include/json/json.h"
 
 namespace google {
 namespace fhir {

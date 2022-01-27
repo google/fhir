@@ -35,6 +35,7 @@
 #include "google/fhir/annotations.h"
 #include "google/fhir/core_resource_registry.h"
 #include "google/fhir/extensions.h"
+#include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json/json_sax_handler.h"
 #include "google/fhir/json_format.h"
 #include "google/fhir/primitive_wrapper.h"
@@ -47,7 +48,6 @@
 #include "google/fhir/stu3/profiles.h"
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
-#include "include/json/json.h"
 
 namespace google {
 namespace fhir {
@@ -205,7 +205,8 @@ class Parser {
         default_timezone_(default_timezone),
         sanitizer_(sanitizer) {}
 
-  absl::Status MergeMessage(const Json::Value& value, Message* target) const {
+  absl::Status MergeMessage(const internal::FhirJson& value,
+                            Message* target) const {
     const Descriptor* target_descriptor = target->GetDescriptor();
     // TODO: handle this with an annotation
     if (target_descriptor->name() == "ContainedResource") {
@@ -215,43 +216,47 @@ class Parser {
     const std::unordered_map<std::string, const FieldDescriptor*>& field_map =
         GetFieldMap(target_descriptor);
 
-    for (auto sub_value_iter = value.begin(); sub_value_iter != value.end();
-         ++sub_value_iter) {
-      const auto& field_entry = field_map.find(sub_value_iter.key().asString());
-      if (field_entry != field_map.end()) {
-        if (IsChoiceType(field_entry->second)) {
-          FHIR_RETURN_IF_ERROR(MergeChoiceField(*sub_value_iter,
-                                                field_entry->second,
-                                                field_entry->first, target));
+    auto object_map = value.objectMap();
+    if (object_map.ok()) {
+      for (auto sub_value_iter = object_map.value()->begin();
+           sub_value_iter != object_map.value()->end(); ++sub_value_iter) {
+        const auto& field_entry = field_map.find(sub_value_iter->first);
+        if (field_entry != field_map.end()) {
+          if (IsChoiceType(field_entry->second)) {
+            FHIR_RETURN_IF_ERROR(MergeChoiceField(*sub_value_iter->second,
+                                                  field_entry->second,
+                                                  field_entry->first, target));
+          } else {
+            FHIR_RETURN_IF_ERROR(MergeField(*sub_value_iter->second,
+                                            field_entry->second, target));
+          }
+        } else if (sub_value_iter->first == "resourceType") {
+          FHIR_ASSIGN_OR_RETURN(std::string resource_type,
+                                sub_value_iter->second->asString());
+          if (!IsResource(target_descriptor) ||
+              target_descriptor->name() != resource_type) {
+            return InvalidArgumentError(absl::StrCat(
+                "Error merging json resource of type ", resource_type,
+                " into message of type", target_descriptor->name()));
+          }
         } else {
-          FHIR_RETURN_IF_ERROR(
-              MergeField(*sub_value_iter, field_entry->second, target));
-        }
-      } else if (sub_value_iter.key().asString() == "resourceType") {
-        std::string resource_type = sub_value_iter->asString();
-        if (!IsResource(target_descriptor) ||
-            target_descriptor->name() != resource_type) {
-          return InvalidArgumentError(absl::StrCat(
-              "Error merging json resource of type ", resource_type,
-              " into message of type", target_descriptor->name()));
-        }
-      } else {
-        if (sub_value_iter.key().asString() == "fhir_comments") {
-          // fhir_comments can exist in a valid FHIR json, however,
-          // it is not supported in the current FHIR protos.
-          // Hence, we simply ignore it.
-          continue;
-        }
+          if (sub_value_iter->first == "fhir_comments") {
+            // fhir_comments can exist in a valid FHIR json, however,
+            // it is not supported in the current FHIR protos.
+            // Hence, we simply ignore it.
+            continue;
+          }
 
-        return InvalidArgumentError(absl::StrCat(
-            "Unable to merge field ", sub_value_iter.key().asString(),
-            " into resource of type ", target_descriptor->full_name()));
+          return InvalidArgumentError(absl::StrCat(
+              "Unable to merge field ", sub_value_iter->first,
+              " into resource of type ", target_descriptor->full_name()));
+        }
       }
     }
     return absl::OkStatus();
   }
 
-  absl::Status MergeContainedResource(const Json::Value& value,
+  absl::Status MergeContainedResource(const internal::FhirJson& value,
                                       Message* target) const {
     // We handle contained resources in a special way, because despite
     // internally being a Oneof, it is not acually a choice-type in FHIR. The
@@ -259,16 +264,18 @@ class Parser {
     // about which field in the Oneof to set.  Instead, we need to inspect
     // the JSON input to determine its type.  Then, merge into that specific
     // field in the resource Oneof.
-    std::string resource_type =
-        value.get("resourceType", Json::Value::null).asString();
+    FHIR_ASSIGN_OR_RETURN(const internal::FhirJson* resource_type_json,
+                          value.get("resourceType"));
+    FHIR_ASSIGN_OR_RETURN(const std::string resource_type_str,
+                          resource_type_json->asString());
     FHIR_ASSIGN_OR_RETURN(
         const FieldDescriptor* contained_field,
-        GetContainedResourceField(target->GetDescriptor(), resource_type));
+        GetContainedResourceField(target->GetDescriptor(), resource_type_str));
     return MergeMessage(value, target->GetReflection()->MutableMessage(
                                    target, contained_field));
   }
 
-  absl::Status MergeChoiceField(const Json::Value& json,
+  absl::Status MergeChoiceField(const internal::FhirJson& json,
                                 const FieldDescriptor* choice_field,
                                 const std::string& field_name,
                                 Message* parent) const {
@@ -301,8 +308,8 @@ class Parser {
   // the given field on the parent.
   // Note that we cannot just pass the field message, as this behaves
   // differently if the field has been previously set or not.
-  absl::Status MergeField(const Json::Value& json, const FieldDescriptor* field,
-                          Message* parent) const {
+  absl::Status MergeField(const internal::FhirJson& json,
+                          const FieldDescriptor* field, Message* parent) const {
     const Reflection* parent_reflection = parent->GetReflection();
     // If the field is non-primitive make sure it hasn't been set yet.
     // Note that we allow primitive types to be set already, because FHIR
@@ -340,18 +347,19 @@ class Parser {
       if (!json.isArray()) {
         return InvalidArgumentError(
             absl::StrCat("Attempted to set repeated field ", field->full_name(),
-                         " using non-array JSON: ", json.toStyledString()));
+                         " using non-array JSON: ", json.toString()));
       }
       size_t existing_field_size = parent_reflection->FieldSize(*parent, field);
-      if (existing_field_size != 0 && existing_field_size != json.size()) {
+      if (existing_field_size != 0 &&
+          existing_field_size != json.arraySize().value()) {
         return InvalidArgumentError(absl::StrCat(
             "Repeated primitive list length does not match extension list ",
             "for field: ", field->full_name()));
       }
-      for (Json::ArrayIndex i = 0; i < json.size(); i++) {
+      for (int i = 0; i < json.arraySize().value(); i++) {
         FHIR_ASSIGN_OR_RETURN(
             std::unique_ptr<Message> parsed_value,
-            ParseFieldValue(field, json.get(i, Json::Value::null), parent));
+            ParseFieldValue(field, *json.get(i).value(), parent));
         if (existing_field_size > 0) {
           FHIR_RETURN_IF_ERROR(MergeAndClearPrimitiveWithNoValue(
               *parsed_value,
@@ -392,7 +400,7 @@ class Parser {
   }
 
   absl::StatusOr<std::unique_ptr<Message>> ParseFieldValue(
-      const FieldDescriptor* field, const Json::Value& json,
+      const FieldDescriptor* field, const internal::FhirJson& json,
       Message* parent) const {
     if (field->type() != FieldDescriptor::Type::TYPE_MESSAGE) {
       return InvalidArgumentError(
@@ -416,9 +424,10 @@ class Parser {
 
       // Sanitize JSON value depending on the type of JSON value.
       if (json.isString()) {
-        std::string val = json.asString();
+        FHIR_ASSIGN_OR_RETURN(std::string val, json.asString());
         FHIR_RETURN_IF_ERROR(sanitizer_.SanitizeStringField(field, val));
-        merge_status = MergeValue(Json::Value(val), target.get());
+        auto val_string = internal::FhirJson::CreateString(val);
+        merge_status = MergeValue(*val_string, target.get());
       } else {
         merge_status = MergeValue(json, target.get());
       }
@@ -431,7 +440,8 @@ class Parser {
     }
   }
 
-  absl::Status MergeValue(const Json::Value& json, Message* target) const {
+  absl::Status MergeValue(const internal::FhirJson& json,
+                          Message* target) const {
     if (IsPrimitive(target->GetDescriptor())) {
       if (json.isObject()) {
         // This is a primitive type extension.
@@ -449,12 +459,12 @@ class Parser {
     }
     // Must be another FHIR element.
     if (!json.isObject()) {
-      if (json.isArray() && json.size() == 1) {
+      if (json.isArray() && json.arraySize().value() == 1) {
         // The target field is non-repeated, and we're trying to populate it
         // with a single element array.
         // This is considered valid, and occurs when a profiled resource reduces
         // the size of a repeated FHIR field to max of 1.
-        return MergeMessage(json.get(0u, Json::Value::null), target);
+        return MergeMessage(*json.get(0).value(), target);
       }
       return InvalidArgumentError(
           absl::StrCat("Expected JsonObject for field of type ",
@@ -482,8 +492,8 @@ absl::Status Parser::MergeJsonFhirStringIntoProto(
     const std::string& raw_json, Message* target,
     const absl::TimeZone default_timezone, const JsonSanitizer& sanitizer,
     const bool validate) const {
-  Json::Value value;
-  FHIR_ASSIGN_OR_RETURN(value, internal::ParseJsonValue(raw_json));
+  internal::FhirJson value;
+  FHIR_RETURN_IF_ERROR(internal::ParseJsonValue(raw_json, value));
 
   internal::Parser parser{primitive_handler_, default_timezone, sanitizer};
 

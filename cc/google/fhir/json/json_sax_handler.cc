@@ -14,9 +14,11 @@
 
 #include "google/fhir/json/json_sax_handler.h"
 
-#include <optional>
 #include <functional>
+#include <memory>
+#include <optional>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "absl/cleanup/cleanup.h"
@@ -26,7 +28,6 @@
 #include "absl/types/optional.h"
 #include "include/nlohmann/json.hpp"
 #include "include/nlohmann/json_fwd.hpp"
-#include "include/json/writer.h"
 
 namespace google {
 namespace fhir {
@@ -34,33 +35,9 @@ namespace internal {
 
 namespace {
 
-std::string typeToString(Json::ValueType type) {
-  switch (type) {
-    case Json::nullValue:
-      return "nullValue";
-    case Json::intValue:
-      return "intValue";
-    case Json::uintValue:
-      return "uintValue";
-    case Json::realValue:
-      return "realValue";
-    case Json::stringValue:
-      return "stringValue";
-    case Json::booleanValue:
-      return "booleanValue";
-    case Json::arrayValue:
-      return "arrayValue";
-    case Json::objectValue:
-      return "objectValue";
-  }
-  return "UNREACHABLE";
-}
-
 class JsonSaxHandler {
  public:
-  explicit JsonSaxHandler(Json::Value& root) {
-    element_stack_.emplace_back(root);
-  }
+  explicit JsonSaxHandler(FhirJson* root) { element_stack_.emplace_back(root); }
 
   /*!
   @brief a null value was read
@@ -69,7 +46,7 @@ class JsonSaxHandler {
   bool null() {
     const std::string token = "null";
     auto set_prev_token = absl::MakeCleanup(StorePreviousTokenCallback(token));
-    return HandleValue(Json::Value(Json::nullValue), /*val_is_complete=*/true);
+    return HandleValue(FhirJson::CreateNull(), /*val_is_complete=*/true);
   }
 
   /*!
@@ -80,7 +57,7 @@ class JsonSaxHandler {
   bool boolean(bool val) {
     const std::string token = absl::StrCat("boolean(", val, ")");
     auto set_prev_token = absl::MakeCleanup(StorePreviousTokenCallback(token));
-    return HandleValue(Json::Value(val), /*val_is_complete=*/true);
+    return HandleValue(FhirJson::CreateBoolean(val), /*val_is_complete=*/true);
   }
 
   /*!
@@ -91,7 +68,7 @@ class JsonSaxHandler {
   bool number_integer(int64_t val) {
     const std::string token = absl::StrCat("integer(", val, ")");
     auto set_prev_token = absl::MakeCleanup(StorePreviousTokenCallback(token));
-    return HandleValue(Json::Value(val), /*val_is_complete=*/true);
+    return HandleValue(FhirJson::CreateInteger(val), /*val_is_complete=*/true);
   }
 
   /*!
@@ -102,7 +79,7 @@ class JsonSaxHandler {
   bool number_unsigned(uint64_t val) {
     const std::string token = absl::StrCat("unsigned(", val, ")");
     auto set_prev_token = absl::MakeCleanup(StorePreviousTokenCallback(token));
-    return HandleValue(Json::Value(val), /*val_is_complete=*/true);
+    return HandleValue(FhirJson::CreateUnsigned(val), /*val_is_complete=*/true);
   }
 
   /*!
@@ -114,7 +91,7 @@ class JsonSaxHandler {
   bool number_float(double val, const std::string& s) {
     const std::string token = absl::StrCat("float(", s, ")");
     auto set_prev_token = absl::MakeCleanup(StorePreviousTokenCallback(token));
-    return HandleValue(Json::Value(s), /*val_is_complete=*/true);
+    return HandleValue(FhirJson::CreateDecimal(s), /*val_is_complete=*/true);
   }
 
   /*!
@@ -126,7 +103,7 @@ class JsonSaxHandler {
   bool string(const std::string& val) {
     const std::string token = absl::StrCat("string(", val, ")");
     auto set_prev_token = absl::MakeCleanup(StorePreviousTokenCallback(token));
-    return HandleValue(Json::Value(val), /*val_is_complete=*/true);
+    return HandleValue(FhirJson::CreateString(val), /*val_is_complete=*/true);
   }
 
   /*!
@@ -154,7 +131,7 @@ class JsonSaxHandler {
   bool start_object(std::size_t elements) {
     const std::string token = "start_object";
     auto set_prev_token = absl::MakeCleanup(StorePreviousTokenCallback(token));
-    return HandleValue(Json::Value(Json::objectValue),
+    return HandleValue(FhirJson::CreateObject(),
                        /*val_is_complete=*/false);
   }
 
@@ -171,11 +148,16 @@ class JsonSaxHandler {
       UpdateError(token, "EOF");
       return false;
     }
-    if (!element_stack_.back().json_value.isObject()) {
+    if (!element_stack_.back()->isObject()) {
       UpdateError(token);
       return false;
     }
-    element_stack_.emplace_back(element_stack_.back().json_value[val]);
+    auto new_json = element_stack_.back()->mutableValueForKey(val);
+    if (!new_json.ok()) {
+      UpdateError(new_json.status());
+      return false;
+    }
+    element_stack_.emplace_back(new_json.value());
     return true;
   }
 
@@ -190,7 +172,7 @@ class JsonSaxHandler {
       UpdateError(token, "EOF");
       return false;
     }
-    if (!element_stack_.back().json_value.isObject()) {
+    if (!element_stack_.back()->isObject()) {
       UpdateError(token);
       return false;
     }
@@ -210,7 +192,7 @@ class JsonSaxHandler {
     // implementation.
     const std::string token = "start_array";
     auto set_prev_token = absl::MakeCleanup(StorePreviousTokenCallback(token));
-    return HandleValue(Json::Value(Json::arrayValue),
+    return HandleValue(FhirJson::CreateArray(),
                        /*val_is_complete=*/false);
   }
 
@@ -225,7 +207,7 @@ class JsonSaxHandler {
       UpdateError(token, "EOF");
       return false;
     }
-    if (!element_stack_.back().json_value.isArray()) {
+    if (!element_stack_.back()->isArray()) {
       UpdateError(token);
       return false;
     }
@@ -256,18 +238,11 @@ class JsonSaxHandler {
   absl::Status status() const { return status_; }
 
  private:
-  // Holds partially parsed JSON element.
-  struct PartialElement {
-    // References are sub/nested-elements of the `root` Json::Value passed into
-    // the JsonSaxHandler constructor.
-    Json::Value& json_value;
-    explicit PartialElement(Json::Value& val) : json_value(val) {}
-  };
   // Front of the stack (index 0) contains the root element, back/top of the
   // stack contains the current element being parsed.
   // Note: we chose to use std::vector instead of std::stack since the root
   // element is potentially useful for error message and debug information.
-  std::vector<PartialElement> element_stack_;
+  std::vector<FhirJson*> element_stack_;
 
   // Hold error status encountered by json parser.
   absl::Status status_;
@@ -275,9 +250,6 @@ class JsonSaxHandler {
   // Store the previous token for purposes of constructing a more informative
   // error message, when needed.
   std::string previous_token_;
-
-  // Writer is used for constructing error messages.
-  Json::FastWriter writer_;
 
   // Function to be called when token processing function goes out of scope.
   std::function<void()> StorePreviousTokenCallback(const std::string& token) {
@@ -288,25 +260,26 @@ class JsonSaxHandler {
   // the `status_` and returns false if the value cannot be handled correctly.
   // "start_object" and "start_array" are also regarded as values to be handled
   // here, but are not "complete" values.
-  bool HandleValue(Json::Value val, bool val_is_complete) {
+  bool HandleValue(std::unique_ptr<FhirJson> val, bool val_is_complete) {
     if (element_stack_.empty()) {
-      UpdateError(writer_.write(val), "EOF");
+      UpdateError(val->toString(), "EOF");
       return false;
     }
     // If current element is an array, append an empty value to be modified
     // later.
-    if (element_stack_.back().json_value.isArray()) {
-      element_stack_.back().json_value.append(Json::Value());
-      element_stack_.emplace_back(
-          element_stack_.back()
-              .json_value[element_stack_.back().json_value.size() - 1]);
+    if (element_stack_.back()->isArray()) {
+      auto new_json = element_stack_.back()->mutableValueToAppend();
+      if (!new_json.ok()) {
+        UpdateError(new_json.status());
+        return false;
+      }
+      element_stack_.emplace_back(new_json.value());
     }
-    // The element to be modified has to be uninitialized.
-    if (!element_stack_.back().json_value.isNull()) {
-      UpdateError(writer_.write(val));
+    auto status = element_stack_.back()->MoveFrom(std::move(val));
+    if (!status.ok()) {
+      UpdateError(status);
       return false;
     }
-    element_stack_.back().json_value = val;
     if (val_is_complete) {
       element_stack_.pop_back();
     }
@@ -325,24 +298,26 @@ class JsonSaxHandler {
     }
     if (!element_stack_.empty()) {
       absl::StrAppend(&error_message, ", current element type is ",
-                      typeToString(element_stack_.back().json_value.type()));
+                      element_stack_.back()->typeString());
     }
     if (!previous_token_.empty()) {
       absl::StrAppend(&error_message, ", previous token is ", previous_token_);
     }
     status_ = absl::InvalidArgumentError(error_message);
   }
+
+  void UpdateError(absl::Status status) { status_ = status; }
 };
 
 }  // namespace
 
-absl::StatusOr<Json::Value> ParseJsonValue(const std::string& raw_json) {
-  Json::Value json_value;
-  JsonSaxHandler sax_handler(json_value);
+absl::Status ParseJsonValue(
+    const std::string& raw_json, FhirJson& json_value) {
+  JsonSaxHandler sax_handler(&json_value);
 
   if (nlohmann::json::sax_parse(raw_json, &sax_handler)) {
     if (sax_handler.stack_empty()) {
-      return json_value;
+      return absl::OkStatus();
     }
     return absl::InvalidArgumentError(
         "Unexpected EOF, possibly due to unmatched brackets");

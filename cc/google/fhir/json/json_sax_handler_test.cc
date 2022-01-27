@@ -14,208 +14,316 @@
 
 #include "google/fhir/json/json_sax_handler.h"
 
+#include <memory>
 #include <string>
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/strings/match.h"
-#include "include/json/writer.h"
 
 namespace google {
 namespace fhir {
 namespace internal {
 namespace {
 
-MATCHER_P(IsOkWithJson, expected_json_object, "") {
-  if (!arg.ok()) {
-    *result_listener << "status error: " << arg.status().message();
-    return false;
-  }
-  Json::StyledWriter writer;
-  if (arg.value() != expected_json_object) {
-    *result_listener << "expected " << writer.write(expected_json_object)
-                     << ", actual " << writer.write(arg.value());
+MATCHER(StatusIsOk, "") { return arg.ok(); }
+
+MATCHER_P(SameAsJson, expected_json_object, "") {
+  if (arg != *expected_json_object) {
+    *result_listener << "expected " << expected_json_object->toString()
+                     << ", actual " << arg.toString();
     return false;
   }
   return true;
 }
 
-TEST(JsonSaxHandlerTest, ParseLiteral) {
-  EXPECT_THAT(ParseJsonValue("null"),
-              IsOkWithJson(Json::Value(Json::nullValue)));
-  EXPECT_THAT(ParseJsonValue("-2"), IsOkWithJson(Json::Value(-2)));
-  EXPECT_THAT(ParseJsonValue("2"), IsOkWithJson(Json::Value(2u)));
-  EXPECT_THAT(ParseJsonValue("\"abc\""), IsOkWithJson(Json::Value("abc")));
-  EXPECT_THAT(ParseJsonValue("3.14"), IsOkWithJson(Json::Value("3.14")));
-  EXPECT_THAT(ParseJsonValue("\"3.14\""), IsOkWithJson(Json::Value("3.14")));
-  EXPECT_THAT(ParseJsonValue("true"), IsOkWithJson(Json::Value(true)));
-  EXPECT_THAT(ParseJsonValue("false"), IsOkWithJson(Json::Value(false)));
-  EXPECT_THAT(ParseJsonValue("\"🔥\""), IsOkWithJson(Json::Value("🔥")));
+MATCHER_P2(HasErrorStatus, status_code, substr, "") {
+  return !arg.ok() && arg.code() == status_code &&
+         absl::StrContains(arg.message(), substr);
 }
 
 TEST(JsonSaxHandlerTest, ParseNull) {
-  EXPECT_THAT(ParseJsonValue("null"),
-              IsOkWithJson(Json::Value(Json::nullValue)));
+  FhirJson json_value;
+  EXPECT_THAT(ParseJsonValue("null", json_value), StatusIsOk());
+  EXPECT_THAT(json_value, SameAsJson(FhirJson::CreateNull().get()));
+}
+
+TEST(JsonSaxHandlerTest, ParseSignedInt) {
+  FhirJson json_value;
+  EXPECT_THAT(ParseJsonValue("-2", json_value), StatusIsOk());
+  EXPECT_THAT(json_value, SameAsJson(FhirJson::CreateInteger(-2).get()));
+}
+
+TEST(JsonSaxHandlerTest, ParseUnsignedInt) {
+  FhirJson json_value;
+  EXPECT_THAT(ParseJsonValue("2", json_value), StatusIsOk());
+  EXPECT_THAT(json_value, SameAsJson(FhirJson::CreateUnsigned(2).get()));
+}
+
+TEST(JsonSaxHandlerTest, ParseString) {
+  FhirJson json_value;
+  EXPECT_THAT(ParseJsonValue("\"abc\"", json_value), StatusIsOk());
+  EXPECT_THAT(json_value, SameAsJson(FhirJson::CreateString("abc").get()));
+}
+
+TEST(JsonSaxHandlerTest, ParseNonAsciiUtf8String) {
+  FhirJson json_value;
+  EXPECT_THAT(ParseJsonValue("\"🔥\"", json_value), StatusIsOk());
+  EXPECT_THAT(json_value, SameAsJson(FhirJson::CreateString("🔥").get()));
+}
+
+TEST(JsonSaxHandlerTest, ParseDecimal) {
+  FhirJson json_value;
+  EXPECT_THAT(ParseJsonValue("3.14", json_value), StatusIsOk());
+  EXPECT_THAT(json_value, SameAsJson(FhirJson::CreateDecimal("3.14").get()));
+}
+
+TEST(JsonSaxHandlerTest, ParseBoolean) {
+  FhirJson json_value;
+  EXPECT_THAT(ParseJsonValue("true", json_value), StatusIsOk());
+  EXPECT_THAT(json_value, SameAsJson(FhirJson::CreateBoolean(true).get()));
 }
 
 TEST(JsonSaxHandlerTest, ParseEmptyObject) {
-  EXPECT_THAT(ParseJsonValue("{}"),
-              IsOkWithJson(Json::Value(Json::objectValue)));
+  FhirJson json_value;
+  EXPECT_THAT(ParseJsonValue("{}", json_value), StatusIsOk());
+  EXPECT_THAT(json_value, SameAsJson(FhirJson::CreateObject().get()));
+}
+
+TEST(JsonSaxHandlerTest, ParseEmptyArray) {
+  FhirJson json_value;
+  EXPECT_THAT(ParseJsonValue("[]", json_value), StatusIsOk());
+  EXPECT_THAT(json_value, SameAsJson(FhirJson::CreateArray().get()));
 }
 
 TEST(JsonSaxHandlerTest, ParseDictionary) {
-  Json::Value expected;
-  expected["a"] = Json::Value(-2);
-  expected["b"] = Json::Value(false);
-  expected["c"] = Json::Value();
-  expected["d"] = Json::Value("dictionary");
+  std::unique_ptr<FhirJson> expected = FhirJson::CreateObject();
 
+  EXPECT_THAT(expected->mutableValueForKey("a").value()->MoveFrom(
+                  FhirJson::CreateInteger(-2)),
+              StatusIsOk());
+  EXPECT_THAT(expected->mutableValueForKey("b").value()->MoveFrom(
+                  FhirJson::CreateBoolean(false)),
+              StatusIsOk());
+  EXPECT_THAT(expected->mutableValueForKey("c").value()->MoveFrom(
+                  FhirJson::CreateNull()),
+              StatusIsOk());
+  EXPECT_THAT(expected->mutableValueForKey("d").value()->MoveFrom(
+                  FhirJson::CreateString("dictionary")),
+              StatusIsOk());
+
+  FhirJson json_value;
   EXPECT_THAT(ParseJsonValue(R"({
                   "a": -2,
                   "b": false,
                   "c": null,
                   "d": "dictionary"
-              })"),
-              IsOkWithJson(expected));
+              })",
+                             json_value),
+              StatusIsOk());
+  EXPECT_THAT(json_value, SameAsJson(expected.get()));
 }
 
 TEST(JsonSaxHandlerTest, ParseNestedDictionary) {
-  Json::Value expected;
-  expected["a"]["b"]["c"] = Json::Value(-2);
+  std::unique_ptr<FhirJson> expected = FhirJson::CreateObject();
 
+  FhirJson* value_a = expected->mutableValueForKey("a").value();
+  EXPECT_THAT(value_a->MoveFrom(FhirJson::CreateObject()), StatusIsOk());
+
+  FhirJson* value_b = value_a->mutableValueForKey("b").value();
+  EXPECT_THAT(value_b->MoveFrom(FhirJson::CreateObject()), StatusIsOk());
+
+  FhirJson* value_c = value_b->mutableValueForKey("c").value();
+  EXPECT_THAT(value_c->MoveFrom(FhirJson::CreateInteger(-2)), StatusIsOk());
+
+  FhirJson json_value;
   EXPECT_THAT(ParseJsonValue(R"({
                   "a": {
                     "b": {
                       "c": -2
                     }
                   }
-              })"),
-              IsOkWithJson(expected));
+              })",
+                             json_value),
+              StatusIsOk());
+  EXPECT_THAT(json_value, SameAsJson(expected.get()));
 }
 
 TEST(JsonSaxHandlerTest, ParseArray) {
-  Json::Value expected(Json::arrayValue);
-  EXPECT_THAT(ParseJsonValue("[]"), IsOkWithJson(expected));
+  std::unique_ptr<FhirJson> expected = FhirJson::CreateArray();
 
-  expected.append(Json::Value(false));
-  EXPECT_THAT(ParseJsonValue("[false]"), IsOkWithJson(expected));
+  FhirJson json_value0;
+  EXPECT_THAT(ParseJsonValue("[]", json_value0), StatusIsOk());
+  EXPECT_THAT(json_value0, SameAsJson(expected.get()));
 
-  expected.append(Json::Value(true));
-  expected.append(Json::Value(false));
-  expected.append(Json::Value(false));
+  EXPECT_THAT(expected->mutableValueToAppend().value()->MoveFrom(
+                  FhirJson::CreateBoolean(false)),
+              StatusIsOk());
+  FhirJson json_value1;
+  EXPECT_THAT(ParseJsonValue("[false]", json_value1), StatusIsOk());
+  EXPECT_THAT(json_value1, SameAsJson(expected.get()));
 
-  EXPECT_THAT(ParseJsonValue("[false, true, false, false]"),
-              IsOkWithJson(expected));
+  EXPECT_THAT(expected->mutableValueToAppend().value()->MoveFrom(
+                  FhirJson::CreateBoolean(true)),
+              StatusIsOk());
+  EXPECT_THAT(expected->mutableValueToAppend().value()->MoveFrom(
+                  FhirJson::CreateBoolean(false)),
+              StatusIsOk());
+  EXPECT_THAT(expected->mutableValueToAppend().value()->MoveFrom(
+                  FhirJson::CreateBoolean(false)),
+              StatusIsOk());
+
+  FhirJson json_value4;
+  EXPECT_THAT(ParseJsonValue("[false, true, false, false]", json_value4),
+              StatusIsOk());
+  EXPECT_THAT(json_value4, SameAsJson(expected.get()));
 }
 
 TEST(JsonSaxHandlerTest, ArrayNestedInDictionary) {
-  Json::Value expected;
-  expected["aa"].append(Json::Value(-2));
-  expected["aa"].append(Json::Value(true));
-  expected["aa"].append(Json::Value("hello"));
-  expected["bb"] = Json::Value(Json::objectValue);
-  expected["cc"] = Json::Value(Json::arrayValue);
+  std::unique_ptr<FhirJson> expected = FhirJson::CreateObject();
 
+  FhirJson* value_aa = expected->mutableValueForKey("aa").value();
+  EXPECT_THAT(value_aa->MoveFrom(FhirJson::CreateArray()), StatusIsOk());
+  EXPECT_THAT(value_aa->mutableValueToAppend().value()->MoveFrom(
+                  FhirJson::CreateInteger(-2)),
+              StatusIsOk());
+  EXPECT_THAT(value_aa->mutableValueToAppend().value()->MoveFrom(
+                  FhirJson::CreateBoolean(true)),
+              StatusIsOk());
+  EXPECT_THAT(value_aa->mutableValueToAppend().value()->MoveFrom(
+                  FhirJson::CreateString("hello")),
+              StatusIsOk());
+
+  FhirJson* value_bb = expected->mutableValueForKey("bb").value();
+  EXPECT_THAT(value_bb->MoveFrom(FhirJson::CreateObject()), StatusIsOk());
+
+  FhirJson* value_cc = expected->mutableValueForKey("cc").value();
+  EXPECT_THAT(value_cc->MoveFrom(FhirJson::CreateNull()), StatusIsOk());
+
+  FhirJson json_value;
   EXPECT_THAT(ParseJsonValue(R"({
                   "aa": [-2, true, "hello"],
                   "bb": {},
-                  "cc": []
-              })"),
-              IsOkWithJson(expected));
+                  "cc": null
+              })",
+                             json_value),
+              StatusIsOk());
+  EXPECT_THAT(json_value, SameAsJson(expected.get()));
 }
 
 TEST(JsonSaxHandlerTest, DictionaryNestedInArray) {
-  Json::Value expected;
-  expected.resize(3);
-  expected[0]["aa"] = Json::Value(-2);
-  expected[1] = Json::Value(Json::objectValue);
-  expected[2]["aa"] = Json::Value(true);
+  std::unique_ptr<FhirJson> expected = FhirJson::CreateArray();
 
+  std::unique_ptr<FhirJson> value_0 = FhirJson::CreateObject();
+  EXPECT_THAT(value_0->mutableValueForKey("aa").value()->MoveFrom(
+                  FhirJson::CreateInteger(-2)),
+              StatusIsOk());
+  EXPECT_THAT(
+      expected->mutableValueToAppend().value()->MoveFrom(std::move(value_0)),
+      StatusIsOk());
+
+  std::unique_ptr<FhirJson> value_1 = FhirJson::CreateObject();
+  EXPECT_THAT(
+      expected->mutableValueToAppend().value()->MoveFrom(std::move(value_1)),
+      StatusIsOk());
+
+  std::unique_ptr<FhirJson> value_2 = FhirJson::CreateObject();
+  EXPECT_THAT(value_2->mutableValueForKey("aa").value()->MoveFrom(
+                  FhirJson::CreateBoolean(true)),
+              StatusIsOk());
+  EXPECT_THAT(
+      expected->mutableValueToAppend().value()->MoveFrom(std::move(value_2)),
+      StatusIsOk());
+
+  FhirJson json_value;
   EXPECT_THAT(ParseJsonValue(R"([
                   {"aa": -2},
                   {},
                   {"aa": true}
-              ])"),
-              IsOkWithJson(expected));
-}
-
-MATCHER_P2(HasErrorStatus, status_code, substr, "") {
-  return !arg.ok() && arg.status().code() == status_code &&
-         absl::StrContains(arg.status().message(), substr);
+              ])",
+                             json_value),
+              StatusIsOk());
+  EXPECT_THAT(json_value, SameAsJson(expected.get()));
 }
 
 TEST(JsonSaxHandlerTest, ErrorParseEmptyInput) {
-  EXPECT_THAT(ParseJsonValue(""),
+  FhirJson json_value;
+  EXPECT_THAT(ParseJsonValue("", json_value),
               HasErrorStatus(absl::StatusCode::kInvalidArgument,
                              "unexpected end of input"));
 }
 
 TEST(JsonSaxHandlerTest, ErrorParseInvalidLiteral) {
+  FhirJson json_value;
   EXPECT_THAT(
-      ParseJsonValue("2f"),
+      ParseJsonValue("2f", json_value),
       HasErrorStatus(absl::StatusCode::kInvalidArgument, "invalid literal"));
 
   EXPECT_THAT(
-      ParseJsonValue("True"),
+      ParseJsonValue("True", json_value),
       HasErrorStatus(absl::StatusCode::kInvalidArgument, "invalid literal"));
 
   EXPECT_THAT(
-      ParseJsonValue("NULL"),
+      ParseJsonValue("NULL", json_value),
       HasErrorStatus(absl::StatusCode::kInvalidArgument, "invalid literal"));
 
   EXPECT_THAT(
-      ParseJsonValue("(2)"),
+      ParseJsonValue("(2)", json_value),
       HasErrorStatus(absl::StatusCode::kInvalidArgument, "invalid literal"));
 
-  EXPECT_THAT(ParseJsonValue("\"string"),
+  EXPECT_THAT(ParseJsonValue("\"string", json_value),
               HasErrorStatus(absl::StatusCode::kInvalidArgument,
                              "missing closing quote"));
 }
 
 TEST(JsonSaxHandlerTest, ErrorParseBracketMismatch) {
-  EXPECT_THAT(ParseJsonValue("{\"key\": 2"),
+  FhirJson json_value0, json_value1;
+  EXPECT_THAT(ParseJsonValue("{\"key\": 2", json_value0),
               HasErrorStatus(absl::StatusCode::kInvalidArgument,
                              "unexpected end of input"));
 
   EXPECT_THAT(
-      ParseJsonValue("[}"),
+      ParseJsonValue("[}", json_value1),
       HasErrorStatus(absl::StatusCode::kInvalidArgument, "unexpected '}'"));
 }
 
 TEST(JsonSaxHandlerTest, ErrorMissingComma) {
-  EXPECT_THAT(ParseJsonValue("null 2"),
+  FhirJson json_value0, json_value1, json_value2;
+  EXPECT_THAT(ParseJsonValue("null 2", json_value0),
               HasErrorStatus(absl::StatusCode::kInvalidArgument,
                              "unexpected number literal"));
 
-  EXPECT_THAT(ParseJsonValue("[2, {} null]"),
+  EXPECT_THAT(ParseJsonValue("[2, {} null]", json_value1),
               HasErrorStatus(absl::StatusCode::kInvalidArgument,
                              "unexpected null literal"));
 
-  EXPECT_THAT(ParseJsonValue("{\"key1\": true \"key2\": false}"),
+  EXPECT_THAT(ParseJsonValue("{\"key1\": true \"key2\": false}", json_value2),
               HasErrorStatus(absl::StatusCode::kInvalidArgument,
                              "unexpected string literal"));
 }
 
 TEST(JsonSaxHandlerTest, ErrorParseExtraTrailingComma) {
+  FhirJson json_value0, json_value1, json_value2;
   EXPECT_THAT(
-      ParseJsonValue("{\"key\": 2},"),
+      ParseJsonValue("{\"key\": 2},", json_value0),
       HasErrorStatus(absl::StatusCode::kInvalidArgument, "unexpected ','"));
 
   EXPECT_THAT(
-      ParseJsonValue("{\"key\": 2,}"),
+      ParseJsonValue("{\"key\": 2,}", json_value1),
       HasErrorStatus(absl::StatusCode::kInvalidArgument, "unexpected '}'"));
 
   EXPECT_THAT(
-      ParseJsonValue("[true, false,]"),
+      ParseJsonValue("[true, false,]", json_value2),
       HasErrorStatus(absl::StatusCode::kInvalidArgument, "unexpected ']'"));
 }
 
 TEST(JsonSaxHandlerTest, ErrorParseInvalidObjectKey) {
-  EXPECT_THAT(ParseJsonValue("{2}"),
+  FhirJson json_value0, json_value1;
+  EXPECT_THAT(ParseJsonValue("{2}", json_value0),
               HasErrorStatus(absl::StatusCode::kInvalidArgument,
                              " expected string literal"));
 
-  EXPECT_THAT(ParseJsonValue("{non_string_key: 2}"),
+  EXPECT_THAT(ParseJsonValue("{non_string_key: 2}", json_value1),
               HasErrorStatus(absl::StatusCode::kInvalidArgument,
                              " expected string literal"));
 }

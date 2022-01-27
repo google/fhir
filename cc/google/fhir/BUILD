@@ -286,6 +286,7 @@ cc_library(
         ":json_util",
         ":proto_util",
         ":util",
+        "//cc/google/fhir/json:fhir_json",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto/google/fhir/proto:annotations_cc_proto",
@@ -298,7 +299,6 @@ cc_library(
         "@com_google_absl//absl/time",
         "@com_google_protobuf//:protobuf",
         "@com_googlesource_code_re2//:re2",
-        "@jsoncpp_git//:jsoncpp",
     ],
 )
 
@@ -325,6 +325,7 @@ cc_library(
         ":references",
         ":resource_validation",
         ":util",
+        "//cc/google/fhir/json:fhir_json",
         "//cc/google/fhir/json:json_sax_handler",
         "//cc/google/fhir/r4:profiles",
         "//cc/google/fhir/status",
@@ -340,7 +341,6 @@ cc_library(
         "@com_google_absl//absl/synchronization",
         "@com_google_absl//absl/time",
         "@com_google_protobuf//:protobuf",
-        "@jsoncpp_git//:jsoncpp",
     ],
 )
 
@@ -476,6 +476,7 @@ cc_library(
         ":primitive_wrapper",
         ":proto_util",
         ":util",
+        "//cc/google/fhir/json:fhir_json",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "@com_google_absl//absl/status",
@@ -483,7 +484,6 @@ cc_library(
         "@com_google_absl//absl/time",
         "@com_google_absl//absl/types:optional",
         "@com_google_protobuf//:protobuf",
-        "@jsoncpp_git//:jsoncpp",
     ],
 )
 

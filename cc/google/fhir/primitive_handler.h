@@ -26,12 +26,12 @@
 #include "absl/status/statusor.h"
 #include "absl/time/time.h"
 #include "absl/types/optional.h"
+#include "google/fhir/json/fhir_json.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
-#include "include/json/json.h"
 
 namespace google {
 namespace fhir {
@@ -65,10 +65,11 @@ class PrimitiveHandler {
  public:
   virtual ~PrimitiveHandler() {}
 
-  absl::Status ParseInto(const Json::Value& json, const absl::TimeZone tz,
+  absl::Status ParseInto(const internal::FhirJson& json,
+                         const absl::TimeZone tz,
                          ::google::protobuf::Message* target) const;
 
-  absl::Status ParseInto(const Json::Value& json,
+  absl::Status ParseInto(const internal::FhirJson& json,
                          ::google::protobuf::Message* target) const;
 
   absl::StatusOr<JsonPrimitive> WrapPrimitiveProto(
@@ -452,10 +453,11 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 
   absl::StatusOr<::google::protobuf::Message*> NewDateTime(
       const std::string& str) const override {
-    Json::Value json_string(str);
+    std::unique_ptr<internal::FhirJson> json_string =
+        internal::FhirJson::CreateString(str);
 
     std::unique_ptr<DateTime> msg = std::make_unique<DateTime>();
-    FHIR_RETURN_IF_ERROR(ParseInto(json_string, msg.get()));
+    FHIR_RETURN_IF_ERROR(ParseInto(*json_string, msg.get()));
 
     return msg.release();
   }

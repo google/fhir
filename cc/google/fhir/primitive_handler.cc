@@ -16,6 +16,9 @@
 
 #include "google/fhir/primitive_handler.h"
 
+#include <memory>
+#include <utility>
+
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "google/fhir/annotations.h"
@@ -29,15 +32,14 @@ using primitives_internal::PrimitiveWrapper;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::Message;
 
-::absl::Status PrimitiveHandler::ParseInto(const Json::Value& json,
+::absl::Status PrimitiveHandler::ParseInto(const internal::FhirJson& json,
                                            const absl::TimeZone tz,
                                            Message* target) const {
   FHIR_RETURN_IF_ERROR(CheckVersion(*target));
 
-  if (json.type() == Json::ValueType::arrayValue ||
-      json.type() == Json::ValueType::objectValue) {
+  if (json.isArray() || json.isObject()) {
     return InvalidArgumentError(
-        absl::StrCat("Invalid JSON type for ", json.toStyledString()));
+        absl::StrCat("Invalid JSON type for ", json.toString()));
   }
   FHIR_ASSIGN_OR_RETURN(std::unique_ptr<PrimitiveWrapper> wrapper,
                         GetWrapper(target->GetDescriptor()));
@@ -45,7 +47,7 @@ using ::google::protobuf::Message;
   return wrapper->MergeInto(target);
 }
 
-::absl::Status PrimitiveHandler::ParseInto(const Json::Value& json,
+::absl::Status PrimitiveHandler::ParseInto(const internal::FhirJson& json,
                                            Message* target) const {
   return ParseInto(json, absl::UTCTimeZone(), target);
 }

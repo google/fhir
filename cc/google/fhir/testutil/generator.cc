@@ -14,6 +14,10 @@
 
 #include "google/fhir/testutil/generator.h"
 
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "absl/random/distributions.h"
@@ -23,7 +27,6 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/references.h"
 #include "google/fhir/util.h"
-#include "include/json/json.h"
 
 namespace google {
 namespace fhir {
@@ -268,53 +271,71 @@ absl::Status FhirGenerator::FillPrimitive(
   int recursion_depth = (*recursion_count)[field->message_type()];
   google::protobuf::Message* fhir_primitive =
       ::google::fhir::MutableOrAddMessage(message, field);
-  Json::Value value;
+  std::unique_ptr<internal::FhirJson> value;
 
   if (google::fhir::IsBoolean(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetBoolean(field, recursion_depth));
+    value = internal::FhirJson::CreateBoolean(
+        value_provider_->GetBoolean(field, recursion_depth));
   } else if (google::fhir::IsBase64Binary(*fhir_primitive)) {
-    value =
-        Json::Value(value_provider_->GetBase64Binary(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetBase64Binary(field, recursion_depth));
   } else if (google::fhir::IsString(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetString(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetString(field, recursion_depth));
   } else if (google::fhir::IsInteger(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetInteger(field, recursion_depth));
+    value = internal::FhirJson::CreateInteger(
+        value_provider_->GetInteger(field, recursion_depth));
   } else if (google::fhir::IsPositiveInt(*fhir_primitive)) {
-    value =
-        Json::Value(value_provider_->GetPositiveInt(field, recursion_depth));
+    value = internal::FhirJson::CreateUnsigned(
+        value_provider_->GetPositiveInt(field, recursion_depth));
   } else if (google::fhir::IsUnsignedInt(*fhir_primitive)) {
-    value =
-        Json::Value(value_provider_->GetUnsignedInt(field, recursion_depth));
+    value = internal::FhirJson::CreateUnsigned(
+        value_provider_->GetUnsignedInt(field, recursion_depth));
   } else if (google::fhir::IsDecimal(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetDecimal(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetDecimal(field, recursion_depth));
   } else if (google::fhir::IsDateTime(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetDateTime(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetDateTime(field, recursion_depth));
   } else if (google::fhir::IsDate(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetDate(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetDate(field, recursion_depth));
   } else if (google::fhir::IsTime(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetTime(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetTime(field, recursion_depth));
   } else if (google::fhir::IsInstant(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetInstant(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetInstant(field, recursion_depth));
   } else if (google::fhir::IsId(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetId(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetId(field, recursion_depth));
   } else if (google::fhir::IsUuid(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetUuid(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetUuid(field, recursion_depth));
   } else if (google::fhir::IsIdentifier(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetIdentifier(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetIdentifier(field, recursion_depth));
   } else if (google::fhir::IsUri(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetUri(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetUri(field, recursion_depth));
   } else if (google::fhir::IsUrl(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetUrl(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetUrl(field, recursion_depth));
   } else if (google::fhir::IsOid(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetOid(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetOid(field, recursion_depth));
   } else if (google::fhir::IsCanonical(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetCanonical(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetCanonical(field, recursion_depth));
   } else if (google::fhir::IsCode(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetCode(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetCode(field, recursion_depth));
   } else if (google::fhir::IsXhtml(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetXhtml(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetXhtml(field, recursion_depth));
   } else if (google::fhir::IsMarkdown(*fhir_primitive)) {
-    value = Json::Value(value_provider_->GetMarkdown(field, recursion_depth));
+    value = internal::FhirJson::CreateString(
+        value_provider_->GetMarkdown(field, recursion_depth));
   } else if (google::fhir::IsProfileOfCode(*fhir_primitive)) {
     // Profile codes use the enumerated value when present.
     const google::protobuf::FieldDescriptor* value_field =
@@ -325,7 +346,8 @@ absl::Status FhirGenerator::FillPrimitive(
       fhir_primitive->GetReflection()->SetEnum(fhir_primitive, value_field,
                                                enum_value);
     } else {
-      value = Json::Value(value_provider_->GetCode(field, recursion_depth));
+      value = internal::FhirJson::CreateString(
+          value_provider_->GetCode(field, recursion_depth));
     }
   } else {
     return absl::InvalidArgumentError(absl::StrCat(
@@ -333,10 +355,9 @@ absl::Status FhirGenerator::FillPrimitive(
         GetStructureDefinitionUrl(fhir_primitive->GetDescriptor())));
   }
 
-  if (!value.empty()) {
-    FHIR_RETURN_IF_ERROR(primitive_handler_->ParseInto(value, fhir_primitive));
+  if (value) {
+    FHIR_RETURN_IF_ERROR(primitive_handler_->ParseInto(*value, fhir_primitive));
   }
-
   return absl::OkStatus();
 }
 
@@ -371,9 +392,10 @@ absl::Status FhirGenerator::FillReference(
                                                         uri_field);
     std::string reference_id =
         value_provider_->GetReferenceId(field, recursion_depth);
-    FHIR_RETURN_IF_ERROR(primitive_handler_->ParseInto(
-        Json::Value(absl::StrCat(reference_type, "/", reference_id)),
-        uri_message));
+    auto fhir_json = internal::FhirJson::CreateString(
+        absl::StrCat(reference_type, "/", reference_id));
+    FHIR_RETURN_IF_ERROR(
+        primitive_handler_->ParseInto(*fhir_json, uri_message));
     return SplitIfRelativeReference(fhir_reference);
   }
 }

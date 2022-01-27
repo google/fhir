@@ -15,6 +15,11 @@
 #ifndef GOOGLE_FHIR_TESTUTIL_GENERATOR_H_
 #define GOOGLE_FHIR_TESTUTIL_GENERATOR_H_
 
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 #include "absl/container/flat_hash_map.h"

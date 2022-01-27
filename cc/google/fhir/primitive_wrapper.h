@@ -17,8 +17,12 @@
 #ifndef GOOGLE_FHIR_PRIMITIVE_WRAPPER_H_
 #define GOOGLE_FHIR_PRIMITIVE_WRAPPER_H_
 
+#include <limits>
 #include <memory>
 #include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
@@ -33,11 +37,11 @@
 #include "absl/time/time.h"
 #include "google/fhir/codes.h"
 #include "google/fhir/extensions.h"
+#include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
-#include "include/json/json.h"
 #include "re2/re2.h"
 
 namespace google {
@@ -82,7 +86,7 @@ class PrimitiveWrapper {
  public:
   virtual ~PrimitiveWrapper() {}
   virtual absl::Status MergeInto(::google::protobuf::Message* target) const = 0;
-  virtual absl::Status Parse(const Json::Value& json,
+  virtual absl::Status Parse(const internal::FhirJson& json,
                              const absl::TimeZone& default_time_zone) = 0;
   virtual absl::Status Wrap(const ::google::protobuf::Message&) = 0;
   virtual bool HasElement() const = 0;
@@ -176,7 +180,7 @@ class XhtmlWrapper : public SpecificWrapper<XhtmlLike> {
     return std::move(element);
   }
 
-  absl::Status Parse(const Json::Value& json,
+  absl::Status Parse(const internal::FhirJson& json,
                      const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       return InvalidArgumentError("Unexpected null xhtml");
@@ -186,9 +190,9 @@ class XhtmlWrapper : public SpecificWrapper<XhtmlLike> {
           absl::StrCat("Cannot parse as ", XhtmlLike::descriptor()->full_name(),
                        ": it is not a string value."));
     }
-    FHIR_RETURN_IF_ERROR(this->ValidateString(json.asString()));
+    FHIR_RETURN_IF_ERROR(this->ValidateString(json.asString().value()));
     std::unique_ptr<XhtmlLike> wrapped = absl::make_unique<XhtmlLike>();
-    wrapped->set_value(json.asString());
+    wrapped->set_value(json.asString().value());
     this->WrapAndManage(std::move(wrapped));
     return absl::OkStatus();
   }
@@ -277,7 +281,7 @@ class ExtensibleWrapper : public SpecificWrapper<T> {
 template <typename T>
 class StringInputWrapper : public ExtensibleWrapper<T> {
  public:
-  absl::Status Parse(const Json::Value& json,
+  absl::Status Parse(const internal::FhirJson& json,
                      const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       return this->InitializeNull();
@@ -287,7 +291,7 @@ class StringInputWrapper : public ExtensibleWrapper<T> {
                                                T::descriptor()->full_name(),
                                                ": it is not a string value."));
     }
-    return ParseString(json.asString());
+    return ParseString(json.asString().value());
   }
 
  protected:
@@ -411,7 +415,7 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
   }
 
  protected:
-  absl::Status Parse(const Json::Value& json,
+  absl::Status Parse(const internal::FhirJson& json,
                      const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       return this->InitializeNull();
@@ -421,7 +425,7 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
                                                T::descriptor()->full_name(),
                                                ": it is not a string value."));
     }
-    const std::string& json_string = json.asString();
+    const std::string json_string = json.asString().value();
     FHIR_RETURN_IF_ERROR(this->ValidateString(json_string));
 
     static const LazyRE2 fractional_seconds_regex{
@@ -478,7 +482,7 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
   absl::Status SetValue(absl::Time time, const std::string& timezone_string,
                         const std::string& precision_string) {
     std::unique_ptr<T> wrapped = absl::make_unique<T>();
-    wrapped->set_value_us(ToUnixMicros(time));
+    wrapped->set_value_us(absl::ToUnixMicros(time));
     wrapped->set_timezone(timezone_string);
     const EnumDescriptor* precision_enum_descriptor =
         T::descriptor()->FindEnumTypeByName("Precision");
@@ -523,27 +527,21 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
 template <typename T>
 class IntegerTypeWrapper : public ExtensibleWrapper<T> {
  public:
-  absl::Status Parse(const Json::Value& json,
+  absl::Status Parse(const internal::FhirJson& json,
                      const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       return this->InitializeNull();
     }
-    if (json.type() != Json::ValueType::intValue &&
-        json.type() != Json::ValueType::uintValue) {
+    if (!json.isInt()) {
       return InvalidArgumentError(
           absl::StrCat("Cannot parse as ", T::descriptor()->full_name(),
                        json.isString() ? "  It is a quoted string." : ""));
     }
     // Before we can treat the jsoncpp value as an int, we need to make sure
     // it fits into bounds of the corresponding datatype.
-    // Json::Value#isInt does these checks
-    if (!json.isInt()) {
-      return InvalidArgumentError(absl::Substitute(
-          "Cannot parse as $0: Out of range", T::descriptor()->full_name()));
-    }
-    FHIR_RETURN_IF_ERROR(ValidateInteger(json.asInt()));
+    FHIR_RETURN_IF_ERROR(ValidateInteger(json.asInt().value()));
     std::unique_ptr<T> wrapped = absl::make_unique<T>();
-    wrapped->set_value(json.asInt());
+    wrapped->set_value(json.asInt().value());
     this->WrapAndManage(std::move(wrapped));
     return absl::OkStatus();
   }
@@ -553,7 +551,12 @@ class IntegerTypeWrapper : public ExtensibleWrapper<T> {
   }
 
  protected:
-  virtual absl::Status ValidateInteger(const int int_value) const {
+  virtual absl::Status ValidateInteger(const int64_t int_value) const {
+    if (int_value < std::numeric_limits<int32_t>::min() ||
+        int_value > std::numeric_limits<int32_t>::max()) {
+      return InvalidArgumentError(absl::Substitute(
+          "Cannot parse as $0: Out of range", T::descriptor()->full_name()));
+    }
     return absl::OkStatus();
   }
 
@@ -735,7 +738,7 @@ class BooleanWrapper : public ExtensibleWrapper<BooleanType> {
   }
 
  private:
-  absl::Status Parse(const Json::Value& json,
+  absl::Status Parse(const internal::FhirJson& json,
                      const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       return this->InitializeNull();
@@ -746,7 +749,7 @@ class BooleanWrapper : public ExtensibleWrapper<BooleanType> {
                        json.isString() ? "  It is a quoted string." : ""));
     }
     std::unique_ptr<BooleanType> wrapped = absl::make_unique<BooleanType>();
-    wrapped->set_value(json.asBool());
+    wrapped->set_value(json.asBool().value());
     this->WrapAndManage(std::move(wrapped));
     return absl::OkStatus();
   }
@@ -789,17 +792,17 @@ class DecimalWrapper : public StringInputWrapper<DecimalType> {
   }
 
  private:
-  absl::Status Parse(const Json::Value& json,
+  absl::Status Parse(const internal::FhirJson& json,
                      const absl::TimeZone& default_time_zone) override {
     if (json.isNull()) {
       return this->InitializeNull();
     }
     if (json.isString()) {
-      return ParseString(json.asString());
+      return ParseString(json.asString().value());
     }
-    if (json.isIntegral()) {
+    if (json.isInt()) {
       std::unique_ptr<DecimalType> wrapped = absl::make_unique<DecimalType>();
-      wrapped->set_value(json.asString());
+      wrapped->set_value(absl::StrCat(json.asInt().value()));
       this->WrapAndManage(std::move(wrapped));
       return absl::OkStatus();
     }
@@ -822,12 +825,14 @@ class DecimalWrapper : public StringInputWrapper<DecimalType> {
 template <typename PositiveIntType>
 class PositiveIntWrapper : public IntegerTypeWrapper<PositiveIntType> {
  protected:
-  absl::Status ValidateInteger(const int int_value) const {
-    return int_value > 0 ? absl::OkStatus()
-                         : InvalidArgumentError(absl::Substitute(
-                               "Cannot parse as $0: must be greater "
-                               "than zero.",
-                               PositiveIntType::descriptor()->full_name()));
+  absl::Status ValidateInteger(const int64_t int_value) const {
+    if (int_value <= 0 || int_value > std::numeric_limits<int32_t>::max()) {
+      return InvalidArgumentError(
+          absl::Substitute("Cannot parse as $0: must be in range [$1..$2].",
+                           PositiveIntType::descriptor()->full_name(), 1,
+                           std::numeric_limits<int32_t>::max()));
+    }
+    return absl::OkStatus();
   }
 };
 
@@ -925,12 +930,14 @@ class TimeWrapper : public StringInputWrapper<TimeLike> {
 template <typename UnsignedIntType>
 class UnsignedIntWrapper : public IntegerTypeWrapper<UnsignedIntType> {
  protected:
-  absl::Status ValidateInteger(const int int_value) const {
-    return int_value >= 0 ? absl::OkStatus()
-                          : InvalidArgumentError(absl::Substitute(
-                                "Cannot parse as $0: must be greater "
-                                "than or equal to zero.",
-                                UnsignedIntType::descriptor()->full_name()));
+  absl::Status ValidateInteger(const int64_t int_value) const {
+    if (int_value < 0 || int_value > std::numeric_limits<int32_t>::max()) {
+      return InvalidArgumentError(
+          absl::Substitute("Cannot parse as $0: must be in range [$1..$2].",
+                           UnsignedIntType::descriptor()->full_name(), 0,
+                           std::numeric_limits<int32_t>::max()));
+    }
+    return absl::OkStatus();
   }
 };
 

@@ -15,18 +15,20 @@
 #ifndef GOOGLE_FHIR_INTERNAL_JSON_SAX_HANDLER_H_
 #define GOOGLE_FHIR_INTERNAL_JSON_SAX_HANDLER_H_
 
+#include <memory>
 #include <string>
 
 #include "absl/status/statusor.h"
-#include "include/json/value.h"
+#include "google/fhir/json/fhir_json.h"
 
 namespace google {
 namespace fhir {
 namespace internal {
 
-// Parse input string into Json::Value, returns invalid argument error if
-// `raw_json` is not well-formatted.
-absl::StatusOr<Json::Value> ParseJsonValue(const std::string& raw_json);
+// Parse input string into FhirJson, returns error if `raw_json` is not
+// well-formatted.
+absl::Status ParseJsonValue(
+    const std::string& raw_json, FhirJson& json_value);
 
 }  // namespace internal
 }  // namespace fhir
