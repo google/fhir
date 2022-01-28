@@ -207,6 +207,9 @@ cc_test(
         ":profiles",
         "//cc/google/fhir:proto_util",
         "//cc/google/fhir:test_helper",
+        "//cc/google/fhir/json:fhir_json",
+        "//cc/google/fhir/json:json_sax_handler",
+        "//cc/google/fhir/json:test_matchers",
         "//cc/google/fhir/testutil:generator",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/google/fhir/proto:annotations_cc_proto",
@@ -363,10 +366,8 @@ cc_test(
         "//testdata/r4/profiles:test_cc_proto",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
-        "@com_google_absl//absl/synchronization",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
-        "@jsoncpp_git//:jsoncpp",
     ],
 )
 

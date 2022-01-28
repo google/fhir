@@ -1,6 +1,6 @@
 licenses(["notice"])
 
-package(default_visibility = ["//cc/google/fhir:__pkg__"])
+package(default_visibility = ["//cc/google/fhir:__subpackages__"])
 
 cc_library(
     name = "fhir_json",
@@ -20,6 +20,7 @@ cc_test(
     srcs = ["fhir_json_test.cc"],
     deps = [
         ":fhir_json",
+        ":test_matchers",
         "//cc/google/fhir/status",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
@@ -43,12 +44,23 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "test_matchers",
+    testonly = 1,
+    hdrs = ["test_matchers.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "@com_google_absl//absl/strings",
+        "@com_google_googletest//:gtest",
+    ],
+)
+
 cc_test(
     name = "json_sax_handler_test",
     srcs = ["json_sax_handler_test.cc"],
     deps = [
         ":json_sax_handler",
-        "@com_google_absl//absl/strings",
+        ":test_matchers",
         "@com_google_googletest//:gtest_main",
     ],
 )

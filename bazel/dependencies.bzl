@@ -99,17 +99,6 @@ def fhirproto_dependencies(core_lib = False):
     )
 
     http_archive(
-        name = "jsoncpp_git",
-        sha256 = "77a402fb577b2e0e5d0bdc1cf9c65278915cdb25171e3452c68b6da8a561f8f0",
-        strip_prefix = "jsoncpp-1.9.2",
-        build_file = main_fhir_location + "//bazel/buildfiles:jsoncpp.BUILD",
-        urls = [
-            "https://storage.googleapis.com/mirror.tensorflow.org/github.com/open-source-parsers/jsoncpp/archive/1.9.2.tar.gz",
-            "https://github.com/open-source-parsers/jsoncpp/archive/1.9.2.tar.gz",
-        ],
-    )
-
-    http_archive(
         name = "nlohmann_json",
         url = "https://github.com/nlohmann/json/archive/v3.7.3.zip",
         strip_prefix = "json-3.7.3",

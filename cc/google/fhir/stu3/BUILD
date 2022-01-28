@@ -177,6 +177,9 @@ cc_test(
         ":json_format",
         "//cc/google/fhir:json_format",
         "//cc/google/fhir:test_helper",
+        "//cc/google/fhir/json:fhir_json",
+        "//cc/google/fhir/json:json_sax_handler",
+        "//cc/google/fhir/json:test_matchers",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/google/fhir/proto/stu3:datatypes_cc_proto",
         "//proto/google/fhir/proto/stu3:resources_cc_proto",
@@ -185,7 +188,6 @@ cc_test(
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
-        "@jsoncpp_git//:jsoncpp",
     ],
 )
 

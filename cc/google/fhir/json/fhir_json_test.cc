@@ -19,6 +19,7 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/strings/str_replace.h"
+#include "google/fhir/json/test_matchers.h"
 #include "google/fhir/status/status.h"
 
 using ::testing::Eq;
@@ -37,16 +38,6 @@ MATCHER_P(EqIgnoringWhiteSpaces, expected_string, "") {
     return false;
   }
   return true;
-}
-
-MATCHER_P(IsOkAndHolds, data, "") { return arg.ok() && arg.value() == data; }
-
-MATCHER_P(InnerStatusIs, status_code, "") {
-  return !arg.ok() && arg.status().code() == status_code;
-}
-
-MATCHER_P(StatusIs, status_code, "") {
-  return !arg.ok() && arg.code() == status_code;
 }
 
 TEST(FhirJsonTest, PrimitiveFactoryFunctions) {
@@ -68,7 +59,7 @@ TEST(FhirJsonTest, MoveFrom) {
   std::unique_ptr<FhirJson> json = FhirJson::CreateNull();
   EXPECT_TRUE(json->MoveFrom(FhirJson::CreateInteger(2)).ok());
   EXPECT_THAT(json->MoveFrom(FhirJson::CreateBoolean(true)),
-              StatusIs(absl::StatusCode::kFailedPrecondition));
+              IsErrorStatus(absl::StatusCode::kFailedPrecondition));
 }
 
 TEST(FhirJsonTest, ConversionBetweenIntegerTypes) {
@@ -78,9 +69,9 @@ TEST(FhirJsonTest, ConversionBetweenIntegerTypes) {
   EXPECT_FALSE(negative_int->isObject());
   EXPECT_FALSE(negative_int->isArray());
   EXPECT_TRUE(negative_int->isInt());
-  EXPECT_THAT(negative_int->asInt(), IsOkAndHolds(-2));
+  EXPECT_THAT(negative_int->asInt(), HoldsData(-2));
   EXPECT_FALSE(negative_int->isBool());
-  EXPECT_THAT(negative_int->asBool(), IsOkAndHolds(true));
+  EXPECT_THAT(negative_int->asBool(), HoldsData(true));
 
   auto unsigned_int = FhirJson::CreateUnsigned(0);
   EXPECT_FALSE(unsigned_int->isNull());
@@ -88,9 +79,9 @@ TEST(FhirJsonTest, ConversionBetweenIntegerTypes) {
   EXPECT_FALSE(unsigned_int->isObject());
   EXPECT_FALSE(unsigned_int->isArray());
   EXPECT_TRUE(unsigned_int->isInt());
-  EXPECT_THAT(unsigned_int->asInt(), IsOkAndHolds(0));
+  EXPECT_THAT(unsigned_int->asInt(), HoldsData(0));
   EXPECT_FALSE(unsigned_int->isBool());
-  EXPECT_THAT(unsigned_int->asBool(), IsOkAndHolds(false));
+  EXPECT_THAT(unsigned_int->asBool(), HoldsData(false));
 
   auto boolean = FhirJson::CreateBoolean(false);
   EXPECT_FALSE(boolean->isNull());
@@ -98,9 +89,9 @@ TEST(FhirJsonTest, ConversionBetweenIntegerTypes) {
   EXPECT_FALSE(boolean->isObject());
   EXPECT_FALSE(boolean->isArray());
   EXPECT_FALSE(boolean->isInt());
-  EXPECT_THAT(boolean->asInt(), IsOkAndHolds(0));
+  EXPECT_THAT(boolean->asInt(), HoldsData(0));
   EXPECT_TRUE(boolean->isBool());
-  EXPECT_THAT(boolean->asBool(), IsOkAndHolds(false));
+  EXPECT_THAT(boolean->asBool(), HoldsData(false));
 }
 
 TEST(FhirJsonTest, ConversionForStringTypes) {
@@ -111,10 +102,10 @@ TEST(FhirJsonTest, ConversionForStringTypes) {
   EXPECT_FALSE(string_val->isInt());
   EXPECT_TRUE(string_val->isString());
   EXPECT_THAT(string_val->asInt(),
-              InnerStatusIs(absl::StatusCode::kFailedPrecondition));
+              HoldsErrorStatus(absl::StatusCode::kFailedPrecondition));
   EXPECT_THAT(string_val->asBool(),
-              InnerStatusIs(absl::StatusCode::kFailedPrecondition));
-  EXPECT_THAT(string_val->asString(), IsOkAndHolds("abc"));
+              HoldsErrorStatus(absl::StatusCode::kFailedPrecondition));
+  EXPECT_THAT(string_val->asString(), HoldsData("abc"));
 
   auto decimal_val = FhirJson::CreateDecimal("3.14");
   EXPECT_FALSE(decimal_val->isNull());
@@ -123,10 +114,10 @@ TEST(FhirJsonTest, ConversionForStringTypes) {
   EXPECT_FALSE(decimal_val->isInt());
   EXPECT_TRUE(decimal_val->isString());
   EXPECT_THAT(decimal_val->asInt(),
-              InnerStatusIs(absl::StatusCode::kFailedPrecondition));
+              HoldsErrorStatus(absl::StatusCode::kFailedPrecondition));
   EXPECT_THAT(decimal_val->asBool(),
-              InnerStatusIs(absl::StatusCode::kFailedPrecondition));
-  EXPECT_THAT(decimal_val->asString(), IsOkAndHolds("3.14"));
+              HoldsErrorStatus(absl::StatusCode::kFailedPrecondition));
+  EXPECT_THAT(decimal_val->asString(), HoldsData("3.14"));
 }
 
 TEST(FhirJsonTest, Arrays) {
@@ -143,32 +134,32 @@ TEST(FhirJsonTest, Arrays) {
   FHIR_ASSERT_OK(value_1.value()->MoveFrom(FhirJson::CreateBoolean(false)));
   EXPECT_THAT(arr->toString(), EqIgnoringWhiteSpaces("[-2, false]"));
 
-  EXPECT_THAT(arr->arraySize(), IsOkAndHolds(2));
+  EXPECT_THAT(arr->arraySize(), HoldsData(2));
 
   auto get_0 = arr->get(0);
   FHIR_ASSERT_OK(get_0.status());
   ASSERT_TRUE(get_0.value()->isInt());
-  EXPECT_THAT(get_0.value()->asInt(), IsOkAndHolds(-2));
+  EXPECT_THAT(get_0.value()->asInt(), HoldsData(-2));
 
   auto get_1 = arr->get(1);
   FHIR_ASSERT_OK(get_1.status());
   ASSERT_TRUE(get_1.value()->isBool());
-  EXPECT_THAT(get_1.value()->asBool(), IsOkAndHolds(false));
+  EXPECT_THAT(get_1.value()->asBool(), HoldsData(false));
 
-  EXPECT_THAT(arr->get(2), InnerStatusIs(absl::StatusCode::kOutOfRange));
-  EXPECT_THAT(arr->get(-1), InnerStatusIs(absl::StatusCode::kOutOfRange));
+  EXPECT_THAT(arr->get(2), HoldsErrorStatus(absl::StatusCode::kOutOfRange));
+  EXPECT_THAT(arr->get(-1), HoldsErrorStatus(absl::StatusCode::kOutOfRange));
 }
 
 TEST(FhirJsonTest, IllegalUseOfArrayFunctions) {
   auto obj = FhirJson::CreateObject();
   EXPECT_THAT(obj->arraySize(),
-              InnerStatusIs(absl::StatusCode::kFailedPrecondition));
+              HoldsErrorStatus(absl::StatusCode::kFailedPrecondition));
   EXPECT_THAT(obj->get(0),
-              InnerStatusIs(absl::StatusCode::kFailedPrecondition));
+              HoldsErrorStatus(absl::StatusCode::kFailedPrecondition));
 
   auto boolean = FhirJson::CreateBoolean(false);
   EXPECT_THAT(boolean->mutableValueToAppend(),
-              InnerStatusIs(absl::StatusCode::kFailedPrecondition));
+              HoldsErrorStatus(absl::StatusCode::kFailedPrecondition));
 }
 
 TEST(FhirJsonTest, Objects) {
@@ -195,27 +186,27 @@ TEST(FhirJsonTest, Objects) {
   auto get_a = obj->get("a");
   FHIR_ASSERT_OK(get_a.status());
   ASSERT_TRUE(get_a.value()->isInt());
-  EXPECT_THAT(get_a.value()->asInt(), IsOkAndHolds(-2));
+  EXPECT_THAT(get_a.value()->asInt(), HoldsData(-2));
 
   auto get_b = obj->get("b");
   FHIR_ASSERT_OK(get_b.status());
   EXPECT_TRUE(get_b.value()->isArray());
 
   EXPECT_THAT(obj->mutableValueForKey("b"),
-              InnerStatusIs(absl::StatusCode::kAlreadyExists));
-  EXPECT_THAT(obj->get("c"), InnerStatusIs(absl::StatusCode::kNotFound));
+              HoldsErrorStatus(absl::StatusCode::kAlreadyExists));
+  EXPECT_THAT(obj->get("c"), HoldsErrorStatus(absl::StatusCode::kNotFound));
 }
 
 TEST(FhirJsonTest, IllegalUseOfObjectFunctions) {
   auto arr = FhirJson::CreateArray();
   EXPECT_THAT(arr->objectMap(),
-              InnerStatusIs(absl::StatusCode::kFailedPrecondition));
+              HoldsErrorStatus(absl::StatusCode::kFailedPrecondition));
   EXPECT_THAT(arr->get("a"),
-              InnerStatusIs(absl::StatusCode::kFailedPrecondition));
+              HoldsErrorStatus(absl::StatusCode::kFailedPrecondition));
 
   auto boolean = FhirJson::CreateBoolean(false);
   EXPECT_THAT(boolean->mutableValueForKey("a"),
-              InnerStatusIs(absl::StatusCode::kFailedPrecondition));
+              HoldsErrorStatus(absl::StatusCode::kFailedPrecondition));
 }
 
 TEST(FhirJsonTest, FormattingOfToString) {

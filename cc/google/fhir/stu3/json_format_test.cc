@@ -21,13 +21,15 @@
 #include "gtest/gtest.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "google/fhir/json/fhir_json.h"
+#include "google/fhir/json/json_sax_handler.h"
+#include "google/fhir/json/test_matchers.h"
 #include "google/fhir/json_format.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 #include "proto/google/fhir/proto/stu3/resources.pb.h"
 #include "testdata/stu3/profiles/test.pb.h"
-#include "include/json/json.h"
 
 namespace google {
 namespace fhir {
@@ -79,25 +81,16 @@ void TestParse(const std::string& name) {
       absl::StrCat("spec/hl7.fhir.core/3.0.1/package/", name + ".json"));
 }
 
-Json::Value ParseJsonStringToValue(const std::string& raw_json) {
-  Json::Reader reader;
-  Json::Value value;
-  reader.parse(raw_json, value);
-  return value;
-}
-
 template <typename R>
 void TestPrintWithFilepaths(const std::string& proto_path,
                             const std::string& json_path) {
-  const R proto = ReadProto<R>(proto_path);
-  std::string from_proto = PrettyPrintFhirToJsonString(proto).value();
-  std::string from_json = ReadFile(json_path);
-
-  if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
-    // This assert will fail, but we get terrible diff messages comparing
-    // JsonCPP, so fall back to string diffs.
-    ASSERT_EQ(from_proto, from_json);
-  }
+  internal::FhirJson from_proto, from_json;
+  ASSERT_TRUE(internal::ParseJsonValue(
+                  PrettyPrintFhirToJsonString(ReadProto<R>(proto_path)).value(),
+                  from_proto)
+                  .ok());
+  ASSERT_TRUE(internal::ParseJsonValue(ReadFile(json_path), from_json).ok());
+  EXPECT_THAT(from_proto, JsonEq(&from_json));
 }
 
 template <typename R>
@@ -119,14 +112,12 @@ void TestPrintForAnalytics(const std::string& proto_filepath,
   ASSERT_TRUE(result.ok()) << "Failed PrintForAnalytics on: " << proto_filepath
                            << "\n"
                            << result.status();
-  std::string from_proto = result.value();
-  std::string from_json = ReadFile(json_filepath);
 
-  if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
-    // This assert will fail, but we get terrible diff messages comparing
-    // JsonCPP, so fall back to string diffs.
-    ASSERT_EQ(from_json, from_proto);
-  }
+  internal::FhirJson from_proto, from_json;
+  ASSERT_TRUE(internal::ParseJsonValue(result.value(), from_proto).ok());
+  ASSERT_TRUE(
+      internal::ParseJsonValue(ReadFile(json_filepath), from_json).ok());
+  EXPECT_THAT(from_proto, JsonEq(&from_json));
 }
 
 template <typename R>

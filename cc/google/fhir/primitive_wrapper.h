@@ -537,7 +537,7 @@ class IntegerTypeWrapper : public ExtensibleWrapper<T> {
           absl::StrCat("Cannot parse as ", T::descriptor()->full_name(),
                        json.isString() ? "  It is a quoted string." : ""));
     }
-    // Before we can treat the jsoncpp value as an int, we need to make sure
+    // Before we can treat the json value as an int, we need to make sure
     // it fits into bounds of the corresponding datatype.
     FHIR_RETURN_IF_ERROR(ValidateInteger(json.asInt().value()));
     std::unique_ptr<T> wrapped = absl::make_unique<T>();

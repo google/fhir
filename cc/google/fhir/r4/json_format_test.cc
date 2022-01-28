@@ -16,13 +16,20 @@
 
 #include "google/fhir/r4/json_format.h"
 
+#include <memory>
+#include <string>
 #include <unordered_set>
+#include <utility>
+#include <vector>
 
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "google/fhir/json/fhir_json.h"
+#include "google/fhir/json/json_sax_handler.h"
+#include "google/fhir/json/test_matchers.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/r4/profiles.h"
@@ -181,7 +188,6 @@
 #include "proto/google/fhir/proto/r4/core/resources/verification_result.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/vision_prescription.pb.h"
 #include "testdata/r4/profiles/test.pb.h"
-#include "include/json/json.h"
 
 namespace google {
 namespace fhir {
@@ -194,6 +200,7 @@ namespace {
 
 using namespace ::google::fhir::r4::core;  // NOLINT
 using ::google::fhir::testutil::EqualsProto;
+using internal::JsonEq;
 using ::google::protobuf::FieldDescriptor;
 using ::testing::Eq;
 
@@ -256,13 +263,6 @@ void TestParseWithFilepaths(const std::string& proto_path,
                                    Parser::PassThroughSanitizer());
 }
 
-Json::Value ParseJsonStringToValue(const std::string& raw_json) {
-  Json::Reader reader;
-  Json::Value value;
-  reader.parse(raw_json, value);
-  return value;
-}
-
 template <typename R>
 void TestPrintWithFilepaths(const std::string& proto_path,
                             const std::string& json_path) {
@@ -272,14 +272,12 @@ void TestPrintWithFilepaths(const std::string& proto_path,
   ASSERT_TRUE(from_proto_status.ok())
       << "Failed Printing on: " << proto_path << ": "
       << from_proto_status.status().message();
-  std::string from_proto = from_proto_status.value();
-  std::string from_json = ReadFile(json_path);
 
-  if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
-    // This assert will fail, but we get terrible diff messages comparing
-    // JsonCPP, so fall back to string diffs.
-    EXPECT_EQ(from_proto, from_json);
-  }
+  internal::FhirJson from_proto, from_json;
+  ASSERT_TRUE(
+      internal::ParseJsonValue(from_proto_status.value(), from_proto).ok());
+  ASSERT_TRUE(internal::ParseJsonValue(ReadFile(json_path), from_json).ok());
+  EXPECT_THAT(from_proto, JsonEq(&from_json));
 }
 
 template <typename R>
@@ -413,14 +411,12 @@ void TestPrintForAnalytics(const std::string& proto_filepath,
   ASSERT_TRUE(result.ok()) << "Failed PrintForAnalytics on: " << proto_filepath
                            << "\n"
                            << result.status();
-  std::string from_proto = result.value();
-  std::string from_json = ReadFile(json_filepath);
 
-  if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
-    // This assert will fail, but we get terrible diff messages comparing
-    // JsonCPP, so fall back to string diffs.
-    ASSERT_EQ(from_json, from_proto);
-  }
+  internal::FhirJson from_proto, from_json;
+  ASSERT_TRUE(internal::ParseJsonValue(result.value(), from_proto).ok());
+  ASSERT_TRUE(
+      internal::ParseJsonValue(ReadFile(json_filepath), from_json).ok());
+  EXPECT_THAT(from_proto, JsonEq(&from_json));
 }
 
 template <typename R>
@@ -474,14 +470,13 @@ TEST(JsonFormatR4Test, PrintForAnalyticsWithContained) {
       << "Failed PrintForAnalytics on Patient with Contained\n"
       << result.status();
 
-  std::string from_proto = result.value();
-  std::string from_json = ReadFile("testdata/r4/examples/with_contained.json");
-
-  if (ParseJsonStringToValue(from_proto) != ParseJsonStringToValue(from_json)) {
-    // This assert will fail, but we get terrible diff messages comparing
-    // JsonCPP, so fall back to string diffs.
-    ASSERT_EQ(from_json, from_proto);
-  }
+  internal::FhirJson from_proto, from_json;
+  ASSERT_TRUE(internal::ParseJsonValue(result.value(), from_proto).ok());
+  ASSERT_TRUE(
+      internal::ParseJsonValue(
+          ReadFile("testdata/r4/examples/with_contained.json"), from_json)
+          .ok());
+  EXPECT_THAT(from_proto, JsonEq(&from_json));
 }
 
 TEST(JsonFormatR4Test, WithEmptyContainedResourcePrintsValidJson) {
