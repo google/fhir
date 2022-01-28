@@ -15,7 +15,9 @@
 #include "google/fhir/fhir_path/fhir_path.h"
 
 #include <algorithm>
+#include <any>
 #include <iterator>
+#include <type_traits>
 #include <utility>
 
 #include "google/protobuf/any.pb.h"
@@ -75,6 +77,66 @@ using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::util::MessageDifferencer;
+
+namespace {
+
+// TODO: Remove after open source builds are using ANTLR greater
+// than 4.9.3
+//
+// ANTLR versions greater than 4.9.3 removed ANTLR's custom implementation of
+// antlrcpp::Any and switched to making antlrcpp::Any a type alias of std::any.
+// The following functions act as a shim for handling either type.
+
+template <typename T>
+inline constexpr bool IsAntlrAnyOrStdAny = (std::is_same_v<T, antlrcpp::Any> ||
+                                            std::is_same_v<T, std::any>);
+
+template <typename F>
+std::enable_if_t<IsAntlrAnyOrStdAny<F>, bool> AnyHasValue(const F& any) {
+  if constexpr (std::is_same_v<antlrcpp::Any, std::any>) {
+    return any.has_value();
+  } else {
+    return !any.isNull();
+  }
+}
+
+template <typename T, typename F>
+std::enable_if_t<IsAntlrAnyOrStdAny<F>, T> AnyCast(const F& any) {
+  if constexpr (std::is_same_v<antlrcpp::Any, std::any>) {
+    return std::any_cast<T>(any);
+  } else {
+    return any.template as<T>();
+  }
+}
+
+template <typename T, typename F>
+std::enable_if_t<IsAntlrAnyOrStdAny<F>, T> AnyCast(F& any) {
+  if constexpr (std::is_same_v<antlrcpp::Any, std::any>) {
+    return std::any_cast<T>(any);
+  } else {
+    return any.template as<T>();
+  }
+}
+
+template <typename T, typename F>
+std::enable_if_t<IsAntlrAnyOrStdAny<F>, T> AnyCast(F&& any) {
+  if constexpr (std::is_same_v<antlrcpp::Any, std::any>) {
+    return std::any_cast<T>(std::forward<F>(any));
+  } else {
+    return std::forward<F>(any).template as<T>();
+  }
+}
+
+template <typename T, typename F>
+std::enable_if_t<IsAntlrAnyOrStdAny<F>, bool> AnyIs(const F& any) {
+  if constexpr (std::is_same_v<antlrcpp::Any, std::any>) {
+    return std::any_cast<T>(&any) != nullptr;
+  } else {
+    return any.template is<T>();
+  }
+}
+
+}  // namespace
 
 namespace internal {
 
@@ -479,11 +541,11 @@ class FunctionNode : public ExpressionNode {
 
     for (auto it = params.begin(); it != params.end(); ++it) {
       antlrcpp::Any param_any = (*it)->accept(visitor);
-      if (param_any.isNull()) {
+      if (!AnyHasValue(param_any)) {
         return InvalidArgumentError("Failed to compile parameter.");
       }
       compiled_params.push_back(
-          param_any.as<std::shared_ptr<ExpressionNode>>());
+          AnyCast<std::shared_ptr<ExpressionNode>>(param_any));
     }
 
     return compiled_params;
@@ -737,17 +799,18 @@ class SubstringFunction : public FunctionNode {
     std::vector<std::shared_ptr<ExpressionNode>> compiled_params;
 
     antlrcpp::Any start = params[0]->accept(base_context_visitor);
-    if (start.isNull()) {
+    if (!AnyHasValue(start)) {
       return InvalidArgumentError("Failed to compile `start` parameter.");
     }
-    compiled_params.push_back(start.as<std::shared_ptr<ExpressionNode>>());
+    compiled_params.push_back(AnyCast<std::shared_ptr<ExpressionNode>>(start));
 
     if (params.size() > 1) {
       antlrcpp::Any length = params[1]->accept(base_context_visitor);
-      if (length.isNull()) {
+      if (!AnyHasValue(length)) {
         return InvalidArgumentError("Failed to compile `length` parameter.");
       }
-      compiled_params.push_back(length.as<std::shared_ptr<ExpressionNode>>());
+      compiled_params.push_back(
+          AnyCast<std::shared_ptr<ExpressionNode>>(length));
     }
 
     return compiled_params;
@@ -2180,25 +2243,26 @@ class IifFunction : public FunctionNode {
     std::vector<std::shared_ptr<ExpressionNode>> compiled_params;
 
     antlrcpp::Any criterion = params[0]->accept(child_context_visitor);
-    if (criterion.isNull()) {
-      return InvalidArgumentError("Failed to compile parameter.");
-    }
-    compiled_params.push_back(criterion.as<std::shared_ptr<ExpressionNode>>());
-
-    antlrcpp::Any true_result = params[1]->accept(base_context_visitor);
-    if (true_result.isNull()) {
+    if (!AnyHasValue(criterion)) {
       return InvalidArgumentError("Failed to compile parameter.");
     }
     compiled_params.push_back(
-        true_result.as<std::shared_ptr<ExpressionNode>>());
+        AnyCast<std::shared_ptr<ExpressionNode>>(criterion));
+
+    antlrcpp::Any true_result = params[1]->accept(base_context_visitor);
+    if (!AnyHasValue(true_result)) {
+      return InvalidArgumentError("Failed to compile parameter.");
+    }
+    compiled_params.push_back(
+        AnyCast<std::shared_ptr<ExpressionNode>>(true_result));
 
     if (params.size() > 2) {
       antlrcpp::Any otherwise_result = params[2]->accept(base_context_visitor);
-      if (otherwise_result.isNull()) {
+      if (!AnyHasValue(otherwise_result)) {
         return InvalidArgumentError("Failed to compile parameter.");
       }
       compiled_params.push_back(
-          otherwise_result.as<std::shared_ptr<ExpressionNode>>());
+          AnyCast<std::shared_ptr<ExpressionNode>>(otherwise_result));
     }
 
     return compiled_params;
@@ -3423,10 +3487,11 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    auto definition = invocation.as<std::shared_ptr<InvocationDefinition>>();
+    auto definition =
+        AnyCast<std::shared_ptr<InvocationDefinition>>(invocation);
 
     std::shared_ptr<ExpressionNode> expr =
-        expression.as<std::shared_ptr<ExpressionNode>>();
+        AnyCast<std::shared_ptr<ExpressionNode>>(expression);
 
     if (definition->is_function) {
       auto function_node =
@@ -3455,8 +3520,9 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
                   !IsMessageType<google::protobuf::Any>(descriptor)
               ? FindFieldByJsonName(descriptor, definition->name)
               : nullptr;
-      return ToAny(std::make_shared<InvokeExpressionNode>(expression, field,
-                                                          definition->name));
+      return ToAny(std::make_shared<InvokeExpressionNode>(
+          AnyCast<std::shared_ptr<ExpressionNode>>(expression), field,
+          definition->name));
     }
   }
 
@@ -3468,11 +3534,12 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    if (invocation.is<std::shared_ptr<ExpressionNode>>()) {
+    if (AnyIs<std::shared_ptr<ExpressionNode>>(invocation)) {
       return invocation;
     }
 
-    auto definition = invocation.as<std::shared_ptr<InvocationDefinition>>();
+    auto definition =
+        AnyCast<std::shared_ptr<InvocationDefinition>>(invocation);
 
     if (definition->is_function) {
       auto function_node = createFunction(
@@ -3514,8 +3581,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
-    auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
+    auto left = AnyCast<std::shared_ptr<ExpressionNode>>(left_any);
+    auto right = AnyCast<std::shared_ptr<ExpressionNode>>(right_any);
 
     return ToAny(
         std::make_shared<IndexerExpression>(primitive_handler_, left, right));
@@ -3530,8 +3597,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
-    auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
+    auto left = AnyCast<std::shared_ptr<ExpressionNode>>(left_any);
+    auto right = AnyCast<std::shared_ptr<ExpressionNode>>(right_any);
 
     return ToAny(std::make_shared<UnionOperator>(left, right));
   }
@@ -3546,8 +3613,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
-    auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
+    auto left = AnyCast<std::shared_ptr<ExpressionNode>>(left_any);
+    auto right = AnyCast<std::shared_ptr<ExpressionNode>>(right_any);
 
     if (op == "+") {
       return ToAny(std::make_shared<AdditionOperator>(left, right));
@@ -3577,7 +3644,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    auto operand = operand_any.as<std::shared_ptr<ExpressionNode>>();
+    auto operand = AnyCast<std::shared_ptr<ExpressionNode>>(operand_any);
 
     if (op == "+") {
       return ToAny(std::make_shared<PolarityOperator>(
@@ -3604,7 +3671,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
+    auto left = AnyCast<std::shared_ptr<ExpressionNode>>(left_any);
 
     if (op == "is") {
       return ToAny(std::make_shared<IsFunction>(left, type));
@@ -3629,8 +3696,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
-    auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
+    auto left = AnyCast<std::shared_ptr<ExpressionNode>>(left_any);
+    auto right = AnyCast<std::shared_ptr<ExpressionNode>>(right_any);
 
     if (op == "=") {
       return ToAny(std::make_shared<EqualsOperator>(left, right));
@@ -3662,8 +3729,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
-    auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
+    auto left = AnyCast<std::shared_ptr<ExpressionNode>>(left_any);
+    auto right = AnyCast<std::shared_ptr<ExpressionNode>>(right_any);
 
     ComparisonOperator::ComparisonType op_type;
 
@@ -3694,8 +3761,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
-    auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
+    auto left = AnyCast<std::shared_ptr<ExpressionNode>>(left_any);
+    auto right = AnyCast<std::shared_ptr<ExpressionNode>>(right_any);
 
     if (op == "in") {
       return ToAny(std::make_shared<ContainsOperator>(right, left));
@@ -3750,8 +3817,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
-    auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
+    auto left = AnyCast<std::shared_ptr<ExpressionNode>>(left_any);
+    auto right = AnyCast<std::shared_ptr<ExpressionNode>>(right_any);
 
     return ToAny(std::make_shared<ImpliesOperator>(left, right));
   }
@@ -3766,8 +3833,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
-    auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
+    auto left = AnyCast<std::shared_ptr<ExpressionNode>>(left_any);
+    auto right = AnyCast<std::shared_ptr<ExpressionNode>>(right_any);
 
     return op == "or"
         ? ToAny(std::make_shared<OrOperator>(left, right))
@@ -3783,8 +3850,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       return nullptr;
     }
 
-    auto left = left_any.as<std::shared_ptr<ExpressionNode>>();
-    auto right = right_any.as<std::shared_ptr<ExpressionNode>>();
+    auto left = AnyCast<std::shared_ptr<ExpressionNode>>(left_any);
+    auto right = AnyCast<std::shared_ptr<ExpressionNode>>(right_any);
 
     return ToAny(std::make_shared<AndOperator>(left, right));
   }
@@ -4251,8 +4318,8 @@ absl::StatusOr<CompiledExpression> CompiledExpression::Compile(
   lexer.addErrorListener(visitor.GetErrorListener());
   antlrcpp::Any result = visitor.visit(parser.expression());
 
-  if (result.isNotNull() && visitor.GetError().ok()) {
-    auto root_node = result.as<std::shared_ptr<internal::ExpressionNode>>();
+  if (AnyHasValue(result) && visitor.GetError().ok()) {
+    auto root_node = AnyCast<std::shared_ptr<internal::ExpressionNode>>(result);
     return CompiledExpression(fhir_path, root_node, primitive_handler,
                               terminology_resolver);
   } else {
