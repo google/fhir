@@ -58,11 +58,6 @@ var (
 	stu3Ignores = stringset.New(
 		// Invalid "value_integer" JSON field.
 		"Bundle-dataelements",
-		"Bundle-types",
-		"DataElement-integer.value",
-		"StructureDefinition-integer",
-		// Invalid "reason_reference" JSON field.
-		"MedicationDispense-meddisp0303",
 		// Missing required field "resourceType".
 		"package",
 		// Invalid "license" JSON field.
@@ -107,17 +102,8 @@ var (
 		"Patient-null",
 	)
 	r4Ignores = stringset.New(
-		// TODO contains timezone after 2038 affected by https://github.com/golang/go/issues/36654
-		"Person-pp",
-		// TODO: decoding overflows 32 bit float.
-		"Observation-decimal",
-		// Invalid "reason_reference" JSON field.
-		"MedicationDispense-meddisp0303",
 		// Invalid "value_integer" JSON field.
 		"Bundle-dataelements",
-		"Bundle-types",
-		"DataElement-integer.value",
-		"StructureDefinition-integer",
 		// Version fields aren't equal between JSON and prototxt.
 		"ig-r4",
 		// Missing required field resourceType.
