@@ -2275,6 +2275,183 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 			},
 		},
 		{
+			name: "Repetitive extension - mixed levels",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						Extension: []*d3pb.Extension{
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/StructureDefinition/test"},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{
+										StringValue: &d3pb.String{Value: "a"},
+									},
+								},
+							},
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/StructureDefinition/test"},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{
+										StringValue: &d3pb.String{Value: "b"},
+									},
+								},
+							},
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/StructureDefinition/test"},
+								Extension: []*d3pb.Extension{
+									{
+										Url: &d3pb.Uri{Value: "test"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_StringValue{
+												StringValue: &d3pb.String{Value: "c"},
+											},
+										},
+									},
+									{
+										Url: &d3pb.Uri{Value: "test"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_StringValue{
+												StringValue: &d3pb.String{Value: "d"},
+											},
+										},
+									},
+									{
+										Url: &d3pb.Uri{Value: "test"},
+										Extension: []*d3pb.Extension{
+											{
+												Url: &d3pb.Uri{Value: "test"},
+												Value: &d3pb.Extension_ValueX{
+													Choice: &d3pb.Extension_ValueX_StringValue{
+														StringValue: &d3pb.String{Value: "e"},
+													},
+												},
+											},
+											{
+												Url: &d3pb.Uri{Value: "test"},
+												Value: &d3pb.Extension_ValueX{
+													Choice: &d3pb.Extension_ValueX_StringValue{
+														StringValue: &d3pb.String{Value: "f"},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						Extension: []*d4pb.Extension{
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/StructureDefinition/test"},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{
+										StringValue: &d4pb.String{Value: "a"},
+									},
+								},
+							},
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/StructureDefinition/test"},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{
+										StringValue: &d4pb.String{Value: "b"},
+									},
+								},
+							},
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/StructureDefinition/test"},
+								Extension: []*d4pb.Extension{
+									{
+										Url: &d4pb.Uri{Value: "test"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_StringValue{
+												StringValue: &d4pb.String{Value: "c"},
+											},
+										},
+									},
+									{
+										Url: &d4pb.Uri{Value: "test"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_StringValue{
+												StringValue: &d4pb.String{Value: "d"},
+											},
+										},
+									},
+									{
+										Url: &d4pb.Uri{Value: "test"},
+										Extension: []*d4pb.Extension{
+											{
+												Url: &d4pb.Uri{Value: "test"},
+												Value: &d4pb.Extension_ValueX{
+													Choice: &d4pb.Extension_ValueX_StringValue{
+														StringValue: &d4pb.String{Value: "e"},
+													},
+												},
+											},
+											{
+												Url: &d4pb.Uri{Value: "test"},
+												Value: &d4pb.Extension_ValueX{
+													Choice: &d4pb.Extension_ValueX_StringValue{
+														StringValue: &d4pb.String{Value: "f"},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			want: jsonpbhelper.JSONObject{
+				"test": jsonpbhelper.JSONArray{
+					jsonpbhelper.JSONObject{
+						"value": jsonpbhelper.JSONObject{
+							"string": jsonpbhelper.JSONString("a"),
+						},
+					},
+					jsonpbhelper.JSONObject{
+						"value": jsonpbhelper.JSONObject{
+							"string": jsonpbhelper.JSONString("b"),
+						},
+					},
+					jsonpbhelper.JSONObject{
+						"test": jsonpbhelper.JSONArray{
+							jsonpbhelper.JSONObject{
+								"value": jsonpbhelper.JSONObject{
+									"string": jsonpbhelper.JSONString("c"),
+								},
+							},
+							jsonpbhelper.JSONObject{
+								"value": jsonpbhelper.JSONObject{
+									"string": jsonpbhelper.JSONString("d"),
+								},
+							},
+							jsonpbhelper.JSONObject{
+								"test": jsonpbhelper.JSONArray{
+									jsonpbhelper.JSONObject{
+										"value": jsonpbhelper.JSONObject{
+											"string": jsonpbhelper.JSONString("e"),
+										},
+									},
+									jsonpbhelper.JSONObject{
+										"value": jsonpbhelper.JSONObject{
+											"string": jsonpbhelper.JSONString("f"),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
 			name: "Extension last token collides with first-class field",
 			inputs: []mvr{
 				{
