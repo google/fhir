@@ -15,7 +15,6 @@
 """Unit tests exercising `fhir_errors.py` functionality."""
 
 from absl.testing import absltest
-
 from google.fhir import fhir_errors
 
 
@@ -66,6 +65,58 @@ class ListErrorReporterTests(absltest.TestCase):
     self.assertRegex(
         logs.output[0],
         r'some.element.path:foo.bar = bats; Some FHIRPath warning.')
+
+  def testListErrorReporter_aggregateErrors_succeeds(self):
+
+    # Add errors.
+    self.error_reporter.report_fhir_path_error('some.element.path',
+                                               'foo.bar = bats',
+                                               'Some FHIRPath error.')
+    self.error_reporter.report_fhir_path_error('some.element.path',
+                                               'foo.bar = bats',
+                                               'Some FHIRPath error.')
+    self.error_reporter.report_fhir_path_error('other', 'other = bats',
+                                               'Some other FHIRPath error.')
+
+    # Add warning.
+    self.error_reporter.report_fhir_path_warning('some.element.path',
+                                                 'foo.bar = bats',
+                                                 'Some FHIRPath warning.')
+
+    self.assertEqual(
+        fhir_errors.aggregate_events(self.error_reporter.errors),
+        [(('FHIR Path Error: some.element.path:foo.bar = bats; Some FHIRPath '
+           'error.'), 2),
+         ('FHIR Path Error: other:other = bats; Some other FHIRPath error.', 1)
+        ])
+
+    self.assertEqual(
+        fhir_errors.aggregate_events(self.error_reporter.warnings),
+        [(('FHIR Path Warning: some.element.path:foo.bar = bats; Some FHIRPath'
+           ' warning.'), 1)])
+
+  def testListErrorReporter_getErrorReport_succeeds(self):
+
+    # Add errors.
+    self.error_reporter.report_fhir_path_error('some.element.path',
+                                               'foo.bar = bats',
+                                               'Some FHIRPath error.')
+    self.error_reporter.report_fhir_path_error('other', 'other = bats',
+                                               'Some other FHIRPath error.')
+
+    # Add warning.
+    self.error_reporter.report_fhir_path_warning('some.element.path',
+                                                 'foo.bar = bats',
+                                                 'Some FHIRPath warning.')
+
+    self.assertEqual(self.error_reporter.get_error_report(),
+                     ("""Encountered 2 errors:
+FHIR Path Error: other:other = bats; Some other FHIRPath error.        :\t1
+FHIR Path Error: some.element.path:foo.bar = bats; Some FHIRPath error.:\t1
+
+Encountered 1 warnings:
+FHIR Path Warning: some.element.path:foo.bar = bats; Some FHIRPath warning.:\t1\
+"""))
 
 
 if __name__ == '__main__':
