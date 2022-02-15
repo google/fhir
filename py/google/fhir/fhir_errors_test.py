@@ -53,8 +53,7 @@ class ListErrorReporterTests(absltest.TestCase):
                                                  'foo.bar = bats',
                                                  'Some FHIRPath error.')
     self.assertLen(self.error_reporter.errors, 1)
-    self.assertRegex(logs.output[0],
-                     r'some.element.path:foo.bar = bats; Some FHIRPath error.')
+    self.assertRegex(logs.output[0], r'foo.bar = bats; Some FHIRPath error.')
 
   def testListErrorReporter_reportFhirPathWarning_succeeds(self):
     with self.assertLogs() as logs:
@@ -62,9 +61,7 @@ class ListErrorReporterTests(absltest.TestCase):
                                                    'foo.bar = bats',
                                                    'Some FHIRPath warning.')
     self.assertLen(self.error_reporter.warnings, 1)
-    self.assertRegex(
-        logs.output[0],
-        r'some.element.path:foo.bar = bats; Some FHIRPath warning.')
+    self.assertRegex(logs.output[0], r'foo.bar = bats; Some FHIRPath warning.')
 
   def testListErrorReporter_aggregateErrors_succeeds(self):
 
@@ -85,14 +82,13 @@ class ListErrorReporterTests(absltest.TestCase):
 
     self.assertEqual(
         fhir_errors.aggregate_events(self.error_reporter.errors),
-        [(('FHIR Path Error: some.element.path:foo.bar = bats; Some FHIRPath '
+        [(('FHIR Path Error: foo.bar = bats; Some FHIRPath '
            'error.'), 2),
-         ('FHIR Path Error: other:other = bats; Some other FHIRPath error.', 1)
-        ])
+         ('FHIR Path Error: other = bats; Some other FHIRPath error.', 1)])
 
     self.assertEqual(
         fhir_errors.aggregate_events(self.error_reporter.warnings),
-        [(('FHIR Path Warning: some.element.path:foo.bar = bats; Some FHIRPath'
+        [(('FHIR Path Warning: foo.bar = bats; Some FHIRPath'
            ' warning.'), 1)])
 
   def testListErrorReporter_getErrorReport_succeeds(self):
@@ -111,11 +107,11 @@ class ListErrorReporterTests(absltest.TestCase):
 
     self.assertEqual(self.error_reporter.get_error_report(),
                      ("""Encountered 2 errors:
-FHIR Path Error: other:other = bats; Some other FHIRPath error.        :\t1
-FHIR Path Error: some.element.path:foo.bar = bats; Some FHIRPath error.:\t1
+FHIR Path Error: foo.bar = bats; Some FHIRPath error.    :   1
+FHIR Path Error: other = bats; Some other FHIRPath error.:   1
 
 Encountered 1 warnings:
-FHIR Path Warning: some.element.path:foo.bar = bats; Some FHIRPath warning.:\t1\
+FHIR Path Warning: foo.bar = bats; Some FHIRPath warning.:   1\
 """))
 
 

@@ -27,7 +27,7 @@ def _create_event_frequency_table(frequency_list: List[Tuple[str, int]]) -> str:
   max_event_len = max(len(key) for key, _ in frequency_list)
 
   for event, count in frequency_list:
-    result.append(f'{event:<{max_event_len}}:\t{count}')
+    result.append(f'{event:<{max_event_len}}:   {count}')
   return '\n'.join(result)
 
 
@@ -167,14 +167,14 @@ class ListErrorReporter(ErrorReporter):
   def report_fhir_path_error(self, element_path: str, fhir_path_constraint: str,
                              msg: str) -> None:
     """Logs to the `error` context and stores `msg` in `errors`."""
-    full_msg = f'FHIR Path Error: {element_path}:{fhir_path_constraint}; {msg}'
+    full_msg = f'FHIR Path Error: {fhir_path_constraint}; {msg}'
     logging.error(full_msg)
     self.errors.append(full_msg)
 
   def report_fhir_path_warning(self, element_path: str,
                                fhir_path_constraint: str, msg: str) -> None:
     """Logs to the `warning` context and stores `msg` in `warnings`."""
-    full_msg = f'FHIR Path Warning: {element_path}:{fhir_path_constraint}; {msg}'
+    full_msg = f'FHIR Path Warning: {fhir_path_constraint}; {msg}'
     logging.warning(full_msg)
     self.warnings.append(full_msg)
 
