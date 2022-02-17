@@ -130,6 +130,21 @@ py_library(
 )
 
 py_library(
+    name = "value_sets",
+    srcs = [
+        "__init__.py",
+        "value_sets.py",
+    ],
+    srcs_version = "PY3",
+    deps = [
+        "//py",
+        "//proto/google/fhir/proto/r4/core/resources:structure_definition_py_pb2",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
+        "//py/google/fhir/utils:fhir_package",
+    ],
+)
+
+py_library(
     name = "extensions_test",
     testonly = 1,
     srcs = [
@@ -179,6 +194,26 @@ py_test(
     deps = [
         ":fhir_errors",
         "//py",
+        requirement("absl-py"),
+        requirement("six"),
+    ],
+)
+
+py_test(
+    name = "value_sets_test",
+    srcs = ["value_sets_test.py"],
+    data = [
+        "//spec:fhir_r4_package.zip",
+    ],
+    legacy_create_init = 0,
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":value_sets",
+        "//py",
+        "//proto/google/fhir/proto/r4/core/resources:structure_definition_py_pb2",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
+        "//py/google/fhir/utils:fhir_package",
         requirement("absl-py"),
         requirement("six"),
     ],
