@@ -215,6 +215,7 @@ py_test(
     deps = [
         ":fhir_package",
         ":proto_utils",
+        "@com_google_protobuf//:protobuf_python",
         "//py",
         "//proto/google/fhir/proto:profile_config_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",

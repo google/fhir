@@ -18,11 +18,12 @@ import contextlib
 import json
 import os
 import tempfile
-from typing import Sequence, Tuple
+from typing import Iterable, Sequence, Tuple
 from unittest import mock
 import zipfile
 
 from absl import flags
+from google.protobuf import message
 from absl.testing import absltest
 from proto.google.fhir.proto import annotations_pb2
 from proto.google.fhir.proto import profile_config_pb2
@@ -348,6 +349,38 @@ class ResourceCollectionTest(absltest.TestCase):
     self.assertEqual(cached_resource, resource)
 
 
+class FhirPackageManagerTest(absltest.TestCase):
+
+  def testGetResource_withAddedPackages_retrievesResource(self):
+    vs_1 = value_set_pb2.ValueSet()
+    vs_1.url.value = 'vs1'
+
+    vs_2 = value_set_pb2.ValueSet()
+    vs_2.url.value = 'vs2'
+
+    package_1 = fhir_package.FhirPackage(
+        package_info=mock.MagicMock(),
+        structure_definitions=mock_resource_collection_containing([]),
+        search_parameters=mock_resource_collection_containing([]),
+        code_systems=mock_resource_collection_containing([]),
+        value_sets=mock_resource_collection_containing([vs_1]),
+    )
+    package_2 = fhir_package.FhirPackage(
+        package_info=mock.MagicMock(),
+        structure_definitions=mock_resource_collection_containing([]),
+        search_parameters=mock_resource_collection_containing([]),
+        code_systems=mock_resource_collection_containing([]),
+        value_sets=mock_resource_collection_containing([vs_2]),
+    )
+
+    manager = fhir_package.FhirPackageManager()
+    manager.add_package(package_1)
+    manager.add_package(package_2)
+
+    self.assertEqual(manager.get_resource('vs1'), vs_1)
+    self.assertEqual(manager.get_resource('vs2'), vs_2)
+
+
 @contextlib.contextmanager
 def zipfile_containing(
     file_contents: Sequence[Tuple[str, str]]) -> tempfile.NamedTemporaryFile:
@@ -366,6 +399,20 @@ def zipfile_containing(
         zip_file.writestr(file_name, contents)
     temp_file.flush()
     yield temp_file
+
+
+def mock_resource_collection_containing(
+    resources: Iterable[message.Message]) -> mock.MagicMock:
+  """Builds a mock for a ResourceCollection containing the given resources."""
+  mock_collection = mock.MagicMock(spec=fhir_package.ResourceCollection)
+  resources = {resource.url.value: resource for resource in resources}
+
+  def mock_get_resource(uri: str) -> message.Message:
+    return resources.get(uri)
+
+  mock_collection.get_resource.side_effect = mock_get_resource
+
+  return mock_collection
 
 
 if __name__ == '__main__':

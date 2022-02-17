@@ -86,7 +86,16 @@ def _read_fhir_package_zip(
 
 
 class ResourceCollection(Iterable[_T]):
-  """A collection of FHIR resources of a given type."""
+  """A collection of FHIR resources of a given type.
+
+  Attributes:
+    zip_file_path: The zip file containing resources represented by this
+      collection.
+    parsed_resources: A cache of resources which have been parsed into protocol
+      buffers.
+    resource_paths_for_uris: A mapping of URIs to tuples of the path within the
+      zip file containing the resource JSON and the type of that resource.
+  """
 
   def __init__(self, zip_file_path: str) -> None:
     self.zip_file_path = zip_file_path
@@ -275,6 +284,48 @@ class FhirPackage:
 
   def __hash__(self) -> int:
     return hash(self.package_info.proto_package)
+
+
+class FhirPackageManager:
+  """Manages access to a collection of FhirPackage instances.
+
+  Allows users to add packages to the package manager and then search all of
+  them for a particular resource.
+
+  Attributes:
+    packages: The packages added to the package manager.
+  """
+
+  def __init__(self) -> None:
+    self.packages = []
+
+  def add_package(self, package: FhirPackage) -> None:
+    """Adds the given package to the package manager."""
+    self.packages.append(package)
+
+  def add_package_at_path(self, path: str) -> None:
+    """Loads the package at `path` and adds it to the package manager."""
+    self.add_package(FhirPackage.load(path))
+
+  def get_resource(self, uri: str) -> Optional[message.Message]:
+    """Retrieves a protocol buffer representation of the given resource.
+
+    Searches the packages added to the package manger for the resource with the
+    given URI. If multiple packages contain the same resource, the package
+    consulted will be non-deterministic.
+
+    Args:
+      uri: The URI of the resource to retrieve.
+
+    Returns:
+      Protocol buffer for the resource or `None` if the `uri` can not be found.
+    """
+    for package in self.packages:
+      resource = package.get_resource(uri)
+      if resource is not None:
+        return resource
+
+    return None
 
 
 def _add_resource_to_collection(resource_json: Dict[str, Any],
