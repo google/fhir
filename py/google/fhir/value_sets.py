@@ -14,8 +14,11 @@
 # limitations under the License.
 """Utilities for working with Value Sets."""
 
+import functools
 import itertools
 from typing import Iterable, Set
+
+import sqlalchemy
 
 from proto.google.fhir.proto.r4.core.resources import structure_definition_pb2
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
@@ -107,6 +110,77 @@ class ValueSetResolver:
                        value_set.DESCRIPTOR.name)
     else:
       return value_set
+
+
+def valueset_codes_insert_statement_for(
+    value_set: value_set_pb2.ValueSet,
+    table: sqlalchemy.sql.expression.TableClause) -> sqlalchemy.sql.dml.Insert:
+  """Builds an INSERT statement for placing the value set's codes into the given table.
+
+  The INSERT may be used to build a valueset_codes table as described by:
+  https://github.com/FHIR/sql-on-fhir/blob/master/sql-on-fhir.md#valueset-support
+
+  Returns an sqlalchemy insert expression which inserts all of the value set's
+  expanded codes into the given table which do not already exist in the table.
+  The query will avoid inserting duplicate rows if some of the codes are already
+  present in the given table. It will not attempt to perform an 'upsert' or
+  modify any existing rows.
+
+  Args:
+    value_set: The expanded value set with codes to insert into the given table.
+      The value set should have already been expanded by the
+      ValueSetResolver.expand_value_set method.
+    table: The SqlAlchemy table to receive the INSERT. May be an sqlalchemy
+      Table or TableClause object. The table is assumed to have the columns
+      'valueseturi', 'valuesetversion', 'system', 'code.'
+
+  Returns:
+    The sqlalchemy insert expression which you may execute to perform the actual
+    database write.
+  """
+  if not value_set.expansion.contains:
+    raise ValueError(
+        'Value set must be expanded. Call ValueSetResolver.expand_value_set on '
+        'the value set to expand it first.')
+
+  # Build a SELECT statement for each code.
+  code_literals = (
+      _code_as_select_literal(value_set, code)
+      for code in value_set.expansion.contains)
+  # UNION each SELECT to build a single select subquery for all codes.
+  codes = functools.reduce(lambda query, literal: query.union_all(literal),
+                           code_literals).alias('codes')
+  # Filter the codes to those not already present in `table` with a LEFT JOIN.
+  new_codes = sqlalchemy.select((codes,)).select_from(
+      codes.outerjoin(
+          table,
+          sqlalchemy.and_(
+              codes.c.valueseturi == table.c.valueseturi,
+              codes.c.valuesetversion == table.c.valuesetversion,
+              codes.c.system == table.c.system,
+              codes.c.code == table.c.code,
+          ))).where(
+              sqlalchemy.and_(
+                  table.c.valueseturi.is_(None),
+                  table.c.valuesetversion.is_(None),
+                  table.c.system.is_(None),
+                  table.c.code.is_(None),
+              ))
+  return table.insert().from_select(new_codes.columns, new_codes)
+
+
+def _code_as_select_literal(
+    value_set: value_set_pb2.ValueSet,
+    code: value_set_pb2.ValueSet.Expansion.Contains) -> sqlalchemy.select:
+  """Builds a SELECT statement for the literals in the given code."""
+  return sqlalchemy.select((
+      sqlalchemy.sql.expression.literal(
+          value_set.url.value).label('valueseturi'),
+      sqlalchemy.sql.expression.literal(
+          value_set.version.value).label('valuesetversion'),
+      sqlalchemy.sql.expression.literal(code.system.value).label('system'),
+      sqlalchemy.sql.expression.literal(code.code.value).label('code'),
+  ))
 
 
 def _unique_by_url(

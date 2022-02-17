@@ -18,6 +18,8 @@ import os
 import unittest.mock
 
 from absl import flags
+import sqlalchemy
+
 from google.fhir import value_sets
 from absl.testing import absltest
 from proto.google.fhir.proto.r4.core.resources import structure_definition_pb2
@@ -148,6 +150,55 @@ class ValueSetsTest(absltest.TestCase):
     )
     self.assertEqual(
         list(self.resolver.value_sets_from_fhir_package(package)), [])
+
+  def testValueSetToInsertStatement_withValueSet_buildsValidQuery(self):
+    value_set = value_set_pb2.ValueSet()
+    value_set.url.value = 'vs-url'
+    value_set.version.value = 'vs-version'
+
+    for code, system in (('c1', 's1'), ('c2', 's2')):
+      coding = value_set.expansion.contains.add()
+      coding.code.value = code
+      coding.system.value = system
+
+    table = build_valueset_codes_table()
+
+    query = value_sets.valueset_codes_insert_statement_for(value_set, table)
+    query_string = str(query.compile(compile_kwargs={'literal_binds': True}))
+    self.assertEqual(query_string, (
+        'INSERT INTO valueset_codes (valueseturi, valuesetversion, system, code) '
+        'SELECT codes.valueseturi, codes.valuesetversion, codes.system, codes.code '
+        '\nFROM ('
+        "SELECT 'vs-url' AS valueseturi, 'vs-version' AS valuesetversion, 's1' AS system, 'c1' AS code "
+        'UNION ALL '
+        "SELECT 'vs-url' AS valueseturi, 'vs-version' AS valuesetversion, 's2' AS system, 'c2' AS code"
+        ') AS codes '
+        'LEFT OUTER JOIN valueset_codes '
+        'ON codes.valueseturi = valueset_codes.valueseturi '
+        'AND codes.valuesetversion = valueset_codes.valuesetversion '
+        'AND codes.system = valueset_codes.system '
+        'AND codes.code = valueset_codes.code '
+        '\nWHERE valueset_codes.valueseturi IS NULL '
+        'AND valueset_codes.valuesetversion IS NULL '
+        'AND valueset_codes.system IS NULL '
+        'AND valueset_codes.code IS NULL'))
+
+  def testValueSetToInsertStatement_withEmptyCodes_raisesError(self):
+    value_set = value_set_pb2.ValueSet()
+    table = build_valueset_codes_table()
+
+    with self.assertRaises(ValueError):
+      value_sets.valueset_codes_insert_statement_for(value_set, table)
+
+
+def build_valueset_codes_table() -> sqlalchemy.sql.expression.TableClause:
+  return sqlalchemy.table(
+      'valueset_codes',
+      sqlalchemy.column('valueseturi'),
+      sqlalchemy.column('valuesetversion'),
+      sqlalchemy.column('system'),
+      sqlalchemy.column('code'),
+  )
 
 
 if __name__ == '__main__':

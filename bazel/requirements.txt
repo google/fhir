@@ -3,3 +3,4 @@ backports.zoneinfo~=0.2.1
 protobuf~=3.13
 python-dateutil~=2.8
 requests~=2.24
+sqlalchemy~=1.2
