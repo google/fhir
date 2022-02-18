@@ -432,7 +432,8 @@ func (m *Marshaller) marshalSingleExtensionHelper(pb protoreflect.Message) (json
 
 		return jsonpbhelper.JSONObject{"value": m}, nil
 	}
-	// marshal sub-extensions
+	// Each extension element must have either a value element or a nested child extension, not both
+	// marshal sub-extensions only when it does not have a value
 	crf := pb.Get(pb.Descriptor().Fields().ByName(jsonpbhelper.Extension)).List()
 	cpbs := make([]protoreflect.Message, 0, crf.Len())
 	for i := 0; i < crf.Len(); i++ {
