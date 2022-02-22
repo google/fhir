@@ -16,30 +16,56 @@
 
 #include "google/fhir/error_reporter.h"
 
+#include "absl/status/status.h"
+#include "absl/strings/string_view.h"
+#include "absl/strings/substitute.h"
+
 namespace google {
 namespace fhir {
 
-FailFastErrorReporter* FailFastErrorReporter::Get() {
-  static FailFastErrorReporter* const kInstance = new FailFastErrorReporter();
+FailFastErrorReporter* FailFastErrorReporter::FailOnErrorOrFailure() {
+  static FailFastErrorReporter* const kInstance = new FailFastErrorReporter(
+      FailFastErrorReporter::FAIL_ON_ERROR_OR_FAILURE);
   return kInstance;
 }
 
+FailFastErrorReporter* FailFastErrorReporter::FailOnErrorOnly() {
+  static FailFastErrorReporter* const kInstance =
+      new FailFastErrorReporter(FailFastErrorReporter::FAIL_ON_ERROR_ONLY);
+  return kInstance;
+}
+
+absl::Status ErrorReporter::ReportError(absl::string_view field_path,
+                                        const absl::Status& status) {
+  return ReportError(field_path, "", status);
+}
+
+absl::Status ErrorReporter::ReportFailure(absl::string_view field_path,
+                                          absl::string_view message) {
+  return ReportFailure(field_path, "", message);
+}
+
+absl::Status ErrorReporter::ReportWarning(absl::string_view field_path,
+                                          absl::string_view message) {
+  return ReportWarning(field_path, "", message);
+}
+
 absl::Status ErrorReporter::ReportFhirPathError(
-    absl::string_view element_path, absl::string_view fhir_path_constraint,
-    absl::string_view message) {
-  absl::Status status = absl::FailedPreconditionError(
-      message.empty() ? fhir_path_constraint
-                      : absl::StrCat(fhir_path_constraint, ": ", message));
-  return ReportValidationError(element_path, status);
+    absl::string_view field_path, absl::string_view element_path,
+    absl::string_view fhir_path_constraint, const absl::Status& status) {
+  return ReportError(field_path, element_path, status);
+}
+
+absl::Status ErrorReporter::ReportFhirPathFailure(
+    absl::string_view field_path, absl::string_view element_path,
+    absl::string_view fhir_path_constraint) {
+  return ReportFailure(field_path, element_path, fhir_path_constraint);
 }
 
 absl::Status ErrorReporter::ReportFhirPathWarning(
-    absl::string_view element_path, absl::string_view fhir_path_constraint,
-    absl::string_view message) {
-  absl::Status status = absl::FailedPreconditionError(
-      message.empty() ? fhir_path_constraint
-                      : absl::StrCat(fhir_path_constraint, ": ", message));
-  return ReportValidationWarning(element_path, status);
+    absl::string_view field_path, absl::string_view element_path,
+    absl::string_view fhir_path_constraint) {
+  return ReportWarning(field_path, element_path, fhir_path_constraint);
 }
 
 }  // namespace fhir

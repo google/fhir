@@ -24,7 +24,6 @@ namespace google {
 namespace fhir {
 
 using ::google::fhir::stu3::proto::OperationOutcome;
-using ::google::protobuf::Message;
 
 namespace stu3 {
 
@@ -47,14 +46,16 @@ absl::StatusOr<OperationOutcome> ConvertToProfile(
 absl::Status ConvertToProfileStu3(const ::google::protobuf::Message& source,
                                   ::google::protobuf::Message* target) {
   return profiles_internal::ConvertToProfileInternal<
-      stu3::Stu3PrimitiveHandler>(source, target, FailFastErrorReporter::Get());
+      stu3::Stu3PrimitiveHandler>(
+      source, target, FailFastErrorReporter::FailOnErrorOrFailure());
 }
 
 // Identical to ConvertToProfile, except does not run the validation step.
 absl::Status ConvertToProfileLenientStu3(const ::google::protobuf::Message& source,
                                          ::google::protobuf::Message* target) {
   return profiles_internal::ConvertToProfileLenientInternal<
-      stu3::Stu3PrimitiveHandler>(source, target, FailFastErrorReporter::Get());
+      stu3::Stu3PrimitiveHandler>(
+      source, target, FailFastErrorReporter::FailOnErrorOrFailure());
 }
 
 }  // namespace fhir

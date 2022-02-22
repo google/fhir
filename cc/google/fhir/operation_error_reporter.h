@@ -39,6 +39,17 @@ namespace google::fhir {
 // error type as described at https://www.hl7.org/fhir/valueset-issue-type.html,
 // since the item could not be converted into the target structure. Validation
 // issues that preserve data use a "value" error type from that value set.
+//
+// Note the IssueSeverityCode used for various report functions is somewhat
+// counterintuitive, since it uses "ERROR" to indicate a validation failure,
+// and "FATAL" to indicate a code error, whereas ErrorReporter uses `Error` to
+// refer to a code error.
+//
+// The mapping is:
+// ReportError -> FATAL severity code
+// ReportFailure -> ERROR severity code
+// ReportWarning -> WARNING severity code.
+
 template <typename OperationOutcomeType, typename IssueSeverityCode,
           typename IssueTypeCode>
 class OutcomeErrorReporter : public ErrorReporter {
@@ -46,39 +57,56 @@ class OutcomeErrorReporter : public ErrorReporter {
   explicit OutcomeErrorReporter(OperationOutcomeType* outcome)
       : outcome_(outcome) {}
 
-  absl::Status ReportConversionError(
-      absl::string_view element_path,
-      const absl::Status& error_status) override {
-    return Report(element_path, error_status, IssueTypeCode::STRUCTURE,
+  absl::Status ReportError(absl::string_view element_path,
+                           const absl::Status& error_status) override {
+    return Report(element_path, error_status.message(),
+                  IssueTypeCode::STRUCTURE, IssueSeverityCode::FATAL);
+  }
+
+  absl::Status ReportFailure(absl::string_view element_path,
+                             absl::string_view message) override {
+    return Report(element_path, message, IssueTypeCode::VALUE,
                   IssueSeverityCode::ERROR);
   }
 
-  absl::Status ReportValidationError(
-      absl::string_view element_path,
-      const absl::Status& error_status) override {
-    return Report(element_path, error_status, IssueTypeCode::VALUE,
+  absl::Status ReportWarning(absl::string_view element_path,
+                             absl::string_view message) override {
+    return Report(element_path, message, IssueTypeCode::VALUE,
+                  IssueSeverityCode::WARNING);
+  }
+
+  absl::Status ReportError(absl::string_view element_path,
+                           absl::string_view node_path,
+                           const absl::Status& error_status) override {
+    return Report(node_path, error_status.message(), IssueTypeCode::STRUCTURE,
+                  IssueSeverityCode::FATAL);
+  }
+
+  absl::Status ReportFailure(absl::string_view element_path,
+                             absl::string_view node_path,
+                             absl::string_view message) override {
+    return Report(node_path, message, IssueTypeCode::VALUE,
                   IssueSeverityCode::ERROR);
   }
 
-  absl::Status ReportValidationWarning(
-      absl::string_view element_path,
-      const absl::Status& error_status) override {
-    return Report(element_path, error_status, IssueTypeCode::VALUE,
+  absl::Status ReportWarning(absl::string_view element_path,
+                             absl::string_view node_path,
+                             absl::string_view message) override {
+    return Report(node_path, message, IssueTypeCode::VALUE,
                   IssueSeverityCode::WARNING);
   }
 
  private:
-  absl::Status Report(
-      absl::string_view element_path, const absl::Status& error_status,
-      typename IssueTypeCode::Value type,
-      typename IssueSeverityCode::Value severity) {
+  absl::Status Report(absl::string_view expression, absl::string_view message,
+                      typename IssueTypeCode::Value type,
+                      typename IssueSeverityCode::Value severity) {
     auto issue = outcome_->add_issue();
     issue->mutable_code()->set_value(type);
     issue->mutable_severity()->set_value(severity);
 
     issue->mutable_diagnostics()
-        ->set_value(std::string(error_status.message()));
-    issue->add_expression()->set_value(std::string(element_path));
+         ->set_value(std::string(message));
+    issue->add_expression()->set_value(std::string(expression));
 
     return absl::OkStatus();
   }

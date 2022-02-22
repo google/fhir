@@ -149,7 +149,7 @@ TEST(ResourceValidationTest, InvalidReference) {
       R"pb(
         issue {
           severity { value: ERROR }
-          code { value: STRUCTURE }
+          code { value: VALUE }
           diagnostics {
             value: "invalid-reference-disallowed-type-Patient-at-Observation.related.target"
           }
@@ -185,7 +185,7 @@ TEST(ResourceValidationTest, RepeatedReferenceInvalid) {
       R"pb(
         issue {
           severity { value: ERROR }
-          code { value: STRUCTURE }
+          code { value: VALUE }
           diagnostics {
             value: "invalid-reference-disallowed-type-Patient-at-Encounter.account"
           }

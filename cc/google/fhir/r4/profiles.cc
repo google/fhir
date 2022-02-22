@@ -50,14 +50,15 @@ absl::StatusOr<OperationOutcome> ConvertToProfile(
 absl::Status ConvertToProfileR4(const ::google::protobuf::Message& source,
                                 ::google::protobuf::Message* target) {
   return profiles_internal::ConvertToProfileInternal<r4::R4PrimitiveHandler>(
-      source, target, FailFastErrorReporter::Get());
+      source, target, FailFastErrorReporter::FailOnErrorOrFailure());
 }
 
 // Identical to ConvertToProfile, except does not run the validation step.
 absl::Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,
                                        ::google::protobuf::Message* target) {
   return profiles_internal::ConvertToProfileLenientInternal<
-      r4::R4PrimitiveHandler>(source, target, FailFastErrorReporter::Get());
+      r4::R4PrimitiveHandler>(source, target,
+                              FailFastErrorReporter::FailOnErrorOrFailure());
 }
 
 }  // namespace fhir

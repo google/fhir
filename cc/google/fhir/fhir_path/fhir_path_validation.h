@@ -15,6 +15,8 @@
 #ifndef GOOGLE_FHIR_FHIR_PATH_FHIR_PATH_VALIDATION_H_
 #define GOOGLE_FHIR_FHIR_PATH_FHIR_PATH_VALIDATION_H_
 
+#include <functional>
+#include <string>
 #include <unordered_map>
 
 #include "google/protobuf/message.h"
@@ -34,9 +36,9 @@ namespace fhir_path {
 // FHIR resource.
 class ValidationResult {
  public:
-  ValidationResult(const std::string& constraint_path,
-                   const std::string& node_path,
-                   const std::string& fhirpath_constraint,
+  ValidationResult(absl::string_view constraint_path,
+                   absl::string_view node_path,
+                   absl::string_view fhirpath_constraint,
                    absl::StatusOr<bool> result)
       : constraint_path_(constraint_path),
         node_path_(node_path),

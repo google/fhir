@@ -24,6 +24,7 @@
 #include "google/protobuf/descriptor.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
+#include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/codeable_concepts.h"
@@ -103,12 +104,12 @@ absl::Status PerformExtensionSlicing(const Message& source, Message* target,
             value.GetReflection()->GetOneofFieldDescriptor(
                 value, value.GetDescriptor()->FindOneofByName("choice"));
         if (src_datatype_field == nullptr) {
-          FHIR_RETURN_IF_ERROR(error_reporter->ReportConversionError(
-              source_extension_field->full_name(), InvalidArgumentError(
-                  absl::StrCat(
-                      "Invalid extension: neither value nor extensions "
-                      "set on extension ",
-                      url))));
+          FHIR_RETURN_IF_ERROR(error_reporter->ReportError(
+              source_extension_field->full_name(),
+              InvalidArgumentError(absl::StrCat(
+                  "Invalid extension: neither value nor extensions "
+                  "set on extension ",
+                  url))));
           continue;
         }
         Message* typed_extension = MutableOrAddMessage(target, inlined_field);
@@ -121,7 +122,7 @@ absl::Status PerformExtensionSlicing(const Message& source, Message* target,
           FHIR_RETURN_IF_ERROR(
               CopyCode(dynamic_cast<const CodeLike&>(src_value), typed_extension));
         } else {
-          FHIR_RETURN_IF_ERROR(error_reporter->ReportConversionError(
+          FHIR_RETURN_IF_ERROR(error_reporter->ReportError(
               destination_type->full_name(),
               absl::InvalidArgumentError(absl::StrCat(
                   "Profiled extension slice is incorrect type: ", url,
