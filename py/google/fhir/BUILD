@@ -130,6 +130,21 @@ py_library(
 )
 
 py_library(
+    name = "terminology_service_client",
+    srcs = [
+        "__init__.py",
+        "terminology_service_client.py",
+    ],
+    srcs_version = "PY3",
+    deps = [
+        "//py",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
+        "//py/google/fhir/r4:json_format",
+        requirement("requests"),
+    ],
+)
+
+py_library(
     name = "value_sets",
     srcs = [
         "__init__.py",
@@ -197,6 +212,20 @@ py_test(
         "//py",
         requirement("absl-py"),
         requirement("six"),
+    ],
+)
+
+py_test(
+    name = "terminology_service_client_test",
+    srcs = ["terminology_service_client_test.py"],
+    legacy_create_init = 0,
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":terminology_service_client",
+        "//py",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
+        requirement("absl-py"),
     ],
 )
 
