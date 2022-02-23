@@ -33,21 +33,8 @@ FLAGS = flags.FLAGS
 
 class ValueSetsTest(absltest.TestCase):
 
-  def setUp(self):
-    super().setUp()
-
-    # TODO upgrade version of absl in the testing environment so we
-    # can reference absl.testing.absltest.TEST_SRCDIR instead.
-    package_filepath = os.path.join(
-        FLAGS.test_srcdir, 'com_google_fhir/spec/fhir_r4_package.zip')
-
-    package_manager = fhir_package.FhirPackageManager()
-    package_manager.add_package_at_path(package_filepath)
-
-    self.resolver = value_sets.ValueSetResolver(package_manager)
-
   def testValueSetFromUrl_withUsCoreDefinitions_findsValueSet(self):
-    value_set = self.resolver.value_set_from_url(
+    value_set = get_resolver().value_set_from_url(
         'http://hl7.org/fhir/ValueSet/financial-taskcode')
     self.assertIsNotNone(value_set)
     self.assertEqual(value_set.url.value,
@@ -55,18 +42,19 @@ class ValueSetsTest(absltest.TestCase):
 
   def testValueSetFromUrl_withUnknownUrl_raisesError(self):
     with self.assertRaises(ValueError):
-      self.resolver.value_set_from_url('http://hl7.org/fhir/ValueSet/mystery')
+      get_resolver().value_set_from_url('http://hl7.org/fhir/ValueSet/mystery')
 
   def testValueSetFromUrl_withWrongResourceType_raisesError(self):
-    with unittest.mock.patch.object(self.resolver.package_manager,
+    with unittest.mock.patch.object(get_resolver().package_manager,
                                     'get_resource') as m_get_resource:
       m_get_resource.return_value = (
           structure_definition_pb2.StructureDefinition())
       with self.assertRaises(ValueError):
-        self.resolver.value_set_from_url('http://hl7.org/fhir/ValueSet/mystery')
+        get_resolver().value_set_from_url(
+            'http://hl7.org/fhir/ValueSet/mystery')
 
   def testValueSetFromUrl_withVersionedUrl_findsValueSet(self):
-    value_set = self.resolver.value_set_from_url(
+    value_set = get_resolver().value_set_from_url(
         'http://hl7.org/fhir/ValueSet/financial-taskcode|4.0.1')
     self.assertIsNotNone(value_set)
     self.assertEqual(value_set.url.value,
@@ -74,7 +62,7 @@ class ValueSetsTest(absltest.TestCase):
 
   def testValueSetFromUrl_withBadVersionedUrl_raisesError(self):
     with self.assertRaises(ValueError):
-      self.resolver.value_set_from_url(
+      get_resolver().value_set_from_url(
           'http://hl7.org/fhir/ValueSet/financial-taskcode|500.0.1')
 
   def testValueSetsFromStructureDefinition_withValueSets_succeeds(self):
@@ -99,7 +87,7 @@ class ValueSetsTest(absltest.TestCase):
     duplicate_element = definition.snapshot.element.add()
     duplicate_element.binding.value_set.value = 'http://hl7.org/fhir/ValueSet/financial-taskcode'
 
-    result = self.resolver.value_sets_from_structure_definition(definition)
+    result = get_resolver().value_sets_from_structure_definition(definition)
     self.assertCountEqual(
         [value_set.url.value for value_set in result],
         [
@@ -112,7 +100,7 @@ class ValueSetsTest(absltest.TestCase):
   def testValueSetsFromStructureDefinition_withNoValueSets_returnsEmpty(self):
     definition = structure_definition_pb2.StructureDefinition()
     self.assertEqual(
-        list(self.resolver.value_sets_from_structure_definition(definition)),
+        list(get_resolver().value_sets_from_structure_definition(definition)),
         [],
     )
 
@@ -142,7 +130,7 @@ class ValueSetsTest(absltest.TestCase):
         value_sets=[value_set, another_value_set, duplicate_value_set],
     )
 
-    result = self.resolver.value_sets_from_fhir_package(package)
+    result = get_resolver().value_sets_from_fhir_package(package)
 
     self.assertCountEqual(
         [vs.url.value for vs in result],
@@ -163,7 +151,7 @@ class ValueSetsTest(absltest.TestCase):
         value_sets=[],
     )
     self.assertEqual(
-        list(self.resolver.value_sets_from_fhir_package(package)), [])
+        list(get_resolver().value_sets_from_fhir_package(package)), [])
 
   def testValueSetToInsertStatement_withValueSet_buildsValidQuery(self):
     value_set = value_set_pb2.ValueSet()
@@ -338,6 +326,18 @@ def build_valueset_codes_table() -> sqlalchemy.sql.expression.TableClause:
       sqlalchemy.column('system'),
       sqlalchemy.column('code'),
   )
+
+
+def get_resolver() -> value_sets.ValueSetResolver:
+  """Build a ValueSetResolver for the common core package."""
+  # TODO upgrade version of absl in the testing environment so we
+  # can reference absl.testing.absltest.TEST_SRCDIR instead.
+  package_filepath = os.path.join(
+      FLAGS.test_srcdir, 'com_google_fhir/spec/fhir_r4_package.zip')
+  package_manager = fhir_package.FhirPackageManager()
+  package_manager.add_package_at_path(package_filepath)
+
+  return value_sets.ValueSetResolver(package_manager)
 
 
 if __name__ == '__main__':
