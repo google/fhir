@@ -65,6 +65,18 @@ class ValueSetsTest(absltest.TestCase):
       with self.assertRaises(ValueError):
         self.resolver.value_set_from_url('http://hl7.org/fhir/ValueSet/mystery')
 
+  def testValueSetFromUrl_withVersionedUrl_findsValueSet(self):
+    value_set = self.resolver.value_set_from_url(
+        'http://hl7.org/fhir/ValueSet/financial-taskcode|4.0.1')
+    self.assertIsNotNone(value_set)
+    self.assertEqual(value_set.url.value,
+                     'http://hl7.org/fhir/ValueSet/financial-taskcode')
+
+  def testValueSetFromUrl_withBadVersionedUrl_raisesError(self):
+    with self.assertRaises(ValueError):
+      self.resolver.value_set_from_url(
+          'http://hl7.org/fhir/ValueSet/financial-taskcode|500.0.1')
+
   def testValueSetsFromStructureDefinition_withValueSets_succeeds(self):
     definition = structure_definition_pb2.StructureDefinition()
 

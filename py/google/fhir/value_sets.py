@@ -105,12 +105,27 @@ class ValueSetResolver:
     Returns:
       The value set for the given URL.
     """
+    # Check if we have a version-specific URL with a trailing |[version]
+    # For details, see:
+    # https://www.hl7.org/fhir/elementdefinition-definitions.html#ElementDefinition.binding.valueSet
+    url_parts = url.rsplit('|', 1)
+    if len(url_parts) == 1:
+      version = None
+    else:
+      url, version = url_parts
+
     value_set = self.package_manager.get_resource(url)
     if value_set is None:
-      raise ValueError('Unable to find value set in given resolver packages.')
+      raise ValueError(
+          'Unable to find value set for url: %s in given resolver packages.' %
+          url)
     elif not isinstance(value_set, value_set_pb2.ValueSet):
-      raise ValueError('URL does not refer to a value set, found: %s' %
-                       value_set.DESCRIPTOR.name)
+      raise ValueError('URL: %s does not refer to a value set, found: %s' %
+                       (url, value_set.DESCRIPTOR.name))
+    elif version is not None and version != value_set.version.value:
+      raise ValueError(
+          'Found incompatible version for value set with url: %s. Requested: %s, found: %s'
+          % (url, version, value_set.version.value))
     else:
       return value_set
 
