@@ -25,6 +25,7 @@ from absl.testing import absltest
 from proto.google.fhir.proto.r4.core import datatypes_pb2
 from proto.google.fhir.proto.r4.core.resources import structure_definition_pb2
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
+from google.fhir import terminology_service_client
 from google.fhir.utils import fhir_package
 
 FLAGS = flags.FLAGS
@@ -286,6 +287,35 @@ class ValueSetsTest(absltest.TestCase):
     expected[1].code.value = 'code_2'
 
     self.assertCountEqual(result, expected)
+
+  @unittest.mock.patch.object(
+      value_sets, '_expand_extensional_value_set', autospec=True)
+  def testExpandValueSet_withIntensionalValueSet_makesExpectedCalls(
+      self, mock_expand_extensional_value_set):
+    mock_expand_extensional_value_set.return_value = None
+
+    expanded_value_set = value_set_pb2.ValueSet()
+    codes = [
+        value_set_pb2.ValueSet.Expansion.Contains(
+            system=datatypes_pb2.Uri(value='include-system-1'),
+            version=datatypes_pb2.String(value='include-version-1'),
+            code=datatypes_pb2.Code(value='code-1-2'),
+        ),
+        value_set_pb2.ValueSet.Expansion.Contains(
+            system=datatypes_pb2.Uri(value='include-system-2'),
+            version=datatypes_pb2.String(value='include-version-2'),
+            code=datatypes_pb2.Code(value='code-2-1'),
+        ),
+    ]
+    expanded_value_set.expansion.contains.extend(codes)
+
+    mock_client = unittest.mock.MagicMock(
+        spec=terminology_service_client.TerminologyServiceClient)
+    mock_client.expand_value_set.return_value = expanded_value_set
+
+    value_set = value_set_pb2.ValueSet()
+    result = value_sets.expand_value_set(value_set, mock_client)
+    self.assertCountEqual(result.expansion.contains, codes)
 
 
 def build_valueset_codes_table() -> sqlalchemy.sql.expression.TableClause:

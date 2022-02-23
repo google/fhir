@@ -14,6 +14,7 @@
 # limitations under the License.
 """Utilities for working with Value Sets."""
 
+import concurrent.futures
 import copy
 import functools
 import itertools
@@ -23,6 +24,7 @@ import sqlalchemy
 
 from proto.google.fhir.proto.r4.core.resources import structure_definition_pb2
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
+from google.fhir import terminology_service_client
 from google.fhir.utils import fhir_package
 
 
@@ -111,6 +113,56 @@ class ValueSetResolver:
                        value_set.DESCRIPTOR.name)
     else:
       return value_set
+
+
+def expand_value_sets(
+    value_sets: Iterable[value_set_pb2.ValueSet],
+    terminology_client: terminology_service_client.TerminologyServiceClient,
+) -> Sequence[value_set_pb2.ValueSet]:
+  """Expands each given value set concurrently.
+
+  Builds a copy of each given value set with its expansion field expanded to
+  contain all the codes composing the value set. Appends new codes from
+  expansion to any codes currently in the value sets' expansion fields.
+
+  Args:
+    value_sets: The value sets to expand.
+    terminology_client: The client to use when expanding value sets which
+      require access to an external terminology server for expansion.
+
+  Returns:
+    A copy of all value sets with their codes expanded.
+
+  """
+  with concurrent.futures.ProcessPoolExecutor() as executor:
+    value_sets = executor.map(expand_value_set, value_sets,
+                              itertools.repeat(terminology_client))
+    return list(value_sets)
+
+
+def expand_value_set(
+    value_set: value_set_pb2.ValueSet,
+    terminology_client: terminology_service_client.TerminologyServiceClient,
+) -> value_set_pb2.ValueSet:
+  """Expand the value set to include all codes it represents.
+
+  Builds a copy of the given value set with its expansion field expanded to
+  contain all the codes composing the value set. Appends new codes from
+  expansion to any codes currently in the value set's expansion field.
+
+  Args:
+    value_set: The value set to expand.
+    terminology_client: The client to use when expanding value sets which
+      require access to an external terminology server for expansion.
+
+  Returns:
+    A copy of the value set with its codes expanded.
+  """
+  expanded_value_set = _expand_extensional_value_set(value_set)
+  if expanded_value_set is None:
+    expanded_value_set = terminology_client.expand_value_set(value_set)
+
+  return expanded_value_set
 
 
 def valueset_codes_insert_statement_for(

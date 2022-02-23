@@ -152,6 +152,7 @@ py_library(
     ],
     srcs_version = "PY3",
     deps = [
+        ":terminology_service_client",
         "//py",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
@@ -239,6 +240,7 @@ py_test(
     python_version = "PY3",
     srcs_version = "PY3",
     deps = [
+        ":terminology_service_client",
         ":value_sets",
         "//py",
         "//proto/google/fhir/proto/r4/core:datatypes_py_pb2",
