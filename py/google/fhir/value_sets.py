@@ -14,9 +14,10 @@
 # limitations under the License.
 """Utilities for working with Value Sets."""
 
+import copy
 import functools
 import itertools
-from typing import Iterable, Set
+from typing import Iterable, List, Optional, Set, Sequence
 
 import sqlalchemy
 
@@ -167,6 +168,76 @@ def valueset_codes_insert_statement_for(
                   table.c.code.is_(None),
               ))
   return table.insert().from_select(new_codes.columns, new_codes)
+
+
+def _expand_extensional_value_set(
+    value_set: value_set_pb2.ValueSet) -> Optional[value_set_pb2.ValueSet]:
+  """Retrieves expanded codes referenced by extensional value sets.
+
+  For value sets with an extensional set of codes, collect all codes referenced
+  in the value set's 'compose' field. If the value set has an intensional set of
+  codes, returns `None` indicating a terminology service should instead be used
+  to find the value set expansion. See
+  https://www.hl7.org/fhir/valueset.html#int-ext for more details about value
+  set expansion and intensional versus extensional value sets.
+
+  Args:
+    value_set: The value set for which to retrieve expanded codes.
+
+  Returns:
+    The codes associated with the value set.
+  """
+  concept_sets = itertools.chain(value_set.compose.include,
+                                 value_set.compose.exclude)
+  if any(concept_set.filter for concept_set in concept_sets):
+    return None
+
+  includes = itertools.chain.from_iterable(
+      _concept_set_to_expansion(include)
+      for include in value_set.compose.include)
+  excludes = itertools.chain.from_iterable(
+      _concept_set_to_expansion(exclude)
+      for exclude in value_set.compose.exclude)
+
+  # Build tuples of the fields to use for equality when testing if a code from
+  # include is also in exclude.
+  codes_to_remove = set(
+      (concept.version.value, concept.system.value, concept.code.value)
+      for concept in excludes)
+  # Use tuples of the same form to filter excluded codes.
+  codes = [
+      concept for concept in includes
+      if (concept.version.value, concept.system.value,
+          concept.code.value) not in codes_to_remove
+  ]
+
+  expanded_value_set = copy.deepcopy(value_set)
+  expanded_value_set.expansion.contains.extend(codes)
+  return expanded_value_set
+
+
+def _concept_set_to_expansion(
+    concept_set: value_set_pb2.ValueSet.Compose.ConceptSet
+) -> Sequence[value_set_pb2.ValueSet.Expansion.Contains]:
+  """Convert the ConceptSet into a collection of Contains objects."""
+  expansion: List[value_set_pb2.ValueSet.Expansion.Contains] = []
+  for concept in concept_set.concept:
+    contains = value_set_pb2.ValueSet.Expansion.Contains()
+    for field, copy_from in (
+        ('system', concept_set),
+        ('version', concept_set),
+        ('code', concept),
+        ('display', concept),
+    ):
+      if copy_from.HasField(field):
+        getattr(contains, field).CopyFrom(getattr(copy_from, field))
+
+    for designation in concept.designation:
+      designation_copy = contains.designation.add()
+      designation_copy.CopyFrom(designation)
+
+    expansion.append(contains)
+  return expansion
 
 
 def _code_as_select_literal(

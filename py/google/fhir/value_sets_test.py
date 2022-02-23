@@ -22,6 +22,7 @@ import sqlalchemy
 
 from google.fhir import value_sets
 from absl.testing import absltest
+from proto.google.fhir.proto.r4.core import datatypes_pb2
 from proto.google.fhir.proto.r4.core.resources import structure_definition_pb2
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
 from google.fhir.utils import fhir_package
@@ -189,6 +190,102 @@ class ValueSetsTest(absltest.TestCase):
 
     with self.assertRaises(ValueError):
       value_sets.valueset_codes_insert_statement_for(value_set, table)
+
+  def testValueSetExpansionForExtensionalSets_withExtensionalSet_expandsCodes(
+      self):
+    value_set = value_set_pb2.ValueSet()
+
+    # Add an include set with three codes.
+    include_1 = value_set.compose.include.add()
+    include_1.version.value = 'include-version-1'
+    include_1.system.value = 'include-system-1'
+
+    code_1_1 = include_1.concept.add()
+    code_1_1.code.value = 'code-1-1'
+
+    code_1_2 = include_1.concept.add()
+    code_1_2.code.value = 'code-1-2'
+
+    code_1_3 = include_1.concept.add()
+    code_1_3.code.value = 'code-1-3'
+
+    # Add an include set with one code.
+    include_2 = value_set.compose.include.add()
+    include_2.version.value = 'include-version-2'
+    include_2.system.value = 'include-system-2'
+
+    code_2_1 = include_2.concept.add()
+    code_2_1.code.value = 'code-2-1'
+
+    # Add a copy of code_1_3 to the exclude set.
+    exclude = value_set.compose.exclude.add()
+    exclude.version.value = 'include-version-1'
+    exclude.system.value = 'include-system-1'
+    exclude_code = exclude.concept.add()
+    exclude_code.code.value = 'code-1-3'
+
+    result = value_sets._expand_extensional_value_set(value_set)
+    expected = [
+        value_set_pb2.ValueSet.Expansion.Contains(
+            system=datatypes_pb2.Uri(value='include-system-1'),
+            version=datatypes_pb2.String(value='include-version-1'),
+            code=datatypes_pb2.Code(value='code-1-1'),
+        ),
+        value_set_pb2.ValueSet.Expansion.Contains(
+            system=datatypes_pb2.Uri(value='include-system-1'),
+            version=datatypes_pb2.String(value='include-version-1'),
+            code=datatypes_pb2.Code(value='code-1-2'),
+        ),
+        value_set_pb2.ValueSet.Expansion.Contains(
+            system=datatypes_pb2.Uri(value='include-system-2'),
+            version=datatypes_pb2.String(value='include-version-2'),
+            code=datatypes_pb2.Code(value='code-2-1'),
+        ),
+    ]
+    self.assertCountEqual(result.expansion.contains, expected)
+
+  def testValueSetExpansionForExtensionalSets_withIntensionalSet_raisesError(
+      self):
+    value_set = value_set_pb2.ValueSet()
+
+    include = value_set.compose.include.add()
+    filter_ = include.filter.add()
+    filter_.op.value = 1
+    filter_.value.value = 'medicine'
+    self.assertIsNone(value_sets._expand_extensional_value_set(value_set))
+
+  def testConceptSetToExpansion_wtihConceptSet_buildsExpansion(self):
+    concept_set = value_set_pb2.ValueSet.Compose.ConceptSet()
+    concept_set.system.value = 'system'
+    concept_set.version.value = 'version'
+
+    code_1 = concept_set.concept.add()
+    code_1.code.value = 'code_1'
+    code_1.display.value = 'display_1'
+    designation_1 = code_1.designation.add()
+    designation_1.value.value = 'doing great'
+
+    code_2 = concept_set.concept.add()
+    code_2.code.value = 'code_2'
+
+    result = value_sets._concept_set_to_expansion(concept_set)
+
+    expected = [
+        value_set_pb2.ValueSet.Expansion.Contains(),
+        value_set_pb2.ValueSet.Expansion.Contains(),
+    ]
+    expected[0].system.value = 'system'
+    expected[0].version.value = 'version'
+    expected[0].code.value = 'code_1'
+    expected[0].display.value = 'display_1'
+    expected_designation = expected[0].designation.add()
+    expected_designation.value.value = 'doing great'
+
+    expected[1].system.value = 'system'
+    expected[1].version.value = 'version'
+    expected[1].code.value = 'code_2'
+
+    self.assertCountEqual(result, expected)
 
 
 def build_valueset_codes_table() -> sqlalchemy.sql.expression.TableClause:
