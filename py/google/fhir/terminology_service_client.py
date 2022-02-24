@@ -61,6 +61,9 @@ class TerminologyServiceClient:
       self, value_set: value_set_pb2.ValueSet) -> value_set_pb2.ValueSet:
     """Expands the value set using a terminology server.
 
+    Requests an expansion of the value set from the appropriate terminology
+    server by the value set's URL.
+
     Builds a copy of the given value set with its expansion field expanded to
     contain all the codes composing the value set. Appends new codes from
     expansion to any codes currently in the value set's expansion field.
@@ -71,13 +74,11 @@ class TerminologyServiceClient:
     Returns:
       A copy of the value set with its code expansion fields set.
     """
-    value_set_id = value_set.id.value
-    value_set_url = value_set.url.value
-    if not value_set_id or not value_set_url:
-      raise ValueError('Value set must have both an ID and a URL. '
+    if not value_set.url.value:
+      raise ValueError('Value set must have a URL. '
                        'Unable to make API calls for value set.')
 
-    value_set_domain = urllib.parse.urlparse(value_set_url).netloc
+    value_set_domain = urllib.parse.urlparse(value_set.url.value).netloc
     base_url = TERMINOLOGY_BASE_URL_PER_DOMAIN.get(value_set_domain)
     if base_url is None:
       raise ValueError(
@@ -86,22 +87,25 @@ class TerminologyServiceClient:
 
     api_key = self.api_keys_per_terminology_server.get(base_url)
 
-    codes = _get_expansion_contains(value_set_id, base_url, api_key)
+    codes = _get_expansion_contains(value_set, base_url, api_key)
     expanded_value_set = copy.deepcopy(value_set)
     expanded_value_set.expansion.contains.extend(codes)
     return expanded_value_set
 
 
 def _get_expansion_contains(
-    value_set_id: str,
+    value_set: value_set_pb2.ValueSet,
     base_url: str,
     api_key: Optional[str] = None
 ) -> Sequence[value_set_pb2.ValueSet.Expansion.Contains]:
   """Expands codes for the value set using the given terminology server."""
   offset = 0
   codes: List[value_set_pb2.ValueSet.Expansion.Contains] = []
-  request_url = urllib.parse.urljoin(base_url,
-                                     f'r4/ValueSet/{value_set_id}/$expand')
+
+  request_url = urllib.parse.urljoin(base_url, 'r4/ValueSet/$expand')
+  params = {'url': value_set.url.value}
+  if value_set.version.value:
+    params['valueSetVerson'] = value_set.version.value
 
   session_ = _session_with_backoff()
   session_.headers.update({'Accept': 'application/json'})
@@ -110,7 +114,7 @@ def _get_expansion_contains(
 
   with session_ as session:
     while True:
-      resp = session.get(request_url, params={'offset': offset})
+      resp = session.get(request_url, params={'offset': offset, **params})
       resp.raise_for_status()
       resp_json = resp.json()
 

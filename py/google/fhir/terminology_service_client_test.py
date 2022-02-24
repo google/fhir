@@ -61,8 +61,8 @@ class TerminologyServiceClientTest(absltest.TestCase):
     mock_session().__enter__().get.reset_mock()
 
     value_set = value_set_pb2.ValueSet()
-    value_set.id.value = '2.16'
     value_set.url.value = 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16'
+    value_set.version.value = '1.0'
 
     client = terminology_service_client.TerminologyServiceClient(
         {'https://cts.nlm.nih.gov/fhir/': 'the-api-key'})
@@ -71,11 +71,19 @@ class TerminologyServiceClientTest(absltest.TestCase):
     # Ensure we called requests correctly.
     self.assertEqual(mock_session().__enter__().get.call_args_list, [
         unittest.mock.call(
-            'https://cts.nlm.nih.gov/fhir/r4/ValueSet/2.16/$expand',
-            params={'offset': 0}),
+            'https://cts.nlm.nih.gov/fhir/r4/ValueSet/$expand',
+            params={
+                'url': 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16',
+                'offset': 0,
+                'valueSetVerson': '1.0'
+            }),
         unittest.mock.call(
-            'https://cts.nlm.nih.gov/fhir/r4/ValueSet/2.16/$expand',
-            params={'offset': 1}),
+            'https://cts.nlm.nih.gov/fhir/r4/ValueSet/$expand',
+            params={
+                'url': 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16',
+                'offset': 1,
+                'valueSetVerson': '1.0'
+            }),
     ])
     self.assertEqual(mock_session().auth, ('apikey', 'the-api-key'))
     self.assertEqual(mock_session().headers['Accept'], 'application/json')
@@ -110,7 +118,6 @@ class TerminologyServiceClientTest(absltest.TestCase):
     mock_session().__enter__().get.reset_mock()
 
     value_set = value_set_pb2.ValueSet()
-    value_set.id.value = 'the-id'
     value_set.url.value = 'http://hl7.org/fhir/ValueSet/financial-taskcode'
 
     client = terminology_service_client.TerminologyServiceClient({})
@@ -118,7 +125,11 @@ class TerminologyServiceClientTest(absltest.TestCase):
 
     # Ensure we called requests correctly.
     mock_session().__enter__().get.assert_called_once_with(
-        'https://tx.fhir.org/r4/ValueSet/the-id/$expand', params={'offset': 0})
+        'https://tx.fhir.org/r4/ValueSet/$expand',
+        params={
+            'offset': 0,
+            'url': 'http://hl7.org/fhir/ValueSet/financial-taskcode'
+        })
     self.assertEqual(mock_session().headers['Accept'], 'application/json')
 
     # Ensure we got the expected protos back.
