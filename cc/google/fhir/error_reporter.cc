@@ -23,49 +23,49 @@
 namespace google {
 namespace fhir {
 
-FailFastErrorReporter* FailFastErrorReporter::FailOnErrorOrFailure() {
-  static FailFastErrorReporter* const kInstance = new FailFastErrorReporter(
-      FailFastErrorReporter::FAIL_ON_ERROR_OR_FAILURE);
-  return kInstance;
-}
-
-FailFastErrorReporter* FailFastErrorReporter::FailOnErrorOnly() {
+FailFastErrorReporter* FailFastErrorReporter::FailOnErrorOrFatal() {
   static FailFastErrorReporter* const kInstance =
-      new FailFastErrorReporter(FailFastErrorReporter::FAIL_ON_ERROR_ONLY);
+      new FailFastErrorReporter(FailFastErrorReporter::FAIL_ON_ERROR_OR_FATAL);
   return kInstance;
 }
 
-absl::Status ErrorReporter::ReportError(absl::string_view field_path,
-                                        const absl::Status& status) {
-  return ReportError(field_path, "", status);
+FailFastErrorReporter* FailFastErrorReporter::FailOnFatalOnly() {
+  static FailFastErrorReporter* const kInstance =
+      new FailFastErrorReporter(FailFastErrorReporter::FAIL_ON_FATAL_ONLY);
+  return kInstance;
 }
 
-absl::Status ErrorReporter::ReportFailure(absl::string_view field_path,
-                                          absl::string_view message) {
-  return ReportFailure(field_path, "", message);
+absl::Status ErrorReporter::ReportFhirFatal(absl::string_view field_path,
+                                            const absl::Status& status) {
+  return ReportFhirFatal(field_path, "", status);
 }
 
-absl::Status ErrorReporter::ReportWarning(absl::string_view field_path,
-                                          absl::string_view message) {
-  return ReportWarning(field_path, "", message);
+absl::Status ErrorReporter::ReportFhirError(absl::string_view field_path,
+                                            absl::string_view message) {
+  return ReportFhirError(field_path, "", message);
+}
+
+absl::Status ErrorReporter::ReportFhirWarning(absl::string_view field_path,
+                                              absl::string_view message) {
+  return ReportFhirWarning(field_path, "", message);
+}
+
+absl::Status ErrorReporter::ReportFhirPathFatal(
+    absl::string_view field_path, absl::string_view element_path,
+    absl::string_view fhir_path_constraint, const absl::Status& status) {
+  return ReportFhirFatal(field_path, element_path, status);
 }
 
 absl::Status ErrorReporter::ReportFhirPathError(
     absl::string_view field_path, absl::string_view element_path,
-    absl::string_view fhir_path_constraint, const absl::Status& status) {
-  return ReportError(field_path, element_path, status);
-}
-
-absl::Status ErrorReporter::ReportFhirPathFailure(
-    absl::string_view field_path, absl::string_view element_path,
     absl::string_view fhir_path_constraint) {
-  return ReportFailure(field_path, element_path, fhir_path_constraint);
+  return ReportFhirError(field_path, element_path, fhir_path_constraint);
 }
 
 absl::Status ErrorReporter::ReportFhirPathWarning(
     absl::string_view field_path, absl::string_view element_path,
     absl::string_view fhir_path_constraint) {
-  return ReportWarning(field_path, element_path, fhir_path_constraint);
+  return ReportFhirWarning(field_path, element_path, fhir_path_constraint);
 }
 
 }  // namespace fhir

@@ -26,30 +26,21 @@
 
 namespace google::fhir {
 
-// Generic Error Reporter for OperationOutcome-like types (e.g. like
-// OperationOutcome and ValidationOutcome). This is templatized by the
-// OperationOutcome-like type, and the types to use for the IssueSeverityCode
-// and IssueTypeCode enums. These are not inferred from the
-// OperationOutcome-like type itself, because the generated proto type uses
-// internal enum types that do not contain the set of enum values needed by this
-// class (at various points they are type asserted back to the types we would
-// want).
+// Error reporter that aggregates errors into an OperationOutcome (or profile of
+// OperationOutcome).
 //
-// Conversion issues that can result in data loss are reported as a "structure"
-// error type as described at https://www.hl7.org/fhir/valueset-issue-type.html,
-// since the item could not be converted into the target structure. Validation
-// issues that preserve data use a "value" error type from that value set.
+// As described in the ErrorReporter interface, FhirError issues indicate
+// validation failures but not process failures, and so use the IssueTypeCode of
+// `value` as described by https://www.hl7.org/fhir/valueset-issue-type.html,
+// while FhirFatal issues indicate that data should not be trusted, and so use
+// the `Structure` IssueType Code.
 //
-// Note the IssueSeverityCode used for various report functions is somewhat
-// counterintuitive, since it uses "ERROR" to indicate a validation failure,
-// and "FATAL" to indicate a code error, whereas ErrorReporter uses `Error` to
-// refer to a code error.
-//
-// The mapping is:
-// ReportError -> FATAL severity code
-// ReportFailure -> ERROR severity code
-// ReportWarning -> WARNING severity code.
-
+// This is templatized by the OperationOutcome-like type, and
+// the types to use for the IssueSeverityCode and IssueTypeCode enums. These are
+// not inferred from the OperationOutcome-like type itself, because the
+// generated proto type uses internal enum types that do not contain the set of
+// enum values needed by this class (at various points they are type asserted
+// back to the types we would want).
 template <typename OperationOutcomeType, typename IssueSeverityCode,
           typename IssueTypeCode>
 class OutcomeErrorReporter : public ErrorReporter {
@@ -57,41 +48,41 @@ class OutcomeErrorReporter : public ErrorReporter {
   explicit OutcomeErrorReporter(OperationOutcomeType* outcome)
       : outcome_(outcome) {}
 
-  absl::Status ReportError(absl::string_view element_path,
-                           const absl::Status& error_status) override {
+  absl::Status ReportFhirFatal(absl::string_view element_path,
+                               const absl::Status& error_status) override {
     return Report(element_path, error_status.message(),
                   IssueTypeCode::STRUCTURE, IssueSeverityCode::FATAL);
   }
 
-  absl::Status ReportFailure(absl::string_view element_path,
-                             absl::string_view message) override {
+  absl::Status ReportFhirError(absl::string_view element_path,
+                               absl::string_view message) override {
     return Report(element_path, message, IssueTypeCode::VALUE,
                   IssueSeverityCode::ERROR);
   }
 
-  absl::Status ReportWarning(absl::string_view element_path,
-                             absl::string_view message) override {
+  absl::Status ReportFhirWarning(absl::string_view element_path,
+                                 absl::string_view message) override {
     return Report(element_path, message, IssueTypeCode::VALUE,
                   IssueSeverityCode::WARNING);
   }
 
-  absl::Status ReportError(absl::string_view element_path,
-                           absl::string_view node_path,
-                           const absl::Status& error_status) override {
+  absl::Status ReportFhirFatal(absl::string_view element_path,
+                               absl::string_view node_path,
+                               const absl::Status& error_status) override {
     return Report(node_path, error_status.message(), IssueTypeCode::STRUCTURE,
                   IssueSeverityCode::FATAL);
   }
 
-  absl::Status ReportFailure(absl::string_view element_path,
-                             absl::string_view node_path,
-                             absl::string_view message) override {
+  absl::Status ReportFhirError(absl::string_view element_path,
+                               absl::string_view node_path,
+                               absl::string_view message) override {
     return Report(node_path, message, IssueTypeCode::VALUE,
                   IssueSeverityCode::ERROR);
   }
 
-  absl::Status ReportWarning(absl::string_view element_path,
-                             absl::string_view node_path,
-                             absl::string_view message) override {
+  absl::Status ReportFhirWarning(absl::string_view element_path,
+                                 absl::string_view node_path,
+                                 absl::string_view message) override {
     return Report(node_path, message, IssueTypeCode::VALUE,
                   IssueSeverityCode::WARNING);
   }

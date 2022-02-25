@@ -52,7 +52,7 @@ absl::Status ValidateFhirConstraints(const Message& message,
                                      ErrorReporter* error_reporter) {
   if (IsPrimitive(message.GetDescriptor())) {
     if (!primitive_handler->ValidatePrimitive(message).ok()) {
-      return error_reporter->ReportFailure(
+      return error_reporter->ReportFhirError(
           base_name, absl::StrCat("invalid-primitive-", base_name));
     }
     return absl::OkStatus();
@@ -82,7 +82,7 @@ absl::Status ValidateFhirConstraints(const Message& message,
     if (!reflection->HasOneof(message, oneof) &&
         !oneof->options().GetExtension(
             ::google::fhir::proto::fhir_oneof_is_optional)) {
-      FHIR_RETURN_IF_ERROR(error_reporter->ReportFailure(
+      FHIR_RETURN_IF_ERROR(error_reporter->ReportFhirError(
           oneof->full_name(),
           absl::StrCat("empty-oneof-", oneof->full_name())));
     }
@@ -99,7 +99,7 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
       field->options().GetExtension(validation_requirement) ==
           ::google::fhir::proto::REQUIRED_BY_FHIR) {
     if (!FieldHasValue(message, field)) {
-      FHIR_RETURN_IF_ERROR(error_reporter->ReportFailure(
+      FHIR_RETURN_IF_ERROR(error_reporter->ReportFhirError(
           field_name, absl::StrCat("missing-", field_name)));
     }
   }
@@ -109,7 +109,7 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
     if (status.ok()) {
       return status;
     } else {
-      FHIR_RETURN_IF_ERROR(error_reporter->ReportFailure(
+      FHIR_RETURN_IF_ERROR(error_reporter->ReportFhirError(
           field_name, absl::StrCat(status.message(), "-at-", field_name)));
     }
   }
@@ -147,7 +147,7 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
       const absl::Status& status = result.EvaluationResult().status();
       // Use ConstraintPath since NodePath may not be populated from
       // evaluation errors.
-      FHIR_RETURN_IF_ERROR(error_reporter->ReportFhirPathError(
+      FHIR_RETURN_IF_ERROR(error_reporter->ReportFhirPathFatal(
           result.ConstraintPath(), result.NodePath(), result.Constraint(),
           status));
     } else {
@@ -157,7 +157,7 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
       // they should be reported here as warnings as well.
       if (!result.EvaluationResult().value()) {
         // Report FHIRPath constraint that was violated.
-        FHIR_RETURN_IF_ERROR(error_reporter->ReportFhirPathFailure(
+        FHIR_RETURN_IF_ERROR(error_reporter->ReportFhirPathError(
             result.ConstraintPath(), result.NodePath(), result.Constraint()));
       }
     }
@@ -181,7 +181,7 @@ absl::Status ValidateResourceWithFhirPath(
     fhir_path::FhirPathValidator* message_validator) {
   FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(
       resource, resource.GetDescriptor()->name(), primitive_handler,
-      FailFastErrorReporter::FailOnErrorOrFailure()));
+      FailFastErrorReporter::FailOnErrorOrFatal()));
   FHIR_ASSIGN_OR_RETURN(const fhir_path::ValidationResults results,
       message_validator->Validate(resource));
   return results.LegacyValidationResult();
@@ -191,7 +191,7 @@ absl::Status ValidateResource(const Message& resource,
                               const PrimitiveHandler* primitive_handler) {
   return ValidateFhirConstraints(resource, resource.GetDescriptor()->name(),
                                  primitive_handler,
-                                 FailFastErrorReporter::FailOnErrorOrFailure());
+                                 FailFastErrorReporter::FailOnErrorOrFatal());
 }
 
 }  // namespace fhir
