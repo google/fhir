@@ -317,6 +317,7 @@ cc_library(
         ":annotations",
         ":codeable_concepts",
         ":core_resource_registry",
+        ":error_reporter",
         ":extensions",
         ":fhir_types",
         ":primitive_handler",

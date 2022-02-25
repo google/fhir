@@ -97,7 +97,7 @@ class FhirProtoParseHelper {
         IsProfile(T::descriptor()) && IsResource(T::descriptor());
     switch (GetFhirVersion(tmp)) {
       case proto::STU3: {
-        valid_status = stu3::ValidateResource(tmp);
+        valid_status = stu3::ValidateWithoutFhirPath(tmp);
         if (is_profile) {
           auto status_or_normalized = NormalizeStu3(tmp);
           EXPECT_TRUE(status_or_normalized.ok());
@@ -106,7 +106,7 @@ class FhirProtoParseHelper {
         break;
       }
       case proto::R4: {
-        valid_status = r4::ValidateResource(tmp);
+        valid_status = r4::ValidateWithoutFhirPath(tmp);
         if (is_profile) {
           auto status_or_normalized = NormalizeR4(tmp);
           EXPECT_TRUE(status_or_normalized.ok());

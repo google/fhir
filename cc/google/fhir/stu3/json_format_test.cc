@@ -21,10 +21,12 @@
 #include "gtest/gtest.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json/json_sax_handler.h"
 #include "google/fhir/json/test_matchers.h"
 #include "google/fhir/json_format.h"
+#include "google/fhir/stu3/resource_validation.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
@@ -46,12 +48,13 @@ static const char* const kTimeZoneString = "Australia/Sydney";
 
 // json_path should be relative to fhir root
 template <typename R>
-absl::StatusOr<R> ParseJsonToProto(const std::string& json_path) {
+absl::StatusOr<R> ParseJsonToProto(const absl::string_view json_path) {
   std::string json = ReadFile(json_path);
   absl::TimeZone tz;
   absl::LoadTimeZone(kTimeZoneString, &tz);
   FHIR_ASSIGN_OR_RETURN(R resource, JsonFhirStringToProto<R>(json, tz));
-  FHIR_RETURN_IF_ERROR(ValidateResourceWithFhirPath(resource));
+  FHIR_RETURN_IF_ERROR(
+      Validate(resource, FailFastErrorReporter::FailOnErrorOrFatal()));
   return resource;
 }
 

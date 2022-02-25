@@ -175,6 +175,8 @@ cc_test(
     shard_count = 10,
     deps = [
         ":json_format",
+        ":resource_validation",
+        "//cc/google/fhir:error_reporter",
         "//cc/google/fhir:json_format",
         "//cc/google/fhir:test_helper",
         "//cc/google/fhir/json:fhir_json",

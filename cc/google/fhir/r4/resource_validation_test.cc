@@ -40,14 +40,11 @@ using namespace ::google::fhir::r4::core;  // NOLINT
 using ::google::fhir::testutil::EqualsProto;
 using ::google::fhir::r4::fhirproto::ValidationOutcome;
 
-// Tests the given resource is valid using both the deprecated and new functions
 template <typename T>
-void ValidTest(const std::string& name, const bool has_resource_id = true) {
+void ValidTest(const absl::string_view name,
+               const bool has_resource_id = true) {
   T resource =
       ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt"));
-  auto status = ValidateResourceWithFhirPath(resource);
-  EXPECT_TRUE(status.ok()) << status;
-
   absl::StatusOr<ValidationOutcome> outcome = Validate(resource);
   FHIR_ASSERT_OK(outcome.status());
 
@@ -63,21 +60,15 @@ void ValidTest(const std::string& name, const bool has_resource_id = true) {
   EXPECT_THAT(*outcome, EqualsProto(expected));
 }
 
-// Tests the given resource is invalid using both the deprecated and new
-// functions
 template <typename T>
-void InvalidTest(const std::string& name) {
+void InvalidTest(const absl::string_view name) {
   T resource =
       ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt"));
-  auto status = ValidateResourceWithFhirPath(resource);
-
   std::string error_msg =
       ReadFile(absl::StrCat("testdata/r4/validation/", name, ".result.txt"));
   if (error_msg[error_msg.length() - 1] == '\n') {
     error_msg.erase(error_msg.length() - 1);
   }
-
-  EXPECT_EQ(status, ::absl::FailedPreconditionError(error_msg));
 
   absl::StatusOr<ValidationOutcome> outcome = Validate(resource);
   FHIR_ASSERT_OK(outcome.status());

@@ -49,10 +49,7 @@ namespace stu3 {
 Validate(const ::google::protobuf::Message& resource);
 
 // Deprecated. Use one of the above Validate functions.
-::absl::Status ValidateResource(const ::google::protobuf::Message& resource);
-
-// Deprecated. Use one of the above Validate functions.
-::absl::Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource);
+::absl::Status ValidateWithoutFhirPath(const ::google::protobuf::Message& resource);
 
 }  // namespace stu3
 }  // namespace fhir

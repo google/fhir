@@ -205,6 +205,7 @@ cc_test(
         ":json_format",
         ":primitive_handler",
         ":profiles",
+        "//cc/google/fhir:error_reporter",
         "//cc/google/fhir:proto_util",
         "//cc/google/fhir:test_helper",
         "//cc/google/fhir/json:fhir_json",

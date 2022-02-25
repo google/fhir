@@ -34,6 +34,7 @@
 #include "absl/synchronization/mutex.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/core_resource_registry.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/extensions.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json/json_sax_handler.h"
@@ -527,7 +528,9 @@ absl::Status Parser::MergeJsonFhirStringIntoProto(
   FHIR_RETURN_IF_ERROR(parser.MergeValue(value, target));
 
   if (validate) {
-    return ValidateResource(*target, primitive_handler_);
+    // TODO: Use FHIRPath validation here.
+    return ValidateWithoutFhirPath(*target, primitive_handler_,
+                                   FailFastErrorReporter::FailOnErrorOrFatal());
   }
   return absl::OkStatus();
 }

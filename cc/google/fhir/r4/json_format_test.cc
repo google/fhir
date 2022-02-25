@@ -27,6 +27,7 @@
 #include "gtest/gtest.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json/json_sax_handler.h"
 #include "google/fhir/json/test_matchers.h"
@@ -231,7 +232,8 @@ absl::StatusOr<R> ParseJsonToProto(const std::string& json_path,
                                         json, tz, sanitizer));
 
   if (INVALID_RECORDS.find(json_path) == INVALID_RECORDS.end()) {
-    FHIR_RETURN_IF_ERROR(ValidateResourceWithFhirPath(resource));
+    FHIR_RETURN_IF_ERROR(
+        Validate(resource, FailFastErrorReporter::FailOnErrorOrFatal()));
   }
   return resource;
 }

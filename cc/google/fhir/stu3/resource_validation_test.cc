@@ -72,25 +72,17 @@ Encounter ValidEncounter() {
   )proto");
 }
 
-// Tests the given resource is valid using both the deprecated and new functions
 template <typename T>
 void ValidTest(const T& proto) {
-  auto status = ValidateResource(proto);
-  EXPECT_TRUE(status.ok()) << status;
-
   absl::StatusOr<OperationOutcome> outcome = Validate(proto);
   FHIR_ASSERT_OK(outcome.status());
   EXPECT_THAT(*outcome, EqualsProto(OperationOutcome()));
 }
 
-// Tests the given resource is invalid using both the deprecated and new
-// functions
 template <typename T>
 void InvalidTest(absl::string_view err_msg,
                  const std::string& outcome_prototxt,
                  const T& proto) {
-  EXPECT_EQ(ValidateResource(proto), ::absl::FailedPreconditionError(err_msg));
-
   OperationOutcome outcome_proto;
   ASSERT_TRUE(parser.ParseFromString(outcome_prototxt, &outcome_proto));
   absl::StatusOr<OperationOutcome> outcome = Validate(proto);
@@ -246,7 +238,7 @@ TEST(BundleValidationTest, Valid) {
     entry { resource { patient {} } }
   )proto", &bundle));
 
-  EXPECT_TRUE(ValidateResource(bundle).ok());
+  ValidTest(bundle);
 }
 
 TEST(EncounterValidationTest, Valid) {
@@ -271,7 +263,7 @@ TEST(EncounterValidationTest, Valid) {
     }
   )proto", &encounter));
 
-  FHIR_ASSERT_OK(ValidateResource(encounter));
+  ValidTest(encounter);
 }
 
 }  // namespace

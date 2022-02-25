@@ -173,26 +173,5 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
                                  primitive_handler, error_reporter);
 }
 
-// TODO: Invert the default here for FHIRPath handling, and have
-// ValidateWithoutFhirPath instead of ValidateWithFhirPath
-
-absl::Status ValidateResourceWithFhirPath(
-    const Message& resource, const PrimitiveHandler* primitive_handler,
-    fhir_path::FhirPathValidator* message_validator) {
-  FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(
-      resource, resource.GetDescriptor()->name(), primitive_handler,
-      FailFastErrorReporter::FailOnErrorOrFatal()));
-  FHIR_ASSIGN_OR_RETURN(const fhir_path::ValidationResults results,
-      message_validator->Validate(resource));
-  return results.LegacyValidationResult();
-}
-
-absl::Status ValidateResource(const Message& resource,
-                              const PrimitiveHandler* primitive_handler) {
-  return ValidateFhirConstraints(resource, resource.GetDescriptor()->name(),
-                                 primitive_handler,
-                                 FailFastErrorReporter::FailOnErrorOrFatal());
-}
-
 }  // namespace fhir
 }  // namespace google

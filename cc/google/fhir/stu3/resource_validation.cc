@@ -40,13 +40,9 @@ absl::StatusOr<OperationOutcome> Validate(const ::google::protobuf::Message& res
   return outcome;
 }
 
-absl::Status ValidateResource(const ::google::protobuf::Message& resource) {
-  return ValidateResource(resource, Stu3PrimitiveHandler::GetInstance());
-}
-
-absl::Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource) {
-  return ValidateResourceWithFhirPath(
-      resource, Stu3PrimitiveHandler::GetInstance(), GetFhirPathValidator());
+absl::Status ValidateWithoutFhirPath(const ::google::protobuf::Message& resource) {
+  return ValidateWithoutFhirPath(resource, Stu3PrimitiveHandler::GetInstance(),
+                                 FailFastErrorReporter::FailOnErrorOrFatal());
 }
 
 }  // namespace stu3

@@ -38,23 +38,9 @@ namespace fhir {
 // report all errors to the error reporter, excluding FHIRPath constraints.
 //
 // This exists only to support backward compatibility in calling methods.
-::absl::Status ValidateWithoutFhirPath(const ::google::protobuf::Message& resource,
-                        const PrimitiveHandler* primitive_handler,
-                        ErrorReporter* error_reporter);
-
-// TODO: Invert the default here for FHIRPath handling, and have
-// ValidateWithoutFhirPath instead of ValidateWithFhirPath
-
-// Run resource-specific validation on a single FHIR resource.
-::absl::Status ValidateResource(const ::google::protobuf::Message& resource,
-                                const PrimitiveHandler* primitive_handler);
-
-// Run resource-specific validation + FHIRPath validation on a single FHIR
-// resource.
-::absl::Status ValidateResourceWithFhirPath(
+::absl::Status ValidateWithoutFhirPath(
     const ::google::protobuf::Message& resource,
-    const PrimitiveHandler* primitive_handler,
-    fhir_path::FhirPathValidator* message_validator);
+    const PrimitiveHandler* primitive_handler, ErrorReporter* error_reporter);
 
 }  // namespace fhir
 }  // namespace google

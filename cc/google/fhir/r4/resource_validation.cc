@@ -56,13 +56,9 @@ absl::StatusOr<ValidationOutcome> Validate(const ::google::protobuf::Message& re
   return validation_outcome;
 }
 
-absl::Status ValidateResource(const ::google::protobuf::Message& resource) {
-  return ValidateResource(resource, R4PrimitiveHandler::GetInstance());
-}
-
-absl::Status ValidateResourceWithFhirPath(const ::google::protobuf::Message& resource) {
-  return ValidateResourceWithFhirPath(
-      resource, R4PrimitiveHandler::GetInstance(), GetFhirPathValidator());
+absl::Status ValidateWithoutFhirPath(const ::google::protobuf::Message& resource) {
+  return ValidateWithoutFhirPath(resource, R4PrimitiveHandler::GetInstance(),
+                                 FailFastErrorReporter::FailOnErrorOrFatal());
 }
 
 }  // namespace r4
