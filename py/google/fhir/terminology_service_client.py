@@ -14,8 +14,7 @@
 # limitations under the License.
 """Provides a client for interacting with terminology servers."""
 
-import copy
-from typing import Dict, List, Optional, Sequence
+from typing import Dict, List
 import urllib.parse
 
 import requests
@@ -62,17 +61,16 @@ class TerminologyServiceClient:
     """Expands the value set using a terminology server.
 
     Requests an expansion of the value set from the appropriate terminology
-    server by the value set's URL.
-
-    Builds a copy of the given value set with its expansion field expanded to
-    contain all the codes composing the value set. Appends new codes from
-    expansion to any codes currently in the value set's expansion field.
+    server for the value set's URL and version if present on the value set.
+    Retrieves the current definition of the value set from the terminology
+    service as well as its expansion.
 
     Args:
-      value_set: The value set for which to retrieve expanded codes.
+      value_set: The value set to expand.
 
     Returns:
-      A copy of the value set with its code expansion fields set.
+      The current definition of the value set from the server with its expanded
+      codes present.
     """
     if not value_set.url.value:
       raise ValueError('Value set must have a URL. '
@@ -87,48 +85,41 @@ class TerminologyServiceClient:
 
     api_key = self.api_keys_per_terminology_server.get(base_url)
 
-    codes = _get_expansion_contains(value_set, base_url, api_key)
-    expanded_value_set = copy.deepcopy(value_set)
-    expanded_value_set.expansion.contains.extend(codes)
-    return expanded_value_set
+    offset = 0
+    codes: List[value_set_pb2.ValueSet.Expansion.Contains] = []
 
+    request_url = urllib.parse.urljoin(base_url, 'r4/ValueSet/$expand')
+    params = {'url': value_set.url.value}
+    if value_set.version.value:
+      params['valueSetVerson'] = value_set.version.value
 
-def _get_expansion_contains(
-    value_set: value_set_pb2.ValueSet,
-    base_url: str,
-    api_key: Optional[str] = None
-) -> Sequence[value_set_pb2.ValueSet.Expansion.Contains]:
-  """Expands codes for the value set using the given terminology server."""
-  offset = 0
-  codes: List[value_set_pb2.ValueSet.Expansion.Contains] = []
+    session_ = _session_with_backoff()
+    session_.headers.update({'Accept': 'application/json'})
+    if api_key is not None:
+      session_.auth = ('apikey', api_key)
 
-  request_url = urllib.parse.urljoin(base_url, 'r4/ValueSet/$expand')
-  params = {'url': value_set.url.value}
-  if value_set.version.value:
-    params['valueSetVerson'] = value_set.version.value
+    with session_ as session:
+      while True:
+        resp = session.get(request_url, params={'offset': offset, **params})
+        resp.raise_for_status()
+        resp_json = resp.json()
 
-  session_ = _session_with_backoff()
-  session_.headers.update({'Accept': 'application/json'})
-  if api_key is not None:
-    session_.auth = ('apikey', api_key)
+        response_value_set = json_format.json_fhir_object_to_proto(
+            resp_json, value_set_pb2.ValueSet)
+        codes.extend(response_value_set.expansion.contains)
 
-  with session_ as session:
-    while True:
-      resp = session.get(request_url, params={'offset': offset, **params})
-      resp.raise_for_status()
-      resp_json = resp.json()
+        # See if we need to paginate through more results. The 'total' attribute
+        # may be absent if pagination is not being used. If it is present, see
+        # if we need to retrieve more results.
+        offset += len(resp_json['expansion']['contains'])
+        if 'total' not in resp_json['expansion'] or (
+            offset >= resp_json['expansion']['total']):
 
-      response_value_set = json_format.json_fhir_object_to_proto(
-          resp_json, value_set_pb2.ValueSet)
-      codes.extend(response_value_set.expansion.contains)
-
-      # See if we need to paginate through more results. The 'total' attribute
-      # may be absent if pagination is not being used. If it is present, see if
-      # we need to retrieve more results.
-      offset += len(resp_json['expansion']['contains'])
-      if 'total' not in resp_json['expansion'] or (
-          offset >= resp_json['expansion']['total']):
-        return codes
+          # Protocol buffers don't support assignment to slices
+          # (i.e. contains[:] = codes) so we delete and extend.
+          del response_value_set.expansion.contains[:]
+          response_value_set.expansion.contains.extend(codes)
+          return response_value_set
 
 
 def _session_with_backoff():
