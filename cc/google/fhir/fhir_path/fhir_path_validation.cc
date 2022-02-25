@@ -14,6 +14,9 @@
 
 #include "google/fhir/fhir_path/fhir_path_validation.h"
 
+#include <algorithm>
+#include <functional>
+#include <string>
 #include <utility>
 
 #include "google/protobuf/descriptor.h"
@@ -23,10 +26,12 @@
 #include "absl/status/statusor.h"
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/string_view.h"
 #include "absl/types/optional.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/fhir_path/fhir_path.h"
 #include "google/fhir/proto_util.h"
+#include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
@@ -57,6 +62,63 @@ bool ValidationResults::IsValid(
 std::vector<ValidationResult> ValidationResults::Results() const {
   return results_;
 }
+
+// ErrorReporter that aggregates FhirPath validations as ValidationResults
+// This is useful for providing the deprecated Validate API that returns
+// ValidationResults.  New usages should use an OperationOutcomeErrorReporter.
+class ValidationResultsErrorReporter : public ErrorReporter {
+ public:
+  ValidationResults GetValidationResults() const {
+    return ValidationResults(results_);
+  }
+  absl::Status ReportFhirPathFatal(absl::string_view field_path,
+                                   absl::string_view element_path,
+                                   absl::string_view fhir_path_constraint,
+                                   const absl::Status& status) override {
+    results_.push_back(ValidationResult(field_path, element_path,
+                                        fhir_path_constraint, status));
+    return absl::OkStatus();
+  }
+
+  absl::Status ReportFhirPathError(
+      absl::string_view field_path, absl::string_view element_path,
+      absl::string_view fhir_path_constraint) override {
+    results_.push_back(ValidationResult(field_path, element_path,
+                                        fhir_path_constraint, false));
+    return absl::OkStatus();
+  }
+
+  absl::Status ReportFhirPathWarning(
+      absl::string_view field_path, absl::string_view element_path,
+      absl::string_view fhir_path_constraint) override {
+    return absl::InternalError(
+        "ValidationResultsErrorReporter does not support WARNINGS.");
+  }
+
+  absl::Status ReportFhirFatal(absl::string_view field_path,
+                               absl::string_view element_path,
+                               const absl::Status& status) override {
+    return absl::InternalError(
+        "ValidationResultsErrorReporter should only use FhirPath APIs.");
+  }
+
+  absl::Status ReportFhirWarning(absl::string_view field_path,
+                                 absl::string_view element_path,
+                                 absl::string_view message) override {
+    return absl::InternalError(
+        "ValidationResultsErrorReporter should only use FhirPath APIs.");
+  }
+
+  absl::Status ReportFhirError(absl::string_view field_path,
+                               absl::string_view element_path,
+                               absl::string_view message) override {
+    return absl::InternalError(
+        "ValidationResultsErrorReporter should only use FhirPath APIs.");
+  }
+
+ private:
+  std::vector<ValidationResult> results_;
+};
 
 FhirPathValidator::~FhirPathValidator() {}
 
@@ -163,17 +225,36 @@ void FhirPathValidator::AddMessageConstraints(const Descriptor* descriptor,
   }
 }
 
-// Validates that the given message satisfies the given FHIRPath expression.
-ValidationResult ValidateConstraint(
-    const absl::string_view constraint_parent_path,
-    const absl::string_view node_parent_path,
-    const internal::WorkspaceMessage& message,
-    const CompiledExpression& expression) {
+// Validates the given message against a given FHIRPath expression.
+// Reports failures to the provided error reporter
+absl::Status ValidateConstraint(const absl::string_view constraint_parent_path,
+                                const absl::string_view node_parent_path,
+                                const internal::WorkspaceMessage& message,
+                                const CompiledExpression& expression,
+                                ErrorReporter* error_reporter) {
   absl::StatusOr<EvaluationResult> expr_result = expression.Evaluate(message);
-  return ValidationResult(std::string(constraint_parent_path),
-                          std::string(node_parent_path), expression.fhir_path(),
-                          expr_result.ok() ? expr_result.value().GetBoolean()
-                                           : expr_result.status());
+  if (!expr_result.ok()) {
+    // Error evaluating expression
+    return error_reporter->ReportFhirPathFatal(
+        constraint_parent_path, node_parent_path, expression.fhir_path(),
+        expr_result.status());
+  }
+  if (!expr_result->GetBoolean().ok()) {
+    // Expression did not evaluate to a boolean
+    return error_reporter->ReportFhirPathFatal(
+        constraint_parent_path, node_parent_path, expression.fhir_path(),
+        absl::FailedPreconditionError(
+            "Cannot Validate non-boolean FhirPath expression."));
+  }
+  if (!*expr_result->GetBoolean()) {
+    // Expression evaluated to a boolean value of "false", indicating the
+    // resource failed to meet the constraint.
+    return error_reporter->ReportFhirPathError(
+        constraint_parent_path, node_parent_path, expression.fhir_path());
+  }
+  // The expression evaluated to the boolean value `true`.
+  // Nothing needs to be reported.
+  return absl::OkStatus();
 }
 
 std::string PathTerm(const Message& message, const FieldDescriptor* field) {
@@ -183,10 +264,9 @@ std::string PathTerm(const Message& message, const FieldDescriptor* field) {
              : field->json_name();
 }
 
-void FhirPathValidator::Validate(absl::string_view constraint_path,
-                                 absl::string_view node_path,
-                                 const internal::WorkspaceMessage& message,
-                                 std::vector<ValidationResult>* results) {
+absl::Status FhirPathValidator::Validate(
+    absl::string_view constraint_path, absl::string_view node_path,
+    const internal::WorkspaceMessage& message, ErrorReporter* error_reporter) {
   // ConstraintsFor may recursively build constraints so
   // we lock the mutex here to ensure thread safety.
   mutex_.Lock();
@@ -196,8 +276,8 @@ void FhirPathValidator::Validate(absl::string_view constraint_path,
 
   // Validate the constraints attached to the message root.
   for (const CompiledExpression& expr : constraints->message_expressions) {
-    results->push_back(
-        ValidateConstraint(constraint_path, node_path, message, expr));
+    FHIR_RETURN_IF_ERROR(ValidateConstraint(constraint_path, node_path, message,
+                                            expr, error_reporter));
   }
 
   // Validate the constraints attached to the message's fields.
@@ -210,12 +290,12 @@ void FhirPathValidator::Validate(absl::string_view constraint_path,
     for (int i = 0; i < PotentiallyRepeatedFieldSize(proto, field); i++) {
       const Message& child = GetPotentiallyRepeatedMessage(proto, field, i);
 
-      results->push_back(ValidateConstraint(
+      FHIR_RETURN_IF_ERROR(ValidateConstraint(
           absl::StrCat(constraint_path, ".", path_term),
           field->is_repeated()
               ? absl::StrCat(node_path, ".", path_term, "[", i, "]")
               : absl::StrCat(node_path, ".", path_term),
-          internal::WorkspaceMessage(message, &child), expr));
+          internal::WorkspaceMessage(message, &child), expr, error_reporter));
     }
   }
 
@@ -227,13 +307,15 @@ void FhirPathValidator::Validate(absl::string_view constraint_path,
     for (int i = 0; i < PotentiallyRepeatedFieldSize(proto, field); i++) {
       const Message& child = GetPotentiallyRepeatedMessage(proto, field, i);
 
-      Validate(absl::StrCat(constraint_path, ".", path_term),
-               field->is_repeated()
-                   ? absl::StrCat(node_path, ".", path_term, "[", i, "]")
-                   : absl::StrCat(node_path, ".", path_term),
-               internal::WorkspaceMessage(message, &child), results);
+      FHIR_RETURN_IF_ERROR(Validate(
+          absl::StrCat(constraint_path, ".", path_term),
+          field->is_repeated()
+              ? absl::StrCat(node_path, ".", path_term, "[", i, "]")
+              : absl::StrCat(node_path, ".", path_term),
+          internal::WorkspaceMessage(message, &child), error_reporter));
     }
   }
+  return absl::OkStatus();
 }
 
 absl::Status ValidationResults::LegacyValidationResult() const {
@@ -251,21 +333,27 @@ absl::Status ValidationResults::LegacyValidationResult() const {
                    ": \"", (*result).Constraint(), "\""));
 }
 
-absl::StatusOr<ValidationResults> FhirPathValidator::Validate(
-    const Message& message) {
+absl::Status FhirPathValidator::Validate(const Message& message,
+                                         ErrorReporter* error_reporter) {
   // ContainedResource is an implementation detail of FHIR protos. Extract the
   // resource from the wrapper before prcoessing so that wrapper is not included
   // in the node/constraint path of the validation results.
   if (IsContainedResource(message)) {
     FHIR_ASSIGN_OR_RETURN(const Message* resource,
                           GetContainedResource(message));
-    return Validate(*resource);
+    return Validate(*resource, error_reporter);
   }
 
-  std::vector<ValidationResult> results;
-  Validate(message.GetDescriptor()->name(), message.GetDescriptor()->name(),
-           internal::WorkspaceMessage(&message), &results);
-  return ValidationResults(results);
+  return Validate(message.GetDescriptor()->name(),
+                  message.GetDescriptor()->name(),
+                  internal::WorkspaceMessage(&message), error_reporter);
+}
+
+absl::StatusOr<ValidationResults> FhirPathValidator::Validate(
+    const ::google::protobuf::Message& message) {
+  ValidationResultsErrorReporter error_reporter;
+  FHIR_RETURN_IF_ERROR(Validate(message, &error_reporter));
+  return error_reporter.GetValidationResults();
 }
 
 }  // namespace fhir_path

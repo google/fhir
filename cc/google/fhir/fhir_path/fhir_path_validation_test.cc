@@ -178,23 +178,14 @@ TYPED_TEST(FhirPathValidationTest, ConstraintViolationResultPaths) {
 
   ASSERT_THAT(
       results.Results(),
-      IsSupersetOf(
-          {AllOf(
-               Property(&ValidationResult::Constraint,
-                        StrEq("where(use = 'home').empty()")),
-               Property(
-                   &ValidationResult::ConstraintPath,
+      IsSupersetOf({AllOf(
+          Property(&ValidationResult::Constraint,
+                   StrEq("where(use = 'home').empty()")),
+          Property(&ValidationResult::ConstraintPath,
                    StrEq("Bundle.entry.resource.ofType(Organization).telecom")),
-               Property(&ValidationResult::NodePath,
-                        StrEq("Bundle.entry[0].resource.ofType(Organization)."
-                              "telecom[0]"))),
-           AllOf(Property(&ValidationResult::Constraint,
-                          StrEq("resource.exists() or request.exists() or "
-                                "response.exists()")),
-                 Property(&ValidationResult::ConstraintPath,
-                          StrEq("Bundle.entry")),
-                 Property(&ValidationResult::NodePath,
-                          StrEq("Bundle.entry[0]")))}));
+          Property(&ValidationResult::NodePath,
+                   StrEq("Bundle.entry[0].resource.ofType(Organization)."
+                         "telecom[0]")))}));
 }
 
 TYPED_TEST(FhirPathValidationTest, ConstraintSatisfied) {

@@ -22,8 +22,10 @@
 #include "google/protobuf/message.h"
 #include "absl/base/macros.h"
 #include "absl/status/statusor.h"
+#include "absl/strings/string_view.h"
 #include "absl/synchronization/mutex.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/fhir_path/fhir_path.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/status/statusor.h"
@@ -135,6 +137,13 @@ class FhirPathValidator {
 
   // Validates the fhir_path_constraint annotations on the given message.
   ABSL_MUST_USE_RESULT
+  absl::Status Validate(const ::google::protobuf::Message& message,
+                        ErrorReporter* error_reporter);
+
+  // Validates the fhir_path_constraint annotations on the given message,
+  // and returns a ValidationResults object.
+  // Deprecated - use the variant that takes an ErrorReporter.
+  ABSL_MUST_USE_RESULT
   absl::StatusOr<ValidationResults> Validate(const ::google::protobuf::Message& message);
 
  private:
@@ -162,10 +171,11 @@ class FhirPathValidator {
                              MessageConstraints* constraints);
 
   // Recursively called validation method that aggregates results into the
-  // provided vector.
-  void Validate(absl::string_view constraint_path, absl::string_view node_path,
-                const internal::WorkspaceMessage& message,
-                std::vector<ValidationResult>* results);
+  // provided ErrorReporter
+  absl::Status Validate(absl::string_view constraint_path,
+                        absl::string_view node_path,
+                        const internal::WorkspaceMessage& message,
+                        ErrorReporter* error_reporter);
 
   const PrimitiveHandler* primitive_handler_;
   absl::Mutex mutex_;
