@@ -2532,6 +2532,191 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 			},
 		},
 		{
+			name: "Nested repetitive extension",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						Extension: []*d3pb.Extension{
+							{
+								Url: &d3pb.Uri{Value: "http://example.com/Extension/QueryData"},
+								Extension: []*d3pb.Extension{
+									{
+										Url: &d3pb.Uri{Value: "https://example.com/Extension/QueryMnemonic"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_StringValue{
+												StringValue: &d3pb.String{Value: "a"},
+											},
+										},
+									},
+									{
+										Url: &d3pb.Uri{Value: "https://example.com/Extension/QueryQuestion"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_StringValue{
+												StringValue: &d3pb.String{Value: "b"},
+											},
+										},
+									},
+									{
+										Url: &d3pb.Uri{Value: "https://example.com/Extension/QueryResponse"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_StringValue{
+												StringValue: &d3pb.String{Value: "c"},
+											},
+										},
+									},
+								},
+							},
+							{
+								Url: &d3pb.Uri{Value: "http://example.com/Extension/QueryData"},
+								Extension: []*d3pb.Extension{
+									{
+										Url: &d3pb.Uri{Value: "https://example.com/Extension/QueryMnemonic"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_StringValue{
+												StringValue: &d3pb.String{Value: "d"},
+											},
+										},
+									},
+									{
+										Url: &d3pb.Uri{Value: "https://example.com/Extension/QueryQuestion"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_StringValue{
+												StringValue: &d3pb.String{Value: "e"},
+											},
+										},
+									},
+									{
+										Url: &d3pb.Uri{Value: "https://example.com/Extension/QueryResponse"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_StringValue{
+												StringValue: &d3pb.String{Value: "f"},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						Extension: []*d4pb.Extension{
+							{
+								Url: &d4pb.Uri{Value: "http://example.com/Extension/QueryData"},
+								Extension: []*d4pb.Extension{
+									{
+										Url: &d4pb.Uri{Value: "https://example.com/Extension/QueryMnemonic"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_StringValue{
+												StringValue: &d4pb.String{Value: "a"},
+											},
+										},
+									},
+									{
+										Url: &d4pb.Uri{Value: "https://example.com/Extension/QueryQuestion"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_StringValue{
+												StringValue: &d4pb.String{Value: "b"},
+											},
+										},
+									},
+									{
+										Url: &d4pb.Uri{Value: "https://example.com/Extension/QueryResponse"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_StringValue{
+												StringValue: &d4pb.String{Value: "c"},
+											},
+										},
+									},
+								},
+							},
+							{
+								Url: &d4pb.Uri{Value: "http://example.com/Extension/QueryData"},
+								Extension: []*d4pb.Extension{
+									{
+										Url: &d4pb.Uri{Value: "https://example.com/Extension/QueryMnemonic"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_StringValue{
+												StringValue: &d4pb.String{Value: "d"},
+											},
+										},
+									},
+									{
+										Url: &d4pb.Uri{Value: "https://example.com/Extension/QueryQuestion"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_StringValue{
+												StringValue: &d4pb.String{Value: "e"},
+											},
+										},
+									},
+									{
+										Url: &d4pb.Uri{Value: "https://example.com/Extension/QueryResponse"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_StringValue{
+												StringValue: &d4pb.String{Value: "f"},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			want: jsonpbhelper.JSONObject{
+				"QueryData": jsonpbhelper.JSONArray{
+					jsonpbhelper.JSONObject{
+						"QueryMnemonic": jsonpbhelper.JSONArray{
+							jsonpbhelper.JSONObject{
+								"value": jsonpbhelper.JSONObject{
+									"string": jsonpbhelper.JSONString("a"),
+								},
+							},
+						},
+						"QueryQuestion": jsonpbhelper.JSONArray{
+							jsonpbhelper.JSONObject{
+								"value": jsonpbhelper.JSONObject{
+									"string": jsonpbhelper.JSONString("b"),
+								},
+							},
+						},
+						"QueryResponse": jsonpbhelper.JSONArray{
+							jsonpbhelper.JSONObject{
+								"value": jsonpbhelper.JSONObject{
+									"string": jsonpbhelper.JSONString("c"),
+								},
+							},
+						},
+					},
+					jsonpbhelper.JSONObject{
+						"QueryMnemonic": jsonpbhelper.JSONArray{
+							jsonpbhelper.JSONObject{
+								"value": jsonpbhelper.JSONObject{
+									"string": jsonpbhelper.JSONString("d"),
+								},
+							},
+						},
+						"QueryQuestion": jsonpbhelper.JSONArray{
+							jsonpbhelper.JSONObject{
+								"value": jsonpbhelper.JSONObject{
+									"string": jsonpbhelper.JSONString("e"),
+								},
+							},
+						},
+						"QueryResponse": jsonpbhelper.JSONArray{
+							jsonpbhelper.JSONObject{
+								"value": jsonpbhelper.JSONObject{
+									"string": jsonpbhelper.JSONString("f"),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
 			name: "Extension last token collides with first-class field",
 			inputs: []mvr{
 				{
