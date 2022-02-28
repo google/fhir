@@ -18,10 +18,11 @@
 #define GOOGLE_FHIR_OPERATION_ERROR_REPORTER_H_
 
 #include "absl/status/status.h"
+#include "absl/strings/string_view.h"
 #include "google/fhir/error_reporter.h"
-#include "proto/google/fhir/proto/r4/core/resources/operation_outcome.pb.h"
 #include "proto/google/fhir/proto/r4/core/codes.pb.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/operation_outcome.pb.h"
 #include "proto/google/fhir/proto/r4/fhirproto.pb.h"
 
 namespace google::fhir {
@@ -47,6 +48,31 @@ class OutcomeErrorReporter : public ErrorReporter {
  public:
   explicit OutcomeErrorReporter(OperationOutcomeType* outcome)
       : outcome_(outcome) {}
+
+  static std::vector<typename OperationOutcomeType::Issue> GetFhirWarnings(
+      const OperationOutcomeType& operation_outcome) {
+    return GetIssuesWithSeverity(operation_outcome, IssueSeverityCode::WARNING);
+  }
+
+  static std::vector<typename OperationOutcomeType::Issue> GetFhirErrors(
+      const OperationOutcomeType& operation_outcome) {
+    return GetIssuesWithSeverity(operation_outcome, IssueSeverityCode::ERROR);
+  }
+
+  static std::vector<typename OperationOutcomeType::Issue> GetFhirFatals(
+      const OperationOutcomeType& operation_outcome) {
+    return GetIssuesWithSeverity(operation_outcome, IssueSeverityCode::FATAL);
+  }
+
+  static bool HasFhirWarnings() { return !GetFhirWarnings().empty(); }
+
+  static bool HasFhirErrors() { return !GetFhirErrors().empty(); }
+
+  static bool HasFhirFatals() { return !GetFhirFatals().empty(); }
+
+  static bool HasFhirErrorsOrFatals() {
+    return HasFhirErrors() || HasFhirFatals();
+  }
 
   absl::Status ReportFhirFatal(absl::string_view element_path,
                                const absl::Status& error_status) override {
@@ -87,6 +113,30 @@ class OutcomeErrorReporter : public ErrorReporter {
                   IssueSeverityCode::WARNING);
   }
 
+  absl::Status ReportFhirPathFatal(absl::string_view element_path,
+                                   absl::string_view node_path,
+                                   absl::string_view fhir_path_constraint,
+                                   const absl::Status& error_status) override {
+    return Report(
+        node_path,
+        absl::StrCat(fhir_path_constraint, ":", error_status.message()),
+        IssueTypeCode::STRUCTURE, IssueSeverityCode::FATAL);
+  }
+
+  absl::Status ReportFhirPathError(absl::string_view element_path,
+                                   absl::string_view node_path,
+                                   absl::string_view message) override {
+    return Report(node_path, message, IssueTypeCode::VALUE,
+                  IssueSeverityCode::ERROR);
+  }
+
+  absl::Status ReportFhirPathWarning(absl::string_view element_path,
+                                     absl::string_view node_path,
+                                     absl::string_view message) override {
+    return Report(node_path, message, IssueTypeCode::VALUE,
+                  IssueSeverityCode::WARNING);
+  }
+
  private:
   absl::Status Report(absl::string_view expression, absl::string_view message,
                       typename IssueTypeCode::Value type,
@@ -100,6 +150,18 @@ class OutcomeErrorReporter : public ErrorReporter {
     issue->add_expression()->set_value(std::string(expression));
 
     return absl::OkStatus();
+  }
+
+  static std::vector<typename OperationOutcomeType::Issue>
+  GetIssuesWithSeverity(const OperationOutcomeType& operation_outcome,
+                        const typename IssueSeverityCode::Value severity) {
+    std::vector<typename OperationOutcomeType::Issue> issues;
+    for (const auto& issue : operation_outcome.issue()) {
+      if (issue.severity().value() == severity) {
+        issues.push_back(issue);
+      }
+    }
+    return issues;
   }
 
   OperationOutcomeType* outcome_;

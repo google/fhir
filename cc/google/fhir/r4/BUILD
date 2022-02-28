@@ -431,3 +431,17 @@ cc_test(
         "@com_google_protobuf//:protobuf",
     ],
 )
+
+cc_test(
+    name = "operation_error_reporter_test",
+    srcs = ["operation_error_reporter_test.cc"],
+    deps = [
+        ":operation_error_reporter",
+        "//cc/google/fhir/status",
+        "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/google/fhir/proto/r4/core/resources:operation_outcome_cc_proto",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/strings",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
