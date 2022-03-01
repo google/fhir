@@ -65,7 +65,7 @@ class TerminologyServiceClientTest(absltest.TestCase):
     value_set.version.value = '1.0'
 
     client = terminology_service_client.TerminologyServiceClient(
-        {'https://cts.nlm.nih.gov/fhir/': 'the-api-key'})
+        {'https://cts.nlm.nih.gov/fhir/r4/': ('apikey', 'the-api-key')})
     result = client.expand_value_set(value_set)
 
     # Ensure we called requests correctly.

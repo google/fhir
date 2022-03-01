@@ -14,7 +14,7 @@
 # limitations under the License.
 """Provides a client for interacting with terminology servers."""
 
-from typing import Dict, List
+from typing import Dict, List, Tuple
 import urllib.parse
 
 import requests
@@ -25,9 +25,10 @@ from proto.google.fhir.proto.r4.core.resources import value_set_pb2
 from google.fhir.r4 import json_format
 
 TERMINOLOGY_BASE_URL_PER_DOMAIN = {
-    'hl7.org': 'https://tx.fhir.org',
-    'terminology.hl7.org': 'https://tx.fhir.org',
-    'cts.nlm.nih.gov': 'https://cts.nlm.nih.gov/fhir/',
+    'hl7.org': 'https://tx.fhir.org/r4/',
+    'terminology.hl7.org': 'https://tx.fhir.org/r4/',
+    'cts.nlm.nih.gov': 'https://cts.nlm.nih.gov/fhir/r4/',
+    'loinc.org': 'https://fhir.loinc.org',
 }
 
 
@@ -35,17 +36,20 @@ class TerminologyServiceClient:
   """Client for interacting with terminology servers.
 
   Attributes:
-    api_keys_per_terminology_server: The API key to use for each terminology
-      server. The keys of this dictionary should be the values of the
-      TERMINOLOGY_BASE_URL_PER_DOMAIN dictionary. If the terminology server does
-      not require an API key to access, the entry for that server may be omitted
-      from api_keys_per_terminology_server or given a value of None.
+    auth_per_terminology_server: The basic auth values to use when communicating
+      with each terminology server. The keys of this dictionary should be the
+      values of the TERMINOLOGY_BASE_URL_PER_DOMAIN dictionary. The values
+      should be tuples of (username, password) strings for use in basic auth. If
+      the terminology server does not require an authorization to access, the
+      entry for that server may be omitted from api_keys_per_terminology_server
+      or given a value of None.
   """
 
-  def __init__(self, api_keys_per_terminology_server: Dict[str, str]) -> None:
+  def __init__(self,
+               auth_per_terminology_server: Dict[str, Tuple[str, str]]) -> None:
     allowed_servers = set(TERMINOLOGY_BASE_URL_PER_DOMAIN.values())
     unknown_servers = [
-        key for key in api_keys_per_terminology_server.keys()
+        key for key in auth_per_terminology_server.keys()
         if key not in allowed_servers
     ]
     if unknown_servers:
@@ -54,7 +58,7 @@ class TerminologyServiceClient:
           'Must be one of %s' %
           (', '.join(unknown_servers), ', '.join(allowed_servers)))
 
-    self.api_keys_per_terminology_server = api_keys_per_terminology_server
+    self.auth_per_terminology_server = auth_per_terminology_server
 
   def expand_value_set(
       self, value_set: value_set_pb2.ValueSet) -> value_set_pb2.ValueSet:
@@ -83,20 +87,20 @@ class TerminologyServiceClient:
           'Unknown domain %s. Can not find appropriate terminology server.' %
           value_set_domain)
 
-    api_key = self.api_keys_per_terminology_server.get(base_url)
+    auth = self.auth_per_terminology_server.get(base_url)
 
     offset = 0
     codes: List[value_set_pb2.ValueSet.Expansion.Contains] = []
 
-    request_url = urllib.parse.urljoin(base_url, 'r4/ValueSet/$expand')
+    request_url = urllib.parse.urljoin(base_url, 'ValueSet/$expand')
     params = {'url': value_set.url.value}
     if value_set.version.value:
       params['valueSetVerson'] = value_set.version.value
 
     session_ = _session_with_backoff()
     session_.headers.update({'Accept': 'application/json'})
-    if api_key is not None:
-      session_.auth = ('apikey', api_key)
+    if auth is not None:
+      session_.auth = auth
 
     with session_ as session:
       while True:
