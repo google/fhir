@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package google.fhir.proto;
+
+// Defines a list of fhir path expressions to be replaced.
+message FHIRPathReplacementList {
+  repeated Replacement replacement = 1;
+}
+
+// Defines all the information needed to replace a FHIR Path expression during
+// FHIRPath to SQL encoding.
+message Replacement {
+  // The full path from the parent resource to the field containing the
+  // expression to be replaced.
+  // E.g., if Patient has a subfield meta and meta has a field id, this could be
+  // `Patient.meta.id`.
+  // If not specified, this will apply to all expressions matching
+  // `expression_to_replace`, regardless of element.
+  optional string element_path = 1;
+  // The expression to be replaced.
+  optional string expression_to_replace = 2;
+  // The expression to be replaced with.
+  // TODO: Look into adding a special token (like `$`) that
+  // will be replaced with the name of the current resource.
+  optional string replacement_expression = 3;
+
+}
