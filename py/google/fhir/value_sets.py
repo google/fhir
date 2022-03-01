@@ -89,6 +89,19 @@ class ValueSetResolver:
         element.binding.value_set.value
         for element in elements
         if element.binding.value_set.value)
+
+    if structure_definition.url.value == (
+        'http://hl7.org/fhir/StructureDefinition/ExplanationOfBenefit'):
+      # A bug in the FHIR spec has this structure definition bound to a code
+      # system by mistake. It should be bound to a value set instead. We swap
+      # the URLs until the bug is addressed.
+      # https://jira.hl7.org/browse/FHIR-36128
+      bad_code_system_url = 'http://terminology.hl7.org/CodeSystem/processpriority'
+      correct_value_set_url = 'http://hl7.org/fhir/ValueSet/process-priority'
+      value_set_urls = (
+          correct_value_set_url if url == bad_code_system_url else url
+          for url in value_set_urls)
+
     value_sets = (self.value_set_from_url(url) for url in value_set_urls)
     yield from _unique_by_url(value_sets)
 

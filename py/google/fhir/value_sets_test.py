@@ -97,6 +97,23 @@ class ValueSetsTest(absltest.TestCase):
         ],
     )
 
+  def testValueSetsFromStructureDefinition_withBuggyDefinition_succeeds(self):
+    """Ensures we handle an incorrect binding to a code system.
+
+    Addresses the issue https://jira.hl7.org/browse/FHIR-36128.
+    """
+    definition = structure_definition_pb2.StructureDefinition()
+    definition.url.value = (
+        'http://hl7.org/fhir/StructureDefinition/ExplanationOfBenefit')
+
+    element = definition.differential.element.add()
+    element.binding.value_set.value = (
+        'http://terminology.hl7.org/CodeSystem/processpriority')
+
+    result = get_resolver().value_sets_from_structure_definition(definition)
+    self.assertEqual([value_set.url.value for value_set in result],
+                     ['http://hl7.org/fhir/ValueSet/process-priority'])
+
   def testValueSetsFromStructureDefinition_withNoValueSets_returnsEmpty(self):
     definition = structure_definition_pb2.StructureDefinition()
     self.assertEqual(
