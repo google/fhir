@@ -64,14 +64,31 @@ class OutcomeErrorReporter : public ErrorReporter {
     return GetIssuesWithSeverity(operation_outcome, IssueSeverityCode::FATAL);
   }
 
-  static bool HasFhirWarnings() { return !GetFhirWarnings().empty(); }
+  static std::vector<typename OperationOutcomeType::Issue>
+  GetFhirErrorsAndFatals(const OperationOutcomeType& operation_outcome) {
+    std::vector<typename OperationOutcomeType::Issue> all =
+        GetFhirErrors(operation_outcome);
+    std::vector<typename OperationOutcomeType::Issue> fatals =
+        GetFhirFatals(operation_outcome);
+    all.insert(all.end(), fatals.begin(), fatals.end());
+    return all;
+  }
 
-  static bool HasFhirErrors() { return !GetFhirErrors().empty(); }
+  static bool HasFhirWarnings(const OperationOutcomeType& operation_outcome) {
+    return !GetFhirWarnings(operation_outcome).empty();
+  }
 
-  static bool HasFhirFatals() { return !GetFhirFatals().empty(); }
+  static bool HasFhirErrors(const OperationOutcomeType& operation_outcome) {
+    return !GetFhirErrors(operation_outcome).empty();
+  }
 
-  static bool HasFhirErrorsOrFatals() {
-    return HasFhirErrors() || HasFhirFatals();
+  static bool HasFhirFatals(const OperationOutcomeType& operation_outcome) {
+    return !GetFhirFatals(operation_outcome).empty();
+  }
+
+  static bool HasFhirErrorsOrFatals(
+      const OperationOutcomeType& operation_outcome) {
+    return HasFhirErrors(operation_outcome) || HasFhirFatals(operation_outcome);
   }
 
   absl::Status ReportFhirFatal(absl::string_view element_path,
