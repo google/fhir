@@ -157,6 +157,7 @@ py_library(
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
         "//py/google/fhir/utils:fhir_package",
+        "//py/google/fhir/utils:url_utils",
         requirement("sqlalchemy"),
     ],
 )

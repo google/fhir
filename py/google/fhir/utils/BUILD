@@ -82,6 +82,16 @@ py_library(
 )
 
 py_library(
+    name = "url_utils",
+    srcs = [
+        "__init__.py",
+        "url_utils.py",
+    ],
+    srcs_version = "PY3",
+    deps = ["//py"],
+)
+
+py_library(
     name = "fhir_package",
     srcs = [
         "__init__.py",
@@ -195,6 +205,22 @@ py_test(
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_py_pb2",
         "//proto/google/fhir/proto/r4/core:datatypes_py_pb2",
+        requirement("absl-py"),
+        requirement("six"),
+    ],
+)
+
+py_test(
+    name = "url_utils_test",
+    srcs = [
+        "url_utils_test.py",
+    ],
+    legacy_create_init = 0,
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":url_utils",
+        "//py",
         requirement("absl-py"),
         requirement("six"),
     ],

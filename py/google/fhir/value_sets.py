@@ -26,6 +26,7 @@ from proto.google.fhir.proto.r4.core.resources import structure_definition_pb2
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
 from google.fhir import terminology_service_client
 from google.fhir.utils import fhir_package
+from google.fhir.utils import url_utils
 
 
 class ValueSetResolver:
@@ -118,15 +119,7 @@ class ValueSetResolver:
     Returns:
       The value set for the given URL.
     """
-    # Check if we have a version-specific URL with a trailing |[version]
-    # For details, see:
-    # https://www.hl7.org/fhir/elementdefinition-definitions.html#ElementDefinition.binding.valueSet
-    url_parts = url.rsplit('|', 1)
-    if len(url_parts) == 1:
-      version = None
-    else:
-      url, version = url_parts
-
+    url, version = url_utils.parse_url_version(url)
     value_set = self.package_manager.get_resource(url)
     if value_set is None:
       raise ValueError(
