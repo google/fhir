@@ -181,7 +181,8 @@ def expand_value_set(
   """
   expanded_value_set = _expand_extensional_value_set(value_set)
   if expanded_value_set is None:
-    expanded_value_set = terminology_client.expand_value_set(value_set)
+    expanded_value_set = terminology_client.expand_value_set(
+        value_set.url.value)
 
   return expanded_value_set
 

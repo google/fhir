@@ -140,6 +140,8 @@ py_library(
         "//py",
         "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
         "//py/google/fhir/r4:json_format",
+        "//py/google/fhir/utils:url_utils",
+        requirement("absl-py"),
         requirement("requests"),
     ],
 )

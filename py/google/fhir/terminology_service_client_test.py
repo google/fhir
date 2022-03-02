@@ -57,30 +57,27 @@ class TerminologyServiceClientTest(absltest.TestCase):
             }
         },
     ]
-    # Reset to hide the get('url') call we made above.
+    mock_session().__enter__().get('url').status_code = 200
+    # Reset to hide the get('url') calls we made above.
     mock_session().__enter__().get.reset_mock()
 
-    value_set = value_set_pb2.ValueSet()
-    value_set.url.value = 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16'
-    value_set.version.value = '1.0'
-
     client = terminology_service_client.TerminologyServiceClient(
-        {'https://cts.nlm.nih.gov/fhir/r4/': ('apikey', 'the-api-key')})
-    result = client.expand_value_set(value_set)
+        {'https://fhir.loinc.org': ('apikey', 'the-api-key')})
+    result = client.expand_value_set('http://loinc.org/fhir/ValueSet/2.16|1.0')
 
     # Ensure we called requests correctly.
     self.assertEqual(mock_session().__enter__().get.call_args_list, [
         unittest.mock.call(
-            'https://cts.nlm.nih.gov/fhir/r4/ValueSet/$expand',
+            'https://fhir.loinc.org/ValueSet/$expand',
             params={
-                'url': 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16',
+                'url': 'http://loinc.org/fhir/ValueSet/2.16',
                 'offset': 0,
                 'valueSetVerson': '1.0'
             }),
         unittest.mock.call(
-            'https://cts.nlm.nih.gov/fhir/r4/ValueSet/$expand',
+            'https://fhir.loinc.org/ValueSet/$expand',
             params={
-                'url': 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16',
+                'url': 'http://loinc.org/fhir/ValueSet/2.16',
                 'offset': 1,
                 'valueSetVerson': '1.0'
             }),
@@ -114,14 +111,13 @@ class TerminologyServiceClientTest(absltest.TestCase):
             }]
         }
     }
-    # Reset to hide the get('url') call we made above.
+    mock_session().__enter__().get('url').status_code = 200
+    # Reset to hide the get('url') calls we made above.
     mock_session().__enter__().get.reset_mock()
 
-    value_set = value_set_pb2.ValueSet()
-    value_set.url.value = 'http://hl7.org/fhir/ValueSet/financial-taskcode'
-
     client = terminology_service_client.TerminologyServiceClient({})
-    result = client.expand_value_set(value_set)
+    result = client.expand_value_set(
+        'http://hl7.org/fhir/ValueSet/financial-taskcode')
 
     # Ensure we called requests correctly.
     mock_session().__enter__().get.assert_called_once_with(
@@ -139,22 +135,10 @@ class TerminologyServiceClientTest(absltest.TestCase):
     expected[0].code.value = 'code-1'
     self.assertCountEqual(result.expansion.contains, expected)
 
-  def testValueSetExpansionFromTerminologyService_withMissingId_raisesError(
-      self):
-    value_set = value_set_pb2.ValueSet()
-
-    with self.assertRaises(ValueError):
-      client = terminology_service_client.TerminologyServiceClient({})
-      client.expand_value_set(value_set)
-
   def testValueSetExpansionFromTerminologyService_withBadUrl_raisesError(self):
-    value_set = value_set_pb2.ValueSet()
-    value_set.id.value = 'an-id'
-    value_set.url.value = 'mystery-url'
-
     with self.assertRaises(ValueError):
       client = terminology_service_client.TerminologyServiceClient({})
-      client.expand_value_set(value_set)
+      client.expand_value_set('http://mystery-url')
 
   def testInit_withBadServerKey_raisesError(self):
     with self.assertRaises(ValueError):
