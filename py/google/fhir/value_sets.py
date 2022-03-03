@@ -14,12 +14,12 @@
 # limitations under the License.
 """Utilities for working with Value Sets."""
 
-import concurrent.futures
 import copy
 import functools
 import itertools
 from typing import Iterable, List, Optional, Set, Sequence
 
+import logging
 import sqlalchemy
 
 from proto.google.fhir.proto.r4.core.resources import structure_definition_pb2
@@ -46,10 +46,9 @@ class ValueSetResolver:
   def __init__(self, package_manager: fhir_package.FhirPackageManager) -> None:
     self.package_manager = package_manager
 
-  def value_sets_from_fhir_package(
-      self,
-      package: fhir_package.FhirPackage) -> Iterable[value_set_pb2.ValueSet]:
-    """Retrieves all value sets referenced by the given FHIR package.
+  def value_set_urls_from_fhir_package(
+      self, package: fhir_package.FhirPackage) -> Iterable[str]:
+    """Retrieves URLs for all value sets referenced by the given FHIR package.
 
     Finds all value set resources in the package as well as any value sets
     referenced by structure definitions in the package.
@@ -58,21 +57,23 @@ class ValueSetResolver:
       package: The FHIR package from which to retrieve value sets.
 
     Yields:
-      All value sets referenced by the FHIR package.
+      URLs for all value sets referenced by the FHIR package.
     """
-    value_sets_from_structure_definitions = itertools.chain.from_iterable(
-        self.value_sets_from_structure_definition(structure_definition)
+    value_set_urls_from_structure_definitions = itertools.chain.from_iterable(
+        self.value_set_urls_from_structure_definition(structure_definition)
         for structure_definition in package.structure_definitions)
-    value_sets = itertools.chain(
-        package.value_sets,
-        value_sets_from_structure_definitions,
+    value_set_urls_from_value_sets = (
+        value_set.url.value for value_set in package.value_sets)
+    all_value_set_urls = itertools.chain(
+        value_set_urls_from_value_sets,
+        value_set_urls_from_structure_definitions,
     )
-    yield from _unique_by_url(value_sets)
+    yield from _unique_urls(all_value_set_urls)
 
-  def value_sets_from_structure_definition(
+  def value_set_urls_from_structure_definition(
       self, structure_definition: structure_definition_pb2.StructureDefinition
-  ) -> Iterable[value_set_pb2.ValueSet]:
-    """Retrieves all value sets referenced by the given structure definition.
+  ) -> Iterable[str]:
+    """Retrieves URLs for value sets referenced by the structure definition.
 
     Finds the union of value sets bound to any element from either the
     differential or snapshot definition.
@@ -82,7 +83,7 @@ class ValueSetResolver:
         value sets.
 
     Yields:
-      All value sets referenced by the structure definition.
+      URLs for all value sets referenced by the structure definition.
     """
     elements = itertools.chain(structure_definition.differential.element,
                                structure_definition.snapshot.element)
@@ -103,10 +104,36 @@ class ValueSetResolver:
           correct_value_set_url if url == bad_code_system_url else url
           for url in value_set_urls)
 
-    value_sets = (self.value_set_from_url(url) for url in value_set_urls)
-    yield from _unique_by_url(value_sets)
+    yield from _unique_urls(value_set_urls)
 
-  def value_set_from_url(self, url: str) -> value_set_pb2.ValueSet:
+  def expand_value_set_url(
+      self, url: str,
+      terminology_client: terminology_service_client.TerminologyServiceClient
+  ) -> value_set_pb2.ValueSet:
+    """Retrieves the expanded value set definition for the given URL.
+
+    Attempts to expand the value set using definitions available to the
+    instance's package manager. If the expansion can not be performed with
+    available resources, makes network calls to a terminology service to perform
+    the expansion.
+
+    Args:
+      url: The URL of the value set to expand.
+      terminology_client: The client to use when using a terminology service to
+        expand the value set.
+
+    Returns:
+      A value set protocol buffer expanded to include the codes it represents.
+    """
+    value_set = self.value_set_from_url(url)
+    if value_set is not None:
+      exapanded_value_set = _expand_value_set_locally(value_set)
+      if exapanded_value_set is not None:
+        return exapanded_value_set
+
+    return terminology_client.expand_value_set(url)
+
+  def value_set_from_url(self, url: str) -> Optional[value_set_pb2.ValueSet]:
     """Retrieves the value set for the given URL.
 
     The value set is assumed to be a member of one of the packages contained in
@@ -117,74 +144,29 @@ class ValueSetResolver:
       url: The url of the value set to retrieve.
 
     Returns:
-      The value set for the given URL.
+      The value set for the given URL or None if it can not be found in the
+      package manager.
+
+    Raises:
+      ValueError: If the URL belongs to a resource that is not a value set.
     """
     url, version = url_utils.parse_url_version(url)
     value_set = self.package_manager.get_resource(url)
     if value_set is None:
-      raise ValueError(
-          'Unable to find value set for url: %s in given resolver packages.' %
+      logging.info(
+          'Unable to find value set for url: %s in given resolver packages.',
           url)
+      return None
     elif not isinstance(value_set, value_set_pb2.ValueSet):
       raise ValueError('URL: %s does not refer to a value set, found: %s' %
                        (url, value_set.DESCRIPTOR.name))
     elif version is not None and version != value_set.version.value:
-      raise ValueError(
-          'Found incompatible version for value set with url: %s. Requested: %s, found: %s'
-          % (url, version, value_set.version.value))
+      logging.warning(
+          'Found incompatible version for value set with url: %s. Requested: %s, found: %s',
+          url, version, value_set.version.value)
+      return None
     else:
       return value_set
-
-
-def expand_value_sets(
-    value_sets: Iterable[value_set_pb2.ValueSet],
-    terminology_client: terminology_service_client.TerminologyServiceClient,
-) -> Sequence[value_set_pb2.ValueSet]:
-  """Expands each given value set concurrently.
-
-  Builds a copy of each given value set with its expansion field expanded to
-  contain all the codes composing the value set. Appends new codes from
-  expansion to any codes currently in the value sets' expansion fields.
-
-  Args:
-    value_sets: The value sets to expand.
-    terminology_client: The client to use when expanding value sets which
-      require access to an external terminology server for expansion.
-
-  Returns:
-    A copy of all value sets with their codes expanded.
-
-  """
-  with concurrent.futures.ProcessPoolExecutor() as executor:
-    value_sets = executor.map(expand_value_set, value_sets,
-                              itertools.repeat(terminology_client))
-    return list(value_sets)
-
-
-def expand_value_set(
-    value_set: value_set_pb2.ValueSet,
-    terminology_client: terminology_service_client.TerminologyServiceClient,
-) -> value_set_pb2.ValueSet:
-  """Expand the value set to include all codes it represents.
-
-  Builds a copy of the given value set with its expansion field expanded to
-  contain all the codes composing the value set. Appends new codes from
-  expansion to any codes currently in the value set's expansion field.
-
-  Args:
-    value_set: The value set to expand.
-    terminology_client: The client to use when expanding value sets which
-      require access to an external terminology server for expansion.
-
-  Returns:
-    A copy of the value set with its codes expanded.
-  """
-  expanded_value_set = _expand_extensional_value_set(value_set)
-  if expanded_value_set is None:
-    expanded_value_set = terminology_client.expand_value_set(
-        value_set.url.value)
-
-  return expanded_value_set
 
 
 def valueset_codes_insert_statement_for(
@@ -244,9 +226,9 @@ def valueset_codes_insert_statement_for(
   return table.insert().from_select(new_codes.columns, new_codes)
 
 
-def _expand_extensional_value_set(
+def _expand_value_set_locally(
     value_set: value_set_pb2.ValueSet) -> Optional[value_set_pb2.ValueSet]:
-  """Retrieves expanded codes referenced by extensional value sets.
+  """Attempts to expanded value sets without contacting a terminology service.
 
   For value sets with an extensional set of codes, collect all codes referenced
   in the value set's 'compose' field. If the value set has an intensional set of
@@ -259,13 +241,16 @@ def _expand_extensional_value_set(
     value_set: The value set for which to retrieve expanded codes.
 
   Returns:
-    The codes associated with the value set.
+    The expanded value set or None if a terminology service should be consulted
+    instead.
   """
   concept_sets = itertools.chain(value_set.compose.include,
                                  value_set.compose.exclude)
   if any(concept_set.filter for concept_set in concept_sets):
     return None
 
+  logging.info('Expanding value set url: %s version: %s locally',
+               value_set.url.value, value_set.version.value)
   includes = itertools.chain.from_iterable(
       _concept_set_to_expansion(include)
       for include in value_set.compose.include)
@@ -328,21 +313,18 @@ def _code_as_select_literal(
   ))
 
 
-def _unique_by_url(
-    value_sets: Iterable[value_set_pb2.ValueSet]
-) -> Iterable[value_set_pb2.ValueSet]:
-  """Filters value_sets to remove those with duplicate URLs.
+def _unique_urls(urls: Iterable[str]) -> Iterable[str]:
+  """Filters URLs to remove duplicates.
 
   Args:
-    value_sets: The value sets to filter.
+    urls: The URLs to filter.
 
   Yields:
-    The value sets filtered to only those without duplicate URLs.
+    The URLs filtered to only those without duplicates.
   """
   seen: Set[str] = set()
 
-  for value_set in value_sets:
-    url = value_set.url.value
+  for url in urls:
     if url not in seen:
       seen.add(url)
-      yield value_set
+      yield url

@@ -41,17 +41,17 @@ class ValueSetsTest(absltest.TestCase):
                      'http://hl7.org/fhir/ValueSet/financial-taskcode')
 
   def testValueSetFromUrl_withUnknownUrl_raisesError(self):
-    with self.assertRaises(ValueError):
-      get_resolver().value_set_from_url('http://hl7.org/fhir/ValueSet/mystery')
+    self.assertIsNone(get_resolver().value_set_from_url(
+        'http://hl7.org/fhir/ValueSet/mystery'))
 
   def testValueSetFromUrl_withWrongResourceType_raisesError(self):
-    with unittest.mock.patch.object(get_resolver().package_manager,
+    resolver = get_resolver()
+    with unittest.mock.patch.object(resolver.package_manager,
                                     'get_resource') as m_get_resource:
       m_get_resource.return_value = (
           structure_definition_pb2.StructureDefinition())
       with self.assertRaises(ValueError):
-        get_resolver().value_set_from_url(
-            'http://hl7.org/fhir/ValueSet/mystery')
+        resolver.value_set_from_url('http://hl7.org/fhir/ValueSet/mystery')
 
   def testValueSetFromUrl_withVersionedUrl_findsValueSet(self):
     value_set = get_resolver().value_set_from_url(
@@ -61,11 +61,10 @@ class ValueSetsTest(absltest.TestCase):
                      'http://hl7.org/fhir/ValueSet/financial-taskcode')
 
   def testValueSetFromUrl_withBadVersionedUrl_raisesError(self):
-    with self.assertRaises(ValueError):
-      get_resolver().value_set_from_url(
-          'http://hl7.org/fhir/ValueSet/financial-taskcode|500.0.1')
+    self.assertIsNone(get_resolver().value_set_from_url(
+        'http://hl7.org/fhir/ValueSet/financial-taskcode|500.0.1'))
 
-  def testValueSetsFromStructureDefinition_withValueSets_succeeds(self):
+  def testValueSetUrlsFromStructureDefinition_withValueSets_succeeds(self):
     definition = structure_definition_pb2.StructureDefinition()
 
     # Add an a element to the differential definition.
@@ -87,9 +86,9 @@ class ValueSetsTest(absltest.TestCase):
     duplicate_element = definition.snapshot.element.add()
     duplicate_element.binding.value_set.value = 'http://hl7.org/fhir/ValueSet/financial-taskcode'
 
-    result = get_resolver().value_sets_from_structure_definition(definition)
+    result = get_resolver().value_set_urls_from_structure_definition(definition)
     self.assertCountEqual(
-        [value_set.url.value for value_set in result],
+        list(result),
         [
             element.binding.value_set.value,
             another_element.binding.value_set.value,
@@ -97,7 +96,8 @@ class ValueSetsTest(absltest.TestCase):
         ],
     )
 
-  def testValueSetsFromStructureDefinition_withBuggyDefinition_succeeds(self):
+  def testValueSetUrlsFromStructureDefinition_withBuggyDefinition_succeeds(
+      self):
     """Ensures we handle an incorrect binding to a code system.
 
     Addresses the issue https://jira.hl7.org/browse/FHIR-36128.
@@ -110,18 +110,20 @@ class ValueSetsTest(absltest.TestCase):
     element.binding.value_set.value = (
         'http://terminology.hl7.org/CodeSystem/processpriority')
 
-    result = get_resolver().value_sets_from_structure_definition(definition)
-    self.assertEqual([value_set.url.value for value_set in result],
-                     ['http://hl7.org/fhir/ValueSet/process-priority'])
+    result = get_resolver().value_set_urls_from_structure_definition(definition)
+    self.assertEqual(
+        list(result), ['http://hl7.org/fhir/ValueSet/process-priority'])
 
-  def testValueSetsFromStructureDefinition_withNoValueSets_returnsEmpty(self):
+  def testValueSetUrlsFromStructureDefinition_withNoValueSets_returnsEmpty(
+      self):
     definition = structure_definition_pb2.StructureDefinition()
     self.assertEqual(
-        list(get_resolver().value_sets_from_structure_definition(definition)),
+        list(get_resolver().value_set_urls_from_structure_definition(
+            definition)),
         [],
     )
 
-  def testValueSetsFromFhirPackage_withValueSets_succeeds(self):
+  def testValueSetUrlsFromFhirPackage_withValueSets_succeeds(self):
     definition = structure_definition_pb2.StructureDefinition()
     element = definition.differential.element.add()
     element.binding.value_set.value = 'http://hl7.org/fhir/ValueSet/financial-taskcode'
@@ -147,10 +149,10 @@ class ValueSetsTest(absltest.TestCase):
         value_sets=[value_set, another_value_set, duplicate_value_set],
     )
 
-    result = get_resolver().value_sets_from_fhir_package(package)
+    result = get_resolver().value_set_urls_from_fhir_package(package)
 
     self.assertCountEqual(
-        [vs.url.value for vs in result],
+        list(result),
         [
             element.binding.value_set.value,
             another_element.binding.value_set.value,
@@ -159,7 +161,7 @@ class ValueSetsTest(absltest.TestCase):
         ],
     )
 
-  def testValueSetsFromFhirPackage_withEmptyPackage_returnsEmpty(self):
+  def testValueSetUrlsFromFhirPackage_withEmptyPackage_returnsEmpty(self):
     package = fhir_package.FhirPackage(
         package_info=unittest.mock.MagicMock(),
         structure_definitions=[],
@@ -168,7 +170,7 @@ class ValueSetsTest(absltest.TestCase):
         value_sets=[],
     )
     self.assertEqual(
-        list(get_resolver().value_sets_from_fhir_package(package)), [])
+        list(get_resolver().value_set_urls_from_fhir_package(package)), [])
 
   def testValueSetToInsertStatement_withValueSet_buildsValidQuery(self):
     value_set = value_set_pb2.ValueSet()
@@ -209,8 +211,7 @@ class ValueSetsTest(absltest.TestCase):
     with self.assertRaises(ValueError):
       value_sets.valueset_codes_insert_statement_for(value_set, table)
 
-  def testValueSetExpansionForExtensionalSets_withExtensionalSet_expandsCodes(
-      self):
+  def testExpandValueSetLocally_withExtensionalSet_expandsCodes(self):
     value_set = value_set_pb2.ValueSet()
 
     # Add an include set with three codes.
@@ -242,7 +243,7 @@ class ValueSetsTest(absltest.TestCase):
     exclude_code = exclude.concept.add()
     exclude_code.code.value = 'code-1-3'
 
-    result = value_sets._expand_extensional_value_set(value_set)
+    result = value_sets._expand_value_set_locally(value_set)
     expected = [
         value_set_pb2.ValueSet.Expansion.Contains(
             system=datatypes_pb2.Uri(value='include-system-1'),
@@ -262,15 +263,14 @@ class ValueSetsTest(absltest.TestCase):
     ]
     self.assertCountEqual(result.expansion.contains, expected)
 
-  def testValueSetExpansionForExtensionalSets_withIntensionalSet_raisesError(
-      self):
+  def testExpandValueSetLocally_withIntensionalSet_raisesError(self):
     value_set = value_set_pb2.ValueSet()
 
     include = value_set.compose.include.add()
     filter_ = include.filter.add()
     filter_.op.value = 1
     filter_.value.value = 'medicine'
-    self.assertIsNone(value_sets._expand_extensional_value_set(value_set))
+    self.assertIsNone(value_sets._expand_value_set_locally(value_set))
 
   def testConceptSetToExpansion_wtihConceptSet_buildsExpansion(self):
     concept_set = value_set_pb2.ValueSet.Compose.ConceptSet()
@@ -305,34 +305,48 @@ class ValueSetsTest(absltest.TestCase):
 
     self.assertCountEqual(result, expected)
 
-  @unittest.mock.patch.object(
-      value_sets, '_expand_extensional_value_set', autospec=True)
-  def testExpandValueSet_withIntensionalValueSet_makesExpectedCalls(
-      self, mock_expand_extensional_value_set):
-    mock_expand_extensional_value_set.return_value = None
-
-    expanded_value_set = value_set_pb2.ValueSet()
-    codes = [
-        value_set_pb2.ValueSet.Expansion.Contains(
-            system=datatypes_pb2.Uri(value='include-system-1'),
-            version=datatypes_pb2.String(value='include-version-1'),
-            code=datatypes_pb2.Code(value='code-1-2'),
-        ),
-        value_set_pb2.ValueSet.Expansion.Contains(
-            system=datatypes_pb2.Uri(value='include-system-2'),
-            version=datatypes_pb2.String(value='include-version-2'),
-            code=datatypes_pb2.Code(value='code-2-1'),
-        ),
-    ]
-    expanded_value_set.expansion.contains.extend(codes)
+  def testExpandValueSet_withMissingResource_callsTerminologyService(self):
+    mock_package_manager = unittest.mock.MagicMock()
+    mock_package_manager.get_resource.return_value = None
+    resolver = value_sets.ValueSetResolver(mock_package_manager)
 
     mock_client = unittest.mock.MagicMock(
         spec=terminology_service_client.TerminologyServiceClient)
-    mock_client.expand_value_set.return_value = expanded_value_set
 
-    value_set = value_set_pb2.ValueSet()
-    result = value_sets.expand_value_set(value_set, mock_client)
-    self.assertCountEqual(result.expansion.contains, codes)
+    result = resolver.expand_value_set_url('http://some-url', mock_client)
+    self.assertEqual(result, mock_client.expand_value_set('http://some-url'))
+
+  @unittest.mock.patch.object(
+      value_sets, '_expand_value_set_locally', autospec=True)
+  def testExpandValueSet_withUnExpandableResource_callsTerminologyService(
+      self, mock_expand_value_set_locally):
+    mock_package_manager = unittest.mock.MagicMock()
+    mock_package_manager.get_resource.return_value = value_set_pb2.ValueSet()
+    resolver = value_sets.ValueSetResolver(mock_package_manager)
+
+    mock_expand_value_set_locally.return_value = None
+
+    mock_client = unittest.mock.MagicMock(
+        spec=terminology_service_client.TerminologyServiceClient)
+
+    result = resolver.expand_value_set_url('http://some-url', mock_client)
+    self.assertEqual(result, mock_client.expand_value_set('http://some-url'))
+
+  @unittest.mock.patch.object(
+      value_sets, '_expand_value_set_locally', autospec=True)
+  def testExpandValueSet_withExpandableResource_doesNotcallTerminologyService(
+      self, mock_expand_value_set_locally):
+    mock_package_manager = unittest.mock.MagicMock()
+    mock_package_manager.get_resource.return_value = value_set_pb2.ValueSet()
+    resolver = value_sets.ValueSetResolver(mock_package_manager)
+
+    mock_client = unittest.mock.MagicMock(
+        spec=terminology_service_client.TerminologyServiceClient)
+
+    result = resolver.expand_value_set_url('http://some-url', mock_client)
+    self.assertEqual(result,
+                     mock_expand_value_set_locally(value_set_pb2.ValueSet()))
+    mock_client.expand_value_set.assert_not_called()
 
 
 def build_valueset_codes_table() -> sqlalchemy.sql.expression.TableClause:
