@@ -113,8 +113,14 @@ class TerminologyServiceClient:
         resp.raise_for_status()
         resp_json = resp.json()
 
+        logging.info(
+            'Retrieved %d codes for value set url: %s version: %s '
+            'using terminology service: %s',
+            len(resp_json['expansion'].get('contains', ())), value_set_url,
+            value_set_version, base_url)
+
         response_value_set = json_format.json_fhir_object_to_proto(
-            resp_json, value_set_pb2.ValueSet)
+            resp_json, value_set_pb2.ValueSet, validate=False)
         codes.extend(response_value_set.expansion.contains)
 
         # See if we need to paginate through more results. The 'total' attribute
