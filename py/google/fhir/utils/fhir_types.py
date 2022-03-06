@@ -25,6 +25,7 @@ _DECIMAL_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/dec
 _EXTENSION_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/Extension'
 _PERIOD_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/Period'
 _PATIENT_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/Patient'
+_STRING_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/string'
 
 # TODO: Look into templating/consolidating
 
@@ -168,6 +169,12 @@ def is_decimal(
     message_or_descriptor: annotation_utils.MessageOrDescriptorBase) -> bool:
   """Returns True if message_or_descriptor is a FHIR Decimal type."""
   return is_type(_DECIMAL_STRUCTURE_DEFINITION_URL, message_or_descriptor)
+
+
+def is_string(
+    message_or_descriptor: annotation_utils.MessageOrDescriptorBase) -> bool:
+  """Returns True if message_or_descriptor is a FHIR String type."""
+  return is_type(_STRING_STRUCTURE_DEFINITION_URL, message_or_descriptor)
 
 
 def is_type_or_profile_of_patient(
