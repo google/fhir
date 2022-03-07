@@ -1,0 +1,11 @@
+# proto-file: proto/google/fhir/proto/fhirpath_replacement_list.proto
+# proto-message: FHIRPathReplacementList
+
+# This replacement was needed because the repeated field `when` is used as the
+# lhs of an `in` operation. But according to FHIR this results in an error.
+# Tracking: https://jira.hl7.org/browse/FHIR-35990.
+replacement {
+  element_path: ""
+  expression_to_replace: "offset.empty() or (when.exists() and ((when in ('C' | 'CM' | 'CD' | 'CV')).not()))"
+  replacement_expression: "offset.empty() or (when.exists() and when.all(($this in ('C' | 'CM' | 'CD' | 'CV')).not()))"
+}

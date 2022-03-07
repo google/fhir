@@ -8,6 +8,12 @@ licenses(["notice"])
 
 exports_files(["uscore_package_info.prototxt"])
 
+# Technical corrections for 4.0.1.
+filegroup(
+    name = "core_4_0_1_technical_corections",
+    srcs = ["hl7.fhir.core/4.0.1/technical_corrections.textproto"],
+)
+
 # Current DSTU2 package
 filegroup(
     name = "dstu2",
