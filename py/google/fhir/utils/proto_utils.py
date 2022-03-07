@@ -92,9 +92,6 @@ def field_is_set(msg: message.Message, field: Union[descriptor.FieldDescriptor,
   return field_content_length(msg, field) > 0
 
 
-# TODO: Add a copy=False default parameter to allow for
-# deep-copying of reference types to the caller (right now, shallow copies are
-# returned).
 def get_value_at_field(msg: message.Message,
                        field: Union[descriptor.FieldDescriptor, str]) -> Any:
   """Returns the value at the field desribed by field.
@@ -109,8 +106,6 @@ def get_value_at_field(msg: message.Message,
   if isinstance(field, str):
     field = _field_descriptor_for_name(msg, field)
 
-  if field_is_repeated(field):
-    return getattr(msg, field.name)[:]
   return getattr(msg, field.name)
 
 
@@ -168,8 +163,7 @@ def get_value_at_field_index(msg: message.Message,
 
   Calling this method on a singular field with an index of 0 is identicial to
   calling get_value_at_field. Providing an index other than 0 in this case
-  raises
-  an exception.
+  raises an exception.
 
   Args:
     msg: The Message whose fields to examine.

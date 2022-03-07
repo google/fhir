@@ -152,7 +152,7 @@ class ProtoUtilsTest(absltest.TestCase):
     ]
     patient = patient_pb2.Patient(name=patient_names)
     result = proto_utils.get_value_at_field(patient, "name")
-    self.assertEqual(result, patient_names)
+    self.assertEqual(list(result), patient_names)
 
   def testGetValueAtFieldIndex_withRepeatedField_returnsValueAtIndex(self):
     """Test get_value_at_field_index with a repeated field."""
