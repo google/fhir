@@ -68,6 +68,22 @@ def is_primitive_type(message_or_descriptor: MessageOrDescriptorBase) -> bool:
           annotations_pb2.StructureDefinitionKindValue.KIND_PRIMITIVE_TYPE)
 
 
+def is_choice_type(message_or_descriptor: MessageOrDescriptorBase) -> bool:
+  """Returns true if message_or_descriptor is of a choice type.
+
+  Args:
+    message_or_descriptor: A protobuf Message or DescriptorBase to examine.
+
+  Returns:
+    A Boolean indicating whether or not message_or_descriptor is a primitive.
+
+  Raises:
+    ValueError: Unable to retrieve options for type: <type>.
+  """
+  return get_value_for_annotation_extension(message_or_descriptor,
+                                            annotations_pb2.is_choice_type)
+
+
 def is_choice_type_field(field_descriptor: descriptor.FieldDescriptor) -> bool:
   """Returns true if field_descriptor describes a choice type.
 
@@ -81,10 +97,7 @@ def is_choice_type_field(field_descriptor: descriptor.FieldDescriptor) -> bool:
     ValueError: Unable to retrieve options for type: <type>.
   """
   return (field_descriptor.type == descriptor.FieldDescriptor.TYPE_MESSAGE and
-          bool(
-              get_value_for_annotation_extension(
-                  field_descriptor.message_type,
-                  annotations_pb2.is_choice_type)))
+          is_choice_type(field_descriptor.message_type))
 
 
 def is_reference(message_or_descriptor: MessageOrDescriptorBase) -> bool:

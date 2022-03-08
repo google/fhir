@@ -89,6 +89,16 @@ class AnnotationUtilsTest(absltest.TestCase):
     self.assertFalse(annotation_utils.is_primitive_type(patient))
     self.assertFalse(annotation_utils.is_primitive_type(patient.DESCRIPTOR))
 
+  def testIsChoiceType_withChoiceMessage_returnsTrue(self):
+    dosage = datatypes_pb2.Dosage()
+    as_needed = dosage.as_needed
+    self.assertTrue(annotation_utils.is_choice_type(as_needed))
+
+  def testIsChoiceType_withNonChoiceMessage_returnsFalse(self):
+    dosage = datatypes_pb2.Dosage()
+    timing = dosage.timing
+    self.assertFalse(annotation_utils.is_choice_type(timing))
+
   def testIsChoiceType_withValidChoiceType_returnsTrue(self):
     """Test is_choice_type functionality on valid input."""
     dosage = datatypes_pb2.Dosage()
