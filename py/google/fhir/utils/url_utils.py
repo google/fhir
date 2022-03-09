@@ -14,7 +14,8 @@
 # limitations under the License.
 """A collection of functions for dealing with FHIR resource URLs."""
 
-from typing import Optional, Tuple
+from typing import Collection, Iterable, Optional, Tuple
+import urllib.parse
 
 
 def parse_url_version(url: str) -> Tuple[str, Optional[str]]:
@@ -37,3 +38,19 @@ def parse_url_version(url: str) -> Tuple[str, Optional[str]]:
   else:
     url, version = url_parts
   return url, version
+
+
+def filter_urls_to_domains(
+    urls: Iterable[str], restrict_to_domains: Collection[str]) -> Iterable[str]:
+  """Filters a collection of URLs to those within the given set of domains.
+
+  Args:
+    urls: The URLs to filter.
+    restrict_to_domains: The domains to limit URLs to, e.g. {'hl7.org'}
+
+  Yields:
+    The URLs filtered to only those within the given set of domains.
+  """
+  for url in urls:
+    if urllib.parse.urlparse(url).netloc in restrict_to_domains:
+      yield url

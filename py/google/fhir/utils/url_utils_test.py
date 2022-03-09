@@ -35,6 +35,13 @@ class UrlUtilsTest(parameterized.TestCase):
                                                                 Optional[str]]):
     self.assertEqual(url_utils.parse_url_version(url), expected_parse)
 
+  def testFilterUrlsToDomains_withFilter_succeeds(self):
+    urls = ('http://hl7.org/fhir/ValueSet/financial-taskcode',
+            'http://loinc.org/fhir/ValueSet/loing-taskcode')
+    result = url_utils.filter_urls_to_domains(urls, ['loinc.org'])
+    self.assertListEqual(
+        list(result), ['http://loinc.org/fhir/ValueSet/loing-taskcode'])
+
 
 if __name__ == '__main__':
   absltest.main()
