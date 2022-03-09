@@ -127,9 +127,9 @@ class ValueSetResolver:
     """
     value_set = self.value_set_from_url(url)
     if value_set is not None:
-      exapanded_value_set = _expand_value_set_locally(value_set)
-      if exapanded_value_set is not None:
-        return exapanded_value_set
+      expanded_value_set = _expand_value_set_locally(value_set)
+      if expanded_value_set is not None:
+        return expanded_value_set
 
     return terminology_client.expand_value_set(url)
 
