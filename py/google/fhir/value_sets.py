@@ -15,7 +15,6 @@
 """Utilities for working with Value Sets."""
 
 import copy
-import functools
 import itertools
 from typing import Iterable, List, Optional, Set, Sequence
 
@@ -339,8 +338,7 @@ def valueset_codes_insert_statement_for(
       _code_as_select_literal(value_set, code)
       for code in value_set.expansion.contains)
   # UNION each SELECT to build a single select subquery for all codes.
-  codes = functools.reduce(lambda query, literal: query.union_all(literal),
-                           code_literals).alias('codes')
+  codes = sqlalchemy.union_all(*code_literals).alias('codes')
   # Filter the codes to those not already present in `table` with a LEFT JOIN.
   new_codes = sqlalchemy.select((codes,)).select_from(
       codes.outerjoin(

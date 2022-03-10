@@ -178,7 +178,7 @@ class ValueSetsTest(absltest.TestCase):
     value_set.url.value = 'vs-url'
     value_set.version.value = 'vs-version'
 
-    for code, system in (('c1', 's1'), ('c2', 's2')):
+    for code, system in (('c1', 's1'), ('c2', 's2'), ('c3', 's3')):
       coding = value_set.expansion.contains.add()
       coding.code.value = code
       coding.system.value = system
@@ -193,7 +193,9 @@ class ValueSetsTest(absltest.TestCase):
         '\nFROM ('
         "SELECT 'vs-url' AS valueseturi, 'vs-version' AS valuesetversion, 's1' AS system, 'c1' AS code "
         'UNION ALL '
-        "SELECT 'vs-url' AS valueseturi, 'vs-version' AS valuesetversion, 's2' AS system, 'c2' AS code"
+        "SELECT 'vs-url' AS valueseturi, 'vs-version' AS valuesetversion, 's2' AS system, 'c2' AS code "
+        'UNION ALL '
+        "SELECT 'vs-url' AS valueseturi, 'vs-version' AS valuesetversion, 's3' AS system, 'c3' AS code"
         ') AS codes '
         'LEFT OUTER JOIN valueset_codes '
         'ON codes.valueseturi = valueset_codes.valueseturi '
