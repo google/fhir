@@ -26,6 +26,7 @@ import "testdata/r4/profiles/split/test_encounter_with_profiled_identifier.proto
 import "testdata/r4/profiles/split/test_observation.proto";
 import "testdata/r4/profiles/split/test_observation_lvl2.proto";
 import "testdata/r4/profiles/split/test_patient.proto";
+import "testdata/r4/profiles/split/test_patient_with_warning_and_error_fhirpath.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.splittesting";
@@ -293,5 +294,7 @@ message ContainedResource {
     ProfiledDatatypesObservation profiled_datatypes_observation = 151;
     TestEncounterWithProfiledIdentifier
         test_encounter_with_profiled_identifier = 152;
+    TestPatientWithWarningAndErrorFhirpath
+        test_patient_with_warning_and_error_fhirpath = 153;
   }
 }

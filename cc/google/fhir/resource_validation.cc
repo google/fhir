@@ -134,36 +134,7 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
   FHIR_RETURN_IF_ERROR(
       ValidateFhirConstraints(resource, resource.GetDescriptor()->name(),
                               primitive_handler, error_reporter));
-
-  // TODO: Consider using the ErrorReporter in the FHIRPath library
-  // as well rather than translating ValidationResults here.
-  FHIR_ASSIGN_OR_RETURN(const fhir_path::ValidationResults results,
-      message_validator->Validate(resource));
-  for (const fhir_path::ValidationResult& result : results.Results()) {
-    if (!result.EvaluationResult().ok()) {
-      // Report failures to evaluate a FHIRPath expression against the incoming
-      // resource. Include information on the constraint and its location
-      // to support troubleshooting.
-      const absl::Status& status = result.EvaluationResult().status();
-      // Use ConstraintPath since NodePath may not be populated from
-      // evaluation errors.
-      FHIR_RETURN_IF_ERROR(error_reporter->ReportFhirPathFatal(
-          result.ConstraintPath(), result.NodePath(), result.Constraint(),
-          status));
-    } else {
-      // Report successful evaluations of FHIRPath that indicated a constraint
-      // violation in the data.
-      // TODO: When FHIRPath warnings are supported on resources,
-      // they should be reported here as warnings as well.
-      if (!result.EvaluationResult().value()) {
-        // Report FHIRPath constraint that was violated.
-        FHIR_RETURN_IF_ERROR(error_reporter->ReportFhirPathError(
-            result.ConstraintPath(), result.NodePath(), result.Constraint()));
-      }
-    }
-  }
-
-  return absl::OkStatus();
+  return message_validator->Validate(resource, error_reporter);
 }
 
 ::absl::Status ValidateWithoutFhirPath(

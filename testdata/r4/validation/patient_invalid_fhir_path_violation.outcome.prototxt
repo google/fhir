@@ -1,0 +1,61 @@
+issue {
+  severity {
+    value: WARNING
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "name.exists()"
+  }
+  expression {
+    value: "TestPatientWithWarningAndErrorFhirpath"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "city.exists() implies state.exists()"
+  }
+  expression {
+    value: "TestPatientWithWarningAndErrorFhirpath.address[0]"
+  }
+}
+issue {
+  severity {
+    value: WARNING
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "postalCode.all(length() >= 5)"
+  }
+  expression {
+    value: "TestPatientWithWarningAndErrorFhirpath.address[0]"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "name.exists() or telecom.exists() or address.exists() or organization.exists()"
+  }
+  expression {
+    value: "TestPatientWithWarningAndErrorFhirpath.contact[0]"
+  }
+}
+subject {
+  patient_id {
+    value: "fppatient"
+  }
+}

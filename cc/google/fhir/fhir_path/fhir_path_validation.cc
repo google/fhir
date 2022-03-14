@@ -29,7 +29,9 @@
 #include "absl/strings/string_view.h"
 #include "absl/types/optional.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/fhir_path/fhir_path.h"
+#include "google/fhir/primitive_handler.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
@@ -91,29 +93,29 @@ class ValidationResultsErrorReporter : public ErrorReporter {
   absl::Status ReportFhirPathWarning(
       absl::string_view field_path, absl::string_view element_path,
       absl::string_view fhir_path_constraint) override {
-    return absl::InternalError(
-        "ValidationResultsErrorReporter does not support WARNINGS.");
+    // Legacy FHIRPath API does not support warnings.
+    return absl::OkStatus();
   }
 
   absl::Status ReportFhirFatal(absl::string_view field_path,
                                absl::string_view element_path,
                                const absl::Status& status) override {
     return absl::InternalError(
-        "ValidationResultsErrorReporter should only use FhirPath APIs.");
+        "ValidationResultsErrorReporter should only use FHIRPath APIs.");
   }
 
   absl::Status ReportFhirWarning(absl::string_view field_path,
                                  absl::string_view element_path,
                                  absl::string_view message) override {
     return absl::InternalError(
-        "ValidationResultsErrorReporter should only use FhirPath APIs.");
+        "ValidationResultsErrorReporter should only use FHIRPath APIs.");
   }
 
   absl::Status ReportFhirError(absl::string_view field_path,
                                absl::string_view element_path,
                                absl::string_view message) override {
     return absl::InternalError(
-        "ValidationResultsErrorReporter should only use FhirPath APIs.");
+        "ValidationResultsErrorReporter should only use FHIRPath APIs.");
   }
 
  private:
@@ -121,6 +123,77 @@ class ValidationResultsErrorReporter : public ErrorReporter {
 };
 
 FhirPathValidator::~FhirPathValidator() {}
+
+namespace {
+
+enum class Severity { kFailure, kWarning };
+
+void AddMessageConstraints(const Descriptor* descriptor,
+                           const Severity severity,
+                           const PrimitiveHandler* primitive_handler,
+                           std::vector<CompiledExpression>* constraints) {
+  auto extension_type = severity == Severity::kWarning
+                            ? proto::fhir_path_message_warning_constraint
+                            : proto::fhir_path_message_constraint;
+  int ext_size = descriptor->options().ExtensionSize(extension_type);
+
+  for (int i = 0; i < ext_size; ++i) {
+    const std::string& fhir_path =
+        descriptor->options().GetExtension(extension_type, i);
+    auto constraint =
+        CompiledExpression::Compile(descriptor, primitive_handler, fhir_path);
+    if (constraint.ok()) {
+      CompiledExpression expression = constraint.value();
+      constraints->push_back(expression);
+    } else {
+      LOG(WARNING) << "Ignoring message constraint on " << descriptor->name()
+                   << " (" << fhir_path << "). "
+                   << constraint.status().message();
+    }
+
+    // TODO: Unsupported FHIRPath expressions are simply not
+    // validated for now; this should produce an error once we support
+    // all of FHIRPath.
+  }
+}
+
+void AddFieldConstraints(
+    const FieldDescriptor* field, const Severity severity,
+    const PrimitiveHandler* primitive_handler,
+    std::vector<std::pair<const ::google::protobuf::FieldDescriptor*,
+                          const CompiledExpression>>* constraints) {
+  const Descriptor* field_type = field->message_type();
+  const auto extension_type = severity == Severity::kWarning
+                                  ? proto::fhir_path_warning_constraint
+                                  : proto::fhir_path_constraint;
+
+  // Constraints only apply to non-primitives.
+  if (field_type != nullptr) {
+    int ext_size = field->options().ExtensionSize(extension_type);
+
+    for (int j = 0; j < ext_size; ++j) {
+      const std::string& fhir_path =
+          field->options().GetExtension(extension_type, j);
+      auto constraint =
+          CompiledExpression::Compile(field_type, primitive_handler, fhir_path);
+
+      if (constraint.ok()) {
+        constraints->push_back(std::make_pair(field, *constraint));
+      } else {
+        LOG(WARNING) << "Ignoring field constraint on "
+                     << field->message_type()->name() << "."
+                     << field_type->name() << " (" << fhir_path << ")."
+                     << constraint.status().message();
+      }
+
+      // TODO: Unsupported FHIRPath expressions are simply not
+      // validated for now; this should produce an error once we support
+      // all of FHIRPath.
+    }
+  }
+}
+
+}  // namespace
 
 // Build the constraints for the given message type and
 // add it to the constraints cache.
@@ -134,39 +207,18 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
   }
 
   auto constraints = absl::make_unique<MessageConstraints>();
-  AddMessageConstraints(descriptor, constraints.get());
+  AddMessageConstraints(descriptor, Severity::kFailure, primitive_handler_,
+                        &constraints->message_error_expressions);
+  AddMessageConstraints(descriptor, Severity::kWarning, primitive_handler_,
+                        &constraints->message_warning_expressions);
 
   for (int i = 0; i < descriptor->field_count(); i++) {
-    const FieldDescriptor* field = descriptor->field(i);
-
-    const Descriptor* field_type = field->message_type();
-
-    // Constraints only apply to non-primitives.
-    if (field_type != nullptr) {
-      int ext_size =
-          field->options().ExtensionSize(proto::fhir_path_constraint);
-
-      for (int j = 0; j < ext_size; ++j) {
-        const std::string& fhir_path =
-            field->options().GetExtension(proto::fhir_path_constraint, j);
-
-        auto constraint = CompiledExpression::Compile(
-            field_type, primitive_handler_, fhir_path);
-
-        if (constraint.ok()) {
-          constraints->field_expressions.push_back(
-              std::make_pair(field, constraint.value()));
-        } else {
-          LOG(WARNING) << "Ignoring field constraint on " << descriptor->name()
-                       << "." << field_type->name() << " (" << fhir_path
-                       << "). " << constraint.status().message();
-        }
-
-        // TODO: Unsupported FHIRPath expressions are simply not
-        // validated for now; this should produce an error once we support
-        // all of FHIRPath.
-      }
-    }
+    AddFieldConstraints(descriptor->field(i), Severity::kFailure,
+                        primitive_handler_,
+                        &constraints->field_error_expressions);
+    AddFieldConstraints(descriptor->field(i), Severity::kWarning,
+                        primitive_handler_,
+                        &constraints->field_warning_expressions);
   }
 
   // Add the successful constraints to the cache while keeping a local
@@ -187,8 +239,10 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
 
       // Nested fields that directly or transitively have constraints
       // are retained and used when applying constraints.
-      if (!child_constraints->message_expressions.empty() ||
-          !child_constraints->field_expressions.empty() ||
+      if (!child_constraints->message_error_expressions.empty() ||
+          !child_constraints->message_warning_expressions.empty() ||
+          !child_constraints->field_error_expressions.empty() ||
+          !child_constraints->field_warning_expressions.empty() ||
           !child_constraints->nested_with_constraints.empty()) {
         constraints_local->nested_with_constraints.push_back(field);
       }
@@ -198,40 +252,25 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
   return constraints_local;
 }
 
-// Build the message constraints for the given message type and
-// add it to the constraints cache.
-void FhirPathValidator::AddMessageConstraints(const Descriptor* descriptor,
-                                              MessageConstraints* constraints) {
-  int ext_size =
-      descriptor->options().ExtensionSize(proto::fhir_path_message_constraint);
-
-  for (int i = 0; i < ext_size; ++i) {
-    const std::string& fhir_path = descriptor->options().GetExtension(
-        proto::fhir_path_message_constraint, i);
-    auto constraint =
-        CompiledExpression::Compile(descriptor, primitive_handler_, fhir_path);
-    if (constraint.ok()) {
-      CompiledExpression expression = constraint.value();
-      constraints->message_expressions.push_back(expression);
-    } else {
-      LOG(WARNING) << "Ignoring message constraint on " << descriptor->name()
-                   << " (" << fhir_path << "). "
-                   << constraint.status().message();
-    }
-
-    // TODO: Unsupported FHIRPath expressions are simply not
-    // validated for now; this should produce an error once we support
-    // all of FHIRPath.
-  }
-}
-
 // Validates the given message against a given FHIRPath expression.
 // Reports failures to the provided error reporter
-absl::Status ValidateConstraint(const absl::string_view constraint_parent_path,
-                                const absl::string_view node_parent_path,
+absl::Status ValidateConstraint(absl::string_view constraint_parent_path,
+                                absl::string_view node_parent_path,
                                 const internal::WorkspaceMessage& message,
                                 const CompiledExpression& expression,
+                                const Severity severity,
                                 ErrorReporter* error_reporter) {
+  static const auto* invalid_expressions = new absl::flat_hash_set<std::string>(
+      {"where(category.memberOf('http://hl7.org/fhir/us/core/ValueSet/"
+       "us-core-condition-category')).exists()",
+       "where(category in 'http://hl7.org/fhir/us/core/ValueSet/"
+       "us-core-condition-category').exists()",
+       "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')"});
+  if (invalid_expressions->contains(expression.fhir_path())) {
+    // TODO:  Eliminate this once technical corrections are handled
+    // upstream.
+    return absl::OkStatus();
+  }
   absl::StatusOr<EvaluationResult> expr_result = expression.Evaluate(message);
   if (!expr_result.ok()) {
     // Error evaluating expression
@@ -244,13 +283,19 @@ absl::Status ValidateConstraint(const absl::string_view constraint_parent_path,
     return error_reporter->ReportFhirPathFatal(
         constraint_parent_path, node_parent_path, expression.fhir_path(),
         absl::FailedPreconditionError(
-            "Cannot Validate non-boolean FhirPath expression."));
+            "Cannot validate non-boolean FHIRPath expression"));
   }
   if (!*expr_result->GetBoolean()) {
     // Expression evaluated to a boolean value of "false", indicating the
     // resource failed to meet the constraint.
-    return error_reporter->ReportFhirPathError(
-        constraint_parent_path, node_parent_path, expression.fhir_path());
+    switch (severity) {
+      case Severity::kFailure:
+        return error_reporter->ReportFhirPathError(
+            constraint_parent_path, node_parent_path, expression.fhir_path());
+      case Severity::kWarning:
+        return error_reporter->ReportFhirPathWarning(
+            constraint_parent_path, node_parent_path, expression.fhir_path());
+    }
   }
   // The expression evaluated to the boolean value `true`.
   // Nothing needs to be reported.
@@ -264,6 +309,31 @@ std::string PathTerm(const Message& message, const FieldDescriptor* field) {
              : field->json_name();
 }
 
+namespace {
+absl::Status HandleFieldConstraint(
+    const internal::WorkspaceMessage& workspace_message,
+    absl::string_view constraint_path, absl::string_view node_path,
+    absl::string_view path_term, const FieldDescriptor* field,
+    const CompiledExpression& expr, const Severity severity,
+    ErrorReporter* error_reporter) {
+  for (int i = 0;
+       i < PotentiallyRepeatedFieldSize(*workspace_message.Message(), field);
+       i++) {
+    const Message& child =
+        GetPotentiallyRepeatedMessage(*workspace_message.Message(), field, i);
+
+    FHIR_RETURN_IF_ERROR(ValidateConstraint(
+        absl::StrCat(constraint_path, ".", path_term),
+        field->is_repeated()
+            ? absl::StrCat(node_path, ".", path_term, "[", i, "]")
+            : absl::StrCat(node_path, ".", path_term),
+        internal::WorkspaceMessage(workspace_message, &child), expr, severity,
+        error_reporter));
+  }
+  return absl::OkStatus();
+}
+}  // namespace
+
 absl::Status FhirPathValidator::Validate(
     absl::string_view constraint_path, absl::string_view node_path,
     const internal::WorkspaceMessage& message, ErrorReporter* error_reporter) {
@@ -275,28 +345,35 @@ absl::Status FhirPathValidator::Validate(
   mutex_.Unlock();
 
   // Validate the constraints attached to the message root.
-  for (const CompiledExpression& expr : constraints->message_expressions) {
+  for (const CompiledExpression& expr :
+       constraints->message_error_expressions) {
     FHIR_RETURN_IF_ERROR(ValidateConstraint(constraint_path, node_path, message,
-                                            expr, error_reporter));
+                                            expr, Severity::kFailure,
+                                            error_reporter));
+  }
+  for (const CompiledExpression& expr :
+       constraints->message_warning_expressions) {
+    FHIR_RETURN_IF_ERROR(ValidateConstraint(constraint_path, node_path, message,
+                                            expr, Severity::kWarning,
+                                            error_reporter));
   }
 
   // Validate the constraints attached to the message's fields.
-  for (const auto& expression : constraints->field_expressions) {
+  for (const auto& expression : constraints->field_error_expressions) {
     const FieldDescriptor* field = expression.first;
     const CompiledExpression& expr = expression.second;
     const std::string path_term = PathTerm(*message.Message(), field);
-    const Message& proto = *message.Message();
-
-    for (int i = 0; i < PotentiallyRepeatedFieldSize(proto, field); i++) {
-      const Message& child = GetPotentiallyRepeatedMessage(proto, field, i);
-
-      FHIR_RETURN_IF_ERROR(ValidateConstraint(
-          absl::StrCat(constraint_path, ".", path_term),
-          field->is_repeated()
-              ? absl::StrCat(node_path, ".", path_term, "[", i, "]")
-              : absl::StrCat(node_path, ".", path_term),
-          internal::WorkspaceMessage(message, &child), expr, error_reporter));
-    }
+    FHIR_RETURN_IF_ERROR(
+        HandleFieldConstraint(message, constraint_path, node_path, path_term,
+                              field, expr, Severity::kFailure, error_reporter));
+  }
+  for (const auto& expression : constraints->field_warning_expressions) {
+    const FieldDescriptor* field = expression.first;
+    const CompiledExpression& expr = expression.second;
+    const std::string path_term = PathTerm(*message.Message(), field);
+    FHIR_RETURN_IF_ERROR(
+        HandleFieldConstraint(message, constraint_path, node_path, path_term,
+                              field, expr, Severity::kWarning, error_reporter));
   }
 
   // Recursively validate constraints for nested messages that have them.

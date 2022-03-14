@@ -151,12 +151,16 @@ class FhirPathValidator {
   struct MessageConstraints {
     // FHIRPath constraints at the "root" FHIR element, which is just the
     // protobuf message.
-    std::vector<CompiledExpression> message_expressions;
+    std::vector<CompiledExpression> message_error_expressions;
+    std::vector<CompiledExpression> message_warning_expressions;
 
     // FHIRPath constraints on fields
     std::vector<
         std::pair<const ::google::protobuf::FieldDescriptor*, const CompiledExpression>>
-        field_expressions;
+        field_error_expressions;
+    std::vector<
+        std::pair<const ::google::protobuf::FieldDescriptor*, const CompiledExpression>>
+        field_warning_expressions;
 
     // Nested messages that have constraints, so the evaluation logic
     // knows to check them.
@@ -165,10 +169,6 @@ class FhirPathValidator {
 
   // Loads constraints for the given descriptor.
   MessageConstraints* ConstraintsFor(const ::google::protobuf::Descriptor* descriptor);
-
-  // Adds message-level constraints
-  void AddMessageConstraints(const ::google::protobuf::Descriptor* descriptor,
-                             MessageConstraints* constraints);
 
   // Recursively called validation method that aggregates results into the
   // provided ErrorReporter

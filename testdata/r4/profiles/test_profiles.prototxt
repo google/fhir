@@ -271,3 +271,33 @@ profile {
     }
   }
 }
+
+
+profile {
+  element_data {
+    name: "TestPatientWithWarningAndErrorFhirpath"
+  }
+  base_url: "http://hl7.org/fhir/StructureDefinition/Patient"
+
+  restriction {
+    field_id: "Patient.address"
+    fhir_path_constraint {
+      description: "If the city has a value the state must too."
+      expression: "city.exists() implies state.exists()"
+    }
+    fhir_path_constraint {
+      severity: WARNING
+      description: "Postal codes should have at least five characters."
+      expression: "postalCode.all(length() >= 5)"
+    }
+  }
+
+  restriction {
+    field_id: "Patient"
+    fhir_path_constraint {
+      severity: WARNING
+      description: "Patient should have a name"
+      expression: "name.exists()"
+    }
+  }
+}

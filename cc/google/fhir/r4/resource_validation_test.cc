@@ -16,6 +16,8 @@
 
 #include "google/fhir/r4/resource_validation.h"
 
+#include <string>
+
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -29,6 +31,7 @@
 #include "proto/google/fhir/proto/r4/core/resources/encounter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
 #include "proto/google/fhir/proto/r4/fhirproto.pb.h"
+#include "testdata/r4/profiles/test.pb.h"
 
 namespace google {
 namespace fhir {
@@ -37,8 +40,8 @@ namespace r4 {
 namespace {
 
 using namespace ::google::fhir::r4::core;  // NOLINT
-using ::google::fhir::testutil::EqualsProto;
 using ::google::fhir::r4::fhirproto::ValidationOutcome;
+using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
 
 template <typename T>
 void ValidTest(const absl::string_view name,
@@ -57,11 +60,11 @@ void ValidTest(const absl::string_view name,
         GetReferenceProtoToResource<::google::fhir::r4::core::Reference>(
             resource));
   }
-  EXPECT_THAT(*outcome, EqualsProto(expected));
+  EXPECT_THAT(*outcome, EqualsProtoIgnoringReordering(expected));
 }
 
 template <typename T>
-void InvalidTest(const absl::string_view name) {
+void InvalidTest(absl::string_view name) {
   T resource =
       ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt"));
   std::string error_msg =
@@ -75,7 +78,7 @@ void InvalidTest(const absl::string_view name) {
 
   ValidationOutcome expected_outcome = ReadProto<ValidationOutcome>(
       absl::StrCat("testdata/r4/validation/", name, ".outcome.prototxt"));
-  EXPECT_THAT(*outcome, EqualsProto(expected_outcome));
+  EXPECT_THAT(*outcome, EqualsProtoIgnoringReordering(expected_outcome));
 }
 
 TEST(ResourceValidationTest, MissingRequiredField) {
@@ -126,6 +129,12 @@ TEST(EncounterValidationTest, ValidWithNumericTimezone) {
 
 TEST(EncounterValidationTest, ValidWithoutResourceId) {
   ValidTest<Encounter>("encounter_valid_without_id", false);
+}
+
+TEST(EncounterValidationTest, FhirPathErrorsAndWarningsAreRecordedAsOutcomes) {
+  InvalidTest<
+      google::fhir::r4::testing::TestPatientWithWarningAndErrorFhirpath>(
+      "patient_invalid_fhir_path_violation");
 }
 
 }  // namespace
