@@ -14,7 +14,7 @@
 # limitations under the License.
 """Provides a client for interacting with terminology servers."""
 
-from typing import Dict, List, Tuple
+from typing import Callable, Dict, List, Tuple
 import urllib.parse
 
 import logging
@@ -61,7 +61,7 @@ class TerminologyServiceClient:
 
     self.auth_per_terminology_server = auth_per_terminology_server
 
-  def expand_value_set(self, value_set_url: str) -> value_set_pb2.ValueSet:
+  def expand_value_set_url(self, value_set_url: str) -> value_set_pb2.ValueSet:
     """Expands the value set using a terminology server.
 
     Requests an expansion of the value set from the appropriate terminology
@@ -86,11 +86,6 @@ class TerminologyServiceClient:
           'Unknown domain %s. Can not find appropriate terminology server.' %
           value_set_domain)
 
-    auth = self.auth_per_terminology_server.get(base_url)
-
-    offset = 0
-    codes: List[value_set_pb2.ValueSet.Expansion.Contains] = []
-
     request_url = urllib.parse.urljoin(base_url, 'ValueSet/$expand')
     params = {'url': value_set_url}
     if value_set_version is not None:
@@ -98,6 +93,8 @@ class TerminologyServiceClient:
 
     session_ = _session_with_backoff()
     session_.headers.update({'Accept': 'application/json'})
+
+    auth = self.auth_per_terminology_server.get(base_url)
     if auth is not None:
       session_.auth = auth
 
@@ -105,36 +102,123 @@ class TerminologyServiceClient:
         'Expanding value set url: %s version: %s using terminology service: %s',
         value_set_url, value_set_version, base_url)
     with session_ as session:
-      while True:
-        resp = session.get(request_url, params={'offset': offset, **params})
 
-        if resp.status_code >= 400:
-          logging.error('Error from terminology service: %s', resp.text)
-        resp.raise_for_status()
-        resp_json = resp.json()
+      def request_func(offset: int) -> requests.Response:
+        return session.get(request_url, params={'offset': offset, **params})
 
-        logging.info(
-            'Retrieved %d codes for value set url: %s version: %s '
-            'using terminology service: %s',
-            len(resp_json['expansion'].get('contains', ())), value_set_url,
-            value_set_version, base_url)
+      expanded_value_set = _paginate_expand_value_set_request(request_func)
 
-        response_value_set = json_format.json_fhir_object_to_proto(
-            resp_json, value_set_pb2.ValueSet, validate=False)
-        codes.extend(response_value_set.expansion.contains)
+    logging.info(
+        'Retrieved %d codes for value set url: %s version: %s '
+        'using terminology service: %s',
+        len(expanded_value_set.expansion.contains), value_set_url,
+        value_set_version, base_url)
+    return expanded_value_set
 
-        # See if we need to paginate through more results. The 'total' attribute
-        # may be absent if pagination is not being used. If it is present, see
-        # if we need to retrieve more results.
-        offset += len(resp_json['expansion'].get('contains', ()))
-        if 'total' not in resp_json['expansion'] or (
-            offset >= resp_json['expansion']['total']):
+  def expand_value_set_definition(
+      self, value_set: value_set_pb2.ValueSet) -> value_set_pb2.ValueSet:
+    """Expands the value set definition using a terminology server.
 
-          # Protocol buffers don't support assignment to slices
-          # (i.e. contains[:] = codes) so we delete and extend.
-          del response_value_set.expansion.contains[:]
-          response_value_set.expansion.contains.extend(codes)
-          return response_value_set
+    Requests an expansion of the given value set from the appropriate
+    terminology server. Attempts to expand arbitrary value sets by passing their
+    entire definition to the terminology service for expansion.
+
+    If possible, requests expansion from the domain associated with the value
+    set's URL. If the value set URL is not associated with a known terminology
+    service, uses the tx.fhir.org service as it is able to expand value sets
+    defined outside its own specifications.
+
+    Retrieves the current definition of the value set from the terminology
+    service as well as its expansion.
+
+    Args:
+      value_set: The value set to expand.
+
+    Returns:
+      The current definition of the value set from the server with its expanded
+      codes present.
+    """
+    value_set_domain = urllib.parse.urlparse(value_set.url.value).netloc
+    base_url = TERMINOLOGY_BASE_URL_PER_DOMAIN.get(value_set_domain,
+                                                   'https://tx.fhir.org/r4/')
+
+    request_url = urllib.parse.urljoin(base_url, 'ValueSet/$expand')
+    request_json = json_format.print_fhir_to_json_string(value_set).encode(
+        'utf-8')
+
+    session_ = _session_with_backoff()
+    session_.headers.update({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    })
+
+    auth = self.auth_per_terminology_server.get(base_url)
+    if auth is not None:
+      session_.auth = auth
+
+    logging.info(
+        'Expanding value set url: %s version: %s using terminology service: %s',
+        value_set.url.value, value_set.version.value, base_url)
+    with session_ as session:
+
+      def request_func(offset: int) -> requests.Response:
+        return session.post(
+            request_url, data=request_json, params={'offset': offset})
+
+      expanded_value_set = _paginate_expand_value_set_request(request_func)
+
+    logging.info(
+        'Retrieved %d codes for value set url: %s version: %s '
+        'using terminology service: %s',
+        len(expanded_value_set.expansion.contains), value_set.url.value,
+        value_set.version.value, base_url)
+    return expanded_value_set
+
+
+def _paginate_expand_value_set_request(
+    request_func: Callable[[int], requests.Response]) -> value_set_pb2.ValueSet:
+  """Performs a request to the terminology service, including pagination.
+
+  Given a function which performs a request against a terminology service, use
+  the function to make requests until the full response has been paginated
+  through.
+
+  Args:
+    request_func: The function to call to perform a request to the terminology
+      service. The function must accept an integer representing the pagination
+      offset value to include in the request and return a requests Response
+      object.
+
+  Returns:
+    The current definition of the value set from the server with its expanded
+    codes present.
+  """
+  offset = 0
+  codes: List[value_set_pb2.ValueSet.Expansion.Contains] = []
+  while True:
+    resp = request_func(offset)
+
+    if resp.status_code >= 400:
+      logging.error('Error from terminology service: %s', resp.text)
+    resp.raise_for_status()
+
+    resp_json = resp.json()
+    response_value_set = json_format.json_fhir_object_to_proto(
+        resp_json, value_set_pb2.ValueSet, validate=False)
+    codes.extend(response_value_set.expansion.contains)
+
+    # See if we need to paginate through more results. The 'total' attribute
+    # may be absent if pagination is not being used. If it is present, see
+    # if we need to retrieve more results.
+    offset += len(resp_json['expansion'].get('contains', ()))
+    if 'total' not in resp_json['expansion'] or (
+        offset >= resp_json['expansion']['total']):
+
+      # Protocol buffers don't support assignment to slices
+      # (i.e. contains[:] = codes) so we delete and extend.
+      del response_value_set.expansion.contains[:]
+      response_value_set.expansion.contains.extend(codes)
+      return response_value_set
 
 
 def _session_with_backoff():

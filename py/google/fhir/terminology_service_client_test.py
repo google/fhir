@@ -14,6 +14,7 @@
 # limitations under the License.
 """Test terminology_service_client functionality."""
 
+import json
 import unittest.mock
 
 from absl.testing import absltest
@@ -63,7 +64,8 @@ class TerminologyServiceClientTest(absltest.TestCase):
 
     client = terminology_service_client.TerminologyServiceClient(
         {'https://fhir.loinc.org': ('apikey', 'the-api-key')})
-    result = client.expand_value_set('http://loinc.org/fhir/ValueSet/2.16|1.0')
+    result = client.expand_value_set_url(
+        'http://loinc.org/fhir/ValueSet/2.16|1.0')
 
     # Ensure we called requests correctly.
     self.assertEqual(mock_session().__enter__().get.call_args_list, [
@@ -116,7 +118,7 @@ class TerminologyServiceClientTest(absltest.TestCase):
     mock_session().__enter__().get.reset_mock()
 
     client = terminology_service_client.TerminologyServiceClient({})
-    result = client.expand_value_set(
+    result = client.expand_value_set_url(
         'http://hl7.org/fhir/ValueSet/financial-taskcode')
 
     # Ensure we called requests correctly.
@@ -135,10 +137,59 @@ class TerminologyServiceClientTest(absltest.TestCase):
     expected[0].code.value = 'code-1'
     self.assertCountEqual(result.expansion.contains, expected)
 
+  @unittest.mock.patch.object(
+      terminology_service_client.requests, 'Session', autospec=True)
+  def testExpandValueSetDefinition_withAuth_retrievesCodes(self, mock_session):
+    mock_session().headers = {}
+    mock_session().__enter__().post('url').json.return_value = {
+        'resourceType': 'ValueSet',
+        'id': 'vs-id',
+        'url': 'vs-url',
+        'status': 'draft',
+        'expansion': {
+            'timestamp': '2022-02-14T15:51:40-05:00',
+            'contains': [{
+                'code': 'code-1'
+            }]
+        }
+    }
+    mock_session().__enter__().post('url').status_code = 200
+    # Reset to hide the post('url') calls we made above.
+    mock_session().__enter__().post.reset_mock()
+
+    value_set = value_set_pb2.ValueSet()
+    value_set.id.value = 'vs-id'
+    value_set.url.value = 'vs-url'
+
+    client = terminology_service_client.TerminologyServiceClient(
+        {'https://tx.fhir.org/r4/': ('un', 'pw')})
+    result = client.expand_value_set_definition(value_set)
+
+    # Ensure we called requests correctly.
+    args, kwargs = mock_session().__enter__().post.call_args_list[0]
+    self.assertEqual(args, ('https://tx.fhir.org/r4/ValueSet/$expand',))
+    self.assertEqual(kwargs['params'], {'offset': 0})
+    self.assertEqual(
+        json.loads(kwargs['data']), {
+            'resourceType': 'ValueSet',
+            'id': 'vs-id',
+            'url': 'vs-url'
+        })
+    self.assertEqual(mock_session().auth, ('un', 'pw'))
+    self.assertEqual(mock_session().headers['Accept'], 'application/json')
+    self.assertEqual(mock_session().headers['Content-Type'], 'application/json')
+
+    # Ensure we got the expected protos back.
+    expected = [
+        value_set_pb2.ValueSet.Expansion.Contains(),
+    ]
+    expected[0].code.value = 'code-1'
+    self.assertCountEqual(result.expansion.contains, expected)
+
   def testValueSetExpansionFromTerminologyService_withBadUrl_raisesError(self):
     with self.assertRaises(ValueError):
       client = terminology_service_client.TerminologyServiceClient({})
-      client.expand_value_set('http://mystery-url')
+      client.expand_value_set_url('http://mystery-url')
 
   def testInit_withBadServerKey_raisesError(self):
     with self.assertRaises(ValueError):

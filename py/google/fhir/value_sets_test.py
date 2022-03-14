@@ -396,7 +396,8 @@ class ValueSetsTest(absltest.TestCase):
         spec=terminology_service_client.TerminologyServiceClient)
 
     result = resolver.expand_value_set_url('http://some-url', mock_client)
-    self.assertEqual(result, mock_client.expand_value_set('http://some-url'))
+    self.assertEqual(result,
+                     mock_client.expand_value_set_url('http://some-url'))
 
   def testExpandValueSet_withUnExpandableResource_callsTerminologyService(self):
     mock_package_manager = unittest.mock.MagicMock()
@@ -409,7 +410,8 @@ class ValueSetsTest(absltest.TestCase):
         spec=terminology_service_client.TerminologyServiceClient)
 
     result = resolver.expand_value_set_url('http://some-url', mock_client)
-    self.assertEqual(result, mock_client.expand_value_set('http://some-url'))
+    self.assertEqual(result,
+                     mock_client.expand_value_set_url('http://some-url'))
 
   def testExpandValueSet_withExpandableResource_doesNotcallTerminologyService(
       self):
@@ -425,7 +427,7 @@ class ValueSetsTest(absltest.TestCase):
     result = resolver.expand_value_set_url('http://some-url', mock_client)
     self.assertEqual(
         result, resolver._expand_value_set_locally(value_set_pb2.ValueSet()))
-    mock_client.expand_value_set.assert_not_called()
+    mock_client.expand_value_set_url.assert_not_called()
 
 
 def build_valueset_codes_table() -> sqlalchemy.sql.expression.TableClause:

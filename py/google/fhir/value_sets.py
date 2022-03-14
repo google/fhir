@@ -132,7 +132,7 @@ class ValueSetResolver:
       if expanded_value_set is not None:
         return expanded_value_set
 
-    return terminology_client.expand_value_set(url)
+    return terminology_client.expand_value_set_url(url)
 
   def value_set_from_url(self, url: str) -> Optional[value_set_pb2.ValueSet]:
     """Retrieves the value set for the given URL.
