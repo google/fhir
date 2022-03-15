@@ -25,10 +25,10 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
-// Auto-generated from StructureDefinition for Media, last updated
-// 2019-11-01T09:29:23.356+11:00. A photo, video, or audio recording acquired or
-// used in healthcare. The actual content may be inline or provided by direct
-// reference. See http://hl7.org/fhir/StructureDefinition/Media
+// Auto-generated from StructureDefinition for Media.
+// A photo, video, or audio recording acquired or used in healthcare. The actual
+// content may be inline or provided by direct reference. See
+// http://hl7.org/fhir/StructureDefinition/Media
 message Media {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =

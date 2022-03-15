@@ -25,10 +25,10 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
-// Auto-generated from StructureDefinition for ChargeItemDefinition, last
-// updated 2019-11-01T09:29:23.356+11:00. Definition of properties and rules
-// about how the price and the applicability of a ChargeItem can be determined.
-// See http://hl7.org/fhir/StructureDefinition/ChargeItemDefinition
+// Auto-generated from StructureDefinition for ChargeItemDefinition.
+// Definition of properties and rules about how the price and the applicability
+// of a ChargeItem can be determined. See
+// http://hl7.org/fhir/StructureDefinition/ChargeItemDefinition
 message ChargeItemDefinition {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =

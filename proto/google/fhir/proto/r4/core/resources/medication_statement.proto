@@ -25,8 +25,8 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
-// Auto-generated from StructureDefinition for MedicationStatement, last updated
-// 2019-11-01T09:29:23.356+11:00. Record of medication being taken by a patient.
+// Auto-generated from StructureDefinition for MedicationStatement.
+// Record of medication being taken by a patient.
 // See http://hl7.org/fhir/StructureDefinition/MedicationStatement
 message MedicationStatement {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;

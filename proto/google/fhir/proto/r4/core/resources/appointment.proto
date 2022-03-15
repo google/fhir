@@ -25,11 +25,10 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
-// Auto-generated from StructureDefinition for Appointment, last updated
-// 2019-11-01T09:29:23.356+11:00. A booking of a healthcare event among
-// patient(s), practitioner(s), related person(s) and/or device(s) for a
-// specific date/time. This may result in one or more Encounter(s). See
-// http://hl7.org/fhir/StructureDefinition/Appointment
+// Auto-generated from StructureDefinition for Appointment.
+// A booking of a healthcare event among patient(s), practitioner(s), related
+// person(s) and/or device(s) for a specific date/time. This may result in one
+// or more Encounter(s). See http://hl7.org/fhir/StructureDefinition/Appointment
 message Appointment {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =

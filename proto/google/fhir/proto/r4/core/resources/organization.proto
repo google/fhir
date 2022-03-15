@@ -24,9 +24,9 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
-// Auto-generated from StructureDefinition for Organization, last updated
-// 2019-11-01T09:29:23.356+11:00. A grouping of people or organizations with a
-// common purpose. See http://hl7.org/fhir/StructureDefinition/Organization
+// Auto-generated from StructureDefinition for Organization.
+// A grouping of people or organizations with a common purpose.
+// See http://hl7.org/fhir/StructureDefinition/Organization
 message Organization {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =

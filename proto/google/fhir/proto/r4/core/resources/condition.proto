@@ -24,9 +24,9 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
-// Auto-generated from StructureDefinition for Condition, last updated
-// 2019-11-01T09:29:23.356+11:00. Detailed information about conditions,
-// problems or diagnoses. See http://hl7.org/fhir/StructureDefinition/Condition
+// Auto-generated from StructureDefinition for Condition.
+// Detailed information about conditions, problems or diagnoses.
+// See http://hl7.org/fhir/StructureDefinition/Condition
 message Condition {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =

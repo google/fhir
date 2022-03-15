@@ -57,7 +57,6 @@ import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
 import com.google.fhir.stu3.proto.CodingWithFixedSystem;
-import com.google.fhir.wrappers.InstantWrapper;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
@@ -440,11 +439,6 @@ public class ProtoGenerator {
           new StringBuilder()
               .append("Auto-generated from StructureDefinition for ")
               .append(structureDefinition.getName().getValue());
-      if (structureDefinition.getMeta().hasLastUpdated()) {
-        comment
-            .append(", last updated ")
-            .append(new InstantWrapper(structureDefinition.getMeta().getLastUpdated()));
-      }
       comment.append(".");
       if (structureDefinition.getSnapshot().getElement(0).hasShort()) {
         String shortString = structureDefinition.getSnapshot().getElement(0).getShort().getValue();

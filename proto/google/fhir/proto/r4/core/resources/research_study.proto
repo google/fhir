@@ -25,10 +25,9 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
-// Auto-generated from StructureDefinition for ResearchStudy, last updated
-// 2019-11-01T09:29:23.356+11:00. Investigation to increase healthcare-related
-// patient-independent knowledge. See
-// http://hl7.org/fhir/StructureDefinition/ResearchStudy
+// Auto-generated from StructureDefinition for ResearchStudy.
+// Investigation to increase healthcare-related patient-independent knowledge.
+// See http://hl7.org/fhir/StructureDefinition/ResearchStudy
 message ResearchStudy {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =

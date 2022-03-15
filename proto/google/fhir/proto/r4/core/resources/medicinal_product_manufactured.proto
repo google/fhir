@@ -24,10 +24,9 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
-// Auto-generated from StructureDefinition for MedicinalProductManufactured,
-// last updated 2019-11-01T09:29:23.356+11:00. The manufactured item as
-// contained in the packaged medicinal product. See
-// http://hl7.org/fhir/StructureDefinition/MedicinalProductManufactured
+// Auto-generated from StructureDefinition for MedicinalProductManufactured.
+// The manufactured item as contained in the packaged medicinal product.
+// See http://hl7.org/fhir/StructureDefinition/MedicinalProductManufactured
 message MedicinalProductManufactured {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =

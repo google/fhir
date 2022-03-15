@@ -25,8 +25,8 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
-// Auto-generated from StructureDefinition for Claim, last updated
-// 2019-11-01T09:29:23.356+11:00. Claim, Pre-determination or Pre-authorization.
+// Auto-generated from StructureDefinition for Claim.
+// Claim, Pre-determination or Pre-authorization.
 // See http://hl7.org/fhir/StructureDefinition/Claim
 message Claim {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;

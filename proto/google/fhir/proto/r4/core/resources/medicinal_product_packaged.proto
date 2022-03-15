@@ -24,9 +24,9 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
-// Auto-generated from StructureDefinition for MedicinalProductPackaged, last
-// updated 2019-11-01T09:29:23.356+11:00. A medicinal product in a container or
-// package. See http://hl7.org/fhir/StructureDefinition/MedicinalProductPackaged
+// Auto-generated from StructureDefinition for MedicinalProductPackaged.
+// A medicinal product in a container or package.
+// See http://hl7.org/fhir/StructureDefinition/MedicinalProductPackaged
 message MedicinalProductPackaged {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =

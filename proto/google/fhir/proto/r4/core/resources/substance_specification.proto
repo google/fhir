@@ -24,9 +24,9 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
-// Auto-generated from StructureDefinition for SubstanceSpecification, last
-// updated 2019-11-01T09:29:23.356+11:00. The detailed description of a
-// substance, typically at a level beyond what is used for prescribing. See
+// Auto-generated from StructureDefinition for SubstanceSpecification.
+// The detailed description of a substance, typically at a level beyond what is
+// used for prescribing. See
 // http://hl7.org/fhir/StructureDefinition/SubstanceSpecification
 message SubstanceSpecification {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;

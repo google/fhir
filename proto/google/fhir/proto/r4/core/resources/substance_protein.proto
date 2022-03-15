@@ -24,15 +24,15 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
-// Auto-generated from StructureDefinition for SubstanceProtein, last updated
-// 2019-11-01T09:29:23.356+11:00. A SubstanceProtein is defined as a single unit
-// of a linear amino acid sequence, or a combination of subunits that are either
-// covalently linked or have a defined invariant stoichiometric relationship.
-// This includes all synthetic, recombinant and purified SubstanceProteins of
-// defined sequence, whether the use is therapeutic or prophylactic. This set of
-// elements will be used to describe albumins, coagulation factors, cytokines,
-// growth factors, peptide/SubstanceProtein hormones, enzymes, toxins, toxoids,
-// recombinant vaccines, and immunomodulators. See
+// Auto-generated from StructureDefinition for SubstanceProtein.
+// A SubstanceProtein is defined as a single unit of a linear amino acid
+// sequence, or a combination of subunits that are either covalently linked or
+// have a defined invariant stoichiometric relationship. This includes all
+// synthetic, recombinant and purified SubstanceProteins of defined sequence,
+// whether the use is therapeutic or prophylactic. This set of elements will be
+// used to describe albumins, coagulation factors, cytokines, growth factors,
+// peptide/SubstanceProtein hormones, enzymes, toxins, toxoids, recombinant
+// vaccines, and immunomodulators. See
 // http://hl7.org/fhir/StructureDefinition/SubstanceProtein
 message SubstanceProtein {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
