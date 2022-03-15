@@ -16,7 +16,7 @@
 
 import copy
 import itertools
-from typing import Iterable, List, Optional, Set, Sequence
+from typing import Iterable, List, Optional, Set, Sequence, Tuple
 
 import logging
 import sqlalchemy
@@ -303,9 +303,10 @@ class ValueSetResolver:
 
 
 def valueset_codes_insert_statement_for(
-    value_set: value_set_pb2.ValueSet,
-    table: sqlalchemy.sql.expression.TableClause) -> sqlalchemy.sql.dml.Insert:
-  """Builds an INSERT statement for placing the value set's codes into the given table.
+    value_sets: Iterable[value_set_pb2.ValueSet],
+    table: sqlalchemy.sql.expression.TableClause,
+    batch_size: int = 500) -> Iterable[sqlalchemy.sql.dml.Insert]:
+  """Builds INSERT statements for placing value sets' codes into a given table.
 
   The INSERT may be used to build a valueset_codes table as described by:
   https://github.com/FHIR/sql-on-fhir/blob/master/sql-on-fhir.md#valueset-support
@@ -317,45 +318,62 @@ def valueset_codes_insert_statement_for(
   modify any existing rows.
 
   Args:
-    value_set: The expanded value set with codes to insert into the given table.
-      The value set should have already been expanded by the
-      ValueSetResolver.expand_value_set method.
+    value_sets: The expanded value sets with codes to insert into the given
+      table. The value sets should have already been expanded by the
+      ValueSetResolver.expand_value_set_url method.
     table: The SqlAlchemy table to receive the INSERT. May be an sqlalchemy
       Table or TableClause object. The table is assumed to have the columns
       'valueseturi', 'valuesetversion', 'system', 'code.'
+    batch_size: The maximum number of rows to insert in a single query.
 
-  Returns:
-    The sqlalchemy insert expression which you may execute to perform the actual
-    database write.
+  Yields:
+    The sqlalchemy insert expressions which you may execute to perform the
+    actual database writes. Each yielded insert expression will insert at most
+    batch_size number of rows.
   """
-  if not value_set.expansion.contains:
-    raise ValueError(
-        'Value set must be expanded. Call ValueSetResolver.expand_value_set on '
-        'the value set to expand it first.')
 
-  # Build a SELECT statement for each code.
-  code_literals = (
-      _code_as_select_literal(value_set, code)
-      for code in value_set.expansion.contains)
-  # UNION each SELECT to build a single select subquery for all codes.
-  codes = sqlalchemy.union_all(*code_literals).alias('codes')
-  # Filter the codes to those not already present in `table` with a LEFT JOIN.
-  new_codes = sqlalchemy.select((codes,)).select_from(
-      codes.outerjoin(
-          table,
-          sqlalchemy.and_(
-              codes.c.valueseturi == table.c.valueseturi,
-              codes.c.valuesetversion == table.c.valuesetversion,
-              codes.c.system == table.c.system,
-              codes.c.code == table.c.code,
-          ))).where(
-              sqlalchemy.and_(
-                  table.c.valueseturi.is_(None),
-                  table.c.valuesetversion.is_(None),
-                  table.c.system.is_(None),
-                  table.c.code.is_(None),
-              ))
-  return table.insert().from_select(new_codes.columns, new_codes)
+  def value_set_codes() -> Iterable[Tuple[
+      value_set_pb2.ValueSet, value_set_pb2.ValueSet.Expansion.Contains]]:
+    """Yields (value_set, code) tuples for each code in each value set."""
+    for value_set in value_sets:
+      if not value_set.expansion.contains:
+        logging.warning('Value set: %s version: %s has no expanded codes',
+                        value_set.url.value, value_set.version.value)
+      for code in value_set.expansion.contains:
+        yield value_set, code
+
+  # Break the value set codes into batches.
+  batch_iterables = [iter(value_set_codes())] * batch_size
+  batches = itertools.zip_longest(*batch_iterables)
+
+  for batch in batches:
+    # Build a SELECT statement for each code.
+    code_literals = []
+    for pair in batch:
+      # The last batch will have `None`s padding it out to `batch_size`.
+      if pair is not None:
+        value_set, code = pair
+        code_literals.append(_code_as_select_literal(value_set, code))
+
+    # UNION each SELECT to build a single select subquery for all codes.
+    codes = sqlalchemy.union_all(*code_literals).alias('codes')
+    # Filter the codes to those not already present in `table` with a LEFT JOIN.
+    new_codes = sqlalchemy.select((codes,)).select_from(
+        codes.outerjoin(
+            table,
+            sqlalchemy.and_(
+                codes.c.valueseturi == table.c.valueseturi,
+                codes.c.valuesetversion == table.c.valuesetversion,
+                codes.c.system == table.c.system,
+                codes.c.code == table.c.code,
+            ))).where(
+                sqlalchemy.and_(
+                    table.c.valueseturi.is_(None),
+                    table.c.valuesetversion.is_(None),
+                    table.c.system.is_(None),
+                    table.c.code.is_(None),
+                ))
+    yield table.insert().from_select(new_codes.columns, new_codes)
 
 
 def _code_as_select_literal(
