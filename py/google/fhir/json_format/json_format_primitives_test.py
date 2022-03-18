@@ -92,7 +92,7 @@ class _Base():
     def setUp(self):
       super().setUp()
       self.primitive_data_list = _get_list_of_primitive_data(
-          self.datatypes_descriptor)
+          self.datatypes_descriptor)  # pytype: disable=not-callable  # trace-all-classes
 
     def _set_primitive_has_no_value_extension(
         self, primitive: message.Message) -> None:
@@ -112,16 +112,16 @@ class _Base():
 
         file_path = os.path.join(_PRIMITIVE_TESTS_PATH, file_name + '.prototxt')
         test_suite = testdata_utils.read_proto(file_path,
-                                               self.primitive_test_suite_class)
+                                               self.primitive_test_suite_class)  # pytype: disable=not-callable  # trace-all-classes
 
         for pair in test_suite.valid_pairs:
           expected_proto = proto_utils.get_value_at_field(
               pair.proto, field_name)
           expected_json = pair.json_string
 
-          actual_json = self.json_format.print_fhir_to_json_string(
+          actual_json = self.json_format.print_fhir_to_json_string(  # pytype: disable=not-callable  # trace-all-classes
               expected_proto)
-          actual_proto = self.json_format.json_fhir_string_to_proto(
+          actual_proto = self.json_format.json_fhir_string_to_proto(  # pytype: disable=not-callable  # trace-all-classes
               actual_json, field_type, default_timezone='Australia/Sydney')
 
           self.assertEqual(expected_json, actual_json)
@@ -135,7 +135,7 @@ class _Base():
 
         file_path = os.path.join(_PRIMITIVE_TESTS_PATH, file_name + '.prototxt')
         test_suite = testdata_utils.read_proto(file_path,
-                                               self.primitive_test_suite_class)
+                                               self.primitive_test_suite_class)  # pytype: disable=not-callable  # trace-all-classes
 
         if not test_suite.invalid_json:
           self.fail('Must have at least one invalid json example!')
@@ -144,7 +144,7 @@ class _Base():
           # Some of the invalid examples may cause non InvalidFhirError errors,
           # which is acceptable.
           with self.assertRaises(Exception):
-            _ = self.json_format.json_fhir_string_to_proto(
+            _ = self.json_format.json_fhir_string_to_proto(  # pytype: disable=not-callable  # trace-all-classes
                 invalid_json, field_type)
 
     def test_invalid_protos(self):
@@ -154,7 +154,7 @@ class _Base():
 
         file_path = os.path.join(_PRIMITIVE_TESTS_PATH, file_name + '.prototxt')
         test_suite = testdata_utils.read_proto(file_path,
-                                               self.primitive_test_suite_class)
+                                               self.primitive_test_suite_class)  # pytype: disable=not-callable  # trace-all-classes
 
         if not (test_suite.invalid_protos or
                 test_suite.no_invalid_protos_reason):
@@ -163,7 +163,7 @@ class _Base():
 
         for invalid_proto in test_suite.invalid_protos:
           with self.assertRaises(fhir_errors.InvalidFhirError):
-            _ = self.json_format.print_fhir_to_json_string(invalid_proto)
+            _ = self.json_format.print_fhir_to_json_string(invalid_proto)  # pytype: disable=not-callable  # trace-all-classes
 
     def test_no_value_behaviour_valid(self):
       for primitive_data in self.primitive_data_list:
@@ -192,7 +192,7 @@ class _Base():
 
         proto_utils.append_value_at_field(primitive_with_no_value, 'extension',
                                           extension)
-        _ = self.json_format.print_fhir_to_json_string(primitive_with_no_value)
+        _ = self.json_format.print_fhir_to_json_string(primitive_with_no_value)  # pytype: disable=not-callable  # trace-all-classes
 
     def test_no_value_behaviour_invalid_if_no_other_extensions(self):
 
@@ -213,7 +213,7 @@ class _Base():
         self._set_primitive_has_no_value_extension(primitive_with_no_value)
 
         with self.assertRaises(fhir_errors.InvalidFhirError):
-          _ = self.json_format.print_fhir_to_json_string(
+          _ = self.json_format.print_fhir_to_json_string(  # pytype: disable=not-callable  # trace-all-classes
               primitive_with_no_value)
 
 
