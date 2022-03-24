@@ -162,6 +162,21 @@ py_library(
         "//py/google/fhir/utils:fhir_package",
         "//py/google/fhir/utils:proto_utils",
         "//py/google/fhir/utils:url_utils",
+        requirement("absl-py"),
+    ],
+)
+
+py_library(
+    name = "value_set_tables",
+    srcs = [
+        "__init__.py",
+        "value_set_tables.py",
+    ],
+    srcs_version = "PY3",
+    deps = [
+        "//py",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
+        requirement("absl-py"),
         requirement("sqlalchemy"),
     ],
 )
@@ -253,6 +268,21 @@ py_test(
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
         "//py/google/fhir/utils:fhir_package",
+        requirement("absl-py"),
+        requirement("six"),
+    ],
+)
+
+py_test(
+    name = "value_set_tables_test",
+    srcs = ["value_set_tables_test.py"],
+    legacy_create_init = 0,
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":value_set_tables",
+        "//py",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
         requirement("absl-py"),
         requirement("six"),
         requirement("sqlalchemy"),
