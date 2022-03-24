@@ -381,13 +381,19 @@ def _code_as_select_literal(
     code: value_set_pb2.ValueSet.Expansion.Contains) -> sqlalchemy.select:
   """Builds a SELECT statement for the literals in the given code."""
   return sqlalchemy.select((
-      sqlalchemy.sql.expression.literal(
-          value_set.url.value).label('valueseturi'),
-      sqlalchemy.sql.expression.literal(
-          value_set.version.value).label('valuesetversion'),
-      sqlalchemy.sql.expression.literal(code.system.value).label('system'),
-      sqlalchemy.sql.expression.literal(code.code.value).label('code'),
+      _literal_or_null(value_set.url.value).label('valueseturi'),
+      _literal_or_null(value_set.version.value).label('valuesetversion'),
+      _literal_or_null(code.system.value).label('system'),
+      _literal_or_null(code.code.value).label('code'),
   ))
+
+
+def _literal_or_null(val: str) -> sqlalchemy.sql.elements.ColumnElement:
+  """Returns a literal for the given string or NULL for an empty string."""
+  if val:
+    return sqlalchemy.sql.expression.literal(val)
+  else:
+    return sqlalchemy.null()
 
 
 def _unique_urls(urls: Iterable[str]) -> Iterable[str]:

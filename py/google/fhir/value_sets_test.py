@@ -270,6 +270,41 @@ class ValueSetsTest(absltest.TestCase):
     ]
     self.assertListEqual(result_queries, [expected_1, expected_2])
 
+  def testValueSetToInsertStatement_withEmptyValues_rendersNulls(self):
+    value_set = value_set_pb2.ValueSet()
+    value_set.url.value = 'vs-url'
+
+    coding = value_set.expansion.contains.add()
+    coding.code.value = 'code'
+
+    table = build_valueset_codes_table()
+
+    result = value_sets.valueset_codes_insert_statement_for([value_set], table)
+    query = list(result)[0]
+    query_string = str(query.compile(compile_kwargs={'literal_binds': True}))
+    self.assertEqual(
+        query_string,
+        ('INSERT INTO valueset_codes '
+         '(valueseturi, valuesetversion, system, code) '
+         'SELECT '
+         'codes.valueseturi, codes.valuesetversion, codes.system, codes.code \n'
+         'FROM (SELECT '
+         "'vs-url' AS valueseturi, "
+         'NULL AS valuesetversion, '
+         'NULL AS system, '
+         "'code' AS code"
+         ') AS codes '
+         'LEFT OUTER JOIN valueset_codes ON '
+         'codes.valueseturi = valueset_codes.valueseturi AND '
+         'codes.valuesetversion = valueset_codes.valuesetversion AND '
+         'codes.system = valueset_codes.system AND '
+         'codes.code = valueset_codes.code \n'
+         'WHERE '
+         'valueset_codes.valueseturi IS NULL AND '
+         'valueset_codes.valuesetversion IS NULL AND '
+         'valueset_codes.system IS NULL AND '
+         'valueset_codes.code IS NULL'))
+
   def testExpandValueSetLocally_withExtensionalSet_expandsCodes(self):
     value_set = value_set_pb2.ValueSet()
 
