@@ -89,7 +89,7 @@ class TerminologyServiceClient:
     request_url = urllib.parse.urljoin(base_url, 'ValueSet/$expand')
     params = {'url': value_set_url}
     if value_set_version is not None:
-      params['valueSetVerson'] = value_set_version
+      params['valueSetVersion'] = value_set_version
 
     session_ = _session_with_backoff()
     session_.headers.update({'Accept': 'application/json'})

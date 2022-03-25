@@ -74,14 +74,14 @@ class TerminologyServiceClientTest(absltest.TestCase):
             params={
                 'url': 'http://loinc.org/fhir/ValueSet/2.16',
                 'offset': 0,
-                'valueSetVerson': '1.0'
+                'valueSetVersion': '1.0'
             }),
         unittest.mock.call(
             'https://fhir.loinc.org/ValueSet/$expand',
             params={
                 'url': 'http://loinc.org/fhir/ValueSet/2.16',
                 'offset': 1,
-                'valueSetVerson': '1.0'
+                'valueSetVersion': '1.0'
             }),
     ])
     self.assertEqual(mock_session().auth, ('apikey', 'the-api-key'))
