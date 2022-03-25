@@ -103,11 +103,7 @@ class TerminologyServiceClientTest(absltest.TestCase):
     mock_session().headers = {}
     mock_session().__enter__().get('url').json.return_value = {
         'resourceType': 'ValueSet',
-        'id': 'vs-id',
-        'url': 'vs-url',
-        'status': 'draft',
         'expansion': {
-            'timestamp': '2022-02-14T15:51:40-05:00',
             'contains': [{
                 'code': 'code-1'
             }]

@@ -14,7 +14,7 @@
 # limitations under the License.
 """Provides a client for interacting with terminology servers."""
 
-from typing import Callable, Dict, List, Tuple
+from typing import Callable, Dict, List, Optional, Tuple
 import urllib.parse
 
 import logging
@@ -106,7 +106,8 @@ class TerminologyServiceClient:
       def request_func(offset: int) -> requests.Response:
         return session.get(request_url, params={'offset': offset, **params})
 
-      expanded_value_set = _paginate_expand_value_set_request(request_func)
+      expanded_value_set = _paginate_expand_value_set_request(
+          request_func, value_set_url, value_set_version)
 
     logging.info(
         'Retrieved %d codes for value set url: %s version: %s '
@@ -165,7 +166,8 @@ class TerminologyServiceClient:
         return session.post(
             request_url, data=request_json, params={'offset': offset})
 
-      expanded_value_set = _paginate_expand_value_set_request(request_func)
+      expanded_value_set = _paginate_expand_value_set_request(
+          request_func, value_set.url.value, value_set.version.value)
 
     logging.info(
         'Retrieved %d codes for value set url: %s version: %s '
@@ -176,7 +178,8 @@ class TerminologyServiceClient:
 
 
 def _paginate_expand_value_set_request(
-    request_func: Callable[[int], requests.Response]) -> value_set_pb2.ValueSet:
+    request_func: Callable[[int], requests.Response], value_set_url: str,
+    value_set_version: Optional[str]) -> value_set_pb2.ValueSet:
   """Performs a request to the terminology service, including pagination.
 
   Given a function which performs a request against a terminology service, use
@@ -188,6 +191,8 @@ def _paginate_expand_value_set_request(
       service. The function must accept an integer representing the pagination
       offset value to include in the request and return a requests Response
       object.
+    value_set_url: The URL of the value set being expanded.
+    value_set_version: The version of the value set being expanded.
 
   Returns:
     The current definition of the value set from the server with its expanded
@@ -218,6 +223,12 @@ def _paginate_expand_value_set_request(
       # (i.e. contains[:] = codes) so we delete and extend.
       del response_value_set.expansion.contains[:]
       response_value_set.expansion.contains.extend(codes)
+
+      # Sometimes a terminology service will not echo back the value set URL or
+      # version. We re-set them in case this happened.
+      response_value_set.url.value = value_set_url
+      if value_set_version is not None:
+        response_value_set.version.value = value_set_version
       return response_value_set
 
 
