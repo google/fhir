@@ -41,10 +41,17 @@ class ValueSetResolver:
       relevant value sets may be found. If a requisite value set definition is
       not present in the package manager, the resolver will throw an error
       instead of attempting to retrieve it over the network.
+    terminology_client: The terminology service client to use when expanding
+      value sets which can not be expanded using local definitions from the
+      package_manager.
   """
 
-  def __init__(self, package_manager: fhir_package.FhirPackageManager) -> None:
+  def __init__(
+      self, package_manager: fhir_package.FhirPackageManager,
+      terminology_client: terminology_service_client.TerminologyServiceClient
+  ) -> None:
     self.package_manager = package_manager
+    self.terminology_client = terminology_client
 
   def value_set_urls_from_fhir_package(
       self, package: fhir_package.FhirPackage) -> Iterable[str]:
@@ -106,10 +113,7 @@ class ValueSetResolver:
 
     yield from _unique_urls(value_set_urls)
 
-  def expand_value_set_url(
-      self, url: str,
-      terminology_client: terminology_service_client.TerminologyServiceClient
-  ) -> value_set_pb2.ValueSet:
+  def expand_value_set_url(self, url: str) -> value_set_pb2.ValueSet:
     """Retrieves the expanded value set definition for the given URL.
 
     Attempts to expand the value set using definitions available to the
@@ -119,8 +123,6 @@ class ValueSetResolver:
 
     Args:
       url: The URL of the value set to expand.
-      terminology_client: The client to use when using a terminology service to
-        expand the value set.
 
     Returns:
       A value set protocol buffer expanded to include the codes it represents.
@@ -131,7 +133,7 @@ class ValueSetResolver:
       if expanded_value_set is not None:
         return expanded_value_set
 
-    return terminology_client.expand_value_set_url(url)
+    return self.terminology_client.expand_value_set_url(url)
 
   def value_set_from_url(self, url: str) -> Optional[value_set_pb2.ValueSet]:
     """Retrieves the value set for the given URL.

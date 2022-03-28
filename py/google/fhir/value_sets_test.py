@@ -205,6 +205,7 @@ class ValueSetsTest(absltest.TestCase):
     exclude_code.code.value = 'code-1-3'
 
     result = value_sets.ValueSetResolver(
+        unittest.mock.MagicMock(),
         unittest.mock.MagicMock())._expand_value_set_locally(value_set)
     expected = [
         value_set_pb2.ValueSet.Expansion.Contains(
@@ -246,7 +247,8 @@ class ValueSetsTest(absltest.TestCase):
     # Return the definition for the above code system.
     package_manager = unittest.mock.MagicMock()
     package_manager.get_resource.return_value = code_system
-    resolver = value_sets.ValueSetResolver(package_manager)
+    resolver = value_sets.ValueSetResolver(package_manager,
+                                           unittest.mock.MagicMock())
 
     result = resolver._expand_value_set_locally(value_set)
 
@@ -279,7 +281,8 @@ class ValueSetsTest(absltest.TestCase):
     # However do not provide a definition for the code system.
     package_manager = unittest.mock.MagicMock()
     package_manager.get_resource.return_value = None
-    resolver = value_sets.ValueSetResolver(package_manager)
+    resolver = value_sets.ValueSetResolver(package_manager,
+                                           unittest.mock.MagicMock())
 
     result = resolver._expand_value_set_locally(value_set)
 
@@ -295,6 +298,7 @@ class ValueSetsTest(absltest.TestCase):
     filter_.value.value = 'medicine'
     self.assertIsNone(
         value_sets.ValueSetResolver(
+            unittest.mock.MagicMock(),
             unittest.mock.MagicMock())._expand_value_set_locally(value_set))
 
   def testConceptSetToExpansion_wtihConceptSet_buildsExpansion(self):
@@ -312,6 +316,7 @@ class ValueSetsTest(absltest.TestCase):
     code_2.code.value = 'code_2'
 
     result = value_sets.ValueSetResolver(
+        unittest.mock.MagicMock(),
         unittest.mock.MagicMock())._concept_set_to_expansion(
             value_set_pb2.ValueSet(), concept_set)
 
@@ -340,7 +345,8 @@ class ValueSetsTest(absltest.TestCase):
     # ...but find a non-code system resource for the URL.
     package_manager = unittest.mock.MagicMock()
     package_manager.get_resource.return_value = value_set_pb2.ValueSet()
-    resolver = value_sets.ValueSetResolver(package_manager)
+    resolver = value_sets.ValueSetResolver(package_manager,
+                                           unittest.mock.MagicMock())
 
     with self.assertRaises(ValueError):
       resolver._concept_set_to_expansion(value_set_pb2.ValueSet(), concept_set)
@@ -348,26 +354,28 @@ class ValueSetsTest(absltest.TestCase):
   def testExpandValueSet_withMissingResource_callsTerminologyService(self):
     mock_package_manager = unittest.mock.MagicMock()
     mock_package_manager.get_resource.return_value = None
-    resolver = value_sets.ValueSetResolver(mock_package_manager)
 
     mock_client = unittest.mock.MagicMock(
         spec=terminology_service_client.TerminologyServiceClient)
 
-    result = resolver.expand_value_set_url('http://some-url', mock_client)
+    resolver = value_sets.ValueSetResolver(mock_package_manager, mock_client)
+
+    result = resolver.expand_value_set_url('http://some-url')
     self.assertEqual(result,
                      mock_client.expand_value_set_url('http://some-url'))
 
   def testExpandValueSet_withUnExpandableResource_callsTerminologyService(self):
     mock_package_manager = unittest.mock.MagicMock()
     mock_package_manager.get_resource.return_value = value_set_pb2.ValueSet()
-    resolver = value_sets.ValueSetResolver(mock_package_manager)
-    resolver._expand_value_set_locally = unittest.mock.MagicMock(
-        spec=resolver._expand_value_set_locally, return_value=None)
 
     mock_client = unittest.mock.MagicMock(
         spec=terminology_service_client.TerminologyServiceClient)
 
-    result = resolver.expand_value_set_url('http://some-url', mock_client)
+    resolver = value_sets.ValueSetResolver(mock_package_manager, mock_client)
+    resolver._expand_value_set_locally = unittest.mock.MagicMock(
+        spec=resolver._expand_value_set_locally, return_value=None)
+
+    result = resolver.expand_value_set_url('http://some-url')
     self.assertEqual(result,
                      mock_client.expand_value_set_url('http://some-url'))
 
@@ -375,14 +383,15 @@ class ValueSetsTest(absltest.TestCase):
       self):
     mock_package_manager = unittest.mock.MagicMock()
     mock_package_manager.get_resource.return_value = value_set_pb2.ValueSet()
-    resolver = value_sets.ValueSetResolver(mock_package_manager)
-    resolver._expand_value_set_locally = unittest.mock.MagicMock(
-        spec=resolver._expand_value_set_locally)
 
     mock_client = unittest.mock.MagicMock(
         spec=terminology_service_client.TerminologyServiceClient)
 
-    result = resolver.expand_value_set_url('http://some-url', mock_client)
+    resolver = value_sets.ValueSetResolver(mock_package_manager, mock_client)
+    resolver._expand_value_set_locally = unittest.mock.MagicMock(
+        spec=resolver._expand_value_set_locally)
+
+    result = resolver.expand_value_set_url('http://some-url')
     self.assertEqual(
         result, resolver._expand_value_set_locally(value_set_pb2.ValueSet()))
     mock_client.expand_value_set_url.assert_not_called()
@@ -397,7 +406,7 @@ def get_resolver() -> value_sets.ValueSetResolver:
   package_manager = fhir_package.FhirPackageManager()
   package_manager.add_package_at_path(package_filepath)
 
-  return value_sets.ValueSetResolver(package_manager)
+  return value_sets.ValueSetResolver(package_manager, unittest.mock.MagicMock())
 
 
 if __name__ == '__main__':
