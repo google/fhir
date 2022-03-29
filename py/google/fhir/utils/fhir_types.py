@@ -16,6 +16,7 @@
 from proto.google.fhir.proto import annotations_pb2
 from google.fhir.utils import annotation_utils
 
+_BOOLEAN_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/boolean'
 _CODE_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/code'
 _CODEABLE_CONCEPT_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/CodeableConcept'
 _CODING_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/Coding'
@@ -151,6 +152,12 @@ def is_period(
     message_or_descriptor: annotation_utils.MessageOrDescriptorBase) -> bool:
   """Returns True if message_or_descriptor is a FHIR Period type."""
   return is_type(_PERIOD_STRUCTURE_DEFINITION_URL, message_or_descriptor)
+
+
+def is_boolean(
+    message_or_descriptor: annotation_utils.MessageOrDescriptorBase) -> bool:
+  """Returns True if message_or_descriptor is a FHIR Boolean type."""
+  return is_type(_BOOLEAN_STRUCTURE_DEFINITION_URL, message_or_descriptor)
 
 
 def is_date(

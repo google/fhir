@@ -100,6 +100,14 @@ class FhirTypesTest(absltest.TestCase):
     """Tests that is_date_time returns False when given a profile of Coding."""
     self.assertFalse(fhir_types.is_date_time(datatypes_pb2.Coding()))
 
+  def testIsBoolean_withBoolean_returnsTrue(self):
+    """Tests that is_boolean returns True when given a Boolean instance."""
+    self.assertTrue(fhir_types.is_boolean(datatypes_pb2.Boolean()))
+
+  def testIsBoolean_withCoding_returnsFalse(self):
+    """Tests that is_boolean returns False when given a profile of Coding."""
+    self.assertFalse(fhir_types.is_boolean(datatypes_pb2.Coding()))
+
   def testIsString_withString_returnsTrue(self):
     """Tests that is_string returns True when given a String instance."""
     self.assertTrue(fhir_types.is_string(datatypes_pb2.String()))
