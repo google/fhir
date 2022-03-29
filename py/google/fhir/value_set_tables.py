@@ -19,16 +19,18 @@ https://github.com/FHIR/sql-on-fhir/blob/master/sql-on-fhir.md#valueset-support
 """
 
 import itertools
-from typing import Iterable, Tuple
+from typing import Iterable, Tuple, Union
 
 import logging
 import sqlalchemy
 
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
+from google.fhir import terminology_service_client
+from google.fhir import value_sets
 
 
 def valueset_codes_insert_statement_for(
-    value_sets: Iterable[value_set_pb2.ValueSet],
+    expanded_value_sets: Iterable[value_set_pb2.ValueSet],
     table: sqlalchemy.sql.expression.TableClause,
     batch_size: int = 500) -> Iterable[sqlalchemy.sql.dml.Insert]:
   """Builds INSERT statements for placing value sets' codes into a given table.
@@ -43,9 +45,10 @@ def valueset_codes_insert_statement_for(
   modify any existing rows.
 
   Args:
-    value_sets: The expanded value sets with codes to insert into the given
-      table. The value sets should have already been expanded by the
-      ValueSetResolver.expand_value_set_url method.
+    expanded_value_sets: The expanded value sets with codes to insert into the
+      given table. The value sets should have already been expanded, for
+      instance by a ValueSetResolver or TerminologyServiceClient's
+      expand_value_set_url method.
     table: The SqlAlchemy table to receive the INSERT. May be an sqlalchemy
       Table or TableClause object. The table is assumed to have the columns
       'valueseturi', 'valuesetversion', 'system', 'code.'
@@ -60,7 +63,7 @@ def valueset_codes_insert_statement_for(
   def value_set_codes() -> Iterable[Tuple[
       value_set_pb2.ValueSet, value_set_pb2.ValueSet.Expansion.Contains]]:
     """Yields (value_set, code) tuples for each code in each value set."""
-    for value_set in value_sets:
+    for value_set in expanded_value_sets:
       if not value_set.expansion.contains:
         logging.warning('Value set: %s version: %s has no expanded codes',
                         value_set.url.value, value_set.version.value)
@@ -99,6 +102,58 @@ def valueset_codes_insert_statement_for(
                     table.c.code.is_(None),
                 ))
     yield table.insert().from_select(new_codes.columns, new_codes)
+
+
+def materialize_value_set_expansion(
+    urls: Iterable[str],
+    expander: Union[terminology_service_client.TerminologyServiceClient,
+                    value_sets.ValueSetResolver],
+    engine: sqlalchemy.engine.base.Engine,
+    table: Union[str, sqlalchemy.sql.expression.TableClause],
+    batch_size: int = 500) -> None:
+  """Expands a sequence of value set and materializes their expanded codes.
+
+  Expands the given value set URLs to obtain the set of codes they describe.
+  Then writes these expanded codes into the given database table using the given
+  sqlalchemy engine. Builds a valueset_codes table as described by
+  https://github.com/FHIR/sql-on-fhir/blob/master/sql-on-fhir.md#valueset-support
+
+  The function will avoid inserting duplicate rows if some of the codes are
+  already present in the given table. It will not attempt to perform an 'upsert'
+  or modify any existing rows.
+
+  Provided as a utility function for user convenience. If `urls` is a large set
+  of URLs, callers may prefer to use multi-processing and/or multi-threading to
+  perform expansion and table insertion of the URLs concurrently. This function
+  performs all expansions and table insertions serially.
+
+  Args:
+    urls: The urls for value sets to expand and materialize.
+    expander: The ValueSetResolver or TerminologyServiceClient to perform value
+      set expansion. A ValueSetResolver may be used to attempt to avoid some
+      network requests by expanding value sets locally. A
+      TerminologyServiceClient will use external terminology services to perform
+      all value set expansions.
+    engine: The SQLAlchemy database engine to use when writing expanded value
+      sets to `table`.
+    table: The database table to be written. May be a string representing the
+      qualified table name or an SQLAlchemy Table or TableClause object. The
+      table is assumed to have the columns 'valueseturi', 'valuesetversion',
+      'system', 'code.'
+    batch_size: The maximum number of rows to insert in a single query.
+  """
+  if isinstance(table, str):
+    table = sqlalchemy.Table(
+        table,
+        sqlalchemy.MetaData(bind=engine),
+        autoload=True,
+    )
+  expanded_value_sets = (expander.expand_value_set_url(url) for url in urls)
+  queries = valueset_codes_insert_statement_for(
+      expanded_value_sets, table, batch_size=batch_size)
+  with engine.connect() as connection:
+    for query in queries:
+      connection.execute(query)
 
 
 def _code_as_select_literal(

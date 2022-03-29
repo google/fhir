@@ -174,6 +174,8 @@ py_library(
     ],
     srcs_version = "PY3",
     deps = [
+        ":terminology_service_client",
+        ":value_sets",
         "//py",
         "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
         requirement("absl-py"),

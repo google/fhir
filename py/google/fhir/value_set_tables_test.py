@@ -14,6 +14,8 @@
 # limitations under the License.
 """Test value_set_tables functionality."""
 
+import unittest.mock
+
 import sqlalchemy
 
 from google.fhir import value_set_tables
@@ -156,6 +158,53 @@ class ValueSetsTest(absltest.TestCase):
          'valueset_codes.valuesetversion IS NULL AND '
          'valueset_codes.system IS NULL AND '
          'valueset_codes.code IS NULL'))
+
+  @unittest.mock.patch.object(
+      value_set_tables.sqlalchemy, 'MetaData', autospec=True)
+  @unittest.mock.patch.object(
+      value_set_tables.sqlalchemy, 'Table', autospec=True)
+  @unittest.mock.patch.object(
+      value_set_tables, 'valueset_codes_insert_statement_for', autospec=True)
+  def testMaterializeValueSetExpansion_withTableName_performsExpansionsAndInserts(
+      self, mock_valueset_codes_insert_statement_for, mock_table,
+      mock_meta_data):
+    mock_valueset_codes_insert_statement_for.return_value = [
+        unittest.mock.MagicMock(),
+        unittest.mock.MagicMock()
+    ]
+    mock_expander = unittest.mock.MagicMock()
+    mock_engine = unittest.mock.MagicMock(spec=sqlalchemy.engine.base.Engine)
+
+    value_set_tables.materialize_value_set_expansion(['url-1', 'url-2'],
+                                                     mock_expander, mock_engine,
+                                                     'table_name')
+
+    # Ensure we reflected our table name string.
+    mock_meta_data.assert_called_once_with(bind=mock_engine)
+    mock_table.assert_called_once_with(
+        'table_name', mock_meta_data(), autoload=True)
+
+    # Ensure we called execute with the two mock queries.
+    mock_engine.connect().__enter__().execute.assert_has_calls([
+        unittest.mock.call(mock_query)
+        for mock_query in mock_valueset_codes_insert_statement_for.return_value
+    ])
+    # Ensure we called valueset_codes_insert_statement_for with the value set
+    # expansions for both URLs.
+    args, kwargs = mock_valueset_codes_insert_statement_for.call_args_list[0]
+    self.assertEqual(
+        list(args[0]), [
+            mock_expander.expand_value_set_url(),
+            mock_expander.expand_value_set_url()
+        ])
+    self.assertEqual(args[1], mock_table())
+    self.assertEqual(kwargs['batch_size'], 500)
+
+    # Ensure we call expand_value_set_url with the two URLs.
+    mock_expander.expand_value_set_url.reset()
+    mock_expander.expand_value_set_url.assert_has_calls(
+        [unittest.mock.call('url-1'),
+         unittest.mock.call('url-2')])
 
 
 def build_valueset_codes_table() -> sqlalchemy.sql.expression.TableClause:
