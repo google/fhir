@@ -18,6 +18,34 @@ pip install --upgrade setuptools
 pip install google-fhir
 ```
 
+### Building Locally
+This project is built and tested with [bazel](https://bazel.build), including
+all Python code. The following command will run all Python unit tests in the
+project:
+
+```
+bazel test //py/...
+```
+
+However, most users will typically install this in a Python environment as
+described in the Installation section above. Users who wish to install a local
+build into such an environment can do so easily using standard Python
+tools. The only prerequisite is that a protobuf compiler be available to
+generate the Python protobuf representation of FHIR resources. Python users
+can easily install one like this:
+
+```
+pip install mypy-protobuf
+```
+
+With that available, the full distribution setup can be created and installed
+like this:
+
+```
+python3 setup.py sdist
+pip install dist/google-fhir-<version>.tar.gz
+```
+
 ### Examples and Documentation
 We think the best way to get an idea of how FhirProto works is to get in and start playing with it.  To that end, we provide [https://github.com/google/fhir-examples](https://github.com/google/fhir-examples). This repo contains a script for using [Synthea](https://github.com/synthetichealth/synthea) to create a synthetic FHIR JSON dataset, and then shows some examples of parsing, printing, validating, profiling and querying.  The repo also contains a [walkthrough](https://github.com/google/fhir-examples/blob/master/EXAMPLES.md) of many of the examples.
 

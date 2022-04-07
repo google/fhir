@@ -352,3 +352,41 @@ py_test(
         requirement("six"),
     ],
 )
+
+py_library(
+    name = "fhir_path",
+    srcs = ["fhir_path.py"],
+    srcs_version = "PY3",
+    deps = [
+        ":primitive_handler",
+        "//py",
+        "//py/google/fhir/fhir_path:_evaluation",
+        "//py/google/fhir/fhir_path:context",
+        "//py/google/fhir/fhir_path:expressions",
+        "//py/google/fhir/fhir_path:fhir_path_data_types",
+    ],
+)
+
+py_test(
+    name = "fhir_path_test",
+    srcs = ["fhir_path_test.py"],
+    data = [
+        "//spec:fhir_r4_package.zip",
+    ],
+    legacy_create_init = 0,
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":fhir_path",
+        "@com_google_protobuf//:protobuf_python",
+        "//py",
+        "//proto/google/fhir/proto/r4/core/resources:observation_py_pb2",
+        "//proto/google/fhir/proto/r4/core/resources:patient_py_pb2",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
+        "//py/google/fhir/fhir_path:_expressions_test_base",
+        "//py/google/fhir/fhir_path:context",
+        "//py/google/fhir/fhir_path:expressions",
+        "//py/google/fhir/utils:fhir_package",
+        requirement("absl-py"),
+    ],
+)
