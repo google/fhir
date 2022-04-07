@@ -7,4 +7,5 @@ pandas~=1.1
 protobuf~=3.13
 python-dateutil~=2.8
 requests~=2.27
+requests-mock~=1.9
 sqlalchemy~=1.2
