@@ -179,7 +179,9 @@ py_library(
         "//py",
         "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
         requirement("absl-py"),
+        requirement("google-cloud-bigquery"),
         requirement("sqlalchemy"),
+        requirement("sqlalchemy-bigquery"),
     ],
 )
 
@@ -272,21 +274,5 @@ py_test(
         "//py/google/fhir/utils:fhir_package",
         requirement("absl-py"),
         requirement("six"),
-    ],
-)
-
-py_test(
-    name = "value_set_tables_test",
-    srcs = ["value_set_tables_test.py"],
-    legacy_create_init = 0,
-    python_version = "PY3",
-    srcs_version = "PY3",
-    deps = [
-        ":value_set_tables",
-        "//py",
-        "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
-        requirement("absl-py"),
-        requirement("six"),
-        requirement("sqlalchemy"),
     ],
 )

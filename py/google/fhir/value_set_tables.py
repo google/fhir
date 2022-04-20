@@ -22,7 +22,9 @@ import itertools
 from typing import Iterable, Tuple, Union
 
 import logging
+from google.cloud import bigquery
 import sqlalchemy
+import sqlalchemy_bigquery
 
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
 from google.fhir import terminology_service_client
@@ -58,7 +60,14 @@ def valueset_codes_insert_statement_for(
     The sqlalchemy insert expressions which you may execute to perform the
     actual database writes. Each yielded insert expression will insert at most
     batch_size number of rows.
+  Raises:
+    ValueError: If the given table does not have the expected columns.
   """
+  expected_cols = ('valueseturi', 'valuesetversion', 'system', 'code')
+  missing_cols = [col for col in expected_cols if col not in table.columns]
+  if missing_cols:
+    raise ValueError('Table %s missing expected columns: %s' %
+                     (table, ', '.join(missing_cols)))
 
   def value_set_codes() -> Iterable[Tuple[
       value_set_pb2.ValueSet, value_set_pb2.ValueSet.Expansion.Contains]]:
@@ -108,7 +117,7 @@ def materialize_value_set_expansion(
     urls: Iterable[str],
     expander: Union[terminology_service_client.TerminologyServiceClient,
                     value_sets.ValueSetResolver],
-    engine: sqlalchemy.engine.base.Engine,
+    engine: Union[bigquery.Client, sqlalchemy.engine.base.Engine],
     table: Union[str, sqlalchemy.sql.expression.TableClause],
     batch_size: int = 500) -> None:
   """Expands a sequence of value set and materializes their expanded codes.
@@ -134,8 +143,8 @@ def materialize_value_set_expansion(
       network requests by expanding value sets locally. A
       TerminologyServiceClient will use external terminology services to perform
       all value set expansions.
-    engine: The SQLAlchemy database engine to use when writing expanded value
-      sets to `table`.
+    engine: Either an SQLAlchemy database engine or a BigQuery Client to use
+      when writing expanded value sets to `table`.
     table: The database table to be written. May be a string representing the
       qualified table name or an SQLAlchemy Table or TableClause object. The
       table is assumed to have the columns 'valueseturi', 'valuesetversion',
@@ -143,17 +152,39 @@ def materialize_value_set_expansion(
     batch_size: The maximum number of rows to insert in a single query.
   """
   if isinstance(table, str):
-    table = sqlalchemy.Table(
-        table,
-        sqlalchemy.MetaData(bind=engine),
-        autoload=True,
-    )
+    if isinstance(engine, sqlalchemy.engine.base.Engine):
+      # Use the engine to reflect the table definition.
+      table = sqlalchemy.Table(
+          table,
+          sqlalchemy.MetaData(bind=engine),
+          autoload=True,
+      )
+    elif isinstance(engine, bigquery.Client):
+      # Build a table object with the columns we expect the table to have.
+      table = sqlalchemy.table(
+          table,
+          sqlalchemy.column('valueseturi'),
+          sqlalchemy.column('valuesetversion'),
+          sqlalchemy.column('system'),
+          sqlalchemy.column('code'),
+      )
+
   expanded_value_sets = (expander.expand_value_set_url(url) for url in urls)
   queries = valueset_codes_insert_statement_for(
       expanded_value_sets, table, batch_size=batch_size)
-  with engine.connect() as connection:
+
+  if isinstance(engine, sqlalchemy.engine.base.Engine):
+    with engine.connect() as connection:
+      for query in queries:
+        connection.execute(query)
+  elif isinstance(engine, bigquery.Client):
+    # Render the query objects as strings and use the client to execute them.
     for query in queries:
-      connection.execute(query)
+      query_string = str(
+          query.compile(
+              dialect=(sqlalchemy_bigquery.BigQueryDialect()),
+              compile_kwargs={'literal_binds': True}))
+      engine.query(query_string).result()
 
 
 def _code_as_select_literal(

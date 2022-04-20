@@ -16,6 +16,7 @@
 
 import unittest.mock
 
+from google.cloud import bigquery
 import sqlalchemy
 
 from google.fhir import value_set_tables
@@ -159,13 +160,18 @@ class ValueSetsTest(absltest.TestCase):
          'valueset_codes.system IS NULL AND '
          'valueset_codes.code IS NULL'))
 
+  def testValueSetToInsertStatement_withBadTable_raisesError(self):
+    table = sqlalchemy.table('missing_columns')
+    with self.assertRaises(ValueError):
+      list(value_set_tables.valueset_codes_insert_statement_for([], table))
+
   @unittest.mock.patch.object(
       value_set_tables.sqlalchemy, 'MetaData', autospec=True)
   @unittest.mock.patch.object(
       value_set_tables.sqlalchemy, 'Table', autospec=True)
   @unittest.mock.patch.object(
       value_set_tables, 'valueset_codes_insert_statement_for', autospec=True)
-  def testMaterializeValueSetExpansion_withTableName_performsExpansionsAndInserts(
+  def testMaterializeValueSetExpansion_withEngineAndTableName_performsExpansionsAndInserts(
       self, mock_valueset_codes_insert_statement_for, mock_table,
       mock_meta_data):
     mock_valueset_codes_insert_statement_for.return_value = [
@@ -198,6 +204,130 @@ class ValueSetsTest(absltest.TestCase):
             mock_expander.expand_value_set_url()
         ])
     self.assertEqual(args[1], mock_table())
+    self.assertEqual(kwargs['batch_size'], 500)
+
+    # Ensure we call expand_value_set_url with the two URLs.
+    mock_expander.expand_value_set_url.reset()
+    mock_expander.expand_value_set_url.assert_has_calls(
+        [unittest.mock.call('url-1'),
+         unittest.mock.call('url-2')])
+
+  @unittest.mock.patch.object(
+      value_set_tables, 'valueset_codes_insert_statement_for', autospec=True)
+  def testMaterializeValueSetExpansion_withEngineAndTableObj_performsExpansionsAndInserts(
+      self, mock_valueset_codes_insert_statement_for):
+    mock_valueset_codes_insert_statement_for.return_value = [
+        unittest.mock.MagicMock(),
+        unittest.mock.MagicMock()
+    ]
+    mock_expander = unittest.mock.MagicMock()
+    mock_engine = unittest.mock.MagicMock(spec=sqlalchemy.engine.base.Engine)
+    mock_table = build_valueset_codes_table()
+
+    value_set_tables.materialize_value_set_expansion(['url-1', 'url-2'],
+                                                     mock_expander, mock_engine,
+                                                     mock_table)
+
+    # Ensure we called execute with the two mock queries.
+    mock_engine.connect().__enter__().execute.assert_has_calls([
+        unittest.mock.call(mock_query)
+        for mock_query in mock_valueset_codes_insert_statement_for.return_value
+    ])
+    # Ensure we called valueset_codes_insert_statement_for with the value set
+    # expansions for both URLs.
+    args, kwargs = mock_valueset_codes_insert_statement_for.call_args_list[0]
+    self.assertEqual(
+        list(args[0]), [
+            mock_expander.expand_value_set_url(),
+            mock_expander.expand_value_set_url()
+        ])
+    self.assertEqual(args[1], mock_table)
+    self.assertEqual(kwargs['batch_size'], 500)
+
+    # Ensure we call expand_value_set_url with the two URLs.
+    mock_expander.expand_value_set_url.reset()
+    mock_expander.expand_value_set_url.assert_has_calls(
+        [unittest.mock.call('url-1'),
+         unittest.mock.call('url-2')])
+
+  @unittest.mock.patch.object(
+      value_set_tables, 'valueset_codes_insert_statement_for', autospec=True)
+  def testMaterializeValueSetExpansion_withBigQueryClientAndTableName_performsExpansionsAndInserts(
+      self, mock_valueset_codes_insert_statement_for):
+    mock_insert_statements = [
+        unittest.mock.MagicMock(),
+        unittest.mock.MagicMock()
+    ]
+    mock_valueset_codes_insert_statement_for.return_value = mock_insert_statements
+    mock_expander = unittest.mock.MagicMock()
+    mock_client = unittest.mock.MagicMock(spec=bigquery.Client)
+
+    value_set_tables.materialize_value_set_expansion(['url-1', 'url-2'],
+                                                     mock_expander, mock_client,
+                                                     'table_name')
+
+    # Ensure we called query with the rendered SQL for the two mock queries and
+    # called .result() on the returned job.
+    mock_client.query.assert_has_calls([
+        unittest.mock.call(str(mock_insert_statements[0].compile())),
+        unittest.mock.call().result(),
+        unittest.mock.call(str(mock_insert_statements[1].compile())),
+        unittest.mock.call().result(),
+    ])
+    # Ensure we called valueset_codes_insert_statement_for with the value set
+    # expansions for both URLs and with an appropriate table object.
+    args, kwargs = mock_valueset_codes_insert_statement_for.call_args_list[0]
+    expanded_value_sets, table = args
+    self.assertEqual(
+        list(expanded_value_sets), [
+            mock_expander.expand_value_set_url(),
+            mock_expander.expand_value_set_url()
+        ])
+    for col in ('valueseturi', 'valuesetversion', 'system', 'code'):
+      self.assertIn(col, table.columns)
+    self.assertEqual(kwargs['batch_size'], 500)
+
+    # Ensure we call expand_value_set_url with the two URLs.
+    mock_expander.expand_value_set_url.reset()
+    mock_expander.expand_value_set_url.assert_has_calls(
+        [unittest.mock.call('url-1'),
+         unittest.mock.call('url-2')])
+
+  @unittest.mock.patch.object(
+      value_set_tables, 'valueset_codes_insert_statement_for', autospec=True)
+  def testMaterializeValueSetExpansion_withBigQueryClientAndTableObj_performsExpansionsAndInserts(
+      self, mock_valueset_codes_insert_statement_for):
+    mock_insert_statements = [
+        unittest.mock.MagicMock(),
+        unittest.mock.MagicMock()
+    ]
+    mock_valueset_codes_insert_statement_for.return_value = mock_insert_statements
+    mock_expander = unittest.mock.MagicMock()
+    mock_client = unittest.mock.MagicMock(spec=bigquery.Client)
+    mock_table = build_valueset_codes_table()
+
+    value_set_tables.materialize_value_set_expansion(['url-1', 'url-2'],
+                                                     mock_expander, mock_client,
+                                                     mock_table)
+
+    # Ensure we called query with the rendered SQL for the two mock queries and
+    # called .result() on the returned job.
+    mock_client.query.assert_has_calls([
+        unittest.mock.call(str(mock_insert_statements[0].compile())),
+        unittest.mock.call().result(),
+        unittest.mock.call(str(mock_insert_statements[1].compile())),
+        unittest.mock.call().result(),
+    ])
+    # Ensure we called valueset_codes_insert_statement_for with the value set
+    # expansions for both URLs and with an appropriate table object.
+    args, kwargs = mock_valueset_codes_insert_statement_for.call_args_list[0]
+    expanded_value_sets, table = args
+    self.assertEqual(
+        list(expanded_value_sets), [
+            mock_expander.expand_value_set_url(),
+            mock_expander.expand_value_set_url()
+        ])
+    self.assertEqual(table, mock_table)
     self.assertEqual(kwargs['batch_size'], 500)
 
     # Ensure we call expand_value_set_url with the two URLs.
