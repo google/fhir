@@ -99,8 +99,10 @@ class ValueSetResolver:
         for element in elements
         if element.binding.value_set.value)
 
-    if structure_definition.url.value == (
-        'http://hl7.org/fhir/StructureDefinition/ExplanationOfBenefit'):
+    if structure_definition.url.value in (
+        'http://hl7.org/fhir/StructureDefinition/ExplanationOfBenefit',
+        'https://g.co/fhir/medicalrecords/StructureDefinition/ExplanationOfBenefit',
+    ):
       # A bug in the FHIR spec has this structure definition bound to a code
       # system by mistake. It should be bound to a value set instead. We swap
       # the URLs until the bug is addressed.
@@ -263,8 +265,10 @@ class ValueSetResolver:
     else:
       # No explicit codes list is given, meaning we should take the expansion as
       # the entire code system.
-      logging.info('Expanding to entire code system: %s',
-                   concept_set.system.value)
+      logging.info(
+          'Expanding value set: %s version: %s to entire code system: %s',
+          value_set.url.value, value_set.version.value,
+          concept_set.system.value)
       code_system = self.package_manager.get_resource(concept_set.system.value)
 
       if code_system is None:
