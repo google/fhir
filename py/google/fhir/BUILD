@@ -178,6 +178,7 @@ py_library(
         ":value_sets",
         "//py",
         "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
+        "//py/google/fhir/utils:url_utils",
         requirement("absl-py"),
         requirement("google-cloud-bigquery"),
         requirement("sqlalchemy"),

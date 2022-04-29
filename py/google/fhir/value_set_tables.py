@@ -29,6 +29,7 @@ import sqlalchemy_bigquery
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
 from google.fhir import terminology_service_client
 from google.fhir import value_sets
+from google.fhir.utils import url_utils
 
 
 def valueset_codes_insert_statement_for(
@@ -185,6 +186,35 @@ def materialize_value_set_expansion(
               dialect=(sqlalchemy_bigquery.BigQueryDialect()),
               compile_kwargs={'literal_binds': True}))
       engine.query(query_string).result()
+
+
+def count_code_systems_within_valueset_query(
+    value_set_url: str,
+    table: sqlalchemy.sql.expression.TableClause) -> sqlalchemy.sql.Select:
+  """Builds a query for the number of code systems within a value set.
+
+  Returns an sqlalchemy SELECT query for the number of code systems within the
+  given value set. If the value set url contains a |version suffix, the query
+  will report the number of code systems for that version of the value set. If
+  the url does not contain a |version suffix, the number of systems for any
+  version of the value set will be reported.
+
+  Args:
+    value_set_url: The value set to retrieve counts for.
+    table: The SqlAlchemy table to query.
+
+  Returns:
+    A sqlalchemy SELECT query which may be executed for the code systems count.
+  """
+  url, version = url_utils.parse_url_version(value_set_url)
+
+  query = sqlalchemy.select([
+      sqlalchemy.func.count(sqlalchemy.distinct(table.c.system))
+  ]).where(table.c.valueseturi == url)
+  if version:
+    query = query.where(table.c.valuesetversion == version)
+
+  return query
 
 
 def _code_as_select_literal(

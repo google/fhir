@@ -336,6 +336,30 @@ class ValueSetsTest(absltest.TestCase):
         [unittest.mock.call('url-1'),
          unittest.mock.call('url-2')])
 
+  def testCountCodeSystemsWithinValuesetQuery_withValueSet_buildsQuery(self):
+    table = build_valueset_codes_table()
+    query = value_set_tables.count_code_systems_within_valueset_query(
+        'http://value.set/id', table)
+    query_string = str(query.compile(compile_kwargs={'literal_binds': True}))
+    self.assertEqual(
+        query_string,
+        'SELECT count(DISTINCT valueset_codes.system) AS count_1 \n'
+        'FROM valueset_codes \n'
+        "WHERE valueset_codes.valueseturi = 'http://value.set/id'")
+
+  def testCountCodeSystemsWithinValuesetQuery_withValueSetVersion_buildsQuery(
+      self):
+    table = build_valueset_codes_table()
+    query = value_set_tables.count_code_systems_within_valueset_query(
+        'http://value.set/id|1.0', table)
+    query_string = str(query.compile(compile_kwargs={'literal_binds': True}))
+    self.assertEqual(
+        query_string,
+        'SELECT count(DISTINCT valueset_codes.system) AS count_1 \n'
+        'FROM valueset_codes \n'
+        "WHERE valueset_codes.valueseturi = 'http://value.set/id' "
+        "AND valueset_codes.valuesetversion = '1.0'")
+
 
 def build_valueset_codes_table() -> sqlalchemy.sql.expression.TableClause:
   return sqlalchemy.table(
