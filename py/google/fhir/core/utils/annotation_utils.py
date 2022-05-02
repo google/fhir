@@ -20,7 +20,7 @@ from google.protobuf import descriptor_pb2
 from google.protobuf import descriptor
 from google.protobuf import message
 from proto.google.fhir.proto import annotations_pb2
-from google.fhir.utils import proto_utils
+from google.fhir.core.utils import proto_utils
 
 MessageOrDescriptorBase = Union[message.Message, descriptor.DescriptorBase]
 

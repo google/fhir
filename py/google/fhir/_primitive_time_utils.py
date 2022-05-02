@@ -23,7 +23,7 @@ from typing import cast, Any, Tuple, Type, TypeVar
 from dateutil import parser
 from dateutil import tz
 from google.protobuf import message
-from google.fhir.utils import proto_utils
+from google.fhir.core.utils import proto_utils
 
 # google-fhir supports multiple <major>.<minor>.x interpreters. If unable to
 # import zoneinfo from stdlib, fallback to the backports package. See more at:

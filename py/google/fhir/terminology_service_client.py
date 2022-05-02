@@ -23,8 +23,8 @@ import requests.adapters
 import requests.packages
 
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
+from google.fhir.core.utils import url_utils
 from google.fhir.r4 import json_format
-from google.fhir.utils import url_utils
 
 TERMINOLOGY_BASE_URL_PER_DOMAIN = {
     'hl7.org': 'https://tx.fhir.org/r4/',

@@ -19,7 +19,7 @@ from proto.google.fhir.proto.r4 import fhirproto_extensions_pb2
 from proto.google.fhir.proto.r4 import uscore_pb2
 from proto.google.fhir.proto.r4.core import datatypes_pb2
 from proto.google.fhir.proto.r4.core.resources import patient_pb2
-from google.fhir.utils import fhir_types
+from google.fhir.core.utils import fhir_types
 
 
 class FhirTypesTest(absltest.TestCase):

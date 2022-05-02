@@ -14,12 +14,12 @@
 # limitations under the License.
 """A collection of functions for dealing with FHIR resources."""
 
-from typing import cast, Any, List, Type, TypeVar
+from typing import Any, List, Type, TypeVar, cast
 
 from google.protobuf import message
-from google.fhir.utils import fhir_types
-from google.fhir.utils import path_utils
-from google.fhir.utils import proto_utils
+from google.fhir.core.utils import fhir_types
+from google.fhir.core.utils import path_utils
+from google.fhir.core.utils import proto_utils
 
 _T = TypeVar('_T', bound=message.Message)
 

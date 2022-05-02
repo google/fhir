@@ -28,8 +28,8 @@ from absl.testing import absltest
 from proto.google.fhir.proto import annotations_pb2
 from proto.google.fhir.proto import profile_config_pb2
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
-from google.fhir.utils import fhir_package
-from google.fhir.utils import proto_utils
+from google.fhir.core.utils import fhir_package
+from google.fhir.core.utils import proto_utils
 
 FLAGS = flags.FLAGS
 

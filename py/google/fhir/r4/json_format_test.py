@@ -15,7 +15,7 @@
 """Test FHIR R4 parsing/printing functionality."""
 
 import os
-from typing import TypeVar, Type
+from typing import Type, TypeVar
 
 from google.protobuf import message
 from absl.testing import absltest
@@ -160,10 +160,10 @@ from proto.google.fhir.proto.r4.core.resources import test_script_pb2
 from proto.google.fhir.proto.r4.core.resources import verification_result_pb2
 from proto.google.fhir.proto.r4.core.resources import vision_prescription_pb2
 from google.fhir import fhir_errors
+from google.fhir.core.utils import proto_utils
 from google.fhir.json_format import json_format_test
 from google.fhir.r4 import json_format
 from google.fhir.testing import testdata_utils
-from google.fhir.utils import proto_utils
 
 _BIGQUERY_PATH = os.path.join('testdata', 'r4', 'bigquery')
 _EXAMPLES_PATH = os.path.join('testdata', 'r4', 'examples')

@@ -20,7 +20,7 @@ import decimal
 import json
 import re
 import threading
-from typing import cast, Any, List, Optional, Pattern, Tuple, Type, TypeVar
+from typing import Any, List, Optional, Pattern, Tuple, Type, TypeVar, cast
 
 from google.protobuf import descriptor
 from google.protobuf import message
@@ -28,8 +28,8 @@ from google.protobuf import message
 from google.fhir import codes
 from google.fhir import extensions
 from google.fhir import fhir_errors
-from google.fhir.utils import annotation_utils
-from google.fhir.utils import proto_utils
+from google.fhir.core.utils import annotation_utils
+from google.fhir.core.utils import proto_utils
 
 _T = TypeVar('_T', bound=message.Message)
 

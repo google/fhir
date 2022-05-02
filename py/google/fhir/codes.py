@@ -19,15 +19,15 @@ See also: https://www.hl7.org/fhir/codesystem.html.
 
 import collections
 import threading
-from typing import cast, Optional, TypeVar
+from typing import Optional, TypeVar, cast
 
 from google.protobuf import descriptor
 from google.protobuf import message
 from proto.google.fhir.proto import annotations_pb2
 from google.fhir import fhir_errors
-from google.fhir.utils import annotation_utils
-from google.fhir.utils import fhir_types
-from google.fhir.utils import proto_utils
+from google.fhir.core.utils import annotation_utils
+from google.fhir.core.utils import fhir_types
+from google.fhir.core.utils import proto_utils
 
 _T = TypeVar('_T', bound=message.Message)
 

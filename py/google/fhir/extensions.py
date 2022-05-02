@@ -18,16 +18,16 @@ See also: https://www.hl7.org/fhir/extensibility.html.
 """
 
 import threading
-from typing import cast, Any, Dict, List, Type, TypeVar
+from typing import Any, Dict, List, Type, TypeVar, cast
 
 from google.protobuf import descriptor
 from google.protobuf import message
 from proto.google.fhir.proto import annotations_pb2
 from google.fhir import codes
 from google.fhir import fhir_errors
-from google.fhir.utils import annotation_utils
-from google.fhir.utils import fhir_types
-from google.fhir.utils import proto_utils
+from google.fhir.core.utils import annotation_utils
+from google.fhir.core.utils import fhir_types
+from google.fhir.core.utils import proto_utils
 
 BINARY_SEPARATOR_STRIDE_URL = 'https://g.co/fhir/StructureDefinition/base64Binary-separatorStride'
 PRIMITIVE_HAS_NO_VALUE_URL = 'https://g.co/fhir/StructureDefinition/primitiveHasNoValue'

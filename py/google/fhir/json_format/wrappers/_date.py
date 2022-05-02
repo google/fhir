@@ -15,13 +15,13 @@
 """PrimitiveWrapper subclass for Date primitives."""
 
 import datetime
-from typing import cast, Any, Callable, Dict, Tuple, Type, TypeVar
+from typing import Any, Callable, Dict, Tuple, Type, TypeVar, cast
 
 from google.protobuf import message
 from google.fhir import _primitive_time_utils
 from google.fhir import fhir_errors
+from google.fhir.core.utils import proto_utils
 from google.fhir.json_format.wrappers import _primitive_wrappers
-from google.fhir.utils import proto_utils
 
 _FORMAT_FUNCS: Dict[_primitive_time_utils.DateTimePrecision,
                     Callable[[datetime.datetime], str]] = {

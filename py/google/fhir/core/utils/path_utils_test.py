@@ -14,8 +14,8 @@
 # limitations under the License.
 """Tests path_utils functionality."""
 
-from google.fhir.utils import path_utils
 from absl.testing import absltest
+from google.fhir.core.utils import path_utils
 
 
 class PathUtilsTest(absltest.TestCase):

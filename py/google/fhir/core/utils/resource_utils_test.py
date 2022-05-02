@@ -20,7 +20,7 @@ from proto.google.fhir.proto.r4.core.resources import account_pb2
 from proto.google.fhir.proto.r4.core.resources import activity_definition_pb2
 from proto.google.fhir.proto.r4.core.resources import bundle_and_contained_resource_pb2
 from proto.google.fhir.proto.r4.core.resources import structure_definition_pb2
-from google.fhir.utils import resource_utils
+from google.fhir.core.utils import resource_utils
 
 # TODO: These util tests should not be FHIR-specific.
 

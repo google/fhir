@@ -19,9 +19,9 @@ from typing import Optional
 
 from google.protobuf import descriptor
 from google.protobuf import message
-from google.fhir.utils import annotation_utils
-from google.fhir.utils import path_utils
-from google.fhir.utils import proto_utils
+from google.fhir.core.utils import annotation_utils
+from google.fhir.core.utils import path_utils
+from google.fhir.core.utils import proto_utils
 
 _FRAGMENT_REFERENCE_PATTERN = re.compile(r'^#[A-Za-z0-9.-]{1,64}$')
 _INTERNAL_REFERENCE_PATTERN = re.compile(

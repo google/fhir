@@ -25,13 +25,13 @@ from proto.google.fhir.proto.r4 import primitive_test_suite_pb2
 from proto.google.fhir.proto.r4.core import datatypes_pb2
 from google.fhir import extensions
 from google.fhir import fhir_errors
+from google.fhir.core.utils import annotation_utils
+from google.fhir.core.utils import fhir_types
+from google.fhir.core.utils import path_utils
+from google.fhir.core.utils import proto_utils
 from google.fhir.r4 import json_format
 from google.fhir.testing import protobuf_compare
 from google.fhir.testing import testdata_utils
-from google.fhir.utils import annotation_utils
-from google.fhir.utils import fhir_types
-from google.fhir.utils import path_utils
-from google.fhir.utils import proto_utils
 
 _PRIMITIVE_TESTS_PATH = os.path.join('testdata', 'primitives')
 

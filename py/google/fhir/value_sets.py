@@ -16,7 +16,7 @@
 
 import copy
 import itertools
-from typing import Iterable, List, Optional, Set, Sequence
+from typing import Iterable, List, Optional, Sequence, Set
 
 import logging
 
@@ -24,9 +24,9 @@ from proto.google.fhir.proto.r4.core.resources import code_system_pb2
 from proto.google.fhir.proto.r4.core.resources import structure_definition_pb2
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
 from google.fhir import terminology_service_client
-from google.fhir.utils import fhir_package
-from google.fhir.utils import proto_utils
-from google.fhir.utils import url_utils
+from google.fhir.core.utils import fhir_package
+from google.fhir.core.utils import proto_utils
+from google.fhir.core.utils import url_utils
 
 
 class ValueSetResolver:

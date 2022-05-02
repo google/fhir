@@ -29,7 +29,7 @@ import sqlalchemy_bigquery
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
 from google.fhir import terminology_service_client
 from google.fhir import value_sets
-from google.fhir.utils import url_utils
+from google.fhir.core.utils import url_utils
 
 
 def valueset_codes_insert_statement_for(

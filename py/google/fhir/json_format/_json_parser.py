@@ -23,8 +23,8 @@ from google.protobuf import message
 from google.fhir import extensions
 from google.fhir import primitive_handler
 from google.fhir import references
-from google.fhir.utils import annotation_utils
-from google.fhir.utils import proto_utils
+from google.fhir.core.utils import annotation_utils
+from google.fhir.core.utils import proto_utils
 
 _field_map_memos = {}
 _field_map_memos_cv = threading.Condition(threading.Lock())

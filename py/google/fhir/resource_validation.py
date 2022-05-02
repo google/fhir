@@ -21,9 +21,9 @@ from proto.google.fhir.proto import annotations_pb2
 from google.fhir import _primitive_time_utils
 from google.fhir import fhir_errors
 from google.fhir import primitive_handler
-from google.fhir.utils import annotation_utils
-from google.fhir.utils import fhir_types
-from google.fhir.utils import proto_utils
+from google.fhir.core.utils import annotation_utils
+from google.fhir.core.utils import fhir_types
+from google.fhir.core.utils import proto_utils
 
 
 def _validate_reference_field(parent: message.Message,

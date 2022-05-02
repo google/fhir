@@ -23,7 +23,7 @@ from proto.google.fhir.proto.r4.core import datatypes_pb2
 from proto.google.fhir.proto.r4.core import valuesets_pb2
 from proto.google.fhir.proto.r4.core.resources import observation_pb2
 from proto.google.fhir.proto.r4.core.resources import patient_pb2
-from google.fhir.utils import annotation_utils
+from google.fhir.core.utils import annotation_utils
 
 try:
   from testdata.r4.profiles import test_pb2

@@ -17,16 +17,16 @@
 import abc
 import copy
 import enum
-from typing import cast, Any, Callable, List, Optional
+from typing import Any, Callable, List, Optional, cast
 
 from google.protobuf import any_pb2
 from google.protobuf import descriptor
 from google.protobuf import message
 from google.fhir import primitive_handler
 from google.fhir import references
-from google.fhir.utils import annotation_utils
-from google.fhir.utils import fhir_types
-from google.fhir.utils import proto_utils
+from google.fhir.core.utils import annotation_utils
+from google.fhir.core.utils import fhir_types
+from google.fhir.core.utils import proto_utils
 
 
 class _FhirJsonFormat(enum.Enum):

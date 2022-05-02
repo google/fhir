@@ -18,7 +18,7 @@ import abc
 import decimal
 import json
 import os
-from typing import cast, Any, Type
+from typing import Any, Type, cast
 
 from google.protobuf import message
 from absl.testing import absltest
@@ -26,9 +26,9 @@ from google.fhir import _primitive_time_utils
 from google.fhir import extensions
 from google.fhir import fhir_errors
 from google.fhir import primitive_handler
+from google.fhir.core.utils import path_utils
+from google.fhir.core.utils import proto_utils
 from google.fhir.testing import testdata_utils
-from google.fhir.utils import path_utils
-from google.fhir.utils import proto_utils
 
 
 class PrimitiveWrapperPrimitiveHasNoValueTest(

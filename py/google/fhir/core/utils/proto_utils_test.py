@@ -21,7 +21,7 @@ from proto.google.fhir.proto.r4 import uscore_pb2
 from proto.google.fhir.proto.r4.core import codes_pb2
 from proto.google.fhir.proto.r4.core import datatypes_pb2
 from proto.google.fhir.proto.r4.core.resources import patient_pb2
-from google.fhir.utils import proto_utils
+from google.fhir.core.utils import proto_utils
 
 # TODO: These util tests should not be FHIR-specific.
 

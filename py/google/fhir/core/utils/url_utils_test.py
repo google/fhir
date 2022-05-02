@@ -17,7 +17,7 @@ from typing import Optional, Tuple
 
 from absl.testing import absltest
 from absl.testing import parameterized
-from google.fhir.utils import url_utils
+from google.fhir.core.utils import url_utils
 
 
 class UrlUtilsTest(parameterized.TestCase):

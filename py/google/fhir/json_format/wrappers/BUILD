@@ -23,7 +23,7 @@ py_library(
         "//py",
         "//py/google/fhir:extensions",
         "//py/google/fhir:fhir_errors",
-        "//py/google/fhir/utils:proto_utils",
+        "//py/google/fhir/core/utils:proto_utils",
         "@com_google_protobuf//:protobuf_python",
     ],
 )
@@ -40,7 +40,7 @@ py_library(
         "//py",
         "//py/google/fhir:fhir_errors",
         "//py/google/fhir:primitive_time_utils",
-        "//py/google/fhir/utils:proto_utils",
+        "//py/google/fhir/core/utils:proto_utils",
         "@com_google_protobuf//:protobuf_python",
     ],
 )
@@ -57,7 +57,7 @@ py_library(
         "//py",
         "//py/google/fhir:fhir_errors",
         "//py/google/fhir:primitive_time_utils",
-        "//py/google/fhir/utils:proto_utils",
+        "//py/google/fhir/core/utils:proto_utils",
         "@com_google_protobuf//:protobuf_python",
     ],
 )
@@ -88,7 +88,7 @@ py_library(
         "//py",
         "//py/google/fhir:fhir_errors",
         "//py/google/fhir:primitive_time_utils",
-        "//py/google/fhir/utils:proto_utils",
+        "//py/google/fhir/core/utils:proto_utils",
         "@com_google_protobuf//:protobuf_python",
     ],
 )
@@ -105,8 +105,8 @@ py_library(
         "//py/google/fhir:codes",
         "//py/google/fhir:extensions",
         "//py/google/fhir:fhir_errors",
-        "//py/google/fhir/utils:annotation_utils",
-        "//py/google/fhir/utils:proto_utils",
+        "//py/google/fhir/core/utils:annotation_utils",
+        "//py/google/fhir/core/utils:proto_utils",
         "@com_google_protobuf//:protobuf_python",
     ],
 )
@@ -123,7 +123,7 @@ py_library(
         "//py",
         "//py/google/fhir:fhir_errors",
         "//py/google/fhir:primitive_time_utils",
-        "//py/google/fhir/utils:proto_utils",
+        "//py/google/fhir/core/utils:proto_utils",
         "@com_google_protobuf//:protobuf_python",
     ],
 )

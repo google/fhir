@@ -17,7 +17,7 @@
 from absl.testing import absltest
 from proto.google.fhir.proto.stu3 import datatypes_pb2
 from google.fhir import references
-from google.fhir.utils import proto_utils
+from google.fhir.core.utils import proto_utils
 
 
 class ReferencesTest(absltest.TestCase):
