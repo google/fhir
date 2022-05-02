@@ -360,10 +360,10 @@ py_library(
     deps = [
         ":primitive_handler",
         "//py",
-        "//py/google/fhir/fhir_path:_evaluation",
-        "//py/google/fhir/fhir_path:context",
-        "//py/google/fhir/fhir_path:expressions",
-        "//py/google/fhir/fhir_path:fhir_path_data_types",
+        "//py/google/fhir/core/fhir_path:_evaluation",
+        "//py/google/fhir/core/fhir_path:context",
+        "//py/google/fhir/core/fhir_path:expressions",
+        "//py/google/fhir/core/fhir_path:fhir_path_data_types",
     ],
 )
 
@@ -383,9 +383,9 @@ py_test(
         "//proto/google/fhir/proto/r4/core/resources:observation_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:patient_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
-        "//py/google/fhir/fhir_path:_expressions_test_base",
-        "//py/google/fhir/fhir_path:context",
-        "//py/google/fhir/fhir_path:expressions",
+        "//py/google/fhir/core/fhir_path:_expressions_test_base",
+        "//py/google/fhir/core/fhir_path:context",
+        "//py/google/fhir/core/fhir_path:expressions",
         "//py/google/fhir/core/utils:fhir_package",
         requirement("absl-py"),
     ],
