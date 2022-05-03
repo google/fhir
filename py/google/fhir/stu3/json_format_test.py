@@ -23,8 +23,8 @@ from absl.testing import absltest
 from absl.testing import parameterized
 from proto.google.fhir.proto.stu3 import datatypes_pb2
 from proto.google.fhir.proto.stu3 import resources_pb2
+from google.fhir.core.internal.json_format import json_format_test
 from google.fhir.core.utils import proto_utils
-from google.fhir.json_format import json_format_test
 from google.fhir.stu3 import json_format
 from google.fhir.testing import testdata_utils
 

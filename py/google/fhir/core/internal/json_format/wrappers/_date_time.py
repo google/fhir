@@ -12,16 +12,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""PrimitiveWrapper subclass for Date primitives."""
+"""PrimitiveWrapper subclass for DateTime primitives."""
 
 import datetime
-from typing import Any, Callable, Dict, Tuple, Type, TypeVar, cast
+from typing import Any, Callable, Dict, Tuple, Type, TypeVar
 
 from google.protobuf import message
 from google.fhir import _primitive_time_utils
 from google.fhir import fhir_errors
+from google.fhir.core.internal.json_format.wrappers import _primitive_wrappers
 from google.fhir.core.utils import proto_utils
-from google.fhir.json_format.wrappers import _primitive_wrappers
 
 _FORMAT_FUNCS: Dict[_primitive_time_utils.DateTimePrecision,
                     Callable[[datetime.datetime], str]] = {
@@ -31,14 +31,20 @@ _FORMAT_FUNCS: Dict[_primitive_time_utils.DateTimePrecision,
                             lambda dt: dt.strftime('%Y-%m'),
                         _primitive_time_utils.DateTimePrecision.DAY:
                             lambda dt: dt.strftime('%Y-%m-%d'),
+                        _primitive_time_utils.DateTimePrecision.SECOND:
+                            lambda dt: dt.isoformat(timespec='seconds'),
+                        _primitive_time_utils.DateTimePrecision.MILLISECOND:
+                            lambda dt: dt.isoformat(timespec='milliseconds'),
+                        _primitive_time_utils.DateTimePrecision.MICROSECOND:
+                            lambda dt: dt.isoformat(timespec='microseconds'),
                     }
 
-Date = TypeVar('Date', bound=message.Message)
+DateTime = TypeVar('DateTime', bound=message.Message)
 
 
-def _parse(json_str: str, primitive_cls: Type[Date], *,
-           default_timezone: str) -> Date:
-  """Parses the json_str into a Date FHIR primitive.
+def _parse(json_str: str, primitive_cls: Type[DateTime], *,
+           default_timezone: str) -> DateTime:
+  """Parses the json_str into a DateTime FHIR primitive.
 
   Args:
     json_str: The raw JSON string to parse.
@@ -47,11 +53,11 @@ def _parse(json_str: str, primitive_cls: Type[Date], *,
       no timezone information is present.
 
   Returns:
-    A FHIR primitive Date.
+    A FHIR primitive DateTime.
 
   Raises:
-    fhir_errors.InvalidFhirError: In the event that no datetime format was
-    able to properly parse the json_str.
+    fhir_errors.InvalidFhirError: In the event that no FHIR primitive DateTime
+    format was able to properly parse the json_str.
   """
   try:
     dt = datetime.datetime.strptime(json_str, '%Y')
@@ -77,17 +83,43 @@ def _parse(json_str: str, primitive_cls: Type[Date], *,
   except ValueError:
     pass  # Fall through
 
-  raise fhir_errors.InvalidFhirError('Invalid Date.')
+  # Attempt to parse DateTime with provided time and timezone offset...
+  datetime_str, timezone_str = _primitive_time_utils.split_timezone(json_str)
+  try:
+    dt = datetime.datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S')
+    return _primitive_time_utils.build_date_like(
+        dt, timezone_str, _primitive_time_utils.DateTimePrecision.SECOND,
+        primitive_cls)
+  except ValueError:
+    pass  # Fall through
+
+  try:
+    dt = datetime.datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S.%f')
+    if (_primitive_time_utils.PRECISION_PATTERN_MILLISECOND.search(datetime_str)
+        is not None):
+      return _primitive_time_utils.build_date_like(
+          dt, timezone_str, _primitive_time_utils.DateTimePrecision.MILLISECOND,
+          primitive_cls)
+    elif (
+        _primitive_time_utils.PRECISION_PATTERN_MICROSECOND.search(datetime_str)
+        is not None):
+      return _primitive_time_utils.build_date_like(
+          dt, timezone_str, _primitive_time_utils.DateTimePrecision.MICROSECOND,
+          primitive_cls)
+  except ValueError:
+    pass  # Fall through
+
+  raise fhir_errors.InvalidFhirError('Invalid DateTime.')
 
 
-class DateWrapper(_primitive_wrappers.PrimitiveWrapper):
-  """A wrapper around the Date FHIR primitive type."""
+class DateTimeWrapper(_primitive_wrappers.PrimitiveWrapper):
+  """A wrapper around the DateTime FHIR primitive type."""
 
   _PARSABLE_TYPES: Tuple[Type[Any], ...] = (str,)
 
   @classmethod
   def from_json_str(cls, json_str: str, primitive_cls: Type[message.Message],
-                    context: _primitive_wrappers.Context) -> 'DateWrapper':
+                    context: _primitive_wrappers.Context) -> 'DateTimeWrapper':
     """See _primitive_wrappers.PrimitiveWrapper.from_json_str."""
     _primitive_wrappers.validate_primitive_json_representation(
         primitive_cls.DESCRIPTOR, json_str)
@@ -98,16 +130,12 @@ class DateWrapper(_primitive_wrappers.PrimitiveWrapper):
   def _nonnull_string_value(self) -> str:
     timezone: str = proto_utils.get_value_at_field(self.wrapped, 'timezone')
     if not timezone:
-      raise fhir_errors.InvalidFhirError('Date missing timezone.')
+      raise fhir_errors.InvalidFhirError('DateTime missing timezone.')
 
     precision: int = proto_utils.get_value_at_field(self.wrapped, 'precision')
     f = _FORMAT_FUNCS.get(precision)
     if f is None:
-      raise fhir_errors.InvalidFhirError('Invalid precision on Date.')
+      raise fhir_errors.InvalidFhirError('Invalid Precision on DateTime')
 
-    tzinfo = _primitive_time_utils.timezone_info_for_timezone(timezone)
-    delta = datetime.timedelta(
-        microseconds=cast(
-            int, proto_utils.get_value_at_field(self.wrapped, 'value_us')))
-    dt_value = (_primitive_time_utils.UNIX_EPOCH + delta).astimezone(tzinfo)
-    return f(dt_value)
+    dt_str = f(_primitive_time_utils.get_date_time_value(self.wrapped))
+    return _primitive_time_utils.restore_utc_timezone(dt_str, timezone)

@@ -22,8 +22,8 @@ from typing import Any, List, Tuple, Type, TypeVar, cast
 from google.protobuf import message
 from google.fhir import extensions
 from google.fhir import fhir_errors
+from google.fhir.core.internal.json_format.wrappers import _primitive_wrappers
 from google.fhir.core.utils import proto_utils
-from google.fhir.json_format.wrappers import _primitive_wrappers
 
 Base64Binary = TypeVar('Base64Binary', bound=message.Message)
 SeparatorStride = TypeVar('SeparatorStride', bound=message.Message)

@@ -22,15 +22,15 @@ from proto.google.fhir.proto.stu3 import fhirproto_extensions_pb2
 from proto.google.fhir.proto.stu3 import resources_pb2
 from google.fhir import _primitive_time_utils
 from google.fhir import primitive_handler
+from google.fhir.core.internal.json_format.wrappers import _base64_binary
+from google.fhir.core.internal.json_format.wrappers import _date
+from google.fhir.core.internal.json_format.wrappers import _date_time
+from google.fhir.core.internal.json_format.wrappers import _decimal
+from google.fhir.core.internal.json_format.wrappers import _instant
+from google.fhir.core.internal.json_format.wrappers import _primitive_wrappers
+from google.fhir.core.internal.json_format.wrappers import _time
 from google.fhir.core.utils import annotation_utils
 from google.fhir.core.utils import fhir_types
-from google.fhir.json_format.wrappers import _base64_binary
-from google.fhir.json_format.wrappers import _date
-from google.fhir.json_format.wrappers import _date_time
-from google.fhir.json_format.wrappers import _decimal
-from google.fhir.json_format.wrappers import _instant
-from google.fhir.json_format.wrappers import _primitive_wrappers
-from google.fhir.json_format.wrappers import _time
 
 
 class PrimitiveHandler(primitive_handler.PrimitiveHandler):

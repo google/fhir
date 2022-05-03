@@ -17,10 +17,10 @@
 import decimal
 import json
 
-from typing import cast, Any, Tuple, Type, TypeVar
+from typing import Any, Tuple, Type, TypeVar, cast
 
 from google.protobuf import message
-from google.fhir.json_format.wrappers import _primitive_wrappers
+from google.fhir.core.internal.json_format.wrappers import _primitive_wrappers
 
 Decimal = TypeVar('Decimal', bound=message.Message)
 

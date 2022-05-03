@@ -88,7 +88,7 @@ py_library(
     deps = [
         "//py",
         "//py/google/fhir:primitive_time_utils",
-        "//py/google/fhir/json_format/wrappers:primitive_wrappers",
+        "//py/google/fhir/core/internal/json_format/wrappers:primitive_wrappers",
         "@com_google_protobuf//:protobuf_python",
     ],
 )

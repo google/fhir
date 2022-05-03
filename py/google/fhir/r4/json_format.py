@@ -21,8 +21,8 @@ from typing import Any, Dict, Type, TypeVar
 from google.protobuf import message
 from google.fhir import _primitive_time_utils
 from google.fhir import resource_validation
-from google.fhir.json_format import _json_parser
-from google.fhir.json_format import _json_printer
+from google.fhir.core.internal.json_format import _json_parser
+from google.fhir.core.internal.json_format import _json_printer
 from google.fhir.r4 import primitive_handler
 
 _T = TypeVar('_T', bound=message.Message)

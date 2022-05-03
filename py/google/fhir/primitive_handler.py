@@ -15,11 +15,11 @@
 """Version-agnostic abstractions around FHIR primitive datatypes."""
 
 import abc
-from typing import cast, Any, List, Optional, Type
+from typing import Any, List, Optional, Type, cast
 
 from google.protobuf import message
 from google.fhir import _primitive_time_utils
-from google.fhir.json_format.wrappers import _primitive_wrappers
+from google.fhir.core.internal.json_format.wrappers import _primitive_wrappers
 
 
 class PrimitiveHandler(abc.ABC):
