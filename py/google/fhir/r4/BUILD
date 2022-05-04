@@ -23,8 +23,8 @@ py_library(
     deps = [
         ":primitive_handler",
         "//py",
-        "//py/google/fhir:primitive_time_utils",
-        "//py/google/fhir:resource_validation",
+        "//py/google/fhir/core/internal:primitive_time_utils",
+        "//py/google/fhir/core/internal:resource_validation",
         "//py/google/fhir/core/internal/json_format",
         "@com_google_protobuf//:protobuf_python",
     ],
@@ -42,8 +42,8 @@ py_library(
         "//proto/google/fhir/proto/r4:fhirproto_extensions_py_pb2",
         "//proto/google/fhir/proto/r4/core:datatypes_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_py_pb2",
-        "//py/google/fhir:primitive_handler",
-        "//py/google/fhir:primitive_time_utils",
+        "//py/google/fhir/core/internal:primitive_handler",
+        "//py/google/fhir/core/internal:primitive_time_utils",
         "//py/google/fhir/core/internal/json_format/wrappers:base64_binary",
         "//py/google/fhir/core/internal/json_format/wrappers:date",
         "//py/google/fhir/core/internal/json_format/wrappers:date_time",
@@ -289,8 +289,8 @@ py_test(
     python_version = "PY3",
     deps = [
         "//py",
-        "//py/google/fhir:primitive_handler_test",
-        "//py/google/fhir/r4:primitive_handler",
+        "//py/google/fhir/core/internal:primitive_handler_test",
+        ":primitive_handler",
         requirement("absl-py"),
         requirement("six"),
     ],
@@ -324,7 +324,7 @@ py_library(
     deps = [
         ":primitive_handler",
         "//py",
-        "//py/google/fhir:resource_validation",
+        "//py/google/fhir/core/internal:resource_validation",
         "@com_google_protobuf//:protobuf_python",
     ],
 )

@@ -15,7 +15,7 @@
 """Performs resource validation on R4 FHIR resource protos."""
 
 from google.protobuf import message
-from google.fhir import resource_validation
+from google.fhir.core.internal import resource_validation
 from google.fhir.r4 import primitive_handler
 
 _PRIMITIVE_HANDLER = primitive_handler.PrimitiveHandler()

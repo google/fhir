@@ -17,7 +17,7 @@
 import os
 
 from absl.testing import absltest
-from google.fhir import primitive_handler_test
+from google.fhir.core.internal import primitive_handler_test
 from google.fhir.stu3 import primitive_handler
 
 _PRIMITIVE_HANDLER = primitive_handler.PrimitiveHandler()

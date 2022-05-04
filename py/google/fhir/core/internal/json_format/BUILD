@@ -24,9 +24,8 @@ py_library(
     deps = [
         "//py",
         "//py/google/fhir:extensions",
-        "//py/google/fhir:primitive_handler",
         "//py/google/fhir:references",
-        "//py/google/fhir:resource_validation",
+        "//py/google/fhir/core/internal:primitive_handler",
         "//py/google/fhir/core/utils:annotation_utils",
         "//py/google/fhir/core/utils:fhir_types",
         "//py/google/fhir/core/utils:proto_utils",

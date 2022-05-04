@@ -20,8 +20,8 @@ from google.protobuf import message
 from proto.google.fhir.proto.stu3 import datatypes_pb2
 from proto.google.fhir.proto.stu3 import fhirproto_extensions_pb2
 from proto.google.fhir.proto.stu3 import resources_pb2
-from google.fhir import _primitive_time_utils
-from google.fhir import primitive_handler
+from google.fhir.core.internal import _primitive_time_utils
+from google.fhir.core.internal import primitive_handler
 from google.fhir.core.internal.json_format.wrappers import _base64_binary
 from google.fhir.core.internal.json_format.wrappers import _date
 from google.fhir.core.internal.json_format.wrappers import _date_time

@@ -19,8 +19,8 @@ import json
 from typing import Any, Dict, Type, TypeVar
 
 from google.protobuf import message
-from google.fhir import _primitive_time_utils
-from google.fhir import resource_validation
+from google.fhir.core.internal import _primitive_time_utils
+from google.fhir.core.internal import resource_validation
 from google.fhir.core.internal.json_format import _json_parser
 from google.fhir.core.internal.json_format import _json_printer
 from google.fhir.r4 import primitive_handler

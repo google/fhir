@@ -18,9 +18,9 @@ from google.protobuf import any_pb2
 from google.protobuf import descriptor
 from google.protobuf import message
 from proto.google.fhir.proto import annotations_pb2
-from google.fhir import _primitive_time_utils
 from google.fhir import fhir_errors
-from google.fhir import primitive_handler
+from google.fhir.core.internal import _primitive_time_utils
+from google.fhir.core.internal import primitive_handler
 from google.fhir.core.utils import annotation_utils
 from google.fhir.core.utils import fhir_types
 from google.fhir.core.utils import proto_utils

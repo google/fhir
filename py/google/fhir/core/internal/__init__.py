@@ -1,5 +1,5 @@
 #
-# Copyright 2020 Google LLC
+# Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,15 +12,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Performs resource validation on STU3 FHIR resource protos."""
-
-from google.protobuf import message
-from google.fhir.core.internal import resource_validation
-from google.fhir.stu3 import primitive_handler
-
-_PRIMITIVE_HANDLER = primitive_handler.PrimitiveHandler()
-
-
-def validate_resource(resource: message.Message) -> None:
-  """Performs basic FHIR constraint validation on the provided resource."""
-  resource_validation.validate_resource(resource, _PRIMITIVE_HANDLER)

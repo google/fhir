@@ -21,8 +21,8 @@ from google.protobuf import any_pb2
 from google.protobuf import descriptor
 from google.protobuf import message
 from google.fhir import extensions
-from google.fhir import primitive_handler
 from google.fhir import references
+from google.fhir.core.internal import primitive_handler
 from google.fhir.core.utils import annotation_utils
 from google.fhir.core.utils import proto_utils
 
