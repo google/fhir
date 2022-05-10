@@ -23,6 +23,9 @@ _CODING_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/Codi
 _DATE_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/date'
 _DATETIME_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/dateTime'
 _DECIMAL_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/decimal'
+_POSITIVE_INTEGER_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/positiveInt'
+_UNSIGNED_INTEGER_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/unsignedInt'
+_INTEGER_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/integer'
 _EXTENSION_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/Extension'
 _PERIOD_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/Period'
 _PATIENT_STRUCTURE_DEFINITION_URL = 'http://hl7.org/fhir/StructureDefinition/Patient'
@@ -176,6 +179,26 @@ def is_decimal(
     message_or_descriptor: annotation_utils.MessageOrDescriptorBase) -> bool:
   """Returns True if message_or_descriptor is a FHIR Decimal type."""
   return is_type(_DECIMAL_STRUCTURE_DEFINITION_URL, message_or_descriptor)
+
+
+def is_integer(
+    message_or_descriptor: annotation_utils.MessageOrDescriptorBase) -> bool:
+  """Returns True if message_or_descriptor is a FHIR integer type."""
+  return is_type(_INTEGER_STRUCTURE_DEFINITION_URL, message_or_descriptor)
+
+
+def is_positive_integer(
+    message_or_descriptor: annotation_utils.MessageOrDescriptorBase) -> bool:
+  """Returns True if message_or_descriptor is a FHIR positive integer type."""
+  return is_type(_POSITIVE_INTEGER_STRUCTURE_DEFINITION_URL,
+                 message_or_descriptor)
+
+
+def is_unsigned_integer(
+    message_or_descriptor: annotation_utils.MessageOrDescriptorBase) -> bool:
+  """Returns True if message_or_descriptor is a FHIR unsigned integer type."""
+  return is_type(_UNSIGNED_INTEGER_STRUCTURE_DEFINITION_URL,
+                 message_or_descriptor)
 
 
 def is_string(
