@@ -15,19 +15,164 @@
 #ifndef GOOGLE_FHIR_FHIR_PACKAGE_H_
 #define GOOGLE_FHIR_FHIR_PACKAGE_H_
 
+#include <string>
+
 #include "absl/container/flat_hash_map.h"
 #include "absl/status/statusor.h"
+#include "absl/strings/str_format.h"
+#include "absl/strings/string_view.h"
 #include "absl/types/optional.h"
+#include "google/fhir/json/fhir_json.h"
+#include "google/fhir/json/json_sax_handler.h"
+#include "google/fhir/r4/json_format.h"
+#include "google/fhir/status/status.h"
 #include "proto/google/fhir/proto/profile_config.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/code_system.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/search_parameter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/structure_definition.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/value_set.pb.h"
+#include "lib/zip.h"
 
 namespace google::fhir {
 
-// Struct representing a FHIR Proto package, including defining resources and a
-// PackageInfo proto. This is constructed from a zip file containing these
+// A collection of FHIR resources of a given type.
+// Acts as an accessor for resources of a single type from a FHIR Package zip
+// file containing JSON representations of various resources.
+// Resources are lazily read and parsed from the zip file as requested.
+// Resources are cached for fast repeated access.
+// Example:
+//    auto collection = ResourceCollection<ValueSet>("zip_file_path");
+//    collection.AddUriAtPath("uri-for-resource",
+//    "path_within_zip_file_for_resource");
+//    absl::StatusOr<ValueSet> result =
+//    collection.GetResource("uri-for-resource");
+template <typename T>
+class ResourceCollection {
+ public:
+  explicit ResourceCollection(absl::string_view zip_file_path)
+      : zip_file_path_(zip_file_path) {}
+
+  // Indicates that the resource for `uri` can be found inside this
+  // ResourceCollection's zip file. The `uri` is defined by the resource JSON
+  // file at `path` within the zip file. The path may be to a file containing
+  // either the uri's resource JSON directly or a Bundle containing the
+  // resource.
+  void AddUriAtPath(absl::string_view uri, absl::string_view path) {
+    resource_paths_for_uris_.insert({std::string(uri), std::string(path)});
+  }
+
+  // Retrieves the resource for `uri`. Either returns a previously cached proto
+  // for the resource or reads and parses the resource from the
+  // ResourceCollection's zip file.
+  absl::StatusOr<const T> GetResource(absl::string_view uri) {
+    const auto cached = parsed_resources_.find(std::string(uri));
+    if (cached != parsed_resources_.end()) {
+      return cached->second;
+    }
+
+    const auto path = resource_paths_for_uris_.find(std::string(uri));
+    if (path == resource_paths_for_uris_.end()) {
+      return absl::NotFoundError(
+          absl::StrFormat("%s not present in collection", uri));
+    }
+
+    absl::StatusOr<const T> parsed =
+        ParseProtoFromFile(uri, zip_file_path_, path->second);
+    if (parsed.ok()) {
+      CacheParsedResource(uri, *parsed);
+    }
+    return parsed;
+  }
+
+  void CacheParsedResource(absl::string_view uri, const T& resource) {
+    parsed_resources_.insert({std::string(uri), resource});
+  }
+
+ private:
+  // Retrieves the resource JSON for `uri` from `zip_file_path` at
+  // `resource_path` and parses the JSON into a protocol buffer.
+  static absl::StatusOr<const T> ParseProtoFromFile(
+      absl::string_view uri, absl::string_view zip_file_path,
+      absl::string_view resource_path) {
+    int zip_open_error;
+    zip_t* zip_file = zip_open(std::string(zip_file_path).c_str(), ZIP_RDONLY,
+                               &zip_open_error);
+    if (zip_file == nullptr) {
+      return absl::NotFoundError(
+          absl::StrFormat("Unable to open zip: %s. Error code: %d",
+                          zip_file_path, zip_open_error));
+    }
+
+    zip_file_t* resource_file =
+        zip_fopen(zip_file, std::string(resource_path).c_str(), 0);
+    if (resource_file == nullptr) {
+      return absl::NotFoundError(
+          absl::StrFormat("Unable to find path %s in zip file %s. The resource "
+                          ".zip file may have changed on disk.",
+                          resource_path, zip_file_path));
+    }
+
+    zip_stat_t resource_file_stat;
+    int zip_stat_error = zip_stat(zip_file, std::string(resource_path).c_str(),
+                                  ZIP_STAT_SIZE, &resource_file_stat);
+    if (zip_stat_error != 0) {
+      return absl::NotFoundError(
+          absl::StrFormat("Unable to stat path %s in zip file %s. The resource "
+                          ".zip file may have changed on disk.",
+                          resource_path, zip_file_path));
+    }
+
+    std::string raw_json(resource_file_stat.size, '\0');
+    zip_int64_t read =
+        zip_fread(resource_file, &raw_json[0], resource_file_stat.size);
+
+    zip_fclose(resource_file);
+    zip_close(zip_file);
+
+    if (read < resource_file_stat.size) {
+      return absl::NotFoundError(
+          absl::StrFormat("Unable to read path %s in zip file %s.",
+                          resource_path, zip_file_path));
+    }
+
+    internal::FhirJson parsed_json;
+    FHIR_RETURN_IF_ERROR(internal::ParseJsonValue(raw_json, parsed_json));
+
+    absl::StatusOr<const internal::FhirJson*> resource_type_json =
+        parsed_json.get("resourceType");
+    if (!resource_type_json.ok()) {
+      return resource_type_json.status();
+    }
+
+    absl::StatusOr<const std::string> resource_type =
+        (*resource_type_json)->asString();
+    if (!resource_type.ok()) {
+      return resource_type.status();
+    }
+
+    if (*resource_type != T::descriptor()->name()) {
+      if (*resource_type == "Bundle") {
+        return absl::UnimplementedError(
+            "Extracting entries from Bundle types not yet implemented.");
+      }
+      return absl::InvalidArgumentError(
+          absl::Substitute("Type mismatch in ResourceCollection:  Collection "
+                           "is of type $0, but JSON resource is of type $1",
+                           T::descriptor()->name(), *resource_type));
+    }
+
+    return google::fhir::r4::JsonFhirStringToProto<T>(raw_json,
+                                                      absl::UTCTimeZone());
+  }
+
+  const std::string zip_file_path_;
+  absl::flat_hash_map<const std::string, T> parsed_resources_;
+  absl::flat_hash_map<const std::string, const std::string>
+      resource_paths_for_uris_;
+};
+
+// Struct representing a FHIR Proto package, including defining resources and
+// a PackageInfo proto. This is constructed from a zip file containing these
 // files, as generated by the `fhir_package` rule in protogen.bzl.
 // TODO: Support versions other than R4
 struct FhirPackage {

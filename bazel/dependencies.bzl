@@ -124,6 +124,16 @@ def fhirproto_dependencies(core_lib = False):
     )
 
     http_archive(
+        name = "libzip",
+        build_file = main_fhir_location + "//bazel/buildfiles:libzip.BUILD",
+        sha256 = "0e2276c550c5a310d4ebf3a2c3dfc43fb3b4602a072ff625842ad4f3238cb9cc",
+        strip_prefix = "libzip-1.7.3",
+        urls = [
+            "https://github.com/nih-at/libzip/releases/download/v1.7.3/libzip-1.7.3.tar.gz",
+        ],
+    )
+
+    http_archive(
         name = "icu",
         sha256 = "dfc62618aa4bd3ca14a3df548cd65fe393155edd213e49c39f3a30ccd618fc27",
         strip_prefix = "icu-release-64-2",

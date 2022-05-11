@@ -540,10 +540,14 @@ cc_test(
     ],
     deps = [
         ":fhir_package",
-        "//cc/google/fhir/status:statusor",
         "//proto/google/fhir/proto:annotations_cc_proto",
         "//proto/google/fhir/proto:profile_config_cc_proto",
+        "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_cc_proto",
+        "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings:str_format",
         "@com_google_googletest//:gtest_main",
+        "@libzip",
     ],
 )
 
@@ -568,7 +572,10 @@ cc_library(
     hdrs = ["fhir_package.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        "//cc/google/fhir/json:fhir_json",
+        "//cc/google/fhir/json:json_sax_handler",
         "//cc/google/fhir/r4:json_format",
+        "//cc/google/fhir/status",
         "//proto/google/fhir/proto:profile_config_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:code_system_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:search_parameter_cc_proto",
@@ -578,10 +585,12 @@ cc_library(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/time",
         "@com_google_absl//absl/types:optional",
         "@com_google_protobuf//:protobuf",
         "@com_googlesource_code_re2//:re2",
         "@libarchive",
+        "@libzip",
     ],
 )
