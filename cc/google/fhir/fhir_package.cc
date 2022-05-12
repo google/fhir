@@ -23,12 +23,16 @@
 #include "absl/strings/string_view.h"
 #include "absl/time/time.h"
 #include "absl/types/optional.h"
+#include "google/fhir/json/fhir_json.h"
+#include "google/fhir/json/json_sax_handler.h"
 #include "google/fhir/r4/json_format.h"
+#include "google/fhir/status/status.h"
 #include "proto/google/fhir/proto/profile_config.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/structure_definition.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/value_set.pb.h"
 #include "libarchive/archive.h"
 #include "libarchive/archive_entry.h"
+#include "lib/zip.h"
 #include "re2/re2.h"
 
 namespace google::fhir {
@@ -52,6 +56,99 @@ absl::StatusOr<std::string> GetResourceType(const std::string& json) {
 }
 
 }  // namespace
+
+namespace internal {
+absl::StatusOr<const FhirJson*> FindResourceInBundle(
+    absl::string_view uri, const FhirJson& bundle_json) {
+  absl::Status not_found =
+      absl::NotFoundError(absl::StrFormat("%s not present in bundle.", uri));
+
+  FHIR_ASSIGN_OR_RETURN(const FhirJson* entries, bundle_json.get("entry"));
+  FHIR_ASSIGN_OR_RETURN(int num_entries, entries->arraySize());
+  for (int i = 0; i < num_entries; ++i) {
+    FHIR_ASSIGN_OR_RETURN(const FhirJson* entry, entries->get(i));
+    FHIR_ASSIGN_OR_RETURN(const FhirJson* resource, entry->get("resource"));
+    FHIR_ASSIGN_OR_RETURN(std::string resource_url,
+                          internal::GetResourceUrl(*resource));
+    // Found the resource!
+    if (uri == resource_url) {
+      return resource;
+    }
+    // If the resource is a bundle, recursively search through it.
+    FHIR_ASSIGN_OR_RETURN(std::string resource_type,
+                          internal::GetResourceType(*resource));
+    if (resource_type == "Bundle") {
+      absl::StatusOr<const FhirJson*> bundle_json =
+          FindResourceInBundle(uri, *resource);
+      if (bundle_json.ok()) {
+        return bundle_json;
+      } else {
+        not_found.Update(bundle_json.status());
+      }
+    }
+  }
+  return not_found;
+}
+
+absl::Status ParseResourceFromZip(absl::string_view zip_file_path,
+                                  absl::string_view resource_path,
+                                  FhirJson& json_value) {
+  int zip_open_error;
+  zip_t* zip_file =
+      zip_open(std::string(zip_file_path).c_str(), ZIP_RDONLY, &zip_open_error);
+  if (zip_file == nullptr) {
+    return absl::NotFoundError(
+        absl::StrFormat("Unable to open zip: %s. Error code: %d", zip_file_path,
+                        zip_open_error));
+  }
+
+  zip_stat_t resource_file_stat;
+  int zip_stat_error = zip_stat(zip_file, std::string(resource_path).c_str(),
+                                ZIP_STAT_SIZE, &resource_file_stat);
+  if (zip_stat_error != 0) {
+    return absl::NotFoundError(
+        absl::StrFormat("Unable to stat path %s in zip file %s. The resource "
+                        ".zip file may have changed on disk.",
+                        resource_path, zip_file_path));
+  }
+
+  zip_file_t* resource_file =
+      zip_fopen(zip_file, std::string(resource_path).c_str(), 0);
+  if (resource_file == nullptr) {
+    return absl::NotFoundError(
+        absl::StrFormat("Unable to find path %s in zip file %s. The resource "
+                        ".zip file may have changed on disk.",
+                        resource_path, zip_file_path));
+  }
+
+  std::string raw_json(resource_file_stat.size, '\0');
+  zip_int64_t read =
+      zip_fread(resource_file, &raw_json[0], resource_file_stat.size);
+
+  zip_fclose(resource_file);
+  zip_close(zip_file);
+
+  if (read < resource_file_stat.size) {
+    return absl::NotFoundError(
+        absl::StrFormat("Unable to read path %s in zip file %s.", resource_path,
+                        zip_file_path));
+  }
+
+  return internal::ParseJsonValue(raw_json, json_value);
+}
+
+absl::StatusOr<std::string> GetResourceType(const FhirJson& parsed_json) {
+  FHIR_ASSIGN_OR_RETURN(const internal::FhirJson* resource_type_json,
+                        parsed_json.get("resourceType"));
+  return resource_type_json->asString();
+}
+
+absl::StatusOr<std::string> GetResourceUrl(const FhirJson& parsed_json) {
+  FHIR_ASSIGN_OR_RETURN(const internal::FhirJson* resource_url_json,
+                        parsed_json.get("url"));
+  return resource_url_json->asString();
+}
+}  // namespace internal
 
 absl::StatusOr<FhirPackage> FhirPackage::Load(absl::string_view zip_file_path) {
   return Load(zip_file_path, absl::optional<PackageInfo>());

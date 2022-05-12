@@ -124,6 +124,56 @@ TEST(ResourceCollectionTest, AddGetResourceSucceeds) {
   EXPECT_EQ(result->url().value(), "http://value.set/id");
 }
 
+TEST(ResourceCollectionTest, AddGetResourceInBundleSucceeds) {
+  const char* bundle_contents = R"(
+{
+  "resourceType": "Bundle",
+  "url": "http://bundles.of-fun/id",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Bundle",
+        "url": "http://bundles.nested/id",
+        "entry": [
+          {
+            "resource": {
+              "resourceType": "ValueSet",
+              "id": "a-different-value-set",
+              "url": "http://different-value.set/id",
+              "status": "draft"
+            }
+          },
+          {
+            "resource": {
+              "resourceType": "ValueSet",
+              "id": "a-value-set",
+              "url": "http://value.set/id",
+              "status": "draft"
+            }
+          }
+        ]
+      }
+    }
+  ]
+})";
+  absl::StatusOr<std::string> temp_name =
+      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+          {"a_bundle.json", bundle_contents}});
+
+  ASSERT_TRUE(temp_name.ok()) << temp_name.status().message();
+
+  auto collection =
+      ResourceCollection<google::fhir::r4::core::ValueSet>(*temp_name);
+  collection.AddUriAtPath("http://value.set/id", "a_bundle.json");
+  absl::StatusOr<google::fhir::r4::core::ValueSet> result =
+      collection.GetResource("http://value.set/id");
+
+  remove(temp_name->c_str());
+  ASSERT_TRUE(result.ok()) << result.status().message();
+  EXPECT_EQ(result->id().value(), "a-value-set");
+  EXPECT_EQ(result->url().value(), "http://value.set/id");
+}
+
 TEST(ResourceCollectionTest, AddGetResourceWithUriMappingFails) {
   auto collection =
       ResourceCollection<google::fhir::r4::core::ValueSet>("missing.zip");
@@ -167,6 +217,38 @@ TEST(ResourceCollectionTest, AddGetResourceWithBadResourceJsonFails) {
   auto collection =
       ResourceCollection<google::fhir::r4::core::ValueSet>(*temp_name);
   collection.AddUriAtPath("http://value.set/id", "a_value_set.json");
+  absl::StatusOr<google::fhir::r4::core::ValueSet> result =
+      collection.GetResource("http://value.set/id");
+
+  remove(temp_name->c_str());
+  ASSERT_FALSE(result.ok());
+}
+
+TEST(ResourceCollectionTest, AddGetResourceWithMissingBundleEntryFails) {
+  const char* bundle_contents = R"(
+{
+  "resourceType": "Bundle",
+  "url": "http://bundles.of-fun/id",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "ValueSet",
+        "id": "a-different-value-set",
+        "url": "http://different-value.set/id",
+        "status": "draft"
+      }
+    }
+  ]
+})";
+  absl::StatusOr<std::string> temp_name =
+      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+          {"a_bundle.json", bundle_contents}});
+
+  ASSERT_TRUE(temp_name.ok()) << temp_name.status().message();
+
+  auto collection =
+      ResourceCollection<google::fhir::r4::core::ValueSet>(*temp_name);
+  collection.AddUriAtPath("http://value.set/id", "a_bundle.json");
   absl::StatusOr<google::fhir::r4::core::ValueSet> result =
       collection.GetResource("http://value.set/id");
 

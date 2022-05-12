@@ -23,7 +23,6 @@
 #include "absl/strings/string_view.h"
 #include "absl/types/optional.h"
 #include "google/fhir/json/fhir_json.h"
-#include "google/fhir/json/json_sax_handler.h"
 #include "google/fhir/r4/json_format.h"
 #include "google/fhir/status/status.h"
 #include "proto/google/fhir/proto/profile_config.pb.h"
@@ -31,9 +30,24 @@
 #include "proto/google/fhir/proto/r4/core/resources/search_parameter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/structure_definition.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/value_set.pb.h"
-#include "lib/zip.h"
 
 namespace google::fhir {
+
+namespace internal {
+// Finds the JSON object for the resource with `uri` inside `bundle_json`.
+absl::StatusOr<const FhirJson*> FindResourceInBundle(
+    absl::string_view uri, const FhirJson& bundle_json);
+
+// Parses the resource JSON from the `resource_path` entry within
+// the .zip file at `zip_file_path` and places result of the parse into
+// `json_value`.
+absl::Status ParseResourceFromZip(absl::string_view zip_file_path,
+                                  absl::string_view resource_path,
+                                  FhirJson& json_value);
+
+absl::StatusOr<std::string> GetResourceType(const FhirJson& parsed_json);
+absl::StatusOr<std::string> GetResourceUrl(const FhirJson& parsed_json);
+}  // namespace internal
 
 // A collection of FHIR resources of a given type.
 // Acts as an accessor for resources of a single type from a FHIR Package zip
@@ -94,71 +108,24 @@ class ResourceCollection {
   static absl::StatusOr<const T> ParseProtoFromFile(
       absl::string_view uri, absl::string_view zip_file_path,
       absl::string_view resource_path) {
-    int zip_open_error;
-    zip_t* zip_file = zip_open(std::string(zip_file_path).c_str(), ZIP_RDONLY,
-                               &zip_open_error);
-    if (zip_file == nullptr) {
-      return absl::NotFoundError(
-          absl::StrFormat("Unable to open zip: %s. Error code: %d",
-                          zip_file_path, zip_open_error));
-    }
-
-    zip_file_t* resource_file =
-        zip_fopen(zip_file, std::string(resource_path).c_str(), 0);
-    if (resource_file == nullptr) {
-      return absl::NotFoundError(
-          absl::StrFormat("Unable to find path %s in zip file %s. The resource "
-                          ".zip file may have changed on disk.",
-                          resource_path, zip_file_path));
-    }
-
-    zip_stat_t resource_file_stat;
-    int zip_stat_error = zip_stat(zip_file, std::string(resource_path).c_str(),
-                                  ZIP_STAT_SIZE, &resource_file_stat);
-    if (zip_stat_error != 0) {
-      return absl::NotFoundError(
-          absl::StrFormat("Unable to stat path %s in zip file %s. The resource "
-                          ".zip file may have changed on disk.",
-                          resource_path, zip_file_path));
-    }
-
-    std::string raw_json(resource_file_stat.size, '\0');
-    zip_int64_t read =
-        zip_fread(resource_file, &raw_json[0], resource_file_stat.size);
-
-    zip_fclose(resource_file);
-    zip_close(zip_file);
-
-    if (read < resource_file_stat.size) {
-      return absl::NotFoundError(
-          absl::StrFormat("Unable to read path %s in zip file %s.",
-                          resource_path, zip_file_path));
-    }
-
     internal::FhirJson parsed_json;
-    FHIR_RETURN_IF_ERROR(internal::ParseJsonValue(raw_json, parsed_json));
+    FHIR_RETURN_IF_ERROR(internal::ParseResourceFromZip(
+        zip_file_path, resource_path, parsed_json));
 
-    absl::StatusOr<const internal::FhirJson*> resource_type_json =
-        parsed_json.get("resourceType");
-    if (!resource_type_json.ok()) {
-      return resource_type_json.status();
-    }
-
-    absl::StatusOr<const std::string> resource_type =
-        (*resource_type_json)->asString();
-    if (!resource_type.ok()) {
-      return resource_type.status();
-    }
-
-    if (*resource_type != T::descriptor()->name()) {
-      if (*resource_type == "Bundle") {
-        return absl::UnimplementedError(
-            "Extracting entries from Bundle types not yet implemented.");
+    FHIR_ASSIGN_OR_RETURN(std::string resource_type,
+                          internal::GetResourceType(parsed_json));
+    if (resource_type != T::descriptor()->name()) {
+      if (resource_type == "Bundle") {
+        FHIR_ASSIGN_OR_RETURN(const internal::FhirJson* bundle_json,
+                              FindResourceInBundle(uri, parsed_json));
+        return google::fhir::r4::JsonFhirObjectToProto<T>(*bundle_json,
+                                                          absl::UTCTimeZone());
+      } else {
+        return absl::InvalidArgumentError(
+            absl::Substitute("Type mismatch in ResourceCollection:  Collection "
+                             "is of type $0, but JSON resource is of type $1",
+                             T::descriptor()->name(), resource_type));
       }
-      return absl::InvalidArgumentError(
-          absl::Substitute("Type mismatch in ResourceCollection:  Collection "
-                           "is of type $0, but JSON resource is of type $1",
-                           T::descriptor()->name(), *resource_type));
     }
     return google::fhir::r4::JsonFhirObjectToProto<T>(parsed_json,
                                                       absl::UTCTimeZone());
