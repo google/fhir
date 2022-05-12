@@ -19,7 +19,7 @@ import unittest.mock
 
 from absl.testing import absltest
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
-from google.fhir import terminology_service_client
+from google.fhir.r4.terminology import terminology_service_client
 
 
 class TerminologyServiceClientTest(absltest.TestCase):

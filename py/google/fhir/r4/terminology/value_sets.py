@@ -23,10 +23,10 @@ import logging
 from proto.google.fhir.proto.r4.core.resources import code_system_pb2
 from proto.google.fhir.proto.r4.core.resources import structure_definition_pb2
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
-from google.fhir import terminology_service_client
 from google.fhir.core.utils import fhir_package
 from google.fhir.core.utils import proto_utils
 from google.fhir.core.utils import url_utils
+from google.fhir.r4.terminology import terminology_service_client
 
 
 class ValueSetResolver:

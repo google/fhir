@@ -21,8 +21,8 @@ py_library(
     deps = [
         ":primitive_wrappers",
         "//py",
-        "//py/google/fhir:extensions",
-        "//py/google/fhir:fhir_errors",
+        "//py/google/fhir/core:extensions",
+        "//py/google/fhir/core:fhir_errors",
         "//py/google/fhir/core/utils:proto_utils",
         "@com_google_protobuf//:protobuf_python",
     ],
@@ -38,7 +38,7 @@ py_library(
     deps = [
         ":primitive_wrappers",
         "//py",
-        "//py/google/fhir:fhir_errors",
+        "//py/google/fhir/core:fhir_errors",
         "//py/google/fhir/core/internal:primitive_time_utils",
         "//py/google/fhir/core/utils:proto_utils",
         "@com_google_protobuf//:protobuf_python",
@@ -55,7 +55,7 @@ py_library(
     deps = [
         ":primitive_wrappers",
         "//py",
-        "//py/google/fhir:fhir_errors",
+        "//py/google/fhir/core:fhir_errors",
         "//py/google/fhir/core/internal:primitive_time_utils",
         "//py/google/fhir/core/utils:proto_utils",
         "@com_google_protobuf//:protobuf_python",
@@ -86,7 +86,7 @@ py_library(
     deps = [
         ":primitive_wrappers",
         "//py",
-        "//py/google/fhir:fhir_errors",
+        "//py/google/fhir/core:fhir_errors",
         "//py/google/fhir/core/internal:primitive_time_utils",
         "//py/google/fhir/core/utils:proto_utils",
         "@com_google_protobuf//:protobuf_python",
@@ -102,9 +102,9 @@ py_library(
     srcs_version = "PY3",
     deps = [
         "//py",
-        "//py/google/fhir:codes",
-        "//py/google/fhir:extensions",
-        "//py/google/fhir:fhir_errors",
+        "//py/google/fhir/core:codes",
+        "//py/google/fhir/core:extensions",
+        "//py/google/fhir/core:fhir_errors",
         "//py/google/fhir/core/utils:annotation_utils",
         "//py/google/fhir/core/utils:proto_utils",
         "@com_google_protobuf//:protobuf_python",
@@ -121,7 +121,7 @@ py_library(
     deps = [
         ":primitive_wrappers",
         "//py",
-        "//py/google/fhir:fhir_errors",
+        "//py/google/fhir/core:fhir_errors",
         "//py/google/fhir/core/internal:primitive_time_utils",
         "//py/google/fhir/core/utils:proto_utils",
         "@com_google_protobuf//:protobuf_python",

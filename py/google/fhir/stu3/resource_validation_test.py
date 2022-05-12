@@ -20,9 +20,9 @@ from typing import Type
 from google.protobuf import message
 from absl.testing import absltest
 from proto.google.fhir.proto.stu3 import resources_pb2
-from google.fhir import fhir_errors
+from google.fhir.core import fhir_errors
+from google.fhir.core.testing import testdata_utils
 from google.fhir.stu3 import resource_validation
-from google.fhir.testing import testdata_utils
 
 _VALIDATION_DIR = os.path.join('testdata', 'stu3', 'validation')
 

@@ -22,9 +22,9 @@ from absl.testing import absltest
 from proto.google.fhir.proto.r4.core.resources import bundle_and_contained_resource_pb2
 from proto.google.fhir.proto.r4.core.resources import encounter_pb2
 from proto.google.fhir.proto.r4.core.resources import observation_pb2
-from google.fhir import fhir_errors
+from google.fhir.core import fhir_errors
+from google.fhir.core.testing import testdata_utils
 from google.fhir.r4 import resource_validation
-from google.fhir.testing import testdata_utils
 
 _VALIDATION_DIR = os.path.join('testdata', 'r4', 'validation')
 

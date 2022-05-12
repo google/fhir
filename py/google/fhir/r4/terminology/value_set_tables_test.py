@@ -18,10 +18,9 @@ import unittest.mock
 
 from google.cloud import bigquery
 import sqlalchemy
-
-from google.fhir import value_set_tables
 from absl.testing import absltest
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
+from google.fhir.r4.terminology import value_set_tables
 
 
 class ValueSetsTest(absltest.TestCase):

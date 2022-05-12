@@ -22,9 +22,9 @@ from absl.testing import absltest
 from absl.testing import parameterized
 from proto.google.fhir.proto.stu3 import codes_pb2
 from proto.google.fhir.proto.stu3 import datatypes_pb2
-from google.fhir import codes
-from google.fhir import fhir_errors
-from google.fhir.testing import testdata_utils
+from google.fhir.core import codes
+from google.fhir.core import fhir_errors
+from google.fhir.core.testing import testdata_utils
 
 _CODES_DIR = os.path.join('testdata', 'stu3', 'codes')
 

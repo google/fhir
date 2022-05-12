@@ -15,7 +15,7 @@
 """Unit tests exercising `fhir_errors.py` functionality."""
 
 from absl.testing import absltest
-from google.fhir import fhir_errors
+from google.fhir.core import fhir_errors
 
 
 class ListErrorReporterTests(absltest.TestCase):

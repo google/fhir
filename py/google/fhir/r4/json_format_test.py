@@ -159,11 +159,11 @@ from proto.google.fhir.proto.r4.core.resources import test_report_pb2
 from proto.google.fhir.proto.r4.core.resources import test_script_pb2
 from proto.google.fhir.proto.r4.core.resources import verification_result_pb2
 from proto.google.fhir.proto.r4.core.resources import vision_prescription_pb2
-from google.fhir import fhir_errors
+from google.fhir.core import fhir_errors
 from google.fhir.core.internal.json_format import json_format_test
+from google.fhir.core.testing import testdata_utils
 from google.fhir.core.utils import proto_utils
 from google.fhir.r4 import json_format
-from google.fhir.testing import testdata_utils
 
 _BIGQUERY_PATH = os.path.join('testdata', 'r4', 'bigquery')
 _EXAMPLES_PATH = os.path.join('testdata', 'r4', 'examples')

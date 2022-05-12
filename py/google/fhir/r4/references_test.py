@@ -16,7 +16,7 @@
 
 from absl.testing import absltest
 from proto.google.fhir.proto.r4.core import datatypes_pb2
-from google.fhir import references
+from google.fhir.core import references
 from google.fhir.core.utils import proto_utils
 
 

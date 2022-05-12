@@ -25,8 +25,8 @@ from proto.google.fhir.proto.r4 import ml_extensions_pb2
 from proto.google.fhir.proto.r4.core import datatypes_pb2
 from proto.google.fhir.proto.r4.core import extensions_pb2
 from proto.google.fhir.proto.r4.core.resources import patient_pb2
-from google.fhir import extensions
-from google.fhir import extensions_test
+from google.fhir.core import extensions
+from google.fhir.core import extensions_test
 
 try:
   from testdata.r4.profiles import test_extensions_pb2

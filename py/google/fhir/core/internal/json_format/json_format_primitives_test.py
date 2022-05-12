@@ -23,15 +23,15 @@ from google.protobuf import message
 from absl.testing import absltest
 from proto.google.fhir.proto.r4 import primitive_test_suite_pb2
 from proto.google.fhir.proto.r4.core import datatypes_pb2
-from google.fhir import extensions
-from google.fhir import fhir_errors
+from google.fhir.core import extensions
+from google.fhir.core import fhir_errors
+from google.fhir.core.testing import protobuf_compare
+from google.fhir.core.testing import testdata_utils
 from google.fhir.core.utils import annotation_utils
 from google.fhir.core.utils import fhir_types
 from google.fhir.core.utils import path_utils
 from google.fhir.core.utils import proto_utils
 from google.fhir.r4 import json_format
-from google.fhir.testing import protobuf_compare
-from google.fhir.testing import testdata_utils
 
 _PRIMITIVE_TESTS_PATH = os.path.join('testdata', 'primitives')
 
@@ -122,7 +122,9 @@ class _Base():
           actual_json = self.json_format.print_fhir_to_json_string(  # pytype: disable=not-callable  # trace-all-classes
               expected_proto)
           actual_proto = self.json_format.json_fhir_string_to_proto(  # pytype: disable=not-callable  # trace-all-classes
-              actual_json, field_type, default_timezone='Australia/Sydney')
+              actual_json,
+              field_type,
+              default_timezone='Australia/Sydney')
 
           self.assertEqual(expected_json, actual_json)
           self.assertProtoEqual(expected_proto, actual_proto)

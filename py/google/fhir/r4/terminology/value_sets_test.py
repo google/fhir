@@ -23,9 +23,9 @@ from proto.google.fhir.proto.r4.core import datatypes_pb2
 from proto.google.fhir.proto.r4.core.resources import code_system_pb2
 from proto.google.fhir.proto.r4.core.resources import structure_definition_pb2
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
-from google.fhir import terminology_service_client
-from google.fhir import value_sets
 from google.fhir.core.utils import fhir_package
+from google.fhir.r4.terminology import terminology_service_client
+from google.fhir.r4.terminology import value_sets
 
 FLAGS = flags.FLAGS
 

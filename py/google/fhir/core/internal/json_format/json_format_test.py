@@ -22,7 +22,7 @@ from typing import Any, Callable, Optional, Type, TypeVar
 
 from google.protobuf import message
 from absl.testing import parameterized
-from google.fhir.testing import testdata_utils
+from google.fhir.core.testing import testdata_utils
 
 _T = TypeVar('_T', bound=message.Message)
 

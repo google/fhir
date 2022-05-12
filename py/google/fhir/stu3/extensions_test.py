@@ -25,8 +25,8 @@ from proto.google.fhir.proto.stu3 import extensions_pb2
 from proto.google.fhir.proto.stu3 import fhirproto_extensions_pb2
 from proto.google.fhir.proto.stu3 import ml_extensions_pb2
 from proto.google.fhir.proto.stu3 import resources_pb2
-from google.fhir import extensions
-from google.fhir import extensions_test
+from google.fhir.core import extensions
+from google.fhir.core import extensions_test
 
 try:
   from testdata.stu3.profiles import test_extensions_pb2

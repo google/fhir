@@ -24,9 +24,9 @@ from proto.google.fhir.proto.r4 import uscore_pb2
 from proto.google.fhir.proto.r4.core import codes_pb2
 from proto.google.fhir.proto.r4.core import datatypes_pb2
 from proto.google.fhir.proto.r4.core.resources import patient_pb2
-from google.fhir import codes
-from google.fhir import fhir_errors
-from google.fhir.testing import testdata_utils
+from google.fhir.core import codes
+from google.fhir.core import fhir_errors
+from google.fhir.core.testing import testdata_utils
 
 _CODES_DIR = os.path.join('testdata', 'r4', 'codes')
 
