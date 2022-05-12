@@ -26,6 +26,7 @@
 #include "absl/strings/match.h"
 #include "absl/time/time.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/json/fhir_json.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/r4/profiles.h"
 #include "google/fhir/status/status.h"
@@ -84,6 +85,21 @@ class Parser {
                                               absl::TimeZone default_timezone,
                                               const JsonSanitizer& sanitizer,
                                               const bool validate) const;
+
+  // Merges a parsed FHIR json into an existing message.
+  // Takes a default timezone for timelike data that does not specify timezone.
+  // For reading JSON into a new resource, it is recommended to use
+  // JsonFhirStringToProto or JsonFhirStringToProtoWithoutValidating.
+  ::absl::Status MergeJsonFhirObjectIntoProto(
+      const internal::FhirJson& json_object, google::protobuf::Message* target,
+      absl::TimeZone default_timezone, const bool validate) const;
+
+  // Same as the previous function, but accepting a JsonSanitizer to clean
+  // up JSON values before mapping them into proto.
+  ::absl::Status MergeJsonFhirObjectIntoProto(
+      const internal::FhirJson& json_object, google::protobuf::Message* target,
+      absl::TimeZone default_timezone, const JsonSanitizer& sanitizer,
+      const bool validate) const;
 
   // Given a template for a FHIR resource type, creates a resource proto of that
   // type and merges a std::string of raw FHIR json into it.

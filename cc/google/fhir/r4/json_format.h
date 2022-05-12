@@ -18,6 +18,7 @@
 #define GOOGLE_FHIR_R4_JSON_FORMAT_H_
 
 #include "absl/status/statusor.h"
+#include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json_format.h"
 
 namespace google {
@@ -37,12 +38,33 @@ absl::Status MergeJsonFhirStringIntoProto(
     absl::TimeZone default_timezone, const Parser::JsonSanitizer& sanitizer,
     const bool validate);
 
+absl::Status MergeJsonFhirObjectIntoProto(
+    const google::fhir::internal::FhirJson& json_object,
+    google::protobuf::Message* target, absl::TimeZone default_timezone,
+    const bool validate);
+
+absl::Status MergeJsonFhirObjectIntoProto(
+    const google::fhir::internal::FhirJson& json_object,
+    google::protobuf::Message* target, absl::TimeZone default_timezone,
+    const Parser::JsonSanitizer& sanitizer, const bool validate);
+
 template <typename R>
 absl::StatusOr<R> JsonFhirStringToProto(const std::string& raw_json,
                                         const absl::TimeZone default_timezone) {
   R resource;
   FHIR_RETURN_IF_ERROR(
       MergeJsonFhirStringIntoProto(raw_json, &resource, default_timezone,
+                                   Parser::PassThroughSanitizer(), true));
+  return resource;
+}
+
+template <typename R>
+absl::StatusOr<R> JsonFhirObjectToProto(
+    const google::fhir::internal::FhirJson& json_object,
+    const absl::TimeZone default_timezone) {
+  R resource;
+  FHIR_RETURN_IF_ERROR(
+      MergeJsonFhirObjectIntoProto(json_object, &resource, default_timezone,
                                    Parser::PassThroughSanitizer(), true));
   return resource;
 }

@@ -160,8 +160,7 @@ class ResourceCollection {
                            "is of type $0, but JSON resource is of type $1",
                            T::descriptor()->name(), *resource_type));
     }
-
-    return google::fhir::r4::JsonFhirStringToProto<T>(raw_json,
+    return google::fhir::r4::JsonFhirObjectToProto<T>(parsed_json,
                                                       absl::UTCTimeZone());
   }
 

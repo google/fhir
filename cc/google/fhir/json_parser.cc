@@ -493,9 +493,24 @@ absl::Status Parser::MergeJsonFhirStringIntoProto(
     const std::string& raw_json, Message* target,
     const absl::TimeZone default_timezone, const JsonSanitizer& sanitizer,
     const bool validate) const {
-  internal::FhirJson value;
-  FHIR_RETURN_IF_ERROR(internal::ParseJsonValue(raw_json, value));
+  internal::FhirJson json_object;
+  FHIR_RETURN_IF_ERROR(internal::ParseJsonValue(raw_json, json_object));
 
+  return MergeJsonFhirObjectIntoProto(json_object, target, default_timezone,
+                                      sanitizer, validate);
+}
+
+absl::Status Parser::MergeJsonFhirObjectIntoProto(
+    const internal::FhirJson& json_object, Message* target,
+    const absl::TimeZone default_timezone, const bool validate) const {
+  return MergeJsonFhirObjectIntoProto(json_object, target, default_timezone,
+                                      PassThroughSanitizer(), validate);
+}
+
+absl::Status Parser::MergeJsonFhirObjectIntoProto(
+    const internal::FhirJson& json_object, Message* target,
+    const absl::TimeZone default_timezone, const JsonSanitizer& sanitizer,
+    const bool validate) const {
   internal::Parser parser{primitive_handler_, default_timezone, sanitizer};
 
   // If the target is a profiled resource, first parse to the base resource,
@@ -507,7 +522,7 @@ absl::Status Parser::MergeJsonFhirStringIntoProto(
     FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> core_resource,
                           GetBaseResourceInstance(*target));
 
-    FHIR_RETURN_IF_ERROR(parser.MergeValue(value, core_resource.get()));
+    FHIR_RETURN_IF_ERROR(parser.MergeValue(json_object, core_resource.get()));
 
     // TODO: This is not ideal because it pulls in both stu3 and
     // r4 datatypes.
@@ -525,7 +540,7 @@ absl::Status Parser::MergeJsonFhirStringIntoProto(
     }
   }
 
-  FHIR_RETURN_IF_ERROR(parser.MergeValue(value, target));
+  FHIR_RETURN_IF_ERROR(parser.MergeValue(json_object, target));
 
   if (validate) {
     // TODO: Use FHIRPath validation here.

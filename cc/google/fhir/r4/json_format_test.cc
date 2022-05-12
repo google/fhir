@@ -1795,6 +1795,7 @@ TEST(JsonFormatR4Test, PrintAndParseAllResources) {
     FHIR_ASSERT_OK_AND_ASSIGN(
         std::string json, ::google::fhir::r4::PrintFhirToJsonString(*resource));
 
+    // Ensure JSON strings are parsed into the correct proto.
     google::fhir::r4::core::ContainedResource parsed_container;
     google::protobuf::Message* parsed_resource =
         parsed_container.GetReflection()->MutableMessage(&parsed_container,
@@ -1802,6 +1803,17 @@ TEST(JsonFormatR4Test, PrintAndParseAllResources) {
     FHIR_ASSERT_OK(::google::fhir::r4::MergeJsonFhirStringIntoProto(
         json, parsed_resource, absl::UTCTimeZone(), false));
     EXPECT_THAT(*resource, EqualsProto(*parsed_resource));
+
+    // Ensure pre-parsed JSON objects are parsed into the correct proto.
+    google::fhir::r4::core::ContainedResource parsed_container_from_object;
+    google::protobuf::Message* parsed_resource_from_object =
+        parsed_container_from_object.GetReflection()->MutableMessage(
+            &parsed_container_from_object, resource_field);
+    internal::FhirJson parsed_json;
+    FHIR_ASSERT_OK(internal::ParseJsonValue(json, parsed_json));
+    FHIR_ASSERT_OK(::google::fhir::r4::MergeJsonFhirObjectIntoProto(
+        parsed_json, parsed_resource_from_object, absl::UTCTimeZone(), false));
+    EXPECT_THAT(*resource, EqualsProto(*parsed_resource_from_object));
   }
 }
 

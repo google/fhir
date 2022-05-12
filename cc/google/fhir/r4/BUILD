@@ -185,6 +185,7 @@ cc_library(
     deps = [
         ":primitive_handler",
         "//cc/google/fhir:json_format",
+        "//cc/google/fhir/json:fhir_json",
         "@com_google_absl//absl/status:statusor",
     ],
 )
