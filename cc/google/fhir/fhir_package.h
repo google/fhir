@@ -63,8 +63,101 @@ absl::StatusOr<std::string> GetResourceUrl(const FhirJson& parsed_json);
 template <typename T>
 class ResourceCollection {
  public:
+  // An iterator over all valid resources contained in the collection. Invalid
+  // resources, such as those with malformed JSON, will not be returned by the
+  // iterator.
+  class Iterator {
+   public:
+    using iterator_category = std::input_iterator_tag;
+    using difference_type = std::ptrdiff_t;
+    using value_type = T;
+    using pointer = const T*;
+    using reference = const T&;
+
+    Iterator(ResourceCollection* resource_collection,
+             absl::flat_hash_map<const std::string, const std::string>::iterator
+                 uri_iter)
+        : resource_collection_(resource_collection), uri_iter_(uri_iter) {
+      // Skip over any initial invalid entries so it is safe to dereference.
+      this->AdvanceUntillValid();
+    }
+
+    pointer operator->() const {
+      std::string uri = uri_iter_->first;
+      absl::StatusOr<const T*> resource =
+          resource_collection_->GetResource(uri);
+
+      // The AdvanceUntillValid() calls in the constructor and in operator++
+      // should prevent us from attempting to dereference an invalid resource.
+      CHECK(resource.ok()) << absl::StrFormat(
+          "Attempted to access invalid resource from iterator for JSON entry: "
+          "%s uri: %s with error: %s",
+          uri_iter_->second, uri_iter_->first, resource.status().message());
+
+      return *resource;
+    }
+    reference operator*() const { return *(this->operator->()); }
+    Iterator& operator++() {
+      ++uri_iter_;
+      // Additionally advance past invalid entries so it is safe to dereference.
+      this->AdvanceUntillValid();
+      return *this;
+    }
+    bool operator==(const Iterator& other) const {
+      // Perform equality checks between iterators at positions with valid
+      // resources. This allows an iterator with no remaining valid resources to
+      // equal an iterator at the end of uri_iter_.
+      return this->NextValidPosistion().uri_iter_ ==
+             other.NextValidPosistion().uri_iter_;
+    }
+    bool operator!=(const Iterator& other) const {
+      return this->NextValidPosistion().uri_iter_ !=
+             other.NextValidPosistion().uri_iter_;
+    }
+
+   private:
+    ResourceCollection* resource_collection_;
+    absl::flat_hash_map<const std::string, const std::string>::iterator
+        uri_iter_;
+
+    // Advances uri_iter_ until it points to a valid, parse-able resource. If it
+    // currently points to a valid resource, does not advance the iterator.
+    void AdvanceUntillValid() {
+      while (true) {
+        if (this->UriIterExhausted()) {
+          return;
+        }
+        absl::StatusOr<const T*> resource =
+            resource_collection_->GetResource(uri_iter_->first);
+        if (resource.ok()) {
+          return;
+        } else {
+          LOG(WARNING) << absl::StrFormat(
+              "Unhandled JSON entry: %s for uri: %s with error: %s",
+              uri_iter_->second, uri_iter_->first, resource.status().message());
+          ++uri_iter_;
+        }
+      }
+    }
+    // Builds a new iterator pointing towards the next valid, parse-able
+    // resource. If the current iterator points to a valid resource, the
+    // returned iterator will be an identical copy.
+    Iterator NextValidPosistion() const {
+      // The constructor calls .AdvanceUntillValid(), so we know the new
+      // iterator is pointing to a valid resource.
+      return Iterator(this->resource_collection_, this->uri_iter_);
+    }
+
+    // Indicates if the URIs being iterated over have been exhausted.
+    bool UriIterExhausted() const {
+      return uri_iter_ == resource_collection_->resource_paths_for_uris_.end();
+    }
+  };
   explicit ResourceCollection(absl::string_view zip_file_path)
       : zip_file_path_(zip_file_path) {}
+
+  Iterator begin() { return Iterator(this, resource_paths_for_uris_.begin()); }
+  Iterator end() { return Iterator(this, resource_paths_for_uris_.end()); }
 
   // Indicates that the resource for `uri` can be found inside this
   // ResourceCollection's zip file. The `uri` is defined by the resource JSON
@@ -78,10 +171,10 @@ class ResourceCollection {
   // Retrieves the resource for `uri`. Either returns a previously cached proto
   // for the resource or reads and parses the resource from the
   // ResourceCollection's zip file.
-  absl::StatusOr<const T> GetResource(absl::string_view uri) {
+  absl::StatusOr<const T*> GetResource(absl::string_view uri) {
     const auto cached = parsed_resources_.find(std::string(uri));
     if (cached != parsed_resources_.end()) {
-      return cached->second;
+      return &cached->second;
     }
 
     const auto path = resource_paths_for_uris_.find(std::string(uri));
@@ -90,16 +183,14 @@ class ResourceCollection {
           absl::StrFormat("%s not present in collection", uri));
     }
 
-    absl::StatusOr<const T> parsed =
-        ParseProtoFromFile(uri, zip_file_path_, path->second);
-    if (parsed.ok()) {
-      CacheParsedResource(uri, *parsed);
-    }
-    return parsed;
+    FHIR_ASSIGN_OR_RETURN(
+        const T parsed, ParseProtoFromFile(uri, zip_file_path_, path->second));
+    return CacheParsedResource(uri, parsed);
   }
 
-  void CacheParsedResource(absl::string_view uri, const T& resource) {
-    parsed_resources_.insert({std::string(uri), resource});
+  const T* CacheParsedResource(absl::string_view uri, const T& resource) {
+    auto insert = parsed_resources_.insert({std::string(uri), resource});
+    return &(insert.first->second);
   }
 
  private:

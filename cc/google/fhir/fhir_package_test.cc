@@ -18,6 +18,7 @@
 
 #include <string>
 
+#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_format.h"
@@ -30,6 +31,7 @@
 namespace google::fhir {
 
 namespace {
+using ::testing::UnorderedElementsAreArray;
 
 // Writes a zip archive to a temporary file containing the given {file_name,
 // file_contents} pairs.
@@ -47,10 +49,10 @@ absl::StatusOr<std::string> CreateZipFileContaining(
   for (auto& pair : zip_contents) {
     zip_source_t* source =
         zip_source_buffer(zip_file, pair.second, strlen(pair.second), 0);
-    zip_int64_t add_error = zip_file_add(zip_file, pair.first, source, 0);
-    if (add_error != 0) {
+    zip_int64_t add_index = zip_file_add(zip_file, pair.first, source, 0);
+    if (add_index < 0) {
       return absl::UnavailableError(absl::StrFormat(
-          "Unable to add file to zip, error code: %d", add_error));
+          "Unable to add file to zip, error code: %s", zip_strerror(zip_file)));
     }
   }
   zip_close(zip_file);
@@ -98,10 +100,10 @@ TEST(ResourceCollectionTest, GetResourceFromCacheSucceeds) {
   vs.mutable_id()->set_value("hello");
   collection.CacheParsedResource("http://value.set/id", vs);
 
-  absl::StatusOr<const google::fhir::r4::core::ValueSet> result =
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> result =
       collection.GetResource("http://value.set/id");
   ASSERT_TRUE(result.ok()) << result.status().message();
-  EXPECT_EQ(result->id().value(), "hello");
+  EXPECT_EQ((*result)->id().value(), "hello");
 }
 
 TEST(ResourceCollectionTest, AddGetResourceSucceeds) {
@@ -115,13 +117,13 @@ TEST(ResourceCollectionTest, AddGetResourceSucceeds) {
   auto collection =
       ResourceCollection<google::fhir::r4::core::ValueSet>(*temp_name);
   collection.AddUriAtPath("http://value.set/id", "a_value_set.json");
-  absl::StatusOr<google::fhir::r4::core::ValueSet> result =
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> result =
       collection.GetResource("http://value.set/id");
 
   remove(temp_name->c_str());
   ASSERT_TRUE(result.ok()) << result.status().message();
-  EXPECT_EQ(result->id().value(), "a-value-set");
-  EXPECT_EQ(result->url().value(), "http://value.set/id");
+  EXPECT_EQ((*result)->id().value(), "a-value-set");
+  EXPECT_EQ((*result)->url().value(), "http://value.set/id");
 }
 
 TEST(ResourceCollectionTest, AddGetResourceInBundleSucceeds) {
@@ -165,19 +167,136 @@ TEST(ResourceCollectionTest, AddGetResourceInBundleSucceeds) {
   auto collection =
       ResourceCollection<google::fhir::r4::core::ValueSet>(*temp_name);
   collection.AddUriAtPath("http://value.set/id", "a_bundle.json");
-  absl::StatusOr<google::fhir::r4::core::ValueSet> result =
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> result =
       collection.GetResource("http://value.set/id");
 
   remove(temp_name->c_str());
   ASSERT_TRUE(result.ok()) << result.status().message();
-  EXPECT_EQ(result->id().value(), "a-value-set");
-  EXPECT_EQ(result->url().value(), "http://value.set/id");
+  EXPECT_EQ((*result)->id().value(), "a-value-set");
+  EXPECT_EQ((*result)->url().value(), "http://value.set/id");
+}
+
+TEST(ResourceCollectionTest, WithValidResourcesIterateSucceeds) {
+  absl::StatusOr<std::string> temp_name =
+      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+          {"a_value_set.json",
+           "{\"resourceType\": \"ValueSet\", \"url\": "
+           "\"http://value.set/id-1\", "
+           "\"id\": \"a-value-set-1\", \"status\": \"draft\"}"},
+          {"another_value_set.json",
+           "{\"resourceType\": \"ValueSet\", \"url\": "
+           "\"http://value.set/id-2\", "
+           "\"id\": \"a-value-set-2\", \"status\": \"draft\"}"},
+          {"yet_another_value_set.json",
+           "{\"resourceType\": \"ValueSet\", \"url\": "
+           "\"http://value.set/id-3\", "
+           "\"id\": \"a-value-set-3\", \"status\": \"draft\"}"},
+      });
+  ASSERT_TRUE(temp_name.ok()) << temp_name.status().message();
+
+  auto collection =
+      ResourceCollection<google::fhir::r4::core::ValueSet>(*temp_name);
+  for (auto& uri_path : std::vector<std::pair<std::string, std::string>>{
+           {"http://value.set/id-1", "a_value_set.json"},
+           {"http://value.set/id-2", "another_value_set.json"},
+           {"http://value.set/id-3", "yet_another_value_set.json"}}) {
+    collection.AddUriAtPath(uri_path.first, uri_path.second);
+  }
+
+  std::vector<std::string> found;
+  for (const google::fhir::r4::core::ValueSet& value_set : collection) {
+    found.emplace_back(value_set.url().value());
+  }
+  EXPECT_THAT(found, UnorderedElementsAreArray(std::vector<std::string>{
+                         "http://value.set/id-1",
+                         "http://value.set/id-2",
+                         "http://value.set/id-3",
+                     }));
+}
+
+TEST(ResourceCollectionTest, WithNoResourcesIterateEmpty) {
+  absl::StatusOr<std::string> temp_name = CreateZipFileContaining(
+      std::vector<std::pair<const char*, const char*>>{});
+  ASSERT_TRUE(temp_name.ok()) << temp_name.status().message();
+
+  auto collection =
+      ResourceCollection<google::fhir::r4::core::ValueSet>(*temp_name);
+
+  std::vector<google::fhir::r4::core::ValueSet> found;
+  for (const google::fhir::r4::core::ValueSet& value_set : collection) {
+    found.emplace_back(value_set);
+  }
+  EXPECT_EQ(found.size(), 0);
+}
+
+TEST(ResourceCollectionTest, WithInvalidResourcesIterateEmpty) {
+  absl::StatusOr<std::string> temp_name =
+      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+          {"a_value_set.json", "{\"resourceType\": \"invalid"},
+          {"another_value_set.json", "{\"resourceType\": \"invalid"},
+          {"yet_another_value_set.json", "{\"resourceType\": \"invalid"},
+      });
+  ASSERT_TRUE(temp_name.ok()) << temp_name.status().message();
+
+  auto collection =
+      ResourceCollection<google::fhir::r4::core::ValueSet>(*temp_name);
+  for (auto& uri_path : std::vector<std::pair<std::string, std::string>>{
+           {"http://value.set/id-1", "a_value_set.json"},
+           {"http://value.set/id-2", "another_value_set.json"},
+           {"http://value.set/id-3", "yet_another_value_set.json"}}) {
+    collection.AddUriAtPath(uri_path.first, uri_path.second);
+  }
+
+  std::vector<google::fhir::r4::core::ValueSet> found;
+  for (const google::fhir::r4::core::ValueSet& value_set : collection) {
+    found.emplace_back(value_set);
+  }
+  EXPECT_EQ(found.size(), 0);
+}
+
+TEST(ResourceCollectionTest, WithValidAndInvalidResourcesIterateSkipsInvalid) {
+  absl::StatusOr<std::string> temp_name =
+      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+          {"a_bad_value_set.json", "{\"resourceType\": \"invalid"},
+          {"another_bad_value_set.json", "{\"resourceType\": \"invalid"},
+          {"yet_bad_another_value_set.json", "{\"resourceType\": \"invalid"},
+          {"a_value_set.json",
+           "{\"resourceType\": \"ValueSet\", \"url\": "
+           "\"http://value.set/id-1\", "
+           "\"id\": \"a-value-set-1\", \"status\": \"draft\"}"},
+          {"another_value_set.json",
+           "{\"resourceType\": \"ValueSet\", \"url\": "
+           "\"http://value.set/id-2\", "
+           "\"id\": \"a-value-set-2\", \"status\": \"draft\"}"},
+      });
+  ASSERT_TRUE(temp_name.ok()) << temp_name.status().message();
+
+  auto collection =
+      ResourceCollection<google::fhir::r4::core::ValueSet>(*temp_name);
+  for (auto& uri_path : std::vector<std::pair<std::string, std::string>>{
+           {"http://value.set/id-bad-1", "a_bad_value_set.json"},
+           {"http://value.set/id-1", "a_value_set.json"},
+           {"http://value.set/id-bad-2", "another_bad_value_set.json"},
+           {"http://value.set/id-2", "another_value_set.json"},
+           {"http://value.set/id-bad-3", "yet_bad_another_value_set.json"},
+       }) {
+    collection.AddUriAtPath(uri_path.first, uri_path.second);
+  }
+
+  std::vector<std::string> found;
+  for (const google::fhir::r4::core::ValueSet& value_set : collection) {
+    found.emplace_back(value_set.url().value());
+  }
+  EXPECT_THAT(found, UnorderedElementsAreArray(std::vector<std::string>{
+                         "http://value.set/id-1",
+                         "http://value.set/id-2",
+                     }));
 }
 
 TEST(ResourceCollectionTest, AddGetResourceWithUriMappingFails) {
   auto collection =
       ResourceCollection<google::fhir::r4::core::ValueSet>("missing.zip");
-  absl::StatusOr<google::fhir::r4::core::ValueSet> result =
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> result =
       collection.GetResource("http://value.set/id");
 
   ASSERT_FALSE(result.ok());
@@ -187,7 +306,7 @@ TEST(ResourceCollectionTest, AddGetResourceWithNoZipFails) {
   auto collection =
       ResourceCollection<google::fhir::r4::core::ValueSet>("missing.zip");
   collection.AddUriAtPath("http://value.set/id", "a_value_set.json");
-  absl::StatusOr<google::fhir::r4::core::ValueSet> result =
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> result =
       collection.GetResource("http://value.set/id");
 
   ASSERT_FALSE(result.ok());
@@ -201,7 +320,7 @@ TEST(ResourceCollectionTest, AddGetResourceWithZipMissingEntryFails) {
   auto collection =
       ResourceCollection<google::fhir::r4::core::ValueSet>(*temp_name);
   collection.AddUriAtPath("http://value.set/id", "a_value_set.json");
-  absl::StatusOr<google::fhir::r4::core::ValueSet> result =
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> result =
       collection.GetResource("http://value.set/id");
 
   remove(temp_name->c_str());
@@ -217,7 +336,7 @@ TEST(ResourceCollectionTest, AddGetResourceWithBadResourceJsonFails) {
   auto collection =
       ResourceCollection<google::fhir::r4::core::ValueSet>(*temp_name);
   collection.AddUriAtPath("http://value.set/id", "a_value_set.json");
-  absl::StatusOr<google::fhir::r4::core::ValueSet> result =
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> result =
       collection.GetResource("http://value.set/id");
 
   remove(temp_name->c_str());
@@ -249,7 +368,7 @@ TEST(ResourceCollectionTest, AddGetResourceWithMissingBundleEntryFails) {
   auto collection =
       ResourceCollection<google::fhir::r4::core::ValueSet>(*temp_name);
   collection.AddUriAtPath("http://value.set/id", "a_bundle.json");
-  absl::StatusOr<google::fhir::r4::core::ValueSet> result =
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> result =
       collection.GetResource("http://value.set/id");
 
   remove(temp_name->c_str());
