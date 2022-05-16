@@ -15,6 +15,7 @@
 #include "google/fhir/fhir_package.h"
 
 #include <optional>
+#include <string>
 
 #include "google/protobuf/text_format.h"
 #include "absl/container/flat_hash_map.h"
@@ -151,12 +152,12 @@ absl::StatusOr<std::string> GetResourceUrl(const FhirJson& parsed_json) {
 }  // namespace internal
 
 absl::StatusOr<FhirPackage> FhirPackage::Load(absl::string_view zip_file_path) {
-  return Load(zip_file_path, absl::optional<PackageInfo>());
+  return Load(zip_file_path, std::optional<PackageInfo>());
 }
 
 absl::StatusOr<FhirPackage> FhirPackage::Load(absl::string_view zip_file_path,
                                               const PackageInfo& package_info) {
-  return Load(zip_file_path, absl::optional<PackageInfo>(package_info));
+  return Load(zip_file_path, std::optional<PackageInfo>(package_info));
 }
 
 absl::StatusOr<FhirPackage> FhirPackage::Load(
