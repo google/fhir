@@ -79,7 +79,7 @@ class ResourceCollection {
                  uri_iter)
         : resource_collection_(resource_collection), uri_iter_(uri_iter) {
       // Skip over any initial invalid entries so it is safe to dereference.
-      this->AdvanceUntillValid();
+      this->AdvanceUntilValid();
     }
 
     pointer operator->() const {
@@ -87,7 +87,7 @@ class ResourceCollection {
       absl::StatusOr<const T*> resource =
           resource_collection_->GetResource(uri);
 
-      // The AdvanceUntillValid() calls in the constructor and in operator++
+      // The AdvanceUntilValid() calls in the constructor and in operator++
       // should prevent us from attempting to dereference an invalid resource.
       CHECK(resource.ok()) << absl::StrFormat(
           "Attempted to access invalid resource from iterator for JSON entry: "
@@ -100,7 +100,7 @@ class ResourceCollection {
     Iterator& operator++() {
       ++uri_iter_;
       // Additionally advance past invalid entries so it is safe to dereference.
-      this->AdvanceUntillValid();
+      this->AdvanceUntilValid();
       return *this;
     }
     bool operator==(const Iterator& other) const {
@@ -122,7 +122,7 @@ class ResourceCollection {
 
     // Advances uri_iter_ until it points to a valid, parse-able resource. If it
     // currently points to a valid resource, does not advance the iterator.
-    void AdvanceUntillValid() {
+    void AdvanceUntilValid() {
       while (true) {
         if (this->UriIterExhausted()) {
           return;
@@ -143,7 +143,7 @@ class ResourceCollection {
     // resource. If the current iterator points to a valid resource, the
     // returned iterator will be an identical copy.
     Iterator NextValidPosistion() const {
-      // The constructor calls .AdvanceUntillValid(), so we know the new
+      // The constructor calls .AdvanceUntilValid(), so we know the new
       // iterator is pointing to a valid resource.
       return Iterator(this->resource_collection_, this->uri_iter_);
     }
