@@ -383,6 +383,7 @@ TEST(ResourceCollectionTest, WithValidResourcesIterateSucceeds) {
                          "http://value.set/id-2",
                          "http://value.set/id-3",
                      }));
+  remove(temp_name->c_str());
 }
 
 TEST(ResourceCollectionTest, WithNoResourcesIterateEmpty) {
@@ -398,6 +399,7 @@ TEST(ResourceCollectionTest, WithNoResourcesIterateEmpty) {
     found.emplace_back(value_set);
   }
   EXPECT_EQ(found.size(), 0);
+  remove(temp_name->c_str());
 }
 
 TEST(ResourceCollectionTest, WithInvalidResourcesIterateEmpty) {
@@ -423,6 +425,7 @@ TEST(ResourceCollectionTest, WithInvalidResourcesIterateEmpty) {
     found.emplace_back(value_set);
   }
   EXPECT_EQ(found.size(), 0);
+  remove(temp_name->c_str());
 }
 
 TEST(ResourceCollectionTest, WithValidAndInvalidResourcesIterateSkipsInvalid) {
@@ -462,6 +465,7 @@ TEST(ResourceCollectionTest, WithValidAndInvalidResourcesIterateSkipsInvalid) {
                          "http://value.set/id-1",
                          "http://value.set/id-2",
                      }));
+  remove(temp_name->c_str());
 }
 
 TEST(ResourceCollectionTest, AddGetResourceWithUriMappingFails) {
