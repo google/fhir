@@ -31,8 +31,6 @@
 #include "proto/google/fhir/proto/profile_config.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/structure_definition.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/value_set.pb.h"
-#include "libarchive/archive.h"
-#include "libarchive/archive_entry.h"
 #include "lib/zip.h"
 #include "re2/re2.h"
 
@@ -163,14 +161,13 @@ absl::StatusOr<FhirPackage> FhirPackage::Load(absl::string_view zip_file_path,
 absl::StatusOr<FhirPackage> FhirPackage::Load(
     absl::string_view zip_file_path,
     const absl::optional<PackageInfo> optional_package_info) {
-  struct archive* archive = archive_read_new();
-  archive_read_support_filter_all(archive);
-  archive_read_support_format_all(archive);
-
-  if (archive_read_open_filename(archive, std::string(zip_file_path).c_str(),
-                                 10240) != ARCHIVE_OK) {
+  int zip_open_error;
+  zip_t* archive =
+      zip_open(std::string(zip_file_path).c_str(), ZIP_RDONLY, &zip_open_error);
+  if (archive == nullptr) {
     return absl::InvalidArgumentError(
-        absl::StrCat("Unable to open zip: ", zip_file_path));
+        absl::StrFormat("Unable to open zip: %s error code: %d", zip_file_path,
+                        zip_open_error));
   }
 
   FhirPackage fhir_package;
@@ -180,12 +177,33 @@ absl::StatusOr<FhirPackage> FhirPackage::Load(
   bool package_info_found = false;
   absl::flat_hash_map<const std::string, const std::string> json_files;
 
-  struct archive_entry* entry;
-  while (archive_read_next_header(archive, &entry) == ARCHIVE_OK) {
-    const std::string entry_name = archive_entry_pathname(entry);
-    const int64 length = archive_entry_size(entry);
-    std::string contents(length, '\0');
-    archive_read_data(archive, &contents[0], length);
+  zip_file_t* entry;
+  zip_stat_t entry_stat;
+  zip_int64_t num_entries = zip_get_num_entries(archive, 0);
+  for (zip_int64_t i = 0; i < num_entries; ++i) {
+    if (zip_stat_index(archive, i, ZIP_STAT_NAME | ZIP_STAT_SIZE,
+                       &entry_stat) != 0) {
+      return absl::InvalidArgumentError(
+          absl::StrFormat("Unable to stat entry %d from zip: %s, error: %s", i,
+                          zip_file_path, zip_strerror(archive)));
+    }
+    std::string entry_name = entry_stat.name;
+
+    entry = zip_fopen_index(archive, i, 0);
+    if (entry == nullptr) {
+      return absl::InvalidArgumentError(
+          absl::StrFormat("Unable to read entry %d from zip: %s, error: %s", i,
+                          zip_file_path, zip_strerror(archive)));
+    }
+
+    std::string contents(entry_stat.size, '\0');
+    zip_int64_t read = zip_fread(entry, &contents[0], entry_stat.size);
+    zip_fclose(entry);
+    if (read < entry_stat.size) {
+      return absl::InvalidArgumentError(
+          absl::StrFormat("Unable to stat entry %d from zip: %s, error: %s", i,
+                          zip_file_path, zip_strerror(archive)));
+    }
 
     if (absl::EndsWith(entry_name, "package_info.prototxt") ||
         absl::EndsWith(entry_name, "package_info.textproto")) {
@@ -206,7 +224,7 @@ absl::StatusOr<FhirPackage> FhirPackage::Load(
       json_files.insert({entry_name, contents});
     }
   }
-  if (archive_read_free(archive) != ARCHIVE_OK) {
+  if (zip_close(archive) != 0) {
     return absl::InternalError(
         absl::StrCat("Failed Freeing Zip: ", zip_file_path));
   }
