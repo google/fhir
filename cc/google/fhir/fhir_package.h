@@ -158,6 +158,9 @@ class ResourceCollection {
 
   Iterator begin() { return Iterator(this, resource_paths_for_uris_.begin()); }
   Iterator end() { return Iterator(this, resource_paths_for_uris_.end()); }
+  absl::flat_hash_map<const std::string, const std::string>::size_type size() {
+    return resource_paths_for_uris_.size();
+  }
 
   // Indicates that the resource for `uri` can be found inside this
   // ResourceCollection's zip file. The `uri` is defined by the resource JSON
@@ -234,11 +237,11 @@ class ResourceCollection {
 // TODO: Support versions other than R4
 struct FhirPackage {
   proto::PackageInfo package_info;
-  std::vector<google::fhir::r4::core::StructureDefinition>
+  ResourceCollection<google::fhir::r4::core::StructureDefinition>
       structure_definitions;
-  std::vector<google::fhir::r4::core::SearchParameter> search_parameters;
-  std::vector<google::fhir::r4::core::CodeSystem> code_systems;
-  std::vector<google::fhir::r4::core::ValueSet> value_sets;
+  ResourceCollection<google::fhir::r4::core::SearchParameter> search_parameters;
+  ResourceCollection<google::fhir::r4::core::CodeSystem> code_systems;
+  ResourceCollection<google::fhir::r4::core::ValueSet> value_sets;
 
   static absl::StatusOr<FhirPackage> Load(absl::string_view zip_file_path);
 
@@ -248,7 +251,18 @@ struct FhirPackage {
       absl::string_view zip_file_path, const proto::PackageInfo& package_info);
 
  private:
-  FhirPackage() {}
+  explicit FhirPackage(absl::string_view zip_file_path)
+      : structure_definitions(
+            ResourceCollection<google::fhir::r4::core::StructureDefinition>(
+                zip_file_path)),
+        search_parameters(
+            ResourceCollection<google::fhir::r4::core::SearchParameter>(
+                zip_file_path)),
+        code_systems(ResourceCollection<google::fhir::r4::core::CodeSystem>(
+            zip_file_path)),
+        value_sets(ResourceCollection<google::fhir::r4::core::ValueSet>(
+            zip_file_path)) {}
+
   static absl::StatusOr<FhirPackage> Load(
       absl::string_view zip_file_path,
       const absl::optional<proto::PackageInfo> optional_package_info);

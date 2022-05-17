@@ -18,42 +18,77 @@
 #include <string>
 
 #include "google/protobuf/text_format.h"
-#include "absl/container/flat_hash_map.h"
 #include "absl/status/status.h"
 #include "absl/strings/match.h"
 #include "absl/strings/string_view.h"
-#include "absl/time/time.h"
 #include "absl/types/optional.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json/json_sax_handler.h"
-#include "google/fhir/r4/json_format.h"
 #include "google/fhir/status/status.h"
 #include "proto/google/fhir/proto/profile_config.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/structure_definition.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/value_set.pb.h"
 #include "lib/zip.h"
-#include "re2/re2.h"
 
 namespace google::fhir {
 
 namespace {
 
 using ::google::fhir::proto::PackageInfo;
-using ::google::fhir::r4::core::CodeSystem;
-using ::google::fhir::r4::core::SearchParameter;
-using ::google::fhir::r4::core::StructureDefinition;
-using ::google::fhir::r4::core::ValueSet;
 
-absl::StatusOr<std::string> GetResourceType(const std::string& json) {
-  static LazyRE2 kResourceTypeRegex = {
-      R"regex("resourceType"\s*:\s*"([A-Za-z]*)")regex"};
-  std::string resource_type;
-  if (RE2::PartialMatch(json, *kResourceTypeRegex, &resource_type)) {
-    return resource_type;
+// Adds the resource described by `resource_json` located at `resource_path`
+// within its FHIR package .zip file to the appropriate ResourceCollection of
+// the given `fhir_package`. Allows the resource to subsequently be retrieved by
+// its URL from the FhirPackage.
+absl::Status AddResourceToFhirPackage(const internal::FhirJson& resource_json,
+                                      absl::string_view resource_path,
+                                      FhirPackage& fhir_package) {
+  FHIR_ASSIGN_OR_RETURN(const std::string resource_type,
+                        GetResourceType(resource_json));
+  FHIR_ASSIGN_OR_RETURN(const std::string resource_url,
+                        GetResourceUrl(resource_json));
+  if (resource_url.empty()) {
+    return absl::InvalidArgumentError(absl::StrFormat(
+        "Unhandled JSON entry: %s resource has missing URL", resource_path));
   }
-  return absl::NotFoundError("No resourceType field in JSON.");
+
+  if (resource_type == "ValueSet") {
+    fhir_package.value_sets.AddUriAtPath(resource_url, resource_path);
+  } else if (resource_type == "CodeSystem") {
+    fhir_package.code_systems.AddUriAtPath(resource_url, resource_path);
+  } else if (resource_type == "StructureDefinition") {
+    fhir_package.structure_definitions.AddUriAtPath(resource_url,
+                                                    resource_path);
+  } else if (resource_type == "SearchParameter") {
+    fhir_package.search_parameters.AddUriAtPath(resource_url, resource_path);
+  } else if (resource_type == "Bundle") {
+    FHIR_ASSIGN_OR_RETURN(const internal::FhirJson* entries,
+                          resource_json.get("entry"));
+    FHIR_ASSIGN_OR_RETURN(int num_entries, entries->arraySize());
+
+    for (int i = 0; i < num_entries; ++i) {
+      FHIR_ASSIGN_OR_RETURN(const internal::FhirJson* entry, entries->get(i));
+      FHIR_ASSIGN_OR_RETURN(const internal::FhirJson* resource,
+                            entry->get("resource"));
+      FHIR_RETURN_IF_ERROR(
+          AddResourceToFhirPackage(*resource, resource_path, fhir_package));
+    }
+  } else {
+    return absl::InvalidArgumentError(absl::StrFormat(
+        "Unhandled JSON entry: %s for unexpected resource type %s.",
+        resource_path, resource_type));
+  }
+  return absl::OkStatus();
 }
 
+absl::Status AddResourceToFhirPackage(absl::string_view resource_json,
+                                      absl::string_view resource_path,
+                                      FhirPackage& fhir_package) {
+  internal::FhirJson parsed_json;
+  FHIR_RETURN_IF_ERROR(
+      internal::ParseJsonValue(std::string(resource_json), parsed_json));
+  return AddResourceToFhirPackage(parsed_json, resource_path, fhir_package);
+}
 }  // namespace
 
 namespace internal {
@@ -170,12 +205,12 @@ absl::StatusOr<FhirPackage> FhirPackage::Load(
                         zip_open_error));
   }
 
-  FhirPackage fhir_package;
+  FhirPackage fhir_package(zip_file_path);
   if (optional_package_info.has_value()) {
     fhir_package.package_info = *optional_package_info;
   }
   bool package_info_found = false;
-  absl::flat_hash_map<const std::string, const std::string> json_files;
+  absl::Status parse_errors;
 
   zip_file_t* entry;
   zip_stat_t entry_stat;
@@ -187,7 +222,6 @@ absl::StatusOr<FhirPackage> FhirPackage::Load(
           absl::StrFormat("Unable to stat entry %d from zip: %s, error: %s", i,
                           zip_file_path, zip_strerror(archive)));
     }
-    std::string entry_name = entry_stat.name;
 
     entry = zip_fopen_index(archive, i, 0);
     if (entry == nullptr) {
@@ -205,12 +239,13 @@ absl::StatusOr<FhirPackage> FhirPackage::Load(
                           zip_file_path, zip_strerror(archive)));
     }
 
-    if (absl::EndsWith(entry_name, "package_info.prototxt") ||
-        absl::EndsWith(entry_name, "package_info.textproto")) {
+    if (absl::EndsWith(entry_stat.name, "package_info.prototxt") ||
+        absl::EndsWith(entry_stat.name, "package_info.textproto")) {
       if (optional_package_info.has_value()) {
         LOG(WARNING) << absl::StrCat(
             "Warning: Ignoring PackageInfo in ", zip_file_path,
-            " because PackageInfo was passed to loading function.  Use the API "
+            " because PackageInfo was passed to loading function.  Use the "
+            "API "
             "with no PackageInfo to use the one from the zip.");
       } else {
         if (!google::protobuf::TextFormat::ParseFromString(contents,
@@ -220,8 +255,14 @@ absl::StatusOr<FhirPackage> FhirPackage::Load(
         }
         package_info_found = true;
       }
-    } else if (absl::EndsWith(entry_name, ".json")) {
-      json_files.insert({entry_name, contents});
+    } else if (absl::EndsWith(entry_stat.name, ".json")) {
+      absl::Status add_status =
+          AddResourceToFhirPackage(contents, entry_stat.name, fhir_package);
+      if (!add_status.ok()) {
+        parse_errors.Update(absl::InvalidArgumentError(
+            absl::StrFormat("Unhandled JSON entry: %s due to error: %s",
+                            entry_stat.name, add_status.message())));
+      }
     }
   }
   if (zip_close(archive) != 0) {
@@ -235,39 +276,9 @@ absl::StatusOr<FhirPackage> FhirPackage::Load(
         zip_file_path));
   }
 
-  for (const auto& entry : json_files) {
-    const std::string& name = entry.first;
-    const std::string& json = entry.second;
-
-    absl::StatusOr<std::string> resource_type = GetResourceType(json);
-    if (!resource_type.ok()) {
-      LOG(WARNING) << "Unhandled JSON entry: " << name;
-      continue;
-    }
-    if (*resource_type == "ValueSet") {
-      fhir_package.value_sets.emplace_back();
-      ValueSet& value_set = fhir_package.value_sets.back();
-      FHIR_RETURN_IF_ERROR(r4::MergeJsonFhirStringIntoProto(
-          json, &value_set, absl::UTCTimeZone(), true));
-    } else if (*resource_type == "CodeSystem") {
-      fhir_package.code_systems.emplace_back();
-      CodeSystem& code_system = fhir_package.code_systems.back();
-      FHIR_RETURN_IF_ERROR(r4::MergeJsonFhirStringIntoProto(
-          json, &code_system, absl::UTCTimeZone(), true));
-    } else if (*resource_type == "StructureDefinition") {
-      fhir_package.structure_definitions.emplace_back();
-      StructureDefinition& structure_definition =
-          fhir_package.structure_definitions.back();
-      FHIR_RETURN_IF_ERROR(r4::MergeJsonFhirStringIntoProto(
-          json, &structure_definition, absl::UTCTimeZone(), true));
-    } else if (*resource_type == "SearchParameter") {
-      fhir_package.search_parameters.emplace_back();
-      SearchParameter& search_parameter = fhir_package.search_parameters.back();
-      FHIR_RETURN_IF_ERROR(r4::MergeJsonFhirStringIntoProto(
-          json, &search_parameter, absl::UTCTimeZone(), true));
-    }
+  if (!parse_errors.ok()) {
+    return parse_errors;
   }
-
   return fhir_package;
 }
 
