@@ -250,6 +250,26 @@ struct FhirPackage {
   static absl::StatusOr<FhirPackage> Load(
       absl::string_view zip_file_path, const proto::PackageInfo& package_info);
 
+  absl::StatusOr<const google::fhir::r4::core::StructureDefinition*>
+  GetStructureDefinition(absl::string_view uri) {
+    return this->structure_definitions.GetResource(uri);
+  }
+
+  absl::StatusOr<const google::fhir::r4::core::SearchParameter*>
+  GetSearchParameter(absl::string_view uri) {
+    return this->search_parameters.GetResource(uri);
+  }
+
+  absl::StatusOr<const google::fhir::r4::core::CodeSystem*> GetCodeSystem(
+      absl::string_view uri) {
+    return this->code_systems.GetResource(uri);
+  }
+
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> GetValueSet(
+      absl::string_view uri) {
+    return this->value_sets.GetResource(uri);
+  }
+
  private:
   explicit FhirPackage(absl::string_view zip_file_path)
       : structure_definitions(
