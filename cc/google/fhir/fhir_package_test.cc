@@ -69,15 +69,17 @@ constexpr int kR4ValuesetsCount = 1316;
 constexpr int kR4SearchParametersCount = 1385;
 
 TEST(FhirPackageTest, LoadSucceeds) {
-  absl::StatusOr<FhirPackage> fhir_package =
+  absl::StatusOr<std::unique_ptr<FhirPackage>> fhir_package =
       FhirPackage::Load("spec/fhir_r4_package.zip");
   ASSERT_TRUE(fhir_package.ok()) << fhir_package.status().message();
 
-  EXPECT_EQ(fhir_package->package_info.proto_package(), "google.fhir.r4.core");
-  EXPECT_EQ(fhir_package->value_sets.size(), kR4ValuesetsCount);
-  EXPECT_EQ(fhir_package->code_systems.size(), kR4CodeSystemsCount);
-  EXPECT_EQ(fhir_package->structure_definitions.size(), kR4DefinitionsCount);
-  EXPECT_EQ(fhir_package->search_parameters.size(), kR4SearchParametersCount);
+  EXPECT_EQ((*fhir_package)->package_info.proto_package(),
+            "google.fhir.r4.core");
+  EXPECT_EQ((*fhir_package)->value_sets.size(), kR4ValuesetsCount);
+  EXPECT_EQ((*fhir_package)->code_systems.size(), kR4CodeSystemsCount);
+  EXPECT_EQ((*fhir_package)->structure_definitions.size(), kR4DefinitionsCount);
+  EXPECT_EQ((*fhir_package)->search_parameters.size(),
+            kR4SearchParametersCount);
 }
 
 TEST(FhirPackageTest, LoadWithSideloadedPackageInfoSucceeds) {
@@ -85,15 +87,16 @@ TEST(FhirPackageTest, LoadWithSideloadedPackageInfoSucceeds) {
   package_info.set_proto_package("my.custom.package");
   package_info.set_fhir_version(proto::FhirVersion::R4);
 
-  absl::StatusOr<FhirPackage> fhir_package = FhirPackage::Load(
+  absl::StatusOr<std::unique_ptr<FhirPackage>> fhir_package = FhirPackage::Load(
       "spec/fhir_r4_package.zip", package_info);
   ASSERT_TRUE(fhir_package.ok()) << fhir_package.status().message();
 
-  EXPECT_EQ(fhir_package->package_info.proto_package(), "my.custom.package");
-  EXPECT_EQ(fhir_package->value_sets.size(), kR4ValuesetsCount);
-  EXPECT_EQ(fhir_package->code_systems.size(), kR4CodeSystemsCount);
-  EXPECT_EQ(fhir_package->structure_definitions.size(), kR4DefinitionsCount);
-  EXPECT_EQ(fhir_package->search_parameters.size(), kR4SearchParametersCount);
+  EXPECT_EQ((*fhir_package)->package_info.proto_package(), "my.custom.package");
+  EXPECT_EQ((*fhir_package)->value_sets.size(), kR4ValuesetsCount);
+  EXPECT_EQ((*fhir_package)->code_systems.size(), kR4CodeSystemsCount);
+  EXPECT_EQ((*fhir_package)->structure_definitions.size(), kR4DefinitionsCount);
+  EXPECT_EQ((*fhir_package)->search_parameters.size(),
+            kR4SearchParametersCount);
 }
 
 TEST(FhirPackageTest, LoadAndGetResourceSucceeds) {
@@ -199,44 +202,44 @@ TEST(FhirPackageTest, LoadAndGetResourceSucceeds) {
   package_info.set_proto_package("my.custom.package");
   package_info.set_fhir_version(proto::FhirVersion::R4);
 
-  absl::StatusOr<FhirPackage> fhir_package =
+  absl::StatusOr<std::unique_ptr<FhirPackage>> fhir_package =
       FhirPackage::Load(*temp_name, package_info);
   ASSERT_TRUE(fhir_package.ok()) << fhir_package.status().message();
 
   // Check that we can retrieve all our resources;
   absl::StatusOr<const google::fhir::r4::core::StructureDefinition*> sd_result =
-      fhir_package->GetStructureDefinition("http://sd1");
+      (*fhir_package)->GetStructureDefinition("http://sd1");
   EXPECT_TRUE(sd_result.ok());
   EXPECT_EQ((*sd_result)->url().value(), "http://sd1");
 
-  sd_result = fhir_package->GetStructureDefinition("http://sd2");
+  sd_result = (*fhir_package)->GetStructureDefinition("http://sd2");
   EXPECT_TRUE(sd_result.ok());
   EXPECT_EQ((*sd_result)->url().value(), "http://sd2");
 
   absl::StatusOr<const google::fhir::r4::core::SearchParameter*> sp_result =
-      fhir_package->GetSearchParameter("http://sp1");
+      (*fhir_package)->GetSearchParameter("http://sp1");
   EXPECT_TRUE(sp_result.ok());
   EXPECT_EQ((*sp_result)->url().value(), "http://sp1");
 
-  sp_result = fhir_package->GetSearchParameter("http://sp2");
+  sp_result = (*fhir_package)->GetSearchParameter("http://sp2");
   EXPECT_TRUE(sp_result.ok());
   EXPECT_EQ((*sp_result)->url().value(), "http://sp2");
 
   absl::StatusOr<const google::fhir::r4::core::CodeSystem*> cs_result =
-      fhir_package->GetCodeSystem("http://cs1");
+      (*fhir_package)->GetCodeSystem("http://cs1");
   EXPECT_TRUE(cs_result.ok());
   EXPECT_EQ((*cs_result)->url().value(), "http://cs1");
 
-  cs_result = fhir_package->GetCodeSystem("http://cs2");
+  cs_result = (*fhir_package)->GetCodeSystem("http://cs2");
   EXPECT_TRUE(cs_result.ok());
   EXPECT_EQ((*cs_result)->url().value(), "http://cs2");
 
   absl::StatusOr<const google::fhir::r4::core::ValueSet*> vs_result =
-      fhir_package->GetValueSet("http://vs1");
+      (*fhir_package)->GetValueSet("http://vs1");
   EXPECT_TRUE(vs_result.ok());
   EXPECT_EQ((*vs_result)->url().value(), "http://vs1");
 
-  vs_result = fhir_package->GetValueSet("http://vs2");
+  vs_result = (*fhir_package)->GetValueSet("http://vs2");
   EXPECT_TRUE(vs_result.ok());
   EXPECT_EQ((*vs_result)->url().value(), "http://vs2");
 
@@ -255,13 +258,57 @@ TEST(FhirPackageTest, GetResourceForMissingUriFindsNothing) {
   package_info.set_proto_package("my.custom.package");
   package_info.set_fhir_version(proto::FhirVersion::R4);
 
-  absl::StatusOr<FhirPackage> fhir_package =
+  absl::StatusOr<std::unique_ptr<FhirPackage>> fhir_package =
       FhirPackage::Load(*temp_name, package_info);
   ASSERT_TRUE(fhir_package.ok()) << fhir_package.status().message();
 
-  EXPECT_FALSE(fhir_package->GetValueSet("missing").ok());
+  EXPECT_FALSE((*fhir_package)->GetValueSet("missing").ok());
+  remove(temp_name->c_str());
+}
+
+TEST(FhirPackageManager, GetResourceForAddedPackagesSucceeds) {
+  absl::StatusOr<std::string> temp_name =
+      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+          {"package_info.prototxt", "fhir_version: R4\nproto_package: 'Foo'"},
+          {"a_value_set.json",
+           "{\"resourceType\": \"ValueSet\", \"url\": "
+           "\"http://value.set/id-1\", "
+           "\"id\": \"a-value-set-1\", \"status\": \"draft\"}"}});
+  ASSERT_TRUE(temp_name.ok()) << temp_name.status().message();
+
+  absl::StatusOr<std::string> another_temp_name =
+      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+          {"package_info.prototxt", "fhir_version: R4\nproto_package: 'Foo'"},
+          {"a_value_set.json",
+           "{\"resourceType\": \"ValueSet\", \"url\": "
+           "\"http://value.set/id-2\", "
+           "\"id\": \"a-value-set-2\", \"status\": \"draft\"}"}});
+  ASSERT_TRUE(another_temp_name.ok()) << another_temp_name.status().message();
+
+  absl::Status add_package_status;
+  FhirPackageManager package_manager = FhirPackageManager();
+
+  add_package_status = package_manager.AddPackageAtPath(*temp_name);
+  ASSERT_TRUE(add_package_status.ok()) << add_package_status.message();
+
+  add_package_status = package_manager.AddPackageAtPath(*another_temp_name);
+  ASSERT_TRUE(add_package_status.ok()) << add_package_status.message();
+
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> result;
+
+  result = package_manager.GetValueSet("http://value.set/id-1");
+  EXPECT_TRUE(result.ok());
+  EXPECT_EQ((*result)->url().value(), "http://value.set/id-1");
+
+  result = package_manager.GetValueSet("http://value.set/id-2");
+  EXPECT_TRUE(result.ok());
+  EXPECT_EQ((*result)->url().value(), "http://value.set/id-2");
+
+  result = package_manager.GetValueSet("http://missing-uri");
+  EXPECT_FALSE(result.ok());
 
   remove(temp_name->c_str());
+  remove(another_temp_name->c_str());
 }
 
 TEST(ResourceCollectionTest, GetResourceFromCacheSucceeds) {

@@ -16,6 +16,7 @@
 
 #include <optional>
 #include <string>
+#include <utility>
 
 #include "google/protobuf/text_format.h"
 #include "absl/status/status.h"
@@ -184,16 +185,17 @@ absl::StatusOr<std::string> GetResourceUrl(const FhirJson& parsed_json) {
 }
 }  // namespace internal
 
-absl::StatusOr<FhirPackage> FhirPackage::Load(absl::string_view zip_file_path) {
+absl::StatusOr<std::unique_ptr<FhirPackage>> FhirPackage::Load(
+    absl::string_view zip_file_path) {
   return Load(zip_file_path, std::optional<PackageInfo>());
 }
 
-absl::StatusOr<FhirPackage> FhirPackage::Load(absl::string_view zip_file_path,
-                                              const PackageInfo& package_info) {
+absl::StatusOr<std::unique_ptr<FhirPackage>> FhirPackage::Load(
+    absl::string_view zip_file_path, const PackageInfo& package_info) {
   return Load(zip_file_path, std::optional<PackageInfo>(package_info));
 }
 
-absl::StatusOr<FhirPackage> FhirPackage::Load(
+absl::StatusOr<std::unique_ptr<FhirPackage>> FhirPackage::Load(
     absl::string_view zip_file_path,
     const absl::optional<PackageInfo> optional_package_info) {
   int zip_open_error;
@@ -205,9 +207,11 @@ absl::StatusOr<FhirPackage> FhirPackage::Load(
                         zip_open_error));
   }
 
-  FhirPackage fhir_package(zip_file_path);
+  // We can't use make_unique here because the constructor is private.
+  auto fhir_package =
+      std::unique_ptr<FhirPackage>(new FhirPackage(zip_file_path));
   if (optional_package_info.has_value()) {
-    fhir_package.package_info = *optional_package_info;
+    fhir_package->package_info = *optional_package_info;
   }
   bool package_info_found = false;
   absl::Status parse_errors;
@@ -249,7 +253,7 @@ absl::StatusOr<FhirPackage> FhirPackage::Load(
             "with no PackageInfo to use the one from the zip.");
       } else {
         if (!google::protobuf::TextFormat::ParseFromString(contents,
-                                                 &fhir_package.package_info)) {
+                                                 &fhir_package->package_info)) {
           return absl::InvalidArgumentError(
               absl::StrCat("Invalid PackageInfo found for ", zip_file_path));
         }
@@ -257,7 +261,7 @@ absl::StatusOr<FhirPackage> FhirPackage::Load(
       }
     } else if (absl::EndsWith(entry_stat.name, ".json")) {
       absl::Status add_status =
-          AddResourceToFhirPackage(contents, entry_stat.name, fhir_package);
+          AddResourceToFhirPackage(contents, entry_stat.name, *fhir_package);
       if (!add_status.ok()) {
         parse_errors.Update(absl::InvalidArgumentError(
             absl::StrFormat("Unhandled JSON entry: %s due to error: %s",
@@ -279,7 +283,18 @@ absl::StatusOr<FhirPackage> FhirPackage::Load(
   if (!parse_errors.ok()) {
     return parse_errors;
   }
-  return fhir_package;
+  return std::move(fhir_package);
+}
+
+void FhirPackageManager::AddPackage(std::unique_ptr<FhirPackage> package) {
+  packages_.push_back(std::move(package));
+}
+
+absl::Status FhirPackageManager::AddPackageAtPath(absl::string_view path) {
+  FHIR_ASSIGN_OR_RETURN(std::unique_ptr<FhirPackage> package,
+                        FhirPackage::Load(path));
+  AddPackage(std::move(package));
+  return absl::OkStatus();
 }
 
 }  // namespace google::fhir

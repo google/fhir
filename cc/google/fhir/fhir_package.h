@@ -243,11 +243,12 @@ struct FhirPackage {
   ResourceCollection<google::fhir::r4::core::CodeSystem> code_systems;
   ResourceCollection<google::fhir::r4::core::ValueSet> value_sets;
 
-  static absl::StatusOr<FhirPackage> Load(absl::string_view zip_file_path);
+  static absl::StatusOr<std::unique_ptr<FhirPackage>> Load(
+      absl::string_view zip_file_path);
 
   // This Load variant will use the passed-in PackageInfo proto for the
   // FhirPackage, regardless of whether or not one was found in the zip.
-  static absl::StatusOr<FhirPackage> Load(
+  static absl::StatusOr<std::unique_ptr<FhirPackage>> Load(
       absl::string_view zip_file_path, const proto::PackageInfo& package_info);
 
   absl::StatusOr<const google::fhir::r4::core::StructureDefinition*>
@@ -283,9 +284,74 @@ struct FhirPackage {
         value_sets(ResourceCollection<google::fhir::r4::core::ValueSet>(
             zip_file_path)) {}
 
-  static absl::StatusOr<FhirPackage> Load(
+  static absl::StatusOr<std::unique_ptr<FhirPackage>> Load(
       absl::string_view zip_file_path,
       const absl::optional<proto::PackageInfo> optional_package_info);
+};
+
+namespace internal {
+// Finds the first ok response from calling `get_resource` on each package in
+// `packages` with the given `uri`. Returns a status describing each non-ok
+// status for every `get_resource` call if no ok response can be found.
+template <typename T>
+absl::StatusOr<T> SearchPackagesForResource(
+    absl::StatusOr<T> (FhirPackage::*get_resource)(absl::string_view),
+    std::vector<std::unique_ptr<FhirPackage>>& packages,
+    absl::string_view uri) {
+  absl::Status status;
+  for (std::unique_ptr<FhirPackage>& package : packages) {
+    absl::StatusOr<T> resource = (*package.*get_resource)(uri);
+    if (resource.ok()) {
+      return resource;
+    } else {
+      status.Update(resource.status());
+    }
+  }
+  return status;
+}
+}  // namespace internal
+
+// Manages access to a collection of FhirPackage instances.
+// Allows users to add packages to the package manager and then search all of
+// them for a particular resource.
+class FhirPackageManager {
+ public:
+  FhirPackageManager() {}
+
+  // Adds the given `package` to the package manager.
+  // Takes ownership of the given `package`.
+  void AddPackage(std::unique_ptr<FhirPackage> package);
+
+  // Loads the FHIR package at `path` and adds it to the package manager.
+  absl::Status AddPackageAtPath(absl::string_view path);
+
+  // Retrieves a protocol buffer representation of the resource with the given
+  // `uri`. Searches the packages added to the package manger for the resource
+  // with the given URI. If multiple packages contain the same resource, the
+  // package consulted will be non-deterministic.
+  absl::StatusOr<const google::fhir::r4::core::StructureDefinition*>
+  GetStructureDefinition(absl::string_view uri) {
+    return internal::SearchPackagesForResource(
+        &FhirPackage::GetStructureDefinition, packages_, uri);
+  }
+  absl::StatusOr<const google::fhir::r4::core::SearchParameter*>
+  GetSearchParameter(absl::string_view uri) {
+    return internal::SearchPackagesForResource(&FhirPackage::GetSearchParameter,
+                                               packages_, uri);
+  }
+  absl::StatusOr<const google::fhir::r4::core::CodeSystem*> GetCodeSystem(
+      absl::string_view uri) {
+    return internal::SearchPackagesForResource(&FhirPackage::GetCodeSystem,
+                                               packages_, uri);
+  }
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> GetValueSet(
+      absl::string_view uri) {
+    return internal::SearchPackagesForResource(&FhirPackage::GetValueSet,
+                                               packages_, uri);
+  }
+
+ private:
+  std::vector<std::unique_ptr<FhirPackage>> packages_;
 };
 
 }  // namespace google::fhir
