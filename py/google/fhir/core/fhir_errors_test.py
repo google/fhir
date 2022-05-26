@@ -79,16 +79,21 @@ class ListErrorReporterTests(absltest.TestCase):
     self.error_reporter.report_fhir_path_warning('some.element.path',
                                                  'foo.bar = bats',
                                                  'Some FHIRPath warning.')
+    self.error_reporter.report_fhir_path_warning('', 'foo.baz = buzz',
+                                                 'Another FHIRPath warning.')
 
     self.assertEqual(
         fhir_errors.aggregate_events(self.error_reporter.errors),
-        [(('FHIR Path Error: foo.bar = bats; Some FHIRPath '
+        [(('FHIR Path Error: some.element.path; foo.bar = bats; Some FHIRPath '
            'error.'), 2),
-         ('FHIR Path Error: other = bats; Some other FHIRPath error.', 1)])
+         ('FHIR Path Error: other; other = bats; Some other FHIRPath error.', 1)
+        ])
 
     self.assertEqual(
         fhir_errors.aggregate_events(self.error_reporter.warnings),
-        [(('FHIR Path Warning: foo.bar = bats; Some FHIRPath'
+        [(('FHIR Path Warning: foo.baz = buzz; Another FHIRPath'
+           ' warning.'), 1),
+         (('FHIR Path Warning: some.element.path; foo.bar = bats; Some FHIRPath'
            ' warning.'), 1)])
 
   def testListErrorReporter_getErrorReport_succeeds(self):
@@ -107,11 +112,11 @@ class ListErrorReporterTests(absltest.TestCase):
 
     self.assertEqual(self.error_reporter.get_error_report(),
                      ("""Encountered 2 errors:
-FHIR Path Error: foo.bar = bats; Some FHIRPath error.    :   1
-FHIR Path Error: other = bats; Some other FHIRPath error.:   1
+FHIR Path Error: other; other = bats; Some other FHIRPath error.        :   1
+FHIR Path Error: some.element.path; foo.bar = bats; Some FHIRPath error.:   1
 
 Encountered 1 warnings:
-FHIR Path Warning: foo.bar = bats; Some FHIRPath warning.:   1\
+FHIR Path Warning: some.element.path; foo.bar = bats; Some FHIRPath warning.:   1\
 """))
 
 

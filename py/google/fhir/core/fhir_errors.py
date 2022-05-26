@@ -167,14 +167,16 @@ class ListErrorReporter(ErrorReporter):
   def report_fhir_path_error(self, element_path: str, fhir_path_constraint: str,
                              msg: str) -> None:
     """Logs to the `error` context and stores `msg` in `errors`."""
-    full_msg = f'FHIR Path Error: {fhir_path_constraint}; {msg}'
+    full_msg = _build_fhir_path_message('Error', element_path,
+                                        fhir_path_constraint, msg)
     logging.error(full_msg)
     self.errors.append(full_msg)
 
   def report_fhir_path_warning(self, element_path: str,
                                fhir_path_constraint: str, msg: str) -> None:
     """Logs to the `warning` context and stores `msg` in `warnings`."""
-    full_msg = f'FHIR Path Warning: {fhir_path_constraint}; {msg}'
+    full_msg = _build_fhir_path_message('Warning', element_path,
+                                        fhir_path_constraint, msg)
     logging.warning(full_msg)
     self.warnings.append(full_msg)
 
@@ -194,3 +196,10 @@ class ListErrorReporter(ErrorReporter):
                  f'{warnings_freq_tbl}')
 
     return report
+
+
+def _build_fhir_path_message(level: str, element_path: str,
+                             fhir_path_constraint: str, msg: str) -> str:
+  """Builds a FHIR Path error message from the given components."""
+  return (f'FHIR Path {level}: {element_path + "; " if element_path else ""}'
+          f'{fhir_path_constraint}; {msg}')
