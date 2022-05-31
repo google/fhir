@@ -33,20 +33,10 @@ absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
                                           absl::TimeZone default_timezone,
                                           const bool validate);
 
-absl::Status MergeJsonFhirStringIntoProto(
-    const std::string& raw_json, google::protobuf::Message* target,
-    absl::TimeZone default_timezone, const Parser::JsonSanitizer& sanitizer,
-    const bool validate);
-
 absl::Status MergeJsonFhirObjectIntoProto(
     const google::fhir::internal::FhirJson& json_object,
     google::protobuf::Message* target, absl::TimeZone default_timezone,
     const bool validate);
-
-absl::Status MergeJsonFhirObjectIntoProto(
-    const google::fhir::internal::FhirJson& json_object,
-    google::protobuf::Message* target, absl::TimeZone default_timezone,
-    const Parser::JsonSanitizer& sanitizer, const bool validate);
 
 template <typename R>
 absl::StatusOr<R> JsonFhirStringToProto(const std::string& raw_json,
@@ -54,7 +44,7 @@ absl::StatusOr<R> JsonFhirStringToProto(const std::string& raw_json,
   R resource;
   FHIR_RETURN_IF_ERROR(
       MergeJsonFhirStringIntoProto(raw_json, &resource, default_timezone,
-                                   Parser::PassThroughSanitizer(), true));
+                                    true));
   return resource;
 }
 
@@ -65,17 +55,7 @@ absl::StatusOr<R> JsonFhirObjectToProto(
   R resource;
   FHIR_RETURN_IF_ERROR(
       MergeJsonFhirObjectIntoProto(json_object, &resource, default_timezone,
-                                   Parser::PassThroughSanitizer(), true));
-  return resource;
-}
-
-template <typename R>
-absl::StatusOr<R> JsonFhirStringToProto(
-    const std::string& raw_json, const absl::TimeZone default_timezone,
-    const Parser::JsonSanitizer& sanitizer) {
-  R resource;
-  FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(
-      raw_json, &resource, default_timezone, sanitizer, true));
+                                   true));
   return resource;
 }
 
@@ -83,19 +63,8 @@ template <typename R>
 absl::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
     const std::string& raw_json, const absl::TimeZone default_timezone) {
   R resource;
-  FHIR_RETURN_IF_ERROR(
-      MergeJsonFhirStringIntoProto(raw_json, &resource, default_timezone,
-                                   Parser::PassThroughSanitizer(), false));
-  return resource;
-}
-
-template <typename R>
-absl::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
-    const std::string& raw_json, const absl::TimeZone default_timezone,
-    const Parser::JsonSanitizer& sanitizer) {
-  R resource;
-  FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(
-      raw_json, &resource, default_timezone, sanitizer, false));
+  FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(raw_json, &resource,
+                                                    default_timezone, false));
   return resource;
 }
 

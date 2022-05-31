@@ -27,25 +27,10 @@ namespace stu3 {
 // STU3-only API for cc/google/fhir/json_format.h
 // See cc/google/fhir/json_format.h for documentation on these methods
 
-absl::Status MergeJsonFhirStringIntoProto(
-    const std::string& raw_json, google::protobuf::Message* target,
-    absl::TimeZone default_timezone, const Parser::JsonSanitizer& sanitizer,
-    const bool validate);
-
 absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
                                           google::protobuf::Message* target,
                                           absl::TimeZone default_timezone,
                                           const bool validate);
-
-template <typename R>
-absl::StatusOr<R> JsonFhirStringToProto(
-    const std::string& raw_json, const absl::TimeZone default_timezone,
-    const Parser::JsonSanitizer& sanitizer) {
-  R resource;
-  FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(
-      raw_json, &resource, default_timezone, sanitizer, true));
-  return resource;
-}
 
 template <typename R>
 absl::StatusOr<R> JsonFhirStringToProto(const std::string& raw_json,
@@ -53,16 +38,6 @@ absl::StatusOr<R> JsonFhirStringToProto(const std::string& raw_json,
   R resource;
   FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(raw_json, &resource,
                                                     default_timezone, true));
-  return resource;
-}
-
-template <typename R>
-absl::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
-    const std::string& raw_json, const absl::TimeZone default_timezone,
-    const Parser::JsonSanitizer& sanitizer) {
-  R resource;
-  FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(
-      raw_json, &resource, default_timezone, sanitizer, false));
   return resource;
 }
 

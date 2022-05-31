@@ -200,11 +200,9 @@ absl::StatusOr<const FieldDescriptor*> GetContainedResourceField(
 class Parser {
  public:
   explicit Parser(const PrimitiveHandler* primitive_handler,
-                  absl::TimeZone default_timezone,
-                  const google::fhir::Parser::JsonSanitizer& sanitizer)
+                  absl::TimeZone default_timezone)
       : primitive_handler_(primitive_handler),
-        default_timezone_(default_timezone),
-        sanitizer_(sanitizer) {}
+        default_timezone_(default_timezone) {}
 
   absl::Status MergeMessage(const internal::FhirJson& value,
                             Message* target) const {
@@ -421,21 +419,11 @@ class Parser {
                                ->GetMessageFactory()
                                ->GetPrototype(field->message_type())
                                ->New());
-      absl::Status merge_status;
-
-      // Sanitize JSON value depending on the type of JSON value.
-      if (json.isString()) {
-        FHIR_ASSIGN_OR_RETURN(std::string val, json.asString());
-        FHIR_RETURN_IF_ERROR(sanitizer_.SanitizeStringField(field, val));
-        auto val_string = internal::FhirJson::CreateString(val);
-        merge_status = MergeValue(*val_string, target.get());
-      } else {
-        merge_status = MergeValue(json, target.get());
-      }
-      if (!merge_status.ok()) {
+      auto status = MergeValue(json, target.get());
+      if (!status.ok()) {
         return InvalidArgumentError(absl::StrCat("Error parsing field ",
                                                  field->json_name(), ": ",
-                                                 merge_status.message()));
+                                                 status.message()));
       }
       return std::move(target);
     }
@@ -477,7 +465,6 @@ class Parser {
  private:
   const PrimitiveHandler* primitive_handler_;
   const absl::TimeZone default_timezone_;
-  const google::fhir::Parser::JsonSanitizer& sanitizer_;
 };
 
 }  // namespace internal
@@ -485,33 +472,17 @@ class Parser {
 absl::Status Parser::MergeJsonFhirStringIntoProto(
     const std::string& raw_json, Message* target,
     const absl::TimeZone default_timezone, const bool validate) const {
-  return MergeJsonFhirStringIntoProto(raw_json, target, default_timezone,
-                                      PassThroughSanitizer(), validate);
-}
-
-absl::Status Parser::MergeJsonFhirStringIntoProto(
-    const std::string& raw_json, Message* target,
-    const absl::TimeZone default_timezone, const JsonSanitizer& sanitizer,
-    const bool validate) const {
   internal::FhirJson json_object;
   FHIR_RETURN_IF_ERROR(internal::ParseJsonValue(raw_json, json_object));
 
   return MergeJsonFhirObjectIntoProto(json_object, target, default_timezone,
-                                      sanitizer, validate);
+                                      validate);
 }
 
 absl::Status Parser::MergeJsonFhirObjectIntoProto(
     const internal::FhirJson& json_object, Message* target,
     const absl::TimeZone default_timezone, const bool validate) const {
-  return MergeJsonFhirObjectIntoProto(json_object, target, default_timezone,
-                                      PassThroughSanitizer(), validate);
-}
-
-absl::Status Parser::MergeJsonFhirObjectIntoProto(
-    const internal::FhirJson& json_object, Message* target,
-    const absl::TimeZone default_timezone, const JsonSanitizer& sanitizer,
-    const bool validate) const {
-  internal::Parser parser{primitive_handler_, default_timezone, sanitizer};
+  internal::Parser parser{primitive_handler_, default_timezone};
 
   // If the target is a profiled resource, first parse to the base resource,
   // and then profile to the target type.

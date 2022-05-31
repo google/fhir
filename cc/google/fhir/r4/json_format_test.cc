@@ -202,15 +202,13 @@ namespace {
 using namespace ::google::fhir::r4::core;  // NOLINT
 using ::google::fhir::testutil::EqualsProto;
 using internal::JsonEq;
-using ::google::protobuf::FieldDescriptor;
 using ::testing::Eq;
 
 static const char* const kTimeZoneString = "Australia/Sydney";
 
 // json_path should be relative to fhir root
 template <typename R>
-absl::StatusOr<R> ParseJsonToProto(const std::string& json_path,
-                                   const Parser::JsonSanitizer& sanitizer) {
+absl::StatusOr<R> ParseJsonToProto(const std::string& json_path) {
   // Some examples are invalid fhir.
   // See:
   // https://gforge.hl7.org/gf/project/fhir/tracker/?action=TrackerItemEdit&tracker_item_id=24933
@@ -229,7 +227,7 @@ absl::StatusOr<R> ParseJsonToProto(const std::string& json_path,
   absl::TimeZone tz;
   absl::LoadTimeZone(kTimeZoneString, &tz);
   FHIR_ASSIGN_OR_RETURN(R resource, JsonFhirStringToProtoWithoutValidating<R>(
-                                        json, tz, sanitizer));
+                                        json, tz));
 
   if (INVALID_RECORDS.find(json_path) == INVALID_RECORDS.end()) {
     FHIR_RETURN_IF_ERROR(
@@ -244,10 +242,8 @@ absl::StatusOr<R> ParseJsonToProto(const std::string& json_path,
 // rather than the testdata directory.
 template <typename R>
 void TestParseWithFilepaths(const std::string& proto_path,
-                            const std::string& json_path,
-                            const Parser::JsonSanitizer& sanitizer) {
-  absl::StatusOr<R> from_json_status =
-      ParseJsonToProto<R>(json_path, sanitizer);
+                            const std::string& json_path) {
+  absl::StatusOr<R> from_json_status = ParseJsonToProto<R>(json_path);
   ASSERT_TRUE(from_json_status.ok()) << "Failed parsing: " << json_path << "\n"
                                      << from_json_status.status();
   R from_json = from_json_status.value();
@@ -257,12 +253,6 @@ void TestParseWithFilepaths(const std::string& proto_path,
   std::string differences;
   differencer.ReportDifferencesToString(&differences);
   EXPECT_TRUE(differencer.Compare(from_disk, from_json)) << differences;
-}
-template <typename R>
-void TestParseWithFilepaths(const std::string& proto_path,
-                            const std::string& json_path) {
-  return TestParseWithFilepaths<R>(proto_path, json_path,
-                                   Parser::PassThroughSanitizer());
 }
 
 template <typename R>
@@ -320,84 +310,11 @@ TEST(JsonFormatR4Test, ParseProfile) {
       "testdata/r4/profiles/test_patient.json");
 }
 
-// Implementation of JsonSanitizer to test string manipulations.
-class DuckCaseSanitizer : public Parser::JsonSanitizer {
- public:
-  absl::Status SanitizeStringField(const FieldDescriptor* field_descriptor,
-                                   std::string& value) const override {
-    const std::string pattern = "Donald Duck";
-    if (absl::StrContains(value, pattern)) {
-      value.replace(value.find(pattern), pattern.size(), "Donald DUCK");
-    }
-    return absl::OkStatus();
-  }
-};
-
-// Implementation of JsonSanitizer to test propagation of errors.
-class DisallowDuckSanitizer : public Parser::JsonSanitizer {
- public:
-  absl::Status SanitizeStringField(const FieldDescriptor* field_descriptor,
-                                   std::string& value) const override {
-    if (absl::StrContains(value, "Duck")) {
-      return absl::InvalidArgumentError("Some fields contain 'Duck'!");
-    }
-    return absl::OkStatus();
-  }
-};
-
-// Implementation of JsonSanitizer to test manipulation based on field type.
-class SpaceTrimmerForCode : public Parser::JsonSanitizer {
- public:
-  absl::Status SanitizeStringField(const FieldDescriptor* field_descriptor,
-                                   std::string& value) const override {
-    if (!google::fhir::IsCode(field_descriptor->message_type()) ||
-        value.empty()) {
-      return absl::OkStatus();
-    }
-    const int start = value.find_first_not_of(' ');
-    const int end = value.find_last_not_of(' ');
-    value = (start == std::string::npos || end == std::string::npos)
-                ? ""
-                : value.substr(start, end - start + 1);
-    return absl::OkStatus();
-  }
-};
-
-TEST(JsonFormatR4Test, ParseWithJsonSanitizer) {
-  class ChainSanitizer : public Parser::JsonSanitizer {
-   public:
-    absl::Status SanitizeStringField(const FieldDescriptor* field_descriptor,
-                                     std::string& value) const override {
-      FHIR_RETURN_IF_ERROR(
-          DuckCaseSanitizer().SanitizeStringField(field_descriptor, value));
-      FHIR_RETURN_IF_ERROR(
-          SpaceTrimmerForCode().SanitizeStringField(field_descriptor, value));
-      return absl::OkStatus();
-    }
-  };
-
-  TestParseWithFilepaths<r4::testing::TestPatient>(
-      "testdata/r4/profiles/test_patient-profiled-testpatient.prototxt",
-      "testdata/r4/profiles/test_patient_need_sanitizers.json",
-      ChainSanitizer());
-}
-
-TEST(JsonFormatR4Test, JsonSanitizerReturnsError) {
-  ASSERT_TRUE(ParseJsonToProto<r4::testing::TestPatient>(
-                  "testdata/r4/profiles/test_patient.json", DuckCaseSanitizer())
-                  .ok());
-  EXPECT_FALSE(
-      ParseJsonToProto<r4::testing::TestPatient>(
-          "testdata/r4/profiles/test_patient.json", DisallowDuckSanitizer())
-          .ok());
-}
-
 // Test parsing to a profile fails if the parsed resource doesn't match the
 // profile
 TEST(JsonFormatR4Test, ParseProfileMismatch) {
   EXPECT_FALSE(ParseJsonToProto<r4::testing::TestPatient>(
-                   "testdata/r4/profiles/test_patient_multiple_names.json",
-                   Parser::PassThroughSanitizer())
+                   "testdata/r4/profiles/test_patient_multiple_names.json")
                    .ok());
 }
 
