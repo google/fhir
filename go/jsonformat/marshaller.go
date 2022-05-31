@@ -242,7 +242,7 @@ func (m *Marshaller) marshalRepeatedFieldValue(decmap jsonpbhelper.JSONObject, f
 		case formatAnalyticWithInferredSchema:
 			return m.marshalExtensionsAsFirstClassFields(decmap, pbs)
 		case formatAnalyticV2WithInferredSchema:
-			return m.marshalExtensionsAsFirstClassFieldsV2(decmap, pbs)
+			return m.marshalExtensionsAsFirstClassFieldsV2(decmap, jsonpbhelper.JSONObject{}, pbs)
 		case formatAnalytic:
 			return m.marshalExtensionsAsURLs(decmap, pbs)
 		}
@@ -344,7 +344,10 @@ func (m *Marshaller) marshalExtensionsAsFirstClassFields(decmap jsonpbhelper.JSO
 	return nil
 }
 
-func (m *Marshaller) marshalExtensionsAsFirstClassFieldsV2(decmap jsonpbhelper.JSONObject, pbs []protoreflect.Message) error {
+func (m *Marshaller) marshalExtensionsAsFirstClassFieldsV2(decmap, valObj jsonpbhelper.JSONObject, pbs []protoreflect.Message) error {
+	if val, ok := valObj["value"]; ok {
+		decmap["value"] = val
+	}
 	// Loop through the extenions first to get all the field name occurrence, lowercase field name
 	// is used for counting since duplicate field names are not allowed in BigQuery even if the
 	// case differs.
@@ -424,13 +427,16 @@ func (m *Marshaller) marshalSingleExtensionHelper(pb protoreflect.Message) (json
 	if err != nil {
 		return nil, &ExtensionError{err: err.Error()}
 	}
+	var valObj jsonpbhelper.JSONObject
 	if value != nil {
-		m, err := m.marshalMessageToMap(value)
+		msg, err := m.marshalMessageToMap(value)
 		if err != nil {
 			return nil, nil
 		}
-
-		return jsonpbhelper.JSONObject{"value": m}, nil
+		valObj = jsonpbhelper.JSONObject{"value": msg}
+		if m.jsonFormat == formatAnalyticWithInferredSchema {
+			return valObj, nil
+		}
 	}
 	// Each extension element must have either a value element or a nested child extension, not both
 	// marshal sub-extensions only when it does not have a value
@@ -441,7 +447,7 @@ func (m *Marshaller) marshalSingleExtensionHelper(pb protoreflect.Message) (json
 	}
 	cm := jsonpbhelper.JSONObject{}
 	if m.jsonFormat == formatAnalyticV2WithInferredSchema {
-		if err := m.marshalExtensionsAsFirstClassFieldsV2(cm, cpbs); err != nil {
+		if err := m.marshalExtensionsAsFirstClassFieldsV2(cm, valObj, cpbs); err != nil {
 			return nil, err
 		}
 	} else {

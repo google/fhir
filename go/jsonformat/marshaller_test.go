@@ -2870,6 +2870,93 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 			},
 		},
 		{
+			name: "Extensions with both value and sub-extension - sub-extension is not skipped",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						Extension: []*d3pb.Extension{
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d3pb.Extension{
+									{
+										Url: &d3pb.Uri{Value: "ombCategory"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_Coding{
+												Coding: &d3pb.Coding{
+													System: &d3pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d3pb.Code{Value: "2106-3"},
+												},
+											},
+										},
+										Extension: []*d3pb.Extension{
+											{
+												Url: &d3pb.Uri{Value: "text"},
+												Value: &d3pb.Extension_ValueX{
+													Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "White"}},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						Extension: []*d4pb.Extension{
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d4pb.Extension{
+									{
+										Url: &d4pb.Uri{Value: "ombCategory"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_Coding{
+												Coding: &d4pb.Coding{
+													System: &d4pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d4pb.Code{Value: "2106-3"},
+												},
+											},
+										},
+										Extension: []*d4pb.Extension{
+											{
+												Url: &d4pb.Uri{Value: "text"},
+												Value: &d4pb.Extension_ValueX{
+													Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "White"}},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			want: jsonpbhelper.JSONObject{
+				"us_core_race": jsonpbhelper.JSONArray{
+					jsonpbhelper.JSONObject{
+						"ombCategory": jsonpbhelper.JSONArray{
+							jsonpbhelper.JSONObject{
+								"text": jsonpbhelper.JSONArray{jsonpbhelper.JSONObject{
+									"value": jsonpbhelper.JSONObject{"string": jsonpbhelper.JSONString("White")},
+								},
+								},
+								"value": jsonpbhelper.JSONObject{
+									"coding": jsonpbhelper.JSONObject{
+										"system": jsonpbhelper.JSONString("urn:oid:2.16.840.1.113883.6.238"),
+										"code":   jsonpbhelper.JSONString("2106-3"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
 			name: "Primitive extension",
 			inputs: []mvr{
 				{
