@@ -2957,6 +2957,65 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 			},
 		},
 		{
+			name: "Extension field name collides with value - use full field name",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						Extension: []*d3pb.Extension{
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "Asian"}},
+								},
+								Extension: []*d3pb.Extension{
+									{
+										Url: &d3pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race/value"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "Asian"}},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						Extension: []*d4pb.Extension{
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "Asian"}},
+								},
+								Extension: []*d4pb.Extension{
+									{
+										Url: &d4pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race/value"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "Asian"}},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			want: jsonpbhelper.JSONObject{
+				"us_core_race": jsonpbhelper.JSONArray{
+					jsonpbhelper.JSONObject{
+						"value": jsonpbhelper.JSONObject{"string": jsonpbhelper.JSONString("Asian")},
+						"hl7_org_fhir_us_core_StructureDefinition_us_core_race_value": jsonpbhelper.JSONArray{
+							jsonpbhelper.JSONObject{
+								"value": jsonpbhelper.JSONObject{"string": jsonpbhelper.JSONString("Asian")},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
 			name: "Primitive extension",
 			inputs: []mvr{
 				{
@@ -3091,6 +3150,101 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 					}
 					if !cmp.Equal(got, test.want) {
 						t.Errorf("marshal %v: got %v, want %v", test.name, got, test.want)
+					}
+				})
+			}
+		})
+	}
+}
+
+func TestMarshalMessageForAnalyticsV2_InferredSchema_Error(t *testing.T) {
+	tests := []struct {
+		name   string
+		inputs []mvr
+	}{
+		{
+			name: "Extension collides with value for Analytics V2",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						Extension: []*d3pb.Extension{
+							{
+								Url: &d3pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d3pb.Extension{
+									{
+										Url: &d3pb.Uri{Value: "ombCategory"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_Coding{
+												Coding: &d3pb.Coding{
+													System: &d3pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d3pb.Code{Value: "2106-3"},
+												},
+											},
+										},
+										Extension: []*d3pb.Extension{
+											{
+												Url: &d3pb.Uri{Value: "value"},
+												Value: &d3pb.Extension_ValueX{
+													Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "White"}},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						Extension: []*d4pb.Extension{
+							{
+								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d4pb.Extension{
+									{
+										Url: &d4pb.Uri{Value: "ombCategory"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_Coding{
+												Coding: &d4pb.Coding{
+													System: &d4pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d4pb.Code{Value: "2106-3"},
+												},
+											},
+										},
+										Extension: []*d4pb.Extension{
+											{
+												Url: &d4pb.Uri{Value: "value"},
+												Value: &d4pb.Extension_ValueX{
+													Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "White"}},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			for _, i := range test.inputs {
+				t.Run(i.ver.String(), func(t *testing.T) {
+					marshaller, err := NewAnalyticsV2MarshallerWithInferredSchema(10, i.ver)
+					if err != nil {
+						t.Fatalf("failed to create marshaller %v: %v", test.name, err)
+					}
+					_, err = marshaller.marshalMessageToMap(i.r.ProtoReflect())
+					if err == nil {
+						t.Errorf("marshalMessageToMap on %v did not return an error", test.name)
+					}
+					var e *ExtensionError
+					if !errors.As(err, &e) {
+						t.Errorf("marshalMessageToMap on %v expect ResourceError, got %T ", test.name, err)
 					}
 				})
 			}

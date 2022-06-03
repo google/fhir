@@ -345,7 +345,9 @@ func (m *Marshaller) marshalExtensionsAsFirstClassFields(decmap jsonpbhelper.JSO
 }
 
 func (m *Marshaller) marshalExtensionsAsFirstClassFieldsV2(decmap, valObj jsonpbhelper.JSONObject, pbs []protoreflect.Message) error {
-	if val, ok := valObj["value"]; ok {
+	var ok bool
+	var val jsonpbhelper.IsJSON
+	if val, ok = valObj["value"]; ok {
 		decmap["value"] = val
 	}
 	// Loop through the extenions first to get all the field name occurrence, lowercase field name
@@ -362,8 +364,12 @@ func (m *Marshaller) marshalExtensionsAsFirstClassFieldsV2(decmap, valObj jsonpb
 		if fn == "" {
 			return &ExtensionError{err: fmt.Sprintf("extension field name is empty for url %q", urlVal)}
 		}
-		fieldNameOccurrence[strings.ToLower(fn)]++
 		ffn := jsonpbhelper.FullExtensionFieldName(urlVal)
+		if fn == "value" && ffn == "value" && ok {
+			// Throw an error when fieldname collides with existing value.
+			return &ExtensionError{err: "extension field has sub-extension that collides with value field"}
+		}
+		fieldNameOccurrence[strings.ToLower(fn)]++
 		fullFieldNameOccurrence[strings.ToLower(ffn)]++
 	}
 
@@ -379,6 +385,8 @@ func (m *Marshaller) marshalExtensionsAsFirstClassFieldsV2(decmap, valObj jsonpb
 		if fieldNameOccurrence[strings.ToLower(fn)] > fullFieldNameOccurrence[strings.ToLower(ffn)] {
 			useFullExtension[fn] = true
 		} else if _, has := decmap[fn]; has {
+			useFullExtension[fn] = true
+		} else if fn == "value" {
 			useFullExtension[fn] = true
 		} else {
 			useFullExtension[fn] = false
@@ -528,8 +536,8 @@ func (m *Marshaller) marshalFieldValue(decmap jsonpbhelper.JSONObject, f protore
 	if m.jsonFormat == formatPure {
 		// for choice type fields in non-analytics output, we need to zoom into the field within oneof.
 		// e.g. value.quantity changed to valueQuantity
-		ext := proto.GetExtension(pb.Descriptor().Options(), apb.E_IsChoiceType)
-		if ict := ext.(bool); ict {
+		ict := proto.GetExtension(pb.Descriptor().Options(), apb.E_IsChoiceType).(bool)
+		if ict {
 			fn := f.Name()
 			if pb.Descriptor().Oneofs().Len() != 1 {
 				return fmt.Errorf("Choice type must have exactly one oneof: %v", f.FullName())
@@ -752,8 +760,8 @@ func (m *Marshaller) marshalPrimitiveType(rpb protoreflect.Message) (jsonpbhelpe
 			// Observe the FHIR original codes if set.
 			ed := f.Enum()
 			ev := ed.Values().ByNumber(num)
-			ext := proto.GetExtension(ev.Options(), apb.E_FhirOriginalCode)
-			if origCode := ext.(string); origCode != "" {
+			origCode := proto.GetExtension(ev.Options(), apb.E_FhirOriginalCode).(string)
+			if origCode != "" {
 				return jsonpbhelper.JSONString(origCode), nil
 			}
 			enum := string(ev.Name())
