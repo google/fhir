@@ -18,7 +18,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"strconv"
 	"strings"
 	"time"
@@ -110,25 +109,16 @@ func (u *Unmarshaller) Unmarshal(in []byte) (proto.Message, error) {
 	return res, nil
 }
 
-// UnmarshalWithErrorReporter unmarshals a FHIR resource from JSON []byte data into a
+// TODO: report parseContainedResource error with error reporter
+// UnmarshalWithErrorReporter unmarshalls a FHIR resource from JSON into a
 // ContainedResource proto. During the process, the validation errors are
 // reported according to user defined error reporter.
 // The FHIR version of the proto is determined by the version the Unmarshaller was
 // created with.
 func (u *Unmarshaller) UnmarshalWithErrorReporter(in []byte, er errorreporter.ErrorReporter) (proto.Message, error) {
-	return u.DecodeWithErrorReporter(bytes.NewReader(in), er)
-}
-
-// DecodeWithErrorReporter read FHIR data as JSON from an io.Reader and unmarshals it into a
-// ContainedResource proto. During the process, the validation errors are
-// reported according to user defined error reporter.
-// The FHIR version of the proto is determined by the version the Unmarshaller was
-// created with.
-func (u *Unmarshaller) DecodeWithErrorReporter(in io.Reader, er errorreporter.ErrorReporter) (proto.Message, error) {
-	// TODO: report parseContainedResource error with error reporter
 	// Decode the JSON object into a map.
 	var decoded map[string]json.RawMessage
-	if err := jsp.NewDecoder(in).Decode(&decoded); err != nil {
+	if err := jsp.Unmarshal(in, &decoded); err != nil {
 		return nil, &jsonpbhelper.UnmarshalError{Details: "invalid JSON", Diagnostics: err.Error()}
 	}
 	res, err := u.parseContainedResource("", decoded)
