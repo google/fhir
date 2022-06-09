@@ -22,6 +22,7 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/primitive_wrapper.h"
 
 namespace google {
@@ -34,22 +35,28 @@ using ::google::protobuf::Message;
 
 ::absl::Status PrimitiveHandler::ParseInto(const internal::FhirJson& json,
                                            const absl::TimeZone tz,
-                                           Message* target) const {
+                                           Message* target,
+                                           ErrorReporter* error_reporter)
+                                           const {
   FHIR_RETURN_IF_ERROR(CheckVersion(*target));
 
   if (json.isArray() || json.isObject()) {
     return InvalidArgumentError(
         absl::StrCat("Invalid JSON type for ", json.toString()));
   }
+  if (error_reporter == nullptr) {
+    return InvalidArgumentError("ErrorReporter must be set");
+  }
   FHIR_ASSIGN_OR_RETURN(std::unique_ptr<PrimitiveWrapper> wrapper,
                         GetWrapper(target->GetDescriptor()));
-  FHIR_RETURN_IF_ERROR(wrapper->Parse(json, tz));
+  RETURN_REPORTED_FHIR_FATAL(error_reporter,
+                                wrapper->Parse(json, tz, *error_reporter));
   return wrapper->MergeInto(target);
 }
 
 ::absl::Status PrimitiveHandler::ParseInto(const internal::FhirJson& json,
-                                           Message* target) const {
-  return ParseInto(json, absl::UTCTimeZone(), target);
+      Message* target, ErrorReporter* error_reporter) const {
+  return ParseInto(json, absl::UTCTimeZone(), target, error_reporter);
 }
 
 absl::StatusOr<JsonPrimitive> PrimitiveHandler::WrapPrimitiveProto(
@@ -71,8 +78,8 @@ absl::StatusOr<JsonPrimitive> PrimitiveHandler::WrapPrimitiveProto(
 }
 
 absl::Status PrimitiveHandler::ValidatePrimitive(
-    const ::google::protobuf::Message& primitive) const {
-  FHIR_RETURN_IF_ERROR(CheckVersion(primitive));
+    const ::google::protobuf::Message& primitive, ErrorReporter* error_reporter) const {
+  RETURN_REPORTED_FHIR_FATAL(error_reporter, CheckVersion(primitive));
 
   if (!IsPrimitive(primitive.GetDescriptor())) {
     return InvalidArgumentError(absl::StrCat(
@@ -83,8 +90,8 @@ absl::Status PrimitiveHandler::ValidatePrimitive(
   std::unique_ptr<PrimitiveWrapper> wrapper;
   FHIR_ASSIGN_OR_RETURN(wrapper, GetWrapper(descriptor));
 
-  FHIR_RETURN_IF_ERROR(wrapper->Wrap(primitive));
-  return wrapper->ValidateProto();
+  RETURN_REPORTED_FHIR_FATAL(error_reporter, wrapper->Wrap(primitive));
+  return wrapper->ValidateProto(*error_reporter);
 }
 
 absl::Status PrimitiveHandler::CheckVersion(const Message& message) const {

@@ -26,6 +26,7 @@
 #include "absl/status/statusor.h"
 #include "absl/time/time.h"
 #include "absl/types/optional.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
@@ -67,15 +68,21 @@ class PrimitiveHandler {
 
   absl::Status ParseInto(const internal::FhirJson& json,
                          const absl::TimeZone tz,
-                         ::google::protobuf::Message* target) const;
+                         ::google::protobuf::Message* target,
+                         ErrorReporter* error_reporter =
+                         FailFastErrorReporter::FailOnErrorOrFatal()) const;
 
   absl::Status ParseInto(const internal::FhirJson& json,
-                         ::google::protobuf::Message* target) const;
+                         ::google::protobuf::Message* target,
+                         ErrorReporter* error_reporter =
+                         FailFastErrorReporter::FailOnErrorOrFatal()) const;
 
   absl::StatusOr<JsonPrimitive> WrapPrimitiveProto(
       const ::google::protobuf::Message& proto) const;
 
-  absl::Status ValidatePrimitive(const ::google::protobuf::Message& primitive) const;
+  absl::Status ValidatePrimitive(const ::google::protobuf::Message& primitive,
+  ErrorReporter* error_reporter = FailFastErrorReporter::FailOnErrorOrFatal())
+  const;
 
   // Validates that a reference field conforms to spec.
   // The types of resources that can be referenced is controlled via annotations
