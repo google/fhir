@@ -17,6 +17,7 @@
 #include "google/fhir/r4/json_format.h"
 
 #include "absl/status/statusor.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json_format.h"
 #include "google/fhir/r4/primitive_handler.h"
@@ -42,17 +43,20 @@ const Printer* GetPrinter() {
 absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
                                           google::protobuf::Message* target,
                                           absl::TimeZone default_timezone,
-                                          const bool validate) {
+                                          const bool validate,
+                                          ErrorReporter* error_reporter) {
   return GetParser()->MergeJsonFhirStringIntoProto(raw_json, target,
-                                                   default_timezone, validate);
+                                                   default_timezone, validate,
+                                                   error_reporter);
 }
 
 absl::Status MergeJsonFhirObjectIntoProto(
     const google::fhir::internal::FhirJson& json_object,
     google::protobuf::Message* target, absl::TimeZone default_timezone,
-    const bool validate) {
+    const bool validate, ErrorReporter* error_reporter) {
   return GetParser()->MergeJsonFhirObjectIntoProto(json_object, target,
-                                                   default_timezone, validate);
+                                                   default_timezone, validate,
+                                                   error_reporter);
 }
 
 absl::StatusOr<std::string> PrintFhirPrimitive(

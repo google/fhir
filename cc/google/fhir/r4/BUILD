@@ -184,6 +184,7 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":primitive_handler",
+        "//cc/google/fhir:error_reporter",
         "//cc/google/fhir:json_format",
         "//cc/google/fhir/json:fhir_json",
         "@com_google_absl//absl/status:statusor",

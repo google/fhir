@@ -18,6 +18,7 @@
 #define GOOGLE_FHIR_STU3_JSON_FORMAT_H_
 
 #include "absl/status/statusor.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/json_format.h"
 
 namespace google {
@@ -28,25 +29,32 @@ namespace stu3 {
 // See cc/google/fhir/json_format.h for documentation on these methods
 
 absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
-                                          google::protobuf::Message* target,
-                                          absl::TimeZone default_timezone,
-                                          const bool validate);
+    google::protobuf::Message* target, absl::TimeZone default_timezone,
+    const bool validate,
+    ErrorReporter* error_reporter =
+    FailFastErrorReporter::FailOnErrorOrFatal());
 
 template <typename R>
 absl::StatusOr<R> JsonFhirStringToProto(const std::string& raw_json,
-                                        const absl::TimeZone default_timezone) {
+    const absl::TimeZone default_timezone,
+    ErrorReporter* error_reporter =
+    FailFastErrorReporter::FailOnErrorOrFatal()) {
   R resource;
-  FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(raw_json, &resource,
-                                                    default_timezone, true));
+  RETURN_REPORTED_FHIR_FATAL(error_reporter,
+      MergeJsonFhirStringIntoProto(raw_json, &resource,
+                                      default_timezone, true));
   return resource;
 }
 
 template <typename R>
 absl::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
-    const std::string& raw_json, const absl::TimeZone default_timezone) {
+    const std::string& raw_json, const absl::TimeZone default_timezone,
+    ErrorReporter* error_reporter =
+    FailFastErrorReporter::FailOnErrorOrFatal()) {
   R resource;
-  FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(raw_json, &resource,
-                                                    default_timezone, false));
+  RETURN_REPORTED_FHIR_FATAL(error_reporter,
+      MergeJsonFhirStringIntoProto(raw_json, &resource,
+                                      default_timezone, false));
   return resource;
 }
 
