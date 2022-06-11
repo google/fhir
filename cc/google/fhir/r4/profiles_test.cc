@@ -126,8 +126,8 @@ TEST(ProfilesTest, UsCore) {
 }
 
 TEST(ProfilesTest, Normalize) {
-  const TestObservation unnormalized = ReadProto<TestObservation>(absl::StrCat(
-      "testdata/r4/profiles/observation_complexextension.prototxt"));
+  const TestObservation unnormalized = ReadProto<TestObservation>(
+      "testdata/r4/profiles/observation_complexextension.prototxt");
   absl::StatusOr<TestObservation> normalized = NormalizeR4(unnormalized);
   if (!normalized.status().ok()) {
     LOG(ERROR) << normalized.status().message();
@@ -135,32 +135,33 @@ TEST(ProfilesTest, Normalize) {
   }
   EXPECT_THAT(
       normalized.value(),
-      EqualsProto(ReadProto<TestObservation>(absl::StrCat(
+      EqualsProto(ReadProto<TestObservation>(
           "testdata/r4/profiles/"
-          "observation_complexextension-profiled-testobservation.prototxt"))));
+          "observation_complexextension-profiled-testobservation.prototxt")));
 }
 
 TEST(ProfilesTest, NormalizeAndValidate_Invalid) {
-  TestObservation unnormalized = ReadProto<TestObservation>(absl::StrCat(
-      "testdata/r4/profiles/observation_complexextension.prototxt"));
+  TestObservation unnormalized = ReadProto<TestObservation>(
+      "testdata/r4/profiles/observation_complexextension.prototxt");
   unnormalized.clear_status();
   absl::StatusOr<TestObservation> normalized =
       NormalizeAndValidateR4(unnormalized);
   EXPECT_FALSE(normalized.ok());
-  EXPECT_EQ(normalized.status().message(), "missing-TestObservation.status");
+  EXPECT_EQ(normalized.status().message(),
+            "missing-required-field at TestObservation.status");
 }
 
 TEST(ProfilesTest, NormalizeAndValidate_Valid) {
-  const TestObservation unnormalized = ReadProto<TestObservation>(absl::StrCat(
-      "testdata/r4/profiles/observation_complexextension.prototxt"));
+  const TestObservation unnormalized = ReadProto<TestObservation>(
+      "testdata/r4/profiles/observation_complexextension.prototxt");
   absl::StatusOr<TestObservation> normalized =
       NormalizeAndValidateR4(unnormalized);
   FHIR_ASSERT_OK(normalized.status());
   EXPECT_THAT(
       normalized.value(),
-      EqualsProto(ReadProto<TestObservation>(absl::StrCat(
+      EqualsProto(ReadProto<TestObservation>(
           "testdata/r4/profiles/"
-          "observation_complexextension-profiled-testobservation.prototxt"))));
+          "observation_complexextension-profiled-testobservation.prototxt")));
 }
 
 TEST(ProfilesTest, NormalizeBundle) {
@@ -228,8 +229,8 @@ TEST(ProfilesTest, MissingRequiredFields) {
         issue {
           severity { value: ERROR }
           code { value: VALUE }
-          diagnostics { value: "missing-TestObservation.component.code" }
-          expression { value: "TestObservation.component.code" }
+          diagnostics { value: "missing-required-field" }
+          expression { value: "TestObservation.component[0].code" }
         }
       )pb",
       &expected);

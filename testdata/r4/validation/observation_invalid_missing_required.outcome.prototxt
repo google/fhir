@@ -6,7 +6,7 @@ issue {
     value: VALUE
   }
   diagnostics {
-    value: "missing-Observation.status"
+    value: "missing-required-field"
   }
   expression {
     value: "Observation.status"

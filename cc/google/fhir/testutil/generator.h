@@ -26,6 +26,7 @@
 #include "absl/random/distributions.h"
 #include "absl/random/random.h"
 #include "absl/strings/str_format.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/status/status.h"
 

@@ -6,7 +6,7 @@ issue {
     value: VALUE
   }
   diagnostics {
-    value: "invalid-reference-disallowed-type-Device-at-Observation.specimen"
+    value: "invalid-reference-disallowed-type-Device"
   }
   expression {
     value: "Observation.specimen"
@@ -20,7 +20,7 @@ issue {
     value: VALUE
   }
   diagnostics {
-    value: "invalid-primitive-Observation.specimen.deviceId"
+    value: "invalid-primitive"
   }
   expression {
     value: "Observation.specimen.deviceId"

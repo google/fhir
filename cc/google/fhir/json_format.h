@@ -23,15 +23,11 @@
 #include "google/protobuf/message.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
-#include "absl/strings/match.h"
 #include "absl/time/time.h"
-#include "google/fhir/annotations.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/primitive_handler.h"
-#include "google/fhir/r4/profiles.h"
 #include "google/fhir/status/status.h"
-#include "google/fhir/stu3/profiles.h"
 
 namespace google {
 namespace fhir {
@@ -51,10 +47,10 @@ class Parser {
   // Takes a default timezone for timelike data that does not specify timezone.
   // For reading JSON into a new resource, it is recommended to use
   // JsonFhirStringToProto or JsonFhirStringToProtoWithoutValidating.
-  ::absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
-      google::protobuf::Message* target, absl::TimeZone default_timezone,
-      const bool validate, ErrorReporter* error_reporter =
-                            FailFastErrorReporter::FailOnErrorOrFatal()) const;
+  ::absl::Status MergeJsonFhirStringIntoProto(
+      const std::string& raw_json, google::protobuf::Message* target,
+      absl::TimeZone default_timezone, const bool validate,
+      ErrorReporter& error_reporter) const;
 
   // Merges a parsed FHIR json into an existing message.
   // Takes a default timezone for timelike data that does not specify timezone.
@@ -63,8 +59,7 @@ class Parser {
   ::absl::Status MergeJsonFhirObjectIntoProto(
       const internal::FhirJson& json_object, google::protobuf::Message* target,
       absl::TimeZone default_timezone, const bool validate,
-      ErrorReporter* error_reporter =
-      FailFastErrorReporter::FailOnErrorOrFatal()) const;
+      ErrorReporter& error_reporter) const;
 
   // Given a template for a FHIR resource type, creates a resource proto of that
   // type and merges a std::string of raw FHIR json into it.
@@ -73,16 +68,12 @@ class Parser {
   // timezone for timelike data that does not specify timezone.
   template <typename R>
   ::absl::StatusOr<R> JsonFhirStringToProto(
-      const std::string& raw_json,
-      const absl::TimeZone default_timezone,
-      ErrorReporter* error_reporter =
-      FailFastErrorReporter::FailOnErrorOrFatal()) const {
-        R resource;
-        RETURN_REPORTED_FHIR_FATAL(error_reporter,
-            MergeJsonFhirStringIntoProto(raw_json, &resource,
-                                            default_timezone, true,
-                                            error_reporter));
-        return resource;
+      const std::string& raw_json, const absl::TimeZone default_timezone,
+      ErrorReporter& error_reporter) const {
+    R resource;
+    RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(
+        raw_json, &resource, default_timezone, true, error_reporter));
+    return resource;
   }
 
   // Given a template for a FHIR resource type, creates a resource proto of that
@@ -92,16 +83,12 @@ class Parser {
   // Takes a default timezone for timelike data that does not specify timezone.
   template <typename R>
   ::absl::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
-      const std::string& raw_json,
-      const absl::TimeZone default_timezone,
-      ErrorReporter* error_reporter =
-      FailFastErrorReporter::FailOnErrorOrFatal()) const {
-        R resource;
-        RETURN_REPORTED_FHIR_FATAL(error_reporter,
-            MergeJsonFhirStringIntoProto(raw_json, &resource,
-                                            default_timezone, false,
-                                            error_reporter));
-        return resource;
+      const std::string& raw_json, const absl::TimeZone default_timezone,
+      ErrorReporter& error_reporter) const {
+    R resource;
+    RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(
+        raw_json, &resource, default_timezone, false, error_reporter));
+    return resource;
   }
 
  private:

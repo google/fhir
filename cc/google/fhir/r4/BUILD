@@ -391,6 +391,7 @@ cc_library(
         "//cc/google/fhir/status:statusor",
         "//cc/google/fhir/stu3:operation_error_reporter",
         "//proto/google/fhir/proto/r4:fhirproto_cc_proto",
+        "//proto/google/fhir/proto/r4/core:codes_cc_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:operation_outcome_cc_proto",
         "@com_google_absl//absl/status",
@@ -446,5 +447,6 @@ cc_test(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
+        "@com_google_protobuf//:protobuf",
     ],
 )

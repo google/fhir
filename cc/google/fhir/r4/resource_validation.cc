@@ -37,9 +37,9 @@ using ::google::fhir::r4::fhirproto::ValidationOutcome;
 using ::google::fhir::r4::core::Reference;
 
 absl::Status Validate(const ::google::protobuf::Message& resource,
-                      ErrorReporter* error_reporter) {
+                      ErrorHandler& error_handler) {
   return ::google::fhir::Validate(resource, R4PrimitiveHandler::GetInstance(),
-                                  GetFhirPathValidator(), error_reporter);
+                                  GetFhirPathValidator(), error_handler);
 }
 
 absl::StatusOr<ValidationOutcome> Validate(const ::google::protobuf::Message& resource) {
@@ -50,15 +50,16 @@ absl::StatusOr<ValidationOutcome> Validate(const ::google::protobuf::Message& re
                           GetReferenceProtoToResource<Reference>(resource));
   }
 
-  ValidationOutcomeErrorReporter error_reporter(&validation_outcome);
-  FHIR_RETURN_IF_ERROR(Validate(resource, &error_reporter));
+  ValidationOutcomeErrorHandler error_handler(&validation_outcome);
+  FHIR_RETURN_IF_ERROR(Validate(resource, error_handler));
 
   return validation_outcome;
 }
 
 absl::Status ValidateWithoutFhirPath(const ::google::protobuf::Message& resource) {
+  auto reporter = google::fhir::FailFastErrorHandler::FailOnErrorOrFatal();
   return ValidateWithoutFhirPath(resource, R4PrimitiveHandler::GetInstance(),
-                                 FailFastErrorReporter::FailOnErrorOrFatal());
+                                 reporter);
 }
 
 }  // namespace r4

@@ -6,9 +6,9 @@ issue {
     value: VALUE
   }
   diagnostics {
-    value: "empty-oneof-google.fhir.r4.core.Observation.Component.ValueX.choice"
+    value: "empty-oneof"
   }
   expression {
-    value: "google.fhir.r4.core.Observation.Component.ValueX.choice"
+    value: "Observation.component[0].value"
   }
 }

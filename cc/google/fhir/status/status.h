@@ -21,12 +21,12 @@ limitations under the License.
 namespace google {
 namespace fhir {
 
-#define RETURN_REPORTED_FHIR_FATAL(error_reporter, expr)        \
-  {                                                             \
-    auto _status = (expr);                                      \
-    if (!_status.ok()) {                                        \
-      return error_reporter->ReportFhirFatal("", _status);      \
-    }                                                           \
+#define RETURN_REPORTED_FHIR_FATAL(error_reporter, expr)                      \
+  {                                                                           \
+    auto _status = (expr);                                                    \
+    if (!_status.ok()) {                                                      \
+      return error_reporter.ReportFhirFatal(_status, "");                     \
+    }                                                                         \
   }
 
 #define FHIR_RETURN_IF_ERROR(expr) \

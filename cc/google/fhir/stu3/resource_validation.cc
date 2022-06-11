@@ -16,6 +16,7 @@
 
 #include "google/fhir/stu3/resource_validation.h"
 
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/fhir_path/stu3_fhir_path_validation.h"
 #include "google/fhir/resource_validation.h"
 #include "google/fhir/stu3/operation_error_reporter.h"
@@ -28,21 +29,21 @@ namespace stu3 {
 using ::google::fhir::stu3::proto::OperationOutcome;
 
 absl::Status Validate(const ::google::protobuf::Message& resource,
-                      ErrorReporter* error_reporter) {
+                      ErrorHandler& error_handler) {
   return ::google::fhir::Validate(resource, Stu3PrimitiveHandler::GetInstance(),
-                                  GetFhirPathValidator(), error_reporter);
+                                  GetFhirPathValidator(), error_handler);
 }
 
 absl::StatusOr<OperationOutcome> Validate(const ::google::protobuf::Message& resource) {
   OperationOutcome outcome;
-  OperationOutcomeErrorReporter error_reporter(&outcome);
-  FHIR_RETURN_IF_ERROR(Validate(resource, &error_reporter));
+  OperationOutcomeErrorHandler error_reporter(&outcome);
+  FHIR_RETURN_IF_ERROR(Validate(resource, error_reporter));
   return outcome;
 }
 
 absl::Status ValidateWithoutFhirPath(const ::google::protobuf::Message& resource) {
   return ValidateWithoutFhirPath(resource, Stu3PrimitiveHandler::GetInstance(),
-                                 FailFastErrorReporter::FailOnErrorOrFatal());
+                                 FailFastErrorHandler::FailOnErrorOrFatal());
 }
 
 }  // namespace stu3

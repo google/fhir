@@ -138,11 +138,11 @@ class FhirPathValidator {
   // Validates the fhir_path_constraint annotations on the given message.
   ABSL_MUST_USE_RESULT
   absl::Status Validate(const ::google::protobuf::Message& message,
-                        ErrorReporter* error_reporter);
+                        ErrorHandler& error_handler);
 
   // Validates the fhir_path_constraint annotations on the given message,
   // and returns a ValidationResults object.
-  // Deprecated - use the variant that takes an ErrorReporter.
+  // Deprecated - use the variant that takes an ErrorHandler.
   ABSL_MUST_USE_RESULT
   absl::StatusOr<ValidationResults> Validate(const ::google::protobuf::Message& message);
 
@@ -172,10 +172,8 @@ class FhirPathValidator {
 
   // Recursively called validation method that aggregates results into the
   // provided ErrorReporter
-  absl::Status Validate(absl::string_view constraint_path,
-                        absl::string_view node_path,
-                        const internal::WorkspaceMessage& message,
-                        ErrorReporter* error_reporter);
+  absl::Status Validate(const internal::WorkspaceMessage& message,
+                        ErrorReporter& error_reporter);
 
   const PrimitiveHandler* primitive_handler_;
   absl::Mutex mutex_;

@@ -31,7 +31,6 @@
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
-#include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 
 namespace google {
@@ -67,22 +66,18 @@ class PrimitiveHandler {
   virtual ~PrimitiveHandler() {}
 
   absl::Status ParseInto(const internal::FhirJson& json,
-                         const absl::TimeZone tz,
-                         ::google::protobuf::Message* target,
-                         ErrorReporter* error_reporter =
-                         FailFastErrorReporter::FailOnErrorOrFatal()) const;
+                         const absl::TimeZone tz, ::google::protobuf::Message* target,
+                         ErrorReporter* error_reporter) const;
 
   absl::Status ParseInto(const internal::FhirJson& json,
                          ::google::protobuf::Message* target,
-                         ErrorReporter* error_reporter =
-                         FailFastErrorReporter::FailOnErrorOrFatal()) const;
+                         ErrorReporter* error_reporter) const;
 
   absl::StatusOr<JsonPrimitive> WrapPrimitiveProto(
       const ::google::protobuf::Message& proto) const;
 
   absl::Status ValidatePrimitive(const ::google::protobuf::Message& primitive,
-  ErrorReporter* error_reporter = FailFastErrorReporter::FailOnErrorOrFatal())
-  const;
+                                 ErrorReporter* error_reporter) const;
 
   // Validates that a reference field conforms to spec.
   // The types of resources that can be referenced is controlled via annotations
@@ -464,7 +459,8 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
         internal::FhirJson::CreateString(str);
 
     std::unique_ptr<DateTime> msg = std::make_unique<DateTime>();
-    FHIR_RETURN_IF_ERROR(ParseInto(*json_string, msg.get()));
+    ErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal());
+    FHIR_RETURN_IF_ERROR(ParseInto(*json_string, msg.get(), &reporter));
 
     return msg.release();
   }

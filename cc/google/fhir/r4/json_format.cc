@@ -44,19 +44,19 @@ absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
                                           google::protobuf::Message* target,
                                           absl::TimeZone default_timezone,
                                           const bool validate,
-                                          ErrorReporter* error_reporter) {
-  return GetParser()->MergeJsonFhirStringIntoProto(raw_json, target,
-                                                   default_timezone, validate,
-                                                   error_reporter);
+                                          ErrorHandler& error_handler) {
+  ErrorReporter reporter(&error_handler);
+  return GetParser()->MergeJsonFhirStringIntoProto(
+      raw_json, target, default_timezone, validate, reporter);
 }
 
 absl::Status MergeJsonFhirObjectIntoProto(
     const google::fhir::internal::FhirJson& json_object,
     google::protobuf::Message* target, absl::TimeZone default_timezone,
-    const bool validate, ErrorReporter* error_reporter) {
-  return GetParser()->MergeJsonFhirObjectIntoProto(json_object, target,
-                                                   default_timezone, validate,
-                                                   error_reporter);
+    const bool validate, ErrorHandler& error_handler) {
+  ErrorReporter reporter(&error_handler);
+  return GetParser()->MergeJsonFhirObjectIntoProto(
+      json_object, target, default_timezone, validate, reporter);
 }
 
 absl::StatusOr<std::string> PrintFhirPrimitive(

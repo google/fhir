@@ -29,33 +29,31 @@ namespace stu3 {
 
 absl::Status ConvertToProfile(const ::google::protobuf::Message& source,
                               ::google::protobuf::Message* target,
-                              ::google::fhir::ErrorReporter* error_reporter) {
-  return profiles_internal::ConvertToProfileInternal<
-      stu3::Stu3PrimitiveHandler>(source, target, error_reporter);
+                              ::google::fhir::ErrorHandler& error_handler) {
+  return ConvertToProfileInternal<stu3::Stu3PrimitiveHandler>(source, target,
+                                                              error_handler);
 }
 
 absl::StatusOr<OperationOutcome> ConvertToProfile(
     const ::google::protobuf::Message& source, ::google::protobuf::Message* target) {
   OperationOutcome outcome;
-  OperationOutcomeErrorReporter error_reporter(&outcome);
-  FHIR_RETURN_IF_ERROR(ConvertToProfile(source, target, &error_reporter));
+  OperationOutcomeErrorHandler error_handler(&outcome);
+  FHIR_RETURN_IF_ERROR(ConvertToProfile(source, target, error_handler));
   return outcome;
 }
 }  // namespace stu3
 
 absl::Status ConvertToProfileStu3(const ::google::protobuf::Message& source,
                                   ::google::protobuf::Message* target) {
-  return profiles_internal::ConvertToProfileInternal<
-      stu3::Stu3PrimitiveHandler>(source, target,
-                                  FailFastErrorReporter::FailOnErrorOrFatal());
+  return ConvertToProfileInternal<stu3::Stu3PrimitiveHandler>(
+      source, target, FailFastErrorHandler::FailOnErrorOrFatal());
 }
 
 // Identical to ConvertToProfile, except does not run the validation step.
 absl::Status ConvertToProfileLenientStu3(const ::google::protobuf::Message& source,
                                          ::google::protobuf::Message* target) {
-  return profiles_internal::ConvertToProfileLenientInternal<
-      stu3::Stu3PrimitiveHandler>(source, target,
-                                  FailFastErrorReporter::FailOnErrorOrFatal());
+  return ConvertToProfileLenientInternal<stu3::Stu3PrimitiveHandler>(
+      source, target, FailFastErrorHandler::FailOnErrorOrFatal());
 }
 
 }  // namespace fhir

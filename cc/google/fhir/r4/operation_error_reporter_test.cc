@@ -18,6 +18,7 @@
 
 #include <string>
 
+#include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
@@ -68,7 +69,7 @@ Issue MakeFatal(const std::string& path, const std::string& diagnostics) {
   return issue;
 }
 
-TEST(OperationOutcomeErrorReporterTest, GetFhirWarningsSucceeds) {
+TEST(OperationOutcomeErrorHandlerTest, GetFhirWarningsSucceeds) {
   OperationOutcome outcome;
   *outcome.add_issue() = MakeFatal("p1", "m1");
   *outcome.add_issue() = MakeWarning("p2", "m2");
@@ -77,12 +78,12 @@ TEST(OperationOutcomeErrorReporterTest, GetFhirWarningsSucceeds) {
   *outcome.add_issue() = MakeWarning("p5", "m5");
   *outcome.add_issue() = MakeError("p6", "m6");
 
-  EXPECT_THAT(OperationOutcomeErrorReporter::GetFhirWarnings(outcome),
+  EXPECT_THAT(OperationOutcomeErrorHandler::GetFhirWarnings(outcome),
               UnorderedElementsAre(EqualsProto(MakeWarning("p2", "m2")),
                                    EqualsProto(MakeWarning("p5", "m5"))));
 }
 
-TEST(OperationOutcomeErrorReporterTest, GetFhirErrorsSucceeds) {
+TEST(OperationOutcomeErrorHandlerTest, GetFhirErrorsSucceeds) {
   OperationOutcome outcome;
   *outcome.add_issue() = MakeFatal("p1", "m1");
   *outcome.add_issue() = MakeWarning("p2", "m2");
@@ -91,12 +92,12 @@ TEST(OperationOutcomeErrorReporterTest, GetFhirErrorsSucceeds) {
   *outcome.add_issue() = MakeWarning("p5", "m5");
   *outcome.add_issue() = MakeError("p6", "m6");
 
-  EXPECT_THAT(OperationOutcomeErrorReporter::GetFhirErrors(outcome),
+  EXPECT_THAT(OperationOutcomeErrorHandler::GetFhirErrors(outcome),
               UnorderedElementsAre(EqualsProto(MakeError("p3", "m3")),
                                    EqualsProto(MakeError("p6", "m6"))));
 }
 
-TEST(OperationOutcomeErrorReporterTest, GetFhirFatalsSucceeds) {
+TEST(OperationOutcomeErrorHandlerTest, GetFhirFatalsSucceeds) {
   OperationOutcome outcome;
   *outcome.add_issue() = MakeFatal("p1", "m1");
   *outcome.add_issue() = MakeWarning("p2", "m2");
@@ -105,12 +106,12 @@ TEST(OperationOutcomeErrorReporterTest, GetFhirFatalsSucceeds) {
   *outcome.add_issue() = MakeWarning("p5", "m5");
   *outcome.add_issue() = MakeError("p6", "m6");
 
-  EXPECT_THAT(OperationOutcomeErrorReporter::GetFhirFatals(outcome),
+  EXPECT_THAT(OperationOutcomeErrorHandler::GetFhirFatals(outcome),
               UnorderedElementsAre(EqualsProto(MakeFatal("p1", "m1")),
                                    EqualsProto(MakeFatal("p4", "m4"))));
 }
 
-TEST(OperationOutcomeErrorReporterTest, GetFhirErrorsAndFatalsSucceeds) {
+TEST(OperationOutcomeErrorHandlerTest, GetFhirErrorsAndFatalsSucceeds) {
   OperationOutcome outcome;
   *outcome.add_issue() = MakeFatal("p1", "m1");
   *outcome.add_issue() = MakeWarning("p2", "m2");
@@ -119,14 +120,14 @@ TEST(OperationOutcomeErrorReporterTest, GetFhirErrorsAndFatalsSucceeds) {
   *outcome.add_issue() = MakeWarning("p5", "m5");
   *outcome.add_issue() = MakeError("p6", "m6");
 
-  EXPECT_THAT(OperationOutcomeErrorReporter::GetFhirErrorsAndFatals(outcome),
+  EXPECT_THAT(OperationOutcomeErrorHandler::GetFhirErrorsAndFatals(outcome),
               UnorderedElementsAre(EqualsProto(MakeFatal("p1", "m1")),
                                    EqualsProto(MakeError("p3", "m3")),
                                    EqualsProto(MakeFatal("p4", "m4")),
                                    EqualsProto(MakeError("p6", "m6"))));
 }
 
-TEST(OperationOutcomeErrorReporterTest, HasFhirWarningTrue) {
+TEST(OperationOutcomeErrorHandlerTest, HasFhirWarningTrue) {
   OperationOutcome outcome;
   *outcome.add_issue() = MakeFatal("p1", "m1");
   *outcome.add_issue() = MakeWarning("p2", "m2");
@@ -135,20 +136,20 @@ TEST(OperationOutcomeErrorReporterTest, HasFhirWarningTrue) {
   *outcome.add_issue() = MakeWarning("p5", "m5");
   *outcome.add_issue() = MakeError("p6", "m6");
 
-  EXPECT_TRUE(OperationOutcomeErrorReporter::HasFhirWarnings(outcome));
+  EXPECT_TRUE(OperationOutcomeErrorHandler::HasFhirWarnings(outcome));
 }
 
-TEST(OperationOutcomeErrorReporterTest, HasFhirWarningFalse) {
+TEST(OperationOutcomeErrorHandlerTest, HasFhirWarningFalse) {
   OperationOutcome outcome;
   *outcome.add_issue() = MakeFatal("p1", "m1");
   *outcome.add_issue() = MakeError("p3", "m3");
   *outcome.add_issue() = MakeFatal("p4", "m4");
   *outcome.add_issue() = MakeError("p6", "m6");
 
-  EXPECT_FALSE(OperationOutcomeErrorReporter::HasFhirWarnings(outcome));
+  EXPECT_FALSE(OperationOutcomeErrorHandler::HasFhirWarnings(outcome));
 }
 
-TEST(OperationOutcomeErrorReporterTest, HasFhirErrorTrue) {
+TEST(OperationOutcomeErrorHandlerTest, HasFhirErrorTrue) {
   OperationOutcome outcome;
   *outcome.add_issue() = MakeFatal("p1", "m1");
   *outcome.add_issue() = MakeWarning("p2", "m2");
@@ -157,20 +158,20 @@ TEST(OperationOutcomeErrorReporterTest, HasFhirErrorTrue) {
   *outcome.add_issue() = MakeWarning("p5", "m5");
   *outcome.add_issue() = MakeError("p6", "m6");
 
-  EXPECT_TRUE(OperationOutcomeErrorReporter::HasFhirErrors(outcome));
+  EXPECT_TRUE(OperationOutcomeErrorHandler::HasFhirErrors(outcome));
 }
 
-TEST(OperationOutcomeErrorReporterTest, HasFhirErrorFalse) {
+TEST(OperationOutcomeErrorHandlerTest, HasFhirErrorFalse) {
   OperationOutcome outcome;
   *outcome.add_issue() = MakeFatal("p1", "m1");
   *outcome.add_issue() = MakeWarning("p3", "m3");
   *outcome.add_issue() = MakeFatal("p4", "m4");
   *outcome.add_issue() = MakeWarning("p6", "m6");
 
-  EXPECT_FALSE(OperationOutcomeErrorReporter::HasFhirErrors(outcome));
+  EXPECT_FALSE(OperationOutcomeErrorHandler::HasFhirErrors(outcome));
 }
 
-TEST(OperationOutcomeErrorReporterTest, HasFhirFatalTrue) {
+TEST(OperationOutcomeErrorHandlerTest, HasFhirFatalTrue) {
   OperationOutcome outcome;
   *outcome.add_issue() = MakeFatal("p1", "m1");
   *outcome.add_issue() = MakeWarning("p2", "m2");
@@ -179,119 +180,69 @@ TEST(OperationOutcomeErrorReporterTest, HasFhirFatalTrue) {
   *outcome.add_issue() = MakeWarning("p5", "m5");
   *outcome.add_issue() = MakeError("p6", "m6");
 
-  EXPECT_TRUE(OperationOutcomeErrorReporter::HasFhirFatals(outcome));
+  EXPECT_TRUE(OperationOutcomeErrorHandler::HasFhirFatals(outcome));
 }
 
-TEST(OperationOutcomeErrorReporterTest, HasFhirFatalFalse) {
+TEST(OperationOutcomeErrorHandlerTest, HasFhirFatalFalse) {
   OperationOutcome outcome;
   *outcome.add_issue() = MakeWarning("p1", "m1");
   *outcome.add_issue() = MakeError("p3", "m3");
   *outcome.add_issue() = MakeWarning("p4", "m4");
   *outcome.add_issue() = MakeError("p6", "m6");
 
-  EXPECT_FALSE(OperationOutcomeErrorReporter::HasFhirFatals(outcome));
+  EXPECT_FALSE(OperationOutcomeErrorHandler::HasFhirFatals(outcome));
 }
 
-TEST(OperationOutcomeErrorReporterTest, HasFhirErrorsOrFatalOnlyError) {
+TEST(OperationOutcomeErrorHandlerTest, HasFhirErrorsOrFatalOnlyError) {
   OperationOutcome outcome;
   *outcome.add_issue() = MakeWarning("p2", "m2");
   *outcome.add_issue() = MakeError("p3", "m3");
   *outcome.add_issue() = MakeWarning("p5", "m5");
   *outcome.add_issue() = MakeError("p6", "m6");
 
-  EXPECT_TRUE(OperationOutcomeErrorReporter::HasFhirErrorsOrFatals(outcome));
+  EXPECT_TRUE(OperationOutcomeErrorHandler::HasFhirErrorsOrFatals(outcome));
 }
 
-TEST(OperationOutcomeErrorReporterTest, HasFhirErrorsOrFatalOnlyFatal) {
+TEST(OperationOutcomeErrorHandlerTest, HasFhirErrorsOrFatalOnlyFatal) {
   OperationOutcome outcome;
   *outcome.add_issue() = MakeWarning("p2", "m2");
   *outcome.add_issue() = MakeFatal("p3", "m3");
   *outcome.add_issue() = MakeWarning("p5", "m5");
   *outcome.add_issue() = MakeFatal("p6", "m6");
 
-  EXPECT_TRUE(OperationOutcomeErrorReporter::HasFhirErrorsOrFatals(outcome));
+  EXPECT_TRUE(OperationOutcomeErrorHandler::HasFhirErrorsOrFatals(outcome));
 }
 
-TEST(OperationOutcomeErrorReporterTest, HasFhirErrorsOrFatalFalse) {
+TEST(OperationOutcomeErrorHandlerTest, HasFhirErrorsOrFatalFalse) {
   OperationOutcome outcome;
   *outcome.add_issue() = MakeWarning("p2", "m2");
   *outcome.add_issue() = MakeWarning("p5", "m5");
 
-  EXPECT_FALSE(OperationOutcomeErrorReporter::HasFhirErrorsOrFatals(outcome));
+  EXPECT_FALSE(OperationOutcomeErrorHandler::HasFhirErrorsOrFatals(outcome));
 }
 
-TEST(OperationOutcomeErrorReporterTest, ReportWarningSucceeds) {
+TEST(OperationOutcomeErrorHandlerTest, HandleAPIsAddIssuesSuccessfully) {
   OperationOutcome outcome;
-  OperationOutcomeErrorReporter reporter(&outcome);
-
-  FHIR_ASSERT_OK(reporter.ReportFhirWarning("Foo.bar.baz", "Foo.bar[2].baz[3]",
-                                            "warning_msg"));
-  FHIR_ASSERT_OK(
-      reporter.ReportFhirWarning("Foo.b.c", "no element path warning_msg"));
-  FHIR_ASSERT_OK(
-      reporter.ReportFhirPathWarning("Foo.f", "Foo.f[3]", "p.exists()"));
-
-  std::vector<OperationOutcome::Issue> warnings =
-      OperationOutcomeErrorReporter::GetFhirWarnings(outcome);
-
-  EXPECT_THAT(
-      warnings,
-      UnorderedElementsAre(
-          EqualsProto(MakeWarning("Foo.bar[2].baz[3]", "warning_msg")),
-          EqualsProto(MakeWarning("Foo.b.c", "no element path warning_msg")),
-          EqualsProto(MakeWarning("Foo.f[3]", "p.exists()")))
-
-  );
-}
-
-TEST(OperationOutcomeErrorReporterTest, ReportErrorSucceeds) {
-  OperationOutcome outcome;
-  OperationOutcomeErrorReporter reporter(&outcome);
-
-  FHIR_ASSERT_OK(reporter.ReportFhirError("Foo.bar.baz", "Foo.bar[2].baz[3]",
-                                          "warning_msg"));
-  FHIR_ASSERT_OK(
-      reporter.ReportFhirError("Foo.b.c", "no element path warning_msg"));
-  FHIR_ASSERT_OK(
-      reporter.ReportFhirPathError("Foo.f", "Foo.f[3]", "p.exists()"));
-
-  std::vector<OperationOutcome::Issue> warnings =
-      OperationOutcomeErrorReporter::GetFhirErrors(outcome);
-
-  EXPECT_THAT(
-      warnings,
-      UnorderedElementsAre(
-          EqualsProto(MakeError("Foo.bar[2].baz[3]", "warning_msg")),
-          EqualsProto(MakeError("Foo.b.c", "no element path warning_msg")),
-          EqualsProto(MakeError("Foo.f[3]", "p.exists()")))
-
-  );
-}
-
-TEST(OperationOutcomeErrorReporterTest, ReportFatalSucceeds) {
-  OperationOutcome outcome;
-  OperationOutcomeErrorReporter reporter(&outcome);
+  OperationOutcomeErrorHandler handler(&outcome);
 
   FHIR_ASSERT_OK(
-      reporter.ReportFhirFatal("Foo.bar.baz", "Foo.bar[2].baz[3]",
-                               absl::InvalidArgumentError("fatal error")));
-  FHIR_ASSERT_OK(reporter.ReportFhirFatal(
-      "Foo.b.c", absl::InvalidArgumentError("no element path warning_msg")));
-  FHIR_ASSERT_OK(reporter.ReportFhirPathFatal(
-      "Foo.f", "Foo.f[3]", "p.exists()",
-      absl::InvalidArgumentError("fhirpath error")));
+      handler.HandleFhirFatal(absl::InternalError("err-1"), "ep1", "fp1"));
+  FHIR_ASSERT_OK(handler.HandleFhirError("err-2", "ep2", "fp2"));
+  FHIR_ASSERT_OK(handler.HandleFhirWarning("err-3", "ep3", "fp3"));
+  FHIR_ASSERT_OK(handler.HandleFhirPathFatal(absl::InternalError("err-4"),
+                                             "expr-4", "ep4", "fp4"));
+  FHIR_ASSERT_OK(handler.HandleFhirPathError("expr-5", "ep5", "fp5"));
+  FHIR_ASSERT_OK(handler.HandleFhirPathWarning("expr-6", "ep6", "fp6"));
 
-  std::vector<OperationOutcome::Issue> issues =
-      OperationOutcomeErrorReporter::GetFhirFatals(outcome);
+  OperationOutcome expected;
+  *expected.add_issue() = MakeFatal("ep1", "err-1");
+  *expected.add_issue() = MakeError("ep2", "err-2");
+  *expected.add_issue() = MakeWarning("ep3", "err-3");
+  *expected.add_issue() = MakeFatal("ep4", "expr-4:err-4");
+  *expected.add_issue() = MakeError("ep5", "expr-5");
+  *expected.add_issue() = MakeWarning("ep6", "expr-6");
 
-  EXPECT_THAT(
-      issues,
-      UnorderedElementsAre(
-          EqualsProto(MakeFatal("Foo.bar[2].baz[3]", "fatal error")),
-          EqualsProto(MakeFatal("Foo.b.c", "no element path warning_msg")),
-          EqualsProto(MakeFatal("Foo.f[3]", "p.exists():fhirpath error")))
-
-  );
+  EXPECT_THAT(outcome, EqualsProto(expected));
 }
 
 }  // namespace

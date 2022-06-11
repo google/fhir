@@ -169,7 +169,7 @@ func (oe *OperationErrorReporter) report(elementPath string, err error, typeCode
 
 // BasicErrorReporter simply stores all errors during valudation.
 //
-// This is primarily for legacy use; most users should use an OperationOutcomeErrorReporter
+// This is primarily for legacy use; most users should use an OperationOutcomeErrorHandler
 // or their own implementation.
 type BasicErrorReporter struct {
 	Errors []*error

@@ -29,13 +29,13 @@ namespace stu3 {
 
 // Run resource-specific validation on the given FHIR resource and
 // report all errors to the given error reporter. Validation will continue
-// processing as long as the ErrorReporter returns an Ok status for all
+// processing as long as the ErrorHandler returns an Ok status for all
 // errors it is given.
 //
-// Returns Ok if the error reporter handled all reported errors and
+// Returns Ok if the error handler handled all reported errors and
 // there was no internal issue (such as a malformed FHIR profile).
 ::absl::Status Validate(const ::google::protobuf::Message& resource,
-                        ::google::fhir::ErrorReporter* reporter);
+                        ::google::fhir::ErrorHandler& handler);
 
 // Run resource-specific validation on the given FHIR resource and
 // adds all errors to the returned OperationOutcome. Validation will continue

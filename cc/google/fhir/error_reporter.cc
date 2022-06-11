@@ -16,57 +16,142 @@
 
 #include "google/fhir/error_reporter.h"
 
+#include <string>
+
+#include "glog/logging.h"
 #include "absl/status/status.h"
+#include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
-#include "absl/strings/substitute.h"
 
-namespace google {
-namespace fhir {
+namespace google::fhir {
 
-FailFastErrorReporter* FailFastErrorReporter::FailOnErrorOrFatal() {
-  static FailFastErrorReporter* const kInstance =
-      new FailFastErrorReporter(FailFastErrorReporter::FAIL_ON_ERROR_OR_FATAL);
-  return kInstance;
+void ErrorReporter::EnterScope(absl::string_view scope,
+                               std::optional<uint> index) {
+  scope_stack_.push_back({std::string(scope), index});
 }
 
-FailFastErrorReporter* FailFastErrorReporter::FailOnFatalOnly() {
-  static FailFastErrorReporter* const kInstance =
-      new FailFastErrorReporter(FailFastErrorReporter::FAIL_ON_FATAL_ONLY);
-  return kInstance;
+void ErrorReporter::ExitScope() {
+  if (scope_stack_.empty()) {
+    // Should be impossible since scopes are only grabbed by ErrorScope objects
+    LOG(WARNING) << "ExitScope called when scope stack is empty";
+    return;
+  }
+  scope_stack_.pop_back();
 }
 
-absl::Status ErrorReporter::ReportFhirFatal(absl::string_view field_path,
-                                            const absl::Status& status) {
-  return ReportFhirFatal(field_path, "", status);
+std::string ErrorReporter::CurrentElementPath() {
+  if (scope_stack_.empty()) {
+    return "";
+  }
+  std::string path = "";
+  for (const auto& token : scope_stack_) {
+    path.append(token.first);
+    if (token.second.has_value()) {
+      absl::StrAppend(&path, "[", std::to_string(token.second.value()), "]");
+    }
+    path += '.';
+  }
+  path.pop_back();  // remove trailing dot
+  return path;
 }
 
-absl::Status ErrorReporter::ReportFhirError(absl::string_view field_path,
-                                            absl::string_view message) {
-  return ReportFhirError(field_path, "", message);
+std::string ErrorReporter::CurrentFieldPath() {
+  if (scope_stack_.empty()) {
+    return "";
+  }
+  std::string path = "";
+  for (const auto& token : scope_stack_) {
+    path.append(token.first);
+    path += ".";
+  }
+  path.pop_back();  // remove trailing dot
+  return path;
 }
 
-absl::Status ErrorReporter::ReportFhirWarning(absl::string_view field_path,
-                                              absl::string_view message) {
-  return ReportFhirWarning(field_path, "", message);
+absl::Status ErrorReporter::ReportFhirFatal(const absl::Status& status,
+                                            absl::string_view field_name,
+                                            std::optional<uint> index) {
+  if (!field_name.empty()) {
+    ErrorScope scope(this, field_name, index);
+    return handler_.HandleFhirFatal(status, CurrentElementPath(),
+                                    CurrentFieldPath());
+  }
+  return handler_.HandleFhirFatal(status, CurrentElementPath(),
+                                  CurrentFieldPath());
+}
+absl::Status ErrorReporter::ReportFhirError(std::string_view msg,
+                                            absl::string_view field_name,
+                                            std::optional<uint> index) {
+  if (!field_name.empty()) {
+    ErrorScope scope(this, field_name, index);
+    return handler_.HandleFhirError(msg, CurrentElementPath(),
+                                    CurrentFieldPath());
+  }
+  return handler_.HandleFhirError(msg, CurrentElementPath(),
+                                  CurrentFieldPath());
+}
+absl::Status ErrorReporter::ReportFhirWarning(std::string_view msg,
+                                              absl::string_view field_name,
+                                              std::optional<uint> index) {
+  if (!field_name.empty()) {
+    ErrorScope scope(this, field_name, index);
+    return handler_.HandleFhirWarning(msg, CurrentElementPath(),
+                                      CurrentFieldPath());
+  }
+  return handler_.HandleFhirWarning(msg, CurrentElementPath(),
+                                    CurrentFieldPath());
 }
 
-absl::Status ErrorReporter::ReportFhirPathFatal(
-    absl::string_view field_path, absl::string_view element_path,
-    absl::string_view fhir_path_constraint, const absl::Status& status) {
-  return ReportFhirFatal(field_path, element_path, status);
+absl::Status ErrorReporter::ReportFhirPathFatal(const absl::Status& status,
+                                                std::string_view expression,
+                                                absl::string_view field_name,
+                                                std::optional<uint> index) {
+  if (!field_name.empty()) {
+    ErrorScope scope(this, field_name, index);
+    return handler_.HandleFhirPathFatal(
+        status, expression, CurrentElementPath(), CurrentFieldPath());
+  }
+  return handler_.HandleFhirPathFatal(status, expression, CurrentElementPath(),
+                                      CurrentFieldPath());
+}
+absl::Status ErrorReporter::ReportFhirPathError(std::string_view expression,
+                                                absl::string_view field_name,
+                                                std::optional<uint> index) {
+  if (!field_name.empty()) {
+    ErrorScope scope(this, field_name, index);
+    return handler_.HandleFhirPathError(expression, CurrentElementPath(),
+                                        CurrentFieldPath());
+  }
+  return handler_.HandleFhirPathError(expression, CurrentElementPath(),
+                                      CurrentFieldPath());
+}
+absl::Status ErrorReporter::ReportFhirPathWarning(std::string_view expression,
+                                                  absl::string_view field_name,
+                                                  std::optional<uint> index) {
+  if (!field_name.empty()) {
+    ErrorScope scope(this, field_name, index);
+    return handler_.HandleFhirPathWarning(expression, CurrentElementPath(),
+                                          CurrentFieldPath());
+  }
+  return handler_.HandleFhirPathWarning(expression, CurrentElementPath(),
+                                        CurrentFieldPath());
 }
 
-absl::Status ErrorReporter::ReportFhirPathError(
-    absl::string_view field_path, absl::string_view element_path,
-    absl::string_view fhir_path_constraint) {
-  return ReportFhirError(field_path, element_path, fhir_path_constraint);
+FailFastErrorHandler& FailFastErrorHandler::FailOnErrorOrFatal() {
+  static FailFastErrorHandler* const kInstance =
+      new FailFastErrorHandler(FailFastErrorHandler::FAIL_ON_ERROR_OR_FATAL);
+  return *kInstance;
 }
 
-absl::Status ErrorReporter::ReportFhirPathWarning(
-    absl::string_view field_path, absl::string_view element_path,
-    absl::string_view fhir_path_constraint) {
-  return ReportFhirWarning(field_path, element_path, fhir_path_constraint);
+FailFastErrorHandler& FailFastErrorHandler::FailOnFatalOnly() {
+  static FailFastErrorHandler* const kInstance =
+      new FailFastErrorHandler(FailFastErrorHandler::FAIL_ON_FATAL_ONLY);
+  return *kInstance;
 }
 
-}  // namespace fhir
-}  // namespace google
+std::optional<uint> IndexOrNullopt(const google::protobuf::FieldDescriptor* field,
+                                   uint index) {
+  return field->is_repeated() ? std::optional(index) : std::nullopt;
+}
+
+}  // namespace google::fhir

@@ -201,7 +201,6 @@ cc_library(
     deps = [
         ":annotations",
         ":error_reporter",
-        ":fhir_types",
         ":primitive_handler",
         ":proto_util",
         ":util",
@@ -481,7 +480,6 @@ cc_library(
         "//cc/google/fhir:error_reporter",
         "//cc/google/fhir/json:fhir_json",
         "//cc/google/fhir/status",
-        "//cc/google/fhir/status:statusor",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/time",
@@ -515,8 +513,22 @@ cc_library(
     hdrs = ["error_reporter.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        "@com_github_glog_glog//:glog",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
+        "@com_google_protobuf//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "error_reporter_test",
+    srcs = ["error_reporter_test.cc"],
+    deps = [
+        ":error_reporter",
+        "//cc/google/fhir/status",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/strings",
+        "@com_google_googletest//:gtest_main",
     ],
 )
 
@@ -561,9 +573,8 @@ cc_library(
     hdrs = ["operation_error_reporter.h"],
     strip_include_prefix = "//cc/",
     deps = [
-        "//cc/google/fhir:error_reporter",
+        ":error_reporter",
         "//proto/google/fhir/proto/r4:fhirproto_cc_proto",
-        "//proto/google/fhir/proto/r4/core:codes_cc_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:operation_outcome_cc_proto",
         "@com_google_absl//absl/status",

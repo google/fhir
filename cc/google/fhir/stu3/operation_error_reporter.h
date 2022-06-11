@@ -26,15 +26,15 @@
 
 namespace google::fhir::stu3 {
 
-// Error reporter that creates FHIR STU3 OperationOutcome records.
+// Error handler that creates FHIR STU3 OperationOutcome records.
 // Conversion issues that can result in data loss are reported as a "structure"
 // error type as described at https://www.hl7.org/fhir/valueset-issue-type.html,
 // since the item could not be converted into the target structure. Validation
 // issues that preserve data use a "value" error type from that value set.
-using OperationOutcomeErrorReporter =
-    OutcomeErrorReporter<::google::fhir::stu3::proto::OperationOutcome,
-                         ::google::fhir::stu3::proto::IssueSeverityCode,
-                         ::google::fhir::stu3::proto::IssueTypeCode>;
+using OperationOutcomeErrorHandler =
+    OutcomeErrorHandler<::google::fhir::stu3::proto::OperationOutcome,
+                        ::google::fhir::stu3::proto::IssueSeverityCode,
+                        ::google::fhir::stu3::proto::IssueTypeCode>;
 
 }  // namespace google::fhir::stu3
 

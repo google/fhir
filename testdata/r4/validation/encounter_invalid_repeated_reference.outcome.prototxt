@@ -6,7 +6,7 @@ issue {
     value: VALUE
   }
   diagnostics {
-    value: "invalid-reference-disallowed-type-Patient-at-Encounter.account"
+    value: "invalid-reference-disallowed-type-Patient"
   }
   expression {
     value: "Encounter.account"
@@ -20,10 +20,10 @@ issue {
     value: VALUE
   }
   diagnostics {
-    value: "invalid-primitive-Encounter.account.accountId"
+    value: "invalid-primitive"
   }
   expression {
-    value: "Encounter.account.accountId"
+    value: "Encounter.account[0].accountId"
   }
 }
 issue {
@@ -34,10 +34,10 @@ issue {
     value: VALUE
   }
   diagnostics {
-    value: "invalid-primitive-Encounter.account.patientId"
+    value: "invalid-primitive"
   }
   expression {
-    value: "Encounter.account.patientId"
+    value: "Encounter.account[1].patientId"
   }
 }
 issue {
@@ -48,10 +48,10 @@ issue {
     value: VALUE
   }
   diagnostics {
-    value: "invalid-primitive-Encounter.account.accountId"
+    value: "invalid-primitive"
   }
   expression {
-    value: "Encounter.account.accountId"
+    value: "Encounter.account[2].accountId"
   }
 }
 subject {

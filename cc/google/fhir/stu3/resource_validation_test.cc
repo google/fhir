@@ -93,12 +93,12 @@ void InvalidTest(absl::string_view err_msg,
 TEST(ResourceValidationTest, MissingRequiredField) {
   Observation observation = ValidObservation();
   observation.clear_status();
-  InvalidTest("missing-Observation.status",
+  InvalidTest("missing-required-field",
               R"pb(
                 issue {
                   severity { value: ERROR }
                   code { value: VALUE }
-                  diagnostics { value: "missing-Observation.status" }
+                  diagnostics { value: "missing-required-field" }
                   expression { value: "Observation.status" }
                 }
               )pb",
@@ -109,13 +109,13 @@ TEST(ResourceValidationTest, InvalidPrimitiveField) {
   Observation observation = ValidObservation();
   observation.mutable_value()->mutable_quantity()->mutable_value()->set_value(
       "1.2.3");
-  InvalidTest("invalid-primitive-Observation.value.quantity.value",
+  InvalidTest("invalid-primitive",
               R"pb(
                 issue {
-                  severity { value: ERROR }
-                  code { value: VALUE }
+                  severity { value: FATAL }
+                  code { value: STRUCTURE }
                   diagnostics {
-                    value: "invalid-primitive-Observation.value.quantity.value"
+                    value: "Invalid input for google.fhir.stu3.proto.Decimal"
                   }
                   expression { value: "Observation.value.quantity.value" }
                 }
@@ -137,23 +137,19 @@ TEST(ResourceValidationTest, InvalidReference) {
   observation.add_related()->mutable_target()->mutable_patient_id()->set_value(
       "12345");
   InvalidTest(
-      "invalid-reference-disallowed-type-Patient-at-Observation.related.target",
+      "invalid-reference-disallowed-type-Patient",
       R"pb(
         issue {
           severity { value: ERROR }
           code { value: VALUE }
-          diagnostics {
-            value: "invalid-reference-disallowed-type-Patient-at-Observation.related.target"
-          }
-          expression { value: "Observation.related.target" }
+          diagnostics { value: "invalid-reference-disallowed-type-Patient" }
+          expression { value: "Observation.related[0].target" }
         }
         issue {
           severity { value: ERROR }
           code { value: VALUE }
-          diagnostics {
-            value: "invalid-primitive-Observation.related.target.patientId"
-          }
-          expression { value: "Observation.related.target.patientId" }
+          diagnostics { value: "invalid-primitive" }
+          expression { value: "Observation.related[0].target.patientId" }
         }
       )pb",
       observation);
@@ -173,33 +169,31 @@ TEST(ResourceValidationTest, RepeatedReferenceInvalid) {
   encounter.add_account()->mutable_patient_id()->set_value("222");
   encounter.add_account()->mutable_account_id()->set_value("333");
   InvalidTest(
-      "invalid-reference-disallowed-type-Patient-at-Encounter.account",
+      "invalid-reference-disallowed-type-Patient",
       R"pb(
         issue {
           severity { value: ERROR }
           code { value: VALUE }
-          diagnostics {
-            value: "invalid-reference-disallowed-type-Patient-at-Encounter.account"
-          }
+          diagnostics { value: "invalid-reference-disallowed-type-Patient" }
           expression { value: "Encounter.account" }
         }
         issue {
           severity { value: ERROR }
           code { value: VALUE }
-          diagnostics { value: "invalid-primitive-Encounter.account.accountId" }
-          expression { value: "Encounter.account.accountId" }
+          diagnostics { value: "invalid-primitive" }
+          expression { value: "Encounter.account[0].accountId" }
         }
         issue {
           severity { value: ERROR }
           code { value: VALUE }
-          diagnostics { value: "invalid-primitive-Encounter.account.patientId" }
-          expression { value: "Encounter.account.patientId" }
+          diagnostics { value: "invalid-primitive" }
+          expression { value: "Encounter.account[1].patientId" }
         }
         issue {
           severity { value: ERROR }
           code { value: VALUE }
-          diagnostics { value: "invalid-primitive-Encounter.account.accountId" }
-          expression { value: "Encounter.account.accountId" }
+          diagnostics { value: "invalid-primitive" }
+          expression { value: "Encounter.account[2].accountId" }
         }
       )pb",
       encounter);
@@ -217,12 +211,8 @@ TEST(ResourceValidationTest, EmptyOneof) {
         issue {
           severity { value: ERROR }
           code { value: VALUE }
-          diagnostics {
-            value: "empty-oneof-google.fhir.stu3.proto.Observation.Component.Value.value"
-          }
-          expression {
-            value: "google.fhir.stu3.proto.Observation.Component.Value.value"
-          }
+          diagnostics { value: "empty-oneof" }
+          expression { value: "Observation.component[0].value" }
         }
       )pb",
       observation);

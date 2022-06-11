@@ -50,7 +50,7 @@ namespace r4 {
 // original format (e.g., extension).
 absl::Status ConvertToProfile(const ::google::protobuf::Message& source,
                               ::google::protobuf::Message* target,
-                              ::google::fhir::ErrorReporter* reporter);
+                              ::google::fhir::ErrorHandler& handler);
 
 // Converts FHIR resources between profiled and unprofiled, returning any
 // conversion errors or warnings in an OperationOutcome. Users should check

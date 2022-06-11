@@ -26,39 +26,38 @@
 namespace google {
 namespace fhir {
 
-using ::google::fhir::r4::OperationOutcomeErrorReporter;
+using ::google::fhir::r4::OperationOutcomeErrorHandler;
 using ::google::fhir::r4::core::OperationOutcome;
 
 namespace r4 {
 
 absl::Status ConvertToProfile(const ::google::protobuf::Message& source,
                               ::google::protobuf::Message* target,
-                              ::google::fhir::ErrorReporter* error_reporter) {
-  return profiles_internal::ConvertToProfileInternal<r4::R4PrimitiveHandler>(
-      source, target, error_reporter);
+                              ::google::fhir::ErrorHandler& handler) {
+  return ConvertToProfileInternal<r4::R4PrimitiveHandler>(source, target,
+                                                          handler);
 }
 
 absl::StatusOr<OperationOutcome> ConvertToProfile(
     const ::google::protobuf::Message& source, ::google::protobuf::Message* target) {
   ::google::fhir::r4::core::OperationOutcome outcome;
-  OperationOutcomeErrorReporter error_reporter(&outcome);
-  FHIR_RETURN_IF_ERROR(ConvertToProfile(source, target, &error_reporter));
+  OperationOutcomeErrorHandler handler(&outcome);
+  FHIR_RETURN_IF_ERROR(ConvertToProfile(source, target, handler));
   return outcome;
 }
 }  // namespace r4
 
 absl::Status ConvertToProfileR4(const ::google::protobuf::Message& source,
                                 ::google::protobuf::Message* target) {
-  return profiles_internal::ConvertToProfileInternal<r4::R4PrimitiveHandler>(
-      source, target, FailFastErrorReporter::FailOnErrorOrFatal());
+  return ConvertToProfileInternal<r4::R4PrimitiveHandler>(
+      source, target, FailFastErrorHandler::FailOnErrorOrFatal());
 }
 
 // Identical to ConvertToProfile, except does not run the validation step.
 absl::Status ConvertToProfileLenientR4(const ::google::protobuf::Message& source,
                                        ::google::protobuf::Message* target) {
-  return profiles_internal::ConvertToProfileLenientInternal<
-      r4::R4PrimitiveHandler>(source, target,
-                              FailFastErrorReporter::FailOnErrorOrFatal());
+  return ConvertToProfileLenientInternal<r4::R4PrimitiveHandler>(
+      source, target, google::fhir::FailFastErrorHandler::FailOnErrorOrFatal());
 }
 
 }  // namespace fhir

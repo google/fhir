@@ -52,6 +52,7 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         "//cc/google/fhir:annotations",
+        "//cc/google/fhir:error_reporter",
         "//cc/google/fhir:fhir_types",
         "//cc/google/fhir:primitive_handler",
         "//cc/google/fhir:proto_util",

@@ -33,11 +33,9 @@ using primitives_internal::PrimitiveWrapper;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::Message;
 
-::absl::Status PrimitiveHandler::ParseInto(const internal::FhirJson& json,
-                                           const absl::TimeZone tz,
-                                           Message* target,
-                                           ErrorReporter* error_reporter)
-                                           const {
+::absl::Status PrimitiveHandler::ParseInto(
+    const internal::FhirJson& json, const absl::TimeZone tz, Message* target,
+    ErrorReporter* error_reporter) const {
   FHIR_RETURN_IF_ERROR(CheckVersion(*target));
 
   if (json.isArray() || json.isObject()) {
@@ -49,8 +47,8 @@ using ::google::protobuf::Message;
   }
   FHIR_ASSIGN_OR_RETURN(std::unique_ptr<PrimitiveWrapper> wrapper,
                         GetWrapper(target->GetDescriptor()));
-  RETURN_REPORTED_FHIR_FATAL(error_reporter,
-                                wrapper->Parse(json, tz, *error_reporter));
+  RETURN_REPORTED_FHIR_FATAL((*error_reporter),
+                             wrapper->Parse(json, tz, *error_reporter));
   return wrapper->MergeInto(target);
 }
 
@@ -79,7 +77,7 @@ absl::StatusOr<JsonPrimitive> PrimitiveHandler::WrapPrimitiveProto(
 
 absl::Status PrimitiveHandler::ValidatePrimitive(
     const ::google::protobuf::Message& primitive, ErrorReporter* error_reporter) const {
-  RETURN_REPORTED_FHIR_FATAL(error_reporter, CheckVersion(primitive));
+  RETURN_REPORTED_FHIR_FATAL((*error_reporter), CheckVersion(primitive));
 
   if (!IsPrimitive(primitive.GetDescriptor())) {
     return InvalidArgumentError(absl::StrCat(
@@ -90,7 +88,7 @@ absl::Status PrimitiveHandler::ValidatePrimitive(
   std::unique_ptr<PrimitiveWrapper> wrapper;
   FHIR_ASSIGN_OR_RETURN(wrapper, GetWrapper(descriptor));
 
-  RETURN_REPORTED_FHIR_FATAL(error_reporter, wrapper->Wrap(primitive));
+  RETURN_REPORTED_FHIR_FATAL((*error_reporter), wrapper->Wrap(primitive));
   return wrapper->ValidateProto(*error_reporter);
 }
 

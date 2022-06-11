@@ -54,7 +54,7 @@ absl::StatusOr<R> ParseJsonToProto(const absl::string_view json_path) {
   absl::LoadTimeZone(kTimeZoneString, &tz);
   FHIR_ASSIGN_OR_RETURN(R resource, JsonFhirStringToProto<R>(json, tz));
   FHIR_RETURN_IF_ERROR(
-      Validate(resource, FailFastErrorReporter::FailOnErrorOrFatal()));
+      Validate(resource, FailFastErrorHandler::FailOnErrorOrFatal()));
   return resource;
 }
 

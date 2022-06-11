@@ -16,6 +16,8 @@
 
 #include <algorithm>
 #include <functional>
+#include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 
@@ -65,57 +67,60 @@ std::vector<ValidationResult> ValidationResults::Results() const {
   return results_;
 }
 
-// ErrorReporter that aggregates FhirPath validations as ValidationResults
+// ErrorHandler that aggregates FhirPath validations as ValidationResults
 // This is useful for providing the deprecated Validate API that returns
-// ValidationResults.  New usages should use an OperationOutcomeErrorReporter.
-class ValidationResultsErrorReporter : public ErrorReporter {
+// ValidationResults.  New usages should use an OperationOutcomeErrorHandler.
+class ValidationResultsErrorHandler : public ErrorHandler {
  public:
   ValidationResults GetValidationResults() const {
     return ValidationResults(results_);
   }
-  absl::Status ReportFhirPathFatal(absl::string_view field_path,
-                                   absl::string_view element_path,
-                                   absl::string_view fhir_path_constraint,
-                                   const absl::Status& status) override {
-    results_.push_back(ValidationResult(field_path, element_path,
-                                        fhir_path_constraint, status));
+  absl::Status HandleFhirPathFatal(const absl::Status& status,
+                                   std::string_view expression,
+                                   std::string_view element_path,
+                                   std::string_view field_path) override {
+    results_.push_back(
+        ValidationResult(field_path, element_path, expression, status));
     return absl::OkStatus();
   }
 
-  absl::Status ReportFhirPathError(
-      absl::string_view field_path, absl::string_view element_path,
-      absl::string_view fhir_path_constraint) override {
-    results_.push_back(ValidationResult(field_path, element_path,
-                                        fhir_path_constraint, false));
+  absl::Status HandleFhirPathError(std::string_view expression,
+                                   std::string_view element_path,
+                                   std::string_view field_path) override {
+    results_.push_back(
+        ValidationResult(field_path, element_path, expression, false));
     return absl::OkStatus();
   }
 
-  absl::Status ReportFhirPathWarning(
-      absl::string_view field_path, absl::string_view element_path,
-      absl::string_view fhir_path_constraint) override {
+  absl::Status HandleFhirPathWarning(std::string_view msg,
+                                     std::string_view element_path,
+                                     std::string_view field_path) override {
     // Legacy FHIRPath API does not support warnings.
     return absl::OkStatus();
   }
 
-  absl::Status ReportFhirFatal(absl::string_view field_path,
-                               absl::string_view element_path,
-                               const absl::Status& status) override {
+  absl::Status HandleFhirFatal(const absl::Status& status,
+                               std::string_view element_path,
+                               std::string_view field_path) override {
     return absl::InternalError(
-        "ValidationResultsErrorReporter should only use FHIRPath APIs.");
+        "ValidationResultsErrorHandler should only use FHIRPath APIs.");
+    return absl::OkStatus();
   }
 
-  absl::Status ReportFhirWarning(absl::string_view field_path,
-                                 absl::string_view element_path,
-                                 absl::string_view message) override {
+  absl::Status HandleFhirError(std::string_view msg,
+                               std::string_view element_path,
+                               std::string_view field_path) override {
     return absl::InternalError(
-        "ValidationResultsErrorReporter should only use FHIRPath APIs.");
+        "ValidationResultsErrorHandler should only use FHIRPath APIs.");
+    return absl::OkStatus();
   }
 
-  absl::Status ReportFhirError(absl::string_view field_path,
-                               absl::string_view element_path,
-                               absl::string_view message) override {
+  absl::Status HandleFhirWarning(std::string_view msg,
+                                 std::string_view element_path,
+                                 std::string_view field_path) override {
     return absl::InternalError(
-        "ValidationResultsErrorReporter should only use FHIRPath APIs.");
+        "ValidationResultsErrorHandler should only use FHIRPath APIs.");
+    return absl::OkStatus();
   }
 
  private:
@@ -206,7 +211,7 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
     return iter->second.get();
   }
 
-  auto constraints = absl::make_unique<MessageConstraints>();
+  auto constraints = std::make_unique<MessageConstraints>();
   AddMessageConstraints(descriptor, Severity::kFailure, primitive_handler_,
                         &constraints->message_error_expressions);
   AddMessageConstraints(descriptor, Severity::kWarning, primitive_handler_,
@@ -254,12 +259,10 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
 
 // Validates the given message against a given FHIRPath expression.
 // Reports failures to the provided error reporter
-absl::Status ValidateConstraint(absl::string_view constraint_parent_path,
-                                absl::string_view node_parent_path,
-                                const internal::WorkspaceMessage& message,
+absl::Status ValidateConstraint(const internal::WorkspaceMessage& message,
                                 const CompiledExpression& expression,
                                 const Severity severity,
-                                ErrorReporter* error_reporter) {
+                                ErrorReporter& error_reporter) {
   static const auto* invalid_expressions = new absl::flat_hash_set<std::string>(
       {"where(category.memberOf('http://hl7.org/fhir/us/core/ValueSet/"
        "us-core-condition-category')).exists()",
@@ -274,27 +277,24 @@ absl::Status ValidateConstraint(absl::string_view constraint_parent_path,
   absl::StatusOr<EvaluationResult> expr_result = expression.Evaluate(message);
   if (!expr_result.ok()) {
     // Error evaluating expression
-    return error_reporter->ReportFhirPathFatal(
-        constraint_parent_path, node_parent_path, expression.fhir_path(),
-        expr_result.status());
+    return error_reporter.ReportFhirPathFatal(expr_result.status(),
+                                              expression.fhir_path());
   }
   if (!expr_result->GetBoolean().ok()) {
     // Expression did not evaluate to a boolean
-    return error_reporter->ReportFhirPathFatal(
-        constraint_parent_path, node_parent_path, expression.fhir_path(),
+    return error_reporter.ReportFhirPathFatal(
         absl::FailedPreconditionError(
-            "Cannot validate non-boolean FHIRPath expression"));
+            "Cannot validate non-boolean FHIRPath expression"),
+        expression.fhir_path());
   }
   if (!*expr_result->GetBoolean()) {
     // Expression evaluated to a boolean value of "false", indicating the
     // resource failed to meet the constraint.
     switch (severity) {
       case Severity::kFailure:
-        return error_reporter->ReportFhirPathError(
-            constraint_parent_path, node_parent_path, expression.fhir_path());
+        return error_reporter.ReportFhirPathError(expression.fhir_path());
       case Severity::kWarning:
-        return error_reporter->ReportFhirPathWarning(
-            constraint_parent_path, node_parent_path, expression.fhir_path());
+        return error_reporter.ReportFhirPathWarning(expression.fhir_path());
     }
   }
   // The expression evaluated to the boolean value `true`.
@@ -312,21 +312,15 @@ std::string PathTerm(const Message& message, const FieldDescriptor* field) {
 namespace {
 absl::Status HandleFieldConstraint(
     const internal::WorkspaceMessage& workspace_message,
-    absl::string_view constraint_path, absl::string_view node_path,
-    absl::string_view path_term, const FieldDescriptor* field,
-    const CompiledExpression& expr, const Severity severity,
-    ErrorReporter* error_reporter) {
-  for (int i = 0;
-       i < PotentiallyRepeatedFieldSize(*workspace_message.Message(), field);
-       i++) {
-    const Message& child =
-        GetPotentiallyRepeatedMessage(*workspace_message.Message(), field, i);
-
+    const FieldDescriptor* field, const CompiledExpression& expr,
+    const Severity severity, ErrorReporter& error_reporter) {
+  const Message& message = *workspace_message.Message();
+  for (int i = 0; i < PotentiallyRepeatedFieldSize(message, field); i++) {
+    const Message& child = GetPotentiallyRepeatedMessage(message, field, i);
+    ErrorScope error_scope(
+        &error_reporter, PathTerm(message, field),
+        field->is_repeated() ? std::optional<std::uint8_t>(i) : std::nullopt);
     FHIR_RETURN_IF_ERROR(ValidateConstraint(
-        absl::StrCat(constraint_path, ".", path_term),
-        field->is_repeated()
-            ? absl::StrCat(node_path, ".", path_term, "[", i, "]")
-            : absl::StrCat(node_path, ".", path_term),
         internal::WorkspaceMessage(workspace_message, &child), expr, severity,
         error_reporter));
   }
@@ -335,8 +329,7 @@ absl::Status HandleFieldConstraint(
 }  // namespace
 
 absl::Status FhirPathValidator::Validate(
-    absl::string_view constraint_path, absl::string_view node_path,
-    const internal::WorkspaceMessage& message, ErrorReporter* error_reporter) {
+    const internal::WorkspaceMessage& message, ErrorReporter& error_reporter) {
   // ConstraintsFor may recursively build constraints so
   // we lock the mutex here to ensure thread safety.
   mutex_.Lock();
@@ -347,33 +340,27 @@ absl::Status FhirPathValidator::Validate(
   // Validate the constraints attached to the message root.
   for (const CompiledExpression& expr :
        constraints->message_error_expressions) {
-    FHIR_RETURN_IF_ERROR(ValidateConstraint(constraint_path, node_path, message,
-                                            expr, Severity::kFailure,
-                                            error_reporter));
+    FHIR_RETURN_IF_ERROR(
+        ValidateConstraint(message, expr, Severity::kFailure, error_reporter));
   }
   for (const CompiledExpression& expr :
        constraints->message_warning_expressions) {
-    FHIR_RETURN_IF_ERROR(ValidateConstraint(constraint_path, node_path, message,
-                                            expr, Severity::kWarning,
-                                            error_reporter));
+    FHIR_RETURN_IF_ERROR(
+        ValidateConstraint(message, expr, Severity::kWarning, error_reporter));
   }
 
   // Validate the constraints attached to the message's fields.
   for (const auto& expression : constraints->field_error_expressions) {
     const FieldDescriptor* field = expression.first;
     const CompiledExpression& expr = expression.second;
-    const std::string path_term = PathTerm(*message.Message(), field);
-    FHIR_RETURN_IF_ERROR(
-        HandleFieldConstraint(message, constraint_path, node_path, path_term,
-                              field, expr, Severity::kFailure, error_reporter));
+    FHIR_RETURN_IF_ERROR(HandleFieldConstraint(
+        message, field, expr, Severity::kFailure, error_reporter));
   }
   for (const auto& expression : constraints->field_warning_expressions) {
     const FieldDescriptor* field = expression.first;
     const CompiledExpression& expr = expression.second;
-    const std::string path_term = PathTerm(*message.Message(), field);
-    FHIR_RETURN_IF_ERROR(
-        HandleFieldConstraint(message, constraint_path, node_path, path_term,
-                              field, expr, Severity::kWarning, error_reporter));
+    FHIR_RETURN_IF_ERROR(HandleFieldConstraint(
+        message, field, expr, Severity::kWarning, error_reporter));
   }
 
   // Recursively validate constraints for nested messages that have them.
@@ -384,11 +371,10 @@ absl::Status FhirPathValidator::Validate(
     for (int i = 0; i < PotentiallyRepeatedFieldSize(proto, field); i++) {
       const Message& child = GetPotentiallyRepeatedMessage(proto, field, i);
 
+      ErrorScope error_scope(
+          &error_reporter, path_term,
+          field->is_repeated() ? std::optional<std::uint8_t>(i) : std::nullopt);
       FHIR_RETURN_IF_ERROR(Validate(
-          absl::StrCat(constraint_path, ".", path_term),
-          field->is_repeated()
-              ? absl::StrCat(node_path, ".", path_term, "[", i, "]")
-              : absl::StrCat(node_path, ".", path_term),
           internal::WorkspaceMessage(message, &child), error_reporter));
     }
   }
@@ -411,25 +397,25 @@ absl::Status ValidationResults::LegacyValidationResult() const {
 }
 
 absl::Status FhirPathValidator::Validate(const Message& message,
-                                         ErrorReporter* error_reporter) {
+                                         ErrorHandler& error_handler) {
   // ContainedResource is an implementation detail of FHIR protos. Extract the
   // resource from the wrapper before prcoessing so that wrapper is not included
   // in the node/constraint path of the validation results.
   if (IsContainedResource(message)) {
     FHIR_ASSIGN_OR_RETURN(const Message* resource,
                           GetContainedResource(message));
-    return Validate(*resource, error_reporter);
+    return Validate(*resource, error_handler);
   }
 
-  return Validate(message.GetDescriptor()->name(),
-                  message.GetDescriptor()->name(),
-                  internal::WorkspaceMessage(&message), error_reporter);
+  ErrorReporter reporter(&error_handler);
+  ErrorScope resource_scope(&reporter, message.GetDescriptor()->name());
+  return Validate(internal::WorkspaceMessage(&message), reporter);
 }
 
 absl::StatusOr<ValidationResults> FhirPathValidator::Validate(
     const ::google::protobuf::Message& message) {
-  ValidationResultsErrorReporter error_reporter;
-  FHIR_RETURN_IF_ERROR(Validate(message, &error_reporter));
+  ValidationResultsErrorHandler error_reporter;
+  FHIR_RETURN_IF_ERROR(Validate(message, error_reporter));
   return error_reporter.GetValidationResults();
 }
 

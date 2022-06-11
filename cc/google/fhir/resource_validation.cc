@@ -14,6 +14,8 @@
 
 #include "google/fhir/resource_validation.h"
 
+#include <string>
+
 #include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
@@ -22,7 +24,6 @@
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/error_reporter.h"
-#include "google/fhir/fhir_types.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
@@ -42,18 +43,15 @@ using ::google::protobuf::Reflection;
 namespace {
 
 absl::Status CheckField(const Message& message, const FieldDescriptor* field,
-                        const std::string& field_name,
                         const PrimitiveHandler* primitive_handler,
-                        ErrorReporter* error_reporter);
+                        ErrorReporter& error_reporter);
 
 absl::Status ValidateFhirConstraints(const Message& message,
-                                     const std::string& base_name,
                                      const PrimitiveHandler* primitive_handler,
-                                     ErrorReporter* error_reporter) {
+                                     ErrorReporter& error_reporter) {
   if (IsPrimitive(message.GetDescriptor())) {
-    if (!primitive_handler->ValidatePrimitive(message).ok()) {
-      return error_reporter->ReportFhirError(
-          base_name, absl::StrCat("invalid-primitive-", base_name));
+    if (!primitive_handler->ValidatePrimitive(message, &error_reporter).ok()) {
+      return error_reporter.ReportFhirError("invalid-primitive");
     }
     return absl::OkStatus();
   }
@@ -69,10 +67,8 @@ absl::Status ValidateFhirConstraints(const Message& message,
 
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
-    const std::string& field_name =
-        absl::StrCat(base_name, ".", field->json_name());
-    FHIR_RETURN_IF_ERROR(CheckField(message, field, field_name,
-                                    primitive_handler, error_reporter));
+    FHIR_RETURN_IF_ERROR(
+        CheckField(message, field, primitive_handler, error_reporter));
   }
   // Also verify that oneof fields are set.
   // Note that optional choice-types should have the containing message unset -
@@ -82,9 +78,7 @@ absl::Status ValidateFhirConstraints(const Message& message,
     if (!reflection->HasOneof(message, oneof) &&
         !oneof->options().GetExtension(
             ::google::fhir::proto::fhir_oneof_is_optional)) {
-      FHIR_RETURN_IF_ERROR(error_reporter->ReportFhirError(
-          oneof->full_name(),
-          absl::StrCat("empty-oneof-", oneof->full_name())));
+      FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirError("empty-oneof"));
     }
   }
   return absl::OkStatus();
@@ -92,15 +86,16 @@ absl::Status ValidateFhirConstraints(const Message& message,
 
 // Check if a required field is missing.
 absl::Status CheckField(const Message& message, const FieldDescriptor* field,
-                        const std::string& field_name,
                         const PrimitiveHandler* primitive_handler,
-                        ErrorReporter* error_reporter) {
+                        ErrorReporter& error_reporter) {
+  const Reflection* reflection = message.GetReflection();
+
   if (field->options().HasExtension(validation_requirement) &&
       field->options().GetExtension(validation_requirement) ==
           ::google::fhir::proto::REQUIRED_BY_FHIR) {
     if (!FieldHasValue(message, field)) {
-      FHIR_RETURN_IF_ERROR(error_reporter->ReportFhirError(
-          field_name, absl::StrCat("missing-", field_name)));
+      FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirError(
+          "missing-required-field", field->json_name()));
     }
   }
 
@@ -109,16 +104,24 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
     if (status.ok()) {
       return status;
     } else {
-      FHIR_RETURN_IF_ERROR(error_reporter->ReportFhirError(
-          field_name, absl::StrCat(status.message(), "-at-", field_name)));
+      FHIR_RETURN_IF_ERROR(
+          error_reporter.ReportFhirError(status.message(), field->json_name()));
     }
   }
 
   if (field->cpp_type() == ::google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
-    for (int i = 0; i < PotentiallyRepeatedFieldSize(message, field); i++) {
-      const auto& submessage = GetPotentiallyRepeatedMessage(message, field, i);
-      FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(
-          submessage, field_name, primitive_handler, error_reporter));
+    if (field->is_repeated()) {
+      for (int i = 0; i < reflection->FieldSize(message, field); i++) {
+        ErrorScope field_scope(&error_reporter, field->json_name(), i);
+        FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(
+            reflection->GetRepeatedMessage(message, field, i),
+            primitive_handler, error_reporter));
+      }
+    } else if (reflection->HasField(message, field)) {
+      ErrorScope field_scope(&error_reporter, field->json_name());
+      FHIR_RETURN_IF_ERROR(
+          ValidateFhirConstraints(reflection->GetMessage(message, field),
+                                  primitive_handler, error_reporter));
     }
   }
 
@@ -130,18 +133,25 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
 ::absl::Status Validate(const ::google::protobuf::Message& resource,
                         const PrimitiveHandler* primitive_handler,
                         fhir_path::FhirPathValidator* message_validator,
-                        ErrorReporter* error_reporter) {
+                        ErrorHandler& error_handler) {
   FHIR_RETURN_IF_ERROR(
-      ValidateFhirConstraints(resource, resource.GetDescriptor()->name(),
-                              primitive_handler, error_reporter));
-  return message_validator->Validate(resource, error_reporter);
+      ValidateWithoutFhirPath(resource, primitive_handler, error_handler));
+  return message_validator->Validate(resource, error_handler);
 }
 
 ::absl::Status ValidateWithoutFhirPath(
     const ::google::protobuf::Message& resource,
-    const PrimitiveHandler* primitive_handler, ErrorReporter* error_reporter) {
-  return ValidateFhirConstraints(resource, resource.GetDescriptor()->name(),
-                                 primitive_handler, error_reporter);
+    const PrimitiveHandler* primitive_handler, ErrorHandler& error_handler) {
+  if (IsContainedResource(resource)) {
+    FHIR_ASSIGN_OR_RETURN(const google::protobuf::Message* contained,
+                          GetContainedResource(resource));
+    return ValidateWithoutFhirPath(*contained, primitive_handler,
+                                   error_handler);
+  }
+
+  ErrorReporter error_reporter(&error_handler);
+  ErrorScope message_scope(&error_reporter, resource.GetDescriptor()->name());
+  return ValidateFhirConstraints(resource, primitive_handler, error_reporter);
 }
 
 }  // namespace fhir

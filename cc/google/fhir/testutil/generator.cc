@@ -356,7 +356,10 @@ absl::Status FhirGenerator::FillPrimitive(
   }
 
   if (value) {
-    FHIR_RETURN_IF_ERROR(primitive_handler_->ParseInto(*value, fhir_primitive));
+    ErrorReporter reporter =
+        ErrorReporter(&FailFastErrorHandler::FailOnErrorOrFatal());
+    FHIR_RETURN_IF_ERROR(
+        primitive_handler_->ParseInto(*value, fhir_primitive, &reporter));
   }
   return absl::OkStatus();
 }
@@ -394,8 +397,11 @@ absl::Status FhirGenerator::FillReference(
         value_provider_->GetReferenceId(field, recursion_depth);
     auto fhir_json = internal::FhirJson::CreateString(
         absl::StrCat(reference_type, "/", reference_id));
+
+    ErrorReporter reporter =
+        ErrorReporter(&FailFastErrorHandler::FailOnErrorOrFatal());
     FHIR_RETURN_IF_ERROR(
-        primitive_handler_->ParseInto(*fhir_json, uri_message));
+        primitive_handler_->ParseInto(*fhir_json, uri_message, &reporter));
     return SplitIfRelativeReference(fhir_reference);
   }
 }

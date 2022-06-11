@@ -1,12 +1,12 @@
 issue {
   severity {
-    value: ERROR
+    value: FATAL
   }
   code {
-    value: VALUE
+    value: STRUCTURE
   }
   diagnostics {
-    value: "invalid-primitive-Observation.value.quantity.value"
+    value: "Invalid input for google.fhir.r4.core.Decimal"
   }
   expression {
     value: "Observation.value.quantity.value"

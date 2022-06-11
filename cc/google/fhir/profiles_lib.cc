@@ -25,10 +25,12 @@
 
 namespace google {
 namespace fhir {
-namespace profiles_internal {
+namespace internal {
 
-
+using ::absl::InvalidArgumentError;
 using ::google::protobuf::Descriptor;
+using ::google::protobuf::FieldDescriptor;
+using ::google::protobuf::Message;
 
 namespace {
 
@@ -83,14 +85,13 @@ const bool SharesCommonAncestor(const ::google::protobuf::Descriptor* first,
   return AddSharedCommonAncestorMemo(first_url, second_url, false, &memos);
 }
 
-const unordered_map<std::string, const FieldDescriptor*> GetExtensionMap(
+const std::unordered_map<std::string, const FieldDescriptor*> GetExtensionMap(
     const Descriptor* descriptor) {
   // Note that we memoize on descriptor address, since the values include
   // FieldDescriptor addresses, which will only be valid for a given address
   // of input descriptor
-  static auto* memos =
-      new unordered_map<intptr_t,
-                        unordered_map<std::string, const FieldDescriptor*>>();
+  static auto* memos = new std::unordered_map<
+      intptr_t, std::unordered_map<std::string, const FieldDescriptor*>>();
   static absl::Mutex memos_mutex;
 
   const intptr_t memo_key = (intptr_t)descriptor;
@@ -198,6 +199,6 @@ absl::Status CopyProtoPrimitiveField(const Message& source,
   return absl::OkStatus();
 }
 
-}  // namespace profiles_internal
+}  // namespace internal
 }  // namespace fhir
 }  // namespace google

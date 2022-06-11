@@ -231,7 +231,7 @@ absl::StatusOr<R> ParseJsonToProto(const std::string& json_path) {
 
   if (INVALID_RECORDS.find(json_path) == INVALID_RECORDS.end()) {
     FHIR_RETURN_IF_ERROR(
-        Validate(resource, FailFastErrorReporter::FailOnErrorOrFatal()));
+        Validate(resource, FailFastErrorHandler::FailOnErrorOrFatal()));
   }
   return resource;
 }

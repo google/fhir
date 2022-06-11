@@ -17,9 +17,12 @@
 #ifndef GOOGLE_FHIR_STU3_JSON_FORMAT_H_
 #define GOOGLE_FHIR_STU3_JSON_FORMAT_H_
 
+#include <string>
+
 #include "absl/status/statusor.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/json_format.h"
+#include "google/fhir/status/status.h"
 
 namespace google {
 namespace fhir {
@@ -28,33 +31,28 @@ namespace stu3 {
 // STU3-only API for cc/google/fhir/json_format.h
 // See cc/google/fhir/json_format.h for documentation on these methods
 
-absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
-    google::protobuf::Message* target, absl::TimeZone default_timezone,
-    const bool validate,
-    ErrorReporter* error_reporter =
-    FailFastErrorReporter::FailOnErrorOrFatal());
+absl::Status MergeJsonFhirStringIntoProto(
+    const std::string& raw_json, google::protobuf::Message* target,
+    absl::TimeZone default_timezone, const bool validate,
+    ErrorHandler& error_handler = FailFastErrorHandler::FailOnErrorOrFatal());
 
 template <typename R>
-absl::StatusOr<R> JsonFhirStringToProto(const std::string& raw_json,
-    const absl::TimeZone default_timezone,
-    ErrorReporter* error_reporter =
-    FailFastErrorReporter::FailOnErrorOrFatal()) {
+absl::StatusOr<R> JsonFhirStringToProto(
+    const std::string& raw_json, const absl::TimeZone default_timezone,
+    ErrorHandler& error_handler = FailFastErrorHandler::FailOnErrorOrFatal()) {
   R resource;
-  RETURN_REPORTED_FHIR_FATAL(error_reporter,
-      MergeJsonFhirStringIntoProto(raw_json, &resource,
-                                      default_timezone, true));
+  FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(
+      raw_json, &resource, default_timezone, true, error_handler));
   return resource;
 }
 
 template <typename R>
 absl::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
     const std::string& raw_json, const absl::TimeZone default_timezone,
-    ErrorReporter* error_reporter =
-    FailFastErrorReporter::FailOnErrorOrFatal()) {
+    ErrorHandler& error_handler = FailFastErrorHandler::FailOnErrorOrFatal()) {
   R resource;
-  RETURN_REPORTED_FHIR_FATAL(error_reporter,
-      MergeJsonFhirStringIntoProto(raw_json, &resource,
-                                      default_timezone, false));
+  FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(
+      raw_json, &resource, default_timezone, false, error_handler));
   return resource;
 }
 
