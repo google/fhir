@@ -196,7 +196,7 @@ func (m *Marshaller) MarshalResource(r proto.Message) ([]byte, error) {
 }
 
 // Marshal returns JSON serialization of a ContainedResource protobuf message.
-func (m *Marshaller) marshal(pb protoreflect.Message) (jsonpbhelper.IsJSON, error) {
+func (m *Marshaller) marshal(pb protoreflect.Message) (jsonpbhelper.JSONObject, error) {
 	pbdesc := pb.Descriptor()
 	if pbdesc.Name() != containedResourceProtoName(m.cfg) {
 		return nil, fmt.Errorf("unexpected resource type: %v", pbdesc.Name())
@@ -215,7 +215,7 @@ func (m *Marshaller) marshal(pb protoreflect.Message) (jsonpbhelper.IsJSON, erro
 	return m.marshalResource(pb.Get(resourceField).Message())
 }
 
-func (m *Marshaller) marshalResource(pb protoreflect.Message) (jsonpbhelper.IsJSON, error) {
+func (m *Marshaller) marshalResource(pb protoreflect.Message) (jsonpbhelper.JSONObject, error) {
 	decmap, err := m.marshalMessageToMap(pb)
 	if err != nil {
 		return nil, err
@@ -224,6 +224,12 @@ func (m *Marshaller) marshalResource(pb protoreflect.Message) (jsonpbhelper.IsJS
 		decmap[jsonpbhelper.ResourceTypeField] = jsonpbhelper.JSONString(string(pb.Descriptor().Name()))
 	}
 	return decmap, nil
+}
+
+// MarshalToJSONObject returns the resource message as a JSON object, instead of marshalling the JSON data to a []byte.
+// This can be useful if you need to modify the marshalled JSON data without needing to re-decode it.
+func (m *Marshaller) MarshalToJSONObject(pb proto.Message) (jsonpbhelper.JSONObject, error) {
+	return m.marshal(pb.ProtoReflect())
 }
 
 // MarshalElement marshals any FHIR complex value to JSON.
