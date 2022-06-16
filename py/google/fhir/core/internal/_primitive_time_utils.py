@@ -29,9 +29,9 @@ from google.fhir.core.utils import proto_utils
 # import zoneinfo from stdlib, fallback to the backports package. See more at:
 # https://pypi.org/project/backports.zoneinfo/.
 try:
-  import zoneinfo  # pytype: disable=import-error
+  import zoneinfo
 except ImportError:
-  from backports import zoneinfo
+  from backports import zoneinfo  # pytype: disable=import-error
 
 _T = TypeVar('_T', bound=message.Message)
 
