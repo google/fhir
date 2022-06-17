@@ -237,6 +237,8 @@ type UnmarshalError struct {
 	Type ErrorType
 	// Severity represents different UnmarshalError severity levels.
 	Severity ErrorSeverity
+
+	Cause error
 }
 
 func (e *UnmarshalError) Error() string {
@@ -245,6 +247,10 @@ func (e *UnmarshalError) Error() string {
 		msg = fmt.Sprintf("error at %q: ", e.Path)
 	}
 	return msg + e.Details
+}
+
+func (e *UnmarshalError) Unwrap() error {
+	return e.Cause
 }
 
 // UnmarshalErrorList is a list of UnmarshalError that implements the Error

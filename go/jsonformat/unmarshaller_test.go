@@ -21,6 +21,7 @@ import (
 	"io/ioutil"
 	"math"
 	"path"
+
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -921,6 +922,28 @@ func TestUnmarshal(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "trailing whitespace",
+			json: []byte("{\"resourceType\": \"Patient\"} \t\n"),
+			wants: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.ContainedResource{
+						OneofResource: &r3pb.ContainedResource_Patient{
+							Patient: &r3pb.Patient{},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4pb.ContainedResource{
+						OneofResource: &r4pb.ContainedResource_Patient{
+							Patient: &r4patientpb.Patient{},
+						},
+					},
+				},
+			},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -1744,6 +1767,12 @@ func TestUnmarshal_Errors(t *testing.T) {
 			}`,
 			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient.managingOrganization.organizationId": invalid type: ReferenceId`},
+		},
+		{
+			name: "trailing characters",
+			json: `{"resourceType": "Patient"}{}`,
+			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			errs: []string{"invalid JSON"},
 		},
 	}
 	for _, test := range tests {

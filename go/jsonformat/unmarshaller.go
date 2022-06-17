@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"strconv"
 	"strings"
 	"time"
@@ -109,17 +110,49 @@ func (u *Unmarshaller) Unmarshal(in []byte) (proto.Message, error) {
 	return res, nil
 }
 
-// TODO: report parseContainedResource error with error reporter
-// UnmarshalWithErrorReporter unmarshalls a FHIR resource from JSON into a
+// UnmarshalWithErrorReporter unmarshals a FHIR resource from JSON []byte data into a
 // ContainedResource proto. During the process, the validation errors are
 // reported according to user defined error reporter.
 // The FHIR version of the proto is determined by the version the Unmarshaller was
 // created with.
 func (u *Unmarshaller) UnmarshalWithErrorReporter(in []byte, er errorreporter.ErrorReporter) (proto.Message, error) {
-	// Decode the JSON object into a map.
+	return u.UnmarshalFromReaderWithErrorReporter(bytes.NewReader(in), er)
+}
+
+func readFullResource(in io.Reader) (map[string]json.RawMessage, error) {
 	var decoded map[string]json.RawMessage
-	if err := jsp.Unmarshal(in, &decoded); err != nil {
-		return nil, &jsonpbhelper.UnmarshalError{Details: "invalid JSON", Diagnostics: err.Error()}
+	d := jsp.NewDecoder(in)
+	if err := d.Decode(&decoded); err != nil {
+		return nil, err
+	}
+	// Emulate the same behaviour as json.Unmarshal where extra bytes cause an error.
+	if d.More() {
+		b := make([]byte, 1)
+		_, err := io.ReadFull(d.Buffered(), b)
+		// Should be impossible since the underlying reader is a bytes.Reader, but that could change.
+		if err != nil {
+			return nil, err
+		}
+		return nil, fmt.Errorf("invalid character '%v' after top-level value", b[0])
+	}
+	return decoded, nil
+}
+
+// UnmarshalFromReaderWithErrorReporter read FHIR data as JSON from an io.Reader and unmarshals it into a
+// ContainedResource proto. During the process, the validation errors are
+// reported according to user defined error reporter.
+// The FHIR version of the proto is determined by the version the Unmarshaller was
+// created with.
+func (u *Unmarshaller) UnmarshalFromReaderWithErrorReporter(in io.Reader, er errorreporter.ErrorReporter) (proto.Message, error) {
+	// TODO: report parseContainedResource error with error reporter
+	// Decode the JSON object into a map.
+	decoded, err := readFullResource(in)
+	if err != nil {
+		return nil, &jsonpbhelper.UnmarshalError{
+			Details:     "invalid JSON",
+			Diagnostics: err.Error(),
+			Cause:       err,
+		}
 	}
 	res, err := u.parseContainedResource("", decoded)
 	if err != nil {
