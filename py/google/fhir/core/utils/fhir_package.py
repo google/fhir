@@ -14,7 +14,7 @@
 # limitations under the License.
 """Utility class for abstracting over FHIR definitions."""
 
-from typing import Any, Dict, Iterable, Iterator, Optional, Tuple, TypeVar
+from typing import Any, BinaryIO, Callable, Dict, Iterable, Iterator, Optional, Tuple, TypeVar, Union
 import zipfile
 
 import logging
@@ -44,12 +44,12 @@ _PROTO_CLASSES_FOR_TYPES = {
 
 
 def _read_fhir_package_zip(
-    zip_file_path: str
+    zip_file: BinaryIO,
 ) -> Tuple[profile_config_pb2.PackageInfo, Dict[str, str]]:
-  """Indexes the file entries at `zip_file_path` and returns package info.
+  """Indexes the file entries in `zip_file` and returns package info.
 
   Args:
-    zip_file_path: The `.zip` file that should be parsed.
+    zip_file: The file-like of a `.zip` file that should be parsed.
 
   Returns:
     A tuple of (package info, JSON entries), detailing the package information
@@ -60,7 +60,7 @@ def _read_fhir_package_zip(
   """
   package_info: Optional[profile_config_pb2.PackageInfo] = None
   json_files: Dict[str, str] = {}
-  with zipfile.ZipFile(zip_file_path, mode='r') as f:
+  with zipfile.ZipFile(zip_file, mode='r') as f:
     for entry_name in f.namelist():
       if (entry_name.endswith('package_info.textproto') or
           entry_name.endswith('package_info.prototxt')):
@@ -69,7 +69,7 @@ def _read_fhir_package_zip(
             text_format.Parse(data, profile_config_pb2.PackageInfo()))
         if not package_info.proto_package:
           raise ValueError(
-              f'Missing proto_package from PackageInfo in: {zip_file_path}.')
+              f'Missing proto_package from PackageInfo in: {zip_file.name}.')
         if package_info.fhir_version != annotations_pb2.R4:
           raise ValueError(
               f'Unsupported FHIR version: {package_info.fhir_version}.')
@@ -89,15 +89,15 @@ class ResourceCollection(Iterable[_T]):
   """A collection of FHIR resources of a given type.
 
   Attributes:
-    zip_file_path: The zip file containing resources represented by this
-      collection.
+    zip_file_path: The zip file path or a function returning a file-like
+      containing resources represented by this collection.
     parsed_resources: A cache of resources which have been parsed into protocol
       buffers.
     resource_paths_for_uris: A mapping of URIs to tuples of the path within the
       zip file containing the resource JSON and the type of that resource.
   """
 
-  def __init__(self, zip_file_path: str) -> None:
+  def __init__(self, zip_file_path: Union[str, Callable[[], BinaryIO]]) -> None:
     self.zip_file_path = zip_file_path
 
     self.parsed_resources: Dict[str, _T] = {}
@@ -136,8 +136,8 @@ class ResourceCollection(Iterable[_T]):
     if path is None and resource_type is None:
       return None
 
-    parsed = self._parse_proto_from_file(uri, self.zip_file_path, path,
-                                         resource_type)
+    with _open_path_or_factory(self.zip_file_path) as fd:
+      parsed = self._parse_proto_from_file(uri, fd, path, resource_type)
     if parsed is None:
       raise RuntimeError(
           'Resource for url %s could no longer be found. The resource .zip '
@@ -152,21 +152,20 @@ class ResourceCollection(Iterable[_T]):
       return parsed
 
   @staticmethod
-  def _parse_proto_from_file(uri: str, zip_file_path: str, path: str,
+  def _parse_proto_from_file(uri: str, zip_file: BinaryIO, path: str,
                              resource_type: str) -> Optional[_T]:
     """Parses a protocol buffer from the resource at the given path.
 
     Args:
       uri: The URI of the resource to parse.
-      zip_file_path: The file path to the zip file containing resource
-        definitions.
+      zip_file: The file-like of a zip file containing resource definitions.
       path: The path within the zip file to the resource file to parse.
       resource_type: The type of the resource contained at `path`.
 
     Returns:
       The protocol buffer for the resource or `None` if it can not be found.
     """
-    with zipfile.ZipFile(zip_file_path, mode='r') as f:
+    with zipfile.ZipFile(zip_file, mode='r') as f:
       raw_json = f.read(path).decode('utf-8')
 
     if resource_type in _PROTO_CLASSES_FOR_TYPES:
@@ -205,12 +204,13 @@ class FhirPackage:
   """
 
   @classmethod
-  def load(cls, zip_file_path: str) -> 'FhirPackage':
+  def load(cls, zip_file_path: Union[str, Callable[[],
+                                                   BinaryIO]]) -> 'FhirPackage':
     """Instantiates and returns a new `FhirPackage` from a `.zip` file.
 
     Args:
-      zip_file_path: A path to the `.zip` file containing the `FhirPackage`
-        contents.
+      zip_file_path: A path to the `.zip` file or a function returning a
+        file-like containing the `FhirPackage` contents.
 
     Returns:
       An instance of `FhirPackage`.
@@ -218,7 +218,8 @@ class FhirPackage:
     Raises:
       ValueError: In the event that the `PackageInfo` is invalid.
     """
-    package_info, json_files = _read_fhir_package_zip(zip_file_path)
+    with _open_path_or_factory(zip_file_path) as fd:
+      package_info, json_files = _read_fhir_package_zip(fd)
 
     collections_per_resource_type = {
         'StructureDefinition':
@@ -390,3 +391,12 @@ def _find_resource_in_bundle(
         return bundled_resource
 
   return None
+
+
+def _open_path_or_factory(
+    path_or_factory: Union[str, Callable[[], BinaryIO]]) -> BinaryIO:
+  """Either opens the file at the path or calls the factory to create a file."""
+  if isinstance(path_or_factory, str):
+    return open(path_or_factory, 'rb')
+  else:
+    return path_or_factory()

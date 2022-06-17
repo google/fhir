@@ -18,13 +18,14 @@ import contextlib
 import json
 import os
 import tempfile
-from typing import Iterable, Sequence, Tuple
+from typing import Callable, Iterable, Sequence, Tuple
 from unittest import mock
 import zipfile
 
 from absl import flags
 from google.protobuf import message
 from absl.testing import absltest
+from absl.testing import parameterized
 from proto.google.fhir.proto import annotations_pb2
 from proto.google.fhir.proto import profile_config_pb2
 from proto.google.fhir.proto.r4.core.resources import value_set_pb2
@@ -39,7 +40,26 @@ _R4_VALUESETS_COUNT = 1316
 _R4_SEARCH_PARAMETERS_COUNT = 1385
 
 
-class FhirPackageTest(absltest.TestCase):
+def _parameterized_with_package_factories(func):
+  parameters = [
+      {
+          'testcase_name': 'WithFilePath',
+          'package_factory': fhir_package.FhirPackage.load,
+      },
+      {
+          'testcase_name': 'WithFileFactory',
+          'package_factory': _package_factory_using_file_factory
+      },
+  ]
+  wrapper = parameterized.named_parameters(*parameters)
+  return wrapper(func)
+
+
+def _package_factory_using_file_factory(path: str) -> fhir_package.FhirPackage:
+  return fhir_package.FhirPackage.load(lambda: open(path, 'rb'))
+
+
+class FhirPackageTest(parameterized.TestCase):
 
   def testFhirPackageEquality_withEqualOperands_succeeds(self):
     lhs = fhir_package.FhirPackage(
@@ -71,17 +91,22 @@ class FhirPackageTest(absltest.TestCase):
         value_sets=[])
     self.assertNotEqual(lhs, rhs)
 
-  def testFhirPackageLoad_withValidFhirPackage_succeeds(self):
+  @_parameterized_with_package_factories
+  def testFhirPackageLoad_withValidFhirPackage_succeeds(
+      self, package_factory: Callable[[str], fhir_package.FhirPackage]):
     package_filepath = os.path.join(
         FLAGS.test_srcdir, 'com_google_fhir/spec/fhir_r4_package.zip')
-    package = fhir_package.FhirPackage.load(package_filepath)
+    package = package_factory(package_filepath)
+
     self.assertEqual(package.package_info.proto_package, 'google.fhir.r4.core')
     self.assertLen(package.structure_definitions, _R4_DEFINITIONS_COUNT)
     self.assertLen(package.code_systems, _R4_CODESYSTEMS_COUNT)
     self.assertLen(package.value_sets, _R4_VALUESETS_COUNT)
     self.assertLen(package.search_parameters, _R4_SEARCH_PARAMETERS_COUNT)
 
-  def testFhirPackageLoad_withValidFhirPackage_isReadable(self):
+  @_parameterized_with_package_factories
+  def testFhirPackageLoad_withValidFhirPackage_isReadable(
+      self, package_factory: Callable[[str], fhir_package.FhirPackage]):
     """Ensure we can read resources following a load."""
     # Define a bunch of fake resources.
     structure_definition_1 = {
@@ -190,7 +215,7 @@ class FhirPackageTest(absltest.TestCase):
         ('bundle.json', json.dumps(bundle)),
     ]
     with zipfile_containing(zipfile_contents) as temp_file:
-      package = fhir_package.FhirPackage.load(temp_file.name)
+      package = package_factory(temp_file.name)
 
       # Ensure all resources can be found by get_resource calls
       for resource in (
