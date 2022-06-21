@@ -195,8 +195,8 @@ class XhtmlWrapper : public SpecificWrapper<XhtmlLike> {
                        ": it is not a string value."));
     }
 
-    RETURN_REPORTED_FHIR_FATAL(error_reporter,
-                               this->ValidateString(json.asString().value()));
+    REPORT_FATAL_AND_RETURN_IF_ERROR(
+        error_reporter, this->ValidateString(json.asString().value()));
     std::unique_ptr<XhtmlLike> wrapped = absl::make_unique<XhtmlLike>();
     wrapped->set_value(json.asString().value());
     this->WrapAndManage(std::move(wrapped));
@@ -328,7 +328,7 @@ class StringTypeWrapper : public StringInputWrapper<T> {
     }
     absl::Status string_validation =
         this->ValidateString(this->GetWrapped()->value());
-    RETURN_REPORTED_FHIR_FATAL(error_reporter, string_validation);
+    REPORT_FATAL_AND_RETURN_IF_ERROR(error_reporter, string_validation);
     return string_validation.ok()
                ? absl::OkStatus()
                : FailedPreconditionError(string_validation.message());
@@ -337,8 +337,8 @@ class StringTypeWrapper : public StringInputWrapper<T> {
  protected:
   absl::Status ParseString(const std::string& json_string,
   ErrorReporter& error_reporter) override {
-    RETURN_REPORTED_FHIR_FATAL(error_reporter,
-                               this->ValidateString(json_string));
+    REPORT_FATAL_AND_RETURN_IF_ERROR(error_reporter,
+                                     this->ValidateString(json_string));
     std::unique_ptr<T> wrapped = absl::make_unique<T>();
     wrapped->set_value(json_string);
     this->WrapAndManage(std::move(wrapped));
@@ -442,8 +442,8 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
     }
     const std::string json_string = json.asString().value();
 
-    RETURN_REPORTED_FHIR_FATAL(error_reporter,
-                               this->ValidateString(json_string));
+    REPORT_FATAL_AND_RETURN_IF_ERROR(error_reporter,
+                                     this->ValidateString(json_string));
 
     static const LazyRE2 fractional_seconds_regex{
         R"regex(T\d+:\d+:\d+(?:\.(\d+))?[zZ\+-])regex"};
@@ -711,7 +711,7 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
     absl::Status string_validation =
         this->ValidateString(as_string.substr(1, as_string.length() - 2));
 
-    RETURN_REPORTED_FHIR_FATAL(error_reporter, string_validation);
+    REPORT_FATAL_AND_RETURN_IF_ERROR(error_reporter, string_validation);
     return string_validation.ok()
                ? absl::OkStatus()
                : FailedPreconditionError(string_validation.message());
@@ -813,7 +813,7 @@ class DecimalWrapper : public StringInputWrapper<DecimalType> {
     absl::Status string_validation =
         this->ValidateString(this->GetWrapped()->value());
 
-    RETURN_REPORTED_FHIR_FATAL(error_reporter, string_validation);
+    REPORT_FATAL_AND_RETURN_IF_ERROR(error_reporter, string_validation);
     return string_validation.ok()
                ? absl::OkStatus()
                : FailedPreconditionError(string_validation.message());
@@ -843,8 +843,8 @@ class DecimalWrapper : public StringInputWrapper<DecimalType> {
 
   absl::Status ParseString(const std::string& json_string,
                               ErrorReporter& error_reporter) override {
-    RETURN_REPORTED_FHIR_FATAL(error_reporter,
-                               this->ValidateString(json_string));
+    REPORT_FATAL_AND_RETURN_IF_ERROR(error_reporter,
+                                     this->ValidateString(json_string));
     // TODO: range check
     std::unique_ptr<DecimalType> wrapped = absl::make_unique<DecimalType>();
     wrapped->set_value(json_string);

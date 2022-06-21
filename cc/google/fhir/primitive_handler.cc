@@ -24,6 +24,7 @@
 #include "google/fhir/annotations.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/primitive_wrapper.h"
+#include "google/fhir/status/status.h"
 
 namespace google {
 namespace fhir {
@@ -47,8 +48,8 @@ using ::google::protobuf::Message;
   }
   FHIR_ASSIGN_OR_RETURN(std::unique_ptr<PrimitiveWrapper> wrapper,
                         GetWrapper(target->GetDescriptor()));
-  RETURN_REPORTED_FHIR_FATAL((*error_reporter),
-                             wrapper->Parse(json, tz, *error_reporter));
+  REPORT_FATAL_AND_RETURN_IF_ERROR((*error_reporter),
+                                   wrapper->Parse(json, tz, *error_reporter));
   return wrapper->MergeInto(target);
 }
 
@@ -77,7 +78,7 @@ absl::StatusOr<JsonPrimitive> PrimitiveHandler::WrapPrimitiveProto(
 
 absl::Status PrimitiveHandler::ValidatePrimitive(
     const ::google::protobuf::Message& primitive, ErrorReporter* error_reporter) const {
-  RETURN_REPORTED_FHIR_FATAL((*error_reporter), CheckVersion(primitive));
+  REPORT_FATAL_AND_RETURN_IF_ERROR((*error_reporter), CheckVersion(primitive));
 
   if (!IsPrimitive(primitive.GetDescriptor())) {
     return InvalidArgumentError(absl::StrCat(
@@ -88,7 +89,7 @@ absl::Status PrimitiveHandler::ValidatePrimitive(
   std::unique_ptr<PrimitiveWrapper> wrapper;
   FHIR_ASSIGN_OR_RETURN(wrapper, GetWrapper(descriptor));
 
-  RETURN_REPORTED_FHIR_FATAL((*error_reporter), wrapper->Wrap(primitive));
+  REPORT_FATAL_AND_RETURN_IF_ERROR((*error_reporter), wrapper->Wrap(primitive));
   return wrapper->ValidateProto(*error_reporter);
 }
 

@@ -506,7 +506,7 @@ absl::Status Parser::MergeJsonFhirObjectIntoProto(
     FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> core_resource,
                           GetBaseResourceInstance(*target));
 
-    RETURN_REPORTED_FHIR_FATAL(
+    REPORT_FATAL_AND_RETURN_IF_ERROR(
         error_reporter,
         parser.MergeValue(json_object, core_resource.get(), error_reporter));
 
@@ -526,7 +526,7 @@ absl::Status Parser::MergeJsonFhirObjectIntoProto(
     }
   }
 
-  RETURN_REPORTED_FHIR_FATAL(
+  REPORT_FATAL_AND_RETURN_IF_ERROR(
       error_reporter, parser.MergeValue(json_object, target, error_reporter));
 
   if (validate) {
