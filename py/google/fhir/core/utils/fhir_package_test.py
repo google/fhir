@@ -15,8 +15,10 @@
 """Test fhir_package functionality."""
 
 import contextlib
+import io
 import json
 import os
+import tarfile
 import tempfile
 from typing import Callable, Iterable, Sequence, Tuple
 from unittest import mock
@@ -202,22 +204,34 @@ class FhirPackageTest(parameterized.TestCase):
             }
         ]
     }
-    package_info = profile_config_pb2.PackageInfo(
-        proto_package='Foo', fhir_version=annotations_pb2.R4)
 
-    # Create a zip file containing the resources and our bundle.
-    zipfile_contents = [
-        ('package_info.prototxt', repr(package_info)),
+    # Create zip and npm files containing the resources and our bundle.
+    common_contents = [
         ('sd1.json', json.dumps(structure_definition_1)),
         ('sp1.json', json.dumps(search_parameter_1)),
         ('cs1.json', json.dumps(code_system_1)),
         ('vs1.json', json.dumps(value_set_1)),
         ('bundle.json', json.dumps(bundle)),
     ]
-    with zipfile_containing(zipfile_contents) as temp_file:
-      package = package_factory(temp_file.name)
 
-      # Ensure all resources can be found by get_resource calls
+    package_info = profile_config_pb2.PackageInfo(
+        proto_package='Foo', fhir_version=annotations_pb2.R4)
+    zipfile_contents = common_contents + [
+        ('package_info.prototxt', repr(package_info))
+    ]
+
+    npm_package_info = {
+        'name': 'example',
+        'fhirVersions': ['4.0.1'],
+        'license': 'Apache',
+        'canonical': 'http://example.com/fhir',
+    }
+    npmfile_contents = common_contents + [
+        ('package.json', json.dumps(npm_package_info))
+    ]
+
+    # Helper to check contents for both zip and NPM/tar packages.
+    def check_contents(package):
       for resource in (
           structure_definition_1,
           structure_definition_2,
@@ -248,6 +262,14 @@ class FhirPackageTest(parameterized.TestCase):
       self.assertCountEqual(
           [resource.url.value for resource in package.value_sets],
           [value_set_1['url'], value_set_2['url']])
+
+    with zipfile_containing(zipfile_contents) as temp_file:
+      package = package_factory(temp_file.name)
+      check_contents(package)
+
+    with npmfile_containing(npmfile_contents) as temp_file:
+      package = package_factory(temp_file.name)
+      check_contents(package)
 
   def testFhirPackageGetResource_forMissingUri_isNone(self):
     """Ensure we return None when requesting non-existent resource URIs."""
@@ -286,25 +308,23 @@ class ResourceCollectionTest(absltest.TestCase):
 
   def testResourceCollection_getBundles(self):
     """Ensure we can add and then get a resource from a bundle."""
-    zipfile_contents = [('a_bundle.json',
-                         json.dumps({
-                             'resourceType':
-                                 'Bundle',
-                             'url':
-                                 'http://bundles.com',
-                             'entry': [{
-                                 'resource': {
-                                     'resourceType': 'ValueSet',
-                                     'id': 'example-extensional',
-                                     'url': 'http://value-in-a-bundle',
-                                     'status': 'draft',
-                                 }
-                             }]
-                         }))]
-    with zipfile_containing(zipfile_contents) as temp_file:
-      collection = fhir_package.ResourceCollection(temp_file.name)
-      collection.add_uri_at_path('http://value-in-a-bundle', 'a_bundle.json',
-                                 'Bundle')
+    file_contents = [('a_bundle.json',
+                      json.dumps({
+                          'resourceType':
+                              'Bundle',
+                          'url':
+                              'http://bundles.com',
+                          'entry': [{
+                              'resource': {
+                                  'resourceType': 'ValueSet',
+                                  'id': 'example-extensional',
+                                  'url': 'http://value-in-a-bundle',
+                                  'status': 'draft',
+                              }
+                          }]
+                      }))]
+
+    def check_resources(collection):
       resource = collection.get_resource('http://value-in-a-bundle')
 
       self.assertIsNotNone(resource)
@@ -312,6 +332,18 @@ class ResourceCollectionTest(absltest.TestCase):
           proto_utils.is_message_type(resource, value_set_pb2.ValueSet))
       self.assertEqual(resource.id.value, 'example-extensional')
       self.assertEqual(resource.url.value, 'http://value-in-a-bundle')
+
+    with zipfile_containing(file_contents) as temp_file:
+      collection = fhir_package.ResourceCollection(temp_file.name)
+      collection.add_uri_at_path('http://value-in-a-bundle', 'a_bundle.json',
+                                 'Bundle')
+      check_resources(collection)
+
+    with npmfile_containing(file_contents) as temp_file:
+      collection = fhir_package.ResourceCollection(temp_file.name)
+      collection.add_uri_at_path('http://value-in-a-bundle',
+                                 'package/a_bundle.json', 'Bundle')
+      check_resources(collection)
 
   def testResourceCollection_getMissingResource(self):
     """Ensure we return None when requesing missing resources."""
@@ -418,10 +450,34 @@ def zipfile_containing(
   Yields:
     A tempfile.NamedTemporaryFile for the written zip file.
   """
-  with tempfile.NamedTemporaryFile() as temp_file:
+  with tempfile.NamedTemporaryFile(suffix='.zip') as temp_file:
     with zipfile.ZipFile(temp_file, 'w') as zip_file:
       for file_name, contents in file_contents:
         zip_file.writestr(file_name, contents)
+    temp_file.flush()
+    yield temp_file
+
+
+@contextlib.contextmanager
+def npmfile_containing(
+    file_contents: Sequence[Tuple[str, str]]) -> tempfile.NamedTemporaryFile:
+  """Builds a temp file containing a NPM .tar.gz file with the given contents.
+
+  Args:
+    file_contents: Sequence of (file_name, file_contents) tuples to be written
+      to the NPM file.
+
+  Yields:
+    A tempfile.NamedTemporaryFile for the written zip file.
+  """
+  with tempfile.NamedTemporaryFile(suffix='.tgz') as temp_file:
+    with tarfile.open(fileobj=temp_file, mode='w:gz') as tar_file:
+      for file_name, contents in file_contents:
+        # NPM package contents live in the package/ directory.
+        info = tarfile.TarInfo(name=f'package/{file_name}')
+        info.size = len(contents)
+        tar_file.addfile(
+            tarinfo=info, fileobj=io.BytesIO(contents.encode('utf-8')))
     temp_file.flush()
     yield temp_file
 

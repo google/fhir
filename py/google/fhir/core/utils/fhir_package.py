@@ -14,6 +14,7 @@
 # limitations under the License.
 """Utility class for abstracting over FHIR definitions."""
 
+import tarfile
 from typing import Any, BinaryIO, Callable, Dict, Iterable, Iterator, Optional, Tuple, TypeVar, Union
 import zipfile
 
@@ -43,6 +44,7 @@ _PROTO_CLASSES_FOR_TYPES = {
 # TODO: Currently only supports R4. Make FHIR-version agnostic.
 
 
+# TODO: Consider deprecating internal "zip" format entirely.
 def _read_fhir_package_zip(
     zip_file: BinaryIO,
 ) -> Tuple[profile_config_pb2.PackageInfo, Dict[str, str]]:
@@ -85,11 +87,34 @@ def _read_fhir_package_zip(
   return (package_info, json_files)
 
 
+def _read_fhir_package_npm(npm_file: BinaryIO) -> Dict[str, str]:
+  """Indexes the file entries at `npm_file_path` and returns package info.
+
+  Args:
+    npm_file: The `.tar.gz` or `.tgz` file following NPM conventions that should
+      be parsed.
+
+  Returns:
+    A dictionary JSON entries indexed by filename.
+  """
+  json_files: Dict[str, str] = {}
+  with tarfile.open(fileobj=npm_file, mode='r:gz') as f:
+    for member in f.getmembers():
+      if member.name.endswith('.json'):
+        content = f.extractfile(member)
+        if content is not None:
+          json_files[member.name] = content.read().decode('utf-8')
+      else:
+        logging.info('Skipping  entry: %s.', member.name)
+
+  return json_files
+
+
 class ResourceCollection(Iterable[_T]):
   """A collection of FHIR resources of a given type.
 
   Attributes:
-    zip_file_path: The zip file path or a function returning a file-like
+    archive_file: The zip or tar file path or a function returning a file-like
       containing resources represented by this collection.
     parsed_resources: A cache of resources which have been parsed into protocol
       buffers.
@@ -97,8 +122,8 @@ class ResourceCollection(Iterable[_T]):
       zip file containing the resource JSON and the type of that resource.
   """
 
-  def __init__(self, zip_file_path: Union[str, Callable[[], BinaryIO]]) -> None:
-    self.zip_file_path = zip_file_path
+  def __init__(self, archive_file: Union[str, Callable[[], BinaryIO]]) -> None:
+    self.archive_file = archive_file
 
     self.parsed_resources: Dict[str, _T] = {}
     self.resource_paths_for_uris: Dict[str, Tuple[str, str]] = {}
@@ -136,7 +161,7 @@ class ResourceCollection(Iterable[_T]):
     if path is None and resource_type is None:
       return None
 
-    with _open_path_or_factory(self.zip_file_path) as fd:
+    with _open_path_or_factory(self.archive_file) as fd:
       parsed = self._parse_proto_from_file(uri, fd, path, resource_type)
     if parsed is None:
       raise RuntimeError(
@@ -152,21 +177,34 @@ class ResourceCollection(Iterable[_T]):
       return parsed
 
   @staticmethod
-  def _parse_proto_from_file(uri: str, zip_file: BinaryIO, path: str,
+  def _parse_proto_from_file(uri: str, archive_file: BinaryIO, path: str,
                              resource_type: str) -> Optional[_T]:
     """Parses a protocol buffer from the resource at the given path.
 
     Args:
       uri: The URI of the resource to parse.
-      zip_file: The file-like of a zip file containing resource definitions.
+      archive_file: The file-like of a zip or tar file containing resource
+        definitions.
       path: The path within the zip file to the resource file to parse.
       resource_type: The type of the resource contained at `path`.
 
     Returns:
       The protocol buffer for the resource or `None` if it can not be found.
     """
-    with zipfile.ZipFile(zip_file, mode='r') as f:
-      raw_json = f.read(path).decode('utf-8')
+    # Default to zip files for compatiblity.
+    if (not isinstance(archive_file.name, str) or
+        archive_file.name.endswith('.zip')):
+      with zipfile.ZipFile(archive_file, mode='r') as f:
+        raw_json = f.read(path).decode('utf-8')
+    elif (archive_file.name.endswith('.tar.gz') or
+          archive_file.name.endswith('.tgz')):
+      with tarfile.open(fileobj=archive_file, mode='r:gz') as f:
+        io_bytes = f.extractfile(path)
+        if io_bytes is None:
+          return None
+        raw_json = io_bytes.read().decode('utf-8')
+    else:
+      raise ValueError(f'Unsupported file type from {archive_file.name}')
 
     if resource_type in _PROTO_CLASSES_FOR_TYPES:
       return json_format.json_fhir_string_to_proto(
@@ -204,34 +242,41 @@ class FhirPackage:
   """
 
   @classmethod
-  def load(cls, zip_file_path: Union[str, Callable[[],
-                                                   BinaryIO]]) -> 'FhirPackage':
+  def load(cls, archive_file: Union[str, Callable[[],
+                                                  BinaryIO]]) -> 'FhirPackage':
     """Instantiates and returns a new `FhirPackage` from a `.zip` file.
 
     Args:
-      zip_file_path: A path to the `.zip` file or a function returning a
-        file-like containing the `FhirPackage` contents.
+      archive_file: The zip or tar file path or a function returning a file-like
+        containing resources represented by this collection.
 
     Returns:
       An instance of `FhirPackage`.
 
     Raises:
-      ValueError: In the event that the `PackageInfo` is invalid.
+      ValueError: In the event that the file or contents are invalid.
     """
-    with _open_path_or_factory(zip_file_path) as fd:
-      package_info, json_files = _read_fhir_package_zip(fd)
+    with _open_path_or_factory(archive_file) as fd:
+      # Default to zip if there is no file name for compatibility.
+      if not isinstance(fd.name, str) or fd.name.endswith('.zip'):
+        package_info, json_files = _read_fhir_package_zip(fd)
+      elif fd.name.endswith('.tar.gz') or fd.name.endswith('.tgz'):
+        json_files = _read_fhir_package_npm(fd)
+        package_info = None
+      else:
+        raise ValueError(f'Unsupported file type from {fd.name}')
 
     collections_per_resource_type = {
         'StructureDefinition':
             ResourceCollection[structure_definition_pb2.StructureDefinition]
-            (zip_file_path),
+            (archive_file),
         'SearchParameter':
             ResourceCollection[search_parameter_pb2.SearchParameter]
-            (zip_file_path),
+            (archive_file),
         'CodeSystem':
-            ResourceCollection[code_system_pb2.CodeSystem](zip_file_path),
+            ResourceCollection[code_system_pb2.CodeSystem](archive_file),
         'ValueSet':
-            ResourceCollection[value_set_pb2.ValueSet](zip_file_path),
+            ResourceCollection[value_set_pb2.ValueSet](archive_file),
     }
 
     for file_name, raw_json in json_files.items():
@@ -247,7 +292,9 @@ class FhirPackage:
         code_systems=collections_per_resource_type['CodeSystem'],
         value_sets=collections_per_resource_type['ValueSet'])
 
-  def __init__(self, *, package_info: profile_config_pb2.PackageInfo,
+  # TODO: Consider deprecating package_info here entirely, since
+  # there is not a clean counterpart from NPM-produced packages.
+  def __init__(self, *, package_info: Optional[profile_config_pb2.PackageInfo],
                structure_definitions: ResourceCollection[
                    structure_definition_pb2.StructureDefinition],
                search_parameters: ResourceCollection[
