@@ -14,34 +14,27 @@
 # limitations under the License.
 """Utility class for abstracting over FHIR definitions."""
 
+import decimal
+import json
 import tarfile
-from typing import Any, BinaryIO, Callable, Dict, Iterable, Iterator, Optional, Tuple, TypeVar, Union
+from typing import Any, BinaryIO, Callable, Dict, Iterable, Iterator, Optional, Tuple, Union, Type, TypeVar
 import zipfile
 
 import logging
 
 from google.protobuf import message
 from google.protobuf import text_format
-
 from proto.google.fhir.proto import annotations_pb2
 from proto.google.fhir.proto import profile_config_pb2
-from proto.google.fhir.proto.r4.core.resources import code_system_pb2
-from proto.google.fhir.proto.r4.core.resources import search_parameter_pb2
-from proto.google.fhir.proto.r4.core.resources import structure_definition_pb2
-from proto.google.fhir.proto.r4.core.resources import value_set_pb2
-from google.fhir.r4 import json_format
+from google.fhir.core.internal import primitive_handler
+from google.fhir.core.internal.json_format import _json_parser
 
-_T = TypeVar('_T', structure_definition_pb2.StructureDefinition,
-             search_parameter_pb2.SearchParameter, code_system_pb2.CodeSystem,
-             value_set_pb2.ValueSet)
-_PROTO_CLASSES_FOR_TYPES = {
-    'ValueSet': value_set_pb2.ValueSet,
-    'CodeSystem': code_system_pb2.CodeSystem,
-    'StructureDefinition': structure_definition_pb2.StructureDefinition,
-    'SearchParameter': search_parameter_pb2.SearchParameter,
-}
+# TODO: Add structural typing to constrain version-agnostic types.
+_T = TypeVar('_T')
 
-# TODO: Currently only supports R4. Make FHIR-version agnostic.
+# Type for a source of FHIR package data, which can either be a file name or
+# a factory-like callable that returns the package data itself.
+PackageSource = Union[str, Callable[[], BinaryIO]]
 
 
 # TODO: Consider deprecating internal "zip" format entirely.
@@ -115,16 +108,21 @@ class ResourceCollection(Iterable[_T]):
 
   Attributes:
     archive_file: The zip or tar file path or a function returning a file-like
-      containing resources represented by this collection.
+    proto_cls: The class of the proto this collection contains.
+    json_parser: The parser to convert JSON data into FHIR.
     parsed_resources: A cache of resources which have been parsed into protocol
       buffers.
     resource_paths_for_uris: A mapping of URIs to tuples of the path within the
       zip file containing the resource JSON and the type of that resource.
   """
 
-  def __init__(self, archive_file: Union[str, Callable[[], BinaryIO]]) -> None:
+  def __init__(self, archive_file: PackageSource, proto_cls: Type[_T],
+               json_parser: _json_parser.JsonParser) -> None:
+
     self.archive_file = archive_file
 
+    self.proto_cls = proto_cls
+    self.json_parser = json_parser
     self.parsed_resources: Dict[str, _T] = {}
     self.resource_paths_for_uris: Dict[str, Tuple[str, str]] = {}
 
@@ -162,7 +160,7 @@ class ResourceCollection(Iterable[_T]):
       return None
 
     with _open_path_or_factory(self.archive_file) as fd:
-      parsed = self._parse_proto_from_file(uri, fd, path, resource_type)
+      parsed = self._parse_proto_from_file(uri, fd, path)
     if parsed is None:
       raise RuntimeError(
           'Resource for url %s could no longer be found. The resource .zip '
@@ -176,9 +174,8 @@ class ResourceCollection(Iterable[_T]):
       self.parsed_resources[uri] = parsed
       return parsed
 
-  @staticmethod
-  def _parse_proto_from_file(uri: str, archive_file: BinaryIO, path: str,
-                             resource_type: str) -> Optional[_T]:
+  def _parse_proto_from_file(self, uri: str, archive_file: BinaryIO,
+                             path: str) -> Optional[_T]:
     """Parses a protocol buffer from the resource at the given path.
 
     Args:
@@ -186,7 +183,6 @@ class ResourceCollection(Iterable[_T]):
       archive_file: The file-like of a zip or tar file containing resource
         definitions.
       path: The path within the zip file to the resource file to parse.
-      resource_type: The type of the resource contained at `path`.
 
     Returns:
       The protocol buffer for the resource or `None` if it can not be found.
@@ -206,22 +202,24 @@ class ResourceCollection(Iterable[_T]):
     else:
       raise ValueError(f'Unsupported file type from {archive_file.name}')
 
-    if resource_type in _PROTO_CLASSES_FOR_TYPES:
-      return json_format.json_fhir_string_to_proto(
-          raw_json, _PROTO_CLASSES_FOR_TYPES[resource_type])
-    elif resource_type == 'Bundle':
-      json_value = _find_resource_in_bundle(uri,
-                                            json_format.load_json(raw_json))
+    json_obj = json.loads(
+        raw_json, parse_float=decimal.Decimal, parse_int=decimal.Decimal)
+    resource_type = json_obj.get('resourceType')
+    if resource_type is None:
+      raise ValueError(f'JSON at {path} does not have a resource type.')
+
+    if resource_type == 'Bundle':
+      json_value = _find_resource_in_bundle(uri, json_obj)
       if json_value is None:
         return None
       else:
-        return json_format.json_fhir_object_to_proto(
-            json_value, _PROTO_CLASSES_FOR_TYPES[json_value['resourceType']])
+        target = self.proto_cls()
+        self.json_parser.merge_value(json_value, target)
+        return target
     else:
-      logging.warning(
-          'Unhandled JSON entry: %s for unexpected resource type %s.', path,
-          resource_type)
-      return None
+      target = self.proto_cls()
+      self.json_parser.merge_value(json_obj, target)
+      return target
 
   def __iter__(self) -> Iterator[_T]:
     for uri in self.resource_paths_for_uris:
@@ -242,13 +240,28 @@ class FhirPackage:
   """
 
   @classmethod
-  def load(cls, archive_file: Union[str, Callable[[],
-                                                  BinaryIO]]) -> 'FhirPackage':
+  def load(cls,
+           archive_file: PackageSource,
+           handler: primitive_handler.PrimitiveHandler,
+           struct_def_class: Type[message.Message],
+           search_param_class: Type[message.Message],
+           code_system_class: Type[message.Message],
+           value_set_class: Type[message.Message],
+           resource_time_zone: str = 'Z') -> 'FhirPackage':
     """Instantiates and returns a new `FhirPackage` from a `.zip` file.
 
+    Most users should not use this directly, but rather use the load methods
+    in FHIR version-specific packages.
+
     Args:
-      archive_file: The zip or tar file path or a function returning a file-like
-        containing resources represented by this collection.
+      archive_file: A path to the `.zip`, `.tar.gz` or `.tgz` file containing
+        the `FhirPackage` contents.
+      handler: The FHIR primitive handler used for resource parsing.
+      struct_def_class: The StructureDefinition proto class to use.
+      search_param_class: The SearchParameter proto class to use.
+      code_system_class: The CodeSystem proto class to use.
+      value_set_class: The Valueset proto class to use.
+      resource_time_zone: The time zone code to parse resource dates into.
 
     Returns:
       An instance of `FhirPackage`.
@@ -256,6 +269,7 @@ class FhirPackage:
     Raises:
       ValueError: In the event that the file or contents are invalid.
     """
+    parser = _json_parser.JsonParser(handler, resource_time_zone)
     with _open_path_or_factory(archive_file) as fd:
       # Default to zip if there is no file name for compatibility.
       if not isinstance(fd.name, str) or fd.name.endswith('.zip'):
@@ -268,20 +282,19 @@ class FhirPackage:
 
     collections_per_resource_type = {
         'StructureDefinition':
-            ResourceCollection[structure_definition_pb2.StructureDefinition]
-            (archive_file),
+            ResourceCollection(archive_file, struct_def_class, parser),
         'SearchParameter':
-            ResourceCollection[search_parameter_pb2.SearchParameter]
-            (archive_file),
+            ResourceCollection(archive_file, search_param_class, parser),
         'CodeSystem':
-            ResourceCollection[code_system_pb2.CodeSystem](archive_file),
+            ResourceCollection(archive_file, code_system_class, parser),
         'ValueSet':
-            ResourceCollection[value_set_pb2.ValueSet](archive_file),
+            ResourceCollection(archive_file, value_set_class, parser),
     }
 
     for file_name, raw_json in json_files.items():
-      resource_json = json_format.load_json(raw_json)
-      _add_resource_to_collection(resource_json, collections_per_resource_type,
+      json_obj = json.loads(
+          raw_json, parse_float=decimal.Decimal, parse_int=decimal.Decimal)
+      _add_resource_to_collection(json_obj, collections_per_resource_type,
                                   file_name)
 
     return FhirPackage(
@@ -294,13 +307,12 @@ class FhirPackage:
 
   # TODO: Consider deprecating package_info here entirely, since
   # there is not a clean counterpart from NPM-produced packages.
+  # TODO: Constrain version-agnostic types with structural typing.
   def __init__(self, *, package_info: Optional[profile_config_pb2.PackageInfo],
-               structure_definitions: ResourceCollection[
-                   structure_definition_pb2.StructureDefinition],
-               search_parameters: ResourceCollection[
-                   search_parameter_pb2.SearchParameter],
-               code_systems: ResourceCollection[code_system_pb2.CodeSystem],
-               value_sets: ResourceCollection[value_set_pb2.ValueSet]) -> None:
+               structure_definitions: ResourceCollection,
+               search_parameters: ResourceCollection,
+               code_systems: ResourceCollection,
+               value_sets: ResourceCollection) -> None:
     """Creates a new instance of `FhirPackage`. Callers should favor `load`."""
     self.package_info = package_info
     self.structure_definitions = structure_definitions
@@ -350,10 +362,6 @@ class FhirPackageManager:
   def add_package(self, package: FhirPackage) -> None:
     """Adds the given package to the package manager."""
     self.packages.append(package)
-
-  def add_package_at_path(self, path: str) -> None:
-    """Loads the package at `path` and adds it to the package manager."""
-    self.add_package(FhirPackage.load(path))
 
   def get_resource(self, uri: str) -> Optional[message.Message]:
     """Retrieves a protocol buffer representation of the given resource.
@@ -440,8 +448,7 @@ def _find_resource_in_bundle(
   return None
 
 
-def _open_path_or_factory(
-    path_or_factory: Union[str, Callable[[], BinaryIO]]) -> BinaryIO:
+def _open_path_or_factory(path_or_factory: PackageSource) -> BinaryIO:
   """Either opens the file at the path or calls the factory to create a file."""
   if isinstance(path_or_factory, str):
     return open(path_or_factory, 'rb')

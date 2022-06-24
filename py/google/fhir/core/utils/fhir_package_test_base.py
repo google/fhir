@@ -13,102 +13,125 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Test fhir_package functionality."""
+# TODO: Add tests that can run without version-specific protos.
 
+import abc
 import contextlib
 import io
 import json
-import os
 import tarfile
 import tempfile
-from typing import Callable, Iterable, Sequence, Tuple
+from typing import Any, Callable, Iterable, Sequence, Tuple, cast
 from unittest import mock
 import zipfile
 
 from absl import flags
+
 from google.protobuf import message
 from absl.testing import absltest
 from absl.testing import parameterized
 from proto.google.fhir.proto import annotations_pb2
 from proto.google.fhir.proto import profile_config_pb2
-from proto.google.fhir.proto.r4.core.resources import value_set_pb2
 from google.fhir.core.utils import fhir_package
 from google.fhir.core.utils import proto_utils
 
 FLAGS = flags.FLAGS
 
-_R4_DEFINITIONS_COUNT = 653
-_R4_CODESYSTEMS_COUNT = 1062
-_R4_VALUESETS_COUNT = 1316
-_R4_SEARCH_PARAMETERS_COUNT = 1385
 
-
-def _parameterized_with_package_factories(func):
+def _parameterized_with_package_sources(func):
+  """Test parameters for package sources."""
   parameters = [
       {
           'testcase_name': 'WithFilePath',
-          'package_factory': fhir_package.FhirPackage.load,
+          'package_source_fn': _package_source_direct_path,
       },
       {
           'testcase_name': 'WithFileFactory',
-          'package_factory': _package_factory_using_file_factory
+          'package_source_fn': _package_source_callable,
       },
   ]
   wrapper = parameterized.named_parameters(*parameters)
   return wrapper(func)
 
 
-def _package_factory_using_file_factory(path: str) -> fhir_package.FhirPackage:
-  return fhir_package.FhirPackage.load(lambda: open(path, 'rb'))
+PackageSourceFn = Callable[[str], fhir_package.PackageSource]
 
 
-class FhirPackageTest(parameterized.TestCase):
+def _package_source_direct_path(path: str) -> fhir_package.PackageSource:
+  return path
+
+
+def _package_source_callable(path: str) -> fhir_package.PackageSource:
+  return lambda: open(path, 'rb')
+
+
+# Metaclass so base tests can inherit both ABC and parameterized.Testcase.
+class _FhirPackageTestMeta(abc.ABCMeta, type(parameterized.TestCase)):
+  pass
+
+
+class FhirPackageTest(
+    parameterized.TestCase, abc.ABC, metaclass=_FhirPackageTestMeta):
+  """Base class for testing the FhirPackage class."""
+
+  @property
+  @abc.abstractmethod
+  def _primitive_handler(self):
+    raise NotImplementedError('Subclasses must implement _primitive_handler')
+
+  @property
+  @abc.abstractmethod
+  def _parser(self):
+    raise NotImplementedError('Subclasses must implement _parser')
+
+  @property
+  @abc.abstractmethod
+  def _valueset_cls(self):
+    raise NotImplementedError('Subclasses must implement _valueset_cls')
+
+  @abc.abstractmethod
+  def _load_package(
+      self, source: fhir_package.PackageSource) -> fhir_package.FhirPackage:
+    raise NotImplementedError('Subclasses must implement _load_package')
+
+  def empty_collection(self) -> fhir_package.ResourceCollection:
+    return fhir_package.ResourceCollection('', self._valueset_cls, self._parser)
 
   def testFhirPackageEquality_withEqualOperands_succeeds(self):
+    """Tests FHIRPackage equality."""
     lhs = fhir_package.FhirPackage(
         package_info=profile_config_pb2.PackageInfo(proto_package='Foo'),
-        structure_definitions=[],
-        search_parameters=[],
-        code_systems=[],
-        value_sets=[])
+        structure_definitions=self.empty_collection(),
+        search_parameters=self.empty_collection(),
+        code_systems=self.empty_collection(),
+        value_sets=self.empty_collection())
     rhs = fhir_package.FhirPackage(
         package_info=profile_config_pb2.PackageInfo(proto_package='Foo'),
-        structure_definitions=[],
-        search_parameters=[],
-        code_systems=[],
-        value_sets=[])
+        structure_definitions=self.empty_collection(),
+        search_parameters=self.empty_collection(),
+        code_systems=self.empty_collection(),
+        value_sets=self.empty_collection())
     self.assertEqual(lhs, rhs)
 
   def testFhirPackageEquality_withNonEqualOperands_succeeds(self):
+    """Tests FHIRPackage inequality."""
     lhs = fhir_package.FhirPackage(
         package_info=profile_config_pb2.PackageInfo(proto_package='Foo'),
-        structure_definitions=[],
-        search_parameters=[],
-        code_systems=[],
-        value_sets=[])
+        structure_definitions=self.empty_collection(),
+        search_parameters=self.empty_collection(),
+        code_systems=self.empty_collection(),
+        value_sets=self.empty_collection())
     rhs = fhir_package.FhirPackage(
         package_info=profile_config_pb2.PackageInfo(proto_package='Bar'),
-        structure_definitions=[],
-        search_parameters=[],
-        code_systems=[],
-        value_sets=[])
+        structure_definitions=self.empty_collection(),
+        search_parameters=self.empty_collection(),
+        code_systems=self.empty_collection(),
+        value_sets=self.empty_collection())
     self.assertNotEqual(lhs, rhs)
 
-  @_parameterized_with_package_factories
-  def testFhirPackageLoad_withValidFhirPackage_succeeds(
-      self, package_factory: Callable[[str], fhir_package.FhirPackage]):
-    package_filepath = os.path.join(
-        FLAGS.test_srcdir, 'com_google_fhir/spec/fhir_r4_package.zip')
-    package = package_factory(package_filepath)
-
-    self.assertEqual(package.package_info.proto_package, 'google.fhir.r4.core')
-    self.assertLen(package.structure_definitions, _R4_DEFINITIONS_COUNT)
-    self.assertLen(package.code_systems, _R4_CODESYSTEMS_COUNT)
-    self.assertLen(package.value_sets, _R4_VALUESETS_COUNT)
-    self.assertLen(package.search_parameters, _R4_SEARCH_PARAMETERS_COUNT)
-
-  @_parameterized_with_package_factories
+  @_parameterized_with_package_sources
   def testFhirPackageLoad_withValidFhirPackage_isReadable(
-      self, package_factory: Callable[[str], fhir_package.FhirPackage]):
+      self, package_source_fn: PackageSourceFn):
     """Ensure we can read resources following a load."""
     # Define a bunch of fake resources.
     structure_definition_1 = {
@@ -242,7 +265,7 @@ class FhirPackageTest(parameterized.TestCase):
           value_set_1,
           value_set_2,
       ):
-        found_resource = package.get_resource(resource['url'])
+        found_resource = cast(Any, package.get_resource(resource['url']))
         self.assertEqual(resource['url'], found_resource.url.value)
         self.assertEqual(resource['name'], found_resource.name.value)
 
@@ -264,26 +287,41 @@ class FhirPackageTest(parameterized.TestCase):
           [value_set_1['url'], value_set_2['url']])
 
     with zipfile_containing(zipfile_contents) as temp_file:
-      package = package_factory(temp_file.name)
+      package = self._load_package(package_source_fn(temp_file.name))
       check_contents(package)
 
     with npmfile_containing(npmfile_contents) as temp_file:
-      package = package_factory(temp_file.name)
+      package = self._load_package(package_source_fn(temp_file.name))
       check_contents(package)
 
   def testFhirPackageGetResource_forMissingUri_isNone(self):
     """Ensure we return None when requesting non-existent resource URIs."""
     package = fhir_package.FhirPackage(
         package_info=profile_config_pb2.PackageInfo(proto_package='Foo'),
-        structure_definitions=fhir_package.ResourceCollection(''),
-        search_parameters=fhir_package.ResourceCollection(''),
-        code_systems=fhir_package.ResourceCollection(''),
-        value_sets=fhir_package.ResourceCollection(''),
-    )
+        structure_definitions=self.empty_collection(),
+        search_parameters=self.empty_collection(),
+        code_systems=self.empty_collection(),
+        value_sets=self.empty_collection())
     self.assertIsNone(package.get_resource('some_uri'))
 
 
-class ResourceCollectionTest(absltest.TestCase):
+class ResourceCollectionTest(absltest.TestCase, abc.ABC):
+  """Base class for testing ResourceCollections."""
+
+  @property
+  @abc.abstractmethod
+  def _primitive_handler(self):
+    raise NotImplementedError('Subclasses must implement _primitive_handler')
+
+  @property
+  @abc.abstractmethod
+  def _parser(self):
+    raise NotImplementedError('Subclasses must implement _parser')
+
+  @property
+  @abc.abstractmethod
+  def _valueset_cls(self):
+    raise NotImplementedError('Subclasses must implement _valueset_cls')
 
   def testResourceCollection_addGetResource(self):
     """Ensure we can add and then get a resource."""
@@ -296,13 +334,14 @@ class ResourceCollectionTest(absltest.TestCase):
                              'status': 'draft',
                          }))]
     with zipfile_containing(zipfile_contents) as temp_file:
-      collection = fhir_package.ResourceCollection(temp_file.name)
+      collection = fhir_package.ResourceCollection(temp_file.name,
+                                                   self._valueset_cls,
+                                                   self._parser)
       collection.add_uri_at_path(uri, 'a_value_set.json', 'ValueSet')
       resource = collection.get_resource(uri)
 
       self.assertIsNotNone(resource)
-      self.assertTrue(
-          proto_utils.is_message_type(resource, value_set_pb2.ValueSet))
+      self.assertTrue(proto_utils.is_message_type(resource, self._valueset_cls))
       self.assertEqual(resource.id.value, 'example-extensional')
       self.assertEqual(resource.url.value, uri)
 
@@ -328,36 +367,37 @@ class ResourceCollectionTest(absltest.TestCase):
       resource = collection.get_resource('http://value-in-a-bundle')
 
       self.assertIsNotNone(resource)
-      self.assertTrue(
-          proto_utils.is_message_type(resource, value_set_pb2.ValueSet))
+      self.assertTrue(proto_utils.is_message_type(resource, self._valueset_cls))
       self.assertEqual(resource.id.value, 'example-extensional')
       self.assertEqual(resource.url.value, 'http://value-in-a-bundle')
 
     with zipfile_containing(file_contents) as temp_file:
-      collection = fhir_package.ResourceCollection(temp_file.name)
+      collection = fhir_package.ResourceCollection(temp_file.name,
+                                                   self._valueset_cls,
+                                                   self._parser)
       collection.add_uri_at_path('http://value-in-a-bundle', 'a_bundle.json',
                                  'Bundle')
       check_resources(collection)
 
     with npmfile_containing(file_contents) as temp_file:
-      collection = fhir_package.ResourceCollection(temp_file.name)
+      collection = fhir_package.ResourceCollection(temp_file.name,
+                                                   self._valueset_cls,
+                                                   self._parser)
       collection.add_uri_at_path('http://value-in-a-bundle',
                                  'package/a_bundle.json', 'Bundle')
       check_resources(collection)
 
   def testResourceCollection_getMissingResource(self):
     """Ensure we return None when requesing missing resources."""
-    collection = fhir_package.ResourceCollection('missing_file.zip')
+    collection = fhir_package.ResourceCollection('missing_file.zip',
+                                                 self._valueset_cls,
+                                                 self._parser)
     resource = collection.get_resource('missing-uri')
 
     self.assertIsNone(resource)
 
-  # A bug present in the Python version running tests in kokoro prevents us
-  # from using auto-spec on static methods.
   @mock.patch.object(
-      fhir_package.ResourceCollection,
-      '_parse_proto_from_file',
-      spec=fhir_package.ResourceCollection._parse_proto_from_file)
+      fhir_package.ResourceCollection, '_parse_proto_from_file', autospec=True)
   def testResourceCollection_getResourceWithUnexpectedUrl(
       self, mock_parse_proto_from_file):
     """Ensure we raise an error for bad state when retrieving resources."""
@@ -370,11 +410,13 @@ class ResourceCollectionTest(absltest.TestCase):
                              'status': 'draft',
                          }))]
     with zipfile_containing(zipfile_contents) as temp_file:
-      collection = fhir_package.ResourceCollection(temp_file.name)
+      collection = fhir_package.ResourceCollection(temp_file.name,
+                                                   self._valueset_cls,
+                                                   self._parser)
       collection.add_uri_at_path(uri, 'a_value_set.json', 'ValueSet')
 
       # The resource unexpectedly has the wrong url
-      mock_parse_proto_from_file().url.value = 'something unexpected'
+      mock_parse_proto_from_file.return_value.url.value = 'something unexpected'
       with self.assertRaises(RuntimeError):
         collection.get_resource(uri)
 
@@ -394,7 +436,9 @@ class ResourceCollectionTest(absltest.TestCase):
                              'status': 'draft',
                          }))]
     with zipfile_containing(zipfile_contents) as temp_file:
-      collection = fhir_package.ResourceCollection(temp_file.name)
+      collection = fhir_package.ResourceCollection(temp_file.name,
+                                                   self._valueset_cls,
+                                                   self._parser)
       collection.add_uri_at_path(uri, 'a_value_set.json', 'ValueSet')
       # Get the resource for the first time to cache it
       resource = collection.get_resource(uri)
@@ -406,13 +450,20 @@ class ResourceCollectionTest(absltest.TestCase):
     self.assertEqual(cached_resource, resource)
 
 
-class FhirPackageManagerTest(absltest.TestCase):
+class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
+  """"Base class for testing FhirPackageManager."""
+
+  @property
+  @abc.abstractmethod
+  def _valueset_cls(self):
+    raise NotImplementedError('Subclasses must implement _valueset_cls')
 
   def testGetResource_withAddedPackages_retrievesResource(self):
-    vs_1 = value_set_pb2.ValueSet()
+    """Test getting resources added to packages."""
+    vs_1 = self._valueset_cls()
     vs_1.url.value = 'vs1'
 
-    vs_2 = value_set_pb2.ValueSet()
+    vs_2 = self._valueset_cls()
     vs_2.url.value = 'vs2'
 
     package_1 = fhir_package.FhirPackage(
@@ -439,8 +490,7 @@ class FhirPackageManagerTest(absltest.TestCase):
 
 
 @contextlib.contextmanager
-def zipfile_containing(
-    file_contents: Sequence[Tuple[str, str]]) -> tempfile.NamedTemporaryFile:
+def zipfile_containing(file_contents: Sequence[Tuple[str, str]]):
   """Builds a temp file containing a zip file with the given contents.
 
   Args:
@@ -459,8 +509,7 @@ def zipfile_containing(
 
 
 @contextlib.contextmanager
-def npmfile_containing(
-    file_contents: Sequence[Tuple[str, str]]) -> tempfile.NamedTemporaryFile:
+def npmfile_containing(file_contents: Sequence[Tuple[str, str]]):
   """Builds a temp file containing a NPM .tar.gz file with the given contents.
 
   Args:
@@ -486,7 +535,9 @@ def mock_resource_collection_containing(
     resources: Iterable[message.Message]) -> mock.MagicMock:
   """Builds a mock for a ResourceCollection containing the given resources."""
   mock_collection = mock.MagicMock(spec=fhir_package.ResourceCollection)
-  resources = {resource.url.value: resource for resource in resources}
+  resources = {
+      cast(Any, resource).url.value: resource for resource in resources
+  }
 
   def mock_get_resource(uri: str) -> message.Message:
     return resources.get(uri)
@@ -494,7 +545,3 @@ def mock_resource_collection_containing(
   mock_collection.get_resource.side_effect = mock_get_resource
 
   return mock_collection
-
-
-if __name__ == '__main__':
-  absltest.main()

@@ -367,6 +367,38 @@ py_library(
     ],
 )
 
+py_library(
+    name = "r4_package",
+    srcs = ["r4_package.py"],
+    deps = [
+        ":primitive_handler",
+        "//py",
+        "//proto/google/fhir/proto/r4/core/resources:code_system_py_pb2",
+        "//proto/google/fhir/proto/r4/core/resources:search_parameter_py_pb2",
+        "//proto/google/fhir/proto/r4/core/resources:structure_definition_py_pb2",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
+        "//py/google/fhir/core/utils:fhir_package",
+    ],
+)
+
+py_test(
+    name = "r4_package_test",
+    srcs = ["r4_package_test.py"],
+    data = [
+        "//spec:fhir_r4_package.zip",
+    ],
+    legacy_create_init = 0,
+    deps = [
+        ":primitive_handler",
+        ":r4_package",
+        "//py",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
+        "//py/google/fhir/core/internal/json_format",
+        "//py/google/fhir/core/utils:fhir_package",
+        "//py/google/fhir/core/utils:fhir_package_test_base",
+    ],
+)
+
 py_test(
     name = "fhir_path_test",
     srcs = ["fhir_path_test.py"],
@@ -378,6 +410,7 @@ py_test(
     srcs_version = "PY3",
     deps = [
         ":fhir_path",
+        ":r4_package",
         "@com_google_protobuf//:protobuf_python",
         "//py",
         "//proto/google/fhir/proto/r4/core/resources:observation_py_pb2",
@@ -386,7 +419,6 @@ py_test(
         "//py/google/fhir/core/fhir_path:_expressions_test_base",
         "//py/google/fhir/core/fhir_path:context",
         "//py/google/fhir/core/fhir_path:expressions",
-        "//py/google/fhir/core/utils:fhir_package",
         requirement("absl-py"),
     ],
 )

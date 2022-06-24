@@ -102,11 +102,8 @@ py_library(
         "//py",
         "//proto/google/fhir/proto:annotations_py_pb2",
         "//proto/google/fhir/proto:profile_config_py_pb2",
-        "//proto/google/fhir/proto/r4/core/resources:code_system_py_pb2",
-        "//proto/google/fhir/proto/r4/core/resources:search_parameter_py_pb2",
-        "//proto/google/fhir/proto/r4/core/resources:structure_definition_py_pb2",
-        "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
-        "//py/google/fhir/r4:json_format",
+        "//py/google/fhir/core/internal:primitive_handler",
+        "//py/google/fhir/core/internal/json_format",
         "@com_google_protobuf//:protobuf_python",
     ],
 )
@@ -226,18 +223,11 @@ py_test(
     ],
 )
 
-py_test(
-    name = "fhir_package_test",
-    size = "medium",
+py_library(
+    name = "fhir_package_test_base",
     srcs = [
-        "fhir_package_test.py",
+        "fhir_package_test_base.py",
     ],
-    data = [
-        "//spec:fhir_r4_package.zip",
-    ],
-    legacy_create_init = 0,
-    python_version = "PY3",
-    srcs_version = "PY3",
     deps = [
         ":fhir_package",
         ":proto_utils",
@@ -245,7 +235,6 @@ py_test(
         "//py",
         "//proto/google/fhir/proto:annotations_py_pb2",
         "//proto/google/fhir/proto:profile_config_py_pb2",
-        "//proto/google/fhir/proto/r4/core/resources:value_set_py_pb2",
         requirement("absl-py"),
         requirement("six"),
     ],
