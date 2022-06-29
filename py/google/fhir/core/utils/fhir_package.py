@@ -23,9 +23,6 @@ import zipfile
 import logging
 
 from google.protobuf import message
-from google.protobuf import text_format
-from proto.google.fhir.proto import annotations_pb2
-from proto.google.fhir.proto import profile_config_pb2
 from google.fhir.core.internal import primitive_handler
 from google.fhir.core.internal.json_format import _json_parser
 
@@ -38,46 +35,27 @@ PackageSource = Union[str, Callable[[], BinaryIO]]
 
 
 # TODO: Consider deprecating internal "zip" format entirely.
-def _read_fhir_package_zip(
-    zip_file: BinaryIO,
-) -> Tuple[profile_config_pb2.PackageInfo, Dict[str, str]]:
+def _read_fhir_package_zip(zip_file: BinaryIO) -> Dict[str, str]:
   """Indexes the file entries in `zip_file` and returns package info.
 
   Args:
     zip_file: The file-like of a `.zip` file that should be parsed.
 
   Returns:
-    A tuple of (package info, JSON entries), detailing the package information
-    and associated `.json` files indexed by filename, respectively.
+    A dictionary of JSON entries indexed by filename.
 
   Raises:
     ValueError: In the event that the `PackgeInfo` is invalid.
   """
-  package_info: Optional[profile_config_pb2.PackageInfo] = None
   json_files: Dict[str, str] = {}
   with zipfile.ZipFile(zip_file, mode='r') as f:
     for entry_name in f.namelist():
-      if (entry_name.endswith('package_info.textproto') or
-          entry_name.endswith('package_info.prototxt')):
-        data = f.read(entry_name)
-        package_info: profile_config_pb2.PackageInfo = (
-            text_format.Parse(data, profile_config_pb2.PackageInfo()))
-        if not package_info.proto_package:
-          raise ValueError(
-              f'Missing proto_package from PackageInfo in: {zip_file.name}.')
-        if package_info.fhir_version != annotations_pb2.R4:
-          raise ValueError(
-              f'Unsupported FHIR version: {package_info.fhir_version}.')
-      elif entry_name.endswith('.json'):
+      if entry_name.endswith('.json'):
         json_files[entry_name] = f.read(entry_name).decode('utf-8')
       else:
         logging.info('Skipping .zip entry: %s.', entry_name)
 
-  if package_info is None:
-    raise ValueError('FhirPackage does not have a valid '
-                     f'`package_info.prototext`: {zipfile}.')
-
-  return (package_info, json_files)
+  return json_files
 
 
 def _read_fhir_package_npm(npm_file: BinaryIO) -> Dict[str, str]:
@@ -88,7 +66,7 @@ def _read_fhir_package_npm(npm_file: BinaryIO) -> Dict[str, str]:
       be parsed.
 
   Returns:
-    A dictionary JSON entries indexed by filename.
+    A dictionary of JSON entries indexed by filename.
   """
   json_files: Dict[str, str] = {}
   with tarfile.open(fileobj=npm_file, mode='r:gz') as f:
@@ -273,10 +251,9 @@ class FhirPackage:
     with _open_path_or_factory(archive_file) as fd:
       # Default to zip if there is no file name for compatibility.
       if not isinstance(fd.name, str) or fd.name.endswith('.zip'):
-        package_info, json_files = _read_fhir_package_zip(fd)
+        json_files = _read_fhir_package_zip(fd)
       elif fd.name.endswith('.tar.gz') or fd.name.endswith('.tgz'):
         json_files = _read_fhir_package_npm(fd)
-        package_info = None
       else:
         raise ValueError(f'Unsupported file type from {fd.name}')
 
@@ -298,23 +275,18 @@ class FhirPackage:
                                   file_name)
 
     return FhirPackage(
-        package_info=package_info,
         structure_definitions=collections_per_resource_type[
             'StructureDefinition'],
         search_parameters=collections_per_resource_type['SearchParameter'],
         code_systems=collections_per_resource_type['CodeSystem'],
         value_sets=collections_per_resource_type['ValueSet'])
 
-  # TODO: Consider deprecating package_info here entirely, since
-  # there is not a clean counterpart from NPM-produced packages.
   # TODO: Constrain version-agnostic types with structural typing.
-  def __init__(self, *, package_info: Optional[profile_config_pb2.PackageInfo],
-               structure_definitions: ResourceCollection,
+  def __init__(self, *, structure_definitions: ResourceCollection,
                search_parameters: ResourceCollection,
                code_systems: ResourceCollection,
                value_sets: ResourceCollection) -> None:
     """Creates a new instance of `FhirPackage`. Callers should favor `load`."""
-    self.package_info = package_info
     self.structure_definitions = structure_definitions
     self.search_parameters = search_parameters
     self.code_systems = code_systems
@@ -336,14 +308,6 @@ class FhirPackage:
         return resource
 
     return None
-
-  def __eq__(self, o: Any) -> bool:
-    if not isinstance(o, FhirPackage):
-      return False
-    return self.package_info.proto_package == o.package_info.proto_package
-
-  def __hash__(self) -> int:
-    return hash(self.package_info.proto_package)
 
 
 class FhirPackageManager:

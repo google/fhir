@@ -26,7 +26,6 @@
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json/json_sax_handler.h"
 #include "google/fhir/status/status.h"
-#include "proto/google/fhir/proto/profile_config.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/structure_definition.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/value_set.pb.h"
 #include "lib/zip.h"
@@ -34,8 +33,6 @@
 namespace google::fhir {
 
 namespace {
-
-using ::google::fhir::proto::PackageInfo;
 
 // Adds the resource described by `resource_json` located at `resource_path`
 // within its FHIR package .zip file to the appropriate ResourceCollection of
@@ -187,17 +184,6 @@ absl::StatusOr<std::string> GetResourceUrl(const FhirJson& parsed_json) {
 
 absl::StatusOr<std::unique_ptr<FhirPackage>> FhirPackage::Load(
     absl::string_view zip_file_path) {
-  return Load(zip_file_path, std::optional<PackageInfo>());
-}
-
-absl::StatusOr<std::unique_ptr<FhirPackage>> FhirPackage::Load(
-    absl::string_view zip_file_path, const PackageInfo& package_info) {
-  return Load(zip_file_path, std::optional<PackageInfo>(package_info));
-}
-
-absl::StatusOr<std::unique_ptr<FhirPackage>> FhirPackage::Load(
-    absl::string_view zip_file_path,
-    const absl::optional<PackageInfo> optional_package_info) {
   int zip_open_error;
   zip_t* archive =
       zip_open(std::string(zip_file_path).c_str(), ZIP_RDONLY, &zip_open_error);
@@ -210,10 +196,6 @@ absl::StatusOr<std::unique_ptr<FhirPackage>> FhirPackage::Load(
   // We can't use make_unique here because the constructor is private.
   auto fhir_package =
       std::unique_ptr<FhirPackage>(new FhirPackage(zip_file_path));
-  if (optional_package_info.has_value()) {
-    fhir_package->package_info = *optional_package_info;
-  }
-  bool package_info_found = false;
   absl::Status parse_errors;
 
   zip_file_t* entry;
@@ -243,23 +225,13 @@ absl::StatusOr<std::unique_ptr<FhirPackage>> FhirPackage::Load(
                           zip_file_path, zip_strerror(archive)));
     }
 
+    // Ignore deprecated package_info data.
     if (absl::EndsWith(entry_stat.name, "package_info.prototxt") ||
         absl::EndsWith(entry_stat.name, "package_info.textproto")) {
-      if (optional_package_info.has_value()) {
-        LOG(WARNING) << absl::StrCat(
-            "Warning: Ignoring PackageInfo in ", zip_file_path,
-            " because PackageInfo was passed to loading function.  Use the "
-            "API "
-            "with no PackageInfo to use the one from the zip.");
-      } else {
-        if (!google::protobuf::TextFormat::ParseFromString(contents,
-                                                 &fhir_package->package_info)) {
-          return absl::InvalidArgumentError(
-              absl::StrCat("Invalid PackageInfo found for ", zip_file_path));
-        }
-        package_info_found = true;
-      }
-    } else if (absl::EndsWith(entry_stat.name, ".json")) {
+      continue;
+    }
+
+    if (absl::EndsWith(entry_stat.name, ".json")) {
       absl::Status add_status =
           AddResourceToFhirPackage(contents, entry_stat.name, *fhir_package);
       if (!add_status.ok()) {
@@ -272,12 +244,6 @@ absl::StatusOr<std::unique_ptr<FhirPackage>> FhirPackage::Load(
   if (zip_close(archive) != 0) {
     return absl::InternalError(
         absl::StrCat("Failed Freeing Zip: ", zip_file_path));
-  }
-
-  if (!optional_package_info.has_value() && !package_info_found) {
-    return absl::InvalidArgumentError(absl::StrCat(
-        "FhirPackage does not have a valid package_info.prototxt: ",
-        zip_file_path));
   }
 
   if (!parse_errors.ok()) {

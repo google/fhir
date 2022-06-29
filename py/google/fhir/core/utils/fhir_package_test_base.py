@@ -30,8 +30,6 @@ from absl import flags
 from google.protobuf import message
 from absl.testing import absltest
 from absl.testing import parameterized
-from proto.google.fhir.proto import annotations_pb2
-from proto.google.fhir.proto import profile_config_pb2
 from google.fhir.core.utils import fhir_package
 from google.fhir.core.utils import proto_utils
 
@@ -96,38 +94,6 @@ class FhirPackageTest(
 
   def empty_collection(self) -> fhir_package.ResourceCollection:
     return fhir_package.ResourceCollection('', self._valueset_cls, self._parser)
-
-  def testFhirPackageEquality_withEqualOperands_succeeds(self):
-    """Tests FHIRPackage equality."""
-    lhs = fhir_package.FhirPackage(
-        package_info=profile_config_pb2.PackageInfo(proto_package='Foo'),
-        structure_definitions=self.empty_collection(),
-        search_parameters=self.empty_collection(),
-        code_systems=self.empty_collection(),
-        value_sets=self.empty_collection())
-    rhs = fhir_package.FhirPackage(
-        package_info=profile_config_pb2.PackageInfo(proto_package='Foo'),
-        structure_definitions=self.empty_collection(),
-        search_parameters=self.empty_collection(),
-        code_systems=self.empty_collection(),
-        value_sets=self.empty_collection())
-    self.assertEqual(lhs, rhs)
-
-  def testFhirPackageEquality_withNonEqualOperands_succeeds(self):
-    """Tests FHIRPackage inequality."""
-    lhs = fhir_package.FhirPackage(
-        package_info=profile_config_pb2.PackageInfo(proto_package='Foo'),
-        structure_definitions=self.empty_collection(),
-        search_parameters=self.empty_collection(),
-        code_systems=self.empty_collection(),
-        value_sets=self.empty_collection())
-    rhs = fhir_package.FhirPackage(
-        package_info=profile_config_pb2.PackageInfo(proto_package='Bar'),
-        structure_definitions=self.empty_collection(),
-        search_parameters=self.empty_collection(),
-        code_systems=self.empty_collection(),
-        value_sets=self.empty_collection())
-    self.assertNotEqual(lhs, rhs)
 
   @_parameterized_with_package_sources
   def testFhirPackageLoad_withValidFhirPackage_isReadable(
@@ -229,18 +195,12 @@ class FhirPackageTest(
     }
 
     # Create zip and npm files containing the resources and our bundle.
-    common_contents = [
+    fhir_resource_contents = [
         ('sd1.json', json.dumps(structure_definition_1)),
         ('sp1.json', json.dumps(search_parameter_1)),
         ('cs1.json', json.dumps(code_system_1)),
         ('vs1.json', json.dumps(value_set_1)),
         ('bundle.json', json.dumps(bundle)),
-    ]
-
-    package_info = profile_config_pb2.PackageInfo(
-        proto_package='Foo', fhir_version=annotations_pb2.R4)
-    zipfile_contents = common_contents + [
-        ('package_info.prototxt', repr(package_info))
     ]
 
     npm_package_info = {
@@ -249,7 +209,7 @@ class FhirPackageTest(
         'license': 'Apache',
         'canonical': 'http://example.com/fhir',
     }
-    npmfile_contents = common_contents + [
+    npmfile_contents = fhir_resource_contents + [
         ('package.json', json.dumps(npm_package_info))
     ]
 
@@ -286,7 +246,7 @@ class FhirPackageTest(
           [resource.url.value for resource in package.value_sets],
           [value_set_1['url'], value_set_2['url']])
 
-    with zipfile_containing(zipfile_contents) as temp_file:
+    with zipfile_containing(fhir_resource_contents) as temp_file:
       package = self._load_package(package_source_fn(temp_file.name))
       check_contents(package)
 
@@ -297,7 +257,6 @@ class FhirPackageTest(
   def testFhirPackageGetResource_forMissingUri_isNone(self):
     """Ensure we return None when requesting non-existent resource URIs."""
     package = fhir_package.FhirPackage(
-        package_info=profile_config_pb2.PackageInfo(proto_package='Foo'),
         structure_definitions=self.empty_collection(),
         search_parameters=self.empty_collection(),
         code_systems=self.empty_collection(),
@@ -467,14 +426,12 @@ class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
     vs_2.url.value = 'vs2'
 
     package_1 = fhir_package.FhirPackage(
-        package_info=mock.MagicMock(),
         structure_definitions=mock_resource_collection_containing([]),
         search_parameters=mock_resource_collection_containing([]),
         code_systems=mock_resource_collection_containing([]),
         value_sets=mock_resource_collection_containing([vs_1]),
     )
     package_2 = fhir_package.FhirPackage(
-        package_info=mock.MagicMock(),
         structure_definitions=mock_resource_collection_containing([]),
         search_parameters=mock_resource_collection_containing([]),
         code_systems=mock_resource_collection_containing([]),

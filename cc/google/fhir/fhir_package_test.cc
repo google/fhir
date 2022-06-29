@@ -73,25 +73,6 @@ TEST(FhirPackageTest, LoadSucceeds) {
       FhirPackage::Load("spec/fhir_r4_package.zip");
   ASSERT_TRUE(fhir_package.ok()) << fhir_package.status().message();
 
-  EXPECT_EQ((*fhir_package)->package_info.proto_package(),
-            "google.fhir.r4.core");
-  EXPECT_EQ((*fhir_package)->value_sets.size(), kR4ValuesetsCount);
-  EXPECT_EQ((*fhir_package)->code_systems.size(), kR4CodeSystemsCount);
-  EXPECT_EQ((*fhir_package)->structure_definitions.size(), kR4DefinitionsCount);
-  EXPECT_EQ((*fhir_package)->search_parameters.size(),
-            kR4SearchParametersCount);
-}
-
-TEST(FhirPackageTest, LoadWithSideloadedPackageInfoSucceeds) {
-  proto::PackageInfo package_info;
-  package_info.set_proto_package("my.custom.package");
-  package_info.set_fhir_version(proto::FhirVersion::R4);
-
-  absl::StatusOr<std::unique_ptr<FhirPackage>> fhir_package = FhirPackage::Load(
-      "spec/fhir_r4_package.zip", package_info);
-  ASSERT_TRUE(fhir_package.ok()) << fhir_package.status().message();
-
-  EXPECT_EQ((*fhir_package)->package_info.proto_package(), "my.custom.package");
   EXPECT_EQ((*fhir_package)->value_sets.size(), kR4ValuesetsCount);
   EXPECT_EQ((*fhir_package)->code_systems.size(), kR4CodeSystemsCount);
   EXPECT_EQ((*fhir_package)->structure_definitions.size(), kR4DefinitionsCount);
@@ -198,12 +179,8 @@ TEST(FhirPackageTest, LoadAndGetResourceSucceeds) {
       });
   ASSERT_TRUE(temp_name.ok()) << temp_name.status().message();
 
-  proto::PackageInfo package_info;
-  package_info.set_proto_package("my.custom.package");
-  package_info.set_fhir_version(proto::FhirVersion::R4);
-
   absl::StatusOr<std::unique_ptr<FhirPackage>> fhir_package =
-      FhirPackage::Load(*temp_name, package_info);
+      FhirPackage::Load(*temp_name);
   ASSERT_TRUE(fhir_package.ok()) << fhir_package.status().message();
 
   // Check that we can retrieve all our resources;
@@ -246,6 +223,31 @@ TEST(FhirPackageTest, LoadAndGetResourceSucceeds) {
   remove(temp_name->c_str());
 }
 
+TEST(FhirPackageTest, ResourceWithParseErrorFails) {
+  // Define a malformed resource to test parse failures.
+  const char* malformed_struct_def = R"({
+    "resourceType": "StructureDefinition",
+    "url": "http://malformed_test",
+    "name": "malformed_json_without_closing_quote,
+    "kind": "complex-type",
+    "abstract": false,
+    "type": "Extension",
+    "status": "draft"
+  })";
+
+  // Put those resources in a FhirPackage.
+  absl::StatusOr<std::string> temp_name =
+      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+          {"malformed_struct_def.json", malformed_struct_def},
+      });
+  ASSERT_TRUE(temp_name.ok()) << temp_name.status().message();
+
+  absl::StatusOr<std::unique_ptr<FhirPackage>> fhir_package =
+      FhirPackage::Load(*temp_name);
+  ASSERT_FALSE(fhir_package.ok());
+  remove(temp_name->c_str());
+}
+
 TEST(FhirPackageTest, GetResourceForMissingUriFindsNothing) {
   absl::StatusOr<std::string> temp_name =
       CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
@@ -254,12 +256,8 @@ TEST(FhirPackageTest, GetResourceForMissingUriFindsNothing) {
            "\"id\": \"a-value-set\", \"status\": \"draft\"}"}});
   ASSERT_TRUE(temp_name.ok()) << temp_name.status().message();
 
-  proto::PackageInfo package_info;
-  package_info.set_proto_package("my.custom.package");
-  package_info.set_fhir_version(proto::FhirVersion::R4);
-
   absl::StatusOr<std::unique_ptr<FhirPackage>> fhir_package =
-      FhirPackage::Load(*temp_name, package_info);
+      FhirPackage::Load(*temp_name);
   ASSERT_TRUE(fhir_package.ok()) << fhir_package.status().message();
 
   EXPECT_FALSE((*fhir_package)->GetValueSet("missing").ok());
@@ -269,6 +267,8 @@ TEST(FhirPackageTest, GetResourceForMissingUriFindsNothing) {
 TEST(FhirPackageManager, GetResourceForAddedPackagesSucceeds) {
   absl::StatusOr<std::string> temp_name =
       CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+          // The deprecated package_info is preserved in tests to ensure its
+          // presence does not break package loading.
           {"package_info.prototxt", "fhir_version: R4\nproto_package: 'Foo'"},
           {"a_value_set.json",
            "{\"resourceType\": \"ValueSet\", \"url\": "

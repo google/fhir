@@ -100,8 +100,6 @@ py_library(
     srcs_version = "PY3",
     deps = [
         "//py",
-        "//proto/google/fhir/proto:annotations_py_pb2",
-        "//proto/google/fhir/proto:profile_config_py_pb2",
         "//py/google/fhir/core/internal:primitive_handler",
         "//py/google/fhir/core/internal/json_format",
         "@com_google_protobuf//:protobuf_python",
@@ -233,8 +231,6 @@ py_library(
         ":proto_utils",
         "@com_google_protobuf//:protobuf_python",
         "//py",
-        "//proto/google/fhir/proto:annotations_py_pb2",
-        "//proto/google/fhir/proto:profile_config_py_pb2",
         requirement("absl-py"),
         requirement("six"),
     ],
