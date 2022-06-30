@@ -51,6 +51,9 @@ absl::Status ValidateFhirConstraints(const Message& message,
                                      ErrorReporter& error_reporter) {
   if (IsPrimitive(message.GetDescriptor())) {
     if (!primitive_handler->ValidatePrimitive(message, &error_reporter).ok()) {
+      // TODO: Once ValidatePrimitive correctly handles all types of
+      // invalid primitives through error_reporter, we can just return the
+      // result of ValidatePrimitive here, allowing code errors to propagate.
       return error_reporter.ReportFhirError("invalid-primitive");
     }
     return absl::OkStatus();
@@ -100,13 +103,8 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
   }
 
   if (IsReference(field->message_type())) {
-    auto status = primitive_handler->ValidateReferenceField(message, field);
-    if (status.ok()) {
-      return status;
-    } else {
-      FHIR_RETURN_IF_ERROR(
-          error_reporter.ReportFhirError(status.message(), field->json_name()));
-    }
+    return primitive_handler->ValidateReferenceField(message, field,
+                                                     error_reporter);
   }
 
   if (field->cpp_type() == ::google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {

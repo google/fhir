@@ -145,12 +145,6 @@ TEST(ResourceValidationTest, InvalidReference) {
           diagnostics { value: "invalid-reference-disallowed-type-Patient" }
           expression { value: "Observation.related[0].target" }
         }
-        issue {
-          severity { value: ERROR }
-          code { value: VALUE }
-          diagnostics { value: "invalid-primitive" }
-          expression { value: "Observation.related[0].target.patientId" }
-        }
       )pb",
       observation);
 }
@@ -175,25 +169,7 @@ TEST(ResourceValidationTest, RepeatedReferenceInvalid) {
           severity { value: ERROR }
           code { value: VALUE }
           diagnostics { value: "invalid-reference-disallowed-type-Patient" }
-          expression { value: "Encounter.account" }
-        }
-        issue {
-          severity { value: ERROR }
-          code { value: VALUE }
-          diagnostics { value: "invalid-primitive" }
-          expression { value: "Encounter.account[0].accountId" }
-        }
-        issue {
-          severity { value: ERROR }
-          code { value: VALUE }
-          diagnostics { value: "invalid-primitive" }
-          expression { value: "Encounter.account[1].patientId" }
-        }
-        issue {
-          severity { value: ERROR }
-          code { value: VALUE }
-          diagnostics { value: "invalid-primitive" }
-          expression { value: "Encounter.account[2].accountId" }
+          expression { value: "Encounter.account[1]" }
         }
       )pb",
       encounter);

@@ -85,8 +85,8 @@ class PrimitiveHandler {
   // an Organization, Practitioner, or PractitionerRole, or it must be an
   // untyped reference, like uri.
   virtual absl::Status ValidateReferenceField(
-      const ::google::protobuf::Message& parent,
-      const ::google::protobuf::FieldDescriptor* field) const = 0;
+      const ::google::protobuf::Message& parent, const ::google::protobuf::FieldDescriptor* field,
+      ErrorReporter& error_reporter) const = 0;
 
   virtual ::google::protobuf::Message* NewContainedResource() const = 0;
 
@@ -210,11 +210,14 @@ ABSL_MUST_USE_RESULT absl::Status CheckType(const ::google::protobuf::Message& m
 template <class TypedReference,
           class TypedReferenceId = REFERENCE_ID_TYPE(TypedReference)>
 absl::Status ValidateReferenceField(const Message& parent,
-                                    const FieldDescriptor* field) {
+                                    const FieldDescriptor* field,
+                                    ErrorReporter& error_reporter) {
   static const Descriptor* descriptor = TypedReference::descriptor();
   static const OneofDescriptor* oneof = descriptor->oneof_decl(0);
 
   for (int i = 0; i < PotentiallyRepeatedFieldSize(parent, field); i++) {
+    ErrorScope element_scope(&error_reporter, field->name(),
+                             IndexOrNullopt(field, i));
     const TypedReference& reference =
         GetPotentiallyRepeatedMessage<TypedReference>(parent, field, i);
     const Reflection* reflection = reference.GetReflection();
@@ -224,18 +227,19 @@ absl::Status ValidateReferenceField(const Message& parent,
     if (!reference_field) {
       if (reference.extension_size() == 0 && !reference.has_identifier() &&
           !reference.has_display()) {
-        return absl::FailedPreconditionError("empty-reference");
+        FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirError("empty-reference"));
+        continue;
       }
       // There's no reference field, but there is other data.  That's valid.
-      return absl::OkStatus();
+      continue;
     }
     if (field->options().ExtensionSize(proto::valid_reference_type) == 0) {
       // The reference field does not have restrictions, so any value is fine.
-      return absl::OkStatus();
+      continue;
     }
     if (reference.has_uri() || reference.has_fragment()) {
       // Uri and Fragment references are untyped.
-      return absl::OkStatus();
+      continue;
     }
 
     // There's no reference annotations for DSTU2, so skip the validation.
@@ -256,8 +260,8 @@ absl::Status ValidateReferenceField(const Message& parent,
         }
       }
       if (!is_allowed) {
-        return absl::FailedPreconditionError(
-            absl::StrCat("invalid-reference-disallowed-type-", reference_type));
+        FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirError(absl::StrCat(
+            "invalid-reference-disallowed-type-", reference_type)));
       }
     }
   }
@@ -301,10 +305,11 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
   typedef SimpleQuantityType SimpleQuantity;
 
   absl::Status ValidateReferenceField(
-      const Message& parent, const FieldDescriptor* field) const override {
+      const Message& parent, const FieldDescriptor* field,
+      ErrorReporter& error_reporter) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Reference>(field->message_type()));
-    return primitives_internal::ValidateReferenceField<Reference>(parent,
-                                                                  field);
+    return primitives_internal::ValidateReferenceField<Reference>(
+        parent, field, error_reporter);
   }
 
   ::google::protobuf::Message* NewContainedResource() const override {

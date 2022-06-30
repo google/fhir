@@ -331,16 +331,22 @@ class FailFastErrorHandler : public ErrorHandler {
   absl::Status HandleFhirFatal(const absl::Status& status,
                                std::string_view element_path,
                                std::string_view field_path) override {
-    return status;
+    return element_path.empty()
+               ? status
+               : absl::Status(
+                     status.code(),
+                     absl::StrCat(status.message(), " at ", element_path));
   }
 
   absl::Status HandleFhirError(std::string_view msg,
                                std::string_view element_path,
                                std::string_view field_path) override {
-    return behavior_ == FAIL_ON_ERROR_OR_FATAL
-               ? absl::FailedPreconditionError(
-                     absl::Substitute("$0 at $1", msg, element_path))
-               : absl::OkStatus();
+    if (behavior_ != FAIL_ON_ERROR_OR_FATAL) {
+      return absl::OkStatus();
+    }
+    return element_path.empty() ? absl::FailedPreconditionError(msg)
+                                : absl::FailedPreconditionError(
+                                      absl::StrCat(msg, " at ", element_path));
   }
 
   absl::Status HandleFhirWarning(std::string_view msg,

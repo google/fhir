@@ -173,16 +173,21 @@ void TestProtoValidation(const bool has_invalid = true) {
 TEST(PrimitiveHandlerTest, ValidReference) {
   Observation obs = ReadR4Proto<Observation>(
       "validation/observation_valid_reference.prototxt");
+  ErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal());
+  ErrorScope resource_scope(&reporter, "Observation");
   FHIR_ASSERT_OK(R4PrimitiveHandler::GetInstance()->ValidateReferenceField(
-      obs, obs.GetDescriptor()->FindFieldByName("specimen")));
+      obs, obs.GetDescriptor()->FindFieldByName("specimen"), reporter));
 }
 
 TEST(PrimitiveHandlerTest, InvalidReference) {
   Observation obs = ReadR4Proto<Observation>(
       "validation/observation_invalid_reference.prototxt");
-  FHIR_ASSERT_STATUS(R4PrimitiveHandler::GetInstance()->ValidateReferenceField(
-                         obs, obs.GetDescriptor()->FindFieldByName("specimen")),
-                     "invalid-reference-disallowed-type-Device");
+  ErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal());
+  ErrorScope resource_scope(&reporter, "Observation");
+  FHIR_ASSERT_STATUS(
+      R4PrimitiveHandler::GetInstance()->ValidateReferenceField(
+          obs, obs.GetDescriptor()->FindFieldByName("specimen"), reporter),
+      "invalid-reference-disallowed-type-Device at Observation.specimen");
 }
 
 TEST(PrimitiveValidationTestJson, Base64Binary) {

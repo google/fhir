@@ -9,49 +9,7 @@ issue {
     value: "invalid-reference-disallowed-type-Patient"
   }
   expression {
-    value: "Encounter.account"
-  }
-}
-issue {
-  severity {
-    value: ERROR
-  }
-  code {
-    value: VALUE
-  }
-  diagnostics {
-    value: "invalid-primitive"
-  }
-  expression {
-    value: "Encounter.account[0].accountId"
-  }
-}
-issue {
-  severity {
-    value: ERROR
-  }
-  code {
-    value: VALUE
-  }
-  diagnostics {
-    value: "invalid-primitive"
-  }
-  expression {
-    value: "Encounter.account[1].patientId"
-  }
-}
-issue {
-  severity {
-    value: ERROR
-  }
-  code {
-    value: VALUE
-  }
-  diagnostics {
-    value: "invalid-primitive"
-  }
-  expression {
-    value: "Encounter.account[2].accountId"
+    value: "Encounter.account[1]"
   }
 }
 subject {
