@@ -35,11 +35,6 @@ fhir_proto_library(
 )
 
 fhir_proto_library(
-    srcs = ["validation.proto"],
-    proto_library_prefix = "validation",
-)
-
-fhir_proto_library(
     srcs = ["fhirpath_replacement_list.proto"],
     proto_library_prefix = "fhirpath_replacement_list",
 )
