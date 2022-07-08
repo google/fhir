@@ -179,7 +179,7 @@ class ResourceCollection {
   absl::StatusOr<const T*> GetResource(absl::string_view uri) {
     const auto cached = parsed_resources_.find(std::string(uri));
     if (cached != parsed_resources_.end()) {
-      return &cached->second;
+      return cached->second.get();
     }
 
     const auto path = resource_paths_for_uris_.find(std::string(uri));
@@ -189,19 +189,22 @@ class ResourceCollection {
     }
 
     FHIR_ASSIGN_OR_RETURN(
-        const T parsed, ParseProtoFromFile(uri, zip_file_path_, path->second));
-    return CacheParsedResource(uri, parsed);
+        std::unique_ptr<const T> parsed,
+        ParseProtoFromFile(uri, zip_file_path_, path->second));
+    return CacheParsedResource(uri, std::move(parsed));
   }
 
-  const T* CacheParsedResource(absl::string_view uri, const T& resource) {
-    auto insert = parsed_resources_.insert({std::string(uri), resource});
-    return &(insert.first->second);
+  const T* CacheParsedResource(absl::string_view uri,
+                               std::unique_ptr<const T> resource) {
+    auto insert =
+        parsed_resources_.insert({std::string(uri), std::move(resource)});
+    return insert.first->second.get();
   }
 
  private:
   // Retrieves the resource JSON for `uri` from `zip_file_path` at
   // `resource_path` and parses the JSON into a protocol buffer.
-  static absl::StatusOr<const T> ParseProtoFromFile(
+  static absl::StatusOr<std::unique_ptr<const T>> ParseProtoFromFile(
       absl::string_view uri, absl::string_view zip_file_path,
       absl::string_view resource_path) {
     internal::FhirJson parsed_json;
@@ -210,12 +213,15 @@ class ResourceCollection {
 
     FHIR_ASSIGN_OR_RETURN(std::string resource_type,
                           internal::GetResourceType(parsed_json));
+    std::unique_ptr<T> resource = std::make_unique<T>();
+
     if (resource_type != T::descriptor()->name()) {
       if (resource_type == "Bundle") {
         FHIR_ASSIGN_OR_RETURN(const internal::FhirJson* bundle_json,
                               FindResourceInBundle(uri, parsed_json));
-        return google::fhir::r4::JsonFhirObjectToProto<T>(*bundle_json,
-                                                          absl::UTCTimeZone());
+        FHIR_RETURN_IF_ERROR(google::fhir::r4::MergeJsonFhirObjectIntoProto(
+            *bundle_json, resource.get(), absl::UTCTimeZone(), true));
+        return std::move(resource);
       } else {
         return absl::InvalidArgumentError(
             absl::Substitute("Type mismatch in ResourceCollection:  Collection "
@@ -223,12 +229,14 @@ class ResourceCollection {
                              T::descriptor()->name(), resource_type));
       }
     }
-    return google::fhir::r4::JsonFhirObjectToProto<T>(parsed_json,
-                                                      absl::UTCTimeZone());
+    FHIR_RETURN_IF_ERROR(google::fhir::r4::MergeJsonFhirObjectIntoProto(
+        parsed_json, resource.get(), absl::UTCTimeZone(), true));
+    return std::move(resource);
   }
 
   const std::string zip_file_path_;
-  absl::flat_hash_map<const std::string, T> parsed_resources_;
+  absl::flat_hash_map<const std::string, std::unique_ptr<const T>>
+      parsed_resources_;
   absl::flat_hash_map<const std::string, const std::string>
       resource_paths_for_uris_;
 };

@@ -314,14 +314,39 @@ TEST(FhirPackageManager, GetResourceForAddedPackagesSucceeds) {
 TEST(ResourceCollectionTest, GetResourceFromCacheSucceeds) {
   auto collection =
       ResourceCollection<google::fhir::r4::core::ValueSet>("package.zip");
-  auto vs = google::fhir::r4::core::ValueSet();
-  vs.mutable_id()->set_value("hello");
-  collection.CacheParsedResource("http://value.set/id", vs);
+  auto vs = std::make_unique<google::fhir::r4::core::ValueSet>();
+  vs->mutable_id()->set_value("hello");
+  collection.CacheParsedResource("http://value.set/id", std::move(vs));
 
   absl::StatusOr<const google::fhir::r4::core::ValueSet*> result =
       collection.GetResource("http://value.set/id");
   ASSERT_TRUE(result.ok()) << result.status().message();
   EXPECT_EQ((*result)->id().value(), "hello");
+}
+
+TEST(ResourceCollectionTest, GetResourceFromCacheHasPointerStability) {
+  auto collection =
+      ResourceCollection<google::fhir::r4::core::ValueSet>("package.zip");
+  auto vs1 = std::make_unique<google::fhir::r4::core::ValueSet>();
+  vs1->mutable_id()->set_value("hello");
+
+  auto vs2 = std::make_unique<google::fhir::r4::core::ValueSet>();
+  vs2->mutable_id()->set_value("goodbye");
+
+  collection.CacheParsedResource("http://value.set/id1", std::move(vs1));
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> result1 =
+      collection.GetResource("http://value.set/id1");
+  ASSERT_TRUE(result1.ok()) << result1.status().message();
+  EXPECT_EQ((*result1)->id().value(), "hello");
+
+  collection.CacheParsedResource("http://value.set/id2", std::move(vs2));
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> result2 =
+      collection.GetResource("http://value.set/id2");
+  ASSERT_TRUE(result2.ok()) << result2.status().message();
+  EXPECT_EQ((*result2)->id().value(), "goodbye");
+
+  // Ensure the vs1 pointer still works.
+  EXPECT_EQ((*result1)->id().value(), "hello");
 }
 
 TEST(ResourceCollectionTest, AddGetResourceSucceeds) {
