@@ -15,7 +15,10 @@
 #ifndef GOOGLE_FHIR_FHIR_PACKAGE_H_
 #define GOOGLE_FHIR_FHIR_PACKAGE_H_
 
+#include <iterator>
+#include <memory>
 #include <string>
+#include <vector>
 
 #include "absl/container/flat_hash_map.h"
 #include "absl/status/statusor.h"
