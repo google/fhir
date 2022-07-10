@@ -15,6 +15,7 @@
 package com.google.fhir.wrappers;
 
 import com.google.common.collect.ImmutableList;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.FhirTypes;
 import com.google.fhir.common.ProtoUtils;
@@ -84,6 +85,7 @@ public final class ExtensionWrapper {
   }
 
   /** Clear all extensions matching the template type from this. */
+  @CanIgnoreReturnValue
   public <T extends Message> ExtensionWrapper clearMatchingExtensions(T template) {
     if (content.isEmpty()) {
       return this;
@@ -165,11 +167,13 @@ public final class ExtensionWrapper {
     }
   }
 
+  @CanIgnoreReturnValue
   public <T extends MessageOrBuilder> ExtensionWrapper add(Extension extension) {
     content.add(extension);
     return this;
   }
 
+  @CanIgnoreReturnValue
   public <T extends MessageOrBuilder> ExtensionWrapper add(
       com.google.fhir.stu3.proto.Extension stu3Extension) {
     content.add(ProtoUtils.fieldWiseCopy(stu3Extension, Extension.newBuilder()).build());
@@ -177,6 +181,7 @@ public final class ExtensionWrapper {
   }
 
   /** Add a new message, converting it to a FHIR Extension. */
+  @CanIgnoreReturnValue
   public <T extends MessageOrBuilder> ExtensionWrapper add(T message) {
     validateFhirExtension(message);
     Extension.Builder extension =

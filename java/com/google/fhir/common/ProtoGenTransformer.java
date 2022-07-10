@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Table;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.fhir.r4.core.Canonical;
 import com.google.fhir.r4.core.CapabilityStatement;
 import com.google.fhir.r4.core.CodeSystem;
@@ -147,6 +148,7 @@ final class ProtoGenTransformer {
       return addTransformer(fieldName, builder, element -> true, transform);
     }
 
+    @CanIgnoreReturnValue
     <B extends Message.Builder> Builder addTransformer(
         String fieldName,
         B builder,
@@ -159,6 +161,7 @@ final class ProtoGenTransformer {
       return this;
     }
 
+    @CanIgnoreReturnValue
     <B extends Message.Builder> Builder addMultiFieldTransformer(
         B builder, BiConsumer<JsonObject, B> transform, String... fields) {
       multiFieldTransformers.put(

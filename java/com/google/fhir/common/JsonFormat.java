@@ -18,6 +18,7 @@ import com.google.common.base.CaseFormat;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.r4.core.Element;
@@ -646,6 +647,7 @@ public final class JsonFormat {
        * this instance which do not have explicit timezone or timezone offset information will be
        * assumed to be measured in the default timezone.
        */
+      @CanIgnoreReturnValue
       Builder withDefaultTimeZone(ZoneId defaultTimeZone) {
         this.defaultTimeZone = defaultTimeZone;
         return this;
@@ -655,6 +657,7 @@ public final class JsonFormat {
         return withProtoGenTransformer(ProtoGenTransformer.STU3_TO_R4);
       }
 
+      @CanIgnoreReturnValue
       Builder withProtoGenTransformer(ProtoGenTransformer protoGenTransformer) {
         this.protoGenTransformer = protoGenTransformer;
         return this;

@@ -80,6 +80,7 @@ java_library(
         "//proto/google/fhir/proto/stu3:resources_java_proto",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_code_gson_gson",
+        "@maven//:com_google_errorprone_error_prone_annotations",
         "@maven//:com_google_guava_guava",
     ],
 )
@@ -129,6 +130,7 @@ java_library(
         "//proto/google/fhir/proto/r4/core/resources:value_set_java_proto",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_code_gson_gson",
+        "@maven//:com_google_errorprone_error_prone_annotations",
         "@maven//:com_google_guava_guava",
     ],
 )
