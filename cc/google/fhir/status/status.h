@@ -16,18 +16,9 @@ limitations under the License.
 #ifndef GOOGLE_FHIR_STATUS_STATUS_H_
 #define GOOGLE_FHIR_STATUS_STATUS_H_
 
-#include "absl/status/status.h"
 
 namespace google {
 namespace fhir {
-
-#define REPORT_FATAL_AND_RETURN_IF_ERROR(error_reporter, expr) \
-  {                                                            \
-    auto _status = (expr);                                     \
-    if (!_status.ok()) {                                       \
-      return error_reporter.ReportFhirFatal(_status);          \
-    }                                                          \
-  }
 
 #define FHIR_RETURN_IF_ERROR(expr) \
   {                                \

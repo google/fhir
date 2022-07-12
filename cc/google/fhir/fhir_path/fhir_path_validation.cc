@@ -19,17 +19,13 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <utility>
+#include <vector>
 
 #include "google/protobuf/descriptor.h"
-#include "google/protobuf/util/message_differencer.h"
-#include "absl/memory/memory.h"
-#include "absl/status/status.h"
-#include "absl/status/statusor.h"
-#include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
-#include "absl/types/optional.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/fhir_path/fhir_path.h"
@@ -121,6 +117,27 @@ class ValidationResultsErrorHandler : public ErrorHandler {
     return absl::InternalError(
         "ValidationResultsErrorHandler should only use FHIRPath APIs.");
     return absl::OkStatus();
+  }
+
+  bool HasFatals() const override {
+    for (const ValidationResult& result : results_) {
+      if (!result.EvaluationResult().ok()) {
+        return true;
+      }
+    }
+    return false;
+  }
+  bool HasErrors() const override {
+    for (const ValidationResult& result : results_) {
+      if (result.EvaluationResult().ok() && !*result.EvaluationResult()) {
+        return true;
+      }
+    }
+    return false;
+  }
+  bool HasWarnings() const override {
+    // Legacy FHIRPath API does not support warnings.
+    return false;
   }
 
  private:

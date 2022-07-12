@@ -119,7 +119,7 @@ template <class W>
 void TestBadProto(const W& w) {
   ErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal());
   absl::Status status =
-      Stu3PrimitiveHandler::GetInstance()->ValidatePrimitive(w, &reporter);
+      Stu3PrimitiveHandler::GetInstance()->ValidatePrimitive(w, reporter);
   ASSERT_FALSE(status.ok()) << "Should have failed: " << w.DebugString();
 }
 
@@ -133,7 +133,7 @@ void TestProtoValidationsFromFile(const std::string& file_base,
     W w = PARSE_STU3_PROTO(proto_string_iter);
     ErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal());
     FHIR_ASSERT_OK(
-        Stu3PrimitiveHandler::GetInstance()->ValidatePrimitive(w, &reporter));
+        Stu3PrimitiveHandler::GetInstance()->ValidatePrimitive(w, reporter));
   }
 
   if (has_invalid) {
@@ -159,7 +159,7 @@ void TestProtoValidation(const bool has_invalid = true) {
   e->mutable_value()->mutable_boolean()->set_value(true);
   ErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal());
   FHIR_ASSERT_OK(Stu3PrimitiveHandler::GetInstance()->ValidatePrimitive(
-      only_extensions, &reporter));
+      only_extensions, reporter));
 
   // It's not ok to JUST have a no value extension.
   W just_no_value;

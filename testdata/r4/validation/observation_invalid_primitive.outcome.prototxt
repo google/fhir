@@ -1,9 +1,9 @@
 issue {
   severity {
-    value: FATAL
+    value: ERROR
   }
   code {
-    value: STRUCTURE
+    value: VALUE
   }
   diagnostics {
     value: "Invalid input for google.fhir.r4.core.Decimal"

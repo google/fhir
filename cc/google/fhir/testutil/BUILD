@@ -54,6 +54,7 @@ cc_library(
         "//cc/google/fhir:annotations",
         "//cc/google/fhir:error_reporter",
         "//cc/google/fhir:fhir_types",
+        "//cc/google/fhir:json_format_results",
         "//cc/google/fhir:primitive_handler",
         "//cc/google/fhir:proto_util",
         "//cc/google/fhir:references",

@@ -18,7 +18,9 @@
 #define GOOGLE_FHIR_PRIMITIVE_HANDLER_H_
 
 #include <memory>
+#include <optional>
 #include <string>
+#include <utility>
 
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
@@ -28,6 +30,7 @@
 #include "absl/types/optional.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/json/fhir_json.h"
+#include "google/fhir/json_format_results.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
@@ -65,25 +68,47 @@ class PrimitiveHandler {
  public:
   virtual ~PrimitiveHandler() {}
 
-  absl::Status ParseInto(const internal::FhirJson& json,
-                         const absl::TimeZone tz, ::google::protobuf::Message* target,
-                         ErrorReporter* error_reporter) const;
+  // Parses a JSON element into a target message.
+  // Variant that does not take TimeZone assumes UTC.
+  // Returns a ParseResult indicating if the parse succeeded (i.e., was
+  // lossless), or failed (i.e., was lossy).  Returns a Status if it encountered
+  // an unexpected error or the error reporter returned a status (e.g., from
+  // fast-fail error reporters).
+  // Note that a successful parse does not indicate the result is valid FHIR,
+  // just that no data was lost in converting from FHIR JSON to FhirProto.
+  // TODO: Use references for target, since it's required.
+  absl::StatusOr<ParseResult> ParseInto(const internal::FhirJson& json,
+                                        const absl::TimeZone tz,
+                                        ::google::protobuf::Message* target,
+                                        ErrorReporter& error_reporter) const;
+  absl::StatusOr<ParseResult> ParseInto(const internal::FhirJson& json,
+                                        ::google::protobuf::Message* target,
+                                        ErrorReporter& error_reporter) const;
 
-  absl::Status ParseInto(const internal::FhirJson& json,
-                         ::google::protobuf::Message* target,
-                         ErrorReporter* error_reporter) const;
-
+  // Wraps a FHIR primitive proto into a JsonPrimitive
+  // Returns a ParseResult indicating if the parse succeeded
+  // and a Status if it encountered an unexpected error or the error reporter
+  // returned a status (e.g., from fast-fail error reporters).
   absl::StatusOr<JsonPrimitive> WrapPrimitiveProto(
       const ::google::protobuf::Message& proto) const;
 
+  // Validates a primitive proto.
+  // Any issues encountered are reported to the error_reporter, but do not
+  // cause a status failure.
+  // Status failures are a result of unexpected errors, or if the error reporter
+  // returns a status (e.g., the fast-fail error reporters).
   absl::Status ValidatePrimitive(const ::google::protobuf::Message& primitive,
-                                 ErrorReporter* error_reporter) const;
+                                 ErrorReporter& error_reporter) const;
 
   // Validates that a reference field conforms to spec.
   // The types of resources that can be referenced is controlled via annotations
   // on the proto, e.g., R4 Patient.general_practitioner must be a reference to
   // an Organization, Practitioner, or PractitionerRole, or it must be an
   // untyped reference, like uri.
+  // Any issues encountered are reported to the error_reporter, but do not
+  // cause a status failure.
+  // Status failures are a result of unexpected errors, or if the error reporter
+  // returns a status (e.g., the fast-fail error reporters).
   virtual absl::Status ValidateReferenceField(
       const ::google::protobuf::Message& parent, const ::google::protobuf::FieldDescriptor* field,
       ErrorReporter& error_reporter) const = 0;
@@ -216,7 +241,7 @@ absl::Status ValidateReferenceField(const Message& parent,
   static const OneofDescriptor* oneof = descriptor->oneof_decl(0);
 
   for (int i = 0; i < PotentiallyRepeatedFieldSize(parent, field); i++) {
-    ErrorScope element_scope(&error_reporter, field->name(),
+    ErrorScope element_scope(&error_reporter, field->json_name(),
                              IndexOrNullopt(field, i));
     const TypedReference& reference =
         GetPotentiallyRepeatedMessage<TypedReference>(parent, field, i);
@@ -465,7 +490,11 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 
     std::unique_ptr<DateTime> msg = std::make_unique<DateTime>();
     ErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal());
-    FHIR_RETURN_IF_ERROR(ParseInto(*json_string, msg.get(), &reporter));
+    FHIR_ASSIGN_OR_RETURN(ParseResult result,
+                          ParseInto(*json_string, msg.get(), reporter));
+    if (result == ParseResult::kFailed) {
+      return absl::InternalError("Unexpected failure while creating DateTime");
+    }
 
     return msg.release();
   }
@@ -553,14 +582,14 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 // all FHIR versions >= STU3.
 template <typename ExtensionType, typename XhtmlType,
           typename Base64BinarySeparatorStrideType>
-absl::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForStu3Types(
+std::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForStu3Types(
     const Descriptor* target_descriptor) {
   if (IsTypeOrProfileOfCode(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
         new CodeWrapper<FHIR_DATATYPE(ExtensionType, code)>());
-  }
-  if (IsMessageType<FHIR_DATATYPE(ExtensionType, code)>(target_descriptor) ||
-      HasValueset(target_descriptor)) {
+  } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, code)>(
+                 target_descriptor) ||
+             HasValueset(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
         (new CodeWrapper<FHIR_DATATYPE(ExtensionType, code)>()));
   } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, base64_binary)>(
@@ -627,16 +656,16 @@ absl::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForStu3Types(
   } else if (IsMessageType<XhtmlType>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(new XhtmlWrapper<XhtmlType>());
   }
-  return absl::optional<std::unique_ptr<PrimitiveWrapper>>();
+  return std::optional<std::unique_ptr<PrimitiveWrapper>>();
 }
 
 // Helper function for handling primitive types that are universally present in
 // all FHIR versions >= R4.
 template <typename ExtensionType, typename XhtmlType,
           typename Base64BinarySeparatorStrideType>
-absl::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForR4Types(
+std::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForR4Types(
     const Descriptor* target_descriptor) {
-  absl::optional<std::unique_ptr<PrimitiveWrapper>> wrapper_for_stu3_types =
+  std::optional<std::unique_ptr<PrimitiveWrapper>> wrapper_for_stu3_types =
       primitives_internal::GetWrapperForStu3Types<
           ExtensionType, XhtmlType, Base64BinarySeparatorStrideType>(
           target_descriptor);
@@ -660,7 +689,7 @@ absl::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForR4Types(
     return std::unique_ptr<PrimitiveWrapper>(
         new StringTypeWrapper<FHIR_DATATYPE(ExtensionType, uuid)>());
   }
-  return absl::optional<std::unique_ptr<PrimitiveWrapper>>();
+  return std::optional<std::unique_ptr<PrimitiveWrapper>>();
 }
 
 }  // namespace primitives_internal

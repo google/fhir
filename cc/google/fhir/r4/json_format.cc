@@ -16,10 +16,15 @@
 
 #include "google/fhir/r4/json_format.h"
 
+#include <string>
+
+#include "absl/status/status.h"
 #include "absl/status/statusor.h"
+#include "absl/strings/string_view.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json_format.h"
+#include "google/fhir/json_format_results.h"
 #include "google/fhir/r4/primitive_handler.h"
 
 namespace google {
@@ -45,18 +50,32 @@ absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
                                           absl::TimeZone default_timezone,
                                           const bool validate,
                                           ErrorHandler& error_handler) {
-  ErrorReporter reporter(&error_handler);
-  return GetParser()->MergeJsonFhirStringIntoProto(
-      raw_json, target, default_timezone, validate, reporter);
+  FHIR_ASSIGN_OR_RETURN(
+      ParseResult result,
+      GetParser()->MergeJsonFhirStringIntoProto(
+          raw_json, target, default_timezone, validate, error_handler));
+
+  if (result == ParseResult::kFailed) {
+    return absl::InvalidArgumentError(
+        "Merge failure when parsing JSON.  See ErrorHandler for more info.");
+  }
+  return absl::OkStatus();
 }
 
 absl::Status MergeJsonFhirObjectIntoProto(
     const google::fhir::internal::FhirJson& json_object,
     google::protobuf::Message* target, absl::TimeZone default_timezone,
     const bool validate, ErrorHandler& error_handler) {
-  ErrorReporter reporter(&error_handler);
-  return GetParser()->MergeJsonFhirObjectIntoProto(
-      json_object, target, default_timezone, validate, reporter);
+  FHIR_ASSIGN_OR_RETURN(
+      ParseResult result,
+      GetParser()->MergeJsonFhirObjectIntoProto(
+          json_object, target, default_timezone, validate, error_handler));
+
+  if (result == ParseResult::kFailed) {
+    return absl::InvalidArgumentError(
+        "Merge failure when parsing JSON.  See ErrorHandler for more info.");
+  }
+  return absl::OkStatus();
 }
 
 absl::StatusOr<std::string> PrintFhirPrimitive(

@@ -186,8 +186,13 @@ cc_library(
         ":primitive_handler",
         "//cc/google/fhir:error_reporter",
         "//cc/google/fhir:json_format",
+        "//cc/google/fhir:json_format_results",
         "//cc/google/fhir/json:fhir_json",
+        "//cc/google/fhir/status",
+        "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
     ],
 )
 
@@ -205,6 +210,7 @@ cc_test(
     shard_count = 10,
     deps = [
         ":json_format",
+        ":operation_error_reporter",
         ":primitive_handler",
         ":profiles",
         "//cc/google/fhir:error_reporter",
@@ -213,6 +219,7 @@ cc_test(
         "//cc/google/fhir/json:fhir_json",
         "//cc/google/fhir/json:json_sax_handler",
         "//cc/google/fhir/json:test_matchers",
+        "//cc/google/fhir/status",
         "//cc/google/fhir/testutil:generator",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/google/fhir/proto:annotations_cc_proto",

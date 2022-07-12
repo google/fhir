@@ -112,8 +112,8 @@ TEST(ResourceValidationTest, InvalidPrimitiveField) {
   InvalidTest("invalid-primitive",
               R"pb(
                 issue {
-                  severity { value: FATAL }
-                  code { value: STRUCTURE }
+                  severity { value: ERROR }
+                  code { value: VALUE }
                   diagnostics {
                     value: "Invalid input for google.fhir.stu3.proto.Decimal"
                   }

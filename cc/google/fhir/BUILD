@@ -280,12 +280,13 @@ cc_library(
     deps = [
         ":annotations",
         ":codes",
+        ":error_reporter",
         ":extensions",
         ":fhir_types",
+        ":json_format_results",
         ":json_util",
         ":proto_util",
         ":util",
-        "//cc/google/fhir:error_reporter",
         "//cc/google/fhir/json:fhir_json",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
@@ -300,6 +301,12 @@ cc_library(
         "@com_google_protobuf//:protobuf",
         "@com_googlesource_code_re2//:re2",
     ],
+)
+
+cc_library(
+    name = "json_format_results",
+    hdrs = ["json_format_results.h"],
+    strip_include_prefix = "//cc/",
 )
 
 # TODO: eliminate version-specific deps
@@ -320,6 +327,7 @@ cc_library(
         ":error_reporter",
         ":extensions",
         ":fhir_types",
+        ":json_format_results",
         ":primitive_handler",
         ":primitive_wrapper",
         ":proto_util",
@@ -474,10 +482,11 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":annotations",
+        ":error_reporter",
+        ":json_format_results",
         ":primitive_wrapper",
         ":proto_util",
         ":util",
-        "//cc/google/fhir:error_reporter",
         "//cc/google/fhir/json:fhir_json",
         "//cc/google/fhir/status",
         "@com_google_absl//absl/status",
@@ -592,10 +601,12 @@ cc_library(
         "//cc/google/fhir/json:json_sax_handler",
         "//cc/google/fhir/r4:json_format",
         "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
         "//proto/google/fhir/proto/r4/core/resources:code_system_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:search_parameter_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:value_set_cc_proto",
+        "@com_github_glog_glog//:glog",
         "@com_google_absl//absl/container:flat_hash_map",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",

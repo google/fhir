@@ -16,9 +16,14 @@
 
 #include "google/fhir/stu3/json_format.h"
 
+#include <string>
+
+#include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/json_format.h"
+#include "google/fhir/json_format_results.h"
+#include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/primitive_handler.h"
 
 namespace google {
@@ -44,9 +49,15 @@ absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
                                           absl::TimeZone default_timezone,
                                           const bool validate,
                                           ErrorHandler& error_handler) {
-  ErrorReporter reporter(&error_handler);
-  return GetParser()->MergeJsonFhirStringIntoProto(
-      raw_json, target, default_timezone, validate, reporter);
+  FHIR_ASSIGN_OR_RETURN(
+      ParseResult result,
+      GetParser()->MergeJsonFhirStringIntoProto(
+          raw_json, target, default_timezone, validate, error_handler));
+  if (result == ParseResult::kFailed) {
+    return absl::InvalidArgumentError(
+        "Merge failure when parsing JSON.  See ErrorHandler for more info.");
+  }
+  return absl::OkStatus();
 }
 
 absl::StatusOr<std::string> PrintFhirPrimitive(

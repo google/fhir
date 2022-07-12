@@ -50,13 +50,7 @@ absl::Status ValidateFhirConstraints(const Message& message,
                                      const PrimitiveHandler* primitive_handler,
                                      ErrorReporter& error_reporter) {
   if (IsPrimitive(message.GetDescriptor())) {
-    if (!primitive_handler->ValidatePrimitive(message, &error_reporter).ok()) {
-      // TODO: Once ValidatePrimitive correctly handles all types of
-      // invalid primitives through error_reporter, we can just return the
-      // result of ValidatePrimitive here, allowing code errors to propagate.
-      return error_reporter.ReportFhirError("invalid-primitive");
-    }
-    return absl::OkStatus();
+    return primitive_handler->ValidatePrimitive(message, error_reporter);
   }
 
   if (IsMessageType<::google::protobuf::Any>(message)) {

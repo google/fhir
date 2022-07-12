@@ -17,6 +17,8 @@
 #ifndef GOOGLE_FHIR_OPERATION_ERROR_REPORTER_H_
 #define GOOGLE_FHIR_OPERATION_ERROR_REPORTER_H_
 
+#include <string_view>
+
 #include "absl/status/status.h"
 #include "absl/strings/string_view.h"
 #include "google/fhir/error_reporter.h"
@@ -48,47 +50,47 @@ class OutcomeErrorHandler : public ErrorHandler {
   explicit OutcomeErrorHandler(OperationOutcomeType* outcome)
       : outcome_(outcome) {}
 
-  static std::vector<typename OperationOutcomeType::Issue> GetFhirWarnings(
-      const OperationOutcomeType& operation_outcome) {
-    return GetIssuesWithSeverity(operation_outcome, IssueSeverityCode::WARNING);
+  static std::vector<typename OperationOutcomeType::Issue> GetWarnings(
+      const OperationOutcomeType& outcome) {
+    return GetIssuesWithSeverity(outcome, IssueSeverityCode::WARNING);
+  }
+  std::vector<typename OperationOutcomeType::Issue> GetWarnings() const {
+    return GetWarnings(*outcome_);
   }
 
-  static std::vector<typename OperationOutcomeType::Issue> GetFhirErrors(
-      const OperationOutcomeType& operation_outcome) {
-    return GetIssuesWithSeverity(operation_outcome, IssueSeverityCode::ERROR);
+  static std::vector<typename OperationOutcomeType::Issue> GetErrors(
+      const OperationOutcomeType& outcome) {
+    return GetIssuesWithSeverity(outcome, IssueSeverityCode::ERROR);
+  }
+  std::vector<typename OperationOutcomeType::Issue> GetErrors() const {
+    return GetErrors(*outcome_);
   }
 
-  static std::vector<typename OperationOutcomeType::Issue> GetFhirFatals(
-      const OperationOutcomeType& operation_outcome) {
-    return GetIssuesWithSeverity(operation_outcome, IssueSeverityCode::FATAL);
+  static std::vector<typename OperationOutcomeType::Issue> GetFatals(
+      const OperationOutcomeType& outcome) {
+    return GetIssuesWithSeverity(outcome, IssueSeverityCode::FATAL);
+  }
+  std::vector<typename OperationOutcomeType::Issue> GetFatals() const {
+    return GetFatals(*outcome_);
   }
 
-  static std::vector<typename OperationOutcomeType::Issue>
-  GetFhirErrorsAndFatals(const OperationOutcomeType& operation_outcome) {
-    std::vector<typename OperationOutcomeType::Issue> all =
-        GetFhirErrors(operation_outcome);
+  static std::vector<typename OperationOutcomeType::Issue> GetErrorsAndFatals(
+      const OperationOutcomeType& outcome) {
+    std::vector<typename OperationOutcomeType::Issue> all = GetErrors(outcome);
     std::vector<typename OperationOutcomeType::Issue> fatals =
-        GetFhirFatals(operation_outcome);
+        GetFatals(outcome);
     all.insert(all.end(), fatals.begin(), fatals.end());
     return all;
   }
-
-  static bool HasFhirWarnings(const OperationOutcomeType& operation_outcome) {
-    return !GetFhirWarnings(operation_outcome).empty();
+  std::vector<typename OperationOutcomeType::Issue> GetErrorsAndFatals() const {
+    return GetErrorsAndFatals(*outcome_);
   }
 
-  static bool HasFhirErrors(const OperationOutcomeType& operation_outcome) {
-    return !GetFhirErrors(operation_outcome).empty();
-  }
+  bool HasWarnings() const override { return !GetWarnings().empty(); }
 
-  static bool HasFhirFatals(const OperationOutcomeType& operation_outcome) {
-    return !GetFhirFatals(operation_outcome).empty();
-  }
+  bool HasErrors() const override { return !GetErrors().empty(); }
 
-  static bool HasFhirErrorsOrFatals(
-      const OperationOutcomeType& operation_outcome) {
-    return HasFhirErrors(operation_outcome) || HasFhirFatals(operation_outcome);
-  }
+  bool HasFatals() const override { return !GetFatals().empty(); }
 
   absl::Status HandleFhirFatal(const absl::Status& status,
                                std::string_view element_path,

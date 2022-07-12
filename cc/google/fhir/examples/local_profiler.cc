@@ -16,13 +16,14 @@
 #include <iostream>
 #include <string>
 
+#include "glog/logging.h"
 #include "absl/strings/str_cat.h"
 #include "absl/time/time.h"
 #include "google/fhir/r4/json_format.h"
 #include "google/fhir/r4/profiles.h"
+#include "google/fhir/status/status.h"
 #include "examples/profiles/demo.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
-
 
 using ::company::fhir::r4::demo::DemoPatient;
 using ::google::fhir::ConvertToProfileLenientR4;
@@ -48,8 +49,7 @@ void ConvertToProfile(const absl::TimeZone time_zone, std::string dir) {
     R raw = google::fhir::r4::JsonFhirStringToProto<Patient>(line, time_zone)
                 .value();
     P profiled;
-    auto status = ConvertToProfileLenientR4(raw, &profiled);
-    CHECK(status.ok()) << status.message();
+    FHIR_CHECK_OK(ConvertToProfileLenientR4(raw, &profiled));
     write_stream << google::fhir::r4::PrintFhirToJsonStringForAnalytics(
                         profiled)
                         .value();

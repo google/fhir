@@ -20,6 +20,7 @@
 #include <string>
 #include <vector>
 
+#include "glog/logging.h"
 #include "absl/container/flat_hash_map.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_format.h"
@@ -28,6 +29,7 @@
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/r4/json_format.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/status/statusor.h"
 #include "proto/google/fhir/proto/r4/core/resources/code_system.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/search_parameter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/structure_definition.pb.h"

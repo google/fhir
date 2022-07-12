@@ -19,10 +19,12 @@
 
 #include <string>
 
+#include "absl/status/status.h"
 #include "absl/status/statusor.h"
+#include "absl/time/time.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/json/fhir_json.h"
-#include "google/fhir/json_format.h"
+#include "google/fhir/status/status.h"
 
 namespace google {
 namespace fhir {
@@ -65,11 +67,17 @@ absl::StatusOr<R> JsonFhirObjectToProto(
 
 template <typename R>
 absl::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
-    const std::string& raw_json, const absl::TimeZone default_timezone,
-    ErrorHandler& error_handler = FailFastErrorHandler::FailOnErrorOrFatal()) {
+    const std::string& raw_json, const absl::TimeZone default_timezone) {
   R resource;
+
+  // This uses a "Fail On Fatal Only" error handler, meaning it will succeed on
+  // things that parsed but are invalid but will fail on things that cannot be
+  // parsed as FhirProto.
+  ErrorHandler& error_handler = FailFastErrorHandler::FailOnFatalOnly();
+
   FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(
       raw_json, &resource, default_timezone, false, error_handler));
+
   return resource;
 }
 

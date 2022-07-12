@@ -157,7 +157,10 @@ cc_library(
         ":primitive_handler",
         "//cc/google/fhir:error_reporter",
         "//cc/google/fhir:json_format",
+        "//cc/google/fhir:json_format_results",
         "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
+        "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
     ],
 )

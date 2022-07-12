@@ -75,6 +75,19 @@ class TestErrorHandler : public ErrorHandler {
     return absl::OkStatus();
   }
 
+  bool HasWarnings() const override {
+    // Not implemented for test reporter
+    return false;
+  }
+  bool HasErrors() const override {
+    // Not implemented for test reporter
+    return false;
+  }
+  bool HasFatals() const override {
+    // Not implemented for test reporter
+    return false;
+  }
+
   std::vector<std::string> reports_;
 
  private:

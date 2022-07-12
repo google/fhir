@@ -33,12 +33,14 @@
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
 #include "absl/strings/str_replace.h"
+#include "absl/strings/string_view.h"
 #include "absl/strings/substitute.h"
 #include "absl/time/time.h"
 #include "google/fhir/codes.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/extensions.h"
 #include "google/fhir/json/fhir_json.h"
+#include "google/fhir/json_format_results.h"
 #include "google/fhir/json_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
@@ -54,8 +56,8 @@ namespace primitives_internal {
 
 using ::absl::FailedPreconditionError;
 using ::absl::InvalidArgumentError;
-using extensions_lib::ClearExtensionsWithUrl;
-using extensions_lib::ClearTypedExtensions;
+using ::google::fhir::extensions_lib::ClearExtensionsWithUrl;
+using ::google::fhir::extensions_lib::ClearTypedExtensions;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::EnumDescriptor;
 using ::google::protobuf::EnumValueDescriptor;
@@ -86,15 +88,29 @@ const std::vector<const char*>* const kConversionOnlyExtensionUrls =
 class PrimitiveWrapper {
  public:
   virtual ~PrimitiveWrapper() {}
-  virtual absl::Status MergeInto(::google::protobuf::Message* target) const = 0;
-  virtual absl::Status Parse(const internal::FhirJson& json,
-                             const absl::TimeZone& default_time_zone,
-                             ErrorReporter& error_reporter) = 0;
+  // Merges this wrapper into a target message.
+  // Returns a ParseResult indicating if the parse succeeded, or a Status
+  // if it encountered an unexpected error or the error reporter returned a
+  // status (e.g., from fast-fail error reporters).
+  virtual absl::StatusOr<ParseResult> MergeInto(
+      ::google::protobuf::Message* target, ErrorReporter& error_reporter) const = 0;
+  // Parses a FhirJson object into this wrapper.
+  // Returns a ParseResult indicating if the parse succeeded, or a Status
+  // if it encountered an unexpected error or the error reporter returned a
+  // status (e.g., from fast-fail error reporters).
+  virtual absl::StatusOr<ParseResult> Parse(
+      const internal::FhirJson& json, const absl::TimeZone& default_time_zone,
+      ErrorReporter& error_reporter) = 0;
   virtual absl::Status Wrap(const ::google::protobuf::Message&) = 0;
   virtual bool HasElement() const = 0;
   virtual absl::StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement()
       const = 0;
 
+  // Validates the wrapped proto.
+  // Any issues encountered are reported to the error_reporter, but do not
+  // cause a status failure.
+  // Status failures are a result of unexpected errors or if the error reporter
+  // returns a status (e.g., from fast-fail error reporters).
   virtual absl::Status ValidateProto(ErrorReporter& error_reporter) const = 0;
 
   absl::StatusOr<std::string> ToValueString() const {
@@ -113,7 +129,8 @@ class PrimitiveWrapper {
 template <typename T>
 class SpecificWrapper : public PrimitiveWrapper {
  public:
-  absl::Status MergeInto(Message* target) const override {
+  absl::StatusOr<ParseResult> MergeInto(
+      Message* target, ErrorReporter& error_reporter) const override {
     if (T::descriptor()->full_name() != target->GetDescriptor()->full_name()) {
       return InvalidArgumentError(absl::StrCat(
           "Type mismatch in SpecificWrapper#MergeInto: Attempted to merge ",
@@ -121,7 +138,7 @@ class SpecificWrapper : public PrimitiveWrapper {
           target->GetDescriptor()->full_name()));
     }
     target->MergeFrom(*wrapped_);
-    return absl::OkStatus();
+    return ParseResult::kSucceeded;
   }
 
   absl::Status Wrap(const ::google::protobuf::Message& message) override {
@@ -145,17 +162,6 @@ class SpecificWrapper : public PrimitiveWrapper {
     managed_memory_ = std::move(t);
     wrapped_ = managed_memory_.get();
   }
-
-  static absl::Status ValidateString(const std::string& input) {
-    static const RE2* regex_pattern = [] {
-      const std::string value_regex_string = GetValueRegex(T::descriptor());
-      return value_regex_string.empty() ? nullptr : new RE2(value_regex_string);
-    }();
-    return regex_pattern == nullptr || RE2::FullMatch(input, *regex_pattern)
-               ? absl::OkStatus()
-               : InvalidArgumentError(absl::StrCat(
-                     "Invalid input for ", T::descriptor()->full_name()));
-  }
 };
 
 // Note that Xhtml types require a special case that sits between
@@ -168,8 +174,9 @@ class XhtmlWrapper : public SpecificWrapper<XhtmlLike> {
   bool HasElement() const override { return this->GetWrapped()->has_id(); }
 
   // Xhtml can't have extensions, it's always valid
-  absl::Status ValidateProto(ErrorReporter& error_reporter) const override
-  { return absl::OkStatus(); }
+  absl::Status ValidateProto(ErrorReporter& error_reporter) const override {
+    return absl::OkStatus();
+  }
 
   absl::StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement()
       const override {
@@ -183,24 +190,20 @@ class XhtmlWrapper : public SpecificWrapper<XhtmlLike> {
     return std::move(element);
   }
 
-  absl::Status Parse(const internal::FhirJson& json,
-                     const absl::TimeZone& default_time_zone,
-                     ErrorReporter& error_reporter) override {
-    if (json.isNull()) {
-      return InvalidArgumentError("Unexpected null xhtml");
+  absl::StatusOr<ParseResult> Parse(const internal::FhirJson& json,
+                                    const absl::TimeZone& default_time_zone,
+                                    ErrorReporter& error_reporter) override {
+    absl::StatusOr<std::string> string_value = json.asString();
+    if (!string_value.ok()) {
+      FHIR_RETURN_IF_ERROR(
+          error_reporter.ReportFhirFatal(absl::InvalidArgumentError(
+              "Unable to parse to XHTML: JSON primitive must be string.")));
+      return ParseResult::kFailed;
     }
-    if (!json.isString()) {
-      return InvalidArgumentError(
-          absl::StrCat("Cannot parse as ", XhtmlLike::descriptor()->full_name(),
-                       ": it is not a string value."));
-    }
-
-    REPORT_FATAL_AND_RETURN_IF_ERROR(
-        error_reporter, this->ValidateString(json.asString().value()));
     std::unique_ptr<XhtmlLike> wrapped = absl::make_unique<XhtmlLike>();
-    wrapped->set_value(json.asString().value());
+    wrapped->set_value(*string_value);
     this->WrapAndManage(std::move(wrapped));
-    return absl::OkStatus();
+    return ParseResult::kSucceeded;
   }
 
  protected:
@@ -217,11 +220,12 @@ class ExtensibleWrapper : public SpecificWrapper<T> {
                           HasPrimitiveHasNoValue(*this->GetWrapped()));
     const T& typed = dynamic_cast<const T&>(*this->GetWrapped());
     if (typed.extension_size() == 1 && has_no_value_extension) {
-      return FailedPreconditionError(
+      FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirError(
           absl::StrCat(T::descriptor()->full_name(),
-                       " must have either extensions or value."));
+                       " must have either extensions or value.")));
+      return absl::OkStatus();
     }
-    return ValidateTypeSpecific(has_no_value_extension, error_reporter);
+    return ValidateProtoTypeSpecific(has_no_value_extension, error_reporter);
   }
 
   absl::StatusOr<std::unique_ptr<::google::protobuf::Message>> GetElement()
@@ -270,7 +274,7 @@ class ExtensibleWrapper : public SpecificWrapper<T> {
   }
 
  protected:
-  virtual absl::Status ValidateTypeSpecific(
+  virtual absl::Status ValidateProtoTypeSpecific(
       const bool has_no_value_extension,
       ErrorReporter& error_reporter) const = 0;
 
@@ -283,28 +287,69 @@ class ExtensibleWrapper : public SpecificWrapper<T> {
   }
 };
 
+template <typename T>
+bool MatchesFhirRegexExtension(absl::string_view string_value) {
+  static const RE2* valid_regex_pattern = [] {
+    const std::string regex_string = GetValueRegex(T::descriptor());
+    return regex_string.empty() ? nullptr : new RE2(regex_string);
+  }();
+  return (valid_regex_pattern == nullptr ||
+          RE2::FullMatch(string_value, *valid_regex_pattern));
+}
+
+// Should be used when a regex failure means a primitive is unpareasble, such as
+// decimal or datetime.
+inline absl::Status ReportRegexFatal(const Descriptor* descriptor,
+                                     ErrorReporter& error_reporter) {
+  return error_reporter.ReportFhirFatal(absl::InvalidArgumentError(
+      absl::StrCat("Unparseable JSON string for ", descriptor->full_name())));
+}
+
+// Should be used when a regex failure means a primitive is unpareasble, such as
+// decimal or datetime.
+inline absl::Status ReportRegexError(const Descriptor* descriptor,
+                                     ErrorReporter& error_reporter) {
+  return error_reporter.ReportFhirError(
+      absl::StrCat("Invalid input for ", descriptor->full_name()));
+}
+
 // Template for wrappers that expect the input to be a JSON string type,
 // and don't care about the default time zone.
 template <typename T>
 class StringInputWrapper : public ExtensibleWrapper<T> {
  public:
-  absl::Status Parse(const internal::FhirJson& json,
-                     const absl::TimeZone& default_time_zone,
-                     ErrorReporter& error_reporter) override {
+  absl::StatusOr<ParseResult> Parse(const internal::FhirJson& json,
+                                    const absl::TimeZone& default_time_zone,
+                                    ErrorReporter& error_reporter) override {
     if (json.isNull()) {
-      return this->InitializeNull();
+      FHIR_RETURN_IF_ERROR(this->InitializeNull());
+      return ParseResult::kSucceeded;
     }
-    if (!json.isString()) {
-      return InvalidArgumentError(absl::StrCat("Cannot parse as ",
-                                               T::descriptor()->full_name(),
-                                               ": it is not a string value."));
+    absl::StatusOr<std::string> string_value = json.asString();
+    if (!string_value.ok()) {
+      FHIR_RETURN_IF_ERROR(
+          error_reporter.ReportFhirFatal(absl::InvalidArgumentError(
+              absl::StrCat("Unable to parse to ", T::descriptor()->full_name(),
+                           ": JSON primitive must be string."))));
+      return ParseResult::kFailed;
     }
-    return ParseString(json.asString().value(), error_reporter);
+    FHIR_ASSIGN_OR_RETURN(ParseResult result,
+                          ParseString(*string_value, error_reporter));
+    if (result == ParseResult::kFailed) {
+      return ParseResult::kFailed;
+    }
+    if (!MatchesFhirRegexExtension<T>(*string_value)) {
+      // The input string is parseable, but not valid fhir
+      // This records a fhir error, but does not early return
+      FHIR_RETURN_IF_ERROR(ReportRegexError(T::descriptor(), error_reporter));
+    }
+
+    return ParseResult::kSucceeded;
   }
 
  protected:
-  virtual absl::Status ParseString(const std::string& json_string,
-    ErrorReporter& error_reporter) = 0;
+  virtual absl::StatusOr<ParseResult> ParseString(
+      const std::string& json_string, ErrorReporter& error_reporter) = 0;
 };
 
 // Template for wrappers that represent data as a string.
@@ -315,34 +360,33 @@ class StringTypeWrapper : public StringInputWrapper<T> {
     return ToJsonStringValue(this->GetWrapped()->value());
   }
 
-  absl::Status ValidateTypeSpecific(
+  absl::Status ValidateProtoTypeSpecific(
       const bool has_no_value_extension,
       ErrorReporter& error_reporter) const override {
     if (has_no_value_extension) {
-      return this->GetWrapped()->value().empty()
-                 ? absl::OkStatus()
-                 : FailedPreconditionError(
-                       absl::StrCat(T::descriptor()->full_name(),
-                                    " has both a value, and a "
-                                    "PrimitiveHasNoValueExtension."));
+      if (!this->GetWrapped()->value().empty()) {
+        FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirError(
+            absl::StrCat(T::descriptor()->full_name(),
+                         " has both a value, and a "
+                         "PrimitiveHasNoValueExtension.")));
+      }
+      return absl::OkStatus();
     }
-    absl::Status string_validation =
-        this->ValidateString(this->GetWrapped()->value());
-    REPORT_FATAL_AND_RETURN_IF_ERROR(error_reporter, string_validation);
-    return string_validation.ok()
-               ? absl::OkStatus()
-               : FailedPreconditionError(string_validation.message());
+    if (!MatchesFhirRegexExtension<T>(this->GetWrapped()->value())) {
+      FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirError(
+          absl::StrCat("Input failed regex requirement for: ",
+                       T::descriptor()->full_name())));
+    }
+    return absl::OkStatus();
   }
 
  protected:
-  absl::Status ParseString(const std::string& json_string,
-  ErrorReporter& error_reporter) override {
-    REPORT_FATAL_AND_RETURN_IF_ERROR(error_reporter,
-                                     this->ValidateString(json_string));
+  absl::StatusOr<ParseResult> ParseString(
+      const std::string& json_string, ErrorReporter& error_reporter) override {
     std::unique_ptr<T> wrapped = absl::make_unique<T>();
     wrapped->set_value(json_string);
     this->WrapAndManage(std::move(wrapped));
-    return absl::OkStatus();
+    return ParseResult::kSucceeded;
   }
 };
 
@@ -398,52 +442,58 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
                : value;
   }
 
-  absl::Status ValidateTypeSpecific(
+  absl::Status ValidateProtoTypeSpecific(
       const bool has_no_value_extension,
       ErrorReporter& error_reporter) const override {
     const T* wrapped = this->GetWrapped();
     if (has_no_value_extension) {
       if (wrapped->value_us() != 0) {
-        return FailedPreconditionError(
+        return error_reporter.ReportFhirError(
             absl::StrCat(T::descriptor()->full_name(),
                          " has PrimitiveNoValueExtension but has a value."));
       }
       if (wrapped->precision() != T::PRECISION_UNSPECIFIED) {
-        return FailedPreconditionError(absl::StrCat(
+        return error_reporter.ReportFhirError(absl::StrCat(
             T::descriptor()->full_name(),
             " has PrimitiveNoValueExtension but has a specified precision."));
       }
       if (!wrapped->timezone().empty()) {
-        return FailedPreconditionError(absl::StrCat(
+        return error_reporter.ReportFhirError(absl::StrCat(
             T::descriptor()->full_name(),
             " has PrimitiveNoValueExtension but has a specified timezone."));
       }
     } else if (wrapped->precision() == T::PRECISION_UNSPECIFIED) {
-      return FailedPreconditionError(
+      return error_reporter.ReportFhirError(
           absl::StrCat(T::descriptor()->full_name(), " is missing precision."));
     } else if (wrapped->timezone().empty()) {
-      return FailedPreconditionError(
+      return error_reporter.ReportFhirError(
           absl::StrCat(T::descriptor()->full_name(), " is missing TimeZone."));
     }
     return absl::OkStatus();
   }
 
  protected:
-  absl::Status Parse(const internal::FhirJson& json,
-                     const absl::TimeZone& default_time_zone,
-                     ErrorReporter& error_reporter) override {
+  absl::StatusOr<ParseResult> Parse(const internal::FhirJson& json,
+                                    const absl::TimeZone& default_time_zone,
+                                    ErrorReporter& error_reporter) override {
     if (json.isNull()) {
-      return this->InitializeNull();
+      FHIR_RETURN_IF_ERROR(this->InitializeNull());
+      return ParseResult::kSucceeded;
     }
     if (!json.isString()) {
-      return InvalidArgumentError(absl::StrCat("Cannot parse as ",
-                                               T::descriptor()->full_name(),
-                                               ": it is not a string value."));
+      FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirFatal(InvalidArgumentError(
+          absl::StrCat("Cannot parse as ", T::descriptor()->full_name(),
+                       ": it is not a string value."))));
+      return ParseResult::kFailed;
     }
     const std::string json_string = json.asString().value();
 
-    REPORT_FATAL_AND_RETURN_IF_ERROR(error_reporter,
-                                     this->ValidateString(json_string));
+    // Note that for time-like types to be parseable, they must match the FHIR
+    // regex.
+    if (!MatchesFhirRegexExtension<T>(json_string)) {
+      FHIR_RETURN_IF_ERROR(ReportRegexFatal(T::descriptor(), error_reporter));
+      return ParseResult::kFailed;
+    }
 
     static const LazyRE2 fractional_seconds_regex{
         R"regex(T\d+:\d+:\d+(?:\.(\d+))?[zZ\+-])regex"};
@@ -461,7 +511,9 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
       if (absl::ParseTime(format_iter->second, json_string, &time, &err)) {
         FHIR_ASSIGN_OR_RETURN(const std::string time_zone_string,
                               ParseTimeZoneString(json_string));
-        return SetValue(time, time_zone_string, format_iter->first);
+        FHIR_RETURN_IF_ERROR(
+            SetValue(time, time_zone_string, format_iter->first));
+        return ParseResult::kSucceeded;
       }
     }
 
@@ -485,10 +537,13 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
                              &fixed_timezone_name)) {
             timezone_name = fixed_timezone_name;
           } else {
-            return InvalidArgumentError("Invalid fixed timezone format");
+            FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirFatal(
+                InvalidArgumentError("Invalid fixed timezone format")));
+            return ParseResult::kFailed;
           }
         }
-        return SetValue(time, timezone_name, format.first);
+        FHIR_RETURN_IF_ERROR(SetValue(time, timezone_name, format.first));
+        return ParseResult::kSucceeded;
       }
     }
     return InvalidArgumentError(
@@ -544,24 +599,26 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
 template <typename T>
 class IntegerTypeWrapper : public ExtensibleWrapper<T> {
  public:
-  absl::Status Parse(const internal::FhirJson& json,
-                     const absl::TimeZone& default_time_zone,
-                     ErrorReporter& error_reporter) override {
+  absl::StatusOr<ParseResult> Parse(const internal::FhirJson& json,
+                                    const absl::TimeZone& default_time_zone,
+                                    ErrorReporter& error_reporter) override {
     if (json.isNull()) {
-      return this->InitializeNull();
+      FHIR_RETURN_IF_ERROR(this->InitializeNull());
+      return ParseResult::kSucceeded;
     }
     if (!json.isInt()) {
-      return InvalidArgumentError(
+      error_reporter.ReportFhirFatal(InvalidArgumentError(
           absl::StrCat("Cannot parse as ", T::descriptor()->full_name(),
-                       json.isString() ? "  It is a quoted string." : ""));
+                       json.isString() ? "  It is a quoted string." : "")));
+      return ParseResult::kFailed;
     }
     // Before we can treat the json value as an int, we need to make sure
     // it fits into bounds of the corresponding datatype.
-    FHIR_RETURN_IF_ERROR(ValidateInteger(json.asInt().value()));
+    FHIR_RETURN_IF_ERROR(ValidateInteger(json.asInt().value(), error_reporter));
     std::unique_ptr<T> wrapped = absl::make_unique<T>();
     wrapped->set_value(json.asInt().value());
     this->WrapAndManage(std::move(wrapped));
-    return absl::OkStatus();
+    return ParseResult::kSucceeded;
   }
 
   absl::StatusOr<std::string> ToNonNullValueString() const override {
@@ -569,31 +626,29 @@ class IntegerTypeWrapper : public ExtensibleWrapper<T> {
   }
 
  protected:
-  virtual absl::Status ValidateInteger(const int64_t int_value) const {
+  virtual absl::Status ValidateInteger(const int64_t int_value,
+                                       ErrorReporter& error_reporter) const {
     if (int_value < std::numeric_limits<int32_t>::min() ||
         int_value > std::numeric_limits<int32_t>::max()) {
-      return InvalidArgumentError(absl::Substitute(
-          "Cannot parse as $0: Out of range", T::descriptor()->full_name()));
+      FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirFatal(InvalidArgumentError(
+          absl::Substitute("Cannot parse as $0: Out of range",
+                           T::descriptor()->full_name()))));
     }
     return absl::OkStatus();
   }
 
-  absl::Status ValidateTypeSpecific(
+  absl::Status ValidateProtoTypeSpecific(
       const bool has_no_value_extension,
       ErrorReporter& error_reporter) const override {
     if (has_no_value_extension) {
       if (this->GetWrapped()->value() != 0) {
-        return FailedPreconditionError(absl::StrCat(
+        return error_reporter.ReportFhirError(absl::StrCat(
             T::descriptor()->full_name(),
             " has both a value, and a PrimitiveHasNoValueExtension."));
       }
       return absl::OkStatus();
     }
-    absl::Status int_validation =
-        this->ValidateInteger(this->GetWrapped()->value());
-    return int_validation.ok()
-               ? absl::OkStatus()
-               : FailedPreconditionError(int_validation.message());
+    return this->ValidateInteger(this->GetWrapped()->value(), error_reporter);
   }
 };
 
@@ -607,11 +662,17 @@ class CodeWrapper : public StringTypeWrapper<CodeType> {
     return absl::OkStatus();
   }
 
-  absl::Status MergeInto(Message* target) const override {
+  absl::StatusOr<ParseResult> MergeInto(
+      Message* target, ErrorReporter& error_reporter) const override {
     if (IsMessageType<CodeType>(*target)) {
       target->MergeFrom(*this->GetWrapped());
     }
-    return CopyCode(*this->GetWrapped(), target);
+    absl::Status copied_status = CopyCode(*this->GetWrapped(), target);
+    if (!copied_status.ok()) {
+      FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirFatal(copied_status));
+      return ParseResult::kFailed;
+    }
+    return ParseResult::kSucceeded;
   }
 
  private:
@@ -697,29 +758,29 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
   }
 
  protected:
-  absl::Status ValidateTypeSpecific(
+  absl::Status ValidateProtoTypeSpecific(
       const bool has_no_value_extension,
       ErrorReporter& error_reporter) const override {
     if (has_no_value_extension) {
-      return this->GetWrapped()->value().empty()
-                 ? absl::OkStatus()
-                 : FailedPreconditionError(
-                       "Base64Binary has both a value, and "
-                       "a PrimitiveHasNoValueExtension.");
+      if (!this->GetWrapped()->value().empty()) {
+        FHIR_RETURN_IF_ERROR(
+            error_reporter.ReportFhirError("Base64Binary has both a value, and "
+                                           "a PrimitiveHasNoValueExtension."));
+      }
+      return absl::OkStatus();
     }
     FHIR_ASSIGN_OR_RETURN(const std::string& as_string, this->ToValueString());
-    absl::Status string_validation =
-        this->ValidateString(as_string.substr(1, as_string.length() - 2));
-
-    REPORT_FATAL_AND_RETURN_IF_ERROR(error_reporter, string_validation);
-    return string_validation.ok()
-               ? absl::OkStatus()
-               : FailedPreconditionError(string_validation.message());
+    if (!MatchesFhirRegexExtension<Base64BinaryType>(
+            as_string.substr(1, as_string.length() - 2))) {
+      FHIR_RETURN_IF_ERROR(
+          ReportRegexError(Base64BinaryType::descriptor(), error_reporter));
+    }
+    return absl::OkStatus();
   }
 
  private:
-  absl::Status ParseString(const std::string& json_string,
-  ErrorReporter& error_reporter) override {
+  absl::StatusOr<ParseResult> ParseString(
+      const std::string& json_string, ErrorReporter& error_reporter) override {
     std::unique_ptr<Base64BinaryType> wrapped =
         absl::make_unique<Base64BinaryType>();
     size_t stride = json_string.find(' ');
@@ -728,7 +789,7 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
       while (end < json_string.length() && json_string[end] == ' ') {
         end++;
       }
-      std::string separator = json_string.substr(stride, end - stride);
+      const std::string separator = json_string.substr(stride, end - stride);
       SeparatorStrideExtensionType separator_stride_extension_msg;
       separator_stride_extension_msg.mutable_separator()->set_value(separator);
       separator_stride_extension_msg.mutable_stride()->set_value(stride);
@@ -740,43 +801,48 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
 
     std::string unescaped;
     if (!absl::Base64Unescape(json_string, &unescaped)) {
-      return InvalidArgumentError("Encountered invalid base64 string.");
+      FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirFatal(
+          InvalidArgumentError("Encountered invalid base64 string.")));
+      return ParseResult::kFailed;
     }
     wrapped->set_value(unescaped);
     this->WrapAndManage(std::move(wrapped));
-    return absl::OkStatus();
+    return ParseResult::kSucceeded;
   }
 };
 
 template <typename BooleanType>
 class BooleanWrapper : public ExtensibleWrapper<BooleanType> {
  protected:
-  absl::Status ValidateTypeSpecific(
+  absl::Status ValidateProtoTypeSpecific(
       const bool has_no_value_extension,
       ErrorReporter& error_reporter) const override {
     if (has_no_value_extension && this->GetWrapped()->value()) {
-      return FailedPreconditionError(
-          "Boolean has both a value, and a PrimitiveHasNoValueExtension.");
+      FHIR_RETURN_IF_ERROR(
+          error_reporter.ReportFhirError("Boolean has both a value, and a "
+                                         "PrimitiveHasNoValueExtension."));
     }
     return absl::OkStatus();
   }
 
  private:
-  absl::Status Parse(const internal::FhirJson& json,
-                     const absl::TimeZone& default_time_zone,
-                     ErrorReporter& error_reporter) override {
+  absl::StatusOr<ParseResult> Parse(const internal::FhirJson& json,
+                                    const absl::TimeZone& default_time_zone,
+                                    ErrorReporter& error_reporter) override {
     if (json.isNull()) {
-      return this->InitializeNull();
+      FHIR_RETURN_IF_ERROR(this->InitializeNull());
+      return ParseResult::kSucceeded;
     }
     if (!json.isBool()) {
-      return InvalidArgumentError(
+      FHIR_RETURN_IF_ERROR(InvalidArgumentError(
           absl::StrCat("Cannot parse as Boolean.",
-                       json.isString() ? "  It is a quoted string." : ""));
+                       json.isString() ? "  It is a quoted string." : "")));
+      return ParseResult::kFailed;
     }
     std::unique_ptr<BooleanType> wrapped = absl::make_unique<BooleanType>();
     wrapped->set_value(json.asBool().value());
     this->WrapAndManage(std::move(wrapped));
-    return absl::OkStatus();
+    return ParseResult::kSucceeded;
   }
 
   absl::StatusOr<std::string> ToNonNullValueString() const override {
@@ -793,75 +859,75 @@ class BooleanWrapper : public ExtensibleWrapper<BooleanType> {
 // We do not do this for integral types (e.g., 287, -5) because there is no
 // risk of loss of precision.
 template <typename DecimalType>
-class DecimalWrapper : public StringInputWrapper<DecimalType> {
+class DecimalWrapper : public ExtensibleWrapper<DecimalType> {
  public:
   absl::StatusOr<std::string> ToNonNullValueString() const override {
     return absl::StrCat(this->GetWrapped()->value());
   }
 
  protected:
-  absl::Status ValidateTypeSpecific(
+  absl::Status ValidateProtoTypeSpecific(
       const bool has_no_value_extension,
       ErrorReporter& error_reporter) const override {
     if (has_no_value_extension) {
-      return this->GetWrapped()->value().empty()
-                 ? absl::OkStatus()
-                 : FailedPreconditionError(
-                       "Decimal has both a value, and a "
-                       "PrimitiveHasNoValueExtension.");
+      if (!this->GetWrapped()->value().empty()) {
+        FHIR_RETURN_IF_ERROR(
+            error_reporter.ReportFhirError("Decimal has both a value, and a "
+                                           "PrimitiveHasNoValueExtension."));
+      }
+      return absl::OkStatus();
     }
-    absl::Status string_validation =
-        this->ValidateString(this->GetWrapped()->value());
-
-    REPORT_FATAL_AND_RETURN_IF_ERROR(error_reporter, string_validation);
-    return string_validation.ok()
-               ? absl::OkStatus()
-               : FailedPreconditionError(string_validation.message());
+    if (!MatchesFhirRegexExtension<DecimalType>(this->GetWrapped()->value())) {
+      FHIR_RETURN_IF_ERROR(
+          ReportRegexError(DecimalType::descriptor(), error_reporter));
+    }
+    return absl::OkStatus();
   }
 
  private:
-  absl::Status Parse(const internal::FhirJson& json,
-                     const absl::TimeZone& default_time_zone,
-                     ErrorReporter& error_reporter) override {
+  absl::StatusOr<ParseResult> Parse(const internal::FhirJson& json,
+                                    const absl::TimeZone& default_time_zone,
+                                    ErrorReporter& error_reporter) override {
     if (json.isNull()) {
-      return this->InitializeNull();
+      FHIR_RETURN_IF_ERROR(this->InitializeNull());
+      return ParseResult::kSucceeded;
     }
     if (json.isString()) {
-      return ParseString(json.asString().value(), error_reporter);
+      FHIR_ASSIGN_OR_RETURN(const std::string& json_string, json.asString());
+      if (!MatchesFhirRegexExtension<DecimalType>(json_string)) {
+        FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirFatal(
+            InvalidArgumentError("Cannot parse Decimal: fails FHIR regex.")));
+        return ParseResult::kFailed;
+      }
+      // TODO: range check
+      std::unique_ptr<DecimalType> wrapped = absl::make_unique<DecimalType>();
+      wrapped->set_value(json_string);
+      this->WrapAndManage(std::move(wrapped));
+      return ParseResult::kSucceeded;
     }
     if (json.isInt()) {
       std::unique_ptr<DecimalType> wrapped = absl::make_unique<DecimalType>();
       wrapped->set_value(absl::StrCat(json.asInt().value()));
       this->WrapAndManage(std::move(wrapped));
-      return absl::OkStatus();
+      return ParseResult::kSucceeded;
     }
     return InvalidArgumentError(
         "Cannot parse as Decimal: must be a string, integer, or null.  "
         "Numeric types containing decimal points should "
         "have been escaped prior to parsing by JsonFormat.");
   }
-
-  absl::Status ParseString(const std::string& json_string,
-                              ErrorReporter& error_reporter) override {
-    REPORT_FATAL_AND_RETURN_IF_ERROR(error_reporter,
-                                     this->ValidateString(json_string));
-    // TODO: range check
-    std::unique_ptr<DecimalType> wrapped = absl::make_unique<DecimalType>();
-    wrapped->set_value(json_string);
-    this->WrapAndManage(std::move(wrapped));
-    return absl::OkStatus();
-  }
 };
 
 template <typename PositiveIntType>
 class PositiveIntWrapper : public IntegerTypeWrapper<PositiveIntType> {
  protected:
-  absl::Status ValidateInteger(const int64_t int_value) const {
+  absl::Status ValidateInteger(const int64_t int_value,
+                               ErrorReporter& error_reporter) const {
     if (int_value <= 0 || int_value > std::numeric_limits<int32_t>::max()) {
-      return InvalidArgumentError(
+      FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirError(
           absl::Substitute("Cannot parse as $0: must be in range [$1..$2].",
                            PositiveIntType::descriptor()->full_name(), 1,
-                           std::numeric_limits<int32_t>::max()));
+                           std::numeric_limits<int32_t>::max())));
     }
     return absl::OkStatus();
   }
@@ -894,28 +960,28 @@ class TimeWrapper : public StringInputWrapper<TimeLike> {
   }
 
  protected:
-  absl::Status ValidateTypeSpecific(
+  absl::Status ValidateProtoTypeSpecific(
       const bool has_no_value_extension,
       ErrorReporter& error_reporter) const override {
     const TimeLike* wrapped = this->GetWrapped();
     if (has_no_value_extension) {
       if (wrapped->value_us() != 0) {
-        return FailedPreconditionError(
+        return error_reporter.ReportFhirError(
             "Time has PrimitiveNoValueExtension but has a value.");
       }
       if (wrapped->precision() !=
           TimeLike::Precision::Time_Precision_PRECISION_UNSPECIFIED) {
-        return FailedPreconditionError(
+        return error_reporter.ReportFhirError(
             "Time has PrimitiveNoValueExtension but has a specified "
             "precision.");
       }
       return absl::OkStatus();
     } else if (wrapped->precision() ==
                TimeLike::Precision::Time_Precision_PRECISION_UNSPECIFIED) {
-      return FailedPreconditionError("Time is missing precision.");
+      return error_reporter.ReportFhirError("Time is missing precision.");
     }
     if (wrapped->value_us() >= DAY_IN_US) {
-      return FailedPreconditionError(
+      return error_reporter.ReportFhirError(
           "Time has value out of range: must be less than a day in "
           "microseconds.");
     }
@@ -923,8 +989,8 @@ class TimeWrapper : public StringInputWrapper<TimeLike> {
   }
 
  private:
-  absl::Status ParseString(const std::string& json_string,
-                              ErrorReporter& error_reporter) override {
+  absl::StatusOr<ParseResult> ParseString(
+      const std::string& json_string, ErrorReporter& error_reporter) override {
     static LazyRE2 PATTERN{
         "([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])(?:\\.([0-9]+))?"};
     int hours;
@@ -933,8 +999,10 @@ class TimeWrapper : public StringInputWrapper<TimeLike> {
     std::string fractional_seconds;
     if (!RE2::FullMatch(json_string, *PATTERN, &hours, &minutes, &seconds,
                         &fractional_seconds)) {
-      return InvalidArgumentError(absl::StrCat(
-          "Cannot parse as ", TimeLike::descriptor()->full_name()));
+      FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirFatal(
+          absl::InvalidArgumentError(absl::StrCat(
+              "Cannot parse as ", TimeLike::descriptor()->full_name()))));
+      return ParseResult::kFailed;
     }
     const int fractional_seconds_length = fractional_seconds.length();
     const uint64_t base_value_us =
@@ -956,16 +1024,17 @@ class TimeWrapper : public StringInputWrapper<TimeLike> {
       wrapped->set_value_us(base_value_us);
     }
     this->WrapAndManage(std::move(wrapped));
-    return absl::OkStatus();
+    return ParseResult::kSucceeded;
   }
 };
 
 template <typename UnsignedIntType>
 class UnsignedIntWrapper : public IntegerTypeWrapper<UnsignedIntType> {
  protected:
-  absl::Status ValidateInteger(const int64_t int_value) const {
+  absl::Status ValidateInteger(const int64_t int_value,
+                               ErrorReporter& error_reporter) const {
     if (int_value < 0 || int_value > std::numeric_limits<int32_t>::max()) {
-      return InvalidArgumentError(
+      return error_reporter.ReportFhirError(
           absl::Substitute("Cannot parse as $0: must be in range [$1..$2].",
                            UnsignedIntType::descriptor()->full_name(), 0,
                            std::numeric_limits<int32_t>::max()));

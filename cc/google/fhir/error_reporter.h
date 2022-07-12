@@ -19,6 +19,7 @@
 
 #include <optional>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -171,6 +172,16 @@ class ErrorHandler {
   virtual absl::Status HandleFhirPathWarning(std::string_view expression,
                                              std::string_view element_path,
                                              std::string_view field_path) = 0;
+
+  // Returns true if any issues have been reported at WARNING level.
+  virtual bool HasWarnings() const = 0;
+  // Returns true if any issues have been reported at ERROR level.
+  virtual bool HasErrors() const = 0;
+  // Returns true if any issues have been reported at FATAL level.
+  virtual bool HasFatals() const = 0;
+
+  // Returns true if any issues have been reported at FATAL or ERROR level.
+  bool HasErrorsOrFatals() const { return HasErrors() || HasFatals(); }
 };
 
 // ErrorReporter object for invoking an ErrorHandler with context scope.
@@ -328,6 +339,12 @@ class FailFastErrorHandler : public ErrorHandler {
   // convenience.
   static FailFastErrorHandler& FailOnFatalOnly();
 
+  // FailFastErrorHandlers handle errors via return status rather than
+  // aggregating.
+  bool HasWarnings() const override { return false; }
+  bool HasErrors() const override { return false; }
+  bool HasFatals() const override { return false; }
+
   absl::Status HandleFhirFatal(const absl::Status& status,
                                std::string_view element_path,
                                std::string_view field_path) override {
@@ -344,8 +361,8 @@ class FailFastErrorHandler : public ErrorHandler {
     if (behavior_ != FAIL_ON_ERROR_OR_FATAL) {
       return absl::OkStatus();
     }
-    return element_path.empty() ? absl::FailedPreconditionError(msg)
-                                : absl::FailedPreconditionError(
+    return element_path.empty() ? absl::InvalidArgumentError(msg)
+                                : absl::InvalidArgumentError(
                                       absl::StrCat(msg, " at ", element_path));
   }
 
@@ -369,7 +386,7 @@ class FailFastErrorHandler : public ErrorHandler {
                                    std::string_view element_path,
                                    std::string_view field_path) override {
     return behavior_ == FAIL_ON_ERROR_OR_FATAL
-               ? absl::FailedPreconditionError(absl::Substitute(
+               ? absl::InvalidArgumentError(absl::Substitute(
                      "Failed expression `$0` at $1", expression, element_path))
                : absl::OkStatus();
   }

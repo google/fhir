@@ -24,6 +24,7 @@
 #include "absl/status/status.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/fhir_types.h"
+#include "google/fhir/json_format_results.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/references.h"
 #include "google/fhir/util.h"
@@ -362,8 +363,17 @@ absl::Status FhirGenerator::FillPrimitive(
   if (value) {
     ErrorReporter reporter =
         ErrorReporter(&FailFastErrorHandler::FailOnErrorOrFatal());
-    FHIR_RETURN_IF_ERROR(
-        primitive_handler_->ParseInto(*value, fhir_primitive, &reporter));
+    FHIR_ASSIGN_OR_RETURN(
+        ParseResult result,
+        primitive_handler_->ParseInto(*value, fhir_primitive, reporter));
+
+    // This should be impossible, since anything that causes succeeded to
+    // be false should have been reported as fatal, and short-circuited due to
+    // the FailOnErrorOrFatal error handler.
+    if (result == ParseResult::kFailed) {
+      return absl::InternalError(
+          "Unexpected merge failure in JsonFhirStringToProtoWithoutValidating");
+    }
   }
   return absl::OkStatus();
 }
@@ -404,8 +414,19 @@ absl::Status FhirGenerator::FillReference(
 
     ErrorReporter reporter =
         ErrorReporter(&FailFastErrorHandler::FailOnErrorOrFatal());
-    FHIR_RETURN_IF_ERROR(
-        primitive_handler_->ParseInto(*fhir_json, uri_message, &reporter));
+    FHIR_ASSIGN_OR_RETURN(
+        ParseResult result,
+        primitive_handler_->ParseInto(*fhir_json, uri_message, reporter));
+
+    // This should be impossible, since anything that causes succeeded to
+    // be false should have been reported as fatal, and short-circuited due to
+    // the FailOnErrorOrFatal error handler.
+    // TODO: Remove this branch once we've deprecated
+    // FastFailErrorHandlers.
+    if (result == ParseResult::kFailed) {
+      return absl::InternalError(
+          "Unexpected merge failure in JsonFhirStringToProtoWithoutValidating");
+    }
     return SplitIfRelativeReference(fhir_reference);
   }
 }

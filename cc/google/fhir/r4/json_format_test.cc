@@ -27,13 +27,16 @@
 #include "gtest/gtest.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/substitute.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json/json_sax_handler.h"
 #include "google/fhir/json/test_matchers.h"
 #include "google/fhir/proto_util.h"
+#include "google/fhir/r4/operation_error_reporter.h"
 #include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/r4/profiles.h"
+#include "google/fhir/status/status.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/generator.h"
 #include "google/fhir/testutil/proto_matchers.h"
@@ -200,7 +203,9 @@ namespace {
 // threads to test concurrency.
 
 using namespace ::google::fhir::r4::core;  // NOLINT
+using ::google::fhir::r4::OperationOutcomeErrorHandler;
 using ::google::fhir::testutil::EqualsProto;
+using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
 using internal::JsonEq;
 using ::testing::Eq;
 
@@ -1764,6 +1769,138 @@ TEST(JsonFormatR4Test, NdjsonLocation) {
   TestPairWithFilePaths<Location>(
       "testdata/jsonformat/location_ndjson.prototxt",
       "testdata/jsonformat/location_ndjson.json");
+}
+
+void AddFatal(OperationOutcome& outcome, absl::string_view diagnostics,
+              absl::string_view field) {
+  google::protobuf::TextFormat::ParseFromString(
+      absl::Substitute(R"pb(
+                         severity { value: FATAL }
+                         code { value: STRUCTURE }
+                         diagnostics { value: "$0" }
+                         expression { value: "$1" }
+                       )pb",
+                       diagnostics, field),
+      outcome.add_issue());
+}
+
+void AddError(OperationOutcome& outcome, absl::string_view diagnostics,
+              absl::string_view field) {
+  google::protobuf::TextFormat::ParseFromString(
+      absl::Substitute(R"pb(
+                         severity { value: ERROR }
+                         code { value: VALUE }
+                         diagnostics { value: "$0" }
+                         expression { value: "$1" }
+                       )pb",
+                       diagnostics, field),
+      outcome.add_issue());
+}
+
+TEST(JsonFormatR4Test, ParserErrorHandlerAggregatesErrorsAndFatalsParseFails) {
+  std::string raw_json = R"json(
+  {
+  "resourceType": "Observation",
+  "id": "blood-glucose-abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",
+  "status": "finol",
+  "category": [
+    {"text": "Laboratory"},
+    {"text": "with bad field", "squibalop": "schpat"}
+  ],
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Amy Shaw"
+  },
+  "effectiveDateTime": "2005-07-0501",
+  "referenceRange": [
+    {
+      "appliesTo": [
+        {
+          "coding": [
+            {
+              "system": " ",
+              "code": "normal",
+              "display": "Normal Range"
+            }
+          ],
+          "text": "Normal Range"
+        }
+      ]
+    }
+  ]})json";
+
+  OperationOutcome outcome;
+  OperationOutcomeErrorHandler handler(&outcome);
+  Observation resource;
+  absl::Status merge_status = ::google::fhir::r4::MergeJsonFhirStringIntoProto(
+      raw_json, &resource, absl::LocalTimeZone(), true, handler);
+
+  OperationOutcome expected_outcome;
+
+  AddFatal(expected_outcome, "No field `squibalop` in CodeableConcept",
+           "Observation.category[1]");
+  AddFatal(expected_outcome,
+           "Unparseable JSON string for google.fhir.r4.core.DateTime",
+           "Observation.dateTime");
+  AddFatal(expected_outcome,
+           "Failed to convert `finol` to "
+           "google.fhir.r4.core.ObservationStatusCode.Value: No matching enum "
+           "found.",
+           "Observation.status");
+  AddError(expected_outcome, "Invalid input for google.fhir.r4.core.Id",
+           "Observation.id");
+  AddError(expected_outcome,
+           "Input failed regex requirement for: google.fhir.r4.core.Id",
+           "Observation.id");
+  AddError(expected_outcome, "Invalid input for google.fhir.r4.core.Uri",
+           "Observation.referenceRange[0].appliesTo[0].coding[0].system");
+  AddError(expected_outcome,
+           "Input failed regex requirement for: google.fhir.r4.core.Uri",
+           "Observation.referenceRange[0].appliesTo[0].coding[0].system");
+  AddError(expected_outcome, "missing-required-field", "Observation.code");
+  AddError(expected_outcome, "missing-required-field", "Observation.status");
+  AddError(expected_outcome, "empty-oneof", "Observation.effective");
+
+  FHIR_ASSERT_STATUS(
+      merge_status,
+      "Merge failure when parsing JSON.  See ErrorHandler for more info.");
+  EXPECT_THAT(outcome, EqualsProtoIgnoringReordering(expected_outcome));
+}
+
+TEST(JsonFormatR4Test,
+     ParserErrorHandlerAggregatesErrorsAndFatalsParseSucceeds) {
+  std::string raw_json = R"json(
+  {
+    "resourceType": "Observation",
+    "id":
+    "blood-glucose-abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",
+    "status": "final",
+    "subject": {
+      "reference": "Patient/example",
+      "display": "Amy Shaw"
+    },
+    "effectiveDateTime": "2005-07-05"
+  })json";
+
+  OperationOutcome outcome;
+  OperationOutcomeErrorHandler handler(&outcome);
+  Observation resource;
+  absl::Status merge_status = ::google::fhir::r4::MergeJsonFhirStringIntoProto(
+      raw_json, &resource, absl::LocalTimeZone(), true, handler);
+
+  OperationOutcome expected_outcome;
+
+  AddError(expected_outcome, "Invalid input for google.fhir.r4.core.Id",
+           "Observation.id");
+  AddError(expected_outcome,
+           "Input failed regex requirement for: google.fhir.r4.core.Id",
+           "Observation.id");
+  AddError(expected_outcome, "missing-required-field", "Observation.code");
+
+  // Merge succeeds despite data issues.
+  FHIR_ASSERT_OK(merge_status);
+
+  EXPECT_THAT(outcome, EqualsProtoIgnoringReordering(expected_outcome));
 }
 
 }  // namespace
