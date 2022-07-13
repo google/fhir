@@ -85,8 +85,6 @@ absl::Status ValidateFhirConstraints(const Message& message,
 absl::Status CheckField(const Message& message, const FieldDescriptor* field,
                         const PrimitiveHandler* primitive_handler,
                         ErrorReporter& error_reporter) {
-  const Reflection* reflection = message.GetReflection();
-
   if (field->options().HasExtension(validation_requirement) &&
       field->options().GetExtension(validation_requirement) ==
           ::google::fhir::proto::REQUIRED_BY_FHIR) {
@@ -102,18 +100,11 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
   }
 
   if (field->cpp_type() == ::google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
-    if (field->is_repeated()) {
-      for (int i = 0; i < reflection->FieldSize(message, field); i++) {
-        ErrorScope field_scope(&error_reporter, field->json_name(), i);
-        FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(
-            reflection->GetRepeatedMessage(message, field, i),
-            primitive_handler, error_reporter));
-      }
-    } else if (reflection->HasField(message, field)) {
-      ErrorScope field_scope(&error_reporter, field->json_name());
-      FHIR_RETURN_IF_ERROR(
-          ValidateFhirConstraints(reflection->GetMessage(message, field),
-                                  primitive_handler, error_reporter));
+    for (int i = 0; i < PotentiallyRepeatedFieldSize(message, field); i++) {
+      ErrorScope field_scope(&error_reporter, field, i);
+      FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(
+          GetPotentiallyRepeatedMessage(message, field, i), primitive_handler,
+          error_reporter));
     }
   }
 

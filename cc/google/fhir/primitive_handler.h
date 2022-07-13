@@ -241,8 +241,7 @@ absl::Status ValidateReferenceField(const Message& parent,
   static const OneofDescriptor* oneof = descriptor->oneof_decl(0);
 
   for (int i = 0; i < PotentiallyRepeatedFieldSize(parent, field); i++) {
-    ErrorScope element_scope(&error_reporter, field->json_name(),
-                             IndexOrNullopt(field, i));
+    ErrorScope element_scope(&error_reporter, field, i);
     const TypedReference& reference =
         GetPotentiallyRepeatedMessage<TypedReference>(parent, field, i);
     const Reflection* reflection = reference.GetReflection();

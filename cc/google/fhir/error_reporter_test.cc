@@ -24,6 +24,7 @@
 #include "absl/status/status.h"
 #include "absl/strings/string_view.h"
 #include "google/fhir/status/status.h"
+#include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
 
 namespace google::fhir {
 
@@ -181,6 +182,33 @@ TEST(ErrorReporterTest, ReportWithScopeApisApplyScopeCorrectly) {
                                    "msg-4@bar.exists():fatal:Foo.s3[0]:Foo.s3",
                                    "@bar.exists():error:Foo.s4:Foo.s4",
                                    "@bar.exists():warning:Foo.s5:Foo.s5"));
+}
+
+TEST(ErrorReporterTest, ScopesCreatedThroughFieldsSucceed) {
+  TestErrorHandler handler;
+  ErrorReporter reporter(&handler);
+
+  auto patient_descriptor = r4::core::Patient::descriptor();
+
+  {
+    ErrorScope foo_scope(&reporter, "Patient");
+    {
+      auto contact_field = patient_descriptor->FindFieldByName("contact");
+      // Contact is repeated - 2 is respected
+      ErrorScope contact_scope(&reporter, contact_field, 2);
+      {
+        auto name_field =
+            r4::core::Patient::Contact::descriptor()->FindFieldByName("name");
+        // Name is not repeated on contact - index should be ignored
+        ErrorScope name_scope(&reporter, name_field, 5);
+        FHIR_ASSERT_OK(reporter.ReportFhirError("msg"));
+      }
+    }
+  }
+
+  EXPECT_THAT(handler.reports_,
+              testing::ElementsAre(
+                  "msg:error:Patient.contact[2].name:Patient.contact.name"));
 }
 
 }  // namespace

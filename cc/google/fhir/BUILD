@@ -535,6 +535,7 @@ cc_test(
     deps = [
         ":error_reporter",
         "//cc/google/fhir/status",
+        "//proto/google/fhir/proto/r4/core/resources:patient_cc_proto",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",

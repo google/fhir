@@ -290,11 +290,22 @@ class ErrorReporter final {
 class ErrorScope {
  public:
   // Enter the scope on construction
-  explicit ErrorScope(ErrorReporter* reporter, absl::string_view name,
-                      std::optional<std::uint8_t> index = std::nullopt)
+  ErrorScope(ErrorReporter* reporter, absl::string_view name,
+             std::optional<std::uint8_t> index = std::nullopt)
       : reporter_(reporter) {
     reporter->EnterScope(name, index);
   }
+
+  // Enters a scope based on a proto field.  This forwards to the above
+  // constructor using the JSON field name (to match the FHIR field), and drops
+  // any index param if the field is not repeated.
+  // TODO: Once we've moved to chained error reporters, we can
+  // catch if a non-zero index is sent with a singular field, or a repeated
+  // field is missing an index.
+  ErrorScope(ErrorReporter* reporter, const google::protobuf::FieldDescriptor* field,
+             std::optional<std::uint8_t> index = std::nullopt)
+      : ErrorScope(reporter, field->json_name(),
+                   field->is_repeated() ? index : std::nullopt) {}
 
   // Prevent copying - the scope can only be owned in one place
   ErrorScope(const ErrorScope&) = delete;
@@ -404,9 +415,6 @@ class FailFastErrorHandler : public ErrorHandler {
 
   const Behavior behavior_;
 };
-
-std::optional<uint> IndexOrNullopt(const google::protobuf::FieldDescriptor* field,
-                                   uint index);
 
 }  // namespace google::fhir
 
