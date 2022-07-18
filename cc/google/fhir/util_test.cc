@@ -481,6 +481,78 @@ TEST(GetResourceDescriptorByName, NotFound) {
   EXPECT_EQ(result.status().code(), absl::StatusCode::kNotFound);
 }
 
+TEST(GetContainedResource, UnprofiledSucceeds) {
+  r4::core::ContainedResource container;
+  r4::core::Patient patient;
+  patient.mutable_id()->set_value("foo");
+  *container.mutable_patient() = patient;
+
+  absl::StatusOr<const Message*> resource = GetContainedResource(container);
+  FHIR_ASSERT_OK(resource.status());
+  EXPECT_THAT(*resource, EqualsProto(patient));
+}
+
+TEST(MutableContainedResource, UnprofiledSucceeds) {
+  r4::core::ContainedResource container;
+  r4::core::Patient patient;
+  patient.mutable_id()->set_value("foo");
+  *container.mutable_patient() = patient;
+
+  absl::StatusOr<Message*> resource = MutableContainedResource(&container);
+  FHIR_ASSERT_OK(resource.status());
+  EXPECT_THAT(*resource, EqualsProto(patient));
+}
+
+TEST(GetContainedResource, ProfiledSucceeds) {
+  r4::testing::ContainedResource container;
+  r4::testing::TestPatient patient;
+  patient.mutable_id()->set_value("foo");
+  *container.mutable_test_patient() = patient;
+
+  absl::StatusOr<const Message*> resource = GetContainedResource(container);
+  FHIR_ASSERT_OK(resource.status());
+  EXPECT_THAT(*resource, EqualsProto(patient));
+}
+
+TEST(MutableContainedResource, ProfiledSucceeds) {
+  r4::testing::ContainedResource container;
+  r4::testing::TestPatient patient;
+  patient.mutable_id()->set_value("foo");
+  *container.mutable_test_patient() = patient;
+
+  absl::StatusOr<Message*> resource = MutableContainedResource(&container);
+  FHIR_ASSERT_OK(resource.status());
+  EXPECT_THAT(*resource, EqualsProto(patient));
+}
+
+TEST(GetContainedResource, NonContainedResourceFailsWithInvalidArgument) {
+  r4::testing::TestPatient patient;
+  patient.mutable_id()->set_value("foo");
+
+  absl::StatusOr<const Message*> resource = GetContainedResource(patient);
+  EXPECT_THAT(resource.status().code(), absl::StatusCode::kInvalidArgument);
+}
+
+TEST(MutableContainedResource, NonContainedResourceFailsWithInvalidArgument) {
+  r4::testing::TestPatient patient;
+  patient.mutable_id()->set_value("foo");
+
+  absl::StatusOr<Message*> resource = MutableContainedResource(&patient);
+  EXPECT_THAT(resource.status().code(), absl::StatusCode::kInvalidArgument);
+}
+
+TEST(GetContainedResource, EmptyFailsWithNotFound) {
+  r4::testing::ContainedResource container;
+  absl::StatusOr<const Message*> resource = GetContainedResource(container);
+  EXPECT_THAT(resource.status().code(), absl::StatusCode::kNotFound);
+}
+
+TEST(MutableContainedResource, EmptyFailsWithNotFound) {
+  r4::testing::ContainedResource container;
+  absl::StatusOr<Message*> resource = MutableContainedResource(&container);
+  EXPECT_THAT(resource.status().code(), absl::StatusCode::kNotFound);
+}
+
 }  // namespace
 }  // namespace fhir
 }  // namespace google

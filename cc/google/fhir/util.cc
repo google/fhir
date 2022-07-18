@@ -305,5 +305,24 @@ absl::StatusOr<const ::google::protobuf::Descriptor*> GetResourceDescriptorByNam
                        contained_resource_type->full_name()));
 }
 
+absl::StatusOr<Message*> MutableContainedResource(google::protobuf::Message* contained) {
+  const ::google::protobuf::Reflection* ref = contained->GetReflection();
+  // Get the resource field corresponding to this resource.
+  const ::google::protobuf::OneofDescriptor* resource_oneof =
+      contained->GetDescriptor()->FindOneofByName("oneof_resource");
+  if (!IsContainedResource(contained->GetDescriptor()) || !resource_oneof) {
+    return ::absl::InvalidArgumentError(
+        ::absl::StrCat("'", contained->GetDescriptor()->full_name(),
+                       "' is not a valid contained resource type."));
+  }
+  const ::google::protobuf::FieldDescriptor* field =
+      contained->GetReflection()->GetOneofFieldDescriptor(*contained,
+                                                          resource_oneof);
+  if (!field) {
+    return ::absl::NotFoundError("ContainedResource is empty.");
+  }
+  return ref->MutableMessage(contained, field);
+}
+
 }  // namespace fhir
 }  // namespace google

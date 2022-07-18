@@ -292,26 +292,7 @@ absl::Status GetResourceByReferenceId(const BundleLike& bundle,
       "\nBundle:\n", bundle.DebugString()));
 }
 
-template <typename ContainedResourceLike>
-absl::StatusOr<Message*> MutableContainedResource(
-    ContainedResourceLike* contained) {
-  const ::google::protobuf::Reflection* ref = contained->GetReflection();
-  // Get the resource field corresponding to this resource.
-  const ::google::protobuf::OneofDescriptor* resource_oneof =
-      contained->GetDescriptor()->FindOneofByName("oneof_resource");
-  if (!resource_oneof) {
-    return ::absl::InvalidArgumentError(::absl::StrCat(
-        "Template type '", contained->GetDescriptor()->full_name(),
-        "' is not a contained resource."));
-  }
-  const ::google::protobuf::FieldDescriptor* field =
-      contained->GetReflection()->GetOneofFieldDescriptor(*contained,
-                                                          resource_oneof);
-  if (!field) {
-    return ::absl::NotFoundError("ContainedResource is empty.");
-  }
-  return ref->MutableMessage(contained, field);
-}
+absl::StatusOr<Message*> MutableContainedResource(google::protobuf::Message* contained);
 
 template <typename R, typename ContainedResourceLike>
 absl::StatusOr<const R*> GetTypedContainedResource(
