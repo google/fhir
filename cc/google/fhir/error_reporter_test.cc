@@ -17,6 +17,7 @@
 #include "google/fhir/error_reporter.h"
 
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "gmock/gmock.h"

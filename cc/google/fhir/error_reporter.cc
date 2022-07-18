@@ -16,7 +16,9 @@
 
 #include "google/fhir/error_reporter.h"
 
+#include <optional>
 #include <string>
+#include <string_view>
 
 #include "glog/logging.h"
 #include "absl/status/status.h"
