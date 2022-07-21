@@ -1,0 +1,17 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "missing-required-field"
+  }
+  expression {
+    value: "Encounter.statusHistory[1].period"
+  }
+}
+subject {
+    encounter_id {value: "123"}
+}
