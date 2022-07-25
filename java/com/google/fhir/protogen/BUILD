@@ -73,7 +73,6 @@ java_library(
         "//java/com/google/fhir/common:json_format",
         "//java/com/google/fhir/common:resource_utils",
         "//java/com/google/fhir/common:resource_validator",
-        "//java/com/google/fhir/wrappers:primitive_wrappers",
         "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto:profile_config_java_proto",
         "//proto/google/fhir/proto:protogenerator_annotations_java_proto",

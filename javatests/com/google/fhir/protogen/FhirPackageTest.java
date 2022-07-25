@@ -15,27 +15,65 @@
 package com.google.fhir.protogen;
 
 import static com.google.common.truth.Truth.assertThat;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.testing.EqualsTester;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
+import com.google.fhir.proto.PackageInfo.FileSplittingBehavior;
+import com.google.fhir.proto.PackageInfo.License;
+import com.google.testing.junit.testparameterinjector.TestParameter;
+import com.google.testing.junit.testparameterinjector.TestParameterInjector;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
-/**
- * Tests for FhirPackage.
- */
-@RunWith(JUnit4.class)
+@RunWith(TestParameterInjector.class)
 public final class FhirPackageTest {
+  /** A test data file's name and its contents. */
+  private static class PackageFile {
+    protected String fileName;
+    protected String fileContents;
+  }
+
+  /**
+   * Creates a temporary ZIP file for a FHIR package.
+   *
+   * <p>A FHIR package consists of a collection of JSON files and a package info prototxt file.
+   *
+   * @param fileName The filename prefix used for the temporary file created.
+   * @param files The collection of files that are packaged into the temporary ZIP file.
+   * @return The absolute path of the file that is created.
+   */
+  private static String createFhirPackageInfoZip(String fileName, List<PackageFile> files)
+      throws IOException {
+    File f = File.createTempFile(fileName, ".zip");
+    try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(f))) {
+      for (PackageFile file : files) {
+        ZipEntry e = new ZipEntry(file.fileName);
+        out.putNextEntry(e);
+        byte[] data = file.fileContents.getBytes(Charset.forName(UTF_8.name()));
+        out.write(data, 0, data.length);
+        out.closeEntry();
+      }
+    }
+    return f.getAbsolutePath();
+  }
 
   @Test
-  public void equalityTest() throws Exception {
+  public void equalityTest() {
     new EqualsTester()
         .addEqualityGroup(
             new FhirPackage(
@@ -66,49 +104,357 @@ public final class FhirPackageTest {
         .testEquals();
   }
 
-  private static final int R4_DEFINITIONS_COUNT = 653;
-  private static final int R4_CODESYSTEMS_COUNT = 1062;
-  private static final int R4_VALUESETS_COUNT = 1316;
-  private static final int R4_SEARCH_PARAMETERS_COUNT = 1385;
-
   @Test
-  public void loadTest() throws IOException, InvalidFhirException {
-    FhirPackage fhirPackage = FhirPackage.load("spec/fhir_r4_package.zip");
-    assertThat(fhirPackage.packageInfo.getProtoPackage()).isEqualTo("google.fhir.r4.core");
-    assertThat(fhirPackage.structureDefinitions).hasSize(R4_DEFINITIONS_COUNT);
-    assertThat(fhirPackage.codeSystems).hasSize(R4_CODESYSTEMS_COUNT);
-    assertThat(fhirPackage.valueSets).hasSize(R4_VALUESETS_COUNT);
-    assertThat(fhirPackage.searchParameters).hasSize(R4_SEARCH_PARAMETERS_COUNT);
+  public void isCorePackageTest_withCorePackage() {
+    PackageInfo packageInfo =
+        PackageInfo.newBuilder()
+            .setProtoPackage("google.fhir.r4.core")
+            .setFhirVersion(FhirVersion.R4)
+            .build();
+
+    assertThat(FhirPackage.isCorePackage(packageInfo)).isTrue();
   }
 
   @Test
-  public void loadTest_withSideloadedPackageInfo() throws IOException, InvalidFhirException {
+  public void isCorePackageTest_withNonCorePackage() {
     PackageInfo packageInfo =
         PackageInfo.newBuilder()
             .setProtoPackage("my.custom.package")
             .setFhirVersion(FhirVersion.R4)
             .build();
-    FhirPackage fhirPackage =
-        FhirPackage.load("spec/fhir_r4_package.zip", packageInfo);
-    assertThat(fhirPackage.packageInfo.getProtoPackage()).isEqualTo("my.custom.package");
-    assertThat(fhirPackage.structureDefinitions).hasSize(R4_DEFINITIONS_COUNT);
-    assertThat(fhirPackage.codeSystems).hasSize(R4_CODESYSTEMS_COUNT);
-    assertThat(fhirPackage.valueSets).hasSize(R4_VALUESETS_COUNT);
-    assertThat(fhirPackage.searchParameters).hasSize(R4_SEARCH_PARAMETERS_COUNT);
+
+    assertThat(FhirPackage.isCorePackage(packageInfo)).isFalse();
+  }
+
+  @Test
+  public void isCorePackageTest_withLoadedCorePackage() throws IOException, InvalidFhirException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            new PackageFile() {
+              {
+                fileName = "foo_package_info.prototxt";
+                fileContents =
+                    "proto_package: \"google.foo\""
+                        + "\njava_proto_package: \"com.google.foo\""
+                        + "\nfhir_version: R4"
+                        + "\nlicense: APACHE"
+                        + "\nlicense_date: \"2019\""
+                        + "\nlocal_contained_resource: true"
+                        + "\nfile_splitting_behavior: SPLIT_RESOURCES";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+    FhirPackage fhirPackage = FhirPackage.load(zipFile);
+
+    assertThat(fhirPackage.isCorePackage()).isFalse();
+  }
+
+  @Test
+  public void isCorePackageTest_withLoadedNonCorePackage()
+      throws IOException, InvalidFhirException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            new PackageFile() {
+              {
+                fileName = "foo_package_info.prototxt";
+                fileContents =
+                    "proto_package: \"google.fhir.r4.core\""
+                        + "\njava_proto_package: \"com.google.fhir.r4.core\""
+                        + "\nfhir_version: R4"
+                        + "\nlicense: APACHE"
+                        + "\nlicense_date: \"2019\""
+                        + "\nlocal_contained_resource: true"
+                        + "\nfile_splitting_behavior: SPLIT_RESOURCES";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+    FhirPackage fhirPackage = FhirPackage.load(zipFile);
+
+    assertThat(fhirPackage.isCorePackage()).isTrue();
+  }
+
+  @Test
+  public void loadTest_moreThanOnePackageInfo() throws IOException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            new PackageFile() {
+              {
+                fileName = "foo_package_info.prototxt";
+                fileContents =
+                    "proto_package: \"google.foo\""
+                        + "\njava_proto_package: \"com.google.foo\""
+                        + "\nfhir_version: R4"
+                        + "\nlicense: APACHE"
+                        + "\nlicense_date: \"2019\""
+                        + "\nlocal_contained_resource: true"
+                        + "\nfile_splitting_behavior: SPLIT_RESOURCES";
+              }
+            },
+            new PackageFile() {
+              {
+                fileName = "bar_package_info.prototxt";
+                fileContents =
+                    "proto_package: \"google.bar\""
+                        + "\njava_proto_package: \"com.google.bar\""
+                        + "\nfhir_version: R4"
+                        + "\nlicense: APACHE"
+                        + "\nlicense_date: \"2019\""
+                        + "\nlocal_contained_resource: true"
+                        + "\nfile_splitting_behavior: SPLIT_RESOURCES";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+
+    IllegalArgumentException thrown =
+        assertThrows(IllegalArgumentException.class, () -> FhirPackage.load(zipFile));
+
+    assertThat(thrown)
+        .hasMessageThat()
+        .isEqualTo("Only one PackageInfo should be provided: " + zipFile);
+  }
+
+  @Test
+  public void loadTest_missingProtoPackageInPackageInfo() throws IOException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            new PackageFile() {
+              {
+                fileName = "foo_package_info.prototxt";
+                fileContents =
+                    "java_proto_package: \"com.google.foo\""
+                        + "\nfhir_version: R4"
+                        + "\nlicense: APACHE"
+                        + "\nlicense_date: \"2019\""
+                        + "\nlocal_contained_resource: true"
+                        + "\nfile_splitting_behavior: SPLIT_RESOURCES";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+
+    IllegalArgumentException thrown =
+        assertThrows(IllegalArgumentException.class, () -> FhirPackage.load(zipFile));
+
+    assertThat(thrown).hasMessageThat().isEqualTo("PackageInfo must specify `proto_package`.");
+  }
+
+  @Test
+  public void loadTest_unknownFhirVersion() throws IOException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            new PackageFile() {
+              {
+                fileName = "foo_package_info.prototxt";
+                fileContents =
+                    "proto_package: \"google.foo\""
+                        + "\njava_proto_package: \"com.google.foo\""
+                        + "\nfhir_version: FHIR_VERSION_UNKNOWN"
+                        + "\nlicense: APACHE"
+                        + "\nlicense_date: \"2019\""
+                        + "\nlocal_contained_resource: true"
+                        + "\nfile_splitting_behavior: SPLIT_RESOURCES";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+
+    IllegalArgumentException thrown =
+        assertThrows(IllegalArgumentException.class, () -> FhirPackage.load(zipFile));
+
+    assertThat(thrown).hasMessageThat().isEqualTo("PackageInfo must specify `fhir_version`.");
+  }
+
+  @Test
+  public void loadTest_noPackageInfo() throws IOException {
+    String zipFile = createFhirPackageInfoZip("foo_package", ImmutableList.of());
+
+    IllegalArgumentException thrown =
+        assertThrows(IllegalArgumentException.class, () -> FhirPackage.load(zipFile));
+
+    assertThat(thrown)
+        .hasMessageThat()
+        .isEqualTo("FhirPackage does not have a package_info.prototxt: " + zipFile);
+  }
+
+  private static final PackageFile VALID_PACKAGE_INFO =
+      new PackageFile() {
+        {
+          fileName = "foo_package_info.prototxt";
+          fileContents =
+              "proto_package: \"google.foo\""
+                  + "\njava_proto_package: \"com.google.foo\""
+                  + "\nfhir_version: R4"
+                  + "\nlicense: APACHE"
+                  + "\nlicense_date: \"2019\""
+                  + "\nlocal_contained_resource: true"
+                  + "\nfile_splitting_behavior: SPLIT_RESOURCES";
+        }
+      };
+
+  private enum LoadTestCase {
+    UNDEFINED_RESOURCE(
+        /*fileContents=*/ "{\"noResourceTypeField\":\"Foo\"}",
+        /*structureDefinitionsCount=*/ 0,
+        /*codeSystemsCount=*/ 0,
+        /*valueSetsCount=*/ 0,
+        /*searchParametersCount=*/ 0),
+    UNHANDLED_RESOURCE_TYPE(
+        /*fileContents=*/ "{\"resourceType\":\"Foo\"}",
+        /*structureDefinitionsCount=*/ 0,
+        /*codeSystemsCount=*/ 0,
+        /*valueSetsCount=*/ 0,
+        /*searchParametersCount=*/ 0),
+    VALUE_SET(
+        /*fileContents=*/ "{\"resourceType\":\"ValueSet\"}",
+        /*structureDefinitionsCount=*/ 0,
+        /*codeSystemsCount=*/ 0,
+        /*valueSetsCount=*/ 1,
+        /*searchParametersCount=*/ 0),
+    CODE_SYSTEM(
+        /*fileContents=*/ "{\"resourceType\":\"CodeSystem\"}",
+        /*structureDefinitionsCount=*/ 0,
+        /*codeSystemsCount=*/ 1,
+        /*valueSetsCount=*/ 0,
+        /*searchParametersCount=*/ 0),
+    STRUCTURE_DEFINITION(
+        /*fileContents=*/ "{\"resourceType\":\"StructureDefinition\"}",
+        /*structureDefinitionsCount=*/ 1,
+        /*codeSystemsCount=*/ 0,
+        /*valueSetsCount=*/ 0,
+        /*searchParametersCount=*/ 0),
+    SEARCH_PARAMETER(
+        /*fileContents=*/ "{\"resourceType\":\"SearchParameter\"}",
+        /*structureDefinitionsCount=*/ 0,
+        /*codeSystemsCount=*/ 0,
+        /*valueSetsCount=*/ 0,
+        /*searchParametersCount=*/ 1),
+    BUNDLE_WITH_EACH(
+        /*fileContents=*/ "{\"resourceType\":\"Bundle\", \"entry\":"
+            + " [{\"resource\": {\"resourceType\":\"ValueSet\"}},"
+            + " {\"resource\": {\"resourceType\":\"CodeSystem\"}},"
+            + " {\"resource\": {\"resourceType\":\"StructureDefinition\"}},"
+            + " {\"resource\": {\"resourceType\":\"SearchParameter\"}}]}",
+        /*structureDefinitionsCount=*/ 1,
+        /*codeSystemsCount=*/ 1,
+        /*valueSetsCount=*/ 1,
+        /*searchParametersCount=*/ 1);
+
+    final String fileContents;
+    final int structureDefinitionsCount;
+    final int codeSystemsCount;
+    final int valueSetsCount;
+    final int searchParametersCount;
+
+    LoadTestCase(
+        String fileContents,
+        int structureDefinitionsCount,
+        int codeSystemsCount,
+        int valueSetsCount,
+        int searchParametersCount) {
+      this.fileContents = fileContents;
+      this.structureDefinitionsCount = structureDefinitionsCount;
+      this.codeSystemsCount = codeSystemsCount;
+      this.valueSetsCount = valueSetsCount;
+      this.searchParametersCount = searchParametersCount;
+    }
+  }
+
+  @Test
+  public void load_success(@TestParameter LoadTestCase loadTestCase)
+      throws IOException, InvalidFhirException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            VALID_PACKAGE_INFO,
+            new PackageFile() {
+              {
+                fileName = "bar.json";
+                fileContents = loadTestCase.fileContents;
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+
+    FhirPackage fhirPackage = FhirPackage.load(zipFile);
+
+    assertThat(fhirPackage.packageInfo.getProtoPackage()).isEqualTo("google.foo");
+    assertThat(fhirPackage.structureDefinitions).hasSize(loadTestCase.structureDefinitionsCount);
+    assertThat(fhirPackage.codeSystems).hasSize(loadTestCase.codeSystemsCount);
+    assertThat(fhirPackage.valueSets).hasSize(loadTestCase.valueSetsCount);
+    assertThat(fhirPackage.searchParameters).hasSize(loadTestCase.searchParametersCount);
+  }
+
+  @Test
+  public void loadTest_withPackageInfo() throws IOException, InvalidFhirException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            new PackageFile() {
+              {
+                fileName = "foo_package_info.prototxt";
+                fileContents =
+                    "proto_package: \"google.bar\""
+                        + "\njava_proto_package: \"com.google.bar\""
+                        + "\nfhir_version: R4"
+                        + "\nlicense: APACHE"
+                        + "\nlicense_date: \"2019\""
+                        + "\nlocal_contained_resource: true"
+                        + "\nfile_splitting_behavior: SPLIT_RESOURCES";
+              }
+            },
+            new PackageFile() {
+              {
+                fileName = "bar.json";
+                fileContents = "{\"resourceType\":\"ValueSet\"}";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+
+    PackageInfo packageInfo =
+        PackageInfo.newBuilder()
+            .setProtoPackage("google.foo")
+            .setJavaProtoPackage("com.google.foo")
+            .setFhirVersion(FhirVersion.R4)
+            .setLicense(License.APACHE)
+            .setLicenseDate("2019")
+            .setLocalContainedResource(true)
+            .setFileSplittingBehavior(FileSplittingBehavior.SPLIT_RESOURCES)
+            .build();
+    FhirPackage fhirPackage = FhirPackage.load(zipFile, packageInfo);
+
+    // Note that it ignores the PackageInfo ("google.bar") provided in the ZIP.
+    assertThat(fhirPackage.packageInfo.getProtoPackage()).isEqualTo("google.foo");
+    assertThat(fhirPackage.structureDefinitions).isEmpty();
+    assertThat(fhirPackage.codeSystems).isEmpty();
+    assertThat(fhirPackage.valueSets).hasSize(1);
+    assertThat(fhirPackage.searchParameters).isEmpty();
   }
 
   @Test
   public void filterTest() throws IOException, InvalidFhirException {
-    FhirPackage fhirPackage = FhirPackage.load("spec/fhir_r4_package.zip");
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            VALID_PACKAGE_INFO,
+            new PackageFile() {
+              {
+                fileName = "foo.json";
+                fileContents = "{\"resourceType\":\"StructureDefinition\", \"id\":\"Foo\"}";
+              }
+            },
+            new PackageFile() {
+              {
+                fileName = "bar.json";
+                fileContents = "{\"resourceType\":\"StructureDefinition\", \"id\":\"Bar\"}";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+
+    FhirPackage fhirPackage = FhirPackage.load(zipFile);
+
     assertTrue(
         fhirPackage.structureDefinitions.stream()
-            .anyMatch(def -> def.getId().getValue().equals("Patient")));
-
+            .anyMatch(def -> def.getId().getValue().equals("Foo")));
     FhirPackage filteredPackage =
-        fhirPackage.filterResources(def -> !def.getId().getValue().equals("Patient"));
+        fhirPackage.filterResources(def -> !def.getId().getValue().equals("Foo"));
     assertFalse(
         filteredPackage.structureDefinitions.stream()
-            .anyMatch(def -> def.getId().getValue().equals("Patient")));
-    assertThat(filteredPackage.structureDefinitions).hasSize(R4_DEFINITIONS_COUNT - 1);
+            .anyMatch(def -> def.getId().getValue().equals("Foo")));
+    // Only "Bar" remains.
+    assertThat(filteredPackage.structureDefinitions).hasSize(1);
   }
 }
