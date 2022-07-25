@@ -733,7 +733,7 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
     std::string escaped;
     absl::Base64Escape(this->GetWrapped()->value(), &escaped);
     std::vector<SeparatorStrideExtensionType> separator_extensions;
-    FHIR_RETURN_IF_ERROR(extensions_lib::GetRepeatedFromExtension(
+    FHIR_RETURN_IF_ERROR(extensions_lib::GetAllMatchingExtensions(
         this->GetWrapped()->extension(), &separator_extensions));
     if (!separator_extensions.empty()) {
       int stride = separator_extensions[0].stride().value();

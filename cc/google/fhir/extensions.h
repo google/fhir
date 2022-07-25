@@ -65,9 +65,9 @@ absl::Status ValidateExtension(const ::google::protobuf::Descriptor* descriptor)
 // them into protos. Example usage:
 // Patient patient = ...
 // std::vector<MyExtension> my_extensions;
-// auto status = GetRepeatedFromExtension(patient.extension(), &my_extension);
+// auto status = GetAllMatchingExtensions(patient.extension(), &my_extension);
 template <class C, class T>
-absl::Status GetRepeatedFromExtension(const C& extension_container,
+absl::Status GetAllMatchingExtensions(const C& extension_container,
                                       std::vector<T>* result);
 
 // Extracts a single extension of type T from 'entity'. Returns a NotFound error
@@ -247,7 +247,7 @@ absl::Status AddValueToExtension(const ::google::protobuf::Message& message,
 namespace extensions_lib {
 
 template <class C, class T>
-absl::Status GetRepeatedFromExtension(const C& extension_container,
+absl::Status GetAllMatchingExtensions(const C& extension_container,
                                       std::vector<T>* result) {
   // This function will be called a huge number of times, usually when no
   // extensions are present.  Return early in this case to keep overhead as low
@@ -274,7 +274,7 @@ absl::Status GetRepeatedFromExtension(const C& extension_container,
 template <class T, class C>
 absl::StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
   std::vector<T> result;
-  FHIR_RETURN_IF_ERROR(GetRepeatedFromExtension(entity.extension(), &result));
+  FHIR_RETURN_IF_ERROR(GetAllMatchingExtensions(entity.extension(), &result));
   if (result.empty()) {
     return ::absl::NotFoundError(
         absl::StrCat("Did not find any extension with url: ",
