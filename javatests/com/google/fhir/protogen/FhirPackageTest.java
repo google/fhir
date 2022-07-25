@@ -234,7 +234,9 @@ public final class FhirPackageTest {
     IllegalArgumentException thrown =
         assertThrows(IllegalArgumentException.class, () -> FhirPackage.load(zipFile));
 
-    assertThat(thrown).hasMessageThat().isEqualTo("PackageInfo must specify `proto_package`.");
+    assertThat(thrown)
+        .hasMessageThat()
+        .isEqualTo("When PackageInfo is provided, must specify `proto_package`.");
   }
 
   @Test
@@ -259,19 +261,32 @@ public final class FhirPackageTest {
     IllegalArgumentException thrown =
         assertThrows(IllegalArgumentException.class, () -> FhirPackage.load(zipFile));
 
-    assertThat(thrown).hasMessageThat().isEqualTo("PackageInfo must specify `fhir_version`.");
+    assertThat(thrown)
+        .hasMessageThat()
+        .isEqualTo("When PackageInfo is provided, must specify `fhir_version`.");
   }
 
   @Test
-  public void loadTest_noPackageInfo() throws IOException {
-    String zipFile = createFhirPackageInfoZip("foo_package", ImmutableList.of());
+  public void loadTest_noPackageInfo() throws IOException, InvalidFhirException {
 
-    IllegalArgumentException thrown =
-        assertThrows(IllegalArgumentException.class, () -> FhirPackage.load(zipFile));
+    String zipFile =
+        createFhirPackageInfoZip(
+            "foo_package",
+            ImmutableList.of(
+                new PackageFile() {
+                  {
+                    fileName = "bar.json";
+                    fileContents = "{\"resourceType\":\"StructureDefinition\"}";
+                  }
+                }));
 
-    assertThat(thrown)
-        .hasMessageThat()
-        .isEqualTo("FhirPackage does not have a package_info.prototxt: " + zipFile);
+    FhirPackage fhirPackage = FhirPackage.load(zipFile);
+
+    assertThat(fhirPackage.packageInfo).isNull();
+    assertThat(fhirPackage.structureDefinitions).hasSize(1);
+    assertThat(fhirPackage.codeSystems).isEmpty();
+    assertThat(fhirPackage.valueSets).isEmpty();
+    assertThat(fhirPackage.searchParameters).isEmpty();
   }
 
   private static final PackageFile VALID_PACKAGE_INFO =
