@@ -86,6 +86,7 @@ java_library(
         "//proto/google/fhir/proto/stu3:datatypes_java_proto",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_guava_guava",
+        "@maven//:org_apache_commons_commons_compress",
     ],
 )
 

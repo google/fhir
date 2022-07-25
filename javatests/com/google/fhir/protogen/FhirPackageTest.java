@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -73,7 +75,7 @@ public final class FhirPackageTest {
   }
 
   @Test
-  public void equalityTest() {
+  public void equality() {
     new EqualsTester()
         .addEqualityGroup(
             new FhirPackage(
@@ -105,7 +107,7 @@ public final class FhirPackageTest {
   }
 
   @Test
-  public void isCorePackageTest_withCorePackage() {
+  public void isCorePackage_withCorePackage() {
     PackageInfo packageInfo =
         PackageInfo.newBuilder()
             .setProtoPackage("google.fhir.r4.core")
@@ -116,7 +118,7 @@ public final class FhirPackageTest {
   }
 
   @Test
-  public void isCorePackageTest_withNonCorePackage() {
+  public void isCorePackage_withNonCorePackage() {
     PackageInfo packageInfo =
         PackageInfo.newBuilder()
             .setProtoPackage("my.custom.package")
@@ -127,7 +129,7 @@ public final class FhirPackageTest {
   }
 
   @Test
-  public void isCorePackageTest_withLoadedCorePackage() throws IOException, InvalidFhirException {
+  public void isCorePackage_withLoadedCorePackage() throws IOException, InvalidFhirException {
     ImmutableList<PackageFile> files =
         ImmutableList.of(
             new PackageFile() {
@@ -150,8 +152,7 @@ public final class FhirPackageTest {
   }
 
   @Test
-  public void isCorePackageTest_withLoadedNonCorePackage()
-      throws IOException, InvalidFhirException {
+  public void isCorePackage_withLoadedNonCorePackage() throws IOException, InvalidFhirException {
     ImmutableList<PackageFile> files =
         ImmutableList.of(
             new PackageFile() {
@@ -174,7 +175,7 @@ public final class FhirPackageTest {
   }
 
   @Test
-  public void loadTest_moreThanOnePackageInfo() throws IOException {
+  public void load_moreThanOnePackageInfo() throws IOException {
     ImmutableList<PackageFile> files =
         ImmutableList.of(
             new PackageFile() {
@@ -214,7 +215,7 @@ public final class FhirPackageTest {
   }
 
   @Test
-  public void loadTest_missingProtoPackageInPackageInfo() throws IOException {
+  public void load_missingProtoPackageInPackageInfo() throws IOException {
     ImmutableList<PackageFile> files =
         ImmutableList.of(
             new PackageFile() {
@@ -240,7 +241,7 @@ public final class FhirPackageTest {
   }
 
   @Test
-  public void loadTest_unknownFhirVersion() throws IOException {
+  public void load_unknownFhirVersion() throws IOException {
     ImmutableList<PackageFile> files =
         ImmutableList.of(
             new PackageFile() {
@@ -267,7 +268,7 @@ public final class FhirPackageTest {
   }
 
   @Test
-  public void loadTest_noPackageInfo() throws IOException, InvalidFhirException {
+  public void load_noPackageInfo() throws IOException, InvalidFhirException {
 
     String zipFile =
         createFhirPackageInfoZip(
@@ -304,7 +305,7 @@ public final class FhirPackageTest {
         }
       };
 
-  private enum LoadTestCase {
+  private enum LoadCase {
     UNDEFINED_RESOURCE(
         /*fileContents=*/ "{\"noResourceTypeField\":\"Foo\"}",
         /*structureDefinitionsCount=*/ 0,
@@ -358,7 +359,7 @@ public final class FhirPackageTest {
     final int valueSetsCount;
     final int searchParametersCount;
 
-    LoadTestCase(
+    LoadCase(
         String fileContents,
         int structureDefinitionsCount,
         int codeSystemsCount,
@@ -373,7 +374,7 @@ public final class FhirPackageTest {
   }
 
   @Test
-  public void load_success(@TestParameter LoadTestCase loadTestCase)
+  public void load_success(@TestParameter LoadCase loadCase)
       throws IOException, InvalidFhirException {
     ImmutableList<PackageFile> files =
         ImmutableList.of(
@@ -381,7 +382,7 @@ public final class FhirPackageTest {
             new PackageFile() {
               {
                 fileName = "bar.json";
-                fileContents = loadTestCase.fileContents;
+                fileContents = loadCase.fileContents;
               }
             });
     String zipFile = createFhirPackageInfoZip("foo_package", files);
@@ -389,14 +390,14 @@ public final class FhirPackageTest {
     FhirPackage fhirPackage = FhirPackage.load(zipFile);
 
     assertThat(fhirPackage.packageInfo.getProtoPackage()).isEqualTo("google.foo");
-    assertThat(fhirPackage.structureDefinitions).hasSize(loadTestCase.structureDefinitionsCount);
-    assertThat(fhirPackage.codeSystems).hasSize(loadTestCase.codeSystemsCount);
-    assertThat(fhirPackage.valueSets).hasSize(loadTestCase.valueSetsCount);
-    assertThat(fhirPackage.searchParameters).hasSize(loadTestCase.searchParametersCount);
+    assertThat(fhirPackage.structureDefinitions).hasSize(loadCase.structureDefinitionsCount);
+    assertThat(fhirPackage.codeSystems).hasSize(loadCase.codeSystemsCount);
+    assertThat(fhirPackage.valueSets).hasSize(loadCase.valueSetsCount);
+    assertThat(fhirPackage.searchParameters).hasSize(loadCase.searchParametersCount);
   }
 
   @Test
-  public void loadTest_withPackageInfo() throws IOException, InvalidFhirException {
+  public void load_withPackageInfo() throws IOException, InvalidFhirException {
     ImmutableList<PackageFile> files =
         ImmutableList.of(
             new PackageFile() {
@@ -441,7 +442,47 @@ public final class FhirPackageTest {
   }
 
   @Test
-  public void filterTest() throws IOException, InvalidFhirException {
+  public void load_withTarFile(@TestParameter({".tar.gz", ".tgz"}) String tarFileExtension)
+      throws IOException, InvalidFhirException {
+    File tarGzFile = File.createTempFile("foo", tarFileExtension);
+    try (TarArchiveOutputStream tOut =
+        new TarArchiveOutputStream(new FileOutputStream(tarGzFile))) {
+      TarArchiveEntry t = new TarArchiveEntry(new File("foo.json"));
+      byte[] content =
+          "{\"resourceType\":\"StructureDefinition\"}".getBytes(Charset.forName(UTF_8.name()));
+      t.setSize(content.length);
+      tOut.putArchiveEntry(t);
+      tOut.write(content);
+      tOut.closeArchiveEntry();
+    }
+
+    FhirPackage fhirPackage = FhirPackage.load(tarGzFile.getAbsolutePath());
+
+    assertThat(fhirPackage.packageInfo).isNull();
+    assertThat(fhirPackage.structureDefinitions).hasSize(1);
+    assertThat(fhirPackage.codeSystems).isEmpty();
+    assertThat(fhirPackage.valueSets).isEmpty();
+    assertThat(fhirPackage.searchParameters).isEmpty();
+  }
+
+  @Test
+  public void load_withUnsupportedFileType() throws IOException, InvalidFhirException {
+    File unsupportedFile = File.createTempFile("foo", ".notsupported");
+
+    IllegalArgumentException thrown =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> FhirPackage.load(unsupportedFile.getAbsolutePath()));
+
+    assertThat(thrown)
+        .hasMessageThat()
+        .isEqualTo(
+            "`archiveFilePath` must end with '.zip', 'tar.gz' or '.tgz': "
+                + unsupportedFile.getAbsolutePath());
+  }
+
+  @Test
+  public void filter() throws IOException, InvalidFhirException {
     ImmutableList<PackageFile> files =
         ImmutableList.of(
             VALID_PACKAGE_INFO,

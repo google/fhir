@@ -25,6 +25,7 @@ def fhirproto_workspace(core_lib = False):
             "org.apache.beam:beam-runners-direct-java:2.9.0",
             "org.apache.beam:beam-runners-google-cloud-dataflow-java:2.9.0",
             "org.apache.beam:beam-sdks-java-core:2.9.0",
+            "org.apache.commons:commons-compress:1.21",
             "org.slf4j:slf4j-simple:1.7.25",
         ],
         repositories = [

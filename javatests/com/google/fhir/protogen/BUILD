@@ -104,6 +104,7 @@ java_test(
         "@maven//:com_google_testparameterinjector_test_parameter_injector",
         "@maven//:com_google_truth_truth",
         "@maven//:junit_junit",
+        "@maven//:org_apache_commons_commons_compress",
     ],
 )
 
