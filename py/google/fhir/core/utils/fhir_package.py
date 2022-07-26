@@ -35,50 +35,41 @@ PackageSource = Union[str, Callable[[], BinaryIO]]
 
 
 # TODO: Consider deprecating internal "zip" format entirely.
-def _read_fhir_package_zip(zip_file: BinaryIO) -> Dict[str, str]:
-  """Indexes the file entries in `zip_file` and returns package info.
+def _read_fhir_package_zip(zip_file: BinaryIO) -> Iterator[Tuple[str, str]]:
+  """Yields the file entries for JSON resources in `zip_file` and their contents.
 
   Args:
     zip_file: The file-like of a `.zip` file that should be parsed.
 
-  Returns:
-    A dictionary of JSON entries indexed by filename.
-
-  Raises:
-    ValueError: In the event that the `PackgeInfo` is invalid.
+  Yields:
+    A tuple of filename and the raw JSON contained in that file.
   """
-  json_files: Dict[str, str] = {}
   with zipfile.ZipFile(zip_file, mode='r') as f:
     for entry_name in f.namelist():
       if entry_name.endswith('.json'):
-        json_files[entry_name] = f.read(entry_name).decode('utf-8')
+        yield entry_name, f.read(entry_name).decode('utf-8')
       else:
         logging.info('Skipping .zip entry: %s.', entry_name)
 
-  return json_files
 
-
-def _read_fhir_package_npm(npm_file: BinaryIO) -> Dict[str, str]:
-  """Indexes the file entries at `npm_file_path` and returns package info.
+def _read_fhir_package_npm(npm_file: BinaryIO) -> Iterator[Tuple[str, str]]:
+  """Yields the file entries for JSON resources in `npm_file` and their contents.
 
   Args:
     npm_file: The `.tar.gz` or `.tgz` file following NPM conventions that should
       be parsed.
 
-  Returns:
-    A dictionary of JSON entries indexed by filename.
+  Yields:
+    A tuple of filename and the raw JSON contained in that file.
   """
-  json_files: Dict[str, str] = {}
   with tarfile.open(fileobj=npm_file, mode='r:gz') as f:
     for member in f.getmembers():
       if member.name.endswith('.json'):
         content = f.extractfile(member)
         if content is not None:
-          json_files[member.name] = content.read().decode('utf-8')
+          yield member.name, content.read().decode('utf-8')
       else:
         logging.info('Skipping  entry: %s.', member.name)
-
-  return json_files
 
 
 class ResourceCollection(Iterable[_T]):
@@ -248,15 +239,6 @@ class FhirPackage:
       ValueError: In the event that the file or contents are invalid.
     """
     parser = _json_parser.JsonParser(handler, resource_time_zone)
-    with _open_path_or_factory(archive_file) as fd:
-      # Default to zip if there is no file name for compatibility.
-      if not isinstance(fd.name, str) or fd.name.endswith('.zip'):
-        json_files = _read_fhir_package_zip(fd)
-      elif fd.name.endswith('.tar.gz') or fd.name.endswith('.tgz'):
-        json_files = _read_fhir_package_npm(fd)
-      else:
-        raise ValueError(f'Unsupported file type from {fd.name}')
-
     collections_per_resource_type = {
         'StructureDefinition':
             ResourceCollection(archive_file, struct_def_class, parser),
@@ -268,11 +250,20 @@ class FhirPackage:
             ResourceCollection(archive_file, value_set_class, parser),
     }
 
-    for file_name, raw_json in json_files.items():
-      json_obj = json.loads(
-          raw_json, parse_float=decimal.Decimal, parse_int=decimal.Decimal)
-      _add_resource_to_collection(json_obj, collections_per_resource_type,
-                                  file_name)
+    with _open_path_or_factory(archive_file) as fd:
+      # Default to zip if there is no file name for compatibility.
+      if not isinstance(fd.name, str) or fd.name.endswith('.zip'):
+        json_files = _read_fhir_package_zip(fd)
+      elif fd.name.endswith('.tar.gz') or fd.name.endswith('.tgz'):
+        json_files = _read_fhir_package_npm(fd)
+      else:
+        raise ValueError(f'Unsupported file type from {fd.name}')
+
+      for file_name, raw_json in json_files:
+        json_obj = json.loads(
+            raw_json, parse_float=decimal.Decimal, parse_int=decimal.Decimal)
+        _add_resource_to_collection(json_obj, collections_per_resource_type,
+                                    file_name)
 
     return FhirPackage(
         structure_definitions=collections_per_resource_type[
