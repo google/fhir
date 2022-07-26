@@ -30,6 +30,7 @@
 namespace google::fhir {
 
 namespace {
+using testing::ElementsAre;
 
 class TestErrorHandler : public ErrorHandler {
  public:
@@ -120,12 +121,12 @@ TEST(ErrorReporterTest, CorrectHandlerCalled) {
   FHIR_ASSERT_OK(reporter.ReportFhirPathError("bar.exists()"));
   FHIR_ASSERT_OK(reporter.ReportFhirPathWarning("bar.exists()"));
 
-  EXPECT_THAT(handler.reports_,
-              testing::ElementsAre("msg-1:fatal:Foo:Foo", "msg-2:error:Foo:Foo",
-                                   "msg-3:warning:Foo:Foo",
-                                   "msg-4@bar.exists():fatal:Foo:Foo",
-                                   "@bar.exists():error:Foo:Foo",
-                                   "@bar.exists():warning:Foo:Foo"));
+  EXPECT_THAT(
+      handler.reports_,
+      ElementsAre("msg-1:fatal:Foo:Foo", "msg-2:error:Foo:Foo",
+                  "msg-3:warning:Foo:Foo", "msg-4@bar.exists():fatal:Foo:Foo",
+                  "@bar.exists():error:Foo:Foo",
+                  "@bar.exists():warning:Foo:Foo"));
 }
 
 TEST(ErrorReporterTest, ScopesAppliedCorretly) {
@@ -155,10 +156,10 @@ TEST(ErrorReporterTest, ScopesAppliedCorretly) {
   }
 
   EXPECT_THAT(handler.reports_,
-              testing::ElementsAre("msg-1:fatal:Foo:Foo",
-                                   "msg-2:error:Foo.bar[2].baz:Foo.bar.baz",
-                                   "msg-3:warning:Foo.bar[5]:Foo.bar",
-                                   "msg-4:warning:Quux:Quux"));
+              ElementsAre("msg-1:fatal:Foo:Foo",
+                          "msg-2:error:Foo.bar[2].baz:Foo.bar.baz",
+                          "msg-3:warning:Foo.bar[5]:Foo.bar",
+                          "msg-4:warning:Quux:Quux"));
 }
 
 TEST(ErrorReporterTest, ReportWithScopeApisApplyScopeCorrectly) {
@@ -176,13 +177,13 @@ TEST(ErrorReporterTest, ReportWithScopeApisApplyScopeCorrectly) {
   FHIR_ASSERT_OK(reporter.ReportFhirPathError("bar.exists()", "s4"));
   FHIR_ASSERT_OK(reporter.ReportFhirPathWarning("bar.exists()", "s5"));
 
-  EXPECT_THAT(handler.reports_,
-              testing::ElementsAre("msg-1:fatal:Foo.s1:Foo.s1",
-                                   "msg-2:error:Foo.s2[3]:Foo.s2",
-                                   "msg-3:warning:Foo.s2[4]:Foo.s2",
-                                   "msg-4@bar.exists():fatal:Foo.s3[0]:Foo.s3",
-                                   "@bar.exists():error:Foo.s4:Foo.s4",
-                                   "@bar.exists():warning:Foo.s5:Foo.s5"));
+  EXPECT_THAT(
+      handler.reports_,
+      ElementsAre("msg-1:fatal:Foo.s1:Foo.s1", "msg-2:error:Foo.s2[3]:Foo.s2",
+                  "msg-3:warning:Foo.s2[4]:Foo.s2",
+                  "msg-4@bar.exists():fatal:Foo.s3[0]:Foo.s3",
+                  "@bar.exists():error:Foo.s4:Foo.s4",
+                  "@bar.exists():warning:Foo.s5:Foo.s5"));
 }
 
 TEST(ErrorReporterTest, ScopesCreatedThroughFieldsSucceed) {
@@ -207,9 +208,110 @@ TEST(ErrorReporterTest, ScopesCreatedThroughFieldsSucceed) {
     }
   }
 
+  EXPECT_THAT(
+      handler.reports_,
+      ElementsAre("msg:error:Patient.contact[2].name:Patient.contact.name"));
+}
+
+TEST(ScopedErrorReporterTest, CorrectHandlerCalled) {
+  TestErrorHandler handler;
+  ScopedErrorReporter reporter = ScopedErrorReporter(&handler, "Foo");
+
+  FHIR_ASSERT_OK(reporter.ReportFhirFatal(absl::InternalError("msg-1")));
+  FHIR_ASSERT_OK(reporter.ReportFhirError("msg-2"));
+  FHIR_ASSERT_OK(reporter.ReportFhirWarning("msg-3"));
+
+  FHIR_ASSERT_OK(reporter.ReportFhirPathFatal(absl::InternalError("msg-4"),
+                                              "bar.exists()"));
+  FHIR_ASSERT_OK(reporter.ReportFhirPathError("bar.exists()"));
+  FHIR_ASSERT_OK(reporter.ReportFhirPathWarning("bar.exists()"));
+
+  EXPECT_THAT(
+      handler.reports_,
+      ElementsAre("msg-1:fatal:Foo:Foo", "msg-2:error:Foo:Foo",
+                  "msg-3:warning:Foo:Foo", "msg-4@bar.exists():fatal:Foo:Foo",
+                  "@bar.exists():error:Foo:Foo",
+                  "@bar.exists():warning:Foo:Foo"));
+}
+
+TEST(ScopedErrorReporterTest, ScopesAppliedCorretly) {
+  TestErrorHandler handler;
+  ScopedErrorReporter foo_scope(&handler, "Foo");
+
+  {
+    FHIR_ASSERT_OK(foo_scope.ReportFhirFatal(absl::InternalError("msg-1")));
+
+    {
+      ScopedErrorReporter bar_scope = foo_scope.WithScope("bar", 2);
+      {
+        ScopedErrorReporter baz_scope = bar_scope.WithScope("baz");
+        FHIR_ASSERT_OK(baz_scope.ReportFhirError("msg-2"));
+      }
+    }
+    {
+      ScopedErrorReporter bar_scope = foo_scope.WithScope("bar", 5);
+      FHIR_ASSERT_OK(bar_scope.ReportFhirWarning("msg-3"));
+    }
+  }
+
+  {
+    ScopedErrorReporter qux_scope(&handler, "Quux");
+    FHIR_ASSERT_OK(qux_scope.ReportFhirWarning("msg-4"));
+  }
+
   EXPECT_THAT(handler.reports_,
-              testing::ElementsAre(
-                  "msg:error:Patient.contact[2].name:Patient.contact.name"));
+              ElementsAre("msg-1:fatal:Foo:Foo",
+                          "msg-2:error:Foo.bar[2].baz:Foo.bar.baz",
+                          "msg-3:warning:Foo.bar[5]:Foo.bar",
+                          "msg-4:warning:Quux:Quux"));
+}
+
+TEST(ScopedErrorReporterTest, ReportWithScopeApisApplyScopeCorrectly) {
+  TestErrorHandler handler;
+  ScopedErrorReporter reporter = ScopedErrorReporter(&handler, "Foo");
+
+  FHIR_ASSERT_OK(reporter.ReportFhirFatal(absl::InternalError("msg-1"), "s1"));
+  FHIR_ASSERT_OK(reporter.ReportFhirError("msg-2", "s2", 3));
+  FHIR_ASSERT_OK(reporter.ReportFhirWarning("msg-3", "s2", 4));
+
+  FHIR_ASSERT_OK(reporter.ReportFhirPathFatal(absl::InternalError("msg-4"),
+                                              "bar.exists()", "s3", 0));
+  FHIR_ASSERT_OK(reporter.ReportFhirPathError("bar.exists()", "s4"));
+  FHIR_ASSERT_OK(reporter.ReportFhirPathWarning("bar.exists()", "s5"));
+
+  EXPECT_THAT(
+      handler.reports_,
+      ElementsAre("msg-1:fatal:Foo.s1:Foo.s1", "msg-2:error:Foo.s2[3]:Foo.s2",
+                  "msg-3:warning:Foo.s2[4]:Foo.s2",
+                  "msg-4@bar.exists():fatal:Foo.s3[0]:Foo.s3",
+                  "@bar.exists():error:Foo.s4:Foo.s4",
+                  "@bar.exists():warning:Foo.s5:Foo.s5"));
+}
+
+TEST(ScopedErrorReporterTest, ScopesCreatedThroughFieldsSucceed) {
+  TestErrorHandler handler;
+  ScopedErrorReporter foo_scope(&handler, "Patient");
+
+  auto patient_descriptor = r4::core::Patient::descriptor();
+
+  {
+    {
+      auto contact_field = patient_descriptor->FindFieldByName("contact");
+      // Contact is repeated - 2 is respected
+      ScopedErrorReporter contact_scope = foo_scope.WithScope(contact_field, 2);
+      {
+        auto name_field =
+            r4::core::Patient::Contact::descriptor()->FindFieldByName("name");
+        // Name is not repeated on contact - index should be ignored
+        FHIR_ASSERT_OK(
+            contact_scope.WithScope(name_field, 5).ReportFhirError("msg"));
+      }
+    }
+  }
+
+  EXPECT_THAT(
+      handler.reports_,
+      ElementsAre("msg:error:Patient.contact[2].name:Patient.contact.name"));
 }
 
 }  // namespace

@@ -226,7 +226,7 @@ class ErrorReporter final {
   // the ErrorHandler implementation wrapped by this object.
   //
   // Optional `field_name` and `index` parameters allow entering a scope just
-  // for the duration of the report.E.g.,
+  // for the duration of the report. E.g.,
   //
   // reporter->ReportFhirError("err-msg", field_name, index);
   //
@@ -282,6 +282,128 @@ class ErrorReporter final {
   void EnterScope(absl::string_view scope,
                   std::optional<uint> index = std::nullopt);
   void ExitScope();
+};
+
+// ScopedErrorReporter object for invoking an ErrorHandler with context scope.
+// Top-level process APIs should accept an ErrorHandler reference, wrap it
+// in a ScopedErrorReporter and then pass the ScopedErrorReporter around.
+// The WithScope method allows entering scopes on the ScopedErrorReporter while
+// traversing a FHIR resource.  The process can then call Report functions on
+// the ScopedErrorReporter, which will forward to the ErrorHandler along with
+// the element and field paths derived from the scope.
+//
+// Scopes are entered by calling WithScope to create a new ScopedErrorReporter
+// object for the given scope. Ex:
+//
+// void HandleResource(const Message& resource, ErrorHandler& error_handler) {
+//   ScopedErrorReporter resource_scope(
+//     &error_handler,
+//     resource.GetDescriptor()->name());
+//
+//   resource_scope->ReportFhirError("err-msg");
+//   // element_path -> ResourceName
+//   // field_path -> ResourceName
+//
+//   const FieldDescriptor* repeated_field = /* ... */;
+//   for (int i = 0;
+//        i < resource.GetReflection()->FieldSize(resource, repeated_field);
+//        ++i) {
+//     ScopedErrorReporter element_scope =
+//       resource_scope->WithScope(repeated_field->jsonName(), i);
+//
+//     element_scope->ReportFhirError("err-msg");
+//     // element_path -> ResourceName.fieldName[i]
+//     // field_path -> ResourceName.fieldName
+//   }
+class ScopedErrorReporter final {
+ public:
+  ScopedErrorReporter(ErrorHandler* handler, absl::string_view field_name)
+      : handler_(*handler), field_name_(field_name), prev_scope_(nullptr) {}
+  ScopedErrorReporter(ErrorHandler* handler, absl::string_view field_name,
+                      uint index)
+      : handler_(*handler),
+        field_name_(field_name),
+        index_(index),
+        prev_scope_(nullptr) {}
+
+  // Create a new ScopedErrorReporter which represents nesting the given scope
+  // into the ScopedErrorReporter on which WithScope was called.
+  const ScopedErrorReporter WithScope(
+      absl::string_view scope, std::optional<uint> index = std::nullopt) const;
+
+  // Enters a scope based on a proto field.  This forwards to the above
+  // constructor using the JSON field name (to match the FHIR field), and drops
+  // any index param if the field is not repeated.
+  // TODO: catch if a non-zero index is sent with a singular field,
+  // or a repeated field is missing an index.
+  const ScopedErrorReporter WithScope(
+      const google::protobuf::FieldDescriptor* field,
+      std::optional<std::uint8_t> index = std::nullopt) const;
+
+  // Report functions that forward to Handle functions of the same name on
+  // the ErrorHandler implementation wrapped by this object.
+  //
+  // Optional `field_name` and `index` parameters allow entering a scope just
+  // for the duration of the report. E.g.,
+  //
+  // reporter->ReportFhirError("err-msg", field_name, index);
+  //
+  // is equivalent to
+  //
+  // reporter->WithScope(field_name, index).ReportFhirError("err-msg");
+  absl::Status ReportFhirFatal(const absl::Status& status) const;
+  absl::Status ReportFhirFatal(const absl::Status& status,
+                               absl::string_view field_name,
+                               std::optional<uint> index = std::nullopt) const;
+
+  absl::Status ReportFhirError(absl::string_view msg) const;
+  absl::Status ReportFhirError(absl::string_view msg,
+                               absl::string_view field_name,
+                               std::optional<uint> index = std::nullopt) const;
+
+  absl::Status ReportFhirWarning(absl::string_view msg) const;
+  absl::Status ReportFhirWarning(
+      absl::string_view msg, absl::string_view field_name,
+      std::optional<uint> index = std::nullopt) const;
+
+  absl::Status ReportFhirPathFatal(const absl::Status& status,
+                                   absl::string_view expression) const;
+  absl::Status ReportFhirPathFatal(
+      const absl::Status& status, absl::string_view expression,
+      absl::string_view field_name,
+      std::optional<uint> index = std::nullopt) const;
+
+  absl::Status ReportFhirPathError(absl::string_view expression) const;
+  absl::Status ReportFhirPathError(
+      absl::string_view expression, absl::string_view field_name,
+      std::optional<uint> index = std::nullopt) const;
+
+  absl::Status ReportFhirPathWarning(absl::string_view expression) const;
+  absl::Status ReportFhirPathWarning(
+      absl::string_view expression, absl::string_view field_name,
+      std::optional<uint> index = std::nullopt) const;
+
+ private:
+  ErrorHandler& handler_;
+  const std::string field_name_;
+  const std::optional<uint> index_;
+  const ScopedErrorReporter* prev_scope_;
+
+  ScopedErrorReporter(ErrorHandler* handler, absl::string_view field_name,
+                      std::optional<uint> index,
+                      const ScopedErrorReporter* prev_scope)
+      : handler_(*handler),
+        field_name_(field_name),
+        index_(index),
+        prev_scope_(prev_scope) {}
+
+  // Returns the field path to the current scope, not including any indexes
+  // E.g., "Foo.bar.baz.quux"
+  std::string CurrentFieldPath() const;
+
+  // Returns the element path to the current scope, including any indexes
+  // E.g., "Foo.bar[2].baz.quux[0]"
+  std::string CurrentElementPath() const;
 };
 
 // Scope Management object for ErrorReporter.
