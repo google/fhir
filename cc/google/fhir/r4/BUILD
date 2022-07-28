@@ -64,7 +64,6 @@ cc_library(
         "//cc/google/fhir/status:statusor",
         "//proto/google/fhir/proto:annotations_cc_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
-        "@com_google_absl//absl/memory",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/types:optional",
@@ -84,6 +83,7 @@ cc_test(
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
         "//testdata/r4/profiles:test_cc_proto",
+        "@com_google_absl//absl/status",
         "@com_google_googletest//:gtest_main",
     ],
 )

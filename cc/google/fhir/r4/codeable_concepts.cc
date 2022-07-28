@@ -14,18 +14,20 @@
 
 #include "google/fhir/r4/codeable_concepts.h"
 
+#include <functional>
+#include <memory>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
-#include "absl/memory/memory.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/codes.h"
 #include "google/fhir/fhir_types.h"
 #include "google/fhir/proto_util.h"
-#include "google/fhir/status/statusor.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 
 namespace google {
@@ -34,7 +36,6 @@ namespace r4 {
 
 namespace {
 
-using ::absl::AlreadyExistsError;
 using ::absl::InvalidArgumentError;
 using ::absl::NotFoundError;
 using ::google::fhir::r4::core::Coding;
@@ -69,7 +70,7 @@ void CopyCommonCodingFields(const SrcCodingLike& src, DestCodingLike* dest) {
 std::unique_ptr<Coding> CodingFromFixedCodeCoding(
     const google::protobuf::FieldDescriptor* field,
     const CodingWithFixedCode& fixed_code_coding) {
-  auto coding = absl::make_unique<Coding>();
+  auto coding = std::make_unique<Coding>();
   CopyCommonCodingFields(fixed_code_coding, coding.get());
   coding->mutable_system()->set_value(GetInlinedCodingSystem(field));
   coding->mutable_code()->set_value(GetInlinedCodingCode(field));
@@ -348,7 +349,7 @@ std::shared_ptr<const Coding> FindCoding(const Message& concept,
         return false;
       },
       [&func, &found_coding](const Message& fixed_system_coding) {
-        auto synth_coding = absl::make_unique<Coding>();
+        auto synth_coding = std::make_unique<Coding>();
         auto status = CopyCoding(fixed_system_coding, synth_coding.get());
         if (!status.ok()) {
           LOG(WARNING) << "Encountered malformed Coding with fixed system "
@@ -418,6 +419,32 @@ int CodingSize(const ::google::protobuf::Message& concept) {
       concept,
       [&size](const std::string& system, const std::string& code) { size++; });
   return size;
+}
+
+std::vector<const core::Coding*> GetAllCodingsWithSystem(
+    const core::CodeableConcept& concept, absl::string_view system) {
+  std::vector<const core::Coding*> matches;
+  for (const core::Coding& coding : concept.coding()) {
+    if (coding.system().value() == system) {
+      matches.push_back(&coding);
+    }
+  }
+  return matches;
+}
+
+absl::StatusOr<const core::Coding*> GetOnlyCodingWithSystem(
+    const core::CodeableConcept& concept, absl::string_view system) {
+  std::vector<const core::Coding*> all_codings =
+      GetAllCodingsWithSystem(concept, system);
+  if (all_codings.empty()) {
+    return NotFoundError(
+        absl::StrCat("Concept has no codings with system: ", system));
+  }
+  if (all_codings.size() > 1) {
+    return InvalidArgumentError(
+        absl::StrCat("Concept has multiple codings with system: ", system));
+  }
+  return all_codings[0];
 }
 
 }  // namespace r4

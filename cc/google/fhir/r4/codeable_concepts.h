@@ -178,6 +178,18 @@ absl::Status CopyCodeableConcept(const ::google::protobuf::Message& source,
 
 int CodingSize(const ::google::protobuf::Message& concept);
 
+// Returns all Codings with a given system in an unprofiled CodeableConcept.
+// Elements in the vector will never be nullptr.
+std::vector<const core::Coding*> GetAllCodingsWithSystem(
+    const core::CodeableConcept& concept, absl::string_view system);
+
+// Returns the only Coding with a given system in an unprofiled CodeableConcept.
+// Returns a NotFound status if no codings have that system, and an
+// InvalidArgumentError if multiple exist.
+// If the status is OK, this will never return nullptr.
+absl::StatusOr<const core::Coding*> GetOnlyCodingWithSystem(
+    const core::CodeableConcept& concept, absl::string_view system);
+
 }  // namespace r4
 }  // namespace fhir
 }  // namespace google

@@ -14,8 +14,12 @@
 
 #include "google/fhir/r4/codeable_concepts.h"
 
+#include <memory>
+#include <string>
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/status/status.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
@@ -30,6 +34,7 @@ namespace {
 using ::google::fhir::r4::core::CodeableConcept;
 using ::google::fhir::r4::core::Coding;
 using ::google::fhir::r4::testing::TestObservation;
+using ::google::fhir::testutil::EqualsProto;
 using ::testing::ElementsAre;
 
 const TestObservation::CodeableConceptForCode GetConcept() {
@@ -459,6 +464,72 @@ TEST(CodeableConceptsTest, AddCodingFromStrings) {
     absl::StrAppend(&code_accum, coding.code().value(), ",");
   });
   EXPECT_EQ(code_accum, "qcode1,qcode2,rcode,");
+}
+
+Coding MakeUnprofiledCoding(const std::string& system,
+                            const std::string& code) {
+  Coding coding;
+  coding.mutable_system()->set_value(system);
+  coding.mutable_code()->set_value(code);
+  return coding;
+}
+
+TEST(CodeableConceptsTest, GetAllCodingsWithSystemNoMatchesSucceeds) {
+  r4::core::CodeableConcept concept;
+
+  *concept.add_coding() = MakeUnprofiledCoding("http://sysq.org", "qcode1");
+  *concept.add_coding() = MakeUnprofiledCoding("http://sysq.org", "qcode2");
+  *concept.add_coding() = MakeUnprofiledCoding("http://sysr.org", "rcode");
+
+  EXPECT_TRUE(GetAllCodingsWithSystem(concept, "not-found-system").empty());
+}
+
+TEST(CodeableConceptsTest, GetAllCodingsWithSystemMultipleFoundSucceeds) {
+  r4::core::CodeableConcept concept;
+
+  *concept.add_coding() = MakeUnprofiledCoding("http://sysq.org", "qcode1");
+  *concept.add_coding() = MakeUnprofiledCoding("http://sysr.org", "rcode");
+  *concept.add_coding() = MakeUnprofiledCoding("http://sysq.org", "qcode2");
+
+  EXPECT_THAT(GetAllCodingsWithSystem(concept, "http://sysq.org"),
+              ElementsAre(EqualsProto(concept.coding(0)),
+                          EqualsProto(concept.coding(2))));
+}
+
+TEST(CodeableConceptsTest, GetOnlyCodingsWithSystemNoMatchesFails) {
+  r4::core::CodeableConcept concept;
+
+  *concept.add_coding() = MakeUnprofiledCoding("http://sysq.org", "qcode1");
+  *concept.add_coding() = MakeUnprofiledCoding("http://sysq.org", "qcode2");
+  *concept.add_coding() = MakeUnprofiledCoding("http://sysr.org", "rcode");
+
+  EXPECT_EQ(
+      GetOnlyCodingWithSystem(concept, "not-found-system").status().code(),
+      absl::StatusCode::kNotFound);
+}
+
+TEST(CodeableConceptsTest, GetOnlyCodingsWithSystemMultipleFoundFails) {
+  r4::core::CodeableConcept concept;
+
+  *concept.add_coding() = MakeUnprofiledCoding("http://sysq.org", "qcode1");
+  *concept.add_coding() = MakeUnprofiledCoding("http://sysr.org", "rcode");
+  *concept.add_coding() = MakeUnprofiledCoding("http://sysq.org", "qcode2");
+
+  EXPECT_EQ(GetOnlyCodingWithSystem(concept, "http://sysq.org").status().code(),
+            absl::StatusCode::kInvalidArgument);
+}
+
+TEST(CodeableConceptsTest, GetOnlyCodingsWithSystemOneFoundSucceeds) {
+  r4::core::CodeableConcept concept;
+
+  *concept.add_coding() = MakeUnprofiledCoding("http://sysq.org", "qcode1");
+  *concept.add_coding() = MakeUnprofiledCoding("http://sysr.org", "rcode");
+  *concept.add_coding() = MakeUnprofiledCoding("http://sysq.org", "qcode2");
+
+  auto test_out = GetOnlyCodingWithSystem(concept, "http://sysr.org");
+
+  EXPECT_TRUE(test_out.ok());
+  EXPECT_THAT(*test_out, EqualsProto(concept.coding(1)));
 }
 
 }  // namespace
