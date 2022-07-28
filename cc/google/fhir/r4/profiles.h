@@ -21,18 +21,18 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "google/fhir/error_reporter.h"
-#include "proto/google/fhir/proto/r4/core/resources/operation_outcome.pb.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "proto/google/fhir/proto/r4/core/resources/operation_outcome.pb.h"
 
 namespace google {
 namespace fhir {
 namespace r4 {
 
 // Converts FHIR resources between profiled and unprofiled, reporting any
-// conversion or validation errors to the given ErrorReporter.  Conversion will
-// continue processing as long as the ErrorReporter returns an Ok status for all
-// errors it is given.
+// conversion or validation errors to the given ScopedErrorReporter.  Conversion
+// will continue processing as long as the ScopedErrorReporter returns an Ok
+// status for all errors it is given.
 //
 // If <target> is a profiled type of <source>:
 // Converts a resource to a profiled version of that resource.
@@ -58,9 +58,8 @@ absl::Status ConvertToProfile(const ::google::protobuf::Message& source,
 //
 // See the above ConvertToProfile method for details on the source and target
 // parameters.
-absl::StatusOr<::google::fhir::r4::core::OperationOutcome>
-ConvertToProfile(const ::google::protobuf::Message& source,
-                 ::google::protobuf::Message* target);
+absl::StatusOr<::google::fhir::r4::core::OperationOutcome> ConvertToProfile(
+    const ::google::protobuf::Message& source, ::google::protobuf::Message* target);
 }  // namespace r4
 
 // Deprecated. Use ::google::fhir::r4::ConvertToProfile instead.

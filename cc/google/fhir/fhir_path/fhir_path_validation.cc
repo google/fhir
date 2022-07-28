@@ -279,7 +279,7 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
 absl::Status ValidateConstraint(const internal::WorkspaceMessage& message,
                                 const CompiledExpression& expression,
                                 const Severity severity,
-                                ErrorReporter& error_reporter) {
+                                const ScopedErrorReporter& error_reporter) {
   static const auto* invalid_expressions = new absl::flat_hash_set<std::string>(
       {"where(category.memberOf('http://hl7.org/fhir/us/core/ValueSet/"
        "us-core-condition-category')).exists()",
@@ -330,23 +330,26 @@ namespace {
 absl::Status HandleFieldConstraint(
     const internal::WorkspaceMessage& workspace_message,
     const FieldDescriptor* field, const CompiledExpression& expr,
-    const Severity severity, ErrorReporter& error_reporter) {
+    const Severity severity, const ScopedErrorReporter& error_reporter) {
   const Message& message = *workspace_message.Message();
   for (int i = 0; i < PotentiallyRepeatedFieldSize(message, field); i++) {
     const Message& child = GetPotentiallyRepeatedMessage(message, field, i);
-    ErrorScope error_scope(
-        &error_reporter, PathTerm(message, field),
-        field->is_repeated() ? std::optional<std::uint8_t>(i) : std::nullopt);
     FHIR_RETURN_IF_ERROR(ValidateConstraint(
         internal::WorkspaceMessage(workspace_message, &child), expr, severity,
-        error_reporter));
+        error_reporter.WithScope(PathTerm(message, field),
+                                 field->is_repeated()
+                                     ? std::optional<std::uint8_t>(i)
+                                     : std::nullopt)
+
+            ));
   }
   return absl::OkStatus();
 }
 }  // namespace
 
 absl::Status FhirPathValidator::Validate(
-    const internal::WorkspaceMessage& message, ErrorReporter& error_reporter) {
+    const internal::WorkspaceMessage& message,
+    const ScopedErrorReporter& error_reporter) {
   // ConstraintsFor may recursively build constraints so
   // we lock the mutex here to ensure thread safety.
   mutex_.Lock();
@@ -388,11 +391,13 @@ absl::Status FhirPathValidator::Validate(
     for (int i = 0; i < PotentiallyRepeatedFieldSize(proto, field); i++) {
       const Message& child = GetPotentiallyRepeatedMessage(proto, field, i);
 
-      ErrorScope error_scope(
-          &error_reporter, path_term,
-          field->is_repeated() ? std::optional<std::uint8_t>(i) : std::nullopt);
       FHIR_RETURN_IF_ERROR(Validate(
-          internal::WorkspaceMessage(message, &child), error_reporter));
+          internal::WorkspaceMessage(message, &child),
+          error_reporter.WithScope(
+              path_term, field->is_repeated() ? std::optional<std::uint8_t>(i)
+                                              : std::nullopt)
+
+              ));
     }
   }
   return absl::OkStatus();
@@ -424,8 +429,8 @@ absl::Status FhirPathValidator::Validate(const Message& message,
     return Validate(*resource, error_handler);
   }
 
-  ErrorReporter reporter(&error_handler);
-  ErrorScope resource_scope(&reporter, message.GetDescriptor()->name());
+  const ScopedErrorReporter reporter(&error_handler,
+                                     message.GetDescriptor()->name());
   return Validate(internal::WorkspaceMessage(&message), reporter);
 }
 

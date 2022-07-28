@@ -59,8 +59,9 @@ GetExtensionMap(const Descriptor* descriptor);
 // cannot are put into the extension field on the target.
 template <typename ExtensionLike,
           typename CodeLike = FHIR_DATATYPE(ExtensionLike, code)>
-absl::Status PerformExtensionSlicing(const Message& source, Message* target,
-    ErrorReporter* error_reporter) {
+absl::Status PerformExtensionSlicing(
+    const Message& source, Message* target,
+    const ScopedErrorReporter& error_reporter) {
   const google::protobuf::Descriptor* source_descriptor = source.GetDescriptor();
   const google::protobuf::Reflection* source_reflection = source.GetReflection();
   const google::protobuf::Descriptor* target_descriptor = target->GetDescriptor();
@@ -84,7 +85,7 @@ absl::Status PerformExtensionSlicing(const Message& source, Message* target,
     const ExtensionLike& source_extension = dynamic_cast<const ExtensionLike&>(
         source_reflection->GetRepeatedMessage(source, source_extension_field,
                                               i));
-    ErrorScope scope(error_reporter, "extensions", i);
+    ScopedErrorReporter scope = error_reporter.WithScope("extensions", i);
     const std::string& url = source_extension.url().value();
     const auto extension_entry_iter = extension_map.find(url);
     if (extension_entry_iter != extension_map.end()) {
@@ -102,11 +103,10 @@ absl::Status PerformExtensionSlicing(const Message& source, Message* target,
             value.GetReflection()->GetOneofFieldDescriptor(
                 value, value.GetDescriptor()->FindOneofByName("choice"));
         if (src_datatype_field == nullptr) {
-          FHIR_RETURN_IF_ERROR(error_reporter->ReportFhirFatal(
-              absl::InvalidArgumentError(absl::StrCat(
-                  "Invalid extension: neither value nor extensions "
-                  "set on extension ",
-                  url))));
+          FHIR_RETURN_IF_ERROR(scope.ReportFhirFatal(absl::InvalidArgumentError(
+              absl::StrCat("Invalid extension: neither value nor extensions "
+                           "set on extension ",
+                           url))));
           continue;
         }
         Message* typed_extension = MutableOrAddMessage(target, inlined_field);
@@ -119,8 +119,8 @@ absl::Status PerformExtensionSlicing(const Message& source, Message* target,
           FHIR_RETURN_IF_ERROR(
               CopyCode(dynamic_cast<const CodeLike&>(src_value), typed_extension));
         } else {
-          FHIR_RETURN_IF_ERROR(error_reporter->ReportFhirFatal(
-              absl::InvalidArgumentError(absl::StrCat(
+          FHIR_RETURN_IF_ERROR(
+              scope.ReportFhirFatal(absl::InvalidArgumentError(absl::StrCat(
                   "Profiled extension slice is incorrect type: ", url,
                   " should be ", destination_type->full_name(), " but is ",
                   src_datatype_field->message_type()->full_name()))));
@@ -213,7 +213,7 @@ template <typename ExtensionLike,
                                                        codeable_concept),
           typename CodeLike = FHIR_DATATYPE(ExtensionLike, code)>
 absl::Status CopyToProfile(const Message& source, Message* target,
-    ErrorReporter* error_reporter) {
+                           const ScopedErrorReporter& error_reporter) {
   target->Clear();
   // Handle all the raw extensions on source.  This slot extensions that have
   // profiled fields, and copy the rest over to the target raw extensions field.
@@ -367,10 +367,9 @@ absl::Status ConvertToProfileLenientInternal(const Message& source,
         "Incompatible profile types: ", source.GetDescriptor()->full_name(),
         " to ", target->GetDescriptor()->full_name()));
   }
-  ErrorReporter error_reporter(&error_handler);
-  ErrorScope resource_scope(&error_reporter, source.GetDescriptor()->name());
-  return internal::CopyToProfile<ExtensionLike>(source, target,
-                                                &error_reporter);
+  const ScopedErrorReporter error_reporter(&error_handler,
+                                           source.GetDescriptor()->name());
+  return internal::CopyToProfile<ExtensionLike>(source, target, error_reporter);
 }
 
 template <typename PrimitiveHandlerVersion,

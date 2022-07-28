@@ -171,9 +171,9 @@ class FhirPathValidator {
   MessageConstraints* ConstraintsFor(const ::google::protobuf::Descriptor* descriptor);
 
   // Recursively called validation method that aggregates results into the
-  // provided ErrorReporter
+  // provided ScopedErrorReporter
   absl::Status Validate(const internal::WorkspaceMessage& message,
-                        ErrorReporter& error_reporter);
+                        const ScopedErrorReporter& error_reporter);
 
   const PrimitiveHandler* primitive_handler_;
   absl::Mutex mutex_;

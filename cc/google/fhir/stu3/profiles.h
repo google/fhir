@@ -18,22 +18,21 @@
 #define GOOGLE_FHIR_STU3_PROFILES_H_
 
 #include "google/protobuf/message.h"
-#include "google/fhir/error_reporter.h"
-#include "proto/google/fhir/proto/stu3/resources.pb.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-
+#include "proto/google/fhir/proto/stu3/resources.pb.h"
 
 namespace google {
 namespace fhir {
 namespace stu3 {
 
 // Converts FHIR resources between profiled and unprofiled, reporting any
-// conversion or validation errors to the given ErrorReporter.  Conversion will
-// continue processing as long as the ErrorReporter returns an Ok status for all
-// errors it is given.
+// conversion or validation errors to the given ScopedErrorReporter.  Conversion
+// will continue processing as long as the ScopedErrorReporter returns an Ok
+// status for all errors it is given.
 //
 // If <target> is a profiled type of <source>:
 // Converts a resource to a profiled version of that resource.
@@ -49,9 +48,9 @@ namespace stu3 {
 // Any data that is in an inlined field in the profiled message,
 // that does not exists in the base message will be converted back to the
 // original format (e.g., extension).
-absl::Status ConvertToProfile(const ::google::protobuf::Message& source,
-                              ::google::protobuf::Message* target,
-                              ::google::fhir::ErrorReporter* reporter);
+absl::Status ConvertToProfile(
+    const ::google::protobuf::Message& source, ::google::protobuf::Message* target,
+    const ::google::fhir::ScopedErrorReporter& reporter);
 
 // Converts FHIR resources between profiled and unprofiled, returning any
 // conversion errors or warnings in an OperationOutcome. Users should check
@@ -59,11 +58,9 @@ absl::Status ConvertToProfile(const ::google::protobuf::Message& source,
 //
 // See the above ConvertToProfile method for details on the source and target
 // parameters.
-absl::StatusOr<::google::fhir::stu3::proto::OperationOutcome>
-ConvertToProfile(const ::google::protobuf::Message& source,
-                 ::google::protobuf::Message* target);
+absl::StatusOr<::google::fhir::stu3::proto::OperationOutcome> ConvertToProfile(
+    const ::google::protobuf::Message& source, ::google::protobuf::Message* target);
 }  // namespace stu3
-
 
 // Deprecated. Use ::google::fhir::stu3::ConvertToProfile instead.
 //
