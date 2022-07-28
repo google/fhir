@@ -37,7 +37,7 @@ using ::google::protobuf::Message;
 
 absl::StatusOr<ParseResult> PrimitiveHandler::ParseInto(
     const internal::FhirJson& json, const absl::TimeZone tz, Message* target,
-    ErrorReporter& error_reporter) const {
+    const ScopedErrorReporter& error_reporter) const {
   FHIR_RETURN_IF_ERROR(CheckVersion(*target));
 
   if (json.isArray() || json.isObject()) {
@@ -58,7 +58,7 @@ absl::StatusOr<ParseResult> PrimitiveHandler::ParseInto(
 
 ::absl::StatusOr<ParseResult> PrimitiveHandler::ParseInto(
     const internal::FhirJson& json, Message* target,
-    ErrorReporter& error_reporter) const {
+    const ScopedErrorReporter& error_reporter) const {
   return ParseInto(json, absl::UTCTimeZone(), target, error_reporter);
 }
 
@@ -81,7 +81,8 @@ absl::StatusOr<JsonPrimitive> PrimitiveHandler::WrapPrimitiveProto(
 }
 
 absl::Status PrimitiveHandler::ValidatePrimitive(
-    const ::google::protobuf::Message& primitive, ErrorReporter& error_reporter) const {
+    const ::google::protobuf::Message& primitive,
+    const ScopedErrorReporter& error_reporter) const {
   FHIR_RETURN_IF_ERROR(CheckVersion(primitive));
 
   if (!IsPrimitive(primitive.GetDescriptor())) {

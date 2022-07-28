@@ -77,13 +77,13 @@ class PrimitiveHandler {
   // Note that a successful parse does not indicate the result is valid FHIR,
   // just that no data was lost in converting from FHIR JSON to FhirProto.
   // TODO: Use references for target, since it's required.
-  absl::StatusOr<ParseResult> ParseInto(const internal::FhirJson& json,
-                                        const absl::TimeZone tz,
-                                        ::google::protobuf::Message* target,
-                                        ErrorReporter& error_reporter) const;
-  absl::StatusOr<ParseResult> ParseInto(const internal::FhirJson& json,
-                                        ::google::protobuf::Message* target,
-                                        ErrorReporter& error_reporter) const;
+  absl::StatusOr<ParseResult> ParseInto(
+      const internal::FhirJson& json, const absl::TimeZone tz,
+      ::google::protobuf::Message* target,
+      const ScopedErrorReporter& error_reporter) const;
+  absl::StatusOr<ParseResult> ParseInto(
+      const internal::FhirJson& json, ::google::protobuf::Message* target,
+      const ScopedErrorReporter& error_reporter) const;
 
   // Wraps a FHIR primitive proto into a JsonPrimitive
   // Returns a ParseResult indicating if the parse succeeded
@@ -97,8 +97,9 @@ class PrimitiveHandler {
   // cause a status failure.
   // Status failures are a result of unexpected errors, or if the error reporter
   // returns a status (e.g., the fast-fail error reporters).
-  absl::Status ValidatePrimitive(const ::google::protobuf::Message& primitive,
-                                 ErrorReporter& error_reporter) const;
+  absl::Status ValidatePrimitive(
+      const ::google::protobuf::Message& primitive,
+      const ScopedErrorReporter& error_reporter) const;
 
   // Validates that a reference field conforms to spec.
   // The types of resources that can be referenced is controlled via annotations
@@ -111,7 +112,7 @@ class PrimitiveHandler {
   // returns a status (e.g., the fast-fail error reporters).
   virtual absl::Status ValidateReferenceField(
       const ::google::protobuf::Message& parent, const ::google::protobuf::FieldDescriptor* field,
-      ErrorReporter& error_reporter) const = 0;
+      const ScopedErrorReporter& error_reporter) const = 0;
 
   virtual ::google::protobuf::Message* NewContainedResource() const = 0;
 
@@ -236,12 +237,13 @@ template <class TypedReference,
           class TypedReferenceId = REFERENCE_ID_TYPE(TypedReference)>
 absl::Status ValidateReferenceField(const Message& parent,
                                     const FieldDescriptor* field,
-                                    ErrorReporter& error_reporter) {
+                                    const ScopedErrorReporter& error_reporter) {
   static const Descriptor* descriptor = TypedReference::descriptor();
   static const OneofDescriptor* oneof = descriptor->oneof_decl(0);
 
   for (int i = 0; i < PotentiallyRepeatedFieldSize(parent, field); i++) {
-    ErrorScope element_scope(&error_reporter, field, i);
+    const ScopedErrorReporter scoped_reporter =
+        error_reporter.WithScope(field, i);
     const TypedReference& reference =
         GetPotentiallyRepeatedMessage<TypedReference>(parent, field, i);
     const Reflection* reflection = reference.GetReflection();
@@ -251,7 +253,8 @@ absl::Status ValidateReferenceField(const Message& parent,
     if (!reference_field) {
       if (reference.extension_size() == 0 && !reference.has_identifier() &&
           !reference.has_display()) {
-        FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirError("empty-reference"));
+        FHIR_RETURN_IF_ERROR(
+            scoped_reporter.ReportFhirError("empty-reference"));
         continue;
       }
       // There's no reference field, but there is other data.  That's valid.
@@ -284,7 +287,7 @@ absl::Status ValidateReferenceField(const Message& parent,
         }
       }
       if (!is_allowed) {
-        FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirError(absl::StrCat(
+        FHIR_RETURN_IF_ERROR(scoped_reporter.ReportFhirError(absl::StrCat(
             "invalid-reference-disallowed-type-", reference_type)));
       }
     }
@@ -330,7 +333,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 
   absl::Status ValidateReferenceField(
       const Message& parent, const FieldDescriptor* field,
-      ErrorReporter& error_reporter) const override {
+      const ScopedErrorReporter& error_reporter) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Reference>(field->message_type()));
     return primitives_internal::ValidateReferenceField<Reference>(
         parent, field, error_reporter);
@@ -488,7 +491,8 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
         internal::FhirJson::CreateString(str);
 
     std::unique_ptr<DateTime> msg = std::make_unique<DateTime>();
-    ErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal());
+    ScopedErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal(),
+                                 "DateTime");
     FHIR_ASSIGN_OR_RETURN(ParseResult result,
                           ParseInto(*json_string, msg.get(), reporter));
     if (result == ParseResult::kFailed) {

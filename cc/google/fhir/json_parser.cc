@@ -207,7 +207,7 @@ class Parser {
 
   absl::StatusOr<ParseResult> MergeMessage(
       const internal::FhirJson& value, Message* target,
-      ErrorReporter& error_reporter) const {
+      const ScopedErrorReporter& error_reporter) const {
     const Descriptor* target_descriptor = target->GetDescriptor();
     // TODO: handle this with an annotation
     if (target_descriptor->name() == "ContainedResource") {
@@ -273,7 +273,7 @@ class Parser {
 
   absl::StatusOr<ParseResult> MergeContainedResource(
       const internal::FhirJson& value, Message* target,
-      ErrorReporter& error_reporter) const {
+      const ScopedErrorReporter& error_reporter) const {
     // We handle contained resources in a special way, because despite
     // internally being a Oneof, it is not acually a choice-type in FHIR. The
     // JSON field name is just "resource", which doesn't give us any clues
@@ -295,7 +295,7 @@ class Parser {
   absl::StatusOr<ParseResult> MergeChoiceField(
       const internal::FhirJson& json, const FieldDescriptor* choice_field,
       absl::string_view field_name, Message* parent,
-      ErrorReporter& error_reporter) const {
+      const ScopedErrorReporter& error_reporter) const {
     const Descriptor* choice_type_descriptor = choice_field->message_type();
     const auto& choice_type_field_map = GetFieldMap(choice_type_descriptor);
     std::string choice_field_name = std::string(field_name);
@@ -329,10 +329,9 @@ class Parser {
   // the given field on the parent.
   // Note that we cannot just pass the field message, as this behaves
   // differently if the field has been previously set or not.
-  absl::StatusOr<ParseResult> MergeField(const internal::FhirJson& json,
-                                         const FieldDescriptor* field,
-                                         Message* parent,
-                                         ErrorReporter& error_reporter) const {
+  absl::StatusOr<ParseResult> MergeField(
+      const internal::FhirJson& json, const FieldDescriptor* field,
+      Message* parent, const ScopedErrorReporter& error_reporter) const {
     const Reflection* parent_reflection = parent->GetReflection();
     // If the field is non-primitive make sure it hasn't been set yet.
     // Note that we allow primitive types to be set already, because FHIR
@@ -392,10 +391,10 @@ class Parser {
 
       ParseResult overall_result = ParseResult::kSucceeded;
       for (int i = 0; i < json.arraySize().value(); i++) {
-        ErrorScope element_scope(&error_reporter, field->json_name(), i);
-        FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> parsed_value,
-                              ParseFieldValue(field, *json.get(i).value(),
-                                              parent, error_reporter));
+        FHIR_ASSIGN_OR_RETURN(
+            std::unique_ptr<Message> parsed_value,
+            ParseFieldValue(field, *json.get(i).value(), parent,
+                            error_reporter.WithScope(field, i)));
         if (parsed_value == nullptr) {
           overall_result = ParseResult::kFailed;
           continue;
@@ -411,10 +410,9 @@ class Parser {
       }
       return overall_result;
     } else {
-      ErrorScope element_scope(&error_reporter, field->json_name());
-      FHIR_ASSIGN_OR_RETURN(
-          std::unique_ptr<Message> parsed_value,
-          ParseFieldValue(field, json, parent, error_reporter));
+      FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> parsed_value,
+                            ParseFieldValue(field, json, parent,
+                                            error_reporter.WithScope(field)));
       if (parsed_value == nullptr) {
         return ParseResult::kFailed;
       }
@@ -447,7 +445,7 @@ class Parser {
 
   absl::StatusOr<std::unique_ptr<Message>> ParseFieldValue(
       const FieldDescriptor* field, const internal::FhirJson& json,
-      Message* parent, ErrorReporter& error_reporter) const {
+      Message* parent, const ScopedErrorReporter& error_reporter) const {
     if (field->type() != FieldDescriptor::Type::TYPE_MESSAGE) {
       FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirFatal(InvalidArgumentError(
           absl::StrCat("Error in FHIR proto definition: Field ",
@@ -481,9 +479,9 @@ class Parser {
     }
   }
 
-  absl::StatusOr<ParseResult> MergeValue(const internal::FhirJson& json,
-                                         Message* target,
-                                         ErrorReporter& error_reporter) const {
+  absl::StatusOr<ParseResult> MergeValue(
+      const internal::FhirJson& json, Message* target,
+      const ScopedErrorReporter& error_reporter) const {
     if (IsPrimitive(target->GetDescriptor())) {
       if (json.isObject()) {
         // This is a primitive type extension.
@@ -551,8 +549,8 @@ absl::StatusOr<ParseResult> Parser::MergeJsonFhirObjectIntoProto(
     const internal::FhirJson& json_object, Message* target,
     const absl::TimeZone default_timezone, const bool validate,
     ErrorHandler& error_handler) const {
-  ErrorReporter error_reporter(&error_handler);
-  ErrorScope object_scope(&error_reporter, target->GetDescriptor()->name());
+  ScopedErrorReporter error_reporter(&error_handler,
+                                     target->GetDescriptor()->name());
 
   internal::Parser parser{primitive_handler_, default_timezone};
 

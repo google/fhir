@@ -361,8 +361,8 @@ absl::Status FhirGenerator::FillPrimitive(
   }
 
   if (value) {
-    ErrorReporter reporter =
-        ErrorReporter(&FailFastErrorHandler::FailOnErrorOrFatal());
+    ScopedErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal(),
+                                 fhir_primitive->GetDescriptor()->name());
     FHIR_ASSIGN_OR_RETURN(
         ParseResult result,
         primitive_handler_->ParseInto(*value, fhir_primitive, reporter));
@@ -412,8 +412,8 @@ absl::Status FhirGenerator::FillReference(
     auto fhir_json = internal::FhirJson::CreateString(
         absl::StrCat(reference_type, "/", reference_id));
 
-    ErrorReporter reporter =
-        ErrorReporter(&FailFastErrorHandler::FailOnErrorOrFatal());
+    ScopedErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal(),
+                                 "");
     FHIR_ASSIGN_OR_RETURN(
         ParseResult result,
         primitive_handler_->ParseInto(*fhir_json, uri_message, reporter));

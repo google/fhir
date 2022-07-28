@@ -117,7 +117,8 @@ void AddPrimitiveHasNoValue(W* primitive) {
 
 template <class W>
 void TestBadProto(const W& w) {
-  ErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal());
+  const ScopedErrorReporter reporter(
+      &FailFastErrorHandler::FailOnErrorOrFatal(), "");
   absl::Status status =
       Stu3PrimitiveHandler::GetInstance()->ValidatePrimitive(w, reporter);
   ASSERT_FALSE(status.ok()) << "Should have failed: " << w.DebugString();
@@ -131,7 +132,8 @@ void TestProtoValidationsFromFile(const std::string& file_base,
 
   for (auto proto_string_iter : valid_proto_strings) {
     W w = PARSE_STU3_PROTO(proto_string_iter);
-    ErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal());
+    const ScopedErrorReporter reporter(
+        &FailFastErrorHandler::FailOnErrorOrFatal(), "");
     FHIR_ASSERT_OK(
         Stu3PrimitiveHandler::GetInstance()->ValidatePrimitive(w, reporter));
   }
@@ -157,7 +159,8 @@ void TestProtoValidation(const bool has_invalid = true) {
   Extension* e = only_extensions.add_extension();
   e->mutable_url()->set_value("abcd");
   e->mutable_value()->mutable_boolean()->set_value(true);
-  ErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal());
+  const ScopedErrorReporter reporter(
+      &FailFastErrorHandler::FailOnErrorOrFatal(), "");
   FHIR_ASSERT_OK(Stu3PrimitiveHandler::GetInstance()->ValidatePrimitive(
       only_extensions, reporter));
 
@@ -175,8 +178,8 @@ void TestProtoValidation(const bool has_invalid = true) {
 TEST(PrimitiveHandlerTest, ValidReference) {
   Observation obs = ReadStu3Proto<Observation>(
       "validation/observation_valid_reference.prototxt");
-  ErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal());
-  ErrorScope resource_scope(&reporter, "Observation");
+  const ScopedErrorReporter reporter(
+      &FailFastErrorHandler::FailOnErrorOrFatal(), "Observation");
   FHIR_ASSERT_OK(Stu3PrimitiveHandler::GetInstance()->ValidateReferenceField(
       obs, obs.GetDescriptor()->FindFieldByName("specimen"), reporter));
 }
@@ -184,8 +187,8 @@ TEST(PrimitiveHandlerTest, ValidReference) {
 TEST(PrimitiveHandlerTest, InvalidReference) {
   Observation obs = ReadStu3Proto<Observation>(
       "validation/observation_invalid_reference.prototxt");
-  ErrorReporter reporter(&FailFastErrorHandler::FailOnErrorOrFatal());
-  ErrorScope resource_scope(&reporter, "Observation");
+  const ScopedErrorReporter reporter(
+      &FailFastErrorHandler::FailOnErrorOrFatal(), "Observation");
   FHIR_ASSERT_STATUS(
       Stu3PrimitiveHandler::GetInstance()->ValidateReferenceField(
           obs, obs.GetDescriptor()->FindFieldByName("specimen"), reporter),

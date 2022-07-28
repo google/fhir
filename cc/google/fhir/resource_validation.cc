@@ -44,11 +44,11 @@ namespace {
 
 absl::Status CheckField(const Message& message, const FieldDescriptor* field,
                         const PrimitiveHandler* primitive_handler,
-                        ErrorReporter& error_reporter);
+                        const ScopedErrorReporter& error_reporter);
 
-absl::Status ValidateFhirConstraints(const Message& message,
-                                     const PrimitiveHandler* primitive_handler,
-                                     ErrorReporter& error_reporter) {
+absl::Status ValidateFhirConstraints(
+    const Message& message, const PrimitiveHandler* primitive_handler,
+    const ScopedErrorReporter& error_reporter) {
   if (IsPrimitive(message.GetDescriptor())) {
     return primitive_handler->ValidatePrimitive(message, error_reporter);
   }
@@ -84,7 +84,7 @@ absl::Status ValidateFhirConstraints(const Message& message,
 // Check if a required field is missing.
 absl::Status CheckField(const Message& message, const FieldDescriptor* field,
                         const PrimitiveHandler* primitive_handler,
-                        ErrorReporter& error_reporter) {
+                        const ScopedErrorReporter& error_reporter) {
   if (field->options().HasExtension(validation_requirement) &&
       field->options().GetExtension(validation_requirement) ==
           ::google::fhir::proto::REQUIRED_BY_FHIR) {
@@ -101,10 +101,9 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
 
   if (field->cpp_type() == ::google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
     for (int i = 0; i < PotentiallyRepeatedFieldSize(message, field); i++) {
-      ErrorScope field_scope(&error_reporter, field, i);
       FHIR_RETURN_IF_ERROR(ValidateFhirConstraints(
           GetPotentiallyRepeatedMessage(message, field, i), primitive_handler,
-          error_reporter));
+          error_reporter.WithScope(field, i)));
     }
   }
 
@@ -132,9 +131,9 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
                                    error_handler);
   }
 
-  ErrorReporter error_reporter(&error_handler);
-  ErrorScope message_scope(&error_reporter, resource.GetDescriptor()->name());
-  return ValidateFhirConstraints(resource, primitive_handler, error_reporter);
+  return ValidateFhirConstraints(
+      resource, primitive_handler,
+      ScopedErrorReporter(&error_handler, resource.GetDescriptor()->name()));
 }
 
 }  // namespace fhir
