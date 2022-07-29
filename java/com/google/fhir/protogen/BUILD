@@ -60,6 +60,7 @@ java_library(
             "GeneratorUtils.java",
             "*Main.java",
             "ProtoGeneratorTestUtils.java",
+            "ResourceCollection.java",
         ],
     ),
     deps = [
@@ -137,5 +138,16 @@ java_library(
     deps = [
         "//proto/google/fhir/proto:protogenerator_annotations_java_proto",
         "@com_google_protobuf//:protobuf_java",
+    ],
+)
+
+java_library(
+    name = "ResourceCollection",
+    srcs = ["ResourceCollection.java"],
+    deps = [
+        "//java/com/google/fhir/common:exceptions",
+        "//java/com/google/fhir/common:json_format",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_code_gson_gson",
     ],
 )

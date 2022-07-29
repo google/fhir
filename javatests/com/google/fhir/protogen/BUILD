@@ -123,4 +123,22 @@ java_test(
     ],
 )
 
+java_test(
+    name = "ResourceCollectionTest",
+    size = "small",
+    srcs = ["ResourceCollectionTest.java"],
+    test_class = "com.google.fhir.protogen.ResourceCollectionTest",
+    deps = [
+        "//java/com/google/fhir/common:exceptions",
+        "//java/com/google/fhir/common:json_format",
+        "//java/com/google/fhir/protogen:ResourceCollection",
+        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
+        "@maven//:com_google_code_gson_gson",
+        "@maven//:com_google_testparameterinjector_test_parameter_injector",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
+    ],
+)
+
 exports_files(["GeneratedProtoTest.java"])
