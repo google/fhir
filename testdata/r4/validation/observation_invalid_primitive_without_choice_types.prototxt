@@ -1,0 +1,11 @@
+status { value: FINAL }
+code {
+  coding {
+    system { value: "foo" }
+    code { value: "bar" }
+  }
+}
+id { value: "123" }
+implicit_rules { value: " " }
+language { value: "" }
+reference_range { text { value: "" } }
