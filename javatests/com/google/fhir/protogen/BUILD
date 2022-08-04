@@ -31,7 +31,7 @@ java_test(
 
 java_test(
     name = "ProtoGeneratorTest",
-    size = "medium",
+    size = "large",
     srcs = ["ProtoGeneratorTest.java"],
     data = [
         "//proto/google/fhir/proto/r4/core:testdata",

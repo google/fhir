@@ -20,6 +20,7 @@ import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.fail;
 
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
@@ -35,17 +36,23 @@ import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.DescriptorProto.ReservedRange;
 import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldOptions;
+import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
+import com.google.protobuf.DescriptorProtos.OneofDescriptorProto;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.Message;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -153,6 +160,18 @@ public class ProtoGeneratorTest {
           "ReferenceId", // ReferenceId type is hard coded.
           "CodingWithFixedCode", // CodingWithFixedCode is a custom data struct for profiling.
           "CodingWithFixedSystem"); // CodingWithFixedSystem is a custom data struct for profiling.
+
+  // Builds a `DescriptorProto` as a StructureDefinition resource.
+  private DescriptorProto buildResourceDescriptor(String resourceName) {
+    return DescriptorProto.newBuilder()
+        .setName(resourceName)
+        .setOptions(
+            MessageOptions.newBuilder()
+                .setExtension(
+                    Annotations.structureDefinitionKind,
+                    Annotations.StructureDefinitionKindValue.KIND_RESOURCE))
+        .build();
+  }
 
   private void testGeneratedR4Proto(ProtoGenerator protoGenerator, String resourceName)
       throws IOException, ReflectiveOperationException, InvalidFhirException {
@@ -283,5 +302,337 @@ public class ProtoGeneratorTest {
               + " R4 descriptors to test, but found "
               + resourceCount);
     }
+  }
+
+  @Test
+  public void addContainedResource_noResourceTypes_emptyFileDescriptor() {
+    FileDescriptorProto res =
+        r4ProtoGenerator.addContainedResource(
+            FileDescriptorProto.getDefaultInstance(), /*resourceTypes=*/ ImmutableList.of());
+
+    assertThat(res)
+        .isEqualTo(
+            FileDescriptorProto.newBuilder()
+                .addMessageType(
+                    DescriptorProto.newBuilder()
+                        .setName("ContainedResource")
+                        .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource")))
+                .build());
+  }
+
+  @Test
+  public void addContainedResource_duplicateResourceTypes_consolidates() {
+    ImmutableList<DescriptorProto> resourceTypes =
+        ImmutableList.of(buildResourceDescriptor("Foo"), buildResourceDescriptor("Foo"));
+
+    FileDescriptorProto res =
+        r4ProtoGenerator.addContainedResource(
+            FileDescriptorProto.getDefaultInstance(), resourceTypes);
+
+    assertThat(res)
+        .isEqualTo(
+            FileDescriptorProto.newBuilder()
+                .addMessageType(
+                    DescriptorProto.newBuilder()
+                        .setName("ContainedResource")
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("foo")
+                                .setNumber(1)
+                                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                                .setTypeName("Foo")
+                                .setOneofIndex(0))
+                        .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource")))
+                .build());
+  }
+
+  @Test
+  public void addContainedResource_existingFileDescriptor_preservesExistingMessageType() {
+    FileDescriptorProto fileDescriptor =
+        FileDescriptorProto.newBuilder()
+            .addMessageType(DescriptorProto.newBuilder().setName("ExistingMessageType"))
+            .build();
+    ImmutableList<DescriptorProto> resourceTypes = ImmutableList.of(buildResourceDescriptor("Foo"));
+
+    FileDescriptorProto res = r4ProtoGenerator.addContainedResource(fileDescriptor, resourceTypes);
+
+    assertThat(res)
+        .isEqualTo(
+            FileDescriptorProto.newBuilder()
+                .addMessageType(DescriptorProto.newBuilder().setName("ExistingMessageType"))
+                .addMessageType(
+                    DescriptorProto.newBuilder()
+                        .setName("ContainedResource")
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("foo")
+                                .setNumber(1)
+                                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                                .setTypeName("Foo")
+                                .setOneofIndex(0))
+                        .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource")))
+                .build());
+  }
+
+  @Test
+  public void addContainedResource_nonResourceType_excluded() {
+    ImmutableList<DescriptorProto> resourceTypes =
+        ImmutableList.of(
+            buildResourceDescriptor("Foo"),
+            DescriptorProto.newBuilder()
+                .setName("Bar")
+                .setOptions(
+                    MessageOptions.newBuilder()
+                        .setExtension(
+                            Annotations.structureDefinitionKind,
+                            Annotations.StructureDefinitionKindValue.KIND_PRIMITIVE_TYPE))
+                .build());
+
+    FileDescriptorProto res =
+        r4ProtoGenerator.addContainedResource(
+            FileDescriptorProto.getDefaultInstance(), resourceTypes);
+
+    assertThat(res)
+        .isEqualTo(
+            FileDescriptorProto.newBuilder()
+                .addMessageType(
+                    DescriptorProto.newBuilder()
+                        .setName("ContainedResource")
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("foo")
+                                .setNumber(1)
+                                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                                .setTypeName("Foo")
+                                .setOneofIndex(0))
+                        .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource")))
+                .build());
+  }
+
+  @Test
+  public void addContainedResource_abstractType_excluded() {
+    ImmutableList<DescriptorProto> resourceTypes =
+        ImmutableList.of(
+            buildResourceDescriptor("Foo"),
+            DescriptorProto.newBuilder()
+                .setName("Bar")
+                .setOptions(
+                    MessageOptions.newBuilder()
+                        .setExtension(
+                            Annotations.structureDefinitionKind,
+                            Annotations.StructureDefinitionKindValue.KIND_RESOURCE)
+                        .setExtension(Annotations.isAbstractType, true))
+                .build());
+
+    FileDescriptorProto res =
+        r4ProtoGenerator.addContainedResource(
+            FileDescriptorProto.getDefaultInstance(), resourceTypes);
+
+    assertThat(res)
+        .isEqualTo(
+            FileDescriptorProto.newBuilder()
+                .addMessageType(
+                    DescriptorProto.newBuilder()
+                        .setName("ContainedResource")
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("foo")
+                                .setNumber(1)
+                                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                                .setTypeName("Foo")
+                                .setOneofIndex(0))
+                        .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource")))
+                .build());
+  }
+
+  @Test
+  public void addCoreContainedResource_nonAlphabetizedResourceTypes_sorted() {
+    ImmutableList<DescriptorProto> resourceTypes =
+        ImmutableList.of(
+            buildResourceDescriptor("Foo"),
+            buildResourceDescriptor("Bar"),
+            buildResourceDescriptor("Baz"));
+
+    FileDescriptorProto res =
+        r4ProtoGenerator.addContainedResource(
+            FileDescriptorProto.getDefaultInstance(), resourceTypes);
+
+    assertThat(res)
+        .isEqualTo(
+            FileDescriptorProto.newBuilder()
+                .addMessageType(
+                    DescriptorProto.newBuilder()
+                        .setName("ContainedResource")
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("bar")
+                                .setNumber(1)
+                                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                                .setTypeName("Bar")
+                                .setOneofIndex(0))
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("baz")
+                                .setNumber(2)
+                                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                                .setTypeName("Baz")
+                                .setOneofIndex(0))
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("foo")
+                                .setNumber(3)
+                                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                                .setTypeName("Foo")
+                                .setOneofIndex(0))
+                        .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource")))
+                .build());
+  }
+
+  // Creates a temporary non-core proto package as a ZIP file and returns its absolute path.
+  private String createNonCorePackage(String protoPackage) throws IOException {
+    File f = File.createTempFile("non_core_package", ".zip");
+    try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(f))) {
+      ZipEntry e = new ZipEntry("foo_package_info.prototxt");
+      out.putNextEntry(e);
+      // The "google.foo" proto package makes this a non-core package.
+      byte[] data =
+          ("proto_package: \""
+                  + protoPackage
+                  + "\""
+                  + "\njava_proto_package: \"com."
+                  + protoPackage
+                  + "\""
+                  + "\nfhir_version: R4"
+                  + "\nlicense: APACHE"
+                  + "\nlicense_date: \"2019\""
+                  + "\nlocal_contained_resource: true"
+                  + "\nfile_splitting_behavior: SPLIT_RESOURCES")
+              .getBytes(Charset.forName(UTF_8.name()));
+      out.write(data, 0, data.length);
+      out.closeEntry();
+    }
+
+    return f.getAbsolutePath();
+  }
+
+  @Test
+  public void addContainedResource_derivedResources_unsortedFileDescriptor()
+      throws IOException, InvalidFhirException {
+    ProtoGenerator generator =
+        ProtoGeneratorTestUtils.makeProtoGenerator(
+            createNonCorePackage("google.foo"),
+            "codes.proto",
+            /*coreDepMap=*/ ImmutableMap.of("R4", "spec/fhir_r4_package.zip"),
+            /*dependencyLocations=*/ ImmutableSet.of());
+
+    ImmutableList<DescriptorProto> resourceTypes =
+        ImmutableList.of(
+            buildResourceDescriptor("Foo"),
+            buildResourceDescriptor("Bar"),
+            buildResourceDescriptor("Baz"),
+            // For derived contained resources, make sure to keep the tag numbers from the base file
+            // for resources that keep the same name.
+            // In other words, "Patient" should keep the tag number (103) of the field in the base
+            // contained resources for Patient.
+            buildResourceDescriptor("Patient"));
+
+    FileDescriptorProto res =
+        generator.addContainedResource(FileDescriptorProto.getDefaultInstance(), resourceTypes);
+
+    assertThat(res)
+        .isEqualTo(
+            FileDescriptorProto.newBuilder()
+                .addMessageType(
+                    DescriptorProto.newBuilder()
+                        .setName("ContainedResource")
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("patient")
+                                .setNumber(103)
+                                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                                .setTypeName(".google.foo.Patient")
+                                .setOneofIndex(0))
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("foo")
+                                .setNumber(147)
+                                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                                .setTypeName(".google.foo.Foo")
+                                .setOneofIndex(0))
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("bar")
+                                .setNumber(148)
+                                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                                .setTypeName(".google.foo.Bar")
+                                .setOneofIndex(0))
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("baz")
+                                .setNumber(149)
+                                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                                .setTypeName(".google.foo.Baz")
+                                .setOneofIndex(0))
+                        .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource")))
+                .build());
+  }
+
+  @Test
+  public void addContainedResource_derivedResourcesWithBaseResources_maintainBaseResourceNumbers()
+      throws IOException, InvalidFhirException {
+    ProtoGenerator generator =
+        ProtoGeneratorTestUtils.makeProtoGenerator(
+            createNonCorePackage("google.foo"),
+            "codes.proto",
+            /*coreDepMap=*/ ImmutableMap.of("R4", "spec/fhir_r4_package.zip"),
+            /*dependencyLocations=*/ ImmutableSet.of());
+
+    ImmutableList<DescriptorProto> resourceTypes =
+        ImmutableList.of(
+            buildResourceDescriptor("Foo"),
+            // For derived contained resources, make sure to keep the tag numbers from the base file
+            // for resources that keep the same name.
+            // In other words, "Patient" should keep the tag number (103) of the field in the base
+            // contained resources for Patient.
+            buildResourceDescriptor("Patient"));
+
+    FileDescriptorProto res =
+        generator.addContainedResource(FileDescriptorProto.getDefaultInstance(), resourceTypes);
+
+    assertThat(res)
+        .isEqualTo(
+            FileDescriptorProto.newBuilder()
+                .addMessageType(
+                    DescriptorProto.newBuilder()
+                        .setName("ContainedResource")
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("patient")
+                                .setNumber(103)
+                                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                                .setTypeName(".google.foo.Patient")
+                                .setOneofIndex(0))
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("foo")
+                                .setNumber(147)
+                                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                                .setTypeName(".google.foo.Foo")
+                                .setOneofIndex(0))
+                        .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource")))
+                .build());
   }
 }
