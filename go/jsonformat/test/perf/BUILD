@@ -14,6 +14,9 @@ go_test(
     deps = [
         "//go/fhirversion",
         "//go/jsonformat",
+        "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
+        "//proto/google/fhir/proto/r4/core/resources:binary_go_proto",
+        "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_go_proto",
         "@io_bazel_rules_go//go/tools/bazel:go_default_library",
     ],
 )

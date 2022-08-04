@@ -62,44 +62,46 @@ type protoToExtensionTestData struct {
 // TestProtoToExtension.
 //
 // The srcProto will be created as following:
-// epb.Base64BinarySeparatorStride{
-// 	Separator: &dpb.String{
-// 		Value: <sep>,
-// 	},
-// 	Stride: &dpb.PositiveInt{
-// 		Value: <stride>,
-// 	},
-// }
+//
+//	epb.Base64BinarySeparatorStride{
+//		Separator: &dpb.String{
+//			Value: <sep>,
+//		},
+//		Stride: &dpb.PositiveInt{
+//			Value: <stride>,
+//		},
+//	}
 //
 // The dstExtension will be created as following:
-// &dpb.Extension{
-// 	Url: &dpb.Uri{
-// 		Value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
-// 	},
-// 	Extension: []*dpb.Extension{{
-// 		Url: &dpb.Uri{
-// 			Value: "separator",
-// 		},
-// 		Value: &dpb.Extension_ValueX{
-// 			Choice: &dpb.Extension_ValueX_StringValue{
-// 				StringValue: &dpb.String{
-// 					Value: <sep>,
-// 				},
-// 			},
-// 		},
-// 	}, {
-// 		Url: &dpb.Uri{
-// 			Value: "stride",
-// 		},
-// 		Value: &dpb.Extension_ValueX{
-// 			Choice: &dpb.Extension_ValueX_PositiveInt{
-// 				PositiveInt: &dpb.PositiveInt{
-// 					Value: <stride>,
-// 				},
-// 			},
-// 		},
-// 	}},
-// },
+//
+//	&dpb.Extension{
+//		Url: &dpb.Uri{
+//			Value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
+//		},
+//		Extension: []*dpb.Extension{{
+//			Url: &dpb.Uri{
+//				Value: "separator",
+//			},
+//			Value: &dpb.Extension_ValueX{
+//				Choice: &dpb.Extension_ValueX_StringValue{
+//					StringValue: &dpb.String{
+//						Value: <sep>,
+//					},
+//				},
+//			},
+//		}, {
+//			Url: &dpb.Uri{
+//				Value: "stride",
+//			},
+//			Value: &dpb.Extension_ValueX{
+//				Choice: &dpb.Extension_ValueX_PositiveInt{
+//					PositiveInt: &dpb.PositiveInt{
+//						Value: <stride>,
+//					},
+//				},
+//			},
+//		}},
+//	},
 func newBinarySeparatorStrideAndExtensionTestData(sep string, stride uint32) []protoToExtensionTestData {
 	var ret []protoToExtensionTestData
 	ret = append(ret,
@@ -127,25 +129,27 @@ func newBinarySeparatorStrideAndExtensionTestData(sep string, stride uint32) []p
 // TestProtoToExtension.
 //
 // The srcProto will be created as following:
-// &epb.PrimitiveHasNoValue{
-// 	ValueBoolean: &dpb.Boolean{
-// 		Value: true,
-// 	},
-// }
+//
+//	&epb.PrimitiveHasNoValue{
+//		ValueBoolean: &dpb.Boolean{
+//			Value: true,
+//		},
+//	}
 //
 // The dstExtension will be created as following:
-// &dpb.Extension{
-// 	Url: &dpb.Uri{
-// 		Value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
-// 	},
-// 	Value: &dpb.Extension_ValueX{
-// 		Choice: &dpb.Extension_ValueX_Boolean{
-// 			Boolean: &dpb.Boolean{
-// 				Value: <b>,
-// 			},
-// 		},
-// 	},
-// }
+//
+//	&dpb.Extension{
+//		Url: &dpb.Uri{
+//			Value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
+//		},
+//		Value: &dpb.Extension_ValueX{
+//			Choice: &dpb.Extension_ValueX_Boolean{
+//				Boolean: &dpb.Boolean{
+//					Value: <b>,
+//				},
+//			},
+//		},
+//	}
 func newPrimitiveHasNoValueTestData(b bool) []protoToExtensionTestData {
 	var ret []protoToExtensionTestData
 	ret = append(ret,
@@ -202,43 +206,46 @@ type addInternalExtensionTestData struct {
 // newAddInternalextensionTestData generates test data for TestAddInternalExtension
 //
 // If alreadydExist is false, the srcBinary will be created as following:
-// &dpb.Base64Binary{
-// 	Value: <bin>,
-// }
-// If alreadyExist is true, the srcBinary will be the same as dstBinary
+//
+//	&dpb.Base64Binary{
+//		Value: <bin>,
+//	}
+//
+// # If alreadyExist is true, the srcBinary will be the same as dstBinary
 //
 // The dstBinary will be created as following:
-// &dpb.Base64Binary{
-// 	Value: <bin>,
-// 	Extension: []*dpb.Extension{{
-// 		Url: &dpb.Uri{
-// 			Value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
-// 		},
-// 		Extension: []*dpb.Extension{{
-// 			Url: &dpb.Uri{
-// 				Value: "separator",
-// 			},
-// 			Value: &dpb.Extension_ValueX{
-// 				Choice: &dpb.Extension_ValueX_StringValue{
-// 					StringValue: &dpb.String{
-// 						Value: <sep>,
-// 					},
-// 				},
-// 			},
-// 		}, {
-// 			Url: &dpb.Uri{
-// 				Value: "stride",
-// 			},
-// 			Value: &dpb.Extension_ValueX{
-// 				Choice: &dpb.Extension_ValueX_PositiveInt{
-// 					PositiveInt: &dpb.PositiveInt{
-// 						Value: <stride>,
-// 					},
-// 				},
-// 			},
-// 		}},
-// 	}},
-// }
+//
+//	&dpb.Base64Binary{
+//		Value: <bin>,
+//		Extension: []*dpb.Extension{{
+//			Url: &dpb.Uri{
+//				Value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride",
+//			},
+//			Extension: []*dpb.Extension{{
+//				Url: &dpb.Uri{
+//					Value: "separator",
+//				},
+//				Value: &dpb.Extension_ValueX{
+//					Choice: &dpb.Extension_ValueX_StringValue{
+//						StringValue: &dpb.String{
+//							Value: <sep>,
+//						},
+//					},
+//				},
+//			}, {
+//				Url: &dpb.Uri{
+//					Value: "stride",
+//				},
+//				Value: &dpb.Extension_ValueX{
+//					Choice: &dpb.Extension_ValueX_PositiveInt{
+//						PositiveInt: &dpb.PositiveInt{
+//							Value: <stride>,
+//						},
+//					},
+//				},
+//			}},
+//		}},
+//	}
 func newAddInternalExtensionTestData(bin []byte, sep string, stride uint32, alreadyExist bool) []addInternalExtensionTestData {
 	var ret []addInternalExtensionTestData
 	ret = append(ret,

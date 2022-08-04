@@ -23,6 +23,7 @@ go_library(
         "//go/jsonformat/fhirvalidate",
         "//go/jsonformat/internal/accessor",
         "//go/jsonformat/internal/jsonpbhelper",
+        "//go/jsonformat/internal/protopath",
         "//proto/google/fhir/proto:annotations_go_proto",
         "//proto/google/fhir/proto/r4:fhirproto_extensions_go_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",

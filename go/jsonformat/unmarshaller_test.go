@@ -408,14 +408,18 @@ func TestUnmarshal(t *testing.T) {
           "name": [
             {
               "given": [{
-                "id": "a3"
-              }],
-              "_given": [{
-                "extension": [{
-                    "url": "http://hl7.org/fhir/StructureDefinition/qualifier",
-                    "valueCode": "MID"
+                "id": "a3",
+								"extension": [{
+									"url": "http://hl7.org/fhir/StructureDefinition/ext1",
+									"valueCode": "value1"
                 }]
-              }]
+              }],
+							"_given": [{
+								"extension": [{
+									"url": "http://hl7.org/fhir/StructureDefinition/ext2",
+									"valueCode": "value2"
+								}]
+							}]
             }
           ]
         }`),
@@ -427,32 +431,40 @@ func TestUnmarshal(t *testing.T) {
 							Patient: &r3pb.Patient{
 								Name: []*d3pb.HumanName{{
 									Given: []*d3pb.String{{
-										Id: &d3pb.String{
-											Value: "a3",
-										},
-										Extension: []*d3pb.Extension{{
-											Url: &d3pb.Uri{
-												Value: "http://hl7.org/fhir/StructureDefinition/qualifier",
-											},
-											Value: &d3pb.Extension_ValueX{
-												Choice: &d3pb.Extension_ValueX_Code{
-													Code: &d3pb.Code{
-														Value: "MID",
+										Id: &d3pb.String{Value: "a3"},
+										Extension: []*d3pb.Extension{
+											{
+												Url: &d3pb.Uri{
+													Value: "http://hl7.org/fhir/StructureDefinition/ext1",
+												},
+												Value: &d3pb.Extension_ValueX{
+													Choice: &d3pb.Extension_ValueX_Code{
+														Code: &d3pb.Code{Value: "value1"},
 													},
 												},
 											},
-										}, {
-											Url: &d3pb.Uri{
-												Value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
-											},
-											Value: &d3pb.Extension_ValueX{
-												Choice: &d3pb.Extension_ValueX_Boolean{
-													Boolean: &d3pb.Boolean{
-														Value: true,
+											{
+												Url: &d3pb.Uri{
+													Value: "http://hl7.org/fhir/StructureDefinition/ext2",
+												},
+												Value: &d3pb.Extension_ValueX{
+													Choice: &d3pb.Extension_ValueX_Code{
+														Code: &d3pb.Code{Value: "value2"},
 													},
 												},
 											},
-										}},
+											{
+												Url: &d3pb.Uri{
+													Value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
+												},
+												Value: &d3pb.Extension_ValueX{
+													Choice: &d3pb.Extension_ValueX_Boolean{
+														Boolean: &d3pb.Boolean{
+															Value: true,
+														},
+													},
+												},
+											}},
 									}},
 								}},
 							},
@@ -466,32 +478,40 @@ func TestUnmarshal(t *testing.T) {
 							Patient: &r4patientpb.Patient{
 								Name: []*d4pb.HumanName{{
 									Given: []*d4pb.String{{
-										Id: &d4pb.String{
-											Value: "a3",
-										},
-										Extension: []*d4pb.Extension{{
-											Url: &d4pb.Uri{
-												Value: "http://hl7.org/fhir/StructureDefinition/qualifier",
-											},
-											Value: &d4pb.Extension_ValueX{
-												Choice: &d4pb.Extension_ValueX_Code{
-													Code: &d4pb.Code{
-														Value: "MID",
+										Id: &d4pb.String{Value: "a3"},
+										Extension: []*d4pb.Extension{
+											{
+												Url: &d4pb.Uri{
+													Value: "http://hl7.org/fhir/StructureDefinition/ext1",
+												},
+												Value: &d4pb.Extension_ValueX{
+													Choice: &d4pb.Extension_ValueX_Code{
+														Code: &d4pb.Code{Value: "value1"},
 													},
 												},
 											},
-										}, {
-											Url: &d4pb.Uri{
-												Value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
-											},
-											Value: &d4pb.Extension_ValueX{
-												Choice: &d4pb.Extension_ValueX_Boolean{
-													Boolean: &d4pb.Boolean{
-														Value: true,
+											{
+												Url: &d4pb.Uri{
+													Value: "http://hl7.org/fhir/StructureDefinition/ext2",
+												},
+												Value: &d4pb.Extension_ValueX{
+													Choice: &d4pb.Extension_ValueX_Code{
+														Code: &d4pb.Code{Value: "value2"},
 													},
 												},
 											},
-										}},
+											{
+												Url: &d4pb.Uri{
+													Value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
+												},
+												Value: &d4pb.Extension_ValueX{
+													Choice: &d4pb.Extension_ValueX_Boolean{
+														Boolean: &d4pb.Boolean{
+															Value: true,
+														},
+													},
+												},
+											}},
 									}},
 								}},
 							},
@@ -955,8 +975,19 @@ func TestUnmarshal(t *testing.T) {
 					if err != nil {
 						t.Fatalf("unmarshal %v failed: %v", test.name, err)
 					}
-					if !proto.Equal(got, w.r) {
-						t.Errorf("unmarshal %v: got %v, want %v", test.name, got, w.r)
+					sortExtensions := cmp.Options{
+						protocmp.SortRepeated(func(e1, e2 *d2pb.Extension) bool {
+							return e1.GetUrl().GetValue() < e2.GetUrl().GetValue()
+						}),
+						protocmp.SortRepeated(func(e1, e2 *d3pb.Extension) bool {
+							return e1.GetUrl().GetValue() < e2.GetUrl().GetValue()
+						}),
+						protocmp.SortRepeated(func(e1, e2 *d4pb.Extension) bool {
+							return e1.GetUrl().GetValue() < e2.GetUrl().GetValue()
+						}),
+					}
+					if diff := cmp.Diff(w.r, got, sortExtensions, protocmp.Transform()); diff != "" {
+						t.Errorf("unmarshal %v, got diff(-want +got): %s", test.name, diff)
 					}
 
 					// test UnmarshalWithOutcome
@@ -964,8 +995,8 @@ func TestUnmarshal(t *testing.T) {
 					if err != nil {
 						t.Fatalf("unmarshalWithOutcome %v failed with unexpected error: %v", test.name, err)
 					}
-					if !proto.Equal(got, w.r) {
-						t.Errorf("unmarshal %v: got %v, want %v", test.name, got, w.r)
+					if diff := cmp.Diff(w.r, got, sortExtensions, protocmp.Transform()); diff != "" {
+						t.Errorf("unmarshalWithOutcome %v, got diff(-want +got): %s", test.name, diff)
 					}
 					var ic int
 					switch w.ver {
@@ -986,8 +1017,8 @@ func TestUnmarshal(t *testing.T) {
 					if err != nil {
 						t.Fatalf("UnmarshalWithErrorReporter %v failed with unexpected error: %v", test.name, err)
 					}
-					if !proto.Equal(got, w.r) {
-						t.Errorf("UnmarshalWithErrorReporter %v: got %v, want %v", test.name, got, w.r)
+					if diff := cmp.Diff(w.r, got, sortExtensions, protocmp.Transform()); diff != "" {
+						t.Errorf("UnmarshalWithErrorReporter %v, got diff(-want +got): %s", test.name, diff)
 					}
 					switch w.ver {
 					case fhirversion.STU3:
@@ -2270,9 +2301,11 @@ func TestParsePrimitiveType(t *testing.T) {
 			for _, w := range test.wants {
 				t.Run(w.ver.String(), func(t *testing.T) {
 					u := setupUnmarshaller(t, w.ver)
-					got, err := u.parsePrimitiveType("value", w.r.ProtoReflect(), test.value)
+					value := make([]byte, len(test.value))
+					copy(value, test.value)
+					got, err := u.parsePrimitiveType("value", w.r.ProtoReflect(), value)
 					if err != nil {
-						t.Fatalf("parse primitive type: %v", err)
+						t.Fatalf("parse primitive type: %v", jsonpbhelper.PrintUnmarshalError(err, -1))
 					}
 					if !cmp.Equal(got, w.r, protocmp.Transform()) {
 						t.Errorf("parse primitive type %v: got %v, want %v", test.pType, got, w.r)

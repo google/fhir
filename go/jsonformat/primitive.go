@@ -23,6 +23,7 @@ import (
 
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
+	"github.com/google/fhir/go/jsonformat/internal/protopath"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
@@ -122,49 +123,94 @@ func parseDecimal(decimal json.RawMessage, m proto.Message) error {
 // and stride value, returns a new Base64BinarySeparatorStride proto.
 type base64BinarySeparatorStrideCreator func(sep string, stride uint32) proto.Message
 
+type base64Data struct {
+	data   []byte
+	stride int
+	sep    int
+}
+
+// filterBase64Spaces removes spaces according to the stride/separator encoding. An error is returned for inconsistent stride and separator lengths.
+// The return values are: the final length of the string, the detected stride and separator lengths, and an error if one occurred.
+func filterBase64Spaces(p []byte) (nn, stride, sep int, err error) {
+	n := len(p)
+	chunkStart := 0
+	for i := 0; i < n; i++ {
+		c := p[i]
+		if c != ' ' {
+			if i != nn {
+				p[nn] = c
+			}
+			nn++
+			continue
+		}
+
+		curStride := i - chunkStart
+		if stride == 0 {
+			stride = curStride
+		}
+		if curStride != stride {
+			return 0, 0, 0, fmt.Errorf("found stride of length %d, previous stride was %d", curStride, stride)
+		}
+
+		chunkStart = i
+		for ; i < n && p[i] == ' '; i++ {
+		}
+
+		curSep := i - chunkStart
+		if sep == 0 {
+			sep = curSep
+		}
+		if curSep != sep {
+			return 0, 0, 0, fmt.Errorf("found separator of length %d, previous separator was %d", curSep, sep)
+		}
+		chunkStart = i
+		i--
+	}
+	return nn, stride, sep, nil
+}
+
+func decodeBase64(data []byte) (base64Data, error) {
+	n, stride, sep, err := filterBase64Spaces(data)
+	if err != nil {
+		return base64Data{}, err
+	}
+	data = data[:n]
+	n, err = base64.StdEncoding.Decode(data, data)
+	if err != nil {
+		return base64Data{}, err
+	}
+	return base64Data{
+		data:   data[:n],
+		stride: stride,
+		sep:    sep,
+	}, nil
+}
+
 // parseBinary parses a FHIR Binary resource object into a Binary proto message, m.
 func parseBinary(binary json.RawMessage, m proto.Message, createSepStride base64BinarySeparatorStrideCreator) error {
-	mr := m.ProtoReflect()
-	var val string
-	if err := jsonpbhelper.JSP.Unmarshal(binary, &val); err != nil {
+	if len(binary) < 2 || binary[0] != '"' || binary[len(binary)-1] != '"' {
+		return fmt.Errorf("binary data is not a string")
+	}
+	val, err := decodeBase64(binary[1 : len(binary)-1])
+	if err != nil {
 		return err
 	}
-	// Find the first occurrence of consecutive spaces, and use it as separator.
-	stride := strings.Index(val, " ")
-	if stride > 0 {
-		end := stride + 1
-		for ; end < len(val) && val[end] == ' '; end++ {
-		}
-		sep := val[stride:end]
-		dec, err := base64.StdEncoding.DecodeString(strings.Join(strings.Split(val, sep), ""))
-		if err != nil {
-			return err
-		}
-		if err := accessor.SetValue(mr, dec, "value"); err != nil {
-			return err
-		}
+	if val.stride > 0 {
+		mr := m.ProtoReflect()
 		extList, err := accessor.GetList(mr, "extension")
 		if err != nil {
 			return err
 		}
 		ext := extList.NewElement().Message().Interface().(proto.Message)
-		sepAndStride := createSepStride(sep, uint32(stride))
+		sepAndStride := createSepStride(strings.Repeat(" ", val.sep), uint32(val.stride))
 		if err := protoToExtension(sepAndStride, ext); err != nil {
 			return err
 		}
-		if err := accessor.AppendValue(mr, ext, "extension"); err != nil {
+		if err := protopath.Set(m, protopath.NewPath("extension.-1"), ext); err != nil {
 			return err
 		}
-		return nil
 	}
-	dec, err := base64.StdEncoding.DecodeString(val)
-	if err != nil {
-		return err
-	}
-	if err := accessor.SetValue(mr, dec, "value"); err != nil {
-		return err
-	}
-	return nil
+	return protopath.Set(m, protopath.NewPath("value"), val.data)
 }
 
 // serializeBinary serializes proto representation of a FHIR Binary data object into a JSON message.

@@ -17,6 +17,10 @@ package perf_test
 
 import (
 	"io/ioutil"
+	"bytes"
+	"encoding/base64"
+	"io"
+	"math/rand"
 	"path"
 	"strings"
 	"testing"
@@ -24,6 +28,9 @@ import (
 	"github.com/bazelbuild/rules_go/go/tools/bazel"
 	"github.com/google/fhir/go/fhirversion"
 	"github.com/google/fhir/go/jsonformat"
+	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
+	r4binarypb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/binary_go_proto"
+	r4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
 )
 
 const (
@@ -126,5 +133,66 @@ func BenchmarkLargeArray(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		roundTrip(b, d, m, um)
+	}
+}
+
+func BenchmarkLargeBinary_Marshal(b *testing.B) {
+	r := rand.New(rand.NewSource(0))
+	buf := bytes.Buffer{}
+	if _, err := io.CopyN(&buf, r, 1<<30); err != nil {
+		b.Fatal(err.Error())
+	}
+	res := &r4pb.ContainedResource{
+		OneofResource: &r4pb.ContainedResource_Binary{
+			Binary: &r4binarypb.Binary{
+				Data: &d4pb.Base64Binary{Value: buf.Bytes()},
+			},
+		},
+	}
+	m, err := jsonformat.NewMarshaller(false, "", "  ", fhirversion.R4)
+	if err != nil {
+		b.Fatalf("Failed to create the marshaller due to error: %v", err)
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, err := m.Marshal(res)
+		if err != nil {
+			b.Error(err.Error())
+		}
+	}
+}
+
+func BenchmarkLargeBinary_Unmarshal(b *testing.B) {
+	r := rand.New(rand.NewSource(0))
+	sb := strings.Builder{}
+	if _, err := sb.WriteString(`{"resourceType":"Binary","contentType":"application/octet-stream","data":"`); err != nil {
+		b.Fatal(err.Error())
+	}
+
+	enc := base64.NewEncoder(base64.StdEncoding, &sb)
+
+	if _, err := io.CopyN(enc, r, 1<<30); err != nil {
+		b.Fatal(err.Error())
+	}
+
+	if err := enc.Close(); err != nil {
+		b.Fatal(err.Error())
+	}
+	if _, err := sb.WriteString(`"}`); err != nil {
+		b.Fatal(err.Error())
+	}
+
+	um, err := jsonformat.NewUnmarshaller("UTC", fhirversion.R4)
+	if err != nil {
+		b.Fatalf("Failed to create the unmarshaller due to error: %v", err)
+	}
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_, err := um.Unmarshal([]byte(sb.String()))
+		if err != nil {
+			b.Error(err.Error())
+		}
 	}
 }

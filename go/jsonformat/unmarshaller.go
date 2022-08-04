@@ -116,7 +116,15 @@ func (u *Unmarshaller) Unmarshal(in []byte) (proto.Message, error) {
 // The FHIR version of the proto is determined by the version the Unmarshaller was
 // created with.
 func (u *Unmarshaller) UnmarshalWithErrorReporter(in []byte, er errorreporter.ErrorReporter) (proto.Message, error) {
-	return u.UnmarshalFromReaderWithErrorReporter(bytes.NewReader(in), er)
+	var decoded map[string]json.RawMessage
+	if err := jsp.Unmarshal(in, &decoded); err != nil {
+		return nil, &jsonpbhelper.UnmarshalError{
+			Details:     "invalid JSON",
+			Diagnostics: err.Error(),
+			Cause:       err,
+		}
+	}
+	return u.unmarshalJSONObject(decoded, er)
 }
 
 func readFullResource(in io.Reader) (map[string]json.RawMessage, error) {
@@ -154,6 +162,10 @@ func (u *Unmarshaller) UnmarshalFromReaderWithErrorReporter(in io.Reader, er err
 			Cause:       err,
 		}
 	}
+	return u.unmarshalJSONObject(decoded, er)
+}
+
+func (u *Unmarshaller) unmarshalJSONObject(decoded map[string]json.RawMessage, er errorreporter.ErrorReporter) (proto.Message, error) {
 	res, err := u.parseContainedResource("", decoded)
 	if err != nil {
 		return res, err
@@ -499,8 +511,7 @@ func (u *Unmarshaller) mergePrimitiveType(dst, src proto.Message) error {
 		return nil
 	}
 	if proto.Size(dst) == 0 {
-		proto.Merge(dst, src)
-		return nil
+		return mergePrimitive(dst, src)
 	}
 
 	dnv := jsonpbhelper.HasExtension(dst, jsonpbhelper.PrimitiveHasNoValueURL)
@@ -511,7 +522,9 @@ func (u *Unmarshaller) mergePrimitiveType(dst, src proto.Message) error {
 	}
 
 	snv := jsonpbhelper.HasExtension(src, jsonpbhelper.PrimitiveHasNoValueURL)
-	proto.Merge(dst, src)
+	if err := mergePrimitive(dst, src); err != nil {
+		return err
+	}
 	if !dnv && snv {
 		// Remove the HasNoValue extension if dst actually has value.
 		if err := jsonpbhelper.RemoveExtension(dst, jsonpbhelper.PrimitiveHasNoValueURL); err != nil {
@@ -519,6 +532,26 @@ func (u *Unmarshaller) mergePrimitiveType(dst, src proto.Message) error {
 		}
 	}
 
+	return nil
+}
+
+func mergePrimitive(dst, src proto.Message) error {
+	dm := dst.ProtoReflect()
+	sm := src.ProtoReflect()
+	if dm.Type() != sm.Type() {
+		return fmt.Errorf("cannot merge proto of type %s into %s", sm.Type().Descriptor().Name(), dm.Type().Descriptor().Name())
+	}
+	// In the case where we don't have any extensions we can simply copy the fields into dst to save allocations.
+	sm.Range(func(fd protoreflect.FieldDescriptor, v protoreflect.Value) bool {
+		if !dm.Has(fd) {
+			dm.Set(fd, v)
+			// Clear the field so the merge doesn't undo the savings here.
+			sm.Clear(fd)
+		}
+		return true
+	})
+	// Fallback to merge functionality for the more complicated cases.
+	proto.Merge(dst, src)
 	return nil
 }
 
