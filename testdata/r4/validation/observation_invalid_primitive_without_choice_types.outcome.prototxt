@@ -43,3 +43,17 @@ issue {
 subject {
     observation_id {value: "123"}
 }
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Input failed regex requirement for: google.fhir.r4.core.Id"
+  }
+  expression {
+    value: "Observation.meta.versionId"
+  }
+}

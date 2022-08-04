@@ -1,0 +1,17 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "google.fhir.r4.core.DateTime is missing TimeZone."
+  }
+  expression {
+    value: "Encounter.period.start"
+  }
+}
+subject {
+    encounter_id {value: "123"}
+}
