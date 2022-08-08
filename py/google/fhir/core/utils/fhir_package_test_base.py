@@ -19,6 +19,7 @@ import abc
 import contextlib
 import io
 import json
+import pickle
 import tarfile
 import tempfile
 from typing import Any, Callable, Iterable, Sequence, Tuple, cast
@@ -79,21 +80,18 @@ class FhirPackageTest(
 
   @property
   @abc.abstractmethod
-  def _parser(self):
-    raise NotImplementedError('Subclasses must implement _parser')
-
-  @property
-  @abc.abstractmethod
   def _valueset_cls(self):
     raise NotImplementedError('Subclasses must implement _valueset_cls')
 
   @abc.abstractmethod
   def _load_package(
-      self, source: fhir_package.PackageSource) -> fhir_package.FhirPackage:
+      self,
+      package_source: fhir_package.PackageSource) -> fhir_package.FhirPackage:
     raise NotImplementedError('Subclasses must implement _load_package')
 
   def empty_collection(self) -> fhir_package.ResourceCollection:
-    return fhir_package.ResourceCollection('', self._valueset_cls, self._parser)
+    return fhir_package.ResourceCollection('', self._valueset_cls,
+                                           self._primitive_handler, 'Z')
 
   @_parameterized_with_package_sources
   def testFhirPackageLoad_withValidFhirPackage_isReadable(
@@ -263,6 +261,15 @@ class FhirPackageTest(
         value_sets=self.empty_collection())
     self.assertIsNone(package.get_resource('some_uri'))
 
+  def testFhirPackage_pickle_isSuccessful(self):
+    """Ensure FhirPackages are pickle-able."""
+    package = fhir_package.FhirPackage(
+        structure_definitions=self.empty_collection(),
+        search_parameters=self.empty_collection(),
+        code_systems=self.empty_collection(),
+        value_sets=self.empty_collection())
+    pickle.dumps(package)
+
 
 class ResourceCollectionTest(absltest.TestCase, abc.ABC):
   """Base class for testing ResourceCollections."""
@@ -271,11 +278,6 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
   @abc.abstractmethod
   def _primitive_handler(self):
     raise NotImplementedError('Subclasses must implement _primitive_handler')
-
-  @property
-  @abc.abstractmethod
-  def _parser(self):
-    raise NotImplementedError('Subclasses must implement _parser')
 
   @property
   @abc.abstractmethod
@@ -295,7 +297,7 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
     with zipfile_containing(zipfile_contents) as temp_file:
       collection = fhir_package.ResourceCollection(temp_file.name,
                                                    self._valueset_cls,
-                                                   self._parser)
+                                                   self._primitive_handler, 'Z')
       collection.add_uri_at_path(uri, 'a_value_set.json', 'ValueSet')
       resource = collection.get_resource(uri)
 
@@ -333,7 +335,7 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
     with zipfile_containing(file_contents) as temp_file:
       collection = fhir_package.ResourceCollection(temp_file.name,
                                                    self._valueset_cls,
-                                                   self._parser)
+                                                   self._primitive_handler, 'Z')
       collection.add_uri_at_path('http://value-in-a-bundle', 'a_bundle.json',
                                  'Bundle')
       check_resources(collection)
@@ -341,7 +343,7 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
     with npmfile_containing(file_contents) as temp_file:
       collection = fhir_package.ResourceCollection(temp_file.name,
                                                    self._valueset_cls,
-                                                   self._parser)
+                                                   self._primitive_handler, 'Z')
       collection.add_uri_at_path('http://value-in-a-bundle',
                                  'package/a_bundle.json', 'Bundle')
       check_resources(collection)
@@ -350,7 +352,7 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
     """Ensure we return None when requesing missing resources."""
     collection = fhir_package.ResourceCollection('missing_file.zip',
                                                  self._valueset_cls,
-                                                 self._parser)
+                                                 self._primitive_handler, 'Z')
     resource = collection.get_resource('missing-uri')
 
     self.assertIsNone(resource)
@@ -371,7 +373,7 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
     with zipfile_containing(zipfile_contents) as temp_file:
       collection = fhir_package.ResourceCollection(temp_file.name,
                                                    self._valueset_cls,
-                                                   self._parser)
+                                                   self._primitive_handler, 'Z')
       collection.add_uri_at_path(uri, 'a_value_set.json', 'ValueSet')
 
       # The resource unexpectedly has the wrong url
@@ -397,7 +399,7 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
     with zipfile_containing(zipfile_contents) as temp_file:
       collection = fhir_package.ResourceCollection(temp_file.name,
                                                    self._valueset_cls,
-                                                   self._parser)
+                                                   self._primitive_handler, 'Z')
       collection.add_uri_at_path(uri, 'a_value_set.json', 'ValueSet')
       # Get the resource for the first time to cache it
       resource = collection.get_resource(uri)

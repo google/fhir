@@ -78,7 +78,8 @@ class ResourceCollection(Iterable[_T]):
   Attributes:
     archive_file: The zip or tar file path or a function returning a file-like
     proto_cls: The class of the proto this collection contains.
-    json_parser: The parser to convert JSON data into FHIR.
+    handler: The FHIR primitive handler used for resource parsing.
+    resource_time_zone: The time zone code to parse resource dates into.
     parsed_resources: A cache of resources which have been parsed into protocol
       buffers.
     resource_paths_for_uris: A mapping of URIs to tuples of the path within the
@@ -86,12 +87,13 @@ class ResourceCollection(Iterable[_T]):
   """
 
   def __init__(self, archive_file: PackageSource, proto_cls: Type[_T],
-               json_parser: _json_parser.JsonParser) -> None:
-
+               handler: primitive_handler.PrimitiveHandler,
+               resource_time_zone: str) -> None:
     self.archive_file = archive_file
-
     self.proto_cls = proto_cls
-    self.json_parser = json_parser
+    self.handler = handler
+    self.resource_time_zone = resource_time_zone
+
     self.parsed_resources: Dict[str, _T] = {}
     self.resource_paths_for_uris: Dict[str, Tuple[str, str]] = {}
 
@@ -156,6 +158,7 @@ class ResourceCollection(Iterable[_T]):
     Returns:
       The protocol buffer for the resource or `None` if it can not be found.
     """
+    json_parser = _json_parser.JsonParser(self.handler, self.resource_time_zone)
     # Default to zip files for compatiblity.
     if (not isinstance(archive_file.name, str) or
         archive_file.name.endswith('.zip')):
@@ -183,11 +186,11 @@ class ResourceCollection(Iterable[_T]):
         return None
       else:
         target = self.proto_cls()
-        self.json_parser.merge_value(json_value, target)
+        json_parser.merge_value(json_value, target)
         return target
     else:
       target = self.proto_cls()
-      self.json_parser.merge_value(json_obj, target)
+      json_parser.merge_value(json_obj, target)
       return target
 
   def __iter__(self) -> Iterator[_T]:
@@ -238,16 +241,19 @@ class FhirPackage:
     Raises:
       ValueError: In the event that the file or contents are invalid.
     """
-    parser = _json_parser.JsonParser(handler, resource_time_zone)
     collections_per_resource_type = {
         'StructureDefinition':
-            ResourceCollection(archive_file, struct_def_class, parser),
+            ResourceCollection(archive_file, struct_def_class, handler,
+                               resource_time_zone),
         'SearchParameter':
-            ResourceCollection(archive_file, search_param_class, parser),
+            ResourceCollection(archive_file, search_param_class, handler,
+                               resource_time_zone),
         'CodeSystem':
-            ResourceCollection(archive_file, code_system_class, parser),
+            ResourceCollection(archive_file, code_system_class, handler,
+                               resource_time_zone),
         'ValueSet':
-            ResourceCollection(archive_file, value_set_class, parser),
+            ResourceCollection(archive_file, value_set_class, handler,
+                               resource_time_zone),
     }
 
     with _open_path_or_factory(archive_file) as fd:
