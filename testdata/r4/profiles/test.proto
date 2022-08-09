@@ -278,134 +278,688 @@ message Bundle {
   core.Signature signature = 11;
 }
 
-// Auto-generated from StructureDefinition for TestPatient.
-// Information about an individual or animal receiving health care services.
-// See http://test/url/base/StructureDefinition/TestPatient
-message TestPatient {
+message ContainedResource {
+  oneof oneof_resource {
+    Bundle bundle = 12;
+    ProfiledDatatypesObservation profiled_datatypes_observation = 147;
+    TestEncounter test_encounter = 148;
+    TestEncounterWithProfiledIdentifier
+        test_encounter_with_profiled_identifier = 149;
+    TestObservation test_observation = 150;
+    TestObservationLvl2 test_observation_lvl2 = 151;
+    TestPatient test_patient = 152;
+    TestPatientWithWarningAndErrorFhirpath
+        test_patient_with_warning_and_error_fhirpath = 153;
+  }
+}
+
+// Auto-generated from StructureDefinition for ProfiledDatatypesObservation.
+// Measurements and simple assertions.
+// See http://test/url/base/StructureDefinition/ProfiledDatatypesObservation
+message ProfiledDatatypesObservation {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_profile_base) =
-      "http://hl7.org/fhir/StructureDefinition/Patient";
+      "http://hl7.org/fhir/StructureDefinition/Observation";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/StructureDefinition/TestPatient";
+      "http://test/url/base/StructureDefinition/ProfiledDatatypesObservation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "dataAbsentReason.empty() or value.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()";
   option (.google.fhir.proto.search_parameter) = {
-    name: "Example Search Parameter on an extension"
+    name: "amino-acid-change"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "based-on"
     type: REFERENCE
-    expression: "DocumentReference.extension('http://example.org/fhir/StructureDefinition/participation-agreement')"
+    expression: "Observation.basedOn"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "active"
+    name: "category"
     type: TOKEN
-    expression: "Patient.active"
+    expression: "Observation.category"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "address"
-    type: STRING
-    expression: "Patient.address | Person.address | Practitioner.address | RelatedPerson.address"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "address-city"
-    type: STRING
-    expression: "Patient.address.city | Person.address.city | Practitioner.address.city | RelatedPerson.address.city"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "address-country"
-    type: STRING
-    expression: "Patient.address.country | Person.address.country | Practitioner.address.country | RelatedPerson.address.country"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "address-postalcode"
-    type: STRING
-    expression: "Patient.address.postalCode | Person.address.postalCode | Practitioner.address.postalCode | RelatedPerson.address.postalCode"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "address-state"
-    type: STRING
-    expression: "Patient.address.state | Person.address.state | Practitioner.address.state | RelatedPerson.address.state"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "address-use"
+    name: "code"
     type: TOKEN
-    expression: "Patient.address.use | Person.address.use | Practitioner.address.use | RelatedPerson.address.use"
+    expression: "AllergyIntolerance.code | AllergyIntolerance.reaction.substance | Condition.code | (DeviceRequest.code as CodeableConcept) | DiagnosticReport.code | FamilyMemberHistory.condition.code | List.code | Medication.code | (MedicationAdministration.medication as CodeableConcept) | (MedicationDispense.medication as CodeableConcept) | (MedicationRequest.medication as CodeableConcept) | (MedicationStatement.medication as CodeableConcept) | Observation.code | Procedure.code | ServiceRequest.code"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "birthdate"
+    name: "code-value-concept"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-date"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-quantity"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "code-value-string"
+    type: COMPOSITE
+    expression: "Observation"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-code"
+    type: TOKEN
+    expression: "Observation.code | Observation.component.code"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-code-value-concept"
+    type: COMPOSITE
+    expression: "Observation | Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-code-value-quantity"
+    type: COMPOSITE
+    expression: "Observation | Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-data-absent-reason"
+    type: TOKEN
+    expression: "Observation.dataAbsentReason | Observation.component.dataAbsentReason"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-value-concept"
+    type: TOKEN
+    expression: "(Observation.value as CodeableConcept) | (Observation.component.value as CodeableConcept)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "combo-value-quantity"
+    type: QUANTITY
+    expression: "(Observation.value as Quantity) | (Observation.value as SampledData) | (Observation.component.value as Quantity) | (Observation.component.value as SampledData)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-code"
+    type: TOKEN
+    expression: "Observation.component.code"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-code-value-concept"
+    type: COMPOSITE
+    expression: "Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-code-value-quantity"
+    type: COMPOSITE
+    expression: "Observation.component"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-data-absent-reason"
+    type: TOKEN
+    expression: "Observation.component.dataAbsentReason"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-value-concept"
+    type: TOKEN
+    expression: "(Observation.component.value as CodeableConcept)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "component-value-quantity"
+    type: QUANTITY
+    expression: "(Observation.component.value as Quantity) | (Observation.component.value as SampledData)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "data-absent-reason"
+    type: TOKEN
+    expression: "Observation.dataAbsentReason"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "date"
     type: DATE
-    expression: "Patient.birthDate | Person.birthDate | RelatedPerson.birthDate"
+    expression: "AllergyIntolerance.recordedDate | CarePlan.period | CareTeam.period | ClinicalImpression.date | Composition.date | Consent.dateTime | DiagnosticReport.effective | Encounter.period | EpisodeOfCare.period | FamilyMemberHistory.date | Flag.period | Immunization.occurrence | List.date | Observation.effective | Procedure.performed | (RiskAssessment.occurrence as dateTime) | SupplyRequest.authoredOn"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "death-date"
-    type: DATE
-    expression: "(Patient.deceased as dateTime)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "deceased"
-    type: TOKEN
-    expression: "Patient.deceased.exists() and Patient.deceased != false"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "email"
-    type: TOKEN
-    expression: "Patient.telecom.where(system='email') | Person.telecom.where(system='email') | Practitioner.telecom.where(system='email') | PractitionerRole.telecom.where(system='email') | RelatedPerson.telecom.where(system='email')"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "family"
-    type: STRING
-    expression: "Patient.name.family | Practitioner.name.family"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "gender"
-    type: TOKEN
-    expression: "Patient.gender | Person.gender | Practitioner.gender | RelatedPerson.gender"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "general-practitioner"
+    name: "derived-from"
     type: REFERENCE
-    expression: "Patient.generalPractitioner"
+    expression: "Observation.derivedFrom"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "given"
+    name: "device"
+    type: REFERENCE
+    expression: "Observation.device"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "dna-variant"
     type: STRING
-    expression: "Patient.name.given | Practitioner.name.given"
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsDnaVariant')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "encounter"
+    type: REFERENCE
+    expression: "Composition.encounter | DeviceRequest.encounter | DiagnosticReport.encounter | DocumentReference.context.encounter | Flag.encounter | List.encounter | NutritionOrder.encounter | Observation.encounter | Procedure.encounter | RiskAssessment.encounter | ServiceRequest.encounter | VisionPrescription.encounter"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "focus"
+    type: REFERENCE
+    expression: "Observation.focus"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gene-amino-acid-change"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gene-dnavariant"
+    type: STRING
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsDnaVariant')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gene-identifier"
+    type: TOKEN
+    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsGene')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "has-member"
+    type: REFERENCE
+    expression: "Observation.hasMember"
   };
   option (.google.fhir.proto.search_parameter) = {
     name: "identifier"
     type: TOKEN
-    expression: "Patient.identifier"
+    expression: "AllergyIntolerance.identifier | CarePlan.identifier | CareTeam.identifier | Composition.identifier | Condition.identifier | Consent.identifier | DetectedIssue.identifier | DeviceRequest.identifier | DiagnosticReport.identifier | DocumentManifest.masterIdentifier | DocumentManifest.identifier | DocumentReference.masterIdentifier | DocumentReference.identifier | Encounter.identifier | EpisodeOfCare.identifier | FamilyMemberHistory.identifier | Goal.identifier | ImagingStudy.identifier | Immunization.identifier | List.identifier | MedicationAdministration.identifier | MedicationDispense.identifier | MedicationRequest.identifier | MedicationStatement.identifier | NutritionOrder.identifier | Observation.identifier | Procedure.identifier | RiskAssessment.identifier | ServiceRequest.identifier | SupplyDelivery.identifier | SupplyRequest.identifier | VisionPrescription.identifier"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "language"
+    name: "method"
     type: TOKEN
-    expression: "Patient.communication.language"
+    expression: "Observation.method"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "link"
+    name: "part-of"
     type: REFERENCE
-    expression: "Patient.link.other"
+    expression: "Observation.partOf"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "name"
-    type: STRING
-    expression: "Patient.name"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "organization"
+    name: "patient"
     type: REFERENCE
-    expression: "Patient.managingOrganization"
+    expression: "AllergyIntolerance.patient | CarePlan.subject.where(resolve() is Patient) | CareTeam.subject.where(resolve() is Patient) | ClinicalImpression.subject.where(resolve() is Patient) | Composition.subject.where(resolve() is Patient) | Condition.subject.where(resolve() is Patient) | Consent.patient | DetectedIssue.patient | DeviceRequest.subject.where(resolve() is Patient) | DeviceUseStatement.subject | DiagnosticReport.subject.where(resolve() is Patient) | DocumentManifest.subject.where(resolve() is Patient) | DocumentReference.subject.where(resolve() is Patient) | Encounter.subject.where(resolve() is Patient) | EpisodeOfCare.patient | FamilyMemberHistory.patient | Flag.subject.where(resolve() is Patient) | Goal.subject.where(resolve() is Patient) | ImagingStudy.subject.where(resolve() is Patient) | Immunization.patient | List.subject.where(resolve() is Patient) | MedicationAdministration.subject.where(resolve() is Patient) | MedicationDispense.subject.where(resolve() is Patient) | MedicationRequest.subject.where(resolve() is Patient) | MedicationStatement.subject.where(resolve() is Patient) | NutritionOrder.patient | Observation.subject.where(resolve() is Patient) | Procedure.subject.where(resolve() is Patient) | RiskAssessment.subject.where(resolve() is Patient) | ServiceRequest.subject.where(resolve() is Patient) | SupplyDelivery.patient | VisionPrescription.patient"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "phone"
+    name: "performer"
+    type: REFERENCE
+    expression: "Observation.performer"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "specimen"
+    type: REFERENCE
+    expression: "Observation.specimen"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "status"
     type: TOKEN
-    expression: "Patient.telecom.where(system='phone') | Person.telecom.where(system='phone') | Practitioner.telecom.where(system='phone') | PractitionerRole.telecom.where(system='phone') | RelatedPerson.telecom.where(system='phone')"
+    expression: "Observation.status"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "phonetic"
+    name: "subject"
+    type: REFERENCE
+    expression: "Observation.subject"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-concept"
+    type: TOKEN
+    expression: "(Observation.value as CodeableConcept)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-date"
+    type: DATE
+    expression: "(Observation.value as dateTime) | (Observation.value as Period)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-quantity"
+    type: QUANTITY
+    expression: "(Observation.value as Quantity) | (Observation.value as SampledData)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "value-string"
     type: STRING
-    expression: "Patient.name | Person.name | Practitioner.name | RelatedPerson.name"
+    expression: "(Observation.value as string) | (Observation.value as CodeableConcept).text"
+  };
+
+  // Logical id of this artifact
+  core.Id id = 1;
+
+  // Metadata about the resource
+  message ProfiledMeta {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/Meta";
+
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Version specific identifier
+    core.Id version_id = 3;
+
+    // When the resource version last changed
+    core.Instant last_updated = 4;
+
+    // Identifies where the resource comes from
+    core.Uri source = 5;
+
+    // Profiles this resource claims to conform to
+    repeated core.Canonical profile = 6;
+
+    // Security Labels applied to this resource
+    repeated core.Coding security = 7;
+
+    // Tags applied to this resource
+    repeated core.Coding tag = 8;
+
+    // an example extension on a meta type.
+    repeated core.Decimal extension_on_meta = 9
+        [(.google.fhir.proto.fhir_inlined_extension_url) =
+             "http://test/url/base/StructureDefinition/SimpleDecimalExt"];
+  }
+  ProfiledMeta meta = 2;
+
+  // A set of rules under which this content was created
+  core.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  core.Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  core.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Observation.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated core.Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated core.Extension modifier_extension = 9;
+
+  // Business Identifier for observation
+  repeated core.Identifier identifier = 10;
+
+  // Fulfills plan, proposal or order
+  repeated core.Reference based_on = 11 [
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "DeviceRequest",
+    (.google.fhir.proto.valid_reference_type) = "ImmunizationRecommendation",
+    (.google.fhir.proto.valid_reference_type) = "MedicationRequest",
+    (.google.fhir.proto.valid_reference_type) = "NutritionOrder",
+    (.google.fhir.proto.valid_reference_type) = "ServiceRequest"
+  ];
+
+  // Part of referenced event
+  repeated core.Reference part_of = 12 [
+    (.google.fhir.proto.valid_reference_type) = "MedicationAdministration",
+    (.google.fhir.proto.valid_reference_type) = "MedicationDispense",
+    (.google.fhir.proto.valid_reference_type) = "MedicationStatement",
+    (.google.fhir.proto.valid_reference_type) = "Procedure",
+    (.google.fhir.proto.valid_reference_type) = "Immunization",
+    (.google.fhir.proto.valid_reference_type) = "ImagingStudy"
+  ];
+
+  // registered | preliminary | final | amended +
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/observation-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    core.ObservationStatusCode.Value value = 1;
+
+    core.String id = 2;
+
+    repeated core.Extension extension = 3;
+  }
+  StatusCode status = 13
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated core.CodeableConcept category = 14;
+
+  // Type of observation (code / type)
+  core.CodeableConcept code = 15
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what the observation is about
+  core.Reference subject = 16 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Location"
+  ];
+
+  // What the observation is about, when it is not about the subject of record
+  repeated core.Reference focus = 17
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Healthcare event during which this observation is made
+  core.Reference encounter = 18
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // Clinically relevant time/time-period for observation
+  message EffectiveX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      core.DateTime date_time = 1;
+      core.Period period = 2;
+      core.Timing timing = 3;
+      core.Instant instant = 4;
+    }
+  }
+  EffectiveX effective = 19;
+
+  // Date/Time this version was made available
+  core.Instant issued = 20;
+
+  // Who is responsible for the observation
+  repeated core.Reference performer = 21 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "CareTeam",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+  ];
+
+  // Actual result
+  message ValueX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      core.Quantity quantity = 1;
+      core.CodeableConcept codeable_concept = 2;
+      core.String string_value = 3 [json_name = "string"];
+      core.Boolean boolean = 4;
+      core.Integer integer = 5;
+      core.Range range = 6;
+      core.Ratio ratio = 7;
+      core.SampledData sampled_data = 8;
+      core.Time time = 9;
+      core.DateTime date_time = 10;
+      core.Period period = 11;
+    }
+  }
+  ValueX value = 22;
+
+  // Why the result is missing
+  core.CodeableConcept data_absent_reason = 23;
+
+  // High, low, normal, etc.
+  repeated core.CodeableConcept interpretation = 24;
+
+  // Comments about the observation
+  repeated core.Annotation note = 25;
+
+  // Observed body part
+  core.CodeableConcept body_site = 26;
+
+  // How it was done
+  core.CodeableConcept method = 27;
+
+  // Specimen used for this observation
+  core.Reference specimen = 28
+      [(.google.fhir.proto.valid_reference_type) = "Specimen"];
+
+  // (Measurement) Device
+  core.Reference device = 29 [
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "DeviceMetric"
+  ];
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "low.exists() or high.exists() or text.exists()";
+
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    core.SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    core.SimpleQuantity high = 5;
+
+    // Reference range qualifier
+    core.CodeableConcept type = 6;
+
+    // Reference range population
+    repeated core.CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    core.Range age = 8;
+
+    // Text based reference range in an observation
+    message StringForText {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.value_regex) = "[ \\r\\n\\t\\S]+";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/string";
+
+      // Primitive value for string
+      string value = 1;
+
+      // xml:id (or equivalent in JSON)
+      core.String id = 2;
+
+      // Additional content defined by implementations
+      repeated core.Extension extension = 3;
+
+      // an example extension on a string type.
+      repeated core.Decimal extension_on_string = 4
+          [(.google.fhir.proto.fhir_inlined_extension_url) =
+               "http://test/url/base/StructureDefinition/SimpleDecimalExt"];
+    }
+    StringForText text = 9;
+  }
+  repeated ReferenceRange reference_range = 30;
+
+  // Related resource that belongs to the Observation group
+  repeated core.Reference has_member = 31 [
+    (.google.fhir.proto.valid_reference_type) = "Observation",
+    (.google.fhir.proto.valid_reference_type) = "QuestionnaireResponse",
+    (.google.fhir.proto.valid_reference_type) = "MolecularSequence"
+  ];
+
+  // Related measurements the observation is made from
+  repeated core.Reference derived_from = 32 [
+    (.google.fhir.proto.valid_reference_type) = "DocumentReference",
+    (.google.fhir.proto.valid_reference_type) = "ImagingStudy",
+    (.google.fhir.proto.valid_reference_type) = "Media",
+    (.google.fhir.proto.valid_reference_type) = "QuestionnaireResponse",
+    (.google.fhir.proto.valid_reference_type) = "Observation",
+    (.google.fhir.proto.valid_reference_type) = "MolecularSequence"
+  ];
+
+  // Component results
+  message Component {
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    core.CodeableConcept code = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Actual component result
+    message ValueX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        core.Quantity quantity = 1;
+        core.CodeableConcept codeable_concept = 2;
+        core.String string_value = 3 [json_name = "string"];
+        core.Boolean boolean = 4;
+        core.Integer integer = 5;
+        core.Range range = 6;
+        core.Ratio ratio = 7;
+        core.SampledData sampled_data = 8;
+        core.Time time = 9;
+        core.DateTime date_time = 10;
+        core.Period period = 11;
+      }
+    }
+    ValueX value = 5;
+
+    // Why the component result is missing
+    core.CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc.
+    repeated core.CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 33;
+}
+
+// Auto-generated from StructureDefinition for TestEncounter.
+// An interaction during which services are provided to the patient.
+// See http://test/url/base/StructureDefinition/TestEncounter
+message TestEncounter {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Encounter";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://test/url/base/StructureDefinition/TestEncounter";
+  option (.google.fhir.proto.search_parameter) = {
+    name: "account"
+    type: REFERENCE
+    expression: "Encounter.account"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "telecom"
+    name: "appointment"
+    type: REFERENCE
+    expression: "Encounter.appointment"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "based-on"
+    type: REFERENCE
+    expression: "Encounter.basedOn"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "class"
     type: TOKEN
-    expression: "Patient.telecom | Person.telecom | Practitioner.telecom | PractitionerRole.telecom | RelatedPerson.telecom"
+    expression: "Encounter.class"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "date"
+    type: DATE
+    expression: "AllergyIntolerance.recordedDate | CarePlan.period | CareTeam.period | ClinicalImpression.date | Composition.date | Consent.dateTime | DiagnosticReport.effective | Encounter.period | EpisodeOfCare.period | FamilyMemberHistory.date | Flag.period | Immunization.occurrence | List.date | Observation.effective | Procedure.performed | (RiskAssessment.occurrence as dateTime) | SupplyRequest.authoredOn"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "diagnosis"
+    type: REFERENCE
+    expression: "Encounter.diagnosis.condition"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "episode-of-care"
+    type: REFERENCE
+    expression: "Encounter.episodeOfCare"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "identifier"
+    type: TOKEN
+    expression: "AllergyIntolerance.identifier | CarePlan.identifier | CareTeam.identifier | Composition.identifier | Condition.identifier | Consent.identifier | DetectedIssue.identifier | DeviceRequest.identifier | DiagnosticReport.identifier | DocumentManifest.masterIdentifier | DocumentManifest.identifier | DocumentReference.masterIdentifier | DocumentReference.identifier | Encounter.identifier | EpisodeOfCare.identifier | FamilyMemberHistory.identifier | Goal.identifier | ImagingStudy.identifier | Immunization.identifier | List.identifier | MedicationAdministration.identifier | MedicationDispense.identifier | MedicationRequest.identifier | MedicationStatement.identifier | NutritionOrder.identifier | Observation.identifier | Procedure.identifier | RiskAssessment.identifier | ServiceRequest.identifier | SupplyDelivery.identifier | SupplyRequest.identifier | VisionPrescription.identifier"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "length"
+    type: QUANTITY
+    expression: "Encounter.length"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "location"
+    type: REFERENCE
+    expression: "Encounter.location.location"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "location-period"
+    type: DATE
+    expression: "Encounter.location.period"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "part-of"
+    type: REFERENCE
+    expression: "Encounter.partOf"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "participant"
+    type: REFERENCE
+    expression: "Encounter.participant.individual"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "participant-type"
+    type: TOKEN
+    expression: "Encounter.participant.type"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "patient"
+    type: REFERENCE
+    expression: "AllergyIntolerance.patient | CarePlan.subject.where(resolve() is Patient) | CareTeam.subject.where(resolve() is Patient) | ClinicalImpression.subject.where(resolve() is Patient) | Composition.subject.where(resolve() is Patient) | Condition.subject.where(resolve() is Patient) | Consent.patient | DetectedIssue.patient | DeviceRequest.subject.where(resolve() is Patient) | DeviceUseStatement.subject | DiagnosticReport.subject.where(resolve() is Patient) | DocumentManifest.subject.where(resolve() is Patient) | DocumentReference.subject.where(resolve() is Patient) | Encounter.subject.where(resolve() is Patient) | EpisodeOfCare.patient | FamilyMemberHistory.patient | Flag.subject.where(resolve() is Patient) | Goal.subject.where(resolve() is Patient) | ImagingStudy.subject.where(resolve() is Patient) | Immunization.patient | List.subject.where(resolve() is Patient) | MedicationAdministration.subject.where(resolve() is Patient) | MedicationDispense.subject.where(resolve() is Patient) | MedicationRequest.subject.where(resolve() is Patient) | MedicationStatement.subject.where(resolve() is Patient) | NutritionOrder.patient | Observation.subject.where(resolve() is Patient) | Procedure.subject.where(resolve() is Patient) | RiskAssessment.subject.where(resolve() is Patient) | ServiceRequest.subject.where(resolve() is Patient) | SupplyDelivery.patient | VisionPrescription.patient"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "practitioner"
+    type: REFERENCE
+    expression: "Encounter.participant.individual.where(resolve() is Practitioner)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "reason-code"
+    type: TOKEN
+    expression: "Encounter.reasonCode"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "reason-reference"
+    type: REFERENCE
+    expression: "Encounter.reasonReference"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "service-provider"
+    type: REFERENCE
+    expression: "Encounter.serviceProvider"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "special-arrangement"
+    type: TOKEN
+    expression: "Encounter.hospitalization.specialArrangement"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "status"
+    type: TOKEN
+    expression: "Encounter.status"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "subject"
+    type: REFERENCE
+    expression: "Encounter.subject"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "type"
+    type: TOKEN
+    expression: "AllergyIntolerance.type | Composition.type | DocumentManifest.type | DocumentReference.type | Encounter.type | EpisodeOfCare.type"
   };
 
   // Logical id of this artifact
@@ -427,7 +981,7 @@ message TestPatient {
   repeated protobuf.Any contained = 6;
 
   // Field 7 reserved for strongly-typed ContainedResource for id:
-  // Patient.contained
+  // Encounter.contained
   reserved 7;
 
   // Additional content defined by implementations
@@ -436,59 +990,100 @@ message TestPatient {
   // Extensions that cannot be ignored
   repeated core.Extension modifier_extension = 9;
 
-  // An identifier for this patient
+  // Identifier(s) by which this encounter is known
   repeated core.Identifier identifier = 10;
 
-  // Whether this patient's record is in active use
-  core.Boolean active = 11;
-
-  // A name associated with the patient
-  core.HumanName name = 12
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-  // A contact detail for the individual
-  repeated core.ContactPoint telecom = 13;
-
-  // male | female | other | unknown
-  message GenderCode {
+  // planned | arrived | triaged | in-progress | onleave | finished | cancelled
+  // +
+  message StatusCode {
     option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
     option (.google.fhir.proto.fhir_valueset_url) =
-        "http://hl7.org/fhir/ValueSet/administrative-gender";
+        "http://hl7.org/fhir/ValueSet/encounter-status";
     option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/code";
 
-    core.AdministrativeGenderCode.Value value = 1;
+    core.EncounterStatusCode.Value value = 1;
 
     core.String id = 2;
 
     repeated core.Extension extension = 3;
   }
-  GenderCode gender = 14;
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
-  // The date of birth for the individual
-  core.Date birth_date = 15;
+  // List of past encounter statuses
+  message StatusHistory {
+    // Unique id for inter-element referencing
+    core.String id = 1;
 
-  // Indicates if the individual is deceased or not
-  message DeceasedX {
-    option (.google.fhir.proto.is_choice_type) = true;
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
 
-    oneof choice {
-      core.Boolean boolean = 1;
-      core.DateTime date_time = 2;
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // planned | arrived | triaged | in-progress | onleave | finished |
+    // cancelled +
+    message StatusCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/encounter-status";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      core.EncounterStatusCode.Value value = 1;
+
+      core.String id = 2;
+
+      repeated core.Extension extension = 3;
     }
-  }
-  DeceasedX deceased = 16;
+    StatusCode status = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
-  // An address for the individual
-  repeated core.Address address = 17 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "city.exists() implies state.exists()",
-    (.google.fhir.proto.fhir_path_warning_constraint) =
-        "postalCode.length() >= 5"
+    // The time that the episode was in the specified status
+    core.Period period = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated StatusHistory status_history = 12;
+
+  // Classification of patient encounter
+  core.Coding class_value = 13 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    json_name = "class"
   ];
 
-  // Marital (civil) status of a patient
-  message CodeableConceptForMaritalStatus {
+  // List of past encounter classes
+  message ClassHistory {
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // inpatient | outpatient | ambulatory | emergency +
+    core.Coding class_value = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      json_name = "class"
+    ];
+
+    // The time that the episode was in the specified class
+    core.Period period = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated ClassHistory class_history = 14;
+
+  // Specific type of encounter
+  repeated core.CodeableConcept type = 15;
+
+  // Specific type of service
+  core.CodeableConcept service_type = 16;
+
+  // Indicates the urgency of the encounter
+  message CodeableConceptForPriority {
     option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
 
@@ -504,7 +1099,7 @@ message TestPatient {
     // Plain text representation of the concept
     core.String text = 4;
 
-    message ColorCoding {
+    message ActCoding {
       option (.google.fhir.proto.fhir_profile_base) =
           "http://hl7.org/fhir/StructureDefinition/Coding";
 
@@ -520,9 +1115,30 @@ message TestPatient {
         option (.google.fhir.proto.fhir_profile_base) =
             "http://hl7.org/fhir/StructureDefinition/code";
         option (.google.fhir.proto.fhir_fixed_system) =
-            "http://hl7.org/fhir/metric-color";
+            "http://terminology.hl7.org/CodeSystem/v3-ActPriority";
 
-        core.DeviceMetricColorCode.Value value = 1;
+        enum Value {
+          option (.google.fhir.proto.fhir_code_system_url) =
+              "http://terminology.hl7.org/CodeSystem/v3-ActPriority";
+
+          INVALID_UNINITIALIZED = 0;
+          A = 1 [(.google.fhir.proto.fhir_original_code) = "A"];
+          CR = 2 [(.google.fhir.proto.fhir_original_code) = "CR"];
+          CS = 3 [(.google.fhir.proto.fhir_original_code) = "CS"];
+          CSP = 4 [(.google.fhir.proto.fhir_original_code) = "CSP"];
+          CSR = 5 [(.google.fhir.proto.fhir_original_code) = "CSR"];
+          EL = 6 [(.google.fhir.proto.fhir_original_code) = "EL"];
+          EM = 7 [(.google.fhir.proto.fhir_original_code) = "EM"];
+          P = 8 [(.google.fhir.proto.fhir_original_code) = "P"];
+          PRN = 9 [(.google.fhir.proto.fhir_original_code) = "PRN"];
+          R = 10 [(.google.fhir.proto.fhir_original_code) = "R"];
+          RR = 11 [(.google.fhir.proto.fhir_original_code) = "RR"];
+          S = 12 [(.google.fhir.proto.fhir_original_code) = "S"];
+          T = 13 [(.google.fhir.proto.fhir_original_code) = "T"];
+          UD = 14 [(.google.fhir.proto.fhir_original_code) = "UD"];
+          UR = 15 [(.google.fhir.proto.fhir_original_code) = "UR"];
+        }
+        Value value = 1;
 
         core.String id = 2;
 
@@ -534,112 +1150,26 @@ message TestPatient {
 
       core.Boolean user_selected = 7;
     }
-    ColorCoding color = 5;
+    ActCoding act = 5;
   }
-  CodeableConceptForMaritalStatus marital_status = 18;
+  CodeableConceptForPriority priority = 17;
 
-  // Whether patient is part of a multiple birth
-  message MultipleBirthX {
-    option (.google.fhir.proto.is_choice_type) = true;
-
-    oneof choice {
-      core.Boolean boolean = 1;
-      core.Integer integer = 2;
-    }
-  }
-  MultipleBirthX multiple_birth = 19;
-
-  // Image of the patient
-  repeated core.Attachment photo = 20;
-
-  // A contact party (e.g. guardian, partner, friend) for the patient
-  message Contact {
-    option (.google.fhir.proto.fhir_path_message_constraint) =
-        "name.exists() or telecom.exists() or address.exists() or organization.exists()";
-
-    // Unique id for inter-element referencing
-    core.String id = 1;
-
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated core.Extension modifier_extension = 3;
-
-    // The kind of relationship
-    repeated core.CodeableConcept relationship = 4;
-
-    // A name associated with the contact person
-    core.HumanName name = 5;
-
-    // A contact detail for the person
-    repeated core.ContactPoint telecom = 6;
-
-    // Address for the contact person
-    core.Address address = 7;
-
-    // male | female | other | unknown
-    message GenderCode {
-      option (.google.fhir.proto.structure_definition_kind) =
-          KIND_PRIMITIVE_TYPE;
-      option (.google.fhir.proto.fhir_valueset_url) =
-          "http://hl7.org/fhir/ValueSet/administrative-gender";
-      option (.google.fhir.proto.fhir_profile_base) =
-          "http://hl7.org/fhir/StructureDefinition/code";
-
-      core.AdministrativeGenderCode.Value value = 1;
-
-      core.String id = 2;
-
-      repeated core.Extension extension = 3;
-    }
-    GenderCode gender = 8;
-
-    // Organization that is associated with the contact
-    core.Reference organization = 9
-        [(.google.fhir.proto.valid_reference_type) = "Organization"];
-
-    // The period during which this contact person or organization is valid to
-    // be contacted relating to this patient
-    core.Period period = 10;
-  }
-  repeated Contact contact = 21;
-
-  // A language which may be used to communicate with the patient about his or
-  // her health
-  message Communication {
-    // Unique id for inter-element referencing
-    core.String id = 1;
-
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated core.Extension modifier_extension = 3;
-
-    // The language which can be used to communicate with the patient about his
-    // or her health
-    core.CodeableConcept language = 4
-        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-    // Language preference indicator
-    core.Boolean preferred = 5;
-  }
-  repeated Communication communication = 22;
-
-  // Patient's nominated primary care provider
-  repeated core.Reference general_practitioner = 23 [
-    (.google.fhir.proto.valid_reference_type) = "Organization",
-    (.google.fhir.proto.valid_reference_type) = "Practitioner",
-    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  // The patient or group present at the encounter
+  core.Reference subject = 18 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
   ];
 
-  // Organization that is the custodian of the patient record
-  core.Reference managing_organization = 24
-      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+  // Episode(s) of care that this encounter should be recorded against
+  repeated core.Reference episode_of_care = 19
+      [(.google.fhir.proto.valid_reference_type) = "EpisodeOfCare"];
 
-  // Link to another patient resource that concerns the same actual person
-  message Link {
+  // The ServiceRequest that initiated this encounter
+  repeated core.Reference based_on = 20
+      [(.google.fhir.proto.valid_reference_type) = "ServiceRequest"];
+
+  // List of participants involved in the encounter
+  message Participant {
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -649,49 +1179,723 @@ message TestPatient {
     // Extensions that cannot be ignored even if unrecognized
     repeated core.Extension modifier_extension = 3;
 
-    // The other patient or related person resource that the link refers to
-    core.Reference other = 4 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.valid_reference_type) = "Patient",
+    // Role of participant in encounter
+    repeated core.CodeableConcept type = 4;
+
+    // Period of time during the encounter that the participant participated
+    core.Period period = 5;
+
+    // Persons involved in the encounter other than the patient
+    core.Reference individual = 6 [
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
       (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
     ];
+  }
+  repeated Participant participant = 21;
 
-    // replaced-by | replaces | refer | seealso
-    message TypeCode {
+  // The appointment that scheduled this encounter
+  repeated core.Reference appointment = 22
+      [(.google.fhir.proto.valid_reference_type) = "Appointment"];
+
+  // The start and end time of the encounter
+  core.Period period = 23;
+
+  // Quantity of time the encounter lasted (less time absent)
+  core.Duration length = 24;
+
+  // Coded reason the encounter takes place
+  repeated core.CodeableConcept reason_code = 25;
+
+  // Reason the encounter takes place (reference)
+  repeated core.Reference reason_reference = 26 [
+    (.google.fhir.proto.valid_reference_type) = "Condition",
+    (.google.fhir.proto.valid_reference_type) = "Procedure",
+    (.google.fhir.proto.valid_reference_type) = "Observation",
+    (.google.fhir.proto.valid_reference_type) = "ImmunizationRecommendation"
+  ];
+
+  // The list of diagnosis relevant to this encounter
+  message Diagnosis {
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // The diagnosis or procedure relevant to the encounter
+    core.Reference condition = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Condition",
+      (.google.fhir.proto.valid_reference_type) = "Procedure"
+    ];
+
+    // Role that this diagnosis has within the encounter (e.g. admission,
+    // billing, discharge …)
+    core.CodeableConcept use = 5;
+
+    // Ranking of the diagnosis (for each role type)
+    core.PositiveInt rank = 6;
+  }
+  repeated Diagnosis diagnosis = 27;
+
+  // The set of accounts that may be used for billing for this Encounter
+  repeated core.Reference account = 28
+      [(.google.fhir.proto.valid_reference_type) = "Account"];
+
+  // Details about the admission to a healthcare service
+  message Hospitalization {
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // Pre-admission identifier
+    core.Identifier pre_admission_identifier = 4;
+
+    // The location/organization from which the patient came before admission
+    core.Reference origin = 5 [
+      (.google.fhir.proto.valid_reference_type) = "Location",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // From where patient was admitted (physician referral, transfer)
+    core.CodeableConcept admit_source = 6;
+
+    // The type of hospital re-admission that has occurred (if any). If the
+    // value is absent, then this is not identified as a readmission
+    core.CodeableConcept re_admission = 7;
+
+    // Diet preferences reported by the patient
+    repeated core.CodeableConcept diet_preference = 8;
+
+    // Special courtesies (VIP, board member)
+    repeated core.CodeableConcept special_courtesy = 9;
+
+    // Wheelchair, translator, stretcher, etc.
+    repeated core.CodeableConcept special_arrangement = 10;
+
+    // Location/organization to which the patient is discharged
+    core.Reference destination = 11 [
+      (.google.fhir.proto.valid_reference_type) = "Location",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // Category or kind of location after discharge
+    core.CodeableConcept discharge_disposition = 12;
+  }
+  Hospitalization hospitalization = 29;
+
+  // List of locations where the patient has been
+  message Location {
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // Location the encounter takes place
+    core.Reference location = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Location"
+    ];
+
+    // planned | active | reserved | completed
+    message StatusCode {
       option (.google.fhir.proto.structure_definition_kind) =
           KIND_PRIMITIVE_TYPE;
       option (.google.fhir.proto.fhir_valueset_url) =
-          "http://hl7.org/fhir/ValueSet/link-type";
+          "http://hl7.org/fhir/ValueSet/encounter-location-status";
       option (.google.fhir.proto.fhir_profile_base) =
           "http://hl7.org/fhir/StructureDefinition/code";
 
-      core.LinkTypeCode.Value value = 1;
+      core.EncounterLocationStatusCode.Value value = 1;
 
       core.String id = 2;
 
       repeated core.Extension extension = 3;
     }
-    TypeCode type = 5
+    StatusCode status = 5;
+
+    // The physical type of the location (usually the level in the location
+    // hierarchy - bed room ward etc.)
+    core.CodeableConcept physical_type = 6;
+
+    // Time period during which the patient was present at the location
+    core.Period period = 7;
+  }
+  repeated Location location = 30;
+
+  // The organization (facility) responsible for this encounter
+  core.Reference service_provider = 31
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Another Encounter this encounter is part of
+  core.Reference part_of = 32
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+}
+
+// Auto-generated from StructureDefinition for
+// TestEncounterWithProfiledIdentifier. An interaction during which services are
+// provided to the patient. See
+// http://test/url/base/StructureDefinition/TestEncounterWithProfiledIdentifier
+message TestEncounterWithProfiledIdentifier {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Encounter";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://test/url/base/StructureDefinition/TestEncounterWithProfiledIdentifier";
+  option (.google.fhir.proto.search_parameter) = {
+    name: "account"
+    type: REFERENCE
+    expression: "Encounter.account"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "appointment"
+    type: REFERENCE
+    expression: "Encounter.appointment"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "based-on"
+    type: REFERENCE
+    expression: "Encounter.basedOn"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "class"
+    type: TOKEN
+    expression: "Encounter.class"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "date"
+    type: DATE
+    expression: "AllergyIntolerance.recordedDate | CarePlan.period | CareTeam.period | ClinicalImpression.date | Composition.date | Consent.dateTime | DiagnosticReport.effective | Encounter.period | EpisodeOfCare.period | FamilyMemberHistory.date | Flag.period | Immunization.occurrence | List.date | Observation.effective | Procedure.performed | (RiskAssessment.occurrence as dateTime) | SupplyRequest.authoredOn"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "diagnosis"
+    type: REFERENCE
+    expression: "Encounter.diagnosis.condition"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "episode-of-care"
+    type: REFERENCE
+    expression: "Encounter.episodeOfCare"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "identifier"
+    type: TOKEN
+    expression: "AllergyIntolerance.identifier | CarePlan.identifier | CareTeam.identifier | Composition.identifier | Condition.identifier | Consent.identifier | DetectedIssue.identifier | DeviceRequest.identifier | DiagnosticReport.identifier | DocumentManifest.masterIdentifier | DocumentManifest.identifier | DocumentReference.masterIdentifier | DocumentReference.identifier | Encounter.identifier | EpisodeOfCare.identifier | FamilyMemberHistory.identifier | Goal.identifier | ImagingStudy.identifier | Immunization.identifier | List.identifier | MedicationAdministration.identifier | MedicationDispense.identifier | MedicationRequest.identifier | MedicationStatement.identifier | NutritionOrder.identifier | Observation.identifier | Procedure.identifier | RiskAssessment.identifier | ServiceRequest.identifier | SupplyDelivery.identifier | SupplyRequest.identifier | VisionPrescription.identifier"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "length"
+    type: QUANTITY
+    expression: "Encounter.length"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "location"
+    type: REFERENCE
+    expression: "Encounter.location.location"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "location-period"
+    type: DATE
+    expression: "Encounter.location.period"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "part-of"
+    type: REFERENCE
+    expression: "Encounter.partOf"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "participant"
+    type: REFERENCE
+    expression: "Encounter.participant.individual"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "participant-type"
+    type: TOKEN
+    expression: "Encounter.participant.type"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "patient"
+    type: REFERENCE
+    expression: "AllergyIntolerance.patient | CarePlan.subject.where(resolve() is Patient) | CareTeam.subject.where(resolve() is Patient) | ClinicalImpression.subject.where(resolve() is Patient) | Composition.subject.where(resolve() is Patient) | Condition.subject.where(resolve() is Patient) | Consent.patient | DetectedIssue.patient | DeviceRequest.subject.where(resolve() is Patient) | DeviceUseStatement.subject | DiagnosticReport.subject.where(resolve() is Patient) | DocumentManifest.subject.where(resolve() is Patient) | DocumentReference.subject.where(resolve() is Patient) | Encounter.subject.where(resolve() is Patient) | EpisodeOfCare.patient | FamilyMemberHistory.patient | Flag.subject.where(resolve() is Patient) | Goal.subject.where(resolve() is Patient) | ImagingStudy.subject.where(resolve() is Patient) | Immunization.patient | List.subject.where(resolve() is Patient) | MedicationAdministration.subject.where(resolve() is Patient) | MedicationDispense.subject.where(resolve() is Patient) | MedicationRequest.subject.where(resolve() is Patient) | MedicationStatement.subject.where(resolve() is Patient) | NutritionOrder.patient | Observation.subject.where(resolve() is Patient) | Procedure.subject.where(resolve() is Patient) | RiskAssessment.subject.where(resolve() is Patient) | ServiceRequest.subject.where(resolve() is Patient) | SupplyDelivery.patient | VisionPrescription.patient"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "practitioner"
+    type: REFERENCE
+    expression: "Encounter.participant.individual.where(resolve() is Practitioner)"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "reason-code"
+    type: TOKEN
+    expression: "Encounter.reasonCode"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "reason-reference"
+    type: REFERENCE
+    expression: "Encounter.reasonReference"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "service-provider"
+    type: REFERENCE
+    expression: "Encounter.serviceProvider"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "special-arrangement"
+    type: TOKEN
+    expression: "Encounter.hospitalization.specialArrangement"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "status"
+    type: TOKEN
+    expression: "Encounter.status"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "subject"
+    type: REFERENCE
+    expression: "Encounter.subject"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "type"
+    type: TOKEN
+    expression: "AllergyIntolerance.type | Composition.type | DocumentManifest.type | DocumentReference.type | Encounter.type | EpisodeOfCare.type"
+  };
+
+  // Logical id of this artifact
+  core.Id id = 1;
+
+  // Metadata about the resource
+  core.Meta meta = 2;
+
+  // A set of rules under which this content was created
+  core.Uri implicit_rules = 3;
+
+  // Language of the resource content
+  core.Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  core.Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Encounter.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated core.Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated core.Extension modifier_extension = 9;
+
+  // Identifier(s) by which this encounter is known
+  message ProfiledIdentifier {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/Identifier";
+
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // usual | official | temp | secondary | old (If known)
+    message UseCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/identifier-use";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      core.IdentifierUseCode.Value value = 1;
+
+      core.String id = 2;
+
+      repeated core.Extension extension = 3;
+    }
+    UseCode use = 3;
+
+    // Description of identifier
+    message CodeableConceptForType {
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
+
+      // Unique id for inter-element referencing
+      core.String id = 1;
+
+      // Additional content defined by implementations
+      repeated core.Extension extension = 2;
+
+      // Code defined by a terminology system
+      repeated core.Coding coding = 3;
+
+      // Plain text representation of the concept
+      core.String text = 4;
+
+      message ActCoding {
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/Coding";
+
+        core.String id = 1;
+
+        repeated core.Extension extension = 2;
+
+        core.String version = 4;
+
+        message FixedCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+          option (.google.fhir.proto.fhir_fixed_system) =
+              "http://terminology.hl7.org/CodeSystem/v3-ActPriority";
+
+          enum Value {
+            option (.google.fhir.proto.fhir_code_system_url) =
+                "http://terminology.hl7.org/CodeSystem/v3-ActPriority";
+
+            INVALID_UNINITIALIZED = 0;
+            A = 1 [(.google.fhir.proto.fhir_original_code) = "A"];
+            CR = 2 [(.google.fhir.proto.fhir_original_code) = "CR"];
+            CS = 3 [(.google.fhir.proto.fhir_original_code) = "CS"];
+            CSP = 4 [(.google.fhir.proto.fhir_original_code) = "CSP"];
+            CSR = 5 [(.google.fhir.proto.fhir_original_code) = "CSR"];
+            EL = 6 [(.google.fhir.proto.fhir_original_code) = "EL"];
+            EM = 7 [(.google.fhir.proto.fhir_original_code) = "EM"];
+            P = 8 [(.google.fhir.proto.fhir_original_code) = "P"];
+            PRN = 9 [(.google.fhir.proto.fhir_original_code) = "PRN"];
+            R = 10 [(.google.fhir.proto.fhir_original_code) = "R"];
+            RR = 11 [(.google.fhir.proto.fhir_original_code) = "RR"];
+            S = 12 [(.google.fhir.proto.fhir_original_code) = "S"];
+            T = 13 [(.google.fhir.proto.fhir_original_code) = "T"];
+            UD = 14 [(.google.fhir.proto.fhir_original_code) = "UD"];
+            UR = 15 [(.google.fhir.proto.fhir_original_code) = "UR"];
+          }
+          Value value = 1;
+
+          core.String id = 2;
+
+          repeated core.Extension extension = 3;
+        }
+        FixedCode code = 5;
+
+        core.String display = 6;
+
+        core.Boolean user_selected = 7;
+      }
+      ActCoding act = 5;
+    }
+    CodeableConceptForType type = 4;
+
+    // The namespace for the identifier value
+    core.Uri system = 5;
+
+    // The value that is unique
+    core.String value = 6;
+
+    // Time period when id is/was valid for use
+    core.Period period = 7;
+
+    // Organization that issued id (may be just text)
+    core.Reference assigner = 8
+        [(.google.fhir.proto.valid_reference_type) = "Organization"];
+  }
+  repeated ProfiledIdentifier identifier = 10;
+
+  // planned | arrived | triaged | in-progress | onleave | finished | cancelled
+  // +
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/encounter-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    core.EncounterStatusCode.Value value = 1;
+
+    core.String id = 2;
+
+    repeated core.Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // List of past encounter statuses
+  message StatusHistory {
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // planned | arrived | triaged | in-progress | onleave | finished |
+    // cancelled +
+    message StatusCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/encounter-status";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      core.EncounterStatusCode.Value value = 1;
+
+      core.String id = 2;
+
+      repeated core.Extension extension = 3;
+    }
+    StatusCode status = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // The time that the episode was in the specified status
+    core.Period period = 5
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated Link link = 25;
+  repeated StatusHistory status_history = 12;
 
-  // Decimal Extension
-  core.Decimal dec_ext = 26 [
+  // Classification of patient encounter
+  core.Coding class_value = 13 [
     (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    (.google.fhir.proto.fhir_inlined_extension_url) =
-        "http://test/url/base/StructureDefinition/SimpleDecimalExt"
+    json_name = "class"
   ];
 
-  // Optional Extensions Element
-  FavoriteBrewery.ValueCode favorite_brewery = 27
-      [(.google.fhir.proto.fhir_inlined_extension_url) =
-           "http://test/url/base/StructureDefinition/FavoriteBrewery"];
+  // List of past encounter classes
+  message ClassHistory {
+    // Unique id for inter-element referencing
+    core.String id = 1;
 
-  // Optional Extensions Element
-  FavoriteCalifornian.ValueCode favorite_californian = 28
-      [(.google.fhir.proto.fhir_inlined_extension_url) =
-           "http://test/url/base/StructureDefinition/FavoriteCalifornian"];
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // inpatient | outpatient | ambulatory | emergency +
+    core.Coding class_value = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      json_name = "class"
+    ];
+
+    // The time that the episode was in the specified class
+    core.Period period = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated ClassHistory class_history = 14;
+
+  // Specific type of encounter
+  repeated core.CodeableConcept type = 15;
+
+  // Specific type of service
+  core.CodeableConcept service_type = 16;
+
+  // Indicates the urgency of the encounter
+  core.CodeableConcept priority = 17;
+
+  // The patient or group present at the encounter
+  core.Reference subject = 18 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // Episode(s) of care that this encounter should be recorded against
+  repeated core.Reference episode_of_care = 19
+      [(.google.fhir.proto.valid_reference_type) = "EpisodeOfCare"];
+
+  // The ServiceRequest that initiated this encounter
+  repeated core.Reference based_on = 20
+      [(.google.fhir.proto.valid_reference_type) = "ServiceRequest"];
+
+  // List of participants involved in the encounter
+  message Participant {
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // Role of participant in encounter
+    repeated core.CodeableConcept type = 4;
+
+    // Period of time during the encounter that the participant participated
+    core.Period period = 5;
+
+    // Persons involved in the encounter other than the patient
+    core.Reference individual = 6 [
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+    ];
+  }
+  repeated Participant participant = 21;
+
+  // The appointment that scheduled this encounter
+  repeated core.Reference appointment = 22
+      [(.google.fhir.proto.valid_reference_type) = "Appointment"];
+
+  // The start and end time of the encounter
+  core.Period period = 23;
+
+  // Quantity of time the encounter lasted (less time absent)
+  core.Duration length = 24;
+
+  // Coded reason the encounter takes place
+  repeated core.CodeableConcept reason_code = 25;
+
+  // Reason the encounter takes place (reference)
+  repeated core.Reference reason_reference = 26 [
+    (.google.fhir.proto.valid_reference_type) = "Condition",
+    (.google.fhir.proto.valid_reference_type) = "Procedure",
+    (.google.fhir.proto.valid_reference_type) = "Observation",
+    (.google.fhir.proto.valid_reference_type) = "ImmunizationRecommendation"
+  ];
+
+  // The list of diagnosis relevant to this encounter
+  message Diagnosis {
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // The diagnosis or procedure relevant to the encounter
+    core.Reference condition = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Condition",
+      (.google.fhir.proto.valid_reference_type) = "Procedure"
+    ];
+
+    // Role that this diagnosis has within the encounter (e.g. admission,
+    // billing, discharge …)
+    core.CodeableConcept use = 5;
+
+    // Ranking of the diagnosis (for each role type)
+    core.PositiveInt rank = 6;
+  }
+  repeated Diagnosis diagnosis = 27;
+
+  // The set of accounts that may be used for billing for this Encounter
+  repeated core.Reference account = 28
+      [(.google.fhir.proto.valid_reference_type) = "Account"];
+
+  // Details about the admission to a healthcare service
+  message Hospitalization {
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // Pre-admission identifier
+    core.Identifier pre_admission_identifier = 4;
+
+    // The location/organization from which the patient came before admission
+    core.Reference origin = 5 [
+      (.google.fhir.proto.valid_reference_type) = "Location",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // From where patient was admitted (physician referral, transfer)
+    core.CodeableConcept admit_source = 6;
+
+    // The type of hospital re-admission that has occurred (if any). If the
+    // value is absent, then this is not identified as a readmission
+    core.CodeableConcept re_admission = 7;
+
+    // Diet preferences reported by the patient
+    repeated core.CodeableConcept diet_preference = 8;
+
+    // Special courtesies (VIP, board member)
+    repeated core.CodeableConcept special_courtesy = 9;
+
+    // Wheelchair, translator, stretcher, etc.
+    repeated core.CodeableConcept special_arrangement = 10;
+
+    // Location/organization to which the patient is discharged
+    core.Reference destination = 11 [
+      (.google.fhir.proto.valid_reference_type) = "Location",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // Category or kind of location after discharge
+    core.CodeableConcept discharge_disposition = 12;
+  }
+  Hospitalization hospitalization = 29;
+
+  // List of locations where the patient has been
+  message Location {
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // Location the encounter takes place
+    core.Reference location = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Location"
+    ];
+
+    // planned | active | reserved | completed
+    message StatusCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/encounter-location-status";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      core.EncounterLocationStatusCode.Value value = 1;
+
+      core.String id = 2;
+
+      repeated core.Extension extension = 3;
+    }
+    StatusCode status = 5;
+
+    // The physical type of the location (usually the level in the location
+    // hierarchy - bed room ward etc.)
+    core.CodeableConcept physical_type = 6;
+
+    // Time period during which the patient was present at the location
+    core.Period period = 7;
+  }
+  repeated Location location = 30;
+
+  // The organization (facility) responsible for this encounter
+  core.Reference service_provider = 31
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Another Encounter this encounter is part of
+  core.Reference part_of = 32
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
 }
 
 // Auto-generated from StructureDefinition for TestObservation.
@@ -2199,129 +3403,134 @@ message TestObservationLvl2 {
            "http://test/url/base/StructureDefinition/SimpleDecimalExt"];
 }
 
-// Auto-generated from StructureDefinition for TestEncounter.
-// An interaction during which services are provided to the patient.
-// See http://test/url/base/StructureDefinition/TestEncounter
-message TestEncounter {
+// Auto-generated from StructureDefinition for TestPatient.
+// Information about an individual or animal receiving health care services.
+// See http://test/url/base/StructureDefinition/TestPatient
+message TestPatient {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_profile_base) =
-      "http://hl7.org/fhir/StructureDefinition/Encounter";
+      "http://hl7.org/fhir/StructureDefinition/Patient";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/StructureDefinition/TestEncounter";
+      "http://test/url/base/StructureDefinition/TestPatient";
   option (.google.fhir.proto.search_parameter) = {
-    name: "account"
+    name: "Example Search Parameter on an extension"
     type: REFERENCE
-    expression: "Encounter.account"
+    expression: "DocumentReference.extension('http://example.org/fhir/StructureDefinition/participation-agreement')"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "appointment"
-    type: REFERENCE
-    expression: "Encounter.appointment"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "based-on"
-    type: REFERENCE
-    expression: "Encounter.basedOn"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "class"
+    name: "active"
     type: TOKEN
-    expression: "Encounter.class"
+    expression: "Patient.active"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "date"
+    name: "address"
+    type: STRING
+    expression: "Patient.address | Person.address | Practitioner.address | RelatedPerson.address"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "address-city"
+    type: STRING
+    expression: "Patient.address.city | Person.address.city | Practitioner.address.city | RelatedPerson.address.city"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "address-country"
+    type: STRING
+    expression: "Patient.address.country | Person.address.country | Practitioner.address.country | RelatedPerson.address.country"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "address-postalcode"
+    type: STRING
+    expression: "Patient.address.postalCode | Person.address.postalCode | Practitioner.address.postalCode | RelatedPerson.address.postalCode"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "address-state"
+    type: STRING
+    expression: "Patient.address.state | Person.address.state | Practitioner.address.state | RelatedPerson.address.state"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "address-use"
+    type: TOKEN
+    expression: "Patient.address.use | Person.address.use | Practitioner.address.use | RelatedPerson.address.use"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "birthdate"
     type: DATE
-    expression: "AllergyIntolerance.recordedDate | CarePlan.period | CareTeam.period | ClinicalImpression.date | Composition.date | Consent.dateTime | DiagnosticReport.effective | Encounter.period | EpisodeOfCare.period | FamilyMemberHistory.date | Flag.period | Immunization.occurrence | List.date | Observation.effective | Procedure.performed | (RiskAssessment.occurrence as dateTime) | SupplyRequest.authoredOn"
+    expression: "Patient.birthDate | Person.birthDate | RelatedPerson.birthDate"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "diagnosis"
-    type: REFERENCE
-    expression: "Encounter.diagnosis.condition"
+    name: "death-date"
+    type: DATE
+    expression: "(Patient.deceased as dateTime)"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "episode-of-care"
+    name: "deceased"
+    type: TOKEN
+    expression: "Patient.deceased.exists() and Patient.deceased != false"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "email"
+    type: TOKEN
+    expression: "Patient.telecom.where(system='email') | Person.telecom.where(system='email') | Practitioner.telecom.where(system='email') | PractitionerRole.telecom.where(system='email') | RelatedPerson.telecom.where(system='email')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "family"
+    type: STRING
+    expression: "Patient.name.family | Practitioner.name.family"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "gender"
+    type: TOKEN
+    expression: "Patient.gender | Person.gender | Practitioner.gender | RelatedPerson.gender"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "general-practitioner"
     type: REFERENCE
-    expression: "Encounter.episodeOfCare"
+    expression: "Patient.generalPractitioner"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "given"
+    type: STRING
+    expression: "Patient.name.given | Practitioner.name.given"
   };
   option (.google.fhir.proto.search_parameter) = {
     name: "identifier"
     type: TOKEN
-    expression: "AllergyIntolerance.identifier | CarePlan.identifier | CareTeam.identifier | Composition.identifier | Condition.identifier | Consent.identifier | DetectedIssue.identifier | DeviceRequest.identifier | DiagnosticReport.identifier | DocumentManifest.masterIdentifier | DocumentManifest.identifier | DocumentReference.masterIdentifier | DocumentReference.identifier | Encounter.identifier | EpisodeOfCare.identifier | FamilyMemberHistory.identifier | Goal.identifier | ImagingStudy.identifier | Immunization.identifier | List.identifier | MedicationAdministration.identifier | MedicationDispense.identifier | MedicationRequest.identifier | MedicationStatement.identifier | NutritionOrder.identifier | Observation.identifier | Procedure.identifier | RiskAssessment.identifier | ServiceRequest.identifier | SupplyDelivery.identifier | SupplyRequest.identifier | VisionPrescription.identifier"
+    expression: "Patient.identifier"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "length"
-    type: QUANTITY
-    expression: "Encounter.length"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "location"
-    type: REFERENCE
-    expression: "Encounter.location.location"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "location-period"
-    type: DATE
-    expression: "Encounter.location.period"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "part-of"
-    type: REFERENCE
-    expression: "Encounter.partOf"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "participant"
-    type: REFERENCE
-    expression: "Encounter.participant.individual"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "participant-type"
+    name: "language"
     type: TOKEN
-    expression: "Encounter.participant.type"
+    expression: "Patient.communication.language"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
+    name: "link"
     type: REFERENCE
-    expression: "AllergyIntolerance.patient | CarePlan.subject.where(resolve() is Patient) | CareTeam.subject.where(resolve() is Patient) | ClinicalImpression.subject.where(resolve() is Patient) | Composition.subject.where(resolve() is Patient) | Condition.subject.where(resolve() is Patient) | Consent.patient | DetectedIssue.patient | DeviceRequest.subject.where(resolve() is Patient) | DeviceUseStatement.subject | DiagnosticReport.subject.where(resolve() is Patient) | DocumentManifest.subject.where(resolve() is Patient) | DocumentReference.subject.where(resolve() is Patient) | Encounter.subject.where(resolve() is Patient) | EpisodeOfCare.patient | FamilyMemberHistory.patient | Flag.subject.where(resolve() is Patient) | Goal.subject.where(resolve() is Patient) | ImagingStudy.subject.where(resolve() is Patient) | Immunization.patient | List.subject.where(resolve() is Patient) | MedicationAdministration.subject.where(resolve() is Patient) | MedicationDispense.subject.where(resolve() is Patient) | MedicationRequest.subject.where(resolve() is Patient) | MedicationStatement.subject.where(resolve() is Patient) | NutritionOrder.patient | Observation.subject.where(resolve() is Patient) | Procedure.subject.where(resolve() is Patient) | RiskAssessment.subject.where(resolve() is Patient) | ServiceRequest.subject.where(resolve() is Patient) | SupplyDelivery.patient | VisionPrescription.patient"
+    expression: "Patient.link.other"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "practitioner"
+    name: "name"
+    type: STRING
+    expression: "Patient.name"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "organization"
     type: REFERENCE
-    expression: "Encounter.participant.individual.where(resolve() is Practitioner)"
+    expression: "Patient.managingOrganization"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "reason-code"
+    name: "phone"
     type: TOKEN
-    expression: "Encounter.reasonCode"
+    expression: "Patient.telecom.where(system='phone') | Person.telecom.where(system='phone') | Practitioner.telecom.where(system='phone') | PractitionerRole.telecom.where(system='phone') | RelatedPerson.telecom.where(system='phone')"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "reason-reference"
-    type: REFERENCE
-    expression: "Encounter.reasonReference"
+    name: "phonetic"
+    type: STRING
+    expression: "Patient.name | Person.name | Practitioner.name | RelatedPerson.name"
   };
   option (.google.fhir.proto.search_parameter) = {
-    name: "service-provider"
-    type: REFERENCE
-    expression: "Encounter.serviceProvider"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "special-arrangement"
+    name: "telecom"
     type: TOKEN
-    expression: "Encounter.hospitalization.specialArrangement"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "Encounter.status"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "subject"
-    type: REFERENCE
-    expression: "Encounter.subject"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "type"
-    type: TOKEN
-    expression: "AllergyIntolerance.type | Composition.type | DocumentManifest.type | DocumentReference.type | Encounter.type | EpisodeOfCare.type"
+    expression: "Patient.telecom | Person.telecom | Practitioner.telecom | PractitionerRole.telecom | RelatedPerson.telecom"
   };
 
   // Logical id of this artifact
@@ -2343,7 +3552,7 @@ message TestEncounter {
   repeated protobuf.Any contained = 6;
 
   // Field 7 reserved for strongly-typed ContainedResource for id:
-  // Encounter.contained
+  // Patient.contained
   reserved 7;
 
   // Additional content defined by implementations
@@ -2352,100 +3561,59 @@ message TestEncounter {
   // Extensions that cannot be ignored
   repeated core.Extension modifier_extension = 9;
 
-  // Identifier(s) by which this encounter is known
+  // An identifier for this patient
   repeated core.Identifier identifier = 10;
 
-  // planned | arrived | triaged | in-progress | onleave | finished | cancelled
-  // +
-  message StatusCode {
+  // Whether this patient's record is in active use
+  core.Boolean active = 11;
+
+  // A name associated with the patient
+  core.HumanName name = 12
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // A contact detail for the individual
+  repeated core.ContactPoint telecom = 13;
+
+  // male | female | other | unknown
+  message GenderCode {
     option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
     option (.google.fhir.proto.fhir_valueset_url) =
-        "http://hl7.org/fhir/ValueSet/encounter-status";
+        "http://hl7.org/fhir/ValueSet/administrative-gender";
     option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/code";
 
-    core.EncounterStatusCode.Value value = 1;
+    core.AdministrativeGenderCode.Value value = 1;
 
     core.String id = 2;
 
     repeated core.Extension extension = 3;
   }
-  StatusCode status = 11
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  GenderCode gender = 14;
 
-  // List of past encounter statuses
-  message StatusHistory {
-    // Unique id for inter-element referencing
-    core.String id = 1;
+  // The date of birth for the individual
+  core.Date birth_date = 15;
 
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
+  // Indicates if the individual is deceased or not
+  message DeceasedX {
+    option (.google.fhir.proto.is_choice_type) = true;
 
-    // Extensions that cannot be ignored even if unrecognized
-    repeated core.Extension modifier_extension = 3;
-
-    // planned | arrived | triaged | in-progress | onleave | finished |
-    // cancelled +
-    message StatusCode {
-      option (.google.fhir.proto.structure_definition_kind) =
-          KIND_PRIMITIVE_TYPE;
-      option (.google.fhir.proto.fhir_valueset_url) =
-          "http://hl7.org/fhir/ValueSet/encounter-status";
-      option (.google.fhir.proto.fhir_profile_base) =
-          "http://hl7.org/fhir/StructureDefinition/code";
-
-      core.EncounterStatusCode.Value value = 1;
-
-      core.String id = 2;
-
-      repeated core.Extension extension = 3;
+    oneof choice {
+      core.Boolean boolean = 1;
+      core.DateTime date_time = 2;
     }
-    StatusCode status = 4
-        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-    // The time that the episode was in the specified status
-    core.Period period = 5
-        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
-  repeated StatusHistory status_history = 12;
+  DeceasedX deceased = 16;
 
-  // Classification of patient encounter
-  core.Coding class_value = 13 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    json_name = "class"
+  // An address for the individual
+  repeated core.Address address = 17 [
+    (.google.fhir.proto.fhir_path_constraint) =
+        "city.exists() implies state.exists()",
+    (.google.fhir.proto.fhir_path_warning_constraint) =
+        "postalCode.length() >= 5"
   ];
 
-  // List of past encounter classes
-  message ClassHistory {
-    // Unique id for inter-element referencing
-    core.String id = 1;
-
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated core.Extension modifier_extension = 3;
-
-    // inpatient | outpatient | ambulatory | emergency +
-    core.Coding class_value = 4 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      json_name = "class"
-    ];
-
-    // The time that the episode was in the specified class
-    core.Period period = 5
-        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-  }
-  repeated ClassHistory class_history = 14;
-
-  // Specific type of encounter
-  repeated core.CodeableConcept type = 15;
-
-  // Specific type of service
-  core.CodeableConcept service_type = 16;
-
-  // Indicates the urgency of the encounter
-  message CodeableConceptForPriority {
+  // Marital (civil) status of a patient
+  message CodeableConceptForMaritalStatus {
     option (.google.fhir.proto.fhir_profile_base) =
         "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
 
@@ -2461,7 +3629,7 @@ message TestEncounter {
     // Plain text representation of the concept
     core.String text = 4;
 
-    message ActCoding {
+    message ColorCoding {
       option (.google.fhir.proto.fhir_profile_base) =
           "http://hl7.org/fhir/StructureDefinition/Coding";
 
@@ -2477,30 +3645,9 @@ message TestEncounter {
         option (.google.fhir.proto.fhir_profile_base) =
             "http://hl7.org/fhir/StructureDefinition/code";
         option (.google.fhir.proto.fhir_fixed_system) =
-            "http://terminology.hl7.org/CodeSystem/v3-ActPriority";
+            "http://hl7.org/fhir/metric-color";
 
-        enum Value {
-          option (.google.fhir.proto.fhir_code_system_url) =
-              "http://terminology.hl7.org/CodeSystem/v3-ActPriority";
-
-          INVALID_UNINITIALIZED = 0;
-          A = 1 [(.google.fhir.proto.fhir_original_code) = "A"];
-          CR = 2 [(.google.fhir.proto.fhir_original_code) = "CR"];
-          CS = 3 [(.google.fhir.proto.fhir_original_code) = "CS"];
-          CSP = 4 [(.google.fhir.proto.fhir_original_code) = "CSP"];
-          CSR = 5 [(.google.fhir.proto.fhir_original_code) = "CSR"];
-          EL = 6 [(.google.fhir.proto.fhir_original_code) = "EL"];
-          EM = 7 [(.google.fhir.proto.fhir_original_code) = "EM"];
-          P = 8 [(.google.fhir.proto.fhir_original_code) = "P"];
-          PRN = 9 [(.google.fhir.proto.fhir_original_code) = "PRN"];
-          R = 10 [(.google.fhir.proto.fhir_original_code) = "R"];
-          RR = 11 [(.google.fhir.proto.fhir_original_code) = "RR"];
-          S = 12 [(.google.fhir.proto.fhir_original_code) = "S"];
-          T = 13 [(.google.fhir.proto.fhir_original_code) = "T"];
-          UD = 14 [(.google.fhir.proto.fhir_original_code) = "UD"];
-          UR = 15 [(.google.fhir.proto.fhir_original_code) = "UR"];
-        }
-        Value value = 1;
+        core.DeviceMetricColorCode.Value value = 1;
 
         core.String id = 2;
 
@@ -2512,630 +3659,28 @@ message TestEncounter {
 
       core.Boolean user_selected = 7;
     }
-    ActCoding act = 5;
+    ColorCoding color = 5;
   }
-  CodeableConceptForPriority priority = 17;
+  CodeableConceptForMaritalStatus marital_status = 18;
 
-  // The patient or group present at the encounter
-  core.Reference subject = 18 [
-    (.google.fhir.proto.valid_reference_type) = "Patient",
-    (.google.fhir.proto.valid_reference_type) = "Group"
-  ];
-
-  // Episode(s) of care that this encounter should be recorded against
-  repeated core.Reference episode_of_care = 19
-      [(.google.fhir.proto.valid_reference_type) = "EpisodeOfCare"];
-
-  // The ServiceRequest that initiated this encounter
-  repeated core.Reference based_on = 20
-      [(.google.fhir.proto.valid_reference_type) = "ServiceRequest"];
-
-  // List of participants involved in the encounter
-  message Participant {
-    // Unique id for inter-element referencing
-    core.String id = 1;
-
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated core.Extension modifier_extension = 3;
-
-    // Role of participant in encounter
-    repeated core.CodeableConcept type = 4;
-
-    // Period of time during the encounter that the participant participated
-    core.Period period = 5;
-
-    // Persons involved in the encounter other than the patient
-    core.Reference individual = 6 [
-      (.google.fhir.proto.valid_reference_type) = "Practitioner",
-      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
-      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
-    ];
-  }
-  repeated Participant participant = 21;
-
-  // The appointment that scheduled this encounter
-  repeated core.Reference appointment = 22
-      [(.google.fhir.proto.valid_reference_type) = "Appointment"];
-
-  // The start and end time of the encounter
-  core.Period period = 23;
-
-  // Quantity of time the encounter lasted (less time absent)
-  core.Duration length = 24;
-
-  // Coded reason the encounter takes place
-  repeated core.CodeableConcept reason_code = 25;
-
-  // Reason the encounter takes place (reference)
-  repeated core.Reference reason_reference = 26 [
-    (.google.fhir.proto.valid_reference_type) = "Condition",
-    (.google.fhir.proto.valid_reference_type) = "Procedure",
-    (.google.fhir.proto.valid_reference_type) = "Observation",
-    (.google.fhir.proto.valid_reference_type) = "ImmunizationRecommendation"
-  ];
-
-  // The list of diagnosis relevant to this encounter
-  message Diagnosis {
-    // Unique id for inter-element referencing
-    core.String id = 1;
-
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated core.Extension modifier_extension = 3;
-
-    // The diagnosis or procedure relevant to the encounter
-    core.Reference condition = 4 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.valid_reference_type) = "Condition",
-      (.google.fhir.proto.valid_reference_type) = "Procedure"
-    ];
-
-    // Role that this diagnosis has within the encounter (e.g. admission,
-    // billing, discharge …)
-    core.CodeableConcept use = 5;
-
-    // Ranking of the diagnosis (for each role type)
-    core.PositiveInt rank = 6;
-  }
-  repeated Diagnosis diagnosis = 27;
-
-  // The set of accounts that may be used for billing for this Encounter
-  repeated core.Reference account = 28
-      [(.google.fhir.proto.valid_reference_type) = "Account"];
-
-  // Details about the admission to a healthcare service
-  message Hospitalization {
-    // Unique id for inter-element referencing
-    core.String id = 1;
-
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated core.Extension modifier_extension = 3;
-
-    // Pre-admission identifier
-    core.Identifier pre_admission_identifier = 4;
-
-    // The location/organization from which the patient came before admission
-    core.Reference origin = 5 [
-      (.google.fhir.proto.valid_reference_type) = "Location",
-      (.google.fhir.proto.valid_reference_type) = "Organization"
-    ];
-
-    // From where patient was admitted (physician referral, transfer)
-    core.CodeableConcept admit_source = 6;
-
-    // The type of hospital re-admission that has occurred (if any). If the
-    // value is absent, then this is not identified as a readmission
-    core.CodeableConcept re_admission = 7;
-
-    // Diet preferences reported by the patient
-    repeated core.CodeableConcept diet_preference = 8;
-
-    // Special courtesies (VIP, board member)
-    repeated core.CodeableConcept special_courtesy = 9;
-
-    // Wheelchair, translator, stretcher, etc.
-    repeated core.CodeableConcept special_arrangement = 10;
-
-    // Location/organization to which the patient is discharged
-    core.Reference destination = 11 [
-      (.google.fhir.proto.valid_reference_type) = "Location",
-      (.google.fhir.proto.valid_reference_type) = "Organization"
-    ];
-
-    // Category or kind of location after discharge
-    core.CodeableConcept discharge_disposition = 12;
-  }
-  Hospitalization hospitalization = 29;
-
-  // List of locations where the patient has been
-  message Location {
-    // Unique id for inter-element referencing
-    core.String id = 1;
-
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated core.Extension modifier_extension = 3;
-
-    // Location the encounter takes place
-    core.Reference location = 4 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.valid_reference_type) = "Location"
-    ];
-
-    // planned | active | reserved | completed
-    message StatusCode {
-      option (.google.fhir.proto.structure_definition_kind) =
-          KIND_PRIMITIVE_TYPE;
-      option (.google.fhir.proto.fhir_valueset_url) =
-          "http://hl7.org/fhir/ValueSet/encounter-location-status";
-      option (.google.fhir.proto.fhir_profile_base) =
-          "http://hl7.org/fhir/StructureDefinition/code";
-
-      core.EncounterLocationStatusCode.Value value = 1;
-
-      core.String id = 2;
-
-      repeated core.Extension extension = 3;
-    }
-    StatusCode status = 5;
-
-    // The physical type of the location (usually the level in the location
-    // hierachy - bed room ward etc.)
-    core.CodeableConcept physical_type = 6;
-
-    // Time period during which the patient was present at the location
-    core.Period period = 7;
-  }
-  repeated Location location = 30;
-
-  // The organization (facility) responsible for this encounter
-  core.Reference service_provider = 31
-      [(.google.fhir.proto.valid_reference_type) = "Organization"];
-
-  // Another Encounter this encounter is part of
-  core.Reference part_of = 32
-      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
-}
-
-// Auto-generated from StructureDefinition for ProfiledDatatypesObservation.
-// Measurements and simple assertions.
-// See http://test/url/base/StructureDefinition/ProfiledDatatypesObservation
-message ProfiledDatatypesObservation {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
-  option (.google.fhir.proto.fhir_profile_base) =
-      "http://hl7.org/fhir/StructureDefinition/Observation";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/StructureDefinition/ProfiledDatatypesObservation";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "dataAbsentReason.empty() or value.empty()";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "amino-acid-change"
-    type: STRING
-    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName')"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "based-on"
-    type: REFERENCE
-    expression: "Observation.basedOn"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "category"
-    type: TOKEN
-    expression: "Observation.category"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "code"
-    type: TOKEN
-    expression: "AllergyIntolerance.code | AllergyIntolerance.reaction.substance | Condition.code | (DeviceRequest.code as CodeableConcept) | DiagnosticReport.code | FamilyMemberHistory.condition.code | List.code | Medication.code | (MedicationAdministration.medication as CodeableConcept) | (MedicationDispense.medication as CodeableConcept) | (MedicationRequest.medication as CodeableConcept) | (MedicationStatement.medication as CodeableConcept) | Observation.code | Procedure.code | ServiceRequest.code"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "code-value-concept"
-    type: COMPOSITE
-    expression: "Observation"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "code-value-date"
-    type: COMPOSITE
-    expression: "Observation"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "code-value-quantity"
-    type: COMPOSITE
-    expression: "Observation"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "code-value-string"
-    type: COMPOSITE
-    expression: "Observation"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "combo-code"
-    type: TOKEN
-    expression: "Observation.code | Observation.component.code"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "combo-code-value-concept"
-    type: COMPOSITE
-    expression: "Observation | Observation.component"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "combo-code-value-quantity"
-    type: COMPOSITE
-    expression: "Observation | Observation.component"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "combo-data-absent-reason"
-    type: TOKEN
-    expression: "Observation.dataAbsentReason | Observation.component.dataAbsentReason"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "combo-value-concept"
-    type: TOKEN
-    expression: "(Observation.value as CodeableConcept) | (Observation.component.value as CodeableConcept)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "combo-value-quantity"
-    type: QUANTITY
-    expression: "(Observation.value as Quantity) | (Observation.value as SampledData) | (Observation.component.value as Quantity) | (Observation.component.value as SampledData)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "component-code"
-    type: TOKEN
-    expression: "Observation.component.code"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "component-code-value-concept"
-    type: COMPOSITE
-    expression: "Observation.component"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "component-code-value-quantity"
-    type: COMPOSITE
-    expression: "Observation.component"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "component-data-absent-reason"
-    type: TOKEN
-    expression: "Observation.component.dataAbsentReason"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "component-value-concept"
-    type: TOKEN
-    expression: "(Observation.component.value as CodeableConcept)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "component-value-quantity"
-    type: QUANTITY
-    expression: "(Observation.component.value as Quantity) | (Observation.component.value as SampledData)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "data-absent-reason"
-    type: TOKEN
-    expression: "Observation.dataAbsentReason"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "date"
-    type: DATE
-    expression: "AllergyIntolerance.recordedDate | CarePlan.period | CareTeam.period | ClinicalImpression.date | Composition.date | Consent.dateTime | DiagnosticReport.effective | Encounter.period | EpisodeOfCare.period | FamilyMemberHistory.date | Flag.period | Immunization.occurrence | List.date | Observation.effective | Procedure.performed | (RiskAssessment.occurrence as dateTime) | SupplyRequest.authoredOn"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "derived-from"
-    type: REFERENCE
-    expression: "Observation.derivedFrom"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "device"
-    type: REFERENCE
-    expression: "Observation.device"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "dna-variant"
-    type: STRING
-    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsDnaVariant')"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "encounter"
-    type: REFERENCE
-    expression: "Composition.encounter | DeviceRequest.encounter | DiagnosticReport.encounter | DocumentReference.context.encounter | Flag.encounter | List.encounter | NutritionOrder.encounter | Observation.encounter | Procedure.encounter | RiskAssessment.encounter | ServiceRequest.encounter | VisionPrescription.encounter"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "focus"
-    type: REFERENCE
-    expression: "Observation.focus"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "gene-amino-acid-change"
-    type: STRING
-    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsAminoAcidChangeName')"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "gene-dnavariant"
-    type: STRING
-    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsDnaVariant')"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "gene-identifier"
-    type: TOKEN
-    expression: "Observation.extension('http://hl7.org/fhir/StructureDefinition/observation-geneticsGene')"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "has-member"
-    type: REFERENCE
-    expression: "Observation.hasMember"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "AllergyIntolerance.identifier | CarePlan.identifier | CareTeam.identifier | Composition.identifier | Condition.identifier | Consent.identifier | DetectedIssue.identifier | DeviceRequest.identifier | DiagnosticReport.identifier | DocumentManifest.masterIdentifier | DocumentManifest.identifier | DocumentReference.masterIdentifier | DocumentReference.identifier | Encounter.identifier | EpisodeOfCare.identifier | FamilyMemberHistory.identifier | Goal.identifier | ImagingStudy.identifier | Immunization.identifier | List.identifier | MedicationAdministration.identifier | MedicationDispense.identifier | MedicationRequest.identifier | MedicationStatement.identifier | NutritionOrder.identifier | Observation.identifier | Procedure.identifier | RiskAssessment.identifier | ServiceRequest.identifier | SupplyDelivery.identifier | SupplyRequest.identifier | VisionPrescription.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "method"
-    type: TOKEN
-    expression: "Observation.method"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "part-of"
-    type: REFERENCE
-    expression: "Observation.partOf"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "AllergyIntolerance.patient | CarePlan.subject.where(resolve() is Patient) | CareTeam.subject.where(resolve() is Patient) | ClinicalImpression.subject.where(resolve() is Patient) | Composition.subject.where(resolve() is Patient) | Condition.subject.where(resolve() is Patient) | Consent.patient | DetectedIssue.patient | DeviceRequest.subject.where(resolve() is Patient) | DeviceUseStatement.subject | DiagnosticReport.subject.where(resolve() is Patient) | DocumentManifest.subject.where(resolve() is Patient) | DocumentReference.subject.where(resolve() is Patient) | Encounter.subject.where(resolve() is Patient) | EpisodeOfCare.patient | FamilyMemberHistory.patient | Flag.subject.where(resolve() is Patient) | Goal.subject.where(resolve() is Patient) | ImagingStudy.subject.where(resolve() is Patient) | Immunization.patient | List.subject.where(resolve() is Patient) | MedicationAdministration.subject.where(resolve() is Patient) | MedicationDispense.subject.where(resolve() is Patient) | MedicationRequest.subject.where(resolve() is Patient) | MedicationStatement.subject.where(resolve() is Patient) | NutritionOrder.patient | Observation.subject.where(resolve() is Patient) | Procedure.subject.where(resolve() is Patient) | RiskAssessment.subject.where(resolve() is Patient) | ServiceRequest.subject.where(resolve() is Patient) | SupplyDelivery.patient | VisionPrescription.patient"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "performer"
-    type: REFERENCE
-    expression: "Observation.performer"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "specimen"
-    type: REFERENCE
-    expression: "Observation.specimen"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "Observation.status"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "subject"
-    type: REFERENCE
-    expression: "Observation.subject"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "value-concept"
-    type: TOKEN
-    expression: "(Observation.value as CodeableConcept)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "value-date"
-    type: DATE
-    expression: "(Observation.value as dateTime) | (Observation.value as Period)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "value-quantity"
-    type: QUANTITY
-    expression: "(Observation.value as Quantity) | (Observation.value as SampledData)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "value-string"
-    type: STRING
-    expression: "(Observation.value as string) | (Observation.value as CodeableConcept).text"
-  };
-
-  // Logical id of this artifact
-  core.Id id = 1;
-
-  // Metadata about the resource
-  message ProfiledMeta {
-    option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
-    option (.google.fhir.proto.fhir_profile_base) =
-        "http://hl7.org/fhir/StructureDefinition/Meta";
-
-    // Unique id for inter-element referencing
-    core.String id = 1;
-
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
-
-    // Version specific identifier
-    core.Id version_id = 3;
-
-    // When the resource version last changed
-    core.Instant last_updated = 4;
-
-    // Identifies where the resource comes from
-    core.Uri source = 5;
-
-    // Profiles this resource claims to conform to
-    repeated core.Canonical profile = 6;
-
-    // Security Labels applied to this resource
-    repeated core.Coding security = 7;
-
-    // Tags applied to this resource
-    repeated core.Coding tag = 8;
-
-    // an example extension on a meta type.
-    repeated core.Decimal extension_on_meta = 9
-        [(.google.fhir.proto.fhir_inlined_extension_url) =
-             "http://test/url/base/StructureDefinition/SimpleDecimalExt"];
-  }
-  ProfiledMeta meta = 2;
-
-  // A set of rules under which this content was created
-  core.Uri implicit_rules = 3;
-
-  // Language of the resource content
-  core.Code language = 4;
-
-  // Text summary of the resource, for human interpretation
-  core.Narrative text = 5;
-
-  // Contained, inline Resources
-  repeated protobuf.Any contained = 6;
-
-  // Field 7 reserved for strongly-typed ContainedResource for id:
-  // Observation.contained
-  reserved 7;
-
-  // Additional content defined by implementations
-  repeated core.Extension extension = 8;
-
-  // Extensions that cannot be ignored
-  repeated core.Extension modifier_extension = 9;
-
-  // Business Identifier for observation
-  repeated core.Identifier identifier = 10;
-
-  // Fulfills plan, proposal or order
-  repeated core.Reference based_on = 11 [
-    (.google.fhir.proto.valid_reference_type) = "CarePlan",
-    (.google.fhir.proto.valid_reference_type) = "DeviceRequest",
-    (.google.fhir.proto.valid_reference_type) = "ImmunizationRecommendation",
-    (.google.fhir.proto.valid_reference_type) = "MedicationRequest",
-    (.google.fhir.proto.valid_reference_type) = "NutritionOrder",
-    (.google.fhir.proto.valid_reference_type) = "ServiceRequest"
-  ];
-
-  // Part of referenced event
-  repeated core.Reference part_of = 12 [
-    (.google.fhir.proto.valid_reference_type) = "MedicationAdministration",
-    (.google.fhir.proto.valid_reference_type) = "MedicationDispense",
-    (.google.fhir.proto.valid_reference_type) = "MedicationStatement",
-    (.google.fhir.proto.valid_reference_type) = "Procedure",
-    (.google.fhir.proto.valid_reference_type) = "Immunization",
-    (.google.fhir.proto.valid_reference_type) = "ImagingStudy"
-  ];
-
-  // registered | preliminary | final | amended +
-  message StatusCode {
-    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-    option (.google.fhir.proto.fhir_valueset_url) =
-        "http://hl7.org/fhir/ValueSet/observation-status";
-    option (.google.fhir.proto.fhir_profile_base) =
-        "http://hl7.org/fhir/StructureDefinition/code";
-
-    core.ObservationStatusCode.Value value = 1;
-
-    core.String id = 2;
-
-    repeated core.Extension extension = 3;
-  }
-  StatusCode status = 13
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-  // Classification of  type of observation
-  repeated core.CodeableConcept category = 14;
-
-  // Type of observation (code / type)
-  core.CodeableConcept code = 15
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-  // Who and/or what the observation is about
-  core.Reference subject = 16 [
-    (.google.fhir.proto.valid_reference_type) = "Patient",
-    (.google.fhir.proto.valid_reference_type) = "Group",
-    (.google.fhir.proto.valid_reference_type) = "Device",
-    (.google.fhir.proto.valid_reference_type) = "Location"
-  ];
-
-  // What the observation is about, when it is not about the subject of record
-  repeated core.Reference focus = 17
-      [(.google.fhir.proto.valid_reference_type) = "Resource"];
-
-  // Healthcare event during which this observation is made
-  core.Reference encounter = 18
-      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
-
-  // Clinically relevant time/time-period for observation
-  message EffectiveX {
+  // Whether patient is part of a multiple birth
+  message MultipleBirthX {
     option (.google.fhir.proto.is_choice_type) = true;
 
     oneof choice {
-      core.DateTime date_time = 1;
-      core.Period period = 2;
-      core.Timing timing = 3;
-      core.Instant instant = 4;
+      core.Boolean boolean = 1;
+      core.Integer integer = 2;
     }
   }
-  EffectiveX effective = 19;
+  MultipleBirthX multiple_birth = 19;
 
-  // Date/Time this version was made available
-  core.Instant issued = 20;
+  // Image of the patient
+  repeated core.Attachment photo = 20;
 
-  // Who is responsible for the observation
-  repeated core.Reference performer = 21 [
-    (.google.fhir.proto.valid_reference_type) = "Practitioner",
-    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
-    (.google.fhir.proto.valid_reference_type) = "Organization",
-    (.google.fhir.proto.valid_reference_type) = "CareTeam",
-    (.google.fhir.proto.valid_reference_type) = "Patient",
-    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
-  ];
-
-  // Actual result
-  message ValueX {
-    option (.google.fhir.proto.is_choice_type) = true;
-
-    oneof choice {
-      core.Quantity quantity = 1;
-      core.CodeableConcept codeable_concept = 2;
-      core.String string_value = 3 [json_name = "string"];
-      core.Boolean boolean = 4;
-      core.Integer integer = 5;
-      core.Range range = 6;
-      core.Ratio ratio = 7;
-      core.SampledData sampled_data = 8;
-      core.Time time = 9;
-      core.DateTime date_time = 10;
-      core.Period period = 11;
-    }
-  }
-  ValueX value = 22;
-
-  // Why the result is missing
-  core.CodeableConcept data_absent_reason = 23;
-
-  // High, low, normal, etc.
-  repeated core.CodeableConcept interpretation = 24;
-
-  // Comments about the observation
-  repeated core.Annotation note = 25;
-
-  // Observed body part
-  core.CodeableConcept body_site = 26;
-
-  // How it was done
-  core.CodeableConcept method = 27;
-
-  // Specimen used for this observation
-  core.Reference specimen = 28
-      [(.google.fhir.proto.valid_reference_type) = "Specimen"];
-
-  // (Measurement) Device
-  core.Reference device = 29 [
-    (.google.fhir.proto.valid_reference_type) = "Device",
-    (.google.fhir.proto.valid_reference_type) = "DeviceMetric"
-  ];
-
-  // Provides guide for interpretation
-  message ReferenceRange {
+  // A contact party (e.g. guardian, partner, friend) for the patient
+  message Contact {
     option (.google.fhir.proto.fhir_path_message_constraint) =
-        "low.exists() or high.exists() or text.exists()";
+        "name.exists() or telecom.exists() or address.exists() or organization.exists()";
 
     // Unique id for inter-element referencing
     core.String id = 1;
@@ -3146,401 +3691,48 @@ message ProfiledDatatypesObservation {
     // Extensions that cannot be ignored even if unrecognized
     repeated core.Extension modifier_extension = 3;
 
-    // Low Range, if relevant
-    core.SimpleQuantity low = 4;
+    // The kind of relationship
+    repeated core.CodeableConcept relationship = 4;
 
-    // High Range, if relevant
-    core.SimpleQuantity high = 5;
+    // A name associated with the contact person
+    core.HumanName name = 5;
 
-    // Reference range qualifier
-    core.CodeableConcept type = 6;
+    // A contact detail for the person
+    repeated core.ContactPoint telecom = 6;
 
-    // Reference range population
-    repeated core.CodeableConcept applies_to = 7;
+    // Address for the contact person
+    core.Address address = 7;
 
-    // Applicable age range, if relevant
-    core.Range age = 8;
-
-    // Text based reference range in an observation
-    message StringForText {
-      option (.google.fhir.proto.structure_definition_kind) =
-          KIND_PRIMITIVE_TYPE;
-      option (.google.fhir.proto.value_regex) = "[ \\r\\n\\t\\S]+";
-      option (.google.fhir.proto.fhir_profile_base) =
-          "http://hl7.org/fhir/StructureDefinition/string";
-
-      // Primitive value for string
-      string value = 1;
-
-      // xml:id (or equivalent in JSON)
-      core.String id = 2;
-
-      // Additional content defined by implementations
-      repeated core.Extension extension = 3;
-
-      // an example extension on a string type.
-      repeated core.Decimal extension_on_string = 4
-          [(.google.fhir.proto.fhir_inlined_extension_url) =
-               "http://test/url/base/StructureDefinition/SimpleDecimalExt"];
-    }
-    StringForText text = 9;
-  }
-  repeated ReferenceRange reference_range = 30;
-
-  // Related resource that belongs to the Observation group
-  repeated core.Reference has_member = 31 [
-    (.google.fhir.proto.valid_reference_type) = "Observation",
-    (.google.fhir.proto.valid_reference_type) = "QuestionnaireResponse",
-    (.google.fhir.proto.valid_reference_type) = "MolecularSequence"
-  ];
-
-  // Related measurements the observation is made from
-  repeated core.Reference derived_from = 32 [
-    (.google.fhir.proto.valid_reference_type) = "DocumentReference",
-    (.google.fhir.proto.valid_reference_type) = "ImagingStudy",
-    (.google.fhir.proto.valid_reference_type) = "Media",
-    (.google.fhir.proto.valid_reference_type) = "QuestionnaireResponse",
-    (.google.fhir.proto.valid_reference_type) = "Observation",
-    (.google.fhir.proto.valid_reference_type) = "MolecularSequence"
-  ];
-
-  // Component results
-  message Component {
-    // Unique id for inter-element referencing
-    core.String id = 1;
-
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated core.Extension modifier_extension = 3;
-
-    // Type of component observation (code / type)
-    core.CodeableConcept code = 4
-        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-    // Actual component result
-    message ValueX {
-      option (.google.fhir.proto.is_choice_type) = true;
-
-      oneof choice {
-        core.Quantity quantity = 1;
-        core.CodeableConcept codeable_concept = 2;
-        core.String string_value = 3 [json_name = "string"];
-        core.Boolean boolean = 4;
-        core.Integer integer = 5;
-        core.Range range = 6;
-        core.Ratio ratio = 7;
-        core.SampledData sampled_data = 8;
-        core.Time time = 9;
-        core.DateTime date_time = 10;
-        core.Period period = 11;
-      }
-    }
-    ValueX value = 5;
-
-    // Why the component result is missing
-    core.CodeableConcept data_absent_reason = 6;
-
-    // High, low, normal, etc.
-    repeated core.CodeableConcept interpretation = 7;
-
-    // Provides guide for interpretation of component result
-    repeated ReferenceRange reference_range = 8;
-  }
-  repeated Component component = 33;
-}
-
-// Auto-generated from StructureDefinition for
-// TestEncounterWithProfiledIdentifier. An interaction during which services are
-// provided to the patient. See
-// http://test/url/base/StructureDefinition/TestEncounterWithProfiledIdentifier
-message TestEncounterWithProfiledIdentifier {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
-  option (.google.fhir.proto.fhir_profile_base) =
-      "http://hl7.org/fhir/StructureDefinition/Encounter";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/StructureDefinition/TestEncounterWithProfiledIdentifier";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "account"
-    type: REFERENCE
-    expression: "Encounter.account"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "appointment"
-    type: REFERENCE
-    expression: "Encounter.appointment"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "based-on"
-    type: REFERENCE
-    expression: "Encounter.basedOn"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "class"
-    type: TOKEN
-    expression: "Encounter.class"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "date"
-    type: DATE
-    expression: "AllergyIntolerance.recordedDate | CarePlan.period | CareTeam.period | ClinicalImpression.date | Composition.date | Consent.dateTime | DiagnosticReport.effective | Encounter.period | EpisodeOfCare.period | FamilyMemberHistory.date | Flag.period | Immunization.occurrence | List.date | Observation.effective | Procedure.performed | (RiskAssessment.occurrence as dateTime) | SupplyRequest.authoredOn"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "diagnosis"
-    type: REFERENCE
-    expression: "Encounter.diagnosis.condition"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "episode-of-care"
-    type: REFERENCE
-    expression: "Encounter.episodeOfCare"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "AllergyIntolerance.identifier | CarePlan.identifier | CareTeam.identifier | Composition.identifier | Condition.identifier | Consent.identifier | DetectedIssue.identifier | DeviceRequest.identifier | DiagnosticReport.identifier | DocumentManifest.masterIdentifier | DocumentManifest.identifier | DocumentReference.masterIdentifier | DocumentReference.identifier | Encounter.identifier | EpisodeOfCare.identifier | FamilyMemberHistory.identifier | Goal.identifier | ImagingStudy.identifier | Immunization.identifier | List.identifier | MedicationAdministration.identifier | MedicationDispense.identifier | MedicationRequest.identifier | MedicationStatement.identifier | NutritionOrder.identifier | Observation.identifier | Procedure.identifier | RiskAssessment.identifier | ServiceRequest.identifier | SupplyDelivery.identifier | SupplyRequest.identifier | VisionPrescription.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "length"
-    type: QUANTITY
-    expression: "Encounter.length"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "location"
-    type: REFERENCE
-    expression: "Encounter.location.location"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "location-period"
-    type: DATE
-    expression: "Encounter.location.period"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "part-of"
-    type: REFERENCE
-    expression: "Encounter.partOf"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "participant"
-    type: REFERENCE
-    expression: "Encounter.participant.individual"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "participant-type"
-    type: TOKEN
-    expression: "Encounter.participant.type"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "AllergyIntolerance.patient | CarePlan.subject.where(resolve() is Patient) | CareTeam.subject.where(resolve() is Patient) | ClinicalImpression.subject.where(resolve() is Patient) | Composition.subject.where(resolve() is Patient) | Condition.subject.where(resolve() is Patient) | Consent.patient | DetectedIssue.patient | DeviceRequest.subject.where(resolve() is Patient) | DeviceUseStatement.subject | DiagnosticReport.subject.where(resolve() is Patient) | DocumentManifest.subject.where(resolve() is Patient) | DocumentReference.subject.where(resolve() is Patient) | Encounter.subject.where(resolve() is Patient) | EpisodeOfCare.patient | FamilyMemberHistory.patient | Flag.subject.where(resolve() is Patient) | Goal.subject.where(resolve() is Patient) | ImagingStudy.subject.where(resolve() is Patient) | Immunization.patient | List.subject.where(resolve() is Patient) | MedicationAdministration.subject.where(resolve() is Patient) | MedicationDispense.subject.where(resolve() is Patient) | MedicationRequest.subject.where(resolve() is Patient) | MedicationStatement.subject.where(resolve() is Patient) | NutritionOrder.patient | Observation.subject.where(resolve() is Patient) | Procedure.subject.where(resolve() is Patient) | RiskAssessment.subject.where(resolve() is Patient) | ServiceRequest.subject.where(resolve() is Patient) | SupplyDelivery.patient | VisionPrescription.patient"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "practitioner"
-    type: REFERENCE
-    expression: "Encounter.participant.individual.where(resolve() is Practitioner)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "reason-code"
-    type: TOKEN
-    expression: "Encounter.reasonCode"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "reason-reference"
-    type: REFERENCE
-    expression: "Encounter.reasonReference"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "service-provider"
-    type: REFERENCE
-    expression: "Encounter.serviceProvider"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "special-arrangement"
-    type: TOKEN
-    expression: "Encounter.hospitalization.specialArrangement"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "Encounter.status"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "subject"
-    type: REFERENCE
-    expression: "Encounter.subject"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "type"
-    type: TOKEN
-    expression: "AllergyIntolerance.type | Composition.type | DocumentManifest.type | DocumentReference.type | Encounter.type | EpisodeOfCare.type"
-  };
-
-  // Logical id of this artifact
-  core.Id id = 1;
-
-  // Metadata about the resource
-  core.Meta meta = 2;
-
-  // A set of rules under which this content was created
-  core.Uri implicit_rules = 3;
-
-  // Language of the resource content
-  core.Code language = 4;
-
-  // Text summary of the resource, for human interpretation
-  core.Narrative text = 5;
-
-  // Contained, inline Resources
-  repeated protobuf.Any contained = 6;
-
-  // Field 7 reserved for strongly-typed ContainedResource for id:
-  // Encounter.contained
-  reserved 7;
-
-  // Additional content defined by implementations
-  repeated core.Extension extension = 8;
-
-  // Extensions that cannot be ignored
-  repeated core.Extension modifier_extension = 9;
-
-  // Identifier(s) by which this encounter is known
-  message ProfiledIdentifier {
-    option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
-    option (.google.fhir.proto.fhir_profile_base) =
-        "http://hl7.org/fhir/StructureDefinition/Identifier";
-
-    // Unique id for inter-element referencing
-    core.String id = 1;
-
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
-
-    // usual | official | temp | secondary | old (If known)
-    message UseCode {
+    // male | female | other | unknown
+    message GenderCode {
       option (.google.fhir.proto.structure_definition_kind) =
           KIND_PRIMITIVE_TYPE;
       option (.google.fhir.proto.fhir_valueset_url) =
-          "http://hl7.org/fhir/ValueSet/identifier-use";
+          "http://hl7.org/fhir/ValueSet/administrative-gender";
       option (.google.fhir.proto.fhir_profile_base) =
           "http://hl7.org/fhir/StructureDefinition/code";
 
-      core.IdentifierUseCode.Value value = 1;
+      core.AdministrativeGenderCode.Value value = 1;
 
       core.String id = 2;
 
       repeated core.Extension extension = 3;
     }
-    UseCode use = 3;
+    GenderCode gender = 8;
 
-    // Description of identifier
-    message CodeableConceptForType {
-      option (.google.fhir.proto.fhir_profile_base) =
-          "http://hl7.org/fhir/StructureDefinition/CodeableConcept";
-
-      // Unique id for inter-element referencing
-      core.String id = 1;
-
-      // Additional content defined by implementations
-      repeated core.Extension extension = 2;
-
-      // Code defined by a terminology system
-      repeated core.Coding coding = 3;
-
-      // Plain text representation of the concept
-      core.String text = 4;
-
-      message ActCoding {
-        option (.google.fhir.proto.fhir_profile_base) =
-            "http://hl7.org/fhir/StructureDefinition/Coding";
-
-        core.String id = 1;
-
-        repeated core.Extension extension = 2;
-
-        core.String version = 4;
-
-        message FixedCode {
-          option (.google.fhir.proto.structure_definition_kind) =
-              KIND_PRIMITIVE_TYPE;
-          option (.google.fhir.proto.fhir_profile_base) =
-              "http://hl7.org/fhir/StructureDefinition/code";
-          option (.google.fhir.proto.fhir_fixed_system) =
-              "http://terminology.hl7.org/CodeSystem/v3-ActPriority";
-
-          enum Value {
-            option (.google.fhir.proto.fhir_code_system_url) =
-                "http://terminology.hl7.org/CodeSystem/v3-ActPriority";
-
-            INVALID_UNINITIALIZED = 0;
-            A = 1 [(.google.fhir.proto.fhir_original_code) = "A"];
-            CR = 2 [(.google.fhir.proto.fhir_original_code) = "CR"];
-            CS = 3 [(.google.fhir.proto.fhir_original_code) = "CS"];
-            CSP = 4 [(.google.fhir.proto.fhir_original_code) = "CSP"];
-            CSR = 5 [(.google.fhir.proto.fhir_original_code) = "CSR"];
-            EL = 6 [(.google.fhir.proto.fhir_original_code) = "EL"];
-            EM = 7 [(.google.fhir.proto.fhir_original_code) = "EM"];
-            P = 8 [(.google.fhir.proto.fhir_original_code) = "P"];
-            PRN = 9 [(.google.fhir.proto.fhir_original_code) = "PRN"];
-            R = 10 [(.google.fhir.proto.fhir_original_code) = "R"];
-            RR = 11 [(.google.fhir.proto.fhir_original_code) = "RR"];
-            S = 12 [(.google.fhir.proto.fhir_original_code) = "S"];
-            T = 13 [(.google.fhir.proto.fhir_original_code) = "T"];
-            UD = 14 [(.google.fhir.proto.fhir_original_code) = "UD"];
-            UR = 15 [(.google.fhir.proto.fhir_original_code) = "UR"];
-          }
-          Value value = 1;
-
-          core.String id = 2;
-
-          repeated core.Extension extension = 3;
-        }
-        FixedCode code = 5;
-
-        core.String display = 6;
-
-        core.Boolean user_selected = 7;
-      }
-      ActCoding act = 5;
-    }
-    CodeableConceptForType type = 4;
-
-    // The namespace for the identifier value
-    core.Uri system = 5;
-
-    // The value that is unique
-    core.String value = 6;
-
-    // Time period when id is/was valid for use
-    core.Period period = 7;
-
-    // Organization that issued id (may be just text)
-    core.Reference assigner = 8
+    // Organization that is associated with the contact
+    core.Reference organization = 9
         [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+    // The period during which this contact person or organization is valid to
+    // be contacted relating to this patient
+    core.Period period = 10;
   }
-  repeated ProfiledIdentifier identifier = 10;
+  repeated Contact contact = 21;
 
-  // planned | arrived | triaged | in-progress | onleave | finished | cancelled
-  // +
-  message StatusCode {
-    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-    option (.google.fhir.proto.fhir_valueset_url) =
-        "http://hl7.org/fhir/ValueSet/encounter-status";
-    option (.google.fhir.proto.fhir_profile_base) =
-        "http://hl7.org/fhir/StructureDefinition/code";
-
-    core.EncounterStatusCode.Value value = 1;
-
-    core.String id = 2;
-
-    repeated core.Extension extension = 3;
-  }
-  StatusCode status = 11
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-  // List of past encounter statuses
-  message StatusHistory {
+  // A language which may be used to communicate with the patient about his or
+  // her health
+  message Communication {
     // Unique id for inter-element referencing
     core.String id = 1;
 
@@ -3550,258 +3742,81 @@ message TestEncounterWithProfiledIdentifier {
     // Extensions that cannot be ignored even if unrecognized
     repeated core.Extension modifier_extension = 3;
 
-    // planned | arrived | triaged | in-progress | onleave | finished |
-    // cancelled +
-    message StatusCode {
-      option (.google.fhir.proto.structure_definition_kind) =
-          KIND_PRIMITIVE_TYPE;
-      option (.google.fhir.proto.fhir_valueset_url) =
-          "http://hl7.org/fhir/ValueSet/encounter-status";
-      option (.google.fhir.proto.fhir_profile_base) =
-          "http://hl7.org/fhir/StructureDefinition/code";
-
-      core.EncounterStatusCode.Value value = 1;
-
-      core.String id = 2;
-
-      repeated core.Extension extension = 3;
-    }
-    StatusCode status = 4
+    // The language which can be used to communicate with the patient about his
+    // or her health
+    core.CodeableConcept language = 4
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 
-    // The time that the episode was in the specified status
-    core.Period period = 5
-        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    // Language preference indicator
+    core.Boolean preferred = 5;
   }
-  repeated StatusHistory status_history = 12;
+  repeated Communication communication = 22;
 
-  // Classification of patient encounter
-  core.Coding class_value = 13 [
-    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-    json_name = "class"
+  // Patient's nominated primary care provider
+  repeated core.Reference general_practitioner = 23 [
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
   ];
 
-  // List of past encounter classes
-  message ClassHistory {
-    // Unique id for inter-element referencing
-    core.String id = 1;
-
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated core.Extension modifier_extension = 3;
-
-    // inpatient | outpatient | ambulatory | emergency +
-    core.Coding class_value = 4 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      json_name = "class"
-    ];
-
-    // The time that the episode was in the specified class
-    core.Period period = 5
-        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-  }
-  repeated ClassHistory class_history = 14;
-
-  // Specific type of encounter
-  repeated core.CodeableConcept type = 15;
-
-  // Specific type of service
-  core.CodeableConcept service_type = 16;
-
-  // Indicates the urgency of the encounter
-  core.CodeableConcept priority = 17;
-
-  // The patient or group present at the encounter
-  core.Reference subject = 18 [
-    (.google.fhir.proto.valid_reference_type) = "Patient",
-    (.google.fhir.proto.valid_reference_type) = "Group"
-  ];
-
-  // Episode(s) of care that this encounter should be recorded against
-  repeated core.Reference episode_of_care = 19
-      [(.google.fhir.proto.valid_reference_type) = "EpisodeOfCare"];
-
-  // The ServiceRequest that initiated this encounter
-  repeated core.Reference based_on = 20
-      [(.google.fhir.proto.valid_reference_type) = "ServiceRequest"];
-
-  // List of participants involved in the encounter
-  message Participant {
-    // Unique id for inter-element referencing
-    core.String id = 1;
-
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated core.Extension modifier_extension = 3;
-
-    // Role of participant in encounter
-    repeated core.CodeableConcept type = 4;
-
-    // Period of time during the encounter that the participant participated
-    core.Period period = 5;
-
-    // Persons involved in the encounter other than the patient
-    core.Reference individual = 6 [
-      (.google.fhir.proto.valid_reference_type) = "Practitioner",
-      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
-      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
-    ];
-  }
-  repeated Participant participant = 21;
-
-  // The appointment that scheduled this encounter
-  repeated core.Reference appointment = 22
-      [(.google.fhir.proto.valid_reference_type) = "Appointment"];
-
-  // The start and end time of the encounter
-  core.Period period = 23;
-
-  // Quantity of time the encounter lasted (less time absent)
-  core.Duration length = 24;
-
-  // Coded reason the encounter takes place
-  repeated core.CodeableConcept reason_code = 25;
-
-  // Reason the encounter takes place (reference)
-  repeated core.Reference reason_reference = 26 [
-    (.google.fhir.proto.valid_reference_type) = "Condition",
-    (.google.fhir.proto.valid_reference_type) = "Procedure",
-    (.google.fhir.proto.valid_reference_type) = "Observation",
-    (.google.fhir.proto.valid_reference_type) = "ImmunizationRecommendation"
-  ];
-
-  // The list of diagnosis relevant to this encounter
-  message Diagnosis {
-    // Unique id for inter-element referencing
-    core.String id = 1;
-
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated core.Extension modifier_extension = 3;
-
-    // The diagnosis or procedure relevant to the encounter
-    core.Reference condition = 4 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.valid_reference_type) = "Condition",
-      (.google.fhir.proto.valid_reference_type) = "Procedure"
-    ];
-
-    // Role that this diagnosis has within the encounter (e.g. admission,
-    // billing, discharge …)
-    core.CodeableConcept use = 5;
-
-    // Ranking of the diagnosis (for each role type)
-    core.PositiveInt rank = 6;
-  }
-  repeated Diagnosis diagnosis = 27;
-
-  // The set of accounts that may be used for billing for this Encounter
-  repeated core.Reference account = 28
-      [(.google.fhir.proto.valid_reference_type) = "Account"];
-
-  // Details about the admission to a healthcare service
-  message Hospitalization {
-    // Unique id for inter-element referencing
-    core.String id = 1;
-
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated core.Extension modifier_extension = 3;
-
-    // Pre-admission identifier
-    core.Identifier pre_admission_identifier = 4;
-
-    // The location/organization from which the patient came before admission
-    core.Reference origin = 5 [
-      (.google.fhir.proto.valid_reference_type) = "Location",
-      (.google.fhir.proto.valid_reference_type) = "Organization"
-    ];
-
-    // From where patient was admitted (physician referral, transfer)
-    core.CodeableConcept admit_source = 6;
-
-    // The type of hospital re-admission that has occurred (if any). If the
-    // value is absent, then this is not identified as a readmission
-    core.CodeableConcept re_admission = 7;
-
-    // Diet preferences reported by the patient
-    repeated core.CodeableConcept diet_preference = 8;
-
-    // Special courtesies (VIP, board member)
-    repeated core.CodeableConcept special_courtesy = 9;
-
-    // Wheelchair, translator, stretcher, etc.
-    repeated core.CodeableConcept special_arrangement = 10;
-
-    // Location/organization to which the patient is discharged
-    core.Reference destination = 11 [
-      (.google.fhir.proto.valid_reference_type) = "Location",
-      (.google.fhir.proto.valid_reference_type) = "Organization"
-    ];
-
-    // Category or kind of location after discharge
-    core.CodeableConcept discharge_disposition = 12;
-  }
-  Hospitalization hospitalization = 29;
-
-  // List of locations where the patient has been
-  message Location {
-    // Unique id for inter-element referencing
-    core.String id = 1;
-
-    // Additional content defined by implementations
-    repeated core.Extension extension = 2;
-
-    // Extensions that cannot be ignored even if unrecognized
-    repeated core.Extension modifier_extension = 3;
-
-    // Location the encounter takes place
-    core.Reference location = 4 [
-      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
-      (.google.fhir.proto.valid_reference_type) = "Location"
-    ];
-
-    // planned | active | reserved | completed
-    message StatusCode {
-      option (.google.fhir.proto.structure_definition_kind) =
-          KIND_PRIMITIVE_TYPE;
-      option (.google.fhir.proto.fhir_valueset_url) =
-          "http://hl7.org/fhir/ValueSet/encounter-location-status";
-      option (.google.fhir.proto.fhir_profile_base) =
-          "http://hl7.org/fhir/StructureDefinition/code";
-
-      core.EncounterLocationStatusCode.Value value = 1;
-
-      core.String id = 2;
-
-      repeated core.Extension extension = 3;
-    }
-    StatusCode status = 5;
-
-    // The physical type of the location (usually the level in the location
-    // hierachy - bed room ward etc.)
-    core.CodeableConcept physical_type = 6;
-
-    // Time period during which the patient was present at the location
-    core.Period period = 7;
-  }
-  repeated Location location = 30;
-
-  // The organization (facility) responsible for this encounter
-  core.Reference service_provider = 31
+  // Organization that is the custodian of the patient record
+  core.Reference managing_organization = 24
       [(.google.fhir.proto.valid_reference_type) = "Organization"];
 
-  // Another Encounter this encounter is part of
-  core.Reference part_of = 32
-      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+  // Link to another patient resource that concerns the same actual person
+  message Link {
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Additional content defined by implementations
+    repeated core.Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated core.Extension modifier_extension = 3;
+
+    // The other patient or related person resource that the link refers to
+    core.Reference other = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+    ];
+
+    // replaced-by | replaces | refer | seealso
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/link-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      core.LinkTypeCode.Value value = 1;
+
+      core.String id = 2;
+
+      repeated core.Extension extension = 3;
+    }
+    TypeCode type = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Link link = 25;
+
+  // Decimal Extension
+  core.Decimal dec_ext = 26 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_inlined_extension_url) =
+        "http://test/url/base/StructureDefinition/SimpleDecimalExt"
+  ];
+
+  // Optional Extensions Element
+  FavoriteBrewery.ValueCode favorite_brewery = 27
+      [(.google.fhir.proto.fhir_inlined_extension_url) =
+           "http://test/url/base/StructureDefinition/FavoriteBrewery"];
+
+  // Optional Extensions Element
+  FavoriteCalifornian.ValueCode favorite_californian = 28
+      [(.google.fhir.proto.fhir_inlined_extension_url) =
+           "http://test/url/base/StructureDefinition/FavoriteCalifornian"];
 }
 
 // Auto-generated from StructureDefinition for
@@ -4155,19 +4170,4 @@ message TestPatientWithWarningAndErrorFhirpath {
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Link link = 25;
-}
-
-message ContainedResource {
-  oneof oneof_resource {
-    Bundle bundle = 12;
-    TestPatient test_patient = 147;
-    TestObservation test_observation = 148;
-    TestObservationLvl2 test_observation_lvl2 = 149;
-    TestEncounter test_encounter = 150;
-    ProfiledDatatypesObservation profiled_datatypes_observation = 151;
-    TestEncounterWithProfiledIdentifier
-        test_encounter_with_profiled_identifier = 152;
-    TestPatientWithWarningAndErrorFhirpath
-        test_patient_with_warning_and_error_fhirpath = 153;
-  }
 }

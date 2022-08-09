@@ -20,7 +20,7 @@ import "google/protobuf/any.proto";
 import "proto/google/fhir/proto/annotations.proto";
 import "proto/google/fhir/proto/r4/core/codes.proto";
 import "proto/google/fhir/proto/r4/core/datatypes.proto";
-import "testdata/r4/profiles/retagging_test_extensions.proto";
+import "testdata/r4/profiles/retagging/retagging_test_extensions.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.testing";
@@ -276,6 +276,13 @@ message Bundle {
 
   // Digital Signature
   core.Signature signature = 11;
+}
+
+message ContainedResource {
+  oneof oneof_resource {
+    Bundle bundle = 12;
+    TestPatient test_patient = 147;
+  }
 }
 
 // Auto-generated from StructureDefinition for TestPatient.
@@ -690,11 +697,4 @@ message TestPatient {
 
   // Field 28 reserved to prevent reuse of field that was previously deleted.
   reserved 28;
-}
-
-message ContainedResource {
-  oneof oneof_resource {
-    Bundle bundle = 12;
-    TestPatient test_patient = 147;
-  }
 }

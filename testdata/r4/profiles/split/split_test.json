@@ -10,7 +10,7 @@
         "name": "Bundle",
         "title": "Bundle",
         "status": "draft",
-        "date": "2022-02-28",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1888,7 +1888,7 @@
         "name": "TestPatient",
         "title": "TestPatient",
         "status": "draft",
-        "date": "2022-02-28",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -2701,7 +2701,7 @@
                   "key": "google.fhir.r4.splittesting-2",
                   "severity": "warning",
                   "human": "Postal codes should have at least five characters.",
-                  "expression": "postalCode.all(length() >= 5)"
+                  "expression": "postalCode.length() >= 5"
                 }
               ],
               "isModifier": false,
@@ -4833,7 +4833,7 @@
         "name": "TestObservation",
         "title": "TestObservation",
         "status": "draft",
-        "date": "2022-02-28",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -10655,7 +10655,7 @@
         "name": "TestObservationLvl2",
         "title": "TestObservationLvl2",
         "status": "draft",
-        "date": "2022-02-28",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -16824,7 +16824,7 @@
         "name": "TestEncounter",
         "title": "TestEncounter",
         "status": "draft",
-        "date": "2022-02-28",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -20755,7 +20755,7 @@
         "name": "ProfiledDatatypesObservation",
         "title": "ProfiledDatatypesObservation",
         "status": "draft",
-        "date": "2022-02-28",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -23579,7 +23579,7 @@
         "name": "TestEncounterWithProfiledIdentifier",
         "title": "TestEncounterWithProfiledIdentifier",
         "status": "draft",
-        "date": "2022-02-28",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -27507,7 +27507,7 @@
         "name": "TestPatientWithWarningAndErrorFhirpath",
         "title": "TestPatientWithWarningAndErrorFhirpath",
         "status": "draft",
-        "date": "2022-02-28",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -28323,9 +28323,9 @@
                 },
                 {
                   "key": "google.fhir.r4.splittesting-2",
-                  "severity": "error",
+                  "severity": "warning",
                   "human": "Postal codes should have at least five characters.",
-                  "expression": "postalCode.length() >= 5"
+                  "expression": "postalCode.all(length() >= 5)"
                 }
               ],
               "isModifier": false,
@@ -29792,9 +29792,9 @@
                 },
                 {
                   "key": "google.fhir.r4.splittesting-2",
-                  "severity": "error",
+                  "severity": "warning",
                   "human": "Postal codes should have at least five characters.",
-                  "expression": "postalCode.length() >= 5"
+                  "expression": "postalCode.all(length() >= 5)"
                 }
               ]
             }

@@ -10,7 +10,7 @@
         "name": "Bundle",
         "title": "Bundle",
         "status": "draft",
-        "date": "2021-07-08",
+        "date": "2022-08-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1888,7 +1888,7 @@
         "name": "TestPatient",
         "title": "TestPatient",
         "status": "draft",
-        "date": "2021-07-08",
+        "date": "2022-08-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -4519,10 +4519,6 @@
               ],
               "isModifier": false,
               "isSummary": true,
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://hl7.org/fhir/metric-color"
-              },
               "mapping": [
                 {
                   "identity": "v2",
@@ -4673,20 +4669,8 @@
             },
             {
               "id": "Patient.extension:favoriteBrewery",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
               "path": "Patient.extension",
               "sliceName": "favoriteBrewery",
-              "short": "Optional Extensions Element",
-              "definition": "Optional Extension Element - found in all resources.",
               "max": "1",
               "type": [
                 {
@@ -4695,9 +4679,6 @@
                     "http://test/url/base/StructureDefinition/FavoriteBrewery"
                   ]
                 }
-              ],
-              "condition": [
-                "ele-1"
               ],
               "constraint": [
                 {
@@ -4712,16 +4693,6 @@
             },
             {
               "id": "Patient.extension:decExt",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-                  "valueCode": "normative"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-                  "valueCode": "4.0.0"
-                }
-              ],
               "path": "Patient.extension",
               "sliceName": "decExt",
               "short": "Decimal Extension",
@@ -4735,9 +4706,6 @@
                     "http://test/url/base/StructureDefinition/SimpleDecimalExt"
                   ]
                 }
-              ],
-              "condition": [
-                "ele-1"
               ],
               "constraint": [
                 {
@@ -4771,37 +4739,9 @@
               "max": "1"
             },
             {
-              "id": "Patient.maritalStatus.coding:color.id",
-              "path": "Patient.maritalStatus.coding.id"
-            },
-            {
-              "id": "Patient.maritalStatus.coding:color.extension",
-              "path": "Patient.maritalStatus.coding.extension"
-            },
-            {
               "id": "Patient.maritalStatus.coding:color.system",
               "path": "Patient.maritalStatus.coding.system",
               "fixedUri": "http://hl7.org/fhir/metric-color"
-            },
-            {
-              "id": "Patient.maritalStatus.coding:color.version",
-              "path": "Patient.maritalStatus.coding.version"
-            },
-            {
-              "id": "Patient.maritalStatus.coding:color.code",
-              "path": "Patient.maritalStatus.coding.code",
-              "binding": {
-                "strength": "required",
-                "valueSet": "http://hl7.org/fhir/metric-color"
-              }
-            },
-            {
-              "id": "Patient.maritalStatus.coding:color.display",
-              "path": "Patient.maritalStatus.coding.display"
-            },
-            {
-              "id": "Patient.maritalStatus.coding:color.userSelected",
-              "path": "Patient.maritalStatus.coding.userSelected"
             }
           ]
         }

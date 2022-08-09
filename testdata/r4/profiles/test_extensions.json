@@ -10,7 +10,7 @@
         "name": "SimpleDecimalExt",
         "title": "SimpleDecimalExt",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -305,7 +305,7 @@
         "name": "SimpleCodeableConceptExtension",
         "title": "SimpleCodeableConceptExtension",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -614,7 +614,7 @@
         "name": "DigitalMediaType",
         "title": "DigitalMediaType",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -923,7 +923,7 @@
         "name": "FavoriteBrewery",
         "title": "FavoriteBrewery",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1229,7 +1229,7 @@
         "name": "FavoriteCalifornian",
         "title": "FavoriteCalifornian",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1535,7 +1535,7 @@
         "name": "ComplexExt",
         "title": "ComplexExt",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -3201,7 +3201,7 @@
         "name": "SingleValueComplexExtension",
         "title": "SingleValueComplexExtension",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -3910,7 +3910,7 @@
         "name": "SingleValueRepeatedComplexExtension",
         "title": "SingleValueRepeatedComplexExtension",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {

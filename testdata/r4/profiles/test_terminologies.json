@@ -10,7 +10,7 @@
         "name": "Brewery",
         "title": "Brewery",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "description": "The brewery of origin.",
         "content": "complete",
@@ -49,7 +49,7 @@
         "name": "FootballTeams",
         "title": "FootballTeams",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "description": "NFL Football Teams",
         "content": "complete",
@@ -78,7 +78,7 @@
         "name": "Brewery",
         "title": "Brewery",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "description": "ValueSet for Brewery Code System.",
         "compose": {
@@ -98,7 +98,7 @@
         "name": "CaliforniaBreweries",
         "title": "CaliforniaBreweries",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "description": "ValueSet for California breweries.",
         "compose": {
@@ -126,7 +126,7 @@
         "name": "AmericanBreweries",
         "title": "AmericanBreweries",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "description": "ValueSet for Brewery Code System.",
         "compose": {
@@ -156,7 +156,7 @@
         "name": "Californians",
         "title": "Californians",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "description": "California businesses",
         "compose": {
@@ -192,7 +192,7 @@
         "name": "SomeSnomedCodes",
         "title": "SomeSnomedCodes",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "description": "ValueSet with codes from a CodeSystem that has a defining resource but no defined codes",
         "compose": {

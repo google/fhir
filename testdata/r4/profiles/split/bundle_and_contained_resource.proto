@@ -287,13 +287,13 @@ message Bundle {
 message ContainedResource {
   oneof oneof_resource {
     Bundle bundle = 12;
-    TestPatient test_patient = 147;
-    TestObservation test_observation = 148;
-    TestObservationLvl2 test_observation_lvl2 = 149;
-    TestEncounter test_encounter = 150;
-    ProfiledDatatypesObservation profiled_datatypes_observation = 151;
+    ProfiledDatatypesObservation profiled_datatypes_observation = 147;
+    TestEncounter test_encounter = 148;
     TestEncounterWithProfiledIdentifier
-        test_encounter_with_profiled_identifier = 152;
+        test_encounter_with_profiled_identifier = 149;
+    TestObservation test_observation = 150;
+    TestObservationLvl2 test_observation_lvl2 = 151;
+    TestPatient test_patient = 152;
     TestPatientWithWarningAndErrorFhirpath
         test_patient_with_warning_and_error_fhirpath = 153;
   }

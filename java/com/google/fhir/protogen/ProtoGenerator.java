@@ -1979,7 +1979,8 @@ public class ProtoGenerator {
         }
       }
       int tagNumber = Iterables.getLast(baseContainedResource.getFields()).getNumber() + 1;
-      for (String resourceType : resourcesToInclude) {
+
+      for (String resourceType : ImmutableList.sortedCopyOf(resourcesToInclude)) {
         contained.addField(
             FieldDescriptorProto.newBuilder()
                 .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, resourceType))
@@ -2394,9 +2395,7 @@ public class ProtoGenerator {
   private static StructureDefinition reconcileSnapshotAndDifferential(StructureDefinition def) {
     // Generate a map from (element id) -> (element) for all elements in the Differential view.
     Map<String, ElementDefinition> diffs =
-        def.getDifferential()
-            .getElementList()
-            .stream()
+        def.getDifferential().getElementList().stream()
             .collect(
                 Collectors.toMap((element) -> element.getId().getValue(), Function.identity()));
 

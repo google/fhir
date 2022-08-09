@@ -10,7 +10,7 @@
         "name": "SimpleDecimalExt",
         "title": "SimpleDecimalExt",
         "status": "draft",
-        "date": "2021-07-08",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -305,7 +305,7 @@
         "name": "SimpleCodeableConceptExtension",
         "title": "SimpleCodeableConceptExtension",
         "status": "draft",
-        "date": "2021-07-08",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -614,7 +614,7 @@
         "name": "DigitalMediaType",
         "title": "DigitalMediaType",
         "status": "draft",
-        "date": "2021-07-08",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -923,7 +923,7 @@
         "name": "FavoriteBrewery",
         "title": "FavoriteBrewery",
         "status": "draft",
-        "date": "2021-07-08",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1229,7 +1229,7 @@
         "name": "FavoriteCalifornian",
         "title": "FavoriteCalifornian",
         "status": "draft",
-        "date": "2021-07-08",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1535,7 +1535,7 @@
         "name": "ComplexExt",
         "title": "ComplexExt",
         "status": "draft",
-        "date": "2021-07-08",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -3024,10 +3024,6 @@
               ]
             },
             {
-              "id": "Extension.extension:simpleSubfield.id",
-              "path": "Extension.extension.id"
-            },
-            {
               "id": "Extension.extension:simpleSubfield.extension",
               "path": "Extension.extension.extension",
               "max": "0"
@@ -3079,10 +3075,6 @@
               ]
             },
             {
-              "id": "Extension.extension:complexSubfield.id",
-              "path": "Extension.extension.id"
-            },
-            {
               "id": "Extension.extension:complexSubfield.extension",
               "path": "Extension.extension.extension",
               "max": "0"
@@ -3127,14 +3119,6 @@
                   "source": "Extension"
                 }
               ]
-            },
-            {
-              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldA.id",
-              "path": "Extension.extension.extension.id"
-            },
-            {
-              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldA.extension",
-              "path": "Extension.extension.extension.extension"
             },
             {
               "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldA.url",
@@ -3187,10 +3171,6 @@
               ]
             },
             {
-              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB.id",
-              "path": "Extension.extension.extension.id"
-            },
-            {
               "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB.extension",
               "path": "Extension.extension.extension.extension",
               "max": "0"
@@ -3221,7 +3201,7 @@
         "name": "SingleValueComplexExtension",
         "title": "SingleValueComplexExtension",
         "status": "draft",
-        "date": "2021-07-08",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -3900,10 +3880,6 @@
               ]
             },
             {
-              "id": "Extension.extension:stringField.id",
-              "path": "Extension.extension.id"
-            },
-            {
               "id": "Extension.extension:stringField.extension",
               "path": "Extension.extension.extension",
               "max": "0"
@@ -3934,7 +3910,7 @@
         "name": "SingleValueRepeatedComplexExtension",
         "title": "SingleValueRepeatedComplexExtension",
         "status": "draft",
-        "date": "2021-07-08",
+        "date": "2022-08-03",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -4610,10 +4586,6 @@
                   "source": "Extension"
                 }
               ]
-            },
-            {
-              "id": "Extension.extension:stringField.id",
-              "path": "Extension.extension.id"
             },
             {
               "id": "Extension.extension:stringField.extension",

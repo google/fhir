@@ -25,54 +25,50 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.splittesting";
 option (.google.fhir.proto.fhir_version) = R4;
 
-// Auto-generated from StructureDefinition for SimpleDecimalExt.
-// This is the A-Extension.
-// See http://test/url/base/StructureDefinition/SimpleDecimalExt
-message SimpleDecimalExt {
+// Auto-generated from StructureDefinition for ComplexExt.
+// complex extension.
+// See http://test/url/base/StructureDefinition/ComplexExt
+message ComplexExt {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/StructureDefinition/SimpleDecimalExt";
+      "http://test/url/base/StructureDefinition/ComplexExt";
 
   // Unique id for inter-element referencing
   core.String id = 1;
 
-  // Additional content defined by implementations
-  repeated core.Extension extension = 2;
+  // simple subfield
+  core.String simple_subfield = 4;
 
-  // Value of extension
-  core.Decimal value_decimal = 3;
-}
+  // complex subfield
+  message ComplexSubfield {
+    // Unique id for inter-element referencing
+    core.String id = 1;
 
-// Auto-generated from StructureDefinition for SimpleCodeableConceptExtension.
-// SimpleCodeableConcept Extension.
-// See http://test/url/base/StructureDefinition/SimpleCodeableConceptExtension
-message SimpleCodeableConceptExtension {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (.google.fhir.proto.fhir_profile_base) =
-      "http://hl7.org/fhir/StructureDefinition/Extension";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/StructureDefinition/SimpleCodeableConceptExtension";
+    // Extension.extension.extension not present on profile.
+    reserved 2;
 
-  // Unique id for inter-element referencing
-  core.String id = 1;
+    // Extension.extension.value[x] not present on profile.
+    reserved 3;
 
-  // Value of extension
-  message ValueCode {
-    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-    option (.google.fhir.proto.fhir_valueset_url) =
-        "http://hl7.org/fhir/ValueSet/care-plan-activity-status";
-    option (.google.fhir.proto.fhir_profile_base) =
-        "http://hl7.org/fhir/StructureDefinition/code";
+    // choice type
+    message SimpleSubSubFieldAX {
+      option (.google.fhir.proto.is_choice_type) = true;
 
-    core.CarePlanActivityStatusCode.Value value = 1;
+      oneof choice {
+        core.String string_value = 1 [json_name = "string"];
+        core.Decimal decimal = 2;
+        core.Boolean boolean = 3;
+      }
+    }
+    SimpleSubSubFieldAX simple_sub_sub_field_a = 4;
 
-    core.String id = 2;
-
-    repeated core.Extension extension = 3;
+    // simple sub sub field b
+    repeated core.UnsignedInt simple_sub_sub_field_b = 5;
   }
-  ValueCode value_code = 3;
+  ComplexSubfield complex_subfield = 5
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }
 
 // Auto-generated from StructureDefinition for DigitalMediaType.
@@ -177,50 +173,54 @@ message FavoriteCalifornian {
   ValueCode value_code = 3;
 }
 
-// Auto-generated from StructureDefinition for ComplexExt.
-// complex extension.
-// See http://test/url/base/StructureDefinition/ComplexExt
-message ComplexExt {
+// Auto-generated from StructureDefinition for SimpleCodeableConceptExtension.
+// SimpleCodeableConcept Extension.
+// See http://test/url/base/StructureDefinition/SimpleCodeableConceptExtension
+message SimpleCodeableConceptExtension {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_profile_base) =
       "http://hl7.org/fhir/StructureDefinition/Extension";
   option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://test/url/base/StructureDefinition/ComplexExt";
+      "http://test/url/base/StructureDefinition/SimpleCodeableConceptExtension";
 
   // Unique id for inter-element referencing
   core.String id = 1;
 
-  // simple subfield
-  core.String simple_subfield = 4;
+  // Value of extension
+  message ValueCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/care-plan-activity-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
 
-  // complex subfield
-  message ComplexSubfield {
-    // Unique id for inter-element referencing
-    core.String id = 1;
+    core.CarePlanActivityStatusCode.Value value = 1;
 
-    // Extension.extension.extension not present on profile.
-    reserved 2;
+    core.String id = 2;
 
-    // Extension.extension.value[x] not present on profile.
-    reserved 3;
-
-    // choice type
-    message SimpleSubSubFieldAX {
-      option (.google.fhir.proto.is_choice_type) = true;
-
-      oneof choice {
-        core.String string_value = 1 [json_name = "string"];
-        core.Decimal decimal = 2;
-        core.Boolean boolean = 3;
-      }
-    }
-    SimpleSubSubFieldAX simple_sub_sub_field_a = 4;
-
-    // simple sub sub field b
-    repeated core.UnsignedInt simple_sub_sub_field_b = 5;
+    repeated core.Extension extension = 3;
   }
-  ComplexSubfield complex_subfield = 5
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  ValueCode value_code = 3;
+}
+
+// Auto-generated from StructureDefinition for SimpleDecimalExt.
+// This is the A-Extension.
+// See http://test/url/base/StructureDefinition/SimpleDecimalExt
+message SimpleDecimalExt {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://test/url/base/StructureDefinition/SimpleDecimalExt";
+
+  // Unique id for inter-element referencing
+  core.String id = 1;
+
+  // Additional content defined by implementations
+  repeated core.Extension extension = 2;
+
+  // Value of extension
+  core.Decimal value_decimal = 3;
 }
 
 // Auto-generated from StructureDefinition for SingleValueComplexExtension.

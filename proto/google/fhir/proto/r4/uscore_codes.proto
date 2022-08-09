@@ -21,1166 +21,6 @@ import "proto/google/fhir/proto/annotations.proto";
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.uscore";
 
-//  The U.S. Centers for Disease Control and Prevention (CDC) has prepared a
-//  code set for use in codingrace and ethnicity data. This code set is based on
-//  current federal standards for classifying data onrace and ethnicity,
-//  specifically the minimum race and ethnicity categories defined by the U.S.
-//  Office ofManagement and Budget (OMB) and a more detailed set of race and
-//  ethnicity categories maintainedby the U.S. Bureau of the Census (BC). The
-//  main purpose of the code set is to facilitate use of federalstandards for
-//  classifying data on race and ethnicity when these data are exchanged,
-//  stored, retrieved,or analyzed in electronic form. At the same time, the code
-//  set can be applied to paper-based recordsystems to the extent that these
-//  systems are used to collect, maintain, and report data on race andethnicity
-//  in accordance with current federal standards. Source: [Race and Ethnicity
-//  Code Set
-//  Version 1.0](https://www.cdc.gov/phin/resources/vocabulary/documents/cdc-race--ethnicity-background-and-purpose.pdf).
-// See urn:oid:2.16.840.1.113883.6.238
-message RaceAndEthnicityCDCCode {
-  enum Value {
-    option (.google.fhir.proto.fhir_code_system_url) =
-        "urn:oid:2.16.840.1.113883.6.238";
-
-    INVALID_UNINITIALIZED = 0;
-    RACE = 1 [(.google.fhir.proto.fhir_original_code) = "1000-9"];
-    AMERICAN_INDIAN_OR_ALASKA_NATIVE = 2
-        [(.google.fhir.proto.fhir_original_code) = "1002-5"];
-    AMERICAN_INDIAN = 3 [(.google.fhir.proto.fhir_original_code) = "1004-1"];
-    ALASKA_NATIVE = 4 [(.google.fhir.proto.fhir_original_code) = "1735-0"];
-    ABENAKI = 5 [(.google.fhir.proto.fhir_original_code) = "1006-6"];
-    ALGONQUIAN = 6 [(.google.fhir.proto.fhir_original_code) = "1008-2"];
-    APACHE = 7 [(.google.fhir.proto.fhir_original_code) = "1010-8"];
-    ARAPAHO = 8 [(.google.fhir.proto.fhir_original_code) = "1021-5"];
-    ARIKARA = 9 [(.google.fhir.proto.fhir_original_code) = "1026-4"];
-    ASSINIBOINE = 10 [(.google.fhir.proto.fhir_original_code) = "1028-0"];
-    ASSINIBOINE_SIOUX = 11 [(.google.fhir.proto.fhir_original_code) = "1030-6"];
-    BANNOCK = 12 [(.google.fhir.proto.fhir_original_code) = "1033-0"];
-    BLACKFEET = 13 [(.google.fhir.proto.fhir_original_code) = "1035-5"];
-    BROTHERTON = 14 [(.google.fhir.proto.fhir_original_code) = "1037-1"];
-    BURT_LAKE_BAND = 15 [(.google.fhir.proto.fhir_original_code) = "1039-7"];
-    CADDO = 16 [(.google.fhir.proto.fhir_original_code) = "1041-3"];
-    CAHUILLA = 17 [(.google.fhir.proto.fhir_original_code) = "1044-7"];
-    CALIFORNIA_TRIBES = 18 [(.google.fhir.proto.fhir_original_code) = "1053-8"];
-    CANADIAN_AND_LATIN_AMERICAN_INDIAN = 19
-        [(.google.fhir.proto.fhir_original_code) = "1068-6"];
-    CATAWBA = 20 [(.google.fhir.proto.fhir_original_code) = "1076-9"];
-    CAYUSE = 21 [(.google.fhir.proto.fhir_original_code) = "1078-5"];
-    CHEHALIS = 22 [(.google.fhir.proto.fhir_original_code) = "1080-1"];
-    CHEMAKUAN = 23 [(.google.fhir.proto.fhir_original_code) = "1082-7"];
-    CHEMEHUEVI = 24 [(.google.fhir.proto.fhir_original_code) = "1086-8"];
-    CHEROKEE = 25 [(.google.fhir.proto.fhir_original_code) = "1088-4"];
-    CHEROKEE_SHAWNEE = 26 [(.google.fhir.proto.fhir_original_code) = "1100-7"];
-    CHEYENNE = 27 [(.google.fhir.proto.fhir_original_code) = "1102-3"];
-    CHEYENNE_ARAPAHO = 28 [(.google.fhir.proto.fhir_original_code) = "1106-4"];
-    CHICKAHOMINY = 29 [(.google.fhir.proto.fhir_original_code) = "1108-0"];
-    CHICKASAW = 30 [(.google.fhir.proto.fhir_original_code) = "1112-2"];
-    CHINOOK = 31 [(.google.fhir.proto.fhir_original_code) = "1114-8"];
-    CHIPPEWA = 32 [(.google.fhir.proto.fhir_original_code) = "1123-9"];
-    CHIPPEWA_CREE = 33 [(.google.fhir.proto.fhir_original_code) = "1150-2"];
-    CHITIMACHA = 34 [(.google.fhir.proto.fhir_original_code) = "1153-6"];
-    CHOCTAW = 35 [(.google.fhir.proto.fhir_original_code) = "1155-1"];
-    CHUMASH = 36 [(.google.fhir.proto.fhir_original_code) = "1162-7"];
-    CLEAR_LAKE = 37 [(.google.fhir.proto.fhir_original_code) = "1165-0"];
-    COEUR_D_ALENE = 38 [(.google.fhir.proto.fhir_original_code) = "1167-6"];
-    COHARIE = 39 [(.google.fhir.proto.fhir_original_code) = "1169-2"];
-    COLORADO_RIVER = 40 [(.google.fhir.proto.fhir_original_code) = "1171-8"];
-    COLVILLE = 41 [(.google.fhir.proto.fhir_original_code) = "1173-4"];
-    COMANCHE = 42 [(.google.fhir.proto.fhir_original_code) = "1175-9"];
-    COOS_LOWER_UMPQUA_SIUSLAW = 43
-        [(.google.fhir.proto.fhir_original_code) = "1178-3"];
-    COOS = 44 [(.google.fhir.proto.fhir_original_code) = "1180-9"];
-    COQUILLES = 45 [(.google.fhir.proto.fhir_original_code) = "1182-5"];
-    COSTANOAN = 46 [(.google.fhir.proto.fhir_original_code) = "1184-1"];
-    COUSHATTA = 47 [(.google.fhir.proto.fhir_original_code) = "1186-6"];
-    COWLITZ = 48 [(.google.fhir.proto.fhir_original_code) = "1189-0"];
-    CREE = 49 [(.google.fhir.proto.fhir_original_code) = "1191-6"];
-    CREEK = 50 [(.google.fhir.proto.fhir_original_code) = "1193-2"];
-    CROATAN = 51 [(.google.fhir.proto.fhir_original_code) = "1207-0"];
-    CROW = 52 [(.google.fhir.proto.fhir_original_code) = "1209-6"];
-    CUPENO = 53 [(.google.fhir.proto.fhir_original_code) = "1211-2"];
-    DELAWARE = 54 [(.google.fhir.proto.fhir_original_code) = "1214-6"];
-    DIEGUENO = 55 [(.google.fhir.proto.fhir_original_code) = "1222-9"];
-    EASTERN_TRIBES = 56 [(.google.fhir.proto.fhir_original_code) = "1233-6"];
-    ESSELEN = 57 [(.google.fhir.proto.fhir_original_code) = "1250-0"];
-    FORT_BELKNAP = 58 [(.google.fhir.proto.fhir_original_code) = "1252-6"];
-    FORT_BERTHOLD = 59 [(.google.fhir.proto.fhir_original_code) = "1254-2"];
-    FORT_MCDOWELL = 60 [(.google.fhir.proto.fhir_original_code) = "1256-7"];
-    FORT_HALL = 61 [(.google.fhir.proto.fhir_original_code) = "1258-3"];
-    GABRIELENO = 62 [(.google.fhir.proto.fhir_original_code) = "1260-9"];
-    GRAND_RONDE = 63 [(.google.fhir.proto.fhir_original_code) = "1262-5"];
-    GROS_VENTRES = 64 [(.google.fhir.proto.fhir_original_code) = "1264-1"];
-    HALIWA = 65 [(.google.fhir.proto.fhir_original_code) = "1267-4"];
-    HIDATSA = 66 [(.google.fhir.proto.fhir_original_code) = "1269-0"];
-    HOOPA = 67 [(.google.fhir.proto.fhir_original_code) = "1271-6"];
-    HOOPA_EXTENSION = 68 [(.google.fhir.proto.fhir_original_code) = "1275-7"];
-    HOUMA = 69 [(.google.fhir.proto.fhir_original_code) = "1277-3"];
-    INAJA_COSMIT = 70 [(.google.fhir.proto.fhir_original_code) = "1279-9"];
-    IOWA = 71 [(.google.fhir.proto.fhir_original_code) = "1281-5"];
-    IROQUOIS = 72 [(.google.fhir.proto.fhir_original_code) = "1285-6"];
-    JUANENO = 73 [(.google.fhir.proto.fhir_original_code) = "1297-1"];
-    KALISPEL = 74 [(.google.fhir.proto.fhir_original_code) = "1299-7"];
-    KARUK = 75 [(.google.fhir.proto.fhir_original_code) = "1301-1"];
-    KAW = 76 [(.google.fhir.proto.fhir_original_code) = "1303-7"];
-    KICKAPOO = 77 [(.google.fhir.proto.fhir_original_code) = "1305-2"];
-    KIOWA = 78 [(.google.fhir.proto.fhir_original_code) = "1309-4"];
-    KLALLAM = 79 [(.google.fhir.proto.fhir_original_code) = "1312-8"];
-    KLAMATH = 80 [(.google.fhir.proto.fhir_original_code) = "1317-7"];
-    KONKOW = 81 [(.google.fhir.proto.fhir_original_code) = "1319-3"];
-    KOOTENAI = 82 [(.google.fhir.proto.fhir_original_code) = "1321-9"];
-    LASSIK = 83 [(.google.fhir.proto.fhir_original_code) = "1323-5"];
-    LONG_ISLAND = 84 [(.google.fhir.proto.fhir_original_code) = "1325-0"];
-    LUISENO = 85 [(.google.fhir.proto.fhir_original_code) = "1331-8"];
-    LUMBEE = 86 [(.google.fhir.proto.fhir_original_code) = "1340-9"];
-    LUMMI = 87 [(.google.fhir.proto.fhir_original_code) = "1342-5"];
-    MAIDU = 88 [(.google.fhir.proto.fhir_original_code) = "1344-1"];
-    MAKAH = 89 [(.google.fhir.proto.fhir_original_code) = "1348-2"];
-    MALISEET = 90 [(.google.fhir.proto.fhir_original_code) = "1350-8"];
-    MANDAN = 91 [(.google.fhir.proto.fhir_original_code) = "1352-4"];
-    MATTAPONI = 92 [(.google.fhir.proto.fhir_original_code) = "1354-0"];
-    MENOMINEE = 93 [(.google.fhir.proto.fhir_original_code) = "1356-5"];
-    MIAMI = 94 [(.google.fhir.proto.fhir_original_code) = "1358-1"];
-    MICCOSUKEE = 95 [(.google.fhir.proto.fhir_original_code) = "1363-1"];
-    MICMAC = 96 [(.google.fhir.proto.fhir_original_code) = "1365-6"];
-    MISSION_INDIANS = 97 [(.google.fhir.proto.fhir_original_code) = "1368-0"];
-    MIWOK = 98 [(.google.fhir.proto.fhir_original_code) = "1370-6"];
-    MODOC = 99 [(.google.fhir.proto.fhir_original_code) = "1372-2"];
-    MOHEGAN = 100 [(.google.fhir.proto.fhir_original_code) = "1374-8"];
-    MONO = 101 [(.google.fhir.proto.fhir_original_code) = "1376-3"];
-    NANTICOKE = 102 [(.google.fhir.proto.fhir_original_code) = "1378-9"];
-    NARRAGANSETT = 103 [(.google.fhir.proto.fhir_original_code) = "1380-5"];
-    NAVAJO = 104 [(.google.fhir.proto.fhir_original_code) = "1382-1"];
-    NEZ_PERCE = 105 [(.google.fhir.proto.fhir_original_code) = "1387-0"];
-    NOMALAKI = 106 [(.google.fhir.proto.fhir_original_code) = "1389-6"];
-    NORTHWEST_TRIBES = 107 [(.google.fhir.proto.fhir_original_code) = "1391-2"];
-    OMAHA = 108 [(.google.fhir.proto.fhir_original_code) = "1403-5"];
-    OREGON_ATHABASKAN = 109
-        [(.google.fhir.proto.fhir_original_code) = "1405-0"];
-    OSAGE = 110 [(.google.fhir.proto.fhir_original_code) = "1407-6"];
-    OTOE_MISSOURIA = 111 [(.google.fhir.proto.fhir_original_code) = "1409-2"];
-    OTTAWA = 112 [(.google.fhir.proto.fhir_original_code) = "1411-8"];
-    PAIUTE = 113 [(.google.fhir.proto.fhir_original_code) = "1416-7"];
-    PAMUNKEY = 114 [(.google.fhir.proto.fhir_original_code) = "1439-9"];
-    PASSAMAQUODDY = 115 [(.google.fhir.proto.fhir_original_code) = "1441-5"];
-    PAWNEE = 116 [(.google.fhir.proto.fhir_original_code) = "1445-6"];
-    PENOBSCOT = 117 [(.google.fhir.proto.fhir_original_code) = "1448-0"];
-    PEORIA = 118 [(.google.fhir.proto.fhir_original_code) = "1450-6"];
-    PEQUOT = 119 [(.google.fhir.proto.fhir_original_code) = "1453-0"];
-    PIMA = 120 [(.google.fhir.proto.fhir_original_code) = "1456-3"];
-    PISCATAWAY = 121 [(.google.fhir.proto.fhir_original_code) = "1460-5"];
-    PIT_RIVER = 122 [(.google.fhir.proto.fhir_original_code) = "1462-1"];
-    POMO = 123 [(.google.fhir.proto.fhir_original_code) = "1464-7"];
-    PONCA = 124 [(.google.fhir.proto.fhir_original_code) = "1474-6"];
-    POTAWATOMI = 125 [(.google.fhir.proto.fhir_original_code) = "1478-7"];
-    POWHATAN = 126 [(.google.fhir.proto.fhir_original_code) = "1487-8"];
-    PUEBLO = 127 [(.google.fhir.proto.fhir_original_code) = "1489-4"];
-    PUGET_SOUND_SALISH = 128
-        [(.google.fhir.proto.fhir_original_code) = "1518-0"];
-    QUAPAW = 129 [(.google.fhir.proto.fhir_original_code) = "1541-2"];
-    QUINAULT = 130 [(.google.fhir.proto.fhir_original_code) = "1543-8"];
-    RAPPAHANNOCK = 131 [(.google.fhir.proto.fhir_original_code) = "1545-3"];
-    RENO_SPARKS = 132 [(.google.fhir.proto.fhir_original_code) = "1547-9"];
-    ROUND_VALLEY = 133 [(.google.fhir.proto.fhir_original_code) = "1549-5"];
-    SAC_AND_FOX = 134 [(.google.fhir.proto.fhir_original_code) = "1551-1"];
-    SALINAN = 135 [(.google.fhir.proto.fhir_original_code) = "1556-0"];
-    SALISH = 136 [(.google.fhir.proto.fhir_original_code) = "1558-6"];
-    SALISH_AND_KOOTENAI = 137
-        [(.google.fhir.proto.fhir_original_code) = "1560-2"];
-    SCHAGHTICOKE = 138 [(.google.fhir.proto.fhir_original_code) = "1562-8"];
-    SCOTT_VALLEY = 139 [(.google.fhir.proto.fhir_original_code) = "1564-4"];
-    SEMINOLE = 140 [(.google.fhir.proto.fhir_original_code) = "1566-9"];
-    SERRANO = 141 [(.google.fhir.proto.fhir_original_code) = "1573-5"];
-    SHASTA = 142 [(.google.fhir.proto.fhir_original_code) = "1576-8"];
-    SHAWNEE = 143 [(.google.fhir.proto.fhir_original_code) = "1578-4"];
-    SHINNECOCK = 144 [(.google.fhir.proto.fhir_original_code) = "1582-6"];
-    SHOALWATER_BAY = 145 [(.google.fhir.proto.fhir_original_code) = "1584-2"];
-    SHOSHONE = 146 [(.google.fhir.proto.fhir_original_code) = "1586-7"];
-    SHOSHONE_PAIUTE = 147 [(.google.fhir.proto.fhir_original_code) = "1602-2"];
-    SILETZ = 148 [(.google.fhir.proto.fhir_original_code) = "1607-1"];
-    SIOUX = 149 [(.google.fhir.proto.fhir_original_code) = "1609-7"];
-    SIUSLAW = 150 [(.google.fhir.proto.fhir_original_code) = "1643-6"];
-    SPOKANE = 151 [(.google.fhir.proto.fhir_original_code) = "1645-1"];
-    STEWART = 152 [(.google.fhir.proto.fhir_original_code) = "1647-7"];
-    STOCKBRIDGE = 153 [(.google.fhir.proto.fhir_original_code) = "1649-3"];
-    SUSANVILLE = 154 [(.google.fhir.proto.fhir_original_code) = "1651-9"];
-    TOHONO_O_ODHAM = 155 [(.google.fhir.proto.fhir_original_code) = "1653-5"];
-    TOLOWA = 156 [(.google.fhir.proto.fhir_original_code) = "1659-2"];
-    TONKAWA = 157 [(.google.fhir.proto.fhir_original_code) = "1661-8"];
-    TYGH = 158 [(.google.fhir.proto.fhir_original_code) = "1663-4"];
-    UMATILLA = 159 [(.google.fhir.proto.fhir_original_code) = "1665-9"];
-    UMPQUA = 160 [(.google.fhir.proto.fhir_original_code) = "1667-5"];
-    UTE = 161 [(.google.fhir.proto.fhir_original_code) = "1670-9"];
-    WAILAKI = 162 [(.google.fhir.proto.fhir_original_code) = "1675-8"];
-    WALLA_WALLA = 163 [(.google.fhir.proto.fhir_original_code) = "1677-4"];
-    WAMPANOAG = 164 [(.google.fhir.proto.fhir_original_code) = "1679-0"];
-    WARM_SPRINGS = 165 [(.google.fhir.proto.fhir_original_code) = "1683-2"];
-    WASCOPUM = 166 [(.google.fhir.proto.fhir_original_code) = "1685-7"];
-    WASHOE = 167 [(.google.fhir.proto.fhir_original_code) = "1687-3"];
-    WICHITA = 168 [(.google.fhir.proto.fhir_original_code) = "1692-3"];
-    WIND_RIVER = 169 [(.google.fhir.proto.fhir_original_code) = "1694-9"];
-    WINNEBAGO = 170 [(.google.fhir.proto.fhir_original_code) = "1696-4"];
-    WINNEMUCCA = 171 [(.google.fhir.proto.fhir_original_code) = "1700-4"];
-    WINTUN = 172 [(.google.fhir.proto.fhir_original_code) = "1702-0"];
-    WIYOT = 173 [(.google.fhir.proto.fhir_original_code) = "1704-6"];
-    YAKAMA = 174 [(.google.fhir.proto.fhir_original_code) = "1707-9"];
-    YAKAMA_COWLITZ = 175 [(.google.fhir.proto.fhir_original_code) = "1709-5"];
-    YAQUI = 176 [(.google.fhir.proto.fhir_original_code) = "1711-1"];
-    YAVAPAI_APACHE = 177 [(.google.fhir.proto.fhir_original_code) = "1715-2"];
-    YOKUTS = 178 [(.google.fhir.proto.fhir_original_code) = "1717-8"];
-    YUCHI = 179 [(.google.fhir.proto.fhir_original_code) = "1722-8"];
-    YUMAN = 180 [(.google.fhir.proto.fhir_original_code) = "1724-4"];
-    YUROK = 181 [(.google.fhir.proto.fhir_original_code) = "1732-7"];
-    CHIRICAHUA = 182 [(.google.fhir.proto.fhir_original_code) = "1011-6"];
-    FORT_SILL_APACHE = 183 [(.google.fhir.proto.fhir_original_code) = "1012-4"];
-    JICARILLA_APACHE = 184 [(.google.fhir.proto.fhir_original_code) = "1013-2"];
-    LIPAN_APACHE = 185 [(.google.fhir.proto.fhir_original_code) = "1014-0"];
-    MESCALERO_APACHE = 186 [(.google.fhir.proto.fhir_original_code) = "1015-7"];
-    OKLAHOMA_APACHE = 187 [(.google.fhir.proto.fhir_original_code) = "1016-5"];
-    PAYSON_APACHE = 188 [(.google.fhir.proto.fhir_original_code) = "1017-3"];
-    SAN_CARLOS_APACHE = 189
-        [(.google.fhir.proto.fhir_original_code) = "1018-1"];
-    WHITE_MOUNTAIN_APACHE = 190
-        [(.google.fhir.proto.fhir_original_code) = "1019-9"];
-    NORTHERN_ARAPAHO = 191 [(.google.fhir.proto.fhir_original_code) = "1022-3"];
-    SOUTHERN_ARAPAHO = 192 [(.google.fhir.proto.fhir_original_code) = "1023-1"];
-    WIND_RIVER_ARAPAHO = 193
-        [(.google.fhir.proto.fhir_original_code) = "1024-9"];
-    FORT_PECK_ASSINIBOINE_SIOUX = 194
-        [(.google.fhir.proto.fhir_original_code) = "1031-4"];
-    OKLAHOMA_CADO = 195 [(.google.fhir.proto.fhir_original_code) = "1042-1"];
-    AGUA_CALIENTE_CAHUILLA = 196
-        [(.google.fhir.proto.fhir_original_code) = "1045-4"];
-    AUGUSTINE = 197 [(.google.fhir.proto.fhir_original_code) = "1046-2"];
-    CABAZON = 198 [(.google.fhir.proto.fhir_original_code) = "1047-0"];
-    LOS_COYOTES = 199 [(.google.fhir.proto.fhir_original_code) = "1048-8"];
-    MORONGO = 200 [(.google.fhir.proto.fhir_original_code) = "1049-6"];
-    SANTA_ROSA_CAHUILLA = 201
-        [(.google.fhir.proto.fhir_original_code) = "1050-4"];
-    TORRES_MARTINEZ = 202 [(.google.fhir.proto.fhir_original_code) = "1051-2"];
-    CAHTO = 203 [(.google.fhir.proto.fhir_original_code) = "1054-6"];
-    CHIMARIKO = 204 [(.google.fhir.proto.fhir_original_code) = "1055-3"];
-    COAST_MIWOK = 205 [(.google.fhir.proto.fhir_original_code) = "1056-1"];
-    DIGGER = 206 [(.google.fhir.proto.fhir_original_code) = "1057-9"];
-    KAWAIISU = 207 [(.google.fhir.proto.fhir_original_code) = "1058-7"];
-    KERN_RIVER = 208 [(.google.fhir.proto.fhir_original_code) = "1059-5"];
-    MATTOLE = 209 [(.google.fhir.proto.fhir_original_code) = "1060-3"];
-    RED_WOOD = 210 [(.google.fhir.proto.fhir_original_code) = "1061-1"];
-    SANTA_ROSA = 211 [(.google.fhir.proto.fhir_original_code) = "1062-9"];
-    TAKELMA = 212 [(.google.fhir.proto.fhir_original_code) = "1063-7"];
-    WAPPO = 213 [(.google.fhir.proto.fhir_original_code) = "1064-5"];
-    YANA = 214 [(.google.fhir.proto.fhir_original_code) = "1065-2"];
-    YUKI = 215 [(.google.fhir.proto.fhir_original_code) = "1066-0"];
-    CANADIAN_INDIAN = 216 [(.google.fhir.proto.fhir_original_code) = "1069-4"];
-    CENTRAL_AMERICAN_INDIAN_1070_2 = 217
-        [(.google.fhir.proto.fhir_original_code) = "1070-2"];
-    FRENCH_AMERICAN_INDIAN = 218
-        [(.google.fhir.proto.fhir_original_code) = "1071-0"];
-    MEXICAN_AMERICAN_INDIAN_1072_8 = 219
-        [(.google.fhir.proto.fhir_original_code) = "1072-8"];
-    SOUTH_AMERICAN_INDIAN_1073_6 = 220
-        [(.google.fhir.proto.fhir_original_code) = "1073-6"];
-    SPANISH_AMERICAN_INDIAN = 221
-        [(.google.fhir.proto.fhir_original_code) = "1074-4"];
-    HOH = 222 [(.google.fhir.proto.fhir_original_code) = "1083-5"];
-    QUILEUTE = 223 [(.google.fhir.proto.fhir_original_code) = "1084-3"];
-    CHEROKEE_ALABAMA = 224 [(.google.fhir.proto.fhir_original_code) = "1089-2"];
-    CHEROKEES_OF_NORTHEAST_ALABAMA = 225
-        [(.google.fhir.proto.fhir_original_code) = "1090-0"];
-    CHEROKEES_OF_SOUTHEAST_ALABAMA = 226
-        [(.google.fhir.proto.fhir_original_code) = "1091-8"];
-    EASTERN_CHEROKEE = 227 [(.google.fhir.proto.fhir_original_code) = "1092-6"];
-    ECHOTA_CHEROKEE = 228 [(.google.fhir.proto.fhir_original_code) = "1093-4"];
-    ETOWAH_CHEROKEE = 229 [(.google.fhir.proto.fhir_original_code) = "1094-2"];
-    NORTHERN_CHEROKEE = 230
-        [(.google.fhir.proto.fhir_original_code) = "1095-9"];
-    TUSCOLA = 231 [(.google.fhir.proto.fhir_original_code) = "1096-7"];
-    UNITED_KEETOWAH_BAND_OF_CHEROKEE = 232
-        [(.google.fhir.proto.fhir_original_code) = "1097-5"];
-    WESTERN_CHEROKEE = 233 [(.google.fhir.proto.fhir_original_code) = "1098-3"];
-    NORTHERN_CHEYENNE = 234
-        [(.google.fhir.proto.fhir_original_code) = "1103-1"];
-    SOUTHERN_CHEYENNE = 235
-        [(.google.fhir.proto.fhir_original_code) = "1104-9"];
-    EASTERN_CHICKAHOMINY = 236
-        [(.google.fhir.proto.fhir_original_code) = "1109-8"];
-    WESTERN_CHICKAHOMINY = 237
-        [(.google.fhir.proto.fhir_original_code) = "1110-6"];
-    CLATSOP = 238 [(.google.fhir.proto.fhir_original_code) = "1115-5"];
-    COLUMBIA_RIVER_CHINOOK = 239
-        [(.google.fhir.proto.fhir_original_code) = "1116-3"];
-    KATHLAMET = 240 [(.google.fhir.proto.fhir_original_code) = "1117-1"];
-    UPPER_CHINOOK = 241 [(.google.fhir.proto.fhir_original_code) = "1118-9"];
-    WAKIAKUM_CHINOOK = 242 [(.google.fhir.proto.fhir_original_code) = "1119-7"];
-    WILLAPA_CHINOOK = 243 [(.google.fhir.proto.fhir_original_code) = "1120-5"];
-    WISHRAM = 244 [(.google.fhir.proto.fhir_original_code) = "1121-3"];
-    BAD_RIVER = 245 [(.google.fhir.proto.fhir_original_code) = "1124-7"];
-    BAY_MILLS_CHIPPEWA = 246
-        [(.google.fhir.proto.fhir_original_code) = "1125-4"];
-    BOIS_FORTE = 247 [(.google.fhir.proto.fhir_original_code) = "1126-2"];
-    BURT_LAKE_CHIPPEWA = 248
-        [(.google.fhir.proto.fhir_original_code) = "1127-0"];
-    FOND_DU_LAC = 249 [(.google.fhir.proto.fhir_original_code) = "1128-8"];
-    GRAND_PORTAGE = 250 [(.google.fhir.proto.fhir_original_code) = "1129-6"];
-    GRAND_TRAVERSE_BAND_OF_OTTAWA_CHIPPEWA = 251
-        [(.google.fhir.proto.fhir_original_code) = "1130-4"];
-    KEWEENAW = 252 [(.google.fhir.proto.fhir_original_code) = "1131-2"];
-    LAC_COURTE_OREILLES = 253
-        [(.google.fhir.proto.fhir_original_code) = "1132-0"];
-    LAC_DU_FLAMBEAU = 254 [(.google.fhir.proto.fhir_original_code) = "1133-8"];
-    LAC_VIEUX_DESERT_CHIPPEWA = 255
-        [(.google.fhir.proto.fhir_original_code) = "1134-6"];
-    LAKE_SUPERIOR = 256 [(.google.fhir.proto.fhir_original_code) = "1135-3"];
-    LEECH_LAKE = 257 [(.google.fhir.proto.fhir_original_code) = "1136-1"];
-    LITTLE_SHELL_CHIPPEWA = 258
-        [(.google.fhir.proto.fhir_original_code) = "1137-9"];
-    MILLE_LACS = 259 [(.google.fhir.proto.fhir_original_code) = "1138-7"];
-    MINNESOTA_CHIPPEWA = 260
-        [(.google.fhir.proto.fhir_original_code) = "1139-5"];
-    ONTONAGON = 261 [(.google.fhir.proto.fhir_original_code) = "1140-3"];
-    RED_CLIFF_CHIPPEWA = 262
-        [(.google.fhir.proto.fhir_original_code) = "1141-1"];
-    RED_LAKE_CHIPPEWA = 263
-        [(.google.fhir.proto.fhir_original_code) = "1142-9"];
-    SAGINAW_CHIPPEWA = 264 [(.google.fhir.proto.fhir_original_code) = "1143-7"];
-    ST_CROIX_CHIPPEWA = 265
-        [(.google.fhir.proto.fhir_original_code) = "1144-5"];
-    SAULT_STE_MARIE_CHIPPEWA = 266
-        [(.google.fhir.proto.fhir_original_code) = "1145-2"];
-    SOKOAGON_CHIPPEWA = 267
-        [(.google.fhir.proto.fhir_original_code) = "1146-0"];
-    TURTLE_MOUNTAIN = 268 [(.google.fhir.proto.fhir_original_code) = "1147-8"];
-    WHITE_EARTH = 269 [(.google.fhir.proto.fhir_original_code) = "1148-6"];
-    ROCKY_BOYS_CHIPPEWA_CREE = 270
-        [(.google.fhir.proto.fhir_original_code) = "1151-0"];
-    CLIFTON_CHOCTAW = 271 [(.google.fhir.proto.fhir_original_code) = "1156-9"];
-    JENA_CHOCTAW = 272 [(.google.fhir.proto.fhir_original_code) = "1157-7"];
-    MISSISSIPPI_CHOCTAW = 273
-        [(.google.fhir.proto.fhir_original_code) = "1158-5"];
-    MOWA_BAND_OF_CHOCTAW = 274
-        [(.google.fhir.proto.fhir_original_code) = "1159-3"];
-    OKLAHOMA_CHOCTAW = 275 [(.google.fhir.proto.fhir_original_code) = "1160-1"];
-    SANTA_YNEZ = 276 [(.google.fhir.proto.fhir_original_code) = "1163-5"];
-    OKLAHOMA_COMANCHE = 277
-        [(.google.fhir.proto.fhir_original_code) = "1176-7"];
-    ALABAMA_COUSHATTA = 278
-        [(.google.fhir.proto.fhir_original_code) = "1187-4"];
-    ALABAMA_CREEK = 279 [(.google.fhir.proto.fhir_original_code) = "1194-0"];
-    ALABAMA_QUASSARTE = 280
-        [(.google.fhir.proto.fhir_original_code) = "1195-7"];
-    EASTERN_CREEK = 281 [(.google.fhir.proto.fhir_original_code) = "1196-5"];
-    EASTERN_MUSCOGEE = 282 [(.google.fhir.proto.fhir_original_code) = "1197-3"];
-    KIALEGEE = 283 [(.google.fhir.proto.fhir_original_code) = "1198-1"];
-    LOWER_MUSCOGEE = 284 [(.google.fhir.proto.fhir_original_code) = "1199-9"];
-    MACHIS_LOWER_CREEK_INDIAN = 285
-        [(.google.fhir.proto.fhir_original_code) = "1200-5"];
-    POARCH_BAND = 286 [(.google.fhir.proto.fhir_original_code) = "1201-3"];
-    PRINCIPAL_CREEK_INDIAN_NATION = 287
-        [(.google.fhir.proto.fhir_original_code) = "1202-1"];
-    STAR_CLAN_OF_MUSCOGEE_CREEKS = 288
-        [(.google.fhir.proto.fhir_original_code) = "1203-9"];
-    THLOPTHLOCCO = 289 [(.google.fhir.proto.fhir_original_code) = "1204-7"];
-    TUCKABACHEE = 290 [(.google.fhir.proto.fhir_original_code) = "1205-4"];
-    AGUA_CALIENTE = 291 [(.google.fhir.proto.fhir_original_code) = "1212-0"];
-    EASTERN_DELAWARE = 292 [(.google.fhir.proto.fhir_original_code) = "1215-3"];
-    LENNI_LENAPE = 293 [(.google.fhir.proto.fhir_original_code) = "1216-1"];
-    MUNSEE = 294 [(.google.fhir.proto.fhir_original_code) = "1217-9"];
-    OKLAHOMA_DELAWARE = 295
-        [(.google.fhir.proto.fhir_original_code) = "1218-7"];
-    RAMPOUGH_MOUNTAIN = 296
-        [(.google.fhir.proto.fhir_original_code) = "1219-5"];
-    SAND_HILL = 297 [(.google.fhir.proto.fhir_original_code) = "1220-3"];
-    CAMPO = 298 [(.google.fhir.proto.fhir_original_code) = "1223-7"];
-    CAPITAN_GRANDE = 299 [(.google.fhir.proto.fhir_original_code) = "1224-5"];
-    CUYAPAIPE = 300 [(.google.fhir.proto.fhir_original_code) = "1225-2"];
-    LA_POSTA = 301 [(.google.fhir.proto.fhir_original_code) = "1226-0"];
-    MANZANITA = 302 [(.google.fhir.proto.fhir_original_code) = "1227-8"];
-    MESA_GRANDE = 303 [(.google.fhir.proto.fhir_original_code) = "1228-6"];
-    SAN_PASQUAL = 304 [(.google.fhir.proto.fhir_original_code) = "1229-4"];
-    SANTA_YSABEL = 305 [(.google.fhir.proto.fhir_original_code) = "1230-2"];
-    SYCUAN = 306 [(.google.fhir.proto.fhir_original_code) = "1231-0"];
-    ATTACAPA = 307 [(.google.fhir.proto.fhir_original_code) = "1234-4"];
-    BILOXI = 308 [(.google.fhir.proto.fhir_original_code) = "1235-1"];
-    GEORGETOWN_EASTERN_TRIBES = 309
-        [(.google.fhir.proto.fhir_original_code) = "1236-9"];
-    MOOR = 310 [(.google.fhir.proto.fhir_original_code) = "1237-7"];
-    NANSEMOND = 311 [(.google.fhir.proto.fhir_original_code) = "1238-5"];
-    NATCHEZ = 312 [(.google.fhir.proto.fhir_original_code) = "1239-3"];
-    NAUSU_WAIWASH = 313 [(.google.fhir.proto.fhir_original_code) = "1240-1"];
-    NIPMUC = 314 [(.google.fhir.proto.fhir_original_code) = "1241-9"];
-    PAUGUSSETT = 315 [(.google.fhir.proto.fhir_original_code) = "1242-7"];
-    POCOMOKE_ACOHONOCK = 316
-        [(.google.fhir.proto.fhir_original_code) = "1243-5"];
-    SOUTHEASTERN_INDIANS = 317
-        [(.google.fhir.proto.fhir_original_code) = "1244-3"];
-    SUSQUEHANOCK = 318 [(.google.fhir.proto.fhir_original_code) = "1245-0"];
-    TUNICA_BILOXI = 319 [(.google.fhir.proto.fhir_original_code) = "1246-8"];
-    WACCAMAW_SIOUSAN = 320 [(.google.fhir.proto.fhir_original_code) = "1247-6"];
-    WICOMICO = 321 [(.google.fhir.proto.fhir_original_code) = "1248-4"];
-    ATSINA = 322 [(.google.fhir.proto.fhir_original_code) = "1265-8"];
-    TRINITY = 323 [(.google.fhir.proto.fhir_original_code) = "1272-4"];
-    WHILKUT = 324 [(.google.fhir.proto.fhir_original_code) = "1273-2"];
-    IOWA_OF_KANSAS_NEBRASKA = 325
-        [(.google.fhir.proto.fhir_original_code) = "1282-3"];
-    IOWA_OF_OKLAHOMA = 326 [(.google.fhir.proto.fhir_original_code) = "1283-1"];
-    CAYUGA = 327 [(.google.fhir.proto.fhir_original_code) = "1286-4"];
-    MOHAWK = 328 [(.google.fhir.proto.fhir_original_code) = "1287-2"];
-    ONEIDA = 329 [(.google.fhir.proto.fhir_original_code) = "1288-0"];
-    ONONDAGA = 330 [(.google.fhir.proto.fhir_original_code) = "1289-8"];
-    SENECA = 331 [(.google.fhir.proto.fhir_original_code) = "1290-6"];
-    SENECA_NATION = 332 [(.google.fhir.proto.fhir_original_code) = "1291-4"];
-    SENECA_CAYUGA = 333 [(.google.fhir.proto.fhir_original_code) = "1292-2"];
-    TONAWANDA_SENECA = 334 [(.google.fhir.proto.fhir_original_code) = "1293-0"];
-    TUSCARORA = 335 [(.google.fhir.proto.fhir_original_code) = "1294-8"];
-    WYANDOTTE = 336 [(.google.fhir.proto.fhir_original_code) = "1295-5"];
-    OKLAHOMA_KICKAPOO = 337
-        [(.google.fhir.proto.fhir_original_code) = "1306-0"];
-    TEXAS_KICKAPOO = 338 [(.google.fhir.proto.fhir_original_code) = "1307-8"];
-    OKLAHOMA_KIOWA = 339 [(.google.fhir.proto.fhir_original_code) = "1310-2"];
-    JAMESTOWN = 340 [(.google.fhir.proto.fhir_original_code) = "1313-6"];
-    LOWER_ELWHA = 341 [(.google.fhir.proto.fhir_original_code) = "1314-4"];
-    PORT_GAMBLE_KLALLAM = 342
-        [(.google.fhir.proto.fhir_original_code) = "1315-1"];
-    MATINECOCK = 343 [(.google.fhir.proto.fhir_original_code) = "1326-8"];
-    MONTAUK = 344 [(.google.fhir.proto.fhir_original_code) = "1327-6"];
-    POOSPATUCK = 345 [(.google.fhir.proto.fhir_original_code) = "1328-4"];
-    SETAUKET = 346 [(.google.fhir.proto.fhir_original_code) = "1329-2"];
-    LA_JOLLA = 347 [(.google.fhir.proto.fhir_original_code) = "1332-6"];
-    PALA = 348 [(.google.fhir.proto.fhir_original_code) = "1333-4"];
-    PAUMA = 349 [(.google.fhir.proto.fhir_original_code) = "1334-2"];
-    PECHANGA = 350 [(.google.fhir.proto.fhir_original_code) = "1335-9"];
-    SOBOBA = 351 [(.google.fhir.proto.fhir_original_code) = "1336-7"];
-    TWENTY_NINE_PALMS = 352
-        [(.google.fhir.proto.fhir_original_code) = "1337-5"];
-    TEMECULA = 353 [(.google.fhir.proto.fhir_original_code) = "1338-3"];
-    MOUNTAIN_MAIDU = 354 [(.google.fhir.proto.fhir_original_code) = "1345-8"];
-    NISHINAM = 355 [(.google.fhir.proto.fhir_original_code) = "1346-6"];
-    ILLINOIS_MIAMI = 356 [(.google.fhir.proto.fhir_original_code) = "1359-9"];
-    INDIANA_MIAMI = 357 [(.google.fhir.proto.fhir_original_code) = "1360-7"];
-    OKLAHOMA_MIAMI = 358 [(.google.fhir.proto.fhir_original_code) = "1361-5"];
-    AROOSTOOK = 359 [(.google.fhir.proto.fhir_original_code) = "1366-4"];
-    ALAMO_NAVAJO = 360 [(.google.fhir.proto.fhir_original_code) = "1383-9"];
-    CANONCITO_NAVAJO = 361 [(.google.fhir.proto.fhir_original_code) = "1384-7"];
-    RAMAH_NAVAJO = 362 [(.google.fhir.proto.fhir_original_code) = "1385-4"];
-    ALSEA = 363 [(.google.fhir.proto.fhir_original_code) = "1392-0"];
-    CELILO = 364 [(.google.fhir.proto.fhir_original_code) = "1393-8"];
-    COLUMBIA = 365 [(.google.fhir.proto.fhir_original_code) = "1394-6"];
-    KALAPUYA = 366 [(.google.fhir.proto.fhir_original_code) = "1395-3"];
-    MOLALA = 367 [(.google.fhir.proto.fhir_original_code) = "1396-1"];
-    TALAKAMISH = 368 [(.google.fhir.proto.fhir_original_code) = "1397-9"];
-    TENINO = 369 [(.google.fhir.proto.fhir_original_code) = "1398-7"];
-    TILLAMOOK = 370 [(.google.fhir.proto.fhir_original_code) = "1399-5"];
-    WENATCHEE = 371 [(.google.fhir.proto.fhir_original_code) = "1400-1"];
-    YAHOOSKIN = 372 [(.google.fhir.proto.fhir_original_code) = "1401-9"];
-    BURT_LAKE_OTTAWA = 373 [(.google.fhir.proto.fhir_original_code) = "1412-6"];
-    MICHIGAN_OTTAWA = 374 [(.google.fhir.proto.fhir_original_code) = "1413-4"];
-    OKLAHOMA_OTTAWA = 375 [(.google.fhir.proto.fhir_original_code) = "1414-2"];
-    BISHOP = 376 [(.google.fhir.proto.fhir_original_code) = "1417-5"];
-    BRIDGEPORT = 377 [(.google.fhir.proto.fhir_original_code) = "1418-3"];
-    BURNS_PAIUTE = 378 [(.google.fhir.proto.fhir_original_code) = "1419-1"];
-    CEDARVILLE = 379 [(.google.fhir.proto.fhir_original_code) = "1420-9"];
-    FORT_BIDWELL = 380 [(.google.fhir.proto.fhir_original_code) = "1421-7"];
-    FORT_INDEPENDENCE = 381
-        [(.google.fhir.proto.fhir_original_code) = "1422-5"];
-    KAIBAB = 382 [(.google.fhir.proto.fhir_original_code) = "1423-3"];
-    LAS_VEGAS = 383 [(.google.fhir.proto.fhir_original_code) = "1424-1"];
-    LONE_PINE = 384 [(.google.fhir.proto.fhir_original_code) = "1425-8"];
-    LOVELOCK = 385 [(.google.fhir.proto.fhir_original_code) = "1426-6"];
-    MALHEUR_PAIUTE = 386 [(.google.fhir.proto.fhir_original_code) = "1427-4"];
-    MOAPA = 387 [(.google.fhir.proto.fhir_original_code) = "1428-2"];
-    NORTHERN_PAIUTE = 388 [(.google.fhir.proto.fhir_original_code) = "1429-0"];
-    OWENS_VALLEY = 389 [(.google.fhir.proto.fhir_original_code) = "1430-8"];
-    PYRAMID_LAKE = 390 [(.google.fhir.proto.fhir_original_code) = "1431-6"];
-    SAN_JUAN_SOUTHERN_PAIUTE = 391
-        [(.google.fhir.proto.fhir_original_code) = "1432-4"];
-    SOUTHERN_PAIUTE = 392 [(.google.fhir.proto.fhir_original_code) = "1433-2"];
-    SUMMIT_LAKE = 393 [(.google.fhir.proto.fhir_original_code) = "1434-0"];
-    UTU_UTU_GWAITU_PAIUTE = 394
-        [(.google.fhir.proto.fhir_original_code) = "1435-7"];
-    WALKER_RIVER = 395 [(.google.fhir.proto.fhir_original_code) = "1436-5"];
-    YERINGTON_PAIUTE = 396 [(.google.fhir.proto.fhir_original_code) = "1437-3"];
-    INDIAN_TOWNSHIP = 397 [(.google.fhir.proto.fhir_original_code) = "1442-3"];
-    PLEASANT_POINT_PASSAMAQUODDY = 398
-        [(.google.fhir.proto.fhir_original_code) = "1443-1"];
-    OKLAHOMA_PAWNEE = 399 [(.google.fhir.proto.fhir_original_code) = "1446-4"];
-    OKLAHOMA_PEORIA = 400 [(.google.fhir.proto.fhir_original_code) = "1451-4"];
-    MARSHANTUCKET_PEQUOT = 401
-        [(.google.fhir.proto.fhir_original_code) = "1454-8"];
-    GILA_RIVER_PIMA_MARICOPA = 402
-        [(.google.fhir.proto.fhir_original_code) = "1457-1"];
-    SALT_RIVER_PIMA_MARICOPA = 403
-        [(.google.fhir.proto.fhir_original_code) = "1458-9"];
-    CENTRAL_POMO = 404 [(.google.fhir.proto.fhir_original_code) = "1465-4"];
-    DRY_CREEK = 405 [(.google.fhir.proto.fhir_original_code) = "1466-2"];
-    EASTERN_POMO = 406 [(.google.fhir.proto.fhir_original_code) = "1467-0"];
-    KASHIA = 407 [(.google.fhir.proto.fhir_original_code) = "1468-8"];
-    NORTHERN_POMO = 408 [(.google.fhir.proto.fhir_original_code) = "1469-6"];
-    SCOTTS_VALLEY = 409 [(.google.fhir.proto.fhir_original_code) = "1470-4"];
-    STONYFORD = 410 [(.google.fhir.proto.fhir_original_code) = "1471-2"];
-    SULPHUR_BANK = 411 [(.google.fhir.proto.fhir_original_code) = "1472-0"];
-    NEBRASKA_PONCA = 412 [(.google.fhir.proto.fhir_original_code) = "1475-3"];
-    OKLAHOMA_PONCA = 413 [(.google.fhir.proto.fhir_original_code) = "1476-1"];
-    CITIZEN_BAND_POTAWATOMI = 414
-        [(.google.fhir.proto.fhir_original_code) = "1479-5"];
-    FOREST_COUNTY = 415 [(.google.fhir.proto.fhir_original_code) = "1480-3"];
-    HANNAHVILLE = 416 [(.google.fhir.proto.fhir_original_code) = "1481-1"];
-    HURON_POTAWATOMI = 417 [(.google.fhir.proto.fhir_original_code) = "1482-9"];
-    POKAGON_POTAWATOMI = 418
-        [(.google.fhir.proto.fhir_original_code) = "1483-7"];
-    PRAIRIE_BAND = 419 [(.google.fhir.proto.fhir_original_code) = "1484-5"];
-    WISCONSIN_POTAWATOMI = 420
-        [(.google.fhir.proto.fhir_original_code) = "1485-2"];
-    ACOMA = 421 [(.google.fhir.proto.fhir_original_code) = "1490-2"];
-    ARIZONA_TEWA = 422 [(.google.fhir.proto.fhir_original_code) = "1491-0"];
-    COCHITI = 423 [(.google.fhir.proto.fhir_original_code) = "1492-8"];
-    HOPI = 424 [(.google.fhir.proto.fhir_original_code) = "1493-6"];
-    ISLETA = 425 [(.google.fhir.proto.fhir_original_code) = "1494-4"];
-    JEMEZ = 426 [(.google.fhir.proto.fhir_original_code) = "1495-1"];
-    KERES = 427 [(.google.fhir.proto.fhir_original_code) = "1496-9"];
-    LAGUNA = 428 [(.google.fhir.proto.fhir_original_code) = "1497-7"];
-    NAMBE = 429 [(.google.fhir.proto.fhir_original_code) = "1498-5"];
-    PICURIS = 430 [(.google.fhir.proto.fhir_original_code) = "1499-3"];
-    PIRO = 431 [(.google.fhir.proto.fhir_original_code) = "1500-8"];
-    POJOAQUE = 432 [(.google.fhir.proto.fhir_original_code) = "1501-6"];
-    SAN_FELIPE = 433 [(.google.fhir.proto.fhir_original_code) = "1502-4"];
-    SAN_ILDEFONSO = 434 [(.google.fhir.proto.fhir_original_code) = "1503-2"];
-    SAN_JUAN_PUEBLO = 435 [(.google.fhir.proto.fhir_original_code) = "1504-0"];
-    SAN_JUAN_DE = 436 [(.google.fhir.proto.fhir_original_code) = "1505-7"];
-    SAN_JUAN = 437 [(.google.fhir.proto.fhir_original_code) = "1506-5"];
-    SANDIA = 438 [(.google.fhir.proto.fhir_original_code) = "1507-3"];
-    SANTA_ANA = 439 [(.google.fhir.proto.fhir_original_code) = "1508-1"];
-    SANTA_CLARA = 440 [(.google.fhir.proto.fhir_original_code) = "1509-9"];
-    SANTO_DOMINGO = 441 [(.google.fhir.proto.fhir_original_code) = "1510-7"];
-    TAOS = 442 [(.google.fhir.proto.fhir_original_code) = "1511-5"];
-    TESUQUE = 443 [(.google.fhir.proto.fhir_original_code) = "1512-3"];
-    TEWA = 444 [(.google.fhir.proto.fhir_original_code) = "1513-1"];
-    TIGUA = 445 [(.google.fhir.proto.fhir_original_code) = "1514-9"];
-    ZIA = 446 [(.google.fhir.proto.fhir_original_code) = "1515-6"];
-    ZUNI = 447 [(.google.fhir.proto.fhir_original_code) = "1516-4"];
-    DUWAMISH = 448 [(.google.fhir.proto.fhir_original_code) = "1519-8"];
-    KIKIALLUS = 449 [(.google.fhir.proto.fhir_original_code) = "1520-6"];
-    LOWER_SKAGIT = 450 [(.google.fhir.proto.fhir_original_code) = "1521-4"];
-    MUCKLESHOOT = 451 [(.google.fhir.proto.fhir_original_code) = "1522-2"];
-    NISQUALLY = 452 [(.google.fhir.proto.fhir_original_code) = "1523-0"];
-    NOOKSACK = 453 [(.google.fhir.proto.fhir_original_code) = "1524-8"];
-    PORT_MADISON = 454 [(.google.fhir.proto.fhir_original_code) = "1525-5"];
-    PUYALLUP = 455 [(.google.fhir.proto.fhir_original_code) = "1526-3"];
-    SAMISH = 456 [(.google.fhir.proto.fhir_original_code) = "1527-1"];
-    SAUK_SUIATTLE = 457 [(.google.fhir.proto.fhir_original_code) = "1528-9"];
-    SKOKOMISH = 458 [(.google.fhir.proto.fhir_original_code) = "1529-7"];
-    SKYKOMISH = 459 [(.google.fhir.proto.fhir_original_code) = "1530-5"];
-    SNOHOMISH = 460 [(.google.fhir.proto.fhir_original_code) = "1531-3"];
-    SNOQUALMIE = 461 [(.google.fhir.proto.fhir_original_code) = "1532-1"];
-    SQUAXIN_ISLAND = 462 [(.google.fhir.proto.fhir_original_code) = "1533-9"];
-    STEILACOOM = 463 [(.google.fhir.proto.fhir_original_code) = "1534-7"];
-    STILLAGUAMISH = 464 [(.google.fhir.proto.fhir_original_code) = "1535-4"];
-    SUQUAMISH = 465 [(.google.fhir.proto.fhir_original_code) = "1536-2"];
-    SWINOMISH = 466 [(.google.fhir.proto.fhir_original_code) = "1537-0"];
-    TULALIP = 467 [(.google.fhir.proto.fhir_original_code) = "1538-8"];
-    UPPER_SKAGIT = 468 [(.google.fhir.proto.fhir_original_code) = "1539-6"];
-    IOWA_SAC_AND_FOX = 469 [(.google.fhir.proto.fhir_original_code) = "1552-9"];
-    MISSOURI_SAC_AND_FOX = 470
-        [(.google.fhir.proto.fhir_original_code) = "1553-7"];
-    OKLAHOMA_SAC_AND_FOX = 471
-        [(.google.fhir.proto.fhir_original_code) = "1554-5"];
-    BIG_CYPRESS = 472 [(.google.fhir.proto.fhir_original_code) = "1567-7"];
-    BRIGHTON = 473 [(.google.fhir.proto.fhir_original_code) = "1568-5"];
-    FLORIDA_SEMINOLE = 474 [(.google.fhir.proto.fhir_original_code) = "1569-3"];
-    HOLLYWOOD_SEMINOLE = 475
-        [(.google.fhir.proto.fhir_original_code) = "1570-1"];
-    OKLAHOMA_SEMINOLE = 476
-        [(.google.fhir.proto.fhir_original_code) = "1571-9"];
-    SAN_MANUAL = 477 [(.google.fhir.proto.fhir_original_code) = "1574-3"];
-    ABSENTEE_SHAWNEE = 478 [(.google.fhir.proto.fhir_original_code) = "1579-2"];
-    EASTERN_SHAWNEE = 479 [(.google.fhir.proto.fhir_original_code) = "1580-0"];
-    BATTLE_MOUNTAIN = 480 [(.google.fhir.proto.fhir_original_code) = "1587-5"];
-    DUCKWATER = 481 [(.google.fhir.proto.fhir_original_code) = "1588-3"];
-    ELKO = 482 [(.google.fhir.proto.fhir_original_code) = "1589-1"];
-    ELY = 483 [(.google.fhir.proto.fhir_original_code) = "1590-9"];
-    GOSHUTE = 484 [(.google.fhir.proto.fhir_original_code) = "1591-7"];
-    PANAMINT = 485 [(.google.fhir.proto.fhir_original_code) = "1592-5"];
-    RUBY_VALLEY = 486 [(.google.fhir.proto.fhir_original_code) = "1593-3"];
-    SKULL_VALLEY = 487 [(.google.fhir.proto.fhir_original_code) = "1594-1"];
-    SOUTH_FORK_SHOSHONE = 488
-        [(.google.fhir.proto.fhir_original_code) = "1595-8"];
-    TE_MOAK_WESTERN_SHOSHONE = 489
-        [(.google.fhir.proto.fhir_original_code) = "1596-6"];
-    TIMBI_SHA_SHOSHONE = 490
-        [(.google.fhir.proto.fhir_original_code) = "1597-4"];
-    WASHAKIE = 491 [(.google.fhir.proto.fhir_original_code) = "1598-2"];
-    WIND_RIVER_SHOSHONE = 492
-        [(.google.fhir.proto.fhir_original_code) = "1599-0"];
-    YOMBA = 493 [(.google.fhir.proto.fhir_original_code) = "1600-6"];
-    DUCK_VALLEY = 494 [(.google.fhir.proto.fhir_original_code) = "1603-0"];
-    FALLON = 495 [(.google.fhir.proto.fhir_original_code) = "1604-8"];
-    FORT_MC_DERMITT = 496 [(.google.fhir.proto.fhir_original_code) = "1605-5"];
-    BLACKFOOT_SIOUX = 497 [(.google.fhir.proto.fhir_original_code) = "1610-5"];
-    BRULE_SIOUX = 498 [(.google.fhir.proto.fhir_original_code) = "1611-3"];
-    CHEYENNE_RIVER_SIOUX = 499
-        [(.google.fhir.proto.fhir_original_code) = "1612-1"];
-    CROW_CREEK_SIOUX = 500 [(.google.fhir.proto.fhir_original_code) = "1613-9"];
-    DAKOTA_SIOUX = 501 [(.google.fhir.proto.fhir_original_code) = "1614-7"];
-    FLANDREAU_SANTEE = 502 [(.google.fhir.proto.fhir_original_code) = "1615-4"];
-    FORT_PECK = 503 [(.google.fhir.proto.fhir_original_code) = "1616-2"];
-    LAKE_TRAVERSE_SIOUX = 504
-        [(.google.fhir.proto.fhir_original_code) = "1617-0"];
-    LOWER_BRULE_SIOUX = 505
-        [(.google.fhir.proto.fhir_original_code) = "1618-8"];
-    LOWER_SIOUX = 506 [(.google.fhir.proto.fhir_original_code) = "1619-6"];
-    MDEWAKANTON_SIOUX = 507
-        [(.google.fhir.proto.fhir_original_code) = "1620-4"];
-    MINICONJOU = 508 [(.google.fhir.proto.fhir_original_code) = "1621-2"];
-    OGLALA_SIOUX = 509 [(.google.fhir.proto.fhir_original_code) = "1622-0"];
-    PINE_RIDGE_SIOUX = 510 [(.google.fhir.proto.fhir_original_code) = "1623-8"];
-    PIPESTONE_SIOUX = 511 [(.google.fhir.proto.fhir_original_code) = "1624-6"];
-    PRAIRIE_ISLAND_SIOUX = 512
-        [(.google.fhir.proto.fhir_original_code) = "1625-3"];
-    PRIOR_LAKE_SIOUX = 513 [(.google.fhir.proto.fhir_original_code) = "1626-1"];
-    ROSEBUD_SIOUX = 514 [(.google.fhir.proto.fhir_original_code) = "1627-9"];
-    SANS_ARC_SIOUX = 515 [(.google.fhir.proto.fhir_original_code) = "1628-7"];
-    SANTEE_SIOUX = 516 [(.google.fhir.proto.fhir_original_code) = "1629-5"];
-    SISSETON_WAHPETON = 517
-        [(.google.fhir.proto.fhir_original_code) = "1630-3"];
-    SISSETON_SIOUX = 518 [(.google.fhir.proto.fhir_original_code) = "1631-1"];
-    SPIRIT_LAKE_SIOUX = 519
-        [(.google.fhir.proto.fhir_original_code) = "1632-9"];
-    STANDING_ROCK_SIOUX = 520
-        [(.google.fhir.proto.fhir_original_code) = "1633-7"];
-    TETON_SIOUX = 521 [(.google.fhir.proto.fhir_original_code) = "1634-5"];
-    TWO_KETTLE_SIOUX = 522 [(.google.fhir.proto.fhir_original_code) = "1635-2"];
-    UPPER_SIOUX = 523 [(.google.fhir.proto.fhir_original_code) = "1636-0"];
-    WAHPEKUTE_SIOUX = 524 [(.google.fhir.proto.fhir_original_code) = "1637-8"];
-    WAHPETON_SIOUX = 525 [(.google.fhir.proto.fhir_original_code) = "1638-6"];
-    WAZHAZA_SIOUX = 526 [(.google.fhir.proto.fhir_original_code) = "1639-4"];
-    YANKTON_SIOUX = 527 [(.google.fhir.proto.fhir_original_code) = "1640-2"];
-    YANKTONAI_SIOUX = 528 [(.google.fhir.proto.fhir_original_code) = "1641-0"];
-    AK_CHIN = 529 [(.google.fhir.proto.fhir_original_code) = "1654-3"];
-    GILA_BEND = 530 [(.google.fhir.proto.fhir_original_code) = "1655-0"];
-    SAN_XAVIER = 531 [(.google.fhir.proto.fhir_original_code) = "1656-8"];
-    SELLS = 532 [(.google.fhir.proto.fhir_original_code) = "1657-6"];
-    COW_CREEK_UMPQUA = 533 [(.google.fhir.proto.fhir_original_code) = "1668-3"];
-    ALLEN_CANYON = 534 [(.google.fhir.proto.fhir_original_code) = "1671-7"];
-    UINTAH_UTE = 535 [(.google.fhir.proto.fhir_original_code) = "1672-5"];
-    UTE_MOUNTAIN_UTE = 536 [(.google.fhir.proto.fhir_original_code) = "1673-3"];
-    GAY_HEAD_WAMPANOAG = 537
-        [(.google.fhir.proto.fhir_original_code) = "1680-8"];
-    MASHPEE_WAMPANOAG = 538
-        [(.google.fhir.proto.fhir_original_code) = "1681-6"];
-    ALPINE = 539 [(.google.fhir.proto.fhir_original_code) = "1688-1"];
-    CARSON = 540 [(.google.fhir.proto.fhir_original_code) = "1689-9"];
-    DRESSLERVILLE = 541 [(.google.fhir.proto.fhir_original_code) = "1690-7"];
-    HO_CHUNK = 542 [(.google.fhir.proto.fhir_original_code) = "1697-2"];
-    NEBRASKA_WINNEBAGO = 543
-        [(.google.fhir.proto.fhir_original_code) = "1698-0"];
-    TABLE_BLUFF = 544 [(.google.fhir.proto.fhir_original_code) = "1705-3"];
-    BARRIO_LIBRE = 545 [(.google.fhir.proto.fhir_original_code) = "1712-9"];
-    PASCUA_YAQUI = 546 [(.google.fhir.proto.fhir_original_code) = "1713-7"];
-    CHUKCHANSI = 547 [(.google.fhir.proto.fhir_original_code) = "1718-6"];
-    TACHI = 548 [(.google.fhir.proto.fhir_original_code) = "1719-4"];
-    TULE_RIVER = 549 [(.google.fhir.proto.fhir_original_code) = "1720-2"];
-    COCOPAH = 550 [(.google.fhir.proto.fhir_original_code) = "1725-1"];
-    HAVASUPAI = 551 [(.google.fhir.proto.fhir_original_code) = "1726-9"];
-    HUALAPAI = 552 [(.google.fhir.proto.fhir_original_code) = "1727-7"];
-    MARICOPA = 553 [(.google.fhir.proto.fhir_original_code) = "1728-5"];
-    MOHAVE = 554 [(.google.fhir.proto.fhir_original_code) = "1729-3"];
-    QUECHAN = 555 [(.google.fhir.proto.fhir_original_code) = "1730-1"];
-    YAVAPAI = 556 [(.google.fhir.proto.fhir_original_code) = "1731-9"];
-    COAST_YUROK = 557 [(.google.fhir.proto.fhir_original_code) = "1733-5"];
-    ALASKA_INDIAN = 558 [(.google.fhir.proto.fhir_original_code) = "1737-6"];
-    ESKIMO = 559 [(.google.fhir.proto.fhir_original_code) = "1840-8"];
-    ALEUT = 560 [(.google.fhir.proto.fhir_original_code) = "1966-1"];
-    ALASKAN_ATHABASCAN = 561
-        [(.google.fhir.proto.fhir_original_code) = "1739-2"];
-    SOUTHEAST_ALASKA = 562 [(.google.fhir.proto.fhir_original_code) = "1811-9"];
-    AHTNA = 563 [(.google.fhir.proto.fhir_original_code) = "1740-0"];
-    ALATNA = 564 [(.google.fhir.proto.fhir_original_code) = "1741-8"];
-    ALEXANDER = 565 [(.google.fhir.proto.fhir_original_code) = "1742-6"];
-    ALLAKAKET = 566 [(.google.fhir.proto.fhir_original_code) = "1743-4"];
-    ALANVIK = 567 [(.google.fhir.proto.fhir_original_code) = "1744-2"];
-    ANVIK = 568 [(.google.fhir.proto.fhir_original_code) = "1745-9"];
-    ARCTIC = 569 [(.google.fhir.proto.fhir_original_code) = "1746-7"];
-    BEAVER = 570 [(.google.fhir.proto.fhir_original_code) = "1747-5"];
-    BIRCH_CREEK = 571 [(.google.fhir.proto.fhir_original_code) = "1748-3"];
-    CANTWELL = 572 [(.google.fhir.proto.fhir_original_code) = "1749-1"];
-    CHALKYITSIK = 573 [(.google.fhir.proto.fhir_original_code) = "1750-9"];
-    CHICKALOON = 574 [(.google.fhir.proto.fhir_original_code) = "1751-7"];
-    CHISTOCHINA = 575 [(.google.fhir.proto.fhir_original_code) = "1752-5"];
-    CHITINA = 576 [(.google.fhir.proto.fhir_original_code) = "1753-3"];
-    CIRCLE = 577 [(.google.fhir.proto.fhir_original_code) = "1754-1"];
-    COOK_INLET = 578 [(.google.fhir.proto.fhir_original_code) = "1755-8"];
-    COPPER_CENTER = 579 [(.google.fhir.proto.fhir_original_code) = "1756-6"];
-    COPPER_RIVER = 580 [(.google.fhir.proto.fhir_original_code) = "1757-4"];
-    DOT_LAKE = 581 [(.google.fhir.proto.fhir_original_code) = "1758-2"];
-    DOYON = 582 [(.google.fhir.proto.fhir_original_code) = "1759-0"];
-    EAGLE = 583 [(.google.fhir.proto.fhir_original_code) = "1760-8"];
-    EKLUTNA = 584 [(.google.fhir.proto.fhir_original_code) = "1761-6"];
-    EVANSVILLE = 585 [(.google.fhir.proto.fhir_original_code) = "1762-4"];
-    FORT_YUKON = 586 [(.google.fhir.proto.fhir_original_code) = "1763-2"];
-    GAKONA = 587 [(.google.fhir.proto.fhir_original_code) = "1764-0"];
-    GALENA = 588 [(.google.fhir.proto.fhir_original_code) = "1765-7"];
-    GRAYLING = 589 [(.google.fhir.proto.fhir_original_code) = "1766-5"];
-    GULKANA = 590 [(.google.fhir.proto.fhir_original_code) = "1767-3"];
-    HEALY_LAKE = 591 [(.google.fhir.proto.fhir_original_code) = "1768-1"];
-    HOLY_CROSS = 592 [(.google.fhir.proto.fhir_original_code) = "1769-9"];
-    HUGHES = 593 [(.google.fhir.proto.fhir_original_code) = "1770-7"];
-    HUSLIA = 594 [(.google.fhir.proto.fhir_original_code) = "1771-5"];
-    ILIAMNA = 595 [(.google.fhir.proto.fhir_original_code) = "1772-3"];
-    KALTAG = 596 [(.google.fhir.proto.fhir_original_code) = "1773-1"];
-    KLUTI_KAAH = 597 [(.google.fhir.proto.fhir_original_code) = "1774-9"];
-    KNIK = 598 [(.google.fhir.proto.fhir_original_code) = "1775-6"];
-    KOYUKUK = 599 [(.google.fhir.proto.fhir_original_code) = "1776-4"];
-    LAKE_MINCHUMINA = 600 [(.google.fhir.proto.fhir_original_code) = "1777-2"];
-    LIME = 601 [(.google.fhir.proto.fhir_original_code) = "1778-0"];
-    MCGRATH = 602 [(.google.fhir.proto.fhir_original_code) = "1779-8"];
-    MANLEY_HOT_SPRINGS = 603
-        [(.google.fhir.proto.fhir_original_code) = "1780-6"];
-    MENTASTA_LAKE = 604 [(.google.fhir.proto.fhir_original_code) = "1781-4"];
-    MINTO = 605 [(.google.fhir.proto.fhir_original_code) = "1782-2"];
-    NENANA = 606 [(.google.fhir.proto.fhir_original_code) = "1783-0"];
-    NIKOLAI = 607 [(.google.fhir.proto.fhir_original_code) = "1784-8"];
-    NINILCHIK = 608 [(.google.fhir.proto.fhir_original_code) = "1785-5"];
-    NONDALTON = 609 [(.google.fhir.proto.fhir_original_code) = "1786-3"];
-    NORTHWAY = 610 [(.google.fhir.proto.fhir_original_code) = "1787-1"];
-    NULATO = 611 [(.google.fhir.proto.fhir_original_code) = "1788-9"];
-    PEDRO_BAY = 612 [(.google.fhir.proto.fhir_original_code) = "1789-7"];
-    RAMPART = 613 [(.google.fhir.proto.fhir_original_code) = "1790-5"];
-    RUBY = 614 [(.google.fhir.proto.fhir_original_code) = "1791-3"];
-    SALAMATOF = 615 [(.google.fhir.proto.fhir_original_code) = "1792-1"];
-    SELDOVIA = 616 [(.google.fhir.proto.fhir_original_code) = "1793-9"];
-    SLANA = 617 [(.google.fhir.proto.fhir_original_code) = "1794-7"];
-    SHAGELUK = 618 [(.google.fhir.proto.fhir_original_code) = "1795-4"];
-    STEVENS = 619 [(.google.fhir.proto.fhir_original_code) = "1796-2"];
-    STONY_RIVER = 620 [(.google.fhir.proto.fhir_original_code) = "1797-0"];
-    TAKOTNA = 621 [(.google.fhir.proto.fhir_original_code) = "1798-8"];
-    TANACROSS = 622 [(.google.fhir.proto.fhir_original_code) = "1799-6"];
-    TANAINA = 623 [(.google.fhir.proto.fhir_original_code) = "1800-2"];
-    TANANA = 624 [(.google.fhir.proto.fhir_original_code) = "1801-0"];
-    TANANA_CHIEFS = 625 [(.google.fhir.proto.fhir_original_code) = "1802-8"];
-    TAZLINA = 626 [(.google.fhir.proto.fhir_original_code) = "1803-6"];
-    TELIDA = 627 [(.google.fhir.proto.fhir_original_code) = "1804-4"];
-    TETLIN = 628 [(.google.fhir.proto.fhir_original_code) = "1805-1"];
-    TOK = 629 [(.google.fhir.proto.fhir_original_code) = "1806-9"];
-    TYONEK = 630 [(.google.fhir.proto.fhir_original_code) = "1807-7"];
-    VENETIE = 631 [(.google.fhir.proto.fhir_original_code) = "1808-5"];
-    WISEMAN = 632 [(.google.fhir.proto.fhir_original_code) = "1809-3"];
-    TLINGIT_HAIDA = 633 [(.google.fhir.proto.fhir_original_code) = "1813-5"];
-    TSIMSHIAN = 634 [(.google.fhir.proto.fhir_original_code) = "1837-4"];
-    ANGOON = 635 [(.google.fhir.proto.fhir_original_code) = "1814-3"];
-    CENTRAL_COUNCIL_OF_TLINGIT_AND_HAIDA_TRIBES = 636
-        [(.google.fhir.proto.fhir_original_code) = "1815-0"];
-    CHILKAT = 637 [(.google.fhir.proto.fhir_original_code) = "1816-8"];
-    CHILKOOT = 638 [(.google.fhir.proto.fhir_original_code) = "1817-6"];
-    CRAIG = 639 [(.google.fhir.proto.fhir_original_code) = "1818-4"];
-    DOUGLAS = 640 [(.google.fhir.proto.fhir_original_code) = "1819-2"];
-    HAIDA = 641 [(.google.fhir.proto.fhir_original_code) = "1820-0"];
-    HOONAH = 642 [(.google.fhir.proto.fhir_original_code) = "1821-8"];
-    HYDABURG = 643 [(.google.fhir.proto.fhir_original_code) = "1822-6"];
-    KAKE = 644 [(.google.fhir.proto.fhir_original_code) = "1823-4"];
-    KASAAN = 645 [(.google.fhir.proto.fhir_original_code) = "1824-2"];
-    KENAITZE = 646 [(.google.fhir.proto.fhir_original_code) = "1825-9"];
-    KETCHIKAN = 647 [(.google.fhir.proto.fhir_original_code) = "1826-7"];
-    KLAWOCK = 648 [(.google.fhir.proto.fhir_original_code) = "1827-5"];
-    PELICAN = 649 [(.google.fhir.proto.fhir_original_code) = "1828-3"];
-    PETERSBURG = 650 [(.google.fhir.proto.fhir_original_code) = "1829-1"];
-    SAXMAN = 651 [(.google.fhir.proto.fhir_original_code) = "1830-9"];
-    SITKA = 652 [(.google.fhir.proto.fhir_original_code) = "1831-7"];
-    TENAKEE_SPRINGS = 653 [(.google.fhir.proto.fhir_original_code) = "1832-5"];
-    TLINGIT = 654 [(.google.fhir.proto.fhir_original_code) = "1833-3"];
-    WRANGELL = 655 [(.google.fhir.proto.fhir_original_code) = "1834-1"];
-    YAKUTAT = 656 [(.google.fhir.proto.fhir_original_code) = "1835-8"];
-    METLAKATLA = 657 [(.google.fhir.proto.fhir_original_code) = "1838-2"];
-    GREENLAND_ESKIMO = 658 [(.google.fhir.proto.fhir_original_code) = "1842-4"];
-    INUPIAT_ESKIMO = 659 [(.google.fhir.proto.fhir_original_code) = "1844-0"];
-    SIBERIAN_ESKIMO = 660 [(.google.fhir.proto.fhir_original_code) = "1891-1"];
-    YUPIK_ESKIMO = 661 [(.google.fhir.proto.fhir_original_code) = "1896-0"];
-    AMBLER = 662 [(.google.fhir.proto.fhir_original_code) = "1845-7"];
-    ANAKTUVUK = 663 [(.google.fhir.proto.fhir_original_code) = "1846-5"];
-    ANAKTUVUK_PASS = 664 [(.google.fhir.proto.fhir_original_code) = "1847-3"];
-    ARCTIC_SLOPE_INUPIAT = 665
-        [(.google.fhir.proto.fhir_original_code) = "1848-1"];
-    ARCTIC_SLOPE_CORPORATION = 666
-        [(.google.fhir.proto.fhir_original_code) = "1849-9"];
-    ATQASUK = 667 [(.google.fhir.proto.fhir_original_code) = "1850-7"];
-    BARROW = 668 [(.google.fhir.proto.fhir_original_code) = "1851-5"];
-    BERING_STRAITS_INUPIAT = 669
-        [(.google.fhir.proto.fhir_original_code) = "1852-3"];
-    BREVIG_MISSION = 670 [(.google.fhir.proto.fhir_original_code) = "1853-1"];
-    BUCKLAND = 671 [(.google.fhir.proto.fhir_original_code) = "1854-9"];
-    CHINIK = 672 [(.google.fhir.proto.fhir_original_code) = "1855-6"];
-    COUNCIL = 673 [(.google.fhir.proto.fhir_original_code) = "1856-4"];
-    DEERING = 674 [(.google.fhir.proto.fhir_original_code) = "1857-2"];
-    ELIM = 675 [(.google.fhir.proto.fhir_original_code) = "1858-0"];
-    GOLOVIN = 676 [(.google.fhir.proto.fhir_original_code) = "1859-8"];
-    INALIK_DIOMEDE = 677 [(.google.fhir.proto.fhir_original_code) = "1860-6"];
-    INUPIAQ = 678 [(.google.fhir.proto.fhir_original_code) = "1861-4"];
-    KAKTOVIK = 679 [(.google.fhir.proto.fhir_original_code) = "1862-2"];
-    KAWERAK = 680 [(.google.fhir.proto.fhir_original_code) = "1863-0"];
-    KIANA = 681 [(.google.fhir.proto.fhir_original_code) = "1864-8"];
-    KIVALINA = 682 [(.google.fhir.proto.fhir_original_code) = "1865-5"];
-    KOBUK = 683 [(.google.fhir.proto.fhir_original_code) = "1866-3"];
-    KOTZEBUE = 684 [(.google.fhir.proto.fhir_original_code) = "1867-1"];
-    KOYUK = 685 [(.google.fhir.proto.fhir_original_code) = "1868-9"];
-    KWIGUK = 686 [(.google.fhir.proto.fhir_original_code) = "1869-7"];
-    MAUNELUK_INUPIAT = 687 [(.google.fhir.proto.fhir_original_code) = "1870-5"];
-    NANA_INUPIAT = 688 [(.google.fhir.proto.fhir_original_code) = "1871-3"];
-    NOATAK = 689 [(.google.fhir.proto.fhir_original_code) = "1872-1"];
-    NOME = 690 [(.google.fhir.proto.fhir_original_code) = "1873-9"];
-    NOORVIK = 691 [(.google.fhir.proto.fhir_original_code) = "1874-7"];
-    NUIQSUT = 692 [(.google.fhir.proto.fhir_original_code) = "1875-4"];
-    POINT_HOPE = 693 [(.google.fhir.proto.fhir_original_code) = "1876-2"];
-    POINT_LAY = 694 [(.google.fhir.proto.fhir_original_code) = "1877-0"];
-    SELAWIK = 695 [(.google.fhir.proto.fhir_original_code) = "1878-8"];
-    SHAKTOOLIK = 696 [(.google.fhir.proto.fhir_original_code) = "1879-6"];
-    SHISHMAREF = 697 [(.google.fhir.proto.fhir_original_code) = "1880-4"];
-    SHUNGNAK = 698 [(.google.fhir.proto.fhir_original_code) = "1881-2"];
-    SOLOMON = 699 [(.google.fhir.proto.fhir_original_code) = "1882-0"];
-    TELLER = 700 [(.google.fhir.proto.fhir_original_code) = "1883-8"];
-    UNALAKLEET = 701 [(.google.fhir.proto.fhir_original_code) = "1884-6"];
-    WAINWRIGHT = 702 [(.google.fhir.proto.fhir_original_code) = "1885-3"];
-    WALES = 703 [(.google.fhir.proto.fhir_original_code) = "1886-1"];
-    WHITE_MOUNTAIN = 704 [(.google.fhir.proto.fhir_original_code) = "1887-9"];
-    WHITE_MOUNTAIN_INUPIAT = 705
-        [(.google.fhir.proto.fhir_original_code) = "1888-7"];
-    MARYS_IGLOO = 706 [(.google.fhir.proto.fhir_original_code) = "1889-5"];
-    GAMBELL = 707 [(.google.fhir.proto.fhir_original_code) = "1892-9"];
-    SAVOONGA = 708 [(.google.fhir.proto.fhir_original_code) = "1893-7"];
-    SIBERIAN_YUPIK = 709 [(.google.fhir.proto.fhir_original_code) = "1894-5"];
-    AKIACHAK = 710 [(.google.fhir.proto.fhir_original_code) = "1897-8"];
-    AKIAK = 711 [(.google.fhir.proto.fhir_original_code) = "1898-6"];
-    ALAKANUK = 712 [(.google.fhir.proto.fhir_original_code) = "1899-4"];
-    ALEKNAGIK = 713 [(.google.fhir.proto.fhir_original_code) = "1900-0"];
-    ANDREAFSKY = 714 [(.google.fhir.proto.fhir_original_code) = "1901-8"];
-    ANIAK = 715 [(.google.fhir.proto.fhir_original_code) = "1902-6"];
-    ATMAUTLUAK = 716 [(.google.fhir.proto.fhir_original_code) = "1903-4"];
-    BETHEL = 717 [(.google.fhir.proto.fhir_original_code) = "1904-2"];
-    BILL_MOORES_SLOUGH = 718
-        [(.google.fhir.proto.fhir_original_code) = "1905-9"];
-    BRISTOL_BAY_YUPIK = 719
-        [(.google.fhir.proto.fhir_original_code) = "1906-7"];
-    CALISTA_YUPIK = 720 [(.google.fhir.proto.fhir_original_code) = "1907-5"];
-    CHEFORNAK = 721 [(.google.fhir.proto.fhir_original_code) = "1908-3"];
-    CHEVAK = 722 [(.google.fhir.proto.fhir_original_code) = "1909-1"];
-    CHUATHBALUK = 723 [(.google.fhir.proto.fhir_original_code) = "1910-9"];
-    CLARKS_POINT = 724 [(.google.fhir.proto.fhir_original_code) = "1911-7"];
-    CROOKED_CREEK = 725 [(.google.fhir.proto.fhir_original_code) = "1912-5"];
-    DILLINGHAM = 726 [(.google.fhir.proto.fhir_original_code) = "1913-3"];
-    EEK = 727 [(.google.fhir.proto.fhir_original_code) = "1914-1"];
-    EKUK = 728 [(.google.fhir.proto.fhir_original_code) = "1915-8"];
-    EKWOK = 729 [(.google.fhir.proto.fhir_original_code) = "1916-6"];
-    EMMONAK = 730 [(.google.fhir.proto.fhir_original_code) = "1917-4"];
-    GOODNEWS_BAY = 731 [(.google.fhir.proto.fhir_original_code) = "1918-2"];
-    HOOPER_BAY = 732 [(.google.fhir.proto.fhir_original_code) = "1919-0"];
-    IQURMUIT_RUSSIAN_MISSION = 733
-        [(.google.fhir.proto.fhir_original_code) = "1920-8"];
-    KALSKAG = 734 [(.google.fhir.proto.fhir_original_code) = "1921-6"];
-    KASIGLUK = 735 [(.google.fhir.proto.fhir_original_code) = "1922-4"];
-    KIPNUK = 736 [(.google.fhir.proto.fhir_original_code) = "1923-2"];
-    KOLIGANEK = 737 [(.google.fhir.proto.fhir_original_code) = "1924-0"];
-    KONGIGANAK = 738 [(.google.fhir.proto.fhir_original_code) = "1925-7"];
-    KOTLIK = 739 [(.google.fhir.proto.fhir_original_code) = "1926-5"];
-    KWETHLUK = 740 [(.google.fhir.proto.fhir_original_code) = "1927-3"];
-    KWIGILLINGOK = 741 [(.google.fhir.proto.fhir_original_code) = "1928-1"];
-    LEVELOCK = 742 [(.google.fhir.proto.fhir_original_code) = "1929-9"];
-    LOWER_KALSKAG = 743 [(.google.fhir.proto.fhir_original_code) = "1930-7"];
-    MANOKOTAK = 744 [(.google.fhir.proto.fhir_original_code) = "1931-5"];
-    MARSHALL = 745 [(.google.fhir.proto.fhir_original_code) = "1932-3"];
-    MEKORYUK = 746 [(.google.fhir.proto.fhir_original_code) = "1933-1"];
-    MOUNTAIN_VILLAGE = 747 [(.google.fhir.proto.fhir_original_code) = "1934-9"];
-    NAKNEK = 748 [(.google.fhir.proto.fhir_original_code) = "1935-6"];
-    NAPAUMUTE = 749 [(.google.fhir.proto.fhir_original_code) = "1936-4"];
-    NAPAKIAK = 750 [(.google.fhir.proto.fhir_original_code) = "1937-2"];
-    NAPASKIAK = 751 [(.google.fhir.proto.fhir_original_code) = "1938-0"];
-    NEWHALEN = 752 [(.google.fhir.proto.fhir_original_code) = "1939-8"];
-    NEW_STUYAHOK = 753 [(.google.fhir.proto.fhir_original_code) = "1940-6"];
-    NEWTOK = 754 [(.google.fhir.proto.fhir_original_code) = "1941-4"];
-    NIGHTMUTE = 755 [(.google.fhir.proto.fhir_original_code) = "1942-2"];
-    NUNAPITCHUKV = 756 [(.google.fhir.proto.fhir_original_code) = "1943-0"];
-    OSCARVILLE = 757 [(.google.fhir.proto.fhir_original_code) = "1944-8"];
-    PILOT_STATION = 758 [(.google.fhir.proto.fhir_original_code) = "1945-5"];
-    PITKAS_POINT = 759 [(.google.fhir.proto.fhir_original_code) = "1946-3"];
-    PLATINUM = 760 [(.google.fhir.proto.fhir_original_code) = "1947-1"];
-    PORTAGE_CREEK = 761 [(.google.fhir.proto.fhir_original_code) = "1948-9"];
-    QUINHAGAK = 762 [(.google.fhir.proto.fhir_original_code) = "1949-7"];
-    RED_DEVIL = 763 [(.google.fhir.proto.fhir_original_code) = "1950-5"];
-    ST_MICHAEL = 764 [(.google.fhir.proto.fhir_original_code) = "1951-3"];
-    SCAMMON_BAY = 765 [(.google.fhir.proto.fhir_original_code) = "1952-1"];
-    SHELDONS_POINT = 766 [(.google.fhir.proto.fhir_original_code) = "1953-9"];
-    SLEETMUTE = 767 [(.google.fhir.proto.fhir_original_code) = "1954-7"];
-    STEBBINS = 768 [(.google.fhir.proto.fhir_original_code) = "1955-4"];
-    TOGIAK = 769 [(.google.fhir.proto.fhir_original_code) = "1956-2"];
-    TOKSOOK = 770 [(.google.fhir.proto.fhir_original_code) = "1957-0"];
-    TULUKSKAK = 771 [(.google.fhir.proto.fhir_original_code) = "1958-8"];
-    TUNTUTULIAK = 772 [(.google.fhir.proto.fhir_original_code) = "1959-6"];
-    TUNUNAK = 773 [(.google.fhir.proto.fhir_original_code) = "1960-4"];
-    TWIN_HILLS = 774 [(.google.fhir.proto.fhir_original_code) = "1961-2"];
-    GEORGETOWN_YUPIK_ESKIMO = 775
-        [(.google.fhir.proto.fhir_original_code) = "1962-0"];
-    ST_MARYS = 776 [(.google.fhir.proto.fhir_original_code) = "1963-8"];
-    UMKUMIATE = 777 [(.google.fhir.proto.fhir_original_code) = "1964-6"];
-    ALUTIIQ_ALEUT = 778 [(.google.fhir.proto.fhir_original_code) = "1968-7"];
-    BRISTOL_BAY_ALEUT = 779
-        [(.google.fhir.proto.fhir_original_code) = "1972-9"];
-    CHUGACH_ALEUT = 780 [(.google.fhir.proto.fhir_original_code) = "1984-4"];
-    EYAK = 781 [(.google.fhir.proto.fhir_original_code) = "1990-1"];
-    KONIAG_ALEUT = 782 [(.google.fhir.proto.fhir_original_code) = "1992-7"];
-    SUGPIAQ = 783 [(.google.fhir.proto.fhir_original_code) = "2002-4"];
-    SUQPIGAQ = 784 [(.google.fhir.proto.fhir_original_code) = "2004-0"];
-    UNANGAN_ALEUT = 785 [(.google.fhir.proto.fhir_original_code) = "2006-5"];
-    TATITLEK = 786 [(.google.fhir.proto.fhir_original_code) = "1969-5"];
-    UGASHIK = 787 [(.google.fhir.proto.fhir_original_code) = "1970-3"];
-    CHIGNIK = 788 [(.google.fhir.proto.fhir_original_code) = "1973-7"];
-    CHIGNIK_LAKE = 789 [(.google.fhir.proto.fhir_original_code) = "1974-5"];
-    EGEGIK = 790 [(.google.fhir.proto.fhir_original_code) = "1975-2"];
-    IGIUGIG = 791 [(.google.fhir.proto.fhir_original_code) = "1976-0"];
-    IVANOF_BAY = 792 [(.google.fhir.proto.fhir_original_code) = "1977-8"];
-    KING_SALMON = 793 [(.google.fhir.proto.fhir_original_code) = "1978-6"];
-    KOKHANOK = 794 [(.google.fhir.proto.fhir_original_code) = "1979-4"];
-    PERRYVILLE = 795 [(.google.fhir.proto.fhir_original_code) = "1980-2"];
-    PILOT_POINT = 796 [(.google.fhir.proto.fhir_original_code) = "1981-0"];
-    PORT_HEIDEN = 797 [(.google.fhir.proto.fhir_original_code) = "1982-8"];
-    CHENEGA = 798 [(.google.fhir.proto.fhir_original_code) = "1985-1"];
-    CHUGACH_CORPORATION = 799
-        [(.google.fhir.proto.fhir_original_code) = "1986-9"];
-    ENGLISH_BAY = 800 [(.google.fhir.proto.fhir_original_code) = "1987-7"];
-    PORT_GRAHAM = 801 [(.google.fhir.proto.fhir_original_code) = "1988-5"];
-    AKHIOK = 802 [(.google.fhir.proto.fhir_original_code) = "1993-5"];
-    AGDAAGUX = 803 [(.google.fhir.proto.fhir_original_code) = "1994-3"];
-    KARLUK = 804 [(.google.fhir.proto.fhir_original_code) = "1995-0"];
-    KODIAK = 805 [(.google.fhir.proto.fhir_original_code) = "1996-8"];
-    LARSEN_BAY = 806 [(.google.fhir.proto.fhir_original_code) = "1997-6"];
-    OLD_HARBOR = 807 [(.google.fhir.proto.fhir_original_code) = "1998-4"];
-    OUZINKIE = 808 [(.google.fhir.proto.fhir_original_code) = "1999-2"];
-    PORT_LIONS = 809 [(.google.fhir.proto.fhir_original_code) = "2000-8"];
-    AKUTAN = 810 [(.google.fhir.proto.fhir_original_code) = "2007-3"];
-    ALEUT_CORPORATION = 811
-        [(.google.fhir.proto.fhir_original_code) = "2008-1"];
-    ALEUTIAN = 812 [(.google.fhir.proto.fhir_original_code) = "2009-9"];
-    ALEUTIAN_ISLANDER = 813
-        [(.google.fhir.proto.fhir_original_code) = "2010-7"];
-    ATKA = 814 [(.google.fhir.proto.fhir_original_code) = "2011-5"];
-    BELKOFSKI = 815 [(.google.fhir.proto.fhir_original_code) = "2012-3"];
-    CHIGNIK_LAGOON = 816 [(.google.fhir.proto.fhir_original_code) = "2013-1"];
-    KING_COVE = 817 [(.google.fhir.proto.fhir_original_code) = "2014-9"];
-    FALSE_PASS = 818 [(.google.fhir.proto.fhir_original_code) = "2015-6"];
-    NELSON_LAGOON = 819 [(.google.fhir.proto.fhir_original_code) = "2016-4"];
-    NIKOLSKI = 820 [(.google.fhir.proto.fhir_original_code) = "2017-2"];
-    PAULOFF_HARBOR = 821 [(.google.fhir.proto.fhir_original_code) = "2018-0"];
-    QAGAN_TOYAGUNGIN = 822 [(.google.fhir.proto.fhir_original_code) = "2019-8"];
-    QAWALANGIN = 823 [(.google.fhir.proto.fhir_original_code) = "2020-6"];
-    ST_GEORGE = 824 [(.google.fhir.proto.fhir_original_code) = "2021-4"];
-    ST_PAUL = 825 [(.google.fhir.proto.fhir_original_code) = "2022-2"];
-    SAND_POINT = 826 [(.google.fhir.proto.fhir_original_code) = "2023-0"];
-    SOUTH_NAKNEK = 827 [(.google.fhir.proto.fhir_original_code) = "2024-8"];
-    UNALASKA = 828 [(.google.fhir.proto.fhir_original_code) = "2025-5"];
-    UNGA = 829 [(.google.fhir.proto.fhir_original_code) = "2026-3"];
-    ASIAN = 830 [(.google.fhir.proto.fhir_original_code) = "2028-9"];
-    ASIAN_INDIAN = 831 [(.google.fhir.proto.fhir_original_code) = "2029-7"];
-    BANGLADESHI = 832 [(.google.fhir.proto.fhir_original_code) = "2030-5"];
-    BHUTANESE = 833 [(.google.fhir.proto.fhir_original_code) = "2031-3"];
-    BURMESE = 834 [(.google.fhir.proto.fhir_original_code) = "2032-1"];
-    CAMBODIAN = 835 [(.google.fhir.proto.fhir_original_code) = "2033-9"];
-    CHINESE = 836 [(.google.fhir.proto.fhir_original_code) = "2034-7"];
-    TAIWANESE = 837 [(.google.fhir.proto.fhir_original_code) = "2035-4"];
-    FILIPINO = 838 [(.google.fhir.proto.fhir_original_code) = "2036-2"];
-    HMONG = 839 [(.google.fhir.proto.fhir_original_code) = "2037-0"];
-    INDONESIAN = 840 [(.google.fhir.proto.fhir_original_code) = "2038-8"];
-    JAPANESE = 841 [(.google.fhir.proto.fhir_original_code) = "2039-6"];
-    KOREAN = 842 [(.google.fhir.proto.fhir_original_code) = "2040-4"];
-    LAOTIAN = 843 [(.google.fhir.proto.fhir_original_code) = "2041-2"];
-    MALAYSIAN = 844 [(.google.fhir.proto.fhir_original_code) = "2042-0"];
-    OKINAWAN = 845 [(.google.fhir.proto.fhir_original_code) = "2043-8"];
-    PAKISTANI = 846 [(.google.fhir.proto.fhir_original_code) = "2044-6"];
-    SRI_LANKAN = 847 [(.google.fhir.proto.fhir_original_code) = "2045-3"];
-    THAI = 848 [(.google.fhir.proto.fhir_original_code) = "2046-1"];
-    VIETNAMESE = 849 [(.google.fhir.proto.fhir_original_code) = "2047-9"];
-    IWO_JIMAN = 850 [(.google.fhir.proto.fhir_original_code) = "2048-7"];
-    MALDIVIAN = 851 [(.google.fhir.proto.fhir_original_code) = "2049-5"];
-    NEPALESE = 852 [(.google.fhir.proto.fhir_original_code) = "2050-3"];
-    SINGAPOREAN = 853 [(.google.fhir.proto.fhir_original_code) = "2051-1"];
-    MADAGASCAR = 854 [(.google.fhir.proto.fhir_original_code) = "2052-9"];
-    BLACK_OR_AFRICAN_AMERICAN = 855
-        [(.google.fhir.proto.fhir_original_code) = "2054-5"];
-    BLACK = 856 [(.google.fhir.proto.fhir_original_code) = "2056-0"];
-    AFRICAN_AMERICAN = 857 [(.google.fhir.proto.fhir_original_code) = "2058-6"];
-    AFRICAN = 858 [(.google.fhir.proto.fhir_original_code) = "2060-2"];
-    BAHAMIAN = 859 [(.google.fhir.proto.fhir_original_code) = "2067-7"];
-    BARBADIAN = 860 [(.google.fhir.proto.fhir_original_code) = "2068-5"];
-    DOMINICAN_2069_3 = 861 [(.google.fhir.proto.fhir_original_code) = "2069-3"];
-    DOMINICA_ISLANDER = 862
-        [(.google.fhir.proto.fhir_original_code) = "2070-1"];
-    HAITIAN = 863 [(.google.fhir.proto.fhir_original_code) = "2071-9"];
-    JAMAICAN = 864 [(.google.fhir.proto.fhir_original_code) = "2072-7"];
-    TOBAGOAN = 865 [(.google.fhir.proto.fhir_original_code) = "2073-5"];
-    TRINIDADIAN = 866 [(.google.fhir.proto.fhir_original_code) = "2074-3"];
-    WEST_INDIAN = 867 [(.google.fhir.proto.fhir_original_code) = "2075-0"];
-    BOTSWANAN = 868 [(.google.fhir.proto.fhir_original_code) = "2061-0"];
-    ETHIOPIAN = 869 [(.google.fhir.proto.fhir_original_code) = "2062-8"];
-    LIBERIAN = 870 [(.google.fhir.proto.fhir_original_code) = "2063-6"];
-    NAMIBIAN = 871 [(.google.fhir.proto.fhir_original_code) = "2064-4"];
-    NIGERIAN = 872 [(.google.fhir.proto.fhir_original_code) = "2065-1"];
-    ZAIREAN = 873 [(.google.fhir.proto.fhir_original_code) = "2066-9"];
-    NATIVE_HAWAIIAN_OR_OTHER_PACIFIC_ISLANDER = 874
-        [(.google.fhir.proto.fhir_original_code) = "2076-8"];
-    POLYNESIAN = 875 [(.google.fhir.proto.fhir_original_code) = "2078-4"];
-    MICRONESIAN = 876 [(.google.fhir.proto.fhir_original_code) = "2085-9"];
-    MELANESIAN = 877 [(.google.fhir.proto.fhir_original_code) = "2100-6"];
-    OTHER_PACIFIC_ISLANDER = 878
-        [(.google.fhir.proto.fhir_original_code) = "2500-7"];
-    NATIVE_HAWAIIAN = 879 [(.google.fhir.proto.fhir_original_code) = "2079-2"];
-    SAMOAN = 880 [(.google.fhir.proto.fhir_original_code) = "2080-0"];
-    TAHITIAN = 881 [(.google.fhir.proto.fhir_original_code) = "2081-8"];
-    TONGAN = 882 [(.google.fhir.proto.fhir_original_code) = "2082-6"];
-    TOKELAUAN = 883 [(.google.fhir.proto.fhir_original_code) = "2083-4"];
-    GUAMANIAN_OR_CHAMORRO = 884
-        [(.google.fhir.proto.fhir_original_code) = "2086-7"];
-    GUAMANIAN = 885 [(.google.fhir.proto.fhir_original_code) = "2087-5"];
-    CHAMORRO = 886 [(.google.fhir.proto.fhir_original_code) = "2088-3"];
-    MARIANA_ISLANDER = 887 [(.google.fhir.proto.fhir_original_code) = "2089-1"];
-    MARSHALLESE = 888 [(.google.fhir.proto.fhir_original_code) = "2090-9"];
-    PALAUAN = 889 [(.google.fhir.proto.fhir_original_code) = "2091-7"];
-    CAROLINIAN = 890 [(.google.fhir.proto.fhir_original_code) = "2092-5"];
-    KOSRAEAN = 891 [(.google.fhir.proto.fhir_original_code) = "2093-3"];
-    POHNPEIAN = 892 [(.google.fhir.proto.fhir_original_code) = "2094-1"];
-    SAIPANESE = 893 [(.google.fhir.proto.fhir_original_code) = "2095-8"];
-    KIRIBATI = 894 [(.google.fhir.proto.fhir_original_code) = "2096-6"];
-    CHUUKESE = 895 [(.google.fhir.proto.fhir_original_code) = "2097-4"];
-    YAPESE = 896 [(.google.fhir.proto.fhir_original_code) = "2098-2"];
-    FIJIAN = 897 [(.google.fhir.proto.fhir_original_code) = "2101-4"];
-    PAPUA_NEW_GUINEAN = 898
-        [(.google.fhir.proto.fhir_original_code) = "2102-2"];
-    SOLOMON_ISLANDER = 899 [(.google.fhir.proto.fhir_original_code) = "2103-0"];
-    NEW_HEBRIDES = 900 [(.google.fhir.proto.fhir_original_code) = "2104-8"];
-    WHITE = 901 [(.google.fhir.proto.fhir_original_code) = "2106-3"];
-    EUROPEAN = 902 [(.google.fhir.proto.fhir_original_code) = "2108-9"];
-    MIDDLE_EASTERN_OR_NORTH_AFRICAN = 903
-        [(.google.fhir.proto.fhir_original_code) = "2118-8"];
-    ARAB = 904 [(.google.fhir.proto.fhir_original_code) = "2129-5"];
-    ARMENIAN = 905 [(.google.fhir.proto.fhir_original_code) = "2109-7"];
-    ENGLISH = 906 [(.google.fhir.proto.fhir_original_code) = "2110-5"];
-    FRENCH = 907 [(.google.fhir.proto.fhir_original_code) = "2111-3"];
-    GERMAN = 908 [(.google.fhir.proto.fhir_original_code) = "2112-1"];
-    IRISH = 909 [(.google.fhir.proto.fhir_original_code) = "2113-9"];
-    ITALIAN = 910 [(.google.fhir.proto.fhir_original_code) = "2114-7"];
-    POLISH = 911 [(.google.fhir.proto.fhir_original_code) = "2115-4"];
-    SCOTTISH = 912 [(.google.fhir.proto.fhir_original_code) = "2116-2"];
-    ASSYRIAN = 913 [(.google.fhir.proto.fhir_original_code) = "2119-6"];
-    EGYPTIAN = 914 [(.google.fhir.proto.fhir_original_code) = "2120-4"];
-    IRANIAN = 915 [(.google.fhir.proto.fhir_original_code) = "2121-2"];
-    IRAQI = 916 [(.google.fhir.proto.fhir_original_code) = "2122-0"];
-    LEBANESE = 917 [(.google.fhir.proto.fhir_original_code) = "2123-8"];
-    PALESTINIAN = 918 [(.google.fhir.proto.fhir_original_code) = "2124-6"];
-    SYRIAN = 919 [(.google.fhir.proto.fhir_original_code) = "2125-3"];
-    AFGHANISTANI = 920 [(.google.fhir.proto.fhir_original_code) = "2126-1"];
-    ISRAEILI = 921 [(.google.fhir.proto.fhir_original_code) = "2127-9"];
-    OTHER_RACE = 922 [(.google.fhir.proto.fhir_original_code) = "2131-1"];
-    ETHNICITY = 923 [(.google.fhir.proto.fhir_original_code) = "2133-7"];
-    HISPANIC_OR_LATINO = 924
-        [(.google.fhir.proto.fhir_original_code) = "2135-2"];
-    SPANIARD = 925 [(.google.fhir.proto.fhir_original_code) = "2137-8"];
-    MEXICAN = 926 [(.google.fhir.proto.fhir_original_code) = "2148-5"];
-    CENTRAL_AMERICAN = 927 [(.google.fhir.proto.fhir_original_code) = "2155-0"];
-    SOUTH_AMERICAN = 928 [(.google.fhir.proto.fhir_original_code) = "2165-9"];
-    LATIN_AMERICAN = 929 [(.google.fhir.proto.fhir_original_code) = "2178-2"];
-    PUERTO_RICAN = 930 [(.google.fhir.proto.fhir_original_code) = "2180-8"];
-    CUBAN = 931 [(.google.fhir.proto.fhir_original_code) = "2182-4"];
-    DOMINICAN_2184_0 = 932 [(.google.fhir.proto.fhir_original_code) = "2184-0"];
-    ANDALUSIAN = 933 [(.google.fhir.proto.fhir_original_code) = "2138-6"];
-    ASTURIAN = 934 [(.google.fhir.proto.fhir_original_code) = "2139-4"];
-    CASTILLIAN = 935 [(.google.fhir.proto.fhir_original_code) = "2140-2"];
-    CATALONIAN = 936 [(.google.fhir.proto.fhir_original_code) = "2141-0"];
-    BELEARIC_ISLANDER = 937
-        [(.google.fhir.proto.fhir_original_code) = "2142-8"];
-    GALLEGO = 938 [(.google.fhir.proto.fhir_original_code) = "2143-6"];
-    VALENCIAN = 939 [(.google.fhir.proto.fhir_original_code) = "2144-4"];
-    CANARIAN = 940 [(.google.fhir.proto.fhir_original_code) = "2145-1"];
-    SPANISH_BASQUE = 941 [(.google.fhir.proto.fhir_original_code) = "2146-9"];
-    MEXICAN_AMERICAN = 942 [(.google.fhir.proto.fhir_original_code) = "2149-3"];
-    MEXICANO = 943 [(.google.fhir.proto.fhir_original_code) = "2150-1"];
-    CHICANO = 944 [(.google.fhir.proto.fhir_original_code) = "2151-9"];
-    LA_RAZA = 945 [(.google.fhir.proto.fhir_original_code) = "2152-7"];
-    MEXICAN_AMERICAN_INDIAN_2153_5 = 946
-        [(.google.fhir.proto.fhir_original_code) = "2153-5"];
-    COSTA_RICAN = 947 [(.google.fhir.proto.fhir_original_code) = "2156-8"];
-    GUATEMALAN = 948 [(.google.fhir.proto.fhir_original_code) = "2157-6"];
-    HONDURAN = 949 [(.google.fhir.proto.fhir_original_code) = "2158-4"];
-    NICARAGUAN = 950 [(.google.fhir.proto.fhir_original_code) = "2159-2"];
-    PANAMANIAN = 951 [(.google.fhir.proto.fhir_original_code) = "2160-0"];
-    SALVADORAN = 952 [(.google.fhir.proto.fhir_original_code) = "2161-8"];
-    CENTRAL_AMERICAN_INDIAN_2162_6 = 953
-        [(.google.fhir.proto.fhir_original_code) = "2162-6"];
-    CANAL_ZONE = 954 [(.google.fhir.proto.fhir_original_code) = "2163-4"];
-    ARGENTINEAN = 955 [(.google.fhir.proto.fhir_original_code) = "2166-7"];
-    BOLIVIAN = 956 [(.google.fhir.proto.fhir_original_code) = "2167-5"];
-    CHILEAN = 957 [(.google.fhir.proto.fhir_original_code) = "2168-3"];
-    COLOMBIAN = 958 [(.google.fhir.proto.fhir_original_code) = "2169-1"];
-    ECUADORIAN = 959 [(.google.fhir.proto.fhir_original_code) = "2170-9"];
-    PARAGUAYAN = 960 [(.google.fhir.proto.fhir_original_code) = "2171-7"];
-    PERUVIAN = 961 [(.google.fhir.proto.fhir_original_code) = "2172-5"];
-    URUGUAYAN = 962 [(.google.fhir.proto.fhir_original_code) = "2173-3"];
-    VENEZUELAN = 963 [(.google.fhir.proto.fhir_original_code) = "2174-1"];
-    SOUTH_AMERICAN_INDIAN_2175_8 = 964
-        [(.google.fhir.proto.fhir_original_code) = "2175-8"];
-    CRIOLLO = 965 [(.google.fhir.proto.fhir_original_code) = "2176-6"];
-    NOT_HISPANIC_OR_LATINO = 966
-        [(.google.fhir.proto.fhir_original_code) = "2186-5"];
-  }
-}
-
-// Set of codes that are needed for implementation of the US-Core profiles.
-// These codes are used as extensions to the FHIR and US Core value sets.
-//
-// See http://hl7.org/fhir/us/core/CodeSystem/careplan-category
-message USCoreCarePlanCategoryExtensionCode {
-  enum Value {
-    option (.google.fhir.proto.fhir_code_system_url) =
-        "http://hl7.org/fhir/us/core/CodeSystem/careplan-category";
-
-    INVALID_UNINITIALIZED = 0;
-    ASSESS_PLAN = 1;
-  }
-}
-
-// Set of codes that are needed for implementation of the US-Core profiles.
-// These codes are used as extensions to the FHIR and US Core value sets.
-//
-// See http://hl7.org/fhir/us/core/CodeSystem/condition-category
-message USCoreConditionCategoryExtensionCode {
-  enum Value {
-    option (.google.fhir.proto.fhir_code_system_url) =
-        "http://hl7.org/fhir/us/core/CodeSystem/condition-category";
-
-    INVALID_UNINITIALIZED = 0;
-    PROBLEM = 1 [(.google.fhir.proto.deprecated_code) = true];
-    HEALTH_CONCERN = 2;
-  }
-}
-
-// The US Core DocumentReferences Type Code System is a 'starter set' of
-// categories supported for fetching and storing DocumentReference Resources.
-// See http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category
-message USCoreDocumentReferencesCategoryCode {
-  enum Value {
-    option (.google.fhir.proto.fhir_code_system_url) =
-        "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category";
-
-    INVALID_UNINITIALIZED = 0;
-    CLINICAL_NOTE = 1;
-  }
-}
-
-// Set of codes that are needed for implementation of the US-Core profiles.
-// These codes are used as extensions to the FHIR and US Core value sets.
-//
-// See
-// http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type
-message USCoreProvenancePaticipantTypeExtensionCode {
-  enum Value {
-    option (.google.fhir.proto.fhir_code_system_url) =
-        "http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type";
-
-    INVALID_UNINITIALIZED = 0;
-    TRANSMITTER = 1;
-  }
-}
-
 // Codes for assigning sex at birth as specified by the [Office of the National
 // Coordinator for Health IT (ONC)](https://www.healthit.gov/newsroom/about-onc)
 // See http://hl7.org/fhir/us/core/ValueSet/birthsex
@@ -6122,6 +4962,1109 @@ message OmbRaceCategoriesValueSet {
   }
 }
 
+//  The U.S. Centers for Disease Control and Prevention (CDC) has prepared a
+//  code set for use in codingrace and ethnicity data. This code set is based on
+//  current federal standards for classifying data onrace and ethnicity,
+//  specifically the minimum race and ethnicity categories defined by the U.S.
+//  Office ofManagement and Budget (OMB) and a more detailed set of race and
+//  ethnicity categories maintainedby the U.S. Bureau of the Census (BC). The
+//  main purpose of the code set is to facilitate use of federalstandards for
+//  classifying data on race and ethnicity when these data are exchanged,
+//  stored, retrieved,or analyzed in electronic form. At the same time, the code
+//  set can be applied to paper-based recordsystems to the extent that these
+//  systems are used to collect, maintain, and report data on race andethnicity
+//  in accordance with current federal standards. Source: [Race and Ethnicity
+//  Code Set
+//  Version 1.0](https://www.cdc.gov/phin/resources/vocabulary/documents/cdc-race--ethnicity-background-and-purpose.pdf).
+// See urn:oid:2.16.840.1.113883.6.238
+message RaceAndEthnicityCDCCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "urn:oid:2.16.840.1.113883.6.238";
+
+    INVALID_UNINITIALIZED = 0;
+    RACE = 1 [(.google.fhir.proto.fhir_original_code) = "1000-9"];
+    AMERICAN_INDIAN_OR_ALASKA_NATIVE = 2
+        [(.google.fhir.proto.fhir_original_code) = "1002-5"];
+    AMERICAN_INDIAN = 3 [(.google.fhir.proto.fhir_original_code) = "1004-1"];
+    ALASKA_NATIVE = 4 [(.google.fhir.proto.fhir_original_code) = "1735-0"];
+    ABENAKI = 5 [(.google.fhir.proto.fhir_original_code) = "1006-6"];
+    ALGONQUIAN = 6 [(.google.fhir.proto.fhir_original_code) = "1008-2"];
+    APACHE = 7 [(.google.fhir.proto.fhir_original_code) = "1010-8"];
+    ARAPAHO = 8 [(.google.fhir.proto.fhir_original_code) = "1021-5"];
+    ARIKARA = 9 [(.google.fhir.proto.fhir_original_code) = "1026-4"];
+    ASSINIBOINE = 10 [(.google.fhir.proto.fhir_original_code) = "1028-0"];
+    ASSINIBOINE_SIOUX = 11 [(.google.fhir.proto.fhir_original_code) = "1030-6"];
+    BANNOCK = 12 [(.google.fhir.proto.fhir_original_code) = "1033-0"];
+    BLACKFEET = 13 [(.google.fhir.proto.fhir_original_code) = "1035-5"];
+    BROTHERTON = 14 [(.google.fhir.proto.fhir_original_code) = "1037-1"];
+    BURT_LAKE_BAND = 15 [(.google.fhir.proto.fhir_original_code) = "1039-7"];
+    CADDO = 16 [(.google.fhir.proto.fhir_original_code) = "1041-3"];
+    CAHUILLA = 17 [(.google.fhir.proto.fhir_original_code) = "1044-7"];
+    CALIFORNIA_TRIBES = 18 [(.google.fhir.proto.fhir_original_code) = "1053-8"];
+    CANADIAN_AND_LATIN_AMERICAN_INDIAN = 19
+        [(.google.fhir.proto.fhir_original_code) = "1068-6"];
+    CATAWBA = 20 [(.google.fhir.proto.fhir_original_code) = "1076-9"];
+    CAYUSE = 21 [(.google.fhir.proto.fhir_original_code) = "1078-5"];
+    CHEHALIS = 22 [(.google.fhir.proto.fhir_original_code) = "1080-1"];
+    CHEMAKUAN = 23 [(.google.fhir.proto.fhir_original_code) = "1082-7"];
+    CHEMEHUEVI = 24 [(.google.fhir.proto.fhir_original_code) = "1086-8"];
+    CHEROKEE = 25 [(.google.fhir.proto.fhir_original_code) = "1088-4"];
+    CHEROKEE_SHAWNEE = 26 [(.google.fhir.proto.fhir_original_code) = "1100-7"];
+    CHEYENNE = 27 [(.google.fhir.proto.fhir_original_code) = "1102-3"];
+    CHEYENNE_ARAPAHO = 28 [(.google.fhir.proto.fhir_original_code) = "1106-4"];
+    CHICKAHOMINY = 29 [(.google.fhir.proto.fhir_original_code) = "1108-0"];
+    CHICKASAW = 30 [(.google.fhir.proto.fhir_original_code) = "1112-2"];
+    CHINOOK = 31 [(.google.fhir.proto.fhir_original_code) = "1114-8"];
+    CHIPPEWA = 32 [(.google.fhir.proto.fhir_original_code) = "1123-9"];
+    CHIPPEWA_CREE = 33 [(.google.fhir.proto.fhir_original_code) = "1150-2"];
+    CHITIMACHA = 34 [(.google.fhir.proto.fhir_original_code) = "1153-6"];
+    CHOCTAW = 35 [(.google.fhir.proto.fhir_original_code) = "1155-1"];
+    CHUMASH = 36 [(.google.fhir.proto.fhir_original_code) = "1162-7"];
+    CLEAR_LAKE = 37 [(.google.fhir.proto.fhir_original_code) = "1165-0"];
+    COEUR_D_ALENE = 38 [(.google.fhir.proto.fhir_original_code) = "1167-6"];
+    COHARIE = 39 [(.google.fhir.proto.fhir_original_code) = "1169-2"];
+    COLORADO_RIVER = 40 [(.google.fhir.proto.fhir_original_code) = "1171-8"];
+    COLVILLE = 41 [(.google.fhir.proto.fhir_original_code) = "1173-4"];
+    COMANCHE = 42 [(.google.fhir.proto.fhir_original_code) = "1175-9"];
+    COOS_LOWER_UMPQUA_SIUSLAW = 43
+        [(.google.fhir.proto.fhir_original_code) = "1178-3"];
+    COOS = 44 [(.google.fhir.proto.fhir_original_code) = "1180-9"];
+    COQUILLES = 45 [(.google.fhir.proto.fhir_original_code) = "1182-5"];
+    COSTANOAN = 46 [(.google.fhir.proto.fhir_original_code) = "1184-1"];
+    COUSHATTA = 47 [(.google.fhir.proto.fhir_original_code) = "1186-6"];
+    COWLITZ = 48 [(.google.fhir.proto.fhir_original_code) = "1189-0"];
+    CREE = 49 [(.google.fhir.proto.fhir_original_code) = "1191-6"];
+    CREEK = 50 [(.google.fhir.proto.fhir_original_code) = "1193-2"];
+    CROATAN = 51 [(.google.fhir.proto.fhir_original_code) = "1207-0"];
+    CROW = 52 [(.google.fhir.proto.fhir_original_code) = "1209-6"];
+    CUPENO = 53 [(.google.fhir.proto.fhir_original_code) = "1211-2"];
+    DELAWARE = 54 [(.google.fhir.proto.fhir_original_code) = "1214-6"];
+    DIEGUENO = 55 [(.google.fhir.proto.fhir_original_code) = "1222-9"];
+    EASTERN_TRIBES = 56 [(.google.fhir.proto.fhir_original_code) = "1233-6"];
+    ESSELEN = 57 [(.google.fhir.proto.fhir_original_code) = "1250-0"];
+    FORT_BELKNAP = 58 [(.google.fhir.proto.fhir_original_code) = "1252-6"];
+    FORT_BERTHOLD = 59 [(.google.fhir.proto.fhir_original_code) = "1254-2"];
+    FORT_MCDOWELL = 60 [(.google.fhir.proto.fhir_original_code) = "1256-7"];
+    FORT_HALL = 61 [(.google.fhir.proto.fhir_original_code) = "1258-3"];
+    GABRIELENO = 62 [(.google.fhir.proto.fhir_original_code) = "1260-9"];
+    GRAND_RONDE = 63 [(.google.fhir.proto.fhir_original_code) = "1262-5"];
+    GROS_VENTRES = 64 [(.google.fhir.proto.fhir_original_code) = "1264-1"];
+    HALIWA = 65 [(.google.fhir.proto.fhir_original_code) = "1267-4"];
+    HIDATSA = 66 [(.google.fhir.proto.fhir_original_code) = "1269-0"];
+    HOOPA = 67 [(.google.fhir.proto.fhir_original_code) = "1271-6"];
+    HOOPA_EXTENSION = 68 [(.google.fhir.proto.fhir_original_code) = "1275-7"];
+    HOUMA = 69 [(.google.fhir.proto.fhir_original_code) = "1277-3"];
+    INAJA_COSMIT = 70 [(.google.fhir.proto.fhir_original_code) = "1279-9"];
+    IOWA = 71 [(.google.fhir.proto.fhir_original_code) = "1281-5"];
+    IROQUOIS = 72 [(.google.fhir.proto.fhir_original_code) = "1285-6"];
+    JUANENO = 73 [(.google.fhir.proto.fhir_original_code) = "1297-1"];
+    KALISPEL = 74 [(.google.fhir.proto.fhir_original_code) = "1299-7"];
+    KARUK = 75 [(.google.fhir.proto.fhir_original_code) = "1301-1"];
+    KAW = 76 [(.google.fhir.proto.fhir_original_code) = "1303-7"];
+    KICKAPOO = 77 [(.google.fhir.proto.fhir_original_code) = "1305-2"];
+    KIOWA = 78 [(.google.fhir.proto.fhir_original_code) = "1309-4"];
+    KLALLAM = 79 [(.google.fhir.proto.fhir_original_code) = "1312-8"];
+    KLAMATH = 80 [(.google.fhir.proto.fhir_original_code) = "1317-7"];
+    KONKOW = 81 [(.google.fhir.proto.fhir_original_code) = "1319-3"];
+    KOOTENAI = 82 [(.google.fhir.proto.fhir_original_code) = "1321-9"];
+    LASSIK = 83 [(.google.fhir.proto.fhir_original_code) = "1323-5"];
+    LONG_ISLAND = 84 [(.google.fhir.proto.fhir_original_code) = "1325-0"];
+    LUISENO = 85 [(.google.fhir.proto.fhir_original_code) = "1331-8"];
+    LUMBEE = 86 [(.google.fhir.proto.fhir_original_code) = "1340-9"];
+    LUMMI = 87 [(.google.fhir.proto.fhir_original_code) = "1342-5"];
+    MAIDU = 88 [(.google.fhir.proto.fhir_original_code) = "1344-1"];
+    MAKAH = 89 [(.google.fhir.proto.fhir_original_code) = "1348-2"];
+    MALISEET = 90 [(.google.fhir.proto.fhir_original_code) = "1350-8"];
+    MANDAN = 91 [(.google.fhir.proto.fhir_original_code) = "1352-4"];
+    MATTAPONI = 92 [(.google.fhir.proto.fhir_original_code) = "1354-0"];
+    MENOMINEE = 93 [(.google.fhir.proto.fhir_original_code) = "1356-5"];
+    MIAMI = 94 [(.google.fhir.proto.fhir_original_code) = "1358-1"];
+    MICCOSUKEE = 95 [(.google.fhir.proto.fhir_original_code) = "1363-1"];
+    MICMAC = 96 [(.google.fhir.proto.fhir_original_code) = "1365-6"];
+    MISSION_INDIANS = 97 [(.google.fhir.proto.fhir_original_code) = "1368-0"];
+    MIWOK = 98 [(.google.fhir.proto.fhir_original_code) = "1370-6"];
+    MODOC = 99 [(.google.fhir.proto.fhir_original_code) = "1372-2"];
+    MOHEGAN = 100 [(.google.fhir.proto.fhir_original_code) = "1374-8"];
+    MONO = 101 [(.google.fhir.proto.fhir_original_code) = "1376-3"];
+    NANTICOKE = 102 [(.google.fhir.proto.fhir_original_code) = "1378-9"];
+    NARRAGANSETT = 103 [(.google.fhir.proto.fhir_original_code) = "1380-5"];
+    NAVAJO = 104 [(.google.fhir.proto.fhir_original_code) = "1382-1"];
+    NEZ_PERCE = 105 [(.google.fhir.proto.fhir_original_code) = "1387-0"];
+    NOMALAKI = 106 [(.google.fhir.proto.fhir_original_code) = "1389-6"];
+    NORTHWEST_TRIBES = 107 [(.google.fhir.proto.fhir_original_code) = "1391-2"];
+    OMAHA = 108 [(.google.fhir.proto.fhir_original_code) = "1403-5"];
+    OREGON_ATHABASKAN = 109
+        [(.google.fhir.proto.fhir_original_code) = "1405-0"];
+    OSAGE = 110 [(.google.fhir.proto.fhir_original_code) = "1407-6"];
+    OTOE_MISSOURIA = 111 [(.google.fhir.proto.fhir_original_code) = "1409-2"];
+    OTTAWA = 112 [(.google.fhir.proto.fhir_original_code) = "1411-8"];
+    PAIUTE = 113 [(.google.fhir.proto.fhir_original_code) = "1416-7"];
+    PAMUNKEY = 114 [(.google.fhir.proto.fhir_original_code) = "1439-9"];
+    PASSAMAQUODDY = 115 [(.google.fhir.proto.fhir_original_code) = "1441-5"];
+    PAWNEE = 116 [(.google.fhir.proto.fhir_original_code) = "1445-6"];
+    PENOBSCOT = 117 [(.google.fhir.proto.fhir_original_code) = "1448-0"];
+    PEORIA = 118 [(.google.fhir.proto.fhir_original_code) = "1450-6"];
+    PEQUOT = 119 [(.google.fhir.proto.fhir_original_code) = "1453-0"];
+    PIMA = 120 [(.google.fhir.proto.fhir_original_code) = "1456-3"];
+    PISCATAWAY = 121 [(.google.fhir.proto.fhir_original_code) = "1460-5"];
+    PIT_RIVER = 122 [(.google.fhir.proto.fhir_original_code) = "1462-1"];
+    POMO = 123 [(.google.fhir.proto.fhir_original_code) = "1464-7"];
+    PONCA = 124 [(.google.fhir.proto.fhir_original_code) = "1474-6"];
+    POTAWATOMI = 125 [(.google.fhir.proto.fhir_original_code) = "1478-7"];
+    POWHATAN = 126 [(.google.fhir.proto.fhir_original_code) = "1487-8"];
+    PUEBLO = 127 [(.google.fhir.proto.fhir_original_code) = "1489-4"];
+    PUGET_SOUND_SALISH = 128
+        [(.google.fhir.proto.fhir_original_code) = "1518-0"];
+    QUAPAW = 129 [(.google.fhir.proto.fhir_original_code) = "1541-2"];
+    QUINAULT = 130 [(.google.fhir.proto.fhir_original_code) = "1543-8"];
+    RAPPAHANNOCK = 131 [(.google.fhir.proto.fhir_original_code) = "1545-3"];
+    RENO_SPARKS = 132 [(.google.fhir.proto.fhir_original_code) = "1547-9"];
+    ROUND_VALLEY = 133 [(.google.fhir.proto.fhir_original_code) = "1549-5"];
+    SAC_AND_FOX = 134 [(.google.fhir.proto.fhir_original_code) = "1551-1"];
+    SALINAN = 135 [(.google.fhir.proto.fhir_original_code) = "1556-0"];
+    SALISH = 136 [(.google.fhir.proto.fhir_original_code) = "1558-6"];
+    SALISH_AND_KOOTENAI = 137
+        [(.google.fhir.proto.fhir_original_code) = "1560-2"];
+    SCHAGHTICOKE = 138 [(.google.fhir.proto.fhir_original_code) = "1562-8"];
+    SCOTT_VALLEY = 139 [(.google.fhir.proto.fhir_original_code) = "1564-4"];
+    SEMINOLE = 140 [(.google.fhir.proto.fhir_original_code) = "1566-9"];
+    SERRANO = 141 [(.google.fhir.proto.fhir_original_code) = "1573-5"];
+    SHASTA = 142 [(.google.fhir.proto.fhir_original_code) = "1576-8"];
+    SHAWNEE = 143 [(.google.fhir.proto.fhir_original_code) = "1578-4"];
+    SHINNECOCK = 144 [(.google.fhir.proto.fhir_original_code) = "1582-6"];
+    SHOALWATER_BAY = 145 [(.google.fhir.proto.fhir_original_code) = "1584-2"];
+    SHOSHONE = 146 [(.google.fhir.proto.fhir_original_code) = "1586-7"];
+    SHOSHONE_PAIUTE = 147 [(.google.fhir.proto.fhir_original_code) = "1602-2"];
+    SILETZ = 148 [(.google.fhir.proto.fhir_original_code) = "1607-1"];
+    SIOUX = 149 [(.google.fhir.proto.fhir_original_code) = "1609-7"];
+    SIUSLAW = 150 [(.google.fhir.proto.fhir_original_code) = "1643-6"];
+    SPOKANE = 151 [(.google.fhir.proto.fhir_original_code) = "1645-1"];
+    STEWART = 152 [(.google.fhir.proto.fhir_original_code) = "1647-7"];
+    STOCKBRIDGE = 153 [(.google.fhir.proto.fhir_original_code) = "1649-3"];
+    SUSANVILLE = 154 [(.google.fhir.proto.fhir_original_code) = "1651-9"];
+    TOHONO_O_ODHAM = 155 [(.google.fhir.proto.fhir_original_code) = "1653-5"];
+    TOLOWA = 156 [(.google.fhir.proto.fhir_original_code) = "1659-2"];
+    TONKAWA = 157 [(.google.fhir.proto.fhir_original_code) = "1661-8"];
+    TYGH = 158 [(.google.fhir.proto.fhir_original_code) = "1663-4"];
+    UMATILLA = 159 [(.google.fhir.proto.fhir_original_code) = "1665-9"];
+    UMPQUA = 160 [(.google.fhir.proto.fhir_original_code) = "1667-5"];
+    UTE = 161 [(.google.fhir.proto.fhir_original_code) = "1670-9"];
+    WAILAKI = 162 [(.google.fhir.proto.fhir_original_code) = "1675-8"];
+    WALLA_WALLA = 163 [(.google.fhir.proto.fhir_original_code) = "1677-4"];
+    WAMPANOAG = 164 [(.google.fhir.proto.fhir_original_code) = "1679-0"];
+    WARM_SPRINGS = 165 [(.google.fhir.proto.fhir_original_code) = "1683-2"];
+    WASCOPUM = 166 [(.google.fhir.proto.fhir_original_code) = "1685-7"];
+    WASHOE = 167 [(.google.fhir.proto.fhir_original_code) = "1687-3"];
+    WICHITA = 168 [(.google.fhir.proto.fhir_original_code) = "1692-3"];
+    WIND_RIVER = 169 [(.google.fhir.proto.fhir_original_code) = "1694-9"];
+    WINNEBAGO = 170 [(.google.fhir.proto.fhir_original_code) = "1696-4"];
+    WINNEMUCCA = 171 [(.google.fhir.proto.fhir_original_code) = "1700-4"];
+    WINTUN = 172 [(.google.fhir.proto.fhir_original_code) = "1702-0"];
+    WIYOT = 173 [(.google.fhir.proto.fhir_original_code) = "1704-6"];
+    YAKAMA = 174 [(.google.fhir.proto.fhir_original_code) = "1707-9"];
+    YAKAMA_COWLITZ = 175 [(.google.fhir.proto.fhir_original_code) = "1709-5"];
+    YAQUI = 176 [(.google.fhir.proto.fhir_original_code) = "1711-1"];
+    YAVAPAI_APACHE = 177 [(.google.fhir.proto.fhir_original_code) = "1715-2"];
+    YOKUTS = 178 [(.google.fhir.proto.fhir_original_code) = "1717-8"];
+    YUCHI = 179 [(.google.fhir.proto.fhir_original_code) = "1722-8"];
+    YUMAN = 180 [(.google.fhir.proto.fhir_original_code) = "1724-4"];
+    YUROK = 181 [(.google.fhir.proto.fhir_original_code) = "1732-7"];
+    CHIRICAHUA = 182 [(.google.fhir.proto.fhir_original_code) = "1011-6"];
+    FORT_SILL_APACHE = 183 [(.google.fhir.proto.fhir_original_code) = "1012-4"];
+    JICARILLA_APACHE = 184 [(.google.fhir.proto.fhir_original_code) = "1013-2"];
+    LIPAN_APACHE = 185 [(.google.fhir.proto.fhir_original_code) = "1014-0"];
+    MESCALERO_APACHE = 186 [(.google.fhir.proto.fhir_original_code) = "1015-7"];
+    OKLAHOMA_APACHE = 187 [(.google.fhir.proto.fhir_original_code) = "1016-5"];
+    PAYSON_APACHE = 188 [(.google.fhir.proto.fhir_original_code) = "1017-3"];
+    SAN_CARLOS_APACHE = 189
+        [(.google.fhir.proto.fhir_original_code) = "1018-1"];
+    WHITE_MOUNTAIN_APACHE = 190
+        [(.google.fhir.proto.fhir_original_code) = "1019-9"];
+    NORTHERN_ARAPAHO = 191 [(.google.fhir.proto.fhir_original_code) = "1022-3"];
+    SOUTHERN_ARAPAHO = 192 [(.google.fhir.proto.fhir_original_code) = "1023-1"];
+    WIND_RIVER_ARAPAHO = 193
+        [(.google.fhir.proto.fhir_original_code) = "1024-9"];
+    FORT_PECK_ASSINIBOINE_SIOUX = 194
+        [(.google.fhir.proto.fhir_original_code) = "1031-4"];
+    OKLAHOMA_CADO = 195 [(.google.fhir.proto.fhir_original_code) = "1042-1"];
+    AGUA_CALIENTE_CAHUILLA = 196
+        [(.google.fhir.proto.fhir_original_code) = "1045-4"];
+    AUGUSTINE = 197 [(.google.fhir.proto.fhir_original_code) = "1046-2"];
+    CABAZON = 198 [(.google.fhir.proto.fhir_original_code) = "1047-0"];
+    LOS_COYOTES = 199 [(.google.fhir.proto.fhir_original_code) = "1048-8"];
+    MORONGO = 200 [(.google.fhir.proto.fhir_original_code) = "1049-6"];
+    SANTA_ROSA_CAHUILLA = 201
+        [(.google.fhir.proto.fhir_original_code) = "1050-4"];
+    TORRES_MARTINEZ = 202 [(.google.fhir.proto.fhir_original_code) = "1051-2"];
+    CAHTO = 203 [(.google.fhir.proto.fhir_original_code) = "1054-6"];
+    CHIMARIKO = 204 [(.google.fhir.proto.fhir_original_code) = "1055-3"];
+    COAST_MIWOK = 205 [(.google.fhir.proto.fhir_original_code) = "1056-1"];
+    DIGGER = 206 [(.google.fhir.proto.fhir_original_code) = "1057-9"];
+    KAWAIISU = 207 [(.google.fhir.proto.fhir_original_code) = "1058-7"];
+    KERN_RIVER = 208 [(.google.fhir.proto.fhir_original_code) = "1059-5"];
+    MATTOLE = 209 [(.google.fhir.proto.fhir_original_code) = "1060-3"];
+    RED_WOOD = 210 [(.google.fhir.proto.fhir_original_code) = "1061-1"];
+    SANTA_ROSA = 211 [(.google.fhir.proto.fhir_original_code) = "1062-9"];
+    TAKELMA = 212 [(.google.fhir.proto.fhir_original_code) = "1063-7"];
+    WAPPO = 213 [(.google.fhir.proto.fhir_original_code) = "1064-5"];
+    YANA = 214 [(.google.fhir.proto.fhir_original_code) = "1065-2"];
+    YUKI = 215 [(.google.fhir.proto.fhir_original_code) = "1066-0"];
+    CANADIAN_INDIAN = 216 [(.google.fhir.proto.fhir_original_code) = "1069-4"];
+    CENTRAL_AMERICAN_INDIAN_1070_2 = 217
+        [(.google.fhir.proto.fhir_original_code) = "1070-2"];
+    FRENCH_AMERICAN_INDIAN = 218
+        [(.google.fhir.proto.fhir_original_code) = "1071-0"];
+    MEXICAN_AMERICAN_INDIAN_1072_8 = 219
+        [(.google.fhir.proto.fhir_original_code) = "1072-8"];
+    SOUTH_AMERICAN_INDIAN_1073_6 = 220
+        [(.google.fhir.proto.fhir_original_code) = "1073-6"];
+    SPANISH_AMERICAN_INDIAN = 221
+        [(.google.fhir.proto.fhir_original_code) = "1074-4"];
+    HOH = 222 [(.google.fhir.proto.fhir_original_code) = "1083-5"];
+    QUILEUTE = 223 [(.google.fhir.proto.fhir_original_code) = "1084-3"];
+    CHEROKEE_ALABAMA = 224 [(.google.fhir.proto.fhir_original_code) = "1089-2"];
+    CHEROKEES_OF_NORTHEAST_ALABAMA = 225
+        [(.google.fhir.proto.fhir_original_code) = "1090-0"];
+    CHEROKEES_OF_SOUTHEAST_ALABAMA = 226
+        [(.google.fhir.proto.fhir_original_code) = "1091-8"];
+    EASTERN_CHEROKEE = 227 [(.google.fhir.proto.fhir_original_code) = "1092-6"];
+    ECHOTA_CHEROKEE = 228 [(.google.fhir.proto.fhir_original_code) = "1093-4"];
+    ETOWAH_CHEROKEE = 229 [(.google.fhir.proto.fhir_original_code) = "1094-2"];
+    NORTHERN_CHEROKEE = 230
+        [(.google.fhir.proto.fhir_original_code) = "1095-9"];
+    TUSCOLA = 231 [(.google.fhir.proto.fhir_original_code) = "1096-7"];
+    UNITED_KEETOWAH_BAND_OF_CHEROKEE = 232
+        [(.google.fhir.proto.fhir_original_code) = "1097-5"];
+    WESTERN_CHEROKEE = 233 [(.google.fhir.proto.fhir_original_code) = "1098-3"];
+    NORTHERN_CHEYENNE = 234
+        [(.google.fhir.proto.fhir_original_code) = "1103-1"];
+    SOUTHERN_CHEYENNE = 235
+        [(.google.fhir.proto.fhir_original_code) = "1104-9"];
+    EASTERN_CHICKAHOMINY = 236
+        [(.google.fhir.proto.fhir_original_code) = "1109-8"];
+    WESTERN_CHICKAHOMINY = 237
+        [(.google.fhir.proto.fhir_original_code) = "1110-6"];
+    CLATSOP = 238 [(.google.fhir.proto.fhir_original_code) = "1115-5"];
+    COLUMBIA_RIVER_CHINOOK = 239
+        [(.google.fhir.proto.fhir_original_code) = "1116-3"];
+    KATHLAMET = 240 [(.google.fhir.proto.fhir_original_code) = "1117-1"];
+    UPPER_CHINOOK = 241 [(.google.fhir.proto.fhir_original_code) = "1118-9"];
+    WAKIAKUM_CHINOOK = 242 [(.google.fhir.proto.fhir_original_code) = "1119-7"];
+    WILLAPA_CHINOOK = 243 [(.google.fhir.proto.fhir_original_code) = "1120-5"];
+    WISHRAM = 244 [(.google.fhir.proto.fhir_original_code) = "1121-3"];
+    BAD_RIVER = 245 [(.google.fhir.proto.fhir_original_code) = "1124-7"];
+    BAY_MILLS_CHIPPEWA = 246
+        [(.google.fhir.proto.fhir_original_code) = "1125-4"];
+    BOIS_FORTE = 247 [(.google.fhir.proto.fhir_original_code) = "1126-2"];
+    BURT_LAKE_CHIPPEWA = 248
+        [(.google.fhir.proto.fhir_original_code) = "1127-0"];
+    FOND_DU_LAC = 249 [(.google.fhir.proto.fhir_original_code) = "1128-8"];
+    GRAND_PORTAGE = 250 [(.google.fhir.proto.fhir_original_code) = "1129-6"];
+    GRAND_TRAVERSE_BAND_OF_OTTAWA_CHIPPEWA = 251
+        [(.google.fhir.proto.fhir_original_code) = "1130-4"];
+    KEWEENAW = 252 [(.google.fhir.proto.fhir_original_code) = "1131-2"];
+    LAC_COURTE_OREILLES = 253
+        [(.google.fhir.proto.fhir_original_code) = "1132-0"];
+    LAC_DU_FLAMBEAU = 254 [(.google.fhir.proto.fhir_original_code) = "1133-8"];
+    LAC_VIEUX_DESERT_CHIPPEWA = 255
+        [(.google.fhir.proto.fhir_original_code) = "1134-6"];
+    LAKE_SUPERIOR = 256 [(.google.fhir.proto.fhir_original_code) = "1135-3"];
+    LEECH_LAKE = 257 [(.google.fhir.proto.fhir_original_code) = "1136-1"];
+    LITTLE_SHELL_CHIPPEWA = 258
+        [(.google.fhir.proto.fhir_original_code) = "1137-9"];
+    MILLE_LACS = 259 [(.google.fhir.proto.fhir_original_code) = "1138-7"];
+    MINNESOTA_CHIPPEWA = 260
+        [(.google.fhir.proto.fhir_original_code) = "1139-5"];
+    ONTONAGON = 261 [(.google.fhir.proto.fhir_original_code) = "1140-3"];
+    RED_CLIFF_CHIPPEWA = 262
+        [(.google.fhir.proto.fhir_original_code) = "1141-1"];
+    RED_LAKE_CHIPPEWA = 263
+        [(.google.fhir.proto.fhir_original_code) = "1142-9"];
+    SAGINAW_CHIPPEWA = 264 [(.google.fhir.proto.fhir_original_code) = "1143-7"];
+    ST_CROIX_CHIPPEWA = 265
+        [(.google.fhir.proto.fhir_original_code) = "1144-5"];
+    SAULT_STE_MARIE_CHIPPEWA = 266
+        [(.google.fhir.proto.fhir_original_code) = "1145-2"];
+    SOKOAGON_CHIPPEWA = 267
+        [(.google.fhir.proto.fhir_original_code) = "1146-0"];
+    TURTLE_MOUNTAIN = 268 [(.google.fhir.proto.fhir_original_code) = "1147-8"];
+    WHITE_EARTH = 269 [(.google.fhir.proto.fhir_original_code) = "1148-6"];
+    ROCKY_BOYS_CHIPPEWA_CREE = 270
+        [(.google.fhir.proto.fhir_original_code) = "1151-0"];
+    CLIFTON_CHOCTAW = 271 [(.google.fhir.proto.fhir_original_code) = "1156-9"];
+    JENA_CHOCTAW = 272 [(.google.fhir.proto.fhir_original_code) = "1157-7"];
+    MISSISSIPPI_CHOCTAW = 273
+        [(.google.fhir.proto.fhir_original_code) = "1158-5"];
+    MOWA_BAND_OF_CHOCTAW = 274
+        [(.google.fhir.proto.fhir_original_code) = "1159-3"];
+    OKLAHOMA_CHOCTAW = 275 [(.google.fhir.proto.fhir_original_code) = "1160-1"];
+    SANTA_YNEZ = 276 [(.google.fhir.proto.fhir_original_code) = "1163-5"];
+    OKLAHOMA_COMANCHE = 277
+        [(.google.fhir.proto.fhir_original_code) = "1176-7"];
+    ALABAMA_COUSHATTA = 278
+        [(.google.fhir.proto.fhir_original_code) = "1187-4"];
+    ALABAMA_CREEK = 279 [(.google.fhir.proto.fhir_original_code) = "1194-0"];
+    ALABAMA_QUASSARTE = 280
+        [(.google.fhir.proto.fhir_original_code) = "1195-7"];
+    EASTERN_CREEK = 281 [(.google.fhir.proto.fhir_original_code) = "1196-5"];
+    EASTERN_MUSCOGEE = 282 [(.google.fhir.proto.fhir_original_code) = "1197-3"];
+    KIALEGEE = 283 [(.google.fhir.proto.fhir_original_code) = "1198-1"];
+    LOWER_MUSCOGEE = 284 [(.google.fhir.proto.fhir_original_code) = "1199-9"];
+    MACHIS_LOWER_CREEK_INDIAN = 285
+        [(.google.fhir.proto.fhir_original_code) = "1200-5"];
+    POARCH_BAND = 286 [(.google.fhir.proto.fhir_original_code) = "1201-3"];
+    PRINCIPAL_CREEK_INDIAN_NATION = 287
+        [(.google.fhir.proto.fhir_original_code) = "1202-1"];
+    STAR_CLAN_OF_MUSCOGEE_CREEKS = 288
+        [(.google.fhir.proto.fhir_original_code) = "1203-9"];
+    THLOPTHLOCCO = 289 [(.google.fhir.proto.fhir_original_code) = "1204-7"];
+    TUCKABACHEE = 290 [(.google.fhir.proto.fhir_original_code) = "1205-4"];
+    AGUA_CALIENTE = 291 [(.google.fhir.proto.fhir_original_code) = "1212-0"];
+    EASTERN_DELAWARE = 292 [(.google.fhir.proto.fhir_original_code) = "1215-3"];
+    LENNI_LENAPE = 293 [(.google.fhir.proto.fhir_original_code) = "1216-1"];
+    MUNSEE = 294 [(.google.fhir.proto.fhir_original_code) = "1217-9"];
+    OKLAHOMA_DELAWARE = 295
+        [(.google.fhir.proto.fhir_original_code) = "1218-7"];
+    RAMPOUGH_MOUNTAIN = 296
+        [(.google.fhir.proto.fhir_original_code) = "1219-5"];
+    SAND_HILL = 297 [(.google.fhir.proto.fhir_original_code) = "1220-3"];
+    CAMPO = 298 [(.google.fhir.proto.fhir_original_code) = "1223-7"];
+    CAPITAN_GRANDE = 299 [(.google.fhir.proto.fhir_original_code) = "1224-5"];
+    CUYAPAIPE = 300 [(.google.fhir.proto.fhir_original_code) = "1225-2"];
+    LA_POSTA = 301 [(.google.fhir.proto.fhir_original_code) = "1226-0"];
+    MANZANITA = 302 [(.google.fhir.proto.fhir_original_code) = "1227-8"];
+    MESA_GRANDE = 303 [(.google.fhir.proto.fhir_original_code) = "1228-6"];
+    SAN_PASQUAL = 304 [(.google.fhir.proto.fhir_original_code) = "1229-4"];
+    SANTA_YSABEL = 305 [(.google.fhir.proto.fhir_original_code) = "1230-2"];
+    SYCUAN = 306 [(.google.fhir.proto.fhir_original_code) = "1231-0"];
+    ATTACAPA = 307 [(.google.fhir.proto.fhir_original_code) = "1234-4"];
+    BILOXI = 308 [(.google.fhir.proto.fhir_original_code) = "1235-1"];
+    GEORGETOWN_EASTERN_TRIBES = 309
+        [(.google.fhir.proto.fhir_original_code) = "1236-9"];
+    MOOR = 310 [(.google.fhir.proto.fhir_original_code) = "1237-7"];
+    NANSEMOND = 311 [(.google.fhir.proto.fhir_original_code) = "1238-5"];
+    NATCHEZ = 312 [(.google.fhir.proto.fhir_original_code) = "1239-3"];
+    NAUSU_WAIWASH = 313 [(.google.fhir.proto.fhir_original_code) = "1240-1"];
+    NIPMUC = 314 [(.google.fhir.proto.fhir_original_code) = "1241-9"];
+    PAUGUSSETT = 315 [(.google.fhir.proto.fhir_original_code) = "1242-7"];
+    POCOMOKE_ACOHONOCK = 316
+        [(.google.fhir.proto.fhir_original_code) = "1243-5"];
+    SOUTHEASTERN_INDIANS = 317
+        [(.google.fhir.proto.fhir_original_code) = "1244-3"];
+    SUSQUEHANOCK = 318 [(.google.fhir.proto.fhir_original_code) = "1245-0"];
+    TUNICA_BILOXI = 319 [(.google.fhir.proto.fhir_original_code) = "1246-8"];
+    WACCAMAW_SIOUSAN = 320 [(.google.fhir.proto.fhir_original_code) = "1247-6"];
+    WICOMICO = 321 [(.google.fhir.proto.fhir_original_code) = "1248-4"];
+    ATSINA = 322 [(.google.fhir.proto.fhir_original_code) = "1265-8"];
+    TRINITY = 323 [(.google.fhir.proto.fhir_original_code) = "1272-4"];
+    WHILKUT = 324 [(.google.fhir.proto.fhir_original_code) = "1273-2"];
+    IOWA_OF_KANSAS_NEBRASKA = 325
+        [(.google.fhir.proto.fhir_original_code) = "1282-3"];
+    IOWA_OF_OKLAHOMA = 326 [(.google.fhir.proto.fhir_original_code) = "1283-1"];
+    CAYUGA = 327 [(.google.fhir.proto.fhir_original_code) = "1286-4"];
+    MOHAWK = 328 [(.google.fhir.proto.fhir_original_code) = "1287-2"];
+    ONEIDA = 329 [(.google.fhir.proto.fhir_original_code) = "1288-0"];
+    ONONDAGA = 330 [(.google.fhir.proto.fhir_original_code) = "1289-8"];
+    SENECA = 331 [(.google.fhir.proto.fhir_original_code) = "1290-6"];
+    SENECA_NATION = 332 [(.google.fhir.proto.fhir_original_code) = "1291-4"];
+    SENECA_CAYUGA = 333 [(.google.fhir.proto.fhir_original_code) = "1292-2"];
+    TONAWANDA_SENECA = 334 [(.google.fhir.proto.fhir_original_code) = "1293-0"];
+    TUSCARORA = 335 [(.google.fhir.proto.fhir_original_code) = "1294-8"];
+    WYANDOTTE = 336 [(.google.fhir.proto.fhir_original_code) = "1295-5"];
+    OKLAHOMA_KICKAPOO = 337
+        [(.google.fhir.proto.fhir_original_code) = "1306-0"];
+    TEXAS_KICKAPOO = 338 [(.google.fhir.proto.fhir_original_code) = "1307-8"];
+    OKLAHOMA_KIOWA = 339 [(.google.fhir.proto.fhir_original_code) = "1310-2"];
+    JAMESTOWN = 340 [(.google.fhir.proto.fhir_original_code) = "1313-6"];
+    LOWER_ELWHA = 341 [(.google.fhir.proto.fhir_original_code) = "1314-4"];
+    PORT_GAMBLE_KLALLAM = 342
+        [(.google.fhir.proto.fhir_original_code) = "1315-1"];
+    MATINECOCK = 343 [(.google.fhir.proto.fhir_original_code) = "1326-8"];
+    MONTAUK = 344 [(.google.fhir.proto.fhir_original_code) = "1327-6"];
+    POOSPATUCK = 345 [(.google.fhir.proto.fhir_original_code) = "1328-4"];
+    SETAUKET = 346 [(.google.fhir.proto.fhir_original_code) = "1329-2"];
+    LA_JOLLA = 347 [(.google.fhir.proto.fhir_original_code) = "1332-6"];
+    PALA = 348 [(.google.fhir.proto.fhir_original_code) = "1333-4"];
+    PAUMA = 349 [(.google.fhir.proto.fhir_original_code) = "1334-2"];
+    PECHANGA = 350 [(.google.fhir.proto.fhir_original_code) = "1335-9"];
+    SOBOBA = 351 [(.google.fhir.proto.fhir_original_code) = "1336-7"];
+    TWENTY_NINE_PALMS = 352
+        [(.google.fhir.proto.fhir_original_code) = "1337-5"];
+    TEMECULA = 353 [(.google.fhir.proto.fhir_original_code) = "1338-3"];
+    MOUNTAIN_MAIDU = 354 [(.google.fhir.proto.fhir_original_code) = "1345-8"];
+    NISHINAM = 355 [(.google.fhir.proto.fhir_original_code) = "1346-6"];
+    ILLINOIS_MIAMI = 356 [(.google.fhir.proto.fhir_original_code) = "1359-9"];
+    INDIANA_MIAMI = 357 [(.google.fhir.proto.fhir_original_code) = "1360-7"];
+    OKLAHOMA_MIAMI = 358 [(.google.fhir.proto.fhir_original_code) = "1361-5"];
+    AROOSTOOK = 359 [(.google.fhir.proto.fhir_original_code) = "1366-4"];
+    ALAMO_NAVAJO = 360 [(.google.fhir.proto.fhir_original_code) = "1383-9"];
+    CANONCITO_NAVAJO = 361 [(.google.fhir.proto.fhir_original_code) = "1384-7"];
+    RAMAH_NAVAJO = 362 [(.google.fhir.proto.fhir_original_code) = "1385-4"];
+    ALSEA = 363 [(.google.fhir.proto.fhir_original_code) = "1392-0"];
+    CELILO = 364 [(.google.fhir.proto.fhir_original_code) = "1393-8"];
+    COLUMBIA = 365 [(.google.fhir.proto.fhir_original_code) = "1394-6"];
+    KALAPUYA = 366 [(.google.fhir.proto.fhir_original_code) = "1395-3"];
+    MOLALA = 367 [(.google.fhir.proto.fhir_original_code) = "1396-1"];
+    TALAKAMISH = 368 [(.google.fhir.proto.fhir_original_code) = "1397-9"];
+    TENINO = 369 [(.google.fhir.proto.fhir_original_code) = "1398-7"];
+    TILLAMOOK = 370 [(.google.fhir.proto.fhir_original_code) = "1399-5"];
+    WENATCHEE = 371 [(.google.fhir.proto.fhir_original_code) = "1400-1"];
+    YAHOOSKIN = 372 [(.google.fhir.proto.fhir_original_code) = "1401-9"];
+    BURT_LAKE_OTTAWA = 373 [(.google.fhir.proto.fhir_original_code) = "1412-6"];
+    MICHIGAN_OTTAWA = 374 [(.google.fhir.proto.fhir_original_code) = "1413-4"];
+    OKLAHOMA_OTTAWA = 375 [(.google.fhir.proto.fhir_original_code) = "1414-2"];
+    BISHOP = 376 [(.google.fhir.proto.fhir_original_code) = "1417-5"];
+    BRIDGEPORT = 377 [(.google.fhir.proto.fhir_original_code) = "1418-3"];
+    BURNS_PAIUTE = 378 [(.google.fhir.proto.fhir_original_code) = "1419-1"];
+    CEDARVILLE = 379 [(.google.fhir.proto.fhir_original_code) = "1420-9"];
+    FORT_BIDWELL = 380 [(.google.fhir.proto.fhir_original_code) = "1421-7"];
+    FORT_INDEPENDENCE = 381
+        [(.google.fhir.proto.fhir_original_code) = "1422-5"];
+    KAIBAB = 382 [(.google.fhir.proto.fhir_original_code) = "1423-3"];
+    LAS_VEGAS = 383 [(.google.fhir.proto.fhir_original_code) = "1424-1"];
+    LONE_PINE = 384 [(.google.fhir.proto.fhir_original_code) = "1425-8"];
+    LOVELOCK = 385 [(.google.fhir.proto.fhir_original_code) = "1426-6"];
+    MALHEUR_PAIUTE = 386 [(.google.fhir.proto.fhir_original_code) = "1427-4"];
+    MOAPA = 387 [(.google.fhir.proto.fhir_original_code) = "1428-2"];
+    NORTHERN_PAIUTE = 388 [(.google.fhir.proto.fhir_original_code) = "1429-0"];
+    OWENS_VALLEY = 389 [(.google.fhir.proto.fhir_original_code) = "1430-8"];
+    PYRAMID_LAKE = 390 [(.google.fhir.proto.fhir_original_code) = "1431-6"];
+    SAN_JUAN_SOUTHERN_PAIUTE = 391
+        [(.google.fhir.proto.fhir_original_code) = "1432-4"];
+    SOUTHERN_PAIUTE = 392 [(.google.fhir.proto.fhir_original_code) = "1433-2"];
+    SUMMIT_LAKE = 393 [(.google.fhir.proto.fhir_original_code) = "1434-0"];
+    UTU_UTU_GWAITU_PAIUTE = 394
+        [(.google.fhir.proto.fhir_original_code) = "1435-7"];
+    WALKER_RIVER = 395 [(.google.fhir.proto.fhir_original_code) = "1436-5"];
+    YERINGTON_PAIUTE = 396 [(.google.fhir.proto.fhir_original_code) = "1437-3"];
+    INDIAN_TOWNSHIP = 397 [(.google.fhir.proto.fhir_original_code) = "1442-3"];
+    PLEASANT_POINT_PASSAMAQUODDY = 398
+        [(.google.fhir.proto.fhir_original_code) = "1443-1"];
+    OKLAHOMA_PAWNEE = 399 [(.google.fhir.proto.fhir_original_code) = "1446-4"];
+    OKLAHOMA_PEORIA = 400 [(.google.fhir.proto.fhir_original_code) = "1451-4"];
+    MARSHANTUCKET_PEQUOT = 401
+        [(.google.fhir.proto.fhir_original_code) = "1454-8"];
+    GILA_RIVER_PIMA_MARICOPA = 402
+        [(.google.fhir.proto.fhir_original_code) = "1457-1"];
+    SALT_RIVER_PIMA_MARICOPA = 403
+        [(.google.fhir.proto.fhir_original_code) = "1458-9"];
+    CENTRAL_POMO = 404 [(.google.fhir.proto.fhir_original_code) = "1465-4"];
+    DRY_CREEK = 405 [(.google.fhir.proto.fhir_original_code) = "1466-2"];
+    EASTERN_POMO = 406 [(.google.fhir.proto.fhir_original_code) = "1467-0"];
+    KASHIA = 407 [(.google.fhir.proto.fhir_original_code) = "1468-8"];
+    NORTHERN_POMO = 408 [(.google.fhir.proto.fhir_original_code) = "1469-6"];
+    SCOTTS_VALLEY = 409 [(.google.fhir.proto.fhir_original_code) = "1470-4"];
+    STONYFORD = 410 [(.google.fhir.proto.fhir_original_code) = "1471-2"];
+    SULPHUR_BANK = 411 [(.google.fhir.proto.fhir_original_code) = "1472-0"];
+    NEBRASKA_PONCA = 412 [(.google.fhir.proto.fhir_original_code) = "1475-3"];
+    OKLAHOMA_PONCA = 413 [(.google.fhir.proto.fhir_original_code) = "1476-1"];
+    CITIZEN_BAND_POTAWATOMI = 414
+        [(.google.fhir.proto.fhir_original_code) = "1479-5"];
+    FOREST_COUNTY = 415 [(.google.fhir.proto.fhir_original_code) = "1480-3"];
+    HANNAHVILLE = 416 [(.google.fhir.proto.fhir_original_code) = "1481-1"];
+    HURON_POTAWATOMI = 417 [(.google.fhir.proto.fhir_original_code) = "1482-9"];
+    POKAGON_POTAWATOMI = 418
+        [(.google.fhir.proto.fhir_original_code) = "1483-7"];
+    PRAIRIE_BAND = 419 [(.google.fhir.proto.fhir_original_code) = "1484-5"];
+    WISCONSIN_POTAWATOMI = 420
+        [(.google.fhir.proto.fhir_original_code) = "1485-2"];
+    ACOMA = 421 [(.google.fhir.proto.fhir_original_code) = "1490-2"];
+    ARIZONA_TEWA = 422 [(.google.fhir.proto.fhir_original_code) = "1491-0"];
+    COCHITI = 423 [(.google.fhir.proto.fhir_original_code) = "1492-8"];
+    HOPI = 424 [(.google.fhir.proto.fhir_original_code) = "1493-6"];
+    ISLETA = 425 [(.google.fhir.proto.fhir_original_code) = "1494-4"];
+    JEMEZ = 426 [(.google.fhir.proto.fhir_original_code) = "1495-1"];
+    KERES = 427 [(.google.fhir.proto.fhir_original_code) = "1496-9"];
+    LAGUNA = 428 [(.google.fhir.proto.fhir_original_code) = "1497-7"];
+    NAMBE = 429 [(.google.fhir.proto.fhir_original_code) = "1498-5"];
+    PICURIS = 430 [(.google.fhir.proto.fhir_original_code) = "1499-3"];
+    PIRO = 431 [(.google.fhir.proto.fhir_original_code) = "1500-8"];
+    POJOAQUE = 432 [(.google.fhir.proto.fhir_original_code) = "1501-6"];
+    SAN_FELIPE = 433 [(.google.fhir.proto.fhir_original_code) = "1502-4"];
+    SAN_ILDEFONSO = 434 [(.google.fhir.proto.fhir_original_code) = "1503-2"];
+    SAN_JUAN_PUEBLO = 435 [(.google.fhir.proto.fhir_original_code) = "1504-0"];
+    SAN_JUAN_DE = 436 [(.google.fhir.proto.fhir_original_code) = "1505-7"];
+    SAN_JUAN = 437 [(.google.fhir.proto.fhir_original_code) = "1506-5"];
+    SANDIA = 438 [(.google.fhir.proto.fhir_original_code) = "1507-3"];
+    SANTA_ANA = 439 [(.google.fhir.proto.fhir_original_code) = "1508-1"];
+    SANTA_CLARA = 440 [(.google.fhir.proto.fhir_original_code) = "1509-9"];
+    SANTO_DOMINGO = 441 [(.google.fhir.proto.fhir_original_code) = "1510-7"];
+    TAOS = 442 [(.google.fhir.proto.fhir_original_code) = "1511-5"];
+    TESUQUE = 443 [(.google.fhir.proto.fhir_original_code) = "1512-3"];
+    TEWA = 444 [(.google.fhir.proto.fhir_original_code) = "1513-1"];
+    TIGUA = 445 [(.google.fhir.proto.fhir_original_code) = "1514-9"];
+    ZIA = 446 [(.google.fhir.proto.fhir_original_code) = "1515-6"];
+    ZUNI = 447 [(.google.fhir.proto.fhir_original_code) = "1516-4"];
+    DUWAMISH = 448 [(.google.fhir.proto.fhir_original_code) = "1519-8"];
+    KIKIALLUS = 449 [(.google.fhir.proto.fhir_original_code) = "1520-6"];
+    LOWER_SKAGIT = 450 [(.google.fhir.proto.fhir_original_code) = "1521-4"];
+    MUCKLESHOOT = 451 [(.google.fhir.proto.fhir_original_code) = "1522-2"];
+    NISQUALLY = 452 [(.google.fhir.proto.fhir_original_code) = "1523-0"];
+    NOOKSACK = 453 [(.google.fhir.proto.fhir_original_code) = "1524-8"];
+    PORT_MADISON = 454 [(.google.fhir.proto.fhir_original_code) = "1525-5"];
+    PUYALLUP = 455 [(.google.fhir.proto.fhir_original_code) = "1526-3"];
+    SAMISH = 456 [(.google.fhir.proto.fhir_original_code) = "1527-1"];
+    SAUK_SUIATTLE = 457 [(.google.fhir.proto.fhir_original_code) = "1528-9"];
+    SKOKOMISH = 458 [(.google.fhir.proto.fhir_original_code) = "1529-7"];
+    SKYKOMISH = 459 [(.google.fhir.proto.fhir_original_code) = "1530-5"];
+    SNOHOMISH = 460 [(.google.fhir.proto.fhir_original_code) = "1531-3"];
+    SNOQUALMIE = 461 [(.google.fhir.proto.fhir_original_code) = "1532-1"];
+    SQUAXIN_ISLAND = 462 [(.google.fhir.proto.fhir_original_code) = "1533-9"];
+    STEILACOOM = 463 [(.google.fhir.proto.fhir_original_code) = "1534-7"];
+    STILLAGUAMISH = 464 [(.google.fhir.proto.fhir_original_code) = "1535-4"];
+    SUQUAMISH = 465 [(.google.fhir.proto.fhir_original_code) = "1536-2"];
+    SWINOMISH = 466 [(.google.fhir.proto.fhir_original_code) = "1537-0"];
+    TULALIP = 467 [(.google.fhir.proto.fhir_original_code) = "1538-8"];
+    UPPER_SKAGIT = 468 [(.google.fhir.proto.fhir_original_code) = "1539-6"];
+    IOWA_SAC_AND_FOX = 469 [(.google.fhir.proto.fhir_original_code) = "1552-9"];
+    MISSOURI_SAC_AND_FOX = 470
+        [(.google.fhir.proto.fhir_original_code) = "1553-7"];
+    OKLAHOMA_SAC_AND_FOX = 471
+        [(.google.fhir.proto.fhir_original_code) = "1554-5"];
+    BIG_CYPRESS = 472 [(.google.fhir.proto.fhir_original_code) = "1567-7"];
+    BRIGHTON = 473 [(.google.fhir.proto.fhir_original_code) = "1568-5"];
+    FLORIDA_SEMINOLE = 474 [(.google.fhir.proto.fhir_original_code) = "1569-3"];
+    HOLLYWOOD_SEMINOLE = 475
+        [(.google.fhir.proto.fhir_original_code) = "1570-1"];
+    OKLAHOMA_SEMINOLE = 476
+        [(.google.fhir.proto.fhir_original_code) = "1571-9"];
+    SAN_MANUAL = 477 [(.google.fhir.proto.fhir_original_code) = "1574-3"];
+    ABSENTEE_SHAWNEE = 478 [(.google.fhir.proto.fhir_original_code) = "1579-2"];
+    EASTERN_SHAWNEE = 479 [(.google.fhir.proto.fhir_original_code) = "1580-0"];
+    BATTLE_MOUNTAIN = 480 [(.google.fhir.proto.fhir_original_code) = "1587-5"];
+    DUCKWATER = 481 [(.google.fhir.proto.fhir_original_code) = "1588-3"];
+    ELKO = 482 [(.google.fhir.proto.fhir_original_code) = "1589-1"];
+    ELY = 483 [(.google.fhir.proto.fhir_original_code) = "1590-9"];
+    GOSHUTE = 484 [(.google.fhir.proto.fhir_original_code) = "1591-7"];
+    PANAMINT = 485 [(.google.fhir.proto.fhir_original_code) = "1592-5"];
+    RUBY_VALLEY = 486 [(.google.fhir.proto.fhir_original_code) = "1593-3"];
+    SKULL_VALLEY = 487 [(.google.fhir.proto.fhir_original_code) = "1594-1"];
+    SOUTH_FORK_SHOSHONE = 488
+        [(.google.fhir.proto.fhir_original_code) = "1595-8"];
+    TE_MOAK_WESTERN_SHOSHONE = 489
+        [(.google.fhir.proto.fhir_original_code) = "1596-6"];
+    TIMBI_SHA_SHOSHONE = 490
+        [(.google.fhir.proto.fhir_original_code) = "1597-4"];
+    WASHAKIE = 491 [(.google.fhir.proto.fhir_original_code) = "1598-2"];
+    WIND_RIVER_SHOSHONE = 492
+        [(.google.fhir.proto.fhir_original_code) = "1599-0"];
+    YOMBA = 493 [(.google.fhir.proto.fhir_original_code) = "1600-6"];
+    DUCK_VALLEY = 494 [(.google.fhir.proto.fhir_original_code) = "1603-0"];
+    FALLON = 495 [(.google.fhir.proto.fhir_original_code) = "1604-8"];
+    FORT_MC_DERMITT = 496 [(.google.fhir.proto.fhir_original_code) = "1605-5"];
+    BLACKFOOT_SIOUX = 497 [(.google.fhir.proto.fhir_original_code) = "1610-5"];
+    BRULE_SIOUX = 498 [(.google.fhir.proto.fhir_original_code) = "1611-3"];
+    CHEYENNE_RIVER_SIOUX = 499
+        [(.google.fhir.proto.fhir_original_code) = "1612-1"];
+    CROW_CREEK_SIOUX = 500 [(.google.fhir.proto.fhir_original_code) = "1613-9"];
+    DAKOTA_SIOUX = 501 [(.google.fhir.proto.fhir_original_code) = "1614-7"];
+    FLANDREAU_SANTEE = 502 [(.google.fhir.proto.fhir_original_code) = "1615-4"];
+    FORT_PECK = 503 [(.google.fhir.proto.fhir_original_code) = "1616-2"];
+    LAKE_TRAVERSE_SIOUX = 504
+        [(.google.fhir.proto.fhir_original_code) = "1617-0"];
+    LOWER_BRULE_SIOUX = 505
+        [(.google.fhir.proto.fhir_original_code) = "1618-8"];
+    LOWER_SIOUX = 506 [(.google.fhir.proto.fhir_original_code) = "1619-6"];
+    MDEWAKANTON_SIOUX = 507
+        [(.google.fhir.proto.fhir_original_code) = "1620-4"];
+    MINICONJOU = 508 [(.google.fhir.proto.fhir_original_code) = "1621-2"];
+    OGLALA_SIOUX = 509 [(.google.fhir.proto.fhir_original_code) = "1622-0"];
+    PINE_RIDGE_SIOUX = 510 [(.google.fhir.proto.fhir_original_code) = "1623-8"];
+    PIPESTONE_SIOUX = 511 [(.google.fhir.proto.fhir_original_code) = "1624-6"];
+    PRAIRIE_ISLAND_SIOUX = 512
+        [(.google.fhir.proto.fhir_original_code) = "1625-3"];
+    PRIOR_LAKE_SIOUX = 513 [(.google.fhir.proto.fhir_original_code) = "1626-1"];
+    ROSEBUD_SIOUX = 514 [(.google.fhir.proto.fhir_original_code) = "1627-9"];
+    SANS_ARC_SIOUX = 515 [(.google.fhir.proto.fhir_original_code) = "1628-7"];
+    SANTEE_SIOUX = 516 [(.google.fhir.proto.fhir_original_code) = "1629-5"];
+    SISSETON_WAHPETON = 517
+        [(.google.fhir.proto.fhir_original_code) = "1630-3"];
+    SISSETON_SIOUX = 518 [(.google.fhir.proto.fhir_original_code) = "1631-1"];
+    SPIRIT_LAKE_SIOUX = 519
+        [(.google.fhir.proto.fhir_original_code) = "1632-9"];
+    STANDING_ROCK_SIOUX = 520
+        [(.google.fhir.proto.fhir_original_code) = "1633-7"];
+    TETON_SIOUX = 521 [(.google.fhir.proto.fhir_original_code) = "1634-5"];
+    TWO_KETTLE_SIOUX = 522 [(.google.fhir.proto.fhir_original_code) = "1635-2"];
+    UPPER_SIOUX = 523 [(.google.fhir.proto.fhir_original_code) = "1636-0"];
+    WAHPEKUTE_SIOUX = 524 [(.google.fhir.proto.fhir_original_code) = "1637-8"];
+    WAHPETON_SIOUX = 525 [(.google.fhir.proto.fhir_original_code) = "1638-6"];
+    WAZHAZA_SIOUX = 526 [(.google.fhir.proto.fhir_original_code) = "1639-4"];
+    YANKTON_SIOUX = 527 [(.google.fhir.proto.fhir_original_code) = "1640-2"];
+    YANKTONAI_SIOUX = 528 [(.google.fhir.proto.fhir_original_code) = "1641-0"];
+    AK_CHIN = 529 [(.google.fhir.proto.fhir_original_code) = "1654-3"];
+    GILA_BEND = 530 [(.google.fhir.proto.fhir_original_code) = "1655-0"];
+    SAN_XAVIER = 531 [(.google.fhir.proto.fhir_original_code) = "1656-8"];
+    SELLS = 532 [(.google.fhir.proto.fhir_original_code) = "1657-6"];
+    COW_CREEK_UMPQUA = 533 [(.google.fhir.proto.fhir_original_code) = "1668-3"];
+    ALLEN_CANYON = 534 [(.google.fhir.proto.fhir_original_code) = "1671-7"];
+    UINTAH_UTE = 535 [(.google.fhir.proto.fhir_original_code) = "1672-5"];
+    UTE_MOUNTAIN_UTE = 536 [(.google.fhir.proto.fhir_original_code) = "1673-3"];
+    GAY_HEAD_WAMPANOAG = 537
+        [(.google.fhir.proto.fhir_original_code) = "1680-8"];
+    MASHPEE_WAMPANOAG = 538
+        [(.google.fhir.proto.fhir_original_code) = "1681-6"];
+    ALPINE = 539 [(.google.fhir.proto.fhir_original_code) = "1688-1"];
+    CARSON = 540 [(.google.fhir.proto.fhir_original_code) = "1689-9"];
+    DRESSLERVILLE = 541 [(.google.fhir.proto.fhir_original_code) = "1690-7"];
+    HO_CHUNK = 542 [(.google.fhir.proto.fhir_original_code) = "1697-2"];
+    NEBRASKA_WINNEBAGO = 543
+        [(.google.fhir.proto.fhir_original_code) = "1698-0"];
+    TABLE_BLUFF = 544 [(.google.fhir.proto.fhir_original_code) = "1705-3"];
+    BARRIO_LIBRE = 545 [(.google.fhir.proto.fhir_original_code) = "1712-9"];
+    PASCUA_YAQUI = 546 [(.google.fhir.proto.fhir_original_code) = "1713-7"];
+    CHUKCHANSI = 547 [(.google.fhir.proto.fhir_original_code) = "1718-6"];
+    TACHI = 548 [(.google.fhir.proto.fhir_original_code) = "1719-4"];
+    TULE_RIVER = 549 [(.google.fhir.proto.fhir_original_code) = "1720-2"];
+    COCOPAH = 550 [(.google.fhir.proto.fhir_original_code) = "1725-1"];
+    HAVASUPAI = 551 [(.google.fhir.proto.fhir_original_code) = "1726-9"];
+    HUALAPAI = 552 [(.google.fhir.proto.fhir_original_code) = "1727-7"];
+    MARICOPA = 553 [(.google.fhir.proto.fhir_original_code) = "1728-5"];
+    MOHAVE = 554 [(.google.fhir.proto.fhir_original_code) = "1729-3"];
+    QUECHAN = 555 [(.google.fhir.proto.fhir_original_code) = "1730-1"];
+    YAVAPAI = 556 [(.google.fhir.proto.fhir_original_code) = "1731-9"];
+    COAST_YUROK = 557 [(.google.fhir.proto.fhir_original_code) = "1733-5"];
+    ALASKA_INDIAN = 558 [(.google.fhir.proto.fhir_original_code) = "1737-6"];
+    ESKIMO = 559 [(.google.fhir.proto.fhir_original_code) = "1840-8"];
+    ALEUT = 560 [(.google.fhir.proto.fhir_original_code) = "1966-1"];
+    ALASKAN_ATHABASCAN = 561
+        [(.google.fhir.proto.fhir_original_code) = "1739-2"];
+    SOUTHEAST_ALASKA = 562 [(.google.fhir.proto.fhir_original_code) = "1811-9"];
+    AHTNA = 563 [(.google.fhir.proto.fhir_original_code) = "1740-0"];
+    ALATNA = 564 [(.google.fhir.proto.fhir_original_code) = "1741-8"];
+    ALEXANDER = 565 [(.google.fhir.proto.fhir_original_code) = "1742-6"];
+    ALLAKAKET = 566 [(.google.fhir.proto.fhir_original_code) = "1743-4"];
+    ALANVIK = 567 [(.google.fhir.proto.fhir_original_code) = "1744-2"];
+    ANVIK = 568 [(.google.fhir.proto.fhir_original_code) = "1745-9"];
+    ARCTIC = 569 [(.google.fhir.proto.fhir_original_code) = "1746-7"];
+    BEAVER = 570 [(.google.fhir.proto.fhir_original_code) = "1747-5"];
+    BIRCH_CREEK = 571 [(.google.fhir.proto.fhir_original_code) = "1748-3"];
+    CANTWELL = 572 [(.google.fhir.proto.fhir_original_code) = "1749-1"];
+    CHALKYITSIK = 573 [(.google.fhir.proto.fhir_original_code) = "1750-9"];
+    CHICKALOON = 574 [(.google.fhir.proto.fhir_original_code) = "1751-7"];
+    CHISTOCHINA = 575 [(.google.fhir.proto.fhir_original_code) = "1752-5"];
+    CHITINA = 576 [(.google.fhir.proto.fhir_original_code) = "1753-3"];
+    CIRCLE = 577 [(.google.fhir.proto.fhir_original_code) = "1754-1"];
+    COOK_INLET = 578 [(.google.fhir.proto.fhir_original_code) = "1755-8"];
+    COPPER_CENTER = 579 [(.google.fhir.proto.fhir_original_code) = "1756-6"];
+    COPPER_RIVER = 580 [(.google.fhir.proto.fhir_original_code) = "1757-4"];
+    DOT_LAKE = 581 [(.google.fhir.proto.fhir_original_code) = "1758-2"];
+    DOYON = 582 [(.google.fhir.proto.fhir_original_code) = "1759-0"];
+    EAGLE = 583 [(.google.fhir.proto.fhir_original_code) = "1760-8"];
+    EKLUTNA = 584 [(.google.fhir.proto.fhir_original_code) = "1761-6"];
+    EVANSVILLE = 585 [(.google.fhir.proto.fhir_original_code) = "1762-4"];
+    FORT_YUKON = 586 [(.google.fhir.proto.fhir_original_code) = "1763-2"];
+    GAKONA = 587 [(.google.fhir.proto.fhir_original_code) = "1764-0"];
+    GALENA = 588 [(.google.fhir.proto.fhir_original_code) = "1765-7"];
+    GRAYLING = 589 [(.google.fhir.proto.fhir_original_code) = "1766-5"];
+    GULKANA = 590 [(.google.fhir.proto.fhir_original_code) = "1767-3"];
+    HEALY_LAKE = 591 [(.google.fhir.proto.fhir_original_code) = "1768-1"];
+    HOLY_CROSS = 592 [(.google.fhir.proto.fhir_original_code) = "1769-9"];
+    HUGHES = 593 [(.google.fhir.proto.fhir_original_code) = "1770-7"];
+    HUSLIA = 594 [(.google.fhir.proto.fhir_original_code) = "1771-5"];
+    ILIAMNA = 595 [(.google.fhir.proto.fhir_original_code) = "1772-3"];
+    KALTAG = 596 [(.google.fhir.proto.fhir_original_code) = "1773-1"];
+    KLUTI_KAAH = 597 [(.google.fhir.proto.fhir_original_code) = "1774-9"];
+    KNIK = 598 [(.google.fhir.proto.fhir_original_code) = "1775-6"];
+    KOYUKUK = 599 [(.google.fhir.proto.fhir_original_code) = "1776-4"];
+    LAKE_MINCHUMINA = 600 [(.google.fhir.proto.fhir_original_code) = "1777-2"];
+    LIME = 601 [(.google.fhir.proto.fhir_original_code) = "1778-0"];
+    MCGRATH = 602 [(.google.fhir.proto.fhir_original_code) = "1779-8"];
+    MANLEY_HOT_SPRINGS = 603
+        [(.google.fhir.proto.fhir_original_code) = "1780-6"];
+    MENTASTA_LAKE = 604 [(.google.fhir.proto.fhir_original_code) = "1781-4"];
+    MINTO = 605 [(.google.fhir.proto.fhir_original_code) = "1782-2"];
+    NENANA = 606 [(.google.fhir.proto.fhir_original_code) = "1783-0"];
+    NIKOLAI = 607 [(.google.fhir.proto.fhir_original_code) = "1784-8"];
+    NINILCHIK = 608 [(.google.fhir.proto.fhir_original_code) = "1785-5"];
+    NONDALTON = 609 [(.google.fhir.proto.fhir_original_code) = "1786-3"];
+    NORTHWAY = 610 [(.google.fhir.proto.fhir_original_code) = "1787-1"];
+    NULATO = 611 [(.google.fhir.proto.fhir_original_code) = "1788-9"];
+    PEDRO_BAY = 612 [(.google.fhir.proto.fhir_original_code) = "1789-7"];
+    RAMPART = 613 [(.google.fhir.proto.fhir_original_code) = "1790-5"];
+    RUBY = 614 [(.google.fhir.proto.fhir_original_code) = "1791-3"];
+    SALAMATOF = 615 [(.google.fhir.proto.fhir_original_code) = "1792-1"];
+    SELDOVIA = 616 [(.google.fhir.proto.fhir_original_code) = "1793-9"];
+    SLANA = 617 [(.google.fhir.proto.fhir_original_code) = "1794-7"];
+    SHAGELUK = 618 [(.google.fhir.proto.fhir_original_code) = "1795-4"];
+    STEVENS = 619 [(.google.fhir.proto.fhir_original_code) = "1796-2"];
+    STONY_RIVER = 620 [(.google.fhir.proto.fhir_original_code) = "1797-0"];
+    TAKOTNA = 621 [(.google.fhir.proto.fhir_original_code) = "1798-8"];
+    TANACROSS = 622 [(.google.fhir.proto.fhir_original_code) = "1799-6"];
+    TANAINA = 623 [(.google.fhir.proto.fhir_original_code) = "1800-2"];
+    TANANA = 624 [(.google.fhir.proto.fhir_original_code) = "1801-0"];
+    TANANA_CHIEFS = 625 [(.google.fhir.proto.fhir_original_code) = "1802-8"];
+    TAZLINA = 626 [(.google.fhir.proto.fhir_original_code) = "1803-6"];
+    TELIDA = 627 [(.google.fhir.proto.fhir_original_code) = "1804-4"];
+    TETLIN = 628 [(.google.fhir.proto.fhir_original_code) = "1805-1"];
+    TOK = 629 [(.google.fhir.proto.fhir_original_code) = "1806-9"];
+    TYONEK = 630 [(.google.fhir.proto.fhir_original_code) = "1807-7"];
+    VENETIE = 631 [(.google.fhir.proto.fhir_original_code) = "1808-5"];
+    WISEMAN = 632 [(.google.fhir.proto.fhir_original_code) = "1809-3"];
+    TLINGIT_HAIDA = 633 [(.google.fhir.proto.fhir_original_code) = "1813-5"];
+    TSIMSHIAN = 634 [(.google.fhir.proto.fhir_original_code) = "1837-4"];
+    ANGOON = 635 [(.google.fhir.proto.fhir_original_code) = "1814-3"];
+    CENTRAL_COUNCIL_OF_TLINGIT_AND_HAIDA_TRIBES = 636
+        [(.google.fhir.proto.fhir_original_code) = "1815-0"];
+    CHILKAT = 637 [(.google.fhir.proto.fhir_original_code) = "1816-8"];
+    CHILKOOT = 638 [(.google.fhir.proto.fhir_original_code) = "1817-6"];
+    CRAIG = 639 [(.google.fhir.proto.fhir_original_code) = "1818-4"];
+    DOUGLAS = 640 [(.google.fhir.proto.fhir_original_code) = "1819-2"];
+    HAIDA = 641 [(.google.fhir.proto.fhir_original_code) = "1820-0"];
+    HOONAH = 642 [(.google.fhir.proto.fhir_original_code) = "1821-8"];
+    HYDABURG = 643 [(.google.fhir.proto.fhir_original_code) = "1822-6"];
+    KAKE = 644 [(.google.fhir.proto.fhir_original_code) = "1823-4"];
+    KASAAN = 645 [(.google.fhir.proto.fhir_original_code) = "1824-2"];
+    KENAITZE = 646 [(.google.fhir.proto.fhir_original_code) = "1825-9"];
+    KETCHIKAN = 647 [(.google.fhir.proto.fhir_original_code) = "1826-7"];
+    KLAWOCK = 648 [(.google.fhir.proto.fhir_original_code) = "1827-5"];
+    PELICAN = 649 [(.google.fhir.proto.fhir_original_code) = "1828-3"];
+    PETERSBURG = 650 [(.google.fhir.proto.fhir_original_code) = "1829-1"];
+    SAXMAN = 651 [(.google.fhir.proto.fhir_original_code) = "1830-9"];
+    SITKA = 652 [(.google.fhir.proto.fhir_original_code) = "1831-7"];
+    TENAKEE_SPRINGS = 653 [(.google.fhir.proto.fhir_original_code) = "1832-5"];
+    TLINGIT = 654 [(.google.fhir.proto.fhir_original_code) = "1833-3"];
+    WRANGELL = 655 [(.google.fhir.proto.fhir_original_code) = "1834-1"];
+    YAKUTAT = 656 [(.google.fhir.proto.fhir_original_code) = "1835-8"];
+    METLAKATLA = 657 [(.google.fhir.proto.fhir_original_code) = "1838-2"];
+    GREENLAND_ESKIMO = 658 [(.google.fhir.proto.fhir_original_code) = "1842-4"];
+    INUPIAT_ESKIMO = 659 [(.google.fhir.proto.fhir_original_code) = "1844-0"];
+    SIBERIAN_ESKIMO = 660 [(.google.fhir.proto.fhir_original_code) = "1891-1"];
+    YUPIK_ESKIMO = 661 [(.google.fhir.proto.fhir_original_code) = "1896-0"];
+    AMBLER = 662 [(.google.fhir.proto.fhir_original_code) = "1845-7"];
+    ANAKTUVUK = 663 [(.google.fhir.proto.fhir_original_code) = "1846-5"];
+    ANAKTUVUK_PASS = 664 [(.google.fhir.proto.fhir_original_code) = "1847-3"];
+    ARCTIC_SLOPE_INUPIAT = 665
+        [(.google.fhir.proto.fhir_original_code) = "1848-1"];
+    ARCTIC_SLOPE_CORPORATION = 666
+        [(.google.fhir.proto.fhir_original_code) = "1849-9"];
+    ATQASUK = 667 [(.google.fhir.proto.fhir_original_code) = "1850-7"];
+    BARROW = 668 [(.google.fhir.proto.fhir_original_code) = "1851-5"];
+    BERING_STRAITS_INUPIAT = 669
+        [(.google.fhir.proto.fhir_original_code) = "1852-3"];
+    BREVIG_MISSION = 670 [(.google.fhir.proto.fhir_original_code) = "1853-1"];
+    BUCKLAND = 671 [(.google.fhir.proto.fhir_original_code) = "1854-9"];
+    CHINIK = 672 [(.google.fhir.proto.fhir_original_code) = "1855-6"];
+    COUNCIL = 673 [(.google.fhir.proto.fhir_original_code) = "1856-4"];
+    DEERING = 674 [(.google.fhir.proto.fhir_original_code) = "1857-2"];
+    ELIM = 675 [(.google.fhir.proto.fhir_original_code) = "1858-0"];
+    GOLOVIN = 676 [(.google.fhir.proto.fhir_original_code) = "1859-8"];
+    INALIK_DIOMEDE = 677 [(.google.fhir.proto.fhir_original_code) = "1860-6"];
+    INUPIAQ = 678 [(.google.fhir.proto.fhir_original_code) = "1861-4"];
+    KAKTOVIK = 679 [(.google.fhir.proto.fhir_original_code) = "1862-2"];
+    KAWERAK = 680 [(.google.fhir.proto.fhir_original_code) = "1863-0"];
+    KIANA = 681 [(.google.fhir.proto.fhir_original_code) = "1864-8"];
+    KIVALINA = 682 [(.google.fhir.proto.fhir_original_code) = "1865-5"];
+    KOBUK = 683 [(.google.fhir.proto.fhir_original_code) = "1866-3"];
+    KOTZEBUE = 684 [(.google.fhir.proto.fhir_original_code) = "1867-1"];
+    KOYUK = 685 [(.google.fhir.proto.fhir_original_code) = "1868-9"];
+    KWIGUK = 686 [(.google.fhir.proto.fhir_original_code) = "1869-7"];
+    MAUNELUK_INUPIAT = 687 [(.google.fhir.proto.fhir_original_code) = "1870-5"];
+    NANA_INUPIAT = 688 [(.google.fhir.proto.fhir_original_code) = "1871-3"];
+    NOATAK = 689 [(.google.fhir.proto.fhir_original_code) = "1872-1"];
+    NOME = 690 [(.google.fhir.proto.fhir_original_code) = "1873-9"];
+    NOORVIK = 691 [(.google.fhir.proto.fhir_original_code) = "1874-7"];
+    NUIQSUT = 692 [(.google.fhir.proto.fhir_original_code) = "1875-4"];
+    POINT_HOPE = 693 [(.google.fhir.proto.fhir_original_code) = "1876-2"];
+    POINT_LAY = 694 [(.google.fhir.proto.fhir_original_code) = "1877-0"];
+    SELAWIK = 695 [(.google.fhir.proto.fhir_original_code) = "1878-8"];
+    SHAKTOOLIK = 696 [(.google.fhir.proto.fhir_original_code) = "1879-6"];
+    SHISHMAREF = 697 [(.google.fhir.proto.fhir_original_code) = "1880-4"];
+    SHUNGNAK = 698 [(.google.fhir.proto.fhir_original_code) = "1881-2"];
+    SOLOMON = 699 [(.google.fhir.proto.fhir_original_code) = "1882-0"];
+    TELLER = 700 [(.google.fhir.proto.fhir_original_code) = "1883-8"];
+    UNALAKLEET = 701 [(.google.fhir.proto.fhir_original_code) = "1884-6"];
+    WAINWRIGHT = 702 [(.google.fhir.proto.fhir_original_code) = "1885-3"];
+    WALES = 703 [(.google.fhir.proto.fhir_original_code) = "1886-1"];
+    WHITE_MOUNTAIN = 704 [(.google.fhir.proto.fhir_original_code) = "1887-9"];
+    WHITE_MOUNTAIN_INUPIAT = 705
+        [(.google.fhir.proto.fhir_original_code) = "1888-7"];
+    MARYS_IGLOO = 706 [(.google.fhir.proto.fhir_original_code) = "1889-5"];
+    GAMBELL = 707 [(.google.fhir.proto.fhir_original_code) = "1892-9"];
+    SAVOONGA = 708 [(.google.fhir.proto.fhir_original_code) = "1893-7"];
+    SIBERIAN_YUPIK = 709 [(.google.fhir.proto.fhir_original_code) = "1894-5"];
+    AKIACHAK = 710 [(.google.fhir.proto.fhir_original_code) = "1897-8"];
+    AKIAK = 711 [(.google.fhir.proto.fhir_original_code) = "1898-6"];
+    ALAKANUK = 712 [(.google.fhir.proto.fhir_original_code) = "1899-4"];
+    ALEKNAGIK = 713 [(.google.fhir.proto.fhir_original_code) = "1900-0"];
+    ANDREAFSKY = 714 [(.google.fhir.proto.fhir_original_code) = "1901-8"];
+    ANIAK = 715 [(.google.fhir.proto.fhir_original_code) = "1902-6"];
+    ATMAUTLUAK = 716 [(.google.fhir.proto.fhir_original_code) = "1903-4"];
+    BETHEL = 717 [(.google.fhir.proto.fhir_original_code) = "1904-2"];
+    BILL_MOORES_SLOUGH = 718
+        [(.google.fhir.proto.fhir_original_code) = "1905-9"];
+    BRISTOL_BAY_YUPIK = 719
+        [(.google.fhir.proto.fhir_original_code) = "1906-7"];
+    CALISTA_YUPIK = 720 [(.google.fhir.proto.fhir_original_code) = "1907-5"];
+    CHEFORNAK = 721 [(.google.fhir.proto.fhir_original_code) = "1908-3"];
+    CHEVAK = 722 [(.google.fhir.proto.fhir_original_code) = "1909-1"];
+    CHUATHBALUK = 723 [(.google.fhir.proto.fhir_original_code) = "1910-9"];
+    CLARKS_POINT = 724 [(.google.fhir.proto.fhir_original_code) = "1911-7"];
+    CROOKED_CREEK = 725 [(.google.fhir.proto.fhir_original_code) = "1912-5"];
+    DILLINGHAM = 726 [(.google.fhir.proto.fhir_original_code) = "1913-3"];
+    EEK = 727 [(.google.fhir.proto.fhir_original_code) = "1914-1"];
+    EKUK = 728 [(.google.fhir.proto.fhir_original_code) = "1915-8"];
+    EKWOK = 729 [(.google.fhir.proto.fhir_original_code) = "1916-6"];
+    EMMONAK = 730 [(.google.fhir.proto.fhir_original_code) = "1917-4"];
+    GOODNEWS_BAY = 731 [(.google.fhir.proto.fhir_original_code) = "1918-2"];
+    HOOPER_BAY = 732 [(.google.fhir.proto.fhir_original_code) = "1919-0"];
+    IQURMUIT_RUSSIAN_MISSION = 733
+        [(.google.fhir.proto.fhir_original_code) = "1920-8"];
+    KALSKAG = 734 [(.google.fhir.proto.fhir_original_code) = "1921-6"];
+    KASIGLUK = 735 [(.google.fhir.proto.fhir_original_code) = "1922-4"];
+    KIPNUK = 736 [(.google.fhir.proto.fhir_original_code) = "1923-2"];
+    KOLIGANEK = 737 [(.google.fhir.proto.fhir_original_code) = "1924-0"];
+    KONGIGANAK = 738 [(.google.fhir.proto.fhir_original_code) = "1925-7"];
+    KOTLIK = 739 [(.google.fhir.proto.fhir_original_code) = "1926-5"];
+    KWETHLUK = 740 [(.google.fhir.proto.fhir_original_code) = "1927-3"];
+    KWIGILLINGOK = 741 [(.google.fhir.proto.fhir_original_code) = "1928-1"];
+    LEVELOCK = 742 [(.google.fhir.proto.fhir_original_code) = "1929-9"];
+    LOWER_KALSKAG = 743 [(.google.fhir.proto.fhir_original_code) = "1930-7"];
+    MANOKOTAK = 744 [(.google.fhir.proto.fhir_original_code) = "1931-5"];
+    MARSHALL = 745 [(.google.fhir.proto.fhir_original_code) = "1932-3"];
+    MEKORYUK = 746 [(.google.fhir.proto.fhir_original_code) = "1933-1"];
+    MOUNTAIN_VILLAGE = 747 [(.google.fhir.proto.fhir_original_code) = "1934-9"];
+    NAKNEK = 748 [(.google.fhir.proto.fhir_original_code) = "1935-6"];
+    NAPAUMUTE = 749 [(.google.fhir.proto.fhir_original_code) = "1936-4"];
+    NAPAKIAK = 750 [(.google.fhir.proto.fhir_original_code) = "1937-2"];
+    NAPASKIAK = 751 [(.google.fhir.proto.fhir_original_code) = "1938-0"];
+    NEWHALEN = 752 [(.google.fhir.proto.fhir_original_code) = "1939-8"];
+    NEW_STUYAHOK = 753 [(.google.fhir.proto.fhir_original_code) = "1940-6"];
+    NEWTOK = 754 [(.google.fhir.proto.fhir_original_code) = "1941-4"];
+    NIGHTMUTE = 755 [(.google.fhir.proto.fhir_original_code) = "1942-2"];
+    NUNAPITCHUKV = 756 [(.google.fhir.proto.fhir_original_code) = "1943-0"];
+    OSCARVILLE = 757 [(.google.fhir.proto.fhir_original_code) = "1944-8"];
+    PILOT_STATION = 758 [(.google.fhir.proto.fhir_original_code) = "1945-5"];
+    PITKAS_POINT = 759 [(.google.fhir.proto.fhir_original_code) = "1946-3"];
+    PLATINUM = 760 [(.google.fhir.proto.fhir_original_code) = "1947-1"];
+    PORTAGE_CREEK = 761 [(.google.fhir.proto.fhir_original_code) = "1948-9"];
+    QUINHAGAK = 762 [(.google.fhir.proto.fhir_original_code) = "1949-7"];
+    RED_DEVIL = 763 [(.google.fhir.proto.fhir_original_code) = "1950-5"];
+    ST_MICHAEL = 764 [(.google.fhir.proto.fhir_original_code) = "1951-3"];
+    SCAMMON_BAY = 765 [(.google.fhir.proto.fhir_original_code) = "1952-1"];
+    SHELDONS_POINT = 766 [(.google.fhir.proto.fhir_original_code) = "1953-9"];
+    SLEETMUTE = 767 [(.google.fhir.proto.fhir_original_code) = "1954-7"];
+    STEBBINS = 768 [(.google.fhir.proto.fhir_original_code) = "1955-4"];
+    TOGIAK = 769 [(.google.fhir.proto.fhir_original_code) = "1956-2"];
+    TOKSOOK = 770 [(.google.fhir.proto.fhir_original_code) = "1957-0"];
+    TULUKSKAK = 771 [(.google.fhir.proto.fhir_original_code) = "1958-8"];
+    TUNTUTULIAK = 772 [(.google.fhir.proto.fhir_original_code) = "1959-6"];
+    TUNUNAK = 773 [(.google.fhir.proto.fhir_original_code) = "1960-4"];
+    TWIN_HILLS = 774 [(.google.fhir.proto.fhir_original_code) = "1961-2"];
+    GEORGETOWN_YUPIK_ESKIMO = 775
+        [(.google.fhir.proto.fhir_original_code) = "1962-0"];
+    ST_MARYS = 776 [(.google.fhir.proto.fhir_original_code) = "1963-8"];
+    UMKUMIATE = 777 [(.google.fhir.proto.fhir_original_code) = "1964-6"];
+    ALUTIIQ_ALEUT = 778 [(.google.fhir.proto.fhir_original_code) = "1968-7"];
+    BRISTOL_BAY_ALEUT = 779
+        [(.google.fhir.proto.fhir_original_code) = "1972-9"];
+    CHUGACH_ALEUT = 780 [(.google.fhir.proto.fhir_original_code) = "1984-4"];
+    EYAK = 781 [(.google.fhir.proto.fhir_original_code) = "1990-1"];
+    KONIAG_ALEUT = 782 [(.google.fhir.proto.fhir_original_code) = "1992-7"];
+    SUGPIAQ = 783 [(.google.fhir.proto.fhir_original_code) = "2002-4"];
+    SUQPIGAQ = 784 [(.google.fhir.proto.fhir_original_code) = "2004-0"];
+    UNANGAN_ALEUT = 785 [(.google.fhir.proto.fhir_original_code) = "2006-5"];
+    TATITLEK = 786 [(.google.fhir.proto.fhir_original_code) = "1969-5"];
+    UGASHIK = 787 [(.google.fhir.proto.fhir_original_code) = "1970-3"];
+    CHIGNIK = 788 [(.google.fhir.proto.fhir_original_code) = "1973-7"];
+    CHIGNIK_LAKE = 789 [(.google.fhir.proto.fhir_original_code) = "1974-5"];
+    EGEGIK = 790 [(.google.fhir.proto.fhir_original_code) = "1975-2"];
+    IGIUGIG = 791 [(.google.fhir.proto.fhir_original_code) = "1976-0"];
+    IVANOF_BAY = 792 [(.google.fhir.proto.fhir_original_code) = "1977-8"];
+    KING_SALMON = 793 [(.google.fhir.proto.fhir_original_code) = "1978-6"];
+    KOKHANOK = 794 [(.google.fhir.proto.fhir_original_code) = "1979-4"];
+    PERRYVILLE = 795 [(.google.fhir.proto.fhir_original_code) = "1980-2"];
+    PILOT_POINT = 796 [(.google.fhir.proto.fhir_original_code) = "1981-0"];
+    PORT_HEIDEN = 797 [(.google.fhir.proto.fhir_original_code) = "1982-8"];
+    CHENEGA = 798 [(.google.fhir.proto.fhir_original_code) = "1985-1"];
+    CHUGACH_CORPORATION = 799
+        [(.google.fhir.proto.fhir_original_code) = "1986-9"];
+    ENGLISH_BAY = 800 [(.google.fhir.proto.fhir_original_code) = "1987-7"];
+    PORT_GRAHAM = 801 [(.google.fhir.proto.fhir_original_code) = "1988-5"];
+    AKHIOK = 802 [(.google.fhir.proto.fhir_original_code) = "1993-5"];
+    AGDAAGUX = 803 [(.google.fhir.proto.fhir_original_code) = "1994-3"];
+    KARLUK = 804 [(.google.fhir.proto.fhir_original_code) = "1995-0"];
+    KODIAK = 805 [(.google.fhir.proto.fhir_original_code) = "1996-8"];
+    LARSEN_BAY = 806 [(.google.fhir.proto.fhir_original_code) = "1997-6"];
+    OLD_HARBOR = 807 [(.google.fhir.proto.fhir_original_code) = "1998-4"];
+    OUZINKIE = 808 [(.google.fhir.proto.fhir_original_code) = "1999-2"];
+    PORT_LIONS = 809 [(.google.fhir.proto.fhir_original_code) = "2000-8"];
+    AKUTAN = 810 [(.google.fhir.proto.fhir_original_code) = "2007-3"];
+    ALEUT_CORPORATION = 811
+        [(.google.fhir.proto.fhir_original_code) = "2008-1"];
+    ALEUTIAN = 812 [(.google.fhir.proto.fhir_original_code) = "2009-9"];
+    ALEUTIAN_ISLANDER = 813
+        [(.google.fhir.proto.fhir_original_code) = "2010-7"];
+    ATKA = 814 [(.google.fhir.proto.fhir_original_code) = "2011-5"];
+    BELKOFSKI = 815 [(.google.fhir.proto.fhir_original_code) = "2012-3"];
+    CHIGNIK_LAGOON = 816 [(.google.fhir.proto.fhir_original_code) = "2013-1"];
+    KING_COVE = 817 [(.google.fhir.proto.fhir_original_code) = "2014-9"];
+    FALSE_PASS = 818 [(.google.fhir.proto.fhir_original_code) = "2015-6"];
+    NELSON_LAGOON = 819 [(.google.fhir.proto.fhir_original_code) = "2016-4"];
+    NIKOLSKI = 820 [(.google.fhir.proto.fhir_original_code) = "2017-2"];
+    PAULOFF_HARBOR = 821 [(.google.fhir.proto.fhir_original_code) = "2018-0"];
+    QAGAN_TOYAGUNGIN = 822 [(.google.fhir.proto.fhir_original_code) = "2019-8"];
+    QAWALANGIN = 823 [(.google.fhir.proto.fhir_original_code) = "2020-6"];
+    ST_GEORGE = 824 [(.google.fhir.proto.fhir_original_code) = "2021-4"];
+    ST_PAUL = 825 [(.google.fhir.proto.fhir_original_code) = "2022-2"];
+    SAND_POINT = 826 [(.google.fhir.proto.fhir_original_code) = "2023-0"];
+    SOUTH_NAKNEK = 827 [(.google.fhir.proto.fhir_original_code) = "2024-8"];
+    UNALASKA = 828 [(.google.fhir.proto.fhir_original_code) = "2025-5"];
+    UNGA = 829 [(.google.fhir.proto.fhir_original_code) = "2026-3"];
+    ASIAN = 830 [(.google.fhir.proto.fhir_original_code) = "2028-9"];
+    ASIAN_INDIAN = 831 [(.google.fhir.proto.fhir_original_code) = "2029-7"];
+    BANGLADESHI = 832 [(.google.fhir.proto.fhir_original_code) = "2030-5"];
+    BHUTANESE = 833 [(.google.fhir.proto.fhir_original_code) = "2031-3"];
+    BURMESE = 834 [(.google.fhir.proto.fhir_original_code) = "2032-1"];
+    CAMBODIAN = 835 [(.google.fhir.proto.fhir_original_code) = "2033-9"];
+    CHINESE = 836 [(.google.fhir.proto.fhir_original_code) = "2034-7"];
+    TAIWANESE = 837 [(.google.fhir.proto.fhir_original_code) = "2035-4"];
+    FILIPINO = 838 [(.google.fhir.proto.fhir_original_code) = "2036-2"];
+    HMONG = 839 [(.google.fhir.proto.fhir_original_code) = "2037-0"];
+    INDONESIAN = 840 [(.google.fhir.proto.fhir_original_code) = "2038-8"];
+    JAPANESE = 841 [(.google.fhir.proto.fhir_original_code) = "2039-6"];
+    KOREAN = 842 [(.google.fhir.proto.fhir_original_code) = "2040-4"];
+    LAOTIAN = 843 [(.google.fhir.proto.fhir_original_code) = "2041-2"];
+    MALAYSIAN = 844 [(.google.fhir.proto.fhir_original_code) = "2042-0"];
+    OKINAWAN = 845 [(.google.fhir.proto.fhir_original_code) = "2043-8"];
+    PAKISTANI = 846 [(.google.fhir.proto.fhir_original_code) = "2044-6"];
+    SRI_LANKAN = 847 [(.google.fhir.proto.fhir_original_code) = "2045-3"];
+    THAI = 848 [(.google.fhir.proto.fhir_original_code) = "2046-1"];
+    VIETNAMESE = 849 [(.google.fhir.proto.fhir_original_code) = "2047-9"];
+    IWO_JIMAN = 850 [(.google.fhir.proto.fhir_original_code) = "2048-7"];
+    MALDIVIAN = 851 [(.google.fhir.proto.fhir_original_code) = "2049-5"];
+    NEPALESE = 852 [(.google.fhir.proto.fhir_original_code) = "2050-3"];
+    SINGAPOREAN = 853 [(.google.fhir.proto.fhir_original_code) = "2051-1"];
+    MADAGASCAR = 854 [(.google.fhir.proto.fhir_original_code) = "2052-9"];
+    BLACK_OR_AFRICAN_AMERICAN = 855
+        [(.google.fhir.proto.fhir_original_code) = "2054-5"];
+    BLACK = 856 [(.google.fhir.proto.fhir_original_code) = "2056-0"];
+    AFRICAN_AMERICAN = 857 [(.google.fhir.proto.fhir_original_code) = "2058-6"];
+    AFRICAN = 858 [(.google.fhir.proto.fhir_original_code) = "2060-2"];
+    BAHAMIAN = 859 [(.google.fhir.proto.fhir_original_code) = "2067-7"];
+    BARBADIAN = 860 [(.google.fhir.proto.fhir_original_code) = "2068-5"];
+    DOMINICAN_2069_3 = 861 [(.google.fhir.proto.fhir_original_code) = "2069-3"];
+    DOMINICA_ISLANDER = 862
+        [(.google.fhir.proto.fhir_original_code) = "2070-1"];
+    HAITIAN = 863 [(.google.fhir.proto.fhir_original_code) = "2071-9"];
+    JAMAICAN = 864 [(.google.fhir.proto.fhir_original_code) = "2072-7"];
+    TOBAGOAN = 865 [(.google.fhir.proto.fhir_original_code) = "2073-5"];
+    TRINIDADIAN = 866 [(.google.fhir.proto.fhir_original_code) = "2074-3"];
+    WEST_INDIAN = 867 [(.google.fhir.proto.fhir_original_code) = "2075-0"];
+    BOTSWANAN = 868 [(.google.fhir.proto.fhir_original_code) = "2061-0"];
+    ETHIOPIAN = 869 [(.google.fhir.proto.fhir_original_code) = "2062-8"];
+    LIBERIAN = 870 [(.google.fhir.proto.fhir_original_code) = "2063-6"];
+    NAMIBIAN = 871 [(.google.fhir.proto.fhir_original_code) = "2064-4"];
+    NIGERIAN = 872 [(.google.fhir.proto.fhir_original_code) = "2065-1"];
+    ZAIREAN = 873 [(.google.fhir.proto.fhir_original_code) = "2066-9"];
+    NATIVE_HAWAIIAN_OR_OTHER_PACIFIC_ISLANDER = 874
+        [(.google.fhir.proto.fhir_original_code) = "2076-8"];
+    POLYNESIAN = 875 [(.google.fhir.proto.fhir_original_code) = "2078-4"];
+    MICRONESIAN = 876 [(.google.fhir.proto.fhir_original_code) = "2085-9"];
+    MELANESIAN = 877 [(.google.fhir.proto.fhir_original_code) = "2100-6"];
+    OTHER_PACIFIC_ISLANDER = 878
+        [(.google.fhir.proto.fhir_original_code) = "2500-7"];
+    NATIVE_HAWAIIAN = 879 [(.google.fhir.proto.fhir_original_code) = "2079-2"];
+    SAMOAN = 880 [(.google.fhir.proto.fhir_original_code) = "2080-0"];
+    TAHITIAN = 881 [(.google.fhir.proto.fhir_original_code) = "2081-8"];
+    TONGAN = 882 [(.google.fhir.proto.fhir_original_code) = "2082-6"];
+    TOKELAUAN = 883 [(.google.fhir.proto.fhir_original_code) = "2083-4"];
+    GUAMANIAN_OR_CHAMORRO = 884
+        [(.google.fhir.proto.fhir_original_code) = "2086-7"];
+    GUAMANIAN = 885 [(.google.fhir.proto.fhir_original_code) = "2087-5"];
+    CHAMORRO = 886 [(.google.fhir.proto.fhir_original_code) = "2088-3"];
+    MARIANA_ISLANDER = 887 [(.google.fhir.proto.fhir_original_code) = "2089-1"];
+    MARSHALLESE = 888 [(.google.fhir.proto.fhir_original_code) = "2090-9"];
+    PALAUAN = 889 [(.google.fhir.proto.fhir_original_code) = "2091-7"];
+    CAROLINIAN = 890 [(.google.fhir.proto.fhir_original_code) = "2092-5"];
+    KOSRAEAN = 891 [(.google.fhir.proto.fhir_original_code) = "2093-3"];
+    POHNPEIAN = 892 [(.google.fhir.proto.fhir_original_code) = "2094-1"];
+    SAIPANESE = 893 [(.google.fhir.proto.fhir_original_code) = "2095-8"];
+    KIRIBATI = 894 [(.google.fhir.proto.fhir_original_code) = "2096-6"];
+    CHUUKESE = 895 [(.google.fhir.proto.fhir_original_code) = "2097-4"];
+    YAPESE = 896 [(.google.fhir.proto.fhir_original_code) = "2098-2"];
+    FIJIAN = 897 [(.google.fhir.proto.fhir_original_code) = "2101-4"];
+    PAPUA_NEW_GUINEAN = 898
+        [(.google.fhir.proto.fhir_original_code) = "2102-2"];
+    SOLOMON_ISLANDER = 899 [(.google.fhir.proto.fhir_original_code) = "2103-0"];
+    NEW_HEBRIDES = 900 [(.google.fhir.proto.fhir_original_code) = "2104-8"];
+    WHITE = 901 [(.google.fhir.proto.fhir_original_code) = "2106-3"];
+    EUROPEAN = 902 [(.google.fhir.proto.fhir_original_code) = "2108-9"];
+    MIDDLE_EASTERN_OR_NORTH_AFRICAN = 903
+        [(.google.fhir.proto.fhir_original_code) = "2118-8"];
+    ARAB = 904 [(.google.fhir.proto.fhir_original_code) = "2129-5"];
+    ARMENIAN = 905 [(.google.fhir.proto.fhir_original_code) = "2109-7"];
+    ENGLISH = 906 [(.google.fhir.proto.fhir_original_code) = "2110-5"];
+    FRENCH = 907 [(.google.fhir.proto.fhir_original_code) = "2111-3"];
+    GERMAN = 908 [(.google.fhir.proto.fhir_original_code) = "2112-1"];
+    IRISH = 909 [(.google.fhir.proto.fhir_original_code) = "2113-9"];
+    ITALIAN = 910 [(.google.fhir.proto.fhir_original_code) = "2114-7"];
+    POLISH = 911 [(.google.fhir.proto.fhir_original_code) = "2115-4"];
+    SCOTTISH = 912 [(.google.fhir.proto.fhir_original_code) = "2116-2"];
+    ASSYRIAN = 913 [(.google.fhir.proto.fhir_original_code) = "2119-6"];
+    EGYPTIAN = 914 [(.google.fhir.proto.fhir_original_code) = "2120-4"];
+    IRANIAN = 915 [(.google.fhir.proto.fhir_original_code) = "2121-2"];
+    IRAQI = 916 [(.google.fhir.proto.fhir_original_code) = "2122-0"];
+    LEBANESE = 917 [(.google.fhir.proto.fhir_original_code) = "2123-8"];
+    PALESTINIAN = 918 [(.google.fhir.proto.fhir_original_code) = "2124-6"];
+    SYRIAN = 919 [(.google.fhir.proto.fhir_original_code) = "2125-3"];
+    AFGHANISTANI = 920 [(.google.fhir.proto.fhir_original_code) = "2126-1"];
+    ISRAEILI = 921 [(.google.fhir.proto.fhir_original_code) = "2127-9"];
+    OTHER_RACE = 922 [(.google.fhir.proto.fhir_original_code) = "2131-1"];
+    ETHNICITY = 923 [(.google.fhir.proto.fhir_original_code) = "2133-7"];
+    HISPANIC_OR_LATINO = 924
+        [(.google.fhir.proto.fhir_original_code) = "2135-2"];
+    SPANIARD = 925 [(.google.fhir.proto.fhir_original_code) = "2137-8"];
+    MEXICAN = 926 [(.google.fhir.proto.fhir_original_code) = "2148-5"];
+    CENTRAL_AMERICAN = 927 [(.google.fhir.proto.fhir_original_code) = "2155-0"];
+    SOUTH_AMERICAN = 928 [(.google.fhir.proto.fhir_original_code) = "2165-9"];
+    LATIN_AMERICAN = 929 [(.google.fhir.proto.fhir_original_code) = "2178-2"];
+    PUERTO_RICAN = 930 [(.google.fhir.proto.fhir_original_code) = "2180-8"];
+    CUBAN = 931 [(.google.fhir.proto.fhir_original_code) = "2182-4"];
+    DOMINICAN_2184_0 = 932 [(.google.fhir.proto.fhir_original_code) = "2184-0"];
+    ANDALUSIAN = 933 [(.google.fhir.proto.fhir_original_code) = "2138-6"];
+    ASTURIAN = 934 [(.google.fhir.proto.fhir_original_code) = "2139-4"];
+    CASTILLIAN = 935 [(.google.fhir.proto.fhir_original_code) = "2140-2"];
+    CATALONIAN = 936 [(.google.fhir.proto.fhir_original_code) = "2141-0"];
+    BELEARIC_ISLANDER = 937
+        [(.google.fhir.proto.fhir_original_code) = "2142-8"];
+    GALLEGO = 938 [(.google.fhir.proto.fhir_original_code) = "2143-6"];
+    VALENCIAN = 939 [(.google.fhir.proto.fhir_original_code) = "2144-4"];
+    CANARIAN = 940 [(.google.fhir.proto.fhir_original_code) = "2145-1"];
+    SPANISH_BASQUE = 941 [(.google.fhir.proto.fhir_original_code) = "2146-9"];
+    MEXICAN_AMERICAN = 942 [(.google.fhir.proto.fhir_original_code) = "2149-3"];
+    MEXICANO = 943 [(.google.fhir.proto.fhir_original_code) = "2150-1"];
+    CHICANO = 944 [(.google.fhir.proto.fhir_original_code) = "2151-9"];
+    LA_RAZA = 945 [(.google.fhir.proto.fhir_original_code) = "2152-7"];
+    MEXICAN_AMERICAN_INDIAN_2153_5 = 946
+        [(.google.fhir.proto.fhir_original_code) = "2153-5"];
+    COSTA_RICAN = 947 [(.google.fhir.proto.fhir_original_code) = "2156-8"];
+    GUATEMALAN = 948 [(.google.fhir.proto.fhir_original_code) = "2157-6"];
+    HONDURAN = 949 [(.google.fhir.proto.fhir_original_code) = "2158-4"];
+    NICARAGUAN = 950 [(.google.fhir.proto.fhir_original_code) = "2159-2"];
+    PANAMANIAN = 951 [(.google.fhir.proto.fhir_original_code) = "2160-0"];
+    SALVADORAN = 952 [(.google.fhir.proto.fhir_original_code) = "2161-8"];
+    CENTRAL_AMERICAN_INDIAN_2162_6 = 953
+        [(.google.fhir.proto.fhir_original_code) = "2162-6"];
+    CANAL_ZONE = 954 [(.google.fhir.proto.fhir_original_code) = "2163-4"];
+    ARGENTINEAN = 955 [(.google.fhir.proto.fhir_original_code) = "2166-7"];
+    BOLIVIAN = 956 [(.google.fhir.proto.fhir_original_code) = "2167-5"];
+    CHILEAN = 957 [(.google.fhir.proto.fhir_original_code) = "2168-3"];
+    COLOMBIAN = 958 [(.google.fhir.proto.fhir_original_code) = "2169-1"];
+    ECUADORIAN = 959 [(.google.fhir.proto.fhir_original_code) = "2170-9"];
+    PARAGUAYAN = 960 [(.google.fhir.proto.fhir_original_code) = "2171-7"];
+    PERUVIAN = 961 [(.google.fhir.proto.fhir_original_code) = "2172-5"];
+    URUGUAYAN = 962 [(.google.fhir.proto.fhir_original_code) = "2173-3"];
+    VENEZUELAN = 963 [(.google.fhir.proto.fhir_original_code) = "2174-1"];
+    SOUTH_AMERICAN_INDIAN_2175_8 = 964
+        [(.google.fhir.proto.fhir_original_code) = "2175-8"];
+    CRIOLLO = 965 [(.google.fhir.proto.fhir_original_code) = "2176-6"];
+    NOT_HISPANIC_OR_LATINO = 966
+        [(.google.fhir.proto.fhir_original_code) = "2186-5"];
+  }
+}
+
 // Documentation of substances suspected of (or not suspected of) causing an
 // allergy or intolerance reaction in an individual. **Inclusion Criteria:**
 // specific or general substances to which a patient may be exposed and which
@@ -9782,6 +9725,20 @@ message USCoreAllergySubstanceValueSet {
   }
 }
 
+// Set of codes that are needed for implementation of the US-Core profiles.
+// These codes are used as extensions to the FHIR and US Core value sets.
+//
+// See http://hl7.org/fhir/us/core/CodeSystem/careplan-category
+message USCoreCarePlanCategoryExtensionCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/us/core/CodeSystem/careplan-category";
+
+    INVALID_UNINITIALIZED = 0;
+    ASSESS_PLAN = 1;
+  }
+}
+
 // The US Core Clinical Note Type Value Set is a 'starter set' of types
 // supported for fetching and storing clinical notes. See
 // http://hl7.org/fhir/us/core/ValueSet/us-core-clinical-note-type
@@ -9834,6 +9791,21 @@ message USCoreConditionCategoryCodesValueSet {
     HEALTH_CONCERN = 3
         [(.google.fhir.proto.source_code_system) =
              "http://hl7.org/fhir/us/core/CodeSystem/condition-category"];
+  }
+}
+
+// Set of codes that are needed for implementation of the US-Core profiles.
+// These codes are used as extensions to the FHIR and US Core value sets.
+//
+// See http://hl7.org/fhir/us/core/CodeSystem/condition-category
+message USCoreConditionCategoryExtensionCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/us/core/CodeSystem/condition-category";
+
+    INVALID_UNINITIALIZED = 0;
+    PROBLEM = 1 [(.google.fhir.proto.deprecated_code) = true];
+    HEALTH_CONCERN = 2;
   }
 }
 
@@ -9895,6 +9867,19 @@ message USCoreDocumentReferenceTypeValueSet {
       (.google.fhir.proto.source_code_system) =
           "http://terminology.hl7.org/CodeSystem/v3-NullFlavor"
     ];
+  }
+}
+
+// The US Core DocumentReferences Type Code System is a 'starter set' of
+// categories supported for fetching and storing DocumentReference Resources.
+// See http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category
+message USCoreDocumentReferencesCategoryCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category";
+
+    INVALID_UNINITIALIZED = 0;
+    CLINICAL_NOTE = 1;
   }
 }
 
@@ -9966,6 +9951,21 @@ message USCoreProvenancePaticipantTypeCodesValueSet {
       (.google.fhir.proto.source_code_system) =
           "http://terminology.hl7.org/CodeSystem/provenance-participant-type"
     ];
+  }
+}
+
+// Set of codes that are needed for implementation of the US-Core profiles.
+// These codes are used as extensions to the FHIR and US Core value sets.
+//
+// See
+// http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type
+message USCoreProvenancePaticipantTypeExtensionCode {
+  enum Value {
+    option (.google.fhir.proto.fhir_code_system_url) =
+        "http://hl7.org/fhir/us/core/CodeSystem/us-core-provenance-participant-type";
+
+    INVALID_UNINITIALIZED = 0;
+    TRANSMITTER = 1;
   }
 }
 

@@ -523,7 +523,7 @@ public class ProtoGeneratorTest {
   }
 
   @Test
-  public void addContainedResource_derivedResources_unsortedFileDescriptor()
+  public void addContainedResource_derivedResources_sorted()
       throws IOException, InvalidFhirException {
     ProtoGenerator generator =
         ProtoGeneratorTestUtils.makeProtoGenerator(
@@ -562,16 +562,8 @@ public class ProtoGeneratorTest {
                                 .setOneofIndex(0))
                         .addField(
                             FieldDescriptorProto.newBuilder()
-                                .setName("foo")
-                                .setNumber(147)
-                                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
-                                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-                                .setTypeName(".google.foo.Foo")
-                                .setOneofIndex(0))
-                        .addField(
-                            FieldDescriptorProto.newBuilder()
                                 .setName("bar")
-                                .setNumber(148)
+                                .setNumber(147)
                                 .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
                                 .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
                                 .setTypeName(".google.foo.Bar")
@@ -579,10 +571,18 @@ public class ProtoGeneratorTest {
                         .addField(
                             FieldDescriptorProto.newBuilder()
                                 .setName("baz")
-                                .setNumber(149)
+                                .setNumber(148)
                                 .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
                                 .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
                                 .setTypeName(".google.foo.Baz")
+                                .setOneofIndex(0))
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("foo")
+                                .setNumber(149)
+                                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                                .setTypeName(".google.foo.Foo")
                                 .setOneofIndex(0))
                         .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource")))
                 .build());

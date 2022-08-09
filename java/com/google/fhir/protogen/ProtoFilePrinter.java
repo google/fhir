@@ -14,6 +14,7 @@
 
 package com.google.fhir.protogen;
 
+
 import com.google.common.base.Ascii;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
@@ -40,6 +41,7 @@ import com.google.protobuf.DescriptorProtos.MessageOptions;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
@@ -126,7 +128,9 @@ public class ProtoFilePrinter {
     contents.append(printHeader(fileDescriptor)).append("\n");
     contents.append(printImports(fileDescriptor)).append("\n");
     contents.append(printOptions(fileDescriptor, fullyQualifiedPackageName)).append("\n");
-    for (DescriptorProto descriptor : fileDescriptor.getMessageTypeList()) {
+    for (DescriptorProto descriptor :
+        ImmutableList.sortedCopyOf(
+            Comparator.comparing(DescriptorProto::getName), fileDescriptor.getMessageTypeList())) {
       contents
           .append(printMessage(descriptor, fullyQualifiedPackageName, fullyQualifiedPackageName))
           .append("\n");

@@ -24,434 +24,6 @@ option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
 
-// Auto-generated from StructureDefinition for base64Binary.
-// Primitive Type base64Binary.
-// See http://hl7.org/fhir/StructureDefinition/base64Binary
-message Base64Binary {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) = "(\\s*([0-9a-zA-Z\\+/=]){4}\\s*)+";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/base64Binary";
-
-  // Primitive value for base64Binary
-  bytes value = 1;
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-}
-
-// Auto-generated from StructureDefinition for boolean.
-// Primitive Type boolean.
-// See http://hl7.org/fhir/StructureDefinition/boolean
-message Boolean {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) = "true|false";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/boolean";
-
-  // Primitive value for boolean
-  bool value = 1;
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-}
-
-// Auto-generated from StructureDefinition for canonical.
-// Primitive Type canonical.
-// See http://hl7.org/fhir/StructureDefinition/canonical
-message Canonical {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) = "\\S*";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/canonical";
-
-  // Primitive value for canonical
-  string value = 1;
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-}
-
-// Auto-generated from StructureDefinition for code.
-// Primitive Type code.
-// See http://hl7.org/fhir/StructureDefinition/code
-message Code {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) = "[^\\s]+(\\s[^\\s]+)*";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/code";
-
-  // Primitive value for code
-  string value = 1;
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-}
-
-// Auto-generated from StructureDefinition for date.
-// Primitive Type date.
-// See http://hl7.org/fhir/StructureDefinition/date
-message Date {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) =
-      "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/date";
-
-  // Primitive value for date
-  int64 value_us = 1;
-
-  string timezone = 2;
-
-  enum Precision {
-    PRECISION_UNSPECIFIED = 0;
-    YEAR = 1;
-    MONTH = 2;
-    DAY = 3;
-  }
-  Precision precision = 3;
-
-  // xml:id (or equivalent in JSON)
-  String id = 4;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 5;
-}
-
-// Auto-generated from StructureDefinition for dateTime.
-// Primitive Type dateTime.
-// See http://hl7.org/fhir/StructureDefinition/dateTime
-message DateTime {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) =
-      "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/dateTime";
-
-  // Primitive value for dateTime
-  int64 value_us = 1;
-
-  string timezone = 2;
-
-  enum Precision {
-    PRECISION_UNSPECIFIED = 0;
-    YEAR = 1;
-    MONTH = 2;
-    DAY = 3;
-    SECOND = 4;
-    MILLISECOND = 5;
-    MICROSECOND = 6;
-  }
-  Precision precision = 3;
-
-  // xml:id (or equivalent in JSON)
-  String id = 4;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 5;
-}
-
-// Auto-generated from StructureDefinition for decimal.
-// Primitive Type decimal.
-// See http://hl7.org/fhir/StructureDefinition/decimal
-message Decimal {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) =
-      "-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/decimal";
-
-  // Primitive value for decimal
-  string value = 1;
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-}
-
-// Auto-generated from StructureDefinition for id.
-// Primitive Type id.
-// See http://hl7.org/fhir/StructureDefinition/id
-message Id {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) = "[A-Za-z0-9\\-\\.]{1,64}";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/id";
-
-  // Primitive value for id
-  string value = 1;
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-}
-
-// Auto-generated from StructureDefinition for instant.
-// Primitive Type instant.
-// See http://hl7.org/fhir/StructureDefinition/instant
-message Instant {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) =
-      "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/instant";
-
-  // Primitive value for instant
-  int64 value_us = 1;
-
-  string timezone = 2;
-
-  enum Precision {
-    PRECISION_UNSPECIFIED = 0;
-    SECOND = 1;
-    MILLISECOND = 2;
-    MICROSECOND = 3;
-  }
-  Precision precision = 3;
-
-  // xml:id (or equivalent in JSON)
-  String id = 4;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 5;
-}
-
-// Auto-generated from StructureDefinition for integer.
-// Primitive Type integer.
-// See http://hl7.org/fhir/StructureDefinition/integer
-message Integer {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) = "-?([0]|([1-9][0-9]*))";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/integer";
-
-  // Primitive value for integer
-  sint32 value = 1;
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-}
-
-// Auto-generated from StructureDefinition for markdown.
-// Primitive Type markdown.
-// See http://hl7.org/fhir/StructureDefinition/markdown
-message Markdown {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) = "[ \\r\\n\\t\\S]+";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/markdown";
-
-  // Primitive value for markdown
-  string value = 1;
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-}
-
-// Auto-generated from StructureDefinition for oid.
-// Primitive Type oid.
-// See http://hl7.org/fhir/StructureDefinition/oid
-message Oid {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) =
-      "urn:oid:[0-2](\\.(0|[1-9][0-9]*))+";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/oid";
-
-  // Primitive value for oid
-  string value = 1;
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-}
-
-// Auto-generated from StructureDefinition for positiveInt.
-// Primitive Type positiveInt.
-// See http://hl7.org/fhir/StructureDefinition/positiveInt
-message PositiveInt {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) = "[1-9][0-9]*";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/positiveInt";
-
-  // Primitive value for positiveInt
-  uint32 value = 1;
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-}
-
-// Auto-generated from StructureDefinition for string.
-// Primitive Type string.
-// See http://hl7.org/fhir/StructureDefinition/string
-message String {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) = "[ \\r\\n\\t\\S]+";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/string";
-
-  // Primitive value for string
-  string value = 1;
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-}
-
-// Auto-generated from StructureDefinition for time.
-// Primitive Type time.
-// See http://hl7.org/fhir/StructureDefinition/time
-message Time {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) =
-      "([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/time";
-
-  // Primitive value for time
-  int64 value_us = 1;
-
-  enum Precision {
-    PRECISION_UNSPECIFIED = 0;
-    SECOND = 1;
-    MILLISECOND = 2;
-    MICROSECOND = 3;
-  }
-  Precision precision = 2;
-
-  // xml:id (or equivalent in JSON)
-  String id = 3;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 4;
-}
-
-// Auto-generated from StructureDefinition for unsignedInt.
-// Primitive Type unsignedInt.
-// See http://hl7.org/fhir/StructureDefinition/unsignedInt
-message UnsignedInt {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) = "[0]|([1-9][0-9]*)";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/unsignedInt";
-
-  // Primitive value for unsignedInt
-  uint32 value = 1;
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-}
-
-// Auto-generated from StructureDefinition for uri.
-// Primitive Type uri.
-// See http://hl7.org/fhir/StructureDefinition/uri
-message Uri {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) = "\\S*";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/uri";
-
-  // Primitive value for uri
-  string value = 1;
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-}
-
-// Auto-generated from StructureDefinition for url.
-// Primitive Type url.
-// See http://hl7.org/fhir/StructureDefinition/url
-message Url {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) = "\\S*";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/url";
-
-  // Primitive value for url
-  string value = 1;
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-}
-
-// Auto-generated from StructureDefinition for uuid.
-// Primitive Type uuid.
-// See http://hl7.org/fhir/StructureDefinition/uuid
-message Uuid {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.value_regex) =
-      "urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/uuid";
-
-  // Primitive value for uuid
-  string value = 1;
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-}
-
-// Auto-generated from StructureDefinition for xhtml.
-// Primitive Type xhtml.
-// See http://hl7.org/fhir/StructureDefinition/xhtml
-message Xhtml {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/xhtml";
-
-  // Actual xhtml
-  string value = 1
-      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-  // xml:id (or equivalent in JSON)
-  String id = 2;
-
-  // xhtml.extension not present on profile.
-  reserved 3;
-}
-
 // Auto-generated from StructureDefinition for Address.
 // An address expressed using postal conventions (as opposed to GPS or other
 // location definition formats). See
@@ -684,6 +256,82 @@ message BackboneElement {
 
   // Extensions that cannot be ignored even if unrecognized
   repeated Extension modifier_extension = 3;
+}
+
+// Auto-generated from StructureDefinition for base64Binary.
+// Primitive Type base64Binary.
+// See http://hl7.org/fhir/StructureDefinition/base64Binary
+message Base64Binary {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) = "(\\s*([0-9a-zA-Z\\+/=]){4}\\s*)+";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/base64Binary";
+
+  // Primitive value for base64Binary
+  bytes value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// Auto-generated from StructureDefinition for boolean.
+// Primitive Type boolean.
+// See http://hl7.org/fhir/StructureDefinition/boolean
+message Boolean {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) = "true|false";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/boolean";
+
+  // Primitive value for boolean
+  bool value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// Auto-generated from StructureDefinition for canonical.
+// Primitive Type canonical.
+// See http://hl7.org/fhir/StructureDefinition/canonical
+message Canonical {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) = "\\S*";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/canonical";
+
+  // Primitive value for canonical
+  string value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// Auto-generated from StructureDefinition for code.
+// Primitive Type code.
+// See http://hl7.org/fhir/StructureDefinition/code
+message Code {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) = "[^\\s]+(\\s[^\\s]+)*";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/code";
+
+  // Primitive value for code
+  string value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
 }
 
 // Auto-generated from StructureDefinition for CodeableConcept.
@@ -1042,6 +690,89 @@ message DataRequirement {
         [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
   }
   repeated Sort sort = 10;
+}
+
+// Auto-generated from StructureDefinition for date.
+// Primitive Type date.
+// See http://hl7.org/fhir/StructureDefinition/date
+message Date {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) =
+      "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/date";
+
+  // Primitive value for date
+  int64 value_us = 1;
+
+  string timezone = 2;
+
+  enum Precision {
+    PRECISION_UNSPECIFIED = 0;
+    YEAR = 1;
+    MONTH = 2;
+    DAY = 3;
+  }
+  Precision precision = 3;
+
+  // xml:id (or equivalent in JSON)
+  String id = 4;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 5;
+}
+
+// Auto-generated from StructureDefinition for dateTime.
+// Primitive Type dateTime.
+// See http://hl7.org/fhir/StructureDefinition/dateTime
+message DateTime {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) =
+      "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/dateTime";
+
+  // Primitive value for dateTime
+  int64 value_us = 1;
+
+  string timezone = 2;
+
+  enum Precision {
+    PRECISION_UNSPECIFIED = 0;
+    YEAR = 1;
+    MONTH = 2;
+    DAY = 3;
+    SECOND = 4;
+    MILLISECOND = 5;
+    MICROSECOND = 6;
+  }
+  Precision precision = 3;
+
+  // xml:id (or equivalent in JSON)
+  String id = 4;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 5;
+}
+
+// Auto-generated from StructureDefinition for decimal.
+// Primitive Type decimal.
+// See http://hl7.org/fhir/StructureDefinition/decimal
+message Decimal {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) =
+      "-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/decimal";
+
+  // Primitive value for decimal
+  string value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
 }
 
 // Auto-generated from StructureDefinition for Distance.
@@ -2011,6 +1742,25 @@ message HumanName {
   Period period = 9;
 }
 
+// Auto-generated from StructureDefinition for id.
+// Primitive Type id.
+// See http://hl7.org/fhir/StructureDefinition/id
+message Id {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) = "[A-Za-z0-9\\-\\.]{1,64}";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/id";
+
+  // Primitive value for id
+  string value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
+}
+
 // Auto-generated from StructureDefinition for Identifier.
 // An identifier intended for computation.
 // See http://hl7.org/fhir/StructureDefinition/Identifier
@@ -2056,6 +1806,74 @@ message Identifier {
   // Organization that issued id (may be just text)
   Reference assigner = 8
       [(.google.fhir.proto.valid_reference_type) = "Organization"];
+}
+
+// Auto-generated from StructureDefinition for instant.
+// Primitive Type instant.
+// See http://hl7.org/fhir/StructureDefinition/instant
+message Instant {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) =
+      "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/instant";
+
+  // Primitive value for instant
+  int64 value_us = 1;
+
+  string timezone = 2;
+
+  enum Precision {
+    PRECISION_UNSPECIFIED = 0;
+    SECOND = 1;
+    MILLISECOND = 2;
+    MICROSECOND = 3;
+  }
+  Precision precision = 3;
+
+  // xml:id (or equivalent in JSON)
+  String id = 4;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 5;
+}
+
+// Auto-generated from StructureDefinition for integer.
+// Primitive Type integer.
+// See http://hl7.org/fhir/StructureDefinition/integer
+message Integer {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) = "-?([0]|([1-9][0-9]*))";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/integer";
+
+  // Primitive value for integer
+  sint32 value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// Auto-generated from StructureDefinition for markdown.
+// Primitive Type markdown.
+// See http://hl7.org/fhir/StructureDefinition/markdown
+message Markdown {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) = "[ \\r\\n\\t\\S]+";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/markdown";
+
+  // Primitive value for markdown
+  string value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
 }
 
 // Auto-generated from StructureDefinition for MarketingStatus.
@@ -2271,6 +2089,26 @@ message Narrative {
   ];
 }
 
+// Auto-generated from StructureDefinition for oid.
+// Primitive Type oid.
+// See http://hl7.org/fhir/StructureDefinition/oid
+message Oid {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) =
+      "urn:oid:[0-2](\\.(0|[1-9][0-9]*))+";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/oid";
+
+  // Primitive value for oid
+  string value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
+}
+
 // Auto-generated from StructureDefinition for ParameterDefinition.
 // Definition of a parameter to a module.
 // See http://hl7.org/fhir/StructureDefinition/ParameterDefinition
@@ -2396,6 +2234,25 @@ message Population {
   // The existing physiological conditions of the specific population to which
   // this applies
   CodeableConcept physiological_condition = 7;
+}
+
+// Auto-generated from StructureDefinition for positiveInt.
+// Primitive Type positiveInt.
+// See http://hl7.org/fhir/StructureDefinition/positiveInt
+message PositiveInt {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) = "[1-9][0-9]*";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/positiveInt";
+
+  // Primitive value for positiveInt
+  uint32 value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
 }
 
 // Auto-generated from StructureDefinition for ProdCharacteristic.
@@ -2819,6 +2676,25 @@ message SimpleQuantity {
   Code code = 7;
 }
 
+// Auto-generated from StructureDefinition for string.
+// Primitive Type string.
+// See http://hl7.org/fhir/StructureDefinition/string
+message String {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) = "[ \\r\\n\\t\\S]+";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/string";
+
+  // Primitive value for string
+  string value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
+}
+
 // Auto-generated from StructureDefinition for SubstanceAmount.
 // Chemical substances are a single substance type whose primary defining
 // element is the molecular structure. Chemical substances shall be defined on
@@ -2883,6 +2759,34 @@ message SubstanceAmount {
     Quantity high_limit = 4;
   }
   ReferenceRange reference_range = 7;
+}
+
+// Auto-generated from StructureDefinition for time.
+// Primitive Type time.
+// See http://hl7.org/fhir/StructureDefinition/time
+message Time {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) =
+      "([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/time";
+
+  // Primitive value for time
+  int64 value_us = 1;
+
+  enum Precision {
+    PRECISION_UNSPECIFIED = 0;
+    SECOND = 1;
+    MILLISECOND = 2;
+    MICROSECOND = 3;
+  }
+  Precision precision = 2;
+
+  // xml:id (or equivalent in JSON)
+  String id = 3;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 4;
 }
 
 // Auto-generated from StructureDefinition for Timing.
@@ -3110,6 +3014,63 @@ message TriggerDefinition {
   Expression condition = 7;
 }
 
+// Auto-generated from StructureDefinition for unsignedInt.
+// Primitive Type unsignedInt.
+// See http://hl7.org/fhir/StructureDefinition/unsignedInt
+message UnsignedInt {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) = "[0]|([1-9][0-9]*)";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/unsignedInt";
+
+  // Primitive value for unsignedInt
+  uint32 value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// Auto-generated from StructureDefinition for uri.
+// Primitive Type uri.
+// See http://hl7.org/fhir/StructureDefinition/uri
+message Uri {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) = "\\S*";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/uri";
+
+  // Primitive value for uri
+  string value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// Auto-generated from StructureDefinition for url.
+// Primitive Type url.
+// See http://hl7.org/fhir/StructureDefinition/url
+message Url {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) = "\\S*";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/url";
+
+  // Primitive value for url
+  string value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
+}
+
 // Auto-generated from StructureDefinition for UsageContext.
 // Describes the context of use for a conformance or knowledge resource.
 // See http://hl7.org/fhir/StructureDefinition/UsageContext
@@ -3149,6 +3110,45 @@ message UsageContext {
   }
   ValueX value = 4
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+}
+
+// Auto-generated from StructureDefinition for uuid.
+// Primitive Type uuid.
+// See http://hl7.org/fhir/StructureDefinition/uuid
+message Uuid {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.value_regex) =
+      "urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/uuid";
+
+  // Primitive value for uuid
+  string value = 1;
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// Auto-generated from StructureDefinition for xhtml.
+// Primitive Type xhtml.
+// See http://hl7.org/fhir/StructureDefinition/xhtml
+message Xhtml {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/xhtml";
+
+  // Actual xhtml
+  string value = 1
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // xml:id (or equivalent in JSON)
+  String id = 2;
+
+  // xhtml.extension not present on profile.
+  reserved 3;
 }
 
 // End of auto-generated messages.
