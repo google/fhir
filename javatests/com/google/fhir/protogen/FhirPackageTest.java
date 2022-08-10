@@ -157,7 +157,7 @@ public final class FhirPackageTest {
         ImmutableList.of(
             new PackageFile() {
               {
-                fileName = "foo_package_info.prototxt";
+                fileName = "foo_package_info.textproto";
                 fileContents =
                     "proto_package: \"google.fhir.r4.core\""
                         + "\njava_proto_package: \"com.google.fhir.r4.core\""
@@ -277,7 +277,8 @@ public final class FhirPackageTest {
                 new PackageFile() {
                   {
                     fileName = "bar.json";
-                    fileContents = "{\"resourceType\":\"StructureDefinition\"}";
+                    fileContents =
+                        "{\"resourceType\":\"StructureDefinition\", \"url\":\"http://bar.com\"}";
                   }
                 }));
 
@@ -313,45 +314,60 @@ public final class FhirPackageTest {
         /*valueSetsCount=*/ 0,
         /*searchParametersCount=*/ 0),
     UNHANDLED_RESOURCE_TYPE(
-        /*fileContents=*/ "{\"resourceType\":\"Foo\"}",
+        /*fileContents=*/ "{\"resourceType\":\"Foo\", \"url\":\"http://foo.com\"}",
         /*structureDefinitionsCount=*/ 0,
         /*codeSystemsCount=*/ 0,
         /*valueSetsCount=*/ 0,
         /*searchParametersCount=*/ 0),
     VALUE_SET(
-        /*fileContents=*/ "{\"resourceType\":\"ValueSet\"}",
+        /*fileContents=*/ "{\"resourceType\":\"ValueSet\", \"url\":\"http://foo.com\"}",
         /*structureDefinitionsCount=*/ 0,
         /*codeSystemsCount=*/ 0,
         /*valueSetsCount=*/ 1,
         /*searchParametersCount=*/ 0),
     CODE_SYSTEM(
-        /*fileContents=*/ "{\"resourceType\":\"CodeSystem\"}",
+        /*fileContents=*/ "{\"resourceType\":\"CodeSystem\", \"url\":\"http://foo.com\"}",
         /*structureDefinitionsCount=*/ 0,
         /*codeSystemsCount=*/ 1,
         /*valueSetsCount=*/ 0,
         /*searchParametersCount=*/ 0),
     STRUCTURE_DEFINITION(
-        /*fileContents=*/ "{\"resourceType\":\"StructureDefinition\"}",
+        /*fileContents=*/ "{\"resourceType\":\"StructureDefinition\", \"url\":\"http://foo.com\"}",
         /*structureDefinitionsCount=*/ 1,
         /*codeSystemsCount=*/ 0,
         /*valueSetsCount=*/ 0,
         /*searchParametersCount=*/ 0),
     SEARCH_PARAMETER(
-        /*fileContents=*/ "{\"resourceType\":\"SearchParameter\"}",
+        /*fileContents=*/ "{\"resourceType\":\"SearchParameter\", \"url\":\"http://foo.com\"}",
         /*structureDefinitionsCount=*/ 0,
         /*codeSystemsCount=*/ 0,
         /*valueSetsCount=*/ 0,
         /*searchParametersCount=*/ 1),
     BUNDLE_WITH_EACH(
-        /*fileContents=*/ "{\"resourceType\":\"Bundle\", \"entry\":"
-            + " [{\"resource\": {\"resourceType\":\"ValueSet\"}},"
-            + " {\"resource\": {\"resourceType\":\"CodeSystem\"}},"
-            + " {\"resource\": {\"resourceType\":\"StructureDefinition\"}},"
-            + " {\"resource\": {\"resourceType\":\"SearchParameter\"}}]}",
+        /*fileContents=*/ "{\"resourceType\":\"Bundle\", \"entry\": [{\"resource\":"
+            + " {\"resourceType\":\"ValueSet\", \"url\":\"http://foo.com/valueset\"}},"
+            + " {\"resource\": {\"resourceType\":\"CodeSystem\""
+            + ", \"url\":\"http://foo.com/codesystem\"}}, {\"resource\":"
+            + " {\"resourceType\":\"StructureDefinition\""
+            + ", \"url\":\"http://foo.com/strucdef\"}}, {\"resource\":"
+            + " {\"resourceType\":\"SearchParameter\""
+            + ", \"url\":\"http://foo.com/searchparam\"}}]}",
         /*structureDefinitionsCount=*/ 1,
         /*codeSystemsCount=*/ 1,
         /*valueSetsCount=*/ 1,
-        /*searchParametersCount=*/ 1);
+        /*searchParametersCount=*/ 1),
+    BUNDLE_WITH_NO_ENTRIES(
+        /*fileContents=*/ "{\"resourceType\":\"Bundle\"}",
+        /*structureDefinitionsCount=*/ 0,
+        /*codeSystemsCount=*/ 0,
+        /*valueSetsCount=*/ 0,
+        /*searchParametersCount=*/ 0),
+    BUNDLE_WITH_INVALID_ENTRIES(
+        /*fileContents=*/ "{\"resourceType\":\"Bundle\", \"entry\":\"Not an array\"}",
+        /*structureDefinitionsCount=*/ 0,
+        /*codeSystemsCount=*/ 0,
+        /*valueSetsCount=*/ 0,
+        /*searchParametersCount=*/ 0);
 
     final String fileContents;
     final int structureDefinitionsCount;
@@ -416,7 +432,7 @@ public final class FhirPackageTest {
             new PackageFile() {
               {
                 fileName = "bar.json";
-                fileContents = "{\"resourceType\":\"ValueSet\"}";
+                fileContents = "{\"resourceType\":\"ValueSet\", \"url\":\"http://foo.com\"}";
               }
             });
     String zipFile = createFhirPackageInfoZip("foo_package", files);
@@ -449,7 +465,8 @@ public final class FhirPackageTest {
         new TarArchiveOutputStream(new FileOutputStream(tarGzFile))) {
       TarArchiveEntry t = new TarArchiveEntry(new File("foo.json"));
       byte[] content =
-          "{\"resourceType\":\"StructureDefinition\"}".getBytes(Charset.forName(UTF_8.name()));
+          "{\"resourceType\":\"StructureDefinition\", \"url\":\"http://foo.com\"}"
+              .getBytes(Charset.forName(UTF_8.name()));
       t.setSize(content.length);
       tOut.putArchiveEntry(t);
       tOut.write(content);
@@ -489,13 +506,17 @@ public final class FhirPackageTest {
             new PackageFile() {
               {
                 fileName = "foo.json";
-                fileContents = "{\"resourceType\":\"StructureDefinition\", \"id\":\"Foo\"}";
+                fileContents =
+                    "{\"resourceType\":\"StructureDefinition\", \"url\":\"http://foo.com\","
+                        + " \"id\":\"Foo\"}";
               }
             },
             new PackageFile() {
               {
                 fileName = "bar.json";
-                fileContents = "{\"resourceType\":\"StructureDefinition\", \"id\":\"Bar\"}";
+                fileContents =
+                    "{\"resourceType\":\"StructureDefinition\", \"url\":\"http://bar.com\","
+                        + " \"id\":\"Bar\"}";
               }
             });
     String zipFile = createFhirPackageInfoZip("foo_package", files);

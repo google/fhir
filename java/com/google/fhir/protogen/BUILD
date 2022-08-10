@@ -64,6 +64,7 @@ java_library(
         ],
     ),
     deps = [
+        ":ResourceCollection",
         ":generator_utils",
         "//java/com/google/fhir/common:annotation_utils",
         "//java/com/google/fhir/common:codes",
@@ -72,7 +73,6 @@ java_library(
         "//java/com/google/fhir/common:fhir_types",
         "//java/com/google/fhir/common:fhir_version",
         "//java/com/google/fhir/common:json_format",
-        "//java/com/google/fhir/common:resource_utils",
         "//java/com/google/fhir/common:resource_validator",
         "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto:profile_config_java_proto",
@@ -86,6 +86,7 @@ java_library(
         "//proto/google/fhir/proto/r4/core/resources:value_set_java_proto",
         "//proto/google/fhir/proto/stu3:datatypes_java_proto",
         "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_code_gson_gson",
         "@maven//:com_google_guava_guava",
         "@maven//:org_apache_commons_commons_compress",
     ],

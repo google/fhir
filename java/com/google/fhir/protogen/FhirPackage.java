@@ -20,26 +20,24 @@ import com.google.common.base.Ascii;
 import com.google.common.io.ByteStreams;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
-import com.google.fhir.common.ResourceUtils;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
-import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.CodeSystem;
 import com.google.fhir.r4.core.SearchParameter;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.ValueSet;
-import com.google.protobuf.Message;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import com.google.protobuf.TextFormat;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
@@ -139,13 +137,16 @@ public class FhirPackage {
       throws IOException, InvalidFhirException {
     PackageInfo extractedPackageInfo = null;
     try (ArchiveInputStream archiveEntries = getZipOrTarInputStream(archiveFilePath)) {
-      Map<String, String> jsonFiles = new HashMap<>();
+      List<JsonFile> jsonFiles = new ArrayList<>();
       ArchiveEntry entry = null;
       while ((entry = archiveEntries.getNextEntry()) != null) {
         String entryName = Ascii.toLowerCase(entry.getName());
         if (entryName.endsWith(".json")) {
-          jsonFiles.put(
-              entry.getName(), new String(ByteStreams.toByteArray(archiveEntries), UTF_8));
+          JsonReader reader =
+              new JsonReader(
+                  new StringReader(new String(ByteStreams.toByteArray(archiveEntries), UTF_8)));
+          JsonElement json = JsonParser.parseReader(reader);
+          jsonFiles.add(new JsonFile(entry.getName(), json));
         } else if (packageInfo == null
             && (entryName.endsWith("package_info.prototxt")
                 || entryName.endsWith("package_info.textproto"))) {
@@ -181,6 +182,23 @@ public class FhirPackage {
         valueSets);
   }
 
+  private static class JsonFile {
+    JsonFile(String name, JsonElement json) {
+      this.name = name;
+      this.json = json;
+    }
+
+    final String name;
+    final JsonElement json;
+  }
+
+  private static class ResourceCollections {
+    ResourceCollection<StructureDefinition> structureDefinitions;
+    ResourceCollection<SearchParameter> searchParameters;
+    ResourceCollection<CodeSystem> codeSystems;
+    ResourceCollection<ValueSet> valueSets;
+  }
+
   /**
    * Gets the archive input stream from a ZIP or TAR file.
    *
@@ -200,16 +218,58 @@ public class FhirPackage {
     }
   }
 
-  private static final Pattern RESOURCE_TYPE_PATTERN =
-      Pattern.compile("\"resourceType\"\\s*:\\s*\"([A-Za-z]*)\"");
+  private static Optional<String> getResourceType(JsonElement json) {
+    if (!json.isJsonObject() || !json.getAsJsonObject().has("resourceType")) {
+      return Optional.empty();
+    }
+    return Optional.of(json.getAsJsonObject().get("resourceType").getAsString());
+  }
 
-  private static Optional<String> getResourceType(String json) {
-    Matcher matcher = RESOURCE_TYPE_PATTERN.matcher(json);
-    return matcher.find() ? Optional.of(matcher.group(1)) : Optional.empty();
+  private static void buildResourceCollections(
+      List<JsonFile> jsonFiles, JsonFormat.Parser parser, ResourceCollections resourceCollections) {
+
+    for (JsonFile jsonFile : jsonFiles) {
+      JsonElement json = jsonFile.json;
+      Optional<String> expectedType = getResourceType(json);
+      if (expectedType.isEmpty()) {
+        System.out.println("Unhandled JSON entry: " + jsonFile.name);
+        continue;
+      }
+      switch (expectedType.get()) {
+        case "StructureDefinition":
+          resourceCollections.structureDefinitions.add(json);
+          break;
+        case "SearchParameter":
+          resourceCollections.searchParameters.add(json);
+          break;
+        case "CodeSystem":
+          resourceCollections.codeSystems.add(json);
+          break;
+        case "ValueSet":
+          resourceCollections.valueSets.add(json);
+          break;
+        case "Bundle":
+          JsonElement bundleEntry;
+          if (!json.isJsonObject()
+              || !json.getAsJsonObject().has("entry")
+              || !(bundleEntry = json.getAsJsonObject().get("entry")).isJsonArray()) {
+            break;
+          }
+          JsonArray entries = bundleEntry.getAsJsonArray();
+          List<JsonFile> bundleEntries = new ArrayList<>();
+          for (JsonElement entry : entries) {
+            bundleEntries.add(new JsonFile(jsonFile.name, entry.getAsJsonObject().get("resource")));
+          }
+          buildResourceCollections(bundleEntries, parser, resourceCollections);
+          break;
+        default:
+          System.out.println("Unhandled JSON entry: " + jsonFile.name);
+      }
+    }
   }
 
   private static FhirPackage makeFromJsonAndPackageInfo(
-      Map<String, String> jsonFiles, PackageInfo packageInfo) throws InvalidFhirException {
+      List<JsonFile> jsonFiles, PackageInfo packageInfo) {
     if (packageInfo != null) {
       if (packageInfo.getProtoPackage().isEmpty()) {
         throw new IllegalArgumentException(
@@ -221,53 +281,37 @@ public class FhirPackage {
       }
     }
 
-    List<ValueSet> valueSets = new ArrayList<>();
-    List<CodeSystem> codeSystems = new ArrayList<>();
-    List<StructureDefinition> structureDefinitions = new ArrayList<>();
-    List<SearchParameter> searchParameters = new ArrayList<>();
     // TODO: Make Fhir Parser injectable.
     JsonFormat.Parser parser =
         packageInfo == null
             ? JsonFormat.getParser()
             : JsonFormat.getSpecParser(packageInfo.getFhirVersion());
 
-    for (Map.Entry<String, String> jsonFile : jsonFiles.entrySet()) {
-      String json = jsonFile.getValue();
-      Optional<String> expectedType = getResourceType(json);
-      if (!expectedType.isPresent()) {
-        System.out.println("Unhandled JSON entry: " + jsonFile.getKey());
-        continue;
-      }
+    ResourceCollections resourceCollections = new ResourceCollections();
+    resourceCollections.structureDefinitions =
+        new ResourceCollection<>(parser, StructureDefinition.class);
+    resourceCollections.searchParameters = new ResourceCollection<>(parser, SearchParameter.class);
+    resourceCollections.codeSystems = new ResourceCollection<>(parser, CodeSystem.class);
+    resourceCollections.valueSets = new ResourceCollection<>(parser, ValueSet.class);
 
-      if (expectedType.get().equals("ValueSet")) {
-        valueSets.add(parser.merge(json, ValueSet.newBuilder()).build());
-      } else if (expectedType.get().equals("CodeSystem")) {
-        codeSystems.add(parser.merge(json, CodeSystem.newBuilder()).build());
-      } else if (expectedType.get().equals("StructureDefinition")) {
-        structureDefinitions.add(parser.merge(json, StructureDefinition.newBuilder()).build());
-      } else if (expectedType.get().equals("SearchParameter")) {
-        searchParameters.add(parser.merge(json, SearchParameter.newBuilder()).build());
-      } else if (expectedType.get().equals("Bundle")) {
-        // TODO: Theoretically a bundle could contain a bundle, modify implementation
-        // to accomodate.
-        Bundle bundle = parser.merge(json, Bundle.newBuilder()).build();
-        for (Bundle.Entry bundleEntry : bundle.getEntryList()) {
-          Message contained = ResourceUtils.getContainedResource(bundleEntry.getResource());
-          if (contained instanceof ValueSet) {
-            valueSets.add((ValueSet) contained);
-          } else if (contained instanceof CodeSystem) {
-            codeSystems.add((CodeSystem) contained);
-          } else if (contained instanceof StructureDefinition) {
-            structureDefinitions.add((StructureDefinition) contained);
-          } else if (contained instanceof SearchParameter) {
-            searchParameters.add((SearchParameter) contained);
-          }
-        }
-      } else {
-        System.out.println("Unhandled JSON entry: " + jsonFile.getKey());
-      }
-    }
+    buildResourceCollections(jsonFiles, parser, resourceCollections);
+
+    // TODO: Modify `FhirPackage` to work with Iterable<T> instead of List<T> and update
+    // callers in standalone CL.
+    List<StructureDefinition> structureDefinitionsList = new ArrayList<>();
+    resourceCollections.structureDefinitions.forEach(structureDefinitionsList::add);
+    List<SearchParameter> searchParametersList = new ArrayList<>();
+    resourceCollections.searchParameters.forEach(searchParametersList::add);
+    List<CodeSystem> codeSystemsList = new ArrayList<>();
+    resourceCollections.codeSystems.forEach(codeSystemsList::add);
+    List<ValueSet> valueSetsList = new ArrayList<>();
+    resourceCollections.valueSets.forEach(valueSetsList::add);
+
     return new FhirPackage(
-        packageInfo, structureDefinitions, searchParameters, codeSystems, valueSets);
+        packageInfo,
+        structureDefinitionsList,
+        searchParametersList,
+        codeSystemsList,
+        valueSetsList);
   }
 }
