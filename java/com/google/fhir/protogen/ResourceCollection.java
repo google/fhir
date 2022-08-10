@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * A collection of FHIR resources of a given type, T.
@@ -40,44 +42,82 @@ class ResourceCollection<T extends Message> implements Iterable<T> {
   private final Map<String, JsonElement> jsonResourcesByUri = new HashMap<>();
   private final Map<String, T> parsedResourcesByUri = new HashMap<>();
   private final Class<T> protoClass;
+  private Predicate<T> filter = null;
 
   ResourceCollection(JsonFormat.Parser jsonParser, Class<T> protoClass) {
     this.jsonParser = jsonParser;
     this.protoClass = protoClass;
   }
 
+  /**
+   * Sets a filter for the collection.
+   *
+   * <p>Only resources matching the filter will be returned by iterators or the `get` method.
+   *
+   * <p>Invalidates iterators.
+   */
+  public void setFilter(Predicate<T> filter) {
+    this.filter = filter;
+  }
+
   @Override
   public Iterator<T> iterator() {
     return new Iterator<T>() {
+      private Optional<T> next = Optional.empty();
       private final Iterator<Map.Entry<String, T>> parsedIterator =
           parsedResourcesByUri.entrySet().iterator();
 
       @Override
       public boolean hasNext() {
-        return parsedIterator.hasNext() || !jsonResourcesByUri.isEmpty();
-      }
-
-      @Override
-      public T next() {
+        if (next.isPresent()) {
+          return true;
+        }
+        T unfilteredNext = null;
         // First iterate the parsed resources, then the unparsed ones.
         if (parsedIterator.hasNext()) {
-          return parsedIterator.next().getValue();
+          unfilteredNext = parsedIterator.next().getValue();
         } else if (!jsonResourcesByUri.isEmpty()) {
           // Calling `get` parses the resource, removing it from the `jsonResourceByUri`
           // collection. We can simply read from the front of that entry set each iteration.
           Map.Entry<String, JsonElement> unparsed = jsonResourcesByUri.entrySet().iterator().next();
           try {
-            return get(unparsed.getKey());
+            unfilteredNext = get(unparsed.getKey());
+          } catch (NoSuchElementException e) {
+            // While the resource exists, it does not match the filter.
+            return hasNext();
           } catch (InvalidFhirException e) {
             throw new IllegalStateException(e);
           }
         } else {
+          return false;
+        }
+
+        if (filter == null || filter.test(unfilteredNext)) {
+          next = Optional.ofNullable(unfilteredNext);
+          return true;
+        }
+
+        // The filter was set and the next unfiltered resource didn't match it.
+        return hasNext();
+      }
+
+      @Override
+      public T next() {
+        if (!hasNext()) {
           throw new NoSuchElementException();
         }
+        T next = this.next.get();
+        this.next = Optional.empty();
+        return next;
       }
     };
   }
 
+  /**
+   * Adds a resource to the collection.
+   *
+   * <p>Invalidates iterators.
+   */
   public void add(JsonElement json) {
     JsonObject jsonObject;
     String url;
@@ -95,24 +135,33 @@ class ResourceCollection<T extends Message> implements Iterable<T> {
     jsonResourcesByUri.put(url, json);
   }
 
+  /**
+   * Returns the resource matching the URI.
+   *
+   * <p>If a filter is set, the retrieved resource will only be returned if it matches.
+   */
+  @SuppressWarnings("unchecked") // newBuilderForType().build() produces a T.
   public T get(String uri) throws InvalidFhirException {
-    T cached = parsedResourcesByUri.get(uri);
-    if (cached != null) {
-      return cached;
+    T resource = parsedResourcesByUri.get(uri);
+    if (resource == null) {
+      JsonElement jsonResource = jsonResourcesByUri.get(uri);
+      if (jsonResource == null) {
+        throw new NoSuchElementException("No resource found for URI: " + uri);
+      }
+
+      Message.Builder builder = Internal.getDefaultInstance(protoClass).newBuilderForType();
+      resource = (T) jsonParser.merge(jsonResource.toString(), builder).build();
+      parsedResourcesByUri.put(uri, resource);
+
+      // Now that the resource is parsed, remove it from the unparsed JSON resources.
+      jsonResourcesByUri.remove(uri);
     }
-    JsonElement jsonResource = jsonResourcesByUri.get(uri);
-    if (jsonResource == null) {
-      throw new NoSuchElementException("No resource found for URI: " + uri);
+
+    if (filter != null && !filter.test(resource)) {
+      throw new NoSuchElementException(
+          "No resource found for URI: '" + uri + "'. Does the resource match the set filter?");
     }
 
-    Message.Builder builder = Internal.getDefaultInstance(protoClass).newBuilderForType();
-    @SuppressWarnings("unchecked") // newBuilderForType().build() produces a T.
-    T parsedResource = (T) jsonParser.merge(jsonResource.toString(), builder).build();
-    parsedResourcesByUri.put(uri, parsedResource);
-
-    // Now that the resource is parsed, remove it from the unparsed JSON resources.
-    jsonResourcesByUri.remove(uri);
-
-    return parsedResource;
+    return resource;
   }
 }
