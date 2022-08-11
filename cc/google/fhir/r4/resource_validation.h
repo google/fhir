@@ -21,7 +21,7 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "google/fhir/error_reporter.h"
-#include "google/fhir/stu3/operation_error_reporter.h"
+#include "google/fhir/operation_error_reporter.h"
 #include "proto/google/fhir/proto/r4/core/codes.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/operation_outcome.pb.h"
 #include "proto/google/fhir/proto/r4/fhirproto.pb.h"
