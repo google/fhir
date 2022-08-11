@@ -15,6 +15,7 @@
 package com.google.fhir.protogen;
 
 import static com.google.common.collect.ImmutableMap.toImmutableMap;
+import static com.google.common.collect.Streams.stream;
 import static com.google.fhir.protogen.GeneratorUtils.getElementById;
 import static com.google.fhir.protogen.GeneratorUtils.isExtensionProfile;
 import static com.google.fhir.protogen.GeneratorUtils.isProfile;
@@ -269,9 +270,11 @@ public class ProtoGenerator {
     for (FhirPackage fhirPackage : fhirPackages) {
       PackageInfo info = fhirPackage.packageInfo;
       allDefinitions.putAll(
-          fhirPackage.structureDefinitions.stream()
+          stream(fhirPackage.structureDefinitions().iterator())
               .collect(Collectors.toMap(def -> def, def -> info.getProtoPackage())));
-      searchParameterMap.putAll(GeneratorUtils.getSearchParameterMap(fhirPackage.searchParameters));
+      searchParameterMap.putAll(
+          GeneratorUtils.getSearchParameterMap(
+              ImmutableList.copyOf(fhirPackage.searchParameters())));
     }
 
     Map<String, StructureDefinitionData> mutableStructDefDataByUrl = new HashMap<>();

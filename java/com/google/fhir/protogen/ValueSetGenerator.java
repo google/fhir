@@ -14,9 +14,12 @@
 
 package com.google.fhir.protogen;
 
+import static com.google.common.collect.Streams.stream;
+
 import com.google.common.base.Ascii;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.fhir.common.AnnotationUtils;
@@ -71,12 +74,12 @@ public class ValueSetGenerator {
 
     this.codeSystemsByUrl =
         fhirPackages.stream()
-            .flatMap(p -> p.codeSystems.stream())
+            .flatMap(p -> stream(p.codeSystems().iterator()))
             .collect(Collectors.toMap(cs -> cs.getUrl().getValue(), cs -> cs));
 
     this.valueSetsByUrl =
         fhirPackages.stream()
-            .flatMap(p -> p.valueSets.stream())
+            .flatMap(p -> stream(p.valueSets().iterator()))
             .collect(Collectors.toMap(vs -> vs.getUrl().getValue(), vs -> vs));
 
     // Make a map from url to proto type for each type we can inline.
@@ -92,13 +95,13 @@ public class ValueSetGenerator {
       if (!fhirPackage.packageInfo.getProtoPackage().equals(fhirVersion.coreProtoPackage)) {
         String packageString = "." + fhirPackage.packageInfo.getProtoPackage() + ".";
         protoTypesByUrl.putAll(
-            fhirPackage.codeSystems.stream()
+            stream(fhirPackage.codeSystems().iterator())
                 .collect(
                     Collectors.toMap(
                         cs -> cs.getUrl().getValue(),
                         cs -> packageString + getCodeSystemName(cs))));
         protoTypesByUrl.putAll(
-            fhirPackage.valueSets.stream()
+            stream(fhirPackage.valueSets().iterator())
                 .filter(vs -> !getOneToOneCodeSystem(vs).isPresent())
                 .collect(
                     Collectors.toMap(
@@ -153,7 +156,7 @@ public class ValueSetGenerator {
   }
 
   public FileDescriptorProto generateCodeSystemFile(FhirPackage fhirPackage) {
-    return generateCodeSystemFile(fhirPackage.codeSystems);
+    return generateCodeSystemFile(ImmutableList.copyOf(fhirPackage.codeSystems()));
   }
 
   private FileDescriptorProto generateCodeSystemFile(Collection<CodeSystem> codeSystemsToGenerate) {
@@ -181,7 +184,7 @@ public class ValueSetGenerator {
   }
 
   public FileDescriptorProto generateValueSetFile(FhirPackage fhirPackage) {
-    return generateValueSetFile(fhirPackage.valueSets);
+    return generateValueSetFile(ImmutableList.copyOf(fhirPackage.valueSets()));
   }
 
   private FileDescriptorProto generateValueSetFile(Collection<ValueSet> valueSetsToGenerate) {

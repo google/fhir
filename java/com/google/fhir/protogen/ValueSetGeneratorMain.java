@@ -55,8 +55,7 @@ final class ValueSetGeneratorMain {
 
     @Parameter(
         names = {"--fhir_definition_dep"},
-        description =
-            "FhirPackage zips that are dependencies of the valuesets being generated.")
+        description = "FhirPackage zips that are dependencies of the valuesets being generated.")
     private Set<String> fhirDefinitionDepList = new HashSet<>();
 
     @Parameter(
@@ -124,7 +123,7 @@ final class ValueSetGeneratorMain {
             .collect(Collectors.toSet()));
     for (String fhirPackageString : args.codeUserPackages) {
       FhirPackage fhirPackage = FhirPackage.load(fhirPackageString);
-      codeUsers.addAll(fhirPackage.structureDefinitions);
+      fhirPackage.structureDefinitions().forEach(codeUsers::add);
     }
 
     FileDescriptorProto codesFileDescriptor =
@@ -171,7 +170,7 @@ final class ValueSetGeneratorMain {
         parser.merge(json, builder);
       } else if (filename.endsWith(".zip")) {
         FhirPackage fhirPackage = FhirPackage.load(filename);
-        for (StructureDefinition structDef : fhirPackage.structureDefinitions) {
+        for (StructureDefinition structDef : fhirPackage.structureDefinitions()) {
           builder.addEntryBuilder().getResourceBuilder().setStructureDefinition(structDef);
         }
       } else {

@@ -14,6 +14,7 @@
 
 package com.google.fhir.protogen;
 
+import static com.google.common.collect.Streams.stream;
 import static com.google.common.truth.Truth.assertThat;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static junit.framework.Assert.assertTrue;
@@ -33,7 +34,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -75,34 +75,28 @@ public final class FhirPackageTest {
   }
 
   @Test
-  public void equality() {
+  public void equality() throws IOException, InvalidFhirException {
+    PackageInfo fooPackage =
+        PackageInfo.newBuilder()
+            .setProtoPackage("google.foo")
+            .setFhirVersion(FhirVersion.R4)
+            .build();
+    PackageInfo barPackage =
+        PackageInfo.newBuilder()
+            .setProtoPackage("google.bar")
+            .setFhirVersion(FhirVersion.R4)
+            .build();
     new EqualsTester()
         .addEqualityGroup(
-            new FhirPackage(
-                PackageInfo.newBuilder().setProtoPackage("foo").build(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>()),
-            new FhirPackage(
-                PackageInfo.newBuilder().setProtoPackage("foo").build(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>()))
+            FhirPackage.load(
+                createFhirPackageInfoZip("foo_package", ImmutableList.of()), fooPackage),
+            FhirPackage.load(
+                createFhirPackageInfoZip("foo_package", ImmutableList.of()), fooPackage))
         .addEqualityGroup(
-            new FhirPackage(
-                PackageInfo.newBuilder().setProtoPackage("bar").build(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>()),
-            new FhirPackage(
-                PackageInfo.newBuilder().setProtoPackage("bar").build(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>()))
+            FhirPackage.load(
+                createFhirPackageInfoZip("bar_package", ImmutableList.of()), barPackage),
+            FhirPackage.load(
+                createFhirPackageInfoZip("bar_package", ImmutableList.of()), barPackage))
         .testEquals();
   }
 
@@ -285,10 +279,10 @@ public final class FhirPackageTest {
     FhirPackage fhirPackage = FhirPackage.load(zipFile);
 
     assertThat(fhirPackage.packageInfo).isNull();
-    assertThat(fhirPackage.structureDefinitions).hasSize(1);
-    assertThat(fhirPackage.codeSystems).isEmpty();
-    assertThat(fhirPackage.valueSets).isEmpty();
-    assertThat(fhirPackage.searchParameters).isEmpty();
+    assertThat(fhirPackage.structureDefinitions()).hasSize(1);
+    assertThat(fhirPackage.codeSystems()).isEmpty();
+    assertThat(fhirPackage.valueSets()).isEmpty();
+    assertThat(fhirPackage.searchParameters()).isEmpty();
   }
 
   private static final PackageFile VALID_PACKAGE_INFO =
@@ -406,10 +400,10 @@ public final class FhirPackageTest {
     FhirPackage fhirPackage = FhirPackage.load(zipFile);
 
     assertThat(fhirPackage.packageInfo.getProtoPackage()).isEqualTo("google.foo");
-    assertThat(fhirPackage.structureDefinitions).hasSize(loadCase.structureDefinitionsCount);
-    assertThat(fhirPackage.codeSystems).hasSize(loadCase.codeSystemsCount);
-    assertThat(fhirPackage.valueSets).hasSize(loadCase.valueSetsCount);
-    assertThat(fhirPackage.searchParameters).hasSize(loadCase.searchParametersCount);
+    assertThat(fhirPackage.structureDefinitions()).hasSize(loadCase.structureDefinitionsCount);
+    assertThat(fhirPackage.codeSystems()).hasSize(loadCase.codeSystemsCount);
+    assertThat(fhirPackage.valueSets()).hasSize(loadCase.valueSetsCount);
+    assertThat(fhirPackage.searchParameters()).hasSize(loadCase.searchParametersCount);
   }
 
   @Test
@@ -451,10 +445,10 @@ public final class FhirPackageTest {
 
     // Note that it ignores the PackageInfo ("google.bar") provided in the ZIP.
     assertThat(fhirPackage.packageInfo.getProtoPackage()).isEqualTo("google.foo");
-    assertThat(fhirPackage.structureDefinitions).isEmpty();
-    assertThat(fhirPackage.codeSystems).isEmpty();
-    assertThat(fhirPackage.valueSets).hasSize(1);
-    assertThat(fhirPackage.searchParameters).isEmpty();
+    assertThat(fhirPackage.structureDefinitions()).isEmpty();
+    assertThat(fhirPackage.codeSystems()).isEmpty();
+    assertThat(fhirPackage.valueSets()).hasSize(1);
+    assertThat(fhirPackage.searchParameters()).isEmpty();
   }
 
   @Test
@@ -476,10 +470,10 @@ public final class FhirPackageTest {
     FhirPackage fhirPackage = FhirPackage.load(tarGzFile.getAbsolutePath());
 
     assertThat(fhirPackage.packageInfo).isNull();
-    assertThat(fhirPackage.structureDefinitions).hasSize(1);
-    assertThat(fhirPackage.codeSystems).isEmpty();
-    assertThat(fhirPackage.valueSets).isEmpty();
-    assertThat(fhirPackage.searchParameters).isEmpty();
+    assertThat(fhirPackage.structureDefinitions()).hasSize(1);
+    assertThat(fhirPackage.codeSystems()).isEmpty();
+    assertThat(fhirPackage.valueSets()).isEmpty();
+    assertThat(fhirPackage.searchParameters()).isEmpty();
   }
 
   @Test
@@ -524,14 +518,14 @@ public final class FhirPackageTest {
     FhirPackage fhirPackage = FhirPackage.load(zipFile);
 
     assertTrue(
-        fhirPackage.structureDefinitions.stream()
+        stream(fhirPackage.structureDefinitions().iterator())
             .anyMatch(def -> def.getId().getValue().equals("Foo")));
     FhirPackage filteredPackage =
         fhirPackage.filterResources(def -> !def.getId().getValue().equals("Foo"));
     assertFalse(
-        filteredPackage.structureDefinitions.stream()
+        stream(filteredPackage.structureDefinitions().iterator())
             .anyMatch(def -> def.getId().getValue().equals("Foo")));
     // Only "Bar" remains.
-    assertThat(filteredPackage.structureDefinitions).hasSize(1);
+    assertThat(filteredPackage.structureDefinitions()).hasSize(1);
   }
 }

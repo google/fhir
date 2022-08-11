@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
@@ -57,22 +56,38 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
  */
 public class FhirPackage {
   public final PackageInfo packageInfo;
-  public final List<StructureDefinition> structureDefinitions;
-  public final List<SearchParameter> searchParameters;
-  public final List<CodeSystem> codeSystems;
-  public final List<ValueSet> valueSets;
+  private final ResourceCollection<StructureDefinition> structureDefinitionCollection;
+  private final ResourceCollection<SearchParameter> searchParameterCollection;
+  private final ResourceCollection<CodeSystem> codeSystemCollection;
+  private final ResourceCollection<ValueSet> valueSetCollection;
 
-  public FhirPackage(
+  public final Iterable<StructureDefinition> structureDefinitions() {
+    return structureDefinitionCollection;
+  }
+
+  public final Iterable<SearchParameter> searchParameters() {
+    return searchParameterCollection;
+  }
+
+  public final Iterable<CodeSystem> codeSystems() {
+    return codeSystemCollection;
+  }
+
+  public final Iterable<ValueSet> valueSets() {
+    return valueSetCollection;
+  }
+
+  private FhirPackage(
       PackageInfo packageInfo,
-      List<StructureDefinition> structureDefinitions,
-      List<SearchParameter> searchParameters,
-      List<CodeSystem> codeSystems,
-      List<ValueSet> valueSets) {
+      ResourceCollection<StructureDefinition> structureDefinitions,
+      ResourceCollection<SearchParameter> searchParameters,
+      ResourceCollection<CodeSystem> codeSystems,
+      ResourceCollection<ValueSet> valueSets) {
     this.packageInfo = packageInfo;
-    this.structureDefinitions = structureDefinitions;
-    this.searchParameters = searchParameters;
-    this.codeSystems = codeSystems;
-    this.valueSets = valueSets;
+    this.structureDefinitionCollection = structureDefinitions;
+    this.searchParameterCollection = searchParameters;
+    this.codeSystemCollection = codeSystems;
+    this.valueSetCollection = valueSets;
   }
 
   @Override
@@ -174,12 +189,13 @@ public class FhirPackage {
    * latest `filter` is applied.
    */
   FhirPackage filterResources(Predicate<StructureDefinition> filter) {
+    structureDefinitionCollection.setFilter(filter);
     return new FhirPackage(
         packageInfo,
-        structureDefinitions.stream().filter(filter).collect(Collectors.toList()),
-        searchParameters,
-        codeSystems,
-        valueSets);
+        structureDefinitionCollection,
+        searchParameterCollection,
+        codeSystemCollection,
+        valueSetCollection);
   }
 
   private static class JsonFile {
@@ -296,22 +312,11 @@ public class FhirPackage {
 
     buildResourceCollections(jsonFiles, parser, resourceCollections);
 
-    // TODO: Modify `FhirPackage` to work with Iterable<T> instead of List<T> and update
-    // callers in standalone CL.
-    List<StructureDefinition> structureDefinitionsList = new ArrayList<>();
-    resourceCollections.structureDefinitions.forEach(structureDefinitionsList::add);
-    List<SearchParameter> searchParametersList = new ArrayList<>();
-    resourceCollections.searchParameters.forEach(searchParametersList::add);
-    List<CodeSystem> codeSystemsList = new ArrayList<>();
-    resourceCollections.codeSystems.forEach(codeSystemsList::add);
-    List<ValueSet> valueSetsList = new ArrayList<>();
-    resourceCollections.valueSets.forEach(valueSetsList::add);
-
     return new FhirPackage(
         packageInfo,
-        structureDefinitionsList,
-        searchParametersList,
-        codeSystemsList,
-        valueSetsList);
+        resourceCollections.structureDefinitions,
+        resourceCollections.searchParameters,
+        resourceCollections.codeSystems,
+        resourceCollections.valueSets);
   }
 }

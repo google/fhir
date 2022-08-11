@@ -14,6 +14,7 @@
 
 package com.google.fhir.protogen;
 
+import static com.google.common.collect.Streams.stream;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.beust.jcommander.JCommander;
@@ -57,9 +58,8 @@ class ProtoGeneratorMain {
 
   private static class Args {
     @Parameter(
-      names = {"--output_directory"},
-      description = "Directory where generated output will be saved"
-    )
+        names = {"--output_directory"},
+        description = "Directory where generated output will be saved")
     private String outputDirectory = ".";
 
     @Parameter(
@@ -180,7 +180,7 @@ class ProtoGeneratorMain {
     }
 
     List<StructureDefinition> inputDefinitions =
-        inputPackage.structureDefinitions.stream()
+        stream(inputPackage.structureDefinitions().iterator())
             .filter(def -> !args.excludeIds.contains(def.getId().getValue()))
             .collect(Collectors.toList());
 

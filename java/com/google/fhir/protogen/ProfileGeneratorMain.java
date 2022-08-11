@@ -19,6 +19,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
@@ -151,7 +152,7 @@ public class ProfileGeneratorMain {
 
     List<StructureDefinition> baseStructDefPool = new ArrayList<>();
     for (String zip : args.structDefDepZips) {
-      baseStructDefPool.addAll(FhirPackage.load(zip).structureDefinitions);
+      baseStructDefPool.addAll(ImmutableList.copyOf(FhirPackage.load(zip).structureDefinitions()));
     }
 
     switch (packageInfo.getFhirVersion()) {
@@ -160,14 +161,16 @@ public class ProfileGeneratorMain {
           throw new IllegalArgumentException(
               "Profile is for STU3, but --stu3_struct_def_zip is not specified.");
         }
-        baseStructDefPool.addAll(FhirPackage.load(args.stu3StructDefZip).structureDefinitions);
+        baseStructDefPool.addAll(
+            ImmutableList.copyOf(FhirPackage.load(args.stu3StructDefZip).structureDefinitions()));
         break;
       case R4:
         if (args.r4StructDefZip == null) {
           throw new IllegalArgumentException(
               "Profile is for R4, but --r4_struct_def_zip is not specified.");
         }
-        baseStructDefPool.addAll(FhirPackage.load(args.r4StructDefZip).structureDefinitions);
+        baseStructDefPool.addAll(
+            ImmutableList.copyOf(FhirPackage.load(args.r4StructDefZip).structureDefinitions()));
         break;
       default:
         throw new IllegalArgumentException(
@@ -175,10 +178,7 @@ public class ProfileGeneratorMain {
     }
 
     ProfileGenerator profileGenerator =
-        new ProfileGenerator(
-            packageInfo,
-            baseStructDefPool,
-            LocalDate.now());
+        new ProfileGenerator(packageInfo, baseStructDefPool, LocalDate.now());
 
     writeBundle(
         profileGenerator.generateProfiles(combinedProfilesBuilder.build()),

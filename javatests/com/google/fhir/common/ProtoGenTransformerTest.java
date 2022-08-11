@@ -130,8 +130,8 @@ public final class ProtoGenTransformerTest {
     // Test to ensure that the STU3 transformer is capable of loading the entire STU3 spec.
     FhirPackage fhirPackage = FhirPackage.load("spec/fhir_stu3_package.zip");
 
-    assertThat(fhirPackage.structureDefinitions).hasSize(585);
-    assertThat(fhirPackage.codeSystems).hasSize(941);
-    assertThat(fhirPackage.valueSets).hasSize(1154);
+    assertThat(fhirPackage.structureDefinitions()).hasSize(585);
+    assertThat(fhirPackage.codeSystems()).hasSize(941);
+    assertThat(fhirPackage.valueSets()).hasSize(1154);
   }
 }
