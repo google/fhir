@@ -250,7 +250,7 @@ final class ProfileGenerator {
                   .setValue(
                       codeableConceptSlice.getRules()
                               == SlicingRulesCode.Value.INVALID_UNINITIALIZED
-                          ? SlicingRulesCode.Value.CLOSED
+                          ? SlicingRulesCode.Value.OPEN
                           : codeableConceptSlice.getRules()))
           .addDiscriminatorBuilder()
           .setPath(fhirString("code"))

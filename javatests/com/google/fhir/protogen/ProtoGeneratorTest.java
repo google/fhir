@@ -31,6 +31,7 @@ import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
+import com.google.fhir.r4.core.SlicingRulesCode;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.DescriptorProto.ReservedRange;
@@ -634,5 +635,143 @@ public class ProtoGeneratorTest {
                                 .setOneofIndex(0))
                         .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource")))
                 .build());
+  }
+
+  @Test
+  public void generateProto_genericFieldAddedForOpenExtension()
+      throws IOException, InvalidFhirException {
+    ProtoGenerator generator =
+        ProtoGeneratorTestUtils.makeProtoGenerator(
+            createNonCorePackage("google.foo"),
+            "codes.proto",
+            /*coreDepMap=*/ ImmutableMap.of("R4", "spec/fhir_r4_package.zip"),
+            /*dependencyLocations=*/ ImmutableSet.of());
+
+    StructureDefinition citizenshipExtension =
+        readStructureDefinition("patient-citizenship", FhirVersion.R4);
+
+    // By default, the patient citizenship has open slicing on sub-extensions.
+    assertThat(
+            GeneratorUtils.getElementById(
+                    "Extension.extension", citizenshipExtension.getSnapshot().getElementList())
+                .getSlicing()
+                .getRules()
+                .getValue())
+        .isEqualTo(SlicingRulesCode.Value.OPEN);
+
+    DescriptorProto citizenshipMessage = generator.generateProto(citizenshipExtension);
+    assertThat(
+            citizenshipMessage.getFieldList().stream()
+                .filter(field -> field.getName().equals("extension"))
+                .count())
+        .isEqualTo(1);
+  }
+
+  @Test
+  public void generateProto_noGenericFieldAddedForClosedExtension()
+      throws IOException, InvalidFhirException {
+    ProtoGenerator generator =
+        ProtoGeneratorTestUtils.makeProtoGenerator(
+            createNonCorePackage("google.foo"),
+            "codes.proto",
+            /*coreDepMap=*/ ImmutableMap.of("R4", "spec/fhir_r4_package.zip"),
+            /*dependencyLocations=*/ ImmutableSet.of());
+
+    // Make a version of citizenship extension that is closed on extension slicing
+    StructureDefinition.Builder citizenshipExtension =
+        readStructureDefinition("patient-citizenship", FhirVersion.R4).toBuilder();
+    citizenshipExtension.getSnapshotBuilder().getElementBuilderList().stream()
+        .filter(elem -> elem.getId().getValue().equals("Extension.extension"))
+        .findFirst()
+        .get()
+        .getSlicingBuilder()
+        .getRulesBuilder()
+        .setValue(SlicingRulesCode.Value.CLOSED);
+
+    DescriptorProto citizenshipMessage = generator.generateProto(citizenshipExtension.build());
+    assertThat(
+            citizenshipMessage.getFieldList().stream()
+                .filter(field -> field.getName().equals("extension"))
+                .findAny()
+                .isPresent())
+        .isFalse();
+
+    System.out.println(citizenshipMessage);
+
+    assertThat(
+            citizenshipMessage.getFieldList().stream()
+                .filter(
+                    field ->
+                        field.getOptions().hasExtension(ProtoGeneratorAnnotations.reservedReason)
+                            && field.getNumber() == 2)
+                .count())
+        .isEqualTo(1);
+  }
+
+  @Test
+  public void generateProto_genericFieldAddedForOpenCoding()
+      throws IOException, InvalidFhirException {
+    ProtoGenerator generator =
+        ProtoGeneratorTestUtils.makeProtoGenerator(
+            createNonCorePackage("google.foo"),
+            "codes.proto",
+            /*coreDepMap=*/ ImmutableMap.of("R4", "spec/fhir_r4_package.zip"),
+            /*dependencyLocations=*/ ImmutableSet.of());
+
+    StructureDefinition bloodPressureProfile = readStructureDefinition("bp", FhirVersion.R4);
+
+    // By default, the Blood Pressure has open slicing on Observation.code.coding.
+    assertThat(
+            GeneratorUtils.getElementById(
+                    "Observation.code.coding", bloodPressureProfile.getSnapshot().getElementList())
+                .getSlicing()
+                .getRules()
+                .getValue())
+        .isEqualTo(SlicingRulesCode.Value.OPEN);
+
+    DescriptorProto bpMessage = generator.generateProto(bloodPressureProfile);
+    assertThat(
+            bpMessage.getNestedType(1).getFieldList().stream()
+                .filter(field -> field.getName().equals("coding"))
+                .count())
+        .isEqualTo(1);
+  }
+
+  @Test
+  public void generateProto_genericFieldNotAddedForClosedCoding()
+      throws IOException, InvalidFhirException {
+    ProtoGenerator generator =
+        ProtoGeneratorTestUtils.makeProtoGenerator(
+            createNonCorePackage("google.foo"),
+            "codes.proto",
+            /*coreDepMap=*/ ImmutableMap.of("R4", "spec/fhir_r4_package.zip"),
+            /*dependencyLocations=*/ ImmutableSet.of());
+
+    // Make a version of Blood Pressure that has closed slicing on Observation.code.coding.
+    StructureDefinition.Builder bloodPressureProfile =
+        readStructureDefinition("bp", FhirVersion.R4).toBuilder();
+    bloodPressureProfile.getSnapshotBuilder().getElementBuilderList().stream()
+        .filter(elem -> elem.getId().getValue().equals("Observation.code.coding"))
+        .findFirst()
+        .get()
+        .getSlicingBuilder()
+        .getRulesBuilder()
+        .setValue(SlicingRulesCode.Value.CLOSED);
+
+    DescriptorProto bpMessage = generator.generateProto(bloodPressureProfile.build());
+    assertThat(
+            bpMessage.getNestedType(1).getFieldList().stream()
+                .filter(field -> field.getName().equals("coding"))
+                .findAny()
+                .isPresent())
+        .isFalse();
+    assertThat(
+            bpMessage.getNestedType(1).getFieldList().stream()
+                .filter(
+                    field ->
+                        field.getOptions().hasExtension(ProtoGeneratorAnnotations.reservedReason)
+                            && field.getNumber() == 3)
+                .count())
+        .isEqualTo(1);
   }
 }

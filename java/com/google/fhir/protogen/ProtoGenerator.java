@@ -54,6 +54,7 @@ import com.google.fhir.r4.core.ElementDefinition;
 import com.google.fhir.r4.core.Extension;
 import com.google.fhir.r4.core.ResourceTypeCode;
 import com.google.fhir.r4.core.SearchParameter;
+import com.google.fhir.r4.core.SlicingRulesCode;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
@@ -491,6 +492,19 @@ public class ProtoGenerator {
       return optionsBuilder.build();
     }
 
+    private void makeClosedExtensionReservedField(
+        FieldDescriptorProto.Builder field, ElementDefinition element, int tagNumber) {
+      field
+          .setNumber(tagNumber)
+          .getOptionsBuilder()
+          .setExtension(
+              ProtoGeneratorAnnotations.reservedReason,
+              "Field "
+                  + tagNumber
+                  + " reserved for unsliced field for element with closed slicing: "
+                  + element.getId().getValue());
+    }
+
     private DescriptorProto generateMessage(
         ElementDefinition currentElement, DescriptorProto.Builder builder)
         throws InvalidFhirException {
@@ -552,7 +566,7 @@ public class ProtoGenerator {
               "Illegal field has multiple types but is not a Choice Type:\n" + element);
         }
 
-        if (lastIdToken(element).slicename != null) {
+        if (isSlice(element)) {
           // This is a slice.  Defer this field until the end of the message, to keep base field
           // numbers consistent across profiles.
           deferredElements.add(element);
@@ -570,6 +584,14 @@ public class ProtoGenerator {
                       + nextTag
                       + " reserved for strongly-typed ContainedResource for id: "
                       + element.getId().getValue());
+          nextTag++;
+        } else if (!isChoiceType(element)
+            && element.getSlicing().getRules().getValue() == SlicingRulesCode.Value.CLOSED
+            && element.getType(0).getCode().getValue().equals("Extension")) {
+          // If this is an exension field that has closed slicing (i.e., all elements
+          // should belong to a slice), don't generate an unsliced extension field, but reserve tag
+          // number to avoid reassigning.
+          makeClosedExtensionReservedField(builder.addFieldBuilder(), element, nextTag);
           nextTag++;
         } else {
           buildAndAddField(element, nextTag++, builder);
@@ -1009,6 +1031,29 @@ public class ProtoGenerator {
           .clearExtension(Annotations.structureDefinitionKind)
           .clearExtension(Annotations.fhirStructureDefinitionUrl)
           .addExtension(Annotations.fhirProfileBase, codeableConceptStructDefUrl);
+
+      // Look for a coding element defined on this codeable concept.  It doesn't have to be there,
+      // but if it is, incorporate data from it in the generated Coding field.
+      Optional<ElementDefinition> profiledCoding =
+          getDescendants(element).stream()
+              .filter(elem -> elem.getBase().getPath().getValue().equals("CodeableConcept.coding"))
+              .findFirst();
+      if (profiledCoding.isPresent()
+          && profiledCoding.get().getSlicing().getRules().getValue()
+              == SlicingRulesCode.Value.CLOSED) {
+        FieldDescriptorProto.Builder codingField =
+            codeableConceptBuilder.getFieldBuilderList().stream()
+                .filter(field -> field.getName().equals("coding"))
+                .findFirst()
+                .orElseThrow(
+                    () ->
+                        new IllegalStateException(
+                            "Failed to find the coding field in generated CodeableConcept."));
+        int tagNumber = codingField.getNumber();
+        codingField.clear();
+        makeClosedExtensionReservedField(codingField, profiledCoding.get(), tagNumber);
+      }
+
       for (ElementDefinition codingSlice : codingSlices) {
         String fixedSystem = null;
         ElementDefinition codeDefinition = null;
