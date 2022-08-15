@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 /**
  * A collection of FHIR resources of a given type, T.
  *
- * <p>Resources in their JSON format can be added to the collection. They are only ever parsed when
+ * <p>Resources in their JSON format can be put in the collection. They are only ever parsed when
  * retrieved (either by `get` or through iterating the collection).
  *
  * <p>TODO: Consider aligning approaches to loading FHIR packages from the archive
@@ -72,19 +72,19 @@ class ResourceCollection<T extends Message> implements Iterable<T> {
         if (next.isPresent()) {
           return true;
         }
-        T unfilteredNext = null;
+        Optional<T> unfilteredNext = Optional.empty();
         // First iterate the parsed resources, then the unparsed ones.
         if (parsedIterator.hasNext()) {
-          unfilteredNext = parsedIterator.next().getValue();
+          unfilteredNext = Optional.of(parsedIterator.next().getValue());
         } else if (!jsonResourcesByUri.isEmpty()) {
           // Calling `get` parses the resource, removing it from the `jsonResourceByUri`
           // collection. We can simply read from the front of that entry set each iteration.
           Map.Entry<String, JsonElement> unparsed = jsonResourcesByUri.entrySet().iterator().next();
           try {
             unfilteredNext = get(unparsed.getKey());
-          } catch (NoSuchElementException e) {
-            // While the resource exists, it does not match the filter.
-            return hasNext();
+            if (!unfilteredNext.isPresent()) {
+              return hasNext();
+            }
           } catch (InvalidFhirException e) {
             throw new IllegalStateException(e);
           }
@@ -92,8 +92,8 @@ class ResourceCollection<T extends Message> implements Iterable<T> {
           return false;
         }
 
-        if (filter == null || filter.test(unfilteredNext)) {
-          next = Optional.ofNullable(unfilteredNext);
+        if (filter == null || filter.test(unfilteredNext.get())) {
+          next = unfilteredNext;
           return true;
         }
 
@@ -114,39 +114,45 @@ class ResourceCollection<T extends Message> implements Iterable<T> {
   }
 
   /**
-   * Adds a resource to the collection.
+   * Associates the provided resource as `json` with this collection, using the `url` field as the
+   * unique identifier. If the collection previously registered a resource using the `url` in the
+   * `json`, the old resource is replaced by the specified value.
    *
    * <p>Invalidates iterators.
    */
-  public void add(JsonElement json) {
+  public void put(JsonElement json) {
     JsonObject jsonObject;
     String url;
     if (!json.isJsonObject()
         || !(jsonObject = json.getAsJsonObject()).has("url")
         || (url = jsonObject.get("url").getAsString()).isEmpty()) {
       throw new IllegalArgumentException(
-          "Must have a non-empty `url` to add resource to collection.");
+          "Must have a non-empty `url` to put the resource in the collection.");
     }
-    if (jsonResourcesByUri.containsKey(url) || parsedResourcesByUri.containsKey(url)) {
-      throw new IllegalArgumentException(
-          "Resource collection already contains a resource with `url`: " + url);
+    // Remove the parsed resource if it exists since `put` should override.
+    if (parsedResourcesByUri.containsKey(url)) {
+      parsedResourcesByUri.remove(url);
     }
 
-    jsonResourcesByUri.put(url, json);
+    // If the map previously contained a mapping for the key, the old value is replaced by the
+    // specified value.
+    // A copy of the `json` is made to ensure mutations don't affect underlying storage.
+    jsonResourcesByUri.put(url, json.deepCopy());
   }
 
   /**
-   * Returns the resource matching the URI.
+   * Returns the resource to which the specified `uri` is registered with, or an empty `Optional` if
+   * this collection does not contain a resource for the `uri`.
    *
    * <p>If a filter is set, the retrieved resource will only be returned if it matches.
    */
   @SuppressWarnings("unchecked") // newBuilderForType().build() produces a T.
-  public T get(String uri) throws InvalidFhirException {
+  public Optional<T> get(String uri) throws InvalidFhirException {
     T resource = parsedResourcesByUri.get(uri);
     if (resource == null) {
       JsonElement jsonResource = jsonResourcesByUri.get(uri);
       if (jsonResource == null) {
-        throw new NoSuchElementException("No resource found for URI: " + uri);
+        return Optional.empty();
       }
 
       Message.Builder builder = Internal.getDefaultInstance(protoClass).newBuilderForType();
@@ -158,10 +164,9 @@ class ResourceCollection<T extends Message> implements Iterable<T> {
     }
 
     if (filter != null && !filter.test(resource)) {
-      throw new NoSuchElementException(
-          "No resource found for URI: '" + uri + "'. Does the resource match the set filter?");
+      return Optional.empty();
     }
 
-    return resource;
+    return Optional.of(resource);
   }
 }

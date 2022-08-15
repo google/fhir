@@ -28,6 +28,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.testing.junit.testparameterinjector.TestParameter;
 import com.google.testing.junit.testparameterinjector.TestParameterInjector;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -40,75 +41,96 @@ public final class ResourceCollectionTest {
     return jsonObject;
   }
 
-  private enum InvalidJsonToAddTestCase {
+  private enum InvalidJsonToPutTestCase {
     NOT_JSON_OBJECT(new JsonArray()),
     NO_URL_FIELD(new JsonObject()),
     EMPTY_URL(buildJsonResource(""));
 
     final JsonElement json;
 
-    InvalidJsonToAddTestCase(JsonElement json) {
+    InvalidJsonToPutTestCase(JsonElement json) {
       this.json = json;
     }
   }
 
   @Test
-  public void add_invalidJsonObject_throws(@TestParameter InvalidJsonToAddTestCase testCase) {
+  public void put_invalidJsonObject_throws(@TestParameter InvalidJsonToPutTestCase testCase) {
     ResourceCollection<StructureDefinition> resourceCollection =
         new ResourceCollection<>(JsonFormat.getParser(), StructureDefinition.class);
 
     IllegalArgumentException thrown =
-        assertThrows(IllegalArgumentException.class, () -> resourceCollection.add(testCase.json));
+        assertThrows(IllegalArgumentException.class, () -> resourceCollection.put(testCase.json));
 
     assertThat(thrown)
         .hasMessageThat()
-        .isEqualTo("Must have a non-empty `url` to add resource to collection.");
+        .isEqualTo("Must have a non-empty `url` to put the resource in the collection.");
   }
 
   @Test
-  public void add_duplicateUrlInUnparsedResources_throws() {
-    JsonElement json = buildJsonResource("http://foo.com");
+  public void put_duplicateUrlInUnparsedResources_replaces() throws Exception {
     ResourceCollection<StructureDefinition> resourceCollection =
         new ResourceCollection<>(JsonFormat.getParser(), StructureDefinition.class);
-    resourceCollection.add(json);
+    JsonObject json = new JsonObject();
+    json.add("url", new JsonPrimitive("http://foo.com"));
+    json.add("title", new JsonPrimitive("Before"));
+    resourceCollection.put(json);
 
-    IllegalArgumentException thrown =
-        assertThrows(IllegalArgumentException.class, () -> resourceCollection.add(json));
+    json.remove("title");
+    json.add("title", new JsonPrimitive("After"));
+    resourceCollection.put(json);
 
-    assertThat(thrown)
-        .hasMessageThat()
-        .isEqualTo("Resource collection already contains a resource with `url`: http://foo.com");
+    assertThat(resourceCollection.get("http://foo.com"))
+        .isEqualTo(
+            Optional.of(
+                StructureDefinition.newBuilder()
+                    .setUrl(Uri.newBuilder().setValue("http://foo.com"))
+                    .setTitle(com.google.fhir.r4.core.String.newBuilder().setValue("After"))
+                    .build()));
   }
 
   @Test
-  public void add_duplicateUrlInParsedResources_throws() throws Exception {
-    JsonElement json = buildJsonResource("http://foo.com");
+  public void put_duplicateUrlInParsedResources_replaces() throws Exception {
     ResourceCollection<StructureDefinition> resourceCollection =
         new ResourceCollection<>(JsonFormat.getParser(), StructureDefinition.class);
-    resourceCollection.add(json);
+    JsonObject json = new JsonObject();
+    json.add("url", new JsonPrimitive("http://foo.com"));
+    json.add("title", new JsonPrimitive("Before"));
+    resourceCollection.put(json);
     // Retrieve the resource, moving it to the parsed collection.
-    resourceCollection.get("http://foo.com");
+    assertThat(resourceCollection.get("http://foo.com"))
+        .isEqualTo(
+            Optional.of(
+                StructureDefinition.newBuilder()
+                    .setUrl(Uri.newBuilder().setValue("http://foo.com"))
+                    .setTitle(com.google.fhir.r4.core.String.newBuilder().setValue("Before"))
+                    .build()));
 
-    IllegalArgumentException thrown =
-        assertThrows(IllegalArgumentException.class, () -> resourceCollection.add(json));
+    json.remove("title");
+    json.add("title", new JsonPrimitive("After"));
+    resourceCollection.put(json);
 
-    assertThat(thrown)
-        .hasMessageThat()
-        .isEqualTo("Resource collection already contains a resource with `url`: http://foo.com");
+    assertThat(resourceCollection.get("http://foo.com"))
+        .isEqualTo(
+            Optional.of(
+                StructureDefinition.newBuilder()
+                    .setUrl(Uri.newBuilder().setValue("http://foo.com"))
+                    .setTitle(com.google.fhir.r4.core.String.newBuilder().setValue("After"))
+                    .build()));
   }
 
   @Test
-  public void add_thenGetResource_succeeds() throws Exception {
+  public void put_thenGetResource_succeeds() throws Exception {
     JsonElement json = buildJsonResource("http://foo.com");
     ResourceCollection<StructureDefinition> resourceCollection =
         new ResourceCollection<>(JsonFormat.getParser(), StructureDefinition.class);
 
-    resourceCollection.add(json);
+    resourceCollection.put(json);
 
-    StructureDefinition expected =
-        StructureDefinition.newBuilder()
-            .setUrl(Uri.newBuilder().setValue("http://foo.com"))
-            .build();
+    Optional<StructureDefinition> expected =
+        Optional.of(
+            StructureDefinition.newBuilder()
+                .setUrl(Uri.newBuilder().setValue("http://foo.com"))
+                .build());
     assertThat(resourceCollection.get("http://foo.com")).isEqualTo(expected);
     // `get` it twice since on the second invocation, the `ResourceCollection` is reading from its
     // parsed resources.
@@ -116,14 +138,30 @@ public final class ResourceCollectionTest {
   }
 
   @Test
-  public void get_nonExistantResource_throws() {
+  public void put_thenGetResource_persistsCopies() throws Exception {
+    JsonElement json = buildJsonResource("http://foo.com");
     ResourceCollection<StructureDefinition> resourceCollection =
         new ResourceCollection<>(JsonFormat.getParser(), StructureDefinition.class);
 
-    NoSuchElementException thrown =
-        assertThrows(NoSuchElementException.class, () -> resourceCollection.get("http://foo.com"));
+    resourceCollection.put(json);
+    // Modify the `json` so we can assert the `ResourceCollection` took a copy.
+    json.getAsJsonObject().remove("url");
+    json.getAsJsonObject().add("bar", new JsonPrimitive("baz"));
 
-    assertThat(thrown).hasMessageThat().isEqualTo("No resource found for URI: http://foo.com");
+    Optional<StructureDefinition> expected =
+        Optional.of(
+            StructureDefinition.newBuilder()
+                .setUrl(Uri.newBuilder().setValue("http://foo.com"))
+                .build());
+    assertThat(resourceCollection.get("http://foo.com")).isEqualTo(expected);
+  }
+
+  @Test
+  public void get_nonExistantResource_returnsEmpty() throws Exception {
+    ResourceCollection<StructureDefinition> resourceCollection =
+        new ResourceCollection<>(JsonFormat.getParser(), StructureDefinition.class);
+
+    assertThat(resourceCollection.get("http://foo.com")).isEqualTo(Optional.empty());
   }
 
   @Test
@@ -134,7 +172,7 @@ public final class ResourceCollectionTest {
     ResourceCollection<StructureDefinition> resourceCollection =
         new ResourceCollection<>(JsonFormat.getParser(), StructureDefinition.class);
 
-    resourceCollection.add(jsonObject);
+    resourceCollection.put(jsonObject);
 
     InvalidFhirException thrown =
         assertThrows(InvalidFhirException.class, () -> resourceCollection.get("http://foo.com"));
@@ -143,12 +181,12 @@ public final class ResourceCollectionTest {
   }
 
   @Test
-  public void iterator_emptyCollection_succeeds() {
-    ResourceCollection<StructureDefinition> r =
+  public void iterator_emptyCollection_isEmptyAndCannotIterate() {
+    ResourceCollection<StructureDefinition> resourceCollection =
         new ResourceCollection<>(JsonFormat.getParser(), StructureDefinition.class);
 
-    assertThat(r).isEmpty();
-    assertThrows(NoSuchElementException.class, () -> r.iterator().next());
+    assertThat(resourceCollection).isEmpty();
+    assertThrows(NoSuchElementException.class, () -> resourceCollection.iterator().next());
   }
 
   @Test
@@ -157,8 +195,8 @@ public final class ResourceCollectionTest {
     JsonElement json1 = buildJsonResource("http://bar.com");
     ResourceCollection<StructureDefinition> resourceCollection =
         new ResourceCollection<>(JsonFormat.getParser(), StructureDefinition.class);
-    resourceCollection.add(json0);
-    resourceCollection.add(json1);
+    resourceCollection.put(json0);
+    resourceCollection.put(json1);
     // Create a mix of parsed and unparsed resources by retrieving them for the first time.
     resourceCollection.get("http://foo.com");
 
@@ -170,7 +208,7 @@ public final class ResourceCollectionTest {
     JsonElement json = buildJsonResource("http://foo.com");
     ResourceCollection<StructureDefinition> resourceCollection =
         new ResourceCollection<>(JsonFormat.getParser(), StructureDefinition.class);
-    resourceCollection.add(json);
+    resourceCollection.put(json);
     assertThat(resourceCollection).hasSize(1);
 
     resourceCollection.setFilter(/* filter= */ null);
@@ -178,9 +216,10 @@ public final class ResourceCollectionTest {
     assertThat(resourceCollection).hasSize(1);
     assertThat(resourceCollection.get("http://foo.com"))
         .isEqualTo(
-            StructureDefinition.newBuilder()
-                .setUrl(Uri.newBuilder().setValue("http://foo.com"))
-                .build());
+            Optional.of(
+                StructureDefinition.newBuilder()
+                    .setUrl(Uri.newBuilder().setValue("http://foo.com"))
+                    .build()));
   }
 
   @Test
@@ -188,7 +227,7 @@ public final class ResourceCollectionTest {
     JsonElement json = buildJsonResource("http://foo.com");
     ResourceCollection<StructureDefinition> resourceCollection =
         new ResourceCollection<>(JsonFormat.getParser(), StructureDefinition.class);
-    resourceCollection.add(json);
+    resourceCollection.put(json);
     assertThat(resourceCollection).hasSize(1);
 
     resourceCollection.setFilter(s -> true);
@@ -196,9 +235,10 @@ public final class ResourceCollectionTest {
     assertThat(resourceCollection).hasSize(1);
     assertThat(resourceCollection.get("http://foo.com"))
         .isEqualTo(
-            StructureDefinition.newBuilder()
-                .setUrl(Uri.newBuilder().setValue("http://foo.com"))
-                .build());
+            Optional.of(
+                StructureDefinition.newBuilder()
+                    .setUrl(Uri.newBuilder().setValue("http://foo.com"))
+                    .build()));
   }
 
   @Test
@@ -207,8 +247,8 @@ public final class ResourceCollectionTest {
     JsonElement json1 = buildJsonResource("http://bar.com");
     ResourceCollection<StructureDefinition> resourceCollection =
         new ResourceCollection<>(JsonFormat.getParser(), StructureDefinition.class);
-    resourceCollection.add(json0);
-    resourceCollection.add(json1);
+    resourceCollection.put(json0);
+    resourceCollection.put(json1);
 
     resourceCollection.setFilter(s -> s.getUrl().getValue().equals("http://bar.com"));
 
@@ -218,14 +258,10 @@ public final class ResourceCollectionTest {
     assertThat(resourceCollection).hasSize(1);
     assertThat(resourceCollection.get("http://bar.com"))
         .isEqualTo(
-            StructureDefinition.newBuilder()
-                .setUrl(Uri.newBuilder().setValue("http://bar.com"))
-                .build());
-    assertThat(
-            assertThrows(
-                NoSuchElementException.class, () -> resourceCollection.get("http://foo.com")))
-        .hasMessageThat()
-        .isEqualTo(
-            "No resource found for URI: 'http://foo.com'. Does the resource match the set filter?");
+            Optional.of(
+                StructureDefinition.newBuilder()
+                    .setUrl(Uri.newBuilder().setValue("http://bar.com"))
+                    .build()));
+    assertThat(resourceCollection.get("http://foo.com")).isEqualTo(Optional.empty());
   }
 }

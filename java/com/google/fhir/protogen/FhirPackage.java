@@ -253,16 +253,16 @@ public class FhirPackage {
       }
       switch (expectedType.get()) {
         case "StructureDefinition":
-          resourceCollections.structureDefinitions.add(json);
+          resourceCollections.structureDefinitions.put(json);
           break;
         case "SearchParameter":
-          resourceCollections.searchParameters.add(json);
+          resourceCollections.searchParameters.put(json);
           break;
         case "CodeSystem":
-          resourceCollections.codeSystems.add(json);
+          resourceCollections.codeSystems.put(json);
           break;
         case "ValueSet":
-          resourceCollections.valueSets.add(json);
+          resourceCollections.valueSets.put(json);
           break;
         case "Bundle":
           JsonElement bundleEntry;
