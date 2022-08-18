@@ -103,12 +103,34 @@ java_test(
         "//java/com/google/fhir/protogen",
         "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto:profile_config_java_proto",
+        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:code_system_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:search_parameter_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_java_proto",
         "@maven//:com_google_guava_guava",
         "@maven//:com_google_guava_guava_testlib",
         "@maven//:com_google_testparameterinjector_test_parameter_injector",
         "@maven//:com_google_truth_truth",
         "@maven//:junit_junit",
         "@maven//:org_apache_commons_commons_compress",
+    ],
+)
+
+java_test(
+    name = "FhirPackageManagerTest",
+    srcs = ["FhirPackageManagerTest.java"],
+    test_class = "com.google.fhir.protogen.FhirPackageManagerTest",
+    deps = [
+        "//java/com/google/fhir/protogen",
+        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:code_system_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:search_parameter_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_java_proto",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
     ],
 )
 

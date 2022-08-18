@@ -28,6 +28,12 @@ import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.PackageInfo.FileSplittingBehavior;
 import com.google.fhir.proto.PackageInfo.License;
+import com.google.fhir.r4.core.CodeSystem;
+import com.google.fhir.r4.core.Id;
+import com.google.fhir.r4.core.SearchParameter;
+import com.google.fhir.r4.core.StructureDefinition;
+import com.google.fhir.r4.core.Uri;
+import com.google.fhir.r4.core.ValueSet;
 import com.google.testing.junit.testparameterinjector.TestParameter;
 import com.google.testing.junit.testparameterinjector.TestParameterInjector;
 import java.io.File;
@@ -35,6 +41,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
@@ -527,5 +534,183 @@ public final class FhirPackageTest {
             .anyMatch(def -> def.getId().getValue().equals("Foo")));
     // Only "Bar" remains.
     assertThat(filteredPackage.structureDefinitions()).hasSize(1);
+  }
+
+  @Test
+  public void getStructureDefinition_doesNotExist_emptyOptional()
+      throws IOException, InvalidFhirException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            VALID_PACKAGE_INFO,
+            new PackageFile() {
+              {
+                fileName = "foo.json";
+                fileContents =
+                    "{\"resourceType\":\"StructureDefinition\", \"url\":\"http://foo.com\","
+                        + " \"id\":\"Foo\"}";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+    FhirPackage fhirPackage = FhirPackage.load(zipFile);
+
+    assertThat(fhirPackage.getStructureDefinition("http://bar.com")).isEqualTo(Optional.empty());
+  }
+
+  @Test
+  public void getStructureDefinition_exists() throws IOException, InvalidFhirException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            VALID_PACKAGE_INFO,
+            new PackageFile() {
+              {
+                fileName = "foo.json";
+                fileContents =
+                    "{\"resourceType\":\"StructureDefinition\", \"url\":\"http://foo.com\","
+                        + " \"id\":\"Foo\"}";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+    FhirPackage fhirPackage = FhirPackage.load(zipFile);
+
+    assertThat(fhirPackage.getStructureDefinition("http://foo.com"))
+        .isEqualTo(
+            Optional.of(
+                StructureDefinition.newBuilder()
+                    .setUrl(Uri.newBuilder().setValue("http://foo.com"))
+                    .setId(Id.newBuilder().setValue("Foo"))
+                    .build()));
+  }
+
+  @Test
+  public void getSearchParameter_doesNotExist_emptyOptional()
+      throws IOException, InvalidFhirException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            VALID_PACKAGE_INFO,
+            new PackageFile() {
+              {
+                fileName = "foo.json";
+                fileContents =
+                    "{\"resourceType\":\"SearchParameter\", \"url\":\"http://foo.com\","
+                        + " \"id\":\"Foo\"}";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+    FhirPackage fhirPackage = FhirPackage.load(zipFile);
+
+    assertThat(fhirPackage.getSearchParameter("http://bar.com")).isEqualTo(Optional.empty());
+  }
+
+  @Test
+  public void getSearchParameter_exists() throws IOException, InvalidFhirException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            VALID_PACKAGE_INFO,
+            new PackageFile() {
+              {
+                fileName = "foo.json";
+                fileContents =
+                    "{\"resourceType\":\"SearchParameter\", \"url\":\"http://foo.com\","
+                        + " \"id\":\"Foo\"}";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+    FhirPackage fhirPackage = FhirPackage.load(zipFile);
+
+    assertThat(fhirPackage.getSearchParameter("http://foo.com"))
+        .isEqualTo(
+            Optional.of(
+                SearchParameter.newBuilder()
+                    .setUrl(Uri.newBuilder().setValue("http://foo.com"))
+                    .setId(Id.newBuilder().setValue("Foo"))
+                    .build()));
+  }
+
+  @Test
+  public void getCodeSystem_doesNotExist_emptyOptional() throws IOException, InvalidFhirException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            VALID_PACKAGE_INFO,
+            new PackageFile() {
+              {
+                fileName = "foo.json";
+                fileContents =
+                    "{\"resourceType\":\"CodeSystem\", \"url\":\"http://foo.com\","
+                        + " \"id\":\"Foo\"}";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+    FhirPackage fhirPackage = FhirPackage.load(zipFile);
+
+    assertThat(fhirPackage.getCodeSystem("http://bar.com")).isEqualTo(Optional.empty());
+  }
+
+  @Test
+  public void getCodeSystem_exists() throws IOException, InvalidFhirException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            VALID_PACKAGE_INFO,
+            new PackageFile() {
+              {
+                fileName = "foo.json";
+                fileContents =
+                    "{\"resourceType\":\"CodeSystem\", \"url\":\"http://foo.com\","
+                        + " \"id\":\"Foo\"}";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+    FhirPackage fhirPackage = FhirPackage.load(zipFile);
+
+    assertThat(fhirPackage.getCodeSystem("http://foo.com"))
+        .isEqualTo(
+            Optional.of(
+                CodeSystem.newBuilder()
+                    .setUrl(Uri.newBuilder().setValue("http://foo.com"))
+                    .setId(Id.newBuilder().setValue("Foo"))
+                    .build()));
+  }
+
+  @Test
+  public void getValueSet_doesNotExist_emptyOptional() throws IOException, InvalidFhirException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            VALID_PACKAGE_INFO,
+            new PackageFile() {
+              {
+                fileName = "foo.json";
+                fileContents =
+                    "{\"resourceType\":\"ValueSet\", \"url\":\"http://foo.com\","
+                        + " \"id\":\"Foo\"}";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+    FhirPackage fhirPackage = FhirPackage.load(zipFile);
+
+    assertThat(fhirPackage.getValueSet("http://bar.com")).isEqualTo(Optional.empty());
+  }
+
+  @Test
+  public void getValueSet_exists() throws IOException, InvalidFhirException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            VALID_PACKAGE_INFO,
+            new PackageFile() {
+              {
+                fileName = "foo.json";
+                fileContents =
+                    "{\"resourceType\":\"ValueSet\", \"url\":\"http://foo.com\","
+                        + " \"id\":\"Foo\"}";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+    FhirPackage fhirPackage = FhirPackage.load(zipFile);
+
+    assertThat(fhirPackage.getValueSet("http://foo.com"))
+        .isEqualTo(
+            Optional.of(
+                ValueSet.newBuilder()
+                    .setUrl(Uri.newBuilder().setValue("http://foo.com"))
+                    .setId(Id.newBuilder().setValue("Foo"))
+                    .build()));
   }
 }

@@ -198,6 +198,47 @@ public class FhirPackage {
         valueSetCollection);
   }
 
+  /**
+   * Returns the `StructureDefinition` from the package with the specified `uri` or an empty
+   * `Optional` if this package does not contain a resource for the `uri`.
+   *
+   * @param uri of the `StructureDefinition` to retrieve as defined in the package.
+   */
+  public Optional<StructureDefinition> getStructureDefinition(String uri)
+      throws InvalidFhirException {
+    return structureDefinitionCollection.get(uri);
+  }
+
+  /**
+   * Returns the `SearchParameter` from the package with the specified `uri` or an empty `Optional`
+   * if this package does not contain a resource for the `uri`.
+   *
+   * @param uri of the `SearchParameter` to retrieve as defined in the package.
+   */
+  public Optional<SearchParameter> getSearchParameter(String uri) throws InvalidFhirException {
+    return searchParameterCollection.get(uri);
+  }
+
+  /**
+   * Returns the `CodeSystem` from the package with the specified `uri` or an empty `Optional` if
+   * this package does not contain a resource for the `uri`.
+   *
+   * @param uri of the `CodeSystem` to retrieve as defined in the package.
+   */
+  public Optional<CodeSystem> getCodeSystem(String uri) throws InvalidFhirException {
+    return codeSystemCollection.get(uri);
+  }
+
+  /**
+   * Returns the `ValueSet` from the package with the specified `uri` or an empty `Optional` if this
+   * package does not contain a resource for the `uri`.
+   *
+   * @param uri of the `ValueSet` to retrieve as defined in the package.
+   */
+  public Optional<ValueSet> getValueSet(String uri) throws InvalidFhirException {
+    return valueSetCollection.get(uri);
+  }
+
   private static class JsonFile {
     JsonFile(String name, JsonElement json) {
       this.name = name;
