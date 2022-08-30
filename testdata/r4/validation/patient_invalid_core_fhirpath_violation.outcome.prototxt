@@ -1,0 +1,33 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "value.empty() or system.exists()"
+  }
+  expression {
+    value: "Patient.telecom[0]"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "name.exists() or telecom.exists() or address.exists() or organization.exists()"
+  }
+  expression {
+    value: "Patient.contact[0]"
+  }
+}
+subject {
+  patient_id {
+    value: "fppatient"
+  }
+}
