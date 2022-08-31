@@ -150,14 +150,12 @@ TEST(FhirPackageTest, LoadAndGetResourceSucceeds) {
   std::string bundle = absl::StrFormat(
       R"({
         "resourceType": "Bundle",
-        "url": "http://bd1",
         "entry": [
           {"resource": %s},
           {"resource": %s},
           {
             "resource": {
               "resourceType": "Bundle",
-              "url": "http://bd1",
               "entry": [
                 {"resource": %s},
                 {"resource": %s}
@@ -373,12 +371,10 @@ TEST(ResourceCollectionTest, AddGetResourceInBundleSucceeds) {
   const char* bundle_contents = R"(
 {
   "resourceType": "Bundle",
-  "url": "http://bundles.of-fun/id",
   "entry": [
     {
       "resource": {
         "resourceType": "Bundle",
-        "url": "http://bundles.nested/id",
         "entry": [
           {
             "resource": {
@@ -594,7 +590,6 @@ TEST(ResourceCollectionTest, AddGetResourceWithMissingBundleEntryFails) {
   const char* bundle_contents = R"(
 {
   "resourceType": "Bundle",
-  "url": "http://bundles.of-fun/id",
   "entry": [
     {
       "resource": {

@@ -312,8 +312,6 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
                       json.dumps({
                           'resourceType':
                               'Bundle',
-                          'url':
-                              'http://bundles.com',
                           'entry': [{
                               'resource': {
                                   'resourceType': 'ValueSet',

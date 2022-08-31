@@ -44,21 +44,22 @@ absl::Status AddResourceToFhirPackage(const internal::FhirJson& resource_json,
                                       FhirPackage& fhir_package) {
   FHIR_ASSIGN_OR_RETURN(const std::string resource_type,
                         GetResourceType(resource_json));
-  FHIR_ASSIGN_OR_RETURN(const std::string resource_url,
-                        GetResourceUrl(resource_json));
-  if (resource_url.empty()) {
-    return absl::InvalidArgumentError(absl::StrFormat(
-        "Unhandled JSON entry: %s resource has missing URL", resource_path));
-  }
-
   if (resource_type == "ValueSet") {
+    FHIR_ASSIGN_OR_RETURN(const std::string resource_url,
+                          GetResourceUrl(resource_json));
     fhir_package.value_sets.AddUriAtPath(resource_url, resource_path);
   } else if (resource_type == "CodeSystem") {
+    FHIR_ASSIGN_OR_RETURN(const std::string resource_url,
+                          GetResourceUrl(resource_json));
     fhir_package.code_systems.AddUriAtPath(resource_url, resource_path);
   } else if (resource_type == "StructureDefinition") {
+    FHIR_ASSIGN_OR_RETURN(const std::string resource_url,
+                          GetResourceUrl(resource_json));
     fhir_package.structure_definitions.AddUriAtPath(resource_url,
                                                     resource_path);
   } else if (resource_type == "SearchParameter") {
+    FHIR_ASSIGN_OR_RETURN(const std::string resource_url,
+                          GetResourceUrl(resource_json));
     fhir_package.search_parameters.AddUriAtPath(resource_url, resource_path);
   } else if (resource_type == "Bundle") {
     FHIR_ASSIGN_OR_RETURN(const internal::FhirJson* entries,
@@ -101,22 +102,24 @@ absl::StatusOr<const FhirJson*> FindResourceInBundle(
   for (int i = 0; i < num_entries; ++i) {
     FHIR_ASSIGN_OR_RETURN(const FhirJson* entry, entries->get(i));
     FHIR_ASSIGN_OR_RETURN(const FhirJson* resource, entry->get("resource"));
-    FHIR_ASSIGN_OR_RETURN(std::string resource_url,
-                          internal::GetResourceUrl(*resource));
-    // Found the resource!
-    if (uri == resource_url) {
-      return resource;
-    }
-    // If the resource is a bundle, recursively search through it.
     FHIR_ASSIGN_OR_RETURN(std::string resource_type,
                           internal::GetResourceType(*resource));
+
     if (resource_type == "Bundle") {
+      // If the resource is a bundle, recursively search through it.
       absl::StatusOr<const FhirJson*> bundle_json =
           FindResourceInBundle(uri, *resource);
       if (bundle_json.ok()) {
         return bundle_json;
       } else {
         not_found.Update(bundle_json.status());
+      }
+    } else {
+      FHIR_ASSIGN_OR_RETURN(std::string resource_url,
+                            internal::GetResourceUrl(*resource));
+      // Found the resource!
+      if (uri == resource_url) {
+        return resource;
       }
     }
   }
@@ -179,7 +182,11 @@ absl::StatusOr<std::string> GetResourceType(const FhirJson& parsed_json) {
 absl::StatusOr<std::string> GetResourceUrl(const FhirJson& parsed_json) {
   FHIR_ASSIGN_OR_RETURN(const internal::FhirJson* resource_url_json,
                         parsed_json.get("url"));
-  return resource_url_json->asString();
+  FHIR_ASSIGN_OR_RETURN(const std::string url, resource_url_json->asString());
+  if (url.empty()) {
+    return absl::InvalidArgumentError(absl::StrFormat("URL is empty"));
+  }
+  return url;
 }
 }  // namespace internal
 
