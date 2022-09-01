@@ -382,8 +382,8 @@ def _add_resource_to_collection(resource_json: Dict[str, Any],
         _add_resource_to_collection(
             resource, collections_per_resource_type, path, is_in_bundle=True)
   else:
-    logging.warning('Unhandled JSON entry: %s for unexpected resource type %s.',
-                    path, resource_type)
+    logging.info('Skipping JSON entry: %s for non-bundle resource type %s.',
+                 path, resource_type)
 
 
 def _find_resource_in_bundle(
