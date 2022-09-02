@@ -10,7 +10,7 @@
         "name": "Bundle",
         "title": "Bundle",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1888,7 +1888,7 @@
         "name": "TestPatient",
         "title": "TestPatient",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -4255,7 +4255,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               },
               "short": "Code defined by a terminology system",
               "definition": "A reference to a code defined by a terminology system.",
@@ -4807,7 +4807,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               }
             },
             {
@@ -4833,7 +4833,7 @@
         "name": "TestObservation",
         "title": "TestObservation",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -7602,7 +7602,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               },
               "short": "Code defined by a terminology system",
               "definition": "A reference to a code defined by a terminology system.",
@@ -9585,7 +9585,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               },
               "short": "Code defined by a terminology system",
               "definition": "A reference to a code defined by a terminology system.",
@@ -10026,7 +10026,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               },
               "short": "Code defined by a terminology system",
               "definition": "A reference to a code defined by a terminology system.",
@@ -10519,7 +10519,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               }
             },
             {
@@ -10605,7 +10605,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               }
             },
             {
@@ -10629,7 +10629,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               }
             },
             {
@@ -10655,7 +10655,7 @@
         "name": "TestObservationLvl2",
         "title": "TestObservationLvl2",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -13424,7 +13424,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               },
               "short": "Code defined by a terminology system",
               "definition": "A reference to a code defined by a terminology system.",
@@ -15407,7 +15407,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               },
               "short": "Code defined by a terminology system",
               "definition": "A reference to a code defined by a terminology system.",
@@ -15848,7 +15848,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               },
               "short": "Code defined by a terminology system",
               "definition": "A reference to a code defined by a terminology system.",
@@ -16343,7 +16343,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               },
               "short": "Code defined by a terminology system",
               "definition": "A reference to a code defined by a terminology system.",
@@ -16824,7 +16824,7 @@
         "name": "TestEncounter",
         "title": "TestEncounter",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -20282,7 +20282,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               },
               "short": "Code defined by a terminology system",
               "definition": "A reference to a code defined by a terminology system.",
@@ -20727,7 +20727,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               }
             },
             {
@@ -20755,7 +20755,7 @@
         "name": "ProfiledDatatypesObservation",
         "title": "ProfiledDatatypesObservation",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -23579,7 +23579,7 @@
         "name": "TestEncounterWithProfiledIdentifier",
         "title": "TestEncounterWithProfiledIdentifier",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -27036,7 +27036,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               },
               "short": "Code defined by a terminology system",
               "definition": "A reference to a code defined by a terminology system.",
@@ -27481,7 +27481,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               }
             },
             {
@@ -27507,7 +27507,7 @@
         "name": "TestPatientWithWarningAndErrorFhirpath",
         "title": "TestPatientWithWarningAndErrorFhirpath",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {

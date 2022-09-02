@@ -368,7 +368,7 @@ public final class ProfileGeneratorTest {
 
     ElementDefinition valueElement =
         extension.getSnapshot().getElementList().stream()
-            .filter(element -> element.getId().getValue().equals("Extension.valueCodeableConcept"))
+            .filter(element -> element.getId().getValue().equals("Extension.value[x]"))
             .collect(toList())
             .get(0);
     assertThat(valueElement.getBinding().getStrength().getValue())

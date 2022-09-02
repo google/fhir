@@ -14,12 +14,11 @@
 
 package com.google.fhir.protogen;
 
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.fhir.protogen.GeneratorUtils.getElementById;
 import static com.google.fhir.protogen.GeneratorUtils.getOptionalElementById;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
-import com.google.common.base.Ascii;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.fhir.common.FhirTypes;
@@ -392,16 +391,10 @@ final class ProfileGenerator {
       for (String type : typeList) {
         valueElement.addType(ElementDefinition.TypeRef.newBuilder().setCode(fhirUri(type)));
       }
-      String valueTail =
-          typeList.size() > 1
-              ? ".value[x]"
-              : ".value"
-                  + (Ascii.toUpperCase(typeList.get(0).substring(0, 1))
-                      + typeList.get(0).substring(1));
       if (extensionProto.hasCodeType()) {
         valueElement.setBinding(buildValueSetBinding(extensionProto.getCodeType()));
       }
-      setIdAndPath(valueElement, rootId, rootPath, valueTail);
+      setIdAndPath(valueElement, rootId, rootPath, ".value[x]");
     }
 
     // Update Id, Path, and Base for all elements.
@@ -498,8 +491,8 @@ final class ProfileGenerator {
         }
         if (field.isRepeated()) {
           if (field.getType() != FieldDescriptor.Type.MESSAGE) {
-            throw new IllegalArgumentException("Encountered unexpected primitive field:"
-                                                   + field.getFullName());
+            throw new IllegalArgumentException(
+                "Encountered unexpected primitive field: " + field.getFullName());
           }
           List<Message> newValues = (List<Message>) newElement.getField(field);
           List<Message> baseValues = (List<Message>) baseElement.getField(field);
@@ -714,7 +707,7 @@ final class ProfileGenerator {
   private boolean isAllowedReferenceTarget(String url, Set<String> allowedReferenceTargets) {
     // References to the base resource can be restricted to any child resource.
     if (allowedReferenceTargets.contains(FhirTypes.RESOURCE_URL)
-            || allowedReferenceTargets.contains(url)) {
+        || allowedReferenceTargets.contains(url)) {
       return true;
     }
     // Check if any of the types in this type's inheritence path are allowed types.
@@ -876,10 +869,10 @@ final class ProfileGenerator {
 
   private static ElementDefinition.Builder getElementBuilderById(
       String id, List<ElementDefinition.Builder> elements) {
-     List<ElementDefinition.Builder> matchingElements =
-         elements.stream()
-        .filter(element -> element.getId().getValue().equals(id))
-        .collect(toList());
+    ImmutableList<ElementDefinition.Builder> matchingElements =
+        elements.stream()
+            .filter(element -> element.getId().getValue().equals(id))
+            .collect(toImmutableList());
     if (matchingElements.size() == 1) {
       return matchingElements.get(0);
     } else {

@@ -10,7 +10,7 @@
         "name": "SimpleDecimalExt",
         "title": "SimpleDecimalExt",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -224,8 +224,8 @@
               ]
             },
             {
-              "id": "Extension.valueDecimal",
-              "path": "Extension.valueDecimal",
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -285,8 +285,8 @@
               "fixedUri": "http://test/url/base/StructureDefinition/SimpleDecimalExt"
             },
             {
-              "id": "Extension.valueDecimal",
-              "path": "Extension.valueDecimal",
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
               "type": [
                 {
                   "code": "decimal"
@@ -305,7 +305,7 @@
         "name": "SimpleCodeableConceptExtension",
         "title": "SimpleCodeableConceptExtension",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -519,8 +519,8 @@
               ]
             },
             {
-              "id": "Extension.valueCode",
-              "path": "Extension.valueCode",
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -590,8 +590,8 @@
               "fixedUri": "http://test/url/base/StructureDefinition/SimpleCodeableConceptExtension"
             },
             {
-              "id": "Extension.valueCode",
-              "path": "Extension.valueCode",
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
               "type": [
                 {
                   "code": "code"
@@ -614,7 +614,7 @@
         "name": "DigitalMediaType",
         "title": "DigitalMediaType",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -828,8 +828,8 @@
               ]
             },
             {
-              "id": "Extension.valueCode",
-              "path": "Extension.valueCode",
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -899,8 +899,8 @@
               "fixedUri": "http://test/url/base/StructureDefinition/DigitalMediaType"
             },
             {
-              "id": "Extension.valueCode",
-              "path": "Extension.valueCode",
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
               "type": [
                 {
                   "code": "code"
@@ -923,7 +923,7 @@
         "name": "FavoriteBrewery",
         "title": "FavoriteBrewery",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1136,8 +1136,8 @@
               ]
             },
             {
-              "id": "Extension.valueCode",
-              "path": "Extension.valueCode",
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -1205,8 +1205,8 @@
               "fixedUri": "http://test/url/base/StructureDefinition/FavoriteBrewery"
             },
             {
-              "id": "Extension.valueCode",
-              "path": "Extension.valueCode",
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
               "type": [
                 {
                   "code": "code"
@@ -1229,7 +1229,7 @@
         "name": "FavoriteCalifornian",
         "title": "FavoriteCalifornian",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1442,8 +1442,8 @@
               ]
             },
             {
-              "id": "Extension.valueCode",
-              "path": "Extension.valueCode",
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -1511,8 +1511,8 @@
               "fixedUri": "http://test/url/base/StructureDefinition/FavoriteCalifornian"
             },
             {
-              "id": "Extension.valueCode",
-              "path": "Extension.valueCode",
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
               "type": [
                 {
                   "code": "code"
@@ -1535,7 +1535,7 @@
         "name": "ComplexExt",
         "title": "ComplexExt",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -2114,8 +2114,8 @@
               ]
             },
             {
-              "id": "Extension.extension:simpleSubfield.valueString",
-              "path": "Extension.extension.valueString",
+              "id": "Extension.extension:simpleSubfield.value[x]",
+              "path": "Extension.extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -2921,8 +2921,8 @@
               ]
             },
             {
-              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB.valueUnsignedInt",
-              "path": "Extension.extension.extension.valueUnsignedInt",
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB.value[x]",
+              "path": "Extension.extension.extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -3034,8 +3034,8 @@
               "fixedUri": "simpleSubfield"
             },
             {
-              "id": "Extension.extension:simpleSubfield.valueString",
-              "path": "Extension.extension.valueString",
+              "id": "Extension.extension:simpleSubfield.value[x]",
+              "path": "Extension.extension.value[x]",
               "type": [
                 {
                   "code": "string"
@@ -3181,8 +3181,8 @@
               "fixedUri": "simpleSubSubFieldB"
             },
             {
-              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB.valueUnsignedInt",
-              "path": "Extension.extension.extension.valueUnsignedInt",
+              "id": "Extension.extension:complexSubfield.extension:simpleSubSubFieldB.value[x]",
+              "path": "Extension.extension.extension.value[x]",
               "type": [
                 {
                   "code": "UnsignedInt"
@@ -3201,7 +3201,7 @@
         "name": "SingleValueComplexExtension",
         "title": "SingleValueComplexExtension",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -3779,8 +3779,8 @@
               ]
             },
             {
-              "id": "Extension.extension:stringField.valueString",
-              "path": "Extension.extension.valueString",
+              "id": "Extension.extension:stringField.value[x]",
+              "path": "Extension.extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -3890,8 +3890,8 @@
               "fixedUri": "stringField"
             },
             {
-              "id": "Extension.extension:stringField.valueString",
-              "path": "Extension.extension.valueString",
+              "id": "Extension.extension:stringField.value[x]",
+              "path": "Extension.extension.value[x]",
               "type": [
                 {
                   "code": "string"
@@ -3910,7 +3910,7 @@
         "name": "SingleValueRepeatedComplexExtension",
         "title": "SingleValueRepeatedComplexExtension",
         "status": "draft",
-        "date": "2022-08-03",
+        "date": "2022-09-01",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -4488,8 +4488,8 @@
               ]
             },
             {
-              "id": "Extension.extension:stringField.valueString",
-              "path": "Extension.extension.valueString",
+              "id": "Extension.extension:stringField.value[x]",
+              "path": "Extension.extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -4598,8 +4598,8 @@
               "fixedUri": "stringField"
             },
             {
-              "id": "Extension.extension:stringField.valueString",
-              "path": "Extension.extension.valueString",
+              "id": "Extension.extension:stringField.value[x]",
+              "path": "Extension.extension.value[x]",
               "type": [
                 {
                   "code": "string"

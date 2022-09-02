@@ -10,7 +10,7 @@
         "name": "PrimitiveHasNoValue",
         "title": "PrimitiveHasNoValue",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-09-01",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -224,8 +224,8 @@
               ]
             },
             {
-              "id": "Extension.valueBoolean",
-              "path": "Extension.valueBoolean",
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -291,8 +291,8 @@
               "fixedUri": "https://g.co/fhir/StructureDefinition/primitiveHasNoValue"
             },
             {
-              "id": "Extension.valueBoolean",
-              "path": "Extension.valueBoolean",
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
               "type": [
                 {
                   "code": "boolean"
@@ -311,7 +311,7 @@
         "name": "OperationOutcomeSubject",
         "title": "OperationOutcomeSubject",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-09-01",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -525,8 +525,8 @@
               ]
             },
             {
-              "id": "Extension.valueReference",
-              "path": "Extension.valueReference",
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -592,8 +592,8 @@
               "fixedUri": "https://g.co/fhir/medicalrecords/OperationOutcomeSubject"
             },
             {
-              "id": "Extension.valueReference",
-              "path": "Extension.valueReference",
+              "id": "Extension.value[x]",
+              "path": "Extension.value[x]",
               "type": [
                 {
                   "code": "Reference"
@@ -612,7 +612,7 @@
         "name": "Base64BinarySeparatorStride",
         "title": "Base64BinarySeparatorStride",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-09-01",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -1191,8 +1191,8 @@
               ]
             },
             {
-              "id": "Extension.extension:separator.valueString",
-              "path": "Extension.extension.valueString",
+              "id": "Extension.extension:separator.value[x]",
+              "path": "Extension.extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -1409,8 +1409,8 @@
               ]
             },
             {
-              "id": "Extension.extension:stride.valuePositiveInt",
-              "path": "Extension.extension.valuePositiveInt",
+              "id": "Extension.extension:stride.value[x]",
+              "path": "Extension.extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -1523,8 +1523,8 @@
               "fixedUri": "separator"
             },
             {
-              "id": "Extension.extension:separator.valueString",
-              "path": "Extension.extension.valueString",
+              "id": "Extension.extension:separator.value[x]",
+              "path": "Extension.extension.value[x]",
               "type": [
                 {
                   "code": "string"
@@ -1574,8 +1574,8 @@
               "fixedUri": "stride"
             },
             {
-              "id": "Extension.extension:stride.valuePositiveInt",
-              "path": "Extension.extension.valuePositiveInt",
+              "id": "Extension.extension:stride.value[x]",
+              "path": "Extension.extension.value[x]",
               "type": [
                 {
                   "code": "positiveInt"
@@ -1594,7 +1594,7 @@
         "name": "EventLabel",
         "title": "EventLabel",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-09-01",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -2173,8 +2173,8 @@
               ]
             },
             {
-              "id": "Extension.extension:patient.valueReference",
-              "path": "Extension.extension.valueReference",
+              "id": "Extension.extension:patient.value[x]",
+              "path": "Extension.extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -2391,8 +2391,8 @@
               ]
             },
             {
-              "id": "Extension.extension:type.valueCoding",
-              "path": "Extension.extension.valueCoding",
+              "id": "Extension.extension:type.value[x]",
+              "path": "Extension.extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -2609,8 +2609,8 @@
               ]
             },
             {
-              "id": "Extension.extension:eventTime.valueDateTime",
-              "path": "Extension.extension.valueDateTime",
+              "id": "Extension.extension:eventTime.value[x]",
+              "path": "Extension.extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -2827,8 +2827,8 @@
               ]
             },
             {
-              "id": "Extension.extension:source.valueReference",
-              "path": "Extension.extension.valueReference",
+              "id": "Extension.extension:source.value[x]",
+              "path": "Extension.extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -3410,8 +3410,8 @@
               ]
             },
             {
-              "id": "Extension.extension:label.extension:className.valueCoding",
-              "path": "Extension.extension.extension.valueCoding",
+              "id": "Extension.extension:label.extension:className.value[x]",
+              "path": "Extension.extension.extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -3749,8 +3749,8 @@
               "fixedUri": "patient"
             },
             {
-              "id": "Extension.extension:patient.valueReference",
-              "path": "Extension.extension.valueReference",
+              "id": "Extension.extension:patient.value[x]",
+              "path": "Extension.extension.value[x]",
               "type": [
                 {
                   "code": "Reference"
@@ -3800,8 +3800,8 @@
               "fixedUri": "type"
             },
             {
-              "id": "Extension.extension:type.valueCoding",
-              "path": "Extension.extension.valueCoding",
+              "id": "Extension.extension:type.value[x]",
+              "path": "Extension.extension.value[x]",
               "type": [
                 {
                   "code": "Coding"
@@ -3850,8 +3850,8 @@
               "fixedUri": "eventTime"
             },
             {
-              "id": "Extension.extension:eventTime.valueDateTime",
-              "path": "Extension.extension.valueDateTime",
+              "id": "Extension.extension:eventTime.value[x]",
+              "path": "Extension.extension.value[x]",
               "type": [
                 {
                   "code": "dateTime"
@@ -3900,8 +3900,8 @@
               "fixedUri": "source"
             },
             {
-              "id": "Extension.extension:source.valueReference",
-              "path": "Extension.extension.valueReference",
+              "id": "Extension.extension:source.value[x]",
+              "path": "Extension.extension.value[x]",
               "type": [
                 {
                   "code": "Reference"
@@ -3996,8 +3996,8 @@
               "fixedUri": "className"
             },
             {
-              "id": "Extension.extension:label.extension:className.valueCoding",
-              "path": "Extension.extension.extension.valueCoding",
+              "id": "Extension.extension:label.extension:className.value[x]",
+              "path": "Extension.extension.extension.value[x]",
               "type": [
                 {
                   "code": "Coding"
@@ -4079,7 +4079,7 @@
         "name": "EventTrigger",
         "title": "EventTrigger",
         "status": "draft",
-        "date": "2021-10-19",
+        "date": "2022-09-01",
         "publisher": "Google LLC",
         "contact": [
           {
@@ -4658,8 +4658,8 @@
               ]
             },
             {
-              "id": "Extension.extension:type.valueCoding",
-              "path": "Extension.extension.valueCoding",
+              "id": "Extension.extension:type.value[x]",
+              "path": "Extension.extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -4876,8 +4876,8 @@
               ]
             },
             {
-              "id": "Extension.extension:eventTime.valueDateTime",
-              "path": "Extension.extension.valueDateTime",
+              "id": "Extension.extension:eventTime.value[x]",
+              "path": "Extension.extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -5094,8 +5094,8 @@
               ]
             },
             {
-              "id": "Extension.extension:source.valueReference",
-              "path": "Extension.extension.valueReference",
+              "id": "Extension.extension:source.value[x]",
+              "path": "Extension.extension.value[x]",
               "short": "Value of extension",
               "definition": "Value of extension - must be one of a constrained set of the data types (see [Extensibility](extensibility.html) for a list).",
               "min": 0,
@@ -5208,8 +5208,8 @@
               "fixedUri": "type"
             },
             {
-              "id": "Extension.extension:type.valueCoding",
-              "path": "Extension.extension.valueCoding",
+              "id": "Extension.extension:type.value[x]",
+              "path": "Extension.extension.value[x]",
               "type": [
                 {
                   "code": "Coding"
@@ -5259,8 +5259,8 @@
               "fixedUri": "eventTime"
             },
             {
-              "id": "Extension.extension:eventTime.valueDateTime",
-              "path": "Extension.extension.valueDateTime",
+              "id": "Extension.extension:eventTime.value[x]",
+              "path": "Extension.extension.value[x]",
               "type": [
                 {
                   "code": "dateTime"
@@ -5309,8 +5309,8 @@
               "fixedUri": "source"
             },
             {
-              "id": "Extension.extension:source.valueReference",
-              "path": "Extension.extension.valueReference",
+              "id": "Extension.extension:source.value[x]",
+              "path": "Extension.extension.value[x]",
               "type": [
                 {
                   "code": "Reference"
