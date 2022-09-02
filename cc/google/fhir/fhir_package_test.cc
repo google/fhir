@@ -16,7 +16,11 @@
 
 #include <stdio.h>
 
+#include <cstdio>
+#include <memory>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -304,6 +308,50 @@ TEST(FhirPackageManager, GetResourceForAddedPackagesSucceeds) {
 
   result = package_manager.GetValueSet("http://missing-uri");
   EXPECT_FALSE(result.ok());
+
+  remove(temp_name->c_str());
+  remove(another_temp_name->c_str());
+}
+
+TEST(FhirPackageManager, GetResourceAgainstEmptyManagerReturnsNothing) {
+  FhirPackageManager package_manager = FhirPackageManager();
+
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> result =
+      package_manager.GetValueSet("http://value.set/id-1");
+  EXPECT_FALSE(result.ok());
+  EXPECT_EQ(result.status().code(), absl::StatusCode::kNotFound);
+}
+
+TEST(FhirPackageManager, GetResourceWithErrorReturnsError) {
+  // The first package is empty and will return a NotFoundError status when
+  // queried.
+  absl::StatusOr<std::string> temp_name = CreateZipFileContaining(
+      std::vector<std::pair<const char*, const char*>>{{"nothing", "{}"}});
+  ASSERT_TRUE(temp_name.ok()) << temp_name.status().message();
+
+  // The second package contains a resource missing required fields, which will
+  // return an InvalidArgumentError status when it fails to be parsed into a
+  // proto.
+  absl::StatusOr<std::string> another_temp_name =
+      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+          {"a_value_set.json",
+           "{\"resourceType\": \"ValueSet\", \"url\": "
+           "\"http://value.set/id-1\" } "}});
+  ASSERT_TRUE(another_temp_name.ok()) << another_temp_name.status().message();
+
+  absl::Status add_package_status;
+  FhirPackageManager package_manager = FhirPackageManager();
+
+  add_package_status = package_manager.AddPackageAtPath(*temp_name);
+  ASSERT_TRUE(add_package_status.ok()) << add_package_status.message();
+
+  add_package_status = package_manager.AddPackageAtPath(*another_temp_name);
+  ASSERT_TRUE(add_package_status.ok()) << add_package_status.message();
+
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> result =
+      package_manager.GetValueSet("http://value.set/id-1");
+  EXPECT_FALSE(result.ok());
+  EXPECT_EQ(result.status().code(), absl::StatusCode::kInvalidArgument);
 
   remove(temp_name->c_str());
   remove(another_temp_name->c_str());

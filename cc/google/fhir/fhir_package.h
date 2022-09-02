@@ -301,16 +301,21 @@ absl::StatusOr<T> SearchPackagesForResource(
     absl::StatusOr<T> (FhirPackage::*get_resource)(absl::string_view),
     std::vector<std::unique_ptr<FhirPackage>>& packages,
     absl::string_view uri) {
-  absl::Status status;
   for (std::unique_ptr<FhirPackage>& package : packages) {
     absl::StatusOr<T> resource = (*package.*get_resource)(uri);
     if (resource.ok()) {
+      // We found the resource!
       return resource;
+    } else if (resource.status().code() == absl::StatusCode::kNotFound) {
+      // The resource wasn't found, so let's keep looking.
+      continue;
     } else {
-      status.Update(resource.status());
+      // An error occurred while looking for the resource, so let's report it.
+      return resource.status();
     }
   }
-  return status;
+  return absl::NotFoundError(
+      absl::StrFormat("%s not found in package manager", uri));
 }
 }  // namespace internal
 
