@@ -94,9 +94,6 @@ absl::Status AddResourceToFhirPackage(absl::string_view resource_json,
 namespace internal {
 absl::StatusOr<const FhirJson*> FindResourceInBundle(
     absl::string_view uri, const FhirJson& bundle_json) {
-  absl::Status not_found =
-      absl::NotFoundError(absl::StrFormat("%s not present in bundle.", uri));
-
   FHIR_ASSIGN_OR_RETURN(const FhirJson* entries, bundle_json.get("entry"));
   FHIR_ASSIGN_OR_RETURN(int num_entries, entries->arraySize());
   for (int i = 0; i < num_entries; ++i) {
@@ -110,9 +107,11 @@ absl::StatusOr<const FhirJson*> FindResourceInBundle(
       absl::StatusOr<const FhirJson*> bundle_json =
           FindResourceInBundle(uri, *resource);
       if (bundle_json.ok()) {
+        // We found the resource!
         return bundle_json;
-      } else {
-        not_found.Update(bundle_json.status());
+      } else if (bundle_json.status().code() != absl::StatusCode::kNotFound) {
+        // We encountered a parsing error in the bundle to report.
+        return bundle_json.status();
       }
     } else {
       FHIR_ASSIGN_OR_RETURN(std::string resource_url,
@@ -123,7 +122,7 @@ absl::StatusOr<const FhirJson*> FindResourceInBundle(
       }
     }
   }
-  return not_found;
+  return absl::NotFoundError(absl::StrFormat("%s not present in bundle.", uri));
 }
 
 absl::Status ParseResourceFromZip(absl::string_view zip_file_path,
@@ -243,9 +242,18 @@ absl::StatusOr<std::unique_ptr<FhirPackage>> FhirPackage::Load(
       absl::Status add_status =
           AddResourceToFhirPackage(contents, entry_stat.name, *fhir_package);
       if (!add_status.ok()) {
-        parse_errors.Update(absl::InvalidArgumentError(
+        // Concatenate all errors founds while parsing the package.
+        std::string error_message =
             absl::StrFormat("Unhandled JSON entry: %s due to error: %s",
-                            entry_stat.name, add_status.message())));
+                            entry_stat.name, add_status.message());
+        if (parse_errors.ok()) {
+          parse_errors = absl::InvalidArgumentError(absl::StrCat(
+              "Error(s) encountered during parsing: ", error_message));
+        } else {
+          parse_errors = absl::Status(
+              parse_errors.code(),
+              absl::StrCat(parse_errors.message(), "; ", error_message));
+        }
       }
     }
   }

@@ -246,7 +246,8 @@ TEST(FhirPackageTest, ResourceWithParseErrorFails) {
 
   absl::StatusOr<std::unique_ptr<FhirPackage>> fhir_package =
       FhirPackage::Load(*temp_name);
-  ASSERT_FALSE(fhir_package.ok());
+  EXPECT_FALSE(fhir_package.ok());
+  EXPECT_EQ(fhir_package.status().code(), absl::StatusCode::kInvalidArgument);
   remove(temp_name->c_str());
 }
 
@@ -262,7 +263,11 @@ TEST(FhirPackageTest, GetResourceForMissingUriFindsNothing) {
       FhirPackage::Load(*temp_name);
   ASSERT_TRUE(fhir_package.ok()) << fhir_package.status().message();
 
-  EXPECT_FALSE((*fhir_package)->GetValueSet("missing").ok());
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> result =
+      (*fhir_package)->GetValueSet("missing");
+  EXPECT_FALSE(result.ok());
+  EXPECT_EQ(result.status().code(), absl::StatusCode::kNotFound);
+
   remove(temp_name->c_str());
 }
 
@@ -634,7 +639,8 @@ TEST(ResourceCollectionTest, AddGetResourceWithBadResourceJsonFails) {
   ASSERT_FALSE(result.ok());
 }
 
-TEST(ResourceCollectionTest, AddGetResourceWithMissingBundleEntryFails) {
+TEST(ResourceCollectionTest,
+     AddGetResourceWithMissingBundleEntryReturnsNotFound) {
   const char* bundle_contents = R"(
 {
   "resourceType": "Bundle",
@@ -662,7 +668,40 @@ TEST(ResourceCollectionTest, AddGetResourceWithMissingBundleEntryFails) {
       collection.GetResource("http://value.set/id");
 
   remove(temp_name->c_str());
-  ASSERT_FALSE(result.ok());
+  EXPECT_FALSE(result.ok());
+  EXPECT_EQ(result.status().code(), absl::StatusCode::kNotFound);
+}
+
+TEST(ResourceCollectionTest,
+     AddGetResourceWithMissingBundleParseErrorReturnsError) {
+  // The bundle contains a resource missing required fields such as
+  // resourceType.
+  const char* bundle_contents = R"(
+{
+  "resourceType": "Bundle",
+  "entry": [
+    {
+      "resource": {
+        "url": "http://different-value.set/id",
+      }
+    }
+  ]
+})";
+  absl::StatusOr<std::string> temp_name =
+      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+          {"a_bundle.json", bundle_contents}});
+  ASSERT_TRUE(temp_name.ok()) << temp_name.status().message();
+
+  auto collection =
+      ResourceCollection<google::fhir::r4::core::ValueSet>(*temp_name);
+  collection.AddUriAtPath("http://value.set/id", "a_bundle.json");
+  absl::StatusOr<const google::fhir::r4::core::ValueSet*> result =
+      collection.GetResource("http://value.set/id");
+
+  EXPECT_FALSE(result.ok());
+  EXPECT_EQ(result.status().code(), absl::StatusCode::kInvalidArgument);
+
+  remove(temp_name->c_str());
 }
 
 }  // namespace
