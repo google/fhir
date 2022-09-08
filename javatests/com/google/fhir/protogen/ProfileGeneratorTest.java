@@ -14,6 +14,7 @@
 
 package com.google.fhir.protogen;
 
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertThrows;
@@ -410,6 +411,14 @@ public final class ProfileGeneratorTest {
     Bundle bundle = generator.generateProfiles(profiles);
 
     StructureDefinition extension = bundle.getEntry(0).getResource().getStructureDefinition();
+
+    ElementDefinition codingSlice =
+        extension.getSnapshot().getElementList().stream()
+            .filter(element -> element.getId().getValue().equals("Observation.code.coding:myslice"))
+            .collect(toImmutableList())
+            .get(0);
+    assertThat(codingSlice.getTypeCount()).isEqualTo(1);
+    assertThat(codingSlice.getType(0).getCode().getValue()).isEqualTo("Coding");
 
     ElementDefinition sliceCodeElement =
         extension.getSnapshot().getElementList().stream()

@@ -10,7 +10,7 @@
         "name": "Bundle",
         "title": "Bundle",
         "status": "draft",
-        "date": "2022-09-01",
+        "date": "2022-09-08",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1888,7 +1888,7 @@
         "name": "TestPatient",
         "title": "TestPatient",
         "status": "draft",
-        "date": "2022-09-01",
+        "date": "2022-09-08",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -4324,6 +4324,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -4814,7 +4819,12 @@
               "id": "Patient.maritalStatus.coding:color",
               "path": "Patient.maritalStatus.coding",
               "sliceName": "color",
-              "max": "1"
+              "max": "1",
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ]
             },
             {
               "id": "Patient.maritalStatus.coding:color.system",
@@ -4833,7 +4843,7 @@
         "name": "TestObservation",
         "title": "TestObservation",
         "status": "draft",
-        "date": "2022-09-01",
+        "date": "2022-09-08",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -7671,6 +7681,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -8056,6 +8071,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -8441,6 +8461,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -8827,6 +8852,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -9213,6 +9243,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -9654,6 +9689,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -10095,6 +10135,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -10528,7 +10573,12 @@
               "sliceName": "sysA",
               "short": "SysA Code",
               "definition": "SysA Code",
-              "max": "1"
+              "max": "1",
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ]
             },
             {
               "id": "Observation.code.coding:sysA.system",
@@ -10540,7 +10590,12 @@
               "path": "Observation.code.coding",
               "sliceName": "sysB",
               "short": "SysB Code",
-              "definition": "SysB Code"
+              "definition": "SysB Code",
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ]
             },
             {
               "id": "Observation.code.coding:sysB.system",
@@ -10553,7 +10608,12 @@
               "sliceName": "sysC",
               "short": "SysC Code",
               "definition": "SysC Code",
-              "max": "1"
+              "max": "1",
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ]
             },
             {
               "id": "Observation.code.coding:sysC.system",
@@ -10571,7 +10631,12 @@
               "sliceName": "sysD",
               "short": "SysD Code",
               "definition": "SysD Code",
-              "max": "1"
+              "max": "1",
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ]
             },
             {
               "id": "Observation.code.coding:sysD.system",
@@ -10587,7 +10652,12 @@
               "id": "Observation.code.coding:color",
               "path": "Observation.code.coding",
               "sliceName": "color",
-              "max": "1"
+              "max": "1",
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ]
             },
             {
               "id": "Observation.code.coding:color.system",
@@ -10611,7 +10681,12 @@
             {
               "id": "Observation.category.coding:catA",
               "path": "Observation.category.coding",
-              "sliceName": "catA"
+              "sliceName": "catA",
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ]
             },
             {
               "id": "Observation.category.coding:catA.system",
@@ -10636,7 +10711,12 @@
               "id": "Observation.component.interpretation.coding:onNestedConcept",
               "path": "Observation.component.interpretation.coding",
               "sliceName": "onNestedConcept",
-              "max": "1"
+              "max": "1",
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ]
             },
             {
               "id": "Observation.component.interpretation.coding:onNestedConcept.system",
@@ -10655,7 +10735,7 @@
         "name": "TestObservationLvl2",
         "title": "TestObservationLvl2",
         "status": "draft",
-        "date": "2022-09-01",
+        "date": "2022-09-08",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -13493,6 +13573,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -13878,6 +13963,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -14263,6 +14353,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -14649,6 +14744,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -15035,6 +15135,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -15476,6 +15581,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -15917,6 +16027,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -16412,6 +16527,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -16805,7 +16925,12 @@
               "id": "Observation.code.coding:newCodeOnProfiled",
               "path": "Observation.code.coding",
               "sliceName": "newCodeOnProfiled",
-              "max": "1"
+              "max": "1",
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ]
             },
             {
               "id": "Observation.code.coding:newCodeOnProfiled.system",
@@ -16824,7 +16949,7 @@
         "name": "TestEncounter",
         "title": "TestEncounter",
         "status": "draft",
-        "date": "2022-09-01",
+        "date": "2022-09-08",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -20351,6 +20476,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -20736,7 +20866,12 @@
               "sliceName": "act",
               "short": "Act Priority",
               "definition": "Act Priority",
-              "max": "1"
+              "max": "1",
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ]
             },
             {
               "id": "Encounter.priority.coding:act.system",
@@ -20755,7 +20890,7 @@
         "name": "ProfiledDatatypesObservation",
         "title": "ProfiledDatatypesObservation",
         "status": "draft",
-        "date": "2022-09-01",
+        "date": "2022-09-08",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -23579,7 +23714,7 @@
         "name": "TestEncounterWithProfiledIdentifier",
         "title": "TestEncounterWithProfiledIdentifier",
         "status": "draft",
-        "date": "2022-09-01",
+        "date": "2022-09-08",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -27105,6 +27240,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -27488,7 +27628,12 @@
               "id": "Encounter.identifier.type.coding:act",
               "path": "Encounter.identifier.type.coding",
               "sliceName": "act",
-              "max": "1"
+              "max": "1",
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ]
             },
             {
               "id": "Encounter.identifier.type.coding:act.system",
@@ -27507,7 +27652,7 @@
         "name": "TestPatientWithWarningAndErrorFhirpath",
         "title": "TestPatientWithWarningAndErrorFhirpath",
         "status": "draft",
-        "date": "2022-09-01",
+        "date": "2022-09-08",
         "publisher": "Testington Inc.",
         "contact": [
           {

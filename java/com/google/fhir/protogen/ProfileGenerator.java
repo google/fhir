@@ -763,6 +763,7 @@ final class ProfileGenerator {
 
     // Root Element
     ElementDefinition.Builder rootElement = getElementBuilderById("Coding", codingElements);
+    rootElement.addType(ElementDefinition.TypeRef.newBuilder().setCode(fhirUri("Coding")));
     customizeRootElement(rootElement, elementData);
     rootElement.setSliceName(fhirString(elementData.getName()));
 
