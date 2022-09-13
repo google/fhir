@@ -24,7 +24,7 @@ MANUAL_TAGS = ["manual"]
 def fhir_package(
         name,
         definitions,
-        package_info):
+        package_info = None):
     """Generates a FHIR package in a way that can be referenced by other packages
 
     Given a zip of resources, and a package info proto, this generates a zip file and a filegroup for the package.
@@ -32,12 +32,15 @@ def fhir_package(
     Args:
         name: The name for the package, which other targets will use to refer to this
         definitions: the definitions to export with this package
-        package_info: the package_info to export with this package
+        package_info: if set, the package_info to export with this package
     """
     filegroup_name = name + "_filegroup"
+    file_srcs = definitions
+    if package_info:
+        file_srcs.append(package_info)
     native.filegroup(
         name = filegroup_name,
-        srcs = definitions + [package_info],
+        srcs = file_srcs,
     )
     native.genrule(
         name = name + "_package_zip",
