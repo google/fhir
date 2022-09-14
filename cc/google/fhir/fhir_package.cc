@@ -37,31 +37,39 @@ namespace {
 
 // Adds the resource described by `resource_json` located at `resource_path`
 // within its FHIR package .zip file to the appropriate ResourceCollection of
-// the given `fhir_package`. Allows the resource to subsequently be retrieved by
-// its URL from the FhirPackage.
-absl::Status AddResourceToFhirPackage(const internal::FhirJson& resource_json,
-                                      absl::string_view resource_path,
-                                      FhirPackage& fhir_package) {
-  FHIR_ASSIGN_OR_RETURN(const std::string resource_type,
-                        GetResourceType(resource_json));
-  if (resource_type == "ValueSet") {
+// the given `fhir_package`, if one applies. Allows the resource to subsequently
+// be retrieved by its URL from the FhirPackage.
+// If the JSON is not a FHIR resource, or not a resource type tracked by the
+// PackageManager, does nothing and returns an OK status.
+absl::Status MaybeAddResourceToFhirPackage(
+    const internal::FhirJson& resource_json, absl::string_view resource_path,
+    FhirPackage& fhir_package) {
+  absl::StatusOr<const std::string> resource_type =
+      GetResourceType(resource_json);
+  if (!resource_type.ok()) {
+    // If no resource type key was found, this is not a FHIR resource.  Ignore.
+    // Return status failure for any other kind of failure.
+    return absl::IsNotFound(resource_type.status()) ? absl::OkStatus()
+                                                    : resource_type.status();
+  }
+  if (*resource_type == "ValueSet") {
     FHIR_ASSIGN_OR_RETURN(const std::string resource_url,
                           GetResourceUrl(resource_json));
     fhir_package.value_sets.AddUriAtPath(resource_url, resource_path);
-  } else if (resource_type == "CodeSystem") {
+  } else if (*resource_type == "CodeSystem") {
     FHIR_ASSIGN_OR_RETURN(const std::string resource_url,
                           GetResourceUrl(resource_json));
     fhir_package.code_systems.AddUriAtPath(resource_url, resource_path);
-  } else if (resource_type == "StructureDefinition") {
+  } else if (*resource_type == "StructureDefinition") {
     FHIR_ASSIGN_OR_RETURN(const std::string resource_url,
                           GetResourceUrl(resource_json));
     fhir_package.structure_definitions.AddUriAtPath(resource_url,
                                                     resource_path);
-  } else if (resource_type == "SearchParameter") {
+  } else if (*resource_type == "SearchParameter") {
     FHIR_ASSIGN_OR_RETURN(const std::string resource_url,
                           GetResourceUrl(resource_json));
     fhir_package.search_parameters.AddUriAtPath(resource_url, resource_path);
-  } else if (resource_type == "Bundle") {
+  } else if (*resource_type == "Bundle") {
     FHIR_ASSIGN_OR_RETURN(const internal::FhirJson* entries,
                           resource_json.get("entry"));
     FHIR_ASSIGN_OR_RETURN(int num_entries, entries->arraySize());
@@ -70,24 +78,25 @@ absl::Status AddResourceToFhirPackage(const internal::FhirJson& resource_json,
       FHIR_ASSIGN_OR_RETURN(const internal::FhirJson* entry, entries->get(i));
       FHIR_ASSIGN_OR_RETURN(const internal::FhirJson* resource,
                             entry->get("resource"));
-      FHIR_RETURN_IF_ERROR(
-          AddResourceToFhirPackage(*resource, resource_path, fhir_package));
+      FHIR_RETURN_IF_ERROR(MaybeAddResourceToFhirPackage(
+          *resource, resource_path, fhir_package));
     }
-  } else {
-    return absl::InvalidArgumentError(absl::StrFormat(
-        "Unhandled JSON entry: %s for unexpected resource type %s.",
-        resource_path, resource_type));
   }
+  // We got a resource type, but it's not one of the ones we track.  Ignore.
   return absl::OkStatus();
 }
 
-absl::Status AddResourceToFhirPackage(absl::string_view resource_json,
-                                      absl::string_view resource_path,
-                                      FhirPackage& fhir_package) {
+absl::Status MaybeAddResourceToFhirPackage(absl::string_view resource_json,
+                                           absl::string_view resource_path,
+                                           FhirPackage& fhir_package) {
   internal::FhirJson parsed_json;
   FHIR_RETURN_IF_ERROR(
       internal::ParseJsonValue(std::string(resource_json), parsed_json));
-  return AddResourceToFhirPackage(parsed_json, resource_path, fhir_package);
+  if (!parsed_json.isObject()) {
+    // Not a json object - definitly not a resource.
+  }
+  return MaybeAddResourceToFhirPackage(parsed_json, resource_path,
+                                       fhir_package);
 }
 }  // namespace
 
@@ -239,8 +248,8 @@ absl::StatusOr<std::unique_ptr<FhirPackage>> FhirPackage::Load(
     }
 
     if (absl::EndsWith(entry_stat.name, ".json")) {
-      absl::Status add_status =
-          AddResourceToFhirPackage(contents, entry_stat.name, *fhir_package);
+      absl::Status add_status = MaybeAddResourceToFhirPackage(
+          contents, entry_stat.name, *fhir_package);
       if (!add_status.ok()) {
         // Concatenate all errors founds while parsing the package.
         std::string error_message =

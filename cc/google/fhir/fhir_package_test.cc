@@ -271,6 +271,60 @@ TEST(FhirPackageTest, GetResourceForMissingUriFindsNothing) {
   remove(temp_name->c_str());
 }
 
+TEST(FhirPackageTest, UntrackedResourceTypeIgnored) {
+  absl::StatusOr<std::string> temp_name =
+      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+          {"a_value_set.json",
+           R"({
+            "resourceType": "ValueSet",
+            "url": "http://value.set/id",
+            "id": "a-value-set",
+            "status": "draft"
+          })"},
+          {"sample_patient.json",
+           R"({
+            "resourceType": "Patient",
+            "id": "dqd"
+          })"},
+      });
+  ASSERT_TRUE(temp_name.ok()) << temp_name.status().message();
+
+  absl::StatusOr<std::unique_ptr<FhirPackage>> fhir_package =
+      FhirPackage::Load(*temp_name);
+  ASSERT_TRUE(fhir_package.ok()) << fhir_package.status().message();
+
+  EXPECT_TRUE(
+      (*fhir_package)->GetValueSet("http://value.set/id").status().ok());
+  remove(temp_name->c_str());
+}
+
+TEST(FhirPackageTest, NonResourceIgnored) {
+  absl::StatusOr<std::string> temp_name =
+      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+          {"a_value_set.json",
+           R"({
+            "resourceType": "ValueSet",
+            "url": "http://value.set/id",
+            "id": "a-value-set",
+            "status": "draft"
+          })"},
+          {"random_file.json",
+           R"({
+            "foo": "bar",
+            "baz": "quux"
+          })"},
+      });
+  ASSERT_TRUE(temp_name.ok()) << temp_name.status().message();
+
+  absl::StatusOr<std::unique_ptr<FhirPackage>> fhir_package =
+      FhirPackage::Load(*temp_name);
+  ASSERT_TRUE(fhir_package.ok()) << fhir_package.status().message();
+
+  EXPECT_TRUE(
+      (*fhir_package)->GetValueSet("http://value.set/id").status().ok());
+  remove(temp_name->c_str());
+}
+
 TEST(FhirPackageManager, GetResourceForAddedPackagesSucceeds) {
   absl::StatusOr<std::string> temp_name =
       CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
