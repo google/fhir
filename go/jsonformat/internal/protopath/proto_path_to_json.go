@@ -56,7 +56,13 @@ func toJSON(md protoreflect.MessageDescriptor, path []protoreflect.Name) []strin
 	}
 
 	// Extract the JSON representation of the FieldDescriptor.
-	jsonName := fd.JSONName()
+	var jsonName string
+	if fd.ContainingOneof() != nil {
+		jsonName = "ofType(" + string(fd.Message().Name()) + ")"
+	} else {
+		jsonName = fd.JSONName()
+	}
+
 	if jsonName != "" && fd.Cardinality() == protoreflect.Repeated && len(path) >= 1 {
 		jsonName += "[" + string(path[0]) + "]"
 		path = path[1:]

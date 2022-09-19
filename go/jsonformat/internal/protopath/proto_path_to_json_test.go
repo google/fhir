@@ -50,12 +50,12 @@ func TestToJSONPath(t *testing.T) {
 		{
 			"oneof prefix path",
 			NewPath("oneof.oneof_message_field.inner_field"),
-			"oneofMessageField.innerField",
+			"ofType(InnerMessage).innerField",
 		},
 		{
 			"oneof path",
 			NewPath("oneof_message_field.inner_field"),
-			"oneofMessageField.innerField",
+			"ofType(InnerMessage).innerField",
 		},
 		{
 			"nonexistent path",
@@ -76,7 +76,7 @@ func TestToJSONPath(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			json := ToJSONPath(&pptpb.Message{}, test.path)
-			if diff := cmp.Diff(json, test.want); diff != "" {
+			if diff := cmp.Diff(test.want, json); diff != "" {
 				t.Errorf("ToJSONPath(_, %v) => %v, want %v, diff:\n%s", test.path, json, test.want, diff)
 			}
 		})
