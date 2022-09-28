@@ -610,6 +610,7 @@ cc_library(
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:value_set_cc_proto",
         "@com_github_glog_glog//:glog",
+        "@com_google_absl//absl/cleanup",
         "@com_google_absl//absl/container:flat_hash_map",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
@@ -617,6 +618,6 @@ cc_library(
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/types:optional",
         "@com_google_protobuf//:protobuf",
-        "@libzip",
+        "@libarchive",
     ],
 )
