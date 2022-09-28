@@ -573,10 +573,11 @@ cc_test(
         "//proto/google/fhir/proto/r4/core/resources:search_parameter_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:value_set_cc_proto",
+        "@com_google_absl//absl/cleanup",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings:str_format",
         "@com_google_googletest//:gtest_main",
-        "@libzip",
+        "@libarchive",
     ],
 )
 

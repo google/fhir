@@ -17,6 +17,7 @@
 #include <stdio.h>
 
 #include <cstdio>
+#include <functional>
 #include <memory>
 #include <string>
 #include <utility>
@@ -24,6 +25,7 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/cleanup/cleanup.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_format.h"
 #include "google/fhir/json/fhir_json.h"
@@ -35,38 +37,85 @@
 #include "proto/google/fhir/proto/r4/core/resources/search_parameter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/structure_definition.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/value_set.pb.h"
-#include "lib/zip.h"
+#include "libarchive/archive.h"
+#include "libarchive/archive_entry.h"
 
 namespace google::fhir {
 
 namespace {
 using ::testing::UnorderedElementsAre;
 
-// Writes a zip archive to a temporary file containing the given {file_name,
-// file_contents} pairs.
-absl::StatusOr<std::string> CreateZipFileContaining(
-    std::vector<std::pair<const char*, const char*>> zip_contents) {
-  std::string temp_name = std::tmpnam(nullptr);
+// File contents provided in CreateArchiveContaining calls.
+struct ArchiveContents {
+  const std::string name;
+  const std::string data;
+};
 
+// Writes an archive to a temporary file containing the given {name,
+// data} structs. The `set_archive_format` argument determines the type
+// of archive written. Pass one of libarchive's functions such as
+// `archive_write_set_format_ustar` or `archive_write_set_format_zip` to set the
+// type of the archive. Functions CreateZipFileContaining and
+// CreateTarFileContaining are provided for convenience.
+absl::StatusOr<std::string> CreateArchiveContaining(
+    const std::vector<ArchiveContents>& contents,
+    const std::function<int(struct archive*)>& set_archive_format) {
   int errorp;
-  zip_t* zip_file = zip_open(temp_name.c_str(), ZIP_CREATE, &errorp);
-  if (zip_file == nullptr) {
+  struct archive* archive = archive_write_new();
+  errorp = set_archive_format(archive);
+  if (errorp != ARCHIVE_OK) {
     return absl::UnavailableError(absl::StrFormat(
-        "Failed to create zip file due to error code: %d", errorp));
+        "Failed to create archive due to error code: %d.", errorp));
   }
 
-  for (auto& pair : zip_contents) {
-    zip_source_t* source =
-        zip_source_buffer(zip_file, pair.second, strlen(pair.second), 0);
-    zip_int64_t add_index = zip_file_add(zip_file, pair.first, source, 0);
-    if (add_index < 0) {
-      return absl::UnavailableError(absl::StrFormat(
-          "Unable to add file to zip, error code: %s", zip_strerror(zip_file)));
+  std::string temp_name = std::tmpnam(nullptr);
+  errorp = archive_write_open_filename(archive, temp_name.c_str());
+  if (errorp != ARCHIVE_OK) {
+    return absl::UnavailableError(
+        absl::StrFormat("Failed to create archive due to error code: %d %s.",
+                        errorp, archive_error_string(archive)));
+  }
+  absl::Cleanup archive_closer = [&archive] {
+    archive_write_close(archive);
+    archive_write_free(archive);
+  };
+
+  for (const auto& file : contents) {
+    struct archive_entry* entry = archive_entry_new();
+    archive_entry_set_pathname(entry, file.name.c_str());
+    archive_entry_set_size(entry, file.data.length());
+    archive_entry_set_filetype(entry, AE_IFREG);
+    absl::Cleanup entry_closer = [&entry] { archive_entry_free(entry); };
+
+    errorp = archive_write_header(archive, entry);
+    if (errorp != ARCHIVE_OK) {
+      return absl::UnavailableError(
+          absl::StrFormat("Unable to add file %s to archive, error code: %d %s",
+                          file.name, errorp, archive_error_string(archive)));
+    }
+
+    int64 written =
+        archive_write_data(archive, file.data.c_str(), file.data.length());
+    if (written < file.data.length()) {
+      return absl::UnavailableError(
+          absl::StrFormat("Unable to add file %s to archive, error: %s",
+                          file.name, archive_error_string(archive)));
     }
   }
-  zip_close(zip_file);
 
   return temp_name;
+}
+absl::StatusOr<std::string> CreateZipFileContaining(
+    const std::vector<ArchiveContents>& contents) {
+  return CreateArchiveContaining(contents, [](struct archive* archive) {
+    return archive_write_set_format_zip(archive);
+  });
+}
+absl::StatusOr<std::string> CreateTarFileContaining(
+    const std::vector<ArchiveContents>& contents) {
+  return CreateArchiveContaining(contents, [](struct archive* archive) {
+    return archive_write_set_format_zip(archive);
+  });
 }
 
 constexpr int kR4DefinitionsCount = 653;
@@ -86,7 +135,7 @@ TEST(FhirPackageTest, LoadSucceeds) {
 
 TEST(FhirPackageTest, LoadAndGetResourceSucceeds) {
   // Define a bunch of fake resources.
-  const char* structure_definition_1 = R"({
+  const std::string structure_definition_1 = R"({
     "resourceType": "StructureDefinition",
     "url": "http://sd1",
     "name": "sd1",
@@ -95,7 +144,7 @@ TEST(FhirPackageTest, LoadAndGetResourceSucceeds) {
     "type": "Extension",
     "status": "draft"
   })";
-  const char* structure_definition_2 = R"({
+  const std::string structure_definition_2 = R"({
     "resourceType": "StructureDefinition",
     "url": "http://sd2",
     "name": "sd2",
@@ -104,7 +153,7 @@ TEST(FhirPackageTest, LoadAndGetResourceSucceeds) {
     "type": "Extension",
     "status": "draft"
   })";
-  const char* search_parameter_1 = R"({
+  const std::string search_parameter_1 = R"({
     "resourceType": "SearchParameter",
     "url": "http://sp1",
     "name": "sp1",
@@ -114,7 +163,7 @@ TEST(FhirPackageTest, LoadAndGetResourceSucceeds) {
     "base": ["Claim"],
     "type": "reference"
   })";
-  const char* search_parameter_2 = R"({
+  const std::string search_parameter_2 = R"({
     "resourceType": "SearchParameter",
     "url": "http://sp2",
     "name": "sp2",
@@ -124,27 +173,27 @@ TEST(FhirPackageTest, LoadAndGetResourceSucceeds) {
     "base": ["Claim"],
     "type": "reference"
   })";
-  const char* code_system_1 = R"({
+  const std::string code_system_1 = R"({
     "resourceType": "CodeSystem",
     "url": "http://cs1",
     "name": "cs1",
     "status": "draft",
     "content": "complete"
   })";
-  const char* code_system_2 = R"({
+  const std::string code_system_2 = R"({
     "resourceType": "CodeSystem",
     "url": "http://cs2",
     "name": "cs2",
     "status": "draft",
     "content": "complete"
   })";
-  const char* value_set_1 = R"({
+  const std::string value_set_1 = R"({
     "resourceType": "ValueSet",
     "url": "http://vs1",
     "name": "vs1",
     "status": "draft"
   })";
-  const char* value_set_2 = R"({
+  const std::string value_set_2 = R"({
     "resourceType": "ValueSet",
     "url": "http://vs2",
     "name": "vs2",
@@ -171,15 +220,16 @@ TEST(FhirPackageTest, LoadAndGetResourceSucceeds) {
       structure_definition_2, search_parameter_2, code_system_2, value_set_2);
 
   // Put those resources in a FhirPackage.
-  FHIR_ASSERT_OK_AND_ASSIGN(
-      std::string temp_name,
-      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
-          {"sd1.json", structure_definition_1},
-          {"sp1.json", search_parameter_1},
-          {"cs1.json", code_system_1},
-          {"vs1.json", value_set_1},
-          {"bundle.json", bundle.c_str()},
-      }));
+  FHIR_ASSERT_OK_AND_ASSIGN(std::string temp_name,
+                            CreateZipFileContaining({
+                                {"sd1.json", structure_definition_1},
+                                {"sp1.json", search_parameter_1},
+                                {"cs1.json", code_system_1},
+                                {"vs1.json", value_set_1},
+                                {"bundle.json", bundle.c_str()},
+                            }));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
+
   FHIR_ASSERT_OK_AND_ASSIGN(std::unique_ptr<FhirPackage> fhir_package,
                             FhirPackage::Load(temp_name));
 
@@ -215,13 +265,11 @@ TEST(FhirPackageTest, LoadAndGetResourceSucceeds) {
   FHIR_ASSERT_OK_AND_ASSIGN(const fhir::r4::core::ValueSet* vs_result2,
                             fhir_package->GetValueSet("http://vs2"));
   EXPECT_EQ(vs_result2->url().value(), "http://vs2");
-
-  remove(temp_name.c_str());
 }
 
 TEST(FhirPackageTest, ResourceWithParseErrorFails) {
   // Define a malformed resource to test parse failures.
-  const char* malformed_struct_def = R"({
+  const std::string malformed_struct_def = R"({
     "resourceType": "StructureDefinition",
     "url": "http://malformed_test",
     "name": "malformed_json_without_closing_quote,
@@ -234,100 +282,89 @@ TEST(FhirPackageTest, ResourceWithParseErrorFails) {
   // Put those resources in a FhirPackage.
   FHIR_ASSERT_OK_AND_ASSIGN(
       std::string temp_name,
-      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+      CreateZipFileContaining({
           {"malformed_struct_def.json", malformed_struct_def},
       }));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
 
   EXPECT_EQ(FhirPackage::Load(temp_name).status().code(),
             absl::StatusCode::kInvalidArgument);
-  remove(temp_name.c_str());
 }
 
 TEST(FhirPackageTest, GetResourceForMissingUriFindsNothing) {
   FHIR_ASSERT_OK_AND_ASSIGN(
       std::string temp_name,
-      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
-          {"a_value_set.json",
-           R"({"resourceType": "ValueSet", "url": "http://value.set/id",
+      CreateZipFileContaining(
+          {{"a_value_set.json",
+            R"({"resourceType": "ValueSet", "url": "http://value.set/id",
                "id": "a-value-set", "status": "draft"})"}}));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
 
   FHIR_ASSERT_OK_AND_ASSIGN(std::unique_ptr<FhirPackage> fhir_package,
                             FhirPackage::Load(temp_name));
 
   EXPECT_EQ(fhir_package->GetValueSet("missing").status().code(),
             absl::StatusCode::kNotFound);
-
-  remove(temp_name.c_str());
 }
 
 TEST(FhirPackageTest, UntrackedResourceTypeIgnored) {
   FHIR_ASSERT_OK_AND_ASSIGN(
       std::string temp_name,
-      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+      CreateZipFileContaining({
           {"a_value_set.json",
-           R"({
-            "resourceType": "ValueSet",
-            "url": "http://value.set/id",
-            "id": "a-value-set",
-            "status": "draft"
+           R"({"resourceType": "ValueSet", "url": "http://value.set/id",
+               "id": "a-value-set", "status": "draft"
           })"},
           {"sample_patient.json",
-           R"({
-            "resourceType": "Patient",
-            "id": "dqd"
-          })"},
+           R"({"resourceType": "Patient", "id": "dqd"})"},
       }));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
 
   FHIR_ASSERT_OK_AND_ASSIGN(std::unique_ptr<FhirPackage> fhir_package,
                             FhirPackage::Load(temp_name));
 
   EXPECT_TRUE(fhir_package->GetValueSet("http://value.set/id").ok());
-  remove(temp_name.c_str());
 }
 
 TEST(FhirPackageTest, NonResourceIgnored) {
   FHIR_ASSERT_OK_AND_ASSIGN(
       std::string temp_name,
-      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
+      CreateZipFileContaining({
           {"a_value_set.json",
-           R"({
-            "resourceType": "ValueSet",
-            "url": "http://value.set/id",
-            "id": "a-value-set",
-            "status": "draft"
-          })"},
-          {"random_file.json",
-           R"({
-            "foo": "bar",
-            "baz": "quux"
-          })"},
+           R"({"resourceType": "ValueSet", "url": "http://value.set/id",
+               "id": "a-value-set", "status": "draft"})"},
+          {"random_file.json", R"({"foo": "bar", "baz": "quux"})"},
       }));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
 
   FHIR_ASSERT_OK_AND_ASSIGN(std::unique_ptr<FhirPackage> fhir_package,
                             FhirPackage::Load(temp_name));
 
   EXPECT_TRUE(fhir_package->GetValueSet("http://value.set/id").ok());
-  remove(temp_name.c_str());
 }
 
 TEST(FhirPackageManager, GetResourceForAddedPackagesSucceeds) {
   FHIR_ASSERT_OK_AND_ASSIGN(
       std::string temp_name,
-      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
-          // The deprecated package_info is preserved in tests to ensure its
-          // presence does not break package loading.
-          {"package_info.prototxt", "fhir_version: R4\nproto_package: 'Foo'"},
-          {"a_value_set.json",
-           R"({"resourceType": "ValueSet", "url": "http://value.set/id-1",
+      CreateZipFileContaining(
+          {// The deprecated package_info is preserved in tests to ensure its
+           // presence does not break package loading.
+           {"package_info.prototxt", "fhir_version: R4\nproto_package: 'Foo'"},
+           {"a_value_set.json",
+            R"({"resourceType": "ValueSet", "url": "http://value.set/id-1",
                "id": "a-value-set-1", "status": "draft"})"}}));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
 
   FHIR_ASSERT_OK_AND_ASSIGN(
       std::string another_temp_name,
-      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
-          {"package_info.prototxt", "fhir_version: R4\nproto_package: 'Foo'"},
-          {"a_value_set.json",
-           R"({"resourceType": "ValueSet", "url": "http://value.set/id-2",
+      CreateZipFileContaining(
+          {{"package_info.prototxt", "fhir_version: R4\nproto_package: 'Foo'"},
+           {"a_value_set.json",
+            R"({"resourceType": "ValueSet", "url": "http://value.set/id-2",
                "id": "a-value-set-2", "status": "draft"})"}}));
+  absl::Cleanup another_temp_closer = [&another_temp_name] {
+    remove(another_temp_name.c_str());
+  };
 
   FhirPackageManager package_manager = FhirPackageManager();
   FHIR_ASSERT_OK(package_manager.AddPackageAtPath(temp_name));
@@ -345,9 +382,28 @@ TEST(FhirPackageManager, GetResourceForAddedPackagesSucceeds) {
 
   EXPECT_EQ(package_manager.GetValueSet("http://missing-uri").status().code(),
             absl::StatusCode::kNotFound);
+}
+// Ensures .tar archives are supported.
+TEST(FhirPackageManager, GetResourceForTarPackagesSucceeds) {
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string temp_name,
+      CreateTarFileContaining(
+          {{"a_value_set.json",
+            "{\"resourceType\": \"ValueSet\", \"url\": "
+            "\"http://value.set/id-1\", "
+            "\"id\": \"a-value-set-1\", \"status\": \"draft\"}"}}));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
 
-  remove(temp_name.c_str());
-  remove(another_temp_name.c_str());
+  FhirPackageManager package_manager = FhirPackageManager();
+  FHIR_ASSERT_OK(package_manager.AddPackageAtPath(temp_name));
+
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      const fhir::r4::core::ValueSet* result,
+      package_manager.GetValueSet("http://value.set/id-1"));
+  EXPECT_EQ(result->url().value(), "http://value.set/id-1");
+
+  EXPECT_EQ(package_manager.GetValueSet("http://missing-uri").status().code(),
+            absl::StatusCode::kNotFound);
 }
 
 TEST(FhirPackageManager, GetResourceAgainstEmptyManagerReturnsNothing) {
@@ -360,19 +416,21 @@ TEST(FhirPackageManager, GetResourceAgainstEmptyManagerReturnsNothing) {
 TEST(FhirPackageManager, GetResourceWithErrorReturnsError) {
   // The first package is empty and will return a NotFoundError status when
   // queried.
-  FHIR_ASSERT_OK_AND_ASSIGN(
-      std::string temp_name,
-      CreateZipFileContaining(
-          std::vector<std::pair<const char*, const char*>>{{"nothing", "{}"}}));
+  FHIR_ASSERT_OK_AND_ASSIGN(std::string temp_name,
+                            CreateZipFileContaining({{"nothing", "{}"}}));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
 
   // The second package contains a resource missing required fields, which will
   // return an InvalidArgumentError status when it fails to be parsed into a
   // proto.
   FHIR_ASSERT_OK_AND_ASSIGN(
       std::string another_temp_name,
-      CreateZipFileContaining(std::vector<std::pair<const char*, const char*>>{
-          {"a_value_set.json",
-           R"({"resourceType": "ValueSet", "url": "http://value.set/id-1"})"}}));
+      CreateZipFileContaining(
+          {{"a_value_set.json",
+            R"({"resourceType": "ValueSet", "url": "http://value.set/id-1"})"}}));
+  absl::Cleanup another_temp_closer = [&another_temp_name] {
+    remove(another_temp_name.c_str());
+  };
 
   FhirPackageManager package_manager = FhirPackageManager();
   FHIR_ASSERT_OK(package_manager.AddPackageAtPath(temp_name));
@@ -381,9 +439,6 @@ TEST(FhirPackageManager, GetResourceWithErrorReturnsError) {
   EXPECT_EQ(
       package_manager.GetValueSet("http://value.set/id-1").status().code(),
       absl::StatusCode::kInvalidArgument);
-
-  remove(temp_name.c_str());
-  remove(another_temp_name.c_str());
 }
 
 TEST(ResourceCollectionTest, GetResourceFromCacheSucceeds) {
@@ -585,7 +640,7 @@ TEST(ResourceCollectionTest,
      AddGetResourceWithMissingBundleParseErrorReturnsError) {
   // The bundle contains a resource missing required fields such as
   // resourceType.
-  const char* bundle_contents = R"(
+  const std::string bundle_contents = R"(
 {
   "resourceType": "Bundle",
   "entry": [
