@@ -564,6 +564,8 @@ cc_test(
     ],
     deps = [
         ":fhir_package",
+        "//cc/google/fhir/json:fhir_json",
+        "//cc/google/fhir/json:json_sax_handler",
         "//proto/google/fhir/proto:annotations_cc_proto",
         "//proto/google/fhir/proto:profile_config_cc_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
