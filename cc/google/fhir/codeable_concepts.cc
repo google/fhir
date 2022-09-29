@@ -59,57 +59,60 @@ namespace fhir {
 
 using ::absl::InvalidArgumentError;
 
-const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
+const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept_proto,
                                     const CodeBoolFunc& func,
                                     std::string* found_system,
                                     std::string* found_code) {
-  CODEABLE_CONCEPTS_VERSION_DISPATCH(false, FindSystemCodeStringPair, concept,
-                                     func, found_system, found_code);
+  CODEABLE_CONCEPTS_VERSION_DISPATCH(false, FindSystemCodeStringPair,
+                                     concept_proto, func, found_system,
+                                     found_code);
 }
 
-const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
+const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept_proto,
                                     const CodeBoolFunc& func) {
-  CODEABLE_CONCEPTS_VERSION_DISPATCH(false, FindSystemCodeStringPair, concept,
-                                     func);
+  CODEABLE_CONCEPTS_VERSION_DISPATCH(false, FindSystemCodeStringPair,
+                                     concept_proto, func);
 }
 
-void ForEachSystemCodeStringPair(const ::google::protobuf::Message& concept,
+void ForEachSystemCodeStringPair(const ::google::protobuf::Message& concept_proto,
                                  const CodeFunc& func) {
-  CODEABLE_CONCEPTS_VERSION_DISPATCH_VOID(ForEachSystemCodeStringPair, concept,
-                                          func);
+  CODEABLE_CONCEPTS_VERSION_DISPATCH_VOID(ForEachSystemCodeStringPair,
+                                          concept_proto, func);
 }
 
 const std::vector<std::string> GetCodesWithSystem(
-    const ::google::protobuf::Message& concept, const absl::string_view target_system) {
-  CODEABLE_CONCEPTS_VERSION_DISPATCH(
-      std::vector<std::string>(), GetCodesWithSystem, concept, target_system);
+    const ::google::protobuf::Message& concept_proto,
+    const absl::string_view target_system) {
+  CODEABLE_CONCEPTS_VERSION_DISPATCH(std::vector<std::string>(),
+                                     GetCodesWithSystem, concept_proto,
+                                     target_system);
 }
 
 absl::StatusOr<const std::string> GetOnlyCodeWithSystem(
-    const ::google::protobuf::Message& concept, const absl::string_view system) {
-  CODEABLE_CONCEPTS_VERSION_DISPATCH_WITH_STATUS(GetOnlyCodeWithSystem, concept,
-                                                 system);
+    const ::google::protobuf::Message& concept_proto, const absl::string_view system) {
+  CODEABLE_CONCEPTS_VERSION_DISPATCH_WITH_STATUS(GetOnlyCodeWithSystem,
+                                                 concept_proto, system);
 }
 
 absl::StatusOr<const std::string> ExtractCodeBySystem(
-    const ::google::protobuf::Message& concept, const absl::string_view system) {
-  CODEABLE_CONCEPTS_VERSION_DISPATCH_WITH_STATUS(ExtractCodeBySystem, concept,
-                                                 system);
+    const ::google::protobuf::Message& concept_proto, const absl::string_view system) {
+  CODEABLE_CONCEPTS_VERSION_DISPATCH_WITH_STATUS(ExtractCodeBySystem,
+                                                 concept_proto, system);
 }
 
-absl::Status AddCoding(::google::protobuf::Message* concept, const std::string& system,
-                       const std::string& code) {
-  switch (google::fhir::GetFhirVersion(*concept)) {
+absl::Status AddCoding(::google::protobuf::Message* concept_proto,
+                       const std::string& system, const std::string& code) {
+  switch (google::fhir::GetFhirVersion(*concept_proto)) {
     case google::fhir::proto::STU3:
-      return stu3::AddCoding(concept, system, code);
+      return stu3::AddCoding(concept_proto, system, code);
     case google::fhir::proto::R4: {
-      return r4::AddCoding(concept, system, code);
+      return r4::AddCoding(concept_proto, system, code);
     }
     default:
       return InvalidArgumentError(
           absl::StrCat("FHIR version not supported by codeable_concepts.h: ",
                        google::fhir::proto::FhirVersion_Name(
-                           google::fhir::GetFhirVersion(*concept))));
+                           google::fhir::GetFhirVersion(*concept_proto))));
   }
 }
 
@@ -119,12 +122,12 @@ absl::Status CopyCodeableConcept(const ::google::protobuf::Message& source,
                                                  target);
 }
 
-int CodingSize(const ::google::protobuf::Message& concept) {
-  switch (google::fhir::GetFhirVersion(concept)) {
+int CodingSize(const ::google::protobuf::Message& concept_proto) {
+  switch (google::fhir::GetFhirVersion(concept_proto)) {
     case google::fhir::proto::STU3:
-      return stu3::CodingSize(concept);
+      return stu3::CodingSize(concept_proto);
     case google::fhir::proto::R4: {
-      return r4::CodingSize(concept);
+      return r4::CodingSize(concept_proto);
     }
     default:
       return 0;

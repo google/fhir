@@ -86,28 +86,28 @@ std::unique_ptr<Coding> CodingFromFixedCodeCoding(
 // This is internal-only, as outside callers shouldn't care about profiled vs
 // unprofiled fields, and should only care about Codings and Codes.
 const bool ForEachInternalCodingHalting(
-    const Message& concept, const CodingBoolFunc& coding_func,
+    const Message& concept_proto, const CodingBoolFunc& coding_func,
     const FixedSystemFieldBoolFunc& fixed_system_func,
     const FixedCodeFieldBoolFunc& fixed_code_func) {
   // Check base Coding fields.
   const FieldDescriptor* coding_field =
-      concept.GetDescriptor()->FindFieldByName("coding");
-  if (ForEachMessageHalting<Coding>(concept, coding_field, coding_func)) {
+      concept_proto.GetDescriptor()->FindFieldByName("coding");
+  if (ForEachMessageHalting<Coding>(concept_proto, coding_field, coding_func)) {
     return true;
   }
 
   // If there are no profiled fields to check, return.
-  if (IsMessageType<r4::core::CodeableConcept>(concept)) return false;
+  if (IsMessageType<r4::core::CodeableConcept>(concept_proto)) return false;
 
   // Check for profiled fields.
-  const ::google::protobuf::Descriptor* descriptor = concept.GetDescriptor();
+  const ::google::protobuf::Descriptor* descriptor = concept_proto.GetDescriptor();
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
     if (field->type() != FieldDescriptor::TYPE_MESSAGE) continue;
 
     if (IsMessageType<CodingWithFixedCode>(field->message_type())) {
       const bool stop = ForEachMessageHalting<CodingWithFixedCode>(
-          concept, field,
+          concept_proto, field,
           [&fixed_code_func,
            &field](const CodingWithFixedCode& fixed_code_coding) {
             return fixed_code_func(field, fixed_code_coding);
@@ -115,7 +115,7 @@ const bool ForEachInternalCodingHalting(
       if (stop) return true;
     } else if (IsProfileOfCoding(field->message_type())) {
       const bool stop = ForEachMessageHalting<Message>(
-          concept, field,
+          concept_proto, field,
           [&fixed_system_func](const Message& fixed_system_coding) {
             return fixed_system_func(fixed_system_coding);
           });
@@ -155,11 +155,11 @@ namespace internal {
 // Gets a profiled field for a given system, or nullptr if none is found.
 // This is internal, since outside callers shouldn't care about profiled vs
 // unprofiled.
-const FieldDescriptor* ProfiledFieldForSystem(const Message& concept,
+const FieldDescriptor* ProfiledFieldForSystem(const Message& concept_proto,
                                               const std::string& system) {
-  if (IsMessageType<r4::core::CodeableConcept>(concept)) return nullptr;
+  if (IsMessageType<r4::core::CodeableConcept>(concept_proto)) return nullptr;
 
-  const ::google::protobuf::Descriptor* descriptor = concept.GetDescriptor();
+  const ::google::protobuf::Descriptor* descriptor = concept_proto.GetDescriptor();
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
     if (IsProfileOfCoding(field->message_type()) &&
@@ -173,13 +173,13 @@ const FieldDescriptor* ProfiledFieldForSystem(const Message& concept,
 
 }  // namespace internal
 
-const bool FindSystemCodeStringPair(const Message& concept,
+const bool FindSystemCodeStringPair(const Message& concept_proto,
                                     const CodeBoolFunc& func,
                                     std::string* found_system,
                                     std::string* found_code) {
   return FindSystemCodeStringPair(
-      concept, [&func, &found_system, &found_code](const std::string& system,
-                                                   const std::string& code) {
+      concept_proto, [&func, &found_system, &found_code](
+                         const std::string& system, const std::string& code) {
         if (func(system, code)) {
           *found_system = system;
           *found_code = code;
@@ -189,10 +189,10 @@ const bool FindSystemCodeStringPair(const Message& concept,
       });
 }
 
-const bool FindSystemCodeStringPair(const Message& concept,
+const bool FindSystemCodeStringPair(const Message& concept_proto,
                                     const CodeBoolFunc& func) {
   return ForEachInternalCodingHalting(
-      concept,
+      concept_proto,
       [&func](const Coding& coding) {
         const std::string& system = coding.system().value();
         const std::string& code = coding.code().value();
@@ -227,20 +227,21 @@ const bool FindSystemCodeStringPair(const Message& concept,
       });
 }
 
-void ForEachSystemCodeStringPair(const Message& concept, const CodeFunc& func) {
-  FindSystemCodeStringPair(
-      concept, [&func](const std::string& system, const std::string& code) {
-        func(system, code);
-        return false;
-      });
+void ForEachSystemCodeStringPair(const Message& concept_proto,
+                                 const CodeFunc& func) {
+  FindSystemCodeStringPair(concept_proto, [&func](const std::string& system,
+                                                  const std::string& code) {
+    func(system, code);
+    return false;
+  });
 }
 
 const std::vector<std::string> GetCodesWithSystem(
-    const Message& concept, const absl::string_view target_system) {
+    const Message& concept_proto, const absl::string_view target_system) {
   std::vector<std::string> codes;
   ForEachSystemCodeStringPair(
-      concept, [&codes, &target_system](const std::string& system,
-                                        const std::string& code) {
+      concept_proto, [&codes, &target_system](const std::string& system,
+                                              const std::string& code) {
         if (system == target_system) {
           codes.push_back(code);
         }
@@ -249,8 +250,9 @@ const std::vector<std::string> GetCodesWithSystem(
 }
 
 absl::StatusOr<const std::string> GetOnlyCodeWithSystem(
-    const Message& concept, const absl::string_view system) {
-  const std::vector<std::string>& codes = GetCodesWithSystem(concept, system);
+    const Message& concept_proto, const absl::string_view system) {
+  const std::vector<std::string>& codes =
+      GetCodesWithSystem(concept_proto, system);
   if (codes.empty()) {
     return absl::NotFoundError(absl::StrCat("No code from system: ", system));
   }
@@ -260,29 +262,30 @@ absl::StatusOr<const std::string> GetOnlyCodeWithSystem(
   return codes.front();
 }
 
-absl::Status AddCoding(Message* concept, const Coding& coding) {
-  if (!IsTypeOrProfileOfCodeableConcept(*concept)) {
+absl::Status AddCoding(Message* concept_proto, const Coding& coding) {
+  if (!IsTypeOrProfileOfCodeableConcept(*concept_proto)) {
     return InvalidArgumentError(absl::StrCat(
-        "Error adding coding: ", concept->GetDescriptor()->full_name(),
+        "Error adding coding: ", concept_proto->GetDescriptor()->full_name(),
         " is not CodeableConcept-like."));
   }
   const std::string& system = coding.system().value();
-  if (IsProfileOfCodeableConcept(*concept)) {
+  if (IsProfileOfCodeableConcept(*concept_proto)) {
     const FieldDescriptor* profiled_field =
-        internal::ProfiledFieldForSystem(*concept, system);
+        internal::ProfiledFieldForSystem(*concept_proto, system);
     if (profiled_field != nullptr) {
       if (IsMessageType<CodingWithFixedCode>(profiled_field->message_type())) {
         const std::string& fixed_code = GetInlinedCodingCode(profiled_field);
         if (fixed_code == coding.code().value()) {
           if (!profiled_field->is_repeated() &&
-              FieldHasValue(*concept, profiled_field)) {
+              FieldHasValue(*concept_proto, profiled_field)) {
             return ::absl::AlreadyExistsError(absl::StrCat(
                 "Attempted to add a Code-System Pair to a non-repeated slice "
                 "that is already populated.  Field: ",
                 profiled_field->full_name(), ", System: ", system,
                 ", Code:", fixed_code));
           }
-          Message* target_coding = MutableOrAddMessage(concept, profiled_field);
+          Message* target_coding =
+              MutableOrAddMessage(concept_proto, profiled_field);
           CodingWithFixedCode* fixed_system_code =
               static_cast<CodingWithFixedCode*>(target_coding);
           CopyCommonCodingFields(coding, fixed_system_code);
@@ -290,30 +293,32 @@ absl::Status AddCoding(Message* concept, const Coding& coding) {
         }
       } else if (IsProfileOfCoding(profiled_field->message_type())) {
         if (!profiled_field->is_repeated() &&
-            FieldHasValue(*concept, profiled_field)) {
+            FieldHasValue(*concept_proto, profiled_field)) {
           return ::absl::AlreadyExistsError(absl::StrCat(
               "Attempted to add a System to a non-repeated slice that is "
               "already populated.  Field: ",
               profiled_field->full_name(), ", System: ", system));
         }
-        return CopyCoding(coding, MutableOrAddMessage(concept, profiled_field));
+        return CopyCoding(coding,
+                          MutableOrAddMessage(concept_proto, profiled_field));
       }
     }
   }
-  concept->GetReflection()
-      ->AddMessage(concept, concept->GetDescriptor()->FindFieldByName("coding"))
+  concept_proto->GetReflection()
+      ->AddMessage(concept_proto,
+                   concept_proto->GetDescriptor()->FindFieldByName("coding"))
       ->CopyFrom(coding);
   return absl::OkStatus();
 }
 
-absl::Status AddCoding(Message* concept, const std::string& system,
+absl::Status AddCoding(Message* concept_proto, const std::string& system,
                        const std::string& code) {
   const google::protobuf::FieldDescriptor* field_descriptor =
-      concept->GetDescriptor()->FindFieldByName("coding");
+      concept_proto->GetDescriptor()->FindFieldByName("coding");
   if (field_descriptor == nullptr ||
       field_descriptor->type() != google::protobuf::FieldDescriptor::TYPE_MESSAGE) {
     return InvalidArgumentError(absl::StrCat(
-        "Error adding coding: ", concept->GetDescriptor()->full_name(),
+        "Error adding coding: ", concept_proto->GetDescriptor()->full_name(),
         " is not CodeableConcept-like."));
   }
   const google::protobuf::Descriptor* descriptor = field_descriptor->message_type();
@@ -321,7 +326,7 @@ absl::Status AddCoding(Message* concept, const std::string& system,
     Coding coding;
     coding.mutable_system()->set_value(system);
     coding.mutable_code()->set_value(code);
-    return AddCoding(concept, coding);
+    return AddCoding(concept_proto, coding);
   } else if (GetFhirVersion(descriptor) ==
              ::google::fhir::proto::FhirVersion::STU3) {
     return InvalidArgumentError(
@@ -333,11 +338,11 @@ absl::Status AddCoding(Message* concept, const std::string& system,
   }
 }
 
-std::shared_ptr<const Coding> FindCoding(const Message& concept,
+std::shared_ptr<const Coding> FindCoding(const Message& concept_proto,
                                          const CodingBoolFunc& func) {
   std::shared_ptr<const Coding> found_coding = nullptr;
   ForEachInternalCodingHalting(
-      concept,
+      concept_proto,
       [&func, &found_coding](const Coding& coding) {
         if (func(coding)) {
           // Use a shared_ptr with a no-op Deleter, since the lifecyle of the
@@ -376,8 +381,8 @@ std::shared_ptr<const Coding> FindCoding(const Message& concept,
   return found_coding;
 }
 
-void ForEachCoding(const Message& concept, const CodingFunc& func) {
-  FindCoding(concept, [&func](const Coding& coding) {
+void ForEachCoding(const Message& concept_proto, const CodingFunc& func) {
+  FindCoding(concept_proto, [&func](const Coding& coding) {
     func(coding);
     // Return false for all codings, to ensure this iterates over all codings
     // without "finding" anything.
@@ -385,10 +390,10 @@ void ForEachCoding(const Message& concept, const CodingFunc& func) {
   });
 }
 
-absl::Status ForEachCodingWithStatus(const Message& concept,
+absl::Status ForEachCodingWithStatus(const Message& concept_proto,
                                      const CodingStatusFunc& func) {
   absl::Status return_status = absl::OkStatus();
-  FindCoding(concept, [&func, &return_status](const Coding& coding) {
+  FindCoding(concept_proto, [&func, &return_status](const Coding& coding) {
     absl::Status status = func(coding);
     if (status.ok()) {
       return false;
@@ -413,18 +418,18 @@ absl::Status CopyCodeableConcept(const Message& source, Message* target) {
   });
 }
 
-int CodingSize(const ::google::protobuf::Message& concept) {
+int CodingSize(const ::google::protobuf::Message& concept_proto) {
   int size = 0;
   ForEachSystemCodeStringPair(
-      concept,
+      concept_proto,
       [&size](const std::string& system, const std::string& code) { size++; });
   return size;
 }
 
 std::vector<const core::Coding*> GetAllCodingsWithSystem(
-    const core::CodeableConcept& concept, absl::string_view system) {
+    const core::CodeableConcept& codeable_concept, absl::string_view system) {
   std::vector<const core::Coding*> matches;
-  for (const core::Coding& coding : concept.coding()) {
+  for (const core::Coding& coding : codeable_concept.coding()) {
     if (coding.system().value() == system) {
       matches.push_back(&coding);
     }
@@ -433,9 +438,9 @@ std::vector<const core::Coding*> GetAllCodingsWithSystem(
 }
 
 absl::StatusOr<const core::Coding*> GetOnlyCodingWithSystem(
-    const core::CodeableConcept& concept, absl::string_view system) {
+    const core::CodeableConcept& codeable_concept, absl::string_view system) {
   std::vector<const core::Coding*> all_codings =
-      GetAllCodingsWithSystem(concept, system);
+      GetAllCodingsWithSystem(codeable_concept, system);
   if (all_codings.empty()) {
     return NotFoundError(
         absl::StrCat("Concept has no codings with system: ", system));

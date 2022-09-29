@@ -48,7 +48,7 @@ typedef std::function<bool(const std::string& system, const std::string& code)>
 // like strings, until the function returns true.
 // If the function returns true on a Coding, ceases visiting Codings and returns
 // true.  If the function returned false for all Codings, returns false.
-const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
+const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept_proto,
                                     const CodeBoolFunc& func,
                                     std::string* found_system,
                                     std::string* found_code);
@@ -57,25 +57,26 @@ const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
 // pointers.
 // This can be used when the actual result is unused, or when the coding is used
 // to set a return pointers in the function closure itself.
-const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
+const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept_proto,
                                     const CodeBoolFunc& func);
 
 // Performs a function on all System/Code pairs, where all codes are treated
 // like strings.  Visits all codings.
-void ForEachSystemCodeStringPair(const ::google::protobuf::Message& concept,
+void ForEachSystemCodeStringPair(const ::google::protobuf::Message& concept_proto,
                                  const CodeFunc& func);
 
 // Gets a vector of all codes with a given system, where codes are represented
 // as strings.
 const std::vector<std::string> GetCodesWithSystem(
-    const ::google::protobuf::Message& concept, const absl::string_view target_system);
+    const ::google::protobuf::Message& concept_proto,
+    const absl::string_view target_system);
 
 // Gets the only code with a given system.
 // If no code is found with that system, returns a NotFound status.
 // If more than one code is found with that system, returns AlreadyExists
 // status.
 absl::StatusOr<const std::string> GetOnlyCodeWithSystem(
-    const ::google::protobuf::Message& concept, const absl::string_view system);
+    const ::google::protobuf::Message& concept_proto, const absl::string_view system);
 
 // Extract first code value with a given system.
 // Returns NOT_FOUND if none exists.
@@ -99,23 +100,23 @@ absl::StatusOr<std::string> ExtractCodeBySystem(
   }
 }
 
-absl::Status AddCoding(::google::protobuf::Message* concept, const std::string& system,
-                       const std::string& code);
+absl::Status AddCoding(::google::protobuf::Message* concept_proto,
+                       const std::string& system, const std::string& code);
 
 template <typename CodeableConceptLike>
-absl::Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
+absl::Status ClearAllCodingsWithSystem(CodeableConceptLike* concept_like,
                                        const std::string& system) {
-  switch (google::fhir::GetFhirVersion(*concept)) {
+  switch (google::fhir::GetFhirVersion(*concept_like)) {
     case google::fhir::proto::STU3:
-      return stu3::ClearAllCodingsWithSystem(concept, system);
+      return stu3::ClearAllCodingsWithSystem(concept_like, system);
     case google::fhir::proto::R4: {
-      return r4::ClearAllCodingsWithSystem(concept, system);
+      return r4::ClearAllCodingsWithSystem(concept_like, system);
     }
     default:
       return ::absl::InvalidArgumentError(
           absl::StrCat("FHIR version not supported by codeable_concepts.h: ",
                        google::fhir::proto::FhirVersion_Name(
-                           google::fhir::GetFhirVersion(*concept))));
+                           google::fhir::GetFhirVersion(*concept_like))));
   }
 }
 
@@ -125,7 +126,7 @@ absl::Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
 absl::Status CopyCodeableConcept(const ::google::protobuf::Message& source,
                                  ::google::protobuf::Message* target);
 
-int CodingSize(const ::google::protobuf::Message& concept);
+int CodingSize(const ::google::protobuf::Message& concept_proto);
 
 }  // namespace fhir
 }  // namespace google

@@ -40,9 +40,9 @@ const TestObservation::CodeableConceptForCode GetConcept() {
 TEST(CodeableConceptsTest, FindSystemCodeStringPairUnprofiled) {
   std::string found_system;
   std::string found_code;
-  const auto concept = GetConcept();
+  const auto codeable_concept = GetConcept();
   EXPECT_TRUE(FindSystemCodeStringPair(
-      concept,
+      codeable_concept,
       [](const std::string& system, const std::string& code) {
         return system == "http://sysg.org" && code == "gcode1";
       },
@@ -54,9 +54,9 @@ TEST(CodeableConceptsTest, FindSystemCodeStringPairUnprofiled) {
 TEST(CodeableConceptsTest, FindSystemCodeStringPairFixedSystem) {
   std::string found_system;
   std::string found_code;
-  const auto concept = GetConcept();
+  const auto codeable_concept = GetConcept();
   EXPECT_TRUE(FindSystemCodeStringPair(
-      concept,
+      codeable_concept,
       [](const std::string& system, const std::string& code) {
         return system == "http://sysb.org" && code == "bcode2";
       },
@@ -69,9 +69,9 @@ TEST(CodeableConceptsTest, FindSystemCodeStringPairFixedSystem) {
 TEST(CodeableConceptsTest, FindSystemCodeStringPairFixedCode) {
   std::string found_system;
   std::string found_code;
-  const auto concept = GetConcept();
+  const auto codeable_concept = GetConcept();
   EXPECT_TRUE(FindSystemCodeStringPair(
-      concept,
+      codeable_concept,
       [](const std::string& system, const std::string& code) {
         return system == "http://sysd.org" && code == "8675329";
       },
@@ -84,54 +84,54 @@ TEST(CodeableConceptsTest, FindSystemCodeStringPairFixedCode) {
 TEST(CodeableConceptsTest, FindSystemCodeStringPairNotFound) {
   std::string found_system;
   std::string found_code;
-  const auto concept = GetConcept();
+  const auto codeable_concept = GetConcept();
   EXPECT_FALSE(FindSystemCodeStringPair(
-      concept,
+      codeable_concept,
       [](const std::string& system, const std::string& code) { return false; },
       &found_system, &found_code));
 }
 
 TEST(CodeableConceptsTest, FindCodingUnprofiled) {
-  const auto concept = GetConcept();
+  const auto codeable_concept = GetConcept();
   std::shared_ptr<const stu3::proto::Coding> coding =
-      FindCoding(concept, [](const Coding& test_coding) {
+      FindCoding(codeable_concept, [](const Coding& test_coding) {
         return test_coding.display().value() == "FDisplay";
       });
   EXPECT_EQ(coding->code().value(), "fcode");
 }
 
 TEST(CodeableConceptsTest, FindCodingFixedSystem) {
-  const auto concept = GetConcept();
+  const auto codeable_concept = GetConcept();
   std::shared_ptr<const stu3::proto::Coding> coding =
-      FindCoding(concept, [](const Coding& test_coding) {
+      FindCoding(codeable_concept, [](const Coding& test_coding) {
         return test_coding.code().value() == "acode";
       });
   EXPECT_EQ(coding->display().value(), "A Display");
 }
 
 TEST(CodeableConceptsTest, FindCodingFixedCode) {
-  const auto concept = GetConcept();
+  const auto codeable_concept = GetConcept();
   std::shared_ptr<const stu3::proto::Coding> coding =
-      FindCoding(concept, [](const Coding& test_coding) {
+      FindCoding(codeable_concept, [](const Coding& test_coding) {
         return test_coding.code().value() == "8675329";
       });
   EXPECT_EQ(coding->display().value(), "display d");
 }
 
 TEST(CodeableConceptsTest, FindCodingNotFound) {
-  const auto concept = GetConcept();
-  std::shared_ptr<const stu3::proto::Coding> coding =
-      FindCoding(concept, [](const Coding& test_coding) { return false; });
+  const auto codeable_concept = GetConcept();
+  std::shared_ptr<const stu3::proto::Coding> coding = FindCoding(
+      codeable_concept, [](const Coding& test_coding) { return false; });
   EXPECT_FALSE(coding);
 }
 
 TEST(CodeableConceptsTest, ForEachSystemCodeStringPair) {
-  const auto concept = GetConcept();
+  const auto codeable_concept = GetConcept();
   std::string sys_accum = "";
   std::string code_accum = "";
   ForEachSystemCodeStringPair(
-      concept, [&sys_accum, &code_accum](const std::string& sys,
-                                         const std::string& code) {
+      codeable_concept, [&sys_accum, &code_accum](const std::string& sys,
+                                                  const std::string& code) {
         absl::StrAppend(&sys_accum, sys, ",");
         absl::StrAppend(&code_accum, code, ",");
       });
@@ -144,9 +144,9 @@ TEST(CodeableConceptsTest, ForEachSystemCodeStringPair) {
 }
 
 TEST(CodeableConceptsTest, ForEachCoding) {
-  const auto concept = GetConcept();
+  const auto codeable_concept = GetConcept();
   std::string display_accum = "";
-  ForEachCoding(concept, [&display_accum](const Coding& coding) {
+  ForEachCoding(codeable_concept, [&display_accum](const Coding& coding) {
     absl::StrAppend(&display_accum,
                     coding.has_display() ? coding.display().value() : "NONE",
                     ",");
@@ -157,53 +157,62 @@ TEST(CodeableConceptsTest, ForEachCoding) {
 }
 
 TEST(CodeableConceptsTest, GetCodesWithSystemUnprofiled) {
-  const auto concept = GetConcept();
-  ASSERT_THAT(GetCodesWithSystem(concept, "http://sysg.org"),
+  const auto codeable_concept = GetConcept();
+  ASSERT_THAT(GetCodesWithSystem(codeable_concept, "http://sysg.org"),
               ElementsAre("gcode1", "gcode2"));
 }
 
 TEST(CodeableConceptsTest, GetCodesWithSystemFixedSystem) {
-  const auto concept = GetConcept();
-  ASSERT_THAT(GetCodesWithSystem(concept, "http://sysb.org"),
+  const auto codeable_concept = GetConcept();
+  ASSERT_THAT(GetCodesWithSystem(codeable_concept, "http://sysb.org"),
               ElementsAre("bcode1", "bcode2"));
 }
 
 TEST(CodeableConceptsTest, GetCodesWithSystemFixedCode) {
-  const auto concept = GetConcept();
-  ASSERT_THAT(GetCodesWithSystem(concept, "http://sysc.org"),
+  const auto codeable_concept = GetConcept();
+  ASSERT_THAT(GetCodesWithSystem(codeable_concept, "http://sysc.org"),
               ElementsAre("8472"));
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemUnprofiled) {
-  const auto concept = GetConcept();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysf.org").value(), "fcode");
+  const auto codeable_concept = GetConcept();
+  EXPECT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysf.org").value(),
+            "fcode");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemFixedSystem) {
-  const auto concept = GetConcept();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysa.org").value(), "acode");
+  const auto codeable_concept = GetConcept();
+  EXPECT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysa.org").value(),
+            "acode");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemFixedCode) {
-  const auto concept = GetConcept();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysc.org").value(), "8472");
+  const auto codeable_concept = GetConcept();
+  EXPECT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysc.org").value(),
+            "8472");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemUnprofiledTooMany) {
-  const auto concept = GetConcept();
-  ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysg.org").status().code(),
+  const auto codeable_concept = GetConcept();
+  ASSERT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysg.org")
+                .status()
+                .code(),
             ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemProfiledTooMany) {
-  const auto concept = GetConcept();
-  ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysb.org").status().code(),
+  const auto codeable_concept = GetConcept();
+  ASSERT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysb.org")
+                .status()
+                .code(),
             ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemNone) {
-  const auto concept = GetConcept();
-  ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysq.org").status().code(),
+  const auto codeable_concept = GetConcept();
+  ASSERT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysq.org")
+                .status()
+                .code(),
             ::absl::StatusCode::kNotFound);
 }
 
@@ -217,105 +226,112 @@ Coding MakeCoding(const std::string& sys, const std::string& code,
 }
 
 TEST(CodeableConceptsTest, AddCodingUnprofiled) {
-  TestObservation::CodeableConceptForCode concept;
+  TestObservation::CodeableConceptForCode codeable_concept;
 
-  FHIR_CHECK_OK(AddCoding(
-      &concept, MakeCoding("http://sysq.org", "qcode1", "Q display1")));
-  FHIR_CHECK_OK(AddCoding(
-      &concept, MakeCoding("http://sysq.org", "qcode2", "Q display2")));
   FHIR_CHECK_OK(
-      AddCoding(&concept, MakeCoding("http://sysr.org", "rcode", "R display")));
+      AddCoding(&codeable_concept,
+                MakeCoding("http://sysq.org", "qcode1", "Q display1")));
+  FHIR_CHECK_OK(
+      AddCoding(&codeable_concept,
+                MakeCoding("http://sysq.org", "qcode2", "Q display2")));
+  FHIR_CHECK_OK(AddCoding(&codeable_concept,
+                          MakeCoding("http://sysr.org", "rcode", "R display")));
 
-  EXPECT_EQ(concept.coding_size(), 3);
+  EXPECT_EQ(codeable_concept.coding_size(), 3);
   std::string display_accum = "";
-  ForEachCoding(concept, [&display_accum](const Coding& coding) {
+  ForEachCoding(codeable_concept, [&display_accum](const Coding& coding) {
     absl::StrAppend(&display_accum, coding.display().value(), ",");
   });
   EXPECT_EQ(display_accum, "Q display1,Q display2,R display,");
 }
 
 TEST(CodeableConceptsTest, AddCodingFixedSystem) {
-  TestObservation::CodeableConceptForCode concept;
+  TestObservation::CodeableConceptForCode codeable_concept;
 
+  FHIR_CHECK_OK(AddCoding(&codeable_concept,
+                          MakeCoding("http://sysa.org", "acode", "A display")));
   FHIR_CHECK_OK(
-      AddCoding(&concept, MakeCoding("http://sysa.org", "acode", "A display")));
+      AddCoding(&codeable_concept,
+                MakeCoding("http://sysb.org", "bcode1", "B display1")));
   FHIR_CHECK_OK(AddCoding(
-      &concept, MakeCoding("http://sysb.org", "bcode1", "B display1")));
-  FHIR_CHECK_OK(AddCoding(
-      &concept, MakeCoding("http://sysb.org", "bcode", "B display2")));
+      &codeable_concept, MakeCoding("http://sysb.org", "bcode", "B display2")));
 
-  EXPECT_EQ(concept.coding_size(), 0);
-  EXPECT_EQ(concept.sys_b_size(), 2);
+  EXPECT_EQ(codeable_concept.coding_size(), 0);
+  EXPECT_EQ(codeable_concept.sys_b_size(), 2);
   std::string display_accum = "";
-  ForEachCoding(concept, [&display_accum](const Coding& coding) {
+  ForEachCoding(codeable_concept, [&display_accum](const Coding& coding) {
     absl::StrAppend(&display_accum, coding.display().value(), ",");
   });
   EXPECT_EQ(display_accum, "A display,B display1,B display2,");
 }
 
 TEST(CodeableConceptsTest, AddCodingFixedCode) {
-  TestObservation::CodeableConceptForCode concept;
+  TestObservation::CodeableConceptForCode codeable_concept;
 
+  FHIR_CHECK_OK(AddCoding(&codeable_concept,
+                          MakeCoding("http://sysc.org", "8472", "C display")));
   FHIR_CHECK_OK(
-      AddCoding(&concept, MakeCoding("http://sysc.org", "8472", "C display")));
-  FHIR_CHECK_OK(AddCoding(
-      &concept, MakeCoding("http://sysd.org", "8675329", "D display")));
+      AddCoding(&codeable_concept,
+                MakeCoding("http://sysd.org", "8675329", "D display")));
 
-  EXPECT_EQ(concept.coding_size(), 0);
+  EXPECT_EQ(codeable_concept.coding_size(), 0);
   std::string display_accum = "";
-  ForEachCoding(concept, [&display_accum](const Coding& coding) {
+  ForEachCoding(codeable_concept, [&display_accum](const Coding& coding) {
     absl::StrAppend(&display_accum, coding.display().value(), ",");
   });
   EXPECT_EQ(display_accum, "C display,D display,");
 }
 
 TEST(CodeableConceptsTest, AddCodingFixedSystemSingularAlreadyExists) {
-  TestObservation::CodeableConceptForCode concept;
+  TestObservation::CodeableConceptForCode codeable_concept;
   // sysa is inlined in a non-repeated field, meaning it can only have one code
   // from that system.
-  FHIR_CHECK_OK(AddCoding(
-      &concept, MakeCoding("http://sysa.org", "acode1", "A display1")));
-  EXPECT_EQ(
-      AddCoding(&concept, MakeCoding("http://sysa.org", "acode2", "A display2"))
-          .code(),
-      ::absl::StatusCode::kAlreadyExists);
+  FHIR_CHECK_OK(
+      AddCoding(&codeable_concept,
+                MakeCoding("http://sysa.org", "acode1", "A display1")));
+  EXPECT_EQ(AddCoding(&codeable_concept,
+                      MakeCoding("http://sysa.org", "acode2", "A display2"))
+                .code(),
+            ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, AddCodingFixedCodeAlreadyExists) {
-  TestObservation::CodeableConceptForCode concept;
+  TestObservation::CodeableConceptForCode codeable_concept;
   // sysc is inlined in a non-repeated fixed-code field, meaning it can only
   // have one with the fixed code and system.
-  FHIR_CHECK_OK(
-      AddCoding(&concept, MakeCoding("http://sysc.org", "8472", "C display")));
-  EXPECT_EQ(AddCoding(&concept,
+  FHIR_CHECK_OK(AddCoding(&codeable_concept,
+                          MakeCoding("http://sysc.org", "8472", "C display")));
+  EXPECT_EQ(AddCoding(&codeable_concept,
                       MakeCoding("http://sysc.org", "8472", "C display other"))
                 .code(),
             ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, AddCodingToSameSystemAsFixedCodeOk) {
-  TestObservation::CodeableConceptForCode concept;
+  TestObservation::CodeableConceptForCode codeable_concept;
   // sysc is inlined in a fixed-code field.
   // If we add a coding from that system that doesn't match the expected code,
   // it should just go in as an unprofiled coding.
+  FHIR_CHECK_OK(AddCoding(&codeable_concept,
+                          MakeCoding("http://sysc.org", "8471", "normal 1")));
   FHIR_CHECK_OK(
-      AddCoding(&concept, MakeCoding("http://sysc.org", "8471", "normal 1")));
-  FHIR_CHECK_OK(AddCoding(
-      &concept, MakeCoding("http://sysc.org", "8472", "magic inlined")));
-  FHIR_CHECK_OK(
-      AddCoding(&concept, MakeCoding("http://sysc.org", "8473", "normal 2")));
+      AddCoding(&codeable_concept,
+                MakeCoding("http://sysc.org", "8472", "magic inlined")));
+  FHIR_CHECK_OK(AddCoding(&codeable_concept,
+                          MakeCoding("http://sysc.org", "8473", "normal 2")));
 
-  EXPECT_EQ(concept.coding_size(), 2);
-  EXPECT_EQ(concept.coding(0).display().value(), "normal 1");
-  EXPECT_EQ(concept.coding(1).display().value(), "normal 2");
-  EXPECT_EQ(concept.sys_c().display().value(), "magic inlined");
+  EXPECT_EQ(codeable_concept.coding_size(), 2);
+  EXPECT_EQ(codeable_concept.coding(0).display().value(), "normal 1");
+  EXPECT_EQ(codeable_concept.coding(1).display().value(), "normal 2");
+  EXPECT_EQ(codeable_concept.sys_c().display().value(), "magic inlined");
 }
 
 TEST(CodeableConceptsTest, ClearAllCodingsWithSystemUnprofiled) {
-  auto concept = GetConcept();
-  FHIR_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysg.org"));
+  auto codeable_concept = GetConcept();
+  FHIR_CHECK_OK(
+      ClearAllCodingsWithSystem(&codeable_concept, "http://sysg.org"));
   std::string display_accum = "";
-  ForEachCoding(concept, [&display_accum](const Coding& coding) {
+  ForEachCoding(codeable_concept, [&display_accum](const Coding& coding) {
     absl::StrAppend(&display_accum,
                     coding.has_display() ? coding.display().value() : "NONE",
                     ",");
@@ -325,10 +341,11 @@ TEST(CodeableConceptsTest, ClearAllCodingsWithSystemUnprofiled) {
 }
 
 TEST(CodeableConceptsTest, ClearAllCodingsWithSystemFixedSystem) {
-  auto concept = GetConcept();
-  FHIR_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysb.org"));
+  auto codeable_concept = GetConcept();
+  FHIR_CHECK_OK(
+      ClearAllCodingsWithSystem(&codeable_concept, "http://sysb.org"));
   std::string display_accum = "";
-  ForEachCoding(concept, [&display_accum](const Coding& coding) {
+  ForEachCoding(codeable_concept, [&display_accum](const Coding& coding) {
     absl::StrAppend(&display_accum,
                     coding.has_display() ? coding.display().value() : "NONE",
                     ",");
@@ -338,12 +355,13 @@ TEST(CodeableConceptsTest, ClearAllCodingsWithSystemFixedSystem) {
 }
 
 TEST(CodeableConceptsTest, ClearAllCodingsWithSystemFixedCode) {
-  auto concept = GetConcept();
-  EXPECT_FALSE(ClearAllCodingsWithSystem(&concept, "http://sysc.org").ok());
+  auto codeable_concept = GetConcept();
+  EXPECT_FALSE(
+      ClearAllCodingsWithSystem(&codeable_concept, "http://sysc.org").ok());
 }
 
 TEST(CodeableConceptsTest, CopyCodeableConcept) {
-  CodeableConcept concept = PARSE_STU3_PROTO(R"proto(
+  CodeableConcept codeable_concept = PARSE_STU3_PROTO(R"pb(
     coding {
       system { value: "foo" },
       code { value: "bar" }
@@ -371,7 +389,7 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
       url { value: "baz" }
       value { integer { value: 5 } }
     }
-  )proto");
+  )pb");
   TestObservation::CodeableConceptForCode concept_for_code =
       PARSE_STU3_PROTO(R"proto(
         # inlined system
@@ -432,11 +450,12 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
   CodeableConcept profiled_to_unprofiled;
   FHIR_ASSERT_OK(
       CopyCodeableConcept(concept_for_code, &profiled_to_unprofiled));
-  ASSERT_THAT(concept,
+  ASSERT_THAT(codeable_concept,
               testutil::EqualsProtoIgnoringReordering(profiled_to_unprofiled));
 
   TestObservation::CodeableConceptForCode unprofiled_to_profiled;
-  FHIR_ASSERT_OK(CopyCodeableConcept(concept, &unprofiled_to_profiled));
+  FHIR_ASSERT_OK(
+      CopyCodeableConcept(codeable_concept, &unprofiled_to_profiled));
   ASSERT_THAT(concept_for_code,
               testutil::EqualsProtoIgnoringReordering(unprofiled_to_profiled));
 
@@ -447,15 +466,15 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
 }
 
 TEST(CodeableConceptsTest, AddCodingFromStrings) {
-  stu3::proto::CodeableConcept concept;
+  stu3::proto::CodeableConcept codeable_concept;
 
-  FHIR_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode1"));
-  FHIR_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode2"));
-  FHIR_CHECK_OK(AddCoding(&concept, "http://sysr.org", "rcode"));
+  FHIR_CHECK_OK(AddCoding(&codeable_concept, "http://sysq.org", "qcode1"));
+  FHIR_CHECK_OK(AddCoding(&codeable_concept, "http://sysq.org", "qcode2"));
+  FHIR_CHECK_OK(AddCoding(&codeable_concept, "http://sysr.org", "rcode"));
 
-  EXPECT_EQ(concept.coding_size(), 3);
+  EXPECT_EQ(codeable_concept.coding_size(), 3);
   std::string code_accum = "";
-  ForEachCoding(concept, [&code_accum](const Coding& coding) {
+  ForEachCoding(codeable_concept, [&code_accum](const Coding& coding) {
     absl::StrAppend(&code_accum, coding.code().value(), ",");
   });
   EXPECT_EQ(code_accum, "qcode1,qcode2,rcode,");

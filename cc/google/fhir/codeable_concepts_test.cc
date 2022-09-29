@@ -38,12 +38,12 @@ const Stu3TestObservation::CodeableConceptForCode GetConceptStu3() {
 }
 
 TEST(CodeableConceptsTest, ForEachSystemCodeStringPair) {
-  const auto concept = GetConceptStu3();
+  const auto codeable_concept = GetConceptStu3();
   std::string sys_accum = "";
   std::string code_accum = "";
   ForEachSystemCodeStringPair(
-      concept, [&sys_accum, &code_accum](const std::string& sys,
-                                         const std::string& code) {
+      codeable_concept, [&sys_accum, &code_accum](const std::string& sys,
+                                                  const std::string& code) {
         absl::StrAppend(&sys_accum, sys, ",");
         absl::StrAppend(&code_accum, code, ",");
       });
@@ -56,63 +56,73 @@ TEST(CodeableConceptsTest, ForEachSystemCodeStringPair) {
 }
 
 TEST(CodeableConceptsTest, GetCodesWithSystemUnprofiled) {
-  const auto concept = GetConceptStu3();
-  ASSERT_THAT(GetCodesWithSystem(concept, "http://sysg.org"),
+  const auto codeable_concept = GetConceptStu3();
+  ASSERT_THAT(GetCodesWithSystem(codeable_concept, "http://sysg.org"),
               ElementsAre("gcode1", "gcode2"));
 }
 
 TEST(CodeableConceptsTest, GetCodesWithSystemFixedSystem) {
-  const auto concept = GetConceptStu3();
-  ASSERT_THAT(GetCodesWithSystem(concept, "http://sysb.org"),
+  const auto codeable_concept = GetConceptStu3();
+  ASSERT_THAT(GetCodesWithSystem(codeable_concept, "http://sysb.org"),
               ElementsAre("bcode1", "bcode2"));
 }
 
 TEST(CodeableConceptsTest, GetCodesWithSystemFixedCode) {
-  const auto concept = GetConceptStu3();
-  ASSERT_THAT(GetCodesWithSystem(concept, "http://sysc.org"),
+  const auto codeable_concept = GetConceptStu3();
+  ASSERT_THAT(GetCodesWithSystem(codeable_concept, "http://sysc.org"),
               ElementsAre("8472"));
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemUnprofiled) {
-  const auto concept = GetConceptStu3();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysf.org").value(), "fcode");
+  const auto codeable_concept = GetConceptStu3();
+  EXPECT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysf.org").value(),
+            "fcode");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemFixedSystem) {
-  const auto concept = GetConceptStu3();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysa.org").value(), "acode");
+  const auto codeable_concept = GetConceptStu3();
+  EXPECT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysa.org").value(),
+            "acode");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemFixedCode) {
-  const auto concept = GetConceptStu3();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysc.org").value(), "8472");
+  const auto codeable_concept = GetConceptStu3();
+  EXPECT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysc.org").value(),
+            "8472");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemUnprofiledTooMany) {
-  const auto concept = GetConceptStu3();
-  ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysg.org").status().code(),
+  const auto codeable_concept = GetConceptStu3();
+  ASSERT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysg.org")
+                .status()
+                .code(),
             ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemProfiledTooMany) {
-  const auto concept = GetConceptStu3();
-  ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysb.org").status().code(),
+  const auto codeable_concept = GetConceptStu3();
+  ASSERT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysb.org")
+                .status()
+                .code(),
             ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemNone) {
-  const auto concept = GetConceptStu3();
-  ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysq.org").status().code(),
+  const auto codeable_concept = GetConceptStu3();
+  ASSERT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysq.org")
+                .status()
+                .code(),
             ::absl::StatusCode::kNotFound);
 }
 
 TEST(CodeableConceptsTest, ClearAllCodingsWithSystemFixedCode) {
-  auto concept = GetConceptStu3();
-  EXPECT_FALSE(ClearAllCodingsWithSystem(&concept, "http://sysc.org").ok());
+  auto codeable_concept = GetConceptStu3();
+  EXPECT_FALSE(
+      ClearAllCodingsWithSystem(&codeable_concept, "http://sysc.org").ok());
 }
 
 TEST(CodeableConceptsTest, CopyCodeableConcept) {
-  stu3::proto::CodeableConcept concept = PARSE_STU3_PROTO(R"proto(
+  stu3::proto::CodeableConcept codeable_concept = PARSE_STU3_PROTO(R"pb(
     coding {
       system { value: "foo" },
       code { value: "bar" }
@@ -140,7 +150,7 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
       url { value: "baz" }
       value { integer { value: 5 } }
     }
-  )proto");
+  )pb");
   Stu3TestObservation::CodeableConceptForCode concept_for_code =
       PARSE_STU3_PROTO(R"proto(
         # inlined system
@@ -201,11 +211,12 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
   stu3::proto::CodeableConcept profiled_to_unprofiled;
   FHIR_ASSERT_OK(
       CopyCodeableConcept(concept_for_code, &profiled_to_unprofiled));
-  ASSERT_THAT(concept,
+  ASSERT_THAT(codeable_concept,
               testutil::EqualsProtoIgnoringReordering(profiled_to_unprofiled));
 
   Stu3TestObservation::CodeableConceptForCode unprofiled_to_profiled;
-  FHIR_ASSERT_OK(CopyCodeableConcept(concept, &unprofiled_to_profiled));
+  FHIR_ASSERT_OK(
+      CopyCodeableConcept(codeable_concept, &unprofiled_to_profiled));
   ASSERT_THAT(concept_for_code,
               testutil::EqualsProtoIgnoringReordering(unprofiled_to_profiled));
 
@@ -216,16 +227,16 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
 }
 
 TEST(CodeableConceptsTest, AddCodingFromStringsSTU3) {
-  stu3::proto::CodeableConcept concept;
+  stu3::proto::CodeableConcept codeable_concept;
 
-  FHIR_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode1"));
-  FHIR_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode2"));
-  FHIR_CHECK_OK(AddCoding(&concept, "http://sysr.org", "rcode"));
+  FHIR_CHECK_OK(AddCoding(&codeable_concept, "http://sysq.org", "qcode1"));
+  FHIR_CHECK_OK(AddCoding(&codeable_concept, "http://sysq.org", "qcode2"));
+  FHIR_CHECK_OK(AddCoding(&codeable_concept, "http://sysr.org", "rcode"));
 
-  EXPECT_EQ(concept.coding_size(), 3);
+  EXPECT_EQ(codeable_concept.coding_size(), 3);
   std::string code_accum = "";
   ForEachSystemCodeStringPair(
-      concept,
+      codeable_concept,
       [&code_accum](const std::string& code, const std::string& system) {
         absl::StrAppend(&code_accum, code, ",");
       });
@@ -233,16 +244,16 @@ TEST(CodeableConceptsTest, AddCodingFromStringsSTU3) {
 }
 
 TEST(CodeableConceptsTest, AddCodingFromStringsR4) {
-  r4::core::CodeableConcept concept;
+  r4::core::CodeableConcept codeable_concept;
 
-  FHIR_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode1"));
-  FHIR_CHECK_OK(AddCoding(&concept, "http://sysq.org", "qcode2"));
-  FHIR_CHECK_OK(AddCoding(&concept, "http://sysr.org", "rcode"));
+  FHIR_CHECK_OK(AddCoding(&codeable_concept, "http://sysq.org", "qcode1"));
+  FHIR_CHECK_OK(AddCoding(&codeable_concept, "http://sysq.org", "qcode2"));
+  FHIR_CHECK_OK(AddCoding(&codeable_concept, "http://sysr.org", "rcode"));
 
-  EXPECT_EQ(concept.coding_size(), 3);
+  EXPECT_EQ(codeable_concept.coding_size(), 3);
   std::string code_accum = "";
   ForEachSystemCodeStringPair(
-      concept,
+      codeable_concept,
       [&code_accum](const std::string& code, const std::string& system) {
         absl::StrAppend(&code_accum, code, ",");
       });
@@ -257,9 +268,9 @@ const R4TestObservation::CodeableConceptForCode GetConceptR4() {
 TEST(CodeableConceptsTest, FindSystemCodeStringPairUnprofiledR4) {
   std::string found_system;
   std::string found_code;
-  const auto concept = GetConceptR4();
+  const auto codeable_concept = GetConceptR4();
   EXPECT_TRUE(FindSystemCodeStringPair(
-      concept,
+      codeable_concept,
       [](const std::string& system, const std::string& code) {
         return system == "http://sysg.org" && code == "gcode1";
       },
@@ -271,9 +282,9 @@ TEST(CodeableConceptsTest, FindSystemCodeStringPairUnprofiledR4) {
 TEST(CodeableConceptsTest, FindSystemCodeStringPairFixedSystemR4) {
   std::string found_system;
   std::string found_code;
-  const auto concept = GetConceptR4();
+  const auto codeable_concept = GetConceptR4();
   EXPECT_TRUE(FindSystemCodeStringPair(
-      concept,
+      codeable_concept,
       [](const std::string& system, const std::string& code) {
         return system == "http://sysb.org" && code == "bcode2";
       },
@@ -286,9 +297,9 @@ TEST(CodeableConceptsTest, FindSystemCodeStringPairFixedSystemR4) {
 TEST(CodeableConceptsTest, FindSystemCodeStringPairFixedCodeR4) {
   std::string found_system;
   std::string found_code;
-  const auto concept = GetConceptR4();
+  const auto codeable_concept = GetConceptR4();
   EXPECT_TRUE(FindSystemCodeStringPair(
-      concept,
+      codeable_concept,
       [](const std::string& system, const std::string& code) {
         return system == "http://sysd.org" && code == "8675329";
       },
@@ -301,20 +312,20 @@ TEST(CodeableConceptsTest, FindSystemCodeStringPairFixedCodeR4) {
 TEST(CodeableConceptsTest, FindSystemCodeStringPairNotFoundR4) {
   std::string found_system;
   std::string found_code;
-  const auto concept = GetConceptR4();
+  const auto codeable_concept = GetConceptR4();
   EXPECT_FALSE(FindSystemCodeStringPair(
-      concept,
+      codeable_concept,
       [](const std::string& system, const std::string& code) { return false; },
       &found_system, &found_code));
 }
 
 TEST(CodeableConceptsTest, ForEachSystemCodeStringPairR4) {
-  const auto concept = GetConceptR4();
+  const auto codeable_concept = GetConceptR4();
   std::string sys_accum = "";
   std::string code_accum = "";
   ForEachSystemCodeStringPair(
-      concept, [&sys_accum, &code_accum](const std::string& sys,
-                                         const std::string& code) {
+      codeable_concept, [&sys_accum, &code_accum](const std::string& sys,
+                                                  const std::string& code) {
         absl::StrAppend(&sys_accum, sys, ",");
         absl::StrAppend(&code_accum, code, ",");
       });
@@ -327,62 +338,72 @@ TEST(CodeableConceptsTest, ForEachSystemCodeStringPairR4) {
 }
 
 TEST(CodeableConceptsTest, GetCodesWithSystemUnprofiledR4) {
-  const auto concept = GetConceptR4();
-  ASSERT_THAT(GetCodesWithSystem(concept, "http://sysg.org"),
+  const auto codeable_concept = GetConceptR4();
+  ASSERT_THAT(GetCodesWithSystem(codeable_concept, "http://sysg.org"),
               ElementsAre("gcode1", "gcode2"));
 }
 
 TEST(CodeableConceptsTest, GetCodesWithSystemFixedSystemR4) {
-  const auto concept = GetConceptR4();
-  ASSERT_THAT(GetCodesWithSystem(concept, "http://sysb.org"),
+  const auto codeable_concept = GetConceptR4();
+  ASSERT_THAT(GetCodesWithSystem(codeable_concept, "http://sysb.org"),
               ElementsAre("bcode1", "bcode2"));
 }
 
 TEST(CodeableConceptsTest, GetCodesWithSystemFixedCodeR4) {
-  const auto concept = GetConceptR4();
-  ASSERT_THAT(GetCodesWithSystem(concept, "http://sysc.org"),
+  const auto codeable_concept = GetConceptR4();
+  ASSERT_THAT(GetCodesWithSystem(codeable_concept, "http://sysc.org"),
               ElementsAre("8472"));
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemUnprofiledR4) {
-  const auto concept = GetConceptR4();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysf.org").value(), "fcode");
+  const auto codeable_concept = GetConceptR4();
+  EXPECT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysf.org").value(),
+            "fcode");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemFixedSystemR4) {
-  const auto concept = GetConceptR4();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysa.org").value(), "acode");
+  const auto codeable_concept = GetConceptR4();
+  EXPECT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysa.org").value(),
+            "acode");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemFixedCodeR4) {
-  const auto concept = GetConceptR4();
-  EXPECT_EQ(GetOnlyCodeWithSystem(concept, "http://sysc.org").value(), "8472");
+  const auto codeable_concept = GetConceptR4();
+  EXPECT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysc.org").value(),
+            "8472");
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemUnprofiledTooManyR4) {
-  const auto concept = GetConceptR4();
-  ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysg.org").status().code(),
+  const auto codeable_concept = GetConceptR4();
+  ASSERT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysg.org")
+                .status()
+                .code(),
             ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemProfiledTooManyR4) {
-  const auto concept = GetConceptR4();
-  ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysb.org").status().code(),
+  const auto codeable_concept = GetConceptR4();
+  ASSERT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysb.org")
+                .status()
+                .code(),
             ::absl::StatusCode::kAlreadyExists);
 }
 
 TEST(CodeableConceptsTest, GetOnlyCodeWithSystemNoneR4) {
-  const auto concept = GetConceptR4();
-  ASSERT_EQ(GetOnlyCodeWithSystem(concept, "http://sysq.org").status().code(),
+  const auto codeable_concept = GetConceptR4();
+  ASSERT_EQ(GetOnlyCodeWithSystem(codeable_concept, "http://sysq.org")
+                .status()
+                .code(),
             ::absl::StatusCode::kNotFound);
 }
 
 TEST(CodeableConceptsTest, ClearAllCodingsWithSystemUnprofiledR4) {
-  auto concept = GetConceptR4();
-  FHIR_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysg.org"));
+  auto codeable_concept = GetConceptR4();
+  FHIR_CHECK_OK(
+      ClearAllCodingsWithSystem(&codeable_concept, "http://sysg.org"));
   std::string display_accum = "";
   ForEachSystemCodeStringPair(
-      concept,
+      codeable_concept,
       [&display_accum](const std::string& code, const std::string& system) {
         absl::StrAppend(&display_accum, code, ",");
       });
@@ -392,11 +413,12 @@ TEST(CodeableConceptsTest, ClearAllCodingsWithSystemUnprofiledR4) {
 }
 
 TEST(CodeableConceptsTest, ClearAllCodingsWithSystemFixedSystemR4) {
-  auto concept = GetConceptR4();
-  FHIR_CHECK_OK(ClearAllCodingsWithSystem(&concept, "http://sysb.org"));
+  auto codeable_concept = GetConceptR4();
+  FHIR_CHECK_OK(
+      ClearAllCodingsWithSystem(&codeable_concept, "http://sysb.org"));
   std::string display_accum = "";
   ForEachSystemCodeStringPair(
-      concept,
+      codeable_concept,
       [&display_accum](const std::string& code, const std::string& system) {
         absl::StrAppend(&display_accum, code, ",");
       });
@@ -406,12 +428,13 @@ TEST(CodeableConceptsTest, ClearAllCodingsWithSystemFixedSystemR4) {
 }
 
 TEST(CodeableConceptsTest, ClearAllCodingsWithSystemFixedCodeR4) {
-  auto concept = GetConceptR4();
-  EXPECT_FALSE(ClearAllCodingsWithSystem(&concept, "http://sysc.org").ok());
+  auto codeable_concept = GetConceptR4();
+  EXPECT_FALSE(
+      ClearAllCodingsWithSystem(&codeable_concept, "http://sysc.org").ok());
 }
 
 TEST(CodeableConceptsTest, CopyCodeableConceptR4) {
-  r4::core::CodeableConcept concept = PARSE_STU3_PROTO(R"proto(
+  r4::core::CodeableConcept codeable_concept = PARSE_STU3_PROTO(R"pb(
     coding {
       system { value: "foo" },
       code { value: "bar" }
@@ -439,7 +462,7 @@ TEST(CodeableConceptsTest, CopyCodeableConceptR4) {
       url { value: "baz" }
       value { integer { value: 5 } }
     }
-  )proto");
+  )pb");
   R4TestObservation::CodeableConceptForCode concept_for_code =
       PARSE_STU3_PROTO(R"proto(
         # inlined system
@@ -500,11 +523,12 @@ TEST(CodeableConceptsTest, CopyCodeableConceptR4) {
   r4::core::CodeableConcept profiled_to_unprofiled;
   FHIR_ASSERT_OK(
       CopyCodeableConcept(concept_for_code, &profiled_to_unprofiled));
-  ASSERT_THAT(concept,
+  ASSERT_THAT(codeable_concept,
               testutil::EqualsProtoIgnoringReordering(profiled_to_unprofiled));
 
   R4TestObservation::CodeableConceptForCode unprofiled_to_profiled;
-  FHIR_ASSERT_OK(CopyCodeableConcept(concept, &unprofiled_to_profiled));
+  FHIR_ASSERT_OK(
+      CopyCodeableConcept(codeable_concept, &unprofiled_to_profiled));
   ASSERT_THAT(concept_for_code,
               testutil::EqualsProtoIgnoringReordering(unprofiled_to_profiled));
 

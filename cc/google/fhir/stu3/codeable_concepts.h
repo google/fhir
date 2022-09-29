@@ -51,7 +51,7 @@ namespace internal {
 // This is internal, since outside callers shouldn't care about profiled vs
 // unprofiled.
 const ::google::protobuf::FieldDescriptor* ProfiledFieldForSystem(
-    const ::google::protobuf::Message& concept, const std::string& system);
+    const ::google::protobuf::Message& concept_proto, const std::string& system);
 
 }  // namespace internal
 
@@ -59,7 +59,7 @@ const ::google::protobuf::FieldDescriptor* ProfiledFieldForSystem(
 // like strings, until the function returns true.
 // If the function returns true on a Coding, ceases visiting Codings and returns
 // true.  If the function returned false for all Codings, returns false.
-const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
+const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept_proto,
                                     const CodeBoolFunc& func,
                                     std::string* found_system,
                                     std::string* found_code);
@@ -68,12 +68,12 @@ const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
 // pointers.
 // This can be used when the actual result is unused, or when the coding is used
 // to set a return pointers in the function closure itself.
-const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept,
+const bool FindSystemCodeStringPair(const ::google::protobuf::Message& concept_proto,
                                     const CodeBoolFunc& func);
 
 // Performs a function on all System/Code pairs, where all codes are treated
 // like strings.  Visits all codings.
-void ForEachSystemCodeStringPair(const ::google::protobuf::Message& concept,
+void ForEachSystemCodeStringPair(const ::google::protobuf::Message& concept_proto,
                                  const CodeFunc& func);
 
 // Performs a function on all Codings, until the function returns true.
@@ -92,30 +92,32 @@ void ForEachSystemCodeStringPair(const ::google::protobuf::Message& concept,
 // semantics accurately convey to the caller that they should never count on
 // the Coding living longer than the shared_ptr.
 std::shared_ptr<const stu3::proto::Coding> FindCoding(
-    const ::google::protobuf::Message& concept, const CodingBoolFunc& func);
+    const ::google::protobuf::Message& concept_proto, const CodingBoolFunc& func);
 
 // Performs a function on all Codings.
 // For profiled fields that have no native Coding representation, constructs
 // a synthetic Coding.
-void ForEachCoding(const ::google::protobuf::Message& concept, const CodingFunc& func);
+void ForEachCoding(const ::google::protobuf::Message& concept_proto,
+                   const CodingFunc& func);
 
 // Similar to ForEachCoding, but takes a function that returns a status.
 // If the function ever returns anything other than OK,
 // this will halt and return that status.
-absl::Status ForEachCodingWithStatus(const ::google::protobuf::Message& concept,
+absl::Status ForEachCodingWithStatus(const ::google::protobuf::Message& concept_proto,
                                      const CodingStatusFunc& func);
 
 // Gets a vector of all codes with a given system, where codes are represented
 // as strings.
 const std::vector<std::string> GetCodesWithSystem(
-    const ::google::protobuf::Message& concept, const absl::string_view target_system);
+    const ::google::protobuf::Message& concept_proto,
+    const absl::string_view target_system);
 
 // Gets the only code with a given system.
 // If no code is found with that system, returns a NotFound status.
 // If more than one code is found with that system, returns AlreadyExists
 // status.
 absl::StatusOr<const std::string> GetOnlyCodeWithSystem(
-    const ::google::protobuf::Message& concept, const absl::string_view system);
+    const ::google::protobuf::Message& concept_proto, const absl::string_view system);
 
 // Gets the first code with a given system.
 // This differs from GetOnlyCodeWithSystem in that it doesn't throw an error
@@ -139,35 +141,35 @@ absl::StatusOr<std::string> ExtractCodeBySystem(
 // Think about this a bit more.  It might just be illegal since a code might
 // fit into two different slices, but might be useful, e.g., if you want
 // to specify a required ICD9 code, but make it easy to add other ICD9 codes.
-absl::Status AddCoding(::google::protobuf::Message* concept,
+absl::Status AddCoding(::google::protobuf::Message* concept_proto,
                        const stu3::proto::Coding& coding);
 
-absl::Status AddCoding(::google::protobuf::Message* concept, const std::string& system,
-                       const std::string& code);
+absl::Status AddCoding(::google::protobuf::Message* concept_proto,
+                       const std::string& system, const std::string& code);
 
 template <typename CodeableConceptLike>
-absl::Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
+absl::Status ClearAllCodingsWithSystem(CodeableConceptLike* concept_like,
                                        const std::string& system) {
-  if (IsProfileOfCodeableConcept(*concept)) {
+  if (IsProfileOfCodeableConcept(*concept_like)) {
     const ::google::protobuf::FieldDescriptor* profiled_field =
-        internal::ProfiledFieldForSystem(*concept, system);
+        internal::ProfiledFieldForSystem(*concept_like, system);
     if (profiled_field != nullptr) {
       if (IsMessageType<stu3::proto::CodingWithFixedSystem>(
               profiled_field->message_type())) {
-        concept->GetReflection()->ClearField(concept, profiled_field);
+        concept_like->GetReflection()->ClearField(concept_like, profiled_field);
       } else if (IsMessageType<stu3::proto::CodingWithFixedCode>(
                      profiled_field->message_type())) {
         return ::absl::InvalidArgumentError(
             absl::StrCat("Cannot clear coding system: ", system, " from ",
-                         concept->GetDescriptor()->full_name(),
+                         concept_like->GetDescriptor()->full_name(),
                          ". It is a fixed code on that profile"));
       }
     }
   }
-  for (auto iter = concept->mutable_coding()->begin();
-       iter != concept->mutable_coding()->end();) {
+  for (auto iter = concept_like->mutable_coding()->begin();
+       iter != concept_like->mutable_coding()->end();) {
     if (iter->has_system() && iter->system().value() == system) {
-      iter = concept->mutable_coding()->erase(iter);
+      iter = concept_like->mutable_coding()->erase(iter);
     } else {
       iter++;
     }
@@ -178,7 +180,7 @@ absl::Status ClearAllCodingsWithSystem(CodeableConceptLike* concept,
 absl::Status CopyCodeableConcept(const ::google::protobuf::Message& source,
                                  ::google::protobuf::Message* target);
 
-int CodingSize(const ::google::protobuf::Message& concept);
+int CodingSize(const ::google::protobuf::Message& concept_proto);
 
 }  // namespace stu3
 }  // namespace fhir
