@@ -80,35 +80,40 @@ class ResourceCollection(Iterable[_T]):
     proto_cls: The class of the proto this collection contains.
     handler: The FHIR primitive handler used for resource parsing.
     resource_time_zone: The time zone code to parse resource dates into.
-    parsed_resources: A cache of resources which have been parsed into protocol
-      buffers.
-    resource_paths_for_uris: A mapping of URIs to tuples of the path within the
-      zip file containing the resource JSON and the type of that resource.
+    resources_by_uri: A map between URIs and the resource for that URI. Elements
+      begin as JSON and are replaced with protos of type _T as they are
+      accessed. For resources inside bundles, the JSON will be the bundle's JSON
+      rather than the resource itself.
   """
 
-  def __init__(self, archive_file: PackageSource, proto_cls: Type[_T],
+  def __init__(self, proto_cls: Type[_T],
                handler: primitive_handler.PrimitiveHandler,
                resource_time_zone: str) -> None:
-    self.archive_file = archive_file
     self.proto_cls = proto_cls
     self.handler = handler
     self.resource_time_zone = resource_time_zone
+    self.resources_by_uri: Dict[str, Union[_T, Dict[str, Any]]] = {}
 
-    self.parsed_resources: Dict[str, _T] = {}
-    self.resource_paths_for_uris: Dict[str, Tuple[str, str]] = {}
+  def put(self,
+          resource_json: Dict[str, Any],
+          parent_bundle: Optional[Dict[str, Any]] = None) -> None:
+    """Puts the given resource into this collection.
 
-  def add_uri_at_path(self, uri: str, path: str, resource_type: str) -> None:
-    """Adds a resource with the given URI located at the given path.
+    Adds the resource represented by `resource_json` found inside
+    `parent_bundle` into this collection for subsequent lookup via the Get
+    method. `parent_bundle` may be None if `resource_json` is not located inside
+    a bundle.
 
     Args:
-      uri: URI of the resource.
-      path: The path inside self.zip_file_path containing the JSON file for the
-        resource.
-      resource_type: The type of the resource located at `path`.
+      resource_json: The JSON object representing the resource.
+      parent_bundle: The bundle `resource_json` is located inside, if any.
     """
-    self.resource_paths_for_uris[uri] = (path, resource_type)
+    if parent_bundle is None:
+      self.resources_by_uri[resource_json['url']] = resource_json
+    else:
+      self.resources_by_uri[resource_json['url']] = parent_bundle
 
-  def get_resource(self, uri: str) -> Optional[_T]:
+  def get(self, uri: str) -> Optional[_T]:
     """Retrieves a protocol buffer for the resource with the given uri.
 
     Args:
@@ -122,63 +127,33 @@ class ResourceCollection(Iterable[_T]):
       RuntimeError: The resource could not be found or the retrieved resource
       did not have the expected URL. The .zip file may have changed on disk.
     """
-    cached = self.parsed_resources.get(uri)
-    if cached is not None:
-      return cached
-
-    path, resource_type = self.resource_paths_for_uris.get(uri, (None, None))
-    if path is None and resource_type is None:
+    resource = self.resources_by_uri.get(uri)
+    if resource is None:
       return None
 
-    with _open_path_or_factory(self.archive_file) as fd:
-      parsed = self._parse_proto_from_file(uri, fd, path)
-    if parsed is None:
-      raise RuntimeError(
-          'Resource for url %s could no longer be found. The resource .zip '
-          'file may have changed on disk.' % uri)
-    elif parsed.url.value != uri:
-      raise RuntimeError(
-          'url for the retrieved resource did not match the url passed to '
-          '`get_resource`. The resource .zip file may have changed on disk. '
-          'Expected: %s, found: %s' % (uri, parsed.url.value))
-    else:
-      self.parsed_resources[uri] = parsed
-      return parsed
+    # See if the resource has already been parsed into a proto.
+    if isinstance(resource, self.proto_cls):
+      return resource
 
-  def _parse_proto_from_file(self, uri: str, archive_file: BinaryIO,
-                             path: str) -> Optional[_T]:
-    """Parses a protocol buffer from the resource at the given path.
+    # The resource needs to be parsed from JSON into a proto.
+    parsed = self._parse_resource(uri, resource)
+    self.resources_by_uri[uri] = parsed
+    return parsed
+
+  def _parse_resource(self, uri: str, json_obj: Dict[str, Any]) -> Optional[_T]:
+    """Parses a protocol buffer for the given JSON object.
 
     Args:
       uri: The URI of the resource to parse.
-      archive_file: The file-like of a zip or tar file containing resource
-        definitions.
-      path: The path within the zip file to the resource file to parse.
+      json_obj: The JSON object to parse into a proto.
 
     Returns:
       The protocol buffer for the resource or `None` if it can not be found.
     """
     json_parser = _json_parser.JsonParser(self.handler, self.resource_time_zone)
-    # Default to zip files for compatiblity.
-    if (not isinstance(archive_file.name, str) or
-        archive_file.name.endswith('.zip')):
-      with zipfile.ZipFile(archive_file, mode='r') as f:
-        raw_json = f.read(path).decode('utf-8')
-    elif (archive_file.name.endswith('.tar.gz') or
-          archive_file.name.endswith('.tgz')):
-      with tarfile.open(fileobj=archive_file, mode='r:gz') as f:
-        io_bytes = f.extractfile(path)
-        if io_bytes is None:
-          return None
-        raw_json = io_bytes.read().decode('utf-8')
-    else:
-      raise ValueError(f'Unsupported file type from {archive_file.name}')
-
-    json_obj = json.loads(
-        raw_json, parse_float=decimal.Decimal, parse_int=decimal.Decimal)
     resource_type = json_obj.get('resourceType')
     if resource_type is None:
-      raise ValueError(f'JSON at {path} does not have a resource type.')
+      raise ValueError(f'JSON for URI {uri} does not have a resource type.')
 
     if resource_type == 'Bundle':
       json_value = _find_resource_in_bundle(uri, json_obj)
@@ -194,13 +169,13 @@ class ResourceCollection(Iterable[_T]):
       return target
 
   def __iter__(self) -> Iterator[_T]:
-    for uri in self.resource_paths_for_uris:
-      resource = self.get_resource(uri)
+    for uri in self.resources_by_uri:
+      resource = self.get(uri)
       if resource is not None:
         yield resource
 
   def __len__(self) -> int:
-    return len(self.resource_paths_for_uris)
+    return len(self.resources_by_uri)
 
 
 class FhirPackage:
@@ -243,17 +218,13 @@ class FhirPackage:
     """
     collections_per_resource_type = {
         'StructureDefinition':
-            ResourceCollection(archive_file, struct_def_class, handler,
-                               resource_time_zone),
+            ResourceCollection(struct_def_class, handler, resource_time_zone),
         'SearchParameter':
-            ResourceCollection(archive_file, search_param_class, handler,
-                               resource_time_zone),
+            ResourceCollection(search_param_class, handler, resource_time_zone),
         'CodeSystem':
-            ResourceCollection(archive_file, code_system_class, handler,
-                               resource_time_zone),
+            ResourceCollection(code_system_class, handler, resource_time_zone),
         'ValueSet':
-            ResourceCollection(archive_file, value_set_class, handler,
-                               resource_time_zone),
+            ResourceCollection(value_set_class, handler, resource_time_zone),
     }
 
     with _open_path_or_factory(archive_file) as fd:
@@ -265,11 +236,11 @@ class FhirPackage:
       else:
         raise ValueError(f'Unsupported file type from {fd.name}')
 
-      for file_name, raw_json in json_files:
+      for _, raw_json in json_files:
         json_obj = json.loads(
             raw_json, parse_float=decimal.Decimal, parse_int=decimal.Decimal)
-        _add_resource_to_collection(json_obj, collections_per_resource_type,
-                                    file_name)
+        _add_resource_to_collection(json_obj, json_obj,
+                                    collections_per_resource_type)
 
     return FhirPackage(
         structure_definitions=collections_per_resource_type[
@@ -300,7 +271,7 @@ class FhirPackage:
     """
     for collection in (self.structure_definitions, self.search_parameters,
                        self.code_systems, self.value_sets):
-      resource = collection.get_resource(uri)
+      resource = collection.get(uri)
       if resource is not None:
         return resource
 
@@ -345,45 +316,37 @@ class FhirPackageManager:
     return None
 
 
-def _add_resource_to_collection(resource_json: Dict[str, Any],
-                                collections_per_resource_type: Dict[
-                                    str, ResourceCollection],
-                                path: str,
-                                is_in_bundle: bool = False) -> None:
+def _add_resource_to_collection(
+    parent_resource: Dict[str, Any], resource_json: Dict[str, Any],
+    collections_per_resource_type: Dict[str, ResourceCollection]) -> None:
   """Adds an entry for the given resource to the appropriate collection.
 
+  Adds the resource described by `resource_json` found within `parent_resource`
+  to the appropriate ResourceCollection of the given `fhir_package`. Allows the
+  resource to subsequently be retrieved by its URL from the FhirPackage. In the
+  case where `resource_json` is located inside a bundle, `parent_resource` will
+  be the bundle containing the resource. Otherwise, `resource_json` and
+  `parent_resource` will be the same JSON object. If the JSON is not a FHIR
+  resource, or not a resource type tracked by the PackageManager, does nothing.
+
   Args:
-    resource_json: Parsed JSON object of the resource to add.
-    collections_per_resource_type: Set of `ResourceCollection`s to add the
+    parent_resource: The bundle `resource_json` can be found inside, or the
+      resource itself if it is not part of a bundle.
+    resource_json: The parsed JSON representation of the resource to add.
+    collections_per_resource_type: The set of `ResourceCollection`s to add the
       resource to.
-    path: Path within the `ResourceCollection` zip file leading to the resource.
-    is_in_bundle: Used in recursive calls to indicate the resource is located in
-      a bundle file.
   """
   resource_type = resource_json.get('resourceType')
-  uri = resource_json.get('url')
 
   if resource_type in collections_per_resource_type:
-    # If a resource doesn't have a URI, ignore it as the resource will
-    # subsequently be impossible to look up.
-    if not uri:
-      logging.warning(
-          'JSON entry: %s does not have a url. Skipping loading of the resource.',
-          path)
-    else:
-      # If the resource is a member of a bundle, pass the bundle's resource
-      # type to ensure the file is handled correctly later.
-      collections_per_resource_type[resource_type].add_uri_at_path(
-          uri, path, 'Bundle' if is_in_bundle else resource_type)
+    collections_per_resource_type[resource_type].put(resource_json,
+                                                     parent_resource)
   elif resource_type == 'Bundle':
     for entry in resource_json.get('entry', ()):
-      resource = entry.get('resource')
-      if resource:
-        _add_resource_to_collection(
-            resource, collections_per_resource_type, path, is_in_bundle=True)
-  else:
-    logging.info('Skipping JSON entry: %s for non-bundle resource type %s.',
-                 path, resource_type)
+      bundle_resource = entry.get('resource')
+      if bundle_resource:
+        _add_resource_to_collection(parent_resource, bundle_resource,
+                                    collections_per_resource_type)
 
 
 def _find_resource_in_bundle(

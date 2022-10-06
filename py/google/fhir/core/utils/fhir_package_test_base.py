@@ -90,7 +90,7 @@ class FhirPackageTest(
     raise NotImplementedError('Subclasses must implement _load_package')
 
   def empty_collection(self) -> fhir_package.ResourceCollection:
-    return fhir_package.ResourceCollection('', self._valueset_cls,
+    return fhir_package.ResourceCollection(self._valueset_cls,
                                            self._primitive_handler, 'Z')
 
   @_parameterized_with_package_sources
@@ -287,124 +287,72 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
   def testResourceCollection_addGetResource(self):
     """Ensure we can add and then get a resource."""
     uri = 'http://hl7.org/fhir/ValueSet/example-extensional'
-    zipfile_contents = [('a_value_set.json',
-                         json.dumps({
-                             'resourceType': 'ValueSet',
-                             'url': uri,
-                             'id': 'example-extensional',
-                             'status': 'draft',
-                         }))]
-    with zipfile_containing(zipfile_contents) as temp_file:
-      collection = fhir_package.ResourceCollection(temp_file.name,
-                                                   self._valueset_cls,
-                                                   self._primitive_handler, 'Z')
-      collection.add_uri_at_path(uri, 'a_value_set.json', 'ValueSet')
-      resource = collection.get_resource(uri)
+    resource_json = {
+        'resourceType': 'ValueSet',
+        'url': uri,
+        'id': 'example-extensional',
+        'status': 'draft',
+    }
+    collection = fhir_package.ResourceCollection(self._valueset_cls,
+                                                 self._primitive_handler, 'Z')
+    collection.put(resource_json)
+    resource = collection.get(uri)
 
-      self.assertIsNotNone(resource)
-      self.assertTrue(proto_utils.is_message_type(resource, self._valueset_cls))
-      self.assertEqual(resource.id.value, 'example-extensional')
-      self.assertEqual(resource.url.value, uri)
+    self.assertIsNotNone(resource)
+    self.assertTrue(proto_utils.is_message_type(resource, self._valueset_cls))
+    self.assertEqual(resource.id.value, 'example-extensional')
+    self.assertEqual(resource.url.value, uri)
 
   def testResourceCollection_getBundles(self):
     """Ensure we can add and then get a resource from a bundle."""
-    file_contents = [('a_bundle.json',
-                      json.dumps({
-                          'resourceType':
-                              'Bundle',
-                          'entry': [{
-                              'resource': {
-                                  'resourceType': 'ValueSet',
-                                  'id': 'example-extensional',
-                                  'url': 'http://value-in-a-bundle',
-                                  'status': 'draft',
-                              }
-                          }]
-                      }))]
+    bundle = {
+        'resourceType':
+            'Bundle',
+        'entry': [{
+            'resource': {
+                'resourceType': 'ValueSet',
+                'id': 'example-extensional',
+                'url': 'http://value-in-a-bundle',
+                'status': 'draft',
+            }
+        }]
+    }
 
-    def check_resources(collection):
-      resource = collection.get_resource('http://value-in-a-bundle')
+    collection = fhir_package.ResourceCollection(self._valueset_cls,
+                                                 self._primitive_handler, 'Z')
+    collection.put(bundle['entry'][0]['resource'], bundle)
+    resource = collection.get('http://value-in-a-bundle')
 
-      self.assertIsNotNone(resource)
-      self.assertTrue(proto_utils.is_message_type(resource, self._valueset_cls))
-      self.assertEqual(resource.id.value, 'example-extensional')
-      self.assertEqual(resource.url.value, 'http://value-in-a-bundle')
-
-    with zipfile_containing(file_contents) as temp_file:
-      collection = fhir_package.ResourceCollection(temp_file.name,
-                                                   self._valueset_cls,
-                                                   self._primitive_handler, 'Z')
-      collection.add_uri_at_path('http://value-in-a-bundle', 'a_bundle.json',
-                                 'Bundle')
-      check_resources(collection)
-
-    with npmfile_containing(file_contents) as temp_file:
-      collection = fhir_package.ResourceCollection(temp_file.name,
-                                                   self._valueset_cls,
-                                                   self._primitive_handler, 'Z')
-      collection.add_uri_at_path('http://value-in-a-bundle',
-                                 'package/a_bundle.json', 'Bundle')
-      check_resources(collection)
+    self.assertIsNotNone(resource)
+    self.assertTrue(proto_utils.is_message_type(resource, self._valueset_cls))
+    self.assertEqual(resource.id.value, 'example-extensional')
+    self.assertEqual(resource.url.value, 'http://value-in-a-bundle')
 
   def testResourceCollection_getMissingResource(self):
     """Ensure we return None when requesing missing resources."""
-    collection = fhir_package.ResourceCollection('missing_file.zip',
-                                                 self._valueset_cls,
+    collection = fhir_package.ResourceCollection(self._valueset_cls,
                                                  self._primitive_handler, 'Z')
-    resource = collection.get_resource('missing-uri')
+    resource = collection.get('missing-uri')
 
     self.assertIsNone(resource)
 
-  @mock.patch.object(
-      fhir_package.ResourceCollection, '_parse_proto_from_file', autospec=True)
-  def testResourceCollection_getResourceWithUnexpectedUrl(
-      self, mock_parse_proto_from_file):
-    """Ensure we raise an error for bad state when retrieving resources."""
-    uri = 'http://hl7.org/fhir/ValueSet/example-extensional'
-    zipfile_contents = [('a_value_set.json',
-                         json.dumps({
-                             'resourceType': 'ValueSet',
-                             'url': uri,
-                             'id': 'example-extensional',
-                             'status': 'draft',
-                         }))]
-    with zipfile_containing(zipfile_contents) as temp_file:
-      collection = fhir_package.ResourceCollection(temp_file.name,
-                                                   self._valueset_cls,
-                                                   self._primitive_handler, 'Z')
-      collection.add_uri_at_path(uri, 'a_value_set.json', 'ValueSet')
-
-      # The resource unexpectedly has the wrong url
-      mock_parse_proto_from_file.return_value.url.value = 'something unexpected'
-      with self.assertRaises(RuntimeError):
-        collection.get_resource(uri)
-
-      # The resource is unexpectedly missing.
-      mock_parse_proto_from_file.return_value = None
-      with self.assertRaises(RuntimeError):
-        collection.get_resource(uri)
-
   def testResourceCollection_cachedResource(self):
     """Ensure we cache the first access to a resource."""
-    uri = 'http://hl7.org/fhir/ValueSet/example-extensional'
-    zipfile_contents = [('a_value_set.json',
-                         json.dumps({
-                             'resourceType': 'ValueSet',
-                             'url': uri,
-                             'id': 'example-extensional',
-                             'status': 'draft',
-                         }))]
-    with zipfile_containing(zipfile_contents) as temp_file:
-      collection = fhir_package.ResourceCollection(temp_file.name,
-                                                   self._valueset_cls,
-                                                   self._primitive_handler, 'Z')
-      collection.add_uri_at_path(uri, 'a_value_set.json', 'ValueSet')
-      # Get the resource for the first time to cache it
-      resource = collection.get_resource(uri)
+    collection = fhir_package.ResourceCollection(self._valueset_cls,
+                                                 self._primitive_handler, 'Z')
+    uri = 'http://value.set'
+    collection.put({
+        'resourceType': 'ValueSet',
+        'url': uri,
+        'id': 'example-extensional',
+        'status': 'draft',
+    })
+    # Get the resource for the first time to cache it
+    resource = collection.get(uri)
+    self.assertIsNotNone(resource)
 
-    # The temp file is now gone, so this shouldn't succeed without a cache.
-    cached_resource = collection.get_resource(uri)
-
+    # Get the resource a second time to retrieve it from the cache.
+    cached_resource = collection.get(uri)
     self.assertIsNotNone(cached_resource)
     self.assertEqual(cached_resource, resource)
 
@@ -496,9 +444,9 @@ def mock_resource_collection_containing(
       cast(Any, resource).url.value: resource for resource in resources
   }
 
-  def mock_get_resource(uri: str) -> message.Message:
+  def mock_get(uri: str) -> message.Message:
     return resources.get(uri)
 
-  mock_collection.get_resource.side_effect = mock_get_resource
+  mock_collection.get.side_effect = mock_get
 
   return mock_collection
