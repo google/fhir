@@ -43,12 +43,12 @@ const absl::string_view kLegalIdCharacters =
 
 // Characters to use in strings. Should be compatible
 // with the FHIR string regex which is "[ \r\n\t\S]+"
-const absl::string_view kLegalStringCharacters =
+const absl::string_view kLegalStringCharacters = reinterpret_cast<const char*>(
     u8"abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "0123456789"
     "!@#$%?^&*()-+=_{}[]|<>,.\\"
-    " \n\r\t";
+    " \n\r\t");
 
 // Returns a randomly generated string consisting of legal_characters
 // and of length between the given min and max string lengths, inclusive.
