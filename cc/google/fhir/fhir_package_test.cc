@@ -126,7 +126,7 @@ constexpr int kR4SearchParametersCount = 1385;
 TEST(FhirPackageTest, LoadSucceeds) {
   FHIR_ASSERT_OK_AND_ASSIGN(
       std::unique_ptr<FhirPackage> fhir_package,
-      FhirPackage::Load("spec/fhir_r4_package.zip"));
+      FhirPackage::Load("spec/fhir_r4_package.tgz"));
   EXPECT_EQ(fhir_package->value_sets.size(), kR4ValuesetsCount);
   EXPECT_EQ(fhir_package->code_systems.size(), kR4CodeSystemsCount);
   EXPECT_EQ(fhir_package->structure_definitions.size(), kR4DefinitionsCount);
