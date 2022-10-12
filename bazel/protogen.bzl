@@ -50,6 +50,22 @@ def fhir_package(
         tags = MANUAL_TAGS,
     )
 
+    # Create a package in NPM format, which is just a tar.gz file containing its
+    # files under a "package" directory. This is the standard way to distribute
+    # FHIR packages. See for example the artifacts published for IGs at
+    # https://hl7.org/fhir/downloads.html.
+    native.genrule(
+        name = name + "_package_tar",
+        srcs = [filegroup_name],
+        outs = [_get_tar_for_pkg(name)],
+        # --dereference to follow symlinks
+        # --transform 's,.*\\/,package/,' to remove directory names (.*\/ all
+        # characters up to the (final) slash) and replace them with just a
+        # 'package' directory.
+        cmd = "tar czf $@ $(locations %s) --dereference --transform 's,.*\\/,package/,'" % filegroup_name,
+        tags = MANUAL_TAGS,
+    )
+
 def _src_dir(label):
     return "\"$$(dirname $(rootpath %s))\"" % label
 
@@ -262,6 +278,9 @@ def gen_fhir_definitions_and_protos(
 
 def _get_zip_for_pkg(pkg):
     return pkg + "_package.zip"
+
+def _get_tar_for_pkg(pkg):
+    return pkg + "_package.tgz"
 
 def _proto_generator_with_runtime_deps_on_existing_protos(name, golden_java_protos_rules):
     native.java_binary(
