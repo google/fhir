@@ -38,6 +38,13 @@ java_binary(
         "//java/com/google/fhir/wrappers:primitive_wrappers",
         "//proto/google/fhir/proto/r4/core/resources:all_java_proto",
     ],
+    resources = [
+      "//proto/google/fhir/proto:all_proto",
+      "//proto/google/fhir/proto/r4:all_proto",
+      "//proto/google/fhir/proto/r4/core:all_proto",
+      "//proto/google/fhir/proto/r4/core/resources:all_proto",
+      "//proto/google/fhir/proto/r4/core/profiles:all_proto",
+    ]
 )
 
 jarjar_library(

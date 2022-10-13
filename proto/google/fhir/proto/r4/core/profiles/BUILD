@@ -585,3 +585,10 @@ filegroup(
         exclude = ["datatypes.proto"],
     ),
 )
+
+filegroup(
+    name = "all_proto",
+    srcs = glob([
+        "*.proto",
+    ]),
+)

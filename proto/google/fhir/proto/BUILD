@@ -38,3 +38,11 @@ fhir_proto_library(
     srcs = ["fhirpath_replacement_list.proto"],
     proto_library_prefix = "fhirpath_replacement_list",
 )
+
+# We also make the .proto files readable for testing.
+filegroup(
+    name = "all_proto",
+    srcs = glob([
+        "*.proto"
+    ]),
+)

@@ -47,7 +47,7 @@ fhir_proto_library(
 
 # We also make the .proto files readable for testing.
 filegroup(
-    name = "testdata",
+    name = "all_proto",
     srcs = glob([
         "*.proto",
     ]),

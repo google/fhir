@@ -85,3 +85,10 @@ fhir_proto_library(
     ],
     proto_library_prefix = "primitive_test_suite",
 )
+
+filegroup(
+    name = "all_proto",
+    srcs = glob([
+        "*.proto",
+    ]),
+)

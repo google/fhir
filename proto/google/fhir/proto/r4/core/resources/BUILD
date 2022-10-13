@@ -1952,6 +1952,14 @@ filegroup(
     ]),
 )
 
+filegroup(
+    name = "all_proto",
+    srcs = glob([
+        "*.proto",
+    ]),
+)
+
+
 # Generate a java proto library that includes all core resources for distributing
 # as a maven jar. No bazel targets should ever depend on this.
 java_proto_library(
