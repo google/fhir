@@ -18,10 +18,11 @@
 
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/message.h"
+#include "absl/status/status.h"
+#include "absl/strings/substitute.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 
-namespace google {
-namespace fhir {
+namespace google::fhir {
 
 const std::string& GetStructureDefinitionUrl(
     const ::google::protobuf::Descriptor* descriptor) {
@@ -157,5 +158,15 @@ const bool IsContainedResource(const ::google::protobuf::Descriptor* descriptor)
   return descriptor->name() == "ContainedResource";
 }
 
-}  // namespace fhir
-}  // namespace google
+absl::Status CheckVersion(const google::protobuf::Message& message,
+                          const google::fhir::proto::FhirVersion version) {
+  if (google::fhir::GetFhirVersion(message) != version) {
+    return absl::FailedPreconditionError(
+        absl::Substitute("Called $0 API with non-$0 proto: $1",
+                         google::fhir::proto::FhirVersion_Name(version),
+                         message.GetDescriptor()->full_name()));
+  }
+  return absl::OkStatus();
+}
+
+}  // namespace google::fhir

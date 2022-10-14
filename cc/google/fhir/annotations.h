@@ -20,6 +20,7 @@
 #include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
+#include "absl/status/status.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 
 namespace google {
@@ -117,6 +118,11 @@ const proto::FhirVersion GetFhirVersion(const ::google::protobuf::Message& messa
 const bool IsContainedResource(const ::google::protobuf::Message& message);
 
 const bool IsContainedResource(const ::google::protobuf::Descriptor* descriptor);
+
+// Throws a FailedPrecondition error if `message` is not a FHIR proto of the
+// given version.
+absl::Status CheckVersion(const google::protobuf::Message& message,
+                          const google::fhir::proto::FhirVersion version);
 
 }  // namespace fhir
 }  // namespace google

@@ -403,7 +403,25 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         "//proto/google/fhir/proto:annotations_cc_proto",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/strings",
         "@com_google_protobuf//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "annotations_test",
+    srcs = ["annotations_test.cc"],
+    deps = [
+        ":annotations",
+        "//cc/google/fhir/status",
+        "//proto/google/fhir/proto:annotations_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:patient_cc_proto",
+        "//proto/google/fhir/proto/stu3:resources_cc_proto",
+        "//testdata/r4/profiles:test_cc_proto",
+        "@com_google_absl//absl/status",
+        "@com_google_googletest//:gtest_main",
     ],
 )
 
