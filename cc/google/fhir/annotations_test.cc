@@ -42,11 +42,11 @@ TEST(AnnotationsTest, CheckVersionCoreProtoSucceeds) {
 TEST(AnnotationsTest, CheckVersionCoreProtoFails) {
   EXPECT_THAT(CheckVersion(google::fhir::r4::core::Patient(),
                            google::fhir::proto::FhirVersion::STU3),
-              HasStatusCode(absl::StatusCode::kFailedPrecondition));
+              HasStatusCode(absl::StatusCode::kInvalidArgument));
 
   EXPECT_THAT(CheckVersion(google::fhir::stu3::proto::Patient(),
                            google::fhir::proto::FhirVersion::R4),
-              HasStatusCode(absl::StatusCode::kFailedPrecondition));
+              HasStatusCode(absl::StatusCode::kInvalidArgument));
 }
 
 TEST(AnnotationsTest, CheckVersionProfiledProtoSucceeds) {
@@ -57,7 +57,7 @@ TEST(AnnotationsTest, CheckVersionProfiledProtoSucceeds) {
 TEST(AnnotationsTest, CheckVersionProfiledProtoFails) {
   EXPECT_THAT(CheckVersion(google::fhir::r4::testing::TestPatient(),
                            google::fhir::proto::FhirVersion::STU3),
-              HasStatusCode(absl::StatusCode::kFailedPrecondition));
+              HasStatusCode(absl::StatusCode::kInvalidArgument));
 }
 
 TEST(AnnotationsTest, CheckVersionContainedResourceSucceeds) {
@@ -70,10 +70,10 @@ TEST(AnnotationsTest, CheckVersionContainedResourceSucceeds) {
 TEST(AnnotationsTest, CheckVersionContainedResourceFails) {
   EXPECT_THAT(CheckVersion(google::fhir::r4::core::ContainedResource(),
                            google::fhir::proto::FhirVersion::STU3),
-              HasStatusCode(absl::StatusCode::kFailedPrecondition));
+              HasStatusCode(absl::StatusCode::kInvalidArgument));
   EXPECT_THAT(CheckVersion(google::fhir::stu3::proto::ContainedResource(),
                            google::fhir::proto::FhirVersion::R4),
-              HasStatusCode(absl::StatusCode::kFailedPrecondition));
+              HasStatusCode(absl::StatusCode::kInvalidArgument));
 }
 
 }  // namespace

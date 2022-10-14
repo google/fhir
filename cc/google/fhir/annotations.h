@@ -119,7 +119,7 @@ const bool IsContainedResource(const ::google::protobuf::Message& message);
 
 const bool IsContainedResource(const ::google::protobuf::Descriptor* descriptor);
 
-// Throws a FailedPrecondition error if `message` is not a FHIR proto of the
+// Throws a InvalidArgument error if `message` is not a FHIR proto of the
 // given version.
 absl::Status CheckVersion(const google::protobuf::Message& message,
                           const google::fhir::proto::FhirVersion version);

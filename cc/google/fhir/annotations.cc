@@ -161,7 +161,7 @@ const bool IsContainedResource(const ::google::protobuf::Descriptor* descriptor)
 absl::Status CheckVersion(const google::protobuf::Message& message,
                           const google::fhir::proto::FhirVersion version) {
   if (google::fhir::GetFhirVersion(message) != version) {
-    return absl::FailedPreconditionError(
+    return absl::InvalidArgumentError(
         absl::Substitute("Called $0 API with non-$0 proto: $1",
                          google::fhir::proto::FhirVersion_Name(version),
                          message.GetDescriptor()->full_name()));
