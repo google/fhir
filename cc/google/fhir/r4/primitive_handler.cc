@@ -32,6 +32,7 @@
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
+#include "google/fhir/r4/codeable_concepts.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
@@ -43,7 +44,7 @@ namespace fhir {
 namespace r4 {
 
 using ::absl::InvalidArgumentError;
-using primitives_internal::PrimitiveWrapper;
+using ::google::fhir::primitives_internal::PrimitiveWrapper;
 using ::google::protobuf::Descriptor;
 
 absl::StatusOr<std::unique_ptr<PrimitiveWrapper>>
@@ -59,6 +60,11 @@ R4PrimitiveHandler::GetWrapper(const Descriptor* target_descriptor) const {
 
   return InvalidArgumentError(absl::StrCat(
       "Unexpected R4 primitive FHIR type: ", target_descriptor->full_name()));
+}
+
+absl::Status R4PrimitiveHandler::CopyCodeableConcept(
+    const google::protobuf::Message& source, google::protobuf::Message* target) const {
+  return r4::CopyCodeableConcept(source, target);
 }
 
 const R4PrimitiveHandler* R4PrimitiveHandler::GetInstance() {

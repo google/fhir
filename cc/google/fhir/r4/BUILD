@@ -131,6 +131,7 @@ cc_library(
     hdrs = ["primitive_handler.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":codeable_concepts",
         "//cc/google/fhir:annotations",
         "//cc/google/fhir:codes",
         "//cc/google/fhir:extensions",

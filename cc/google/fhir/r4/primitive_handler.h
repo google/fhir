@@ -24,8 +24,6 @@
 #include "absl/status/statusor.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/primitive_wrapper.h"
-#include "google/fhir/status/status.h"
-#include "google/fhir/status/statusor.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 
@@ -39,9 +37,16 @@ class R4PrimitiveHandler
  public:
   static const R4PrimitiveHandler* GetInstance();
 
+  // Copies any codeable concept-like message into any other codeable
+  // concept-like message.  An ok status guarantees that all codings present on
+  // the source will be present on the target, in the correct profiled fields on
+  // the target.
+  absl::Status CopyCodeableConcept(const google::protobuf::Message& source,
+                                   google::protobuf::Message* target) const override;
+
  protected:
-  ::absl::StatusOr<std::unique_ptr<primitives_internal::PrimitiveWrapper>>
-  GetWrapper(const ::google::protobuf::Descriptor* target_descriptor) const override;
+  absl::StatusOr<std::unique_ptr<primitives_internal::PrimitiveWrapper>>
+  GetWrapper(const google::protobuf::Descriptor* target_descriptor) const override;
 };
 
 }  // namespace r4

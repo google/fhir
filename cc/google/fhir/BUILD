@@ -121,7 +121,6 @@ cc_library(
     ],
     deps = [
         ":annotations",
-        ":codeable_concepts",
         ":codes",
         ":core_resource_registry",
         ":error_reporter",
@@ -322,7 +321,6 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         ":annotations",
-        ":codeable_concepts",
         ":core_resource_registry",
         ":error_reporter",
         ":extensions",
@@ -336,9 +334,11 @@ cc_library(
         ":util",
         "//cc/google/fhir/json:fhir_json",
         "//cc/google/fhir/json:json_sax_handler",
+        "//cc/google/fhir/r4:codeable_concepts",
         "//cc/google/fhir/r4:profiles",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
+        "//cc/google/fhir/stu3:codeable_concepts",
         "//cc/google/fhir/stu3:profiles",
         "//proto/google/fhir/proto:annotations_cc_proto",
         "@com_google_absl//absl/container:flat_hash_map",
@@ -350,49 +350,6 @@ cc_library(
         "@com_google_absl//absl/synchronization",
         "@com_google_absl//absl/time",
         "@com_google_protobuf//:protobuf",
-    ],
-)
-
-cc_library(
-    name = "codeable_concepts",
-    srcs = ["codeable_concepts.cc"],
-    hdrs = ["codeable_concepts.h"],
-    strip_include_prefix = "//cc/",
-    deps = [
-        ":annotations",
-        ":proto_util",
-        "//cc/google/fhir/r4:codeable_concepts",
-        "//cc/google/fhir/status:statusor",
-        "//cc/google/fhir/stu3:codeable_concepts",
-        "//proto/google/fhir/proto:annotations_cc_proto",
-        "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
-        "//proto/google/fhir/proto/stu3:datatypes_cc_proto",
-        "@com_github_glog_glog//:glog",
-        "@com_google_absl//absl/memory",
-        "@com_google_absl//absl/status",
-        "@com_google_absl//absl/status:statusor",
-        "@com_google_absl//absl/strings",
-        "@com_google_absl//absl/types:optional",
-        "@com_google_protobuf//:protobuf",
-    ],
-)
-
-cc_test(
-    name = "codeable_concepts_test",
-    srcs = ["codeable_concepts_test.cc"],
-    data = [
-        "//testdata/r4/profiles:testdata",
-        "//testdata/stu3/profiles:testdata",
-    ],
-    deps = [
-        ":codeable_concepts",
-        ":test_helper",
-        "//cc/google/fhir/testutil:proto_matchers",
-        "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
-        "//proto/google/fhir/proto/stu3:datatypes_cc_proto",
-        "//testdata/r4/profiles:test_cc_proto",
-        "//testdata/stu3/profiles:test_cc_proto",
-        "@com_google_googletest//:gtest_main",
     ],
 )
 

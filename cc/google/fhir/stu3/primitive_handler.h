@@ -37,9 +37,16 @@ class Stu3PrimitiveHandler
  public:
   static const Stu3PrimitiveHandler* GetInstance();
 
+  // Copies any codeable concept-like message into any other codeable
+  // concept-like message.  An ok status guarantees that all codings present on
+  // the source will be present on the target, in the correct profiled fields on
+  // the target.
+  absl::Status CopyCodeableConcept(const google::protobuf::Message& source,
+                                   google::protobuf::Message* target) const override;
+
  protected:
   ::absl::StatusOr<std::unique_ptr<primitives_internal::PrimitiveWrapper>>
-  GetWrapper(const ::google::protobuf::Descriptor* target_descriptor) const override;
+  GetWrapper(const google::protobuf::Descriptor* target_descriptor) const override;
 };
 
 }  // namespace stu3

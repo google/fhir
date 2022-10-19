@@ -28,20 +28,19 @@
 #include "absl/memory/memory.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
-#include "absl/time/time.h"
 #include "google/fhir/annotations.h"
-#include "google/fhir/codeable_concepts.h"
 #include "google/fhir/core_resource_registry.h"
 #include "google/fhir/extensions.h"
 #include "google/fhir/fhir_types.h"
 #include "google/fhir/json_format.h"
 #include "google/fhir/primitive_handler.h"
-#include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
+#include "google/fhir/r4/codeable_concepts.h"
 #include "google/fhir/r4/profiles.h"
 #include "google/fhir/references.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/stu3/codeable_concepts.h"
 #include "google/fhir/stu3/profiles.h"
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
@@ -357,9 +356,8 @@ class Printer {
           primitive_handler_->WrapPrimitiveProto(field_value));
       non_null_values_found =
           non_null_values_found || (json_primitives[i].is_non_null());
-      any_primitive_extensions_found =
-          any_primitive_extensions_found ||
-          (json_primitives[i].element != nullptr);
+      any_primitive_extensions_found = any_primitive_extensions_found ||
+                                       (json_primitives[i].element != nullptr);
     }
 
     if (non_null_values_found) {
@@ -413,8 +411,8 @@ class Printer {
     auto analytic_codeable_concept =
         absl::WrapUnique(profiled_codeable_concept.New());
 
-    FHIR_RETURN_IF_ERROR(CopyCodeableConcept(profiled_codeable_concept,
-                                             analytic_codeable_concept.get()));
+    FHIR_RETURN_IF_ERROR(primitive_handler_->CopyCodeableConcept(
+        profiled_codeable_concept, analytic_codeable_concept.get()));
     FHIR_RETURN_IF_ERROR(ClearField(analytic_codeable_concept.get(), "coding"));
 
     const Descriptor* descriptor = analytic_codeable_concept->GetDescriptor();
@@ -460,7 +458,7 @@ class Printer {
       const Message& reference) {
     const Descriptor* descriptor = reference.GetDescriptor();
     const Reflection* reflection = reference.GetReflection();
-    const ::google::protobuf::OneofDescriptor* oneof =
+    const google::protobuf::OneofDescriptor* oneof =
         descriptor->FindOneofByName("reference");
 
     if (!reflection->HasOneof(reference, oneof)) {

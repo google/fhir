@@ -34,6 +34,7 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/stu3/codeable_concepts.h"
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 #include "proto/google/fhir/proto/stu3/fhirproto_extensions.pb.h"
@@ -63,6 +64,11 @@ Stu3PrimitiveHandler::GetWrapper(const Descriptor* target_descriptor) const {
 const Stu3PrimitiveHandler* Stu3PrimitiveHandler::GetInstance() {
   static Stu3PrimitiveHandler* instance = new Stu3PrimitiveHandler;
   return instance;
+}
+
+absl::Status Stu3PrimitiveHandler::CopyCodeableConcept(
+    const google::protobuf::Message& source, google::protobuf::Message* target) const {
+  return stu3::CopyCodeableConcept(source, target);
 }
 
 }  // namespace stu3

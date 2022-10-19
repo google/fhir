@@ -27,7 +27,6 @@
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
-#include "google/fhir/codeable_concepts.h"
 #include "google/fhir/codes.h"
 #include "google/fhir/core_resource_registry.h"
 #include "google/fhir/error_reporter.h"
@@ -208,7 +207,7 @@ absl::Status CopyProtoPrimitiveField(
     const Message& source, const google::protobuf::FieldDescriptor* source_field,
     Message* target, const google::protobuf::FieldDescriptor* target_field);
 
-template <typename ExtensionLike,
+template <typename PrimitiveHandlerVersion, typename ExtensionLike,
           typename CodeableConceptLike = FHIR_DATATYPE(ExtensionLike,
                                                        codeable_concept),
           typename CodeLike = FHIR_DATATYPE(ExtensionLike, code)>
@@ -308,7 +307,7 @@ absl::Status CopyToProfile(const Message& source, Message* target,
       FHIR_RETURN_IF_ERROR(ForEachMessageWithStatus<Message>(
           source, source_field,
           [&target, &target_field](const Message& source_message) {
-            return CopyCodeableConcept(
+            return PrimitiveHandlerVersion::GetInstance()->CopyCodeableConcept(
                 source_message, MutableOrAddMessage(target, target_field));
           }));
       continue;
@@ -327,7 +326,7 @@ absl::Status CopyToProfile(const Message& source, Message* target,
           source, source_field,
           [&target, &target_field,
            error_reporter](const Message& source_message) {
-            return CopyToProfile<ExtensionLike>(
+            return CopyToProfile<PrimitiveHandlerVersion, ExtensionLike>(
                 source_message, MutableOrAddMessage(target, target_field),
                 error_reporter);
           }));
@@ -369,7 +368,8 @@ absl::Status ConvertToProfileLenientInternal(const Message& source,
   }
   const ScopedErrorReporter error_reporter(&error_handler,
                                            source.GetDescriptor()->name());
-  return internal::CopyToProfile<ExtensionLike>(source, target, error_reporter);
+  return internal::CopyToProfile<PrimitiveHandlerVersion, ExtensionLike>(
+      source, target, error_reporter);
 }
 
 template <typename PrimitiveHandlerVersion,
