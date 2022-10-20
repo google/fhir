@@ -17,6 +17,7 @@
 #ifndef GOOGLE_FHIR_PRIMITIVE_HANDLER_H_
 #define GOOGLE_FHIR_PRIMITIVE_HANDLER_H_
 
+#include <cstddef>
 #include <memory>
 #include <optional>
 #include <string>
@@ -24,8 +25,10 @@
 
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
+#include "absl/base/casts.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
+#include "absl/strings/string_view.h"
 #include "absl/time/time.h"
 #include "absl/types/optional.h"
 #include "google/fhir/error_reporter.h"
@@ -35,6 +38,8 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/util.h"
+#include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/r5/core/datatypes.pb.h"
 
 namespace google {
 namespace fhir {
@@ -121,6 +126,8 @@ class PrimitiveHandler {
       const google::protobuf::Message& primitive) const = 0;
 
   virtual google::protobuf::Message* NewString(const std::string& str) const = 0;
+
+  virtual ::google::protobuf::Message* NewId(const std::string& str) const = 0;
 
   virtual const ::google::protobuf::Descriptor* StringDescriptor() const = 0;
 
@@ -243,6 +250,7 @@ template <class TypedReference,
           class TypedReferenceId = REFERENCE_ID_TYPE(TypedReference)>
 absl::Status ValidateReferenceField(const Message& parent,
                                     const FieldDescriptor* field,
+                                    const PrimitiveHandler* handler,
                                     const ScopedErrorReporter& error_reporter) {
   static const Descriptor* descriptor = TypedReference::descriptor();
   static const OneofDescriptor* oneof = descriptor->oneof_decl(0);
@@ -256,7 +264,37 @@ absl::Status ValidateReferenceField(const Message& parent,
     const FieldDescriptor* reference_field =
         reflection->GetOneofFieldDescriptor(reference, oneof);
 
-    if (!reference_field) {
+    if (reference_field) {
+      // If a reference with a `ReferenceId` field exists, validate its `value`
+      // attribute.
+      if (reference_field->message_type() != nullptr &&
+          reference_field->message_type()->name() == "ReferenceId") {
+        const ScopedErrorReporter reference_scope =
+            scoped_reporter.WithScope(reference_field, i);
+        const Message& reference_msg =
+            reflection->GetMessage(reference, reference_field);
+
+        const FieldDescriptor* value_field_descriptor =
+            reference_msg.GetDescriptor()->FindFieldByName("value");
+        if (value_field_descriptor == nullptr) {
+          return reference_scope.ReportFhirFatal(
+              absl::NotFoundError("missing-value"));
+        }
+
+        const std::string& value = reference_msg.GetReflection()->GetString(
+            reference_msg, value_field_descriptor);
+
+        const ScopedErrorReporter value_scope =
+            reference_scope.WithScope(value_field_descriptor, i);
+
+        // Use a temporary id to validate that the ReferenceId is a valid Id
+        // field.
+        const std::unique_ptr<::google::protobuf::Message> temp_id =
+            std::unique_ptr<::google::protobuf::Message>(handler->NewId(value));
+        FHIR_RETURN_IF_ERROR(handler->ValidatePrimitive(*temp_id, value_scope));
+      }
+
+    } else {
       if (reference.extension_size() == 0 && !reference.has_identifier() &&
           !reference.has_display()) {
         FHIR_RETURN_IF_ERROR(
@@ -304,14 +342,15 @@ absl::Status ValidateReferenceField(const Message& parent,
 
 // Template for a PrimitiveHandler tied to a single version of FHIR.
 // This provides much of the functionality that is common between versions.
-// The templating is kept separate from the main interface, in order to provide
-// a version-agnostic type that libraries can use without needing to template
-// themselves.
+// The templating is kept separate from the main interface, in order to
+// provide a version-agnostic type that libraries can use without needing to
+// template themselves.
 template <typename BundleType,
           typename ContainedResourceType =
               BUNDLE_CONTAINED_RESOURCE(BundleType),
           typename ExtensionType = EXTENSION_TYPE(BundleType),
           typename StringType = FHIR_DATATYPE(BundleType, string_value),
+          typename IdType = FHIR_DATATYPE(BundleType, id),
           typename IntegerType = FHIR_DATATYPE(BundleType, integer),
           typename PositiveIntType = FHIR_DATATYPE(BundleType, positive_int),
           typename UnsignedIntType = FHIR_DATATYPE(BundleType, unsigned_int),
@@ -328,6 +367,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
   typedef ContainedResourceType ContainedResource;
   typedef ExtensionType Extension;
   typedef StringType String;
+  typedef IdType Id;
   typedef BooleanType Boolean;
   typedef IntegerType Integer;
   typedef PositiveIntType PositiveInt;
@@ -342,7 +382,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
       const ScopedErrorReporter& error_reporter) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Reference>(field->message_type()));
     return primitives_internal::ValidateReferenceField<Reference>(
-        parent, field, error_reporter);
+        parent, field, this, error_reporter);
   }
 
   google::protobuf::Message* NewContainedResource() const override {
@@ -361,6 +401,12 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 
   google::protobuf::Message* NewString(const std::string& str) const override {
     String* msg = new String();
+    msg->set_value(str);
+    return msg;
+  }
+
+  ::google::protobuf::Message* NewId(const std::string& str) const override {
+    Id* msg = new Id();
     msg->set_value(str);
     return msg;
   }
@@ -587,8 +633,8 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
       : PrimitiveHandler(GetFhirVersion(ExtensionType::descriptor())) {}
 };
 
-// Helper function for handling primitive types that are universally present in
-// all FHIR versions >= STU3.
+// Helper function for handling primitive types that are universally present
+// in all FHIR versions >= STU3.
 template <typename ExtensionType, typename XhtmlType,
           typename Base64BinarySeparatorStrideType>
 std::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForStu3Types(
@@ -668,8 +714,8 @@ std::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForStu3Types(
   return std::optional<std::unique_ptr<PrimitiveWrapper>>();
 }
 
-// Helper function for handling primitive types that are universally present in
-// all FHIR versions >= R4.
+// Helper function for handling primitive types that are universally present
+// in all FHIR versions >= R4.
 template <typename ExtensionType, typename XhtmlType,
           typename Base64BinarySeparatorStrideType>
 std::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForR4Types(
