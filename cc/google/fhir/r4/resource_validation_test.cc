@@ -28,7 +28,6 @@
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
-#include "proto/google/fhir/proto/r4/core/resources/composition.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/encounter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
 #include "proto/google/fhir/proto/r4/fhirproto.pb.h"
@@ -136,14 +135,6 @@ TEST(EncounterValidationTest, FhirPathErrorsAndWarningsAreRecordedAsOutcomes) {
   InvalidTest<
       google::fhir::r4::testing::TestPatientWithWarningAndErrorFhirpath>(
       "patient_invalid_fhir_path_violation");
-}
-
-TEST(CompositionValidationTest, ValidCompositionWithReferences) {
-  ValidTest<Composition>("composition_valid", false);
-}
-
-TEST(CompositionValidationTest, InvalidCompositionWithInvalidReferences) {
-  InvalidTest<Composition>("composition_invalid_reference");
 }
 
 }  // namespace
