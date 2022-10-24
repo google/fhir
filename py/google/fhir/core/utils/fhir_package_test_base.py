@@ -76,18 +76,33 @@ class FhirPackageTest(
   @property
   @abc.abstractmethod
   def _primitive_handler(self):
-    raise NotImplementedError('Subclasses must implement _primitive_handler')
+    pass
+
+  @property
+  @abc.abstractmethod
+  def _structure_definition_cls(self):
+    pass
+
+  @property
+  @abc.abstractmethod
+  def _search_parameter_cls(self):
+    pass
+
+  @property
+  @abc.abstractmethod
+  def _code_system_cls(self):
+    pass
 
   @property
   @abc.abstractmethod
   def _valueset_cls(self):
-    raise NotImplementedError('Subclasses must implement _valueset_cls')
+    pass
 
   @abc.abstractmethod
   def _load_package(
       self,
       package_source: fhir_package.PackageSource) -> fhir_package.FhirPackage:
-    raise NotImplementedError('Subclasses must implement _load_package')
+    pass
 
   def empty_collection(self) -> fhir_package.ResourceCollection:
     return fhir_package.ResourceCollection(self._valueset_cls,
@@ -270,6 +285,81 @@ class FhirPackageTest(
         value_sets=self.empty_collection())
     pickle.dumps(package)
 
+  def testGetStructureDefinition_withAddedPackages_retrievesResource(self):
+    """Ensures structure definitions are retrievable from packages."""
+    r1 = self._structure_definition_cls()
+    r1.url.value = 'r1'
+
+    r2 = self._structure_definition_cls()
+    r2.url.value = 'r2'
+
+    package = fhir_package.FhirPackage(
+        structure_definitions=mock_resource_collection_containing([r1, r2]),
+        search_parameters=mock_resource_collection_containing([]),
+        code_systems=mock_resource_collection_containing([]),
+        value_sets=mock_resource_collection_containing([]),
+    )
+
+    self.assertEqual(package.get_structure_definition('r1'), r1)
+    self.assertEqual(package.get_structure_definition('r2'), r2)
+    self.assertIsNone(package.get_structure_definition('mystery-url'))
+
+  def testGetSearchParameter_withAddedPackages_retrievesResource(self):
+    """Ensures search parameters are retrievable from packages."""
+    r1 = self._search_parameter_cls()
+    r1.url.value = 'r1'
+
+    r2 = self._search_parameter_cls()
+    r2.url.value = 'r2'
+
+    package = fhir_package.FhirPackage(
+        structure_definitions=mock_resource_collection_containing([]),
+        search_parameters=mock_resource_collection_containing([r1, r2]),
+        code_systems=mock_resource_collection_containing([]),
+        value_sets=mock_resource_collection_containing([]),
+    )
+
+    self.assertEqual(package.get_search_parameter('r1'), r1)
+    self.assertEqual(package.get_search_parameter('r2'), r2)
+    self.assertIsNone(package.get_search_parameter('mystery-url'))
+
+  def testGetCodeSystem_withAddedPackages_retrievesResource(self):
+    """Ensures code systems are retrievable from packages."""
+    r1 = self._code_system_cls()
+    r1.url.value = 'r1'
+
+    r2 = self._code_system_cls()
+    r2.url.value = 'r2'
+
+    package = fhir_package.FhirPackage(
+        structure_definitions=mock_resource_collection_containing([]),
+        search_parameters=mock_resource_collection_containing([]),
+        code_systems=mock_resource_collection_containing([r1, r2]),
+        value_sets=mock_resource_collection_containing([]),
+    )
+
+    self.assertEqual(package.get_code_system('r1'), r1)
+    self.assertEqual(package.get_code_system('r2'), r2)
+    self.assertIsNone(package.get_code_system('mystery-url'))
+
+  def testValueSet_withAddedPackages_retrievesResource(self):
+    """Ensures value sets are retrievable from packages."""
+    r1 = self._valueset_cls()
+    r1.url.value = 'r1'
+
+    r2 = self._valueset_cls()
+    r2.url.value = 'r2'
+
+    package = fhir_package.FhirPackage(
+        structure_definitions=mock_resource_collection_containing([]),
+        search_parameters=mock_resource_collection_containing([]),
+        code_systems=mock_resource_collection_containing([]),
+        value_sets=mock_resource_collection_containing([r1, r2]),
+    )
+    self.assertEqual(package.get_value_set('r1'), r1)
+    self.assertEqual(package.get_value_set('r2'), r2)
+    self.assertIsNone(package.get_value_set('mystery-url'))
+
 
 class ResourceCollectionTest(absltest.TestCase, abc.ABC):
   """Base class for testing ResourceCollections."""
@@ -277,12 +367,12 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
   @property
   @abc.abstractmethod
   def _primitive_handler(self):
-    raise NotImplementedError('Subclasses must implement _primitive_handler')
+    pass
 
   @property
   @abc.abstractmethod
   def _valueset_cls(self):
-    raise NotImplementedError('Subclasses must implement _valueset_cls')
+    pass
 
   def testResourceCollection_addGetResource(self):
     """Ensure we can add and then get a resource."""
@@ -358,12 +448,27 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
 
 
 class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
-  """"Base class for testing FhirPackageManager."""
+  """Base class for testing FhirPackageManager."""
+
+  @property
+  @abc.abstractmethod
+  def _structure_definition_cls(self):
+    pass
+
+  @property
+  @abc.abstractmethod
+  def _search_parameter_cls(self):
+    pass
+
+  @property
+  @abc.abstractmethod
+  def _code_system_cls(self):
+    pass
 
   @property
   @abc.abstractmethod
   def _valueset_cls(self):
-    raise NotImplementedError('Subclasses must implement _valueset_cls')
+    pass
 
   def testGetResource_withAddedPackages_retrievesResource(self):
     """Test getting resources added to packages."""
@@ -392,6 +497,123 @@ class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
 
     self.assertEqual(manager.get_resource('vs1'), vs_1)
     self.assertEqual(manager.get_resource('vs2'), vs_2)
+    self.assertIsNone(manager.get_resource('mystery-url'))
+
+  def testGetStructureDefinition_withAddedPackages_retrievesResource(self):
+    """Ensures structure definitions are retrievable from packages."""
+    r1 = self._structure_definition_cls()
+    r1.url.value = 'r1'
+
+    r2 = self._structure_definition_cls()
+    r2.url.value = 'r2'
+
+    package_1 = fhir_package.FhirPackage(
+        structure_definitions=mock_resource_collection_containing([r1]),
+        search_parameters=mock_resource_collection_containing([]),
+        code_systems=mock_resource_collection_containing([]),
+        value_sets=mock_resource_collection_containing([]),
+    )
+    package_2 = fhir_package.FhirPackage(
+        structure_definitions=mock_resource_collection_containing([r2]),
+        search_parameters=mock_resource_collection_containing([]),
+        code_systems=mock_resource_collection_containing([]),
+        value_sets=mock_resource_collection_containing([]),
+    )
+
+    manager = fhir_package.FhirPackageManager()
+    manager.add_package(package_1)
+    manager.add_package(package_2)
+
+    self.assertEqual(manager.get_structure_definition('r1'), r1)
+    self.assertEqual(manager.get_structure_definition('r2'), r2)
+    self.assertIsNone(manager.get_structure_definition('mystery-url'))
+
+  def testGetSearchParameter_withAddedPackages_retrievesResource(self):
+    """Ensures search parameters are retrievable from packages."""
+    r1 = self._search_parameter_cls()
+    r1.url.value = 'r1'
+
+    r2 = self._search_parameter_cls()
+    r2.url.value = 'r2'
+
+    package_1 = fhir_package.FhirPackage(
+        structure_definitions=mock_resource_collection_containing([]),
+        search_parameters=mock_resource_collection_containing([r1]),
+        code_systems=mock_resource_collection_containing([]),
+        value_sets=mock_resource_collection_containing([]),
+    )
+    package_2 = fhir_package.FhirPackage(
+        structure_definitions=mock_resource_collection_containing([]),
+        search_parameters=mock_resource_collection_containing([r2]),
+        code_systems=mock_resource_collection_containing([]),
+        value_sets=mock_resource_collection_containing([]),
+    )
+
+    manager = fhir_package.FhirPackageManager()
+    manager.add_package(package_1)
+    manager.add_package(package_2)
+
+    self.assertEqual(manager.get_search_parameter('r1'), r1)
+    self.assertEqual(manager.get_search_parameter('r2'), r2)
+    self.assertIsNone(manager.get_search_parameter('mystery-url'))
+
+  def testGetCodeSystem_withAddedPackages_retrievesResource(self):
+    """Ensures code systems are retrievable from packages."""
+    r1 = self._code_system_cls()
+    r1.url.value = 'r1'
+
+    r2 = self._code_system_cls()
+    r2.url.value = 'r2'
+
+    package_1 = fhir_package.FhirPackage(
+        structure_definitions=mock_resource_collection_containing([]),
+        search_parameters=mock_resource_collection_containing([]),
+        code_systems=mock_resource_collection_containing([r1]),
+        value_sets=mock_resource_collection_containing([]),
+    )
+    package_2 = fhir_package.FhirPackage(
+        structure_definitions=mock_resource_collection_containing([]),
+        search_parameters=mock_resource_collection_containing([]),
+        code_systems=mock_resource_collection_containing([r2]),
+        value_sets=mock_resource_collection_containing([]),
+    )
+
+    manager = fhir_package.FhirPackageManager()
+    manager.add_package(package_1)
+    manager.add_package(package_2)
+
+    self.assertEqual(manager.get_code_system('r1'), r1)
+    self.assertEqual(manager.get_code_system('r2'), r2)
+    self.assertIsNone(manager.get_code_system('mystery-url'))
+
+  def testValueSet_withAddedPackages_retrievesResource(self):
+    """Ensures value sets are retrievable from packages."""
+    r1 = self._valueset_cls()
+    r1.url.value = 'r1'
+
+    r2 = self._valueset_cls()
+    r2.url.value = 'r2'
+
+    package_1 = fhir_package.FhirPackage(
+        structure_definitions=mock_resource_collection_containing([]),
+        search_parameters=mock_resource_collection_containing([]),
+        code_systems=mock_resource_collection_containing([]),
+        value_sets=mock_resource_collection_containing([r1]),
+    )
+    package_2 = fhir_package.FhirPackage(
+        structure_definitions=mock_resource_collection_containing([]),
+        search_parameters=mock_resource_collection_containing([]),
+        code_systems=mock_resource_collection_containing([]),
+        value_sets=mock_resource_collection_containing([r2]),
+    )
+
+    manager = fhir_package.FhirPackageManager()
+    manager.add_package(package_1)
+    manager.add_package(package_2)
+
+    self.assertEqual(manager.get_value_set('r1'), r1)
+    self.assertEqual(manager.get_value_set('r2'), r2)
+    self.assertIsNone(manager.get_value_set('mystery-url'))
 
 
 @contextlib.contextmanager
