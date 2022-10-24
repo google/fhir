@@ -14,6 +14,7 @@
 # limitations under the License.
 """Utility class for abstracting over FHIR definitions."""
 
+import abc
 import decimal
 import json
 import tarfile
@@ -183,8 +184,29 @@ class ResourceCollection(Iterable[_T]):
     return len(self.resources_by_uri)
 
 
-class FhirPackage(Generic[_StructDefT, _SearchParamaterT, _CodeSystemT,
-                          _ValueSetT]):
+class FhirPackageAccessor(Generic[_StructDefT, _SearchParamaterT, _CodeSystemT,
+                                  _ValueSetT], abc.ABC):
+  """Interface implemented by FhirPackage and FhirPackageManager."""
+
+  @abc.abstractmethod
+  def get_structure_definition(self, uri: str) -> Optional[_StructDefT]:
+    pass
+
+  @abc.abstractmethod
+  def get_search_parameter(self, uri: str) -> Optional[_SearchParamaterT]:
+    pass
+
+  @abc.abstractmethod
+  def get_code_system(self, uri: str) -> Optional[_CodeSystemT]:
+    pass
+
+  @abc.abstractmethod
+  def get_value_set(self, uri: str) -> Optional[_ValueSetT]:
+    pass
+
+
+class FhirPackage(FhirPackageAccessor[_StructDefT, _SearchParamaterT,
+                                      _CodeSystemT, _ValueSetT]):
   """Represents a FHIR Proto package.
 
   The FHIR Proto package is constructed from a `.zip` file containing defining
@@ -306,8 +328,8 @@ class FhirPackage(Generic[_StructDefT, _SearchParamaterT, _CodeSystemT,
     return self.value_sets.get(uri)
 
 
-class FhirPackageManager(Generic[_StructDefT, _SearchParamaterT, _CodeSystemT,
-                                 _ValueSetT]):
+class FhirPackageManager(FhirPackageAccessor[_StructDefT, _SearchParamaterT,
+                                             _CodeSystemT, _ValueSetT]):
   """Manages access to a collection of FhirPackage instances.
 
   Allows users to add packages to the package manager and then search all of
@@ -319,8 +341,12 @@ class FhirPackageManager(Generic[_StructDefT, _SearchParamaterT, _CodeSystemT,
   packages: List[FhirPackage[_StructDefT, _SearchParamaterT, _CodeSystemT,
                              _ValueSetT]]
 
-  def __init__(self) -> None:
-    self.packages = []
+  def __init__(
+      self,
+      packages: Optional[List[FhirPackage[_StructDefT, _SearchParamaterT,
+                                          _CodeSystemT, _ValueSetT]]] = None
+  ) -> None:
+    self.packages = packages or []
 
   def add_package(
       self, package: FhirPackage[_StructDefT, _SearchParamaterT, _CodeSystemT,
