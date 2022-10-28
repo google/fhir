@@ -88,8 +88,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * JSON structure definition generator that consumes Profiles and Extensions proto definitions in
- * and generates one StructureDefinition per extension and profile.
+ * JSON structure definition generator that consumes Profiles and Extensions proto definitions and
+ * generates one StructureDefinition per extension and profile.
  */
 final class ProfileGenerator {
   private final PackageInfo packageInfo;
