@@ -53,7 +53,7 @@ fhir_package(
         [
             "hl7.fhir.core/3.0.1/package/CodeSystem-*.json",
         ],
-    ),
+    ) + ["hl7.fhir.core/3.0.1/package/package.json"],
     package_info = "fhir_stu3_package_info.prototxt",
 )
 
@@ -96,7 +96,7 @@ fhir_package(
             exclude = [
                 "hl7.fhir.core/4.0.1/package/SearchParameter-*-extensions-*.json",
             ],
-        ),
+        ) + ["hl7.fhir.core/4.0.1/package/package.json"],
     package_info = "fhir_r4_package_info.prototxt",
 )
 
@@ -117,7 +117,7 @@ fhir_package(
         "hl7.fhir.us.core/3.1.0/package/StructureDefinition-*.json",
     ]) + glob(["hl7.fhir.us.core/3.1.0/package/ValueSet-*.json"]) + glob([
         "hl7.fhir.us.core/3.1.0/package/CodeSystem-*.json",
-    ]),
+    ]) + ["hl7.fhir.us.core/3.1.0/package/package.json"],
     package_info = "uscore_r4_package_info.prototxt",
 )
 
