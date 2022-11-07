@@ -39,12 +39,6 @@ absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
   return extensions_templates::SetDatatypeOnExtension(message, extension);
 }
 
-absl::Status ValueToMessage(
-    const ::google::fhir::r4::core::Extension& extension,
-    ::google::protobuf::Message* message, const ::google::protobuf::FieldDescriptor* field) {
-  return extensions_templates::ValueToMessage(extension, message, field);
-}
-
 }  // namespace r4
 }  // namespace fhir
 }  // namespace google

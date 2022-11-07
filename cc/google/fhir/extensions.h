@@ -95,11 +95,6 @@ const std::string& GetExtensionSystem(const google::protobuf::Message& extension
 namespace extensions_templates {
 
 template <class ExtensionLike>
-absl::Status ValueToMessage(const ExtensionLike& extension,
-                            ::google::protobuf::Message* message,
-                            const ::google::protobuf::FieldDescriptor* field);
-
-template <class ExtensionLike>
 absl::Status ExtensionToMessage(const ExtensionLike& extension,
                                 ::google::protobuf::Message* message);
 
@@ -242,63 +237,6 @@ absl::Status AddValueToExtension(const ::google::protobuf::Message& message,
   return AddFieldsToExtension(message, extension);
 }
 
-}  // namespace extensions_internal
-
-namespace extensions_lib {
-
-template <class C, class T>
-absl::Status GetAllMatchingExtensions(const C& extension_container,
-                                      std::vector<T>* result) {
-  // This function will be called a huge number of times, usually when no
-  // extensions are present.  Return early in this case to keep overhead as low
-  // as possible.
-  if (extension_container.empty()) {
-    return absl::OkStatus();
-  }
-  const ::google::protobuf::Descriptor* descriptor = T::descriptor();
-  FHIR_RETURN_IF_ERROR(ValidateExtension(descriptor));
-  const std::string& url = descriptor->options().GetExtension(
-      ::google::fhir::proto::fhir_structure_definition_url);
-  for (const auto& extension : extension_container) {
-    if (extension.url().value() == url) {
-      T message;
-      FHIR_RETURN_IF_ERROR(
-          extensions_templates::ExtensionToMessage<typename C::value_type>(
-              extension, &message));
-      result->emplace_back(message);
-    }
-  }
-  return absl::OkStatus();
-}
-
-template <class T, class C>
-absl::StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
-  std::vector<T> result;
-  FHIR_RETURN_IF_ERROR(GetAllMatchingExtensions(entity.extension(), &result));
-  if (result.empty()) {
-    return ::absl::NotFoundError(
-        absl::StrCat("Did not find any extension with url: ",
-                     GetStructureDefinitionUrl(T::descriptor()), " on ",
-                     C::descriptor()->full_name(), "."));
-  }
-  if (result.size() > 1) {
-    return ::absl::InvalidArgumentError(
-        absl::StrCat("Expected exactly 1 extension with url: ",
-                     GetStructureDefinitionUrl(T::descriptor()), " on ",
-                     C::descriptor()->full_name(), ". Found: ", result.size()));
-  }
-  return result.front();
-}
-
-// Returns true if the passed-in descriptor descriptor describes a "Simple"
-// extension, which corresponds to an unprofiled extension with the "value"
-// choice type set, rather than itself having extensions.
-bool IsSimpleExtension(const ::google::protobuf::Descriptor* descriptor);
-
-}  // namespace extensions_lib
-
-namespace extensions_templates {
-
 template <class ExtensionLike>
 absl::Status ValueToMessage(const ExtensionLike& extension,
                             ::google::protobuf::Message* message,
@@ -365,6 +303,63 @@ absl::Status ValueToMessage(const ExtensionLike& extension,
   return absl::OkStatus();
 }
 
+}  // namespace extensions_internal
+
+namespace extensions_lib {
+
+template <class C, class T>
+absl::Status GetAllMatchingExtensions(const C& extension_container,
+                                      std::vector<T>* result) {
+  // This function will be called a huge number of times, usually when no
+  // extensions are present.  Return early in this case to keep overhead as low
+  // as possible.
+  if (extension_container.empty()) {
+    return absl::OkStatus();
+  }
+  const ::google::protobuf::Descriptor* descriptor = T::descriptor();
+  FHIR_RETURN_IF_ERROR(ValidateExtension(descriptor));
+  const std::string& url = descriptor->options().GetExtension(
+      ::google::fhir::proto::fhir_structure_definition_url);
+  for (const auto& extension : extension_container) {
+    if (extension.url().value() == url) {
+      T message;
+      FHIR_RETURN_IF_ERROR(
+          extensions_templates::ExtensionToMessage<typename C::value_type>(
+              extension, &message));
+      result->emplace_back(message);
+    }
+  }
+  return absl::OkStatus();
+}
+
+template <class T, class C>
+absl::StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
+  std::vector<T> result;
+  FHIR_RETURN_IF_ERROR(GetAllMatchingExtensions(entity.extension(), &result));
+  if (result.empty()) {
+    return ::absl::NotFoundError(
+        absl::StrCat("Did not find any extension with url: ",
+                     GetStructureDefinitionUrl(T::descriptor()), " on ",
+                     C::descriptor()->full_name(), "."));
+  }
+  if (result.size() > 1) {
+    return ::absl::InvalidArgumentError(
+        absl::StrCat("Expected exactly 1 extension with url: ",
+                     GetStructureDefinitionUrl(T::descriptor()), " on ",
+                     C::descriptor()->full_name(), ". Found: ", result.size()));
+  }
+  return result.front();
+}
+
+// Returns true if the passed-in descriptor descriptor describes a "Simple"
+// extension, which corresponds to an unprofiled extension with the "value"
+// choice type set, rather than itself having extensions.
+bool IsSimpleExtension(const ::google::protobuf::Descriptor* descriptor);
+
+}  // namespace extensions_lib
+
+namespace extensions_templates {
+
 template <class ExtensionLike>
 absl::Status ExtensionToMessage(const ExtensionLike& extension,
                                 ::google::protobuf::Message* message) {
@@ -400,7 +395,8 @@ absl::Status ExtensionToMessage(const ExtensionLike& extension,
       return ::absl::InvalidArgumentError(absl::StrCat(
           descriptor->full_name(), " is not a FHIR extension type"));
     }
-    return ValueToMessage(extension, message, fields_by_url.begin()->second);
+    return extensions_internal::ValueToMessage(extension, message,
+                                               fields_by_url.begin()->second);
   }
 
   for (const ExtensionLike& inner : extension.extension()) {
@@ -413,7 +409,8 @@ absl::Status ExtensionToMessage(const ExtensionLike& extension,
     }
 
     if (inner.value().choice_case() != ExtensionLike::ValueX::CHOICE_NOT_SET) {
-      FHIR_RETURN_IF_ERROR(ValueToMessage(inner, message, field));
+      FHIR_RETURN_IF_ERROR(
+          extensions_internal::ValueToMessage(inner, message, field));
     } else {
       ::google::protobuf::Message* child;
       if (field->is_repeated()) {
@@ -493,7 +490,7 @@ absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
           reflection->GetMessage(message, value_field), extension,
           IsChoiceType(value_field));
     } else {
-       // TODO: Invalid FHIR; throw an error here?
+      // TODO: Invalid FHIR; throw an error here?
       return absl::OkStatus();
     }
   } else {
