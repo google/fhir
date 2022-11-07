@@ -122,6 +122,8 @@ class PrimitiveHandler {
 
   virtual google::protobuf::Message* NewString(const std::string& str) const = 0;
 
+  virtual google::protobuf::Message* NewId(const std::string& str) const = 0;
+
   virtual const ::google::protobuf::Descriptor* StringDescriptor() const = 0;
 
   virtual absl::StatusOr<bool> GetBooleanValue(
@@ -312,6 +314,7 @@ template <typename BundleType,
               BUNDLE_CONTAINED_RESOURCE(BundleType),
           typename ExtensionType = EXTENSION_TYPE(BundleType),
           typename StringType = FHIR_DATATYPE(BundleType, string_value),
+          typename IdType = FHIR_DATATYPE(BundleType, id),
           typename IntegerType = FHIR_DATATYPE(BundleType, integer),
           typename PositiveIntType = FHIR_DATATYPE(BundleType, positive_int),
           typename UnsignedIntType = FHIR_DATATYPE(BundleType, unsigned_int),
@@ -328,6 +331,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
   typedef ContainedResourceType ContainedResource;
   typedef ExtensionType Extension;
   typedef StringType String;
+  typedef IdType Id;
   typedef BooleanType Boolean;
   typedef IntegerType Integer;
   typedef PositiveIntType PositiveInt;
@@ -361,6 +365,12 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 
   google::protobuf::Message* NewString(const std::string& str) const override {
     String* msg = new String();
+    msg->set_value(str);
+    return msg;
+  }
+
+  google::protobuf::Message* NewId(const std::string& str) const override {
+    Id* msg = new Id();
     msg->set_value(str);
     return msg;
   }
