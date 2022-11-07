@@ -17,6 +17,7 @@ gen_fhir_definitions_and_protos(
         "//spec:uscore_r4_package",
     ],
     package_info = "//testdata/r4/profiles:test_package_info.prototxt",
+    package_json = "//testdata/r4/profiles:test_package.json",
     profiles = [
         "retagging_test_profiles.prototxt",
     ],

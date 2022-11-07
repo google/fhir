@@ -1,0 +1,16 @@
+{
+  "name": "google.fhir.stu3.google",
+  "version": "0.0.0",
+  "type": "IG",
+  "date": "20221027175520",
+  "canonical": "https://g.co/fhir/StructureDefinition",
+  "fhirVersions": [
+    "3.0.1"
+  ],
+  "maintainers": [
+    {
+      "name": "Google LLC",
+      "url": "https://www.google.com"
+    }
+  ]
+}

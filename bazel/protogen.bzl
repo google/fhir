@@ -181,7 +181,8 @@ def gen_fhir_definitions_and_protos(
         package_deps = [],
         additional_proto_imports = [],
         disable_test = False,
-        golden_java_proto_rules = []):
+        golden_java_proto_rules = [],
+        package_json = None):
     """Generates structure definitions and protos based on Extensions and Profiles protos.
 
     These rules should be run by bazel/generate_protos.sh, which will generate the
@@ -206,6 +207,7 @@ def gen_fhir_definitions_and_protos(
           generator. Any generated proto with a corresponding proto available to the runtime will
           preserve the tag numbers from that proto.  This should be left empty when generating the
           first version of protos.
+      package_json: The path of the package.json metadata file for the package.
     """
 
     profile_flags = " ".join([("--profiles $(location %s) " % profile) for profile in profiles])
@@ -260,6 +262,23 @@ def gen_fhir_definitions_and_protos(
         )),
         tags = MANUAL_TAGS,
     )
+
+    if package_json and package_json.rpartition("/")[-1] != "package.json":
+        # If the file is not named 'package.json', create a copy of the file
+        # named package.json and add the renamed file into the archive.
+        # Place the copy in a new directory to avoid clashes with other
+        # files. When we create the archive, we strip the directory names.
+        package_rename_rule = name + "_package_json_rename"
+        package_rename_path = "%s/package.json" % package_rename_rule
+        native.genrule(
+            name = package_rename_rule,
+            srcs = [package_json],
+            outs = [package_rename_path],
+            cmd = "cp $< $@",
+        )
+        json_outs.append(package_rename_path)
+    elif package_json:
+        json_outs.append(package_json)
 
     fhir_package(
         name = name,

@@ -16,6 +16,7 @@ gen_fhir_definitions_and_protos(
         "//spec:uscore_stu3_package",
     ],
     package_info = "test_package_info.prototxt",
+    package_json = "package.json",
     profiles = [
         "test_profiles.prototxt",
     ],

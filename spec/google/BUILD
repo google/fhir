@@ -15,6 +15,7 @@ gen_fhir_definitions_and_protos(
         "fhirproto_extensions.prototxt",
     ],
     package_info = "google_stu3_package_info.prototxt",
+    package_json = "google_stu3_package.json",
 )
 
 gen_fhir_definitions_and_protos(
@@ -26,6 +27,7 @@ gen_fhir_definitions_and_protos(
         "fhirproto_extensions.prototxt",
     ],
     package_info = "google_r4_package_info.prototxt",
+    package_json = "google_r4_package.json",
     profiles = [
         "fhirproto.prototxt",
     ],

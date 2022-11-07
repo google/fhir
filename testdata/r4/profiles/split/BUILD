@@ -16,6 +16,7 @@ gen_fhir_definitions_and_protos(
         "//spec:uscore_r4_package",
     ],
     package_info = "package_info.prototxt",
+    package_json = "package.json",
     profiles = [
         "//testdata/r4/profiles:test_profiles.prototxt",
     ],
@@ -39,6 +40,7 @@ fhir_proto_library(
 exports_files(
     [
         "package_info.prototxt",
+        "package.json",
     ],
     visibility = ["//testdata/r4/profiles:__subpackages__"],
 )

@@ -1,0 +1,16 @@
+{
+  "name": "google.fhir.stu3.testing",
+  "version": "0.0.0",
+  "type": "IG",
+  "date": "20221027175520",
+  "canonical": "http://test/url/base",
+  "fhirVersions": [
+    "4.0.1"
+  ],
+  "maintainers": [
+    {
+      "name": "Testington Inc.",
+      "url": "http://www.testington.com"
+    }
+  ]
+}
