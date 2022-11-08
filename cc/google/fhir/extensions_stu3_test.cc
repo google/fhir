@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-#include "google/fhir/extensions.h"
-
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "google/fhir/extensions.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
@@ -32,32 +31,34 @@
 
 namespace google {
 namespace fhir {
-namespace stu3 {
 
 namespace {
 
-using fhirproto::Base64BinarySeparatorStride;
-using fhirproto::PrimitiveHasNoValue;
+using ::google::fhir::ReadStu3Proto;
+using ::google::fhir::stu3::fhirproto::Base64BinarySeparatorStride;
+using ::google::fhir::stu3::fhirproto::PrimitiveHasNoValue;
+using ::google::fhir::stu3::ml::EventLabel;
+using ::google::fhir::stu3::ml::EventTrigger;
+using ::google::fhir::stu3::proto::
+    CapabilityStatementSearchParameterCombination;
+using ::google::fhir::stu3::proto::Composition;
+using ::google::fhir::stu3::proto::Extension;
+using ::google::fhir::stu3::testing::DigitalMediaType;
 using ::google::fhir::testutil::EqualsProto;
-using ml::EventLabel;
-using ml::EventTrigger;
-using proto::CapabilityStatementSearchParameterCombination;
-using proto::Composition;
-using testing::DigitalMediaType;
 
 template <class T>
 void ReadStu3TestData(const std::string& type, T* message,
-                      proto::Extension* extension) {
+                      Extension* extension) {
   *message =
       ReadStu3Proto<T>(absl::StrCat("extensions/", type, ".message.prototxt"));
-  *extension = ReadStu3Proto<proto::Extension>(
+  *extension = ReadStu3Proto<Extension>(
       absl::StrCat("extensions/", type, ".extension.prototxt"));
 }
 
 template <class T>
 void TestExtensionToMessage(const std::string& name) {
   T message;
-  proto::Extension extension;
+  Extension extension;
   ReadStu3TestData(name, &message, &extension);
 
   T output;
@@ -68,10 +69,10 @@ void TestExtensionToMessage(const std::string& name) {
 template <class T>
 void TestConvertToExtension(const std::string& name) {
   T message;
-  proto::Extension extension;
+  Extension extension;
   ReadStu3TestData(name, &message, &extension);
 
-  proto::Extension output;
+  Extension output;
   FHIR_ASSERT_OK(ConvertToExtension(message, &output));
   EXPECT_THAT(output, EqualsProto(extension));
 }
@@ -286,6 +287,5 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionMultipleFound) {
 
 }  // namespace
 
-}  // namespace stu3
 }  // namespace fhir
 }  // namespace google
