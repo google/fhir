@@ -56,8 +56,8 @@ namespace primitives_internal {
 
 using ::absl::FailedPreconditionError;
 using ::absl::InvalidArgumentError;
-using ::google::fhir::extensions_lib::ClearExtensionsWithUrl;
-using ::google::fhir::extensions_lib::ClearTypedExtensions;
+using ::google::fhir::ClearExtensionsWithUrl;
+using ::google::fhir::ClearTypedExtensions;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::EnumDescriptor;
 using ::google::protobuf::EnumValueDescriptor;
@@ -743,7 +743,7 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
     std::string escaped;
     absl::Base64Escape(this->GetWrapped()->value(), &escaped);
     std::vector<SeparatorStrideExtensionType> separator_extensions;
-    FHIR_RETURN_IF_ERROR(extensions_lib::GetAllMatchingExtensions(
+    FHIR_RETURN_IF_ERROR(GetAllMatchingExtensions(
         this->GetWrapped()->extension(), &separator_extensions));
     if (!separator_extensions.empty()) {
       int stride = separator_extensions[0].stride().value();
@@ -806,7 +806,7 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
       separator_stride_extension_msg.mutable_stride()->set_value(stride);
 
       FHIR_RETURN_IF_ERROR(
-          extensions_templates::ConvertToExtension<ExtensionType>(
+          ConvertToExtension<ExtensionType>(
               separator_stride_extension_msg, wrapped->add_extension()));
     }
 

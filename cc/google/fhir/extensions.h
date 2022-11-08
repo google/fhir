@@ -40,24 +40,6 @@ namespace google {
 namespace fhir {
 
 // Provides utility functions for dealing with FHIR extensions.
-// In order to implement this in a version-indepdendent way, this file defines
-// three extensions namespaces:
-//
-// 1) extensions_internal for functions that should never be used outside of
-// this compilation unit.
-// 2) extensions_lib for functions that are fully version-independent
-// 3) extensions_templates for template functions that cannot be used without
-//    a specific extension version.
-//
-// For each version, there is a corresponding extensions.h defined in
-// cc/$VERSION/extensions.h.  This exists on ::google::fhir::$VERSION namespace,
-// and provides both the functions defined on extensions_lib, and definitions
-// of the extensions_templates.
-// This means that in any case where the version is known, files should import
-// JUST the version-specific extensions.h, so code doesn't need to care which
-// functions are defined where.
-
-namespace extensions_lib {
 
 absl::Status ValidateExtension(const ::google::protobuf::Descriptor* descriptor);
 
@@ -90,13 +72,13 @@ const std::string& GetExtensionUrl(const google::protobuf::Message& extension,
 const std::string& GetExtensionSystem(const google::protobuf::Message& extension,
                                       std::string* scratch);
 
-}  // namespace extensions_lib
-
-namespace extensions_templates {
-
 template <class ExtensionLike>
 absl::Status ExtensionToMessage(const ExtensionLike& extension,
                                 ::google::protobuf::Message* message);
+
+template <class ExtensionLike>
+absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
+                                ExtensionLike* extension);
 
 // Given a datatype message (E.g., String, Code, Boolean, etc.),
 // finds the appropriate field on the target extension and sets it.
@@ -105,12 +87,6 @@ absl::Status ExtensionToMessage(const ExtensionLike& extension,
 template <class ExtensionLike>
 absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
                                     ExtensionLike* extension);
-
-template <class ExtensionLike>
-absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
-                                ExtensionLike* extension);
-
-}  // namespace extensions_templates
 
 namespace extensions_internal {
 
@@ -186,8 +162,7 @@ absl::Status AddFieldsToExtension(const ::google::protobuf::Message& message,
     if (field->is_repeated()) {
       for (int j = 0; j < reflection->FieldSize(message, field); j++) {
         ExtensionLike* child = extension->add_extension();
-        child->mutable_url()->set_value(
-            extensions_lib::GetInlinedExtensionUrl(field));
+        child->mutable_url()->set_value(GetInlinedExtensionUrl(field));
         FHIR_RETURN_IF_ERROR(extensions_internal::CheckIsMessage(field));
         FHIR_RETURN_IF_ERROR(extensions_internal::AddValueToExtension(
             reflection->GetRepeatedMessage(message, field, j), child,
@@ -195,8 +170,7 @@ absl::Status AddFieldsToExtension(const ::google::protobuf::Message& message,
       }
     } else {
       ExtensionLike* child = extension->add_extension();
-      child->mutable_url()->set_value(
-          extensions_lib::GetInlinedExtensionUrl(field));
+      child->mutable_url()->set_value(GetInlinedExtensionUrl(field));
       FHIR_RETURN_IF_ERROR(extensions_internal::CheckIsMessage(field));
       FHIR_RETURN_IF_ERROR(extensions_internal::AddValueToExtension(
           reflection->GetMessage(message, field), child, IsChoiceType(field)));
@@ -230,7 +204,7 @@ absl::Status AddValueToExtension(const ::google::protobuf::Message& message,
   }
   // Try to set the message directly as a datatype value on the extension.
   // E.g., put message of type boolean into the value.boolean field
-  if (extensions_templates::SetDatatypeOnExtension(message, extension).ok()) {
+  if (SetDatatypeOnExtension(message, extension).ok()) {
     return absl::OkStatus();
   }
   // Fall back to adding individual fields as sub-extensions.
@@ -305,8 +279,6 @@ absl::Status ValueToMessage(const ExtensionLike& extension,
 
 }  // namespace extensions_internal
 
-namespace extensions_lib {
-
 template <class C, class T>
 absl::Status GetAllMatchingExtensions(const C& extension_container,
                                       std::vector<T>* result) {
@@ -324,8 +296,7 @@ absl::Status GetAllMatchingExtensions(const C& extension_container,
     if (extension.url().value() == url) {
       T message;
       FHIR_RETURN_IF_ERROR(
-          extensions_templates::ExtensionToMessage<typename C::value_type>(
-              extension, &message));
+          ExtensionToMessage<typename C::value_type>(extension, &message));
       result->emplace_back(message);
     }
   }
@@ -356,10 +327,6 @@ absl::StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
 // choice type set, rather than itself having extensions.
 bool IsSimpleExtension(const ::google::protobuf::Descriptor* descriptor);
 
-}  // namespace extensions_lib
-
-namespace extensions_templates {
-
 template <class ExtensionLike>
 absl::Status ExtensionToMessage(const ExtensionLike& extension,
                                 ::google::protobuf::Message* message) {
@@ -376,7 +343,7 @@ absl::Status ExtensionToMessage(const ExtensionLike& extension,
     if (field->name() == "id") {
       id_field = field;
     } else {
-      fields_by_url[extensions_lib::GetInlinedExtensionUrl(field)] = field;
+      fields_by_url[GetInlinedExtensionUrl(field)] = field;
     }
   }
 
@@ -461,7 +428,7 @@ template <class ExtensionLike>
 absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
                                 ExtensionLike* extension) {
   const ::google::protobuf::Descriptor* descriptor = message.GetDescriptor();
-  FHIR_RETURN_IF_ERROR(extensions_lib::ValidateExtension(descriptor));
+  FHIR_RETURN_IF_ERROR(ValidateExtension(descriptor));
 
   extension->mutable_url()->set_value(GetStructureDefinitionUrl(descriptor));
 
@@ -482,7 +449,7 @@ absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
     return ::absl::InvalidArgumentError(
         absl::StrCat("Extension has no value fields: ", descriptor->name()));
   }
-  if (extensions_lib::IsSimpleExtension(descriptor)) {
+  if (IsSimpleExtension(descriptor)) {
     const ::google::protobuf::FieldDescriptor* value_field = value_fields[0];
     FHIR_RETURN_IF_ERROR(extensions_internal::CheckIsMessage(value_field));
     if (reflection->HasField(message, value_field)) {
@@ -497,8 +464,6 @@ absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
     return extensions_internal::AddFieldsToExtension(message, extension);
   }
 }
-
-}  // namespace extensions_templates
 
 }  // namespace fhir
 }  // namespace google

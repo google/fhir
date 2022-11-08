@@ -62,8 +62,6 @@ const std::vector<const FieldDescriptor*> FindValueFields(
 
 }  // namespace extensions_internal
 
-namespace extensions_lib {
-
 absl::Status ValidateExtension(const Descriptor* descriptor) {
   if (!IsProfileOfExtension(descriptor)) {
     return InvalidArgumentError(
@@ -124,14 +122,6 @@ const std::string& GetExtensionSystem(const google::protobuf::Message& extension
       scratch);
 }
 
-std::string GetInlinedExtensionUrl(const FieldDescriptor* field) {
-  return field->options().HasExtension(
-             ::google::fhir::proto::fhir_inlined_extension_url)
-             ? field->options().GetExtension(
-                   ::google::fhir::proto::fhir_inlined_extension_url)
-             : field->json_name();
-}
-
 bool IsSimpleExtension(const ::google::protobuf::Descriptor* descriptor) {
   // Simple extensions have only a single, non-repeated value field.
   // However, it is also possible to have a complex extension with only
@@ -144,6 +134,13 @@ bool IsSimpleExtension(const ::google::protobuf::Descriptor* descriptor) {
          !descriptor->options().GetExtension(proto::is_complex_extension);
 }
 
-}  // namespace extensions_lib
+std::string GetInlinedExtensionUrl(const FieldDescriptor* field) {
+  return field->options().HasExtension(
+             ::google::fhir::proto::fhir_inlined_extension_url)
+             ? field->options().GetExtension(
+                   ::google::fhir::proto::fhir_inlined_extension_url)
+             : field->json_name();
+}
+
 }  // namespace fhir
 }  // namespace google

@@ -95,7 +95,6 @@ cc_library(
     strip_include_prefix = "//cc/",
     deps = [
         "//cc/google/fhir:extensions",
-        "//cc/google/fhir/status:statusor",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
         "@com_google_absl//absl/status",
         "@com_google_protobuf//:protobuf",
@@ -109,7 +108,7 @@ cc_test(
         "//testdata/r4:extensions",
     ],
     deps = [
-        ":extensions",
+        "//cc/google/fhir:extensions",
         "//cc/google/fhir:test_helper",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/google/fhir/proto/r4:fhirproto_extensions_cc_proto",

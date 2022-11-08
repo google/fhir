@@ -156,8 +156,7 @@ class Printer {
     if (json_format_ == kFormatAnalytic && IsExtension(proto)) {
       // Only print extension url when in analytic mode.
       std::string scratch;
-      absl::StrAppend(&output_, "\"",
-                      extensions_lib::GetExtensionUrl(proto, &scratch), "\"");
+      absl::StrAppend(&output_, "\"", GetExtensionUrl(proto, &scratch), "\"");
       return absl::OkStatus();
     }
 

@@ -16,7 +16,6 @@
 
 #include "google/fhir/stu3/extensions.h"
 
-#include "google/fhir/status/statusor.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 
 namespace google {
@@ -25,18 +24,17 @@ namespace stu3 {
 
 absl::Status ExtensionToMessage(const proto::Extension& extension,
                                 ::google::protobuf::Message* message) {
-  return extensions_templates::ExtensionToMessage<proto::Extension>(extension,
-                                                                    message);
+  return google::fhir::ExtensionToMessage<proto::Extension>(extension, message);
 }
 
 absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
                                 proto::Extension* extension) {
-  return extensions_templates::ConvertToExtension(message, extension);
+  return google::fhir::ConvertToExtension(message, extension);
 }
 
 absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
                                     proto::Extension* extension) {
-  return extensions_templates::SetDatatypeOnExtension(message, extension);
+  return google::fhir::SetDatatypeOnExtension(message, extension);
 }
 
 }  // namespace stu3

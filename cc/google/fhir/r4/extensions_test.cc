@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "google/fhir/r4/extensions.h"
+#include "google/fhir/extensions.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"

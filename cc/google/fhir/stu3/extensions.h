@@ -28,7 +28,6 @@ namespace stu3 {
 // This adds all functions on extensions_lib, which work on any version, so that
 // users don't need to care which functions are defined on the core extensions.h
 // and can just import the r4 version
-using namespace extensions_lib;  // NOLINT
 
 absl::Status ExtensionToMessage(const proto::Extension& extension,
                                 ::google::protobuf::Message* message);
@@ -42,7 +41,6 @@ absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
 // for the message.
 absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
                                     proto::Extension* extension);
-
 }  // namespace stu3
 }  // namespace fhir
 }  // namespace google

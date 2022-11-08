@@ -25,18 +25,17 @@ namespace r4 {
 
 absl::Status ExtensionToMessage(const core::Extension& extension,
                                 ::google::protobuf::Message* message) {
-  return extensions_templates::ExtensionToMessage<core::Extension>(extension,
-                                                                   message);
+  return google::fhir::ExtensionToMessage<core::Extension>(extension, message);
 }
 
 absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
                                 core::Extension* extension) {
-  return extensions_templates::ConvertToExtension(message, extension);
+  return google::fhir::ConvertToExtension(message, extension);
 }
 
 absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
                                     core::Extension* extension) {
-  return extensions_templates::SetDatatypeOnExtension(message, extension);
+  return google::fhir::SetDatatypeOnExtension(message, extension);
 }
 
 }  // namespace r4

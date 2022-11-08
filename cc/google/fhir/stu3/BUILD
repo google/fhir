@@ -104,7 +104,7 @@ cc_test(
         "//testdata/stu3:extensions",
     ],
     deps = [
-        ":extensions",
+        "//cc/google/fhir:extensions",
         "//cc/google/fhir:test_helper",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/google/fhir/proto/stu3:datatypes_cc_proto",

@@ -18,18 +18,16 @@
 #define GOOGLE_FHIR_R4_EXTENSIONS_H_
 
 #include "google/protobuf/message.h"
-#include "google/fhir/extensions.h"
 #include "absl/status/status.h"
+#include "google/fhir/extensions.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 
 namespace google {
 namespace fhir {
 namespace r4 {
 
-// This adds all functions on extensions_lib, which work on any version, so that
-// users don't need to care which functions are defined on the core extensions.h
-// and can just import the r4 version
-using namespace extensions_lib;  // NOLINT
+// TODO: Deprecate ane eliminate this file in favor of unversioned
+// extension util.
 
 absl::Status ExtensionToMessage(const core::Extension& extension,
                                 ::google::protobuf::Message* message);
@@ -43,6 +41,11 @@ absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
 // for the message.
 absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& message,
                                     core::Extension* extension);
+
+template <class T, class C>
+inline absl::StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
+  return google::fhir::ExtractOnlyMatchingExtension<T>(entity);
+}
 
 }  // namespace r4
 }  // namespace fhir

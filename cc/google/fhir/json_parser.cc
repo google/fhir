@@ -439,8 +439,8 @@ class Parser {
     // This is the second time we've visited this field - once for
     // extensions, and once for value.  So, make sure to clear the
     // PrimitiveHasNoValue extension.
-    return extensions_lib::ClearExtensionsWithUrl(
-        primitives_internal::kPrimitiveHasNoValueUrl, field_to_modify);
+    return ClearExtensionsWithUrl(primitives_internal::kPrimitiveHasNoValueUrl,
+                                  field_to_modify);
   }
 
   absl::StatusOr<std::unique_ptr<Message>> ParseFieldValue(

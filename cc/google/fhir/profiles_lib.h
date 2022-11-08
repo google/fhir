@@ -128,9 +128,8 @@ absl::Status PerformExtensionSlicing(
       } else {
         // This is a complex extension
         Message* typed_extension = MutableOrAddMessage(target, inlined_field);
-        FHIR_RETURN_IF_ERROR(
-            extensions_templates::ExtensionToMessage<ExtensionLike>(
-                source_extension, typed_extension));
+        FHIR_RETURN_IF_ERROR(ExtensionToMessage<ExtensionLike>(
+            source_extension, typed_extension));
       }
     } else {
       // There is no inlined field for this extension, just copy it over.
@@ -158,15 +157,12 @@ absl::Status UnsliceExtension(const Message& typed_extension,
                               ExtensionLike* target) {
   if (IsProfileOfExtension(typed_extension)) {
     // This a profile on extension, and therefore a complex extension
-    return extensions_templates::ConvertToExtension<ExtensionLike>(
-        typed_extension, target);
+    return ConvertToExtension<ExtensionLike>(typed_extension, target);
   } else {
     // This just a raw datatype, and therefore a simple extension
-    target->mutable_url()->set_value(
-        extensions_lib::GetInlinedExtensionUrl(source_field));
+    target->mutable_url()->set_value(GetInlinedExtensionUrl(source_field));
 
-    return extensions_templates::SetDatatypeOnExtension<ExtensionLike>(
-        typed_extension, target);
+    return SetDatatypeOnExtension<ExtensionLike>(typed_extension, target);
   }
 }
 
