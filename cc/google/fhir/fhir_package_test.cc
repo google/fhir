@@ -114,7 +114,7 @@ absl::StatusOr<std::string> CreateZipFileContaining(
 absl::StatusOr<std::string> CreateTarFileContaining(
     const std::vector<ArchiveContents>& contents) {
   return CreateArchiveContaining(contents, [](struct archive* archive) {
-    return archive_write_set_format_zip(archive);
+    return archive_write_set_format_ustar(archive);
   });
 }
 
