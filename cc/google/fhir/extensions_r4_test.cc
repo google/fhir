@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-#include "google/fhir/extensions.h"
-
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "google/fhir/extensions.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
@@ -32,19 +31,18 @@
 
 namespace google {
 namespace fhir {
-namespace r4 {
 
 namespace {
 
-using core::CapabilityStatementSearchParameterCombination;
-using core::Composition;
-using core::Extension;
-using fhirproto::Base64BinarySeparatorStride;
-using fhirproto::PrimitiveHasNoValue;
+using ::google::fhir::r4::core::CapabilityStatementSearchParameterCombination;
+using ::google::fhir::r4::core::Composition;
+using ::google::fhir::r4::core::Extension;
+using ::google::fhir::r4::fhirproto::Base64BinarySeparatorStride;
+using ::google::fhir::r4::fhirproto::PrimitiveHasNoValue;
+using ::google::fhir::r4::ml::EventLabel;
+using ::google::fhir::r4::ml::EventTrigger;
+using ::google::fhir::r4::testing::DigitalMediaType;
 using ::google::fhir::testutil::EqualsProto;
-using ml::EventLabel;
-using ml::EventTrigger;
-using testing::DigitalMediaType;
 
 template <class T>
 void ReadR4TestData(const std::string& type, T* message, Extension* extension) {
@@ -76,69 +74,69 @@ void TestConvertToExtension(const std::string& name) {
   EXPECT_THAT(output, EqualsProto(extension));
 }
 
-TEST(ExtensionsTest, ConvertToProfiledEventTrigger) {
+TEST(ExtensionsR4Test, ConvertToProfiledEventTrigger) {
   TestExtensionToMessage<EventTrigger>("trigger");
 }
 
-TEST(ExtensionsTest, ConvertToUnprofiledEventTrigger) {
+TEST(ExtensionsR4Test, ConvertToUnprofiledEventTrigger) {
   TestConvertToExtension<EventTrigger>("trigger");
 }
 
-TEST(ExtensionsTest, ConvertToProfiledEventLabel) {
+TEST(ExtensionsR4Test, ConvertToProfiledEventLabel) {
   TestExtensionToMessage<EventLabel>("label");
 }
 
-TEST(ExtensionsTest, ConvertToUnprofiledEventLabel) {
+TEST(ExtensionsR4Test, ConvertToUnprofiledEventLabel) {
   TestConvertToExtension<EventLabel>("label");
 }
 
-TEST(ExtensionsTest, ConvertToProfiledPrimitiveHasNoValue) {
+TEST(ExtensionsR4Test, ConvertToProfiledPrimitiveHasNoValue) {
   TestExtensionToMessage<PrimitiveHasNoValue>("primitive_has_no_value");
 }
 
-TEST(ExtensionsTest, ConvertToUnprofiledPrimitiveHasNoValue) {
+TEST(ExtensionsR4Test, ConvertToUnprofiledPrimitiveHasNoValue) {
   TestConvertToExtension<PrimitiveHasNoValue>("primitive_has_no_value");
 }
 
-TEST(ExtensionsTest, ConvertToProfiledPrimitiveHasNoValue_Empty) {
+TEST(ExtensionsR4Test, ConvertToProfiledPrimitiveHasNoValue_Empty) {
   TestExtensionToMessage<PrimitiveHasNoValue>("empty");
 }
 
-TEST(ExtensionsTest, ConvertToUnprofiledPrimitiveHasNoValue_Empty) {
+TEST(ExtensionsR4Test, ConvertToUnprofiledPrimitiveHasNoValue_Empty) {
   TestConvertToExtension<PrimitiveHasNoValue>("empty");
 }
 
-TEST(ExtensionsTest,
+TEST(ExtensionsR4Test,
      ConvertToProfiledCapabilityStatementSearchParameterCombination) {
   TestExtensionToMessage<CapabilityStatementSearchParameterCombination>(
       "capability");
 }
 
-TEST(ExtensionsTest,
+TEST(ExtensionsR4Test,
      ConvertToUnprofiledCapabilityStatementSearchParameterCombination) {
   TestConvertToExtension<CapabilityStatementSearchParameterCombination>(
       "capability");
 }
 
-TEST(ExtensionsTest, ConvertToProfiledBoundCodeExtension) {
+TEST(ExtensionsR4Test, ConvertToProfiledBoundCodeExtension) {
   TestExtensionToMessage<DigitalMediaType>("digital_media_type");
 }
 
-TEST(ExtensionsTest, ConvertToUnprofiledBoundCodeExtension) {
+TEST(ExtensionsR4Test, ConvertToUnprofiledBoundCodeExtension) {
   TestConvertToExtension<DigitalMediaType>("digital_media_type");
 }
 
-TEST(ExtensionsTest, ConvertToProfiledSingleValueComplexExtension) {
-  TestExtensionToMessage<testing::SingleValueComplexExtension>(
+TEST(ExtensionsR4Test, ConvertToProfiledSingleValueComplexExtension) {
+  TestExtensionToMessage<r4::testing::SingleValueComplexExtension>(
       "single_value_complex");
 }
 
-TEST(ExtensionsTest, ConvertToUnprofiledSingleValueComplexExtension) {
-  TestConvertToExtension<testing::SingleValueComplexExtension>(
+TEST(ExtensionsR4Test, ConvertToUnprofiledSingleValueComplexExtension) {
+  TestConvertToExtension<r4::testing::SingleValueComplexExtension>(
       "single_value_complex");
 }
 
-TEST(ExtensionsTest, ExtractOnlyMatchingExtensionOneFound) {
+TEST(ExtensionsR4Test, ExtractOnlyMatchingExtensionOneFound) {
   Composition composition = PARSE_VALID_STU3_PROTO(R"pb(
     id { value: "1" }
     status { value: FINAL }
@@ -200,7 +198,7 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionOneFound) {
   EXPECT_THAT(extracted.value(), EqualsProto(expected));
 }
 
-TEST(ExtensionsTest, ExtractOnlyMatchingExtensionNoneFound) {
+TEST(ExtensionsR4Test, ExtractOnlyMatchingExtensionNoneFound) {
   Composition composition = PARSE_VALID_STU3_PROTO(R"pb(
     id { value: "1" }
     status { value: FINAL }
@@ -242,7 +240,7 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionNoneFound) {
   EXPECT_EQ(absl::StatusCode::kNotFound, extracted.status().code());
 }
 
-TEST(ExtensionsTest, ExtractOnlyMatchingExtensionMultipleFound) {
+TEST(ExtensionsR4Test, ExtractOnlyMatchingExtensionMultipleFound) {
   Composition composition = PARSE_VALID_STU3_PROTO(R"pb(
     id { value: "1" }
     status { value: FINAL }
@@ -296,26 +294,25 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionMultipleFound) {
   EXPECT_EQ(absl::StatusCode::kInvalidArgument, extracted.status().code());
 }
 
-TEST(ExtensionsTest, IsSimpleExtensionTrue) {
+TEST(ExtensionsR4Test, IsSimpleExtensionTrue) {
   EXPECT_TRUE(IsSimpleExtension(r4::testing::SimpleDecimalExt::descriptor()));
 }
 
-TEST(ExtensionsTest, IsSimpleExtensionFalseManyFields) {
+TEST(ExtensionsR4Test, IsSimpleExtensionFalseManyFields) {
   EXPECT_FALSE(IsSimpleExtension(r4::testing::ComplexExt::descriptor()));
 }
 
-TEST(ExtensionsTest, IsSimpleExtensionFalseOneFieldWithComplexAnnotation) {
+TEST(ExtensionsR4Test, IsSimpleExtensionFalseOneFieldWithComplexAnnotation) {
   EXPECT_FALSE(IsSimpleExtension(
       r4::testing::SingleValueComplexExtension::descriptor()));
 }
 
-TEST(ExtensionsTest, IsSimpleExtensionFalseOneRepeatedField) {
+TEST(ExtensionsR4Test, IsSimpleExtensionFalseOneRepeatedField) {
   EXPECT_FALSE(IsSimpleExtension(
       r4::testing::SingleValueRepeatedComplexExtension::descriptor()));
 }
 
 }  // namespace
 
-}  // namespace r4
 }  // namespace fhir
 }  // namespace google
