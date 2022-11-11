@@ -350,6 +350,7 @@ TEST(FhirPackageManager, GetResourceForAddedPackagesSucceeds) {
           {// The deprecated package_info is preserved in tests to ensure its
            // presence does not break package loading.
            {"package_info.prototxt", "fhir_version: R4\nproto_package: 'Foo'"},
+           {"package_info.textproto", "fhir_version: R4\nproto_package: 'Foo'"},
            {"a_value_set.json",
             R"({"resourceType": "ValueSet", "url": "http://value.set/id-1",
                "id": "a-value-set-1", "status": "draft"})"}}));
@@ -359,6 +360,7 @@ TEST(FhirPackageManager, GetResourceForAddedPackagesSucceeds) {
       std::string another_temp_name,
       CreateZipFileContaining(
           {{"package_info.prototxt", "fhir_version: R4\nproto_package: 'Foo'"},
+           {"package_info.textproto", "fhir_version: R4\nproto_package: 'Foo'"},
            {"a_value_set.json",
             R"({"resourceType": "ValueSet", "url": "http://value.set/id-2",
                "id": "a-value-set-2", "status": "draft"})"}}));
