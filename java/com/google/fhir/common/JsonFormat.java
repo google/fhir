@@ -85,9 +85,7 @@ public final class JsonFormat {
     private final boolean omittingInsignificantWhitespace;
     private final FhirJsonFormat jsonFormat;
 
-    private Printer(
-        boolean omittingInsignificantWhitespace,
-        FhirJsonFormat jsonFormat) {
+    private Printer(boolean omittingInsignificantWhitespace, FhirJsonFormat jsonFormat) {
       this.omittingInsignificantWhitespace = omittingInsignificantWhitespace;
       this.jsonFormat = jsonFormat;
     }
@@ -241,9 +239,7 @@ public final class JsonFormat {
     private final FhirJsonFormat jsonFormat;
 
     PrinterImpl(
-        Appendable jsonOutput,
-        boolean omittingInsignificantWhitespace,
-        FhirJsonFormat jsonFormat) {
+        Appendable jsonOutput, boolean omittingInsignificantWhitespace, FhirJsonFormat jsonFormat) {
       // json format related properties, determined by printerType
       if (omittingInsignificantWhitespace) {
         this.generator = new CompactTextGenerator(jsonOutput);

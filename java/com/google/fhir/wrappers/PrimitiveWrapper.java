@@ -58,9 +58,7 @@ public abstract class PrimitiveWrapper<T extends Message> {
 
   private static final ImmutableSet<String> NON_VALUE_FIELDS = ImmutableSet.of("id", "extension");
 
-  /**
-   * Validates that the wrapped primitive proto is valid according to the FHIR spec.
-   */
+  /** Validates that the wrapped primitive proto is valid according to the FHIR spec. */
   // TODO: This should throw a checked InvalidFhirException.
   public void validateWrapped() {
     if (hasValue()) {
@@ -93,9 +91,8 @@ public abstract class PrimitiveWrapper<T extends Message> {
 
   /**
    * True if the primitive wapped by this is has a value, as opposed to being purely defined by
-   * extensions.
-   * Note that this checks for PrimitiveHasNoValue extension, NOT for the actual presence of a value
-   * field.
+   * extensions. Note that this checks for PrimitiveHasNoValue extension, NOT for the actual
+   * presence of a value field.
    */
   public boolean hasValue() {
     return hasValue(wrapped);

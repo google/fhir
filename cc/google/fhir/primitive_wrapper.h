@@ -537,7 +537,8 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
         // Clean up the fixed timezone string that is returned from the
         // absl::Timezone library.
         if (absl::StartsWith(timezone_name, "Fixed/UTC")) {
-          // TODO: Evaluate whether we want to keep the seconds offset.
+          // TODO: Evaluate whether we want to keep the seconds
+          // offset.
           static const LazyRE2 kFixedTimezoneRegex{
               "Fixed\\/UTC([+-]\\d\\d:\\d\\d):\\d\\d"};
           std::string fixed_timezone_name;
@@ -805,9 +806,8 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
       separator_stride_extension_msg.mutable_separator()->set_value(separator);
       separator_stride_extension_msg.mutable_stride()->set_value(stride);
 
-      FHIR_RETURN_IF_ERROR(
-          ConvertToExtension<ExtensionType>(
-              separator_stride_extension_msg, wrapped->add_extension()));
+      FHIR_RETURN_IF_ERROR(ConvertToExtension<ExtensionType>(
+          separator_stride_extension_msg, wrapped->add_extension()));
     }
 
     std::string unescaped;

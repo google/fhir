@@ -88,8 +88,8 @@ namespace {
 // The following functions act as a shim for handling either type.
 
 template <typename T>
-inline constexpr bool IsAntlrAnyOrStdAny = (std::is_same_v<T, antlrcpp::Any> ||
-                                            std::is_same_v<T, std::any>);
+inline constexpr bool IsAntlrAnyOrStdAny =
+    (std::is_same_v<T, antlrcpp::Any> || std::is_same_v<T, std::any>);
 
 template <typename F>
 std::enable_if_t<IsAntlrAnyOrStdAny<F>, bool> AnyHasValue(const F& any) {
@@ -175,8 +175,7 @@ absl::StatusOr<absl::optional<int32_t>> IntegerOrEmpty(
     return absl::optional<int>();
   }
 
-  if (messages.size() > 1 ||
-      !IsSystemInteger(*messages[0].Message())) {
+  if (messages.size() > 1 || !IsSystemInteger(*messages[0].Message())) {
     return InvalidArgumentError(
         "Expression must be empty or represent a single primitive value.");
   }
@@ -346,9 +345,7 @@ class EmptyLiteral : public ExpressionNode {
   // The return type of the empty literal is undefined. If this causes problems,
   // it is likely we could arbitrarily pick one of the primitive types without
   // ill-effect.
-  const Descriptor* ReturnType() const override {
-    return nullptr;
-  }
+  const Descriptor* ReturnType() const override { return nullptr; }
 };
 
 // Expression node for a reference to $this.
@@ -1299,9 +1296,8 @@ class LengthFunction : public ZeroParameterFunctionNode {
 // Returns true if the input collection is empty and false otherwise.
 class EmptyFunction : public ZeroParameterFunctionNode {
  public:
-  EmptyFunction(
-      const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+  EmptyFunction(const std::shared_ptr<ExpressionNode>& child,
+                const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
   absl::Status Evaluate(WorkSpace* work_space,
@@ -1326,9 +1322,8 @@ class EmptyFunction : public ZeroParameterFunctionNode {
 // Returns the size of the input collection as an integer.
 class CountFunction : public ZeroParameterFunctionNode {
  public:
-  CountFunction(
-      const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+  CountFunction(const std::shared_ptr<ExpressionNode>& child,
+                const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
   absl::Status Evaluate(WorkSpace* work_space,
@@ -1385,9 +1380,8 @@ class SingleFunction : public ZeroParameterFunctionNode {
 // if the input collection is empty.
 class FirstFunction : public ZeroParameterFunctionNode {
  public:
-  FirstFunction(
-      const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+  FirstFunction(const std::shared_ptr<ExpressionNode>& child,
+                const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
   absl::Status Evaluate(WorkSpace* work_space,
@@ -1402,9 +1396,7 @@ class FirstFunction : public ZeroParameterFunctionNode {
     return absl::OkStatus();
   }
 
-  const Descriptor* ReturnType() const override {
-    return child_->ReturnType();
-  }
+  const Descriptor* ReturnType() const override { return child_->ReturnType(); }
 };
 
 // Implements the FHIRPath .last() function.
@@ -1512,9 +1504,8 @@ class TakeFunction : public SingleValueFunctionNode {
 // Implements the FHIRPath .trace() function.
 class TraceFunction : public SingleValueFunctionNode {
  public:
-  TraceFunction(
-      const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+  TraceFunction(const std::shared_ptr<ExpressionNode>& child,
+                const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleValueFunctionNode(child, params) {}
 
   absl::Status EvaluateWithParam(
@@ -1531,17 +1522,14 @@ class TraceFunction : public SingleValueFunctionNode {
     return absl::OkStatus();
   }
 
-  const Descriptor* ReturnType() const override {
-    return child_->ReturnType();
-  }
+  const Descriptor* ReturnType() const override { return child_->ReturnType(); }
 };
 
 // Implements the FHIRPath .toInteger() function.
 class ToIntegerFunction : public ZeroParameterFunctionNode {
  public:
-  ToIntegerFunction(
-      const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+  ToIntegerFunction(const std::shared_ptr<ExpressionNode>& child,
+                    const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
   absl::Status Evaluate(WorkSpace* work_space,
@@ -1769,11 +1757,11 @@ class EqualsOperator : public BinaryOperator {
     }
 
     for (int i = 0; i < left_results.size(); ++i) {
-        const WorkspaceMessage& left = left_results.at(i);
-        const WorkspaceMessage& right = right_results.at(i);
-        if (!AreEqual(primitive_handler, *left.Message(), *right.Message())) {
-          return false;
-        }
+      const WorkspaceMessage& left = left_results.at(i);
+      const WorkspaceMessage& right = right_results.at(i);
+      if (!AreEqual(primitive_handler, *left.Message(), *right.Message())) {
+        return false;
+      }
     }
     return true;
   }
@@ -1885,8 +1873,8 @@ class UnionOperator : public BinaryOperator {
       return left_->ReturnType();
     }
 
-    // TODO: Consider refactoring ReturnType to return a set of all types
-    // in the collection.
+    // TODO: Consider refactoring ReturnType to return a set of all
+    // types in the collection.
     return nullptr;
   }
 };
@@ -1894,9 +1882,8 @@ class UnionOperator : public BinaryOperator {
 // Implements the FHIRPath .isDistinct() function.
 class IsDistinctFunction : public ZeroParameterFunctionNode {
  public:
-  IsDistinctFunction(
-      const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+  IsDistinctFunction(const std::shared_ptr<ExpressionNode>& child,
+                     const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
   absl::Status Evaluate(WorkSpace* work_space,
@@ -1926,9 +1913,8 @@ class IsDistinctFunction : public ZeroParameterFunctionNode {
 // Implements the FHIRPath .distinct() function.
 class DistinctFunction : public ZeroParameterFunctionNode {
  public:
-  DistinctFunction(
-      const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+  DistinctFunction(const std::shared_ptr<ExpressionNode>& child,
+                   const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
   absl::Status Evaluate(WorkSpace* work_space,
@@ -1951,9 +1937,8 @@ class DistinctFunction : public ZeroParameterFunctionNode {
 // Implements the FHIRPath .combine() function.
 class CombineFunction : public SingleParameterFunctionNode {
  public:
-  CombineFunction(
-      const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+  CombineFunction(const std::shared_ptr<ExpressionNode>& child,
+                  const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleParameterFunctionNode(child, params) {}
 
   absl::Status Evaluate(WorkSpace* work_space,
@@ -1979,8 +1964,8 @@ class CombineFunction : public SingleParameterFunctionNode {
       return child_->ReturnType();
     }
 
-    // TODO: Consider refactoring ReturnType to return a set of all types
-    // in the collection.
+    // TODO: Consider refactoring ReturnType to return a set of all
+    // types in the collection.
     return nullptr;
   }
 };
@@ -2106,9 +2091,8 @@ class AllFunction : public FunctionNode {
     return FunctionNode::CompileParams(params, child_context_visitor);
   }
 
-  AllFunction(
-      const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+  AllFunction(const std::shared_ptr<ExpressionNode>& child,
+              const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : FunctionNode(child, params) {
     FHIR_DCHECK_OK(ValidateParams(params));
   }
@@ -2335,9 +2319,9 @@ absl::StatusOr<ExpressionNode*> static CreateConvertsToFunction(
 
 // Implements the FHIRPath .ofType() function.
 //
-// TODO: This does not currently validate that the tested type exists.
-// According to the FHIRPath spec, if the type does not exist the expression
-// should throw an error instead of returning false.
+// TODO: This does not currently validate that the tested type
+// exists. According to the FHIRPath spec, if the type does not exist the
+// expression should throw an error instead of returning false.
 //
 // TODO: Handle type namespaces (i.e. FHIR.* and System.*)
 //
@@ -2359,7 +2343,7 @@ class OfTypeFunction : public ExpressionNode {
   }
 
   OfTypeFunction(const std::shared_ptr<ExpressionNode>& child,
-             std::string type_name)
+                 std::string type_name)
       : child_(child), type_name_(type_name) {}
 
   absl::Status Evaluate(WorkSpace* work_space,
@@ -2368,8 +2352,8 @@ class OfTypeFunction : public ExpressionNode {
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
     for (const WorkspaceMessage& message : child_results) {
-      if (absl::EqualsIgnoreCase(
-            message.Message()->GetDescriptor()->name(), type_name_)) {
+      if (absl::EqualsIgnoreCase(message.Message()->GetDescriptor()->name(),
+                                 type_name_)) {
         results->push_back(message);
       }
     }
@@ -2389,9 +2373,9 @@ class OfTypeFunction : public ExpressionNode {
 
 // Implements the FHIRPath .is() function.
 //
-// TODO: This does not currently validate that the tested type exists.
-// According to the FHIRPath spec, if the type does not exist the expression
-// should throw an error instead of returning false.
+// TODO: This does not currently validate that the tested type
+// exists. According to the FHIRPath spec, if the type does not exist the
+// expression should throw an error instead of returning false.
 //
 // TODO: Handle type namespaces (i.e. FHIR.* and System.*)
 //
@@ -2448,9 +2432,9 @@ class IsFunction : public ExpressionNode {
 
 // Implements the FHIRPath .as() function.
 //
-// TODO: This does not currently validate that the tested type exists.
-// According to the FHIRPath spec, if the type does not exist the expression
-// should throw an error.
+// TODO: This does not currently validate that the tested type
+// exists. According to the FHIRPath spec, if the type does not exist the
+// expression should throw an error.
 //
 // TODO: Handle type namespaces (i.e. FHIR.* and System.*)
 //
@@ -2507,7 +2491,7 @@ class AsFunction : public ExpressionNode {
 class ChildrenFunction : public ZeroParameterFunctionNode {
  public:
   ChildrenFunction(const std::shared_ptr<ExpressionNode>& child,
-                 const std::vector<std::shared_ptr<ExpressionNode>>& params)
+                   const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : ZeroParameterFunctionNode(child, params) {}
 
   absl::Status Evaluate(WorkSpace* work_space,
@@ -2523,7 +2507,7 @@ class ChildrenFunction : public ZeroParameterFunctionNode {
             RetrieveField(*child.Message(), *descriptor->field(i),
                           MakeWorkSpaceMessageFactory(work_space), &messages));
         for (const Message* message : messages) {
-            results->push_back(WorkspaceMessage(child, message));
+          results->push_back(WorkspaceMessage(child, message));
         }
       }
     }
@@ -2531,9 +2515,7 @@ class ChildrenFunction : public ZeroParameterFunctionNode {
     return absl::OkStatus();
   }
 
-  const Descriptor* ReturnType() const override {
-    return nullptr;
-  }
+  const Descriptor* ReturnType() const override { return nullptr; }
 };
 
 class DescendantsFunction : public ZeroParameterFunctionNode {
@@ -2584,9 +2566,8 @@ class DescendantsFunction : public ZeroParameterFunctionNode {
 // Implements the FHIRPath .intersect() function.
 class IntersectFunction : public SingleParameterFunctionNode {
  public:
-  IntersectFunction(
-      const std::shared_ptr<ExpressionNode>& child,
-      const std::vector<std::shared_ptr<ExpressionNode>>& params)
+  IntersectFunction(const std::shared_ptr<ExpressionNode>& child,
+                    const std::vector<std::shared_ptr<ExpressionNode>>& params)
       : SingleParameterFunctionNode(child, params) {}
 
   absl::Status Evaluate(WorkSpace* work_space,
@@ -2621,8 +2602,8 @@ class IntersectFunction : public SingleParameterFunctionNode {
       return child_->ReturnType();
     }
 
-    // TODO: Consider refactoring ReturnType to return a set of all types
-    // in the collection.
+    // TODO: Consider refactoring ReturnType to return a set of all
+    // types in the collection.
     return nullptr;
   }
 };
@@ -2882,15 +2863,15 @@ class ComparisonOperator : public BinaryOperator {
       case kLessThanEqualTo:
         // Fallback to literal comparison for equality to avoid
         // rounding errors.
-        return
-            absl::make_optional(left <= right ||
+        return absl::make_optional(
+            left <= right ||
             (left_message->GetDescriptor() == right_message->GetDescriptor() &&
              MessageDifferencer::Equals(*left_message, *right_message)));
       case kGreaterThanEqualTo:
         // Fallback to literal comparison for equality to avoid
         // rounding errors.
-        return
-            absl::make_optional(left >= right ||
+        return absl::make_optional(
+            left >= right ||
             (left_message->GetDescriptor() == right_message->GetDescriptor() &&
              MessageDifferencer::Equals(*left_message, *right_message)));
     }
@@ -3059,8 +3040,8 @@ class AdditionOperator : public BinaryOperator {
       work_space->DeleteWhenFinished(result);
       out_results->push_back(WorkspaceMessage(result));
     } else {
-      // TODO: Add implementation for Date, DateTime, Time, and Decimal
-      // addition.
+      // TODO: Add implementation for Date, DateTime, Time, and
+      // Decimal addition.
       return InvalidArgumentError(absl::StrCat(
           "Addition not supported for ", left_result->GetTypeName(), " and ",
           right_result->GetTypeName()));
@@ -3377,7 +3358,7 @@ class AndOperator : public BooleanOperator {
 class ContainsOperator : public BinaryOperator {
  public:
   ContainsOperator(std::shared_ptr<ExpressionNode> left,
-                  std::shared_ptr<ExpressionNode> right)
+                   std::shared_ptr<ExpressionNode> right)
       : BinaryOperator(std::move(left), std::move(right)) {}
 
   absl::Status EvaluateOperator(
@@ -3507,8 +3488,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
       // If we know the return type of the expression, and the return type
       // doesn't have the referenced field, set an error and return.
-      if (descriptor != nullptr && !HasFieldWithJsonName(descriptor,
-                                                         definition->name)) {
+      if (descriptor != nullptr &&
+          !HasFieldWithJsonName(descriptor, definition->name)) {
         SetError(NotFoundError(
             absl::StrFormat("Unable to find field `%s` in `%s`",
                             definition->name, descriptor->full_name())));
@@ -3556,8 +3537,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
     // If we know the return type of the expression, and the return type
     // doesn't have the referenced field, set an error and return.
-    if (descriptor != nullptr && !HasFieldWithJsonName(descriptor,
-                                                       definition->name)) {
+    if (descriptor != nullptr &&
+        !HasFieldWithJsonName(descriptor, definition->name)) {
       SetError(NotFoundError(
           absl::StrFormat("Unable to find field `%s` in `%s`", definition->name,
                           descriptor->full_name())));
@@ -3836,9 +3817,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     auto left = AnyCast<std::shared_ptr<ExpressionNode>>(left_any);
     auto right = AnyCast<std::shared_ptr<ExpressionNode>>(right_any);
 
-    return op == "or"
-        ? ToAny(std::make_shared<OrOperator>(left, right))
-        : ToAny(std::make_shared<XorOperator>(left, right));
+    return op == "or" ? ToAny(std::make_shared<OrOperator>(left, right))
+                      : ToAny(std::make_shared<XorOperator>(left, right));
   }
 
   antlrcpp::Any visitAndExpression(

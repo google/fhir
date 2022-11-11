@@ -193,10 +193,10 @@ final class GeneratorUtils {
   // Throws IllegalArgumentException if more than one matching element is found.
   static Optional<ElementDefinition> getOptionalElementById(
       String id, List<ElementDefinition> elements) throws InvalidFhirException {
-     List<ElementDefinition> matchingElements =
-         elements.stream()
-        .filter(element -> element.getId().getValue().equals(id))
-        .collect(Collectors.toList());
+    List<ElementDefinition> matchingElements =
+        elements.stream()
+            .filter(element -> element.getId().getValue().equals(id))
+            .collect(Collectors.toList());
     if (matchingElements.isEmpty()) {
       return Optional.empty();
     } else if (matchingElements.size() == 1) {

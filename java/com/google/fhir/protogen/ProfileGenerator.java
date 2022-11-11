@@ -517,7 +517,8 @@ final class ProfileGenerator {
           Message newValue = (Message) newElement.getField(field);
           Message baseValue = (Message) baseElement.getField(field);
           if (!newValue.equals(baseValue)) {
-            // TODO: There's currently a bug where the differential emits empty markdown
+            // TODO: There's currently a bug where the differential emits empty
+            // markdown
             // for removed fields, and empty markdown is invalid.
             if (newValue instanceof Markdown && ((Markdown) newValue).getValue().isEmpty()) {
               continue;
