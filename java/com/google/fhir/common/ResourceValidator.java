@@ -51,7 +51,7 @@ public final class ResourceValidator {
 
     if (message instanceof Any) {
       // We do not validate "Any" contained resources.
-      // TODO: Potentially unpack the correct type and validate?
+      // TODO(b/155339868): Potentially unpack the correct type and validate?
       return;
     }
 
@@ -115,7 +115,7 @@ public final class ResourceValidator {
   }
 
   // If there is no typed reference id on a reference, one of these fields must be set.
-  // TODO: remove this once FHIRPath can handle this.
+  // TODO(b/244184211): remove this once FHIRPath can handle this.
   private static final ImmutableSet<String> OTHER_REFERENCE_FIELDS =
       ImmutableSet.of("extension", "identifier", "display");
 

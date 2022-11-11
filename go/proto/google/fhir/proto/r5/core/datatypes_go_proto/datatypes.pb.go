@@ -6975,7 +6975,7 @@ func (x *UsageContext) GetValue() *UsageContext_ValueX {
 // Specialization of Coding that drops the system and code fields.
 // Fields that use this message must be annotated with
 // fhir_inlined_coding_system and fhir_inlined_coding_code.
-// TODO: autogenerate this.
+// TODO(b/244184211): autogenerate this.
 type CodingWithFixedCode struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -7060,7 +7060,7 @@ func (x *CodingWithFixedCode) GetUserSelected() *Boolean {
 	return nil
 }
 
-// TODO: eliminate this in favor of inlined reference types?
+// TODO(b/244184211): eliminate this in favor of inlined reference types?
 // A reference from one resource to another
 // See https://www.hl7.org/fhir/datatypes.html#Reference
 type Reference struct {

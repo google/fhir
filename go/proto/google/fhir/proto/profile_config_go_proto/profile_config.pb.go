@@ -1209,7 +1209,7 @@ func (x *ComplexExtension) GetComplexField() []*ComplexExtension {
 
 // Definition for a simple extension, i.e. one that contains
 // only a primitive data type.
-// TODO: support references with target profiles.
+// TODO(b/244184211): support references with target profiles.
 type SimpleExtension struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

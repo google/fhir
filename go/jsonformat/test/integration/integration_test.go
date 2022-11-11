@@ -218,7 +218,7 @@ func testMarshal(t *testing.T, name string, ver fhirversion.Version) {
 	}
 }
 
-// TODO: add tests and goldens for analytics marshaller with inferred schema.
+// TODO(b/156023087): add tests and goldens for analytics marshaller with inferred schema.
 func TestMarshalAnalytics_STU3(t *testing.T) {
 	t.Parallel()
 	tests := []struct {

@@ -75,7 +75,7 @@ public final class ProtoGeneratorTestUtils {
   //   with double-slashes added.
   // * Removes import statements.  This is because sometimes the protogenerator will include an
   //   extra dep (such as extensions or codes imports) that can be pruned by a clean-up tool.
-  //   TODO: be smarter about which imports we include per resource.
+  //   TODO(b/185161283): be smarter about which imports we include per resource.
   // * Replaces any repeated whitespace with a single white space
   // * Removes insignificant whitespace between control symbols.
   private static String cleanProtoFile(String protoFile) {

@@ -32,5 +32,5 @@ invalid_json: "true"
 invalid_json: "1"
 invalid_json: "1.0"
 
-# TODO: Add test cases to be used by other languages, and filter them out in java
+# TODO(b/179911416): Add test cases to be used by other languages, and filter them out in java
 no_invalid_protos_reason: "Due to limitations in regex engines, Base64Binary strings are not checked"

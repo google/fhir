@@ -96,7 +96,7 @@ final class FieldRetagger {
     // in the new file, add a reserved field for the highest golden tag.
     // This ensures that all subsequent iterations of the proto will never use that or any
     // lower-numbered tag.
-    // TODO: For historical reasons, ProtoGenerator generates reserved fields using
+    // TODO(b/192419079): For historical reasons, ProtoGenerator generates reserved fields using
     // normal fields, with the "reservedReason" annotation.  These should be updated to just use
     // ReservedRanges.
     if (getHighestNumberInUse(newBuilder) < highestGoldenTag) {

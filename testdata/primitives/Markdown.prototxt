@@ -11,5 +11,5 @@ invalid_json: "true"
 invalid_json: "1"
 invalid_json: "1.0"
 
-# TODO: Add additional string character validation beyond regex
+# TODO(b/178605278): Add additional string character validation beyond regex
 no_invalid_protos_reason: "Markdown regex is overly permissive"

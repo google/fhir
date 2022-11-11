@@ -284,7 +284,7 @@ class JsonPrinter:
         self.generator.add_field(f'_{field_name}')
         self._print_list(elements, self._print)
     else:  # Singular field
-      # TODO: Detect ReferenceId using an annotation
+      # TODO(b/153462178): Detect ReferenceId using an annotation
       if (self.json_format == _FhirJsonFormat.ANALYTIC and
           field.message_type.name == 'ReferenceId'):
         str_value = proto_utils.get_value_at_field(value, 'value')
@@ -398,14 +398,14 @@ class JsonPrinter:
 
   def _print(self, msg: message.Message) -> None:
     """Prints the JSON representation of message to the underlying generator."""
-    # TODO: Identify ContainedResource with an annotation
+    # TODO(b/154059162): Identify ContainedResource with an annotation
     if msg.DESCRIPTOR.name == 'ContainedResource':
       self._print_contained_resource(msg)
     elif msg.DESCRIPTOR.full_name == any_pb2.Any.DESCRIPTOR.full_name:
       contained_resource = self.primitive_handler.new_contained_resource()
       if not cast(any_pb2.Any, msg).Unpack(contained_resource):
         # If we can't unpack the Any, drop it.
-        # TODO: Use a registry to determine the correct
+        # TODO(b/148916862): Use a registry to determine the correct
         # ContainedResource to unpack to
         return
       self._print_contained_resource(contained_resource)

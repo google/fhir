@@ -230,7 +230,7 @@ public final class ProtoFilePrinterTest {
     protoPrinter = new ProtoFilePrinter(packageInfo);
   }
 
-  // TODO: Test the FHIR code types.
+  // TODO(b/244184211): Test the FHIR code types.
 
   /** Test generating datatypes.proto. */
   @Test

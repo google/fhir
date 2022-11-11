@@ -344,7 +344,7 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
       ('_withBundleBundleTransaction', 'Bundle-bundle-transaction'),
       ('_withBundleConceptMaps', 'Bundle-conceptmaps'),
 
-      # TODO: Investigate test timeouts
+      # TODO(b/152317976): Investigate test timeouts
       # ('_withBundleDataElements', 'Bundle-dataelements'),
       # ('_withBundleDg2', 'Bundle-dg2'),
       # ('_withBundleExtensions', 'Bundle-extensions'),
@@ -701,7 +701,7 @@ class JsonFormatTest(json_format_test.JsonFormatTest):
       ('_withDiagnosticReport102', 'DiagnosticReport-102'),
       ('_withDiagnosticReportExamplePgx', 'DiagnosticReport-example-pgx'),
       ('_withDiagnosticReportF201', 'DiagnosticReport-f201'),
-      # TODO: Disabling due to flaky failures.
+      # TODO(b/185511968): Disabling due to flaky failures.
       # ('_withDiagnosticReportGingivalMass', 'DiagnosticReport-gingival-mass'),
       ('_withDiagnosticReportPap', 'DiagnosticReport-pap'),
       ('_withDiagnosticReportUltrasound', 'DiagnosticReport-ultrasound'),

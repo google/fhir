@@ -62,7 +62,7 @@ public class CanonicalWrapper extends PrimitiveWrapper<Canonical> {
 
   // Extract the uri component from a canonical, which can be of the form
   // uri|version
-  // TODO: Consider separating this in the proto into value_uri and version
+  // TODO(b/244184211): Consider separating this in the proto into value_uri and version
   public static String getUri(Canonical canonical) {
     String value = canonical.getValue();
     int pipeIndex = value.indexOf("|");

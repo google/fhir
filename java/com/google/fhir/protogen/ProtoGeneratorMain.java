@@ -360,7 +360,7 @@ class ProtoGeneratorMain {
           "datatypes.proto", generator.generateFileDescriptor(datatypes), printer, zipOutputStream);
     }
 
-    // TODO: Move Contained Resource logic into ProtoGenerator.java
+    // TODO(b/244184211): Move Contained Resource logic into ProtoGenerator.java
     if (!resources.isEmpty()) {
       List<DescriptorProto> containedTypes = new ArrayList<>();
       // Note that in the case where there is a contained resource that is local to a proto set,

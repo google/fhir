@@ -152,7 +152,7 @@ func readFullResource(in io.Reader) (map[string]json.RawMessage, error) {
 // The FHIR version of the proto is determined by the version the Unmarshaller was
 // created with.
 func (u *Unmarshaller) UnmarshalFromReaderWithErrorReporter(in io.Reader, er errorreporter.ErrorReporter) (proto.Message, error) {
-	// TODO: report parseContainedResource error with error reporter
+	// TODO(b/244184211): report parseContainedResource error with error reporter
 	// Decode the JSON object into a map.
 	decoded, err := readFullResource(in)
 	if err != nil {
@@ -315,7 +315,7 @@ func (u *Unmarshaller) mergeMessage(jsonPath string, decmap map[string]json.RawM
 			continue
 		}
 
-		// TODO: reject upper camel case fields names after suitable deprecation warning.
+		// TODO(b/161479338): reject upper camel case fields names after suitable deprecation warning.
 		var normalizedFieldName string
 		if strings.HasPrefix(k, "_") {
 			normalizedFieldName = "_" + lowerFirst(k[1:])
@@ -363,7 +363,7 @@ func lowerFirst(s string) string {
 func (u *Unmarshaller) mergeChoiceField(jsonPath string, f protoreflect.FieldDescriptor, k string, v json.RawMessage, pb protoreflect.Message) error {
 	fieldMap := jsonpbhelper.FieldMap(f.Message())
 
-	// TODO: reject upper camel case fields names after suitable deprecation warning.
+	// TODO(b/161479338): reject upper camel case fields names after suitable deprecation warning.
 	var choiceFieldName string
 	if strings.HasPrefix(k, "_") {
 		// Convert ex: "_valueString" and "_ValueString" interchangeably to "_string".

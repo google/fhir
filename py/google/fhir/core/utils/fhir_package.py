@@ -27,7 +27,7 @@ from google.protobuf import message
 from google.fhir.core.internal import primitive_handler
 from google.fhir.core.internal.json_format import _json_parser
 
-# TODO: Add structural typing to constrain version-agnostic types.
+# TODO(b/201107372): Add structural typing to constrain version-agnostic types.
 _T = TypeVar('_T')
 
 _StructDefT = TypeVar('_StructDefT')
@@ -40,7 +40,7 @@ _ValueSetT = TypeVar('_ValueSetT')
 PackageSource = Union[str, Callable[[], BinaryIO]]
 
 
-# TODO: Consider deprecating internal "zip" format entirely.
+# TODO(b/235876918): Consider deprecating internal "zip" format entirely.
 def _read_fhir_package_zip(zip_file: BinaryIO) -> Iterator[Tuple[str, str]]:
   """Yields the file entries for JSON resources in `zip_file` and their contents.
 
@@ -287,7 +287,7 @@ class FhirPackage(FhirPackageAccessor[_StructDefT, _SearchParamaterT,
         code_systems=collections_per_resource_type['CodeSystem'],
         value_sets=collections_per_resource_type['ValueSet'])
 
-  # TODO: Constrain version-agnostic types with structural typing.
+  # TODO(b/201107372): Constrain version-agnostic types with structural typing.
   def __init__(self, *, structure_definitions: ResourceCollection[_StructDefT],
                search_parameters: ResourceCollection[_SearchParamaterT],
                code_systems: ResourceCollection[_CodeSystemT],

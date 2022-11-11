@@ -76,7 +76,7 @@ class PrimitiveHandler {
   // fast-fail error reporters).
   // Note that a successful parse does not indicate the result is valid FHIR,
   // just that no data was lost in converting from FHIR JSON to FhirProto.
-  // TODO: Use references for target, since it's required.
+  // TODO(b/238631378): Use references for target, since it's required.
   absl::StatusOr<ParseResult> ParseInto(
       const internal::FhirJson& json, const absl::TimeZone tz,
       google::protobuf::Message* target, const ScopedErrorReporter& error_reporter) const;

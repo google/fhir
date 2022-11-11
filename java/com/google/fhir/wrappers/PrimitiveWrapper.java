@@ -59,7 +59,7 @@ public abstract class PrimitiveWrapper<T extends Message> {
   private static final ImmutableSet<String> NON_VALUE_FIELDS = ImmutableSet.of("id", "extension");
 
   /** Validates that the wrapped primitive proto is valid according to the FHIR spec. */
-  // TODO: This should throw a checked InvalidFhirException.
+  // TODO(b/244184211): This should throw a checked InvalidFhirException.
   public void validateWrapped() {
     if (hasValue()) {
       validateUsingPattern(getPattern(), printValue());

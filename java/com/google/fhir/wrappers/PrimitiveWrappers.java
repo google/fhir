@@ -23,7 +23,7 @@ import com.google.protobuf.MessageOrBuilder;
 import java.time.ZoneId;
 
 /** Utility functions for working with primitive wrappers */
-// TODO: Some of these functions catch IllegalArgumentExceptions and rethrow as
+// TODO(b/176651098): Some of these functions catch IllegalArgumentExceptions and rethrow as
 // InvalidFhirException.  Once wrappers all throw InvalidFhirException, remove this catch-and-throw
 public class PrimitiveWrappers {
 
@@ -129,7 +129,7 @@ public class PrimitiveWrappers {
       if (descriptor.getOptions().hasExtension(Annotations.fhirValuesetUrl)) {
         return new CodeWrapper(jsonString);
       }
-      // TODO: Make proper class hierarchy for wrapper input types,
+      // TODO(b/244184211): Make proper class hierarchy for wrapper input types,
       // so these can all accept JsonElement in constructor, and do type checking there.
       switch (descriptor.getName()) {
         case "Base64Binary":

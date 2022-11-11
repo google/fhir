@@ -70,7 +70,7 @@ public final class ProfileGeneratorTest {
   private static final String STU3_TESTDATA_DIR = "testdata/stu3/profiles/";
   private static final String R4_TESTDATA_DIR = "testdata/r4/profiles/";
 
-  // TODO: consolidate these proto loading functions across test files.
+  // TODO(b/244184211): consolidate these proto loading functions across test files.
   private static void loadProto(String filename, Message.Builder builder) throws IOException {
     TextFormat.merge(
         Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read(), builder);

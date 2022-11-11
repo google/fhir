@@ -14,7 +14,7 @@
 # limitations under the License.
 """The setuptools script for the Google FHIR Python distribution package."""
 
-# TODO: Explore PEP517 and PEP518 adoption in lieu of `setup.py`.
+# TODO(b/181821245): Explore PEP517 and PEP518 adoption in lieu of `setup.py`.
 
 from distutils import spawn
 from distutils.command import clean

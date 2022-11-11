@@ -537,7 +537,7 @@ class TimeTypeWrapper : public ExtensibleWrapper<T> {
         // Clean up the fixed timezone string that is returned from the
         // absl::Timezone library.
         if (absl::StartsWith(timezone_name, "Fixed/UTC")) {
-          // TODO: Evaluate whether we want to keep the seconds
+          // TODO(b/244184211): Evaluate whether we want to keep the seconds
           // offset.
           static const LazyRE2 kFixedTimezoneRegex{
               "Fixed\\/UTC([+-]\\d\\d:\\d\\d):\\d\\d"};
@@ -910,7 +910,7 @@ class DecimalWrapper : public ExtensibleWrapper<DecimalType> {
             InvalidArgumentError("Cannot parse Decimal: fails FHIR regex.")));
         return ParseResult::kFailed;
       }
-      // TODO: range check
+      // TODO(b/244184211): range check
       std::unique_ptr<DecimalType> wrapped = absl::make_unique<DecimalType>();
       wrapped->set_value(json_string);
       this->WrapAndManage(std::move(wrapped));

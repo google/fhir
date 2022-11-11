@@ -65,8 +65,8 @@ $PROTO_GENERATOR \
 # * FHIR-defined valueset codes
 # * Proto for Reference, which allows more structure than FHIR spec provides.
 # * Extension, which has a field order discrepancy between spec and test data.
-# TODO: generate Extension proto with custom ordering.
-# TODO: generate codes.proto
+# TODO(b/244184211): generate Extension proto with custom ordering.
+# TODO(b/244184211): generate codes.proto
 if [ $? -eq 0 ]
 then
   echo -e "\n//End of auto-generated messages.\n" >> $OUTPUT_PATH/datatypes.proto

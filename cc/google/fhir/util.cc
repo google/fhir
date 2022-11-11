@@ -267,7 +267,7 @@ absl::StatusOr<Message*> UnpackAnyAsContainedResource(
       ::google::protobuf::DescriptorPool::generated_pool()->FindMessageTypeByName(
           full_type_name);
   if (type_descriptor == nullptr) {
-    // TODO: Ensure the necessary protos are available.
+    // TODO(b/154140425): Ensure the necessary protos are available.
     return UnimplementedError(
         absl::StrCat("Unknown message type packed into google.protobuf.Any \"",
                      full_type_name, "\""));

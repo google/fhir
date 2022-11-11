@@ -308,7 +308,7 @@ cc_library(
     strip_include_prefix = "//cc/",
 )
 
-# TODO: eliminate version-specific deps
+# TODO(b/244184211): eliminate version-specific deps
 cc_library(
     name = "json_format",
     srcs = [

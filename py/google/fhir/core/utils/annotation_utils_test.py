@@ -28,7 +28,7 @@ from google.fhir.core.utils import annotation_utils
 try:
   from testdata.r4.profiles import test_pb2
 except ImportError:
-  # TODO: Add test protos to PYTHONPATH during dist testing.
+  # TODO(b/173534909): Add test protos to PYTHONPATH during dist testing.
   pass  # Fall through
 
 _ADDRESS_USECODE_FHIR_VALUESET_URL = 'http://hl7.org/fhir/ValueSet/address-use'

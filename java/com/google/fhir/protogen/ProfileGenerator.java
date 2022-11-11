@@ -503,7 +503,7 @@ final class ProfileGenerator {
           } else {
             for (int i = 0; i < baseValues.size(); i++) {
               if (!newValues.get(i).equals(baseValues.get(i))) {
-                // TODO: do we need finer grain than element field diffing?
+                // TODO(b/244184211): do we need finer grain than element field diffing?
                 diffElement.addRepeatedField(field, newValues.get(i));
                 foundDiff = true;
               }
@@ -517,13 +517,13 @@ final class ProfileGenerator {
           Message newValue = (Message) newElement.getField(field);
           Message baseValue = (Message) baseElement.getField(field);
           if (!newValue.equals(baseValue)) {
-            // TODO: There's currently a bug where the differential emits empty
+            // TODO(b/244184211): There's currently a bug where the differential emits empty
             // markdown
             // for removed fields, and empty markdown is invalid.
             if (newValue instanceof Markdown && ((Markdown) newValue).getValue().isEmpty()) {
               continue;
             }
-            // TODO: do we need finer grain than element field diffing?
+            // TODO(b/244184211): do we need finer grain than element field diffing?
             diffElement.setField(field, newValue);
             foundDiff = true;
           }
@@ -809,7 +809,7 @@ final class ProfileGenerator {
         .setTitle(fhirString(elementData.getName()))
         .setDate(creationDateTime)
         .setPublisher(fhirString(packageInfo.getPublisher()))
-        // TODO: read status from profile_config
+        // TODO(b/153091759): read status from profile_config
         .setStatus(
             StructureDefinition.StatusCode.newBuilder().setValue(PublicationStatusCode.Value.DRAFT))
         .setFhirVersion(
@@ -822,7 +822,7 @@ final class ProfileGenerator {
                 .setType(
                     StructureDefinition.Context.TypeCode.newBuilder()
                         .setValue(ExtensionContextTypeCode.Value.ELEMENT))
-                // TODO: read from extension config.
+                // TODO(b/153091759): read from extension config.
                 .setExpression(fhirString("Element")))
         .setType(fhirUri(type))
         .setBaseDefinition(fhirCanonical(baseDefinitionUrl))

@@ -853,7 +853,7 @@ public class ValueSetGenerator {
   private static final Pattern ACRONYM_PATTERN = Pattern.compile("([A-Z])([A-Z]+)(?![a-z])");
 
   private static String toEnumCase(Code code, String display, boolean fullySpecify) {
-    // TODO: handle more cases of fullySpecify
+    // TODO(b/244184211): handle more cases of fullySpecify
     String rawCode = code.getValue();
     if (CODE_RENAMES.containsKey(rawCode)) {
       return CODE_RENAMES.get(rawCode);
@@ -930,7 +930,7 @@ public class ValueSetGenerator {
               "http://hl7.org/fhir/contract-security-classification",
               "ContractResourceSecurityClassificationCode")
           .put("http://hl7.org/fhir/device-definition-status", "FHIRDeviceDefinitionStatusCode")
-          // TODO: drop this rename - it's done to avoid a change in the 4.0.1 CL
+          // TODO(b/244184211): drop this rename - it's done to avoid a change in the 4.0.1 CL
           .put(
               "http://hl7.org/fhir/CodeSystem/medication-statement-status",
               "MedicationStatementStatusCodes")

@@ -40,7 +40,7 @@ def extract_resources_from_bundle(bundle: message.Message, *,
     ValueError: In the event that a field corresponding to the "snake_case" name
     of `resource_type` does not exist on `Bundle.Entry`.
   """
-  # TODO: Replace with templated/consolidated `fhir_types` call.
+  # TODO(b/148949073): Replace with templated/consolidated `fhir_types` call.
   if not fhir_types.is_type_or_profile_of(
       'http://hl7.org/fhir/StructureDefinition/Bundle', bundle):
     raise TypeError(
@@ -70,7 +70,7 @@ def get_contained_resource(
     `ContainedResource`.
     ValueError: In the event that the oneof on `contained_resource` is not set.
   """
-  # TODO: Use an annotation here.
+  # TODO(b/154059162): Use an annotation here.
   if contained_resource.DESCRIPTOR.name != 'ContainedResource':
     raise TypeError('Expected `ContainedResource` but got: '
                     f'{type(contained_resource)}.')

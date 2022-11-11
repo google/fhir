@@ -80,7 +80,7 @@ using ::google::protobuf::util::MessageDifferencer;
 
 namespace {
 
-// TODO: Remove after open source builds are using ANTLR greater
+// TODO(b/216654862): Remove after open source builds are using ANTLR greater
 // than 4.9.3
 //
 // ANTLR versions greater than 4.9.3 removed ANTLR's custom implementation of
@@ -395,7 +395,7 @@ class ResourceReference : public ExpressionNode {
     return absl::OkStatus();
   }
 
-  // TODO: Track %resource type during compilation.
+  // TODO(b/244184211): Track %resource type during compilation.
   const Descriptor* ReturnType() const override { return nullptr; }
 };
 
@@ -1821,7 +1821,7 @@ struct ProtoPtrHash {
       return 0;
     }
 
-    // TODO: This will crash on a non-STU3 or R4 primitive.
+    // TODO(b/148992850): This will crash on a non-STU3 or R4 primitive.
     // That's probably ok for now but we should fix this to never crash ASAP.
     if (IsPrimitive(message->GetDescriptor())) {
       return std::hash<std::string>{}(
@@ -1873,7 +1873,7 @@ class UnionOperator : public BinaryOperator {
       return left_->ReturnType();
     }
 
-    // TODO: Consider refactoring ReturnType to return a set of all
+    // TODO(b/244184211): Consider refactoring ReturnType to return a set of all
     // types in the collection.
     return nullptr;
   }
@@ -1964,7 +1964,7 @@ class CombineFunction : public SingleParameterFunctionNode {
       return child_->ReturnType();
     }
 
-    // TODO: Consider refactoring ReturnType to return a set of all
+    // TODO(b/244184211): Consider refactoring ReturnType to return a set of all
     // types in the collection.
     return nullptr;
   }
@@ -2319,13 +2319,13 @@ absl::StatusOr<ExpressionNode*> static CreateConvertsToFunction(
 
 // Implements the FHIRPath .ofType() function.
 //
-// TODO: This does not currently validate that the tested type
+// TODO(b/244184211): This does not currently validate that the tested type
 // exists. According to the FHIRPath spec, if the type does not exist the
 // expression should throw an error instead of returning false.
 //
-// TODO: Handle type namespaces (i.e. FHIR.* and System.*)
+// TODO(b/244184211): Handle type namespaces (i.e. FHIR.* and System.*)
 //
-// TODO: Handle type inheritance correctly. For example, a Patient
+// TODO(b/244184211): Handle type inheritance correctly. For example, a Patient
 // resource is a DomainResource, but this function, as is, will filter out the
 // Patient if ofType(DomainResource) is used.
 class OfTypeFunction : public ExpressionNode {
@@ -2362,7 +2362,7 @@ class OfTypeFunction : public ExpressionNode {
   }
 
   const Descriptor* ReturnType() const override {
-    // TODO: Fetch the descriptor based on this->type_name_.
+    // TODO(b/244184211): Fetch the descriptor based on this->type_name_.
     return nullptr;
   }
 
@@ -2373,13 +2373,13 @@ class OfTypeFunction : public ExpressionNode {
 
 // Implements the FHIRPath .is() function.
 //
-// TODO: This does not currently validate that the tested type
+// TODO(b/244184211): This does not currently validate that the tested type
 // exists. According to the FHIRPath spec, if the type does not exist the
 // expression should throw an error instead of returning false.
 //
-// TODO: Handle type namespaces (i.e. FHIR.* and System.*)
+// TODO(b/244184211): Handle type namespaces (i.e. FHIR.* and System.*)
 //
-// TODO: Handle type inheritance correctly. For example, a Patient
+// TODO(b/244184211): Handle type inheritance correctly. For example, a Patient
 // resource is a DomainResource, but this function, as is, will return false.
 class IsFunction : public ExpressionNode {
  public:
@@ -2432,13 +2432,13 @@ class IsFunction : public ExpressionNode {
 
 // Implements the FHIRPath .as() function.
 //
-// TODO: This does not currently validate that the tested type
+// TODO(b/244184211): This does not currently validate that the tested type
 // exists. According to the FHIRPath spec, if the type does not exist the
 // expression should throw an error.
 //
-// TODO: Handle type namespaces (i.e. FHIR.* and System.*)
+// TODO(b/244184211): Handle type namespaces (i.e. FHIR.* and System.*)
 //
-// TODO: Handle type inheritance correctly. For example, a Patient
+// TODO(b/244184211): Handle type inheritance correctly. For example, a Patient
 // resource is a DomainResource, but this function, as is, will behave as if
 // a Patient is not a DomainResource and return an empty collection.
 class AsFunction : public ExpressionNode {
@@ -2479,7 +2479,7 @@ class AsFunction : public ExpressionNode {
   }
 
   const Descriptor* ReturnType() const override {
-    // TODO: Fetch the descriptor based on this->type_name_.
+    // TODO(b/244184211): Fetch the descriptor based on this->type_name_.
     return nullptr;
   }
 
@@ -2602,7 +2602,7 @@ class IntersectFunction : public SingleParameterFunctionNode {
       return child_->ReturnType();
     }
 
-    // TODO: Consider refactoring ReturnType to return a set of all
+    // TODO(b/244184211): Consider refactoring ReturnType to return a set of all
     // types in the collection.
     return nullptr;
   }
@@ -3040,7 +3040,7 @@ class AdditionOperator : public BinaryOperator {
       work_space->DeleteWhenFinished(result);
       out_results->push_back(WorkspaceMessage(result));
     } else {
-      // TODO: Add implementation for Date, DateTime, Time, and
+      // TODO(b/244184211): Add implementation for Date, DateTime, Time, and
       // Decimal addition.
       return InvalidArgumentError(absl::StrCat(
           "Addition not supported for ", left_result->GetTypeName(), " and ",
@@ -3606,7 +3606,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     }
 
     if (op == "-") {
-      // TODO: Support "-"
+      // TODO(b/153188056): Support "-"
       SetError(UnimplementedError("'-' operator is not supported yet."));
       return nullptr;
     }
@@ -3849,14 +3849,14 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitTotalInvocation(
       FhirPathParser::TotalInvocationContext* ctx) override {
-    // TODO: Add support for $total.
+    // TODO(b/154666068): Add support for $total.
     SetError(UnimplementedError("$total is not implemented"));
     return nullptr;
   }
 
   antlrcpp::Any visitIndexInvocation(
       FhirPathParser::IndexInvocationContext* ctx) override {
-    // TODO: Add support for $index.
+    // TODO(b/154665405): Add support for $index.
     SetError(UnimplementedError("$index is not implemented"));
     return nullptr;
   }
@@ -3886,13 +3886,13 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     } else if (name == "resource") {
       return ToAny(std::make_shared<ResourceReference>());
     } else if (name == "rootResource") {
-      // TODO: Add suport for %rootResource
+      // TODO(b/154440191): Add suport for %rootResource
       SetError(UnimplementedError("%rootResource is not implemented"));
     } else if (absl::StartsWith(name, "vs-")) {
-      // TODO: Add support for %vs-[name]
+      // TODO(b/154443143): Add support for %vs-[name]
       SetError(UnimplementedError("%vs-[name] is not implemented"));
     } else if (absl::StartsWith(name, "ext-")) {
-      // TODO: Add support for %ext-[name]
+      // TODO(b/154442904): Add support for %ext-[name]
       SetError(UnimplementedError("%ext-[name] is not implemented"));
     } else {
       SetError(
@@ -3914,7 +3914,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     }
 
     if (date_time_str.size() == 13 || date_time_str.size() == 16) {
-      // TODO: Support hour and minute precision
+      // TODO(b/154874664): Support hour and minute precision
       return UnimplementedError(
           "Hour and minute level precision is not supported yet.");
     }
@@ -4010,12 +4010,12 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   antlrcpp::Any visitTerminal(TerminalNode* node) override {
     switch (node->getSymbol()->getType()) {
       case FhirPathLexer::DATE:
-        // TODO: Add support for Date literals.
+        // TODO(b/153188970): Add support for Date literals.
         SetError(UnimplementedError("Date literals are not yet supported."));
         return nullptr;
 
       case FhirPathLexer::TIME:
-        // TODO: Add spport for time literals.
+        // TODO(b/153185021): Add spport for time literals.
         SetError(UnimplementedError("Time literals are not yet supported."));
         return nullptr;
 

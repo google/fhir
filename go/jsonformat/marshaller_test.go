@@ -40,14 +40,14 @@ import (
 	r3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
 )
 
-// TODO: Find a better way to maintain the versioned unit tests.
+// TODO(b/135148603): Find a better way to maintain the versioned unit tests.
 
 type mvr struct {
 	ver fhirversion.Version
 	r   proto.Message
 }
 
-// TODO: merge with other copies of this function
+// TODO(b/141131076): merge with other copies of this function
 func marshalToAny(t *testing.T, pb proto.Message) *anypb.Any {
 	t.Helper()
 	any := &anypb.Any{}

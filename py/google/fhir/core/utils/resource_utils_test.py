@@ -22,7 +22,7 @@ from proto.google.fhir.proto.r4.core.resources import bundle_and_contained_resou
 from proto.google.fhir.proto.r4.core.resources import structure_definition_pb2
 from google.fhir.core.utils import resource_utils
 
-# TODO: These util tests should not be FHIR-specific.
+# TODO(b/176912972): These util tests should not be FHIR-specific.
 
 
 def _bundle_with_single_structure_definition(

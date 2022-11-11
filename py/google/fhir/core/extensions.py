@@ -368,7 +368,7 @@ def add_message_to_extension(msg: message.Message,
       _add_value_to_extension(
           value, extension, annotation_utils.is_choice_type_field(value_field))
     else:
-      # TODO: Invalid FHIR; throw an error here?
+      # TODO(b/152902402): Invalid FHIR; throw an error here?
       pass
   else:  # Add child extensions...
     _add_fields_to_extension(msg, extension)

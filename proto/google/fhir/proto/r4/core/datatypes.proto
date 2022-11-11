@@ -3245,7 +3245,7 @@ message Extension {
 // Specialization of Coding that drops the system and code fields.
 // Fields that use this message must be annotated with
 // fhir_inlined_coding_system and fhir_inlined_coding_code.
-// TODO: autogenerate this.
+// TODO(b/244184211): autogenerate this.
 message CodingWithFixedCode {
   option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
@@ -3273,7 +3273,7 @@ message CodingWithFixedCode {
   Boolean user_selected = 7;
 }
 
-// TODO: autogenerate this.
+// TODO(b/244184211): autogenerate this.
 // A reference from one resource to another
 // See https://www.hl7.org/fhir/datatypes.html#Reference
 message Reference {

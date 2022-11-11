@@ -23,7 +23,7 @@ valid_pairs {
   proto { decimal { value: "1.0E+401" } }
 }
 
-# TODO:  Add other variants of scientific notation.
+# TODO(b/178611707):  Add other variants of scientific notation.
 
 invalid_json: "\"text\""
 invalid_json: "\" 1\""

@@ -23,7 +23,7 @@
 #include "google/fhir/fhir_path/fhir_path_validation.h"
 #include "google/fhir/primitive_handler.h"
 
-// TODO: Refactor this into an internal namespace and directory.
+// TODO(b/181018290): Refactor this into an internal namespace and directory.
 namespace google {
 namespace fhir {
 

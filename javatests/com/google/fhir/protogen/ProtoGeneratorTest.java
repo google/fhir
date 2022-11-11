@@ -59,7 +59,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-// TODO: consider adding more specialized test structure definitions that isolate
+// TODO(b/244184211): consider adding more specialized test structure definitions that isolate
 // individual functionality from ProtoGenerator
 
 /** Unit tests for {@link ProtoGenerator}. */

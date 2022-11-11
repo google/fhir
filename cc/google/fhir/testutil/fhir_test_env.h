@@ -45,7 +45,7 @@ namespace testutil {
 
 template <typename BundleType, typename PrimitiveHandlerType>
 struct FhirTestEnv {
-  // TODO: Update to eliminate duplication between types that are
+  // TODO(b/159944432): Update to eliminate duplication between types that are
   // defined in PrimitiveHandler and in FhirTestEnv.
   using PrimitiveHandler = PrimitiveHandlerType;
 

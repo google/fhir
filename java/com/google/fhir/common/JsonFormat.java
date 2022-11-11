@@ -317,7 +317,7 @@ public final class JsonFormat {
             @Override
             public void print(PrinterImpl printer, MessageOrBuilder message)
                 throws IOException, InvalidFhirException {
-              // TODO: handle STU3 Any.
+              // TODO(b/244184211): handle STU3 Any.
               printer.printContainedResource(
                   ((Any) message).unpack(com.google.fhir.r4.core.ContainedResource.class));
             }
@@ -367,7 +367,7 @@ public final class JsonFormat {
       }
     }
 
-    // TODO: Replace with utility that throws a checked exception
+    // TODO(b/176651098): Replace with utility that throws a checked exception
     private static Object getValue(Message primitive) {
       return primitive.getField(primitive.getDescriptorForType().findFieldByName("value"));
     }
@@ -532,7 +532,7 @@ public final class JsonFormat {
                     com.google.fhir.stu3.proto.ReferenceId.getDescriptor().getFullName())
                 || messageName.equals(
                     com.google.fhir.r4.core.ReferenceId.getDescriptor().getFullName()))) {
-          // TODO: detect ReferenceId with an annotation
+          // TODO(b/153462178): detect ReferenceId with an annotation
           String referenceValue =
               (String) message.getField(message.getDescriptorForType().findFieldByName("value"));
           generator.print("\"" + name + "\":" + blankOrSpace + "\"" + referenceValue + "\"");
@@ -726,7 +726,7 @@ public final class JsonFormat {
 
     private void mergeMessage(JsonObject json, Message.Builder builder)
         throws InvalidFhirException {
-      // TODO: Use an annotation here.
+      // TODO(b/154059162): Use an annotation here.
       if (builder.getDescriptorForType().getName().equals("ContainedResource")) {
         // We handle contained resources in a special way, since we need to inspect the input to
         // determine its type.

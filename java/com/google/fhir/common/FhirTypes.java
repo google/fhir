@@ -88,7 +88,7 @@ public final class FhirTypes {
 
   public static boolean isProfileOfCode(Descriptor type) {
     if (!AnnotationUtils.getFhirValuesetUrl(type).isEmpty()) {
-      // TODO: This is an STU3-type code
+      // TODO(b/161402929): This is an STU3-type code
       return true;
     }
     return isProfileOf(CODE_URL, type);

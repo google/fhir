@@ -313,7 +313,7 @@ public final class ExtensionWrapper {
       throw new IllegalArgumentException(
           "Unrecognized primitive type: " + valueDescriptor.getFullName());
     }
-    // TODO: handle stu3 meta field, which is absent on r4 extension.
+    // TODO(b/244184211): handle stu3 meta field, which is absent on r4 extension.
     // Fall back to adding the value as a message.
     addMessageToExtension(value, result);
   }
@@ -347,12 +347,12 @@ public final class ExtensionWrapper {
     }
   }
 
-  // TODO: This should handle the extension fields.
+  // TODO(b/244184211): This should handle the extension fields.
   private static void addExtensionToMessage(Extension extension, Message.Builder builder) {
     // Copy the id field if present.
     if (extension.hasId()) {
       FieldDescriptor idField = builder.getDescriptorForType().findFieldByName("id");
-      // TODO: handle copying the id field for all kinds of extensions.
+      // TODO(b/244184211): handle copying the id field for all kinds of extensions.
       if (idField != null) {
         ProtoUtils.fieldWiseCopy(extension.getId(), builder.getFieldBuilder(idField));
       }
@@ -419,7 +419,7 @@ public final class ExtensionWrapper {
         }
         Message.Builder subBuilder = builder.newBuilderForField(field);
         if (inner.hasValue()) {
-          // TODO: handle ids on inner extensions
+          // TODO(b/244184211): handle ids on inner extensions
           if (inner.getExtensionCount() > 0) {
             throw new IllegalArgumentException(
                 "Extension holds both a value and sub-extensions: " + inner);

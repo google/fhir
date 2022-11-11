@@ -97,7 +97,7 @@ public final class PrimitiveWrappersTest {
         .filter(
             type ->
                 AnnotationUtils.isPrimitiveType(type)
-                    // TODO: Remove "ReferenceId" handling once ReferenceId is no
+                    // TODO(b/178495903): Remove "ReferenceId" handling once ReferenceId is no
                     // longer (erroneously) marked as a primitive.
                     && !type.getName().equals("ReferenceId")
                     // STU3 profiles of codes are marked as primitive types.
@@ -132,7 +132,7 @@ public final class PrimitiveWrappersTest {
       assertThat(protoToString(message)).isEqualTo(jsonString);
 
       // Test parse
-      // TODO: Compare as protos once there is true multiversion support for Java.
+      // TODO(b/178424920): Compare as protos once there is true multiversion support for Java.
       assertThat(stringToProto(jsonString, message.newBuilderForType()).toString())
           .isEqualTo(message.toString());
 
@@ -158,7 +158,7 @@ public final class PrimitiveWrappersTest {
     assertWithMessage("Suite has no invalid_json cases").that(invalidJsonLines).isNotEmpty();
     for (String jsonString : invalidJsonLines) {
 
-      // TODO: convert to only accepting InvalidFhirException
+      // TODO(b/176651098): convert to only accepting InvalidFhirException
       assertThrows(
           "Should have failed: " + jsonString,
           Exception.class,
@@ -176,7 +176,7 @@ public final class PrimitiveWrappersTest {
     assertWithMessage("Suite has no invalid_protos cases").that(invalidProtoCases).isNotEmpty();
     for (Message union : invalidProtoCases) {
       Message message = getOneofValue(union);
-      // TODO: convert to only accepting InvalidFhirException
+      // TODO(b/176651098): convert to only accepting InvalidFhirException
       assertThrows(
           "Should have failed:\n" + message,
           Exception.class,

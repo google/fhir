@@ -139,7 +139,7 @@ def _validate_fhir_constraints(
 
   if proto_utils.is_message_type(msg, any_pb2.Any):
     # We do not validate "Any" constrained resources.
-    # TODO: Potentially unpack the correct type and validate?
+    # TODO(b/155339868): Potentially unpack the correct type and validate?
     return
 
   # Enumerate and validate fields of the message

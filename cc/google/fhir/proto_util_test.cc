@@ -35,7 +35,7 @@ using ::google::fhir::stu3::proto::Observation;
 using ::google::fhir::testutil::EqualsProto;
 using ::google::protobuf::Message;
 
-// TODO: These util tests should not be FHIR-specific.
+// TODO(b/176912972): These util tests should not be FHIR-specific.
 
 Encounter MakeTestEncounter() {
   Encounter encounter;

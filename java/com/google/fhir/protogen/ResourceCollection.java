@@ -33,7 +33,7 @@ import java.util.function.Predicate;
  * <p>Resources in their JSON format can be put in the collection. They are only ever parsed when
  * retrieved (either by `get` or through iterating the collection).
  *
- * <p>TODO: Consider aligning approaches to loading FHIR packages from the archive
+ * <p>TODO(b/240605161): Consider aligning approaches to loading FHIR packages from the archive
  * file.
  */
 class ResourceCollection<T extends Message> implements Iterable<T> {

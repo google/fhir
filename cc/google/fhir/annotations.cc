@@ -46,7 +46,7 @@ const bool IsProfileOf(const ::google::protobuf::Descriptor* descriptor,
 const bool IsProfile(const ::google::protobuf::Descriptor* descriptor) {
   // Note ContainedResource is not a true FHIR type, an as such, profiles of
   // contained resources don't have a fhir_profile_base
-  // TODO: Use an annotation for this.
+  // TODO(b/244184211): Use an annotation for this.
   return descriptor->options().ExtensionSize(proto::fhir_profile_base) > 0 ||
          (descriptor->name() == "ContainedResource" &&
           (descriptor->full_name() !=
@@ -153,7 +153,7 @@ const bool IsContainedResource(const ::google::protobuf::Message& message) {
 }
 
 const bool IsContainedResource(const ::google::protobuf::Descriptor* descriptor) {
-  // TODO: Add a contained-resource specific annotation and read
+  // TODO(b/244184211): Add a contained-resource specific annotation and read
   // that instead.
   return descriptor->name() == "ContainedResource";
 }

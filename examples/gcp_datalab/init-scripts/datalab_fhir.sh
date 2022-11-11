@@ -66,7 +66,7 @@ function configure_master(){
 
   # For some reason Spark has issues resolving the user's directory inside of
   # Datalab.
-  # TODO: consider fixing in Dataproc proper.
+  # TODO(b/244184211): consider fixing in Dataproc proper.
   if ! grep -q '^spark\.sql\.warehouse\.dir=' "${SPARK_CONF}"; then
     echo 'spark.sql.warehouse.dir=/root/spark-warehouse' >> "${SPARK_CONF}"
   fi

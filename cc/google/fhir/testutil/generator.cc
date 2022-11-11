@@ -128,7 +128,7 @@ int RandomValueProvider::GetUnsignedInt(const google::protobuf::FieldDescriptor*
 
 std::string RandomValueProvider::GetDecimal(
     const google::protobuf::FieldDescriptor* field, int recursion_depth) {
-  // TODO: Use a fractional component when the parser properly
+  // TODO(b/160252654): Use a fractional component when the parser properly
   // handles a list of decimals.
   // return absl::StrCat(GetInteger(field, recursion_depth), ".",
   //                    GetUnsignedInt(field, recursion_depth));
@@ -180,7 +180,7 @@ std::string RandomValueProvider::GetId(const google::protobuf::FieldDescriptor* 
 
 std::string RandomValueProvider::GetUuid(const google::protobuf::FieldDescriptor* field,
                                          int recursion_depth) {
-  // TODO: generate UUID at runtime
+  // TODO(b/154072870): generate UUID at runtime
   return absl::StrCat("urn:uuid:", "2eb090b1-9da8-4549-ba31-bf3c3a0239f3");
 }
 
@@ -421,7 +421,7 @@ absl::Status FhirGenerator::FillReference(
     // This should be impossible, since anything that causes succeeded to
     // be false should have been reported as fatal, and short-circuited due to
     // the FailOnErrorOrFatal error handler.
-    // TODO: Remove this branch once we've deprecated
+    // TODO(b/237300807): Remove this branch once we've deprecated
     // FastFailErrorHandlers.
     if (result == ParseResult::kFailed) {
       return absl::InternalError(

@@ -35,7 +35,7 @@ public final class FieldRetaggerTest {
     return builder;
   }
 
-  // TODO: For historical reasons, ProtoGenerator generates reserved fields using
+  // TODO(b/192419079): For historical reasons, ProtoGenerator generates reserved fields using
   // normal fields, with the "reservedReason" annotation.  These should be updated to just use
   // ReservedRanges.
   private DescriptorProto.Builder addReservedField(DescriptorProto.Builder builder, int number) {

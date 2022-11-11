@@ -271,7 +271,7 @@ def _is_only_primitive(name: str,
   """Returns if the message specified is only a primitive and nothing else."""
   return (
       annotation_utils.is_primitive_type(msg_descriptor)
-      # TODO: Remove "ReferenceId" handling once ReferenceId
+      # TODO(b/178495903): Remove "ReferenceId" handling once ReferenceId
       # is no longer (erroneously) marked as a primitive.
       and name != 'ReferenceId'
       # STU3 profiles of codes are marked as primitive types.

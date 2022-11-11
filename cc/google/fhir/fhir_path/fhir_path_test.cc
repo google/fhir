@@ -1987,7 +1987,7 @@ TYPED_TEST(FhirPathTest, TestStringLiteralEscaping) {
               EvalsToStringThatMatches(StrEq(" ")));
 
   // Escape sequences that should be ignored (but are not currently.)
-  // TODO: These sequences should not be unescaped.
+  // TODO(b/154666440): These sequences should not be unescaped.
   EXPECT_THAT(TestFixture::Evaluate("'\\x20'"),
               EvalsToStringThatMatches(StrEq(" ")));
   EXPECT_THAT(TestFixture::Evaluate("'\\123'"),
@@ -2038,11 +2038,11 @@ TYPED_TEST(FhirPathTest, TestDateTimeLiteral) {
       TestFixture::Evaluate("@2014-01-25T14:30:14").value().GetMessages(),
       ElementsAreArray({EqualsProto(second_precision)}));
 
-  // TODO: MINUTE precision should be supported.
+  // TODO(b/154874664): MINUTE precision should be supported.
   EXPECT_THAT(TestFixture::Evaluate("@2014-01-25T14:30"),
               HasStatusCode(StatusCode::kUnimplemented));
 
-  // TODO: HOUR precision should be supported.
+  // TODO(b/154874664): HOUR precision should be supported.
   EXPECT_THAT(TestFixture::Evaluate("@2014-01-25T14"),
               HasStatusCode(StatusCode::kUnimplemented));
 
@@ -2067,16 +2067,16 @@ TYPED_TEST(FhirPathTest, TestDateTimeLiteral) {
 
 TYPED_TEST(FhirPathTest, TestTimeComparisonsWithLiterals) {
   // Test cases form http://hl7.org/fhirpath/#datetime-equality
-  // TODO: This should evaluate to true.
+  // TODO(b/154874664): This should evaluate to true.
   EXPECT_THAT(TestFixture::Evaluate("@2012-01-01T10:30 = @2012-01-01T10:30"),
               HasStatusCode(StatusCode::kUnimplemented));
-  // TODO: This should evaluate to false.
+  // TODO(b/154874664): This should evaluate to false.
   EXPECT_THAT(TestFixture::Evaluate("@2012-01-01T10:30 = @2012-01-01T10:31"),
               HasStatusCode(StatusCode::kUnimplemented));
-  // TODO: This should evaluate to empty.
+  // TODO(b/154874664): This should evaluate to empty.
   EXPECT_THAT(TestFixture::Evaluate("@2012-01-01T10:30:31 = @2012-01-01T10:30"),
               HasStatusCode(StatusCode::kUnimplemented));
-  // TODO: This should evaluate to true.
+  // TODO(b/154877869): This should evaluate to true.
   EXPECT_THAT(
       TestFixture::Evaluate("@2012-01-01T10:30:31.0 = @2012-01-01T10:30:31"),
       EvalsToFalse());
@@ -2084,7 +2084,7 @@ TYPED_TEST(FhirPathTest, TestTimeComparisonsWithLiterals) {
       TestFixture::Evaluate("@2012-01-01T10:30:31.1 = @2012-01-01T10:30:31"),
       EvalsToFalse());
   // Additional test case to cover unimplemented example above.
-  // TODO: This should evaluate to empty.
+  // TODO(b/155126141): This should evaluate to empty.
   EXPECT_THAT(TestFixture::Evaluate("@2018-03-01T = @2018-03-01T10:30:00"),
               EvalsToFalse());
   EXPECT_THAT(
@@ -2099,7 +2099,7 @@ TYPED_TEST(FhirPathTest, TestTimeComparisonsWithLiterals) {
       TestFixture::Evaluate(
           "@2017-11-05T01:30:00.0-04:00 > @2017-11-05T01:15:00.0-05:00"),
       EvalsToFalse());
-  // TODO: This should evaluate to true.
+  // TODO(b/154874878): This should evaluate to true.
   EXPECT_THAT(
       TestFixture::Evaluate(
           "@2017-11-05T01:30:00.0-04:00 = @2017-11-05T00:30:00.0-05:00"),
@@ -2113,7 +2113,7 @@ TYPED_TEST(FhirPathTest, TestTimeComparisonsWithLiterals) {
   EXPECT_THAT(
       TestFixture::Evaluate("@2018-03-01T10:30:00 > @2018-03-01T10:00:00"),
       EvalsToTrue());
-  // TODO: This should evaluate to empty.
+  // TODO(b/154874664): This should evaluate to empty.
   EXPECT_THAT(TestFixture::Evaluate("@2018-03-01T10 > @2018-03-01T10:30"),
               HasStatusCode(StatusCode::kUnimplemented));
   EXPECT_THAT(
@@ -2127,7 +2127,7 @@ TYPED_TEST(FhirPathTest, TestTimeComparisonsWithLiterals) {
   EXPECT_THAT(
       TestFixture::Evaluate("@2018-03-01T10:30:00 < @2018-03-01T10:00:00"),
       EvalsToFalse());
-  // TODO: This should evaluate to empty.
+  // TODO(b/154874664): This should evaluate to empty.
   EXPECT_THAT(TestFixture::Evaluate("@2018-03-01T10 < @2018-03-01T10:30"),
               HasStatusCode(StatusCode::kUnimplemented));
   EXPECT_THAT(
@@ -2141,7 +2141,7 @@ TYPED_TEST(FhirPathTest, TestTimeComparisonsWithLiterals) {
   EXPECT_THAT(
       TestFixture::Evaluate("@2018-03-01T10:30:00 <= @2018-03-01T10:00:00"),
       EvalsToFalse());
-  // TODO: This should evaluate to empty.
+  // TODO(b/154874664): This should evaluate to empty.
   EXPECT_THAT(TestFixture::Evaluate("@2018-03-01T10 <= @2018-03-01T10:30"),
               HasStatusCode(StatusCode::kUnimplemented));
   EXPECT_THAT(
@@ -2155,7 +2155,7 @@ TYPED_TEST(FhirPathTest, TestTimeComparisonsWithLiterals) {
   EXPECT_THAT(
       TestFixture::Evaluate("@2018-03-01T10:30:00 >= @2018-03-01T10:00:00"),
       EvalsToTrue());
-  // TODO: This should evaluate to empty.
+  // TODO(b/154874664): This should evaluate to empty.
   EXPECT_THAT(TestFixture::Evaluate("@2018-03-01T10 >= @2018-03-01T10:30"),
               HasStatusCode(StatusCode::kUnimplemented));
   EXPECT_THAT(
@@ -2544,7 +2544,7 @@ const char kRangeValueSetUrl[] = "http://terminology.hl7.org/ValueSet/Range";
 template <typename T>
 class FhirPathTestForValueSets : public FhirPathTest<T> {
  protected:
-  // TODO: Refactor this to use an in-memory resolver using real
+  // TODO(b/204365134): Refactor this to use an in-memory resolver using real
   // system values.
   class FakeTerminologyResolver : public terminology::TerminologyResolver {
    public:

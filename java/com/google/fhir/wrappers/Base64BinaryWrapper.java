@@ -57,7 +57,7 @@ public class Base64BinaryWrapper extends PrimitiveWrapper<Base64Binary> {
   }
 
   private static Base64Binary parseAndValidate(String input) {
-    // TODO: Java regex engine throws a StackOverflow exception if we try to validate
+    // TODO(b/144523187): Java regex engine throws a StackOverflow exception if we try to validate
     // here.
 
     BaseEncoding encoding = BaseEncoding.base64();
@@ -86,7 +86,7 @@ public class Base64BinaryWrapper extends PrimitiveWrapper<Base64Binary> {
 
   @Override
   public void validateWrapped() {
-    // TODO: Java regex engine throws a StackOverflow exception if we try to validate
+    // TODO(b/178598546): Java regex engine throws a StackOverflow exception if we try to validate
     // here.
     if (hasValue()) {
       return;
