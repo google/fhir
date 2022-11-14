@@ -36,9 +36,11 @@ import com.google.fhir.r4.core.Uri;
 import com.google.fhir.r4.core.ValueSet;
 import com.google.testing.junit.testparameterinjector.TestParameter;
 import com.google.testing.junit.testparameterinjector.TestParameterInjector;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.Channels;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +48,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -459,11 +462,15 @@ public final class FhirPackageTest {
   }
 
   @Test
-  public void load_withTarFile(@TestParameter({".tar.gz", ".tgz"}) String tarFileExtension)
+  public void load_withTarGzFile(@TestParameter({".tar.gz", ".tgz"}) String tarFileExtension)
       throws IOException, InvalidFhirException {
     File tarGzFile = File.createTempFile("foo", tarFileExtension);
     try (TarArchiveOutputStream tOut =
-        new TarArchiveOutputStream(new FileOutputStream(tarGzFile))) {
+        new TarArchiveOutputStream(
+            new GzipCompressorOutputStream(
+                new BufferedOutputStream(
+                    Channels.newOutputStream(
+                        new FileOutputStream(tarGzFile.getAbsolutePath()).getChannel()))))) {
       TarArchiveEntry t = new TarArchiveEntry(new File("foo.json"));
       byte[] content =
           "{\"resourceType\":\"StructureDefinition\", \"url\":\"http://foo.com\"}"

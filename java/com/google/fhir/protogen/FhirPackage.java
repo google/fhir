@@ -42,6 +42,7 @@ import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 
 /**
  * Represents a FHIR Proto package.
@@ -257,7 +258,7 @@ public class FhirPackage {
   }
 
   /**
-   * Gets the archive input stream from a ZIP or TAR file.
+   * Gets the archive input stream from a ZIP or TAR.GZ file.
    *
    * @param archiveFilePath The absolute path to the archive file (ZIP or TAR) that is loaded.
    *     Expected to end with ".zip" "tar.gz" or ".tgz".
@@ -268,7 +269,7 @@ public class FhirPackage {
     if (archiveFilePath.endsWith(".zip")) {
       return new ZipArchiveInputStream(fileStream);
     } else if (archiveFilePath.endsWith(".tar.gz") || archiveFilePath.endsWith(".tgz")) {
-      return new TarArchiveInputStream(fileStream);
+      return new TarArchiveInputStream(new GzipCompressorInputStream(fileStream));
     } else {
       throw new IllegalArgumentException(
           "`archiveFilePath` must end with '.zip', 'tar.gz' or '.tgz': " + archiveFilePath);
