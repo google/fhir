@@ -15,6 +15,7 @@
 #ifndef GOOGLE_FHIR_FHIR_PACKAGE_H_
 #define GOOGLE_FHIR_FHIR_PACKAGE_H_
 
+#include <functional>
 #include <iterator>
 #include <memory>
 #include <string>
@@ -275,8 +276,25 @@ struct FhirPackage {
   ResourceCollection<google::fhir::r4::core::CodeSystem> code_systems;
   ResourceCollection<google::fhir::r4::core::ValueSet> value_sets;
 
+  // Builds a FhirPackage instance from the archive at `archive_file_path`.
+  // Processes each .json file in the archive for future access as protos via
+  // GetStructureDefinition, GetCodeSystem, etc. calls.
   static absl::StatusOr<std::unique_ptr<FhirPackage>> Load(
       absl::string_view archive_file_path);
+
+  // Builds a FhirPackage instance from the archive at `archive_file_path`.
+  // Callers may pass a `handle_entry` function to supply custom logic for
+  // processing entries from the archive. The function be called with the path
+  // for each entry in the archive, the contents of said entry and a FhirPackage
+  // instance the function is free to modify. This logic will be applied in
+  // addition to the default logic performed in calls to `Load` where no
+  // `handle_entry` function is provided. That is, `handle_entry` may be used to
+  // supply additional logic to that which is already performed in `Load` calls.
+  static absl::StatusOr<std::unique_ptr<FhirPackage>> Load(
+      absl::string_view archive_file_path,
+      std::function<absl::Status(absl::string_view, absl::string_view,
+                                 FhirPackage&)>
+          handle_entry);
 
   absl::StatusOr<const google::fhir::r4::core::StructureDefinition*>
   GetStructureDefinition(absl::string_view uri) {

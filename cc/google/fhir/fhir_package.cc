@@ -14,13 +14,13 @@
 
 #include "google/fhir/fhir_package.h"
 
+#include <functional>
 #include <memory>
 #include <optional>
 #include <string>
 #include <utility>
 
 #include "google/protobuf/text_format.h"
-#include "absl/cleanup/cleanup.h"
 #include "absl/status/status.h"
 #include "absl/strings/match.h"
 #include "absl/strings/string_view.h"
@@ -90,8 +90,13 @@ absl::Status MaybeAddResourceToFhirPackage(
   return absl::OkStatus();
 }
 
-absl::Status MaybeAddResourceToFhirPackage(absl::string_view resource_json,
-                                           FhirPackage& fhir_package) {
+absl::Status MaybeAddEntryToFhirPackage(absl::string_view entry_name,
+                                        absl::string_view resource_json,
+                                        FhirPackage& fhir_package) {
+  if (!absl::EndsWith(entry_name, ".json")) {
+    return absl::OkStatus();
+  }
+
   auto parsed_json = std::make_unique<internal::FhirJson>();
   FHIR_RETURN_IF_ERROR(
       internal::ParseJsonValue(std::string(resource_json), *parsed_json));
@@ -99,6 +104,108 @@ absl::Status MaybeAddResourceToFhirPackage(absl::string_view resource_json,
   return MaybeAddResourceToFhirPackage(std::move(parsed_json), *parsed_json_ptr,
                                        fhir_package);
 }
+
+// Opens the archive for reading at `archive_file_path` and returns a unique
+// pointer to the archive. The unique pointer will close and free the archive
+// when it is destructed.
+absl::StatusOr<std::unique_ptr<archive, decltype(&archive_read_free)>>
+OpenArchive(absl::string_view archive_file_path) {
+  // archive_read_free itself calls archive_read_close, so no further cleanup is
+  // required by the caller.
+  std::unique_ptr<archive, decltype(&archive_read_free)> archive(
+      archive_read_new(), &archive_read_free);
+  archive_read_support_filter_all(archive.get());
+  archive_read_support_format_all(archive.get());
+
+  int archive_open_error = archive_read_open_filename(
+      archive.get(), std::string(archive_file_path).c_str(),
+      /*block_size=*/1024);
+  if (archive_open_error != ARCHIVE_OK) {
+    return absl::InvalidArgumentError(absl::StrFormat(
+        "Unable to open archive %s, error code: %d %s.", archive_file_path,
+        archive_open_error, archive_error_string(archive.get())));
+  }
+  return std::move(archive);
+}
+
+absl::Status LoadPackage(absl::string_view archive_file_path,
+                         std::function<absl::Status(
+                             absl::string_view entry_name,
+                             absl::string_view contents, FhirPackage& package)>
+                             handle_entry,
+                         FhirPackage& fhir_package) {
+  // The FHIR_ASSIGN_OR_RETURN macro expansion doesn't parse correctly without
+  // placing the type inside a 'using' statement.
+  using archive_ptr = std::unique_ptr<archive, decltype(&archive_read_free)>;
+  FHIR_ASSIGN_OR_RETURN(archive_ptr archive, OpenArchive(archive_file_path));
+
+  absl::Status all_errors;
+  archive_entry* entry;
+  while (true) {
+    int read_next_status = archive_read_next_header(archive.get(), &entry);
+    if (read_next_status == ARCHIVE_EOF) {
+      break;
+    } else if (read_next_status == ARCHIVE_RETRY) {
+      continue;
+    } else if (read_next_status != ARCHIVE_OK &&
+               read_next_status != ARCHIVE_WARN) {
+      return absl::InvalidArgumentError(absl::StrFormat(
+          "Unable to read archive %s, error code: %d %s.", archive_file_path,
+          read_next_status, archive_error_string(archive.get())));
+    }
+
+    std::string entry_name = archive_entry_pathname(entry);
+    // Ignore deprecated package_info data.
+    if (absl::EndsWith(entry_name, "package_info.prototxt") ||
+        absl::EndsWith(entry_name, "package_info.textproto")) {
+      continue;
+    }
+
+    int64 length = archive_entry_size(entry);
+    std::string contents(length, '\0');
+    int64 read = archive_read_data(archive.get(), &contents[0], length);
+    if (read < length) {
+      return absl::InvalidArgumentError(
+          absl::StrFormat("Unable to read entry %s from archive %s.",
+                          entry_name, archive_file_path));
+    }
+
+    absl::Status entry_status =
+        handle_entry(entry_name, contents, fhir_package);
+    if (!entry_status.ok()) {
+      // Concatenate all errors founds while processing the package.
+      std::string error_message =
+          absl::StrFormat("Unhandled JSON entry %s due to error: %s.",
+                          entry_name, entry_status.message());
+      if (all_errors.ok()) {
+        all_errors = absl::InvalidArgumentError(absl::StrCat(
+            "Error(s) encountered during parsing: ", error_message));
+      } else {
+        all_errors = absl::Status(
+            all_errors.code(),
+            absl::StrCat(all_errors.message(), "; ", error_message));
+      }
+    }
+  }
+
+  return all_errors;
+}
+
+// Concatenates error messages from the two statuses into a single status. If
+// one status is ok, returns the other. If both are not ok, returns a new error
+// with the code of the first status.
+absl::Status ConcatErrors(const absl::Status& status1,
+                          const absl::Status& status2) {
+  if (status1.ok()) {
+    return status2;
+  } else if (status2.ok()) {
+    return status1;
+  } else {
+    return absl::Status(status1.code(), absl::StrCat(status1.message(), "; ",
+                                                     status2.message()));
+  }
+}
+
 }  // namespace
 
 namespace internal {
@@ -154,81 +261,36 @@ absl::StatusOr<std::string> GetResourceUrl(const FhirJson& parsed_json) {
 
 absl::StatusOr<std::unique_ptr<FhirPackage>> FhirPackage::Load(
     absl::string_view archive_file_path) {
-  std::unique_ptr<archive, decltype(&archive_read_free)> archive(
-      archive_read_new(), &archive_read_free);
-  archive_read_support_filter_all(archive.get());
-  archive_read_support_format_all(archive.get());
-
-  int archive_open_error = archive_read_open_filename(
-      archive.get(), std::string(archive_file_path).c_str(),
-      /*block_size=*/1024);
-  if (archive_open_error != ARCHIVE_OK) {
-    return absl::InvalidArgumentError(absl::StrFormat(
-        "Unable to open archive %s, error code: %d %s.", archive_file_path,
-        archive_open_error, archive_error_string(archive.get())));
-  }
-  absl::Cleanup archive_closer = [&archive] {
-    archive_read_close(archive.get());
-  };
-
   // We can't use make_unique here because the constructor is private.
   auto fhir_package = absl::WrapUnique(new FhirPackage());
-  absl::Status parse_errors;
+  FHIR_RETURN_IF_ERROR(LoadPackage(archive_file_path,
+                                   &MaybeAddEntryToFhirPackage, *fhir_package));
+  return std::move(fhir_package);
+}
 
-  archive_entry* entry;
-  while (true) {
-    int read_next_status = archive_read_next_header(archive.get(), &entry);
-    if (read_next_status == ARCHIVE_EOF) {
-      break;
-    } else if (read_next_status == ARCHIVE_RETRY) {
-      continue;
-    } else if (read_next_status != ARCHIVE_OK &&
-               read_next_status != ARCHIVE_WARN) {
-      return absl::InvalidArgumentError(absl::StrFormat(
-          "Unable to read archive %s, error code: %d %s.", archive_file_path,
-          read_next_status, archive_error_string(archive.get())));
-    }
+absl::StatusOr<std::unique_ptr<FhirPackage>> FhirPackage::Load(
+    absl::string_view archive_file_path,
+    std::function<absl::Status(absl::string_view entry_name,
+                               absl::string_view contents,
+                               FhirPackage& package)>
+        handle_entry) {
+  // We can't use make_unique here because the constructor is private.
+  auto fhir_package = absl::WrapUnique(new FhirPackage());
 
-    std::string entry_name = archive_entry_pathname(entry);
-    int64 length = archive_entry_size(entry);
+  // Create a lambda which calls the default MaybeAddEntryToFhirPackage handler
+  // and also calls the user-provided `handle_entry` function.
+  auto handle_entry_wrapper = [&handle_entry](absl::string_view entry_name,
+                                              absl::string_view contents,
+                                              FhirPackage& package) {
+    absl::Status add_entry_status =
+        MaybeAddEntryToFhirPackage(entry_name, contents, package);
+    absl::Status handle_entry_status =
+        handle_entry(entry_name, contents, package);
+    return ConcatErrors(add_entry_status, handle_entry_status);
+  };
 
-    std::string contents(length, '\0');
-    int64 read = archive_read_data(archive.get(), &contents[0], length);
-    if (read < length) {
-      return absl::InvalidArgumentError(
-          absl::StrFormat("Unable to read entry %s from archive %s.",
-                          entry_name, archive_file_path));
-    }
-
-    // Ignore deprecated package_info data.
-    if (absl::EndsWith(entry_name, "package_info.prototxt") ||
-        absl::EndsWith(entry_name, "package_info.textproto")) {
-      continue;
-    }
-
-    if (absl::EndsWith(entry_name, ".json")) {
-      absl::Status add_status =
-          MaybeAddResourceToFhirPackage(contents, *fhir_package);
-      if (!add_status.ok()) {
-        // Concatenate all errors founds while parsing the package.
-        std::string error_message =
-            absl::StrFormat("Unhandled JSON entry %s due to error: %s.",
-                            entry_name, add_status.message());
-        if (parse_errors.ok()) {
-          parse_errors = absl::InvalidArgumentError(absl::StrCat(
-              "Error(s) encountered during parsing: ", error_message));
-        } else {
-          parse_errors = absl::Status(
-              parse_errors.code(),
-              absl::StrCat(parse_errors.message(), "; ", error_message));
-        }
-      }
-    }
-  }
-
-  if (!parse_errors.ok()) {
-    return parse_errors;
-  }
+  FHIR_RETURN_IF_ERROR(
+      LoadPackage(archive_file_path, handle_entry_wrapper, *fhir_package));
   return std::move(fhir_package);
 }
 

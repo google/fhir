@@ -343,6 +343,55 @@ TEST(FhirPackageTest, NonResourceIgnored) {
   EXPECT_TRUE(fhir_package->GetValueSet("http://value.set/id").ok());
 }
 
+TEST(FhirPackageTest, LoadWithUserProvidedHandlerCallsHandler) {
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string temp_name,
+      CreateZipFileContaining({
+          {"a_value_set.json",
+           R"({"resourceType": "ValueSet", "url": "http://value.set/id",
+               "id": "a-value-set", "status": "draft"})"},
+          {"random_file.json", R"({"foo": "bar", "baz": "quux"})"},
+      }));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
+
+  // Pass a handler which counts the number of entries in the archive.
+  int count = 0;
+  auto entry_counter = [&count](absl::string_view entry_name,
+                                absl::string_view contents,
+                                FhirPackage& package) {
+    count++;
+    return absl::OkStatus();
+  };
+
+  FHIR_ASSERT_OK_AND_ASSIGN(std::unique_ptr<FhirPackage> fhir_package,
+                            FhirPackage::Load(temp_name, entry_counter));
+
+  EXPECT_EQ(count, 2);
+  // Ensure we can read the package as normal.
+  EXPECT_TRUE(fhir_package->GetValueSet("http://value.set/id").ok());
+}
+
+TEST(FhirPackageTest, LoadWithUserProvidedHandlerReturnsErrorsFromHandler) {
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string temp_name,
+      CreateZipFileContaining({
+          {"a_value_set.json",
+           R"({"resourceType": "ValueSet", "url": "http://value.set/id",
+               "id": "a-value-set", "status": "draft"})"},
+          {"random_file.json", R"({"foo": "bar", "baz": "quux"})"},
+      }));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
+
+  // Pass a handler returning a non-ok status and ensure Load returns an error.
+  auto unhappy_handler = [](absl::string_view entry_name,
+                            absl::string_view contents, FhirPackage& package) {
+    return absl::InvalidArgumentError("oh no!");
+  };
+
+  EXPECT_EQ(FhirPackage::Load(temp_name, unhappy_handler).status().code(),
+            absl::StatusCode::kInvalidArgument);
+}
+
 TEST(FhirPackageManager, GetResourceForAddedPackagesSucceeds) {
   FHIR_ASSERT_OK_AND_ASSIGN(
       std::string temp_name,
