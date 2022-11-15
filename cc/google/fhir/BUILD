@@ -541,6 +541,7 @@ cc_test(
         ":fhir_package",
         "//cc/google/fhir/json:fhir_json",
         "//cc/google/fhir/json:json_sax_handler",
+        "//cc/google/fhir/testutil:archive",
         "//proto/google/fhir/proto:annotations_cc_proto",
         "//proto/google/fhir/proto:profile_config_cc_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
@@ -552,7 +553,6 @@ cc_test(
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings:str_format",
         "@com_google_googletest//:gtest_main",
-        "@libarchive",
     ],
 )
 

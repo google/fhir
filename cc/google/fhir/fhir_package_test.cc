@@ -30,6 +30,7 @@
 #include "absl/strings/str_format.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json/json_sax_handler.h"
+#include "google/fhir/testutil/archive.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 #include "proto/google/fhir/proto/profile_config.pb.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
@@ -37,86 +38,13 @@
 #include "proto/google/fhir/proto/r4/core/resources/search_parameter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/structure_definition.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/value_set.pb.h"
-#include "libarchive/archive.h"
-#include "libarchive/archive_entry.h"
 
 namespace google::fhir {
 
 namespace {
+using ::google::fhir::testutil::CreateTarFileContaining;
+using ::google::fhir::testutil::CreateZipFileContaining;
 using ::testing::UnorderedElementsAre;
-
-// File contents provided in CreateArchiveContaining calls.
-struct ArchiveContents {
-  const std::string name;
-  const std::string data;
-};
-
-// Writes an archive to a temporary file containing the given {name,
-// data} structs. The `set_archive_format` argument determines the type
-// of archive written. Pass one of libarchive's functions such as
-// `archive_write_set_format_ustar` or `archive_write_set_format_zip` to set the
-// type of the archive. Functions CreateZipFileContaining and
-// CreateTarFileContaining are provided for convenience.
-absl::StatusOr<std::string> CreateArchiveContaining(
-    const std::vector<ArchiveContents>& contents,
-    const std::function<int(struct archive*)>& set_archive_format) {
-  int errorp;
-  struct archive* archive = archive_write_new();
-  errorp = set_archive_format(archive);
-  if (errorp != ARCHIVE_OK) {
-    return absl::UnavailableError(absl::StrFormat(
-        "Failed to create archive due to error code: %d.", errorp));
-  }
-
-  std::string temp_name = std::tmpnam(nullptr);
-  errorp = archive_write_open_filename(archive, temp_name.c_str());
-  if (errorp != ARCHIVE_OK) {
-    return absl::UnavailableError(
-        absl::StrFormat("Failed to create archive due to error code: %d %s.",
-                        errorp, archive_error_string(archive)));
-  }
-  absl::Cleanup archive_closer = [&archive] {
-    archive_write_close(archive);
-    archive_write_free(archive);
-  };
-
-  for (const auto& file : contents) {
-    struct archive_entry* entry = archive_entry_new();
-    archive_entry_set_pathname(entry, file.name.c_str());
-    archive_entry_set_size(entry, file.data.length());
-    archive_entry_set_filetype(entry, AE_IFREG);
-    absl::Cleanup entry_closer = [&entry] { archive_entry_free(entry); };
-
-    errorp = archive_write_header(archive, entry);
-    if (errorp != ARCHIVE_OK) {
-      return absl::UnavailableError(
-          absl::StrFormat("Unable to add file %s to archive, error code: %d %s",
-                          file.name, errorp, archive_error_string(archive)));
-    }
-
-    int64 written =
-        archive_write_data(archive, file.data.c_str(), file.data.length());
-    if (written < file.data.length()) {
-      return absl::UnavailableError(
-          absl::StrFormat("Unable to add file %s to archive, error: %s",
-                          file.name, archive_error_string(archive)));
-    }
-  }
-
-  return temp_name;
-}
-absl::StatusOr<std::string> CreateZipFileContaining(
-    const std::vector<ArchiveContents>& contents) {
-  return CreateArchiveContaining(contents, [](struct archive* archive) {
-    return archive_write_set_format_zip(archive);
-  });
-}
-absl::StatusOr<std::string> CreateTarFileContaining(
-    const std::vector<ArchiveContents>& contents) {
-  return CreateArchiveContaining(contents, [](struct archive* archive) {
-    return archive_write_set_format_ustar(archive);
-  });
-}
 
 constexpr int kR4DefinitionsCount = 653;
 constexpr int kR4CodeSystemsCount = 1062;

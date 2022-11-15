@@ -86,3 +86,17 @@ cc_test(
         "@com_google_protobuf//:protobuf",
     ],
 )
+
+cc_library(
+    name = "archive",
+    srcs = ["archive.cc"],
+    hdrs = ["archive.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "@com_google_absl//absl/cleanup",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings:str_format",
+        "@libarchive",
+    ],
+)
