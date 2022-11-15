@@ -623,6 +623,7 @@ cc_library(
         "//cc/google/fhir/r4:json_format",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
+        "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:code_system_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:search_parameter_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_cc_proto",

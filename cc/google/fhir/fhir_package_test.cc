@@ -434,6 +434,198 @@ TEST(FhirPackageManager, GetResourceForAddedPackagesSucceeds) {
   EXPECT_EQ(package_manager.GetValueSet("http://missing-uri").status().code(),
             absl::StatusCode::kNotFound);
 }
+
+TEST(FhirPackageManager,
+     GetStructureDefinitionWithVersionForAddedPackagesSucceeds) {
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string temp_name,
+      CreateTarFileContaining({{"resource.json",
+                                R"({"resourceType": "StructureDefinition",
+                                    "url": "url",
+                                    "id": "1",
+                                    "version": "1.0",
+                                    "name": "sd1",
+                                    "kind": "complex-type",
+                                    "abstract": false,
+                                    "type": "Extension",
+                                    "status": "draft"
+                                  })"}}));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
+
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string another_temp_name,
+      CreateTarFileContaining({{"resource.json",
+                                R"({"resourceType": "StructureDefinition",
+                                    "url": "url",
+                                    "id": "2",
+                                    "version": "2.0",
+                                    "name": "sd1",
+                                    "kind": "complex-type",
+                                    "abstract": false,
+                                    "type": "Extension",
+                                    "status": "draft"
+                                  })"}}));
+  absl::Cleanup another_temp_closer = [&another_temp_name] {
+    remove(another_temp_name.c_str());
+  };
+
+  FhirPackageManager package_manager = FhirPackageManager();
+  FHIR_ASSERT_OK(package_manager.AddPackageAtPath(temp_name));
+  FHIR_ASSERT_OK(package_manager.AddPackageAtPath(another_temp_name));
+
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      const fhir::r4::core::StructureDefinition* result1,
+      package_manager.GetStructureDefinition("url", "1.0"))
+  EXPECT_EQ(result1->id().value(), "1");
+
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      const fhir::r4::core::StructureDefinition* result2,
+      package_manager.GetStructureDefinition("url", "2.0"));
+  EXPECT_EQ(result2->id().value(), "2");
+
+  EXPECT_EQ(
+      package_manager.GetStructureDefinition("url", "3.0").status().code(),
+      absl::StatusCode::kNotFound);
+}
+
+TEST(FhirPackageManager,
+     GetSearchParameterWithVersionForAddedPackagesSucceeds) {
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string temp_name,
+      CreateTarFileContaining({{"resource.json",
+                                R"({"resourceType": "SearchParameter",
+                                    "url": "url",
+                                    "id": "1",
+                                    "version": "1.0",
+                                    "name": "sp1",
+                                    "status": "draft",
+                                    "description": "sp1",
+                                    "code": "facility",
+                                    "base": ["Claim"],
+                                    "type": "reference"
+                                  })"}}));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
+
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string another_temp_name,
+      CreateTarFileContaining({{"resource.json",
+                                R"({"resourceType": "SearchParameter",
+                                    "url": "url",
+                                    "id": "2",
+                                    "version": "2.0",
+                                    "name": "sp1",
+                                    "status": "draft",
+                                    "description": "sp1",
+                                    "code": "facility",
+                                    "base": ["Claim"],
+                                    "type": "reference"
+                                  })"}}));
+  absl::Cleanup another_temp_closer = [&another_temp_name] {
+    remove(another_temp_name.c_str());
+  };
+
+  FhirPackageManager package_manager = FhirPackageManager();
+  FHIR_ASSERT_OK(package_manager.AddPackageAtPath(temp_name));
+  FHIR_ASSERT_OK(package_manager.AddPackageAtPath(another_temp_name));
+
+  FHIR_ASSERT_OK_AND_ASSIGN(const fhir::r4::core::SearchParameter* result1,
+                            package_manager.GetSearchParameter("url", "1.0"))
+  EXPECT_EQ(result1->id().value(), "1");
+
+  FHIR_ASSERT_OK_AND_ASSIGN(const fhir::r4::core::SearchParameter* result2,
+                            package_manager.GetSearchParameter("url", "2.0"));
+  EXPECT_EQ(result2->id().value(), "2");
+
+  EXPECT_EQ(package_manager.GetSearchParameter("url", "3.0").status().code(),
+            absl::StatusCode::kNotFound);
+}
+
+TEST(FhirPackageManager, GetCodeSystemWithVersionForAddedPackagesSucceeds) {
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string temp_name,
+      CreateTarFileContaining({{"resource.json",
+                                R"({"resourceType": "CodeSystem",
+                                    "url": "url",
+                                    "id": "1",
+                                    "version": "1.0",
+                                    "name": "cs1",
+                                    "status": "draft",
+                                    "content": "complete"
+                                  })"}}));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
+
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string another_temp_name,
+      CreateTarFileContaining({{"resource.json",
+                                R"({"resourceType": "CodeSystem",
+                                    "url": "url",
+                                    "id": "2",
+                                    "version": "2.0",
+                                    "name": "cs1",
+                                    "status": "draft",
+                                    "content": "complete"
+                                  })"}}));
+  absl::Cleanup another_temp_closer = [&another_temp_name] {
+    remove(another_temp_name.c_str());
+  };
+
+  FhirPackageManager package_manager = FhirPackageManager();
+  FHIR_ASSERT_OK(package_manager.AddPackageAtPath(temp_name));
+  FHIR_ASSERT_OK(package_manager.AddPackageAtPath(another_temp_name));
+
+  FHIR_ASSERT_OK_AND_ASSIGN(const fhir::r4::core::CodeSystem* result1,
+                            package_manager.GetCodeSystem("url", "1.0"))
+  EXPECT_EQ(result1->id().value(), "1");
+
+  FHIR_ASSERT_OK_AND_ASSIGN(const fhir::r4::core::CodeSystem* result2,
+                            package_manager.GetCodeSystem("url", "2.0"));
+  EXPECT_EQ(result2->id().value(), "2");
+
+  EXPECT_EQ(package_manager.GetCodeSystem("url", "3.0").status().code(),
+            absl::StatusCode::kNotFound);
+}
+
+TEST(FhirPackageManager, GetValueSetWithVersionForAddedPackagesSucceeds) {
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string temp_name,
+      CreateTarFileContaining({{"resource.json",
+                                R"({"resourceType": "ValueSet",
+                                    "url": "url",
+                                    "version": "1.0",
+                                    "id": "1",
+                                    "status": "draft"
+                                   })"}}));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
+
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string another_temp_name,
+      CreateTarFileContaining({{"resource.json",
+                                R"({"resourceType": "ValueSet",
+                                    "url": "url",
+                                    "version": "2.0",
+                                    "id": "2",
+                                    "status": "draft"
+                                   })"}}));
+  absl::Cleanup another_temp_closer = [&another_temp_name] {
+    remove(another_temp_name.c_str());
+  };
+
+  FhirPackageManager package_manager = FhirPackageManager();
+  FHIR_ASSERT_OK(package_manager.AddPackageAtPath(temp_name));
+  FHIR_ASSERT_OK(package_manager.AddPackageAtPath(another_temp_name));
+
+  FHIR_ASSERT_OK_AND_ASSIGN(const fhir::r4::core::ValueSet* result1,
+                            package_manager.GetValueSet("url", "1.0"))
+  EXPECT_EQ(result1->id().value(), "1");
+
+  FHIR_ASSERT_OK_AND_ASSIGN(const fhir::r4::core::ValueSet* result2,
+                            package_manager.GetValueSet("url", "2.0"));
+  EXPECT_EQ(result2->id().value(), "2");
+
+  EXPECT_EQ(package_manager.GetValueSet("url", "3.0").status().code(),
+            absl::StatusCode::kNotFound);
+}
+
 // Ensures .tar archives are supported.
 TEST(FhirPackageManager, GetResourceForTarPackagesSucceeds) {
   FHIR_ASSERT_OK_AND_ASSIGN(
