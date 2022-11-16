@@ -337,10 +337,11 @@ namespace internal {
 template <typename T>
 absl::StatusOr<T> SearchPackagesForResource(
     absl::StatusOr<T> (FhirPackage::*get_resource)(absl::string_view),
-    std::vector<std::unique_ptr<FhirPackage>>& packages, absl::string_view uri,
+    const std::vector<std::unique_ptr<FhirPackage>>& packages,
+    absl::string_view uri,
     std::optional<absl::string_view> version = std::nullopt) {
   std::vector<std::string> mismatched_versions;
-  for (std::unique_ptr<FhirPackage>& package : packages) {
+  for (const std::unique_ptr<FhirPackage>& package : packages) {
     absl::StatusOr<T> resource = (*package.*get_resource)(uri);
     if (resource.ok()) {
       if (version == std::nullopt ||
@@ -390,45 +391,46 @@ class FhirPackageManager {
   // with the given URI. If multiple packages contain the same resource, the
   // package consulted will be non-deterministic.
   absl::StatusOr<const google::fhir::r4::core::StructureDefinition*>
-  GetStructureDefinition(absl::string_view uri) {
+  GetStructureDefinition(absl::string_view uri) const {
     return internal::SearchPackagesForResource(
         &FhirPackage::GetStructureDefinition, packages_, uri);
   }
   absl::StatusOr<const google::fhir::r4::core::StructureDefinition*>
-  GetStructureDefinition(absl::string_view uri, absl::string_view version) {
+  GetStructureDefinition(absl::string_view uri,
+                         absl::string_view version) const {
     return internal::SearchPackagesForResource(
         &FhirPackage::GetStructureDefinition, packages_, uri, version);
   }
 
   absl::StatusOr<const google::fhir::r4::core::SearchParameter*>
-  GetSearchParameter(absl::string_view uri) {
+  GetSearchParameter(absl::string_view uri) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetSearchParameter,
                                                packages_, uri);
   }
   absl::StatusOr<const google::fhir::r4::core::SearchParameter*>
-  GetSearchParameter(absl::string_view uri, absl::string_view version) {
+  GetSearchParameter(absl::string_view uri, absl::string_view version) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetSearchParameter,
                                                packages_, uri, version);
   }
 
   absl::StatusOr<const google::fhir::r4::core::CodeSystem*> GetCodeSystem(
-      absl::string_view uri) {
+      absl::string_view uri) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetCodeSystem,
                                                packages_, uri);
   }
   absl::StatusOr<const google::fhir::r4::core::CodeSystem*> GetCodeSystem(
-      absl::string_view uri, absl::string_view version) {
+      absl::string_view uri, absl::string_view version) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetCodeSystem,
                                                packages_, uri, version);
   }
 
   absl::StatusOr<const google::fhir::r4::core::ValueSet*> GetValueSet(
-      absl::string_view uri) {
+      absl::string_view uri) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetValueSet,
                                                packages_, uri);
   }
   absl::StatusOr<const google::fhir::r4::core::ValueSet*> GetValueSet(
-      absl::string_view uri, absl::string_view version) {
+      absl::string_view uri, absl::string_view version) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetValueSet,
                                                packages_, uri, version);
   }
