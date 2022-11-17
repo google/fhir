@@ -53,7 +53,7 @@ final class GeneratorUtils {
     // Make sure the field name is snake case, as required by the proto style guide.
     String normalizedFieldName =
         CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, resolveAcronyms(fieldName));
-    // TODO: add more normalization here if necessary.  I think this is enough for now.
+    // TODO(b/244184211): add more normalization here if necessary.  I think this is enough for now.
     return normalizedFieldName;
   }
 

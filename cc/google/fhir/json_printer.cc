@@ -137,7 +137,7 @@ class Printer {
     const Descriptor* descriptor = proto.GetDescriptor();
     const Reflection* reflection = proto.GetReflection();
 
-    // TODO: Use an annotation here.
+    // TODO(b/154059162): Use an annotation here.
     if (descriptor->name() == "ContainedResource") {
       return PrintContainedResource(proto);
     }
@@ -146,7 +146,7 @@ class Printer {
           absl::WrapUnique(primitive_handler_->NewContainedResource());
       if (!dynamic_cast<const Any&>(proto).UnpackTo(contained.get())) {
         // If we can't unpack the Any, drop it.
-        // TODO: Use a registry to determine the correct
+        // TODO(b/148916862): Use a registry to determine the correct
         // ContainedResource to unpack to
         return absl::OkStatus();
       }
@@ -268,7 +268,7 @@ class Printer {
 
   absl::Status PrintPrimitiveField(const Message& proto,
                                    const std::string& field_name) {
-    // TODO: check for ReferenceId using an annotation.
+    // TODO(b/153462178): check for ReferenceId using an annotation.
     if (json_format_ == kFormatAnalytic &&
         proto.GetDescriptor()->name() == "ReferenceId") {
       // In analytic mode, print the raw reference id rather than slicing into
@@ -506,7 +506,7 @@ absl::StatusOr<std::string> WriteMessage(Printer printer,
     FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> core_resource,
                           GetBaseResourceInstance(message));
 
-    // TODO: This is not ideal because it pulls in both stu3 and
+    // TODO(b/244184211): This is not ideal because it pulls in both stu3 and
     // r4 datatypes.
     switch (GetFhirVersion(message)) {
       case proto::STU3:

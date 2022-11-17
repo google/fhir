@@ -31,7 +31,7 @@ from google.fhir.core import extensions_test
 try:
   from testdata.stu3.profiles import test_extensions_pb2
 except ImportError:
-  # TODO: Add test protos to PYTHONPATH during dist testing.
+  # TODO(b/173534909): Add test protos to PYTHONPATH during dist testing.
   pass  # Fall through
 
 _EXTENSIONS_DIR = os.path.join('testdata', 'stu3', 'extensions')

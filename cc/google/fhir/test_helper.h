@@ -45,11 +45,11 @@
 // final patient bundles. On the other hand, there are cases where the input
 // data is missing critical information and should indeed be dropped. These
 // macros let you specify which situation applies to any given test case.
-// TODO: We temporarily disabled FHIR validation in tests to avoid
+// TODO(b/244184211): We temporarily disabled FHIR validation in tests to avoid
 // having to fix all tests with missing fields.  Long term, tests where
 // validation is important should be fixed, and tests where validation is not
 // important should be switched to PARSE_STU3_PROTO.
-// TODO: This is not stu3 specific - these can be eliminated
+// TODO(b/244184211): This is not stu3 specific - these can be eliminated
 // in favor of PARSE_*_FHIR_PROTO versions.
 #define PARSE_VALID_STU3_PROTO(asciipb) \
   ::google::fhir::FhirProtoParseHelper( \

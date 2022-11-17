@@ -209,7 +209,7 @@ class Parser {
       const internal::FhirJson& value, Message* target,
       const ScopedErrorReporter& error_reporter) const {
     const Descriptor* target_descriptor = target->GetDescriptor();
-    // TODO: handle this with an annotation
+    // TODO(b/244184211): handle this with an annotation
     if (target_descriptor->name() == "ContainedResource") {
       return MergeContainedResource(value, target, error_reporter);
     }
@@ -570,7 +570,7 @@ absl::StatusOr<ParseResult> Parser::MergeJsonFhirObjectIntoProto(
       return ParseResult::kFailed;
     }
 
-    // TODO: This is not ideal because it pulls in both stu3 and
+    // TODO(b/244184211): This is not ideal because it pulls in both stu3 and
     // r4 datatypes.
     absl::Status profile_status;
     switch (GetFhirVersion(*target)) {
@@ -600,7 +600,7 @@ absl::StatusOr<ParseResult> Parser::MergeJsonFhirObjectIntoProto(
                         parser.MergeValue(json_object, target, error_reporter));
 
   if (validate) {
-    // TODO: Use FHIRPath validation here.
+    // TODO(b/221105249): Use FHIRPath validation here.
     FHIR_RETURN_IF_ERROR(
         ValidateWithoutFhirPath(*target, primitive_handler_, error_handler));
   }

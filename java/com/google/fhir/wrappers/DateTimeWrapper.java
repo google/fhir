@@ -175,7 +175,7 @@ public class DateTimeWrapper extends PrimitiveWrapper<DateTime> {
   private static final long MICROS_PER_YEAR = MICROS_PER_DAY * 366;
 
   private long getDurationFromPrecision() {
-    // TODO: Handle YEAR and MONTH precision appropriately
+    // TODO(b/155669322): Handle YEAR and MONTH precision appropriately
     switch (getWrapped().getPrecision()) {
       case YEAR:
         return MICROS_PER_YEAR;

@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Utility for generating BigQuery schema from descriptors. TODO: convert this to
+ * Utility for generating BigQuery schema from descriptors. TODO(b/244184211): convert this to
  * dynamically load protos from a .proto filepath flag.
  */
 public class BigQuerySchemaGeneratorMain {

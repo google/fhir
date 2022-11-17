@@ -157,7 +157,7 @@ def copy_coding(source: message.Message, target: message.Message) -> None:
 
   target_system_field = target.DESCRIPTOR.fields_by_name.get('system')
 
-  # TODO: This will fail if there is a target system field,
+  # TODO(b/177480280): This will fail if there is a target system field,
   # *and* a source system field, since in this case the source code will not
   # contain the system information, the containing Coding would.  In general,
   # it's not quite right to get the system from Code, since unprofiled codes

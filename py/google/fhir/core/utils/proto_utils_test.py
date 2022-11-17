@@ -23,7 +23,7 @@ from proto.google.fhir.proto.r4.core import datatypes_pb2
 from proto.google.fhir.proto.r4.core.resources import patient_pb2
 from google.fhir.core.utils import proto_utils
 
-# TODO: These util tests should not be FHIR-specific.
+# TODO(b/176912972): These util tests should not be FHIR-specific.
 
 
 class ProtoUtilsTest(absltest.TestCase):

@@ -32,7 +32,7 @@ enum FhirVersion {
   R5 = 5;
 }
 
-// TODO: Unify with StructureDefinitionKindCode
+// TODO(b/244184211): Unify with StructureDefinitionKindCode
 enum StructureDefinitionKindValue {
   KIND_UNKNOWN = 0;
   KIND_PRIMITIVE_TYPE = 1;

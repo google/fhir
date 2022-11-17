@@ -35,7 +35,7 @@ public final class FhirTypesTest {
   private final Descriptor stringTypedCode;
   private final Descriptor xhtmlType;
 
-  // TODO: There are no profiled Codings in STU3.
+  // TODO(b/161402929): There are no profiled Codings in STU3.
   private final Optional<Descriptor> profiledCoding;
 
   private final Descriptor profiledCodeableConcept;
@@ -84,7 +84,7 @@ public final class FhirTypesTest {
           com.google.fhir.stu3.proto.AddressGeolocation.getDescriptor(),
           com.google.fhir.stu3.proto.AdministrativeGenderCode.getDescriptor(),
           com.google.fhir.stu3.proto.MimeTypeCode.getDescriptor(),
-          Optional.empty(), // TODO: There are no profiled Codings in STU3.
+          Optional.empty(), // TODO(b/161402929): There are no profiled Codings in STU3.
           com.google.fhir.stu3.testing.TestObservation.CodeableConceptForCategory.getDescriptor(),
           com.google.fhir.stu3.proto.Xhtml.getDescriptor(),
         });

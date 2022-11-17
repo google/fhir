@@ -261,7 +261,7 @@ TYPED_TEST(FhirPathValidationTest, MessageLevelConstraint) {
   EXPECT_TRUE(TestFixture::Validate(period).IsValid());
 }
 
-// TODO: Templatize tests to work with both STU3 and R4
+// TODO(b/148992850): Templatize tests to work with both STU3 and R4
 TEST(FhirPathValidationTest, MessageLevelConstraintViolated) {
   auto end_before_start_period = ParseFromString<r4::core::Period>(R"proto(
     start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
@@ -303,7 +303,7 @@ TEST(FhirPathValidationTest, NestedMessageLevelConstraintViolated) {
   EXPECT_FALSE(results.IsValid());
 }
 
-// TODO: Templatize tests to work with both STU3 and R4
+// TODO(b/148992850): Templatize tests to work with both STU3 and R4
 TEST(FhirPathValidationTest, ProfiledEmptyExtension) {
   r4::uscore::USCorePatientProfile patient =
       ValidUsCorePatient<r4::uscore::USCorePatientProfile>();

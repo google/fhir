@@ -132,7 +132,7 @@ final class TerminologyGenerator {
       propertyBuilder.getValueBuilder().getCodeBuilder().setValue(CODE_VALUE_STATUS_DEPRECATED);
     }
 
-    // TODO: handle child concepts.
+    // TODO(b/244184211): handle child concepts.
   }
 
   private ValueSet buildValueSet(ValueSetConfig config) {

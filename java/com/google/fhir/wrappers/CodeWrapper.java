@@ -127,7 +127,7 @@ public class CodeWrapper extends PrimitiveWrapper<Code> {
 
   public static EnumValueDescriptor getEnumValueDescriptor(
       EnumDescriptor enumDescriptor, String value) {
-    // TODO: improve strictness of this parsing step.
+    // TODO(b/244184211): improve strictness of this parsing step.
     EnumValueDescriptor enumValue =
         enumDescriptor.findValueByName(value.toUpperCase().replace('-', '_'));
     if (enumValue != null

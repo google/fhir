@@ -264,12 +264,12 @@ message ComplexExtension {
   repeated SimpleExtension simple_field = 3;
   repeated ComplexExtension complex_field = 4;
 
-  // TODO: support choice-type fields as well.
+  // TODO(b/244184211): support choice-type fields as well.
 }
 
 // Definition for a simple extension, i.e. one that contains
 // only a primitive data type.
-// TODO: support references with target profiles.
+// TODO(b/244184211): support references with target profiles.
 message SimpleExtension {
   ElementData element_data = 1;
 
@@ -370,7 +370,7 @@ message CodeSystemConfig {
     // Flag indicating the code value is deprecated.
     bool deprecated = 4;
 
-    // TODO: Concepts can have "child" concepts representing
+    // TODO(b/244184211): Concepts can have "child" concepts representing
     // is-a/contains/categorizes relationships
   }
   repeated Concept concept = 5;

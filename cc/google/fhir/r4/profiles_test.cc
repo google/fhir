@@ -265,7 +265,7 @@ TEST(ProfilesTest, ContainedResourcesWithUnmatchedProfileNames) {
               EqualsProtoIgnoringReordering(test_patient));
 }
 
-// TODO: Reenable once PrimitiveHandler can wrap profiled
+// TODO(b/237447770): Reenable once PrimitiveHandler can wrap profiled
 // primitives.
 // TEST(ProfilesTest, ProfiledDatatypes) {
 //   TestPair<Observation, ProfiledDatatypesObservation>(

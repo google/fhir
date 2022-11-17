@@ -163,7 +163,7 @@ absl::Status CopyCoding(const Message& source, Message* target) {
   const FieldDescriptor* target_system_field =
       target_descriptor->FindFieldByName("system");
 
-  // TODO: This will fail if there is a target system field,
+  // TODO(b/177480280): This will fail if there is a target system field,
   // *and* a source system field, since in this case the source code will not
   // contain the system information, the containing Coding would.  In general,
   // it's not quite right to get the system from Code, since unprofiled codes
@@ -228,7 +228,7 @@ absl::Status CopyCode(const Message& source, Message* target) {
         target_reflection->SetEnum(target, target_value_field, source_value);
         return absl::OkStatus();
       } else {
-        // TODO: This conversion should go through FHIR code,
+        // TODO(b/177241602): This conversion should go through FHIR code,
         // since Enum value name is not meaningful.
         const EnumValueDescriptor* target_value =
             target_enum_type->FindValueByName(source_value->name());

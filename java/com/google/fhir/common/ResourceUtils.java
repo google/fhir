@@ -27,13 +27,13 @@ import java.util.List;
 import java.util.Map;
 
 /** Helper methods for handling FHIR resource protos. */
-// TODO: Break reference utils into standalone References.java
+// TODO(b/177246116): Break reference utils into standalone References.java
 public final class ResourceUtils {
 
   private ResourceUtils() {}
 
   public static Message getContainedResource(Message resource) throws InvalidFhirException {
-    // TODO: Use an annotation here.
+    // TODO(b/154059162): Use an annotation here.
     if (!resource.getDescriptorForType().getName().equals("ContainedResource")) {
       throw new InvalidFhirException(
           "Not a ContainedResource: " + resource.getDescriptorForType().getName());
@@ -129,7 +129,7 @@ public final class ResourceUtils {
    * <p>For more information on the form of uri references, see {@link
    * https://www.hl7.org/fhir/references.html#Reference}.
    */
-  // TODO: Ensure consistent behavior/testing with python/c++.
+  // TODO(b/177249530): Ensure consistent behavior/testing with python/c++.
   public static void splitIfRelativeReference(Message.Builder builder) throws InvalidFhirException {
     Descriptor descriptor = builder.getDescriptorForType();
     FieldDescriptor uriField = descriptor.findFieldByName("uri");
@@ -162,7 +162,7 @@ public final class ResourceUtils {
     }
   }
 
-  // TODO: Replace with utility that throws a checked exception
+  // TODO(b/176651098): Replace with utility that throws a checked exception
   public static Object getValue(Message primitive) {
     return primitive.getField(primitive.getDescriptorForType().findFieldByName("value"));
   }

@@ -34,7 +34,7 @@ message Replacement {
   // The expression to be replaced.
   string expression_to_replace = 2;
   // The expression to be replaced with.
-  // TODO: Look into adding a special token (like `$`) that
+  // TODO(b/221470795): Look into adding a special token (like `$`) that
   // will be replaced with the name of the current resource.
   string replacement_expression = 3;
 }

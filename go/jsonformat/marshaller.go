@@ -36,7 +36,7 @@ type jsonFormat int
 
 // ExtensionError is an error that occurs when the extension is invalid for
 // the marshaller, such as when an extension has empty URL value.
-// TODO: Use ErrorReporter for more robust special case handling.
+// TODO(b/197531657): Use ErrorReporter for more robust special case handling.
 type ExtensionError struct {
 	err string
 }

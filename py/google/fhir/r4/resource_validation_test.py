@@ -47,7 +47,7 @@ class ResourceValidationTest(absltest.TestCase):
     self._invalid_test('observation_invalid_reference',
                        observation_pb2.Observation)
 
-  # TODO: Implement FHIR-Path validation for Python API
+  # TODO(b/155795499): Implement FHIR-Path validation for Python API
   # def testResourceValidation_withFhirPathViolation_raises(self):
   #   self._invalid_test('observation_invalid_fhirpath_violation',
   #                     observation_pb2.Observation)

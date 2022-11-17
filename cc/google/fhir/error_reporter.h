@@ -234,7 +234,7 @@ class ScopedErrorReporter final {
   // Enters a scope based on a proto field.  This forwards to the above
   // constructor using the JSON field name (to match the FHIR field), and drops
   // any index param if the field is not repeated.
-  // TODO: catch if a non-zero index is sent with a singular field,
+  // TODO(b/238909399): catch if a non-zero index is sent with a singular field,
   // or a repeated field is missing an index.
   const ScopedErrorReporter WithScope(
       const google::protobuf::FieldDescriptor* field,

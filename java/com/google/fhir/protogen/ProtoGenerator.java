@@ -89,7 +89,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /** A class which turns FHIR StructureDefinitions into protocol messages. */
-// TODO: Move a bunch of the public static methods into ProtoGeneratorUtils.
+// TODO(b/244184211): Move a bunch of the public static methods into ProtoGeneratorUtils.
 public class ProtoGenerator {
 
   public static final String REGEX_EXTENSION_URL = "http://hl7.org/fhir/StructureDefinition/regex";
@@ -139,7 +139,7 @@ public class ProtoGenerator {
 
   // Exclude constraints from the DomainResource until we refactor
   // them to a common place rather on every resource.
-  // TODO: remove these with the above refactoring.
+  // TODO(b/244184211): remove these with the above refactoring.
   private static final ImmutableSet<String> DOMAIN_RESOURCE_CONSTRAINTS =
       ImmutableSet.of(
           "contained.contained.empty()",
@@ -858,7 +858,7 @@ public class ProtoGenerator {
                         baseChoiceType.getField(baseTypesToIndex.get(type.getCode().getValue())))
                 .collect(Collectors.toList());
 
-        // TODO: If a choice type is a slice of another choice type (not a pure
+        // TODO(b/244184211): If a choice type is a slice of another choice type (not a pure
         // constraint, but actual slice) we'll need to update the name and type name as well.
         DescriptorProto.Builder newChoiceType =
             baseChoiceType.toBuilder().clearField().addAllField(matchingFields);
@@ -963,7 +963,7 @@ public class ProtoGenerator {
       // special case is necessary, because when in a complex extension, this is handled when
       // looking at the simple extension _field_.  In this case that field doesn't exist, so we need
       // to make a special case for slicing.
-      // TODO: We should do a broader rewrite at somepoint that makes type and field
+      // TODO(b/244184211): We should do a broader rewrite at somepoint that makes type and field
       // co-generated.  That would remove this class of special case.
       if (element.equals(valueElement)
           && element.getPath().getValue().equals("Extension.value[x]")
@@ -991,8 +991,8 @@ public class ProtoGenerator {
                 new QualifiedType(containerName + "Coding", packageInfo.getProtoPackage()));
           }
         }
-        // TODO: Handle bound systems on CodeableConcepts
-        // TODO: return an error for unhandled types with required bindings in strict
+        // TODO(b/244184211): Handle bound systems on CodeableConcepts
+        // TODO(b/244184211): return an error for unhandled types with required bindings in strict
         // mode
       }
       return Optional.empty();
@@ -1096,7 +1096,7 @@ public class ProtoGenerator {
           // For codings with fixed systems, we should inline a custom Coding type that incorporates
           // this information, e.g., inlining a strongly-typed Code enum.
           // For legacy reasons, we're only doing this for R4.
-          // TODO: Do this for all versions before 1.0 release.
+          // TODO(b/244184211): Do this for all versions before 1.0 release.
           if (packageInfo.getFhirVersion() == Annotations.FhirVersion.R4) {
             addCodingFieldWithFixedSystem(
                 codeableConceptBuilder, qualifiedType, codingSlice, fixedSystem);
@@ -1177,7 +1177,7 @@ public class ProtoGenerator {
                   .collect(toList()))
           .addAllElement(elementsFromProfile);
 
-      // TODO: If the newly-generated type is not known to the Java runtime,
+      // TODO(b/193153214): If the newly-generated type is not known to the Java runtime,
       // run field remapping against the core datatype.
       DescriptorProto.Builder builder =
           new PerDefinitionGenerator(modifiedDataTypeBuilder.build()).generate().toBuilder();
@@ -1253,7 +1253,7 @@ public class ProtoGenerator {
           // This is a reference to a slice of a field, but the slice isn't a supported slice type.
           // Just use a reference to the base field.
 
-          // TODO:  This logic assumes only a single level of slicing is present - the
+          // TODO(b/244184211):  This logic assumes only a single level of slicing is present - the
           // base element could theoretically also be unsupported for slicing.
           referencedElement =
               getElementById(
@@ -1501,7 +1501,7 @@ public class ProtoGenerator {
      * Otherwise, uses the last token's pathpart. Logs a warning if the slice name in the id token
      * does not match the SliceName field.
      */
-    // TODO: Handle reslices. Could be as easy as adding it to the end of SliceName.
+    // TODO(b/244184211): Handle reslices. Could be as easy as adding it to the end of SliceName.
     private String getNameForElement(ElementDefinition element) throws InvalidFhirException {
       IdToken lastToken = lastIdToken(element);
       if (lastToken.slicename == null || !element.getId().getValue().contains(".")) {
@@ -1513,7 +1513,7 @@ public class ProtoGenerator {
       }
       String sliceName = element.getSliceName().getValue();
       if (!lastToken.slicename.equals(Ascii.toLowerCase(sliceName))) {
-        // TODO: pull this into a common validator that runs ealier.
+        // TODO(b/244184211): pull this into a common validator that runs ealier.
         logDiscrepancies(
             "Warning: Inconsistent slice name for element with id "
                 + element.getId().getValue()
@@ -1556,7 +1556,7 @@ public class ProtoGenerator {
 
     // Given a potential slice field name and an element, returns true if that slice name would
     // conflict with the field name of any siblings to that elements.
-    // TODO: This only checks against non-slice names.  Theoretically, you could have
+    // TODO(b/244184211): This only checks against non-slice names.  Theoretically, you could have
     // two identically-named slices of different base fields.
     private String resolveSliceNameConflicts(String fieldName, ElementDefinition element)
         throws InvalidFhirException {
@@ -1615,7 +1615,7 @@ public class ProtoGenerator {
         StructureDefinitionData profileData = structDefDataByUrl.get(profileUrl);
         if (profileData == null) {
           // Unrecognized url.
-          // TODO: add a lenient mode that just ignores this extension.
+          // TODO(b/244184211): add a lenient mode that just ignores this extension.
           throw new IllegalArgumentException("Encountered unknown extension url: " + profileUrl);
         }
         options.setExtension(Annotations.fhirInlinedExtensionUrl, profileUrl);
@@ -1772,7 +1772,7 @@ public class ProtoGenerator {
           choiceType.addField(fieldBuilder);
         } else {
           // If no custom type was generated, just use the type name from the core FHIR types.
-          // TODO:  This assumes all types in a oneof are core FHIR types.  In order to
+          // TODO(b/244184211):  This assumes all types in a oneof are core FHIR types.  In order to
           // support custom types, we'll need to load the structure definition for the type and
           // check
           // against knownStructureDefinitionPackages
@@ -1813,7 +1813,7 @@ public class ProtoGenerator {
       if (matchingSlices.isEmpty()) {
         return Optional.empty();
       }
-      // TODO: this might be something we need to eventually support, e.g., if oneof
+      // TODO(b/244184211): this might be something we need to eventually support, e.g., if oneof
       // could
       // be bound to multiple different systems.
       if (matchingSlices.size() > 1) {
@@ -1925,7 +1925,7 @@ public class ProtoGenerator {
       if (types.contains(packageString + "." + descriptor.getName())
           && !descriptor.getName().equals("RelatedArtifact")) {
         // This file defines a type from the set.  It can't depend on itself.
-        // TODO: We don't pay attention to RelatedArtifact because there's an extension
+        // TODO(b/244184211): We don't pay attention to RelatedArtifact because there's an extension
         // with that name.  This is a hack, we should do something cleverer.
         return false;
       }
@@ -2192,7 +2192,7 @@ public class ProtoGenerator {
   }
 
   private static boolean isLocalContentReference(ElementDefinition element) {
-    // TODO: more sophisticated logic.  This wouldn't handle references to fields in
+    // TODO(b/244184211): more sophisticated logic.  This wouldn't handle references to fields in
     // other elements in a non-core package
     if (!element.hasContentReference()) {
       return false;
@@ -2212,7 +2212,7 @@ public class ProtoGenerator {
     return fieldName;
   }
 
-  // TODO: memoize
+  // TODO(b/244184211): memoize
   private Optional<ElementDefinition> getChoiceTypeBase(ElementDefinition element)
       throws InvalidFhirException {
     if (!element.hasBase()) {
@@ -2410,7 +2410,7 @@ public class ProtoGenerator {
         valueType.type.replaceFirst("Extension", getTypeName(def)), valueType.packageName);
   }
 
-  // TODO: consider supporting more types of slicing.
+  // TODO(b/139489684): consider supporting more types of slicing.
   private static boolean isElementSupportedForSlicing(ElementDefinition element) {
     return element.getTypeCount() == 1
         && (element.getType(0).getCode().getValue().equals("Extension")

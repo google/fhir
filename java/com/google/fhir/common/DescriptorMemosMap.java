@@ -25,7 +25,7 @@ import java.util.function.Function;
  * GenericDescriptor} type so as to preserve the most specific type information possible by the
  * compute function.
  */
-// TODO: Try caching on descriptor object, with a size limit and "least recently used"
+// TODO(b/175751626): Try caching on descriptor object, with a size limit and "least recently used"
 // eviction strategy.  This will avoid string comparisons.
 public final class DescriptorMemosMap<D extends GenericDescriptor, T> {
   private final ConcurrentHashMap<String, T> memos = new ConcurrentHashMap<>();

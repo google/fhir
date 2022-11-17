@@ -63,7 +63,7 @@ class PrimitiveHandler(abc.ABC):
     """
     raise NotImplementedError('Subclasses *must* implement code_cls.')
 
-  # TODO: Find more appropriate location for contained_resource_cls
+  # TODO(b/163349112): Find more appropriate location for contained_resource_cls
   @property
   @abc.abstractmethod
   def contained_resource_cls(self) -> Type[message.Message]:

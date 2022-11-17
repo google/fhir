@@ -62,7 +62,7 @@ public final class BigQuerySchema {
       return field.setType("STRING");
     }
     // We don't include nested types.
-    // TODO: consider allowing a certain level of nesting.
+    // TODO(b/244184211): consider allowing a certain level of nesting.
     if (fieldType.equals(fieldDescriptor.getContainingType())) {
       return null;
     }
@@ -104,7 +104,7 @@ public final class BigQuerySchema {
 
       // Accept the generic types (uri, fragment) as well as the specified ones.
       List<FieldDescriptor> fields = new ArrayList<>();
-      // TODO: We're dropping "identifier" to avoid an infinite recursion where
+      // TODO(b/244184211): We're dropping "identifier" to avoid an infinite recursion where
       // identifiers have references and vice versa.  We should dig in to if there is a better
       // solution.
       Set<String> staticNames = ImmutableSet.of("uri", "fragment", "extension", "display");

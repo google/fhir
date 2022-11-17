@@ -93,7 +93,7 @@ func (FhirVersion) EnumDescriptor() ([]byte, []int) {
 	return file_proto_google_fhir_proto_annotations_proto_rawDescGZIP(), []int{0}
 }
 
-// TODO: Unify with StructureDefinitionKindCode
+// TODO(b/244184211): Unify with StructureDefinitionKindCode
 type StructureDefinitionKindValue int32
 
 const (

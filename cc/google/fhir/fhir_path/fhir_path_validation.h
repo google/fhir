@@ -117,7 +117,7 @@ class ValidationResults {
   absl::Status LegacyValidationResult() const;
 
   // Returns the result for each FHIRPath expressions that was evaluated.
-  // TODO: Expose expressions that failed to compile.
+  // TODO(b/151745508): Expose expressions that failed to compile.
   std::vector<ValidationResult> Results() const;
 
  private:

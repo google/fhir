@@ -55,7 +55,7 @@ absl::Status ValidateFhirConstraints(
 
   if (IsMessageType<::google::protobuf::Any>(message)) {
     // We do not validate "Any" contained resources.
-    // TODO: Potentially unpack the correct type and validate?
+    // TODO(b/155339868): Potentially unpack the correct type and validate?
     return absl::OkStatus();
   }
 

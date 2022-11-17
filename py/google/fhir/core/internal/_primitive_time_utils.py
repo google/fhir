@@ -104,7 +104,7 @@ def get_date_time_value(primitive: message.Message) -> datetime.datetime:
 def get_duration_from_precision(
     precision: DateTimePrecision) -> datetime.timedelta:
   """Returns a timedelta reflecting the minimum unit based on precision."""
-  # TODO: Handle YEAR and MONTH precision properly
+  # TODO(b/155669322): Handle YEAR and MONTH precision properly
   if precision == DateTimePrecision.YEAR:
     return datetime.timedelta(days=366)
   elif precision == DateTimePrecision.MONTH:
@@ -128,7 +128,7 @@ def get_upper_bound(primitive: message.Message,
   return get_date_time_value(primitive) + get_duration_from_precision(precision)
 
 
-# TODO: Look into a cleaner method of restoring the UTC timezone
+# TODO(b/150299275): Look into a cleaner method of restoring the UTC timezone
 def restore_utc_timezone(datetime_str: str, original_timezone: str) -> str:
   """Restores UTC '+00:00' offset with 'Z' or '-00:00' if necessary.
 

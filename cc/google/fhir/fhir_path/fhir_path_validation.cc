@@ -173,7 +173,7 @@ void AddMessageConstraints(const Descriptor* descriptor,
                    << constraint.status().message();
     }
 
-    // TODO: Unsupported FHIRPath expressions are simply not
+    // TODO(b/151745508): Unsupported FHIRPath expressions are simply not
     // validated for now; this should produce an error once we support
     // all of FHIRPath.
   }
@@ -208,7 +208,7 @@ void AddFieldConstraints(
                      << constraint.status().message();
       }
 
-      // TODO: Unsupported FHIRPath expressions are simply not
+      // TODO(b/151745508): Unsupported FHIRPath expressions are simply not
       // validated for now; this should produce an error once we support
       // all of FHIRPath.
     }
@@ -287,7 +287,7 @@ absl::Status ValidateConstraint(const internal::WorkspaceMessage& message,
        "us-core-condition-category').exists()",
        "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')"});
   if (invalid_expressions->contains(expression.fhir_path())) {
-    // TODO:  Eliminate this once technical corrections are handled
+    // TODO(b/221470795):  Eliminate this once technical corrections are handled
     // upstream.
     return absl::OkStatus();
   }

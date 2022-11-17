@@ -39,7 +39,7 @@
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 
-// TODO: Refactor this into an internal directory.
+// TODO(b/181018290): Refactor this into an internal directory.
 namespace google {
 namespace fhir {
 
@@ -297,7 +297,7 @@ absl::Status CopyToProfile(const Message& source, Message* target,
       continue;
     }
 
-    // TODO:  Handle type-or-profile-of CodingLike
+    // TODO(b/244184211):  Handle type-or-profile-of CodingLike
 
     if (IsTypeOrProfileOfCodeableConcept(target_field->message_type())) {
       FHIR_RETURN_IF_ERROR(ForEachMessageWithStatus<Message>(

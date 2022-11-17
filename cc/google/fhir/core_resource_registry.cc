@@ -106,7 +106,7 @@ GetBaseResourceInstanceForVersion(const ::google::protobuf::Descriptor* descript
   return absl::WrapUnique(example_iter->second->New());
 }
 
-// TODO: Split into versioned files so we don't pull in both STU3
+// TODO(b/244184211): Split into versioned files so we don't pull in both STU3
 // and R4
 absl::StatusOr<std::unique_ptr<::google::protobuf::Message>>
 GetBaseResourceInstanceFromDescriptor(const Descriptor* descriptor) {

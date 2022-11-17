@@ -65,8 +65,8 @@ var (
 	basePath = "testdata/jsonformat"
 )
 
-// TODO: Find a better way to maintain the versioned unit tests.
-// TODO: Legacy tests in this file use hardcoded data -
+// TODO(b/135148603): Find a better way to maintain the versioned unit tests.
+// TODO(b/185413163): Legacy tests in this file use hardcoded data -
 // these should be moved to testdata files to make it easy to share testcases between languages.
 // New test cases should create new testdata files in the basePath above.
 
@@ -781,7 +781,7 @@ func TestUnmarshal(t *testing.T) {
 				},
 			},
 		},
-		// TODO: remove test once upper camel case fields are rejected.
+		// TODO(b/161479338): remove test once upper camel case fields are rejected.
 		{
 			name: "upper camel case is valid",
 			json: []byte(`
@@ -1707,7 +1707,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			vers: []Version{fhirversion.STU3, fhirversion.R4},
 			errs: []string{`error at "Patient.language": expected UTF-8 encoding`},
 		},
-		// TODO: add test for rejecting upper camel case fields once deprecated.
+		// TODO(b/161479338): add test for rejecting upper camel case fields once deprecated.
 		{
 			name: "all upper case is invalid",
 			json: `

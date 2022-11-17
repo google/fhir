@@ -457,7 +457,7 @@ absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
           reflection->GetMessage(message, value_field), extension,
           IsChoiceType(value_field));
     } else {
-      // TODO: Invalid FHIR; throw an error here?
+      // TODO(b/152902402): Invalid FHIR; throw an error here?
       return absl::OkStatus();
     }
   } else {
