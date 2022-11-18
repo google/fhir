@@ -54,15 +54,9 @@ absl::StatusOr<std::string> GetResourceUrl(const FhirJson& parsed_json);
 // A collection of FHIR resources of a given type.
 // Acts as an accessor for resources of a single type from a FHIR Package
 // archive containing JSON representations of various resources. Resources are
-// lazily read and parsed from the archive as requested. Resources are cached
-// for fast repeated access.
+// lazily parsed into protocol buffers as requested.
 template <typename T>
 class ResourceCollection {
- private:
-  using MaybeParsedResource =
-      std::variant<std::unique_ptr<const T>,
-                   std::shared_ptr<const internal::FhirJson>>;
-
  public:
   // An iterator over all valid resources contained in the collection. Invalid
   // resources, such as those with malformed JSON, will not be returned by the
@@ -72,21 +66,20 @@ class ResourceCollection {
     using iterator_category = std::input_iterator_tag;
     using difference_type = std::ptrdiff_t;
     using value_type = T;
-    using pointer = const T*;
-    using reference = const T&;
 
     Iterator(
-        ResourceCollection* resource_collection,
-        typename absl::flat_hash_map<std::string, MaybeParsedResource>::iterator
-            uri_iter)
+        const ResourceCollection* resource_collection,
+        typename absl::flat_hash_map<
+            std::string,
+            std::shared_ptr<const internal::FhirJson>>::const_iterator uri_iter)
         : resource_collection_(resource_collection), uri_iter_(uri_iter) {
       // Skip over any initial invalid entries so it is safe to dereference.
       this->AdvanceUntilValid();
     }
 
-    pointer operator->() const {
+    value_type operator*() const {
       std::string uri = uri_iter_->first;
-      absl::StatusOr<const T*> resource = resource_collection_->Get(uri);
+      absl::StatusOr<T> resource = resource_collection_->Get(uri);
 
       // The AdvanceUntilValid() calls in the constructor and in operator++
       // should prevent us from attempting to dereference an invalid resource.
@@ -97,7 +90,6 @@ class ResourceCollection {
 
       return *resource;
     }
-    reference operator*() const { return *(this->operator->()); }
     Iterator& operator++() {
       ++uri_iter_;
       // Additionally advance past invalid entries so it is safe to dereference.
@@ -117,9 +109,6 @@ class ResourceCollection {
     }
 
    private:
-    ResourceCollection* resource_collection_;
-    typename absl::flat_hash_map<std::string, MaybeParsedResource>::iterator
-        uri_iter_;
     // Advances uri_iter_ until it points to a valid, parse-able resource. If it
     // currently points to a valid resource, does not advance the iterator.
     void AdvanceUntilValid() {
@@ -127,7 +116,7 @@ class ResourceCollection {
         if (this->UriIterExhausted()) {
           return;
         }
-        absl::StatusOr<const T*> resource =
+        absl::StatusOr<T> resource =
             resource_collection_->Get(uri_iter_->first);
         if (resource.ok()) {
           return;
@@ -151,6 +140,11 @@ class ResourceCollection {
     bool UriIterExhausted() const {
       return uri_iter_ == resource_collection_->resources_by_uri_.end();
     }
+
+    const ResourceCollection* resource_collection_;
+    typename absl::flat_hash_map<
+        std::string, std::shared_ptr<const internal::FhirJson>>::const_iterator
+        uri_iter_;
   };
 
   ResourceCollection() = default;
@@ -160,10 +154,15 @@ class ResourceCollection {
   ResourceCollection& operator=(const ResourceCollection& other) = default;
   ResourceCollection& operator=(ResourceCollection&& other) = default;
 
-  Iterator begin() { return Iterator(this, this->resources_by_uri_.begin()); }
-  Iterator end() { return Iterator(this, this->resources_by_uri_.end()); }
+  Iterator begin() const {
+    return Iterator(this, this->resources_by_uri_.cbegin());
+  }
+  Iterator end() const {
+    return Iterator(this, this->resources_by_uri_.cend());
+  }
 
-  typename absl::flat_hash_map<std::string, MaybeParsedResource>::size_type
+  typename absl::flat_hash_map<
+      std::string, std::shared_ptr<const internal::FhirJson>>::size_type
   size() const {
     return resources_by_uri_.size();
   }
@@ -191,61 +190,32 @@ class ResourceCollection {
   }
 
   // Retrieves the resource for `uri`. Parses the JSON supplied in previous
-  // Put calls and returns the resulting proto. The protos are cached, so
-  // re-accessing the same resource will not result in another parse from the
-  // initial JSON.
-  absl::StatusOr<const T*> Get(absl::string_view uri) {
+  // Put calls and returns the resulting proto.
+  absl::StatusOr<T> Get(absl::string_view uri) const {
     const auto itr = resources_by_uri_.find(uri);
     if (itr == resources_by_uri_.end()) {
       return absl::NotFoundError(
           absl::StrFormat("%s not present in collection", uri));
     }
 
-    return ParseResourceIfNotParsed(uri, itr->second);
+    return ParseProtoFromJson(uri, *itr->second);
   }
 
  private:
-  // If the given resource has already been parsed into a proto, returns a
-  // pointer to that proto. If it has not, mutates the resource by replacing the
-  // JSON representation of the resource with a proto representation.
-  static absl::StatusOr<const T*> ParseResourceIfNotParsed(
-      absl::string_view uri, MaybeParsedResource& resource) {
-    if (std::unique_ptr<const T>* parsed =
-            std::get_if<std::unique_ptr<const T>>(&resource)) {
-      return parsed->get();
-    }
-    return ParseResource(uri, resource);
-  }
-
-  // Parses the JSON into a proto and replaces the un-parsed JSON with the
-  // parsed proto representation.
-  static absl::StatusOr<const T*> ParseResource(absl::string_view uri,
-                                                MaybeParsedResource& resource) {
-    FHIR_ASSIGN_OR_RETURN(
-        std::unique_ptr<const T> parsed,
-        ParseProtoFromJson(
-            uri,
-            *std::get<std::shared_ptr<const internal::FhirJson>>(resource)));
-
-    resource = std::move(parsed);
-    return std::get<std::unique_ptr<const T>>(resource).get();
-  }
-
   // Retrieves the resource JSON for `uri` from the given `parsed_json` blob
   // and parses the JSON into a protocol buffer.
-  static absl::StatusOr<std::unique_ptr<const T>> ParseProtoFromJson(
+  static absl::StatusOr<T> ParseProtoFromJson(
       absl::string_view uri, const internal::FhirJson& parsed_json) {
     FHIR_ASSIGN_OR_RETURN(std::string resource_type,
                           internal::GetResourceType(parsed_json));
-    std::unique_ptr<T> resource = std::make_unique<T>();
-
+    T resource;
     if (resource_type != T::descriptor()->name()) {
       if (resource_type == "Bundle") {
         FHIR_ASSIGN_OR_RETURN(const internal::FhirJson* bundle_json,
                               FindResourceInBundle(uri, parsed_json));
         FHIR_RETURN_IF_ERROR(google::fhir::r4::MergeJsonFhirObjectIntoProto(
-            *bundle_json, resource.get(), absl::UTCTimeZone(), true));
-        return std::move(resource);
+            *bundle_json, &resource, absl::UTCTimeZone(), true));
+        return resource;
       } else {
         return absl::InvalidArgumentError(
             absl::Substitute("Type mismatch in ResourceCollection:  Collection "
@@ -254,16 +224,16 @@ class ResourceCollection {
       }
     }
     FHIR_RETURN_IF_ERROR(google::fhir::r4::MergeJsonFhirObjectIntoProto(
-        parsed_json, resource.get(), absl::UTCTimeZone(), true));
-    return std::move(resource);
+        parsed_json, &resource, absl::UTCTimeZone(), true));
+    return resource;
   }
 
-  // A map between URIs and the resource for that URI. Elements begin as
-  // JSON and are replaced with protos of type T as they are accessed.
-  // For resources inside bundles, the JSON will be the bundle's JSON rather
-  // than the resource itself. Because bundles can be associated with
-  // multiple resources, we use a shared_ptr.
-  absl::flat_hash_map<std::string, MaybeParsedResource> resources_by_uri_;
+  // A map between URIs and the JSON of the resource for that URI. For resources
+  // inside bundles, the JSON will be the bundle's JSON rather than the resource
+  // itself. Because bundles can be associated with multiple resources, we use a
+  // shared_ptr.
+  absl::flat_hash_map<std::string, std::shared_ptr<const internal::FhirJson>>
+      resources_by_uri_;
 };
 
 // Struct representing a FHIR Proto package. This is constructed from an archive
@@ -298,23 +268,23 @@ struct FhirPackage {
                                  FhirPackage&)>
           handle_entry);
 
-  absl::StatusOr<const google::fhir::r4::core::StructureDefinition*>
-  GetStructureDefinition(absl::string_view uri) {
+  absl::StatusOr<google::fhir::r4::core::StructureDefinition>
+  GetStructureDefinition(absl::string_view uri) const {
     return this->structure_definitions.Get(uri);
   }
 
-  absl::StatusOr<const google::fhir::r4::core::SearchParameter*>
-  GetSearchParameter(absl::string_view uri) {
+  absl::StatusOr<google::fhir::r4::core::SearchParameter> GetSearchParameter(
+      absl::string_view uri) const {
     return this->search_parameters.Get(uri);
   }
 
-  absl::StatusOr<const google::fhir::r4::core::CodeSystem*> GetCodeSystem(
-      absl::string_view uri) {
+  absl::StatusOr<google::fhir::r4::core::CodeSystem> GetCodeSystem(
+      absl::string_view uri) const {
     return this->code_systems.Get(uri);
   }
 
-  absl::StatusOr<const google::fhir::r4::core::ValueSet*> GetValueSet(
-      absl::string_view uri) {
+  absl::StatusOr<google::fhir::r4::core::ValueSet> GetValueSet(
+      absl::string_view uri) const {
     return this->value_sets.Get(uri);
   }
 
@@ -336,21 +306,20 @@ namespace internal {
 // response can be found.
 template <typename T>
 absl::StatusOr<T> SearchPackagesForResource(
-    absl::StatusOr<T> (FhirPackage::*get_resource)(absl::string_view),
+    absl::StatusOr<T> (FhirPackage::*get_resource)(absl::string_view) const,
     const std::vector<std::unique_ptr<FhirPackage>>& packages,
-    absl::string_view uri,
-    std::optional<absl::string_view> version = std::nullopt) {
+    const absl::string_view uri,
+    const std::optional<absl::string_view> version = std::nullopt) {
   std::vector<std::string> mismatched_versions;
   for (const std::unique_ptr<FhirPackage>& package : packages) {
     absl::StatusOr<T> resource = (*package.*get_resource)(uri);
     if (resource.ok()) {
-      if (version == std::nullopt ||
-          (*resource)->version().value() == *version) {
+      if (version == std::nullopt || resource->version().value() == *version) {
         // We found the resource!
         return resource;
       }
       // Report the different version we found.
-      mismatched_versions.push_back((*resource)->version().value());
+      mismatched_versions.push_back(resource->version().value());
     } else if (resource.status().code() == absl::StatusCode::kNotFound) {
       // The resource wasn't found, so let's keep looking.
       continue;
@@ -390,46 +359,46 @@ class FhirPackageManager {
   // `uri`. Searches the packages added to the package manger for the resource
   // with the given URI. If multiple packages contain the same resource, the
   // package consulted will be non-deterministic.
-  absl::StatusOr<const google::fhir::r4::core::StructureDefinition*>
+  absl::StatusOr<google::fhir::r4::core::StructureDefinition>
   GetStructureDefinition(absl::string_view uri) const {
     return internal::SearchPackagesForResource(
         &FhirPackage::GetStructureDefinition, packages_, uri);
   }
-  absl::StatusOr<const google::fhir::r4::core::StructureDefinition*>
+  absl::StatusOr<google::fhir::r4::core::StructureDefinition>
   GetStructureDefinition(absl::string_view uri,
                          absl::string_view version) const {
     return internal::SearchPackagesForResource(
         &FhirPackage::GetStructureDefinition, packages_, uri, version);
   }
 
-  absl::StatusOr<const google::fhir::r4::core::SearchParameter*>
-  GetSearchParameter(absl::string_view uri) const {
+  absl::StatusOr<google::fhir::r4::core::SearchParameter> GetSearchParameter(
+      absl::string_view uri) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetSearchParameter,
                                                packages_, uri);
   }
-  absl::StatusOr<const google::fhir::r4::core::SearchParameter*>
-  GetSearchParameter(absl::string_view uri, absl::string_view version) const {
+  absl::StatusOr<google::fhir::r4::core::SearchParameter> GetSearchParameter(
+      absl::string_view uri, absl::string_view version) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetSearchParameter,
                                                packages_, uri, version);
   }
 
-  absl::StatusOr<const google::fhir::r4::core::CodeSystem*> GetCodeSystem(
+  absl::StatusOr<google::fhir::r4::core::CodeSystem> GetCodeSystem(
       absl::string_view uri) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetCodeSystem,
                                                packages_, uri);
   }
-  absl::StatusOr<const google::fhir::r4::core::CodeSystem*> GetCodeSystem(
+  absl::StatusOr<google::fhir::r4::core::CodeSystem> GetCodeSystem(
       absl::string_view uri, absl::string_view version) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetCodeSystem,
                                                packages_, uri, version);
   }
 
-  absl::StatusOr<const google::fhir::r4::core::ValueSet*> GetValueSet(
+  absl::StatusOr<google::fhir::r4::core::ValueSet> GetValueSet(
       absl::string_view uri) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetValueSet,
                                                packages_, uri);
   }
-  absl::StatusOr<const google::fhir::r4::core::ValueSet*> GetValueSet(
+  absl::StatusOr<google::fhir::r4::core::ValueSet> GetValueSet(
       absl::string_view uri, absl::string_view version) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetValueSet,
                                                packages_, uri, version);
