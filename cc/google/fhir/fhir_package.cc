@@ -178,8 +178,9 @@ absl::Status LoadPackage(absl::string_view archive_file_path,
           absl::StrFormat("Unhandled JSON entry %s due to error: %s.",
                           entry_name, entry_status.message());
       if (all_errors.ok()) {
-        all_errors = absl::InvalidArgumentError(absl::StrCat(
-            "Error(s) encountered during parsing: ", error_message));
+        all_errors = absl::InvalidArgumentError(
+            absl::StrCat("Error(s) encountered during parsing of ",
+                         archive_file_path, ": ", error_message));
       } else {
         all_errors = absl::Status(
             all_errors.code(),
