@@ -7,6 +7,6 @@ We think the best way to get an idea of how FhirProto works is to get in and sta
 
 A Reference User Guide with in-depth descriptions of different concepts can be found [here](https://github.com/google/fhir-examples/blob/master/USERGUIDE.md).
 
-## Trademark
+# Trademark
 FHIR® is the registered trademark of HL7 and is used with the permission of HL7. Use of the FHIR trademark does not constitute endorsement of this product by HL7.
 
