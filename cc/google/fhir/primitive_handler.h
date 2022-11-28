@@ -26,6 +26,7 @@
 #include "google/protobuf/message.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
+#include "absl/strings/substitute.h"
 #include "absl/time/time.h"
 #include "absl/types/optional.h"
 #include "google/fhir/error_reporter.h"
@@ -107,11 +108,17 @@ class PrimitiveHandler {
   // untyped reference, like uri.
   // Any issues encountered are reported to the error_reporter, but do not
   // cause a status failure.
+  //
+  // If `validate_reference_field_ids` is set to `true`, Reference ids inside
+  // FHIR resources will be validated and resources with invalid Reference field
+  // ids will be flagged as invalid.
+  //
   // Status failures are a result of unexpected errors, or if the error reporter
   // returns a status (e.g., the fast-fail error reporters).
   virtual absl::Status ValidateReferenceField(
       const google::protobuf::Message& parent, const ::google::protobuf::FieldDescriptor* field,
-      const ScopedErrorReporter& error_reporter) const = 0;
+      const ScopedErrorReporter& error_reporter,
+      bool validate_reference_field_ids) const = 0;
 
   virtual google::protobuf::Message* NewContainedResource() const = 0;
 
@@ -243,9 +250,10 @@ ABSL_MUST_USE_RESULT absl::Status CheckType(const google::protobuf::Message& mes
 
 template <class TypedReference,
           class TypedReferenceId = REFERENCE_ID_TYPE(TypedReference)>
-absl::Status ValidateReferenceField(const Message& parent,
-                                    const FieldDescriptor* field,
-                                    const ScopedErrorReporter& error_reporter) {
+absl::Status ValidateReferenceField(
+    const Message& parent, const FieldDescriptor* field,
+    const PrimitiveHandler* handler, const ScopedErrorReporter& error_reporter,
+    const bool validate_reference_field_ids = false) {
   static const Descriptor* descriptor = TypedReference::descriptor();
   static const OneofDescriptor* oneof = descriptor->oneof_decl(0);
 
@@ -258,7 +266,41 @@ absl::Status ValidateReferenceField(const Message& parent,
     const FieldDescriptor* reference_field =
         reflection->GetOneofFieldDescriptor(reference, oneof);
 
-    if (!reference_field) {
+    if (reference_field) {
+      // If a reference with a `ReferenceId` field exists and the
+      // `validate_reference_field_ids` flag is `true`, validate its `value`
+      // attribute.
+      if (reference_field->message_type() != nullptr &&
+          reference_field->message_type()->name() == "ReferenceId" &&
+          validate_reference_field_ids) {
+        const ScopedErrorReporter reference_scope =
+            scoped_reporter.WithScope(reference_field, i);
+        const Message& reference_msg =
+            reflection->GetMessage(reference, reference_field);
+
+        const FieldDescriptor* value_field_descriptor =
+            reference_msg.GetDescriptor()->FindFieldByName("value");
+        if (value_field_descriptor == nullptr) {
+          return reference_scope.ReportFhirFatal(
+              absl::NotFoundError(absl::Substitute(
+                  "Invalid Reference Type `$0` has no value field.",
+                  reference_field->full_name())));
+        }
+
+        const std::string& value = reference_msg.GetReflection()->GetString(
+            reference_msg, value_field_descriptor);
+
+        const ScopedErrorReporter value_scope =
+            reference_scope.WithScope(value_field_descriptor, i);
+
+        // Use a temporary id to validate that the ReferenceId is a valid Id
+        // field.
+        const std::unique_ptr<::google::protobuf::Message> temp_id =
+            std::unique_ptr<::google::protobuf::Message>(handler->NewId(value));
+        FHIR_RETURN_IF_ERROR(handler->ValidatePrimitive(*temp_id, value_scope));
+      }
+
+    } else {
       if (reference.extension_size() == 0 && !reference.has_identifier() &&
           !reference.has_display()) {
         FHIR_RETURN_IF_ERROR(
@@ -343,10 +385,11 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 
   absl::Status ValidateReferenceField(
       const Message& parent, const FieldDescriptor* field,
-      const ScopedErrorReporter& error_reporter) const override {
+      const ScopedErrorReporter& error_reporter,
+      const bool validate_reference_field_ids = false) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Reference>(field->message_type()));
     return primitives_internal::ValidateReferenceField<Reference>(
-        parent, field, error_reporter);
+        parent, field, this, error_reporter, validate_reference_field_ids);
   }
 
   google::protobuf::Message* NewContainedResource() const override {

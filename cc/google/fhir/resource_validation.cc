@@ -44,11 +44,13 @@ namespace {
 
 absl::Status CheckField(const Message& message, const FieldDescriptor* field,
                         const PrimitiveHandler* primitive_handler,
-                        const ScopedErrorReporter& error_reporter);
+                        const ScopedErrorReporter& error_reporter,
+                        bool validate_reference_field_ids = false);
 
 absl::Status ValidateFhirConstraints(
     const Message& message, const PrimitiveHandler* primitive_handler,
-    const ScopedErrorReporter& error_reporter) {
+    const ScopedErrorReporter& error_reporter,
+    const bool validate_reference_field_ids = false) {
   if (IsPrimitive(message.GetDescriptor())) {
     return primitive_handler->ValidatePrimitive(message, error_reporter);
   }
@@ -64,8 +66,9 @@ absl::Status ValidateFhirConstraints(
 
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
-    FHIR_RETURN_IF_ERROR(
-        CheckField(message, field, primitive_handler, error_reporter));
+    FHIR_RETURN_IF_ERROR(CheckField(message, field, primitive_handler,
+                                    error_reporter,
+                                    validate_reference_field_ids));
   }
   // Also verify that oneof fields are set.
   // Note that optional choice-types should have the containing message unset -
@@ -84,7 +87,8 @@ absl::Status ValidateFhirConstraints(
 // Check if a required field is missing.
 absl::Status CheckField(const Message& message, const FieldDescriptor* field,
                         const PrimitiveHandler* primitive_handler,
-                        const ScopedErrorReporter& error_reporter) {
+                        const ScopedErrorReporter& error_reporter,
+                        const bool validate_reference_field_ids) {
   if (field->options().HasExtension(validation_requirement) &&
       field->options().GetExtension(validation_requirement) ==
           ::google::fhir::proto::REQUIRED_BY_FHIR) {
@@ -95,8 +99,8 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
   }
 
   if (IsReference(field->message_type())) {
-    return primitive_handler->ValidateReferenceField(message, field,
-                                                     error_reporter);
+    return primitive_handler->ValidateReferenceField(
+        message, field, error_reporter, validate_reference_field_ids);
   }
 
   if (field->cpp_type() == ::google::protobuf::FieldDescriptor::CPPTYPE_MESSAGE) {
@@ -115,25 +119,29 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
 ::absl::Status Validate(const ::google::protobuf::Message& resource,
                         const PrimitiveHandler* primitive_handler,
                         fhir_path::FhirPathValidator* message_validator,
-                        ErrorHandler& error_handler) {
-  FHIR_RETURN_IF_ERROR(
-      ValidateWithoutFhirPath(resource, primitive_handler, error_handler));
+                        ErrorHandler& error_handler,
+                        const bool validate_reference_field_ids) {
+  FHIR_RETURN_IF_ERROR(ValidateWithoutFhirPath(resource, primitive_handler,
+                                               error_handler,
+                                               validate_reference_field_ids));
   return message_validator->Validate(resource, error_handler);
 }
 
 ::absl::Status ValidateWithoutFhirPath(
     const ::google::protobuf::Message& resource,
-    const PrimitiveHandler* primitive_handler, ErrorHandler& error_handler) {
+    const PrimitiveHandler* primitive_handler, ErrorHandler& error_handler,
+    const bool validate_reference_field_ids) {
   if (IsContainedResource(resource)) {
     FHIR_ASSIGN_OR_RETURN(const google::protobuf::Message* contained,
                           GetContainedResource(resource));
-    return ValidateWithoutFhirPath(*contained, primitive_handler,
-                                   error_handler);
+    return ValidateWithoutFhirPath(*contained, primitive_handler, error_handler,
+                                   validate_reference_field_ids);
   }
 
   return ValidateFhirConstraints(
       resource, primitive_handler,
-      ScopedErrorReporter(&error_handler, resource.GetDescriptor()->name()));
+      ScopedErrorReporter(&error_handler, resource.GetDescriptor()->name()),
+      validate_reference_field_ids);
 }
 
 }  // namespace fhir

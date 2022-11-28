@@ -28,6 +28,7 @@
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/composition.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/encounter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
 #include "proto/google/fhir/proto/r4/fhirproto.pb.h"
@@ -44,11 +45,12 @@ using ::google::fhir::r4::fhirproto::ValidationOutcome;
 using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
 
 template <typename T>
-void ValidTest(const absl::string_view name,
-               const bool has_resource_id = true) {
+void ValidTest(const absl::string_view name, const bool has_resource_id = true,
+               const bool validate_reference_ids = false) {
   T resource =
       ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt"));
-  absl::StatusOr<ValidationOutcome> outcome = Validate(resource);
+  absl::StatusOr<ValidationOutcome> outcome =
+      Validate(resource, validate_reference_ids);
   FHIR_ASSERT_OK(outcome.status());
 
   // The ValidationOutcome should be empty except for the subject, if the
@@ -64,7 +66,8 @@ void ValidTest(const absl::string_view name,
 }
 
 template <typename T>
-void InvalidTest(absl::string_view name) {
+void InvalidTest(absl::string_view name,
+                 const bool validate_reference_ids = false) {
   T resource =
       ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt"));
   std::string error_msg =
@@ -73,7 +76,8 @@ void InvalidTest(absl::string_view name) {
     error_msg.erase(error_msg.length() - 1);
   }
 
-  absl::StatusOr<ValidationOutcome> outcome = Validate(resource);
+  absl::StatusOr<ValidationOutcome> outcome =
+      Validate(resource, validate_reference_ids);
   FHIR_ASSERT_OK(outcome.status());
 
   ValidationOutcome expected_outcome = ReadProto<ValidationOutcome>(
@@ -135,6 +139,26 @@ TEST(EncounterValidationTest, FhirPathErrorsAndWarningsAreRecordedAsOutcomes) {
   InvalidTest<
       google::fhir::r4::testing::TestPatientWithWarningAndErrorFhirpath>(
       "patient_invalid_fhir_path_violation");
+}
+
+// Test with validate reference id flag false (The default behavior).
+TEST(CompositionValidationTest, ValidCompositionWithValidateReferenceIdsFalse) {
+  ValidTest<Composition>("composition_valid", false, false);
+}
+TEST(CompositionValidationTest,
+     InvalidCompositionWithValidateReferenceIdsFalse) {
+  InvalidTest<Composition>(
+      "composition_invalid_reference_with_validate_reference_id_false", false);
+}
+
+// Test with validate reference id flag true (The new behavior).
+TEST(CompositionValidationTest, ValidCompositionWithValidateReferenceIdsTrue) {
+  ValidTest<Composition>("composition_valid", false, true);
+}
+TEST(CompositionValidationTest,
+     InvalidCompositionWithValidateReferenceIdsTrue) {
+  InvalidTest<Composition>(
+      "composition_invalid_reference_with_validate_reference_id_true", true);
 }
 
 }  // namespace

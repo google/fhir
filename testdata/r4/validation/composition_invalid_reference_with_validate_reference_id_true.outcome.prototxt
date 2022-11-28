@@ -1,0 +1,56 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Input failed regex requirement for: google.fhir.r4.core.Id"
+  }
+  expression {
+    value: "Composition.author[0].practitionerId.value"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Input failed regex requirement for: google.fhir.r4.core.Id"
+  }
+  expression {
+    value: "Composition.author[1].practitionerRoleId.value"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Input failed regex requirement for: google.fhir.r4.core.Id"
+  }
+  expression {
+    value: "Composition.author[2].deviceId.value"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Input failed regex requirement for: google.fhir.r4.core.Id"
+  }
+  expression {
+    value: "Composition.author[3].patientId.value"
+  }
+}

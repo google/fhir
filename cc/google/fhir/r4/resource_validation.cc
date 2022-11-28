@@ -33,16 +33,20 @@ namespace google {
 namespace fhir {
 namespace r4 {
 
-using ::google::fhir::r4::fhirproto::ValidationOutcome;
 using ::google::fhir::r4::core::Reference;
+using ::google::fhir::r4::fhirproto::ValidationOutcome;
 
 absl::Status Validate(const ::google::protobuf::Message& resource,
-                      ErrorHandler& error_handler) {
+                      ErrorHandler& error_handler,
+                      const bool validate_reference_field_ids) {
   return ::google::fhir::Validate(resource, R4PrimitiveHandler::GetInstance(),
-                                  GetFhirPathValidator(), error_handler);
+                                  GetFhirPathValidator(), error_handler,
+                                  validate_reference_field_ids);
 }
 
-absl::StatusOr<ValidationOutcome> Validate(const ::google::protobuf::Message& resource) {
+absl::StatusOr<ValidationOutcome> Validate(
+    const ::google::protobuf::Message& resource,
+    const bool validate_reference_field_ids) {
   ValidationOutcome validation_outcome;
 
   if (ResourceHasId(resource)) {
@@ -51,7 +55,8 @@ absl::StatusOr<ValidationOutcome> Validate(const ::google::protobuf::Message& re
   }
 
   ValidationOutcomeErrorHandler error_handler(&validation_outcome);
-  FHIR_RETURN_IF_ERROR(Validate(resource, error_handler));
+  FHIR_RETURN_IF_ERROR(
+      Validate(resource, error_handler, validate_reference_field_ids));
 
   return validation_outcome;
 }

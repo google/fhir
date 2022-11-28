@@ -46,22 +46,34 @@ using ValidationOutcomeErrorHandler =
 // processing as long as the ErrorReporter returns an Ok status for all
 // errors it is given.
 //
+// If `validate_reference_field_ids` is set to `true`, Reference ids inside FHIR
+// resources will be validated and resources with invalid Reference field ids
+// will be flagged as invalid.
+// TODO(b/243721150): Deprecate this config option after the validate reference
+// ids feature has been integrated into the data-pipeline.
+//
 // Returns Ok if the error reporter handled all reported errors and
 // there was no internal issue (such as a malformed FHIR profile).
 ::absl::Status Validate(const ::google::protobuf::Message& resource,
-                        ::google::fhir::ErrorHandler& handler);
+                        ::google::fhir::ErrorHandler& handler,
+                        bool validate_reference_field_ids = false);
 
 // Run resource-specific validation on the given FHIR resource and
 // adds all errors to the returned OperationOutcome. Validation will continue
 // through all issues encountered so the given OperationOutcome will provide
 // a complete description of any issues.
 //
+// If `validate_reference_field_ids` is set to `true`, Reference ids
+// inside FHIR resources will be validated and resources with invalid Reference
+// field ids will be flagged as invalid.
+//
 // Returns a ValidationOutcome (a profiled OperationOutcome) with all data
 // issues; this will only return an error status if there is some unexpected
 // issue like a malformed FHIR profile. If the provided resources does not have
 // an ID the ValidationOutcome.subject will be empty.
-::absl::StatusOr<::google::fhir::r4::fhirproto::ValidationOutcome>
-Validate(const ::google::protobuf::Message& resource);
+::absl::StatusOr<::google::fhir::r4::fhirproto::ValidationOutcome> Validate(
+    const ::google::protobuf::Message& resource,
+    bool validate_reference_field_ids = false);
 
 // Deprecated. Use one of the above Validate functions.
 ::absl::Status ValidateWithoutFhirPath(const ::google::protobuf::Message& resource);
