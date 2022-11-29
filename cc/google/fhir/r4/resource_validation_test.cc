@@ -72,10 +72,11 @@ void InvalidTest(absl::string_view name,
       ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt"));
   std::string error_msg =
       ReadFile(absl::StrCat("testdata/r4/validation/", name, ".result.txt"));
-  if (error_msg[error_msg.length() - 1] == '\n') {
-    error_msg.erase(error_msg.length() - 1);
+  if (!error_msg.empty()) {
+    if (error_msg[error_msg.length() - 1] == '\n') {
+      error_msg.erase(error_msg.length() - 1);
+    }
   }
-
   absl::StatusOr<ValidationOutcome> outcome =
       Validate(resource, validate_reference_ids);
   FHIR_ASSERT_OK(outcome.status());
