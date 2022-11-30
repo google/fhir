@@ -30,12 +30,12 @@ class ExtensionsTest(absltest.TestCase, metaclass=abc.ABCMeta):
   @property
   @abc.abstractmethod
   def extension_cls(self) -> Type[message.Message]:
-    raise NotImplementedError('Subclasses *must* implement extension_cls.')
+    pass
 
   @property
   @abc.abstractmethod
   def testdata_dir(self) -> str:
-    raise NotImplementedError('Subclasses *must* implement testdata_dir.')
+    pass
 
   def assert_extension_to_message_equals_golden(
       self, name: str, message_cls: Type[message.Message]) -> None:

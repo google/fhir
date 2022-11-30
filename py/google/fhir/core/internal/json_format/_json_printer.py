@@ -49,15 +49,15 @@ class _JsonTextGenerator(abc.ABC):
 
   @abc.abstractmethod
   def indent(self) -> None:
-    raise NotImplementedError('Subclasses *must* implement indent().')
+    pass
 
   @abc.abstractmethod
   def outdent(self) -> None:
-    raise NotImplementedError('Subclasses *must* implement outdent().')
+    pass
 
   @abc.abstractmethod
   def add_newline(self) -> None:
-    raise NotImplementedError('Subclasses *must* implement add_newline().')
+    pass
 
   def push(self, value: str) -> None:
     self._output.append(value)

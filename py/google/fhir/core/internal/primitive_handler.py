@@ -31,7 +31,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#base64Binary.
     """
-    raise NotImplementedError('Subclasses *must* implement base64_binary_cls.')
 
   @property
   @abc.abstractmethod
@@ -40,9 +39,9 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#boolean.
     """
-    raise NotImplementedError('Subclasses *must* implement boolean_cls.')
 
   @property
+  @abc.abstractmethod
   def canonical_cls(self) -> Type[message.Message]:
     """A URI that refers to a resource by its canonical URL.
 
@@ -51,7 +50,6 @@ class PrimitiveHandler(abc.ABC):
     Returns:
       A FHIR R4 Canonical primitive class.
     """
-    raise NotImplementedError('Subclasses *must* implement canonical_cls.')
 
   @property
   @abc.abstractmethod
@@ -60,7 +58,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#code.
     """
-    raise NotImplementedError('Subclasses *must* implement code_cls.')
 
   # TODO(b/163349112): Find more appropriate location for contained_resource_cls
   @property
@@ -73,8 +70,6 @@ class PrimitiveHandler(abc.ABC):
     identified independently, nor can it have its own independent transaction
     scope. See more at: https://www.hl7.org/fhir/references.html#contained.
     """
-    raise NotImplementedError(
-        'Subclasses *must* implement contained_resource_cls.')
 
   @property
   @abc.abstractmethod
@@ -83,7 +78,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#date.
     """
-    raise NotImplementedError('Subclasses *must* implement date_cls.')
 
   @property
   @abc.abstractmethod
@@ -92,7 +86,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#datetime.
     """
-    raise NotImplementedError('Subclasses *must* implement date_time_cls.')
 
   @property
   @abc.abstractmethod
@@ -101,7 +94,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#quantity.
     """
-    raise NotImplementedError('Subclasses *must* implement quantity_cls.')
 
   @property
   @abc.abstractmethod
@@ -110,7 +102,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#decimal.
     """
-    raise NotImplementedError('Subclasses *must* implement decimal_cls.')
 
   @property
   @abc.abstractmethod
@@ -119,7 +110,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#id.
     """
-    raise NotImplementedError('Subclasses *must* implement id_cls.')
 
   @property
   @abc.abstractmethod
@@ -128,7 +118,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#instant.
     """
-    raise NotImplementedError('Subclasses *must* implement instant_cls.')
 
   @property
   @abc.abstractmethod
@@ -137,7 +126,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#integer.
     """
-    raise NotImplementedError('Subclasses *must* implement integer_cls.')
 
   @property
   @abc.abstractmethod
@@ -146,7 +134,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#markdown.
     """
-    raise NotImplementedError('Subclasses *must* implement markdown_cls.')
 
   @property
   @abc.abstractmethod
@@ -155,7 +142,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#oid.
     """
-    raise NotImplementedError('Subclasses *must* implement oid_cls.')
 
   @property
   @abc.abstractmethod
@@ -164,7 +150,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#positiveInt.
     """
-    raise NotImplementedError('Subclasses *must* implement positive_int_cls.')
 
   @property
   @abc.abstractmethod
@@ -173,7 +158,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#string.
     """
-    raise NotImplementedError('Subclasses *must* implement string_cls.')
 
   @property
   @abc.abstractmethod
@@ -182,7 +166,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#time.
     """
-    raise NotImplementedError('Subclasses *must* implement time_cls.')
 
   @property
   @abc.abstractmethod
@@ -191,7 +174,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#unsignedInt.
     """
-    raise NotImplementedError('Subclasses *must* implement unsigned_int_cls.')
 
   @property
   @abc.abstractmethod
@@ -200,7 +182,6 @@ class PrimitiveHandler(abc.ABC):
 
     See more at: https://www.hl7.org/fhir/datatypes.html#uri.
     """
-    raise NotImplementedError('Subclasses *must* implement uri_cls.')
 
   @property
   @abc.abstractmethod
@@ -212,7 +193,6 @@ class PrimitiveHandler(abc.ABC):
     Returns:
       A FHIR R4 URL primitive class.
     """
-    raise NotImplementedError('Subclasses *must* implement url_cls.')
 
   @property
   @abc.abstractmethod
@@ -224,13 +204,11 @@ class PrimitiveHandler(abc.ABC):
     Returns:
       A FHIR R4 UUID primitive class.
     """
-    raise NotImplementedError('Subclasses *must* implement uuid_cls.')
 
   @property
   @abc.abstractmethod
   def xhtml_cls(self) -> Type[message.Message]:
     """XHTML content."""
-    raise NotImplementedError('Subclasses *must* implement xhtml_cls.')
 
   @abc.abstractmethod
   def get_primitive_wrapper_cls_for_primitive_cls(
@@ -249,8 +227,6 @@ class PrimitiveHandler(abc.ABC):
     Returns:
       A PrimitiveWrapper for parsing/printing types of primitive_cls.
     """
-    raise NotImplementedError('Subclasses *must* implement '
-                              'get_primitive_wrapper_cls_for_primitive_cls.')
 
   def new_base64_binary(
       self,
@@ -446,8 +422,6 @@ class PrimitiveHandler(abc.ABC):
       primitive FHIR type.
     Returns: A wrapper around primitive_message.
     """
-    raise NotImplementedError(
-        'Subclasses *must* implement primitive_wrapper_from_primitive.')
 
   @abc.abstractmethod
   def primitive_wrapper_from_json_value(
@@ -477,5 +451,3 @@ class PrimitiveHandler(abc.ABC):
     Returns:
       A wrapper around an instance of primitive_cls parsed from json_value.
     """
-    raise NotImplementedError(
-        'Subclasses *must* implement primitive_wrapper_from_json_value.')

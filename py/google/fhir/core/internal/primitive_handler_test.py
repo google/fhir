@@ -38,7 +38,7 @@ class PrimitiveWrapperPrimitiveHasNoValueTest(
   @property
   @abc.abstractmethod
   def primitive_handler(self) -> primitive_handler.PrimitiveHandler:
-    raise NotImplementedError('Subclasses *must* implement primitive_handler.')
+    pass
 
   def testPrimitiveHasNoValue_withValidBase64Binary_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
@@ -244,12 +244,12 @@ class PrimitiveWrapperProtoValidationTest(
   @property
   @abc.abstractmethod
   def primitive_handler(self) -> primitive_handler.PrimitiveHandler:
-    raise NotImplementedError('Subclasses *must* implement primitive_handler.')
+    pass
 
   @property
   @abc.abstractmethod
   def validation_dir(self) -> str:
-    raise NotImplementedError('Subclasses *must* implement validation_dir')
+    pass
 
   def testValidateWrapped_withValidBase64Binary_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
@@ -393,12 +393,12 @@ class PrimitiveWrapperJsonValidationTest(
   @property
   @abc.abstractmethod
   def primitive_handler(self) -> primitive_handler.PrimitiveHandler:
-    raise NotImplementedError('Subclasses *must* implement primitive_handler.')
+    pass
 
   @property
   @abc.abstractmethod
   def validation_dir(self) -> str:
-    raise NotImplementedError('Subclasses *must* implement validation_dir')
+    pass
 
   def testValidateWrapped_withValidBase64Binary_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
@@ -548,7 +548,7 @@ class DateTimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
   @property
   @abc.abstractmethod
   def primitive_handler(self) -> primitive_handler.PrimitiveHandler:
-    raise NotImplementedError('Subclasses *must* implement primitive_handler.')
+    pass
 
   def testParseDateTime_withYearPrecision_succeeds(self):
     datetime_str = '1971'
@@ -814,7 +814,7 @@ class DateWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
   @property
   @abc.abstractmethod
   def primitive_handler(self) -> primitive_handler.PrimitiveHandler:
-    raise NotImplementedError('Subclasses *must* implement primitive_handler.')
+    pass
 
   def testParseDate_withYearPrecision_succeeds(self):
     date_str = '1971'
@@ -943,7 +943,7 @@ class InstantWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
   @property
   @abc.abstractmethod
   def primitive_handler(self) -> primitive_handler.PrimitiveHandler:
-    raise NotImplementedError('Subclasses *must* implement primitive_handler.')
+    pass
 
   def testParseInstant_withSecondPrecision_succeeds(self):
     instant_str = '1970-01-01T00:00:00Z'
@@ -1045,7 +1045,7 @@ class TimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
   @property
   @abc.abstractmethod
   def primitive_handler(self) -> primitive_handler.PrimitiveHandler:
-    raise NotImplementedError('Subclasses *must* implement primitive_handler.')
+    pass
 
   def testParseTime_withSecondPrecision_succeeds(self):
     timestamp = '12:00:00'
@@ -1105,7 +1105,7 @@ class DecimalWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
   @property
   @abc.abstractmethod
   def primitive_handler(self) -> primitive_handler.PrimitiveHandler:
-    raise NotImplementedError('Subclasses *must* implement primitive_handler.')
+    pass
 
   def testParseDecimal_withPositiveInteger_succeeds(self):
     expected = self.primitive_handler.new_decimal(value='185')

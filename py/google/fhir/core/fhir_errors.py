@@ -67,8 +67,6 @@ class ErrorReporter(abc.ABC):
       element_path: The path to the field where the issue occurred.
       msg: The error message produced.
     """
-    raise NotImplementedError(
-        'Subclasses *must* override `report_conversion_error`.')
 
   @abc.abstractmethod
   def report_validation_error(self, element_path: str, msg: str) -> None:
@@ -81,8 +79,6 @@ class ErrorReporter(abc.ABC):
       element_path: The path to the field where the issue occurred.
       msg: The error message produced.
     """
-    raise NotImplementedError(
-        'Subclasses *must* override `report_validation_error`.')
 
   @abc.abstractmethod
   def report_validation_warning(self, element_path: str, msg: str) -> None:
@@ -96,8 +92,6 @@ class ErrorReporter(abc.ABC):
       element_path: The path to the field where the issue occurred.
       msg: The warning message that was produced.
     """
-    raise NotImplementedError(
-        'Subclasses *must* override `report_validation_warning`.')
 
   @abc.abstractmethod
   def report_fhir_path_error(self, element_path: str, fhir_path_constraint: str,
@@ -112,8 +106,6 @@ class ErrorReporter(abc.ABC):
       fhir_path_constraint: The FHIRPath constraint expression.
       msg: The error message produced.
     """
-    raise NotImplementedError(
-        'Subclasses *must* override `report_fhir_path_error`.')
 
   @abc.abstractmethod
   def report_fhir_path_warning(self, element_path: str,
@@ -125,8 +117,6 @@ class ErrorReporter(abc.ABC):
       fhir_path_constraint: The FHIRPath constraint expression.
       msg: The warning message produced.
     """
-    raise NotImplementedError(
-        'Subclasses *must* override `report_fhir_path_warning`.')
 
 
 class ListErrorReporter(ErrorReporter):

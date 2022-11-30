@@ -196,7 +196,6 @@ class PrimitiveWrapper(abc.ABC):
     Returns:
       An instance of PrimitiveWrapper.
     """
-    raise NotImplementedError('Subclasses *must* implement from_json_str.')
 
   def __init__(self, wrapped: message.Message, unused_context: Context) -> None:
     """Initializes a new PrimitiveWrapper with wrapped.
