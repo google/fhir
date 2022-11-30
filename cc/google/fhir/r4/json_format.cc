@@ -45,7 +45,7 @@ const Printer* GetPrinter() {
 
 }  // namespace
 
-absl::Status MergeJsonFhirStringIntoProto(const std::string& raw_json,
+absl::Status MergeJsonFhirStringIntoProto(const absl::string_view raw_json,
                                           google::protobuf::Message* target,
                                           absl::TimeZone default_timezone,
                                           const bool validate,

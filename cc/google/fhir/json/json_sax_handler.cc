@@ -312,7 +312,7 @@ class JsonSaxHandler {
 }  // namespace
 
 absl::Status ParseJsonValue(
-    const std::string& raw_json, FhirJson& json_value) {
+    const absl::string_view raw_json, FhirJson& json_value) {
   JsonSaxHandler sax_handler(&json_value);
 
   if (nlohmann::json::sax_parse(raw_json, &sax_handler)) {

@@ -535,7 +535,7 @@ class Parser {
 }  // namespace internal
 
 absl::StatusOr<ParseResult> Parser::MergeJsonFhirStringIntoProto(
-    const std::string& raw_json, Message* target,
+    const absl::string_view raw_json, Message* target,
     const absl::TimeZone default_timezone, const bool validate,
     ErrorHandler& error_handler) const {
   internal::FhirJson json_object;

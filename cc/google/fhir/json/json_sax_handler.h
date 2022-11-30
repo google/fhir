@@ -18,7 +18,8 @@
 #include <memory>
 #include <string>
 
-#include "absl/status/statusor.h"
+#include "absl/status/status.h"
+#include "absl/strings/string_view.h"
 #include "google/fhir/json/fhir_json.h"
 
 namespace google {
@@ -28,7 +29,7 @@ namespace internal {
 // Parse input string into FhirJson, returns error if `raw_json` is not
 // well-formatted.
 absl::Status ParseJsonValue(
-    const std::string& raw_json, FhirJson& json_value);
+    absl::string_view raw_json, FhirJson& json_value);
 
 }  // namespace internal
 }  // namespace fhir

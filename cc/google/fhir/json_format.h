@@ -22,6 +22,7 @@
 
 #include "google/protobuf/message.h"
 #include "absl/status/statusor.h"
+#include "absl/strings/string_view.h"
 #include "absl/time/time.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/json/fhir_json.h"
@@ -46,7 +47,7 @@ class Parser {
   // For reading JSON into a new resource, it is recommended to use
   // JsonFhirStringToProto or JsonFhirStringToProtoWithoutValidating.
   ::absl::StatusOr<ParseResult> MergeJsonFhirStringIntoProto(
-      const std::string& raw_json, google::protobuf::Message* target,
+      absl::string_view raw_json, google::protobuf::Message* target,
       absl::TimeZone default_timezone, const bool validate,
       ErrorHandler& error_handler) const;
 
@@ -66,7 +67,7 @@ class Parser {
   // timezone for timelike data that does not specify timezone.
   template <typename R>
   ::absl::StatusOr<R> JsonFhirStringToProto(
-      const std::string& raw_json, const absl::TimeZone default_timezone,
+      absl::string_view raw_json, const absl::TimeZone default_timezone,
       ErrorHandler& error_handler) const {
     R resource;
     RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(
@@ -81,7 +82,7 @@ class Parser {
   // Takes a default timezone for timelike data that does not specify timezone.
   template <typename R>
   ::absl::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
-      const std::string& raw_json, const absl::TimeZone default_timezone,
+      absl::string_view raw_json, const absl::TimeZone default_timezone,
       ErrorHandler& error_handler) const {
     R resource;
     RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(

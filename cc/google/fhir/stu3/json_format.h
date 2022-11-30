@@ -20,6 +20,7 @@
 #include <string>
 
 #include "absl/status/statusor.h"
+#include "absl/strings/string_view.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/json_format.h"
 #include "google/fhir/status/status.h"
@@ -32,13 +33,13 @@ namespace stu3 {
 // See cc/google/fhir/json_format.h for documentation on these methods
 
 absl::Status MergeJsonFhirStringIntoProto(
-    const std::string& raw_json, google::protobuf::Message* target,
+    absl::string_view raw_json, google::protobuf::Message* target,
     absl::TimeZone default_timezone, const bool validate,
     ErrorHandler& error_handler = FailFastErrorHandler::FailOnErrorOrFatal());
 
 template <typename R>
 absl::StatusOr<R> JsonFhirStringToProto(
-    const std::string& raw_json, const absl::TimeZone default_timezone,
+    absl::string_view raw_json, const absl::TimeZone default_timezone,
     ErrorHandler& error_handler = FailFastErrorHandler::FailOnErrorOrFatal()) {
   R resource;
   FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(
@@ -48,7 +49,7 @@ absl::StatusOr<R> JsonFhirStringToProto(
 
 template <typename R>
 absl::StatusOr<R> JsonFhirStringToProtoWithoutValidating(
-    const std::string& raw_json, const absl::TimeZone default_timezone,
+    absl::string_view raw_json, const absl::TimeZone default_timezone,
     ErrorHandler& error_handler = FailFastErrorHandler::FailOnErrorOrFatal()) {
   R resource;
   FHIR_RETURN_IF_ERROR(MergeJsonFhirStringIntoProto(
