@@ -101,6 +101,10 @@ class PrimitiveHandler(primitive_handler.PrimitiveHandler):
     return datatypes_pb2.DateTime
 
   @property
+  def quantity_cls(self) -> Type[datatypes_pb2.Quantity]:
+    return datatypes_pb2.Quantity
+
+  @property
   def decimal_cls(self) -> Type[datatypes_pb2.Decimal]:
     return datatypes_pb2.Decimal
 

@@ -35,7 +35,6 @@ from google.fhir.core.utils import fhir_types
 
 class PrimitiveHandler(primitive_handler.PrimitiveHandler):
   """An implementation of PrimitiveHandler for vending R4 FHIR datatypes."""
-
   _DESC_TO_PRIMITIVE_WRAPPER_TYPE: Dict[
       str, Type[_primitive_wrappers.PrimitiveWrapper]] = {
           datatypes_pb2.Base64Binary.DESCRIPTOR.full_name:
@@ -106,6 +105,10 @@ class PrimitiveHandler(primitive_handler.PrimitiveHandler):
   @property
   def date_time_cls(self) -> Type[datatypes_pb2.DateTime]:
     return datatypes_pb2.DateTime
+
+  @property
+  def quantity_cls(self) -> Type[datatypes_pb2.Quantity]:
+    return datatypes_pb2.Quantity
 
   @property
   def decimal_cls(self) -> Type[datatypes_pb2.Decimal]:

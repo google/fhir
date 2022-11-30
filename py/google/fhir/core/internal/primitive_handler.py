@@ -13,10 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Version-agnostic abstractions around FHIR primitive datatypes."""
-
 import abc
+import decimal
 from typing import Any, List, Optional, Type, cast
-
 from google.protobuf import message
 from google.fhir.core.internal import _primitive_time_utils
 from google.fhir.core.internal.json_format.wrappers import _primitive_wrappers
@@ -70,11 +69,9 @@ class PrimitiveHandler(abc.ABC):
     """A reference to a resource associated with some record.
 
     The contained resource is a reference to content that does not have an
-    independent existence apart from the resource that contains it. It cannot
-    be identified independently, nor can it have its own independent transaction
-    scope.
-
-    See more at: https://www.hl7.org/fhir/references.html#contained.
+    independent existence apart from the resource that contains it. It cannot be
+    identified independently, nor can it have its own independent transaction
+    scope. See more at: https://www.hl7.org/fhir/references.html#contained.
     """
     raise NotImplementedError(
         'Subclasses *must* implement contained_resource_cls.')
@@ -96,6 +93,15 @@ class PrimitiveHandler(abc.ABC):
     See more at: https://www.hl7.org/fhir/datatypes.html#datetime.
     """
     raise NotImplementedError('Subclasses *must* implement date_time_cls.')
+
+  @property
+  @abc.abstractmethod
+  def quantity_cls(self) -> Type[message.Message]:
+    """A quantity.
+
+    See more at: https://www.hl7.org/fhir/datatypes.html#quantity.
+    """
+    raise NotImplementedError('Subclasses *must* implement quantity_cls.')
 
   @property
   @abc.abstractmethod
@@ -307,6 +313,12 @@ class PrimitiveHandler(abc.ABC):
         id=id_,
         extension=extension)
 
+  # TODO(b/226133941): Ask for feedback on whether we bother with comparator,
+  # system and code?
+  def new_quantity(self, value: decimal.Decimal, unit: str) -> message.Message:
+    return cast(Any, self.quantity_cls)(
+        value=self.new_decimal(str(value)), unit=self.new_string(unit))
+
   def new_decimal(
       self,
       value: str = '',
@@ -423,8 +435,8 @@ class PrimitiveHandler(abc.ABC):
   ) -> _primitive_wrappers.PrimitiveWrapper:
     """Wraps the FHIR protobuf primitive_message to handle parsing/printing.
 
-    The wrapped FHIR protobuf primitive provides necessary state for printing
-    to the FHIR JSON spec.
+    The wrapped FHIR protobuf primitive provides necessary state for printing to
+    the FHIR JSON spec.
 
     Args:
       primitive_message: The FHIR primitive to wrap.
@@ -432,7 +444,6 @@ class PrimitiveHandler(abc.ABC):
     Raises:
       ValueError: In the event that primitive_message is not actually a
       primitive FHIR type.
-
     Returns: A wrapper around primitive_message.
     """
     raise NotImplementedError(
@@ -448,9 +459,9 @@ class PrimitiveHandler(abc.ABC):
   ) -> _primitive_wrappers.PrimitiveWrapper:
     """Parses json_value into a FHIR protobuf primitive and wraps.
 
-    The wrapper provides necessary information on how to parse json_value into
-    a corresponding FHIR protobuf message. Afterwards, this is wrapped to
-    provide stateful information to the parent parser and/or printer.
+    The wrapper provides necessary information on how to parse json_value into a
+    corresponding FHIR protobuf message. Afterwards, this is wrapped to provide
+    stateful information to the parent parser and/or printer.
 
     Args:
       json_value: The FHIR json value to parse and wrap.
