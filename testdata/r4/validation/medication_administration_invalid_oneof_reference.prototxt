@@ -1,0 +1,23 @@
+status { value: STOPPED }
+medication {
+  reference {
+    medication_id { value: "Invalid id with spaces." }
+  }
+}
+subject {
+    patient_id { value: "1234" }
+}
+effective {
+  period {
+    start {
+      value_us: 5515679100000000  # "2144-10-13T21:05:00+00:00"
+      timezone: ""
+      precision: SECOND
+    }
+    end {
+      value_us: 5515680100000000  # "2144-10-13T21:21:40+00:00"
+      timezone: "UTC"
+      precision: SECOND
+    }
+   }
+}
