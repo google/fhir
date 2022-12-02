@@ -102,6 +102,10 @@ TEST(ResourceValidationTest, InvalidReference) {
   InvalidTest<Observation>("observation_invalid_reference");
 }
 
+TEST(ResourceValidationTest, EmptyReference) {
+  InvalidTest<Observation>("observation_empty_reference");
+}
+
 TEST(ResourceValidationTest, FHIRPathViolation) {
   InvalidTest<Observation>("observation_invalid_fhirpath_violation");
 }
