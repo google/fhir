@@ -135,34 +135,40 @@ public final class ResourceValidator {
             // There's no reference field, but there is other data.  That's valid.
             return;
           }
-          throw new InvalidFhirException("empty-reference-" + baseName + "." + setField.getName());
         }
-      }
-      if (field.getOptions().getExtensionCount(Annotations.validReferenceType) == 0) {
-        // The reference field does not have restrictions, so any value is fine.
-        return;
-      }
-      if (!referenceField.getOptions().hasExtension(Annotations.referencedFhirType)) {
-        // This is either a Uri, or a Fragment, which are untyped, and therefore valid.
-        return;
-      }
-      String referenceType =
-          referenceField.getOptions().getExtension(Annotations.referencedFhirType);
-      boolean isAllowed = false;
-      for (String validType : field.getOptions().getExtension(Annotations.validReferenceType)) {
-        if (validType.equals(referenceType) || validType.equals("Resource")) {
-          isAllowed = true;
-        }
-      }
-      if (!isAllowed) {
         throw new InvalidFhirException(
-            "invalid-reference"
-                + "-disallowed-type-"
-                + referenceType
-                + "-at-"
+            "Invalid reference at `"
                 + baseName
                 + "."
-                + field.getName());
+                + field.getName()
+                + "` has no reference fields set.");
+      } else {
+        if (field.getOptions().getExtensionCount(Annotations.validReferenceType) == 0) {
+          // The reference field does not have restrictions, so any value is fine.
+          return;
+        }
+        if (!referenceField.getOptions().hasExtension(Annotations.referencedFhirType)) {
+          // This is either a Uri, or a Fragment, which are untyped, and therefore valid.
+          return;
+        }
+        String referenceType =
+            referenceField.getOptions().getExtension(Annotations.referencedFhirType);
+        boolean isAllowed = false;
+        for (String validType : field.getOptions().getExtension(Annotations.validReferenceType)) {
+          if (validType.equals(referenceType) || validType.equals("Resource")) {
+            isAllowed = true;
+          }
+        }
+        if (!isAllowed) {
+          throw new InvalidFhirException(
+              "invalid-reference"
+                  + "-disallowed-type-"
+                  + referenceType
+                  + "-at-"
+                  + baseName
+                  + "."
+                  + field.getName());
+        }
       }
     }
   }

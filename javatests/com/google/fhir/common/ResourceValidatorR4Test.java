@@ -99,6 +99,11 @@ public final class ResourceValidatorR4Test {
   }
 
   @Test
+  public void testEmptyReference() throws Exception {
+    invalidTest("observation_empty_reference", Observation.newBuilder());
+  }
+
+  @Test
   public void testRepeatedReferenceValid() throws Exception {
     validTest("encounter_valid_repeated_reference", Encounter.newBuilder());
   }
