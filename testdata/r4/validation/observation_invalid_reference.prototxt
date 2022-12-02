@@ -7,3 +7,10 @@ code {
 }
 id { value: "123" }
 specimen { device_id { value: "12345" } }
+subject { patient_id { value: "12345" } }
+focus { identifier { value { value: "1234" } } }
+focus { display { value: "1234" } }
+focus { }
+performer { uri { value: "1234" } }
+performer { fragment { value: "1234" } }
+performer { basic_id { value: "1234" } }
