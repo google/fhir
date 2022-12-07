@@ -1,6 +1,9 @@
 licenses(["notice"])
 
-package(default_visibility = ["//cc/google/fhir:__subpackages__"])
+package(
+    default_applicable_licenses = ["//:license"],
+    default_visibility = ["//cc/google/fhir:__subpackages__"],
+)
 
 cc_library(
     name = "fhir_json",

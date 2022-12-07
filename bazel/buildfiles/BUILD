@@ -1,3 +1,5 @@
+package(default_applicable_licenses = ["//:license"])
+
 licenses(["notice"])
 
 # Build files for external dependencies that do not provide build files.
