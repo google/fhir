@@ -91,6 +91,9 @@ message PackageInfo {
   }
   // If unset, defaults to no splitting
   FileSplittingBehavior file_splitting_behavior = 13;
+
+  // The package's version number.
+  string version = 14;
 }
 
 enum SizeRestriction {

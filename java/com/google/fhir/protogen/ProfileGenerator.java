@@ -843,6 +843,9 @@ final class ProfileGenerator {
       structureDefinitionBuilder.setDescription(
           Markdown.newBuilder().setValue(elementData.getDescription()));
     }
+    if (!packageInfo.getVersion().isEmpty()) {
+      structureDefinitionBuilder.setVersion(fhirString(packageInfo.getVersion()));
+    }
   }
 
   private ElementDefinition.Base buildBase(String path, StructureDefinition parentStructDef)
