@@ -1,4 +1,5 @@
 base_url: "http://test/url/base"
+version: "123"
 proto_package: "google.fhir.r4.testing"
 java_proto_package: "com.google.fhir.r4.testing"
 go_proto_package: "google/fhir/r4/testing"

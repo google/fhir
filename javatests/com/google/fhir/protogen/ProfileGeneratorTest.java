@@ -583,6 +583,7 @@ public final class ProfileGeneratorTest {
     Bundle bundle = generator.generateProfiles(profiles);
 
     StructureDefinition patient = bundle.getEntry(0).getResource().getStructureDefinition();
+    assertThat(patient.getVersion().getValue()).isEqualTo("123");
 
     List<ElementDefinition> typeElement =
         patient.getSnapshot().getElementList().stream()
