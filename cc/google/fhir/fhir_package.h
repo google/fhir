@@ -65,6 +65,8 @@ class ResourceCollection {
    public:
     using iterator_category = std::input_iterator_tag;
     using difference_type = std::ptrdiff_t;
+
+    // value_type is an iterator_trait
     using value_type = T;
 
     Iterator(
@@ -77,9 +79,10 @@ class ResourceCollection {
       this->AdvanceUntilValid();
     }
 
-    value_type operator*() const {
+    std::unique_ptr<T> operator*() const {
       std::string uri = uri_iter_->first;
-      absl::StatusOr<T> resource = resource_collection_->Get(uri);
+      absl::StatusOr<std::unique_ptr<T>> resource =
+          resource_collection_->Get(uri);
 
       // The AdvanceUntilValid() calls in the constructor and in operator++
       // should prevent us from attempting to dereference an invalid resource.
@@ -88,7 +91,7 @@ class ResourceCollection {
           "error: %s",
           uri, resource.status().message());
 
-      return *resource;
+      return std::move(*resource);
     }
     Iterator& operator++() {
       ++uri_iter_;
@@ -116,7 +119,7 @@ class ResourceCollection {
         if (this->UriIterExhausted()) {
           return;
         }
-        absl::StatusOr<T> resource =
+        absl::StatusOr<std::unique_ptr<T>> resource =
             resource_collection_->Get(uri_iter_->first);
         if (resource.ok()) {
           return;
@@ -191,7 +194,7 @@ class ResourceCollection {
 
   // Retrieves the resource for `uri`. Parses the JSON supplied in previous
   // Put calls and returns the resulting proto.
-  absl::StatusOr<T> Get(absl::string_view uri) const {
+  absl::StatusOr<std::unique_ptr<T>> Get(absl::string_view uri) const {
     const auto itr = resources_by_uri_.find(uri);
     if (itr == resources_by_uri_.end()) {
       return absl::NotFoundError(
@@ -204,18 +207,18 @@ class ResourceCollection {
  private:
   // Retrieves the resource JSON for `uri` from the given `parsed_json` blob
   // and parses the JSON into a protocol buffer.
-  static absl::StatusOr<T> ParseProtoFromJson(
+  static absl::StatusOr<std::unique_ptr<T>> ParseProtoFromJson(
       absl::string_view uri, const internal::FhirJson& parsed_json) {
     FHIR_ASSIGN_OR_RETURN(std::string resource_type,
                           internal::GetResourceType(parsed_json));
-    T resource;
+    auto resource = std::make_unique<T>();
     if (resource_type != T::descriptor()->name()) {
       if (resource_type == "Bundle") {
         FHIR_ASSIGN_OR_RETURN(const internal::FhirJson* bundle_json,
                               FindResourceInBundle(uri, parsed_json));
         FHIR_RETURN_IF_ERROR(google::fhir::r4::MergeJsonFhirObjectIntoProto(
-            *bundle_json, &resource, absl::UTCTimeZone(), true));
-        return resource;
+            *bundle_json, resource.get(), absl::UTCTimeZone(), true));
+        return std::move(resource);
       } else {
         return absl::InvalidArgumentError(
             absl::Substitute("Type mismatch in ResourceCollection:  Collection "
@@ -224,8 +227,8 @@ class ResourceCollection {
       }
     }
     FHIR_RETURN_IF_ERROR(google::fhir::r4::MergeJsonFhirObjectIntoProto(
-        parsed_json, &resource, absl::UTCTimeZone(), true));
-    return resource;
+        parsed_json, resource.get(), absl::UTCTimeZone(), true));
+    return std::move(resource);
   }
 
   // A map between URIs and the JSON of the resource for that URI. For resources
@@ -268,22 +271,22 @@ struct FhirPackage {
                                  FhirPackage&)>
           handle_entry);
 
-  absl::StatusOr<google::fhir::r4::core::StructureDefinition>
+  absl::StatusOr<std::unique_ptr<google::fhir::r4::core::StructureDefinition>>
   GetStructureDefinition(absl::string_view uri) const {
     return this->structure_definitions.Get(uri);
   }
 
-  absl::StatusOr<google::fhir::r4::core::SearchParameter> GetSearchParameter(
-      absl::string_view uri) const {
+  absl::StatusOr<std::unique_ptr<google::fhir::r4::core::SearchParameter>>
+  GetSearchParameter(absl::string_view uri) const {
     return this->search_parameters.Get(uri);
   }
 
-  absl::StatusOr<google::fhir::r4::core::CodeSystem> GetCodeSystem(
-      absl::string_view uri) const {
+  absl::StatusOr<std::unique_ptr<google::fhir::r4::core::CodeSystem>>
+  GetCodeSystem(absl::string_view uri) const {
     return this->code_systems.Get(uri);
   }
 
-  absl::StatusOr<google::fhir::r4::core::ValueSet> GetValueSet(
+  absl::StatusOr<std::unique_ptr<google::fhir::r4::core::ValueSet>> GetValueSet(
       absl::string_view uri) const {
     return this->value_sets.Get(uri);
   }
@@ -314,12 +317,13 @@ absl::StatusOr<T> SearchPackagesForResource(
   for (const std::unique_ptr<FhirPackage>& package : packages) {
     absl::StatusOr<T> resource = (*package.*get_resource)(uri);
     if (resource.ok()) {
-      if (version == std::nullopt || resource->version().value() == *version) {
+      if (version == std::nullopt ||
+          (*resource)->version().value() == *version) {
         // We found the resource!
         return resource;
       }
       // Report the different version we found.
-      mismatched_versions.push_back(resource->version().value());
+      mismatched_versions.push_back((*resource)->version().value());
     } else if (resource.status().code() == absl::StatusCode::kNotFound) {
       // The resource wasn't found, so let's keep looking.
       continue;
@@ -359,46 +363,46 @@ class FhirPackageManager {
   // `uri`. Searches the packages added to the package manger for the resource
   // with the given URI. If multiple packages contain the same resource, the
   // package consulted will be non-deterministic.
-  absl::StatusOr<google::fhir::r4::core::StructureDefinition>
+  absl::StatusOr<std::unique_ptr<google::fhir::r4::core::StructureDefinition>>
   GetStructureDefinition(absl::string_view uri) const {
     return internal::SearchPackagesForResource(
         &FhirPackage::GetStructureDefinition, packages_, uri);
   }
-  absl::StatusOr<google::fhir::r4::core::StructureDefinition>
+  absl::StatusOr<std::unique_ptr<google::fhir::r4::core::StructureDefinition>>
   GetStructureDefinition(absl::string_view uri,
                          absl::string_view version) const {
     return internal::SearchPackagesForResource(
         &FhirPackage::GetStructureDefinition, packages_, uri, version);
   }
 
-  absl::StatusOr<google::fhir::r4::core::SearchParameter> GetSearchParameter(
-      absl::string_view uri) const {
+  absl::StatusOr<std::unique_ptr<google::fhir::r4::core::SearchParameter>>
+  GetSearchParameter(absl::string_view uri) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetSearchParameter,
                                                packages_, uri);
   }
-  absl::StatusOr<google::fhir::r4::core::SearchParameter> GetSearchParameter(
-      absl::string_view uri, absl::string_view version) const {
+  absl::StatusOr<std::unique_ptr<google::fhir::r4::core::SearchParameter>>
+  GetSearchParameter(absl::string_view uri, absl::string_view version) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetSearchParameter,
                                                packages_, uri, version);
   }
 
-  absl::StatusOr<google::fhir::r4::core::CodeSystem> GetCodeSystem(
-      absl::string_view uri) const {
+  absl::StatusOr<std::unique_ptr<google::fhir::r4::core::CodeSystem>>
+  GetCodeSystem(absl::string_view uri) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetCodeSystem,
                                                packages_, uri);
   }
-  absl::StatusOr<google::fhir::r4::core::CodeSystem> GetCodeSystem(
-      absl::string_view uri, absl::string_view version) const {
+  absl::StatusOr<std::unique_ptr<google::fhir::r4::core::CodeSystem>>
+  GetCodeSystem(absl::string_view uri, absl::string_view version) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetCodeSystem,
                                                packages_, uri, version);
   }
 
-  absl::StatusOr<google::fhir::r4::core::ValueSet> GetValueSet(
+  absl::StatusOr<std::unique_ptr<google::fhir::r4::core::ValueSet>> GetValueSet(
       absl::string_view uri) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetValueSet,
                                                packages_, uri);
   }
-  absl::StatusOr<google::fhir::r4::core::ValueSet> GetValueSet(
+  absl::StatusOr<std::unique_ptr<google::fhir::r4::core::ValueSet>> GetValueSet(
       absl::string_view uri, absl::string_view version) const {
     return internal::SearchPackagesForResource(&FhirPackage::GetValueSet,
                                                packages_, uri, version);
