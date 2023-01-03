@@ -163,11 +163,15 @@ public class ProtoGenerator {
               "extension.exists() != value.exists()",
               "hasValue() | (children().count() > id.count())",
               "hasValue() or (children().count() > id.count())",
+              "hasValue() or (children().count() > id.count()) or $this is Parameters",
               // Exclude the FHIR-provided element name regex, since field names are known at
               // compile time
               "path.matches('[^\\\\s\\\\.,:;\\\\\\'\"\\\\/|?!@#$%&*()\\\\[\\\\]{}]{1,64}"
                   + "(\\\\.[^\\\\s\\\\.,:;\\\\\\'\"\\\\/|?!@#$%&*()\\\\[\\\\]{}]{1,64}"
                   + "(\\\\[x\\\\])?(\\\\:[^\\\\s\\\\.]+)?)*')",
+              "path.matches('^[^\\\\s\\\\.,:;\\\\\\'\"\\\\/|?!@#$%&*()\\\\[\\\\]{}]{1,64}"
+                  + "(\\\\.[^\\\\s\\\\.,:;\\\\\\'\"\\\\/|?!@#$%&*()\\\\[\\\\]{}]{1,64}"
+                  + "(\\\\[x\\\\])?(\\\\:[^\\\\s\\\\.]+)?)*$')",
               // "telcom or endpoint" is an invalid expression that shows up in USCore
               "telecom or endpoint",
               "fullUrl.contains('/_history/').not()", // See https://jira.hl7.org/browse/FHIR-25525
@@ -360,11 +364,11 @@ public class ProtoGenerator {
   }
 
   private StructureDefinition fixIdBug(StructureDefinition def) {
-    if (def.getKind().getValue() != StructureDefinitionKindCode.Value.RESOURCE) {
-      return def;
-    }
-    // Fix bug in 4.0.1 where $RESOURCE.id types are strings instead of ids.
-    // See https://jira.hl7.org/browse/FHIR-25262
+    boolean isResource = def.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE;
+
+    // FHIR uses "compiler magic" to set the type of id fields, but it has errors in several
+    // versions of FHIR.  Here, assume all Resource IDs are type "id", and all DataType IDs are
+    // type "string", which is the intention of the spec.
     StructureDefinition.Builder defBuilder = def.toBuilder();
     for (ElementDefinition.Builder elementBuilder :
         defBuilder.getSnapshotBuilder().getElementBuilderList()) {
@@ -373,7 +377,10 @@ public class ProtoGenerator {
           Extension.Builder extensionBuilder =
               elementBuilder.getTypeBuilder(0).getExtensionBuilder(i);
           if (extensionBuilder.getUrl().getValue().equals(FHIR_TYPE_EXTENSION_URL)) {
-            extensionBuilder.getValueBuilder().getUrlBuilder().setValue("id");
+            extensionBuilder
+                .getValueBuilder()
+                .getUrlBuilder()
+                .setValue(isResource ? "id" : "string");
           }
         }
       }
@@ -2251,7 +2258,7 @@ public class ProtoGenerator {
   }
 
   private static boolean useLegacyTypeNaming(Annotations.FhirVersion version) {
-    return version != Annotations.FhirVersion.R4;
+    return version == Annotations.FhirVersion.DSTU2 || version == Annotations.FhirVersion.STU3;
   }
 
   private void addReferenceType(FieldOptions.Builder options, String referenceUrl) {

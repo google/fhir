@@ -594,13 +594,13 @@ public final class JsonFormat {
    */
   public static Parser getSpecParser(FhirVersion version) {
     switch (version) {
-      case STU3:
-        return Parser.newBuilder().withStu3ProtoGenTransformer().build();
-      case R4:
-        return Parser.newBuilder().build();
-      default:
+      case DSTU2:
         throw new IllegalArgumentException(
             "Fhir version not supported for getSpecParser: " + version);
+      case STU3:
+        return Parser.newBuilder().withStu3ProtoGenTransformer().build();
+      default:
+        return Parser.newBuilder().build();
     }
   }
 
